@@ -605,24 +605,24 @@ Retrieve shift-chart data.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `detail_code` | integer |  |
+| `detail_code` | integer | Numeric code identifying the specific detail type or sub-category within the shift or event record. |
 | `duration` | character | Penalty duration in minutes. |
 | `end_time` | character | End time (local). |
 | `event_description` | character | Human-readable event description. |
-| `event_details` | character |  |
+| `event_details` | character | Serialized details describing the on-ice event associated with the shift, such as play type and participants. |
 | `event_number` | integer | Event number identifier. |
 | `first_name` | character | Player first name. |
 | `game_id` | integer | Unique game identifier. |
-| `hex_value` | character |  |
+| `hex_value` | character | Hexadecimal color code associated with the event or team, used for display rendering. |
 | `last_name` | character | Player last name. |
 | `period` | integer | Period number. |
 | `player_id` | integer | Unique player identifier. |
-| `shift_number` | integer |  |
+| `shift_number` | integer | Sequential number identifying the shift within the game, ordered chronologically by start time. |
 | `start_time` | character | Start time (local). |
 | `team_abbrev` | character | Team abbreviation. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
-| `type_code` | integer |  |
+| `type_code` | integer | Numeric code identifying the high-level event type (e.g., faceoff, goal, penalty) for this shift record. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

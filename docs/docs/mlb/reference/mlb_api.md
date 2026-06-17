@@ -1073,7 +1073,7 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | double | Total number of splits in the leaderboard. |
-| `exemptions` | character |  |
+| `exemptions` | character | Serialized list of statistical exemptions or special-case flags applied to this player's game-log splits. |
 | `splits` | character | Splits. |
 | `type_display_name` | character | Stat type display name. |
 | `group_display_name` | character | Stat group display name. |

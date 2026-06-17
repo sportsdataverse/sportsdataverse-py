@@ -1424,7 +1424,7 @@ Pull the current / most recent draft pick set.
 | `team_common_name_default` | character | Team common name (default language). |
 | `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
 | `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
-| `display_abbrev_default` | character |  |
+| `display_abbrev_default` | character | Default-language display abbreviation for the team that currently holds this draft pick. |
 | `first_name_default` | character | Player first name (default language). |
 | `last_name_default` | character | Player last name (default language). |
 

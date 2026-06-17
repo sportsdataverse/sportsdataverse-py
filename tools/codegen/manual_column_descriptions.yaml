@@ -15,6 +15,46 @@ ahl_player_stats:
 ahl_standings:
   past_10: Win-loss-overtime record across the team's most recent 10 games, typically formatted as W-L-OTL.
   percentage: Points percentage earned by the team (points divided by maximum possible points), expressed as a decimal between 0 and 1.
+all_time_record_vs_franchise:
+  active_opponent_franchise: Flag indicating whether the opponent franchise is currently active in the NHL (1 = active, 0 = relocated or dissolved).
+  home_games_played: Total number of home games the franchise has played all-time against this opponent franchise.
+  home_goals_against: Total goals allowed by the franchise in all-time home games against this opponent.
+  home_goals_for: Total goals scored by the franchise in all-time home games against this opponent.
+  home_last_meeting_season_id: NHL season identifier for the most recent home game played against this opponent franchise.
+  opponent_franchise_id: NHL records identifier for the opposing franchise in this all-time head-to-head record.
+  opponent_franchise_name: Full name of the opposing franchise in this all-time head-to-head record.
+  road_games_played: Total number of road games the franchise has played all-time against this opponent franchise.
+  road_goals_against: Total goals allowed by the franchise in all-time road games against this opponent.
+  road_goals_for: Total goals scored by the franchise in all-time road games against this opponent.
+  road_last_meeting_season_id: NHL season identifier for the most recent road game played against this opponent franchise.
+  road_points: Total standings points earned by the franchise in all-time road games against this opponent.
+  total_games_played: Total number of games played all-time between this franchise and the opponent franchise across home and road venues.
+  total_goals_against: Total goals allowed by the franchise in all-time games against this opponent across home and road.
+  total_goals_for: Total goals scored by the franchise in all-time games against this opponent across home and road.
+  total_last_meeting_season_id: NHL season identifier for the most recent game played between the two franchises in any venue.
+  total_ot_losses: Total number of overtime losses accumulated by the franchise all-time against this opponent.
+  total_points: Total standings points earned by the franchise across all all-time games against this opponent.
+allstar_coach_career:
+  all_star_team_id: NHL identifier for the All-Star team the coach was assigned to in a given All-Star game.
+  games_coached: Total number of All-Star games the coach has coached across their career.
+allstar_goalie_career:
+  all_star_team_id: Identifier for the NHL All-Star team the goalie represented in their career All-Star appearances.
+  nhl_team_id: NHL identifier for the regular-season franchise the goalie was affiliated with during their All-Star career.
+allstar_goalie_game:
+  all_star_team_id: NHL identifier for the All-Star team the goalie was assigned to in the game.
+  all_star_team_score: Goals scored by the goalie's All-Star team in that game.
+  home_road: Indicates whether the goalie's All-Star team was the designated home or road squad for the game.
+  nhl_team_id: NHL identifier for the goalie's regular-season franchise at the time of the All-Star game.
+allstar_skater_career:
+  all_star_team_id: Identifier for the All-Star team roster to which the skater was assigned during the All-Star event.
+  nhl_team_id: NHL identifier for the skater's regular-season team at the time of All-Star selection.
+allstar_skater_game:
+  all_star_team_id: Identifier for the All-Star team roster to which the skater was assigned for this game.
+  all_star_team_score: Goals scored by the skater's All-Star team in this specific All-Star game.
+  home_road: Designation indicating whether the skater's All-Star team was the home or road side for this game.
+  nhl_team_id: NHL identifier for the skater's regular-season team at the time this All-Star game was played.
+away_team_record:
+  goals_per_game: Average number of goals the team scored per road game over the recorded period.
 boxscore:
   all_positions: All fielding positions played by the player during the game, as a list of position codes.
   game_status_is_current_batter: Indicates whether the player is currently at bat at the moment the boxscore was captured.
@@ -232,6 +272,70 @@ boxscore:
   stats_pitching_triples: Number of triples allowed by the pitcher in this game.
   stats_pitching_wild_pitches: Number of wild pitches thrown by the pitcher in this game.
   stats_pitching_wins: Indicator of whether the pitcher was credited with the win in this game.
+cat_goalie_detail:
+  player_games_played: Number of games in which the goalie appeared during the relevant tracking period.
+  player_goals_against_avg: Goalie's goals-against average — goals allowed per 60 minutes of ice time — for the tracking period.
+  player_losses: Number of regulation losses credited to the goalie during the tracking period.
+  player_overtime_losses: Number of overtime or shootout losses credited to the goalie during the tracking period.
+  player_save_pctg: Goalie's save percentage, expressed as the proportion of shots on goal stopped.
+  player_shoots_catches: Side on which the goalie catches — L (left) or R (right).
+  player_wins: Number of regulation and overtime wins credited to the goalie during the tracking period.
+  seasons_with_edge_stats: JSON-serialized list of NHL season identifiers for which EDGE puck-and-player tracking data is available for this goalie.
+  shot_location_details: JSON-serialized per-zone shot-location tracking breakdown showing where shots were attempted against the goalie.
+  shot_location_summary: JSON-serialized summary of shot-location tracking data aggregated across all zones for the goalie.
+  stats_games_above900_league_avg: League-average games-above-.900-save-percentage rate used as the baseline for this goalie's percentile calculation.
+  stats_games_above900_percentile: Percentile rank among all NHL goalies for games played in which the goalie posted a save percentage above .900.
+  stats_games_above900_value: Number of games the goalie posted a save percentage above .900 during the tracking period.
+  stats_goal_differential_per60_league_avg: League-average goals-saved-above-expected per 60 minutes used as the baseline for this goalie's percentile.
+  stats_goal_differential_per60_percentile: Percentile rank among all NHL goalies for goals-saved-above-expected per 60 minutes of ice time.
+  stats_goal_differential_per60_value: Goalie's goals-saved-above-expected per 60 minutes, measuring performance relative to shot quality faced.
+  stats_goal_support_avg_league_avg: League-average goal support (goals scored for the goalie per game) used as the baseline for percentile calculation.
+  stats_goal_support_avg_percentile: Percentile rank among all NHL goalies for average offensive goal support received per game started.
+  stats_goal_support_avg_value: Average number of goals scored for the goalie per game started during the tracking period.
+  stats_goals_against_avg_league_avg: League-average goals-against average used as the baseline for this goalie's GAA percentile calculation.
+  stats_goals_against_avg_percentile: Percentile rank among all NHL goalies for goals-against average (lower GAA = higher percentile).
+  stats_goals_against_avg_value: Goalie's goals-against average for the tracking period.
+  stats_point_pctg_league_avg: League-average team point percentage in games the goalie started, used as the baseline for percentile calculation.
+  stats_point_pctg_percentile: Percentile rank among all NHL goalies for team point percentage in games the goalie started.
+  stats_point_pctg_value: Fraction of available standings points the goalie's team earned in games the goalie started.
+cat_skater_detail:
+  player_assists: Number of assists credited to the skater during the relevant tracking period.
+  player_games_played: Number of games in which the skater appeared during the relevant tracking period.
+  player_goals: Number of goals scored by the skater during the relevant tracking period.
+  player_shoots_catches: Side on which the skater shoots — L (left) or R (right).
+  seasons_with_edge_stats: JSON-serialized list of NHL season identifiers for which EDGE puck-and-player tracking data is available for this skater.
+  skating_speed_bursts_over20_league_avg_value: League-average number of skating speed bursts exceeding 20 mph per game, used as the baseline for this skater's percentile.
+  skating_speed_bursts_over20_percentile: Percentile rank among all NHL skaters for frequency of skating speed bursts exceeding 20 mph per game.
+  skating_speed_bursts_over20_value: Number of skating bursts the skater reached or exceeded 20 mph per game on average during the tracking period.
+  skating_speed_speed_max_imperial: Skater's maximum recorded skating speed in miles per hour during the tracking period.
+  skating_speed_speed_max_league_avg_imperial: League-average maximum skating speed in miles per hour, used as the baseline for this skater's percentile.
+  skating_speed_speed_max_league_avg_metric: League-average maximum skating speed in kilometers per hour, used as the baseline for this skater's percentile.
+  skating_speed_speed_max_metric: Skater's maximum recorded skating speed in kilometers per hour during the tracking period.
+  skating_speed_speed_max_overlay_player_first_name_default: First name of the skater who achieved the maximum skating speed in the context of the overlay comparison play.
+  skating_speed_speed_max_overlay_player_last_name_default: Last name of the skater who achieved the maximum skating speed in the context of the overlay comparison play.
+  skating_speed_speed_max_overlay_time_in_period: Elapsed time within the period (mm:ss) at which the skater's maximum skating speed was recorded.
+  skating_speed_speed_max_percentile: Percentile rank among all NHL skaters for maximum skating speed recorded during the tracking period.
+  sog_details: JSON-serialized per-game shot-on-goal tracking details for the skater across the tracking period.
+  sog_summary: JSON-serialized summary of shot-on-goal tracking data aggregated over the tracking period for the skater.
+  top_shot_speed_imperial: Skater's highest recorded shot speed in miles per hour during the tracking period.
+  top_shot_speed_league_avg_imperial: League-average top shot speed in miles per hour, used as the baseline for this skater's shot-speed percentile.
+  top_shot_speed_league_avg_metric: League-average top shot speed in kilometers per hour, used as the baseline for this skater's shot-speed percentile.
+  top_shot_speed_metric: Skater's highest recorded shot speed in kilometers per hour during the tracking period.
+  top_shot_speed_percentile: Percentile rank among all NHL skaters for highest recorded shot speed during the tracking period.
+  total_distance_skated_imperial: Total cumulative distance skated by the player in miles during the tracking period.
+  total_distance_skated_league_avg_imperial: League-average total distance skated in miles per game, used as the baseline for this skater's distance percentile.
+  total_distance_skated_league_avg_metric: League-average total distance skated in kilometers per game, used as the baseline for this skater's distance percentile.
+  total_distance_skated_metric: Total cumulative distance skated by the player in kilometers during the tracking period.
+  total_distance_skated_percentile: Percentile rank among all NHL skaters for total distance skated per game during the tracking period.
+  zone_time_details_defensive_zone_league_avg: League-average percentage of on-ice time skaters spend in the defensive zone, used as the baseline for this player's percentile.
+  zone_time_details_defensive_zone_pctg: Percentage of the skater's total on-ice time spent in the defensive zone during the tracking period.
+  zone_time_details_defensive_zone_percentile: Percentile rank among all NHL skaters for percentage of ice time spent in the defensive zone.
+  zone_time_details_neutral_zone_league_avg: League-average percentage of on-ice time skaters spend in the neutral zone, used as the baseline for this player's percentile.
+  zone_time_details_neutral_zone_pctg: Percentage of the skater's total on-ice time spent in the neutral zone during the tracking period.
+  zone_time_details_neutral_zone_percentile: Percentile rank among all NHL skaters for percentage of ice time spent in the neutral zone.
+  zone_time_details_offensive_zone_league_avg: League-average percentage of on-ice time skaters spend in the offensive zone, used as the baseline for this player's percentile.
+  zone_time_details_offensive_zone_pctg: Percentage of the skater's total on-ice time spent in the offensive zone during the tracking period.
+  zone_time_details_offensive_zone_percentile: Percentile rank among all NHL skaters for percentage of ice time spent in the offensive zone.
 club_schedule_season:
   club_current_season: Indicator for whether the game falls within the current season for the requesting club (1 = current season, 0 otherwise).
   club_next_season: Indicator for whether the game belongs to the club's next upcoming season (1 = next season, 0 otherwise).
@@ -249,6 +353,70 @@ club_schedule_season:
   special_event_name_default: English display name for a special promotional or marquee event designation attached to the game (e.g., 'Winter Classic', 'Heritage Classic').
   special_event_name_fr: French display name for a special promotional or marquee event designation attached to the game, used in bilingual NHL communications.
   special_event_parent_id: NHL api-web identifier for the parent special-event record grouping multiple games under the same marquee event umbrella.
+coach:
+  bio: Free-text biographical summary of the coach's career and background.
+  birth_state_province_code: Two-letter state or province code indicating the coach's place of birth.
+  featured_image: URL of the featured promotional image associated with the coach's NHL profile.
+  hockey_hof_link: URL to the coach's page on the Hockey Hall of Fame website, if inducted.
+  in_iihf_hockey_hof: Boolean flag indicating whether the coach is inducted into the IIHF Hockey Hall of Fame.
+  instagram: Instagram profile handle or URL associated with the coach.
+  stanley_cup: Number of Stanley Cup championships won by the coach as a head coach.
+  top100_player_link: URL to the coach's entry on the NHL's Top 100 Players list, if applicable.
+  twitter: Twitter (X) handle or URL associated with the coach.
+coach_career:
+  active_coach: Indicates whether the coach is currently active as an NHL head coach.
+  coach_name: Full display name of the NHL head coach.
+  end_season: The most recent season the coach held a head-coaching position, encoded as an eight-digit season ID.
+  home_win_pctg: Win percentage for all regular-season home games coached.
+  jack_adams: Number of Jack Adams Award trophies won by the coach as NHL coach of the year.
+  last_coached_date: Date of the coach's most recent game on the bench, in ISO 8601 format.
+  losses_in_ot: Total regular-season games the coach's team lost in overtime.
+  losses_in_ot_plus_shootout: Total regular-season games the coach's team lost in overtime or a shootout combined.
+  losses_in_shootout: Total regular-season games the coach's team lost via shootout.
+  road_games: Total regular-season road games coached.
+  road_win_pctg: Win percentage for all regular-season road games coached.
+  seasons: Number of NHL seasons the coach has served as a head coach.
+  stanley_cup_final_appearances: Number of times the coach has led a team to the Stanley Cup Final.
+  stanley_cups: Number of Stanley Cup championships won as head coach.
+  start_season: The first season the coach served as an NHL head coach, encoded as an eight-digit season ID.
+  ties_in_ot: Total regular-season overtime-period ties recorded under pre-shootout rules.
+  win_pctg: Overall regular-season win percentage across the coach's entire career.
+  wins_in_ot: Total regular-season games the coach's team won in overtime.
+  wins_in_ot_plus_shootout: Total regular-season games the coach's team won in overtime or a shootout combined.
+coach_career_with_playoffs:
+  active_coach: Indicates whether the coach is currently active as an NHL head coach.
+  coach_name: Full display name of the NHL head coach.
+  end_season: The most recent season the coach held a head-coaching position, encoded as an eight-digit season ID.
+  seasons: Number of NHL seasons the coach has served as a head coach, including playoff appearances.
+  start_season: The first season the coach served as an NHL head coach, encoded as an eight-digit season ID.
+coach_franchise:
+  active_coach: Indicates whether the coach is currently active with the franchise.
+  coach_name: Full display name of the coach as recorded in NHL records.
+  end_season: Last season (in YYYYYYYY format) the coach was behind the bench for this franchise.
+  first_coached_date: Calendar date on which the coach first handled a game for this franchise.
+  home_win_pctg: Fraction of home games the coach's franchise won during their tenure.
+  jack_adams: Number of Jack Adams Awards (NHL coach of the year) won by the coach during this franchise tenure.
+  last_coached_date: Calendar date of the coach's most recent game on the bench for this franchise.
+  losses_in_ot: Number of games the coach's franchise lost in overtime during the tenure.
+  losses_in_ot_plus_shootout: Combined losses in overtime and shootout during the coach's franchise tenure.
+  losses_in_shootout: Number of games the coach's franchise lost in a shootout during the tenure.
+  road_games: Total regular-season road games coached with this franchise.
+  road_win_pctg: Fraction of away games the coach's franchise won during their tenure.
+  seasons: Number of NHL seasons the coach spent with this franchise.
+  stanley_cup_final_appearances: Number of Stanley Cup Final appearances made while coaching this franchise.
+  stanley_cups: Number of Stanley Cup championships won while coaching this franchise.
+  start_season: First season (in YYYYYYYY format) the coach served with this franchise.
+  ties_in_ot: Number of overtime ties recorded under this coach for this franchise (pre-shootout era).
+  win_pctg: Overall win percentage across all regular-season games coached with this franchise.
+  wins_in_ot: Number of games the coach's franchise won in overtime during the tenure.
+  wins_in_ot_plus_shootout: Combined wins in overtime and shootout during the coach's franchise tenure.
+coach_stanley_cup:
+  active_coach: Boolean flag indicating whether the coach is currently active as an NHL head coach.
+  coach_name: Full name of the head coach in this Stanley Cup championship record.
+  longest_streak: Maximum number of consecutive seasons in which the coach won the Stanley Cup.
+  longest_streak_description: Human-readable description of the coach's longest consecutive Stanley Cup winning streak.
+  seasons_won: Comma-separated list of NHL seasons in which the coach won the Stanley Cup as head coach.
+  stanley_cups: Total number of Stanley Cup championships won by this coach as head coach.
 coaches:
   bio: Long-form biographical narrative for the coach, as provided by the NHL api-web endpoint.
   birth_state_province_code: Two-letter state or province code of the coach's birth location (e.g., 'ON' for Ontario, 'MI' for Michigan).
@@ -259,6 +427,10 @@ coaches:
   stanley_cup: Number of Stanley Cup championships won by the coach as a head coach or assistant coach.
   top100_player_link: URL to the coach's NHL Top 100 players recognition page, if applicable.
   twitter: Twitter/X handle or profile URL for the coach's official social media presence.
+consecutive_100pt_seasons:
+  consecutive100_point_seasons: Number of consecutive NHL regular seasons in which the player reached 100 or more points.
+  streak_end_season: The last season of the consecutive 100-point streak, encoded as an eight-digit season ID.
+  streak_start_season: The first season of the consecutive 100-point streak, encoded as an eight-digit season ID.
 country:
   country3_code: Three-letter ISO country code used by the NHL api-web country reference endpoint.
   country_name: Full English display name of the country as provided by the NHL api-web country reference.
@@ -363,6 +535,8 @@ draft_latest:
   pick_year: MLB draft year for which this pick record applies.
 draft_picks:
   display_abbrev_default: Short display abbreviation for the selected player's nationality or amateur league affiliation shown in the NHL draft picks listing.
+draft_picks_now:
+  display_abbrev_default: Default-language display abbreviation for the team that currently holds this draft pick.
 draft_rankings:
   category_key: Machine-readable slug identifying the scouting or ranking category (e.g., 'north-american-skater', 'international-skater') that the prospect belongs to in the NHL draft rankings.
 draft_rankings_now:
@@ -939,6 +1113,8 @@ espn_wnba_schedule:
   away_records: Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference).
   home_linescores: Period-by-period point totals for the home team, stored as a list of integer scores.
   home_records: Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference).
+expansion_draft_picks:
+  draft_picks: JSON-serialized list of players selected by this franchise in the NHL expansion draft.
 game_changes:
   schedule_date: The calendar date for which schedule changes are being reported, identifying when rescheduled or suspended games occurred.
 game_pace:
@@ -964,6 +1140,74 @@ game_pace:
   total9_inn_games_without_extra_inn: Number of nine-inning games completed without requiring extra innings.
 game_timestamps:
   timecode: A timestamp string representing a specific point in time used to query the MLB Stats API for game state changes.
+gm_career:
+  active_gm: Indicates whether the general manager is currently active in an NHL front-office role.
+  end_season_id: Season identifier (e.g., 20232024) for the last season the GM held the position.
+  gm_of_the_year: Number of times the general manager won the NHL GM of the Year Award during their career.
+  losses_in_ot: Number of games the GM's team lost in overtime during their tenure.
+  losses_in_ot_plus_shootout: Combined total of overtime and shootout losses recorded during the GM's tenure.
+  losses_in_shootout: Number of games the GM's team lost in the shootout portion of a tied game.
+  road_games: Total number of away games played by the GM's team across their tenure.
+  seasons: Total number of NHL seasons the general manager has served in the role.
+  stanley_cup_final_appearances: Number of times the GM's team reached the Stanley Cup Final during their tenure.
+  stanley_cups: Number of Stanley Cup championships won by the GM's franchise during their tenure.
+  start_season_id: Season identifier (e.g., 20052006) for the first season the GM held the position.
+  ties_in_ot: Number of overtime ties recorded under legacy rules during the GM's tenure.
+  win_pctg: Career winning percentage for the GM, calculated as wins divided by total games decided.
+  wins_in_ot: Number of games the GM's team won in overtime during their tenure.
+  wins_in_ot_plus_shootout: Combined total of overtime and shootout wins recorded during the GM's tenure.
+gm_franchise:
+  active_gm: Indicates whether the general manager is currently active with the franchise.
+  end_season_id: NHL season identifier for the last season the GM held the role with this franchise.
+  gm_of_the_year: Number of NHL General Manager of the Year awards won during this franchise tenure.
+  losses_in_ot: Number of regular-season overtime losses recorded by the franchise under this GM.
+  losses_in_ot_plus_shootout: Combined overtime and shootout losses for the franchise during this GM's tenure.
+  losses_in_shootout: Number of regular-season shootout losses recorded by the franchise under this GM.
+  road_games: Total regular-season away games played by the franchise during this GM's tenure.
+  seasons: Number of NHL seasons the GM held the role with this franchise.
+  stanley_cup_final_appearances: Number of Stanley Cup Final appearances by the franchise during this GM's tenure.
+  stanley_cups: Number of Stanley Cup championships won by the franchise under this GM.
+  start_season_id: NHL season identifier for the first season the GM held the role with this franchise.
+  ties_in_ot: Number of overtime ties recorded by the franchise under this GM (pre-shootout era).
+  win_pctg: Overall win percentage for the franchise across all regular-season games during this GM's tenure.
+  wins_in_ot: Number of regular-season overtime wins recorded by the franchise under this GM.
+  wins_in_ot_plus_shootout: Combined overtime and shootout wins for the franchise during this GM's tenure.
+goalie_5v5_detail:
+  save_pctg5v5_details_save_pctg_close_league_avg: League-average 5-on-5 save percentage in close-score situations (one-goal games in the third period or overtime) for the current period.
+  save_pctg5v5_details_save_pctg_close_percentile: Percentile rank of the goalie's 5-on-5 save percentage in close-score situations relative to all qualifying NHL goalies.
+  save_pctg5v5_details_save_pctg_close_value: Goalie's 5-on-5 save percentage recorded specifically in close-score situations.
+  save_pctg5v5_details_save_pctg_league_avg: League-average 5-on-5 save percentage across all NHL goalies for the current period.
+  save_pctg5v5_details_save_pctg_percentile: Percentile rank of the goalie's overall 5-on-5 save percentage relative to all qualifying NHL goalies.
+  save_pctg5v5_details_save_pctg_value: Goalie's overall 5-on-5 save percentage (saves divided by shots faced at even strength).
+  save_pctg5v5_details_shots_league_avg: League-average number of 5-on-5 shots faced per game by NHL goalies for the current period.
+  save_pctg5v5_details_shots_per60_league_avg: League-average rate of 5-on-5 shots faced per 60 minutes of even-strength ice time.
+  save_pctg5v5_details_shots_per60_percentile: Percentile rank of the goalie's 5-on-5 shots-faced-per-60-minutes rate relative to all qualifying NHL goalies.
+  save_pctg5v5_details_shots_per60_value: Goalie's rate of 5-on-5 shots faced per 60 minutes of even-strength ice time.
+  save_pctg5v5_details_shots_percentile: Percentile rank of the goalie's 5-on-5 shots-faced count relative to all qualifying NHL goalies.
+  save_pctg5v5_details_shots_value: Total number of 5-on-5 shots the goalie faced during the current period.
+  save_pctg5v5_last10: Serialized last-10-game 5-on-5 save percentage trend data for the goalie.
+goalie_comparison:
+  player_games_played: Total number of regular-season or playoff games the goalie appeared in during the comparison period.
+  player_goals_against_avg: Goalie's goals-against average — average goals allowed per 60 minutes of ice time.
+  player_losses: Number of decisions recorded as losses for the goalie during the comparison period.
+  player_overtime_losses: Number of losses the goalie suffered after regulation time, counting as an overtime loss in the standings.
+  player_save_pctg: Overall save percentage for the goalie — proportion of shots faced that were stopped.
+  player_shoots_catches: Handedness indicator showing which side the goalie catches (L = left-catch, R = right-catch).
+  player_wins: Number of decisions recorded as wins for the goalie during the comparison period.
+  save_pctg5v5_details_save_pctg: Goalie's save percentage in 5-on-5 even-strength situations only.
+  save_pctg5v5_details_save_pctg_close: Save percentage in 5-on-5 situations where the game score was within one goal (close-game situations).
+  save_pctg5v5_details_shots: Total number of shots the goalie faced in 5-on-5 situations during the comparison period.
+  save_pctg5v5_details_shots_per60: Rate of shots faced per 60 minutes of 5-on-5 ice time, reflecting workload intensity.
+  save_pctg5v5_last10: Serialized breakdown of the goalie's 5-on-5 save percentage across their last 10 games.
+  save_pctg_details_games_above900: Number of games in which the goalie posted a save percentage above .900 during the comparison period.
+  save_pctg_details_goals_against_avg: Goals-against average from the detailed save-percentage breakdown dataset for this goalie.
+  save_pctg_details_pctg_games_above900: Proportion of the goalie's games (as a percentage) in which they achieved a save percentage above .900.
+  save_pctg_details_point_pctg: Team points percentage in games started by this goalie, reflecting their contribution to standings.
+  save_pctg_details_save_pctg: Overall save percentage from the detailed breakdown dataset, capturing all situations.
+  save_pctg_last10: Serialized summary of the goalie's save percentage across their most recent 10 games.
+  seasons_with_edge_stats: Serialized list of season identifiers for which EDGE player-tracking data is available for this goalie.
+  shot_location_details: Serialized shot-zone breakdown detailing save rates from each ice region (slot, off-wing, etc.).
+  shot_location_summary: High-level serialized summary of the goalie's save percentages grouped by shot location zone.
 goalie_detail:
   player_games_played: Total number of regular-season games the goalie appeared in for the season covered by this NHL EDGE detail record.
   player_goals_against_avg: Goals-against average (GAA) for the goalie during the season, reflecting the average number of goals allowed per 60 minutes played.
@@ -990,6 +1234,105 @@ goalie_detail:
   stats_point_pctg_league_avg: League-average points percentage (team winning percentage when the goalie starts) used as the EDGE comparative baseline.
   stats_point_pctg_percentile: Percentile rank among all NHL goalies for team points percentage in games the goalie started, per NHL EDGE.
   stats_point_pctg_value: Team points percentage in games started by this goalie during the season, as tracked by the NHL EDGE system.
+goalie_landing:
+  leaders_games_above900_games: Number of games above a .900 save percentage for the top-ranked goalie in that leaderboard category.
+  leaders_games_above900_player_first_name_default: First name of the goalie leading the games-above-.900 leaderboard (default locale).
+  leaders_games_above900_player_headshot: URL pointing to the headshot image of the goalie leading the games-above-.900 leaderboard.
+  leaders_games_above900_player_id: NHL player identifier for the goalie leading the games-above-.900 leaderboard.
+  leaders_games_above900_player_last_name_default: Last name of the goalie leading the games-above-.900 leaderboard (default locale).
+  leaders_games_above900_player_position: Position code for the goalie leading the games-above-.900 leaderboard (always G).
+  leaders_games_above900_player_slug: URL-friendly slug for the goalie leading the games-above-.900 leaderboard, used in NHL.com profile links.
+  leaders_games_above900_player_sweater_number: Jersey number worn by the goalie leading the games-above-.900 leaderboard.
+  leaders_games_above900_player_team_abbrev: Three-letter team abbreviation for the club of the goalie leading the games-above-.900 leaderboard.
+  leaders_games_above900_player_team_common_name_default: Common team name (e.g., Maple Leafs) for the club of the leader in the games-above-.900 category.
+  leaders_games_above900_player_team_place_name_with_preposition_default: City/place name with grammatical preposition (e.g., in Toronto) for the leader's team, in the default locale.
+  leaders_games_above900_player_team_place_name_with_preposition_fr: City/place name with grammatical preposition for the leader's team in the French locale.
+  leaders_games_above900_player_team_team_logo_dark: URL for the dark-background version of the team logo for the games-above-.900 leaderboard leader.
+  leaders_games_above900_player_team_team_logo_light: URL for the light-background version of the team logo for the games-above-.900 leaderboard leader.
+  leaders_high_danger_goals_against_goals_against: Number of high-danger goals allowed by the goalie leading the high-danger goals-against leaderboard.
+  leaders_high_danger_goals_against_player_first_name_default: First name of the goalie leading the high-danger goals-against leaderboard (default locale).
+  leaders_high_danger_goals_against_player_headshot: URL pointing to the headshot image of the goalie leading the high-danger goals-against leaderboard.
+  leaders_high_danger_goals_against_player_id: NHL player identifier for the goalie leading the high-danger goals-against leaderboard.
+  leaders_high_danger_goals_against_player_last_name_default: Last name of the goalie leading the high-danger goals-against leaderboard (default locale).
+  leaders_high_danger_goals_against_player_position: Position code for the goalie leading the high-danger goals-against leaderboard (always G).
+  leaders_high_danger_goals_against_player_slug: URL-friendly slug for the goalie leading the high-danger goals-against leaderboard, used in NHL.com profile links.
+  leaders_high_danger_goals_against_player_sweater_number: Jersey number worn by the goalie leading the high-danger goals-against leaderboard.
+  leaders_high_danger_goals_against_player_team_abbrev: Three-letter team abbreviation for the club of the goalie leading the high-danger goals-against leaderboard.
+  leaders_high_danger_goals_against_player_team_common_name_default: Common team name for the club of the leader in the high-danger goals-against category.
+  leaders_high_danger_goals_against_player_team_place_name_with_preposition_default: City/place name with grammatical preposition for the high-danger goals-against leader's team, default locale.
+  leaders_high_danger_goals_against_player_team_place_name_with_preposition_fr: City/place name with grammatical preposition for the high-danger goals-against leader's team in the French locale.
+  leaders_high_danger_goals_against_player_team_team_logo_dark: URL for the dark-background team logo for the high-danger goals-against leaderboard leader.
+  leaders_high_danger_goals_against_player_team_team_logo_light: URL for the light-background team logo for the high-danger goals-against leaderboard leader.
+  leaders_high_danger_save_pctg_player_first_name_default: First name of the goalie leading the high-danger save-percentage leaderboard (default locale).
+  leaders_high_danger_save_pctg_player_headshot: URL pointing to the headshot image of the goalie leading the high-danger save-percentage leaderboard.
+  leaders_high_danger_save_pctg_player_id: NHL player identifier for the goalie leading the high-danger save-percentage leaderboard.
+  leaders_high_danger_save_pctg_player_last_name_cs: Last name of the high-danger save-percentage leader rendered in Czech locale.
+  leaders_high_danger_save_pctg_player_last_name_default: Last name of the goalie leading the high-danger save-percentage leaderboard (default locale).
+  leaders_high_danger_save_pctg_player_last_name_sk: Last name of the high-danger save-percentage leader rendered in Slovak locale.
+  leaders_high_danger_save_pctg_player_position: Position code for the goalie leading the high-danger save-percentage leaderboard (always G).
+  leaders_high_danger_save_pctg_player_slug: URL-friendly slug for the high-danger save-percentage leader, used in NHL.com profile links.
+  leaders_high_danger_save_pctg_player_sweater_number: Jersey number worn by the goalie leading the high-danger save-percentage leaderboard.
+  leaders_high_danger_save_pctg_player_team_abbrev: Three-letter team abbreviation for the club of the goalie leading the high-danger save-percentage leaderboard.
+  leaders_high_danger_save_pctg_player_team_common_name_default: Common team name for the club of the leader in the high-danger save-percentage category.
+  leaders_high_danger_save_pctg_player_team_place_name_with_preposition_default: City/place name with grammatical preposition for the high-danger save-percentage leader's team, default locale.
+  leaders_high_danger_save_pctg_player_team_place_name_with_preposition_fr: City/place name with grammatical preposition for the high-danger save-percentage leader's team in the French locale.
+  leaders_high_danger_save_pctg_player_team_team_logo_dark: URL for the dark-background team logo for the high-danger save-percentage leaderboard leader.
+  leaders_high_danger_save_pctg_player_team_team_logo_light: URL for the light-background team logo for the high-danger save-percentage leaderboard leader.
+  leaders_high_danger_save_pctg_save_pctg: Save percentage value for the leader of the high-danger save-percentage leaderboard.
+  leaders_high_danger_save_pctg_shot_location_details: Serialized shot-zone breakdown for the high-danger save-percentage leaderboard leader.
+  leaders_high_danger_saves_player_first_name_default: First name of the goalie leading the high-danger saves leaderboard (default locale).
+  leaders_high_danger_saves_player_headshot: URL pointing to the headshot image of the goalie leading the high-danger saves leaderboard.
+  leaders_high_danger_saves_player_id: NHL player identifier for the goalie leading the high-danger saves leaderboard.
+  leaders_high_danger_saves_player_last_name_default: Last name of the goalie leading the high-danger saves leaderboard (default locale).
+  leaders_high_danger_saves_player_position: Position code for the goalie leading the high-danger saves leaderboard (always G).
+  leaders_high_danger_saves_player_slug: URL-friendly slug for the high-danger saves leaderboard leader, used in NHL.com profile links.
+  leaders_high_danger_saves_player_sweater_number: Jersey number worn by the goalie leading the high-danger saves leaderboard.
+  leaders_high_danger_saves_player_team_abbrev: Three-letter team abbreviation for the club of the goalie leading the high-danger saves leaderboard.
+  leaders_high_danger_saves_player_team_common_name_default: Common team name for the club of the leader in the high-danger saves category.
+  leaders_high_danger_saves_player_team_place_name_with_preposition_default: City/place name with grammatical preposition for the high-danger saves leader's team, default locale.
+  leaders_high_danger_saves_player_team_place_name_with_preposition_fr: City/place name with grammatical preposition for the high-danger saves leader's team in the French locale.
+  leaders_high_danger_saves_player_team_team_logo_dark: URL for the dark-background team logo for the high-danger saves leaderboard leader.
+  leaders_high_danger_saves_player_team_team_logo_light: URL for the light-background team logo for the high-danger saves leaderboard leader.
+  leaders_high_danger_saves_saves: Total high-danger saves made by the goalie leading the high-danger saves leaderboard.
+  leaders_high_danger_saves_shot_location_details: Serialized shot-zone breakdown for the high-danger saves leaderboard leader.
+  leaders_save_pctg5v5_player_first_name_default: First name of the goalie leading the 5-on-5 save-percentage leaderboard (default locale).
+  leaders_save_pctg5v5_player_headshot: URL pointing to the headshot image of the goalie leading the 5-on-5 save-percentage leaderboard.
+  leaders_save_pctg5v5_player_id: NHL player identifier for the goalie leading the 5-on-5 save-percentage leaderboard.
+  leaders_save_pctg5v5_player_last_name_cs: Last name of the 5-on-5 save-percentage leader rendered in Czech locale.
+  leaders_save_pctg5v5_player_last_name_default: Last name of the goalie leading the 5-on-5 save-percentage leaderboard (default locale).
+  leaders_save_pctg5v5_player_last_name_sk: Last name of the 5-on-5 save-percentage leader rendered in Slovak locale.
+  leaders_save_pctg5v5_player_position: Position code for the goalie leading the 5-on-5 save-percentage leaderboard (always G).
+  leaders_save_pctg5v5_player_slug: URL-friendly slug for the 5-on-5 save-percentage leaderboard leader, used in NHL.com profile links.
+  leaders_save_pctg5v5_player_sweater_number: Jersey number worn by the goalie leading the 5-on-5 save-percentage leaderboard.
+  leaders_save_pctg5v5_player_team_abbrev: Three-letter team abbreviation for the club of the goalie leading the 5-on-5 save-percentage leaderboard.
+  leaders_save_pctg5v5_player_team_common_name_default: Common team name for the club of the leader in the 5-on-5 save-percentage category.
+  leaders_save_pctg5v5_player_team_place_name_with_preposition_default: City/place name with grammatical preposition for the 5-on-5 save-percentage leader's team, default locale.
+  leaders_save_pctg5v5_player_team_place_name_with_preposition_fr: City/place name with grammatical preposition for the 5-on-5 save-percentage leader's team in the French locale.
+  leaders_save_pctg5v5_player_team_team_logo_dark: URL for the dark-background team logo for the 5-on-5 save-percentage leaderboard leader.
+  leaders_save_pctg5v5_player_team_team_logo_light: URL for the light-background team logo for the 5-on-5 save-percentage leaderboard leader.
+  leaders_save_pctg5v5_save_pctg: Save percentage value for the leader of the 5-on-5 save-percentage leaderboard.
+  minimum_minutes_played: Minimum minutes-played threshold a goalie must meet to qualify for the EDGE leaderboards.
+  seasons_with_edge_stats: Serialized list of season identifiers for which EDGE player-tracking data is available on this landing page.
+goalie_playoff_streak:
+  consecutive_playoff_seasons: Number of consecutive playoff seasons in which the goalie appeared for the franchise during this streak.
+  end_season: Last season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak.
+  start_season: First season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak.
+goalie_save_percentage_detail:
+  save_pctg_details_games_above900_league_avg: League-average number of games in which goalies posted a save percentage above .900, used as a comparison baseline.
+  save_pctg_details_games_above900_percentile: Percentile rank of this goalie's games-above-.900 count relative to all qualifying goalies.
+  save_pctg_details_games_above900_value: Actual count of games in which this goalie achieved a save percentage above .900.
+  save_pctg_details_pctg_games_above900_league_avg: League-average percentage of games with a save percentage above .900, used as the baseline comparison.
+  save_pctg_details_pctg_games_above900_percentile: Percentile rank of this goalie's proportion of games above .900 relative to all qualifying goalies.
+  save_pctg_details_pctg_games_above900_value: Proportion (as a decimal fraction) of the goalie's games in which they exceeded a .900 save percentage.
+  save_pctg_last10: Serialized summary of the goalie's save percentage across their most recent 10 games.
+goalie_undefeated_streak:
+  undefeated_streak: Number of consecutive games without a regulation loss (wins plus overtime or shootout losses) in the goalie's record streak.
+goalie_win_plateaus:
+  forty_win_seasons: Number of seasons in which the goalie recorded 40 or more wins, a rare single-season achievement.
+  thirty_win_seasons: Number of seasons in which the goalie recorded 30 or more wins.
+  twenty_win_seasons: Number of seasons in which the goalie recorded 20 or more wins.
+goalie_win_streak:
+  win_streak: Number of consecutive wins recorded by the goalie in this streak.
 high_low:
   exemptions: Serialized list of exemption codes or player IDs excluded from the high/low statistical split calculation.
   sort_stat_high_low_types: Serialized list of high/low result type codes (e.g., high, low) applicable to this stat leader query.
@@ -1095,6 +1438,8 @@ home_run_derby_pool:
   current_team_venue_id: The MLB Stats API numeric identifier for the regular-season home ballpark of the pool participant's current team.
   current_team_venue_link: The MLB Stats API relative URL linking to the regular-season venue resource for the pool participant's current team.
   current_team_venue_name: The official name of the regular-season home ballpark for the pool participant's current team.
+home_team_record:
+  goals_per_game: Average number of goals the team scored per home game over the recorded period.
 injuries:
   display_name: Athlete's full display name as shown on ESPN.
   id: ESPN numeric identifier for the athlete.
@@ -2278,6 +2623,8 @@ pbp:
   ppt_replay_url: URL to the power-play tracking replay video associated with this play event in the NHL api-web play-by-play feed.
   type_code: Numeric event-type code identifying the category of play (e.g., goal, shot, hit, penalty, faceoff) in the NHL api-web play-by-play feed.
   type_desc_key: String key describing the event type category (e.g., 'goal', 'shot-on-goal', 'hit', 'faceoff') in the NHL api-web play-by-play feed.
+person_game_stats:
+  exemptions: Serialized list of statistical exemptions or special-case flags applied to this player's game-log splits.
 play_by_play:
   about_at_bat_index: The sequential index of the at-bat within the game to which this play or pitch event belongs.
   about_captivating_index: A numeric score assigned by the MLB Stats API reflecting how compelling or exciting a given play was, based on leverage and game context.
@@ -2623,6 +2970,102 @@ scoreboard:
   status: Status type name (e.g. STATUS_FINAL, STATUS_SCHEDULED, STATUS_IN_PROGRESS).
   status_detail: Human-readable status detail (e.g. 'Final', the over/innings summary).
   venue: Full name of the venue where the match was played.
+shiftcharts:
+  detail_code: Numeric code identifying the specific detail type or sub-category within the shift or event record.
+  event_details: Serialized details describing the on-ice event associated with the shift, such as play type and participants.
+  hex_value: Hexadecimal color code associated with the event or team, used for display rendering.
+  shift_number: Sequential number identifying the shift within the game, ordered chronologically by start time.
+  type_code: Numeric code identifying the high-level event type (e.g., faceoff, goal, penalty) for this shift record.
+skater_comparison:
+  player_assists: Total regular-season assists recorded by the skater in the current season.
+  player_games_played: Number of regular-season games the skater appeared in during the current season.
+  player_goals: Total regular-season goals scored by the skater in the current season.
+  player_shoots_catches: Handedness of the skater's shot or, for goalies, their catching hand (L or R).
+  seasons_with_edge_stats: Serialized list of seasons for which NHL EDGE player-tracking data is available for the skater.
+  shot_location_details: Serialized shot-location breakdown object containing zone-based shot attempt counts and percentages.
+  shot_location_totals: Serialized aggregate shot-location totals across all zones for the skater.
+  shot_speed_details_avg_shot_speed_imperial: Skater's average shot speed in miles per hour, measured by NHL EDGE puck-tracking.
+  shot_speed_details_avg_shot_speed_metric: Skater's average shot speed in kilometres per hour, measured by NHL EDGE puck-tracking.
+  shot_speed_details_shot_attempts70_to80: Number of shot attempts the skater recorded at speeds between 70 and 80 mph.
+  shot_speed_details_shot_attempts80_to90: Number of shot attempts the skater recorded at speeds between 80 and 90 mph.
+  shot_speed_details_shot_attempts90_to100: Number of shot attempts the skater recorded at speeds between 90 and 100 mph.
+  shot_speed_details_shot_attempts_over100: Number of shot attempts the skater recorded at speeds exceeding 100 mph.
+  shot_speed_details_top_shot_speed_imperial: Skater's single highest recorded shot speed in miles per hour for the season.
+  shot_speed_details_top_shot_speed_metric: Skater's single highest recorded shot speed in kilometres per hour for the season.
+  shot_speed_details_top_shot_speed_overlay_away_team_abbrev: Abbreviation of the away team in the game where the skater recorded their top shot speed.
+  shot_speed_details_top_shot_speed_overlay_away_team_score: Away team's final score in the game where the skater recorded their top shot speed.
+  shot_speed_details_top_shot_speed_overlay_game_date: Calendar date of the game in which the skater recorded their top shot speed.
+  shot_speed_details_top_shot_speed_overlay_game_outcome_last_period_type: Period type (REG, OT, or SO) of the final period in the game where the skater's top shot speed was recorded.
+  shot_speed_details_top_shot_speed_overlay_game_type: Numeric game-type code (e.g. 2 for regular season, 3 for playoffs) for the top-shot-speed game.
+  shot_speed_details_top_shot_speed_overlay_home_team_abbrev: Abbreviation of the home team in the game where the skater recorded their top shot speed.
+  shot_speed_details_top_shot_speed_overlay_home_team_score: Home team's final score in the game where the skater recorded their top shot speed.
+  shot_speed_details_top_shot_speed_overlay_period_descriptor_max_regulation_periods: Maximum number of regulation periods played in the top-shot-speed game (typically 3).
+  shot_speed_details_top_shot_speed_overlay_period_descriptor_number: Period number in which the skater recorded their top shot speed.
+  shot_speed_details_top_shot_speed_overlay_period_descriptor_period_type: Period type label (REG, OT, or SO) of the period in which the skater's top shot speed occurred.
+  shot_speed_details_top_shot_speed_overlay_player_first_name_default: Skater's first name as displayed in the top-shot-speed overlay.
+  shot_speed_details_top_shot_speed_overlay_player_last_name_default: Skater's last name as displayed in the top-shot-speed overlay.
+  shot_speed_details_top_shot_speed_overlay_time_in_period: Elapsed time within the period (mm:ss) when the skater's top shot speed was recorded.
+  skating_distance_details_distance_max_game_imperial: Greatest total distance the skater covered in any single game during the season, in miles.
+  skating_distance_details_distance_max_game_metric: Greatest total distance the skater covered in any single game during the season, in kilometres.
+  skating_distance_details_distance_max_game_overlay_away_team_abbrev: Abbreviation of the away team in the game where the skater set their single-game distance record.
+  skating_distance_details_distance_max_game_overlay_away_team_score: Away team's final score in the game where the skater set their single-game distance record.
+  skating_distance_details_distance_max_game_overlay_game_date: Calendar date of the game in which the skater covered their maximum single-game distance.
+  skating_distance_details_distance_max_game_overlay_game_outcome_last_period_type: Period type (REG, OT, or SO) of the final period in the skater's maximum single-game distance game.
+  skating_distance_details_distance_max_game_overlay_game_outcome_ot_periods: Number of overtime periods played in the game where the skater set their single-game distance record.
+  skating_distance_details_distance_max_game_overlay_game_type: Numeric game-type code for the game in which the skater covered their maximum single-game distance.
+  skating_distance_details_distance_max_game_overlay_home_team_abbrev: Abbreviation of the home team in the game where the skater set their single-game distance record.
+  skating_distance_details_distance_max_game_overlay_home_team_score: Home team's final score in the game where the skater set their single-game distance record.
+  skating_distance_details_distance_max_game_overlay_period_descriptor_max_regulation_periods: Maximum number of regulation periods in the game where the skater covered their greatest single-game distance.
+  skating_distance_details_distance_max_game_overlay_period_descriptor_number: Period number being referenced in the skater's maximum single-game distance overlay context.
+  skating_distance_details_distance_max_game_overlay_period_descriptor_period_type: Period type label for the period referenced in the skater's maximum single-game distance overlay.
+  skating_distance_details_distance_max_game_overlay_player_first_name_default: Skater's first name as displayed in the single-game maximum distance overlay.
+  skating_distance_details_distance_max_game_overlay_player_last_name_default: Skater's last name as displayed in the single-game maximum distance overlay.
+  skating_distance_details_distance_max_period_imperial: Greatest distance the skater covered in any single period during the season, in miles.
+  skating_distance_details_distance_max_period_metric: Greatest distance the skater covered in any single period during the season, in kilometres.
+  skating_distance_details_distance_max_period_overlay_away_team_abbrev: Abbreviation of the away team in the game where the skater set their single-period distance record.
+  skating_distance_details_distance_max_period_overlay_away_team_score: Away team's final score in the game where the skater set their single-period distance record.
+  skating_distance_details_distance_max_period_overlay_game_date: Calendar date of the game in which the skater covered their maximum single-period distance.
+  skating_distance_details_distance_max_period_overlay_game_outcome_last_period_type: Period type (REG, OT, or SO) of the final period in the skater's maximum single-period distance game.
+  skating_distance_details_distance_max_period_overlay_game_type: Numeric game-type code for the game in which the skater covered their maximum single-period distance.
+  skating_distance_details_distance_max_period_overlay_home_team_abbrev: Abbreviation of the home team in the game where the skater set their single-period distance record.
+  skating_distance_details_distance_max_period_overlay_home_team_score: Home team's final score in the game where the skater set their single-period distance record.
+  skating_distance_details_distance_max_period_overlay_period_descriptor_max_regulation_periods: Maximum number of regulation periods in the game where the skater covered their greatest single-period distance.
+  skating_distance_details_distance_max_period_overlay_period_descriptor_number: Period number in which the skater covered their maximum single-period skating distance.
+  skating_distance_details_distance_max_period_overlay_period_descriptor_period_type: Period type label (REG, OT) for the period in which the skater's single-period distance record was set.
+  skating_distance_details_distance_max_period_overlay_player_first_name_default: Skater's first name as displayed in the single-period maximum distance overlay.
+  skating_distance_details_distance_max_period_overlay_player_last_name_default: Skater's last name as displayed in the single-period maximum distance overlay.
+  skating_distance_details_distance_per60_imperial: Skater's average skating distance per 60 minutes of ice time during the season, in miles.
+  skating_distance_details_distance_per60_metric: Skater's average skating distance per 60 minutes of ice time during the season, in kilometres.
+  skating_distance_details_distance_total_imperial: Total cumulative skating distance the skater covered across all games in the season, in miles.
+  skating_distance_details_distance_total_metric: Total cumulative skating distance the skater covered across all games in the season, in kilometres.
+  skating_distance_last10: Serialized skating-distance trend data for the skater's most recent 10 games.
+  skating_speed_details_bursts18_to20: Number of skating speed bursts the skater recorded between 18 and 20 mph during the season.
+  skating_speed_details_bursts20_to22: Number of skating speed bursts the skater recorded between 20 and 22 mph during the season.
+  skating_speed_details_bursts_over22: Number of skating speed bursts the skater recorded exceeding 22 mph during the season.
+  skating_speed_details_max_skating_speed_imperial: Skater's single highest skating speed recorded during the season, in miles per hour.
+  skating_speed_details_max_skating_speed_metric: Skater's single highest skating speed recorded during the season, in kilometres per hour.
+  skating_speed_details_max_skating_speed_overlay_away_team_abbrev: Abbreviation of the away team in the game where the skater recorded their top skating speed.
+  skating_speed_details_max_skating_speed_overlay_away_team_score: Away team's final score in the game where the skater recorded their top skating speed.
+  skating_speed_details_max_skating_speed_overlay_game_date: Calendar date of the game in which the skater reached their maximum skating speed.
+  skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type: Period type (REG, OT, or SO) of the final period in the game where the skater's top speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_game_type: Numeric game-type code for the game in which the skater recorded their maximum skating speed.
+  skating_speed_details_max_skating_speed_overlay_home_team_abbrev: Abbreviation of the home team in the game where the skater recorded their top skating speed.
+  skating_speed_details_max_skating_speed_overlay_home_team_score: Home team's final score in the game where the skater recorded their top skating speed.
+  skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods: Maximum number of regulation periods in the game where the skater reached their top skating speed (typically 3).
+  skating_speed_details_max_skating_speed_overlay_period_descriptor_number: Period number in which the skater reached their maximum skating speed.
+  skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type: Period type label (REG or OT) for the period in which the skater's top speed occurred.
+  skating_speed_details_max_skating_speed_overlay_player_first_name_default: Skater's first name as displayed in the top-skating-speed overlay.
+  skating_speed_details_max_skating_speed_overlay_player_last_name_default: Skater's last name as displayed in the top-skating-speed overlay.
+  skating_speed_details_max_skating_speed_overlay_time_in_period: Elapsed time within the period (mm:ss) when the skater reached their maximum skating speed.
+  zone_starts_defensive_zone_starts: Percentage of the skater's on-ice faceoffs that were taken in the defensive zone.
+  zone_starts_neutral_zone_starts: Percentage of the skater's on-ice faceoffs that were taken in the neutral zone.
+  zone_starts_offensive_zone_starts: Percentage of the skater's on-ice faceoffs that were taken in the offensive zone.
+  zone_time_details_defensive_zone_league_avg: League-average percentage of ice time that skaters spend in the defensive zone.
+  zone_time_details_defensive_zone_pctg: Percentage of the skater's total ice time spent in the defensive zone, per EDGE tracking.
+  zone_time_details_neutral_zone_league_avg: League-average percentage of ice time that skaters spend in the neutral zone.
+  zone_time_details_neutral_zone_pctg: Percentage of the skater's total ice time spent in the neutral zone, per EDGE tracking.
+  zone_time_details_offensive_zone_league_avg: League-average percentage of ice time that skaters spend in the offensive zone.
+  zone_time_details_offensive_zone_pctg: Percentage of the skater's total ice time spent in the offensive zone, per EDGE tracking.
 skater_detail:
   distance_max_game_imperial: Maximum distance skated by the player in their single best game of the season, measured in miles (imperial).
   distance_max_game_league_avg_imperial: League-average maximum single-game distance skated among all qualifying skaters, measured in miles (imperial).
@@ -2705,6 +3148,152 @@ skater_detail:
   zone_time_details_offensive_zone_league_avg: League-average percentage of all-situation ice time spent in the offensive zone among qualifying skaters, used as a comparison baseline.
   zone_time_details_offensive_zone_pctg: Percentage of the player's total tracked ice time spent in the offensive zone across all situations, as measured by NHL EDGE zone-time tracking.
   zone_time_details_offensive_zone_percentile: Percentile rank of the player's overall offensive zone time percentage relative to all qualifying skaters in the NHL EDGE dataset.
+skater_landing:
+  leaders_defensive_zone_time_player_first_name_default: First name of the skater leading the defensive zone time leaderboard, in the default display language.
+  leaders_defensive_zone_time_player_headshot: URL of the headshot image for the defensive zone time leaderboard leader.
+  leaders_defensive_zone_time_player_id: Unique NHL identifier for the skater atop the defensive zone time leaderboard.
+  leaders_defensive_zone_time_player_last_name_default: Last name of the skater leading the defensive zone time leaderboard, in the default display language.
+  leaders_defensive_zone_time_player_position: Ice position (e.g., C, LW, RW, D) of the defensive zone time leaderboard leader.
+  leaders_defensive_zone_time_player_slug: URL-safe slug identifying the defensive zone time leaderboard leader on the NHL website.
+  leaders_defensive_zone_time_player_sweater_number: Jersey number worn by the skater leading the defensive zone time leaderboard.
+  leaders_defensive_zone_time_player_team_abbrev: Three-letter abbreviation of the team the defensive zone time leader plays for.
+  leaders_defensive_zone_time_player_team_common_name_default: Common team name (e.g., Maple Leafs) of the defensive zone time leaderboard leader's club, in the default language.
+  leaders_defensive_zone_time_player_team_place_name_with_preposition_default: Team place name with grammatical preposition in the default language (e.g., "in Toronto") for the defensive zone time leader's team.
+  leaders_defensive_zone_time_player_team_place_name_with_preposition_fr: Team place name with grammatical preposition in French for the defensive zone time leader's team.
+  leaders_defensive_zone_time_player_team_team_logo_dark: URL of the dark-background version of the team logo for the defensive zone time leaderboard leader's club.
+  leaders_defensive_zone_time_player_team_team_logo_light: URL of the light-background version of the team logo for the defensive zone time leaderboard leader's club.
+  leaders_defensive_zone_time_zone_time: Total time the defensive zone time leaderboard leader spent in the defensive zone, as tracked by NHL EDGE player tracking.
+  leaders_distance_max_game_distance_skated_imperial: Farthest single-game skating distance (in miles) recorded by the distance-max-game leaderboard leader, per NHL EDGE tracking.
+  leaders_distance_max_game_distance_skated_metric: Farthest single-game skating distance (in kilometres) recorded by the distance-max-game leaderboard leader, per NHL EDGE tracking.
+  leaders_distance_max_game_overlay_away_team_abbrev: Three-letter abbreviation of the away team in the game where the distance-max-game leader set their top mark.
+  leaders_distance_max_game_overlay_away_team_score: Final score of the away team in the game where the distance-max-game leader set their single-game distance record.
+  leaders_distance_max_game_overlay_game_date: Calendar date of the game in which the distance-max-game leader skated their record single-game distance.
+  leaders_distance_max_game_overlay_game_outcome_last_period_type: Period type (REG, OT, SO) that decided the outcome of the game where the distance-max-game leader set their record.
+  leaders_distance_max_game_overlay_game_outcome_ot_periods: Number of overtime periods played in the game where the distance-max-game leader set their single-game distance record.
+  leaders_distance_max_game_overlay_game_type: Game type code (e.g., regular season, playoffs) for the game where the distance-max-game leader set their record.
+  leaders_distance_max_game_overlay_home_team_abbrev: Three-letter abbreviation of the home team in the game where the distance-max-game leader set their top mark.
+  leaders_distance_max_game_overlay_home_team_score: Final score of the home team in the game where the distance-max-game leader set their single-game distance record.
+  leaders_distance_max_game_overlay_period_descriptor_max_regulation_periods: Maximum number of regulation periods in the game where the distance-max-game leader set their record (typically 3).
+  leaders_distance_max_game_overlay_period_descriptor_number: Period number in which the distance-max-game leader's record tracking event was most notable.
+  leaders_distance_max_game_overlay_period_descriptor_period_type: Period type label (e.g., REG, OT) for the period highlighted in the distance-max-game overlay.
+  leaders_distance_max_game_overlay_player_first_name_default: First name of the skater displayed in the distance-max-game game overlay, in the default language.
+  leaders_distance_max_game_overlay_player_last_name_default: Last name of the skater displayed in the distance-max-game game overlay, in the default language.
+  leaders_distance_max_game_player_first_name_default: First name of the skater who skated the farthest distance in a single game, in the default display language.
+  leaders_distance_max_game_player_headshot: URL of the headshot image for the skater atop the single-game distance leaderboard.
+  leaders_distance_max_game_player_id: Unique NHL identifier for the skater who recorded the highest single-game skating distance.
+  leaders_distance_max_game_player_last_name_default: Last name of the skater who skated the farthest distance in a single game, in the default display language.
+  leaders_distance_max_game_player_position: Ice position (e.g., C, LW, RW, D) of the single-game distance skating leader.
+  leaders_distance_max_game_player_slug: URL-safe slug identifying the single-game distance skating leader on the NHL website.
+  leaders_distance_max_game_player_sweater_number: Jersey number worn by the skater who recorded the highest single-game skating distance.
+  leaders_distance_max_game_player_team_abbrev: Three-letter abbreviation of the team the single-game distance skating leader plays for.
+  leaders_distance_max_game_player_team_common_name_default: Common team name of the single-game distance skating leader's club, in the default language.
+  leaders_distance_max_game_player_team_place_name_with_preposition_default: Team place name with grammatical preposition in the default language for the single-game distance leader's team.
+  leaders_distance_max_game_player_team_place_name_with_preposition_fr: Team place name with grammatical preposition in French for the single-game distance leader's team.
+  leaders_distance_max_game_player_team_team_logo_dark: URL of the dark-background version of the team logo for the single-game distance skating leader's club.
+  leaders_distance_max_game_player_team_team_logo_light: URL of the light-background version of the team logo for the single-game distance skating leader's club.
+  leaders_hardest_shot_overlay_away_team_abbrev: Three-letter abbreviation of the away team in the game where the hardest shot leader recorded their top shot speed.
+  leaders_hardest_shot_overlay_away_team_score: Final score of the away team in the game where the hardest shot leader recorded their top shot speed.
+  leaders_hardest_shot_overlay_game_date: Calendar date of the game in which the hardest shot leader recorded their fastest shot speed.
+  leaders_hardest_shot_overlay_game_outcome_last_period_type: Period type (REG, OT, SO) that decided the outcome of the game where the hardest shot leader set their mark.
+  leaders_hardest_shot_overlay_game_outcome_ot_periods: Number of overtime periods played in the game where the hardest shot leader recorded their top speed.
+  leaders_hardest_shot_overlay_game_type: Game type code (e.g., regular season, playoffs) for the game where the hardest shot leader set their record.
+  leaders_hardest_shot_overlay_home_team_abbrev: Three-letter abbreviation of the home team in the game where the hardest shot leader recorded their top shot speed.
+  leaders_hardest_shot_overlay_home_team_score: Final score of the home team in the game where the hardest shot leader recorded their top shot speed.
+  leaders_hardest_shot_overlay_period_descriptor_max_regulation_periods: Maximum number of regulation periods in the game where the hardest shot leader set their record (typically 3).
+  leaders_hardest_shot_overlay_period_descriptor_number: Period number in which the hardest shot leader's fastest shot was recorded.
+  leaders_hardest_shot_overlay_period_descriptor_period_type: Period type label (e.g., REG, OT) for the period in which the hardest shot was recorded.
+  leaders_hardest_shot_overlay_player_first_name_default: First name of the skater shown in the hardest shot game overlay, in the default language.
+  leaders_hardest_shot_overlay_player_last_name_default: Last name of the skater shown in the hardest shot game overlay, in the default language.
+  leaders_hardest_shot_overlay_time_in_period: Elapsed time within the period when the hardest shot leader's fastest recorded shot occurred.
+  leaders_hardest_shot_player_first_name_default: First name of the skater leading the hardest shot speed leaderboard, in the default display language.
+  leaders_hardest_shot_player_headshot: URL of the headshot image for the hardest shot leaderboard leader.
+  leaders_hardest_shot_player_id: Unique NHL identifier for the skater atop the hardest shot speed leaderboard.
+  leaders_hardest_shot_player_last_name_default: Last name of the skater leading the hardest shot speed leaderboard, in the default display language.
+  leaders_hardest_shot_player_position: Ice position (e.g., C, LW, RW, D) of the hardest shot speed leaderboard leader.
+  leaders_hardest_shot_player_slug: URL-safe slug identifying the hardest shot leaderboard leader on the NHL website.
+  leaders_hardest_shot_player_sweater_number: Jersey number worn by the skater leading the hardest shot speed leaderboard.
+  leaders_hardest_shot_player_team_abbrev: Three-letter abbreviation of the team the hardest shot leaderboard leader plays for.
+  leaders_hardest_shot_player_team_common_name_default: Common team name of the hardest shot leaderboard leader's club, in the default language.
+  leaders_hardest_shot_player_team_place_name_with_preposition_default: Team place name with grammatical preposition in the default language for the hardest shot leader's team.
+  leaders_hardest_shot_player_team_place_name_with_preposition_fr: Team place name with grammatical preposition in French for the hardest shot leader's team.
+  leaders_hardest_shot_player_team_team_logo_dark: URL of the dark-background version of the team logo for the hardest shot leaderboard leader's club.
+  leaders_hardest_shot_player_team_team_logo_light: URL of the light-background version of the team logo for the hardest shot leaderboard leader's club.
+  leaders_hardest_shot_shot_speed_imperial: Fastest NHL EDGE-tracked shot speed (in mph) recorded by the hardest shot leaderboard leader.
+  leaders_hardest_shot_shot_speed_metric: Fastest NHL EDGE-tracked shot speed (in km/h) recorded by the hardest shot leaderboard leader.
+  leaders_high_danger_sog_player_first_name_default: First name of the skater leading the high-danger shots-on-goal leaderboard, in the default display language.
+  leaders_high_danger_sog_player_headshot: URL of the headshot image for the high-danger shots-on-goal leaderboard leader.
+  leaders_high_danger_sog_player_id: Unique NHL identifier for the skater atop the high-danger shots-on-goal leaderboard.
+  leaders_high_danger_sog_player_last_name_default: Last name of the skater leading the high-danger shots-on-goal leaderboard, in the default display language.
+  leaders_high_danger_sog_player_position: Ice position (e.g., C, LW, RW, D) of the high-danger shots-on-goal leaderboard leader.
+  leaders_high_danger_sog_player_slug: URL-safe slug identifying the high-danger shots-on-goal leaderboard leader on the NHL website.
+  leaders_high_danger_sog_player_sweater_number: Jersey number worn by the skater leading the high-danger shots-on-goal leaderboard.
+  leaders_high_danger_sog_player_team_abbrev: Three-letter abbreviation of the team the high-danger shots-on-goal leader plays for.
+  leaders_high_danger_sog_player_team_common_name_default: Common team name of the high-danger shots-on-goal leaderboard leader's club, in the default language.
+  leaders_high_danger_sog_player_team_place_name_with_preposition_default: Team place name with grammatical preposition in the default language for the high-danger shots-on-goal leader's team.
+  leaders_high_danger_sog_player_team_place_name_with_preposition_fr: Team place name with grammatical preposition in French for the high-danger shots-on-goal leader's team.
+  leaders_high_danger_sog_player_team_team_logo_dark: URL of the dark-background version of the team logo for the high-danger shots-on-goal leader's club.
+  leaders_high_danger_sog_player_team_team_logo_light: URL of the light-background version of the team logo for the high-danger shots-on-goal leader's club.
+  leaders_high_danger_sog_shot_location_details: Structured details describing the ice zones or slot locations from which the high-danger shots-on-goal leader's tracked shots originated.
+  leaders_high_danger_sog_sog: Total number of high-danger shots on goal recorded by the leaderboard leader, as tracked by NHL EDGE puck tracking.
+  leaders_max_skating_speed_overlay_away_team_abbrev: Three-letter abbreviation of the away team in the game where the max skating speed leader recorded their top speed.
+  leaders_max_skating_speed_overlay_away_team_score: Final score of the away team in the game where the max skating speed leader set their top burst speed.
+  leaders_max_skating_speed_overlay_game_date: Calendar date of the game in which the max skating speed leader recorded their fastest burst speed.
+  leaders_max_skating_speed_overlay_game_outcome_last_period_type: Period type (REG, OT, SO) that decided the game where the max skating speed leader set their top mark.
+  leaders_max_skating_speed_overlay_game_outcome_ot_periods: Number of overtime periods played in the game where the max skating speed leader recorded their fastest speed.
+  leaders_max_skating_speed_overlay_game_type: Game type code (e.g., regular season, playoffs) for the game where the max skating speed leader set their record.
+  leaders_max_skating_speed_overlay_home_team_abbrev: Three-letter abbreviation of the home team in the game where the max skating speed leader recorded their top speed.
+  leaders_max_skating_speed_overlay_home_team_score: Final score of the home team in the game where the max skating speed leader set their top burst speed.
+  leaders_max_skating_speed_overlay_period_descriptor_max_regulation_periods: Maximum number of regulation periods in the game where the max skating speed leader set their record (typically 3).
+  leaders_max_skating_speed_overlay_period_descriptor_number: Period number in which the max skating speed leader's fastest burst was recorded.
+  leaders_max_skating_speed_overlay_period_descriptor_period_type: Period type label (e.g., REG, OT) for the period in which the max skating speed was recorded.
+  leaders_max_skating_speed_overlay_player_first_name_default: First name of the skater shown in the max skating speed game overlay, in the default language.
+  leaders_max_skating_speed_overlay_player_last_name_default: Last name of the skater shown in the max skating speed game overlay, in the default language.
+  leaders_max_skating_speed_overlay_time_in_period: Elapsed time within the period when the max skating speed leader's fastest burst was recorded.
+  leaders_max_skating_speed_player_first_name_default: First name of the skater leading the maximum skating speed leaderboard, in the default display language.
+  leaders_max_skating_speed_player_headshot: URL of the headshot image for the maximum skating speed leaderboard leader.
+  leaders_max_skating_speed_player_id: Unique NHL identifier for the skater atop the maximum skating speed leaderboard.
+  leaders_max_skating_speed_player_last_name_default: Last name of the skater leading the maximum skating speed leaderboard, in the default display language.
+  leaders_max_skating_speed_player_position: Ice position (e.g., C, LW, RW, D) of the maximum skating speed leaderboard leader.
+  leaders_max_skating_speed_player_slug: URL-safe slug identifying the maximum skating speed leaderboard leader on the NHL website.
+  leaders_max_skating_speed_player_sweater_number: Jersey number worn by the skater leading the maximum skating speed leaderboard.
+  leaders_max_skating_speed_player_team_abbrev: Three-letter abbreviation of the team the maximum skating speed leaderboard leader plays for.
+  leaders_max_skating_speed_player_team_common_name_default: Common team name of the maximum skating speed leaderboard leader's club, in the default language.
+  leaders_max_skating_speed_player_team_place_name_with_preposition_default: Team place name with grammatical preposition in the default language for the max skating speed leader's team.
+  leaders_max_skating_speed_player_team_place_name_with_preposition_fr: Team place name with grammatical preposition in French for the max skating speed leader's team.
+  leaders_max_skating_speed_player_team_team_logo_dark: URL of the dark-background version of the team logo for the maximum skating speed leaderboard leader's club.
+  leaders_max_skating_speed_player_team_team_logo_light: URL of the light-background version of the team logo for the maximum skating speed leaderboard leader's club.
+  leaders_max_skating_speed_skating_speed_imperial: Peak skating burst speed (in mph) recorded by the maximum skating speed leaderboard leader, per NHL EDGE tracking.
+  leaders_max_skating_speed_skating_speed_metric: Peak skating burst speed (in km/h) recorded by the maximum skating speed leaderboard leader, per NHL EDGE tracking.
+  leaders_offensive_zone_time_player_first_name_default: First name of the skater leading the offensive zone time leaderboard, in the default display language.
+  leaders_offensive_zone_time_player_headshot: URL of the headshot image for the offensive zone time leaderboard leader.
+  leaders_offensive_zone_time_player_id: Unique NHL identifier for the skater atop the offensive zone time leaderboard.
+  leaders_offensive_zone_time_player_last_name_default: Last name of the skater leading the offensive zone time leaderboard, in the default display language.
+  leaders_offensive_zone_time_player_position: Ice position (e.g., C, LW, RW, D) of the offensive zone time leaderboard leader.
+  leaders_offensive_zone_time_player_slug: URL-safe slug identifying the offensive zone time leaderboard leader on the NHL website.
+  leaders_offensive_zone_time_player_sweater_number: Jersey number worn by the skater leading the offensive zone time leaderboard.
+  leaders_offensive_zone_time_player_team_abbrev: Three-letter abbreviation of the team the offensive zone time leaderboard leader plays for.
+  leaders_offensive_zone_time_player_team_common_name_default: Common team name of the offensive zone time leaderboard leader's club, in the default language.
+  leaders_offensive_zone_time_player_team_place_name_with_preposition_default: Team place name with grammatical preposition in the default language for the offensive zone time leader's team.
+  leaders_offensive_zone_time_player_team_place_name_with_preposition_fr: Team place name with grammatical preposition in French for the offensive zone time leader's team.
+  leaders_offensive_zone_time_player_team_team_logo_dark: URL of the dark-background version of the team logo for the offensive zone time leaderboard leader's club.
+  leaders_offensive_zone_time_player_team_team_logo_light: URL of the light-background version of the team logo for the offensive zone time leaderboard leader's club.
+  leaders_offensive_zone_time_zone_time: Total time the offensive zone time leaderboard leader spent in the offensive zone, as tracked by NHL EDGE player tracking.
+  leaders_total_distance_skated_distance_skated_imperial: Cumulative skating distance (in miles) recorded by the total distance skated leaderboard leader, per NHL EDGE tracking.
+  leaders_total_distance_skated_distance_skated_metric: Cumulative skating distance (in kilometres) recorded by the total distance skated leaderboard leader, per NHL EDGE tracking.
+  leaders_total_distance_skated_player_first_name_default: First name of the skater leading the total distance skated leaderboard, in the default display language.
+  leaders_total_distance_skated_player_headshot: URL of the headshot image for the total distance skated leaderboard leader.
+  leaders_total_distance_skated_player_id: Unique NHL identifier for the skater atop the total distance skated leaderboard.
+  leaders_total_distance_skated_player_last_name_default: Last name of the skater leading the total distance skated leaderboard, in the default display language.
+  leaders_total_distance_skated_player_position: Ice position (e.g., C, LW, RW, D) of the total distance skated leaderboard leader.
+  leaders_total_distance_skated_player_slug: URL-safe slug identifying the total distance skated leaderboard leader on the NHL website.
+  leaders_total_distance_skated_player_sweater_number: Jersey number worn by the skater leading the total distance skated leaderboard.
+  leaders_total_distance_skated_player_team_abbrev: Three-letter abbreviation of the team the total distance skated leaderboard leader plays for.
+  leaders_total_distance_skated_player_team_common_name_default: Common team name of the total distance skated leaderboard leader's club, in the default language.
+  leaders_total_distance_skated_player_team_place_name_with_preposition_default: Team place name with grammatical preposition in the default language for the total distance skated leader's team.
+  leaders_total_distance_skated_player_team_place_name_with_preposition_fr: Team place name with grammatical preposition in French for the total distance skated leader's team.
+  leaders_total_distance_skated_player_team_team_logo_dark: URL of the dark-background version of the team logo for the total distance skated leaderboard leader's club.
+  leaders_total_distance_skated_player_team_team_logo_light: URL of the light-background version of the team logo for the total distance skated leaderboard leader's club.
+  seasons_with_edge_stats: List of NHL seasons for which this skater has NHL EDGE player-tracking statistics available.
 skater_shot_speed_detail:
   hardest_shots: Serialized list or JSON array of the player's hardest individual shot efforts, including speed and context metadata from NHL EDGE puck tracking.
   shot_speed_details_avg_shot_speed_imperial: Player's average shot speed across all tracked shot attempts for the season, measured in miles per hour (imperial).
@@ -2742,6 +3331,38 @@ skater_shot_speed_detail:
   shot_speed_details_top_shot_speed_overlay_player_last_name_default: Player's last name as stored in the NHL api-web system, included in the overlay for the top-shot-speed event.
   shot_speed_details_top_shot_speed_overlay_time_in_period: Time elapsed within the period (MM:SS) when the player released their top-speed shot for the season.
   shot_speed_details_top_shot_speed_percentile: Percentile rank of the player's top shot speed relative to all qualifying skaters in the NHL EDGE shot-speed dataset.
+skater_skating_distance_detail:
+  skating_distance_details: JSON-serialized per-game breakdown of total distance skated by the player during the tracking period.
+  skating_distance_last10: JSON-serialized rolling summary of total distance skated by the player across the last 10 games.
+skater_skating_speed_detail:
+  skating_speed_details_bursts18_to20_league_avg: League-average number of skating speed bursts in the 18-20 mph band per game, used as the baseline for percentile calculation.
+  skating_speed_details_bursts18_to20_percentile: Percentile rank among all NHL skaters for frequency of skating speed bursts in the 18-20 mph speed band.
+  skating_speed_details_bursts18_to20_value: Average number of skating bursts per game in which the skater's speed fell in the 18-20 mph range.
+  skating_speed_details_bursts20_to22_league_avg: League-average number of skating speed bursts in the 20-22 mph band per game, used as the baseline for percentile calculation.
+  skating_speed_details_bursts20_to22_percentile: Percentile rank among all NHL skaters for frequency of skating speed bursts in the 20-22 mph speed band.
+  skating_speed_details_bursts20_to22_value: Average number of skating bursts per game in which the skater's speed fell in the 20-22 mph range.
+  skating_speed_details_bursts_over22_league_avg: League-average number of skating speed bursts exceeding 22 mph per game, used as the baseline for this skater's percentile.
+  skating_speed_details_bursts_over22_percentile: Percentile rank among all NHL skaters for frequency of skating speed bursts exceeding 22 mph per game.
+  skating_speed_details_bursts_over22_value: Average number of skating bursts per game in which the skater reached or exceeded 22 mph during the tracking period.
+  skating_speed_details_max_skating_speed_imperial: Skater's maximum recorded skating speed in miles per hour captured by EDGE tracking during the tracking period.
+  skating_speed_details_max_skating_speed_league_avg_imperial: League-average maximum skating speed in miles per hour, used as the baseline for this skater's max-speed percentile.
+  skating_speed_details_max_skating_speed_league_avg_metric: League-average maximum skating speed in kilometers per hour, used as the baseline for this skater's max-speed percentile.
+  skating_speed_details_max_skating_speed_metric: Skater's maximum recorded skating speed in kilometers per hour captured by EDGE tracking during the tracking period.
+  skating_speed_details_max_skating_speed_overlay_away_team_abbrev: Abbreviation of the away team in the game where the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_away_team_score: Score of the away team at the conclusion of the game in which the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_game_date: Date on which the game occurred where the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type: Type of the final period that determined the outcome of the game where the max speed was recorded (REG, OT, or SO).
+  skating_speed_details_max_skating_speed_overlay_game_type: NHL game type code (e.g., 2 = regular season, 3 = playoffs) for the game where the skater's maximum speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_home_team_abbrev: Abbreviation of the home team in the game where the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_home_team_score: Score of the home team at the conclusion of the game in which the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods: Number of regulation periods in the game format where the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_period_descriptor_number: Period number within the game in which the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type: Period type (REG, OT) identifying the phase of the game when the skater's maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_overlay_player_first_name_default: First name of the skater for whom the maximum skating speed overlay data is displayed.
+  skating_speed_details_max_skating_speed_overlay_player_last_name_default: Last name of the skater for whom the maximum skating speed overlay data is displayed.
+  skating_speed_details_max_skating_speed_overlay_time_in_period: Elapsed time within the period (mm:ss) at which the skater's career or season maximum skating speed was recorded.
+  skating_speed_details_max_skating_speed_percentile: Percentile rank among all NHL skaters for maximum skating speed recorded during the tracking period.
+  top_skating_speeds: JSON-serialized list of the skater's top individual speed bursts, typically the ten highest speed readings recorded during the tracking period.
 standings:
   advanced: Whether the team has advanced/qualified.
   against: Runs/goals against.
@@ -3065,6 +3686,94 @@ team_detail:
   zone_time_details_offensive_zone_league_avg: League-average percentage of all-situation ice time that teams spend in the offensive zone, from NHL EDGE zone-time tracking data.
   zone_time_details_offensive_zone_pctg: Percentage of all-situation ice time this team spends in the offensive zone, as measured by NHL EDGE player-tracking data.
   zone_time_details_offensive_zone_rank: Team's league rank by overall offensive-zone time percentage (all situations), where rank 1 indicates the team with the most offensive-zone presence.
+team_landing:
+  leaders_bursts_over22_bursts: Number of speed bursts above 22 mph recorded by skaters on the team in the EDGE tracking leaderboard period.
+  leaders_bursts_over22_team_abbrev: Three-letter abbreviation for the team leading the speed-bursts-over-22-mph EDGE tracking category.
+  leaders_bursts_over22_team_common_name_default: Common team name (e.g., 'Maple Leafs') for the leader in the speed-bursts-over-22-mph EDGE tracking category.
+  leaders_bursts_over22_team_id: NHL identifier for the team leading the speed-bursts-over-22-mph EDGE tracking category.
+  leaders_bursts_over22_team_losses: Regular-season losses for the team leading the speed-bursts-over-22-mph EDGE tracking category.
+  leaders_bursts_over22_team_ot_losses: Overtime losses for the team leading the speed-bursts-over-22-mph EDGE tracking category.
+  leaders_bursts_over22_team_place_name_with_preposition_default: Default-language place name with preposition (e.g., 'in Toronto') for the team leading the speed-bursts-over-22-mph EDGE category.
+  leaders_bursts_over22_team_place_name_with_preposition_fr: French-language place name with preposition for the team leading the speed-bursts-over-22-mph EDGE category.
+  leaders_bursts_over22_team_slug: URL-friendly slug identifier for the team leading the speed-bursts-over-22-mph EDGE tracking category.
+  leaders_bursts_over22_team_team_logo_dark: URL of the dark-background logo for the team leading the speed-bursts-over-22-mph EDGE category.
+  leaders_bursts_over22_team_team_logo_light: URL of the light-background logo for the team leading the speed-bursts-over-22-mph EDGE category.
+  leaders_bursts_over22_team_wins: Regular-season wins for the team leading the speed-bursts-over-22-mph EDGE tracking category.
+  leaders_defensive_zone_time_team_abbrev: Three-letter abbreviation for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_common_name_default: Common team name for the leader in the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_id: NHL identifier for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_losses: Regular-season losses for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_ot_losses: Overtime losses for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_place_name_with_preposition_default: Default-language place name with preposition for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_place_name_with_preposition_fr: French-language place name with preposition for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_slug: URL-friendly slug identifier for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_team_logo_dark: URL of the dark-background logo for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_team_logo_light: URL of the light-background logo for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_team_wins: Regular-season wins for the team leading the EDGE defensive-zone time category.
+  leaders_defensive_zone_time_zone_time: Total time spent in the defensive zone by the leading team in the EDGE tracking leaderboard period.
+  leaders_distance_per60_distance_skated_imperial: Average distance skated per 60 minutes of ice time by the leading team's skaters, measured in miles.
+  leaders_distance_per60_distance_skated_metric: Average distance skated per 60 minutes of ice time by the leading team's skaters, measured in kilometers.
+  leaders_distance_per60_team_abbrev: Three-letter abbreviation for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_common_name_default: Common team name for the leader in the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_id: NHL identifier for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_losses: Regular-season losses for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_ot_losses: Overtime losses for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_place_name_with_preposition_default: Default-language place name with preposition for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_place_name_with_preposition_fr: French-language place name with preposition for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_slug: URL-friendly slug identifier for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_team_logo_dark: URL of the dark-background logo for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_team_logo_light: URL of the light-background logo for the team leading the EDGE distance-skated-per-60 category.
+  leaders_distance_per60_team_wins: Regular-season wins for the team leading the EDGE distance-skated-per-60 category.
+  leaders_high_danger_sog_shot_location_details: Serialized details describing the high-danger shot locations used to define this EDGE tracking leaderboard category.
+  leaders_high_danger_sog_sog: Number of high-danger shots on goal recorded by the leading team in the EDGE tracking leaderboard period.
+  leaders_high_danger_sog_team_abbrev: Three-letter abbreviation for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_common_name_default: Common team name for the leader in the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_id: NHL identifier for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_losses: Regular-season losses for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_ot_losses: Overtime losses for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_place_name_with_preposition_default: Default-language place name with preposition for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_place_name_with_preposition_fr: French-language place name with preposition for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_slug: URL-friendly slug identifier for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_team_logo_dark: URL of the dark-background logo for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_team_logo_light: URL of the light-background logo for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_high_danger_sog_team_wins: Regular-season wins for the team leading the EDGE high-danger shots-on-goal category.
+  leaders_neutral_zone_time_team_abbrev: Three-letter abbreviation for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_common_name_default: Common team name for the leader in the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_id: NHL identifier for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_losses: Regular-season losses for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_ot_losses: Overtime losses for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_place_name_with_preposition_default: Default-language place name with preposition for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_place_name_with_preposition_fr: French-language place name with preposition for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_slug: URL-friendly slug identifier for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_team_logo_dark: URL of the dark-background logo for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_team_logo_light: URL of the light-background logo for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_team_wins: Regular-season wins for the team leading the EDGE neutral-zone time category.
+  leaders_neutral_zone_time_zone_time: Total time spent in the neutral zone by the leading team in the EDGE tracking leaderboard period.
+  leaders_offensive_zone_time_team_abbrev: Three-letter abbreviation for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_common_name_default: Common team name for the leader in the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_id: NHL identifier for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_losses: Regular-season losses for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_ot_losses: Overtime losses for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_place_name_with_preposition_default: Default-language place name with preposition for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_place_name_with_preposition_fr: French-language place name with preposition for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_slug: URL-friendly slug identifier for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_team_logo_dark: URL of the dark-background logo for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_team_logo_light: URL of the light-background logo for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_team_wins: Regular-season wins for the team leading the EDGE offensive-zone time category.
+  leaders_offensive_zone_time_zone_time: Total time spent in the offensive zone by the leading team in the EDGE tracking leaderboard period.
+  leaders_shot_attempts_over90_attempts: Number of shot attempts above the 90-mph threshold recorded by the leading team in the EDGE shot-speed leaderboard period.
+  leaders_shot_attempts_over90_team_abbrev: Three-letter abbreviation for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_common_name_default: Common team name for the leader in the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_id: NHL identifier for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_losses: Regular-season losses for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_ot_losses: Overtime losses for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_place_name_with_preposition_default: Default-language place name with preposition for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_place_name_with_preposition_fr: French-language place name with preposition for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_slug: URL-friendly slug identifier for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_team_logo_dark: URL of the dark-background logo for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_team_logo_light: URL of the light-background logo for the team leading the EDGE shot-attempts-over-90-mph category.
+  leaders_shot_attempts_over90_team_wins: Regular-season wins for the team leading the EDGE shot-attempts-over-90-mph category.
+  seasons_with_edge_stats: Serialized list of NHL seasons for which EDGE player-tracking data is available for this team.
 team_roster:
   age: Athlete age in years.
   athlete_id: ESPN numeric identifier for the athlete.
@@ -3106,6 +3815,9 @@ team_schedule:
   short_name: Abbreviated event name (e.g. 'TA @ TB').
   time_valid: Whether the event time is confirmed.
   week_text: Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API.
+team_shot_speed_detail:
+  hardest_shots: Serialized list of the hardest individual shot records associated with the team's players.
+  shot_speed_details: Serialized shot-speed breakdown object containing aggregate and top-speed metrics for the team.
 teams:
   abbreviation: Team abbreviation.
   alternate_color: Secondary team color (hex).

@@ -200,32 +200,32 @@ Retrieve one coach by their numeric ID.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `bio` | character |  |
+| `bio` | character | Free-text biographical summary of the coach's career and background. |
 | `birth_city` | character | Birth city. |
 | `birth_country3code` | character | Prospect birth country three-letter code. |
 | `birth_date` | character | Player birth date. |
-| `birth_state_province_code` | character |  |
+| `birth_state_province_code` | character | Two-letter state or province code indicating the coach's place of birth. |
 | `brief_description` | character | Brief description of the trophy. |
 | `date_of_death` | character | Date of death, if applicable. |
 | `deceased` | logical | Whether the player is deceased. |
 | `description` | character | Full text description of the event. |
-| `featured_image` | character |  |
+| `featured_image` | character | URL of the featured promotional image associated with the coach's NHL profile. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
 | `history` | character | ESPN's long-form history text for the award. |
-| `hockey_hof_link` | character |  |
+| `hockey_hof_link` | character | URL to the coach's page on the Hockey Hall of Fame website, if inducted. |
 | `in_hockey_hof` | logical | Whether the player is in the Hockey Hall of Fame. |
-| `in_iihf_hockey_hof` | logical |  |
+| `in_iihf_hockey_hof` | logical | Boolean flag indicating whether the coach is inducted into the IIHF Hockey Hall of Fame. |
 | `in_us_hockey_hof` | logical | Whether the player is in the US Hockey Hall of Fame. |
-| `instagram` | character |  |
+| `instagram` | character | Instagram profile handle or URL associated with the coach. |
 | `is_active` | logical | Whether the team is active. |
 | `last_name` | character | Player last name. |
 | `nationality_code` | character | Nationality code of the official. |
 | `player_id` | integer | Unique player identifier. |
-| `stanley_cup` | integer |  |
+| `stanley_cup` | integer | Number of Stanley Cup championships won by the coach as a head coach. |
 | `team_id` | character | Unique team identifier. |
-| `top100_player_link` | character |  |
-| `twitter` | character |  |
+| `top100_player_link` | character | URL to the coach's entry on the NHL's Top 100 Players list, if applicable. |
+| `twitter` | character | Twitter (X) handle or URL associated with the coach. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -255,9 +255,9 @@ Coach career-records (regular season).
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `active_coach` | logical |  |
-| `coach_name` | character |  |
-| `end_season` | integer |  |
+| `active_coach` | logical | Indicates whether the coach is currently active as an NHL head coach. |
+| `coach_name` | character | Full display name of the NHL head coach. |
+| `end_season` | integer | The most recent season the coach held a head-coaching position, encoded as an eight-digit season ID. |
 | `first_name` | character | Player first name. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games` | integer | Games played. |
@@ -265,33 +265,33 @@ Coach career-records (regular season).
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
 | `home_ties` | double | Ties at home. |
-| `home_win_pctg` | double |  |
+| `home_win_pctg` | double | Win percentage for all regular-season home games coached. |
 | `home_wins` | integer | Wins at home. |
-| `jack_adams` | integer |  |
-| `last_coached_date` | character |  |
+| `jack_adams` | integer | Number of Jack Adams Award trophies won by the coach as NHL coach of the year. |
+| `last_coached_date` | character | Date of the coach's most recent game on the bench, in ISO 8601 format. |
 | `last_name` | character | Player last name. |
 | `losses` | integer | Losses. |
-| `losses_in_ot` | integer |  |
-| `losses_in_ot_plus_shootout` | integer |  |
-| `losses_in_shootout` | double |  |
+| `losses_in_ot` | integer | Total regular-season games the coach's team lost in overtime. |
+| `losses_in_ot_plus_shootout` | integer | Total regular-season games the coach's team lost in overtime or a shootout combined. |
+| `losses_in_shootout` | double | Total regular-season games the coach's team lost via shootout. |
 | `ot_losses` | double | Overtime losses. |
-| `road_games` | integer |  |
+| `road_games` | integer | Total regular-season road games coached. |
 | `road_losses` | integer | Losses on the road. |
 | `road_ot_losses` | double | Road overtime losses. |
 | `road_ties` | double | Ties on the road. |
-| `road_win_pctg` | double |  |
+| `road_win_pctg` | double | Win percentage for all regular-season road games coached. |
 | `road_wins` | integer | Wins on the road. |
-| `seasons` | integer |  |
-| `stanley_cup_final_appearances` | integer |  |
-| `stanley_cups` | integer |  |
-| `start_season` | integer |  |
+| `seasons` | integer | Number of NHL seasons the coach has served as a head coach. |
+| `stanley_cup_final_appearances` | integer | Number of times the coach has led a team to the Stanley Cup Final. |
+| `stanley_cups` | integer | Number of Stanley Cup championships won as head coach. |
+| `start_season` | integer | The first season the coach served as an NHL head coach, encoded as an eight-digit season ID. |
 | `team_abbrevs` | character | Team abbreviation(s). |
 | `ties` | double | Total ties. |
-| `ties_in_ot` | integer |  |
-| `win_pctg` | double |  |
+| `ties_in_ot` | integer | Total regular-season overtime-period ties recorded under pre-shootout rules. |
+| `win_pctg` | double | Overall regular-season win percentage across the coach's entire career. |
 | `wins` | integer | Wins. |
-| `wins_in_ot` | integer |  |
-| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_ot` | integer | Total regular-season games the coach's team won in overtime. |
+| `wins_in_ot_plus_shootout` | integer | Total regular-season games the coach's team won in overtime or a shootout combined. |
 | `wins_in_shootout` | double | Wins in shootout. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -321,15 +321,15 @@ Coach career records inclusive of regular season + playoffs.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `active_coach` | logical |  |
+| `active_coach` | logical | Indicates whether the coach is currently active as an NHL head coach. |
 | `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
-| `coach_name` | character |  |
-| `end_season` | integer |  |
+| `coach_name` | character | Full display name of the NHL head coach. |
+| `end_season` | integer | The most recent season the coach held a head-coaching position, encoded as an eight-digit season ID. |
 | `games` | integer | Games played. |
 | `losses` | integer | Losses. |
 | `ot_losses` | double | Overtime losses. |
-| `seasons` | integer |  |
-| `start_season` | integer |  |
+| `seasons` | integer | Number of NHL seasons the coach has served as a head coach, including playoff appearances. |
+| `start_season` | integer | The first season the coach served as an NHL head coach, encoded as an eight-digit season ID. |
 | `team_abbrevs` | character | Team abbreviation(s). |
 | `ties` | double | Total ties. |
 | `wins` | integer | Wins. |
@@ -362,10 +362,10 @@ Coach records scoped to individual franchise stints.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `active_coach` | logical |  |
-| `coach_name` | character |  |
-| `end_season` | integer |  |
-| `first_coached_date` | character |  |
+| `active_coach` | logical | Indicates whether the coach is currently active with the franchise. |
+| `coach_name` | character | Full display name of the coach as recorded in NHL records. |
+| `end_season` | integer | Last season (in YYYYYYYY format) the coach was behind the bench for this franchise. |
+| `first_coached_date` | character | Calendar date on which the coach first handled a game for this franchise. |
 | `first_name` | character | Player first name. |
 | `franchise_id` | integer | Unique franchise identifier. |
 | `franchise_name` | character | Franchise name. |
@@ -375,36 +375,36 @@ Coach records scoped to individual franchise stints.
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
 | `home_ties` | double | Ties at home. |
-| `home_win_pctg` | double |  |
+| `home_win_pctg` | double | Fraction of home games the coach's franchise won during their tenure. |
 | `home_wins` | integer | Wins at home. |
-| `jack_adams` | integer |  |
-| `last_coached_date` | character |  |
+| `jack_adams` | integer | Number of Jack Adams Awards (NHL coach of the year) won by the coach during this franchise tenure. |
+| `last_coached_date` | character | Calendar date of the coach's most recent game on the bench for this franchise. |
 | `last_name` | character | Player last name. |
 | `losses` | integer | Losses. |
-| `losses_in_ot` | integer |  |
-| `losses_in_ot_plus_shootout` | integer |  |
-| `losses_in_shootout` | double |  |
+| `losses_in_ot` | integer | Number of games the coach's franchise lost in overtime during the tenure. |
+| `losses_in_ot_plus_shootout` | integer | Combined losses in overtime and shootout during the coach's franchise tenure. |
+| `losses_in_shootout` | double | Number of games the coach's franchise lost in a shootout during the tenure. |
 | `ot_losses` | double | Overtime losses. |
 | `point_pctg` | double | Points percentage. |
 | `points` | integer | Total points (goals + assists). |
-| `road_games` | integer |  |
+| `road_games` | integer | Total regular-season road games coached with this franchise. |
 | `road_losses` | integer | Losses on the road. |
 | `road_ot_losses` | double | Road overtime losses. |
 | `road_ties` | double | Ties on the road. |
-| `road_win_pctg` | double |  |
+| `road_win_pctg` | double | Fraction of away games the coach's franchise won during their tenure. |
 | `road_wins` | integer | Wins on the road. |
-| `seasons` | integer |  |
-| `stanley_cup_final_appearances` | integer |  |
-| `stanley_cups` | integer |  |
-| `start_season` | integer |  |
+| `seasons` | integer | Number of NHL seasons the coach spent with this franchise. |
+| `stanley_cup_final_appearances` | integer | Number of Stanley Cup Final appearances made while coaching this franchise. |
+| `stanley_cups` | integer | Number of Stanley Cup championships won while coaching this franchise. |
+| `start_season` | integer | First season (in YYYYYYYY format) the coach served with this franchise. |
 | `team_abbrev` | character | Team abbreviation. |
 | `team_name` | character | Team name. |
 | `ties` | double | Total ties. |
-| `ties_in_ot` | integer |  |
-| `win_pctg` | double |  |
+| `ties_in_ot` | integer | Number of overtime ties recorded under this coach for this franchise (pre-shootout era). |
+| `win_pctg` | double | Overall win percentage across all regular-season games coached with this franchise. |
 | `wins` | integer | Wins. |
-| `wins_in_ot` | integer |  |
-| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_ot` | integer | Number of games the coach's franchise won in overtime during the tenure. |
+| `wins_in_ot_plus_shootout` | integer | Combined wins in overtime and shootout during the coach's franchise tenure. |
 | `wins_in_shootout` | double | Wins in shootout. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -434,15 +434,15 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `active_coach` | logical |  |
+| `active_coach` | logical | Boolean flag indicating whether the coach is currently active as an NHL head coach. |
 | `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
-| `coach_name` | character |  |
+| `coach_name` | character | Full name of the head coach in this Stanley Cup championship record. |
 | `franchise_id` | double | Unique franchise identifier. |
 | `franchise_name` | character | Franchise name. |
-| `longest_streak` | integer |  |
-| `longest_streak_description` | character |  |
-| `seasons_won` | character |  |
-| `stanley_cups` | integer |  |
+| `longest_streak` | integer | Maximum number of consecutive seasons in which the coach won the Stanley Cup. |
+| `longest_streak_description` | character | Human-readable description of the coach's longest consecutive Stanley Cup winning streak. |
+| `seasons_won` | character | Comma-separated list of NHL seasons in which the coach won the Stanley Cup as head coach. |
+| `stanley_cups` | integer | Total number of Stanley Cup championships won by this coach as head coach. |
 | `team_abbrevs` | character | Team abbreviation(s). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -777,39 +777,39 @@ All-time head-to-head records between every franchise pairing.
 |---|---|---|
 | `id` | integer | Unique player identifier. |
 | `active_franchise` | integer | Indicator of whether the franchise is active. |
-| `active_opponent_franchise` | integer |  |
+| `active_opponent_franchise` | integer | Flag indicating whether the opponent franchise is currently active in the NHL (1 = active, 0 = relocated or dissolved). |
 | `franchise_name` | character | Franchise name. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
-| `home_games_played` | integer |  |
-| `home_goals_against` | double |  |
-| `home_goals_for` | double |  |
-| `home_last_meeting_season_id` | integer |  |
+| `home_games_played` | integer | Total number of home games the franchise has played all-time against this opponent franchise. |
+| `home_goals_against` | double | Total goals allowed by the franchise in all-time home games against this opponent. |
+| `home_goals_for` | double | Total goals scored by the franchise in all-time home games against this opponent. |
+| `home_last_meeting_season_id` | integer | NHL season identifier for the most recent home game played against this opponent franchise. |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | integer | Home overtime losses. |
 | `home_points` | integer | Home team total points scored in the game so far. |
 | `home_ties` | integer | Ties at home. |
 | `home_wins` | integer | Wins at home. |
-| `opponent_franchise_id` | integer |  |
-| `opponent_franchise_name` | character |  |
+| `opponent_franchise_id` | integer | NHL records identifier for the opposing franchise in this all-time head-to-head record. |
+| `opponent_franchise_name` | character | Full name of the opposing franchise in this all-time head-to-head record. |
 | `opponent_team_id` | integer | Opponent team identifier. |
-| `road_games_played` | integer |  |
-| `road_goals_against` | integer |  |
-| `road_goals_for` | integer |  |
-| `road_last_meeting_season_id` | integer |  |
+| `road_games_played` | integer | Total number of road games the franchise has played all-time against this opponent franchise. |
+| `road_goals_against` | integer | Total goals allowed by the franchise in all-time road games against this opponent. |
+| `road_goals_for` | integer | Total goals scored by the franchise in all-time road games against this opponent. |
+| `road_last_meeting_season_id` | integer | NHL season identifier for the most recent road game played against this opponent franchise. |
 | `road_losses` | integer | Losses on the road. |
 | `road_ot_losses` | integer | Road overtime losses. |
-| `road_points` | integer |  |
+| `road_points` | integer | Total standings points earned by the franchise in all-time road games against this opponent. |
 | `road_ties` | integer | Ties on the road. |
 | `road_wins` | integer | Wins on the road. |
 | `team_franchise_id` | integer | Team franchise identifier. |
 | `team_id` | integer | Unique team identifier. |
-| `total_games_played` | integer |  |
-| `total_goals_against` | integer |  |
-| `total_goals_for` | integer |  |
-| `total_last_meeting_season_id` | integer |  |
+| `total_games_played` | integer | Total number of games played all-time between this franchise and the opponent franchise across home and road venues. |
+| `total_goals_against` | integer | Total goals allowed by the franchise in all-time games against this opponent across home and road. |
+| `total_goals_for` | integer | Total goals scored by the franchise in all-time games against this opponent across home and road. |
+| `total_last_meeting_season_id` | integer | NHL season identifier for the most recent game played between the two franchises in any venue. |
 | `total_losses` | integer | Total losses to date (goalie). |
-| `total_ot_losses` | integer |  |
-| `total_points` | integer |  |
+| `total_ot_losses` | integer | Total number of overtime losses accumulated by the franchise all-time against this opponent. |
+| `total_points` | integer | Total standings points earned by the franchise across all all-time games against this opponent. |
 | `total_ties` | integer | Total ties. |
 | `total_wins` | integer | Total wins. |
 
@@ -890,15 +890,15 @@ Skaters with the most consecutive 100-point seasons.
 | `id` | integer | Unique player identifier. |
 | `active_player` | logical | Indicator of whether the player is active. |
 | `active_streak` | logical | Indicator of whether the streak is active. |
-| `consecutive100_point_seasons` | integer |  |
+| `consecutive100_point_seasons` | integer | Number of consecutive NHL regular seasons in which the player reached 100 or more points. |
 | `first_name` | character | Player first name. |
 | `franchise_id` | double | Unique franchise identifier. |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |
 | `position_code` | character | Player position code. |
 | `seasons_played` | integer | Number of seasons played. |
-| `streak_end_season` | integer |  |
-| `streak_start_season` | integer |  |
+| `streak_end_season` | integer | The last season of the consecutive 100-point streak, encoded as an eight-digit season ID. |
+| `streak_start_season` | integer | The first season of the consecutive 100-point streak, encoded as an eight-digit season ID. |
 | `team_abbrevs` | character | Team abbreviation(s). |
 | `team_names` | character | Team names. |
 
@@ -1117,7 +1117,7 @@ Goaltenders with the longest consecutive-win streaks.
 | `team_abbrev` | character | Team abbreviation. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
-| `win_streak` | integer |  |
+| `win_streak` | integer | Number of consecutive wins recorded by the goalie in this streak. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1192,15 +1192,15 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 | `id` | integer | Unique player identifier. |
 | `active_player` | logical | Indicator of whether the player is active. |
 | `first_name` | character | Player first name. |
-| `forty_win_seasons` | integer |  |
+| `forty_win_seasons` | integer | Number of seasons in which the goalie recorded 40 or more wins, a rare single-season achievement. |
 | `franchise_id` | double | Unique franchise identifier. |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |
 | `seasons_played` | integer | Number of seasons played. |
 | `team_abbrevs` | character | Team abbreviation(s). |
 | `team_names` | character | Team names. |
-| `thirty_win_seasons` | integer |  |
-| `twenty_win_seasons` | integer |  |
+| `thirty_win_seasons` | integer | Number of seasons in which the goalie recorded 30 or more wins. |
+| `twenty_win_seasons` | integer | Number of seasons in which the goalie recorded 20 or more wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1231,15 +1231,15 @@ Goaltender consecutive playoff-win streaks.
 | `id` | integer | Unique player identifier. |
 | `active_player` | logical | Indicator of whether the player is active. |
 | `active_streak` | logical | Indicator of whether the streak is active. |
-| `consecutive_playoff_seasons` | integer |  |
-| `end_season` | integer |  |
+| `consecutive_playoff_seasons` | integer | Number of consecutive playoff seasons in which the goalie appeared for the franchise during this streak. |
+| `end_season` | integer | Last season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak. |
 | `first_name` | character | Player first name. |
 | `franchise_id` | double | Unique franchise identifier. |
 | `last_name` | character | Player last name. |
 | `player_id` | integer | Unique player identifier. |
 | `playoff_seasons` | integer | Number of playoff seasons. |
 | `stanley_cup_wins` | integer | Number of Stanley Cup championships. |
-| `start_season` | integer |  |
+| `start_season` | integer | First season (in YYYYYYYY format) of the goalie's consecutive playoff appearance streak. |
 | `team_abbrevs` | character | Team abbreviation(s). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1282,7 +1282,7 @@ Goaltender longest undefeated streaks (wins + ties).
 | `team_abbrev` | character | Team abbreviation. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
-| `undefeated_streak` | integer |  |
+| `undefeated_streak` | integer | Number of consecutive games without a regulation loss (wins plus overtime or shootout losses) in the goalie's record streak. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1518,7 +1518,7 @@ Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 |---|---|---|
 | `id` | integer | Unique player identifier. |
 | `active` | logical | Whether athlete is currently active. |
-| `draft_picks` | character |  |
+| `draft_picks` | character | JSON-serialized list of players selected by this franchise in the NHL expansion draft. |
 | `season_id` | integer | Season identifier. |
 | `team_id` | integer | Unique team identifier. |
 
@@ -1549,7 +1549,7 @@ All-Star Game career statistics for skaters.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer |  |
+| `all_star_team_id` | integer | Identifier for the All-Star team roster to which the skater was assigned during the All-Star event. |
 | `assists` | integer | Assists. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
@@ -1559,7 +1559,7 @@ All-Star Game career statistics for skaters.
 | `is_rookie` | logical | Whether the player is a rookie. |
 | `last_name` | character | Player last name. |
 | `losses` | integer | Losses. |
-| `nhl_team_id` | integer |  |
+| `nhl_team_id` | integer | NHL identifier for the skater's regular-season team at the time of All-Star selection. |
 | `penalties` | double | Penalty count. |
 | `penalty_minutes` | double | Penalty minutes. |
 | `player_id` | integer | Unique player identifier. |
@@ -1597,7 +1597,7 @@ All-Star Game career statistics for goaltenders.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer |  |
+| `all_star_team_id` | integer | Identifier for the NHL All-Star team the goalie represented in their career All-Star appearances. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
 | `games_played` | integer | Games played. |
@@ -1607,7 +1607,7 @@ All-Star Game career statistics for goaltenders.
 | `is_rookie` | logical | Whether the player is a rookie. |
 | `last_name` | character | Player last name. |
 | `losses` | integer | Losses. |
-| `nhl_team_id` | integer |  |
+| `nhl_team_id` | integer | NHL identifier for the regular-season franchise the goalie was affiliated with during their All-Star career. |
 | `ot_losses` | integer | Overtime losses. |
 | `player_id` | integer | Unique player identifier. |
 | `save_percentage` | double | Save percentage (goalies). |
@@ -1646,11 +1646,11 @@ All-Star Game career records for coaches.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer |  |
+| `all_star_team_id` | integer | NHL identifier for the All-Star team the coach was assigned to in a given All-Star game. |
 | `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
-| `games_coached` | integer |  |
+| `games_coached` | integer | Total number of All-Star games the coach has coached across their career. |
 | `is_active` | logical | Whether the team is active. |
 | `last_name` | character | Player last name. |
 | `losses` | integer | Losses. |
@@ -1686,8 +1686,8 @@ All-Star Game single-game scoring records for skaters.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer |  |
-| `all_star_team_score` | integer |  |
+| `all_star_team_id` | integer | Identifier for the All-Star team roster to which the skater was assigned for this game. |
+| `all_star_team_score` | integer | Goals scored by the skater's All-Star team in this specific All-Star game. |
 | `arena_name` | character | Arena name. |
 | `assists` | integer | Assists. |
 | `city` | character | City where the venue is located. |
@@ -1697,12 +1697,12 @@ All-Star Game single-game scoring records for skaters.
 | `game_id` | integer | Unique game identifier. |
 | `game_name` | character | Full event name. |
 | `goals` | integer | Goals scored. |
-| `home_road` | character |  |
+| `home_road` | character | Designation indicating whether the skater's All-Star team was the home or road side for this game. |
 | `is_active` | logical | Whether the team is active. |
 | `is_rookie` | logical | Whether the player is a rookie. |
 | `last_name` | character | Player last name. |
 | `mvp` | character | Mvp. |
-| `nhl_team_id` | integer |  |
+| `nhl_team_id` | integer | NHL identifier for the skater's regular-season team at the time this All-Star game was played. |
 | `opponent_score` | integer | Opponent score. |
 | `opponent_team_id` | integer | Opponent team identifier. |
 | `penalties` | double | Penalty count. |
@@ -1742,8 +1742,8 @@ All-Star Game single-game stats for goaltenders.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `all_star_team_id` | integer |  |
-| `all_star_team_score` | integer |  |
+| `all_star_team_id` | integer | NHL identifier for the All-Star team the goalie was assigned to in the game. |
+| `all_star_team_score` | integer | Goals scored by the goalie's All-Star team in that game. |
 | `arena_name` | character | Arena name. |
 | `city` | character | City where the venue is located. |
 | `first_name` | character | Player first name. |
@@ -1752,12 +1752,12 @@ All-Star Game single-game stats for goaltenders.
 | `game_id` | integer | Unique game identifier. |
 | `game_name` | character | Full event name. |
 | `goals_against` | integer | Goals against. |
-| `home_road` | character |  |
+| `home_road` | character | Indicates whether the goalie's All-Star team was the designated home or road squad for the game. |
 | `is_active` | logical | Whether the team is active. |
 | `is_rookie` | logical | Whether the player is a rookie. |
 | `last_name` | character | Player last name. |
 | `mvp` | character | Mvp. |
-| `nhl_team_id` | integer |  |
+| `nhl_team_id` | integer | NHL identifier for the goalie's regular-season franchise at the time of the All-Star game. |
 | `opponent_score` | integer | Opponent score. |
 | `opponent_team_id` | integer | Opponent team identifier. |
 | `player_id` | integer | Unique player identifier. |
@@ -1897,14 +1897,14 @@ General Manager career records.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `active_gm` | logical |  |
+| `active_gm` | logical | Indicates whether the general manager is currently active in an NHL front-office role. |
 | `end_date` | character | Season end date. |
-| `end_season_id` | integer |  |
+| `end_season_id` | integer | Season identifier (e.g., 20232024) for the last season the GM held the position. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games` | integer | Games played. |
-| `gm_of_the_year` | integer |  |
+| `gm_of_the_year` | integer | Number of times the general manager won the NHL GM of the Year Award during their career. |
 | `home_games` | integer | Total home games. |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
@@ -1912,29 +1912,29 @@ General Manager career records.
 | `home_wins` | integer | Wins at home. |
 | `last_name` | character | Player last name. |
 | `losses` | integer | Losses. |
-| `losses_in_ot` | integer |  |
-| `losses_in_ot_plus_shootout` | integer |  |
-| `losses_in_shootout` | double |  |
+| `losses_in_ot` | integer | Number of games the GM's team lost in overtime during their tenure. |
+| `losses_in_ot_plus_shootout` | integer | Combined total of overtime and shootout losses recorded during the GM's tenure. |
+| `losses_in_shootout` | double | Number of games the GM's team lost in the shootout portion of a tied game. |
 | `overtime_losses` | integer | Total overtime losses. |
 | `point_pctg` | double | Points percentage. |
 | `points` | integer | Total points (goals + assists). |
-| `road_games` | integer |  |
+| `road_games` | integer | Total number of away games played by the GM's team across their tenure. |
 | `road_losses` | integer | Losses on the road. |
 | `road_ot_losses` | double | Road overtime losses. |
 | `road_ties` | double | Ties on the road. |
 | `road_wins` | integer | Wins on the road. |
-| `seasons` | integer |  |
-| `stanley_cup_final_appearances` | integer |  |
-| `stanley_cups` | integer |  |
+| `seasons` | integer | Total number of NHL seasons the general manager has served in the role. |
+| `stanley_cup_final_appearances` | integer | Number of times the GM's team reached the Stanley Cup Final during their tenure. |
+| `stanley_cups` | integer | Number of Stanley Cup championships won by the GM's franchise during their tenure. |
 | `start_date` | character | Season start date. |
-| `start_season_id` | integer |  |
+| `start_season_id` | integer | Season identifier (e.g., 20052006) for the first season the GM held the position. |
 | `team_abbrevs` | character | Team abbreviation(s). |
 | `ties` | integer | Total ties. |
-| `ties_in_ot` | integer |  |
-| `win_pctg` | double |  |
+| `ties_in_ot` | integer | Number of overtime ties recorded under legacy rules during the GM's tenure. |
+| `win_pctg` | double | Career winning percentage for the GM, calculated as wins divided by total games decided. |
 | `wins` | integer | Wins. |
-| `wins_in_ot` | integer |  |
-| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_ot` | integer | Number of games the GM's team won in overtime during their tenure. |
+| `wins_in_ot_plus_shootout` | integer | Combined total of overtime and shootout wins recorded during the GM's tenure. |
 | `wins_in_shootout` | double | Wins in shootout. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1964,16 +1964,16 @@ General Manager records scoped to franchise stints.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `active_gm` | logical |  |
+| `active_gm` | logical | Indicates whether the general manager is currently active with the franchise. |
 | `end_date` | character | Season end date. |
-| `end_season_id` | integer |  |
+| `end_season_id` | integer | NHL season identifier for the last season the GM held the role with this franchise. |
 | `first_name` | character | Player first name. |
 | `franchise_id` | integer | Unique franchise identifier. |
 | `franchise_name` | character | Franchise name. |
 | `full_name` | character | Player full name. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games` | integer | Games played. |
-| `gm_of_the_year` | integer |  |
+| `gm_of_the_year` | integer | Number of NHL General Manager of the Year awards won during this franchise tenure. |
 | `home_games` | integer | Total home games. |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
@@ -1981,30 +1981,30 @@ General Manager records scoped to franchise stints.
 | `home_wins` | integer | Wins at home. |
 | `last_name` | character | Player last name. |
 | `losses` | integer | Losses. |
-| `losses_in_ot` | integer |  |
-| `losses_in_ot_plus_shootout` | integer |  |
-| `losses_in_shootout` | double |  |
+| `losses_in_ot` | integer | Number of regular-season overtime losses recorded by the franchise under this GM. |
+| `losses_in_ot_plus_shootout` | integer | Combined overtime and shootout losses for the franchise during this GM's tenure. |
+| `losses_in_shootout` | double | Number of regular-season shootout losses recorded by the franchise under this GM. |
 | `overtime_losses` | integer | Total overtime losses. |
 | `point_pctg` | double | Points percentage. |
 | `points` | integer | Total points (goals + assists). |
-| `road_games` | integer |  |
+| `road_games` | integer | Total regular-season away games played by the franchise during this GM's tenure. |
 | `road_losses` | integer | Losses on the road. |
 | `road_ot_losses` | double | Road overtime losses. |
 | `road_ties` | double | Ties on the road. |
 | `road_wins` | integer | Wins on the road. |
-| `seasons` | integer |  |
-| `stanley_cup_final_appearances` | integer |  |
-| `stanley_cups` | integer |  |
+| `seasons` | integer | Number of NHL seasons the GM held the role with this franchise. |
+| `stanley_cup_final_appearances` | integer | Number of Stanley Cup Final appearances by the franchise during this GM's tenure. |
+| `stanley_cups` | integer | Number of Stanley Cup championships won by the franchise under this GM. |
 | `start_date` | character | Season start date. |
-| `start_season_id` | integer |  |
+| `start_season_id` | integer | NHL season identifier for the first season the GM held the role with this franchise. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |
 | `ties` | integer | Total ties. |
-| `ties_in_ot` | integer |  |
-| `win_pctg` | double |  |
+| `ties_in_ot` | integer | Number of overtime ties recorded by the franchise under this GM (pre-shootout era). |
+| `win_pctg` | double | Overall win percentage for the franchise across all regular-season games during this GM's tenure. |
 | `wins` | integer | Wins. |
-| `wins_in_ot` | integer |  |
-| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_ot` | integer | Number of regular-season overtime wins recorded by the franchise under this GM. |
+| `wins_in_ot_plus_shootout` | integer | Combined overtime and shootout wins for the franchise during this GM's tenure. |
 | `wins_in_shootout` | double | Wins in shootout. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2040,7 +2040,7 @@ League-wide home-team win/loss record by season.
 | `goals` | integer | Goals scored. |
 | `goals_against` | integer | Goals against. |
 | `goals_against_per_game` | double | Goals against per game. |
-| `goals_per_game` | double |  |
+| `goals_per_game` | double | Average number of goals the team scored per home game over the recorded period. |
 | `losses` | integer | Losses. |
 | `overtime_losses` | double | Total overtime losses. |
 | `point_pctg` | double | Points percentage. |
@@ -2084,7 +2084,7 @@ League-wide away-team win/loss record by season.
 | `goals` | integer | Goals scored. |
 | `goals_against` | integer | Goals against. |
 | `goals_against_per_game` | double | Goals against per game. |
-| `goals_per_game` | double |  |
+| `goals_per_game` | double | Average number of goals the team scored per road game over the recorded period. |
 | `losses` | integer | Losses. |
 | `overtime_losses` | double | Total overtime losses. |
 | `point_pctg` | double | Points percentage. |

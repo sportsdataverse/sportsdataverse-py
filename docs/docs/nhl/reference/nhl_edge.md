@@ -152,23 +152,23 @@ Pull EDGE comparison data for a single skater.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `skating_distance_last10` | character |  |
-| `shot_location_details` | character |  |
-| `shot_location_totals` | character |  |
+| `seasons_with_edge_stats` | character | Serialized list of seasons for which NHL EDGE player-tracking data is available for the skater. |
+| `skating_distance_last10` | character | Serialized skating-distance trend data for the skater's most recent 10 games. |
+| `shot_location_details` | character | Serialized shot-location breakdown object containing zone-based shot attempt counts and percentages. |
+| `shot_location_totals` | character | Serialized aggregate shot-location totals across all zones for the skater. |
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
-| `player_shoots_catches` | character |  |
+| `player_shoots_catches` | character | Handedness of the skater's shot or, for goalies, their catching hand (L or R). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_position` | character | Primary player position. |
 | `player_slug` | character | URL slug for the player. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_goals` | integer |  |
-| `player_assists` | integer |  |
+| `player_goals` | integer | Total regular-season goals scored by the skater in the current season. |
+| `player_assists` | integer | Total regular-season assists recorded by the skater in the current season. |
 | `player_points` | integer | Player points. |
-| `player_games_played` | integer |  |
+| `player_games_played` | integer | Number of regular-season games the skater appeared in during the current season. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
 | `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
@@ -176,87 +176,87 @@ Pull EDGE comparison data for a single skater.
 | `player_team_team_logo_light` | character | Player team light-mode logo URL. |
 | `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
 | `player_team_slug` | character | Player team URL-friendly slug. |
-| `shot_speed_details_top_shot_speed_imperial` | double |  |
-| `shot_speed_details_top_shot_speed_metric` | double |  |
-| `shot_speed_details_top_shot_speed_overlay_player_first_name_default` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_player_last_name_default` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_game_date` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_away_team_abbrev` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_away_team_score` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_home_team_abbrev` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_home_team_score` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_period_descriptor_number` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_period_descriptor_period_type` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_time_in_period` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_game_type` | integer |  |
-| `shot_speed_details_avg_shot_speed_imperial` | double |  |
-| `shot_speed_details_avg_shot_speed_metric` | double |  |
-| `shot_speed_details_shot_attempts_over100` | integer |  |
-| `shot_speed_details_shot_attempts90_to100` | integer |  |
-| `shot_speed_details_shot_attempts80_to90` | integer |  |
-| `shot_speed_details_shot_attempts70_to80` | integer |  |
-| `skating_speed_details_max_skating_speed_imperial` | double |  |
-| `skating_speed_details_max_skating_speed_metric` | double |  |
-| `skating_speed_details_max_skating_speed_overlay_player_first_name_default` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_player_last_name_default` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_game_date` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_away_team_abbrev` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_away_team_score` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_home_team_abbrev` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_home_team_score` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_period_descriptor_number` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_time_in_period` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_game_type` | integer |  |
-| `skating_speed_details_bursts_over22` | integer |  |
-| `skating_speed_details_bursts20_to22` | integer |  |
-| `skating_speed_details_bursts18_to20` | integer |  |
-| `skating_distance_details_distance_total_imperial` | double |  |
-| `skating_distance_details_distance_total_metric` | double |  |
-| `skating_distance_details_distance_per60_imperial` | double |  |
-| `skating_distance_details_distance_per60_metric` | double |  |
-| `skating_distance_details_distance_max_game_imperial` | double |  |
-| `skating_distance_details_distance_max_game_metric` | double |  |
-| `skating_distance_details_distance_max_game_overlay_player_first_name_default` | character |  |
-| `skating_distance_details_distance_max_game_overlay_player_last_name_default` | character |  |
-| `skating_distance_details_distance_max_game_overlay_game_date` | character |  |
-| `skating_distance_details_distance_max_game_overlay_away_team_abbrev` | character |  |
-| `skating_distance_details_distance_max_game_overlay_away_team_score` | integer |  |
-| `skating_distance_details_distance_max_game_overlay_home_team_abbrev` | character |  |
-| `skating_distance_details_distance_max_game_overlay_home_team_score` | integer |  |
-| `skating_distance_details_distance_max_game_overlay_game_outcome_last_period_type` | character |  |
-| `skating_distance_details_distance_max_game_overlay_game_outcome_ot_periods` | integer |  |
-| `skating_distance_details_distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `skating_distance_details_distance_max_game_overlay_period_descriptor_number` | integer |  |
-| `skating_distance_details_distance_max_game_overlay_period_descriptor_period_type` | character |  |
-| `skating_distance_details_distance_max_game_overlay_game_type` | integer |  |
-| `skating_distance_details_distance_max_period_imperial` | double |  |
-| `skating_distance_details_distance_max_period_metric` | double |  |
-| `skating_distance_details_distance_max_period_overlay_player_first_name_default` | character |  |
-| `skating_distance_details_distance_max_period_overlay_player_last_name_default` | character |  |
-| `skating_distance_details_distance_max_period_overlay_game_date` | character |  |
-| `skating_distance_details_distance_max_period_overlay_away_team_abbrev` | character |  |
-| `skating_distance_details_distance_max_period_overlay_away_team_score` | integer |  |
-| `skating_distance_details_distance_max_period_overlay_home_team_abbrev` | character |  |
-| `skating_distance_details_distance_max_period_overlay_home_team_score` | integer |  |
-| `skating_distance_details_distance_max_period_overlay_game_outcome_last_period_type` | character |  |
-| `skating_distance_details_distance_max_period_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `skating_distance_details_distance_max_period_overlay_period_descriptor_number` | integer |  |
-| `skating_distance_details_distance_max_period_overlay_period_descriptor_period_type` | character |  |
-| `skating_distance_details_distance_max_period_overlay_game_type` | integer |  |
-| `zone_time_details_offensive_zone_pctg` | double |  |
-| `zone_time_details_offensive_zone_league_avg` | double |  |
-| `zone_time_details_neutral_zone_pctg` | double |  |
-| `zone_time_details_neutral_zone_league_avg` | double |  |
-| `zone_time_details_defensive_zone_pctg` | double |  |
-| `zone_time_details_defensive_zone_league_avg` | double |  |
-| `zone_starts_offensive_zone_starts` | double |  |
-| `zone_starts_neutral_zone_starts` | double |  |
-| `zone_starts_defensive_zone_starts` | double |  |
+| `shot_speed_details_top_shot_speed_imperial` | double | Skater's single highest recorded shot speed in miles per hour for the season. |
+| `shot_speed_details_top_shot_speed_metric` | double | Skater's single highest recorded shot speed in kilometres per hour for the season. |
+| `shot_speed_details_top_shot_speed_overlay_player_first_name_default` | character | Skater's first name as displayed in the top-shot-speed overlay. |
+| `shot_speed_details_top_shot_speed_overlay_player_last_name_default` | character | Skater's last name as displayed in the top-shot-speed overlay. |
+| `shot_speed_details_top_shot_speed_overlay_game_date` | character | Calendar date of the game in which the skater recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_away_team_abbrev` | character | Abbreviation of the away team in the game where the skater recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_away_team_score` | integer | Away team's final score in the game where the skater recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_home_team_abbrev` | character | Abbreviation of the home team in the game where the skater recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_home_team_score` | integer | Home team's final score in the game where the skater recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_game_outcome_last_period_type` | character | Period type (REG, OT, or SO) of the final period in the game where the skater's top shot speed was recorded. |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods played in the top-shot-speed game (typically 3). |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_number` | integer | Period number in which the skater recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_period_type` | character | Period type label (REG, OT, or SO) of the period in which the skater's top shot speed occurred. |
+| `shot_speed_details_top_shot_speed_overlay_time_in_period` | character | Elapsed time within the period (mm:ss) when the skater's top shot speed was recorded. |
+| `shot_speed_details_top_shot_speed_overlay_game_type` | integer | Numeric game-type code (e.g. 2 for regular season, 3 for playoffs) for the top-shot-speed game. |
+| `shot_speed_details_avg_shot_speed_imperial` | double | Skater's average shot speed in miles per hour, measured by NHL EDGE puck-tracking. |
+| `shot_speed_details_avg_shot_speed_metric` | double | Skater's average shot speed in kilometres per hour, measured by NHL EDGE puck-tracking. |
+| `shot_speed_details_shot_attempts_over100` | integer | Number of shot attempts the skater recorded at speeds exceeding 100 mph. |
+| `shot_speed_details_shot_attempts90_to100` | integer | Number of shot attempts the skater recorded at speeds between 90 and 100 mph. |
+| `shot_speed_details_shot_attempts80_to90` | integer | Number of shot attempts the skater recorded at speeds between 80 and 90 mph. |
+| `shot_speed_details_shot_attempts70_to80` | integer | Number of shot attempts the skater recorded at speeds between 70 and 80 mph. |
+| `skating_speed_details_max_skating_speed_imperial` | double | Skater's single highest skating speed recorded during the season, in miles per hour. |
+| `skating_speed_details_max_skating_speed_metric` | double | Skater's single highest skating speed recorded during the season, in kilometres per hour. |
+| `skating_speed_details_max_skating_speed_overlay_player_first_name_default` | character | Skater's first name as displayed in the top-skating-speed overlay. |
+| `skating_speed_details_max_skating_speed_overlay_player_last_name_default` | character | Skater's last name as displayed in the top-skating-speed overlay. |
+| `skating_speed_details_max_skating_speed_overlay_game_date` | character | Calendar date of the game in which the skater reached their maximum skating speed. |
+| `skating_speed_details_max_skating_speed_overlay_away_team_abbrev` | character | Abbreviation of the away team in the game where the skater recorded their top skating speed. |
+| `skating_speed_details_max_skating_speed_overlay_away_team_score` | integer | Away team's final score in the game where the skater recorded their top skating speed. |
+| `skating_speed_details_max_skating_speed_overlay_home_team_abbrev` | character | Abbreviation of the home team in the game where the skater recorded their top skating speed. |
+| `skating_speed_details_max_skating_speed_overlay_home_team_score` | integer | Home team's final score in the game where the skater recorded their top skating speed. |
+| `skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type` | character | Period type (REG, OT, or SO) of the final period in the game where the skater's top speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game where the skater reached their top skating speed (typically 3). |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_number` | integer | Period number in which the skater reached their maximum skating speed. |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type` | character | Period type label (REG or OT) for the period in which the skater's top speed occurred. |
+| `skating_speed_details_max_skating_speed_overlay_time_in_period` | character | Elapsed time within the period (mm:ss) when the skater reached their maximum skating speed. |
+| `skating_speed_details_max_skating_speed_overlay_game_type` | integer | Numeric game-type code for the game in which the skater recorded their maximum skating speed. |
+| `skating_speed_details_bursts_over22` | integer | Number of skating speed bursts the skater recorded exceeding 22 mph during the season. |
+| `skating_speed_details_bursts20_to22` | integer | Number of skating speed bursts the skater recorded between 20 and 22 mph during the season. |
+| `skating_speed_details_bursts18_to20` | integer | Number of skating speed bursts the skater recorded between 18 and 20 mph during the season. |
+| `skating_distance_details_distance_total_imperial` | double | Total cumulative skating distance the skater covered across all games in the season, in miles. |
+| `skating_distance_details_distance_total_metric` | double | Total cumulative skating distance the skater covered across all games in the season, in kilometres. |
+| `skating_distance_details_distance_per60_imperial` | double | Skater's average skating distance per 60 minutes of ice time during the season, in miles. |
+| `skating_distance_details_distance_per60_metric` | double | Skater's average skating distance per 60 minutes of ice time during the season, in kilometres. |
+| `skating_distance_details_distance_max_game_imperial` | double | Greatest total distance the skater covered in any single game during the season, in miles. |
+| `skating_distance_details_distance_max_game_metric` | double | Greatest total distance the skater covered in any single game during the season, in kilometres. |
+| `skating_distance_details_distance_max_game_overlay_player_first_name_default` | character | Skater's first name as displayed in the single-game maximum distance overlay. |
+| `skating_distance_details_distance_max_game_overlay_player_last_name_default` | character | Skater's last name as displayed in the single-game maximum distance overlay. |
+| `skating_distance_details_distance_max_game_overlay_game_date` | character | Calendar date of the game in which the skater covered their maximum single-game distance. |
+| `skating_distance_details_distance_max_game_overlay_away_team_abbrev` | character | Abbreviation of the away team in the game where the skater set their single-game distance record. |
+| `skating_distance_details_distance_max_game_overlay_away_team_score` | integer | Away team's final score in the game where the skater set their single-game distance record. |
+| `skating_distance_details_distance_max_game_overlay_home_team_abbrev` | character | Abbreviation of the home team in the game where the skater set their single-game distance record. |
+| `skating_distance_details_distance_max_game_overlay_home_team_score` | integer | Home team's final score in the game where the skater set their single-game distance record. |
+| `skating_distance_details_distance_max_game_overlay_game_outcome_last_period_type` | character | Period type (REG, OT, or SO) of the final period in the skater's maximum single-game distance game. |
+| `skating_distance_details_distance_max_game_overlay_game_outcome_ot_periods` | integer | Number of overtime periods played in the game where the skater set their single-game distance record. |
+| `skating_distance_details_distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game where the skater covered their greatest single-game distance. |
+| `skating_distance_details_distance_max_game_overlay_period_descriptor_number` | integer | Period number being referenced in the skater's maximum single-game distance overlay context. |
+| `skating_distance_details_distance_max_game_overlay_period_descriptor_period_type` | character | Period type label for the period referenced in the skater's maximum single-game distance overlay. |
+| `skating_distance_details_distance_max_game_overlay_game_type` | integer | Numeric game-type code for the game in which the skater covered their maximum single-game distance. |
+| `skating_distance_details_distance_max_period_imperial` | double | Greatest distance the skater covered in any single period during the season, in miles. |
+| `skating_distance_details_distance_max_period_metric` | double | Greatest distance the skater covered in any single period during the season, in kilometres. |
+| `skating_distance_details_distance_max_period_overlay_player_first_name_default` | character | Skater's first name as displayed in the single-period maximum distance overlay. |
+| `skating_distance_details_distance_max_period_overlay_player_last_name_default` | character | Skater's last name as displayed in the single-period maximum distance overlay. |
+| `skating_distance_details_distance_max_period_overlay_game_date` | character | Calendar date of the game in which the skater covered their maximum single-period distance. |
+| `skating_distance_details_distance_max_period_overlay_away_team_abbrev` | character | Abbreviation of the away team in the game where the skater set their single-period distance record. |
+| `skating_distance_details_distance_max_period_overlay_away_team_score` | integer | Away team's final score in the game where the skater set their single-period distance record. |
+| `skating_distance_details_distance_max_period_overlay_home_team_abbrev` | character | Abbreviation of the home team in the game where the skater set their single-period distance record. |
+| `skating_distance_details_distance_max_period_overlay_home_team_score` | integer | Home team's final score in the game where the skater set their single-period distance record. |
+| `skating_distance_details_distance_max_period_overlay_game_outcome_last_period_type` | character | Period type (REG, OT, or SO) of the final period in the skater's maximum single-period distance game. |
+| `skating_distance_details_distance_max_period_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game where the skater covered their greatest single-period distance. |
+| `skating_distance_details_distance_max_period_overlay_period_descriptor_number` | integer | Period number in which the skater covered their maximum single-period skating distance. |
+| `skating_distance_details_distance_max_period_overlay_period_descriptor_period_type` | character | Period type label (REG, OT) for the period in which the skater's single-period distance record was set. |
+| `skating_distance_details_distance_max_period_overlay_game_type` | integer | Numeric game-type code for the game in which the skater covered their maximum single-period distance. |
+| `zone_time_details_offensive_zone_pctg` | double | Percentage of the skater's total ice time spent in the offensive zone, per EDGE tracking. |
+| `zone_time_details_offensive_zone_league_avg` | double | League-average percentage of ice time that skaters spend in the offensive zone. |
+| `zone_time_details_neutral_zone_pctg` | double | Percentage of the skater's total ice time spent in the neutral zone, per EDGE tracking. |
+| `zone_time_details_neutral_zone_league_avg` | double | League-average percentage of ice time that skaters spend in the neutral zone. |
+| `zone_time_details_defensive_zone_pctg` | double | Percentage of the skater's total ice time spent in the defensive zone, per EDGE tracking. |
+| `zone_time_details_defensive_zone_league_avg` | double | League-average percentage of ice time that skaters spend in the defensive zone. |
+| `zone_starts_offensive_zone_starts` | double | Percentage of the skater's on-ice faceoffs that were taken in the offensive zone. |
+| `zone_starts_neutral_zone_starts` | double | Percentage of the skater's on-ice faceoffs that were taken in the neutral zone. |
+| `zone_starts_defensive_zone_starts` | double | Percentage of the skater's on-ice faceoffs that were taken in the defensive zone. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -447,8 +447,8 @@ Pull EDGE skating-distance detail for a single skater.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `skating_distance_last10` | character |  |
-| `skating_distance_details` | character |  |
+| `skating_distance_last10` | character | JSON-serialized rolling summary of total distance skated by the player across the last 10 games. |
+| `skating_distance_details` | character | JSON-serialized per-game breakdown of total distance skated by the player during the tracking period. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -479,34 +479,34 @@ Pull EDGE skating-speed detail for a single skater.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `top_skating_speeds` | character |  |
-| `skating_speed_details_max_skating_speed_imperial` | double |  |
-| `skating_speed_details_max_skating_speed_metric` | double |  |
-| `skating_speed_details_max_skating_speed_percentile` | double |  |
-| `skating_speed_details_max_skating_speed_league_avg_imperial` | double |  |
-| `skating_speed_details_max_skating_speed_league_avg_metric` | double |  |
-| `skating_speed_details_max_skating_speed_overlay_player_first_name_default` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_player_last_name_default` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_game_date` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_away_team_abbrev` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_away_team_score` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_home_team_abbrev` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_home_team_score` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_period_descriptor_number` | integer |  |
-| `skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_time_in_period` | character |  |
-| `skating_speed_details_max_skating_speed_overlay_game_type` | integer |  |
-| `skating_speed_details_bursts_over22_value` | integer |  |
-| `skating_speed_details_bursts_over22_percentile` | double |  |
-| `skating_speed_details_bursts_over22_league_avg` | double |  |
-| `skating_speed_details_bursts20_to22_value` | integer |  |
-| `skating_speed_details_bursts20_to22_percentile` | double |  |
-| `skating_speed_details_bursts20_to22_league_avg` | double |  |
-| `skating_speed_details_bursts18_to20_value` | integer |  |
-| `skating_speed_details_bursts18_to20_percentile` | double |  |
-| `skating_speed_details_bursts18_to20_league_avg` | double |  |
+| `top_skating_speeds` | character | JSON-serialized list of the skater's top individual speed bursts, typically the ten highest speed readings recorded during the tracking period. |
+| `skating_speed_details_max_skating_speed_imperial` | double | Skater's maximum recorded skating speed in miles per hour captured by EDGE tracking during the tracking period. |
+| `skating_speed_details_max_skating_speed_metric` | double | Skater's maximum recorded skating speed in kilometers per hour captured by EDGE tracking during the tracking period. |
+| `skating_speed_details_max_skating_speed_percentile` | double | Percentile rank among all NHL skaters for maximum skating speed recorded during the tracking period. |
+| `skating_speed_details_max_skating_speed_league_avg_imperial` | double | League-average maximum skating speed in miles per hour, used as the baseline for this skater's max-speed percentile. |
+| `skating_speed_details_max_skating_speed_league_avg_metric` | double | League-average maximum skating speed in kilometers per hour, used as the baseline for this skater's max-speed percentile. |
+| `skating_speed_details_max_skating_speed_overlay_player_first_name_default` | character | First name of the skater for whom the maximum skating speed overlay data is displayed. |
+| `skating_speed_details_max_skating_speed_overlay_player_last_name_default` | character | Last name of the skater for whom the maximum skating speed overlay data is displayed. |
+| `skating_speed_details_max_skating_speed_overlay_game_date` | character | Date on which the game occurred where the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_away_team_abbrev` | character | Abbreviation of the away team in the game where the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_away_team_score` | integer | Score of the away team at the conclusion of the game in which the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_home_team_abbrev` | character | Abbreviation of the home team in the game where the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_home_team_score` | integer | Score of the home team at the conclusion of the game in which the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type` | character | Type of the final period that determined the outcome of the game where the max speed was recorded (REG, OT, or SO). |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer | Number of regulation periods in the game format where the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_number` | integer | Period number within the game in which the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type` | character | Period type (REG, OT) identifying the phase of the game when the skater's maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_time_in_period` | character | Elapsed time within the period (mm:ss) at which the skater's career or season maximum skating speed was recorded. |
+| `skating_speed_details_max_skating_speed_overlay_game_type` | integer | NHL game type code (e.g., 2 = regular season, 3 = playoffs) for the game where the skater's maximum speed was recorded. |
+| `skating_speed_details_bursts_over22_value` | integer | Average number of skating bursts per game in which the skater reached or exceeded 22 mph during the tracking period. |
+| `skating_speed_details_bursts_over22_percentile` | double | Percentile rank among all NHL skaters for frequency of skating speed bursts exceeding 22 mph per game. |
+| `skating_speed_details_bursts_over22_league_avg` | double | League-average number of skating speed bursts exceeding 22 mph per game, used as the baseline for this skater's percentile. |
+| `skating_speed_details_bursts20_to22_value` | integer | Average number of skating bursts per game in which the skater's speed fell in the 20-22 mph range. |
+| `skating_speed_details_bursts20_to22_percentile` | double | Percentile rank among all NHL skaters for frequency of skating speed bursts in the 20-22 mph speed band. |
+| `skating_speed_details_bursts20_to22_league_avg` | double | League-average number of skating speed bursts in the 20-22 mph band per game, used as the baseline for percentile calculation. |
+| `skating_speed_details_bursts18_to20_value` | integer | Average number of skating bursts per game in which the skater's speed fell in the 18-20 mph range. |
+| `skating_speed_details_bursts18_to20_percentile` | double | Percentile rank among all NHL skaters for frequency of skating speed bursts in the 18-20 mph speed band. |
+| `skating_speed_details_bursts18_to20_league_avg` | double | League-average number of skating speed bursts in the 18-20 mph band per game, used as the baseline for percentile calculation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -662,151 +662,151 @@ Pull the EDGE skater landing page (summary across all skaters).
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `leaders_hardest_shot_player_id` | integer |  |
-| `leaders_hardest_shot_player_first_name_default` | character |  |
-| `leaders_hardest_shot_player_last_name_default` | character |  |
-| `leaders_hardest_shot_player_sweater_number` | integer |  |
-| `leaders_hardest_shot_player_position` | character |  |
-| `leaders_hardest_shot_player_slug` | character |  |
-| `leaders_hardest_shot_player_headshot` | character |  |
-| `leaders_hardest_shot_player_team_common_name_default` | character |  |
-| `leaders_hardest_shot_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_hardest_shot_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_hardest_shot_player_team_abbrev` | character |  |
-| `leaders_hardest_shot_player_team_team_logo_light` | character |  |
-| `leaders_hardest_shot_player_team_team_logo_dark` | character |  |
-| `leaders_hardest_shot_overlay_player_first_name_default` | character |  |
-| `leaders_hardest_shot_overlay_player_last_name_default` | character |  |
-| `leaders_hardest_shot_overlay_game_date` | character |  |
-| `leaders_hardest_shot_overlay_away_team_abbrev` | character |  |
-| `leaders_hardest_shot_overlay_away_team_score` | integer |  |
-| `leaders_hardest_shot_overlay_home_team_abbrev` | character |  |
-| `leaders_hardest_shot_overlay_home_team_score` | integer |  |
-| `leaders_hardest_shot_overlay_game_outcome_last_period_type` | character |  |
-| `leaders_hardest_shot_overlay_game_outcome_ot_periods` | integer |  |
-| `leaders_hardest_shot_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `leaders_hardest_shot_overlay_period_descriptor_number` | integer |  |
-| `leaders_hardest_shot_overlay_period_descriptor_period_type` | character |  |
-| `leaders_hardest_shot_overlay_time_in_period` | character |  |
-| `leaders_hardest_shot_overlay_game_type` | integer |  |
-| `leaders_hardest_shot_shot_speed_imperial` | double |  |
-| `leaders_hardest_shot_shot_speed_metric` | double |  |
-| `leaders_max_skating_speed_player_id` | integer |  |
-| `leaders_max_skating_speed_player_first_name_default` | character |  |
-| `leaders_max_skating_speed_player_last_name_default` | character |  |
-| `leaders_max_skating_speed_player_sweater_number` | integer |  |
-| `leaders_max_skating_speed_player_position` | character |  |
-| `leaders_max_skating_speed_player_slug` | character |  |
-| `leaders_max_skating_speed_player_headshot` | character |  |
-| `leaders_max_skating_speed_player_team_common_name_default` | character |  |
-| `leaders_max_skating_speed_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_max_skating_speed_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_max_skating_speed_player_team_abbrev` | character |  |
-| `leaders_max_skating_speed_player_team_team_logo_light` | character |  |
-| `leaders_max_skating_speed_player_team_team_logo_dark` | character |  |
-| `leaders_max_skating_speed_overlay_player_first_name_default` | character |  |
-| `leaders_max_skating_speed_overlay_player_last_name_default` | character |  |
-| `leaders_max_skating_speed_overlay_game_date` | character |  |
-| `leaders_max_skating_speed_overlay_away_team_abbrev` | character |  |
-| `leaders_max_skating_speed_overlay_away_team_score` | integer |  |
-| `leaders_max_skating_speed_overlay_home_team_abbrev` | character |  |
-| `leaders_max_skating_speed_overlay_home_team_score` | integer |  |
-| `leaders_max_skating_speed_overlay_game_outcome_last_period_type` | character |  |
-| `leaders_max_skating_speed_overlay_game_outcome_ot_periods` | integer |  |
-| `leaders_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `leaders_max_skating_speed_overlay_period_descriptor_number` | integer |  |
-| `leaders_max_skating_speed_overlay_period_descriptor_period_type` | character |  |
-| `leaders_max_skating_speed_overlay_time_in_period` | character |  |
-| `leaders_max_skating_speed_overlay_game_type` | integer |  |
-| `leaders_max_skating_speed_skating_speed_imperial` | double |  |
-| `leaders_max_skating_speed_skating_speed_metric` | double |  |
-| `leaders_total_distance_skated_player_id` | integer |  |
-| `leaders_total_distance_skated_player_first_name_default` | character |  |
-| `leaders_total_distance_skated_player_last_name_default` | character |  |
-| `leaders_total_distance_skated_player_sweater_number` | integer |  |
-| `leaders_total_distance_skated_player_position` | character |  |
-| `leaders_total_distance_skated_player_slug` | character |  |
-| `leaders_total_distance_skated_player_headshot` | character |  |
-| `leaders_total_distance_skated_player_team_common_name_default` | character |  |
-| `leaders_total_distance_skated_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_total_distance_skated_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_total_distance_skated_player_team_abbrev` | character |  |
-| `leaders_total_distance_skated_player_team_team_logo_light` | character |  |
-| `leaders_total_distance_skated_player_team_team_logo_dark` | character |  |
-| `leaders_total_distance_skated_distance_skated_imperial` | double |  |
-| `leaders_total_distance_skated_distance_skated_metric` | double |  |
-| `leaders_distance_max_game_player_id` | integer |  |
-| `leaders_distance_max_game_player_first_name_default` | character |  |
-| `leaders_distance_max_game_player_last_name_default` | character |  |
-| `leaders_distance_max_game_player_sweater_number` | integer |  |
-| `leaders_distance_max_game_player_position` | character |  |
-| `leaders_distance_max_game_player_slug` | character |  |
-| `leaders_distance_max_game_player_headshot` | character |  |
-| `leaders_distance_max_game_player_team_common_name_default` | character |  |
-| `leaders_distance_max_game_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_distance_max_game_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_distance_max_game_player_team_abbrev` | character |  |
-| `leaders_distance_max_game_player_team_team_logo_light` | character |  |
-| `leaders_distance_max_game_player_team_team_logo_dark` | character |  |
-| `leaders_distance_max_game_distance_skated_imperial` | double |  |
-| `leaders_distance_max_game_distance_skated_metric` | double |  |
-| `leaders_distance_max_game_overlay_player_first_name_default` | character |  |
-| `leaders_distance_max_game_overlay_player_last_name_default` | character |  |
-| `leaders_distance_max_game_overlay_game_date` | character |  |
-| `leaders_distance_max_game_overlay_away_team_abbrev` | character |  |
-| `leaders_distance_max_game_overlay_away_team_score` | integer |  |
-| `leaders_distance_max_game_overlay_home_team_abbrev` | character |  |
-| `leaders_distance_max_game_overlay_home_team_score` | integer |  |
-| `leaders_distance_max_game_overlay_game_outcome_last_period_type` | character |  |
-| `leaders_distance_max_game_overlay_game_outcome_ot_periods` | integer |  |
-| `leaders_distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `leaders_distance_max_game_overlay_period_descriptor_number` | integer |  |
-| `leaders_distance_max_game_overlay_period_descriptor_period_type` | character |  |
-| `leaders_distance_max_game_overlay_game_type` | integer |  |
-| `leaders_high_danger_sog_player_id` | integer |  |
-| `leaders_high_danger_sog_player_first_name_default` | character |  |
-| `leaders_high_danger_sog_player_last_name_default` | character |  |
-| `leaders_high_danger_sog_player_sweater_number` | integer |  |
-| `leaders_high_danger_sog_player_position` | character |  |
-| `leaders_high_danger_sog_player_slug` | character |  |
-| `leaders_high_danger_sog_player_headshot` | character |  |
-| `leaders_high_danger_sog_player_team_common_name_default` | character |  |
-| `leaders_high_danger_sog_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_high_danger_sog_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_high_danger_sog_player_team_abbrev` | character |  |
-| `leaders_high_danger_sog_player_team_team_logo_light` | character |  |
-| `leaders_high_danger_sog_player_team_team_logo_dark` | character |  |
-| `leaders_high_danger_sog_sog` | integer |  |
-| `leaders_high_danger_sog_shot_location_details` | character |  |
-| `leaders_offensive_zone_time_player_id` | integer |  |
-| `leaders_offensive_zone_time_player_first_name_default` | character |  |
-| `leaders_offensive_zone_time_player_last_name_default` | character |  |
-| `leaders_offensive_zone_time_player_sweater_number` | integer |  |
-| `leaders_offensive_zone_time_player_position` | character |  |
-| `leaders_offensive_zone_time_player_slug` | character |  |
-| `leaders_offensive_zone_time_player_headshot` | character |  |
-| `leaders_offensive_zone_time_player_team_common_name_default` | character |  |
-| `leaders_offensive_zone_time_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_offensive_zone_time_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_offensive_zone_time_player_team_abbrev` | character |  |
-| `leaders_offensive_zone_time_player_team_team_logo_light` | character |  |
-| `leaders_offensive_zone_time_player_team_team_logo_dark` | character |  |
-| `leaders_offensive_zone_time_zone_time` | double |  |
-| `leaders_defensive_zone_time_player_id` | integer |  |
-| `leaders_defensive_zone_time_player_first_name_default` | character |  |
-| `leaders_defensive_zone_time_player_last_name_default` | character |  |
-| `leaders_defensive_zone_time_player_sweater_number` | integer |  |
-| `leaders_defensive_zone_time_player_position` | character |  |
-| `leaders_defensive_zone_time_player_slug` | character |  |
-| `leaders_defensive_zone_time_player_headshot` | character |  |
-| `leaders_defensive_zone_time_player_team_common_name_default` | character |  |
-| `leaders_defensive_zone_time_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_defensive_zone_time_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_defensive_zone_time_player_team_abbrev` | character |  |
-| `leaders_defensive_zone_time_player_team_team_logo_light` | character |  |
-| `leaders_defensive_zone_time_player_team_team_logo_dark` | character |  |
-| `leaders_defensive_zone_time_zone_time` | double |  |
+| `seasons_with_edge_stats` | character | List of NHL seasons for which this skater has NHL EDGE player-tracking statistics available. |
+| `leaders_hardest_shot_player_id` | integer | Unique NHL identifier for the skater atop the hardest shot speed leaderboard. |
+| `leaders_hardest_shot_player_first_name_default` | character | First name of the skater leading the hardest shot speed leaderboard, in the default display language. |
+| `leaders_hardest_shot_player_last_name_default` | character | Last name of the skater leading the hardest shot speed leaderboard, in the default display language. |
+| `leaders_hardest_shot_player_sweater_number` | integer | Jersey number worn by the skater leading the hardest shot speed leaderboard. |
+| `leaders_hardest_shot_player_position` | character | Ice position (e.g., C, LW, RW, D) of the hardest shot speed leaderboard leader. |
+| `leaders_hardest_shot_player_slug` | character | URL-safe slug identifying the hardest shot leaderboard leader on the NHL website. |
+| `leaders_hardest_shot_player_headshot` | character | URL of the headshot image for the hardest shot leaderboard leader. |
+| `leaders_hardest_shot_player_team_common_name_default` | character | Common team name of the hardest shot leaderboard leader's club, in the default language. |
+| `leaders_hardest_shot_player_team_place_name_with_preposition_default` | character | Team place name with grammatical preposition in the default language for the hardest shot leader's team. |
+| `leaders_hardest_shot_player_team_place_name_with_preposition_fr` | character | Team place name with grammatical preposition in French for the hardest shot leader's team. |
+| `leaders_hardest_shot_player_team_abbrev` | character | Three-letter abbreviation of the team the hardest shot leaderboard leader plays for. |
+| `leaders_hardest_shot_player_team_team_logo_light` | character | URL of the light-background version of the team logo for the hardest shot leaderboard leader's club. |
+| `leaders_hardest_shot_player_team_team_logo_dark` | character | URL of the dark-background version of the team logo for the hardest shot leaderboard leader's club. |
+| `leaders_hardest_shot_overlay_player_first_name_default` | character | First name of the skater shown in the hardest shot game overlay, in the default language. |
+| `leaders_hardest_shot_overlay_player_last_name_default` | character | Last name of the skater shown in the hardest shot game overlay, in the default language. |
+| `leaders_hardest_shot_overlay_game_date` | character | Calendar date of the game in which the hardest shot leader recorded their fastest shot speed. |
+| `leaders_hardest_shot_overlay_away_team_abbrev` | character | Three-letter abbreviation of the away team in the game where the hardest shot leader recorded their top shot speed. |
+| `leaders_hardest_shot_overlay_away_team_score` | integer | Final score of the away team in the game where the hardest shot leader recorded their top shot speed. |
+| `leaders_hardest_shot_overlay_home_team_abbrev` | character | Three-letter abbreviation of the home team in the game where the hardest shot leader recorded their top shot speed. |
+| `leaders_hardest_shot_overlay_home_team_score` | integer | Final score of the home team in the game where the hardest shot leader recorded their top shot speed. |
+| `leaders_hardest_shot_overlay_game_outcome_last_period_type` | character | Period type (REG, OT, SO) that decided the outcome of the game where the hardest shot leader set their mark. |
+| `leaders_hardest_shot_overlay_game_outcome_ot_periods` | integer | Number of overtime periods played in the game where the hardest shot leader recorded their top speed. |
+| `leaders_hardest_shot_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game where the hardest shot leader set their record (typically 3). |
+| `leaders_hardest_shot_overlay_period_descriptor_number` | integer | Period number in which the hardest shot leader's fastest shot was recorded. |
+| `leaders_hardest_shot_overlay_period_descriptor_period_type` | character | Period type label (e.g., REG, OT) for the period in which the hardest shot was recorded. |
+| `leaders_hardest_shot_overlay_time_in_period` | character | Elapsed time within the period when the hardest shot leader's fastest recorded shot occurred. |
+| `leaders_hardest_shot_overlay_game_type` | integer | Game type code (e.g., regular season, playoffs) for the game where the hardest shot leader set their record. |
+| `leaders_hardest_shot_shot_speed_imperial` | double | Fastest NHL EDGE-tracked shot speed (in mph) recorded by the hardest shot leaderboard leader. |
+| `leaders_hardest_shot_shot_speed_metric` | double | Fastest NHL EDGE-tracked shot speed (in km/h) recorded by the hardest shot leaderboard leader. |
+| `leaders_max_skating_speed_player_id` | integer | Unique NHL identifier for the skater atop the maximum skating speed leaderboard. |
+| `leaders_max_skating_speed_player_first_name_default` | character | First name of the skater leading the maximum skating speed leaderboard, in the default display language. |
+| `leaders_max_skating_speed_player_last_name_default` | character | Last name of the skater leading the maximum skating speed leaderboard, in the default display language. |
+| `leaders_max_skating_speed_player_sweater_number` | integer | Jersey number worn by the skater leading the maximum skating speed leaderboard. |
+| `leaders_max_skating_speed_player_position` | character | Ice position (e.g., C, LW, RW, D) of the maximum skating speed leaderboard leader. |
+| `leaders_max_skating_speed_player_slug` | character | URL-safe slug identifying the maximum skating speed leaderboard leader on the NHL website. |
+| `leaders_max_skating_speed_player_headshot` | character | URL of the headshot image for the maximum skating speed leaderboard leader. |
+| `leaders_max_skating_speed_player_team_common_name_default` | character | Common team name of the maximum skating speed leaderboard leader's club, in the default language. |
+| `leaders_max_skating_speed_player_team_place_name_with_preposition_default` | character | Team place name with grammatical preposition in the default language for the max skating speed leader's team. |
+| `leaders_max_skating_speed_player_team_place_name_with_preposition_fr` | character | Team place name with grammatical preposition in French for the max skating speed leader's team. |
+| `leaders_max_skating_speed_player_team_abbrev` | character | Three-letter abbreviation of the team the maximum skating speed leaderboard leader plays for. |
+| `leaders_max_skating_speed_player_team_team_logo_light` | character | URL of the light-background version of the team logo for the maximum skating speed leaderboard leader's club. |
+| `leaders_max_skating_speed_player_team_team_logo_dark` | character | URL of the dark-background version of the team logo for the maximum skating speed leaderboard leader's club. |
+| `leaders_max_skating_speed_overlay_player_first_name_default` | character | First name of the skater shown in the max skating speed game overlay, in the default language. |
+| `leaders_max_skating_speed_overlay_player_last_name_default` | character | Last name of the skater shown in the max skating speed game overlay, in the default language. |
+| `leaders_max_skating_speed_overlay_game_date` | character | Calendar date of the game in which the max skating speed leader recorded their fastest burst speed. |
+| `leaders_max_skating_speed_overlay_away_team_abbrev` | character | Three-letter abbreviation of the away team in the game where the max skating speed leader recorded their top speed. |
+| `leaders_max_skating_speed_overlay_away_team_score` | integer | Final score of the away team in the game where the max skating speed leader set their top burst speed. |
+| `leaders_max_skating_speed_overlay_home_team_abbrev` | character | Three-letter abbreviation of the home team in the game where the max skating speed leader recorded their top speed. |
+| `leaders_max_skating_speed_overlay_home_team_score` | integer | Final score of the home team in the game where the max skating speed leader set their top burst speed. |
+| `leaders_max_skating_speed_overlay_game_outcome_last_period_type` | character | Period type (REG, OT, SO) that decided the game where the max skating speed leader set their top mark. |
+| `leaders_max_skating_speed_overlay_game_outcome_ot_periods` | integer | Number of overtime periods played in the game where the max skating speed leader recorded their fastest speed. |
+| `leaders_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game where the max skating speed leader set their record (typically 3). |
+| `leaders_max_skating_speed_overlay_period_descriptor_number` | integer | Period number in which the max skating speed leader's fastest burst was recorded. |
+| `leaders_max_skating_speed_overlay_period_descriptor_period_type` | character | Period type label (e.g., REG, OT) for the period in which the max skating speed was recorded. |
+| `leaders_max_skating_speed_overlay_time_in_period` | character | Elapsed time within the period when the max skating speed leader's fastest burst was recorded. |
+| `leaders_max_skating_speed_overlay_game_type` | integer | Game type code (e.g., regular season, playoffs) for the game where the max skating speed leader set their record. |
+| `leaders_max_skating_speed_skating_speed_imperial` | double | Peak skating burst speed (in mph) recorded by the maximum skating speed leaderboard leader, per NHL EDGE tracking. |
+| `leaders_max_skating_speed_skating_speed_metric` | double | Peak skating burst speed (in km/h) recorded by the maximum skating speed leaderboard leader, per NHL EDGE tracking. |
+| `leaders_total_distance_skated_player_id` | integer | Unique NHL identifier for the skater atop the total distance skated leaderboard. |
+| `leaders_total_distance_skated_player_first_name_default` | character | First name of the skater leading the total distance skated leaderboard, in the default display language. |
+| `leaders_total_distance_skated_player_last_name_default` | character | Last name of the skater leading the total distance skated leaderboard, in the default display language. |
+| `leaders_total_distance_skated_player_sweater_number` | integer | Jersey number worn by the skater leading the total distance skated leaderboard. |
+| `leaders_total_distance_skated_player_position` | character | Ice position (e.g., C, LW, RW, D) of the total distance skated leaderboard leader. |
+| `leaders_total_distance_skated_player_slug` | character | URL-safe slug identifying the total distance skated leaderboard leader on the NHL website. |
+| `leaders_total_distance_skated_player_headshot` | character | URL of the headshot image for the total distance skated leaderboard leader. |
+| `leaders_total_distance_skated_player_team_common_name_default` | character | Common team name of the total distance skated leaderboard leader's club, in the default language. |
+| `leaders_total_distance_skated_player_team_place_name_with_preposition_default` | character | Team place name with grammatical preposition in the default language for the total distance skated leader's team. |
+| `leaders_total_distance_skated_player_team_place_name_with_preposition_fr` | character | Team place name with grammatical preposition in French for the total distance skated leader's team. |
+| `leaders_total_distance_skated_player_team_abbrev` | character | Three-letter abbreviation of the team the total distance skated leaderboard leader plays for. |
+| `leaders_total_distance_skated_player_team_team_logo_light` | character | URL of the light-background version of the team logo for the total distance skated leaderboard leader's club. |
+| `leaders_total_distance_skated_player_team_team_logo_dark` | character | URL of the dark-background version of the team logo for the total distance skated leaderboard leader's club. |
+| `leaders_total_distance_skated_distance_skated_imperial` | double | Cumulative skating distance (in miles) recorded by the total distance skated leaderboard leader, per NHL EDGE tracking. |
+| `leaders_total_distance_skated_distance_skated_metric` | double | Cumulative skating distance (in kilometres) recorded by the total distance skated leaderboard leader, per NHL EDGE tracking. |
+| `leaders_distance_max_game_player_id` | integer | Unique NHL identifier for the skater who recorded the highest single-game skating distance. |
+| `leaders_distance_max_game_player_first_name_default` | character | First name of the skater who skated the farthest distance in a single game, in the default display language. |
+| `leaders_distance_max_game_player_last_name_default` | character | Last name of the skater who skated the farthest distance in a single game, in the default display language. |
+| `leaders_distance_max_game_player_sweater_number` | integer | Jersey number worn by the skater who recorded the highest single-game skating distance. |
+| `leaders_distance_max_game_player_position` | character | Ice position (e.g., C, LW, RW, D) of the single-game distance skating leader. |
+| `leaders_distance_max_game_player_slug` | character | URL-safe slug identifying the single-game distance skating leader on the NHL website. |
+| `leaders_distance_max_game_player_headshot` | character | URL of the headshot image for the skater atop the single-game distance leaderboard. |
+| `leaders_distance_max_game_player_team_common_name_default` | character | Common team name of the single-game distance skating leader's club, in the default language. |
+| `leaders_distance_max_game_player_team_place_name_with_preposition_default` | character | Team place name with grammatical preposition in the default language for the single-game distance leader's team. |
+| `leaders_distance_max_game_player_team_place_name_with_preposition_fr` | character | Team place name with grammatical preposition in French for the single-game distance leader's team. |
+| `leaders_distance_max_game_player_team_abbrev` | character | Three-letter abbreviation of the team the single-game distance skating leader plays for. |
+| `leaders_distance_max_game_player_team_team_logo_light` | character | URL of the light-background version of the team logo for the single-game distance skating leader's club. |
+| `leaders_distance_max_game_player_team_team_logo_dark` | character | URL of the dark-background version of the team logo for the single-game distance skating leader's club. |
+| `leaders_distance_max_game_distance_skated_imperial` | double | Farthest single-game skating distance (in miles) recorded by the distance-max-game leaderboard leader, per NHL EDGE tracking. |
+| `leaders_distance_max_game_distance_skated_metric` | double | Farthest single-game skating distance (in kilometres) recorded by the distance-max-game leaderboard leader, per NHL EDGE tracking. |
+| `leaders_distance_max_game_overlay_player_first_name_default` | character | First name of the skater displayed in the distance-max-game game overlay, in the default language. |
+| `leaders_distance_max_game_overlay_player_last_name_default` | character | Last name of the skater displayed in the distance-max-game game overlay, in the default language. |
+| `leaders_distance_max_game_overlay_game_date` | character | Calendar date of the game in which the distance-max-game leader skated their record single-game distance. |
+| `leaders_distance_max_game_overlay_away_team_abbrev` | character | Three-letter abbreviation of the away team in the game where the distance-max-game leader set their top mark. |
+| `leaders_distance_max_game_overlay_away_team_score` | integer | Final score of the away team in the game where the distance-max-game leader set their single-game distance record. |
+| `leaders_distance_max_game_overlay_home_team_abbrev` | character | Three-letter abbreviation of the home team in the game where the distance-max-game leader set their top mark. |
+| `leaders_distance_max_game_overlay_home_team_score` | integer | Final score of the home team in the game where the distance-max-game leader set their single-game distance record. |
+| `leaders_distance_max_game_overlay_game_outcome_last_period_type` | character | Period type (REG, OT, SO) that decided the outcome of the game where the distance-max-game leader set their record. |
+| `leaders_distance_max_game_overlay_game_outcome_ot_periods` | integer | Number of overtime periods played in the game where the distance-max-game leader set their single-game distance record. |
+| `leaders_distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game where the distance-max-game leader set their record (typically 3). |
+| `leaders_distance_max_game_overlay_period_descriptor_number` | integer | Period number in which the distance-max-game leader's record tracking event was most notable. |
+| `leaders_distance_max_game_overlay_period_descriptor_period_type` | character | Period type label (e.g., REG, OT) for the period highlighted in the distance-max-game overlay. |
+| `leaders_distance_max_game_overlay_game_type` | integer | Game type code (e.g., regular season, playoffs) for the game where the distance-max-game leader set their record. |
+| `leaders_high_danger_sog_player_id` | integer | Unique NHL identifier for the skater atop the high-danger shots-on-goal leaderboard. |
+| `leaders_high_danger_sog_player_first_name_default` | character | First name of the skater leading the high-danger shots-on-goal leaderboard, in the default display language. |
+| `leaders_high_danger_sog_player_last_name_default` | character | Last name of the skater leading the high-danger shots-on-goal leaderboard, in the default display language. |
+| `leaders_high_danger_sog_player_sweater_number` | integer | Jersey number worn by the skater leading the high-danger shots-on-goal leaderboard. |
+| `leaders_high_danger_sog_player_position` | character | Ice position (e.g., C, LW, RW, D) of the high-danger shots-on-goal leaderboard leader. |
+| `leaders_high_danger_sog_player_slug` | character | URL-safe slug identifying the high-danger shots-on-goal leaderboard leader on the NHL website. |
+| `leaders_high_danger_sog_player_headshot` | character | URL of the headshot image for the high-danger shots-on-goal leaderboard leader. |
+| `leaders_high_danger_sog_player_team_common_name_default` | character | Common team name of the high-danger shots-on-goal leaderboard leader's club, in the default language. |
+| `leaders_high_danger_sog_player_team_place_name_with_preposition_default` | character | Team place name with grammatical preposition in the default language for the high-danger shots-on-goal leader's team. |
+| `leaders_high_danger_sog_player_team_place_name_with_preposition_fr` | character | Team place name with grammatical preposition in French for the high-danger shots-on-goal leader's team. |
+| `leaders_high_danger_sog_player_team_abbrev` | character | Three-letter abbreviation of the team the high-danger shots-on-goal leader plays for. |
+| `leaders_high_danger_sog_player_team_team_logo_light` | character | URL of the light-background version of the team logo for the high-danger shots-on-goal leader's club. |
+| `leaders_high_danger_sog_player_team_team_logo_dark` | character | URL of the dark-background version of the team logo for the high-danger shots-on-goal leader's club. |
+| `leaders_high_danger_sog_sog` | integer | Total number of high-danger shots on goal recorded by the leaderboard leader, as tracked by NHL EDGE puck tracking. |
+| `leaders_high_danger_sog_shot_location_details` | character | Structured details describing the ice zones or slot locations from which the high-danger shots-on-goal leader's tracked shots originated. |
+| `leaders_offensive_zone_time_player_id` | integer | Unique NHL identifier for the skater atop the offensive zone time leaderboard. |
+| `leaders_offensive_zone_time_player_first_name_default` | character | First name of the skater leading the offensive zone time leaderboard, in the default display language. |
+| `leaders_offensive_zone_time_player_last_name_default` | character | Last name of the skater leading the offensive zone time leaderboard, in the default display language. |
+| `leaders_offensive_zone_time_player_sweater_number` | integer | Jersey number worn by the skater leading the offensive zone time leaderboard. |
+| `leaders_offensive_zone_time_player_position` | character | Ice position (e.g., C, LW, RW, D) of the offensive zone time leaderboard leader. |
+| `leaders_offensive_zone_time_player_slug` | character | URL-safe slug identifying the offensive zone time leaderboard leader on the NHL website. |
+| `leaders_offensive_zone_time_player_headshot` | character | URL of the headshot image for the offensive zone time leaderboard leader. |
+| `leaders_offensive_zone_time_player_team_common_name_default` | character | Common team name of the offensive zone time leaderboard leader's club, in the default language. |
+| `leaders_offensive_zone_time_player_team_place_name_with_preposition_default` | character | Team place name with grammatical preposition in the default language for the offensive zone time leader's team. |
+| `leaders_offensive_zone_time_player_team_place_name_with_preposition_fr` | character | Team place name with grammatical preposition in French for the offensive zone time leader's team. |
+| `leaders_offensive_zone_time_player_team_abbrev` | character | Three-letter abbreviation of the team the offensive zone time leaderboard leader plays for. |
+| `leaders_offensive_zone_time_player_team_team_logo_light` | character | URL of the light-background version of the team logo for the offensive zone time leaderboard leader's club. |
+| `leaders_offensive_zone_time_player_team_team_logo_dark` | character | URL of the dark-background version of the team logo for the offensive zone time leaderboard leader's club. |
+| `leaders_offensive_zone_time_zone_time` | double | Total time the offensive zone time leaderboard leader spent in the offensive zone, as tracked by NHL EDGE player tracking. |
+| `leaders_defensive_zone_time_player_id` | integer | Unique NHL identifier for the skater atop the defensive zone time leaderboard. |
+| `leaders_defensive_zone_time_player_first_name_default` | character | First name of the skater leading the defensive zone time leaderboard, in the default display language. |
+| `leaders_defensive_zone_time_player_last_name_default` | character | Last name of the skater leading the defensive zone time leaderboard, in the default display language. |
+| `leaders_defensive_zone_time_player_sweater_number` | integer | Jersey number worn by the skater leading the defensive zone time leaderboard. |
+| `leaders_defensive_zone_time_player_position` | character | Ice position (e.g., C, LW, RW, D) of the defensive zone time leaderboard leader. |
+| `leaders_defensive_zone_time_player_slug` | character | URL-safe slug identifying the defensive zone time leaderboard leader on the NHL website. |
+| `leaders_defensive_zone_time_player_headshot` | character | URL of the headshot image for the defensive zone time leaderboard leader. |
+| `leaders_defensive_zone_time_player_team_common_name_default` | character | Common team name (e.g., Maple Leafs) of the defensive zone time leaderboard leader's club, in the default language. |
+| `leaders_defensive_zone_time_player_team_place_name_with_preposition_default` | character | Team place name with grammatical preposition in the default language (e.g., "in Toronto") for the defensive zone time leader's team. |
+| `leaders_defensive_zone_time_player_team_place_name_with_preposition_fr` | character | Team place name with grammatical preposition in French for the defensive zone time leader's team. |
+| `leaders_defensive_zone_time_player_team_abbrev` | character | Three-letter abbreviation of the team the defensive zone time leader plays for. |
+| `leaders_defensive_zone_time_player_team_team_logo_light` | character | URL of the light-background version of the team logo for the defensive zone time leaderboard leader's club. |
+| `leaders_defensive_zone_time_player_team_team_logo_dark` | character | URL of the dark-background version of the team logo for the defensive zone time leaderboard leader's club. |
+| `leaders_defensive_zone_time_zone_time` | double | Total time the defensive zone time leaderboard leader spent in the defensive zone, as tracked by NHL EDGE player tracking. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -905,19 +905,19 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `save_pctg5v5_last10` | character |  |
-| `save_pctg5v5_details_save_pctg_value` | double |  |
-| `save_pctg5v5_details_save_pctg_league_avg` | double |  |
-| `save_pctg5v5_details_save_pctg_percentile` | double |  |
-| `save_pctg5v5_details_save_pctg_close_value` | double |  |
-| `save_pctg5v5_details_save_pctg_close_league_avg` | double |  |
-| `save_pctg5v5_details_save_pctg_close_percentile` | double |  |
-| `save_pctg5v5_details_shots_value` | integer |  |
-| `save_pctg5v5_details_shots_league_avg` | integer |  |
-| `save_pctg5v5_details_shots_percentile` | double |  |
-| `save_pctg5v5_details_shots_per60_value` | double |  |
-| `save_pctg5v5_details_shots_per60_league_avg` | double |  |
-| `save_pctg5v5_details_shots_per60_percentile` | double |  |
+| `save_pctg5v5_last10` | character | Serialized last-10-game 5-on-5 save percentage trend data for the goalie. |
+| `save_pctg5v5_details_save_pctg_value` | double | Goalie's overall 5-on-5 save percentage (saves divided by shots faced at even strength). |
+| `save_pctg5v5_details_save_pctg_league_avg` | double | League-average 5-on-5 save percentage across all NHL goalies for the current period. |
+| `save_pctg5v5_details_save_pctg_percentile` | double | Percentile rank of the goalie's overall 5-on-5 save percentage relative to all qualifying NHL goalies. |
+| `save_pctg5v5_details_save_pctg_close_value` | double | Goalie's 5-on-5 save percentage recorded specifically in close-score situations. |
+| `save_pctg5v5_details_save_pctg_close_league_avg` | double | League-average 5-on-5 save percentage in close-score situations (one-goal games in the third period or overtime) for the current period. |
+| `save_pctg5v5_details_save_pctg_close_percentile` | double | Percentile rank of the goalie's 5-on-5 save percentage in close-score situations relative to all qualifying NHL goalies. |
+| `save_pctg5v5_details_shots_value` | integer | Total number of 5-on-5 shots the goalie faced during the current period. |
+| `save_pctg5v5_details_shots_league_avg` | integer | League-average number of 5-on-5 shots faced per game by NHL goalies for the current period. |
+| `save_pctg5v5_details_shots_percentile` | double | Percentile rank of the goalie's 5-on-5 shots-faced count relative to all qualifying NHL goalies. |
+| `save_pctg5v5_details_shots_per60_value` | double | Goalie's rate of 5-on-5 shots faced per 60 minutes of even-strength ice time. |
+| `save_pctg5v5_details_shots_per60_league_avg` | double | League-average rate of 5-on-5 shots faced per 60 minutes of even-strength ice time. |
+| `save_pctg5v5_details_shots_per60_percentile` | double | Percentile rank of the goalie's 5-on-5 shots-faced-per-60-minutes rate relative to all qualifying NHL goalies. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -975,40 +975,40 @@ Pull EDGE comparison data for a single goalie.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `shot_location_summary` | character |  |
-| `shot_location_details` | character |  |
-| `save_pctg5v5_last10` | character |  |
-| `save_pctg_last10` | character |  |
+| `seasons_with_edge_stats` | character | Serialized list of season identifiers for which EDGE player-tracking data is available for this goalie. |
+| `shot_location_summary` | character | High-level serialized summary of the goalie's save percentages grouped by shot location zone. |
+| `shot_location_details` | character | Serialized shot-zone breakdown detailing save rates from each ice region (slot, off-wing, etc.). |
+| `save_pctg5v5_last10` | character | Serialized breakdown of the goalie's 5-on-5 save percentage across their last 10 games. |
+| `save_pctg_last10` | character | Serialized summary of the goalie's save percentage across their most recent 10 games. |
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
-| `player_shoots_catches` | character |  |
+| `player_shoots_catches` | character | Handedness indicator showing which side the goalie catches (L = left-catch, R = right-catch). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_slug` | character | URL slug for the player. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_wins` | integer |  |
-| `player_losses` | integer |  |
-| `player_overtime_losses` | integer |  |
-| `player_goals_against_avg` | double |  |
-| `player_save_pctg` | double |  |
-| `player_games_played` | integer |  |
+| `player_wins` | integer | Number of decisions recorded as wins for the goalie during the comparison period. |
+| `player_losses` | integer | Number of decisions recorded as losses for the goalie during the comparison period. |
+| `player_overtime_losses` | integer | Number of losses the goalie suffered after regulation time, counting as an overtime loss in the standings. |
+| `player_goals_against_avg` | double | Goalie's goals-against average — average goals allowed per 60 minutes of ice time. |
+| `player_save_pctg` | double | Overall save percentage for the goalie — proportion of shots faced that were stopped. |
+| `player_games_played` | integer | Total number of regular-season or playoff games the goalie appeared in during the comparison period. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
 | `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
 | `player_team_abbrev` | character | Player team abbreviation. |
 | `player_team_team_logo_light` | character | Player team light-mode logo URL. |
 | `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
-| `save_pctg5v5_details_save_pctg` | double |  |
-| `save_pctg5v5_details_save_pctg_close` | double |  |
-| `save_pctg5v5_details_shots` | integer |  |
-| `save_pctg5v5_details_shots_per60` | double |  |
-| `save_pctg_details_games_above900` | integer |  |
-| `save_pctg_details_pctg_games_above900` | double |  |
-| `save_pctg_details_point_pctg` | double |  |
-| `save_pctg_details_goals_against_avg` | double |  |
-| `save_pctg_details_save_pctg` | double |  |
+| `save_pctg5v5_details_save_pctg` | double | Goalie's save percentage in 5-on-5 even-strength situations only. |
+| `save_pctg5v5_details_save_pctg_close` | double | Save percentage in 5-on-5 situations where the game score was within one goal (close-game situations). |
+| `save_pctg5v5_details_shots` | integer | Total number of shots the goalie faced in 5-on-5 situations during the comparison period. |
+| `save_pctg5v5_details_shots_per60` | double | Rate of shots faced per 60 minutes of 5-on-5 ice time, reflecting workload intensity. |
+| `save_pctg_details_games_above900` | integer | Number of games in which the goalie posted a save percentage above .900 during the comparison period. |
+| `save_pctg_details_pctg_games_above900` | double | Proportion of the goalie's games (as a percentage) in which they achieved a save percentage above .900. |
+| `save_pctg_details_point_pctg` | double | Team points percentage in games started by this goalie, reflecting their contribution to standings. |
+| `save_pctg_details_goals_against_avg` | double | Goals-against average from the detailed save-percentage breakdown dataset for this goalie. |
+| `save_pctg_details_save_pctg` | double | Overall save percentage from the detailed breakdown dataset, capturing all situations. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1039,13 +1039,13 @@ Pull EDGE save-percentage detail for a single goalie.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `save_pctg_last10` | character |  |
-| `save_pctg_details_games_above900_value` | integer |  |
-| `save_pctg_details_games_above900_percentile` | double |  |
-| `save_pctg_details_games_above900_league_avg` | double |  |
-| `save_pctg_details_pctg_games_above900_value` | double |  |
-| `save_pctg_details_pctg_games_above900_percentile` | double |  |
-| `save_pctg_details_pctg_games_above900_league_avg` | double |  |
+| `save_pctg_last10` | character | Serialized summary of the goalie's save percentage across their most recent 10 games. |
+| `save_pctg_details_games_above900_value` | integer | Actual count of games in which this goalie achieved a save percentage above .900. |
+| `save_pctg_details_games_above900_percentile` | double | Percentile rank of this goalie's games-above-.900 count relative to all qualifying goalies. |
+| `save_pctg_details_games_above900_league_avg` | double | League-average number of games in which goalies posted a save percentage above .900, used as a comparison baseline. |
+| `save_pctg_details_pctg_games_above900_value` | double | Proportion (as a decimal fraction) of the goalie's games in which they exceeded a .900 save percentage. |
+| `save_pctg_details_pctg_games_above900_percentile` | double | Percentile rank of this goalie's proportion of games above .900 relative to all qualifying goalies. |
+| `save_pctg_details_pctg_games_above900_league_avg` | double | League-average percentage of games with a save percentage above .900, used as the baseline comparison. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1169,84 +1169,84 @@ Pull the EDGE goalie landing page (summary across all goalies).
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `minimum_minutes_played` | integer |  |
-| `leaders_high_danger_save_pctg_player_id` | integer |  |
-| `leaders_high_danger_save_pctg_player_first_name_default` | character |  |
-| `leaders_high_danger_save_pctg_player_last_name_default` | character |  |
-| `leaders_high_danger_save_pctg_player_last_name_cs` | character |  |
-| `leaders_high_danger_save_pctg_player_last_name_sk` | character |  |
-| `leaders_high_danger_save_pctg_player_sweater_number` | integer |  |
-| `leaders_high_danger_save_pctg_player_position` | character |  |
-| `leaders_high_danger_save_pctg_player_slug` | character |  |
-| `leaders_high_danger_save_pctg_player_headshot` | character |  |
-| `leaders_high_danger_save_pctg_player_team_common_name_default` | character |  |
-| `leaders_high_danger_save_pctg_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_high_danger_save_pctg_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_high_danger_save_pctg_player_team_abbrev` | character |  |
-| `leaders_high_danger_save_pctg_player_team_team_logo_light` | character |  |
-| `leaders_high_danger_save_pctg_player_team_team_logo_dark` | character |  |
-| `leaders_high_danger_save_pctg_save_pctg` | double |  |
-| `leaders_high_danger_save_pctg_shot_location_details` | character |  |
-| `leaders_high_danger_saves_player_id` | integer |  |
-| `leaders_high_danger_saves_player_first_name_default` | character |  |
-| `leaders_high_danger_saves_player_last_name_default` | character |  |
-| `leaders_high_danger_saves_player_sweater_number` | integer |  |
-| `leaders_high_danger_saves_player_position` | character |  |
-| `leaders_high_danger_saves_player_slug` | character |  |
-| `leaders_high_danger_saves_player_headshot` | character |  |
-| `leaders_high_danger_saves_player_team_common_name_default` | character |  |
-| `leaders_high_danger_saves_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_high_danger_saves_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_high_danger_saves_player_team_abbrev` | character |  |
-| `leaders_high_danger_saves_player_team_team_logo_light` | character |  |
-| `leaders_high_danger_saves_player_team_team_logo_dark` | character |  |
-| `leaders_high_danger_saves_saves` | integer |  |
-| `leaders_high_danger_saves_shot_location_details` | character |  |
-| `leaders_high_danger_goals_against_player_id` | integer |  |
-| `leaders_high_danger_goals_against_player_first_name_default` | character |  |
-| `leaders_high_danger_goals_against_player_last_name_default` | character |  |
-| `leaders_high_danger_goals_against_player_sweater_number` | integer |  |
-| `leaders_high_danger_goals_against_player_position` | character |  |
-| `leaders_high_danger_goals_against_player_slug` | character |  |
-| `leaders_high_danger_goals_against_player_headshot` | character |  |
-| `leaders_high_danger_goals_against_player_team_common_name_default` | character |  |
-| `leaders_high_danger_goals_against_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_high_danger_goals_against_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_high_danger_goals_against_player_team_abbrev` | character |  |
-| `leaders_high_danger_goals_against_player_team_team_logo_light` | character |  |
-| `leaders_high_danger_goals_against_player_team_team_logo_dark` | character |  |
-| `leaders_high_danger_goals_against_goals_against` | integer |  |
-| `leaders_save_pctg5v5_player_id` | integer |  |
-| `leaders_save_pctg5v5_player_first_name_default` | character |  |
-| `leaders_save_pctg5v5_player_last_name_default` | character |  |
-| `leaders_save_pctg5v5_player_last_name_cs` | character |  |
-| `leaders_save_pctg5v5_player_last_name_sk` | character |  |
-| `leaders_save_pctg5v5_player_sweater_number` | integer |  |
-| `leaders_save_pctg5v5_player_position` | character |  |
-| `leaders_save_pctg5v5_player_slug` | character |  |
-| `leaders_save_pctg5v5_player_headshot` | character |  |
-| `leaders_save_pctg5v5_player_team_common_name_default` | character |  |
-| `leaders_save_pctg5v5_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_save_pctg5v5_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_save_pctg5v5_player_team_abbrev` | character |  |
-| `leaders_save_pctg5v5_player_team_team_logo_light` | character |  |
-| `leaders_save_pctg5v5_player_team_team_logo_dark` | character |  |
-| `leaders_save_pctg5v5_save_pctg` | double |  |
-| `leaders_games_above900_player_id` | integer |  |
-| `leaders_games_above900_player_first_name_default` | character |  |
-| `leaders_games_above900_player_last_name_default` | character |  |
-| `leaders_games_above900_player_sweater_number` | integer |  |
-| `leaders_games_above900_player_position` | character |  |
-| `leaders_games_above900_player_slug` | character |  |
-| `leaders_games_above900_player_headshot` | character |  |
-| `leaders_games_above900_player_team_common_name_default` | character |  |
-| `leaders_games_above900_player_team_place_name_with_preposition_default` | character |  |
-| `leaders_games_above900_player_team_place_name_with_preposition_fr` | character |  |
-| `leaders_games_above900_player_team_abbrev` | character |  |
-| `leaders_games_above900_player_team_team_logo_light` | character |  |
-| `leaders_games_above900_player_team_team_logo_dark` | character |  |
-| `leaders_games_above900_games` | integer |  |
+| `seasons_with_edge_stats` | character | Serialized list of season identifiers for which EDGE player-tracking data is available on this landing page. |
+| `minimum_minutes_played` | integer | Minimum minutes-played threshold a goalie must meet to qualify for the EDGE leaderboards. |
+| `leaders_high_danger_save_pctg_player_id` | integer | NHL player identifier for the goalie leading the high-danger save-percentage leaderboard. |
+| `leaders_high_danger_save_pctg_player_first_name_default` | character | First name of the goalie leading the high-danger save-percentage leaderboard (default locale). |
+| `leaders_high_danger_save_pctg_player_last_name_default` | character | Last name of the goalie leading the high-danger save-percentage leaderboard (default locale). |
+| `leaders_high_danger_save_pctg_player_last_name_cs` | character | Last name of the high-danger save-percentage leader rendered in Czech locale. |
+| `leaders_high_danger_save_pctg_player_last_name_sk` | character | Last name of the high-danger save-percentage leader rendered in Slovak locale. |
+| `leaders_high_danger_save_pctg_player_sweater_number` | integer | Jersey number worn by the goalie leading the high-danger save-percentage leaderboard. |
+| `leaders_high_danger_save_pctg_player_position` | character | Position code for the goalie leading the high-danger save-percentage leaderboard (always G). |
+| `leaders_high_danger_save_pctg_player_slug` | character | URL-friendly slug for the high-danger save-percentage leader, used in NHL.com profile links. |
+| `leaders_high_danger_save_pctg_player_headshot` | character | URL pointing to the headshot image of the goalie leading the high-danger save-percentage leaderboard. |
+| `leaders_high_danger_save_pctg_player_team_common_name_default` | character | Common team name for the club of the leader in the high-danger save-percentage category. |
+| `leaders_high_danger_save_pctg_player_team_place_name_with_preposition_default` | character | City/place name with grammatical preposition for the high-danger save-percentage leader's team, default locale. |
+| `leaders_high_danger_save_pctg_player_team_place_name_with_preposition_fr` | character | City/place name with grammatical preposition for the high-danger save-percentage leader's team in the French locale. |
+| `leaders_high_danger_save_pctg_player_team_abbrev` | character | Three-letter team abbreviation for the club of the goalie leading the high-danger save-percentage leaderboard. |
+| `leaders_high_danger_save_pctg_player_team_team_logo_light` | character | URL for the light-background team logo for the high-danger save-percentage leaderboard leader. |
+| `leaders_high_danger_save_pctg_player_team_team_logo_dark` | character | URL for the dark-background team logo for the high-danger save-percentage leaderboard leader. |
+| `leaders_high_danger_save_pctg_save_pctg` | double | Save percentage value for the leader of the high-danger save-percentage leaderboard. |
+| `leaders_high_danger_save_pctg_shot_location_details` | character | Serialized shot-zone breakdown for the high-danger save-percentage leaderboard leader. |
+| `leaders_high_danger_saves_player_id` | integer | NHL player identifier for the goalie leading the high-danger saves leaderboard. |
+| `leaders_high_danger_saves_player_first_name_default` | character | First name of the goalie leading the high-danger saves leaderboard (default locale). |
+| `leaders_high_danger_saves_player_last_name_default` | character | Last name of the goalie leading the high-danger saves leaderboard (default locale). |
+| `leaders_high_danger_saves_player_sweater_number` | integer | Jersey number worn by the goalie leading the high-danger saves leaderboard. |
+| `leaders_high_danger_saves_player_position` | character | Position code for the goalie leading the high-danger saves leaderboard (always G). |
+| `leaders_high_danger_saves_player_slug` | character | URL-friendly slug for the high-danger saves leaderboard leader, used in NHL.com profile links. |
+| `leaders_high_danger_saves_player_headshot` | character | URL pointing to the headshot image of the goalie leading the high-danger saves leaderboard. |
+| `leaders_high_danger_saves_player_team_common_name_default` | character | Common team name for the club of the leader in the high-danger saves category. |
+| `leaders_high_danger_saves_player_team_place_name_with_preposition_default` | character | City/place name with grammatical preposition for the high-danger saves leader's team, default locale. |
+| `leaders_high_danger_saves_player_team_place_name_with_preposition_fr` | character | City/place name with grammatical preposition for the high-danger saves leader's team in the French locale. |
+| `leaders_high_danger_saves_player_team_abbrev` | character | Three-letter team abbreviation for the club of the goalie leading the high-danger saves leaderboard. |
+| `leaders_high_danger_saves_player_team_team_logo_light` | character | URL for the light-background team logo for the high-danger saves leaderboard leader. |
+| `leaders_high_danger_saves_player_team_team_logo_dark` | character | URL for the dark-background team logo for the high-danger saves leaderboard leader. |
+| `leaders_high_danger_saves_saves` | integer | Total high-danger saves made by the goalie leading the high-danger saves leaderboard. |
+| `leaders_high_danger_saves_shot_location_details` | character | Serialized shot-zone breakdown for the high-danger saves leaderboard leader. |
+| `leaders_high_danger_goals_against_player_id` | integer | NHL player identifier for the goalie leading the high-danger goals-against leaderboard. |
+| `leaders_high_danger_goals_against_player_first_name_default` | character | First name of the goalie leading the high-danger goals-against leaderboard (default locale). |
+| `leaders_high_danger_goals_against_player_last_name_default` | character | Last name of the goalie leading the high-danger goals-against leaderboard (default locale). |
+| `leaders_high_danger_goals_against_player_sweater_number` | integer | Jersey number worn by the goalie leading the high-danger goals-against leaderboard. |
+| `leaders_high_danger_goals_against_player_position` | character | Position code for the goalie leading the high-danger goals-against leaderboard (always G). |
+| `leaders_high_danger_goals_against_player_slug` | character | URL-friendly slug for the goalie leading the high-danger goals-against leaderboard, used in NHL.com profile links. |
+| `leaders_high_danger_goals_against_player_headshot` | character | URL pointing to the headshot image of the goalie leading the high-danger goals-against leaderboard. |
+| `leaders_high_danger_goals_against_player_team_common_name_default` | character | Common team name for the club of the leader in the high-danger goals-against category. |
+| `leaders_high_danger_goals_against_player_team_place_name_with_preposition_default` | character | City/place name with grammatical preposition for the high-danger goals-against leader's team, default locale. |
+| `leaders_high_danger_goals_against_player_team_place_name_with_preposition_fr` | character | City/place name with grammatical preposition for the high-danger goals-against leader's team in the French locale. |
+| `leaders_high_danger_goals_against_player_team_abbrev` | character | Three-letter team abbreviation for the club of the goalie leading the high-danger goals-against leaderboard. |
+| `leaders_high_danger_goals_against_player_team_team_logo_light` | character | URL for the light-background team logo for the high-danger goals-against leaderboard leader. |
+| `leaders_high_danger_goals_against_player_team_team_logo_dark` | character | URL for the dark-background team logo for the high-danger goals-against leaderboard leader. |
+| `leaders_high_danger_goals_against_goals_against` | integer | Number of high-danger goals allowed by the goalie leading the high-danger goals-against leaderboard. |
+| `leaders_save_pctg5v5_player_id` | integer | NHL player identifier for the goalie leading the 5-on-5 save-percentage leaderboard. |
+| `leaders_save_pctg5v5_player_first_name_default` | character | First name of the goalie leading the 5-on-5 save-percentage leaderboard (default locale). |
+| `leaders_save_pctg5v5_player_last_name_default` | character | Last name of the goalie leading the 5-on-5 save-percentage leaderboard (default locale). |
+| `leaders_save_pctg5v5_player_last_name_cs` | character | Last name of the 5-on-5 save-percentage leader rendered in Czech locale. |
+| `leaders_save_pctg5v5_player_last_name_sk` | character | Last name of the 5-on-5 save-percentage leader rendered in Slovak locale. |
+| `leaders_save_pctg5v5_player_sweater_number` | integer | Jersey number worn by the goalie leading the 5-on-5 save-percentage leaderboard. |
+| `leaders_save_pctg5v5_player_position` | character | Position code for the goalie leading the 5-on-5 save-percentage leaderboard (always G). |
+| `leaders_save_pctg5v5_player_slug` | character | URL-friendly slug for the 5-on-5 save-percentage leaderboard leader, used in NHL.com profile links. |
+| `leaders_save_pctg5v5_player_headshot` | character | URL pointing to the headshot image of the goalie leading the 5-on-5 save-percentage leaderboard. |
+| `leaders_save_pctg5v5_player_team_common_name_default` | character | Common team name for the club of the leader in the 5-on-5 save-percentage category. |
+| `leaders_save_pctg5v5_player_team_place_name_with_preposition_default` | character | City/place name with grammatical preposition for the 5-on-5 save-percentage leader's team, default locale. |
+| `leaders_save_pctg5v5_player_team_place_name_with_preposition_fr` | character | City/place name with grammatical preposition for the 5-on-5 save-percentage leader's team in the French locale. |
+| `leaders_save_pctg5v5_player_team_abbrev` | character | Three-letter team abbreviation for the club of the goalie leading the 5-on-5 save-percentage leaderboard. |
+| `leaders_save_pctg5v5_player_team_team_logo_light` | character | URL for the light-background team logo for the 5-on-5 save-percentage leaderboard leader. |
+| `leaders_save_pctg5v5_player_team_team_logo_dark` | character | URL for the dark-background team logo for the 5-on-5 save-percentage leaderboard leader. |
+| `leaders_save_pctg5v5_save_pctg` | double | Save percentage value for the leader of the 5-on-5 save-percentage leaderboard. |
+| `leaders_games_above900_player_id` | integer | NHL player identifier for the goalie leading the games-above-.900 leaderboard. |
+| `leaders_games_above900_player_first_name_default` | character | First name of the goalie leading the games-above-.900 leaderboard (default locale). |
+| `leaders_games_above900_player_last_name_default` | character | Last name of the goalie leading the games-above-.900 leaderboard (default locale). |
+| `leaders_games_above900_player_sweater_number` | integer | Jersey number worn by the goalie leading the games-above-.900 leaderboard. |
+| `leaders_games_above900_player_position` | character | Position code for the goalie leading the games-above-.900 leaderboard (always G). |
+| `leaders_games_above900_player_slug` | character | URL-friendly slug for the goalie leading the games-above-.900 leaderboard, used in NHL.com profile links. |
+| `leaders_games_above900_player_headshot` | character | URL pointing to the headshot image of the goalie leading the games-above-.900 leaderboard. |
+| `leaders_games_above900_player_team_common_name_default` | character | Common team name (e.g., Maple Leafs) for the club of the leader in the games-above-.900 category. |
+| `leaders_games_above900_player_team_place_name_with_preposition_default` | character | City/place name with grammatical preposition (e.g., in Toronto) for the leader's team, in the default locale. |
+| `leaders_games_above900_player_team_place_name_with_preposition_fr` | character | City/place name with grammatical preposition for the leader's team in the French locale. |
+| `leaders_games_above900_player_team_abbrev` | character | Three-letter team abbreviation for the club of the goalie leading the games-above-.900 leaderboard. |
+| `leaders_games_above900_player_team_team_logo_light` | character | URL for the light-background version of the team logo for the games-above-.900 leaderboard leader. |
+| `leaders_games_above900_player_team_team_logo_dark` | character | URL for the dark-background version of the team logo for the games-above-.900 leaderboard leader. |
+| `leaders_games_above900_games` | integer | Number of games above a .900 save percentage for the top-ranked goalie in that leaderboard category. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1385,93 +1385,93 @@ Pull the EDGE team landing page (summary across all teams).
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `leaders_shot_attempts_over90_team_id` | integer |  |
-| `leaders_shot_attempts_over90_team_common_name_default` | character |  |
-| `leaders_shot_attempts_over90_team_place_name_with_preposition_default` | character |  |
-| `leaders_shot_attempts_over90_team_place_name_with_preposition_fr` | character |  |
-| `leaders_shot_attempts_over90_team_abbrev` | character |  |
-| `leaders_shot_attempts_over90_team_team_logo_light` | character |  |
-| `leaders_shot_attempts_over90_team_team_logo_dark` | character |  |
-| `leaders_shot_attempts_over90_team_slug` | character |  |
-| `leaders_shot_attempts_over90_team_wins` | integer |  |
-| `leaders_shot_attempts_over90_team_losses` | integer |  |
-| `leaders_shot_attempts_over90_team_ot_losses` | integer |  |
-| `leaders_shot_attempts_over90_attempts` | integer |  |
-| `leaders_bursts_over22_team_id` | integer |  |
-| `leaders_bursts_over22_team_common_name_default` | character |  |
-| `leaders_bursts_over22_team_place_name_with_preposition_default` | character |  |
-| `leaders_bursts_over22_team_place_name_with_preposition_fr` | character |  |
-| `leaders_bursts_over22_team_abbrev` | character |  |
-| `leaders_bursts_over22_team_team_logo_light` | character |  |
-| `leaders_bursts_over22_team_team_logo_dark` | character |  |
-| `leaders_bursts_over22_team_slug` | character |  |
-| `leaders_bursts_over22_team_wins` | integer |  |
-| `leaders_bursts_over22_team_losses` | integer |  |
-| `leaders_bursts_over22_team_ot_losses` | integer |  |
-| `leaders_bursts_over22_bursts` | integer |  |
-| `leaders_distance_per60_team_id` | integer |  |
-| `leaders_distance_per60_team_common_name_default` | character |  |
-| `leaders_distance_per60_team_place_name_with_preposition_default` | character |  |
-| `leaders_distance_per60_team_place_name_with_preposition_fr` | character |  |
-| `leaders_distance_per60_team_abbrev` | character |  |
-| `leaders_distance_per60_team_team_logo_light` | character |  |
-| `leaders_distance_per60_team_team_logo_dark` | character |  |
-| `leaders_distance_per60_team_slug` | character |  |
-| `leaders_distance_per60_team_wins` | integer |  |
-| `leaders_distance_per60_team_losses` | integer |  |
-| `leaders_distance_per60_team_ot_losses` | integer |  |
-| `leaders_distance_per60_distance_skated_imperial` | double |  |
-| `leaders_distance_per60_distance_skated_metric` | double |  |
-| `leaders_high_danger_sog_team_id` | integer |  |
-| `leaders_high_danger_sog_team_common_name_default` | character |  |
-| `leaders_high_danger_sog_team_place_name_with_preposition_default` | character |  |
-| `leaders_high_danger_sog_team_place_name_with_preposition_fr` | character |  |
-| `leaders_high_danger_sog_team_abbrev` | character |  |
-| `leaders_high_danger_sog_team_team_logo_light` | character |  |
-| `leaders_high_danger_sog_team_team_logo_dark` | character |  |
-| `leaders_high_danger_sog_team_slug` | character |  |
-| `leaders_high_danger_sog_team_wins` | integer |  |
-| `leaders_high_danger_sog_team_losses` | integer |  |
-| `leaders_high_danger_sog_team_ot_losses` | integer |  |
-| `leaders_high_danger_sog_sog` | integer |  |
-| `leaders_high_danger_sog_shot_location_details` | character |  |
-| `leaders_offensive_zone_time_team_id` | integer |  |
-| `leaders_offensive_zone_time_team_common_name_default` | character |  |
-| `leaders_offensive_zone_time_team_place_name_with_preposition_default` | character |  |
-| `leaders_offensive_zone_time_team_place_name_with_preposition_fr` | character |  |
-| `leaders_offensive_zone_time_team_abbrev` | character |  |
-| `leaders_offensive_zone_time_team_team_logo_light` | character |  |
-| `leaders_offensive_zone_time_team_team_logo_dark` | character |  |
-| `leaders_offensive_zone_time_team_slug` | character |  |
-| `leaders_offensive_zone_time_team_wins` | integer |  |
-| `leaders_offensive_zone_time_team_losses` | integer |  |
-| `leaders_offensive_zone_time_team_ot_losses` | integer |  |
-| `leaders_offensive_zone_time_zone_time` | double |  |
-| `leaders_neutral_zone_time_team_id` | integer |  |
-| `leaders_neutral_zone_time_team_common_name_default` | character |  |
-| `leaders_neutral_zone_time_team_place_name_with_preposition_default` | character |  |
-| `leaders_neutral_zone_time_team_place_name_with_preposition_fr` | character |  |
-| `leaders_neutral_zone_time_team_abbrev` | character |  |
-| `leaders_neutral_zone_time_team_team_logo_light` | character |  |
-| `leaders_neutral_zone_time_team_team_logo_dark` | character |  |
-| `leaders_neutral_zone_time_team_slug` | character |  |
-| `leaders_neutral_zone_time_team_wins` | integer |  |
-| `leaders_neutral_zone_time_team_losses` | integer |  |
-| `leaders_neutral_zone_time_team_ot_losses` | integer |  |
-| `leaders_neutral_zone_time_zone_time` | double |  |
-| `leaders_defensive_zone_time_team_id` | integer |  |
-| `leaders_defensive_zone_time_team_common_name_default` | character |  |
-| `leaders_defensive_zone_time_team_place_name_with_preposition_default` | character |  |
-| `leaders_defensive_zone_time_team_place_name_with_preposition_fr` | character |  |
-| `leaders_defensive_zone_time_team_abbrev` | character |  |
-| `leaders_defensive_zone_time_team_team_logo_light` | character |  |
-| `leaders_defensive_zone_time_team_team_logo_dark` | character |  |
-| `leaders_defensive_zone_time_team_slug` | character |  |
-| `leaders_defensive_zone_time_team_wins` | integer |  |
-| `leaders_defensive_zone_time_team_losses` | integer |  |
-| `leaders_defensive_zone_time_team_ot_losses` | integer |  |
-| `leaders_defensive_zone_time_zone_time` | double |  |
+| `seasons_with_edge_stats` | character | Serialized list of NHL seasons for which EDGE player-tracking data is available for this team. |
+| `leaders_shot_attempts_over90_team_id` | integer | NHL identifier for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_common_name_default` | character | Common team name for the leader in the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_place_name_with_preposition_default` | character | Default-language place name with preposition for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_place_name_with_preposition_fr` | character | French-language place name with preposition for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_abbrev` | character | Three-letter abbreviation for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_team_logo_light` | character | URL of the light-background logo for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_team_logo_dark` | character | URL of the dark-background logo for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_slug` | character | URL-friendly slug identifier for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_wins` | integer | Regular-season wins for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_losses` | integer | Regular-season losses for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_team_ot_losses` | integer | Overtime losses for the team leading the EDGE shot-attempts-over-90-mph category. |
+| `leaders_shot_attempts_over90_attempts` | integer | Number of shot attempts above the 90-mph threshold recorded by the leading team in the EDGE shot-speed leaderboard period. |
+| `leaders_bursts_over22_team_id` | integer | NHL identifier for the team leading the speed-bursts-over-22-mph EDGE tracking category. |
+| `leaders_bursts_over22_team_common_name_default` | character | Common team name (e.g., 'Maple Leafs') for the leader in the speed-bursts-over-22-mph EDGE tracking category. |
+| `leaders_bursts_over22_team_place_name_with_preposition_default` | character | Default-language place name with preposition (e.g., 'in Toronto') for the team leading the speed-bursts-over-22-mph EDGE category. |
+| `leaders_bursts_over22_team_place_name_with_preposition_fr` | character | French-language place name with preposition for the team leading the speed-bursts-over-22-mph EDGE category. |
+| `leaders_bursts_over22_team_abbrev` | character | Three-letter abbreviation for the team leading the speed-bursts-over-22-mph EDGE tracking category. |
+| `leaders_bursts_over22_team_team_logo_light` | character | URL of the light-background logo for the team leading the speed-bursts-over-22-mph EDGE category. |
+| `leaders_bursts_over22_team_team_logo_dark` | character | URL of the dark-background logo for the team leading the speed-bursts-over-22-mph EDGE category. |
+| `leaders_bursts_over22_team_slug` | character | URL-friendly slug identifier for the team leading the speed-bursts-over-22-mph EDGE tracking category. |
+| `leaders_bursts_over22_team_wins` | integer | Regular-season wins for the team leading the speed-bursts-over-22-mph EDGE tracking category. |
+| `leaders_bursts_over22_team_losses` | integer | Regular-season losses for the team leading the speed-bursts-over-22-mph EDGE tracking category. |
+| `leaders_bursts_over22_team_ot_losses` | integer | Overtime losses for the team leading the speed-bursts-over-22-mph EDGE tracking category. |
+| `leaders_bursts_over22_bursts` | integer | Number of speed bursts above 22 mph recorded by skaters on the team in the EDGE tracking leaderboard period. |
+| `leaders_distance_per60_team_id` | integer | NHL identifier for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_common_name_default` | character | Common team name for the leader in the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_place_name_with_preposition_default` | character | Default-language place name with preposition for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_place_name_with_preposition_fr` | character | French-language place name with preposition for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_abbrev` | character | Three-letter abbreviation for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_team_logo_light` | character | URL of the light-background logo for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_team_logo_dark` | character | URL of the dark-background logo for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_slug` | character | URL-friendly slug identifier for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_wins` | integer | Regular-season wins for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_losses` | integer | Regular-season losses for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_team_ot_losses` | integer | Overtime losses for the team leading the EDGE distance-skated-per-60 category. |
+| `leaders_distance_per60_distance_skated_imperial` | double | Average distance skated per 60 minutes of ice time by the leading team's skaters, measured in miles. |
+| `leaders_distance_per60_distance_skated_metric` | double | Average distance skated per 60 minutes of ice time by the leading team's skaters, measured in kilometers. |
+| `leaders_high_danger_sog_team_id` | integer | NHL identifier for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_common_name_default` | character | Common team name for the leader in the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_place_name_with_preposition_default` | character | Default-language place name with preposition for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_place_name_with_preposition_fr` | character | French-language place name with preposition for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_abbrev` | character | Three-letter abbreviation for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_team_logo_light` | character | URL of the light-background logo for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_team_logo_dark` | character | URL of the dark-background logo for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_slug` | character | URL-friendly slug identifier for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_wins` | integer | Regular-season wins for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_losses` | integer | Regular-season losses for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_team_ot_losses` | integer | Overtime losses for the team leading the EDGE high-danger shots-on-goal category. |
+| `leaders_high_danger_sog_sog` | integer | Number of high-danger shots on goal recorded by the leading team in the EDGE tracking leaderboard period. |
+| `leaders_high_danger_sog_shot_location_details` | character | Serialized details describing the high-danger shot locations used to define this EDGE tracking leaderboard category. |
+| `leaders_offensive_zone_time_team_id` | integer | NHL identifier for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_common_name_default` | character | Common team name for the leader in the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_place_name_with_preposition_default` | character | Default-language place name with preposition for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_place_name_with_preposition_fr` | character | French-language place name with preposition for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_abbrev` | character | Three-letter abbreviation for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_team_logo_light` | character | URL of the light-background logo for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_team_logo_dark` | character | URL of the dark-background logo for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_slug` | character | URL-friendly slug identifier for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_wins` | integer | Regular-season wins for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_losses` | integer | Regular-season losses for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_team_ot_losses` | integer | Overtime losses for the team leading the EDGE offensive-zone time category. |
+| `leaders_offensive_zone_time_zone_time` | double | Total time spent in the offensive zone by the leading team in the EDGE tracking leaderboard period. |
+| `leaders_neutral_zone_time_team_id` | integer | NHL identifier for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_common_name_default` | character | Common team name for the leader in the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_place_name_with_preposition_default` | character | Default-language place name with preposition for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_place_name_with_preposition_fr` | character | French-language place name with preposition for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_abbrev` | character | Three-letter abbreviation for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_team_logo_light` | character | URL of the light-background logo for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_team_logo_dark` | character | URL of the dark-background logo for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_slug` | character | URL-friendly slug identifier for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_wins` | integer | Regular-season wins for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_losses` | integer | Regular-season losses for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_team_ot_losses` | integer | Overtime losses for the team leading the EDGE neutral-zone time category. |
+| `leaders_neutral_zone_time_zone_time` | double | Total time spent in the neutral zone by the leading team in the EDGE tracking leaderboard period. |
+| `leaders_defensive_zone_time_team_id` | integer | NHL identifier for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_common_name_default` | character | Common team name for the leader in the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_place_name_with_preposition_default` | character | Default-language place name with preposition for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_place_name_with_preposition_fr` | character | French-language place name with preposition for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_abbrev` | character | Three-letter abbreviation for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_team_logo_light` | character | URL of the light-background logo for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_team_logo_dark` | character | URL of the dark-background logo for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_slug` | character | URL-friendly slug identifier for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_wins` | integer | Regular-season wins for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_losses` | integer | Regular-season losses for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_team_ot_losses` | integer | Overtime losses for the team leading the EDGE defensive-zone time category. |
+| `leaders_defensive_zone_time_zone_time` | double | Total time spent in the defensive zone by the leading team in the EDGE tracking leaderboard period. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1568,8 +1568,8 @@ Pull EDGE shot-speed detail for a single team.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `hardest_shots` | character |  |
-| `shot_speed_details` | character |  |
+| `hardest_shots` | character | Serialized list of the hardest individual shot records associated with the team's players. |
+| `shot_speed_details` | character | Serialized shot-speed breakdown object containing aggregate and top-speed metrics for the team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1777,58 +1777,58 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `sog_summary` | character |  |
-| `sog_details` | character |  |
+| `seasons_with_edge_stats` | character | JSON-serialized list of NHL season identifiers for which EDGE puck-and-player tracking data is available for this skater. |
+| `sog_summary` | character | JSON-serialized summary of shot-on-goal tracking data aggregated over the tracking period for the skater. |
+| `sog_details` | character | JSON-serialized per-game shot-on-goal tracking details for the skater across the tracking period. |
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
-| `player_shoots_catches` | character |  |
+| `player_shoots_catches` | character | Side on which the skater shoots — L (left) or R (right). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_position` | character | Primary player position. |
 | `player_slug` | character | URL slug for the player. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_goals` | integer |  |
-| `player_assists` | integer |  |
+| `player_goals` | integer | Number of goals scored by the skater during the relevant tracking period. |
+| `player_assists` | integer | Number of assists credited to the skater during the relevant tracking period. |
 | `player_points` | integer | Player points. |
-| `player_games_played` | integer |  |
+| `player_games_played` | integer | Number of games in which the skater appeared during the relevant tracking period. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
 | `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
 | `player_team_abbrev` | character | Player team abbreviation. |
 | `player_team_team_logo_light` | character | Player team light-mode logo URL. |
 | `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
-| `top_shot_speed_imperial` | double |  |
-| `top_shot_speed_metric` | double |  |
-| `top_shot_speed_percentile` | double |  |
-| `top_shot_speed_league_avg_imperial` | double |  |
-| `top_shot_speed_league_avg_metric` | double |  |
-| `skating_speed_speed_max_imperial` | double |  |
-| `skating_speed_speed_max_metric` | double |  |
-| `skating_speed_speed_max_percentile` | double |  |
-| `skating_speed_speed_max_league_avg_imperial` | double |  |
-| `skating_speed_speed_max_league_avg_metric` | double |  |
-| `skating_speed_speed_max_overlay_player_first_name_default` | character |  |
-| `skating_speed_speed_max_overlay_player_last_name_default` | character |  |
-| `skating_speed_speed_max_overlay_time_in_period` | character |  |
-| `skating_speed_bursts_over20_value` | integer |  |
-| `skating_speed_bursts_over20_percentile` | double |  |
-| `skating_speed_bursts_over20_league_avg_value` | double |  |
-| `total_distance_skated_imperial` | double |  |
-| `total_distance_skated_metric` | double |  |
-| `total_distance_skated_percentile` | double |  |
-| `total_distance_skated_league_avg_imperial` | double |  |
-| `total_distance_skated_league_avg_metric` | double |  |
-| `zone_time_details_offensive_zone_pctg` | double |  |
-| `zone_time_details_offensive_zone_percentile` | double |  |
-| `zone_time_details_offensive_zone_league_avg` | double |  |
-| `zone_time_details_neutral_zone_pctg` | double |  |
-| `zone_time_details_neutral_zone_percentile` | double |  |
-| `zone_time_details_neutral_zone_league_avg` | double |  |
-| `zone_time_details_defensive_zone_pctg` | double |  |
-| `zone_time_details_defensive_zone_percentile` | double |  |
-| `zone_time_details_defensive_zone_league_avg` | double |  |
+| `top_shot_speed_imperial` | double | Skater's highest recorded shot speed in miles per hour during the tracking period. |
+| `top_shot_speed_metric` | double | Skater's highest recorded shot speed in kilometers per hour during the tracking period. |
+| `top_shot_speed_percentile` | double | Percentile rank among all NHL skaters for highest recorded shot speed during the tracking period. |
+| `top_shot_speed_league_avg_imperial` | double | League-average top shot speed in miles per hour, used as the baseline for this skater's shot-speed percentile. |
+| `top_shot_speed_league_avg_metric` | double | League-average top shot speed in kilometers per hour, used as the baseline for this skater's shot-speed percentile. |
+| `skating_speed_speed_max_imperial` | double | Skater's maximum recorded skating speed in miles per hour during the tracking period. |
+| `skating_speed_speed_max_metric` | double | Skater's maximum recorded skating speed in kilometers per hour during the tracking period. |
+| `skating_speed_speed_max_percentile` | double | Percentile rank among all NHL skaters for maximum skating speed recorded during the tracking period. |
+| `skating_speed_speed_max_league_avg_imperial` | double | League-average maximum skating speed in miles per hour, used as the baseline for this skater's percentile. |
+| `skating_speed_speed_max_league_avg_metric` | double | League-average maximum skating speed in kilometers per hour, used as the baseline for this skater's percentile. |
+| `skating_speed_speed_max_overlay_player_first_name_default` | character | First name of the skater who achieved the maximum skating speed in the context of the overlay comparison play. |
+| `skating_speed_speed_max_overlay_player_last_name_default` | character | Last name of the skater who achieved the maximum skating speed in the context of the overlay comparison play. |
+| `skating_speed_speed_max_overlay_time_in_period` | character | Elapsed time within the period (mm:ss) at which the skater's maximum skating speed was recorded. |
+| `skating_speed_bursts_over20_value` | integer | Number of skating bursts the skater reached or exceeded 20 mph per game on average during the tracking period. |
+| `skating_speed_bursts_over20_percentile` | double | Percentile rank among all NHL skaters for frequency of skating speed bursts exceeding 20 mph per game. |
+| `skating_speed_bursts_over20_league_avg_value` | double | League-average number of skating speed bursts exceeding 20 mph per game, used as the baseline for this skater's percentile. |
+| `total_distance_skated_imperial` | double | Total cumulative distance skated by the player in miles during the tracking period. |
+| `total_distance_skated_metric` | double | Total cumulative distance skated by the player in kilometers during the tracking period. |
+| `total_distance_skated_percentile` | double | Percentile rank among all NHL skaters for total distance skated per game during the tracking period. |
+| `total_distance_skated_league_avg_imperial` | double | League-average total distance skated in miles per game, used as the baseline for this skater's distance percentile. |
+| `total_distance_skated_league_avg_metric` | double | League-average total distance skated in kilometers per game, used as the baseline for this skater's distance percentile. |
+| `zone_time_details_offensive_zone_pctg` | double | Percentage of the skater's total on-ice time spent in the offensive zone during the tracking period. |
+| `zone_time_details_offensive_zone_percentile` | double | Percentile rank among all NHL skaters for percentage of ice time spent in the offensive zone. |
+| `zone_time_details_offensive_zone_league_avg` | double | League-average percentage of on-ice time skaters spend in the offensive zone, used as the baseline for this player's percentile. |
+| `zone_time_details_neutral_zone_pctg` | double | Percentage of the skater's total on-ice time spent in the neutral zone during the tracking period. |
+| `zone_time_details_neutral_zone_percentile` | double | Percentile rank among all NHL skaters for percentage of ice time spent in the neutral zone. |
+| `zone_time_details_neutral_zone_league_avg` | double | League-average percentage of on-ice time skaters spend in the neutral zone, used as the baseline for this player's percentile. |
+| `zone_time_details_defensive_zone_pctg` | double | Percentage of the skater's total on-ice time spent in the defensive zone during the tracking period. |
+| `zone_time_details_defensive_zone_percentile` | double | Percentile rank among all NHL skaters for percentage of ice time spent in the defensive zone. |
+| `zone_time_details_defensive_zone_league_avg` | double | League-average percentage of on-ice time skaters spend in the defensive zone, used as the baseline for this player's percentile. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1859,44 +1859,44 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `shot_location_summary` | character |  |
-| `shot_location_details` | character |  |
+| `seasons_with_edge_stats` | character | JSON-serialized list of NHL season identifiers for which EDGE puck-and-player tracking data is available for this goalie. |
+| `shot_location_summary` | character | JSON-serialized summary of shot-location tracking data aggregated across all zones for the goalie. |
+| `shot_location_details` | character | JSON-serialized per-zone shot-location tracking breakdown showing where shots were attempted against the goalie. |
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
-| `player_shoots_catches` | character |  |
+| `player_shoots_catches` | character | Side on which the goalie catches — L (left) or R (right). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_slug` | character | URL slug for the player. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_wins` | integer |  |
-| `player_losses` | integer |  |
-| `player_overtime_losses` | integer |  |
-| `player_goals_against_avg` | double |  |
-| `player_save_pctg` | double |  |
-| `player_games_played` | integer |  |
+| `player_wins` | integer | Number of regulation and overtime wins credited to the goalie during the tracking period. |
+| `player_losses` | integer | Number of regulation losses credited to the goalie during the tracking period. |
+| `player_overtime_losses` | integer | Number of overtime or shootout losses credited to the goalie during the tracking period. |
+| `player_goals_against_avg` | double | Goalie's goals-against average — goals allowed per 60 minutes of ice time — for the tracking period. |
+| `player_save_pctg` | double | Goalie's save percentage, expressed as the proportion of shots on goal stopped. |
+| `player_games_played` | integer | Number of games in which the goalie appeared during the relevant tracking period. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
 | `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
 | `player_team_abbrev` | character | Player team abbreviation. |
 | `player_team_team_logo_light` | character | Player team light-mode logo URL. |
 | `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
-| `stats_goals_against_avg_value` | double |  |
-| `stats_goals_against_avg_percentile` | double |  |
-| `stats_goals_against_avg_league_avg` | double |  |
-| `stats_games_above900_value` | double |  |
-| `stats_games_above900_percentile` | double |  |
-| `stats_games_above900_league_avg` | double |  |
-| `stats_goal_differential_per60_value` | double |  |
-| `stats_goal_differential_per60_percentile` | double |  |
-| `stats_goal_differential_per60_league_avg` | double |  |
-| `stats_goal_support_avg_value` | double |  |
-| `stats_goal_support_avg_percentile` | double |  |
-| `stats_goal_support_avg_league_avg` | double |  |
-| `stats_point_pctg_value` | double |  |
-| `stats_point_pctg_percentile` | double |  |
-| `stats_point_pctg_league_avg` | double |  |
+| `stats_goals_against_avg_value` | double | Goalie's goals-against average for the tracking period. |
+| `stats_goals_against_avg_percentile` | double | Percentile rank among all NHL goalies for goals-against average (lower GAA = higher percentile). |
+| `stats_goals_against_avg_league_avg` | double | League-average goals-against average used as the baseline for this goalie's GAA percentile calculation. |
+| `stats_games_above900_value` | double | Number of games the goalie posted a save percentage above .900 during the tracking period. |
+| `stats_games_above900_percentile` | double | Percentile rank among all NHL goalies for games played in which the goalie posted a save percentage above .900. |
+| `stats_games_above900_league_avg` | double | League-average games-above-.900-save-percentage rate used as the baseline for this goalie's percentile calculation. |
+| `stats_goal_differential_per60_value` | double | Goalie's goals-saved-above-expected per 60 minutes, measuring performance relative to shot quality faced. |
+| `stats_goal_differential_per60_percentile` | double | Percentile rank among all NHL goalies for goals-saved-above-expected per 60 minutes of ice time. |
+| `stats_goal_differential_per60_league_avg` | double | League-average goals-saved-above-expected per 60 minutes used as the baseline for this goalie's percentile. |
+| `stats_goal_support_avg_value` | double | Average number of goals scored for the goalie per game started during the tracking period. |
+| `stats_goal_support_avg_percentile` | double | Percentile rank among all NHL goalies for average offensive goal support received per game started. |
+| `stats_goal_support_avg_league_avg` | double | League-average goal support (goals scored for the goalie per game) used as the baseline for percentile calculation. |
+| `stats_point_pctg_value` | double | Fraction of available standings points the goalie's team earned in games the goalie started. |
+| `stats_point_pctg_percentile` | double | Percentile rank among all NHL goalies for team point percentage in games the goalie started. |
+| `stats_point_pctg_league_avg` | double | League-average team point percentage in games the goalie started, used as the baseline for percentile calculation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
