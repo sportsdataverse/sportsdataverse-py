@@ -26,102 +26,102 @@ Pull EDGE detail stats for a single skater.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `sog_summary` | character |  |
-| `sog_details` | character |  |
+| `seasons_with_edge_stats` | character | Comma-separated list or serialized array of seasons for which NHL EDGE player-tracking data is available for this skater. |
+| `sog_summary` | character | Serialized summary-level shots-on-goal statistics for the skater, as returned in the NHL EDGE skater detail payload. |
+| `sog_details` | character | Serialized detail breakdown of shots on goal by game or other sub-category, as returned in the NHL EDGE skater detail payload. |
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
-| `player_shoots_catches` | character |  |
+| `player_shoots_catches` | character | Handedness indicator for the skater showing the side they shoot from ('L' for left, 'R' for right). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_position` | character | Primary player position. |
 | `player_slug` | character | URL slug for the player. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_goals` | integer |  |
-| `player_assists` | integer |  |
+| `player_goals` | integer | Total regular-season goals scored by the skater in the current NHL season, as returned in the EDGE skater detail. |
+| `player_assists` | integer | Total regular-season assists recorded by the skater in the current NHL season, as returned in the EDGE skater detail. |
 | `player_points` | integer | Player points. |
-| `player_games_played` | integer |  |
+| `player_games_played` | integer | Total number of regular-season games played by the skater in the current NHL season, as returned in the EDGE skater detail. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
 | `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
 | `player_team_abbrev` | character | Player team abbreviation. |
 | `player_team_team_logo_light` | character | Player team light-mode logo URL. |
 | `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
-| `top_shot_speed_imperial` | double |  |
-| `top_shot_speed_metric` | double |  |
-| `top_shot_speed_percentile` | double |  |
-| `top_shot_speed_league_avg_imperial` | double |  |
-| `top_shot_speed_league_avg_metric` | double |  |
-| `top_shot_speed_overlay_player_first_name_default` | character |  |
-| `top_shot_speed_overlay_player_last_name_default` | character |  |
-| `top_shot_speed_overlay_game_date` | character |  |
-| `top_shot_speed_overlay_away_team_abbrev` | character |  |
-| `top_shot_speed_overlay_away_team_score` | integer |  |
-| `top_shot_speed_overlay_home_team_abbrev` | character |  |
-| `top_shot_speed_overlay_home_team_score` | integer |  |
-| `top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
-| `top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `top_shot_speed_overlay_period_descriptor_number` | integer |  |
-| `top_shot_speed_overlay_period_descriptor_period_type` | character |  |
-| `top_shot_speed_overlay_time_in_period` | character |  |
-| `top_shot_speed_overlay_game_type` | integer |  |
-| `skating_speed_speed_max_imperial` | double |  |
-| `skating_speed_speed_max_metric` | double |  |
-| `skating_speed_speed_max_percentile` | double |  |
-| `skating_speed_speed_max_league_avg_imperial` | double |  |
-| `skating_speed_speed_max_league_avg_metric` | double |  |
-| `skating_speed_speed_max_overlay_player_first_name_default` | character |  |
-| `skating_speed_speed_max_overlay_player_last_name_default` | character |  |
-| `skating_speed_speed_max_overlay_game_date` | character |  |
-| `skating_speed_speed_max_overlay_away_team_abbrev` | character |  |
-| `skating_speed_speed_max_overlay_away_team_score` | integer |  |
-| `skating_speed_speed_max_overlay_home_team_abbrev` | character |  |
-| `skating_speed_speed_max_overlay_home_team_score` | integer |  |
-| `skating_speed_speed_max_overlay_game_outcome_last_period_type` | character |  |
-| `skating_speed_speed_max_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `skating_speed_speed_max_overlay_period_descriptor_number` | integer |  |
-| `skating_speed_speed_max_overlay_period_descriptor_period_type` | character |  |
-| `skating_speed_speed_max_overlay_time_in_period` | character |  |
-| `skating_speed_speed_max_overlay_game_type` | integer |  |
-| `skating_speed_bursts_over20_value` | integer |  |
-| `skating_speed_bursts_over20_percentile` | double |  |
-| `skating_speed_bursts_over20_league_avg_value` | double |  |
-| `total_distance_skated_imperial` | double |  |
-| `total_distance_skated_metric` | double |  |
-| `total_distance_skated_percentile` | double |  |
-| `total_distance_skated_league_avg_imperial` | double |  |
-| `total_distance_skated_league_avg_metric` | double |  |
-| `distance_max_game_imperial` | double |  |
-| `distance_max_game_metric` | double |  |
-| `distance_max_game_percentile` | double |  |
-| `distance_max_game_league_avg_imperial` | double |  |
-| `distance_max_game_league_avg_metric` | double |  |
-| `distance_max_game_overlay_player_first_name_default` | character |  |
-| `distance_max_game_overlay_player_last_name_default` | character |  |
-| `distance_max_game_overlay_game_date` | character |  |
-| `distance_max_game_overlay_away_team_abbrev` | character |  |
-| `distance_max_game_overlay_away_team_score` | integer |  |
-| `distance_max_game_overlay_home_team_abbrev` | character |  |
-| `distance_max_game_overlay_home_team_score` | integer |  |
-| `distance_max_game_overlay_game_outcome_last_period_type` | character |  |
-| `distance_max_game_overlay_game_outcome_ot_periods` | integer |  |
-| `distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `distance_max_game_overlay_period_descriptor_number` | integer |  |
-| `distance_max_game_overlay_period_descriptor_period_type` | character |  |
-| `distance_max_game_overlay_game_type` | integer |  |
-| `zone_time_details_offensive_zone_pctg` | double |  |
-| `zone_time_details_offensive_zone_percentile` | double |  |
-| `zone_time_details_offensive_zone_league_avg` | double |  |
-| `zone_time_details_offensive_zone_ev_pctg` | double |  |
-| `zone_time_details_offensive_zone_ev_percentile` | double |  |
-| `zone_time_details_offensive_zone_ev_league_avg` | double |  |
-| `zone_time_details_neutral_zone_pctg` | double |  |
-| `zone_time_details_neutral_zone_percentile` | double |  |
-| `zone_time_details_neutral_zone_league_avg` | double |  |
-| `zone_time_details_defensive_zone_pctg` | double |  |
-| `zone_time_details_defensive_zone_percentile` | double |  |
-| `zone_time_details_defensive_zone_league_avg` | double |  |
+| `top_shot_speed_imperial` | double | Player's highest recorded shot speed for the season measured in miles per hour (imperial), as captured by NHL EDGE puck-tracking. |
+| `top_shot_speed_metric` | double | Player's highest recorded shot speed for the season measured in kilometers per hour (metric), as captured by NHL EDGE puck-tracking. |
+| `top_shot_speed_percentile` | double | Percentile rank of the player's top shot speed relative to all qualifying skaters in the NHL EDGE dataset. |
+| `top_shot_speed_league_avg_imperial` | double | League-average top shot speed among qualifying skaters for the season, measured in miles per hour (imperial). |
+| `top_shot_speed_league_avg_metric` | double | League-average top shot speed among qualifying skaters for the season, measured in kilometers per hour (metric). |
+| `top_shot_speed_overlay_player_first_name_default` | character | Player's first name as stored in the NHL api-web system, included in the overlay for the top-shot-speed game. |
+| `top_shot_speed_overlay_player_last_name_default` | character | Player's last name as stored in the NHL api-web system, included in the overlay for the top-shot-speed game. |
+| `top_shot_speed_overlay_game_date` | character | Date (YYYY-MM-DD) of the game in which the player recorded their top shot speed for the season. |
+| `top_shot_speed_overlay_away_team_abbrev` | character | Three-letter abbreviation for the away team in the game where the player recorded their top shot speed this season. |
+| `top_shot_speed_overlay_away_team_score` | integer | Away team's final score in the game where the player recorded their season-high shot speed. |
+| `top_shot_speed_overlay_home_team_abbrev` | character | Three-letter abbreviation for the home team in the game where the player achieved their top shot speed this season. |
+| `top_shot_speed_overlay_home_team_score` | integer | Home team's final score in the game where the player recorded their season-high shot speed. |
+| `top_shot_speed_overlay_game_outcome_last_period_type` | character | Type of period that ended the game where the player set their top shot speed (e.g., 'REG', 'OT', 'SO'). |
+| `top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods defined for the game type in which the player recorded their top shot speed. |
+| `top_shot_speed_overlay_period_descriptor_number` | integer | Period number in which the player recorded their top shot speed during the referenced game. |
+| `top_shot_speed_overlay_period_descriptor_period_type` | character | Period type label (e.g., 'REG', 'OT') for the period in which the player hit their top shot speed. |
+| `top_shot_speed_overlay_time_in_period` | character | Time elapsed within the period (MM:SS) when the player released their top-speed shot for the season. |
+| `top_shot_speed_overlay_game_type` | integer | Numeric code for the game type of the game in which the player recorded their top shot speed (e.g., 2 = regular season). |
+| `skating_speed_speed_max_imperial` | double | Player's top recorded skating speed for the season measured in miles per hour (imperial), as captured by NHL EDGE player tracking. |
+| `skating_speed_speed_max_metric` | double | Player's top recorded skating speed for the season measured in kilometers per hour (metric), as captured by NHL EDGE player tracking. |
+| `skating_speed_speed_max_percentile` | double | Percentile rank of the player's top skating speed relative to all qualifying skaters in the NHL EDGE dataset. |
+| `skating_speed_speed_max_league_avg_imperial` | double | League-average top skating speed among qualifying skaters for the season, measured in miles per hour (imperial). |
+| `skating_speed_speed_max_league_avg_metric` | double | League-average top skating speed among qualifying skaters for the season, measured in kilometers per hour (metric). |
+| `skating_speed_speed_max_overlay_player_first_name_default` | character | Player's first name as stored in the NHL api-web system, included in the overlay for the top-skating-speed game. |
+| `skating_speed_speed_max_overlay_player_last_name_default` | character | Player's last name as stored in the NHL api-web system, included in the overlay for the top-skating-speed game. |
+| `skating_speed_speed_max_overlay_game_date` | character | Date (YYYY-MM-DD) of the game in which the player recorded their top skating speed for the season. |
+| `skating_speed_speed_max_overlay_away_team_abbrev` | character | Three-letter abbreviation for the away team in the game where the player achieved their top skating speed this season. |
+| `skating_speed_speed_max_overlay_away_team_score` | integer | Away team's final score in the game where the player achieved their season-high skating speed. |
+| `skating_speed_speed_max_overlay_home_team_abbrev` | character | Three-letter abbreviation for the home team in the game where the player achieved their top skating speed this season. |
+| `skating_speed_speed_max_overlay_home_team_score` | integer | Home team's final score in the game where the player achieved their season-high skating speed. |
+| `skating_speed_speed_max_overlay_game_outcome_last_period_type` | character | Type of period that ended the game where the player set their top skating speed (e.g., 'REG', 'OT', 'SO'). |
+| `skating_speed_speed_max_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods defined for the game type in which the player set their top skating speed. |
+| `skating_speed_speed_max_overlay_period_descriptor_number` | integer | Period number in which the player recorded their top skating speed during the referenced game. |
+| `skating_speed_speed_max_overlay_period_descriptor_period_type` | character | Period type label (e.g., 'REG', 'OT') for the period in which the player hit their top skating speed. |
+| `skating_speed_speed_max_overlay_time_in_period` | character | Time elapsed within the period (MM:SS) when the player recorded their top skating speed for the season. |
+| `skating_speed_speed_max_overlay_game_type` | integer | Numeric code for the game type of the game in which the player recorded their top skating speed (e.g., 2 = regular season). |
+| `skating_speed_bursts_over20_value` | integer | Number of distinct skating speed bursts exceeding 20 mph recorded for the player across the season in NHL EDGE tracking data. |
+| `skating_speed_bursts_over20_percentile` | double | Percentile rank of the player's count of skating speed bursts exceeding 20 mph relative to all qualifying skaters in the NHL EDGE dataset. |
+| `skating_speed_bursts_over20_league_avg_value` | double | League-average number of skating speed bursts exceeding 20 mph recorded per game among qualifying skaters, for the current season. |
+| `total_distance_skated_imperial` | double | Total cumulative distance skated by the player across all tracked games in the season, measured in miles (imperial). |
+| `total_distance_skated_metric` | double | Total cumulative distance skated by the player across all tracked games in the season, measured in kilometers (metric). |
+| `total_distance_skated_percentile` | double | Percentile rank of the player's total season skating distance relative to all qualifying skaters in the NHL EDGE dataset. |
+| `total_distance_skated_league_avg_imperial` | double | League-average total season skating distance among qualifying skaters, measured in miles (imperial). |
+| `total_distance_skated_league_avg_metric` | double | League-average total season skating distance among qualifying skaters, measured in kilometers (metric). |
+| `distance_max_game_imperial` | double | Maximum distance skated by the player in their single best game of the season, measured in miles (imperial). |
+| `distance_max_game_metric` | double | Maximum distance skated by the player in their single best game of the season, measured in kilometers (metric). |
+| `distance_max_game_percentile` | double | Percentile rank of the player's maximum single-game skating distance relative to all qualifying skaters in the NHL EDGE dataset. |
+| `distance_max_game_league_avg_imperial` | double | League-average maximum single-game distance skated among all qualifying skaters, measured in miles (imperial). |
+| `distance_max_game_league_avg_metric` | double | League-average maximum single-game distance skated among all qualifying skaters, measured in kilometers (metric). |
+| `distance_max_game_overlay_player_first_name_default` | character | Player's first name as stored in the NHL api-web system, included in the overlay context for the max-distance game. |
+| `distance_max_game_overlay_player_last_name_default` | character | Player's last name as stored in the NHL api-web system, included in the overlay context for the max-distance game. |
+| `distance_max_game_overlay_game_date` | character | Date (YYYY-MM-DD) of the game where the player achieved their maximum single-game skating distance. |
+| `distance_max_game_overlay_away_team_abbrev` | character | Three-letter abbreviation for the away team in the game where the player achieved their maximum single-game skating distance. |
+| `distance_max_game_overlay_away_team_score` | integer | Away team's final score in the game where the player achieved their maximum single-game skating distance. |
+| `distance_max_game_overlay_home_team_abbrev` | character | Three-letter abbreviation for the home team in the game where the player achieved their maximum single-game skating distance. |
+| `distance_max_game_overlay_home_team_score` | integer | Home team's final score in the game where the player achieved their maximum single-game skating distance. |
+| `distance_max_game_overlay_game_outcome_last_period_type` | character | Type of period that ended the game where the player set their maximum single-game skating distance (e.g., 'REG', 'OT', 'SO'). |
+| `distance_max_game_overlay_game_outcome_ot_periods` | integer | Number of overtime periods played in the game where the player achieved their maximum single-game skating distance. |
+| `distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods defined for the game type in which the player set their max-distance performance. |
+| `distance_max_game_overlay_period_descriptor_number` | integer | Period number during which the player's max-distance game context is anchored in the NHL EDGE overlay data. |
+| `distance_max_game_overlay_period_descriptor_period_type` | character | Period type label (e.g., 'REG', 'OT') for the period referenced in the max-distance game overlay. |
+| `distance_max_game_overlay_game_type` | integer | Numeric code for the game type (e.g., 2 = regular season, 3 = playoffs) of the max-distance game. |
+| `zone_time_details_offensive_zone_pctg` | double | Percentage of the player's total tracked ice time spent in the offensive zone across all situations, as measured by NHL EDGE zone-time tracking. |
+| `zone_time_details_offensive_zone_percentile` | double | Percentile rank of the player's overall offensive zone time percentage relative to all qualifying skaters in the NHL EDGE dataset. |
+| `zone_time_details_offensive_zone_league_avg` | double | League-average percentage of all-situation ice time spent in the offensive zone among qualifying skaters, used as a comparison baseline. |
+| `zone_time_details_offensive_zone_ev_pctg` | double | Percentage of the player's even-strength ice time spent in the offensive zone, as measured by NHL EDGE zone-time tracking. |
+| `zone_time_details_offensive_zone_ev_percentile` | double | Percentile rank of the player's even-strength offensive zone time percentage relative to all qualifying skaters in the NHL EDGE dataset. |
+| `zone_time_details_offensive_zone_ev_league_avg` | double | League-average percentage of even-strength ice time spent in the offensive zone among qualifying skaters, used as a comparison baseline. |
+| `zone_time_details_neutral_zone_pctg` | double | Percentage of the player's total tracked ice time spent in the neutral zone, as measured by NHL EDGE zone-time tracking. |
+| `zone_time_details_neutral_zone_percentile` | double | Percentile rank of the player's neutral zone time percentage relative to all qualifying skaters in the NHL EDGE dataset. |
+| `zone_time_details_neutral_zone_league_avg` | double | League-average percentage of ice time spent in the neutral zone among qualifying skaters, used as a comparison baseline. |
+| `zone_time_details_defensive_zone_pctg` | double | Percentage of the player's total tracked ice time spent in the defensive zone, as measured by NHL EDGE zone-time tracking. |
+| `zone_time_details_defensive_zone_percentile` | double | Percentile rank of the player's defensive zone time percentage relative to all qualifying skaters in the NHL EDGE dataset. |
+| `zone_time_details_defensive_zone_league_avg` | double | League-average percentage of ice time spent in the defensive zone among qualifying skaters, used as a comparison baseline. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -235,42 +235,42 @@ Pull EDGE shot-speed detail for a single skater.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `hardest_shots` | character |  |
-| `shot_speed_details_top_shot_speed_imperial` | double |  |
-| `shot_speed_details_top_shot_speed_metric` | double |  |
-| `shot_speed_details_top_shot_speed_percentile` | double |  |
-| `shot_speed_details_top_shot_speed_league_avg_imperial` | double |  |
-| `shot_speed_details_top_shot_speed_league_avg_metric` | double |  |
-| `shot_speed_details_top_shot_speed_overlay_player_first_name_default` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_player_last_name_default` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_game_date` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_away_team_abbrev` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_away_team_score` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_home_team_abbrev` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_home_team_score` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_period_descriptor_number` | integer |  |
-| `shot_speed_details_top_shot_speed_overlay_period_descriptor_period_type` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_time_in_period` | character |  |
-| `shot_speed_details_top_shot_speed_overlay_game_type` | integer |  |
-| `shot_speed_details_avg_shot_speed_imperial` | double |  |
-| `shot_speed_details_avg_shot_speed_metric` | double |  |
-| `shot_speed_details_avg_shot_speed_percentile` | double |  |
-| `shot_speed_details_avg_shot_speed_league_avg_imperial` | double |  |
-| `shot_speed_details_avg_shot_speed_league_avg_metric` | double |  |
-| `shot_speed_details_shot_attempts_over100_value` | integer |  |
-| `shot_speed_details_shot_attempts_over100_percentile` | double |  |
-| `shot_speed_details_shot_attempts_over100_league_avg` | double |  |
-| `shot_speed_details_shot_attempts90_to100_value` | integer |  |
-| `shot_speed_details_shot_attempts90_to100_percentile` | double |  |
-| `shot_speed_details_shot_attempts90_to100_league_avg` | double |  |
-| `shot_speed_details_shot_attempts80_to90_value` | integer |  |
-| `shot_speed_details_shot_attempts80_to90_percentile` | double |  |
-| `shot_speed_details_shot_attempts80_to90_league_avg` | double |  |
-| `shot_speed_details_shot_attempts70_to80_value` | integer |  |
-| `shot_speed_details_shot_attempts70_to80_percentile` | double |  |
-| `shot_speed_details_shot_attempts70_to80_league_avg` | double |  |
+| `hardest_shots` | character | Serialized list or JSON array of the player's hardest individual shot efforts, including speed and context metadata from NHL EDGE puck tracking. |
+| `shot_speed_details_top_shot_speed_imperial` | double | Player's single highest recorded shot speed for the season measured in miles per hour (imperial), from NHL EDGE puck-tracking. |
+| `shot_speed_details_top_shot_speed_metric` | double | Player's single highest recorded shot speed for the season measured in kilometers per hour (metric), from NHL EDGE puck-tracking. |
+| `shot_speed_details_top_shot_speed_percentile` | double | Percentile rank of the player's top shot speed relative to all qualifying skaters in the NHL EDGE shot-speed dataset. |
+| `shot_speed_details_top_shot_speed_league_avg_imperial` | double | League-average highest shot speed among qualifying skaters for the season, measured in miles per hour (imperial). |
+| `shot_speed_details_top_shot_speed_league_avg_metric` | double | League-average highest shot speed among qualifying skaters for the season, measured in kilometers per hour (metric). |
+| `shot_speed_details_top_shot_speed_overlay_player_first_name_default` | character | Player's first name as stored in the NHL api-web system, included in the overlay for the top-shot-speed event. |
+| `shot_speed_details_top_shot_speed_overlay_player_last_name_default` | character | Player's last name as stored in the NHL api-web system, included in the overlay for the top-shot-speed event. |
+| `shot_speed_details_top_shot_speed_overlay_game_date` | character | Date (YYYY-MM-DD) of the game in which the player recorded their top shot speed for the season. |
+| `shot_speed_details_top_shot_speed_overlay_away_team_abbrev` | character | Three-letter abbreviation for the away team in the game where the player recorded their top shot speed this season. |
+| `shot_speed_details_top_shot_speed_overlay_away_team_score` | integer | Away team's final score in the game where the player recorded their season-high shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_home_team_abbrev` | character | Three-letter abbreviation for the home team in the game where the player achieved their top shot speed this season. |
+| `shot_speed_details_top_shot_speed_overlay_home_team_score` | integer | Home team's final score in the game where the player recorded their season-high shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_game_outcome_last_period_type` | character | Type of period that ended the game where the player set their top shot speed (e.g., 'REG', 'OT', 'SO'). |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods defined for the game type in which the player recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_number` | integer | Period number in which the player released their top-speed shot during the referenced game. |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_period_type` | character | Period type label (e.g., 'REG', 'OT') for the period in which the player recorded their top shot speed. |
+| `shot_speed_details_top_shot_speed_overlay_time_in_period` | character | Time elapsed within the period (MM:SS) when the player released their top-speed shot for the season. |
+| `shot_speed_details_top_shot_speed_overlay_game_type` | integer | Numeric code for the game type of the game in which the player recorded their top shot speed (e.g., 2 = regular season). |
+| `shot_speed_details_avg_shot_speed_imperial` | double | Player's average shot speed across all tracked shot attempts for the season, measured in miles per hour (imperial). |
+| `shot_speed_details_avg_shot_speed_metric` | double | Player's average shot speed across all tracked shot attempts for the season, measured in kilometers per hour (metric). |
+| `shot_speed_details_avg_shot_speed_percentile` | double | Percentile rank of the player's average shot speed relative to all qualifying skaters in the NHL EDGE shot-speed dataset. |
+| `shot_speed_details_avg_shot_speed_league_avg_imperial` | double | League-average shot speed across all qualifying skaters' tracked attempts for the season, measured in miles per hour (imperial). |
+| `shot_speed_details_avg_shot_speed_league_avg_metric` | double | League-average shot speed across all qualifying skaters' tracked attempts for the season, measured in kilometers per hour (metric). |
+| `shot_speed_details_shot_attempts_over100_value` | integer | Number of the player's tracked shot attempts for the season with a recorded speed exceeding 100 mph. |
+| `shot_speed_details_shot_attempts_over100_percentile` | double | Percentile rank of the player's count of shot attempts exceeding 100 mph relative to all qualifying skaters in the NHL EDGE dataset. |
+| `shot_speed_details_shot_attempts_over100_league_avg` | double | League-average number of shot attempts with a recorded speed above 100 mph among qualifying skaters for the season. |
+| `shot_speed_details_shot_attempts90_to100_value` | integer | Number of the player's tracked shot attempts for the season with a recorded speed between 90 and 100 mph. |
+| `shot_speed_details_shot_attempts90_to100_percentile` | double | Percentile rank of the player's count of shot attempts in the 90–100 mph speed band relative to all qualifying skaters in the NHL EDGE dataset. |
+| `shot_speed_details_shot_attempts90_to100_league_avg` | double | League-average number of shot attempts falling in the 90–100 mph speed band among qualifying skaters for the season. |
+| `shot_speed_details_shot_attempts80_to90_value` | integer | Number of the player's tracked shot attempts for the season with a recorded speed between 80 and 90 mph. |
+| `shot_speed_details_shot_attempts80_to90_percentile` | double | Percentile rank of the player's count of shot attempts in the 80–90 mph speed band relative to all qualifying skaters in the NHL EDGE dataset. |
+| `shot_speed_details_shot_attempts80_to90_league_avg` | double | League-average number of shot attempts falling in the 80–90 mph speed band among qualifying skaters for the season. |
+| `shot_speed_details_shot_attempts70_to80_value` | integer | Number of the player's tracked shot attempts for the season with a recorded speed between 70 and 80 mph. |
+| `shot_speed_details_shot_attempts70_to80_percentile` | double | Percentile rank of the player's count of shot attempts in the 70–80 mph speed band relative to all qualifying skaters in the NHL EDGE dataset. |
+| `shot_speed_details_shot_attempts70_to80_league_avg` | double | League-average number of shot attempts falling in the 70–80 mph speed band among qualifying skaters for the season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -535,44 +535,44 @@ Pull EDGE detail stats for a single goalie.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `shot_location_summary` | character |  |
-| `shot_location_details` | character |  |
+| `seasons_with_edge_stats` | character | Serialized list of seasons for which NHL EDGE player-tracking data is available for this goalie. |
+| `shot_location_summary` | character | Serialized summary of shot-location zones faced by the goalie, aggregated from NHL EDGE tracking data. |
+| `shot_location_details` | character | Serialized detailed breakdown of shot locations faced by the goalie, derived from NHL EDGE tracking data. |
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
 | `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
-| `player_shoots_catches` | character |  |
+| `player_shoots_catches` | character | Hand on which the goalie catches (glove side), typically 'L' for left or 'R' for right. |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_slug` | character | URL slug for the player. |
 | `player_headshot` | character | URL to the player headshot image. |
-| `player_wins` | integer |  |
-| `player_losses` | integer |  |
-| `player_overtime_losses` | integer |  |
-| `player_goals_against_avg` | double |  |
-| `player_save_pctg` | double |  |
-| `player_games_played` | integer |  |
+| `player_wins` | integer | Number of wins credited to the goalie for the season in this NHL EDGE detail record. |
+| `player_losses` | integer | Number of regulation losses credited to the goalie for the season in this NHL EDGE detail record. |
+| `player_overtime_losses` | integer | Number of overtime or shootout losses (OTL) credited to the goalie during the season. |
+| `player_goals_against_avg` | double | Goals-against average (GAA) for the goalie during the season, reflecting the average number of goals allowed per 60 minutes played. |
+| `player_save_pctg` | double | Save percentage (SV%) for the goalie during the season, expressed as a decimal ratio of saves to shots faced. |
+| `player_games_played` | integer | Total number of regular-season games the goalie appeared in for the season covered by this NHL EDGE detail record. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
 | `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
 | `player_team_abbrev` | character | Player team abbreviation. |
 | `player_team_team_logo_light` | character | Player team light-mode logo URL. |
 | `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
-| `stats_goals_against_avg_value` | double |  |
-| `stats_goals_against_avg_percentile` | double |  |
-| `stats_goals_against_avg_league_avg` | double |  |
-| `stats_games_above900_value` | double |  |
-| `stats_games_above900_percentile` | double |  |
-| `stats_games_above900_league_avg` | double |  |
-| `stats_goal_differential_per60_value` | double |  |
-| `stats_goal_differential_per60_percentile` | double |  |
-| `stats_goal_differential_per60_league_avg` | double |  |
-| `stats_goal_support_avg_value` | double |  |
-| `stats_goal_support_avg_percentile` | double |  |
-| `stats_goal_support_avg_league_avg` | double |  |
-| `stats_point_pctg_value` | double |  |
-| `stats_point_pctg_percentile` | double |  |
-| `stats_point_pctg_league_avg` | double |  |
+| `stats_goals_against_avg_value` | double | Goalie's goals-against average value as reported in the NHL EDGE detail stat block (mirrors player_goals_against_avg at the EDGE layer). |
+| `stats_goals_against_avg_percentile` | double | Percentile rank among all NHL goalies for goals-against average as reported in the NHL EDGE detail. |
+| `stats_goals_against_avg_league_avg` | double | League-average GAA value used as the EDGE comparative baseline for this goalie's goals-against-average metric. |
+| `stats_games_above900_value` | double | Goalie's own count of games in which save percentage exceeded .900, as tracked by the NHL EDGE system. |
+| `stats_games_above900_percentile` | double | Percentile rank among all NHL goalies for the 'games above .900 save percentage' EDGE metric during the season. |
+| `stats_games_above900_league_avg` | double | League-average value for the 'games above .900 save percentage' EDGE metric, used as a comparative baseline for the goalie. |
+| `stats_goal_differential_per60_value` | double | Goalie's goals-saved-above-expected differential per 60 minutes of play, as computed by the NHL EDGE system. |
+| `stats_goal_differential_per60_percentile` | double | Percentile rank among all NHL goalies for the goals-differential-per-60 EDGE metric during the season. |
+| `stats_goal_differential_per60_league_avg` | double | League-average goals-saved-above-expected differential per 60 minutes, used as the EDGE baseline comparator for the goalie. |
+| `stats_goal_support_avg_value` | double | Average number of goals scored by the goalie's team per game while this goalie was in net, as tracked by NHL EDGE. |
+| `stats_goal_support_avg_percentile` | double | Percentile rank among all NHL goalies for average goal support received while the goalie was in net. |
+| `stats_goal_support_avg_league_avg` | double | League-average goal-support value (average goals scored for the goalie while in net), used as the EDGE baseline comparator. |
+| `stats_point_pctg_value` | double | Team points percentage in games started by this goalie during the season, as tracked by the NHL EDGE system. |
+| `stats_point_pctg_percentile` | double | Percentile rank among all NHL goalies for team points percentage in games the goalie started, per NHL EDGE. |
+| `stats_point_pctg_league_avg` | double | League-average points percentage (team winning percentage when the goalie starts) used as the EDGE comparative baseline. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -831,9 +831,9 @@ Pull EDGE detail stats for a single team.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `seasons_with_edge_stats` | character |  |
-| `sog_summary` | character |  |
-| `sog_details` | character |  |
+| `seasons_with_edge_stats` | character | Comma-separated list of season identifiers for which NHL EDGE player-tracking statistics are available for this team. |
+| `sog_summary` | character | Serialized summary string of total shots-on-goal across all periods for this team, flattened from the NHL api-web team detail payload. |
+| `sog_details` | character | Serialized JSON-like string containing per-period or per-game shots-on-goal detail for this team, flattened from the NHL api-web team detail payload. |
 | `team_id` | integer | Unique team identifier. |
 | `team_common_name_default` | character | Team common name (default language). |
 | `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
@@ -842,74 +842,74 @@ Pull EDGE detail stats for a single team.
 | `team_team_logo_light` | character | URL to the team light logo. |
 | `team_team_logo_dark` | character | URL to the team dark logo. |
 | `team_slug` | character | Team URL slug. |
-| `team_conference` | character |  |
-| `team_division` | character |  |
+| `team_conference` | character | Name of the NHL conference (e.g., Eastern, Western) to which this team belongs, as returned by the NHL api-web team detail endpoint. |
+| `team_division` | character | Name of the NHL division (e.g., Atlantic, Metro, Central, Pacific) to which this team belongs, as returned by the NHL api-web team detail endpoint. |
 | `team_wins` | integer | Team wins. |
 | `team_losses` | integer | Team losses. |
-| `team_ot_losses` | integer |  |
-| `team_games_played` | integer |  |
+| `team_ot_losses` | integer | Total number of games this team has lost in overtime or a shootout (earning one standings point each) in the current season. |
+| `team_games_played` | integer | Total number of regular-season or playoff games this team has played in the current season, from the NHL api-web team detail endpoint. |
 | `team_points` | integer | Total points scored by the player's team in this game. |
-| `shot_speed_shot_attempts_over90_value` | integer |  |
-| `shot_speed_shot_attempts_over90_rank` | integer |  |
-| `shot_speed_top_shot_speed_imperial` | double |  |
-| `shot_speed_top_shot_speed_metric` | double |  |
-| `shot_speed_top_shot_speed_rank` | integer |  |
-| `shot_speed_top_shot_speed_league_avg_imperial` | double |  |
-| `shot_speed_top_shot_speed_league_avg_metric` | double |  |
-| `shot_speed_top_shot_speed_overlay_player_first_name_default` | character |  |
-| `shot_speed_top_shot_speed_overlay_player_last_name_default` | character |  |
-| `shot_speed_top_shot_speed_overlay_game_date` | character |  |
-| `shot_speed_top_shot_speed_overlay_away_team_abbrev` | character |  |
-| `shot_speed_top_shot_speed_overlay_away_team_score` | integer |  |
-| `shot_speed_top_shot_speed_overlay_home_team_abbrev` | character |  |
-| `shot_speed_top_shot_speed_overlay_home_team_score` | integer |  |
-| `shot_speed_top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
-| `shot_speed_top_shot_speed_overlay_game_outcome_ot_periods` | integer |  |
-| `shot_speed_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `shot_speed_top_shot_speed_overlay_period_descriptor_number` | integer |  |
-| `shot_speed_top_shot_speed_overlay_period_descriptor_period_type` | character |  |
-| `shot_speed_top_shot_speed_overlay_time_in_period` | character |  |
-| `shot_speed_top_shot_speed_overlay_game_type` | integer |  |
-| `skating_speed_bursts_over22_value` | integer |  |
-| `skating_speed_bursts_over22_rank` | integer |  |
-| `skating_speed_bursts_over20_value` | integer |  |
-| `skating_speed_bursts_over20_rank` | integer |  |
-| `skating_speed_bursts_over20_league_avg_value` | integer |  |
-| `skating_speed_speed_max_imperial` | double |  |
-| `skating_speed_speed_max_metric` | double |  |
-| `skating_speed_speed_max_rank` | integer |  |
-| `skating_speed_speed_max_league_avg_imperial` | double |  |
-| `skating_speed_speed_max_league_avg_metric` | double |  |
-| `skating_speed_speed_max_overlay_player_first_name_default` | character |  |
-| `skating_speed_speed_max_overlay_player_last_name_default` | character |  |
-| `skating_speed_speed_max_overlay_game_date` | character |  |
-| `skating_speed_speed_max_overlay_away_team_abbrev` | character |  |
-| `skating_speed_speed_max_overlay_away_team_score` | integer |  |
-| `skating_speed_speed_max_overlay_home_team_abbrev` | character |  |
-| `skating_speed_speed_max_overlay_home_team_score` | integer |  |
-| `skating_speed_speed_max_overlay_game_outcome_last_period_type` | character |  |
-| `skating_speed_speed_max_overlay_period_descriptor_max_regulation_periods` | integer |  |
-| `skating_speed_speed_max_overlay_period_descriptor_number` | integer |  |
-| `skating_speed_speed_max_overlay_period_descriptor_period_type` | character |  |
-| `skating_speed_speed_max_overlay_time_in_period` | character |  |
-| `skating_speed_speed_max_overlay_game_type` | integer |  |
-| `distance_skated_total_imperial` | double |  |
-| `distance_skated_total_metric` | double |  |
-| `distance_skated_total_rank` | integer |  |
-| `distance_skated_total_league_avg_imperial` | double |  |
-| `distance_skated_total_league_avg_metric` | double |  |
-| `zone_time_details_offensive_zone_pctg` | double |  |
-| `zone_time_details_offensive_zone_rank` | integer |  |
-| `zone_time_details_offensive_zone_league_avg` | double |  |
-| `zone_time_details_offensive_zone_ev_pctg` | double |  |
-| `zone_time_details_offensive_zone_ev_rank` | integer |  |
-| `zone_time_details_offensive_zone_ev_league_avg` | double |  |
-| `zone_time_details_neutral_zone_pctg` | double |  |
-| `zone_time_details_neutral_zone_rank` | integer |  |
-| `zone_time_details_neutral_zone_league_avg` | double |  |
-| `zone_time_details_defensive_zone_pctg` | double |  |
-| `zone_time_details_defensive_zone_rank` | integer |  |
-| `zone_time_details_defensive_zone_league_avg` | double |  |
+| `shot_speed_shot_attempts_over90_value` | integer | Total count of shot attempts recorded at a speed exceeding 90 mph by this team's players during the season, from NHL EDGE tracking data. |
+| `shot_speed_shot_attempts_over90_rank` | integer | Team's league rank by number of shot attempts exceeding 90 mph in shot speed, with rank 1 indicating the highest count, from NHL EDGE tracking data. |
+| `shot_speed_top_shot_speed_imperial` | double | Fastest recorded shot speed by any player on this team during the season, expressed in miles per hour, from NHL EDGE tracking data. |
+| `shot_speed_top_shot_speed_metric` | double | Fastest recorded shot speed by any player on this team during the season, expressed in kilometers per hour, from NHL EDGE tracking data. |
+| `shot_speed_top_shot_speed_rank` | integer | Team's league rank by top shot speed for the season, where rank 1 indicates the team whose fastest shot was the quickest in the league. |
+| `shot_speed_top_shot_speed_league_avg_imperial` | double | League-average of the top shot speed across all teams for the same period, expressed in miles per hour, from NHL EDGE tracking data. |
+| `shot_speed_top_shot_speed_league_avg_metric` | double | League-average of the top shot speed across all teams for the same period, expressed in kilometers per hour, from NHL EDGE tracking data. |
+| `shot_speed_top_shot_speed_overlay_player_first_name_default` | character | Default-language first name of the player who recorded this team's top shot speed, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_player_last_name_default` | character | Default-language last name of the player who recorded this team's top shot speed, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_game_date` | character | Calendar date of the game in which this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_away_team_abbrev` | character | Three-letter abbreviation of the away team in the game where this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_away_team_score` | integer | Away team's final score in the game where this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_home_team_abbrev` | character | Three-letter abbreviation of the home team in the game where this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_home_team_score` | integer | Home team's final score in the game where this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_game_outcome_last_period_type` | character | Type of the final period played (e.g., REG, OT, SO) in the game where this team's top shot speed was recorded. |
+| `shot_speed_top_shot_speed_overlay_game_outcome_ot_periods` | integer | Number of overtime periods played in the game where this team's top shot speed was recorded, or zero if decided in regulation. |
+| `shot_speed_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game format where this team's top shot speed was recorded (typically 3 for NHL). |
+| `shot_speed_top_shot_speed_overlay_period_descriptor_number` | integer | Period number within the game during which this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_period_descriptor_period_type` | character | Type label for the period (e.g., REG, OT) during which this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_time_in_period` | character | Elapsed time within the period (MM:SS format) at which this team's top shot speed was recorded, from the NHL EDGE overlay context. |
+| `shot_speed_top_shot_speed_overlay_game_type` | integer | Numeric game-type code (e.g., 2 = regular season, 3 = playoffs) for the game in which this team's top shot speed was recorded. |
+| `skating_speed_bursts_over22_value` | integer | Total count of skating speed bursts exceeding 22 mph recorded by this team's skaters during the season, from NHL EDGE tracking data. |
+| `skating_speed_bursts_over22_rank` | integer | Team's league rank by total count of skating speed bursts exceeding 22 mph, where rank 1 indicates the most elite-speed bursts, from NHL EDGE tracking data. |
+| `skating_speed_bursts_over20_value` | integer | Total count of skating speed bursts exceeding 20 mph recorded by this team's skaters during the season, from NHL EDGE tracking data. |
+| `skating_speed_bursts_over20_rank` | integer | Team's league rank by total count of skating speed bursts exceeding 20 mph, where rank 1 indicates the most such bursts, from NHL EDGE tracking data. |
+| `skating_speed_bursts_over20_league_avg_value` | integer | League-average number of skating speed bursts exceeding 20 mph recorded per team over the same season window, from NHL EDGE tracking data. |
+| `skating_speed_speed_max_imperial` | double | Fastest skating speed reached by any player on this team during the season, expressed in miles per hour, from NHL EDGE tracking data. |
+| `skating_speed_speed_max_metric` | double | Fastest skating speed reached by any player on this team during the season, expressed in kilometers per hour, from NHL EDGE tracking data. |
+| `skating_speed_speed_max_rank` | integer | Team's league rank by maximum skating speed for the season, where rank 1 indicates the team whose fastest skater reached the highest speed in the league. |
+| `skating_speed_speed_max_league_avg_imperial` | double | League-average of the maximum skating speed across all teams for the same period, expressed in miles per hour, from NHL EDGE tracking data. |
+| `skating_speed_speed_max_league_avg_metric` | double | League-average of the maximum skating speed across all teams for the same period, expressed in kilometers per hour, from NHL EDGE tracking data. |
+| `skating_speed_speed_max_overlay_player_first_name_default` | character | Default-language first name of the player who recorded this team's top skating speed, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_player_last_name_default` | character | Default-language last name of the player who recorded this team's top skating speed, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_game_date` | character | Calendar date of the game in which this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_away_team_abbrev` | character | Three-letter abbreviation of the away team in the game where this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_away_team_score` | integer | Away team's final score in the game where this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_home_team_abbrev` | character | Three-letter abbreviation of the home team in the game where this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_home_team_score` | integer | Home team's final score in the game where this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_game_outcome_last_period_type` | character | Type of the final period played (e.g., REG, OT, SO) in the game where this team's top skating speed was recorded. |
+| `skating_speed_speed_max_overlay_period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods in the game format where this team's top skating speed was recorded (typically 3 for NHL). |
+| `skating_speed_speed_max_overlay_period_descriptor_number` | integer | Period number within the game during which this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_period_descriptor_period_type` | character | Type label for the period (e.g., REG, OT) during which this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_time_in_period` | character | Elapsed time within the period (MM:SS format) at which this team's top skating speed was recorded, from the NHL EDGE overlay context. |
+| `skating_speed_speed_max_overlay_game_type` | integer | Numeric game-type code (e.g., 2 = regular season, 3 = playoffs) for the game in which this team's top skating speed was recorded. |
+| `distance_skated_total_imperial` | double | Total cumulative skating distance logged by all skaters on this team across the season, expressed in miles (imperial), from NHL EDGE tracking data. |
+| `distance_skated_total_metric` | double | Total cumulative skating distance logged by all skaters on this team across the season, expressed in kilometers (metric), from NHL EDGE tracking data. |
+| `distance_skated_total_rank` | integer | Team's league rank by total cumulative skating distance for the season, where rank 1 indicates the team with the most distance skated. |
+| `distance_skated_total_league_avg_imperial` | double | League-average cumulative skating distance for all teams over the same period as this team's totals, expressed in miles (imperial), from NHL EDGE tracking data. |
+| `distance_skated_total_league_avg_metric` | double | League-average cumulative skating distance for all teams over the same period as this team's totals, expressed in kilometers (metric), from NHL EDGE tracking data. |
+| `zone_time_details_offensive_zone_pctg` | double | Percentage of all-situation ice time this team spends in the offensive zone, as measured by NHL EDGE player-tracking data. |
+| `zone_time_details_offensive_zone_rank` | integer | Team's league rank by overall offensive-zone time percentage (all situations), where rank 1 indicates the team with the most offensive-zone presence. |
+| `zone_time_details_offensive_zone_league_avg` | double | League-average percentage of all-situation ice time that teams spend in the offensive zone, from NHL EDGE zone-time tracking data. |
+| `zone_time_details_offensive_zone_ev_pctg` | double | Percentage of even-strength ice time this team spends in the offensive zone, as measured by NHL EDGE player-tracking data. |
+| `zone_time_details_offensive_zone_ev_rank` | integer | Team's league rank by even-strength offensive-zone time percentage, where rank 1 indicates the team spending the most time in the offensive zone at even strength. |
+| `zone_time_details_offensive_zone_ev_league_avg` | double | League-average percentage of even-strength ice time that teams spend in the offensive zone, from NHL EDGE zone-time tracking data. |
+| `zone_time_details_neutral_zone_pctg` | double | Percentage of five-on-five ice time this team spends in the neutral zone, as measured by NHL EDGE player-tracking data. |
+| `zone_time_details_neutral_zone_rank` | integer | Team's league rank by neutral-zone time percentage, where rank 1 indicates the team that spends the most time in the neutral zone during five-on-five play. |
+| `zone_time_details_neutral_zone_league_avg` | double | League-average percentage of time that teams spend in the neutral zone during five-on-five play, from NHL EDGE zone-time tracking data. |
+| `zone_time_details_defensive_zone_pctg` | double | Percentage of five-on-five ice time this team spends in its own defensive zone, as measured by NHL EDGE player-tracking data. |
+| `zone_time_details_defensive_zone_rank` | integer | Team's league rank by defensive-zone time percentage, where rank 1 indicates the team that spends the most time in its own zone during five-on-five play. |
+| `zone_time_details_defensive_zone_league_avg` | double | League-average percentage of time that teams spend in the defensive zone during five-on-five play, from NHL EDGE zone-time tracking data. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

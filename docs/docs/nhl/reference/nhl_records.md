@@ -99,32 +99,32 @@ List NHL head coaches.
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
-| `bio` | character |  |
+| `bio` | character | Long-form biographical narrative for the coach, as provided by the NHL api-web endpoint. |
 | `birth_city` | character | Birth city. |
 | `birth_country3code` | character | Prospect birth country three-letter code. |
 | `birth_date` | character | Player birth date. |
-| `birth_state_province_code` | character |  |
+| `birth_state_province_code` | character | Two-letter state or province code of the coach's birth location (e.g., 'ON' for Ontario, 'MI' for Michigan). |
 | `brief_description` | character | Brief description of the trophy. |
 | `date_of_death` | character | Date of death, if applicable. |
 | `deceased` | logical | Whether the player is deceased. |
 | `description` | character | Full text description of the event. |
-| `featured_image` | character |  |
+| `featured_image` | character | URL of the coach's featured promotional or profile image on the NHL platform. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
 | `history` | character | ESPN's long-form history text for the award. |
-| `hockey_hof_link` | character |  |
+| `hockey_hof_link` | character | URL to the coach's Hockey Hall of Fame profile page, if they are an inductee. |
 | `in_hockey_hof` | logical | Whether the player is in the Hockey Hall of Fame. |
-| `in_iihf_hockey_hof` | logical |  |
+| `in_iihf_hockey_hof` | logical | Boolean flag indicating whether the coach is inducted into the IIHF Hockey Hall of Fame. |
 | `in_us_hockey_hof` | logical | Whether the player is in the US Hockey Hall of Fame. |
-| `instagram` | character |  |
+| `instagram` | character | Instagram handle or profile URL for the coach's official social media presence. |
 | `is_active` | logical | Whether the team is active. |
 | `last_name` | character | Player last name. |
 | `nationality_code` | character | Nationality code of the official. |
 | `player_id` | double | Unique player identifier. |
-| `stanley_cup` | double |  |
+| `stanley_cup` | double | Number of Stanley Cup championships won by the coach as a head coach or assistant coach. |
 | `team_id` | character | Unique team identifier. |
-| `top100_player_link` | character |  |
-| `twitter` | character |  |
+| `top100_player_link` | character | URL to the coach's NHL Top 100 players recognition page, if applicable. |
+| `twitter` | character | Twitter/X handle or profile URL for the coach's official social media presence. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -121,16 +121,16 @@ Retrieve the list of countries used in NHL data.
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Unique player identifier. |
-| `country3_code` | character |  |
+| `country3_code` | character | Three-letter ISO country code used by the NHL api-web country reference endpoint. |
 | `country_code` | character | Player country code. |
-| `country_name` | character |  |
-| `has_player_stats` | integer |  |
+| `country_name` | character | Full English display name of the country as provided by the NHL api-web country reference. |
+| `has_player_stats` | integer | Flag (1/0) indicating whether the NHL api-web tracks player statistics for this country. |
 | `image_url` | character | Player headshot URL. |
-| `ioc_code` | character |  |
+| `ioc_code` | character | International Olympic Committee three-letter country code assigned to this nation. |
 | `is_active` | integer | Whether the team is active. |
-| `nationality_name` | character |  |
-| `olympic_url` | character |  |
-| `thumbnail_url` | character |  |
+| `nationality_name` | character | Nationality label string used on player profiles in the NHL api-web (e.g., 'Canadian', 'American'). |
+| `olympic_url` | character | URL to the country's Olympic profile page linked from the NHL api-web country record. |
+| `thumbnail_url` | character | URL to a small thumbnail image representing the country's flag or emblem in the NHL api-web. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
