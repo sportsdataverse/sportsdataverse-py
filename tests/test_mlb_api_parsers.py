@@ -163,8 +163,8 @@ def test_parser_for_mlb_api_always_returns_callable():
         parser_for_mlb_api,
     )
 
-    assert parser_for_mlb_api("mlb_api_schedule") is parse_mlb_api_schedule
-    assert parser_for_mlb_api("mlb_api_nope") is parse_mlb_api_list
+    assert parser_for_mlb_api("mlb_schedule") is parse_mlb_api_schedule
+    assert parser_for_mlb_api("mlb_nope") is parse_mlb_api_list
 
 
 def test_mlb_api_endpoint_parsers_registry_references_real_wrappers():

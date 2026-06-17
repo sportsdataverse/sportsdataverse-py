@@ -35,3 +35,9 @@ from sportsdataverse.mlb.mlb_statcast_parsers import (
     parse_mlb_statcast_search,
 )
 from sportsdataverse.mlb.mlb_teams import *
+
+# Re-export MLB Stats API wrappers that share a name with a submodule
+# (mlb_schedule, mlb_teams). The submodule imports above set the package
+# attribute to the module object; re-importing the functions here restores
+# them as callable names in the sportsdataverse.mlb namespace.
+from sportsdataverse.mlb.mlb_api_extra import mlb_schedule, mlb_teams  # noqa: E402

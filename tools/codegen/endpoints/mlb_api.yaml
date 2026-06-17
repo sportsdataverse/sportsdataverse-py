@@ -1,6 +1,6 @@
 api: mlb_api
 host: https://statsapi.mlb.com
-name_pattern: mlb_api_{short}
+name_pattern: mlb_{short}
 module: mlb_api
 parser_module: mlb.mlb_api_parsers
 qualifier: ''

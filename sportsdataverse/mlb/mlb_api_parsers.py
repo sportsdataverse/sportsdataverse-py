@@ -447,61 +447,61 @@ def parse_mlb_api_timecodes(payload, return_as_pandas: bool = False) -> pl.DataF
 # ---------------------------------------------------------------------------
 
 
-# Maps an mlb_api_* wrapper name to its parser. Endpoints not in the
+# Maps an mlb_* wrapper name to its parser. Endpoints not in the
 # registry can be parsed via :func:`parse_mlb_api_list` (generic
 # list flattener) or via :func:`pd.json_normalize` directly.
 MLB_API_ENDPOINT_PARSERS = {
     # Dedicated parsers (extra unrolling logic):
-    "mlb_api_schedule": parse_mlb_api_schedule,
-    "mlb_api_schedule_postseason": parse_mlb_api_schedule,
-    "mlb_api_teams": parse_mlb_api_teams,
-    "mlb_api_team_roster": parse_mlb_api_team_roster,
-    "mlb_api_standings": parse_mlb_api_standings,
-    "mlb_api_person_stats": parse_mlb_api_person_stats,
-    "mlb_api_team_stats": parse_mlb_api_person_stats,
-    "mlb_api_boxscore": parse_mlb_api_boxscore,
-    "mlb_api_linescore": parse_mlb_api_linescore,
-    "mlb_api_play_by_play": parse_mlb_api_play_by_play,
-    "mlb_api_win_probability": parse_mlb_api_win_probability,
+    "mlb_schedule": parse_mlb_api_schedule,
+    "mlb_schedule_postseason": parse_mlb_api_schedule,
+    "mlb_teams": parse_mlb_api_teams,
+    "mlb_team_roster": parse_mlb_api_team_roster,
+    "mlb_standings": parse_mlb_api_standings,
+    "mlb_person_stats": parse_mlb_api_person_stats,
+    "mlb_team_stats": parse_mlb_api_person_stats,
+    "mlb_boxscore": parse_mlb_api_boxscore,
+    "mlb_linescore": parse_mlb_api_linescore,
+    "mlb_play_by_play": parse_mlb_api_play_by_play,
+    "mlb_win_probability": parse_mlb_api_win_probability,
     # Generic list-shape endpoints:
-    "mlb_api_people": parse_mlb_api_list,
-    "mlb_api_sport_players": parse_mlb_api_list,
-    "mlb_api_sports": parse_mlb_api_list,
-    "mlb_api_leagues": parse_mlb_api_list,
-    "mlb_api_divisions": parse_mlb_api_list,
-    "mlb_api_seasons": parse_mlb_api_list,
-    "mlb_api_venues": parse_mlb_api_list,
-    "mlb_api_awards": parse_mlb_api_list,
-    "mlb_api_award_recipients": parse_mlb_api_list,
-    "mlb_api_umpires": parse_mlb_api_list,
-    "mlb_api_team_leaders": parse_mlb_api_list,
-    "mlb_api_team_alumni": parse_mlb_api_list,
-    "mlb_api_team_affiliates": parse_mlb_api_list,
-    "mlb_api_stats": parse_mlb_api_list,
-    "mlb_api_stats_leaders": parse_mlb_api_list,
-    "mlb_api_stats_streaks": parse_mlb_api_list,
-    "mlb_api_draft": parse_mlb_api_list,
-    "mlb_api_draft_prospects": parse_mlb_api_list,
-    "mlb_api_attendance": parse_mlb_api_list,
+    "mlb_people": parse_mlb_api_list,
+    "mlb_sport_players": parse_mlb_api_list,
+    "mlb_sports": parse_mlb_api_list,
+    "mlb_leagues": parse_mlb_api_list,
+    "mlb_divisions": parse_mlb_api_list,
+    "mlb_seasons": parse_mlb_api_list,
+    "mlb_venues": parse_mlb_api_list,
+    "mlb_awards": parse_mlb_api_list,
+    "mlb_award_recipients": parse_mlb_api_list,
+    "mlb_umpires": parse_mlb_api_list,
+    "mlb_team_leaders": parse_mlb_api_list,
+    "mlb_team_alumni": parse_mlb_api_list,
+    "mlb_team_affiliates": parse_mlb_api_list,
+    "mlb_stats": parse_mlb_api_list,
+    "mlb_stats_leaders": parse_mlb_api_list,
+    "mlb_stats_streaks": parse_mlb_api_list,
+    "mlb_draft": parse_mlb_api_list,
+    "mlb_draft_prospects": parse_mlb_api_list,
+    "mlb_attendance": parse_mlb_api_list,
     # Broader Stats API surface (dedicated shapes):
-    "mlb_api_draft_latest": parse_mlb_api_draft_latest,
-    "mlb_api_game_timestamps": parse_mlb_api_timecodes,
-    "mlb_api_game_color_timestamps": parse_mlb_api_timecodes,
-    "mlb_api_game_changes": parse_mlb_api_schedule,
-    "mlb_api_schedule_tied": parse_mlb_api_schedule,
-    "mlb_api_schedule_postseason_tunein": parse_mlb_api_schedule,
+    "mlb_draft_latest": parse_mlb_api_draft_latest,
+    "mlb_game_timestamps": parse_mlb_api_timecodes,
+    "mlb_game_color_timestamps": parse_mlb_api_timecodes,
+    "mlb_game_changes": parse_mlb_api_schedule,
+    "mlb_schedule_tied": parse_mlb_api_schedule,
+    "mlb_schedule_postseason_tunein": parse_mlb_api_schedule,
 }
 
 
 def parser_for_mlb_api(fn_name: str):
-    """Return the registered parser for an ``mlb_api_*`` wrapper name.
+    """Return the registered parser for an ``mlb_*`` wrapper name.
 
     Falls back to :func:`parse_mlb_api_list` (the generic list flattener)
     when no specific parser is registered, so the caller always gets a
     DataFrame-returning function rather than ``None``.
 
     Args:
-        fn_name: The ``__name__`` of any ``mlb_api_*`` wrapper.
+        fn_name: The ``__name__`` of any ``mlb_*`` wrapper.
 
     Returns:
         Parser callable. Never ``None``.

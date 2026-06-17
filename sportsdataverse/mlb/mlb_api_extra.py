@@ -14,21 +14,21 @@ from sportsdataverse.dl_utils import download
 _BASE = "https://statsapi.mlb.com"
 
 __all__ = [
-    "mlb_api_attendance",
-    "mlb_api_divisions",
-    "mlb_api_draft_prospects",
-    "mlb_api_pbp_diff",
-    "mlb_api_pbp_live",
-    "mlb_api_person_stats",
-    "mlb_api_schedule",
-    "mlb_api_seasons",
-    "mlb_api_standings",
-    "mlb_api_stats",
-    "mlb_api_stats_leaders",
-    "mlb_api_stats_streaks",
-    "mlb_api_team_leaders",
-    "mlb_api_team_stats",
-    "mlb_api_teams",
+    "mlb_attendance",
+    "mlb_divisions",
+    "mlb_draft_prospects",
+    "mlb_pbp_diff",
+    "mlb_pbp_live",
+    "mlb_person_stats",
+    "mlb_schedule",
+    "mlb_seasons",
+    "mlb_standings",
+    "mlb_stats",
+    "mlb_stats_leaders",
+    "mlb_stats_streaks",
+    "mlb_team_leaders",
+    "mlb_team_stats",
+    "mlb_teams",
 ]
 
 
@@ -58,7 +58,7 @@ def _csv(values) -> Optional[str]:
     return str(values)
 
 
-def mlb_api_schedule(
+def mlb_schedule(
     date: Optional[str] = None,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
@@ -95,7 +95,7 @@ def mlb_api_schedule(
     )
 
 
-def mlb_api_pbp_live(
+def mlb_pbp_live(
     game_pk: int,
     language: Optional[str] = None,
     timecode: Optional[str] = None,
@@ -107,7 +107,7 @@ def mlb_api_pbp_live(
 
     Top-level keys: ``copyright, gamePk, link, metaData, gameData, liveData``.
     Includes Statcast metrics where available. The historical name
-    ``mlb_api_pbp`` is preserved as an alias.
+    ``mlb_pbp`` is preserved as an alias in the generated module.
     """
     return _get(
         f"/api/v1.1/game/{game_pk}/feed/live",
@@ -121,7 +121,7 @@ def mlb_api_pbp_live(
     )
 
 
-def mlb_api_pbp_diff(game_pk: int, start_timecode: str, end_timecode: Optional[str] = None, **kwargs) -> Dict:
+def mlb_pbp_diff(game_pk: int, start_timecode: str, end_timecode: Optional[str] = None, **kwargs) -> Dict:
     """GET /api/v1/game/{gamePk}/feed/live/diffPatch — JSON-patch diff of the live feed.
 
     Replays of in-game state for low-bandwidth clients.
@@ -136,7 +136,7 @@ def mlb_api_pbp_diff(game_pk: int, start_timecode: str, end_timecode: Optional[s
     )
 
 
-def mlb_api_teams(
+def mlb_teams(
     season: Optional[Union[int, str]] = None,
     sport_id: int = 1,
     league_ids: Optional[Union[int, List[int], str]] = None,
@@ -162,7 +162,7 @@ def mlb_api_teams(
     )
 
 
-def mlb_api_team_stats(
+def mlb_team_stats(
     team_id: int,
     season: Union[int, str],
     stats: str = "season",
@@ -191,7 +191,7 @@ def mlb_api_team_stats(
     )
 
 
-def mlb_api_team_leaders(
+def mlb_team_leaders(
     team_id: int,
     leader_categories: str,
     season: Optional[Union[int, str]] = None,
@@ -216,7 +216,7 @@ def mlb_api_team_leaders(
     )
 
 
-def mlb_api_person_stats(
+def mlb_person_stats(
     person_id: int,
     stats: str,
     group: str = "hitting",
@@ -247,7 +247,7 @@ def mlb_api_person_stats(
     )
 
 
-def mlb_api_standings(
+def mlb_standings(
     league_id: Union[int, str, List[int]] = "103,104",
     season: Optional[Union[int, str]] = None,
     date: Optional[str] = None,
@@ -275,7 +275,7 @@ def mlb_api_standings(
     )
 
 
-def mlb_api_stats(
+def mlb_stats(
     stats: str,
     group: str,
     season: Optional[Union[int, str]] = None,
@@ -314,7 +314,7 @@ def mlb_api_stats(
     )
 
 
-def mlb_api_stats_leaders(
+def mlb_stats_leaders(
     leader_categories: str,
     season: Optional[Union[int, str]] = None,
     leader_game_types: Optional[str] = None,
@@ -340,7 +340,7 @@ def mlb_api_stats_leaders(
     )
 
 
-def mlb_api_stats_streaks(
+def mlb_stats_streaks(
     streak_type: str,
     streak_threshold: int = 1,
     season: Optional[Union[int, str]] = None,
@@ -367,7 +367,7 @@ def mlb_api_stats_streaks(
     )
 
 
-def mlb_api_divisions(
+def mlb_divisions(
     sport_id: int = 1,
     league_id: Optional[Union[int, str]] = None,
     division_id: Optional[int] = None,
@@ -385,7 +385,7 @@ def mlb_api_divisions(
     )
 
 
-def mlb_api_seasons(
+def mlb_seasons(
     sport_id: int = 1,
     season: Optional[Union[int, str]] = None,
     all_seasons: bool = False,
@@ -403,7 +403,7 @@ def mlb_api_seasons(
     )
 
 
-def mlb_api_draft_prospects(
+def mlb_draft_prospects(
     year: Union[int, str],
     scouting_report: Optional[bool] = None,
     limit: int = 100,
@@ -420,7 +420,7 @@ def mlb_api_draft_prospects(
     )
 
 
-def mlb_api_attendance(
+def mlb_attendance(
     team_id: Optional[int] = None,
     league_id: Optional[Union[int, str]] = None,
     season: Optional[Union[int, str]] = None,

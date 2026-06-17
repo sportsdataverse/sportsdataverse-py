@@ -24,74 +24,74 @@ if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers
     import polars as pl
 
 __all__ = [
-    "mlb_api_schedule_postseason",
-    "mlb_api_pbp",
-    "mlb_api_boxscore",
-    "mlb_api_linescore",
-    "mlb_api_play_by_play",
-    "mlb_api_game_context_metrics",
-    "mlb_api_win_probability",
-    "mlb_api_game_content",
-    "mlb_api_team",
-    "mlb_api_team_roster",
-    "mlb_api_team_alumni",
-    "mlb_api_team_affiliates",
-    "mlb_api_people",
-    "mlb_api_person",
-    "mlb_api_person_game_stats",
-    "mlb_api_sport_players",
-    "mlb_api_sports",
-    "mlb_api_leagues",
-    "mlb_api_season",
-    "mlb_api_venues",
-    "mlb_api_venue",
-    "mlb_api_meta",
-    "mlb_api_awards",
-    "mlb_api_award_recipients",
-    "mlb_api_draft",
-    "mlb_api_umpires",
-    "mlb_api_conferences",
-    "mlb_api_conference",
-    "mlb_api_draft_latest",
-    "mlb_api_game_timestamps",
-    "mlb_api_game_changes",
-    "mlb_api_analytics_games",
-    "mlb_api_analytics_guids",
-    "mlb_api_game_guids",
-    "mlb_api_play_analytics",
-    "mlb_api_play_context_metrics_averages",
-    "mlb_api_game_color",
-    "mlb_api_game_color_diff",
-    "mlb_api_game_color_timestamps",
-    "mlb_api_game_pace",
-    "mlb_api_high_low",
-    "mlb_api_home_run_derby",
-    "mlb_api_home_run_derby_bracket",
-    "mlb_api_home_run_derby_pool",
-    "mlb_api_all_star_ballot",
-    "mlb_api_all_star_write_ins",
-    "mlb_api_all_star_final_vote",
-    "mlb_api_free_agents",
-    "mlb_api_jobs",
-    "mlb_api_datacasters",
-    "mlb_api_official_scorers",
-    "mlb_api_umpire_games",
-    "mlb_api_schedule_tied",
-    "mlb_api_schedule_postseason_series",
-    "mlb_api_schedule_postseason_tunein",
-    "mlb_api_seasons_all",
-    "mlb_api_sport",
-    "mlb_api_stats_metrics",
-    "mlb_api_teams_history",
-    "mlb_api_teams_stats",
-    "mlb_api_teams_stats_leaders",
-    "mlb_api_team_coaches",
-    "mlb_api_team_personnel",
-    "mlb_api_team_roster_type",
+    "mlb_schedule_postseason",
+    "mlb_pbp",
+    "mlb_boxscore",
+    "mlb_linescore",
+    "mlb_play_by_play",
+    "mlb_game_context_metrics",
+    "mlb_win_probability",
+    "mlb_game_content",
+    "mlb_team",
+    "mlb_team_roster",
+    "mlb_team_alumni",
+    "mlb_team_affiliates",
+    "mlb_people",
+    "mlb_person",
+    "mlb_person_game_stats",
+    "mlb_sport_players",
+    "mlb_sports",
+    "mlb_leagues",
+    "mlb_season",
+    "mlb_venues",
+    "mlb_venue",
+    "mlb_meta",
+    "mlb_awards",
+    "mlb_award_recipients",
+    "mlb_draft",
+    "mlb_umpires",
+    "mlb_conferences",
+    "mlb_conference",
+    "mlb_draft_latest",
+    "mlb_game_timestamps",
+    "mlb_game_changes",
+    "mlb_analytics_games",
+    "mlb_analytics_guids",
+    "mlb_game_guids",
+    "mlb_play_analytics",
+    "mlb_play_context_metrics_averages",
+    "mlb_game_color",
+    "mlb_game_color_diff",
+    "mlb_game_color_timestamps",
+    "mlb_game_pace",
+    "mlb_high_low",
+    "mlb_home_run_derby",
+    "mlb_home_run_derby_bracket",
+    "mlb_home_run_derby_pool",
+    "mlb_all_star_ballot",
+    "mlb_all_star_write_ins",
+    "mlb_all_star_final_vote",
+    "mlb_free_agents",
+    "mlb_jobs",
+    "mlb_datacasters",
+    "mlb_official_scorers",
+    "mlb_umpire_games",
+    "mlb_schedule_tied",
+    "mlb_schedule_postseason_series",
+    "mlb_schedule_postseason_tunein",
+    "mlb_seasons_all",
+    "mlb_sport",
+    "mlb_stats_metrics",
+    "mlb_teams_history",
+    "mlb_teams_stats",
+    "mlb_teams_stats_leaders",
+    "mlb_team_coaches",
+    "mlb_team_personnel",
+    "mlb_team_roster_type",
 ]
 
 
-def mlb_api_schedule_postseason(
+def mlb_schedule_postseason(
     season: Optional[Union[int, str]] = None,
     sport_id: Optional[int] = 1,
     hydrate: Optional[str] = None,
@@ -116,7 +116,7 @@ def mlb_api_schedule_postseason(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_schedule_postseason()
+        >>> mlb_schedule_postseason()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/postseason",
@@ -132,7 +132,7 @@ def mlb_api_schedule_postseason(
     return raw
 
 
-def mlb_api_pbp(
+def mlb_pbp(
     game_pk: int,
     language: Optional[str] = None,
     timecode: Optional[str] = None,
@@ -161,7 +161,7 @@ def mlb_api_pbp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_pbp(game_pk=716390)
+        >>> mlb_pbp(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live",
@@ -178,7 +178,7 @@ def mlb_api_pbp(
     return raw
 
 
-def mlb_api_boxscore(
+def mlb_boxscore(
     game_pk: int,
     timecode: Optional[str] = None,
     fields: Optional[str] = None,
@@ -203,7 +203,7 @@ def mlb_api_boxscore(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_boxscore(game_pk=716390)
+        >>> mlb_boxscore(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/boxscore",
@@ -218,7 +218,7 @@ def mlb_api_boxscore(
     return raw
 
 
-def mlb_api_linescore(
+def mlb_linescore(
     game_pk: int,
     timecode: Optional[str] = None,
     fields: Optional[str] = None,
@@ -243,7 +243,7 @@ def mlb_api_linescore(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_linescore(game_pk=716390)
+        >>> mlb_linescore(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/linescore",
@@ -258,7 +258,7 @@ def mlb_api_linescore(
     return raw
 
 
-def mlb_api_play_by_play(
+def mlb_play_by_play(
     game_pk: int,
     timecode: Optional[str] = None,
     fields: Optional[str] = None,
@@ -283,7 +283,7 @@ def mlb_api_play_by_play(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_play_by_play(game_pk=716390)
+        >>> mlb_play_by_play(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/playByPlay",
@@ -298,7 +298,7 @@ def mlb_api_play_by_play(
     return raw
 
 
-def mlb_api_game_context_metrics(
+def mlb_game_context_metrics(
     game_pk: int,
     fields: Optional[str] = None,
     *,
@@ -321,7 +321,7 @@ def mlb_api_game_context_metrics(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_context_metrics(game_pk=716390)
+        >>> mlb_game_context_metrics(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/contextMetrics",
@@ -335,7 +335,7 @@ def mlb_api_game_context_metrics(
     return raw
 
 
-def mlb_api_win_probability(
+def mlb_win_probability(
     game_pk: int,
     fields: Optional[str] = None,
     *,
@@ -358,7 +358,7 @@ def mlb_api_win_probability(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_win_probability(game_pk=716390)
+        >>> mlb_win_probability(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/winProbability",
@@ -372,7 +372,7 @@ def mlb_api_win_probability(
     return raw
 
 
-def mlb_api_game_content(
+def mlb_game_content(
     game_pk: int,
     *,
     return_parsed: bool = True,
@@ -393,7 +393,7 @@ def mlb_api_game_content(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_content(game_pk=716390)
+        >>> mlb_game_content(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/content",
@@ -406,7 +406,7 @@ def mlb_api_game_content(
     return raw
 
 
-def mlb_api_team(
+def mlb_team(
     team_id: int,
     season: Optional[Union[int, str]] = None,
     sport_id: Optional[int] = 1,
@@ -435,7 +435,7 @@ def mlb_api_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_team(team_id=10)
+        >>> mlb_team(team_id=10)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}",
@@ -452,7 +452,7 @@ def mlb_api_team(
     return raw
 
 
-def mlb_api_team_roster(
+def mlb_team_roster(
     team_id: int,
     season: Optional[Union[int, str]] = None,
     roster_type: Optional[str] = "active",
@@ -483,7 +483,7 @@ def mlb_api_team_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_team_roster(team_id=10)
+        >>> mlb_team_roster(team_id=10)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/roster",
@@ -501,7 +501,7 @@ def mlb_api_team_roster(
     return raw
 
 
-def mlb_api_team_alumni(
+def mlb_team_alumni(
     team_id: int,
     season: Optional[Union[int, str]] = None,
     group: Optional[str] = "hitting",
@@ -528,7 +528,7 @@ def mlb_api_team_alumni(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_team_alumni(team_id=10)
+        >>> mlb_team_alumni(team_id=10)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/alumni",
@@ -544,7 +544,7 @@ def mlb_api_team_alumni(
     return raw
 
 
-def mlb_api_team_affiliates(
+def mlb_team_affiliates(
     team_ids: Optional[Union[int, List[int]]] = None,
     sport_id: Optional[int] = 1,
     season: Optional[Union[int, str]] = None,
@@ -571,7 +571,7 @@ def mlb_api_team_affiliates(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_team_affiliates()
+        >>> mlb_team_affiliates()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/affiliates",
@@ -588,7 +588,7 @@ def mlb_api_team_affiliates(
     return raw
 
 
-def mlb_api_people(
+def mlb_people(
     person_ids: Optional[Union[int, List[int]]] = None,
     hydrate: Optional[str] = None,
     fields: Optional[str] = None,
@@ -613,7 +613,7 @@ def mlb_api_people(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_people()
+        >>> mlb_people()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/people",
@@ -629,7 +629,7 @@ def mlb_api_people(
     return raw
 
 
-def mlb_api_person(
+def mlb_person(
     person_id: int,
     season: Optional[Union[int, str]] = None,
     hydrate: Optional[str] = None,
@@ -656,7 +656,7 @@ def mlb_api_person(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_person(person_id=660271)
+        >>> mlb_person(person_id=660271)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/people/{person_id}",
@@ -672,7 +672,7 @@ def mlb_api_person(
     return raw
 
 
-def mlb_api_person_game_stats(
+def mlb_person_game_stats(
     person_id: int,
     game_pk: Union[int, str],
     fields: Optional[str] = None,
@@ -697,7 +697,7 @@ def mlb_api_person_game_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_person_game_stats(person_id=660271, game_pk=716390)
+        >>> mlb_person_game_stats(person_id=660271, game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/people/{person_id}/stats/game/{game_pk}",
@@ -711,7 +711,7 @@ def mlb_api_person_game_stats(
     return raw
 
 
-def mlb_api_sport_players(
+def mlb_sport_players(
     sport_id: int = 1,
     season: Optional[Union[int, str]] = None,
     hydrate: Optional[str] = None,
@@ -738,7 +738,7 @@ def mlb_api_sport_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_sport_players()
+        >>> mlb_sport_players()
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/sports/{sport_id}/players",
@@ -754,7 +754,7 @@ def mlb_api_sport_players(
     return raw
 
 
-def mlb_api_sports(
+def mlb_sports(
     sport_id: Optional[int] = None,
     *,
     return_parsed: bool = True,
@@ -775,7 +775,7 @@ def mlb_api_sports(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_sports()
+        >>> mlb_sports()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/sports",
@@ -789,7 +789,7 @@ def mlb_api_sports(
     return raw
 
 
-def mlb_api_leagues(
+def mlb_leagues(
     sport_id: Optional[int] = 1,
     season: Optional[Union[int, str]] = None,
     league_ids: Optional[Union[int, List[int]]] = None,
@@ -814,7 +814,7 @@ def mlb_api_leagues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_leagues()
+        >>> mlb_leagues()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/leagues",
@@ -830,7 +830,7 @@ def mlb_api_leagues(
     return raw
 
 
-def mlb_api_season(
+def mlb_season(
     season_id: Union[int, str],
     sport_id: Optional[int] = 1,
     *,
@@ -853,7 +853,7 @@ def mlb_api_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_season(season_id='X')
+        >>> mlb_season(season_id='X')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/seasons/{season_id}",
@@ -867,7 +867,7 @@ def mlb_api_season(
     return raw
 
 
-def mlb_api_venues(
+def mlb_venues(
     season: Optional[Union[int, str]] = None,
     sport_ids: Optional[Union[int, List[int]]] = None,
     hydrate: Optional[str] = None,
@@ -892,7 +892,7 @@ def mlb_api_venues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_venues()
+        >>> mlb_venues()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/venues",
@@ -908,7 +908,7 @@ def mlb_api_venues(
     return raw
 
 
-def mlb_api_venue(
+def mlb_venue(
     venue_id: int,
     season: Optional[Union[int, str]] = None,
     hydrate: Optional[str] = None,
@@ -933,7 +933,7 @@ def mlb_api_venue(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_venue(venue_id=15)
+        >>> mlb_venue(venue_id=15)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/venues/{venue_id}",
@@ -948,7 +948,7 @@ def mlb_api_venue(
     return raw
 
 
-def mlb_api_meta(
+def mlb_meta(
     meta_type: str,
     *,
     return_parsed: bool = True,
@@ -969,7 +969,7 @@ def mlb_api_meta(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_meta(meta_type='leagueLeaderTypes')
+        >>> mlb_meta(meta_type='leagueLeaderTypes')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/{meta_type}",
@@ -982,7 +982,7 @@ def mlb_api_meta(
     return raw
 
 
-def mlb_api_awards(
+def mlb_awards(
     sport_id: Optional[int] = None,
     *,
     return_parsed: bool = True,
@@ -1003,7 +1003,7 @@ def mlb_api_awards(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_awards()
+        >>> mlb_awards()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/awards",
@@ -1017,7 +1017,7 @@ def mlb_api_awards(
     return raw
 
 
-def mlb_api_award_recipients(
+def mlb_award_recipients(
     award_id: str,
     season: Optional[Union[int, str]] = None,
     sport_id: Optional[int] = 1,
@@ -1044,7 +1044,7 @@ def mlb_api_award_recipients(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_award_recipients(award_id='MLBHOF')
+        >>> mlb_award_recipients(award_id='MLBHOF')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/awards/{award_id}/recipients",
@@ -1060,7 +1060,7 @@ def mlb_api_award_recipients(
     return raw
 
 
-def mlb_api_draft(
+def mlb_draft(
     year: Union[int, str],
     round_: Optional[Union[int, str]] = None,
     team_id: Optional[int] = None,
@@ -1089,7 +1089,7 @@ def mlb_api_draft(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_draft(year=2024)
+        >>> mlb_draft(year=2024)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/draft/{year}",
@@ -1106,7 +1106,7 @@ def mlb_api_draft(
     return raw
 
 
-def mlb_api_umpires(
+def mlb_umpires(
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -1125,7 +1125,7 @@ def mlb_api_umpires(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_umpires()
+        >>> mlb_umpires()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs/umpires",
@@ -1138,7 +1138,7 @@ def mlb_api_umpires(
     return raw
 
 
-def mlb_api_conferences(
+def mlb_conferences(
     conference_id: Optional[str] = None,
     season: Optional[str] = None,
     fields: Optional[str] = None,
@@ -1163,7 +1163,7 @@ def mlb_api_conferences(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_conferences()
+        >>> mlb_conferences()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/conferences",
@@ -1179,7 +1179,7 @@ def mlb_api_conferences(
     return raw
 
 
-def mlb_api_conference(
+def mlb_conference(
     conference_id: int,
     season: Optional[str] = None,
     fields: Optional[str] = None,
@@ -1204,7 +1204,7 @@ def mlb_api_conference(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_conference(conference_id=301)
+        >>> mlb_conference(conference_id=301)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/conferences/{conference_id}",
@@ -1219,7 +1219,7 @@ def mlb_api_conference(
     return raw
 
 
-def mlb_api_draft_latest(
+def mlb_draft_latest(
     year: int,
     *,
     return_parsed: bool = True,
@@ -1240,7 +1240,7 @@ def mlb_api_draft_latest(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_draft_latest(year=2023)
+        >>> mlb_draft_latest(year=2023)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/draft/{year}/latest",
@@ -1253,7 +1253,7 @@ def mlb_api_draft_latest(
     return raw
 
 
-def mlb_api_game_timestamps(
+def mlb_game_timestamps(
     game_pk: str,
     *,
     return_parsed: bool = True,
@@ -1274,7 +1274,7 @@ def mlb_api_game_timestamps(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_timestamps(game_pk=716390)
+        >>> mlb_game_timestamps(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live/timestamps",
@@ -1287,7 +1287,7 @@ def mlb_api_game_timestamps(
     return raw
 
 
-def mlb_api_game_changes(
+def mlb_game_changes(
     updated_since: Optional[str] = None,
     sport_id: Optional[int] = None,
     fields: Optional[str] = None,
@@ -1312,7 +1312,7 @@ def mlb_api_game_changes(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
+        >>> mlb_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/game/changes",
@@ -1328,7 +1328,7 @@ def mlb_api_game_changes(
     return raw
 
 
-def mlb_api_analytics_games(
+def mlb_analytics_games(
     game_mode_id: Optional[int] = None,
     timecode: Optional[str] = None,
     limit: Optional[str] = None,
@@ -1361,7 +1361,7 @@ def mlb_api_analytics_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_analytics_games()
+        >>> mlb_analytics_games()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/game/analytics/game",
@@ -1381,7 +1381,7 @@ def mlb_api_analytics_games(
     return raw
 
 
-def mlb_api_analytics_guids(
+def mlb_analytics_guids(
     game_mode_id: Optional[int] = None,
     timecode: Optional[str] = None,
     limit: Optional[str] = None,
@@ -1414,7 +1414,7 @@ def mlb_api_analytics_guids(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_analytics_guids()
+        >>> mlb_analytics_guids()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/game/analytics/guids",
@@ -1434,7 +1434,7 @@ def mlb_api_analytics_guids(
     return raw
 
 
-def mlb_api_game_guids(
+def mlb_game_guids(
     game_pk: str,
     game_mode_id: Optional[int] = None,
     updated_since: Optional[str] = None,
@@ -1471,7 +1471,7 @@ def mlb_api_game_guids(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_guids(game_pk=716390)
+        >>> mlb_game_guids(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/guids",
@@ -1492,7 +1492,7 @@ def mlb_api_game_guids(
     return raw
 
 
-def mlb_api_play_analytics(
+def mlb_play_analytics(
     game_pk: str,
     guid: str,
     hydrate: Optional[str] = None,
@@ -1519,7 +1519,7 @@ def mlb_api_play_analytics(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
+        >>> mlb_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/analytics",
@@ -1534,7 +1534,7 @@ def mlb_api_play_analytics(
     return raw
 
 
-def mlb_api_play_context_metrics_averages(
+def mlb_play_context_metrics_averages(
     game_pk: str,
     guid: str,
     fields: Optional[str] = None,
@@ -1559,7 +1559,7 @@ def mlb_api_play_context_metrics_averages(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
+        >>> mlb_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/{guid}/contextMetricsAverages",
@@ -1573,7 +1573,7 @@ def mlb_api_play_context_metrics_averages(
     return raw
 
 
-def mlb_api_game_color(
+def mlb_game_color(
     game_pk: str,
     timecode: Optional[str] = None,
     fields: Optional[str] = None,
@@ -1598,7 +1598,7 @@ def mlb_api_game_color(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_color(game_pk=716390)
+        >>> mlb_game_color(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color",
@@ -1613,7 +1613,7 @@ def mlb_api_game_color(
     return raw
 
 
-def mlb_api_game_color_diff(
+def mlb_game_color_diff(
     game_pk: str,
     start_timecode: Optional[str] = None,
     end_timecode: Optional[str] = None,
@@ -1638,7 +1638,7 @@ def mlb_api_game_color_diff(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_color_diff(game_pk=716390)
+        >>> mlb_game_color_diff(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/diffPatch",
@@ -1653,7 +1653,7 @@ def mlb_api_game_color_diff(
     return raw
 
 
-def mlb_api_game_color_timestamps(
+def mlb_game_color_timestamps(
     game_pk: str,
     *,
     return_parsed: bool = True,
@@ -1674,7 +1674,7 @@ def mlb_api_game_color_timestamps(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_color_timestamps(game_pk=716390)
+        >>> mlb_game_color_timestamps(game_pk=716390)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/game/{game_pk}/feed/color/timestamps",
@@ -1687,7 +1687,7 @@ def mlb_api_game_color_timestamps(
     return raw
 
 
-def mlb_api_game_pace(
+def mlb_game_pace(
     season: Optional[str] = None,
     team_ids: Optional[str] = None,
     league_ids: Optional[str] = None,
@@ -1730,7 +1730,7 @@ def mlb_api_game_pace(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_game_pace(season='2023')
+        >>> mlb_game_pace(season='2023')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/gamePace",
@@ -1755,7 +1755,7 @@ def mlb_api_game_pace(
     return raw
 
 
-def mlb_api_high_low(
+def mlb_high_low(
     org_type: str,
     stat_group: Optional[str] = None,
     sort_stat: Optional[str] = None,
@@ -1794,7 +1794,7 @@ def mlb_api_high_low(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
+        >>> mlb_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/highLow/{org_type}",
@@ -1816,7 +1816,7 @@ def mlb_api_high_low(
     return raw
 
 
-def mlb_api_home_run_derby(
+def mlb_home_run_derby(
     game_pk: int,
     fields: Optional[str] = None,
     *,
@@ -1839,7 +1839,7 @@ def mlb_api_home_run_derby(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_home_run_derby(game_pk=511101)
+        >>> mlb_home_run_derby(game_pk=511101)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}",
@@ -1853,7 +1853,7 @@ def mlb_api_home_run_derby(
     return raw
 
 
-def mlb_api_home_run_derby_bracket(
+def mlb_home_run_derby_bracket(
     game_pk: int,
     fields: Optional[str] = None,
     *,
@@ -1876,7 +1876,7 @@ def mlb_api_home_run_derby_bracket(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_home_run_derby_bracket(game_pk=511101)
+        >>> mlb_home_run_derby_bracket(game_pk=511101)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/bracket",
@@ -1890,7 +1890,7 @@ def mlb_api_home_run_derby_bracket(
     return raw
 
 
-def mlb_api_home_run_derby_pool(
+def mlb_home_run_derby_pool(
     game_pk: int,
     fields: Optional[str] = None,
     *,
@@ -1913,7 +1913,7 @@ def mlb_api_home_run_derby_pool(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_home_run_derby_pool(game_pk=511101)
+        >>> mlb_home_run_derby_pool(game_pk=511101)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/homeRunDerby/{game_pk}/pool",
@@ -1927,7 +1927,7 @@ def mlb_api_home_run_derby_pool(
     return raw
 
 
-def mlb_api_all_star_ballot(
+def mlb_all_star_ballot(
     league_id: str,
     season: Optional[str] = None,
     fields: Optional[str] = None,
@@ -1952,7 +1952,7 @@ def mlb_api_all_star_ballot(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_all_star_ballot(league_id='103', season='2023')
+        >>> mlb_all_star_ballot(league_id='103', season='2023')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarBallot",
@@ -1967,7 +1967,7 @@ def mlb_api_all_star_ballot(
     return raw
 
 
-def mlb_api_all_star_write_ins(
+def mlb_all_star_write_ins(
     league_id: str,
     season: Optional[str] = None,
     fields: Optional[str] = None,
@@ -1992,7 +1992,7 @@ def mlb_api_all_star_write_ins(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_all_star_write_ins(league_id='103', season='2023')
+        >>> mlb_all_star_write_ins(league_id='103', season='2023')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarWriteIns",
@@ -2007,7 +2007,7 @@ def mlb_api_all_star_write_ins(
     return raw
 
 
-def mlb_api_all_star_final_vote(
+def mlb_all_star_final_vote(
     league_id: str,
     season: Optional[str] = None,
     fields: Optional[str] = None,
@@ -2032,7 +2032,7 @@ def mlb_api_all_star_final_vote(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_all_star_final_vote(league_id='103', season='2023')
+        >>> mlb_all_star_final_vote(league_id='103', season='2023')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/league/{league_id}/allStarFinalVote",
@@ -2047,7 +2047,7 @@ def mlb_api_all_star_final_vote(
     return raw
 
 
-def mlb_api_free_agents(
+def mlb_free_agents(
     season: Optional[str] = None,
     order: Optional[str] = None,
     hydrate: Optional[str] = None,
@@ -2074,7 +2074,7 @@ def mlb_api_free_agents(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_free_agents(season='2023')
+        >>> mlb_free_agents(season='2023')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/people/freeAgents",
@@ -2091,7 +2091,7 @@ def mlb_api_free_agents(
     return raw
 
 
-def mlb_api_jobs(
+def mlb_jobs(
     job_type: Optional[str] = None,
     sport_id: Optional[str] = None,
     date: Optional[str] = None,
@@ -2118,7 +2118,7 @@ def mlb_api_jobs(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_jobs(job_type='UMPR')
+        >>> mlb_jobs(job_type='UMPR')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs",
@@ -2135,7 +2135,7 @@ def mlb_api_jobs(
     return raw
 
 
-def mlb_api_datacasters(
+def mlb_datacasters(
     sport_id: Optional[str] = None,
     date: Optional[str] = None,
     hydrate: Optional[str] = None,
@@ -2162,7 +2162,7 @@ def mlb_api_datacasters(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_datacasters()
+        >>> mlb_datacasters()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs/datacasters",
@@ -2179,7 +2179,7 @@ def mlb_api_datacasters(
     return raw
 
 
-def mlb_api_official_scorers(
+def mlb_official_scorers(
     sport_id: Optional[str] = None,
     date: Optional[str] = None,
     hydrate: Optional[str] = None,
@@ -2206,7 +2206,7 @@ def mlb_api_official_scorers(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_official_scorers()
+        >>> mlb_official_scorers()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/jobs/officialScorers",
@@ -2223,7 +2223,7 @@ def mlb_api_official_scorers(
     return raw
 
 
-def mlb_api_umpire_games(
+def mlb_umpire_games(
     umpire_id: str,
     season: Optional[str] = None,
     hydrate: Optional[str] = None,
@@ -2250,7 +2250,7 @@ def mlb_api_umpire_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_umpire_games(umpire_id=596809, season='2023')
+        >>> mlb_umpire_games(umpire_id=596809, season='2023')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/jobs/umpires/games/{umpire_id}",
@@ -2266,7 +2266,7 @@ def mlb_api_umpire_games(
     return raw
 
 
-def mlb_api_schedule_tied(
+def mlb_schedule_tied(
     game_types: Optional[str] = None,
     season: Optional[str] = None,
     hydrate: Optional[str] = None,
@@ -2293,7 +2293,7 @@ def mlb_api_schedule_tied(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_schedule_tied(season='2016')
+        >>> mlb_schedule_tied(season='2016')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/games/tied",
@@ -2310,7 +2310,7 @@ def mlb_api_schedule_tied(
     return raw
 
 
-def mlb_api_schedule_postseason_series(
+def mlb_schedule_postseason_series(
     game_types: Optional[str] = None,
     series_number: Optional[int] = None,
     team_id: Optional[int] = None,
@@ -2341,7 +2341,7 @@ def mlb_api_schedule_postseason_series(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_schedule_postseason_series(season='2023')
+        >>> mlb_schedule_postseason_series(season='2023')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/postseason/series",
@@ -2360,7 +2360,7 @@ def mlb_api_schedule_postseason_series(
     return raw
 
 
-def mlb_api_schedule_postseason_tunein(
+def mlb_schedule_postseason_tunein(
     team_id: Optional[int] = None,
     sport_id: Optional[str] = None,
     season: Optional[str] = None,
@@ -2389,7 +2389,7 @@ def mlb_api_schedule_postseason_tunein(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_schedule_postseason_tunein(season='2023')
+        >>> mlb_schedule_postseason_tunein(season='2023')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/schedule/postseason/tuneIn",
@@ -2407,7 +2407,7 @@ def mlb_api_schedule_postseason_tunein(
     return raw
 
 
-def mlb_api_seasons_all(
+def mlb_seasons_all(
     division_id: Optional[str] = None,
     league_id: Optional[int] = None,
     with_game_type_dates: Optional[int] = None,
@@ -2436,7 +2436,7 @@ def mlb_api_seasons_all(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_seasons_all(sport_id=1)
+        >>> mlb_seasons_all(sport_id=1)
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/seasons/all",
@@ -2454,7 +2454,7 @@ def mlb_api_seasons_all(
     return raw
 
 
-def mlb_api_sport(
+def mlb_sport(
     sport_id: str,
     fields: Optional[str] = None,
     *,
@@ -2477,7 +2477,7 @@ def mlb_api_sport(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_sport(sport_id=1)
+        >>> mlb_sport(sport_id=1)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/sports/{sport_id}",
@@ -2491,7 +2491,7 @@ def mlb_api_sport(
     return raw
 
 
-def mlb_api_stats_metrics(
+def mlb_stats_metrics(
     stats: Optional[str] = None,
     group: Optional[str] = None,
     game_type: Optional[str] = None,
@@ -2540,7 +2540,7 @@ def mlb_api_stats_metrics(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_stats_metrics()
+        >>> mlb_stats_metrics()
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/stats/metrics",
@@ -2568,7 +2568,7 @@ def mlb_api_stats_metrics(
     return raw
 
 
-def mlb_api_teams_history(
+def mlb_teams_history(
     team_ids: Optional[str] = None,
     start_season: Optional[str] = None,
     end_season: Optional[str] = None,
@@ -2595,7 +2595,7 @@ def mlb_api_teams_history(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_teams_history(team_ids='147')
+        >>> mlb_teams_history(team_ids='147')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/history",
@@ -2612,7 +2612,7 @@ def mlb_api_teams_history(
     return raw
 
 
-def mlb_api_teams_stats(
+def mlb_teams_stats(
     season: Optional[str] = None,
     sport_ids: Optional[str] = None,
     stat_group: Optional[str] = None,
@@ -2647,7 +2647,7 @@ def mlb_api_teams_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
+        >>> mlb_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/stats",
@@ -2668,7 +2668,7 @@ def mlb_api_teams_stats(
     return raw
 
 
-def mlb_api_teams_stats_leaders(
+def mlb_teams_stats_leaders(
     leader_categories: Optional[str] = None,
     sit_codes: Optional[str] = None,
     game_types: Optional[str] = None,
@@ -2711,7 +2711,7 @@ def mlb_api_teams_stats_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_teams_stats_leaders(leader_categories='homeRuns', season='2023')
+        >>> mlb_teams_stats_leaders(leader_categories='homeRuns', season='2023')
     """
     raw = _get(
         "https://statsapi.mlb.com/api/v1/teams/stats/leaders",
@@ -2736,7 +2736,7 @@ def mlb_api_teams_stats_leaders(
     return raw
 
 
-def mlb_api_team_coaches(
+def mlb_team_coaches(
     team_id: int,
     season: Optional[str] = None,
     date: Optional[str] = None,
@@ -2763,7 +2763,7 @@ def mlb_api_team_coaches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_team_coaches(team_id=147, season='2023')
+        >>> mlb_team_coaches(team_id=147, season='2023')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/coaches",
@@ -2779,7 +2779,7 @@ def mlb_api_team_coaches(
     return raw
 
 
-def mlb_api_team_personnel(
+def mlb_team_personnel(
     team_id: int,
     date: Optional[str] = None,
     fields: Optional[str] = None,
@@ -2804,7 +2804,7 @@ def mlb_api_team_personnel(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_team_personnel(team_id=147)
+        >>> mlb_team_personnel(team_id=147)
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/personnel",
@@ -2819,7 +2819,7 @@ def mlb_api_team_personnel(
     return raw
 
 
-def mlb_api_team_roster_type(
+def mlb_team_roster_type(
     team_id: int,
     roster_type: str,
     season: Optional[str] = None,
@@ -2850,7 +2850,7 @@ def mlb_api_team_roster_type(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_api_team_roster_type(team_id=147, roster_type='active', season='2023')
+        >>> mlb_team_roster_type(team_id=147, roster_type='active', season='2023')
     """
     raw = _get(
         f"https://statsapi.mlb.com/api/v1/teams/{team_id}/roster/{roster_type}",
