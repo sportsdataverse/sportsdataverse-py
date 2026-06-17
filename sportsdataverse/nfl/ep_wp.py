@@ -50,6 +50,8 @@ import polars as pl
 
 from sportsdataverse.nfl.model_vars import (
     _EP_POINT_VALUES,
+    TOUCHBACK_YARDLINE_POST_2016,
+    TOUCHBACK_YARDLINE_PRE_2016,
     defense_score_vec,
     end_change_vec,
     kickoff_turnovers,
@@ -1516,3 +1518,472 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
     )
 
     return play_df
+
+
+# ===========================================================================
+# enrich_nfl_pbp — nflverse-native EP/EPA/WP/WPA/CP/CPOE/xYAC orchestrator
+# ===========================================================================
+#
+# This is the public, nflverse-shape orchestrator (Task 4a).  Unlike
+# ``calculate_epa`` / ``calculate_wpa`` (which consume ESPN-internal columns
+# such as ``type.text`` / ``EP_start`` / ``change_of_pos_team``), the
+# ``method="lead_diff"`` path derives EPA/WPA *natively* on nflverse columns by
+# mirroring nflfastR's ``R/helper_add_ep_wp.R`` (``add_ep_variables`` +
+# ``add_wp_variables``).  It must NOT call ``calculate_epa`` / ``calculate_wpa``.
+#
+# Parity map (R source -> Python):
+#   * kickoff feature substitution      -> _apply_feature_substitution
+#       (helper_add_ep_wp.R add_ep_variables L351-391: yardline_100 -> 80/75 by
+#        season, down -> 1, ydstogo -> 10 for kickoffs; down-NA PAT/2pt rows get
+#        the same down/ydstogo + touchback substitution)
+#   * EP scoring + start-of-play ``ep``  -> calculate_expected_points (re-scored
+#       on the substituted frame; ``ep`` is the start-of-play estimate)
+#   * EPA lead-difference + overlays    -> _derive_epa
+#       (L589-803: ep filled up per game, home_ep, home_epa = lead(home_ep) -
+#        home_ep over game_id, posteam-perspective sign flip, TD/FG/PAT/2pt/
+#        safety scoring overlays, end-of-half + OT overlays)
+#   * WP from posteam perspective       -> calculate_win_probability
+#   * WPA lead-of-home-WP + overlays    -> _derive_wpa
+#       (L1074-1184: home_wp/vegas_home_wp posteam->home perspective, end-game
+#        final_value, def_wp = 1 - wp, away_wp = 1 - home_wp, home_wpa =
+#        lead(home_wp) - home_wp over game_id, wpa posteam-perspective sign flip,
+#        kneel/end-game NA overlay)
+
+#: Minimal columns the ``lead_diff`` derivation reads directly (beyond what the
+#: scorers validate).  Used for the up-front contract check.
+_ENRICH_REQUIRED_COLUMNS: tuple[str, ...] = (
+    "game_id",
+    "season",
+    "posteam",
+    "home_team",
+    "yardline_100",
+    "ydstogo",
+    "down",
+    "half_seconds_remaining",
+    "posteam_timeouts_remaining",
+    "defteam_timeouts_remaining",
+)
+
+
+def _validate_enrich_input(df: pl.DataFrame) -> None:
+    """Raise a clear ``ValueError`` when required contract columns are absent."""
+    from sportsdataverse.nfl.model_vars import NFLVERSE_FRAME_CONTRACT
+
+    missing = [c for c in _ENRICH_REQUIRED_COLUMNS if c not in df.columns]
+    if missing:
+        raise ValueError(
+            "enrich_nfl_pbp(method='lead_diff') input is missing required columns "
+            f"{sorted(missing)}. Expected an nflverse-shape frame matching "
+            f"NFLVERSE_FRAME_CONTRACT (got {len(df.columns)} columns). "
+            f"Contract reference: {sorted(NFLVERSE_FRAME_CONTRACT)}"
+        )
+
+
+def _apply_feature_substitution(df: pl.DataFrame) -> pl.DataFrame:
+    """Substitute EP model features for kickoffs and down-NA (PAT/2pt) plays.
+
+    Mirrors nflfastR ``add_ep_variables`` (``helper_add_ep_wp.R`` L351-391):
+    kickoff plays are scored as if receiving a touchback — ``yardline_100`` set
+    to the touchback yardline (80 for ``season < 2016`` else 75), ``down`` set
+    to 1, ``ydstogo`` set to 10.  Other plays with a missing ``down`` (PATs,
+    two-point conversions) are likewise scored on a 1st-and-10 substitution at
+    the touchback spot so the EP model never sees a NA ``down``.  Normal,
+    downed plays are left untouched.
+
+    The substitution is written to *copies* of the feature columns so the
+    returned frame still carries the original raw values for the EPA overlays.
+    """
+    touchback = (
+        pl.when(pl.col("season") < 2016)
+        .then(pl.lit(TOUCHBACK_YARDLINE_PRE_2016))
+        .otherwise(pl.lit(TOUCHBACK_YARDLINE_POST_2016))
+    )
+
+    is_kickoff = pl.lit(False)
+    if "kickoff_attempt" in df.columns:
+        is_kickoff = is_kickoff | (pl.col("kickoff_attempt") == 1)
+    if "play_type" in df.columns:
+        is_kickoff = is_kickoff | (pl.col("play_type") == "kickoff")
+
+    needs_sub = is_kickoff | pl.col("down").is_null()
+
+    return df.with_columns(
+        pl.when(needs_sub)
+        .then(touchback.cast(pl.Int64))
+        .otherwise(pl.col("yardline_100").cast(pl.Int64))
+        .alias("yardline_100"),
+        pl.when(needs_sub).then(pl.lit(1)).otherwise(pl.col("down")).cast(pl.Int64).alias("down"),
+        pl.when(needs_sub).then(pl.lit(10)).otherwise(pl.col("ydstogo").cast(pl.Int64)).alias("ydstogo"),
+    )
+
+
+def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
+    """Derive ``epa`` from start-of-play ``ep`` natively, per nflfastR.
+
+    Mirrors ``add_ep_variables`` EPA block (``helper_add_ep_wp.R`` L589-803):
+
+    * ``ep`` is filled *up* within each game so the last play inherits the
+      following play's start-of-play EP (the lead).
+    * ``home_ep`` flips ``ep`` to the home-team frame using the (filled-up)
+      possession team; ``home_epa = lead(home_ep) - home_ep`` over ``game_id``;
+      ``epa`` flips back to the possession-team frame.
+    * Scoring overlays replace the lead difference with the realised value:
+      touchdown (``7 - ep`` / ``-7 - ep``), made FG (``3 - ep``), made PAT
+      (``1 - ep``), good two-point (``2 - ep``), failed PAT (``0 - ep``),
+      safety (``±2 - ep``).
+    * End-of-half / end-of-game / OT-last-play overlays set ``epa = 0 - ep`` for
+      non-scoring plays and NA the ``ep`` / ``epa`` of terminal rows.
+
+    All leads are grouped by ``game_id`` so no value leaks across games.
+    """
+    grp = "game_id"
+
+    df = df.with_columns(pl.col("ep").alias("ep"), pl.col("posteam").alias("_tmp_posteam"))
+    # fill ep + tmp_posteam UP within each game (R: tidyr::fill .direction="up")
+    df = df.with_columns(
+        pl.col("ep").fill_null(strategy="backward").over(grp),
+        pl.col("_tmp_posteam").fill_null(strategy="backward").over(grp),
+    )
+
+    df = df.with_columns(
+        pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
+        .then(pl.col("ep"))
+        .otherwise(-pl.col("ep"))
+        .alias("_home_ep")
+    )
+    df = df.with_columns((pl.col("_home_ep").shift(-1).over(grp) - pl.col("_home_ep")).alias("_home_epa"))
+    df = df.with_columns(
+        pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
+        .then(pl.col("_home_epa"))
+        .otherwise(-pl.col("_home_epa"))
+        .alias("epa")
+    )
+
+    def _has(col: str) -> bool:
+        return col in df.columns
+
+    # --- scoring overlays (each conditional on the realised scoring result) ---
+    # Touchdown
+    if _has("td_team"):
+        df = df.with_columns(
+            pl.when(pl.col("td_team").is_not_null() & (pl.col("td_team") == pl.col("posteam")))
+            .then(7.0 - pl.col("ep"))
+            .when(pl.col("td_team").is_not_null() & (pl.col("td_team") != pl.col("posteam")))
+            .then(-7.0 - pl.col("ep"))
+            .otherwise(pl.col("epa"))
+            .alias("epa")
+        )
+
+    # Offense field goal
+    if _has("field_goal_made"):
+        _no_td = pl.col("td_team").is_null() if _has("td_team") else pl.lit(True)
+        df = df.with_columns(
+            pl.when(_no_td & (pl.col("field_goal_made") == 1))
+            .then(3.0 - pl.col("ep"))
+            .otherwise(pl.col("epa"))
+            .alias("epa")
+        )
+
+    # Offense extra point
+    if _has("extra_point_good"):
+        _no_td = pl.col("td_team").is_null() if _has("td_team") else pl.lit(True)
+        _no_fg = (pl.col("field_goal_made") == 0) if _has("field_goal_made") else pl.lit(True)
+        df = df.with_columns(
+            pl.when(_no_td & _no_fg & (pl.col("extra_point_good") == 1))
+            .then(1.0 - pl.col("ep"))
+            .otherwise(pl.col("epa"))
+            .alias("epa")
+        )
+
+    # Offense two-point conversion
+    _two_pt_good_cols = [
+        c for c in ("two_point_rush_good", "two_point_pass_good", "two_point_pass_reception_good") if _has(c)
+    ]
+    if _two_pt_good_cols:
+        _no_td = pl.col("td_team").is_null() if _has("td_team") else pl.lit(True)
+        _no_fg = (pl.col("field_goal_made") == 0) if _has("field_goal_made") else pl.lit(True)
+        _no_xp = (pl.col("extra_point_good") == 0) if _has("extra_point_good") else pl.lit(True)
+        any_two = pl.lit(False)
+        for c in _two_pt_good_cols:
+            any_two = any_two | (pl.col(c) == 1)
+        df = df.with_columns(
+            pl.when(_no_td & _no_fg & _no_xp & any_two).then(2.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa")
+        )
+
+    # Defensive two-point conversion (opponent scores)
+    if _has("defensive_two_point_conv"):
+        df = df.with_columns(
+            pl.when(pl.col("defensive_two_point_conv") == 1)
+            .then(-2.0 - pl.col("ep"))
+            .otherwise(pl.col("epa"))
+            .alias("epa")
+        )
+
+    # Safety
+    if _has("safety_team"):
+        df = df.with_columns(
+            pl.when(pl.col("safety_team").is_not_null() & (pl.col("safety_team") == pl.col("posteam")))
+            .then(2.0 - pl.col("ep"))
+            .when(pl.col("safety_team").is_not_null() & (pl.col("safety_team") != pl.col("posteam")))
+            .then(-2.0 - pl.col("ep"))
+            .otherwise(pl.col("epa"))
+            .alias("epa")
+        )
+
+    # --- end-of-half / end-of-game / OT overlays ---
+    if _has("desc"):
+        df = df.with_columns(
+            pl.when(pl.col("desc").str.to_lowercase().str.contains(r"(?:end of game)|(?:end game)"))
+            .then(pl.lit(1))
+            .otherwise(pl.lit(0))
+            .alias("_end_game")
+        )
+    else:
+        df = df.with_columns(pl.lit(0).alias("_end_game"))
+
+    if _has("qtr") and _has("sp"):
+        next_qtr = pl.col("qtr").shift(-1).over(grp)
+        next_desc = pl.col("desc").shift(-1).over(grp) if _has("desc") else pl.lit(None, dtype=pl.Utf8)
+        next_end_game = pl.col("_end_game").shift(-1).over(grp)
+        play_type_ok = pl.col("play_type").is_not_null() if _has("play_type") else pl.lit(True)
+
+        end_half = (
+            (
+                (pl.col("qtr") == 2) & ((next_qtr == 3) | (next_desc == pl.lit("END QUARTER 2")))
+                | (pl.col("qtr") == 4)
+                & ((next_qtr == 5) | (next_desc == pl.lit("END QUARTER 4")) | (next_end_game == 1))
+            )
+            & (pl.col("sp") == 0)
+            & play_type_ok
+        )
+        df = df.with_columns(pl.when(end_half).then(0.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa"))
+        # last play of OT
+        ot_last = (pl.col("qtr") > 4) & (next_end_game == 1) & (pl.col("sp") == 0)
+        df = df.with_columns(pl.when(ot_last).then(0.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa"))
+
+    if _has("desc"):
+        df = df.with_columns(
+            pl.when(pl.col("desc") == pl.lit("END QUARTER 2")).then(None).otherwise(pl.col("epa")).alias("epa"),
+        )
+    df = df.with_columns(
+        pl.when(pl.col("_end_game") == 1).then(None).otherwise(pl.col("epa")).alias("epa"),
+        pl.when(pl.col("_end_game") == 1).then(None).otherwise(pl.col("ep")).alias("ep"),
+    )
+    if _has("desc"):
+        df = df.with_columns(
+            pl.when(pl.col("desc") == pl.lit("END QUARTER 2")).then(None).otherwise(pl.col("ep")).alias("ep"),
+        )
+
+    return df.drop([c for c in ("_tmp_posteam", "_home_ep", "_home_epa", "_end_game") if c in df.columns])
+
+
+def _derive_wpa(df: pl.DataFrame) -> pl.DataFrame:
+    """Derive home/away/def WP and ``wpa`` natively, per nflfastR.
+
+    Mirrors ``add_wp_variables`` tail (``helper_add_ep_wp.R`` L1074-1184):
+
+    * ``wp`` / ``vegas_wp`` filled *up* within each game; the possession team is
+      likewise filled up to resolve the NA-posteam terminal rows.
+    * ``home_wp`` / ``vegas_home_wp`` flip the possession-team WP into the home
+      frame (``wp`` if ``posteam == home_team`` else ``1 - wp``).
+    * On the end-of-game row both are set to ``final_value`` (1 / 0 / 0.5 by
+      final score); ``away_wp = 1 - home_wp``; ``def_wp = 1 - wp``.
+    * ``home_wpa = lead(home_wp) - home_wp`` over ``game_id``; ``wpa`` flips into
+      the possession-team frame (``home_wpa`` if ``posteam == home_team`` else
+      ``-home_wpa``).  Kneels and end-of-game rows get NA ``wpa`` / ``vegas_wpa``.
+
+    All leads are grouped by ``game_id`` so no value leaks across games.
+    """
+    grp = "game_id"
+
+    df = df.with_columns(pl.col("posteam").alias("_tmp_posteam"))
+    df = df.with_columns(
+        pl.col("wp").fill_null(strategy="backward").over(grp),
+        pl.col("vegas_wp").fill_null(strategy="backward").over(grp),
+        pl.col("_tmp_posteam").fill_null(strategy="backward").over(grp),
+    )
+
+    df = df.with_columns(
+        pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
+        .then(pl.col("wp"))
+        .otherwise(1.0 - pl.col("wp"))
+        .alias("home_wp"),
+        pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
+        .then(pl.col("vegas_wp"))
+        .otherwise(1.0 - pl.col("vegas_wp"))
+        .alias("vegas_home_wp"),
+    )
+
+    if "desc" in df.columns:
+        df = df.with_columns(
+            pl.when(pl.col("desc").str.to_lowercase().str.contains(r"(?:end of game)|(?:end game)"))
+            .then(pl.lit(1))
+            .otherwise(pl.lit(0))
+            .alias("_end_game")
+        )
+    else:
+        df = df.with_columns(pl.lit(0).alias("_end_game"))
+
+    if "home_score" in df.columns and "away_score" in df.columns:
+        final_value = (
+            pl.when(pl.col("home_score") > pl.col("away_score"))
+            .then(1.0)
+            .when(pl.col("away_score") > pl.col("home_score"))
+            .then(0.0)
+            .otherwise(0.5)
+        )
+        df = df.with_columns(
+            pl.when(pl.col("_end_game") == 1).then(final_value).otherwise(pl.col("home_wp")).alias("home_wp"),
+            pl.when(pl.col("_end_game") == 1)
+            .then(final_value)
+            .otherwise(pl.col("vegas_home_wp"))
+            .alias("vegas_home_wp"),
+        )
+
+    df = df.with_columns(
+        (1.0 - pl.col("home_wp")).alias("away_wp"),
+        pl.when(pl.col("_end_game") == 1).then(None).otherwise(pl.col("vegas_wp")).alias("vegas_wp"),
+        pl.when(pl.col("_end_game") == 1).then(None).otherwise(pl.col("wp")).alias("wp"),
+    )
+    df = df.with_columns((1.0 - pl.col("wp")).alias("def_wp"))
+
+    # WPA: lead of home WP, flipped into possession-team frame.
+    df = df.with_columns(
+        (pl.col("vegas_home_wp").shift(-1).over(grp) - pl.col("vegas_home_wp")).alias("_vegas_home_wpa"),
+        (pl.col("home_wp").shift(-1).over(grp) - pl.col("home_wp")).alias("_home_wpa"),
+    )
+    df = df.with_columns(
+        pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
+        .then(pl.col("_vegas_home_wpa"))
+        .otherwise(-pl.col("_vegas_home_wpa"))
+        .alias("vegas_wpa"),
+        pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
+        .then(pl.col("_home_wpa"))
+        .otherwise(-pl.col("_home_wpa"))
+        .alias("wpa"),
+    )
+
+    if "desc" in df.columns:
+        kneel_or_end = pl.col("desc").str.to_lowercase().str.contains(r"(?:\skneels\s)|(?:end of game)|(?:end game)")
+        df = df.with_columns(
+            pl.when(kneel_or_end).then(None).otherwise(pl.col("vegas_wpa")).alias("vegas_wpa"),
+            pl.when(kneel_or_end).then(None).otherwise(pl.col("wpa")).alias("wpa"),
+        )
+
+    return df.drop(
+        [c for c in ("_tmp_posteam", "_end_game", "_vegas_home_wpa", "_home_wpa", "vegas_home_wp") if c in df.columns]
+    )
+
+
+def enrich_nfl_pbp(
+    df: pl.DataFrame,
+    *,
+    method: str = "lead_diff",
+    models_dir: Union[str, None] = None,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC.
+
+    ``method="lead_diff"`` (the default and only implemented method) is a
+    NFLVERSE-NATIVE derivation that mirrors nflfastR's ``helper_add_ep_wp.R``.
+    It runs EP -> EPA -> WP -> WPA -> CP/CPOE -> xYAC, deriving ``epa`` / ``wpa``
+    with grouped lead-differences (over ``game_id``) and the nflfastR scoring /
+    end-of-half / OT overlays — it does **not** call ``calculate_epa`` /
+    ``calculate_wpa`` (those consume ESPN-internal columns absent from a
+    nflverse frame).  Kickoffs and down-NA plays (PATs, two-point conversions)
+    have their EP model features substituted (touchback ``yardline_100``,
+    ``down=1``, ``ydstogo=10``) before EP scoring, matching nflfastR.
+
+    The orchestrator is idempotent: stale ``ep`` / ``epa`` / ``wp`` / ``wpa`` /
+    ``cp`` / ``cpoe`` / xYAC columns are recomputed on each call.
+
+    Args:
+        df: Play-by-play DataFrame in nflverse shape.  Must satisfy the
+            ``NFLVERSE_FRAME_CONTRACT`` minimum (``game_id``, ``season``,
+            ``posteam``, ``home_team``, ``yardline_100``, ``ydstogo``,
+            ``down``, ``half_seconds_remaining``, the timeout columns, plus the
+            WP inputs ``score_differential`` / ``game_seconds_remaining`` /
+            ``spread_line`` / ``receive_2h_ko``).
+        method: ``"lead_diff"`` (native nflfastR-style derivation) or
+            ``"snapshot"`` (model-snapshot derivation — Task 4b, not yet
+            implemented).
+        models_dir: Reserved for a future override of the bundled model
+            directory.  Currently unused (the scorers load from
+            ``sportsdataverse/nfl/models/``).
+        return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
+
+    Returns:
+        The input frame plus ``ep`` (start-of-play expected points), ``epa``,
+        ``wp`` (naive WP), ``vegas_wp`` (spread-adjusted WP), ``def_wp`` /
+        ``home_wp`` / ``away_wp``, ``wpa`` / ``vegas_wpa``, ``cp`` / ``cpoe``,
+        and the four ``xyac_*`` columns.
+
+    Raises:
+        ValueError: when ``method`` is unrecognised, or required contract
+            columns are absent from ``df``.
+        NotImplementedError: when ``method="snapshot"`` (Task 4b).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_pbp
+            from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+            pbp = load_nfl_pbp([2023])
+            enriched = enrich_nfl_pbp(pbp)
+            print(enriched.select("ep", "epa", "wp", "wpa").head())
+
+        Pandas next step (one line)::
+
+            enrich_nfl_pbp(pbp, return_as_pandas=True).head()
+
+        See Also:
+            * `nflfastR`_ -- the R package whose ``helper_add_ep_wp.R`` this
+              method mirrors.
+            * `nflreadpy`_ -- Python parity wrapper for nflverse loaders.
+
+        .. _nflfastR: https://www.nflfastr.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    """
+    if method == "snapshot":
+        raise NotImplementedError("snapshot method: Task 4b")
+    if method != "lead_diff":
+        raise ValueError(f"enrich_nfl_pbp: unknown method {method!r}; expected 'lead_diff' or 'snapshot'.")
+
+    _validate_enrich_input(df)
+
+    # Resolve the scorers off the module so monkeypatched stubs in tests and any
+    # future indirection are honoured.
+    import sportsdataverse.nfl.ep_wp as _self
+
+    # 1. EP — score on the feature-substituted frame (kickoff / down-NA), then
+    #    keep ``ep`` as the start-of-play estimate.  We score a substituted COPY
+    #    so the original raw feature columns survive for the EPA overlays.
+    substituted = _apply_feature_substitution(df)
+    scored = _self.calculate_expected_points(substituted)
+    # Carry the freshly-scored ``ep`` (+ class probs) back onto the ORIGINAL
+    # (un-substituted) frame so downstream overlays read the real columns.
+    ep_cols = ["ep", *_EP_CLASS_NAMES]
+    raw = df.drop([c for c in ep_cols if c in df.columns])
+    raw = pl.concat([raw, scored.select([c for c in ep_cols if c in scored.columns])], how="horizontal")
+
+    # 2. EPA — native lead-difference + scoring/end-of-half/OT overlays.
+    raw = _derive_epa(raw)
+
+    # 3. WP — naive + spread-adjusted.
+    raw = raw.drop([c for c in ("wp", "vegas_wp") if c in raw.columns])
+    raw = _self.calculate_win_probability(raw)
+
+    # 4. WPA + home/away/def WP — native lead-of-home-WP + posteam perspective.
+    raw = raw.drop([c for c in ("home_wp", "away_wp", "def_wp", "wpa", "vegas_wpa") if c in raw.columns])
+    raw = _derive_wpa(raw)
+
+    # 5. CP / CPOE.
+    raw = _self.calculate_completion_probability(raw)
+
+    # 6. xYAC (needs ep + cp present).
+    raw = _self.calculate_xyac(raw)
+
+    if return_as_pandas:
+        return raw.to_pandas()
+    return raw
