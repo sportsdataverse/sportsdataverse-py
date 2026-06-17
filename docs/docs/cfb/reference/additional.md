@@ -549,11 +549,11 @@ Polars dataframe containing betting lines available for the available seasons.
 | `game_desc` | character | Human-readable description of the game, typically including team names and context. |
 | `date_time` | character | Date and time of the game to which the betting line applies, as a string. |
 | `market_type` | character | Geographic market type (e.g. `National`). |
-| `abbr` | character | Abbreviated team identifier or matchup label associated with the betting line entry. |
-| `lines` | double | Point spread value for the game as reported by the sportsbook (negative indicates the favorite). |
-| `odds` | integer | Moneyline odds for the game as reported by the sportsbook (American odds format). |
-| `opening_lines` | double | Opening point spread value posted by the sportsbook before line movement. |
-| `opening_odds` | integer | Opening moneyline odds posted by the sportsbook before line movement. |
+| `abbr` | character | Selection/side this odds row applies to — a team abbreviation for spread and moneyline markets, or 'over'/'under' for total markets (the data is long-format, one row per book per selection per market_type). |
+| `lines` | double | Numeric line for this row's market — the per-side point spread for spread markets or the over/under total points for total markets; null for moneyline rows. |
+| `odds` | integer | American-odds price for this selection — the juice/vig on spread and total rows, or the moneyline price itself on moneyline rows. |
+| `opening_lines` | double | Opening numeric line for this row's market (per-side spread or over/under total points) before line movement; null for moneyline rows. |
+| `opening_odds` | integer | Opening American-odds price for this selection before line movement (vig on spread/total rows, moneyline price on moneyline rows). |
 | `book` | character | Name of the sportsbook or oddsmaker that provided the betting line. |
 | `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
 | `week` | integer | Game week of the season. |

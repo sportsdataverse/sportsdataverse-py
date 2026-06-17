@@ -29,11 +29,15 @@ def test_table_cell_desc_priority(monkeypatch):
 
 
 def test_residual_columns_have_required_fields():
-    rows = extract.residual_columns()
-    assert isinstance(rows, list) and rows, "expected a non-empty residual work-list"
+    # residual_columns() is empty at full coverage (the goal), so assert the row
+    # SHAPE against iter_schema_columns() — the full column walk is always non-empty
+    # and shares the residual row shape (residual_columns is a filter of it).
+    assert isinstance(extract.residual_columns(), list)
+    rows = extract.iter_schema_columns()
+    assert rows, "expected a non-empty schema-column walk"
     sample = rows[0]
     for k in ("schema", "col", "type", "league", "siblings"):
-        assert k in sample, f"missing {k} in residual row"
+        assert k in sample, f"missing {k} in schema-column row"
 
 
 def test_residual_total_matches_known_baseline():
