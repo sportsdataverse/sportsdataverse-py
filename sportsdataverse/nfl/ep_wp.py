@@ -48,7 +48,14 @@ if TYPE_CHECKING:
 import numpy as np
 import polars as pl
 
-from sportsdataverse.nfl.model_vars import _EP_POINT_VALUES
+from sportsdataverse.nfl.model_vars import (
+    _EP_POINT_VALUES,
+    defense_score_vec,
+    end_change_vec,
+    kickoff_turnovers,
+    kickoff_vec,
+    offense_score_vec,
+)
 
 # ---------------------------------------------------------------------------
 # Feature lists — mirror nflfastR's ep_model_select / wp_*_model_select
@@ -960,3 +967,290 @@ def calculate_xyac(
     if return_as_pandas:
         return result.to_pandas()
     return result
+
+
+# ---------------------------------------------------------------------------
+# EPA derivation (lifted from NFLPlayProcess.__process_epa)
+# ---------------------------------------------------------------------------
+
+#: Columns the EPA derivation reads.  ``calculate_epa`` validates that these
+#: are present and raises a clear ``KeyError`` if the caller hasn't scored the
+#: EP point estimates / classified the plays first.
+_EPA_REQUIRED_COLUMNS: tuple[str, ...] = (
+    "game_id",
+    "type.text",
+    "text",
+    "EP_start",
+    "EP_end",
+    "EP_start_touchback",
+    "change_of_pos_team",
+    "downs_turnover",
+    "kickoff_onside",
+    "scoring_play",
+    "end_of_half",
+    "penalty_in_text",
+)
+
+
+def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
+    """Derive expected points added (EPA) from pre-scored EP point estimates.
+
+    This is the **derivation half** of ``NFLPlayProcess.__process_epa`` lifted
+    into a shared, model-free function so the same nflfastR-faithful EPA logic
+    can be reused by the streaming ``enrich_nfl_pbp`` pipeline and by
+    ``__process_epa`` itself.  It performs **no** model inference — the caller
+    must already have scored the per-play EP point estimates.
+
+    Derivation rules (mirror nflfastR / the original ``__process_epa``):
+
+    * Scoring overlays rewrite ``EP_end`` to the realized point value
+      (offense TD ``+7`` / ``+6.92`` / 2pt variants, made FG ``+3``,
+      defensive scores, extra points, etc.) using the same ``type.text`` /
+      ``text`` classification as ``__process_epa``.
+    * Turnovers (``end_change_vec`` / ``downs_turnover``), kickoff turnovers
+      and recovered onside kicks flip ``EP_end`` to the opponent's
+      perspective (``EP_end * -1``).
+    * ``lag_EP_end`` is the previous play's ``EP_end``; ``EP_between`` flips
+      its sign on a prior-play possession change.
+    * Kickoffs use ``EP_start_touchback`` as ``EP_start``.
+    * ``EPA = EP_end - EP_start`` normally; ``-EP_start`` on a non-scoring
+      end-of-half play; ``0`` on a timeout; ``EP_end - EP_start + EP_between``
+      on a (non-kickoff, non-``Penalty``) penalty-in-text play.
+
+    **Every** ``shift`` is grouped ``.over("game_id")`` so a concatenated
+    multi-game frame never leaks EP across game boundaries — this differs from
+    ``__process_epa`` (which runs one game per instance and therefore needs no
+    grouping).
+
+    Args:
+        df: Play-by-play DataFrame that already carries the EP point estimates
+            under the ESPN-internal names ``EP_start``, ``EP_end`` and
+            ``EP_start_touchback`` (e.g. as produced by the EP-scoring half of
+            ``__process_epa``), plus the play-classification / flag columns:
+            ``game_id``, ``type.text``, ``text``, ``change_of_pos_team``,
+            ``downs_turnover``, ``kickoff_onside``, ``scoring_play``,
+            ``end_of_half`` and ``penalty_in_text``.  See
+            :data:`_EPA_REQUIRED_COLUMNS`.  This function does **not** score EP
+            itself — score it first via the EP feature pipeline (the ``EP_*``
+            triple is the ESPN-internal naming, distinct from
+            :func:`calculate_expected_points`'s lowercase ``ep``).
+
+    Returns:
+        The input frame with the EPA derivation applied.  ``EP_start`` /
+        ``EP_end`` are rewritten in place (overlays, sign flips, touchback),
+        ``EP_between``, ``lag_EP_end`` and ``lag_change_of_pos_team`` are
+        added, ``EPA`` is added, and lowercase nflverse aliases ``ep``
+        (``= EP_end``), ``epa`` (``= EPA``), ``ep_start`` (``= EP_start``) and
+        ``ep_end`` (``= EP_end``) are added for downstream contract parity.
+
+    Raises:
+        KeyError: If any column in :data:`_EPA_REQUIRED_COLUMNS` is absent.
+
+    Example:
+        Derive EPA from a pre-scored frame::
+
+            import polars as pl
+            from sportsdataverse.nfl.ep_wp import calculate_epa
+
+            # `scored` already has EP_start / EP_end / EP_start_touchback
+            out = calculate_epa(scored)
+            print(out.select("game_id", "ep", "epa").head())
+    """
+    missing = [c for c in _EPA_REQUIRED_COLUMNS if c not in df.columns]
+    if missing:
+        raise KeyError(
+            "calculate_epa: input frame is missing required EPA-derivation "
+            f"columns: {missing}.  Score the EP point estimates "
+            "(EP_start / EP_end / EP_start_touchback) and classify the plays "
+            "before calling calculate_epa."
+        )
+
+    play_df = (
+        df.with_columns(
+            # --- Scoring overlays + turnover sign flips on EP_end ---
+            EP_end=pl.when(
+                (pl.col("type.text").str.to_lowercase().str.contains(r"end of game")).or_(
+                    pl.col("type.text").str.to_lowercase().str.contains(r"end of half"),
+                ),
+            )
+            .then(0)
+            # Defensive 2pt Conversion
+            .when(pl.col("type.text").is_in(["Defensive 2pt Conversion"]))
+            .then(-2)
+            # Safeties
+            .when(
+                (pl.col("type.text").is_in(defense_score_vec)).and_(
+                    pl.col("text").str.to_lowercase().str.contains(r"(?i)safety"),
+                ),
+            )
+            .then(-2)
+            # Defense TD + Successful Two-Point Conversion
+            .when(
+                (pl.col("type.text").is_in(defense_score_vec))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
+            )
+            .then(-8)
+            # Defense TD + Failed Two-Point Conversion
+            .when(
+                (pl.col("type.text").is_in(defense_score_vec))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
+            )
+            .then(-6)
+            # Defense TD + Kick/PAT Missed
+            .when(
+                (pl.col("type.text").is_in(defense_score_vec))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
+            )
+            .then(-6)
+            # Defense TD + Kick/PAT Good
+            .when(
+                (pl.col("type.text").is_in(defense_score_vec)).and_(
+                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
+                ),
+            )
+            .then(-7)
+            # Defense TD
+            .when(pl.col("type.text").is_in(defense_score_vec))
+            .then(-6.92)
+            # Offense TD + Failed Two-Point Conversion
+            .when(
+                (pl.col("type.text").is_in(offense_score_vec))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
+            )
+            .then(6)
+            # Offense TD + Successful Two-Point Conversion
+            .when(
+                (pl.col("type.text").is_in(offense_score_vec))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
+            )
+            .then(8)
+            # Offense Made FG
+            .when(
+                (pl.col("type.text").is_in(offense_score_vec))
+                .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)field goal"))
+                .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)good")),
+            )
+            .then(3)
+            # Offense TD + Kick/PAT Missed
+            .when(
+                (pl.col("type.text").is_in(offense_score_vec))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
+                .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
+            )
+            .then(6)
+            # Offense TD + Kick/PAT Good
+            .when(
+                (pl.col("type.text").is_in(offense_score_vec)).and_(
+                    pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
+                ),
+            )
+            .then(7)
+            # Offense TD
+            .when(pl.col("type.text").is_in(offense_score_vec))
+            .then(6.92)
+            # Extra Point Good
+            .when(pl.col("type.text").is_in(["Extra Point Good"]))
+            .then(1)
+            # Extra Point Missed
+            .when(pl.col("type.text").is_in(["Extra Point Missed"]))
+            .then(0)
+            # Two-Point Conversion Good
+            .when(pl.col("type.text").is_in(["Two-Point Conversion Good"]))
+            .then(2)
+            # Two-Point Conversion Missed
+            .when(pl.col("type.text").is_in(["Two-Point Conversion Missed"]))
+            .then(0)
+            # Two Point Pass/Rush Missed (Pre-2014 Data)
+            .when(
+                (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
+                    pl.col("text").str.to_lowercase().str.contains(r"(?i)no good"),
+                ),
+            )
+            .then(0)
+            # Two Point Pass/Rush Good (Pre-2014 Data)
+            .when(
+                (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
+                    pl.col("text").str.to_lowercase().str.contains(r"(?i)no good") == False,
+                ),
+            )
+            .then(2)
+            # Blocked PAT
+            .when(pl.col("type.text").is_in(["Blocked PAT"]))
+            .then(0)
+            # Flips for Turnovers that aren't kickoffs
+            .when(
+                ((pl.col("type.text").is_in(end_change_vec)).or_(pl.col("downs_turnover") == True)).and_(
+                    pl.col("type.text").is_in(kickoff_vec) == False,
+                ),
+            )
+            .then(pl.col("EP_end") * -1)
+            # Flips for Turnovers that are kickoffs
+            .when(pl.col("type.text").is_in(kickoff_turnovers))
+            .then(pl.col("EP_end") * -1)
+            # Onside kicks
+            .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
+            .then(pl.col("EP_end") * -1)
+            .otherwise(pl.col("EP_end")),
+        )
+        .with_columns(
+            # Group EVERY shift by game_id so concatenated frames don't leak
+            # EP across game boundaries.
+            lag_EP_end=pl.col("EP_end").shift(1).over("game_id"),
+            lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1).over("game_id"),
+        )
+        .with_columns(
+            lag_change_of_pos_team=pl.when(pl.col("lag_change_of_pos_team").is_null())
+            .then(False)
+            .otherwise(pl.col("lag_change_of_pos_team")),
+        )
+        .with_columns(
+            EP_between=pl.when(pl.col("lag_change_of_pos_team") == True)
+            .then(pl.col("EP_start") + pl.col("lag_EP_end"))
+            .otherwise(pl.col("EP_start") - pl.col("lag_EP_end")),
+            EP_start=pl.when(
+                (pl.col("type.text").is_in(["Timeout", "End Period"])).and_(
+                    pl.col("lag_change_of_pos_team") == False,
+                ),
+            )
+            .then(pl.col("lag_EP_end"))
+            .otherwise(pl.col("EP_start")),
+        )
+        .with_columns(
+            EP_start=pl.when(pl.col("type.text").is_in(kickoff_vec))
+            .then(pl.col("EP_start_touchback"))
+            .otherwise(pl.col("EP_start")),
+        )
+        .with_columns(
+            EP_end=pl.when(pl.col("type.text").is_in(["Timeout"])).then(pl.col("EP_start")).otherwise(pl.col("EP_end")),
+        )
+        .with_columns(
+            EPA=pl.when(pl.col("type.text").is_in(["Timeout"]))
+            .then(0)
+            .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
+            .then(-1 * pl.col("EP_start"))
+            .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("penalty_in_text") == True))
+            .then(pl.col("EP_end") - pl.col("EP_start"))
+            .when(
+                (pl.col("penalty_in_text") == True)
+                .and_(pl.col("type.text").is_in(["Penalty"]) == False)
+                .and_(pl.col("type.text").is_in(kickoff_vec) == False),
+            )
+            .then(pl.col("EP_end") - pl.col("EP_start") + pl.col("EP_between"))
+            .otherwise(pl.col("EP_end") - pl.col("EP_start")),
+        )
+    )
+
+    # Lowercase nflverse aliases for downstream contract parity.
+    play_df = play_df.with_columns(
+        ep=pl.col("EP_end"),
+        epa=pl.col("EPA"),
+        ep_start=pl.col("EP_start"),
+        ep_end=pl.col("EP_end"),
+    )
+
+    return play_df
