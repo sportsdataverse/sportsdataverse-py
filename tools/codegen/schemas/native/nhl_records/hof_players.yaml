@@ -1,0 +1,24 @@
+schema: hof_players
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: date_inducted
+  type: character
+  description: ''
+- name: induction_cat_id
+  type: integer
+  description: ''
+- name: misc_full_name
+  type: character
+  description: ''
+- name: office_id
+  type: integer
+  description: ''
+- name: official_id
+  type: character
+  description: ''
+- name: player_id
+  type: integer
+  description: ''

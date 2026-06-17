@@ -1,0 +1,80 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "activeCoach": true,
+      "coachId": 1848,
+      "coachName": "Travis Green",
+      "endSeason": 20252026,
+      "games": 526,
+      "losses": 231,
+      "otLosses": 53,
+      "seasons": 8,
+      "startSeason": 20172018,
+      "teamAbbrevs": "VAN, NJD, OTT",
+      "ties": null,
+      "wins": 242
+    },
+    {
+      "id": 2,
+      "activeCoach": true,
+      "coachId": 73,
+      "coachName": "Paul Maurice",
+      "endSeason": 20252026,
+      "games": 2172,
+      "losses": 879,
+      "otLosses": 152,
+      "seasons": 28,
+      "startSeason": 19951996,
+      "teamAbbrevs": "HFD, CAR, TOR, WPG, FLA",
+      "ties": 99,
+      "wins": 1042
+    },
+    {
+      "id": 3,
+      "activeCoach": false,
+      "coachId": 1249,
+      "coachName": "Art Ross",
+      "endSeason": 19441945,
+      "games": 872,
+      "losses": 346,
+      "otLosses": null,
+      "seasons": 19,
+      "startSeason": 19171918,
+      "teamAbbrevs": "MWN, HAM, BOS",
+      "ties": 100,
+      "wins": 426
+    },
+    {
+      "id": 4,
+      "activeCoach": false,
+      "coachId": 12,
+      "coachName": "Brad Shaw",
+      "endSeason": 20242025,
+      "games": 49,
+      "losses": 21,
+      "otLosses": 5,
+      "seasons": 2,
+      "startSeason": 20052006,
+      "teamAbbrevs": "NYI, PHI",
+      "ties": null,
+      "wins": 23
+    },
+    {
+      "id": 5,
+      "activeCoach": false,
+      "coachId": 1765,
+      "coachName": "Todd Reirden",
+      "endSeason": 20192020,
+      "games": 166,
+      "losses": 55,
+      "otLosses": 17,
+      "seasons": 2,
+      "startSeason": 20182019,
+      "teamAbbrevs": "WSH",
+      "ties": null,
+      "wins": 94
+    }
+  ],
+  "total": 403
+}

@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "active": true,
+      "draftPicks": "<p><strong>Goaltenders</strong><br />\r\nCharlie Hodge (MTL)<br />\r\nGary Smith (TOR)</p>\r\n\r\n<p><strong>Skaters</strong><br />\r\nBob Baun (TOR)<br />\r\nRon Boehm (NYR)<br />\r\nWally Boyer (CHI)<br />\r\nLarry Cahan (NYR)<br />\r\nAlain Caron (CHI)<br />\r\nTerry Clancy (TOR)<br />\r\nKent Douglas (TOR)<br />\r\nAut Erickson (TOR)<br />\r\nBilly Harris (DET)<br />\r\nRon Harris (BOS)<br />\r\nBryan Hextall Jr. (NYR)<br />\r\nBill Hicke (NYR)<br />\r\nGary Kilpatrick (CHI)<br />\r\nMike Laughton (TOR)<br />\r\nBob Lemieux (MTL)<br />\r\nJ.P. Parise (MTL)<br />\r\nTracy Pratt (CHI)<br />\r\nJoe Szura (MTL)</p>\r\n",
+      "seasonId": 19671968,
+      "teamId": 46
+    },
+    {
+      "id": 2,
+      "active": true,
+      "draftPicks": "<p><strong>Goaltenders</strong><br />\r\nWayne Rutledge (NYR)<br />\r\nTerry Sawchuk (TOR)</p>\r\n\r\n<p><strong>Skaters</strong><br />\r\nKen Block (NYR)<br />\r\nBryan Campbell (NYR)<br />\r\nMike Corrigan (TOR)<br />\r\nMarc Dufour (NYR)<br />\r\nBill Flett (TOR)<br />\r\nTerry Gray (DET)<br />\r\nBrent Hughes (DET)<br />\r\nHowie&nbsp;Hughes (MTL)<br />\r\nBill Inglis (MTL)<br />\r\nTed Irvine (BOS)<br />\r\nEddie Joyal (TOR)<br />\r\nGord Labossiere (MTL)<br />\r\nJacques Lemieux (MTL)<br />\r\nReal Lemieux (DET)<br />\r\nLowell MacDonald (TOR)<br />\r\nPoul Popiel (BOS)<br />\r\nDoug Robinson (NYR)<br />\r\nBob Wall (DET)</p>\r\n",
+      "seasonId": 19671968,
+      "teamId": 26
+    },
+    {
+      "id": 3,
+      "active": true,
+      "draftPicks": "<p><strong>Goaltenders</strong><br />\r\nGary Bauman (MTL)<br />\r\nCesare Maniago (NYR)</p>\r\n\r\n<p><strong>Skaters</strong><br />\r\nDave Balon (MTL)<br />\r\nBill Collins (NYR)<br />\r\nWayne Connolly (BOS)<br />\r\nRay Cullen (DET)<br />\r\nSandy Fitzpatrick (NYR)<br />\r\nPete Goegan (DET)<br />\r\nBill Goldsworthy (BOS)<br />\r\nMurray Hall (CHI)<br />\r\nLen Lunde (CHI)<br />\r\nParker MacDonald (DET)<br />\r\nAndre Pronovost (DET)<br />\r\nDave Richardson (CHI)<br />\r\nJean-Guy Talbot (MTL)<br />\r\nBilly Taylor Jr. (CHI)<br />\r\nTed Taylor (DET)<br />\r\nMoose Vasko (CHI)<br />\r\nBryan Watson (DET)<br />\r\nBob Woytowich (BOS)</p>\r\n",
+      "seasonId": 19671968,
+      "teamId": 31
+    },
+    {
+      "id": 4,
+      "active": true,
+      "draftPicks": "<p><strong>Goaltenders</strong><br />\r\nDoug Favell (BOS)<br />\r\nBernie Parent (BOS)</p>\r\n\r\n<p><strong>Skaters</strong><br />\r\nLou Angotti (CHI)<br />\r\nTerry Ball (NYR)<br />\r\nDon Blackburn (TOR)<br />\r\nDwight Carruthers (DET)<br />\r\nDick Cherry (BOS)<br />\r\nBob Courcy (MTL)<br />\r\nGary Dornhoefer (BOS)<br />\r\nJean Gauthier (MTL)<br />\r\nPat Hannigan (CHI)<br />\r\nJim Johnson (NYR)<br />\r\nForbes Kennedy (BOS)<br />\r\nJohn Miszuk (CHI)<br />\r\nGarry Peters (MTL)<br />\r\nLeon Rochefort (MTL)<br />\r\nBrit Selby (TOR)<br />\r\nEd Van Impe (CHI)<br />\r\nJoe Watson (BOS)<br />\r\nKeith Wright (BOS)</p>\r\n",
+      "seasonId": 19671968,
+      "teamId": 4
+    },
+    {
+      "id": 5,
+      "active": true,
+      "draftPicks": "<p><strong>Goaltenders</strong><br />\r\nJoe Daley (DET)<br />\r\nRoy Edwards (CHI)</p>\r\n\r\n<p><strong>Skaters</strong><br />\r\nAndy Bathgate (DET)<br />\r\nLeo Boivin (DET)<br />\r\nBill Dea (CHI)<br />\r\nBob Dillabough (BOS)<br />\r\nVal Fonteyne (DET)<br />\r\nJeannot Gilbert (BOS)<br />\r\nLes Hunt (NYR)<br />\r\nEarl Ingarfield (NYR)<br />\r\nLarry Jeffrey (TOR)<br />\r\nAl MacNeil (NYR)<br />\r\nTom McCarthy (MTL)<br />\r\nKeith McCreary (MTL)<br />\r\nAb McDonald (DET)<br />\r\nMel Pearson (CHI)<br />\r\nNoel Price (MTL)<br />\r\nBob Rivard (MTL)<br />\r\nKen Schinkel (NYR)<br />\r\nArt Stratton (CHI)</p>\r\n",
+      "seasonId": 19671968,
+      "teamId": 5
+    }
+  ],
+  "total": 28
+}

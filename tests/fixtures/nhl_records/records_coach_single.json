@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "bio": null,
+      "birthCity": "Sydney",
+      "birthCountry3code": "CAN",
+      "birthDate": "1935-09-27T00:00:00",
+      "birthStateProvinceCode": "NS",
+      "briefDescription": null,
+      "dateOfDeath": null,
+      "deceased": false,
+      "description": null,
+      "featuredImage": null,
+      "firstName": "Al",
+      "fullName": "Al MacNeil",
+      "history": null,
+      "hockeyHofLink": null,
+      "inHockeyHof": false,
+      "inIihfHockeyHof": false,
+      "inUsHockeyHof": false,
+      "instagram": null,
+      "isActive": false,
+      "lastName": "MacNeil",
+      "nationalityCode": "CAN",
+      "playerId": 8447580,
+      "stanleyCup": 1,
+      "teamId": null,
+      "top100PlayerLink": null,
+      "twitter": null
+    }
+  ],
+  "total": 1
+}

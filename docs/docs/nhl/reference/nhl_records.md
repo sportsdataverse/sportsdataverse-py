@@ -20,7 +20,30 @@ List all NHL award / trophy records.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `awarded_posthumously` | logical | Whether the award was given posthumously. |
+| `coach_id` | double | ESPN coach id parsed from the `$ref` URL. |
+| `created_on` | character | Date the trophy record was created. |
+| `detail_summary` | character | Detail summary flag. |
+| `full_name` | character | Player full name. |
+| `general_manager_id` | double | General manager identifier, if applicable. |
+| `image_url` | character | Player headshot URL. |
+| `is_rookie` | logical | Whether the player is a rookie. |
+| `player_id` | double | Unique player identifier. |
+| `player_image_caption` | character | Player image caption flag. |
+| `player_image_url` | character | URL to the player image. |
+| `season_id` | integer | Season identifier. |
+| `status` | character | Status string (e.g. captain markers). |
+| `summary` | character | Record summary string (e.g. "25-15-10"). |
+| `team_id` | integer | Unique team identifier. |
+| `trophy_category_id` | integer | Trophy category identifier. |
+| `trophy_id` | integer | Trophy identifier. |
+| `value` | character | Leader stat numeric value. |
+| `vote_count` | double | Number of votes received. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -71,7 +94,30 @@ Retrieve the trophy winner for a specific season.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `awarded_posthumously` | logical | Whether the award was given posthumously. |
+| `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
+| `created_on` | character | Date the trophy record was created. |
+| `detail_summary` | character | Detail summary flag. |
+| `full_name` | character | Player full name. |
+| `general_manager_id` | integer | General manager identifier, if applicable. |
+| `image_url` | character | Player headshot URL. |
+| `is_rookie` | logical | Whether the player is a rookie. |
+| `player_id` | character | Unique player identifier. |
+| `player_image_caption` | character | Player image caption flag. |
+| `player_image_url` | character | URL to the player image. |
+| `season_id` | integer | Season identifier. |
+| `status` | character | Status string (e.g. captain markers). |
+| `summary` | character | Record summary string (e.g. "25-15-10"). |
+| `team_id` | integer | Unique team identifier. |
+| `trophy_category_id` | integer | Trophy category identifier. |
+| `trophy_id` | integer | Trophy identifier. |
+| `value` | character | Leader stat numeric value. |
+| `vote_count` | integer | Number of votes received. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -150,7 +196,37 @@ Retrieve one coach by their numeric ID.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `bio` | character |  |
+| `birth_city` | character | Birth city. |
+| `birth_country3code` | character | Prospect birth country three-letter code. |
+| `birth_date` | character | Player birth date. |
+| `birth_state_province_code` | character |  |
+| `brief_description` | character | Brief description of the trophy. |
+| `date_of_death` | character | Date of death, if applicable. |
+| `deceased` | logical | Whether the player is deceased. |
+| `description` | character | Full text description of the event. |
+| `featured_image` | character |  |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `history` | character | ESPN's long-form history text for the award. |
+| `hockey_hof_link` | character |  |
+| `in_hockey_hof` | logical | Whether the player is in the Hockey Hall of Fame. |
+| `in_iihf_hockey_hof` | logical |  |
+| `in_us_hockey_hof` | logical | Whether the player is in the US Hockey Hall of Fame. |
+| `instagram` | character |  |
+| `is_active` | logical | Whether the team is active. |
+| `last_name` | character | Player last name. |
+| `nationality_code` | character | Nationality code of the official. |
+| `player_id` | integer | Unique player identifier. |
+| `stanley_cup` | integer |  |
+| `team_id` | character | Unique team identifier. |
+| `top100_player_link` | character |  |
+| `twitter` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -175,7 +251,49 @@ Coach career-records (regular season).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_coach` | logical |  |
+| `coach_name` | character |  |
+| `end_season` | integer |  |
+| `first_name` | character | Player first name. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games` | integer | Games played. |
+| `home_games` | integer | Total home games. |
+| `home_losses` | integer | Losses at home. |
+| `home_ot_losses` | double | Home overtime losses. |
+| `home_ties` | double | Ties at home. |
+| `home_win_pctg` | double |  |
+| `home_wins` | integer | Wins at home. |
+| `jack_adams` | integer |  |
+| `last_coached_date` | character |  |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `losses_in_ot` | integer |  |
+| `losses_in_ot_plus_shootout` | integer |  |
+| `losses_in_shootout` | double |  |
+| `ot_losses` | double | Overtime losses. |
+| `road_games` | integer |  |
+| `road_losses` | integer | Losses on the road. |
+| `road_ot_losses` | double | Road overtime losses. |
+| `road_ties` | double | Ties on the road. |
+| `road_win_pctg` | double |  |
+| `road_wins` | integer | Wins on the road. |
+| `seasons` | integer |  |
+| `stanley_cup_final_appearances` | integer |  |
+| `stanley_cups` | integer |  |
+| `start_season` | integer |  |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `ties` | double | Total ties. |
+| `ties_in_ot` | integer |  |
+| `win_pctg` | double |  |
+| `wins` | integer | Wins. |
+| `wins_in_ot` | integer |  |
+| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_shootout` | double | Wins in shootout. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -199,7 +317,23 @@ Coach career records inclusive of regular season + playoffs.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_coach` | logical |  |
+| `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
+| `coach_name` | character |  |
+| `end_season` | integer |  |
+| `games` | integer | Games played. |
+| `losses` | integer | Losses. |
+| `ot_losses` | double | Overtime losses. |
+| `seasons` | integer |  |
+| `start_season` | integer |  |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `ties` | double | Total ties. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -224,7 +358,55 @@ Coach records scoped to individual franchise stints.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_coach` | logical |  |
+| `coach_name` | character |  |
+| `end_season` | integer |  |
+| `first_coached_date` | character |  |
+| `first_name` | character | Player first name. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `franchise_name` | character | Franchise name. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games` | integer | Games played. |
+| `home_games` | integer | Total home games. |
+| `home_losses` | integer | Losses at home. |
+| `home_ot_losses` | double | Home overtime losses. |
+| `home_ties` | double | Ties at home. |
+| `home_win_pctg` | double |  |
+| `home_wins` | integer | Wins at home. |
+| `jack_adams` | integer |  |
+| `last_coached_date` | character |  |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `losses_in_ot` | integer |  |
+| `losses_in_ot_plus_shootout` | integer |  |
+| `losses_in_shootout` | double |  |
+| `ot_losses` | double | Overtime losses. |
+| `point_pctg` | double | Points percentage. |
+| `points` | integer | Total points (goals + assists). |
+| `road_games` | integer |  |
+| `road_losses` | integer | Losses on the road. |
+| `road_ot_losses` | double | Road overtime losses. |
+| `road_ties` | double | Ties on the road. |
+| `road_win_pctg` | double |  |
+| `road_wins` | integer | Wins on the road. |
+| `seasons` | integer |  |
+| `stanley_cup_final_appearances` | integer |  |
+| `stanley_cups` | integer |  |
+| `start_season` | integer |  |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_name` | character | Team name. |
+| `ties` | double | Total ties. |
+| `ties_in_ot` | integer |  |
+| `win_pctg` | double |  |
+| `wins` | integer | Wins. |
+| `wins_in_ot` | integer |  |
+| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_shootout` | double | Wins in shootout. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -248,7 +430,21 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_coach` | logical |  |
+| `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
+| `coach_name` | character |  |
+| `franchise_id` | double | Unique franchise identifier. |
+| `franchise_name` | character | Franchise name. |
+| `longest_streak` | integer |  |
+| `longest_streak_description` | character |  |
+| `seasons_won` | character |  |
+| `stanley_cups` | integer |  |
+| `team_abbrevs` | character | Team abbreviation(s). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -307,7 +503,23 @@ Franchise detail records (extended metadata per franchise).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active` | logical | Whether athlete is currently active. |
+| `captain_history` | character | Franchise captain history text. |
+| `coaching_history` | character | Franchise coaching history text. |
+| `date_awarded` | character | Date the franchise was awarded. |
+| `directory_url` | character | Franchise directory URL. |
+| `first_season_id` | integer | Season identifier of the first season. |
+| `general_manager_history` | character | Franchise general manager history text. |
+| `hero_image_url` | character | Franchise hero image URL. |
+| `most_recent_team_id` | integer | Most recent team identifier. |
+| `retired_numbers_summary` | character | Summary of retired jersey numbers. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_full_name` | character | Full team name. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -396,7 +608,48 @@ Season-by-season results for each franchise.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `conference_abbrev` | character | Conference abbreviation. |
+| `conference_name` | character | Conference name. |
+| `conference_sequence` | integer | Team's seeding position within the conference. |
+| `decision` | character | Goalie decision (W/L/O). |
+| `division_abbrev` | character | Division abbreviation. |
+| `division_name` | character | Division name. |
+| `division_sequence` | integer | Team's seeding position within the division. |
+| `final_playoff_round` | integer | Final playoff round reached. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games_played` | integer | Games played. |
+| `goals` | integer | Goals scored. |
+| `goals_against` | integer | Goals against. |
+| `home_losses` | integer | Losses at home. |
+| `home_overtime_losses` | character | Overtime losses at home. |
+| `home_ties` | integer | Ties at home. |
+| `home_wins` | integer | Wins at home. |
+| `in_playoffs` | logical | Whether the season reached the playoffs. |
+| `league_sequence` | integer | Team's seeding position within the league. |
+| `losses` | integer | Losses. |
+| `overtime_losses` | character | Total overtime losses. |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `playoff_round` | double | Playoff round identifier. |
+| `points` | integer | Total points (goals + assists). |
+| `road_losses` | integer | Losses on the road. |
+| `road_overtime_losses` | character | Overtime losses on the road. |
+| `road_ties` | integer | Ties on the road. |
+| `road_wins` | integer | Wins on the road. |
+| `season_id` | integer | Season identifier. |
+| `series_abbrev` | character | Playoff series abbreviation. |
+| `series_title` | character | Playoff series title. |
+| `shutouts` | integer | Shutouts recorded. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `ties` | integer | Total ties. |
+| `tri_code` | character | Team three-letter code. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -420,7 +673,18 @@ Franchise playoff appearance counts and streak information.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `first_season_id` | integer | Season identifier of the first season. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `franchise_name` | character | Franchise name. |
+| `playoff_seasons` | integer | Number of playoff seasons. |
+| `stanley_cup_appearances` | integer | Number of Stanley Cup Final appearances. |
+| `stanley_cup_wins` | integer | Number of Stanley Cup championships. |
+| `years` | integer | Number of years the franchise existed. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -444,7 +708,47 @@ League-wide franchise totals (all-time aggregate per franchise).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_franchise` | integer | Indicator of whether the franchise is active. |
+| `cups` | integer | Number of Stanley Cup championships. |
+| `first_season_id` | integer | Season identifier of the first season. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `game_win_pctg` | double | Game-winning percentage. |
+| `games_played` | integer | Games played. |
+| `goals_against` | integer | Goals against. |
+| `goals_for` | integer | Goals for. |
+| `home_losses` | integer | Losses at home. |
+| `home_overtime_losses` | double | Overtime losses at home. |
+| `home_ties` | double | Ties at home. |
+| `home_wins` | integer | Wins at home. |
+| `last_season_id` | double | Season ID of the franchise's last season. |
+| `losses` | integer | Losses. |
+| `overtime_losses` | double | Total overtime losses. |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `playoff_seasons` | double | Number of playoff seasons. |
+| `point_pctg` | double | Points percentage. |
+| `points` | integer | Total points (goals + assists). |
+| `road_losses` | integer | Losses on the road. |
+| `road_overtime_losses` | double | Overtime losses on the road. |
+| `road_ties` | double | Ties on the road. |
+| `road_wins` | integer | Wins on the road. |
+| `series_losses` | double | Playoff series losses. |
+| `series_played` | double | Playoff series played. |
+| `series_win_pctg` | double | Playoff series win percentage. |
+| `series_wins` | double | Playoff series wins. |
+| `shootout_losses` | integer | Shootout losses. |
+| `shootout_wins` | integer | Shootout wins. |
+| `shutouts` | integer | Shutouts recorded. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `ties` | double | Total ties. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -468,7 +772,47 @@ All-time head-to-head records between every franchise pairing.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_franchise` | integer | Indicator of whether the franchise is active. |
+| `active_opponent_franchise` | integer |  |
+| `franchise_name` | character | Franchise name. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `home_games_played` | integer |  |
+| `home_goals_against` | double |  |
+| `home_goals_for` | double |  |
+| `home_last_meeting_season_id` | integer |  |
+| `home_losses` | integer | Losses at home. |
+| `home_ot_losses` | integer | Home overtime losses. |
+| `home_points` | integer | Home team total points scored in the game so far. |
+| `home_ties` | integer | Ties at home. |
+| `home_wins` | integer | Wins at home. |
+| `opponent_franchise_id` | integer |  |
+| `opponent_franchise_name` | character |  |
+| `opponent_team_id` | integer | Opponent team identifier. |
+| `road_games_played` | integer |  |
+| `road_goals_against` | integer |  |
+| `road_goals_for` | integer |  |
+| `road_last_meeting_season_id` | integer |  |
+| `road_losses` | integer | Losses on the road. |
+| `road_ot_losses` | integer | Road overtime losses. |
+| `road_points` | integer |  |
+| `road_ties` | integer | Ties on the road. |
+| `road_wins` | integer | Wins on the road. |
+| `team_franchise_id` | integer | Team franchise identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `total_games_played` | integer |  |
+| `total_goals_against` | integer |  |
+| `total_goals_for` | integer |  |
+| `total_last_meeting_season_id` | integer |  |
+| `total_losses` | integer | Total losses to date (goalie). |
+| `total_ot_losses` | integer |  |
+| `total_points` | integer |  |
+| `total_ties` | integer | Total ties. |
+| `total_wins` | integer | Total wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -540,7 +884,24 @@ Skaters with the most consecutive 100-point seasons.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `active_streak` | logical | Indicator of whether the streak is active. |
+| `consecutive100_point_seasons` | integer |  |
+| `first_name` | character | Player first name. |
+| `franchise_id` | double | Unique franchise identifier. |
+| `last_name` | character | Player last name. |
+| `player_id` | integer | Unique player identifier. |
+| `position_code` | character | Player position code. |
+| `seasons_played` | integer | Number of seasons played. |
+| `streak_end_season` | integer |  |
+| `streak_start_season` | integer |  |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `team_names` | character | Team names. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -564,7 +925,47 @@ Goaltender career statistics (regular season).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `first_name` | character | Player first name. |
+| `first_season_for_game_type` | integer | First season ID for the game type. |
+| `franchise_id` | double | Unique franchise identifier. |
+| `game_seven_games_played` | character | Game seven games played. |
+| `game_seven_losses` | character | Game seven losses. |
+| `game_seven_wins` | character | Game seven wins. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games_played` | integer | Games played. |
+| `goals_against` | integer | Goals against. |
+| `goals_against_average` | double | Goals against average. |
+| `last_name` | character | Player last name. |
+| `last_season_for_game_type` | integer | Last season ID for the game type. |
+| `losses` | integer | Losses. |
+| `overtime_games_played` | integer | Overtime games played. |
+| `overtime_goals_against` | integer | Overtime goals against. |
+| `overtime_goals_against_average` | character | Overtime goals against average. |
+| `overtime_losses` | character | Total overtime losses. |
+| `overtime_save_pctg` | double | Overtime save percentage. |
+| `overtime_shots_against` | integer | Overtime shots against. |
+| `overtime_ties` | integer | Overtime ties. |
+| `overtime_time_on_ice` | double | Overtime time on ice (seconds). |
+| `overtime_wins` | integer | Overtime wins. |
+| `player_id` | integer | Unique player identifier. |
+| `position_code` | character | Player position code. |
+| `save_pctg` | double | Save percentage. |
+| `saves` | integer | Saves made. |
+| `seasons_played` | integer | Number of seasons played. |
+| `shots_against` | integer | Shots faced. |
+| `shutouts` | integer | Shutouts recorded. |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `team_names` | character | Team names. |
+| `ties` | integer | Total ties. |
+| `time_on_ice` | integer | Time on ice in seconds. |
+| `time_on_ice_min_sec` | character | Total time on ice (MM:SS). |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -588,7 +989,32 @@ Goaltender career stats inclusive of regular season and playoffs.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | integer | Indicator of whether the player is active. |
+| `first_name` | character | Player first name. |
+| `franchise_id` | double | Unique franchise identifier. |
+| `games_played` | integer | Games played. |
+| `goals_against` | integer | Goals against. |
+| `goals_against_average` | double | Goals against average. |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `overtime_losses` | character | Total overtime losses. |
+| `player_id` | integer | Unique player identifier. |
+| `position_code` | character | Player position code. |
+| `save_pctg` | double | Save percentage. |
+| `saves` | integer | Saves made. |
+| `shots_against` | integer | Shots faced. |
+| `shutouts` | integer | Shutouts recorded. |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `team_names` | character | Team names. |
+| `ties` | integer | Total ties. |
+| `time_on_ice` | integer | Time on ice in seconds. |
+| `time_on_ice_min_sec` | character | Total time on ice (MM:SS). |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -612,7 +1038,44 @@ Goaltender single-season statistics.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `first_name` | character | Player first name. |
+| `franchise_id` | double | Unique franchise identifier. |
+| `game_seven_games_played` | character | Game seven games played. |
+| `game_seven_losses` | character | Game seven losses. |
+| `game_seven_wins` | character | Game seven wins. |
+| `game_type` | integer | Game type the row belongs to. |
+| `games_played` | integer | Games played. |
+| `games_started` | integer | Games started (goalies). |
+| `goals_against` | integer | Goals against. |
+| `goals_against_average` | double | Goals against average. |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `number_of_games_in_season` | integer | Number of games in the season. |
+| `overtime_games_played` | integer | Overtime games played. |
+| `overtime_goals_against` | integer | Overtime goals against. |
+| `overtime_losses` | character | Total overtime losses. |
+| `overtime_ties` | integer | Overtime ties. |
+| `overtime_wins` | integer | Overtime wins. |
+| `player_id` | integer | Unique player identifier. |
+| `position_code` | character | Player position code. |
+| `rookie_flag` | logical | Indicator of whether the player was a rookie. |
+| `save_pctg` | double | Save percentage. |
+| `saves` | integer | Saves made. |
+| `season_id` | integer | Season identifier. |
+| `shots_against` | integer | Shots faced. |
+| `shutouts` | integer | Shutouts recorded. |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `team_names` | character | Team names. |
+| `ties` | integer | Total ties. |
+| `time_on_ice` | integer | Time on ice in seconds. |
+| `time_on_ice_min_sec` | character | Total time on ice (MM:SS). |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -636,7 +1099,26 @@ Goaltenders with the longest consecutive-win streaks.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `active_streak` | logical | Indicator of whether the streak is active. |
+| `end_date` | character | Season end date. |
+| `first_name` | character | Player first name. |
+| `franchise_id` | double | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `last_name` | character | Player last name. |
+| `player_id` | integer | Unique player identifier. |
+| `rookie` | logical | Whether the player is a rookie. |
+| `season_id` | integer | Season identifier. |
+| `start_date` | character | Season start date. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `win_streak` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -660,7 +1142,27 @@ Goaltenders with the longest consecutive-shutout streaks.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `active_streak` | logical | Indicator of whether the streak is active. |
+| `duration_min_sec` | character | Streak duration (MM:SS). |
+| `duration_seconds` | integer | Streak duration in seconds. |
+| `end_date` | character | Season end date. |
+| `first_name` | character | Player first name. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `last_name` | character | Player last name. |
+| `player_id` | integer | Unique player identifier. |
+| `saves` | character | Saves made. |
+| `season_id` | integer | Season identifier. |
+| `start_date` | character | Season start date. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -684,7 +1186,22 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `first_name` | character | Player first name. |
+| `forty_win_seasons` | integer |  |
+| `franchise_id` | double | Unique franchise identifier. |
+| `last_name` | character | Player last name. |
+| `player_id` | integer | Unique player identifier. |
+| `seasons_played` | integer | Number of seasons played. |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `team_names` | character | Team names. |
+| `thirty_win_seasons` | integer |  |
+| `twenty_win_seasons` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -708,7 +1225,23 @@ Goaltender consecutive playoff-win streaks.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `active_streak` | logical | Indicator of whether the streak is active. |
+| `consecutive_playoff_seasons` | integer |  |
+| `end_season` | integer |  |
+| `first_name` | character | Player first name. |
+| `franchise_id` | double | Unique franchise identifier. |
+| `last_name` | character | Player last name. |
+| `player_id` | integer | Unique player identifier. |
+| `playoff_seasons` | integer | Number of playoff seasons. |
+| `stanley_cup_wins` | integer | Number of Stanley Cup championships. |
+| `start_season` | integer |  |
+| `team_abbrevs` | character | Team abbreviation(s). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -732,7 +1265,25 @@ Goaltender longest undefeated streaks (wins + ties).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_player` | logical | Indicator of whether the player is active. |
+| `active_streak` | logical | Indicator of whether the streak is active. |
+| `end_date` | character | Season end date. |
+| `first_name` | character | Player first name. |
+| `franchise_id` | double | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `last_name` | character | Player last name. |
+| `player_id` | integer | Unique player identifier. |
+| `season_id` | integer | Season identifier. |
+| `start_date` | character | Season start date. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `undefeated_streak` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -816,7 +1367,41 @@ All draft picks made by a single team.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `age_in_days` | integer | Player age in days. |
+| `age_in_days_for_year` | integer | Player age in days for the draft year. |
+| `age_in_years` | integer | Player age in years. |
+| `amateur_club_name` | character | Amateur club the player played for. |
+| `amateur_league` | character | Amateur league the player played in. |
+| `birth_date` | character | Player birth date. |
+| `birth_place` | character | Player birth place. |
+| `country_code` | character | Player country code. |
+| `cs_player_id` | character | Central Scouting player identifier. |
+| `draft_date` | character | Date the player was drafted. |
+| `draft_master_id` | integer | Draft master record identifier. |
+| `draft_year` | integer | Draft year the lottery applies to. |
+| `drafted_by_team_id` | integer | Identifier of the drafting team. |
+| `first_name` | character | Player first name. |
+| `height` | double | Player height in inches. |
+| `last_name` | character | Player last name. |
+| `notes` | character | Notes flag for the pick. |
+| `overall_pick_number` | integer | Overall pick number in the draft. |
+| `pick_in_round` | integer | Pick number within the round. |
+| `player_id` | character | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `position` | character | Player position. |
+| `removed_outright` | character | Removed-outright indicator. |
+| `removed_outright_why` | character | Reason the pick was removed outright. |
+| `round_number` | integer | Draft round number. |
+| `shoots_catches` | character | Handedness (shoots/catches). |
+| `supplemental_draft` | character | Supplemental draft indicator. |
+| `team_pick_history` | character | History of the team's picks at this slot. |
+| `tri_code` | character | Team three-letter code. |
+| `weight` | double | Player weight in pounds. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -841,7 +1426,38 @@ Draft prospect records.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `birth_city` | character | Birth city. |
+| `birth_country3code` | character | Prospect birth country three-letter code. |
+| `birth_date` | character | Player birth date. |
+| `birth_state_prov_code` | character | Prospect birth state/province code. |
+| `category_id` | integer | Prospect category identifier. |
+| `created_on` | character | Date the trophy record was created. |
+| `cs_player_id` | integer | Central Scouting player identifier. |
+| `draft_status_code` | character | Draft eligibility status code. |
+| `ep_player_id` | integer | EliteProspects player identifier. |
+| `first_name` | character | Player first name. |
+| `headshot_id` | integer | Headshot image identifier. |
+| `height` | integer | Player height in inches. |
+| `hometown` | character | Prospect hometown. |
+| `last_club_name` | character | Most recent club name. |
+| `last_league_abbr` | character | Most recent league abbreviation. |
+| `last_name` | character | Player last name. |
+| `nationality_code` | character | Nationality code of the official. |
+| `news_articles` | character | Associated news articles. |
+| `playerid` | integer | Unique player identifier. |
+| `position_desc` | character | Player position description. |
+| `profile` | character | Prospect profile text. |
+| `quotes` | character | Quotes about the prospect. |
+| `scouting_report` | character | Scouting report text. |
+| `shoots_catches` | character | Handedness (shoots/catches). |
+| `stats_text` | character | Statistical summary text. |
+| `video` | character | Associated video content. |
+| `weight` | integer | Player weight in pounds. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -865,7 +1481,15 @@ Draft lottery odds (current year or filtered by season).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `draft_year` | integer | Draft year the lottery applies to. |
+| `format_content` | character | Description of the lottery format. |
+| `odds_content` | character | Description of the lottery odds. |
+| `result_notes` | character | Notes on the lottery results. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -889,7 +1513,15 @@ Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active` | logical | Whether athlete is currently active. |
+| `draft_picks` | character |  |
+| `season_id` | integer | Season identifier. |
+| `team_id` | integer | Unique team identifier. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -913,7 +1545,31 @@ All-Star Game career statistics for skaters.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `all_star_team_id` | integer |  |
+| `assists` | integer | Assists. |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `games_played` | integer | Games played. |
+| `goals` | integer | Goals scored. |
+| `is_active` | logical | Whether the team is active. |
+| `is_rookie` | logical | Whether the player is a rookie. |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `nhl_team_id` | integer |  |
+| `penalties` | double | Penalty count. |
+| `penalty_minutes` | double | Penalty minutes. |
+| `player_id` | integer | Unique player identifier. |
+| `points` | integer | Total points (goals + assists). |
+| `position` | character | Player position. |
+| `power_play_goals` | integer | Power-play goals. |
+| `season_id` | integer | Season identifier. |
+| `short_handed_goals` | integer | Short-handed goals. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -937,7 +1593,32 @@ All-Star Game career statistics for goaltenders.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `all_star_team_id` | integer |  |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `games_played` | integer | Games played. |
+| `goals_against` | integer | Goals against. |
+| `goals_against_average` | double | Goals against average. |
+| `is_active` | logical | Whether the team is active. |
+| `is_rookie` | logical | Whether the player is a rookie. |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `nhl_team_id` | integer |  |
+| `ot_losses` | integer | Overtime losses. |
+| `player_id` | integer | Unique player identifier. |
+| `save_percentage` | double | Save percentage (goalies). |
+| `season_id` | integer | Season identifier. |
+| `shots_against` | integer | Shots faced. |
+| `team_losses` | integer | Team losses. |
+| `team_wins` | integer | Team wins. |
+| `ties` | integer | Total ties. |
+| `time_on_ice` | integer | Time on ice in seconds. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -961,7 +1642,23 @@ All-Star Game career records for coaches.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `all_star_team_id` | integer |  |
+| `coach_id` | integer | ESPN coach id parsed from the `$ref` URL. |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `games_coached` | integer |  |
+| `is_active` | logical | Whether the team is active. |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `ot_losses` | integer | Overtime losses. |
+| `season_id` | integer | Season identifier. |
+| `ties` | integer | Total ties. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -985,7 +1682,39 @@ All-Star Game single-game scoring records for skaters.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `all_star_team_id` | integer |  |
+| `all_star_team_score` | integer |  |
+| `arena_name` | character | Arena name. |
+| `assists` | integer | Assists. |
+| `city` | character | City where the venue is located. |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `game_date` | character | Game date. |
+| `game_id` | integer | Unique game identifier. |
+| `game_name` | character | Full event name. |
+| `goals` | integer | Goals scored. |
+| `home_road` | character |  |
+| `is_active` | logical | Whether the team is active. |
+| `is_rookie` | logical | Whether the player is a rookie. |
+| `last_name` | character | Player last name. |
+| `mvp` | character | Mvp. |
+| `nhl_team_id` | integer |  |
+| `opponent_score` | integer | Opponent score. |
+| `opponent_team_id` | integer | Opponent team identifier. |
+| `penalties` | double | Penalty count. |
+| `penalty_minutes` | double | Penalty minutes. |
+| `player_id` | integer | Unique player identifier. |
+| `points` | integer | Total points (goals + assists). |
+| `position` | character | Player position. |
+| `power_play_goals` | integer | Power-play goals. |
+| `season_id` | integer | Season identifier. |
+| `short_handed_goals` | integer | Short-handed goals. |
+| `state_province_code` | character | State or province code of the official. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1009,7 +1738,36 @@ All-Star Game single-game stats for goaltenders.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `all_star_team_id` | integer |  |
+| `all_star_team_score` | integer |  |
+| `arena_name` | character | Arena name. |
+| `city` | character | City where the venue is located. |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `game_date` | character | Game date. |
+| `game_id` | integer | Unique game identifier. |
+| `game_name` | character | Full event name. |
+| `goals_against` | integer | Goals against. |
+| `home_road` | character |  |
+| `is_active` | logical | Whether the team is active. |
+| `is_rookie` | logical | Whether the player is a rookie. |
+| `last_name` | character | Player last name. |
+| `mvp` | character | Mvp. |
+| `nhl_team_id` | integer |  |
+| `opponent_score` | integer | Opponent score. |
+| `opponent_team_id` | integer | Opponent team identifier. |
+| `player_id` | integer | Unique player identifier. |
+| `save_percentage` | double | Save percentage (goalies). |
+| `saves` | integer | Saves made. |
+| `season_id` | integer | Season identifier. |
+| `shots_against` | integer | Shots faced. |
+| `state_province_code` | character | State or province code of the official. |
+| `time_on_ice` | integer | Time on ice in seconds. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1065,7 +1823,17 @@ Hockey Hall of Fame player inductees.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `date_inducted` | character | Date the inductee entered the Hall of Fame. |
+| `induction_cat_id` | integer | Induction category identifier. |
+| `misc_full_name` | character | Full name of the inductee. |
+| `office_id` | integer | Office/category identifier. |
+| `official_id` | character | ESPN official id (echoed from arg). |
+| `player_id` | integer | Unique player identifier. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1090,7 +1858,17 @@ Hall of Fame players for a specific induction office/category.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `date_inducted` | character | Date the inductee entered the Hall of Fame. |
+| `induction_cat_id` | integer | Induction category identifier. |
+| `misc_full_name` | character | Full name of the inductee. |
+| `office_id` | integer | Office/category identifier. |
+| `official_id` | character | ESPN official id (echoed from arg). |
+| `player_id` | character | Unique player identifier. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1115,7 +1893,50 @@ General Manager career records.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_gm` | logical |  |
+| `end_date` | character | Season end date. |
+| `end_season_id` | integer |  |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games` | integer | Games played. |
+| `gm_of_the_year` | integer |  |
+| `home_games` | integer | Total home games. |
+| `home_losses` | integer | Losses at home. |
+| `home_ot_losses` | double | Home overtime losses. |
+| `home_ties` | double | Ties at home. |
+| `home_wins` | integer | Wins at home. |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `losses_in_ot` | integer |  |
+| `losses_in_ot_plus_shootout` | integer |  |
+| `losses_in_shootout` | double |  |
+| `overtime_losses` | integer | Total overtime losses. |
+| `point_pctg` | double | Points percentage. |
+| `points` | integer | Total points (goals + assists). |
+| `road_games` | integer |  |
+| `road_losses` | integer | Losses on the road. |
+| `road_ot_losses` | double | Road overtime losses. |
+| `road_ties` | double | Ties on the road. |
+| `road_wins` | integer | Wins on the road. |
+| `seasons` | integer |  |
+| `stanley_cup_final_appearances` | integer |  |
+| `stanley_cups` | integer |  |
+| `start_date` | character | Season start date. |
+| `start_season_id` | integer |  |
+| `team_abbrevs` | character | Team abbreviation(s). |
+| `ties` | integer | Total ties. |
+| `ties_in_ot` | integer |  |
+| `win_pctg` | double |  |
+| `wins` | integer | Wins. |
+| `wins_in_ot` | integer |  |
+| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_shootout` | double | Wins in shootout. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1139,7 +1960,53 @@ General Manager records scoped to franchise stints.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `active_gm` | logical |  |
+| `end_date` | character | Season end date. |
+| `end_season_id` | integer |  |
+| `first_name` | character | Player first name. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `franchise_name` | character | Franchise name. |
+| `full_name` | character | Player full name. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games` | integer | Games played. |
+| `gm_of_the_year` | integer |  |
+| `home_games` | integer | Total home games. |
+| `home_losses` | integer | Losses at home. |
+| `home_ot_losses` | double | Home overtime losses. |
+| `home_ties` | double | Ties at home. |
+| `home_wins` | integer | Wins at home. |
+| `last_name` | character | Player last name. |
+| `losses` | integer | Losses. |
+| `losses_in_ot` | integer |  |
+| `losses_in_ot_plus_shootout` | integer |  |
+| `losses_in_shootout` | double |  |
+| `overtime_losses` | integer | Total overtime losses. |
+| `point_pctg` | double | Points percentage. |
+| `points` | integer | Total points (goals + assists). |
+| `road_games` | integer |  |
+| `road_losses` | integer | Losses on the road. |
+| `road_ot_losses` | double | Road overtime losses. |
+| `road_ties` | double | Ties on the road. |
+| `road_wins` | integer | Wins on the road. |
+| `seasons` | integer |  |
+| `stanley_cup_final_appearances` | integer |  |
+| `stanley_cups` | integer |  |
+| `start_date` | character | Season start date. |
+| `start_season_id` | integer |  |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `ties` | integer | Total ties. |
+| `ties_in_ot` | integer |  |
+| `win_pctg` | double |  |
+| `wins` | integer | Wins. |
+| `wins_in_ot` | integer |  |
+| `wins_in_ot_plus_shootout` | integer |  |
+| `wins_in_shootout` | double | Wins in shootout. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1163,7 +2030,27 @@ League-wide home-team win/loss record by season.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games_played` | integer | Games played. |
+| `goals` | integer | Goals scored. |
+| `goals_against` | integer | Goals against. |
+| `goals_against_per_game` | double | Goals against per game. |
+| `goals_per_game` | double |  |
+| `losses` | integer | Losses. |
+| `overtime_losses` | double | Total overtime losses. |
+| `point_pctg` | double | Points percentage. |
+| `points` | integer | Total points (goals + assists). |
+| `season_id` | integer | Season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `ties` | double | Total ties. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1187,7 +2074,27 @@ League-wide away-team win/loss record by season.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `franchise_id` | integer | Unique franchise identifier. |
+| `game_type_id` | integer | Game type identifier (regular/playoffs). |
+| `games_played` | integer | Games played. |
+| `goals` | integer | Goals scored. |
+| `goals_against` | integer | Goals against. |
+| `goals_against_per_game` | double | Goals against per game. |
+| `goals_per_game` | double |  |
+| `losses` | integer | Losses. |
+| `overtime_losses` | double | Total overtime losses. |
+| `point_pctg` | double | Points percentage. |
+| `points` | integer | Total points (goals + assists). |
+| `season_id` | integer | Season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Team name. |
+| `ties` | double | Total ties. |
+| `wins` | integer | Wins. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example

@@ -1,0 +1,42 @@
+schema: coach_career_with_playoffs
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: ''
+- name: active_coach
+  type: logical
+  description: ''
+- name: coach_id
+  type: integer
+  description: ''
+- name: coach_name
+  type: character
+  description: ''
+- name: end_season
+  type: integer
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: losses
+  type: integer
+  description: ''
+- name: ot_losses
+  type: double
+  description: ''
+- name: seasons
+  type: integer
+  description: ''
+- name: start_season
+  type: integer
+  description: ''
+- name: team_abbrevs
+  type: character
+  description: ''
+- name: ties
+  type: double
+  description: ''
+- name: wins
+  type: integer
+  description: ''

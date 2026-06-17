@@ -1,0 +1,70 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "activeCoach": false,
+      "coachId": 71,
+      "coachName": "Pat Burns",
+      "franchiseId": null,
+      "franchiseName": null,
+      "longestStreak": 1,
+      "longestStreakDescription": "",
+      "seasonsWon": "2003 (NJD)",
+      "stanleyCups": 1,
+      "teamAbbrevs": "NJD"
+    },
+    {
+      "id": 2,
+      "activeCoach": false,
+      "coachId": 1231,
+      "coachName": "Joe Primeau",
+      "franchiseId": 5,
+      "franchiseName": "Toronto Maple Leafs",
+      "longestStreak": 1,
+      "longestStreakDescription": "",
+      "seasonsWon": "1951 (TOR)",
+      "stanleyCups": 1,
+      "teamAbbrevs": null
+    },
+    {
+      "id": 3,
+      "activeCoach": false,
+      "coachId": 103,
+      "coachName": "Al Arbour",
+      "franchiseId": null,
+      "franchiseName": null,
+      "longestStreak": 4,
+      "longestStreakDescription": "1979-80 - 1982-83",
+      "seasonsWon": "1980 (NYI), 1981 (NYI), 1982 (NYI), 1983 (NYI)",
+      "stanleyCups": 4,
+      "teamAbbrevs": "NYI"
+    },
+    {
+      "id": 4,
+      "activeCoach": false,
+      "coachId": 1220,
+      "coachName": "Jean Perron",
+      "franchiseId": 1,
+      "franchiseName": "Montr\u00e9al Canadiens",
+      "longestStreak": 1,
+      "longestStreakDescription": "",
+      "seasonsWon": "1986 (MTL)",
+      "stanleyCups": 1,
+      "teamAbbrevs": null
+    },
+    {
+      "id": 5,
+      "activeCoach": false,
+      "coachId": 54,
+      "coachName": "Ken Hitchcock",
+      "franchiseId": null,
+      "franchiseName": null,
+      "longestStreak": 1,
+      "longestStreakDescription": "",
+      "seasonsWon": "1999 (DAL)",
+      "stanleyCups": 1,
+      "teamAbbrevs": "DAL"
+    }
+  ],
+  "total": 121
+}

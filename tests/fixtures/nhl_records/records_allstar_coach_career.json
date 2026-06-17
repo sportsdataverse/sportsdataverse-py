@@ -1,0 +1,80 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "allStarTeamId": 7428,
+      "coachId": 1001,
+      "firstName": "Sid",
+      "fullName": "Sid Abel",
+      "gamesCoached": 1,
+      "isActive": false,
+      "lastName": "Abel",
+      "losses": 0,
+      "otLosses": 0,
+      "seasonId": 19641965,
+      "ties": 0,
+      "wins": 1
+    },
+    {
+      "id": 2,
+      "allStarTeamId": 98,
+      "coachId": 76,
+      "firstName": "Randy",
+      "fullName": "Randy Carlyle",
+      "gamesCoached": 1,
+      "isActive": false,
+      "lastName": "Carlyle",
+      "losses": 0,
+      "otLosses": 0,
+      "seasonId": 20062007,
+      "ties": 0,
+      "wins": 1
+    },
+    {
+      "id": 3,
+      "allStarTeamId": 16,
+      "coachId": 1223,
+      "firstName": "Rudy",
+      "fullName": "Rudy Pilous",
+      "gamesCoached": 1,
+      "isActive": false,
+      "lastName": "Pilous",
+      "losses": 1,
+      "otLosses": 0,
+      "seasonId": 19611962,
+      "ties": 0,
+      "wins": 0
+    },
+    {
+      "id": 4,
+      "allStarTeamId": 89,
+      "coachId": 1845,
+      "firstName": "Jared",
+      "fullName": "Jared Bednar",
+      "gamesCoached": 2,
+      "isActive": true,
+      "lastName": "Bednar",
+      "losses": 1,
+      "otLosses": 0,
+      "seasonId": 20212022,
+      "ties": 0,
+      "wins": 1
+    },
+    {
+      "id": 5,
+      "allStarTeamId": 10,
+      "coachId": 1064,
+      "firstName": "Hap",
+      "fullName": "Hap Day",
+      "gamesCoached": 1,
+      "isActive": false,
+      "lastName": "Day",
+      "losses": 1,
+      "otLosses": 0,
+      "seasonId": 19491950,
+      "ties": 0,
+      "wins": 0
+    }
+  ],
+  "total": 154
+}

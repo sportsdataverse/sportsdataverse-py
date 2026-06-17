@@ -10,10 +10,12 @@ runtime_imports:
 - format_nhl_season
 endpoints:
 - short: awards
+  returns_schema: native/nhl_records/awards
   summary: List all NHL award / trophy records.
   path: /award-details
   parser: parse_nhl_records
 - short: awards_by_franchise
+  returns_schema: native/nhl_records/awards_by_franchise
   summary: List award records for a single franchise.
   path: /award-details/{franchise_id}
   path_params:
@@ -24,6 +26,7 @@ endpoints:
     franchise_id: 1
   parser: parse_nhl_records
 - short: awards_trophy_season
+  returns_schema: native/nhl_records/awards_trophy_season
   summary: Retrieve the trophy winner for a specific season.
   path: /award-details/trophy/{trophy_id}/season/{season_id}
   path_params:
@@ -43,6 +46,7 @@ endpoints:
   path: /coach
   parser: parse_nhl_records
 - short: coach
+  returns_schema: native/nhl_records/coach
   summary: Retrieve one coach by their numeric ID.
   path: /coach/{coach_id}
   path_params:
@@ -53,6 +57,7 @@ endpoints:
     coach_id: X
   parser: parse_nhl_records
 - short: coach_career
+  returns_schema: native/nhl_records/coach_career
   summary: Coach career-records (regular season).
   path: /coach-career-records/{coach_id}
   now_variant: /coach-career-records
@@ -63,10 +68,12 @@ endpoints:
     required: false
   parser: parse_nhl_records
 - short: coach_career_with_playoffs
+  returns_schema: native/nhl_records/coach_career_with_playoffs
   summary: Coach career records inclusive of regular season + playoffs.
   path: /coach-career-records-regular-plus-playoffs
   parser: parse_nhl_records
 - short: coach_franchise
+  returns_schema: native/nhl_records/coach_franchise
   summary: Coach records scoped to individual franchise stints.
   path: /coach-franchise-records/{coach_id}
   now_variant: /coach-franchise-records
@@ -77,6 +84,7 @@ endpoints:
     required: false
   parser: parse_nhl_records
 - short: coach_stanley_cup
+  returns_schema: native/nhl_records/coach_stanley_cup
   summary: Coach Stanley Cup Final win streak and consecutive-cup records.
   path: /coach-stanley-cup-streak
   parser: parse_nhl_records
@@ -86,6 +94,7 @@ endpoints:
   path: /franchise
   parser: parse_nhl_records
 - short: franchise_detail
+  returns_schema: native/nhl_records/franchise_detail
   summary: Franchise detail records (extended metadata per franchise).
   path: /franchise-detail
   parser: parse_nhl_records
@@ -95,18 +104,22 @@ endpoints:
   path: /franchise-team-totals
   parser: parse_nhl_records
 - short: franchise_season_results
+  returns_schema: native/nhl_records/franchise_season_results
   summary: Season-by-season results for each franchise.
   path: /franchise-season-results
   parser: parse_nhl_records
 - short: franchise_playoff_appearances
+  returns_schema: native/nhl_records/franchise_playoff_appearances
   summary: Franchise playoff appearance counts and streak information.
   path: /franchise-playoff-appearances
   parser: parse_nhl_records
 - short: franchise_totals
+  returns_schema: native/nhl_records/franchise_totals
   summary: League-wide franchise totals (all-time aggregate per franchise).
   path: /franchise-totals
   parser: parse_nhl_records
 - short: all_time_record_vs_franchise
+  returns_schema: native/nhl_records/all_time_record_vs_franchise
   summary: All-time head-to-head records between every franchise pairing.
   path: /all-time-record-vs-franchise
   parser: parse_nhl_records
@@ -119,38 +132,47 @@ endpoints:
   path: /skater-career-leaders
   parser: parse_nhl_records
 - short: consecutive_100pt_seasons
+  returns_schema: native/nhl_records/consecutive_100pt_seasons
   summary: Skaters with the most consecutive 100-point seasons.
   path: /consecutive-100-point-seasons
   parser: parse_nhl_records
 - short: goalie_career_stats
+  returns_schema: native/nhl_records/goalie_career_stats
   summary: Goaltender career statistics (regular season).
   path: /goalie-career-stats
   parser: parse_nhl_records
 - short: goalie_career_stats_with_playoffs
+  returns_schema: native/nhl_records/goalie_career_stats_with_playoffs
   summary: Goaltender career stats inclusive of regular season and playoffs.
   path: /goalie_career_stats_incl_playoffs
   parser: parse_nhl_records
 - short: goalie_season_stats
+  returns_schema: native/nhl_records/goalie_season_stats
   summary: Goaltender single-season statistics.
   path: /goalie-season-stats
   parser: parse_nhl_records
 - short: goalie_win_streak
+  returns_schema: native/nhl_records/goalie_win_streak
   summary: Goaltenders with the longest consecutive-win streaks.
   path: /goalie-win-streak
   parser: parse_nhl_records
 - short: goalie_shutout_streak
+  returns_schema: native/nhl_records/goalie_shutout_streak
   summary: Goaltenders with the longest consecutive-shutout streaks.
   path: /goalie-shutout-streak
   parser: parse_nhl_records
 - short: goalie_win_plateaus
+  returns_schema: native/nhl_records/goalie_win_plateaus
   summary: "Goaltenders who reached each win plateau (100, 200, 300 \u2026)."
   path: /goalie-win-plateaus
   parser: parse_nhl_records
 - short: goalie_playoff_streak
+  returns_schema: native/nhl_records/goalie_playoff_streak
   summary: Goaltender consecutive playoff-win streaks.
   path: /goalie-playoff-streak
   parser: parse_nhl_records
 - short: goalie_undefeated_streak
+  returns_schema: native/nhl_records/goalie_undefeated_streak
   summary: Goaltender longest undefeated streaks (wins + ties).
   path: /goalie-undefeated-streak
   parser: parse_nhl_records
@@ -166,6 +188,7 @@ endpoints:
     required: false
   parser: parse_nhl_records
 - short: draft_by_team
+  returns_schema: native/nhl_records/draft_by_team
   summary: All draft picks made by a single team.
   path: /draft/byTeam/{team_id}
   path_params:
@@ -176,6 +199,7 @@ endpoints:
     team_id: 10
   parser: parse_nhl_records
 - short: draft_prospect
+  returns_schema: native/nhl_records/draft_prospect
   summary: Draft prospect records.
   path: /draft-prospect/{prospect_id}
   now_variant: /draft-prospect
@@ -186,30 +210,37 @@ endpoints:
     required: false
   parser: parse_nhl_records
 - short: draft_lottery_odds
+  returns_schema: native/nhl_records/draft_lottery_odds
   summary: Draft lottery odds (current year or filtered by season).
   path: /draft-lottery-odds
   parser: parse_nhl_records
 - short: expansion_draft_picks
+  returns_schema: native/nhl_records/expansion_draft_picks
   summary: Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
   path: /expansion-draft-picks
   parser: parse_nhl_records
 - short: allstar_skater_career
+  returns_schema: native/nhl_records/allstar_skater_career
   summary: All-Star Game career statistics for skaters.
   path: /all-star-skater-career-stats
   parser: parse_nhl_records
 - short: allstar_goalie_career
+  returns_schema: native/nhl_records/allstar_goalie_career
   summary: All-Star Game career statistics for goaltenders.
   path: /all-star-goaltender-career-stats
   parser: parse_nhl_records
 - short: allstar_coach_career
+  returns_schema: native/nhl_records/allstar_coach_career
   summary: All-Star Game career records for coaches.
   path: /all-star-coach-career-stats
   parser: parse_nhl_records
 - short: allstar_skater_game
+  returns_schema: native/nhl_records/allstar_skater_game
   summary: All-Star Game single-game scoring records for skaters.
   path: /all-star-skater-game-stats
   parser: parse_nhl_records
 - short: allstar_goalie_game
+  returns_schema: native/nhl_records/allstar_goalie_game
   summary: All-Star Game single-game stats for goaltenders.
   path: /all-star-goaltender-game-stats
   parser: parse_nhl_records
@@ -219,10 +250,12 @@ endpoints:
   path: /attendance
   parser: parse_nhl_records
 - short: hof_players
+  returns_schema: native/nhl_records/hof_players
   summary: Hockey Hall of Fame player inductees.
   path: /hof/players
   parser: parse_nhl_records
 - short: hof_players_by_office
+  returns_schema: native/nhl_records/hof_players_by_office
   summary: Hall of Fame players for a specific induction office/category.
   path: /hof/players/{office_id}
   path_params:
@@ -233,6 +266,7 @@ endpoints:
     office_id: X
   parser: parse_nhl_records
 - short: gm_career
+  returns_schema: native/nhl_records/gm_career
   summary: General Manager career records.
   path: /general-manager/{gm_id}
   now_variant: /general-manager-career-records
@@ -243,14 +277,17 @@ endpoints:
     required: false
   parser: parse_nhl_records
 - short: gm_franchise
+  returns_schema: native/nhl_records/gm_franchise
   summary: General Manager records scoped to franchise stints.
   path: /general-manager-franchise-records
   parser: parse_nhl_records
 - short: home_team_record
+  returns_schema: native/nhl_records/home_team_record
   summary: League-wide home-team win/loss record by season.
   path: /home-team-record
   parser: parse_nhl_records
 - short: away_team_record
+  returns_schema: native/nhl_records/away_team_record
   summary: League-wide away-team win/loss record by season.
   path: /away-team-record
   parser: parse_nhl_records
