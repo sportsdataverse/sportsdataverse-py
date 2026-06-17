@@ -1281,3 +1281,238 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
     )
 
     return play_df
+
+
+# ---------------------------------------------------------------------------
+# WPA derivation (lifted from NFLPlayProcess.__process_wpa)
+# ---------------------------------------------------------------------------
+
+_WPA_REQUIRED_COLUMNS: tuple[str, ...] = (
+    "game_id",
+    "type.text",
+    # WP point estimates the orchestrator (or enrich_nfl_pbp) must score first.
+    "wp_before",
+    "wp_touchback",
+    "wp_after",
+    # Perspective / flag columns the derivation references.
+    "homeTeamId",
+    "start.pos_team.id",
+    "end.pos_team.id",
+    "start.pos_team_receives_2H_kickoff",
+    "change_of_pos_team",
+    "scoringPlay",
+    "kickoff_onside",
+    "end_of_half",
+    "status_type_completed",
+    "pos_score_diff_end",
+    "lead_play_type",
+    "lead_pos_team",
+    "game_play_number",
+)
+
+
+def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
+    """Derive win probability added (WPA) from pre-scored WP point estimates.
+
+    This is the **derivation half** of ``NFLPlayProcess.__process_wpa`` lifted
+    into a shared, model-free function so the same nflfastR-faithful WPA logic
+    can be reused by the streaming ``enrich_nfl_pbp`` pipeline and by
+    ``__process_wpa`` itself.  It performs **no** model inference — the caller
+    must already have scored the per-play WP point estimates
+    (``wp_spread.ubj``) for the start / touchback / end feature views and
+    attached them as ``wp_before`` / ``wp_touchback`` / ``wp_after``.  This
+    mirrors :func:`calculate_epa`, which likewise consumes pre-scored EP point
+    estimates and leaves prediction to the orchestrator.
+
+    Derivation rules (mirror the original ``__process_wpa``):
+
+    * **Leading overlay (do not drop):** on a kickoff (``type.text`` in
+      ``kickoff_vec``) ``wp_before`` is replaced by ``wp_touchback`` — the
+      win-probability scored from the touchback feature view — before any
+      other column derives.  This is the WP analogue of the EPA ``0.92``
+      scoring-attempt overlay and must fire first.
+    * ``def_wp_before = 1 - wp_before``; ``home_wp_before`` / ``away_wp_before``
+      are the posteam->home perspective columns (the offense's ``wp_before``
+      flows to home when the start possession team is the home team, otherwise
+      to the defense ``def_wp_before``).
+    * ``wp_after`` is rewritten by the end-of-half / end-of-game / OT two-path:
+      timeouts hold ``wp_before``; a completed final play resolves to ``1.0`` /
+      ``0.0`` by the winner; end-of-half and ``End Period`` / ``End of Half``
+      lead plays take ``lead_wp_before`` (or ``1 - lead_wp_before`` on a
+      possession change); a possession change otherwise flips the lead;
+      everything else keeps the model ``wp_after``.
+    * ``def_wp_after = 1 - wp_after``; ``home_wp_after`` / ``away_wp_after``
+      use the **end** possession team for the perspective flip.
+    * ``wpa = wp_after - wp_before``.
+
+    **Every** ``shift`` / forward reference is grouped ``.over("game_id")`` so a
+    concatenated multi-game frame never leaks WP across game boundaries — the
+    ``lead_wp_before`` / ``lead_wp_before2`` shifts and the end-of-game
+    ``game_play_number == max()`` lookup are all per-game.  This differs from
+    ``__process_wpa`` (which runs one game per instance and therefore needs no
+    grouping).
+
+    Args:
+        df: Play-by-play DataFrame that already carries the WP point estimates
+            ``wp_before`` (start feature view), ``wp_touchback`` (touchback
+            feature view) and ``wp_after`` (end feature view), plus the
+            play-classification / perspective columns ``game_id``,
+            ``type.text``, ``homeTeamId``, ``start.pos_team.id``,
+            ``end.pos_team.id``, ``start.pos_team_receives_2H_kickoff``,
+            ``change_of_pos_team``, ``scoringPlay``, ``kickoff_onside``,
+            ``end_of_half``, ``status_type_completed``, ``pos_score_diff_end``,
+            ``lead_play_type``, ``lead_pos_team`` and ``game_play_number``.  See
+            :data:`_WPA_REQUIRED_COLUMNS`.  This function does **not** score WP
+            itself — score it first via :func:`calculate_win_probability` /
+            the ``wp_spread`` feature pipeline.
+
+    Returns:
+        The input frame with the WPA derivation applied: ``wp_before`` rewritten
+        by the kickoff-touchback overlay; ``def_wp_before``, ``home_wp_before``,
+        ``away_wp_before``, ``lead_wp_before``, ``lead_wp_before2``, the
+        rewritten ``wp_after``, ``def_wp_after``, ``home_wp_after``,
+        ``away_wp_after`` and ``wpa`` added; plus first-class lowercase aliases
+        ``wp`` (``= wp_before``), ``def_wp`` (``= def_wp_before``), ``home_wp``
+        (``= home_wp_before``) and ``away_wp`` (``= away_wp_before``) for
+        downstream contract parity (the per-play offense win probability is the
+        pre-snap ``wp_before``, matching nflfastR's ``wp`` semantics).
+
+    Raises:
+        KeyError: If any column in :data:`_WPA_REQUIRED_COLUMNS` is absent.
+
+    Example:
+        Derive WPA from a pre-scored frame::
+
+            import polars as pl
+            from sportsdataverse.nfl.ep_wp import calculate_wpa
+
+            # `scored` already has wp_before / wp_touchback / wp_after
+            out = calculate_wpa(scored)
+            print(out.select("game_id", "wp", "wpa").head())
+    """
+    missing = [c for c in _WPA_REQUIRED_COLUMNS if c not in df.columns]
+    if missing:
+        raise KeyError(
+            "calculate_wpa: input frame is missing required WPA-derivation "
+            f"columns: {missing}.  Score the WP point estimates "
+            "(wp_before / wp_touchback / wp_after via the wp_spread model) and "
+            "classify the plays before calling calculate_wpa."
+        )
+
+    play_df = (
+        df.with_columns(
+            # --- Leading overlay: kickoff wp_before uses the touchback view ---
+            # Mirrors nfl_pbp.py lines 3964-3967; must fire before the
+            # perspective / lead columns derive.
+            wp_before=pl.when(pl.col("type.text").is_in(kickoff_vec))
+            .then(pl.col("wp_touchback"))
+            .otherwise(pl.col("wp_before")),
+        )
+        .with_columns(
+            def_wp_before=1 - pl.col("wp_before"),
+        )
+        .with_columns(
+            home_wp_before=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("wp_before"))
+            .otherwise(pl.col("def_wp_before")),
+            away_wp_before=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
+            .then(pl.col("wp_before"))
+            .otherwise(pl.col("def_wp_before")),
+        )
+        .with_columns(
+            # Group EVERY shift by game_id so concatenated frames don't leak
+            # WP across game boundaries.
+            lead_wp_before=pl.col("wp_before").shift(-1).over("game_id"),
+            lead_wp_before2=pl.col("wp_before").shift(-2).over("game_id"),
+        )
+        .with_columns(
+            wp_after=pl.when(pl.col("type.text").is_in(["Timeout"]))
+            .then(pl.col("wp_before"))
+            .when(
+                (pl.col("status_type_completed") == True)
+                .and_(
+                    (pl.col("lead_play_type").is_null()).or_(
+                        # Per-game max so the end-of-game branch is scoped to
+                        # each game's final play in a concatenated frame.
+                        pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
+                    ),
+                )
+                .and_(pl.col("pos_score_diff_end") > 0),
+            )
+            .then(1.0)
+            .when(
+                (pl.col("status_type_completed") == True)
+                .and_(
+                    (pl.col("lead_play_type").is_null()).or_(
+                        pl.col("game_play_number") == pl.col("game_play_number").max().over("game_id"),
+                    ),
+                )
+                .and_(pl.col("pos_score_diff_end") < 0),
+            )
+            .then(0.0)
+            .when(
+                (pl.col("end_of_half") == True)
+                .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
+                .and_(pl.col("type.text") != "Timeout"),
+            )
+            .then(pl.col("lead_wp_before"))
+            .when(
+                (pl.col("end_of_half") == True)
+                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("type.text") != "Timeout"),
+            )
+            .then(1 - pl.col("lead_wp_before"))
+            .when(
+                (pl.col("end_of_half") == True)
+                .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
+                .and_(pl.col("type.text") == "Timeout"),
+            )
+            .then(pl.col("wp_after"))
+            .when(
+                (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
+                    pl.col("change_of_pos_team") == False,
+                ),
+            )
+            .then(pl.col("lead_wp_before"))
+            .when(
+                (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
+                    pl.col("change_of_pos_team") == True,
+                ),
+            )
+            .then(1 - pl.col("lead_wp_before"))
+            .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
+            .then(pl.col("wp_after"))
+            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
+            .then(1 - pl.col("lead_wp_before"))
+            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
+            .then(pl.col("lead_wp_before"))
+            .otherwise(pl.col("wp_after")),
+        )
+        .with_columns(
+            def_wp_after=1 - pl.col("wp_after"),
+        )
+        .with_columns(
+            home_wp_after=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("wp_after"))
+            .otherwise(pl.col("def_wp_after")),
+            away_wp_after=pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
+            .then(pl.col("wp_after"))
+            .otherwise(pl.col("def_wp_after")),
+        )
+        .with_columns(
+            wpa=pl.col("wp_after") - pl.col("wp_before"),
+        )
+    )
+
+    # First-class lowercase aliases for downstream contract parity.  The
+    # per-play offense win probability is the pre-snap ``wp_before`` (matching
+    # nflfastR's ``wp`` semantics); the home/away/def variants mirror the
+    # ``_before`` perspective columns.
+    play_df = play_df.with_columns(
+        wp=pl.col("wp_before"),
+        def_wp=pl.col("def_wp_before"),
+        home_wp=pl.col("home_wp_before"),
+        away_wp=pl.col("away_wp_before"),
+    )
+
+    return play_df
