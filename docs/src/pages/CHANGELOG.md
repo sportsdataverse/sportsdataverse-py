@@ -4,6 +4,7 @@
 
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
   - [Namespace — minor/alias leagues nested under sport-group packages](#namespace--minoralias-leagues-nested-under-sport-group-packages)
+  - [All sports — `espn_*_game_rosters` vectorized logo extraction](#all-sports--espn__game_rosters-vectorized-logo-extraction)
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
   - [MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)](#mlb--comprehensive-baseball-savant--statcast-surface-mlb_statcast_-43-endpoints)
 - [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
@@ -124,6 +125,16 @@
 ### Namespace — minor/alias leagues nested under sport-group packages
 
 - refactor(namespace): nest minor/alias leagues under sport-group packages (`sportsdataverse.soccer.epl`, `.hockey.ahl`, `.football.ufl`, `.baseball.college_baseball`); the 8 majors + pwhl/soccer/cricket stay top-level. Legacy names (`sportsdataverse.epl`, `import sportsdataverse.ufl`) still resolve with a `DeprecationWarning`. NOTE: `discover.function_count()`/`list_functions()` keep flat-leaf keys (`function_count(league="ufl")` works); `import sportsdataverse` now eagerly loads the 12 soccer-alias submodules to support attribute access.
+
+### All sports — `espn_*_game_rosters` vectorized logo extraction
+
+Pre-2010 ESPN team payloads omit the `logos` key entirely, causing `helper_{sport}_team_items` to raise `polars.exceptions.ColumnNotFoundError: "logos" not found`. The row-by-row item-assignment fallback (`teams_df[row, "logo_href"] = ...`) also triggers `TypeError: the truth value of a Series is ambiguous` in polars 1.x because the row-index selector internally evaluates `Series.__bool__`.
+
+Replaced the logos block in all seven `espn_*_game_rosters` modules (`cfb`, `mbb`, `nba`, `nfl`, `nhl`, `wbb`, `wnba`) with vectorized `with_columns`:
+
+- `if "logos" in teams_df.columns:` guard handles pre-2010 payloads where the key is absent.
+- `pl.col("logos").list.get(i).struct.field("href").fill_null("")` — expression-engine extraction, null-safe, no Python-level row iteration.
+- `except Exception:` fallback to empty-string literals if the logos payload doesn't match the expected `List(Struct)` shape.
 
 ## 0.0.64 Release: June 17, 2026
 
