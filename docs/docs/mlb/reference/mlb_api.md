@@ -750,7 +750,7 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 | `person_full_name` | character | Player full name. |
 | `person_link` | character | API relative link to the person. |
 | `position_code` | character | Numeric scorekeeping position code. |
-| `position_name` | character | Position name. |
+| `position_name` | character | Full position name. |
 | `position_type` | character | Position category (e.g. 'Pitcher', 'Infielder'). |
 | `position_abbreviation` | character | Position abbreviation. |
 | `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |

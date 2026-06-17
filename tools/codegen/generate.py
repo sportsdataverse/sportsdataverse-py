@@ -1097,6 +1097,10 @@ def _return_schema_parsers():
         "standings": (P.parse_standings, "dataframe"),
         "leaders": (P.parse_leaders, "dataframe"),
         "summary": (P.parse_summary, "frames"),
+        # deeper-tree endpoints (stable per-parser shapes; captured fixtures)
+        "team_schedule": (P.parse_team_schedule, "dataframe"),
+        "news": (P.parse_news, "dataframe"),
+        "injuries": (P.parse_injuries, "dataframe"),
     }
 
 
@@ -1140,6 +1144,96 @@ def _cols_from_frame(df, descs: dict) -> list:
 
 _LEAGUES = ["nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"]
 _FIX = ROOT / "tests" / "fixtures" / "espn"
+
+
+# Sport-specific ESPN parsers (soccer/cricket) emit different column shapes than
+# the generic cross-league parsers, so they get their own per-prefix schema files
+# introspected from the nested tests/fixtures/espn/{sport}/{league}/site-v2/ captures
+# (unioned across captured leagues). Column descriptions are NOT written here -- like
+# every captured schema they carry name+type only and are filled at render time from
+# manual_column_descriptions.yaml (keyed by the `schema:` field). See the
+# returns-table-descriptions design.
+
+# (sport, prefix, [leagues], {endpoint(schema_key): (parser_attr, kind)})
+_SPORT_SPECIFIC_SCHEMAS = [
+    (
+        "soccer",
+        "soccer",
+        ["eng.1", "usa.1", "uefa.champions"],
+        {
+            "scoreboard": ("parse_soccer_scoreboard", "dataframe"),
+            "standings": ("parse_soccer_standings", "dataframe"),
+            "teams": ("parse_soccer_teams", "dataframe"),
+            "team_roster": ("parse_soccer_team_roster", "dataframe"),
+            "summary": ("parse_soccer_summary", "frames"),
+        },
+        "sportsdataverse.soccer.soccer_espn_parsers",
+    ),
+    (
+        "cricket",
+        "cricket",
+        ["8048"],
+        {
+            "scoreboard": ("parse_cricket_scoreboard", "dataframe"),
+            "standings": ("parse_cricket_standings", "dataframe"),
+            "summary": ("parse_cricket_summary", "frames"),
+        },
+        "sportsdataverse.cricket.cricket_espn_parsers",
+    ),
+]
+
+
+def _refresh_sport_specific_return_schemas() -> int:
+    """Emit per-prefix schemas for the soccer/cricket sport-specific parsers,
+    unioning columns/sections across the captured leagues so the schema is
+    representative (e.g. uefa.champions adds the summary `shootout` section)."""
+    import importlib
+    import json
+
+    import yaml
+
+    def cols(df) -> list:
+        return [{"name": n, "type": _pl_to_doc_type(str(t)), "description": ""} for n, t in zip(df.columns, df.dtypes)]
+
+    written = 0
+    for sport, prefix, leagues, endpoints, modpath in _SPORT_SPECIFIC_SCHEMAS:
+        pmod = importlib.import_module(modpath)
+        for schema_key, (parser_attr, kind) in endpoints.items():
+            parser = getattr(pmod, parser_attr)
+            payloads = []
+            for lg in leagues:
+                fx = _FIX / sport / lg / "site-v2" / f"{schema_key}.json"
+                if fx.exists():
+                    payloads.append(json.loads(fx.read_text(encoding="utf-8")))
+            if not payloads:
+                continue
+            if kind == "frames":
+                sections: dict = {}  # section -> {col_name: col_dict}
+                for p in payloads:
+                    for sec, df in parser(p).items():
+                        bucket = sections.setdefault(sec, {})
+                        for c in cols(df):
+                            bucket.setdefault(c["name"], c)
+                doc = {
+                    "schema": schema_key,
+                    "kind": "frames",
+                    "frames": [{"section": s, "columns": list(c.values())} for s, c in sections.items()],
+                }
+            else:
+                seen: dict = {}
+                for p in payloads:
+                    for c in cols(parser(p)):
+                        seen.setdefault(c["name"], c)
+                doc = {"schema": schema_key, "kind": "dataframe", "columns": list(seen.values())}
+            outdir = ROOT / "tools" / "codegen" / "schemas" / schema_key
+            outdir.mkdir(parents=True, exist_ok=True)
+            (outdir / f"{prefix}.yaml").write_text(
+                yaml.safe_dump(doc, sort_keys=False, width=120, allow_unicode=True),
+                encoding="utf-8",
+                newline="\n",
+            )
+            written += 1
+    return written
 
 
 def refresh_return_schemas() -> int:
@@ -1203,7 +1297,11 @@ def refresh_return_schemas() -> int:
             )
             written += 1
 
-    print(f"return schemas: {written} per-league written, {skipped} skipped (no fixture)")
+    # --- sport-specific ESPN parsers (soccer/cricket) ---
+    sport_written = _refresh_sport_specific_return_schemas()
+    written += sport_written
+
+    print(f"return schemas: {written} written ({sport_written} sport-specific), {skipped} skipped (no fixture)")
     return 0
 
 

@@ -28,9 +28,18 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | ESPN event id. |
-| `season` | integer | Four-digit season year. |
-| `game_date` | character | ISO 8601 kickoff timestamp (UTC). |
+| `event_id` | character | ESPN event id for the match. |
+| `date` | character | Match start timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name (e.g. 'Team A at Team B'). |
+| `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
+| `home_team` | character | Home team display name. |
+| `home_team_id` | character | Home team ESPN id. |
+| `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
+| `away_team` | character | Away team display name. |
+| `away_team_id` | character | Away team ESPN id. |
+| `away_score` | character | Away team's score. For cricket, the innings string. |
+| `status` | character | Status type name (e.g. STATUS_FINAL, STATUS_SCHEDULED, STATUS_IN_PROGRESS). |
+| `venue` | character | Venue full name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -57,259 +66,209 @@ ESPN endpoint.
 ### Returns
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**boxscore_player**
+**header**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_location` | character | Team location. |
-| `athlete_id` | character | Athlete id. |
-| `athlete_display_name` | character | Athlete display name. |
-| `athlete_short_name` | character | Athlete short name. |
-| `athlete_jersey` | character | Athlete jersey. |
-| `athlete_position` | character | Athlete position. |
-| `starter` | logical | Starter. |
-| `active` | logical | Active. |
-| `did_not_play` | logical | Did not play. |
-| `ejected` | logical | Ejected. |
-| `reason` | character | Reason. |
-| `minutes` | character | Minutes. |
-| `points` | character | Points. |
-| `field_goals_made_field_goals_attempted` | character | Field goals made field goals attempted. |
-| `three_point_field_goals_made_three_point_field_goals_attempted` | character | Three point field goals made three point field goals attempted. |
-| `free_throws_made_free_throws_attempted` | character | Free throws made free throws attempted. |
-| `rebounds` | character | Rebounds. |
-| `assists` | character | Assists. |
-| `turnovers` | character | Turnovers. |
-| `steals` | character | Steals. |
-| `blocks` | character | Blocks. |
-| `offensive_rebounds` | character | Offensive rebounds. |
-| `defensive_rebounds` | character | Defensive rebounds. |
-| `fouls` | character | Fouls. |
-| `plus_minus` | character | Plus minus. |
+| `id` | character | ID of the player in the 'name' column. |
+| `uid` | character | ESPN UID string. |
+| `time_valid` | logical | Whether the start time is confirmed. |
+| `season_year` | integer | Season year string ('YYYY-YY' format). |
+| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `season_slug` | character | Season slug. |
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_name` | character | League name. |
+| `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
+| `competition_id` | character | Id of the primary competition (equals `event_id` for NHL). |
+| `competition_date` | character |  |
+| `neutral_site` | logical | Neutral site. |
+| `status_name` | character | Status label. |
+| `status_description` | character | Roster status description (e.g. 'Active'). |
+| `is_final` | logical |  |
 
-**boxscore_team**
+**lineups**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `home_away` | character | Home away. |
-| `display_order` | integer | Display order. |
-| `stat_name` | character | Stat name. |
-| `stat_label` | character | Stat label. |
-| `stat_display_value` | character | Stat display value. |
-| `stat_value` | character | Stat value. |
+| `team_id` | character | Unique team identifier. |
+| `home_away` | character | Game venue label ('home' or 'away'). |
+| `athlete` | character |  |
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `starter` | logical | TRUE if the player was in the starting lineup; FALSE otherwise. |
+| `jersey` | character | Jersey number worn by the player. |
+| `formation_place` | character |  |
+| `subbed_in` | logical |  |
+| `subbed_out` | logical |  |
 
-**plays**
+**key_events**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
-| `sequence_number` | character | Sequence number. |
-| `text` | character | Text. |
-| `away_score` | integer | Away score. |
-| `home_score` | integer | Home score. |
-| `scoring_play` | logical | Scoring play. |
-| `score_value` | integer | Score value. |
-| `participants` | character | Participants. |
+| `id` | character | ID of the player in the 'name' column. |
+| `type` | character | Record type / category. |
+| `type_id` | character | Type identifier (numeric). |
+| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
+| `text` | character | Text description of the play / record. |
+| `short_text` | character | Short play description text. |
+| `clock` | character | Game clock value. |
+| `clock_value` | double | Clock value in seconds. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `team_id` | character | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `scoring_play` | logical | TRUE if the play resulted in points scored. |
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `athlete_name` | character | Athlete display name (ESPN). |
 | `wallclock` | character | Wallclock. |
-| `shooting_play` | logical | Shooting play. |
-| `points_attempted` | integer | Points attempted. |
-| `short_description` | character | Short description. |
-| `type_id` | character | Type id. |
-| `type_text` | character | Type text. |
-| `period_number` | integer | Period number. |
-| `period_display_value` | character | Period display value. |
-| `clock_display_value` | character | Clock display value. |
-| `team_id` | character | Team id. |
-| `coordinate_x` | integer | Coordinate x. |
-| `coordinate_y` | integer | Coordinate y. |
 
-**winprobability**
+**team_stats**
 
 | col_name | type | description |
 |---|---|---|
-| `home_win_percentage` | double | Home win percentage. |
-| `tie_percentage` | double | Tie percentage. |
-| `play_id` | character | Play id. |
+| `team_id` | character | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `home_away` | character | Game venue label ('home' or 'away'). |
+| `fouls_committed` | character |  |
+| `yellow_cards` | character |  |
+| `red_cards` | character |  |
+| `offsides` | character |  |
+| `won_corners` | character |  |
+| `saves` | character | Saves made. |
+| `possession_pct` | character |  |
+| `total_shots` | character |  |
+| `shots_on_target` | character |  |
+| `shot_pct` | character |  |
+| `penalty_kick_goals` | character |  |
+| `penalty_kick_shots` | character |  |
+| `accurate_passes` | character |  |
+| `total_passes` | character |  |
+| `pass_pct` | character |  |
+| `accurate_crosses` | character |  |
+| `total_crosses` | character |  |
+| `cross_pct` | character |  |
+| `total_long_balls` | character |  |
+| `accurate_long_balls` | character |  |
+| `longball_pct` | character |  |
+| `blocked_shots` | character | Blocked shots. |
+| `effective_tackles` | character |  |
+| `total_tackles` | character |  |
+| `tackle_pct` | character |  |
+| `interceptions` | character | The number of interceptions thrown. |
+| `effective_clearance` | character |  |
+| `total_clearance` | character |  |
+
+**commentary**
+
+| col_name | type | description |
+|---|---|---|
+| `sequence` | integer | Sequence order of the season row. |
+| `time_display` | character |  |
+| `time_value` | double |  |
+| `text` | character | Text description of the play / record. |
 
 **leaders**
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Team id. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `category_name` | character | Category name. |
-| `category_display_name` | character | Category display name. |
-| `athlete_id` | character | Athlete id. |
-| `athlete_display_name` | character | Athlete display name. |
-| `athlete_position` | character | Athlete position. |
-| `value` | double | Value. |
-| `display_value` | character | Display value. |
-| `main_stat` | character | Main stat. |
-| `summary` | character | Summary. |
-
-**game_info**
-
-| col_name | type | description |
-|---|---|---|
-| `attendance` | integer | Attendance. |
-| `venue_id` | character | Venue id. |
-| `venue_guid` | character | Venue guid. |
-| `venue_full_name` | character | Venue full name. |
-| `venue_short_name` | character | Venue short name. |
-| `venue_address_city` | character | Venue address city. |
-| `venue_address_state` | character | Venue address state. |
-| `venue_grass` | logical | Venue grass. |
-
-**officials**
-
-| col_name | type | description |
-|---|---|---|
-| `full_name` | character | Full name. |
-| `display_name` | character | Display name. |
-| `order` | integer | Order. |
-| `position_name` | character | Position name. |
-| `position_display_name` | character | Position display name. |
-| `position_id` | character | Position id. |
-
-**header**
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | Id. |
-| `uid` | character | Uid. |
-| `time_valid` | logical | Time valid. |
-| `competitions` | character | Competitions. |
-| `links` | character | Links. |
-| `season_year` | integer | Season year. |
-| `season_current` | logical | Season current. |
-| `season_type` | integer | Season type. |
-| `league_id` | character | League id. |
-| `league_uid` | character | League uid. |
-| `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation. |
-| `league_slug` | character | League slug. |
-| `league_is_tournament` | logical | League is tournament. |
-| `league_links` | character | League links. |
-| `league_logos` | character | League logos. |
-
-**season_series**
-
-| col_name | type | description |
-|---|---|---|
-| `type` | character | Type. |
-| `title` | character | Title. |
-| `description` | character | Description. |
-| `summary` | character | Summary. |
-| `completed` | logical | Completed. |
-| `total_competitions` | integer | Total competitions. |
-| `series_label` | character | Series label. |
-| `series_score` | character | Series score. |
-| `short_summary` | character | Short summary. |
-| `events` | character | Events. |
+| `team_id` | character | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `category` | character | Category label. |
+| `category_slug` | character |  |
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `athlete` | character |  |
+| `athlete_position` | character | Player position name; `athlete_detail = TRUE` only. |
+| `value` | character | Numeric or string value field. |
+| `main_stat_label` | character |  |
+| `main_stat_value` | character |  |
+| `summary` | character | Record summary string (e.g. "25-15-10"). |
 
 **standings**
 
 | col_name | type | description |
 |---|---|---|
-| `group_header` | character | Group header. |
-| `conference_header` | character | Conference header. |
-| `division_header` | character | Division header. |
-| `team_id` | character | Team id. |
-| `team_uid` | character | Team uid. |
-| `team_location` | character | Team location. |
-| `games_behind` | character | Games behind. |
-| `losses` | character | Losses. |
-| `streak` | character | Streak. |
-| `win_percent` | character | Win percent. |
-| `wins` | character | Wins. |
+| `group` | character | Group identifier (e.g. conference 'group_id'). |
+| `team` | character | Team-side label or team identifier. |
+| `team_id` | character | Unique team identifier. |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `games_played` | double | Games played. |
+| `losses` | double | Total losses. |
+| `point_differential` | double | Point differential. |
+| `points` | double | Points scored. |
+| `ties` | double | Number of ties in the series. |
+| `wins` | double | Total wins. |
+| `rank` | double | Position of the school within the poll for the given week (1 = top-ranked). |
+| `overall` | character | Overall. |
 
-**format**
-
-| col_name | type | description |
-|---|---|---|
-| `regulation_periods` | integer | Regulation periods. |
-| `regulation_display_name` | character | Regulation display name. |
-| `regulation_slug` | character | Regulation slug. |
-| `regulation_clock` | double | Regulation clock. |
-| `overtime_display_name` | character | Overtime display name. |
-| `overtime_slug` | character | Overtime slug. |
-| `overtime_clock` | double | Overtime clock. |
-
-**article**
+**head_to_head**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `now_id` | character | Now id. |
-| `content_key` | character | Content key. |
-| `data_source_identifier` | character | Data source identifier. |
-| `publishedkey` | character | Publishedkey. |
-| `type` | character | Type. |
-| `game_id` | character | Game id. |
-| `headline` | character | Headline. |
-| `description` | character | Description. |
-| `link_text` | character | Link text. |
-| `categorized` | character | Categorized. |
-| `originally_posted` | character | Originally posted. |
-| `last_modified` | character | Last modified. |
-| `published` | character | Published. |
-| `section` | character | Section. |
-| `source` | character | Source. |
-| `images` | character | Images. |
-| `video` | character | Video. |
-| `categories` | character | Categories. |
-| `keywords` | character | Keywords. |
-| `story` | character | Story. |
-| `premium` | logical | Premium. |
-| `is_live_blog` | logical | Is live blog. |
-| `allow_comments` | logical | Allow comments. |
-| `allow_search` | logical | Allow search. |
-| `allow_content_reactions` | logical | Allow content reactions. |
-| `links_web_href` | character | Links web href. |
-| `links_mobile_href` | character | Links mobile href. |
-| `links_api_self_href` | character | Links api self href. |
-| `links_app_sportscenter_href` | character | Links app sportscenter href. |
+| `event_id` | character | Unique event / game identifier (ESPN). |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `at_vs` | character | "at" or "vs" home/away indicator. |
+| `score` | character | Final score string. |
+| `home_team_id` | character | Unique identifier for the home team. |
+| `away_team_id` | character | Unique identifier for the away team. |
+| `home_team_score` | character | Home team final score. |
+| `away_team_score` | character | Away team final score. |
+| `home_aggregate_score` | character |  |
+| `away_aggregate_score` | character |  |
+| `home_shootout_score` | character |  |
+| `away_shootout_score` | character |  |
+| `game_result` | character | Game result for the player's team (`W`/`L`). |
+| `match_note` | character |  |
+| `competition_name` | character |  |
+| `round_name` | character |  |
+| `league_name` | character | League name. |
+| `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
+| `opponent` | integer | Opposing team of player |
+| `perspective_team_id` | character |  |
 
-**injuries**
+**last_five**
 
 | col_name | type | description |
 |---|---|---|
-| `injuries` | character | Injuries. |
-| `team_id` | character | Team id. |
-| `team_uid` | character | Team uid. |
-| `team_display_name` | character | Team display name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_links` | character | Team links. |
-| `team_logo` | character | Team logo. |
-| `team_logos` | character | Team logos. |
+| `team_id` | character | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `display_order` | integer |  |
+| `event_id` | character | Unique event / game identifier (ESPN). |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `at_vs` | character | "at" or "vs" home/away indicator. |
+| `score` | character | Final score string. |
+| `home_team_id` | character | Unique identifier for the home team. |
+| `away_team_id` | character | Unique identifier for the away team. |
+| `home_team_score` | character | Home team final score. |
+| `away_team_score` | character | Away team final score. |
+| `game_result` | character | Game result for the player's team (`W`/`L`). |
+| `competition_name` | character |  |
+| `league_name` | character | League name. |
+| `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
+| `opponent` | integer | Opposing team of player |
 
-**news**
+**game_info**
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `now_id` | character | Now id. |
-| `content_key` | character | Content key. |
-| `data_source_identifier` | character | Data source identifier. |
-| `type` | character | Type. |
-| `headline` | character | Headline. |
-| `description` | character | Description. |
-| `last_modified` | character | Last modified. |
-| `published` | character | Published. |
-| `images` | character | Images. |
-| `categories` | character | Categories. |
-| `premium` | logical | Premium. |
-| `byline` | character | Byline. |
-| `links_web_href` | character | Links web href. |
-| `links_mobile_href` | character | Links mobile href. |
-| `links_api_self_href` | character | Links api self href. |
-| `links_app_sportscenter_href` | character | Links app sportscenter href. |
+| `venue_id` | character | Unique venue identifier. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_short_name` | character |  |
+| `venue_city` | character | Venue city. |
+| `venue_country` | character |  |
+| `attendance` | integer | Reported attendance. |
+| `officials` | character | Whether officials data is available. |
+
+**shootout**
+
+| col_name | type | description |
+|---|---|---|
+| `team_entry_id` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `shot_id` | character |  |
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Penalized player name. |
+| `shot_number` | integer |  |
+| `did_score` | logical |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -359,7 +318,27 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Article id. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | API self link. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -383,7 +362,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | Athlete id. |
+| `display_name` | character | Athlete display name. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -507,20 +492,19 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
-| `team_alternate_color` | character | Secondary team color as a hex string (no leading '#'). |
-| `team_color` | character | Primary team color as a hex string (no leading '#'). |
-| `team_display_name` | character | Full team display name (location + nickname). |
-| `team_id` | character | ESPN team id (stable join key across ESPN endpoints). |
-| `team_is_active` | logical | Whether the team is currently active. |
-| `team_is_all_star` | logical | Whether the entry is an all-star squad rather than a franchise. |
-| `team_location` | character | Team location / city (e.g. "Boston"). |
-| `team_logos` | character | Pipe-delimited logo image URLs. |
-| `team_name` | character | Team nickname/mascot (e.g. "Celtics"). |
-| `team_nickname` | character | Team nickname as ESPN labels it (often equals team_name). |
-| `team_short_display_name` | character | Abbreviated display name for compact UIs. |
-| `team_slug` | character | URL slug used in ESPN web paths. |
-| `team_uid` | character | ESPN global UID (encodes sport/league/team). |
+| `team_id` | character | Team ESPN id. |
+| `display_name` | character | Team display name. |
+| `abbreviation` | character | Team abbreviation. |
+| `location` | character | Team location/city. |
+| `name` | character | Team short name. |
+| `short_display_name` | character | Short team display name. |
+| `nickname` | character | Team nickname. |
+| `slug` | character | URL slug for the team. |
+| `uid` | character | ESPN universal id for the team. |
+| `color` | character | Primary team color (hex). |
+| `alternate_color` | character | Secondary team color (hex). |
+| `is_active` | logical | Whether the team is currently active. |
+| `is_all_star` | logical | Whether the team is an all-star side. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -574,74 +558,27 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `id` | character | Id. |
-| `uid` | character | Uid. |
-| `guid` | character | Guid. |
-| `first_name` | character | First name. |
-| `last_name` | character | Last name. |
-| `full_name` | character | Full name. |
-| `display_name` | character | Display name. |
-| `short_name` | character | Short name. |
-| `weight` | double | Weight. |
-| `display_weight` | character | Display weight. |
-| `height` | double | Height. |
-| `display_height` | character | Display height. |
-| `age` | integer | Age. |
-| `date_of_birth` | character | Date of birth. |
-| `debut_year` | double | Debut year. |
-| `links` | character | Links. |
-| `slug` | character | Slug. |
-| `jersey` | character | Jersey. |
-| `injuries` | character | Injuries. |
-| `teams` | character | Teams. |
-| `contracts` | character | Contracts. |
-| `alternate_ids_sdr` | character | Alternate ids sdr. |
-| `birth_place_city` | character | Birth place city. |
-| `birth_place_country` | character | Birth place country. |
-| `college_id` | character | College id. |
-| `college_guid` | character | College guid. |
-| `college_mascot` | character | College mascot. |
-| `college_name` | character | College name. |
-| `college_short_name` | character | College short name. |
-| `college_abbrev` | character | College abbrev. |
-| `college_logos` | character | College logos. |
-| `headshot_href` | character | Headshot href. |
-| `headshot_alt` | character | Headshot alt. |
-| `position_id` | character | Position id. |
-| `position_name` | character | Position name. |
-| `position_display_name` | character | Position display name. |
-| `position_abbreviation` | character | Position abbreviation. |
-| `position_leaf` | logical | Position leaf. |
-| `experience_years` | integer | Experience years. |
-| `contract_bird_status` | integer | Contract bird status. |
-| `contract_base_year_compensation_active` | logical | Contract base year compensation active. |
-| `contract_poison_pill_provision_active` | logical | Contract poison pill provision active. |
-| `contract_incoming_trade_value` | integer | Contract incoming trade value. |
-| `contract_outgoing_trade_value` | integer | Contract outgoing trade value. |
-| `contract_minimum_salary_exception` | logical | Contract minimum salary exception. |
-| `contract_option_type` | integer | Contract option type. |
-| `contract_salary` | integer | Contract salary. |
-| `contract_salary_remaining` | integer | Contract salary remaining. |
-| `contract_years_remaining` | integer | Contract years remaining. |
-| `contract_season_year` | integer | Contract season year. |
-| `contract_season_start_date` | character | Contract season start date. |
-| `contract_season_end_date` | character | Contract season end date. |
-| `contract_trade_kicker_active` | logical | Contract trade kicker active. |
-| `contract_trade_kicker_percentage` | double | Contract trade kicker percentage. |
-| `contract_trade_kicker_value` | integer | Contract trade kicker value. |
-| `contract_trade_kicker_trade_value` | integer | Contract trade kicker trade value. |
-| `contract_trade_restriction` | logical | Contract trade restriction. |
-| `contract_unsigned_foreign_pick` | logical | Contract unsigned foreign pick. |
-| `contract_active` | logical | Contract active. |
-| `status_id` | character | Status id. |
-| `status_name` | character | Status name. |
-| `status_type` | character | Status type. |
-| `status_abbreviation` | character | Status abbreviation. |
-| `citizenship` | character | Citizenship. |
-| `birth_place_state` | character | Birth place state. |
-| `hand_type` | character | Hand type. |
-| `hand_abbreviation` | character | Hand abbreviation. |
-| `hand_display_value` | character | Hand display value. |
+| `athlete_id` | character | Athlete ESPN id. |
+| `uid` | character | ESPN universal id for the athlete. |
+| `first_name` | character | Athlete first name. |
+| `last_name` | character | Athlete last name. |
+| `display_name` | character | Athlete display name. |
+| `short_name` | character | Athlete short name. |
+| `jersey` | character | Jersey number. |
+| `age` | integer | Athlete age in years. |
+| `date_of_birth` | character | Athlete date of birth (ISO 8601). |
+| `height` | double | Athlete height in inches. |
+| `display_height` | character | Athlete height, formatted for display. |
+| `weight` | double | Athlete weight in pounds. |
+| `display_weight` | character | Athlete weight, formatted for display. |
+| `position` | character | Position abbreviation. |
+| `position_name` | character | Full position name. |
+| `birth_city` | character | Athlete birth city. |
+| `birth_country` | character | Athlete birth country. |
+| `citizenship` | character | Athlete citizenship. |
+| `gender` | character | Athlete gender. |
+| `slug` | character | URL slug for the athlete. |
+| `status` | character | Roster status (e.g. Active). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -668,7 +605,23 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_team_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | ESPN event id. |
+| `date` | character | Event timestamp (ISO 8601, UTC). |
+| `name` | character | Full event name. |
+| `short_name` | character | Abbreviated event name. |
+| `time_valid` | logical | Whether the event time is confirmed. |
+| `competitions` | character | Competition detail (list of dicts, stringified): competitors, venue, status. |
+| `links` | character | Related links (list, stringified). |
+| `season_year` | integer | Four-digit season year. |
+| `season_display_name` | character | Season display name. |
+| `season_type_id` | character | Season type id. |
+| `season_type_type` | integer | Season type numeric code. |
+| `season_type_name` | character | Season type name (e.g. Regular Season). |
+| `season_type_abbreviation` | character | Season type abbreviation. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -743,7 +696,13 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_injuries`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | character | Athlete id. |
+| `display_name` | character | Athlete display name. |
+| `injuries` | character | Injury entries for the athlete (list of dicts, stringified): status, type, details, dates. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -819,7 +778,27 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Article id. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | API self link. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -919,7 +898,27 @@ ESPN endpoint.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_news`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Article id. |
+| `now_id` | character | ESPN 'now' feed id. |
+| `content_key` | character | Internal content key. |
+| `data_source_identifier` | character | Source-system identifier. |
+| `type` | character | Article type (Story, Media, HeadlineNews, etc.). |
+| `headline` | character | Article headline. |
+| `description` | character | Article summary/description. |
+| `last_modified` | character | Last-modified timestamp (ISO 8601). |
+| `published` | character | Publish timestamp (ISO 8601). |
+| `images` | character | Article images (list, stringified). |
+| `categories` | character | Article categories (list, stringified). |
+| `premium` | logical | Whether the article is premium/paywalled. |
+| `byline` | character | Author byline. |
+| `links_web_href` | character | Web article URL. |
+| `links_mobile_href` | character | Mobile article URL. |
+| `links_api_self_href` | character | API self link. |
+| `links_app_sportscenter_href` | character | SportsCenter app deep link. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -949,37 +948,25 @@ ESPN endpoint.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character | Group name. |
-| `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
-| `team_name` | character | Team name. |
+| `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
+| `team` | character | Team display name. |
+| `team_id` | character | Team ESPN id. |
 | `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_location` | character | Team location. |
-| `team_logo` | character | Team logo. |
-| `avg_points_against` | double | Avg points against. |
-| `avg_points_for` | double | Avg points for. |
-| `clincher` | double | Clincher. |
-| `differential` | double | Differential. |
-| `division_win_percent` | double | Division win percent. |
-| `games_behind` | double | Games behind. |
-| `league_win_percent` | double | League win percent. |
-| `losses` | double | Losses. |
-| `playoff_seed` | double | Playoff seed. |
-| `point_differential` | double | Point differential. |
-| `points` | double | Points. |
-| `points_against` | double | Points against. |
-| `points_for` | double | Points for. |
-| `streak` | double | Streak. |
-| `win_percent` | double | Win percent. |
-| `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
-| `overall` | character | Overall. |
-| `home` | character | Home. |
-| `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
-| `last ten games` | character | Last ten games. |
+| `note` | character | Standings note (e.g. qualification/relegation marker). |
+| `games_played` | double | Matches played. |
+| `losses` | double | Matches lost. |
+| `point_differential` | double | Goal difference (for minus against). |
+| `points` | double | Competition points. |
+| `points_against` | double | Goals conceded. |
+| `points_for` | double | Goals scored. |
+| `ties` | double | Matches drawn. |
+| `wins` | double | Matches won. |
+| `advanced` | double | Whether the team has advanced/qualified. |
+| `deductions` | double | Points deducted. |
+| `ppg` | double | Points per game. |
+| `rank` | double | Position within the group/table. |
+| `rank_change` | double | Change in rank versus the previous update. |
+| `overall` | character | Overall record summary as published by ESPN. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

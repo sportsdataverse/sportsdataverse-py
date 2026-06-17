@@ -1,0 +1,12 @@
+schema: injuries
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: injuries
+  type: character
+  description: ''

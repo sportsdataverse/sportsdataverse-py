@@ -1,0 +1,250 @@
+schema: summary
+kind: frames
+frames:
+- section: header
+  columns:
+  - name: id
+    type: character
+    description: ''
+  - name: uid
+    type: character
+    description: ''
+  - name: time_valid
+    type: logical
+    description: ''
+  - name: season_year
+    type: integer
+    description: ''
+  - name: season_type
+    type: integer
+    description: ''
+  - name: season_slug
+    type: character
+    description: ''
+  - name: league_id
+    type: character
+    description: ''
+  - name: league_name
+    type: character
+    description: ''
+  - name: league_abbreviation
+    type: character
+    description: ''
+  - name: competition_id
+    type: character
+    description: ''
+  - name: competition_date
+    type: character
+    description: ''
+  - name: neutral_site
+    type: logical
+    description: ''
+  - name: status_name
+    type: character
+    description: ''
+  - name: status_description
+    type: character
+    description: ''
+  - name: is_final
+    type: character
+    description: ''
+- section: matchcards_batting
+  columns:
+  - name: innings_number
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: total
+    type: character
+    description: ''
+  - name: runs_total
+    type: character
+    description: ''
+  - name: extras
+    type: character
+    description: ''
+  - name: player_id
+    type: character
+    description: ''
+  - name: player_name
+    type: character
+    description: ''
+  - name: dismissal
+    type: character
+    description: ''
+  - name: runs
+    type: character
+    description: ''
+  - name: balls_faced
+    type: character
+    description: ''
+  - name: fours
+    type: character
+    description: ''
+  - name: sixes
+    type: character
+    description: ''
+- section: matchcards_bowling
+  columns:
+  - name: innings_number
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: player_id
+    type: character
+    description: ''
+  - name: player_name
+    type: character
+    description: ''
+  - name: overs
+    type: character
+    description: ''
+  - name: maidens
+    type: character
+    description: ''
+  - name: conceded
+    type: character
+    description: ''
+  - name: wickets
+    type: character
+    description: ''
+  - name: economy_rate
+    type: character
+    description: ''
+  - name: nbw
+    type: character
+    description: ''
+- section: matchcards_partnerships
+  columns:
+  - name: innings_number
+    type: character
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: partnership_runs
+    type: character
+    description: ''
+  - name: partnership_overs
+    type: character
+    description: ''
+  - name: wicket_name
+    type: character
+    description: ''
+  - name: fow_type
+    type: character
+    description: ''
+  - name: player1_name
+    type: character
+    description: ''
+  - name: player1_runs
+    type: character
+    description: ''
+  - name: player2_name
+    type: character
+    description: ''
+  - name: player2_runs
+    type: character
+    description: ''
+- section: rosters
+  columns:
+  - name: team_id
+    type: character
+    description: ''
+  - name: home_away
+    type: character
+    description: ''
+  - name: winner
+    type: logical
+    description: ''
+  - name: athlete_id
+    type: character
+    description: ''
+  - name: athlete
+    type: character
+    description: ''
+  - name: jersey
+    type: character
+    description: ''
+  - name: starter
+    type: logical
+    description: ''
+  - name: position
+    type: character
+    description: ''
+  - name: captain
+    type: logical
+    description: ''
+- section: game_info
+  columns:
+  - name: venue_id
+    type: character
+    description: ''
+  - name: venue_full_name
+    type: character
+    description: ''
+  - name: venue_short_name
+    type: character
+    description: ''
+  - name: venue_city
+    type: character
+    description: ''
+  - name: venue_country
+    type: character
+    description: ''
+  - name: attendance
+    type: integer
+    description: ''
+  - name: officials
+    type: character
+    description: ''
+- section: leaders
+  columns: []
+- section: standings
+  columns:
+  - name: group
+    type: character
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: team_id
+    type: character
+    description: ''
+  - name: rank
+    type: integer
+    description: ''
+  - name: matches_played
+    type: integer
+    description: ''
+  - name: matches_won
+    type: integer
+    description: ''
+  - name: matches_lost
+    type: integer
+    description: ''
+  - name: noresult
+    type: integer
+    description: ''
+  - name: match_points
+    type: integer
+    description: ''
+  - name: qualified
+    type: integer
+    description: ''
+  - name: netrr
+    type: double
+    description: ''
+  - name: for
+    type: double
+    description: ''
+  - name: against
+    type: double
+    description: ''
+  - name: total
+    type: character
+    description: ''
