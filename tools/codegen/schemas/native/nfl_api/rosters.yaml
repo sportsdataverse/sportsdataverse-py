@@ -1,0 +1,45 @@
+schema: rosters
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: Season (year) of the roster.
+- name: season_type
+  type: character
+  description: Season type code (PRE, REG, or POST).
+- name: team_id
+  type: character
+  description: NFL.com Shield GUID for the team.
+- name: team_abbreviation
+  type: character
+  description: Team abbreviation (e.g. "ARI").
+- name: team_full_name
+  type: character
+  description: Full team name (e.g. "Arizona Cardinals").
+- name: team_conference_abbr
+  type: character
+  description: Conference abbreviation (AFC or NFC).
+- name: team_conference_full_name
+  type: character
+  description: Full conference name (e.g. "National Football Conference").
+- name: team_current_logo
+  type: character
+  description: Templated URL of the team's current logo.
+- name: team_division_full_name
+  type: character
+  description: Full division name (e.g. "NFC West").
+- name: team_league
+  type: character
+  description: League name ("National Football League").
+- name: team_location
+  type: character
+  description: Team location / city (e.g. "Arizona").
+- name: team_nick_name
+  type: character
+  description: Team nickname (e.g. "Cardinals").
+- name: team_venues
+  type: character
+  description: JSON-stringified array of the team's venue objects (id, name, etc.).
+- name: persons
+  type: character
+  description: JSON-stringified array of roster player objects for the team.

@@ -4,6 +4,7 @@
 
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
   - [MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)](#mlb--comprehensive-baseball-savant--statcast-surface-mlb_statcast_-43-endpoints)
+  - [Documentation — `nfl_api` (NFL.com Shield) returns-schema tables](#documentation--nfl_api-nflcom-shield-returns-schema-tables)
 - [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
   - [All sports — `espn_*_game_rosters` diagonal per-team concat (fixes silent roster loss)](#all-sports--espn__game_rosters-diagonal-per-team-concat-fixes-silent-roster-loss)
   - [HTTP — `download()` no longer retries a definitive 404](#http--download-no-longer-retries-a-definitive-404)
@@ -127,6 +128,10 @@ Expanded the Baseball Savant integration from a 12-endpoint representative slice
 - **Hand-written search** — `mlb_statcast_search` (+ `_minors`, `_wbc`) auto-chunks the 25,000-row Savant cap and translates friendly filters (`season`, `pitch_type`, `at_bat_result`, `batters_lookup`, …) to Savant's `hf*` params. `mlb_statcast_player` parses a player page's `serverVals` section (default `statcast`, ~260 metrics) to a tidy frame (`section=` for others, `raw=True` for HTML).
 - **Returns-schemas** (`col_name | type | description`) for every frame-returning function, and `examples/notebooks/09_mlb_intro.ipynb` modernized to the new surface.
 - The pre-0.0.64 `statcast_*` names were **renamed (no aliases)** to the `mlb_statcast_*` convention.
+
+### Documentation — `nfl_api` (NFL.com Shield) returns-schema tables
+
+Added live-captured `col_name | type | description` returns-schemas for all 11 `api.nfl.com` endpoints (`standings`, `rosters`, `teams_history`, `team`, `weeks`, `weeks_by_date`, `combine_profiles`, `draft_picks`, `injuries`, `game_summaries`, `weekly_game_details`), wired via `returns_schema:` into `nfl_api.yaml` and rendered into the reference docs — bringing `nfl_api` to parity with the other six native API families (mlb_api, nhl_*). Docs/codegen-metadata only; no runtime change.
 
 ## 0.0.63 Release: June 16, 2026
 

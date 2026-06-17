@@ -1,0 +1,48 @@
+schema: team
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: NFL.com Shield GUID for the team.
+- name: bio
+  type: character
+  description: Team biography / description text (may be null).
+- name: current_background
+  type: character
+  description: Templated URL of the team's current background image.
+- name: current_coach
+  type: character
+  description: Name of the team's current head coach.
+- name: current_logo
+  type: character
+  description: Templated URL of the team's current logo.
+- name: primary_color
+  type: character
+  description: Team primary color (hex code).
+- name: secondary_color
+  type: character
+  description: Team secondary color (hex code).
+- name: year_established
+  type: integer
+  description: Year the franchise was established.
+- name: full_name
+  type: character
+  description: Full team name (e.g. "Arizona Cardinals").
+- name: nfl_shop_url
+  type: character
+  description: URL to the team's NFL Shop storefront.
+- name: official_website_url
+  type: character
+  description: URL of the team's official website.
+- name: owners
+  type: character
+  description: Name(s) of the team's owner(s).
+- name: team_type
+  type: character
+  description: Team type classification (e.g. "TEAM").
+- name: socials
+  type: character
+  description: JSON-stringified array of the team's social-media links (platform, link).
+- name: vll_channel_callsign
+  type: character
+  description: Verizon Live League (VLL) channel call sign for the team.

@@ -1,0 +1,105 @@
+schema: game_summaries
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: NFL.com Shield GUID for the game.
+- name: offset
+  type: integer
+  description: Live-feed sequence offset for the summary snapshot.
+- name: attendance
+  type: integer
+  description: Announced game attendance.
+- name: clock
+  type: character
+  description: Game clock at the snapshot (MM:SS).
+- name: distance
+  type: integer
+  description: Yards to gain for a first down at the snapshot.
+- name: down
+  type: integer
+  description: Current down (1-4) at the snapshot.
+- name: game_book_url
+  type: character
+  description: URL of the official game book image.
+- name: is_goal_to_go
+  type: logical
+  description: Whether the current situation is goal-to-go.
+- name: is_red_zone
+  type: logical
+  description: Whether the ball is in the red zone.
+- name: phase
+  type: character
+  description: Game phase (e.g. PREGAME, INGAME, HALFTIME, FINAL).
+- name: quarter
+  type: character
+  description: Current period descriptor (e.g. Q1, HALFTIME, END_OF_GAME).
+- name: start_time
+  type: character
+  description: ISO 8601 kickoff timestamp.
+- name: weather
+  type: character
+  description: Weather summary string (temperature, humidity, wind).
+- name: yard_line
+  type: character
+  description: Current line of scrimmage (e.g. "KC 10").
+- name: away_team_team_id
+  type: character
+  description: NFL.com Shield GUID of the away team.
+- name: away_team_has_possession
+  type: logical
+  description: Whether the away team has possession at the snapshot.
+- name: away_team_score_q1
+  type: integer
+  description: Away team points scored in the first quarter.
+- name: away_team_score_q2
+  type: integer
+  description: Away team points scored in the second quarter.
+- name: away_team_score_q3
+  type: integer
+  description: Away team points scored in the third quarter.
+- name: away_team_score_q4
+  type: integer
+  description: Away team points scored in the fourth quarter.
+- name: away_team_score_ot
+  type: integer
+  description: Away team points scored in overtime.
+- name: away_team_score_total
+  type: integer
+  description: Away team total points.
+- name: away_team_timeouts_remaining
+  type: integer
+  description: Away team timeouts remaining at the snapshot.
+- name: away_team_timeouts_used
+  type: integer
+  description: Away team timeouts used at the snapshot.
+- name: home_team_team_id
+  type: character
+  description: NFL.com Shield GUID of the home team.
+- name: home_team_has_possession
+  type: logical
+  description: Whether the home team has possession at the snapshot.
+- name: home_team_score_q1
+  type: integer
+  description: Home team points scored in the first quarter.
+- name: home_team_score_q2
+  type: integer
+  description: Home team points scored in the second quarter.
+- name: home_team_score_q3
+  type: integer
+  description: Home team points scored in the third quarter.
+- name: home_team_score_q4
+  type: integer
+  description: Home team points scored in the fourth quarter.
+- name: home_team_score_ot
+  type: integer
+  description: Home team points scored in overtime.
+- name: home_team_score_total
+  type: integer
+  description: Home team total points.
+- name: home_team_timeouts_remaining
+  type: integer
+  description: Home team timeouts remaining at the snapshot.
+- name: home_team_timeouts_used
+  type: integer
+  description: Home team timeouts used at the snapshot.

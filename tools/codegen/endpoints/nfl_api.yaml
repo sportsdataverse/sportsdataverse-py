@@ -18,6 +18,7 @@ endpoints:
   summary: "GET /football/v2/standings — one row per team standing across the returned week(s)."
   path: /football/v2/standings
   parser: parse_nfl_standings
+  returns_schema: native/nfl_api/standings
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
@@ -28,6 +29,7 @@ endpoints:
   summary: "GET /football/v2/rosters — one row per team roster for the season."
   path: /football/v2/rosters
   parser: parse_nfl_rosters
+  returns_schema: native/nfl_api/rosters
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: limit, query_key: limit, type: int, default: 40}
@@ -36,6 +38,7 @@ endpoints:
   summary: "GET /football/v2/teams/history — one row per team for a season."
   path: /football/v2/teams/history
   parser: parse_nfl_teams_history
+  returns_schema: native/nfl_api/teams_history
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: limit, query_key: limit, type: int, default: 40}
@@ -44,6 +47,7 @@ endpoints:
   summary: "GET /football/v2/teams/{team_id} — single-team detail (one row)."
   path: /football/v2/teams/{team_id}
   parser: parse_nfl_team
+  returns_schema: native/nfl_api/team
   path_params:
   - {name: team_id, type: str, required: true}
   example_args: {team_id: 10403800-517c-7b8c-65a3-c61b95d86123}
@@ -51,6 +55,7 @@ endpoints:
   summary: "GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calendar (one row per week)."
   path: /football/v2/weeks/season/{season}/seasonType/{season_type}
   parser: parse_nfl_weeks
+  returns_schema: native/nfl_api/weeks
   path_params:
   - {name: season, type: int, required: false, default: 2024}
   - {name: season_type, type: str, required: false, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
@@ -59,6 +64,7 @@ endpoints:
   summary: "GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row)."
   path: /football/v2/weeks/date/{date}
   parser: parse_nfl_weeks_by_date
+  returns_schema: native/nfl_api/weeks_by_date
   path_params:
   - {name: date, type: str, required: true}
   example_args: {date: '2024-09-08'}
@@ -66,6 +72,7 @@ endpoints:
   summary: "GET /football/v2/combine/profiles — one row per combine prospect."
   path: /football/v2/combine/profiles
   parser: parse_nfl_combine_profiles
+  returns_schema: native/nfl_api/combine_profiles
   extra_params:
   - {name: year, query_key: year, type: int, default: 2024}
   - {name: limit, query_key: limit, type: int, default: 40}
@@ -74,6 +81,7 @@ endpoints:
   summary: "GET /football/v2/draft/picks/report — one row per draft pick."
   path: /football/v2/draft/picks/report
   parser: parse_nfl_draft_picks
+  returns_schema: native/nfl_api/draft_picks
   extra_params:
   - {name: year, query_key: year, type: int, default: 2024}
   - {name: limit, query_key: limit, type: int, default: 40}
@@ -82,6 +90,7 @@ endpoints:
   summary: "GET /football/v2/injuries — one row per injured player."
   path: /football/v2/injuries
   parser: parse_nfl_injuries
+  returns_schema: native/nfl_api/injuries
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
@@ -91,6 +100,7 @@ endpoints:
   summary: "GET /football/v2/stats/live/game-summaries — one row per game (live state)."
   path: /football/v2/stats/live/game-summaries
   parser: parse_nfl_game_summaries
+  returns_schema: native/nfl_api/game_summaries
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: season_type, query_key: seasonType, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST -- not ESPN's numeric 1/2/3."}
@@ -100,6 +110,7 @@ endpoints:
   summary: "GET /football/v2/experience/weekly-game-details — one row per game (bare list)."
   path: /football/v2/experience/weekly-game-details
   parser: parse_nfl_weekly_game_details
+  returns_schema: native/nfl_api/weekly_game_details
   extra_params:
   - {name: season, query_key: season, type: int, default: 2024}
   - {name: season_type, query_key: type, type: str, default: REG, description: "Season type code (string): PRE, REG, or POST (sent as the `type` query param) -- not ESPN's numeric 1/2/3."}

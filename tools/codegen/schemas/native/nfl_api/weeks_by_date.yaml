@@ -1,0 +1,24 @@
+schema: weeks_by_date
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: Season (year) the date falls in.
+- name: season_type
+  type: character
+  description: Season type code (PRE, REG, or POST).
+- name: week
+  type: integer
+  description: Week number that the queried date falls within.
+- name: bye_teams
+  type: character
+  description: JSON-stringified array of teams on bye during the week (empty when none).
+- name: date_begin
+  type: character
+  description: Start date of the week (YYYY-MM-DD).
+- name: date_end
+  type: character
+  description: End date of the week (YYYY-MM-DD).
+- name: week_type
+  type: character
+  description: Week type code (e.g. PRE, REG, WC, DIV, CONF, SB).
