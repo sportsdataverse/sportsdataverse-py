@@ -3,9 +3,15 @@ contract: polars by default, pandas via return_as_pandas, snake-case columns,
 zero-row frame on empty/malformed input."""
 
 from __future__ import annotations
+
+import json
+import re
 from io import StringIO
+from typing import Dict
+
 import pandas as pd
 import polars as pl
+
 from sportsdataverse.dl_utils import underscore
 
 
@@ -41,3 +47,15 @@ def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | p
     if df.empty:
         return _empty_frame(return_as_pandas)
     return _to_output(_snake_columns(df), return_as_pandas)
+
+
+def _html_script_json(html: str, var_name: str) -> Dict:
+    if not html:
+        return {}
+    m = re.search(rf"var\s+{re.escape(var_name)}\s*=\s*(\{{.*?\}});", html, re.DOTALL)
+    if not m:
+        return {}
+    try:
+        return json.loads(m.group(1))
+    except Exception:
+        return {}
