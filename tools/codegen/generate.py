@@ -1268,7 +1268,14 @@ def refresh_return_schemas() -> int:
                 }
             else:
                 df = parser(payload)
-                doc = {"schema": name, "kind": "dataframe", "columns": _cols_from_frame(df, descs)}
+                cols = _cols_from_frame(df, descs)
+                # Skip 0-column captures: an empty per-league schema file would
+                # shadow (and suppress) the generic schemas/{name}.yaml fallback,
+                # leaving the league with NO return table. No file => generic applies.
+                if not cols:
+                    skipped += 1
+                    continue
+                doc = {"schema": name, "kind": "dataframe", "columns": cols}
             (outdir / f"{league}.yaml").write_text(
                 yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
             )
