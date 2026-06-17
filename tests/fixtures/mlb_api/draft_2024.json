@@ -1,0 +1,472 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "drafts": {
+    "draftYear": 2024,
+    "rounds": [
+      {
+        "round": "1",
+        "picks": [
+          {
+            "bisPlayerId": 5027335,
+            "pickRound": "1",
+            "pickNumber": 1,
+            "displayPickNumber": 1,
+            "roundPickNumber": 1,
+            "rank": 1,
+            "pickValue": "10570600",
+            "signingBonus": "8950000",
+            "home": {
+              "city": "Sydney",
+              "country": "AUS"
+            },
+            "scoutingReport": "https://www.mlb.com/video/2024-draft-travis-bazzana-2b?t=mlb-draft",
+            "school": {
+              "name": "Oregon State",
+              "schoolClass": "4YR JR",
+              "city": "Corvallis",
+              "country": "USA",
+              "state": "OR"
+            },
+            "blurb": "A native of Sydney, Australia, Bazzana came to the United States and immediately made an impact with a .902 OPS as a freshman. He upped that to 1.122 with 11 homers and 36 steals a year later, then raised his profile even more when he won the Cape Cod League batting title (.375) and MVP Award, putting him near the top of most Draft boards. The left-handed-hitting infielder is compact and strong with plenty of bat speed. He has an advanced approach at the plate with a ton of raw power he taps into, though he can occasionally be susceptible to offspeed stuff on the outer half. He\ufffds proven he can hit lefties as well as righties. A plus runner, he\ufffds a legitimate base-stealing threat. While some worry about where he can play defensively, some scouts think he\ufffds going to be just fine at second base. His athleticism helps him have good range, he has enough arm for the spot and he can turn the double play effectively. A second-base profile isn\ufffdt one often seen at the top of a Draft, but the conviction in his bat is so strong, he\ufffds going to get a lot of attention in the top 10.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/683953/headshot/draft/current",
+            "person": {
+              "id": 683953,
+              "fullName": "Travis Bazzana",
+              "link": "/api/v1/people/683953",
+              "firstName": "Travis",
+              "lastName": "Bazzana",
+              "primaryNumber": "37",
+              "birthDate": "2002-08-28",
+              "currentAge": 23,
+              "birthCity": "Hornsby",
+              "birthStateProvince": "NSW",
+              "birthCountry": "Australia",
+              "height": "5' 11\"",
+              "weight": 199,
+              "active": true,
+              "primaryPosition": {
+                "code": "4",
+                "name": "Second Base",
+                "type": "Infielder",
+                "abbreviation": "2B"
+              },
+              "useName": "Travis",
+              "useLastName": "Bazzana",
+              "middleName": "William",
+              "boxscoreName": "Bazzana",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2024,
+              "mlbDebutDate": "2026-04-28",
+              "batSide": {
+                "code": "L",
+                "description": "Left"
+              },
+              "pitchHand": {
+                "code": "R",
+                "description": "Right"
+              },
+              "nameFirstLast": "Travis Bazzana",
+              "nameSlug": "travis-bazzana-683953",
+              "firstLastName": "Travis Bazzana",
+              "lastFirstName": "Bazzana, Travis",
+              "lastInitName": "Bazzana, T",
+              "initLastName": "T Bazzana",
+              "fullFMLName": "Travis  Bazzana",
+              "fullLFMName": "Bazzana, Travis ",
+              "strikeZoneTop": 3.179,
+              "strikeZoneBottom": 1.604
+            },
+            "team": {
+              "springLeague": {
+                "id": 114,
+                "name": "Cactus League",
+                "link": "/api/v1/league/114",
+                "abbreviation": "CL"
+              },
+              "allStarStatus": "N",
+              "id": 114,
+              "name": "Cleveland Guardians",
+              "link": "/api/v1/teams/114"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "Rule 4 / June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2024"
+          },
+          {
+            "bisPlayerId": 5016701,
+            "pickRound": "1",
+            "pickNumber": 2,
+            "displayPickNumber": 2,
+            "roundPickNumber": 2,
+            "rank": 5,
+            "pickValue": "9785000",
+            "signingBonus": "9250000",
+            "home": {
+              "city": "Knoxville",
+              "state": "Tennessee",
+              "country": "USA"
+            },
+            "scoutingReport": "https://www.mlb.com/video/2024-draft-chase-burns-rhp?t=mlb-draft ",
+            "school": {
+              "name": "Wake Forest",
+              "schoolClass": "4YR JR",
+              "city": "Winston Salem",
+              "country": "USA",
+              "state": "NC"
+            },
+            "blurb": "Though Burns reached 100 mph with his fastball and drew some first-round interest as a Tennessee high schooler, he fell to the Padres in the 20th round of the 2021 Draft because he was set on pitching at Tennessee. He starred in the Volunteers' rotation as a freshman but logged a 6.10 ERA in eight starts in 2023, prompting a move to a long-relief role in which he thrived. He ranked third in NCAA Division I in strikeout rate (14.3 per nine innings) and helped Tennessee reach the College World Series, then opted to transfer to Wake Forest. He could be the first pitcher selected in a July following a spectacular junior season that has included Atlantic Coast Conference Pitcher of the Year accolades and the D-I lead in strikeouts (184 in 95 innings) entering regional tournament action. \nBurns operates at 97-99 mph and reaches 102 with his heater, but it's fairly straight and batters get a good look at it coming out of his high arm slot, so it gets hit harder than it should at times. His tight slider is a true beast that sits in the upper 80s and has generated a 60 percent swing-and-miss rate during the last two seasons. He also owns a plus low-80s curveball. Burns rarely uses his upper-80s changeup but it can be a plus pitch with significant fade when it's on. He has a history of throwing strikes and has improved his overall command this spring, though he's still going to need to locate his fastball with more precision at the next level. He has the ceiling of a frontline starter but comes with a bit of reliever risk.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/695505/headshot/draft/current",
+            "person": {
+              "id": 695505,
+              "fullName": "Chase Burns",
+              "link": "/api/v1/people/695505",
+              "firstName": "Chase",
+              "lastName": "Burns",
+              "primaryNumber": "26",
+              "birthDate": "2003-01-16",
+              "currentAge": 23,
+              "birthCity": "Naples",
+              "birthCountry": "Italy",
+              "height": "6' 3\"",
+              "weight": 210,
+              "active": true,
+              "primaryPosition": {
+                "code": "1",
+                "name": "Pitcher",
+                "type": "Pitcher",
+                "abbreviation": "P"
+              },
+              "useName": "Chase",
+              "useLastName": "Burns",
+              "middleName": "David",
+              "boxscoreName": "Burns, Ch",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2024,
+              "mlbDebutDate": "2025-06-24",
+              "batSide": {
+                "code": "R",
+                "description": "Right"
+              },
+              "pitchHand": {
+                "code": "R",
+                "description": "Right"
+              },
+              "nameFirstLast": "Chase Burns",
+              "nameSlug": "chase-burns-695505",
+              "firstLastName": "Chase Burns",
+              "lastFirstName": "Burns, Chase",
+              "lastInitName": "Burns, C",
+              "initLastName": "C Burns",
+              "fullFMLName": "Chase David Burns",
+              "fullLFMName": "Burns, Chase David",
+              "strikeZoneTop": 3.55,
+              "strikeZoneBottom": 1.63
+            },
+            "team": {
+              "springLeague": {
+                "id": 114,
+                "name": "Cactus League",
+                "link": "/api/v1/league/114",
+                "abbreviation": "CL"
+              },
+              "allStarStatus": "N",
+              "id": 113,
+              "name": "Cincinnati Reds",
+              "link": "/api/v1/teams/113"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "Rule 4 / June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2024"
+          },
+          {
+            "bisPlayerId": 5028602,
+            "pickRound": "1",
+            "pickNumber": 3,
+            "displayPickNumber": 3,
+            "roundPickNumber": 3,
+            "rank": 2,
+            "pickValue": "9070800",
+            "signingBonus": "9250000",
+            "home": {
+              "city": "Marietta",
+              "state": "Georgia",
+              "country": "USA"
+            },
+            "scoutingReport": "https://www.mlb.com/video/2024-draft-charlie-condon-of-1b?t=mlb-draft",
+            "school": {
+              "name": "Georgia",
+              "schoolClass": "4YR JR",
+              "city": "Athens",
+              "country": "USA",
+              "state": "GA"
+            },
+            "blurb": "Scouts and college recruiters took little notice of Condon when he was a physically underdeveloped Georgia high schooler, and he wound up going to Georgia as a preferred walk-on. He redshirted in 2022 as he continued to gain strength, then earned national freshman of the year honors last spring by slashing .386/.484/.800 with a Southeastern Conference freshman-record 25 homers. He won SEC Player of the Year accolades while posting even better numbers this spring, leading NCAA Division I in batting (.443), slugging (1.043), OPS (1.601), homers (35), extra-base hits (55) and total bases (219) entering regional tournament play. A leading candidate to go No. 1 overall, Condon should surpass Jeff Pyburn (No. 5 overall in 1980) as the highest-drafted player in Bulldogs history because he has a huge offensive ceiling. He has top-of-the-scale raw power that plays from foul pole to foul pole and his combination of bat speed, strength and leverage in his 6-foot-6 frame allows him to mishit balls yet still drive them out of the park. Despite his long arms, he keeps his right-handed swing relatively compact and controls the strike zone while repeatedly making loud contact against all types of pitching. \nThough he's a below-average runner, Condon is reasonably athletic and covers ground with long strides once he gets going. After splitting time between first base and the outfield corners as a freshman, he has played all three outfield spots and third base this spring. He's not quick enough for third or center but he does have solid-to-plus arm strength and can provide average defense in left or right field.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/809707/headshot/draft/current",
+            "person": {
+              "id": 809707,
+              "fullName": "Charlie Condon",
+              "link": "/api/v1/people/809707",
+              "firstName": "Charles",
+              "lastName": "Condon",
+              "birthDate": "2003-04-14",
+              "currentAge": 23,
+              "birthCity": "Atlanta",
+              "birthStateProvince": "GA",
+              "birthCountry": "USA",
+              "height": "6' 5\"",
+              "weight": 216,
+              "active": true,
+              "primaryPosition": {
+                "code": "O",
+                "name": "Outfield",
+                "type": "Outfielder",
+                "abbreviation": "OF"
+              },
+              "useName": "Charlie",
+              "useLastName": "Condon",
+              "middleName": "William",
+              "boxscoreName": "Condon",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2024,
+              "batSide": {
+                "code": "R",
+                "description": "Right"
+              },
+              "pitchHand": {
+                "code": "R",
+                "description": "Right"
+              },
+              "nameFirstLast": "Charlie Condon",
+              "nameSlug": "charlie-condon-809707",
+              "firstLastName": "Charlie Condon",
+              "lastFirstName": "Condon, Charlie",
+              "lastInitName": "Condon, C",
+              "initLastName": "C Condon",
+              "fullFMLName": "Charles Condon",
+              "fullLFMName": "Condon, Charles ",
+              "strikeZoneTop": 3.442,
+              "strikeZoneBottom": 1.737
+            },
+            "team": {
+              "springLeague": {
+                "id": 114,
+                "name": "Cactus League",
+                "link": "/api/v1/league/114",
+                "abbreviation": "CL"
+              },
+              "allStarStatus": "N",
+              "id": 115,
+              "name": "Colorado Rockies",
+              "link": "/api/v1/teams/115"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "Rule 4 / June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2024"
+          },
+          {
+            "bisPlayerId": 5018297,
+            "pickRound": "1",
+            "pickNumber": 4,
+            "displayPickNumber": 4,
+            "roundPickNumber": 4,
+            "rank": 4,
+            "pickValue": "8370800",
+            "signingBonus": "7000000",
+            "home": {
+              "city": "Lancaster",
+              "state": "Pennsylvania",
+              "country": "USA"
+            },
+            "scoutingReport": "https://www.mlb.com/video/2024-draft-nick-kurtz-1b?t=mlb-draft ",
+            "school": {
+              "name": "Wake Forest",
+              "schoolClass": "4YR JR",
+              "city": "Winston Salem",
+              "country": "USA",
+              "state": "NC"
+            },
+            "blurb": "Wake Forest originally recruited Kurtz as a left-handed pitcher, but over the course of winning consecutive Tennessee Division II 2-A state baseball championships at Baylor School (Chattanooga), he emerged as a superior prospect as a hitter. After batting .344/.498/.695 with 39 homers in his first two college seasons, he entered 2024 as a candidate to go first in the Draft. He got off to a slow start and missed two weeks with a shoulder injury, then went on a rampage shortly after he returned and homered 14 times in nine games, including six blasts in seven at-bats. He topped NCAA Division I with 76 walks heading into regional tournament action. Kurtz's signature tool is his well-above-average power to all fields, the product of outstanding bat speed, strength and a left-handed stroke designed to drive balls in the air. More than just a slugger, he's a complete hitter with no discernible weakness who crushes left-handers and right-handers and all types of pitches. He controls the strike zone, covers the entire plate and hits the ball with authority all over the ballpark. Kurtz also plays a quality first base and has average arm strength. The only blemishes on his game are his below-average speed, which doesn't really matter given his position and offensive upside, and an injury history that includes a broken rib that knocked him out of the end of the 2023 College World Series. If he's as good as scouts believe he is, he could turn into Jim Thome with defensive value.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/701762/headshot/draft/current",
+            "person": {
+              "id": 701762,
+              "fullName": "Nick Kurtz",
+              "link": "/api/v1/people/701762",
+              "firstName": "Nicholas",
+              "lastName": "Kurtz",
+              "primaryNumber": "16",
+              "birthDate": "2003-03-12",
+              "currentAge": 23,
+              "birthCity": "Lancaster",
+              "birthStateProvince": "PA",
+              "birthCountry": "USA",
+              "height": "6' 5\"",
+              "weight": 240,
+              "active": true,
+              "primaryPosition": {
+                "code": "3",
+                "name": "First Base",
+                "type": "Infielder",
+                "abbreviation": "1B"
+              },
+              "useName": "Nick",
+              "useLastName": "Kurtz",
+              "middleName": "Jeffrey",
+              "boxscoreName": "Kurtz",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2024,
+              "mlbDebutDate": "2025-04-23",
+              "batSide": {
+                "code": "L",
+                "description": "Left"
+              },
+              "pitchHand": {
+                "code": "L",
+                "description": "Left"
+              },
+              "nameFirstLast": "Nick Kurtz",
+              "nameSlug": "nick-kurtz-701762",
+              "firstLastName": "Nick Kurtz",
+              "lastFirstName": "Kurtz, Nick",
+              "lastInitName": "Kurtz, N",
+              "initLastName": "N Kurtz",
+              "fullFMLName": "Nicholas Jeffrey Kurtz",
+              "fullLFMName": "Kurtz, Nicholas Jeffrey",
+              "strikeZoneTop": 3.413,
+              "strikeZoneBottom": 1.722
+            },
+            "team": {
+              "springLeague": {
+                "id": 114,
+                "name": "Cactus League",
+                "link": "/api/v1/league/114",
+                "abbreviation": "CL"
+              },
+              "allStarStatus": "N",
+              "id": 133,
+              "name": "Athletics",
+              "link": "/api/v1/teams/133"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "Rule 4 / June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2024"
+          },
+          {
+            "bisPlayerId": 5018163,
+            "pickRound": "1",
+            "pickNumber": 5,
+            "displayPickNumber": 5,
+            "roundPickNumber": 5,
+            "rank": 6,
+            "pickValue": "7763700",
+            "signingBonus": "8000000",
+            "home": {
+              "city": "Tyler",
+              "state": "Texas",
+              "country": "USA"
+            },
+            "scoutingReport": "https://www.mlb.com/video/2024-draft-hagen-smith-lhp?t=mlb-draft ",
+            "school": {
+              "name": "Arkansas",
+              "schoolClass": "4YR JR",
+              "city": "Fayetteville",
+              "country": "USA",
+              "state": "AR"
+            },
+            "blurb": "After blowing out his elbow as a high school sophomore and having Tommy John surgery, Smith bounced back to tie a Texas prep record with seven no-hitters as a senior in 2021. He might have factored in the top three rounds that July if not for his strong commitment to Arkansas. He has better stuff than any southpaw in this Draft and could be the first pitcher selected after finding more consistency this spring. He won Southeastern Conference Pitcher of the Year honors and led NCAA Division I in ERA (1.48), strikeout rate (17.5 per nine innings, which would be a record if it holds up) and opponent average (.139) at the outset of regional tournament play. Smith operates at 94-97 mph and touches 100 with his fastball, which plays up because his funky delivery creates deception and riding action. His best offering is an 83-87 mph slider, which features sweep and depth while destroying lefties and keeping righties at bay, and he also can turn it into a cutter that reaches 91 mph. He uses an upper-80s splitter as a change of pace, and while he struggles to locate it well, it has intriguing tumble when it's on. Smith employs far from a textbook delivery, working from a low-three-quarters slot with some crossfire that makes it tough to pick up his pitches and also to throw strikes at times. He has improved his control and performance in 2024, highlighted by striking out 17 over six innings on just 78 pitches against Oregon State, with some evaluators calling it the most dominant game they ever had seen. He has a strong 6-foot-3, 225-pound frame built for durability and could become a frontline starter if he continues to harness his stuff.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/696146/headshot/draft/current",
+            "person": {
+              "id": 696146,
+              "fullName": "Hagen Smith",
+              "link": "/api/v1/people/696146",
+              "firstName": "Hagen",
+              "lastName": "Smith",
+              "birthDate": "2003-08-19",
+              "currentAge": 22,
+              "birthCity": "Bullard",
+              "birthStateProvince": "TX",
+              "birthCountry": "USA",
+              "height": "6' 3\"",
+              "weight": 235,
+              "active": true,
+              "primaryPosition": {
+                "code": "1",
+                "name": "Pitcher",
+                "type": "Pitcher",
+                "abbreviation": "P"
+              },
+              "useName": "Hagen",
+              "useLastName": "Smith",
+              "middleName": "Boyd",
+              "boxscoreName": "Smith, H",
+              "gender": "M",
+              "isPlayer": true,
+              "isVerified": true,
+              "draftYear": 2024,
+              "batSide": {
+                "code": "L",
+                "description": "Left"
+              },
+              "pitchHand": {
+                "code": "L",
+                "description": "Left"
+              },
+              "nameFirstLast": "Hagen Smith",
+              "nameSlug": "hagen-smith-696146",
+              "firstLastName": "Hagen Smith",
+              "lastFirstName": "Smith, Hagen",
+              "lastInitName": "Smith, H",
+              "initLastName": "H Smith",
+              "fullFMLName": "Hagen Boyd Smith",
+              "fullLFMName": "Smith, Hagen Boyd",
+              "strikeZoneTop": 3.344,
+              "strikeZoneBottom": 1.688
+            },
+            "team": {
+              "springLeague": {
+                "id": 114,
+                "name": "Cactus League",
+                "link": "/api/v1/league/114",
+                "abbreviation": "CL"
+              },
+              "allStarStatus": "N",
+              "id": 145,
+              "name": "Chicago White Sox",
+              "link": "/api/v1/teams/145"
+            },
+            "draftType": {
+              "code": "JR",
+              "description": "Rule 4 / June Amateur Draft"
+            },
+            "isDrafted": true,
+            "isPass": false,
+            "year": "2024"
+          }
+        ]
+      }
+    ]
+  }
+}

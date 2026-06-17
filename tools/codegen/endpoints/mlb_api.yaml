@@ -25,6 +25,7 @@ endpoints:
   parser: parse_mlb_api_schedule
   returns_schema: native/mlb_api/schedule_postseason
 - short: pbp
+  returns_schema: native/mlb_api/pbp
   summary: "GET /api/v1.1/game/{gamePk}/feed/live \u2014 live firehose (v1.1)."
   path: /api/v1.1/game/{game_pk}/feed/live
   path_params:
@@ -102,6 +103,7 @@ endpoints:
   parser: parse_mlb_api_play_by_play
   returns_schema: native/mlb_api/play_by_play
 - short: game_context_metrics
+  returns_schema: native/mlb_api/game_context_metrics
   summary: "GET /api/v1/game/{gamePk}/contextMetrics \u2014 WP, leverage index, in-game context."
   path: /api/v1/game/{game_pk}/contextMetrics
   path_params:
@@ -131,6 +133,7 @@ endpoints:
   parser: parse_mlb_api_win_probability
   returns_schema: native/mlb_api/win_probability
 - short: game_content
+  returns_schema: native/mlb_api/game_content
   summary: "GET /api/v1/game/{gamePk}/content \u2014 articles, highlights, editorial content."
   path: /api/v1/game/{game_pk}/content
   path_params:
@@ -235,6 +238,7 @@ endpoints:
   parser: parse_mlb_api_list
   returns_schema: native/mlb_api/team_affiliates
 - short: people
+  returns_schema: native/mlb_api/people
   summary: "GET /api/v1/people?personIds=... \u2014 bulk person lookup by MLBAM id."
   path: /api/v1/people
   extra_params:
@@ -249,6 +253,7 @@ endpoints:
     type: str
   parser: parse_mlb_api_list
 - short: person
+  returns_schema: native/mlb_api/person
   summary: "GET /api/v1/people/{personId} \u2014 single person detail."
   path: /api/v1/people/{person_id}
   path_params:
@@ -269,6 +274,7 @@ endpoints:
     person_id: 660271
   parser: parse_mlb_api_list
 - short: person_game_stats
+  returns_schema: native/mlb_api/person_game_stats
   summary: "GET /api/v1/people/{personId}/stats/game/{gamePk} \u2014 one player, one game."
   path: /api/v1/people/{person_id}/stats/game/{game_pk}
   path_params:
@@ -381,6 +387,7 @@ endpoints:
   parser: parse_mlb_api_list
   returns_schema: native/mlb_api/venue
 - short: meta
+  returns_schema: native/mlb_api/meta
   summary: "GET /api/v1/{metaType} \u2014 enum lookup (the API's self-describing surface)."
   path: /api/v1/{meta_type}
   path_params:
@@ -422,6 +429,7 @@ endpoints:
   parser: parse_mlb_api_list
   returns_schema: native/mlb_api/award_recipients
 - short: draft
+  returns_schema: native/mlb_api/draft
   summary: "GET /api/v1/draft/{year} \u2014 draft results for a year (optionally one round)."
   path: /api/v1/draft/{year}
   path_params:

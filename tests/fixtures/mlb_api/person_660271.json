@@ -1,0 +1,53 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "people": [
+    {
+      "id": 660271,
+      "fullName": "Shohei Ohtani",
+      "link": "/api/v1/people/660271",
+      "firstName": "Shohei",
+      "lastName": "Ohtani",
+      "primaryNumber": "17",
+      "birthDate": "1994-07-05",
+      "currentAge": 31,
+      "birthCity": "Oshu",
+      "birthCountry": "Japan",
+      "height": "6' 4\"",
+      "weight": 210,
+      "active": true,
+      "primaryPosition": {
+        "code": "Y",
+        "name": "Two-Way Player",
+        "type": "Two-Way Player",
+        "abbreviation": "TWP"
+      },
+      "useName": "Shohei",
+      "useLastName": "Ohtani",
+      "boxscoreName": "Ohtani",
+      "nickName": "Showtime",
+      "gender": "M",
+      "isPlayer": true,
+      "isVerified": false,
+      "pronunciation": "show-HEY oh-TAWN-ee",
+      "mlbDebutDate": "2018-03-29",
+      "batSide": {
+        "code": "L",
+        "description": "Left"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "Shohei Ohtani",
+      "nameSlug": "shohei-ohtani-660271",
+      "firstLastName": "Shohei Ohtani",
+      "lastFirstName": "Ohtani, Shohei",
+      "lastInitName": "Ohtani, S",
+      "initLastName": "S Ohtani",
+      "fullFMLName": "Shohei Ohtani",
+      "fullLFMName": "Ohtani, Shohei",
+      "strikeZoneTop": 3.369,
+      "strikeZoneBottom": 1.7
+    }
+  ]
+}

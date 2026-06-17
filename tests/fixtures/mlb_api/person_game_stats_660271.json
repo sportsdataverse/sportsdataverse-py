@@ -1,0 +1,170 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "stats": [
+    {
+      "type": {
+        "displayName": "vsPlayer5Y"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "totalSplits": 1,
+      "exemptions": [],
+      "splits": [
+        {
+          "stat": {
+            "gamesPlayed": 3,
+            "groundOuts": 3,
+            "airOuts": 2,
+            "doubles": 1,
+            "triples": 0,
+            "homeRuns": 0,
+            "strikeOuts": 1,
+            "baseOnBalls": 0,
+            "intentionalWalks": 0,
+            "hits": 1,
+            "hitByPitch": 0,
+            "avg": ".143",
+            "atBats": 7,
+            "obp": ".143",
+            "slg": ".286",
+            "ops": ".429",
+            "groundIntoDoublePlay": 0,
+            "groundIntoTriplePlay": 0,
+            "numberOfPitches": 30,
+            "plateAppearances": 7,
+            "totalBases": 2,
+            "rbi": 0,
+            "leftOnBase": 0,
+            "sacBunts": 0,
+            "sacFlies": 0,
+            "babip": ".167",
+            "groundOutsToAirouts": "1.50",
+            "catchersInterference": 0,
+            "atBatsPerHomeRun": "-.--"
+          },
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          },
+          "opponent": {
+            "id": 111,
+            "name": "Boston Red Sox",
+            "link": "/api/v1/teams/111"
+          },
+          "gameType": "R",
+          "numTeams": 1,
+          "pitcher": {
+            "id": 676477,
+            "fullName": "Garrett Whitlock",
+            "link": "/api/v1/people/676477",
+            "firstName": "Garrett",
+            "lastName": "Whitlock"
+          },
+          "batter": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          }
+        }
+      ]
+    },
+    {
+      "type": {
+        "displayName": "vsPlayer5Y"
+      },
+      "group": {
+        "displayName": "pitching"
+      },
+      "totalSplits": 1,
+      "exemptions": [],
+      "splits": [
+        {
+          "stat": {
+            "gamesPlayed": 1,
+            "groundOuts": 0,
+            "airOuts": 1,
+            "doubles": 0,
+            "triples": 0,
+            "homeRuns": 0,
+            "strikeOuts": 1,
+            "baseOnBalls": 0,
+            "intentionalWalks": 0,
+            "hits": 1,
+            "hitByPitch": 0,
+            "avg": ".333",
+            "atBats": 3,
+            "obp": ".333",
+            "slg": ".333",
+            "ops": ".666",
+            "groundIntoDoublePlay": 0,
+            "numberOfPitches": 12,
+            "inningsPitched": "0.2",
+            "outsPitched": 2,
+            "whip": "1.50",
+            "battersFaced": 3,
+            "outs": 2,
+            "gamesPitched": 1,
+            "balls": 6,
+            "strikes": 6,
+            "strikePercentage": ".500",
+            "hitBatsmen": 0,
+            "balks": 0,
+            "wildPitches": 0,
+            "totalBases": 1,
+            "groundOutsToAirouts": "0.00",
+            "rbi": 0,
+            "pitchesPerInning": "18.00",
+            "strikeoutWalkRatio": "-.--",
+            "strikeoutsPer9Inn": "13.50",
+            "walksPer9Inn": "0.00",
+            "hitsPer9Inn": "13.50",
+            "homeRunsPer9": "0.00",
+            "catchersInterference": 0,
+            "sacBunts": 0,
+            "sacFlies": 0
+          },
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          },
+          "opponent": {
+            "id": 134,
+            "name": "Pittsburgh Pirates",
+            "link": "/api/v1/teams/134"
+          },
+          "gameType": "R",
+          "numTeams": 1,
+          "pitcher": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          },
+          "batter": {
+            "id": 656811,
+            "fullName": "Ryan O'Hearn",
+            "link": "/api/v1/people/656811",
+            "firstName": "Ryan",
+            "lastName": "O'Hearn"
+          }
+        }
+      ]
+    },
+    {
+      "type": {
+        "displayName": "playLog"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "exemptions": [],
+      "splits": []
+    }
+  ]
+}
