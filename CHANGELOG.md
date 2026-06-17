@@ -2,6 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
+  - [Namespace — minor/alias leagues nested under sport-group packages](#namespace--minoralias-leagues-nested-under-sport-group-packages)
+  - [All sports — `espn_*_game_rosters` vectorized logo extraction](#all-sports--espn__game_rosters-vectorized-logo-extraction)
+  - [MLB — `mlb_api_*` renamed to `mlb_*`](#mlb--mlb_api_-renamed-to-mlb_)
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
   - [MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)](#mlb--comprehensive-baseball-savant--statcast-surface-mlb_statcast_-43-endpoints)
   - [Documentation — `nfl_api` (NFL.com Shield) returns-schema tables](#documentation--nfl_api-nflcom-shield-returns-schema-tables)
@@ -117,6 +121,26 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.65 Release: June 17, 2026
+
+### Namespace — minor/alias leagues nested under sport-group packages
+
+- refactor(namespace): nest minor/alias leagues under sport-group packages (`sportsdataverse.soccer.epl`, `.hockey.ahl`, `.football.ufl`, `.baseball.college_baseball`); the 8 majors + pwhl/soccer/cricket stay top-level. Legacy names (`sportsdataverse.epl`, `import sportsdataverse.ufl`) still resolve with a `DeprecationWarning`. NOTE: `discover.function_count()`/`list_functions()` keep flat-leaf keys (`function_count(league="ufl")` works); `import sportsdataverse` now eagerly loads the 12 soccer-alias submodules to support attribute access.
+
+### All sports — `espn_*_game_rosters` vectorized logo extraction
+
+Pre-2010 ESPN team payloads omit the `logos` key entirely, causing `helper_{sport}_team_items` to raise `polars.exceptions.ColumnNotFoundError: "logos" not found`. The row-by-row item-assignment fallback (`teams_df[row, "logo_href"] = ...`) also triggers `TypeError: the truth value of a Series is ambiguous` in polars 1.x because the row-index selector internally evaluates `Series.__bool__`.
+
+Replaced the logos block in all seven `espn_*_game_rosters` modules (`cfb`, `mbb`, `nba`, `nfl`, `nhl`, `wbb`, `wnba`) with vectorized `with_columns`:
+
+- `if "logos" in teams_df.columns:` guard handles pre-2010 payloads where the key is absent.
+- `pl.col("logos").list.get(i).struct.field("href").fill_null("")` — expression-engine extraction, null-safe, no Python-level row iteration.
+- `except Exception:` fallback to empty-string literals if the logos payload doesn't match the expected `List(Struct)` shape.
+
+### MLB — `mlb_api_*` renamed to `mlb_*`
+
+The 64 Stats API wrapper functions in `mlb_api.py` (generated via `tools/codegen/endpoints/mlb_api.yaml`) and the 15 hand-written functions in `mlb_api_extra.py` were renamed from `mlb_api_{short}` to `mlb_{short}` — parallel to the `statcast_*` → `mlb_statcast_*` rename in 0.0.64. The `_api_` infix was a disambiguation artifact from when multiple backends shared the module; it is now redundant. **No aliases — update call sites accordingly.**
 
 ## 0.0.64 Release: June 17, 2026
 

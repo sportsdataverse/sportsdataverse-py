@@ -8,259 +8,6 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.mlb`
 not covered by the generated API-endpoint reference above.
 
-## MLB Stats API
-
-### `mlb_api_attendance(team_id: 'Optional[int]' = None, league_id: 'Optional[Union[int, str]]' = None, season: 'Optional[Union[int, str]]' = None, league_list_id: 'Optional[str]' = None, game_type: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_attendance}
-
-GET /api/v1/attendance — game attendance figures.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `Optional[int]` | `None` |  |
-| `league_id` | `Optional[Union[int, str]]` | `None` |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `league_list_id` | `Optional[str]` | `None` |  |
-| `game_type` | `Optional[str]` | `None` |  |
-
-### `mlb_api_divisions(sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, division_id: 'Optional[int]' = None, **kwargs) -> 'Dict'` {#mlb_api_divisions}
-
-GET /api/v1/divisions — list divisions.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sport_id` | `int` | `1` |  |
-| `league_id` | `Optional[Union[int, str]]` | `None` |  |
-| `division_id` | `Optional[int]` | `None` |  |
-
-### `mlb_api_draft_prospects(year: 'Union[int, str]', scouting_report: 'Optional[bool]' = None, limit: 'int' = 100, **kwargs) -> 'Dict'` {#mlb_api_draft_prospects}
-
-GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `year` | `Union[int, str]` |  |  |
-| `scouting_report` | `Optional[bool]` | `None` |  |
-| `limit` | `int` | `100` |  |
-
-### `mlb_api_pbp_diff(game_pk: 'int', start_timecode: 'str', end_timecode: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_pbp_diff}
-
-GET /api/v1/game/{gamePk}/feed/live/diffPatch — JSON-patch diff of the live feed.
-
-Replays of in-game state for low-bandwidth clients.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_pk` | `int` |  |  |
-| `start_timecode` | `str` |  |  |
-| `end_timecode` | `Optional[str]` | `None` |  |
-
-### `mlb_api_pbp_live(game_pk: 'int', language: 'Optional[str]' = None, timecode: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_pbp_live}
-
-GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
-
-Top-level keys: `copyright, gamePk, link, metaData, gameData, liveData`.
-Includes Statcast metrics where available. The historical name
-`mlb_api_pbp` is preserved as an alias.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_pk` | `int` |  |  |
-| `language` | `Optional[str]` | `None` |  |
-| `timecode` | `Optional[str]` | `None` |  |
-| `hydrate` | `Optional[str]` | `None` |  |
-| `fields` | `Optional[str]` | `None` |  |
-
-### `mlb_api_person_stats(person_id: 'int', stats: 'str', group: 'str' = 'hitting', season: 'Optional[Union[int, str]]' = None, season_type: 'Optional[str]' = None, sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_person_stats}
-
-GET /api/v1/people/{personId}/stats — player aggregate stats.
-
-`stats`: `season`, `career`, `yearByYear`, `vsTeam`, `vsPlayer`,
-`byMonth`, `byDayOfWeek`, `homeAndAway`, `gameLog`, `lastXGames`, …
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `person_id` | `int` |  |  |
-| `stats` | `str` |  |  |
-| `group` | `str` | `'hitting'` |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `season_type` | `Optional[str]` | `None` |  |
-| `sport_ids` | `Optional[Union[int, List[int]]]` | `None` |  |
-| `game_type` | `Optional[str]` | `None` |  |
-| `fields` | `Optional[str]` | `None` |  |
-
-### `mlb_api_schedule(date: 'Optional[str]' = None, start_date: 'Optional[str]' = None, end_date: 'Optional[str]' = None, team_id: 'Optional[int]' = None, opponent_id: 'Optional[int]' = None, season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, game_type: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_schedule}
-
-GET /api/v1/schedule — schedule of games for a date, range, team, or season.
-
-Response: `dates[].games[]`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `date` | `Optional[str]` | `None` |  |
-| `start_date` | `Optional[str]` | `None` |  |
-| `end_date` | `Optional[str]` | `None` |  |
-| `team_id` | `Optional[int]` | `None` |  |
-| `opponent_id` | `Optional[int]` | `None` |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `sport_id` | `int` | `1` |  |
-| `game_type` | `Optional[str]` | `None` |  |
-| `league_id` | `Optional[Union[int, str]]` | `None` |  |
-| `hydrate` | `Optional[str]` | `None` |  |
-| `fields` | `Optional[str]` | `None` |  |
-
-### `mlb_api_seasons(sport_id: 'int' = 1, season: 'Optional[Union[int, str]]' = None, all_seasons: 'bool' = False, **kwargs) -> 'Dict'` {#mlb_api_seasons}
-
-GET /api/v1/seasons — list of seasons for a sport.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sport_id` | `int` | `1` |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `all_seasons` | `bool` | `False` |  |
-
-### `mlb_api_standings(league_id: 'Union[int, str, List[int]]' = '103,104', season: 'Optional[Union[int, str]]' = None, date: 'Optional[str]' = None, standings_types: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_standings}
-
-GET /api/v1/standings — league standings.
-
-`league_id`: `103` AL, `104` NL (comma-separated for both, the default).
-`standings_types` e.g. `regularSeason`, `wildCard`, `divisionLeaders`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league_id` | `Union[int, str, List[int]]` | `'103,104'` |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `date` | `Optional[str]` | `None` |  |
-| `standings_types` | `Optional[str]` | `None` |  |
-| `hydrate` | `Optional[str]` | `None` |  |
-| `fields` | `Optional[str]` | `None` |  |
-
-### `mlb_api_stats(stats: 'str', group: 'str', season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, team_id: 'Optional[int]' = None, player_pool: 'Optional[str]' = None, game_type: 'Optional[str]' = None, limit: 'int' = 50, offset: 'int' = 0, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_stats}
-
-GET /api/v1/stats — generic stats query.
-
-`stats` selects the slice (`season`, `career`, `yearByYear`, …) and
-`group` selects the stat group (`hitting`, `pitching`, `fielding`).
-Filters: `season`, `team_id`, `league_id`, `game_type`, `player_pool`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `stats` | `str` |  |  |
-| `group` | `str` |  |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `sport_id` | `int` | `1` |  |
-| `league_id` | `Optional[Union[int, str]]` | `None` |  |
-| `team_id` | `Optional[int]` | `None` |  |
-| `player_pool` | `Optional[str]` | `None` |  |
-| `game_type` | `Optional[str]` | `None` |  |
-| `limit` | `int` | `50` |  |
-| `offset` | `int` | `0` |  |
-| `fields` | `Optional[str]` | `None` |  |
-
-### `mlb_api_stats_leaders(leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, stat_group: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, limit: 'int' = 10, **kwargs) -> 'Dict'` {#mlb_api_stats_leaders}
-
-GET /api/v1/stats/leaders — top-N leaders for a stat category.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `leader_categories` | `str` |  |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `leader_game_types` | `Optional[str]` | `None` |  |
-| `stat_group` | `Optional[str]` | `None` |  |
-| `league_id` | `Optional[Union[int, str]]` | `None` |  |
-| `sport_id` | `int` | `1` |  |
-| `limit` | `int` | `10` |  |
-
-### `mlb_api_stats_streaks(streak_type: 'str', streak_threshold: 'int' = 1, season: 'Optional[Union[int, str]]' = None, stat_group: 'Optional[str]' = None, active_streak: 'Optional[bool]' = None, sport_id: 'int' = 1, **kwargs) -> 'Dict'` {#mlb_api_stats_streaks}
-
-GET /api/v1/stats/streaks — active or historical streaks.
-
-`streak_type` e.g. `hittingStreakOverall`, `onBaseOverall`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `streak_type` | `str` |  |  |
-| `streak_threshold` | `int` | `1` |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `stat_group` | `Optional[str]` | `None` |  |
-| `active_streak` | `Optional[bool]` | `None` |  |
-| `sport_id` | `int` | `1` |  |
-
-### `mlb_api_team_leaders(team_id: 'int', leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, limit: 'int' = 10, **kwargs) -> 'Dict'` {#mlb_api_team_leaders}
-
-GET /api/v1/teams/{teamId}/leaders — team leaders.
-
-`leader_categories` e.g. `homeRuns`, `battingAverage`, `wins`,
-`earnedRunAverage` (comma-separated for multi).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `int` |  |  |
-| `leader_categories` | `str` |  |  |
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `leader_game_types` | `Optional[str]` | `None` |  |
-| `limit` | `int` | `10` |  |
-
-### `mlb_api_team_stats(team_id: 'int', season: 'Union[int, str]', stats: 'str' = 'season', group: 'str' = 'hitting', sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_team_stats}
-
-GET /api/v1/teams/{teamId}/stats — team-level stats.
-
-`stats`: `season`, `career`, `yearByYear`, `byMonth`, `byDayOfWeek`, …
-`group`: `hitting`, `pitching`, `fielding`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `int` |  |  |
-| `season` | `Union[int, str]` |  |  |
-| `stats` | `str` | `'season'` |  |
-| `group` | `str` | `'hitting'` |  |
-| `sport_ids` | `Optional[Union[int, List[int]]]` | `None` |  |
-| `game_type` | `Optional[str]` | `None` |  |
-| `fields` | `Optional[str]` | `None` |  |
-
-### `mlb_api_teams(season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_ids: 'Optional[Union[int, List[int], str]]' = None, active_status: 'Optional[str]' = None, all_star_statuses: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_api_teams}
-
-GET /api/v1/teams — list teams. `sport_id=1` = MLB.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[Union[int, str]]` | `None` |  |
-| `sport_id` | `int` | `1` |  |
-| `league_ids` | `Optional[Union[int, List[int], str]]` | `None` |  |
-| `active_status` | `Optional[str]` | `None` |  |
-| `all_star_statuses` | `Optional[str]` | `None` |  |
-| `hydrate` | `Optional[str]` | `None` |  |
-| `fields` | `Optional[str]` | `None` |  |
-
 ## Play-by-play, schedule & rosters
 
 ### `espn_mlb_game_rosters(game_id: 'int', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs)` {#espn_mlb_game_rosters}
@@ -818,6 +565,148 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 from sportsdataverse.mlb import fox_mlb_team_stats
 df = fox_mlb_team_stats("...")
 ```
+
+### `mlb_attendance(team_id: 'Optional[int]' = None, league_id: 'Optional[Union[int, str]]' = None, season: 'Optional[Union[int, str]]' = None, league_list_id: 'Optional[str]' = None, game_type: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_attendance}
+
+GET /api/v1/attendance — game attendance figures.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `Optional[int]` | `None` |  |
+| `league_id` | `Optional[Union[int, str]]` | `None` |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `league_list_id` | `Optional[str]` | `None` |  |
+| `game_type` | `Optional[str]` | `None` |  |
+
+### `mlb_divisions(sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, division_id: 'Optional[int]' = None, **kwargs) -> 'Dict'` {#mlb_divisions}
+
+GET /api/v1/divisions — list divisions.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sport_id` | `int` | `1` |  |
+| `league_id` | `Optional[Union[int, str]]` | `None` |  |
+| `division_id` | `Optional[int]` | `None` |  |
+
+### `mlb_draft_prospects(year: 'Union[int, str]', scouting_report: 'Optional[bool]' = None, limit: 'int' = 100, **kwargs) -> 'Dict'` {#mlb_draft_prospects}
+
+GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Union[int, str]` |  |  |
+| `scouting_report` | `Optional[bool]` | `None` |  |
+| `limit` | `int` | `100` |  |
+
+### `mlb_pbp_diff(game_pk: 'int', start_timecode: 'str', end_timecode: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_pbp_diff}
+
+GET /api/v1/game/{gamePk}/feed/live/diffPatch — JSON-patch diff of the live feed.
+
+Replays of in-game state for low-bandwidth clients.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_pk` | `int` |  |  |
+| `start_timecode` | `str` |  |  |
+| `end_timecode` | `Optional[str]` | `None` |  |
+
+### `mlb_pbp_live(game_pk: 'int', language: 'Optional[str]' = None, timecode: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_pbp_live}
+
+GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
+
+Top-level keys: `copyright, gamePk, link, metaData, gameData, liveData`.
+Includes Statcast metrics where available. The historical name
+`mlb_pbp` is preserved as an alias in the generated module.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_pk` | `int` |  |  |
+| `language` | `Optional[str]` | `None` |  |
+| `timecode` | `Optional[str]` | `None` |  |
+| `hydrate` | `Optional[str]` | `None` |  |
+| `fields` | `Optional[str]` | `None` |  |
+
+### `mlb_person_stats(person_id: 'int', stats: 'str', group: 'str' = 'hitting', season: 'Optional[Union[int, str]]' = None, season_type: 'Optional[str]' = None, sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_person_stats}
+
+GET /api/v1/people/{personId}/stats — player aggregate stats.
+
+`stats`: `season`, `career`, `yearByYear`, `vsTeam`, `vsPlayer`,
+`byMonth`, `byDayOfWeek`, `homeAndAway`, `gameLog`, `lastXGames`, …
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `person_id` | `int` |  |  |
+| `stats` | `str` |  |  |
+| `group` | `str` | `'hitting'` |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `season_type` | `Optional[str]` | `None` |  |
+| `sport_ids` | `Optional[Union[int, List[int]]]` | `None` |  |
+| `game_type` | `Optional[str]` | `None` |  |
+| `fields` | `Optional[str]` | `None` |  |
+
+### `mlb_schedule(date: 'Optional[str]' = None, start_date: 'Optional[str]' = None, end_date: 'Optional[str]' = None, team_id: 'Optional[int]' = None, opponent_id: 'Optional[int]' = None, season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, game_type: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_schedule}
+
+GET /api/v1/schedule — schedule of games for a date, range, team, or season.
+
+Response: `dates[].games[]`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `date` | `Optional[str]` | `None` |  |
+| `start_date` | `Optional[str]` | `None` |  |
+| `end_date` | `Optional[str]` | `None` |  |
+| `team_id` | `Optional[int]` | `None` |  |
+| `opponent_id` | `Optional[int]` | `None` |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `sport_id` | `int` | `1` |  |
+| `game_type` | `Optional[str]` | `None` |  |
+| `league_id` | `Optional[Union[int, str]]` | `None` |  |
+| `hydrate` | `Optional[str]` | `None` |  |
+| `fields` | `Optional[str]` | `None` |  |
+
+### `mlb_seasons(sport_id: 'int' = 1, season: 'Optional[Union[int, str]]' = None, all_seasons: 'bool' = False, **kwargs) -> 'Dict'` {#mlb_seasons}
+
+GET /api/v1/seasons — list of seasons for a sport.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sport_id` | `int` | `1` |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `all_seasons` | `bool` | `False` |  |
+
+### `mlb_standings(league_id: 'Union[int, str, List[int]]' = '103,104', season: 'Optional[Union[int, str]]' = None, date: 'Optional[str]' = None, standings_types: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_standings}
+
+GET /api/v1/standings — league standings.
+
+`league_id`: `103` AL, `104` NL (comma-separated for both, the default).
+`standings_types` e.g. `regularSeason`, `wildCard`, `divisionLeaders`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `Union[int, str, List[int]]` | `'103,104'` |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `date` | `Optional[str]` | `None` |  |
+| `standings_types` | `Optional[str]` | `None` |  |
+| `hydrate` | `Optional[str]` | `None` |  |
+| `fields` | `Optional[str]` | `None` |  |
 
 ### `mlb_statcast_player(player_id: 'int', stats: 'Optional[str]' = None, *, section: 'str' = 'statcast', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame, str]'"` {#mlb_statcast_player}
 
@@ -1571,3 +1460,112 @@ A polars (or pandas) DataFrame, one row per WBC pitch.
 from sportsdataverse.mlb import mlb_statcast_search_wbc
 df = mlb_statcast_search_wbc("2023-03-08", "2023-03-22")
 ```
+
+### `mlb_stats(stats: 'str', group: 'str', season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, team_id: 'Optional[int]' = None, player_pool: 'Optional[str]' = None, game_type: 'Optional[str]' = None, limit: 'int' = 50, offset: 'int' = 0, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_stats}
+
+GET /api/v1/stats — generic stats query.
+
+`stats` selects the slice (`season`, `career`, `yearByYear`, …) and
+`group` selects the stat group (`hitting`, `pitching`, `fielding`).
+Filters: `season`, `team_id`, `league_id`, `game_type`, `player_pool`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stats` | `str` |  |  |
+| `group` | `str` |  |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `sport_id` | `int` | `1` |  |
+| `league_id` | `Optional[Union[int, str]]` | `None` |  |
+| `team_id` | `Optional[int]` | `None` |  |
+| `player_pool` | `Optional[str]` | `None` |  |
+| `game_type` | `Optional[str]` | `None` |  |
+| `limit` | `int` | `50` |  |
+| `offset` | `int` | `0` |  |
+| `fields` | `Optional[str]` | `None` |  |
+
+### `mlb_stats_leaders(leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, stat_group: 'Optional[str]' = None, league_id: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, limit: 'int' = 10, **kwargs) -> 'Dict'` {#mlb_stats_leaders}
+
+GET /api/v1/stats/leaders — top-N leaders for a stat category.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `leader_categories` | `str` |  |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `leader_game_types` | `Optional[str]` | `None` |  |
+| `stat_group` | `Optional[str]` | `None` |  |
+| `league_id` | `Optional[Union[int, str]]` | `None` |  |
+| `sport_id` | `int` | `1` |  |
+| `limit` | `int` | `10` |  |
+
+### `mlb_stats_streaks(streak_type: 'str', streak_threshold: 'int' = 1, season: 'Optional[Union[int, str]]' = None, stat_group: 'Optional[str]' = None, active_streak: 'Optional[bool]' = None, sport_id: 'int' = 1, **kwargs) -> 'Dict'` {#mlb_stats_streaks}
+
+GET /api/v1/stats/streaks — active or historical streaks.
+
+`streak_type` e.g. `hittingStreakOverall`, `onBaseOverall`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `streak_type` | `str` |  |  |
+| `streak_threshold` | `int` | `1` |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `stat_group` | `Optional[str]` | `None` |  |
+| `active_streak` | `Optional[bool]` | `None` |  |
+| `sport_id` | `int` | `1` |  |
+
+### `mlb_team_leaders(team_id: 'int', leader_categories: 'str', season: 'Optional[Union[int, str]]' = None, leader_game_types: 'Optional[str]' = None, limit: 'int' = 10, **kwargs) -> 'Dict'` {#mlb_team_leaders}
+
+GET /api/v1/teams/{teamId}/leaders — team leaders.
+
+`leader_categories` e.g. `homeRuns`, `battingAverage`, `wins`,
+`earnedRunAverage` (comma-separated for multi).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `int` |  |  |
+| `leader_categories` | `str` |  |  |
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `leader_game_types` | `Optional[str]` | `None` |  |
+| `limit` | `int` | `10` |  |
+
+### `mlb_team_stats(team_id: 'int', season: 'Union[int, str]', stats: 'str' = 'season', group: 'str' = 'hitting', sport_ids: 'Optional[Union[int, List[int]]]' = None, game_type: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_team_stats}
+
+GET /api/v1/teams/{teamId}/stats — team-level stats.
+
+`stats`: `season`, `career`, `yearByYear`, `byMonth`, `byDayOfWeek`, …
+`group`: `hitting`, `pitching`, `fielding`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `int` |  |  |
+| `season` | `Union[int, str]` |  |  |
+| `stats` | `str` | `'season'` |  |
+| `group` | `str` | `'hitting'` |  |
+| `sport_ids` | `Optional[Union[int, List[int]]]` | `None` |  |
+| `game_type` | `Optional[str]` | `None` |  |
+| `fields` | `Optional[str]` | `None` |  |
+
+### `mlb_teams(season: 'Optional[Union[int, str]]' = None, sport_id: 'int' = 1, league_ids: 'Optional[Union[int, List[int], str]]' = None, active_status: 'Optional[str]' = None, all_star_statuses: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_teams}
+
+GET /api/v1/teams — list teams. `sport_id=1` = MLB.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[Union[int, str]]` | `None` |  |
+| `sport_id` | `int` | `1` |  |
+| `league_ids` | `Optional[Union[int, List[int], str]]` | `None` |  |
+| `active_status` | `Optional[str]` | `None` |  |
+| `all_star_statuses` | `Optional[str]` | `None` |  |
+| `hydrate` | `Optional[str]` | `None` |  |
+| `fields` | `Optional[str]` | `None` |  |

@@ -117,6 +117,7 @@ class League:
     league: str
     scopes: List[str]
     league_param: bool = False
+    group: str = ""
 
 
 @dataclass(frozen=True)
@@ -158,6 +159,7 @@ def load_leagues(path: Path) -> LeaguesConfig:
             league=lg["league"],
             scopes=list(lg["scopes"]),
             league_param=bool(lg.get("league_param", False)),
+            group=str(lg.get("group", "")),
         )
         for lg in raw["leagues"]
     ]

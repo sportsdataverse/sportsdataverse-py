@@ -1414,32 +1414,103 @@ def build() -> list[Path]:
     return sorted(OUT.glob("*_espn_ext.py"))
 
 
-def _ensure_init_import(prefix: str) -> None:
-    """Idempotently make ``sportsdataverse/{prefix}/__init__.py`` re-export the module."""
-    init = LIVE / prefix / "__init__.py"
-    text = init.read_text(encoding="utf-8")
-    if f"{prefix}_espn_ext import *" in text:
+def _ensure_init_import(pkg_dir: Path, prefix: str, dotted: str) -> None:
+    """Idempotently make ``pkg_dir/__init__.py`` re-export the generated ext.
+
+    ``dotted`` is the import path of the ext module, e.g.
+    ``sportsdataverse.soccer.epl.epl_espn_ext`` (nested) or
+    ``sportsdataverse.nba.nba_espn_ext`` (flat).
+    """
+    init = pkg_dir / "__init__.py"
+    text = init.read_text(encoding="utf-8") if init.exists() else ""
+    line = f"from {dotted} import *\n"
+    if line.strip() in text:
         return
-    line = f"from sportsdataverse.{prefix}.{prefix}_espn_ext import *\n"
-    init.write_text(text.rstrip() + "\n" + line, encoding="utf-8", newline="\n")
+    init.write_text((text.rstrip() + "\n" + line).lstrip("\n"), encoding="utf-8", newline="\n")
+
+
+def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
+    """Return the deterministic body for a sport-group container ``__init__.py``.
+
+    Args:
+        group:    Sport-group name (e.g. ``"soccer"``, ``"football"``).
+        members:  Sorted list of sub-league prefixes that live under this group.
+        has_ext:  True when a ``{group}_espn_ext.py`` also lives in the container
+                  (currently only ``soccer`` doubles as a top-level league).
+
+    Returns:
+        Source text for the container ``__init__.py``.
+    """
+    lines: list[str] = ["from __future__ import annotations", ""]
+    if has_ext:
+        lines.append(f"from sportsdataverse.{group}.{group}_espn_ext import *  # noqa: F401,F403")
+        lines.append("")
+    lines.append(f"# Sub-league packages — imported so ``sportsdataverse.{group}.<leaf>`` is reachable")
+    lines.append("# as an attribute on this container module (0.0.65+).")
+    # Emit at most 4 members per import line to stay within line-length limits.
+    chunk_size = 4
+    for i in range(0, len(members), chunk_size):
+        chunk = members[i : i + chunk_size]
+        lines.append(f"from sportsdataverse.{group} import {', '.join(chunk)}  # noqa: F401,E402")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
+    """Build group → sorted-members mapping from the prefix→group dict.
+
+    Includes HockeyTech hand-written modules (ahl/ohl/whl/qmjhl) under hockey.
+    """
+    _HOCKEYTECH = ["ahl", "ohl", "qmjhl", "whl"]
+    result: dict[str, list[str]] = {}
+    for prefix, group in groups_map.items():
+        if not group:
+            continue
+        result.setdefault(group, [])
+        if prefix not in result[group]:
+            result[group].append(prefix)
+    # Add HockeyTech extras under hockey (they have no leagues.yaml entry).
+    for ht in _HOCKEYTECH:
+        result.setdefault("hockey", [])
+        if ht not in result["hockey"]:
+            result["hockey"].append(ht)
+    return {g: sorted(members) for g, members in result.items()}
 
 
 def build_live() -> list[Path]:
     """Write the concrete generated modules into the live package + wire __init__."""
+    groups = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues}
     written = []
     for name, src in _render_all().items():
         prefix = name[: -len("_espn_ext.py")]
-        dest = LIVE / prefix / f"{prefix}_espn_ext.py"
+        group = groups.get(prefix, "")
+        if group:
+            container = LIVE / group
+            container.mkdir(parents=True, exist_ok=True)
+            pkg_dir = container / prefix
+            dotted = f"sportsdataverse.{group}.{prefix}.{prefix}_espn_ext"
+        else:
+            pkg_dir = LIVE / prefix
+            dotted = f"sportsdataverse.{prefix}.{prefix}_espn_ext"
+        pkg_dir.mkdir(parents=True, exist_ok=True)
+        dest = pkg_dir / f"{prefix}_espn_ext.py"
         dest.write_text(src, encoding="utf-8", newline="\n")
-        _ensure_init_import(prefix)
+        _ensure_init_import(pkg_dir, prefix, dotted)
         written.append(dest)
+    # Write deterministic container __init__.py for each sport-group (replaces bare .touch()).
+    for group, members in _container_groups(groups).items():
+        container = LIVE / group
+        container.mkdir(parents=True, exist_ok=True)
+        has_ext = (container / f"{group}_espn_ext.py").exists()
+        body = _container_init_body(group, members, has_ext)
+        (container / "__init__.py").write_text(body, encoding="utf-8", newline="\n")
     if written:
         subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
     return sorted(written)
 
 
 def _live_stale() -> list[str]:
-    """Live ``{prefix}_espn_ext.py`` files that differ from a fresh render."""
+    """Live ``{prefix}_espn_ext.py`` and container ``__init__.py`` files that differ from a fresh render."""
     tmp = OUT / "_check_live_tmp"
     if tmp.exists():
         shutil.rmtree(tmp)
@@ -1449,14 +1520,27 @@ def _live_stale() -> list[str]:
         for name, src in rendered.items():
             (tmp / name).write_text(src, encoding="utf-8", newline="\n")
         _ruff_format_dir(tmp)
+        groups = {lg.prefix: lg.group for lg in spec.load_leagues(ENDPOINTS / "leagues.yaml").leagues}
         stale = []
         for name in rendered:
             prefix = name[: -len("_espn_ext.py")]
-            live_file = LIVE / prefix / f"{prefix}_espn_ext.py"
+            group = groups.get(prefix, "")
+            if group:
+                live_file = LIVE / group / prefix / f"{prefix}_espn_ext.py"
+            else:
+                live_file = LIVE / prefix / f"{prefix}_espn_ext.py"
             if not live_file.exists() or live_file.read_text(encoding="utf-8") != (tmp / name).read_text(
                 encoding="utf-8",
             ):
                 stale.append(str(live_file.relative_to(ROOT)))
+        # Also check each container __init__.py against its expected body.
+        for group, members in _container_groups(groups).items():
+            container = LIVE / group
+            has_ext = (container / f"{group}_espn_ext.py").exists()
+            expected = _container_init_body(group, members, has_ext)
+            live_init = container / "__init__.py"
+            if not live_init.exists() or live_init.read_text(encoding="utf-8") != expected:
+                stale.append(str(live_init.relative_to(ROOT)))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     return stale
@@ -1518,6 +1602,16 @@ _COVERAGE_LEAGUES = [
     "odds",
 ]
 
+# Mapping from doc/coverage prefix to actual Python module path for leagues
+# whose module moved under a sport-group container (Task 5+).
+# All other leagues default to f"sportsdataverse.{prefix}".
+_LEAGUE_MODULE: dict[str, str] = {
+    "ahl": "hockey.ahl",
+    "ohl": "hockey.ohl",
+    "whl": "hockey.whl",
+    "qmjhl": "hockey.qmjhl",
+}
+
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
 
 
@@ -1563,7 +1657,8 @@ def _coverage_scope_names() -> tuple[dict[str, set[str]], set[str]]:
     per_league: dict[str, set[str]] = {}
     all_league: set[str] = set()
     for lg in _COVERAGE_LEAGUES:
-        mod = importlib.import_module(f"sportsdataverse.{lg}")
+        mod_path = _LEAGUE_MODULE.get(lg, lg)
+        mod = importlib.import_module(f"sportsdataverse.{mod_path}")
         names = {n for n in dir(mod) if _coverage_in_scope(n, getattr(mod, n))}
         per_league[lg] = names
         all_league |= names
@@ -2609,7 +2704,8 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
         return []
     else:
         names = per_league[league]
-        mod = importlib.import_module(f"sportsdataverse.{league}")
+        mod_path = _LEAGUE_MODULE.get(league, league)
+        mod = importlib.import_module(f"sportsdataverse.{mod_path}")
         allowed = allow.get(league, set())
     out = []
     for n in names:
@@ -2635,7 +2731,8 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     template can render Parameters/Returns/Example sections."""
     import importlib
 
-    mod = importlib.import_module("sportsdataverse" if league is None else f"sportsdataverse.{league}")
+    _mod_path = _LEAGUE_MODULE.get(league, league) if league is not None else None
+    mod = importlib.import_module("sportsdataverse" if _mod_path is None else f"sportsdataverse.{_mod_path}")
     scope = "global" if league is None else league
     by_family: dict[str, list[dict]] = {}
     for n in names:

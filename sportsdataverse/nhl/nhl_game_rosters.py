@@ -126,13 +126,16 @@ def helper_nhl_team_items(items, **kwargs):
         teams_df = pl.concat([teams_df, team_row], how="diagonal")
 
     teams_df = normalize_team_roster_columns(teams_df)
-    teams_df = teams_df.with_columns(logo_href=pl.lit(""), logo_dark_href=pl.lit(""))
-    for row in range(len(teams_df["logos"])):
-        team = teams_df["logos"][row]
-        teams_df[row, "logo_href"] = team[0]["href"]
-        teams_df[row, "logo_dark_href"] = team[1]["href"]
-
-    teams_df = teams_df.drop(["logos"])
+    if "logos" in teams_df.columns:
+        try:
+            teams_df = teams_df.with_columns(
+                logo_href=pl.col("logos").list.get(0).struct.field("href").fill_null(""),
+                logo_dark_href=pl.col("logos").list.get(1).struct.field("href").fill_null(""),
+            ).drop("logos")
+        except Exception:
+            teams_df = teams_df.with_columns(logo_href=pl.lit(""), logo_dark_href=pl.lit("")).drop(["logos"])
+    else:
+        teams_df = teams_df.with_columns(logo_href=pl.lit(""), logo_dark_href=pl.lit(""))
     teams_df = teams_df.with_columns(team_id=pl.col("team_id").cast(pl.Int32))
     return teams_df
 

@@ -209,25 +209,25 @@ def test_nhl_web_roster_toronto_2024():
 # ===========================================================================
 
 
-def test_mlb_api_teams_returns_30_teams_for_2024():
-    # mlb_api_teams is an irregular (multi-param) wrapper kept hand-written in
+def test_mlb_teams_returns_30_teams_for_2024():
+    # mlb_teams is an irregular (multi-param) wrapper kept hand-written in
     # mlb_api_extra after the codegen cutover; import from the package namespace,
     # which re-exports both the generated mlb_api wrappers and the residuals.
-    from sportsdataverse.mlb import mlb_api_teams
+    from sportsdataverse.mlb import mlb_teams
 
-    payload = mlb_api_teams(season=2024)
+    payload = mlb_teams(season=2024)
     teams = payload.get("teams") or []
     # MLB roster includes 30 active franchises; some responses also include
     # Spring Training or historical entries so >=30 is the safe assertion.
     assert len(teams) >= 30, f"expected >=30 MLB teams for 2024, got {len(teams)}"
 
 
-def test_mlb_api_schedule_opening_day_2024_returns_games():
-    # mlb_api_schedule is a hand-written residual in mlb_api_extra (it forwards
+def test_mlb_schedule_opening_day_2024_returns_games():
+    # mlb_schedule is a hand-written residual in mlb_api_extra (it forwards
     # arbitrary **filters); import from the package namespace, which re-exports it.
-    from sportsdataverse.mlb import mlb_api_schedule
+    from sportsdataverse.mlb import mlb_schedule
 
-    payload = mlb_api_schedule(date="2024-03-20", sport_id=1)
+    payload = mlb_schedule(date="2024-03-20", sport_id=1)
     dates = payload.get("dates") or []
     all_games = [g for d in dates for g in (d.get("games") or [])]
     assert len(all_games) > 0, "expected MLB games on Opening Day 2024-03-20, got none"

@@ -7,7 +7,7 @@ sidebar_position: 10
 
 `sportsdataverse.mlb` — 64 endpoints.
 
-## `mlb_api_schedule_postseason`
+## `mlb_schedule_postseason`
 
 GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
@@ -92,12 +92,12 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 ### Example
 
 ```python
-mlb_api_schedule_postseason()
+mlb_schedule_postseason()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_pbp`
+## `mlb_pbp`
 
 GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
@@ -107,11 +107,11 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `game_pk` | `game_pk` |  | `Y` |  | game_pk path parameter. |
-| `language` | `language` |  |  | `Y` | language query parameter. |
-| `language` | `timecode` |  |  | `Y` | language query parameter. |
-| `hydrate` | `hydrate` |  |  | `Y` | hydrate query parameter. |
-| `fields` | `fields` |  |  | `Y` | fields query parameter. |
+| `game_pk` | `game_pk` |  | `Y` |  |  |
+| `language` | `language` |  |  | `Y` |  |
+| `language` | `timecode` |  |  | `Y` |  |
+| `hydrate` | `hydrate` |  |  | `Y` |  |
+| `fields` | `fields` |  |  | `Y` |  |
 
 ### Returns
 
@@ -121,12 +121,12 @@ GET /api/v1.1/game/{gamePk}/feed/live — live firehose (v1.1).
 ### Example
 
 ```python
-mlb_api_pbp(game_pk=716390)
+mlb_pbp(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_boxscore`
+## `mlb_boxscore`
 
 GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
@@ -382,12 +382,12 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 ### Example
 
 ```python
-mlb_api_boxscore(game_pk=716390)
+mlb_boxscore(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_linescore`
+## `mlb_linescore`
 
 GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 
@@ -422,12 +422,12 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 ### Example
 
 ```python
-mlb_api_linescore(game_pk=716390)
+mlb_linescore(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_play_by_play`
+## `mlb_play_by_play`
 
 GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 
@@ -509,12 +509,12 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 ### Example
 
 ```python
-mlb_api_play_by_play(game_pk=716390)
+mlb_play_by_play(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_context_metrics`
+## `mlb_game_context_metrics`
 
 GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context.
 
@@ -535,12 +535,12 @@ GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context
 ### Example
 
 ```python
-mlb_api_game_context_metrics(game_pk=716390)
+mlb_game_context_metrics(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_win_probability`
+## `mlb_win_probability`
 
 GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 
@@ -628,12 +628,12 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 ### Example
 
 ```python
-mlb_api_win_probability(game_pk=716390)
+mlb_win_probability(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_content`
+## `mlb_game_content`
 
 GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 
@@ -653,12 +653,12 @@ GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 ### Example
 
 ```python
-mlb_api_game_content(game_pk=716390)
+mlb_game_content(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_team`
+## `mlb_team`
 
 GET /api/v1/teams/{teamId} — single team detail.
 
@@ -718,12 +718,12 @@ GET /api/v1/teams/{teamId} — single team detail.
 ### Example
 
 ```python
-mlb_api_team(team_id=10)
+mlb_team(team_id=10)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_team_roster`
+## `mlb_team_roster`
 
 GET /api/v1/teams/{teamId}/roster — team roster.
 
@@ -761,12 +761,12 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 ### Example
 
 ```python
-mlb_api_team_roster(team_id=10)
+mlb_team_roster(team_id=10)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_team_alumni`
+## `mlb_team_alumni`
 
 GET /api/v1/teams/{teamId}/alumni — players who played for this team in a season.
 
@@ -838,12 +838,12 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 ### Example
 
 ```python
-mlb_api_team_alumni(team_id=10)
+mlb_team_alumni(team_id=10)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_team_affiliates`
+## `mlb_team_affiliates`
 
 GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league chain).
 
@@ -904,12 +904,12 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 ### Example
 
 ```python
-mlb_api_team_affiliates()
+mlb_team_affiliates()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_people`
+## `mlb_people`
 
 GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 
@@ -931,12 +931,12 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 ### Example
 
 ```python
-mlb_api_people()
+mlb_people()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_person`
+## `mlb_person`
 
 GET /api/v1/people/{personId} — single person detail.
 
@@ -959,12 +959,12 @@ GET /api/v1/people/{personId} — single person detail.
 ### Example
 
 ```python
-mlb_api_person(person_id=660271)
+mlb_person(person_id=660271)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_person_game_stats`
+## `mlb_person_game_stats`
 
 GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 
@@ -986,12 +986,12 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 ### Example
 
 ```python
-mlb_api_person_game_stats(person_id=660271, game_pk=716390)
+mlb_person_game_stats(person_id=660271, game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_sport_players`
+## `mlb_sport_players`
 
 GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 
@@ -1067,12 +1067,12 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 ### Example
 
 ```python
-mlb_api_sport_players()
+mlb_sport_players()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_sports`
+## `mlb_sports`
 
 GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 
@@ -1102,12 +1102,12 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 ### Example
 
 ```python
-mlb_api_sports()
+mlb_sports()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_leagues`
+## `mlb_leagues`
 
 GET /api/v1/leagues — list leagues.
 
@@ -1172,12 +1172,12 @@ GET /api/v1/leagues — list leagues.
 ### Example
 
 ```python
-mlb_api_leagues()
+mlb_leagues()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_season`
+## `mlb_season`
 
 GET /api/v1/seasons/{seasonId} — single season detail.
 
@@ -1222,12 +1222,12 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 ### Example
 
 ```python
-mlb_api_season(season_id='X')
+mlb_season(season_id='X')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_venues`
+## `mlb_venues`
 
 GET /api/v1/venues — list venues.
 
@@ -1257,12 +1257,12 @@ GET /api/v1/venues — list venues.
 ### Example
 
 ```python
-mlb_api_venues()
+mlb_venues()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_venue`
+## `mlb_venue`
 
 GET /api/v1/venues/{venueId} — single venue detail.
 
@@ -1292,12 +1292,12 @@ GET /api/v1/venues/{venueId} — single venue detail.
 ### Example
 
 ```python
-mlb_api_venue(venue_id=15)
+mlb_venue(venue_id=15)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_meta`
+## `mlb_meta`
 
 GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 
@@ -1317,12 +1317,12 @@ GET /api/v1/{metaType} — enum lookup (the API's self-describing surface).
 ### Example
 
 ```python
-mlb_api_meta(meta_type='leagueLeaderTypes')
+mlb_meta(meta_type='leagueLeaderTypes')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_awards`
+## `mlb_awards`
 
 GET /api/v1/awards — list award IDs (call with no params to enumerate).
 
@@ -1355,12 +1355,12 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 ### Example
 
 ```python
-mlb_api_awards()
+mlb_awards()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_award_recipients`
+## `mlb_award_recipients`
 
 GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 
@@ -1400,12 +1400,12 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 ### Example
 
 ```python
-mlb_api_award_recipients(award_id='MLBHOF')
+mlb_award_recipients(award_id='MLBHOF')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_draft`
+## `mlb_draft`
 
 GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
@@ -1429,12 +1429,12 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 ### Example
 
 ```python
-mlb_api_draft(year=2024)
+mlb_draft(year=2024)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_umpires`
+## `mlb_umpires`
 
 GET /api/v1/jobs/umpires — current umpire crew assignments.
 
@@ -1463,12 +1463,12 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 ### Example
 
 ```python
-mlb_api_umpires()
+mlb_umpires()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_conferences`
+## `mlb_conferences`
 
 View all PCL conferences.
 
@@ -1503,12 +1503,12 @@ View all PCL conferences.
 ### Example
 
 ```python
-mlb_api_conferences()
+mlb_conferences()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_conference`
+## `mlb_conference`
 
 View PCL conferences by conferenceId.
 
@@ -1543,12 +1543,12 @@ View PCL conferences by conferenceId.
 ### Example
 
 ```python
-mlb_api_conference(conference_id=301)
+mlb_conference(conference_id=301)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_draft_latest`
+## `mlb_draft_latest`
 
 View latest player drafted, endpoint best used when draft is currently open.
 
@@ -1665,12 +1665,12 @@ View latest player drafted, endpoint best used when draft is currently open.
 ### Example
 
 ```python
-mlb_api_draft_latest(year=2023)
+mlb_draft_latest(year=2023)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_timestamps`
+## `mlb_game_timestamps`
 
 Retrieve all of the play timecodes for a game in GUMBO feed.
 
@@ -1694,12 +1694,12 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 ### Example
 
 ```python
-mlb_api_game_timestamps(game_pk=716390)
+mlb_game_timestamps(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_changes`
+## `mlb_game_changes`
 
 View corrected non Statcast information for games
 
@@ -1788,12 +1788,12 @@ View corrected non Statcast information for games
 ### Example
 
 ```python
-mlb_api_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
+mlb_game_changes(sport_id=1, updated_since='2023-09-01T00:00:00Z')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_analytics_games`
+## `mlb_analytics_games`
 
 View timestamps of most recent data corrections made to games.
 
@@ -1819,12 +1819,12 @@ View timestamps of most recent data corrections made to games.
 ### Example
 
 ```python
-mlb_api_analytics_games()
+mlb_analytics_games()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_analytics_guids`
+## `mlb_analytics_guids`
 
 View timestamps of most recent data corrections made to GUIDs.
 
@@ -1850,12 +1850,12 @@ View timestamps of most recent data corrections made to GUIDs.
 ### Example
 
 ```python
-mlb_api_analytics_guids()
+mlb_analytics_guids()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_guids`
+## `mlb_game_guids`
 
 View Statcast data for a specific game.
 
@@ -1883,12 +1883,12 @@ View Statcast data for a specific game.
 ### Example
 
 ```python
-mlb_api_game_guids(game_pk=716390)
+mlb_game_guids(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_play_analytics`
+## `mlb_play_analytics`
 
 View Statcast data for a specific play.
 
@@ -1911,12 +1911,12 @@ View Statcast data for a specific play.
 ### Example
 
 ```python
-mlb_api_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
+mlb_play_analytics(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_play_context_metrics_averages`
+## `mlb_play_context_metrics_averages`
 
 View Statcast contextMetrics data for a specific play.
 
@@ -1938,12 +1938,12 @@ View Statcast contextMetrics data for a specific play.
 ### Example
 
 ```python
-mlb_api_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
+mlb_play_context_metrics_averages(game_pk=716390, guid='90groovy-2438-test-guid-placeholder0')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_color`
+## `mlb_game_color`
 
 View game color commentary info.
 
@@ -1965,12 +1965,12 @@ View game color commentary info.
 ### Example
 
 ```python
-mlb_api_game_color(game_pk=716390)
+mlb_game_color(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_color_diff`
+## `mlb_game_color_diff`
 
 View game color feed.
 
@@ -1992,12 +1992,12 @@ View game color feed.
 ### Example
 
 ```python
-mlb_api_game_color_diff(game_pk=716390)
+mlb_game_color_diff(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_color_timestamps`
+## `mlb_game_color_timestamps`
 
 View all of the color timecodes for a game.
 
@@ -2017,12 +2017,12 @@ View all of the color timecodes for a game.
 ### Example
 
 ```python
-mlb_api_game_color_timestamps(game_pk=716390)
+mlb_game_color_timestamps(game_pk=716390)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_game_pace`
+## `mlb_game_pace`
 
 View time of game info.
 
@@ -2105,12 +2105,12 @@ View time of game info.
 ### Example
 
 ```python
-mlb_api_game_pace(season='2023')
+mlb_game_pace(season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_high_low`
+## `mlb_high_low`
 
 View high/low stats by player or team.
 
@@ -2160,12 +2160,12 @@ View high/low stats by player or team.
 ### Example
 
 ```python
-mlb_api_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
+mlb_high_low(org_type='player', stat_group='hitting', sort_stat='homeRuns', season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_home_run_derby`
+## `mlb_home_run_derby`
 
 View a home run derby object based on gamePk.
 
@@ -2270,12 +2270,12 @@ View a home run derby object based on gamePk.
 ### Example
 
 ```python
-mlb_api_home_run_derby(game_pk=511101)
+mlb_home_run_derby(game_pk=511101)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_home_run_derby_bracket`
+## `mlb_home_run_derby_bracket`
 
 View a home run derby object based on bracket.
 
@@ -2380,12 +2380,12 @@ View a home run derby object based on bracket.
 ### Example
 
 ```python
-mlb_api_home_run_derby_bracket(game_pk=511101)
+mlb_home_run_derby_bracket(game_pk=511101)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_home_run_derby_pool`
+## `mlb_home_run_derby_pool`
 
 View a home run derby object based on pool.
 
@@ -2490,12 +2490,12 @@ View a home run derby object based on pool.
 ### Example
 
 ```python
-mlb_api_home_run_derby_pool(game_pk=511101)
+mlb_home_run_derby_pool(game_pk=511101)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_all_star_ballot`
+## `mlb_all_star_ballot`
 
 View All-Star Ballots per league.
 
@@ -2567,12 +2567,12 @@ View All-Star Ballots per league.
 ### Example
 
 ```python
-mlb_api_all_star_ballot(league_id='103', season='2023')
+mlb_all_star_ballot(league_id='103', season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_all_star_write_ins`
+## `mlb_all_star_write_ins`
 
 View All-Star Write-ins per league.
 
@@ -2640,12 +2640,12 @@ View All-Star Write-ins per league.
 ### Example
 
 ```python
-mlb_api_all_star_write_ins(league_id='103', season='2023')
+mlb_all_star_write_ins(league_id='103', season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_all_star_final_vote`
+## `mlb_all_star_final_vote`
 
 View All-Star Final Vote per league.
 
@@ -2717,12 +2717,12 @@ View All-Star Final Vote per league.
 ### Example
 
 ```python
-mlb_api_all_star_final_vote(league_id='103', season='2023')
+mlb_all_star_final_vote(league_id='103', season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_free_agents`
+## `mlb_free_agents`
 
 View biographical information and stats for Free Agents.
 
@@ -2765,12 +2765,12 @@ View biographical information and stats for Free Agents.
 ### Example
 
 ```python
-mlb_api_free_agents(season='2023')
+mlb_free_agents(season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_jobs`
+## `mlb_jobs`
 
 View directory by jobType.
 
@@ -2803,12 +2803,12 @@ View directory by jobType.
 ### Example
 
 ```python
-mlb_api_jobs(job_type='UMPR')
+mlb_jobs(job_type='UMPR')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_datacasters`
+## `mlb_datacasters`
 
 View datacasters directory.
 
@@ -2841,12 +2841,12 @@ View datacasters directory.
 ### Example
 
 ```python
-mlb_api_datacasters()
+mlb_datacasters()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_official_scorers`
+## `mlb_official_scorers`
 
 View official scorer directory.
 
@@ -2879,12 +2879,12 @@ View official scorer directory.
 ### Example
 
 ```python
-mlb_api_official_scorers()
+mlb_official_scorers()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_umpire_games`
+## `mlb_umpire_games`
 
 Get umpires and associated game for umpireId.
 
@@ -2907,12 +2907,12 @@ Get umpires and associated game for umpireId.
 ### Example
 
 ```python
-mlb_api_umpire_games(umpire_id=596809, season='2023')
+mlb_umpire_games(umpire_id=596809, season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_schedule_tied`
+## `mlb_schedule_tied`
 
 View tied game schedule info.
 
@@ -2995,12 +2995,12 @@ View tied game schedule info.
 ### Example
 
 ```python
-mlb_api_schedule_tied(season='2016')
+mlb_schedule_tied(season='2016')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_schedule_postseason_series`
+## `mlb_schedule_postseason_series`
 
 View schedule info for postseason based on series.
 
@@ -3037,12 +3037,12 @@ View schedule info for postseason based on series.
 ### Example
 
 ```python
-mlb_api_schedule_postseason_series(season='2023')
+mlb_schedule_postseason_series(season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_schedule_postseason_tunein`
+## `mlb_schedule_postseason_tunein`
 
 View schedule info for the tuneIn application.
 
@@ -3066,12 +3066,12 @@ View schedule info for the tuneIn application.
 ### Example
 
 ```python
-mlb_api_schedule_postseason_tunein(season='2023')
+mlb_schedule_postseason_tunein(season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_seasons_all`
+## `mlb_seasons_all`
 
 View information for all seasons based on id.
 
@@ -3119,12 +3119,12 @@ View information for all seasons based on id.
 ### Example
 
 ```python
-mlb_api_seasons_all(sport_id=1)
+mlb_seasons_all(sport_id=1)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_sport`
+## `mlb_sport`
 
 View information for any given sportId.
 
@@ -3155,12 +3155,12 @@ View information for any given sportId.
 ### Example
 
 ```python
-mlb_api_sport(sport_id=1)
+mlb_sport(sport_id=1)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_stats_metrics`
+## `mlb_stats_metrics`
 
 View Statcast stats.
 
@@ -3194,12 +3194,12 @@ View Statcast stats.
 ### Example
 
 ```python
-mlb_api_stats_metrics()
+mlb_stats_metrics()
 ```
 
 _Last validated n/a._
 
-## `mlb_api_teams_history`
+## `mlb_teams_history`
 
 View historical records for a list of teams.
 
@@ -3251,12 +3251,12 @@ View historical records for a list of teams.
 ### Example
 
 ```python
-mlb_api_teams_history(team_ids='147')
+mlb_teams_history(team_ids='147')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_teams_stats`
+## `mlb_teams_stats`
 
 View team stats.
 
@@ -3293,12 +3293,12 @@ View team stats.
 ### Example
 
 ```python
-mlb_api_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
+mlb_teams_stats(season='2023', sport_ids='1', stat_group='hitting', stats='season')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_teams_stats_leaders`
+## `mlb_teams_stats_leaders`
 
 View leaders for a statistic.
 
@@ -3339,12 +3339,12 @@ View leaders for a statistic.
 ### Example
 
 ```python
-mlb_api_teams_stats_leaders(leader_categories='homeRuns', season='2023')
+mlb_teams_stats_leaders(leader_categories='homeRuns', season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_team_coaches`
+## `mlb_team_coaches`
 
 View biographical  information on all coaches for a given club.
 
@@ -3377,12 +3377,12 @@ View biographical  information on all coaches for a given club.
 ### Example
 
 ```python
-mlb_api_team_coaches(team_id=147, season='2023')
+mlb_team_coaches(team_id=147, season='2023')
 ```
 
 _Last validated n/a._
 
-## `mlb_api_team_personnel`
+## `mlb_team_personnel`
 
 View biographical  information on all personnel for a given club.
 
@@ -3414,12 +3414,12 @@ View biographical  information on all personnel for a given club.
 ### Example
 
 ```python
-mlb_api_team_personnel(team_id=147)
+mlb_team_personnel(team_id=147)
 ```
 
 _Last validated n/a._
 
-## `mlb_api_team_roster_type`
+## `mlb_team_roster_type`
 
 View biographical and statistical information for a club's roster based on roster type.
 
@@ -3457,7 +3457,7 @@ View biographical and statistical information for a club's roster based on roste
 ### Example
 
 ```python
-mlb_api_team_roster_type(team_id=147, roster_type='active', season='2023')
+mlb_team_roster_type(team_id=147, roster_type='active', season='2023')
 ```
 
 _Last validated n/a._
