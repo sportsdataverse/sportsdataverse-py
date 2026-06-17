@@ -873,9 +873,13 @@ class TestCalculateCompletionProbability:
         assert result["cp"][0] is None
 
     def test_cpoe_value_with_complete_pass(self, mock_cp_model):
-        """cpoe = complete_pass(1) - cp(0.5 from fake) = 0.5."""
+        """cpoe = 100 * (complete_pass(1) - cp(0.5 from fake)) = 50.0.
+
+        nflfastR's ``helper_add_cp_cpoe.R`` defines ``cpoe`` on the
+        percentage-point scale (``100 * (complete_pass - cp)``).
+        """
         result = calculate_completion_probability(_nflverse_pass_row(complete_pass=1))
-        assert result["cpoe"][0] == pytest.approx(0.5, abs=1e-4)
+        assert result["cpoe"][0] == pytest.approx(50.0, abs=1e-4)
 
     def test_cpoe_null_without_complete_pass_col(self, mock_cp_model):
         df = _nflverse_row().with_columns(pl.lit(5.0).alias("air_yards"))

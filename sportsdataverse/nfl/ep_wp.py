@@ -835,7 +835,8 @@ def calculate_completion_probability(
     Mirrors nflfastR's ``helper_add_cp_cpoe.R``.  Scores only intended pass
     plays (where ``air_yards`` is not null); non-pass plays receive null in
     the ``cp`` column.  When ``complete_pass`` is present,
-    ``cpoe = complete_pass - cp`` is also added.
+    ``cpoe = 100 * (complete_pass - cp)`` is also added — on nflfastR's
+    percentage-point scale (``add_cp`` in ``helper_add_cp_cpoe.R``).
 
     Drops and recomputes any existing ``cp`` / ``cpoe`` columns.
 
@@ -884,7 +885,8 @@ def calculate_completion_probability(
     result = df.join(cp_frame, on="_row_idx", how="left").drop("_row_idx")
 
     if "complete_pass" in result.columns:
-        result = result.with_columns((pl.col("complete_pass").cast(pl.Float64) - pl.col("cp")).alias("cpoe"))
+        # nflfastR: cpoe = 100 * (complete_pass - cp)  (percentage points).
+        result = result.with_columns((100.0 * (pl.col("complete_pass").cast(pl.Float64) - pl.col("cp"))).alias("cpoe"))
     else:
         result = result.with_columns(pl.lit(None).cast(pl.Float64).alias("cpoe"))
 
@@ -1632,6 +1634,41 @@ def _apply_feature_substitution(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _is_real_play_expr(df: pl.DataFrame) -> pl.Expr:
+    """Boolean expr: row is a real, model-scorable football play.
+
+    nflfastR scores EP/WP only on real plays; marker / timeout rows (``END
+    QUARTER``, ``END GAME``, ``Timeout ...``, suspension notices) carry no game
+    situation and get NA model output, later inherited via
+    ``tidyr::fill(.direction = "up")``.  Operationally a real play has a
+    non-null ``down`` OR is a kickoff / extra-point / two-point attempt (those
+    legitimately carry a null ``down`` but are still scored).
+    """
+    expr = pl.col("down").is_not_null()
+    for flag in ("kickoff_attempt", "extra_point_attempt", "two_point_attempt"):
+        if flag in df.columns:
+            expr = expr | (pl.col(flag) == 1)
+    return expr
+
+
+def _fill_up_nonplay(df: pl.DataFrame, cols: tuple[str, ...]) -> pl.DataFrame:
+    """NA the given model-output ``cols`` on non-play rows, then fill UP per game.
+
+    Mirrors nflfastR's ``tidyr::fill(<col>, .direction = "up")`` applied after
+    the marker / timeout rows received a NA model score.  Without this the
+    streaming pipeline scores those rows through the EP/WP model and produces a
+    garbage value (e.g. ``wp`` ~ 0.002 on a timeout), which then poisons the
+    ``lead(home_ep)`` / ``lead(home_wp)`` of the *preceding* real play and
+    wrecks ``epa`` / ``wpa`` parity.
+    """
+    is_play = _is_real_play_expr(df)
+    present = [c for c in cols if c in df.columns]
+    if not present:
+        return df
+    df = df.with_columns([pl.when(is_play).then(pl.col(c)).otherwise(None).alias(c) for c in present])
+    return df.with_columns([pl.col(c).fill_null(strategy="backward").over("game_id") for c in present])
+
+
 def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
     """Derive ``epa`` from start-of-play ``ep`` natively, per nflfastR.
 
@@ -1649,11 +1686,24 @@ def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
     * End-of-half / end-of-game / OT-last-play overlays set ``epa = 0 - ep`` for
       non-scoring plays and NA the ``ep`` / ``epa`` of terminal rows.
 
+    Scoring overlays key on the **nflverse** result columns
+    (``field_goal_result == "made"`` / ``extra_point_result == "good"`` /
+    ``two_point_conv_result == "success"`` / ``safety == 1``), not the
+    ESPN-internal ``field_goal_made`` / ``extra_point_good`` /
+    ``two_point_*_good`` / ``safety_team`` flags (which are absent from a
+    nflverse frame, leaving the overlays inert and the realised-score EPA
+    silently wrong).
+
     All leads are grouped by ``game_id`` so no value leaks across games.
     """
     grp = "game_id"
 
-    df = df.with_columns(pl.col("ep").alias("ep"), pl.col("posteam").alias("_tmp_posteam"))
+    # NA the model-scored ``ep`` on non-play (marker / timeout) rows and fill UP
+    # per game (R: tidyr::fill .direction="up") so a real play's lead never
+    # reads a garbage marker-row EP.
+    df = _fill_up_nonplay(df, ("ep",))
+
+    df = df.with_columns(pl.col("posteam").alias("_tmp_posteam"))
     # fill ep + tmp_posteam UP within each game (R: tidyr::fill .direction="up")
     df = df.with_columns(
         pl.col("ep").fill_null(strategy="backward").over(grp),
@@ -1689,43 +1739,55 @@ def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
             .alias("epa")
         )
 
-    # Offense field goal
-    if _has("field_goal_made"):
-        _no_td = pl.col("td_team").is_null() if _has("td_team") else pl.lit(True)
+    # nflverse-name realised-result predicates (the ESPN-internal *_made /
+    # *_good / safety_team flags are absent from a nflverse frame).  Use
+    # ``eq_missing`` / ``fill_null`` so a NULL result column yields ``False``
+    # (not Kleene-NULL) — a NULL would otherwise poison the conjunction and
+    # silently drop the overlay.
+    _no_td = pl.col("td_team").is_null() if _has("td_team") else pl.lit(True)
+    _fg_made = pl.col("field_goal_result").eq_missing("made") if _has("field_goal_result") else pl.lit(False)
+    _xp_good = pl.col("extra_point_result").eq_missing("good") if _has("extra_point_result") else pl.lit(False)
+    _two_good = (
+        pl.col("two_point_conv_result").eq_missing("success") if _has("two_point_conv_result") else pl.lit(False)
+    )
+    _xp_failed = (
+        pl.col("extra_point_result").is_in(["failed", "blocked", "aborted"]).fill_null(False)
+        if _has("extra_point_result")
+        else pl.lit(False)
+    )
+    _two_failed = (
+        pl.col("two_point_conv_result").eq_missing("failure") if _has("two_point_conv_result") else pl.lit(False)
+    )
+
+    # Offense field goal (made) -> 3 - ep
+    if _has("field_goal_result"):
+        df = df.with_columns(pl.when(_no_td & _fg_made).then(3.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa"))
+
+    # Offense extra point (good) -> 1 - ep
+    if _has("extra_point_result"):
         df = df.with_columns(
-            pl.when(_no_td & (pl.col("field_goal_made") == 1))
-            .then(3.0 - pl.col("ep"))
+            pl.when(_no_td & ~_fg_made & _xp_good).then(1.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa")
+        )
+
+    # Offense two-point conversion (success) -> 2 - ep
+    if _has("two_point_conv_result"):
+        df = df.with_columns(
+            pl.when(_no_td & ~_fg_made & ~_xp_good & _two_good)
+            .then(2.0 - pl.col("ep"))
             .otherwise(pl.col("epa"))
             .alias("epa")
         )
 
-    # Offense extra point
-    if _has("extra_point_good"):
-        _no_td = pl.col("td_team").is_null() if _has("td_team") else pl.lit(True)
-        _no_fg = (pl.col("field_goal_made") == 0) if _has("field_goal_made") else pl.lit(True)
+    # Failed PAT / failed two-point -> 0 - ep
+    if _has("extra_point_result") or _has("two_point_conv_result"):
         df = df.with_columns(
-            pl.when(_no_td & _no_fg & (pl.col("extra_point_good") == 1))
-            .then(1.0 - pl.col("ep"))
+            pl.when(_no_td & ~_fg_made & ~_xp_good & ~_two_good & (_xp_failed | _two_failed))
+            .then(0.0 - pl.col("ep"))
             .otherwise(pl.col("epa"))
             .alias("epa")
         )
 
-    # Offense two-point conversion
-    _two_pt_good_cols = [
-        c for c in ("two_point_rush_good", "two_point_pass_good", "two_point_pass_reception_good") if _has(c)
-    ]
-    if _two_pt_good_cols:
-        _no_td = pl.col("td_team").is_null() if _has("td_team") else pl.lit(True)
-        _no_fg = (pl.col("field_goal_made") == 0) if _has("field_goal_made") else pl.lit(True)
-        _no_xp = (pl.col("extra_point_good") == 0) if _has("extra_point_good") else pl.lit(True)
-        any_two = pl.lit(False)
-        for c in _two_pt_good_cols:
-            any_two = any_two | (pl.col(c) == 1)
-        df = df.with_columns(
-            pl.when(_no_td & _no_fg & _no_xp & any_two).then(2.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa")
-        )
-
-    # Defensive two-point conversion (opponent scores)
+    # Defensive two-point conversion (opponent scores) -> -2 - ep
     if _has("defensive_two_point_conv"):
         df = df.with_columns(
             pl.when(pl.col("defensive_two_point_conv") == 1)
@@ -1734,15 +1796,11 @@ def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
             .alias("epa")
         )
 
-    # Safety
-    if _has("safety_team"):
+    # Safety (nflverse: safety == 1; the possession team conceded, so the
+    # defense scores -> posteam-frame epa = -2 - ep).
+    if _has("safety"):
         df = df.with_columns(
-            pl.when(pl.col("safety_team").is_not_null() & (pl.col("safety_team") == pl.col("posteam")))
-            .then(2.0 - pl.col("ep"))
-            .when(pl.col("safety_team").is_not_null() & (pl.col("safety_team") != pl.col("posteam")))
-            .then(-2.0 - pl.col("ep"))
-            .otherwise(pl.col("epa"))
-            .alias("epa")
+            pl.when(pl.col("safety") == 1).then(-2.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa")
         )
 
     # --- end-of-half / end-of-game / OT overlays ---
@@ -1810,6 +1868,11 @@ def _derive_wpa(df: pl.DataFrame) -> pl.DataFrame:
     All leads are grouped by ``game_id`` so no value leaks across games.
     """
     grp = "game_id"
+
+    # NA the model-scored ``wp`` / ``vegas_wp`` on non-play (marker / timeout)
+    # rows and fill UP per game (R: tidyr::fill .direction="up") so a real
+    # play's lead never reads a garbage marker-row WP.
+    df = _fill_up_nonplay(df, ("wp", "vegas_wp"))
 
     df = df.with_columns(pl.col("posteam").alias("_tmp_posteam"))
     df = df.with_columns(
