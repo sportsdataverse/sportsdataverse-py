@@ -2226,7 +2226,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `yac_r` | double | Average yards after the catch per reception. |
 | `adot` | double | Average depth of target — mean air yards at point of throw on pass attempts directed at the receiver, per Pro Football Reference. |
 | `brk_tkl` | double | Number of broken tackles credited to the player after a reception, per Pro Football Reference. |
-| `rec_br` | double | Broken tackles per reception — rate at which the player evaded tacklers after catches, per Pro Football Reference. |
+| `rec_br` | double | Receptions per broken tackle — number of receptions for each broken tackle the player forced after the catch, per Pro Football Reference. |
 | `drop` | double | Number of catchable passes the player dropped (failed to secure after the ball reached the receiver's hands). |
 | `drop_percent` | double | Percentage of catchable targets that the player dropped. |
 | `int` | double | Binary flag for an interception. |

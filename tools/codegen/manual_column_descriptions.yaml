@@ -396,7 +396,7 @@ load_nfl_pfr_rec:
   loaded: Indicator or metadata field from the Pro Football Reference data load, flagging the row's data source state or completeness.
   rat: Passer rating generated on passes thrown to the player — the NFL passer rating when the receiver is targeted.
   rec: Total receptions made by the player during the period covered.
-  rec_br: Broken tackles per reception — rate at which the player evaded tacklers after catches, per Pro Football Reference.
+  rec_br: Receptions per broken tackle — number of receptions for each broken tackle the player forced after the catch, per Pro Football Reference.
   td: Total receiving touchdowns scored by the player.
   tgt: Total number of times the player was the intended receiver on a pass attempt.
   x1d: Number of receptions by the player that resulted in a first down.
