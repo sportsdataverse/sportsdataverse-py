@@ -72,16 +72,17 @@ from sportsdataverse.qmjhl import *  # noqa: F401,F403,E402
 from sportsdataverse.whl import *  # noqa: F401,F403,E402
 from sportsdataverse.odds import *  # noqa: F401,F403,E402
 
-# --- ESPN additional leagues (0.0.59+) ---
+# --- ESPN additional leagues — sport param-families stay top-level; minor/alias
+#     leagues are nested under sport-group packages (0.0.65+). ---
 from sportsdataverse.soccer import *  # noqa: F401,F403,E402
 from sportsdataverse.cricket import *  # noqa: F401,F403,E402
-from sportsdataverse.ufl import *  # noqa: F401,F403,E402
-from sportsdataverse.xfl import *  # noqa: F401,F403,E402
-from sportsdataverse.cfl import *  # noqa: F401,F403,E402
-from sportsdataverse.college_baseball import *  # noqa: F401,F403,E402
-from sportsdataverse.college_softball import *  # noqa: F401,F403,E402
-from sportsdataverse.mch import *  # noqa: F401,F403,E402
-from sportsdataverse.wch import *  # noqa: F401,F403,E402
+from sportsdataverse.football.ufl import *  # noqa: F401,F403,E402
+from sportsdataverse.football.xfl import *  # noqa: F401,F403,E402
+from sportsdataverse.football.cfl import *  # noqa: F401,F403,E402
+from sportsdataverse.baseball.college_baseball import *  # noqa: F401,F403,E402
+from sportsdataverse.baseball.college_softball import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.mch import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.wch import *  # noqa: F401,F403,E402
 
 # Top-level QoL helpers (0.0.51+).
 #   * find_team / find_athlete / find_event — name-to-ID resolvers

@@ -392,7 +392,8 @@ def test_function_count_per_league():
     # core 8 leagues must always be present
     core = {"cfb", "mbb", "mlb", "nba", "nfl", "nhl", "wbb", "wnba"}
     assert core <= set(counts), f"Missing core leagues: {core - set(counts)}"
-    # ESPN additional leagues (0.0.59+)
+    # ESPN additional leagues — minor/alias leagues now nested under sport-group
+    # packages (0.0.65+); ahl/ohl/qmjhl/whl remain flat until a later task.
     additional = {
         "ahl",
         "ohl",
@@ -400,13 +401,14 @@ def test_function_count_per_league():
         "whl",
         "soccer",
         "cricket",
-        "ufl",
-        "xfl",
-        "cfl",
-        "college_baseball",
-        "college_softball",
-        "mch",
-        "wch",
+        # nested under sport-group packages
+        "football.ufl",
+        "football.xfl",
+        "football.cfl",
+        "baseball.college_baseball",
+        "baseball.college_softball",
+        "hockey.mch",
+        "hockey.wch",
     }
     assert additional <= set(counts), f"Missing additional leagues: {additional - set(counts)}"
     # MLB has the largest surface post-0.0.51 (ESPN + Stats API + Statcast)

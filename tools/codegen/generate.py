@@ -1584,20 +1584,14 @@ def _coverage_scope_names() -> tuple[dict[str, set[str]], set[str]]:
 
     per_league: dict[str, set[str]] = {}
     all_league: set[str] = set()
-    try:
-        for lg in _COVERAGE_LEAGUES:
-            mod = importlib.import_module(f"sportsdataverse.{lg}")
-            names = {n for n in dir(mod) if _coverage_in_scope(n, getattr(mod, n))}
-            per_league[lg] = names
-            all_league |= names
+    for lg in _COVERAGE_LEAGUES:
+        mod = importlib.import_module(f"sportsdataverse.{lg}")
+        names = {n for n in dir(mod) if _coverage_in_scope(n, getattr(mod, n))}
+        per_league[lg] = names
+        all_league |= names
 
-        top = importlib.import_module("sportsdataverse")
-        top_names = {n for n in dir(top) if _coverage_in_scope(n, getattr(top, n))}
-    except ImportError:
-        # sportsdataverse/__init__.py may temporarily import old flat paths during
-        # a namespace-nesting migration (Task 3 → Task 4). Degrade gracefully so
-        # --check and docs generation continue to work.
-        top_names = set()
+    top = importlib.import_module("sportsdataverse")
+    top_names = {n for n in dir(top) if _coverage_in_scope(n, getattr(top, n))}
     global_names = top_names - all_league
     return per_league, global_names
 
@@ -2628,10 +2622,7 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
     allow = _coverage_allowlist()
     if league is None:
         names = global_names
-        try:
-            mod = importlib.import_module("sportsdataverse")
-        except ImportError:
-            return []
+        mod = importlib.import_module("sportsdataverse")
         allowed = allow.get("global", set())
     elif league not in per_league:
         # Loader-only leagues (e.g. pwhl) have no module of their own and no
@@ -2640,10 +2631,7 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
         return []
     else:
         names = per_league[league]
-        try:
-            mod = importlib.import_module(f"sportsdataverse.{league}")
-        except ImportError:
-            return []
+        mod = importlib.import_module(f"sportsdataverse.{league}")
         allowed = allow.get(league, set())
     out = []
     for n in names:
@@ -2669,10 +2657,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     template can render Parameters/Returns/Example sections."""
     import importlib
 
-    try:
-        mod = importlib.import_module("sportsdataverse" if league is None else f"sportsdataverse.{league}")
-    except ImportError:
-        return []
+    mod = importlib.import_module("sportsdataverse" if league is None else f"sportsdataverse.{league}")
     scope = "global" if league is None else league
     by_family: dict[str, list[dict]] = {}
     for n in names:
