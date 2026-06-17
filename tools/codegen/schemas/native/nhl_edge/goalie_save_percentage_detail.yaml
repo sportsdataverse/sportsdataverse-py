@@ -1,0 +1,24 @@
+schema: goalie_save_percentage_detail
+kind: dataframe
+columns:
+- name: save_pctg_last10
+  type: character
+  description: ''
+- name: save_pctg_details_games_above900_value
+  type: integer
+  description: ''
+- name: save_pctg_details_games_above900_percentile
+  type: double
+  description: ''
+- name: save_pctg_details_games_above900_league_avg
+  type: double
+  description: ''
+- name: save_pctg_details_pctg_games_above900_value
+  type: double
+  description: ''
+- name: save_pctg_details_pctg_games_above900_percentile
+  type: double
+  description: ''
+- name: save_pctg_details_pctg_games_above900_league_avg
+  type: double
+  description: ''

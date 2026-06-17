@@ -1,0 +1,397 @@
+{
+  "savePctg5v5Last10": [
+    {
+      "gameCenterLink": "/gamecenter/wsh-vs-car/2025/04/02/2024021193",
+      "savePctg": 0.8571,
+      "gameDate": "2025-04-02",
+      "decision": "L",
+      "playerOnHomeTeam": false,
+      "homeTeam": {
+        "commonName": {
+          "default": "Hurricanes"
+        },
+        "placeNameWithPreposition": {
+          "default": "Carolina",
+          "fr": "de la Caroline"
+        },
+        "abbrev": "CAR",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg"
+        },
+        "slug": "carolina-hurricanes-12"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/buf-vs-wsh/2025/03/30/2024021171",
+      "savePctg": 0.6667,
+      "gameDate": "2025-03-30",
+      "decision": "L",
+      "playerOnHomeTeam": true,
+      "homeTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Sabres"
+        },
+        "placeNameWithPreposition": {
+          "default": "Buffalo",
+          "fr": "de Buffalo"
+        },
+        "abbrev": "BUF",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg"
+        },
+        "slug": "buffalo-sabres-7"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/wsh-vs-wpg/2025/03/25/2024021135",
+      "savePctg": 0.8889,
+      "gameDate": "2025-03-25",
+      "decision": "O",
+      "playerOnHomeTeam": false,
+      "homeTeam": {
+        "commonName": {
+          "default": "Jets"
+        },
+        "placeNameWithPreposition": {
+          "default": "Winnipeg",
+          "fr": "de Winnipeg"
+        },
+        "abbrev": "WPG",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+        },
+        "slug": "winnipeg-jets-52"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/fla-vs-wsh/2025/03/22/2024021110",
+      "savePctg": 0.8966,
+      "gameDate": "2025-03-22",
+      "decision": "W",
+      "playerOnHomeTeam": true,
+      "homeTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Panthers"
+        },
+        "placeNameWithPreposition": {
+          "default": "Florida",
+          "fr": "de la Floride"
+        },
+        "abbrev": "FLA",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/FLA_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg"
+        },
+        "slug": "florida-panthers-13"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/det-vs-wsh/2025/03/18/2024021081",
+      "savePctg": 0.9583,
+      "gameDate": "2025-03-18",
+      "decision": "W",
+      "playerOnHomeTeam": true,
+      "homeTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Red Wings"
+        },
+        "placeNameWithPreposition": {
+          "default": "Detroit",
+          "fr": "de Detroit"
+        },
+        "abbrev": "DET",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/DET_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg"
+        },
+        "slug": "detroit-red-wings-17"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/wsh-vs-sjs/2025/03/15/2024021057",
+      "savePctg": 0.9375,
+      "gameDate": "2025-03-15",
+      "decision": "W",
+      "playerOnHomeTeam": false,
+      "homeTeam": {
+        "commonName": {
+          "default": "Sharks"
+        },
+        "placeNameWithPreposition": {
+          "default": "San Jose",
+          "fr": "de San Jose"
+        },
+        "abbrev": "SJS",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/SJS_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg"
+        },
+        "slug": "san-jose-sharks-28"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/wsh-vs-ana/2025/03/11/2024021033",
+      "savePctg": 0.8182,
+      "gameDate": "2025-03-11",
+      "decision": "W",
+      "playerOnHomeTeam": false,
+      "homeTeam": {
+        "commonName": {
+          "default": "Ducks"
+        },
+        "placeNameWithPreposition": {
+          "default": "Anaheim",
+          "fr": "d'Anaheim"
+        },
+        "abbrev": "ANA",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg"
+        },
+        "slug": "anaheim-ducks-24"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/det-vs-wsh/2025/03/07/2024020998",
+      "savePctg": 0.9444,
+      "gameDate": "2025-03-07",
+      "decision": "W",
+      "playerOnHomeTeam": true,
+      "homeTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Red Wings"
+        },
+        "placeNameWithPreposition": {
+          "default": "Detroit",
+          "fr": "de Detroit"
+        },
+        "abbrev": "DET",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/DET_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg"
+        },
+        "slug": "detroit-red-wings-17"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/ott-vs-wsh/2025/03/03/2024020967",
+      "savePctg": 0.8571,
+      "gameDate": "2025-03-03",
+      "decision": "W",
+      "playerOnHomeTeam": true,
+      "homeTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Senators",
+          "fr": "S\u00e9nateurs"
+        },
+        "placeNameWithPreposition": {
+          "default": "Ottawa",
+          "fr": "d'Ottawa"
+        },
+        "abbrev": "OTT",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/OTT_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg"
+        },
+        "slug": "ottawa-senators-9"
+      }
+    },
+    {
+      "gameCenterLink": "/gamecenter/tbl-vs-wsh/2025/03/01/2024020950",
+      "savePctg": 0.9091,
+      "gameDate": "2025-03-01",
+      "decision": "L",
+      "playerOnHomeTeam": true,
+      "homeTeam": {
+        "commonName": {
+          "default": "Capitals"
+        },
+        "placeNameWithPreposition": {
+          "default": "Washington",
+          "fr": "de Washington"
+        },
+        "abbrev": "WSH",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/WSH_secondary_dark.svg"
+        },
+        "slug": "washington-capitals-15"
+      },
+      "awayTeam": {
+        "commonName": {
+          "default": "Lightning"
+        },
+        "placeNameWithPreposition": {
+          "default": "Tampa Bay",
+          "fr": "de Tampa Bay"
+        },
+        "abbrev": "TBL",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/TBL_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg"
+        },
+        "slug": "tampa-bay-lightning-14"
+      }
+    }
+  ],
+  "savePctg5v5Details": {
+    "savePctg": {
+      "value": 0.9208,
+      "leagueAvg": 0.910518,
+      "percentile": 0.7925
+    },
+    "savePctgClose": {
+      "value": 0.9229,
+      "leagueAvg": 0.911615,
+      "percentile": 0.7358
+    },
+    "shots": {
+      "value": 922,
+      "leagueAvg": 567,
+      "percentile": 0.4717
+    },
+    "shotsPer60": {
+      "value": 26.6032,
+      "leagueAvg": 27.1569,
+      "percentile": 0.3396
+    }
+  }
+}

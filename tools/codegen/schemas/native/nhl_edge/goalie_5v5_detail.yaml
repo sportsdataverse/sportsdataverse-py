@@ -1,0 +1,42 @@
+schema: goalie_5v5_detail
+kind: dataframe
+columns:
+- name: save_pctg5v5_last10
+  type: character
+  description: ''
+- name: save_pctg5v5_details_save_pctg_value
+  type: double
+  description: ''
+- name: save_pctg5v5_details_save_pctg_league_avg
+  type: double
+  description: ''
+- name: save_pctg5v5_details_save_pctg_percentile
+  type: double
+  description: ''
+- name: save_pctg5v5_details_save_pctg_close_value
+  type: double
+  description: ''
+- name: save_pctg5v5_details_save_pctg_close_league_avg
+  type: double
+  description: ''
+- name: save_pctg5v5_details_save_pctg_close_percentile
+  type: double
+  description: ''
+- name: save_pctg5v5_details_shots_value
+  type: integer
+  description: ''
+- name: save_pctg5v5_details_shots_league_avg
+  type: integer
+  description: ''
+- name: save_pctg5v5_details_shots_percentile
+  type: double
+  description: ''
+- name: save_pctg5v5_details_shots_per60_value
+  type: double
+  description: ''
+- name: save_pctg5v5_details_shots_per60_league_avg
+  type: double
+  description: ''
+- name: save_pctg5v5_details_shots_per60_percentile
+  type: double
+  description: ''

@@ -1,0 +1,370 @@
+{
+  "seasonsWithEdgeStats": [
+    {
+      "id": 20212022,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20222023,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20232024,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20242025,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20252026,
+      "gameTypes": [
+        2,
+        3
+      ]
+    }
+  ],
+  "minimumMinutesPlayed": 30,
+  "leaders": {
+    "highDangerSavePctg": {
+      "player": {
+        "id": 8481668,
+        "firstName": {
+          "default": "Arturs"
+        },
+        "lastName": {
+          "default": "Silovs",
+          "cs": "\u0160ilovs",
+          "sk": "\u0160ilovs"
+        },
+        "sweaterNumber": 37,
+        "position": "G",
+        "slug": "arturs-silovs-8481668",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/PIT/8481668.png",
+        "team": {
+          "commonName": {
+            "default": "Penguins"
+          },
+          "placeNameWithPreposition": {
+            "default": "Pittsburgh",
+            "fr": "de Pittsburgh"
+          },
+          "abbrev": "PIT",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/PIT_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg"
+          }
+        }
+      },
+      "savePctg": 0.909091,
+      "shotLocationDetails": [
+        {
+          "area": "Behind the Net",
+          "savePctg": 0.0,
+          "savePctgPercentile": 0.2609
+        },
+        {
+          "area": "Beyond Red Line",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "Center Point",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "Crease",
+          "savePctg": 0.8,
+          "savePctgPercentile": 0.7826
+        },
+        {
+          "area": "High Slot",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "L Circle",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "L Corner",
+          "savePctg": 0.0,
+          "savePctgPercentile": 0.7391
+        },
+        {
+          "area": "L Net Side",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "L Point",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "Low Slot",
+          "savePctg": 0.941176,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "Offensive Neutral Zone",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "Outside L",
+          "savePctg": 0.8,
+          "savePctgPercentile": 0.1304
+        },
+        {
+          "area": "Outside R",
+          "savePctg": 1.0,
+          "savePctgPercentile": 1.0
+        },
+        {
+          "area": "R Circle",
+          "savePctg": 0.888889,
+          "savePctgPercentile": 0.3043
+        },
+        {
+          "area": "R Corner",
+          "savePctg": 0.0,
+          "savePctgPercentile": 0.7391
+        },
+        {
+          "area": "R Net Side",
+          "savePctg": 0.0,
+          "savePctgPercentile": 0.2174
+        },
+        {
+          "area": "R Point",
+          "savePctg": 0.857143,
+          "savePctgPercentile": 0.0435
+        }
+      ]
+    },
+    "highDangerSaves": {
+      "player": {
+        "id": 8482487,
+        "firstName": {
+          "default": "Jakub"
+        },
+        "lastName": {
+          "default": "Dobes"
+        },
+        "sweaterNumber": 75,
+        "position": "G",
+        "slug": "jakub-dobes-8482487",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/MTL/8482487.png",
+        "team": {
+          "commonName": {
+            "default": "Canadiens"
+          },
+          "placeNameWithPreposition": {
+            "default": "Montr\u00e9al",
+            "fr": "de Montr\u00e9al"
+          },
+          "abbrev": "MTL",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg"
+          }
+        }
+      },
+      "saves": 125,
+      "shotLocationDetails": [
+        {
+          "area": "Behind the Net",
+          "saves": 6,
+          "savesPercentile": 1.0
+        },
+        {
+          "area": "Beyond Red Line",
+          "saves": 16,
+          "savesPercentile": 0.92
+        },
+        {
+          "area": "Center Point",
+          "saves": 33,
+          "savesPercentile": 0.96
+        },
+        {
+          "area": "Crease",
+          "saves": 17,
+          "savesPercentile": 1.0
+        },
+        {
+          "area": "High Slot",
+          "saves": 55,
+          "savesPercentile": 1.0
+        },
+        {
+          "area": "L Circle",
+          "saves": 60,
+          "savesPercentile": 1.0
+        },
+        {
+          "area": "L Corner",
+          "saves": 0,
+          "savesPercentile": 0.76
+        },
+        {
+          "area": "L Net Side",
+          "saves": 15,
+          "savesPercentile": 0.96
+        },
+        {
+          "area": "L Point",
+          "saves": 30,
+          "savesPercentile": 0.96
+        },
+        {
+          "area": "Low Slot",
+          "saves": 108,
+          "savesPercentile": 1.0
+        },
+        {
+          "area": "Offensive Neutral Zone",
+          "saves": 8,
+          "savesPercentile": 0.76
+        },
+        {
+          "area": "Outside L",
+          "saves": 25,
+          "savesPercentile": 0.96
+        },
+        {
+          "area": "Outside R",
+          "saves": 25,
+          "savesPercentile": 0.92
+        },
+        {
+          "area": "R Circle",
+          "saves": 62,
+          "savesPercentile": 1.0
+        },
+        {
+          "area": "R Corner",
+          "saves": 0,
+          "savesPercentile": 0.76
+        },
+        {
+          "area": "R Net Side",
+          "saves": 18,
+          "savesPercentile": 1.0
+        },
+        {
+          "area": "R Point",
+          "saves": 34,
+          "savesPercentile": 0.96
+        }
+      ]
+    },
+    "highDangerGoalsAgainst": {
+      "player": {
+        "id": 8477465,
+        "firstName": {
+          "default": "Tristan"
+        },
+        "lastName": {
+          "default": "Jarry"
+        },
+        "sweaterNumber": 35,
+        "position": "G",
+        "slug": "tristan-jarry-8477465",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/EDM/8477465.png",
+        "team": {
+          "commonName": {
+            "default": "Oilers"
+          },
+          "placeNameWithPreposition": {
+            "default": "Edmonton",
+            "fr": "d'Edmonton"
+          },
+          "abbrev": "EDM",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/EDM_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg"
+          }
+        }
+      },
+      "goalsAgainst": 1
+    },
+    "savePctg5v5": {
+      "player": {
+        "id": 8478435,
+        "firstName": {
+          "default": "Dan"
+        },
+        "lastName": {
+          "default": "Vladar",
+          "cs": "Vlada\u0159",
+          "sk": "Vlada\u0159"
+        },
+        "sweaterNumber": 80,
+        "position": "G",
+        "slug": "dan-vladar-8478435",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/PHI/8478435.png",
+        "team": {
+          "commonName": {
+            "default": "Flyers"
+          },
+          "placeNameWithPreposition": {
+            "default": "Philadelphia",
+            "fr": "de Philadelphie"
+          },
+          "abbrev": "PHI",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/PHI_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg"
+          }
+        }
+      },
+      "savePctg": 0.9369
+    },
+    "gamesAbove900": {
+      "player": {
+        "id": 8479394,
+        "firstName": {
+          "default": "Carter"
+        },
+        "lastName": {
+          "default": "Hart"
+        },
+        "sweaterNumber": 79,
+        "position": "G",
+        "slug": "carter-hart-8479394",
+        "headshot": "https://assets.nhle.com/mugs/nhl/20252026/VGK/8479394.png",
+        "team": {
+          "commonName": {
+            "default": "Golden Knights"
+          },
+          "placeNameWithPreposition": {
+            "default": "Vegas",
+            "fr": "de Vegas"
+          },
+          "abbrev": "VGK",
+          "teamLogo": {
+            "light": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
+            "dark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg"
+          }
+        }
+      },
+      "games": 13
+    }
+  }
+}

@@ -149,7 +149,115 @@ Pull EDGE comparison data for a single skater.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `skating_distance_last10` | character |  |
+| `shot_location_details` | character |  |
+| `shot_location_totals` | character |  |
+| `player_id` | integer | Unique player identifier. |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_shoots_catches` | character |  |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_goals` | integer |  |
+| `player_assists` | integer |  |
+| `player_points` | integer | Player points. |
+| `player_games_played` | integer |  |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `player_team_slug` | character | Player team URL-friendly slug. |
+| `shot_speed_details_top_shot_speed_imperial` | double |  |
+| `shot_speed_details_top_shot_speed_metric` | double |  |
+| `shot_speed_details_top_shot_speed_overlay_player_first_name_default` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_player_last_name_default` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_game_date` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_away_team_abbrev` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_away_team_score` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_home_team_abbrev` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_home_team_score` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_game_outcome_last_period_type` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_number` | integer |  |
+| `shot_speed_details_top_shot_speed_overlay_period_descriptor_period_type` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_time_in_period` | character |  |
+| `shot_speed_details_top_shot_speed_overlay_game_type` | integer |  |
+| `shot_speed_details_avg_shot_speed_imperial` | double |  |
+| `shot_speed_details_avg_shot_speed_metric` | double |  |
+| `shot_speed_details_shot_attempts_over100` | integer |  |
+| `shot_speed_details_shot_attempts90_to100` | integer |  |
+| `shot_speed_details_shot_attempts80_to90` | integer |  |
+| `shot_speed_details_shot_attempts70_to80` | integer |  |
+| `skating_speed_details_max_skating_speed_imperial` | double |  |
+| `skating_speed_details_max_skating_speed_metric` | double |  |
+| `skating_speed_details_max_skating_speed_overlay_player_first_name_default` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_player_last_name_default` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_game_date` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_away_team_abbrev` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_away_team_score` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_home_team_abbrev` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_home_team_score` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_number` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_time_in_period` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_game_type` | integer |  |
+| `skating_speed_details_bursts_over22` | integer |  |
+| `skating_speed_details_bursts20_to22` | integer |  |
+| `skating_speed_details_bursts18_to20` | integer |  |
+| `skating_distance_details_distance_total_imperial` | double |  |
+| `skating_distance_details_distance_total_metric` | double |  |
+| `skating_distance_details_distance_per60_imperial` | double |  |
+| `skating_distance_details_distance_per60_metric` | double |  |
+| `skating_distance_details_distance_max_game_imperial` | double |  |
+| `skating_distance_details_distance_max_game_metric` | double |  |
+| `skating_distance_details_distance_max_game_overlay_player_first_name_default` | character |  |
+| `skating_distance_details_distance_max_game_overlay_player_last_name_default` | character |  |
+| `skating_distance_details_distance_max_game_overlay_game_date` | character |  |
+| `skating_distance_details_distance_max_game_overlay_away_team_abbrev` | character |  |
+| `skating_distance_details_distance_max_game_overlay_away_team_score` | integer |  |
+| `skating_distance_details_distance_max_game_overlay_home_team_abbrev` | character |  |
+| `skating_distance_details_distance_max_game_overlay_home_team_score` | integer |  |
+| `skating_distance_details_distance_max_game_overlay_game_outcome_last_period_type` | character |  |
+| `skating_distance_details_distance_max_game_overlay_game_outcome_ot_periods` | integer |  |
+| `skating_distance_details_distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `skating_distance_details_distance_max_game_overlay_period_descriptor_number` | integer |  |
+| `skating_distance_details_distance_max_game_overlay_period_descriptor_period_type` | character |  |
+| `skating_distance_details_distance_max_game_overlay_game_type` | integer |  |
+| `skating_distance_details_distance_max_period_imperial` | double |  |
+| `skating_distance_details_distance_max_period_metric` | double |  |
+| `skating_distance_details_distance_max_period_overlay_player_first_name_default` | character |  |
+| `skating_distance_details_distance_max_period_overlay_player_last_name_default` | character |  |
+| `skating_distance_details_distance_max_period_overlay_game_date` | character |  |
+| `skating_distance_details_distance_max_period_overlay_away_team_abbrev` | character |  |
+| `skating_distance_details_distance_max_period_overlay_away_team_score` | integer |  |
+| `skating_distance_details_distance_max_period_overlay_home_team_abbrev` | character |  |
+| `skating_distance_details_distance_max_period_overlay_home_team_score` | integer |  |
+| `skating_distance_details_distance_max_period_overlay_game_outcome_last_period_type` | character |  |
+| `skating_distance_details_distance_max_period_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `skating_distance_details_distance_max_period_overlay_period_descriptor_number` | integer |  |
+| `skating_distance_details_distance_max_period_overlay_period_descriptor_period_type` | character |  |
+| `skating_distance_details_distance_max_period_overlay_game_type` | integer |  |
+| `zone_time_details_offensive_zone_pctg` | double |  |
+| `zone_time_details_offensive_zone_league_avg` | double |  |
+| `zone_time_details_neutral_zone_pctg` | double |  |
+| `zone_time_details_neutral_zone_league_avg` | double |  |
+| `zone_time_details_defensive_zone_pctg` | double |  |
+| `zone_time_details_defensive_zone_league_avg` | double |  |
+| `zone_starts_offensive_zone_starts` | double |  |
+| `zone_starts_neutral_zone_starts` | double |  |
+| `zone_starts_defensive_zone_starts` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -176,7 +284,17 @@ Pull EDGE shot-location detail for a single skater.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_shot_location`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `area` | character | Net/ice zone the shots were taken from. |
+| `sog` | integer | Shots on goal from the area. |
+| `goals` | integer | Goals scored. |
+| `shooting_pctg` | double | Shooting percentage from the area. |
+| `sog_percentile` | double | League percentile rank for shots on goal. |
+| `goals_percentile` | double | League percentile rank for goals. |
+| `shooting_pctg_percentile` | double | League percentile rank for shooting percentage. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -326,7 +444,12 @@ Pull EDGE skating-distance detail for a single skater.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `skating_distance_last10` | character |  |
+| `skating_distance_details` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -353,7 +476,38 @@ Pull EDGE skating-speed detail for a single skater.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `top_skating_speeds` | character |  |
+| `skating_speed_details_max_skating_speed_imperial` | double |  |
+| `skating_speed_details_max_skating_speed_metric` | double |  |
+| `skating_speed_details_max_skating_speed_percentile` | double |  |
+| `skating_speed_details_max_skating_speed_league_avg_imperial` | double |  |
+| `skating_speed_details_max_skating_speed_league_avg_metric` | double |  |
+| `skating_speed_details_max_skating_speed_overlay_player_first_name_default` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_player_last_name_default` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_game_date` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_away_team_abbrev` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_away_team_score` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_home_team_abbrev` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_home_team_score` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_game_outcome_last_period_type` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_number` | integer |  |
+| `skating_speed_details_max_skating_speed_overlay_period_descriptor_period_type` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_time_in_period` | character |  |
+| `skating_speed_details_max_skating_speed_overlay_game_type` | integer |  |
+| `skating_speed_details_bursts_over22_value` | integer |  |
+| `skating_speed_details_bursts_over22_percentile` | double |  |
+| `skating_speed_details_bursts_over22_league_avg` | double |  |
+| `skating_speed_details_bursts20_to22_value` | integer |  |
+| `skating_speed_details_bursts20_to22_percentile` | double |  |
+| `skating_speed_details_bursts20_to22_league_avg` | double |  |
+| `skating_speed_details_bursts18_to20_value` | integer |  |
+| `skating_speed_details_bursts18_to20_percentile` | double |  |
+| `skating_speed_details_bursts18_to20_league_avg` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -505,7 +659,155 @@ Pull the EDGE skater landing page (summary across all skaters).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `leaders_hardest_shot_player_id` | integer |  |
+| `leaders_hardest_shot_player_first_name_default` | character |  |
+| `leaders_hardest_shot_player_last_name_default` | character |  |
+| `leaders_hardest_shot_player_sweater_number` | integer |  |
+| `leaders_hardest_shot_player_position` | character |  |
+| `leaders_hardest_shot_player_slug` | character |  |
+| `leaders_hardest_shot_player_headshot` | character |  |
+| `leaders_hardest_shot_player_team_common_name_default` | character |  |
+| `leaders_hardest_shot_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_hardest_shot_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_hardest_shot_player_team_abbrev` | character |  |
+| `leaders_hardest_shot_player_team_team_logo_light` | character |  |
+| `leaders_hardest_shot_player_team_team_logo_dark` | character |  |
+| `leaders_hardest_shot_overlay_player_first_name_default` | character |  |
+| `leaders_hardest_shot_overlay_player_last_name_default` | character |  |
+| `leaders_hardest_shot_overlay_game_date` | character |  |
+| `leaders_hardest_shot_overlay_away_team_abbrev` | character |  |
+| `leaders_hardest_shot_overlay_away_team_score` | integer |  |
+| `leaders_hardest_shot_overlay_home_team_abbrev` | character |  |
+| `leaders_hardest_shot_overlay_home_team_score` | integer |  |
+| `leaders_hardest_shot_overlay_game_outcome_last_period_type` | character |  |
+| `leaders_hardest_shot_overlay_game_outcome_ot_periods` | integer |  |
+| `leaders_hardest_shot_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `leaders_hardest_shot_overlay_period_descriptor_number` | integer |  |
+| `leaders_hardest_shot_overlay_period_descriptor_period_type` | character |  |
+| `leaders_hardest_shot_overlay_time_in_period` | character |  |
+| `leaders_hardest_shot_overlay_game_type` | integer |  |
+| `leaders_hardest_shot_shot_speed_imperial` | double |  |
+| `leaders_hardest_shot_shot_speed_metric` | double |  |
+| `leaders_max_skating_speed_player_id` | integer |  |
+| `leaders_max_skating_speed_player_first_name_default` | character |  |
+| `leaders_max_skating_speed_player_last_name_default` | character |  |
+| `leaders_max_skating_speed_player_sweater_number` | integer |  |
+| `leaders_max_skating_speed_player_position` | character |  |
+| `leaders_max_skating_speed_player_slug` | character |  |
+| `leaders_max_skating_speed_player_headshot` | character |  |
+| `leaders_max_skating_speed_player_team_common_name_default` | character |  |
+| `leaders_max_skating_speed_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_max_skating_speed_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_max_skating_speed_player_team_abbrev` | character |  |
+| `leaders_max_skating_speed_player_team_team_logo_light` | character |  |
+| `leaders_max_skating_speed_player_team_team_logo_dark` | character |  |
+| `leaders_max_skating_speed_overlay_player_first_name_default` | character |  |
+| `leaders_max_skating_speed_overlay_player_last_name_default` | character |  |
+| `leaders_max_skating_speed_overlay_game_date` | character |  |
+| `leaders_max_skating_speed_overlay_away_team_abbrev` | character |  |
+| `leaders_max_skating_speed_overlay_away_team_score` | integer |  |
+| `leaders_max_skating_speed_overlay_home_team_abbrev` | character |  |
+| `leaders_max_skating_speed_overlay_home_team_score` | integer |  |
+| `leaders_max_skating_speed_overlay_game_outcome_last_period_type` | character |  |
+| `leaders_max_skating_speed_overlay_game_outcome_ot_periods` | integer |  |
+| `leaders_max_skating_speed_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `leaders_max_skating_speed_overlay_period_descriptor_number` | integer |  |
+| `leaders_max_skating_speed_overlay_period_descriptor_period_type` | character |  |
+| `leaders_max_skating_speed_overlay_time_in_period` | character |  |
+| `leaders_max_skating_speed_overlay_game_type` | integer |  |
+| `leaders_max_skating_speed_skating_speed_imperial` | double |  |
+| `leaders_max_skating_speed_skating_speed_metric` | double |  |
+| `leaders_total_distance_skated_player_id` | integer |  |
+| `leaders_total_distance_skated_player_first_name_default` | character |  |
+| `leaders_total_distance_skated_player_last_name_default` | character |  |
+| `leaders_total_distance_skated_player_sweater_number` | integer |  |
+| `leaders_total_distance_skated_player_position` | character |  |
+| `leaders_total_distance_skated_player_slug` | character |  |
+| `leaders_total_distance_skated_player_headshot` | character |  |
+| `leaders_total_distance_skated_player_team_common_name_default` | character |  |
+| `leaders_total_distance_skated_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_total_distance_skated_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_total_distance_skated_player_team_abbrev` | character |  |
+| `leaders_total_distance_skated_player_team_team_logo_light` | character |  |
+| `leaders_total_distance_skated_player_team_team_logo_dark` | character |  |
+| `leaders_total_distance_skated_distance_skated_imperial` | double |  |
+| `leaders_total_distance_skated_distance_skated_metric` | double |  |
+| `leaders_distance_max_game_player_id` | integer |  |
+| `leaders_distance_max_game_player_first_name_default` | character |  |
+| `leaders_distance_max_game_player_last_name_default` | character |  |
+| `leaders_distance_max_game_player_sweater_number` | integer |  |
+| `leaders_distance_max_game_player_position` | character |  |
+| `leaders_distance_max_game_player_slug` | character |  |
+| `leaders_distance_max_game_player_headshot` | character |  |
+| `leaders_distance_max_game_player_team_common_name_default` | character |  |
+| `leaders_distance_max_game_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_distance_max_game_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_distance_max_game_player_team_abbrev` | character |  |
+| `leaders_distance_max_game_player_team_team_logo_light` | character |  |
+| `leaders_distance_max_game_player_team_team_logo_dark` | character |  |
+| `leaders_distance_max_game_distance_skated_imperial` | double |  |
+| `leaders_distance_max_game_distance_skated_metric` | double |  |
+| `leaders_distance_max_game_overlay_player_first_name_default` | character |  |
+| `leaders_distance_max_game_overlay_player_last_name_default` | character |  |
+| `leaders_distance_max_game_overlay_game_date` | character |  |
+| `leaders_distance_max_game_overlay_away_team_abbrev` | character |  |
+| `leaders_distance_max_game_overlay_away_team_score` | integer |  |
+| `leaders_distance_max_game_overlay_home_team_abbrev` | character |  |
+| `leaders_distance_max_game_overlay_home_team_score` | integer |  |
+| `leaders_distance_max_game_overlay_game_outcome_last_period_type` | character |  |
+| `leaders_distance_max_game_overlay_game_outcome_ot_periods` | integer |  |
+| `leaders_distance_max_game_overlay_period_descriptor_max_regulation_periods` | integer |  |
+| `leaders_distance_max_game_overlay_period_descriptor_number` | integer |  |
+| `leaders_distance_max_game_overlay_period_descriptor_period_type` | character |  |
+| `leaders_distance_max_game_overlay_game_type` | integer |  |
+| `leaders_high_danger_sog_player_id` | integer |  |
+| `leaders_high_danger_sog_player_first_name_default` | character |  |
+| `leaders_high_danger_sog_player_last_name_default` | character |  |
+| `leaders_high_danger_sog_player_sweater_number` | integer |  |
+| `leaders_high_danger_sog_player_position` | character |  |
+| `leaders_high_danger_sog_player_slug` | character |  |
+| `leaders_high_danger_sog_player_headshot` | character |  |
+| `leaders_high_danger_sog_player_team_common_name_default` | character |  |
+| `leaders_high_danger_sog_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_high_danger_sog_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_high_danger_sog_player_team_abbrev` | character |  |
+| `leaders_high_danger_sog_player_team_team_logo_light` | character |  |
+| `leaders_high_danger_sog_player_team_team_logo_dark` | character |  |
+| `leaders_high_danger_sog_sog` | integer |  |
+| `leaders_high_danger_sog_shot_location_details` | character |  |
+| `leaders_offensive_zone_time_player_id` | integer |  |
+| `leaders_offensive_zone_time_player_first_name_default` | character |  |
+| `leaders_offensive_zone_time_player_last_name_default` | character |  |
+| `leaders_offensive_zone_time_player_sweater_number` | integer |  |
+| `leaders_offensive_zone_time_player_position` | character |  |
+| `leaders_offensive_zone_time_player_slug` | character |  |
+| `leaders_offensive_zone_time_player_headshot` | character |  |
+| `leaders_offensive_zone_time_player_team_common_name_default` | character |  |
+| `leaders_offensive_zone_time_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_offensive_zone_time_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_offensive_zone_time_player_team_abbrev` | character |  |
+| `leaders_offensive_zone_time_player_team_team_logo_light` | character |  |
+| `leaders_offensive_zone_time_player_team_team_logo_dark` | character |  |
+| `leaders_offensive_zone_time_zone_time` | double |  |
+| `leaders_defensive_zone_time_player_id` | integer |  |
+| `leaders_defensive_zone_time_player_first_name_default` | character |  |
+| `leaders_defensive_zone_time_player_last_name_default` | character |  |
+| `leaders_defensive_zone_time_player_sweater_number` | integer |  |
+| `leaders_defensive_zone_time_player_position` | character |  |
+| `leaders_defensive_zone_time_player_slug` | character |  |
+| `leaders_defensive_zone_time_player_headshot` | character |  |
+| `leaders_defensive_zone_time_player_team_common_name_default` | character |  |
+| `leaders_defensive_zone_time_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_defensive_zone_time_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_defensive_zone_time_player_team_abbrev` | character |  |
+| `leaders_defensive_zone_time_player_team_team_logo_light` | character |  |
+| `leaders_defensive_zone_time_player_team_team_logo_dark` | character |  |
+| `leaders_defensive_zone_time_zone_time` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -600,7 +902,23 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `save_pctg5v5_last10` | character |  |
+| `save_pctg5v5_details_save_pctg_value` | double |  |
+| `save_pctg5v5_details_save_pctg_league_avg` | double |  |
+| `save_pctg5v5_details_save_pctg_percentile` | double |  |
+| `save_pctg5v5_details_save_pctg_close_value` | double |  |
+| `save_pctg5v5_details_save_pctg_close_league_avg` | double |  |
+| `save_pctg5v5_details_save_pctg_close_percentile` | double |  |
+| `save_pctg5v5_details_shots_value` | integer |  |
+| `save_pctg5v5_details_shots_league_avg` | integer |  |
+| `save_pctg5v5_details_shots_percentile` | double |  |
+| `save_pctg5v5_details_shots_per60_value` | double |  |
+| `save_pctg5v5_details_shots_per60_league_avg` | double |  |
+| `save_pctg5v5_details_shots_per60_percentile` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -654,7 +972,44 @@ Pull EDGE comparison data for a single goalie.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `shot_location_summary` | character |  |
+| `shot_location_details` | character |  |
+| `save_pctg5v5_last10` | character |  |
+| `save_pctg_last10` | character |  |
+| `player_id` | integer | Unique player identifier. |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_shoots_catches` | character |  |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_slug` | character | URL slug for the player. |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_wins` | integer |  |
+| `player_losses` | integer |  |
+| `player_overtime_losses` | integer |  |
+| `player_goals_against_avg` | double |  |
+| `player_save_pctg` | double |  |
+| `player_games_played` | integer |  |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `save_pctg5v5_details_save_pctg` | double |  |
+| `save_pctg5v5_details_save_pctg_close` | double |  |
+| `save_pctg5v5_details_shots` | integer |  |
+| `save_pctg5v5_details_shots_per60` | double |  |
+| `save_pctg_details_games_above900` | integer |  |
+| `save_pctg_details_pctg_games_above900` | double |  |
+| `save_pctg_details_point_pctg` | double |  |
+| `save_pctg_details_goals_against_avg` | double |  |
+| `save_pctg_details_save_pctg` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -681,7 +1036,17 @@ Pull EDGE save-percentage detail for a single goalie.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `save_pctg_last10` | character |  |
+| `save_pctg_details_games_above900_value` | integer |  |
+| `save_pctg_details_games_above900_percentile` | double |  |
+| `save_pctg_details_games_above900_league_avg` | double |  |
+| `save_pctg_details_pctg_games_above900_value` | double |  |
+| `save_pctg_details_pctg_games_above900_percentile` | double |  |
+| `save_pctg_details_pctg_games_above900_league_avg` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -801,7 +1166,88 @@ Pull the EDGE goalie landing page (summary across all goalies).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `minimum_minutes_played` | integer |  |
+| `leaders_high_danger_save_pctg_player_id` | integer |  |
+| `leaders_high_danger_save_pctg_player_first_name_default` | character |  |
+| `leaders_high_danger_save_pctg_player_last_name_default` | character |  |
+| `leaders_high_danger_save_pctg_player_last_name_cs` | character |  |
+| `leaders_high_danger_save_pctg_player_last_name_sk` | character |  |
+| `leaders_high_danger_save_pctg_player_sweater_number` | integer |  |
+| `leaders_high_danger_save_pctg_player_position` | character |  |
+| `leaders_high_danger_save_pctg_player_slug` | character |  |
+| `leaders_high_danger_save_pctg_player_headshot` | character |  |
+| `leaders_high_danger_save_pctg_player_team_common_name_default` | character |  |
+| `leaders_high_danger_save_pctg_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_high_danger_save_pctg_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_high_danger_save_pctg_player_team_abbrev` | character |  |
+| `leaders_high_danger_save_pctg_player_team_team_logo_light` | character |  |
+| `leaders_high_danger_save_pctg_player_team_team_logo_dark` | character |  |
+| `leaders_high_danger_save_pctg_save_pctg` | double |  |
+| `leaders_high_danger_save_pctg_shot_location_details` | character |  |
+| `leaders_high_danger_saves_player_id` | integer |  |
+| `leaders_high_danger_saves_player_first_name_default` | character |  |
+| `leaders_high_danger_saves_player_last_name_default` | character |  |
+| `leaders_high_danger_saves_player_sweater_number` | integer |  |
+| `leaders_high_danger_saves_player_position` | character |  |
+| `leaders_high_danger_saves_player_slug` | character |  |
+| `leaders_high_danger_saves_player_headshot` | character |  |
+| `leaders_high_danger_saves_player_team_common_name_default` | character |  |
+| `leaders_high_danger_saves_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_high_danger_saves_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_high_danger_saves_player_team_abbrev` | character |  |
+| `leaders_high_danger_saves_player_team_team_logo_light` | character |  |
+| `leaders_high_danger_saves_player_team_team_logo_dark` | character |  |
+| `leaders_high_danger_saves_saves` | integer |  |
+| `leaders_high_danger_saves_shot_location_details` | character |  |
+| `leaders_high_danger_goals_against_player_id` | integer |  |
+| `leaders_high_danger_goals_against_player_first_name_default` | character |  |
+| `leaders_high_danger_goals_against_player_last_name_default` | character |  |
+| `leaders_high_danger_goals_against_player_sweater_number` | integer |  |
+| `leaders_high_danger_goals_against_player_position` | character |  |
+| `leaders_high_danger_goals_against_player_slug` | character |  |
+| `leaders_high_danger_goals_against_player_headshot` | character |  |
+| `leaders_high_danger_goals_against_player_team_common_name_default` | character |  |
+| `leaders_high_danger_goals_against_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_high_danger_goals_against_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_high_danger_goals_against_player_team_abbrev` | character |  |
+| `leaders_high_danger_goals_against_player_team_team_logo_light` | character |  |
+| `leaders_high_danger_goals_against_player_team_team_logo_dark` | character |  |
+| `leaders_high_danger_goals_against_goals_against` | integer |  |
+| `leaders_save_pctg5v5_player_id` | integer |  |
+| `leaders_save_pctg5v5_player_first_name_default` | character |  |
+| `leaders_save_pctg5v5_player_last_name_default` | character |  |
+| `leaders_save_pctg5v5_player_last_name_cs` | character |  |
+| `leaders_save_pctg5v5_player_last_name_sk` | character |  |
+| `leaders_save_pctg5v5_player_sweater_number` | integer |  |
+| `leaders_save_pctg5v5_player_position` | character |  |
+| `leaders_save_pctg5v5_player_slug` | character |  |
+| `leaders_save_pctg5v5_player_headshot` | character |  |
+| `leaders_save_pctg5v5_player_team_common_name_default` | character |  |
+| `leaders_save_pctg5v5_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_save_pctg5v5_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_save_pctg5v5_player_team_abbrev` | character |  |
+| `leaders_save_pctg5v5_player_team_team_logo_light` | character |  |
+| `leaders_save_pctg5v5_player_team_team_logo_dark` | character |  |
+| `leaders_save_pctg5v5_save_pctg` | double |  |
+| `leaders_games_above900_player_id` | integer |  |
+| `leaders_games_above900_player_first_name_default` | character |  |
+| `leaders_games_above900_player_last_name_default` | character |  |
+| `leaders_games_above900_player_sweater_number` | integer |  |
+| `leaders_games_above900_player_position` | character |  |
+| `leaders_games_above900_player_slug` | character |  |
+| `leaders_games_above900_player_headshot` | character |  |
+| `leaders_games_above900_player_team_common_name_default` | character |  |
+| `leaders_games_above900_player_team_place_name_with_preposition_default` | character |  |
+| `leaders_games_above900_player_team_place_name_with_preposition_fr` | character |  |
+| `leaders_games_above900_player_team_abbrev` | character |  |
+| `leaders_games_above900_player_team_team_logo_light` | character |  |
+| `leaders_games_above900_player_team_team_logo_dark` | character |  |
+| `leaders_games_above900_games` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -936,7 +1382,97 @@ Pull the EDGE team landing page (summary across all teams).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `leaders_shot_attempts_over90_team_id` | integer |  |
+| `leaders_shot_attempts_over90_team_common_name_default` | character |  |
+| `leaders_shot_attempts_over90_team_place_name_with_preposition_default` | character |  |
+| `leaders_shot_attempts_over90_team_place_name_with_preposition_fr` | character |  |
+| `leaders_shot_attempts_over90_team_abbrev` | character |  |
+| `leaders_shot_attempts_over90_team_team_logo_light` | character |  |
+| `leaders_shot_attempts_over90_team_team_logo_dark` | character |  |
+| `leaders_shot_attempts_over90_team_slug` | character |  |
+| `leaders_shot_attempts_over90_team_wins` | integer |  |
+| `leaders_shot_attempts_over90_team_losses` | integer |  |
+| `leaders_shot_attempts_over90_team_ot_losses` | integer |  |
+| `leaders_shot_attempts_over90_attempts` | integer |  |
+| `leaders_bursts_over22_team_id` | integer |  |
+| `leaders_bursts_over22_team_common_name_default` | character |  |
+| `leaders_bursts_over22_team_place_name_with_preposition_default` | character |  |
+| `leaders_bursts_over22_team_place_name_with_preposition_fr` | character |  |
+| `leaders_bursts_over22_team_abbrev` | character |  |
+| `leaders_bursts_over22_team_team_logo_light` | character |  |
+| `leaders_bursts_over22_team_team_logo_dark` | character |  |
+| `leaders_bursts_over22_team_slug` | character |  |
+| `leaders_bursts_over22_team_wins` | integer |  |
+| `leaders_bursts_over22_team_losses` | integer |  |
+| `leaders_bursts_over22_team_ot_losses` | integer |  |
+| `leaders_bursts_over22_bursts` | integer |  |
+| `leaders_distance_per60_team_id` | integer |  |
+| `leaders_distance_per60_team_common_name_default` | character |  |
+| `leaders_distance_per60_team_place_name_with_preposition_default` | character |  |
+| `leaders_distance_per60_team_place_name_with_preposition_fr` | character |  |
+| `leaders_distance_per60_team_abbrev` | character |  |
+| `leaders_distance_per60_team_team_logo_light` | character |  |
+| `leaders_distance_per60_team_team_logo_dark` | character |  |
+| `leaders_distance_per60_team_slug` | character |  |
+| `leaders_distance_per60_team_wins` | integer |  |
+| `leaders_distance_per60_team_losses` | integer |  |
+| `leaders_distance_per60_team_ot_losses` | integer |  |
+| `leaders_distance_per60_distance_skated_imperial` | double |  |
+| `leaders_distance_per60_distance_skated_metric` | double |  |
+| `leaders_high_danger_sog_team_id` | integer |  |
+| `leaders_high_danger_sog_team_common_name_default` | character |  |
+| `leaders_high_danger_sog_team_place_name_with_preposition_default` | character |  |
+| `leaders_high_danger_sog_team_place_name_with_preposition_fr` | character |  |
+| `leaders_high_danger_sog_team_abbrev` | character |  |
+| `leaders_high_danger_sog_team_team_logo_light` | character |  |
+| `leaders_high_danger_sog_team_team_logo_dark` | character |  |
+| `leaders_high_danger_sog_team_slug` | character |  |
+| `leaders_high_danger_sog_team_wins` | integer |  |
+| `leaders_high_danger_sog_team_losses` | integer |  |
+| `leaders_high_danger_sog_team_ot_losses` | integer |  |
+| `leaders_high_danger_sog_sog` | integer |  |
+| `leaders_high_danger_sog_shot_location_details` | character |  |
+| `leaders_offensive_zone_time_team_id` | integer |  |
+| `leaders_offensive_zone_time_team_common_name_default` | character |  |
+| `leaders_offensive_zone_time_team_place_name_with_preposition_default` | character |  |
+| `leaders_offensive_zone_time_team_place_name_with_preposition_fr` | character |  |
+| `leaders_offensive_zone_time_team_abbrev` | character |  |
+| `leaders_offensive_zone_time_team_team_logo_light` | character |  |
+| `leaders_offensive_zone_time_team_team_logo_dark` | character |  |
+| `leaders_offensive_zone_time_team_slug` | character |  |
+| `leaders_offensive_zone_time_team_wins` | integer |  |
+| `leaders_offensive_zone_time_team_losses` | integer |  |
+| `leaders_offensive_zone_time_team_ot_losses` | integer |  |
+| `leaders_offensive_zone_time_zone_time` | double |  |
+| `leaders_neutral_zone_time_team_id` | integer |  |
+| `leaders_neutral_zone_time_team_common_name_default` | character |  |
+| `leaders_neutral_zone_time_team_place_name_with_preposition_default` | character |  |
+| `leaders_neutral_zone_time_team_place_name_with_preposition_fr` | character |  |
+| `leaders_neutral_zone_time_team_abbrev` | character |  |
+| `leaders_neutral_zone_time_team_team_logo_light` | character |  |
+| `leaders_neutral_zone_time_team_team_logo_dark` | character |  |
+| `leaders_neutral_zone_time_team_slug` | character |  |
+| `leaders_neutral_zone_time_team_wins` | integer |  |
+| `leaders_neutral_zone_time_team_losses` | integer |  |
+| `leaders_neutral_zone_time_team_ot_losses` | integer |  |
+| `leaders_neutral_zone_time_zone_time` | double |  |
+| `leaders_defensive_zone_time_team_id` | integer |  |
+| `leaders_defensive_zone_time_team_common_name_default` | character |  |
+| `leaders_defensive_zone_time_team_place_name_with_preposition_default` | character |  |
+| `leaders_defensive_zone_time_team_place_name_with_preposition_fr` | character |  |
+| `leaders_defensive_zone_time_team_abbrev` | character |  |
+| `leaders_defensive_zone_time_team_team_logo_light` | character |  |
+| `leaders_defensive_zone_time_team_team_logo_dark` | character |  |
+| `leaders_defensive_zone_time_team_slug` | character |  |
+| `leaders_defensive_zone_time_team_wins` | integer |  |
+| `leaders_defensive_zone_time_team_losses` | integer |  |
+| `leaders_defensive_zone_time_team_ot_losses` | integer |  |
+| `leaders_defensive_zone_time_zone_time` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1029,7 +1565,12 @@ Pull EDGE shot-speed detail for a single team.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `hardest_shots` | character |  |
+| `shot_speed_details` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1165,7 +1706,20 @@ Pull EDGE zone-time details for a single team.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_zone_time`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
+| `offensive_zone_pctg` | double | Percentage of time spent in the offensive zone. |
+| `offensive_zone_rank` | integer | League rank for offensive zone time. |
+| `offensive_zone_league_avg` | double | League average offensive-zone time percentage. |
+| `neutral_zone_pctg` | double | Percentage of time spent in the neutral zone. |
+| `neutral_zone_rank` | integer | League rank for neutral zone time. |
+| `neutral_zone_league_avg` | double | League average neutral-zone time percentage. |
+| `defensive_zone_pctg` | double | Percentage of time spent in the defensive zone. |
+| `defensive_zone_rank` | integer | League rank for defensive zone time. |
+| `defensive_zone_league_avg` | double | League average defensive-zone time percentage. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1220,7 +1774,62 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `sog_summary` | character |  |
+| `sog_details` | character |  |
+| `player_id` | integer | Unique player identifier. |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_shoots_catches` | character |  |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_goals` | integer |  |
+| `player_assists` | integer |  |
+| `player_points` | integer | Player points. |
+| `player_games_played` | integer |  |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `top_shot_speed_imperial` | double |  |
+| `top_shot_speed_metric` | double |  |
+| `top_shot_speed_percentile` | double |  |
+| `top_shot_speed_league_avg_imperial` | double |  |
+| `top_shot_speed_league_avg_metric` | double |  |
+| `skating_speed_speed_max_imperial` | double |  |
+| `skating_speed_speed_max_metric` | double |  |
+| `skating_speed_speed_max_percentile` | double |  |
+| `skating_speed_speed_max_league_avg_imperial` | double |  |
+| `skating_speed_speed_max_league_avg_metric` | double |  |
+| `skating_speed_speed_max_overlay_player_first_name_default` | character |  |
+| `skating_speed_speed_max_overlay_player_last_name_default` | character |  |
+| `skating_speed_speed_max_overlay_time_in_period` | character |  |
+| `skating_speed_bursts_over20_value` | integer |  |
+| `skating_speed_bursts_over20_percentile` | double |  |
+| `skating_speed_bursts_over20_league_avg_value` | double |  |
+| `total_distance_skated_imperial` | double |  |
+| `total_distance_skated_metric` | double |  |
+| `total_distance_skated_percentile` | double |  |
+| `total_distance_skated_league_avg_imperial` | double |  |
+| `total_distance_skated_league_avg_metric` | double |  |
+| `zone_time_details_offensive_zone_pctg` | double |  |
+| `zone_time_details_offensive_zone_percentile` | double |  |
+| `zone_time_details_offensive_zone_league_avg` | double |  |
+| `zone_time_details_neutral_zone_pctg` | double |  |
+| `zone_time_details_neutral_zone_percentile` | double |  |
+| `zone_time_details_neutral_zone_league_avg` | double |  |
+| `zone_time_details_defensive_zone_pctg` | double |  |
+| `zone_time_details_defensive_zone_percentile` | double |  |
+| `zone_time_details_defensive_zone_league_avg` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1247,7 +1856,48 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `seasons_with_edge_stats` | character |  |
+| `shot_location_summary` | character |  |
+| `shot_location_details` | character |  |
+| `player_id` | integer | Unique player identifier. |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_shoots_catches` | character |  |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_slug` | character | URL slug for the player. |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_wins` | integer |  |
+| `player_losses` | integer |  |
+| `player_overtime_losses` | integer |  |
+| `player_goals_against_avg` | double |  |
+| `player_save_pctg` | double |  |
+| `player_games_played` | integer |  |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `stats_goals_against_avg_value` | double |  |
+| `stats_goals_against_avg_percentile` | double |  |
+| `stats_goals_against_avg_league_avg` | double |  |
+| `stats_games_above900_value` | double |  |
+| `stats_games_above900_percentile` | double |  |
+| `stats_games_above900_league_avg` | double |  |
+| `stats_goal_differential_per60_value` | double |  |
+| `stats_goal_differential_per60_percentile` | double |  |
+| `stats_goal_differential_per60_league_avg` | double |  |
+| `stats_goal_support_avg_value` | double |  |
+| `stats_goal_support_avg_percentile` | double |  |
+| `stats_goal_support_avg_league_avg` | double |  |
+| `stats_point_pctg_value` | double |  |
+| `stats_point_pctg_percentile` | double |  |
+| `stats_point_pctg_league_avg` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example

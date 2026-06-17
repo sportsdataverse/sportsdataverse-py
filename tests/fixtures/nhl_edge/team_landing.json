@@ -1,0 +1,285 @@
+{
+  "seasonsWithEdgeStats": [
+    {
+      "id": 20252026,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20242025,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20232024,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20222023,
+      "gameTypes": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 20212022,
+      "gameTypes": [
+        2,
+        3
+      ]
+    }
+  ],
+  "leaders": {
+    "shotAttemptsOver90": {
+      "team": {
+        "id": 7,
+        "commonName": {
+          "default": "Sabres"
+        },
+        "placeNameWithPreposition": {
+          "default": "Buffalo",
+          "fr": "de Buffalo"
+        },
+        "abbrev": "BUF",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/BUF_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg"
+        },
+        "slug": "buffalo-sabres-7",
+        "wins": 7,
+        "losses": 6,
+        "otLosses": 0
+      },
+      "attempts": 22
+    },
+    "burstsOver22": {
+      "team": {
+        "id": 21,
+        "commonName": {
+          "default": "Avalanche"
+        },
+        "placeNameWithPreposition": {
+          "default": "Colorado",
+          "fr": "du Colorado"
+        },
+        "abbrev": "COL",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg"
+        },
+        "slug": "colorado-avalanche-21",
+        "wins": 8,
+        "losses": 5,
+        "otLosses": 0
+      },
+      "bursts": 37
+    },
+    "distancePer60": {
+      "team": {
+        "id": 26,
+        "commonName": {
+          "default": "Kings"
+        },
+        "placeNameWithPreposition": {
+          "default": "Los Angeles",
+          "fr": "de Los Angeles"
+        },
+        "abbrev": "LAK",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/LAK_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg"
+        },
+        "slug": "los-angeles-kings-26",
+        "wins": 0,
+        "losses": 4,
+        "otLosses": 0
+      },
+      "distanceSkated": {
+        "imperial": 9.3576,
+        "metric": 15.0588
+      }
+    },
+    "highDangerSOG": {
+      "team": {
+        "id": 54,
+        "commonName": {
+          "default": "Golden Knights"
+        },
+        "placeNameWithPreposition": {
+          "default": "Vegas",
+          "fr": "de Vegas"
+        },
+        "abbrev": "VGK",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg"
+        },
+        "slug": "vegas-golden-knights-54",
+        "wins": 14,
+        "losses": 8,
+        "otLosses": 0
+      },
+      "sog": 179,
+      "shotLocationDetails": [
+        {
+          "area": "Behind the Net",
+          "sog": 6,
+          "rank": 1
+        },
+        {
+          "area": "Beyond Red Line",
+          "sog": 22,
+          "rank": 2
+        },
+        {
+          "area": "Center Point",
+          "sog": 53,
+          "rank": 1
+        },
+        {
+          "area": "Crease",
+          "sog": 21,
+          "rank": 2
+        },
+        {
+          "area": "High Slot",
+          "sog": 56,
+          "rank": 2
+        },
+        {
+          "area": "L Circle",
+          "sog": 44,
+          "rank": 2
+        },
+        {
+          "area": "L Corner",
+          "sog": 2,
+          "rank": 1
+        },
+        {
+          "area": "L Net Side",
+          "sog": 18,
+          "rank": 2
+        },
+        {
+          "area": "L Point",
+          "sog": 27,
+          "rank": 4
+        },
+        {
+          "area": "Low Slot",
+          "sog": 158,
+          "rank": 1
+        },
+        {
+          "area": "Offensive Neutral Zone",
+          "sog": 26,
+          "rank": 1
+        },
+        {
+          "area": "Outside L",
+          "sog": 22,
+          "rank": 6
+        },
+        {
+          "area": "Outside R",
+          "sog": 38,
+          "rank": 1
+        },
+        {
+          "area": "R Circle",
+          "sog": 49,
+          "rank": 2
+        },
+        {
+          "area": "R Corner",
+          "sog": 1,
+          "rank": 3
+        },
+        {
+          "area": "R Net Side",
+          "sog": 7,
+          "rank": 6
+        },
+        {
+          "area": "R Point",
+          "sog": 34,
+          "rank": 4
+        }
+      ]
+    },
+    "offensiveZoneTime": {
+      "team": {
+        "id": 12,
+        "commonName": {
+          "default": "Hurricanes"
+        },
+        "placeNameWithPreposition": {
+          "default": "Carolina",
+          "fr": "de la Caroline"
+        },
+        "abbrev": "CAR",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg"
+        },
+        "slug": "carolina-hurricanes-12",
+        "wins": 16,
+        "losses": 3,
+        "otLosses": 0
+      },
+      "zoneTime": 0.4549323
+    },
+    "neutralZoneTime": {
+      "team": {
+        "id": 54,
+        "commonName": {
+          "default": "Golden Knights"
+        },
+        "placeNameWithPreposition": {
+          "default": "Vegas",
+          "fr": "de Vegas"
+        },
+        "abbrev": "VGK",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/VGK_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg"
+        },
+        "slug": "vegas-golden-knights-54",
+        "wins": 14,
+        "losses": 8,
+        "otLosses": 0
+      },
+      "zoneTime": 0.1885328
+    },
+    "defensiveZoneTime": {
+      "team": {
+        "id": 12,
+        "commonName": {
+          "default": "Hurricanes"
+        },
+        "placeNameWithPreposition": {
+          "default": "Carolina",
+          "fr": "de la Caroline"
+        },
+        "abbrev": "CAR",
+        "teamLogo": {
+          "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+          "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg"
+        },
+        "slug": "carolina-hurricanes-12",
+        "wins": 16,
+        "losses": 3,
+        "otLosses": 0
+      },
+      "zoneTime": 0.3624315
+    }
+  }
+}

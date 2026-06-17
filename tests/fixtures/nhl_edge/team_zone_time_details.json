@@ -1,0 +1,58 @@
+{
+  "zoneTimeDetails": [
+    {
+      "strengthCode": "all",
+      "offensiveZonePctg": 0.4291742,
+      "offensiveZoneRank": 3,
+      "offensiveZoneLeagueAvg": 0.410504,
+      "neutralZonePctg": 0.1731538,
+      "neutralZoneRank": 30,
+      "neutralZoneLeagueAvg": 0.1789921,
+      "defensiveZonePctg": 0.397672,
+      "defensiveZoneRank": 5,
+      "defensiveZoneLeagueAvg": 0.410504
+    },
+    {
+      "strengthCode": "es",
+      "offensiveZonePctg": 0.4249663,
+      "offensiveZoneRank": 4,
+      "offensiveZoneLeagueAvg": 0.4072952,
+      "neutralZonePctg": 0.1786736,
+      "neutralZoneRank": 30,
+      "neutralZoneLeagueAvg": 0.1854096,
+      "defensiveZonePctg": 0.3963601,
+      "defensiveZoneRank": 6,
+      "defensiveZoneLeagueAvg": 0.4072952
+    },
+    {
+      "strengthCode": "pp",
+      "offensiveZonePctg": 0.6172135,
+      "offensiveZoneRank": 4,
+      "offensiveZoneLeagueAvg": 0.5873286,
+      "neutralZonePctg": 0.1362425,
+      "neutralZoneRank": 24,
+      "neutralZoneLeagueAvg": 0.1420598,
+      "defensiveZonePctg": 0.246544,
+      "defensiveZoneRank": 4,
+      "defensiveZoneLeagueAvg": 0.2706116
+    },
+    {
+      "strengthCode": "pk",
+      "offensiveZonePctg": 0.2884245,
+      "offensiveZoneRank": 3,
+      "offensiveZoneLeagueAvg": 0.2706116,
+      "neutralZonePctg": 0.1418427,
+      "neutralZoneRank": 13,
+      "neutralZoneLeagueAvg": 0.1420598,
+      "defensiveZonePctg": 0.5697328,
+      "defensiveZoneRank": 6,
+      "defensiveZoneLeagueAvg": 0.5873286
+    }
+  ],
+  "shotDifferential": {
+    "shotAttemptDifferential": 5.012195,
+    "shotAttemptDifferentialRank": 3,
+    "sogDifferential": 0.124596,
+    "sogDifferentialRank": 2
+  }
+}
