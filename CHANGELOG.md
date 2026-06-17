@@ -5,6 +5,7 @@
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
   - [Namespace — minor/alias leagues nested under sport-group packages](#namespace--minoralias-leagues-nested-under-sport-group-packages)
   - [All sports — `espn_*_game_rosters` vectorized logo extraction](#all-sports--espn__game_rosters-vectorized-logo-extraction)
+  - [MLB — `mlb_api_*` renamed to `mlb_*`](#mlb--mlb_api_-renamed-to-mlb_)
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
   - [MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)](#mlb--comprehensive-baseball-savant--statcast-surface-mlb_statcast_-43-endpoints)
 - [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
@@ -135,6 +136,10 @@ Replaced the logos block in all seven `espn_*_game_rosters` modules (`cfb`, `mbb
 - `if "logos" in teams_df.columns:` guard handles pre-2010 payloads where the key is absent.
 - `pl.col("logos").list.get(i).struct.field("href").fill_null("")` — expression-engine extraction, null-safe, no Python-level row iteration.
 - `except Exception:` fallback to empty-string literals if the logos payload doesn't match the expected `List(Struct)` shape.
+
+### MLB — `mlb_api_*` renamed to `mlb_*`
+
+The 64 Stats API wrapper functions in `mlb_api.py` (generated via `tools/codegen/endpoints/mlb_api.yaml`) and the 15 hand-written functions in `mlb_api_extra.py` were renamed from `mlb_api_{short}` to `mlb_{short}` — parallel to the `statcast_*` → `mlb_statcast_*` rename in 0.0.64. The `_api_` infix was a disambiguation artifact from when multiple backends shared the module; it is now redundant. **No aliases — update call sites accordingly.**
 
 ## 0.0.64 Release: June 17, 2026
 
