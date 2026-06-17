@@ -80,7 +80,7 @@ ESPN endpoint.
 | `season_slug` | character | Season slug. |
 | `league_id` | character | ESPN numeric identifier for the league or competition. |
 | `league_name` | character | League name. |
-| `league_abbreviation` | character | Abbreviation for the league or competition (e.g. 'ICC', 'T20'). |
+| `league_abbreviation` | character | Abbreviation for the league or competition the game belongs to. |
 | `competition_id` | character | ESPN numeric identifier for the primary competition (game) in the header. |
 | `competition_date` | character | Date and time of the competition as recorded in the game header. |
 | `neutral_site` | logical | Neutral site. |
@@ -93,7 +93,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
-| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
+| `team_name` | character | Full display name of the team. |
 | `total` | character | Total. |
 | `runs_total` | character | Total runs scored by the team or batting side in this innings. |
 | `extras` | character | Additional runs awarded to the batting side from wides, no-balls, byes, or leg byes in this innings. |
@@ -110,7 +110,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
-| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
+| `team_name` | character | Full display name of the team. |
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `overs` | character | Number of overs bowled by the bowler in this innings. |
@@ -125,7 +125,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
-| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
+| `team_name` | character | Full display name of the team. |
 | `partnership_runs` | character | Total runs scored during the batting partnership for this fall-of-wicket record. |
 | `partnership_overs` | character | Number of overs faced during the batting partnership for this fall-of-wicket record. |
 | `wicket_name` | character | Name or label identifying the wicket at which this batting partnership ended. |

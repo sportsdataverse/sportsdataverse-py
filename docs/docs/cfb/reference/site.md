@@ -365,7 +365,7 @@ ESPN endpoint.
 | `display_result` | character | Drive-result label (e.g. `Punt`, `Touchdown`). |
 | `plays` | character | Total qualifying passing plays included in the WEPA calculation. |
 | `team_id` | character | Team id. |
-| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
+| `team_name` | character | Full display name of the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
 | `team_short_display_name` | character | Short team display name; `team_detail = TRUE` only. |

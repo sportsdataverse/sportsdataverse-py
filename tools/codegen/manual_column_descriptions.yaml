@@ -2883,7 +2883,7 @@ summary:
   is_final: Boolean flag indicating whether the game has reached a final or completed status.
   is_national: Boolean flag indicating whether the broadcast is a nationally distributed feed.
   kick_return_touchdowns: Number of touchdowns scored on kick returns by the player in the box score.
-  league_abbreviation: Abbreviation for the league or competition (e.g. 'ICC', 'T20').
+  league_abbreviation: Abbreviation for the league or competition the game belongs to.
   league_id: ESPN numeric identifier for the league or competition.
   league_midsize_name: Medium-length display name for the league or competition as shown in the game header.
   links_api_artwork_href: API endpoint URL for artwork or imagery associated with the article.
@@ -2968,7 +2968,7 @@ summary:
   sudden_death_periods: Number of sudden-death overtime periods defined in the game format rules.
   tackle_pct: Percentage of the team's tackle attempts that were effective in winning possession.
   team_entry_id: ESPN identifier for the team entry associated with this shootout or penalty record.
-  team_name: Full display name of the team (e.g. 'Chennai Super Kings').
+  team_name: Full display name of the team.
   team_participants: Teams or participants associated with a specific drive or sequence in the broadcast record.
   time_display: Human-readable game clock time at which a match event occurred.
   time_elapsed_display_value: Human-readable duration of time elapsed during the drive or scoring sequence.
