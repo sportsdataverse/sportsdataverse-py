@@ -13,7 +13,7 @@ import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
-from sportsdataverse.errors import no_espn_data
+from sportsdataverse.errors import NoESPNDataError, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
@@ -207,6 +207,11 @@ def download(
                 except Exception:  # noqa: BLE001
                     pass
             return response
+        except NoESPNDataError:
+            # A 404 (or ESPN's 200-with-`code:404` body) is a definitive "no data"
+            # answer — retrying cannot change it and only amplifies load against a
+            # rate-limited host. Fail fast instead of burning the retry budget.
+            raise
         except Exception as e:  # noqa: BLE001
             last_exc = e
             remaining = attempts - attempt - 1

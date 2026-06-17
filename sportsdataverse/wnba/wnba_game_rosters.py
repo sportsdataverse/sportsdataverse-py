@@ -156,7 +156,7 @@ def helper_wnba_roster_items(items, summary_url, **kwargs):
         team_roster.columns = [col.replace("$ref", "href") for col in team_roster.columns]
         team_roster.columns = [underscore(c) for c in team_roster.columns]
         team_roster = team_roster.with_columns(team_id=pl.lit(tm).cast(pl.Int32))
-        game_rosters = pl.concat([game_rosters, team_roster], how="vertical")
+        game_rosters = pl.concat([game_rosters, team_roster], how="diagonal")
     if game_rosters.is_empty():
         # No team in this game exposes a roster resource — genuinely no data.
         raise NoESPNDataError(f"NoESPNDataError: No roster data found for any team at {summary_url}")

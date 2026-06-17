@@ -109,3 +109,34 @@ def test_roster_items_all_teams_404_raises(sport, monkeypatch):
     monkeypatch.setattr(mod, "download", fake_download)
     with pytest.raises(NoESPNDataError):
         getattr(mod, f"helper_{sport}_roster_items")(items=items, summary_url="http://core/competitors")
+
+
+@pytest.mark.parametrize("sport", SPORTS)
+def test_roster_items_differing_team_columns_concat(sport, monkeypatch):
+    """The two teams' roster-entry payloads can carry different column sets; the
+    per-team concat must be diagonal (union + null-fill), not vertical (which
+    raised polars ShapeError and lost the whole game)."""
+    mod = _mod(sport)
+    items = pl.DataFrame({"team_id": [52, 2641]})
+
+    def _entry(pid, **extra):
+        e = {
+            "playerId": pid,
+            "period": 0,
+            "active": True,
+            "forPlayerId": 0,
+            "starter": True,
+            "athlete": {"$ref": f"http://core/athletes/{pid}"},
+        }
+        e.update(extra)
+        return e
+
+    def fake_download(url, **kwargs):
+        if url.endswith("/52/roster"):
+            return _FakeResp({"entries": [_entry(101, jersey="7"), _entry(102, jersey="9")]})
+        return _FakeResp({"entries": [_entry(201, didNotPlay=True), _entry(202, didNotPlay=False)]})
+
+    monkeypatch.setattr(mod, "download", fake_download)
+    out = getattr(mod, f"helper_{sport}_roster_items")(items=items, summary_url="http://core/competitors")
+    assert out.height == 4
+    assert set(out["team_id"].unique().to_list()) == {52, 2641}

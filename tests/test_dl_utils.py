@@ -8,6 +8,7 @@ import pytest
 import requests
 
 from sportsdataverse.dl_utils import _MAX_RETRY_AFTER, _parse_retry_after, _retry_delay, download
+from sportsdataverse.errors import NoESPNDataError
 
 
 class TestRetryDelay:
@@ -112,3 +113,18 @@ class TestDownload:
         url = "https://thisisnotavalidurl.com"
         with pytest.raises(requests.exceptions.RequestException):
             download(url, num_retries=0)
+
+    def test_download_does_not_retry_404(self, monkeypatch):
+        """A 404 (NoESPNDataError) is a definitive "no data" answer — download must
+        NOT burn the retry budget on it. Exactly one HTTP attempt even when
+        num_retries is large (offline; session.get is stubbed to a 404)."""
+        calls = {"n": 0}
+
+        def fake_get(self, url, **kwargs):
+            calls["n"] += 1
+            return types.SimpleNamespace(status_code=404, url=url, headers={})
+
+        monkeypatch.setattr(requests.Session, "get", fake_get)
+        with pytest.raises(NoESPNDataError):
+            download("https://sports.core.api.espn.com/v2/_no_such_/roster", num_retries=15)
+        assert calls["n"] == 1  # not 16

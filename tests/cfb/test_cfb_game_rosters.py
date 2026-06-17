@@ -107,3 +107,35 @@ def test_roster_items_all_teams_404_raises(monkeypatch):
     monkeypatch.setattr(cfb_game_rosters, "download", fake_download)
     with pytest.raises(NoESPNDataError):
         helper_cfb_roster_items(items=items, summary_url="http://core/competitors")
+
+
+def test_roster_items_differing_team_columns_concat(monkeypatch):
+    """Regression #3: the two teams' roster-entry payloads can carry different
+    column sets (e.g. one has ``jersey``, the other ``didNotPlay``). A
+    ``how="vertical"`` concat raised polars ShapeError ("column names don't
+    match: jersey and ...") and lost the whole game; ``how="diagonal"`` unions
+    the columns and keeps both teams."""
+    items = pl.DataFrame({"team_id": [52, 2641]})
+
+    def _entry(pid, **extra):
+        e = {
+            "playerId": pid,
+            "period": 0,
+            "active": True,
+            "forPlayerId": 0,
+            "starter": True,
+            "athlete": {"$ref": f"http://core/athletes/{pid}"},
+        }
+        e.update(extra)
+        return e
+
+    def fake_download(url, **kwargs):
+        if url.endswith("/52/roster"):
+            return _FakeResp({"entries": [_entry(101, jersey="7"), _entry(102, jersey="9")]})
+        return _FakeResp({"entries": [_entry(201, didNotPlay=True), _entry(202, didNotPlay=False)]})
+
+    monkeypatch.setattr(cfb_game_rosters, "download", fake_download)
+    out = helper_cfb_roster_items(items=items, summary_url="http://core/competitors")
+    assert out.height == 4
+    assert set(out["team_id"].unique().to_list()) == {52, 2641}
+    assert "jersey" in out.columns and "did_not_play" in out.columns
