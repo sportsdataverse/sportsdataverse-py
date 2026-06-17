@@ -58,7 +58,7 @@ __all__ = [
     "espn_nba_player_news",
     "espn_nba_standings",
     "espn_nba_player_overview",
-    "espn_nba_player_stats_v3",
+    "espn_nba_player_stats",
     "espn_nba_player_gamelog",
     "espn_nba_player_splits",
     "espn_nba_leaders",
@@ -1045,7 +1045,7 @@ def espn_nba_player_overview(
     return raw
 
 
-def espn_nba_player_stats_v3(
+def espn_nba_player_stats(
     athlete_id: Union[int, str],
     season: Optional[Union[int, str]] = None,
     *,
@@ -1070,7 +1070,7 @@ def espn_nba_player_stats_v3(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> espn_nba_player_stats_v3(athlete_id='4239')
+        >>> espn_nba_player_stats(athlete_id='4239')
     """
     raw = _get(
         f"https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/{athlete_id}/stats",
