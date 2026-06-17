@@ -14,23 +14,24 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def _empty_frame(return_as_pandas: bool = False):
+def _empty_frame(return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     return pd.DataFrame() if return_as_pandas else pl.DataFrame()
 
 
-def _to_output(df: pd.DataFrame, return_as_pandas: bool):
+def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame | pd.DataFrame:
     if return_as_pandas:
         return df
     try:
         return pl.from_pandas(df)
     except Exception:
+        # polars rejected a mixed/list-valued column — stringify object columns so the frame still converts (sdv-py parser convention).
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
         return pl.from_pandas(df2)
 
 
-def _csv_to_frame(text: str, return_as_pandas: bool = False):
+def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     if not text or not text.strip():
         return _empty_frame(return_as_pandas)
     try:
