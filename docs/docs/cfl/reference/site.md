@@ -52,7 +52,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `event` | `event_id` |  |  | `Y` |  |
+| `event` | `event_id` |  |  | `Y` | event query parameter. |
 
 ### Returns
 
@@ -542,7 +542,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -567,7 +567,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -663,7 +663,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
 ### Returns
@@ -689,7 +689,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -714,7 +714,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -739,7 +739,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -764,7 +764,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -789,7 +789,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -814,7 +814,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
 ### Returns
@@ -840,7 +840,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  |  |
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
 ### Returns
 
@@ -865,7 +865,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `athlete_id` | `athlete_id` |  | `Y` |  |  |
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -890,7 +890,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `athlete_id` | `athlete_id` |  | `Y` |  |  |
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 
@@ -915,7 +915,7 @@ ESPN endpoint.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `athlete_id` | `athlete_id` |  | `Y` |  |  |
+| `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
 ### Returns
 

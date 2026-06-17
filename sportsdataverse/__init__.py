@@ -111,3 +111,86 @@ import sportsdataverse.cache as cache  # noqa: F401, E402
 import sportsdataverse.discover as discover  # noqa: F401, E402
 import sportsdataverse.find as find  # noqa: F401, E402
 # isort: on
+
+# ---------------------------------------------------------------------------
+# Back-compat: leagues moved under sport-group packages (0.0.65+). The old
+# top-level names (``sportsdataverse.epl``, ``.ahl``, ``.ufl``, …) still
+# resolve — to their nested home — with a DeprecationWarning. ``_MOVED`` maps
+# the legacy leaf -> nested dotted suffix and is the single source of truth;
+# tests/test_namespace_backcompat.py asserts it matches the grouped leagues.
+# ---------------------------------------------------------------------------
+import importlib as _importlib  # noqa: E402
+import importlib.abc as _ilabc  # noqa: E402
+import importlib.util as _ilutil  # noqa: E402
+import sys as _sys  # noqa: E402
+import warnings as _warnings  # noqa: E402
+
+_MOVED = {
+    "epl": "soccer.epl",
+    "laliga": "soccer.laliga",
+    "bundesliga": "soccer.bundesliga",
+    "seriea": "soccer.seriea",
+    "ligue1": "soccer.ligue1",
+    "mls": "soccer.mls",
+    "ligamx": "soccer.ligamx",
+    "ucl": "soccer.ucl",
+    "uel": "soccer.uel",
+    "nwsl": "soccer.nwsl",
+    "wwc": "soccer.wwc",
+    "wc": "soccer.wc",
+    "mch": "hockey.mch",
+    "wch": "hockey.wch",
+    "ahl": "hockey.ahl",
+    "ohl": "hockey.ohl",
+    "qmjhl": "hockey.qmjhl",
+    "whl": "hockey.whl",
+    "ufl": "football.ufl",
+    "xfl": "football.xfl",
+    "cfl": "football.cfl",
+    "college_baseball": "baseball.college_baseball",
+    "college_softball": "baseball.college_softball",
+}
+
+
+def __getattr__(name):  # PEP 562 module-level __getattr__
+    target = _MOVED.get(name)
+    if target is None:
+        raise AttributeError(f"module 'sportsdataverse' has no attribute {name!r}")
+    _warnings.warn(
+        f"sportsdataverse.{name} moved to sportsdataverse.{target}; "
+        f"import it from there — this top-level alias is deprecated.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    mod = _importlib.import_module(f"sportsdataverse.{target}")
+    globals()[name] = mod  # cache; __getattr__ won't fire for this name again
+    return mod
+
+
+class _MovedLeagueFinder(_ilabc.MetaPathFinder, _ilabc.Loader):
+    """Make the statement ``import sportsdataverse.<leaf>`` resolve a moved league."""
+
+    def find_spec(self, fullname, path=None, target=None):
+        if not fullname.startswith("sportsdataverse."):
+            return None
+        leaf = fullname[len("sportsdataverse.") :]
+        if "." in leaf or leaf not in _MOVED:
+            return None
+        return _ilutil.spec_from_loader(fullname, self)
+
+    def create_module(self, spec):
+        leaf = spec.name[len("sportsdataverse.") :]
+        tgt = _MOVED[leaf]
+        _warnings.warn(
+            f"import sportsdataverse.{leaf} is deprecated; it moved to sportsdataverse.{tgt}.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return _importlib.import_module(f"sportsdataverse.{tgt}")
+
+    def exec_module(self, module):  # module already fully initialised
+        pass
+
+
+if not any(isinstance(f, _MovedLeagueFinder) for f in _sys.meta_path):
+    _sys.meta_path.append(_MovedLeagueFinder())
