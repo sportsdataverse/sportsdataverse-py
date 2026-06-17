@@ -259,6 +259,21 @@ def _add_wp_aux(df: pl.DataFrame) -> pl.DataFrame:
     ``spread_line`` is used for ``spread_time``; if absent or null,
     ``spread_time`` is set to 0 and the WP-naive model should be used instead.
     """
+    # receive_2h_ko: mirrors nflfastR helper_add_ep_wp.R — within a game, 1 when
+    # the play is in the 1st half and the posteam is the team that received the
+    # 2nd-half kickoff (i.e. the opening defense = first non-null defteam of the
+    # game). Derived only when absent; the ESPN adapter (_espn_wp_features)
+    # precomputes its own, so we never override an existing column.
+    if "receive_2h_ko" not in df.columns:
+        df = df.with_columns(
+            pl.when(
+                (pl.col("qtr") <= 2) & (pl.col("posteam") == pl.col("defteam").drop_nulls().first().over("game_id"))
+            )
+            .then(1)
+            .otherwise(0)
+            .alias("receive_2h_ko"),
+        )
+
     # Cast spread_line to Float64 so negation works even when all values are null
     # (polars 1.x raises on neg for dtype Null without the cast).
     _spread = pl.col("spread_line").cast(pl.Float64) if "spread_line" in df.columns else pl.lit(0.0)
@@ -1981,8 +1996,20 @@ def enrich_nfl_pbp(
     # 5. CP / CPOE.
     raw = _self.calculate_completion_probability(raw)
 
-    # 6. xYAC (needs ep + cp present).
-    raw = _self.calculate_xyac(raw)
+    # 6. xYAC (needs ep + cp present). Optional surface: the faithful track6
+    # artifacts do not include xYAC models (nflfastR's xYAC is a separate model
+    # family), so skip gracefully when the models are unavailable rather than
+    # failing the whole enrichment.
+    try:
+        raw = _self.calculate_xyac(raw)
+    except FileNotFoundError as exc:
+        import warnings
+
+        warnings.warn(
+            f"enrich_nfl_pbp: skipping xYAC step — model unavailable ({exc}).",
+            RuntimeWarning,
+            stacklevel=2,
+        )
 
     if return_as_pandas:
         return raw.to_pandas()
