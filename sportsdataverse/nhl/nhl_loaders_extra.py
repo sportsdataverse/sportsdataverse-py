@@ -85,7 +85,9 @@ def load_nhl_games(return_as_pandas: bool = False):
         A polars (or pandas) DataFrame of all games in the data repository.
 
     Example:
-        >>> load_nhl_games()
+        Quick start::
+
+            load_nhl_games()
     """
     primary = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_schedules/nhl_games_in_data_repo.parquet"
     fallback = (

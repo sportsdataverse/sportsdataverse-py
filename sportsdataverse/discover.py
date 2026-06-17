@@ -8,27 +8,27 @@ view.
 
 ::
 
-    >>> from sportsdataverse import list_functions
+    from sportsdataverse import list_functions
 
     # All wrappers in the package
-    >>> list_functions()
+    list_functions()
     {'cfb': [...], 'mbb': [...], ...}
 
     # One league
-    >>> list_functions(league='nba')
+    list_functions(league='nba')
     ['espn_nba_player_overview', 'espn_nba_boxscore', ...]
 
     # Search by substring (case-insensitive)
-    >>> list_functions(search='roster')
+    list_functions(search='roster')
     {'nba': ['espn_nba_team_roster', ...], 'mlb': ['espn_mlb_team_roster',
      'mlb_api_team_roster', ...], ...}
 
     # Filter by category — endpoints that return PBP
-    >>> list_functions(search='pbp')
+    list_functions(search='pbp')
     {'cfb': [...], 'nfl': [...], 'nhl': ['espn_nhl_pbp', 'nhl_web_pbp'], ...}
 
     # Show only parser callables
-    >>> list_functions(parsers_only=True)
+    list_functions(parsers_only=True)
     {'_common_espn_parsers': [...], 'nhl': ['parse_edge_*', ...], ...}
 """
 
@@ -126,15 +126,15 @@ def list_functions(
 
     Examples::
 
-        >>> list_functions(league="nba", search="leader")
+        list_functions(league="nba", search="leader")
         ['espn_nba_leaders', 'espn_nba_leaders_core',
          'espn_nba_season_type_leaders', ...]
 
-        >>> list_functions(search="pbp")
+        list_functions(search="pbp")
         {'cfb': ['espn_cfb_pbp'], 'mbb': ['espn_mbb_pbp'],
          'nfl': ['espn_nfl_pbp'], 'nhl': ['espn_nhl_pbp', 'nhl_web_pbp'], ...}
 
-        >>> list_functions(league="mlb", parsers_only=True)
+        list_functions(league="mlb", parsers_only=True)
         ['parse_mlb_api_list', 'parse_mlb_api_person_stats',
          'parse_mlb_api_schedule', 'parse_mlb_api_standings',
          'parse_mlb_api_team_roster', 'parse_mlb_api_teams']
@@ -181,10 +181,10 @@ def function_count(league: Optional[str] = None) -> Union[Dict[str, int], int]:
 
     Examples::
 
-        >>> function_count()
+        function_count()
         {'cfb': 145, 'mbb': 148, ..., 'nhl': 220}
 
-        >>> function_count(league="mlb")
+        function_count(league="mlb")
         178
     """
     if league is not None:

@@ -316,9 +316,11 @@ def nfl_week_games(
         A polars (or pandas) ``DataFrame``, one row per game.
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_week_games
-        >>> sched = nfl_week_games(season=2024, season_type="REG", week=1)
-        >>> sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_week_games
+            sched = nfl_week_games(season=2024, season_type="REG", week=1)
+            sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
     """
     payload = nfl_game_schedule(season=season, season_type=season_type, week=week, headers=headers)
     return _to_frame(payload.get("games", []), return_as_pandas)
@@ -346,9 +348,11 @@ def nfl_game_pbp(
         game has no play-by-play yet).
 
     Example:
-        >>> from sportsdataverse.nfl import nfl_game_pbp
-        >>> pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
-        >>> pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_game_pbp
+            pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
+            pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
     """
     import polars as pl
 

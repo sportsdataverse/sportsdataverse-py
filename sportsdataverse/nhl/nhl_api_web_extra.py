@@ -47,7 +47,9 @@ def nhl_scoreboard(
         ``return_parsed=False``.
 
     Example:
-        >>> nhl_scoreboard(date="2024-03-01")
+        Quick start::
+
+            nhl_scoreboard(date="2024-03-01")
     """
     if team is not None:
         path = f"/v1/scoreboard/{team}/now"

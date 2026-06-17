@@ -129,13 +129,13 @@ def pick_ttl(url: str, today: Optional[datetime] = None) -> timedelta:
 
     Examples::
 
-        >>> pick_ttl("https://api-web.nhle.com/v1/scoreboard/now")
+        pick_ttl("https://api-web.nhle.com/v1/scoreboard/now")
         timedelta(seconds=0)                              # LIVE
 
-        >>> pick_ttl("https://api-web.nhle.com/v1/gamecenter/2023030417/play-by-play")
+        pick_ttl("https://api-web.nhle.com/v1/gamecenter/2023030417/play-by-play")
         timedelta(days=30)                                # IMMUTABLE
 
-        >>> pick_ttl("https://site.api.espn.com/.../news?limit=5")
+        pick_ttl("https://site.api.espn.com/.../news?limit=5")
         timedelta(seconds=300)                            # FAST
     """
     today = today or datetime.now(timezone.utc)
