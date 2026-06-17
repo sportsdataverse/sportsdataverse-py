@@ -163,6 +163,10 @@ test = [
 ]
 lint = [
     "mypy>=1.0",
+    # Stubs for `requests` so the mypy ratchet can check modules that import it
+    # (e.g. errors.py, mlb_statcast_runtime.py via dl_utils). Without these mypy
+    # emits an import-untyped error under the strict gate.
+    "types-requests>=2.28.0",
     # Pinned to match the pre-commit ruff hook (.pre-commit-config.yaml). The codegen
     # generator formats its output with this ruff, so build/--check and the commit hook
     # must agree byte-for-byte; a floating version reintroduces format drift.
@@ -279,4 +283,7 @@ files = [
     "sportsdataverse/cfb/cfb_yahoo_ext.py",
     "sportsdataverse/nfl/config.py",
     "sportsdataverse/nfl/utils_date.py",
+    "sportsdataverse/mlb/mlb_statcast_runtime.py",
+    "sportsdataverse/mlb/mlb_statcast_parsers.py",
+    "sportsdataverse/mlb/mlb_statcast_extra.py",
 ]

@@ -1,0 +1,81 @@
+schema: leaderboard_arm_strength
+kind: dataframe
+columns:
+- name: fielder_name
+  type: character
+  description: "Fielder name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: primary_position
+  type: integer
+  description: "Primary fielding position."
+- name: primary_position_name
+  type: character
+  description: "Primary position name."
+- name: total_throws
+  type: integer
+  description: "Total throws."
+- name: total_throws_1b
+  type: integer
+  description: "Total throws 1b."
+- name: total_throws_2b
+  type: integer
+  description: "Total throws 2b."
+- name: total_throws_3b
+  type: integer
+  description: "Total throws 3b."
+- name: total_throws_ss
+  type: integer
+  description: "Total throws ss."
+- name: total_throws_lf
+  type: integer
+  description: "Total throws lf."
+- name: total_throws_cf
+  type: integer
+  description: "Total throws cf."
+- name: total_throws_rf
+  type: integer
+  description: "Total throws rf."
+- name: total_throws_inf
+  type: integer
+  description: "Total throws inf."
+- name: total_throws_of
+  type: integer
+  description: "Total throws of."
+- name: max_arm_strength
+  type: numeric
+  description: "Max arm strength (mph)."
+- name: arm_1b
+  type: numeric
+  description: "Arm 1b."
+- name: arm_2b
+  type: character
+  description: "Arm 2b."
+- name: arm_3b
+  type: character
+  description: "Arm 3b."
+- name: arm_ss
+  type: character
+  description: "Arm ss."
+- name: arm_lf
+  type: character
+  description: "Arm lf."
+- name: arm_cf
+  type: character
+  description: "Arm cf."
+- name: arm_rf
+  type: character
+  description: "Arm rf."
+- name: arm_inf
+  type: character
+  description: "Arm inf."
+- name: arm_of
+  type: character
+  description: "Arm of."
+- name: arm_overall
+  type: numeric
+  description: "Arm overall."

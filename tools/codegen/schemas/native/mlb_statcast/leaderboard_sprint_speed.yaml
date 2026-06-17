@@ -1,0 +1,33 @@
+schema: leaderboard_sprint_speed
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: team_id
+  type: integer
+  description: "MLBAM team id."
+- name: team
+  type: character
+  description: "Team abbreviation."
+- name: position
+  type: character
+  description: "Position."
+- name: age
+  type: integer
+  description: "Player age."
+- name: competitive_runs
+  type: integer
+  description: "Competitive runs (qualifying sprint-speed runs)."
+- name: bolts
+  type: integer
+  description: "Bolts."
+- name: hp_to_1b
+  type: numeric
+  description: "Home-to-first time (s)."
+- name: sprint_speed
+  type: numeric
+  description: "Sprint speed (ft/sec, top 50% of competitive runs)."

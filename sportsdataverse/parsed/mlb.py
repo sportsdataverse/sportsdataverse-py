@@ -204,8 +204,72 @@ from sportsdataverse.mlb import mlb_api_venue as _raw_mlb_api_venue
 from sportsdataverse.mlb import mlb_api_venues as _raw_mlb_api_venues
 from sportsdataverse.mlb import mlb_api_win_probability as _raw_mlb_api_win_probability
 from sportsdataverse.mlb import mlb_statcast_gamefeed as _raw_mlb_statcast_gamefeed
+from sportsdataverse.mlb import mlb_statcast_leaderboard_active_spin as _raw_mlb_statcast_leaderboard_active_spin
+from sportsdataverse.mlb import mlb_statcast_leaderboard_arm_angles as _raw_mlb_statcast_leaderboard_arm_angles
+from sportsdataverse.mlb import mlb_statcast_leaderboard_arm_strength as _raw_mlb_statcast_leaderboard_arm_strength
+from sportsdataverse.mlb import mlb_statcast_leaderboard_baserunning as _raw_mlb_statcast_leaderboard_baserunning
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_baserunning_run_value as _raw_mlb_statcast_leaderboard_baserunning_run_value,
+)
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_basestealing_run_value as _raw_mlb_statcast_leaderboard_basestealing_run_value,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_bat_tracking as _raw_mlb_statcast_leaderboard_bat_tracking
+from sportsdataverse.mlb import mlb_statcast_leaderboard_batted_ball as _raw_mlb_statcast_leaderboard_batted_ball
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_catch_probability as _raw_mlb_statcast_leaderboard_catch_probability,
+)
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_catcher_blocking as _raw_mlb_statcast_leaderboard_catcher_blocking,
+)
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_catcher_framing as _raw_mlb_statcast_leaderboard_catcher_framing,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_catcher_stance as _raw_mlb_statcast_leaderboard_catcher_stance
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_catcher_throwing as _raw_mlb_statcast_leaderboard_catcher_throwing,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_custom as _raw_mlb_statcast_leaderboard_custom
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_exit_velocity_barrels as _raw_mlb_statcast_leaderboard_exit_velocity_barrels,
+)
 from sportsdataverse.mlb import mlb_statcast_leaderboard_expected_stats as _raw_mlb_statcast_leaderboard_expected_stats
-from sportsdataverse.mlb import mlb_statcast_player_percentile_rankings as _raw_mlb_statcast_player_percentile_rankings
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_fielding_run_value as _raw_mlb_statcast_leaderboard_fielding_run_value,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_home_runs as _raw_mlb_statcast_leaderboard_home_runs
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_outfield_directional_oaa as _raw_mlb_statcast_leaderboard_outfield_directional_oaa,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_outfield_jump as _raw_mlb_statcast_leaderboard_outfield_jump
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_outs_above_average as _raw_mlb_statcast_leaderboard_outs_above_average,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_park_factors as _raw_mlb_statcast_leaderboard_park_factors
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_percentile_rankings as _raw_mlb_statcast_leaderboard_percentile_rankings,
+)
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_pitch_arsenal_stats as _raw_mlb_statcast_leaderboard_pitch_arsenal_stats,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_pitch_arsenals as _raw_mlb_statcast_leaderboard_pitch_arsenals
+from sportsdataverse.mlb import mlb_statcast_leaderboard_pitch_movement as _raw_mlb_statcast_leaderboard_pitch_movement
+from sportsdataverse.mlb import mlb_statcast_leaderboard_pitch_tempo as _raw_mlb_statcast_leaderboard_pitch_tempo
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_pitcher_running_game as _raw_mlb_statcast_leaderboard_pitcher_running_game,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_poptime as _raw_mlb_statcast_leaderboard_poptime
+from sportsdataverse.mlb import mlb_statcast_leaderboard_running_splits as _raw_mlb_statcast_leaderboard_running_splits
+from sportsdataverse.mlb import mlb_statcast_leaderboard_spin_direction as _raw_mlb_statcast_leaderboard_spin_direction
+from sportsdataverse.mlb import mlb_statcast_leaderboard_sprint_speed as _raw_mlb_statcast_leaderboard_sprint_speed
+from sportsdataverse.mlb import mlb_statcast_leaderboard_swing_path as _raw_mlb_statcast_leaderboard_swing_path
+from sportsdataverse.mlb import mlb_statcast_leaderboard_swing_take as _raw_mlb_statcast_leaderboard_swing_take
+from sportsdataverse.mlb import mlb_statcast_leaderboard_swing_timing as _raw_mlb_statcast_leaderboard_swing_timing
+from sportsdataverse.mlb import (
+    mlb_statcast_leaderboard_timer_infractions as _raw_mlb_statcast_leaderboard_timer_infractions,
+)
+from sportsdataverse.mlb import mlb_statcast_leaderboard_year_to_year as _raw_mlb_statcast_leaderboard_year_to_year
+from sportsdataverse.mlb import mlb_statcast_schedule as _raw_mlb_statcast_schedule
 from sportsdataverse.mlb import download as download  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_calendar as espn_mlb_calendar  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_game_rosters as espn_mlb_game_rosters  # noqa: F401
@@ -233,7 +297,10 @@ from sportsdataverse.mlb import mlb_api_stats_streaks as mlb_api_stats_streaks  
 from sportsdataverse.mlb import mlb_api_team_leaders as mlb_api_team_leaders  # noqa: F401
 from sportsdataverse.mlb import mlb_api_team_stats as mlb_api_team_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_api_teams as mlb_api_teams  # noqa: F401
+from sportsdataverse.mlb import mlb_statcast_player as mlb_statcast_player  # noqa: F401
 from sportsdataverse.mlb import mlb_statcast_search as mlb_statcast_search  # noqa: F401
+from sportsdataverse.mlb import mlb_statcast_search_minors as mlb_statcast_search_minors  # noqa: F401
+from sportsdataverse.mlb import mlb_statcast_search_wbc as mlb_statcast_search_wbc  # noqa: F401
 from sportsdataverse.mlb import most_recent_mlb_season as most_recent_mlb_season  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_list as parse_mlb_api_list  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_person_stats as parse_mlb_api_person_stats  # noqa: F401
@@ -242,8 +309,10 @@ from sportsdataverse.mlb import parse_mlb_api_standings as parse_mlb_api_standin
 from sportsdataverse.mlb import parse_mlb_api_team_roster as parse_mlb_api_team_roster  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_api_teams as parse_mlb_api_teams  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_statcast_gamefeed as parse_mlb_statcast_gamefeed  # noqa: F401
+from sportsdataverse.mlb import parse_mlb_statcast_html_leaderboard as parse_mlb_statcast_html_leaderboard  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_statcast_leaderboard as parse_mlb_statcast_leaderboard  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_statcast_player as parse_mlb_statcast_player  # noqa: F401
+from sportsdataverse.mlb import parse_mlb_statcast_schedule as parse_mlb_statcast_schedule  # noqa: F401
 from sportsdataverse.mlb import parse_mlb_statcast_search as parse_mlb_statcast_search  # noqa: F401
 from sportsdataverse.mlb import parser_for_mlb_api as parser_for_mlb_api  # noqa: F401
 from sportsdataverse.mlb import underscore as underscore  # noqa: F401
@@ -457,9 +526,48 @@ __all__ = [
     "mlb_api_venues",
     "mlb_api_win_probability",
     "mlb_statcast_gamefeed",
+    "mlb_statcast_leaderboard_active_spin",
+    "mlb_statcast_leaderboard_arm_angles",
+    "mlb_statcast_leaderboard_arm_strength",
+    "mlb_statcast_leaderboard_baserunning",
+    "mlb_statcast_leaderboard_baserunning_run_value",
+    "mlb_statcast_leaderboard_basestealing_run_value",
+    "mlb_statcast_leaderboard_bat_tracking",
+    "mlb_statcast_leaderboard_batted_ball",
+    "mlb_statcast_leaderboard_catch_probability",
+    "mlb_statcast_leaderboard_catcher_blocking",
+    "mlb_statcast_leaderboard_catcher_framing",
+    "mlb_statcast_leaderboard_catcher_stance",
+    "mlb_statcast_leaderboard_catcher_throwing",
+    "mlb_statcast_leaderboard_custom",
+    "mlb_statcast_leaderboard_exit_velocity_barrels",
     "mlb_statcast_leaderboard_expected_stats",
-    "mlb_statcast_player_percentile_rankings",
+    "mlb_statcast_leaderboard_fielding_run_value",
+    "mlb_statcast_leaderboard_home_runs",
+    "mlb_statcast_leaderboard_outfield_directional_oaa",
+    "mlb_statcast_leaderboard_outfield_jump",
+    "mlb_statcast_leaderboard_outs_above_average",
+    "mlb_statcast_leaderboard_park_factors",
+    "mlb_statcast_leaderboard_percentile_rankings",
+    "mlb_statcast_leaderboard_pitch_arsenal_stats",
+    "mlb_statcast_leaderboard_pitch_arsenals",
+    "mlb_statcast_leaderboard_pitch_movement",
+    "mlb_statcast_leaderboard_pitch_tempo",
+    "mlb_statcast_leaderboard_pitcher_running_game",
+    "mlb_statcast_leaderboard_poptime",
+    "mlb_statcast_leaderboard_running_splits",
+    "mlb_statcast_leaderboard_spin_direction",
+    "mlb_statcast_leaderboard_sprint_speed",
+    "mlb_statcast_leaderboard_swing_path",
+    "mlb_statcast_leaderboard_swing_take",
+    "mlb_statcast_leaderboard_swing_timing",
+    "mlb_statcast_leaderboard_timer_infractions",
+    "mlb_statcast_leaderboard_year_to_year",
+    "mlb_statcast_player",
+    "mlb_statcast_schedule",
     "mlb_statcast_search",
+    "mlb_statcast_search_minors",
+    "mlb_statcast_search_wbc",
     "most_recent_mlb_season",
     "parse_mlb_api_list",
     "parse_mlb_api_person_stats",
@@ -468,8 +576,10 @@ __all__ = [
     "parse_mlb_api_team_roster",
     "parse_mlb_api_teams",
     "parse_mlb_statcast_gamefeed",
+    "parse_mlb_statcast_html_leaderboard",
     "parse_mlb_statcast_leaderboard",
     "parse_mlb_statcast_player",
+    "parse_mlb_statcast_schedule",
     "parse_mlb_statcast_search",
     "parser_for_mlb_api",
     "underscore",
@@ -3010,6 +3120,216 @@ def mlb_statcast_gamefeed(*args, **kwargs):
     return _raw_mlb_statcast_gamefeed(*args, **kwargs)
 
 
+def mlb_statcast_leaderboard_active_spin(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_active_spin``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_active_spin` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_active_spin` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_active_spin(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_arm_angles(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_arm_angles``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_arm_angles` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_arm_angles` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_arm_angles(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_arm_strength(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_arm_strength``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_arm_strength` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_arm_strength` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_arm_strength(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_baserunning(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_baserunning``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_baserunning` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_baserunning` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_baserunning(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_baserunning_run_value(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_baserunning_run_value``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_baserunning_run_value` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_baserunning_run_value` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_baserunning_run_value(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_basestealing_run_value(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_basestealing_run_value``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_basestealing_run_value` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_basestealing_run_value` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_basestealing_run_value(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_bat_tracking(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_bat_tracking``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_bat_tracking` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_bat_tracking` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_bat_tracking(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_batted_ball(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_batted_ball``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_batted_ball` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_batted_ball` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_batted_ball(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_catch_probability(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_catch_probability``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catch_probability` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catch_probability` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_catch_probability(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_catcher_blocking(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_catcher_blocking``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_blocking` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_blocking` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_catcher_blocking(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_catcher_framing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_catcher_framing``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_framing` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_framing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_catcher_framing(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_catcher_stance(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_catcher_stance``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_stance` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_stance` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_catcher_stance(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_catcher_throwing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_catcher_throwing``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_throwing` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_catcher_throwing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_catcher_throwing(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_custom(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_custom``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_custom` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_custom` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_custom(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_exit_velocity_barrels(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_exit_velocity_barrels``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_exit_velocity_barrels` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_exit_velocity_barrels` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_exit_velocity_barrels(*args, **kwargs)
+
+
 def mlb_statcast_leaderboard_expected_stats(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_expected_stats``).
 
@@ -3024,15 +3344,309 @@ def mlb_statcast_leaderboard_expected_stats(*args, **kwargs):
     return _raw_mlb_statcast_leaderboard_expected_stats(*args, **kwargs)
 
 
-def mlb_statcast_player_percentile_rankings(*args, **kwargs):
-    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_player_percentile_rankings``).
+def mlb_statcast_leaderboard_fielding_run_value(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_fielding_run_value``).
 
     .. deprecated:: 0.0.54
-       Import :func:`sportsdataverse.mlb.mlb_statcast_player_percentile_rankings` directly instead;
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_fielding_run_value` directly instead;
        that function now returns a parsed DataFrame by default.
 
     Pass ``return_parsed=False`` for the raw ``Dict``. See
-    :func:`sportsdataverse.mlb.mlb_statcast_player_percentile_rankings` for full documentation.
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_fielding_run_value` for full documentation.
     """
     kwargs.setdefault("return_parsed", True)
-    return _raw_mlb_statcast_player_percentile_rankings(*args, **kwargs)
+    return _raw_mlb_statcast_leaderboard_fielding_run_value(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_home_runs(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_home_runs``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_home_runs` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_home_runs` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_home_runs(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_outfield_directional_oaa(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_outfield_directional_oaa``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_outfield_directional_oaa` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_outfield_directional_oaa` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_outfield_directional_oaa(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_outfield_jump(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_outfield_jump``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_outfield_jump` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_outfield_jump` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_outfield_jump(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_outs_above_average(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_outs_above_average``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_outs_above_average` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_outs_above_average` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_outs_above_average(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_park_factors(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_park_factors``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_park_factors` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_park_factors` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_park_factors(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_percentile_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_percentile_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_percentile_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_percentile_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_percentile_rankings(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_pitch_arsenal_stats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_pitch_arsenal_stats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_arsenal_stats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_arsenal_stats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_pitch_arsenal_stats(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_pitch_arsenals(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_pitch_arsenals``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_arsenals` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_arsenals` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_pitch_arsenals(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_pitch_movement(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_pitch_movement``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_movement` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_movement` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_pitch_movement(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_pitch_tempo(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_pitch_tempo``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_tempo` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitch_tempo` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_pitch_tempo(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_pitcher_running_game(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_pitcher_running_game``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitcher_running_game` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_pitcher_running_game` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_pitcher_running_game(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_poptime(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_poptime``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_poptime` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_poptime` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_poptime(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_running_splits(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_running_splits``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_running_splits` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_running_splits` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_running_splits(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_spin_direction(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_spin_direction``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_spin_direction` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_spin_direction` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_spin_direction(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_sprint_speed(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_sprint_speed``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_sprint_speed` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_sprint_speed` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_sprint_speed(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_swing_path(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_swing_path``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_swing_path` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_swing_path` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_swing_path(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_swing_take(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_swing_take``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_swing_take` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_swing_take` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_swing_take(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_swing_timing(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_swing_timing``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_swing_timing` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_swing_timing` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_swing_timing(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_timer_infractions(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_timer_infractions``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_timer_infractions` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_timer_infractions` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_timer_infractions(*args, **kwargs)
+
+
+def mlb_statcast_leaderboard_year_to_year(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_leaderboard_year_to_year``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_year_to_year` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_leaderboard_year_to_year` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_leaderboard_year_to_year(*args, **kwargs)
+
+
+def mlb_statcast_schedule(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mlb.mlb_statcast_schedule``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mlb.mlb_statcast_schedule` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mlb.mlb_statcast_schedule` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_mlb_statcast_schedule(*args, **kwargs)

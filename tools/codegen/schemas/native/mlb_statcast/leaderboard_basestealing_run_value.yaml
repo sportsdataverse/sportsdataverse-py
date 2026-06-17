@@ -1,0 +1,75 @@
+schema: leaderboard_basestealing_run_value
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: player_name
+  type: character
+  description: "Player name."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: start_year
+  type: integer
+  description: "First season in the range."
+- name: end_year
+  type: integer
+  description: "Last season in the range."
+- name: key_target_base
+  type: character
+  description: "Key target base."
+- name: runs_stolen_on_running_act
+  type: numeric
+  description: "Runs stolen on running act."
+- name: n_init
+  type: integer
+  description: "Number of init."
+- name: rate_sbx
+  type: integer
+  description: "Rate sbx."
+- name: n_sb
+  type: integer
+  description: "Stolen bases allowed (count)."
+- name: n_cs
+  type: integer
+  description: "Caught stealing (count)."
+- name: n_pk
+  type: integer
+  description: "Number of pk."
+- name: n_bk
+  type: integer
+  description: "Number of bk."
+- name: n_fb
+  type: integer
+  description: "Number of fb."
+- name: n_plus
+  type: integer
+  description: "Number of plus."
+- name: n_minus
+  type: integer
+  description: "Number of minus."
+- name: net_act_plus
+  type: numeric
+  description: "Net act plus."
+- name: net_act_minus
+  type: numeric
+  description: "Net act minus."
+- name: r_primary_lead
+  type: numeric
+  description: "Average primary lead distance (ft)."
+- name: r_secondary_lead
+  type: numeric
+  description: "Average secondary lead (ft)."
+- name: r_sec_minus_prim_lead
+  type: numeric
+  description: "R sec minus prim lead."
+- name: r_primary_lead_sbx
+  type: character
+  description: "R primary lead sbx."
+- name: r_secondary_lead_sbx
+  type: character
+  description: "R secondary lead sbx."
+- name: r_sec_minus_prim_lead_sbx
+  type: character
+  description: "R sec minus prim lead sbx."

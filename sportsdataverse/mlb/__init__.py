@@ -20,11 +20,18 @@ from sportsdataverse.mlb.mlb_pbp import *
 from sportsdataverse.mlb.mlb_player_stats import *
 from sportsdataverse.mlb.mlb_schedule import *
 from sportsdataverse.mlb.mlb_statcast import *
-from sportsdataverse.mlb.mlb_statcast_extra import mlb_statcast_search
+from sportsdataverse.mlb.mlb_statcast_extra import (
+    mlb_statcast_player,
+    mlb_statcast_search,
+    mlb_statcast_search_minors,
+    mlb_statcast_search_wbc,
+)
 from sportsdataverse.mlb.mlb_statcast_parsers import (
     parse_mlb_statcast_gamefeed,
+    parse_mlb_statcast_html_leaderboard,
     parse_mlb_statcast_leaderboard,
     parse_mlb_statcast_player,
+    parse_mlb_statcast_schedule,
     parse_mlb_statcast_search,
 )
 from sportsdataverse.mlb.mlb_teams import *

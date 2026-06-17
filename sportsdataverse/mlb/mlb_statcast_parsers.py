@@ -7,7 +7,7 @@ from __future__ import annotations
 import json
 import re
 from io import StringIO
-from typing import Dict
+from typing import Dict, List, Union
 
 import pandas as pd
 import polars as pl
@@ -49,20 +49,38 @@ def _csv_to_frame(text: str, return_as_pandas: bool = False) -> pl.DataFrame | p
     return _to_output(_snake_columns(df), return_as_pandas)
 
 
-def _html_script_json(html: str, var_name: str) -> Dict:
+def _html_decode_var(html: str, var_name: str) -> Union[Dict, List, None]:
+    """Extract the JSON value assigned to ``var_name`` in an embedded ``<script>``.
+
+    Savant pages embed data as ``var serverVals = {...}`` (player pages) or
+    ``const data = [...]`` (the ``fielding-run-value`` / ``statcast-park-factors``
+    leaderboards). Handles ``var`` / ``let`` / ``const`` / ``window.`` / bare
+    assignment, decodes either an object or an array via balanced-brace
+    ``raw_decode`` (so nested Savant payloads are not truncated), and skips any
+    same-named assignment whose body fails to decode. The leading
+    ``(?<![\\w$.])`` lookbehind anchors a word boundary so a request for ``data``
+    does not match ``methods_data``. Returns ``None`` when absent/unparseable.
+    """
     if not html:
-        return {}
-    m = re.search(rf"var\s+{re.escape(var_name)}\s*=\s*", html)
-    if not m:
-        return {}
-    try:
-        obj, _ = json.JSONDecoder().raw_decode(html, m.end())
-        return obj if isinstance(obj, dict) else {}
-    except Exception:
-        return {}
+        return None
+    pat = rf"(?<![\w$.])(?:(?:var|let|const)\s+|window\.)?{re.escape(var_name)}\s*=\s*"
+    for m in re.finditer(pat, html):
+        try:
+            obj, _ = json.JSONDecoder().raw_decode(html, m.end())
+        except Exception:
+            continue
+        if isinstance(obj, (dict, list)):
+            return obj
+    return None
 
 
-def parse_mlb_statcast_search(payload, return_as_pandas: bool = False):
+def _html_script_json(html: str, var_name: str) -> Dict:
+    """Object-only convenience over :func:`_html_decode_var` (``{}`` if not a dict)."""
+    obj = _html_decode_var(html, var_name)
+    return obj if isinstance(obj, dict) else {}
+
+
+def parse_mlb_statcast_search(payload: object, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Parse a Statcast search CSV payload into a tidy frame.
 
     Args:
@@ -81,7 +99,7 @@ def parse_mlb_statcast_search(payload, return_as_pandas: bool = False):
     return _csv_to_frame(payload if isinstance(payload, str) else "", return_as_pandas)
 
 
-def parse_mlb_statcast_leaderboard(payload, return_as_pandas: bool = False):
+def parse_mlb_statcast_leaderboard(payload: object, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
     """Parse a Statcast leaderboard CSV payload into a tidy frame.
 
     Args:
@@ -100,46 +118,137 @@ def parse_mlb_statcast_leaderboard(payload, return_as_pandas: bool = False):
     return _csv_to_frame(payload if isinstance(payload, str) else "", return_as_pandas)
 
 
-def parse_mlb_statcast_gamefeed(payload: Dict, return_as_pandas: bool = False):
-    """Parse a Statcast gamefeed JSON payload into a tidy frame of tracked events.
+def parse_mlb_statcast_gamefeed(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """Parse a Statcast gamefeed (``/gf``) JSON payload into a tidy per-pitch frame.
+
+    The Savant ``/gf`` feed carries the game's pitch-by-pitch tracking under the
+    ``team_home`` and ``team_away`` arrays (one rich object per pitch:
+    ``pitch_type``, ``start_speed``, ``launch_speed``, ``launch_angle``,
+    ``plate_x``/``plate_z``, ``des``, ``events``, …). This concatenates both
+    sides into one frame, one row per pitch. When neither side is present it
+    falls back to the ``exit_velocity`` array (batted-ball events only).
 
     Args:
-        payload: JSON dict returned by a Savant `/game` gamefeed endpoint.
+        payload: JSON dict returned by :func:`mlb_statcast_gamefeed`.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per tracked event; zero rows on empty input.
+        A polars (or pandas) DataFrame, one row per pitch; zero rows on empty input.
 
     Example:
         Quick start::
 
-            from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_gamefeed
-            df = parse_mlb_statcast_gamefeed(payload_dict)
+            from sportsdataverse.mlb import mlb_statcast_gamefeed, parse_mlb_statcast_gamefeed
+            df = parse_mlb_statcast_gamefeed(mlb_statcast_gamefeed(game_pk=745444, return_parsed=False))
     """
-    events = (payload or {}).get("events")
-    if not isinstance(events, list) or not events:
+    if not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
-    df = pd.json_normalize(events, sep="_")
+    rows: List[dict] = []
+    for side in ("team_home", "team_away"):
+        v = payload.get(side)
+        if isinstance(v, list):
+            rows.extend(v)
+    if not rows:
+        ev = payload.get("exit_velocity")
+        if isinstance(ev, list):
+            rows = ev
+    if not rows:
+        return _empty_frame(return_as_pandas)
+    df = pd.json_normalize(rows, sep="_")
     return _to_output(_snake_columns(df), return_as_pandas)
 
 
-def parse_mlb_statcast_player(payload: str, return_as_pandas: bool = False):
-    """Parse a Statcast player page HTML into a tidy frame of player metrics.
+def parse_mlb_statcast_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """Parse the Savant ``/schedule`` JSON into a tidy frame of one row per game.
+
+    The feed wraps the standard MLB Stats API schedule under
+    ``schedule.dates[].games[]`` (plus a ``wpa`` array). This flattens every
+    game across all dates into one row, snake-cased.
 
     Args:
-        payload: HTML page text returned by a Savant player page endpoint.
+        payload: JSON dict returned by :func:`mlb_statcast_schedule`.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        A polars (or pandas) DataFrame, one row per metric; zero rows on empty input.
+        A polars (or pandas) DataFrame, one row per scheduled game; zero rows on empty input.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mlb import mlb_statcast_schedule
+            df = mlb_statcast_schedule()
+    """
+    sched = payload.get("schedule") if isinstance(payload, dict) else None
+    dates = sched.get("dates") if isinstance(sched, dict) else None
+    if not isinstance(dates, list):
+        return _empty_frame(return_as_pandas)
+    games: List[dict] = []
+    for d in dates:
+        if isinstance(d, dict) and isinstance(d.get("games"), list):
+            games.extend(d["games"])
+    if not games:
+        return _empty_frame(return_as_pandas)
+    df = pd.json_normalize(games, sep="_")
+    return _to_output(_snake_columns(df), return_as_pandas)
+
+
+def parse_mlb_statcast_html_leaderboard(payload: str, return_as_pandas: bool = False) -> pl.DataFrame | pd.DataFrame:
+    """Parse an HTML-embedded-JSON Statcast leaderboard into a tidy frame.
+
+    A couple of leaderboards (``fielding-run-value``, ``statcast-park-factors``)
+    return ``text/html`` even with ``csv=true``; the rows live in an embedded
+    ``const data = [...]`` ``<script>`` array. This extracts and flattens that
+    array.
+
+    Args:
+        payload: HTML page text returned by the leaderboard endpoint.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame, one row per leaderboard entry; zero rows on empty input.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_html_leaderboard
+            df = parse_mlb_statcast_html_leaderboard(html_text)
+    """
+    rows = _html_decode_var(payload if isinstance(payload, str) else "", "data")
+    if not isinstance(rows, list) or not rows:
+        return _empty_frame(return_as_pandas)
+    df = pd.json_normalize(rows, sep="_")
+    return _to_output(_snake_columns(df), return_as_pandas)
+
+
+def parse_mlb_statcast_player(
+    payload: str, section: str = "statcast", return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """Parse a Savant player page into a tidy frame of one of its embedded tables.
+
+    The ``/savant-player/{id}`` page embeds a large ``var serverVals = {...}`` blob
+    whose array-valued keys are the page's data tables. ``section`` selects which
+    one — default ``"statcast"`` (the seasonal Statcast aggregate, ~260 metrics per
+    season row). Other useful sections include ``"statcastGameLogs"`` (per-game
+    batted-ball logs), ``"statcastHistogram"``, ``"zones"``, ``"pitchDetails"``,
+    ``"sprayChart"``, ``"fielderPositioning"``, and ``"statcastLeader"``.
+
+    Args:
+        payload: HTML page text (e.g. from ``mlb_statcast_player(..., raw=True)``).
+        section: name of the ``serverVals`` array key to flatten (default ``"statcast"``).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame, one row per record in ``section``; zero rows
+        when the page or section is absent.
 
     Example:
         Quick start::
 
             from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_player
-            df = parse_mlb_statcast_player(html_text)
+            df = parse_mlb_statcast_player(html_text)                       # seasonal aggregate
+            logs = parse_mlb_statcast_player(html_text, section="statcastGameLogs")
     """
-    rows = _html_script_json(payload or "", "serverVals").get("rows")
+    rows = _html_script_json(payload or "", "serverVals").get(section)
     if not isinstance(rows, list) or not rows:
         return _empty_frame(return_as_pandas)
     df = pd.json_normalize(rows, sep="_")

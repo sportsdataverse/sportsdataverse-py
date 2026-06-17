@@ -1,0 +1,57 @@
+schema: leaderboard_bat_tracking
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: "MLBAM player id."
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: swings_competitive
+  type: integer
+  description: "Competitive swings."
+- name: percent_swings_competitive
+  type: numeric
+  description: "Share of swings that are competitive."
+- name: contact
+  type: integer
+  description: "Contact."
+- name: avg_bat_speed
+  type: numeric
+  description: "Average bat speed (mph)."
+- name: hard_swing_rate
+  type: numeric
+  description: "Hard swing rate."
+- name: squared_up_per_bat_contact
+  type: numeric
+  description: "Squared up per bat contact."
+- name: squared_up_per_swing
+  type: numeric
+  description: "Squared-up rate per swing."
+- name: blast_per_bat_contact
+  type: numeric
+  description: "Blast per bat contact."
+- name: blast_per_swing
+  type: numeric
+  description: "Blasts per swing."
+- name: swing_length
+  type: numeric
+  description: "Swing length (ft, head travel)."
+- name: swords
+  type: integer
+  description: "Swords."
+- name: batter_run_value
+  type: numeric
+  description: "Batter run value."
+- name: whiffs
+  type: character
+  description: "Whiffs."
+- name: whiff_per_swing
+  type: character
+  description: "Whiff per swing."
+- name: batted_ball_events
+  type: integer
+  description: "Batted ball events."
+- name: batted_ball_event_per_swing
+  type: numeric
+  description: "Batted ball event per swing."

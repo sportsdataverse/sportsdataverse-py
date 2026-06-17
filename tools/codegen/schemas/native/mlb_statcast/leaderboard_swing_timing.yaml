@@ -1,0 +1,81 @@
+schema: leaderboard_swing_timing
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: "MLBAM player id."
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: year
+  type: integer
+  description: "Season year."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: bat_side_formatted
+  type: character
+  description: "Batter side (formatted)."
+- name: miss_distance
+  type: numeric
+  description: "Average miss distance (in) on swings."
+- name: flawed_percent
+  type: numeric
+  description: "Flawed rate."
+- name: perfect_percent
+  type: numeric
+  description: "Perfect rate."
+- name: tied_up_percent
+  type: numeric
+  description: "Tied up rate."
+- name: avg_x_tied_up
+  type: numeric
+  description: "Avg x tied up."
+- name: centered_percent
+  type: numeric
+  description: "Centered rate."
+- name: flailed_percent
+  type: numeric
+  description: "Flailed rate."
+- name: avg_x_flail
+  type: numeric
+  description: "Avg x flail."
+- name: early_percent
+  type: numeric
+  description: "Early rate."
+- name: avg_y_early
+  type: numeric
+  description: "Avg y early."
+- name: on_time_percent
+  type: numeric
+  description: "On time rate."
+- name: late_percent
+  type: numeric
+  description: "Late rate."
+- name: avg_y_late
+  type: numeric
+  description: "Avg y late."
+- name: n_swings
+  type: integer
+  description: "Number of swings."
+- name: whiff_rate
+  type: numeric
+  description: "Whiff rate."
+- name: competitive_percent
+  type: numeric
+  description: "Competitive rate."
+- name: over_percent
+  type: numeric
+  description: "Over rate."
+- name: avg_z_over
+  type: numeric
+  description: "Avg z over."
+- name: lined_up_percent
+  type: numeric
+  description: "Lined up rate."
+- name: under_percent
+  type: numeric
+  description: "Under rate."
+- name: avg_z_under
+  type: numeric
+  description: "Avg z under."

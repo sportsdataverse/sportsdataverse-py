@@ -1,0 +1,72 @@
+schema: leaderboard_percentile_rankings
+kind: dataframe
+columns:
+- name: player_name
+  type: character
+  description: "Player name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: year
+  type: integer
+  description: "Season year."
+- name: xwoba
+  type: character
+  description: "Expected wOBA."
+- name: xba
+  type: character
+  description: "Expected batting average."
+- name: xslg
+  type: character
+  description: "Expected slugging."
+- name: xiso
+  type: character
+  description: "Expected isolated power."
+- name: xobp
+  type: character
+  description: "Expected on-base percentage."
+- name: brl
+  type: character
+  description: "Barrels."
+- name: brl_percent
+  type: character
+  description: "Barrel rate (% of batted balls)."
+- name: exit_velocity
+  type: character
+  description: "Exit velocity (mph)."
+- name: max_ev
+  type: integer
+  description: "Max ev."
+- name: hard_hit_percent
+  type: character
+  description: "Hard-hit rate (95+ mph EV)."
+- name: k_percent
+  type: character
+  description: "Strikeout rate."
+- name: bb_percent
+  type: character
+  description: "Walk rate."
+- name: whiff_percent
+  type: character
+  description: "Whiff rate (swings and misses / swings)."
+- name: chase_percent
+  type: character
+  description: "Chase rate."
+- name: arm_strength
+  type: integer
+  description: "Arm strength (mph, top throws)."
+- name: sprint_speed
+  type: integer
+  description: "Sprint speed (ft/sec, top 50% of competitive runs)."
+- name: oaa
+  type: integer
+  description: "Outs Above Average."
+- name: bat_speed
+  type: character
+  description: "Bat speed (mph)."
+- name: squared_up_rate
+  type: character
+  description: "Squared up rate."
+- name: swing_length
+  type: character
+  description: "Swing length (ft, head travel)."

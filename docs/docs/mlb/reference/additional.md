@@ -819,9 +819,314 @@ from sportsdataverse.mlb import fox_mlb_team_stats
 df = fox_mlb_team_stats("...")
 ```
 
-### `mlb_statcast_search(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters) -> "'Union[pl.DataFrame, object]'"` {#mlb_statcast_search}
+### `mlb_statcast_player(player_id: 'int', stats: 'Optional[str]' = None, *, section: 'str' = 'statcast', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame, str]'"` {#mlb_statcast_player}
 
-_No description available._
+GET /savant-player/{player_id} and parse one embedded table into a tidy frame.
+
+Returns a tidy frame **by default** (the parsed Statcast page); pass
+`raw=True` to get the underlying HTML string instead (the page embeds ~12
+other tables you can mine yourself, or feed to
+`sportsdataverse.mlb.parse_mlb_statcast_player` with a different
+`section`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_id` | `int` |  | MLBAM player id (shared with the Stats API `personId`). |
+| `stats` | `Optional[str]` | `None` | optional `stats` query value to scope the embedded payload. |
+| `section` | `str` | `'statcast'` | which embedded `serverVals` table to flatten (default `"statcast"`, the seasonal aggregate; e.g. `"statcastGameLogs"`). |
+| `raw` | `bool` | `False` | return the raw page HTML string instead of a parsed frame. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame of the player's Statcast metrics by default (zero rows when the page/section is absent); the raw HTML `str` when `raw=True`.
+
+| col_name | type | description |
+|---|---|---|
+| `aggregate` | integer | Aggregate. |
+| `year` | integer | Season year. |
+| `yearhidden` | integer | Yearhidden. |
+| `player_id` | integer | MLBAM player id. |
+| `age` | integer | Player age. |
+| `bat_side` | character | Batter side (R/L/S). |
+| `pitch_hand` | character | Pitcher handedness (R/L). |
+| `month` | character | Month. |
+| `grouping_code` | character | Grouping code. |
+| `grouping_cat` | character | Grouping cat. |
+| `pitch_count` | integer | Pitch count. |
+| `in_zone_percent` | numeric | In zone rate. |
+| `out_zone_percent` | numeric | Out zone rate. |
+| `edge_percent` | numeric | Edge rate. |
+| `z_swing_percent` | numeric | Z swing rate. |
+| `oz_swing_percent` | numeric | Oz swing rate. |
+| `iz_contact_percent` | numeric | Iz contact rate. |
+| `oz_contact_percent` | numeric | Oz contact rate. |
+| `whiff_percent` | numeric | Whiff rate (swings and misses / swings). |
+| `f_strike_percent` | numeric | F strike rate. |
+| `f_swing_percent` | numeric | F swing rate. |
+| `swing_percent` | numeric | Swing rate. |
+| `meatball_swing_percent` | integer | Meatball swing rate. |
+| `meatball_percent` | numeric | Meatball rate. |
+| `z_swing_miss_percent` | numeric | Z swing miss rate. |
+| `oz_swing_miss_percent` | numeric | Oz swing miss rate. |
+| `in_zone` | integer | In zone. |
+| `out_zone` | integer | Out zone. |
+| `edge` | integer | Edge. |
+| `popups` | integer | Popups. |
+| `flyballs` | integer | Flyballs. |
+| `linedrives` | integer | Linedrives. |
+| `groundballs` | integer | Groundballs. |
+| `airballs` | integer | Airballs. |
+| `popups_percent` | numeric | Popups rate. |
+| `flyballs_percent` | numeric | Flyballs rate. |
+| `linedrives_percent` | numeric | Linedrives rate. |
+| `groundballs_percent` | numeric | Groundballs rate. |
+| `airballs_percent` | numeric | Airballs rate. |
+| `pull_percent` | numeric | Pull rate. |
+| `straightaway_percent` | numeric | Straightaway rate. |
+| `opposite_percent` | numeric | Opposite rate. |
+| `pull_percent_airballs` | numeric | Pull percent airballs. |
+| `straightaway_percent_airballs` | numeric | Straightaway percent airballs. |
+| `opposite_percent_airballs` | integer | Opposite percent airballs. |
+| `pull_percent_groundballs` | numeric | Pull percent groundballs. |
+| `straightaway_percent_groundballs` | numeric | Straightaway percent groundballs. |
+| `opposite_percent_groundballs` | numeric | Opposite percent groundballs. |
+| `pull_percent_popups` | numeric | Pull percent popups. |
+| `straightaway_percent_popups` | numeric | Straightaway percent popups. |
+| `opposite_percent_popups` | numeric | Opposite percent popups. |
+| `pull_percent_flyballs` | numeric | Pull percent flyballs. |
+| `straightaway_percent_flyballs` | numeric | Straightaway percent flyballs. |
+| `opposite_percent_flyballs` | numeric | Opposite percent flyballs. |
+| `pull_percent_linedrives` | integer | Pull percent linedrives. |
+| `straightaway_percent_linedrives` | integer | Straightaway percent linedrives. |
+| `opposite_percent_linedrives` | integer | Opposite percent linedrives. |
+| `poorlyweak_percent` | integer | Poorlyweak rate. |
+| `poorlytopped_percent` | numeric | Poorlytopped rate. |
+| `poorlyunder_percent` | numeric | Poorlyunder rate. |
+| `flareburner_percent` | numeric | Flareburner rate. |
+| `solidcontact_percent` | numeric | Solidcontact rate. |
+| `hr_flyballs_percent` | numeric | Hr flyballs rate. |
+| `in_zone_swing` | integer | In zone swing. |
+| `out_zone_swing` | integer | Out zone swing. |
+| `in_zone_swing_miss` | integer | In zone swing miss. |
+| `out_zone_swing_miss` | integer | Out zone swing miss. |
+| `pitch_count_fastball` | integer | Pitch count fastball. |
+| `pitch_count_offspeed` | integer | Pitch count offspeed. |
+| `pitch_count_breaking` | integer | Pitch count breaking. |
+| `pa` | integer | Plate appearances. |
+| `ab` | integer | At-bats. |
+| `hit` | integer | Hit. |
+| `single` | integer | Singles. |
+| `double` | integer | Doubles. |
+| `triple` | integer | Triples. |
+| `home_run` | integer | Home run. |
+| `walk` | integer | Walk. |
+| `strikeout` | integer | Strikeout. |
+| `hbp` | integer | Hbp. |
+| `k_percent` | numeric | Strikeout rate. |
+| `bb_percent` | numeric | Walk rate. |
+| `sz_judge` | numeric | Sz judge. |
+| `batted_ball` | integer | Batted ball. |
+| `barrel` | integer | Barrel. |
+| `barrel_batted_rate` | numeric | Barrels per batted ball. |
+| `barrels_per_pa` | numeric | Barrels per pa. |
+| `launch_angle_avg` | numeric | Launch angle avg. |
+| `exit_velocity_avg` | numeric | Exit velocity avg. |
+| `exit_velocity_max` | numeric | Exit velocity max. |
+| `hard_hit_percent` | numeric | Hard-hit rate (95+ mph EV). |
+| `sweet_spot_percent` | numeric | Sweet-spot rate (8-32 deg launch angle). |
+| `ba` | numeric | Batting average. |
+| `xba` | numeric | Expected batting average. |
+| `bacon` | numeric | Bacon. |
+| `xbacon` | numeric | Expected batting average on contact. |
+| `babip` | numeric | BABIP. |
+| `obp` | numeric | On-base percentage. |
+| `slg` | numeric | Slugging percentage. |
+| `xobp` | numeric | Expected on-base percentage. |
+| `xslg` | numeric | Expected slugging. |
+| `iso` | numeric | Isolated power. |
+| `xiso` | numeric | Expected isolated power. |
+| `woba` | numeric | Weighted on-base average. |
+| `xwoba` | numeric | Expected wOBA. |
+| `wobacon` | numeric | Wobacon. |
+| `xwobacon` | numeric | Xwobacon. |
+| `xbadiff` | numeric | Xbadiff. |
+| `xslgdiff` | numeric | Xslgdiff. |
+| `wobadiff` | numeric | Wobadiff. |
+| `player_type` | character | Player type. |
+| `era` | character | Era. |
+| `xera` | character | Expected ERA. |
+| `avg_hyper_speed` | numeric | Avg hyper speed. |
+| `avg_best_speed` | numeric | Avg best speed. |
+| `distance_hr_avg` | integer | Distance hr avg. |
+| `sprint_speed` | numeric | Sprint speed (ft/sec, top 50% of competitive runs). |
+| `pop_2b` | character | Pop 2b. |
+| `arm_cs_2b` | character | Arm cs 2b. |
+| `strike_rate` | character | Called-strike rate. |
+| `outs_above_average` | integer | Outs Above Average. |
+| `jump_v_avg` | integer | Jump v avg. |
+| `max_arm_strength` | character | Max arm strength (mph). |
+| `arm_overall` | character | Arm overall. |
+| `xhr` | numeric | Xhr. |
+| `swing_take_run_value` | integer | Swing take run value. |
+| `blocks_above_average` | character | Blocks above average. |
+| `cs_above_average` | character | Cs above average. |
+| `fastball_velo` | character | Fastball velo. |
+| `fastball_spin` | character | Fastball spin. |
+| `fastball_extension` | character | Fastball extension. |
+| `curveball_spin` | character | Curveball spin. |
+| `pitch_run_value_fastball` | numeric | Pitch run value fastball. |
+| `pitch_run_value_breaking` | numeric | Pitch run value breaking. |
+| `pitch_run_value_offspeed` | numeric | Pitch run value offspeed. |
+| `group_fastball_velo` | numeric | Group fastball velo. |
+| `group_breaking_velo` | numeric | Group breaking velo. |
+| `group_offspeed_velo` | numeric | Group offspeed velo. |
+| `pitch_usage_fastball` | numeric | Pitch usage fastball. |
+| `pitch_usage_breaking` | numeric | Pitch usage breaking. |
+| `pitch_usage_offspeed` | numeric | Pitch usage offspeed. |
+| `fielding_run_value` | integer | Fielding run value. |
+| `runner_run_value` | integer | Runner run value. |
+| `fielding_run_value_arm` | integer | Fielding run value arm. |
+| `fielding_run_value_framing` | character | Fielding run value framing. |
+| `runner_runs_sb` | integer | Runner runs sb. |
+| `runner_runs_xb` | integer | Runner runs xb. |
+| `net_bases_runner` | integer | Net bases runner. |
+| `net_bases_pitcher` | character | Net bases pitcher. |
+| `fast_swing_rate` | character | Fast-swing rate (>=75 mph). |
+| `squared_up_contact` | character | Squared up contact. |
+| `squared_up_swing` | character | Squared up swing. |
+| `blasts_contact` | character | Blasts contact. |
+| `blasts_swing` | character | Blasts swing. |
+| `swords` | character | Swords. |
+| `avg_swing_speed` | character | Avg swing speed. |
+| `avg_swing_length` | character | Avg swing length. |
+| `attack_angle` | character | Attack angle (deg, bat path at contact). |
+| `vertical_swing_path` | character | Vertical swing path. |
+| `acceleration` | character | Acceleration. |
+| `horizontal_swing_path` | character | Horizontal swing path. |
+| `attack_direction` | character | Attack direction (deg, pull/oppo). |
+| `ideal_angle_rate` | character | Ideal angle rate. |
+| `n_squared_up` | character | Number of squared up. |
+| `n_blasts` | character | Number of blasts. |
+| `arm_angle` | character | Arm angle. |
+| `is_qualified` | integer | Is qualified. |
+| `percent_rank_barrel_unrounded` | character | Percent rank barrel unrounded. |
+| `percent_rank_barrel_batted_rate_unrounded` | character | Percent rank barrel batted rate unrounded. |
+| `percent_rank_exit_velocity_avg_unrounded` | character | Percent rank exit velocity avg unrounded. |
+| `percent_rank_exit_velocity_max_unrounded` | numeric | Percent rank exit velocity max unrounded. |
+| `percent_rank_launch_angle_avg_unrounded` | character | Percent rank launch angle avg unrounded. |
+| `percent_rank_xba_unrounded` | character | Percent rank xba unrounded. |
+| `percent_rank_xslg_unrounded` | character | Percent rank xslg unrounded. |
+| `percent_rank_xwoba_unrounded` | character | Percent rank xwoba unrounded. |
+| `percent_rank_woba_unrounded` | character | Percent rank woba unrounded. |
+| `percent_rank_hard_hit_percent_unrounded` | character | Percent rank hard hit percent unrounded. |
+| `percent_rank_xwobacon_unrounded` | character | Percent rank xwobacon unrounded. |
+| `percent_rank_wobacon_unrounded` | character | Percent rank wobacon unrounded. |
+| `percent_rank_k_percent_unrounded` | character | Percent rank k percent unrounded. |
+| `percent_rank_bb_percent_unrounded` | character | Percent rank bb percent unrounded. |
+| `percent_rank_sz_judge_unrounded` | character | Percent rank sz judge unrounded. |
+| `percent_rank_whiff_percent_unrounded` | character | Percent rank whiff percent unrounded. |
+| `percent_rank_chase_percent_unrounded` | character | Percent rank chase percent unrounded. |
+| `percent_rank_ba_unrounded` | character | Percent rank ba unrounded. |
+| `percent_rank_bacon_unrounded` | character | Percent rank bacon unrounded. |
+| `percent_rank_xbacon_unrounded` | character | Percent rank xbacon unrounded. |
+| `percent_rank_babip_unrounded` | character | Percent rank babip unrounded. |
+| `percent_rank_obp_unrounded` | character | Percent rank obp unrounded. |
+| `percent_rank_slg_unrounded` | character | Percent rank slg unrounded. |
+| `percent_rank_xobp_unrounded` | character | Percent rank xobp unrounded. |
+| `percent_rank_iso_unrounded` | character | Percent rank iso unrounded. |
+| `percent_rank_xiso_unrounded` | character | Percent rank xiso unrounded. |
+| `percent_rank_sweet_spot_percent_unrounded` | character | Percent rank sweet spot percent unrounded. |
+| `percent_rank_distance_hr_avg_unrounded` | character | Percent rank distance hr avg unrounded. |
+| `percent_rank_groundballs_percent_unrounded` | character | Percent rank groundballs percent unrounded. |
+| `percent_rank_airballs_percent_unrounded` | character | Percent rank airballs percent unrounded. |
+| `percent_rank_avg_hyper_speed_unrounded` | character | Percent rank avg hyper speed unrounded. |
+| `percent_rank_avg_best_speed_unrounded` | character | Percent rank avg best speed unrounded. |
+| `percent_rank_pitch_run_value_fastball_unrounded` | character | Percent rank pitch run value fastball unrounded. |
+| `percent_rank_pitch_run_value_breaking_unrounded` | character | Percent rank pitch run value breaking unrounded. |
+| `percent_rank_pitch_run_value_offspeed_unrounded` | character | Percent rank pitch run value offspeed unrounded. |
+| `percent_rank_barrel` | character | Percent rank barrel. |
+| `percent_rank_barrel_batted_rate` | character | Percent rank barrel batted rate. |
+| `percent_rank_exit_velocity_avg` | character | Percent rank exit velocity avg. |
+| `percent_rank_exit_velocity_max` | integer | Percent rank exit velocity max. |
+| `percent_rank_launch_angle_avg` | character | Percent rank launch angle avg. |
+| `percent_rank_xba` | character | Percent rank xba. |
+| `percent_rank_xslg` | character | Percent rank xslg. |
+| `percent_rank_xwoba` | character | Percent rank xwoba. |
+| `percent_rank_woba` | character | Percent rank woba. |
+| `percent_rank_hard_hit_percent` | character | Percent rank hard hit rate. |
+| `percent_rank_xwobacon` | character | Percent rank xwobacon. |
+| `percent_rank_wobacon` | character | Percent rank wobacon. |
+| `percent_rank_k_percent` | character | Percent rank k rate. |
+| `percent_rank_bb_percent` | character | Percent rank bb rate. |
+| `percent_rank_sz_judge` | character | Percent rank sz judge. |
+| `percent_rank_whiff_percent` | character | Percent rank whiff rate. |
+| `percent_rank_chase_percent` | character | Percent rank chase rate. |
+| `percent_rank_ba` | character | Percent rank ba. |
+| `percent_rank_bacon` | character | Percent rank bacon. |
+| `percent_rank_xbacon` | character | Percent rank xbacon. |
+| `percent_rank_babip` | character | Percent rank babip. |
+| `percent_rank_obp` | character | Percent rank obp. |
+| `percent_rank_slg` | character | Percent rank slg. |
+| `percent_rank_xobp` | character | Percent rank xobp. |
+| `percent_rank_iso` | character | Percent rank iso. |
+| `percent_rank_xiso` | character | Percent rank xiso. |
+| `percent_rank_sweet_spot_percent` | character | Percent rank sweet spot rate. |
+| `percent_rank_distance_hr_avg` | character | Percent rank distance hr avg. |
+| `percent_rank_groundballs_percent` | character | Percent rank groundballs rate. |
+| `percent_rank_airballs_percent` | character | Percent rank airballs rate. |
+| `percent_rank_avg_hyper_speed` | character | Percent rank avg hyper speed. |
+| `percent_rank_avg_best_speed` | character | Percent rank avg best speed. |
+| `percent_rank_pitch_run_value_fastball` | character | Percent rank pitch run value fastball. |
+| `percent_rank_pitch_run_value_breaking` | character | Percent rank pitch run value breaking. |
+| `percent_rank_pitch_run_value_offspeed` | character | Percent rank pitch run value offspeed. |
+| `percent_speed_order` | integer | Percent speed order. |
+| `percent_rank_speed_order` | integer | Percent rank speed order. |
+| `percent_rank_pop_2b` | character | Percent rank pop 2b. |
+| `percent_rank_arm_cs_2b` | character | Percent rank arm cs 2b. |
+| `percent_rank_oaa` | character | Percent rank oaa. |
+| `percent_rank_framing` | character | Percent rank framing. |
+| `percent_rank_jump` | character | Percent rank jump. |
+| `percent_rank_fastball_velo` | character | Percent rank fastball velo. |
+| `percent_rank_fastball_spin` | character | Percent rank fastball spin. |
+| `percent_rank_fastball_extension` | character | Percent rank fastball extension. |
+| `percent_rank_cu_spin` | character | Percent rank cu spin. |
+| `percent_rank_xera` | character | Percent rank xera. |
+| `percent_rank_arm_max` | character | Percent rank arm max. |
+| `percent_rank_arm_overall` | character | Percent rank arm overall. |
+| `percent_rank_xhr` | character | Percent rank xhr. |
+| `percent_rank_swing_take_run_value` | character | Percent rank swing take run value. |
+| `percent_rank_blocks_above_average` | character | Percent rank blocks above average. |
+| `percent_rank_cs_above_average` | character | Percent rank cs above average. |
+| `percent_rank_fielding_run_value` | character | Percent rank fielding run value. |
+| `percent_rank_runner_run_value` | character | Percent rank runner run value. |
+| `percent_rank_fielding_run_value_arm` | character | Percent rank fielding run value arm. |
+| `percent_rank_fielding_run_value_framing` | character | Percent rank fielding run value framing. |
+| `percent_rank_swing_speed` | character | Percent rank swing speed. |
+| `percent_rank_swing_length` | character | Percent rank swing length. |
+| `percent_rank_squared_up_swing` | character | Percent rank squared up swing. |
+| `percent_rank_attack_angle` | character | Percent rank attack angle. |
+| `percent_rank_vertical_swing_path` | character | Percent rank vertical swing path. |
+| `percent_rank_acceleration` | character | Percent rank acceleration. |
+| `percent_rank_ideal_angle_rate` | character | Percent rank ideal angle rate. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb import mlb_statcast_player
+df = mlb_statcast_player(592450)
+html = mlb_statcast_player(592450, raw=True)
+```
+
+### `mlb_statcast_search(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_statcast_search}
+
+Pitch-by-pitch MLB Statcast search (`/statcast_search/csv`), date-chunked.
+
+Savant caps a single `/statcast_search/csv` response at **25,000 rows with
+no pagination**. This splits the date range into `chunk_days` windows,
+halving any window that hits the cap, and stitches the chunks back together.
 
 **Parameters**
 
@@ -829,6 +1134,440 @@ _No description available._
 |---|---|---|---|
 | `start_dt` | `str` |  |  |
 | `end_dt` | `str` |  |  |
-| `player_type` | `str` | `'batter'` |  |
-| `chunk_days` | `int` | `7` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `player_type` | `str` | `'batter'` | `"batter"` (default) or `"pitcher"`. |
+| `chunk_days` | `int` | `7` | initial window size in days. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per pitch.
+
+| col_name | type | description |
+|---|---|---|
+| `pitch_type` | character | Pitch type code. |
+| `game_date` | character | Game date. |
+| `release_speed` | numeric | Release speed. |
+| `release_pos_x` | numeric | Release pos x. |
+| `release_pos_z` | numeric | Release pos z. |
+| `player_name` | character | Player name. |
+| `batter` | integer | MLBAM id of the batter. |
+| `pitcher` | integer | MLBAM id of the pitcher. |
+| `events` | character | Events. |
+| `description` | character | Description. |
+| `spin_dir` | character | Spin dir. |
+| `spin_rate_deprecated` | character | Spin rate deprecated. |
+| `break_angle_deprecated` | character | Break angle deprecated. |
+| `break_length_deprecated` | character | Break length deprecated. |
+| `zone` | integer | Zone. |
+| `des` | character | Des. |
+| `game_type` | character | Game type. |
+| `stand` | character | Batter stance side (R/L). |
+| `p_throws` | character | Pitcher throwing hand (R/L). |
+| `home_team` | character | Home team. |
+| `away_team` | character | Away team. |
+| `type` | character | Record/pitch type. |
+| `hit_location` | integer | Hit location. |
+| `bb_type` | character | Bb type. |
+| `balls` | integer | Balls. |
+| `strikes` | integer | Strikes. |
+| `game_year` | integer | Game year. |
+| `pfx_x` | numeric | Horizontal movement (in, pitcher perspective). |
+| `pfx_z` | numeric | Induced vertical movement (in). |
+| `plate_x` | numeric | Plate x. |
+| `plate_z` | numeric | Plate z. |
+| `on_3b` | character | On 3b. |
+| `on_2b` | character | On 2b. |
+| `on_1b` | character | On 1b. |
+| `outs_when_up` | integer | Outs when up. |
+| `inning` | integer | Inning. |
+| `inning_topbot` | character | Inning topbot. |
+| `hc_x` | numeric | Hc x. |
+| `hc_y` | numeric | Hc y. |
+| `tfs_deprecated` | character | Tfs deprecated. |
+| `tfs_zulu_deprecated` | character | Tfs zulu deprecated. |
+| `umpire` | character | Umpire. |
+| `sv_id` | character | Sv id. |
+| `vx0` | numeric | Vx0. |
+| `vy0` | numeric | Vy0. |
+| `vz0` | numeric | Vz0. |
+| `ax` | numeric | Ax. |
+| `ay` | numeric | Ay. |
+| `az` | numeric | Az. |
+| `sz_top` | numeric | Sz top. |
+| `sz_bot` | numeric | Sz bot. |
+| `hit_distance_sc` | integer | Hit distance sc. |
+| `launch_speed` | numeric | Exit velocity of the batted ball (mph). |
+| `launch_angle` | integer | Launch angle (deg). |
+| `effective_speed` | integer | Effective speed. |
+| `release_spin_rate` | integer | Release spin rate. |
+| `release_extension` | numeric | Release extension. |
+| `game_pk` | integer | MLBAM game id. |
+| `fielder_2` | integer | Fielder 2. |
+| `fielder_3` | integer | Fielder 3. |
+| `fielder_4` | integer | Fielder 4. |
+| `fielder_5` | integer | Fielder 5. |
+| `fielder_6` | integer | Fielder 6. |
+| `fielder_7` | integer | Fielder 7. |
+| `fielder_8` | integer | Fielder 8. |
+| `fielder_9` | integer | Fielder 9. |
+| `release_pos_y` | numeric | Release pos y. |
+| `estimated_ba_using_speedangle` | numeric | Estimated ba using speedangle. |
+| `estimated_woba_using_speedangle` | numeric | Estimated woba using speedangle. |
+| `woba_value` | integer | Woba value. |
+| `woba_denom` | integer | Woba denom. |
+| `babip_value` | integer | Babip value. |
+| `iso_value` | integer | Iso value. |
+| `launch_speed_angle` | integer | Launch speed angle. |
+| `at_bat_number` | integer | At bat number. |
+| `pitch_number` | integer | Pitch number. |
+| `pitch_name` | character | Pitch type name. |
+| `home_score` | integer | Home score. |
+| `away_score` | integer | Away score. |
+| `bat_score` | integer | Bat score. |
+| `fld_score` | integer | Fld score. |
+| `post_away_score` | integer | Post away score. |
+| `post_home_score` | integer | Post home score. |
+| `post_bat_score` | integer | Post bat score. |
+| `post_fld_score` | integer | Post fld score. |
+| `if_fielding_alignment` | character | If fielding alignment. |
+| `of_fielding_alignment` | character | Of fielding alignment. |
+| `spin_axis` | integer | Spin axis. |
+| `delta_home_win_exp` | numeric | Delta home win exp. |
+| `delta_run_exp` | numeric | Delta run exp. |
+| `bat_speed` | numeric | Bat speed (mph). |
+| `swing_length` | numeric | Swing length (ft, head travel). |
+| `miss_distance` | character | Average miss distance (in) on swings. |
+| `estimated_slg_using_speedangle` | numeric | Estimated slg using speedangle. |
+| `delta_pitcher_run_exp` | numeric | Delta pitcher run exp. |
+| `hyper_speed` | numeric | Hyper speed. |
+| `home_score_diff` | integer | Home score diff. |
+| `bat_score_diff` | integer | Bat score diff. |
+| `home_win_exp` | numeric | Home win exp. |
+| `bat_win_exp` | numeric | Bat win exp. |
+| `age_pit_legacy` | integer | Age pit legacy. |
+| `age_bat_legacy` | integer | Age bat legacy. |
+| `age_pit` | integer | Age pit. |
+| `age_bat` | integer | Age bat. |
+| `n_thruorder_pitcher` | integer | Number of thruorder pitcher. |
+| `n_priorpa_thisgame_player_at_bat` | integer | Number of priorpa thisgame player at bat. |
+| `pitcher_days_since_prev_game` | integer | Pitcher days since prev game. |
+| `batter_days_since_prev_game` | integer | Batter days since prev game. |
+| `pitcher_days_until_next_game` | integer | Pitcher days until next game. |
+| `batter_days_until_next_game` | integer | Batter days until next game. |
+| `api_break_z_with_gravity` | numeric | Api break z with gravity. |
+| `api_break_x_arm` | numeric | Api break x arm. |
+| `api_break_x_batter_in` | numeric | Api break x batter in. |
+| `arm_angle` | numeric | Arm angle. |
+| `attack_angle` | numeric | Attack angle (deg, bat path at contact). |
+| `attack_direction` | numeric | Attack direction (deg, pull/oppo). |
+| `swing_path_tilt` | numeric | Swing-path tilt (deg). |
+| `intercept_ball_minus_batter_pos_x_inches` | numeric | Intercept ball minus batter pos x inches. |
+| `intercept_ball_minus_batter_pos_y_inches` | numeric | Intercept ball minus batter pos y inches. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb import mlb_statcast_search
+df = mlb_statcast_search("2024-06-15", "2024-06-16", batters_lookup=592450)
+```
+
+### `mlb_statcast_search_minors(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_statcast_search_minors}
+
+Minor-league Statcast search (`/statcast-search-minors/csv`), date-chunked.
+
+Same shape, columns, and 25,000-row chunking as `mlb_statcast_search`,
+but against the MiLB CSV route. Scope with `hfLevel` (Triple-A/Double-A/…)
+and `hfSea` filters.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  |  |
+| `end_dt` | `str` |  |  |
+| `player_type` | `str` | `'batter'` | `"batter"` (default) or `"pitcher"`. |
+| `chunk_days` | `int` | `7` | initial window size in days. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per minor-league pitch.
+
+| col_name | type | description |
+|---|---|---|
+| `pitch_type` | character | Pitch type code. |
+| `game_date` | character | Game date. |
+| `release_speed` | numeric | Release speed. |
+| `release_pos_x` | numeric | Release pos x. |
+| `release_pos_z` | numeric | Release pos z. |
+| `player_name` | character | Player name. |
+| `batter` | integer | MLBAM id of the batter. |
+| `pitcher` | integer | MLBAM id of the pitcher. |
+| `events` | character | Events. |
+| `description` | character | Description. |
+| `spin_dir` | character | Spin dir. |
+| `spin_rate_deprecated` | character | Spin rate deprecated. |
+| `break_angle_deprecated` | character | Break angle deprecated. |
+| `break_length_deprecated` | character | Break length deprecated. |
+| `zone` | integer | Zone. |
+| `des` | character | Des. |
+| `game_type` | character | Game type. |
+| `stand` | character | Batter stance side (R/L). |
+| `p_throws` | character | Pitcher throwing hand (R/L). |
+| `home_team` | character | Home team. |
+| `away_team` | character | Away team. |
+| `type` | character | Record/pitch type. |
+| `hit_location` | integer | Hit location. |
+| `bb_type` | character | Bb type. |
+| `balls` | integer | Balls. |
+| `strikes` | integer | Strikes. |
+| `game_year` | integer | Game year. |
+| `pfx_x` | numeric | Horizontal movement (in, pitcher perspective). |
+| `pfx_z` | numeric | Induced vertical movement (in). |
+| `plate_x` | numeric | Plate x. |
+| `plate_z` | numeric | Plate z. |
+| `on_3b` | character | On 3b. |
+| `on_2b` | character | On 2b. |
+| `on_1b` | character | On 1b. |
+| `outs_when_up` | integer | Outs when up. |
+| `inning` | integer | Inning. |
+| `inning_topbot` | character | Inning topbot. |
+| `hc_x` | numeric | Hc x. |
+| `hc_y` | numeric | Hc y. |
+| `tfs_deprecated` | character | Tfs deprecated. |
+| `tfs_zulu_deprecated` | character | Tfs zulu deprecated. |
+| `umpire` | character | Umpire. |
+| `sv_id` | character | Sv id. |
+| `vx0` | numeric | Vx0. |
+| `vy0` | numeric | Vy0. |
+| `vz0` | numeric | Vz0. |
+| `ax` | numeric | Ax. |
+| `ay` | numeric | Ay. |
+| `az` | numeric | Az. |
+| `sz_top` | numeric | Sz top. |
+| `sz_bot` | numeric | Sz bot. |
+| `hit_distance_sc` | integer | Hit distance sc. |
+| `launch_speed` | numeric | Exit velocity of the batted ball (mph). |
+| `launch_angle` | integer | Launch angle (deg). |
+| `effective_speed` | integer | Effective speed. |
+| `release_spin_rate` | integer | Release spin rate. |
+| `release_extension` | numeric | Release extension. |
+| `game_pk` | integer | MLBAM game id. |
+| `fielder_2` | integer | Fielder 2. |
+| `fielder_3` | integer | Fielder 3. |
+| `fielder_4` | integer | Fielder 4. |
+| `fielder_5` | integer | Fielder 5. |
+| `fielder_6` | integer | Fielder 6. |
+| `fielder_7` | integer | Fielder 7. |
+| `fielder_8` | integer | Fielder 8. |
+| `fielder_9` | integer | Fielder 9. |
+| `release_pos_y` | numeric | Release pos y. |
+| `estimated_ba_using_speedangle` | numeric | Estimated ba using speedangle. |
+| `estimated_woba_using_speedangle` | numeric | Estimated woba using speedangle. |
+| `woba_value` | integer | Woba value. |
+| `woba_denom` | integer | Woba denom. |
+| `babip_value` | integer | Babip value. |
+| `iso_value` | integer | Iso value. |
+| `launch_speed_angle` | integer | Launch speed angle. |
+| `at_bat_number` | integer | At bat number. |
+| `pitch_number` | integer | Pitch number. |
+| `pitch_name` | character | Pitch type name. |
+| `home_score` | integer | Home score. |
+| `away_score` | integer | Away score. |
+| `bat_score` | integer | Bat score. |
+| `fld_score` | integer | Fld score. |
+| `post_away_score` | integer | Post away score. |
+| `post_home_score` | integer | Post home score. |
+| `post_bat_score` | integer | Post bat score. |
+| `post_fld_score` | integer | Post fld score. |
+| `if_fielding_alignment` | character | If fielding alignment. |
+| `of_fielding_alignment` | character | Of fielding alignment. |
+| `spin_axis` | integer | Spin axis. |
+| `delta_home_win_exp` | numeric | Delta home win exp. |
+| `delta_run_exp` | numeric | Delta run exp. |
+| `bat_speed` | numeric | Bat speed (mph). |
+| `swing_length` | numeric | Swing length (ft, head travel). |
+| `miss_distance` | character | Average miss distance (in) on swings. |
+| `estimated_slg_using_speedangle` | numeric | Estimated slg using speedangle. |
+| `delta_pitcher_run_exp` | numeric | Delta pitcher run exp. |
+| `hyper_speed` | numeric | Hyper speed. |
+| `home_score_diff` | integer | Home score diff. |
+| `bat_score_diff` | integer | Bat score diff. |
+| `home_win_exp` | numeric | Home win exp. |
+| `bat_win_exp` | numeric | Bat win exp. |
+| `age_pit_legacy` | integer | Age pit legacy. |
+| `age_bat_legacy` | integer | Age bat legacy. |
+| `age_pit` | integer | Age pit. |
+| `age_bat` | integer | Age bat. |
+| `n_thruorder_pitcher` | integer | Number of thruorder pitcher. |
+| `n_priorpa_thisgame_player_at_bat` | integer | Number of priorpa thisgame player at bat. |
+| `pitcher_days_since_prev_game` | integer | Pitcher days since prev game. |
+| `batter_days_since_prev_game` | integer | Batter days since prev game. |
+| `pitcher_days_until_next_game` | integer | Pitcher days until next game. |
+| `batter_days_until_next_game` | integer | Batter days until next game. |
+| `api_break_z_with_gravity` | numeric | Api break z with gravity. |
+| `api_break_x_arm` | numeric | Api break x arm. |
+| `api_break_x_batter_in` | numeric | Api break x batter in. |
+| `arm_angle` | numeric | Arm angle. |
+| `attack_angle` | numeric | Attack angle (deg, bat path at contact). |
+| `attack_direction` | numeric | Attack direction (deg, pull/oppo). |
+| `swing_path_tilt` | numeric | Swing-path tilt (deg). |
+| `intercept_ball_minus_batter_pos_x_inches` | numeric | Intercept ball minus batter pos x inches. |
+| `intercept_ball_minus_batter_pos_y_inches` | numeric | Intercept ball minus batter pos y inches. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb import mlb_statcast_search_minors
+df = mlb_statcast_search_minors("2024-06-01", "2024-06-02")
+```
+
+### `mlb_statcast_search_wbc(start_dt: 'str', end_dt: 'str', *, player_type: 'str' = 'batter', chunk_days: 'int' = 7, return_as_pandas: 'bool' = False, **filters: 'Any') -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_statcast_search_wbc}
+
+World Baseball Classic Statcast search (`/statcast-search-world-baseball-classic/csv`).
+
+Same shape, columns, and 25,000-row chunking as `mlb_statcast_search`,
+against the WBC CSV route. Pass WBC date windows (e.g. March of a WBC year).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  |  |
+| `end_dt` | `str` |  |  |
+| `player_type` | `str` | `'batter'` | `"batter"` (default) or `"pitcher"`. |
+| `chunk_days` | `int` | `7` | initial window size in days. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per WBC pitch.
+
+| col_name | type | description |
+|---|---|---|
+| `pitch_type` | character | Pitch type code. |
+| `game_date` | character | Game date. |
+| `release_speed` | numeric | Release speed. |
+| `release_pos_x` | numeric | Release pos x. |
+| `release_pos_z` | numeric | Release pos z. |
+| `player_name` | character | Player name. |
+| `batter` | integer | MLBAM id of the batter. |
+| `pitcher` | integer | MLBAM id of the pitcher. |
+| `events` | character | Events. |
+| `description` | character | Description. |
+| `spin_dir` | character | Spin dir. |
+| `spin_rate_deprecated` | character | Spin rate deprecated. |
+| `break_angle_deprecated` | character | Break angle deprecated. |
+| `break_length_deprecated` | character | Break length deprecated. |
+| `zone` | integer | Zone. |
+| `des` | character | Des. |
+| `game_type` | character | Game type. |
+| `stand` | character | Batter stance side (R/L). |
+| `p_throws` | character | Pitcher throwing hand (R/L). |
+| `home_team` | character | Home team. |
+| `away_team` | character | Away team. |
+| `type` | character | Record/pitch type. |
+| `hit_location` | integer | Hit location. |
+| `bb_type` | character | Bb type. |
+| `balls` | integer | Balls. |
+| `strikes` | integer | Strikes. |
+| `game_year` | integer | Game year. |
+| `pfx_x` | numeric | Horizontal movement (in, pitcher perspective). |
+| `pfx_z` | numeric | Induced vertical movement (in). |
+| `plate_x` | numeric | Plate x. |
+| `plate_z` | numeric | Plate z. |
+| `on_3b` | character | On 3b. |
+| `on_2b` | character | On 2b. |
+| `on_1b` | character | On 1b. |
+| `outs_when_up` | integer | Outs when up. |
+| `inning` | integer | Inning. |
+| `inning_topbot` | character | Inning topbot. |
+| `hc_x` | numeric | Hc x. |
+| `hc_y` | numeric | Hc y. |
+| `tfs_deprecated` | character | Tfs deprecated. |
+| `tfs_zulu_deprecated` | character | Tfs zulu deprecated. |
+| `umpire` | character | Umpire. |
+| `sv_id` | character | Sv id. |
+| `vx0` | numeric | Vx0. |
+| `vy0` | numeric | Vy0. |
+| `vz0` | numeric | Vz0. |
+| `ax` | numeric | Ax. |
+| `ay` | numeric | Ay. |
+| `az` | numeric | Az. |
+| `sz_top` | numeric | Sz top. |
+| `sz_bot` | numeric | Sz bot. |
+| `hit_distance_sc` | integer | Hit distance sc. |
+| `launch_speed` | numeric | Exit velocity of the batted ball (mph). |
+| `launch_angle` | integer | Launch angle (deg). |
+| `effective_speed` | integer | Effective speed. |
+| `release_spin_rate` | integer | Release spin rate. |
+| `release_extension` | numeric | Release extension. |
+| `game_pk` | integer | MLBAM game id. |
+| `fielder_2` | integer | Fielder 2. |
+| `fielder_3` | integer | Fielder 3. |
+| `fielder_4` | integer | Fielder 4. |
+| `fielder_5` | integer | Fielder 5. |
+| `fielder_6` | integer | Fielder 6. |
+| `fielder_7` | integer | Fielder 7. |
+| `fielder_8` | integer | Fielder 8. |
+| `fielder_9` | integer | Fielder 9. |
+| `release_pos_y` | numeric | Release pos y. |
+| `estimated_ba_using_speedangle` | numeric | Estimated ba using speedangle. |
+| `estimated_woba_using_speedangle` | numeric | Estimated woba using speedangle. |
+| `woba_value` | integer | Woba value. |
+| `woba_denom` | integer | Woba denom. |
+| `babip_value` | integer | Babip value. |
+| `iso_value` | integer | Iso value. |
+| `launch_speed_angle` | integer | Launch speed angle. |
+| `at_bat_number` | integer | At bat number. |
+| `pitch_number` | integer | Pitch number. |
+| `pitch_name` | character | Pitch type name. |
+| `home_score` | integer | Home score. |
+| `away_score` | integer | Away score. |
+| `bat_score` | integer | Bat score. |
+| `fld_score` | integer | Fld score. |
+| `post_away_score` | integer | Post away score. |
+| `post_home_score` | integer | Post home score. |
+| `post_bat_score` | integer | Post bat score. |
+| `post_fld_score` | integer | Post fld score. |
+| `if_fielding_alignment` | character | If fielding alignment. |
+| `of_fielding_alignment` | character | Of fielding alignment. |
+| `spin_axis` | integer | Spin axis. |
+| `delta_home_win_exp` | numeric | Delta home win exp. |
+| `delta_run_exp` | numeric | Delta run exp. |
+| `bat_speed` | numeric | Bat speed (mph). |
+| `swing_length` | numeric | Swing length (ft, head travel). |
+| `miss_distance` | character | Average miss distance (in) on swings. |
+| `estimated_slg_using_speedangle` | numeric | Estimated slg using speedangle. |
+| `delta_pitcher_run_exp` | numeric | Delta pitcher run exp. |
+| `hyper_speed` | numeric | Hyper speed. |
+| `home_score_diff` | integer | Home score diff. |
+| `bat_score_diff` | integer | Bat score diff. |
+| `home_win_exp` | numeric | Home win exp. |
+| `bat_win_exp` | numeric | Bat win exp. |
+| `age_pit_legacy` | integer | Age pit legacy. |
+| `age_bat_legacy` | integer | Age bat legacy. |
+| `age_pit` | integer | Age pit. |
+| `age_bat` | integer | Age bat. |
+| `n_thruorder_pitcher` | integer | Number of thruorder pitcher. |
+| `n_priorpa_thisgame_player_at_bat` | integer | Number of priorpa thisgame player at bat. |
+| `pitcher_days_since_prev_game` | integer | Pitcher days since prev game. |
+| `batter_days_since_prev_game` | integer | Batter days since prev game. |
+| `pitcher_days_until_next_game` | integer | Pitcher days until next game. |
+| `batter_days_until_next_game` | integer | Batter days until next game. |
+| `api_break_z_with_gravity` | numeric | Api break z with gravity. |
+| `api_break_x_arm` | numeric | Api break x arm. |
+| `api_break_x_batter_in` | numeric | Api break x batter in. |
+| `arm_angle` | numeric | Arm angle. |
+| `attack_angle` | numeric | Attack angle (deg, bat path at contact). |
+| `attack_direction` | numeric | Attack direction (deg, pull/oppo). |
+| `swing_path_tilt` | numeric | Swing-path tilt (deg). |
+| `intercept_ball_minus_batter_pos_x_inches` | numeric | Intercept ball minus batter pos x inches. |
+| `intercept_ball_minus_batter_pos_y_inches` | numeric | Intercept ball minus batter pos y inches. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb import mlb_statcast_search_wbc
+df = mlb_statcast_search_wbc("2023-03-08", "2023-03-22")
+```

@@ -1,0 +1,204 @@
+schema: gamefeed
+kind: dataframe
+columns:
+- name: type
+  type: character
+  description: "Record/pitch type."
+- name: year
+  type: character
+  description: "Season year."
+- name: sport_id
+  type: character
+  description: "Sport id."
+- name: play_id
+  type: character
+  description: "Statcast play UUID."
+- name: inning
+  type: character
+  description: "Inning."
+- name: half_inning
+  type: character
+  description: "Half inning."
+- name: ab_number
+  type: character
+  description: "Ab number."
+- name: cap_index
+  type: character
+  description: "Cap index."
+- name: outs
+  type: character
+  description: "Outs."
+- name: batter
+  type: character
+  description: "MLBAM id of the batter."
+- name: stand
+  type: character
+  description: "Batter stance side (R/L)."
+- name: batter_name
+  type: character
+  description: "Batter name."
+- name: pitcher
+  type: character
+  description: "MLBAM id of the pitcher."
+- name: p_throws
+  type: character
+  description: "Pitcher throwing hand (R/L)."
+- name: pitcher_name
+  type: character
+  description: "Pitcher name."
+- name: catcher
+  type: character
+  description: "Catcher."
+- name: catcher_name
+  type: character
+  description: "Catcher name."
+- name: team_batting
+  type: character
+  description: "Team batting."
+- name: team_fielding
+  type: character
+  description: "Team fielding."
+- name: team_batting_id
+  type: character
+  description: "Team batting id."
+- name: team_fielding_id
+  type: character
+  description: "Team fielding id."
+- name: result
+  type: character
+  description: "Result."
+- name: des
+  type: character
+  description: "Des."
+- name: events
+  type: character
+  description: "Events."
+- name: strikes
+  type: character
+  description: "Strikes."
+- name: balls
+  type: character
+  description: "Balls."
+- name: pre_strikes
+  type: character
+  description: "Pre strikes."
+- name: pre_balls
+  type: character
+  description: "Pre balls."
+- name: call
+  type: character
+  description: "Call."
+- name: call_name
+  type: character
+  description: "Call name."
+- name: pitch_type
+  type: character
+  description: "Pitch type code."
+- name: pitch_name
+  type: character
+  description: "Pitch type name."
+- name: description
+  type: character
+  description: "Description."
+- name: result_code
+  type: character
+  description: "Result code."
+- name: pitch_call
+  type: character
+  description: "Pitch call."
+- name: is_strike_swinging
+  type: character
+  description: "Is strike swinging."
+- name: balls_and_strikes
+  type: character
+  description: "Balls and strikes."
+- name: start_speed
+  type: character
+  description: "Start speed."
+- name: end_speed
+  type: character
+  description: "End speed."
+- name: sz_top
+  type: character
+  description: "Sz top."
+- name: sz_bot
+  type: character
+  description: "Sz bot."
+- name: extension
+  type: character
+  description: "Release extension (ft)."
+- name: plate_time
+  type: character
+  description: "Plate time."
+- name: zone
+  type: character
+  description: "Zone."
+- name: spin_rate
+  type: character
+  description: "Spin rate (rpm)."
+- name: break_x
+  type: character
+  description: "Break x."
+- name: induced_break_z
+  type: character
+  description: "Induced break z."
+- name: break_z
+  type: character
+  description: "Break z."
+- name: px
+  type: character
+  description: "Px."
+- name: pz
+  type: character
+  description: "Pz."
+- name: pfx_x
+  type: character
+  description: "Horizontal movement (in, pitcher perspective)."
+- name: pfx_z
+  type: character
+  description: "Induced vertical movement (in)."
+- name: is_bip_out
+  type: character
+  description: "Is bip out."
+- name: pitch_number
+  type: character
+  description: "Pitch number."
+- name: plate_x
+  type: character
+  description: "Plate x."
+- name: plate_z
+  type: character
+  description: "Plate z."
+- name: hit_speed
+  type: character
+  description: "Hit speed."
+- name: hit_distance
+  type: character
+  description: "Hit distance."
+- name: xba
+  type: character
+  description: "Expected batting average."
+- name: hit_angle
+  type: character
+  description: "Hit angle."
+- name: is_barrel
+  type: character
+  description: "Is barrel."
+- name: hc_x
+  type: character
+  description: "Hc x."
+- name: hc_y
+  type: character
+  description: "Hc y."
+- name: launch_speed
+  type: character
+  description: "Exit velocity of the batted ball (mph)."
+- name: launch_angle
+  type: character
+  description: "Launch angle (deg)."
+- name: game_total_pitches
+  type: character
+  description: "Game total pitches."
+- name: game_pk
+  type: character
+  description: "MLBAM game id."

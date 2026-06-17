@@ -1,0 +1,81 @@
+schema: leaderboard_running_splits
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: name_abbrev
+  type: character
+  description: "Team/name abbreviation."
+- name: team_id
+  type: integer
+  description: "MLBAM team id."
+- name: position_name
+  type: character
+  description: "Position name."
+- name: age
+  type: integer
+  description: "Player age."
+- name: bat_side
+  type: character
+  description: "Batter side (R/L/S)."
+- name: seconds_since_hit_000
+  type: numeric
+  description: "Seconds since hit 000."
+- name: seconds_since_hit_005
+  type: numeric
+  description: "Seconds since hit 005."
+- name: seconds_since_hit_010
+  type: numeric
+  description: "Seconds since hit 010."
+- name: seconds_since_hit_015
+  type: numeric
+  description: "Seconds since hit 015."
+- name: seconds_since_hit_020
+  type: numeric
+  description: "Seconds since hit 020."
+- name: seconds_since_hit_025
+  type: numeric
+  description: "Seconds since hit 025."
+- name: seconds_since_hit_030
+  type: numeric
+  description: "Seconds since hit 030."
+- name: seconds_since_hit_035
+  type: numeric
+  description: "Seconds since hit 035."
+- name: seconds_since_hit_040
+  type: numeric
+  description: "Seconds since hit 040."
+- name: seconds_since_hit_045
+  type: numeric
+  description: "Seconds since hit 045."
+- name: seconds_since_hit_050
+  type: numeric
+  description: "Seconds since hit 050."
+- name: seconds_since_hit_055
+  type: numeric
+  description: "Seconds since hit 055."
+- name: seconds_since_hit_060
+  type: numeric
+  description: "Seconds since hit 060."
+- name: seconds_since_hit_065
+  type: numeric
+  description: "Seconds since hit 065."
+- name: seconds_since_hit_070
+  type: numeric
+  description: "Seconds since hit 070."
+- name: seconds_since_hit_075
+  type: numeric
+  description: "Seconds since hit 075."
+- name: seconds_since_hit_080
+  type: numeric
+  description: "Seconds since hit 080."
+- name: seconds_since_hit_085
+  type: numeric
+  description: "Seconds since hit 085."
+- name: seconds_since_hit_090
+  type: numeric
+  description: "Seconds since hit 090."

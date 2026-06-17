@@ -1,0 +1,84 @@
+schema: leaderboard_park_factors
+kind: dataframe
+columns:
+- name: grouping_venue_conditions
+  type: character
+  description: "Grouping venue conditions."
+- name: key_is_year_rolling
+  type: integer
+  description: "Key is year rolling."
+- name: key_num_years_rolling
+  type: integer
+  description: "Key num years rolling."
+- name: key_year
+  type: integer
+  description: "Key year."
+- name: key_bat_side
+  type: character
+  description: "Key bat side."
+- name: venue_id
+  type: integer
+  description: "Venue id."
+- name: venue_name
+  type: character
+  description: "Ballpark name."
+- name: main_team_id
+  type: integer
+  description: "Main team id."
+- name: name_display_club
+  type: character
+  description: "Club name."
+- name: n_pa
+  type: integer
+  description: "Number of plate appearances."
+- name: index_runs
+  type: integer
+  description: "Index runs."
+- name: index_hardhit
+  type: integer
+  description: "Index hardhit."
+- name: index_woba
+  type: integer
+  description: "Park factor index for wOBA (100 = neutral)."
+- name: index_wobatto
+  type: integer
+  description: "Index wobatto."
+- name: index_wobacon
+  type: integer
+  description: "Index wobacon."
+- name: index_xwobacon
+  type: integer
+  description: "Index xwobacon."
+- name: index_xbacon
+  type: integer
+  description: "Index xbacon."
+- name: index_obp
+  type: integer
+  description: "Index obp."
+- name: index_so
+  type: integer
+  description: "Index so."
+- name: index_bb
+  type: integer
+  description: "Index bb."
+- name: index_bacon
+  type: integer
+  description: "Index bacon."
+- name: index_hits
+  type: integer
+  description: "Index hits."
+- name: index_1b
+  type: integer
+  description: "Index 1b."
+- name: index_2b
+  type: integer
+  description: "Index 2b."
+- name: index_3b
+  type: integer
+  description: "Index 3b."
+- name: index_hr
+  type: integer
+  description: "Index hr."
+- name: year_range
+  type: character
+  description: "Year range."

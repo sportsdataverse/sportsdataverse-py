@@ -6,8 +6,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get
-from sportsdataverse.mlb.mlb_statcast_parsers import parse_mlb_statcast_gamefeed, parse_mlb_statcast_leaderboard
+from sportsdataverse.mlb.mlb_statcast_runtime import _get
+from sportsdataverse.mlb.mlb_statcast_parsers import (
+    parse_mlb_statcast_gamefeed,
+    parse_mlb_statcast_html_leaderboard,
+    parse_mlb_statcast_leaderboard,
+    parse_mlb_statcast_schedule,
+)
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -15,21 +20,58 @@ if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers
 
 __all__ = [
     "mlb_statcast_leaderboard_expected_stats",
+    "mlb_statcast_leaderboard_percentile_rankings",
+    "mlb_statcast_leaderboard_sprint_speed",
+    "mlb_statcast_leaderboard_running_splits",
+    "mlb_statcast_leaderboard_bat_tracking",
+    "mlb_statcast_leaderboard_swing_path",
+    "mlb_statcast_leaderboard_swing_timing",
+    "mlb_statcast_leaderboard_swing_take",
+    "mlb_statcast_leaderboard_exit_velocity_barrels",
+    "mlb_statcast_leaderboard_batted_ball",
+    "mlb_statcast_leaderboard_home_runs",
+    "mlb_statcast_leaderboard_pitch_arsenals",
+    "mlb_statcast_leaderboard_pitch_arsenal_stats",
+    "mlb_statcast_leaderboard_pitch_movement",
+    "mlb_statcast_leaderboard_pitch_tempo",
+    "mlb_statcast_leaderboard_active_spin",
+    "mlb_statcast_leaderboard_spin_direction",
+    "mlb_statcast_leaderboard_arm_angles",
+    "mlb_statcast_leaderboard_pitcher_running_game",
+    "mlb_statcast_leaderboard_outs_above_average",
+    "mlb_statcast_leaderboard_outfield_directional_oaa",
+    "mlb_statcast_leaderboard_outfield_jump",
+    "mlb_statcast_leaderboard_catch_probability",
+    "mlb_statcast_leaderboard_arm_strength",
+    "mlb_statcast_leaderboard_poptime",
+    "mlb_statcast_leaderboard_catcher_framing",
+    "mlb_statcast_leaderboard_catcher_blocking",
+    "mlb_statcast_leaderboard_catcher_throwing",
+    "mlb_statcast_leaderboard_catcher_stance",
+    "mlb_statcast_leaderboard_basestealing_run_value",
+    "mlb_statcast_leaderboard_baserunning_run_value",
+    "mlb_statcast_leaderboard_baserunning",
+    "mlb_statcast_leaderboard_year_to_year",
+    "mlb_statcast_leaderboard_timer_infractions",
+    "mlb_statcast_leaderboard_custom",
+    "mlb_statcast_leaderboard_fielding_run_value",
+    "mlb_statcast_leaderboard_park_factors",
     "mlb_statcast_gamefeed",
-    "mlb_statcast_player_percentile_rankings",
+    "mlb_statcast_schedule",
 ]
 
 
 def mlb_statcast_leaderboard_expected_stats(
     type: Optional[str] = None,
     year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
     csv: Optional[bool] = "true",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA leaderboard (csv=true).
+    """GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/expected_statistics``
     Example URL: https://baseballsavant.mlb.com/leaderboard/expected_statistics
@@ -37,6 +79,7 @@ def mlb_statcast_leaderboard_expected_stats(
     Args:
         type: type query parameter.
         year: year query parameter.
+        team: team query parameter.
         csv: csv query parameter.
         return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -52,6 +95,7 @@ def mlb_statcast_leaderboard_expected_stats(
         params={
             "type": type,
             "year": year,
+            "team": team,
             "csv": csv,
             **{_k: _v for _k, _v in kwargs.items() if _v is not None},
         },
@@ -61,20 +105,1612 @@ def mlb_statcast_leaderboard_expected_stats(
     return raw
 
 
-def mlb_statcast_gamefeed(
-    game_pk: Optional[int] = None,
+def mlb_statcast_leaderboard_percentile_rankings(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /gf — Savant per-game JSON feed.
+    """GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOBA/xBA/xSLG/…).
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/percentile-rankings``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/percentile-rankings
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_percentile_rankings()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/percentile-rankings",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_sprint_speed(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/sprint_speed``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/sprint_speed
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_sprint_speed()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/sprint_speed",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_running_splits(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/running_splits — 90-foot running splits leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/running_splits``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/running_splits
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_running_splits()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/running_splits",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_bat_tracking(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/bat-tracking``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_bat_tracking()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/bat-tracking",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_swing_path(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-angle leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_swing_path()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_swing_timing(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss-distance leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_swing_timing()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_swing_take(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/swing-take — swing/take run-value leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/swing-take``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/swing-take
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_swing_take()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/swing-take",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_exit_velocity_barrels(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/statcast — exit velocity & barrels leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/statcast``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/statcast
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_exit_velocity_barrels()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/statcast",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_batted_ball(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/batted-ball — batted-ball profile leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/batted-ball``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/batted-ball
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_batted_ball()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/batted-ball",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_home_runs(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/home-runs — Statcast home-runs leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/home-runs``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/home-runs
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_home_runs()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/home-runs",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_pitch_arsenals(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-arsenals``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-arsenals
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_pitch_arsenals()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/pitch-arsenals",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_pitch_arsenal_stats(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_pitch_arsenal_stats()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_pitch_movement(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/pitch-movement — pitch-movement leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-movement``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-movement
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_pitch_movement()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/pitch-movement",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_pitch_tempo(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-tempo``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-tempo
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_pitch_tempo()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/pitch-tempo",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_active_spin(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/active-spin — active-spin leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/active-spin``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/active-spin
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_active_spin()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/active-spin",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_spin_direction(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_spin_direction()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_arm_angles(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_arm_angles()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_pitcher_running_game(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners) leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitcher-running-game``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitcher-running-game
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_pitcher_running_game()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/pitcher-running-game",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_outs_above_average(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/outs_above_average``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/outs_above_average
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_outs_above_average()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/outs_above_average",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_outfield_directional_oaa(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/outfield_directional_outs_above_average — outfield directional OAA leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_outfield_directional_oaa()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_outfield_jump(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/outfield_jump — outfielder jump leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/outfield_jump``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/outfield_jump
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_outfield_jump()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/outfield_jump",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_catch_probability(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catch_probability``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catch_probability
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_catch_probability()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/catch_probability",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_arm_strength(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/arm-strength``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/arm-strength
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_arm_strength()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/arm-strength",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_poptime(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/poptime — catcher pop-time leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/poptime``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/poptime
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_poptime()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/poptime",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_catcher_framing(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/catcher-framing — catcher framing leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-framing``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-framing
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_catcher_framing()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/catcher-framing",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_catcher_blocking(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-blocking``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-blocking
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_catcher_blocking()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/catcher-blocking",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_catcher_throwing(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-throwing``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-throwing
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_catcher_throwing()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/catcher-throwing",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_catcher_stance(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/catcher-stance — catcher stance leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-stance``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-stance
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_catcher_stance()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/catcher-stance",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_basestealing_run_value(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/basestealing-run-value``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/basestealing-run-value
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_basestealing_run_value()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/basestealing-run-value",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_baserunning_run_value(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/baserunning-run-value``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/baserunning-run-value
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_baserunning_run_value()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/baserunning-run-value",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_baserunning(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/baserunning``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/baserunning
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_baserunning()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/baserunning",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_year_to_year(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_year_to_year()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_timer_infractions(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard.
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_timer_infractions()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_custom(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    selections: Optional[str] = None,
+    filter: Optional[str] = None,
+    min: Optional[Union[int, str]] = None,
+    sort: Optional[str] = None,
+    sort_dir: Optional[str] = None,
+    csv: Optional[bool] = "true",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated selections).
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/custom``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/custom
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        selections: selections query parameter.
+        filter: filter query parameter.
+        min: min query parameter.
+        sort: sort query parameter.
+        sort_dir: sortDir query parameter.
+        csv: csv query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_custom()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/custom",
+        params={
+            "type": type,
+            "year": year,
+            "selections": selections,
+            "filter": filter,
+            "min": min,
+            "sort": sort,
+            "sortDir": sort_dir,
+            "csv": csv,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_fielding_run_value(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/fielding-run-value — fielding run-value leaderboard (HTML-embedded JSON).
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/fielding-run-value``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/fielding-run-value
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_html_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_fielding_run_value()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/fielding-run-value",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_html_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_leaderboard_park_factors(
+    type: Optional[str] = None,
+    year: Optional[Union[int, str]] = None,
+    team: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /leaderboard/statcast-park-factors — Statcast park-factors leaderboard (HTML-embedded JSON).
+
+    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/statcast-park-factors``
+    Example URL: https://baseballsavant.mlb.com/leaderboard/statcast-park-factors
+
+    Args:
+        type: type query parameter.
+        year: year query parameter.
+        team: team query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_html_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        >>> mlb_statcast_leaderboard_park_factors()
+    """
+    raw = _get(
+        "https://baseballsavant.mlb.com/leaderboard/statcast-park-factors",
+        params={
+            "type": type,
+            "year": year,
+            "team": team,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_mlb_statcast_html_leaderboard(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def mlb_statcast_gamefeed(
+    game_pk: Optional[int] = None,
+    at_bat_number: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 
     Endpoint: ``GET https://baseballsavant.mlb.com/gf``
     Example URL: https://baseballsavant.mlb.com/gf
 
     Args:
         game_pk: game_pk query parameter.
+        at_bat_number: at_bat_number query parameter.
         return_parsed: parse the payload through parse_mlb_statcast_gamefeed -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -88,6 +1724,7 @@ def mlb_statcast_gamefeed(
         "https://baseballsavant.mlb.com/gf",
         params={
             "game_pk": game_pk,
+            "at_bat_number": at_bat_number,
             **{_k: _v for _k, _v in kwargs.items() if _v is not None},
         },
     )
@@ -96,42 +1733,36 @@ def mlb_statcast_gamefeed(
     return raw
 
 
-def mlb_statcast_player_percentile_rankings(
-    type: Optional[str] = None,
-    year: Optional[Union[int, str]] = None,
-    csv: Optional[bool] = "true",
+def mlb_statcast_schedule(
+    date: Optional[str] = None,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """GET /leaderboard/percentile-rankings — player percentile sliders (csv=true).
+    """GET /schedule — Savant schedule feed (one row per game).
 
-    Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/percentile-rankings``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/percentile-rankings
+    Endpoint: ``GET https://baseballsavant.mlb.com/schedule``
+    Example URL: https://baseballsavant.mlb.com/schedule
 
     Args:
-        type: type query parameter.
-        year: year query parameter.
-        csv: csv query parameter.
-        return_parsed: parse the payload through parse_mlb_statcast_leaderboard -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        date: date query parameter.
+        return_parsed: parse the payload through parse_mlb_statcast_schedule -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
-        >>> mlb_statcast_player_percentile_rankings()
+        >>> mlb_statcast_schedule()
     """
     raw = _get(
-        "https://baseballsavant.mlb.com/leaderboard/percentile-rankings",
+        "https://baseballsavant.mlb.com/schedule",
         params={
-            "type": type,
-            "year": year,
-            "csv": csv,
+            "date": date,
             **{_k: _v for _k, _v in kwargs.items() if _v is not None},
         },
     )
     if return_parsed:
-        return parse_mlb_statcast_leaderboard(raw, return_as_pandas=return_as_pandas)
+        return parse_mlb_statcast_schedule(raw, return_as_pandas=return_as_pandas)
     return raw

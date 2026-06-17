@@ -1,0 +1,63 @@
+schema: leaderboard_pitch_arsenal_stats
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: team_name_alt
+  type: character
+  description: "Team name (alternate form)."
+- name: pitch_type
+  type: character
+  description: "Pitch type code."
+- name: pitch_name
+  type: character
+  description: "Pitch type name."
+- name: run_value_per_100
+  type: numeric
+  description: "Run value per 100 pitches."
+- name: run_value
+  type: integer
+  description: "Run value (runs)."
+- name: pitches
+  type: integer
+  description: "Pitches."
+- name: pitch_usage
+  type: numeric
+  description: "Pitch usage."
+- name: pa
+  type: integer
+  description: "Plate appearances."
+- name: ba
+  type: numeric
+  description: "Batting average."
+- name: slg
+  type: numeric
+  description: "Slugging percentage."
+- name: woba
+  type: numeric
+  description: "Weighted on-base average."
+- name: whiff_percent
+  type: numeric
+  description: "Whiff rate (swings and misses / swings)."
+- name: k_percent
+  type: numeric
+  description: "Strikeout rate."
+- name: put_away
+  type: numeric
+  description: "Put away."
+- name: est_ba
+  type: numeric
+  description: "Expected batting average (xBA)."
+- name: est_slg
+  type: numeric
+  description: "Expected slugging (xSLG)."
+- name: est_woba
+  type: numeric
+  description: "Expected wOBA (xwOBA)."
+- name: hard_hit_percent
+  type: numeric
+  description: "Hard-hit rate (95+ mph EV)."

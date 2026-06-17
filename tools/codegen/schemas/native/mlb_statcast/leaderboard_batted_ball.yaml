@@ -1,0 +1,57 @@
+schema: leaderboard_batted_ball
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: "MLBAM player id."
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: year
+  type: integer
+  description: "Season year."
+- name: bbe
+  type: integer
+  description: "Batted-ball events."
+- name: gb_rate
+  type: numeric
+  description: "Gb rate."
+- name: air_rate
+  type: numeric
+  description: "Air rate."
+- name: fb_rate
+  type: numeric
+  description: "Fb rate."
+- name: ld_rate
+  type: numeric
+  description: "Ld rate."
+- name: pu_rate
+  type: numeric
+  description: "Pu rate."
+- name: pull_rate
+  type: numeric
+  description: "Pull rate."
+- name: straight_rate
+  type: numeric
+  description: "Straight rate."
+- name: oppo_rate
+  type: numeric
+  description: "Oppo rate."
+- name: pull_gb_rate
+  type: numeric
+  description: "Pull gb rate."
+- name: straight_gb_rate
+  type: numeric
+  description: "Straight gb rate."
+- name: oppo_gb_rate
+  type: numeric
+  description: "Oppo gb rate."
+- name: pull_air_rate
+  type: numeric
+  description: "Pull air rate."
+- name: straight_air_rate
+  type: numeric
+  description: "Straight air rate."
+- name: oppo_air_rate
+  type: numeric
+  description: "Oppo air rate."

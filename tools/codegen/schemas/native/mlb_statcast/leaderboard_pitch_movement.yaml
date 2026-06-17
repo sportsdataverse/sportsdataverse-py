@@ -1,0 +1,75 @@
+schema: leaderboard_pitch_movement
+kind: dataframe
+columns:
+- name: year
+  type: integer
+  description: "Season year."
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: pitcher_id
+  type: integer
+  description: "MLBAM id of the pitcher."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: team_name_abbrev
+  type: character
+  description: "Team name abbrev."
+- name: pitch_hand
+  type: character
+  description: "Pitcher handedness (R/L)."
+- name: avg_speed
+  type: integer
+  description: "Average pitch velocity (mph)."
+- name: pitches_thrown
+  type: integer
+  description: "Pitches thrown."
+- name: total_pitches
+  type: integer
+  description: "Total pitches."
+- name: pitches_per_game
+  type: numeric
+  description: "Pitches per game."
+- name: pitch_per
+  type: numeric
+  description: "Pitch per."
+- name: pitch_type
+  type: character
+  description: "Pitch type code."
+- name: pitch_type_name
+  type: character
+  description: "Pitch type name."
+- name: pitcher_break_z
+  type: numeric
+  description: "Pitcher break z."
+- name: league_break_z
+  type: numeric
+  description: "League break z."
+- name: diff_z
+  type: numeric
+  description: "Diff z."
+- name: rise
+  type: integer
+  description: "Rise."
+- name: pitcher_break_z_induced
+  type: numeric
+  description: "Pitcher break z induced."
+- name: pitcher_break_x
+  type: numeric
+  description: "Pitcher break x."
+- name: league_break_x
+  type: numeric
+  description: "League break x."
+- name: diff_x
+  type: numeric
+  description: "Diff x."
+- name: tail
+  type: integer
+  description: "Tail."
+- name: percent_rank_diff_z
+  type: numeric
+  description: "Percent rank diff z."
+- name: percent_rank_diff_x
+  type: numeric
+  description: "Percent rank diff x."

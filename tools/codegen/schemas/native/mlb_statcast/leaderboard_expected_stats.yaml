@@ -1,0 +1,45 @@
+schema: leaderboard_expected_stats
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: year
+  type: integer
+  description: "Season year."
+- name: pa
+  type: integer
+  description: "Plate appearances."
+- name: bip
+  type: integer
+  description: "Balls in play."
+- name: ba
+  type: numeric
+  description: "Batting average."
+- name: est_ba
+  type: numeric
+  description: "Expected batting average (xBA)."
+- name: est_ba_minus_ba_diff
+  type: numeric
+  description: "xBA minus actual BA (over/under-performance)."
+- name: slg
+  type: numeric
+  description: "Slugging percentage."
+- name: est_slg
+  type: numeric
+  description: "Expected slugging (xSLG)."
+- name: est_slg_minus_slg_diff
+  type: numeric
+  description: "xSLG minus actual SLG."
+- name: woba
+  type: numeric
+  description: "Weighted on-base average."
+- name: est_woba
+  type: numeric
+  description: "Expected wOBA (xwOBA)."
+- name: est_woba_minus_woba_diff
+  type: numeric
+  description: "xwOBA minus actual wOBA."

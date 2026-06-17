@@ -1,0 +1,54 @@
+schema: leaderboard_catcher_blocking
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: player_name
+  type: character
+  description: "Player name."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: start_year
+  type: integer
+  description: "First season in the range."
+- name: end_year
+  type: character
+  description: "Last season in the range."
+- name: pitches
+  type: integer
+  description: "Pitches."
+- name: catcher_blocking_runs
+  type: integer
+  description: "Catcher blocking runs."
+- name: blocks_above_average
+  type: integer
+  description: "Blocks above average."
+- name: n_pbwp
+  type: integer
+  description: "Number of pbwp."
+- name: x_pbwp
+  type: numeric
+  description: "X pbwp."
+- name: blocks_above_average_per_game
+  type: numeric
+  description: "Blocks above average per game."
+- name: freq_pbwp_easy
+  type: numeric
+  description: "Freq pbwp easy."
+- name: freq_pbwp_medium
+  type: numeric
+  description: "Freq pbwp medium."
+- name: freq_pbwp_tough
+  type: numeric
+  description: "Freq pbwp tough."
+- name: diff_pbwp_easy
+  type: numeric
+  description: "Diff pbwp easy."
+- name: diff_pbwp_medium
+  type: numeric
+  description: "Diff pbwp medium."
+- name: diff_pbwp_tough
+  type: numeric
+  description: "Diff pbwp tough."

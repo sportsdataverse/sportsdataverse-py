@@ -1,0 +1,36 @@
+schema: leaderboard_swing_take
+kind: dataframe
+columns:
+- name: year
+  type: character
+  description: "Season year."
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: character
+  description: "MLBAM player id."
+- name: team_id
+  type: character
+  description: "MLBAM team id."
+- name: pa
+  type: character
+  description: "Plate appearances."
+- name: pitches
+  type: character
+  description: "Pitches."
+- name: runs_all
+  type: character
+  description: "Runs all."
+- name: runs_heart
+  type: character
+  description: "Runs heart."
+- name: runs_shadow
+  type: character
+  description: "Runs shadow."
+- name: runs_chase
+  type: character
+  description: "Runs chase."
+- name: runs_waste
+  type: character
+  description: "Runs waste."

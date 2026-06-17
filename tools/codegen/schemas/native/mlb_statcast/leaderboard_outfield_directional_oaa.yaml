@@ -1,0 +1,39 @@
+schema: leaderboard_outfield_directional_oaa
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: attempts
+  type: integer
+  description: "Opportunities/attempts."
+- name: n_outs_above_average
+  type: integer
+  description: "Outs Above Average (count)."
+- name: n_oaa_slice_back_left
+  type: integer
+  description: "Number of oaa slice back left."
+- name: n_oaa_slice_back
+  type: integer
+  description: "Number of oaa slice back."
+- name: n_oaa_slice_back_right
+  type: integer
+  description: "Number of oaa slice back right."
+- name: n_oaa_slice_back_all
+  type: integer
+  description: "Number of oaa slice back all."
+- name: n_oaa_slice_in_left
+  type: integer
+  description: "Number of oaa slice in left."
+- name: n_oaa_slice_in
+  type: integer
+  description: "Number of oaa slice in."
+- name: n_oaa_slice_in_right
+  type: integer
+  description: "Number of oaa slice in right."
+- name: n_oaa_slice_in_all
+  type: integer
+  description: "Number of oaa slice in all."

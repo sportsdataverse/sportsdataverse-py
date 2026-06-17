@@ -239,11 +239,11 @@ def test_mlb_api_schedule_opening_day_2024_returns_games():
 
 
 def test_statcast_leaderboard_expected_statistics_2024_nonempty():
-    from sportsdataverse.mlb.mlb_statcast import statcast_leaderboard_expected_statistics
+    from sportsdataverse.mlb import mlb_statcast_leaderboard_expected_stats
 
-    result = statcast_leaderboard_expected_statistics(year=2024)
-    # Returns a polars DataFrame (csv=True default) or a pandas DataFrame
-    # depending on return_as_pandas; the default gives polars.
+    result = mlb_statcast_leaderboard_expected_stats(type="batter", year=2024)
+    # Returns a parsed polars DataFrame by default (return_parsed=True), or a
+    # pandas DataFrame with return_as_pandas=True.
     try:
         import polars as pl
 
@@ -261,7 +261,7 @@ def test_statcast_leaderboard_expected_statistics_2024_nonempty():
     except ImportError:
         pass
     # Fallback: if some other collection-like (list, dict, etc.)
-    assert result is not None, "statcast_leaderboard_expected_statistics returned None"
+    assert result is not None, "mlb_statcast_leaderboard_expected_stats returned None"
     # If it's a dict with a non-empty content, accept that too
     if hasattr(result, "__len__"):
         assert len(result) > 0, f"result is empty: {type(result)}"
@@ -661,10 +661,10 @@ def test_espn_cfb_summary_live_uses_football_pattern():
 
 def test_statcast_search_returns_polars_frame_for_small_date_range():
     """A 2-day mid-season slice fits well under the 25k cap and should
-    return a polars DataFrame with the expected ~90-column wide schema."""
-    from sportsdataverse.mlb import statcast_search
+    return a polars DataFrame with the expected wide pitch-level schema."""
+    from sportsdataverse.mlb import mlb_statcast_search
 
-    df = statcast_search(start_date="2024-06-15", end_date="2024-06-16")
+    df = mlb_statcast_search(start_dt="2024-06-15", end_dt="2024-06-16")
     # The exact row count varies by query day, but a full slate of MLB
     # games typically ships >=4,000 pitches per day league-wide.
     try:
@@ -677,23 +677,21 @@ def test_statcast_search_returns_polars_frame_for_small_date_range():
         assert len(df) > 1000
 
 
-def test_statcast_search_chunked_stitches_multi_week_range():
-    """A 3-week range will exceed the 25k cap in a single response so
-    the chunked variant must auto-chunk and stitch client-side without
-    triggering a truncation error.
+def test_statcast_search_auto_chunks_multi_week_range():
+    """A 3-week range exceeds the 25k cap in a single response, so
+    ``mlb_statcast_search`` must auto-chunk and stitch client-side without
+    raising.
 
     ``chunk_days=3`` is intentional: a peak-season MLB week (~5k
     pitches/day × 7 = 35k) blows past the 25k Savant cap on a single
-    7-day chunk, which would defeat the test's purpose of proving the
-    stitching path works. 3-day chunks (~12-15k pitches each) keep
-    every individual request safely under the cap while still requiring
-    ~7 chunks to cover the 21-day range — exercising the loop, the
-    stitch, and the cross-chunk concat."""
-    from sportsdataverse.mlb import statcast_search_chunked
+    7-day chunk. 3-day chunks (~12-15k pitches each) keep every request
+    under the cap while still requiring ~7 chunks across the 21-day
+    range — exercising the loop, the stitch, and the cross-chunk concat."""
+    from sportsdataverse.mlb import mlb_statcast_search
 
-    df = statcast_search_chunked(
-        start_date="2024-06-01",
-        end_date="2024-06-21",
+    df = mlb_statcast_search(
+        start_dt="2024-06-01",
+        end_dt="2024-06-21",
         chunk_days=3,
     )
     try:
@@ -706,21 +704,50 @@ def test_statcast_search_chunked_stitches_multi_week_range():
         assert len(df) > 25_000
 
 
-def test_statcast_search_raises_runtime_error_on_truncation():
-    """An unfiltered 7-day range typically blows past the 25k cap.
-    With raise_on_truncation=True (default), the wrapper must raise
-    RuntimeError rather than silently shipping a partial frame."""
-    import pytest as _pytest
+def test_statcast_search_handles_full_week_without_raising():
+    """An unfiltered 7-day range blows past the 25k single-response cap.
+    ``mlb_statcast_search`` must transparently re-chunk (halving the
+    window) and return a stitched frame larger than the cap rather than
+    raising or silently truncating."""
+    from sportsdataverse.mlb import mlb_statcast_search
 
-    from sportsdataverse.mlb import statcast_search
+    df = mlb_statcast_search(start_dt="2024-07-08", end_dt="2024-07-14", chunk_days=7)
+    try:
+        import polars as pl
 
-    # Use a known full week from the 2024 regular season — should hit
-    # exactly 25,000 rows when the response is truncated.
-    with _pytest.raises(RuntimeError, match=r"25,?000"):
-        statcast_search(
-            start_date="2024-07-08",
-            end_date="2024-07-14",
-        )
+        assert isinstance(df, pl.DataFrame)
+        assert df.height > 25_000, f"auto re-chunk should exceed the single-response cap, got {df.height}"
+    except ImportError:
+        assert len(df) > 25_000
+
+
+def test_statcast_search_minors_returns_milb_pitches():
+    """The minor-league CSV route returns the same wide pitch schema."""
+    from sportsdataverse.mlb import mlb_statcast_search_minors
+
+    df = mlb_statcast_search_minors(start_dt="2024-06-01", end_dt="2024-06-02", chunk_days=2)
+    try:
+        import polars as pl
+
+        assert isinstance(df, pl.DataFrame)
+        assert df.height > 100, f"expected MiLB pitches over 2 days, got {df.height}"
+    except ImportError:
+        assert len(df) > 100
+
+
+def test_statcast_gamefeed_parses_pitch_rows():
+    """The /gf feed parses to one row per pitch (team_home + team_away)."""
+    from sportsdataverse.mlb import mlb_statcast_gamefeed
+
+    df = mlb_statcast_gamefeed(game_pk=745444)
+    try:
+        import polars as pl
+
+        assert isinstance(df, pl.DataFrame)
+        assert df.height > 100, f"expected >100 tracked pitches, got {df.height}"
+        assert "pitch_type" in df.columns
+    except ImportError:
+        assert len(df) > 100
 
 
 # ===========================================================================

@@ -1,0 +1,84 @@
+schema: leaderboard_catcher_stance
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: "MLBAM player id."
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: year
+  type: integer
+  description: "Season year."
+- name: pitches
+  type: integer
+  description: "Pitches."
+- name: knee_down_pct
+  type: numeric
+  description: "Share of pitches received in a knee-down stance."
+- name: l_down_r_up_pct
+  type: numeric
+  description: "L down r up rate."
+- name: r_down_l_up_pct
+  type: numeric
+  description: "R down l up rate."
+- name: both_down_pct
+  type: numeric
+  description: "Both down rate."
+- name: both_up_pct
+  type: numeric
+  description: "Both up rate."
+- name: extended_leg_pct
+  type: numeric
+  description: "Extended leg rate."
+- name: inside_down_pct
+  type: numeric
+  description: "Inside down rate."
+- name: outside_down_pct
+  type: numeric
+  description: "Outside down rate."
+- name: one_knee_framing_rv
+  type: numeric
+  description: "One knee framing rv."
+- name: other_framing_rv
+  type: integer
+  description: "Other framing rv."
+- name: one_knee_calledstr_pct
+  type: numeric
+  description: "One knee calledstr rate."
+- name: other_calledstr_pct
+  type: character
+  description: "Other calledstr rate."
+- name: one_knee_blocking_rv
+  type: numeric
+  description: "One knee blocking rv."
+- name: other_blocking_rv
+  type: integer
+  description: "Other blocking rv."
+- name: one_knee_pbwp100
+  type: numeric
+  description: "One knee pbwp100."
+- name: other_pbwp100
+  type: character
+  description: "Other pbwp100."
+- name: one_knee_throwing_rv
+  type: integer
+  description: "One knee throwing rv."
+- name: other_throwing_rv
+  type: integer
+  description: "Other throwing rv."
+- name: one_knee_csaa100
+  type: integer
+  description: "One knee csaa100."
+- name: other_csaa100
+  type: character
+  description: "Other csaa100."
+- name: catching_rv
+  type: numeric
+  description: "Catching rv."
+- name: one_knee_pitching_rv
+  type: numeric
+  description: "One knee pitching rv."
+- name: other_pitching_rv
+  type: numeric
+  description: "Other pitching rv."
