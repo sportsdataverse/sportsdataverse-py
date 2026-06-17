@@ -76,12 +76,12 @@ ESPN endpoint.
 | `uid` | character | ESPN UID string. |
 | `time_valid` | logical | Whether the start time is confirmed. |
 | `season_year` | integer | Season year string ('YYYY-YY' format). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `season_type` | integer | ESPN season-phase numeric code (1=pre-season, 2=regular season, 3=postseason, 4=off-season). |
 | `season_slug` | character | Season slug. |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | ESPN numeric identifier for the league or competition. |
 | `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
-| `competition_id` | character | Id of the primary competition (equals `event_id` for NHL). |
+| `league_abbreviation` | character | Abbreviation for the league or competition (e.g. 'ICC', 'T20'). |
+| `competition_id` | character | ESPN numeric identifier for the primary competition (game) in the header. |
 | `competition_date` | character | Date and time of the competition as recorded in the game header. |
 | `neutral_site` | logical | Neutral site. |
 | `status_name` | character | Status label. |
@@ -93,7 +93,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `total` | character | Total. |
 | `runs_total` | character | Total runs scored by the team or batting side in this innings. |
 | `extras` | character | Additional runs awarded to the batting side from wides, no-balls, byes, or leg byes in this innings. |
@@ -110,7 +110,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `overs` | character | Number of overs bowled by the bowler in this innings. |
@@ -125,14 +125,14 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `partnership_runs` | character | Total runs scored during the batting partnership for this fall-of-wicket record. |
 | `partnership_overs` | character | Number of overs faced during the batting partnership for this fall-of-wicket record. |
 | `wicket_name` | character | Name or label identifying the wicket at which this batting partnership ended. |
 | `fow_type` | character | Type classification for this fall-of-wicket entry (e.g., caught, bowled, run out). |
-| `player1_name` | character | V2 PBP primary player name. |
+| `player1_name` | character | Name of the first batter in the batting partnership for this fall-of-wicket entry. |
 | `player1_runs` | character | Runs contributed by the first player in the batting partnership. |
-| `player2_name` | character | V2 PBP secondary player name. |
+| `player2_name` | character | Name of the second batter in the batting partnership for this fall-of-wicket entry. |
 | `player2_runs` | character | Runs contributed by the second player in the batting partnership. |
 
 **rosters**
@@ -174,7 +174,7 @@ ESPN endpoint.
 | `matches_lost` | integer | Total number of matches lost by the team in the current stage or competition group. |
 | `noresult` | integer | Number of matches that ended without a result (e.g., rain-affected or abandoned) for the team. |
 | `match_points` | integer | Total competition points accumulated by the team based on match outcomes in the group or stage. |
-| `qualified` | integer | True/False indicator of whether or not player meets minimum play requirement |
+| `qualified` | integer | Boolean qualification flag indicating whether the team has secured advancement from the current group or stage. |
 | `netrr` | double | Net Run Rate for the team, a tiebreaker metric used in cricket group standings. |
 | `for` | double | Total runs or score accumulated by the team across all matches in the group or stage. |
 | `against` | double | Total runs or score conceded by the team across all matches in the group or stage. |

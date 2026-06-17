@@ -74,12 +74,12 @@ ESPN endpoint.
 | `uid` | character | ESPN UID string. |
 | `time_valid` | logical | Whether the start time is confirmed. |
 | `season_year` | integer | Season year string ('YYYY-YY' format). |
-| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `season_type` | integer | ESPN season-phase numeric code (1=pre-season, 2=regular season, 3=postseason, 4=off-season). |
 | `season_slug` | character | Season slug. |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | ESPN numeric identifier for the league or competition. |
 | `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
-| `competition_id` | character | Id of the primary competition (equals `event_id` for NHL). |
+| `league_abbreviation` | character | Abbreviation for the league or competition (e.g. 'ICC', 'T20'). |
+| `competition_id` | character | ESPN numeric identifier for the primary competition (game) in the header. |
 | `competition_date` | character | Date and time of the competition as recorded in the game header. |
 | `neutral_site` | logical | Neutral site. |
 | `status_name` | character | Status label. |
@@ -115,7 +115,7 @@ ESPN endpoint.
 | `clock_value` | double | Clock value in seconds. |
 | `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
 | `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `scoring_play` | logical | TRUE if the play resulted in points scored. |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
 | `athlete_name` | character | Athlete display name (ESPN). |
@@ -126,7 +126,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `home_away` | character | Game venue label ('home' or 'away'). |
 | `fouls_committed` | character | Total number of fouls committed by the team during the match. |
@@ -172,7 +172,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `category` | character | Category label. |
 | `category_slug` | character | Machine-readable slug identifying the statistical category the player entry belongs to in the box score. |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
@@ -221,7 +221,7 @@ ESPN endpoint.
 | `competition_name` | character | Full name of the competition or tournament to which this series match belongs. |
 | `round_name` | character | Name or label for the round or stage of the competition in which this series match is played. |
 | `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
+| `league_abbreviation` | character | Abbreviation for the league or competition (e.g. 'ICC', 'T20'). |
 | `opponent` | integer | Opposing team of player |
 | `perspective_team_id` | character | ESPN identifier for the team whose perspective is used to orient the series or match result display. |
 
@@ -230,7 +230,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `display_order` | integer | Numeric order in which the team or entry is displayed within the box score table. |
 | `event_id` | character | Unique event / game identifier (ESPN). |
 | `game_date` | character | Game date (YYYY-MM-DD). |
@@ -243,7 +243,7 @@ ESPN endpoint.
 | `game_result` | character | Game result for the player's team (`W`/`L`). |
 | `competition_name` | character | Full name of the competition or tournament to which this series match belongs. |
 | `league_name` | character | League name. |
-| `league_abbreviation` | character | League abbreviation (e.g. 'AL'). |
+| `league_abbreviation` | character | Abbreviation for the league or competition (e.g. 'ICC', 'T20'). |
 | `opponent` | integer | Opposing team of player |
 
 **game_info**
@@ -263,7 +263,7 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `team_entry_id` | character | ESPN identifier for the team entry associated with this shootout or penalty record. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Full display name of the team (e.g. 'Chennai Super Kings'). |
 | `shot_id` | character | ESPN identifier for an individual shootout or penalty kick attempt. |
 | `player_id` | character | Unique player identifier. |
 | `player` | character | Penalized player name. |

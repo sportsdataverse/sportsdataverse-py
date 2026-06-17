@@ -477,7 +477,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_conference_id` | character | Unique identifier for home conference. |
 | `home_score` | character | Home-team score after the play. |
 | `home_current_rank` | integer | AP or Coaches Poll ranking of the home team at the time of the game (null if unranked). |
-| `home_linescores` | integer | Per-period point totals for the home team, stored as an array of quarter/overtime scores. |
+| `home_linescores` | list | Per-period point totals for the home team, stored as an array of quarter/overtime scores. |
 | `home_records` | character | Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `away_id` | character | Away team referencing id. |
 | `away_uid` | character | Away team's uid. |
@@ -494,7 +494,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_conference_id` | character | Unique identifier for away conference. |
 | `away_score` | character | Away-team score after the play. |
 | `away_current_rank` | integer | AP or Coaches Poll ranking of the away team at the time of the game (null if unranked). |
-| `away_linescores` | integer | Per-period point totals for the away team, stored as an array of quarter/overtime scores. |
+| `away_linescores` | list | Per-period point totals for the away team, stored as an array of quarter/overtime scores. |
 | `away_records` | character | Win-loss record of the away team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `game_id` | integer | ESPN game identifier. |
 | `season` | integer | Season (4-digit year). |

@@ -65,7 +65,7 @@ A polars (or pandas) DataFrame of all games in the data repository.
 **Example**
 
 ```python
->>> load_pwhl_games()
+load_pwhl_games()
 ```
 
 ### `load_pwhl_goalie_box(seasons, return_as_pandas: 'bool' = False)` {#load_pwhl_goalie_box}

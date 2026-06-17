@@ -15,10 +15,24 @@ SCHEMA_DIR = os.path.join(ROOT, "tools", "codegen", "schemas")
 
 
 def _league_of(path: str) -> str | None:
-    """Best-effort league slug from an autodoc schema path (schemas/autodoc/<league>/..)."""
+    """Best-effort league slug from a schema path.
+
+    Handles two cases:
+    * ``schemas/autodoc/<league>/...``  → return ``<league>``
+    * ``schemas/<name>/<league>.yaml``  where ``<name>`` is NOT ``autodoc`` or ``native``
+      (e.g. ``schemas/news/nfl.yaml``, ``schemas/standings/nba.yaml``) → return file stem
+      (the stem is the league slug, matching how ``_return_table`` passes ``league.prefix``).
+
+    Top-level files (e.g. ``schemas/scoreboard.yaml``, depth==1) and ``native/<stem>/``
+    subdirs (stem is an API family, not a league) remain ``None``.
+    """
     rel = os.path.relpath(path, SCHEMA_DIR).replace("\\", "/").split("/")
     if rel[0] == "autodoc" and len(rel) >= 2:
         return rel[1]
+    # schemas/<name>/<league>.yaml — two-segment relative path, <name> not autodoc/native
+    if len(rel) == 2 and rel[0] not in ("autodoc", "native"):
+        stem = os.path.splitext(rel[1])[0]
+        return stem
     return None
 
 
@@ -35,8 +49,9 @@ def iter_schema_columns() -> list[dict]:
     out: list[dict] = []
     for f in glob.glob(os.path.join(SCHEMA_DIR, "**", "*.yaml"), recursive=True):
         try:
-            d = yaml.safe_load(open(f, encoding="utf-8"))
-        except Exception:
+            with open(f, encoding="utf-8") as fh:
+                d = yaml.safe_load(fh)
+        except (yaml.YAMLError, OSError):
             continue
         if not isinstance(d, dict):
             continue

@@ -432,7 +432,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | The number of points the home team scored. Is NA for games which haven't yet been played. |
 | `home_current_rank` | integer | Current AP or ESPN power ranking of the home team at the time of the game. |
-| `home_linescores` | integer | Comma-separated or serialized quarter-by-quarter score totals for the home team. |
+| `home_linescores` | list | Comma-separated or serialized quarter-by-quarter score totals for the home team. |
 | `home_records` | character | Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference). |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
@@ -448,7 +448,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | The number of points the away team scored. Is NA for games which haven't yet been played. |
 | `away_current_rank` | integer | Current AP or ESPN power ranking of the away team at the time of the game. |
-| `away_linescores` | integer | Comma-separated or serialized quarter-by-quarter score totals for the away team. |
+| `away_linescores` | list | Comma-separated or serialized quarter-by-quarter score totals for the away team. |
 | `away_records` | character | Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference). |
 | `game_id` | integer | Ten digit identifier for NFL game. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
@@ -5034,9 +5034,9 @@ A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_game_pbp
->>> pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
->>> pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
+from sportsdataverse.nfl import nfl_game_pbp
+pbp = nfl_game_pbp(game_id="7d3e8f84-1312-11ef-afd1-646009f18b2e")
+pbp.select(["quarter", "down", "yardsToGo", "playType", "playDescription"]).head()
 ```
 
 ### `nfl_game_schedule(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_schedule}
@@ -5137,9 +5137,9 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_gamecenter_overview
->>> ov = nfl_ngs_gamecenter_overview(game_id="2024090500", group="passers")
->>> ov.select(["side", "playerName", "position"]).head()
+from sportsdataverse.nfl import nfl_ngs_gamecenter_overview
+ov = nfl_ngs_gamecenter_overview(game_id="2024090500", group="passers")
+ov.select(["side", "playerName", "position"]).head()
 ```
 
 ### `nfl_ngs_leaders(category: 'str' = 'speed', season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_leaders}
@@ -5236,9 +5236,9 @@ A polars (or pandas) `DataFrame`, one row per leader entry.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_leaders
->>> fast = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
->>> fast.select(["leader_playerName", "leader_maxSpeed", "play_playDescription"]).head()
+from sportsdataverse.nfl import nfl_ngs_leaders
+fast = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+fast.select(["leader_playerName", "leader_maxSpeed", "play_playDescription"]).head()
 ```
 
 ### `nfl_ngs_league_schedule(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_league_schedule}
@@ -5338,9 +5338,9 @@ A polars (or pandas) `DataFrame`, one row per scheduled game.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_league_schedule
->>> sched = nfl_ngs_league_schedule(season=2024, season_type="REG", week=1)
->>> first_game_id = sched["gameId"][0]
+from sportsdataverse.nfl import nfl_ngs_league_schedule
+sched = nfl_ngs_league_schedule(season=2024, season_type="REG", week=1)
+first_game_id = sched["gameId"][0]
 ```
 
 ### `nfl_ngs_league_schedule_current(return_as_pandas: 'bool' = False)` {#nfl_ngs_league_schedule_current}
@@ -5433,9 +5433,9 @@ A polars (or pandas) `DataFrame`, one row per game in the current week.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_league_schedule_current
->>> cur = nfl_ngs_league_schedule_current()
->>> cur.select(["gameId", "homeTeamAbbr", "visitorTeamAbbr"]).head()
+from sportsdataverse.nfl import nfl_ngs_league_schedule_current
+cur = nfl_ngs_league_schedule_current()
+cur.select(["gameId", "homeTeamAbbr", "visitorTeamAbbr"]).head()
 ```
 
 ### `nfl_ngs_league_teams(return_as_pandas: 'bool' = False)` {#nfl_ngs_league_teams}
@@ -5484,9 +5484,9 @@ A polars (or pandas) `DataFrame`, one row per team.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_league_teams
->>> teams = nfl_ngs_league_teams()
->>> teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
+from sportsdataverse.nfl import nfl_ngs_league_teams
+teams = nfl_ngs_league_teams()
+teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
 ```
 
 ### `nfl_ngs_microsite_chart(season: 'int' = 2024, season_type: 'str' = 'REG', week=None, chart_type=None, team_id=None, limit: 'int' = 100, offset: 'int' = 0, return_as_pandas: 'bool' = False)` {#nfl_ngs_microsite_chart}
@@ -5551,9 +5551,9 @@ A polars (or pandas) `DataFrame`, one row per chart in the page.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_microsite_chart
->>> charts = nfl_ngs_microsite_chart(season=2024, season_type="REG", limit=25)
->>> charts.select(["playerName", "type", "imageName"]).head()
+from sportsdataverse.nfl import nfl_ngs_microsite_chart
+charts = nfl_ngs_microsite_chart(season=2024, season_type="REG", limit=25)
+charts.select(["playerName", "type", "imageName"]).head()
 ```
 
 ### `nfl_ngs_microsite_chart_players(season: 'int' = 2024, season_type: 'str' = 'REG', return_as_pandas: 'bool' = False)` {#nfl_ngs_microsite_chart_players}
@@ -5586,9 +5586,9 @@ A polars (or pandas) `DataFrame`, one row per player.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_microsite_chart_players
->>> who = nfl_ngs_microsite_chart_players(season=2024, season_type="REG")
->>> who.select(["playerName", "esbId"]).head()
+from sportsdataverse.nfl import nfl_ngs_microsite_chart_players
+who = nfl_ngs_microsite_chart_players(season=2024, season_type="REG")
+who.select(["playerName", "esbId"]).head()
 ```
 
 ### `nfl_ngs_play_is_highlight(game_id, play_id, return_as_pandas: 'bool' = False)` {#nfl_ngs_play_is_highlight}
@@ -5667,11 +5667,11 @@ A one-row polars (or pandas) `DataFrame` with `gameId`, `playId`, `isHighlight` 
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_leaders, nfl_ngs_play_is_highlight
->>> lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
->>> gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
->>> hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
->>> hl.select(["gameId", "playId", "isHighlight"]).head()
+from sportsdataverse.nfl import nfl_ngs_leaders, nfl_ngs_play_is_highlight
+lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
+gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
+hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
+hl.select(["gameId", "playId", "isHighlight"]).head()
 ```
 
 ### `nfl_ngs_statboard(stat_type: 'str' = 'passing', season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_statboard}
@@ -5746,9 +5746,9 @@ A polars (or pandas) `DataFrame`, one row per qualifying player.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_statboard
->>> qb = nfl_ngs_statboard(stat_type="passing", season=2024, season_type="REG")
->>> qb.select(["playerName", "passerRating", "completionPercentageAboveExpectation"]).head()
+from sportsdataverse.nfl import nfl_ngs_statboard
+qb = nfl_ngs_statboard(stat_type="passing", season=2024, season_type="REG")
+qb.select(["playerName", "passerRating", "completionPercentageAboveExpectation"]).head()
 ```
 
 ### `nfl_ngs_statboard_leaders(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_statboard_leaders}
@@ -5900,9 +5900,9 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_ngs_statboard_leaders
->>> bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
->>> bd["category"].unique().to_list()
+from sportsdataverse.nfl import nfl_ngs_statboard_leaders
+bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
+bd["category"].unique().to_list()
 ```
 
 ### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None, force_refresh: 'bool' = False) -> 'str'` {#nfl_token_gen}
@@ -6005,9 +6005,9 @@ A polars (or pandas) `DataFrame`, one row per game.
 **Example**
 
 ```python
->>> from sportsdataverse.nfl import nfl_week_games
->>> sched = nfl_week_games(season=2024, season_type="REG", week=1)
->>> sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
+from sportsdataverse.nfl import nfl_week_games
+sched = nfl_week_games(season=2024, season_type="REG", week=1)
+sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
 ```
 
 ### `reset_config() -> 'NflConfig'` {#reset_config}

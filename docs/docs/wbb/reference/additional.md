@@ -441,7 +441,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Whether the home team won. |
 | `home_current_rank` | integer | Current AP/coaches poll ranking of the home team at the time of the game. |
-| `home_linescores` | integer | Points scored by the home team in each period or half of the game. |
+| `home_linescores` | list | Points scored by the home team in each period or half of the game. |
 | `home_records` | character | Win-loss record string for the home team at the time of the game. |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
@@ -459,7 +459,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Whether the away team won. |
 | `away_current_rank` | integer | Current AP/coaches poll ranking of the away team at the time of the game. |
-| `away_linescores` | integer | Points scored by the away team in each period or half of the game. |
+| `away_linescores` | list | Points scored by the away team in each period or half of the game. |
 | `away_records` | character | Win-loss record string for the away team at the time of the game. |
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |

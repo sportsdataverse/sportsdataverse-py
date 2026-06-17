@@ -382,7 +382,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_venue_id` | character | Unique identifier for home venue. |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team final score. |
-| `home_linescores` | integer | Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period. |
+| `home_linescores` | list | Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period. |
 | `home_records` | character | Serialized win-loss-overtime record string for the home team at the time of the scheduled game. |
 | `away_id` | character | Away team ESPN identifier. |
 | `away_uid` | character | Away team's uid. |
@@ -397,7 +397,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_venue_id` | character | Unique identifier for away venue. |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team final score. |
-| `away_linescores` | integer | Period-by-period goal totals for the away team, stored as an array of integer scores indexed by period. |
+| `away_linescores` | list | Period-by-period goal totals for the away team, stored as an array of integer scores indexed by period. |
 | `away_records` | character | Serialized win-loss-overtime record string for the away team at the time of the scheduled game. |
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season year (echoed from arg). |
@@ -631,7 +631,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
->>> nhl_scoreboard(date="2024-03-01")
+nhl_scoreboard(date="2024-03-01")
 ```
 
 ## Dataset loaders
@@ -697,7 +697,7 @@ A polars (or pandas) DataFrame of all games in the data repository.
 **Example**
 
 ```python
->>> load_nhl_games()
+load_nhl_games()
 ```
 
 ### `load_nhl_goalie_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_goalie_box}

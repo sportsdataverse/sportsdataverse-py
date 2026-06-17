@@ -307,7 +307,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Whether the home team won. |
-| `home_linescores` | integer | Period-by-period point totals for the home team, stored as a list of integer scores. |
+| `home_linescores` | list | Period-by-period point totals for the home team, stored as a list of integer scores. |
 | `home_records` | character | Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference). |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
@@ -323,7 +323,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Whether the away team won. |
-| `away_linescores` | integer | Period-by-period point totals for the away team, stored as a list of integer scores. |
+| `away_linescores` | list | Period-by-period point totals for the away team, stored as a list of integer scores. |
 | `away_records` | character | Win-loss record strings for the away team across relevant splits (e.g., overall, home/away, conference). |
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |

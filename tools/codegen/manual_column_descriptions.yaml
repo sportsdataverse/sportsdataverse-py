@@ -2845,6 +2845,7 @@ summary:
   captain: Indicates whether the player was designated as a team captain for this game.
   category_slug: Machine-readable slug identifying the statistical category the player entry belongs to in the box score.
   competition_date: Date and time of the competition as recorded in the game header.
+  competition_id: ESPN numeric identifier for the primary competition (game) in the header.
   competition_name: Full name of the competition or tournament to which this series match belongs.
   completions/passing_attempts: Pass completion ratio for the player in the box score, expressed as completions divided by pass attempts.
   conceded: Total runs conceded by the bowler during their spell in this innings.
@@ -2882,6 +2883,8 @@ summary:
   is_final: Boolean flag indicating whether the game has reached a final or completed status.
   is_national: Boolean flag indicating whether the broadcast is a nationally distributed feed.
   kick_return_touchdowns: Number of touchdowns scored on kick returns by the player in the box score.
+  league_abbreviation: Abbreviation for the league or competition (e.g. 'ICC', 'T20').
+  league_id: ESPN numeric identifier for the league or competition.
   league_midsize_name: Medium-length display name for the league or competition as shown in the game header.
   links_api_artwork_href: API endpoint URL for artwork or imagery associated with the article.
   links_sportscenter_href: URL for the article's page on ESPN's SportsCenter platform.
@@ -2918,7 +2921,9 @@ summary:
   perspective_team_id: ESPN identifier for the team whose perspective is used to orient the series or match result display.
   pitches: Total number of pitches thrown or faced by the player in the box score.
   pitches_strikes: Combined count of pitches thrown and strikes recorded for the pitcher in the box score.
+  player1_name: Name of the first batter in the batting partnership for this fall-of-wicket entry.
   player1_runs: Runs contributed by the first player in the batting partnership.
+  player2_name: Name of the second batter in the batting partnership for this fall-of-wicket entry.
   player2_runs: Runs contributed by the second player in the batting partnership.
   possession_pct: Percentage of total ball possession time held by the team during the match.
   power_play_saves: Number of saves made by the goaltender during power-play situations in the game.
@@ -2929,6 +2934,7 @@ summary:
   punts_inside20: Number of punts by the player that were downed or stopped inside the opposing team's 20-yard line.
   qb_hits: Number of times the player made contact with the opposing quarterback after or during a pass attempt.
   qb_rating: Traditional passer rating for the quarterback in the box score, calculated from completions, yards, touchdowns, and interceptions.
+  qualified: Boolean qualification flag indicating whether the team has secured advancement from the current group or stage.
   rb_is: Runs batted in and other secondary hitting statistics for the player in the box score.
   receiving_targets: Number of passing targets directed at the receiver during the game.
   receiving_touchdowns: Number of receiving touchdowns scored by the player in the box score.
@@ -2937,6 +2943,7 @@ summary:
   runs_total: Total runs scored by the team or batting side in this innings.
   rushing_touchdowns: Number of rushing touchdowns scored by the player in the box score.
   sacks_sack_yards_lost: Combined sack statistics for the player, including sack count and total yards lost by the opposing offense.
+  season_type: ESPN season-phase numeric code (1=pre-season, 2=regular season, 3=postseason, 4=off-season).
   shootout_shots_against: Number of shootout attempts faced by the goaltender in the game's shootout.
   short_handed_saves: Number of saves made by the goaltender while the team was shorthanded in the game.
   short_handed_time_on_ice: Total time the player spent on the ice while the team was at a numerical disadvantage (shorthanded) in the game.
@@ -2961,6 +2968,7 @@ summary:
   sudden_death_periods: Number of sudden-death overtime periods defined in the game format rules.
   tackle_pct: Percentage of the team's tackle attempts that were effective in winning possession.
   team_entry_id: ESPN identifier for the team entry associated with this shootout or penalty record.
+  team_name: Full display name of the team (e.g. 'Chennai Super Kings').
   team_participants: Teams or participants associated with a specific drive or sequence in the broadcast record.
   time_display: Human-readable game clock time at which a match event occurred.
   time_elapsed_display_value: Human-readable duration of time elapsed during the drive or scoring sequence.

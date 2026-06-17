@@ -396,7 +396,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_score` | character | Home team score at the time of the play. |
 | `home_winner` | logical | Home team's winner. |
 | `home_current_rank` | integer | Current national poll ranking of the home team at the time of the game, or null if unranked. |
-| `home_linescores` | integer | Period-by-period scoring breakdown for the home team, serialized as a packed integer sequence. |
+| `home_linescores` | list | Period-by-period scoring breakdown for the home team, serialized as a packed integer sequence. |
 | `home_records` | character | Win-loss record string(s) for the home team across applicable record categories (e.g., overall, conference). |
 | `away_id` | character | Unique identifier for away. |
 | `away_uid` | character | Away team's uid. |
@@ -414,7 +414,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_score` | character | Away team score at the time of the play. |
 | `away_winner` | logical | Away team's winner. |
 | `away_current_rank` | integer | Current national poll ranking of the away team at the time of the game, or null if unranked. |
-| `away_linescores` | integer | Period-by-period scoring breakdown for the away team, serialized as a packed integer sequence. |
+| `away_linescores` | list | Period-by-period scoring breakdown for the away team, serialized as a packed integer sequence. |
 | `away_records` | character | Win-loss record string(s) for the away team across applicable record categories (e.g., overall, conference). |
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season year. |
