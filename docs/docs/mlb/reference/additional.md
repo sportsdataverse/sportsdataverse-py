@@ -165,7 +165,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `batting_on_base_pct` | double | Team batting: batting on base pct. |
 | `batting_ops` | double | Team batting: batting ops. |
 | `batting_ground_to_fly_ratio` | double | Team batting: batting ground to fly ratio. |
-| `batting_runs_created_per27_outs` | double |  |
+| `batting_runs_created_per27_outs` | double | Bill James Runs Created per 27 outs, estimating how many runs a lineup of this batter would score per game. |
 | `batting_batter_rating` | double | Team batting: batting batter rating. |
 | `batting_at_bats_per_home_run` | double | Team batting: batting at bats per home run. |
 | `batting_stolen_base_pct` | double | Team batting: batting stolen base pct. |
@@ -176,46 +176,46 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `batting_secondary_avg_minus_ba` | double | Team batting: batting secondary avg minus ba. |
 | `batting_runs_produced` | double | Team batting: batting runs produced. |
 | `batting_runs_ratio` | double | Team batting: batting runs ratio. |
-| `batting_patience_ratio` | double |  |
-| `batting_bipa` | double |  |
-| `batting_mlb_rating` | double |  |
-| `batting_off_warbr` | double |  |
-| `batting_warbr` | double |  |
-| `fielding_games_played` | double |  |
-| `fielding_team_games_played` | double |  |
-| `fielding_double_plays` | double |  |
-| `fielding_opportunities` | double |  |
-| `fielding_errors` | double |  |
-| `fielding_passed_balls` | double |  |
-| `fielding_assists` | double |  |
-| `fielding_outfield_assists` | double |  |
-| `fielding_pickoffs` | double |  |
-| `fielding_putouts` | double |  |
-| `fielding_outs_on_field` | double |  |
-| `fielding_triple_plays` | double |  |
-| `fielding_balls_in_zone` | double |  |
-| `fielding_extra_bases` | double |  |
-| `fielding_outs_made` | double |  |
-| `fielding_hits` | double |  |
-| `fielding_total_bases` | double |  |
-| `fielding_games_started` | double |  |
-| `fielding_catcher_third_innings_played` | double |  |
-| `fielding_catcher_caught_stealing` | double |  |
-| `fielding_catcher_stolen_bases_allowed` | double |  |
-| `fielding_catcher_earned_runs` | double |  |
-| `fielding_is_qualified` | double |  |
-| `fielding_is_qualified_catcher` | double |  |
-| `fielding_is_qualified_pitcher` | double |  |
-| `fielding_successful_chances` | double |  |
-| `fielding_total_chances` | double |  |
-| `fielding_full_innings_played` | double |  |
-| `fielding_part_innings_played` | double |  |
-| `fielding_fielding_pct` | double |  |
-| `fielding_range_factor` | double |  |
-| `fielding_zone_rating` | double |  |
-| `fielding_catcher_caught_stealing_pct` | double |  |
-| `fielding_catcher_era` | double |  |
-| `fielding_def_warbr` | double |  |
+| `batting_patience_ratio` | double | Ratio of walks to strikeouts, measuring a batter's plate discipline and ability to work counts. |
+| `batting_bipa` | double | Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact. |
+| `batting_mlb_rating` | double | ESPN's composite MLB rating for the batter reflecting overall offensive performance. |
+| `batting_off_warbr` | double | Offensive Wins Above Replacement (Baseball Reference methodology) attributable to the batter's hitting contributions. |
+| `batting_warbr` | double | Total Wins Above Replacement (Baseball Reference methodology) for the batter including offense and baserunning. |
+| `fielding_games_played` | double | Number of games in which the player appeared defensively at their position. |
+| `fielding_team_games_played` | double | Number of games the player's team played while the player was on the active roster. |
+| `fielding_double_plays` | double | Number of double plays the fielder participated in during the season. |
+| `fielding_opportunities` | double | Total fielding opportunities defined as putouts plus assists plus errors for the player. |
+| `fielding_errors` | double | Number of fielding errors charged to the player during the season. |
+| `fielding_passed_balls` | double | Number of pitches ruled as passed balls charged to the catcher during the season. |
+| `fielding_assists` | double | Number of assists recorded by the fielder when a thrown ball contributes to an out. |
+| `fielding_outfield_assists` | double | Number of outfield assists, recorded when an outfielder throws out a runner. |
+| `fielding_pickoffs` | double | Number of baserunners picked off by pitchers while this catcher was behind the plate or this fielder was at their position. |
+| `fielding_putouts` | double | Number of putouts recorded by the fielder where they made the final play to retire a batter or runner. |
+| `fielding_outs_on_field` | double | Total outs recorded across all innings the player was present on the field. |
+| `fielding_triple_plays` | double | Number of triple plays in which the fielder participated during the season. |
+| `fielding_balls_in_zone` | double | Number of batted balls that entered the fielder's defined defensive zone. |
+| `fielding_extra_bases` | double | Extra bases allowed by the outfielder due to errors or misplays on balls hit into their zone. |
+| `fielding_outs_made` | double | Total outs the fielder was directly responsible for recording during the season. |
+| `fielding_hits` | double | Number of hits recorded while this fielder was positioned, relevant for zone-rating calculations. |
+| `fielding_total_bases` | double | Total bases allowed by the outfielder on balls hit into their zone, used in advanced defensive metrics. |
+| `fielding_games_started` | double | Number of games the player started at their primary defensive position. |
+| `fielding_catcher_third_innings_played` | double | Total one-third innings played behind the plate by the catcher, expressed in thirds. |
+| `fielding_catcher_caught_stealing` | double | Number of opposing baserunners thrown out attempting to steal a base by this catcher. |
+| `fielding_catcher_stolen_bases_allowed` | double | Number of successful stolen bases allowed by the catcher during the season. |
+| `fielding_catcher_earned_runs` | double | Earned runs allowed while this catcher was behind the plate, used in catcher ERA calculations. |
+| `fielding_is_qualified` | double | Indicator flag for whether the player meets minimum innings requirements to qualify for fielding rate stats. |
+| `fielding_is_qualified_catcher` | double | Indicator flag for whether the catcher meets the minimum innings threshold to qualify for catcher-specific rate stats. |
+| `fielding_is_qualified_pitcher` | double | Indicator flag for whether the pitcher qualifies for pitcher fielding rate statistics. |
+| `fielding_successful_chances` | double | Total successful fielding chances defined as putouts plus assists (errors excluded). |
+| `fielding_total_chances` | double | Total fielding chances (putouts + assists + errors) offered to the player during the season. |
+| `fielding_full_innings_played` | double | Number of complete innings (three outs per side) the player appeared in the field. |
+| `fielding_part_innings_played` | double | Number of fractional (partial) innings the player appeared in the field, expressed as a count of thirds. |
+| `fielding_fielding_pct` | double | Fielding percentage calculated as successful chances divided by total chances (putouts + assists + errors). |
+| `fielding_range_factor` | double | Range factor per nine innings (putouts + assists) / innings * 9, measuring a fielder's defensive range. |
+| `fielding_zone_rating` | double | Percentage of batted balls in the fielder's defined zone that were successfully converted into outs. |
+| `fielding_catcher_caught_stealing_pct` | double | Percentage of opposing stolen base attempts that resulted in the catcher throwing out the runner. |
+| `fielding_catcher_era` | double | ERA of pitchers while this specific catcher was behind the plate over the season. |
+| `fielding_def_warbr` | double | Defensive Wins Above Replacement (Baseball Reference methodology) attributable to the player's fielding. |
 | `team_id` | integer | Unique ESPN team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID). |
 | `team_guid` | character | ESPN team GUID. |

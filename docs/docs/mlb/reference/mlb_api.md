@@ -26,7 +26,7 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `schedule_date` | character |  |
+| `schedule_date` | character | The calendar date grouping postseason games in this response row, as returned by the MLB Stats API schedule endpoint. |
 | `game_pk` | integer | Unique game identifier. |
 | `game_guid` | character | Globally unique game identifier (GUID). |
 | `link` | character | API link to the game feed. |
@@ -149,9 +149,9 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `team_id` | integer | Unique ESPN team identifier. |
 | `team_name` | character | Team name. |
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
-| `parent_team_id` | integer |  |
+| `parent_team_id` | integer | MLB Stats API identifier for the player's parent (MLB-level) organization, useful for tracking players on optional assignment. |
 | `batting_order` | character | Spot in the batting order (1-9). |
-| `all_positions` | character |  |
+| `all_positions` | character | All fielding positions played by the player during the game, as a list of position codes. |
 | `person_id` | integer | MLB player ID. |
 | `person_full_name` | character | Player full name. |
 | `person_link` | character | API relative link to the person. |
@@ -162,220 +162,220 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `position_abbreviation` | character | Position abbreviation. |
 | `status_code` | character | Status code identifier (e.g. 'S', 'P', 'I', 'F'). |
 | `status_description` | character | Roster status description (e.g. 'Active'). |
-| `stats_batting_summary` | character |  |
-| `stats_batting_games_played` | double |  |
-| `stats_batting_fly_outs` | double |  |
-| `stats_batting_ground_outs` | double |  |
-| `stats_batting_air_outs` | double |  |
-| `stats_batting_runs` | double |  |
-| `stats_batting_doubles` | double |  |
-| `stats_batting_triples` | double |  |
-| `stats_batting_home_runs` | double |  |
-| `stats_batting_strike_outs` | double |  |
-| `stats_batting_base_on_balls` | double |  |
-| `stats_batting_intentional_walks` | double |  |
-| `stats_batting_hits` | double |  |
-| `stats_batting_hit_by_pitch` | double |  |
-| `stats_batting_at_bats` | double |  |
-| `stats_batting_caught_stealing` | double |  |
-| `stats_batting_stolen_bases` | double |  |
-| `stats_batting_stolen_base_percentage` | character |  |
-| `stats_batting_ground_into_double_play` | double |  |
-| `stats_batting_ground_into_triple_play` | double |  |
-| `stats_batting_plate_appearances` | double |  |
-| `stats_batting_total_bases` | double |  |
-| `stats_batting_rbi` | double |  |
-| `stats_batting_left_on_base` | double |  |
-| `stats_batting_sac_bunts` | double |  |
-| `stats_batting_sac_flies` | double |  |
-| `stats_batting_catchers_interference` | double |  |
-| `stats_batting_pickoffs` | double |  |
-| `stats_batting_at_bats_per_home_run` | character |  |
-| `stats_batting_pop_outs` | double |  |
-| `stats_batting_line_outs` | double |  |
-| `stats_fielding_caught_stealing` | double |  |
-| `stats_fielding_stolen_bases` | double |  |
-| `stats_fielding_stolen_base_percentage` | character |  |
-| `stats_fielding_caught_stealing_percentage` | character |  |
-| `stats_fielding_assists` | double |  |
-| `stats_fielding_put_outs` | double |  |
-| `stats_fielding_errors` | double |  |
-| `stats_fielding_chances` | double |  |
-| `stats_fielding_fielding` | character |  |
-| `stats_fielding_passed_ball` | double |  |
-| `stats_fielding_pickoffs` | double |  |
-| `season_stats_batting_games_played` | integer |  |
-| `season_stats_batting_fly_outs` | integer |  |
-| `season_stats_batting_ground_outs` | integer |  |
-| `season_stats_batting_air_outs` | integer |  |
-| `season_stats_batting_runs` | integer |  |
-| `season_stats_batting_doubles` | integer |  |
-| `season_stats_batting_triples` | integer |  |
-| `season_stats_batting_home_runs` | integer |  |
-| `season_stats_batting_strike_outs` | integer |  |
-| `season_stats_batting_base_on_balls` | integer |  |
-| `season_stats_batting_intentional_walks` | integer |  |
-| `season_stats_batting_hits` | integer |  |
-| `season_stats_batting_hit_by_pitch` | integer |  |
-| `season_stats_batting_avg` | character |  |
-| `season_stats_batting_at_bats` | integer |  |
-| `season_stats_batting_obp` | character |  |
-| `season_stats_batting_slg` | character |  |
-| `season_stats_batting_ops` | character |  |
-| `season_stats_batting_caught_stealing` | integer |  |
-| `season_stats_batting_stolen_bases` | integer |  |
-| `season_stats_batting_stolen_base_percentage` | character |  |
-| `season_stats_batting_caught_stealing_percentage` | character |  |
-| `season_stats_batting_ground_into_double_play` | integer |  |
-| `season_stats_batting_ground_into_triple_play` | integer |  |
-| `season_stats_batting_plate_appearances` | integer |  |
-| `season_stats_batting_total_bases` | integer |  |
-| `season_stats_batting_rbi` | integer |  |
-| `season_stats_batting_left_on_base` | integer |  |
-| `season_stats_batting_sac_bunts` | integer |  |
-| `season_stats_batting_sac_flies` | integer |  |
-| `season_stats_batting_babip` | character |  |
-| `season_stats_batting_ground_outs_to_airouts` | character |  |
-| `season_stats_batting_catchers_interference` | integer |  |
-| `season_stats_batting_pickoffs` | integer |  |
-| `season_stats_batting_at_bats_per_home_run` | character |  |
-| `season_stats_batting_pop_outs` | integer |  |
-| `season_stats_batting_line_outs` | integer |  |
-| `season_stats_pitching_games_played` | integer |  |
-| `season_stats_pitching_games_started` | integer |  |
-| `season_stats_pitching_fly_outs` | integer |  |
-| `season_stats_pitching_ground_outs` | integer |  |
-| `season_stats_pitching_air_outs` | integer |  |
-| `season_stats_pitching_runs` | integer |  |
-| `season_stats_pitching_doubles` | integer |  |
-| `season_stats_pitching_triples` | integer |  |
-| `season_stats_pitching_home_runs` | integer |  |
-| `season_stats_pitching_strike_outs` | integer |  |
-| `season_stats_pitching_base_on_balls` | integer |  |
-| `season_stats_pitching_intentional_walks` | integer |  |
-| `season_stats_pitching_hits` | integer |  |
-| `season_stats_pitching_hit_by_pitch` | integer |  |
-| `season_stats_pitching_at_bats` | integer |  |
-| `season_stats_pitching_obp` | character |  |
-| `season_stats_pitching_caught_stealing` | integer |  |
-| `season_stats_pitching_stolen_bases` | integer |  |
-| `season_stats_pitching_stolen_base_percentage` | character |  |
-| `season_stats_pitching_caught_stealing_percentage` | character |  |
-| `season_stats_pitching_number_of_pitches` | integer |  |
-| `season_stats_pitching_era` | character |  |
-| `season_stats_pitching_innings_pitched` | character |  |
-| `season_stats_pitching_wins` | integer |  |
-| `season_stats_pitching_losses` | integer |  |
-| `season_stats_pitching_saves` | integer |  |
-| `season_stats_pitching_save_opportunities` | integer |  |
-| `season_stats_pitching_holds` | integer |  |
-| `season_stats_pitching_blown_saves` | integer |  |
-| `season_stats_pitching_earned_runs` | integer |  |
-| `season_stats_pitching_whip` | character |  |
-| `season_stats_pitching_batters_faced` | integer |  |
-| `season_stats_pitching_outs` | integer |  |
-| `season_stats_pitching_games_pitched` | integer |  |
-| `season_stats_pitching_complete_games` | integer |  |
-| `season_stats_pitching_shutouts` | integer |  |
-| `season_stats_pitching_balls` | integer |  |
-| `season_stats_pitching_strikes` | integer |  |
-| `season_stats_pitching_strike_percentage` | character |  |
-| `season_stats_pitching_hit_batsmen` | integer |  |
-| `season_stats_pitching_balks` | integer |  |
-| `season_stats_pitching_wild_pitches` | integer |  |
-| `season_stats_pitching_pickoffs` | integer |  |
-| `season_stats_pitching_ground_outs_to_airouts` | character |  |
-| `season_stats_pitching_rbi` | integer |  |
-| `season_stats_pitching_win_percentage` | character |  |
-| `season_stats_pitching_pitches_per_inning` | character |  |
-| `season_stats_pitching_games_finished` | integer |  |
-| `season_stats_pitching_strikeout_walk_ratio` | character |  |
-| `season_stats_pitching_strikeouts_per9_inn` | character |  |
-| `season_stats_pitching_walks_per9_inn` | character |  |
-| `season_stats_pitching_hits_per9_inn` | character |  |
-| `season_stats_pitching_runs_scored_per9` | character |  |
-| `season_stats_pitching_home_runs_per9` | character |  |
-| `season_stats_pitching_inherited_runners` | integer |  |
-| `season_stats_pitching_inherited_runners_scored` | integer |  |
-| `season_stats_pitching_catchers_interference` | integer |  |
-| `season_stats_pitching_sac_bunts` | integer |  |
-| `season_stats_pitching_sac_flies` | integer |  |
-| `season_stats_pitching_passed_ball` | integer |  |
-| `season_stats_pitching_pop_outs` | integer |  |
-| `season_stats_pitching_line_outs` | integer |  |
-| `season_stats_fielding_caught_stealing` | integer |  |
-| `season_stats_fielding_stolen_bases` | integer |  |
-| `season_stats_fielding_stolen_base_percentage` | character |  |
-| `season_stats_fielding_caught_stealing_percentage` | character |  |
-| `season_stats_fielding_assists` | integer |  |
-| `season_stats_fielding_put_outs` | integer |  |
-| `season_stats_fielding_errors` | integer |  |
-| `season_stats_fielding_chances` | integer |  |
-| `season_stats_fielding_fielding` | character |  |
-| `season_stats_fielding_passed_ball` | integer |  |
-| `season_stats_fielding_pickoffs` | integer |  |
-| `game_status_is_current_batter` | logical |  |
-| `game_status_is_current_pitcher` | logical |  |
-| `game_status_is_on_bench` | logical |  |
-| `game_status_is_substitute` | logical |  |
-| `stats_fielding_games_started` | double |  |
-| `season_stats_fielding_games_started` | double |  |
-| `season_stats_pitching_pitches_thrown` | double |  |
-| `stats_pitching_summary` | character |  |
-| `stats_pitching_games_played` | double |  |
-| `stats_pitching_games_started` | double |  |
-| `stats_pitching_fly_outs` | double |  |
-| `stats_pitching_ground_outs` | double |  |
-| `stats_pitching_air_outs` | double |  |
-| `stats_pitching_runs` | double |  |
-| `stats_pitching_doubles` | double |  |
-| `stats_pitching_triples` | double |  |
-| `stats_pitching_home_runs` | double |  |
-| `stats_pitching_strike_outs` | double |  |
-| `stats_pitching_base_on_balls` | double |  |
-| `stats_pitching_intentional_walks` | double |  |
-| `stats_pitching_hits` | double |  |
-| `stats_pitching_hit_by_pitch` | double |  |
-| `stats_pitching_at_bats` | double |  |
-| `stats_pitching_caught_stealing` | double |  |
-| `stats_pitching_stolen_bases` | double |  |
-| `stats_pitching_stolen_base_percentage` | character |  |
-| `stats_pitching_number_of_pitches` | double |  |
-| `stats_pitching_innings_pitched` | character |  |
-| `stats_pitching_wins` | double |  |
-| `stats_pitching_losses` | double |  |
-| `stats_pitching_saves` | double |  |
-| `stats_pitching_save_opportunities` | double |  |
-| `stats_pitching_holds` | double |  |
-| `stats_pitching_blown_saves` | double |  |
-| `stats_pitching_earned_runs` | double |  |
-| `stats_pitching_batters_faced` | double |  |
-| `stats_pitching_outs` | double |  |
-| `stats_pitching_games_pitched` | double |  |
-| `stats_pitching_complete_games` | double |  |
-| `stats_pitching_shutouts` | double |  |
-| `stats_pitching_pitches_thrown` | double |  |
-| `stats_pitching_balls` | double |  |
-| `stats_pitching_strikes` | double |  |
-| `stats_pitching_strike_percentage` | character |  |
-| `stats_pitching_hit_batsmen` | double |  |
-| `stats_pitching_balks` | double |  |
-| `stats_pitching_wild_pitches` | double |  |
-| `stats_pitching_pickoffs` | double |  |
-| `stats_pitching_rbi` | double |  |
-| `stats_pitching_games_finished` | double |  |
-| `stats_pitching_runs_scored_per9` | character |  |
-| `stats_pitching_home_runs_per9` | character |  |
-| `stats_pitching_inherited_runners` | double |  |
-| `stats_pitching_inherited_runners_scored` | double |  |
-| `stats_pitching_catchers_interference` | double |  |
-| `stats_pitching_sac_bunts` | double |  |
-| `stats_pitching_sac_flies` | double |  |
-| `stats_pitching_passed_ball` | double |  |
-| `stats_pitching_pop_outs` | double |  |
-| `stats_pitching_line_outs` | double |  |
-| `stats_pitching_note` | character |  |
-| `stats_batting_note` | character |  |
+| `stats_batting_summary` | character | Condensed text summary of the batter's performance line (e.g., '2-4, HR, 2 RBI') for display purposes. |
+| `stats_batting_games_played` | double | Number of games played indicator for this batter's boxscore row (typically 1 for a standard game appearance). |
+| `stats_batting_fly_outs` | double | Number of outs recorded by the batter on fly balls in this game. |
+| `stats_batting_ground_outs` | double | Number of outs recorded by the batter on ground balls in this game. |
+| `stats_batting_air_outs` | double | Number of outs recorded by the batter on balls hit in the air during this game. |
+| `stats_batting_runs` | double | Number of runs scored by the batter in this game. |
+| `stats_batting_doubles` | double | Number of doubles hit by the batter in this game. |
+| `stats_batting_triples` | double | Number of triples hit by the batter in this game. |
+| `stats_batting_home_runs` | double | Number of home runs hit by the batter in this game. |
+| `stats_batting_strike_outs` | double | Number of times the batter struck out in this game. |
+| `stats_batting_base_on_balls` | double | Number of unintentional walks drawn by the batter in this game. |
+| `stats_batting_intentional_walks` | double | Number of intentional walks issued to the batter in this game. |
+| `stats_batting_hits` | double | Total number of hits recorded by the batter in this game. |
+| `stats_batting_hit_by_pitch` | double | Number of times the batter was hit by a pitch in this game. |
+| `stats_batting_at_bats` | double | Number of official at-bats for the batter in this game. |
+| `stats_batting_caught_stealing` | double | Number of times the batter was caught stealing in this game. |
+| `stats_batting_stolen_bases` | double | Number of stolen bases recorded by the batter in this game. |
+| `stats_batting_stolen_base_percentage` | character | Percentage of stolen base attempts that were successful for the batter in this game. |
+| `stats_batting_ground_into_double_play` | double | Number of times the batter grounded into a double play in this game. |
+| `stats_batting_ground_into_triple_play` | double | Number of times the batter grounded into a triple play in this game. |
+| `stats_batting_plate_appearances` | double | Total number of plate appearances for the batter in this game. |
+| `stats_batting_total_bases` | double | Total number of bases accumulated by the batter on hits in this game. |
+| `stats_batting_rbi` | double | Number of runs batted in (RBI) credited to the batter in this game. |
+| `stats_batting_left_on_base` | double | Number of runners left on base when the batter made an out or the inning ended in this game. |
+| `stats_batting_sac_bunts` | double | Number of sacrifice bunts executed by the batter in this game. |
+| `stats_batting_sac_flies` | double | Number of sacrifice flies hit by the batter that scored a run in this game. |
+| `stats_batting_catchers_interference` | double | Number of times the batter reached base due to catcher's interference in this game. |
+| `stats_batting_pickoffs` | double | Number of times the batter was picked off base in this game. |
+| `stats_batting_at_bats_per_home_run` | character | At-bats per home run ratio for the batter in this game. |
+| `stats_batting_pop_outs` | double | Number of outs recorded by the batter on infield pop-ups in this game. |
+| `stats_batting_line_outs` | double | Number of outs recorded by the batter on line drives caught in this game. |
+| `stats_fielding_caught_stealing` | double | Number of baserunners caught stealing by the player (typically a catcher) in this game. |
+| `stats_fielding_stolen_bases` | double | Number of stolen bases allowed by the player while fielding in this game. |
+| `stats_fielding_stolen_base_percentage` | character | Percentage of stolen base attempts against the player (catcher perspective) that were successful in this game. |
+| `stats_fielding_caught_stealing_percentage` | character | Percentage of stolen base attempts that the player threw out in this game. |
+| `stats_fielding_assists` | double | Number of fielding assists recorded by the player in this game. |
+| `stats_fielding_put_outs` | double | Number of putouts recorded by the player in this game. |
+| `stats_fielding_errors` | double | Number of fielding errors committed by the player in this game. |
+| `stats_fielding_chances` | double | Total fielding chances for the player in this game (putouts + assists + errors). |
+| `stats_fielding_fielding` | character | Fielding percentage for the player in this game, calculated as (putouts + assists) / total chances. |
+| `stats_fielding_passed_ball` | double | Number of passed balls charged to the player (catcher-specific) in this game. |
+| `stats_fielding_pickoffs` | double | Number of pickoffs credited to the player as a fielder in this game. |
+| `season_stats_batting_games_played` | integer | Season-to-date number of games in which the batter appeared. |
+| `season_stats_batting_fly_outs` | integer | Season-to-date number of outs recorded by the batter on fly balls caught in the outfield. |
+| `season_stats_batting_ground_outs` | integer | Season-to-date number of outs recorded by the batter on ground balls. |
+| `season_stats_batting_air_outs` | integer | Season-to-date number of outs recorded by the batter on balls hit in the air (fly balls and line drives caught). |
+| `season_stats_batting_runs` | integer | Season-to-date number of runs scored by the batter. |
+| `season_stats_batting_doubles` | integer | Season-to-date number of doubles hit by the batter. |
+| `season_stats_batting_triples` | integer | Season-to-date number of triples hit by the batter. |
+| `season_stats_batting_home_runs` | integer | Season-to-date number of home runs hit by the batter. |
+| `season_stats_batting_strike_outs` | integer | Season-to-date number of times the batter struck out. |
+| `season_stats_batting_base_on_balls` | integer | Season-to-date number of unintentional walks drawn by the batter. |
+| `season_stats_batting_intentional_walks` | integer | Season-to-date number of intentional walks (IBB) issued to the batter. |
+| `season_stats_batting_hits` | integer | Season-to-date total number of hits recorded by the batter. |
+| `season_stats_batting_hit_by_pitch` | integer | Season-to-date number of times the batter was hit by a pitch. |
+| `season_stats_batting_avg` | character | Season-to-date batting average (hits divided by at-bats) for the batter. |
+| `season_stats_batting_at_bats` | integer | Season-to-date number of official at-bats accumulated by the batter. |
+| `season_stats_batting_obp` | character | Season-to-date on-base percentage (OBP), measuring how often the batter reaches base per plate appearance. |
+| `season_stats_batting_slg` | character | Season-to-date slugging percentage (SLG), measuring total bases per at-bat. |
+| `season_stats_batting_ops` | character | Season-to-date on-base plus slugging percentage (OPS), a combined measure of a batter's ability to get on base and hit for power. |
+| `season_stats_batting_caught_stealing` | integer | Season-to-date number of times the batter was caught stealing a base. |
+| `season_stats_batting_stolen_bases` | integer | Season-to-date number of bases stolen by the batter. |
+| `season_stats_batting_stolen_base_percentage` | character | Season-to-date percentage of stolen base attempts that were successful for the batter. |
+| `season_stats_batting_caught_stealing_percentage` | character | Season-to-date percentage of stolen base attempts that resulted in the batter being caught stealing. |
+| `season_stats_batting_ground_into_double_play` | integer | Season-to-date number of times the batter grounded into a double play. |
+| `season_stats_batting_ground_into_triple_play` | integer | Season-to-date number of times the batter grounded into a triple play. |
+| `season_stats_batting_plate_appearances` | integer | Season-to-date total number of plate appearances for the batter, including at-bats, walks, HBP, and sacrifices. |
+| `season_stats_batting_total_bases` | integer | Season-to-date total number of bases accumulated by the batter on hits. |
+| `season_stats_batting_rbi` | integer | Season-to-date number of runs batted in (RBI) credited to the batter. |
+| `season_stats_batting_left_on_base` | integer | Season-to-date number of runners left on base when the batter made an out or the inning ended. |
+| `season_stats_batting_sac_bunts` | integer | Season-to-date number of sacrifice bunts executed by the batter. |
+| `season_stats_batting_sac_flies` | integer | Season-to-date number of sacrifice flies hit by the batter that scored a run. |
+| `season_stats_batting_babip` | character | Season-to-date Batting Average on Balls In Play (BABIP), measuring batting average excluding strikeouts and home runs. |
+| `season_stats_batting_ground_outs_to_airouts` | character | Season-to-date ratio of ground outs to air outs, indicating the batter's tendency to hit the ball on the ground versus in the air. |
+| `season_stats_batting_catchers_interference` | integer | Season-to-date number of times the batter reached base due to catcher's interference. |
+| `season_stats_batting_pickoffs` | integer | Season-to-date number of times the batter was picked off base by a pitcher or catcher. |
+| `season_stats_batting_at_bats_per_home_run` | character | Season-to-date ratio of at-bats per home run, reflecting the batter's home run frequency. |
+| `season_stats_batting_pop_outs` | integer | Season-to-date number of outs recorded by the batter on pop-ups caught in the infield. |
+| `season_stats_batting_line_outs` | integer | Season-to-date number of outs recorded by the batter on line drives caught. |
+| `season_stats_pitching_games_played` | integer | Season-to-date number of games the pitcher was active on the roster (may include non-pitching appearances). |
+| `season_stats_pitching_games_started` | integer | Season-to-date number of games in which the pitcher was the starting pitcher. |
+| `season_stats_pitching_fly_outs` | integer | Season-to-date number of outs recorded by the pitcher on fly balls. |
+| `season_stats_pitching_ground_outs` | integer | Season-to-date number of outs recorded by the pitcher on ground balls. |
+| `season_stats_pitching_air_outs` | integer | Season-to-date number of outs recorded by the pitcher on balls hit in the air. |
+| `season_stats_pitching_runs` | integer | Season-to-date total runs (earned and unearned) allowed by the pitcher. |
+| `season_stats_pitching_doubles` | integer | Season-to-date number of doubles allowed by the pitcher. |
+| `season_stats_pitching_triples` | integer | Season-to-date number of triples allowed by the pitcher. |
+| `season_stats_pitching_home_runs` | integer | Season-to-date number of home runs allowed by the pitcher. |
+| `season_stats_pitching_strike_outs` | integer | Season-to-date number of batters struck out by the pitcher. |
+| `season_stats_pitching_base_on_balls` | integer | Season-to-date number of unintentional walks issued by the pitcher. |
+| `season_stats_pitching_intentional_walks` | integer | Season-to-date number of intentional walks (IBB) issued by the pitcher. |
+| `season_stats_pitching_hits` | integer | Season-to-date number of hits allowed by the pitcher. |
+| `season_stats_pitching_hit_by_pitch` | integer | Season-to-date number of hit-by-pitch events while the pitcher was pitching (alternate field name for hit_batsmen). |
+| `season_stats_pitching_at_bats` | integer | Season-to-date number of at-bats faced by the pitcher (excluding walks, HBP, and sacrifices). |
+| `season_stats_pitching_obp` | character | Season-to-date on-base percentage allowed by the pitcher (opponents' OBP against this pitcher). |
+| `season_stats_pitching_caught_stealing` | integer | Season-to-date number of baserunners caught stealing while the pitcher was on the mound. |
+| `season_stats_pitching_stolen_bases` | integer | Season-to-date number of stolen bases allowed while the pitcher was pitching. |
+| `season_stats_pitching_stolen_base_percentage` | character | Season-to-date percentage of stolen base attempts that were successful while the pitcher was on the mound. |
+| `season_stats_pitching_caught_stealing_percentage` | character | Season-to-date percentage of stolen base attempts that were thrown out while the pitcher was pitching. |
+| `season_stats_pitching_number_of_pitches` | integer | Season-to-date total number of pitches thrown by the pitcher. |
+| `season_stats_pitching_era` | character | Season-to-date Earned Run Average (ERA) for the pitcher, expressed as earned runs per nine innings. |
+| `season_stats_pitching_innings_pitched` | character | Season-to-date total innings pitched, expressed as a decimal where each out is one-third of an inning. |
+| `season_stats_pitching_wins` | integer | Season-to-date number of wins credited to the pitcher. |
+| `season_stats_pitching_losses` | integer | Season-to-date number of losses charged to the pitcher. |
+| `season_stats_pitching_saves` | integer | Season-to-date number of saves recorded by the pitcher. |
+| `season_stats_pitching_save_opportunities` | integer | Season-to-date number of save opportunities the pitcher entered (leads of three runs or fewer in the seventh inning or later, or entering with the tying run on base). |
+| `season_stats_pitching_holds` | integer | Season-to-date number of holds recorded by the pitcher (relief appearance maintaining a lead without a save situation). |
+| `season_stats_pitching_blown_saves` | integer | Season-to-date number of blown save opportunities for the pitcher. |
+| `season_stats_pitching_earned_runs` | integer | Season-to-date number of earned runs allowed by the pitcher. |
+| `season_stats_pitching_whip` | character | Season-to-date Walks plus Hits per Inning Pitched (WHIP), measuring baserunners allowed per inning. |
+| `season_stats_pitching_batters_faced` | integer | Season-to-date total number of batters faced by the pitcher. |
+| `season_stats_pitching_outs` | integer | Season-to-date total number of outs recorded by the pitcher. |
+| `season_stats_pitching_games_pitched` | integer | Season-to-date number of games in which the pitcher appeared. |
+| `season_stats_pitching_complete_games` | integer | Season-to-date number of complete games pitched by the pitcher. |
+| `season_stats_pitching_shutouts` | integer | Season-to-date number of complete-game shutouts pitched. |
+| `season_stats_pitching_balls` | integer | Season-to-date number of ball calls recorded against the pitcher. |
+| `season_stats_pitching_strikes` | integer | Season-to-date total number of strikes thrown by the pitcher. |
+| `season_stats_pitching_strike_percentage` | character | Season-to-date percentage of all pitches thrown that were strikes. |
+| `season_stats_pitching_hit_batsmen` | integer | Season-to-date number of batters hit by a pitch thrown by the pitcher. |
+| `season_stats_pitching_balks` | integer | Season-to-date number of balks called against the pitcher. |
+| `season_stats_pitching_wild_pitches` | integer | Season-to-date number of wild pitches thrown by the pitcher. |
+| `season_stats_pitching_pickoffs` | integer | Season-to-date number of pickoffs executed by the pitcher. |
+| `season_stats_pitching_ground_outs_to_airouts` | character | Season-to-date ratio of ground ball outs to air ball outs allowed by the pitcher. |
+| `season_stats_pitching_rbi` | integer | Season-to-date number of RBI allowed (runs batted in by opposing batters) while this pitcher was pitching. |
+| `season_stats_pitching_win_percentage` | character | Season-to-date winning percentage for the pitcher (wins divided by decisions). |
+| `season_stats_pitching_pitches_per_inning` | character | Season-to-date average number of pitches thrown per inning by the pitcher. |
+| `season_stats_pitching_games_finished` | integer | Season-to-date number of games in which the pitcher was the last pitcher used by their team. |
+| `season_stats_pitching_strikeout_walk_ratio` | character | Season-to-date ratio of strikeouts to walks, measuring the pitcher's command and dominance. |
+| `season_stats_pitching_strikeouts_per9_inn` | character | Season-to-date strikeouts recorded per nine innings pitched (K/9), a rate measure of strikeout ability. |
+| `season_stats_pitching_walks_per9_inn` | character | Season-to-date walks issued per nine innings pitched (BB/9), a rate measure of control. |
+| `season_stats_pitching_hits_per9_inn` | character | Season-to-date hits allowed per nine innings pitched, a rate stat measuring hit prevention. |
+| `season_stats_pitching_runs_scored_per9` | character | Season-to-date total runs (including unearned) allowed per nine innings pitched. |
+| `season_stats_pitching_home_runs_per9` | character | Season-to-date home runs allowed per nine innings pitched. |
+| `season_stats_pitching_inherited_runners` | integer | Season-to-date number of baserunners already on base when the pitcher entered the game. |
+| `season_stats_pitching_inherited_runners_scored` | integer | Season-to-date number of inherited runners who eventually scored while or after the pitcher was pitching. |
+| `season_stats_pitching_catchers_interference` | integer | Season-to-date number of times the pitcher benefited from a catcher's interference call. |
+| `season_stats_pitching_sac_bunts` | integer | Season-to-date number of sacrifice bunts allowed by the pitcher. |
+| `season_stats_pitching_sac_flies` | integer | Season-to-date number of sacrifice flies allowed by the pitcher. |
+| `season_stats_pitching_passed_ball` | integer | Season-to-date number of passed balls that occurred while the pitcher was pitching. |
+| `season_stats_pitching_pop_outs` | integer | Season-to-date number of outs recorded by the pitcher on pop-ups caught in the infield. |
+| `season_stats_pitching_line_outs` | integer | Season-to-date number of outs recorded by the pitcher on line drives caught. |
+| `season_stats_fielding_caught_stealing` | integer | Season-to-date number of baserunners caught stealing by the player (typically a catcher stat). |
+| `season_stats_fielding_stolen_bases` | integer | Season-to-date number of stolen bases allowed by the player while fielding (typically catcher). |
+| `season_stats_fielding_stolen_base_percentage` | character | Season-to-date percentage of stolen base attempts against the player that were successful (catcher perspective). |
+| `season_stats_fielding_caught_stealing_percentage` | character | Season-to-date percentage of stolen base attempts that the player (usually a catcher) threw out. |
+| `season_stats_fielding_assists` | integer | Season-to-date number of fielding assists recorded by the player (touching the ball before a putout by a teammate). |
+| `season_stats_fielding_put_outs` | integer | Season-to-date number of putouts recorded by the player (directly retiring a baserunner or batter). |
+| `season_stats_fielding_errors` | integer | Season-to-date number of fielding errors committed by the player. |
+| `season_stats_fielding_chances` | integer | Season-to-date total fielding chances for the player (putouts + assists + errors). |
+| `season_stats_fielding_fielding` | character | Season-to-date fielding percentage for the player, calculated as (putouts + assists) / total chances. |
+| `season_stats_fielding_passed_ball` | integer | Season-to-date number of passed balls charged to the player (catcher-specific). |
+| `season_stats_fielding_pickoffs` | integer | Season-to-date number of pickoffs credited to the player as a fielder. |
+| `game_status_is_current_batter` | logical | Indicates whether the player is currently at bat at the moment the boxscore was captured. |
+| `game_status_is_current_pitcher` | logical | Indicates whether the player is currently pitching at the moment the boxscore was captured. |
+| `game_status_is_on_bench` | logical | Indicates whether the player is currently on the bench (not in the active lineup) at time of capture. |
+| `game_status_is_substitute` | logical | Indicates whether the player entered the game as a substitute for another player. |
+| `stats_fielding_games_started` | double | Indicator of whether the player started at a fielding position in this game. |
+| `season_stats_fielding_games_started` | double | Season-to-date number of games in which the player started at a fielding position. |
+| `season_stats_pitching_pitches_thrown` | double | Season-to-date total pitches thrown by the pitcher (may differ from number_of_pitches if strikes/balls are tracked separately). |
+| `stats_pitching_summary` | character | Condensed text summary of the pitcher's performance line (e.g., '6.0 IP, 2 ER, 8 K') for display purposes. |
+| `stats_pitching_games_played` | double | Number of games the pitcher appeared in for this boxscore row (typically 1). |
+| `stats_pitching_games_started` | double | Indicator of whether the pitcher was the starting pitcher in this game. |
+| `stats_pitching_fly_outs` | double | Number of outs recorded by the pitcher on fly balls in this game. |
+| `stats_pitching_ground_outs` | double | Number of outs recorded by the pitcher on ground balls in this game. |
+| `stats_pitching_air_outs` | double | Number of outs recorded by the pitcher on balls hit in the air in this game. |
+| `stats_pitching_runs` | double | Total runs (earned and unearned) allowed by the pitcher in this game. |
+| `stats_pitching_doubles` | double | Number of doubles allowed by the pitcher in this game. |
+| `stats_pitching_triples` | double | Number of triples allowed by the pitcher in this game. |
+| `stats_pitching_home_runs` | double | Number of home runs allowed by the pitcher in this game. |
+| `stats_pitching_strike_outs` | double | Number of batters struck out by the pitcher in this game. |
+| `stats_pitching_base_on_balls` | double | Number of unintentional walks issued by the pitcher in this game. |
+| `stats_pitching_intentional_walks` | double | Number of intentional walks (IBB) issued by the pitcher in this game. |
+| `stats_pitching_hits` | double | Number of hits allowed by the pitcher in this game. |
+| `stats_pitching_hit_by_pitch` | double | Number of hit-by-pitch events while the pitcher was pitching in this game (alternate field for hit_batsmen). |
+| `stats_pitching_at_bats` | double | Number of at-bats faced by the pitcher (excluding walks, HBP, and sacrifices) in this game. |
+| `stats_pitching_caught_stealing` | double | Number of baserunners caught stealing while the pitcher was on the mound in this game. |
+| `stats_pitching_stolen_bases` | double | Number of stolen bases allowed while the pitcher was pitching in this game. |
+| `stats_pitching_stolen_base_percentage` | character | Percentage of stolen base attempts that were successful while the pitcher was on the mound in this game. |
+| `stats_pitching_number_of_pitches` | double | Total number of pitches thrown by the pitcher in this game. |
+| `stats_pitching_innings_pitched` | character | Total innings pitched by the pitcher in this game, expressed as a decimal (each out counts as one-third of an inning). |
+| `stats_pitching_wins` | double | Indicator of whether the pitcher was credited with the win in this game. |
+| `stats_pitching_losses` | double | Indicator of whether the pitcher was charged with the loss in this game. |
+| `stats_pitching_saves` | double | Indicator of whether the pitcher recorded a save in this game. |
+| `stats_pitching_save_opportunities` | double | Number of save opportunities the pitcher entered in this game. |
+| `stats_pitching_holds` | double | Number of holds recorded by the pitcher in this game. |
+| `stats_pitching_blown_saves` | double | Number of blown save opportunities for the pitcher in this game. |
+| `stats_pitching_earned_runs` | double | Number of earned runs allowed by the pitcher in this game. |
+| `stats_pitching_batters_faced` | double | Total number of batters faced by the pitcher in this game. |
+| `stats_pitching_outs` | double | Total number of outs recorded by the pitcher in this game. |
+| `stats_pitching_games_pitched` | double | Number of pitching appearances for the pitcher in this game (typically 1). |
+| `stats_pitching_complete_games` | double | Indicator of whether the pitcher threw a complete game in this appearance. |
+| `stats_pitching_shutouts` | double | Indicator of whether the pitcher recorded a complete-game shutout in this game. |
+| `stats_pitching_pitches_thrown` | double | Total pitches thrown by the pitcher in this game (may differ from number_of_pitches depending on tracking method). |
+| `stats_pitching_balls` | double | Number of ball calls recorded against the pitcher in this game. |
+| `stats_pitching_strikes` | double | Total number of strikes thrown by the pitcher in this game. |
+| `stats_pitching_strike_percentage` | character | Percentage of all pitches thrown that were strikes in this game. |
+| `stats_pitching_hit_batsmen` | double | Number of batters hit by a pitch thrown by the pitcher in this game. |
+| `stats_pitching_balks` | double | Number of balks called against the pitcher in this game. |
+| `stats_pitching_wild_pitches` | double | Number of wild pitches thrown by the pitcher in this game. |
+| `stats_pitching_pickoffs` | double | Number of pickoffs executed by the pitcher in this game. |
+| `stats_pitching_rbi` | double | Number of RBI allowed (runs batted in by opposing batters off this pitcher) in this game. |
+| `stats_pitching_games_finished` | double | Indicator of whether the pitcher was the last pitcher used by their team in this game. |
+| `stats_pitching_runs_scored_per9` | character | Total runs (including unearned) allowed per nine innings rate for the pitcher in this game. |
+| `stats_pitching_home_runs_per9` | character | Home runs allowed per nine innings rate for the pitcher in this game. |
+| `stats_pitching_inherited_runners` | double | Number of baserunners already on base when the pitcher entered the game. |
+| `stats_pitching_inherited_runners_scored` | double | Number of inherited runners who scored while or after the pitcher was pitching in this game. |
+| `stats_pitching_catchers_interference` | double | Number of catcher's interference calls that occurred while the pitcher was pitching in this game. |
+| `stats_pitching_sac_bunts` | double | Number of sacrifice bunts allowed by the pitcher in this game. |
+| `stats_pitching_sac_flies` | double | Number of sacrifice flies allowed by the pitcher in this game. |
+| `stats_pitching_passed_ball` | double | Number of passed balls that occurred while the pitcher was pitching in this game. |
+| `stats_pitching_pop_outs` | double | Number of outs recorded by the pitcher on infield pop-ups in this game. |
+| `stats_pitching_line_outs` | double | Number of outs recorded by the pitcher on line drives caught in this game. |
+| `stats_pitching_note` | character | Supplementary note or annotation attached to the pitcher's boxscore line (e.g., indicating a special circumstance). |
+| `stats_batting_note` | character | Supplementary note or annotation attached to the batter's boxscore line (e.g., indicating a special circumstance). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -446,63 +446,63 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `pitch_index` | character |  |
-| `action_index` | character |  |
-| `runner_index` | character |  |
-| `runners` | character |  |
-| `play_events` | character |  |
-| `play_end_time` | character |  |
+| `pitch_index` | character | A serialized list of indices identifying individual pitch events that occurred within this at-bat. |
+| `action_index` | character | A serialized list of indices identifying action-type events (e.g., stolen bases, pickoffs) that occurred within the at-bat. |
+| `runner_index` | character | A serialized list of indices identifying baserunner movement events that occurred during or after this play. |
+| `runners` | character | A serialized representation of baserunner movement records for this play, including starting base, ending base, and relevant event types. |
+| `play_events` | character | A serialized representation of the sequence of individual pitch and action events comprising this at-bat. |
+| `play_end_time` | character | The ISO 8601 timestamp marking the conclusion of the entire play (as distinct from a single pitch event) within the game feed. |
 | `at_bat_index` | integer | Zero-based index of the at-bat within the game. |
-| `result_type` | character |  |
-| `result_event` | character |  |
-| `result_event_type` | character |  |
-| `result_description` | character |  |
-| `result_rbi` | integer |  |
-| `result_away_score` | integer |  |
-| `result_home_score` | integer |  |
-| `result_is_out` | logical |  |
-| `about_at_bat_index` | integer |  |
-| `about_half_inning` | character |  |
-| `about_is_top_inning` | logical |  |
-| `about_inning` | integer |  |
-| `about_start_time` | character |  |
-| `about_end_time` | character |  |
-| `about_is_complete` | logical |  |
-| `about_is_scoring_play` | logical |  |
-| `about_has_review` | logical |  |
-| `about_has_out` | logical |  |
-| `about_captivating_index` | integer |  |
-| `count_balls` | integer |  |
-| `count_strikes` | integer |  |
-| `count_outs` | integer |  |
-| `matchup_batter_id` | integer |  |
-| `matchup_batter_full_name` | character |  |
-| `matchup_batter_link` | character |  |
-| `matchup_bat_side_code` | character |  |
-| `matchup_bat_side_description` | character |  |
-| `matchup_pitcher_id` | integer |  |
-| `matchup_pitcher_full_name` | character |  |
-| `matchup_pitcher_link` | character |  |
-| `matchup_pitch_hand_code` | character |  |
-| `matchup_pitch_hand_description` | character |  |
-| `matchup_post_on_first_id` | double |  |
-| `matchup_post_on_first_full_name` | character |  |
-| `matchup_post_on_first_link` | character |  |
-| `matchup_batter_hot_cold_zones` | character |  |
-| `matchup_pitcher_hot_cold_zones` | character |  |
-| `matchup_splits_batter` | character |  |
-| `matchup_splits_pitcher` | character |  |
-| `matchup_splits_men_on_base` | character |  |
-| `matchup_post_on_second_id` | double |  |
-| `matchup_post_on_second_full_name` | character |  |
-| `matchup_post_on_second_link` | character |  |
-| `matchup_post_on_third_id` | double |  |
-| `matchup_post_on_third_full_name` | character |  |
-| `matchup_post_on_third_link` | character |  |
-| `review_details_is_overturned` | logical |  |
-| `review_details_in_progress` | logical |  |
-| `review_details_review_type` | character |  |
-| `review_details_challenge_team_id` | double |  |
+| `result_type` | character | The high-level category of the play result as classified by the MLB Stats API (e.g., 'atBat', 'action'). |
+| `result_event` | character | The short categorical label for the play outcome as classified by the MLB Stats API (e.g., 'Strikeout', 'Home Run', 'Walk'). |
+| `result_event_type` | character | The snake-cased type identifier for the play outcome used internally by the MLB Stats API (e.g., 'strikeout', 'home_run'). |
+| `result_description` | character | A human-readable text description of the play result as reported by the MLB Stats API (e.g., 'Strikeout', 'Single to left field'). |
+| `result_rbi` | integer | The number of runs batted in credited to the batter as a result of this play. |
+| `result_away_score` | integer | The away team's cumulative run total at the conclusion of this play. |
+| `result_home_score` | integer | The home team's cumulative run total at the conclusion of this play. |
+| `result_is_out` | logical | Boolean flag indicating whether the play resulted in the batter being retired (i.e., an out was charged to the batter). |
+| `about_at_bat_index` | integer | The sequential index of the at-bat within the game to which this play or pitch event belongs. |
+| `about_half_inning` | character | Indicates whether the play occurred in the top or bottom half of the inning (e.g., 'top' or 'bottom'). |
+| `about_is_top_inning` | logical | Boolean flag indicating whether this play occurred in the top half of the inning (true) or bottom half (false). |
+| `about_inning` | integer | The inning number in which this play or pitch event occurred. |
+| `about_start_time` | character | The ISO 8601 timestamp marking the start of the play event, used for temporal sequencing within the game feed. |
+| `about_end_time` | character | The ISO 8601 timestamp marking the end of the play event, used for temporal sequencing within the game feed. |
+| `about_is_complete` | logical | Boolean flag indicating whether the at-bat or play event has concluded (i.e., reached a terminal result). |
+| `about_is_scoring_play` | logical | Boolean flag indicating whether this play resulted in one or more runs being scored. |
+| `about_has_review` | logical | Boolean flag indicating whether this play was subject to a manager's challenge or umpire review. |
+| `about_has_out` | logical | Boolean flag indicating whether this play resulted in at least one out being recorded. |
+| `about_captivating_index` | integer | A numeric score assigned by the MLB Stats API reflecting how compelling or exciting a given play was, based on leverage and game context. |
+| `count_balls` | integer | The ball count in the current at-bat at the time of this pitch or play event. |
+| `count_strikes` | integer | The strike count in the current at-bat at the time of this pitch or play event. |
+| `count_outs` | integer | The number of outs recorded in the current half-inning at the time of this pitch or play event. |
+| `matchup_batter_id` | integer | The MLB Stats API (MLBAM) numeric identifier for the batter in this play's matchup. |
+| `matchup_batter_full_name` | character | The full name of the batter involved in this plate appearance. |
+| `matchup_batter_link` | character | The MLB Stats API relative URL linking to the batter's player resource for this matchup. |
+| `matchup_bat_side_code` | character | A single-character code indicating the batter's handedness for this matchup (e.g., 'L' for left, 'R' for right, 'S' for switch). |
+| `matchup_bat_side_description` | character | The human-readable description of the batter's hitting side for this matchup (e.g., 'Left', 'Right', 'Switch'). |
+| `matchup_pitcher_id` | integer | The MLB Stats API (MLBAM) numeric identifier for the pitcher in this play's matchup. |
+| `matchup_pitcher_full_name` | character | The full name of the pitcher involved in this plate appearance. |
+| `matchup_pitcher_link` | character | The MLB Stats API relative URL linking to the pitcher's player resource for this matchup. |
+| `matchup_pitch_hand_code` | character | A single-character code indicating the pitcher's throwing hand for this matchup (e.g., 'L' for left, 'R' for right). |
+| `matchup_pitch_hand_description` | character | The human-readable description of the pitcher's throwing arm for this matchup (e.g., 'Left', 'Right'). |
+| `matchup_post_on_first_id` | double | The MLB Stats API (MLBAM) numeric identifier for the runner on first base after the play concluded. |
+| `matchup_post_on_first_full_name` | character | The full name of the baserunner on first base after the play concluded, if applicable. |
+| `matchup_post_on_first_link` | character | The MLB Stats API relative URL linking to the player resource of the runner on first base after the play. |
+| `matchup_batter_hot_cold_zones` | character | A serialized representation of the batter's hot and cold zone effectiveness data for this matchup context. |
+| `matchup_pitcher_hot_cold_zones` | character | A serialized representation of the pitcher's hot and cold zone effectiveness data for this matchup context. |
+| `matchup_splits_batter` | character | A string describing the batter's situational split relevant to this matchup (e.g., 'vs. Right' or 'vs. Left'). |
+| `matchup_splits_pitcher` | character | A string describing the pitcher's situational split relevant to this matchup (e.g., 'vs. Left' or 'vs. Right'). |
+| `matchup_splits_men_on_base` | character | A string describing the baserunner configuration applicable to the batter's situational split for this plate appearance. |
+| `matchup_post_on_second_id` | double | The MLB Stats API (MLBAM) numeric identifier for the runner on second base after the play concluded. |
+| `matchup_post_on_second_full_name` | character | The full name of the baserunner on second base after the play concluded, if applicable. |
+| `matchup_post_on_second_link` | character | The MLB Stats API relative URL linking to the player resource of the runner on second base after the play. |
+| `matchup_post_on_third_id` | double | The MLB Stats API (MLBAM) numeric identifier for the runner on third base after the play concluded. |
+| `matchup_post_on_third_full_name` | character | The full name of the baserunner on third base after the play concluded, if applicable. |
+| `matchup_post_on_third_link` | character | The MLB Stats API relative URL linking to the player resource of the runner on third base after the play. |
+| `review_details_is_overturned` | logical | Boolean flag indicating whether the original on-field call was reversed as a result of the replay review. |
+| `review_details_in_progress` | logical | Boolean flag indicating whether the umpire review of this play was still ongoing at the time of data capture. |
+| `review_details_review_type` | character | The type of review mechanism applied to this play (e.g., 'managerChallenge', 'umpireReview'). |
+| `review_details_challenge_team_id` | double | The MLB Stats API numeric identifier for the team that initiated the manager's challenge review on this play. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -558,70 +558,70 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `pitch_index` | character |  |
-| `action_index` | character |  |
-| `runner_index` | character |  |
-| `runners` | character |  |
-| `play_events` | character |  |
-| `credits` | character |  |
-| `flags` | character |  |
+| `pitch_index` | character | A serialized list of indices identifying individual pitch events within the at-bat for this win-probability row. |
+| `action_index` | character | A serialized list of indices identifying action-type events (stolen bases, pickoffs, etc.) within the at-bat for this win-probability row. |
+| `runner_index` | character | A serialized list of indices identifying baserunner movement events during the play in this win-probability row. |
+| `runners` | character | A serialized representation of baserunner movement records for this play in the win-probability feed, capturing start/end base positions and event types. |
+| `play_events` | character | A serialized representation of the sequence of pitch and action events comprising the at-bat for this win-probability row. |
+| `credits` | character | A serialized list of player credit records for this play, linking fielding, pitching, or batting achievements to specific player identifiers. |
+| `flags` | character | A serialized representation of situational boolean flags associated with this play (e.g., whether it was a big lead situation or a save opportunity). |
 | `home_team_win_probability` | double | Home team win probability (percent) entering the at-bat. |
 | `away_team_win_probability` | double | Away team win probability (percent) entering the at-bat. |
 | `home_team_win_probability_added` | double | Change in home team win probability attributed to the at-bat. |
-| `play_end_time` | character |  |
+| `play_end_time` | character | The ISO 8601 timestamp marking the conclusion of the play associated with this win-probability snapshot. |
 | `at_bat_index` | integer | Zero-based index of the at-bat within the game. |
-| `result_type` | character |  |
-| `result_event` | character |  |
-| `result_event_type` | character |  |
-| `result_description` | character |  |
-| `result_rbi` | integer |  |
-| `result_away_score` | integer |  |
-| `result_home_score` | integer |  |
-| `result_is_out` | logical |  |
-| `about_at_bat_index` | integer |  |
-| `about_half_inning` | character |  |
-| `about_is_top_inning` | logical |  |
-| `about_inning` | integer |  |
-| `about_start_time` | character |  |
-| `about_end_time` | character |  |
-| `about_is_complete` | logical |  |
-| `about_is_scoring_play` | logical |  |
-| `about_has_review` | logical |  |
-| `about_has_out` | logical |  |
-| `about_captivating_index` | integer |  |
-| `count_balls` | integer |  |
-| `count_strikes` | integer |  |
-| `count_outs` | integer |  |
-| `matchup_batter_id` | integer |  |
-| `matchup_batter_full_name` | character |  |
-| `matchup_batter_link` | character |  |
-| `matchup_bat_side_code` | character |  |
-| `matchup_bat_side_description` | character |  |
-| `matchup_pitcher_id` | integer |  |
-| `matchup_pitcher_full_name` | character |  |
-| `matchup_pitcher_link` | character |  |
-| `matchup_pitch_hand_code` | character |  |
-| `matchup_pitch_hand_description` | character |  |
-| `matchup_post_on_first_id` | double |  |
-| `matchup_post_on_first_full_name` | character |  |
-| `matchup_post_on_first_link` | character |  |
-| `matchup_batter_hot_cold_zones` | character |  |
-| `matchup_pitcher_hot_cold_zones` | character |  |
-| `matchup_splits_batter` | character |  |
-| `matchup_splits_pitcher` | character |  |
-| `matchup_splits_men_on_base` | character |  |
+| `result_type` | character | The high-level category of the play result in the win-probability feed (e.g., 'atBat', 'action'). |
+| `result_event` | character | The short categorical label for the play outcome in the win-probability feed (e.g., 'Single', 'Home Run', 'Strikeout'). |
+| `result_event_type` | character | The snake-cased type identifier for the play outcome in the win-probability feed (e.g., 'single', 'home_run'). |
+| `result_description` | character | A human-readable text description of the play result as reported in the win-probability game feed. |
+| `result_rbi` | integer | The number of runs batted in credited to the batter for the play in this win-probability row. |
+| `result_away_score` | integer | The away team's cumulative run total at the conclusion of the play in this win-probability row. |
+| `result_home_score` | integer | The home team's cumulative run total at the conclusion of the play in this win-probability row. |
+| `result_is_out` | logical | Boolean flag indicating whether the batter was retired on the play recorded in this win-probability row. |
+| `about_at_bat_index` | integer | The sequential index of the at-bat within the game to which this win-probability observation belongs. |
+| `about_half_inning` | character | Indicates whether the win-probability observation occurred in the top or bottom half of the inning. |
+| `about_is_top_inning` | logical | Boolean flag indicating whether this win-probability observation occurred in the top half of the inning. |
+| `about_inning` | integer | The inning number in which this win-probability observation was recorded. |
+| `about_start_time` | character | The ISO 8601 timestamp marking the start of the play event within the win-probability game feed. |
+| `about_end_time` | character | The ISO 8601 timestamp marking the end of the play event within the win-probability game feed. |
+| `about_is_complete` | logical | Boolean flag indicating whether the at-bat associated with this win-probability row has concluded. |
+| `about_is_scoring_play` | logical | Boolean flag indicating whether this play resulted in one or more runs being scored. |
+| `about_has_review` | logical | Boolean flag indicating whether this play was subject to a manager's challenge or umpire review. |
+| `about_has_out` | logical | Boolean flag indicating whether this play resulted in at least one out being recorded. |
+| `about_captivating_index` | integer | A numeric score reflecting how compelling or exciting this plate appearance was, based on leverage and game-state context. |
+| `count_balls` | integer | The ball count in the current at-bat at the time this win-probability snapshot was recorded. |
+| `count_strikes` | integer | The strike count in the current at-bat at the time this win-probability snapshot was recorded. |
+| `count_outs` | integer | The number of outs in the current half-inning at the time this win-probability snapshot was recorded. |
+| `matchup_batter_id` | integer | The MLB Stats API (MLBAM) numeric identifier for the batter in this win-probability matchup row. |
+| `matchup_batter_full_name` | character | The full name of the batter whose plate appearance generated this win-probability observation. |
+| `matchup_batter_link` | character | The MLB Stats API relative URL linking to the batter's player resource for this win-probability row. |
+| `matchup_bat_side_code` | character | A single-character code indicating the batter's handedness for this matchup in the win-probability feed (e.g., 'L', 'R', 'S'). |
+| `matchup_bat_side_description` | character | The human-readable description of the batter's hitting side for this win-probability matchup row. |
+| `matchup_pitcher_id` | integer | The MLB Stats API (MLBAM) numeric identifier for the pitcher in this win-probability matchup row. |
+| `matchup_pitcher_full_name` | character | The full name of the pitcher who delivered pitches for this win-probability observation. |
+| `matchup_pitcher_link` | character | The MLB Stats API relative URL linking to the pitcher's player resource for this win-probability row. |
+| `matchup_pitch_hand_code` | character | A single-character code indicating the pitcher's throwing hand for this win-probability matchup (e.g., 'L' or 'R'). |
+| `matchup_pitch_hand_description` | character | The human-readable description of the pitcher's throwing arm for this win-probability matchup row. |
+| `matchup_post_on_first_id` | double | The MLB Stats API (MLBAM) numeric identifier for the runner on first base after the play in this win-probability row. |
+| `matchup_post_on_first_full_name` | character | The full name of the runner occupying first base at the conclusion of the play in this win-probability row. |
+| `matchup_post_on_first_link` | character | The MLB Stats API relative URL linking to the player resource of the runner on first base after the play. |
+| `matchup_batter_hot_cold_zones` | character | A serialized representation of the batter's hot and cold zone data applicable to this win-probability matchup. |
+| `matchup_pitcher_hot_cold_zones` | character | A serialized representation of the pitcher's hot and cold zone data applicable to this win-probability matchup. |
+| `matchup_splits_batter` | character | A string describing the batter's situational split for this win-probability matchup (e.g., 'vs. Right'). |
+| `matchup_splits_pitcher` | character | A string describing the pitcher's situational split for this win-probability matchup (e.g., 'vs. Left'). |
+| `matchup_splits_men_on_base` | character | A string describing the baserunner configuration applicable to the batter's situational split in this win-probability row. |
 | `leverage_index` | double | Leverage index quantifying the importance of the at-bat situation. |
-| `drama_index` | double |  |
-| `matchup_post_on_second_id` | double |  |
-| `matchup_post_on_second_full_name` | character |  |
-| `matchup_post_on_second_link` | character |  |
-| `matchup_post_on_third_id` | double |  |
-| `matchup_post_on_third_full_name` | character |  |
-| `matchup_post_on_third_link` | character |  |
-| `review_details_is_overturned` | logical |  |
-| `review_details_in_progress` | logical |  |
-| `review_details_review_type` | character |  |
-| `review_details_challenge_team_id` | double |  |
+| `drama_index` | double | A numeric score quantifying the dramatic significance of this play within the game, based on win-probability swing and game leverage. |
+| `matchup_post_on_second_id` | double | The MLB Stats API (MLBAM) numeric identifier for the runner on second base after the play in this win-probability row. |
+| `matchup_post_on_second_full_name` | character | The full name of the runner occupying second base at the conclusion of the play in this win-probability row. |
+| `matchup_post_on_second_link` | character | The MLB Stats API relative URL linking to the player resource of the runner on second base after the play. |
+| `matchup_post_on_third_id` | double | The MLB Stats API (MLBAM) numeric identifier for the runner on third base after the play in this win-probability row. |
+| `matchup_post_on_third_full_name` | character | The full name of the runner occupying third base at the conclusion of the play in this win-probability row. |
+| `matchup_post_on_third_link` | character | The MLB Stats API relative URL linking to the player resource of the runner on third base after the play. |
+| `review_details_is_overturned` | logical | Boolean flag indicating whether the original on-field ruling was reversed following the replay review for this play. |
+| `review_details_in_progress` | logical | Boolean flag indicating whether a replay review of this play was still underway at the time of data capture. |
+| `review_details_review_type` | character | The type of review mechanism applied to this play in the win-probability feed (e.g., 'managerChallenge', 'umpireReview'). |
+| `review_details_challenge_team_id` | double | The MLB Stats API numeric identifier for the team that initiated a replay challenge on this win-probability play. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1131,15 +1131,15 @@ GET /api/v1/leagues — list leagues.
 | `link` | character | API link to the game feed. |
 | `abbreviation` | character | Short abbreviation. |
 | `name_short` | character | Short name of player (First Initial, Last Name) |
-| `season_state` | character |  |
-| `has_wild_card` | logical |  |
-| `has_split_season` | logical |  |
-| `num_games` | double |  |
-| `has_playoff_points` | logical |  |
+| `season_state` | character | A string describing the current phase of the league's season (e.g., 'inProgress', 'offseason', 'preseason'). |
+| `has_wild_card` | logical | Boolean flag indicating whether this league includes a wild card playoff format for postseason eligibility. |
+| `has_split_season` | logical | Boolean flag indicating whether this league divides its season into two halves with separate standings (as used historically in some minor leagues). |
+| `num_games` | double | The total number of regular-season games scheduled per team in this league for the given season. |
+| `has_playoff_points` | logical | Boolean flag indicating whether this league uses a playoff points system to determine postseason seeding. |
 | `num_teams` | double | Number of teams the player appeared for. |
-| `num_wildcard_teams` | double |  |
+| `num_wildcard_teams` | double | The number of wild card berths available for postseason entry in this league for the given season. |
 | `season` | character | Season year. |
-| `org_code` | character |  |
+| `org_code` | character | The organizational code identifying the parent body (e.g., 'MLB') governing this league within the MLB Stats API hierarchy. |
 | `conferences_in_use` | logical | Whether conferences were in use that season. |
 | `divisions_in_use` | logical | Whether divisions were in use that season. |
 | `sort_order` | integer | Display sort order for the sport. |
@@ -1566,99 +1566,99 @@ View latest player drafted, endpoint best used when draft is currently open.
 | col_name | type | description |
 |---|---|---|
 | `number` | integer | Week number as returned by the API. |
-| `next_up` | character |  |
-| `pick_pick_round` | character |  |
-| `pick_pick_number` | integer |  |
-| `pick_display_pick_number` | integer |  |
-| `pick_round_pick_number` | integer |  |
-| `pick_signing_bonus` | character |  |
-| `pick_home_city` | character |  |
-| `pick_home_state` | character |  |
-| `pick_home_country` | character |  |
-| `pick_school_name` | character |  |
-| `pick_school_school_class` | character |  |
-| `pick_school_city` | character |  |
-| `pick_school_country` | character |  |
-| `pick_school_state` | character |  |
-| `pick_headshot_link` | character |  |
-| `pick_person_id` | integer |  |
-| `pick_person_full_name` | character |  |
-| `pick_person_link` | character |  |
-| `pick_person_first_name` | character |  |
-| `pick_person_last_name` | character |  |
-| `pick_person_birth_date` | character |  |
-| `pick_person_current_age` | integer |  |
-| `pick_person_birth_city` | character |  |
-| `pick_person_birth_state_province` | character |  |
-| `pick_person_birth_country` | character |  |
-| `pick_person_height` | character |  |
-| `pick_person_weight` | integer |  |
-| `pick_person_active` | logical |  |
-| `pick_person_primary_position_code` | character |  |
-| `pick_person_primary_position_name` | character |  |
-| `pick_person_primary_position_type` | character |  |
-| `pick_person_primary_position_abbreviation` | character |  |
-| `pick_person_use_name` | character |  |
-| `pick_person_use_last_name` | character |  |
-| `pick_person_middle_name` | character |  |
-| `pick_person_boxscore_name` | character |  |
-| `pick_person_gender` | character |  |
-| `pick_person_is_player` | logical |  |
-| `pick_person_is_verified` | logical |  |
-| `pick_person_draft_year` | integer |  |
-| `pick_person_bat_side_code` | character |  |
-| `pick_person_bat_side_description` | character |  |
-| `pick_person_pitch_hand_code` | character |  |
-| `pick_person_pitch_hand_description` | character |  |
-| `pick_person_name_first_last` | character |  |
-| `pick_person_name_slug` | character |  |
-| `pick_person_first_last_name` | character |  |
-| `pick_person_last_first_name` | character |  |
-| `pick_person_last_init_name` | character |  |
-| `pick_person_init_last_name` | character |  |
-| `pick_person_full_fml_name` | character |  |
-| `pick_person_full_lfm_name` | character |  |
-| `pick_person_strike_zone_top` | double |  |
-| `pick_person_strike_zone_bottom` | double |  |
-| `pick_person_xref_ids` | character |  |
-| `pick_team_spring_league_id` | integer |  |
-| `pick_team_spring_league_name` | character |  |
-| `pick_team_spring_league_link` | character |  |
-| `pick_team_spring_league_abbreviation` | character |  |
-| `pick_team_all_star_status` | character |  |
-| `pick_team_id` | integer |  |
-| `pick_team_name` | character |  |
-| `pick_team_link` | character |  |
-| `pick_team_season` | integer |  |
-| `pick_team_venue_id` | integer |  |
-| `pick_team_venue_name` | character |  |
-| `pick_team_venue_link` | character |  |
-| `pick_team_spring_venue_id` | integer |  |
-| `pick_team_spring_venue_link` | character |  |
-| `pick_team_team_code` | character |  |
-| `pick_team_file_code` | character |  |
-| `pick_team_abbreviation` | character |  |
-| `pick_team_team_name` | character |  |
-| `pick_team_location_name` | character |  |
-| `pick_team_first_year_of_play` | character |  |
-| `pick_team_league_id` | integer |  |
-| `pick_team_league_name` | character |  |
-| `pick_team_league_link` | character |  |
-| `pick_team_division_id` | integer |  |
-| `pick_team_division_name` | character |  |
-| `pick_team_division_link` | character |  |
-| `pick_team_sport_id` | integer |  |
-| `pick_team_sport_link` | character |  |
-| `pick_team_sport_name` | character |  |
-| `pick_team_short_name` | character |  |
-| `pick_team_franchise_name` | character |  |
-| `pick_team_club_name` | character |  |
-| `pick_team_active` | logical |  |
-| `pick_draft_type_code` | character |  |
-| `pick_draft_type_description` | character |  |
-| `pick_is_drafted` | logical |  |
-| `pick_is_pass` | logical |  |
-| `pick_year` | character |  |
+| `next_up` | character | Indicates whether this draft slot is the next pick to be made in the current draft. |
+| `pick_pick_round` | character | Draft round in which this pick was made (e.g., '1', '2', 'CB-A' for competitive balance). |
+| `pick_pick_number` | integer | Overall pick number of this selection counting sequentially across all rounds of the draft. |
+| `pick_display_pick_number` | integer | The formatted overall pick number displayed publicly for this draft selection. |
+| `pick_round_pick_number` | integer | Pick number within the specific draft round (i.e., the Nth pick in that round). |
+| `pick_signing_bonus` | character | Reported or slotted signing bonus amount associated with this draft pick. |
+| `pick_home_city` | character | City of the draftee's listed home address at the time of the draft. |
+| `pick_home_state` | character | State or province of the draftee's listed home address at the time of the draft. |
+| `pick_home_country` | character | Country of the draftee's listed home address at the time of the draft. |
+| `pick_school_name` | character | Name of the high school or college the draftee attended before being drafted. |
+| `pick_school_school_class` | character | Academic class or level of the draftee at their school (e.g., High School, Junior, Senior). |
+| `pick_school_city` | character | City of the high school or college the draftee attended before being drafted. |
+| `pick_school_country` | character | Country of the school the draftee attended. |
+| `pick_school_state` | character | State of the school the draftee attended. |
+| `pick_headshot_link` | character | URL to the headshot image of the drafted player on the MLB Stats API CDN. |
+| `pick_person_id` | integer | Unique MLB Stats API (MLBAM) identifier for the drafted player. |
+| `pick_person_full_name` | character | Player's complete display name as used throughout the MLB Stats API. |
+| `pick_person_link` | character | Relative URL path to the player's resource in the MLB Stats API. |
+| `pick_person_first_name` | character | The player's legal or preferred first name. |
+| `pick_person_last_name` | character | The player's legal or preferred last name. |
+| `pick_person_birth_date` | character | Date of birth of the drafted player in ISO 8601 format. |
+| `pick_person_current_age` | integer | Age of the drafted player in years at the time of the data retrieval. |
+| `pick_person_birth_city` | character | City where the drafted player was born. |
+| `pick_person_birth_state_province` | character | State or province where the drafted player was born. |
+| `pick_person_birth_country` | character | Country where the drafted player was born. |
+| `pick_person_height` | character | Player's height in feet-and-inches notation (e.g., 6' 2"). |
+| `pick_person_weight` | integer | Player's weight in pounds as recorded by the MLB Stats API. |
+| `pick_person_active` | logical | Boolean flag indicating whether the drafted player is currently on an active MLB roster. |
+| `pick_person_primary_position_code` | character | Numeric or short code identifying the player's primary fielding position. |
+| `pick_person_primary_position_name` | character | Full name of the player's primary fielding position (e.g., Shortstop, Center Field). |
+| `pick_person_primary_position_type` | character | Broad classification of the player's position role (e.g., Pitcher, Infielder, Outfielder). |
+| `pick_person_primary_position_abbreviation` | character | Short abbreviation for the player's primary fielding position (e.g., SS, CF, SP). |
+| `pick_person_use_name` | character | The first name or nickname the player prefers to use publicly. |
+| `pick_person_use_last_name` | character | The last name the player prefers to use publicly, which may differ from the legal last name. |
+| `pick_person_middle_name` | character | The player's middle name as recorded by the MLB Stats API. |
+| `pick_person_boxscore_name` | character | Abbreviated name format used for the player on official MLB box scores. |
+| `pick_person_gender` | character | Recorded gender of the drafted player. |
+| `pick_person_is_player` | logical | Boolean flag indicating whether this person is classified as an active player in the MLB Stats API. |
+| `pick_person_is_verified` | logical | Boolean flag indicating whether the player's profile has been verified by MLB. |
+| `pick_person_draft_year` | integer | The MLB draft year in which this player was originally selected. |
+| `pick_person_bat_side_code` | character | Single-letter code for the player's batting handedness (e.g., R, L, S for switch). |
+| `pick_person_bat_side_description` | character | Full description of the player's batting side (e.g., Right, Left, Switch). |
+| `pick_person_pitch_hand_code` | character | Single-letter code for the player's pitching handedness (e.g., R, L, S). |
+| `pick_person_pitch_hand_description` | character | Full description of the player's pitching hand (e.g., Right, Left, Switch). |
+| `pick_person_name_first_last` | character | Player's display name in first-last format, typically matching the broadcast name. |
+| `pick_person_name_slug` | character | URL-safe slug derived from the player's name for use in web links. |
+| `pick_person_first_last_name` | character | Player's name formatted as first name followed by last name. |
+| `pick_person_last_first_name` | character | Player's name formatted as last name followed by first name. |
+| `pick_person_last_init_name` | character | Player's name formatted as last name followed by first initial. |
+| `pick_person_init_last_name` | character | Player's name formatted as first initial followed by last name (e.g., J. Smith). |
+| `pick_person_full_fml_name` | character | Player's full name in first-middle-last order as recorded by the MLB Stats API. |
+| `pick_person_full_lfm_name` | character | Player's full name in last-first-middle order as recorded by the MLB Stats API. |
+| `pick_person_strike_zone_top` | double | Upper boundary of the player's personalized strike zone in feet from the ground. |
+| `pick_person_strike_zone_bottom` | double | Lower boundary of the player's personalized strike zone in feet from the ground. |
+| `pick_person_xref_ids` | character | Serialized cross-reference identifiers linking the player to external data systems. |
+| `pick_team_spring_league_id` | integer | MLB Stats API identifier for the team's spring training league. |
+| `pick_team_spring_league_name` | character | Full name of the spring training league the team belongs to. |
+| `pick_team_spring_league_link` | character | Relative URL path to the spring training league resource in the MLB Stats API. |
+| `pick_team_spring_league_abbreviation` | character | Abbreviation for the spring training league the team participates in (e.g., Cactus, Grapefruit). |
+| `pick_team_all_star_status` | character | All-Star game affiliation status of the team (e.g., American League, National League). |
+| `pick_team_id` | integer | Unique MLB Stats API identifier for the team that made this draft pick. |
+| `pick_team_name` | character | Full official name of the MLB team that made this pick (e.g., New York Yankees). |
+| `pick_team_link` | character | Relative URL path to the team resource in the MLB Stats API. |
+| `pick_team_season` | integer | MLB season year for which this team's metadata snapshot applies. |
+| `pick_team_venue_id` | integer | MLB Stats API identifier for the team's regular-season home ballpark. |
+| `pick_team_venue_name` | character | Name of the team's regular-season home ballpark (e.g., Yankee Stadium). |
+| `pick_team_venue_link` | character | Relative URL path to the team's regular-season home venue in the MLB Stats API. |
+| `pick_team_spring_venue_id` | integer | MLB Stats API identifier for the team's spring training ballpark. |
+| `pick_team_spring_venue_link` | character | Relative URL path to the spring training venue resource in the MLB Stats API. |
+| `pick_team_team_code` | character | Short internal code used by MLB to identify the team in system contexts. |
+| `pick_team_file_code` | character | Lowercase file-system-safe code used internally by MLB to identify the team. |
+| `pick_team_abbreviation` | character | Standard two- or three-letter abbreviation for the MLB team that made this pick. |
+| `pick_team_team_name` | character | The nickname portion of the team's full name (e.g., Yankees, Dodgers). |
+| `pick_team_location_name` | character | Geographic location name (city/metro) associated with the team (e.g., New York). |
+| `pick_team_first_year_of_play` | character | Year in which the selecting franchise first played as an MLB team. |
+| `pick_team_league_id` | integer | MLB Stats API identifier for the league (American or National) of the selecting team. |
+| `pick_team_league_name` | character | Full name of the league the selecting team belongs to (e.g., American League). |
+| `pick_team_league_link` | character | Relative URL path to the league resource in the MLB Stats API. |
+| `pick_team_division_id` | integer | MLB Stats API identifier for the division the selecting team belongs to. |
+| `pick_team_division_name` | character | Full name of the division the selecting team belongs to (e.g., AL East). |
+| `pick_team_division_link` | character | Relative URL path to the division resource in the MLB Stats API. |
+| `pick_team_sport_id` | integer | MLB Stats API identifier for the sport classification (MLB = 1). |
+| `pick_team_sport_link` | character | Relative URL path to the sport resource in the MLB Stats API. |
+| `pick_team_sport_name` | character | Full name of the sport classification for the team (e.g., Major League Baseball). |
+| `pick_team_short_name` | character | Shortened version of the team name used in space-constrained display contexts. |
+| `pick_team_franchise_name` | character | Historical franchise name that persists across any team relocations or renames. |
+| `pick_team_club_name` | character | Informal club or nickname portion of the team's full name (e.g., Yankees, Red Sox). |
+| `pick_team_active` | logical | Boolean flag indicating whether the selecting MLB franchise is currently active. |
+| `pick_draft_type_code` | character | Short code identifying the type of draft (e.g., amateur, Rule 5) for this pick. |
+| `pick_draft_type_description` | character | Human-readable description of the draft type associated with this pick. |
+| `pick_is_drafted` | logical | Boolean flag indicating whether this draft slot has been filled with an actual selection. |
+| `pick_is_pass` | logical | Boolean flag indicating whether the selecting team passed on this pick rather than making a selection. |
+| `pick_year` | character | MLB draft year for which this pick record applies. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1687,7 +1687,7 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `timecode` | character |  |
+| `timecode` | character | A timestamp string representing a specific point in time used to query the MLB Stats API for game state changes. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1718,7 +1718,7 @@ View corrected non Statcast information for games
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `schedule_date` | character |  |
+| `schedule_date` | character | The calendar date for which schedule changes are being reported, identifying when rescheduled or suspended games occurred. |
 | `game_pk` | integer | Unique game identifier. |
 | `game_guid` | character | Globally unique game identifier (GUID). |
 | `link` | character | API link to the game feed. |
@@ -2050,10 +2050,10 @@ View time of game info.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `hits_per9_inn` | double |  |
-| `runs_per9_inn` | double |  |
-| `pitches_per9_inn` | double |  |
-| `plate_appearances_per9_inn` | double |  |
+| `hits_per9_inn` | double | Average number of hits allowed per nine innings across all games in the sample period. |
+| `runs_per9_inn` | double | Average number of runs scored per nine innings across all games in the sample period. |
+| `pitches_per9_inn` | double | Average number of pitches thrown per nine innings across all games in the sample period. |
+| `plate_appearances_per9_inn` | double | Average number of plate appearances occurring per nine innings across all games in the sample period. |
 | `hits_per_game` | double | Hits per game. |
 | `runs_per_game` | double | Runs per game. |
 | `innings_played_per_game` | double | Innings played per game. |
@@ -2068,37 +2068,37 @@ View time of game info.
 | `total_pitchers` | integer | Total pitchers used. |
 | `total_pitches` | integer | Total pitches thrown. |
 | `total_games` | integer | Total games on the date. |
-| `total7_inn_games` | integer |  |
-| `total9_inn_games` | double |  |
+| `total7_inn_games` | integer | Total number of seven-inning games played (including doubleheader games). |
+| `total9_inn_games` | double | Total number of nine-inning games played in the sample period. |
 | `total_extra_inn_games` | integer | Total extra-inning games. |
 | `time_per_game` | character | Average time per game (HH:MM:SS). |
 | `time_per_pitch` | character | Average time per pitch (HH:MM:SS). |
 | `time_per_hit` | character | Average time per hit (HH:MM:SS). |
 | `time_per_run` | character | Average time per run (HH:MM:SS). |
 | `time_per_plate_appearance` | character | Average time per plate appearance (HH:MM:SS). |
-| `time_per9_inn` | character |  |
-| `time_per77_plate_appearances` | character |  |
+| `time_per9_inn` | character | Average elapsed clock time per nine-inning game formatted as hours and minutes. |
+| `time_per77_plate_appearances` | character | Average time per 77 plate appearances, used as a normalized pace benchmark by MLB. |
 | `total_extra_inn_time` | character | Total extra-inning time (HHH:MM:SS). |
-| `time_per7_inn_game_without_extra_inn` | character |  |
-| `total9_inn_games_completed_early` | integer |  |
-| `total9_inn_games_without_extra_inn` | double |  |
-| `total9_inn_games_scheduled` | integer |  |
+| `time_per7_inn_game_without_extra_inn` | character | Average elapsed clock time per seven-inning game excluding games that went to extra innings. |
+| `total9_inn_games_completed_early` | integer | Number of nine-inning games that were called or suspended before completing nine full innings. |
+| `total9_inn_games_without_extra_inn` | double | Number of nine-inning games completed without requiring extra innings. |
+| `total9_inn_games_scheduled` | integer | Total number of nine-inning games that were scheduled in the sample period. |
 | `hits_per_run` | double | Hits per run. |
 | `pitches_per_pitcher` | double | Pitches per pitcher. |
 | `season` | character | Season year. |
 | `sport_id` | integer | Sport MLBAM ID. |
 | `sport_code` | character | Short sport code (e.g. 'mlb', 'aaa'). |
 | `sport_link` | character | API link to the sport. |
-| `pr_portal_calculated_fields_total7_inn_games` | integer |  |
-| `pr_portal_calculated_fields_total9_inn_games` | double |  |
+| `pr_portal_calculated_fields_total7_inn_games` | integer | Calculated total count of seven-inning games as tallied by the MLB Stats API pace portal. |
+| `pr_portal_calculated_fields_total9_inn_games` | double | Calculated total count of nine-inning games as tallied by the MLB Stats API pace portal. |
 | `pr_portal_calculated_fields_total_extra_inn_games` | integer | Portal-calculated total extra-inning games. |
-| `pr_portal_calculated_fields_time_per7_inn_game` | character |  |
-| `pr_portal_calculated_fields_time_per9_inn_game` | character |  |
+| `pr_portal_calculated_fields_time_per7_inn_game` | character | Calculated average game time per seven-inning game as produced by the MLB Stats API pace portal. |
+| `pr_portal_calculated_fields_time_per9_inn_game` | character | Calculated average game time per nine-inning game as produced by the MLB Stats API pace portal. |
 | `pr_portal_calculated_fields_time_per_extra_inn_game` | character | Portal-calculated time per extra-inning game. |
-| `time_per7_inn_game` | character |  |
-| `total7_inn_games_scheduled` | double |  |
-| `total7_inn_games_without_extra_inn` | double |  |
-| `total7_inn_games_completed_early` | double |  |
+| `time_per7_inn_game` | character | Average elapsed clock time per seven-inning game formatted as hours and minutes. |
+| `total7_inn_games_scheduled` | double | Total number of seven-inning games that were scheduled in the sample period. |
+| `total7_inn_games_without_extra_inn` | double | Number of seven-inning games completed without requiring extra innings. |
+| `total7_inn_games_completed_early` | double | Number of seven-inning games that were called or completed before the full seven innings were played. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2137,7 +2137,7 @@ View high/low stats by player or team.
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | integer | Total number of splits in the leaderboard. |
-| `exemptions` | character |  |
+| `exemptions` | character | Serialized list of exemption codes or player IDs excluded from the high/low statistical split calculation. |
 | `splits` | character | Splits. |
 | `splits_tied_with_offset` | character | Players tied at the offset boundary. |
 | `splits_tied_with_limit` | character | Players tied at the limit boundary. |
@@ -2150,10 +2150,10 @@ View high/low stats by player or team.
 | `sort_stat_lookup_param` | character | API lookup parameter for the sorted statistic (e.g. 'atBats'). |
 | `sort_stat_is_counting` | logical | Whether the sorted statistic is a counting stat. |
 | `sort_stat_label` | character | Human-readable label of the sorted statistic (e.g. 'At bats'). |
-| `sort_stat_stat_groups` | character |  |
-| `sort_stat_org_types` | character |  |
-| `sort_stat_high_low_types` | character |  |
-| `sort_stat_streak_levels` | character |  |
+| `sort_stat_stat_groups` | character | Serialized list of statistical group identifiers (e.g., hitting, pitching) used to filter this high/low query. |
+| `sort_stat_org_types` | character | Serialized list of organization types (e.g., MLB, MiLB) in scope for this high/low stat sort. |
+| `sort_stat_high_low_types` | character | Serialized list of high/low result type codes (e.g., high, low) applicable to this stat leader query. |
+| `sort_stat_streak_levels` | character | Serialized list of streak level codes defining the streak lengths tracked in this high/low query. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2219,39 +2219,39 @@ View a home run derby object based on gamePk.
 | `full_lfm_name` | character | Full name (last-first-middle). |
 | `strike_zone_top` | double | Top of the player's strike zone (feet). |
 | `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
-| `current_team_spring_league_id` | double |  |
-| `current_team_spring_league_name` | character |  |
-| `current_team_spring_league_link` | character |  |
-| `current_team_spring_league_abbreviation` | character |  |
-| `current_team_all_star_status` | character |  |
+| `current_team_spring_league_id` | double | The MLB Stats API numeric identifier for the spring training league of the player's current team. |
+| `current_team_spring_league_name` | character | The full name of the spring training league (e.g., 'Cactus League') for the player's current team. |
+| `current_team_spring_league_link` | character | The MLB Stats API relative URL linking to the spring training league resource for the player's current team. |
+| `current_team_spring_league_abbreviation` | character | The abbreviation for the Cactus League or Grapefruit League in which the player's current team participates during spring training. |
+| `current_team_all_star_status` | character | The All-Star designation status of the player's current team (e.g., which league's All-Star pool the team belongs to). |
 | `current_team_id` | integer | Current team MLBAM ID. |
 | `current_team_name` | character | Current team name. |
 | `current_team_link` | character | API link to the current team. |
-| `current_team_season` | integer |  |
-| `current_team_venue_id` | integer |  |
-| `current_team_venue_name` | character |  |
-| `current_team_venue_link` | character |  |
-| `current_team_spring_venue_id` | double |  |
-| `current_team_spring_venue_link` | character |  |
-| `current_team_team_code` | character |  |
-| `current_team_file_code` | character |  |
-| `current_team_abbreviation` | character |  |
-| `current_team_team_name` | character |  |
-| `current_team_location_name` | character |  |
-| `current_team_first_year_of_play` | character |  |
-| `current_team_league_id` | integer |  |
-| `current_team_league_name` | character |  |
-| `current_team_league_link` | character |  |
-| `current_team_division_id` | double |  |
-| `current_team_division_name` | character |  |
-| `current_team_division_link` | character |  |
-| `current_team_sport_id` | integer |  |
-| `current_team_sport_link` | character |  |
-| `current_team_sport_name` | character |  |
-| `current_team_short_name` | character |  |
-| `current_team_franchise_name` | character |  |
-| `current_team_club_name` | character |  |
-| `current_team_active` | logical |  |
+| `current_team_season` | integer | The MLB season year for which the player's current team metadata is reported. |
+| `current_team_venue_id` | integer | The MLB Stats API numeric identifier for the regular-season home ballpark of the player's current team. |
+| `current_team_venue_name` | character | The official name of the regular-season home ballpark for the player's current team. |
+| `current_team_venue_link` | character | The MLB Stats API relative URL linking to the regular-season venue resource for the player's current team. |
+| `current_team_spring_venue_id` | double | The MLB Stats API numeric identifier for the spring training ballpark used by the player's current team. |
+| `current_team_spring_venue_link` | character | The MLB Stats API relative URL linking to the spring training venue resource for the player's current team. |
+| `current_team_team_code` | character | The three-letter internal team code used by MLB in legacy data systems and some API references. |
+| `current_team_file_code` | character | The lowercase alphabetic file code used by MLB for identifying the team in media and data assets. |
+| `current_team_abbreviation` | character | The standard two- or three-letter abbreviation for the player's current MLB team (e.g., 'NYY', 'LAD'). |
+| `current_team_team_name` | character | The full official name of the player's current team, including both city and nickname. |
+| `current_team_location_name` | character | The city or metropolitan area name associated with the player's current team. |
+| `current_team_first_year_of_play` | character | The calendar year in which the player's current franchise first played MLB games. |
+| `current_team_league_id` | integer | The MLB Stats API numeric identifier for the league (American League or National League) of the player's current team. |
+| `current_team_league_name` | character | The full name of the league (e.g., 'American League') in which the player's current team competes. |
+| `current_team_league_link` | character | The MLB Stats API relative URL linking to the league resource for the player's current team. |
+| `current_team_division_id` | double | The MLB Stats API numeric identifier for the division in which the player's current team competes. |
+| `current_team_division_name` | character | The full name of the division in which the player's current team competes (e.g., 'American League East'). |
+| `current_team_division_link` | character | The MLB Stats API relative URL linking to the division resource for the player's current team. |
+| `current_team_sport_id` | integer | The MLB Stats API numeric identifier for the sport classification (e.g., 1 for MLB) of the player's current team. |
+| `current_team_sport_link` | character | The MLB Stats API relative URL linking to the sport resource associated with the player's current team. |
+| `current_team_sport_name` | character | The name of the sport classification for the player's current team (e.g., 'Major League Baseball'). |
+| `current_team_short_name` | character | A shortened display name for the player's current team, often used in space-constrained UI contexts. |
+| `current_team_franchise_name` | character | The historical franchise name for the player's current team, which may differ from the current team name for relocated clubs. |
+| `current_team_club_name` | character | The short club nickname for the player's current team, typically the city-less portion of the franchise name. |
+| `current_team_active` | logical | Boolean flag indicating whether the player's current team is an active MLB franchise. |
 | `primary_position_code` | character | Primary position code. |
 | `primary_position_name` | character | Primary fielding position name. |
 | `primary_position_type` | character | Primary position type (e.g. Infielder). |
@@ -2262,8 +2262,8 @@ View a home run derby object based on gamePk.
 | `pitch_hand_description` | character | Throwing hand description. |
 | `last_played_date` | character | Date of last MLB game played. |
 | `name_matrilineal` | character | Maternal family name. |
-| `current_team_parent_org_name` | character |  |
-| `current_team_parent_org_id` | double |  |
+| `current_team_parent_org_name` | character | The name of the parent major-league organization for the player's current team. |
+| `current_team_parent_org_id` | double | The MLB Stats API numeric identifier for the parent organization (major-league affiliate) of the player's current team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2329,39 +2329,39 @@ View a home run derby object based on bracket.
 | `full_lfm_name` | character | Full name (last-first-middle). |
 | `strike_zone_top` | double | Top of the player's strike zone (feet). |
 | `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
-| `current_team_spring_league_id` | double |  |
-| `current_team_spring_league_name` | character |  |
-| `current_team_spring_league_link` | character |  |
-| `current_team_spring_league_abbreviation` | character |  |
-| `current_team_all_star_status` | character |  |
+| `current_team_spring_league_id` | double | MLB Stats API identifier for the spring training league of the participant's current team. |
+| `current_team_spring_league_name` | character | Full name of the spring training league the participant's team belongs to. |
+| `current_team_spring_league_link` | character | Relative URL path to the spring training league resource in the MLB Stats API. |
+| `current_team_spring_league_abbreviation` | character | Abbreviation for the spring training league the participant's team belongs to (e.g., Cactus, Grapefruit). |
+| `current_team_all_star_status` | character | All-Star game league affiliation of the participant's current team (e.g., American League, National League). |
 | `current_team_id` | integer | Current team MLBAM ID. |
 | `current_team_name` | character | Current team name. |
 | `current_team_link` | character | API link to the current team. |
-| `current_team_season` | integer |  |
-| `current_team_venue_id` | integer |  |
-| `current_team_venue_name` | character |  |
-| `current_team_venue_link` | character |  |
-| `current_team_spring_venue_id` | double |  |
-| `current_team_spring_venue_link` | character |  |
-| `current_team_team_code` | character |  |
-| `current_team_file_code` | character |  |
-| `current_team_abbreviation` | character |  |
-| `current_team_team_name` | character |  |
-| `current_team_location_name` | character |  |
-| `current_team_first_year_of_play` | character |  |
-| `current_team_league_id` | integer |  |
-| `current_team_league_name` | character |  |
-| `current_team_league_link` | character |  |
-| `current_team_division_id` | double |  |
-| `current_team_division_name` | character |  |
-| `current_team_division_link` | character |  |
-| `current_team_sport_id` | integer |  |
-| `current_team_sport_link` | character |  |
-| `current_team_sport_name` | character |  |
-| `current_team_short_name` | character |  |
-| `current_team_franchise_name` | character |  |
-| `current_team_club_name` | character |  |
-| `current_team_active` | logical |  |
+| `current_team_season` | integer | MLB season year for which the participant's current team metadata snapshot applies. |
+| `current_team_venue_id` | integer | MLB Stats API identifier for the participant's current team's regular-season home ballpark. |
+| `current_team_venue_name` | character | Name of the participant's current team's regular-season home ballpark. |
+| `current_team_venue_link` | character | Relative URL path to the current team's home venue resource in the MLB Stats API. |
+| `current_team_spring_venue_id` | double | MLB Stats API identifier for the spring training ballpark used by the participant's team. |
+| `current_team_spring_venue_link` | character | Relative URL path to the spring training venue resource in the MLB Stats API. |
+| `current_team_team_code` | character | Short internal code used by MLB to identify the participant's current team in system contexts. |
+| `current_team_file_code` | character | Lowercase file-system-safe code used by MLB to identify the participant's current team. |
+| `current_team_abbreviation` | character | Standard two- or three-letter abbreviation for the Home Run Derby participant's current MLB team. |
+| `current_team_team_name` | character | The nickname portion of the participant's current team name (e.g., Red Sox, Braves). |
+| `current_team_location_name` | character | City or metropolitan area name associated with the participant's current team. |
+| `current_team_first_year_of_play` | character | Year in which the participant's current franchise first played as an MLB team. |
+| `current_team_league_id` | integer | MLB Stats API identifier for the league (American or National) of the participant's current team. |
+| `current_team_league_name` | character | Full name of the league the participant's current team belongs to (e.g., National League). |
+| `current_team_league_link` | character | Relative URL path to the league resource for the participant's current team in the MLB Stats API. |
+| `current_team_division_id` | double | MLB Stats API identifier for the division the participant's current team belongs to. |
+| `current_team_division_name` | character | Full name of the division the participant's current team belongs to (e.g., AL East). |
+| `current_team_division_link` | character | Relative URL path to the participant's current team's division resource in the MLB Stats API. |
+| `current_team_sport_id` | integer | MLB Stats API identifier for the sport classification of the participant's current team (MLB = 1). |
+| `current_team_sport_link` | character | Relative URL path to the sport resource for the participant's current team in the MLB Stats API. |
+| `current_team_sport_name` | character | Full sport classification name for the participant's current team (e.g., Major League Baseball). |
+| `current_team_short_name` | character | Shortened display name of the participant's current team for space-constrained contexts. |
+| `current_team_franchise_name` | character | Historical franchise name for the participant's team, persisting across relocations. |
+| `current_team_club_name` | character | Informal nickname portion of the participant's current team name (e.g., Yankees, Dodgers). |
+| `current_team_active` | logical | Boolean flag indicating whether the participant's current franchise is an active MLB organization. |
 | `primary_position_code` | character | Primary position code. |
 | `primary_position_name` | character | Primary fielding position name. |
 | `primary_position_type` | character | Primary position type (e.g. Infielder). |
@@ -2372,8 +2372,8 @@ View a home run derby object based on bracket.
 | `pitch_hand_description` | character | Throwing hand description. |
 | `last_played_date` | character | Date of last MLB game played. |
 | `name_matrilineal` | character | Maternal family name. |
-| `current_team_parent_org_name` | character |  |
-| `current_team_parent_org_id` | double |  |
+| `current_team_parent_org_name` | character | Name of the parent MLB organization for the participant's current team. |
+| `current_team_parent_org_id` | double | MLB Stats API identifier for the parent MLB organization of the participant's current team, relevant for minor league affiliates. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2439,39 +2439,39 @@ View a home run derby object based on pool.
 | `full_lfm_name` | character | Full name (last-first-middle). |
 | `strike_zone_top` | double | Top of the player's strike zone (feet). |
 | `strike_zone_bottom` | double | Bottom of the player's strike zone (feet). |
-| `current_team_spring_league_id` | double |  |
-| `current_team_spring_league_name` | character |  |
-| `current_team_spring_league_link` | character |  |
-| `current_team_spring_league_abbreviation` | character |  |
-| `current_team_all_star_status` | character |  |
+| `current_team_spring_league_id` | double | The MLB Stats API numeric identifier for the spring training league of the pool participant's current team. |
+| `current_team_spring_league_name` | character | The full name of the spring training league for the pool participant's current team. |
+| `current_team_spring_league_link` | character | The MLB Stats API relative URL linking to the spring training league resource for the pool participant's current team. |
+| `current_team_spring_league_abbreviation` | character | The abbreviation for the spring training league in which the pool participant's current team plays during spring training. |
+| `current_team_all_star_status` | character | The All-Star designation status of the pool participant's current team (e.g., which league's All-Star pool the team belongs to). |
 | `current_team_id` | integer | Current team MLBAM ID. |
 | `current_team_name` | character | Current team name. |
 | `current_team_link` | character | API link to the current team. |
-| `current_team_season` | integer |  |
-| `current_team_venue_id` | integer |  |
-| `current_team_venue_name` | character |  |
-| `current_team_venue_link` | character |  |
-| `current_team_spring_venue_id` | double |  |
-| `current_team_spring_venue_link` | character |  |
-| `current_team_team_code` | character |  |
-| `current_team_file_code` | character |  |
-| `current_team_abbreviation` | character |  |
-| `current_team_team_name` | character |  |
-| `current_team_location_name` | character |  |
-| `current_team_first_year_of_play` | character |  |
-| `current_team_league_id` | integer |  |
-| `current_team_league_name` | character |  |
-| `current_team_league_link` | character |  |
-| `current_team_division_id` | double |  |
-| `current_team_division_name` | character |  |
-| `current_team_division_link` | character |  |
-| `current_team_sport_id` | integer |  |
-| `current_team_sport_link` | character |  |
-| `current_team_sport_name` | character |  |
-| `current_team_short_name` | character |  |
-| `current_team_franchise_name` | character |  |
-| `current_team_club_name` | character |  |
-| `current_team_active` | logical |  |
+| `current_team_season` | integer | The MLB season year for which the pool participant's current team metadata is reported. |
+| `current_team_venue_id` | integer | The MLB Stats API numeric identifier for the regular-season home ballpark of the pool participant's current team. |
+| `current_team_venue_name` | character | The official name of the regular-season home ballpark for the pool participant's current team. |
+| `current_team_venue_link` | character | The MLB Stats API relative URL linking to the regular-season venue resource for the pool participant's current team. |
+| `current_team_spring_venue_id` | double | The MLB Stats API numeric identifier for the spring training ballpark used by the pool participant's current team. |
+| `current_team_spring_venue_link` | character | The MLB Stats API relative URL linking to the spring training venue resource for the pool participant's current team. |
+| `current_team_team_code` | character | The three-letter internal team code used by MLB for the pool participant's team in legacy data systems. |
+| `current_team_file_code` | character | The lowercase alphabetic file code used by MLB for identifying the pool participant's team in media and data assets. |
+| `current_team_abbreviation` | character | The standard two- or three-letter abbreviation for the Home Run Derby pool participant's current MLB team. |
+| `current_team_team_name` | character | The full official name of the pool participant's current team, including both city and nickname. |
+| `current_team_location_name` | character | The city or metropolitan area name associated with the pool participant's current team. |
+| `current_team_first_year_of_play` | character | The calendar year in which the pool participant's current franchise first played MLB games. |
+| `current_team_league_id` | integer | The MLB Stats API numeric identifier for the league of the pool participant's current team. |
+| `current_team_league_name` | character | The full name of the league (e.g., 'National League') in which the pool participant's current team competes. |
+| `current_team_league_link` | character | The MLB Stats API relative URL linking to the league resource for the pool participant's current team. |
+| `current_team_division_id` | double | The MLB Stats API numeric identifier for the division in which the pool participant's current team competes. |
+| `current_team_division_name` | character | The full name of the division in which the pool participant's current team competes (e.g., 'National League West'). |
+| `current_team_division_link` | character | The MLB Stats API relative URL linking to the division resource for the pool participant's current team. |
+| `current_team_sport_id` | integer | The MLB Stats API numeric identifier for the sport classification of the pool participant's current team. |
+| `current_team_sport_link` | character | The MLB Stats API relative URL linking to the sport resource associated with the pool participant's current team. |
+| `current_team_sport_name` | character | The name of the sport classification for the pool participant's current team (e.g., 'Major League Baseball'). |
+| `current_team_short_name` | character | A shortened display name for the pool participant's current team, often used in space-constrained UI contexts. |
+| `current_team_franchise_name` | character | The historical franchise name for the pool participant's current team, which may differ from the current team name for relocated clubs. |
+| `current_team_club_name` | character | The short club nickname for the pool participant's current team, typically the city-less portion of the franchise name. |
+| `current_team_active` | logical | Boolean flag indicating whether the pool participant's current team is an active MLB franchise. |
 | `primary_position_code` | character | Primary position code. |
 | `primary_position_name` | character | Primary fielding position name. |
 | `primary_position_type` | character | Primary position type (e.g. Infielder). |
@@ -2482,8 +2482,8 @@ View a home run derby object based on pool.
 | `pitch_hand_description` | character | Throwing hand description. |
 | `last_played_date` | character | Date of last MLB game played. |
 | `name_matrilineal` | character | Maternal family name. |
-| `current_team_parent_org_name` | character |  |
-| `current_team_parent_org_id` | double |  |
+| `current_team_parent_org_name` | character | The name of the parent major-league organization for the pool participant's current team. |
+| `current_team_parent_org_id` | double | The MLB Stats API numeric identifier for the parent organization of the pool participant's current team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2932,7 +2932,7 @@ View tied game schedule info.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `schedule_date` | character |  |
+| `schedule_date` | character | The calendar date grouping tied (suspended and resumed) games in this response row, as returned by the MLB Stats API schedule endpoint. |
 | `game_pk` | integer | Unique game identifier. |
 | `game_guid` | character | Globally unique game identifier (GUID). |
 | `link` | character | API link to the game feed. |
@@ -3281,7 +3281,7 @@ View team stats.
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | integer | Total number of splits in the leaderboard. |
-| `exemptions` | character |  |
+| `exemptions` | character | A serialized list of any statistical exemption notes or flags associated with the team's stat splits (e.g., players exempt from qualifying thresholds). |
 | `splits` | character | Splits. |
 | `splits_tied_with_offset` | character | Players tied at the offset boundary. |
 | `splits_tied_with_limit` | character | Players tied at the limit boundary. |
@@ -3328,7 +3328,7 @@ View leaders for a statistic.
 |---|---|---|
 | `leader_category` | character | Team leader category (e.g., homeRuns). |
 | `season` | character | Season year. |
-| `leaders` | character |  |
+| `leaders` | character | Serialized representation of the statistical leaders entries for the team stat category returned by the MLB Stats API. |
 | `stat_group` | character | Stat group (e.g., hitting). |
 | `total_splits` | integer | Total number of splits in the leaderboard. |
 | `game_type_id` | character | Game type code (e.g., R for regular season). |

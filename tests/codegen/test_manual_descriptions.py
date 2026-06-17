@@ -38,9 +38,9 @@ def test_residual_columns_have_required_fields():
 
 def test_residual_total_matches_known_baseline():
     # Baseline ratchets DOWN as buckets are filled (only ever lowered, never raised).
-    # 3352ed0: 3061 → NFL bucket (Task 3): 1903.
+    # 3352ed0: 3061 → NFL (Task 3): 1903 → MLB (Task 4): 1304.
     total = len(extract.residual_columns())
-    assert total <= 1903, f"residual grew to {total} (>1903) — new blank columns appeared"
+    assert total <= 1304, f"residual grew to {total} (>1304) — new blank columns appeared"
 
 
 _BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
