@@ -1,4 +1,7 @@
+import re
+
 from tools.codegen import generate as gen
+from tools.codegen import extract_residual_columns as extract
 
 
 def test_manual_col_desc_schema_then_global_then_empty(monkeypatch):
@@ -23,3 +26,52 @@ def test_table_cell_desc_priority(monkeypatch):
     assert gen._table_cell_desc("", "nfl", "other", "nfl_load_pbp") == "rdict desc"
     # schema=None still resolves r-dict (back-compat path)
     assert gen._table_cell_desc("", "nfl", "other") == "rdict desc"
+
+
+def test_residual_columns_have_required_fields():
+    rows = extract.residual_columns()
+    assert isinstance(rows, list) and rows, "expected a non-empty residual work-list"
+    sample = rows[0]
+    for k in ("schema", "col", "type", "league", "siblings"):
+        assert k in sample, f"missing {k} in residual row"
+
+
+def test_residual_total_matches_known_baseline():
+    # Baseline measured on feat/returns-table-descriptions @ 3352ed0; ratchets DOWN as buckets are filled.
+    # Update this constant (only downward) as each authoring task lands.
+    total = len(extract.residual_columns())
+    assert total <= 3061, f"residual grew to {total} (>3061) — new blank columns appeared"
+
+
+_BANNED = re.compile(r"^(the\s+)?\w+(\s+\w+)?\s+(column|field|value|id|name)\.?$", re.I)
+
+
+def _all_manual_entries():
+    d = gen._manual_col_descs()
+    for schema, cols in d.items():
+        if not isinstance(cols, dict):
+            continue
+        for col, desc in cols.items():
+            yield schema, col, desc
+
+
+def test_no_orphan_manual_entries():
+    valid = {(r["schema"], r["col"]) for r in extract.iter_schema_columns()}
+    valid_cols = {r["col"] for r in extract.iter_schema_columns()}
+    orphans = []
+    for schema, col, _ in _all_manual_entries():
+        if schema == "_global":
+            if col not in valid_cols:
+                orphans.append(f"_global.{col}")
+        elif (schema, col) not in valid:
+            orphans.append(f"{schema}.{col}")
+    assert not orphans, f"manual dict has stale keys (no matching column): {orphans[:10]}"
+
+
+def test_no_filler_descriptions():
+    bad = []
+    for schema, col, desc in _all_manual_entries():
+        d = (desc or "").strip()
+        if len(d) < 15 or d.lower() == col.lower() or _BANNED.match(d):
+            bad.append(f"{schema}.{col}: {desc!r}")
+    assert not bad, f"filler/low-quality descriptions: {bad[:10]}"
