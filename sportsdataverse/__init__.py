@@ -66,10 +66,10 @@ from sportsdataverse.nhl import *
 from sportsdataverse.pwhl import *
 from sportsdataverse.wbb import *
 from sportsdataverse.wnba import *
-from sportsdataverse.ahl import *  # noqa: F401,F403,E402
-from sportsdataverse.ohl import *  # noqa: F401,F403,E402
-from sportsdataverse.qmjhl import *  # noqa: F401,F403,E402
-from sportsdataverse.whl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.ahl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.ohl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.qmjhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.whl import *  # noqa: F401,F403,E402
 from sportsdataverse.odds import *  # noqa: F401,F403,E402
 
 # --- ESPN additional leagues — sport param-families stay top-level; minor/alias

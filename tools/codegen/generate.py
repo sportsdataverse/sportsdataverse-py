@@ -1540,6 +1540,16 @@ _COVERAGE_LEAGUES = [
     "odds",
 ]
 
+# Mapping from doc/coverage prefix to actual Python module path for leagues
+# whose module moved under a sport-group container (Task 5+).
+# All other leagues default to f"sportsdataverse.{prefix}".
+_LEAGUE_MODULE: dict[str, str] = {
+    "ahl": "hockey.ahl",
+    "ohl": "hockey.ohl",
+    "whl": "hockey.whl",
+    "qmjhl": "hockey.qmjhl",
+}
+
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
 
 
@@ -1585,7 +1595,8 @@ def _coverage_scope_names() -> tuple[dict[str, set[str]], set[str]]:
     per_league: dict[str, set[str]] = {}
     all_league: set[str] = set()
     for lg in _COVERAGE_LEAGUES:
-        mod = importlib.import_module(f"sportsdataverse.{lg}")
+        mod_path = _LEAGUE_MODULE.get(lg, lg)
+        mod = importlib.import_module(f"sportsdataverse.{mod_path}")
         names = {n for n in dir(mod) if _coverage_in_scope(n, getattr(mod, n))}
         per_league[lg] = names
         all_league |= names
@@ -2631,7 +2642,8 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
         return []
     else:
         names = per_league[league]
-        mod = importlib.import_module(f"sportsdataverse.{league}")
+        mod_path = _LEAGUE_MODULE.get(league, league)
+        mod = importlib.import_module(f"sportsdataverse.{mod_path}")
         allowed = allow.get(league, set())
     out = []
     for n in names:
@@ -2657,7 +2669,8 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     template can render Parameters/Returns/Example sections."""
     import importlib
 
-    mod = importlib.import_module("sportsdataverse" if league is None else f"sportsdataverse.{league}")
+    _mod_path = _LEAGUE_MODULE.get(league, league) if league is not None else None
+    mod = importlib.import_module("sportsdataverse" if _mod_path is None else f"sportsdataverse.{_mod_path}")
     scope = "global" if league is None else league
     by_family: dict[str, list[dict]] = {}
     for n in names:
