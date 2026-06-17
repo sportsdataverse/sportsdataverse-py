@@ -1,0 +1,162 @@
+schema: standings
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: NFL.com Shield GUID for the team.
+- name: team_current_logo
+  type: character
+  description: Templated URL of the team's current logo.
+- name: team_full_name
+  type: character
+  description: Full team name (e.g. "Arizona Cardinals").
+- name: clinched_bye
+  type: logical
+  description: Whether the team has clinched a first-round playoff bye.
+- name: clinched_division
+  type: logical
+  description: Whether the team has clinched its division.
+- name: clinched_eliminated
+  type: logical
+  description: Whether the team has been mathematically eliminated from playoff contention.
+- name: clinched_home_field
+  type: logical
+  description: Whether the team has clinched home-field advantage throughout the playoffs.
+- name: clinched_playoff
+  type: logical
+  description: Whether the team has clinched a playoff berth.
+- name: clinched_wild_card
+  type: logical
+  description: Whether the team has clinched a wild-card playoff berth.
+- name: close_games_wins
+  type: integer
+  description: Wins in close games (decided by one score / 8 points or fewer).
+- name: close_games_losses
+  type: integer
+  description: Losses in close games (decided by one score / 8 points or fewer).
+- name: close_games_ties
+  type: integer
+  description: Ties in close games.
+- name: conference_wins
+  type: integer
+  description: Wins against conference (AFC/NFC) opponents.
+- name: conference_win_pct
+  type: numeric
+  description: Win percentage against conference opponents.
+- name: conference_losses
+  type: integer
+  description: Losses against conference opponents.
+- name: conference_ties
+  type: integer
+  description: Ties against conference opponents.
+- name: conference_rank
+  type: integer
+  description: Standings rank within the conference.
+- name: conference_points_for
+  type: integer
+  description: Points scored in conference games.
+- name: conference_points_against
+  type: integer
+  description: Points allowed in conference games.
+- name: division_wins
+  type: integer
+  description: Wins against division opponents.
+- name: division_win_pct
+  type: numeric
+  description: Win percentage against division opponents.
+- name: division_losses
+  type: integer
+  description: Losses against division opponents.
+- name: division_ties
+  type: integer
+  description: Ties against division opponents.
+- name: division_rank
+  type: integer
+  description: Standings rank within the division.
+- name: division_points_for
+  type: integer
+  description: Points scored in division games.
+- name: division_points_against
+  type: integer
+  description: Points allowed in division games.
+- name: home_wins
+  type: integer
+  description: Wins in home games.
+- name: home_win_pct
+  type: numeric
+  description: Win percentage in home games.
+- name: home_losses
+  type: integer
+  description: Losses in home games.
+- name: home_ties
+  type: integer
+  description: Ties in home games.
+- name: home_points_for
+  type: integer
+  description: Points scored in home games.
+- name: home_points_against
+  type: integer
+  description: Points allowed in home games.
+- name: last5_wins
+  type: integer
+  description: Wins over the last five games.
+- name: last5_win_pct
+  type: numeric
+  description: Win percentage over the last five games.
+- name: last5_losses
+  type: integer
+  description: Losses over the last five games.
+- name: last5_ties
+  type: integer
+  description: Ties over the last five games.
+- name: last5_points_for
+  type: integer
+  description: Points scored over the last five games.
+- name: last5_points_against
+  type: integer
+  description: Points allowed over the last five games.
+- name: overall_games
+  type: integer
+  description: Total games played.
+- name: overall_wins
+  type: integer
+  description: Total wins.
+- name: overall_win_pct
+  type: numeric
+  description: Overall win percentage.
+- name: overall_losses
+  type: integer
+  description: Total losses.
+- name: overall_ties
+  type: integer
+  description: Total ties.
+- name: overall_points_for
+  type: integer
+  description: Total points scored.
+- name: overall_points_against
+  type: integer
+  description: Total points allowed.
+- name: overall_streak_type
+  type: character
+  description: Current streak type ("W" for winning, "L" for losing).
+- name: overall_streak_length
+  type: integer
+  description: Length of the current win/loss streak.
+- name: road_wins
+  type: integer
+  description: Wins in road (away) games.
+- name: road_win_pct
+  type: numeric
+  description: Win percentage in road games.
+- name: road_losses
+  type: integer
+  description: Losses in road games.
+- name: road_ties
+  type: integer
+  description: Ties in road games.
+- name: road_points_for
+  type: integer
+  description: Points scored in road games.
+- name: road_points_against
+  type: integer
+  description: Points allowed in road games.

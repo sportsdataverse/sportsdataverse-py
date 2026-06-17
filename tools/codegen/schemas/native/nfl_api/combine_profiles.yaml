@@ -1,0 +1,171 @@
+schema: combine_profiles
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: NFL.com Shield GUID for the combine profile.
+- name: year
+  type: integer
+  description: Combine / draft class year.
+- name: person_id
+  type: character
+  description: NFL.com Shield GUID of the prospect.
+- name: person_display_name
+  type: character
+  description: Prospect's full display name.
+- name: person_esb_id
+  type: character
+  description: Prospect's Elias Sports Bureau (ESB) identifier.
+- name: person_first_name
+  type: character
+  description: Prospect's first name.
+- name: person_last_name
+  type: character
+  description: Prospect's last name.
+- name: person_hometown
+  type: character
+  description: Prospect's hometown (city, state).
+- name: person_college_names
+  type: character
+  description: JSON-stringified array of the prospect's college(s).
+- name: arm_length
+  type: numeric
+  description: Arm length measured at the combine, in inches.
+- name: athleticism_score
+  type: numeric
+  description: Composite athleticism score.
+- name: bench_press
+  type: numeric
+  description: Bench-press measurement object (flattened; null when no measurement).
+- name: broad_jump
+  type: numeric
+  description: Broad-jump measurement object (flattened; null when no measurement).
+- name: bio
+  type: character
+  description: HTML biography / career summary for the prospect.
+- name: college_class
+  type: character
+  description: Prospect's college class (e.g. Senior, Junior).
+- name: draft_grade
+  type: numeric
+  description: Numeric draft grade assigned to the prospect.
+- name: draft_projection
+  type: character
+  description: Draft projection text (e.g. "Priority free agent").
+- name: forty_yard_dash
+  type: numeric
+  description: 40-yard-dash measurement object (flattened; null when no measurement).
+- name: grade
+  type: numeric
+  description: Overall prospect grade.
+- name: hand_size
+  type: integer
+  description: Hand size measured at the combine, in inches.
+- name: headshot
+  type: character
+  description: Templated URL of the prospect's headshot image.
+- name: height
+  type: integer
+  description: Prospect height, in inches.
+- name: nfl_comparison
+  type: character
+  description: Player the prospect is most comparable to.
+- name: overview
+  type: character
+  description: HTML scouting overview of the prospect.
+- name: production_score
+  type: numeric
+  description: Composite college-production score.
+- name: profile_author
+  type: character
+  description: Author of the scouting profile (e.g. "Lance Zierlein").
+- name: pro_forty_yard_dash
+  type: numeric
+  description: Pro-day 40-yard-dash measurement object (flattened; null when no measurement).
+- name: sixty_yard_shuttle
+  type: numeric
+  description: 60-yard-shuttle measurement object (flattened; null when no measurement).
+- name: size_score
+  type: numeric
+  description: Composite size score (flattened; null when not scored).
+- name: sources_tell_us
+  type: character
+  description: "\"Sources tell us\" scouting commentary text."
+- name: strengths
+  type: character
+  description: HTML list of the prospect's strengths.
+- name: ten_yard_split
+  type: numeric
+  description: 10-yard-split measurement object (flattened; null when no measurement).
+- name: three_cone_drill
+  type: numeric
+  description: Three-cone-drill measurement object (flattened; null when no measurement).
+- name: twenty_yard_shuttle
+  type: numeric
+  description: 20-yard-shuttle measurement object (flattened; null when no measurement).
+- name: weaknesses
+  type: character
+  description: HTML list of the prospect's weaknesses.
+- name: combine_attendance
+  type: logical
+  description: Whether the prospect attended the combine.
+- name: position
+  type: character
+  description: Prospect's position abbreviation (e.g. "CB").
+- name: position_group
+  type: character
+  description: Prospect's position group (e.g. "DB").
+- name: vertical_jump
+  type: numeric
+  description: Vertical-jump measurement object (flattened; null when no measurement).
+- name: weight
+  type: integer
+  description: Prospect weight, in pounds.
+- name: pro_forty_yard_dash_designation
+  type: character
+  description: Designation for the pro-day 40-yard dash (OFFICIAL or UNOFFICIAL).
+- name: pro_forty_yard_dash_seconds
+  type: numeric
+  description: Pro-day 40-yard-dash time, in seconds.
+- name: bench_press_designation
+  type: character
+  description: Designation for the bench-press result (OFFICIAL or UNOFFICIAL).
+- name: bench_press_repetitions
+  type: integer
+  description: Number of 225 lb bench-press repetitions.
+- name: broad_jump_designation
+  type: character
+  description: Designation for the broad-jump result (OFFICIAL or UNOFFICIAL).
+- name: broad_jump_inches
+  type: integer
+  description: Broad-jump distance, in inches.
+- name: forty_yard_dash_designation
+  type: character
+  description: Designation for the 40-yard-dash result (OFFICIAL or UNOFFICIAL).
+- name: forty_yard_dash_seconds
+  type: numeric
+  description: 40-yard-dash time, in seconds.
+- name: ten_yard_split_designation
+  type: character
+  description: Designation for the 10-yard-split result (OFFICIAL or UNOFFICIAL).
+- name: ten_yard_split_seconds
+  type: numeric
+  description: 10-yard-split time, in seconds.
+- name: vertical_jump_designation
+  type: character
+  description: Designation for the vertical-jump result (OFFICIAL or UNOFFICIAL).
+- name: vertical_jump_inches
+  type: integer
+  description: Vertical-jump height, in inches.
+- name: three_cone_drill_designation
+  type: character
+  description: Designation for the three-cone-drill result (OFFICIAL or UNOFFICIAL).
+- name: three_cone_drill_seconds
+  type: numeric
+  description: Three-cone-drill time, in seconds.
+- name: twenty_yard_shuttle_designation
+  type: character
+  description: Designation for the 20-yard-shuttle result (OFFICIAL or UNOFFICIAL).
+- name: twenty_yard_shuttle_seconds
+  type: numeric
+  description: 20-yard-shuttle time, in seconds.

@@ -1,0 +1,42 @@
+schema: teams_history
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: NFL.com Shield GUID for the team (or Pro Bowl team entry).
+- name: season
+  type: integer
+  description: Season (year) the team record applies to.
+- name: abbreviation
+  type: character
+  description: Team abbreviation (e.g. "AFC", "ARI").
+- name: full_name
+  type: character
+  description: Full team name (e.g. "AFC Pro Bowl Team", "Arizona Cardinals").
+- name: team_type
+  type: character
+  description: Team type classification (e.g. "TEAM", "PRO" for Pro Bowl teams).
+- name: conference_abbr
+  type: character
+  description: Conference abbreviation (AFC or NFC).
+- name: conference_full_name
+  type: character
+  description: Full conference name (e.g. "American Football Conference").
+- name: current_logo
+  type: character
+  description: Templated URL of the team's current logo.
+- name: division_full_name
+  type: character
+  description: Full division name (e.g. "NFC West").
+- name: league
+  type: character
+  description: League name ("National Football League").
+- name: location
+  type: character
+  description: Team location / city.
+- name: nick_name
+  type: character
+  description: Team nickname.
+- name: venues
+  type: character
+  description: JSON-stringified array of the team's venue objects (empty for non-club entries).

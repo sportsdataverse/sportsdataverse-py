@@ -1,0 +1,33 @@
+schema: draft_picks
+kind: dataframe
+columns:
+- name: year
+  type: integer
+  description: Draft year.
+- name: draft_round
+  type: integer
+  description: Round of the draft in which the pick was made.
+- name: draft_position
+  type: integer
+  description: Pick position within the round.
+- name: draft_number_overall
+  type: integer
+  description: Overall pick number across the entire draft.
+- name: person_id
+  type: character
+  description: NFL.com Shield GUID of the drafted player (may be empty until the pick is announced).
+- name: pick_is_in
+  type: logical
+  description: Whether the pick has officially been submitted / announced.
+- name: team_id
+  type: character
+  description: NFL.com Shield GUID of the team making the pick.
+- name: trade_note
+  type: character
+  description: Trade annotation for the pick (e.g. "CAR>CHI" denoting a traded selection).
+- name: tweet_sent
+  type: logical
+  description: Whether the announcement tweet has been sent for the pick.
+- name: tweets_sent
+  type: character
+  description: JSON-stringified array of per-account tweet-sent status objects.

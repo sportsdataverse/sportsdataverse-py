@@ -1,0 +1,60 @@
+schema: injuries
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: Season (year) of the injury report.
+- name: season_type
+  type: character
+  description: Season type code (PRE, REG, or POST).
+- name: week
+  type: integer
+  description: Week number of the injury report.
+- name: team_id
+  type: character
+  description: NFL.com Shield GUID of the player's team.
+- name: team_current_logo
+  type: character
+  description: Templated URL of the team's current logo.
+- name: team_full_name
+  type: character
+  description: Full team name (e.g. "Atlanta Falcons").
+- name: person_id
+  type: character
+  description: NFL.com Shield GUID of the injured player.
+- name: person_first_name
+  type: character
+  description: Player's first name.
+- name: person_common_first_name
+  type: character
+  description: Player's common / preferred first name.
+- name: person_last_name
+  type: character
+  description: Player's last name.
+- name: person_display_name
+  type: character
+  description: Player's full display name.
+- name: person_gsis_id
+  type: character
+  description: Player's NFL GSIS identifier (e.g. "00-0036948").
+- name: person_headshot
+  type: character
+  description: Templated URL of the player's headshot image.
+- name: injuries
+  type: character
+  description: JSON-stringified array of detailed injury objects (empty when not specified).
+- name: injury_status
+  type: character
+  description: Game-status designation (e.g. OUT, DOUBTFUL, QUESTIONABLE).
+- name: practices
+  type: character
+  description: JSON-stringified array of practice-participation notes.
+- name: practice_days
+  type: character
+  description: JSON-stringified array of per-day practice status objects (date, status).
+- name: practice_status
+  type: character
+  description: Most recent practice-participation status (e.g. FULL, LIMITED, DNP).
+- name: position
+  type: character
+  description: Player's position abbreviation (e.g. "DE").
