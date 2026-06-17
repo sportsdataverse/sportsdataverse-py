@@ -1,0 +1,78 @@
+schema: leaderboard_pitcher_running_game
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: player_name
+  type: character
+  description: "Player name."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: start_year
+  type: integer
+  description: "First season in the range."
+- name: end_year
+  type: integer
+  description: "Last season in the range."
+- name: key_target_base
+  type: character
+  description: "Key target base."
+- name: runs_prevented_on_running_attr
+  type: numeric
+  description: "Runs prevented on running attr."
+- name: n_pitcher_cs_aa
+  type: numeric
+  description: "Number of pitcher cs aa."
+- name: n_init
+  type: integer
+  description: "Number of init."
+- name: rate_sbx
+  type: numeric
+  description: "Rate sbx."
+- name: n_sb
+  type: integer
+  description: "Stolen bases allowed (count)."
+- name: n_cs
+  type: integer
+  description: "Caught stealing (count)."
+- name: n_pk
+  type: integer
+  description: "Number of pk."
+- name: n_bk
+  type: integer
+  description: "Number of bk."
+- name: n_fb
+  type: integer
+  description: "Number of fb."
+- name: n_plus
+  type: integer
+  description: "Number of plus."
+- name: n_minus
+  type: integer
+  description: "Number of minus."
+- name: net_attr_plus
+  type: numeric
+  description: "Net attr plus."
+- name: net_attr_minus
+  type: numeric
+  description: "Net attr minus."
+- name: r_primary_lead
+  type: numeric
+  description: "Average primary lead distance (ft)."
+- name: r_secondary_lead
+  type: numeric
+  description: "Average secondary lead (ft)."
+- name: r_sec_minus_prim_lead
+  type: numeric
+  description: "R sec minus prim lead."
+- name: r_primary_lead_sbx
+  type: numeric
+  description: "R primary lead sbx."
+- name: r_secondary_lead_sbx
+  type: numeric
+  description: "R secondary lead sbx."
+- name: r_sec_minus_prim_lead_sbx
+  type: numeric
+  description: "R sec minus prim lead sbx."

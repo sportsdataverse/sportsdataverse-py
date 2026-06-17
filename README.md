@@ -44,7 +44,7 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 | WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only |
 | CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) + Fox Sports (Bifrost) + Yahoo Sports |
 | NFL | `sportsdataverse.nfl` | ESPN + **NFL.com API** (`api.nfl.com` "Shield") + **nflverse loaders** (nflreadpy parity) + football-only (QBR) |
-| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast + Fox Sports (Bifrost) |
+| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast (43-endpoint `mlb_statcast_*` surface) + Fox Sports (Bifrost) |
 | NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site + Fox Sports (Bifrost) |
 
 Each league exports 150–340 public functions (ESPN wrappers + that league's

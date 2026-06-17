@@ -1,0 +1,39 @@
+schema: leaderboard_outfield_jump
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: resp_fielder_id
+  type: integer
+  description: "MLBAM id of the responsible fielder."
+- name: year
+  type: integer
+  description: "Season year."
+- name: outs_above_average
+  type: integer
+  description: "Outs Above Average."
+- name: outs_per_play
+  type: numeric
+  description: "Outs per play."
+- name: rel_league_burst_distance
+  type: integer
+  description: "Rel league burst distance."
+- name: rel_league_reaction_distance
+  type: numeric
+  description: "Rel league reaction distance."
+- name: rel_league_routing_distance
+  type: numeric
+  description: "Rel league routing distance."
+- name: rel_league_bootup_distance
+  type: numeric
+  description: "Rel league bootup distance."
+- name: f_bootup_distance
+  type: numeric
+  description: "F bootup distance."
+- name: n
+  type: integer
+  description: "Sample count (pitches/events)."
+- name: n_outs
+  type: integer
+  description: "Number of outs."

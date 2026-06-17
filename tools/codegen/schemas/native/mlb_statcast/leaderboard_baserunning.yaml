@@ -1,0 +1,66 @@
+schema: leaderboard_baserunning
+kind: dataframe
+columns:
+- name: entity_name
+  type: character
+  description: "Player (or team) entity name."
+- name: entity_id
+  type: integer
+  description: "MLBAM id of the player/team entity."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: year
+  type: integer
+  description: "Season year."
+- name: runner_runs
+  type: numeric
+  description: "Baserunning run value as a runner."
+- name: fielder_runs
+  type: numeric
+  description: "Run value from the defense's perspective."
+- name: runner_runs_advances
+  type: numeric
+  description: "Runner runs advances."
+- name: runner_runs_thrown_out
+  type: integer
+  description: "Runner runs thrown out."
+- name: runner_runs_hold
+  type: numeric
+  description: "Runner runs hold."
+- name: fielder_runs_advances
+  type: numeric
+  description: "Fielder runs advances."
+- name: fielder_runs_thrown_out
+  type: integer
+  description: "Fielder runs thrown out."
+- name: fielder_runs_hold
+  type: numeric
+  description: "Fielder runs hold."
+- name: n_opp_xb
+  type: integer
+  description: "Number of opp xb."
+- name: n_att_xb
+  type: integer
+  description: "Number of att xb."
+- name: rate_att_xb
+  type: numeric
+  description: "Rate att xb."
+- name: est_rate_att_generic_runner
+  type: numeric
+  description: "Expected rate att generic runner."
+- name: est_rate_att_generic_fielder
+  type: numeric
+  description: "Expected rate att generic fielder."
+- name: n_out
+  type: integer
+  description: "Number of out."
+- name: n_safe
+  type: integer
+  description: "Number of safe."
+- name: rate_safe
+  type: numeric
+  description: "Rate safe."
+- name: rate_safe_per_attempt
+  type: integer
+  description: "Rate safe per attempt."

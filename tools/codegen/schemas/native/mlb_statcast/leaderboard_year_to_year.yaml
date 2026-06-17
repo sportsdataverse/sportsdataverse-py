@@ -1,0 +1,78 @@
+schema: leaderboard_year_to_year
+kind: dataframe
+columns:
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: entity_id
+  type: integer
+  description: "MLBAM id of the player/team entity."
+- name: 2015
+  type: character
+  description: "2015."
+- name: 2016
+  type: character
+  description: "2016."
+- name: delta_2015_2016
+  type: character
+  description: "Delta 2015 2016."
+- name: 2017
+  type: character
+  description: "2017."
+- name: delta_2016_2017
+  type: character
+  description: "Delta 2016 2017."
+- name: 2018
+  type: character
+  description: "2018."
+- name: delta_2017_2018
+  type: character
+  description: "Delta 2017 2018."
+- name: 2019
+  type: character
+  description: "2019."
+- name: delta_2018_2019
+  type: character
+  description: "Delta 2018 2019."
+- name: 2020
+  type: character
+  description: "2020."
+- name: delta_2019_2020
+  type: character
+  description: "Delta 2019 2020."
+- name: 2021
+  type: character
+  description: "2021."
+- name: delta_2020_2021
+  type: character
+  description: "Delta 2020 2021."
+- name: 2022
+  type: character
+  description: "2022."
+- name: delta_2021_2022
+  type: character
+  description: "Delta 2021 2022."
+- name: 2023
+  type: character
+  description: "2023."
+- name: delta_2022_2023
+  type: character
+  description: "Delta 2022 2023."
+- name: 2024
+  type: character
+  description: "2024."
+- name: delta_2023_2024
+  type: character
+  description: "Delta 2023 2024."
+- name: 2025
+  type: character
+  description: "2025."
+- name: delta_2024_2025
+  type: character
+  description: "Delta 2024 2025."
+- name: 2026
+  type: character
+  description: "2026."
+- name: delta_2025_2026
+  type: character
+  description: "Delta 2025 2026."

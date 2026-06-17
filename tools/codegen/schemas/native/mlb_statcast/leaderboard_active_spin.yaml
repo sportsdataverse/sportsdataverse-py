@@ -1,0 +1,39 @@
+schema: leaderboard_active_spin
+kind: dataframe
+columns:
+- name: entity_name
+  type: character
+  description: "Player (or team) entity name."
+- name: entity_id
+  type: integer
+  description: "MLBAM id of the player/team entity."
+- name: pitch_hand
+  type: character
+  description: "Pitcher handedness (R/L)."
+- name: active_spin_fourseam
+  type: character
+  description: "Active spin fourseam."
+- name: active_spin_sinker
+  type: numeric
+  description: "Active spin sinker."
+- name: active_spin_cutter
+  type: numeric
+  description: "Active spin cutter."
+- name: active_spin_changeup
+  type: numeric
+  description: "Active spin changeup."
+- name: active_spin_splitter
+  type: character
+  description: "Active spin splitter."
+- name: active_spin_curve
+  type: character
+  description: "Active spin curve."
+- name: active_spin_slider
+  type: numeric
+  description: "Active spin slider."
+- name: active_spin_sweeper
+  type: numeric
+  description: "Active spin sweeper."
+- name: active_spin_slurve
+  type: character
+  description: "Active spin slurve."

@@ -1,0 +1,801 @@
+schema: mlb_statcast_player
+kind: dataframe
+columns:
+- name: aggregate
+  type: integer
+  description: "Aggregate."
+- name: year
+  type: integer
+  description: "Season year."
+- name: yearhidden
+  type: integer
+  description: "Yearhidden."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: age
+  type: integer
+  description: "Player age."
+- name: bat_side
+  type: character
+  description: "Batter side (R/L/S)."
+- name: pitch_hand
+  type: character
+  description: "Pitcher handedness (R/L)."
+- name: month
+  type: character
+  description: "Month."
+- name: grouping_code
+  type: character
+  description: "Grouping code."
+- name: grouping_cat
+  type: character
+  description: "Grouping cat."
+- name: pitch_count
+  type: integer
+  description: "Pitch count."
+- name: in_zone_percent
+  type: numeric
+  description: "In zone rate."
+- name: out_zone_percent
+  type: numeric
+  description: "Out zone rate."
+- name: edge_percent
+  type: numeric
+  description: "Edge rate."
+- name: z_swing_percent
+  type: numeric
+  description: "Z swing rate."
+- name: oz_swing_percent
+  type: numeric
+  description: "Oz swing rate."
+- name: iz_contact_percent
+  type: numeric
+  description: "Iz contact rate."
+- name: oz_contact_percent
+  type: numeric
+  description: "Oz contact rate."
+- name: whiff_percent
+  type: numeric
+  description: "Whiff rate (swings and misses / swings)."
+- name: f_strike_percent
+  type: numeric
+  description: "F strike rate."
+- name: f_swing_percent
+  type: numeric
+  description: "F swing rate."
+- name: swing_percent
+  type: numeric
+  description: "Swing rate."
+- name: meatball_swing_percent
+  type: integer
+  description: "Meatball swing rate."
+- name: meatball_percent
+  type: numeric
+  description: "Meatball rate."
+- name: z_swing_miss_percent
+  type: numeric
+  description: "Z swing miss rate."
+- name: oz_swing_miss_percent
+  type: numeric
+  description: "Oz swing miss rate."
+- name: in_zone
+  type: integer
+  description: "In zone."
+- name: out_zone
+  type: integer
+  description: "Out zone."
+- name: edge
+  type: integer
+  description: "Edge."
+- name: popups
+  type: integer
+  description: "Popups."
+- name: flyballs
+  type: integer
+  description: "Flyballs."
+- name: linedrives
+  type: integer
+  description: "Linedrives."
+- name: groundballs
+  type: integer
+  description: "Groundballs."
+- name: airballs
+  type: integer
+  description: "Airballs."
+- name: popups_percent
+  type: numeric
+  description: "Popups rate."
+- name: flyballs_percent
+  type: numeric
+  description: "Flyballs rate."
+- name: linedrives_percent
+  type: numeric
+  description: "Linedrives rate."
+- name: groundballs_percent
+  type: numeric
+  description: "Groundballs rate."
+- name: airballs_percent
+  type: numeric
+  description: "Airballs rate."
+- name: pull_percent
+  type: numeric
+  description: "Pull rate."
+- name: straightaway_percent
+  type: numeric
+  description: "Straightaway rate."
+- name: opposite_percent
+  type: numeric
+  description: "Opposite rate."
+- name: pull_percent_airballs
+  type: numeric
+  description: "Pull percent airballs."
+- name: straightaway_percent_airballs
+  type: numeric
+  description: "Straightaway percent airballs."
+- name: opposite_percent_airballs
+  type: integer
+  description: "Opposite percent airballs."
+- name: pull_percent_groundballs
+  type: numeric
+  description: "Pull percent groundballs."
+- name: straightaway_percent_groundballs
+  type: numeric
+  description: "Straightaway percent groundballs."
+- name: opposite_percent_groundballs
+  type: numeric
+  description: "Opposite percent groundballs."
+- name: pull_percent_popups
+  type: numeric
+  description: "Pull percent popups."
+- name: straightaway_percent_popups
+  type: numeric
+  description: "Straightaway percent popups."
+- name: opposite_percent_popups
+  type: numeric
+  description: "Opposite percent popups."
+- name: pull_percent_flyballs
+  type: numeric
+  description: "Pull percent flyballs."
+- name: straightaway_percent_flyballs
+  type: numeric
+  description: "Straightaway percent flyballs."
+- name: opposite_percent_flyballs
+  type: numeric
+  description: "Opposite percent flyballs."
+- name: pull_percent_linedrives
+  type: integer
+  description: "Pull percent linedrives."
+- name: straightaway_percent_linedrives
+  type: integer
+  description: "Straightaway percent linedrives."
+- name: opposite_percent_linedrives
+  type: integer
+  description: "Opposite percent linedrives."
+- name: poorlyweak_percent
+  type: integer
+  description: "Poorlyweak rate."
+- name: poorlytopped_percent
+  type: numeric
+  description: "Poorlytopped rate."
+- name: poorlyunder_percent
+  type: numeric
+  description: "Poorlyunder rate."
+- name: flareburner_percent
+  type: numeric
+  description: "Flareburner rate."
+- name: solidcontact_percent
+  type: numeric
+  description: "Solidcontact rate."
+- name: hr_flyballs_percent
+  type: numeric
+  description: "Hr flyballs rate."
+- name: in_zone_swing
+  type: integer
+  description: "In zone swing."
+- name: out_zone_swing
+  type: integer
+  description: "Out zone swing."
+- name: in_zone_swing_miss
+  type: integer
+  description: "In zone swing miss."
+- name: out_zone_swing_miss
+  type: integer
+  description: "Out zone swing miss."
+- name: pitch_count_fastball
+  type: integer
+  description: "Pitch count fastball."
+- name: pitch_count_offspeed
+  type: integer
+  description: "Pitch count offspeed."
+- name: pitch_count_breaking
+  type: integer
+  description: "Pitch count breaking."
+- name: pa
+  type: integer
+  description: "Plate appearances."
+- name: ab
+  type: integer
+  description: "At-bats."
+- name: hit
+  type: integer
+  description: "Hit."
+- name: single
+  type: integer
+  description: "Singles."
+- name: double
+  type: integer
+  description: "Doubles."
+- name: triple
+  type: integer
+  description: "Triples."
+- name: home_run
+  type: integer
+  description: "Home run."
+- name: walk
+  type: integer
+  description: "Walk."
+- name: strikeout
+  type: integer
+  description: "Strikeout."
+- name: hbp
+  type: integer
+  description: "Hbp."
+- name: k_percent
+  type: numeric
+  description: "Strikeout rate."
+- name: bb_percent
+  type: numeric
+  description: "Walk rate."
+- name: sz_judge
+  type: numeric
+  description: "Sz judge."
+- name: batted_ball
+  type: integer
+  description: "Batted ball."
+- name: barrel
+  type: integer
+  description: "Barrel."
+- name: barrel_batted_rate
+  type: numeric
+  description: "Barrels per batted ball."
+- name: barrels_per_pa
+  type: numeric
+  description: "Barrels per pa."
+- name: launch_angle_avg
+  type: numeric
+  description: "Launch angle avg."
+- name: exit_velocity_avg
+  type: numeric
+  description: "Exit velocity avg."
+- name: exit_velocity_max
+  type: numeric
+  description: "Exit velocity max."
+- name: hard_hit_percent
+  type: numeric
+  description: "Hard-hit rate (95+ mph EV)."
+- name: sweet_spot_percent
+  type: numeric
+  description: "Sweet-spot rate (8-32 deg launch angle)."
+- name: ba
+  type: numeric
+  description: "Batting average."
+- name: xba
+  type: numeric
+  description: "Expected batting average."
+- name: bacon
+  type: numeric
+  description: "Bacon."
+- name: xbacon
+  type: numeric
+  description: "Expected batting average on contact."
+- name: babip
+  type: numeric
+  description: "BABIP."
+- name: obp
+  type: numeric
+  description: "On-base percentage."
+- name: slg
+  type: numeric
+  description: "Slugging percentage."
+- name: xobp
+  type: numeric
+  description: "Expected on-base percentage."
+- name: xslg
+  type: numeric
+  description: "Expected slugging."
+- name: iso
+  type: numeric
+  description: "Isolated power."
+- name: xiso
+  type: numeric
+  description: "Expected isolated power."
+- name: woba
+  type: numeric
+  description: "Weighted on-base average."
+- name: xwoba
+  type: numeric
+  description: "Expected wOBA."
+- name: wobacon
+  type: numeric
+  description: "Wobacon."
+- name: xwobacon
+  type: numeric
+  description: "Xwobacon."
+- name: xbadiff
+  type: numeric
+  description: "Xbadiff."
+- name: xslgdiff
+  type: numeric
+  description: "Xslgdiff."
+- name: wobadiff
+  type: numeric
+  description: "Wobadiff."
+- name: player_type
+  type: character
+  description: "Player type."
+- name: era
+  type: character
+  description: "Era."
+- name: xera
+  type: character
+  description: "Expected ERA."
+- name: avg_hyper_speed
+  type: numeric
+  description: "Avg hyper speed."
+- name: avg_best_speed
+  type: numeric
+  description: "Avg best speed."
+- name: distance_hr_avg
+  type: integer
+  description: "Distance hr avg."
+- name: sprint_speed
+  type: numeric
+  description: "Sprint speed (ft/sec, top 50% of competitive runs)."
+- name: pop_2b
+  type: character
+  description: "Pop 2b."
+- name: arm_cs_2b
+  type: character
+  description: "Arm cs 2b."
+- name: strike_rate
+  type: character
+  description: "Called-strike rate."
+- name: outs_above_average
+  type: integer
+  description: "Outs Above Average."
+- name: jump_v_avg
+  type: integer
+  description: "Jump v avg."
+- name: max_arm_strength
+  type: character
+  description: "Max arm strength (mph)."
+- name: arm_overall
+  type: character
+  description: "Arm overall."
+- name: xhr
+  type: numeric
+  description: "Xhr."
+- name: swing_take_run_value
+  type: integer
+  description: "Swing take run value."
+- name: blocks_above_average
+  type: character
+  description: "Blocks above average."
+- name: cs_above_average
+  type: character
+  description: "Cs above average."
+- name: fastball_velo
+  type: character
+  description: "Fastball velo."
+- name: fastball_spin
+  type: character
+  description: "Fastball spin."
+- name: fastball_extension
+  type: character
+  description: "Fastball extension."
+- name: curveball_spin
+  type: character
+  description: "Curveball spin."
+- name: pitch_run_value_fastball
+  type: numeric
+  description: "Pitch run value fastball."
+- name: pitch_run_value_breaking
+  type: numeric
+  description: "Pitch run value breaking."
+- name: pitch_run_value_offspeed
+  type: numeric
+  description: "Pitch run value offspeed."
+- name: group_fastball_velo
+  type: numeric
+  description: "Group fastball velo."
+- name: group_breaking_velo
+  type: numeric
+  description: "Group breaking velo."
+- name: group_offspeed_velo
+  type: numeric
+  description: "Group offspeed velo."
+- name: pitch_usage_fastball
+  type: numeric
+  description: "Pitch usage fastball."
+- name: pitch_usage_breaking
+  type: numeric
+  description: "Pitch usage breaking."
+- name: pitch_usage_offspeed
+  type: numeric
+  description: "Pitch usage offspeed."
+- name: fielding_run_value
+  type: integer
+  description: "Fielding run value."
+- name: runner_run_value
+  type: integer
+  description: "Runner run value."
+- name: fielding_run_value_arm
+  type: integer
+  description: "Fielding run value arm."
+- name: fielding_run_value_framing
+  type: character
+  description: "Fielding run value framing."
+- name: runner_runs_sb
+  type: integer
+  description: "Runner runs sb."
+- name: runner_runs_xb
+  type: integer
+  description: "Runner runs xb."
+- name: net_bases_runner
+  type: integer
+  description: "Net bases runner."
+- name: net_bases_pitcher
+  type: character
+  description: "Net bases pitcher."
+- name: fast_swing_rate
+  type: character
+  description: "Fast-swing rate (>=75 mph)."
+- name: squared_up_contact
+  type: character
+  description: "Squared up contact."
+- name: squared_up_swing
+  type: character
+  description: "Squared up swing."
+- name: blasts_contact
+  type: character
+  description: "Blasts contact."
+- name: blasts_swing
+  type: character
+  description: "Blasts swing."
+- name: swords
+  type: character
+  description: "Swords."
+- name: avg_swing_speed
+  type: character
+  description: "Avg swing speed."
+- name: avg_swing_length
+  type: character
+  description: "Avg swing length."
+- name: attack_angle
+  type: character
+  description: "Attack angle (deg, bat path at contact)."
+- name: vertical_swing_path
+  type: character
+  description: "Vertical swing path."
+- name: acceleration
+  type: character
+  description: "Acceleration."
+- name: horizontal_swing_path
+  type: character
+  description: "Horizontal swing path."
+- name: attack_direction
+  type: character
+  description: "Attack direction (deg, pull/oppo)."
+- name: ideal_angle_rate
+  type: character
+  description: "Ideal angle rate."
+- name: n_squared_up
+  type: character
+  description: "Number of squared up."
+- name: n_blasts
+  type: character
+  description: "Number of blasts."
+- name: arm_angle
+  type: character
+  description: "Arm angle."
+- name: is_qualified
+  type: integer
+  description: "Is qualified."
+- name: percent_rank_barrel_unrounded
+  type: character
+  description: "Percent rank barrel unrounded."
+- name: percent_rank_barrel_batted_rate_unrounded
+  type: character
+  description: "Percent rank barrel batted rate unrounded."
+- name: percent_rank_exit_velocity_avg_unrounded
+  type: character
+  description: "Percent rank exit velocity avg unrounded."
+- name: percent_rank_exit_velocity_max_unrounded
+  type: numeric
+  description: "Percent rank exit velocity max unrounded."
+- name: percent_rank_launch_angle_avg_unrounded
+  type: character
+  description: "Percent rank launch angle avg unrounded."
+- name: percent_rank_xba_unrounded
+  type: character
+  description: "Percent rank xba unrounded."
+- name: percent_rank_xslg_unrounded
+  type: character
+  description: "Percent rank xslg unrounded."
+- name: percent_rank_xwoba_unrounded
+  type: character
+  description: "Percent rank xwoba unrounded."
+- name: percent_rank_woba_unrounded
+  type: character
+  description: "Percent rank woba unrounded."
+- name: percent_rank_hard_hit_percent_unrounded
+  type: character
+  description: "Percent rank hard hit percent unrounded."
+- name: percent_rank_xwobacon_unrounded
+  type: character
+  description: "Percent rank xwobacon unrounded."
+- name: percent_rank_wobacon_unrounded
+  type: character
+  description: "Percent rank wobacon unrounded."
+- name: percent_rank_k_percent_unrounded
+  type: character
+  description: "Percent rank k percent unrounded."
+- name: percent_rank_bb_percent_unrounded
+  type: character
+  description: "Percent rank bb percent unrounded."
+- name: percent_rank_sz_judge_unrounded
+  type: character
+  description: "Percent rank sz judge unrounded."
+- name: percent_rank_whiff_percent_unrounded
+  type: character
+  description: "Percent rank whiff percent unrounded."
+- name: percent_rank_chase_percent_unrounded
+  type: character
+  description: "Percent rank chase percent unrounded."
+- name: percent_rank_ba_unrounded
+  type: character
+  description: "Percent rank ba unrounded."
+- name: percent_rank_bacon_unrounded
+  type: character
+  description: "Percent rank bacon unrounded."
+- name: percent_rank_xbacon_unrounded
+  type: character
+  description: "Percent rank xbacon unrounded."
+- name: percent_rank_babip_unrounded
+  type: character
+  description: "Percent rank babip unrounded."
+- name: percent_rank_obp_unrounded
+  type: character
+  description: "Percent rank obp unrounded."
+- name: percent_rank_slg_unrounded
+  type: character
+  description: "Percent rank slg unrounded."
+- name: percent_rank_xobp_unrounded
+  type: character
+  description: "Percent rank xobp unrounded."
+- name: percent_rank_iso_unrounded
+  type: character
+  description: "Percent rank iso unrounded."
+- name: percent_rank_xiso_unrounded
+  type: character
+  description: "Percent rank xiso unrounded."
+- name: percent_rank_sweet_spot_percent_unrounded
+  type: character
+  description: "Percent rank sweet spot percent unrounded."
+- name: percent_rank_distance_hr_avg_unrounded
+  type: character
+  description: "Percent rank distance hr avg unrounded."
+- name: percent_rank_groundballs_percent_unrounded
+  type: character
+  description: "Percent rank groundballs percent unrounded."
+- name: percent_rank_airballs_percent_unrounded
+  type: character
+  description: "Percent rank airballs percent unrounded."
+- name: percent_rank_avg_hyper_speed_unrounded
+  type: character
+  description: "Percent rank avg hyper speed unrounded."
+- name: percent_rank_avg_best_speed_unrounded
+  type: character
+  description: "Percent rank avg best speed unrounded."
+- name: percent_rank_pitch_run_value_fastball_unrounded
+  type: character
+  description: "Percent rank pitch run value fastball unrounded."
+- name: percent_rank_pitch_run_value_breaking_unrounded
+  type: character
+  description: "Percent rank pitch run value breaking unrounded."
+- name: percent_rank_pitch_run_value_offspeed_unrounded
+  type: character
+  description: "Percent rank pitch run value offspeed unrounded."
+- name: percent_rank_barrel
+  type: character
+  description: "Percent rank barrel."
+- name: percent_rank_barrel_batted_rate
+  type: character
+  description: "Percent rank barrel batted rate."
+- name: percent_rank_exit_velocity_avg
+  type: character
+  description: "Percent rank exit velocity avg."
+- name: percent_rank_exit_velocity_max
+  type: integer
+  description: "Percent rank exit velocity max."
+- name: percent_rank_launch_angle_avg
+  type: character
+  description: "Percent rank launch angle avg."
+- name: percent_rank_xba
+  type: character
+  description: "Percent rank xba."
+- name: percent_rank_xslg
+  type: character
+  description: "Percent rank xslg."
+- name: percent_rank_xwoba
+  type: character
+  description: "Percent rank xwoba."
+- name: percent_rank_woba
+  type: character
+  description: "Percent rank woba."
+- name: percent_rank_hard_hit_percent
+  type: character
+  description: "Percent rank hard hit rate."
+- name: percent_rank_xwobacon
+  type: character
+  description: "Percent rank xwobacon."
+- name: percent_rank_wobacon
+  type: character
+  description: "Percent rank wobacon."
+- name: percent_rank_k_percent
+  type: character
+  description: "Percent rank k rate."
+- name: percent_rank_bb_percent
+  type: character
+  description: "Percent rank bb rate."
+- name: percent_rank_sz_judge
+  type: character
+  description: "Percent rank sz judge."
+- name: percent_rank_whiff_percent
+  type: character
+  description: "Percent rank whiff rate."
+- name: percent_rank_chase_percent
+  type: character
+  description: "Percent rank chase rate."
+- name: percent_rank_ba
+  type: character
+  description: "Percent rank ba."
+- name: percent_rank_bacon
+  type: character
+  description: "Percent rank bacon."
+- name: percent_rank_xbacon
+  type: character
+  description: "Percent rank xbacon."
+- name: percent_rank_babip
+  type: character
+  description: "Percent rank babip."
+- name: percent_rank_obp
+  type: character
+  description: "Percent rank obp."
+- name: percent_rank_slg
+  type: character
+  description: "Percent rank slg."
+- name: percent_rank_xobp
+  type: character
+  description: "Percent rank xobp."
+- name: percent_rank_iso
+  type: character
+  description: "Percent rank iso."
+- name: percent_rank_xiso
+  type: character
+  description: "Percent rank xiso."
+- name: percent_rank_sweet_spot_percent
+  type: character
+  description: "Percent rank sweet spot rate."
+- name: percent_rank_distance_hr_avg
+  type: character
+  description: "Percent rank distance hr avg."
+- name: percent_rank_groundballs_percent
+  type: character
+  description: "Percent rank groundballs rate."
+- name: percent_rank_airballs_percent
+  type: character
+  description: "Percent rank airballs rate."
+- name: percent_rank_avg_hyper_speed
+  type: character
+  description: "Percent rank avg hyper speed."
+- name: percent_rank_avg_best_speed
+  type: character
+  description: "Percent rank avg best speed."
+- name: percent_rank_pitch_run_value_fastball
+  type: character
+  description: "Percent rank pitch run value fastball."
+- name: percent_rank_pitch_run_value_breaking
+  type: character
+  description: "Percent rank pitch run value breaking."
+- name: percent_rank_pitch_run_value_offspeed
+  type: character
+  description: "Percent rank pitch run value offspeed."
+- name: percent_speed_order
+  type: integer
+  description: "Percent speed order."
+- name: percent_rank_speed_order
+  type: integer
+  description: "Percent rank speed order."
+- name: percent_rank_pop_2b
+  type: character
+  description: "Percent rank pop 2b."
+- name: percent_rank_arm_cs_2b
+  type: character
+  description: "Percent rank arm cs 2b."
+- name: percent_rank_oaa
+  type: character
+  description: "Percent rank oaa."
+- name: percent_rank_framing
+  type: character
+  description: "Percent rank framing."
+- name: percent_rank_jump
+  type: character
+  description: "Percent rank jump."
+- name: percent_rank_fastball_velo
+  type: character
+  description: "Percent rank fastball velo."
+- name: percent_rank_fastball_spin
+  type: character
+  description: "Percent rank fastball spin."
+- name: percent_rank_fastball_extension
+  type: character
+  description: "Percent rank fastball extension."
+- name: percent_rank_cu_spin
+  type: character
+  description: "Percent rank cu spin."
+- name: percent_rank_xera
+  type: character
+  description: "Percent rank xera."
+- name: percent_rank_arm_max
+  type: character
+  description: "Percent rank arm max."
+- name: percent_rank_arm_overall
+  type: character
+  description: "Percent rank arm overall."
+- name: percent_rank_xhr
+  type: character
+  description: "Percent rank xhr."
+- name: percent_rank_swing_take_run_value
+  type: character
+  description: "Percent rank swing take run value."
+- name: percent_rank_blocks_above_average
+  type: character
+  description: "Percent rank blocks above average."
+- name: percent_rank_cs_above_average
+  type: character
+  description: "Percent rank cs above average."
+- name: percent_rank_fielding_run_value
+  type: character
+  description: "Percent rank fielding run value."
+- name: percent_rank_runner_run_value
+  type: character
+  description: "Percent rank runner run value."
+- name: percent_rank_fielding_run_value_arm
+  type: character
+  description: "Percent rank fielding run value arm."
+- name: percent_rank_fielding_run_value_framing
+  type: character
+  description: "Percent rank fielding run value framing."
+- name: percent_rank_swing_speed
+  type: character
+  description: "Percent rank swing speed."
+- name: percent_rank_swing_length
+  type: character
+  description: "Percent rank swing length."
+- name: percent_rank_squared_up_swing
+  type: character
+  description: "Percent rank squared up swing."
+- name: percent_rank_attack_angle
+  type: character
+  description: "Percent rank attack angle."
+- name: percent_rank_vertical_swing_path
+  type: character
+  description: "Percent rank vertical swing path."
+- name: percent_rank_acceleration
+  type: character
+  description: "Percent rank acceleration."
+- name: percent_rank_ideal_angle_rate
+  type: character
+  description: "Percent rank ideal angle rate."

@@ -1,0 +1,636 @@
+schema: schedule
+kind: dataframe
+columns:
+- name: game_pk
+  type: integer
+  description: "MLBAM game id."
+- name: game_guid
+  type: character
+  description: "Game GUID."
+- name: link
+  type: character
+  description: "Stats API resource link."
+- name: game_type
+  type: character
+  description: "Game type code (R/F/D/L/W/S/E/A)."
+- name: season
+  type: character
+  description: "Season year."
+- name: game_date
+  type: character
+  description: "Game date/time (ISO 8601, UTC offset)."
+- name: official_date
+  type: character
+  description: "Official game date (YYYY-MM-DD)."
+- name: game_number
+  type: integer
+  description: "Game number (1, or 2 for the nightcap of a doubleheader)."
+- name: public_facing
+  type: logical
+  description: "Public facing."
+- name: double_header
+  type: character
+  description: "Doubleheader flag (Y/N/S)."
+- name: gameday_type
+  type: character
+  description: "Gameday type."
+- name: tiebreaker
+  type: character
+  description: "Tiebreaker."
+- name: calendar_event_id
+  type: character
+  description: "Calendar event id."
+- name: season_display
+  type: character
+  description: "Season display."
+- name: day_night
+  type: character
+  description: "Day or night game."
+- name: scheduled_innings
+  type: integer
+  description: "Scheduled innings (usually 9)."
+- name: reverse_home_away_status
+  type: logical
+  description: "Reverse home away status."
+- name: inning_break_length
+  type: integer
+  description: "Inning break length."
+- name: games_in_series
+  type: integer
+  description: "Total games in the series."
+- name: series_game_number
+  type: integer
+  description: "Game number within the series."
+- name: series_description
+  type: character
+  description: "Series description."
+- name: record_source
+  type: character
+  description: "Record source."
+- name: if_necessary
+  type: character
+  description: "If necessary."
+- name: if_necessary_description
+  type: character
+  description: "If necessary description."
+- name: status_abstract_game_state
+  type: character
+  description: "Status abstract game state."
+- name: status_coded_game_state
+  type: character
+  description: "Status coded game state."
+- name: status_detailed_state
+  type: character
+  description: "Status detailed state."
+- name: status_status_code
+  type: character
+  description: "Status status code."
+- name: status_start_time_tbd
+  type: logical
+  description: "Status start time tbd."
+- name: status_abstract_game_code
+  type: character
+  description: "Status abstract game code."
+- name: teams_away_team_spring_league_id
+  type: integer
+  description: "Away team team spring league id."
+- name: teams_away_team_spring_league_name
+  type: character
+  description: "Away team team spring league name."
+- name: teams_away_team_spring_league_link
+  type: character
+  description: "Away team team spring league link."
+- name: teams_away_team_spring_league_abbreviation
+  type: character
+  description: "Away team team spring league abbreviation."
+- name: teams_away_team_all_star_status
+  type: character
+  description: "Away team team all star status."
+- name: teams_away_team_id
+  type: integer
+  description: "Away team team id."
+- name: teams_away_team_name
+  type: character
+  description: "Away team team name."
+- name: teams_away_team_link
+  type: character
+  description: "Away team team link."
+- name: teams_away_team_season
+  type: integer
+  description: "Away team team season."
+- name: teams_away_team_venue_id
+  type: integer
+  description: "Away team team venue id."
+- name: teams_away_team_venue_name
+  type: character
+  description: "Away team team venue name."
+- name: teams_away_team_venue_link
+  type: character
+  description: "Away team team venue link."
+- name: teams_away_team_spring_venue_id
+  type: integer
+  description: "Away team team spring venue id."
+- name: teams_away_team_spring_venue_link
+  type: character
+  description: "Away team team spring venue link."
+- name: teams_away_team_team_code
+  type: character
+  description: "Away team team team code."
+- name: teams_away_team_file_code
+  type: character
+  description: "Away team team file code."
+- name: teams_away_team_abbreviation
+  type: character
+  description: "Away team team abbreviation."
+- name: teams_away_team_team_name
+  type: character
+  description: "Away team team team name."
+- name: teams_away_team_location_name
+  type: character
+  description: "Away team team location name."
+- name: teams_away_team_first_year_of_play
+  type: character
+  description: "Away team team first year of play."
+- name: teams_away_team_league_id
+  type: integer
+  description: "Away team team league id."
+- name: teams_away_team_league_name
+  type: character
+  description: "Away team team league name."
+- name: teams_away_team_league_link
+  type: character
+  description: "Away team team league link."
+- name: teams_away_team_division_id
+  type: integer
+  description: "Away team team division id."
+- name: teams_away_team_division_name
+  type: character
+  description: "Away team team division name."
+- name: teams_away_team_division_link
+  type: character
+  description: "Away team team division link."
+- name: teams_away_team_sport_id
+  type: integer
+  description: "Away team team sport id."
+- name: teams_away_team_sport_link
+  type: character
+  description: "Away team team sport link."
+- name: teams_away_team_sport_name
+  type: character
+  description: "Away team team sport name."
+- name: teams_away_team_short_name
+  type: character
+  description: "Away team team short name."
+- name: teams_away_team_franchise_name
+  type: character
+  description: "Away team team franchise name."
+- name: teams_away_team_club_name
+  type: character
+  description: "Away team team club name."
+- name: teams_away_team_active
+  type: logical
+  description: "Away team team active."
+- name: teams_away_league_record_wins
+  type: integer
+  description: "Away team league record wins."
+- name: teams_away_league_record_losses
+  type: integer
+  description: "Away team league record losses."
+- name: teams_away_league_record_ties
+  type: integer
+  description: "Away team league record ties."
+- name: teams_away_league_record_pct
+  type: character
+  description: "Away team league record rate."
+- name: teams_away_probable_pitcher_id
+  type: integer
+  description: "Away team probable pitcher id."
+- name: teams_away_probable_pitcher_full_name
+  type: character
+  description: "Away team probable pitcher full name."
+- name: teams_away_probable_pitcher_link
+  type: character
+  description: "Away team probable pitcher link."
+- name: teams_away_probable_pitcher_first_name
+  type: character
+  description: "Away team probable pitcher first name."
+- name: teams_away_probable_pitcher_last_name
+  type: character
+  description: "Away team probable pitcher last name."
+- name: teams_away_probable_pitcher_primary_number
+  type: character
+  description: "Away team probable pitcher primary number."
+- name: teams_away_probable_pitcher_birth_date
+  type: character
+  description: "Away team probable pitcher birth date."
+- name: teams_away_probable_pitcher_current_age
+  type: integer
+  description: "Away team probable pitcher current age."
+- name: teams_away_probable_pitcher_birth_city
+  type: character
+  description: "Away team probable pitcher birth city."
+- name: teams_away_probable_pitcher_birth_state_province
+  type: character
+  description: "Away team probable pitcher birth state province."
+- name: teams_away_probable_pitcher_birth_country
+  type: character
+  description: "Away team probable pitcher birth country."
+- name: teams_away_probable_pitcher_height
+  type: character
+  description: "Away team probable pitcher height."
+- name: teams_away_probable_pitcher_weight
+  type: integer
+  description: "Away team probable pitcher weight."
+- name: teams_away_probable_pitcher_active
+  type: logical
+  description: "Away team probable pitcher active."
+- name: teams_away_probable_pitcher_primary_position_code
+  type: character
+  description: "Away team probable pitcher primary position code."
+- name: teams_away_probable_pitcher_primary_position_name
+  type: character
+  description: "Away team probable pitcher primary position name."
+- name: teams_away_probable_pitcher_primary_position_type
+  type: character
+  description: "Away team probable pitcher primary position type."
+- name: teams_away_probable_pitcher_primary_position_abbreviation
+  type: character
+  description: "Away team probable pitcher primary position abbreviation."
+- name: teams_away_probable_pitcher_use_name
+  type: character
+  description: "Away team probable pitcher use name."
+- name: teams_away_probable_pitcher_use_last_name
+  type: character
+  description: "Away team probable pitcher use last name."
+- name: teams_away_probable_pitcher_middle_name
+  type: character
+  description: "Away team probable pitcher middle name."
+- name: teams_away_probable_pitcher_boxscore_name
+  type: character
+  description: "Away team probable pitcher boxscore name."
+- name: teams_away_probable_pitcher_gender
+  type: character
+  description: "Away team probable pitcher gender."
+- name: teams_away_probable_pitcher_is_player
+  type: logical
+  description: "Away team probable pitcher is player."
+- name: teams_away_probable_pitcher_is_verified
+  type: logical
+  description: "Away team probable pitcher is verified."
+- name: teams_away_probable_pitcher_draft_year
+  type: integer
+  description: "Away team probable pitcher draft year."
+- name: teams_away_probable_pitcher_mlb_debut_date
+  type: character
+  description: "Away team probable pitcher mlb debut date."
+- name: teams_away_probable_pitcher_bat_side_code
+  type: character
+  description: "Away team probable pitcher bat side code."
+- name: teams_away_probable_pitcher_bat_side_description
+  type: character
+  description: "Away team probable pitcher bat side description."
+- name: teams_away_probable_pitcher_pitch_hand_code
+  type: character
+  description: "Away team probable pitcher pitch hand code."
+- name: teams_away_probable_pitcher_pitch_hand_description
+  type: character
+  description: "Away team probable pitcher pitch hand description."
+- name: teams_away_probable_pitcher_name_first_last
+  type: character
+  description: "Away team probable pitcher name first last."
+- name: teams_away_probable_pitcher_name_slug
+  type: character
+  description: "Away team probable pitcher name slug."
+- name: teams_away_probable_pitcher_first_last_name
+  type: character
+  description: "Away team probable pitcher first last name."
+- name: teams_away_probable_pitcher_last_first_name
+  type: character
+  description: "Away team probable pitcher last first name."
+- name: teams_away_probable_pitcher_last_init_name
+  type: character
+  description: "Away team probable pitcher last init name."
+- name: teams_away_probable_pitcher_init_last_name
+  type: character
+  description: "Away team probable pitcher init last name."
+- name: teams_away_probable_pitcher_full_fml_name
+  type: character
+  description: "Away team probable pitcher full fml name."
+- name: teams_away_probable_pitcher_full_lfm_name
+  type: character
+  description: "Away team probable pitcher full lfm name."
+- name: teams_away_probable_pitcher_strike_zone_top
+  type: numeric
+  description: "Away team probable pitcher strike zone top."
+- name: teams_away_probable_pitcher_strike_zone_bottom
+  type: numeric
+  description: "Away team probable pitcher strike zone bottom."
+- name: teams_away_split_squad
+  type: logical
+  description: "Away team split squad."
+- name: teams_away_series_number
+  type: integer
+  description: "Away team series number."
+- name: teams_away_spring_league_id
+  type: integer
+  description: "Away team spring league id."
+- name: teams_away_spring_league_name
+  type: character
+  description: "Away team spring league name."
+- name: teams_away_spring_league_link
+  type: character
+  description: "Away team spring league link."
+- name: teams_away_spring_league_abbreviation
+  type: character
+  description: "Away team spring league abbreviation."
+- name: teams_home_team_spring_league_id
+  type: integer
+  description: "Home team team spring league id."
+- name: teams_home_team_spring_league_name
+  type: character
+  description: "Home team team spring league name."
+- name: teams_home_team_spring_league_link
+  type: character
+  description: "Home team team spring league link."
+- name: teams_home_team_spring_league_abbreviation
+  type: character
+  description: "Home team team spring league abbreviation."
+- name: teams_home_team_all_star_status
+  type: character
+  description: "Home team team all star status."
+- name: teams_home_team_id
+  type: integer
+  description: "Home team team id."
+- name: teams_home_team_name
+  type: character
+  description: "Home team team name."
+- name: teams_home_team_link
+  type: character
+  description: "Home team team link."
+- name: teams_home_team_season
+  type: integer
+  description: "Home team team season."
+- name: teams_home_team_venue_id
+  type: integer
+  description: "Home team team venue id."
+- name: teams_home_team_venue_name
+  type: character
+  description: "Home team team venue name."
+- name: teams_home_team_venue_link
+  type: character
+  description: "Home team team venue link."
+- name: teams_home_team_spring_venue_id
+  type: integer
+  description: "Home team team spring venue id."
+- name: teams_home_team_spring_venue_link
+  type: character
+  description: "Home team team spring venue link."
+- name: teams_home_team_team_code
+  type: character
+  description: "Home team team team code."
+- name: teams_home_team_file_code
+  type: character
+  description: "Home team team file code."
+- name: teams_home_team_abbreviation
+  type: character
+  description: "Home team team abbreviation."
+- name: teams_home_team_team_name
+  type: character
+  description: "Home team team team name."
+- name: teams_home_team_location_name
+  type: character
+  description: "Home team team location name."
+- name: teams_home_team_first_year_of_play
+  type: character
+  description: "Home team team first year of play."
+- name: teams_home_team_league_id
+  type: integer
+  description: "Home team team league id."
+- name: teams_home_team_league_name
+  type: character
+  description: "Home team team league name."
+- name: teams_home_team_league_link
+  type: character
+  description: "Home team team league link."
+- name: teams_home_team_division_id
+  type: integer
+  description: "Home team team division id."
+- name: teams_home_team_division_name
+  type: character
+  description: "Home team team division name."
+- name: teams_home_team_division_link
+  type: character
+  description: "Home team team division link."
+- name: teams_home_team_sport_id
+  type: integer
+  description: "Home team team sport id."
+- name: teams_home_team_sport_link
+  type: character
+  description: "Home team team sport link."
+- name: teams_home_team_sport_name
+  type: character
+  description: "Home team team sport name."
+- name: teams_home_team_short_name
+  type: character
+  description: "Home team team short name."
+- name: teams_home_team_franchise_name
+  type: character
+  description: "Home team team franchise name."
+- name: teams_home_team_club_name
+  type: character
+  description: "Home team team club name."
+- name: teams_home_team_active
+  type: logical
+  description: "Home team team active."
+- name: teams_home_league_record_wins
+  type: integer
+  description: "Home team league record wins."
+- name: teams_home_league_record_losses
+  type: integer
+  description: "Home team league record losses."
+- name: teams_home_league_record_ties
+  type: integer
+  description: "Home team league record ties."
+- name: teams_home_league_record_pct
+  type: character
+  description: "Home team league record rate."
+- name: teams_home_probable_pitcher_id
+  type: integer
+  description: "Home team probable pitcher id."
+- name: teams_home_probable_pitcher_full_name
+  type: character
+  description: "Home team probable pitcher full name."
+- name: teams_home_probable_pitcher_link
+  type: character
+  description: "Home team probable pitcher link."
+- name: teams_home_probable_pitcher_first_name
+  type: character
+  description: "Home team probable pitcher first name."
+- name: teams_home_probable_pitcher_last_name
+  type: character
+  description: "Home team probable pitcher last name."
+- name: teams_home_probable_pitcher_primary_number
+  type: character
+  description: "Home team probable pitcher primary number."
+- name: teams_home_probable_pitcher_birth_date
+  type: character
+  description: "Home team probable pitcher birth date."
+- name: teams_home_probable_pitcher_current_age
+  type: integer
+  description: "Home team probable pitcher current age."
+- name: teams_home_probable_pitcher_birth_city
+  type: character
+  description: "Home team probable pitcher birth city."
+- name: teams_home_probable_pitcher_birth_state_province
+  type: character
+  description: "Home team probable pitcher birth state province."
+- name: teams_home_probable_pitcher_birth_country
+  type: character
+  description: "Home team probable pitcher birth country."
+- name: teams_home_probable_pitcher_height
+  type: character
+  description: "Home team probable pitcher height."
+- name: teams_home_probable_pitcher_weight
+  type: integer
+  description: "Home team probable pitcher weight."
+- name: teams_home_probable_pitcher_active
+  type: logical
+  description: "Home team probable pitcher active."
+- name: teams_home_probable_pitcher_primary_position_code
+  type: character
+  description: "Home team probable pitcher primary position code."
+- name: teams_home_probable_pitcher_primary_position_name
+  type: character
+  description: "Home team probable pitcher primary position name."
+- name: teams_home_probable_pitcher_primary_position_type
+  type: character
+  description: "Home team probable pitcher primary position type."
+- name: teams_home_probable_pitcher_primary_position_abbreviation
+  type: character
+  description: "Home team probable pitcher primary position abbreviation."
+- name: teams_home_probable_pitcher_use_name
+  type: character
+  description: "Home team probable pitcher use name."
+- name: teams_home_probable_pitcher_use_last_name
+  type: character
+  description: "Home team probable pitcher use last name."
+- name: teams_home_probable_pitcher_middle_name
+  type: character
+  description: "Home team probable pitcher middle name."
+- name: teams_home_probable_pitcher_boxscore_name
+  type: character
+  description: "Home team probable pitcher boxscore name."
+- name: teams_home_probable_pitcher_nick_name
+  type: character
+  description: "Home team probable pitcher nick name."
+- name: teams_home_probable_pitcher_gender
+  type: character
+  description: "Home team probable pitcher gender."
+- name: teams_home_probable_pitcher_is_player
+  type: logical
+  description: "Home team probable pitcher is player."
+- name: teams_home_probable_pitcher_is_verified
+  type: logical
+  description: "Home team probable pitcher is verified."
+- name: teams_home_probable_pitcher_draft_year
+  type: integer
+  description: "Home team probable pitcher draft year."
+- name: teams_home_probable_pitcher_mlb_debut_date
+  type: character
+  description: "Home team probable pitcher mlb debut date."
+- name: teams_home_probable_pitcher_bat_side_code
+  type: character
+  description: "Home team probable pitcher bat side code."
+- name: teams_home_probable_pitcher_bat_side_description
+  type: character
+  description: "Home team probable pitcher bat side description."
+- name: teams_home_probable_pitcher_pitch_hand_code
+  type: character
+  description: "Home team probable pitcher pitch hand code."
+- name: teams_home_probable_pitcher_pitch_hand_description
+  type: character
+  description: "Home team probable pitcher pitch hand description."
+- name: teams_home_probable_pitcher_name_first_last
+  type: character
+  description: "Home team probable pitcher name first last."
+- name: teams_home_probable_pitcher_name_slug
+  type: character
+  description: "Home team probable pitcher name slug."
+- name: teams_home_probable_pitcher_first_last_name
+  type: character
+  description: "Home team probable pitcher first last name."
+- name: teams_home_probable_pitcher_last_first_name
+  type: character
+  description: "Home team probable pitcher last first name."
+- name: teams_home_probable_pitcher_last_init_name
+  type: character
+  description: "Home team probable pitcher last init name."
+- name: teams_home_probable_pitcher_init_last_name
+  type: character
+  description: "Home team probable pitcher init last name."
+- name: teams_home_probable_pitcher_full_fml_name
+  type: character
+  description: "Home team probable pitcher full fml name."
+- name: teams_home_probable_pitcher_full_lfm_name
+  type: character
+  description: "Home team probable pitcher full lfm name."
+- name: teams_home_probable_pitcher_strike_zone_top
+  type: numeric
+  description: "Home team probable pitcher strike zone top."
+- name: teams_home_probable_pitcher_strike_zone_bottom
+  type: numeric
+  description: "Home team probable pitcher strike zone bottom."
+- name: teams_home_split_squad
+  type: logical
+  description: "Home team split squad."
+- name: teams_home_series_number
+  type: integer
+  description: "Home team series number."
+- name: teams_home_spring_league_id
+  type: integer
+  description: "Home team spring league id."
+- name: teams_home_spring_league_name
+  type: character
+  description: "Home team spring league name."
+- name: teams_home_spring_league_link
+  type: character
+  description: "Home team spring league link."
+- name: teams_home_spring_league_abbreviation
+  type: character
+  description: "Home team spring league abbreviation."
+- name: linescore_scheduled_innings
+  type: integer
+  description: "Linescore scheduled innings."
+- name: linescore_innings
+  type: character
+  description: "Linescore innings."
+- name: linescore_defense_team_id
+  type: integer
+  description: "Linescore defense team id."
+- name: linescore_defense_team_name
+  type: character
+  description: "Linescore defense team name."
+- name: linescore_defense_team_link
+  type: character
+  description: "Linescore defense team link."
+- name: linescore_offense_team_id
+  type: integer
+  description: "Linescore offense team id."
+- name: linescore_offense_team_name
+  type: character
+  description: "Linescore offense team name."
+- name: linescore_offense_team_link
+  type: character
+  description: "Linescore offense team link."
+- name: venue_id
+  type: integer
+  description: "MLBAM venue id."
+- name: venue_name
+  type: character
+  description: "Ballpark name."
+- name: venue_link
+  type: character
+  description: "Venue link."
+- name: content_link
+  type: character
+  description: "Content link."

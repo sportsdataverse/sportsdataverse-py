@@ -1,0 +1,90 @@
+schema: leaderboard_spin_direction
+kind: dataframe
+columns:
+- name: year
+  type: integer
+  description: "Season year."
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: pitch_hand
+  type: character
+  description: "Pitcher handedness (R/L)."
+- name: api_pitch_type
+  type: character
+  description: "Pitch type (API code)."
+- name: n_pitches
+  type: integer
+  description: "Number of pitches."
+- name: release_speed
+  type: numeric
+  description: "Release speed."
+- name: spin_rate
+  type: integer
+  description: "Spin rate (rpm)."
+- name: movement_inches
+  type: numeric
+  description: "Movement inches."
+- name: alan_active_spin_pct
+  type: numeric
+  description: "Alan active spin rate."
+- name: active_spin
+  type: numeric
+  description: "Active (useful) spin (%)."
+- name: hawkeye_measured
+  type: numeric
+  description: "Hawkeye measured."
+- name: movement_inferred
+  type: numeric
+  description: "Movement inferred."
+- name: api_pitch_name
+  type: character
+  description: "Api pitch name."
+- name: active_spin_formatted
+  type: integer
+  description: "Active spin (formatted, %)."
+- name: hawkeye_measured_clock_minutes
+  type: integer
+  description: "Hawkeye measured clock minutes."
+- name: movement_inferred_clock_minutes
+  type: integer
+  description: "Movement inferred clock minutes."
+- name: diff_measured_inferred
+  type: numeric
+  description: "Diff measured inferred."
+- name: diff2
+  type: numeric
+  description: "Diff2."
+- name: diff_measured_inferred_minutes
+  type: integer
+  description: "Diff measured inferred minutes."
+- name: hawkeye_measured_clock_hh
+  type: integer
+  description: "Hawkeye measured clock hh."
+- name: hawkeye_measured_clock_mm
+  type: integer
+  description: "Hawkeye measured clock mm."
+- name: movement_inferred_clock_hh
+  type: integer
+  description: "Movement inferred clock hh."
+- name: movement_inferred_clock_mm
+  type: integer
+  description: "Movement inferred clock mm."
+- name: diff_clock_hh
+  type: integer
+  description: "Diff clock hh."
+- name: diff_clock_mm
+  type: integer
+  description: "Diff clock mm."
+- name: hawkeye_measured_clock_label
+  type: character
+  description: "Hawkeye measured clock label."
+- name: movement_inferred_clock_label
+  type: character
+  description: "Movement inferred clock label."
+- name: diff_clock_label
+  type: character
+  description: "Diff clock label."

@@ -10,7 +10,8 @@ sidebar_label: MLB
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
 | [MLB Stats API](reference/mlb_api) | 64 | `https://statsapi.mlb.com` |
-| [Additional functions](reference/additional) | 45 | hand-written wrappers, loaders & helpers |
+| [MLB Statcast (Baseball Savant)](reference/mlb_statcast) | 39 | `https://baseballsavant.mlb.com` |
+| [Additional functions](reference/additional) | 36 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -130,4 +131,3 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | [`mlb_api_teams_stats_leaders`](reference/mlb_api#mlb_api_teams_stats_leaders) | [`mlb_teams_stats_leaders`](https://billpetti.github.io/baseballr/reference/mlb_teams_stats_leaders.html) |
 | [`mlb_api_venues`](reference/mlb_api#mlb_api_venues) | [`mlb_venues`](https://billpetti.github.io/baseballr/reference/mlb_venues.html) |
 | [`most_recent_mlb_season`](reference/additional#most_recent_mlb_season) | [`most_recent_mlb_season`](https://billpetti.github.io/baseballr/reference/most_recent_mlb_season.html) |
-| [`statcast_search`](reference/additional#statcast_search) | [`statcast_search`](https://billpetti.github.io/baseballr/reference/statcast_search.html) |

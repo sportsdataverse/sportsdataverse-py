@@ -1,0 +1,36 @@
+schema: leaderboard_pitch_tempo
+kind: dataframe
+columns:
+- name: entity_id
+  type: integer
+  description: "MLBAM id of the player/team entity."
+- name: entity_name
+  type: character
+  description: "Player (or team) entity name."
+- name: entity_code
+  type: character
+  description: "Entity code."
+- name: team_id
+  type: integer
+  description: "MLBAM team id."
+- name: total_pitches
+  type: integer
+  description: "Total pitches."
+- name: total_pitches_empty
+  type: integer
+  description: "Total pitches empty."
+- name: median_seconds_empty
+  type: numeric
+  description: "Median tempo (s) with bases empty."
+- name: total_pitches_onbase
+  type: integer
+  description: "Total pitches onbase."
+- name: freq_hot
+  type: numeric
+  description: "Freq hot."
+- name: freq_warm
+  type: numeric
+  description: "Freq warm."
+- name: freq_cold
+  type: numeric
+  description: "Freq cold."

@@ -1,0 +1,42 @@
+schema: leaderboard_swing_path
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: "MLBAM player id."
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: side
+  type: character
+  description: "Side."
+- name: avg_bat_speed
+  type: numeric
+  description: "Average bat speed (mph)."
+- name: swing_tilt
+  type: numeric
+  description: "Swing tilt (deg)."
+- name: attack_angle
+  type: numeric
+  description: "Attack angle (deg, bat path at contact)."
+- name: attack_direction
+  type: numeric
+  description: "Attack direction (deg, pull/oppo)."
+- name: ideal_attack_angle_rate
+  type: numeric
+  description: "Rate of swings in the ideal attack-angle window."
+- name: avg_intercept_y_vs_plate
+  type: numeric
+  description: "Avg intercept y vs plate."
+- name: avg_intercept_y_vs_batter
+  type: numeric
+  description: "Avg intercept y vs batter."
+- name: avg_batter_y_position
+  type: numeric
+  description: "Avg batter y position."
+- name: avg_batter_x_position
+  type: numeric
+  description: "Avg batter x position."
+- name: competitive_swings
+  type: integer
+  description: "Competitive swings."

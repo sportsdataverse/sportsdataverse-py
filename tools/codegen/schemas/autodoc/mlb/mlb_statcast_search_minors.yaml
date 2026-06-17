@@ -1,0 +1,360 @@
+schema: mlb_statcast_search_minors
+kind: dataframe
+columns:
+- name: pitch_type
+  type: character
+  description: "Pitch type code."
+- name: game_date
+  type: character
+  description: "Game date."
+- name: release_speed
+  type: numeric
+  description: "Release speed."
+- name: release_pos_x
+  type: numeric
+  description: "Release pos x."
+- name: release_pos_z
+  type: numeric
+  description: "Release pos z."
+- name: player_name
+  type: character
+  description: "Player name."
+- name: batter
+  type: integer
+  description: "MLBAM id of the batter."
+- name: pitcher
+  type: integer
+  description: "MLBAM id of the pitcher."
+- name: events
+  type: character
+  description: "Events."
+- name: description
+  type: character
+  description: "Description."
+- name: spin_dir
+  type: character
+  description: "Spin dir."
+- name: spin_rate_deprecated
+  type: character
+  description: "Spin rate deprecated."
+- name: break_angle_deprecated
+  type: character
+  description: "Break angle deprecated."
+- name: break_length_deprecated
+  type: character
+  description: "Break length deprecated."
+- name: zone
+  type: integer
+  description: "Zone."
+- name: des
+  type: character
+  description: "Des."
+- name: game_type
+  type: character
+  description: "Game type."
+- name: stand
+  type: character
+  description: "Batter stance side (R/L)."
+- name: p_throws
+  type: character
+  description: "Pitcher throwing hand (R/L)."
+- name: home_team
+  type: character
+  description: "Home team."
+- name: away_team
+  type: character
+  description: "Away team."
+- name: type
+  type: character
+  description: "Record/pitch type."
+- name: hit_location
+  type: integer
+  description: "Hit location."
+- name: bb_type
+  type: character
+  description: "Bb type."
+- name: balls
+  type: integer
+  description: "Balls."
+- name: strikes
+  type: integer
+  description: "Strikes."
+- name: game_year
+  type: integer
+  description: "Game year."
+- name: pfx_x
+  type: numeric
+  description: "Horizontal movement (in, pitcher perspective)."
+- name: pfx_z
+  type: numeric
+  description: "Induced vertical movement (in)."
+- name: plate_x
+  type: numeric
+  description: "Plate x."
+- name: plate_z
+  type: numeric
+  description: "Plate z."
+- name: on_3b
+  type: character
+  description: "On 3b."
+- name: on_2b
+  type: character
+  description: "On 2b."
+- name: on_1b
+  type: character
+  description: "On 1b."
+- name: outs_when_up
+  type: integer
+  description: "Outs when up."
+- name: inning
+  type: integer
+  description: "Inning."
+- name: inning_topbot
+  type: character
+  description: "Inning topbot."
+- name: hc_x
+  type: numeric
+  description: "Hc x."
+- name: hc_y
+  type: numeric
+  description: "Hc y."
+- name: tfs_deprecated
+  type: character
+  description: "Tfs deprecated."
+- name: tfs_zulu_deprecated
+  type: character
+  description: "Tfs zulu deprecated."
+- name: umpire
+  type: character
+  description: "Umpire."
+- name: sv_id
+  type: character
+  description: "Sv id."
+- name: vx0
+  type: numeric
+  description: "Vx0."
+- name: vy0
+  type: numeric
+  description: "Vy0."
+- name: vz0
+  type: numeric
+  description: "Vz0."
+- name: ax
+  type: numeric
+  description: "Ax."
+- name: ay
+  type: numeric
+  description: "Ay."
+- name: az
+  type: numeric
+  description: "Az."
+- name: sz_top
+  type: numeric
+  description: "Sz top."
+- name: sz_bot
+  type: numeric
+  description: "Sz bot."
+- name: hit_distance_sc
+  type: integer
+  description: "Hit distance sc."
+- name: launch_speed
+  type: numeric
+  description: "Exit velocity of the batted ball (mph)."
+- name: launch_angle
+  type: integer
+  description: "Launch angle (deg)."
+- name: effective_speed
+  type: integer
+  description: "Effective speed."
+- name: release_spin_rate
+  type: integer
+  description: "Release spin rate."
+- name: release_extension
+  type: numeric
+  description: "Release extension."
+- name: game_pk
+  type: integer
+  description: "MLBAM game id."
+- name: fielder_2
+  type: integer
+  description: "Fielder 2."
+- name: fielder_3
+  type: integer
+  description: "Fielder 3."
+- name: fielder_4
+  type: integer
+  description: "Fielder 4."
+- name: fielder_5
+  type: integer
+  description: "Fielder 5."
+- name: fielder_6
+  type: integer
+  description: "Fielder 6."
+- name: fielder_7
+  type: integer
+  description: "Fielder 7."
+- name: fielder_8
+  type: integer
+  description: "Fielder 8."
+- name: fielder_9
+  type: integer
+  description: "Fielder 9."
+- name: release_pos_y
+  type: numeric
+  description: "Release pos y."
+- name: estimated_ba_using_speedangle
+  type: numeric
+  description: "Estimated ba using speedangle."
+- name: estimated_woba_using_speedangle
+  type: numeric
+  description: "Estimated woba using speedangle."
+- name: woba_value
+  type: integer
+  description: "Woba value."
+- name: woba_denom
+  type: integer
+  description: "Woba denom."
+- name: babip_value
+  type: integer
+  description: "Babip value."
+- name: iso_value
+  type: integer
+  description: "Iso value."
+- name: launch_speed_angle
+  type: integer
+  description: "Launch speed angle."
+- name: at_bat_number
+  type: integer
+  description: "At bat number."
+- name: pitch_number
+  type: integer
+  description: "Pitch number."
+- name: pitch_name
+  type: character
+  description: "Pitch type name."
+- name: home_score
+  type: integer
+  description: "Home score."
+- name: away_score
+  type: integer
+  description: "Away score."
+- name: bat_score
+  type: integer
+  description: "Bat score."
+- name: fld_score
+  type: integer
+  description: "Fld score."
+- name: post_away_score
+  type: integer
+  description: "Post away score."
+- name: post_home_score
+  type: integer
+  description: "Post home score."
+- name: post_bat_score
+  type: integer
+  description: "Post bat score."
+- name: post_fld_score
+  type: integer
+  description: "Post fld score."
+- name: if_fielding_alignment
+  type: character
+  description: "If fielding alignment."
+- name: of_fielding_alignment
+  type: character
+  description: "Of fielding alignment."
+- name: spin_axis
+  type: integer
+  description: "Spin axis."
+- name: delta_home_win_exp
+  type: numeric
+  description: "Delta home win exp."
+- name: delta_run_exp
+  type: numeric
+  description: "Delta run exp."
+- name: bat_speed
+  type: numeric
+  description: "Bat speed (mph)."
+- name: swing_length
+  type: numeric
+  description: "Swing length (ft, head travel)."
+- name: miss_distance
+  type: character
+  description: "Average miss distance (in) on swings."
+- name: estimated_slg_using_speedangle
+  type: numeric
+  description: "Estimated slg using speedangle."
+- name: delta_pitcher_run_exp
+  type: numeric
+  description: "Delta pitcher run exp."
+- name: hyper_speed
+  type: numeric
+  description: "Hyper speed."
+- name: home_score_diff
+  type: integer
+  description: "Home score diff."
+- name: bat_score_diff
+  type: integer
+  description: "Bat score diff."
+- name: home_win_exp
+  type: numeric
+  description: "Home win exp."
+- name: bat_win_exp
+  type: numeric
+  description: "Bat win exp."
+- name: age_pit_legacy
+  type: integer
+  description: "Age pit legacy."
+- name: age_bat_legacy
+  type: integer
+  description: "Age bat legacy."
+- name: age_pit
+  type: integer
+  description: "Age pit."
+- name: age_bat
+  type: integer
+  description: "Age bat."
+- name: n_thruorder_pitcher
+  type: integer
+  description: "Number of thruorder pitcher."
+- name: n_priorpa_thisgame_player_at_bat
+  type: integer
+  description: "Number of priorpa thisgame player at bat."
+- name: pitcher_days_since_prev_game
+  type: integer
+  description: "Pitcher days since prev game."
+- name: batter_days_since_prev_game
+  type: integer
+  description: "Batter days since prev game."
+- name: pitcher_days_until_next_game
+  type: integer
+  description: "Pitcher days until next game."
+- name: batter_days_until_next_game
+  type: integer
+  description: "Batter days until next game."
+- name: api_break_z_with_gravity
+  type: numeric
+  description: "Api break z with gravity."
+- name: api_break_x_arm
+  type: numeric
+  description: "Api break x arm."
+- name: api_break_x_batter_in
+  type: numeric
+  description: "Api break x batter in."
+- name: arm_angle
+  type: numeric
+  description: "Arm angle."
+- name: attack_angle
+  type: numeric
+  description: "Attack angle (deg, bat path at contact)."
+- name: attack_direction
+  type: numeric
+  description: "Attack direction (deg, pull/oppo)."
+- name: swing_path_tilt
+  type: numeric
+  description: "Swing-path tilt (deg)."
+- name: intercept_ball_minus_batter_pos_x_inches
+  type: numeric
+  description: "Intercept ball minus batter pos x inches."
+- name: intercept_ball_minus_batter_pos_y_inches
+  type: numeric
+  description: "Intercept ball minus batter pos y inches."

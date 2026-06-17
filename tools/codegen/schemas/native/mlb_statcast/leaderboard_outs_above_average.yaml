@@ -1,0 +1,51 @@
+schema: leaderboard_outs_above_average
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: character
+  description: "MLBAM player id."
+- name: display_team_name
+  type: character
+  description: "Team display name."
+- name: year
+  type: character
+  description: "Season year."
+- name: primary_pos_formatted
+  type: character
+  description: "Primary position (formatted)."
+- name: fielding_runs_prevented
+  type: character
+  description: "Fielding Run Value (runs)."
+- name: outs_above_average
+  type: character
+  description: "Outs Above Average."
+- name: outs_above_average_infront
+  type: character
+  description: "Outs above average infront."
+- name: outs_above_average_lateral_toward3bline
+  type: character
+  description: "Outs above average lateral toward3bline."
+- name: outs_above_average_lateral_toward1bline
+  type: character
+  description: "Outs above average lateral toward1bline."
+- name: outs_above_average_behind
+  type: character
+  description: "Outs above average behind."
+- name: outs_above_average_rhh
+  type: character
+  description: "Outs above average rhh."
+- name: outs_above_average_lhh
+  type: character
+  description: "Outs above average lhh."
+- name: actual_success_rate_formatted
+  type: character
+  description: "Actual success rate formatted."
+- name: adj_estimated_success_rate_formatted
+  type: character
+  description: "Adj estimated success rate formatted."
+- name: diff_success_rate_formatted
+  type: character
+  description: "Diff success rate formatted."

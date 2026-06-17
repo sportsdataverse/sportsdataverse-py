@@ -1,0 +1,57 @@
+schema: leaderboard_baserunning_run_value
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: entity_name
+  type: character
+  description: "Player (or team) entity name."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: start_year
+  type: integer
+  description: "First season in the range."
+- name: end_year
+  type: integer
+  description: "Last season in the range."
+- name: runner_runs_tot
+  type: numeric
+  description: "Runner runs tot."
+- name: runner_runs_xb
+  type: numeric
+  description: "Runner runs xb."
+- name: runner_runs_sbx
+  type: numeric
+  description: "Runner runs sbx."
+- name: n_runner_moved
+  type: integer
+  description: "Number of runner moved."
+- name: runner_runs_xb_swipe
+  type: numeric
+  description: "Runner runs xb swipe."
+- name: runner_runs_xb_snipe
+  type: integer
+  description: "Runner runs xb snipe."
+- name: runner_runs_xb_freeze
+  type: numeric
+  description: "Runner runs xb freeze."
+- name: n_runner_moved_xb
+  type: integer
+  description: "Number of runner moved xb."
+- name: runner_runs_sb2
+  type: numeric
+  description: "Runner runs sb2."
+- name: runner_runs_sb3
+  type: numeric
+  description: "Runner runs sb3."
+- name: simple_stolen_on_running_act_sb2
+  type: numeric
+  description: "Simple stolen on running act sb2."
+- name: simple_stolen_on_running_act_sb3
+  type: numeric
+  description: "Simple stolen on running act sb3."
+- name: n_runner_moved_sbx
+  type: integer
+  description: "Number of runner moved sbx."

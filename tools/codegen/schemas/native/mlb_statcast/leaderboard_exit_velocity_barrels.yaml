@@ -1,0 +1,57 @@
+schema: leaderboard_exit_velocity_barrels
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: attempts
+  type: integer
+  description: "Opportunities/attempts."
+- name: avg_hit_angle
+  type: numeric
+  description: "Average launch angle (deg)."
+- name: anglesweetspotpercent
+  type: numeric
+  description: "Anglesweetspotpercent."
+- name: max_hit_speed
+  type: numeric
+  description: "Max exit velocity (mph)."
+- name: avg_hit_speed
+  type: numeric
+  description: "Average exit velocity (mph)."
+- name: ev50
+  type: numeric
+  description: "Ev50."
+- name: fbld
+  type: numeric
+  description: "Fbld."
+- name: gb
+  type: numeric
+  description: "Gb."
+- name: max_distance
+  type: integer
+  description: "Max distance."
+- name: avg_distance
+  type: integer
+  description: "Avg distance."
+- name: avg_hr_distance
+  type: integer
+  description: "Avg hr distance."
+- name: ev95plus
+  type: integer
+  description: "Ev95plus."
+- name: ev95percent
+  type: numeric
+  description: "Ev95percent."
+- name: barrels
+  type: integer
+  description: "Barrels."
+- name: brl_percent
+  type: numeric
+  description: "Barrel rate (% of batted balls)."
+- name: brl_pa
+  type: numeric
+  description: "Barrels per plate appearance."

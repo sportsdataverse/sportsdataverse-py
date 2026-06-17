@@ -1,0 +1,66 @@
+schema: leaderboard_catcher_framing
+kind: dataframe
+columns:
+- name: id
+  type: integer
+  description: "MLBAM player id."
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: pitches
+  type: integer
+  description: "Pitches."
+- name: rv_tot
+  type: numeric
+  description: "Total framing run value."
+- name: pct_tot
+  type: numeric
+  description: "Total called-strike rate."
+- name: rv_11
+  type: integer
+  description: "Rv 11."
+- name: pct_11
+  type: numeric
+  description: "Pct 11."
+- name: rv_12
+  type: integer
+  description: "Rv 12."
+- name: pct_12
+  type: numeric
+  description: "Pct 12."
+- name: rv_13
+  type: integer
+  description: "Rv 13."
+- name: pct_13
+  type: integer
+  description: "Pct 13."
+- name: rv_14
+  type: integer
+  description: "Rv 14."
+- name: pct_14
+  type: numeric
+  description: "Pct 14."
+- name: rv_16
+  type: integer
+  description: "Rv 16."
+- name: pct_16
+  type: numeric
+  description: "Pct 16."
+- name: rv_17
+  type: integer
+  description: "Rv 17."
+- name: pct_17
+  type: numeric
+  description: "Pct 17."
+- name: rv_18
+  type: integer
+  description: "Rv 18."
+- name: pct_18
+  type: numeric
+  description: "Pct 18."
+- name: rv_19
+  type: integer
+  description: "Rv 19."
+- name: pct_19
+  type: numeric
+  description: "Pct 19."

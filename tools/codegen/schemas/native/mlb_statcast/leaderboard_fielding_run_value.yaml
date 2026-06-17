@@ -1,0 +1,75 @@
+schema: leaderboard_fielding_run_value
+kind: dataframe
+columns:
+- name: total_runs
+  type: numeric
+  description: "Total runs."
+- name: inf_of_runs
+  type: character
+  description: "Inf of runs."
+- name: range_runs
+  type: character
+  description: "Range runs."
+- name: arm_runs
+  type: character
+  description: "Arm runs."
+- name: dp_runs
+  type: character
+  description: "Dp runs."
+- name: catching_runs
+  type: numeric
+  description: "Catching runs."
+- name: framing_runs
+  type: numeric
+  description: "Framing runs."
+- name: throwing_runs
+  type: numeric
+  description: "Throwing runs."
+- name: blocking_runs
+  type: numeric
+  description: "Blocking runs."
+- name: outs_total
+  type: integer
+  description: "Outs total."
+- name: tot_pa
+  type: integer
+  description: "Tot pa."
+- name: outs_2
+  type: integer
+  description: "Outs 2."
+- name: outs_3
+  type: integer
+  description: "Outs 3."
+- name: outs_4
+  type: integer
+  description: "Outs 4."
+- name: outs_5
+  type: integer
+  description: "Outs 5."
+- name: outs_6
+  type: integer
+  description: "Outs 6."
+- name: outs_7
+  type: integer
+  description: "Outs 7."
+- name: outs_8
+  type: integer
+  description: "Outs 8."
+- name: outs_9
+  type: integer
+  description: "Outs 9."
+- name: id
+  type: integer
+  description: "MLBAM player id."
+- name: name
+  type: character
+  description: "Player (or entity) name."
+- name: team_id
+  type: integer
+  description: "MLBAM team id."
+- name: n_teams
+  type: integer
+  description: "Number of teams."
+- name: team_name
+  type: character
+  description: "Team name."

@@ -1,0 +1,72 @@
+schema: leaderboard_catcher_throwing
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: player_name
+  type: character
+  description: "Player name."
+- name: team_name
+  type: character
+  description: "Team name."
+- name: start_year
+  type: integer
+  description: "First season in the range."
+- name: end_year
+  type: integer
+  description: "Last season in the range."
+- name: sb_attempts
+  type: integer
+  description: "Sb attempts."
+- name: catcher_stealing_runs
+  type: numeric
+  description: "Catcher stealing runs."
+- name: caught_stealing_above_average
+  type: numeric
+  description: "Caught-stealing above average."
+- name: n_cs
+  type: integer
+  description: "Caught stealing (count)."
+- name: rate_cs
+  type: numeric
+  description: "Rate cs."
+- name: est_cs_pct
+  type: numeric
+  description: "Expected caught stealing rate."
+- name: cs_aa_per_throw
+  type: numeric
+  description: "Cs aa per throw."
+- name: seasonal_runner_speed
+  type: numeric
+  description: "Seasonal runner speed."
+- name: runner_distance_from_second
+  type: numeric
+  description: "Runner distance from second."
+- name: pop_time
+  type: numeric
+  description: "Pop time."
+- name: exchange_time
+  type: numeric
+  description: "Exchange time."
+- name: arm_strength
+  type: numeric
+  description: "Arm strength (mph, top throws)."
+- name: n_xcs_with_flight_over_xcs
+  type: numeric
+  description: "Number of xcs with flight over xcs."
+- name: n_xcs_with_exchange_over_xcs
+  type: numeric
+  description: "Number of xcs with exchange over xcs."
+- name: n_xcs_with_accuracy_over_xcs
+  type: numeric
+  description: "Number of xcs with accuracy over xcs."
+- name: n_xcs_with_ground_other_over_xcs
+  type: numeric
+  description: "Number of xcs with ground other over xcs."
+- name: n_xcs_with_onfly_other_over_xcs
+  type: numeric
+  description: "Number of xcs with onfly other over xcs."
+- name: n_xcs_with_untracked_other_over_xcs
+  type: integer
+  description: "Number of xcs with untracked other over xcs."

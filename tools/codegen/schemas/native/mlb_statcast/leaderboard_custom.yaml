@@ -1,0 +1,21 @@
+schema: leaderboard_custom
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: year
+  type: integer
+  description: "Season year."
+- name: xba
+  type: numeric
+  description: "Expected batting average."
+- name: xslg
+  type: numeric
+  description: "Expected slugging."
+- name: xwoba
+  type: numeric
+  description: "Expected wOBA."

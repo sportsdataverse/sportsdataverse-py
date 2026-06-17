@@ -1,0 +1,33 @@
+schema: leaderboard_arm_angles
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: "MLBAM id of the pitcher."
+- name: pitcher_name
+  type: character
+  description: "Pitcher name."
+- name: pitch_hand
+  type: character
+  description: "Pitcher handedness (R/L)."
+- name: n_pitches
+  type: integer
+  description: "Number of pitches."
+- name: team_id
+  type: integer
+  description: "MLBAM team id."
+- name: ball_angle
+  type: numeric
+  description: "Arm slot angle (deg)."
+- name: relative_release_ball_x
+  type: numeric
+  description: "Relative release ball x."
+- name: release_ball_z
+  type: numeric
+  description: "Release ball z."
+- name: relative_shoulder_x
+  type: numeric
+  description: "Relative shoulder x."
+- name: shoulder_z
+  type: numeric
+  description: "Shoulder z."

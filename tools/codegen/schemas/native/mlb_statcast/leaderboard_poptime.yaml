@@ -1,0 +1,45 @@
+schema: leaderboard_poptime
+kind: dataframe
+columns:
+- name: entity_name
+  type: character
+  description: "Player (or team) entity name."
+- name: entity_id
+  type: integer
+  description: "MLBAM id of the player/team entity."
+- name: team_id
+  type: integer
+  description: "MLBAM team id."
+- name: age
+  type: integer
+  description: "Player age."
+- name: maxeff_arm_2b_3b_sba
+  type: numeric
+  description: "Max-effort arm velo to 2B/3B (mph)."
+- name: exchange_2b_3b_sba
+  type: numeric
+  description: "Transfer/exchange time (s)."
+- name: pop_2b_sba_count
+  type: integer
+  description: "Pop-time sample (throws to 2B)."
+- name: pop_2b_sba
+  type: numeric
+  description: "Pop time to 2B on stolen-base attempts (s)."
+- name: pop_2b_cs
+  type: numeric
+  description: "Pop 2b cs."
+- name: pop_2b_sb
+  type: numeric
+  description: "Pop 2b sb."
+- name: pop_3b_sba_count
+  type: integer
+  description: "Pop 3b sba count."
+- name: pop_3b_sba
+  type: numeric
+  description: "Pop 3b sba."
+- name: pop_3b_cs
+  type: numeric
+  description: "Pop 3b cs."
+- name: pop_3b_sb
+  type: numeric
+  description: "Pop 3b sb."

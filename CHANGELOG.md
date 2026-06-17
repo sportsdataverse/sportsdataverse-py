@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
+  - [MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)](#mlb--comprehensive-baseball-savant--statcast-surface-mlb_statcast_-43-endpoints)
 - [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
   - [All sports — `espn_*_game_rosters` diagonal per-team concat (fixes silent roster loss)](#all-sports--espn__game_rosters-diagonal-per-team-concat-fixes-silent-roster-loss)
   - [HTTP — `download()` no longer retries a definitive 404](#http--download-no-longer-retries-a-definitive-404)
@@ -114,6 +116,17 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.64 Release: June 17, 2026
+
+### MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)
+
+Expanded the Baseball Savant integration from a 12-endpoint representative slice to the full **~43-endpoint catalog** under the `mlb_statcast_<family>_<name>` naming (`search` / `leaderboard` / `gamefeed` / `player`), with **every endpoint parsed to a tidy frame by default** (`return_parsed=False` / `raw=True` for the raw payload).
+
+- **39 codegen-generated wrappers** — 37 leaderboards (expected stats, sprint speed, bat tracking, pitch arsenals/movement/tempo, OAA, arm strength, catcher framing/blocking/throwing, baserunning, park factors, …) plus `mlb_statcast_gamefeed` (one row per pitch) and `mlb_statcast_schedule` (one row per game). Savant mixes CSV / JSON / HTML, so the family uses a content-type-aware getter (`dict` for JSON, `str` for CSV/HTML); the two HTML-embedded leaderboards (`fielding-run-value`, `statcast-park-factors`) are parsed from their embedded `data[]` blob.
+- **Hand-written search** — `mlb_statcast_search` (+ `_minors`, `_wbc`) auto-chunks the 25,000-row Savant cap and translates friendly filters (`season`, `pitch_type`, `at_bat_result`, `batters_lookup`, …) to Savant's `hf*` params. `mlb_statcast_player` parses a player page's `serverVals` section (default `statcast`, ~260 metrics) to a tidy frame (`section=` for others, `raw=True` for HTML).
+- **Returns-schemas** (`col_name | type | description`) for every frame-returning function, and `examples/notebooks/09_mlb_intro.ipynb` modernized to the new surface.
+- The pre-0.0.64 `statcast_*` names were **renamed (no aliases)** to the `mlb_statcast_*` convention.
 
 ## 0.0.63 Release: June 16, 2026
 

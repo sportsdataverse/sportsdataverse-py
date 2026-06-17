@@ -1,0 +1,39 @@
+schema: leaderboard_pitch_arsenals
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: pitcher
+  type: integer
+  description: "MLBAM id of the pitcher."
+- name: ff_batter
+  type: character
+  description: "Ff batter."
+- name: si_batter
+  type: character
+  description: "Si batter."
+- name: fc_batter
+  type: character
+  description: "Fc batter."
+- name: sl_batter
+  type: character
+  description: "Sl batter."
+- name: ch_batter
+  type: character
+  description: "Ch batter."
+- name: cu_batter
+  type: character
+  description: "Cu batter."
+- name: fs_batter
+  type: character
+  description: "Fs batter."
+- name: kn_batter
+  type: character
+  description: "Kn batter."
+- name: st_batter
+  type: character
+  description: "St batter."
+- name: sv_batter
+  type: character
+  description: "Sv batter."

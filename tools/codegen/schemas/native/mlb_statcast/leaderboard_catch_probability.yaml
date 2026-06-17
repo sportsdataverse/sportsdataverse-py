@@ -1,0 +1,57 @@
+schema: leaderboard_catch_probability
+kind: dataframe
+columns:
+- name: last_name, first_name
+  type: character
+  description: "Last name, first name."
+- name: player_id
+  type: character
+  description: "MLBAM player id."
+- name: oaa
+  type: character
+  description: "Outs Above Average."
+- name: n_fieldout_5stars
+  type: character
+  description: "5-star (hardest) plays made."
+- name: n_opp_5stars
+  type: character
+  description: "5-star play opportunities."
+- name: n_5star_percent
+  type: character
+  description: "Number of 5star rate."
+- name: n_fieldout_4stars
+  type: character
+  description: "Number of fieldout 4stars."
+- name: n_opp_4stars
+  type: character
+  description: "Number of opp 4stars."
+- name: n_4star_percent
+  type: character
+  description: "Number of 4star rate."
+- name: n_fieldout_3stars
+  type: character
+  description: "Number of fieldout 3stars."
+- name: n_opp_3stars
+  type: character
+  description: "Number of opp 3stars."
+- name: n_3star_percent
+  type: character
+  description: "Number of 3star rate."
+- name: n_fieldout_2stars
+  type: character
+  description: "Number of fieldout 2stars."
+- name: n_opp_2stars
+  type: character
+  description: "Number of opp 2stars."
+- name: n_2star_percent
+  type: character
+  description: "Number of 2star rate."
+- name: n_fieldout_1stars
+  type: character
+  description: "Number of fieldout 1stars."
+- name: n_opp_1stars
+  type: character
+  description: "Number of opp 1stars."
+- name: n_1star_percent
+  type: character
+  description: "Number of 1star rate."

@@ -1,0 +1,33 @@
+schema: leaderboard_timer_infractions
+kind: dataframe
+columns:
+- name: entity_id
+  type: character
+  description: "MLBAM id of the player/team entity."
+- name: entity_name
+  type: character
+  description: "Player (or team) entity name."
+- name: year
+  type: character
+  description: "Season year."
+- name: pitches
+  type: character
+  description: "Pitches."
+- name: all_violations
+  type: character
+  description: "Pitch-timer violations (total)."
+- name: pitcher_timer
+  type: character
+  description: "Pitcher timer."
+- name: batter_timer
+  type: character
+  description: "Batter timer."
+- name: batter_timeout
+  type: character
+  description: "Batter timeout."
+- name: catcher_timer
+  type: character
+  description: "Catcher timer."
+- name: defensive_shift
+  type: character
+  description: "Defensive shift."

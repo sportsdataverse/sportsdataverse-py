@@ -1,0 +1,42 @@
+schema: leaderboard_home_runs
+kind: dataframe
+columns:
+- name: player
+  type: character
+  description: "Player."
+- name: player_id
+  type: integer
+  description: "MLBAM player id."
+- name: team_abbrev
+  type: character
+  description: "Team abbreviation."
+- name: year
+  type: integer
+  description: "Season year."
+- name: type
+  type: character
+  description: "Record/pitch type."
+- name: avg_hr_trot
+  type: numeric
+  description: "Avg hr trot."
+- name: doubters
+  type: integer
+  description: "Doubters."
+- name: mostly_gone
+  type: integer
+  description: "Mostly gone."
+- name: no_doubters
+  type: integer
+  description: "No doubters."
+- name: no_doubter_per
+  type: numeric
+  description: "No doubter per."
+- name: hr_total
+  type: integer
+  description: "Hr total."
+- name: xhr
+  type: numeric
+  description: "Xhr."
+- name: xhr_diff
+  type: numeric
+  description: "Xhr diff."
