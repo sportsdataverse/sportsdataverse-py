@@ -42,6 +42,7 @@ endpoints:
     game_id: 2024020001
   parser: parse_nhl_web_landing
 - short: right_rail
+  returns_schema: native/nhl_api_web/right_rail
   summary: Pull the gamecenter right-rail payload (in-game widgets).
   path: /v1/gamecenter/{game_id}/right-rail
   path_params:
@@ -74,6 +75,7 @@ endpoints:
     required: false
   parser: parse_nhl_web_score
 - short: schedule_calendar
+  returns_schema: native/nhl_api_web/schedule_calendar
   summary: Pull the calendar of game-days for the season.
   path: /v1/schedule-calendar/{date}
   now_variant: /v1/schedule-calendar/now
@@ -133,6 +135,7 @@ endpoints:
     team: TOR
   parser: parse_nhl_web_club_schedule
 - short: club_schedule_month
+  returns_schema: native/nhl_api_web/club_schedule_month
   summary: Pull a team's schedule for one month.
   path: /v1/club-schedule/{team}/month/{month}
   now_variant: /v1/club-schedule/{team}/month/now
@@ -148,6 +151,7 @@ endpoints:
     team: TOR
   parser: parse_nhl_web_club_schedule
 - short: club_schedule_week
+  returns_schema: native/nhl_api_web/club_schedule_week
   summary: Pull a team's schedule for one week.
   path: /v1/club-schedule/{team}/week/{date}
   now_variant: /v1/club-schedule/{team}/week/now
@@ -163,6 +167,7 @@ endpoints:
     team: TOR
   parser: parse_nhl_web_club_schedule
 - short: club_stats
+  returns_schema: native/nhl_api_web/club_stats
   summary: Pull a team's season stat block.
   path: /v1/club-stats/{team}/{season}/{game_type}
   now_variant: /v1/club-stats/{team}/now
@@ -183,6 +188,7 @@ endpoints:
     team: TOR
   parser: parse_nhl_web_club_stats
 - short: club_stats_season
+  returns_schema: native/nhl_api_web/club_stats_season
   summary: Pull the seasons a team has stats for.
   path: /v1/club-stats-season/{team}
   path_params:
@@ -210,6 +216,7 @@ endpoints:
     team: TOR
   parser: parse_nhl_web_roster
 - short: roster_season
+  returns_schema: native/nhl_api_web/roster_season
   summary: Pull every season a team has had on file.
   path: /v1/roster-season/{team}
   path_params:
@@ -319,6 +326,7 @@ endpoints:
   example_args:
     year: 2024
 - short: draft_picks_now
+  returns_schema: native/nhl_api_web/draft_picks_now
   summary: Pull the current / most recent draft pick set.
   path: /v1/draft/picks/now
   parser: parse_nhl_web_draft_picks
@@ -328,6 +336,7 @@ endpoints:
   parser: parse_nhl_web_draft_rankings
   returns_schema: native/nhl_api_web/draft_rankings_now
 - short: draft_tracker_picks_now
+  returns_schema: native/nhl_api_web/draft_tracker_picks_now
   summary: Pull the live draft-tracker pick list (during the draft itself).
   path: /v1/draft-tracker/picks/now
   parser: parse_nhl_web_draft_picks

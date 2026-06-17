@@ -1,0 +1,246 @@
+{
+  "broadcastStartTimeUTC": "2025-06-27T23:00:00Z",
+  "draftYear": 2025,
+  "draftYears": [
+    1979,
+    1980,
+    1981,
+    1982,
+    1983,
+    1984,
+    1985,
+    1986,
+    1987,
+    1988,
+    1989,
+    1990,
+    1991,
+    1992,
+    1993,
+    1994,
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "selectableRounds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "state": "over",
+  "picks": [
+    {
+      "round": 1,
+      "pickInRound": 1,
+      "overallPick": 1,
+      "teamId": 2,
+      "teamAbbrev": "NYI",
+      "teamName": {
+        "default": "New York Islanders",
+        "fr": "Islanders de New York"
+      },
+      "teamCommonName": {
+        "default": "Islanders"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "New York",
+        "fr": "de New York"
+      },
+      "displayAbbrev": {
+        "default": "NYI"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NYI_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+      "teamPickHistory": "NYI",
+      "firstName": {
+        "default": "Matthew"
+      },
+      "lastName": {
+        "default": "Schaefer"
+      },
+      "positionCode": "D",
+      "countryCode": "CAN",
+      "height": 74,
+      "weight": 186,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Erie"
+    },
+    {
+      "round": 1,
+      "pickInRound": 2,
+      "overallPick": 2,
+      "teamId": 28,
+      "teamAbbrev": "SJS",
+      "teamName": {
+        "default": "San Jose Sharks",
+        "fr": "Sharks de San Jose"
+      },
+      "teamCommonName": {
+        "default": "Sharks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "San Jose",
+        "fr": "de San Jose"
+      },
+      "displayAbbrev": {
+        "default": "SJS"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/SJS_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
+      "teamPickHistory": "SJS",
+      "firstName": {
+        "default": "Michael"
+      },
+      "lastName": {
+        "default": "Misa"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 73,
+      "weight": 182,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Saginaw"
+    },
+    {
+      "round": 1,
+      "pickInRound": 3,
+      "overallPick": 3,
+      "teamId": 16,
+      "teamAbbrev": "CHI",
+      "teamName": {
+        "default": "Chicago Blackhawks",
+        "fr": "Blackhawks de Chicago"
+      },
+      "teamCommonName": {
+        "default": "Blackhawks"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Chicago",
+        "fr": "de Chicago"
+      },
+      "displayAbbrev": {
+        "default": "CHI"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/CHI_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+      "teamPickHistory": "CHI",
+      "firstName": {
+        "default": "Anton"
+      },
+      "lastName": {
+        "default": "Frondell"
+      },
+      "positionCode": "C",
+      "countryCode": "SWE",
+      "height": 74,
+      "weight": 204,
+      "amateurLeague": "SWEDEN-2",
+      "amateurClubName": "Djurgarden"
+    },
+    {
+      "round": 1,
+      "pickInRound": 4,
+      "overallPick": 4,
+      "teamId": 68,
+      "teamAbbrev": "UTA",
+      "teamName": {
+        "default": "Utah Mammoth",
+        "fr": "Mammoth de l'Utah"
+      },
+      "teamCommonName": {
+        "default": "Mammoth"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Utah",
+        "fr": "de l'Utah"
+      },
+      "displayAbbrev": {
+        "default": "UTA"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/UTA_light.svg?season=20252026",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg?season=20252026",
+      "teamPickHistory": "UTA",
+      "firstName": {
+        "default": "Caleb"
+      },
+      "lastName": {
+        "default": "Desnoyers"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 74,
+      "weight": 182,
+      "amateurLeague": "QMJHL",
+      "amateurClubName": "Moncton"
+    },
+    {
+      "round": 1,
+      "pickInRound": 5,
+      "overallPick": 5,
+      "teamId": 18,
+      "teamAbbrev": "NSH",
+      "teamName": {
+        "default": "Nashville Predators",
+        "fr": "Predators de Nashville"
+      },
+      "teamCommonName": {
+        "default": "Predators"
+      },
+      "teamPlaceNameWithPreposition": {
+        "default": "Nashville",
+        "fr": "de Nashville"
+      },
+      "displayAbbrev": {
+        "default": "NSH"
+      },
+      "teamLogoLight": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg",
+      "teamLogoDark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+      "teamPickHistory": "NSH",
+      "firstName": {
+        "default": "Brady"
+      },
+      "lastName": {
+        "default": "Martin"
+      },
+      "positionCode": "C",
+      "countryCode": "CAN",
+      "height": 72,
+      "weight": 186,
+      "amateurLeague": "OHL",
+      "amateurClubName": "Sault Ste. Marie"
+    }
+  ]
+}

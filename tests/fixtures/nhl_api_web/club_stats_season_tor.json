@@ -1,0 +1,660 @@
+[
+  {
+    "season": 20252026,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20242025,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20232024,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20222023,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20212022,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20202021,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20192020,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20182019,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20172018,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20162017,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20152016,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20142015,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20132014,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20122013,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20112012,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20102011,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20092010,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20082009,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20072008,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20062007,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20052006,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 20032004,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20022003,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20012002,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 20002001,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19992000,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19981999,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19971998,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19961997,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19951996,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19941995,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19931994,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19921993,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19911992,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19901991,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19891990,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19881989,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19871988,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19861987,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19851986,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19841985,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19831984,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19821983,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19811982,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19801981,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19791980,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19781979,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19771978,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19761977,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19751976,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19741975,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19731974,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19721973,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19711972,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19701971,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19691970,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19681969,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19671968,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19661967,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19651966,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19641965,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19631964,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19621963,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19611962,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19601961,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19591960,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19581959,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19571958,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19561957,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19551956,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19541955,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19531954,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19521953,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19511952,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19501951,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19491950,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19481949,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19471948,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19461947,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19451946,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19441945,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19431944,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19421943,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19411942,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19401941,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19391940,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19381939,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19371938,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19361937,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19351936,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19341935,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19331934,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19321933,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19311932,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19301931,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19291930,
+    "gameTypes": [
+      2
+    ]
+  },
+  {
+    "season": 19281929,
+    "gameTypes": [
+      2,
+      3
+    ]
+  },
+  {
+    "season": 19271928,
+    "gameTypes": [
+      2
+    ]
+  }
+]

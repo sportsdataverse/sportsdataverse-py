@@ -1402,7 +1402,32 @@ Pull the current / most recent draft pick set.
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_draft_picks`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `round` | integer | Shootout round number. |
+| `pick_in_round` | integer | Pick number within the round. |
+| `overall_pick` | integer | Overall pick number in the draft. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_logo_light` | character | URL to the team logo (light variant). |
+| `team_logo_dark` | character | URL to the team logo (dark variant). |
+| `team_pick_history` | character | History of the team's picks at this slot. |
+| `position_code` | character | Player position code. |
+| `country_code` | character | Player country code. |
+| `height` | integer | Player height in inches. |
+| `weight` | integer | Player weight in pounds. |
+| `amateur_league` | character | Amateur league the player played in. |
+| `amateur_club_name` | character | Amateur club the player played for. |
+| `team_name_default` | character | Team name (default locale). |
+| `team_name_fr` | character | Team name (French locale). |
+| `team_common_name_default` | character | Team common name (default language). |
+| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
+| `display_abbrev_default` | character |  |
+| `first_name_default` | character | Player first name (default language). |
+| `last_name_default` | character | Player last name (default language). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
@@ -1470,7 +1495,25 @@ Pull the live draft-tracker pick list (during the draft itself).
 
 ### Returns
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_draft_picks`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `pick_in_round` | integer | Pick number within the round. |
+| `overall_pick` | integer | Overall pick number in the draft. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbrev` | character | Team abbreviation. |
+| `team_logo_light` | character | URL to the team logo (light variant). |
+| `team_logo_dark` | character | URL to the team logo (dark variant). |
+| `state` | character | Pick state (e.g., on the clock, complete). |
+| `position_code` | character | Player position code. |
+| `team_full_name_default` | character | Team full name (default language). |
+| `team_full_name_fr` | character | Team full name (French). |
+| `team_common_name_default` | character | Team common name (default language). |
+| `team_place_name_with_preposition_default` | character | Team place name with preposition (default). |
+| `team_place_name_with_preposition_fr` | character | Team place name with preposition (French). |
+| `last_name_default` | character | Player last name (default language). |
+| `first_name_default` | character | Player first name (default language). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
