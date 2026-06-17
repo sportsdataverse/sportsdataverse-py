@@ -49,13 +49,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_country_alternate_id` | character |  |
+| `birth_country_alternate_id` | character | Alternate identifier for the athlete's birth country, used in ESPN's nationality lookup system. |
 | `birth_country_abbreviation` | character | Birth country abbreviation. |
 | `headshot_href` | character | URL of the athlete headshot image. |
 | `headshot_alt` | character | Alternative-text label for the headshot. |
-| `flag_href` | character |  |
-| `flag_alt` | character |  |
-| `flag_rel` | character |  |
+| `flag_href` | character | URL to the athlete's nationality flag image on ESPN's CDN. |
+| `flag_alt` | character | Alt-text description for the athlete's country flag image, typically the country name. |
+| `flag_rel` | character | Relationship descriptor for the flag image link (e.g., 'flag' or 'country'). |
 | `experience_years` | integer | Years of experience. |
 | `experience_display_value` | character | Experience display value. |
 | `experience_abbreviation` | character | Experience abbreviation. |
@@ -69,13 +69,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `age` | integer | Player age (in years). |
 | `date_of_birth` | character | Player date of birth (if published). |
 | `starter` | logical | `TRUE` if the athlete started the game. |
-| `jersey_right` | character |  |
+| `jersey_right` | character | Secondary or alternate jersey number field, distinct from the primary jersey number. |
 | `valid` | logical | `TRUE` if the roster entry is flagged valid by ESPN. |
 | `did_not_play` | logical | `TRUE` if the athlete did not play. |
 | `display_name` | character | Human-readable metric name. |
-| `athlete_href` | character |  |
-| `position_href` | character |  |
-| `statistics_href` | character |  |
+| `athlete_href` | character | ESPN API URL reference for the athlete's full profile resource. |
+| `position_href` | character | ESPN API URL reference for the athlete's position resource. |
+| `statistics_href` | character | ESPN API URL reference for the athlete's game or season statistics resource. |
 | `team_id` | integer | ESPN team id. |
 | `order` | integer | Team order within the competition (0 = first). |
 | `home_away` | character | `home` or `away`. |
@@ -93,7 +93,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `team_alternate_color` | character | Alternate team color; `team_detail = TRUE` only. |
 | `is_active` | logical | Whether the team is currently active. |
 | `is_all_star` | logical | Whether the team is an all-star team. |
-| `team_alternate_ids_sdr` | character |  |
+| `team_alternate_ids_sdr` | character | ESPN SDR (Sports Data Repository) alternate team identifier for the athlete's team. |
 | `logo_href` | character | URL of the default team logo. |
 | `logo_dark_href` | character | URL of the dark-variant team logo. |
 | `game_id` | integer | ESPN game identifier. |
@@ -144,46 +144,46 @@ Polars (or pandas) DataFrame, one row per play. Columns include `game_id`, `play
 | `passer_player_name` | character | Name of the passer on a passing play. |
 | `receiver_player_name` | character | Name of the receiver on a passing play. |
 | `rusher_player_name` | character | Name of the rusher on a rushing play. |
-| `scorer_player_name` | character |  |
-| `returner_player_name` | character |  |
-| `pass_defender_player_name` | character |  |
-| `penalized_player_name` | character |  |
-| `sacked_by_player_name` | character |  |
-| `pat_scorer_player_name` | character |  |
+| `scorer_player_name` | character | Display name of the primary player credited with a touchdown or field goal score on the play. |
+| `returner_player_name` | character | Display name of the primary player who returned a kick, punt, or interception on the play. |
+| `pass_defender_player_name` | character | Display name of the primary pass defender who contested the target or broke up the pass on the play. |
+| `penalized_player_name` | character | Display name of the player assessed a penalty on the play. |
+| `sacked_by_player_name` | character | Display name of the primary pass rusher credited with the sack on the play. |
+| `pat_scorer_player_name` | character | Display name of the player who scored the point-after-touchdown conversion on the play. |
 | `punter_player_name` | character | Name of the punter. |
 | `kicker_player_id` | character | Unique identifier for the kicker on FG or kickoff. |
 | `passer_player_id` | character | Unique identifier for the player that attempted the pass. |
 | `receiver_player_id` | character | Unique identifier for the receiver that was targeted on the pass. |
 | `rusher_player_id` | character | Unique identifier for the player that attempted the run. |
-| `scorer_player_id` | character |  |
-| `returner_player_id` | character |  |
-| `pass_defender_player_id` | character |  |
-| `penalized_player_id` | character |  |
-| `sacked_by_player_id` | character |  |
-| `pat_scorer_player_id` | character |  |
+| `scorer_player_id` | character | ESPN athlete ID for the primary player who scored a touchdown or field goal on the play. |
+| `returner_player_id` | character | ESPN athlete ID for the primary player who returned a kick, punt, or interception on the play. |
+| `pass_defender_player_id` | character | ESPN athlete ID for the primary pass defender (cornerback or safety) who contested the target on the play. |
+| `penalized_player_id` | character | ESPN athlete ID for the primary player who committed the penalty on the play. |
+| `sacked_by_player_id` | character | ESPN athlete ID for the primary pass rusher who recorded the sack on the play. |
+| `pat_scorer_player_id` | character | ESPN athlete ID for the primary player who scored a point-after-touchdown (PAT) conversion on the play. |
 | `punter_player_id` | character | Unique identifier for the punter. |
-| `kicker_player_names` | character |  |
-| `passer_player_names` | character |  |
-| `receiver_player_names` | character |  |
-| `rusher_player_names` | character |  |
-| `scorer_player_names` | character |  |
-| `returner_player_names` | character |  |
-| `pass_defender_player_names` | character |  |
-| `penalized_player_names` | character |  |
-| `sacked_by_player_names` | character |  |
-| `pat_scorer_player_names` | character |  |
-| `punter_player_names` | character |  |
-| `kicker_player_ids` | character |  |
-| `passer_player_ids` | character |  |
-| `receiver_player_ids` | character |  |
-| `rusher_player_ids` | character |  |
-| `scorer_player_ids` | character |  |
-| `returner_player_ids` | character |  |
-| `pass_defender_player_ids` | character |  |
-| `penalized_player_ids` | character |  |
-| `sacked_by_player_ids` | character |  |
-| `pat_scorer_player_ids` | character |  |
-| `punter_player_ids` | character |  |
+| `kicker_player_names` | character | List of display names for all kickers credited on the play. |
+| `passer_player_names` | character | List of display names for all passers credited on the play. |
+| `receiver_player_names` | character | List of display names for all intended receivers credited on the play. |
+| `rusher_player_names` | character | List of display names for all ball carriers credited on the play. |
+| `scorer_player_names` | character | List of display names for all players credited with scoring on the play. |
+| `returner_player_names` | character | List of display names for all returners credited on the play. |
+| `pass_defender_player_names` | character | List of display names for all pass defenders credited on the play. |
+| `penalized_player_names` | character | List of display names for all players penalized on the play. |
+| `sacked_by_player_names` | character | List of display names for all pass rushers credited with the sack, including secondary participants on split sacks. |
+| `pat_scorer_player_names` | character | List of display names for all players credited with a PAT conversion on the play. |
+| `punter_player_names` | character | List of display names for all punters credited on the play. |
+| `kicker_player_ids` | character | List of ESPN athlete IDs for all kickers credited on the play (e.g., kickoff, field goal, or PAT attempt). |
+| `passer_player_ids` | character | List of ESPN athlete IDs for all passers credited on the play (supports multi-player lateral/trick plays). |
+| `receiver_player_ids` | character | List of ESPN athlete IDs for all intended receivers on the play (supports lateral chains). |
+| `rusher_player_ids` | character | List of ESPN athlete IDs for all ball carriers credited on the play (supports lateral handoffs). |
+| `scorer_player_ids` | character | List of ESPN athlete IDs for all players credited with a scoring event on the play. |
+| `returner_player_ids` | character | List of ESPN athlete IDs for all returners credited on the play (e.g., during a lateral after a return). |
+| `pass_defender_player_ids` | character | List of ESPN athlete IDs for all pass defenders who contested the target or were credited with a pass breakup on the play. |
+| `penalized_player_ids` | character | List of ESPN athlete IDs for all players penalized on the play. |
+| `sacked_by_player_ids` | character | List of ESPN athlete IDs for all pass rushers credited with the sack on the play (includes split-sack participants). |
+| `pat_scorer_player_ids` | character | List of ESPN athlete IDs for all players credited with a PAT conversion on the play. |
+| `punter_player_ids` | character | List of ESPN athlete IDs for all punters credited on the play. |
 
 **Example**
 
@@ -263,127 +263,127 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `college_name` | character | College name. |
 | `status_id` | integer | ESPN commitment status id. |
 | `status_name` | character | Status-type key (e.g. `STATUS_FINAL`). |
-| `general_fumbles` | double |  |
-| `general_fumbles_lost` | double |  |
-| `general_fumbles_touchdowns` | double |  |
+| `general_fumbles` | double | Total number of fumbles committed by the player across all offensive and special-teams plays. |
+| `general_fumbles_lost` | double | Number of fumbles the player committed that were recovered by the opposing team. |
+| `general_fumbles_touchdowns` | double | Total touchdowns scored by the player as a result of fumble recoveries, combining offensive and defensive occurrences. |
 | `general_games_played` | double | Games Played. |
-| `general_offensive_two_pt_returns` | double |  |
-| `general_offensive_fumbles_touchdowns` | double |  |
-| `general_defensive_fumbles_touchdowns` | double |  |
-| `passing_avg_gain` | double |  |
-| `passing_completion_pct` | double |  |
+| `general_offensive_two_pt_returns` | double | Number of two-point conversions the player scored by returning a blocked or intercepted two-point attempt on the offensive side. |
+| `general_offensive_fumbles_touchdowns` | double | Number of touchdowns scored by the player on fumble recoveries credited to the offensive category. |
+| `general_defensive_fumbles_touchdowns` | double | Number of touchdowns scored by the player on fumble recoveries attributed to the defensive category. |
+| `passing_avg_gain` | double | Average yards gained per passing play attempt by the quarterback in the passing category. |
+| `passing_completion_pct` | double | Percentage of pass attempts thrown by the quarterback that were completed, calculated as completions divided by attempts. |
 | `passing_completions` | double | Pass completions (split from CFBD's `C/ATT` field). |
-| `passing_espnqb_rating` | double |  |
-| `passing_interception_pct` | double |  |
-| `passing_interceptions` | double |  |
-| `passing_long_passing` | double |  |
-| `passing_net_passing_yards` | double |  |
-| `passing_net_passing_yards_per_game` | double |  |
-| `passing_net_total_yards` | double |  |
-| `passing_net_yards_per_game` | double |  |
-| `passing_passing_attempts` | double |  |
-| `passing_passing_big_plays` | double |  |
-| `passing_passing_first_downs` | double |  |
-| `passing_passing_fumbles` | double |  |
-| `passing_passing_fumbles_lost` | double |  |
-| `passing_passing_touchdown_pct` | double |  |
-| `passing_passing_touchdowns` | double |  |
-| `passing_passing_yards` | double |  |
-| `passing_passing_yards_after_catch` | double |  |
-| `passing_passing_yards_at_catch` | double |  |
-| `passing_passing_yards_per_game` | double |  |
-| `passing_qb_rating` | double |  |
-| `passing_sacks` | double |  |
-| `passing_sack_yards_lost` | double |  |
-| `passing_team_games_played` | double |  |
-| `passing_total_offensive_plays` | double |  |
-| `passing_total_points_per_game` | double |  |
-| `passing_total_touchdowns` | double |  |
-| `passing_total_yards` | double |  |
-| `passing_total_yards_from_scrimmage` | double |  |
-| `passing_two_point_pass_convs` | double |  |
-| `passing_two_pt_pass` | double |  |
-| `passing_two_pt_pass_attempts` | double |  |
-| `passing_yards_from_scrimmage_per_game` | double |  |
-| `passing_yards_per_completion` | double |  |
-| `passing_yards_per_game` | double |  |
-| `passing_yards_per_pass_attempt` | double |  |
-| `passing_net_yards_per_pass_attempt` | double |  |
+| `passing_espnqb_rating` | double | ESPN's proprietary quarterback rating for the player's passing performance, factoring in efficiency metrics beyond traditional passer rating. |
+| `passing_interception_pct` | double | Percentage of pass attempts that resulted in an interception, calculated as interceptions divided by passing attempts. |
+| `passing_interceptions` | double | Total number of passes thrown by the quarterback that were intercepted by the defense. |
+| `passing_long_passing` | double | Longest single completed pass in yards recorded by the quarterback during the stat period. |
+| `passing_net_passing_yards` | double | Net passing yards gained by the quarterback after subtracting yardage lost on sacks from gross passing yards. |
+| `passing_net_passing_yards_per_game` | double | Net passing yards per game for the quarterback, computed as net passing yards divided by games played. |
+| `passing_net_total_yards` | double | Combined net yardage from passing and rushing for a quarterback, accounting for sack yardage lost in the passing category. |
+| `passing_net_yards_per_game` | double | Net total yards gained per game for the player as recorded in the passing category context. |
+| `passing_passing_attempts` | double | Total number of pass attempts thrown by the quarterback, including completions, incompletions, and interceptions. |
+| `passing_passing_big_plays` | double | Number of passing plays that gained 20 or more yards as recorded for the quarterback. |
+| `passing_passing_first_downs` | double | Number of first downs gained by the team on passing plays thrown by the quarterback. |
+| `passing_passing_fumbles` | double | Number of fumbles the quarterback committed during passing plays, including fumbled snaps and sack fumbles. |
+| `passing_passing_fumbles_lost` | double | Number of fumbles the quarterback committed on passing plays that were recovered by the opposing team. |
+| `passing_passing_touchdown_pct` | double | Percentage of pass attempts that resulted in a passing touchdown, calculated as touchdowns divided by attempts. |
+| `passing_passing_touchdowns` | double | Total number of touchdown passes thrown by the quarterback. |
+| `passing_passing_yards` | double | Gross passing yards gained by the quarterback on completed passes. |
+| `passing_passing_yards_after_catch` | double | Total yards gained by receivers after the catch on passes thrown by the quarterback. |
+| `passing_passing_yards_at_catch` | double | Total yards gained at the point of the catch (air yards) on passes thrown by the quarterback, before any yards after catch. |
+| `passing_passing_yards_per_game` | double | Gross passing yards per game for the quarterback, computed as passing yards divided by games played. |
+| `passing_qb_rating` | double | Traditional NCAA passer rating for the quarterback, calculated from completion percentage, yards per attempt, touchdown rate, and interception rate. |
+| `passing_sacks` | double | Total number of times the quarterback was sacked (tackled behind the line of scrimmage on a passing play). |
+| `passing_sack_yards_lost` | double | Total yards lost by the quarterback as a result of being sacked, subtracted when computing net passing yards. |
+| `passing_team_games_played` | double | Number of team games played during the stat period, used as the denominator for per-game passing rate statistics. |
+| `passing_total_offensive_plays` | double | Total number of offensive plays (pass attempts plus rushes) for the team during the stat period, recorded in the passing category context. |
+| `passing_total_points_per_game` | double | Average total points scored per game by the player's team as recorded alongside passing statistics. |
+| `passing_total_touchdowns` | double | Total touchdowns accounted for by the quarterback across passing and rushing in the passing category context. |
+| `passing_total_yards` | double | Total offensive yardage (passing plus rushing) accumulated by the quarterback as reported in the passing category. |
+| `passing_total_yards_from_scrimmage` | double | Total yards from scrimmage accumulated by the quarterback (passing plus rushing yards) in the passing category context. |
+| `passing_two_point_pass_convs` | double | Number of successful two-point conversions the quarterback converted via a passing play. |
+| `passing_two_pt_pass` | double | Indicator or count of two-point conversion passing attempts recorded for the quarterback. |
+| `passing_two_pt_pass_attempts` | double | Total number of two-point conversion attempts the quarterback made via a passing play. |
+| `passing_yards_from_scrimmage_per_game` | double | Average yards from scrimmage per game for the quarterback as reported in the passing category. |
+| `passing_yards_per_completion` | double | Average yards gained per completed pass by the quarterback, calculated as passing yards divided by completions. |
+| `passing_yards_per_game` | double | Average gross passing yards per game for the quarterback, equivalent to passing_passing_yards_per_game. |
+| `passing_yards_per_pass_attempt` | double | Average yards gained per pass attempt by the quarterback, calculated as passing yards divided by attempts. |
+| `passing_net_yards_per_pass_attempt` | double | Net passing yards divided by total pass attempts, including sack yardage lost in the denominator's context. |
 | `passing_qbr` | double | ESPN Quarterback Rating (QBR) for the player in this game. |
-| `passing_adj_qbr` | double |  |
-| `passing_quarterback_rating` | double |  |
-| `rushing_avg_gain` | double |  |
-| `rushing_espnrb_rating` | double |  |
-| `rushing_long_rushing` | double |  |
-| `rushing_net_total_yards` | double |  |
-| `rushing_net_yards_per_game` | double |  |
-| `rushing_rushing_attempts` | double |  |
-| `rushing_rushing_big_plays` | double |  |
-| `rushing_rushing_first_downs` | double |  |
-| `rushing_rushing_fumbles` | double |  |
-| `rushing_rushing_fumbles_lost` | double |  |
-| `rushing_rushing_touchdowns` | double |  |
-| `rushing_rushing_yards` | double |  |
-| `rushing_rushing_yards_per_game` | double |  |
-| `rushing_stuffs` | double |  |
-| `rushing_stuff_yards_lost` | double |  |
-| `rushing_team_games_played` | double |  |
-| `rushing_total_offensive_plays` | double |  |
-| `rushing_total_points_per_game` | double |  |
-| `rushing_total_touchdowns` | double |  |
-| `rushing_total_yards` | double |  |
-| `rushing_total_yards_from_scrimmage` | double |  |
-| `rushing_two_point_rush_convs` | double |  |
-| `rushing_two_pt_rush` | double |  |
-| `rushing_two_pt_rush_attempts` | double |  |
-| `rushing_yards_from_scrimmage_per_game` | double |  |
-| `rushing_yards_per_game` | double |  |
-| `rushing_yards_per_rush_attempt` | double |  |
-| `receiving_avg_gain` | double |  |
-| `receiving_espnwr_rating` | double |  |
-| `receiving_long_reception` | double |  |
-| `receiving_net_total_yards` | double |  |
-| `receiving_net_yards_per_game` | double |  |
-| `receiving_receiving_big_plays` | double |  |
-| `receiving_receiving_first_downs` | double |  |
-| `receiving_receiving_fumbles` | double |  |
-| `receiving_receiving_fumbles_lost` | double |  |
-| `receiving_receiving_targets` | double |  |
-| `receiving_receiving_touchdowns` | double |  |
-| `receiving_receiving_yards` | double |  |
-| `receiving_receiving_yards_after_catch` | double |  |
-| `receiving_receiving_yards_at_catch` | double |  |
-| `receiving_receiving_yards_per_game` | double |  |
-| `receiving_receptions` | double |  |
-| `receiving_team_games_played` | double |  |
-| `receiving_total_offensive_plays` | double |  |
-| `receiving_total_points_per_game` | double |  |
-| `receiving_total_touchdowns` | double |  |
-| `receiving_total_yards` | double |  |
-| `receiving_total_yards_from_scrimmage` | double |  |
-| `receiving_two_point_rec_convs` | double |  |
-| `receiving_two_pt_reception` | double |  |
-| `receiving_two_pt_reception_attempts` | double |  |
-| `receiving_yards_from_scrimmage_per_game` | double |  |
-| `receiving_yards_per_game` | double |  |
-| `receiving_yards_per_reception` | double |  |
-| `scoring_defensive_points` | double |  |
-| `scoring_field_goals` | double |  |
-| `scoring_kick_extra_points` | double |  |
-| `scoring_kick_extra_points_made` | double |  |
-| `scoring_misc_points` | double |  |
-| `scoring_passing_touchdowns` | double |  |
-| `scoring_receiving_touchdowns` | double |  |
-| `scoring_return_touchdowns` | double |  |
-| `scoring_rushing_touchdowns` | double |  |
-| `scoring_total_points` | double |  |
-| `scoring_total_points_per_game` | double |  |
-| `scoring_total_touchdowns` | double |  |
-| `scoring_total_two_point_convs` | double |  |
-| `scoring_two_point_pass_convs` | double |  |
-| `scoring_two_point_rec_convs` | double |  |
-| `scoring_two_point_rush_convs` | double |  |
-| `scoring_one_pt_safeties_made` | double |  |
+| `passing_adj_qbr` | double | ESPN's adjusted Total Quarterback Rating (QBR) for the player's passing performance, controlling for opponent difficulty and game situation. |
+| `passing_quarterback_rating` | double | Traditional passer rating for the quarterback, equivalent to passing_qb_rating, using the standard NCAA formula. |
+| `rushing_avg_gain` | double | Average yards gained per rushing attempt for the player in the rushing category. |
+| `rushing_espnrb_rating` | double | ESPN's proprietary running back rating for the player's rushing performance. |
+| `rushing_long_rushing` | double | Longest single rushing carry in yards recorded by the player during the stat period. |
+| `rushing_net_total_yards` | double | Net total yardage accumulated by the player from rushing and any receiving contributions as reported in the rushing category. |
+| `rushing_net_yards_per_game` | double | Net total yards per game for the player as reported in the rushing category context. |
+| `rushing_rushing_attempts` | double | Total number of rushing attempts (carries) credited to the player. |
+| `rushing_rushing_big_plays` | double | Number of rushing plays that gained 10 or more yards for the player. |
+| `rushing_rushing_first_downs` | double | Number of first downs gained by the player via rushing plays. |
+| `rushing_rushing_fumbles` | double | Number of fumbles the player committed on rushing plays. |
+| `rushing_rushing_fumbles_lost` | double | Number of fumbles the player committed on rushing plays that were recovered by the opposing team. |
+| `rushing_rushing_touchdowns` | double | Total number of rushing touchdowns scored by the player. |
+| `rushing_rushing_yards` | double | Total yards gained by the player on rushing attempts. |
+| `rushing_rushing_yards_per_game` | double | Average rushing yards per game for the player, calculated as rushing yards divided by games played. |
+| `rushing_stuffs` | double | Number of rushing attempts in which the player was stopped at or behind the line of scrimmage. |
+| `rushing_stuff_yards_lost` | double | Total yards lost by the player on stuffed rushing plays (carries stopped at or behind the line of scrimmage). |
+| `rushing_team_games_played` | double | Number of team games played during the stat period, used as the denominator for per-game rushing rate statistics. |
+| `rushing_total_offensive_plays` | double | Total number of offensive plays for the team during the stat period, recorded in the rushing category context. |
+| `rushing_total_points_per_game` | double | Average total points scored per game by the player's team as recorded alongside rushing statistics. |
+| `rushing_total_touchdowns` | double | Total touchdowns scored by the player across all methods as reported in the rushing category context. |
+| `rushing_total_yards` | double | Total offensive yardage accumulated by the player as reported in the rushing category. |
+| `rushing_total_yards_from_scrimmage` | double | Total yards from scrimmage for the player (rushing plus receiving yards) as reported in the rushing category. |
+| `rushing_two_point_rush_convs` | double | Number of successful two-point conversions the player converted via a rushing play. |
+| `rushing_two_pt_rush` | double | Indicator or count of two-point conversion rushing attempts recorded for the player. |
+| `rushing_two_pt_rush_attempts` | double | Total number of two-point conversion attempts the player made via a rushing play. |
+| `rushing_yards_from_scrimmage_per_game` | double | Average yards from scrimmage per game for the player as reported in the rushing category. |
+| `rushing_yards_per_game` | double | Average rushing yards per game for the player, equivalent to rushing_rushing_yards_per_game. |
+| `rushing_yards_per_rush_attempt` | double | Average yards gained per rushing attempt for the player, calculated as rushing yards divided by attempts. |
+| `receiving_avg_gain` | double | Average yards gained per reception for the player in the receiving category. |
+| `receiving_espnwr_rating` | double | ESPN's proprietary wide receiver / pass-catcher rating for the player's receiving performance. |
+| `receiving_long_reception` | double | Longest single reception in yards recorded by the player during the stat period. |
+| `receiving_net_total_yards` | double | Net total yardage accumulated by the player from receiving and any rushing contributions as reported in the receiving category. |
+| `receiving_net_yards_per_game` | double | Net total yards per game for the player as reported in the receiving category context. |
+| `receiving_receiving_big_plays` | double | Number of receiving plays that gained 20 or more yards for the player. |
+| `receiving_receiving_first_downs` | double | Number of first downs gained by the player via receptions. |
+| `receiving_receiving_fumbles` | double | Number of fumbles the player committed after catching a pass. |
+| `receiving_receiving_fumbles_lost` | double | Number of fumbles the player committed on receiving plays that were recovered by the opposing team. |
+| `receiving_receiving_targets` | double | Total number of times the player was targeted as the intended receiver on a pass play. |
+| `receiving_receiving_touchdowns` | double | Total number of touchdown receptions scored by the player. |
+| `receiving_receiving_yards` | double | Total yards gained by the player on completed receptions. |
+| `receiving_receiving_yards_after_catch` | double | Total yards gained by the player after the catch on receiving plays. |
+| `receiving_receiving_yards_at_catch` | double | Total air yards gained at the point of the catch on receiving plays, before any yards after catch. |
+| `receiving_receiving_yards_per_game` | double | Average receiving yards per game for the player, calculated as receiving yards divided by games played. |
+| `receiving_receptions` | double | Total number of completed receptions (catches) recorded by the player. |
+| `receiving_team_games_played` | double | Number of team games played during the stat period, used as the denominator for per-game receiving rate statistics. |
+| `receiving_total_offensive_plays` | double | Total number of offensive plays for the team during the stat period, recorded in the receiving category context. |
+| `receiving_total_points_per_game` | double | Average total points scored per game by the player's team as recorded alongside receiving statistics. |
+| `receiving_total_touchdowns` | double | Total touchdowns scored by the player across all methods as reported in the receiving category context. |
+| `receiving_total_yards` | double | Total offensive yardage accumulated by the player as reported in the receiving category. |
+| `receiving_total_yards_from_scrimmage` | double | Total yards from scrimmage for the player (receiving plus rushing yards) as reported in the receiving category. |
+| `receiving_two_point_rec_convs` | double | Number of successful two-point conversions the player converted via a reception. |
+| `receiving_two_pt_reception` | double | Indicator or count of two-point conversion receptions recorded for the player. |
+| `receiving_two_pt_reception_attempts` | double | Total number of two-point conversion attempts the player made via a receiving play. |
+| `receiving_yards_from_scrimmage_per_game` | double | Average yards from scrimmage per game for the player as reported in the receiving category. |
+| `receiving_yards_per_game` | double | Average receiving yards per game for the player, equivalent to receiving_receiving_yards_per_game. |
+| `receiving_yards_per_reception` | double | Average yards gained per reception for the player, calculated as receiving yards divided by receptions. |
+| `scoring_defensive_points` | double | Total points scored by the player through defensive plays such as defensive touchdowns, safeties, or fumble-return scores. |
+| `scoring_field_goals` | double | Total number of field goals made by the player in the scoring category. |
+| `scoring_kick_extra_points` | double | Total number of extra point attempts kicked by the player. |
+| `scoring_kick_extra_points_made` | double | Total number of successful extra points (PATs) kicked by the player. |
+| `scoring_misc_points` | double | Points scored by the player through miscellaneous means not captured by standard scoring categories. |
+| `scoring_passing_touchdowns` | double | Total touchdown passes thrown by the player as counted in the scoring category. |
+| `scoring_receiving_touchdowns` | double | Total touchdown receptions scored by the player as counted in the scoring category. |
+| `scoring_return_touchdowns` | double | Total touchdowns scored by the player on kick or punt returns as counted in the scoring category. |
+| `scoring_rushing_touchdowns` | double | Total rushing touchdowns scored by the player as counted in the scoring category. |
+| `scoring_total_points` | double | Total points scored by the player across all scoring methods during the stat period. |
+| `scoring_total_points_per_game` | double | Average total points scored by the player per game during the stat period. |
+| `scoring_total_touchdowns` | double | Total touchdowns scored by the player across all methods (passing, rushing, receiving, and return) in the scoring category. |
+| `scoring_total_two_point_convs` | double | Total number of successful two-point conversions scored by the player across passing, rushing, and receiving attempts. |
+| `scoring_two_point_pass_convs` | double | Number of successful two-point conversions the player scored via a passing play, as counted in the scoring category. |
+| `scoring_two_point_rec_convs` | double | Number of successful two-point conversions the player scored via a reception, as counted in the scoring category. |
+| `scoring_two_point_rush_convs` | double | Number of successful two-point conversions the player scored via a rushing play, as counted in the scoring category. |
+| `scoring_one_pt_safeties_made` | double | Number of one-point safeties scored by the player's team, credited in the scoring category. |
 | `team_id` | integer | ESPN team id. |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 | `team_guid` | character | ESPN team GUID. |
@@ -432,7 +432,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `date` | character | Date of the poll release. |
 | `attendance` | integer | Reported attendance at the game. |
 | `time_valid` | logical | Whether the start time is confirmed. |
-| `date_valid` | logical |  |
+| `date_valid` | logical | Boolean flag indicating whether the game's scheduled date is confirmed and valid. |
 | `neutral_site` | logical | TRUE/FALSE flag for if the game took place at a neutral site. |
 | `conference_competition` | logical | Conference competition. |
 | `play_by_play_available` | logical | Whether play-by-play data is available. |
@@ -449,7 +449,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `venue_id` | character | Referencing venue id. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_address_city` | character | Venue address city. |
-| `venue_address_country` | character |  |
+| `venue_address_country` | character | Country in which the game venue is located, as provided by ESPN's venue data. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `status_clock` | double | Game clock in seconds. |
 | `status_display_clock` | character | Status display clock. |
@@ -476,9 +476,9 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `home_logo` | character | Home team logo URL. |
 | `home_conference_id` | character | Unique identifier for home conference. |
 | `home_score` | character | Home-team score after the play. |
-| `home_current_rank` | integer |  |
-| `home_linescores` | integer |  |
-| `home_records` | character |  |
+| `home_current_rank` | integer | AP or Coaches Poll ranking of the home team at the time of the game (null if unranked). |
+| `home_linescores` | integer | Per-period point totals for the home team, stored as an array of quarter/overtime scores. |
+| `home_records` | character | Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `away_id` | character | Away team referencing id. |
 | `away_uid` | character | Away team's uid. |
 | `away_location` | character | Away team's location. |
@@ -493,9 +493,9 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `away_logo` | character | Away team logo URL. |
 | `away_conference_id` | character | Unique identifier for away conference. |
 | `away_score` | character | Away-team score after the play. |
-| `away_current_rank` | integer |  |
-| `away_linescores` | integer |  |
-| `away_records` | character |  |
+| `away_current_rank` | integer | AP or Coaches Poll ranking of the away team at the time of the game (null if unranked). |
+| `away_linescores` | integer | Per-period point totals for the away team, stored as an array of quarter/overtime scores. |
+| `away_records` | character | Win-loss record of the away team at the time of the game, as reported by ESPN (e.g., overall or conference record). |
 | `game_id` | integer | ESPN game identifier. |
 | `season` | integer | Season (4-digit year). |
 | `season_type` | integer | ESPN season type (2 = regular, 3 = postseason). |
@@ -546,15 +546,15 @@ Polars dataframe containing betting lines available for the available seasons.
 | `id` | double | 247Sports referencing id for the recruit. |
 | `game_id` | integer | ESPN game identifier. |
 | `season` | double | Season (4-digit year). |
-| `game_desc` | character |  |
-| `date_time` | character |  |
+| `game_desc` | character | Human-readable description of the game, typically including team names and context. |
+| `date_time` | character | Date and time of the game to which the betting line applies, as a string. |
 | `market_type` | character | Geographic market type (e.g. `National`). |
-| `abbr` | character |  |
-| `lines` | double |  |
-| `odds` | integer |  |
-| `opening_lines` | double |  |
-| `opening_odds` | integer |  |
-| `book` | character |  |
+| `abbr` | character | Abbreviated team identifier or matchup label associated with the betting line entry. |
+| `lines` | double | Point spread value for the game as reported by the sportsbook (negative indicates the favorite). |
+| `odds` | integer | Moneyline odds for the game as reported by the sportsbook (American odds format). |
+| `opening_lines` | double | Opening point spread value posted by the sportsbook before line movement. |
+| `opening_odds` | integer | Opening moneyline odds posted by the sportsbook before line movement. |
+| `book` | character | Name of the sportsbook or oddsmaker that provided the betting line. |
 | `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
 | `week` | integer | Game week of the season. |
 

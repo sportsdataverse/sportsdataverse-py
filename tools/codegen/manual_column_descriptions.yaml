@@ -357,6 +357,179 @@ draft_rankings:
   category_key: Machine-readable slug identifying the scouting or ranking category (e.g., 'north-american-skater', 'international-skater') that the prospect belongs to in the NHL draft rankings.
 draft_rankings_now:
   category_key: Short identifier string for the scouting category or ranking list under which the prospect is evaluated (e.g., 'NA-SKATER', 'GOALIE').
+espn_cfb_game_rosters:
+  athlete_href: ESPN API URL reference for the athlete's full profile resource.
+  birth_country_alternate_id: Alternate identifier for the athlete's birth country, used in ESPN's nationality lookup system.
+  flag_alt: Alt-text description for the athlete's country flag image, typically the country name.
+  flag_href: URL to the athlete's nationality flag image on ESPN's CDN.
+  flag_rel: Relationship descriptor for the flag image link (e.g., 'flag' or 'country').
+  jersey_right: Secondary or alternate jersey number field, distinct from the primary jersey number.
+  position_href: ESPN API URL reference for the athlete's position resource.
+  statistics_href: ESPN API URL reference for the athlete's game or season statistics resource.
+  team_alternate_ids_sdr: ESPN SDR (Sports Data Repository) alternate team identifier for the athlete's team.
+espn_cfb_play_participants:
+  kicker_player_ids: List of ESPN athlete IDs for all kickers credited on the play (e.g., kickoff, field goal, or PAT attempt).
+  kicker_player_names: List of display names for all kickers credited on the play.
+  pass_defender_player_id: ESPN athlete ID for the primary pass defender (cornerback or safety) who contested the target on the play.
+  pass_defender_player_ids: List of ESPN athlete IDs for all pass defenders who contested the target or were credited with a pass breakup on the play.
+  pass_defender_player_name: Display name of the primary pass defender who contested the target or broke up the pass on the play.
+  pass_defender_player_names: List of display names for all pass defenders credited on the play.
+  passer_player_ids: List of ESPN athlete IDs for all passers credited on the play (supports multi-player lateral/trick plays).
+  passer_player_names: List of display names for all passers credited on the play.
+  pat_scorer_player_id: ESPN athlete ID for the primary player who scored a point-after-touchdown (PAT) conversion on the play.
+  pat_scorer_player_ids: List of ESPN athlete IDs for all players credited with a PAT conversion on the play.
+  pat_scorer_player_name: Display name of the player who scored the point-after-touchdown conversion on the play.
+  pat_scorer_player_names: List of display names for all players credited with a PAT conversion on the play.
+  penalized_player_id: ESPN athlete ID for the primary player who committed the penalty on the play.
+  penalized_player_ids: List of ESPN athlete IDs for all players penalized on the play.
+  penalized_player_name: Display name of the player assessed a penalty on the play.
+  penalized_player_names: List of display names for all players penalized on the play.
+  punter_player_ids: List of ESPN athlete IDs for all punters credited on the play.
+  punter_player_names: List of display names for all punters credited on the play.
+  receiver_player_ids: List of ESPN athlete IDs for all intended receivers on the play (supports lateral chains).
+  receiver_player_names: List of display names for all intended receivers credited on the play.
+  returner_player_id: ESPN athlete ID for the primary player who returned a kick, punt, or interception on the play.
+  returner_player_ids: List of ESPN athlete IDs for all returners credited on the play (e.g., during a lateral after a return).
+  returner_player_name: Display name of the primary player who returned a kick, punt, or interception on the play.
+  returner_player_names: List of display names for all returners credited on the play.
+  rusher_player_ids: List of ESPN athlete IDs for all ball carriers credited on the play (supports lateral handoffs).
+  rusher_player_names: List of display names for all ball carriers credited on the play.
+  sacked_by_player_id: ESPN athlete ID for the primary pass rusher who recorded the sack on the play.
+  sacked_by_player_ids: List of ESPN athlete IDs for all pass rushers credited with the sack on the play (includes split-sack participants).
+  sacked_by_player_name: Display name of the primary pass rusher credited with the sack on the play.
+  sacked_by_player_names: List of display names for all pass rushers credited with the sack, including secondary participants on split sacks.
+  scorer_player_id: ESPN athlete ID for the primary player who scored a touchdown or field goal on the play.
+  scorer_player_ids: List of ESPN athlete IDs for all players credited with a scoring event on the play.
+  scorer_player_name: Display name of the primary player credited with a touchdown or field goal score on the play.
+  scorer_player_names: List of display names for all players credited with scoring on the play.
+espn_cfb_player_stats:
+  general_defensive_fumbles_touchdowns: Number of touchdowns scored by the player on fumble recoveries attributed to the defensive category.
+  general_fumbles: Total number of fumbles committed by the player across all offensive and special-teams plays.
+  general_fumbles_lost: Number of fumbles the player committed that were recovered by the opposing team.
+  general_fumbles_touchdowns: Total touchdowns scored by the player as a result of fumble recoveries, combining offensive and defensive occurrences.
+  general_offensive_fumbles_touchdowns: Number of touchdowns scored by the player on fumble recoveries credited to the offensive category.
+  general_offensive_two_pt_returns: Number of two-point conversions the player scored by returning a blocked or intercepted two-point attempt on the offensive side.
+  passing_adj_qbr: ESPN's adjusted Total Quarterback Rating (QBR) for the player's passing performance, controlling for opponent difficulty and game situation.
+  passing_avg_gain: Average yards gained per passing play attempt by the quarterback in the passing category.
+  passing_completion_pct: Percentage of pass attempts thrown by the quarterback that were completed, calculated as completions divided by attempts.
+  passing_espnqb_rating: ESPN's proprietary quarterback rating for the player's passing performance, factoring in efficiency metrics beyond traditional passer rating.
+  passing_interception_pct: Percentage of pass attempts that resulted in an interception, calculated as interceptions divided by passing attempts.
+  passing_interceptions: Total number of passes thrown by the quarterback that were intercepted by the defense.
+  passing_long_passing: Longest single completed pass in yards recorded by the quarterback during the stat period.
+  passing_net_passing_yards: Net passing yards gained by the quarterback after subtracting yardage lost on sacks from gross passing yards.
+  passing_net_passing_yards_per_game: Net passing yards per game for the quarterback, computed as net passing yards divided by games played.
+  passing_net_total_yards: Combined net yardage from passing and rushing for a quarterback, accounting for sack yardage lost in the passing category.
+  passing_net_yards_per_game: Net total yards gained per game for the player as recorded in the passing category context.
+  passing_net_yards_per_pass_attempt: Net passing yards divided by total pass attempts, including sack yardage lost in the denominator's context.
+  passing_passing_attempts: Total number of pass attempts thrown by the quarterback, including completions, incompletions, and interceptions.
+  passing_passing_big_plays: Number of passing plays that gained 20 or more yards as recorded for the quarterback.
+  passing_passing_first_downs: Number of first downs gained by the team on passing plays thrown by the quarterback.
+  passing_passing_fumbles: Number of fumbles the quarterback committed during passing plays, including fumbled snaps and sack fumbles.
+  passing_passing_fumbles_lost: Number of fumbles the quarterback committed on passing plays that were recovered by the opposing team.
+  passing_passing_touchdown_pct: Percentage of pass attempts that resulted in a passing touchdown, calculated as touchdowns divided by attempts.
+  passing_passing_touchdowns: Total number of touchdown passes thrown by the quarterback.
+  passing_passing_yards: Gross passing yards gained by the quarterback on completed passes.
+  passing_passing_yards_after_catch: Total yards gained by receivers after the catch on passes thrown by the quarterback.
+  passing_passing_yards_at_catch: Total yards gained at the point of the catch (air yards) on passes thrown by the quarterback, before any yards after catch.
+  passing_passing_yards_per_game: Gross passing yards per game for the quarterback, computed as passing yards divided by games played.
+  passing_qb_rating: Traditional NCAA passer rating for the quarterback, calculated from completion percentage, yards per attempt, touchdown rate, and interception rate.
+  passing_quarterback_rating: Traditional passer rating for the quarterback, equivalent to passing_qb_rating, using the standard NCAA formula.
+  passing_sack_yards_lost: Total yards lost by the quarterback as a result of being sacked, subtracted when computing net passing yards.
+  passing_sacks: Total number of times the quarterback was sacked (tackled behind the line of scrimmage on a passing play).
+  passing_team_games_played: Number of team games played during the stat period, used as the denominator for per-game passing rate statistics.
+  passing_total_offensive_plays: Total number of offensive plays (pass attempts plus rushes) for the team during the stat period, recorded in the passing category context.
+  passing_total_points_per_game: Average total points scored per game by the player's team as recorded alongside passing statistics.
+  passing_total_touchdowns: Total touchdowns accounted for by the quarterback across passing and rushing in the passing category context.
+  passing_total_yards: Total offensive yardage (passing plus rushing) accumulated by the quarterback as reported in the passing category.
+  passing_total_yards_from_scrimmage: Total yards from scrimmage accumulated by the quarterback (passing plus rushing yards) in the passing category context.
+  passing_two_point_pass_convs: Number of successful two-point conversions the quarterback converted via a passing play.
+  passing_two_pt_pass: Indicator or count of two-point conversion passing attempts recorded for the quarterback.
+  passing_two_pt_pass_attempts: Total number of two-point conversion attempts the quarterback made via a passing play.
+  passing_yards_from_scrimmage_per_game: Average yards from scrimmage per game for the quarterback as reported in the passing category.
+  passing_yards_per_completion: Average yards gained per completed pass by the quarterback, calculated as passing yards divided by completions.
+  passing_yards_per_game: Average gross passing yards per game for the quarterback, equivalent to passing_passing_yards_per_game.
+  passing_yards_per_pass_attempt: Average yards gained per pass attempt by the quarterback, calculated as passing yards divided by attempts.
+  receiving_avg_gain: Average yards gained per reception for the player in the receiving category.
+  receiving_espnwr_rating: ESPN's proprietary wide receiver / pass-catcher rating for the player's receiving performance.
+  receiving_long_reception: Longest single reception in yards recorded by the player during the stat period.
+  receiving_net_total_yards: Net total yardage accumulated by the player from receiving and any rushing contributions as reported in the receiving category.
+  receiving_net_yards_per_game: Net total yards per game for the player as reported in the receiving category context.
+  receiving_receiving_big_plays: Number of receiving plays that gained 20 or more yards for the player.
+  receiving_receiving_first_downs: Number of first downs gained by the player via receptions.
+  receiving_receiving_fumbles: Number of fumbles the player committed after catching a pass.
+  receiving_receiving_fumbles_lost: Number of fumbles the player committed on receiving plays that were recovered by the opposing team.
+  receiving_receiving_targets: Total number of times the player was targeted as the intended receiver on a pass play.
+  receiving_receiving_touchdowns: Total number of touchdown receptions scored by the player.
+  receiving_receiving_yards: Total yards gained by the player on completed receptions.
+  receiving_receiving_yards_after_catch: Total yards gained by the player after the catch on receiving plays.
+  receiving_receiving_yards_at_catch: Total air yards gained at the point of the catch on receiving plays, before any yards after catch.
+  receiving_receiving_yards_per_game: Average receiving yards per game for the player, calculated as receiving yards divided by games played.
+  receiving_receptions: Total number of completed receptions (catches) recorded by the player.
+  receiving_team_games_played: Number of team games played during the stat period, used as the denominator for per-game receiving rate statistics.
+  receiving_total_offensive_plays: Total number of offensive plays for the team during the stat period, recorded in the receiving category context.
+  receiving_total_points_per_game: Average total points scored per game by the player's team as recorded alongside receiving statistics.
+  receiving_total_touchdowns: Total touchdowns scored by the player across all methods as reported in the receiving category context.
+  receiving_total_yards: Total offensive yardage accumulated by the player as reported in the receiving category.
+  receiving_total_yards_from_scrimmage: Total yards from scrimmage for the player (receiving plus rushing yards) as reported in the receiving category.
+  receiving_two_point_rec_convs: Number of successful two-point conversions the player converted via a reception.
+  receiving_two_pt_reception: Indicator or count of two-point conversion receptions recorded for the player.
+  receiving_two_pt_reception_attempts: Total number of two-point conversion attempts the player made via a receiving play.
+  receiving_yards_from_scrimmage_per_game: Average yards from scrimmage per game for the player as reported in the receiving category.
+  receiving_yards_per_game: Average receiving yards per game for the player, equivalent to receiving_receiving_yards_per_game.
+  receiving_yards_per_reception: Average yards gained per reception for the player, calculated as receiving yards divided by receptions.
+  rushing_avg_gain: Average yards gained per rushing attempt for the player in the rushing category.
+  rushing_espnrb_rating: ESPN's proprietary running back rating for the player's rushing performance.
+  rushing_long_rushing: Longest single rushing carry in yards recorded by the player during the stat period.
+  rushing_net_total_yards: Net total yardage accumulated by the player from rushing and any receiving contributions as reported in the rushing category.
+  rushing_net_yards_per_game: Net total yards per game for the player as reported in the rushing category context.
+  rushing_rushing_attempts: Total number of rushing attempts (carries) credited to the player.
+  rushing_rushing_big_plays: Number of rushing plays that gained 10 or more yards for the player.
+  rushing_rushing_first_downs: Number of first downs gained by the player via rushing plays.
+  rushing_rushing_fumbles: Number of fumbles the player committed on rushing plays.
+  rushing_rushing_fumbles_lost: Number of fumbles the player committed on rushing plays that were recovered by the opposing team.
+  rushing_rushing_touchdowns: Total number of rushing touchdowns scored by the player.
+  rushing_rushing_yards: Total yards gained by the player on rushing attempts.
+  rushing_rushing_yards_per_game: Average rushing yards per game for the player, calculated as rushing yards divided by games played.
+  rushing_stuff_yards_lost: Total yards lost by the player on stuffed rushing plays (carries stopped at or behind the line of scrimmage).
+  rushing_stuffs: Number of rushing attempts in which the player was stopped at or behind the line of scrimmage.
+  rushing_team_games_played: Number of team games played during the stat period, used as the denominator for per-game rushing rate statistics.
+  rushing_total_offensive_plays: Total number of offensive plays for the team during the stat period, recorded in the rushing category context.
+  rushing_total_points_per_game: Average total points scored per game by the player's team as recorded alongside rushing statistics.
+  rushing_total_touchdowns: Total touchdowns scored by the player across all methods as reported in the rushing category context.
+  rushing_total_yards: Total offensive yardage accumulated by the player as reported in the rushing category.
+  rushing_total_yards_from_scrimmage: Total yards from scrimmage for the player (rushing plus receiving yards) as reported in the rushing category.
+  rushing_two_point_rush_convs: Number of successful two-point conversions the player converted via a rushing play.
+  rushing_two_pt_rush: Indicator or count of two-point conversion rushing attempts recorded for the player.
+  rushing_two_pt_rush_attempts: Total number of two-point conversion attempts the player made via a rushing play.
+  rushing_yards_from_scrimmage_per_game: Average yards from scrimmage per game for the player as reported in the rushing category.
+  rushing_yards_per_game: Average rushing yards per game for the player, equivalent to rushing_rushing_yards_per_game.
+  rushing_yards_per_rush_attempt: Average yards gained per rushing attempt for the player, calculated as rushing yards divided by attempts.
+  scoring_defensive_points: Total points scored by the player through defensive plays such as defensive touchdowns, safeties, or fumble-return scores.
+  scoring_field_goals: Total number of field goals made by the player in the scoring category.
+  scoring_kick_extra_points: Total number of extra point attempts kicked by the player.
+  scoring_kick_extra_points_made: Total number of successful extra points (PATs) kicked by the player.
+  scoring_misc_points: Points scored by the player through miscellaneous means not captured by standard scoring categories.
+  scoring_one_pt_safeties_made: Number of one-point safeties scored by the player's team, credited in the scoring category.
+  scoring_passing_touchdowns: Total touchdown passes thrown by the player as counted in the scoring category.
+  scoring_receiving_touchdowns: Total touchdown receptions scored by the player as counted in the scoring category.
+  scoring_return_touchdowns: Total touchdowns scored by the player on kick or punt returns as counted in the scoring category.
+  scoring_rushing_touchdowns: Total rushing touchdowns scored by the player as counted in the scoring category.
+  scoring_total_points: Total points scored by the player across all scoring methods during the stat period.
+  scoring_total_points_per_game: Average total points scored by the player per game during the stat period.
+  scoring_total_touchdowns: Total touchdowns scored by the player across all methods (passing, rushing, receiving, and return) in the scoring category.
+  scoring_total_two_point_convs: Total number of successful two-point conversions scored by the player across passing, rushing, and receiving attempts.
+  scoring_two_point_pass_convs: Number of successful two-point conversions the player scored via a passing play, as counted in the scoring category.
+  scoring_two_point_rec_convs: Number of successful two-point conversions the player scored via a reception, as counted in the scoring category.
+  scoring_two_point_rush_convs: Number of successful two-point conversions the player scored via a rushing play, as counted in the scoring category.
+espn_cfb_schedule:
+  away_current_rank: AP or Coaches Poll ranking of the away team at the time of the game (null if unranked).
+  away_linescores: Per-period point totals for the away team, stored as an array of quarter/overtime scores.
+  away_records: Win-loss record of the away team at the time of the game, as reported by ESPN (e.g., overall or conference record).
+  date_valid: Boolean flag indicating whether the game's scheduled date is confirmed and valid.
+  home_current_rank: AP or Coaches Poll ranking of the home team at the time of the game (null if unranked).
+  home_linescores: Per-period point totals for the home team, stored as an array of quarter/overtime scores.
+  home_records: Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference record).
+  venue_address_country: Country in which the game venue is located, as provided by ESPN's venue data.
 espn_mlb_player_stats:
   batting_bipa: Batting average on balls in the air (fly balls and line drives), measuring in-play success on airborne contact.
   batting_mlb_rating: ESPN's composite MLB rating for the batter reflecting overall offensive performance.
@@ -849,6 +1022,15 @@ leagues:
   num_wildcard_teams: The number of wild card berths available for postseason entry in this league for the given season.
   org_code: The organizational code identifying the parent body (e.g., 'MLB') governing this league within the MLB Stats API hierarchy.
   season_state: A string describing the current phase of the league's season (e.g., 'inProgress', 'offseason', 'preseason').
+load_cfb_betting_lines:
+  abbr: Abbreviated team identifier or matchup label associated with the betting line entry.
+  book: Name of the sportsbook or oddsmaker that provided the betting line.
+  date_time: Date and time of the game to which the betting line applies, as a string.
+  game_desc: Human-readable description of the game, typically including team names and context.
+  lines: Point spread value for the game as reported by the sportsbook (negative indicates the favorite).
+  odds: Moneyline odds for the game as reported by the sportsbook (American odds format).
+  opening_lines: Opening point spread value posted by the sportsbook before line movement.
+  opening_odds: Opening moneyline odds posted by the sportsbook before line movement.
 load_contracts:
   cols: Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context.
 load_depth_charts:
