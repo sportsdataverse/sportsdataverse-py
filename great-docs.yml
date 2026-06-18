@@ -64,6 +64,38 @@ sidebar_filter:
   enabled: true
   min_items: 10
 
+# ── User guide + tutorials ───────────────────────────────────────────────────
+# Two explicit sidebar sections. "User guide" is the executable getting-started
+# pair (cells run live against ESPN at build time). "Tutorials" are the 15
+# per-sport walkthroughs ported from the Docusaurus site (docs/docs/tutorials/);
+# their cells are `#| eval: false` so the build stays fast + non-flaky (they hit
+# live ESPN / native / odds APIs). Regenerate the tutorial .qmd files with
+# `python tools/convert_tutorials_to_qmd.py` when the source tutorials change.
+user_guide:
+  - section: "User guide"
+    contents:
+      # No numeric prefix: Great Docs derives the navbar "User Guide" landing
+      # link from the first page's stem, and a numeric prefix breaks it.
+      - getting-started.qmd
+      - scoreboards-and-schedules.qmd
+  - section: "Tutorials"
+    contents:
+      - 02-quickstart.qmd
+      - 03-cfb-intro.qmd
+      - 04-nfl-intro.qmd
+      - 05-nba-intro.qmd
+      - 06-wbb-intro.qmd
+      - 07-mbb-intro.qmd
+      - 08-nhl-intro.qmd
+      - 09-wnba-intro.qmd
+      - 10-mlb-intro.qmd
+      - 11-pwhl-intro.qmd
+      - 12-junior-hockey-intro.qmd
+      - 13-odds-intro.qmd
+      - 14-soccer-intro.qmd
+      - 15-cricket-intro.qmd
+      - 16-other-espn-leagues-intro.qmd
+
 # ── Explicit, curated API reference ──────────────────────────────────────────
 # One section per sport listing the canonical ESPN cross-league surface, plus a
 # loaders section and the core play-by-play / config classes. Every name here is

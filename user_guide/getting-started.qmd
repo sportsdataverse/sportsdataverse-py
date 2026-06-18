@@ -79,7 +79,7 @@ wbb.select(["team_id", "team_display_name", "team_abbreviation"]).head(5)
 
 ## Where to go next
 
-- **[Scoreboards & schedules](01-scoreboards-and-schedules.qmd)** — pull a day
+- **[Scoreboards & schedules](scoreboards-and-schedules.qmd)** — pull a day
   of finished games with scores, and a full-season schedule.
 - **[API reference](../reference/index.qmd)** — the curated per-sport surface,
   one page per function with its signature, parameters, and a runnable example.
