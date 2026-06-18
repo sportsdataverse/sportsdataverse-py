@@ -3051,7 +3051,7 @@ participation = load_nfl_pbp_participation(seasons=[2022])
 participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
 
-### `load_pbp(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_pbp}
+### `load_pbp(seasons: 'List[int]', source: 'str' = 'nflverse', return_as_pandas=False) -> 'pl.DataFrame'` {#load_pbp}
 
 Load NFL play by play data going back to 1999
 
@@ -3060,6 +3060,7 @@ Load NFL play by play data going back to 1999
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
+| `source` | `str` | `'nflverse'` | Which enriched play-by-play release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse/nflfastR `play_by_play_{season}.parquet` releases — full history from 1999, unchanged behavior. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_model_pbp` release: a Python-built, nflfastR-faithful enriched frame (ep/epa, wp/wpa/vegas_wp, cp/cpoe, xyac_*/air_epa) that covers the published seasons (2023+) and drops administrative / timeout rows for a clean modeling subset. Any other value raises `ValueError`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
@@ -3451,6 +3452,11 @@ print(pbp.shape)
 # Multi-season range
 
 pbp = load_nfl_pbp(seasons=range(2020, 2025))
+
+# SDV-native enriched play-by-play (Python-built, nflfastR-faithful EP/WP/CP/xYAC; published seasons only; admin/timeout rows dropped)
+
+pbp_sdv = load_nfl_pbp(seasons=[2024], source="sdv")
+pbp_sdv.select(["ep", "epa", "wp", "wpa", "cp", "cpoe", "xyac_epa"]).head()
 
 # With cache off (development workflow)
 
@@ -4977,8 +4983,14 @@ regressor, xYAC is **one** `multi:softprob` model (`num_class=76`) that
 predicts a distribution over YAC buckets (`yac = -5..70`); the five output
 columns are *derived* from that distribution by re-scoring expected points on
 every outcome.  `ep` is **not** required on the input — it is recomputed on
-the outcome rows via `calculate_expected_points` — but `air_epa` and
-the play's pre-snap `ep` (`original_ep`) are read for the EPA baseline.
+the outcome rows via `calculate_expected_points`.  The play's pre-snap
+`ep` (`original_ep`) is the EPA baseline; `air_epa` is also part of the
+baseline (`xyac_epa = Σ((ep − original_ep)·prob) − air_epa`).  `air_epa`
+is **optional**: when present (the nflverse path) it is used verbatim so
+parity is byte-for-byte preserved; when absent (the Shield-native / ESPN
+path) it is computed from the already-scored `yac == 0` (catch-spot)
+outcome — `air_epa = ep(yac == 0) − original_ep` — and, since it was
+genuinely missing, surfaced as an extra `air_epa` output column.
 
 Inference filter (nflfastR `valid_pass` ∧ `distance_to_goal != 0`):
 `complete_pass == 1` OR `incomplete_pass == 1` OR `interception == 1`,
@@ -5001,13 +5013,13 @@ network) the underlying loader raises `FileNotFoundError`.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp_data` | `DataFrame` |  | nflverse-format play-by-play DataFrame. Required: `air_yards`, `season`, `half_seconds_remaining`, `yardline_100`, `ydstogo`, `down`, `posteam`, `home_team`, `roof`, `ep`, `air_epa`, `posteam_timeouts_remaining`, `defteam_timeouts_remaining`, `complete_pass`, `incomplete_pass`, `interception`, `pass_location`, `receiver_player_name`. Optional: `qb_hit`. |
+| `pbp_data` | `DataFrame` |  | nflverse-format play-by-play DataFrame. Required: `air_yards`, `season`, `half_seconds_remaining`, `yardline_100`, `ydstogo`, `down`, `posteam`, `home_team`, `roof`, `ep`, `posteam_timeouts_remaining`, `defteam_timeouts_remaining`, `complete_pass`, `incomplete_pass`, `interception`, `pass_location`, `receiver_player_name`. Optional: `air_epa` (used verbatim when present for byte-for-byte nflverse parity; computed from the `yac == 0` outcome and added as an output column when absent), `qb_hit`. |
 | `models_dir` | `Optional[Union[str, Path]]` | `None` | Optional directory to load `xyac_model.ubj` from instead of downloading/caching it (offline use or a custom-trained model). When `None` (default) the model is resolved bundled → cache → downloaded-from-release. |
 | `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
 
 **Returns**
 
-DataFrame with the original columns plus the five nflfastR xYAC columns (`Float64`, null on non-qualifying rows): `xyac_epa`, `xyac_mean_yardage`, `xyac_median_yardage`, `xyac_success`, `xyac_fd`.
+DataFrame with the original columns plus the five nflfastR xYAC columns (`Float64`, null on non-qualifying rows): `xyac_epa`, `xyac_mean_yardage`, `xyac_median_yardage`, `xyac_success`, `xyac_fd`. When the input lacked `air_epa` and at least one qualifying pass was scored, a computed `air_epa` column (catch-spot air EPA) is also added.
 
 **Example**
 

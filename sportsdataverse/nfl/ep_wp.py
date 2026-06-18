@@ -1037,6 +1037,8 @@ _XYAC_MODEL_FILE: str = "xyac_model.ubj"
 def _derive_xyac(
     pass_df: pl.DataFrame,
     probs: np.ndarray,
+    *,
+    compute_air_epa: bool = False,
 ) -> pl.DataFrame:
     """Derive the 5 nflfastR xYAC columns from the 76-class outcome distribution.
 
@@ -1047,18 +1049,35 @@ def _derive_xyac(
     half clock by 6 seconds, re-scores expected points on every outcome row via
     :func:`calculate_expected_points`, and reduces back to one row per play.
 
+    The ``xyac_epa`` baseline is ``Σ((ep − original_ep)·prob) − air_epa``.  When
+    the caller supplies ``air_epa`` (the nflverse path — it carries the column
+    computed by nflfastR's ``add_air_yac_ep_variables``), that value is used
+    verbatim so the output is byte-for-byte preserved.  When ``air_epa`` is
+    absent (the Shield-native / ESPN path — see :func:`calculate_xyac`), pass
+    ``compute_air_epa=True`` to derive it from the already-scored ``yac == 0``
+    (catch-spot) outcome row: ``air_epa = ep(yac == 0) − original_ep``.  That
+    row's ``ep`` carries the same TD (``yardline_100 == 0 → 7``) and
+    turnover-on-downs (``ep → −ep``) handling as nflfastR's ``airEPA``, so the
+    derived value is faithful to the R definition.
+
     Args:
         pass_df: Qualifying (``valid_pass``) plays, one row each, carrying the
             join columns (``_xyac_index``, ``distance_to_goal``, ``original_spot``
             = pre-play ``yardline_100``, ``original_ep``, ``original_ydstogo``,
-            ``air_epa``, ``air_yards``, ``down``, ``ydstogo`` plus the EP inputs
+            ``air_yards``, ``down``, ``ydstogo`` plus the EP inputs
             ``season``/``week``/``home_team``/``posteam``/``roof``/
             ``half_seconds_remaining``/``posteam_timeouts_remaining``/
-            ``defteam_timeouts_remaining``).
+            ``defteam_timeouts_remaining``).  Must also carry ``air_epa`` unless
+            ``compute_air_epa`` is ``True``.
         probs: ``(n_plays, 76)`` float prob matrix from the multinomial model.
+        compute_air_epa: When ``True``, derive ``air_epa`` from the ``yac == 0``
+            outcome row instead of reading it from ``pass_df``.  The derived
+            value is surfaced as an extra ``air_epa`` column on the returned
+            frame so callers can fold it into the native dataset.
 
     Returns:
-        One row per play keyed on ``_xyac_index`` with the 5 ``xyac_*`` columns.
+        One row per play keyed on ``_xyac_index`` with the 5 ``xyac_*`` columns
+        (plus ``air_epa`` when ``compute_air_epa`` is ``True``).
     """
     n_plays = pass_df.height
     # yac outcome grid: -5..70 (76 buckets) repeated per play.
@@ -1176,11 +1195,20 @@ def _derive_xyac(
     )
     long = long.with_columns(
         # epa = ep - original_ep; wt_epa = epa * prob  (nflfastR)
+        (pl.col("ep") - pl.col("original_ep")).alias("_epa"),
         ((pl.col("ep") - pl.col("original_ep")) * pl.col("prob")).alias("_wt_epa"),
         (pl.col("yardline_100_noflip") * pl.col("prob")).alias("_wt_yardln"),
         ((pl.col("ep") > pl.col("original_ep")).cast(pl.Float64) * pl.col("prob")).alias("_wt_success"),
         ((pl.col("gain") >= pl.col("original_ydstogo")).cast(pl.Float64) * pl.col("prob")).alias("_wt_fd"),
     )
+    if compute_air_epa:
+        # Native path: air_epa = ep(yac == 0) - original_ep (catch-spot air EPA,
+        # faithful to nflfastR's airEPA — the yac == 0 ep already carries the TD
+        # and turnover-on-downs adjustments applied above).  Captured per play as
+        # a single non-null value so .min() over the play group recovers it.
+        long = long.with_columns(
+            pl.when(pl.col("yac") == 0).then(pl.col("_epa")).otherwise(None).alias("air_epa"),
+        )
     # median: first yac whose cumulative prob crosses 0.5
     long = long.with_columns(
         pl.col("prob").cum_sum().over("_xyac_index").alias("_cum2"),
@@ -1192,15 +1220,31 @@ def _derive_xyac(
         .alias("_med"),
     )
 
-    return long.group_by("_xyac_index").agg(
-        (pl.col("_wt_epa").sum() - pl.col("air_epa").first()).alias("xyac_epa"),
-        ((pl.col("original_spot").first() - pl.col("air_yards").first()) - pl.col("_wt_yardln").sum()).alias(
-            "xyac_mean_yardage"
-        ),
-        pl.col("_med").max().cast(pl.Float64).alias("xyac_median_yardage"),
-        pl.col("_wt_success").sum().alias("xyac_success"),
-        pl.col("_wt_fd").sum().alias("xyac_fd"),
+    # air_epa baseline: the supplied (nflverse) column, or the yac == 0 derived
+    # value when compute_air_epa is set.  ``.min()`` ignores the per-row nulls
+    # introduced for the non-(yac == 0) rows in the computed case; in the supplied
+    # case every row carries the same value so ``.first()``-equivalent semantics
+    # hold either way.
+    air_epa_expr = pl.col("air_epa").min().alias("_air_epa_base")
+    agg = (
+        long.group_by("_xyac_index")
+        .agg(
+            air_epa_expr,
+            pl.col("_wt_epa").sum().alias("_sum_wt_epa"),
+            ((pl.col("original_spot").first() - pl.col("air_yards").first()) - pl.col("_wt_yardln").sum()).alias(
+                "xyac_mean_yardage"
+            ),
+            pl.col("_med").max().cast(pl.Float64).alias("xyac_median_yardage"),
+            pl.col("_wt_success").sum().alias("xyac_success"),
+            pl.col("_wt_fd").sum().alias("xyac_fd"),
+        )
+        .with_columns(
+            (pl.col("_sum_wt_epa") - pl.col("_air_epa_base")).alias("xyac_epa"),
+        )
     )
+    if compute_air_epa:
+        agg = agg.with_columns(pl.col("_air_epa_base").alias("air_epa"))
+    return agg.drop("_sum_wt_epa", "_air_epa_base")
 
 
 def calculate_xyac(
@@ -1216,8 +1260,14 @@ def calculate_xyac(
     predicts a distribution over YAC buckets (``yac = -5..70``); the five output
     columns are *derived* from that distribution by re-scoring expected points on
     every outcome.  ``ep`` is **not** required on the input — it is recomputed on
-    the outcome rows via :func:`calculate_expected_points` — but ``air_epa`` and
-    the play's pre-snap ``ep`` (``original_ep``) are read for the EPA baseline.
+    the outcome rows via :func:`calculate_expected_points`.  The play's pre-snap
+    ``ep`` (``original_ep``) is the EPA baseline; ``air_epa`` is also part of the
+    baseline (``xyac_epa = Σ((ep − original_ep)·prob) − air_epa``).  ``air_epa``
+    is **optional**: when present (the nflverse path) it is used verbatim so
+    parity is byte-for-byte preserved; when absent (the Shield-native / ESPN
+    path) it is computed from the already-scored ``yac == 0`` (catch-spot)
+    outcome — ``air_epa = ep(yac == 0) − original_ep`` — and, since it was
+    genuinely missing, surfaced as an extra ``air_epa`` output column.
 
     Inference filter (nflfastR ``valid_pass`` ∧ ``distance_to_goal != 0``):
     ``complete_pass == 1`` OR ``incomplete_pass == 1`` OR ``interception == 1``,
@@ -1240,10 +1290,13 @@ def calculate_xyac(
         pbp_data: nflverse-format play-by-play DataFrame.  Required:
             ``air_yards``, ``season``, ``half_seconds_remaining``,
             ``yardline_100``, ``ydstogo``, ``down``, ``posteam``, ``home_team``,
-            ``roof``, ``ep``, ``air_epa``, ``posteam_timeouts_remaining``,
+            ``roof``, ``ep``, ``posteam_timeouts_remaining``,
             ``defteam_timeouts_remaining``, ``complete_pass``,
             ``incomplete_pass``, ``interception``, ``pass_location``,
-            ``receiver_player_name``.  Optional: ``qb_hit``.
+            ``receiver_player_name``.  Optional: ``air_epa`` (used verbatim when
+            present for byte-for-byte nflverse parity; computed from the
+            ``yac == 0`` outcome and added as an output column when absent),
+            ``qb_hit``.
         models_dir: Optional directory to load ``xyac_model.ubj`` from instead
             of downloading/caching it (offline use or a custom-trained model).
             When ``None`` (default) the model is resolved bundled → cache →
@@ -1254,7 +1307,9 @@ def calculate_xyac(
         DataFrame with the original columns plus the five nflfastR xYAC columns
         (``Float64``, null on non-qualifying rows):
         ``xyac_epa``, ``xyac_mean_yardage``, ``xyac_median_yardage``,
-        ``xyac_success``, ``xyac_fd``.
+        ``xyac_success``, ``xyac_fd``.  When the input lacked ``air_epa`` and at
+        least one qualifying pass was scored, a computed ``air_epa`` column
+        (catch-spot air EPA) is also added.
 
     Example:
         Quick start::
@@ -1314,26 +1369,42 @@ def calculate_xyac(
         # Only the columns the EP re-score + derivation actually read are kept
         # (``calculate_expected_points`` needs season/posteam/home_team/roof/
         # half_seconds_remaining/yardline_100/down/ydstogo/timeouts).
-        join_df = pass_df.select(
-            "_xyac_index",
-            "season",
-            "home_team",
-            "posteam",
-            "roof",
-            "half_seconds_remaining",
-            "posteam_timeouts_remaining",
-            "defteam_timeouts_remaining",
-            "air_epa",
-            "air_yards",
+        #
+        # ``air_epa`` is an EPA *input*, not a passthrough: the nflverse path
+        # carries it (computed by nflfastR's add_air_yac_ep_variables) and we use
+        # it verbatim to preserve byte-for-byte parity.  The Shield-native / ESPN
+        # path does NOT produce air_epa, so when it is absent we ask _derive_xyac
+        # to compute it from the yac == 0 outcome (catch-spot air EPA) — this is
+        # what unblocks xYAC on that path (previously a ColumnNotFoundError).
+        has_air_epa = "air_epa" in pass_df.columns
+        join_cols = [
+            pl.col("_xyac_index"),
+            pl.col("season"),
+            pl.col("home_team"),
+            pl.col("posteam"),
+            pl.col("roof"),
+            pl.col("half_seconds_remaining"),
+            pl.col("posteam_timeouts_remaining"),
+            pl.col("defteam_timeouts_remaining"),
+            pl.col("air_yards"),
             (pl.col("yardline_100") - pl.col("air_yards")).alias("distance_to_goal"),
             pl.col("yardline_100").alias("original_spot"),
             pl.col("ep").alias("original_ep"),
             pl.col("down").cast(pl.Int64),
             pl.col("ydstogo").cast(pl.Int64),
             pl.col("ydstogo").cast(pl.Int64).alias("original_ydstogo"),
-        )
+        ]
+        if has_air_epa:
+            join_cols.append(pl.col("air_epa"))
+        join_df = pass_df.select(join_cols)
 
-        xyac_frame = _derive_xyac(join_df, probs).select("_xyac_index", *_XYAC_OUT_COLS)
+        derived = _derive_xyac(join_df, probs, compute_air_epa=not has_air_epa)
+        # Surface the computed air_epa as an output column only when it was
+        # genuinely absent from the input (never overwrite nflverse's column).
+        out_cols = list(_XYAC_OUT_COLS)
+        if not has_air_epa and "air_epa" not in df.columns:
+            out_cols.append("air_epa")
+        xyac_frame = derived.select("_xyac_index", *out_cols)
     else:
         xyac_frame = empty
 
@@ -2502,11 +2573,17 @@ def enrich_nfl_pbp(
     # a RuntimeWarning rather than failing the whole enrichment.
     try:
         raw = _self.calculate_xyac(raw, models_dir=models_dir)
-    except FileNotFoundError as exc:
+    except (FileNotFoundError, pl.exceptions.ColumnNotFoundError) as exc:
         import warnings
 
+        # FileNotFoundError → xyac_model.ubj genuinely unavailable (offline,
+        # no cache).  ColumnNotFoundError is a defensive catch: calculate_xyac
+        # now derives air_epa from the yac == 0 outcome when it is absent, so a
+        # missing-column failure should no longer fire on the Shield-native
+        # path — but if some other required input column is genuinely missing
+        # we degrade gracefully rather than failing the whole enrichment.
         warnings.warn(
-            f"enrich_nfl_pbp: skipping xYAC step — model unavailable ({exc}).",
+            f"enrich_nfl_pbp: skipping xYAC step — {type(exc).__name__}: {exc}.",
             RuntimeWarning,
             stacklevel=2,
         )

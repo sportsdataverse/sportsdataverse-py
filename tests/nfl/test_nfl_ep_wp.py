@@ -999,6 +999,70 @@ class TestCalculateXyac:
 
 
 # ---------------------------------------------------------------------------
+# Public API: calculate_xyac — air_epa absent (Shield-native / ESPN) path
+# ---------------------------------------------------------------------------
+
+
+class TestCalculateXyacAirEpaAbsent:
+    """When air_epa is absent (native path), calculate_xyac computes it.
+
+    Previously this raised polars.ColumnNotFoundError because _derive_xyac read
+    pl.col("air_epa"); the fix derives air_epa from the yac == 0 outcome.
+    """
+
+    _OUT = ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd")
+
+    def test_no_crash_when_air_epa_absent(self, mock_xyac_model):
+        df = _nflverse_pass_row().drop("air_epa")
+        assert "air_epa" not in df.columns
+        # Must not raise ColumnNotFoundError.
+        result = calculate_xyac(df)
+        for col in self._OUT:
+            assert col in result.columns
+
+    def test_xyac_epa_non_null_on_qualifying_pass(self, mock_xyac_model):
+        df = _nflverse_pass_row().drop("air_epa")
+        result = calculate_xyac(df)
+        assert result["xyac_epa"][0] is not None
+
+    def test_air_epa_surfaced_as_output_when_absent(self, mock_xyac_model):
+        df = _nflverse_pass_row().drop("air_epa")
+        result = calculate_xyac(df)
+        assert "air_epa" in result.columns
+        assert result["air_epa"][0] is not None
+
+    def test_air_epa_not_added_when_present(self, mock_xyac_model):
+        """Supplied air_epa is kept verbatim and not duplicated/overwritten."""
+        df = _nflverse_pass_row()  # carries air_epa = 0.5
+        result = calculate_xyac(df)
+        # Single air_epa column, value preserved exactly.
+        assert result.columns.count("air_epa") == 1
+        assert result["air_epa"][0] == pytest.approx(0.5)
+
+    def test_computed_air_epa_matches_yac0_outcome_identity(self, mock_xyac_model):
+        """xyac_epa(no air_epa) == Σ((ep-orig)·prob) - air_epa_computed.
+
+        Equivalently: feeding the computed air_epa back in as the supplied
+        column reproduces the same xyac_epa, proving the two paths share the
+        identical Σ((ep-original_ep)·prob) term and differ only by which
+        air_epa baseline is subtracted.
+        """
+        df = _nflverse_pass_row().drop("air_epa")
+        out_native = calculate_xyac(df)
+        computed_air = out_native["air_epa"][0]
+        # Supply the computed air_epa back -> xyac_epa must be byte-identical.
+        df_supplied = df.with_columns(pl.lit(computed_air).alias("air_epa"))
+        out_supplied = calculate_xyac(df_supplied)
+        assert out_supplied["xyac_epa"][0] == pytest.approx(out_native["xyac_epa"][0])
+
+    def test_air_epa_absent_with_nonpass_row(self, mock_xyac_model):
+        """Non-qualifying rows stay null; no crash without air_epa."""
+        df = _nflverse_pass_row(air_yards=None).drop("air_epa")
+        result = calculate_xyac(df)
+        assert result["xyac_epa"][0] is None
+
+
+# ---------------------------------------------------------------------------
 # Download-on-demand + cache resolution for the large xYAC model.
 #
 # These exercise ``_load_model``'s resolution order (override → bundled →

@@ -841,6 +841,9 @@ loaders:
 # per-season loaders are listed; season-less / extra-param / alias loaders
 # (player_stats, nextgen_stats, pfr_advstats, teams, players, ff_*, ...) stay
 # under "Additional functions". ---
+# load_nfl_pbp also accepts source="sdv" to read the SDV-native nfl_model_pbp
+# release (Python-built, nflfastR-faithful EP/WP/CP/xYAC; published seasons only).
+# The default source="nflverse" maps to the asset below and is documented here.
 - fn: load_nfl_pbp
   league: nfl
   base: nflverse
