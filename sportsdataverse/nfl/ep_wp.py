@@ -739,8 +739,8 @@ def calculate_expected_points(
     ep = np.clip(probs @ _EP_POINT_VALUES, -10.0, 10.0)
 
     prob_frame = pl.DataFrame(
-        {name: pl.Series(name, probs[:, i]) for i, name in enumerate(_EP_CLASS_NAMES)}
-    ).with_columns(ep=pl.Series("ep", ep))
+        {name: pl.Series(name, probs[:, i], dtype=pl.Float64) for i, name in enumerate(_EP_CLASS_NAMES)}
+    ).with_columns(ep=pl.Series("ep", ep, dtype=pl.Float64))
 
     result = pl.concat([df, prob_frame], how="horizontal")
 
@@ -818,8 +818,8 @@ def calculate_win_probability(
     # emits both).  Gating the predict to null-spread rows would silently
     # drop `wp` for all spread rows and break that contract.
     result = df.with_columns(
-        wp=pl.Series("wp", wp_naive),
-        vegas_wp=pl.Series("vegas_wp", vegas_wp),
+        wp=pl.Series("wp", wp_naive, dtype=pl.Float64),
+        vegas_wp=pl.Series("vegas_wp", vegas_wp, dtype=pl.Float64),
     )
 
     if return_as_pandas:
