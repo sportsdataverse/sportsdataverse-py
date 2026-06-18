@@ -25,9 +25,12 @@ See the module-level ``_DENIED_ENDPOINTS`` note and the package docs for details
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import TYPE_CHECKING, List, Optional
 
 import requests
+
+if TYPE_CHECKING:
+    import polars as pl
 
 API_HOST = "https://nextgenstats.nfl.com/api"
 _HOME = "https://nextgenstats.nfl.com/"
@@ -569,6 +572,302 @@ def nfl_ngs_play_is_highlight(
     return _to_frame([payload], return_as_pandas)
 
 
+# --------------------------------------------------------------------------- #
+# NGS season scraper (mirrors nflverse/ngs-data's R ``load_week_ngs`` /
+# ``save_ngs_type``). Produces frames column-compatible with the released
+# nflverse NGS parquet that :func:`sportsdataverse.nfl.load_nfl_nextgen_stats`
+# reads -- i.e. snake_cased columns with ``team_abbr`` resolved from ``team_id``.
+#
+# NGS statboard rows are PLAYER-WEEK AGGREGATES (``avg_intended_air_yards``,
+# ``completion_percentage_above_expectation``, ...), NOT per-play rows. This is
+# a season-stats source, not a per-play air-yards / completion-probability one.
+# --------------------------------------------------------------------------- #
+
+# Relocated franchises share a ``team_id`` with their current identity in the NGS
+# ``/league/teams`` directory; dropping these legacy abbreviations (as nflverse
+# ngs-data does) keeps the team_id -> team_abbr map one-to-one for the join.
+_RELOCATED_ABBRS = ("LA", "OAK", "STL", "SD")
+
+# Module-level cache of the team_id -> team_abbr frame (fetched at most once per
+# process). ``None`` means "not yet attempted"; a fetch failure stores an empty
+# frame so we never re-hit the network on every week of a season loop.
+_TEAMS_CACHE: Optional["pl.DataFrame"] = None
+
+
+def _team_abbr_map() -> "pl.DataFrame":
+    """Return (and cache) a 2-column ``team_id`` / ``team_abbr`` polars frame.
+
+    Sourced from :func:`nfl_ngs_league_teams` (``/api/league/teams``). The
+    relocated abbreviations in :data:`_RELOCATED_ABBRS` are dropped so the
+    ``team_id`` key stays unique (mirrors nflverse ngs-data). The teams frame is
+    fetched at most once per process; a network failure caches an empty frame so
+    a season loop never repeatedly retries.
+    """
+    global _TEAMS_CACHE
+    import polars as pl
+
+    if _TEAMS_CACHE is None:
+        try:
+            teams = nfl_ngs_league_teams()
+            cols = {c.lower(): c for c in teams.columns}
+            id_col = cols.get("teamid")
+            abbr_col = cols.get("abbr")
+            if id_col is None or abbr_col is None:
+                _TEAMS_CACHE = pl.DataFrame(schema={"team_id": pl.String, "team_abbr": pl.String})
+            else:
+                _TEAMS_CACHE = (
+                    teams.select(
+                        pl.col(id_col).cast(pl.String).alias("team_id"),
+                        pl.col(abbr_col).cast(pl.String).alias("team_abbr"),
+                    )
+                    .filter(~pl.col("team_abbr").is_in(_RELOCATED_ABBRS))
+                    .unique(subset=["team_id"], keep="first")
+                )
+        except Exception:  # noqa: BLE001 -- never let a teams-lookup failure abort a scrape
+            _TEAMS_CACHE = pl.DataFrame(schema={"team_id": pl.String, "team_abbr": pl.String})
+    return _TEAMS_CACHE
+
+
+def _resolve_team_abbr(df: "pl.DataFrame") -> "pl.DataFrame":
+    """Left-join a ``team_abbr`` column onto ``df`` via its ``teamId``/``team_id`` key.
+
+    The statboard frame carries the team key as ``teamId`` (camelCase, pre-rename);
+    after :func:`_snake_rename` it is ``team_id``. This helper accepts either and
+    casts the key to string before joining against the cached team directory
+    (:func:`_team_abbr_map`). If no team key column is present the frame is
+    returned unchanged.
+
+    Args:
+        df: a statboard frame (camelCase or snake_case columns).
+
+    Returns:
+        ``df`` with a ``team_abbr`` column appended (null where unmatched).
+    """
+    import polars as pl
+
+    if df.height == 0:
+        return df
+    key = "team_id" if "team_id" in df.columns else ("teamId" if "teamId" in df.columns else None)
+    if key is None or "team_abbr" in df.columns:
+        return df
+    out = df.with_columns(pl.col(key).cast(pl.String).alias(key))
+    teams = _team_abbr_map().rename({"team_id": key})
+    return out.join(teams, on=key, how="left")
+
+
+def _snake_rename(df: "pl.DataFrame") -> "pl.DataFrame":
+    """Rename every column of ``df`` to ``snake_case`` via :func:`dl_utils.underscore`.
+
+    The raw NGS statboard JSON is camelCase (``completionPercentageAboveExpectation``,
+    ``avgTimeToThrow``, ``player_displayName`` ...); the published nflverse NGS
+    parquet is snake_case. This makes the scraped frame column-compatible with
+    :func:`sportsdataverse.nfl.load_nfl_nextgen_stats`.
+
+    Args:
+        df: any polars frame.
+
+    Returns:
+        ``df`` with snake-cased column names.
+    """
+    from sportsdataverse.dl_utils import underscore
+
+    return df.rename({c: underscore(c) for c in df.columns})
+
+
+# Documented empty-frame schema per stat type (snake_case keys + join columns).
+# Returned when the API yields no stats for a (season, week) slice so callers can
+# chain without null-checks.
+_NGS_KEY_COLS = ("season", "season_type", "week", "player_display_name", "player_gsis_id", "team_abbr")
+
+
+def _empty_ngs_frame(stat_type: str, return_as_pandas: bool):
+    """Return a zero-row frame carrying the stable NGS key columns."""
+    import polars as pl
+
+    schema = {c: pl.String for c in _NGS_KEY_COLS}
+    schema["season"] = pl.Int64
+    schema["week"] = pl.Int64
+    empty = pl.DataFrame(schema=schema)
+    return empty.to_pandas() if return_as_pandas else empty
+
+
+def scrape_ngs_week(
+    stat_type: str,
+    season: int,
+    week: int,
+    season_type: str = "REG",
+    *,
+    return_as_pandas: bool = False,
+):
+    """Scrape one (season, week) NGS statboard slice, shaped like the nflverse parquet.
+
+    Port of nflverse ngs-data's R ``load_week_ngs``: fetch a single statboard
+    slice via :func:`nfl_ngs_statboard`, resolve ``team_abbr`` from the team
+    directory, snake-case every column, and tag the row with the loop ``week``.
+    ``week=0`` is the season-aggregate row (a ``season_type="REG"`` call with no
+    ``week`` query param); weeks ``1..max_reg`` are regular-season, and the
+    playoff weeks (``max_reg+1`` upward) are fetched with ``season_type="POST"``.
+
+    NGS statboard rows are **player-week aggregates** (``avg_intended_air_yards``,
+    ``completion_percentage_above_expectation``, ``avg_time_to_throw``, ...), NOT
+    per-play rows -- this is a season-stats source, not a per-play air-yards /
+    completion-probability source.
+
+    Args:
+        stat_type (str): one of ``"passing"``, ``"rushing"``, ``"receiving"``.
+        season (int): season year (NGS coverage starts in 2016).
+        week (int): NGS week. ``0`` -> season aggregate; ``1..max_reg`` -> REG;
+            higher -> POST. The supplied value is what tags the returned rows.
+        season_type (str): ``"REG"`` or ``"POST"``; the caller (or
+            :func:`scrape_ngs_season`) selects this per week. Defaults to ``"REG"``.
+        return_as_pandas (bool): return a pandas frame instead of polars.
+
+    Returns:
+        A polars (or pandas) ``DataFrame`` of player-week NGS rows with
+        snake-cased columns + a resolved ``team_abbr``. An EMPTY frame carrying
+        the documented key schema (not an exception) when the API yields no stats.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import scrape_ngs_week
+            wk1 = scrape_ngs_week("passing", 2023, week=1)
+            wk1.select(["season", "week", "player_display_name", "team_abbr"]).head()
+
+        Season-aggregate row (week 0)::
+
+            tot = scrape_ngs_week("rushing", 2023, week=0)
+
+        See Also:
+            * `nflverse`_ -- the nflverse/ngs-data scraper this mirrors
+            * `nflreadpy`_ -- reads the published NGS parquet directly
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    """
+    import polars as pl
+
+    raw = nfl_ngs_statboard(
+        stat_type=stat_type,
+        season=season,
+        season_type=season_type,
+        week=(week if week else None),
+        return_as_pandas=False,
+    )
+    if raw.height == 0:
+        return _empty_ngs_frame(stat_type, return_as_pandas)
+
+    out = _snake_rename(_resolve_team_abbr(raw))
+    # Tag with the loop week + season_type (mirrors R's ``mutate(week = week)`` on
+    # the info tibble) so the season-aggregate row is week 0 and POST weeks carry
+    # their continuous NGS week number.
+    out = out.with_columns(
+        pl.lit(int(season)).alias("season"),
+        pl.lit(season_type).alias("season_type"),
+        pl.lit(int(week)).alias("week"),
+    )
+    return out.to_pandas() if return_as_pandas else out
+
+
+def scrape_ngs_season(
+    stat_type: str,
+    season: int,
+    *,
+    include_season_totals: bool = True,
+    return_as_pandas: bool = False,
+):
+    """Scrape a full season of NGS statboard data, shaped like the nflverse parquet.
+
+    Port of nflverse ngs-data's R ``save_ngs_type``: loop the regular-season weeks
+    (``1..max_reg`` where ``max_reg = 18`` for ``season >= 2021`` else ``17``) plus
+    the playoff weeks (``max_reg+1 .. max_reg+5``, fetched with
+    ``season_type="POST"``), stack them diagonally, and -- when
+    ``include_season_totals`` -- prepend the season-aggregate rows (NGS ``week=0``,
+    a ``REG`` call with no ``week`` param) tagged ``week=0``. Duplicate rows (NGS
+    returned dupes for some 2022 weeks) are de-duplicated on
+    ``(season, week, player_gsis_id)``.
+
+    Output columns match the published nflverse NGS parquet read by
+    :func:`sportsdataverse.nfl.load_nfl_nextgen_stats` (snake_case, ``team_abbr``
+    resolved). It will not be byte-identical -- nflverse post-processes (column
+    pruning / ordering) -- but the core metric columns and the
+    player/team/week keys align.
+
+    NGS statboard rows are **player-week aggregates**, NOT per-play rows.
+
+    Args:
+        stat_type (str): one of ``"passing"``, ``"rushing"``, ``"receiving"``.
+        season (int): season year (NGS coverage starts in 2016).
+        include_season_totals (bool): also fetch the season-aggregate (``week=0``)
+            rows. Defaults to ``True`` (matches ngs-data, whose week loop starts
+            at 0).
+        return_as_pandas (bool): return a pandas frame instead of polars.
+
+    Returns:
+        A polars (or pandas) ``DataFrame`` stacking every week (and, by default,
+        the season totals) for the requested ``stat_type`` and ``season``. An
+        EMPTY frame carrying the documented key schema if nothing is returned.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import scrape_ngs_season
+            pas = scrape_ngs_season("passing", 2023)
+            pas.select(["season", "week", "player_display_name", "team_abbr"]).head()
+
+        Regular-season weeks only (skip the week-0 totals)::
+
+            wk = scrape_ngs_season("receiving", 2023, include_season_totals=False)
+
+        Column-compatible with the published parquet::
+
+            from sportsdataverse.nfl import load_nfl_nextgen_stats
+            published = load_nfl_nextgen_stats(seasons=[2023], stat_type="passing")
+            shared = set(pas.columns) & set(published.columns)
+
+        See Also:
+            * `nflverse`_ -- the nflverse/ngs-data scraper this mirrors
+            * `nflreadpy`_ -- reads the published NGS parquet directly
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    """
+    import polars as pl
+
+    max_reg = 18 if season >= 2021 else 17
+
+    # Week 0 = season aggregate (REG, no week param); 1..max_reg = REG weeks;
+    # max_reg+1 .. max_reg+5 = playoff weeks (POST). This mirrors ngs-data's
+    # ``seq(0, max_week + 1)`` with the REG/POST split inside ``load_week_ngs``.
+    weeks: List[tuple[int, str]] = []
+    if include_season_totals:
+        weeks.append((0, "REG"))
+    weeks.extend((w, "REG") for w in range(1, max_reg + 1))
+    weeks.extend((w, "POST") for w in range(max_reg + 1, max_reg + 6))
+
+    frames = []
+    for week, season_type in weeks:
+        wk = scrape_ngs_week(
+            stat_type=stat_type,
+            season=season,
+            week=week,
+            season_type=season_type,
+            return_as_pandas=False,
+        )
+        if wk.height:
+            frames.append(wk)
+
+    if not frames:
+        return _empty_ngs_frame(stat_type, return_as_pandas)
+
+    out = pl.concat(frames, how="diagonal_relaxed")
+    # NGS returned duplicate rows for some 2022 weeks with slightly different
+    # values; de-dupe on (season, week, player_gsis_id) like ngs-data does.
+    if "player_gsis_id" in out.columns:
+        out = out.unique(subset=["season", "week", "player_gsis_id"], keep="first")
+    return out.to_pandas() if return_as_pandas else out
+
+
 __all__ = [
     "nfl_ngs_statboard",
     "nfl_ngs_statboard_leaders",
@@ -580,4 +879,6 @@ __all__ = [
     "nfl_ngs_microsite_chart",
     "nfl_ngs_microsite_chart_players",
     "nfl_ngs_play_is_highlight",
+    "scrape_ngs_week",
+    "scrape_ngs_season",
 ]
