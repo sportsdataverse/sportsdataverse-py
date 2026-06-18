@@ -44,6 +44,18 @@ hero:
   enabled: true
   tagline: "Tidy play-by-play, box score, schedule, roster, and odds data across the SportsDataverse — NBA, WNBA, NFL, CFB, MBB, WBB, MLB, and NHL."
 
+# ── Link-out to the interactive docs / playground ────────────────────────────
+# Great Docs is a static Quarto site, so it has NO analogue of the React
+# in-browser code playground on the main Docusaurus docs. Rather than fake one,
+# we surface a dismissable banner that links OUT to the interactive site (where
+# the live playground + full long-tail reference live). This is the one piece
+# that cannot reach parity; see GREAT-DOCS-NOTES.md.
+announcement:
+  content: "Looking for the interactive code playground + the full reference? Visit the main docs at py.sportsdataverse.org →"
+  type: info
+  dismissable: true
+  url: "https://py.sportsdataverse.org"
+
 # ── GitHub + source links ────────────────────────────────────────────────────
 repo: https://github.com/sportsdataverse/sportsdataverse-py
 github_style: widget

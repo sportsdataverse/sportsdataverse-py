@@ -845,27 +845,51 @@ codegen docs — the two are different by design:
 - **Docusaurus codegen (`docs/`, production):** full ~800-wrapper breadth driven
   by endpoint YAML, with rich per-column `col_name | type | description` returns
   tables. The source of truth for the long tail.
-- **Great Docs (`great-docs.yml`):** a curated public surface (the per-sport entry
-  points people actually call) introspected **live from the real Python objects**
-  (signature / params / returns / example), plus **executable** user-guide pages.
-  No per-column returns tables; ~zero authoring cost per documented symbol.
+- **Great Docs (`great-docs.yml`):** a per-sport public surface introspected
+  **live from the real Python objects** (signature / params / returns / example),
+  plus **executable** user-guide pages + the 15 ported tutorials. No per-column
+  returns tables; ~zero authoring cost per documented symbol. Brand-matched to
+  the Docusaurus site (Plausible, Bungee/Lato/Fira fonts, cyan glow, favicon).
 
-**The curated `reference:` allow-list is load-bearing.** Great Docs validates
-every discoverable name through griffe's dynamic loader (~2s per name), and
-`import sportsdataverse` registers **~2,940** dynamic wrappers via
-`make_league_module()` → a full auto-discovery walk would take ~90 min and time
-out. Pinning an explicit, curated per-sport `reference:` block (plus
-`source.enabled: false`) makes Great Docs skip the per-symbol validation loop and
-render in **~95s (85 pages / 95 symbols)**. Every name in the allow-list is a real
-top-level `sportsdataverse` export with a Google-style docstring. When you add a
-canonical public function people should discover here, add its name to the
-relevant sport section in `great-docs.yml` — don't try to re-enable auto-discovery.
+**The `reference:` block is GENERATED from `leagues.yaml` — do not hand-edit it.**
+Great Docs validates every discoverable name through griffe's dynamic loader
+(~2s per name), and `import sportsdataverse` registers **~2,940** dynamic
+wrappers via `make_league_module()` → a full auto-discovery walk would take
+~90 min and time out. So the `reference:` is pinned to a curated, importable
+subset (plus `source.enabled: false`) — that skips the per-symbol validation loop
+and renders in a few minutes. The block is now **codegen-generated** by
+`tools/codegen/great_docs_reference.py` from
+`tools/codegen/endpoints/leagues.yaml`, spliced between the
+`# >>> generated reference` / `# <<< generated reference` markers in
+`great-docs.yml`, covering all 17 leagues (the 8 ESPN sports + college hockey,
+college baseball/softball, UFL/XFL/CFL, soccer, cricket). It emits only
+`espn_<prefix>_<short>` names that are real importable top-level exports.
+
+```sh
+python tools/codegen/generate.py --great-docs          # regenerate the block
+python tools/codegen/generate.py --great-docs --check  # drift guard (rc=1 if stale; also in the main --check gate)
+```
+
+To surface a new canonical entry point, add its `short` name to `CURATED_SHORTS`
+in `great_docs_reference.py` (or a league to `leagues.yaml`) and re-run
+`--great-docs` — don't hand-edit the block or re-enable auto-discovery.
+
+**Brand parity lives in `assets/head.html`** (wired via
+`include_in_header: [{file: assets/head.html}]`): the Plausible tag, the
+Bungee/Chivo/Lato/Fira font stack, and the cyan glow keyframes — all ported from
+`docs/docusaurus.config.ts` + `docs/src/css/custom.css`. Pass the include as
+`{file: ...}`, **not** a bare string (a bare string is normalized to literal
+`text` and injects the path itself).
+
+**No playground analogue.** Great Docs is a static Quarto site with no equivalent
+of the Docusaurus React code playground; a dismissable `announcement:` banner
+links OUT to the interactive site instead. This is the one parity gap.
 
 **Build / preview (local / manual — see `GREAT-DOCS-NOTES.md` for the full
 write-up):**
 
 ```sh
-PYTHONUTF8=1 great-docs build      # ~95s → great-docs/_site/index.html
+PYTHONUTF8=1 great-docs build      # ~5min → great-docs/_site/index.html (175 reference + 17 guide pages)
 great-docs preview                 # local server (http://localhost:3000)
 ```
 
@@ -876,7 +900,9 @@ great-docs preview                 # local server (http://localhost:3000)
   a stale Anaconda kernel.
 - **`great-docs/` is gitignored** (ephemeral build output, regenerated every build)
   — never hand-edit it. The committed sources are `great-docs.yml`,
-  `user_guide/*.qmd`, and `assets/`.
+  `user_guide/*.qmd`, `assets/` (`head.html` + `favicon.ico` + `logo.png`), and
+  the two generators (`tools/convert_tutorials_to_qmd.py`,
+  `tools/codegen/great_docs_reference.py`).
 - **User-guide cells hit the live ESPN API at build time** and freeze the real
   output into static HTML (so the build needs network, like the repo's live
   tests). The CI check for it (`.github/workflows/great-docs.yml`) is therefore
