@@ -86,80 +86,99 @@ def _build_game_espn(game_id: int) -> pl.DataFrame:
 
 @overload
 def build_nfl_season(
-    game_ids: list[int],
+    game_ids: list[int] | None = ...,
     *,
+    seasons: list[int] | None = ...,
     source: str = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 @overload
 def build_nfl_season(
-    game_ids: list[int],
+    game_ids: list[int] | None = ...,
     *,
+    seasons: list[int] | None = ...,
     source: str = ...,
     return_as_pandas: Literal[True],
 ) -> "pd.DataFrame": ...
 def build_nfl_season(
-    game_ids: list[int],
+    game_ids: list[int] | None = None,
     *,
+    seasons: list[int] | None = None,
     source: str = "espn",
     return_as_pandas: bool = False,
 ) -> "pl.DataFrame | pd.DataFrame":
     """Compile play-by-play for multiple NFL games into one tidy frame.
 
-    For each *game_id* the function either loads a previously cached plays
-    frame or processes the game fresh via ``NFLPlayProcess``.  Individual
-    game failures are logged and skipped so a single bad game does not abort
-    the whole season build.  The per-game frames are concatenated with
-    ``how="diagonal_relaxed"`` (schema union, missing columns filled with
-    ``null``) so games with slightly different column sets merge cleanly.
+    The ``source`` parameter determines which input parameter is required:
+
+    - ``source="espn"`` — requires *game_ids*; *seasons* must be ``None``.
+    - ``source="nflverse"`` — requires *seasons*; *game_ids* must be ``None``.
+
+    For ESPN games the function either loads a previously cached plays frame or
+    processes the game fresh via ``NFLPlayProcess``.  Individual game failures
+    are logged and skipped so a single bad game does not abort the whole season
+    build.  The per-game frames are concatenated with ``how="diagonal_relaxed"``
+    (schema union, missing columns filled with ``null``) so games with slightly
+    different column sets merge cleanly.
 
     Args:
         game_ids: ESPN event IDs to compile (e.g. ``[401671801, 401671802]``).
+            Required when ``source="espn"``; must be ``None`` for other sources.
+        seasons: Season years to compile (e.g. ``[2023, 2024]``).
+            Required when ``source="nflverse"``; must be ``None`` for other sources.
         source: Data source.
 
             - ``"espn"`` *(default)*: each game is processed via
               ``NFLPlayProcess(gameId=gid).espn_nfl_pbp()`` +
-              ``run_processing_pipeline()``.
+              ``run_processing_pipeline()``.  Pass *game_ids*.
             - ``"nflverse"``: delegates to :func:`sportsdataverse.nfl.load_nfl_pbp`
-              for the seasons implied by *game_ids*.  **Note:** the nflverse
-              loader is season-oriented (not game-id-oriented); use it when
-              you want a full pre-enriched season frame rather than ESPN-
-              processed individual games.
+              for the requested seasons.  Pass *seasons*.  Returns the full
+              pre-enriched season frame as-is.
             - ``"shield"``: raises :class:`NotImplementedError` — Shield
               (api.nfl.com) play-by-play lives in the native-pipeline
-              (`nfl-data`) repository, not sdv-py.
+              (``nfl-data``) repository, not sdv-py.
 
         return_as_pandas: If ``True``, return a ``pandas.DataFrame`` instead
             of polars.
 
     Returns:
-        polars.DataFrame: All plays from the requested games, concatenated
-        with schema-union semantics (missing columns are ``null``).  Returns
-        a zero-row frame if every game failed.  When *return_as_pandas* is
-        ``True``, returns a ``pandas.DataFrame`` instead.
+        polars.DataFrame: All plays from the requested games/seasons,
+        concatenated with schema-union semantics (missing columns are ``null``).
+        Returns a zero-row frame if every game failed (ESPN source only).
+        When *return_as_pandas* is ``True``, returns a ``pandas.DataFrame``
+        instead.
 
     Raises:
         ValueError: If *source* is not one of ``"espn"``, ``"nflverse"``,
-            ``"shield"``.
+            ``"shield"``; or if the wrong input parameter is supplied for the
+            chosen source (e.g. passing *seasons* to ``source="espn"`` or
+            *game_ids* to ``source="nflverse"``); or if the required parameter
+            is missing or empty.
         NotImplementedError: If ``source="shield"``.
 
     Example:
-        Basic ESPN season compile::
+        ESPN season compile (pass ESPN event IDs)::
 
             from sportsdataverse.nfl import build_nfl_season
-            df = build_nfl_season([401671801, 401671802])
+            df = build_nfl_season(game_ids=[401671801, 401671802])
             print(df.shape)
 
-        With filesystem cache enabled::
+        nflverse season compile (pass season years)::
+
+            from sportsdataverse.nfl import build_nfl_season
+            df = build_nfl_season(seasons=[2023], source="nflverse")
+            print(df.shape)
+
+        With filesystem cache enabled (ESPN)::
 
             from sportsdataverse.nfl import build_nfl_season, update_config
             update_config(cache_mode="filesystem")
-            df = build_nfl_season([401671801, 401671802])  # processes + caches
-            df2 = build_nfl_season([401671801, 401671802]) # served from cache
+            df = build_nfl_season(game_ids=[401671801, 401671802])  # processes + caches
+            df2 = build_nfl_season(game_ids=[401671801, 401671802]) # served from cache
 
         Pandas output::
 
-            df_pd = build_nfl_season([401671801], return_as_pandas=True)
+            df_pd = build_nfl_season(game_ids=[401671801], return_as_pandas=True)
 
         See Also:
             * `nflverse`_ -- full NFL data ecosystem
@@ -181,24 +200,27 @@ def build_nfl_season(
         )
 
     if source == "nflverse":
+        if game_ids is not None:
+            raise ValueError("source='nflverse' takes seasons, not game_ids. Pass seasons=[year, ...] instead.")
+        if not seasons:
+            raise ValueError(
+                "source='nflverse' requires seasons to be a non-empty list of season years (e.g. seasons=[2023])."
+            )
         from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp  # noqa: PLC0415
 
-        # nflverse loader is season-oriented; derive unique seasons from ids.
-        # game_ids here are treated as season years for nflverse parity
-        # (the caller should pass seasons, not ESPN game IDs, for this source).
-        warnings.warn(
-            "source='nflverse' treats game_ids as season years "
-            "(e.g. [2024]) rather than ESPN event IDs.  "
-            "Use source='espn' for per-game processing.",
-            UserWarning,
-            stacklevel=2,
-        )
-        frame = load_nfl_pbp(seasons=game_ids, return_as_pandas=False)
+        frame = load_nfl_pbp(seasons=seasons, return_as_pandas=False)
         if return_as_pandas:
             return frame.to_pandas()
         return frame
 
     # ---- source == "espn" ------------------------------------------------
+    if seasons is not None:
+        raise ValueError("source='espn' takes game_ids, not seasons. Pass game_ids=[espn_event_id, ...] instead.")
+    if not game_ids:
+        raise ValueError(
+            "source='espn' requires game_ids to be a non-empty list of ESPN event IDs (e.g. game_ids=[401671801])."
+        )
+
     frames: list[pl.DataFrame] = []
     skipped: list[int] = []
 

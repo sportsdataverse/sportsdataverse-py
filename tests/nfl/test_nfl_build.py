@@ -198,17 +198,16 @@ def test_return_as_pandas(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Test 9: empty game_ids returns empty DataFrame
+# Test 9: empty game_ids raises ValueError for espn source
 # ---------------------------------------------------------------------------
 
 
-def test_empty_game_ids(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_empty_game_ids_raises_value_error(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(nfl_build_mod, "_build_game_espn", lambda gid: _FRAME_A)
     update_config(cache_mode="off")
 
-    result = build_nfl_season([])
-    assert isinstance(result, pl.DataFrame)
-    assert result.shape[0] == 0
+    with pytest.raises(ValueError, match="non-empty list of ESPN event IDs"):
+        build_nfl_season([])
 
 
 # ---------------------------------------------------------------------------
@@ -222,30 +221,61 @@ def test_pipeline_version_is_positive_int() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Test 11: source="nflverse" emits UserWarning and passes frame through
+# Test 11: source="nflverse" passes frame through (no warning)
 # ---------------------------------------------------------------------------
 
 
-def test_nflverse_source_warns_and_passes_frame(monkeypatch: pytest.MonkeyPatch) -> None:
-    """source='nflverse' emits a UserWarning and returns the loader's frame."""
-    import sportsdataverse.nfl.nfl_build as nfl_build_mod2  # same module, different alias
-
+def test_nflverse_source_passes_frame_through(monkeypatch: pytest.MonkeyPatch) -> None:
+    """source='nflverse' delegates to load_nfl_pbp and returns the frame without warning."""
     fake_frame = pl.DataFrame({"season": [2024, 2024], "play_id": [1, 2]})
+    received_seasons: list[list[int]] = []
 
     def fake_load_nfl_pbp(seasons: list[int], return_as_pandas: bool = False) -> pl.DataFrame:
+        received_seasons.append(seasons)
         return fake_frame
 
-    monkeypatch.setattr(nfl_build_mod2, "load_nfl_pbp", fake_load_nfl_pbp, raising=False)
-    # The loader is imported lazily inside the function; patch at module level
-    # by injecting into nfl_build's namespace so the lazy import resolves to our stub.
     import sportsdataverse.nfl.nfl_loaders as nfl_loaders_mod
 
     monkeypatch.setattr(nfl_loaders_mod, "load_nfl_pbp", fake_load_nfl_pbp)
 
     update_config(cache_mode="off")
 
-    with pytest.warns(UserWarning, match="source='nflverse' treats game_ids as season years"):
-        result = build_nfl_season([2024], source="nflverse")
+    # No warning should be emitted — the API is explicit now
+    result = build_nfl_season(seasons=[2024], source="nflverse")
 
     assert isinstance(result, pl.DataFrame)
     assert result.shape == fake_frame.shape
+    assert received_seasons == [[2024]], "load_nfl_pbp must be called with the provided seasons"
+
+
+# ---------------------------------------------------------------------------
+# Test 12: source="espn" with seasons= raises ValueError
+# ---------------------------------------------------------------------------
+
+
+def test_espn_source_rejects_seasons() -> None:
+    """source='espn' must reject seasons= kwarg with a clear ValueError."""
+    with pytest.raises(ValueError, match="source='espn' takes game_ids, not seasons"):
+        build_nfl_season(seasons=[2023], source="espn")
+
+
+# ---------------------------------------------------------------------------
+# Test 13: source="nflverse" with game_ids= raises ValueError
+# ---------------------------------------------------------------------------
+
+
+def test_nflverse_source_rejects_game_ids() -> None:
+    """source='nflverse' must reject game_ids= with a clear ValueError."""
+    with pytest.raises(ValueError, match="source='nflverse' takes seasons, not game_ids"):
+        build_nfl_season(game_ids=[401671801], source="nflverse")
+
+
+# ---------------------------------------------------------------------------
+# Test 14: source="nflverse" with neither raises ValueError
+# ---------------------------------------------------------------------------
+
+
+def test_nflverse_source_requires_seasons() -> None:
+    """source='nflverse' with neither game_ids nor seasons raises ValueError."""
+    with pytest.raises(ValueError, match="requires seasons"):
+        build_nfl_season(source="nflverse")
