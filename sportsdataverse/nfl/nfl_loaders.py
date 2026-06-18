@@ -19,6 +19,7 @@ from sportsdataverse.config import (
     NFL_FF_RANKINGS_WEEK_URL,
     NFL_FTN_CHARTING_URL,
     NFL_INJURIES_URL,
+    NFL_MODEL_PBP_URL,
     NFL_NGS_PASSING_URL,
     NFL_NGS_RECEIVING_URL,
     NFL_NGS_RUSHING_URL,
@@ -48,18 +49,27 @@ from sportsdataverse.nfl.cache import cached_loader
 
 
 @cached_loader
-def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_pbp(seasons: List[int], source: str = "nflverse", return_as_pandas=False) -> pl.DataFrame:
     """Load NFL play by play data going back to 1999
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
+        source (str): Which enriched play-by-play release to read. ``"nflverse"`` (the
+            default, also accepts ``None``) returns the nflverse/nflfastR
+            ``play_by_play_{season}.parquet`` releases — full history from 1999,
+            unchanged behavior. ``"sportsdataverse"`` / ``"sdv"`` returns the
+            SDV-native ``nfl_model_pbp`` release: a Python-built, nflfastR-faithful
+            enriched frame (ep/epa, wp/wpa/vegas_wp, cp/cpoe, xyac_*/air_epa) that
+            covers the published seasons (2023+) and drops administrative / timeout
+            rows for a clean modeling subset. Any other value raises ``ValueError``.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing the play-by-plays available for the requested seasons.
 
     Raises:
-        ValueError: If `season` is less than 1999.
+        ValueError: If `season` is less than 1999, or `source` is not one of
+            ``"nflverse"``, ``None``, ``"sportsdataverse"``, or ``"sdv"``.
 
     Example:
         Quick start::
@@ -71,6 +81,12 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         Multi-season range::
 
             pbp = load_nfl_pbp(seasons=range(2020, 2025))
+
+        SDV-native enriched play-by-play (Python-built, nflfastR-faithful
+        EP/WP/CP/xYAC; published seasons only; admin/timeout rows dropped)::
+
+            pbp_sdv = load_nfl_pbp(seasons=[2024], source="sdv")
+            pbp_sdv.select(["ep", "epa", "wp", "wpa", "cp", "cpoe", "xyac_epa"]).head()
 
         With cache off (development workflow)::
 
@@ -92,12 +108,18 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
         .. _nflfastR: https://www.nflfastr.com
     """
+    if source in ("nflverse", None):
+        base_url = NFL_BASE_URL
+    elif source in ("sportsdataverse", "sdv"):
+        base_url = NFL_MODEL_PBP_URL
+    else:
+        raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
     data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1999)
-        i_data = pl.read_parquet(NFL_BASE_URL.format(season=i), use_pyarrow=True, columns=None)
+        i_data = pl.read_parquet(base_url.format(season=i), use_pyarrow=True, columns=None)
         data = pl.concat([data, i_data], how="vertical")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 

@@ -58,6 +58,7 @@ NFLVERSEGITHUBPBP = "https://raw.githubusercontent.com/nflverse/"
 DYNASTYPROCESSGITHUB = "https://github.com/dynastyprocess/data/raw/master/files/"
 FFOPPORTUNITYGITHUB = "https://github.com/ffverse/ffopportunity/releases/download/"
 NFL_BASE_URL = NFLVERSEGITHUB + "pbp/play_by_play_{season}.parquet"  # done
+NFL_MODEL_PBP_URL = SDVRELEASES + "nfl_model_pbp/model_pbp_{season}.parquet"
 NFL_PLAYER_URL = f"{NFLVERSEGITHUB}players/players.parquet"
 NFL_PLAYER_STATS_URL = f"{NFLVERSEGITHUB}player_stats/player_stats.parquet"
 NFL_PLAYER_KICKING_STATS_URL = f"{NFLVERSEGITHUB}player_stats/player_stats_kicking.parquet"
