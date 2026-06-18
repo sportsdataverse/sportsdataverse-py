@@ -37,6 +37,8 @@ from sportsdataverse.nfl.ep_wp import (
     _espn_wp_features,
     _espn_xyac_features,
     _load_model as _ep_wp_load_model,
+    calculate_epa,
+    calculate_wpa,
 )
 from sportsdataverse.nfl.model_vars import (
     defense_score_vec,
@@ -3491,307 +3493,118 @@ class NFLPlayProcess(object):
             EP_end=pl.lit(EP_end),
         )
 
-        play_df = (
-            play_df.with_columns(
-                EP_start=pl.when(
-                    pl.col("type.text").is_in(
-                        [
-                            "Extra Point Good",
-                            "Extra Point Missed",
-                            "Two-Point Conversion Good",
-                            "Two-Point Conversion Missed",
-                            "Two Point Pass",
-                            "Two Point Rush",
-                            "Blocked PAT",
-                        ],
-                    ),
-                )
-                .then(0.92)
-                .otherwise(pl.col("EP_start")),
+        # --- Derivation half delegated to the shared, model-free calculate_epa ---
+        # The EP point estimates (EP_start / EP_end / EP_start_touchback) have been
+        # scored above; calculate_epa is the verbatim lift of the scoring-overlay /
+        # lead-lag / EP_between / kickoff-touchback / turnover-flip / EPA derivation
+        # that used to live inline here. NFLPlayProcess always operates on a single
+        # game, so calculate_epa's ``.over("game_id")`` window guards collapse to the
+        # plain ``.shift`` semantics this method relied on, leaving output identical.
+        # calculate_epa also emits lowercase nflverse aliases (ep / epa / ep_start /
+        # ep_end) the legacy __process_epa output never carried, so drop them to keep
+        # the plays schema byte-identical; the EPA_* summary flags below stay inline.
+        play_df = calculate_epa(play_df).drop("ep", "epa", "ep_start", "ep_end")
+
+        play_df = play_df.with_columns(
+            def_EPA=pl.col("EPA") * -1,
+            # --- EPA Summary flags ----
+            EPA_scrimmage=pl.when(pl.col("scrimmage_play") == True).then(pl.col("EPA")).otherwise(None),
+            EPA_rush=pl.when((pl.col("rush") == True).and_(pl.col("penalty_in_text") == True))
+            .then(pl.col("EPA"))
+            .when((pl.col("rush") == True).and_(pl.col("penalty_in_text") == False))
+            .then(pl.col("EPA"))
+            .otherwise(None),
+            EPA_pass=pl.when(pl.col("pass") == True).then(pl.col("EPA")).otherwise(None),
+            EPA_explosive=pl.when((pl.col("pass") == True).and_(pl.col("EPA") >= 2.4))
+            .then(True)
+            .when(((pl.col("rush") == True).and_(pl.col("EPA") >= 1.8)))
+            .then(True)
+            .otherwise(False),
+        ).with_columns(
+            EPA_non_explosive=pl.when(pl.col("EPA_explosive") == False).then(pl.col("EPA")).otherwise(None),
+            EPA_explosive_pass=pl.when((pl.col("pass") == True).and_(pl.col("EPA") >= 2.4)).then(True).otherwise(False),
+            EPA_explosive_rush=pl.when((pl.col("rush") == True).and_(pl.col("EPA") >= 1.8)).then(True).otherwise(False),
+            first_down_created=pl.when(
+                (pl.col("scrimmage_play") == True)
+                .and_(pl.col("end.down") == 1)
+                .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id")),
             )
-            .with_columns(
-                # End of Half
-                EP_end=pl.when(
-                    (pl.col("type.text").str.to_lowercase().str.contains(r"end of game")).or_(
-                        pl.col("type.text").str.to_lowercase().str.contains(r"end of half"),
-                    ),
-                )
-                .then(0)
-                # Defensive 2pt Conversion
-                .when(pl.col("type.text").is_in(["Defensive 2pt Conversion"]))
-                .then(-2)
-                # Safeties
-                .when(
-                    (pl.col("type.text").is_in(defense_score_vec)).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"(?i)safety"),
-                    ),
-                )
-                .then(-2)
-                # Defense TD + Successful Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-                )
-                .then(-8)
-                # Defense TD + Failed Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-                )
-                .then(-6)
-                # Defense TD + Kick/PAT Missed
-                .when(
-                    (pl.col("type.text").is_in(defense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-                )
-                .then(-6)
-                # Defense TD + Kick/PAT Good
-                .when(
-                    (pl.col("type.text").is_in(defense_score_vec)).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                    ),
-                )
-                .then(-7)
-                # Defense TD
-                .when(pl.col("type.text").is_in(defense_score_vec))
-                .then(-6.92)
-                # Offense TD + Failed Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed")),
-                )
-                .then(6)
-                # Offense TD + Successful Two-Point Conversion
-                .when(
-                    (pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)conversion"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)failed") == False),
-                )
-                .then(8)
-                # Offense Made FG
-                .when(
-                    (pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)field goal"))
-                    .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)good")),
-                )
-                .then(3)
-                # Offense TD + Kick/PAT Missed
-                .when(
-                    (pl.col("type.text").is_in(offense_score_vec))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"PAT"))
-                    .and_(pl.col("text").str.to_lowercase().str.contains(r"(?i)missed")),
-                )
-                .then(6)
-                # Offense TD + Kick/PAT Good
-                .when(
-                    (pl.col("type.text").is_in(offense_score_vec)).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"kick\)"),
-                    ),
-                )
-                .then(7)
-                # Offense TD
-                .when(pl.col("type.text").is_in(offense_score_vec))
-                .then(6.92)
-                # Extra Point Good
-                .when(pl.col("type.text").is_in(["Extra Point Good"]))
-                .then(1)
-                # Extra Point Missed
-                .when(pl.col("type.text").is_in(["Extra Point Missed"]))
-                .then(0)
-                # Two-Point Conversion Good
-                .when(pl.col("type.text").is_in(["Two-Point Conversion Good"]))
-                .then(2)
-                # Two-Point Conversion Missed
-                .when(pl.col("type.text").is_in(["Two-Point Conversion Missed"]))
-                .then(0)
-                # Two Point Pass/Rush Missed (Pre-2014 Data)
-                .when(
-                    (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"(?i)no good"),
-                    ),
-                )
-                .then(0)
-                # Two Point Pass/Rush Good (Pre-2014 Data)
-                .when(
-                    (pl.col("type.text").is_in(["Two Point Pass", "Two Point Rush"])).and_(
-                        pl.col("text").str.to_lowercase().str.contains(r"(?i)no good") == False,
-                    ),
-                )
-                .then(2)
-                # Blocked PAT
-                .when(pl.col("type.text").is_in(["Blocked PAT"]))
-                .then(0)
-                # Flips for Turnovers that aren't kickoffs
-                .when(
-                    ((pl.col("type.text").is_in(end_change_vec)).or_(pl.col("downs_turnover") == True)).and_(
-                        pl.col("type.text").is_in(kickoff_vec) == False,
-                    ),
-                )
-                .then(pl.col("EP_end") * -1)
-                # Flips for Turnovers that are kickoffs
-                .when(pl.col("type.text").is_in(kickoff_turnovers))
-                .then(pl.col("EP_end") * -1)
-                # Onside kicks
-                .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
-                .then(pl.col("EP_end") * -1)
-                .otherwise(pl.col("EP_end")),
+            .then(True)
+            .otherwise(False),
+            EPA_success=pl.when(pl.col("EPA") > 0).then(True).otherwise(False),
+            EPA_success_early_down=pl.when((pl.col("EPA") > 0).and_(pl.col("early_down") == True))
+            .then(True)
+            .otherwise(False),
+            EPA_success_early_down_pass=pl.when(
+                (pl.col("pass") == True).and_(pl.col("EPA") > 0).and_(pl.col("early_down") == True),
             )
-            .with_columns(
-                lag_EP_end=pl.col("EP_end").shift(1),
-                lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1),
+            .then(True)
+            .otherwise(False),
+            EPA_success_early_down_rush=pl.when(
+                (pl.col("rush") == True).and_(pl.col("EPA") > 0).and_(pl.col("early_down") == True),
             )
-            .with_columns(
-                lag_change_of_pos_team=pl.when(pl.col("lag_change_of_pos_team").is_null())
-                .then(False)
-                .otherwise(pl.col("lag_change_of_pos_team")),
+            .then(True)
+            .otherwise(False),
+            EPA_success_late_down=pl.when((pl.col("EPA") > 0).and_(pl.col("late_down") == True))
+            .then(True)
+            .otherwise(False),
+            EPA_success_late_down_pass=pl.when(
+                (pl.col("pass") == True).and_(pl.col("EPA") > 0).and_(pl.col("late_down") == True),
             )
-            .with_columns(
-                EP_between=pl.when(pl.col("lag_change_of_pos_team") == True)
-                .then(pl.col("EP_start") + pl.col("lag_EP_end"))
-                .otherwise(pl.col("EP_start") - pl.col("lag_EP_end")),
-                EP_start=pl.when(
-                    (pl.col("type.text").is_in(["Timeout", "End Period"])).and_(
-                        pl.col("lag_change_of_pos_team") == False,
-                    ),
-                )
-                .then(pl.col("lag_EP_end"))
-                .otherwise(pl.col("EP_start")),
+            .then(True)
+            .otherwise(False),
+            EPA_success_late_down_rush=pl.when(
+                (pl.col("rush") == True).and_(pl.col("EPA") > 0).and_(pl.col("late_down") == True),
             )
-            .with_columns(
-                EP_start=pl.when(pl.col("type.text").is_in(kickoff_vec))
-                .then(pl.col("EP_start_touchback"))
-                .otherwise(pl.col("EP_start")),
+            .then(True)
+            .otherwise(False),
+            EPA_success_standard_down=pl.when((pl.col("EPA") > 0).and_(pl.col("standard_down") == True))
+            .then(True)
+            .otherwise(False),
+            EPA_success_passing_down=pl.when((pl.col("EPA") > 0).and_(pl.col("passing_down") == True))
+            .then(True)
+            .otherwise(False),
+            EPA_success_pass=pl.when((pl.col("EPA") > 0).and_(pl.col("pass") == True)).then(True).otherwise(False),
+            EPA_success_rush=pl.when((pl.col("EPA") > 0).and_(pl.col("rush") == True)).then(True).otherwise(False),
+            EPA_success_EPA=pl.when(pl.col("EPA") > 0).then(pl.col("EPA")).otherwise(None),
+            EPA_success_standard_down_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("standard_down") == True))
+            .then(pl.col("EPA"))
+            .otherwise(None),
+            EPA_success_passing_down_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("passing_down") == True))
+            .then(pl.col("EPA"))
+            .otherwise(None),
+            EPA_success_pass_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("pass") == True))
+            .then(pl.col("EPA"))
+            .otherwise(None),
+            EPA_success_rush_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("rush") == True))
+            .then(pl.col("EPA"))
+            .otherwise(None),
+            EPA_middle_8_success=pl.when((pl.col("EPA") > 0).and_(pl.col("middle_8") == True))
+            .then(True)
+            .otherwise(False),
+            EPA_middle_8_success_pass=pl.when(
+                (pl.col("pass") == True).and_(pl.col("EPA") > 0).and_(pl.col("middle_8") == True),
             )
-            .with_columns(
-                EP_end=pl.when(pl.col("type.text").is_in(["Timeout"]))
-                .then(pl.col("EP_start"))
-                .otherwise(pl.col("EP_end")),
+            .then(True)
+            .otherwise(False),
+            EPA_middle_8_success_rush=pl.when(
+                (pl.col("rush") == True).and_(pl.col("EPA") > 0).and_(pl.col("middle_8") == True),
             )
-            .with_columns(
-                EPA=pl.when(pl.col("type.text").is_in(["Timeout"]))
-                .then(0)
-                .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
-                .then(-1 * pl.col("EP_start"))
-                .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("penalty_in_text") == True))
-                .then(pl.col("EP_end") - pl.col("EP_start"))
-                .when(
-                    (pl.col("penalty_in_text") == True)
-                    .and_(pl.col("type.text").is_in(["Penalty"]) == False)
-                    .and_(pl.col("type.text").is_in(kickoff_vec) == False),
-                )
-                .then(pl.col("EP_end") - pl.col("EP_start") + pl.col("EP_between"))
-                .otherwise(pl.col("EP_end") - pl.col("EP_start")),
+            .then(True)
+            .otherwise(False),
+            EPA_penalty=pl.when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
+            .then(pl.col("EPA"))
+            .when(pl.col("penalty_in_text") == True)
+            .then(pl.col("EP_end") - pl.col("EP_start"))
+            .otherwise(None),
+            EPA_sp=pl.when(
+                (pl.col("fg_attempt") == True).or_(pl.col("punt") == True).or_(pl.col("kickoff_play") == True),
             )
-            .with_columns(
-                def_EPA=pl.col("EPA") * -1,
-                # --- EPA Summary flags ----
-                EPA_scrimmage=pl.when(pl.col("scrimmage_play") == True).then(pl.col("EPA")).otherwise(None),
-                EPA_rush=pl.when((pl.col("rush") == True).and_(pl.col("penalty_in_text") == True))
-                .then(pl.col("EPA"))
-                .when((pl.col("rush") == True).and_(pl.col("penalty_in_text") == False))
-                .then(pl.col("EPA"))
-                .otherwise(None),
-                EPA_pass=pl.when(pl.col("pass") == True).then(pl.col("EPA")).otherwise(None),
-                EPA_explosive=pl.when((pl.col("pass") == True).and_(pl.col("EPA") >= 2.4))
-                .then(True)
-                .when(((pl.col("rush") == True).and_(pl.col("EPA") >= 1.8)))
-                .then(True)
-                .otherwise(False),
-            )
-            .with_columns(
-                EPA_non_explosive=pl.when(pl.col("EPA_explosive") == False).then(pl.col("EPA")).otherwise(None),
-                EPA_explosive_pass=pl.when((pl.col("pass") == True).and_(pl.col("EPA") >= 2.4))
-                .then(True)
-                .otherwise(False),
-                EPA_explosive_rush=pl.when((pl.col("rush") == True).and_(pl.col("EPA") >= 1.8))
-                .then(True)
-                .otherwise(False),
-                first_down_created=pl.when(
-                    (pl.col("scrimmage_play") == True)
-                    .and_(pl.col("end.down") == 1)
-                    .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id")),
-                )
-                .then(True)
-                .otherwise(False),
-                EPA_success=pl.when(pl.col("EPA") > 0).then(True).otherwise(False),
-                EPA_success_early_down=pl.when((pl.col("EPA") > 0).and_(pl.col("early_down") == True))
-                .then(True)
-                .otherwise(False),
-                EPA_success_early_down_pass=pl.when(
-                    (pl.col("pass") == True).and_(pl.col("EPA") > 0).and_(pl.col("early_down") == True),
-                )
-                .then(True)
-                .otherwise(False),
-                EPA_success_early_down_rush=pl.when(
-                    (pl.col("rush") == True).and_(pl.col("EPA") > 0).and_(pl.col("early_down") == True),
-                )
-                .then(True)
-                .otherwise(False),
-                EPA_success_late_down=pl.when((pl.col("EPA") > 0).and_(pl.col("late_down") == True))
-                .then(True)
-                .otherwise(False),
-                EPA_success_late_down_pass=pl.when(
-                    (pl.col("pass") == True).and_(pl.col("EPA") > 0).and_(pl.col("late_down") == True),
-                )
-                .then(True)
-                .otherwise(False),
-                EPA_success_late_down_rush=pl.when(
-                    (pl.col("rush") == True).and_(pl.col("EPA") > 0).and_(pl.col("late_down") == True),
-                )
-                .then(True)
-                .otherwise(False),
-                EPA_success_standard_down=pl.when((pl.col("EPA") > 0).and_(pl.col("standard_down") == True))
-                .then(True)
-                .otherwise(False),
-                EPA_success_passing_down=pl.when((pl.col("EPA") > 0).and_(pl.col("passing_down") == True))
-                .then(True)
-                .otherwise(False),
-                EPA_success_pass=pl.when((pl.col("EPA") > 0).and_(pl.col("pass") == True)).then(True).otherwise(False),
-                EPA_success_rush=pl.when((pl.col("EPA") > 0).and_(pl.col("rush") == True)).then(True).otherwise(False),
-                EPA_success_EPA=pl.when(pl.col("EPA") > 0).then(pl.col("EPA")).otherwise(None),
-                EPA_success_standard_down_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("standard_down") == True))
-                .then(pl.col("EPA"))
-                .otherwise(None),
-                EPA_success_passing_down_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("passing_down") == True))
-                .then(pl.col("EPA"))
-                .otherwise(None),
-                EPA_success_pass_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("pass") == True))
-                .then(pl.col("EPA"))
-                .otherwise(None),
-                EPA_success_rush_EPA=pl.when((pl.col("EPA") > 0).and_(pl.col("rush") == True))
-                .then(pl.col("EPA"))
-                .otherwise(None),
-                EPA_middle_8_success=pl.when((pl.col("EPA") > 0).and_(pl.col("middle_8") == True))
-                .then(True)
-                .otherwise(False),
-                EPA_middle_8_success_pass=pl.when(
-                    (pl.col("pass") == True).and_(pl.col("EPA") > 0).and_(pl.col("middle_8") == True),
-                )
-                .then(True)
-                .otherwise(False),
-                EPA_middle_8_success_rush=pl.when(
-                    (pl.col("rush") == True).and_(pl.col("EPA") > 0).and_(pl.col("middle_8") == True),
-                )
-                .then(True)
-                .otherwise(False),
-                EPA_penalty=pl.when(pl.col("type.text").is_in(["Penalty", "Penalty (Kickoff)"]))
-                .then(pl.col("EPA"))
-                .when(pl.col("penalty_in_text") == True)
-                .then(pl.col("EP_end") - pl.col("EP_start"))
-                .otherwise(None),
-                EPA_sp=pl.when(
-                    (pl.col("fg_attempt") == True).or_(pl.col("punt") == True).or_(pl.col("kickoff_play") == True),
-                )
-                .then(pl.col("EPA"))
-                .otherwise(False),
-                EPA_fg=pl.when(pl.col("fg_attempt") == True).then(pl.col("EPA")).otherwise(None),
-                EPA_punt=pl.when(pl.col("punt") == True).then(pl.col("EPA")).otherwise(None),
-                EPA_kickoff=pl.when(pl.col("kickoff_play") == True).then(pl.col("EPA")).otherwise(None),
-            )
+            .then(pl.col("EPA"))
+            .otherwise(False),
+            EPA_fg=pl.when(pl.col("fg_attempt") == True).then(pl.col("EPA")).otherwise(None),
+            EPA_punt=pl.when(pl.col("punt") == True).then(pl.col("EPA")).otherwise(None),
+            EPA_kickoff=pl.when(pl.col("kickoff_play") == True).then(pl.col("EPA")).otherwise(None),
         )
         return play_df
 
@@ -3954,108 +3767,21 @@ class NFLPlayProcess(object):
         )
         WP_end = _wp_model.predict(DMatrix(X_wp_end, feature_names=WP_SPREAD_FEATURES))
 
-        play_df = (
-            play_df.with_columns(
-                wp_before=pl.lit(WP_start),
-                wp_touchback=pl.lit(WP_start_touchback),
-                wp_after=pl.lit(WP_end),
-            )
-            .with_columns(
-                wp_before=pl.when(pl.col("type.text").is_in(kickoff_vec))
-                .then(pl.col("wp_touchback"))
-                .otherwise(pl.col("wp_before")),
-            )
-            .with_columns(
-                def_wp_before=1 - pl.col("wp_before"),
-            )
-            .with_columns(
-                home_wp_before=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
-                .then(pl.col("wp_before"))
-                .otherwise(pl.col("def_wp_before")),
-                away_wp_before=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
-                .then(pl.col("wp_before"))
-                .otherwise(pl.col("def_wp_before")),
-            )
-            .with_columns(
-                lead_wp_before=pl.col("wp_before").shift(-1),
-                lead_wp_before2=pl.col("wp_before").shift(-2),
-            )
-            .with_columns(
-                wp_after=pl.when(pl.col("type.text").is_in(["Timeout"]))
-                .then(pl.col("wp_before"))
-                .when(
-                    (pl.col("status_type_completed") == True)
-                    .and_(
-                        (pl.col("lead_play_type").is_null()).or_(
-                            pl.col("game_play_number") == pl.col("game_play_number").max(),
-                        ),
-                    )
-                    .and_(pl.col("pos_score_diff_end") > 0),
-                )
-                .then(1.0)
-                .when(
-                    (pl.col("status_type_completed") == True)
-                    .and_(
-                        (pl.col("lead_play_type").is_null()).or_(
-                            pl.col("game_play_number") == pl.col("game_play_number").max(),
-                        ),
-                    )
-                    .and_(pl.col("pos_score_diff_end") < 0),
-                )
-                .then(0.0)
-                .when(
-                    (pl.col("end_of_half") == True)
-                    .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
-                    .and_(pl.col("type.text") != "Timeout"),
-                )
-                .then(pl.col("lead_wp_before"))
-                .when(
-                    (pl.col("end_of_half") == True)
-                    .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
-                    .and_(pl.col("type.text") != "Timeout"),
-                )
-                .then(1 - pl.col("lead_wp_before"))
-                .when(
-                    (pl.col("end_of_half") == True)
-                    .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
-                    .and_(pl.col("type.text") == "Timeout"),
-                )
-                .then(pl.col("wp_after"))
-                .when(
-                    (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
-                        pl.col("change_of_pos_team") == False,
-                    ),
-                )
-                .then(pl.col("lead_wp_before"))
-                .when(
-                    (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
-                        pl.col("change_of_pos_team") == True,
-                    ),
-                )
-                .then(1 - pl.col("lead_wp_before"))
-                .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
-                .then(pl.col("wp_after"))
-                .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
-                .then(1 - pl.col("lead_wp_before"))
-                .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
-                .then(pl.col("lead_wp_before"))
-                .otherwise(pl.col("wp_after")),
-            )
-            .with_columns(
-                def_wp_after=1 - pl.col("wp_after"),
-            )
-            .with_columns(
-                home_wp_after=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
-                .then(pl.col("wp_after"))
-                .otherwise(pl.col("def_wp_after")),
-                away_wp_after=pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
-                .then(pl.col("wp_after"))
-                .otherwise(pl.col("def_wp_after")),
-            )
-            .with_columns(
-                wpa=pl.col("wp_after") - pl.col("wp_before"),
-            )
+        # Attach the scored WP point estimates, then delegate the derivation half to
+        # the shared, model-free calculate_wpa. calculate_wpa is the verbatim lift of
+        # the kickoff-touchback overlay / posteam->home flip / lead_wp / end-of-game /
+        # OT derivation that used to live inline here. NFLPlayProcess always operates
+        # on a single game, so calculate_wpa's ``.over("game_id")`` window guards
+        # collapse to the plain ``.shift`` / ``.max()`` semantics this method relied
+        # on, leaving output identical. calculate_wpa also emits lowercase nflverse
+        # aliases (wp / def_wp / home_wp / away_wp) the legacy __process_wpa output
+        # never carried, so drop them to keep the plays schema byte-identical.
+        play_df = play_df.with_columns(
+            wp_before=pl.lit(WP_start),
+            wp_touchback=pl.lit(WP_start_touchback),
+            wp_after=pl.lit(WP_end),
         )
+        play_df = calculate_wpa(play_df).drop("wp", "def_wp", "home_wp", "away_wp")
         return play_df
 
     def __process_cp(self, play_df):
