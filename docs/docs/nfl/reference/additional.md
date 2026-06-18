@@ -4689,7 +4689,8 @@ Compute completion probability (CP) and CPOE for pass plays.
 Mirrors nflfastR's `helper_add_cp_cpoe.R`.  Scores only intended pass
 plays (where `air_yards` is not null); non-pass plays receive null in
 the `cp` column.  When `complete_pass` is present,
-`cpoe = complete_pass - cp` is also added.
+`cpoe = 100 * (complete_pass - cp)` is also added — on nflfastR's
+percentage-point scale (`add_cp` in `helper_add_cp_cpoe.R`).
 
 Drops and recomputes any existing `cp` / `cpoe` columns.
 

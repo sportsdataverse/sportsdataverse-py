@@ -5,6 +5,8 @@
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
+  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl-%E2%86%94-nflfastr-alignment--faithful-model-artifacts)
+  - [CFB — EP + WP models retrained on the full 2004–2025 history](#cfb--ep--wp-models-retrained-on-the-full-20042025-history)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
   - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
@@ -143,6 +145,18 @@ Every generated reference page renders a `col_name | type | description` returns
 - **78 new native returns-tables.** Wired `returns_schema` for NHL api-web (9), stats-rest (10), records (37), EDGE (15), and MLB Stats API (8) endpoints that previously rendered no return table — captured from live fixtures; the 676 new columns are fully described. (24 endpoints were skipped: off-season EDGE top-10 leaderboards, retired record paths, and auth-gated MLB endpoints.)
 - **`refresh_return_schemas` no longer writes 0-column per-league schemas** — an empty `columns: []` file shadowed and suppressed the generic `schemas/{name}.yaml` fallback, leaving some leagues with no table; it now skips them so the generic table renders.
 - **Three new intro tutorials** under `examples/notebooks/` (rendered to `docs/docs/tutorials/`): **Soccer** (`espn_soccer_*(league=)` + headline aliases), **Cricket** (`espn_cricket_*` + the 8-section matchcard summary), and **Other ESPN leagues** (UFL/XFL/CFL, college baseball/softball, NCAA M/W hockey).
+
+### NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts
+
+- **`enrich_nfl_pbp()` lead-diff orchestrator** computes nflverse-native EP/EPA/WP/WPA/CP/xYAC on a real nflverse PBP frame, aligned to nflfastR; runs on live nflverse data.
+- **Shared derivations** `calculate_epa()` / `calculate_wpa()` lifted into `sportsdataverse/nfl/ep_wp.py`; the NFL EP/WP constants + shared column contract centralized in `sportsdataverse/nfl/model_vars.py`.
+- **Faithful NFL model artifacts** replace the byte-identical CFB 8-feature placeholders that previously shipped under `nfl/models/`: `ep_model.ubj` (18 features), `wp_spread.ubj` (12), `wp_naive.ubj` (11), `cp_model.ubj` (18) — resolving the long-standing `xgboost num_feature >= num_col (8 vs 18)` mismatch that left the NFL model path red.
+- **New test coverage:** `tests/nfl/` gains enrich, enrich-derive, EPA, WPA, and column-contract suites.
+
+### CFB — EP + WP models retrained on the full 2004–2025 history
+
+- Canonical `cfb/models/ep_model.ubj` and `cfb/models/wp_spread.ubj` retrained on the complete cfbfastR-cfb-raw finals — **2,219,607 cleaned/labeled/weighted plays, seasons 2004–2025** — now that the raw backfill is complete. Shipped XGBoost recipes unchanged (EP `multi:softprob` 7-class/525 rounds; WP-spread `binary:logistic`/760 rounds).
+- **Leave-one-season-out validated** (22 folds, out-of-fold): EP mlogloss 1.233 / accuracy 0.500 / EP-value calibration MAE 0.014 pts; WP logloss 0.362 / Brier 0.118 / AUC 0.916 / weighted-cal-error 0.0147. Drop-in safe (feature names/order match `cfb_pbp.ep_final_names`/`wp_final_names`). **QBR is intentionally unchanged** (LOSO R² 0.585 — remains the Dec-2020 canonical model).
 
 ## 0.0.66 Release: June 17, 2026
 
