@@ -192,6 +192,131 @@ def test_pat_after_defensive_td_stays_in_same_drive():
     assert out["fixed_drive_result"].to_list()[0] == "Opp touchdown"
 
 
+def test_pat_after_defensive_td_with_one_timeout_stays_in_same_drive():
+    """nflfastR L55-67: a PAT/2pt after a *defensive* TD is NOT a new drive even
+    when a single standalone Timeout row is interleaved between the scoring play
+    and the try.  ESPN (unlike the assumption the first port made) DOES retain
+    standalone timeout rows, so the boundary must be suppressed via the
+    ``lag(...,2L)`` variant -- the prior row is a timeout, the TD was 2 rows back,
+    and that TD was defensive.  The result MUST equal the no-timeout case
+    ``[1, 1, 1, 2, 2]`` (see ``test_pat_after_defensive_td_stays_in_same_drive``):
+    the timeout must not manufacture a spurious drive increment that then
+    cascades into ``series``."""
+    df = _frame(
+        [
+            {"pos_team": A, "def_pos_team": B, "rush": True},  # drive 1
+            {
+                "pos_team": A,
+                "def_pos_team": B,
+                "pass": True,
+                "rush": False,  # B returns INT for TD
+                "touchdown": True,
+                "int_td": True,
+                "type.text": "Interception Return Touchdown",
+                "text": "intercepted and returned for a touchdown.",
+                "end.pos_team.id": A,
+                "end.down": 1,
+            },
+            {
+                "pos_team": A,  # standalone Official Timeout, possession unchanged
+                "def_pos_team": B,
+                "rush": False,
+                "type.text": "Official Timeout",
+                "text": "Timeout.",
+                "scrimmage_play": False,
+            },
+            {
+                "pos_team": B,
+                "def_pos_team": A,
+                "rush": True,  # B's 2pt try -> same drive (lag-2 suppression)
+                "type.text": "Two Point Rush",
+                "scrimmage_play": False,
+                "down": 1,
+            },
+            {
+                "pos_team": A,
+                "def_pos_team": B,
+                "kickoff_play": True,
+                "rush": False,  # kickoff by A -> new drive
+                "type.text": "Kickoff",
+                "scrimmage_play": False,
+            },
+            {"pos_team": A, "def_pos_team": B, "rush": True},
+        ]
+    )
+    out = _run(df)
+    # The interleaved Official Timeout must NOT manufacture an extra drive: the
+    # 2pt try still folds into drive 1, identical to the no-timeout case.
+    assert out["fixed_drive"].to_list() == [1, 1, 1, 1, 2, 2]
+    # series tracks the drive boundaries; no spurious cascade.
+    assert out["series"].to_list() == [1, 1, 1, 1, 2, 2]
+    assert out["fixed_drive_result"].to_list()[0] == "Opp touchdown"
+
+
+def test_pat_after_defensive_td_with_two_timeouts_stays_in_same_drive():
+    """nflfastR L68-82: a PAT/2pt after a *defensive* TD is NOT a new drive even
+    when TWO standalone timeout rows (e.g. an Official Timeout then the
+    Two-minute warning) are interleaved -- the ``lag(...,3L)`` variant.  The
+    prior two rows are timeouts, the TD was 3 rows back, and that TD was
+    defensive.  The 2pt try must fold into drive 1, never incrementing the
+    drive/series across the two interleaved rows."""
+    df = _frame(
+        [
+            {"pos_team": A, "def_pos_team": B, "rush": True},  # drive 1
+            {
+                "pos_team": A,
+                "def_pos_team": B,
+                "pass": True,
+                "rush": False,  # B returns INT for TD
+                "touchdown": True,
+                "int_td": True,
+                "type.text": "Interception Return Touchdown",
+                "text": "intercepted and returned for a touchdown.",
+                "end.pos_team.id": A,
+                "end.down": 1,
+            },
+            {
+                "pos_team": A,  # 1st interleaved timeout
+                "def_pos_team": B,
+                "rush": False,
+                "type.text": "Official Timeout",
+                "text": "Timeout.",
+                "scrimmage_play": False,
+            },
+            {
+                "pos_team": A,  # 2nd interleaved timeout (two-minute warning)
+                "def_pos_team": B,
+                "rush": False,
+                "type.text": "Two-minute warning",
+                "text": "Two-minute warning.",
+                "scrimmage_play": False,
+            },
+            {
+                "pos_team": B,
+                "def_pos_team": A,
+                "rush": True,  # B's 2pt try -> same drive (lag-3 suppression)
+                "type.text": "Two Point Rush",
+                "scrimmage_play": False,
+                "down": 1,
+            },
+            {
+                "pos_team": A,
+                "def_pos_team": B,
+                "kickoff_play": True,
+                "rush": False,  # kickoff by A -> new drive
+                "type.text": "Kickoff",
+                "scrimmage_play": False,
+            },
+            {"pos_team": A, "def_pos_team": B, "rush": True},
+        ]
+    )
+    out = _run(df)
+    # Two interleaved timeout rows must still not manufacture a spurious drive.
+    assert out["fixed_drive"].to_list() == [1, 1, 1, 1, 1, 2, 2]
+    assert out["series"].to_list() == [1, 1, 1, 1, 1, 2, 2]
+    assert out["fixed_drive_result"].to_list()[0] == "Opp touchdown"
+
+
 def test_onside_kick_recovery_is_new_drive():
     """A recovered onside kick (kicking team retains) is a NEW drive
     (helper_add_fixed_drives.R L117-122).  ``own_kickoff_recovery`` is derived

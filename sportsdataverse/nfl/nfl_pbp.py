@@ -4010,6 +4010,17 @@ class NFLPlayProcess(object):
                 .alias("_ff_tdteam"),
                 (pl.col("int_td") | txt.str.contains(r"(?i)intercept")).cast(pl.Int8).alias("_ff_int"),
                 (txt.str.contains(r"(?i)kneel") & (pl.col("rush") == True)).cast(pl.Int8).alias("_ff_qbkneel"),
+                # standalone timeout / two-minute-warning row detector. nflfastR keys
+                # the L55-82 PAT-after-defensive-TD interleave on desc matching
+                # "(Timeout)|(Two-Minute Warning)"; the ESPN analog is the play-type
+                # label, which carries "Timeout" / "Official Timeout" / "Two-minute
+                # warning". Match type.text (and the description as a fallback).
+                (
+                    type_txt.str.contains(r"(?i)timeout|two-minute warning")
+                    | txt.str.contains(r"(?i)timeout|two-minute warning")
+                )
+                .cast(pl.Int8)
+                .alias("_ff_to"),
                 # ESPN omits nflfastR's "END QUARTER 2/4 / END GAME" desc markers; the
                 # end_of_half boolean is the 1:1 ESPN analog for "End of half".
                 (eoh | txt.str.contains(r"(END QUARTER 2)|(END QUARTER 4)|(END GAME)")).cast(pl.Int8).alias("_ff_eoh"),
@@ -4060,7 +4071,12 @@ class NFLPlayProcess(object):
         lag_pt3 = pl.col("_ff_pt").shift(3).over(["game_id", "_ff_half"])
         lag_td = pl.col("_ff_td").shift(1).over(["game_id", "_ff_half"])
         lag_td2 = pl.col("_ff_td").shift(2).over(["game_id", "_ff_half"])
+        lag_td3 = pl.col("_ff_td").shift(3).over(["game_id", "_ff_half"])
         lag_tdteam = pl.col("_ff_tdteam").shift(1).over(["game_id", "_ff_half"])
+        lag_tdteam2 = pl.col("_ff_tdteam").shift(2).over(["game_id", "_ff_half"])
+        lag_tdteam3 = pl.col("_ff_tdteam").shift(3).over(["game_id", "_ff_half"])
+        lag_to = pl.col("_ff_to").shift(1).over(["game_id", "_ff_half"])
+        lag_to2 = pl.col("_ff_to").shift(2).over(["game_id", "_ff_half"])
         lag_fum = pl.col("_ff_fumlost").shift(1).over(["game_id", "_ff_half"])
         lag_fum2 = pl.col("_ff_fumlost").shift(2).over(["game_id", "_ff_half"])
         lag_ptype = pl.col("_ff_play_type").shift(1).over(["game_id", "_ff_half"])
@@ -4083,6 +4099,32 @@ class NFLPlayProcess(object):
             .with_columns(
                 # PAT after a defensive TD is not a new drive (L45-54)
                 pl.when((lag_td == 1) & (lag_pt != lag_tdteam) & lag_pt.is_not_null())
+                .then(0)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # PAT after a defensive TD is not a new drive even if a single
+                # standalone Timeout / Two-minute-warning row follows the TD
+                # (L55-67). The prior row is a timeout, the TD was 2 rows back, and
+                # that TD was scored by the defense. A null lag => keep _ff_nd
+                # (the R `missing = new_drive` clause): the `&` chain is null when any
+                # lag is out of range, and pl.when treats null as the else branch.
+                pl.when(
+                    (lag_to == 1) & (lag_td2 == 1) & (lag_pt2 != lag_tdteam2),
+                )
+                .then(0)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # PAT after a defensive TD is not a new drive even if TWO standalone
+                # Timeout / Two-minute-warning rows follow the TD (L68-82). The prior
+                # two rows are timeouts, the TD was 3 rows back, and that TD was
+                # scored by the defense. Same null-keeps-_ff_nd semantics as above.
+                pl.when(
+                    (lag_to == 1) & (lag_to2 == 1) & (lag_td3 == 1) & (lag_pt3 != lag_tdteam3),
+                )
                 .then(0)
                 .otherwise(pl.col("_ff_nd"))
                 .alias("_ff_nd"),
