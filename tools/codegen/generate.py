@@ -15,7 +15,7 @@ from urllib.parse import urlencode
 # where sys.path[0] is this file's dir rather than the repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from tools.codegen import render, spec  # noqa: E402
+from tools.codegen import great_docs_reference, render, spec  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 ENDPOINTS = ROOT / "tools" / "codegen" / "endpoints"
@@ -3256,11 +3256,31 @@ def main(argv=None) -> int:
         help="regenerate the per-league reference subtree into docs/docs/ and exit",
     )
     ap.add_argument(
+        "--great-docs",
+        action="store_true",
+        help="regenerate the Great Docs reference block in great-docs.yml from leagues.yaml "
+        "(combine with --check to fail on a stale block instead of rewriting)",
+    )
+    ap.add_argument(
         "--coverage",
         action="store_true",
         help="report user-facing functions that never reach the rendered docs (offline; report-only)",
     )
     args = ap.parse_args(argv)
+    if args.great_docs:
+        if args.check:
+            if great_docs_reference.great_docs_reference_stale():
+                print(
+                    "codegen --great-docs --check: great-docs.yml reference block is stale; "
+                    "run `python tools/codegen/generate.py --great-docs`",
+                    file=sys.stderr,
+                )
+                return 1
+            print("codegen --great-docs --check: great-docs.yml reference block current")
+            return 0
+        p = great_docs_reference.write_great_docs_reference()
+        print(f"codegen --great-docs: regenerated the reference block in {p}")
+        return 0
     if args.coverage:
         return coverage_report()
     if args.autodoc_schemas:
@@ -3296,6 +3316,13 @@ def main(argv=None) -> int:
         docs = _docs_stale()
         if docs:
             print("codegen --check: stale doc files:", ", ".join(sorted(docs)), file=sys.stderr)
+            rc = 1
+        if great_docs_reference.great_docs_reference_stale():
+            print(
+                "codegen --check: great-docs.yml reference block is stale; "
+                "run `python tools/codegen/generate.py --great-docs`",
+                file=sys.stderr,
+            )
             rc = 1
         gaps = _coverage_gaps()
         if gaps:

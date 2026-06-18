@@ -96,138 +96,257 @@ user_guide:
       - 15-cricket-intro.qmd
       - 16-other-espn-leagues-intro.qmd
 
-# ── Explicit, curated API reference ──────────────────────────────────────────
-# One section per sport listing the canonical ESPN cross-league surface, plus a
-# loaders section and the core play-by-play / config classes. Every name here is
-# a real top-level export of `sportsdataverse` with a Google-style docstring.
+# ── Generated API reference ──────────────────────────────────────────────────
+# The `reference:` block below is GENERATED from tools/codegen/endpoints/
+# leagues.yaml — do NOT hand-edit between the markers. It pins the high-value
+# espn_<prefix>_<short> entry points per league across every sport (only names
+# that are real importable top-level exports of `sportsdataverse`), plus the
+# preserved NFL-loaders + play-by-play/config tail sections.
+#
+#   Regenerate:  python tools/codegen/generate.py --great-docs
+#   Drift check: python tools/codegen/generate.py --great-docs --check
+#
+
+# >>> generated reference (python tools/codegen/generate.py --great-docs)
 reference:
-  title: "API reference"
-  desc: >
-    The canonical public surface of sportsdataverse, grouped by sport. Each
-    `espn_<sport>_*` function returns a tidy polars DataFrame by default (pass
-    `return_as_pandas=True` for pandas). The full ~800-wrapper cross-league
-    surface is generated dynamically at import; this reference pins the
-    most-used entry points per sport.
+  title: API reference
+  desc: The canonical public surface of sportsdataverse, grouped by sport. Each espn_<sport>_* function
+    returns a tidy polars DataFrame by default (pass return_as_pandas=True for pandas). The full ~800-wrapper
+    cross-league surface is generated dynamically at import; this reference is generated from tools/codegen/endpoints/leagues.yaml
+    and pins the high-value entry points per league across every sport.
   sections:
-    - title: NBA
-      desc: National Basketball Association (ESPN).
-      contents:
-        - espn_nba_teams
-        - espn_nba_scoreboard
-        - espn_nba_schedule
-        - espn_nba_team_roster
-        - espn_nba_player_stats
-        - espn_nba_standings
-        - espn_nba_calendar
-        - espn_nba_news
-
-    - title: WNBA
-      desc: Women's National Basketball Association (ESPN).
-      contents:
-        - espn_wnba_teams
-        - espn_wnba_scoreboard
-        - espn_wnba_schedule
-        - espn_wnba_team_roster
-        - espn_wnba_player_stats
-        - espn_wnba_standings
-        - espn_wnba_calendar
-        - espn_wnba_news
-
-    - title: NFL
-      desc: National Football League (ESPN).
-      contents:
-        - espn_nfl_teams
-        - espn_nfl_scoreboard
-        - espn_nfl_schedule
-        - espn_nfl_team_roster
-        - espn_nfl_player_stats
-        - espn_nfl_standings
-        - espn_nfl_calendar
-        - espn_nfl_news
-
-    - title: College football
-      desc: NCAA college football (ESPN).
-      contents:
-        - espn_cfb_teams
-        - espn_cfb_scoreboard
-        - espn_cfb_schedule
-        - espn_cfb_team_roster
-        - espn_cfb_player_stats
-        - espn_cfb_standings
-        - espn_cfb_calendar
-        - espn_cfb_news
-
-    - title: Men's college basketball
-      desc: NCAA men's college basketball (ESPN).
-      contents:
-        - espn_mbb_teams
-        - espn_mbb_scoreboard
-        - espn_mbb_schedule
-        - espn_mbb_team_roster
-        - espn_mbb_player_stats
-        - espn_mbb_standings
-        - espn_mbb_calendar
-        - espn_mbb_news
-
-    - title: Women's college basketball
-      desc: NCAA women's college basketball (ESPN).
-      contents:
-        - espn_wbb_teams
-        - espn_wbb_scoreboard
-        - espn_wbb_schedule
-        - espn_wbb_team_roster
-        - espn_wbb_player_stats
-        - espn_wbb_standings
-        - espn_wbb_calendar
-        - espn_wbb_news
-
-    - title: MLB
-      desc: Major League Baseball (ESPN).
-      contents:
-        - espn_mlb_teams
-        - espn_mlb_scoreboard
-        - espn_mlb_schedule
-        - espn_mlb_team_roster
-        - espn_mlb_player_stats
-        - espn_mlb_standings
-        - espn_mlb_calendar
-        - espn_mlb_news
-
-    - title: NHL
-      desc: National Hockey League (ESPN).
-      contents:
-        - espn_nhl_teams
-        - espn_nhl_scoreboard
-        - espn_nhl_schedule
-        - espn_nhl_team_roster
-        - espn_nhl_player_stats
-        - espn_nhl_standings
-        - espn_nhl_calendar
-        - espn_nhl_news
-
-    - title: NFL data loaders
-      desc: >
-        nflreadpy-parity loaders for nflverse release data (cached, polars by
-        default). The `load_nfl_*` prefix disambiguates under the umbrella
-        package.
-      contents:
-        - load_nfl_pbp
-        - load_nfl_schedule
-        - load_nfl_rosters
-        - load_nfl_teams
-        - load_nfl_nextgen_stats
-        - load_nfl_pfr_advstats
-        - load_nfl_injuries
-        - load_nfl_depth_charts
-        - load_nfl_draft_picks
-        - load_nfl_contracts
-
-    - title: Play-by-play and config classes
-      desc: Core processing classes and the NFL caching config object.
-      contents:
-        - name: CFBPlayProcess
-          members: false
-        - name: NFLPlayProcess
-          members: false
-        - NflConfig
-        - SeasonNotFoundError
+  - title: College football
+    desc: College football — Football (ESPN cross-league surface).
+    contents:
+    - espn_cfb_teams
+    - espn_cfb_scoreboard
+    - espn_cfb_schedule
+    - espn_cfb_team_roster
+    - espn_cfb_player_stats
+    - espn_cfb_standings
+    - espn_cfb_rankings
+    - espn_cfb_calendar
+    - espn_cfb_news
+    - espn_cfb_injuries
+    - espn_cfb_futures
+    - espn_cfb_team_record
+  - title: NFL
+    desc: NFL — Football (ESPN cross-league surface).
+    contents:
+    - espn_nfl_teams
+    - espn_nfl_scoreboard
+    - espn_nfl_schedule
+    - espn_nfl_team_roster
+    - espn_nfl_player_stats
+    - espn_nfl_standings
+    - espn_nfl_calendar
+    - espn_nfl_news
+    - espn_nfl_injuries
+    - espn_nfl_team_record
+  - title: UFL
+    desc: UFL — Football (ESPN cross-league surface).
+    contents:
+    - espn_ufl_scoreboard
+    - espn_ufl_team_roster
+    - espn_ufl_player_stats
+    - espn_ufl_standings
+    - espn_ufl_calendar
+    - espn_ufl_news
+    - espn_ufl_injuries
+    - espn_ufl_team_record
+  - title: XFL
+    desc: XFL — Football (ESPN cross-league surface).
+    contents:
+    - espn_xfl_scoreboard
+    - espn_xfl_team_roster
+    - espn_xfl_player_stats
+    - espn_xfl_standings
+    - espn_xfl_calendar
+    - espn_xfl_news
+    - espn_xfl_injuries
+    - espn_xfl_team_record
+  - title: CFL
+    desc: CFL — Football (ESPN cross-league surface).
+    contents:
+    - espn_cfl_scoreboard
+    - espn_cfl_team_roster
+    - espn_cfl_player_stats
+    - espn_cfl_standings
+    - espn_cfl_calendar
+    - espn_cfl_news
+    - espn_cfl_injuries
+    - espn_cfl_team_record
+  - title: NBA
+    desc: NBA — Basketball (ESPN cross-league surface).
+    contents:
+    - espn_nba_teams
+    - espn_nba_scoreboard
+    - espn_nba_schedule
+    - espn_nba_team_roster
+    - espn_nba_player_stats
+    - espn_nba_standings
+    - espn_nba_calendar
+    - espn_nba_news
+    - espn_nba_injuries
+    - espn_nba_team_record
+  - title: WNBA
+    desc: WNBA — Basketball (ESPN cross-league surface).
+    contents:
+    - espn_wnba_teams
+    - espn_wnba_scoreboard
+    - espn_wnba_schedule
+    - espn_wnba_team_roster
+    - espn_wnba_player_stats
+    - espn_wnba_standings
+    - espn_wnba_calendar
+    - espn_wnba_news
+    - espn_wnba_injuries
+    - espn_wnba_team_record
+  - title: Men's college basketball
+    desc: Men's college basketball — Basketball (ESPN cross-league surface).
+    contents:
+    - espn_mbb_teams
+    - espn_mbb_scoreboard
+    - espn_mbb_schedule
+    - espn_mbb_team_roster
+    - espn_mbb_player_stats
+    - espn_mbb_standings
+    - espn_mbb_rankings
+    - espn_mbb_calendar
+    - espn_mbb_news
+    - espn_mbb_injuries
+    - espn_mbb_team_record
+  - title: Women's college basketball
+    desc: Women's college basketball — Basketball (ESPN cross-league surface).
+    contents:
+    - espn_wbb_teams
+    - espn_wbb_scoreboard
+    - espn_wbb_schedule
+    - espn_wbb_team_roster
+    - espn_wbb_player_stats
+    - espn_wbb_standings
+    - espn_wbb_rankings
+    - espn_wbb_calendar
+    - espn_wbb_news
+    - espn_wbb_injuries
+    - espn_wbb_team_record
+  - title: MLB
+    desc: MLB — Baseball (ESPN cross-league surface).
+    contents:
+    - espn_mlb_teams
+    - espn_mlb_scoreboard
+    - espn_mlb_schedule
+    - espn_mlb_team_roster
+    - espn_mlb_player_stats
+    - espn_mlb_standings
+    - espn_mlb_calendar
+    - espn_mlb_news
+    - espn_mlb_injuries
+    - espn_mlb_team_record
+  - title: College baseball
+    desc: College baseball — Baseball (ESPN cross-league surface).
+    contents:
+    - espn_college_baseball_scoreboard
+    - espn_college_baseball_team_roster
+    - espn_college_baseball_player_stats
+    - espn_college_baseball_standings
+    - espn_college_baseball_rankings
+    - espn_college_baseball_calendar
+    - espn_college_baseball_news
+    - espn_college_baseball_injuries
+    - espn_college_baseball_team_record
+  - title: College softball
+    desc: College softball — Baseball (ESPN cross-league surface).
+    contents:
+    - espn_college_softball_scoreboard
+    - espn_college_softball_team_roster
+    - espn_college_softball_player_stats
+    - espn_college_softball_standings
+    - espn_college_softball_rankings
+    - espn_college_softball_calendar
+    - espn_college_softball_news
+    - espn_college_softball_injuries
+    - espn_college_softball_team_record
+  - title: NHL
+    desc: NHL — Hockey (ESPN cross-league surface).
+    contents:
+    - espn_nhl_teams
+    - espn_nhl_scoreboard
+    - espn_nhl_schedule
+    - espn_nhl_team_roster
+    - espn_nhl_player_stats
+    - espn_nhl_standings
+    - espn_nhl_calendar
+    - espn_nhl_news
+    - espn_nhl_injuries
+    - espn_nhl_team_record
+  - title: Men's college hockey
+    desc: Men's college hockey — Hockey (ESPN cross-league surface).
+    contents:
+    - espn_mch_scoreboard
+    - espn_mch_team_roster
+    - espn_mch_player_stats
+    - espn_mch_standings
+    - espn_mch_rankings
+    - espn_mch_calendar
+    - espn_mch_news
+    - espn_mch_injuries
+    - espn_mch_team_record
+  - title: Women's college hockey
+    desc: Women's college hockey — Hockey (ESPN cross-league surface).
+    contents:
+    - espn_wch_scoreboard
+    - espn_wch_team_roster
+    - espn_wch_player_stats
+    - espn_wch_standings
+    - espn_wch_rankings
+    - espn_wch_calendar
+    - espn_wch_news
+    - espn_wch_injuries
+    - espn_wch_team_record
+  - title: Soccer (league-parameterized)
+    desc: Soccer (league-parameterized) — Soccer (ESPN cross-league surface).
+    contents:
+    - espn_soccer_scoreboard
+    - espn_soccer_team_roster
+    - espn_soccer_player_stats
+    - espn_soccer_standings
+    - espn_soccer_calendar
+    - espn_soccer_news
+    - espn_soccer_injuries
+    - espn_soccer_team_record
+  - title: Cricket (league-parameterized)
+    desc: Cricket (league-parameterized) — Cricket (ESPN cross-league surface).
+    contents:
+    - espn_cricket_scoreboard
+    - espn_cricket_team_roster
+    - espn_cricket_player_stats
+    - espn_cricket_standings
+    - espn_cricket_calendar
+    - espn_cricket_news
+    - espn_cricket_injuries
+    - espn_cricket_team_record
+  - title: NFL data loaders
+    desc: nflreadpy-parity loaders for nflverse release data (cached, polars by default). The load_nfl_*
+      prefix disambiguates under the umbrella package.
+    contents:
+    - load_nfl_pbp
+    - load_nfl_schedule
+    - load_nfl_rosters
+    - load_nfl_teams
+    - load_nfl_nextgen_stats
+    - load_nfl_pfr_advstats
+    - load_nfl_injuries
+    - load_nfl_depth_charts
+    - load_nfl_draft_picks
+    - load_nfl_contracts
+  - title: Play-by-play and config classes
+    desc: Core processing classes and the NFL caching config object.
+    contents:
+    - name: CFBPlayProcess
+      members: false
+    - name: NFLPlayProcess
+      members: false
+    - NflConfig
+    - SeasonNotFoundError
+# <<< generated reference
