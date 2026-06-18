@@ -1,0 +1,97 @@
+<!--
+  Brand head for the sportsdataverse Great Docs site.
+
+  Ported faithfully from the Docusaurus site so the two stay at visual parity:
+    * Plausible analytics  (docs/docusaurus.config.ts -> scripts[])
+    * Brand fonts          (docs/src/css/custom.css   -> @import url(...))
+    * The cyan "glow"      (docs/src/css/custom.css   -> @keyframes glow)
+
+  Injected into <head> via `include_in_header: [assets/head.html]` in
+  great-docs.yml. Selectors are adapted to Quarto / Bootstrap markup
+  (`.navbar-brand`, `.sidebar-title`, `h1`/`h2`, `code`) rather than the
+  Infima class names the Docusaurus stylesheet targets.
+-->
+
+<!-- ── Plausible analytics (same src + data-domain as the Docusaurus site) ── -->
+<script defer data-domain="py.sportsdataverse.org" src="https://plausible.io/js/script.js"></script>
+
+<!-- ── Brand fonts: Bungee, Chivo, Lato, Fira Mono + the FiraCode CDN ── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.rawgit.com/tonsky/FiraCode/1.205/distr/fira_code.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&display=swap">
+
+<!-- ── Brand glow + typography (ported from custom.css, retargeted to Quarto) ── -->
+<style>
+  /* The cyan glow keyframes, copied verbatim from docs/src/css/custom.css. */
+  @-webkit-keyframes glow {
+    from { text-shadow: 0 0 8px #427FD4, 0 0 10px #39F8FF; }
+    to   { text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF; }
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 8px #427FD4, 0 0 10px #39F8FF; }
+    to   { text-shadow: 0 0 10px #427FD4, 0 0 11px #39F8FF; }
+  }
+
+  /* Body copy -> Lato (the Docusaurus `body` rule). */
+  body {
+    font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  /* Brand title / navbar brand -> Bungee with the animated glow.
+     Quarto renders the site title as `.navbar-brand` (and `.navbar-title`
+     in some Great Docs themes); cover both. */
+  .navbar-brand,
+  .navbar-brand .navbar-title,
+  .navbar .navbar-title,
+  a.navbar-brand {
+    font-family: "Bungee", cursive !important;
+    letter-spacing: 0.1px;
+    font-weight: 500;
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+
+  /* Page headings -> Chivo (the Docusaurus h1..h6 rules). The top-level
+     page title (h1) gets the Bungee brand treatment + glow to echo the
+     Docusaurus brand headings. */
+  h1, .h1,
+  #title-block-header h1.title,
+  .quarto-title h1 {
+    font-family: "Bungee", "Chivo", sans-serif;
+    letter-spacing: 0.6px;
+    font-weight: 500;
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+  h2, h3, h4, h5, h6,
+  .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Chivo", sans-serif;
+    letter-spacing: 0.6px;
+    font-weight: 500;
+  }
+
+  /* Sidebar / nav links -> Fira Mono (the Docusaurus `.menu__link` /
+     `.navbar__item` rules). */
+  .sidebar-item-text,
+  .sidebar a,
+  .nav-link,
+  nav[role="doc-toc"] a {
+    font-family: "Fira Mono", monospace;
+    letter-spacing: 0.6px;
+  }
+
+  /* Code -> Fira Mono / Fira Code (the Docusaurus `pre, code` rule). */
+  pre, code, kbd, samp,
+  .sourceCode {
+    font-family: "Fira Mono", "Fira Code", Consolas, Inconsolata, monospace;
+  }
+
+  /* Bold brand emphasis echoes the Docusaurus `b { ... glow }` rule. */
+  strong.sdv-brand, b.sdv-brand {
+    font-family: "Bungee", cursive;
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+</style>

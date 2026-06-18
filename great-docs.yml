@@ -22,6 +22,15 @@ attribution: true
 
 logo: assets/logo.png
 
+# Brand parity with the Docusaurus site (docs/docusaurus.config.ts +
+# docs/src/css/custom.css): Plausible analytics, the Bungee/Chivo/Lato/Fira
+# font stack, and the cyan "glow" animation are all injected into <head> from
+# assets/head.html so the two sites read as one brand.
+include_in_header:
+  # `file:` (not a bare string) so Quarto reads the file into <head>; a bare
+  # string is normalized to a literal-text entry and would inject the path itself.
+  - file: assets/head.html
+
 hero:
   enabled: true
   tagline: "Tidy play-by-play, box score, schedule, roster, and odds data across the SportsDataverse — NBA, WNBA, NFL, CFB, MBB, WBB, MLB, and NHL."
