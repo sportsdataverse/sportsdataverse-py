@@ -2,6 +2,12 @@
 /.quarto/
 /_site/
 
+# Scratch dir for the standalone self-contained preview render (not committed).
+/_preview_src/
+
+# Playwright screenshot scratch.
+/.playwright-mcp/
+
 # NOTE: _freeze/ IS committed on purpose — it is the cached executed output
 # (the proof the cells ran against live data) and lets `quarto render` reuse
 # results without re-hitting the live ESPN endpoints.

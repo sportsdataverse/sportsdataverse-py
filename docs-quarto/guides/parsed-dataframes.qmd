@@ -1,0 +1,74 @@
+---
+title: "The parser layer"
+---
+
+Every ESPN wrapper can return either the **raw JSON `Dict`** ESPN ships or a
+**tidy DataFrame** produced by the parser layer. This guide shows both, side by
+side, executed at build time.
+
+## `return_parsed` — raw `Dict` vs tidy frame
+
+For parser-backed ESPN wrappers, `return_parsed=True` is the **default**, so you
+get a polars frame out of the box. Pass `return_parsed=False` to recover the raw
+payload.
+
+```{python}
+import warnings
+warnings.filterwarnings("ignore")
+
+from sportsdataverse.nba import espn_nba_team_roster
+
+raw = espn_nba_team_roster(team_id=13, return_parsed=False)   # -> Dict
+print("raw payload type:", type(raw).__name__)
+print("top-level keys:", list(raw.keys())[:10])
+```
+
+The same call with the default `return_parsed=True` gives a tidy frame:
+
+```{python}
+df = espn_nba_team_roster(team_id=13)   # -> polars.DataFrame (default)
+print("parsed frame:", df.shape)
+df.columns[:16]
+```
+
+## `return_as_pandas` — one frame, two engines
+
+The package is polars-first but pandas-friendly. Because the cache key excludes
+`return_as_pandas`, a single stored frame serves both callers — the conversion
+happens on read.
+
+```{python}
+from sportsdataverse.nba import espn_nba_teams
+
+pl_frame = espn_nba_teams()                       # polars
+pd_frame = espn_nba_teams(return_as_pandas=True)  # pandas
+
+print("polars type:", type(pl_frame).__name__)
+print("pandas type:", type(pd_frame).__name__)
+print("same row count:", pl_frame.height == len(pd_frame))
+```
+
+Quarto renders the pandas frame just as happily (note the `df-print: paged`
+styling from `_quarto.yml`):
+
+```{python}
+pd_frame[["team_id", "team_abbreviation", "team_display_name"]].head(5)
+```
+
+## Sibling-API parsers compose explicitly
+
+NHL and MLB have their own native APIs whose wrappers return raw `Dict` and pair
+with a named parser you apply yourself. The shape is
+`parse_<x>(<wrapper>(...))`:
+
+```python
+from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
+
+df = parse_nhl_web_pbp(nhl_web_pbp(2023030417))   # 331-row polars frame
+```
+
+::: {.callout-note}
+The parser contract is universal: empty/malformed payloads return a **zero-row
+frame** (not an exception), so you can chain without null-checks, and columns are
+snake-cased. See [Architecture](../architecture.qmd) for the full picture.
+:::

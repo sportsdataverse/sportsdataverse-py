@@ -1,0 +1,85 @@
+---
+title: "Teams & scoreboard"
+---
+
+The ESPN cross-league surface is **uniform**: the same loader name shape works
+for every league. This guide shows the teams directory and a past-dated
+scoreboard, each rendered as a real frame at build time.
+
+## Teams — the uniform `espn_<sport>_teams()` shape
+
+```{python}
+import warnings
+warnings.filterwarnings("ignore")
+
+from sportsdataverse.nba import espn_nba_teams
+from sportsdataverse.nfl import espn_nfl_teams
+from sportsdataverse.mlb import espn_mlb_teams
+from sportsdataverse.nhl import espn_nhl_teams
+
+nba = espn_nba_teams()
+print("NBA teams frame:", nba.shape)
+nba.columns
+```
+
+Every league returns the same tidy column set. Selecting the three columns most
+readers care about, across four leagues:
+
+```{python}
+import polars as pl
+
+frames = {
+    "NBA": espn_nba_teams(),
+    "NFL": espn_nfl_teams(),
+    "MLB": espn_mlb_teams(),
+    "NHL": espn_nhl_teams(),
+}
+
+summary = pl.DataFrame(
+    {
+        "league": list(frames.keys()),
+        "n_teams": [f.height for f in frames.values()],
+        "example_team": [
+            f.select("team_display_name").row(0)[0] for f in frames.values()
+        ],
+    }
+)
+summary
+```
+
+A closer look at the MLB directory — the first ten teams:
+
+```{python}
+espn_mlb_teams().select(
+    ["team_id", "team_abbreviation", "team_location", "team_name"]
+).head(10)
+```
+
+## Scoreboard — a stable past-dated call
+
+Scoreboards take a `dates` argument (`YYYYMMDD`). Using a **past** date keeps the
+example reproducible — the slate is final and won't change between renders.
+
+```{python}
+from sportsdataverse.mlb import espn_mlb_scoreboard
+
+sb = espn_mlb_scoreboard(dates="20240615")   # a settled 2024 regular-season date
+print("scoreboard frame:", sb.shape)
+sb.columns[:18]
+```
+
+A few human-readable columns from that slate:
+
+```{python}
+keep = [c for c in ["id", "name", "short_name", "status_type_detail"] if c in sb.columns]
+sb.select(keep).head(8)
+```
+
+::: {.callout-note}
+Because `execute: freeze: auto` is set project-wide, re-rendering this page does
+**not** re-hit ESPN unless the `.qmd` source changes — the executed output is
+cached in `_freeze/`. That also turns the examples into a lightweight
+integration test: if a loader's output shape drifts, the re-render fails.
+:::
+
+Next: [Schedule & rosters](schedule-and-rosters.qmd).

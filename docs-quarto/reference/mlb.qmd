@@ -1,0 +1,164 @@
+---
+title: "MLB reference"
+subtitle: "sportsdataverse.mlb — hand-written, executable"
+---
+
+A representative slice of the `sportsdataverse.mlb` ESPN surface. Each entry
+carries a signature, parameter and returns tables, and an **executable example
+that renders the real frame** at build time. The MLB namespace ships ~116
+`espn_mlb_*` callables in total; this page documents four.
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+```
+
+---
+
+## `espn_mlb_teams`
+
+```python
+espn_mlb_teams(return_as_pandas: bool = False, **kwargs) -> pl.DataFrame
+```
+
+Look up the full MLB team directory from ESPN's Site v2 API.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame; else polars. |
+
+**Returns** — a tidy `polars.DataFrame`, one row per team:
+
+| Column | Type | Description |
+|---|---|---|
+| `team_id` | str | ESPN team identifier. |
+| `team_abbreviation` | str | Short team code (e.g. `LAD`). |
+| `team_display_name` | str | Full display name. |
+| `team_location` | str | City / location. |
+| `team_name` | str | Nickname. |
+| `team_color` | str | Primary hex color. |
+| `team_logos` | list | Logo asset records. |
+
+**Example**
+
+```{python}
+from sportsdataverse.mlb import espn_mlb_teams
+
+teams = espn_mlb_teams()
+print("shape:", teams.shape)
+teams.select(["team_id", "team_abbreviation", "team_location", "team_name"]).head(8)
+```
+
+---
+
+## `espn_mlb_team_schedule`
+
+```python
+espn_mlb_team_schedule(team_id: int | str, *, season: int | str | None = None,
+                       return_parsed: bool = True,
+                       return_as_pandas: bool = False, **kwargs) -> pl.DataFrame | dict
+```
+
+A single team's season schedule.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `int \| str` | — | ESPN team identifier (from `espn_mlb_teams`). |
+| `season` | `int \| str` | `None` | Season year; defaults to the current season. |
+| `return_parsed` | `bool` | `True` | If `True`, return a tidy frame; `False` for the raw `Dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame. |
+
+**Returns** — a tidy `polars.DataFrame`, one row per scheduled game (columns vary
+by season; common columns include `id`, `date`, `name`, `short_name`).
+
+**Example**
+
+```{python}
+from sportsdataverse.mlb import espn_mlb_teams, espn_mlb_team_schedule
+import polars as pl
+
+team_id = (
+    espn_mlb_teams()
+    .filter(pl.col("team_abbreviation") == "LAD")
+    .select("team_id").row(0)[0]
+)
+sched = espn_mlb_team_schedule(team_id=team_id, season=2024)
+print("shape:", sched.shape)
+keep = [c for c in ["id", "date", "name", "short_name"] if c in sched.columns]
+sched.select(keep).head(6) if keep else sched.head(6)
+```
+
+---
+
+## `espn_mlb_team_roster`
+
+```python
+espn_mlb_team_roster(team_id: int | str, *, return_parsed: bool = True,
+                     return_as_pandas: bool = False, **kwargs) -> pl.DataFrame | dict
+```
+
+A single team's active roster.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `int \| str` | — | ESPN team identifier. |
+| `return_parsed` | `bool` | `True` | If `True`, return a tidy frame; `False` for the raw `Dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame. |
+
+**Returns** — a tidy `polars.DataFrame`, one row per athlete on the roster.
+
+**Example**
+
+```{python}
+from sportsdataverse.mlb import espn_mlb_team_roster
+
+roster = espn_mlb_team_roster(team_id=team_id)
+print("shape:", roster.shape)
+cols = [c for c in roster.columns if "name" in c.lower() or "position" in c.lower()][:5]
+roster.select(cols).head(8) if cols else roster.head(8)
+```
+
+---
+
+## `espn_mlb_scoreboard`
+
+```python
+espn_mlb_scoreboard(dates: int | str | None = None, *, season_type: int | None = None,
+                    return_as_pandas: bool = False, **kwargs) -> pl.DataFrame
+```
+
+The scoreboard for a given date (`YYYYMMDD`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dates` | `int \| str` | `None` | Date in `YYYYMMDD`; defaults to today. |
+| `season_type` | `int` | `None` | ESPN season type (2 = regular, 3 = postseason). |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame. |
+
+**Returns** — a tidy `polars.DataFrame`, one row per game on the slate.
+
+**Example**
+
+```{python}
+from sportsdataverse.mlb import espn_mlb_scoreboard
+
+sb = espn_mlb_scoreboard(dates="20240615")
+print("shape:", sb.shape)
+keep = [c for c in ["id", "name", "short_name", "status_type_detail"] if c in sb.columns]
+sb.select(keep).head(6)
+```
+
+::: {.callout-tip}
+Every table above is the **literal output** of the call as of this render — not a
+schema sample. Compare with the [generated MLB stubs](generated/index.qmd), which
+are emitted mechanically from endpoint YAML.
+:::

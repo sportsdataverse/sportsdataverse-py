@@ -1,32 +1,70 @@
 ---
-title: "sportsdataverse-py × Quarto — executable-docs PoC"
-subtitle: "Real Python output, frozen into the page at build time"
-author: "SportsDataverse"
-date: today
+title: "sportsdataverse-py"
+subtitle: "Tidy, cross-sport play-by-play, box score, schedule, roster & betting data for Python"
+toc: false
+about:
+  template: jolla
+  image: "https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png"
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/sportsdataverse/sportsdataverse-py
+    - icon: box
+      text: PyPI
+      href: https://pypi.org/project/sportsdataverse/
+    - icon: book
+      text: Docusaurus docs
+      href: https://py.sportsdataverse.org
 ---
 
-## What this page is
+`sportsdataverse-py` is the Python sister to the SportsDataverse R packages
+(`hoopR`, `wehoop`, `cfbfastR`, `baseballr`, `fastRhockey`) and gives you tidy
+[polars](https://pola.rs) / [pandas](https://pandas.pydata.org) access to
+play-by-play, box score, schedule, roster, and odds data across the NBA, WNBA,
+NFL, MLB, NHL, men's & women's college basketball, college football, soccer,
+cricket, junior hockey, and more.
 
-This is a **proof-of-concept** for documenting the Python package
-[`sportsdataverse-py`](https://py.sportsdataverse.org) with
-[Quarto](https://quarto.org). The point it demonstrates is **build-time
-executable code cells**: every Python block below is *actually run* when the
-page is rendered (`quarto render`), and its output — including tidy
-**polars** / **pandas** DataFrames rendered as HTML tables — is frozen into
-the static page. No browser runtime, no serverless proxy, no "trust me, this
-is what it returns": the reader sees the genuine output of `sportsdataverse`
-against the live ESPN endpoints as of the render.
+::: {.callout-note appearance="simple"}
+This site is a **Quarto + Great-Docs conversion** of the production
+[Docusaurus docs](https://py.sportsdataverse.org), built to evaluate Quarto's
+literate, *run-it-for-real* documentation model against the current React/MDX
+stack. Every table and number below is the **genuine output of `sportsdataverse`
+code executed at build time** and frozen into the static page — no client-side
+Python, no hand-maintained "expected output" that can drift. See the
+[evaluation write-up](https://github.com/sportsdataverse/sportsdataverse-py/blob/proto/quarto-docs/docs-quarto/README.md).
+:::
 
-Compare this side-by-side with the Docusaurus site under `docs/` — see
-[`README.md`](./README.md) in this folder for the full Quarto-vs-Docusaurus
-write-up.
+## Install
 
-------------------------------------------------------------------------
+::: {.panel-tabset}
 
-## 1. The package surface
+### pip
 
-First, import the package and confirm the per-sport namespaces are all
-present. This is a stable, offline-safe call — it touches no network.
+```bash
+pip install sportsdataverse
+```
+
+### uv
+
+```bash
+uv add sportsdataverse
+```
+
+### conda
+
+```bash
+conda install -c conda-forge sportsdataverse
+```
+
+:::
+
+Requires Python 3.9–3.14. The DataFrame engine is polars 1.x; every loader can
+hand back pandas with `return_as_pandas=True`.
+
+## The surface, in one cell
+
+First, import the package and confirm the per-sport namespaces resolve. This is
+a stable, offline-safe call — it touches no network.
 
 ```{python}
 import warnings
@@ -39,9 +77,8 @@ present = [s for s in sports if hasattr(sdv, s)]
 present
 ```
 
-Every sport submodule resolves. Each one exposes an `espn_<sport>_*` family
-of tidy-data loaders. For example, the NBA namespace ships these ESPN
-endpoints (first dozen shown):
+Each sport submodule exposes an `espn_<sport>_*` family of tidy-data loaders.
+For example, the NBA namespace ships a large ESPN endpoint surface:
 
 ```{python}
 import sportsdataverse.nba as nba
@@ -51,82 +88,62 @@ print(f"{len(nba_espn)} espn_nba_* callables; first 12:")
 nba_espn[:12]
 ```
 
-------------------------------------------------------------------------
+## A real loader → a real DataFrame
 
-## 2. A real loader → a real DataFrame
-
-Now the headline feature. We call `espn_nba_teams()` — a stable ESPN teams
-endpoint — and let Quarto render the returned **polars** DataFrame as an HTML
-table. This is *live data captured at build time*, not a hand-maintained
-sample that drifts out of date.
+Call `espn_nba_teams()` — a stable ESPN teams endpoint — and let Quarto render
+the returned **polars** DataFrame as an HTML table. This is *live data captured
+at build time*, not a sample that drifts out of date.
 
 ```{python}
 from sportsdataverse.nba import espn_nba_teams
 
 teams = espn_nba_teams()        # -> polars.DataFrame
-teams.shape                     # (rows, cols)
-```
-
-The frame is wide (logos, colors, slugs, uids…). Let's select the three
-columns most readers care about and show the first ten teams. Quarto renders
-the polars frame inline:
-
-```{python}
 teams.select(["team_id", "team_abbreviation", "team_display_name"]).head(10)
 ```
 
-Because the package is polars-first but pandas-friendly, the same loader can
-hand back a **pandas** frame with `return_as_pandas=True` — useful when the
-reader's downstream stack is pandas. Quarto renders pandas frames just as
-happily (note the `df-print: paged` styling from `_quarto.yml`):
-
-```{python}
-teams_pd = espn_nba_teams(return_as_pandas=True)
-teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head(5)
-```
-
-------------------------------------------------------------------------
-
-## 3. A second sport, same one-liner shape
-
 The cross-league surface is uniform: `espn_<sport>_teams()` returns the same
-tidy shape for every league. Here is the NFL equivalent — 32 teams, rendered
-the same way:
+tidy shape for every league. Here is the NFL equivalent:
 
 ```{python}
 from sportsdataverse.nfl import espn_nfl_teams
 
-nfl_teams = espn_nfl_teams()
-nfl_teams.select(["team_id", "team_abbreviation", "team_display_name"]).head(8)
+espn_nfl_teams().select(["team_id", "team_abbreviation", "team_display_name"]).head(8)
 ```
 
-------------------------------------------------------------------------
+## Inline computed results in prose
 
-## 4. Inline computed results in prose
-
-Quarto also supports **inline executable expressions**, so a sentence can
-quote a *computed* number rather than a copy-pasted one that goes stale.
+Quarto supports **inline executable expressions**, so a sentence can quote a
+*computed* number rather than a copy-pasted one that goes stale.
 
 ```{python}
 n_nba = espn_nba_teams().height
 n_nfl = espn_nfl_teams().height
 ```
 
-As of this render, `sportsdataverse` reports **`{python} n_nba` NBA teams**
-and **`{python} n_nfl` NFL teams** from the ESPN teams endpoints — and those
-two numbers were computed by Python while this page was being built, not
-typed in by hand.
+As of this render, `sportsdataverse` reports **`{python} n_nba` NBA teams** and
+**`{python} n_nfl` NFL teams** from the ESPN teams endpoints — both computed by
+Python while this page was being built.
 
-------------------------------------------------------------------------
+## Where to go next
 
-## Takeaway
+::: {.grid}
 
-Every table and number on this page is the *real* output of `sportsdataverse`
-code, executed once at build time and frozen into static HTML. There is no
-client-side Python, no live API call when a reader loads the page, and no
-manually maintained "expected output" that can silently rot. That is the core
-value proposition of Quarto for the SportsDataverse **Python** (and **R**)
-data packages.
+::: {.g-col-12 .g-col-md-4}
+### [Guides »](guides/index.qmd)
+Executable walkthroughs: install, teams & scoreboard, schedule & rosters, and
+the polars/pandas parser layer.
+:::
 
-See [`README.md`](./README.md) for how this stacks up against the Docusaurus
-toolchain the SportsDataverse uses elsewhere.
+::: {.g-col-12 .g-col-md-4}
+### [Reference »](reference/index.qmd)
+Hand-written reference for MLB & NBA with real `df.head()` output, plus
+generator-emitted stubs proving the codegen → `.qmd` path.
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### [Architecture »](architecture.qmd)
+The ESPN cross-league core, the parser layer, and the codegen pipeline that
+drives the production docs.
+:::
+
+:::

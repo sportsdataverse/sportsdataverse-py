@@ -1,0 +1,12 @@
+{
+  "hash": "8a6900122aa0838b02c3db6128cbca1f",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Installation\"\n---\n\n## Install the package\n\n`sportsdataverse` is published on PyPI and conda-forge.\n\n::: {.panel-tabset}\n\n### pip\n\n```bash\npip install sportsdataverse\n```\n\n### uv\n\n```bash\nuv add sportsdataverse\n```\n\n### conda\n\n```bash\nconda install -c conda-forge sportsdataverse\n```\n\n:::\n\nOptional extras pull in the heavier model / test / docs dependencies:\n\n```bash\npip install \"sportsdataverse[all]\"     # everything\npip install \"sportsdataverse[models]\"  # NFL / CFB model inference deps\n```\n\n## Runtime requirements\n\n- **Python** 3.9, 3.10, 3.11, 3.12, 3.13, or 3.14.\n- **DataFrame engine:** polars 1.x end-to-end. Every loader accepts\n  `return_as_pandas=True` to hand back a pandas frame instead.\n\n## Verify the import\n\nThis cell runs at build time and proves the package is importable in the\ndocumentation environment, and reports the installed version:\n\n::: {#586110f0 .cell execution_count=1}\n``` {.python .cell-code}\nimport warnings\nwarnings.filterwarnings(\"ignore\")\n\nfrom importlib.metadata import version\nimport sportsdataverse as sdv  # noqa: F401\n\nprint(\"sportsdataverse\", version(\"sportsdataverse\"))\n```\n\n::: {.cell-output .cell-output-stdout}\n```\nsportsdataverse 0.0.58\n```\n:::\n:::\n\n\nThe per-sport namespaces are attributes of the top-level package:\n\n::: {#20019b0f .cell execution_count=2}\n``` {.python .cell-code}\nsports = [\"nba\", \"wnba\", \"nfl\", \"mlb\", \"nhl\", \"mbb\", \"wbb\", \"cfb\", \"odds\"]\n{s: hasattr(sdv, s) for s in sports}\n```\n\n::: {.cell-output .cell-output-display execution_count=2}\n```\n{'nba': True,\n 'wnba': True,\n 'nfl': True,\n 'mlb': True,\n 'nhl': True,\n 'mbb': True,\n 'wbb': True,\n 'cfb': True,\n 'odds': True}\n```\n:::\n:::\n\n\nEvery value above is `True`, so each league's `espn_<sport>_*` loader family is\nready to import. Continue to [Teams & scoreboard](teams-and-scoreboard.qmd).\n\n",
+    "supporting": [
+      "installation_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

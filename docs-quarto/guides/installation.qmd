@@ -1,0 +1,67 @@
+---
+title: "Installation"
+---
+
+## Install the package
+
+`sportsdataverse` is published on PyPI and conda-forge.
+
+::: {.panel-tabset}
+
+### pip
+
+```bash
+pip install sportsdataverse
+```
+
+### uv
+
+```bash
+uv add sportsdataverse
+```
+
+### conda
+
+```bash
+conda install -c conda-forge sportsdataverse
+```
+
+:::
+
+Optional extras pull in the heavier model / test / docs dependencies:
+
+```bash
+pip install "sportsdataverse[all]"     # everything
+pip install "sportsdataverse[models]"  # NFL / CFB model inference deps
+```
+
+## Runtime requirements
+
+- **Python** 3.9, 3.10, 3.11, 3.12, 3.13, or 3.14.
+- **DataFrame engine:** polars 1.x end-to-end. Every loader accepts
+  `return_as_pandas=True` to hand back a pandas frame instead.
+
+## Verify the import
+
+This cell runs at build time and proves the package is importable in the
+documentation environment, and reports the installed version:
+
+```{python}
+import warnings
+warnings.filterwarnings("ignore")
+
+from importlib.metadata import version
+import sportsdataverse as sdv  # noqa: F401
+
+print("sportsdataverse", version("sportsdataverse"))
+```
+
+The per-sport namespaces are attributes of the top-level package:
+
+```{python}
+sports = ["nba", "wnba", "nfl", "mlb", "nhl", "mbb", "wbb", "cfb", "odds"]
+{s: hasattr(sdv, s) for s in sports}
+```
+
+Every value above is `True`, so each league's `espn_<sport>_*` loader family is
+ready to import. Continue to [Teams & scoreboard](teams-and-scoreboard.qmd).

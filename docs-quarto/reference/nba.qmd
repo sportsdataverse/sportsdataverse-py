@@ -1,0 +1,121 @@
+---
+title: "NBA reference"
+subtitle: "sportsdataverse.nba — hand-written, executable"
+---
+
+A representative slice of the `sportsdataverse.nba` ESPN surface, documented the
+same way as [MLB](mlb.qmd): signature + parameters + returns table + an
+**executable example that renders the real frame**.
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+```
+
+---
+
+## `espn_nba_teams`
+
+```python
+espn_nba_teams(return_as_pandas: bool = False, **kwargs) -> pl.DataFrame
+```
+
+The full NBA team directory from ESPN's Site v2 API.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame; else polars. |
+
+**Returns** — a tidy `polars.DataFrame`, one row per team (same tidy column set as
+every other league's `espn_<sport>_teams`).
+
+**Example**
+
+```{python}
+from sportsdataverse.nba import espn_nba_teams
+
+teams = espn_nba_teams()
+print("shape:", teams.shape)
+teams.select(["team_id", "team_abbreviation", "team_display_name"]).head(10)
+```
+
+---
+
+## `espn_nba_team_roster`
+
+```python
+espn_nba_team_roster(team_id: int | str, *, return_parsed: bool = True,
+                     return_as_pandas: bool = False, **kwargs) -> pl.DataFrame | dict
+```
+
+A single team's roster. Parser-backed, so `return_parsed=True` is the default.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `int \| str` | — | ESPN team identifier (e.g. `13` for the Los Angeles Lakers). |
+| `return_parsed` | `bool` | `True` | If `True`, return a tidy frame; `False` for the raw `Dict`. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame. |
+
+**Returns** — a tidy `polars.DataFrame`, one row per athlete; or the raw ESPN
+`Dict` when `return_parsed=False`.
+
+**Example**
+
+```{python}
+from sportsdataverse.nba import espn_nba_team_roster
+
+roster = espn_nba_team_roster(team_id=13)
+print("shape:", roster.shape)
+cols = [c for c in roster.columns if "name" in c.lower() or "position" in c.lower()][:5]
+roster.select(cols).head(8) if cols else roster.head(8)
+```
+
+The raw form, for comparison:
+
+```{python}
+raw = espn_nba_team_roster(team_id=13, return_parsed=False)
+print("raw type:", type(raw).__name__)
+print("top-level keys:", list(raw.keys())[:8])
+```
+
+---
+
+## `espn_nba_scoreboard`
+
+```python
+espn_nba_scoreboard(dates: int | str | None = None, *,
+                    return_as_pandas: bool = False, **kwargs) -> pl.DataFrame
+```
+
+The scoreboard for a given date (`YYYYMMDD`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dates` | `int \| str` | `None` | Date in `YYYYMMDD`; defaults to today. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame. |
+
+**Returns** — a tidy `polars.DataFrame`, one row per game on the slate.
+
+**Example**
+
+```{python}
+from sportsdataverse.nba import espn_nba_scoreboard
+
+sb = espn_nba_scoreboard(dates="20240115")   # a settled 2024 date
+print("shape:", sb.shape)
+keep = [c for c in ["id", "name", "short_name", "status_type_detail"] if c in sb.columns]
+sb.select(keep).head(6)
+```
+
+::: {.callout-note}
+For the R analogue of these functions, see
+[`hoopR`](https://hoopR.sportsdataverse.org) — the SportsDataverse maintains a
+near-identical surface across Python and R.
+:::

@@ -1,24 +1,100 @@
 project:
   type: website
   output-dir: _site
+  # Pre/post hooks intentionally omitted — the reference generator
+  # (_gen_reference.py) is run explicitly so reviewers can see its output.
 
 website:
-  title: "sportsdataverse-py — Quarto docs PoC"
-  description: "Proof-of-concept: Quarto build-time executable Python cells for the SportsDataverse Python package."
+  title: "sportsdataverse-py"
+  description: "Tidy, cross-sport play-by-play, box score, schedule, roster, and betting data for Python — a Quarto + Great-Docs documentation conversion."
+  site-url: "https://py.sportsdataverse.org"
+  repo-url: "https://github.com/sportsdataverse/sportsdataverse-py"
+  favicon: "https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png"
+  # Site-wide search (Quarto's built-in lunr index) — the Docusaurus-search equivalent.
+  search:
+    location: navbar
+    type: overlay
+  page-navigation: true
+  back-to-top-navigation: true
   navbar:
     background: dark
+    logo: "https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/master/sdv-py-logo.png"
+    title: "sportsdataverse-py"
+    collapse-below: lg
     left:
       - href: index.qmd
         text: Home
+      - text: Guides
+        menu:
+          - href: guides/index.qmd
+            text: Guides overview
+          - href: guides/installation.qmd
+            text: Installation
+          - href: guides/teams-and-scoreboard.qmd
+            text: Teams & scoreboard
+          - href: guides/schedule-and-rosters.qmd
+            text: Schedule & rosters
+          - href: guides/parsed-dataframes.qmd
+            text: The parser layer
+      - text: Reference
+        menu:
+          - href: reference/index.qmd
+            text: Reference overview
+          - href: reference/mlb.qmd
+            text: MLB (hand-written)
+          - href: reference/nba.qmd
+            text: NBA (hand-written)
+          - href: reference/generated/index.qmd
+            text: MLB (generated stubs)
+      - href: architecture.qmd
+        text: Architecture
+    right:
+      - icon: github
+        href: https://github.com/sportsdataverse/sportsdataverse-py
+        aria-label: GitHub
+  sidebar:
+    - id: guides
+      title: "Guides"
+      style: floating
+      collapse-level: 2
+      contents:
+        - guides/index.qmd
+        - guides/installation.qmd
+        - guides/teams-and-scoreboard.qmd
+        - guides/schedule-and-rosters.qmd
+        - guides/parsed-dataframes.qmd
+    - id: reference
+      title: "Reference"
+      style: floating
+      collapse-level: 2
+      contents:
+        - reference/index.qmd
+        - section: "Hand-written reference"
+          contents:
+            - reference/mlb.qmd
+            - reference/nba.qmd
+        - section: "Generated stubs (MLB)"
+          contents:
+            - reference/generated/index.qmd
+            - auto: "reference/generated/*.qmd"
+  page-footer:
+    left: "Quarto + Great-Docs conversion of the SportsDataverse Python docs."
+    right: "Built with [Quarto](https://quarto.org)."
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: darkly
     toc: true
     toc-depth: 3
+    toc-title: "On this page"
     code-copy: true
     code-overflow: wrap
     df-print: paged
+    grid:
+      sidebar-width: 270px
+      body-width: 900px
 
 # Quarto executes Python cells through Jupyter (nbclient + ipykernel).
 # The default `python3` kernel resolves to the same interpreter that has

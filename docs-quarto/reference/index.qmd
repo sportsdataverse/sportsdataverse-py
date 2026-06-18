@@ -1,0 +1,44 @@
+---
+title: "Reference"
+subtitle: "Hand-written executable reference + generator-emitted stubs"
+---
+
+The production Docusaurus site generates a per-league reference subtree from
+endpoint YAML — accurate **schema tables** (`col_name | type | description`).
+This Quarto reference demonstrates two complementary approaches:
+
+## 1. Hand-written, executable reference
+
+Two sports are documented by hand. Each function entry carries a **signature**, a
+**parameters table**, a **returns table**, and — critically — an **executable
+example that renders the real frame** the call produces at build time. That is
+the literate-docs guarantee Quarto adds over a static schema table.
+
+- [**MLB reference »**](mlb.qmd) — `espn_mlb_teams`, `espn_mlb_team_schedule`,
+  `espn_mlb_team_roster`, `espn_mlb_scoreboard`.
+- [**NBA reference »**](nba.qmd) — `espn_nba_teams`, `espn_nba_team_roster`,
+  `espn_nba_scoreboard`.
+
+## 2. Generator-emitted `.qmd` stubs
+
+To prove the **codegen → `.qmd`** path (the analogue of the production
+`tools/codegen/generate.py --docs`), a small generator
+[`_gen_reference.py`](https://github.com/sportsdataverse/sportsdataverse-py/blob/proto/quarto-docs/docs-quarto/_gen_reference.py)
+reads the package's live signatures + docstrings and the endpoint YAML, and emits
+one `.qmd` stub per MLB endpoint into `reference/generated/`.
+
+- [**Generated MLB stubs »**](generated/index.qmd)
+
+Run it with:
+
+```bash
+cd docs-quarto
+python _gen_reference.py
+```
+
+::: {.callout-note}
+The generator is intentionally small and single-sport: it demonstrates that the
+existing endpoint-YAML metadata can target Quarto `.qmd` just as readily as it
+targets Docusaurus markdown, so a full conversion would extend the existing
+codegen rather than re-author every page.
+:::

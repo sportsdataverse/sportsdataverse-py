@@ -1,0 +1,76 @@
+---
+title: "Schedule & rosters"
+---
+
+Most per-team endpoints key on a `team_id`. This guide shows how to discover a
+team id from the teams directory and then feed it into the schedule and roster
+loaders — all executed at build time.
+
+## Discover a `team_id`
+
+```{python}
+import warnings
+warnings.filterwarnings("ignore")
+
+from sportsdataverse.mlb import espn_mlb_teams
+
+teams = espn_mlb_teams()
+lookup = teams.select(["team_id", "team_abbreviation", "team_display_name"])
+lookup.head(12)
+```
+
+Pick one team programmatically so the rest of the page stays in sync if ESPN
+re-orders the directory:
+
+```{python}
+import polars as pl
+
+row = teams.filter(pl.col("team_abbreviation") == "LAD")
+team_id = row.select("team_id").row(0)[0]
+team_name = row.select("team_display_name").row(0)[0]
+print(f"Using {team_name} (team_id={team_id})")
+```
+
+## Team schedule
+
+```{python}
+from sportsdataverse.mlb import espn_mlb_team_schedule
+
+sched = espn_mlb_team_schedule(team_id=team_id, season=2024)
+# espn_*_team_schedule returns a tidy frame by default (return_parsed=True)
+print("schedule frame:", sched.shape)
+sched.columns[:16]
+```
+
+A few columns from the start of the season:
+
+```{python}
+keep = [c for c in ["id", "date", "name", "short_name"] if c in sched.columns]
+sched.select(keep).head(8) if keep else sched.head(8)
+```
+
+## Team roster
+
+Roster loaders return a tidy polars frame by default (`return_parsed=True`); pass
+`return_parsed=False` for the raw ESPN `Dict`.
+
+```{python}
+from sportsdataverse.mlb import espn_mlb_team_roster
+
+roster = espn_mlb_team_roster(team_id=team_id)
+print("roster frame:", roster.shape)
+roster.columns[:18]
+```
+
+```{python}
+name_cols = [c for c in roster.columns if "name" in c.lower() or "position" in c.lower()][:5]
+roster.select(name_cols).head(10) if name_cols else roster.head(10)
+```
+
+::: {.callout-tip}
+The same `team_id` flows through *every* per-team endpoint for a league
+(`espn_mlb_team_record`, `espn_mlb_team_injuries`, `espn_mlb_team_leaders`, …),
+so once you have it you can compose a full team profile.
+:::
+
+Next: [The parser layer](parsed-dataframes.qmd).

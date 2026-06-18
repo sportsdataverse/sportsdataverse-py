@@ -1,0 +1,25 @@
+---
+title: "Guides"
+subtitle: "Executable, run-it-for-real walkthroughs"
+---
+
+These guides mirror the *tutorials* section of the production Docusaurus site,
+but every code cell is **executed at build time** — the polars / pandas frames
+you see are the genuine output of `sportsdataverse` against the live ESPN
+endpoints as of the render, frozen into the static page.
+
+| Guide | What it covers |
+|---|---|
+| [Installation](installation.qmd) | pip / uv / conda install, Python & engine versions, optional extras, verifying the import. |
+| [Teams & scoreboard](teams-and-scoreboard.qmd) | The uniform `espn_<sport>_teams()` surface and a past-dated scoreboard across multiple leagues. |
+| [Schedule & rosters](schedule-and-rosters.qmd) | Team schedules and rosters, and how `team_id` flows through the endpoints. |
+| [The parser layer](parsed-dataframes.qmd) | `return_parsed` / `return_as_pandas`, and how raw ESPN JSON becomes a tidy frame. |
+
+::: {.callout-tip}
+Each guide is a single `.qmd` file. To reproduce any of them locally:
+
+```bash
+cd docs-quarto
+quarto render guides/teams-and-scoreboard.qmd
+```
+:::

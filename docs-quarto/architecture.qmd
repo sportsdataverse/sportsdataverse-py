@@ -1,0 +1,150 @@
+---
+title: "Architecture"
+subtitle: "ESPN cross-league core, the parser layer, and the codegen pipeline"
+---
+
+`sportsdataverse-py` is built around a small set of reusable cores rather than
+hundreds of hand-written scrapers. This page summarizes that architecture and
+the codegen pipeline that drives the production documentation — the part most
+relevant to a docs-toolchain evaluation.
+
+## ESPN cross-league architecture
+
+The cross-league ESPN wrapper surface lives in
+`sportsdataverse/_common_espn.py`. The pattern is **one core + N thin
+extensions**:
+
+- `_common_espn.py` — ~80 core functions parameterized on `(sport, league)`
+  slugs. Every ESPN URL family is wrapped once (Site v2 / Site v2 alt / Web v3 /
+  Core v2 / Core v3 / CDN).
+- `_UNIVERSAL_WRAPPERS` / `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` /
+  `_MLB_WRAPPERS` — tables of `(short_name, core_fn)` tuples mapped onto each
+  league.
+- `make_league_module(sport, league, prefix, namespace, …)` — iterates the
+  wrapper tables and **registers each one dynamically** in the league module's
+  namespace as `espn_{prefix}_{short}`.
+
+Per-league extension modules (`sportsdataverse/{league}/{league}_espn_ext.py`)
+are four-line files:
+
+```python
+# sportsdataverse/nba/nba_espn_ext.py
+__all__ = make_league_module("basketball", "nba", "nba", globals())
+
+# sportsdataverse/cfb/cfb_espn_ext.py — both NCAA + football extras
+__all__ = make_league_module(
+    "football", "college-football", "cfb", globals(),
+    include_ncaa=True, include_football=True,
+)
+```
+
+Total cross-league surface: **121 short names** registered across many leagues
+= **800+ wrappers**.
+
+::: {.callout-important}
+This dynamic, namespaced generation is exactly what makes auto-introspection
+documentation tools struggle with this package — there is no static `__all__` of
+flat names to discover. See the [evaluation write-up](https://github.com/sportsdataverse/sportsdataverse-py/blob/proto/quarto-docs/docs-quarto/README.md)
+for how that shaped the Great-Docs result.
+:::
+
+## The parser layer
+
+Every wrapper returns raw `Dict` by default (or, for parser-backed ESPN
+endpoints, a tidy frame by default). The parser layer turns payloads into tidy
+polars / pandas DataFrames. There are **six parser modules**, one per data
+surface:
+
+| Module | Surface |
+|---|---|
+| `_common_espn_parsers.py` | ESPN cross-league (Site v2 + Core v2 + Web v3) — 30+ dedicated + a 21-section summary dispatcher |
+| `nhl/nhl_api_web_parsers.py` | `api-web.nhle.com/v1/` modern game-feed |
+| `nhl/nhl_edge_parsers.py` | `api-web.nhle.com/v1/edge/*` player tracking |
+| `nhl/nhl_stats_rest_parsers.py` + `nhl_records_parsers.py` | `api.nhle.com/stats/rest` + `records.nhl.com` |
+| `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API |
+| `nfl/nfl_api_parsers.py` | `api.nfl.com` "Shield" data API |
+
+**The parser contract is universal across all six modules:**
+
+- Return `polars.DataFrame` by default; pandas via `return_as_pandas=True`.
+- Empty / malformed payloads return a **zero-row frame** instead of raising — so
+  callers can chain without null-checks.
+- Output columns are snake-cased.
+
+## The codegen pipeline (and what the docs are generated from)
+
+Reference docs in the production site are **generated from the same YAML endpoint
+metadata that drives the wrappers**, via the codegen CLI:
+
+```bash
+python tools/codegen/generate.py --docs    # rewrite the per-league reference subtree
+python tools/codegen/generate.py --check   # CI drift gate: fail on stale generated docs
+```
+
+- **Endpoint YAML** lives in `tools/codegen/endpoints/*.yaml`
+  (`espn_site_v2.yaml`, `espn_core_v2.yaml`, `mlb_api.yaml`, …). Each endpoint
+  declares its path, params, `parser:`, and `returns_schema:`.
+- **`@return` tables** come from `tools/codegen/schemas/*.yaml`
+  (`col_name | type | description`).
+- **Templates** (`tools/codegen/templates/_reference_block.jinja` + friends)
+  render an 8-section per-function block into markdown for Docusaurus.
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+import yaml, pathlib
+
+root = pathlib.Path().resolve()
+# walk up to the repo root (where tools/codegen lives)
+for _ in range(5):
+    if (root / "tools" / "codegen" / "endpoints").exists():
+        break
+    root = root.parent
+
+ep_dir = root / "tools" / "codegen" / "endpoints"
+stems = ["espn_site_v2", "espn_web_v3", "espn_core_v2", "mlb_api"]
+rows = []
+for stem in stems:
+    p = ep_dir / f"{stem}.yaml"
+    if p.exists():
+        d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        eps = d.get("endpoints", [])
+        with_schema = sum(1 for e in eps if e.get("returns_schema"))
+        rows.append((stem, len(eps), with_schema))
+
+import polars as pl
+pl.DataFrame(rows, schema=["endpoint_yaml", "n_endpoints", "with_returns_schema"], orient="row")
+```
+
+The table above is computed at build time by reading the **actual** endpoint
+YAML in this repo — so it can't drift from the metadata it describes.
+
+## How this maps onto a docs toolchain
+
+This is the crux of the Quarto evaluation:
+
+- **Generated reference** (Docusaurus today) → schema-table reference built from
+  `returns_schema` YAML. Accurate column lists, but not *actual* `df.head()`
+  output.
+- **Executable reference** (Quarto here) → the example output a reader sees is
+  the literal frame the code produced at build time. See the hand-written
+  [MLB](reference/mlb.qmd) and [NBA](reference/nba.qmd) reference pages, and the
+  generator-emitted [MLB stubs](reference/generated/index.qmd).
+
+## Ecosystem
+
+`sportsdataverse-py` is one package in a multi-language family:
+
+- **Python:** `sportsdataverse-py` (this package).
+- **R sisters:** [`hoopR`](https://hoopR.sportsdataverse.org),
+  [`wehoop`](https://wehoop.sportsdataverse.org),
+  [`cfbfastR`](https://cfbfastR.sportsdataverse.org),
+  [`baseballr`](https://baseballr.sportsdataverse.org),
+  [`fastRhockey`](https://fastRhockey.sportsdataverse.org).
+- **JS:** `sportsdataverse-js`.
+
+Because Quarto is the native literate-docs tool for the R world and also executes
+Python, a single Quarto toolchain could in principle document the **R and Python**
+packages with the same run-it-for-real model — a point explored in the
+[evaluation](https://github.com/sportsdataverse/sportsdataverse-py/blob/proto/quarto-docs/docs-quarto/README.md).

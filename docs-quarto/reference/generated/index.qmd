@@ -1,0 +1,35 @@
+---
+title: "Generated MLB reference stubs"
+---
+
+These pages are emitted mechanically by [`_gen_reference.py`](../../_gen_reference.py) from the **same endpoint YAML** (`tools/codegen/endpoints/espn_site_v2.yaml`) that drives the production Docusaurus reference, plus each function's live `inspect.signature` and docstring. They prove the **codegen → .qmd** path.
+
+21 MLB endpoints generated:
+
+| Endpoint | Function |
+|---|---|
+| `scoreboard` | [`espn_mlb_scoreboard`](scoreboard.qmd) |
+| `summary` | [`espn_mlb_summary`](summary.qmd) |
+| `calendar` | [`espn_mlb_calendar`](calendar.qmd) |
+| `news` | [`espn_mlb_news`](news.qmd) |
+| `injuries` | [`espn_mlb_injuries`](injuries.qmd) |
+| `transactions` | [`espn_mlb_transactions`](transactions.qmd) |
+| `conferences` | [`espn_mlb_conferences`](conferences.qmd) |
+| `statistics_league` | [`espn_mlb_statistics_league`](statistics_league.qmd) |
+| `draft` | [`espn_mlb_draft`](draft.qmd) |
+| `teams_site` | [`espn_mlb_teams_site`](teams_site.qmd) |
+| `team` | [`espn_mlb_team`](team.qmd) |
+| `team_roster` | [`espn_mlb_team_roster`](team_roster.qmd) |
+| `team_schedule` | [`espn_mlb_team_schedule`](team_schedule.qmd) |
+| `team_record` | [`espn_mlb_team_record`](team_record.qmd) |
+| `team_depthcharts` | [`espn_mlb_team_depthcharts`](team_depthcharts.qmd) |
+| `team_injuries` | [`espn_mlb_team_injuries`](team_injuries.qmd) |
+| `team_transactions` | [`espn_mlb_team_transactions`](team_transactions.qmd) |
+| `team_history` | [`espn_mlb_team_history`](team_history.qmd) |
+| `team_news` | [`espn_mlb_team_news`](team_news.qmd) |
+| `team_leaders` | [`espn_mlb_team_leaders`](team_leaders.qmd) |
+| `standings` | [`espn_mlb_standings`](standings.qmd) |
+
+::: {.callout-tip}
+Compare these mechanical stubs with the **hand-written** [MLB reference](../mlb.qmd) — the hand-written pages add executable examples that render the real frame for *every* function, which is the literate-docs value Quarto adds over a schema table.
+:::
