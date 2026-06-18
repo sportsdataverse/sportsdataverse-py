@@ -41,6 +41,7 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_win_probability,
     calculate_xyac,
 )
+from tests.conftest import skip_if_no_live
 
 
 # ---------------------------------------------------------------------------
@@ -696,7 +697,7 @@ def mock_xyac_model(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):
+    def _fake_load(name: str, models_dir=None):
         if "xyac_model" in name:
             return _FakeBooster(n_classes=76)
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
@@ -995,3 +996,190 @@ class TestCalculateXyac:
 
         result = calculate_xyac(_nflverse_pass_row(), return_as_pandas=True)
         assert isinstance(result, pandas.DataFrame)
+
+
+# ---------------------------------------------------------------------------
+# Download-on-demand + cache resolution for the large xYAC model.
+#
+# These exercise ``_load_model``'s resolution order (override → bundled →
+# cache → download) and ``clear_cache``'s models/ preservation WITHOUT touching
+# the network (the bundled EP/WP/CP models stay on the bundled path; xYAC is
+# faked via a tmp cache dir / bogus URL). The single real-network end-to-end
+# download is live-gated below.
+# ---------------------------------------------------------------------------
+
+
+class TestXyacModelCacheResolution:
+    def _write_dummy_model(self, path):
+        """Write a tiny valid XGBoost Booster .ubj so load_model() succeeds."""
+        import numpy as np
+        import xgboost as xgb
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+        dtrain = xgb.DMatrix(np.zeros((4, 1), dtype=np.float32), label=np.array([0, 1, 0, 1]))
+        booster = xgb.train({"objective": "binary:logistic"}, dtrain, num_boost_round=1)
+        booster.save_model(str(path))
+
+    def test_loads_from_cache_dir(self, tmp_path, monkeypatch):
+        """A model placed in <cache_dir>/models is found (cache hit, no download)."""
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))
+        try:
+            cache_model = tmp_path / "models" / "xyac_model.ubj"
+            self._write_dummy_model(cache_model)
+
+            # Guard: a download attempt would be a bug here — make download() blow up.
+            def _boom(*a, **k):
+                raise AssertionError("download() must not be called on a cache hit")
+
+            monkeypatch.setattr("sportsdataverse.dl_utils.download", _boom)
+
+            booster = ew._load_model("xyac_model.ubj")
+            assert booster is not None
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()
+
+    def test_models_dir_override(self, tmp_path):
+        """An explicit models_dir override is preferred and loaded."""
+        import sportsdataverse.nfl.ep_wp as ew
+
+        ew._load_model.cache_clear()
+        try:
+            override = tmp_path / "custom"
+            self._write_dummy_model(override / "xyac_model.ubj")
+            booster = ew._load_model("xyac_model.ubj", models_dir=str(override))
+            assert booster is not None
+        finally:
+            ew._load_model.cache_clear()
+
+    def test_download_failure_raises_filenotfound(self, tmp_path, monkeypatch):
+        """No cache + a failing download → FileNotFoundError (so enrich skips)."""
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))
+        try:
+
+            def _boom(*a, **k):
+                raise RuntimeError("network down / bogus URL")
+
+            monkeypatch.setattr("sportsdataverse.dl_utils.download", _boom)
+            with pytest.raises(FileNotFoundError):
+                ew._load_model("xyac_model.ubj")
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()
+
+    def test_calculate_xyac_propagates_filenotfound(self, tmp_path, monkeypatch):
+        """When the model is unavailable, calculate_xyac raises FileNotFoundError.
+
+        This is the contract ``enrich_nfl_pbp`` relies on to skip the xYAC step
+        (its ``except FileNotFoundError`` → ``RuntimeWarning``) and leave the
+        five xyac columns null while the rest of the pipeline proceeds.
+        """
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))  # empty cache, no bundled xyac
+        try:
+
+            def _boom(*a, **k):
+                raise RuntimeError("network down / bogus URL")
+
+            monkeypatch.setattr("sportsdataverse.dl_utils.download", _boom)
+            with pytest.raises(FileNotFoundError):
+                calculate_xyac(_nflverse_pass_row())
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()
+
+    def test_enrich_skips_xyac_when_unavailable(self, monkeypatch, mock_both_models):
+        """enrich_nfl_pbp degrades gracefully (RuntimeWarning + null xyac) offline.
+
+        ``mock_both_models`` stubs EP/WP/CP via ``_load_model``; we then force
+        the xYAC step to raise ``FileNotFoundError`` and assert the five xyac
+        cols are present-but-null and a ``RuntimeWarning`` fired.  The input is
+        the full nflverse-contract frame built by ``test_enrich``'s helper.
+        """
+        import warnings
+
+        import sportsdataverse.nfl.ep_wp as ew
+        from tests.nfl.test_enrich import _synthetic_frame
+
+        def _raise_xyac(df, *, models_dir=None, return_as_pandas=False):
+            raise FileNotFoundError("xyac unavailable (offline test)")
+
+        monkeypatch.setattr("sportsdataverse.nfl.ep_wp.calculate_xyac", _raise_xyac)
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            out = ew.enrich_nfl_pbp(_synthetic_frame())
+
+        assert any(issubclass(w.category, RuntimeWarning) for w in caught)
+        # xYAC was skipped, so the five columns are simply absent (the step
+        # that would add them never ran) — the rest of the enrichment is intact.
+        assert "ep" in out.columns and "wp" in out.columns
+        assert "xyac_epa" not in out.columns
+
+    def test_clear_cache_preserves_models(self, tmp_path):
+        """clear_cache() wipes data entries but keeps <cache_dir>/models intact."""
+        from sportsdataverse.nfl import clear_cache, reset_config, update_config
+
+        update_config(cache_mode="filesystem", cache_dir=str(tmp_path))
+        try:
+            # A data-cache parquet alongside a downloaded model.
+            (tmp_path / "deadbeef.parquet").write_bytes(b"stale")
+            model_file = tmp_path / "models" / "xyac_model.ubj"
+            model_file.parent.mkdir(parents=True, exist_ok=True)
+            model_file.write_bytes(b"pretend-model")
+
+            clear_cache()
+
+            assert not (tmp_path / "deadbeef.parquet").exists(), "data entry should be wiped"
+            assert model_file.exists(), "models/ must survive clear_cache()"
+            assert model_file.read_bytes() == b"pretend-model"
+        finally:
+            reset_config()
+
+
+@skip_if_no_live
+class TestXyacDownloadLive:
+    """Real download from the nfl_model_artifacts release (gated by SDV_PY_LIVE_TESTS=1)."""
+
+    def test_end_to_end_download_and_cache_reuse(self, tmp_path):
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import load_nfl_pbp, reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))
+        try:
+            dest = tmp_path / "models" / "xyac_model.ubj"
+            assert not dest.exists()
+
+            pbp = load_nfl_pbp([2023]).head(400)
+            enriched = ew.enrich_nfl_pbp(pbp)
+
+            # Downloaded + cached (~33.7 MB).
+            assert dest.exists(), "xyac_model.ubj should be downloaded into <cache_dir>/models"
+            assert dest.stat().st_size > 30_000_000
+
+            # At least one qualifying pass got a non-null xyac value.
+            qualifying = enriched.filter(pl.col("xyac_epa").is_not_null())
+            assert qualifying.height > 0
+            for col in ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd"):
+                assert col in enriched.columns
+
+            # Re-run loads from cache — no re-download (mtime unchanged).
+            mtime_before = dest.stat().st_mtime
+            ew._load_model.cache_clear()  # force a fresh resolution path
+            ew.enrich_nfl_pbp(load_nfl_pbp([2023]).head(400))
+            assert dest.stat().st_mtime == mtime_before, "cache hit must not re-download"
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()

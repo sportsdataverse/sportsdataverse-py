@@ -37,10 +37,11 @@ Example:
 
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from importlib.resources import files as _resource_files
 from pathlib import Path
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -198,23 +199,112 @@ _XYAC_NUM_CLASSES: int = 76
 # ---------------------------------------------------------------------------
 
 
+#: Download-on-demand model URLs.  Models too large to bundle in the wheel
+#: (the faithful 76-class ``xyac_model.ubj`` is ~34 MB) are published to the
+#: ``nfl_model_artifacts`` GitHub release and fetched + cached on first use.
+#: The small EP/WP/CP models stay bundled under ``nfl/models/`` and are NOT
+#: listed here.
+_MODEL_URLS: dict[str, str] = {
+    "xyac_model.ubj": (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_artifacts/xyac_model.ubj"
+    ),
+}
+
+
 def _model_path(name: str) -> Path:
     return Path(str(_resource_files("sportsdataverse").joinpath(f"nfl/models/{name}")))
 
 
-@lru_cache(maxsize=4)
-def _load_model(name: str) -> "Booster":
-    """Load a named XGBoost Booster from nfl/models/.  Cached per process."""
+def _model_cache_dir() -> Path:
+    """Directory for download-on-demand models: ``<cache_dir>/models``."""
+    from sportsdataverse.nfl.config import get_config
+
+    return get_config().cache_dir / "models"
+
+
+def _load_booster_from(path: Path) -> "Booster":
+    """Construct an XGBoost ``Booster`` from a model file on disk."""
     from xgboost import Booster
 
-    path = _model_path(name)
-    if not path.exists():
-        raise FileNotFoundError(
-            f"NFL model '{name}' not found at {path}. Run the track6 training pipeline to produce the model files."
-        )
     b = Booster({"nthread": 4})
     b.load_model(str(path))
     return b
+
+
+@lru_cache(maxsize=4)
+def _load_model(name: str, models_dir: Optional[Union[str, Path]] = None) -> "Booster":
+    """Load a named XGBoost Booster, with download-on-demand for large models.
+
+    Resolution order:
+
+    1. ``models_dir`` override — if given and ``Path(models_dir)/name`` exists,
+       load it (offline / user-supplied model directory).
+    2. Bundled — ``sportsdataverse/nfl/models/name`` (EP/WP/CP path; unchanged).
+    3. Cache — ``<cache_dir>/models/name`` (a previously downloaded model).
+    4. Download — if ``name`` is in :data:`_MODEL_URLS`, fetch the URL into the
+       cache directory (written atomically via a ``.tmp`` sibling +
+       :func:`os.replace`) and load it.  Any download / IO failure is wrapped
+       in :class:`FileNotFoundError` so offline callers that ``except
+       FileNotFoundError`` still degrade gracefully.
+    5. Otherwise raise :class:`FileNotFoundError`.
+
+    Cached per process via :func:`functools.lru_cache`, keyed on
+    ``(name, models_dir)`` — a ``str`` ``models_dir`` is coerced to ``Path`` so
+    the cache key is stable; ``None`` stays ``None``.
+    """
+    if isinstance(models_dir, str):
+        models_dir = Path(models_dir)
+
+    # 1. Explicit override directory.
+    if models_dir is not None:
+        override = models_dir / name
+        if override.exists():
+            return _load_booster_from(override)
+
+    # 2. Bundled (EP/WP/CP).
+    bundled = _model_path(name)
+    if bundled.exists():
+        return _load_booster_from(bundled)
+
+    # 3. Cache (previously downloaded).
+    cached = _model_cache_dir() / name
+    if cached.exists():
+        return _load_booster_from(cached)
+
+    # 4. Download-on-demand.
+    if name in _MODEL_URLS:
+        from sportsdataverse.dl_utils import download
+        from sportsdataverse.nfl.config import get_config
+
+        cfg = get_config()
+        url = _MODEL_URLS[name]
+        dest = _model_cache_dir() / name
+        try:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            if cfg.verbose:
+                print(
+                    f"Downloading {name} (~34 MB) from the nfl_model_artifacts release… (caching under {dest.parent})"
+                )
+            content = download(url, timeout=cfg.timeout, num_retries=5).content
+            tmp = dest.with_suffix(dest.suffix + ".tmp")
+            with open(tmp, "wb") as fh:
+                fh.write(content)
+            os.replace(tmp, dest)
+            return _load_booster_from(dest)
+        except Exception as exc:
+            raise FileNotFoundError(
+                f"Could not obtain '{name}' (bundled absent, cache miss, download from {url} "
+                f"failed: {exc}). Callers that catch FileNotFoundError will skip this model "
+                f"and continue offline; otherwise check network access or pre-place the file "
+                f"under {_model_cache_dir()} or pass models_dir=."
+            ) from exc
+
+    # 5. Unknown model with no bundled/cached file and no download URL.
+    raise FileNotFoundError(
+        f"NFL model '{name}' not found (bundled: {bundled}, cache: {_model_cache_dir() / name}). "
+        f"It is not registered for download in _MODEL_URLS. Run the track6 training pipeline to "
+        f"produce the bundled model files, or pass models_dir= pointing at a directory containing it."
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1115,6 +1205,7 @@ def _derive_xyac(
 def calculate_xyac(
     pbp_data: pl.DataFrame,
     *,
+    models_dir: Optional[Union[str, Path]] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Compute expected yards after catch (xYAC) for intended pass plays.
@@ -1134,6 +1225,16 @@ def calculate_xyac(
     receive null in all five columns.  Drops and recomputes any existing xYAC
     output columns.
 
+    The xYAC model (``xyac_model.ubj``, ~34 MB) is **not** bundled in the
+    wheel: on first use it is downloaded from the ``nfl_model_artifacts``
+    GitHub release and cached under ``<cache_dir>/models/`` (see
+    :func:`sportsdataverse.nfl.get_config`).  Subsequent calls load it from the
+    cache; ``clear_cache()`` deliberately preserves the ``models/`` subdir so a
+    data-cache clear does not force a re-download.  Pass ``models_dir=`` to
+    point at a local directory containing ``xyac_model.ubj`` (offline / custom
+    model override).  If the model is genuinely unavailable (no cache + no
+    network) the underlying loader raises :class:`FileNotFoundError`.
+
     Args:
         pbp_data: nflverse-format play-by-play DataFrame.  Required:
             ``air_yards``, ``season``, ``half_seconds_remaining``,
@@ -1142,6 +1243,10 @@ def calculate_xyac(
             ``defteam_timeouts_remaining``, ``complete_pass``,
             ``incomplete_pass``, ``interception``, ``pass_location``,
             ``receiver_player_name``.  Optional: ``qb_hit``.
+        models_dir: Optional directory to load ``xyac_model.ubj`` from instead
+            of downloading/caching it (offline use or a custom-trained model).
+            When ``None`` (default) the model is resolved bundled → cache →
+            downloaded-from-release.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
@@ -1198,7 +1303,7 @@ def calculate_xyac(
             (pl.col("yardline_100") - pl.col("air_yards")).alias("distance_to_goal"),
         )
         X = feats.select(XYAC_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
-        probs = _load_model(_XYAC_MODEL_FILE).predict(DMatrix(X, feature_names=XYAC_FEATURES))
+        probs = _load_model(_XYAC_MODEL_FILE, models_dir=models_dir).predict(DMatrix(X, feature_names=XYAC_FEATURES))
         if probs.ndim == 1:
             probs = probs.reshape(-1, _XYAC_NUM_CLASSES)
 
@@ -2270,9 +2375,12 @@ def enrich_nfl_pbp(
         method: ``"lead_diff"`` (native nflfastR-style derivation) or
             ``"snapshot"`` (model-snapshot derivation — Task 4b, not yet
             implemented).
-        models_dir: Reserved for a future override of the bundled model
-            directory.  Currently unused (the scorers load from
-            ``sportsdataverse/nfl/models/``).
+        models_dir: Optional directory to load the xYAC model
+            (``xyac_model.ubj``) from instead of downloading/caching it —
+            for offline use or a custom-trained model.  When ``None``
+            (default) the bundled EP/WP/CP models load from
+            ``sportsdataverse/nfl/models/`` and the large xYAC model is
+            resolved bundled → cache → downloaded-from-release.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
@@ -2297,8 +2405,13 @@ def enrich_nfl_pbp(
         * ``xyac_epa``, ``xyac_mean_yardage``, ``xyac_median_yardage``,
           ``xyac_success``, ``xyac_fd`` — expected yards after catch, derived
           from the single multinomial xYAC model (faithful to nflfastR's
-          ``add_xyac``; null on non-qualifying plays; the step is skipped with
-          a ``RuntimeWarning`` only if ``xyac_model.ubj`` is absent).
+          ``add_xyac``; null on non-qualifying plays).  ``xyac_model.ubj``
+          (~34 MB) is **not** bundled in the wheel — on first use it is
+          downloaded from the ``nfl_model_artifacts`` GitHub release and cached
+          under ``<cache_dir>/models/`` (preserved across ``clear_cache()``).
+          If the model is unavailable offline (no cache + no network) the xYAC
+          step is skipped with a ``RuntimeWarning`` and the five columns stay
+          null while the rest of the enrichment proceeds.
 
     Raises:
         ValueError: when ``method`` is unrecognised, or required contract
@@ -2376,7 +2489,7 @@ def enrich_nfl_pbp(
     # the five xyac_* columns; if it is genuinely missing we skip gracefully with
     # a RuntimeWarning rather than failing the whole enrichment.
     try:
-        raw = _self.calculate_xyac(raw)
+        raw = _self.calculate_xyac(raw, models_dir=models_dir)
     except FileNotFoundError as exc:
         import warnings
 

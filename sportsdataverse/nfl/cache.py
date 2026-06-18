@@ -245,6 +245,11 @@ def clear_cache() -> None:
     directory itself is preserved so subsequent writes succeed without
     needing ``mkdir``.
 
+    The ``models/`` subdirectory is **deliberately preserved** — it holds
+    download-on-demand model artifacts (e.g. the ~34 MB ``xyac_model.ubj``)
+    that are expensive to re-fetch. Clearing the *data* cache should not force
+    a model re-download; delete ``<cache_dir>/models/`` by hand to drop those.
+
     Example:
         Force a fresh fetch after upstream changes::
 
@@ -267,6 +272,10 @@ def clear_cache() -> None:
     cache_dir = get_config().cache_dir
     if cache_dir.exists():
         for child in cache_dir.iterdir():
+            # Preserve the download-on-demand model cache; a data-cache clear
+            # must not force an expensive model re-download.
+            if child.name == "models":
+                continue
             if child.is_file():
                 child.unlink()
             elif child.is_dir():

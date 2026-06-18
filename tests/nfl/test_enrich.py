@@ -289,7 +289,7 @@ def _stub_cp(df: pl.DataFrame, *, return_as_pandas: bool = False):  # noqa: ANN0
     return out.to_pandas() if return_as_pandas else out
 
 
-def _stub_xyac(df: pl.DataFrame, *, return_as_pandas: bool = False):  # noqa: ANN001
+def _stub_xyac(df: pl.DataFrame, *, models_dir=None, return_as_pandas: bool = False):  # noqa: ANN001
     out = df.with_columns(
         pl.when(pl.col("air_yards").is_not_null()).then(0.3).otherwise(None).alias("xyac_epa"),
         pl.when(pl.col("air_yards").is_not_null()).then(4.5).otherwise(None).alias("xyac_mean_yardage"),
