@@ -39,6 +39,7 @@ _DEFAULT = {
     "def_pos_team": B,
     "start.pos_team.id": A,
     "end.pos_team.id": A,
+    "start.def_pos_team.id": B,
     "down": 1,
     "end.down": 2,
     "start.distance": 10,
@@ -71,6 +72,7 @@ _SCHEMA = {
     "def_pos_team": pl.Int64,
     "start.pos_team.id": pl.Int64,
     "end.pos_team.id": pl.Int64,
+    "start.def_pos_team.id": pl.Int64,
     "down": pl.Int64,
     "end.down": pl.Int64,
     "start.distance": pl.Int64,
@@ -353,6 +355,55 @@ def test_onside_kick_recovery_is_new_drive():
     # flipped to the (kicking) team's defteam, so the following scrimmage play
     # by A registers as a possession change and a further new drive -- matching
     # nflfastR exactly.
+    fd = out["fixed_drive"].to_list()
+    assert fd == [1, 1, 2, 3]
+    assert fd[2] == 2  # onside recovery is its own new drive boundary
+    assert out["fixed_drive_result"].to_list()[0] == "Field goal"
+
+
+def test_onside_recovery_via_possession_change_without_fumble_flag_is_new_drive():
+    """A recovered onside kick can be represented by the END possession changing
+    to the kicking team WITHOUT a ``fumble_recovered`` flag.  ``_ff_own_kick_rec``
+    must still fire so the drive/series metadata follows the (recovering) kicking
+    team (helper_add_fixed_drives.R L15-27, L117-122).
+
+    Identical to ``test_onside_kick_recovery_is_new_drive`` except the recovery is
+    signalled purely by ``end.pos_team.id == start.def_pos_team.id`` (possession
+    change) rather than ``fumble_recovered=True``.  Before the fix the second OR
+    branch did not exist, so ``_ff_own_kick_rec`` stayed 0 and the onside row was
+    NOT promoted to a new drive (the whole sequence collapsed to ``[1, 1, 1, 1]``).
+    """
+    df = _frame(
+        [
+            {"pos_team": A, "def_pos_team": B, "rush": True},  # drive 1
+            {
+                "pos_team": A,
+                "def_pos_team": B,
+                "field_goal_result": "made",  # FG -> drive 1 ends
+                "fg_attempt": True,
+                "rush": False,
+                "type.text": "Field Goal Good",
+                "scrimmage_play": False,
+            },
+            {
+                "pos_team": A,
+                "def_pos_team": B,
+                "kickoff_play": True,
+                "rush": False,  # onside recovery by A, NO fumble_recovered flag
+                "kickoff_onside": True,
+                "fumble_recovered": False,
+                "start.def_pos_team.id": B,
+                "end.pos_team.id": B,  # END possession changed -> own-kick recovery
+                "type.text": "Kickoff",
+                "scrimmage_play": False,
+                "text": "A kicks onside, recovered by A.",
+            },
+            {"pos_team": A, "def_pos_team": B, "rush": True},  # A keeps ball
+        ]
+    )
+    out = _run(df)
+    # Same outcome as the fumble-flagged onside test: the recovery row opens a new
+    # drive and A's ensuing scrimmage play registers as a further possession change.
     fd = out["fixed_drive"].to_list()
     assert fd == [1, 1, 2, 3]
     assert fd[2] == 2  # onside recovery is its own new drive boundary

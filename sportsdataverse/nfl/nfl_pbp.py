@@ -3488,9 +3488,9 @@ class NFLPlayProcess(object):
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
 
         play_df = play_df.with_columns(
-            EP_start_touchback=pl.lit(EP_start_touchback),
-            EP_start=pl.lit(EP_start),
-            EP_end=pl.lit(EP_end),
+            pl.Series("EP_start_touchback", EP_start_touchback, dtype=pl.Float64),
+            pl.Series("EP_start", EP_start, dtype=pl.Float64),
+            pl.Series("EP_end", EP_end, dtype=pl.Float64),
         )
 
         # --- Derivation half delegated to the shared, model-free calculate_epa ---
@@ -3776,10 +3776,17 @@ class NFLPlayProcess(object):
         # on, leaving output identical. calculate_wpa also emits lowercase nflverse
         # aliases (wp / def_wp / home_wp / away_wp) the legacy __process_wpa output
         # never carried, so drop them to keep the plays schema byte-identical.
+        # NOTE: the XGBoost ``predict`` arrays are native float32 (unlike the EP
+        # arrays, which are float64 after the ``np.clip(probs @ point_values)``
+        # matmul). ``pl.Series`` is given the array's native float32 dtype here so
+        # the downstream ``calculate_wpa`` arithmetic runs at the exact same
+        # precision the prior ``pl.lit(<f32 array>)`` produced -- forcing Float64
+        # would widen the inputs and shift the WP cascade by ~1e-8. This is an
+        # explicitness change only, byte-identical to the prior ``pl.lit`` form.
         play_df = play_df.with_columns(
-            wp_before=pl.lit(WP_start),
-            wp_touchback=pl.lit(WP_start_touchback),
-            wp_after=pl.lit(WP_end),
+            pl.Series("wp_before", WP_start, dtype=pl.Float32),
+            pl.Series("wp_touchback", WP_start_touchback, dtype=pl.Float32),
+            pl.Series("wp_after", WP_end, dtype=pl.Float32),
         )
         play_df = calculate_wpa(play_df).drop("wp", "def_wp", "home_wp", "away_wp")
         return play_df
@@ -3991,7 +3998,10 @@ class NFLPlayProcess(object):
                 (
                     (pl.col("kickoff_play") == True)
                     & ((pl.col("kickoff_onside") == True) | (pl.col("kickoff_downed") == True))
-                    & (pl.col("fumble_recovered") == True)
+                    & (
+                        (pl.col("fumble_recovered") == True)
+                        | (pl.col("end.pos_team.id") == pl.col("start.def_pos_team.id"))
+                    )
                 )
                 .cast(pl.Int8)
                 .alias("_ff_own_kick_rec"),

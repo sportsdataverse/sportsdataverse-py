@@ -71,8 +71,11 @@ def cache_get(key: str) -> pl.DataFrame | None:
     """Return a cached frame for *key*, or ``None`` on miss or expiry.
 
     Honors the active :class:`~sportsdataverse.nfl.config.NflConfig` cache
-    mode (``memory``, ``filesystem``, ``off``).  Expired entries are evicted
-    automatically.
+    mode (``memory``, ``filesystem``, ``off``).  An expired entry is treated
+    as a MISS (returns ``None``).  In ``memory`` mode the expired key is
+    dropped from the in-process dict on read; in ``filesystem`` mode the
+    stale parquet file is NOT auto-deleted from disk — call
+    :func:`clear_cache` to reclaim it.
 
     Args:
         key: Cache key string (e.g. from ``_game_cache_key()``).
@@ -95,7 +98,14 @@ def cache_get(key: str) -> pl.DataFrame | None:
             try:
                 return pl.read_parquet(path)
             except Exception:
-                path.unlink(missing_ok=True)
+                # Corrupt / unreadable parquet: best-effort cleanup. ``unlink``
+                # can itself raise (permissions, Windows file lock), but
+                # ``cache_get`` is opaque infra and must return ``None`` on any
+                # cache issue rather than propagate.
+                try:
+                    path.unlink(missing_ok=True)
+                except Exception:
+                    pass
     return None
 
 
