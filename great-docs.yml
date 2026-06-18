@@ -1,0 +1,183 @@
+# great-docs.yml — Great Docs configuration for sportsdataverse-py
+#
+# Why an explicit `reference:` instead of auto-discovery?
+# `import sportsdataverse` dynamically registers ~2,940 public names at import
+# time (2,678 functions, 163 submodules) via make_league_module(). Great Docs'
+# auto-discovery validates every name through griffe's dynamic loader (~2s per
+# name → ~90 min), so a full `init`/`build` times out. We instead pin an
+# explicit, curated per-sport reference of the canonical public surface, which
+# skips the per-symbol validation loop and renders in a few minutes. See
+# docs-quarto/README.md for the full evaluation.
+
+module: sportsdataverse
+display_name: sportsdataverse
+parser: google
+dynamic: true
+
+# ── Theming ──────────────────────────────────────────────────────────────────
+navbar_style: slate
+content_style: sky
+dark_mode_toggle: true
+attribution: true
+
+logo: assets/logo.png
+
+hero:
+  enabled: true
+  tagline: "Tidy play-by-play, box score, schedule, roster, and odds data across the SportsDataverse — NBA, WNBA, NFL, CFB, MBB, WBB, MLB, and NHL."
+
+# ── GitHub + source links ────────────────────────────────────────────────────
+repo: https://github.com/sportsdataverse/sportsdataverse-py
+github_style: widget
+
+# Source links are disabled: "View source" generation runs a full unscoped
+# export discovery (the same ~2s/name griffe walk over all 2,774 names) that
+# the explicit `reference:` was chosen to avoid. Re-enable only if you are
+# willing to pay the multi-minute discovery cost.
+source:
+  enabled: false
+
+# Changelog pulls from GitHub Releases at build time; keep off for the offline
+# evaluation build so the build never blocks on network/token.
+changelog:
+  enabled: false
+
+sidebar_filter:
+  enabled: true
+  min_items: 10
+
+# ── Explicit, curated API reference ──────────────────────────────────────────
+# One section per sport listing the canonical ESPN cross-league surface, plus a
+# loaders section and the core play-by-play / config classes. Every name here is
+# a real top-level export of `sportsdataverse` with a Google-style docstring.
+reference:
+  title: "API reference"
+  desc: >
+    The canonical public surface of sportsdataverse, grouped by sport. Each
+    `espn_<sport>_*` function returns a tidy polars DataFrame by default (pass
+    `return_as_pandas=True` for pandas). The full ~800-wrapper cross-league
+    surface is generated dynamically at import; this reference pins the
+    most-used entry points per sport.
+  sections:
+    - title: NBA
+      desc: National Basketball Association (ESPN).
+      contents:
+        - espn_nba_teams
+        - espn_nba_scoreboard
+        - espn_nba_schedule
+        - espn_nba_team_roster
+        - espn_nba_player_stats
+        - espn_nba_standings
+        - espn_nba_calendar
+        - espn_nba_news
+
+    - title: WNBA
+      desc: Women's National Basketball Association (ESPN).
+      contents:
+        - espn_wnba_teams
+        - espn_wnba_scoreboard
+        - espn_wnba_schedule
+        - espn_wnba_team_roster
+        - espn_wnba_player_stats
+        - espn_wnba_standings
+        - espn_wnba_calendar
+        - espn_wnba_news
+
+    - title: NFL
+      desc: National Football League (ESPN).
+      contents:
+        - espn_nfl_teams
+        - espn_nfl_scoreboard
+        - espn_nfl_schedule
+        - espn_nfl_team_roster
+        - espn_nfl_player_stats
+        - espn_nfl_standings
+        - espn_nfl_calendar
+        - espn_nfl_news
+
+    - title: College football
+      desc: NCAA college football (ESPN).
+      contents:
+        - espn_cfb_teams
+        - espn_cfb_scoreboard
+        - espn_cfb_schedule
+        - espn_cfb_team_roster
+        - espn_cfb_player_stats
+        - espn_cfb_standings
+        - espn_cfb_calendar
+        - espn_cfb_news
+
+    - title: Men's college basketball
+      desc: NCAA men's college basketball (ESPN).
+      contents:
+        - espn_mbb_teams
+        - espn_mbb_scoreboard
+        - espn_mbb_schedule
+        - espn_mbb_team_roster
+        - espn_mbb_player_stats
+        - espn_mbb_standings
+        - espn_mbb_calendar
+        - espn_mbb_news
+
+    - title: Women's college basketball
+      desc: NCAA women's college basketball (ESPN).
+      contents:
+        - espn_wbb_teams
+        - espn_wbb_scoreboard
+        - espn_wbb_schedule
+        - espn_wbb_team_roster
+        - espn_wbb_player_stats
+        - espn_wbb_standings
+        - espn_wbb_calendar
+        - espn_wbb_news
+
+    - title: MLB
+      desc: Major League Baseball (ESPN).
+      contents:
+        - espn_mlb_teams
+        - espn_mlb_scoreboard
+        - espn_mlb_schedule
+        - espn_mlb_team_roster
+        - espn_mlb_player_stats
+        - espn_mlb_standings
+        - espn_mlb_calendar
+        - espn_mlb_news
+
+    - title: NHL
+      desc: National Hockey League (ESPN).
+      contents:
+        - espn_nhl_teams
+        - espn_nhl_scoreboard
+        - espn_nhl_schedule
+        - espn_nhl_team_roster
+        - espn_nhl_player_stats
+        - espn_nhl_standings
+        - espn_nhl_calendar
+        - espn_nhl_news
+
+    - title: NFL data loaders
+      desc: >
+        nflreadpy-parity loaders for nflverse release data (cached, polars by
+        default). The `load_nfl_*` prefix disambiguates under the umbrella
+        package.
+      contents:
+        - load_nfl_pbp
+        - load_nfl_schedule
+        - load_nfl_rosters
+        - load_nfl_teams
+        - load_nfl_nextgen_stats
+        - load_nfl_pfr_advstats
+        - load_nfl_injuries
+        - load_nfl_depth_charts
+        - load_nfl_draft_picks
+        - load_nfl_contracts
+
+    - title: Play-by-play and config classes
+      desc: Core processing classes and the NFL caching config object.
+      contents:
+        - name: CFBPlayProcess
+          members: false
+        - name: NFLPlayProcess
+          members: false
+        - NflConfig
+        - SeasonNotFoundError

@@ -1,0 +1,90 @@
+---
+title: "Getting started"
+description: "Install sportsdataverse and pull your first tidy DataFrame of real ESPN data."
+jupyter: python3
+---
+
+`sportsdataverse` is the Python sister to the SportsDataverse R packages
+(`hoopR`, `wehoop`, `cfbfastR`, `fastRhockey`, `baseballr`). It provides tidy
+access to play-by-play, box score, schedule, roster, and odds data across the
+NBA, WNBA, NFL, College Football, Men's and Women's College Basketball, MLB,
+and NHL.
+
+## Install
+
+::: {.panel-tabset}
+
+### pip
+
+```bash
+pip install sportsdataverse
+```
+
+### uv
+
+```bash
+uv add sportsdataverse
+```
+
+### conda
+
+```bash
+conda install -c conda-forge sportsdataverse
+```
+
+:::
+
+Every `espn_<sport>_*` function returns a [polars](https://pola.rs) `DataFrame`
+by default. Pass `return_as_pandas=True` for a pandas frame instead.
+
+## Your first call
+
+The cell below runs **at documentation build time** against the live ESPN API,
+so the table you see is the genuine output of the function — not a
+hand-maintained snapshot that can silently drift out of date.
+
+```{python}
+import polars as pl
+pl.Config.set_tbl_rows(6)
+pl.Config.set_tbl_cols(6)
+
+from sportsdataverse.nba import espn_nba_teams
+
+teams = espn_nba_teams()
+teams.select(
+    ["team_id", "team_location", "team_name", "team_display_name", "team_abbreviation"]
+).head(6)
+```
+
+That is all 30 NBA franchises with their ESPN ids — the `team_id` column is the
+key you pass to roster and schedule calls.
+
+```{python}
+print(f"espn_nba_teams() returned {teams.shape[0]} rows x {teams.shape[1]} columns")
+```
+
+## The same shape across every sport
+
+The cross-league surface is uniform: swap the sport slug and the call works the
+same way. Here is the women's college basketball team list, again executed
+live:
+
+```{python}
+from sportsdataverse.wbb import espn_wbb_teams
+
+wbb = espn_wbb_teams()
+print(f"espn_wbb_teams() -> {wbb.shape[0]} teams")
+wbb.select(["team_id", "team_display_name", "team_abbreviation"]).head(5)
+```
+
+## Where to go next
+
+- **[Scoreboards & schedules](01-scoreboards-and-schedules.qmd)** — pull a day
+  of finished games with scores, and a full-season schedule.
+- **[API reference](../reference/index.qmd)** — the curated per-sport surface,
+  one page per function with its signature, parameters, and a runnable example.
+
+See also the companion R packages: [hoopR](https://hoopR.sportsdataverse.org)
+(men's basketball), [wehoop](https://wehoop.sportsdataverse.org) (women's
+basketball), and [cfbfastR](https://cfbfastR.sportsdataverse.org) (college
+football).

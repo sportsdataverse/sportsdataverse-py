@@ -1,0 +1,82 @@
+---
+title: "Scoreboards & schedules"
+description: "Pull a day of finished games with scores, then a full-season schedule — all executed live."
+jupyter: python3
+---
+
+Two of the most common tasks are *"what games were played on date X?"* and
+*"give me the whole season schedule."* Both are one function call, and both
+return a tidy DataFrame. Every table on this page is executed against the live
+ESPN API when the docs are built.
+
+## A day of finished games
+
+`espn_<sport>_scoreboard(dates=YYYYMMDD)` returns one row per game for that
+date. We use a past date so the scores are final and stable:
+
+```{python}
+import polars as pl
+pl.Config.set_tbl_rows(8)
+pl.Config.set_tbl_cols(10)
+
+from sportsdataverse.nba import espn_nba_scoreboard
+
+games = espn_nba_scoreboard(dates=20240110)
+games.select(
+    [
+        "short_name",
+        "home_display_name",
+        "away_display_name",
+        "home_score",
+        "away_score",
+        "status_type_detail",
+        "home_winner",
+    ]
+).head(8)
+```
+
+The frame carries 50 columns in total — venue, broadcast, odds, and series
+context all ride along — but the slice above is the human-readable core.
+
+```{python}
+n = games.shape[0]
+home_wins = games.filter(pl.col("home_winner") == True).shape[0]
+print(f"{n} games on 2024-01-10; the home team won {home_wins} of them.")
+```
+
+That count is computed at build time from the live frame — change the date and
+the prose updates itself on the next render.
+
+## A full-season schedule
+
+Pass a season year instead of a date to get the whole schedule. The frame is
+wide (every team, venue, and status field), so we select a readable slice:
+
+```{python}
+from sportsdataverse.nba import espn_nba_schedule
+
+schedule = espn_nba_schedule(dates=2024)
+print(f"espn_nba_schedule(dates=2024) -> {schedule.shape[0]} games x {schedule.shape[1]} columns")
+
+schedule.select(
+    ["game_id", "season", "home_display_name", "away_display_name"]
+).head(6)
+```
+
+## pandas, if you prefer
+
+Any of these functions takes `return_as_pandas=True` and hands back a pandas
+`DataFrame` with identical columns:
+
+```{python}
+teams_pd = espn_nba_scoreboard(dates=20240110, return_as_pandas=True)
+print(type(teams_pd).__module__ + "." + type(teams_pd).__name__)
+print(list(teams_pd.columns[:6]))
+```
+
+## Next steps
+
+- Browse the **[API reference](../reference/index.qmd)** for the full per-sport
+  surface — schedules, rosters, player stats, standings, and news.
+- The same `dates=` pattern works for `espn_nfl_scoreboard`,
+  `espn_cfb_scoreboard`, `espn_nhl_scoreboard`, and the rest.

@@ -123,6 +123,16 @@ This is an honest comparison scoped to the SportsDataverse stack, not a generic
 
 ## The Great Docs attempt — what happened
 
+> **⚠️ Superseded — see [`../GREAT-DOCS-NOTES.md`](../GREAT-DOCS-NOTES.md).** A
+> later pass got **real Great Docs auto-discovery working** for this package by
+> pinning an explicit, curated `reference:` in `great-docs.yml` (which skips the
+> ~2s-per-name griffe validation walk that makes full auto-discovery time out).
+> The build below was correct about the *symptom* (auto-discovery times out) but
+> the *conclusion* ("auto-reference discovery is not viable here") was too
+> strong. The corrected recipe, timings, and a screenshotted working site live
+> in `../GREAT-DOCS-NOTES.md`. The fallback Quarto site in this directory is kept
+> as a separate, still-valid experiment.
+
 Great Docs is a `pip install great-docs` CLI (`init` / `build` / `preview`) that
 uses Quarto under the hood. It auto-discovers a package's public API from
 `__all__` / `dir()` / static analysis, detects the docstring style, and
