@@ -486,12 +486,24 @@ exactly one place.
   `ep`, derives the rest natively on nflverse columns, applies the **kickoff/PAT
   feature substitution** (touchback yardline `TOUCHBACK_YARDLINE_PRE/POST_2016` =
   80 pre-2016 / 75 from 2016, `down`→1, `ydstogo`→10 — the parity lever), and
-  exposes `ep` as **start-of-play** EP. `method="snapshot"` (ESPN `start.*`/`end.*`
-  via `calculate_epa`/`calculate_wpa`) is **planned** — currently
-  `NotImplementedError`; it pairs with delegating `NFLPlayProcess.__process_*` to
-  `ep_wp` (the de-triplication is not yet landed — until then the inline
-  `__process_epa/wpa` math is an intentional temporary duplicate of the shared
-  functions).
+  exposes `ep` as **start-of-play** EP. `method="snapshot"` remains
+  `NotImplementedError` — it was the intended vehicle for a
+  lead_diff-vs-snapshot cross-era comparison, which was instead validated
+  directly; the comparison confirmed correctness without needing a second
+  live path, so `"snapshot"` is intentionally left unimplemented.
+- **`NFLPlayProcess.__process_epa` / `__process_wpa` now delegate** their
+  derivation to the shared `calculate_epa` / `calculate_wpa` — the ESPN
+  construction path and the nflverse lead_diff path share one derivation
+  engine (byte-identical output verified). There is no inline duplicate.
+- **`fixed_drive` / `series` columns** — nflfastR
+  `helper_add_fixed_drives.R` + `helper_add_series_data.R` are ported into
+  the ESPN `NFLPlayProcess` construction path (including lag-2/3
+  timeout-interleave and onside-recovery handling); they are additive
+  columns appended during `run_processing_pipeline()`.
+- **`build_nfl_season(game_ids, *, source=...)`** — season-compile helper:
+  iterates game IDs, calls construct→enrich→appends, joins via
+  `diagonal_relaxed`, and caches each game's enriched parquet keyed by
+  `(game_id, PIPELINE_VERSION)` reusing `nfl/cache.py`.
 - **Constants** are centralized in `model_vars.py`: `NFLVERSE_FRAME_CONTRACT`,
   `_EP_POINT_VALUES`, `ERA_SEASON_CUTS` (cuts 2001/2005/2013/2017),
   `TOUCHBACK_YARDLINE_PRE/POST_2016`, `SPREAD_TIME_DECAY_EXPONENT` (`-4.0`).
