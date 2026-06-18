@@ -2579,7 +2579,7 @@ import polars as pl
 stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 ```
 
-### `load_nfl_players(*, source: 'str' = 'nflverse', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_players}
+### `load_nfl_players(return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_players}
 
 Load the nflverse NFL player-identity master.
 
@@ -2601,8 +2601,8 @@ this same parquet).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface only. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface only. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3076,7 +3076,7 @@ participation = load_nfl_pbp_participation(seasons=[2022])
 participation = load_nfl_pbp_participation(seasons=range(2018, 2023))
 ```
 
-### `load_pbp(seasons: 'List[int]', source: 'str' = 'nflverse', return_as_pandas=False) -> 'pl.DataFrame'` {#load_pbp}
+### `load_pbp(seasons: 'List[int]', return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_pbp}
 
 Load NFL play by play data going back to 1999
 
@@ -3085,8 +3085,8 @@ Load NFL play by play data going back to 1999
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
-| `source` | `str` | `'nflverse'` | Which enriched play-by-play release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse/nflfastR `play_by_play_{season}.parquet` releases — full history from 1999, unchanged behavior. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_model_pbp` release: a Python-built, nflfastR-faithful enriched frame (ep/epa, wp/wpa/vegas_wp, cp/cpoe, xyac_*/air_epa) that covers the published seasons (2023+) and drops administrative / timeout rows for a clean modeling subset. Any other value raises `ValueError`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which enriched play-by-play release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse/nflfastR `play_by_play_{season}.parquet` releases — full history from 1999, unchanged behavior. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_model_pbp` release: a Python-built, nflfastR-faithful enriched frame (ep/epa, wp/wpa/vegas_wp, cp/cpoe, xyac_*/air_epa) that covers the published seasons (2023+) and drops administrative / timeout rows for a clean modeling subset. Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3664,7 +3664,7 @@ import polars as pl
 stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 ```
 
-### `load_players(*, source: 'str' = 'nflverse', return_as_pandas=False) -> 'pl.DataFrame'` {#load_players}
+### `load_players(return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_players}
 
 Load the nflverse NFL player-identity master.
 
@@ -3686,8 +3686,8 @@ this same parquet).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface only. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface only. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3758,7 +3758,7 @@ import polars as pl
 load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
 ```
 
-### `load_rosters(seasons: 'List[int]', *, source: 'str' = 'nflverse', return_as_pandas=False) -> 'pl.DataFrame'` {#load_rosters}
+### `load_rosters(seasons: 'List[int]', return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_rosters}
 
 Load NFL season roster data for the requested seasons.
 
@@ -3776,8 +3776,8 @@ network round trip to nflverse is acceptable.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `list` |  | Seasons to load (e.g. `[2024]` or `range(2020, 2025)`). A single `int` is accepted and wrapped. 1920 is the earliest available season. |
-| `source` | `str` | `'nflverse'` | Which roster release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse season-roster releases described above -- the full multi-source product (1920+, densely populated cross-system IDs). `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_rosters` release built by `sportsdataverse.nfl.build_nfl_rosters` from the **public NFL Shield / ESPN** surface only. The SDV tier is a partial build: its 30 columns are a subset of nflverse's 36, and cross-system IDs are sparser pre-2016. It covers only the published seasons (rosters 2022+). The default stays `"nflverse"`. Any other value raises `ValueError`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe (default). |
+| `source` | `str` | `'nflverse'` | Which roster release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse season-roster releases described above -- the full multi-source product (1920+, densely populated cross-system IDs). `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_rosters` release built by `sportsdataverse.nfl.build_nfl_rosters` from the **public NFL Shield / ESPN** surface only. The SDV tier is a partial build: its 30 columns are a subset of nflverse's 36, and cross-system IDs are sparser pre-2016. It covers only the published seasons (rosters 2022+). The default stays `"nflverse"`. Any other value raises `ValueError`. |
 
 **Returns**
 

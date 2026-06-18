@@ -51,7 +51,7 @@ from sportsdataverse.nfl.cache import cached_loader
 
 
 @cached_loader
-def load_nfl_pbp(seasons: List[int], source: str = "nflverse", return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
     """Load NFL play by play data going back to 1999
 
     Args:
@@ -709,7 +709,7 @@ def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas: bool = False) 
 
 
 @cached_loader
-def load_nfl_rosters(seasons: List[int], *, source: str = "nflverse", return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
     """Load NFL season roster data for the requested seasons.
 
     Reads nflverse's published season-roster parquet (one row per player per
@@ -899,7 +899,7 @@ def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
 
 
 @cached_loader
-def load_nfl_players(*, source: str = "nflverse", return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_players(return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
     """Load the nflverse NFL player-identity master.
 
     Reads nflverse's published ``players.parquet`` — a one-row-per-player
