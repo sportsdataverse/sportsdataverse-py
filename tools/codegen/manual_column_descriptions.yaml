@@ -2412,6 +2412,102 @@ nfl_ngs_statboard:
   player_uniformNumber: Uniform number worn by the player, stored as a string to preserve leading zeros if applicable.
   seasonType: Season segment covered by this statboard record (e.g., 'REG' for regular season, 'POST' for playoffs).
   teamId: NFL Next Gen Stats team identifier for the passer's team at the time of this record.
+scrape_ngs_season:
+  aggressiveness: Percentage of pass attempts thrown into tight windows (defender within one yard of the receiver at completion or incompletion), from NFL Next Gen Stats. Passing only.
+  attempts: Pass attempts (including incompletions) recorded for the passer during the slice. Passing only.
+  avg_air_distance: Average air distance in yards on all pass attempts, measuring how far the ball travels through the air regardless of direction. Passing only.
+  avg_air_yards_differential: Average difference between intended air yards and completed air yards, measuring accuracy relative to target depth. Passing only.
+  avg_air_yards_to_sticks: Average air yards relative to the first-down marker on pass attempts (positive = beyond the sticks). Passing only.
+  avg_completed_air_yards: Average air yards on completed passes only, measuring depth of actual completions. Passing only.
+  avg_intended_air_yards: Average depth of target on all pass attempts, regardless of completion. Passing/receiving.
+  avg_time_to_throw: Average time in seconds from snap to release for the passer, as tracked by NFL Next Gen Stats. Passing only.
+  completion_percentage: Actual completion percentage for the passer during the slice. Passing only.
+  completion_percentage_above_expectation: Completion percentage above the model-expected completion rate (CPOE/CPAE). Passing only.
+  completions: Completed passes for the passer during the slice. Passing only.
+  expected_completion_percentage: Model-expected completion percentage based on target depth, separation, and coverage, from NFL Next Gen Stats. Passing only.
+  games_played: Number of games played by the player during the slice covered by the row.
+  interceptions: Interceptions thrown by the passer during the slice. Passing only.
+  max_air_distance: Maximum air distance in yards recorded on any single pass attempt during the slice. Passing only.
+  max_completed_air_distance: Maximum air distance in yards recorded on any single completed pass during the slice. Passing only.
+  pass_touchdowns: Passing touchdowns thrown by the passer during the slice. Passing only.
+  pass_yards: Total passing yards accumulated by the passer during the slice. Passing only.
+  passer_rating: NFL passer rating (0–158.3 scale) for the passer during the slice. Passing only.
+  player_name: Display name of the player as returned at the top-level statboard row.
+  season: NFL season year for the row.
+  season_type: Season segment for the row ('REG' for regular-season weeks and the week-0 aggregate, 'POST' for playoff weeks).
+  week: NFL Next Gen Stats week tag; 0 is the season aggregate, 1..max_reg are regular-season weeks, and higher values are continuous playoff weeks.
+  position: Player position as returned at the top-level statboard row (e.g., 'QB', 'WR', 'RB').
+  team_id: NFL Next Gen Stats team identifier for the player's team on this row; the key joined to resolve team_abbr.
+  player_season: NFL season year recorded in the nested player record.
+  player_season_type: Season segment recorded in the nested player record.
+  player_week: Week recorded in the nested player record (the loop week tag overrides this on the top-level week column).
+  player_jersey_number: Jersey number worn by the player.
+  player_last_name: Last name of the player.
+  player_football_name: Football name used by the player, which may differ from the legal first name.
+  player_first_name: First name of the player.
+  player_position: Player position from the nested player record.
+  player_gsis_it_id: NFL GSIS internal tracking integer identifier for the player.
+  player_gsis_id: NFL GSIS (Game Statistics and Information System) identifier, the primary nflverse player key.
+  player_esb_id: Elias Sports Bureau (ESB) identifier for the player.
+  player_display_name: Full display name of the player as used in NFL Next Gen Stats records.
+  player_short_name: Shortened display name for the player (e.g., 'P.Mahomes').
+  player_uniform_number: Uniform number worn by the player, stored as a string to preserve leading zeros if applicable.
+  player_status: Current roster status of the player (e.g., 'ACT' for active, 'IR' for injured reserve).
+  player_current_team_id: NFL Next Gen Stats team identifier for the team the player is currently rostered on.
+  player_smart_id: NFL Next Gen Stats smart (UUID-style) identifier for the player.
+  player_headshot: URL template for the player's headshot image.
+  player_position_group: Broad position group for the player (e.g., 'QB', 'WR') in the NGS player record.
+  player_ngs_position: Player's position as classified by the NFL Next Gen Stats system.
+  player_ngs_position_group: Broader position group the player belongs to as classified by the NFL Next Gen Stats system.
+  team_abbr: Team abbreviation resolved from team_id via the NGS team directory (relocated franchise abbreviations dropped to keep the mapping one-to-one).
+scrape_ngs_week:
+  aggressiveness: Percentage of pass attempts thrown into tight windows (defender within one yard of the receiver at completion or incompletion), from NFL Next Gen Stats. Passing only.
+  attempts: Pass attempts (including incompletions) recorded for the passer during the week. Passing only.
+  avg_air_distance: Average air distance in yards on all pass attempts, measuring how far the ball travels through the air regardless of direction. Passing only.
+  avg_air_yards_differential: Average difference between intended air yards and completed air yards, measuring accuracy relative to target depth. Passing only.
+  avg_air_yards_to_sticks: Average air yards relative to the first-down marker on pass attempts (positive = beyond the sticks). Passing only.
+  avg_completed_air_yards: Average air yards on completed passes only, measuring depth of actual completions. Passing only.
+  avg_intended_air_yards: Average depth of target on all pass attempts, regardless of completion. Passing/receiving.
+  avg_time_to_throw: Average time in seconds from snap to release for the passer, as tracked by NFL Next Gen Stats. Passing only.
+  completion_percentage: Actual completion percentage for the passer during the week. Passing only.
+  completion_percentage_above_expectation: Completion percentage above the model-expected completion rate (CPOE/CPAE). Passing only.
+  completions: Completed passes for the passer during the week. Passing only.
+  expected_completion_percentage: Model-expected completion percentage based on target depth, separation, and coverage, from NFL Next Gen Stats. Passing only.
+  games_played: Number of games played by the player during the slice covered by the row.
+  interceptions: Interceptions thrown by the passer during the week. Passing only.
+  max_air_distance: Maximum air distance in yards recorded on any single pass attempt during the week. Passing only.
+  max_completed_air_distance: Maximum air distance in yards recorded on any single completed pass during the week. Passing only.
+  pass_touchdowns: Passing touchdowns thrown by the passer during the week. Passing only.
+  pass_yards: Total passing yards accumulated by the passer during the week. Passing only.
+  passer_rating: NFL passer rating (0–158.3 scale) for the passer during the week. Passing only.
+  player_name: Display name of the player as returned at the top-level statboard row.
+  season: NFL season year for the row.
+  season_type: Season segment for the row ('REG' or 'POST') as supplied by the caller.
+  week: NFL Next Gen Stats week tag supplied by the caller; 0 is the season aggregate, 1..max_reg are regular-season weeks, and higher values are continuous playoff weeks.
+  position: Player position as returned at the top-level statboard row (e.g., 'QB', 'WR', 'RB').
+  team_id: NFL Next Gen Stats team identifier for the player's team on this row; the key joined to resolve team_abbr.
+  player_season: NFL season year recorded in the nested player record.
+  player_season_type: Season segment recorded in the nested player record.
+  player_week: Week recorded in the nested player record (the loop week tag overrides this on the top-level week column).
+  player_jersey_number: Jersey number worn by the player.
+  player_last_name: Last name of the player.
+  player_football_name: Football name used by the player, which may differ from the legal first name.
+  player_first_name: First name of the player.
+  player_position: Player position from the nested player record.
+  player_gsis_it_id: NFL GSIS internal tracking integer identifier for the player.
+  player_gsis_id: NFL GSIS (Game Statistics and Information System) identifier, the primary nflverse player key.
+  player_esb_id: Elias Sports Bureau (ESB) identifier for the player.
+  player_display_name: Full display name of the player as used in NFL Next Gen Stats records.
+  player_short_name: Shortened display name for the player (e.g., 'P.Mahomes').
+  player_uniform_number: Uniform number worn by the player, stored as a string to preserve leading zeros if applicable.
+  player_status: Current roster status of the player (e.g., 'ACT' for active, 'IR' for injured reserve).
+  player_current_team_id: NFL Next Gen Stats team identifier for the team the player is currently rostered on.
+  player_smart_id: NFL Next Gen Stats smart (UUID-style) identifier for the player.
+  player_headshot: URL template for the player's headshot image.
+  player_position_group: Broad position group for the player (e.g., 'QB', 'WR') in the NGS player record.
+  player_ngs_position: Player's position as classified by the NFL Next Gen Stats system.
+  player_ngs_position_group: Broader position group the player belongs to as classified by the NFL Next Gen Stats system.
+  team_abbr: Team abbreviation resolved from team_id via the NGS team directory (relocated franchise abbreviations dropped to keep the mapping one-to-one).
 nfl_ngs_statboard_leaders:
   avgAirDistance: Average air distance (in yards) the ball traveled on all pass attempts, from NFL Next Gen Stats.
   avgAirYardsDifferential: Average difference between intended air yards and completed air yards per attempt, indicating whether the passer throws short or long relative to the targeted depth.

@@ -79,6 +79,9 @@ nfl:
   nfl_ngs_microsite_chart: {season: 2024, season_type: "REG", week: 1}
   nfl_ngs_microsite_chart_players: {season: 2024, season_type: "REG"}
   nfl_ngs_play_is_highlight: {game_id: 2024111800, play_id: 1214}
+  # NGS season scraper (mirrors nflverse/ngs-data)
+  scrape_ngs_week: {stat_type: "passing", season: 2023, week: 1, season_type: "REG"}
+  scrape_ngs_season: {stat_type: "passing", season: 2023, include_season_totals: false}
 
 nba:
   espn_nba_player_stats: {athlete_id: 3059318, season: 2024}
