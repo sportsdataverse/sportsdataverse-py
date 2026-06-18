@@ -41,6 +41,7 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_win_probability,
     calculate_xyac,
 )
+from tests.conftest import skip_if_no_live
 
 
 # ---------------------------------------------------------------------------
@@ -144,6 +145,9 @@ class _FakeBooster:
         if self._n_classes == 7:
             # uniform 1/7 for each EP class
             return np.full((n, 7), 1.0 / 7.0, dtype=np.float32)
+        if self._n_classes == 76:
+            # uniform multinomial over the 76 YAC buckets (rows sum to 1)
+            return np.full((n, 76), 1.0 / 76.0, dtype=np.float32)
         # binary logistic → 0.5
         return np.full(n, 0.5, dtype=np.float32)
 
@@ -159,7 +163,7 @@ def mock_ep_model(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):  # noqa: ARG001
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -175,7 +179,7 @@ def mock_wp_model(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):  # noqa: ARG001
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -191,7 +195,7 @@ def mock_both_models(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -618,11 +622,19 @@ def _nflverse_pass_row(
         roof=roof,
     )
     _air: float | None = float(air_yards) if air_yards is not None else None
+    # ``pass_location="left"`` keeps ``pass_middle`` at 0 so the CP feature
+    # parity check (ESPN side defaults pass_middle=0) still holds.
     return base.with_columns(
         pl.lit(_air, dtype=pl.Float64).alias("air_yards"),
         pl.lit(complete_pass).alias("complete_pass"),
+        pl.lit(0).alias("incomplete_pass"),
+        pl.lit(0).alias("interception"),
         pl.lit(ep).alias("ep"),
         pl.lit(cp).alias("cp"),
+        # nflfastR add_xyac valid_pass inputs
+        pl.lit(0.5).alias("air_epa"),
+        pl.lit("left").alias("pass_location"),
+        pl.lit("X.Receiver").alias("receiver_player_name"),
     )
 
 
@@ -664,7 +676,7 @@ def mock_cp_model(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -674,13 +686,20 @@ def mock_cp_model(monkeypatch):
 
 @pytest.fixture()
 def mock_xyac_model(monkeypatch):
-    """Patch _load_model so EP, CP, and all four XYAC models return simple preds."""
+    """Patch _load_model: EP → 7-class uniform, xYAC → 76-class uniform.
+
+    The xYAC derivation re-scores expected points on every outcome row, so the
+    EP model (``ep_model.ubj``) must also be stubbed.  A uniform 76-class
+    distribution makes the derivation deterministic and model-file-free.
+    """
     import sportsdataverse.nfl.ep_wp as _mod
 
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):
+    def _fake_load(name: str, models_dir=None):
+        if "xyac_model" in name:
+            return _FakeBooster(n_classes=76)
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -716,10 +735,10 @@ class TestEspnCpFeatures:
         assert X[0, CP_FEATURES.index("air_is_zero")] == 0.0
 
     def test_distance_to_sticks(self):
-        # distance_to_sticks = ydstogo - air_yards = 10 - 7 = 3
+        # distance_to_sticks = air_yards - ydstogo = 7 - 10 = -3 (nflfastR sign)
         df = _espn_pass_row(ydstogo=10.0, air_yards=7.0)
         X = _espn_cp_features(df)
-        assert X[0, CP_FEATURES.index("distance_to_sticks")] == pytest.approx(3.0)
+        assert X[0, CP_FEATURES.index("distance_to_sticks")] == pytest.approx(-3.0)
 
     def test_no_era0_era1_in_cp_features(self):
         assert "era0" not in CP_FEATURES
@@ -774,27 +793,30 @@ class TestEspnCpFeatures:
 class TestEspnXyacFeatures:
     def test_shape(self):
         X = _espn_xyac_features(_espn_pass_row())
-        assert X.shape == (1, 15)
+        assert X.shape == (1, 19)
         assert X.dtype == np.float32
 
     def test_column_count_matches_xyac_features(self):
         assert _espn_xyac_features(_espn_pass_row()).shape[1] == len(XYAC_FEATURES)
 
+    def test_no_cp_ep_in_features(self):
+        # The faithful multinomial xYAC model takes no cp/ep features.
+        assert "cp" not in XYAC_FEATURES
+        assert "ep" not in XYAC_FEATURES
+
     def test_air_yards_passthrough(self):
         X = _espn_xyac_features(_espn_pass_row(air_yards=8.0))
         assert X[0, XYAC_FEATURES.index("air_yards")] == pytest.approx(8.0)
 
-    def test_cp_passthrough(self):
-        X = _espn_xyac_features(_espn_pass_row(cp=0.75))
-        assert X[0, XYAC_FEATURES.index("cp")] == pytest.approx(0.75)
+    def test_distance_to_goal_computed(self):
+        # distance_to_goal = yardline_100 - air_yards = 40 - 8 = 32
+        X = _espn_xyac_features(_espn_pass_row(yardline=40.0, air_yards=8.0))
+        assert X[0, XYAC_FEATURES.index("distance_to_goal")] == pytest.approx(32.0)
 
-    def test_ep_passthrough(self):
-        X = _espn_xyac_features(_espn_pass_row(ep=3.5))
-        assert X[0, XYAC_FEATURES.index("ep")] == pytest.approx(3.5)
-
-    def test_season_passthrough(self):
-        X = _espn_xyac_features(_espn_pass_row(season=2019))
-        assert X[0, XYAC_FEATURES.index("season")] == pytest.approx(2019.0)
+    def test_distance_to_sticks_computed(self):
+        # distance_to_sticks = air_yards - ydstogo = 8 - 10 = -2
+        X = _espn_xyac_features(_espn_pass_row(ydstogo=10.0, air_yards=8.0))
+        assert X[0, XYAC_FEATURES.index("distance_to_sticks")] == pytest.approx(-2.0)
 
     def test_air_is_zero_computed(self):
         X = _espn_xyac_features(_espn_pass_row(air_yards=0.0))
@@ -804,10 +826,17 @@ class TestEspnXyacFeatures:
         X = _espn_xyac_features(_espn_pass_row(air_yards=4.0))
         assert X[0, XYAC_FEATURES.index("air_is_zero")] == 0.0
 
-    def test_down_integer_passthrough(self):
-        df = _espn_pass_row(down=3)
-        X = _espn_xyac_features(df, down_col="start.down")
-        assert X[0, XYAC_FEATURES.index("down")] == pytest.approx(3.0)
+    def test_down_one_hots(self):
+        X = _espn_xyac_features(_espn_pass_row(down=3))
+        assert X[0, XYAC_FEATURES.index("down1")] == 0.0
+        assert X[0, XYAC_FEATURES.index("down3")] == 1.0
+        assert X[0, XYAC_FEATURES.index("down4")] == 0.0
+
+    def test_roof_defaults_retractable(self):
+        X = _espn_xyac_features(_espn_pass_row())
+        assert X[0, XYAC_FEATURES.index("retractable")] == 1.0
+        assert X[0, XYAC_FEATURES.index("dome")] == 0.0
+        assert X[0, XYAC_FEATURES.index("outdoors")] == 0.0
 
     def test_era_flags(self):
         X = _espn_xyac_features(_espn_pass_row(season=2015))
@@ -817,7 +846,7 @@ class TestEspnXyacFeatures:
 
     def test_multi_row(self):
         rows = pl.concat([_espn_pass_row(season=2022), _espn_pass_row(season=2015)])
-        assert _espn_xyac_features(rows).shape == (2, 15)
+        assert _espn_xyac_features(rows).shape == (2, 19)
 
 
 # ---------------------------------------------------------------------------
@@ -919,33 +948,35 @@ class TestCalculateCompletionProbability:
 
 
 class TestCalculateXyac:
+    _OUT = ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd")
+
     def test_adds_xyac_columns(self, mock_xyac_model):
         result = calculate_xyac(_nflverse_pass_row())
-        for col in ("xyac_mean_yardage", "xyac_median_yardage", "xyac_sd_yardage", "xyac_prob_complete"):
+        for col in self._OUT:
             assert col in result.columns
 
     def test_xyac_not_null_for_pass_plays(self, mock_xyac_model):
         result = calculate_xyac(_nflverse_pass_row())
-        assert result["xyac_mean_yardage"][0] is not None
+        for col in self._OUT:
+            assert result[col][0] is not None, f"{col} unexpectedly null"
 
     def test_xyac_null_for_nonpass(self, mock_xyac_model):
-        df = _nflverse_row().with_columns(
-            pl.lit(None).cast(pl.Float64).alias("air_yards"),
-            pl.lit(2.0).alias("ep"),
-            pl.lit(0.7).alias("cp"),
-        )
+        # air_yards null → fails the valid_pass filter → all xyac cols null
+        df = _nflverse_pass_row(air_yards=None)
         result = calculate_xyac(df)
-        assert result["xyac_mean_yardage"][0] is None
+        assert result["xyac_epa"][0] is None
 
-    def test_xyac_null_when_cp_missing(self, mock_xyac_model):
-        """Plays with air_yards but null cp are excluded (cp required)."""
-        df = _nflverse_row().with_columns(
-            pl.lit(5.0).alias("air_yards"),
-            pl.lit(2.0).alias("ep"),
-            pl.lit(None).cast(pl.Float64).alias("cp"),
-        )
+    def test_xyac_null_when_not_a_pass_attempt(self, mock_xyac_model):
+        """Plays with air_yards but no completion/incompletion/INT are excluded."""
+        df = _nflverse_pass_row(complete_pass=0)
         result = calculate_xyac(df)
-        assert result["xyac_mean_yardage"][0] is None
+        assert result["xyac_epa"][0] is None
+
+    def test_xyac_null_when_distance_to_goal_zero(self, mock_xyac_model):
+        """distance_to_goal == 0 (air_yards == yardline_100) is excluded."""
+        df = _nflverse_pass_row(yardline=10.0, air_yards=10.0)
+        result = calculate_xyac(df)
+        assert result["xyac_epa"][0] is None
 
     def test_drops_stale_xyac_cols(self, mock_xyac_model):
         stale = _nflverse_pass_row().with_columns(pl.lit(999.0).alias("xyac_mean_yardage"))
@@ -957,11 +988,200 @@ class TestCalculateXyac:
         nonpass_play = _nflverse_pass_row(season=2020, air_yards=None)
         df = pl.concat([pass_play, nonpass_play])
         result = calculate_xyac(df)
-        assert result["xyac_mean_yardage"][0] is not None
-        assert result["xyac_mean_yardage"][1] is None
+        assert result["xyac_epa"][0] is not None
+        assert result["xyac_epa"][1] is None
 
     def test_return_as_pandas(self, mock_xyac_model):
         import pandas
 
         result = calculate_xyac(_nflverse_pass_row(), return_as_pandas=True)
         assert isinstance(result, pandas.DataFrame)
+
+
+# ---------------------------------------------------------------------------
+# Download-on-demand + cache resolution for the large xYAC model.
+#
+# These exercise ``_load_model``'s resolution order (override → bundled →
+# cache → download) and ``clear_cache``'s models/ preservation WITHOUT touching
+# the network (the bundled EP/WP/CP models stay on the bundled path; xYAC is
+# faked via a tmp cache dir / bogus URL). The single real-network end-to-end
+# download is live-gated below.
+# ---------------------------------------------------------------------------
+
+
+class TestXyacModelCacheResolution:
+    def _write_dummy_model(self, path):
+        """Write a tiny valid XGBoost Booster .ubj so load_model() succeeds."""
+        import numpy as np
+        import xgboost as xgb
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+        dtrain = xgb.DMatrix(np.zeros((4, 1), dtype=np.float32), label=np.array([0, 1, 0, 1]))
+        booster = xgb.train({"objective": "binary:logistic"}, dtrain, num_boost_round=1)
+        booster.save_model(str(path))
+
+    def test_loads_from_cache_dir(self, tmp_path, monkeypatch):
+        """A model placed in <cache_dir>/models is found (cache hit, no download)."""
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))
+        try:
+            cache_model = tmp_path / "models" / "xyac_model.ubj"
+            self._write_dummy_model(cache_model)
+
+            # Guard: a download attempt would be a bug here — make download() blow up.
+            def _boom(*a, **k):
+                raise AssertionError("download() must not be called on a cache hit")
+
+            monkeypatch.setattr("sportsdataverse.dl_utils.download", _boom)
+
+            booster = ew._load_model("xyac_model.ubj")
+            assert booster is not None
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()
+
+    def test_models_dir_override(self, tmp_path):
+        """An explicit models_dir override is preferred and loaded."""
+        import sportsdataverse.nfl.ep_wp as ew
+
+        ew._load_model.cache_clear()
+        try:
+            override = tmp_path / "custom"
+            self._write_dummy_model(override / "xyac_model.ubj")
+            booster = ew._load_model("xyac_model.ubj", models_dir=str(override))
+            assert booster is not None
+        finally:
+            ew._load_model.cache_clear()
+
+    def test_download_failure_raises_filenotfound(self, tmp_path, monkeypatch):
+        """No cache + a failing download → FileNotFoundError (so enrich skips)."""
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))
+        try:
+
+            def _boom(*a, **k):
+                raise RuntimeError("network down / bogus URL")
+
+            monkeypatch.setattr("sportsdataverse.dl_utils.download", _boom)
+            with pytest.raises(FileNotFoundError):
+                ew._load_model("xyac_model.ubj")
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()
+
+    def test_calculate_xyac_propagates_filenotfound(self, tmp_path, monkeypatch):
+        """When the model is unavailable, calculate_xyac raises FileNotFoundError.
+
+        This is the contract ``enrich_nfl_pbp`` relies on to skip the xYAC step
+        (its ``except FileNotFoundError`` → ``RuntimeWarning``) and leave the
+        five xyac columns null while the rest of the pipeline proceeds.
+        """
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))  # empty cache, no bundled xyac
+        try:
+
+            def _boom(*a, **k):
+                raise RuntimeError("network down / bogus URL")
+
+            monkeypatch.setattr("sportsdataverse.dl_utils.download", _boom)
+            with pytest.raises(FileNotFoundError):
+                calculate_xyac(_nflverse_pass_row())
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()
+
+    def test_enrich_skips_xyac_when_unavailable(self, monkeypatch, mock_both_models):
+        """enrich_nfl_pbp degrades gracefully (RuntimeWarning + null xyac) offline.
+
+        ``mock_both_models`` stubs EP/WP/CP via ``_load_model``; we then force
+        the xYAC step to raise ``FileNotFoundError`` and assert the five xyac
+        cols are present-but-null and a ``RuntimeWarning`` fired.  The input is
+        the full nflverse-contract frame built by ``test_enrich``'s helper.
+        """
+        import warnings
+
+        import sportsdataverse.nfl.ep_wp as ew
+        from tests.nfl.test_enrich import _synthetic_frame
+
+        def _raise_xyac(df, *, models_dir=None, return_as_pandas=False):
+            raise FileNotFoundError("xyac unavailable (offline test)")
+
+        monkeypatch.setattr("sportsdataverse.nfl.ep_wp.calculate_xyac", _raise_xyac)
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            out = ew.enrich_nfl_pbp(_synthetic_frame())
+
+        assert any(issubclass(w.category, RuntimeWarning) for w in caught)
+        # xYAC was skipped, but for schema stability the five columns are still
+        # present and all-null — the rest of the enrichment is intact.
+        assert "ep" in out.columns and "wp" in out.columns
+        for col in ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd"):
+            assert col in out.columns, f"{col} missing — schema not stable offline"
+            assert out[col].null_count() == out.height, f"{col} should be all-null when skipped"
+
+    def test_clear_cache_preserves_models(self, tmp_path):
+        """clear_cache() wipes data entries but keeps <cache_dir>/models intact."""
+        from sportsdataverse.nfl import clear_cache, reset_config, update_config
+
+        update_config(cache_mode="filesystem", cache_dir=str(tmp_path))
+        try:
+            # A data-cache parquet alongside a downloaded model.
+            (tmp_path / "deadbeef.parquet").write_bytes(b"stale")
+            model_file = tmp_path / "models" / "xyac_model.ubj"
+            model_file.parent.mkdir(parents=True, exist_ok=True)
+            model_file.write_bytes(b"pretend-model")
+
+            clear_cache()
+
+            assert not (tmp_path / "deadbeef.parquet").exists(), "data entry should be wiped"
+            assert model_file.exists(), "models/ must survive clear_cache()"
+            assert model_file.read_bytes() == b"pretend-model"
+        finally:
+            reset_config()
+
+
+@skip_if_no_live
+class TestXyacDownloadLive:
+    """Real download from the nfl_model_artifacts release (gated by SDV_PY_LIVE_TESTS=1)."""
+
+    def test_end_to_end_download_and_cache_reuse(self, tmp_path):
+        import sportsdataverse.nfl.ep_wp as ew
+        from sportsdataverse.nfl import load_nfl_pbp, reset_config, update_config
+
+        ew._load_model.cache_clear()
+        update_config(cache_dir=str(tmp_path))
+        try:
+            dest = tmp_path / "models" / "xyac_model.ubj"
+            assert not dest.exists()
+
+            pbp = load_nfl_pbp([2023]).head(400)
+            enriched = ew.enrich_nfl_pbp(pbp)
+
+            # Downloaded + cached (~33.7 MB).
+            assert dest.exists(), "xyac_model.ubj should be downloaded into <cache_dir>/models"
+            assert dest.stat().st_size > 30_000_000
+
+            # At least one qualifying pass got a non-null xyac value.
+            qualifying = enriched.filter(pl.col("xyac_epa").is_not_null())
+            assert qualifying.height > 0
+            for col in ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd"):
+                assert col in enriched.columns
+
+            # Re-run loads from cache — no re-download (mtime unchanged).
+            mtime_before = dest.stat().st_mtime
+            ew._load_model.cache_clear()  # force a fresh resolution path
+            ew.enrich_nfl_pbp(load_nfl_pbp([2023]).head(400))
+            assert dest.stat().st_mtime == mtime_before, "cache hit must not re-download"
+        finally:
+            ew._load_model.cache_clear()
+            reset_config()

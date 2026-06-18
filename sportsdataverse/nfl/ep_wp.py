@@ -37,13 +37,15 @@ Example:
 
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from importlib.resources import files as _resource_files
 from pathlib import Path
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 if TYPE_CHECKING:
     import pandas as pd
+    from xgboost import Booster
 
 import numpy as np
 import polars as pl
@@ -155,52 +157,154 @@ CP_FEATURES: list[str] = [
 ]
 
 # ---------------------------------------------------------------------------
-# XYAC — expected yards after catch feature contract (4 sub-models)
+# XYAC — expected yards after catch feature contract (one multinomial model)
 # ---------------------------------------------------------------------------
-# Mirrors fastrmodels xyac_* models (mean / median / sd / prob_complete).
-# All four share the same feature vector; outputs differ.
-# Requires ep + cp to already be computed (EP and CP are features).
+# Mirrors nflfastR's ``add_xyac`` / ``xyac_model_select``: a single
+# ``multi:softprob`` XGBoost model with ``num_class=76`` (YAC buckets −5..70,
+# label = clamp(yac, −5, 70) + 5) over 19 features.  The 5 nflfastR output
+# columns are *derived* from the 76-class distribution — see
+# :func:`calculate_xyac` — they are NOT direct model outputs.
+#
+# Feature order must match the trained model's ``feature_names`` exactly.
+# ``distance_to_goal = yardline_100 - air_yards`` and
+# ``distance_to_sticks = air_yards - ydstogo``.
 
 XYAC_FEATURES: list[str] = [
-    "season",
-    "half_seconds_remaining",
+    "air_yards",
     "yardline_100",
     "ydstogo",
-    "down",
-    "home",
-    "qb_hit",
-    "air_yards",
+    "distance_to_goal",
+    "down1",
+    "down2",
+    "down3",
+    "down4",
     "air_is_zero",
     "pass_middle",
     "era2",
     "era3",
     "era4",
-    "cp",
-    "ep",
+    "qb_hit",
+    "home",
+    "outdoors",
+    "retractable",
+    "dome",
+    "distance_to_sticks",
 ]
+
+#: Number of YAC outcome classes in the multinomial xYAC model (yac = −5..70).
+_XYAC_NUM_CLASSES: int = 76
 
 # ---------------------------------------------------------------------------
 # Model loading (lazy — avoids ImportError when .ubj files are absent)
 # ---------------------------------------------------------------------------
 
 
+#: Download-on-demand model URLs.  Models too large to bundle in the wheel
+#: (the faithful 76-class ``xyac_model.ubj`` is ~34 MB) are published to the
+#: ``nfl_model_artifacts`` GitHub release and fetched + cached on first use.
+#: The small EP/WP/CP models stay bundled under ``nfl/models/`` and are NOT
+#: listed here.
+_MODEL_URLS: dict[str, str] = {
+    "xyac_model.ubj": (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_artifacts/xyac_model.ubj"
+    ),
+}
+
+
 def _model_path(name: str) -> Path:
     return Path(str(_resource_files("sportsdataverse").joinpath(f"nfl/models/{name}")))
 
 
-@lru_cache(maxsize=4)
-def _load_model(name: str):
-    """Load a named XGBoost Booster from nfl/models/.  Cached per process."""
+def _model_cache_dir() -> Path:
+    """Directory for download-on-demand models: ``<cache_dir>/models``."""
+    from sportsdataverse.nfl.config import get_config
+
+    return get_config().cache_dir / "models"
+
+
+def _load_booster_from(path: Path) -> "Booster":
+    """Construct an XGBoost ``Booster`` from a model file on disk."""
     from xgboost import Booster
 
-    path = _model_path(name)
-    if not path.exists():
-        raise FileNotFoundError(
-            f"NFL model '{name}' not found at {path}. Run the track6 training pipeline to produce the model files."
-        )
     b = Booster({"nthread": 4})
     b.load_model(str(path))
     return b
+
+
+@lru_cache(maxsize=4)
+def _load_model(name: str, models_dir: Optional[Union[str, Path]] = None) -> "Booster":
+    """Load a named XGBoost Booster, with download-on-demand for large models.
+
+    Resolution order:
+
+    1. ``models_dir`` override — if given and ``Path(models_dir)/name`` exists,
+       load it (offline / user-supplied model directory).
+    2. Bundled — ``sportsdataverse/nfl/models/name`` (EP/WP/CP path; unchanged).
+    3. Cache — ``<cache_dir>/models/name`` (a previously downloaded model).
+    4. Download — if ``name`` is in :data:`_MODEL_URLS`, fetch the URL into the
+       cache directory (written atomically via a ``.tmp`` sibling +
+       :func:`os.replace`) and load it.  Any download / IO failure is wrapped
+       in :class:`FileNotFoundError` so offline callers that ``except
+       FileNotFoundError`` still degrade gracefully.
+    5. Otherwise raise :class:`FileNotFoundError`.
+
+    Cached per process via :func:`functools.lru_cache`, keyed on
+    ``(name, models_dir)`` — a ``str`` ``models_dir`` is coerced to ``Path`` so
+    the cache key is stable; ``None`` stays ``None``.
+    """
+    if isinstance(models_dir, str):
+        models_dir = Path(models_dir)
+
+    # 1. Explicit override directory.
+    if models_dir is not None:
+        override = models_dir / name
+        if override.exists():
+            return _load_booster_from(override)
+
+    # 2. Bundled (EP/WP/CP).
+    bundled = _model_path(name)
+    if bundled.exists():
+        return _load_booster_from(bundled)
+
+    # 3. Cache (previously downloaded).
+    cached = _model_cache_dir() / name
+    if cached.exists():
+        return _load_booster_from(cached)
+
+    # 4. Download-on-demand.
+    if name in _MODEL_URLS:
+        from sportsdataverse.dl_utils import download
+        from sportsdataverse.nfl.config import get_config
+
+        cfg = get_config()
+        url = _MODEL_URLS[name]
+        dest = _model_cache_dir() / name
+        try:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            if cfg.verbose:
+                print(
+                    f"Downloading {name} (~34 MB) from the nfl_model_artifacts release… (caching under {dest.parent})"
+                )
+            content = download(url, timeout=cfg.timeout, num_retries=5).content
+            tmp = dest.with_suffix(dest.suffix + ".tmp")
+            with open(tmp, "wb") as fh:
+                fh.write(content)
+            os.replace(tmp, dest)
+            return _load_booster_from(dest)
+        except Exception as exc:
+            raise FileNotFoundError(
+                f"Could not obtain '{name}' (bundled absent, cache miss, download from {url} "
+                f"failed: {exc}). Callers that catch FileNotFoundError will skip this model "
+                f"and continue offline; otherwise check network access or pre-place the file "
+                f"under {_model_cache_dir()} or pass models_dir=."
+            ) from exc
+
+    # 5. Unknown model with no bundled/cached file and no download URL.
+    raise FileNotFoundError(
+        f"NFL model '{name}' not found (bundled: {bundled}, cache: {_model_cache_dir() / name}). "
+        f"It is not registered for download in _MODEL_URLS. Run the track6 training pipeline to "
+        f"produce the bundled model files, or pass models_dir= pointing at a directory containing it."
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -309,7 +413,8 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
 
     Computes the three derived features that aren't direct column copies:
     - ``air_is_zero`` — air_yards == 0
-    - ``distance_to_sticks`` — ydstogo - air_yards
+    - ``distance_to_sticks`` — air_yards - ydstogo (nflfastR sign; the models
+      were trained on this orientation — see track6 features.py)
     - Era flags era2..4 (era0/era1 are intentionally excluded from CP)
     - ``home`` indicator (if not already present)
     - Roof one-hots (identical to :func:`_make_model_mutations`)
@@ -317,7 +422,7 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     """
     df = df.with_columns(
         pl.when(pl.col("air_yards") == 0).then(1).otherwise(0).alias("air_is_zero"),
-        (pl.col("ydstogo") - pl.col("air_yards")).alias("distance_to_sticks"),
+        (pl.col("air_yards") - pl.col("ydstogo")).alias("distance_to_sticks"),
         pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
         pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
         pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
@@ -575,7 +680,7 @@ def _espn_cp_features(
     """
     df = play_df.with_columns(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
-        (pl.col(ydstogo_col) - pl.col(air_yards_col)).alias("_distance_to_sticks"),
+        (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
         pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
         pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
         pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
@@ -618,37 +723,41 @@ def _espn_xyac_features(
     air_yards_col: str = "air_yards",
     yardline_col: str = "start.yardsToEndzone",
     ydstogo_col: str = "start.distance",
-    down_col: str = "start.down",
-    half_sec_col: str = "start.TimeSecsRem",
+    down1_col: str = "down_1",
+    down2_col: str = "down_2",
+    down3_col: str = "down_3",
+    down4_col: str = "down_4",
     home_col: str = "start.is_home",
     qb_hit_col: str | None = None,
     pass_middle_col: str | None = None,
-    cp_col: str = "cp",
-    ep_col: str = "ep",
 ) -> np.ndarray:
-    """Build the 15-feature XYAC matrix (nflfastR format) from ESPN play data.
+    """Build the 19-feature XYAC matrix (nflfastR format) from ESPN play data.
 
-    Mirrors :data:`XYAC_FEATURES` column order.  Requires ``cp`` and ``ep``
-    to already be computed and present on *play_df*.
+    Mirrors :data:`XYAC_FEATURES` column order — the input feature vector to the
+    single ``multi:softprob`` xYAC model (``num_class=76``).  Unlike the EP / WP
+    / CP adapters this matrix carries NO ``cp`` / ``ep`` columns; the model is a
+    pure YAC-distribution predictor.  ``distance_to_goal = yardline_100 -
+    air_yards`` and ``distance_to_sticks = air_yards - ydstogo``.
+
+    Intended for pass plays only — filter to ``air_yards`` not-null first.
 
     Args:
-        play_df: ESPN-format pass-play DataFrame with ``cp`` and ``ep``.
+        play_df: ESPN-format pass-play DataFrame.
         air_yards_col: Air yards column.
         yardline_col: Yards to end zone.
         ydstogo_col: Yards to go.
-        down_col: Integer down column (1–4, NOT boolean one-hots).
-        half_sec_col: Half seconds remaining.
+        down1_col … down4_col: Boolean down-indicator columns.
         home_col: Boolean home-team indicator.
         qb_hit_col: QB-hit indicator column.  Defaults to 0 when absent.
         pass_middle_col: Middle-field pass column.  Defaults to 0 when absent.
-        cp_col: Pre-computed completion probability column.
-        ep_col: Pre-computed expected points column.
 
     Returns:
-        ``(N, 15)`` float32 ndarray in :data:`XYAC_FEATURES` column order.
+        ``(N, 19)`` float32 ndarray in :data:`XYAC_FEATURES` column order.
     """
     df = play_df.with_columns(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
+        (pl.col(yardline_col) - pl.col(air_yards_col)).alias("_distance_to_goal"),
+        (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
         pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
         pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
         pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
@@ -661,21 +770,25 @@ def _espn_xyac_features(
     qb_hit = pl.col(qb_hit_col).cast(pl.Int8) if qb_hit_col is not None and qb_hit_col in play_df.columns else pl.lit(0)
     return (
         df.select(
-            pl.col("season"),
-            pl.col(half_sec_col).alias("half_seconds_remaining"),
+            pl.col(air_yards_col).alias("air_yards"),
             pl.col(yardline_col).alias("yardline_100"),
             pl.col(ydstogo_col).alias("ydstogo"),
-            pl.col(down_col).alias("down"),
-            pl.col(home_col).cast(pl.Int8).alias("home"),
-            qb_hit.alias("qb_hit"),
-            pl.col(air_yards_col).alias("air_yards"),
+            pl.col("_distance_to_goal").alias("distance_to_goal"),
+            pl.col(down1_col).cast(pl.Int8).alias("down1"),
+            pl.col(down2_col).cast(pl.Int8).alias("down2"),
+            pl.col(down3_col).cast(pl.Int8).alias("down3"),
+            pl.col(down4_col).cast(pl.Int8).alias("down4"),
             pl.col("_air_is_zero").alias("air_is_zero"),
             pass_mid.alias("pass_middle"),
             pl.col("_era2").alias("era2"),
             pl.col("_era3").alias("era3"),
             pl.col("_era4").alias("era4"),
-            pl.col(cp_col).alias("cp"),
-            pl.col(ep_col).alias("ep"),
+            qb_hit.alias("qb_hit"),
+            pl.col(home_col).cast(pl.Int8).alias("home"),
+            pl.lit(0).alias("outdoors"),
+            pl.lit(1).alias("retractable"),
+            pl.lit(0).alias("dome"),
+            pl.col("_distance_to_sticks").alias("distance_to_sticks"),
         )
         .to_numpy(allow_copy=True)
         .astype(np.float32)
@@ -906,89 +1019,325 @@ def calculate_completion_probability(
 # XYAC public API
 # ---------------------------------------------------------------------------
 
+#: The five nflfastR xYAC output columns, derived from the 76-class outcome
+#: distribution (NOT direct model outputs).  Order matches nflfastR's
+#: ``drop.cols.xyac``.
 _XYAC_OUT_COLS: tuple[str, ...] = (
+    "xyac_epa",
     "xyac_mean_yardage",
     "xyac_median_yardage",
-    "xyac_sd_yardage",
-    "xyac_prob_complete",
+    "xyac_success",
+    "xyac_fd",
 )
-_XYAC_MODEL_FILES: tuple[str, ...] = (
-    "xyac_mean_yardage.ubj",
-    "xyac_median_yardage.ubj",
-    "xyac_sd_yardage.ubj",
-    "xyac_prob_complete.ubj",
-)
+
+#: The single multinomial xYAC model file.
+_XYAC_MODEL_FILE: str = "xyac_model.ubj"
+
+
+def _derive_xyac(
+    pass_df: pl.DataFrame,
+    probs: np.ndarray,
+) -> pl.DataFrame:
+    """Derive the 5 nflfastR xYAC columns from the 76-class outcome distribution.
+
+    Faithful polars port of the derivation in nflfastR's ``add_xyac`` (the
+    ``xyac_vars`` pipeline).  Expands each play into 76 ``yac = -5..70`` outcome
+    rows, truncates the tail probability mass into the field-boundary buckets,
+    flips turnover-on-downs outcomes to the opponent perspective, decrements the
+    half clock by 6 seconds, re-scores expected points on every outcome row via
+    :func:`calculate_expected_points`, and reduces back to one row per play.
+
+    Args:
+        pass_df: Qualifying (``valid_pass``) plays, one row each, carrying the
+            join columns (``_xyac_index``, ``distance_to_goal``, ``original_spot``
+            = pre-play ``yardline_100``, ``original_ep``, ``original_ydstogo``,
+            ``air_epa``, ``air_yards``, ``down``, ``ydstogo`` plus the EP inputs
+            ``season``/``week``/``home_team``/``posteam``/``roof``/
+            ``half_seconds_remaining``/``posteam_timeouts_remaining``/
+            ``defteam_timeouts_remaining``).
+        probs: ``(n_plays, 76)`` float prob matrix from the multinomial model.
+
+    Returns:
+        One row per play keyed on ``_xyac_index`` with the 5 ``xyac_*`` columns.
+    """
+    n_plays = pass_df.height
+    # yac outcome grid: -5..70 (76 buckets) repeated per play.
+    yac_grid: np.ndarray = np.tile(np.arange(-5, 71, dtype=np.int64), n_plays)
+    index_grid: np.ndarray = np.repeat(pass_df["_xyac_index"].to_numpy(), _XYAC_NUM_CLASSES)
+    prob_flat: np.ndarray = probs.reshape(-1).astype(np.float64)
+
+    long = pl.DataFrame(
+        {
+            "_xyac_index": index_grid,
+            "yac": yac_grid,
+            "prob": prob_flat,
+        }
+    ).join(
+        pass_df.drop("prob") if "prob" in pass_df.columns else pass_df,
+        on="_xyac_index",
+        how="left",
+    )
+
+    # Decrement half clock by 6s for the outcome EP eval (clamped at 0).
+    long = long.with_columns(
+        pl.when(pl.col("half_seconds_remaining") <= 6)
+        .then(pl.lit(0.0))
+        .otherwise(pl.col("half_seconds_remaining") - 6.0)
+        .alias("half_seconds_remaining"),
+    )
+
+    # Field-boundary truncation: absorb out-of-range tail mass into the boundary
+    # buckets via the cumulative distribution (mirrors the R cumsum manipulation).
+    long = long.with_columns(
+        pl.when(pl.col("distance_to_goal") < 95)
+        .then(pl.lit(-5))
+        .otherwise(pl.col("distance_to_goal") - 99)
+        .alias("max_loss"),
+        pl.when(pl.col("distance_to_goal") > 70)
+        .then(pl.lit(70))
+        .otherwise(pl.col("distance_to_goal"))
+        .alias("max_gain"),
+    )
+    long = long.with_columns(
+        pl.col("prob").cum_sum().over("_xyac_index").alias("cum_prob"),
+    )
+    long = long.with_columns(
+        pl.when(pl.col("yac") == pl.col("max_loss"))
+        .then(pl.col("cum_prob"))
+        .when(pl.col("yac") == pl.col("max_gain"))
+        .then(1.0 - pl.col("cum_prob").shift(1).over("_xyac_index"))
+        .otherwise(pl.col("prob"))
+        .alias("prob"),
+        # updated end result for each possibility
+        (pl.col("distance_to_goal") - pl.col("yac")).alias("yardline_100"),
+    )
+    long = long.filter((pl.col("yac") >= pl.col("max_loss")) & (pl.col("yac") <= pl.col("max_gain"))).drop("cum_prob")
+
+    # Down / distance bookkeeping + turnover-on-downs flip (opponent perspective).
+    long = long.with_columns(
+        pl.col("posteam_timeouts_remaining").alias("_pos_to_pre"),
+        pl.col("defteam_timeouts_remaining").alias("_def_to_pre"),
+        (pl.col("original_spot") - pl.col("yardline_100")).alias("gain"),
+    )
+    long = long.with_columns(
+        pl.when((pl.col("down") == 4) & (pl.col("gain") < pl.col("ydstogo"))).then(1).otherwise(0).alias("turnover"),
+    )
+    long = long.with_columns(
+        # down/ydstogo update for converted vs not (pre-turnover override)
+        pl.when(pl.col("gain") >= pl.col("ydstogo"))
+        .then(pl.lit(10))
+        .otherwise(pl.col("ydstogo") - pl.col("gain"))
+        .alias("ydstogo"),
+    )
+    long = long.with_columns(
+        # save yardline before flip for the yards-gained calculation
+        pl.col("yardline_100").alias("yardline_100_noflip"),
+    )
+    long = long.with_columns(
+        # turnover overrides: ydstogo->10, flip yardline + timeouts
+        pl.when(pl.col("turnover") == 1).then(pl.lit(10)).otherwise(pl.col("ydstogo")).alias("ydstogo"),
+        pl.when(pl.col("turnover") == 1)
+        .then(100 - pl.col("yardline_100"))
+        .otherwise(pl.col("yardline_100"))
+        .alias("yardline_100"),
+        pl.when(pl.col("turnover") == 1)
+        .then(pl.col("_def_to_pre"))
+        .otherwise(pl.col("_pos_to_pre"))
+        .alias("posteam_timeouts_remaining"),
+        pl.when(pl.col("turnover") == 1)
+        .then(pl.col("_pos_to_pre"))
+        .otherwise(pl.col("_def_to_pre"))
+        .alias("defteam_timeouts_remaining"),
+    )
+    long = long.with_columns(
+        # ydstogo can't be bigger than the (post-flip) yardline
+        pl.when(pl.col("ydstogo") >= pl.col("yardline_100"))
+        .then(pl.col("yardline_100"))
+        .otherwise(pl.col("ydstogo"))
+        .alias("ydstogo"),
+        # down: 1 on conversion / turnover, else +1
+        pl.when((pl.col("turnover") == 1) | (pl.col("gain") >= pl.col("original_ydstogo")))
+        .then(pl.lit(1))
+        .otherwise(pl.col("down") + 1)
+        .alias("down"),
+    )
+
+    # Re-score expected points on every outcome row (faithful EP model).
+    long = calculate_expected_points(long)
+
+    # TD / turnover EP adjustments, then probability-weighted reductions.
+    long = long.with_columns(
+        pl.when(pl.col("yardline_100") == 0)
+        .then(pl.lit(7.0))
+        .when(pl.col("turnover") == 1)
+        .then(-1.0 * pl.col("ep"))
+        .otherwise(pl.col("ep"))
+        .alias("ep"),
+    )
+    long = long.with_columns(
+        # epa = ep - original_ep; wt_epa = epa * prob  (nflfastR)
+        ((pl.col("ep") - pl.col("original_ep")) * pl.col("prob")).alias("_wt_epa"),
+        (pl.col("yardline_100_noflip") * pl.col("prob")).alias("_wt_yardln"),
+        ((pl.col("ep") > pl.col("original_ep")).cast(pl.Float64) * pl.col("prob")).alias("_wt_success"),
+        ((pl.col("gain") >= pl.col("original_ydstogo")).cast(pl.Float64) * pl.col("prob")).alias("_wt_fd"),
+    )
+    # median: first yac whose cumulative prob crosses 0.5
+    long = long.with_columns(
+        pl.col("prob").cum_sum().over("_xyac_index").alias("_cum2"),
+    )
+    long = long.with_columns(
+        pl.when((pl.col("_cum2") > 0.5) & (pl.col("_cum2").shift(1).over("_xyac_index") < 0.5))
+        .then(pl.col("yac"))
+        .otherwise(0)
+        .alias("_med"),
+    )
+
+    return long.group_by("_xyac_index").agg(
+        (pl.col("_wt_epa").sum() - pl.col("air_epa").first()).alias("xyac_epa"),
+        ((pl.col("original_spot").first() - pl.col("air_yards").first()) - pl.col("_wt_yardln").sum()).alias(
+            "xyac_mean_yardage"
+        ),
+        pl.col("_med").max().cast(pl.Float64).alias("xyac_median_yardage"),
+        pl.col("_wt_success").sum().alias("xyac_success"),
+        pl.col("_wt_fd").sum().alias("xyac_fd"),
+    )
 
 
 def calculate_xyac(
     pbp_data: pl.DataFrame,
     *,
+    models_dir: Optional[Union[str, Path]] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Compute expected yards after catch (XYAC) for intended pass plays.
+    """Compute expected yards after catch (xYAC) for intended pass plays.
 
-    Mirrors nflfastR's four XYAC sub-models (mean yardage, median yardage,
-    SD of yardage, completion probability).  Requires ``ep`` and ``cp`` to
-    already be present — call :func:`calculate_expected_points` and
-    :func:`calculate_completion_probability` before this function.
+    Faithful polars port of nflfastR's ``add_xyac``.  Unlike a per-statistic
+    regressor, xYAC is **one** ``multi:softprob`` model (``num_class=76``) that
+    predicts a distribution over YAC buckets (``yac = -5..70``); the five output
+    columns are *derived* from that distribution by re-scoring expected points on
+    every outcome.  ``ep`` is **not** required on the input — it is recomputed on
+    the outcome rows via :func:`calculate_expected_points` — but ``air_epa`` and
+    the play's pre-snap ``ep`` (``original_ep``) are read for the EPA baseline.
 
-    Scores all intended pass plays (``air_yards`` not null and ``cp`` + ``ep``
-    not null); non-pass plays receive null.  Drops and recomputes any existing
-    XYAC output columns.
+    Inference filter (nflfastR ``valid_pass`` ∧ ``distance_to_goal != 0``):
+    ``complete_pass == 1`` OR ``incomplete_pass == 1`` OR ``interception == 1``,
+    ``air_yards`` in ``[-15, 70)``, non-null ``receiver_player_name`` and
+    ``pass_location``, and ``distance_to_goal != 0``.  Non-qualifying rows
+    receive null in all five columns.  Drops and recomputes any existing xYAC
+    output columns.
+
+    The xYAC model (``xyac_model.ubj``, ~34 MB) is **not** bundled in the
+    wheel: on first use it is downloaded from the ``nfl_model_artifacts``
+    GitHub release and cached under ``<cache_dir>/models/`` (see
+    :func:`sportsdataverse.nfl.get_config`).  Subsequent calls load it from the
+    cache; ``clear_cache()`` deliberately preserves the ``models/`` subdir so a
+    data-cache clear does not force a re-download.  Pass ``models_dir=`` to
+    point at a local directory containing ``xyac_model.ubj`` (offline / custom
+    model override).  If the model is genuinely unavailable (no cache + no
+    network) the underlying loader raises :class:`FileNotFoundError`.
 
     Args:
-        pbp_data: nflverse-format play-by-play DataFrame with ``ep`` and
-            ``cp`` columns already computed.  Required: ``air_yards``,
-            ``season``, ``half_seconds_remaining``, ``yardline_100``,
-            ``ydstogo``, ``down``, ``home`` (or ``posteam`` + ``home_team``),
-            ``ep``, ``cp``.  Optional: ``qb_hit``, ``pass_location``.
+        pbp_data: nflverse-format play-by-play DataFrame.  Required:
+            ``air_yards``, ``season``, ``half_seconds_remaining``,
+            ``yardline_100``, ``ydstogo``, ``down``, ``posteam``, ``home_team``,
+            ``roof``, ``ep``, ``air_epa``, ``posteam_timeouts_remaining``,
+            ``defteam_timeouts_remaining``, ``complete_pass``,
+            ``incomplete_pass``, ``interception``, ``pass_location``,
+            ``receiver_player_name``.  Optional: ``qb_hit``.
+        models_dir: Optional directory to load ``xyac_model.ubj`` from instead
+            of downloading/caching it (offline use or a custom-trained model).
+            When ``None`` (default) the model is resolved bundled → cache →
+            downloaded-from-release.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
-        DataFrame with the original columns plus:
-        ``xyac_mean_yardage``, ``xyac_median_yardage``, ``xyac_sd_yardage``,
-        ``xyac_prob_complete`` (null for non-pass plays).
+        DataFrame with the original columns plus the five nflfastR xYAC columns
+        (``Float64``, null on non-qualifying rows):
+        ``xyac_epa``, ``xyac_mean_yardage``, ``xyac_median_yardage``,
+        ``xyac_success``, ``xyac_fd``.
 
     Example:
         Quick start::
 
+            import polars as pl
+
             from sportsdataverse.nfl import load_nfl_pbp
-            from sportsdataverse.nfl.ep_wp import (
-                calculate_expected_points,
-                calculate_completion_probability,
-                calculate_xyac,
-            )
+            from sportsdataverse.nfl.ep_wp import calculate_xyac
 
             pbp = load_nfl_pbp([2023])
-            pbp = calculate_expected_points(pbp)
-            pbp = calculate_completion_probability(pbp)
             pbp = calculate_xyac(pbp)
-            print(pbp.select("xyac_mean_yardage", "xyac_prob_complete").head())
+            print(pbp.select("xyac_epa", "xyac_mean_yardage").head())
+
+        Pipeline next step (one line)::
+
+            pbp.filter(pl.col("xyac_epa").is_not_null()).select("xyac_epa", "xyac_fd").head()
+
+    See Also:
+        * `nflfastR`_ -- the reference R implementation (``add_xyac``).
+        * `nflreadpy`_ -- the Python NFL data loader this surface mirrors.
+
+    .. _nflfastR: https://www.nflfastr.com
+    .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     from xgboost import DMatrix
 
     df = pbp_data.drop([c for c in _XYAC_OUT_COLS if c in pbp_data.columns])
-    df = df.with_row_index("_row_idx")
+    df = df.with_row_index("_xyac_index")
 
-    pass_df = df.filter(pl.col("air_yards").is_not_null() & pl.col("cp").is_not_null() & pl.col("ep").is_not_null())
+    # valid_pass ∧ distance_to_goal != 0
+    pass_mask = (
+        ((pl.col("complete_pass") == 1) | (pl.col("incomplete_pass") == 1) | (pl.col("interception") == 1))
+        & pl.col("air_yards").is_not_null()
+        & (pl.col("air_yards") >= -15)
+        & (pl.col("air_yards") < 70)
+        & pl.col("receiver_player_name").is_not_null()
+        & pl.col("pass_location").is_not_null()
+        & ((pl.col("yardline_100") - pl.col("air_yards")) != 0)
+    )
+    pass_df = df.filter(pass_mask)
 
-    if len(pass_df) > 0:
-        pass_df = _make_cp_mutations(pass_df)
-        X = pass_df.select(XYAC_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
-        dmat = DMatrix(X, feature_names=XYAC_FEATURES)
-        xyac_frame = pass_df.select("_row_idx")
-        for col, model_file in zip(_XYAC_OUT_COLS, _XYAC_MODEL_FILES):
-            preds = _load_model(model_file).predict(dmat)
-            xyac_frame = xyac_frame.with_columns(pl.Series(col, preds.tolist(), dtype=pl.Float64))
-    else:
-        xyac_frame = pl.DataFrame(
-            {
-                "_row_idx": pl.Series([], dtype=pl.UInt32),
-                **{col: pl.Series([], dtype=pl.Float64) for col in _XYAC_OUT_COLS},
-            }
+    empty = pl.DataFrame(
+        {"_xyac_index": pl.Series([], dtype=pl.UInt32)}
+        | {col: pl.Series([], dtype=pl.Float64) for col in _XYAC_OUT_COLS}
+    )
+
+    if pass_df.height > 0:
+        feats = _make_cp_mutations(pass_df).with_columns(
+            (pl.col("yardline_100") - pl.col("air_yards")).alias("distance_to_goal"),
+        )
+        X = feats.select(XYAC_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
+        probs = _load_model(_XYAC_MODEL_FILE, models_dir=models_dir).predict(DMatrix(X, feature_names=XYAC_FEATURES))
+        if probs.ndim == 1:
+            probs = probs.reshape(-1, _XYAC_NUM_CLASSES)
+
+        # Assemble the per-play join frame mirroring nflfastR's join_data.
+        # Only the columns the EP re-score + derivation actually read are kept
+        # (``calculate_expected_points`` needs season/posteam/home_team/roof/
+        # half_seconds_remaining/yardline_100/down/ydstogo/timeouts).
+        join_df = pass_df.select(
+            "_xyac_index",
+            "season",
+            "home_team",
+            "posteam",
+            "roof",
+            "half_seconds_remaining",
+            "posteam_timeouts_remaining",
+            "defteam_timeouts_remaining",
+            "air_epa",
+            "air_yards",
+            (pl.col("yardline_100") - pl.col("air_yards")).alias("distance_to_goal"),
+            pl.col("yardline_100").alias("original_spot"),
+            pl.col("ep").alias("original_ep"),
+            pl.col("down").cast(pl.Int64),
+            pl.col("ydstogo").cast(pl.Int64),
+            pl.col("ydstogo").cast(pl.Int64).alias("original_ydstogo"),
         )
 
-    result = df.join(xyac_frame, on="_row_idx", how="left").drop("_row_idx")
+        xyac_frame = _derive_xyac(join_df, probs).select("_xyac_index", *_XYAC_OUT_COLS)
+    else:
+        xyac_frame = empty
+
+    result = df.join(xyac_frame, on="_xyac_index", how="left").drop("_xyac_index")
 
     if return_as_pandas:
         return result.to_pandas()
@@ -2029,9 +2378,12 @@ def enrich_nfl_pbp(
         method: ``"lead_diff"`` (native nflfastR-style derivation) or
             ``"snapshot"`` (model-snapshot derivation — Task 4b, not yet
             implemented).
-        models_dir: Reserved for a future override of the bundled model
-            directory.  Currently unused (the scorers load from
-            ``sportsdataverse/nfl/models/``).
+        models_dir: Optional directory to load the xYAC model
+            (``xyac_model.ubj``) from instead of downloading/caching it —
+            for offline use or a custom-trained model.  When ``None``
+            (default) the bundled EP/WP/CP models load from
+            ``sportsdataverse/nfl/models/`` and the large xYAC model is
+            resolved bundled → cache → downloaded-from-release.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
@@ -2053,10 +2405,16 @@ def enrich_nfl_pbp(
           otherwise; float64).
         * ``cpoe`` — completion probability over expected, percentage-point
           scale (null when ``complete_pass`` absent; float64).
-        * ``xyac_mean_yardage``, ``xyac_median_yardage``, ``xyac_sd_yardage``,
-          ``xyac_prob_complete`` — expected yards after catch sub-models (null
-          on non-pass plays; omitted with a ``RuntimeWarning`` if the xYAC
-          model files are absent).
+        * ``xyac_epa``, ``xyac_mean_yardage``, ``xyac_median_yardage``,
+          ``xyac_success``, ``xyac_fd`` — expected yards after catch, derived
+          from the single multinomial xYAC model (faithful to nflfastR's
+          ``add_xyac``; null on non-qualifying plays).  ``xyac_model.ubj``
+          (~34 MB) is **not** bundled in the wheel — on first use it is
+          downloaded from the ``nfl_model_artifacts`` GitHub release and cached
+          under ``<cache_dir>/models/`` (preserved across ``clear_cache()``).
+          If the model is unavailable offline (no cache + no network) the xYAC
+          step is skipped with a ``RuntimeWarning`` and the five columns stay
+          null while the rest of the enrichment proceeds.
 
     Raises:
         ValueError: when ``method`` is unrecognised, or required contract
@@ -2129,12 +2487,12 @@ def enrich_nfl_pbp(
     # 5. CP / CPOE.
     raw = _self.calculate_completion_probability(raw)
 
-    # 6. xYAC (needs ep + cp present). Optional surface: the faithful track6
-    # artifacts do not include xYAC models (nflfastR's xYAC is a separate model
-    # family), so skip gracefully when the models are unavailable rather than
-    # failing the whole enrichment.
+    # 6. xYAC — faithful nflfastR add_xyac (single multinomial xyac_model.ubj +
+    # the EP-rescored derivation). When the model file is present this populates
+    # the five xyac_* columns; if it is genuinely missing we skip gracefully with
+    # a RuntimeWarning rather than failing the whole enrichment.
     try:
-        raw = _self.calculate_xyac(raw)
+        raw = _self.calculate_xyac(raw, models_dir=models_dir)
     except FileNotFoundError as exc:
         import warnings
 
@@ -2142,6 +2500,13 @@ def enrich_nfl_pbp(
             f"enrich_nfl_pbp: skipping xYAC step — model unavailable ({exc}).",
             RuntimeWarning,
             stacklevel=2,
+        )
+        # Schema stability: emit the five xyac_* columns as all-null so the
+        # returned frame has a stable column set whether or not the model
+        # could be obtained (matches calculate_xyac + the ESPN __process_xyac
+        # contract — callers can always select the columns).
+        raw = raw.with_columns(
+            [pl.lit(None, dtype=pl.Float64).alias(c) for c in _XYAC_OUT_COLS if c not in raw.columns]
         )
 
     if return_as_pandas:

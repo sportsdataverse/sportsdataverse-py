@@ -289,12 +289,13 @@ def _stub_cp(df: pl.DataFrame, *, return_as_pandas: bool = False):  # noqa: ANN0
     return out.to_pandas() if return_as_pandas else out
 
 
-def _stub_xyac(df: pl.DataFrame, *, return_as_pandas: bool = False):  # noqa: ANN001
+def _stub_xyac(df: pl.DataFrame, *, models_dir=None, return_as_pandas: bool = False):  # noqa: ANN001
     out = df.with_columns(
+        pl.when(pl.col("air_yards").is_not_null()).then(0.3).otherwise(None).alias("xyac_epa"),
         pl.when(pl.col("air_yards").is_not_null()).then(4.5).otherwise(None).alias("xyac_mean_yardage"),
         pl.when(pl.col("air_yards").is_not_null()).then(4.0).otherwise(None).alias("xyac_median_yardage"),
-        pl.when(pl.col("air_yards").is_not_null()).then(2.0).otherwise(None).alias("xyac_sd_yardage"),
-        pl.when(pl.col("air_yards").is_not_null()).then(0.6).otherwise(None).alias("xyac_prob_complete"),
+        pl.when(pl.col("air_yards").is_not_null()).then(0.6).otherwise(None).alias("xyac_success"),
+        pl.when(pl.col("air_yards").is_not_null()).then(0.5).otherwise(None).alias("xyac_fd"),
     )
     return out.to_pandas() if return_as_pandas else out
 
@@ -343,7 +344,7 @@ class TestLeadDiffWiring:
         out = enrich_nfl_pbp(_synthetic_frame(), method="lead_diff")
         for col in ("ep", "epa", "wp", "vegas_wp", "def_wp", "home_wp", "away_wp", "wpa", "cp", "cpoe"):
             assert col in out.columns, f"missing output column {col}"
-        for col in ("xyac_mean_yardage", "xyac_median_yardage", "xyac_sd_yardage", "xyac_prob_complete"):
+        for col in ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd"):
             assert col in out.columns, f"missing xyac column {col}"
 
     def test_returns_polars_by_default(self, patched) -> None:  # noqa: ANN001

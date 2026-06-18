@@ -28,14 +28,11 @@ from sportsdataverse.nfl.ep_wp import (
     CP_FEATURES,
     EP_FEATURES,
     WP_SPREAD_FEATURES,
-    XYAC_FEATURES,
     _EP_POINT_VALUES,
-    _XYAC_MODEL_FILES,
     _XYAC_OUT_COLS,
     _espn_cp_features,
     _espn_ep_features,
     _espn_wp_features,
-    _espn_xyac_features,
     _load_model as _ep_wp_load_model,
     calculate_epa,
     calculate_wpa,
@@ -3839,46 +3836,19 @@ class NFLPlayProcess(object):
         return play_df
 
     def __process_xyac(self, play_df):
-        """Score XYAC sub-models (mean/median/sd yardage + prob_complete).
+        """Add the five nflfastR xYAC columns (schema-stable; null on this path).
 
-        Requires ``air_yards``, ``cp``, and ``EP_start`` to be present with
-        non-null values.  All four output columns are always added; rows that
-        don't meet the filter receive nulls.
+        nflfastR's xYAC is a single ``multi:softprob`` model whose five outputs
+        (``xyac_epa``/``xyac_mean_yardage``/``xyac_median_yardage``/
+        ``xyac_success``/``xyac_fd``) are *derived* by re-scoring expected points
+        on each of 76 YAC outcomes — see
+        :func:`sportsdataverse.nfl.ep_wp.calculate_xyac`.  That derivation needs
+        ``air_epa`` and a clean per-play EP baseline, which the ESPN play frame
+        does not carry in nflverse form, so this in-pipeline ESPN path emits the
+        five columns as nulls for schema stability.  Run ``calculate_xyac`` on a
+        nflverse-format frame (or ``enrich_nfl_pbp``) to populate them.
         """
-        xyac_nulls = [pl.lit(None, dtype=pl.Float64).alias(c) for c in _XYAC_OUT_COLS]
-
-        if "air_yards" not in play_df.columns:
-            return play_df.with_columns(xyac_nulls)
-
-        play_df = play_df.with_row_index("_xyac_row_idx")
-        pass_df = play_df.filter(
-            pl.col("air_yards").is_not_null() & pl.col("cp").is_not_null() & pl.col("EP_start").is_not_null()
-        )
-
-        if len(pass_df) > 0:
-            X_xyac = _espn_xyac_features(
-                pass_df,
-                air_yards_col="air_yards",
-                yardline_col="start.yardsToEndzone",
-                ydstogo_col="start.distance",
-                down_col="start.down",
-                half_sec_col="start.TimeSecsRem",
-                home_col="start.is_home",
-                cp_col="cp",
-                ep_col="EP_start",
-            )
-            dmat = DMatrix(X_xyac, feature_names=XYAC_FEATURES)
-            xyac_frame = pass_df.select("_xyac_row_idx")
-            for col, model_file in zip(_XYAC_OUT_COLS, _XYAC_MODEL_FILES):
-                preds = _ep_wp_load_model(model_file).predict(dmat)
-                xyac_frame = xyac_frame.with_columns(pl.Series(col, preds.tolist(), dtype=pl.Float64))
-        else:
-            xyac_frame = pl.DataFrame(
-                {"_xyac_row_idx": pl.Series([], dtype=pl.UInt32)}
-                | {c: pl.Series([], dtype=pl.Float64) for c in _XYAC_OUT_COLS}
-            )
-
-        return play_df.join(xyac_frame, on="_xyac_row_idx", how="left").drop("_xyac_row_idx")
+        return play_df.with_columns([pl.lit(None, dtype=pl.Float64).alias(c) for c in _XYAC_OUT_COLS])
 
     def __add_drive_data(self, play_df):
         play_df = (

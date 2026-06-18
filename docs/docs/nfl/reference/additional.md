@@ -4968,45 +4968,62 @@ called internally by ``NFLPlayProcess.__process_wpa`` and by the
 because those columns are absent from a nflverse frame.
 ```
 
-### `calculate_xyac(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_xyac}
+### `calculate_xyac(pbp_data: 'pl.DataFrame', *, models_dir: 'Optional[Union[str, Path]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_xyac}
 
-Compute expected yards after catch (XYAC) for intended pass plays.
+Compute expected yards after catch (xYAC) for intended pass plays.
 
-Mirrors nflfastR's four XYAC sub-models (mean yardage, median yardage,
-SD of yardage, completion probability).  Requires `ep` and `cp` to
-already be present — call `calculate_expected_points` and
-`calculate_completion_probability` before this function.
+Faithful polars port of nflfastR's `add_xyac`.  Unlike a per-statistic
+regressor, xYAC is **one** `multi:softprob` model (`num_class=76`) that
+predicts a distribution over YAC buckets (`yac = -5..70`); the five output
+columns are *derived* from that distribution by re-scoring expected points on
+every outcome.  `ep` is **not** required on the input — it is recomputed on
+the outcome rows via `calculate_expected_points` — but `air_epa` and
+the play's pre-snap `ep` (`original_ep`) are read for the EPA baseline.
 
-Scores all intended pass plays (`air_yards` not null and `cp` + `ep`
-not null); non-pass plays receive null.  Drops and recomputes any existing
-XYAC output columns.
+Inference filter (nflfastR `valid_pass` ∧ `distance_to_goal != 0`):
+`complete_pass == 1` OR `incomplete_pass == 1` OR `interception == 1`,
+`air_yards` in `[-15, 70)`, non-null `receiver_player_name` and
+`pass_location`, and `distance_to_goal != 0`.  Non-qualifying rows
+receive null in all five columns.  Drops and recomputes any existing xYAC
+output columns.
+
+The xYAC model (`xyac_model.ubj`, ~34 MB) is **not** bundled in the
+wheel: on first use it is downloaded from the `nfl_model_artifacts`
+GitHub release and cached under `<cache_dir>/models/` (see
+`sportsdataverse.nfl.get_config`).  Subsequent calls load it from the
+cache; `clear_cache()` deliberately preserves the `models/` subdir so a
+data-cache clear does not force a re-download.  Pass `models_dir=` to
+point at a local directory containing `xyac_model.ubj` (offline / custom
+model override).  If the model is genuinely unavailable (no cache + no
+network) the underlying loader raises `FileNotFoundError`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp_data` | `DataFrame` |  | nflverse-format play-by-play DataFrame with `ep` and `cp` columns already computed. Required: `air_yards`, `season`, `half_seconds_remaining`, `yardline_100`, `ydstogo`, `down`, `home` (or `posteam` + `home_team`), `ep`, `cp`. Optional: `qb_hit`, `pass_location`. |
+| `pbp_data` | `DataFrame` |  | nflverse-format play-by-play DataFrame. Required: `air_yards`, `season`, `half_seconds_remaining`, `yardline_100`, `ydstogo`, `down`, `posteam`, `home_team`, `roof`, `ep`, `air_epa`, `posteam_timeouts_remaining`, `defteam_timeouts_remaining`, `complete_pass`, `incomplete_pass`, `interception`, `pass_location`, `receiver_player_name`. Optional: `qb_hit`. |
+| `models_dir` | `Optional[Union[str, Path]]` | `None` | Optional directory to load `xyac_model.ubj` from instead of downloading/caching it (offline use or a custom-trained model). When `None` (default) the model is resolved bundled → cache → downloaded-from-release. |
 | `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
 
 **Returns**
 
-DataFrame with the original columns plus: `xyac_mean_yardage`, `xyac_median_yardage`, `xyac_sd_yardage`, `xyac_prob_complete` (null for non-pass plays).
+DataFrame with the original columns plus the five nflfastR xYAC columns (`Float64`, null on non-qualifying rows): `xyac_epa`, `xyac_mean_yardage`, `xyac_median_yardage`, `xyac_success`, `xyac_fd`.
 
 **Example**
 
 ```python
+import polars as pl
+
 from sportsdataverse.nfl import load_nfl_pbp
-from sportsdataverse.nfl.ep_wp import (
-    calculate_expected_points,
-    calculate_completion_probability,
-    calculate_xyac,
-)
+from sportsdataverse.nfl.ep_wp import calculate_xyac
 
 pbp = load_nfl_pbp([2023])
-pbp = calculate_expected_points(pbp)
-pbp = calculate_completion_probability(pbp)
 pbp = calculate_xyac(pbp)
-print(pbp.select("xyac_mean_yardage", "xyac_prob_complete").head())
+print(pbp.select("xyac_epa", "xyac_mean_yardage").head())
+
+# Pipeline next step (one line)
+
+pbp.filter(pl.col("xyac_epa").is_not_null()).select("xyac_epa", "xyac_fd").head()
 ```
 
 ### `clear_cache() -> 'None'` {#clear_cache}
@@ -5017,6 +5034,11 @@ Memory: empties the in-process dict.
 Filesystem: removes all entries under `config.cache_dir`. The
 directory itself is preserved so subsequent writes succeed without
 needing `mkdir`.
+
+The `models/` subdirectory is **deliberately preserved** — it holds
+download-on-demand model artifacts (e.g. the ~34 MB `xyac_model.ubj`)
+that are expensive to re-fetch. Clearing the *data* cache should not force
+a model re-download; delete `<cache_dir>/models/` by hand to drop those.
 
 **Example**
 
