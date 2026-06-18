@@ -8,15 +8,16 @@ don't exist on a nflverse frame).
 
 Why these tests monkeypatch the scorers
 ---------------------------------------
-The bundled ``sportsdataverse/nfl/models/*.ubj`` files are CFB placeholders, not
-real NFL models: ``ep_model.ubj`` is an 8-feature CFB tree (the NFL code feeds
-18 features -> XGBoostError), ``wp_naive.ubj`` / ``cp_model.ubj`` don't exist,
-and ``wp_spread.ubj`` is a 13-feature placeholder.  Real-model structural and
-numeric assertions are therefore impossible in-env.  Instead we monkeypatch the
-four scorer functions (``calculate_expected_points`` /
+Real track6-trained NFL models are now bundled under
+``sportsdataverse/nfl/models/*.ubj`` (``ep_model.ubj`` / ``cp_model.ubj`` are
+the full 18-feature NFL trees, ``wp_naive.ubj`` / ``wp_spread.ubj`` the WP
+models), so these tests *could* score against real models.  We still
+monkeypatch the four scorer functions (``calculate_expected_points`` /
 ``calculate_win_probability`` / ``calculate_completion_probability`` /
-``calculate_xyac``) with deterministic, model-free stubs and assert the
-ORCHESTRATION WIRING:
+``calculate_xyac``) with deterministic, model-free stubs — not out of
+necessity but for SPEED and ISOLATION: the stubs make every expected value
+hand-computable and keep the suite from loading the multi-MB boosters, so the
+assertions target the ORCHESTRATION WIRING (not model numerics):
 
 * nflfastR pipeline order (EP -> EPA -> WP -> WPA -> CP -> CPOE -> xYAC),
 * lead-over-``game_id`` grouping (no cross-game leak in ``epa`` / ``wpa``),

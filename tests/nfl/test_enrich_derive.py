@@ -22,10 +22,12 @@ These offline tests pin the three nflfastR-faithfulness fixes that closed the
    (``qtr`` change, ``END QUARTER``/``END GAME`` markers) terminates the lead so
    no value leaks across the boundary.
 
-The bundled ``models/*.ubj`` are CFB placeholders, so these tests exercise the
-two pure-derivation helpers ``_derive_epa`` / ``_derive_wpa`` directly with
-hand-supplied ``ep`` / ``wp`` point estimates (every expected value is
-hand-computable) plus ``calculate_completion_probability`` for the CPOE scale.
+Real track6-trained NFL models are now bundled under ``models/*.ubj``, but
+these tests deliberately exercise the two pure-derivation helpers
+``_derive_epa`` / ``_derive_wpa`` directly with hand-supplied ``ep`` / ``wp``
+point estimates (every expected value is hand-computable) plus
+``calculate_completion_probability`` for the CPOE scale — that keeps the parity
+guards model-free and fast, independent of the bundled boosters.
 """
 
 from __future__ import annotations
