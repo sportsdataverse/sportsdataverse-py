@@ -283,6 +283,7 @@ files = [
     "sportsdataverse/cfb/cfb_yahoo_ext.py",
     "sportsdataverse/nfl/config.py",
     "sportsdataverse/nfl/model_vars.py",
+    "sportsdataverse/nfl/nfl_build.py",
     "sportsdataverse/nfl/utils_date.py",
     "sportsdataverse/mlb/mlb_statcast_runtime.py",
     "sportsdataverse/mlb/mlb_statcast_parsers.py",
