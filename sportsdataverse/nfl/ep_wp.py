@@ -1797,7 +1797,10 @@ def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
         )
 
     # Safety (nflverse: safety == 1; the possession team conceded, so the
-    # defense scores -> posteam-frame epa = -2 - ep).
+    # defense scores -> posteam-frame epa = -2 - ep). nflfastR's companion
+    # `safety_team == posteam -> +2 - ep` branch is unreachable: safety_team is
+    # derived as the scoring (defending) team, never the posteam, so it is
+    # intentionally omitted here.
     if _has("safety"):
         df = df.with_columns(
             pl.when(pl.col("safety") == 1).then(-2.0 - pl.col("ep")).otherwise(pl.col("epa")).alias("epa")

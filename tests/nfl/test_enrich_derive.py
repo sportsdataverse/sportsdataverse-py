@@ -268,12 +268,6 @@ def test_cpoe_is_percentage_points_scale(monkeypatch) -> None:  # noqa: ANN001
     """``cpoe`` must be on the nflfastR percentage-point scale (x100)."""
     import sportsdataverse.nfl.ep_wp as ew
 
-    # Stub the model scoring so cp is a deterministic 0.25 on the one pass play.
-    def _stub_cp_predict(df):  # noqa: ANN001
-        return df.with_columns(pl.lit(0.25).alias("cp"))
-
-    captured = {}
-
     # Build a minimal pass-play frame; air_yards not-null marks it a pass play.
     df = pl.DataFrame(
         {
