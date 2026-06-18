@@ -178,7 +178,9 @@ def build_nfl_season(
 
         Pandas output::
 
+            from sportsdataverse.nfl import build_nfl_season
             df_pd = build_nfl_season(game_ids=[401671801], return_as_pandas=True)
+            print(df_pd.shape)
 
         See Also:
             * `nflverse`_ -- full NFL data ecosystem

@@ -1078,14 +1078,31 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         KeyError: If any column in :data:`_EPA_REQUIRED_COLUMNS` is absent.
 
     Example:
-        Derive EPA from a pre-scored frame::
+        For most use cases, call the high-level entry point instead.
+        ``enrich_nfl_pbp`` scores EP, derives EPA, and adds WP/WPA/CP/CPOE
+        in one shot on any nflverse-shape frame::
 
-            import polars as pl
-            from sportsdataverse.nfl.ep_wp import calculate_epa
+            from sportsdataverse.nfl import load_nfl_pbp
+            from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
 
-            # `scored` already has EP_start / EP_end / EP_start_touchback
-            out = calculate_epa(scored)
-            print(out.select("game_id", "ep", "epa").head())
+            pbp = load_nfl_pbp([2023])
+            enriched = enrich_nfl_pbp(pbp)
+            print(enriched.select("game_id", "ep", "epa").head())
+
+        ``calculate_epa`` directly requires ESPN-internal columns
+        (``EP_start``, ``EP_end``, ``EP_start_touchback``, ``type.text``,
+        etc.) produced by ``NFLPlayProcess``.  It is called internally by
+        ``NFLPlayProcess.__process_epa`` and by the ``enrich_nfl_pbp``
+        orchestrator — a naked ``calculate_epa(load_nfl_pbp([2023]))``
+        will raise ``KeyError`` because those columns are absent from a
+        nflverse frame.
+
+        See Also:
+            * `nflfastR`_ -- R package whose EPA derivation this mirrors.
+            * `nflreadpy`_ -- Python parity loader for nflverse frames.
+
+        .. _nflfastR: https://www.nflfastr.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     missing = [c for c in _EPA_REQUIRED_COLUMNS if c not in df.columns]
     if missing:
@@ -1407,14 +1424,31 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
         KeyError: If any column in :data:`_WPA_REQUIRED_COLUMNS` is absent.
 
     Example:
-        Derive WPA from a pre-scored frame::
+        For most use cases, call the high-level entry point instead.
+        ``enrich_nfl_pbp`` scores WP, derives WPA, and adds EP/EPA/CP/CPOE
+        in one shot on any nflverse-shape frame::
 
-            import polars as pl
-            from sportsdataverse.nfl.ep_wp import calculate_wpa
+            from sportsdataverse.nfl import load_nfl_pbp
+            from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
 
-            # `scored` already has wp_before / wp_touchback / wp_after
-            out = calculate_wpa(scored)
-            print(out.select("game_id", "wp", "wpa").head())
+            pbp = load_nfl_pbp([2023])
+            enriched = enrich_nfl_pbp(pbp)
+            print(enriched.select("game_id", "wp", "def_wp", "home_wp", "away_wp", "wpa").head())
+
+        ``calculate_wpa`` directly requires ESPN-internal columns
+        (``wp_before``, ``wp_touchback``, ``wp_after``, ``homeTeamId``,
+        ``start.pos_team.id``, etc.) produced by ``NFLPlayProcess``.  It is
+        called internally by ``NFLPlayProcess.__process_wpa`` and by the
+        ``enrich_nfl_pbp`` orchestrator — a naked
+        ``calculate_wpa(load_nfl_pbp([2023]))`` will raise ``KeyError``
+        because those columns are absent from a nflverse frame.
+
+        See Also:
+            * `nflfastR`_ -- R package whose WPA derivation this mirrors.
+            * `nflreadpy`_ -- Python parity loader for nflverse frames.
+
+        .. _nflfastR: https://www.nflfastr.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
     missing = [c for c in _WPA_REQUIRED_COLUMNS if c not in df.columns]
     if missing:
@@ -2001,10 +2035,28 @@ def enrich_nfl_pbp(
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
-        The input frame plus ``ep`` (start-of-play expected points), ``epa``,
-        ``wp`` (naive WP), ``vegas_wp`` (spread-adjusted WP), ``def_wp`` /
-        ``home_wp`` / ``away_wp``, ``wpa`` / ``vegas_wpa``, ``cp`` / ``cpoe``,
-        and the four ``xyac_*`` columns.
+        polars.DataFrame (or pandas.DataFrame when *return_as_pandas* is
+        ``True``) — the input frame with the following columns added or
+        recomputed:
+
+        * ``ep`` — start-of-play expected points (float64, clipped to [-10, 10]).
+        * ``epa`` — expected points added (float64; null on terminal/timeout rows).
+        * ``wp`` — naive win probability from the ``wp_naive`` model (float64).
+        * ``vegas_wp`` — spread-adjusted win probability from ``wp_spread``
+          (falls back to ``wp`` when ``spread_line`` is null).
+        * ``def_wp`` — defensive team win probability (``1 - wp``).
+        * ``home_wp`` — home-team win probability (possession-team frame flip).
+        * ``away_wp`` — away-team win probability (``1 - home_wp``).
+        * ``wpa`` — win probability added (float64; null on kneel/terminal rows).
+        * ``vegas_wpa`` — spread-adjusted WPA.
+        * ``cp`` — completion probability for intended pass plays (null
+          otherwise; float64).
+        * ``cpoe`` — completion probability over expected, percentage-point
+          scale (null when ``complete_pass`` absent; float64).
+        * ``xyac_mean_yardage``, ``xyac_median_yardage``, ``xyac_sd_yardage``,
+          ``xyac_prob_complete`` — expected yards after catch sub-models (null
+          on non-pass plays; omitted with a ``RuntimeWarning`` if the xYAC
+          model files are absent).
 
     Raises:
         ValueError: when ``method`` is unrecognised, or required contract
@@ -2021,9 +2073,17 @@ def enrich_nfl_pbp(
             enriched = enrich_nfl_pbp(pbp)
             print(enriched.select("ep", "epa", "wp", "wpa").head())
 
-        Pandas next step (one line)::
+        Pandas output::
 
-            enrich_nfl_pbp(pbp, return_as_pandas=True).head()
+            from sportsdataverse.nfl import load_nfl_pbp
+            from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+            enriched_pd = enrich_nfl_pbp(load_nfl_pbp([2023]), return_as_pandas=True)
+            print(enriched_pd[["ep", "epa", "wp", "wpa"]].head())
+
+        Pipeline next step::
+
+            enriched.filter(pl.col("play_type") == "pass").select("posteam", "epa", "cp", "cpoe").head()
 
         See Also:
             * `nflfastR`_ -- the R package whose ``helper_add_ep_wp.R`` this
