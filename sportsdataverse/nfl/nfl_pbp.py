@@ -38,6 +38,8 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_wpa,
 )
 from sportsdataverse.nfl.model_vars import (
+    TOUCHBACK_YARDLINE_POST_2016,
+    TOUCHBACK_YARDLINE_PRE_2016,
     defense_score_vec,
     end_change_vec,
     ep_class_to_score_mapping,
@@ -3366,10 +3368,13 @@ class NFLPlayProcess(object):
                 pl.lit(99).alias("start.yardsToEndzone.touchback"),
             )
             .with_columns(
-                pl.when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") > 2013))
-                .then(75)
-                .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") <= 2013))
-                .then(80)
+                # The 2016 rule change moved the touchback spot to the 25 (75 yards to
+                # the end zone); before 2016 it was the 20 (80 yards).  nflfastR keys
+                # this on the 2016 season boundary, NOT 2013.
+                pl.when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") >= 2016))
+                .then(TOUCHBACK_YARDLINE_POST_2016)
+                .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") < 2016))
+                .then(TOUCHBACK_YARDLINE_PRE_2016)
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone.touchback"),
             )
@@ -4427,7 +4432,7 @@ class NFLPlayProcess(object):
         )
         # # self.logger.info(pass_qbr)
 
-        dtest_qbr = DMatrix(pass_qbr[qbr_vars])
+        dtest_qbr = DMatrix(pass_qbr[qbr_vars], feature_names=list(qbr_vars))
         qbr_result = qbr_model.predict(dtest_qbr)
         pass_qbr = pass_qbr.with_columns(exp_qbr=pl.lit(qbr_result))
         passer_box = passer_box.join(
