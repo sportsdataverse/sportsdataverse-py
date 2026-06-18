@@ -3916,6 +3916,350 @@ class NFLPlayProcess(object):
         )
         return play_df
 
+    def __add_fixed_drives_series(self, play_df: pl.DataFrame) -> pl.DataFrame:
+        """Add nflfastR-parity ``fixed_drive`` and ``series`` columns.
+
+        Reconstructs nflverse/nflfastR's drive- and series-numbering scheme on
+        top of the ESPN ``NFLPlayProcess`` frame so the ESPN-constructed output
+        reaches parity with ``load_nfl_pbp`` on these columns. Ported faithfully
+        from nflfastR ``R/helper_add_fixed_drives.R`` (``add_drive_results``)
+        and ``R/helper_add_series_data.R`` (``add_series_data``); dplyr/
+        ``data.table`` idioms are translated to polars 1.x.
+
+        Adds five columns -- ``fixed_drive`` (int, shared across both teams,
+        increments on a real possession change with nflfastR's PAT / onside /
+        safety special cases), ``fixed_drive_result`` (str), ``series`` (int,
+        increments on a new set of downs / first down / possession change),
+        ``series_success`` (int 0/1), and ``series_result`` (str). The method is
+        strictly additive -- every pre-existing column is left untouched and the
+        ``_ff_*`` working columns are dropped before returning.
+
+        nflfastR is keyed on its own column vocabulary; the ESPN frame uses
+        different names, so the inputs are mapped first: ``pos_team`` ->
+        posteam, ``def_pos_team`` -> defteam, ``half`` -> game_half,
+        ``start.distance`` -> ydstogo, ``statYardage`` -> yards_gained,
+        ``text`` -> desc. nflfastR signals absent from the ESPN frame
+        (``play_type``, ``td_team``, ``first_down_*``, ``own_kickoff_recovery``,
+        ``qb_kneel``, ``interception``) are derived from ESPN columns.
+
+        Args:
+            play_df (pl.DataFrame): The plays frame after ``__add_drive_data``,
+                where ``pos_team`` / ``def_pos_team`` / down / yardage / scoring
+                flags / ``end_of_half`` are all populated.
+
+        Returns:
+            pl.DataFrame: The same frame plus the five drive/series columns.
+        """
+        cols = play_df.columns
+        txt = pl.col("text") if "text" in cols else pl.col("desc")
+        type_txt = pl.col("type.text") if "type.text" in cols else pl.lit("")
+        eoh = pl.col("end_of_half").cast(pl.Boolean) if "end_of_half" in cols else pl.lit(False)
+
+        # ---- map nflfastR inputs from ESPN columns + derive missing signals ----
+        play_df = (
+            play_df.with_columns(
+                pl.col("pos_team").alias("_ff_posteam"),
+                pl.col("def_pos_team").alias("_ff_defteam"),
+                pl.col("half").alias("_ff_half"),
+                pl.col("down").alias("_ff_down"),
+                pl.col("start.distance").alias("_ff_ydstogo"),
+                pl.col("statYardage").alias("_ff_ygained"),
+                txt.alias("_ff_desc"),
+                pl.col("touchdown").cast(pl.Int8).alias("_ff_td"),
+                pl.col("safety").cast(pl.Int8).alias("_ff_safety"),
+                pl.col("fumble_lost").cast(pl.Int8).alias("_ff_fumlost"),
+                pl.col("field_goal_result").alias("_ff_fgr"),
+                pl.col("kickoff_play").cast(pl.Int8).alias("_ff_kick_att"),
+                (pl.col("punt") | pl.col("punt_play")).cast(pl.Int8).alias("_ff_punt_att"),
+                pl.col("fg_attempt").cast(pl.Int8).alias("_ff_fg"),
+            )
+            .with_columns(
+                # nflfastR play_type, collapsed from ESPN type.text / rush / pass flags
+                pl.when(pl.col("_ff_kick_att") == 1)
+                .then(pl.lit("kickoff"))
+                .when(pl.col("_ff_punt_att") == 1)
+                .then(pl.lit("punt"))
+                .when(pl.col("_ff_fg") == 1)
+                .then(pl.lit("field_goal"))
+                .when(pl.col("pass") == True)
+                .then(pl.lit("pass"))
+                .when(pl.col("rush") == True)
+                .then(pl.lit("run"))
+                .otherwise(pl.lit("no_play"))
+                .alias("_ff_play_type"),
+                # own_kickoff_recovery: kicking team retains a recovered kick
+                (
+                    (pl.col("kickoff_play") == True)
+                    & ((pl.col("kickoff_onside") == True) | (pl.col("kickoff_downed") == True))
+                    & (pl.col("fumble_recovered") == True)
+                )
+                .cast(pl.Int8)
+                .alias("_ff_own_kick_rec"),
+            )
+            .with_columns(
+                # td_team: defense on return / interception TDs, else offense
+                pl.when(pl.col("_ff_td") == 0)
+                .then(None)
+                .when(type_txt.str.contains(r"(?i)return touchdown") | pl.col("int_td"))
+                .then(pl.col("def_pos_team"))
+                .when(
+                    txt.str.contains(r"(?i)intercept(ed)?.*touchdown|fumble.*return.*touchdown|return(ed)?.*touchdown")
+                )
+                .then(pl.col("def_pos_team"))
+                .otherwise(pl.col("pos_team"))
+                .alias("_ff_tdteam"),
+                (pl.col("int_td") | txt.str.contains(r"(?i)intercept")).cast(pl.Int8).alias("_ff_int"),
+                (txt.str.contains(r"(?i)kneel") & (pl.col("rush") == True)).cast(pl.Int8).alias("_ff_qbkneel"),
+                # ESPN omits nflfastR's "END QUARTER 2/4 / END GAME" desc markers; the
+                # end_of_half boolean is the 1:1 ESPN analog for "End of half".
+                (eoh | txt.str.contains(r"(END QUARTER 2)|(END QUARTER 4)|(END GAME)")).cast(pl.Int8).alias("_ff_eoh"),
+            )
+        )
+
+        # per-play first down: non-scoring scrimmage play that advanced the chain
+        # (same possession, end down resets to 1, yards gained >= distance) or a
+        # penalty that converted a first down. This strips the post-touchdown /
+        # dead-ball end.down==1 bookkeeping artifacts the raw flags carry.
+        fd_gain = (
+            (pl.col("scrimmage_play") == True)
+            & (pl.col("end.down") == 1)
+            & (pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+            & (pl.col("touchdown") == False)
+            & (pl.col("statYardage") >= pl.col("start.distance"))
+        )
+        fd_pen = (
+            (pl.col("penalty_1st_conv") == True)
+            & (pl.col("touchdown") == False)
+            & (pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
+            if "penalty_1st_conv" in cols
+            else pl.lit(False)
+        )
+        play_df = play_df.with_columns(
+            (fd_gain & (pl.col("rush") == True)).cast(pl.Int8).alias("_ff_fd_rush"),
+            (fd_gain & (pl.col("pass") == True)).cast(pl.Int8).alias("_ff_fd_pass"),
+            (fd_pen | (fd_gain & (pl.col("pass") == False) & (pl.col("rush") == False)))
+            .cast(pl.Int8)
+            .alias("_ff_fd_pen"),
+        )
+
+        # ===================== fixed_drive (add_drive_results) =====================
+        # posteam swap: on a recovered kickoff the kicking team (defteam) owns the
+        # drive (helper_add_fixed_drives.R L15-27).
+        play_df = play_df.with_columns(
+            pl.when(
+                (pl.col("_ff_kick_att") == 1) & ((pl.col("_ff_own_kick_rec") == 1) | (pl.col("_ff_fumlost") == 1)),
+            )
+            .then(pl.col("_ff_defteam"))
+            .otherwise(pl.col("_ff_posteam"))
+            .alias("_ff_pt"),
+        ).with_columns(
+            pl.int_range(pl.len()).over(["game_id", "_ff_half"]).alias("_ff_row"),
+        )
+        lag_pt = pl.col("_ff_pt").shift(1).over(["game_id", "_ff_half"])
+        lag_pt2 = pl.col("_ff_pt").shift(2).over(["game_id", "_ff_half"])
+        lag_pt3 = pl.col("_ff_pt").shift(3).over(["game_id", "_ff_half"])
+        lag_td = pl.col("_ff_td").shift(1).over(["game_id", "_ff_half"])
+        lag_td2 = pl.col("_ff_td").shift(2).over(["game_id", "_ff_half"])
+        lag_tdteam = pl.col("_ff_tdteam").shift(1).over(["game_id", "_ff_half"])
+        lag_fum = pl.col("_ff_fumlost").shift(1).over(["game_id", "_ff_half"])
+        lag_fum2 = pl.col("_ff_fumlost").shift(2).over(["game_id", "_ff_half"])
+        lag_ptype = pl.col("_ff_play_type").shift(1).over(["game_id", "_ff_half"])
+        lag_ptype2 = pl.col("_ff_play_type").shift(2).over(["game_id", "_ff_half"])
+        lag_safety = pl.col("_ff_safety").shift(1).over(["game_id", "_ff_half"])
+        lag_safety2 = pl.col("_ff_safety").shift(2).over(["game_id", "_ff_half"])
+
+        play_df = (
+            play_df.with_columns(
+                # change in posteam, incl. the t-2 / t-3 NA-posteam variants (L32-44)
+                pl.when(
+                    (pl.col("_ff_pt") != lag_pt)
+                    | ((pl.col("_ff_pt") != lag_pt2) & lag_pt.is_null())
+                    | ((pl.col("_ff_pt") != lag_pt3) & lag_pt2.is_null() & lag_pt.is_null()),
+                )
+                .then(1)
+                .otherwise(0)
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # PAT after a defensive TD is not a new drive (L45-54)
+                pl.when((lag_td == 1) & (lag_pt != lag_tdteam) & lag_pt.is_not_null())
+                .then(0)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # same team retains after a lost fumble on a punt/fg/pass/run that did
+                # not score: it's a new drive (L83-113).
+                pl.when(
+                    (pl.col("_ff_nd") != 1)
+                    & (
+                        (
+                            (pl.col("_ff_pt") == lag_pt)
+                            & (lag_fum == 1)
+                            & lag_ptype.is_in(["punt", "pass", "run", "field_goal"])
+                            & (lag_td == 0)
+                        )
+                        | (
+                            lag_pt.is_null()
+                            & (pl.col("_ff_pt") == lag_pt2)
+                            & (lag_fum2 == 1)
+                            & lag_ptype2.is_in(["punt", "pass", "run", "field_goal"])
+                            & (lag_td2 == 0)
+                        )
+                    ),
+                )
+                .then(1)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # first observation of a half is a new drive (L114-115)
+                pl.when(pl.col("_ff_row") == 0).then(1).otherwise(pl.col("_ff_nd")).alias("_ff_nd"),
+            )
+            .with_columns(
+                # recovered onside / muffed kick is a new drive (L117-122)
+                pl.when(
+                    (pl.col("_ff_play_type") == "kickoff")
+                    & ((pl.col("_ff_own_kick_rec") == 1) | (pl.col("_ff_fumlost") == 1)),
+                )
+                .then(1)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                # kickoff after a safety is a new drive (L124-134)
+                pl.when(
+                    ((pl.col("_ff_kick_att") == 1) & (lag_safety == 1))
+                    | (
+                        (pl.col("_ff_kick_att") == 1)
+                        & (lag_safety2 == 1)
+                        & (lag_ptype.is_null() | (lag_ptype == "no_play"))
+                    ),
+                )
+                .then(1)
+                .otherwise(pl.col("_ff_nd"))
+                .alias("_ff_nd"),
+            )
+            .with_columns(
+                pl.col("_ff_nd").fill_null(0).alias("_ff_nd"),
+            )
+            .with_columns(
+                fixed_drive=pl.col("_ff_nd").cum_sum().over("game_id"),
+            )
+        )
+
+        play_df = play_df.with_columns(
+            # per-play candidate drive result (L142-158)
+            pl.when((pl.col("_ff_td") == 1) & (pl.col("_ff_pt") == pl.col("_ff_tdteam")))
+            .then(pl.lit("Touchdown"))
+            .when((pl.col("_ff_td") == 1) & (pl.col("_ff_pt") != pl.col("_ff_tdteam")))
+            .then(pl.lit("Opp touchdown"))
+            .when(pl.col("_ff_fgr") == "made")
+            .then(pl.lit("Field goal"))
+            .when(pl.col("_ff_fgr").is_in(["blocked", "missed"]))
+            .then(pl.lit("Missed field goal"))
+            .when(pl.col("_ff_safety") == 1)
+            .then(pl.lit("Safety"))
+            .when((pl.col("_ff_play_type") == "punt") | (pl.col("_ff_punt_att") == 1))
+            .then(pl.lit("Punt"))
+            .when((pl.col("_ff_int") == 1) | (pl.col("_ff_fumlost") == 1))
+            .then(pl.lit("Turnover"))
+            .when(
+                (pl.col("_ff_down") == 4)
+                & (pl.col("_ff_ygained") < pl.col("_ff_ydstogo"))
+                & (pl.col("_ff_play_type") != "no_play"),
+            )
+            .then(pl.lit("Turnover on downs"))
+            .when(pl.col("_ff_eoh") == 1)
+            .then(pl.lit("End of half"))
+            .otherwise(None)
+            .alias("_ff_tmp"),
+        )
+        last_tmp = pl.col("_ff_tmp").drop_nulls().last().over(["game_id", "fixed_drive"])
+        first_tmp = pl.col("_ff_tmp").drop_nulls().first().over(["game_id", "fixed_drive"])
+        play_df = play_df.with_columns(
+            # end-of-half drives take the first result seen, else the last (L162-168)
+            fixed_drive_result=pl.when(last_tmp == "End of half").then(first_tmp).otherwise(last_tmp),
+        )
+
+        # ======================= series (add_series_data) ========================
+        play_df = play_df.with_columns(
+            pl.int_range(pl.len()).over(["game_id", "_ff_half"]).alias("_ff_srow"),
+        )
+        lag_fd = pl.col("fixed_drive").shift(1).over(["game_id", "_ff_half"])
+        lag_fdr = pl.col("_ff_fd_rush").shift(1).over(["game_id", "_ff_half"])
+        lag_fdp = pl.col("_ff_fd_pass").shift(1).over(["game_id", "_ff_half"])
+        lag_fdn = pl.col("_ff_fd_pen").shift(1).over(["game_id", "_ff_half"])
+        lag_td_s = pl.col("_ff_td").shift(1).over(["game_id", "_ff_half"])
+        play_df = (
+            play_df.with_columns(
+                # new series: a new drive, a non-TD first down on the prior play, or the
+                # first play of the half (L35-47)
+                pl.when(
+                    (pl.col("fixed_drive") != lag_fd)
+                    | (((lag_fdr == 1) | (lag_fdp == 1) | (lag_fdn == 1)) & (lag_td_s == 0))
+                    | (pl.col("_ff_srow") == 0),
+                )
+                .then(1)
+                .otherwise(0)
+                .alias("_ff_ns"),
+            )
+            .with_columns(
+                pl.col("_ff_ns").fill_null(0).alias("_ff_ns"),
+            )
+            .with_columns(
+                series=pl.col("_ff_ns").cum_sum().over("game_id"),
+            )
+        )
+        play_df = play_df.with_columns(
+            # per-play candidate series result (L54-75): note "First down" and
+            # "QB kneel" precede the scoring branches, unlike the drive result.
+            pl.when(
+                ((pl.col("_ff_fd_pen") == 1) | (pl.col("_ff_fd_rush") == 1) | (pl.col("_ff_fd_pass") == 1))
+                & (pl.col("_ff_td") == 0),
+            )
+            .then(pl.lit("First down"))
+            .when((pl.col("_ff_td") == 1) & (pl.col("_ff_pt") == pl.col("_ff_tdteam")))
+            .then(pl.lit("Touchdown"))
+            .when((pl.col("_ff_td") == 1) & (pl.col("_ff_pt") != pl.col("_ff_tdteam")))
+            .then(pl.lit("Opp touchdown"))
+            .when(pl.col("_ff_fgr") == "made")
+            .then(pl.lit("Field goal"))
+            .when(pl.col("_ff_fgr").is_in(["blocked", "missed"]))
+            .then(pl.lit("Missed field goal"))
+            .when(pl.col("_ff_safety") == 1)
+            .then(pl.lit("Safety"))
+            .when((pl.col("_ff_play_type") == "punt") | (pl.col("_ff_punt_att") == 1))
+            .then(pl.lit("Punt"))
+            .when((pl.col("_ff_int") == 1) | (pl.col("_ff_fumlost") == 1))
+            .then(pl.lit("Turnover"))
+            .when(
+                (pl.col("_ff_down") == 4)
+                & (pl.col("_ff_ygained") < pl.col("_ff_ydstogo"))
+                & (pl.col("_ff_play_type") != "no_play"),
+            )
+            .then(pl.lit("Turnover on downs"))
+            .when(pl.col("_ff_qbkneel") == 1)
+            .then(pl.lit("QB kneel"))
+            .when(pl.col("_ff_eoh") == 1)
+            .then(pl.lit("End of half"))
+            .otherwise(None)
+            .alias("_ff_stmp"),
+        )
+        last_stmp = pl.col("_ff_stmp").drop_nulls().last().over(["game_id", "series"])
+        first_stmp = pl.col("_ff_stmp").drop_nulls().first().over(["game_id", "series"])
+        play_df = play_df.with_columns(
+            series_result=pl.when(last_stmp == "End of half").then(first_stmp).otherwise(last_stmp),
+        ).with_columns(
+            # series_success: 1 if the series ended in a TD or first down (L86-90)
+            series_success=pl.when(pl.col("series_result").is_in(["Touchdown", "First down"])).then(1).otherwise(0),
+        )
+
+        # drop all working columns -- strictly additive output
+        drop_cols = [c for c in play_df.columns if c.startswith("_ff_")]
+        play_df = play_df.drop(drop_cols)
+        return play_df
+
     def __cast_box_score_column(self, play_df, column, target_type):
         if column in play_df.columns:
             play_df = play_df.with_columns(pl.col(column).cast(target_type).alias(column))
@@ -4781,6 +5125,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__process_cp)
                     .pipe(self.__process_xyac)
                     .pipe(self.__add_drive_data)
+                    .pipe(self.__add_fixed_drives_series)
                     .pipe(self.__process_qbr)
                 )
                 self.ran_pipeline = True
