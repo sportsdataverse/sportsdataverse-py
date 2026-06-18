@@ -5012,6 +5012,8 @@ DataFrame with the original columns plus the five nflfastR xYAC columns (`Float6
 **Example**
 
 ```python
+import polars as pl
+
 from sportsdataverse.nfl import load_nfl_pbp
 from sportsdataverse.nfl.ep_wp import calculate_xyac
 

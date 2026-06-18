@@ -1259,6 +1259,8 @@ def calculate_xyac(
     Example:
         Quick start::
 
+            import polars as pl
+
             from sportsdataverse.nfl import load_nfl_pbp
             from sportsdataverse.nfl.ep_wp import calculate_xyac
 
