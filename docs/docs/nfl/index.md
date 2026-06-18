@@ -11,7 +11,7 @@ sidebar_label: NFL
 | [ESPN core API (v2)](reference/core) | 83 | `https://sports.core.api.espn.com/v2/sports` |
 | [NFL.com API](reference/nfl_api) | 11 | `https://api.nfl.com` |
 | [Dataset loaders](reference/loaders) | 8 | nflverse data releases |
-| [Additional functions](reference/additional) | 92 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 93 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

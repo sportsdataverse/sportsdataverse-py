@@ -1627,6 +1627,43 @@ load_nfl_pfr_weekly_rush:
   rushing_yards_before_contact_avg: Average rushing yards gained before first contact per rushing attempt in this weekly game log.
 load_nfl_player_stats:
   opponent_team: Abbreviation or name of the opposing team faced by the player in a given game or week.
+load_nfl_rosters:
+  season: NFL season (year) the roster entry applies to.
+  team: Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA').
+  position: Position the player is listed at on the roster (e.g. 'QB', 'WR', 'CB').
+  depth_chart_position: Fine-grained depth-chart position label, which may differ from the broader position group.
+  jersey_number: Uniform (jersey) number the player wears.
+  status: Roster status code for the player (e.g. 'ACT' active, 'INA' inactive, 'RES' reserve/injured).
+  full_name: Player's full display name.
+  first_name: Player's first (given) name.
+  last_name: Player's last (family) name.
+  birth_date: Player's date of birth (YYYY-MM-DD).
+  height: Player's height in inches.
+  weight: Player's listed weight in pounds.
+  college: College or university the player attended.
+  gsis_id: NFL GSIS player identifier — the canonical nflverse player key used to join across datasets.
+  espn_id: ESPN player identifier for cross-system joins.
+  sportradar_id: Sportradar player identifier for cross-system joins.
+  yahoo_id: Yahoo Sports player identifier for cross-system joins.
+  rotowire_id: RotoWire player identifier for cross-system joins.
+  pff_id: Pro Football Focus (PFF) player identifier for cross-system joins.
+  pfr_id: Pro Football Reference (PFR) player identifier for cross-system joins.
+  fantasy_data_id: FantasyData player identifier for cross-system joins.
+  sleeper_id: Sleeper player identifier for cross-system joins.
+  years_exp: Number of accrued NFL seasons of experience for the player.
+  headshot_url: URL of the player's headshot image.
+  ngs_position: Player's position as classified by NFL Next Gen Stats.
+  week: Week of the season the roster snapshot applies to (weekly rosters only).
+  game_type: Type of game the roster snapshot applies to (e.g. 'REG', 'POST').
+  status_description_abbr: Abbreviated roster status description code from the source feed.
+  football_name: Player's preferred football (commonly used) first name.
+  esb_id: Elias Sports Bureau (ESB) player identifier used for official NFL record-keeping.
+  gsis_it_id: NFL GSIS internal tracking identifier for the player.
+  smart_id: NFL SMART player identifier (GUID) used across modern NFL data feeds.
+  entry_year: Calendar year the player first entered the NFL.
+  rookie_year: Calendar year of the player's rookie season.
+  draft_club: Team abbreviation of the club that drafted the player.
+  draft_number: Overall pick number at which the player was selected in the NFL draft.
 load_nfl_schedule:
   ftn: FTN Data game identifier corresponding to this scheduled game.
 load_nfl_team_stats:
@@ -1690,6 +1727,43 @@ load_nfl_teams:
   team_logo_wikipedia: URL to the team's primary logo image as hosted on Wikimedia Commons / Wikipedia.
   team_nick: Team nickname (e.g., 'Chiefs', 'Eagles', 'Patriots') without the city or state prefix.
   team_wordmark: URL to the team's wordmark image (team name rendered in official typography without the primary logo mark).
+load_nfl_weekly_rosters:
+  season: NFL season (year) the weekly roster snapshot applies to.
+  team: Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA').
+  position: Position the player is listed at on the roster (e.g. 'QB', 'WR', 'CB').
+  depth_chart_position: Fine-grained depth-chart position label, which may differ from the broader position group.
+  jersey_number: Uniform (jersey) number the player wears.
+  status: Roster status code for the player (e.g. 'ACT' active, 'INA' inactive, 'RES' reserve/injured).
+  full_name: Player's full display name.
+  first_name: Player's first (given) name.
+  last_name: Player's last (family) name.
+  birth_date: Player's date of birth (YYYY-MM-DD).
+  height: Player's height in inches.
+  weight: Player's listed weight in pounds.
+  college: College or university the player attended.
+  gsis_id: NFL GSIS player identifier — the canonical nflverse player key used to join across datasets.
+  espn_id: ESPN player identifier for cross-system joins.
+  sportradar_id: Sportradar player identifier for cross-system joins.
+  yahoo_id: Yahoo Sports player identifier for cross-system joins.
+  rotowire_id: RotoWire player identifier for cross-system joins.
+  pff_id: Pro Football Focus (PFF) player identifier for cross-system joins.
+  pfr_id: Pro Football Reference (PFR) player identifier for cross-system joins.
+  fantasy_data_id: FantasyData player identifier for cross-system joins.
+  sleeper_id: Sleeper player identifier for cross-system joins.
+  years_exp: Number of accrued NFL seasons of experience for the player.
+  headshot_url: URL of the player's headshot image.
+  ngs_position: Player's position as classified by NFL Next Gen Stats.
+  week: Week of the season the weekly roster snapshot applies to.
+  game_type: Type of game the weekly roster snapshot applies to (e.g. 'REG', 'POST').
+  status_description_abbr: Abbreviated roster status description code from the source feed.
+  football_name: Player's preferred football (commonly used) first name.
+  esb_id: Elias Sports Bureau (ESB) player identifier used for official NFL record-keeping.
+  gsis_it_id: NFL GSIS internal tracking identifier for the player.
+  smart_id: NFL SMART player identifier (GUID) used across modern NFL data feeds.
+  entry_year: Calendar year the player first entered the NFL.
+  rookie_year: Calendar year of the player's rookie season.
+  draft_club: Team abbreviation of the club that drafted the player.
+  draft_number: Overall pick number at which the player was selected in the NFL draft.
 load_nhl_games:
   linescore: Logical flag indicating whether linescore data (period-by-period scoring breakdown) is available for this game in the NHL games loader output.
   scratches: Logical flag indicating whether a scratches list (players healthy-scratched and not dressing) is available for this game in the NHL games loader output.
@@ -1710,6 +1784,80 @@ load_pfr_advstats:
   times_sacked: Total number of times the defensive player recorded a sack of the quarterback, from Pro Football Reference.
 load_player_stats:
   opponent_team: Abbreviation of the opposing team the player faced in the game or week represented by this row.
+load_rosters:
+  season: NFL season (year) the roster entry applies to.
+  team: Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA').
+  position: Position the player is listed at on the roster (e.g. 'QB', 'WR', 'CB').
+  depth_chart_position: Fine-grained depth-chart position label, which may differ from the broader position group.
+  jersey_number: Uniform (jersey) number the player wears.
+  status: Roster status code for the player (e.g. 'ACT' active, 'INA' inactive, 'RES' reserve/injured).
+  full_name: Player's full display name.
+  first_name: Player's first (given) name.
+  last_name: Player's last (family) name.
+  birth_date: Player's date of birth (YYYY-MM-DD).
+  height: Player's height in inches.
+  weight: Player's listed weight in pounds.
+  college: College or university the player attended.
+  gsis_id: NFL GSIS player identifier — the canonical nflverse player key used to join across datasets.
+  espn_id: ESPN player identifier for cross-system joins.
+  sportradar_id: Sportradar player identifier for cross-system joins.
+  yahoo_id: Yahoo Sports player identifier for cross-system joins.
+  rotowire_id: RotoWire player identifier for cross-system joins.
+  pff_id: Pro Football Focus (PFF) player identifier for cross-system joins.
+  pfr_id: Pro Football Reference (PFR) player identifier for cross-system joins.
+  fantasy_data_id: FantasyData player identifier for cross-system joins.
+  sleeper_id: Sleeper player identifier for cross-system joins.
+  years_exp: Number of accrued NFL seasons of experience for the player.
+  headshot_url: URL of the player's headshot image.
+  ngs_position: Player's position as classified by NFL Next Gen Stats.
+  week: Week of the season the roster snapshot applies to (weekly rosters only).
+  game_type: Type of game the roster snapshot applies to (e.g. 'REG', 'POST').
+  status_description_abbr: Abbreviated roster status description code from the source feed.
+  football_name: Player's preferred football (commonly used) first name.
+  esb_id: Elias Sports Bureau (ESB) player identifier used for official NFL record-keeping.
+  gsis_it_id: NFL GSIS internal tracking identifier for the player.
+  smart_id: NFL SMART player identifier (GUID) used across modern NFL data feeds.
+  entry_year: Calendar year the player first entered the NFL.
+  rookie_year: Calendar year of the player's rookie season.
+  draft_club: Team abbreviation of the club that drafted the player.
+  draft_number: Overall pick number at which the player was selected in the NFL draft.
+load_rosters_weekly:
+  season: NFL season (year) the weekly roster snapshot applies to.
+  team: Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA').
+  position: Position the player is listed at on the roster (e.g. 'QB', 'WR', 'CB').
+  depth_chart_position: Fine-grained depth-chart position label, which may differ from the broader position group.
+  jersey_number: Uniform (jersey) number the player wears.
+  status: Roster status code for the player (e.g. 'ACT' active, 'INA' inactive, 'RES' reserve/injured).
+  full_name: Player's full display name.
+  first_name: Player's first (given) name.
+  last_name: Player's last (family) name.
+  birth_date: Player's date of birth (YYYY-MM-DD).
+  height: Player's height in inches.
+  weight: Player's listed weight in pounds.
+  college: College or university the player attended.
+  gsis_id: NFL GSIS player identifier — the canonical nflverse player key used to join across datasets.
+  espn_id: ESPN player identifier for cross-system joins.
+  sportradar_id: Sportradar player identifier for cross-system joins.
+  yahoo_id: Yahoo Sports player identifier for cross-system joins.
+  rotowire_id: RotoWire player identifier for cross-system joins.
+  pff_id: Pro Football Focus (PFF) player identifier for cross-system joins.
+  pfr_id: Pro Football Reference (PFR) player identifier for cross-system joins.
+  fantasy_data_id: FantasyData player identifier for cross-system joins.
+  sleeper_id: Sleeper player identifier for cross-system joins.
+  years_exp: Number of accrued NFL seasons of experience for the player.
+  headshot_url: URL of the player's headshot image.
+  ngs_position: Player's position as classified by NFL Next Gen Stats.
+  week: Week of the season the weekly roster snapshot applies to.
+  game_type: Type of game the weekly roster snapshot applies to (e.g. 'REG', 'POST').
+  status_description_abbr: Abbreviated roster status description code from the source feed.
+  football_name: Player's preferred football (commonly used) first name.
+  esb_id: Elias Sports Bureau (ESB) player identifier used for official NFL record-keeping.
+  gsis_it_id: NFL GSIS internal tracking identifier for the player.
+  smart_id: NFL SMART player identifier (GUID) used across modern NFL data feeds.
+  entry_year: Calendar year the player first entered the NFL.
+  rookie_year: Calendar year of the player's rookie season.
+  draft_club: Team abbreviation of the club that drafted the player.
+  draft_number: Overall pick number at which the player was selected in the NFL draft.
 load_schedules:
   ftn: FTN Data game identifier used to join schedule records with FTN charting and tracking data.
 load_team_stats:
