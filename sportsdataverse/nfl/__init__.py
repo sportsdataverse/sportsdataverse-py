@@ -102,4 +102,5 @@ from sportsdataverse.nfl.utils_date import *
 from sportsdataverse.nfl.utils_date import get_current_nfl_season as get_current_season
 from sportsdataverse.nfl.utils_date import get_current_nfl_week as get_current_week
 from sportsdataverse.nfl.nfl_build import build_nfl_season
+from sportsdataverse.nfl.nfl_players import build_nfl_players, nfl_players_crosswalk
 from sportsdataverse.nfl.nfl_roster_builder import build_nfl_rosters

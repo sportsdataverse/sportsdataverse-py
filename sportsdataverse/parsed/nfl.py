@@ -147,6 +147,7 @@ from sportsdataverse.nfl import nfl_weeks as _raw_nfl_weeks
 from sportsdataverse.nfl import nfl_weeks_by_date as _raw_nfl_weeks_by_date
 from sportsdataverse.nfl import NFLPlayProcess as NFLPlayProcess  # noqa: F401
 from sportsdataverse.nfl import NflConfig as NflConfig  # noqa: F401
+from sportsdataverse.nfl import build_nfl_players as build_nfl_players  # noqa: F401
 from sportsdataverse.nfl import build_nfl_rosters as build_nfl_rosters  # noqa: F401
 from sportsdataverse.nfl import build_nfl_season as build_nfl_season  # noqa: F401
 from sportsdataverse.nfl import cached_loader as cached_loader  # noqa: F401
@@ -245,6 +246,7 @@ from sportsdataverse.nfl import nfl_ngs_microsite_chart_players as nfl_ngs_micro
 from sportsdataverse.nfl import nfl_ngs_play_is_highlight as nfl_ngs_play_is_highlight  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard as nfl_ngs_statboard  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders as nfl_ngs_statboard_leaders  # noqa: F401
+from sportsdataverse.nfl import nfl_players_crosswalk as nfl_players_crosswalk  # noqa: F401
 from sportsdataverse.nfl import nfl_token_gen as nfl_token_gen  # noqa: F401
 from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
@@ -259,6 +261,7 @@ from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 __all__ = [
     "NFLPlayProcess",
     "NflConfig",
+    "build_nfl_players",
     "build_nfl_rosters",
     "build_nfl_season",
     "cached_loader",
@@ -472,6 +475,7 @@ __all__ = [
     "nfl_ngs_play_is_highlight",
     "nfl_ngs_statboard",
     "nfl_ngs_statboard_leaders",
+    "nfl_players_crosswalk",
     "nfl_rosters",
     "nfl_standings",
     "nfl_team",

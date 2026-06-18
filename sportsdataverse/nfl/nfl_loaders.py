@@ -867,29 +867,54 @@ def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
 
 @cached_loader
 def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL Player ID information
+    """Load the nflverse NFL player-identity master.
+
+    Reads nflverse's published ``players.parquet`` — a one-row-per-player
+    identity master that is the union of **seven** upstream systems (GSIS, ESPN,
+    NGS roster, Pro-Football-Reference, OverTheCap, PFF, and the Sleeper / Yahoo
+    cross-walk). It is the canonical source for cross-system identifier
+    columns (``gsis_id``, ``espn_id``, ``pfr_id``, ``pff_id``, ``otc_id``,
+    ``smart_id``, ``esb_id``, ``nfl_id``) plus name, position, physical, draft,
+    and status fields.
+
+    This is the **full identity master**. For an SDV-native, public-source-only
+    alternative that does not depend on the nflverse release, see
+    :func:`sportsdataverse.nfl.build_nfl_players` (ESPN-athletes tier only) and
+    :func:`sportsdataverse.nfl.nfl_players_crosswalk` (a thin ID-only slice of
+    this same parquet).
 
     Args:
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+        return_as_pandas (bool): If ``True``, return a ``pandas.DataFrame``;
+            otherwise a ``polars.DataFrame`` (default).
 
     Returns:
-        pl.DataFrame: Polars dataframe containing players available.
+        pl.DataFrame: One-row-per-player identity master. ``return_as_pandas``
+        narrows the return to a ``pandas.DataFrame``.
+
+    Raises:
+        Exception: Propagates any network / parquet-read error from the
+            underlying ``pl.read_parquet`` against the nflverse release URL.
 
     Example:
         Quick start::
 
             from sportsdataverse.nfl import load_nfl_players
             players = load_nfl_players()
-            players.shape
+            print(players.shape)
 
         Pandas round-trip::
 
             players_pd = load_nfl_players(return_as_pandas=True)
             players_pd.head()
 
+        Pipeline next step (one line)::
+
+            import polars as pl
+            load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
+
         See Also:
             * `nflverse`_ -- full data ecosystem (R + Python)
-            * `nflreadpy`_ -- direct nflverse Python bindings
+            * `nflreadpy`_ -- direct nflverse Python bindings (load_players)
 
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
