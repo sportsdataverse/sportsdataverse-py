@@ -144,6 +144,9 @@ class _FakeBooster:
         if self._n_classes == 7:
             # uniform 1/7 for each EP class
             return np.full((n, 7), 1.0 / 7.0, dtype=np.float32)
+        if self._n_classes == 76:
+            # uniform multinomial over the 76 YAC buckets (rows sum to 1)
+            return np.full((n, 76), 1.0 / 76.0, dtype=np.float32)
         # binary logistic → 0.5
         return np.full(n, 0.5, dtype=np.float32)
 
@@ -618,11 +621,19 @@ def _nflverse_pass_row(
         roof=roof,
     )
     _air: float | None = float(air_yards) if air_yards is not None else None
+    # ``pass_location="left"`` keeps ``pass_middle`` at 0 so the CP feature
+    # parity check (ESPN side defaults pass_middle=0) still holds.
     return base.with_columns(
         pl.lit(_air, dtype=pl.Float64).alias("air_yards"),
         pl.lit(complete_pass).alias("complete_pass"),
+        pl.lit(0).alias("incomplete_pass"),
+        pl.lit(0).alias("interception"),
         pl.lit(ep).alias("ep"),
         pl.lit(cp).alias("cp"),
+        # nflfastR add_xyac valid_pass inputs
+        pl.lit(0.5).alias("air_epa"),
+        pl.lit("left").alias("pass_location"),
+        pl.lit("X.Receiver").alias("receiver_player_name"),
     )
 
 
@@ -674,13 +685,20 @@ def mock_cp_model(monkeypatch):
 
 @pytest.fixture()
 def mock_xyac_model(monkeypatch):
-    """Patch _load_model so EP, CP, and all four XYAC models return simple preds."""
+    """Patch _load_model: EP → 7-class uniform, xYAC → 76-class uniform.
+
+    The xYAC derivation re-scores expected points on every outcome row, so the
+    EP model (``ep_model.ubj``) must also be stubbed.  A uniform 76-class
+    distribution makes the derivation deterministic and model-file-free.
+    """
     import sportsdataverse.nfl.ep_wp as _mod
 
     _original = _mod._load_model
     _original.cache_clear()
 
     def _fake_load(name: str):
+        if "xyac_model" in name:
+            return _FakeBooster(n_classes=76)
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -774,27 +792,30 @@ class TestEspnCpFeatures:
 class TestEspnXyacFeatures:
     def test_shape(self):
         X = _espn_xyac_features(_espn_pass_row())
-        assert X.shape == (1, 15)
+        assert X.shape == (1, 19)
         assert X.dtype == np.float32
 
     def test_column_count_matches_xyac_features(self):
         assert _espn_xyac_features(_espn_pass_row()).shape[1] == len(XYAC_FEATURES)
 
+    def test_no_cp_ep_in_features(self):
+        # The faithful multinomial xYAC model takes no cp/ep features.
+        assert "cp" not in XYAC_FEATURES
+        assert "ep" not in XYAC_FEATURES
+
     def test_air_yards_passthrough(self):
         X = _espn_xyac_features(_espn_pass_row(air_yards=8.0))
         assert X[0, XYAC_FEATURES.index("air_yards")] == pytest.approx(8.0)
 
-    def test_cp_passthrough(self):
-        X = _espn_xyac_features(_espn_pass_row(cp=0.75))
-        assert X[0, XYAC_FEATURES.index("cp")] == pytest.approx(0.75)
+    def test_distance_to_goal_computed(self):
+        # distance_to_goal = yardline_100 - air_yards = 40 - 8 = 32
+        X = _espn_xyac_features(_espn_pass_row(yardline=40.0, air_yards=8.0))
+        assert X[0, XYAC_FEATURES.index("distance_to_goal")] == pytest.approx(32.0)
 
-    def test_ep_passthrough(self):
-        X = _espn_xyac_features(_espn_pass_row(ep=3.5))
-        assert X[0, XYAC_FEATURES.index("ep")] == pytest.approx(3.5)
-
-    def test_season_passthrough(self):
-        X = _espn_xyac_features(_espn_pass_row(season=2019))
-        assert X[0, XYAC_FEATURES.index("season")] == pytest.approx(2019.0)
+    def test_distance_to_sticks_computed(self):
+        # distance_to_sticks = air_yards - ydstogo = 8 - 10 = -2
+        X = _espn_xyac_features(_espn_pass_row(ydstogo=10.0, air_yards=8.0))
+        assert X[0, XYAC_FEATURES.index("distance_to_sticks")] == pytest.approx(-2.0)
 
     def test_air_is_zero_computed(self):
         X = _espn_xyac_features(_espn_pass_row(air_yards=0.0))
@@ -804,10 +825,17 @@ class TestEspnXyacFeatures:
         X = _espn_xyac_features(_espn_pass_row(air_yards=4.0))
         assert X[0, XYAC_FEATURES.index("air_is_zero")] == 0.0
 
-    def test_down_integer_passthrough(self):
-        df = _espn_pass_row(down=3)
-        X = _espn_xyac_features(df, down_col="start.down")
-        assert X[0, XYAC_FEATURES.index("down")] == pytest.approx(3.0)
+    def test_down_one_hots(self):
+        X = _espn_xyac_features(_espn_pass_row(down=3))
+        assert X[0, XYAC_FEATURES.index("down1")] == 0.0
+        assert X[0, XYAC_FEATURES.index("down3")] == 1.0
+        assert X[0, XYAC_FEATURES.index("down4")] == 0.0
+
+    def test_roof_defaults_retractable(self):
+        X = _espn_xyac_features(_espn_pass_row())
+        assert X[0, XYAC_FEATURES.index("retractable")] == 1.0
+        assert X[0, XYAC_FEATURES.index("dome")] == 0.0
+        assert X[0, XYAC_FEATURES.index("outdoors")] == 0.0
 
     def test_era_flags(self):
         X = _espn_xyac_features(_espn_pass_row(season=2015))
@@ -817,7 +845,7 @@ class TestEspnXyacFeatures:
 
     def test_multi_row(self):
         rows = pl.concat([_espn_pass_row(season=2022), _espn_pass_row(season=2015)])
-        assert _espn_xyac_features(rows).shape == (2, 15)
+        assert _espn_xyac_features(rows).shape == (2, 19)
 
 
 # ---------------------------------------------------------------------------
@@ -919,33 +947,35 @@ class TestCalculateCompletionProbability:
 
 
 class TestCalculateXyac:
+    _OUT = ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd")
+
     def test_adds_xyac_columns(self, mock_xyac_model):
         result = calculate_xyac(_nflverse_pass_row())
-        for col in ("xyac_mean_yardage", "xyac_median_yardage", "xyac_sd_yardage", "xyac_prob_complete"):
+        for col in self._OUT:
             assert col in result.columns
 
     def test_xyac_not_null_for_pass_plays(self, mock_xyac_model):
         result = calculate_xyac(_nflverse_pass_row())
-        assert result["xyac_mean_yardage"][0] is not None
+        for col in self._OUT:
+            assert result[col][0] is not None, f"{col} unexpectedly null"
 
     def test_xyac_null_for_nonpass(self, mock_xyac_model):
-        df = _nflverse_row().with_columns(
-            pl.lit(None).cast(pl.Float64).alias("air_yards"),
-            pl.lit(2.0).alias("ep"),
-            pl.lit(0.7).alias("cp"),
-        )
+        # air_yards null → fails the valid_pass filter → all xyac cols null
+        df = _nflverse_pass_row(air_yards=None)
         result = calculate_xyac(df)
-        assert result["xyac_mean_yardage"][0] is None
+        assert result["xyac_epa"][0] is None
 
-    def test_xyac_null_when_cp_missing(self, mock_xyac_model):
-        """Plays with air_yards but null cp are excluded (cp required)."""
-        df = _nflverse_row().with_columns(
-            pl.lit(5.0).alias("air_yards"),
-            pl.lit(2.0).alias("ep"),
-            pl.lit(None).cast(pl.Float64).alias("cp"),
-        )
+    def test_xyac_null_when_not_a_pass_attempt(self, mock_xyac_model):
+        """Plays with air_yards but no completion/incompletion/INT are excluded."""
+        df = _nflverse_pass_row(complete_pass=0)
         result = calculate_xyac(df)
-        assert result["xyac_mean_yardage"][0] is None
+        assert result["xyac_epa"][0] is None
+
+    def test_xyac_null_when_distance_to_goal_zero(self, mock_xyac_model):
+        """distance_to_goal == 0 (air_yards == yardline_100) is excluded."""
+        df = _nflverse_pass_row(yardline=10.0, air_yards=10.0)
+        result = calculate_xyac(df)
+        assert result["xyac_epa"][0] is None
 
     def test_drops_stale_xyac_cols(self, mock_xyac_model):
         stale = _nflverse_pass_row().with_columns(pl.lit(999.0).alias("xyac_mean_yardage"))
@@ -957,8 +987,8 @@ class TestCalculateXyac:
         nonpass_play = _nflverse_pass_row(season=2020, air_yards=None)
         df = pl.concat([pass_play, nonpass_play])
         result = calculate_xyac(df)
-        assert result["xyac_mean_yardage"][0] is not None
-        assert result["xyac_mean_yardage"][1] is None
+        assert result["xyac_epa"][0] is not None
+        assert result["xyac_epa"][1] is None
 
     def test_return_as_pandas(self, mock_xyac_model):
         import pandas
