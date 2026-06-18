@@ -219,3 +219,33 @@ def test_empty_game_ids(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_pipeline_version_is_positive_int() -> None:
     assert isinstance(PIPELINE_VERSION, int)
     assert PIPELINE_VERSION >= 1
+
+
+# ---------------------------------------------------------------------------
+# Test 11: source="nflverse" emits UserWarning and passes frame through
+# ---------------------------------------------------------------------------
+
+
+def test_nflverse_source_warns_and_passes_frame(monkeypatch: pytest.MonkeyPatch) -> None:
+    """source='nflverse' emits a UserWarning and returns the loader's frame."""
+    import sportsdataverse.nfl.nfl_build as nfl_build_mod2  # same module, different alias
+
+    fake_frame = pl.DataFrame({"season": [2024, 2024], "play_id": [1, 2]})
+
+    def fake_load_nfl_pbp(seasons: list[int], return_as_pandas: bool = False) -> pl.DataFrame:
+        return fake_frame
+
+    monkeypatch.setattr(nfl_build_mod2, "load_nfl_pbp", fake_load_nfl_pbp, raising=False)
+    # The loader is imported lazily inside the function; patch at module level
+    # by injecting into nfl_build's namespace so the lazy import resolves to our stub.
+    import sportsdataverse.nfl.nfl_loaders as nfl_loaders_mod
+
+    monkeypatch.setattr(nfl_loaders_mod, "load_nfl_pbp", fake_load_nfl_pbp)
+
+    update_config(cache_mode="off")
+
+    with pytest.warns(UserWarning, match="source='nflverse' treats game_ids as season years"):
+        result = build_nfl_season([2024], source="nflverse")
+
+    assert isinstance(result, pl.DataFrame)
+    assert result.shape == fake_frame.shape

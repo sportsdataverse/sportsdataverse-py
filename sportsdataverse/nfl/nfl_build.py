@@ -22,19 +22,20 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-import time
 import warnings
-from pathlib import Path
-from typing import Union
+from typing import TYPE_CHECKING, Literal, overload
 
 import polars as pl
 
-from sportsdataverse.nfl.cache import _MEMORY, _is_expired, get_config
+from sportsdataverse.nfl.cache import cache_get, cache_put
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 # ---------------------------------------------------------------------------
 # Pipeline version — bump to invalidate all per-game caches.
 # ---------------------------------------------------------------------------
-PIPELINE_VERSION: int = 1
+PIPELINE_VERSION: int = 1  # 1 -> initial release
 
 logger = logging.getLogger("sdv.nfl_build")
 logger.addHandler(logging.NullHandler())
@@ -50,45 +51,14 @@ def _game_cache_key(game_id: int, pipeline_version: int) -> str:
     return "nfl_build__" + hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
 
-def _game_cache_path(key: str) -> Path:
-    """Resolve the on-disk parquet path for a given per-game cache key."""
-    cache_dir = get_config().cache_dir
-    return cache_dir / f"{key}.parquet"
-
-
 def _game_cache_read(key: str) -> pl.DataFrame | None:
     """Return cached frame for *key* or ``None`` on miss/expiry."""
-    cfg = get_config()
-    if cfg.cache_mode == "memory":
-        entry = _MEMORY.get(key)
-        if entry is not None:
-            ts, frame = entry
-            if not _is_expired(ts):
-                return frame
-            del _MEMORY[key]
-    elif cfg.cache_mode == "filesystem":
-        path = _game_cache_path(key)
-        if path.exists() and not _is_expired(path.stat().st_mtime):
-            try:
-                return pl.read_parquet(path)
-            except Exception:
-                path.unlink(missing_ok=True)
-    return None
+    return cache_get(key)
 
 
 def _game_cache_write(key: str, frame: pl.DataFrame) -> None:
     """Persist *frame* to the active cache backend."""
-    cfg = get_config()
-    if cfg.cache_mode == "memory":
-        _MEMORY[key] = (time.time(), frame)
-    elif cfg.cache_mode == "filesystem":
-        cache_dir = get_config().cache_dir
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        path = _game_cache_path(key)
-        try:
-            frame.write_parquet(path)
-        except Exception:
-            pass  # Cache write failure is non-fatal; data still returned.
+    cache_put(key, frame)
 
 
 # ---------------------------------------------------------------------------
@@ -114,12 +84,26 @@ def _build_game_espn(game_id: int) -> pl.DataFrame:
 # ---------------------------------------------------------------------------
 
 
+@overload
+def build_nfl_season(
+    game_ids: list[int],
+    *,
+    source: str = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+@overload
+def build_nfl_season(
+    game_ids: list[int],
+    *,
+    source: str = ...,
+    return_as_pandas: Literal[True],
+) -> "pd.DataFrame": ...
 def build_nfl_season(
     game_ids: list[int],
     *,
     source: str = "espn",
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, object]:
+) -> "pl.DataFrame | pd.DataFrame":
     """Compile play-by-play for multiple NFL games into one tidy frame.
 
     For each *game_id* the function either loads a previously cached plays
@@ -210,7 +194,6 @@ def build_nfl_season(
             stacklevel=2,
         )
         frame = load_nfl_pbp(seasons=game_ids, return_as_pandas=False)
-        assert isinstance(frame, pl.DataFrame)
         if return_as_pandas:
             return frame.to_pandas()
         return frame
