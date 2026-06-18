@@ -37,6 +37,8 @@ from sportsdataverse.config import (
     NFL_PLAYER_STATS_URL,
     NFL_PLAYER_URL,
     NFL_ROSTER_URL,
+    NFL_SDV_PLAYER_URL,
+    NFL_SDV_ROSTER_URL,
     NFL_SNAP_COUNTS_URL,
     NFL_TEAM_LOGO_URL,
     NFL_TEAM_SCHEDULE_URL,
@@ -49,7 +51,7 @@ from sportsdataverse.nfl.cache import cached_loader
 
 
 @cached_loader
-def load_nfl_pbp(seasons: List[int], source: str = "nflverse", return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
     """Load NFL play by play data going back to 1999
 
     Args:
@@ -707,7 +709,7 @@ def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas: bool = False) 
 
 
 @cached_loader
-def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
     """Load NFL season roster data for the requested seasons.
 
     Reads nflverse's published season-roster parquet (one row per player per
@@ -723,6 +725,18 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
         seasons (list): Seasons to load (e.g. ``[2024]`` or ``range(2020, 2025)``).
             A single ``int`` is accepted and wrapped. 1920 is the earliest
             available season.
+        source (str): Which roster release to read.
+            ``"nflverse"`` (the default, also accepts ``None``) returns the
+            nflverse season-roster releases described above -- the full
+            multi-source product (1920+, densely populated cross-system IDs).
+            ``"sportsdataverse"`` / ``"sdv"`` returns the SDV-native
+            ``nfl_rosters`` release built by
+            :func:`sportsdataverse.nfl.build_nfl_rosters` from the **public NFL
+            Shield / ESPN** surface only. The SDV tier is a partial build: its
+            30 columns are a subset of nflverse's 36, and cross-system IDs are
+            sparser pre-2016. It covers only the published seasons (rosters
+            2022+). The default stays ``"nflverse"``. Any other value raises
+            ``ValueError``.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe (default).
 
@@ -733,6 +747,8 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
     Raises:
         SeasonNotFoundError: If a requested season precedes the earliest
             available season (1920).
+        ValueError: If ``source`` is not one of ``"nflverse"``, ``None``,
+            ``"sportsdataverse"``, or ``"sdv"``.
 
     Example:
         Single season::
@@ -749,6 +765,12 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
             import polars as pl
             kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
 
+        SDV-native rosters (public Shield/ESPN build; published seasons 2022+;
+        30-column subset of nflverse, sparser cross-IDs pre-2016)::
+
+            rosters_sdv = load_nfl_rosters(seasons=[2023], source="sdv")
+            rosters_sdv.select(["season", "team", "full_name", "gsis_id"]).head()
+
         See Also:
             * :func:`sportsdataverse.nfl.build_nfl_rosters` -- SDV-native rosters
               built from the public NFL Shield API only (no nflverse dependency;
@@ -759,12 +781,18 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
+    if source in ("nflverse", None):
+        base_url = NFL_ROSTER_URL
+    elif source in ("sportsdataverse", "sdv"):
+        base_url = NFL_SDV_ROSTER_URL
+    else:
+        raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
     data = pl.DataFrame()
     if type(seasons) is int:
         seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1920)
-        i_data = pl.read_parquet(NFL_ROSTER_URL.format(season=i), use_pyarrow=True, columns=None)
+        i_data = pl.read_parquet(base_url.format(season=i), use_pyarrow=True, columns=None)
         data = pl.concat([data, i_data], how="vertical")
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
@@ -779,6 +807,11 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
     :func:`load_nfl_rosters` it is sourced from nflverse's full multi-tier
     roster product and carries densely populated cross-system identifier columns
     plus a ``week`` / ``game_type`` pair identifying each snapshot.
+
+    Unlike :func:`load_nfl_rosters` and :func:`load_nfl_players`, this loader has
+    **no SDV-native (``source="sdv"``) tier**: the SDV roster build
+    (:func:`build_nfl_rosters`) is season-only, and weekly snapshots require the
+    credential-gated NFL Data Exchange that the public build cannot reach.
 
     Args:
         seasons (list): Seasons to load (e.g. ``[2024]`` or ``range(2022, 2025)``).
@@ -866,7 +899,7 @@ def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
 
 
 @cached_loader
-def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_players(return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
     """Load the nflverse NFL player-identity master.
 
     Reads nflverse's published ``players.parquet`` — a one-row-per-player
@@ -884,6 +917,16 @@ def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
     this same parquet).
 
     Args:
+        source (str): Which player-master release to read.
+            ``"nflverse"`` (the default, also accepts ``None``) returns the
+            nflverse seven-system ``players.parquet`` identity master described
+            above. ``"sportsdataverse"`` / ``"sdv"`` returns the SDV-native
+            ``nfl_players`` release built by
+            :func:`sportsdataverse.nfl.build_nfl_players` from the **public NFL
+            Shield / ESPN-athletes** surface only. The SDV tier is a partial
+            build: its columns are a subset of nflverse's and cross-system IDs
+            are sparser (notably pre-2016), though ``espn_id`` is populated. The
+            default stays ``"nflverse"``. Any other value raises ``ValueError``.
         return_as_pandas (bool): If ``True``, return a ``pandas.DataFrame``;
             otherwise a ``polars.DataFrame`` (default).
 
@@ -892,8 +935,10 @@ def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
         narrows the return to a ``pandas.DataFrame``.
 
     Raises:
+        ValueError: If ``source`` is not one of ``"nflverse"``, ``None``,
+            ``"sportsdataverse"``, or ``"sdv"``.
         Exception: Propagates any network / parquet-read error from the
-            underlying ``pl.read_parquet`` against the nflverse release URL.
+            underlying ``pl.read_parquet`` against the release URL.
 
     Example:
         Quick start::
@@ -907,6 +952,12 @@ def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
             players_pd = load_nfl_players(return_as_pandas=True)
             players_pd.head()
 
+        SDV-native player master (public Shield/ESPN-athletes build; subset of
+        nflverse columns, sparser cross-IDs)::
+
+            players_sdv = load_nfl_players(source="sdv")
+            players_sdv.select(["display_name", "position", "espn_id"]).head()
+
         Pipeline next step (one line)::
 
             import polars as pl
@@ -919,10 +970,16 @@ def load_nfl_players(return_as_pandas=False) -> pl.DataFrame:
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
+    if source in ("nflverse", None):
+        url = NFL_PLAYER_URL
+    elif source in ("sportsdataverse", "sdv"):
+        url = NFL_SDV_PLAYER_URL
+    else:
+        raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
     return (
-        pl.read_parquet(NFL_PLAYER_URL, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
+        pl.read_parquet(url, use_pyarrow=True, columns=None).to_pandas(use_pyarrow_extension_array=True)
         if return_as_pandas
-        else pl.read_parquet(NFL_PLAYER_URL, use_pyarrow=True, columns=None)
+        else pl.read_parquet(url, use_pyarrow=True, columns=None)
     )
 
 

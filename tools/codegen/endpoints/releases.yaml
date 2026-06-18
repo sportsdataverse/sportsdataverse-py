@@ -852,6 +852,9 @@ loaders:
   min_season: 1999
   example_args:
     seasons: 2024
+# load_nfl_rosters also accepts source="sdv" to read the SDV-native nfl_rosters
+# release (public Shield/ESPN build; 30-col subset; published seasons 2022+).
+# The default source="nflverse" maps to the asset below and is documented here.
 - fn: load_nfl_rosters
   league: nfl
   base: nflverse
