@@ -163,7 +163,7 @@ def mock_ep_model(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):  # noqa: ARG001
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -179,7 +179,7 @@ def mock_wp_model(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):  # noqa: ARG001
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -195,7 +195,7 @@ def mock_both_models(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -676,7 +676,7 @@ def mock_cp_model(monkeypatch):
     _original = _mod._load_model
     _original.cache_clear()
 
-    def _fake_load(name: str):
+    def _fake_load(name: str, models_dir=None):  # noqa: ARG001
         return _FakeBooster(n_classes=7 if "ep_model" in name else 1)
 
     monkeypatch.setattr("sportsdataverse.nfl.ep_wp._load_model", _fake_load)
@@ -735,10 +735,10 @@ class TestEspnCpFeatures:
         assert X[0, CP_FEATURES.index("air_is_zero")] == 0.0
 
     def test_distance_to_sticks(self):
-        # distance_to_sticks = ydstogo - air_yards = 10 - 7 = 3
+        # distance_to_sticks = air_yards - ydstogo = 7 - 10 = -3 (nflfastR sign)
         df = _espn_pass_row(ydstogo=10.0, air_yards=7.0)
         X = _espn_cp_features(df)
-        assert X[0, CP_FEATURES.index("distance_to_sticks")] == pytest.approx(3.0)
+        assert X[0, CP_FEATURES.index("distance_to_sticks")] == pytest.approx(-3.0)
 
     def test_no_era0_era1_in_cp_features(self):
         assert "era0" not in CP_FEATURES
@@ -1122,10 +1122,12 @@ class TestXyacModelCacheResolution:
             out = ew.enrich_nfl_pbp(_synthetic_frame())
 
         assert any(issubclass(w.category, RuntimeWarning) for w in caught)
-        # xYAC was skipped, so the five columns are simply absent (the step
-        # that would add them never ran) — the rest of the enrichment is intact.
+        # xYAC was skipped, but for schema stability the five columns are still
+        # present and all-null — the rest of the enrichment is intact.
         assert "ep" in out.columns and "wp" in out.columns
-        assert "xyac_epa" not in out.columns
+        for col in ("xyac_epa", "xyac_mean_yardage", "xyac_median_yardage", "xyac_success", "xyac_fd"):
+            assert col in out.columns, f"{col} missing — schema not stable offline"
+            assert out[col].null_count() == out.height, f"{col} should be all-null when skipped"
 
     def test_clear_cache_preserves_models(self, tmp_path):
         """clear_cache() wipes data entries but keeps <cache_dir>/models intact."""

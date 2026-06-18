@@ -413,7 +413,8 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
 
     Computes the three derived features that aren't direct column copies:
     - ``air_is_zero`` — air_yards == 0
-    - ``distance_to_sticks`` — ydstogo - air_yards
+    - ``distance_to_sticks`` — air_yards - ydstogo (nflfastR sign; the models
+      were trained on this orientation — see track6 features.py)
     - Era flags era2..4 (era0/era1 are intentionally excluded from CP)
     - ``home`` indicator (if not already present)
     - Roof one-hots (identical to :func:`_make_model_mutations`)
@@ -421,7 +422,7 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     """
     df = df.with_columns(
         pl.when(pl.col("air_yards") == 0).then(1).otherwise(0).alias("air_is_zero"),
-        (pl.col("ydstogo") - pl.col("air_yards")).alias("distance_to_sticks"),
+        (pl.col("air_yards") - pl.col("ydstogo")).alias("distance_to_sticks"),
         pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
         pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
         pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
@@ -679,7 +680,7 @@ def _espn_cp_features(
     """
     df = play_df.with_columns(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
-        (pl.col(ydstogo_col) - pl.col(air_yards_col)).alias("_distance_to_sticks"),
+        (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
         pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
         pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
         pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
@@ -2497,6 +2498,13 @@ def enrich_nfl_pbp(
             f"enrich_nfl_pbp: skipping xYAC step — model unavailable ({exc}).",
             RuntimeWarning,
             stacklevel=2,
+        )
+        # Schema stability: emit the five xyac_* columns as all-null so the
+        # returned frame has a stable column set whether or not the model
+        # could be obtained (matches calculate_xyac + the ESPN __process_xyac
+        # contract — callers can always select the columns).
+        raw = raw.with_columns(
+            [pl.lit(None, dtype=pl.Float64).alias(c) for c in _XYAC_OUT_COLS if c not in raw.columns]
         )
 
     if return_as_pandas:
