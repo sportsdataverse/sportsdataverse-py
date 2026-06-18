@@ -708,14 +708,31 @@ def load_nfl_pfr_weekly_def(seasons: List[int], return_as_pandas: bool = False) 
 
 @cached_loader
 def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL roster data for all seasons
+    """Load NFL season roster data for the requested seasons.
+
+    Reads nflverse's published season-roster parquet (one row per player per
+    season). nflverse's roster product is the union of three upstream tiers --
+    NFL Next Gen Stats (2016+), the credentialed NFL Data Exchange (2002-2015),
+    and the public NFL Shield endpoint (all seasons) -- so it carries densely
+    populated cross-system identifier columns (``espn_id``, ``sportradar_id``,
+    ``yahoo_id``, ``pff_id``, ``pfr_id``, ...) alongside biographical and
+    depth-chart fields. This is the richest roster surface; prefer it whenever a
+    network round trip to nflverse is acceptable.
 
     Args:
-        seasons (list): Used to define different seasons. 1920 is the earliest available season.
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+        seasons (list): Seasons to load (e.g. ``[2024]`` or ``range(2020, 2025)``).
+            A single ``int`` is accepted and wrapped. 1920 is the earliest
+            available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe (default).
 
     Returns:
-        pl.DataFrame: Polars dataframe containing rosters available for the requested seasons.
+        pl.DataFrame: Polars dataframe of season rosters for the requested
+        seasons (``pandas.DataFrame`` when ``return_as_pandas=True``).
+
+    Raises:
+        SeasonNotFoundError: If a requested season precedes the earliest
+            available season (1920).
 
     Example:
         Single season::
@@ -733,6 +750,9 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
             kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
 
         See Also:
+            * :func:`sportsdataverse.nfl.build_nfl_rosters` -- SDV-native rosters
+              built from the public NFL Shield API only (no nflverse dependency;
+              partial cross-system IDs)
             * `nflverse`_ -- full data ecosystem (R + Python)
             * `nflreadpy`_ -- direct nflverse Python bindings
 
@@ -751,14 +771,29 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame
 
 @cached_loader
 def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.DataFrame:
-    """Load NFL weekly roster data for selected seasons
+    """Load NFL weekly roster data for the requested seasons.
+
+    Reads nflverse's published weekly-roster parquet (one row per player per
+    team per week), so the roster snapshot reflects mid-season transactions
+    (signings, releases, IR moves) rather than a single season-end view. Like
+    :func:`load_nfl_rosters` it is sourced from nflverse's full multi-tier
+    roster product and carries densely populated cross-system identifier columns
+    plus a ``week`` / ``game_type`` pair identifying each snapshot.
 
     Args:
-        seasons (list): Used to define different seasons. 2002 is the earliest available season.
-        return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+        seasons (list): Seasons to load (e.g. ``[2024]`` or ``range(2022, 2025)``).
+            A single ``int`` is accepted and wrapped. 2002 is the earliest
+            available season.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe (default).
 
     Returns:
-        pl.DataFrame: Polars dataframe containing weekly rosters available for the requested seasons.
+        pl.DataFrame: Polars dataframe of weekly rosters for the requested
+        seasons (``pandas.DataFrame`` when ``return_as_pandas=True``).
+
+    Raises:
+        SeasonNotFoundError: If a requested season precedes the earliest
+            available season (2002).
 
     Example:
         Single season::
@@ -775,6 +810,9 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
             )
 
         See Also:
+            * :func:`sportsdataverse.nfl.load_nfl_rosters` -- season-level rosters
+            * :func:`sportsdataverse.nfl.build_nfl_rosters` -- SDV-native rosters
+              built from the public NFL Shield API only (season-level)
             * `nflverse`_ -- full data ecosystem (R + Python)
             * `nflreadpy`_ -- direct nflverse Python bindings
 

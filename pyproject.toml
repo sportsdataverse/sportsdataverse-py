@@ -284,6 +284,7 @@ files = [
     "sportsdataverse/nfl/config.py",
     "sportsdataverse/nfl/model_vars.py",
     "sportsdataverse/nfl/nfl_build.py",
+    "sportsdataverse/nfl/nfl_roster_builder.py",
     "sportsdataverse/nfl/utils_date.py",
     "sportsdataverse/mlb/mlb_statcast_runtime.py",
     "sportsdataverse/mlb/mlb_statcast_parsers.py",
