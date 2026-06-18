@@ -738,9 +738,9 @@ def calculate_expected_points(
 
     ep = np.clip(probs @ _EP_POINT_VALUES, -10.0, 10.0)
 
-    prob_frame = pl.DataFrame({name: probs[:, i].tolist() for i, name in enumerate(_EP_CLASS_NAMES)}).with_columns(
-        ep=pl.Series("ep", ep.tolist())
-    )
+    prob_frame = pl.DataFrame(
+        {name: pl.Series(name, probs[:, i]) for i, name in enumerate(_EP_CLASS_NAMES)}
+    ).with_columns(ep=pl.Series("ep", ep))
 
     result = pl.concat([df, prob_frame], how="horizontal")
 
@@ -805,14 +805,21 @@ def calculate_win_probability(
 
     if "spread_line" in df.columns:
         # Where spread_line is null, fall back to naive wp for vegas_wp
-        has_spread = np.array(df["spread_line"].is_not_null().to_list(), dtype=bool)
+        has_spread = df["spread_line"].is_not_null().to_numpy()
         vegas_wp = np.where(has_spread, wp_spread, wp_naive)
     else:
         vegas_wp = wp_naive
 
+    # NOTE: wp_naive is NOT gated to null-spread_line rows even though
+    # vegas_wp already handles the spread/naive merge.  The `wp` column
+    # intentionally exposes the naive model output for *every* row so
+    # callers can compare naive vs spread-adjusted WP side-by-side
+    # (mirroring nflfastR's calculate_win_probability which always
+    # emits both).  Gating the predict to null-spread rows would silently
+    # drop `wp` for all spread rows and break that contract.
     result = df.with_columns(
-        wp=pl.Series("wp", wp_naive.tolist()),
-        vegas_wp=pl.Series("vegas_wp", vegas_wp.tolist()),
+        wp=pl.Series("wp", wp_naive),
+        vegas_wp=pl.Series("vegas_wp", vegas_wp),
     )
 
     if return_as_pandas:
