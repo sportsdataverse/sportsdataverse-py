@@ -147,10 +147,13 @@ from sportsdataverse.nfl import nfl_weeks as _raw_nfl_weeks
 from sportsdataverse.nfl import nfl_weeks_by_date as _raw_nfl_weeks_by_date
 from sportsdataverse.nfl import NFLPlayProcess as NFLPlayProcess  # noqa: F401
 from sportsdataverse.nfl import NflConfig as NflConfig  # noqa: F401
+from sportsdataverse.nfl import build_nfl_season as build_nfl_season  # noqa: F401
 from sportsdataverse.nfl import cached_loader as cached_loader  # noqa: F401
 from sportsdataverse.nfl import calculate_completion_probability as calculate_completion_probability  # noqa: F401
+from sportsdataverse.nfl import calculate_epa as calculate_epa  # noqa: F401
 from sportsdataverse.nfl import calculate_expected_points as calculate_expected_points  # noqa: F401
 from sportsdataverse.nfl import calculate_win_probability as calculate_win_probability  # noqa: F401
+from sportsdataverse.nfl import calculate_wpa as calculate_wpa  # noqa: F401
 from sportsdataverse.nfl import calculate_xyac as calculate_xyac  # noqa: F401
 from sportsdataverse.nfl import clear_cache as clear_cache  # noqa: F401
 from sportsdataverse.nfl import download as download  # noqa: F401
@@ -253,10 +256,13 @@ from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 __all__ = [
     "NFLPlayProcess",
     "NflConfig",
+    "build_nfl_season",
     "cached_loader",
     "calculate_completion_probability",
+    "calculate_epa",
     "calculate_expected_points",
     "calculate_win_probability",
+    "calculate_wpa",
     "calculate_xyac",
     "clear_cache",
     "download",

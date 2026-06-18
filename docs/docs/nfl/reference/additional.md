@@ -4634,6 +4634,62 @@ from sportsdataverse.nfl import NflConfig
 cfg = NflConfig(cache_mode="off", timeout=10)
 ```
 
+### `build_nfl_season(game_ids: 'list[int] | None' = None, *, seasons: 'list[int] | None' = None, source: 'str' = 'espn', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#build_nfl_season}
+
+Compile play-by-play for multiple NFL games into one tidy frame.
+
+The `source` parameter determines which input parameter is required:
+
+- `source="espn"` — requires *game_ids*; *seasons* must be `None`.
+- `source="nflverse"` — requires *seasons*; *game_ids* must be `None`.
+
+For ESPN games the function either loads a previously cached plays frame or
+processes the game fresh via `NFLPlayProcess`.  Individual game failures
+are logged and skipped so a single bad game does not abort the whole season
+build.  The per-game frames are concatenated with `how="diagonal_relaxed"`
+(schema union, missing columns filled with `null`) so games with slightly
+different column sets merge cleanly.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_ids` | `list[int] \| None` | `None` | ESPN event IDs to compile (e.g. `[401671801, 401671802]`). Required when `source="espn"`; must be `None` for other sources. |
+| `seasons` | `list[int] \| None` | `None` | Season years to compile (e.g. `[2023, 2024]`). Required when `source="nflverse"`; must be `None` for other sources. |
+| `source` | `str` | `'espn'` | Data source. - `"espn"` *(default)*: each game is processed via `NFLPlayProcess(gameId=gid).espn_nfl_pbp()` + `run_processing_pipeline()`. Pass *game_ids*. - `"nflverse"`: delegates to `sportsdataverse.nfl.load_nfl_pbp` for the requested seasons. Pass *seasons*. Returns the full pre-enriched season frame as-is. - `"shield"`: raises `NotImplementedError` — Shield (api.nfl.com) play-by-play lives in the native-pipeline (`nfl-data`) repository, not sdv-py. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+All plays from the requested games/seasons, concatenated with schema-union semantics (missing columns are `null`). Returns a zero-row frame if every game failed (ESPN source only). When *return_as_pandas* is `True`, returns a `pandas.DataFrame` instead.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_season
+df = build_nfl_season(game_ids=[401671801, 401671802])
+print(df.shape)
+
+# nflverse season compile (pass season years)
+
+from sportsdataverse.nfl import build_nfl_season
+df = build_nfl_season(seasons=[2023], source="nflverse")
+print(df.shape)
+
+# With filesystem cache enabled (ESPN)
+
+from sportsdataverse.nfl import build_nfl_season, update_config
+update_config(cache_mode="filesystem")
+df = build_nfl_season(game_ids=[401671801, 401671802])  # processes + caches
+df2 = build_nfl_season(game_ids=[401671801, 401671802]) # served from cache
+
+# Pandas output
+
+from sportsdataverse.nfl import build_nfl_season
+df_pd = build_nfl_season(game_ids=[401671801], return_as_pandas=True)
+print(df_pd.shape)
+```
+
 ### `cached_loader(func: 'F') -> 'F'` {#cached_loader}
 
 Decorator that adds caching to a `load_nfl_*` function.
@@ -4716,6 +4772,68 @@ pbp_cp = calculate_completion_probability(pbp)
 print(pbp_cp.select("cp", "cpoe").head())
 ```
 
+### `calculate_epa(df: 'pl.DataFrame') -> 'pl.DataFrame'` {#calculate_epa}
+
+Derive expected points added (EPA) from pre-scored EP point estimates.
+
+This is the **derivation half** of `NFLPlayProcess.__process_epa` lifted
+into a shared, model-free function so the same nflfastR-faithful EPA logic
+can be reused by the streaming `enrich_nfl_pbp` pipeline and by
+process_epa` itself.  It performs **no** model inference — the caller
+must already have scored the per-play EP point estimates.
+
+Derivation rules (mirror nflfastR / the original process_epa`):
+
+* Scoring overlays rewrite `EP_end` to the realized point value
+  (offense TD `+7` / `+6.92` / 2pt variants, made FG `+3`,
+  defensive scores, extra points, etc.) using the same `type.text` /
+  `text` classification as process_epa`.
+* Turnovers (`end_change_vec` / `downs_turnover`), kickoff turnovers
+  and recovered onside kicks flip `EP_end` to the opponent's
+  perspective (`EP_end * -1`).
+* `lag_EP_end` is the previous play's `EP_end`; `EP_between` flips
+  its sign on a prior-play possession change.
+* Kickoffs use `EP_start_touchback` as `EP_start`.
+* `EPA = EP_end - EP_start` normally; `-EP_start` on a non-scoring
+  end-of-half play; `0` on a timeout; `EP_end - EP_start + EP_between`
+  on a (non-kickoff, non-`Penalty`) penalty-in-text play.
+
+**Every** `shift` is grouped `.over("game_id")` so a concatenated
+multi-game frame never leaks EP across game boundaries — this differs from
+process_epa` (which runs one game per instance and therefore needs no
+grouping).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Play-by-play DataFrame that already carries the EP point estimates under the ESPN-internal names `EP_start`, `EP_end` and `EP_start_touchback` (e.g. as produced by the EP-scoring half of process_epa`), plus the play-classification / flag columns: `game_id`, `type.text`, `text`, `change_of_pos_team`, `downs_turnover`, `kickoff_onside`, `scoring_play`, `end_of_half` and `penalty_in_text`. See EPA_REQUIRED_COLUMNS`. This function does **not** score EP itself — score it first via the EP feature pipeline (the `EP_*` triple is the ESPN-internal naming, distinct from `calculate_expected_points`'s lowercase `ep`). |
+
+**Returns**
+
+The input frame with the EPA derivation applied. `EP_start` is rewritten to `0.92` for scoring-attempt play types (`Extra Point Good`, `Extra Point Missed`, `Two-Point Conversion Good`, `Two-Point Conversion Missed`, `Two Point Pass`, `Two Point Rush`, `Blocked PAT`) before any other overlays fire. `EP_start` / `EP_end` are then rewritten in place (overlays, sign flips, touchback), `EP_between`, `lag_EP_end` and `lag_change_of_pos_team` are added, `EPA` is added, and lowercase nflverse aliases `ep` (`= EP_end`), `epa` (`= EPA`), `ep_start` (`= EP_start`) and `ep_end` (`= EP_end`) are added for downstream contract parity.
+
+**Example**
+
+```python
+# For most use cases, call the high-level entry point instead. ``enrich_nfl_pbp`` scores EP, derives EPA, and adds WP/WPA/CP/CPOE in one shot on any nflverse-shape frame
+
+    from sportsdataverse.nfl import load_nfl_pbp
+    from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+    pbp = load_nfl_pbp([2023])
+    enriched = enrich_nfl_pbp(pbp)
+    print(enriched.select("game_id", "ep", "epa").head())
+
+``calculate_epa`` directly requires ESPN-internal columns
+(``EP_start``, ``EP_end``, ``EP_start_touchback``, ``type.text``,
+etc.) produced by ``NFLPlayProcess``.  It is called internally by
+``NFLPlayProcess.__process_epa`` and by the ``enrich_nfl_pbp``
+orchestrator — a naked ``calculate_epa(load_nfl_pbp([2023]))``
+will raise ``KeyError`` because those columns are absent from a
+nflverse frame.
+```
+
 ### `calculate_expected_points(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_expected_points}
 
 Compute expected points for provided plays.
@@ -4775,6 +4893,79 @@ from sportsdataverse.nfl.ep_wp import calculate_win_probability
 pbp = load_nfl_pbp([2023])
 pbp_wp = calculate_win_probability(pbp)
 print(pbp_wp.select("wp", "vegas_wp").head())
+```
+
+### `calculate_wpa(df: 'pl.DataFrame') -> 'pl.DataFrame'` {#calculate_wpa}
+
+Derive win probability added (WPA) from pre-scored WP point estimates.
+
+This is the **derivation half** of `NFLPlayProcess.__process_wpa` lifted
+into a shared, model-free function so the same nflfastR-faithful WPA logic
+can be reused by the streaming `enrich_nfl_pbp` pipeline and by
+process_wpa` itself.  It performs **no** model inference — the caller
+must already have scored the per-play WP point estimates
+(`wp_spread.ubj`) for the start / touchback / end feature views and
+attached them as `wp_before` / `wp_touchback` / `wp_after`.  This
+mirrors `calculate_epa`, which likewise consumes pre-scored EP point
+estimates and leaves prediction to the orchestrator.
+
+Derivation rules (mirror the original process_wpa`):
+
+* **Leading overlay (do not drop):** on a kickoff (`type.text` in
+  `kickoff_vec`) `wp_before` is replaced by `wp_touchback` — the
+  win-probability scored from the touchback feature view — before any
+  other column derives.  This is the WP analogue of the EPA `0.92`
+  scoring-attempt overlay and must fire first.
+* `def_wp_before = 1 - wp_before`; `home_wp_before` / `away_wp_before`
+  are the posteam->home perspective columns (the offense's `wp_before`
+  flows to home when the start possession team is the home team, otherwise
+  to the defense `def_wp_before`).
+* `wp_after` is rewritten by the end-of-half / end-of-game / OT two-path:
+  timeouts hold `wp_before`; a completed final play resolves to `1.0` /
+  `0.0` by the winner; end-of-half and `End Period` / `End of Half`
+  lead plays take `lead_wp_before` (or `1 - lead_wp_before` on a
+  possession change); a possession change otherwise flips the lead;
+  everything else keeps the model `wp_after`.
+* `def_wp_after = 1 - wp_after`; `home_wp_after` / `away_wp_after`
+  use the **end** possession team for the perspective flip.
+* `wpa = wp_after - wp_before`.
+
+**Every** `shift` / forward reference is grouped `.over("game_id")` so a
+concatenated multi-game frame never leaks WP across game boundaries — the
+`lead_wp_before` / `lead_wp_before2` shifts and the end-of-game
+`game_play_number == max()` lookup are all per-game.  This differs from
+process_wpa` (which runs one game per instance and therefore needs no
+grouping).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Play-by-play DataFrame that already carries the WP point estimates `wp_before` (start feature view), `wp_touchback` (touchback feature view) and `wp_after` (end feature view), plus the play-classification / perspective columns `game_id`, `type.text`, `homeTeamId`, `start.pos_team.id`, `end.pos_team.id`, `start.pos_team_receives_2H_kickoff`, `change_of_pos_team`, `scoringPlay`, `kickoff_onside`, `end_of_half`, `status_type_completed`, `pos_score_diff_end`, `lead_play_type`, `lead_pos_team` and `game_play_number`. See WPA_REQUIRED_COLUMNS`. This function does **not** score WP itself — score it first via `calculate_win_probability` / the `wp_spread` feature pipeline. |
+
+**Returns**
+
+The input frame with the WPA derivation applied: `wp_before` rewritten by the kickoff-touchback overlay; `def_wp_before`, `home_wp_before`, `away_wp_before`, `lead_wp_before`, `lead_wp_before2`, the rewritten `wp_after`, `def_wp_after`, `home_wp_after`, `away_wp_after` and `wpa` added; plus first-class lowercase aliases `wp` (`= wp_before`), `def_wp` (`= def_wp_before`), `home_wp` (`= home_wp_before`) and `away_wp` (`= away_wp_before`) for downstream contract parity (the per-play offense win probability is the pre-snap `wp_before`, matching nflfastR's `wp` semantics).
+
+**Example**
+
+```python
+# For most use cases, call the high-level entry point instead. ``enrich_nfl_pbp`` scores WP, derives WPA, and adds EP/EPA/CP/CPOE in one shot on any nflverse-shape frame
+
+    from sportsdataverse.nfl import load_nfl_pbp
+    from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+
+    pbp = load_nfl_pbp([2023])
+    enriched = enrich_nfl_pbp(pbp)
+    print(enriched.select("game_id", "wp", "def_wp", "home_wp", "away_wp", "wpa").head())
+
+``calculate_wpa`` directly requires ESPN-internal columns
+(``wp_before``, ``wp_touchback``, ``wp_after``, ``homeTeamId``,
+``start.pos_team.id``, etc.) produced by ``NFLPlayProcess``.  It is
+called internally by ``NFLPlayProcess.__process_wpa`` and by the
+``enrich_nfl_pbp`` orchestrator — a naked
+``calculate_wpa(load_nfl_pbp([2023]))`` will raise ``KeyError``
+because those columns are absent from a nflverse frame.
 ```
 
 ### `calculate_xyac(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_xyac}
