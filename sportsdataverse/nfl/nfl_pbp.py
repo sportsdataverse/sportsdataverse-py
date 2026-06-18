@@ -3793,6 +3793,38 @@ class NFLPlayProcess(object):
         play_df = calculate_wpa(play_df).drop("wp", "def_wp", "home_wp", "away_wp")
         return play_df
 
+    def __add_description_features(self, play_df):
+        """Derive text-only model inputs from the ESPN play ``text`` column.
+
+        nflverse's native pipeline extracts a handful of CP / context inputs
+        straight from the play description (see
+        ``native_pbp.description.add_description_features``).  The ESPN path
+        lacks them, so this method mirrors the canonical regexes on the
+        ``text`` column:
+
+        * ``pass_length`` — ``"short"`` / ``"deep"`` (``pass (?:incomplete )?(short|deep)``).
+        * ``pass_location`` — ``"left"`` / ``"middle"`` / ``"right"``
+          (``(?:short|deep) (left|middle|right)``).
+        * ``pass_middle`` — ``Int8`` 1 when ``pass_location == "middle"`` else 0
+          (also 0 for non-pass / null text); wired into CP scoring so the model
+          sees real middle-of-field info instead of the default 0.
+        * ``shotgun`` — ``Int8`` 1 when the text contains ``"Shotgun"``.
+        * ``no_huddle`` — ``Int8`` 1 when the text contains ``"No Huddle"``.
+
+        Documented gaps (NOT text-derivable on the ESPN path): ``air_yards``
+        (a tracking/GSIS measure, absent here) and ``qb_hit`` (left at 0).
+        """
+        text = pl.col("text").fill_null("")
+        play_df = play_df.with_columns(
+            pass_length=text.str.extract(r"pass (?:incomplete )?(short|deep)", 1),
+            pass_location=text.str.extract(r"(?:short|deep) (left|middle|right)", 1),
+            shotgun=text.str.contains("Shotgun").cast(pl.Int8),
+            no_huddle=text.str.contains("No Huddle").cast(pl.Int8),
+        )
+        return play_df.with_columns(
+            pass_middle=(pl.col("pass_location") == "middle").fill_null(False).cast(pl.Int8),
+        )
+
     def __process_cp(self, play_df):
         """Score completion probability and CPOE for pass plays.
 
@@ -3821,6 +3853,7 @@ class NFLPlayProcess(object):
                 down2_col="down_2",
                 down3_col="down_3",
                 down4_col="down_4",
+                pass_middle_col="pass_middle",
                 home_col="start.is_home",
             )
             cp_preds = _cp_model.predict(DMatrix(X_cp, feature_names=CP_FEATURES))
@@ -5147,6 +5180,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_player_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_spread_time)
+                    .pipe(self.__add_description_features)
                     .pipe(self.__process_epa)
                     .pipe(self.__process_wpa)
                     .pipe(self.__process_cp)
@@ -5260,6 +5294,7 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_player_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_spread_time)
+                    .pipe(self.__add_description_features)
                 )
                 self.plays_json = self.plays_json.to_dicts()
                 pbp_json = {
