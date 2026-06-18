@@ -1627,6 +1627,46 @@ load_nfl_pfr_weekly_rush:
   rushing_yards_before_contact_avg: Average rushing yards gained before first contact per rushing attempt in this weekly game log.
 load_nfl_player_stats:
   opponent_team: Abbreviation or name of the opposing team faced by the player in a given game or week.
+load_nfl_players:
+  gsis_id: NFL Game Statistics & Information System player identifier, the canonical nflverse player key.
+  display_name: Player's full display name as published by nflverse.
+  common_first_name: Player's commonly used first name (the name they go by, which may differ from their legal first name).
+  first_name: Player's legal first name.
+  last_name: Player's last name.
+  short_name: Abbreviated name (typically first initial plus last name).
+  football_name: Player's preferred on-field name as used in broadcast and box-score contexts.
+  suffix: Generational or honorific name suffix (e.g., Jr., Sr., III), when present.
+  esb_id: Elias Sports Bureau player identifier.
+  nfl_id: NFL.com / Shield player identifier.
+  pfr_id: Pro-Football-Reference player identifier.
+  pff_id: Pro Football Focus player identifier.
+  otc_id: OverTheCap player identifier (salary-cap data source).
+  espn_id: ESPN athlete identifier.
+  smart_id: NFL SMART (Standard Media and Reference Table) globally unique player identifier.
+  birth_date: Player's date of birth (ISO YYYY-MM-DD).
+  position_group: Broad positional grouping the player belongs to (e.g., QB, RB, WR, DL).
+  position: Player's specific listed position abbreviation.
+  ngs_position_group: Positional grouping as classified by NFL Next Gen Stats.
+  ngs_position: Specific position as classified by NFL Next Gen Stats.
+  height: Player's height in inches.
+  weight: Player's listed weight in pounds.
+  headshot: URL to the player's official headshot image.
+  college_name: Name of the college the player attended.
+  college_conference: Athletic conference of the player's college.
+  jersey_number: Player's uniform / jersey number.
+  rookie_season: Season (year) the player entered the league as a rookie.
+  last_season: Most recent season (year) the player appeared on an NFL roster.
+  latest_team: Abbreviation of the most recent team the player was rostered on.
+  status: Player's current roster status (e.g., active, retired, free agent).
+  ngs_status: Player status as reported by NFL Next Gen Stats.
+  ngs_status_short_description: Short human-readable description of the NFL Next Gen Stats status.
+  years_of_experience: Number of accrued NFL seasons of experience.
+  pff_position: Player's position as classified by Pro Football Focus.
+  pff_status: Player's status as classified by Pro Football Focus.
+  draft_year: Year the player was selected in the NFL Draft (null if undrafted).
+  draft_round: Round in which the player was drafted (null if undrafted).
+  draft_pick: Overall pick number at which the player was drafted (null if undrafted).
+  draft_team: Abbreviation of the team that drafted the player (null if undrafted).
 load_nfl_rosters:
   season: NFL season (year) the roster entry applies to.
   team: Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA').
@@ -1784,6 +1824,46 @@ load_pfr_advstats:
   times_sacked: Total number of times the defensive player recorded a sack of the quarterback, from Pro Football Reference.
 load_player_stats:
   opponent_team: Abbreviation of the opposing team the player faced in the game or week represented by this row.
+load_players:
+  gsis_id: NFL Game Statistics & Information System player identifier, the canonical nflverse player key.
+  display_name: Player's full display name as published by nflverse.
+  common_first_name: Player's commonly used first name (the name they go by, which may differ from their legal first name).
+  first_name: Player's legal first name.
+  last_name: Player's last name.
+  short_name: Abbreviated name (typically first initial plus last name).
+  football_name: Player's preferred on-field name as used in broadcast and box-score contexts.
+  suffix: Generational or honorific name suffix (e.g., Jr., Sr., III), when present.
+  esb_id: Elias Sports Bureau player identifier.
+  nfl_id: NFL.com / Shield player identifier.
+  pfr_id: Pro-Football-Reference player identifier.
+  pff_id: Pro Football Focus player identifier.
+  otc_id: OverTheCap player identifier (salary-cap data source).
+  espn_id: ESPN athlete identifier.
+  smart_id: NFL SMART (Standard Media and Reference Table) globally unique player identifier.
+  birth_date: Player's date of birth (ISO YYYY-MM-DD).
+  position_group: Broad positional grouping the player belongs to (e.g., QB, RB, WR, DL).
+  position: Player's specific listed position abbreviation.
+  ngs_position_group: Positional grouping as classified by NFL Next Gen Stats.
+  ngs_position: Specific position as classified by NFL Next Gen Stats.
+  height: Player's height in inches.
+  weight: Player's listed weight in pounds.
+  headshot: URL to the player's official headshot image.
+  college_name: Name of the college the player attended.
+  college_conference: Athletic conference of the player's college.
+  jersey_number: Player's uniform / jersey number.
+  rookie_season: Season (year) the player entered the league as a rookie.
+  last_season: Most recent season (year) the player appeared on an NFL roster.
+  latest_team: Abbreviation of the most recent team the player was rostered on.
+  status: Player's current roster status (e.g., active, retired, free agent).
+  ngs_status: Player status as reported by NFL Next Gen Stats.
+  ngs_status_short_description: Short human-readable description of the NFL Next Gen Stats status.
+  years_of_experience: Number of accrued NFL seasons of experience.
+  pff_position: Player's position as classified by Pro Football Focus.
+  pff_status: Player's status as classified by Pro Football Focus.
+  draft_year: Year the player was selected in the NFL Draft (null if undrafted).
+  draft_round: Round in which the player was drafted (null if undrafted).
+  draft_pick: Overall pick number at which the player was drafted (null if undrafted).
+  draft_team: Abbreviation of the team that drafted the player (null if undrafted).
 load_rosters:
   season: NFL season (year) the roster entry applies to.
   team: Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA').

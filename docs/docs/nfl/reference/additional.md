@@ -2581,71 +2581,90 @@ stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 
 ### `load_nfl_players(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_players}
 
-Load NFL Player ID information
+Load the nflverse NFL player-identity master.
+
+Reads nflverse's published `players.parquet` — a one-row-per-player
+identity master that is the union of **seven** upstream systems (GSIS, ESPN,
+NGS roster, Pro-Football-Reference, OverTheCap, PFF, and the Sleeper / Yahoo
+cross-walk). It is the canonical source for cross-system identifier
+columns (`gsis_id`, `espn_id`, `pfr_id`, `pff_id`, `otc_id`,
+`smart_id`, `esb_id`, `nfl_id`) plus name, position, physical, draft,
+and status fields.
+
+This is the **full identity master**. For an SDV-native, public-source-only
+alternative that does not depend on the nflverse release, see
+`sportsdataverse.nfl.build_nfl_players` (ESPN-athletes tier only) and
+`sportsdataverse.nfl.nfl_players_crosswalk` (a thin ID-only slice of
+this same parquet).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
 
 **Returns**
 
-Polars dataframe containing players available.
+One-row-per-player identity master. `return_as_pandas` narrows the return to a `pandas.DataFrame`.
 
 | col_name | type | description |
 |---|---|---|
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `display_name` | character | Full name of player |
-| `common_first_name` | character | Common first name of player |
-| `first_name` | character | First name of player |
-| `last_name` | character | Last name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
-| `suffix` | character | Name suffix of player |
-| `esb_id` | character | Player ID for Elias Sports Bureau |
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
-| `otc_id` | character | Over the Cap ID for player |
-| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
-| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
-| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `position` | character | Primary position as reported by NFL.com |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `height` | integer | Official height, in inches |
-| `weight` | integer | Official weight, in pounds |
-| `headshot` | character | NFL headshot url for player |
-| `college_name` | character | Official college (usually the last one attended) |
-| `college_conference` | character | Conference of college |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `rookie_season` | integer | 4 digit number indicating which season the player was a rookie |
-| `last_season` | integer | 4 digit number indicating which season the player was active the last time |
-| `latest_team` | character | Latest team the player was listed in |
-| `status` | character | Status label. |
-| `ngs_status` | character | Next Gen Stats variant of status |
-| `ngs_status_short_description` | character | Next Gen Stats status description |
-| `years_of_experience` | integer | Years played in league |
-| `pff_position` | character | Position of player as listed by PFF |
-| `pff_status` | character | Roster status as listed by PFF |
-| `draft_year` | integer | Year that player was drafted |
-| `draft_round` | integer | Round that player was drafted in |
-| `draft_pick` | integer | Draft pick within round, i.e. 32nd pick of second round. |
-| `draft_team` | character | Team that drafted player |
+| `gsis_id` | character | NFL Game Statistics & Information System player identifier, the canonical nflverse player key. |
+| `display_name` | character | Player's full display name as published by nflverse. |
+| `common_first_name` | character | Player's commonly used first name (the name they go by, which may differ from their legal first name). |
+| `first_name` | character | Player's legal first name. |
+| `last_name` | character | Player's last name. |
+| `short_name` | character | Abbreviated name (typically first initial plus last name). |
+| `football_name` | character | Player's preferred on-field name as used in broadcast and box-score contexts. |
+| `suffix` | character | Generational or honorific name suffix (e.g., Jr., Sr., III), when present. |
+| `esb_id` | character | Elias Sports Bureau player identifier. |
+| `nfl_id` | character | NFL.com / Shield player identifier. |
+| `pfr_id` | character | Pro-Football-Reference player identifier. |
+| `pff_id` | character | Pro Football Focus player identifier. |
+| `otc_id` | character | OverTheCap player identifier (salary-cap data source). |
+| `espn_id` | character | ESPN athlete identifier. |
+| `smart_id` | character | NFL SMART (Standard Media and Reference Table) globally unique player identifier. |
+| `birth_date` | character | Player's date of birth (ISO YYYY-MM-DD). |
+| `position_group` | character | Broad positional grouping the player belongs to (e.g., QB, RB, WR, DL). |
+| `position` | character | Player's specific listed position abbreviation. |
+| `ngs_position_group` | character | Positional grouping as classified by NFL Next Gen Stats. |
+| `ngs_position` | character | Specific position as classified by NFL Next Gen Stats. |
+| `height` | integer | Player's height in inches. |
+| `weight` | integer | Player's listed weight in pounds. |
+| `headshot` | character | URL to the player's official headshot image. |
+| `college_name` | character | Name of the college the player attended. |
+| `college_conference` | character | Athletic conference of the player's college. |
+| `jersey_number` | character | Player's uniform / jersey number. |
+| `rookie_season` | integer | Season (year) the player entered the league as a rookie. |
+| `last_season` | integer | Most recent season (year) the player appeared on an NFL roster. |
+| `latest_team` | character | Abbreviation of the most recent team the player was rostered on. |
+| `status` | character | Player's current roster status (e.g., active, retired, free agent). |
+| `ngs_status` | character | Player status as reported by NFL Next Gen Stats. |
+| `ngs_status_short_description` | character | Short human-readable description of the NFL Next Gen Stats status. |
+| `years_of_experience` | integer | Number of accrued NFL seasons of experience. |
+| `pff_position` | character | Player's position as classified by Pro Football Focus. |
+| `pff_status` | character | Player's status as classified by Pro Football Focus. |
+| `draft_year` | integer | Year the player was selected in the NFL Draft (null if undrafted). |
+| `draft_round` | integer | Round in which the player was drafted (null if undrafted). |
+| `draft_pick` | integer | Overall pick number at which the player was drafted (null if undrafted). |
+| `draft_team` | character | Abbreviation of the team that drafted the player (null if undrafted). |
 
 **Example**
 
 ```python
 from sportsdataverse.nfl import load_nfl_players
 players = load_nfl_players()
-players.shape
+print(players.shape)
 
 # Pandas round-trip
 
 players_pd = load_nfl_players(return_as_pandas=True)
 players_pd.head()
+
+# Pipeline next step (one line)
+
+import polars as pl
+load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
 ```
 
 ### `load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_schedule}
@@ -3641,71 +3660,90 @@ stats_2024 = load_nfl_player_stats().filter(pl.col("season") == 2024)
 
 ### `load_players(return_as_pandas=False) -> 'pl.DataFrame'` {#load_players}
 
-Load NFL Player ID information
+Load the nflverse NFL player-identity master.
+
+Reads nflverse's published `players.parquet` — a one-row-per-player
+identity master that is the union of **seven** upstream systems (GSIS, ESPN,
+NGS roster, Pro-Football-Reference, OverTheCap, PFF, and the Sleeper / Yahoo
+cross-walk). It is the canonical source for cross-system identifier
+columns (`gsis_id`, `espn_id`, `pfr_id`, `pff_id`, `otc_id`,
+`smart_id`, `esb_id`, `nfl_id`) plus name, position, physical, draft,
+and status fields.
+
+This is the **full identity master**. For an SDV-native, public-source-only
+alternative that does not depend on the nflverse release, see
+`sportsdataverse.nfl.build_nfl_players` (ESPN-athletes tier only) and
+`sportsdataverse.nfl.nfl_players_crosswalk` (a thin ID-only slice of
+this same parquet).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
 
 **Returns**
 
-Polars dataframe containing players available.
+One-row-per-player identity master. `return_as_pandas` narrows the return to a `pandas.DataFrame`.
 
 | col_name | type | description |
 |---|---|---|
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `display_name` | character | Full name of player |
-| `common_first_name` | character | Common first name of player |
-| `first_name` | character | First name of player |
-| `last_name` | character | Last name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
-| `suffix` | character | Name suffix of player |
-| `esb_id` | character | Player ID for Elias Sports Bureau |
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
-| `otc_id` | character | Over the Cap ID for player |
-| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
-| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
-| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `position` | character | Primary position as reported by NFL.com |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `height` | integer | Official height, in inches |
-| `weight` | integer | Official weight, in pounds |
-| `headshot` | character | NFL headshot url for player |
-| `college_name` | character | Official college (usually the last one attended) |
-| `college_conference` | character | Conference of college |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `rookie_season` | integer | 4 digit number indicating which season the player was a rookie |
-| `last_season` | integer | 4 digit number indicating which season the player was active the last time |
-| `latest_team` | character | Latest team the player was listed in |
-| `status` | character | Status label. |
-| `ngs_status` | character | Next Gen Stats variant of status |
-| `ngs_status_short_description` | character | Next Gen Stats status description |
-| `years_of_experience` | integer | Years played in league |
-| `pff_position` | character | Position of player as listed by PFF |
-| `pff_status` | character | Roster status as listed by PFF |
-| `draft_year` | integer | Year that player was drafted |
-| `draft_round` | integer | Round that player was drafted in |
-| `draft_pick` | integer | Draft pick within round, i.e. 32nd pick of second round. |
-| `draft_team` | character | Team that drafted player |
+| `gsis_id` | character | NFL Game Statistics & Information System player identifier, the canonical nflverse player key. |
+| `display_name` | character | Player's full display name as published by nflverse. |
+| `common_first_name` | character | Player's commonly used first name (the name they go by, which may differ from their legal first name). |
+| `first_name` | character | Player's legal first name. |
+| `last_name` | character | Player's last name. |
+| `short_name` | character | Abbreviated name (typically first initial plus last name). |
+| `football_name` | character | Player's preferred on-field name as used in broadcast and box-score contexts. |
+| `suffix` | character | Generational or honorific name suffix (e.g., Jr., Sr., III), when present. |
+| `esb_id` | character | Elias Sports Bureau player identifier. |
+| `nfl_id` | character | NFL.com / Shield player identifier. |
+| `pfr_id` | character | Pro-Football-Reference player identifier. |
+| `pff_id` | character | Pro Football Focus player identifier. |
+| `otc_id` | character | OverTheCap player identifier (salary-cap data source). |
+| `espn_id` | character | ESPN athlete identifier. |
+| `smart_id` | character | NFL SMART (Standard Media and Reference Table) globally unique player identifier. |
+| `birth_date` | character | Player's date of birth (ISO YYYY-MM-DD). |
+| `position_group` | character | Broad positional grouping the player belongs to (e.g., QB, RB, WR, DL). |
+| `position` | character | Player's specific listed position abbreviation. |
+| `ngs_position_group` | character | Positional grouping as classified by NFL Next Gen Stats. |
+| `ngs_position` | character | Specific position as classified by NFL Next Gen Stats. |
+| `height` | integer | Player's height in inches. |
+| `weight` | integer | Player's listed weight in pounds. |
+| `headshot` | character | URL to the player's official headshot image. |
+| `college_name` | character | Name of the college the player attended. |
+| `college_conference` | character | Athletic conference of the player's college. |
+| `jersey_number` | character | Player's uniform / jersey number. |
+| `rookie_season` | integer | Season (year) the player entered the league as a rookie. |
+| `last_season` | integer | Most recent season (year) the player appeared on an NFL roster. |
+| `latest_team` | character | Abbreviation of the most recent team the player was rostered on. |
+| `status` | character | Player's current roster status (e.g., active, retired, free agent). |
+| `ngs_status` | character | Player status as reported by NFL Next Gen Stats. |
+| `ngs_status_short_description` | character | Short human-readable description of the NFL Next Gen Stats status. |
+| `years_of_experience` | integer | Number of accrued NFL seasons of experience. |
+| `pff_position` | character | Player's position as classified by Pro Football Focus. |
+| `pff_status` | character | Player's status as classified by Pro Football Focus. |
+| `draft_year` | integer | Year the player was selected in the NFL Draft (null if undrafted). |
+| `draft_round` | integer | Round in which the player was drafted (null if undrafted). |
+| `draft_pick` | integer | Overall pick number at which the player was drafted (null if undrafted). |
+| `draft_team` | character | Abbreviation of the team that drafted the player (null if undrafted). |
 
 **Example**
 
 ```python
 from sportsdataverse.nfl import load_nfl_players
 players = load_nfl_players()
-players.shape
+print(players.shape)
 
 # Pandas round-trip
 
 players_pd = load_nfl_players(return_as_pandas=True)
 players_pd.head()
+
+# Pipeline next step (one line)
+
+import polars as pl
+load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
 ```
 
 ### `load_rosters(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'` {#load_rosters}
@@ -4654,6 +4692,54 @@ cfg.timeout         # 30 (seconds)
 
 from sportsdataverse.nfl import NflConfig
 cfg = NflConfig(cache_mode="off", timeout=10)
+```
+
+### `build_nfl_players(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_nfl_players}
+
+Build an SDV-native NFL players frame from ESPN's public athletes endpoint.
+
+Walks ESPN's public NFL athletes index
+(`sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes`),
+resolves each athlete's detail resource, flattens it onto the SDV-native
+players schema, **dedups to the highest numeric `espn_id` per
+`(full_name, birth_date)`** (the ESPN ~2007 4-digit -> 7-digit id
+migration left some players with two ids), and enriches `gsis_id` +
+other cross-IDs by a best-effort join against
+`sportsdataverse.nfl.load_nfl_players`.
+
+This is the **public ESPN-athletes tier only** — a partial mirror of
+nflverse's full seven-source `players.parquet` (three of those sources,
+PFR / OTC / PFF, require private credentials). ESPN-native rows with no
+nflverse match keep only their ESPN fields (cross-IDs left null). For the
+full identity master prefer `sportsdataverse.nfl.load_nfl_players`;
+use `build_nfl_players` when you need an SDV-native frame that depends
+only on the live public ESPN API.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+
+**Returns**
+
+A one-row-per-player `DataFrame` with the documented schema (`espn_id`, `full_name`, `first_name`, `last_name`, `position`, `team`, `jersey`, `height`, `weight`, `birth_date`, `status`, `headshot_url`, `gsis_id`, `esb_id`, `pfr_id`, `pff_id`, `smart_id`, `college`). An empty / failed fetch yields a zero-row frame carrying the same column set (never a raise).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_players
+players = build_nfl_players()
+print(players.shape)
+
+# Pandas output
+
+df = build_nfl_players(return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+import polars as pl
+build_nfl_players().filter(pl.col("position") == "QB").head()
 ```
 
 ### `build_nfl_rosters(seasons: 'List[int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_nfl_rosters}
@@ -6196,6 +6282,39 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders
 bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
 bd["category"].unique().to_list()
+```
+
+### `nfl_players_crosswalk(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_players_crosswalk}
+
+Pure-consumer ID crosswalk sliced from `load_nfl_players`.
+
+Reads nflverse's published players master and projects it down to just the
+cross-system identifier columns it carries (`gsis_id`, `esb_id`,
+`espn_id`, `pfr_id`, `pff_id`, `otc_id`, `nfl_id`, `smart_id` —
+whichever the parquet exposes) plus `full_name` and `position`, deduped
+on `gsis_id`. It is a convenience for joining nflverse identity IDs onto
+PBP / rosters / stats frames without carrying the full ~40-column master.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+
+**Returns**
+
+A one-row-per-`gsis_id` `DataFrame` of cross-system IDs + `full_name` / `position`. A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_players_crosswalk
+xwalk = nfl_players_crosswalk()
+print(xwalk.columns)
+
+# Join nflverse IDs onto a PBP frame (one line)
+
+pbp.join(nfl_players_crosswalk(), left_on="passer_player_id", right_on="gsis_id", how="left")
 ```
 
 ### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None, force_refresh: 'bool' = False) -> 'str'` {#nfl_token_gen}
