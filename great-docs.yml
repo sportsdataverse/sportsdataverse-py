@@ -21,6 +21,15 @@ dark_mode_toggle: true
 attribution: true
 
 logo: assets/logo.png
+# Brand favicon copied verbatim from the Docusaurus site (docs/static/img/
+# favicon.ico) so the browser-tab icon matches. Without this Great Docs
+# auto-generates one from the logo; pinning it keeps the two sites identical.
+favicon: assets/favicon.ico
+
+# `navbar_style: slate` (the dark gradient above) is the brand backdrop the
+# cyan glow sits on — matching the Docusaurus dark navbar. We deliberately do
+# NOT set a solid `navbar_color`: it would override the slate gradient. The
+# #427FD4 / #39F8FF brand-cyan family lives in the glow (assets/head.html).
 
 # Brand parity with the Docusaurus site (docs/docusaurus.config.ts +
 # docs/src/css/custom.css): Plausible analytics, the Bungee/Chivo/Lato/Fira
