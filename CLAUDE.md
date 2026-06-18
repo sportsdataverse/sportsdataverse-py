@@ -30,6 +30,7 @@
   - [Docstring conventions for new functions](#docstring-conventions-for-new-functions)
   - [Example notebooks](#example-notebooks)
   - [Reference-docs build toolchain (codegen)](#reference-docs-build-toolchain-codegen)
+  - [Great Docs site (executable guides + auto-introspected reference)](#great-docs-site-executable-guides--auto-introspected-reference)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -833,3 +834,55 @@ the wrappers, via the codegen CLI:
   excluded from doctoc + markdownlint), so generated tables/fences don't fight the
   hooks. Docstrings still use Google-style sections (`Args:`/`Returns:`/`Raises:`/
   `Example:`) — those feed the wrappers' runtime help, not a Sphinx build.
+
+## Great Docs site (executable guides + auto-introspected reference)
+
+`great-docs.yml` + `user_guide/*.qmd` drive a second, **complementary**
+documentation site built with [Great Docs](https://posit-dev.github.io/great-docs/)
+(a Quarto-based autodoc tool). It does **NOT** replace the production Docusaurus
+codegen docs — the two are different by design:
+
+- **Docusaurus codegen (`docs/`, production):** full ~800-wrapper breadth driven
+  by endpoint YAML, with rich per-column `col_name | type | description` returns
+  tables. The source of truth for the long tail.
+- **Great Docs (`great-docs.yml`):** a curated public surface (the per-sport entry
+  points people actually call) introspected **live from the real Python objects**
+  (signature / params / returns / example), plus **executable** user-guide pages.
+  No per-column returns tables; ~zero authoring cost per documented symbol.
+
+**The curated `reference:` allow-list is load-bearing.** Great Docs validates
+every discoverable name through griffe's dynamic loader (~2s per name), and
+`import sportsdataverse` registers **~2,940** dynamic wrappers via
+`make_league_module()` → a full auto-discovery walk would take ~90 min and time
+out. Pinning an explicit, curated per-sport `reference:` block (plus
+`source.enabled: false`) makes Great Docs skip the per-symbol validation loop and
+render in **~95s (85 pages / 95 symbols)**. Every name in the allow-list is a real
+top-level `sportsdataverse` export with a Google-style docstring. When you add a
+canonical public function people should discover here, add its name to the
+relevant sport section in `great-docs.yml` — don't try to re-enable auto-discovery.
+
+**Build / preview (local / manual — see `GREAT-DOCS-NOTES.md` for the full
+write-up):**
+
+```sh
+PYTHONUTF8=1 great-docs build      # ~95s → great-docs/_site/index.html
+great-docs preview                 # local server (http://localhost:3000)
+```
+
+- **Windows caveats:** export `PYTHONUTF8=1` first (the CLI crashes on a Unicode
+  glyph in its progress output otherwise), and the `user_guide/*.qmd` pages pin
+  `jupyter: python3` in their front matter so Quarto uses the PATH `python` kernel
+  (the one with `sportsdataverse` + `polars` + `ipykernel`) instead of auto-picking
+  a stale Anaconda kernel.
+- **`great-docs/` is gitignored** (ephemeral build output, regenerated every build)
+  — never hand-edit it. The committed sources are `great-docs.yml`,
+  `user_guide/*.qmd`, and `assets/`.
+- **User-guide cells hit the live ESPN API at build time** and freeze the real
+  output into static HTML (so the build needs network, like the repo's live
+  tests). The CI check for it (`.github/workflows/great-docs.yml`) is therefore
+  **informational / non-blocking** — a flaky live render must never block a merge.
+- **Deploy is deliberately a maintainer decision** — the Docusaurus site already
+  auto-deploys on Vercel at the root, so there is no Great Docs publisher wired in
+  (a second one could double-publish). Local / manual build only.
+- Quarto is a **SYSTEM** dependency (<https://quarto.org>), not pip; the
+  `great-docs` pip dep lives in the `docs` optional-dependencies extra.

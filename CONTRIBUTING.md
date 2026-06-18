@@ -10,6 +10,7 @@
   - [Documentation & the docs site](#documentation--the-docs-site)
     - [Updating docs (everyday — including a commit after a release)](#updating-docs-everyday--including-a-commit-after-a-release)
     - [At release time](#at-release-time)
+    - [Great Docs site (alternative — executable guides)](#great-docs-site-alternative--executable-guides)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -244,3 +245,42 @@ docs stay the default and keep tracking the code. The snapshot becomes a
 read-only archive at `/docs/<x.y.z>/` in the version dropdown. (To backport a
 fix into an already-released archive — rare — edit
 `docs/versioned_docs/version-<x.y.z>/...` directly.)
+
+### Great Docs site (alternative — executable guides)
+
+`great-docs.yml` + `user_guide/*.qmd` drive a second, **complementary**
+[Great Docs](https://posit-dev.github.io/great-docs/) site: a curated public
+surface introspected live from the real Python objects, plus executable
+user-guide pages whose cells run against the live ESPN API at build time. It is
+additive to the Docusaurus codegen docs (which still own the full ~800-wrapper
+breadth and the per-column returns tables), not a replacement.
+
+Install the `docs` extra (which provides `great-docs`) plus **Quarto**, which is
+a separate **system** install (not pip — see <https://quarto.org>):
+
+```sh
+uv sync --extra docs           # or: pip install "sportsdataverse[docs]"
+# then install Quarto from https://quarto.org
+```
+
+Build and preview locally:
+
+```sh
+PYTHONUTF8=1 great-docs build  # ~95s -> great-docs/_site/index.html
+great-docs preview             # local server at http://localhost:3000
+```
+
+Notes:
+
+- On **Windows**, export `PYTHONUTF8=1` first (the CLI otherwise crashes on a
+  Unicode glyph in its progress output). The `user_guide/*.qmd` pages pin
+  `jupyter: python3` so Quarto uses the PATH `python` kernel.
+- The rendered `great-docs/` directory is **gitignored** (ephemeral, regenerated
+  on every build) — never hand-edit it. The committed sources are
+  `great-docs.yml`, `user_guide/*.qmd`, and `assets/`.
+- The `reference:` block in `great-docs.yml` is a **curated allow-list** — listing
+  the full ~2,940 dynamic wrappers would make the build time out, so add only the
+  canonical public name when you want a new symbol documented here.
+- The CI build (`.github/workflows/great-docs.yml`) is **informational /
+  non-blocking** because the live-cell render needs the ESPN API. Full background
+  in `GREAT-DOCS-NOTES.md`.

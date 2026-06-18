@@ -1,0 +1,71 @@
+# Great Docs build check (informational). Builds the alternative Great Docs site
+# (curated auto-introspected reference + executable user-guide pages) and uploads
+# the rendered _site as an artifact. This is COMPLEMENTARY to the production
+# Docusaurus codegen docs, not a replacement, and there is NO deployment here —
+# the Docusaurus site already auto-deploys on Vercel; a second publisher could
+# double-publish, so deploy is left as a maintainer decision.
+#
+# The user-guide `.qmd` cells execute LIVE ESPN API calls at build time, so the
+# render can legitimately fail when ESPN is unreachable. The build step is
+# therefore non-blocking (`continue-on-error: true`) and the job is named
+# "(informational)" — it must never become a required check that red-fails a PR
+# on a flaky live render.
+name: great-docs
+on:
+  pull_request:
+    paths:
+      - "great-docs.yml"
+      - "user_guide/**"
+      - "assets/**"
+      - ".github/workflows/great-docs.yml"
+  push:
+    branches: [main]
+    paths:
+      - "great-docs.yml"
+      - "user_guide/**"
+      - "assets/**"
+      - ".github/workflows/great-docs.yml"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  build:
+    name: great-docs build (informational)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install Linux build deps for pyreadr sdist fallback
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libbz2-dev liblzma-dev
+      - name: Install project + docs extra
+        # The package itself (so `import sportsdataverse` works for live
+        # introspection / executable cells) plus the `docs` extra (great-docs).
+        run: uv sync --extra docs --extra all --frozen --python 3.13.2
+      - name: Install Quarto (system dependency)
+        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Build Great Docs site
+        # Non-blocking: the user-guide cells hit the live ESPN API at build time,
+        # so a transient upstream outage must not red-fail the PR.
+        continue-on-error: true
+        env:
+          PYTHONUTF8: "1"
+        run: uv run --frozen great-docs build
+      - name: Upload rendered site
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: great-docs-site
+          path: great-docs/_site
+          if-no-files-found: warn

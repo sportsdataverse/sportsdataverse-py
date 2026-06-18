@@ -165,6 +165,12 @@ pipeline next-step. Regenerate the API reference locally with
 to preview the Docusaurus site) or browse the live docs at
 [py.sportsdataverse.org](https://py.sportsdataverse.org).
 
+An alternative [Great Docs](https://posit-dev.github.io/great-docs/) site —
+auto-introspected reference plus **executable** user guides — is also wired in
+(`great-docs.yml` + `user_guide/*.qmd`). Build it locally with
+`PYTHONUTF8=1 great-docs build` and preview with `great-docs preview` (needs the
+`docs` extra and a [Quarto](https://quarto.org) install).
+
 For longer-form walkthroughs, see the intro/intermediate Jupyter notebooks
 under [`examples/notebooks/`](examples/notebooks):
 

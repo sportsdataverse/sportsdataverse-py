@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [Documentation — Great Docs site wired into the toolchain (executable guides + auto-introspected reference)](#documentation--great-docs-site-wired-into-the-toolchain-executable-guides--auto-introspected-reference)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
@@ -128,6 +130,16 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### Documentation — Great Docs site wired into the toolchain (executable guides + auto-introspected reference)
+
+An alternative [Great Docs](https://posit-dev.github.io/great-docs/) site is now a first-class, reproducible part of the repo. It is **additive and complementary** to the production Docusaurus codegen docs — not a replacement: Docusaurus still owns the full ~800-wrapper breadth and the per-column returns tables, while Great Docs renders a **curated public surface introspected live from the real Python objects** (signature / params / returns / example) plus **executable** user-guide pages whose cells run against the live ESPN API at build time.
+
+- **`great-docs` added to the `docs` optional-dependencies extra** (flows into `all`); Quarto remains a separate **system** install (<https://quarto.org>). Build/preview with `PYTHONUTF8=1 great-docs build` (~95s → `great-docs/_site/`) / `great-docs preview`.
+- **Curated `reference:` allow-list** in `great-docs.yml` is load-bearing: `import sportsdataverse` registers ~2,940 dynamic wrappers, and auto-discovery validates every name via a ~2s griffe call (~90-min walk → timeout), so the explicit allow-list skips that loop and keeps the build at ~95s / 85 pages / 95 symbols.
+- **Informational, non-blocking CI** (`.github/workflows/great-docs.yml`) builds the site and uploads `great-docs/_site` as an artifact on changes to `great-docs.yml` / `user_guide/**` / `assets/**`; the live-cell render is `continue-on-error` so a flaky ESPN render never blocks a merge. The ephemeral `great-docs/` output stays gitignored. Background notes live in `GREAT-DOCS-NOTES.md`. Public deployment is left as a maintainer decision (the Docusaurus site already auto-deploys at the root).
 
 ## 0.0.67 Release: June 17, 2026
 

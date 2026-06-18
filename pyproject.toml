@@ -101,10 +101,21 @@ models = [
     "attrs>=20.3.0",
     "xgboost>=2.0.0",
 ]
+docs = [
+    # Great Docs builds the alternative executable-guides + auto-introspected
+    # reference site (great-docs.yml + user_guide/*.qmd). It is COMPLEMENTARY to
+    # the production Docusaurus codegen docs, not a replacement. Docs-only — never
+    # ships to users. NOTE: Great Docs additionally requires Quarto, which is a
+    # SYSTEM install (not a pip package) — install it from <https://quarto.org>.
+    # Marker-gated to py>=3.11 (great-docs requires it); this keeps the package's
+    # `requires-python = ">=3.9"` runtime support untouched — on 3.9/3.10 the docs
+    # extra simply resolves without great-docs.
+    "great-docs>=0.14.0; python_version >= '3.11'",
+]
 all = [
-    # Mirrors `tests + models`. Kept explicit (rather than referencing the other
-    # groups) because PEP 621 does not have a "union of groups" mechanism that
-    # older pip / build-frontends understand uniformly.
+    # Mirrors `tests + models + docs`. Kept explicit (rather than referencing the
+    # other groups) because PEP 621 does not have a "union of groups" mechanism
+    # that older pip / build-frontends understand uniformly.
     "black>=22.3.0",
     "flake8>=5.0.0",
     "isort>=5.10.1",
@@ -127,6 +138,9 @@ all = [
     "tqdm>=4.50.0",
     "attrs>=20.3.0",
     "xgboost>=2.0.0",
+    # docs extra — see the `docs` group above (Quarto is a separate SYSTEM install).
+    # Marker-gated to py>=3.11 so `all` still resolves on 3.9/3.10.
+    "great-docs>=0.14.0; python_version >= '3.11'",
 ]
 
 
