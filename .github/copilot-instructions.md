@@ -12,6 +12,7 @@
   - [Module Naming](#module-naming)
   - [NFL — nflreadpy Parity](#nfl--nflreadpy-parity)
     - [NFL Cache + Config](#nfl-cache--config)
+    - [NFL — `ep_wp` model application + EPA/WPA](#nfl--ep_wp-model-application--epawpa)
   - [CFB — `cfb_play_participants`](#cfb--cfb_play_participants)
   - [CFB — offline reprocess (`CFBPlayProcess`, 0.0.52+)](#cfb--offline-reprocess-cfbplayprocess-0052)
   - [Module Pattern (NEW modules)](#module-pattern-new-modules)
@@ -208,6 +209,20 @@ clear_cache()  # wipes both memory + filesystem
 Call `clear_cache()` after modifying a loader's underlying URL — the
 key does NOT hash the URL or function body, so a renamed-URL/same-name
 change yields stale data until invalidated.
+
+### NFL — `ep_wp` model application + EPA/WPA
+
+`sportsdataverse/nfl/ep_wp.py` is the **single owner of NFL model
+application and EPA/WPA derivation**. Construction modules (`NFLPlayProcess`,
+`native_pbp`, `load_nfl_pbp`) must never add EPA/WPA inline — they emit a
+frame and `ep_wp.enrich_nfl_pbp` / `calculate_epa` / `calculate_wpa` apply
+it. `NFLPlayProcess.__process_epa` / `__process_wpa` delegate to those shared
+functions (byte-identical output verified — one engine across both the
+ESPN and nflverse `lead_diff` paths). `build_nfl_season(game_ids, *, source=...)`
+compiles a full season: per-game construct→enrich→`diagonal_relaxed` concat,
+with a per-game parquet cache keyed `(game_id, PIPELINE_VERSION)` via
+`nfl/cache.py`. `method="snapshot"` on `enrich_nfl_pbp` is intentionally
+`NotImplementedError` — the cross-era comparison was validated without it.
 
 ## CFB — `cfb_play_participants`
 

@@ -67,6 +67,72 @@ def _is_expired(timestamp: float) -> bool:
     return (time.time() - timestamp) > get_config().cache_duration
 
 
+def cache_get(key: str) -> pl.DataFrame | None:
+    """Return a cached frame for *key*, or ``None`` on miss or expiry.
+
+    Honors the active :class:`~sportsdataverse.nfl.config.NflConfig` cache
+    mode (``memory``, ``filesystem``, ``off``).  An expired entry is treated
+    as a MISS (returns ``None``).  In ``memory`` mode the expired key is
+    dropped from the in-process dict on read; in ``filesystem`` mode the
+    stale parquet file is NOT auto-deleted from disk — call
+    :func:`clear_cache` to reclaim it.
+
+    Args:
+        key: Cache key string (e.g. from ``_game_cache_key()``).
+
+    Returns:
+        polars.DataFrame if the key is present and unexpired; ``None``
+        otherwise.
+    """
+    cfg = get_config()
+    if cfg.cache_mode == "memory":
+        entry = _MEMORY.get(key)
+        if entry is not None:
+            ts, frame = entry
+            if not _is_expired(ts):
+                return frame
+            del _MEMORY[key]
+    elif cfg.cache_mode == "filesystem":
+        path = _filesystem_path(key)
+        if path.exists() and not _is_expired(path.stat().st_mtime):
+            try:
+                return pl.read_parquet(path)
+            except Exception:
+                # Corrupt / unreadable parquet: best-effort cleanup. ``unlink``
+                # can itself raise (permissions, Windows file lock), but
+                # ``cache_get`` is opaque infra and must return ``None`` on any
+                # cache issue rather than propagate.
+                try:
+                    path.unlink(missing_ok=True)
+                except Exception:
+                    pass
+    return None
+
+
+def cache_put(key: str, frame: pl.DataFrame) -> None:
+    """Persist *frame* to the active cache backend under *key*.
+
+    Honors the active :class:`~sportsdataverse.nfl.config.NflConfig` cache
+    mode.  Write failures on the filesystem backend are silently swallowed —
+    the data is still returned to the caller; the cache is opaque infra.
+
+    Args:
+        key: Cache key string.
+        frame: polars DataFrame to store.
+    """
+    cfg = get_config()
+    if cfg.cache_mode == "memory":
+        _MEMORY[key] = (time.time(), frame)
+    elif cfg.cache_mode == "filesystem":
+        cache_dir = cfg.cache_dir
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        path = _filesystem_path(key)
+        try:
+            frame.write_parquet(path)
+        except Exception:
+            pass  # Cache write failure is non-fatal; data still returned.
+
+
 def cached_loader(func: F) -> F:
     """Decorator that adds caching to a ``load_nfl_*`` function.
 
