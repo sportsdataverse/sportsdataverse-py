@@ -1,0 +1,33 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "sportsdataverse-py — Quarto docs PoC"
+  description: "Proof-of-concept: Quarto build-time executable Python cells for the SportsDataverse Python package."
+  navbar:
+    background: dark
+    left:
+      - href: index.qmd
+        text: Home
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    df-print: paged
+
+# Quarto executes Python cells through Jupyter (nbclient + ipykernel).
+# The default `python3` kernel resolves to the same interpreter that has
+# `sportsdataverse` importable, so no kernel override is needed here.
+jupyter: python3
+
+# Project-level execution defaults. `freeze: auto` caches executed output
+# so re-renders don't re-hit the live ESPN endpoints unless the .qmd changes.
+execute:
+  warning: false
+  error: false
+  freeze: auto

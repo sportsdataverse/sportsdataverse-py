@@ -1,0 +1,7 @@
+# Quarto build cache + rendered website (artifacts; regenerate with `quarto render`).
+/.quarto/
+/_site/
+
+# NOTE: _freeze/ IS committed on purpose — it is the cached executed output
+# (the proof the cells ran against live data) and lets `quarto render` reuse
+# results without re-hitting the live ESPN endpoints.
