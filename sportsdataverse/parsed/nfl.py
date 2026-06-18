@@ -249,6 +249,8 @@ from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nfl import reset_config as reset_config  # noqa: F401
 from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
+from sportsdataverse.nfl import scrape_ngs_season as scrape_ngs_season  # noqa: F401
+from sportsdataverse.nfl import scrape_ngs_week as scrape_ngs_week  # noqa: F401
 from sportsdataverse.nfl import season_not_found_error as season_not_found_error  # noqa: F401
 from sportsdataverse.nfl import underscore as underscore  # noqa: F401
 from sportsdataverse.nfl import update_config as update_config  # noqa: F401
@@ -480,6 +482,8 @@ __all__ = [
     "normalize_team_roster_columns",
     "reset_config",
     "scoreboard_event_parsing",
+    "scrape_ngs_season",
+    "scrape_ngs_week",
     "season_not_found_error",
     "underscore",
     "update_config",
