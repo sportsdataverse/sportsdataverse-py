@@ -18,6 +18,7 @@
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
     - [NFL — nflreadpy parity](#nfl--nflreadpy-parity)
+    - [NFL — `ep_wp` model application + EPA/WPA (nflfastR alignment, 0.0.67+)](#nfl--ep_wp-model-application--epawpa-nflfastr-alignment-0067)
     - [CFB — `cfb_play_participants` and the 0.36-live reconciliation](#cfb--cfb_play_participants-and-the-036-live-reconciliation)
     - [CFB — offline reprocess (`odds_override`, raw allowlist, `odds_source`) (0.0.52+)](#cfb--offline-reprocess-odds_override-raw-allowlist-odds_source-0052)
     - [MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)](#mlb--statcast-baseball-savant-comprehensive-surface-0064)
@@ -458,6 +459,54 @@ inline-bundled (not separate JSON files) because the
 When in doubt about the upstream API surface, check
 `gh repo view nflverse/nflreadpy` — sdv-py mirrors nflreadpy's signatures
 where practical.
+
+### NFL — `ep_wp` model application + EPA/WPA (nflfastR alignment, 0.0.67+)
+
+`sportsdataverse/nfl/ep_wp.py` is the **single owner of NFL model application
+and EPA/WPA derivation**. The canonical rule: **construction modules
+(`nfl_pbp.py` / native_pbp / `load_nfl_pbp`) must never re-add EPA/WPA inline —
+they emit a frame and `ep_wp` applies the models.** EPA/WPA logic lives in
+exactly one place.
+
+- **Scorers** mirror nflfastR's `calculate_*()`: `calculate_expected_points`
+  (single start-of-play `ep` + 7 class probs), `calculate_win_probability`
+  (`wp` naive + `vegas_wp` spread), `calculate_completion_probability`
+  (`cp` + `cpoe`, percentage-point scale `100*(complete_pass-cp)`),
+  `calculate_xyac`. Outputs are `Float64` (cast explicitly — the models emit
+  float32; do NOT let a `pl.Series(numpy_f32)` silently downcast the public
+  columns).
+- **Derivations** `calculate_epa(df)` / `calculate_wpa(df)` were lifted verbatim
+  from `NFLPlayProcess.__process_epa/__process_wpa` (scoring overlays, half-end
+  `-ep`, penalty `EP_between`, kickoff touchback, turnover/onside, OT two-path,
+  posteam→home flip). **Every `shift`/lead is `.over("game_id")`** — no
+  cross-game leak when frames are concatenated.
+- **`enrich_nfl_pbp(df, *, method=...)`** orchestrates EP→EPA→WP→WPA→CP→CPOE→xYAC
+  in nflfastR order. `method="lead_diff"` (default, **shipped + parity-validated**)
+  is a nflverse-native faithful port of nflfastR `helper_add_ep_wp.R`: scores one
+  `ep`, derives the rest natively on nflverse columns, applies the **kickoff/PAT
+  feature substitution** (touchback yardline `TOUCHBACK_YARDLINE_PRE/POST_2016` =
+  80 pre-2016 / 75 from 2016, `down`→1, `ydstogo`→10 — the parity lever), and
+  exposes `ep` as **start-of-play** EP. `method="snapshot"` (ESPN `start.*`/`end.*`
+  via `calculate_epa`/`calculate_wpa`) is **planned** — currently
+  `NotImplementedError`; it pairs with delegating `NFLPlayProcess.__process_*` to
+  `ep_wp` (the de-triplication is not yet landed — until then the inline
+  `__process_epa/wpa` math is an intentional temporary duplicate of the shared
+  functions).
+- **Constants** are centralized in `model_vars.py`: `NFLVERSE_FRAME_CONTRACT`,
+  `_EP_POINT_VALUES`, `ERA_SEASON_CUTS` (cuts 2001/2005/2013/2017),
+  `TOUCHBACK_YARDLINE_PRE/POST_2016`, `SPREAD_TIME_DECAY_EXPONENT` (`-4.0`).
+  `receive_2h_ko` is derived in `_add_wp_aux` when absent (per game: 1st-half
+  posteam == opening defense).
+- **Models** `nfl/models/*.ubj` are the **faithful** `nfl_model_artifacts`
+  (EP 18-feat / wp_spread 12 / wp_naive 11 / cp 18) from `sportsdataverse-data`,
+  not the old CFB-shape placeholders. Refresh by downloading that release and
+  verifying `Booster.feature_names == *_FEATURES`.
+- **Parity** (`lead_diff` vs nflverse, model domain): `ep` 0.996, `epa` 0.994,
+  `wp` 0.997, `vegas_wp` 0.998, `cpoe` scale-correct; `wpa` ≈0.89 is an SNR
+  ceiling (the derivation is exact — corr 1.0 when fed nflverse's own `wp`; the
+  residual is WP-model per-play noise amplified by first-differencing, not a
+  bug). The track6 EP/WP/CP recipe + this surface are validated against the
+  nflfastR source in the workspace (`nflverse-dev/nflfastR/R/helper_add_ep_wp.R`).
 
 ### CFB — `cfb_play_participants` and the 0.36-live reconciliation
 
