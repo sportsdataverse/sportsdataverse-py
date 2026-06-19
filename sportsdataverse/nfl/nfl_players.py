@@ -47,6 +47,10 @@ __all__ = ["build_nfl_players", "nfl_players_crosswalk"]
 # ESPN public NFL athletes listing (paginated ``$ref`` index) + per-athlete detail.
 _ATHLETES_URL = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes"
 _PAGE_LIMIT = 1000
+# Bounded concurrency for resolving athlete ``$ref`` detail resources. ESPN's
+# core v2 API rate-limits aggressive parallelism (403s), and ``download()``
+# already retries with Retry-After backoff, so keep this modest.
+_FETCH_WORKERS = 8
 
 # ---------------------------------------------------------------------------
 # SDV-native players schema. ESPN supplies the identity + physical fields
@@ -165,17 +169,26 @@ def _fetch_athletes(limit: Optional[int] = None) -> List[Dict]:
             break
         page += 1
 
-    athletes: List[Dict] = []
-    for ref in refs:
+    def _resolve(ref: str) -> Optional[Dict]:
         resp = download(url=ref)
         if resp is None:
-            continue
+            return None
         try:
             detail = resp.json()
         except Exception:  # noqa: BLE001 -- malformed athlete degrades to skip
-            continue
-        if isinstance(detail, dict):
-            athletes.append(detail)
+            return None
+        return detail if isinstance(detail, dict) else None
+
+    athletes: List[Dict] = []
+    if refs:
+        from concurrent.futures import ThreadPoolExecutor
+
+        # download() owns its own pooled session + Retry-After backoff, so a
+        # bounded pool resolves the ~7.5k athlete $refs concurrently without
+        # tripping ESPN's rate limit. ex.map preserves input order; failures
+        # come back as None and are dropped.
+        with ThreadPoolExecutor(max_workers=min(_FETCH_WORKERS, len(refs))) as ex:
+            athletes = [d for d in ex.map(_resolve, refs) if d is not None]
     return athletes
 
 
