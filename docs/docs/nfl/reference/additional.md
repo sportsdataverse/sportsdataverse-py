@@ -2491,9 +2491,12 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_player_stats}
+### `load_nfl_player_stats(kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_player_stats}
 
 Load NFL player stats data
+
+One combined week-level parquet (all seasons, offense) mirroring nflverse's
+`player_stats`.
 
 **Parameters**
 
@@ -2501,6 +2504,7 @@ Load NFL player stats data
 |---|---|---|---|
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `player_stats.parquet`. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST). Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -2569,7 +2573,12 @@ from sportsdataverse.nfl import load_nfl_player_stats
 stats = load_nfl_player_stats()
 stats.shape
 
-# Kicking-only stats
+# SDV-native player stats (week-level, built from SDV play-by-play)
+
+stats_sdv = load_nfl_player_stats(source="sdv")
+stats_sdv.select(["season", "week", "player_id", "attempts"]).head()
+
+# Kicking-only stats (nflverse source only)
 
 kicking = load_nfl_player_stats(kicking=True)
 
@@ -3576,9 +3585,12 @@ rec_pd = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'` {#load_player_stats}
+### `load_player_stats(kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_player_stats}
 
 Load NFL player stats data
+
+One combined week-level parquet (all seasons, offense) mirroring nflverse's
+`player_stats`.
 
 **Parameters**
 
@@ -3586,6 +3598,7 @@ Load NFL player stats data
 |---|---|---|---|
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `player_stats.parquet`. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST). Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3654,7 +3667,12 @@ from sportsdataverse.nfl import load_nfl_player_stats
 stats = load_nfl_player_stats()
 stats.shape
 
-# Kicking-only stats
+# SDV-native player stats (week-level, built from SDV play-by-play)
+
+stats_sdv = load_nfl_player_stats(source="sdv")
+stats_sdv.select(["season", "week", "player_id", "attempts"]).head()
+
+# Kicking-only stats (nflverse source only)
 
 kicking = load_nfl_player_stats(kicking=True)
 
