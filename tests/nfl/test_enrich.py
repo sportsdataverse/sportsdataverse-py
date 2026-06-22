@@ -25,7 +25,7 @@ assertions target the ORCHESTRATION WIRING (not model numerics):
   scoring,
 * ``ep`` is the start-of-play estimate,
 * idempotency (enrich twice == enrich once),
-* method dispatch (``snapshot`` -> NotImplementedError, invalid -> ValueError),
+* method dispatch (any non-``lead_diff`` value, incl. ``snapshot``, -> ValueError),
 * input-column validation against the frame contract.
 
 The stub EP score is a deterministic function of ``yardline_100`` so that the
@@ -317,9 +317,11 @@ def patched(monkeypatch):  # noqa: ANN001
 
 
 class TestDispatch:
-    def test_snapshot_not_implemented(self) -> None:
+    def test_snapshot_method_raises_valueerror(self) -> None:
+        # "snapshot" was a removed design vestige; it is now just an
+        # unsupported method value (ValueError), not a NotImplementedError.
         df = _synthetic_frame()
-        with pytest.raises(NotImplementedError):
+        with pytest.raises(ValueError):
             enrich_nfl_pbp(df, method="snapshot")
 
     def test_invalid_method_raises_valueerror(self) -> None:

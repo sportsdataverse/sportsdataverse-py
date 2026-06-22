@@ -2447,10 +2447,9 @@ def enrich_nfl_pbp(
             WP inputs ``score_differential`` / ``game_seconds_remaining`` /
             ``spread_line`` / ``receive_2h_ko``).
         method: ``"lead_diff"`` (default) — the native, nflfastR-faithful
-            EPA/WPA derivation and the canonical parity path; it is the only
-            implemented method.  ``"snapshot"`` is accepted for API stability
-            but is **not implemented** (it has no nflfastR-parity reference) and
-            raises ``NotImplementedError``; pass ``"lead_diff"`` instead.
+            EPA/WPA derivation and the canonical parity path. It is the only
+            supported method; any other value raises ``ValueError``. (The param
+            is retained for forward extensibility / API stability.)
         models_dir: Optional directory to load the xYAC model
             (``xyac_model.ubj``) from instead of downloading/caching it —
             for offline use or a custom-trained model.  When ``None``
@@ -2490,10 +2489,8 @@ def enrich_nfl_pbp(
           null while the rest of the enrichment proceeds.
 
     Raises:
-        ValueError: when ``method`` is unrecognised, or required contract
-            columns are absent from ``df``.
-        NotImplementedError: when ``method="snapshot"`` — that method is not
-            implemented (no nflfastR-parity reference); use ``"lead_diff"``.
+        ValueError: when ``method`` is not ``"lead_diff"``, or required
+            contract columns are absent from ``df``.
 
     Example:
         Quick start::
@@ -2525,16 +2522,10 @@ def enrich_nfl_pbp(
         .. _nflfastR: https://www.nflfastr.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    if method == "snapshot":
-        raise NotImplementedError(
-            "enrich_nfl_pbp(method='snapshot') is not implemented. The 'snapshot' "
-            "(model-snapshot) derivation has no nflfastR-parity reference, so it is "
-            "intentionally not provided; the parameter is retained only for API "
-            "stability. Use method='lead_diff' (the default) — the native, "
-            "nflfastR-faithful EPA/WPA derivation."
-        )
     if method != "lead_diff":
-        raise ValueError(f"enrich_nfl_pbp: unknown method {method!r}; expected 'lead_diff' or 'snapshot'.")
+        raise ValueError(
+            f"enrich_nfl_pbp: unknown method {method!r}; expected 'lead_diff' (the only supported method)."
+        )
 
     _validate_enrich_input(df)
 
