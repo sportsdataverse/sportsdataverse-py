@@ -305,3 +305,129 @@ def test_cpoe_is_percentage_points_scale(monkeypatch) -> None:  # noqa: ANN001
     out = calculate_completion_probability(df)
     cpoe = out["cpoe"][0]
     assert math.isclose(cpoe, 100.0 * (1.0 - 0.25), abs_tol=1e-6), f"cpoe={cpoe} (expected 75.0 on x100 scale)"
+
+
+# ---------------------------------------------------------------------------
+# qb_epa — nflfastR add_qb_epa parity (_derive_qb_epa).
+# ---------------------------------------------------------------------------
+
+# Columns _derive_qb_epa reads, with benign defaults.  Individual rows override.
+_QB_DEFAULT: dict = {
+    "game_id": "2023_01_AAA_BBB",
+    "play_id": 1,
+    "season": 2023,
+    "posteam": "BBB",
+    "home_team": "BBB",
+    "roof": "outdoors",
+    "half_seconds_remaining": 1800.0,
+    "yardline_100": 75,
+    "down": 1,
+    "ydstogo": 10,
+    "posteam_timeouts_remaining": 3,
+    "defteam_timeouts_remaining": 3,
+    "yards_gained": 0,
+    "complete_pass": 0,
+    "fumble_lost": 0,
+    "ep": 1.0,
+    "epa": 0.5,
+}
+
+
+def _qb_frame(rows: list[dict]) -> pl.DataFrame:
+    full = []
+    for i, r in enumerate(rows):
+        merged = dict(_QB_DEFAULT)
+        merged["play_id"] = i + 1
+        merged.update(r)
+        full.append(merged)
+    return pl.DataFrame(full)
+
+
+def test_qb_epa_equals_epa_off_the_fumble_condition() -> None:
+    """qb_epa == epa on every play NOT (complete_pass==1 & fumble_lost==1)."""
+    from sportsdataverse.nfl.ep_wp import _derive_qb_epa
+
+    df = _qb_frame(
+        [
+            {"complete_pass": 1, "fumble_lost": 0, "epa": 0.7},  # completion, no fumble
+            {"complete_pass": 0, "fumble_lost": 1, "epa": -3.0},  # fumble, not a completion
+            {"complete_pass": 0, "fumble_lost": 0, "epa": 0.1},  # ordinary play
+            {"complete_pass": 1, "fumble_lost": 1, "epa": -4.0, "down": None},  # null down → excluded
+        ]
+    )
+    out = _derive_qb_epa(df).sort("play_id")
+    # No play matches (complete_pass & fumble_lost & non-null epa & non-null down).
+    for qb, epa in zip(out["qb_epa"].to_list(), out["epa"].to_list()):
+        assert qb == epa, f"qb_epa={qb} should equal epa={epa} off the fumble condition"
+    assert out.schema["qb_epa"] == pl.Float64
+
+
+def test_qb_epa_respots_completed_pass_fumble_play(monkeypatch) -> None:  # noqa: ANN001
+    """On complete_pass==1 & fumble_lost==1, qb_epa = ep_respotted - ep_before."""
+    import sportsdataverse.nfl.ep_wp as ew
+
+    # Deterministic EP scorer: ep = yardline_100 / 100 on the re-spotted frame.
+    def _fake_ep(pbp, *, return_as_pandas=False):  # noqa: ANN001, ANN202
+        return pbp.with_columns((pl.col("yardline_100").cast(pl.Float64) / 100.0).alias("ep"))
+
+    monkeypatch.setattr(ew, "calculate_expected_points", _fake_ep)
+
+    # One qualifying play: 1st & 10 at own 25 (yardline_100=75), completion gains
+    # 20 (does not make a NEW set since 20>=10 → 1st down).  Re-spot:
+    #   yardline_100 = 75 - 20 = 55; gain(20) >= ydstogo(10) → down=1 → ydstogo=10
+    #   no possession change → ep_respotted = 55/100 = 0.55
+    #   qb_epa = 0.55 - ep_before(1.0) = -0.45
+    df = _qb_frame(
+        [
+            {
+                "complete_pass": 1,
+                "fumble_lost": 1,
+                "yards_gained": 20,
+                "yardline_100": 75,
+                "down": 1,
+                "ydstogo": 10,
+                "ep": 1.0,
+                "epa": -4.2,  # the (penalised) raw epa — qb_epa must NOT equal this
+            },
+            {"complete_pass": 0, "fumble_lost": 0, "epa": 0.3},  # control: untouched
+        ]
+    )
+    out = ew._derive_qb_epa(df).sort("play_id")
+    qb = out["qb_epa"].to_list()
+    assert math.isclose(qb[0], 0.55 - 1.0, abs_tol=1e-9), f"qb_epa={qb[0]} (expected -0.45)"
+    assert qb[0] != out["epa"].to_list()[0], "qb_epa must differ from the penalised epa on the fumble play"
+    # Control play untouched.
+    assert math.isclose(qb[1], 0.3, abs_tol=1e-9)
+
+
+def test_qb_epa_turnover_on_downs_flips_field_and_sign(monkeypatch) -> None:  # noqa: ANN001
+    """A fumble re-spot that yields 4th→5th down is a possession change (sign flip)."""
+    import sportsdataverse.nfl.ep_wp as ew
+
+    def _fake_ep(pbp, *, return_as_pandas=False):  # noqa: ANN001, ANN202
+        return pbp.with_columns((pl.col("yardline_100").cast(pl.Float64) / 100.0).alias("ep"))
+
+    monkeypatch.setattr(ew, "calculate_expected_points", _fake_ep)
+
+    # 4th & 10 at own 30 (yardline_100=70); completion gains only 3 (< ydstogo).
+    #   down = 4 + 1 = 5 → change=1, down reset to 1, ydstogo=10
+    #   yardline_100 after gain = 70 - 3 = 67; possession flip → 100 - 67 = 33
+    #   ep_respotted (pre-flip sign) = 33/100 = 0.33; change→ negate → -0.33
+    #   qb_epa = -0.33 - ep_before(2.0) = -2.33
+    df = _qb_frame(
+        [
+            {
+                "complete_pass": 1,
+                "fumble_lost": 1,
+                "yards_gained": 3,
+                "yardline_100": 70,
+                "down": 4,
+                "ydstogo": 10,
+                "ep": 2.0,
+                "epa": -5.0,
+            }
+        ]
+    )
+    out = ew._derive_qb_epa(df)
+    qb = out["qb_epa"].to_list()[0]
+    assert math.isclose(qb, -0.33 - 2.0, abs_tol=1e-9), f"qb_epa={qb} (expected -2.33)"
