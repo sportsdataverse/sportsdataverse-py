@@ -5,6 +5,7 @@
 - [Unreleased](#unreleased)
   - [CFB — spread-free (naive) win-probability surface (`wp_*_naive`)](#cfb--spread-free-naive-win-probability-surface-wp__naive)
   - [CFB — QBR model retrained on the full 2004–2025 history](#cfb--qbr-model-retrained-on-the-full-20042025-history)
+  - [CFB — fourth-down decision surface (`get_4th_down_probs`, cfb4th port)](#cfb--fourth-down-decision-surface-get_4th_down_probs-cfb4th-port)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
@@ -148,6 +149,14 @@ The bundled `cfb/models/qbr_model.ubj` (6-feat XGBoost: `qbr_epa` / `sack_epa` /
 
 - **Decisively better against the ESPN raw-QBR reference.** On a 2021–2025 holdout (out-of-sample for the legacy model): RMSE 23.2 → **16.1** (−31%), MAE 18.7 → **12.5**, R² 0.29 → **0.66**, correlation 0.69 → **0.82**. The retrained model's honest leave-one-season-out metrics (RMSE 17.9, R² 0.585) confirm the gains are real generalization, not in-sample fit.
 - **Drop-in swap** — same 6-feature contract, ships via the existing `cfb/models/*` package-data glob; no caller changes.
+
+### CFB — fourth-down decision surface (`get_4th_down_probs`, cfb4th port)
+
+A full college-football fourth-down decision surface, a faithful Python port of [cfb4th](https://github.com/sportsdataverse/cfb4th)'s `add_4th_probs()`, against this package's bundled EP / WP-spread boosters.
+
+- **`sportsdataverse.cfb.get_4th_down_probs(pbp_df)`** scores all three options on a frame of fourth-down situations and adds: `go_wp` / `first_down_prob` / `wp_succeed` / `wp_fail` (go), `punt_wp` (punt), `fg_make_prob` / `make_fg_wp` / `miss_fg_wp` / `fg_wp` (field goal), a `fourth_down_recommendation` ∈ {`go`, `punt`, `field_goal`} (max-WP choice), per-option `*_wp_diff`, and `go_boost` (cfb4th's headline `100·(go_wp − max(fg_wp, punt_wp))`).
+- **`CFBPlayProcess.add_fourth_down_probs()`** applies the same to a processed game's fourth-down rows after `run_processing_pipeline()`.
+- **New models:** `fg_model.ubj` (CFB-native field-goal make-probability by distance, trained on 42.6k attempts) and `punt_distribution.parquet` (punt end-yardline distribution) are bundled under `cfb/models/`; the 6-feat / 76-class `fd_model.ubj` (yards-gained, with the ordinal CFB rule-era factor) is **download-on-demand** (~16 MB, fetched from the `espn_cfb_model_artifacts` release and cached under `~/.cache/sportsdataverse/cfb_models/`, mirroring the NFL xYAC pattern; override with `SDV_PY_CFB_MODEL_DIR`). The go path reuses the reviewed cfb-data decision-layer machinery; punt/FG mirror cfb4th's possession-flip + end-game scoring.
 
 ## 0.0.67 Release: June 17, 2026
 
