@@ -45,6 +45,10 @@ from sportsdataverse.cfb.model_vars import (
     turnover_vec,
     wp_end_columns,
     wp_final_names,
+    wp_naive_end_columns,
+    wp_naive_final_names,
+    wp_naive_start_columns,
+    wp_naive_start_touchback_columns,
     wp_start_columns,
     wp_start_touchback_columns,
 )
@@ -52,6 +56,7 @@ from sportsdataverse.dl_utils import download
 
 ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
 wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
+wp_naive_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_naive.ubj")
 qbr_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/qbr_model.ubj")
 
 ep_model = Booster({"nthread": 4})  # init model
@@ -60,11 +65,162 @@ ep_model.load_model(ep_model_file)
 wp_model = Booster({"nthread": 4})  # init model
 wp_model.load_model(wp_spread_file)
 
+# Spread-free win-probability booster (12-feat = wp_final_names minus spread_time).
+wp_naive_model = Booster({"nthread": 4})  # init model
+wp_naive_model.load_model(wp_naive_file)
+
 qbr_model = Booster({"nthread": 4})  # init model
 qbr_model.load_model(qbr_model_file)
 
 logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
+
+
+def _wp_predict(play_df, model, names, tb_cols, start_cols, end_cols):
+    """Project the WP feature columns, rename to the booster's feature names, and
+    predict the start-touchback / start / end win-probabilities. Shared by the
+    spread (13-feat) and naive (12-feat) models — the only differences are the
+    column-source lists and feature-name list passed in.
+    """
+    tb = play_df[tb_cols]
+    tb.columns = names
+    start = play_df[start_cols]
+    start.columns = names
+    end = play_df[end_cols]
+    end.columns = names
+    return (
+        model.predict(DMatrix(tb)),
+        model.predict(DMatrix(start)),
+        model.predict(DMatrix(end)),
+    )
+
+
+def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix=""):
+    """Apply the win-probability game-logic derivation to a set of raw model
+    predictions, writing suffixed output columns. With ``suffix=""`` this emits
+    the canonical ``wp_before`` / ``wp_after`` / ``wpa`` (+ home/away/def) columns;
+    with ``suffix="_naive"`` it emits the spread-free analogues. The adjustment
+    chain (kickoff touchback, end-of-half, change-of-possession, end-of-game) is
+    model-independent, so spread and naive share it verbatim.
+    """
+    wb = f"wp_before{suffix}"
+    wt = f"wp_touchback{suffix}"
+    wa = f"wp_after{suffix}"
+    dwb = f"def_wp_before{suffix}"
+    hwb = f"home_wp_before{suffix}"
+    awb = f"away_wp_before{suffix}"
+    lwb = f"lead_wp_before{suffix}"
+    lwb2 = f"lead_wp_before2{suffix}"
+    dwa = f"def_wp_after{suffix}"
+    hwa = f"home_wp_after{suffix}"
+    awa = f"away_wp_after{suffix}"
+    wpa = f"wpa{suffix}"
+    return (
+        play_df.with_columns(
+            pl.lit(wp_before_raw).alias(wb),
+            pl.lit(wp_touchback_raw).alias(wt),
+            pl.lit(wp_after_raw).alias(wa),
+        )
+        .with_columns(
+            pl.when(pl.col("type.text").is_in(kickoff_vec)).then(pl.col(wt)).otherwise(pl.col(wb)).alias(wb),
+        )
+        .with_columns(
+            (1 - pl.col(wb)).alias(dwb),
+        )
+        .with_columns(
+            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col(wb))
+            .otherwise(pl.col(dwb))
+            .alias(hwb),
+            pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
+            .then(pl.col(wb))
+            .otherwise(pl.col(dwb))
+            .alias(awb),
+        )
+        .with_columns(
+            pl.col(wb).shift(-1).alias(lwb),
+            pl.col(wb).shift(-2).alias(lwb2),
+        )
+        .with_columns(
+            pl.when(pl.col("type.text").is_in(["Timeout"]))
+            .then(pl.col(wb))
+            .when(
+                (pl.col("status_type_completed") == True)
+                .and_(
+                    (pl.col("lead_play_type").is_null()).or_(
+                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                    ),
+                )
+                .and_(pl.col("pos_score_diff_end") > 0),
+            )
+            .then(1.0)
+            .when(
+                (pl.col("status_type_completed") == True)
+                .and_(
+                    (pl.col("lead_play_type").is_null()).or_(
+                        pl.col("game_play_number") == pl.col("game_play_number").max(),
+                    ),
+                )
+                .and_(pl.col("pos_score_diff_end") < 0),
+            )
+            .then(0.0)
+            .when(
+                (pl.col("end_of_half") == True)
+                .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
+                .and_(pl.col("type.text") != "Timeout"),
+            )
+            .then(pl.col(lwb))
+            .when(
+                (pl.col("end_of_half") == True)
+                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("type.text") != "Timeout"),
+            )
+            .then(1 - pl.col(lwb))
+            .when(
+                (pl.col("end_of_half") == True)
+                .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
+                .and_(pl.col("type.text") == "Timeout"),
+            )
+            .then(pl.col(wa))
+            .when(
+                (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
+                    pl.col("change_of_pos_team") == False,
+                ),
+            )
+            .then(pl.col(lwb))
+            .when(
+                (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
+                    pl.col("change_of_pos_team") == True,
+                ),
+            )
+            .then(1 - pl.col(lwb))
+            .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
+            .then(pl.col(wa))
+            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
+            .then(1 - pl.col(lwb))
+            .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
+            .then(pl.col(lwb))
+            .otherwise(pl.col(wa))
+            .alias(wa),
+        )
+        .with_columns(
+            (1 - pl.col(wa)).alias(dwa),
+        )
+        .with_columns(
+            pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col(wa))
+            .otherwise(pl.col(dwa))
+            .alias(hwa),
+            pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
+            .then(pl.col(wa))
+            .otherwise(pl.col(dwa))
+            .alias(awa),
+        )
+        .with_columns(
+            (pl.col(wa) - pl.col(wb)).alias(wpa),
+        )
+    )
+
 
 # ---------------------------------------------------------------------------
 # Module-level pure-function helpers (no network, no class state)
@@ -4661,126 +4817,34 @@ class CFBPlayProcess(object):
             )
         )
 
-        # ---- wp_before ----
-        start_touchback_data = play_df[wp_start_touchback_columns]
-        start_touchback_data.columns = wp_final_names
-        # self.logger.info(start_touchback_data.iloc[[36]].to_json(orient="records"))
-        dtest_start_touchback = DMatrix(start_touchback_data)
-        WP_start_touchback = wp_model.predict(dtest_start_touchback)
-        start_data = play_df[wp_start_columns]
-        start_data.columns = wp_final_names
-        # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
-        dtest_start = DMatrix(start_data)
-        WP_start = wp_model.predict(dtest_start)
+        # ---- raw model predictions: spread (13-feat) + naive / spread-free (12-feat) ----
+        WP_start_touchback, WP_start, WP_end = _wp_predict(
+            play_df,
+            wp_model,
+            wp_final_names,
+            wp_start_touchback_columns,
+            wp_start_columns,
+            wp_end_columns,
+        )
+        WP_tb_naive, WP_start_naive, WP_end_naive = _wp_predict(
+            play_df,
+            wp_naive_model,
+            wp_naive_final_names,
+            wp_naive_start_touchback_columns,
+            wp_naive_start_columns,
+            wp_naive_end_columns,
+        )
 
-        # ---- wp_after ----
-        end_data = play_df[wp_end_columns]
-        end_data.columns = wp_final_names
-        # self.logger.info(start_data.iloc[[36]].to_json(orient="records"))
-        dtest_end = DMatrix(end_data)
-        WP_end = wp_model.predict(dtest_end)
-
-        play_df = (
-            play_df.with_columns(
-                wp_before=pl.lit(WP_start),
-                wp_touchback=pl.lit(WP_start_touchback),
-                wp_after=pl.lit(WP_end),
-            )
-            .with_columns(
-                wp_before=pl.when(pl.col("type.text").is_in(kickoff_vec))
-                .then(pl.col("wp_touchback"))
-                .otherwise(pl.col("wp_before")),
-            )
-            .with_columns(
-                def_wp_before=1 - pl.col("wp_before"),
-            )
-            .with_columns(
-                home_wp_before=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
-                .then(pl.col("wp_before"))
-                .otherwise(pl.col("def_wp_before")),
-                away_wp_before=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
-                .then(pl.col("wp_before"))
-                .otherwise(pl.col("def_wp_before")),
-            )
-            .with_columns(
-                lead_wp_before=pl.col("wp_before").shift(-1),
-                lead_wp_before2=pl.col("wp_before").shift(-2),
-            )
-            .with_columns(
-                wp_after=pl.when(pl.col("type.text").is_in(["Timeout"]))
-                .then(pl.col("wp_before"))
-                .when(
-                    (pl.col("status_type_completed") == True)
-                    .and_(
-                        (pl.col("lead_play_type").is_null()).or_(
-                            pl.col("game_play_number") == pl.col("game_play_number").max(),
-                        ),
-                    )
-                    .and_(pl.col("pos_score_diff_end") > 0),
-                )
-                .then(1.0)
-                .when(
-                    (pl.col("status_type_completed") == True)
-                    .and_(
-                        (pl.col("lead_play_type").is_null()).or_(
-                            pl.col("game_play_number") == pl.col("game_play_number").max(),
-                        ),
-                    )
-                    .and_(pl.col("pos_score_diff_end") < 0),
-                )
-                .then(0.0)
-                .when(
-                    (pl.col("end_of_half") == True)
-                    .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
-                    .and_(pl.col("type.text") != "Timeout"),
-                )
-                .then(pl.col("lead_wp_before"))
-                .when(
-                    (pl.col("end_of_half") == True)
-                    .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
-                    .and_(pl.col("type.text") != "Timeout"),
-                )
-                .then(1 - pl.col("lead_wp_before"))
-                .when(
-                    (pl.col("end_of_half") == True)
-                    .and_(pl.col("start.pos_team_receives_2H_kickoff") == False)
-                    .and_(pl.col("type.text") == "Timeout"),
-                )
-                .then(pl.col("wp_after"))
-                .when(
-                    (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
-                        pl.col("change_of_pos_team") == False,
-                    ),
-                )
-                .then(pl.col("lead_wp_before"))
-                .when(
-                    (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
-                        pl.col("change_of_pos_team") == True,
-                    ),
-                )
-                .then(1 - pl.col("lead_wp_before"))
-                .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
-                .then(pl.col("wp_after"))
-                .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == False))
-                .then(1 - pl.col("lead_wp_before"))
-                .when((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")).and_(pl.col("scoringPlay") == True))
-                .then(pl.col("lead_wp_before"))
-                .otherwise(pl.col("wp_after")),
-            )
-            .with_columns(
-                def_wp_after=1 - pl.col("wp_after"),
-            )
-            .with_columns(
-                home_wp_after=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
-                .then(pl.col("wp_after"))
-                .otherwise(pl.col("def_wp_after")),
-                away_wp_after=pl.when(pl.col("end.pos_team.id") != pl.col("homeTeamId"))
-                .then(pl.col("wp_after"))
-                .otherwise(pl.col("def_wp_after")),
-            )
-            .with_columns(
-                wpa=pl.col("wp_after") - pl.col("wp_before"),
-            )
+        # ---- derive wp_before / wp_after / wpa (+ home/away/def) for each model ----
+        # The spread surface keeps the canonical un-suffixed column names; the
+        # spread-free surface mirrors it under the ``_naive`` suffix.
+        play_df = _apply_wp_derivation(play_df, WP_start, WP_start_touchback, WP_end, suffix="")
+        play_df = _apply_wp_derivation(
+            play_df,
+            WP_start_naive,
+            WP_tb_naive,
+            WP_end_naive,
+            suffix="_naive",
         )
         return play_df
 

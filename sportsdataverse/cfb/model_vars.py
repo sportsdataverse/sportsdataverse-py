@@ -103,6 +103,17 @@ wp_final_names = [
     "period",
 ]
 
+# Naive (spread-free) WP feature set = spread WP minus the ``spread_time``
+# feature (12-feat). The column-source lists below are positionally aligned to
+# ``wp_final_names``, so the naive analogues are derived by dropping the single
+# ``spread_time`` slot (index 1) from each list — keeping every other column in
+# place. This mirrors the cfbscrapR naive recipe and the bundled ``wp_naive.ubj``.
+_spread_time_idx = wp_final_names.index("spread_time")
+wp_naive_final_names = [c for i, c in enumerate(wp_final_names) if i != _spread_time_idx]
+wp_naive_start_touchback_columns = [c for i, c in enumerate(wp_start_touchback_columns) if i != _spread_time_idx]
+wp_naive_start_columns = [c for i, c in enumerate(wp_start_columns) if i != _spread_time_idx]
+wp_naive_end_columns = [c for i, c in enumerate(wp_end_columns) if i != _spread_time_idx]
+
 # -------Play type vectors-------------
 scores_vec = [
     "Blocked Punt Touchdown",

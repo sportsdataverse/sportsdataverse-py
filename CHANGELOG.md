@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [CFB — spread-free (naive) win-probability surface (`wp_*_naive`)](#cfb--spread-free-naive-win-probability-surface-wp__naive)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
@@ -128,6 +130,16 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### CFB — spread-free (naive) win-probability surface (`wp_*_naive`)
+
+`CFBPlayProcess` now emits a second, **spread-free** win-probability surface alongside the existing spread WP, completing the play-level model handoff begun in 0.0.67 (which retrained EP + spread WP on the full 2004–2025 history).
+
+- **New bundled model `cfb/models/wp_naive.ubj`** — the faithful cfbscrapR "naive" recipe (12-feat = `wp_final_names` minus `spread_time`, `binary:logistic`, 65 rounds), retrained on the same full-history corpus (2,219,607 plays, 2004–2025) as the spread model. Ships via the existing `cfb/models/*` package-data glob.
+- **New per-play columns** `wp_before_naive` / `wp_after_naive` / `wpa_naive` (plus `def_`/`home_`/`away_` analogues), mirroring the spread columns under a `_naive` suffix. The naive surface answers "given only game state, who wins?" while the spread surface bakes in the pregame line; the two correlate ~0.90, diverging most early-game where the market prior carries the most information.
+- **Refactor (no behavior change to the spread surface):** the win-probability prediction + game-logic derivation in `__process_wpa` was factored into shared `_wp_predict` / `_apply_wp_derivation` helpers routed once per model. The spread (un-suffixed) output is **byte-identical** to the prior release — verified against a captured per-play baseline.
 
 ## 0.0.67 Release: June 17, 2026
 
