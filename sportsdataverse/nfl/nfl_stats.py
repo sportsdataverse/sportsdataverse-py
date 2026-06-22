@@ -1313,6 +1313,24 @@ def build_nfl_team_stats(
     from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp  # noqa: PLC0415
 
     pbp = load_nfl_pbp(seasons, source=source)
+    # The SDV-native PBP (source="sdv") omits a few special-teams return-detail
+    # flags the full nflverse PBP carries; default them to 0 so the return-count
+    # logic still runs. Return YARDS are unaffected; on source="sdv" the punt /
+    # kickoff return COUNTS may include fair catches / downed punts — a documented
+    # minor limitation (those flags are not in the Shield-built nfl_model_pbp).
+    _missing_st = [
+        c
+        for c in (
+            "punt_fair_catch",
+            "punt_downed",
+            "punt_out_of_bounds",
+            "kickoff_fair_catch",
+            "kickoff_out_of_bounds",
+        )
+        if c not in pbp.columns
+    ]
+    if _missing_st:
+        pbp = pbp.with_columns([pl.lit(0, dtype=pl.Int64).alias(c) for c in _missing_st])
 
     if season_type in ("REG", "POST"):
         pbp = pbp.filter(pl.col("season_type") == season_type)
