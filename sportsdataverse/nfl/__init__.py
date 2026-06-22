@@ -96,6 +96,7 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.nfl_pbp import *
 from sportsdataverse.nfl.nfl_player_stats import *
+from sportsdataverse.nfl.nfl_stats import build_nfl_player_stats
 from sportsdataverse.nfl.nfl_schedule import *
 from sportsdataverse.nfl.nfl_teams import *
 from sportsdataverse.nfl.utils_date import *
