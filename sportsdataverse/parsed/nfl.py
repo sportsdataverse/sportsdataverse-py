@@ -147,9 +147,11 @@ from sportsdataverse.nfl import nfl_weeks as _raw_nfl_weeks
 from sportsdataverse.nfl import nfl_weeks_by_date as _raw_nfl_weeks_by_date
 from sportsdataverse.nfl import NFLPlayProcess as NFLPlayProcess  # noqa: F401
 from sportsdataverse.nfl import NflConfig as NflConfig  # noqa: F401
+from sportsdataverse.nfl import build_nfl_player_stats as build_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import build_nfl_players as build_nfl_players  # noqa: F401
 from sportsdataverse.nfl import build_nfl_rosters as build_nfl_rosters  # noqa: F401
 from sportsdataverse.nfl import build_nfl_season as build_nfl_season  # noqa: F401
+from sportsdataverse.nfl import build_nfl_team_stats as build_nfl_team_stats  # noqa: F401
 from sportsdataverse.nfl import cached_loader as cached_loader  # noqa: F401
 from sportsdataverse.nfl import calculate_completion_probability as calculate_completion_probability  # noqa: F401
 from sportsdataverse.nfl import calculate_epa as calculate_epa  # noqa: F401
@@ -261,9 +263,11 @@ from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 __all__ = [
     "NFLPlayProcess",
     "NflConfig",
+    "build_nfl_player_stats",
     "build_nfl_players",
     "build_nfl_rosters",
     "build_nfl_season",
+    "build_nfl_team_stats",
     "cached_loader",
     "calculate_completion_probability",
     "calculate_epa",

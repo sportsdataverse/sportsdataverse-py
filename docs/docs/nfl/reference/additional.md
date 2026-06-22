@@ -2491,9 +2491,12 @@ df = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_nfl_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_player_stats}
+### `load_nfl_player_stats(kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_player_stats}
 
 Load NFL player stats data
+
+One combined week-level parquet (all seasons, offense) mirroring nflverse's
+`player_stats`.
 
 **Parameters**
 
@@ -2501,6 +2504,7 @@ Load NFL player stats data
 |---|---|---|---|
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `player_stats.parquet`. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST). Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -2569,7 +2573,12 @@ from sportsdataverse.nfl import load_nfl_player_stats
 stats = load_nfl_player_stats()
 stats.shape
 
-# Kicking-only stats
+# SDV-native player stats (week-level, built from SDV play-by-play)
+
+stats_sdv = load_nfl_player_stats(source="sdv")
+stats_sdv.select(["season", "week", "player_id", "attempts"]).head()
+
+# Kicking-only stats (nflverse source only)
 
 kicking = load_nfl_player_stats(kicking=True)
 
@@ -2759,7 +2768,7 @@ schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
 schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```
 
-### `load_nfl_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_team_stats}
+### `load_nfl_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_team_stats}
 
 Load NFL team stats data going back to 1999
 
@@ -2768,8 +2777,9 @@ Load NFL team stats data going back to 1999
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
-| `summary_level` | `str` | `'week'` | Aggregation level. One of "week", "reg", "post", "reg+post". Defaults to "week". |
+| `summary_level` | `str` | `'week'` | Aggregation level. One of "week", "reg", "post", "reg+post". Defaults to "week". Ignored when `source` is the SDV-native release (a single week-level parquet covering all seasons; filter post-load). |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which team-stats release to read. `"nflverse"` (the default) reads the per-season nflverse `stats_team` releases. `"sportsdataverse"` / `"sdv"` reads the SDV-native `nfl_team_stats` release (a single combined week-level parquet, built by `sportsdataverse.nfl.build_nfl_team_stats` from the SDV play-by-play and filtered to the requested seasons post-load). |
 
 **Returns**
 
@@ -2890,9 +2900,9 @@ weekly = load_nfl_team_stats(seasons=[2024])
 
 reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 
-# Combined regular + post-season at season grain
+# SDV-native team stats (built from SDV play-by-play)
 
-combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
+sdv = load_nfl_team_stats(seasons=[2024], source="sdv")
 ```
 
 ### `load_nfl_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_teams}
@@ -3576,9 +3586,12 @@ rec_pd = load_nfl_pfr_advstats(
 )
 ```
 
-### `load_player_stats(kicking=False, return_as_pandas=False) -> 'pl.DataFrame'` {#load_player_stats}
+### `load_player_stats(kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_player_stats}
 
 Load NFL player stats data
+
+One combined week-level parquet (all seasons, offense) mirroring nflverse's
+`player_stats`.
 
 **Parameters**
 
@@ -3586,6 +3599,7 @@ Load NFL player stats data
 |---|---|---|---|
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `player_stats.parquet`. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST). Any other value raises `ValueError`. |
 
 **Returns**
 
@@ -3654,7 +3668,12 @@ from sportsdataverse.nfl import load_nfl_player_stats
 stats = load_nfl_player_stats()
 stats.shape
 
-# Kicking-only stats
+# SDV-native player stats (week-level, built from SDV play-by-play)
+
+stats_sdv = load_nfl_player_stats(source="sdv")
+stats_sdv.select(["season", "week", "player_id", "attempts"]).head()
+
+# Kicking-only stats (nflverse source only)
 
 kicking = load_nfl_player_stats(kicking=True)
 
@@ -4059,7 +4078,7 @@ offense = (
 )
 ```
 
-### `load_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False) -> 'pl.DataFrame'` {#load_team_stats}
+### `load_team_stats(seasons: 'List[int]', summary_level: 'str' = 'week', return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_team_stats}
 
 Load NFL team stats data going back to 1999
 
@@ -4068,8 +4087,9 @@ Load NFL team stats data going back to 1999
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
-| `summary_level` | `str` | `'week'` | Aggregation level. One of "week", "reg", "post", "reg+post". Defaults to "week". |
+| `summary_level` | `str` | `'week'` | Aggregation level. One of "week", "reg", "post", "reg+post". Defaults to "week". Ignored when `source` is the SDV-native release (a single week-level parquet covering all seasons; filter post-load). |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which team-stats release to read. `"nflverse"` (the default) reads the per-season nflverse `stats_team` releases. `"sportsdataverse"` / `"sdv"` reads the SDV-native `nfl_team_stats` release (a single combined week-level parquet, built by `sportsdataverse.nfl.build_nfl_team_stats` from the SDV play-by-play and filtered to the requested seasons post-load). |
 
 **Returns**
 
@@ -4190,9 +4210,9 @@ weekly = load_nfl_team_stats(seasons=[2024])
 
 reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 
-# Combined regular + post-season at season grain
+# SDV-native team stats (built from SDV play-by-play)
 
-combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
+sdv = load_nfl_team_stats(seasons=[2024], source="sdv")
 ```
 
 ### `load_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#load_teams}
@@ -4717,6 +4737,49 @@ from sportsdataverse.nfl import NflConfig
 cfg = NflConfig(cache_mode="off", timeout=10)
 ```
 
+### `build_nfl_player_stats(seasons: 'List[int]', *, summary_level: 'str' = 'week', season_type: 'str' = 'REG', source: 'str' = 'sdv', return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#build_nfl_player_stats}
+
+Build nflverse **player_stats** by aggregating SDV-native play-by-play.
+
+A faithful polars port of nflfastR's `calculate_player_stats`
+(`aggregate_game_stats.R`): per-player passing / rushing / receiving frames
+are full-outer-joined on the group keys, special-teams touchdowns and fantasy
+points are added, and player metadata is joined from
+`sportsdataverse.nfl.load_nfl_players`. See the module docstring for the
+SDV-PBP column-gap handling (notably `passing_epa` falls back to `epa`
+because `qb_epa` is absent).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `List[int]` |  | Four-digit NFL seasons to aggregate (e.g. `[2023]`). |
+| `summary_level` | `str` | `'week'` | `"week"` (group on season + week + player_id, with `opponent_team`) or `"season"` (group on season + player_id, with `recent_team` = last team and `games` = distinct game count). |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"REG+POST"`. Pre-filters the play-by-play before aggregation. |
+| `source` | `str` | `'sdv'` | Play-by-play release passed to `load_nfl_pbp`. Defaults to `"sdv"` (the SDV-native enriched release). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame in the published `load_nfl_player_stats` schema. At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_player_stats
+wk = build_nfl_player_stats([2023], summary_level="week")
+print(wk.shape)
+
+# Season totals as pandas
+
+df_pd = build_nfl_player_stats([2023], summary_level="season",
+                               return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+wk.filter(pl.col("attempts") >= 5).sort("passing_epa", descending=True).head()
+```
+
 ### `build_nfl_players(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_nfl_players}
 
 Build an SDV-native NFL players frame from ESPN's public athletes endpoint.
@@ -4870,6 +4933,49 @@ df2 = build_nfl_season(game_ids=[401671801, 401671802]) # served from cache
 from sportsdataverse.nfl import build_nfl_season
 df_pd = build_nfl_season(game_ids=[401671801], return_as_pandas=True)
 print(df_pd.shape)
+```
+
+### `build_nfl_team_stats(seasons: 'List[int]', *, summary_level: 'str' = 'week', season_type: 'str' = 'REG', source: 'str' = 'sdv', return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#build_nfl_team_stats}
+
+Build nflverse **team_stats** by aggregating SDV-native play-by-play.
+
+A faithful polars port of nflfastR's `calculate_stats(stat_type = "team")`
+(the `aggregate_game_stats*` family). Offense is keyed on `posteam`,
+defense on the tackler's team (per-play `*_team` slot tags -- NOT
+`defteam`, which double-counts on return plays), kicking on `posteam`,
+and returns / penalties / timeouts on the relevant play team tag. See the
+module docstring for the full grouping + SDV-PBP gap notes (notably
+`passing_epa` falls back to `epa` because `qb_epa` is absent).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `List[int]` |  | Four-digit NFL seasons to aggregate (e.g. `[2023]`). |
+| `summary_level` | `str` | `'week'` | `"week"` (group on season + week + team, with `opponent_team`) or `"season"` (group on season + team, with a `games` distinct-game count replacing week / season_type / opponent_team). |
+| `season_type` | `str` | `'REG'` | `"REG"`, `"POST"`, or `"REG+POST"`. Pre-filters the play-by-play before aggregation. |
+| `source` | `str` | `'sdv'` | Play-by-play release passed to `load_nfl_pbp`. Defaults to `"sdv"` (the SDV-native enriched release). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame in the published `load_nfl_team_stats` schema (~102 columns). At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_team_stats
+wk = build_nfl_team_stats([2023], summary_level="week")
+print(wk.shape)
+
+# Season totals as pandas
+
+df_pd = build_nfl_team_stats([2023], summary_level="season",
+                             return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+wk.sort("def_sacks", descending=True).head()
 ```
 
 ### `cached_loader(func: 'F') -> 'F'` {#cached_loader}
