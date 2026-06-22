@@ -40,6 +40,7 @@ from sportsdataverse.config import (
     NFL_SDV_PLAYER_STATS_URL,
     NFL_SDV_PLAYER_URL,
     NFL_SDV_ROSTER_URL,
+    NFL_SDV_TEAM_STATS_URL,
     NFL_SNAP_COUNTS_URL,
     NFL_TEAM_LOGO_URL,
     NFL_TEAM_SCHEDULE_URL,
@@ -1333,20 +1334,31 @@ def load_nfl_officials(return_as_pandas=False) -> pl.DataFrame:
 
 
 @cached_loader
-def load_nfl_team_stats(seasons: List[int], summary_level: str = "week", return_as_pandas=False) -> pl.DataFrame:
+def load_nfl_team_stats(
+    seasons: List[int], summary_level: str = "week", return_as_pandas=False, *, source: str = "nflverse"
+) -> pl.DataFrame:
     """Load NFL team stats data going back to 1999
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
         summary_level (str): Aggregation level. One of "week", "reg", "post", "reg+post". Defaults to "week".
+            Ignored when ``source`` is the SDV-native release (a single week-level
+            parquet covering all seasons; filter post-load).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
+        source (str): Which team-stats release to read. ``"nflverse"`` (the
+            default) reads the per-season nflverse ``stats_team`` releases.
+            ``"sportsdataverse"`` / ``"sdv"`` reads the SDV-native
+            ``nfl_team_stats`` release (a single combined week-level parquet,
+            built by :func:`sportsdataverse.nfl.build_nfl_team_stats` from the
+            SDV play-by-play and filtered to the requested seasons post-load).
 
     Returns:
         pl.DataFrame: Polars dataframe containing team stats available for the requested seasons.
 
     Raises:
-        ValueError: If `season` is less than 1999, or if `summary_level` is not one of the
-            allowed values.
+        ValueError: If `season` is less than 1999, if `summary_level` is not one of the
+            allowed values, or if ``source`` is not one of ``"nflverse"``, ``None``,
+            ``"sportsdataverse"``, or ``"sdv"``.
 
     Example:
         Weekly team stats (default)::
@@ -1358,9 +1370,9 @@ def load_nfl_team_stats(seasons: List[int], summary_level: str = "week", return_
 
             reg = load_nfl_team_stats(seasons=[2024], summary_level="reg")
 
-        Combined regular + post-season at season grain::
+        SDV-native team stats (built from SDV play-by-play)::
 
-            combined = load_nfl_team_stats(seasons=[2023, 2024], summary_level="reg+post")
+            sdv = load_nfl_team_stats(seasons=[2024], source="sdv")
 
         See Also:
             * `nflverse`_ -- full data ecosystem (R + Python)
@@ -1369,14 +1381,25 @@ def load_nfl_team_stats(seasons: List[int], summary_level: str = "week", return_
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
+    if type(seasons) is int:
+        seasons = [seasons]
+
+    if source in ("sportsdataverse", "sdv"):
+        for i in seasons:
+            season_not_found_error(int(i), 1999)
+        data = pl.read_parquet(NFL_SDV_TEAM_STATS_URL, use_pyarrow=True)
+        data = data.filter(pl.col("season").is_in([int(i) for i in seasons]))
+        return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+    if source not in ("nflverse", None):
+        raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
+
     if summary_level not in ("week", "reg", "post", "reg+post"):
         raise ValueError("summary_level must be one of 'week', 'reg', 'post', 'reg+post'")
 
     level_str = summary_level.replace("+", "")  # "reg+post" -> "regpost"
 
     data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
     for i in tqdm(seasons):
         season_not_found_error(int(i), 1999)
         i_data = pl.read_parquet(

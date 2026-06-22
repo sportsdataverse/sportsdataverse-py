@@ -94,6 +94,7 @@ NFL_TEAM_SCHEDULE_URL = f"{NFLVERSEGITHUB}schedules/games.parquet"
 
 # nflreadpy parity additions: coverage gaps the canonical loaders fill
 NFL_TEAM_STATS_URL = NFLVERSEGITHUB + "stats_team/stats_team_{level}_{season}.parquet"
+NFL_SDV_TEAM_STATS_URL = SDVRELEASES + "nfl_team_stats/team_stats.parquet"
 NFL_FTN_CHARTING_URL = NFLVERSEGITHUB + "ftn_charting/ftn_charting_{season}.parquet"
 NFL_TRADES_URL = f"{NFLVERSEGITHUB}trades/trades.parquet"
 NFL_FF_PLAYERIDS_URL = f"{DYNASTYPROCESSGITHUB}db_playerids.csv"
