@@ -25,6 +25,42 @@ def _cfb_resource_filename(package: str, resource: str) -> str:
     return str(_resource_files(package).joinpath(resource))
 
 
+def _n_capture_groups(pattern: str) -> int:
+    """Count capturing groups in *pattern* (skips ``\\(`` literals and ``(?...`` groups)."""
+    n = 0
+    i = 0
+    while i < len(pattern):
+        c = pattern[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == "(" and not (i + 1 < len(pattern) and pattern[i + 1] == "?"):
+            n += 1
+        i += 1
+    return n
+
+
+def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
+    """Extract a player name from play text, robust to multi-alternative patterns.
+
+    polars ``str.extract`` defaults to capture group 1. When *pattern* is an
+    alternation whose branches each carry their own capture group (e.g.
+    ``(A )run |(A )rush ``), the matched branch's name may live in group 2, 3,
+    ... -- so the default group-1 extract returns ``None``. ESPN play text uses
+    "rush"/"on-side"/"Punt by {name}"/"returned by {name}" phrasings that match
+    such non-first alternatives, which is why pre-2014 games (which carry no
+    structured ``participants[]`` array to overwrite the regex output) had null
+    rusher / punter / kicker / returner names. This coalesces across every
+    capture group so the matched branch's name is returned regardless of its
+    position. Single-group patterns fall through to the plain group-1 extract.
+    """
+    n = _n_capture_groups(pattern)
+    if n <= 1:
+        return text_expr.str.extract(pattern, 1)
+    groups = text_expr.str.extract_groups(pattern)
+    return pl.coalesce([groups.struct.field(str(i)) for i in range(1, n + 1)])
+
+
 from sportsdataverse.cfb.model_vars import (
     defense_score_vec,
     end_change_vec,
@@ -3095,8 +3131,8 @@ class CFBPlayProcess(object):
                 # --- RB Names -----
                 rush_player=pl.when(pl.col("rush") == True)
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i)(.{0,25} )run |(?i)(.{0,25} )\d{0,2} Yd Run|(?i)(.{0,25} )rush |(?i)(.{0,25} )rushed ",
                     )
                     .str.replace(r"(?i) run |(?i) \d+ Yd Run|(?i) rush ", "")
@@ -3110,11 +3146,10 @@ class CFBPlayProcess(object):
                     .and_(pl.col("type.text") != "Passing Touchdown"),
                 )
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i)(.{0,30} )pass |(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for|(?i)(.{0,30} )incomplete|(?i)pass from (.{0,30} ) \( ",
-                    )
-                    .str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
+                    ).str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
                 )
                 .when(
                     (pl.col("pass") == True)
@@ -3122,9 +3157,9 @@ class CFBPlayProcess(object):
                     .and_(pl.col("type.text") != "Passing Touchdown"),
                 )
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for")
-                    .str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
+                    _extract_player_name(
+                        pl.col("text"), r"(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for"
+                    ).str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
                 )
                 .when((pl.col("pass") == True).and_(pl.col("type.text") == "Passing Touchdown"))
                 .then(
@@ -3251,16 +3286,16 @@ class CFBPlayProcess(object):
                 # --- Interception Names -----
                 interception_player=pl.when(pl.col("text").str.contains(r"Yd Interception Return"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} Yd Interception Return|(?i)(.{0,25} )\\d{0,2} yd interception return",
+                    _extract_player_name(
+                        pl.col("text"),
+                        r"(?i)(.{0,25} )\d{0,2} Yd Interception Return|(?i)(.{0,25} )\d{0,2} yd interception return",
                     )
                     .str.replace(r"return (.+)", "")
                     .str.replace(r"(.+) intercepted", "")
                     .str.replace(r"intercepted", "")
                     .str.replace(r"Yd Interception Return", "")
                     .str.replace(r"for a 1st down", "")
-                    .str.replace(r"(\\d{1,2})", "")
+                    .str.replace(r"(\d{1,2})", "")
                     .str.replace(r"for a TD", "")
                     .str.replace(r"at the (.+)", "")
                     .str.replace(r" by ", ""),
@@ -3292,8 +3327,7 @@ class CFBPlayProcess(object):
                 # --- Punter Names ----
                 punter_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)(.{0,30}) punt|(?i)Punt by (.{0,30})")
+                    _extract_player_name(pl.col("text"), r"(?i)(.{0,30}) punt|(?i)Punt by (.{0,30})")
                     .str.replace(r"(?i) punt", "")
                     .str.replace(r"(?i) for(.+)", "")
                     .str.replace(r"(?i)Punt by ", "")
@@ -3306,8 +3340,8 @@ class CFBPlayProcess(object):
                 # --- Punt Returner Names ----
                 punt_return_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i), (.{0,25}) returns|(?i)fair catch by (.{0,25})|(?i), returned by (.{0,25})|(?i)yards by (.{0,30})|(?i) return by (.{0,25})",
                     )
                     .str.replace(r"(?i), ", "")
@@ -3325,8 +3359,7 @@ class CFBPlayProcess(object):
                 # --- Punt Blocker Names ----
                 punt_block_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)punt blocked by (.{0,25})|(?i)blocked by(.+)")
+                    _extract_player_name(pl.col("text"), r"(?i)punt blocked by (.{0,25})|(?i)blocked by(.+)")
                     .str.replace(r"punt blocked by |for a(.+)", "")
                     .str.replace(r"blocked by(.+)", "")
                     .str.replace(r"blocked(.+)", "")
@@ -3342,7 +3375,7 @@ class CFBPlayProcess(object):
                     pl.col("text")
                     .str.extract(r"(?i)(.+) yd return of blocked")
                     .str.replace(r"(?i)blocked|(?i)Blocked", "")
-                    .str.replace(r"(?i)\\d+", "")
+                    .str.replace(r"(?i)\d+", "")
                     .str.replace(r"(?i)yd return of", ""),
                 )
                 .otherwise(pl.col("punt_block_player")),
@@ -3377,32 +3410,35 @@ class CFBPlayProcess(object):
                 # --- Kickoff Names ----
                 kickoff_player=pl.when(pl.col("type.text").str.contains(r"(?i)kickoff"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)(.{0,25}) kickoff|(.{0,25}) on-side")
-                    .str.replace(r"(?i) on-side| kickoff", ""),
+                    _extract_player_name(pl.col("text"), r"(?i)(.{0,25}) kickoff|(.{0,25}) on-side").str.replace(
+                        r"(?i) on-side| kickoff", ""
+                    ),
                 )
                 .otherwise(None),
                 # --- Kickoff Returner Names ----
                 kickoff_return_player=pl.when(pl.col("type.text").str.contains(r"(?i)ickoff"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i), (.{0,25}) return|(?i), (.{0,25}) fumble|(?i)returned by (.{0,25})|(?i)touchback by (.{0,25})",
                     )
                     .str.replace(r", ", "")
-                    .str.replace(r"(?i) return|(?i) fumble|(?i) returned by|(?i) for |(?i)touchback by ", "")
+                    .str.replace(r"(?i) for .*", "")
+                    .str.replace(r"(?i) return|(?i) fumble|(?i) returned by|(?i)touchback by ", "")
+                    .str.replace(r"(?i) at the.*", "")
+                    .str.replace(r"(?i) to the.*", "")
                     .str.replace(r"\((.+)\)(.+)", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Kicker Names ----
                 fg_kicker_player=pl.when(pl.col("type.text").str.contains(r"(?i)Field Goal"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} yd field goal|(?i)(.{0,25} )\\d{0,2} yd fg|(?i)(.{0,25} )\\d{0,2} yard field goal",
+                    _extract_player_name(
+                        pl.col("text"),
+                        r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",
                     )
                     .str.replace(r"(?i) Yd Field Goal|(?i)Yd FG |(?i)yd FG|(?i) yd FG", "")
-                    .str.replace(r"(\\d{1,2})", ""),
+                    .str.replace(r"(\d{1,2})", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Blocker Names ----
@@ -3457,8 +3493,8 @@ class CFBPlayProcess(object):
                     .str.replace(r"(?i) for ", "")
                     .str.replace(r"(?i) a safety", "")
                     .str.replace(r"(?i)r no gain", "")
-                    .str.replace(r"(?i)(.+)(\\d{1,2})", "")
-                    .str.replace(r"(?i)(\\d{1,2})", "")
+                    .str.replace(r"(?i)(.+)(\d{1,2})", "")
+                    .str.replace(r"(?i)(\d{1,2})", "")
                     .str.replace(r", ", ""),
                 )
                 .otherwise(None),
@@ -3478,7 +3514,8 @@ class CFBPlayProcess(object):
                     .str.replace(r"(?i), re(.+)", "")
                     .str.replace(r"(?i), fo(.+)", "")
                     .str.replace(r"(?i), r", "")
-                    .str.replace(r"(?i), ", ""),
+                    .str.replace(r"(?i), ", "")
+                    .str.replace(r"(?i) at th.*", ""),
                 )
                 .otherwise(None),
             )
@@ -3509,7 +3546,8 @@ class CFBPlayProcess(object):
                     .str.replace(r"(?i)  (.+)", "")
                     .str.replace(r"(?i) ,", "")
                     .str.replace(r"(?i)penalty(.+)", "")
-                    .str.replace(r"(?i)for a 1ST down", ""),
+                    .str.replace(r"(?i)for a 1ST down", "")
+                    .str.replace(r"(?i) at the.*", ""),
                 )
                 .otherwise(None),
             )
