@@ -658,6 +658,40 @@ result = proc.run_processing_pipeline()
 
 **Methods**
 
+#### `CFBPlayProcess.add_fourth_down_probs()`
+
+Add the cfb4th 4th-down decision surface to the processed plays.
+
+Runs `run_processing_pipeline` first if it hasn't already, then
+computes the go / punt / field-goal win-probability options plus the
+max-WP `fourth_down_recommendation` (and per-option `*_wp_diff` and
+`go_boost`) on every 4th-down row via
+`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`. The new
+columns are written back onto `self.plays_json` (and `self.json`'s
+`plays`); non-4th-down rows carry nulls for the decision columns.
+
+Field-goal columns (`fg_make_prob` / `make_fg_wp` / `miss_fg_wp` /
+`fg_wp`) are null when the cfb4th FG model isn't bundled
+(`cfb_fourth_down.FG_MODEL_AVAILABLE` is False) -- the go + punt surface
+and the recommendation over the available options are still computed.
+
+**Returns**
+
+`self.plays_json` as a frame with the decision columns appended (also persisted back onto the instance).
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+game.run_processing_pipeline()
+fourth = game.add_fourth_down_probs()
+print(fourth.filter(pl.col("start.down") == 4)
+            .select(["go_wp", "punt_wp", "fg_wp", "fourth_down_recommendation"])
+            .head())
+```
+
 #### `CFBPlayProcess.cfb_pbp_disk()`
 
 Load a previously cached ESPN summary JSON for this game from disk.
@@ -1406,6 +1440,40 @@ Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
 
 A dict shaped like ESPN's `college-football/summary` response (`header` + `drives` + stub `pickcenter`/`boxscore`/...), ready to assign onto `CFBPlayProcess(...).json`.
 
+### `get_4th_down_probs(pbp_df) -> 'pd.DataFrame'` {#get_4th_down_probs}
+
+Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation.
+
+Runs `get_go_wp`, `get_fg_wp`, `get_punt_wp` on the
+fourth-down rows and adds the combined option columns plus:
+
+* `fourth_down_recommendation` -- the max-WP choice among `{go, punt,
+  field_goal}` (NaN options are excluded; when the FG model isn't bundled,
+  `field_goal` is excluded from the comparison).
+* `go_wp_diff` / `punt_wp_diff` / `fg_wp_diff` -- each option's WP minus
+  the recommended option's WP (the recommended option's diff is 0, the others
+  <= 0). NaN where the option WP is NaN.
+* `go_boost` -- cfb4th's headline number: `100 * (go_wp - max(fg_wp,
+  punt_wp))` in percentage points.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the `start.*` state columns in PBP_COLS`. |
+
+**Returns**
+
+A pandas copy of `pbp_df` with the decision columns added. Empty input returns the input plus empty decision columns.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_fourth_down import get_4th_down_probs
+out = get_4th_down_probs(fourth_down_rows)
+print(out[["go_wp", "punt_wp", "fg_wp", "fourth_down_recommendation"]].head())
+```
+
 ### `get_cfb_teams(return_as_pandas=False) -> 'pl.DataFrame'` {#get_cfb_teams}
 
 Load college football team ID information and logos
@@ -1453,6 +1521,56 @@ teams_pd.head()
 teams = get_cfb_teams()
 logo_map = dict(zip(teams["team_id"], teams["logo"]))
 ```
+
+### `get_fg_wp(pbp_df) -> 'pd.DataFrame'` {#get_fg_wp}
+
+Expected win probability of attempting a field goal (cfb4th `get_fg_wp`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations. |
+
+**Returns**
+
+A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `fg_wp` (= make_prob*make_wp + (1-make_prob)*miss_wp, from the kicking team's perspective). All four are NaN when the FG model is not bundled (`FG_MODEL_AVAILABLE` is False) -- probabilities are never fabricated.
+
+### `get_go_wp(pbp_df) -> 'pd.DataFrame'` {#get_go_wp}
+
+Expected win probability of going for it on 4th down (cfb4th `get_go_wp`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the `start.*` state columns in PBP_COLS`. |
+
+**Returns**
+
+A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `first_down_prob` (P(conversion)), `wp_succeed` (mean WP over conversion outcomes) and `wp_fail` (mean WP over failure outcomes). `go_wp` is always in [0, 1]; the conditional columns are in [0, 1] but can be NaN for degenerate goal-line plays where one outcome bucket is empty (matches the R reference `pivot_wider` NA behavior).
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_fourth_down import get_go_wp
+out = get_go_wp(fourth_down_rows)
+print(out[["go_wp", "first_down_prob"]].head())
+```
+
+### `get_punt_wp(pbp_df) -> 'pd.DataFrame'` {#get_punt_wp}
+
+Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations. |
+
+**Returns**
+
+A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
 
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 

@@ -2314,6 +2314,152 @@ def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
     return df.drop([c for c in ("_tmp_posteam", "_home_ep", "_home_epa", "_end_game") if c in df.columns])
 
 
+def _derive_qb_epa(df: pl.DataFrame) -> pl.DataFrame:
+    """Add ``qb_epa`` — EPA crediting the QB on completed-pass-then-fumble plays.
+
+    Mirrors nflfastR's ``add_qb_epa`` (``helper_additional_functions.R``).  On
+    every play ``qb_epa == epa`` EXCEPT plays where the receiver caught the ball
+    and *then* lost a fumble (``complete_pass == 1 & fumble_lost == 1``).  Those
+    plays are RE-SPOTTED as if the receiver had simply been tackled at the
+    fumble spot (no turnover): the post-completion game state is recomputed
+    (``yardline_100 -= yards_gained`` for the air+YAC gain, ``down`` / ``ydstogo``
+    incl. first-down resets, turnover-on-downs → possession change with field /
+    timeout flip, goal-line ``ydstogo`` clamp), EP is re-scored with the existing
+    :func:`calculate_expected_points`, and ``qb_epa = ep_respotted - ep_before``
+    (negated when the re-spot is a turnover on downs).  The QB thereby gets
+    credit for the completion + YAC and is NOT penalised for the fumble turnover.
+
+    The function is a no-op-shaped addition: on every play *not* matching the
+    fumble condition (or when the required columns are absent), ``qb_epa == epa``
+    exactly.  ``qb_epa`` is float64 and null-safe (null wherever ``epa`` is null).
+
+    Args:
+        df: Enriched frame carrying start-of-play ``ep`` and possession-team
+            ``epa`` (i.e. post-:func:`_derive_epa`), plus the nflverse columns
+            ``complete_pass``, ``fumble_lost``, ``yards_gained``, ``down``,
+            ``ydstogo``, ``yardline_100``, ``half_seconds_remaining``,
+            ``posteam_timeouts_remaining``, ``defteam_timeouts_remaining``,
+            ``season``, ``posteam``, ``home_team`` (``roof`` optional).
+
+    Returns:
+        ``df`` with a ``qb_epa`` column added (float64).
+    """
+    import sportsdataverse.nfl.ep_wp as _self
+
+    df = df.drop([c for c in ("qb_epa",) if c in df.columns])
+
+    required = ("complete_pass", "fumble_lost", "yards_gained", "ep", "epa", "down", "posteam", "defteam")
+    if any(c not in df.columns for c in required):
+        # Required inputs absent — qb_epa is exactly epa (faithful no-op fallback).
+        return df.with_columns(pl.col("epa").cast(pl.Float64).alias("qb_epa"))
+
+    # Stable join key independent of play_id uniqueness.
+    df = df.with_row_index("_qbepa_idx")
+
+    fumbles = df.filter(
+        (pl.col("complete_pass") == 1)
+        & (pl.col("fumble_lost") == 1)
+        & pl.col("epa").is_not_null()
+        & pl.col("down").is_not_null()
+    )
+
+    if fumbles.height == 0:
+        return df.drop("_qbepa_idx").with_columns(pl.col("epa").cast(pl.Float64).alias("qb_epa"))
+
+    # Re-spot the play as if the receiver were tackled at the fumble spot.
+    respotted = (
+        fumbles.with_columns(
+            # The play consumed ~6 seconds before the fumble was recovered.
+            pl.when(pl.col("half_seconds_remaining") <= 6)
+            .then(pl.lit(0.0))
+            .otherwise(pl.col("half_seconds_remaining").cast(pl.Float64) - 6.0)
+            .alias("half_seconds_remaining"),
+            pl.col("down").cast(pl.Float64).alias("down"),
+            pl.col("posteam_timeouts_remaining").alias("_pos_to_pre"),
+            pl.col("defteam_timeouts_remaining").alias("_def_to_pre"),
+            pl.col("posteam").alias("_posteam_pre"),
+            pl.col("defteam").alias("_defteam_pre"),
+            pl.col("ep").alias("_ep_old"),
+        )
+        # New yard line from the play result.
+        .with_columns((pl.col("yardline_100") - pl.col("yards_gained")).alias("yardline_100"))
+        # New down: 1st down if the gain made the sticks, else down + 1.
+        .with_columns(
+            pl.when(pl.col("yards_gained") >= pl.col("ydstogo"))
+            .then(pl.lit(1.0))
+            .otherwise(pl.col("down") + 1.0)
+            .alias("down")
+        )
+        # down == 5 → turnover on downs at the fumble spot → possession change.
+        .with_columns(
+            pl.when(pl.col("down") == 5).then(pl.lit(1)).otherwise(pl.lit(0)).alias("_change"),
+        )
+        .with_columns(
+            pl.when(pl.col("down") == 5).then(pl.lit(1.0)).otherwise(pl.col("down")).alias("down"),
+        )
+        # ydstogo: 10 on a fresh first down, else what's left after the gain.
+        .with_columns(
+            pl.when(pl.col("down") == 1)
+            .then(pl.lit(10.0))
+            .otherwise(pl.col("ydstogo") - pl.col("yards_gained"))
+            .alias("ydstogo"),
+        )
+        # Possession change → 10 yards to go, flip field + timeouts.
+        .with_columns(
+            pl.when(pl.col("_change") == 1).then(pl.lit(10.0)).otherwise(pl.col("ydstogo")).alias("ydstogo"),
+            pl.when(pl.col("_change") == 1)
+            .then(100 - pl.col("yardline_100"))
+            .otherwise(pl.col("yardline_100"))
+            .alias("yardline_100"),
+            pl.when(pl.col("_change") == 1)
+            .then(pl.col("_def_to_pre"))
+            .otherwise(pl.col("_pos_to_pre"))
+            .alias("posteam_timeouts_remaining"),
+            pl.when(pl.col("_change") == 1)
+            .then(pl.col("_pos_to_pre"))
+            .otherwise(pl.col("_def_to_pre"))
+            .alias("defteam_timeouts_remaining"),
+            # Flip possession too: calculate_expected_points derives features from
+            # posteam/home_team, so a turnover-on-downs re-spot must score from the
+            # NEW possessing team's perspective (then -ep negates back below).
+            pl.when(pl.col("_change") == 1)
+            .then(pl.col("_defteam_pre"))
+            .otherwise(pl.col("_posteam_pre"))
+            .alias("posteam"),
+            pl.when(pl.col("_change") == 1)
+            .then(pl.col("_posteam_pre"))
+            .otherwise(pl.col("_defteam_pre"))
+            .alias("defteam"),
+        )
+        # Goal-line clamp: can't have more yards to go than yards to the end zone.
+        .with_columns(
+            pl.when(pl.col("yardline_100") < pl.col("ydstogo"))
+            .then(pl.col("yardline_100"))
+            .otherwise(pl.col("ydstogo"))
+            .alias("ydstogo"),
+        )
+        .with_columns(pl.col("down").cast(pl.Int64).alias("down"))
+    )
+
+    # Re-score EP on the re-spotted state with the existing scorer.
+    scored = _self.calculate_expected_points(
+        respotted.drop([c for c in ("ep", *_EP_CLASS_NAMES) if c in respotted.columns])
+    )
+
+    fixed = scored.select(
+        pl.col("_qbepa_idx"),
+        (pl.when(pl.col("_change") == 1).then(-pl.col("ep")).otherwise(pl.col("ep")) - pl.col("_ep_old")).alias(
+            "_fixed_epa"
+        ),
+    )
+
+    df = df.join(fixed, on="_qbepa_idx", how="left").with_columns(
+        pl.coalesce(pl.col("_fixed_epa"), pl.col("epa")).cast(pl.Float64).alias("qb_epa")
+    )
+
+    return df.drop([c for c in ("_qbepa_idx", "_fixed_epa") if c in df.columns])
+
+
 def _derive_wpa(df: pl.DataFrame) -> pl.DataFrame:
     """Derive home/away/def WP and ``wpa`` natively, per nflfastR.
 
@@ -2465,6 +2611,11 @@ def enrich_nfl_pbp(
 
         * ``ep`` — start-of-play expected points (float64, clipped to [-10, 10]).
         * ``epa`` — expected points added (float64; null on terminal/timeout rows).
+        * ``qb_epa`` — EPA crediting the QB (float64).  Equals ``epa`` on every
+          play except completed passes the receiver then loses to a fumble
+          (``complete_pass == 1 & fumble_lost == 1``), which are re-spotted at the
+          fumble spot (no turnover) and re-scored so the QB keeps completion + YAC
+          credit and is not penalised for the turnover (nflfastR ``add_qb_epa``).
         * ``wp`` — naive win probability from the ``wp_naive`` model (float64).
         * ``vegas_wp`` — spread-adjusted win probability from ``wp_spread``
           (falls back to ``wp`` when ``spread_line`` is null).
@@ -2546,6 +2697,11 @@ def enrich_nfl_pbp(
 
     # 2. EPA — native lead-difference + scoring/end-of-half/OT overlays.
     raw = _derive_epa(raw)
+
+    # 2b. qb_epa — equals epa everywhere except completed-pass-then-fumble plays,
+    #     which are re-spotted at the fumble spot (no turnover) and re-scored so
+    #     the QB keeps completion + YAC credit (nflfastR add_qb_epa).
+    raw = _derive_qb_epa(raw)
 
     # 3. WP — naive + spread-adjusted.
     raw = raw.drop([c for c in ("wp", "vegas_wp") if c in raw.columns])

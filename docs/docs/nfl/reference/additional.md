@@ -4746,8 +4746,8 @@ A faithful polars port of nflfastR's `calculate_player_stats`
 are full-outer-joined on the group keys, special-teams touchdowns and fantasy
 points are added, and player metadata is joined from
 `sportsdataverse.nfl.load_nfl_players`. See the module docstring for the
-SDV-PBP column-gap handling (notably `passing_epa` falls back to `epa`
-because `qb_epa` is absent).
+SDV-PBP column-gap handling (`passing_epa` uses the exact `qb_epa`;
+`rushing_epa` / `receiving_epa` use plain `epa` per nflfastR).
 
 **Parameters**
 
@@ -4944,8 +4944,8 @@ A faithful polars port of nflfastR's `calculate_stats(stat_type = "team")`
 defense on the tackler's team (per-play `*_team` slot tags -- NOT
 `defteam`, which double-counts on return plays), kicking on `posteam`,
 and returns / penalties / timeouts on the relevant play team tag. See the
-module docstring for the full grouping + SDV-PBP gap notes (notably
-`passing_epa` falls back to `epa` because `qb_epa` is absent).
+module docstring for the full grouping + SDV-PBP gap notes (`passing_epa`
+uses the exact `qb_epa`; `gwfg_*` derive from `fixed_drive`).
 
 **Parameters**
 

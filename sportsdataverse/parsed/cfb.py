@@ -168,7 +168,11 @@ from sportsdataverse.cfb import espn_cfb_schedule as espn_cfb_schedule  # noqa: 
 from sportsdataverse.cfb import espn_cfb_teams as espn_cfb_teams  # noqa: F401
 from sportsdataverse.cfb import fox_cfb_play_process as fox_cfb_play_process  # noqa: F401
 from sportsdataverse.cfb import fox_to_espn_summary as fox_to_espn_summary  # noqa: F401
+from sportsdataverse.cfb import get_4th_down_probs as get_4th_down_probs  # noqa: F401
 from sportsdataverse.cfb import get_cfb_teams as get_cfb_teams  # noqa: F401
+from sportsdataverse.cfb import get_fg_wp as get_fg_wp  # noqa: F401
+from sportsdataverse.cfb import get_go_wp as get_go_wp  # noqa: F401
+from sportsdataverse.cfb import get_punt_wp as get_punt_wp  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_athlete_items as helper_cfb_athlete_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_game_items as helper_cfb_game_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_roster_items as helper_cfb_roster_items  # noqa: F401
@@ -325,7 +329,11 @@ __all__ = [
     "fox_cfb_team_stats",
     "fox_cfb_teams",
     "fox_to_espn_summary",
+    "get_4th_down_probs",
     "get_cfb_teams",
+    "get_fg_wp",
+    "get_go_wp",
+    "get_punt_wp",
     "helper_cfb_athlete_items",
     "helper_cfb_game_items",
     "helper_cfb_roster_items",
