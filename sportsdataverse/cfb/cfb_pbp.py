@@ -6154,7 +6154,44 @@ class CFBPlayProcess(object):
         dec = pl.from_pandas(scored[keep]).with_columns(pl.col("id").cast(play_df.schema["id"]))
         return play_df.join(dec, on="id", how="left")
 
-    def run_processing_pipeline(self, fourth_down_probs: bool = True):
+    def __add_two_pt_probs(self, play_df):
+        """Append the cfb4th two-point (XP vs go-for-2) decision columns to PAT rows.
+
+        Runs :func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs` on the
+        point-after / two-point attempt rows (``pointAfterAttempt.text`` present, or
+        ``extra_point_result`` / ``two_point_conv_result`` non-null) and left-joins the
+        decision columns back; every other row is null. Idempotent (returns unchanged
+        if the columns already exist). Lazy import -- ``cfb_two_point`` imports the
+        EP/WP boosters from this module.
+        """
+        if "two_pt_recommendation" in play_df.columns:
+            return play_df
+        from sportsdataverse.cfb.cfb_two_point import get_2pt_probs
+
+        decision_cols = ["two_pt_wp", "xp_wp", "prob_2pt", "two_pt_recommendation", "two_pt_wp_diff"]
+        pat_mask = pl.lit(False)
+        if "pointAfterAttempt.text" in play_df.columns:
+            pat_mask = pat_mask | (
+                pl.col("pointAfterAttempt.text").is_not_null()
+                & (pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.strip_chars() != "")
+            )
+        for c in ("extra_point_result", "two_point_conv_result"):
+            if c in play_df.columns:
+                pat_mask = pat_mask | pl.col(c).is_not_null()
+        plays = play_df.with_row_index("__twopt_row_idx")
+        pat = plays.filter(pat_mask)
+        if pat.height == 0:
+            for c in decision_cols:
+                dtype = pl.Utf8 if c == "two_pt_recommendation" else pl.Float64
+                plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
+            return plays.drop("__twopt_row_idx")
+        scored = get_2pt_probs(pat)  # pandas
+        scored_pl = pl.from_pandas(scored[["__twopt_row_idx", *decision_cols]]).with_columns(
+            pl.col("__twopt_row_idx").cast(pl.UInt32)
+        )
+        return plays.join(scored_pl, on="__twopt_row_idx", how="left").drop("__twopt_row_idx")
+
+    def run_processing_pipeline(self, fourth_down_probs: bool = True, two_pt_probs: bool = True):
         """Run the full play-by-play processing pipeline.
 
         Applies every scoring/feature step in order: down detection, play type
@@ -6171,6 +6208,10 @@ class CFBPlayProcess(object):
                 enriched frame and append the go/field-goal/punt WP columns plus the
                 ``fourth_down_recommendation`` to 4th-down plays (null elsewhere). Pass
                 False to skip it (e.g. to avoid loading the fourth-down model).
+            two_pt_probs: when True (default), run the cfb4th two-point decision surface
+                (:func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`) and append
+                ``two_pt_wp`` / ``xp_wp`` / ``prob_2pt`` / ``two_pt_recommendation`` /
+                ``two_pt_wp_diff`` to point-after / two-point rows (null elsewhere).
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
@@ -6257,6 +6298,8 @@ class CFBPlayProcess(object):
                 self.plays_json = self.plays_json.pipe(self.__join_participants)
                 if fourth_down_probs:
                     self.plays_json = self.__add_fourth_down_probs(self.plays_json)
+                if two_pt_probs:
+                    self.plays_json = self.__add_two_pt_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
                 self.plays_json = self.plays_json.to_dicts()
@@ -6402,44 +6445,12 @@ class CFBPlayProcess(object):
             See Also:
                 * `cfb4th <https://github.com/sportsdataverse/cfb4th>`_ -- R 4th-down / 2pt decision model
         """
-        from sportsdataverse.cfb.cfb_two_point import get_2pt_probs
-
         if self.ran_pipeline == False:
+            # run_processing_pipeline applies the two-point surface by default, so a
+            # plain run already carries the columns; recompute here for explicit calls.
             self.run_processing_pipeline()
 
-        plays = pl.DataFrame(self.plays_json, infer_schema_length=None)
-        decision_cols = ["two_pt_wp", "xp_wp", "prob_2pt", "two_pt_recommendation", "two_pt_wp_diff"]
-
-        # PAT / two-point attempt mask: pointAfterAttempt.text present, or the
-        # derived extra_point_result / two_point_conv_result non-null.
-        pat_mask = pl.lit(False)
-        if "pointAfterAttempt.text" in plays.columns:
-            pat_mask = pat_mask | (
-                pl.col("pointAfterAttempt.text").is_not_null()
-                & (pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.strip_chars() != "")
-            )
-        for c in ("extra_point_result", "two_point_conv_result"):
-            if c in plays.columns:
-                pat_mask = pat_mask | pl.col(c).is_not_null()
-
-        plays = plays.with_row_index("__twopt_row_idx")
-        pat = plays.filter(pat_mask)
-
-        if pat.height == 0:
-            for c in decision_cols:
-                dtype = pl.Utf8 if c == "two_pt_recommendation" else pl.Float64
-                plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
-            plays = plays.drop("__twopt_row_idx")
-            self.plays_json = plays.to_dicts()
-            self.json["plays"] = self.plays_json
-            return plays
-
-        scored = get_2pt_probs(pat)  # pandas
-        scored_pl = pl.from_pandas(scored[["__twopt_row_idx", *decision_cols]]).with_columns(
-            pl.col("__twopt_row_idx").cast(pl.UInt32)
-        )
-
-        plays = plays.join(scored_pl, on="__twopt_row_idx", how="left").drop("__twopt_row_idx")
+        plays = self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
         self.plays_json = plays.to_dicts()
         self.json["plays"] = self.plays_json
         return plays
