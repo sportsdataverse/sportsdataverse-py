@@ -87,9 +87,11 @@ __all__ = [
 ]
 
 # --- inference contracts (mirror cfbfastR-cfb-data fourth_down constants) ---
-FD_FEATURES = ["down", "distance", "yards_to_goal", "posteam_total", "posteam_spread", "era"]
+# The fourth-down model uses one-hot rule-era dummies (era0..era3), which beat the
+# ordinal factor out-of-fold (first-down cal-MAE 0.0035 -> 0.0027). Cuts 2006/2013/2020.
+FD_FEATURES = ["down", "distance", "yards_to_goal", "posteam_total", "posteam_spread", "era0", "era1", "era2", "era3"]
 FD_NUM_CLASS = 76  # gain class k -> yards = k - 10, range -10..65
-FD_ERA_BOUNDS = (2006, 2013, 2017)  # ordinal CFB rule-era factor cuts
+FD_ERA_BOUNDS = (2006, 2013, 2020)  # one-hot CFB rule-era factor cuts
 
 EP_FEATURES = list(ep_final_names)
 WP_SPREAD_FEATURES = list(wp_final_names)
@@ -122,9 +124,11 @@ _punt_distribution_file = _cfb_resource_filename("sportsdataverse", "cfb/models/
 punt_distribution = pl.read_parquet(_punt_distribution_file)
 
 
-# --- fourth-down yards model: download-on-demand (~16 MB, too large to bundle) ---
-# Mirrors the NFL xYAC pattern: published to the espn_cfb_model_artifacts release
-# and fetched + cached on first use under the CFB model cache dir.
+# --- fourth-down yards model: bundled in the package (~16 MB era one-hot model) ---
+# The era one-hot model (9 features) ships with the package under cfb/models/fd_model.ubj.
+# _load_fd_model prefers the bundled copy, so it is version-pinned by the package and any
+# older cached download is never reached (no filename versioning needed). The release
+# download stays only as a fallback for trimmed installs.
 _FD_MODEL_URL = (
     "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_artifacts/fd_model.ubj"
 )
@@ -144,12 +148,13 @@ def _load_booster(path: Path | str) -> Booster:
 
 @lru_cache(maxsize=1)
 def _load_fd_model() -> Booster:
-    """Load the fourth-down yards model (``fd_model.ubj``), downloading on demand.
+    """Load the fourth-down yards model (``fd_model.ubj``).
 
-    Resolution order: a bundled copy (normally absent — the model is ~16 MB) ->
-    the cache dir -> download from the ``espn_cfb_model_artifacts`` release
-    (written atomically). Raises :class:`FileNotFoundError` when unobtainable
-    (offline + no cache), so callers / tests can skip or degrade gracefully.
+    Resolution order: the bundled copy (``cfb/models/fd_model.ubj``, shipped with the
+    package — the normal path) -> the cache dir -> download from the
+    ``espn_cfb_model_artifacts`` release (written atomically) as a trimmed-install
+    fallback. Raises :class:`FileNotFoundError` when unobtainable (offline + no cache),
+    so callers / tests can skip or degrade gracefully.
     """
     name = "fd_model.ubj"
     bundled = Path(_cfb_resource_filename("sportsdataverse", f"cfb/models/{name}"))
@@ -215,13 +220,18 @@ def _posteam_total(state: pd.DataFrame) -> np.ndarray:
     return np.where(is_home, (hs + ou) / 2.0, (ou - hs) / 2.0)
 
 
-def _era(season: np.ndarray) -> np.ndarray:
+def _era_onehot(season: np.ndarray) -> dict[str, np.ndarray]:
+    """One-hot CFB rule-era dummies (era0..era3) from season — cuts FD_ERA_BOUNDS.
+
+    Matches the cfbfastR-cfb-data training construction (ERA_BOUNDS 2006/2013/2020).
+    """
     lo, mid, hi = FD_ERA_BOUNDS
-    out = np.full(len(season), 3, dtype=np.int32)
-    out = np.where(season <= hi, 2, out)
-    out = np.where(season <= mid, 1, out)
-    out = np.where(season <= lo, 0, out)
-    return out
+    return {
+        "era0": (season <= lo).astype(np.int32),
+        "era1": ((season > lo) & (season <= mid)).astype(np.int32),
+        "era2": ((season > mid) & (season <= hi)).astype(np.int32),
+        "era3": (season > hi).astype(np.int32),
+    }
 
 
 def _predict_ep(state: pd.DataFrame) -> np.ndarray:
@@ -252,7 +262,11 @@ def _predict_wp(state: pd.DataFrame, ep: np.ndarray) -> np.ndarray:
     exp_score_diff = pos_diff + ep
     exp_ratio = exp_score_diff / (adj + 1.0)
     elapsed_share = (3600.0 - adj) / 3600.0
-    spread_time = (-1.0 * state["pos_team_spread"].to_numpy().astype(float)) * np.exp(-4.0 * elapsed_share)
+    # spread_time MUST match the trained-on convention: pbp_full's start.spread_time is
+    # +pos_team_spread * exp(-4 * elapsed_share) (verified MAE 0.0 against the training
+    # frame; mirrors NFL ep_wp.py / nfl_fourth_down.py). The previous `-1.0 *` form fed
+    # the WP model a sign-inverted spread (favorites scored as underdogs).
+    spread_time = state["pos_team_spread"].to_numpy().astype(float) * np.exp(-4.0 * elapsed_share)
     X = pd.DataFrame(
         {
             "pos_team_receives_2H_kickoff": state["pos_team_receives_2H_kickoff"].to_numpy().astype(float),
@@ -365,7 +379,7 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
             "yards_to_goal": st["yards_to_goal"].to_numpy().astype(float),
             "posteam_total": _posteam_total(st),
             "posteam_spread": st["pos_team_spread"].to_numpy().astype(float),
-            "era": _era(st["season"].to_numpy().astype(float)),
+            **_era_onehot(st["season"].to_numpy().astype(float)),
         }
     )[FD_FEATURES]
     fd_probs = _load_fd_model().predict(DMatrix(fd_X))
@@ -626,6 +640,20 @@ def _fg_make_prob(st: pd.DataFrame) -> np.ndarray:
     # single yards_to_goal feature, then apply the cfb4th post-clamps.
     X = pd.DataFrame({"yards_to_goal": ytg})
     fnames = fg_model.feature_names or ["yards_to_goal"]
+    # The era-augmented fg_model expects era0..era3; add them only when the bundled
+    # model declares them (keeps the single-feature GAM path working unchanged).
+    if any(str(f).startswith("era") for f in fnames):
+        # The era-aware fg_model needs `season` to build the era dummies. `_to_pandas`
+        # backfills a missing source column with NaN rather than raising, which would
+        # silently yield all-zero era features (wrong predictions). Fail loudly instead
+        # -- `season` is a documented required column (see _PBP_COLS).
+        if "season" not in st.columns or st["season"].isna().all():
+            raise ValueError(
+                "the bundled era-aware fg_model requires a non-null 'season' column "
+                "(era features would otherwise silently degrade to all-zero); pass "
+                "'season' in the input frame -- see sportsdataverse.cfb.cfb_fourth_down._PBP_COLS"
+            )
+        X = X.assign(**_era_onehot(st["season"].to_numpy().astype(float)))
     prob = fg_model.predict(DMatrix(X[fnames] if set(fnames) <= set(X.columns) else X))
     prob = np.where(ytg > 42, 0.0, prob)
     prob = np.where(ytg >= 35, 0.9 * prob, prob)

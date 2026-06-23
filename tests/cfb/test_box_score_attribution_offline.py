@@ -126,11 +126,30 @@ def test_kickoff_own_recovery_credits_receiving_team(monkeypatch):
 
 
 def test_punt_returns_not_credited_to_punting_team(monkeypatch):
-    # NC State (152) punted to FSU (52). Any punt returns must be filed under the
-    # returning team, never the punting team (152).
-    box = _box(monkeypatch, 401754598)
-    bad = [s for s in box["specialists"] if s.get("punt_returns", 0) > 0 and s.get("pos_team") == 152]
-    assert not bad, f"punt returns mis-credited to the punting team: {bad}"
+    # A punt return / fair catch is credited to the RETURNING team (def_pos_team on
+    # the punt), never the punting team (pos_team). Both teams punt to each other, so
+    # each legitimately fields the other's punts -- the invariant is per-play, not
+    # "team 152 never returns". (Regression guard: the group-index extract bug used to
+    # drop "fair catch by" / "returned by" returners, which masked this entirely.)
+    import polars as pl
+
+    summary = _load(401754598)
+
+    class _Resp:
+        def json(self):
+            return summary
+
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
+    proc = CFBPlayProcess(gameId=401754598)
+    proc.join_participants = False
+    proc.espn_cfb_pbp()
+    proc.run_processing_pipeline()
+    df = pl.from_dicts(proc.plays_json, infer_schema_length=None)
+    punts = df.filter((pl.col("punt") == True) & pl.col("punt_return_player_name").is_not_null())
+    assert punts.height > 0, "expected punt returns/fair catches to be extracted in this game"
+    # returner filed under the returning team, never the punting team (pos_team)
+    assert (punts["punt_return_team"] == punts["def_pos_team"]).all()
+    assert (punts["punt_return_team"] != punts["pos_team"]).all()
 
 
 def test_penalty_yards_charged_to_penalized_team(monkeypatch):

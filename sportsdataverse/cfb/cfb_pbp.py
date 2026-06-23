@@ -25,6 +25,42 @@ def _cfb_resource_filename(package: str, resource: str) -> str:
     return str(_resource_files(package).joinpath(resource))
 
 
+def _n_capture_groups(pattern: str) -> int:
+    """Count capturing groups in *pattern* (skips ``\\(`` literals and ``(?...`` groups)."""
+    n = 0
+    i = 0
+    while i < len(pattern):
+        c = pattern[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == "(" and not (i + 1 < len(pattern) and pattern[i + 1] == "?"):
+            n += 1
+        i += 1
+    return n
+
+
+def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
+    """Extract a player name from play text, robust to multi-alternative patterns.
+
+    polars ``str.extract`` defaults to capture group 1. When *pattern* is an
+    alternation whose branches each carry their own capture group (e.g.
+    ``(A )run |(A )rush ``), the matched branch's name may live in group 2, 3,
+    ... -- so the default group-1 extract returns ``None``. ESPN play text uses
+    "rush"/"on-side"/"Punt by {name}"/"returned by {name}" phrasings that match
+    such non-first alternatives, which is why pre-2014 games (which carry no
+    structured ``participants[]`` array to overwrite the regex output) had null
+    rusher / punter / kicker / returner names. This coalesces across every
+    capture group so the matched branch's name is returned regardless of its
+    position. Single-group patterns fall through to the plain group-1 extract.
+    """
+    n = _n_capture_groups(pattern)
+    if n <= 1:
+        return text_expr.str.extract(pattern, 1)
+    groups = text_expr.str.extract_groups(pattern)
+    return pl.coalesce([groups.struct.field(str(i)) for i in range(1, n + 1)])
+
+
 from sportsdataverse.cfb.model_vars import (
     defense_score_vec,
     end_change_vec,
@@ -3095,8 +3131,8 @@ class CFBPlayProcess(object):
                 # --- RB Names -----
                 rush_player=pl.when(pl.col("rush") == True)
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i)(.{0,25} )run |(?i)(.{0,25} )\d{0,2} Yd Run|(?i)(.{0,25} )rush |(?i)(.{0,25} )rushed ",
                     )
                     .str.replace(r"(?i) run |(?i) \d+ Yd Run|(?i) rush ", "")
@@ -3110,11 +3146,10 @@ class CFBPlayProcess(object):
                     .and_(pl.col("type.text") != "Passing Touchdown"),
                 )
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i)(.{0,30} )pass |(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for|(?i)(.{0,30} )incomplete|(?i)pass from (.{0,30} ) \( ",
-                    )
-                    .str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
+                    ).str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
                 )
                 .when(
                     (pl.col("pass") == True)
@@ -3122,9 +3157,9 @@ class CFBPlayProcess(object):
                     .and_(pl.col("type.text") != "Passing Touchdown"),
                 )
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for")
-                    .str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
+                    _extract_player_name(
+                        pl.col("text"), r"(?i)(.{0,30} )sacked by|(?i)(.{0,30} )sacked for"
+                    ).str.replace(r"(?i)pass |(?i) sacked by|(?i) sacked for|(?i) incomplete", ""),
                 )
                 .when((pl.col("pass") == True).and_(pl.col("type.text") == "Passing Touchdown"))
                 .then(
@@ -3249,18 +3284,18 @@ class CFBPlayProcess(object):
                 .then(pl.col("sack_players").str.replace(r"(.+) and", ""))
                 .otherwise(None),
                 # --- Interception Names -----
-                interception_player=pl.when(pl.col("text").str.contains(r"Yd Interception Return"))
+                interception_player=pl.when(pl.col("text").str.contains(r"(?i)yd interception return"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} Yd Interception Return|(?i)(.{0,25} )\\d{0,2} yd interception return",
+                    _extract_player_name(
+                        pl.col("text"),
+                        r"(?i)(.{0,25} )\d{0,2} Yd Interception Return|(?i)(.{0,25} )\d{0,2} yd interception return",
                     )
                     .str.replace(r"return (.+)", "")
                     .str.replace(r"(.+) intercepted", "")
                     .str.replace(r"intercepted", "")
                     .str.replace(r"Yd Interception Return", "")
                     .str.replace(r"for a 1st down", "")
-                    .str.replace(r"(\\d{1,2})", "")
+                    .str.replace(r"(\d{1,2})", "")
                     .str.replace(r"for a TD", "")
                     .str.replace(r"at the (.+)", "")
                     .str.replace(r" by ", ""),
@@ -3292,8 +3327,7 @@ class CFBPlayProcess(object):
                 # --- Punter Names ----
                 punter_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)(.{0,30}) punt|(?i)Punt by (.{0,30})")
+                    _extract_player_name(pl.col("text"), r"(?i)(.{0,30}) punt|(?i)Punt by (.{0,30})")
                     .str.replace(r"(?i) punt", "")
                     .str.replace(r"(?i) for(.+)", "")
                     .str.replace(r"(?i)Punt by ", "")
@@ -3306,8 +3340,8 @@ class CFBPlayProcess(object):
                 # --- Punt Returner Names ----
                 punt_return_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i), (.{0,25}) returns|(?i)fair catch by (.{0,25})|(?i), returned by (.{0,25})|(?i)yards by (.{0,30})|(?i) return by (.{0,25})",
                     )
                     .str.replace(r"(?i), ", "")
@@ -3325,8 +3359,7 @@ class CFBPlayProcess(object):
                 # --- Punt Blocker Names ----
                 punt_block_player=pl.when(pl.col("type.text").str.contains("Punt"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)punt blocked by (.{0,25})|(?i)blocked by(.+)")
+                    _extract_player_name(pl.col("text"), r"(?i)punt blocked by (.{0,25})|(?i)blocked by(.+)")
                     .str.replace(r"punt blocked by |for a(.+)", "")
                     .str.replace(r"blocked by(.+)", "")
                     .str.replace(r"blocked(.+)", "")
@@ -3342,7 +3375,7 @@ class CFBPlayProcess(object):
                     pl.col("text")
                     .str.extract(r"(?i)(.+) yd return of blocked")
                     .str.replace(r"(?i)blocked|(?i)Blocked", "")
-                    .str.replace(r"(?i)\\d+", "")
+                    .str.replace(r"(?i)\d+", "")
                     .str.replace(r"(?i)yd return of", ""),
                 )
                 .otherwise(pl.col("punt_block_player")),
@@ -3377,32 +3410,35 @@ class CFBPlayProcess(object):
                 # --- Kickoff Names ----
                 kickoff_player=pl.when(pl.col("type.text").str.contains(r"(?i)kickoff"))
                 .then(
-                    pl.col("text")
-                    .str.extract(r"(?i)(.{0,25}) kickoff|(.{0,25}) on-side")
-                    .str.replace(r"(?i) on-side| kickoff", ""),
+                    _extract_player_name(pl.col("text"), r"(?i)(.{0,25}) kickoff|(.{0,25}) on-side").str.replace(
+                        r"(?i) on-side| kickoff", ""
+                    ),
                 )
                 .otherwise(None),
                 # --- Kickoff Returner Names ----
                 kickoff_return_player=pl.when(pl.col("type.text").str.contains(r"(?i)ickoff"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
+                    _extract_player_name(
+                        pl.col("text"),
                         r"(?i), (.{0,25}) return|(?i), (.{0,25}) fumble|(?i)returned by (.{0,25})|(?i)touchback by (.{0,25})",
                     )
                     .str.replace(r", ", "")
-                    .str.replace(r"(?i) return|(?i) fumble|(?i) returned by|(?i) for |(?i)touchback by ", "")
+                    .str.replace(r"(?i) for .*", "")
+                    .str.replace(r"(?i) return|(?i) fumble|(?i) returned by|(?i)touchback by ", "")
+                    .str.replace(r"(?i) at the.*", "")
+                    .str.replace(r"(?i) to the.*", "")
                     .str.replace(r"\((.+)\)(.+)", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Kicker Names ----
                 fg_kicker_player=pl.when(pl.col("type.text").str.contains(r"(?i)Field Goal"))
                 .then(
-                    pl.col("text")
-                    .str.extract(
-                        r"(?i)(.{0,25} )\\d{0,2} yd field goal|(?i)(.{0,25} )\\d{0,2} yd fg|(?i)(.{0,25} )\\d{0,2} yard field goal",
+                    _extract_player_name(
+                        pl.col("text"),
+                        r"(?i)(.{0,25} )\d{0,2} yd field goal|(?i)(.{0,25} )\d{0,2} yd fg|(?i)(.{0,25} )\d{0,2} yard field goal",
                     )
                     .str.replace(r"(?i) Yd Field Goal|(?i)Yd FG |(?i)yd FG|(?i) yd FG", "")
-                    .str.replace(r"(\\d{1,2})", ""),
+                    .str.replace(r"(\d{1,2})", ""),
                 )
                 .otherwise(None),
                 # --- Field Goal Blocker Names ----
@@ -3457,8 +3493,7 @@ class CFBPlayProcess(object):
                     .str.replace(r"(?i) for ", "")
                     .str.replace(r"(?i) a safety", "")
                     .str.replace(r"(?i)r no gain", "")
-                    .str.replace(r"(?i)(.+)(\\d{1,2})", "")
-                    .str.replace(r"(?i)(\\d{1,2})", "")
+                    .str.replace(r"(?i)(\d{1,2})", "")
                     .str.replace(r", ", ""),
                 )
                 .otherwise(None),
@@ -3478,7 +3513,8 @@ class CFBPlayProcess(object):
                     .str.replace(r"(?i), re(.+)", "")
                     .str.replace(r"(?i), fo(.+)", "")
                     .str.replace(r"(?i), r", "")
-                    .str.replace(r"(?i), ", ""),
+                    .str.replace(r"(?i), ", "")
+                    .str.replace(r"(?i) at th.*", ""),
                 )
                 .otherwise(None),
             )
@@ -3509,7 +3545,8 @@ class CFBPlayProcess(object):
                     .str.replace(r"(?i)  (.+)", "")
                     .str.replace(r"(?i) ,", "")
                     .str.replace(r"(?i)penalty(.+)", "")
-                    .str.replace(r"(?i)for a 1ST down", ""),
+                    .str.replace(r"(?i)for a 1ST down", "")
+                    .str.replace(r"(?i) at the.*", ""),
                 )
                 .otherwise(None),
             )
@@ -5175,6 +5212,15 @@ class CFBPlayProcess(object):
             .fill_null(0.0)
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
+        # One-hot rule-era dummies (era0..era3, cuts 2006/2013/2020). Era is constant
+        # within a game, so they are added as literal columns from the game's season.
+        _qbr_season = int(play_df["season"].drop_nulls().max())
+        pass_qbr = pass_qbr.with_columns(
+            era0=pl.lit(1 if _qbr_season <= 2006 else 0, dtype=pl.Int32),
+            era1=pl.lit(1 if 2006 < _qbr_season <= 2013 else 0, dtype=pl.Int32),
+            era2=pl.lit(1 if 2013 < _qbr_season <= 2020 else 0, dtype=pl.Int32),
+            era3=pl.lit(1 if _qbr_season > 2020 else 0, dtype=pl.Int32),
+        )
         # # self.logger.info(pass_qbr)
 
         dtest_qbr = DMatrix(pass_qbr[qbr_vars])
@@ -6101,7 +6147,119 @@ class CFBPlayProcess(object):
             logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
             return original_play_df
 
-    def run_processing_pipeline(self):
+    # cfb4th decision-surface columns appended to 4th-down plays when
+    # ``run_processing_pipeline(fourth_down_probs=True)``.
+    _FOURTH_DOWN_DECISION_COLS = [
+        "go_wp",
+        "first_down_prob",
+        "wp_succeed",
+        "wp_fail",
+        "fg_make_prob",
+        "make_fg_wp",
+        "miss_fg_wp",
+        "fg_wp",
+        "punt_wp",
+        "go_boost",
+        "go_wp_diff",
+        "fg_wp_diff",
+        "punt_wp_diff",
+        "fourth_down_recommendation",
+    ]
+
+    def __add_fourth_down_probs(self, play_df):
+        """Append the cfb4th 4th-down decision columns to 4th-down plays.
+
+        Runs the decision surface (:func:`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`
+        — go / field-goal / punt WP + the max-WP recommendation) on the 4th-down
+        subset of the already-enriched frame, then left-joins the decision columns
+        back onto every play (non-4th-down rows are null). Imported lazily because
+        ``cfb_fourth_down`` imports the EP/WP boosters from this module.
+        """
+        from sportsdataverse.cfb.cfb_fourth_down import get_4th_down_probs
+
+        cols = self._FOURTH_DOWN_DECISION_COLS
+        str_cols = {"fourth_down_recommendation"}
+        if "start.down" not in play_df.columns:
+            return play_df
+        fourth = play_df.filter(pl.col("start.down") == 4)
+        if fourth.height == 0:
+            # stable schema: emit the decision columns as nulls
+            return play_df.with_columns(
+                [pl.lit(None).cast(pl.Utf8 if c in str_cols else pl.Float64).alias(c) for c in cols]
+            )
+        scored = get_4th_down_probs(fourth)  # pandas; preserves input cols incl. ``id``
+        keep = ["id"] + [c for c in cols if c in scored.columns]
+        dec = pl.from_pandas(scored[keep]).with_columns(pl.col("id").cast(play_df.schema["id"]))
+        return play_df.join(dec, on="id", how="left")
+
+    def __add_two_pt_probs(self, play_df):
+        """Append the cfb4th two-point (XP vs go-for-2) decision columns to PAT rows.
+
+        Runs :func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs` on the
+        point-after / two-point attempt rows (``pointAfterAttempt.text`` present, or
+        ``extra_point_result`` / ``two_point_conv_result`` non-null) and left-joins the
+        decision columns back; every other row is null. Idempotent (returns unchanged
+        if the columns already exist). Lazy import -- ``cfb_two_point`` imports the
+        EP/WP boosters from this module.
+        """
+        if "two_pt_recommendation" in play_df.columns:
+            return play_df
+        from sportsdataverse.cfb.cfb_two_point import get_2pt_probs
+
+        decision_cols = ["two_pt_wp", "xp_wp", "prob_2pt", "two_pt_recommendation", "two_pt_wp_diff"]
+        pat_mask = pl.lit(False)
+        if "pointAfterAttempt.text" in play_df.columns:
+            pat_mask = pat_mask | (
+                pl.col("pointAfterAttempt.text").is_not_null()
+                & (pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.strip_chars() != "")
+            )
+        for c in ("extra_point_result", "two_point_conv_result"):
+            if c in play_df.columns:
+                pat_mask = pat_mask | pl.col(c).is_not_null()
+        # Pre-2014 games carry no pointAfterAttempt / extra_point_result columns and
+        # instead represent the PAT as a SEPARATE play row ("Extra Point Good",
+        # "Two-Point Conversion Good", ...). Detect those by play type so the
+        # decision surface covers older games too. (On those separate rows
+        # pos_score_diff_start is already the post-TD score and pass_td/rush_td are
+        # False, so the +6 post-TD adjustment below correctly does not apply.)
+        for tcol in ("type.text", "play_type", "type"):
+            if tcol in play_df.columns:
+                pat_mask = pat_mask | pl.col(tcol).cast(pl.Utf8).str.contains(r"(?i)extra point|two.?point")
+                break
+        plays = play_df.with_row_index("__twopt_row_idx")
+        pat = plays.filter(pat_mask)
+        if pat.height == 0:
+            for c in decision_cols:
+                dtype = pl.Utf8 if c == "two_pt_recommendation" else pl.Float64
+                plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
+            return plays.drop("__twopt_row_idx")
+        # The PAT shares the touchdown's play row, so pos_score_diff_start is the
+        # PRE-TD diff; add the 6-pt touchdown so get_2pt_probs scores the XP-vs-2pt
+        # decision at the POST-TD score. Only offensive (posteam) touchdowns gain +6;
+        # other PAT rows (e.g. defensive-TD tries, where the posteam is not the
+        # scoring team) are left as-is rather than mis-credited.
+        if {"pass_td", "rush_td", "offense_score_play"}.issubset(set(pat.columns)):
+            # pass_td also fires for pick-sixes (its `pass & td_play` branch), so AND with
+            # offense_score_play to keep only TDs scored BY the posteam -- a defensive
+            # return TD must not push the posteam's score frame +6. (td_play alone is
+            # unreliable here: "Passing Touchdown" rows carry td_play == False.)
+            off_td = (
+                pl.col("pass_td").cast(pl.Boolean).fill_null(False)
+                | pl.col("rush_td").cast(pl.Boolean).fill_null(False)
+            ) & pl.col("offense_score_play").cast(pl.Boolean).fill_null(False)
+            pat = pat.with_columns(
+                pl.when(off_td)
+                .then(pl.col("pos_score_diff_start") + 6)
+                .otherwise(pl.col("pos_score_diff_start"))
+                .alias("pos_score_diff_start")
+            )
+        scored = get_2pt_probs(pat)  # pandas
+        scored_pl = pl.from_pandas(scored[["__twopt_row_idx", *decision_cols]]).with_columns(
+            pl.col("__twopt_row_idx").cast(pl.UInt32)
+        )
+        return plays.join(scored_pl, on="__twopt_row_idx", how="left").drop("__twopt_row_idx")
+
+    def run_processing_pipeline(self, fourth_down_probs: bool = True, two_pt_probs: bool = True):
         """Run the full play-by-play processing pipeline.
 
         Applies every scoring/feature step in order: down detection, play type
@@ -6111,6 +6269,17 @@ class CFBPlayProcess(object):
         box score and stores it under ``advBoxScore`` on the returned dict.
 
         Idempotent -- subsequent calls return the cached ``self.json``.
+
+        Args:
+            fourth_down_probs: when True (default), run the cfb4th decision surface
+                (:func:`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`) on the
+                enriched frame and append the go/field-goal/punt WP columns plus the
+                ``fourth_down_recommendation`` to 4th-down plays (null elsewhere). Pass
+                False to skip it (e.g. to avoid loading the fourth-down model).
+            two_pt_probs: when True (default), run the cfb4th two-point decision surface
+                (:func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`) and append
+                ``two_pt_wp`` / ``xp_wp`` / ``prob_2pt`` / ``two_pt_recommendation`` /
+                ``two_pt_wp_diff`` to point-after / two-point rows (null elsewhere).
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
@@ -6195,6 +6364,10 @@ class CFBPlayProcess(object):
                     .pipe(self.__process_qbr)
                 )
                 self.plays_json = self.plays_json.pipe(self.__join_participants)
+                if fourth_down_probs:
+                    self.plays_json = self.__add_fourth_down_probs(self.plays_json)
+                if two_pt_probs:
+                    self.plays_json = self.__add_two_pt_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
                 self.plays_json = self.plays_json.to_dicts()
@@ -6268,22 +6441,14 @@ class CFBPlayProcess(object):
             self.run_processing_pipeline()
 
         plays = pl.DataFrame(self.plays_json, infer_schema_length=None)
-        decision_cols = [
-            "go_wp",
-            "first_down_prob",
-            "wp_succeed",
-            "wp_fail",
-            "fg_make_prob",
-            "make_fg_wp",
-            "miss_fg_wp",
-            "fg_wp",
-            "punt_wp",
-            "go_boost",
-            "go_wp_diff",
-            "punt_wp_diff",
-            "fg_wp_diff",
-            "fourth_down_recommendation",
-        ]
+        decision_cols = self._FOURTH_DOWN_DECISION_COLS
+        # run_processing_pipeline() appends these by default, so the documented
+        # run_processing_pipeline(); add_fourth_down_probs() flow starts with them
+        # already present. Drop any existing copies first so the re-score is a clean
+        # overwrite instead of producing suffixed duplicate columns on the join.
+        existing = [c for c in decision_cols if c in plays.columns]
+        if existing:
+            plays = plays.drop(existing)
         plays = plays.with_row_index("__fourth_row_idx")
         fourth = plays.filter(pl.col("start.down") == 4)
 
@@ -6297,9 +6462,8 @@ class CFBPlayProcess(object):
             return plays
 
         scored = get_4th_down_probs(fourth)  # pandas
-        scored_pl = pl.from_pandas(scored[["__fourth_row_idx", *decision_cols]]).with_columns(
-            pl.col("__fourth_row_idx").cast(pl.UInt32)
-        )
+        keep = ["__fourth_row_idx"] + [c for c in decision_cols if c in scored.columns]
+        scored_pl = pl.from_pandas(scored[keep]).with_columns(pl.col("__fourth_row_idx").cast(pl.UInt32))
 
         plays = plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
         self.plays_json = plays.to_dicts()
@@ -6340,44 +6504,12 @@ class CFBPlayProcess(object):
             See Also:
                 * `cfb4th <https://github.com/sportsdataverse/cfb4th>`_ -- R 4th-down / 2pt decision model
         """
-        from sportsdataverse.cfb.cfb_two_point import get_2pt_probs
-
         if self.ran_pipeline == False:
+            # run_processing_pipeline applies the two-point surface by default, so a
+            # plain run already carries the columns; recompute here for explicit calls.
             self.run_processing_pipeline()
 
-        plays = pl.DataFrame(self.plays_json, infer_schema_length=None)
-        decision_cols = ["two_pt_wp", "xp_wp", "prob_2pt", "two_pt_recommendation", "two_pt_wp_diff"]
-
-        # PAT / two-point attempt mask: pointAfterAttempt.text present, or the
-        # derived extra_point_result / two_point_conv_result non-null.
-        pat_mask = pl.lit(False)
-        if "pointAfterAttempt.text" in plays.columns:
-            pat_mask = pat_mask | (
-                pl.col("pointAfterAttempt.text").is_not_null()
-                & (pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.strip_chars() != "")
-            )
-        for c in ("extra_point_result", "two_point_conv_result"):
-            if c in plays.columns:
-                pat_mask = pat_mask | pl.col(c).is_not_null()
-
-        plays = plays.with_row_index("__twopt_row_idx")
-        pat = plays.filter(pat_mask)
-
-        if pat.height == 0:
-            for c in decision_cols:
-                dtype = pl.Utf8 if c == "two_pt_recommendation" else pl.Float64
-                plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
-            plays = plays.drop("__twopt_row_idx")
-            self.plays_json = plays.to_dicts()
-            self.json["plays"] = self.plays_json
-            return plays
-
-        scored = get_2pt_probs(pat)  # pandas
-        scored_pl = pl.from_pandas(scored[["__twopt_row_idx", *decision_cols]]).with_columns(
-            pl.col("__twopt_row_idx").cast(pl.UInt32)
-        )
-
-        plays = plays.join(scored_pl, on="__twopt_row_idx", how="left").drop("__twopt_row_idx")
+        plays = self.__add_two_pt_probs(pl.DataFrame(self.plays_json, infer_schema_length=None))
         self.plays_json = plays.to_dicts()
         self.json["plays"] = self.plays_json
         return plays

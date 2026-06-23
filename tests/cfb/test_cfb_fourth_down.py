@@ -222,3 +222,41 @@ def test_cfb_play_process_add_fourth_down_probs_synthetic(monkeypatch):
     assert non_fourth["go_wp"].is_null().all()
     recs = fourth["fourth_down_recommendation"].drop_nulls().unique().to_list()
     assert set(recs) <= {"go", "punt", "field_goal"}
+
+
+@requires_fd
+def test_add_fourth_down_probs_idempotent_after_pipeline():
+    """run_processing_pipeline() appends the decision columns by default, so the
+    documented run_processing_pipeline(); add_fourth_down_probs() flow re-enters
+    with them already present. The re-score must overwrite cleanly (no suffixed
+    ``*_right`` duplicate columns) and expose ``go_boost`` (schema parity with the
+    integrated pipeline path)."""
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    proc = CFBPlayProcess(gameId=1)
+    proc.ran_pipeline = True
+    proc.json = {"plays": []}
+    # a 4th-down row already carrying (stale) decision columns, as if the pipeline ran
+    stale = {**_row(4, 2, 45, sd=0)}
+    for c in CFBPlayProcess._FOURTH_DOWN_DECISION_COLS:
+        stale[c] = "punt" if c == "fourth_down_recommendation" else 0.123
+    proc.plays_json = [stale, _row(1, 10, 60, sd=0)]
+    out = proc.add_fourth_down_probs()
+    assert [c for c in out.columns if c.endswith("_right")] == [], "stale decision cols not overwritten cleanly"
+    assert "go_boost" in out.columns
+    # the 4th-down row was actually re-scored, not left at the stale sentinel
+    assert out.filter(pl.col("start.down") == 4)["go_wp"][0] != 0.123
+
+
+@pytest.mark.skipif(not FG_MODEL_AVAILABLE, reason="FG model absent")
+def test_fg_make_prob_requires_season_when_era_aware():
+    """The era-aware fg_model must fail loudly (not silently zero the era dummies)
+    when ``season`` is missing from the input frame."""
+    from sportsdataverse.cfb.cfb_fourth_down import fg_model
+
+    fnames = fg_model.feature_names or []
+    if not any(str(f).startswith("era") for f in fnames):
+        pytest.skip("bundled fg_model is not era-aware")
+    rows = pl.DataFrame([_row(4, 2, 45)]).drop("season")
+    with pytest.raises(ValueError, match="season"):
+        get_fg_wp(rows)

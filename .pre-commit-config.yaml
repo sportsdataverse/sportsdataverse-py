@@ -37,6 +37,10 @@ repos:
       - id: requirements-txt-fixer
       - id: check-added-large-files
         args: [--maxkb=10000]
+        # fd_model.ubj is the bundled 76-class fourth-down model (~16 MB, ~12k trees).
+        # It exceeds the 10 MB guard by design; exempt this one known file rather than
+        # loosen the limit for everything.
+        exclude: '^sportsdataverse/cfb/models/fd_model\.ubj$'
       - id: debug-statements
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0 # Use the ref you want to point at

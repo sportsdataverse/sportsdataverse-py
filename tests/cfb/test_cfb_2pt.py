@@ -106,11 +106,14 @@ def test_columns_present_and_bounded(td_rows):
 @requires_two_pt
 def test_trailing_two_late_favors_go_more_than_leading_big():
     # Sanity: when trailing by 2 late, going for 2 should be favored more
-    # (larger two_pt_wp_diff) than when leading comfortably.
+    # (larger two_pt_wp_diff) than in an already-decided game where the try is
+    # irrelevant. The "decided" comparison must be late + a blowout (up 28, 1:00
+    # left) -- a mid-game lead (e.g. up 21 in Q3) is NOT decided, so the try still
+    # moves WP and the ordering would not hold.
     df = pl.DataFrame(
         [
             _row(sd=-2, tsr=120, adj=120, period=4),  # trailing 2, late
-            _row(sd=21, tsr=1800, adj=1800, period=3),  # leading 21, comfortable
+            _row(sd=28, tsr=60, adj=60, period=4),  # leading 28 with 1:00 left -> decided
         ]
     )
     out = get_2pt_probs(df)
@@ -159,6 +162,55 @@ def test_cfb_play_process_add_2pt_probs_synthetic():
     assert rec_rows["two_pt_wp"].is_not_null().all()
     recs = set(rec_rows["two_pt_recommendation"].to_list())
     assert recs <= {"go_for_2", "kick_xp"}
+
+
+@requires_two_pt
+def test_pre2014_separate_pat_row_detected_by_type():
+    """Pre-2014 games carry the PAT as a SEPARATE play row ("Extra Point Good" /
+    "Two-Point Conversion Good") with no pointAfterAttempt / extra_point_result
+    columns. It must still be detected (by play type) and scored at its
+    already-post-TD pos_score_diff_start (pass_td/rush_td absent -> no +6)."""
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    proc = CFBPlayProcess(gameId=1)
+    proc.ran_pipeline = True
+    proc.json = {"plays": []}
+    xp = {**_row(sd=4, period=4), "type.text": "Extra Point Good"}
+    two_pt = {**_row(sd=-2, tsr=120, adj=120, period=4), "type.text": "Two-Point Conversion Good"}
+    not_pat = {**_row(sd=0), "type.text": "Rush"}
+    proc.plays_json = [xp, two_pt, not_pat]
+    out = proc.add_2pt_probs()
+    rec_rows = out.filter(pl.col("two_pt_recommendation").is_not_null())
+    # both PAT rows detected by type; the plain rush row is not
+    assert rec_rows.height == 2
+    assert rec_rows["two_pt_wp"].is_not_null().all()
+    assert set(rec_rows["two_pt_recommendation"].to_list()) <= {"go_for_2", "kick_xp"}
+
+
+@requires_two_pt
+def test_offensive_td_gets_plus6_but_defensive_return_td_does_not():
+    """The post-TD +6 score adjustment must apply only to TDs scored BY the posteam.
+    `pass_td` also fires for pick-sixes (its `pass & td_play` branch), so the gate
+    ANDs with `offense_score_play`. An offensive-TD PAT row (offense_score_play=True)
+    is scored at +6; a defensive return-TD PAT row (offense_score_play=False, but
+    pass_td=True) is not -- so their two-point decisions must differ."""
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    proc = CFBPlayProcess(gameId=1)
+    proc.ran_pipeline = True
+    proc.json = {"plays": []}
+    common = {**_row(sd=-1, period=4), "pointAfterAttempt.text": "Extra Point Good", "pass_td": True, "rush_td": False}
+    offensive = {**common, "offense_score_play": True}  # posteam scored -> +6 applies
+    defensive = {**common, "offense_score_play": False}  # pick-six PAT -> +6 must NOT apply
+    proc.plays_json = [offensive, defensive]
+    out = proc.add_2pt_probs()
+    rec = out.filter(pl.col("two_pt_recommendation").is_not_null())
+    assert rec.height == 2
+    # +6 only on the offensive row changes its scored score frame, so its win-prob
+    # outputs differ from the (un-adjusted) defensive return-TD row. (prob_2pt alone
+    # can tie -- the 2pt booster lands pos_score_diff -1 vs +5 in the same leaf -- so
+    # assert on two_pt_wp, which the WP model resolves.)
+    assert rec["two_pt_wp"][0] != rec["two_pt_wp"][1]
 
 
 @skip_if_no_live

@@ -869,7 +869,7 @@ cleaned = game.run_cleaning_pipeline()
 print(len(cleaned["plays"]))
 ```
 
-#### `CFBPlayProcess.run_processing_pipeline()`
+#### `CFBPlayProcess.run_processing_pipeline(fourth_down_probs: 'bool' = True, two_pt_probs: 'bool' = True)`
 
 Run the full play-by-play processing pipeline.
 
@@ -880,6 +880,13 @@ spread time, EPA, WPA, drive data, and QBR. Also produces an advanced
 box score and stores it under `advBoxScore` on the returned dict.
 
 Idempotent -- subsequent calls return the cached `self.json`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fourth_down_probs` | `bool` | `True` | when True (default), run the cfb4th decision surface (`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`) on the enriched frame and append the go/field-goal/punt WP columns plus the `fourth_down_recommendation` to 4th-down plays (null elsewhere). Pass False to skip it (e.g. to avoid loading the fourth-down model). |
+| `two_pt_probs` | `bool` | `True` | when True (default), run the cfb4th two-point decision surface (`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`) and append `two_pt_wp` / `xp_wp` / `prob_2pt` / `two_pt_recommendation` / `two_pt_wp_diff` to point-after / two-point rows (null elsewhere). |
 
 **Returns**
 
