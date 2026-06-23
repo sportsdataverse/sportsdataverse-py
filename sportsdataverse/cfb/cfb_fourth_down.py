@@ -87,9 +87,11 @@ __all__ = [
 ]
 
 # --- inference contracts (mirror cfbfastR-cfb-data fourth_down constants) ---
-FD_FEATURES = ["down", "distance", "yards_to_goal", "posteam_total", "posteam_spread", "era"]
+# The fourth-down model uses one-hot rule-era dummies (era0..era3), which beat the
+# ordinal factor out-of-fold (first-down cal-MAE 0.0035 -> 0.0027). Cuts 2006/2013/2020.
+FD_FEATURES = ["down", "distance", "yards_to_goal", "posteam_total", "posteam_spread", "era0", "era1", "era2", "era3"]
 FD_NUM_CLASS = 76  # gain class k -> yards = k - 10, range -10..65
-FD_ERA_BOUNDS = (2006, 2013, 2017)  # ordinal CFB rule-era factor cuts
+FD_ERA_BOUNDS = (2006, 2013, 2020)  # one-hot CFB rule-era factor cuts
 
 EP_FEATURES = list(ep_final_names)
 WP_SPREAD_FEATURES = list(wp_final_names)
@@ -125,9 +127,9 @@ punt_distribution = pl.read_parquet(_punt_distribution_file)
 # --- fourth-down yards model: download-on-demand (~16 MB, too large to bundle) ---
 # Mirrors the NFL xYAC pattern: published to the espn_cfb_model_artifacts release
 # and fetched + cached on first use under the CFB model cache dir.
-_FD_MODEL_URL = (
-    "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_artifacts/fd_model.ubj"
-)
+# Versioned filename (era one-hot model, 9 features) — distinct from the legacy
+# ordinal fd_model.ubj so a cached older copy is never reused with the new contract.
+_FD_MODEL_URL = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_artifacts/fd_model_era.ubj"
 
 
 def _cfb_model_cache_dir() -> Path:
@@ -151,7 +153,7 @@ def _load_fd_model() -> Booster:
     (written atomically). Raises :class:`FileNotFoundError` when unobtainable
     (offline + no cache), so callers / tests can skip or degrade gracefully.
     """
-    name = "fd_model.ubj"
+    name = "fd_model_era.ubj"
     bundled = Path(_cfb_resource_filename("sportsdataverse", f"cfb/models/{name}"))
     if bundled.exists():
         return _load_booster(bundled)
@@ -215,13 +217,18 @@ def _posteam_total(state: pd.DataFrame) -> np.ndarray:
     return np.where(is_home, (hs + ou) / 2.0, (ou - hs) / 2.0)
 
 
-def _era(season: np.ndarray) -> np.ndarray:
+def _era_onehot(season: np.ndarray) -> dict[str, np.ndarray]:
+    """One-hot CFB rule-era dummies (era0..era3) from season — cuts FD_ERA_BOUNDS.
+
+    Matches the cfbfastR-cfb-data training construction (ERA_BOUNDS 2006/2013/2020).
+    """
     lo, mid, hi = FD_ERA_BOUNDS
-    out = np.full(len(season), 3, dtype=np.int32)
-    out = np.where(season <= hi, 2, out)
-    out = np.where(season <= mid, 1, out)
-    out = np.where(season <= lo, 0, out)
-    return out
+    return {
+        "era0": (season <= lo).astype(np.int32),
+        "era1": ((season > lo) & (season <= mid)).astype(np.int32),
+        "era2": ((season > mid) & (season <= hi)).astype(np.int32),
+        "era3": (season > hi).astype(np.int32),
+    }
 
 
 def _predict_ep(state: pd.DataFrame) -> np.ndarray:
@@ -369,7 +376,7 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
             "yards_to_goal": st["yards_to_goal"].to_numpy().astype(float),
             "posteam_total": _posteam_total(st),
             "posteam_spread": st["pos_team_spread"].to_numpy().astype(float),
-            "era": _era(st["season"].to_numpy().astype(float)),
+            **_era_onehot(st["season"].to_numpy().astype(float)),
         }
     )[FD_FEATURES]
     fd_probs = _load_fd_model().predict(DMatrix(fd_X))
@@ -630,6 +637,10 @@ def _fg_make_prob(st: pd.DataFrame) -> np.ndarray:
     # single yards_to_goal feature, then apply the cfb4th post-clamps.
     X = pd.DataFrame({"yards_to_goal": ytg})
     fnames = fg_model.feature_names or ["yards_to_goal"]
+    # The era-augmented fg_model expects era0..era3; add them only when the bundled
+    # model declares them (keeps the single-feature GAM path working unchanged).
+    if any(str(f).startswith("era") for f in fnames):
+        X = X.assign(**_era_onehot(st["season"].to_numpy().astype(float)))
     prob = fg_model.predict(DMatrix(X[fnames] if set(fnames) <= set(X.columns) else X))
     prob = np.where(ytg > 42, 0.0, prob)
     prob = np.where(ytg >= 35, 0.9 * prob, prob)
