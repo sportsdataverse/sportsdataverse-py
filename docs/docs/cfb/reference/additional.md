@@ -620,7 +620,7 @@ osu = load_cfb_rosters_crosswalk().filter(pl.col("espn_team_id") == 194)
 
 ## Utilities & helpers
 
-### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, **kwargs)` {#CFBPlayProcess}
+### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, game_roster=None, participants=None, **kwargs)` {#CFBPlayProcess}
 
 Process ESPN college-football play-by-play feeds into a tidy game-level dictionary.
 
@@ -639,6 +639,8 @@ set or `run_cleaning_pipeline()` for a lighter clean.
 | `path_to_json` |  | `'/'` | directory for cfb_pbp_disk() offline loads. |
 | `return_keys` |  | `None` | optional subset of result keys to return. |
 | `odds_override` |  | `None` | optional dict {gameSpread, overUnder, homeFavorite, gameSpreadAvailable} that short-circuits odds resolution (sets odds_source="injected") so offline rebuilds never hit the live core-odds endpoint or fall back to defaults. Validated + coerced here. |
+| `game_roster` |  | `None` | optional pre-fetched game roster (the list of athlete records from `~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`, or the `{"data": [...]}` wrapper). Used by attach_player_ids` to resolve a roster-backed `{type}_player_id` for each extracted `{type}_player_name` on games that lack a structured `participants[]` array (pre-2014). Passing it makes offline rebuilds fetch-free; when omitted the live path fetches the roster on demand only if needed. |
+| `participants` |  | `None` |  |
 
 **Example**
 
