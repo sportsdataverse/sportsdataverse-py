@@ -5460,7 +5460,7 @@ Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th `get_2pt_wp`)
 For each row, scores the post-touchdown state under three scoring outcomes
 (0 / 1 / 2 added points) from the kicking-off team's ensuing-drive WP, and
 combines them with the 2-pt conversion probability (`two_pt_model`) and the
-PAT make probability (the FG grid at `yardline_100 = 15`) into `wp_td` —
+PAT make probability (the FG model at `yardline_100 = 15`) into `wp_td` —
 the better of go-for-2 and kick-the-PAT.
 
 **Parameters**
