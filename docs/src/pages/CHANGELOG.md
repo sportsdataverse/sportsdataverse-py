@@ -7,6 +7,7 @@
   - [CFB — spread-free (naive) win-probability surface (`wp_*_naive`)](#cfb--spread-free-naive-win-probability-surface-wp__naive)
   - [CFB — QBR model retrained on the full 2004–2025 history](#cfb--qbr-model-retrained-on-the-full-20042025-history)
   - [CFB — fourth-down decision surface (`get_4th_down_probs`, cfb4th port)](#cfb--fourth-down-decision-surface-get_4th_down_probs-cfb4th-port)
+  - [CFB — two-point-conversion decision surface (`get_2pt_probs`, cfb4th port)](#cfb--two-point-conversion-decision-surface-get_2pt_probs-cfb4th-port)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
@@ -165,6 +166,14 @@ A full college-football fourth-down decision surface, a faithful Python port of 
 - **`sportsdataverse.cfb.get_4th_down_probs(pbp_df)`** scores all three options on a frame of fourth-down situations and adds: `go_wp` / `first_down_prob` / `wp_succeed` / `wp_fail` (go), `punt_wp` (punt), `fg_make_prob` / `make_fg_wp` / `miss_fg_wp` / `fg_wp` (field goal), a `fourth_down_recommendation` ∈ {`go`, `punt`, `field_goal`} (max-WP choice), per-option `*_wp_diff`, and `go_boost` (cfb4th's headline `100·(go_wp − max(fg_wp, punt_wp))`).
 - **`CFBPlayProcess.add_fourth_down_probs()`** applies the same to a processed game's fourth-down rows after `run_processing_pipeline()`.
 - **New models:** `fg_model.ubj` (CFB-native field-goal make-probability by distance, trained on 42.6k attempts) and `punt_distribution.parquet` (punt end-yardline distribution) are bundled under `cfb/models/`; the 6-feat / 76-class `fd_model.ubj` (yards-gained, with the ordinal CFB rule-era factor) is **download-on-demand** (~16 MB, fetched from the `espn_cfb_model_artifacts` release and cached under `~/.cache/sportsdataverse/cfb_models/`, mirroring the NFL xYAC pattern; override with `SDV_PY_CFB_MODEL_DIR`). The go path reuses the reviewed cfb-data decision-layer machinery; punt/FG mirror cfb4th's possession-flip + end-game scoring.
+
+### CFB — two-point-conversion decision surface (`get_2pt_probs`, cfb4th port)
+
+The extra-point vs go-for-2 decision, a faithful Python port of [cfb4th](https://github.com/sportsdataverse/cfb4th)'s `get_2pt_wp()`, against this package's bundled EP / WP-spread boosters and a new bundled CFB two-point model.
+
+- **`sportsdataverse.cfb.get_2pt_probs(pbp_df)`** treats each row as "the scoring team just made a touchdown; decide". For each of the three point outcomes (`0` / `1` / `2`) it subtracts the points, flips to the opponent's ensuing kickoff-return drive (1st-&-10 at the 25, `yards_to_goal = 75`), scores EP → WP, and flips WP back to the scoring team. It adds `two_pt_wp` (= `prob_2pt·wp(2) + (1−prob_2pt)·wp(0)`), `xp_wp` (= `prob_xp·wp(1) + (1−prob_xp)·wp(0)`), `prob_2pt`, a `two_pt_recommendation` ∈ {`go_for_2`, `kick_xp`} (go for 2 iff `two_pt_wp > xp_wp`), and `two_pt_wp_diff` (= `two_pt_wp − xp_wp`, positive ⇒ go for 2). The ensuing-drive frame reuses the reviewed 4th-down state machinery (`_flip_team_state` + EP/WP scorers).
+- **`CFBPlayProcess.add_2pt_probs()`** applies the same to a processed game's point-after / two-point-conversion rows (those with `pointAfterAttempt.text` present) after `run_processing_pipeline()`; every other row carries nulls.
+- **New model:** `two_pt_model.ubj` (a `binary:logistic` 4-feature booster — `posteam_spread`, `posteam_total`, `pos_score_diff`, ordinal `era`) is bundled under `cfb/models/`. `prob_2pt` comes from this model (cfb4th hardcodes 0.45); `prob_xp` is the empirical CFB extra-point make rate `0.9851` (cfb4th derives XP from its FG GAM, but the empirical rate is more accurate for CFB).
 
 ## 0.0.67 Release: June 17, 2026
 
