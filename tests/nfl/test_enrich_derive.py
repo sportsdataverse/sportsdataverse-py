@@ -317,6 +317,7 @@ _QB_DEFAULT: dict = {
     "play_id": 1,
     "season": 2023,
     "posteam": "BBB",
+    "defteam": "AAA",
     "home_team": "BBB",
     "roof": "outdoors",
     "half_seconds_remaining": 1800.0,

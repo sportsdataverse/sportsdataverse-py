@@ -182,7 +182,12 @@ def _ensure_new_cols(pbp: pl.DataFrame) -> pl.DataFrame:
     """Backfill the newer SDV-PBP columns when an older/partial source omits them.
 
     ``qb_epa`` falls back to ``epa`` (its value on the vast majority of plays);
-    the remaining count/yardage columns default to 0 so the exact-stat-id logic
+    ``fixed_drive`` backfills to NULL (NOT 0) so that a source lacking it does
+    not make every row look like the game's final drive — ``_team_gwfg_frame``
+    keys GWFG off ``fixed_drive == max(fixed_drive)``, and an all-zero column
+    would flag every qualifying FG attempt as a game-winner; a null column makes
+    ``max`` null so no row qualifies (GWFG degrades to empty, not over-counted).
+    The remaining count/yardage columns default to 0 so the exact-stat-id logic
     degrades gracefully to a zero contribution rather than raising.
     """
     add: list[pl.Expr] = []
@@ -192,6 +197,8 @@ def _ensure_new_cols(pbp: pl.DataFrame) -> pl.DataFrame:
         if c == "qb_epa":
             src = pl.col("epa") if "epa" in pbp.columns else pl.lit(0.0)
             add.append(src.cast(pl.Float64, strict=False).alias("qb_epa"))
+        elif c == "fixed_drive":
+            add.append(pl.lit(None, dtype=pl.Int64).alias("fixed_drive"))
         else:
             add.append(pl.lit(0, dtype=pl.Int64).alias(c))
     return pbp.with_columns(add) if add else pbp

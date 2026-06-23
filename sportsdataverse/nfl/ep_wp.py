@@ -2348,7 +2348,7 @@ def _derive_qb_epa(df: pl.DataFrame) -> pl.DataFrame:
 
     df = df.drop([c for c in ("qb_epa",) if c in df.columns])
 
-    required = ("complete_pass", "fumble_lost", "yards_gained", "ep", "epa", "down")
+    required = ("complete_pass", "fumble_lost", "yards_gained", "ep", "epa", "down", "posteam", "defteam")
     if any(c not in df.columns for c in required):
         # Required inputs absent — qb_epa is exactly epa (faithful no-op fallback).
         return df.with_columns(pl.col("epa").cast(pl.Float64).alias("qb_epa"))
@@ -2377,6 +2377,8 @@ def _derive_qb_epa(df: pl.DataFrame) -> pl.DataFrame:
             pl.col("down").cast(pl.Float64).alias("down"),
             pl.col("posteam_timeouts_remaining").alias("_pos_to_pre"),
             pl.col("defteam_timeouts_remaining").alias("_def_to_pre"),
+            pl.col("posteam").alias("_posteam_pre"),
+            pl.col("defteam").alias("_defteam_pre"),
             pl.col("ep").alias("_ep_old"),
         )
         # New yard line from the play result.
@@ -2417,6 +2419,17 @@ def _derive_qb_epa(df: pl.DataFrame) -> pl.DataFrame:
             .then(pl.col("_pos_to_pre"))
             .otherwise(pl.col("_def_to_pre"))
             .alias("defteam_timeouts_remaining"),
+            # Flip possession too: calculate_expected_points derives features from
+            # posteam/home_team, so a turnover-on-downs re-spot must score from the
+            # NEW possessing team's perspective (then -ep negates back below).
+            pl.when(pl.col("_change") == 1)
+            .then(pl.col("_defteam_pre"))
+            .otherwise(pl.col("_posteam_pre"))
+            .alias("posteam"),
+            pl.when(pl.col("_change") == 1)
+            .then(pl.col("_posteam_pre"))
+            .otherwise(pl.col("_defteam_pre"))
+            .alias("defteam"),
         )
         # Goal-line clamp: can't have more yards to go than yards to the end zone.
         .with_columns(
