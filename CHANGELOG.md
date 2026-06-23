@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.69 Release: June 23, 2026](#0069-release-june-23-2026)
+  - [CFB — roster-backed `{type}_player_id` + player-name cleanup fixes](#cfb--roster-backed-type_player_id--player-name-cleanup-fixes)
 - [0.0.68 Release: June 23, 2026](#0068-release-june-23-2026)
   - [CFB — completion-probability (`cp`/`cpoe`) + expected-pass (`xpass`/`pass_oe`) surface](#cfb--completion-probability-cpcpoe--expected-pass-xpasspass_oe-surface)
   - [CFB — spread-free (naive) win-probability surface (`wp_*_naive`)](#cfb--spread-free-naive-win-probability-surface-wp__naive)
@@ -140,6 +142,15 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.69 Release: June 23, 2026
+
+### CFB — roster-backed `{type}_player_id` + player-name cleanup fixes
+
+`CFBPlayProcess` now emits a `{type}_player_id` for every extracted `{type}_player_name`, resolved **team-aware** against the game roster: each player type maps to the team that fielded it (offense `pos_team` / defense `def_pos_team` / special-teams `kicking_team` / `return_team` / recovery), so identical names on opposing rosters don't collide; a globally-unique name is the fallback. Ids resolve for **all years** — pre-2014 (no structured `participants[]` array) via the roster, 2014+ from the clean participant names.
+
+- **New `CFBPlayProcess(game_roster=, participants=)` constructor params** let offline rebuilds pass the stored roster + participants — fetch-free, and keeping 2014+ clean names when `join_participants` is off. `__join_participants` now accepts a caller-supplied participant frame / `{"data": [...]}` / row list instead of always fetching.
+- **Player-name cleanup fixes the roster-match exposed:** the receiver state-abbrev strip (`ST`/`GA`/`FL`/…, with the leading space) is anchored to a *trailing standalone token* so it can't corrupt real names (it used to eat the " St" inside "Stewart" → "ewart"); a garbage guard nulls obvious play-text artifacts ("bea loss of") before the id-join.
 
 ## 0.0.68 Release: June 23, 2026
 
