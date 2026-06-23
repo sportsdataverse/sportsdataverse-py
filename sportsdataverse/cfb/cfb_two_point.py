@@ -6,12 +6,14 @@ WP-spread (13-feat logistic) boosters plus a new bundled CFB two-point model.
 Treats each row as "the scoring team just made a touchdown; decide between
 kicking the extra point and going for two".
 
-The cfb4th logic, per play, enumerates the three possible point outcomes of the
-try -- ``pts in {0, 1, 2}`` -- adjusting ``pos_score_diff_start -= pts``, flips
-to the OPPONENT's ensuing drive (the scoring team kicks off, the opponent
-receives a touchback at the 25 -> 1st-&-10, ``yards_to_goal = 75``), scores
-EP -> WP, and flips the WP back to the scoring team's perspective. The two option
-values are then::
+The logic, per play, enumerates the three possible point outcomes of the
+try -- ``pts in {0, 1, 2}`` -- growing the scoring team's lead by ``pts``
+(``pos_score_diff_start += pts``), flips to the OPPONENT's ensuing drive (the
+scoring team kicks off, the opponent receives a touchback at the 25 -> 1st-&-10,
+``yards_to_goal = 75``), scores EP -> WP, and flips the WP back to the scoring
+team's perspective. (cfb4th writes ``-= pts`` because it adjusts the
+already-flipped opponent frame; here we adjust the scoring-team frame pre-flip,
+so the sign is ``+= pts`` -- see ``_wp_after_pts``.) The two option values are then::
 
     two_pt_wp = prob_2pt * wp(pts=2) + (1 - prob_2pt) * wp(pts=0)
     xp_wp     = prob_xp  * wp(pts=1) + (1 - prob_xp)  * wp(pts=0)
@@ -121,13 +123,20 @@ def _prob_2pt(st: pd.DataFrame) -> np.ndarray:
 def _wp_after_pts(st: pd.DataFrame, pts: int) -> np.ndarray:
     """WP (scoring team's perspective) of the opponent's ensuing drive after ``pts``.
 
-    cfb4th: subtract ``pts`` from ``pos_score_diff_start``, hand the ball to the
-    opponent (flip team), place them at the 25 after a touchback
-    (``yards_to_goal = 75``, ``down = 1``, ``distance = 10``), score EP -> WP, then
-    flip the WP back to the scoring team.
+    The scoring team has just made the try worth ``pts`` (so their lead grows by
+    ``pts``); the ball goes to the opponent at the 25 after a touchback
+    (``yards_to_goal = 75``, ``down = 1``, ``distance = 10``), EP -> WP is scored,
+    and the WP is flipped back to the scoring team.
+
+    NOTE on the sign: ``st`` here is the SCORING team's frame, and
+    ``_flip_team_state`` negates ``pos_score_diff_start`` when handing off, so we ADD
+    ``pts`` to the scoring team's lead first -> after the flip the opponent correctly
+    faces ``-(lead + pts)``. cfb4th's ``get_2pt_wp`` writes ``- pts`` because it
+    operates on the ALREADY-flipped (opponent) frame ("this switch was all handled in
+    get_go_wp()"); applying that ``- pts`` here, pre-flip, would invert the try value.
     """
     s = st.copy()
-    s["pos_score_diff_start"] = s["pos_score_diff_start"].to_numpy().astype(float) - float(pts)
+    s["pos_score_diff_start"] = s["pos_score_diff_start"].to_numpy().astype(float) + float(pts)
     flipped = _flip_team_state(s[list(_PBP_COLS.keys())])
     flipped["yards_to_goal"] = 75
     flipped["distance"] = 10

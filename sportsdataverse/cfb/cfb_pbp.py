@@ -6185,6 +6185,21 @@ class CFBPlayProcess(object):
                 dtype = pl.Utf8 if c == "two_pt_recommendation" else pl.Float64
                 plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
             return plays.drop("__twopt_row_idx")
+        # The PAT shares the touchdown's play row, so pos_score_diff_start is the
+        # PRE-TD diff; add the 6-pt touchdown so get_2pt_probs scores the XP-vs-2pt
+        # decision at the POST-TD score. Only offensive (posteam) touchdowns gain +6;
+        # other PAT rows (e.g. defensive-TD tries, where the posteam is not the
+        # scoring team) are left as-is rather than mis-credited.
+        if {"pass_td", "rush_td"}.issubset(set(pat.columns)):
+            off_td = pl.col("pass_td").cast(pl.Boolean).fill_null(False) | pl.col("rush_td").cast(pl.Boolean).fill_null(
+                False
+            )
+            pat = pat.with_columns(
+                pl.when(off_td)
+                .then(pl.col("pos_score_diff_start") + 6)
+                .otherwise(pl.col("pos_score_diff_start"))
+                .alias("pos_score_diff_start")
+            )
         scored = get_2pt_probs(pat)  # pandas
         scored_pl = pl.from_pandas(scored[["__twopt_row_idx", *decision_cols]]).with_columns(
             pl.col("__twopt_row_idx").cast(pl.UInt32)

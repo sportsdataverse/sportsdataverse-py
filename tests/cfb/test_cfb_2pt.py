@@ -106,11 +106,14 @@ def test_columns_present_and_bounded(td_rows):
 @requires_two_pt
 def test_trailing_two_late_favors_go_more_than_leading_big():
     # Sanity: when trailing by 2 late, going for 2 should be favored more
-    # (larger two_pt_wp_diff) than when leading comfortably.
+    # (larger two_pt_wp_diff) than in an already-decided game where the try is
+    # irrelevant. The "decided" comparison must be late + a blowout (up 28, 1:00
+    # left) -- a mid-game lead (e.g. up 21 in Q3) is NOT decided, so the try still
+    # moves WP and the ordering would not hold.
     df = pl.DataFrame(
         [
             _row(sd=-2, tsr=120, adj=120, period=4),  # trailing 2, late
-            _row(sd=21, tsr=1800, adj=1800, period=3),  # leading 21, comfortable
+            _row(sd=28, tsr=60, adj=60, period=4),  # leading 28 with 1:00 left -> decided
         ]
     )
     out = get_2pt_probs(df)
