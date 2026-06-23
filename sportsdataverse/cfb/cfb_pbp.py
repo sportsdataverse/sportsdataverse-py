@@ -5175,6 +5175,15 @@ class CFBPlayProcess(object):
             .fill_null(0.0)
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
+        # One-hot rule-era dummies (era0..era3, cuts 2006/2013/2020). Era is constant
+        # within a game, so they are added as literal columns from the game's season.
+        _qbr_season = int(play_df["season"].drop_nulls().max())
+        pass_qbr = pass_qbr.with_columns(
+            era0=pl.lit(1 if _qbr_season <= 2006 else 0, dtype=pl.Int32),
+            era1=pl.lit(1 if 2006 < _qbr_season <= 2013 else 0, dtype=pl.Int32),
+            era2=pl.lit(1 if 2013 < _qbr_season <= 2020 else 0, dtype=pl.Int32),
+            era3=pl.lit(1 if _qbr_season > 2020 else 0, dtype=pl.Int32),
+        )
         # # self.logger.info(pass_qbr)
 
         dtest_qbr = DMatrix(pass_qbr[qbr_vars])
