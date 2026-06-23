@@ -37,10 +37,13 @@ import math
 import polars as pl
 
 from sportsdataverse.nfl.ep_wp import (
+    XPASS_FEATURES,
     _derive_epa,
     _derive_wpa,
     calculate_completion_probability,
+    calculate_xpass,
 )
+from tests.conftest import skip_if_no_live
 
 
 # ---------------------------------------------------------------------------
@@ -432,3 +435,150 @@ def test_qb_epa_turnover_on_downs_flips_field_and_sign(monkeypatch) -> None:  # 
     out = ew._derive_qb_epa(df)
     qb = out["qb_epa"].to_list()[0]
     assert math.isclose(qb, -0.33 - 2.0, abs_tol=1e-9), f"qb_epa={qb} (expected -2.33)"
+
+
+# ---------------------------------------------------------------------------
+# xpass / pass_oe — nflfastR add_xpass parity (calculate_xpass).
+# ---------------------------------------------------------------------------
+
+# Columns calculate_xpass reads for the valid_play filter + the 17 features,
+# with benign valid values.  Individual rows override what they exercise.
+_XPASS_DEFAULT: dict = {
+    "season": 2023,
+    "play_type": "pass",
+    "posteam": "BBB",
+    "home_team": "BBB",
+    "down": 1.0,
+    "ydstogo": 10.0,
+    "yardline_100": 50.0,
+    "qtr": 1.0,
+    "wp": 0.5,
+    "vegas_wp": 0.5,
+    "score_differential": 0.0,
+    "half_seconds_remaining": 900.0,
+    "posteam_timeouts_remaining": 3.0,
+    "defteam_timeouts_remaining": 3.0,
+    "roof": "outdoors",
+    "pass": 1,
+    "rush": 0,
+    # _make_cp_mutations (the shared era/roof/home helper) reads air_yards.
+    "air_yards": 8.0,
+}
+
+
+def _xpass_frame(rows: list[dict]) -> pl.DataFrame:
+    return pl.DataFrame([{**_XPASS_DEFAULT, **r} for r in rows])
+
+
+class _FakeXpassModel:
+    """Returns a constant pass probability so the formula is hand-checkable."""
+
+    def __init__(self, p: float = 0.6) -> None:
+        self._p = p
+
+    def predict(self, dmatrix):  # noqa: ANN001, ANN201
+        import numpy as np
+
+        return np.full((dmatrix.num_row(),), self._p, dtype="float32")
+
+
+def test_xpass_null_outside_valid_play_filter(monkeypatch) -> None:  # noqa: ANN001
+    """xpass must be NULL outside nflfastR's ``valid_play`` filter."""
+    import sportsdataverse.nfl.ep_wp as ew
+
+    monkeypatch.setattr(ew, "_load_model", lambda *a, **k: _FakeXpassModel(0.6))
+
+    df = _xpass_frame(
+        [
+            {},  # valid pass play
+            {"season": 2005},  # pre-2006 — invalid
+            {"play_type": "field_goal"},  # not in {no_play,pass,run} — invalid
+            {"down": None},  # null down — invalid
+            {"score_differential": None},  # null score_diff — invalid
+            {"play_type": "run", "pass": 0, "rush": 1},  # valid run play
+        ]
+    )
+    out = calculate_xpass(df)
+    xp = out["xpass"].to_list()
+
+    assert xp[0] is not None and math.isclose(xp[0], 0.6, abs_tol=1e-5)
+    assert xp[1] is None, "pre-2006 row must be null"
+    assert xp[2] is None, "non-{no_play,pass,run} play_type must be null"
+    assert xp[3] is None, "null down must be null"
+    assert xp[4] is None, "null score_differential must be null"
+    assert xp[5] is not None and math.isclose(xp[5], 0.6, abs_tol=1e-5)
+
+
+def test_pass_oe_formula_and_rush_pass_zero_null(monkeypatch) -> None:  # noqa: ANN001
+    """``pass_oe = 100*(pass - xpass)``; null when ``rush == 0 & pass == 0``."""
+    import sportsdataverse.nfl.ep_wp as ew
+
+    monkeypatch.setattr(ew, "_load_model", lambda *a, **k: _FakeXpassModel(0.6))
+
+    df = _xpass_frame(
+        [
+            {"pass": 1, "rush": 0},  # dropback: 100*(1-0.6) = 40.0
+            {"play_type": "run", "pass": 0, "rush": 1},  # run: 100*(0-0.6) = -60.0
+            {"play_type": "no_play", "pass": 0, "rush": 0},  # penalty: null
+        ]
+    )
+    out = calculate_xpass(df)
+    poe = out["pass_oe"].to_list()
+
+    # 0.6 is a float32 model output, so allow float32 round-off in the x100 scale.
+    assert math.isclose(poe[0], 100.0 * (1.0 - 0.6), abs_tol=1e-4), f"pass_oe={poe[0]} (expected 40.0)"
+    assert math.isclose(poe[1], 100.0 * (0.0 - 0.6), abs_tol=1e-4), f"pass_oe={poe[1]} (expected -60.0)"
+    assert poe[2] is None, "rush == 0 & pass == 0 must yield null pass_oe"
+
+
+def test_pass_oe_null_when_xpass_null(monkeypatch) -> None:  # noqa: ANN001
+    """``pass_oe`` is null wherever ``xpass`` is null (outside valid_play)."""
+    import sportsdataverse.nfl.ep_wp as ew
+
+    monkeypatch.setattr(ew, "_load_model", lambda *a, **k: _FakeXpassModel(0.6))
+
+    df = _xpass_frame([{"season": 2005, "pass": 1, "rush": 0}])  # pre-2006 → xpass null
+    out = calculate_xpass(df)
+    assert out["xpass"].to_list()[0] is None
+    assert out["pass_oe"].to_list()[0] is None
+
+
+def test_xpass_features_contract() -> None:
+    """The 17-feature contract order is the nflfastR ``prepare_xpass_data`` order."""
+    assert XPASS_FEATURES == [
+        "down",
+        "ydstogo",
+        "yardline_100",
+        "qtr",
+        "wp",
+        "vegas_wp",
+        "era2",
+        "era3",
+        "era4",
+        "score_differential",
+        "home",
+        "half_seconds_remaining",
+        "posteam_timeouts_remaining",
+        "defteam_timeouts_remaining",
+        "outdoors",
+        "retractable",
+        "dome",
+    ]
+
+
+@skip_if_no_live
+def test_xpass_parity_vs_nflverse_2023() -> None:
+    """Live: scoring on nflverse's own wp/vegas_wp reproduces shipped xpass exactly."""
+    import numpy as np
+
+    from sportsdataverse.nfl import load_nfl_pbp
+
+    nflverse = load_nfl_pbp([2023])
+    ref = nflverse.select("game_id", "play_id", "xpass").rename({"xpass": "xpass_ref"})
+    scored = calculate_xpass(nflverse)  # uses nflverse's own wp / vegas_wp
+    j = scored.select("game_id", "play_id", "xpass").join(ref, on=["game_id", "play_id"], how="inner")
+    both = j.filter(pl.col("xpass").is_not_null() & pl.col("xpass_ref").is_not_null())
+    a = both["xpass"].to_numpy()
+    b = both["xpass_ref"].to_numpy()
+    assert both.height > 30000
+    assert np.max(np.abs(a - b)) < 1e-5, "xpass must match nflverse exactly given the same wp/vegas_wp"

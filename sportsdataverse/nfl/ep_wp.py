@@ -191,6 +191,36 @@ XYAC_FEATURES: list[str] = [
     "distance_to_sticks",
 ]
 
+# ---------------------------------------------------------------------------
+# XPASS — expected dropback (pass) feature contract (one binary:logistic model)
+# ---------------------------------------------------------------------------
+# Mirrors nflfastR's ``add_xpass`` / ``prepare_xpass_data`` (helper_add_xpass.R):
+# a single ``binary:logistic`` XGBoost model over 17 features.  The model was
+# trained without embedded ``feature_names`` (Booster.feature_names is None), so
+# the input matrix MUST be supplied with columns in EXACTLY this order.  The
+# era2..4 + outdoors/retractable/dome dummies + ``home`` indicator come from the
+# same nflfastR make_model_mutations() logic that :func:`_make_cp_mutations`
+# already builds — that helper is reused rather than re-deriving them.
+XPASS_FEATURES: list[str] = [
+    "down",
+    "ydstogo",
+    "yardline_100",
+    "qtr",
+    "wp",
+    "vegas_wp",
+    "era2",
+    "era3",
+    "era4",
+    "score_differential",
+    "home",
+    "half_seconds_remaining",
+    "posteam_timeouts_remaining",
+    "defteam_timeouts_remaining",
+    "outdoors",
+    "retractable",
+    "dome",
+]
+
 #: Number of YAC outcome classes in the multinomial xYAC model (yac = −5..70).
 _XYAC_NUM_CLASSES: int = 76
 
@@ -207,6 +237,18 @@ _XYAC_NUM_CLASSES: int = 76
 _MODEL_URLS: dict[str, str] = {
     "xyac_model.ubj": (
         "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_artifacts/xyac_model.ubj"
+    ),
+    "xpass_model.ubj": (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_artifacts/xpass_model.ubj"
+    ),
+    # nfl4th 4th-down decision models (the fourth-down yards model ``fd_model.ubj``
+    # is ~73 MB and the nfl4th win-probability model ``wp_model.ubj`` ~7.6 MB —
+    # both too large to bundle).  Consumed by ``nfl/nfl_fourth_down.py``.
+    "fd_model.ubj": (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_4th_down_models/fd_model.ubj"
+    ),
+    "wp_model.ubj": (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_4th_down_models/wp_model.ubj"
     ),
 }
 
@@ -1409,6 +1451,163 @@ def calculate_xyac(
         xyac_frame = empty
 
     result = df.join(xyac_frame, on="_xyac_index", how="left").drop("_xyac_index")
+
+    if return_as_pandas:
+        return result.to_pandas()
+    return result
+
+
+# ---------------------------------------------------------------------------
+# XPASS public API
+# ---------------------------------------------------------------------------
+
+#: The single binary:logistic expected-dropback (xpass) model file.  Published
+#: to the ``nfl_model_artifacts`` GitHub release (see :data:`_MODEL_URLS`) and
+#: resolved bundled → cache → downloaded by :func:`_load_model`.
+_XPASS_MODEL_FILE: str = "xpass_model.ubj"
+
+
+def calculate_xpass(
+    pbp_data: pl.DataFrame,
+    *,
+    models_dir: Union[str, None] = None,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Compute expected dropback probability (``xpass``) and ``pass_oe``.
+
+    Faithful polars port of nflfastR's ``add_xpass`` /
+    ``prepare_xpass_data`` (``helper_add_xpass.R``).  Scores a single
+    ``binary:logistic`` XGBoost model (17 features, in :data:`XPASS_FEATURES`
+    order) over the rows that satisfy nflfastR's ``valid_play`` filter:
+
+    - ``season >= 2006`` (before this the NFL did not mark scrambles), and
+    - ``play_type in {"no_play", "pass", "run"}``, and
+    - none of ``posteam`` / ``down`` / ``defteam_timeouts_remaining`` /
+      ``posteam_timeouts_remaining`` / ``yardline_100`` /
+      ``score_differential`` is null.
+
+    The era2..4 + ``outdoors`` / ``retractable`` / ``dome`` dummies and the
+    ``home`` indicator are produced by :func:`_make_cp_mutations` (the same
+    nflfastR ``make_model_mutations`` logic CP uses) rather than re-derived.
+    ``wp`` / ``vegas_wp`` are the start-of-play win-probability columns and
+    must already be present (run after the WP step / inside
+    :func:`enrich_nfl_pbp`).
+
+    The booster ships with no embedded ``feature_names``, so the DMatrix is
+    built with :data:`XPASS_FEATURES` as the column order — feeding the
+    features in any other order silently yields wrong predictions.
+
+    Drops and recomputes any existing ``xpass`` / ``pass_oe`` columns.
+
+    Args:
+        pbp_data: nflverse-format play-by-play DataFrame.  Required:
+            ``season``, ``play_type``, ``posteam``, ``home_team``, ``down``,
+            ``ydstogo``, ``yardline_100``, ``qtr``, ``wp``, ``vegas_wp``,
+            ``score_differential``, ``half_seconds_remaining``,
+            ``posteam_timeouts_remaining``, ``defteam_timeouts_remaining``.
+            Optional: ``roof`` (for the roof dummies), ``pass`` / ``rush``
+            (the 0/1 dropback / rush indicators used by ``pass_oe``).
+        models_dir: Optional directory to load ``xpass_model.ubj`` from
+            instead of downloading / caching it (offline or custom model).
+        return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
+
+    Returns:
+        DataFrame with the original columns plus ``xpass`` (predicted pass
+        probability, null outside the ``valid_play`` filter; float64) and
+        ``pass_oe`` (``100 * (pass - xpass)``, null when ``xpass`` is null and
+        null when ``rush == 0 & pass == 0``; float64).
+
+    Raises:
+        FileNotFoundError: when ``xpass_model.ubj`` cannot be located
+            (no bundled / cached copy and no network).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import load_nfl_pbp
+            from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp, calculate_xpass
+
+            pbp = enrich_nfl_pbp(load_nfl_pbp([2023]))  # gives wp / vegas_wp
+            pbp_xp = calculate_xpass(pbp)
+            print(pbp_xp.select("xpass", "pass_oe").head())
+
+        Pipeline next step::
+
+            pbp_xp.filter(pl.col("play_type") == "pass").select("posteam", "xpass", "pass_oe").head()
+
+        See Also:
+            * `nflfastR`_ -- the R package whose ``add_xpass`` this mirrors.
+
+        .. _nflfastR: https://www.nflfastr.com
+    """
+    from xgboost import DMatrix
+
+    df = pbp_data.drop([c for c in ("xpass", "pass_oe") if c in pbp_data.columns])
+    df = df.with_row_index("_xpass_index")
+
+    valid = (
+        (pl.col("season") >= 2006)
+        & pl.col("play_type").is_in(["no_play", "pass", "run"])
+        & pl.col("posteam").is_not_null()
+        & pl.col("down").is_not_null()
+        & pl.col("defteam_timeouts_remaining").is_not_null()
+        & pl.col("posteam_timeouts_remaining").is_not_null()
+        & pl.col("yardline_100").is_not_null()
+        & pl.col("score_differential").is_not_null()
+    )
+    play_df = df.filter(valid)
+
+    if len(play_df) > 0:
+        # _make_cp_mutations is the shared era/roof/home/down helper, but it also
+        # builds CP-only columns that read ``air_yards`` / ``ydstogo``.  xpass does
+        # not use those, but the helper would raise if ``air_yards`` is absent —
+        # so supply a benign placeholder when the (CP-only) column is missing.
+        if "air_yards" not in play_df.columns:
+            play_df = play_df.with_columns(pl.lit(0.0).alias("air_yards"))
+        feats = _make_cp_mutations(play_df)
+        X = feats.select(XPASS_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
+        preds = _load_model(_XPASS_MODEL_FILE, models_dir=models_dir).predict(DMatrix(X, feature_names=XPASS_FEATURES))
+        xpass_frame = play_df.select("_xpass_index").with_columns(pl.Series("xpass", preds.tolist(), dtype=pl.Float64))
+    else:
+        xpass_frame = pl.DataFrame(
+            {
+                "_xpass_index": pl.Series([], dtype=pl.UInt32),
+                "xpass": pl.Series([], dtype=pl.Float64),
+            }
+        )
+
+    result = df.join(xpass_frame, on="_xpass_index", how="left").drop("_xpass_index")
+
+    # pass_oe = 100 * (pass - xpass); null when xpass is null and null when
+    # rush == 0 & pass == 0 (nflfastR add_xpass).  Be defensive: when the
+    # nflverse pass / rush 0/1 indicators are absent, derive them from
+    # play_type so pass_oe still resolves (and is null on neither-pass-nor-run).
+    if "pass" in result.columns:
+        pass_ind = pl.col("pass").cast(pl.Float64)
+    elif "play_type" in result.columns:
+        pass_ind = pl.when(pl.col("play_type") == "pass").then(1.0).otherwise(0.0)
+    else:
+        pass_ind = None
+
+    if "rush" in result.columns:
+        rush_ind = pl.col("rush").cast(pl.Float64)
+    elif "play_type" in result.columns:
+        rush_ind = pl.when(pl.col("play_type") == "run").then(1.0).otherwise(0.0)
+    else:
+        rush_ind = None
+
+    if pass_ind is not None and rush_ind is not None:
+        result = result.with_columns(
+            pl.when(pl.col("xpass").is_null())
+            .then(None)
+            .when((rush_ind == 0) & (pass_ind == 0))
+            .then(None)
+            .otherwise(100.0 * (pass_ind - pl.col("xpass")))
+            .cast(pl.Float64)
+            .alias("pass_oe")
+        )
+    else:
+        result = result.with_columns(pl.lit(None).cast(pl.Float64).alias("pass_oe"))
 
     if return_as_pandas:
         return result.to_pandas()
@@ -2628,6 +2827,17 @@ def enrich_nfl_pbp(
           otherwise; float64).
         * ``cpoe`` — completion probability over expected, percentage-point
           scale (null when ``complete_pass`` absent; float64).
+        * ``xpass`` — expected dropback (pass) probability from the
+          ``binary:logistic`` xpass model (faithful to nflfastR's ``add_xpass``;
+          null outside the ``valid_play`` filter — ``season < 2006`` or any
+          required input null; float64).  ``xpass_model.ubj`` is **not** bundled
+          — on first use it is downloaded from the ``nfl_model_artifacts``
+          GitHub release and cached under ``<cache_dir>/models/``.  If the model
+          is unavailable offline the xpass step is skipped with a
+          ``RuntimeWarning`` and ``xpass`` / ``pass_oe`` stay null.
+        * ``pass_oe`` — dropback percent over expected, ``100 * (pass - xpass)``
+          (null when ``xpass`` is null and when ``rush == 0 & pass == 0``;
+          float64).
         * ``xyac_epa``, ``xyac_mean_yardage``, ``xyac_median_yardage``,
           ``xyac_success``, ``xyac_fd`` — expected yards after catch, derived
           from the single multinomial xYAC model (faithful to nflfastR's
@@ -2713,6 +2923,24 @@ def enrich_nfl_pbp(
 
     # 5. CP / CPOE.
     raw = _self.calculate_completion_probability(raw)
+
+    # 5b. xpass / pass_oe — faithful nflfastR add_xpass (single binary:logistic
+    # xpass_model.ubj).  Needs wp / vegas_wp (present after the WP step).  When
+    # the model is genuinely unavailable offline we skip gracefully with a
+    # RuntimeWarning and emit null xpass / pass_oe so the column set stays stable.
+    try:
+        raw = _self.calculate_xpass(raw, models_dir=models_dir)
+    except FileNotFoundError as exc:
+        import warnings
+
+        warnings.warn(
+            f"enrich_nfl_pbp: skipping xpass step — {type(exc).__name__}: {exc}.",
+            RuntimeWarning,
+            stacklevel=2,
+        )
+        raw = raw.with_columns(
+            [pl.lit(None, dtype=pl.Float64).alias(c) for c in ("xpass", "pass_oe") if c not in raw.columns]
+        )
 
     # 6. xYAC — faithful nflfastR add_xyac (single multinomial xyac_model.ubj +
     # the EP-rescored derivation). When the model file is present this populates

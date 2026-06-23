@@ -158,6 +158,7 @@ from sportsdataverse.nfl import calculate_epa as calculate_epa  # noqa: F401
 from sportsdataverse.nfl import calculate_expected_points as calculate_expected_points  # noqa: F401
 from sportsdataverse.nfl import calculate_win_probability as calculate_win_probability  # noqa: F401
 from sportsdataverse.nfl import calculate_wpa as calculate_wpa  # noqa: F401
+from sportsdataverse.nfl import calculate_xpass as calculate_xpass  # noqa: F401
 from sportsdataverse.nfl import calculate_xyac as calculate_xyac  # noqa: F401
 from sportsdataverse.nfl import clear_cache as clear_cache  # noqa: F401
 from sportsdataverse.nfl import download as download  # noqa: F401
@@ -166,11 +167,16 @@ from sportsdataverse.nfl import espn_nfl_game_rosters as espn_nfl_game_rosters  
 from sportsdataverse.nfl import espn_nfl_player_stats as espn_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_schedule as espn_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_teams as espn_nfl_teams  # noqa: F401
+from sportsdataverse.nfl import get_2pt_wp as get_2pt_wp  # noqa: F401
+from sportsdataverse.nfl import get_4th_down_probs as get_4th_down_probs  # noqa: F401
 from sportsdataverse.nfl import get_config as get_config  # noqa: F401
 from sportsdataverse.nfl import get_current_nfl_season as get_current_nfl_season  # noqa: F401
 from sportsdataverse.nfl import get_current_nfl_week as get_current_nfl_week  # noqa: F401
 from sportsdataverse.nfl import get_current_season as get_current_season  # noqa: F401
 from sportsdataverse.nfl import get_current_week as get_current_week  # noqa: F401
+from sportsdataverse.nfl import get_fg_wp as get_fg_wp  # noqa: F401
+from sportsdataverse.nfl import get_go_wp as get_go_wp  # noqa: F401
+from sportsdataverse.nfl import get_punt_wp as get_punt_wp  # noqa: F401
 from sportsdataverse.nfl import helper_nfl_athlete_items as helper_nfl_athlete_items  # noqa: F401
 from sportsdataverse.nfl import helper_nfl_game_items as helper_nfl_game_items  # noqa: F401
 from sportsdataverse.nfl import helper_nfl_roster_items as helper_nfl_roster_items  # noqa: F401
@@ -274,6 +280,7 @@ __all__ = [
     "calculate_expected_points",
     "calculate_win_probability",
     "calculate_wpa",
+    "calculate_xpass",
     "calculate_xyac",
     "clear_cache",
     "download",
@@ -393,11 +400,16 @@ __all__ = [
     "espn_nfl_transactions",
     "espn_nfl_venue",
     "espn_nfl_venues",
+    "get_2pt_wp",
+    "get_4th_down_probs",
     "get_config",
     "get_current_nfl_season",
     "get_current_nfl_week",
     "get_current_season",
     "get_current_week",
+    "get_fg_wp",
+    "get_go_wp",
+    "get_punt_wp",
     "helper_nfl_athlete_items",
     "helper_nfl_game_items",
     "helper_nfl_roster_items",
