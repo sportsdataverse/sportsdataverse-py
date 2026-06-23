@@ -232,14 +232,14 @@ _XYAC_NUM_CLASSES: int = 76
 #: Download-on-demand model URLs.  Models too large to bundle in the wheel
 #: (the faithful 76-class ``xyac_model.ubj`` is ~34 MB) are published to the
 #: ``nfl_model_artifacts`` GitHub release and fetched + cached on first use.
-#: The small EP/WP/CP models stay bundled under ``nfl/models/`` and are NOT
-#: listed here.
+#: The EP/WP/CP/xpass models stay bundled under ``nfl/models/`` (each < 10 MB)
+#: and are NOT listed here. ``xpass_model.ubj`` is the **faithful**
+#: ``fastrmodels::xpass_model`` (the exact nflfastR ``add_xpass`` booster, 1121
+#: trees) — NOT a self-trained approximation — so :func:`calculate_xpass`
+#: reproduces nflverse's shipped ``xpass`` exactly.
 _MODEL_URLS: dict[str, str] = {
     "xyac_model.ubj": (
         "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_artifacts/xyac_model.ubj"
-    ),
-    "xpass_model.ubj": (
-        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_artifacts/xpass_model.ubj"
     ),
     # nfl4th 4th-down decision models (the fourth-down yards model ``fd_model.ubj``
     # is ~73 MB and the nfl4th win-probability model ``wp_model.ubj`` ~7.6 MB —
