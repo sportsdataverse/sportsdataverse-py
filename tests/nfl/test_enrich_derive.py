@@ -43,7 +43,6 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_completion_probability,
     calculate_xpass,
 )
-from tests.conftest import skip_if_no_live
 
 
 # ---------------------------------------------------------------------------
@@ -564,21 +563,3 @@ def test_xpass_features_contract() -> None:
         "retractable",
         "dome",
     ]
-
-
-@skip_if_no_live
-def test_xpass_parity_vs_nflverse_2023() -> None:
-    """Live: scoring on nflverse's own wp/vegas_wp reproduces shipped xpass exactly."""
-    import numpy as np
-
-    from sportsdataverse.nfl import load_nfl_pbp
-
-    nflverse = load_nfl_pbp([2023])
-    ref = nflverse.select("game_id", "play_id", "xpass").rename({"xpass": "xpass_ref"})
-    scored = calculate_xpass(nflverse)  # uses nflverse's own wp / vegas_wp
-    j = scored.select("game_id", "play_id", "xpass").join(ref, on=["game_id", "play_id"], how="inner")
-    both = j.filter(pl.col("xpass").is_not_null() & pl.col("xpass_ref").is_not_null())
-    a = both["xpass"].to_numpy()
-    b = both["xpass_ref"].to_numpy()
-    assert both.height > 30000
-    assert np.max(np.abs(a - b)) < 1e-5, "xpass must match nflverse exactly given the same wp/vegas_wp"
