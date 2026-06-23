@@ -5256,6 +5256,61 @@ called internally by ``NFLPlayProcess.__process_wpa`` and by the
 because those columns are absent from a nflverse frame.
 ```
 
+### `calculate_xpass(pbp_data: 'pl.DataFrame', *, models_dir: 'Union[str, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_xpass}
+
+Compute expected dropback probability (`xpass`) and `pass_oe`.
+
+Faithful polars port of nflfastR's `add_xpass` /
+`prepare_xpass_data` (`helper_add_xpass.R`).  Scores a single
+`binary:logistic` XGBoost model (17 features, in `XPASS_FEATURES`
+order) over the rows that satisfy nflfastR's `valid_play` filter:
+
+- `season >= 2006` (before this the NFL did not mark scrambles), and
+- `play_type in {"no_play", "pass", "run"}`, and
+- none of `posteam` / `down` / `defteam_timeouts_remaining` /
+  `posteam_timeouts_remaining` / `yardline_100` /
+  `score_differential` is null.
+
+The era2..4 + `outdoors` / `retractable` / `dome` dummies and the
+`home` indicator are produced by make_cp_mutations` (the same
+nflfastR `make_model_mutations` logic CP uses) rather than re-derived.
+`wp` / `vegas_wp` are the start-of-play win-probability columns and
+must already be present (run after the WP step / inside
+`enrich_nfl_pbp`).
+
+The booster ships with no embedded `feature_names`, so the DMatrix is
+built with `XPASS_FEATURES` as the column order — feeding the
+features in any other order silently yields wrong predictions.
+
+Drops and recomputes any existing `xpass` / `pass_oe` columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_data` | `DataFrame` |  | nflverse-format play-by-play DataFrame. Required: `season`, `play_type`, `posteam`, `home_team`, `down`, `ydstogo`, `yardline_100`, `qtr`, `wp`, `vegas_wp`, `score_differential`, `half_seconds_remaining`, `posteam_timeouts_remaining`, `defteam_timeouts_remaining`. Optional: `roof` (for the roof dummies), `pass` / `rush` (the 0/1 dropback / rush indicators used by `pass_oe`). |
+| `models_dir` | `Union[str, None]` | `None` | Optional directory to load `xpass_model.ubj` from instead of downloading / caching it (offline or custom model). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+DataFrame with the original columns plus `xpass` (predicted pass probability, null outside the `valid_play` filter; float64) and `pass_oe` (`100 * (pass - xpass)`, null when `xpass` is null and null when `rush == 0 & pass == 0`; float64).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp, calculate_xpass
+
+pbp = enrich_nfl_pbp(load_nfl_pbp([2023]))  # gives wp / vegas_wp
+pbp_xp = calculate_xpass(pbp)
+print(pbp_xp.select("xpass", "pass_oe").head())
+
+# Pipeline next step
+
+pbp_xp.filter(pl.col("play_type") == "pass").select("posteam", "xpass", "pass_oe").head()
+```
+
 ### `calculate_xyac(pbp_data: 'pl.DataFrame', *, models_dir: 'Optional[Union[str, Path]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_xyac}
 
 Compute expected yards after catch (xYAC) for intended pass plays.

@@ -92,6 +92,7 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_completion_probability,
     calculate_expected_points,
     calculate_win_probability,
+    calculate_xpass,
     calculate_xyac,
 )
 from sportsdataverse.nfl.nfl_pbp import *

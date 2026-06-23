@@ -158,6 +158,7 @@ from sportsdataverse.nfl import calculate_epa as calculate_epa  # noqa: F401
 from sportsdataverse.nfl import calculate_expected_points as calculate_expected_points  # noqa: F401
 from sportsdataverse.nfl import calculate_win_probability as calculate_win_probability  # noqa: F401
 from sportsdataverse.nfl import calculate_wpa as calculate_wpa  # noqa: F401
+from sportsdataverse.nfl import calculate_xpass as calculate_xpass  # noqa: F401
 from sportsdataverse.nfl import calculate_xyac as calculate_xyac  # noqa: F401
 from sportsdataverse.nfl import clear_cache as clear_cache  # noqa: F401
 from sportsdataverse.nfl import download as download  # noqa: F401
@@ -274,6 +275,7 @@ __all__ = [
     "calculate_expected_points",
     "calculate_win_probability",
     "calculate_wpa",
+    "calculate_xpass",
     "calculate_xyac",
     "clear_cache",
     "download",
