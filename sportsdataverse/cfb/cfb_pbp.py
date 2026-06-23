@@ -58,6 +58,8 @@ ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.u
 wp_spread_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_spread.ubj")
 wp_naive_file = _cfb_resource_filename("sportsdataverse", "cfb/models/wp_naive.ubj")
 qbr_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/qbr_model.ubj")
+cp_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/cfb_cp_model.ubj")
+xpass_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/xpass_model.ubj")
 
 ep_model = Booster({"nthread": 4})  # init model
 ep_model.load_model(ep_model_file)
@@ -71,6 +73,37 @@ wp_naive_model.load_model(wp_naive_file)
 
 qbr_model = Booster({"nthread": 4})  # init model
 qbr_model.load_model(qbr_model_file)
+
+# Completion-probability booster (8-feat, binary:logistic) -> cp / cpoe.
+cp_model = Booster({"nthread": 4})  # init model
+cp_model.load_model(cp_model_file)
+
+# Expected-pass booster (7-feat, binary:logistic) -> xpass / pass_oe.
+xpass_model = Booster({"nthread": 4})  # init model
+xpass_model.load_model(xpass_model_file)
+
+# Faithful feature-name orders the boosters were trained with. The DMatrix
+# is built from a pandas frame whose columns are renamed to these exact
+# names so xgboost validates feature_names alignment.
+CP_FEATURES = [
+    "down",
+    "distance",
+    "yards_to_goal",
+    "score_diff",
+    "seconds_remaining",
+    "is_home",
+    "period",
+    "passing_down",
+]
+XPASS_FEATURES = [
+    "down",
+    "distance",
+    "yards_to_goal",
+    "pos_score_diff",
+    "TimeSecsRem",
+    "era",
+    "period",
+]
 
 logger = logging.getLogger("sdv.cfb_pbp")
 logger.addHandler(logging.NullHandler())
@@ -4754,6 +4787,110 @@ class CFBPlayProcess(object):
         )
         return play_df
 
+    def __process_cpoe(self, play_df):
+        """Completion probability + CPOE (nflfastR ``cp`` / ``cpoe`` analogue).
+
+        Scores ``cp`` = P(complete pass) on pass plays via the bundled 8-feature
+        completion-probability booster, then ``cpoe = 100 * (completion - cp)``
+        (percentage-point scale). ``cp`` / ``cpoe`` are null on non-pass plays.
+        Degrades to null columns if any source column is missing.
+        """
+        cp_sources = {
+            "down": "start.down",
+            "distance": "start.distance",
+            "yards_to_goal": "start.yardsToEndzone",
+            "score_diff": "pos_score_diff_start",
+            "seconds_remaining": "start.TimeSecsRem",
+            "is_home": "start.is_home",
+            "period": "period",
+            "passing_down": "passing_down",
+        }
+        required = list(cp_sources.values()) + ["pass", "completion"]
+        if any(c not in play_df.columns for c in required):
+            return play_df.with_columns(
+                pl.lit(None, dtype=pl.Float64).alias("cp"),
+                pl.lit(None, dtype=pl.Float64).alias("cpoe"),
+            )
+        try:
+            feat = play_df.select(
+                [pl.col(src).cast(pl.Float64).alias(name) for name, src in cp_sources.items()],
+            ).to_pandas()[CP_FEATURES]
+            cp_raw = cp_model.predict(DMatrix(feat, feature_names=CP_FEATURES))
+            play_df = play_df.with_columns(
+                pl.when(pl.col("pass") == True)
+                .then(pl.Series("cp", cp_raw, dtype=pl.Float64))
+                .otherwise(None)
+                .alias("cp"),
+            ).with_columns(
+                pl.when(pl.col("cp").is_not_null())
+                .then(100.0 * (pl.col("completion").cast(pl.Float64) - pl.col("cp")))
+                .otherwise(None)
+                .alias("cpoe"),
+            )
+        except Exception as err:  # noqa: BLE001 — degrade to null columns, never raise
+            logger.warning("%s: __process_cpoe failed (%s); emitting null cp/cpoe", self.gameId, err)
+            play_df = play_df.with_columns(
+                pl.lit(None, dtype=pl.Float64).alias("cp"),
+                pl.lit(None, dtype=pl.Float64).alias("cpoe"),
+            )
+        return play_df
+
+    def __process_xpass(self, play_df):
+        """Expected pass + pass-over-expected (nflfastR ``xpass`` / ``pass_oe``).
+
+        Scores ``xpass`` = P(pass) on scrimmage rush-or-pass plays via the bundled
+        7-feature expected-pass booster, then ``pass_oe = 100 * (pass - xpass)``
+        (percentage-point scale). ``xpass`` / ``pass_oe`` are null elsewhere.
+        Degrades to null columns if any source column is missing.
+        """
+        xpass_sources = {
+            "down": "start.down",
+            "distance": "start.distance",
+            "yards_to_goal": "start.yardsToEndzone",
+            "pos_score_diff": "pos_score_diff_start",
+            "TimeSecsRem": "start.TimeSecsRem",
+            "period": "period",
+        }
+        required = list(xpass_sources.values()) + ["pass", "rush", "season"]
+        if any(c not in play_df.columns for c in required):
+            return play_df.with_columns(
+                pl.lit(None, dtype=pl.Float64).alias("xpass"),
+                pl.lit(None, dtype=pl.Float64).alias("pass_oe"),
+            )
+        try:
+            # Ordinal era from season (cuts: <=2006->0, <=2013->1, <=2017->2, else 3).
+            play_df = play_df.with_columns(
+                pl.when(pl.col("season") <= 2006)
+                .then(0)
+                .when(pl.col("season") <= 2013)
+                .then(1)
+                .when(pl.col("season") <= 2017)
+                .then(2)
+                .otherwise(3)
+                .alias("era"),
+            )
+            feat = play_df.select(
+                [pl.col(src).cast(pl.Float64).alias(name) for name, src in xpass_sources.items()]
+                + [pl.col("era").cast(pl.Float64).alias("era")],
+            ).to_pandas()[XPASS_FEATURES]
+            xpass_raw = xpass_model.predict(DMatrix(feat, feature_names=XPASS_FEATURES))
+            scrimmage = (pl.col("pass") == True).or_(pl.col("rush") == True)
+            play_df = play_df.with_columns(
+                pl.when(scrimmage).then(pl.Series("xpass", xpass_raw, dtype=pl.Float64)).otherwise(None).alias("xpass"),
+            ).with_columns(
+                pl.when(pl.col("xpass").is_not_null())
+                .then(100.0 * (pl.col("pass").cast(pl.Float64) - pl.col("xpass")))
+                .otherwise(None)
+                .alias("pass_oe"),
+            )
+        except Exception as err:  # noqa: BLE001 — degrade to null columns, never raise
+            logger.warning("%s: __process_xpass failed (%s); emitting null xpass/pass_oe", self.gameId, err)
+            play_df = play_df.with_columns(
+                pl.lit(None, dtype=pl.Float64).alias("xpass"),
+                pl.lit(None, dtype=pl.Float64).alias("pass_oe"),
+            )
+        return play_df
+
     def __process_wpa(self, play_df):
         # ---- prepare variables for wp_before calculations ----
         play_df = (
@@ -6052,6 +6189,8 @@ class CFBPlayProcess(object):
                     .pipe(self.__add_spread_time)
                     .pipe(self.__process_epa)
                     .pipe(self.__process_wpa)
+                    .pipe(self.__process_cpoe)
+                    .pipe(self.__process_xpass)
                     .pipe(self.__add_drive_data)
                     .pipe(self.__process_qbr)
                 )

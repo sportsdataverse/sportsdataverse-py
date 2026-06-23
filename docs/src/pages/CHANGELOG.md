@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — completion-probability (`cp`/`cpoe`) + expected-pass (`xpass`/`pass_oe`) surface](#cfb--completion-probability-cpcpoe--expected-pass-xpasspass_oe-surface)
   - [CFB — spread-free (naive) win-probability surface (`wp_*_naive`)](#cfb--spread-free-naive-win-probability-surface-wp__naive)
   - [CFB — QBR model retrained on the full 2004–2025 history](#cfb--qbr-model-retrained-on-the-full-20042025-history)
   - [CFB — fourth-down decision surface (`get_4th_down_probs`, cfb4th port)](#cfb--fourth-down-decision-surface-get_4th_down_probs-cfb4th-port)
@@ -134,6 +135,13 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — completion-probability (`cp`/`cpoe`) + expected-pass (`xpass`/`pass_oe`) surface
+
+`CFBPlayProcess` now emits per-play completion-probability and expected-pass columns, mirroring nflfastR's `cp`/`cpoe` and `xpass`/`pass_oe`.
+
+- **Two new bundled models** — `cfb/models/cfb_cp_model.ubj` (8-feat `binary:logistic`: `down`, `distance`, `yards_to_goal`, `score_diff`, `seconds_remaining`, `is_home`, `period`, `passing_down`) and `cfb/models/xpass_model.ubj` (7-feat `binary:logistic`: `down`, `distance`, `yards_to_goal`, `pos_score_diff`, `TimeSecsRem`, `era`, `period`). Both are ~400 KB and ship via the existing `cfb/models/*` package-data glob (no download-on-demand).
+- **New per-play columns** — `cp` = P(complete) on pass plays with `cpoe = 100 * (completion - cp)` (percentage-point scale, null on non-pass plays); `xpass` = P(pass) on scrimmage rush-or-pass plays with `pass_oe = 100 * (pass - xpass)` (null elsewhere). Added as two pipe steps (`__process_cpoe` / `__process_xpass`) after the EPA/WPA steps in `run_processing_pipeline()`; each degrades to null columns rather than raising when a source column is absent.
 
 ### CFB — spread-free (naive) win-probability surface (`wp_*_naive`)
 
