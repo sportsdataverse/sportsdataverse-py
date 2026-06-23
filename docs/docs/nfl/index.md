@@ -11,7 +11,7 @@ sidebar_label: NFL
 | [ESPN core API (v2)](reference/core) | 83 | `https://sports.core.api.espn.com/v2/sports` |
 | [NFL.com API](reference/nfl_api) | 11 | `https://api.nfl.com` |
 | [Dataset loaders](reference/loaders) | 8 | nflverse data releases |
-| [Additional functions](reference/additional) | 103 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 105 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -33,6 +33,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`nf
 | [`load_contracts`](reference/additional#load_contracts) | [`load_contracts`](https://nflreadr.nflverse.com/reference/load_contracts.html) |
 | [`load_depth_charts`](reference/additional#load_depth_charts) | [`load_depth_charts`](https://nflreadr.nflverse.com/reference/load_depth_charts.html) |
 | [`load_draft_picks`](reference/additional#load_draft_picks) | [`load_draft_picks`](https://nflreadr.nflverse.com/reference/load_draft_picks.html) |
+| [`load_espn_qbr`](reference/additional#load_espn_qbr) | [`load_espn_qbr`](https://nflreadr.nflverse.com/reference/load_espn_qbr.html) |
 | [`load_ff_opportunity`](reference/additional#load_ff_opportunity) | [`load_ff_opportunity`](https://nflreadr.nflverse.com/reference/load_ff_opportunity.html) |
 | [`load_ff_playerids`](reference/additional#load_ff_playerids) | [`load_ff_playerids`](https://nflreadr.nflverse.com/reference/load_ff_playerids.html) |
 | [`load_ff_rankings`](reference/additional#load_ff_rankings) | [`load_ff_rankings`](https://nflreadr.nflverse.com/reference/load_ff_rankings.html) |
@@ -43,6 +44,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`nf
 | [`load_nfl_contracts`](reference/additional#load_nfl_contracts) | [`load_contracts`](https://nflreadr.nflverse.com/reference/load_contracts.html) |
 | [`load_nfl_depth_charts`](reference/loaders#load_nfl_depth_charts) | [`load_depth_charts`](https://nflreadr.nflverse.com/reference/load_depth_charts.html) |
 | [`load_nfl_draft_picks`](reference/additional#load_nfl_draft_picks) | [`load_draft_picks`](https://nflreadr.nflverse.com/reference/load_draft_picks.html) |
+| [`load_nfl_espn_qbr`](reference/additional#load_nfl_espn_qbr) | [`load_espn_qbr`](https://nflreadr.nflverse.com/reference/load_espn_qbr.html) |
 | [`load_nfl_ff_opportunity`](reference/additional#load_nfl_ff_opportunity) | [`load_ff_opportunity`](https://nflreadr.nflverse.com/reference/load_ff_opportunity.html) |
 | [`load_nfl_ff_playerids`](reference/additional#load_nfl_ff_playerids) | [`load_ff_playerids`](https://nflreadr.nflverse.com/reference/load_ff_playerids.html) |
 | [`load_nfl_ff_rankings`](reference/additional#load_nfl_ff_rankings) | [`load_ff_rankings`](https://nflreadr.nflverse.com/reference/load_ff_rankings.html) |

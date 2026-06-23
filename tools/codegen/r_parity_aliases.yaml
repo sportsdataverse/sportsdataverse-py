@@ -9,6 +9,7 @@ nfl:
   load_nfl_contracts: load_contracts
   load_nfl_depth_charts: load_depth_charts
   load_nfl_draft_picks: load_draft_picks
+  load_nfl_espn_qbr: load_espn_qbr
   load_nfl_ff_opportunity: load_ff_opportunity
   load_nfl_ff_playerids: load_ff_playerids
   load_nfl_ff_rankings: load_ff_rankings

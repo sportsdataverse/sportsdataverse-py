@@ -1498,6 +1498,30 @@ load_nfl_depth_charts:
   depth_team: Numeric depth rank (1 = starter, 2 = backup, etc.) of the player at their position.
   elias_id: Elias Sports Bureau player identifier used for official NFL record-keeping and statistics attribution.
   formation: Offensive or defensive formation label (e.g., 'Base 3-4', 'Nickel') associated with this depth chart grouping.
+load_nfl_espn_qbr:
+  season: NFL season (year) the Total QBR record covers.
+  season_type: Season segment for the record -- regular season or postseason.
+  game_week: Week scope of the QBR aggregation; for season-level rows this is the season-summary tag.
+  team_abb: Team abbreviation for the quarterback's team during the period.
+  player_id: ESPN athlete identifier for the quarterback.
+  name_short: Abbreviated display name of the quarterback (e.g. 'P. Mahomes').
+  rank: Quarterback's rank by Total QBR among qualified passers for the period.
+  qbr_total: ESPN Total QBR on a 0-100 scale -- the headline opponent-adjusted quarterback rating.
+  pts_added: Points the quarterback added versus a league-average passer (ESPN QBR points-added component).
+  qb_plays: Count of qualifying quarterback action plays used to compute QBR.
+  epa_total: Total expected points added across the quarterback's plays (ESPN QBR EPA component).
+  pass: QBR points contribution from pass plays.
+  run: QBR points contribution from designed runs and scrambles.
+  exp_sack: QBR points contribution adjustment from expected sacks.
+  penalty: QBR points contribution from penalties attributed to the quarterback.
+  qbr_raw: Raw (non-opponent-adjusted) QBR for the period.
+  sack: QBR points contribution from sacks taken.
+  name_first: Quarterback's first name.
+  name_last: Quarterback's last name.
+  name_display: Quarterback's full display name.
+  headshot_href: URL of the quarterback's ESPN headshot image.
+  team: Full team name for the quarterback's team during the period.
+  qualified: Whether the quarterback met ESPN's minimum action-play threshold to qualify for ranking.
 load_nfl_ftn_charting:
   n_defense_box: Number of defenders aligned in the box at the time of the snap, as charted by FTN Data.
 load_nfl_officials:

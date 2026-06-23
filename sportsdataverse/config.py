@@ -95,6 +95,14 @@ NFL_TEAM_SCHEDULE_URL = f"{NFLVERSEGITHUB}schedules/games.parquet"
 # nflreadpy parity additions: coverage gaps the canonical loaders fill
 NFL_TEAM_STATS_URL = NFLVERSEGITHUB + "stats_team/stats_team_{level}_{season}.parquet"
 NFL_SDV_TEAM_STATS_URL = SDVRELEASES + "nfl_team_stats/team_stats.parquet"
+# ESPN Total QBR. nflverse republishes ESPN's QBR through the espn_data release as
+# two combined files (all seasons, 2006-present), one per summary_type. Mirrors
+# nflreadr::load_espn_qbr; filtered post-load by `season`.
+NFL_ESPN_QBR_SEASON_URL = f"{NFLVERSEGITHUB}espn_data/qbr_season_level.parquet"
+NFL_ESPN_QBR_WEEK_URL = f"{NFLVERSEGITHUB}espn_data/qbr_week_level.parquet"
+# SDV-native QBR (forthcoming `nfl_espn_qbr` release; see CFB<->NFL parity backlog).
+NFL_SDV_ESPN_QBR_SEASON_URL = SDVRELEASES + "nfl_espn_qbr/qbr_season_level.parquet"
+NFL_SDV_ESPN_QBR_WEEK_URL = SDVRELEASES + "nfl_espn_qbr/qbr_week_level.parquet"
 NFL_FTN_CHARTING_URL = NFLVERSEGITHUB + "ftn_charting/ftn_charting_{season}.parquet"
 NFL_TRADES_URL = f"{NFLVERSEGITHUB}trades/trades.parquet"
 NFL_FF_PLAYERIDS_URL = f"{DYNASTYPROCESSGITHUB}db_playerids.csv"

@@ -185,6 +185,7 @@ from sportsdataverse.nfl import load_combine as load_combine  # noqa: F401
 from sportsdataverse.nfl import load_contracts as load_contracts  # noqa: F401
 from sportsdataverse.nfl import load_depth_charts as load_depth_charts  # noqa: F401
 from sportsdataverse.nfl import load_draft_picks as load_draft_picks  # noqa: F401
+from sportsdataverse.nfl import load_espn_qbr as load_espn_qbr  # noqa: F401
 from sportsdataverse.nfl import load_ff_opportunity as load_ff_opportunity  # noqa: F401
 from sportsdataverse.nfl import load_ff_playerids as load_ff_playerids  # noqa: F401
 from sportsdataverse.nfl import load_ff_rankings as load_ff_rankings  # noqa: F401
@@ -195,6 +196,7 @@ from sportsdataverse.nfl import load_nfl_combine as load_nfl_combine  # noqa: F4
 from sportsdataverse.nfl import load_nfl_contracts as load_nfl_contracts  # noqa: F401
 from sportsdataverse.nfl import load_nfl_depth_charts as load_nfl_depth_charts  # noqa: F401
 from sportsdataverse.nfl import load_nfl_draft_picks as load_nfl_draft_picks  # noqa: F401
+from sportsdataverse.nfl import load_nfl_espn_qbr as load_nfl_espn_qbr  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ff_opportunity as load_nfl_ff_opportunity  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ff_playerids as load_nfl_ff_playerids  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ff_rankings as load_nfl_ff_rankings  # noqa: F401
@@ -418,6 +420,7 @@ __all__ = [
     "load_contracts",
     "load_depth_charts",
     "load_draft_picks",
+    "load_espn_qbr",
     "load_ff_opportunity",
     "load_ff_playerids",
     "load_ff_rankings",
@@ -428,6 +431,7 @@ __all__ = [
     "load_nfl_contracts",
     "load_nfl_depth_charts",
     "load_nfl_draft_picks",
+    "load_nfl_espn_qbr",
     "load_nfl_ff_opportunity",
     "load_nfl_ff_playerids",
     "load_nfl_ff_rankings",
