@@ -11,9 +11,11 @@ and nfl4th's headline ``go_boost`` number:
   routed through :func:`get_2pt_wp` (PAT vs 2-pt choice), and the option value is
   the prob-weighted WP.  Emits ``go_wp`` / ``first_down_prob`` / ``wp_succeed`` /
   ``wp_fail``.
-* **field goal** — :func:`get_fg_wp` (nfl4th ``get_fg_wp``): a make-probability
-  grid (``fg_model_grid``, the mgcv-GAM prediction grid keyed on
-  ``yardline_100`` × ``fg_model_roof``) with the long-kick decay weights the
+* **field goal** — :func:`get_fg_wp` (nfl4th ``get_fg_wp``): the make
+  probability comes from the self-trained ``fg_model`` (a ``binary:logistic``
+  XGBoost re-train of the original mgcv GAM, features
+  ``[yardline_100, fg_roof, fg_era]`` where ``fg_roof = (roof == "outdoors")``
+  and ``fg_era = (season >= 2020)``) with the long-kick decay; it weights the
   made-FG WP (opponent receives a kickoff, +3) against the missed-FG WP
   (opponent takes over at the spot).  Emits ``fg_make_prob`` / ``make_fg_wp`` /
   ``miss_fg_wp`` / ``fg_wp``.
@@ -56,7 +58,9 @@ release and cached under ``<cache_dir>/models/`` (see
 punt distribution are bundled under ``nfl/models/``.  When the downloaded models
 cannot be obtained (offline + no cache), the corresponding columns are emitted as
 nulls (never fabricated); check :data:`FD_MODEL_AVAILABLE` /
-:data:`WP_MODEL_AVAILABLE` to know which mode is active.
+:data:`WP_MODEL_AVAILABLE` to know which mode is active.  The 2-pt model, FG
+model (``fg_model.ubj``) and punt distribution are all bundled under
+``nfl/models/`` (see :data:`FG_MODEL_AVAILABLE` / :data:`TWO_PT_MODEL_AVAILABLE`).
 """
 
 from __future__ import annotations
@@ -87,6 +91,7 @@ __all__ = [
     "FD_MODEL_AVAILABLE",
     "WP_MODEL_AVAILABLE",
     "TWO_PT_MODEL_AVAILABLE",
+    "FG_MODEL_AVAILABLE",
 ]
 
 # --------------------------------------------------------------------------- #
@@ -95,6 +100,16 @@ __all__ = [
 _FD_MODEL_FILE = "fd_model.ubj"  # download-on-demand (multi:softprob, 76 classes)
 _WP_MODEL_FILE = "wp_model.ubj"  # download-on-demand (nfl4th home-WP, binary:logistic)
 _TWO_PT_MODEL_FILE = "two_pt_model.ubj"  # bundled (binary:logistic, 9 features)
+_FG_MODEL_FILE = "fg_model.ubj"  # bundled (binary:logistic, 3 features)
+
+#: ``fg_model`` feature order (track7 ``FG_FEATURES``).  The booster carries its
+#: own feature names, but the DMatrix is built in this exact order to match:
+#: ``fg_roof = 1`` when ``roof == "outdoors"``, ``fg_era = 1`` when ``season >= 2020``.
+FG_FEATURES: list[str] = [
+    "yardline_100",
+    "fg_roof",
+    "fg_era",
+]
 
 #: ``fd_model`` feature order (nfl4th ``get_go_wp``).  The model has no embedded
 #: feature names, so column order is load-bearing.
@@ -157,12 +172,35 @@ def _load_two_pt_model() -> Optional["Booster"]:
 
 
 @lru_cache(maxsize=1)
-def _load_fg_grid() -> Optional[pl.DataFrame]:
-    """Load the bundled FG make-probability grid (``fg_model_grid.parquet``)."""
-    path = _bundled_models_dir() / "fg_model_grid.parquet"
-    if not path.exists():  # pragma: no cover - depends on bundling
+def _load_fg_model() -> Optional["Booster"]:
+    """Load the bundled FG make-probability model (``fg_model.ubj``), or ``None``."""
+    try:
+        return _load_model(_FG_MODEL_FILE, models_dir=_bundled_models_dir())
+    except Exception:  # pragma: no cover - depends on bundling
         return None
-    return pl.read_parquet(path)
+
+
+def _fg_make_prob(yardline_100: np.ndarray, fg_roof: np.ndarray, fg_era: np.ndarray) -> Optional[np.ndarray]:
+    """Predict the FG make probability from the bundled ``fg_model``.
+
+    Builds the feature matrix in :data:`FG_FEATURES` order
+    (``yardline_100``, ``fg_roof``, ``fg_era``), predicts the ``binary:logistic``
+    make probability, and applies nfl4th's long-kick post-processing: shrink by
+    0.9 at/beyond ``yardline_100 = 38`` and zero at/beyond ``yardline_100 = 45``
+    (>= ~63-yard kicks).  Returns ``None`` when the model is unavailable.
+    """
+    model = _load_fg_model()
+    if model is None:
+        return None
+    from xgboost import DMatrix
+
+    yl: np.ndarray = yardline_100.astype(float)
+    x_fg = np.column_stack([yl, fg_roof.astype(float), fg_era.astype(float)]).astype(np.float32)
+    make_prob: np.ndarray = model.predict(DMatrix(x_fg, feature_names=FG_FEATURES)).astype(float)
+    # nfl4th long-kick clamps: zero at/beyond the 45 (>= ~63 yd), shrink 0.9 at/beyond the 38.
+    make_prob = np.where(yl >= 45, 0.0, make_prob)
+    make_prob = np.where(yl >= 38, 0.9 * make_prob, make_prob)
+    return make_prob
 
 
 @lru_cache(maxsize=1)
@@ -205,6 +243,8 @@ FD_MODEL_AVAILABLE: bool = _on_disk(_FD_MODEL_FILE)
 WP_MODEL_AVAILABLE: bool = _on_disk(_WP_MODEL_FILE)
 #: ``True`` when the bundled 2-pt conversion model is present.
 TWO_PT_MODEL_AVAILABLE: bool = (_bundled_models_dir() / _TWO_PT_MODEL_FILE).exists()
+#: ``True`` when the bundled FG make-probability model is present.
+FG_MODEL_AVAILABLE: bool = (_bundled_models_dir() / _FG_MODEL_FILE).exists()
 
 
 # --------------------------------------------------------------------------- #
@@ -260,9 +300,11 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     season = d["season"].to_numpy()
     d["era3"] = ((season > 2013) & (season <= 2017)).astype(int)
     d["era4"] = (season > 2017).astype(int)
-    fg_roof = np.where(roof.to_numpy() == "outdoors", 1, 0)
-    fg_era = np.where(season >= 2020, 1, 0)
-    d["fg_model_roof"] = pd.Series(fg_roof.astype(str)).str.cat(pd.Series(fg_era.astype(str)))
+    # fg_model features (track7 FG_FEATURES): fg_roof = (roof == "outdoors"),
+    # fg_era = (season >= 2020).  Stored as columns so the FG/PAT paths can build
+    # the DMatrix in FG_FEATURES order.
+    d["fg_roof"] = np.where(roof.to_numpy() == "outdoors", 1, 0)
+    d["fg_era"] = np.where(season >= 2020, 1, 0)
     d["home_total"] = (d["total_line"] + d["spread_line"]) / 2.0
     d["away_total"] = (d["total_line"] - d["spread_line"]) / 2.0
     d["retractable"] = (d["model_roof"] == "retractable").astype(int)
@@ -478,8 +520,7 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         return pd.DataFrame({"go_index": [], "yardline_100": [], "wp_td": []})
 
     two_pt = _load_two_pt_model()
-    fg_grid = _load_fg_grid()
-    if two_pt is None or fg_grid is None or _try_load(_WP_MODEL_FILE) is None:
+    if two_pt is None or _load_fg_model() is None or _try_load(_WP_MODEL_FILE) is None:
         out = d[["go_index"]].copy()
         out["yardline_100"] = 0
         out["wp_td"] = np.nan
@@ -502,11 +543,9 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     ).astype(np.float32)
     conv_2pt = two_pt.predict(DMatrix(x2, feature_names=TWO_PT_FEATURES))
 
-    grid = fg_grid.with_columns(pl.col("yardline_100").cast(pl.Int64))
-    pat_key = pd.DataFrame(
-        {"yardline_100": np.full(n, 15, dtype=np.int64), "fg_model_roof": d["fg_model_roof"].to_numpy()}
-    )
-    conv_1pt = pat_key.merge(grid.to_pandas(), on=["yardline_100", "fg_model_roof"], how="left")["prob"].to_numpy()
+    # PAT make probability: the FG model at yardline_100 = 15 (the PAT spot).
+    pat_yl: np.ndarray = np.full(n, 15, dtype=float)
+    conv_1pt = _fg_make_prob(pat_yl, d["fg_roof"].to_numpy(), d["fg_era"].to_numpy())
 
     rows = []
     for pts in (0, 1, 2):
@@ -687,9 +726,10 @@ def get_go_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     """Expected win probability of attempting a field goal (nfl4th ``get_fg_wp``).
 
-    The make probability is looked up from the mgcv-GAM grid (``fg_model_grid``,
-    keyed on ``yardline_100`` × ``fg_model_roof``), shrunk by 0.9 for kicks at/
-    beyond ``yardline_100 = 38`` and zeroed at/beyond ``yardline_100 = 45``
+    The make probability comes from the self-trained ``fg_model`` (a
+    ``binary:logistic`` XGBoost re-train of the original mgcv GAM, features
+    ``[yardline_100, fg_roof, fg_era]``), shrunk by 0.9 for kicks at/beyond
+    ``yardline_100 = 38`` and zeroed at/beyond ``yardline_100 = 45``
     (>= ~63-yard kicks).  The made-FG state (opponent receives a touchback
     kickoff at the 25, kicking team +3) and the missed-FG state (opponent takes
     over 8 yards back of the spot, capped at the 80) are each scored with win
@@ -701,7 +741,7 @@ def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     Returns:
         A pandas copy of ``pbp_df`` plus ``fg_make_prob``, ``make_fg_wp``,
         ``miss_fg_wp`` and ``fg_wp`` (from the kicking team's perspective).  All
-        four are NaN when the FG grid or WP model is unavailable.
+        four are NaN when the FG model or WP model is unavailable.
 
     Example:
         Quick start::
@@ -726,20 +766,15 @@ def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     d = base if "posteam_spread" in base.columns else _prepare(base)
     d = d.reset_index(drop=True)
 
-    fg_grid = _load_fg_grid()
-    if fg_grid is None or _try_load(_WP_MODEL_FILE) is None:
+    if _load_fg_model() is None or _try_load(_WP_MODEL_FILE) is None:
         out = base.copy()
         for c in cols:
             out[c] = np.nan
         return out
 
-    grid = fg_grid.with_columns(pl.col("yardline_100").cast(pl.Int64)).to_pandas()
     yl = d["yardline_100"].to_numpy().astype(float)
-    key = pd.DataFrame({"yardline_100": yl.astype(np.int64), "fg_model_roof": d["fg_model_roof"].to_numpy()})
-    make_prob = key.merge(grid, on=["yardline_100", "fg_model_roof"], how="left")["prob"].to_numpy()
-    # nfl4th long-kick clamps: zero at/beyond the 45 (>= ~63 yd), shrink 0.9 at/beyond the 38.
-    make_prob = np.where(yl >= 45, 0.0, make_prob)
-    make_prob = np.where(yl >= 38, 0.9 * make_prob, make_prob)
+    make_prob = _fg_make_prob(yl, d["fg_roof"].to_numpy(), d["fg_era"].to_numpy())
+    assert make_prob is not None  # guarded above
 
     # made FG: flip to opponent receiving a touchback (the 25), kicking team +3.
     make_state = _flip_team(d)

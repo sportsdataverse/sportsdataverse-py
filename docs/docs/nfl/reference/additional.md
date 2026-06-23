@@ -5544,9 +5544,10 @@ assert get_config().cache_mode == "off"
 
 Expected win probability of attempting a field goal (nfl4th `get_fg_wp`).
 
-The make probability is looked up from the mgcv-GAM grid (`fg_model_grid`,
-keyed on `yardline_100` × `fg_model_roof`), shrunk by 0.9 for kicks at/
-beyond `yardline_100 = 38` and zeroed at/beyond `yardline_100 = 45`
+The make probability comes from the self-trained `fg_model` (a
+`binary:logistic` XGBoost re-train of the original mgcv GAM, features
+`[yardline_100, fg_roof, fg_era]`), shrunk by 0.9 for kicks at/beyond
+`yardline_100 = 38` and zeroed at/beyond `yardline_100 = 45`
 (>= ~63-yard kicks).  The made-FG state (opponent receives a touchback
 kickoff at the 25, kicking team +3) and the missed-FG state (opponent takes
 over 8 yards back of the spot, capped at the 80) are each scored with win
@@ -5560,7 +5561,7 @@ probability; `fg_wp = make_prob * make_wp + (1 - make_prob) * miss_wp`.
 
 **Returns**
 
-A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `fg_wp` (from the kicking team's perspective). All four are NaN when the FG grid or WP model is unavailable.
+A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `fg_wp` (from the kicking team's perspective). All four are NaN when the FG model or WP model is unavailable.
 
 **Example**
 
