@@ -164,6 +164,29 @@ def test_cfb_play_process_add_2pt_probs_synthetic():
     assert recs <= {"go_for_2", "kick_xp"}
 
 
+@requires_two_pt
+def test_pre2014_separate_pat_row_detected_by_type():
+    """Pre-2014 games carry the PAT as a SEPARATE play row ("Extra Point Good" /
+    "Two-Point Conversion Good") with no pointAfterAttempt / extra_point_result
+    columns. It must still be detected (by play type) and scored at its
+    already-post-TD pos_score_diff_start (pass_td/rush_td absent -> no +6)."""
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    proc = CFBPlayProcess(gameId=1)
+    proc.ran_pipeline = True
+    proc.json = {"plays": []}
+    xp = {**_row(sd=4, period=4), "type.text": "Extra Point Good"}
+    two_pt = {**_row(sd=-2, tsr=120, adj=120, period=4), "type.text": "Two-Point Conversion Good"}
+    not_pat = {**_row(sd=0), "type.text": "Rush"}
+    proc.plays_json = [xp, two_pt, not_pat]
+    out = proc.add_2pt_probs()
+    rec_rows = out.filter(pl.col("two_pt_recommendation").is_not_null())
+    # both PAT rows detected by type; the plain rush row is not
+    assert rec_rows.height == 2
+    assert rec_rows["two_pt_wp"].is_not_null().all()
+    assert set(rec_rows["two_pt_recommendation"].to_list()) <= {"go_for_2", "kick_xp"}
+
+
 @skip_if_no_live
 def test_add_2pt_probs_live():
     """Live: a real game's PAT / 2pt rows get bounded WPs + valid recommendations."""

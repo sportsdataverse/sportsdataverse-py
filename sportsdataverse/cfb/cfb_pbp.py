@@ -6178,6 +6178,16 @@ class CFBPlayProcess(object):
         for c in ("extra_point_result", "two_point_conv_result"):
             if c in play_df.columns:
                 pat_mask = pat_mask | pl.col(c).is_not_null()
+        # Pre-2014 games carry no pointAfterAttempt / extra_point_result columns and
+        # instead represent the PAT as a SEPARATE play row ("Extra Point Good",
+        # "Two-Point Conversion Good", ...). Detect those by play type so the
+        # decision surface covers older games too. (On those separate rows
+        # pos_score_diff_start is already the post-TD score and pass_td/rush_td are
+        # False, so the +6 post-TD adjustment below correctly does not apply.)
+        for tcol in ("type.text", "play_type", "type"):
+            if tcol in play_df.columns:
+                pat_mask = pat_mask | pl.col(tcol).cast(pl.Utf8).str.contains(r"(?i)extra point|two.?point")
+                break
         plays = play_df.with_row_index("__twopt_row_idx")
         pat = plays.filter(pat_mask)
         if pat.height == 0:
