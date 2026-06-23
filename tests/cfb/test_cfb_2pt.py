@@ -187,6 +187,32 @@ def test_pre2014_separate_pat_row_detected_by_type():
     assert set(rec_rows["two_pt_recommendation"].to_list()) <= {"go_for_2", "kick_xp"}
 
 
+@requires_two_pt
+def test_offensive_td_gets_plus6_but_defensive_return_td_does_not():
+    """The post-TD +6 score adjustment must apply only to TDs scored BY the posteam.
+    `pass_td` also fires for pick-sixes (its `pass & td_play` branch), so the gate
+    ANDs with `offense_score_play`. An offensive-TD PAT row (offense_score_play=True)
+    is scored at +6; a defensive return-TD PAT row (offense_score_play=False, but
+    pass_td=True) is not -- so their two-point decisions must differ."""
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    proc = CFBPlayProcess(gameId=1)
+    proc.ran_pipeline = True
+    proc.json = {"plays": []}
+    common = {**_row(sd=-1, period=4), "pointAfterAttempt.text": "Extra Point Good", "pass_td": True, "rush_td": False}
+    offensive = {**common, "offense_score_play": True}  # posteam scored -> +6 applies
+    defensive = {**common, "offense_score_play": False}  # pick-six PAT -> +6 must NOT apply
+    proc.plays_json = [offensive, defensive]
+    out = proc.add_2pt_probs()
+    rec = out.filter(pl.col("two_pt_recommendation").is_not_null())
+    assert rec.height == 2
+    # +6 only on the offensive row changes its scored score frame, so its win-prob
+    # outputs differ from the (un-adjusted) defensive return-TD row. (prob_2pt alone
+    # can tie -- the 2pt booster lands pos_score_diff -1 vs +5 in the same leaf -- so
+    # assert on two_pt_wp, which the WP model resolves.)
+    assert rec["two_pt_wp"][0] != rec["two_pt_wp"][1]
+
+
 @skip_if_no_live
 def test_add_2pt_probs_live():
     """Live: a real game's PAT / 2pt rows get bounded WPs + valid recommendations."""

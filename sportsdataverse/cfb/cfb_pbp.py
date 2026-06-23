@@ -3284,7 +3284,7 @@ class CFBPlayProcess(object):
                 .then(pl.col("sack_players").str.replace(r"(.+) and", ""))
                 .otherwise(None),
                 # --- Interception Names -----
-                interception_player=pl.when(pl.col("text").str.contains(r"Yd Interception Return"))
+                interception_player=pl.when(pl.col("text").str.contains(r"(?i)yd interception return"))
                 .then(
                     _extract_player_name(
                         pl.col("text"),
@@ -3493,7 +3493,6 @@ class CFBPlayProcess(object):
                     .str.replace(r"(?i) for ", "")
                     .str.replace(r"(?i) a safety", "")
                     .str.replace(r"(?i)r no gain", "")
-                    .str.replace(r"(?i)(.+)(\d{1,2})", "")
                     .str.replace(r"(?i)(\d{1,2})", "")
                     .str.replace(r", ", ""),
                 )
@@ -6160,6 +6159,7 @@ class CFBPlayProcess(object):
         "miss_fg_wp",
         "fg_wp",
         "punt_wp",
+        "go_boost",
         "go_wp_diff",
         "fg_wp_diff",
         "punt_wp_diff",
@@ -6238,10 +6238,15 @@ class CFBPlayProcess(object):
         # decision at the POST-TD score. Only offensive (posteam) touchdowns gain +6;
         # other PAT rows (e.g. defensive-TD tries, where the posteam is not the
         # scoring team) are left as-is rather than mis-credited.
-        if {"pass_td", "rush_td"}.issubset(set(pat.columns)):
-            off_td = pl.col("pass_td").cast(pl.Boolean).fill_null(False) | pl.col("rush_td").cast(pl.Boolean).fill_null(
-                False
-            )
+        if {"pass_td", "rush_td", "offense_score_play"}.issubset(set(pat.columns)):
+            # pass_td also fires for pick-sixes (its `pass & td_play` branch), so AND with
+            # offense_score_play to keep only TDs scored BY the posteam -- a defensive
+            # return TD must not push the posteam's score frame +6. (td_play alone is
+            # unreliable here: "Passing Touchdown" rows carry td_play == False.)
+            off_td = (
+                pl.col("pass_td").cast(pl.Boolean).fill_null(False)
+                | pl.col("rush_td").cast(pl.Boolean).fill_null(False)
+            ) & pl.col("offense_score_play").cast(pl.Boolean).fill_null(False)
             pat = pat.with_columns(
                 pl.when(off_td)
                 .then(pl.col("pos_score_diff_start") + 6)
@@ -6436,22 +6441,14 @@ class CFBPlayProcess(object):
             self.run_processing_pipeline()
 
         plays = pl.DataFrame(self.plays_json, infer_schema_length=None)
-        decision_cols = [
-            "go_wp",
-            "first_down_prob",
-            "wp_succeed",
-            "wp_fail",
-            "fg_make_prob",
-            "make_fg_wp",
-            "miss_fg_wp",
-            "fg_wp",
-            "punt_wp",
-            "go_boost",
-            "go_wp_diff",
-            "punt_wp_diff",
-            "fg_wp_diff",
-            "fourth_down_recommendation",
-        ]
+        decision_cols = self._FOURTH_DOWN_DECISION_COLS
+        # run_processing_pipeline() appends these by default, so the documented
+        # run_processing_pipeline(); add_fourth_down_probs() flow starts with them
+        # already present. Drop any existing copies first so the re-score is a clean
+        # overwrite instead of producing suffixed duplicate columns on the join.
+        existing = [c for c in decision_cols if c in plays.columns]
+        if existing:
+            plays = plays.drop(existing)
         plays = plays.with_row_index("__fourth_row_idx")
         fourth = plays.filter(pl.col("start.down") == 4)
 
@@ -6465,9 +6462,8 @@ class CFBPlayProcess(object):
             return plays
 
         scored = get_4th_down_probs(fourth)  # pandas
-        scored_pl = pl.from_pandas(scored[["__fourth_row_idx", *decision_cols]]).with_columns(
-            pl.col("__fourth_row_idx").cast(pl.UInt32)
-        )
+        keep = ["__fourth_row_idx"] + [c for c in decision_cols if c in scored.columns]
+        scored_pl = pl.from_pandas(scored[keep]).with_columns(pl.col("__fourth_row_idx").cast(pl.UInt32))
 
         plays = plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
         self.plays_json = plays.to_dicts()

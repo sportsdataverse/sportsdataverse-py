@@ -27,7 +27,9 @@ def _run_player_cols(rows: list[dict]) -> pl.DataFrame:
     return proc._CFBPlayProcess__add_player_cols(df)
 
 
-def _row(text: str, *, rush=False, pass_=False, sack_vec=False, sack=False, fumble_vec=False, type_text="Rush"):
+def _row(
+    text: str, *, rush=False, pass_=False, sack_vec=False, sack=False, fumble_vec=False, type_text="Rush"
+) -> dict[str, str | bool]:
     return {
         "text": text,
         "rush": rush,
@@ -117,6 +119,17 @@ def test_kickoff_returner_extracted_without_yardage_tail():
         ]
     )
     assert out["kickoff_return_player_name"].to_list() == ["Arthur Jaffee", "John Doe"]
+
+
+def test_fumble_player_not_blanked_by_yardage_digits():
+    """Regression: after the ``\\d`` escape fix, the greedy ``(.+)(\\d{1,2})`` cleanup
+    erased the whole fumbler capture whenever a yardage digit remained. It was
+    removed -- the name must survive."""
+    out = _run_player_cols(
+        [_row("John Doe fumbled at the 25, recovered by Smith.", rush=True, fumble_vec=True, type_text="Rush")]
+    )
+    fp = out["fumble_player_name"][0]
+    assert fp not in (None, ""), f"fumble_player blanked: {fp!r}"
 
 
 def test_fumble_forced_player_extracted():

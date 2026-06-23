@@ -643,6 +643,16 @@ def _fg_make_prob(st: pd.DataFrame) -> np.ndarray:
     # The era-augmented fg_model expects era0..era3; add them only when the bundled
     # model declares them (keeps the single-feature GAM path working unchanged).
     if any(str(f).startswith("era") for f in fnames):
+        # The era-aware fg_model needs `season` to build the era dummies. `_to_pandas`
+        # backfills a missing source column with NaN rather than raising, which would
+        # silently yield all-zero era features (wrong predictions). Fail loudly instead
+        # -- `season` is a documented required column (see _PBP_COLS).
+        if "season" not in st.columns or st["season"].isna().all():
+            raise ValueError(
+                "the bundled era-aware fg_model requires a non-null 'season' column "
+                "(era features would otherwise silently degrade to all-zero); pass "
+                "'season' in the input frame -- see sportsdataverse.cfb.cfb_fourth_down._PBP_COLS"
+            )
         X = X.assign(**_era_onehot(st["season"].to_numpy().astype(float)))
     prob = fg_model.predict(DMatrix(X[fnames] if set(fnames) <= set(X.columns) else X))
     prob = np.where(ytg > 42, 0.0, prob)
