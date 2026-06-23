@@ -25,11 +25,13 @@ nfl:
   espn_nfl_teams: {}
   # load_* dataset loaders with no `seasons` default need an explicit season.
   load_depth_charts: {seasons: 2024}
+  load_espn_qbr: {seasons: 2024}
   load_ff_opportunity: {seasons: 2024}
   load_ftn_charting: {seasons: 2024}
   load_injuries: {seasons: 2024}
   load_nextgen_stats: {seasons: 2024}
   load_nfl_depth_charts: {seasons: 2024}
+  load_nfl_espn_qbr: {seasons: 2024}
   load_nfl_ff_opportunity: {seasons: 2024}
   load_nfl_ftn_charting: {seasons: 2024}
   load_nfl_injuries: {seasons: 2024}

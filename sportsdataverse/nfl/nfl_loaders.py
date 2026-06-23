@@ -12,6 +12,8 @@ from sportsdataverse.config import (
     NFL_CONTRACTS_URL,
     NFL_DEPTH_CHARTS_URL,
     NFL_DRAFT_PICKS_URL,
+    NFL_ESPN_QBR_SEASON_URL,
+    NFL_ESPN_QBR_WEEK_URL,
     NFL_FF_OPPORTUNITY_URL,
     NFL_FF_PLAYERIDS_URL,
     NFL_FF_RANKINGS_ALL_URL,
@@ -37,6 +39,8 @@ from sportsdataverse.config import (
     NFL_PLAYER_STATS_URL,
     NFL_PLAYER_URL,
     NFL_ROSTER_URL,
+    NFL_SDV_ESPN_QBR_SEASON_URL,
+    NFL_SDV_ESPN_QBR_WEEK_URL,
     NFL_SDV_PLAYER_STATS_URL,
     NFL_SDV_PLAYER_URL,
     NFL_SDV_ROSTER_URL,
@@ -1666,6 +1670,102 @@ def load_nfl_ff_opportunity(
             columns=None,
         )
         data = pl.concat([data, i_data], how="vertical")
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
+
+
+@cached_loader
+def load_nfl_espn_qbr(
+    seasons: List[int],
+    summary_type: str = "season",
+    return_as_pandas: bool = False,
+    *,
+    source: str = "nflverse",
+) -> pl.DataFrame:
+    """Load ESPN Total QBR (Quarterback Rating) data going back to 2006.
+
+    Mirrors nflreadpy / nflreadr ``load_espn_qbr`` -- the lone nflreadpy dataset
+    that previously had no sdv-py loader. ESPN publishes Total QBR only from 2006
+    onward, so 2006 is the earliest available season (unlike the 1999 floor on
+    play-by-play). nflverse republishes ESPN's QBR through the ``espn_data``
+    release as two combined files (one per ``summary_type``), each covering all
+    seasons; this loader reads the requested file once and post-filters by
+    ``season`` (the same access pattern as :func:`load_nfl_schedule`).
+
+    Args:
+        seasons (list): Seasons to return. 2006 is the earliest available season.
+        summary_type (str): Aggregation level. ``"season"`` (default) returns one
+            row per quarterback-season; ``"week"`` returns one row per
+            quarterback-game. Any other value raises ``ValueError``.
+        return_as_pandas (bool): If True, returns a pandas dataframe. If False,
+            returns a polars dataframe.
+        source (str): Which QBR release to read. ``"nflverse"`` (the default,
+            also accepts ``None``) returns the nflverse ``espn_data`` release.
+            ``"sportsdataverse"`` / ``"sdv"`` returns the SDV-native
+            ``nfl_espn_qbr`` release (built by ``nfl-data`` from ESPN's QBR web
+            endpoint -- the same source nflverse's espnscrapeR uses). Any other
+            value raises ``ValueError``.
+
+    Returns:
+        pl.DataFrame: Polars dataframe containing ESPN Total QBR for the requested
+            seasons, summarized per ``summary_type``.
+
+    Raises:
+        ValueError: If ``summary_type`` is not ``"season"`` / ``"week"``, or if
+            ``source`` is not one of ``"nflverse"``, ``None``,
+            ``"sportsdataverse"``, or ``"sdv"``.
+        SeasonNotFoundError: If any requested season is before 2006.
+
+    Note:
+        ``source="sdv"`` reads the ``nfl_espn_qbr`` release, which ``nfl-data``
+        publishes as part of the CFB<->NFL dataset-parity backlog. Until that
+        release exists the default ``source="nflverse"`` is the working path.
+
+    Example:
+        Season-level QBR (default)::
+
+            from sportsdataverse.nfl import load_nfl_espn_qbr
+            qbr = load_nfl_espn_qbr(seasons=[2024])
+            qbr.shape
+
+        Week-level QBR::
+
+            qbr_week = load_nfl_espn_qbr(seasons=[2024], summary_type="week")
+
+        Multi-season range::
+
+            qbr = load_nfl_espn_qbr(seasons=range(2020, 2025))
+
+        Pandas round-trip::
+
+            qbr_pd = load_nfl_espn_qbr(seasons=[2024], return_as_pandas=True)
+            qbr_pd[["season", "team_abb", "qbr_total"]].head()
+
+        See Also:
+            * `nflverse`_ -- full data ecosystem (R + Python)
+            * `nflreadpy`_ -- direct nflverse Python bindings
+
+        .. _nflverse: https://nflverse.nflverse.com
+        .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    """
+    if summary_type not in ("season", "week"):
+        raise ValueError(f"Invalid summary_type {summary_type!r}; expected 'season' or 'week'.")
+    if source in ("nflverse", None):
+        url = NFL_ESPN_QBR_SEASON_URL if summary_type == "season" else NFL_ESPN_QBR_WEEK_URL
+    elif source in ("sportsdataverse", "sdv"):
+        url = NFL_SDV_ESPN_QBR_SEASON_URL if summary_type == "season" else NFL_SDV_ESPN_QBR_WEEK_URL
+    else:
+        raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
+
+    if type(seasons) is int:
+        seasons = [seasons]
+    for i in seasons:
+        season_not_found_error(int(i), 2006)
+    # The espn_data release ships ONE combined parquet per summary_type (all
+    # seasons, 2006-present). Read once and post-filter by season.
+    data = pl.read_parquet(url, use_pyarrow=True, columns=None)
+    if "season" in data.columns and seasons:
+        season_ints = [int(s) for s in seasons]
+        data = data.filter(pl.col("season").is_in(season_ints))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 

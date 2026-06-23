@@ -63,6 +63,7 @@ from sportsdataverse.nfl.nfl_loaders import load_nfl_combine as load_combine
 from sportsdataverse.nfl.nfl_loaders import load_nfl_contracts as load_contracts
 from sportsdataverse.nfl.nfl_loaders import load_nfl_depth_charts as load_depth_charts
 from sportsdataverse.nfl.nfl_loaders import load_nfl_draft_picks as load_draft_picks
+from sportsdataverse.nfl.nfl_loaders import load_nfl_espn_qbr as load_espn_qbr
 from sportsdataverse.nfl.nfl_loaders import (
     load_nfl_ff_opportunity as load_ff_opportunity,
 )

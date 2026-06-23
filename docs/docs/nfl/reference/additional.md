@@ -691,6 +691,52 @@ r1_2024 = (
 )
 ```
 
+### `load_espn_qbr(seasons: 'List[int]', summary_type: 'str' = 'season', return_as_pandas: 'bool' = False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_espn_qbr}
+
+Load ESPN Total QBR (Quarterback Rating) data going back to 2006.
+
+Mirrors nflreadpy / nflreadr `load_espn_qbr` -- the lone nflreadpy dataset
+that previously had no sdv-py loader. ESPN publishes Total QBR only from 2006
+onward, so 2006 is the earliest available season (unlike the 1999 floor on
+play-by-play). nflverse republishes ESPN's QBR through the `espn_data`
+release as two combined files (one per `summary_type`), each covering all
+seasons; this loader reads the requested file once and post-filters by
+`season` (the same access pattern as `load_nfl_schedule`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list` |  | Seasons to return. 2006 is the earliest available season. |
+| `summary_type` | `str` | `'season'` | Aggregation level. `"season"` (default) returns one row per quarterback-season; `"week"` returns one row per quarterback-game. Any other value raises `ValueError`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which QBR release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse `espn_data` release. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_espn_qbr` release (built by `nfl-data` from ESPN's QBR web endpoint -- the same source nflverse's espnscrapeR uses). Any other value raises `ValueError`. |
+
+**Returns**
+
+Polars dataframe containing ESPN Total QBR for the requested seasons, summarized per `summary_type`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_espn_qbr
+qbr = load_nfl_espn_qbr(seasons=[2024])
+qbr.shape
+
+# Week-level QBR
+
+qbr_week = load_nfl_espn_qbr(seasons=[2024], summary_type="week")
+
+# Multi-season range
+
+qbr = load_nfl_espn_qbr(seasons=range(2020, 2025))
+
+# Pandas round-trip
+
+qbr_pd = load_nfl_espn_qbr(seasons=[2024], return_as_pandas=True)
+qbr_pd[["season", "team_abb", "qbr_total"]].head()
+```
+
 ### `load_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'` {#load_ff_opportunity}
 
 Load NFL fantasy football opportunity data from ffverse/ffopportunity
@@ -1384,6 +1430,78 @@ r1_2024 = (
     load_nfl_draft_picks()
     .filter((pl.col("season") == 2024) & (pl.col("round") == 1))
 )
+```
+
+### `load_nfl_espn_qbr(seasons: 'List[int]', summary_type: 'str' = 'season', return_as_pandas: 'bool' = False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'` {#load_nfl_espn_qbr}
+
+Load ESPN Total QBR (Quarterback Rating) data going back to 2006.
+
+Mirrors nflreadpy / nflreadr `load_espn_qbr` -- the lone nflreadpy dataset
+that previously had no sdv-py loader. ESPN publishes Total QBR only from 2006
+onward, so 2006 is the earliest available season (unlike the 1999 floor on
+play-by-play). nflverse republishes ESPN's QBR through the `espn_data`
+release as two combined files (one per `summary_type`), each covering all
+seasons; this loader reads the requested file once and post-filters by
+`season` (the same access pattern as `load_nfl_schedule`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list` |  | Seasons to return. 2006 is the earliest available season. |
+| `summary_type` | `str` | `'season'` | Aggregation level. `"season"` (default) returns one row per quarterback-season; `"week"` returns one row per quarterback-game. Any other value raises `ValueError`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which QBR release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse `espn_data` release. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_espn_qbr` release (built by `nfl-data` from ESPN's QBR web endpoint -- the same source nflverse's espnscrapeR uses). Any other value raises `ValueError`. |
+
+**Returns**
+
+Polars dataframe containing ESPN Total QBR for the requested seasons, summarized per `summary_type`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | NFL season (year) the Total QBR record covers. |
+| `season_type` | character | Season segment for the record -- regular season or postseason. |
+| `game_week` | character | Week scope of the QBR aggregation; for season-level rows this is the season-summary tag. |
+| `team_abb` | character | Team abbreviation for the quarterback's team during the period. |
+| `player_id` | character | ESPN athlete identifier for the quarterback. |
+| `name_short` | character | Abbreviated display name of the quarterback (e.g. 'P. Mahomes'). |
+| `rank` | double | Quarterback's rank by Total QBR among qualified passers for the period. |
+| `qbr_total` | double | ESPN Total QBR on a 0-100 scale -- the headline opponent-adjusted quarterback rating. |
+| `pts_added` | double | Points the quarterback added versus a league-average passer (ESPN QBR points-added component). |
+| `qb_plays` | double | Count of qualifying quarterback action plays used to compute QBR. |
+| `epa_total` | double | Total expected points added across the quarterback's plays (ESPN QBR EPA component). |
+| `pass` | double | QBR points contribution from pass plays. |
+| `run` | double | QBR points contribution from designed runs and scrambles. |
+| `exp_sack` | double | QBR points contribution adjustment from expected sacks. |
+| `penalty` | double | QBR points contribution from penalties attributed to the quarterback. |
+| `qbr_raw` | double | Raw (non-opponent-adjusted) QBR for the period. |
+| `sack` | double | QBR points contribution from sacks taken. |
+| `name_first` | character | Quarterback's first name. |
+| `name_last` | character | Quarterback's last name. |
+| `name_display` | character | Quarterback's full display name. |
+| `headshot_href` | character | URL of the quarterback's ESPN headshot image. |
+| `team` | character | Full team name for the quarterback's team during the period. |
+| `qualified` | logical | Whether the quarterback met ESPN's minimum action-play threshold to qualify for ranking. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_espn_qbr
+qbr = load_nfl_espn_qbr(seasons=[2024])
+qbr.shape
+
+# Week-level QBR
+
+qbr_week = load_nfl_espn_qbr(seasons=[2024], summary_type="week")
+
+# Multi-season range
+
+qbr = load_nfl_espn_qbr(seasons=range(2020, 2025))
+
+# Pandas round-trip
+
+qbr_pd = load_nfl_espn_qbr(seasons=[2024], return_as_pandas=True)
+qbr_pd[["season", "team_abb", "qbr_total"]].head()
 ```
 
 ### `load_nfl_ff_opportunity(seasons: 'List[int]', stat_type: 'str' = 'weekly', model_version: 'str' = 'latest', return_as_pandas=False) -> 'pl.DataFrame'` {#load_nfl_ff_opportunity}
