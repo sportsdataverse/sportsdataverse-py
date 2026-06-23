@@ -144,3 +144,31 @@ def test_fumble_forced_player_extracted():
         ]
     )
     assert out["fumble_forced_player_name"][0] == "Bill Smith"
+
+
+def test_roster_player_id_attach_team_aware():
+    """__attach_player_ids resolves {type}_player_id from the game roster, keyed by
+    the player's team so an identical name on opposing rosters doesn't collide."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    proc.game_roster = [
+        {"athlete_id": 100, "full_name": "Joe Back", "team_id": 10},
+        {"athlete_id": 200, "full_name": "Sam Sack", "team_id": 20},
+        {"athlete_id": 300, "full_name": "Joe Back", "team_id": 20},  # same name, other team
+    ]
+    df = pl.DataFrame(
+        [{"rusher_player_name": "Joe Back", "sack_player_name": "Sam Sack", "pos_team": 10, "def_pos_team": 20}]
+    )
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    # team-aware: pos_team=10 -> Joe Back@10 (not the @20 namesake); def_pos_team=20 -> Sam Sack@20
+    assert out["rusher_player_id"][0] == 100
+    assert out["sack_player_id"][0] == 200
+
+
+def test_garbage_player_name_nulled():
+    """Obvious play-text artifacts ('... loss ...') are nulled before the id-join."""
+    proc = CFBPlayProcess(gameId=1)
+    proc.join_participants = False
+    df = pl.DataFrame([{"rusher_player_name": "bea loss of", "pos_team": 10}])
+    out = proc._CFBPlayProcess__attach_player_ids(df)
+    assert out["rusher_player_name"][0] is None

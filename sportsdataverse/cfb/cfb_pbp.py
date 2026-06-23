@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import time
+import unicodedata
 from functools import reduce
 from importlib.resources import files as _resource_files
 
@@ -59,6 +60,30 @@ def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
         return text_expr.str.extract(pattern, 1)
     groups = text_expr.str.extract_groups(pattern)
     return pl.coalesce([groups.struct.field(str(i)) for i in range(1, n + 1)])
+
+
+#: A play-text artifact masquerading as a name if it contains one of these as a
+#: whole word (real surnames effectively never do). Used to null garbage
+#: extractions like "bea loss of" / "for a loss" before the roster id-join.
+_PLAYER_NAME_GARBAGE = re.compile(
+    r"(?i)\b(loss|gain|yards?|incomplete|penalty|fumbled|sacked|touchdown|kickoff|punt|return)\b"
+)
+
+
+def _norm_player_name(name) -> str:
+    """Normalize a player name for roster matching.
+
+    ASCII-folds, lowercases, drops punctuation + generational suffixes
+    (Jr/Sr/II/III/IV/V), and collapses whitespace. Returns ``""`` for empty or
+    the ``"Team"`` sentinel so they never match a roster entry.
+    """
+    if not name or name == "Team":
+        return ""
+    s = unicodedata.normalize("NFKD", str(name)).encode("ascii", "ignore").decode()
+    s = s.lower().strip().rstrip(".")
+    s = re.sub(r"\b(jr|sr|ii|iii|iv|v)\b\.?", "", s)
+    s = re.sub(r"[^a-z0-9 ]", "", s)
+    return re.sub(r"\s+", " ", s).strip()
 
 
 from sportsdataverse.cfb.model_vars import (
@@ -507,7 +532,17 @@ class CFBPlayProcess(object):
     path_to_json = "/"
     return_keys = None
 
-    def __init__(self, gameId=0, raw=False, path_to_json="/", return_keys=None, odds_override=None, **kwargs):
+    def __init__(
+        self,
+        gameId=0,
+        raw=False,
+        path_to_json="/",
+        return_keys=None,
+        odds_override=None,
+        game_roster=None,
+        participants=None,
+        **kwargs,
+    ):
         """CFBPlayProcess.
 
         Args:
@@ -519,6 +554,14 @@ class CFBPlayProcess(object):
                 gameSpreadAvailable} that short-circuits odds resolution (sets
                 odds_source="injected") so offline rebuilds never hit the live
                 core-odds endpoint or fall back to defaults. Validated + coerced here.
+            game_roster: optional pre-fetched game roster (the list of athlete
+                records from :func:`~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`,
+                or the ``{"data": [...]}`` wrapper). Used by ``__attach_player_ids``
+                to resolve a roster-backed ``{type}_player_id`` for each extracted
+                ``{type}_player_name`` on games that lack a structured
+                ``participants[]`` array (pre-2014). Passing it makes offline
+                rebuilds fetch-free; when omitted the live path fetches the roster
+                on demand only if needed.
 
         Attributes:
             odds_source: provenance of the resolved spread —
@@ -548,6 +591,8 @@ class CFBPlayProcess(object):
         self.return_keys = return_keys
         self.odds_source = None
         self.odds_override = odds_override
+        self.game_roster = game_roster
+        self.participants = participants
 
     def espn_cfb_pbp(self, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
@@ -3251,12 +3296,10 @@ class CFBPlayProcess(object):
                 receiver_player=pl.col("receiver_player")
                 .str.replace(r"(?i) &", "")
                 .str.replace(r"(?i)A&M", "")
-                .str.replace(r"(?i) ST", "")
-                .str.replace(r"(?i) GA", "")
-                .str.replace(r"(?i) UL", "")
-                .str.replace(r"(?i) FL", "")
-                .str.replace(r"(?i) OH", "")
-                .str.replace(r"(?i) NC", "")
+                # Strip a stray trailing team/state token only as the FINAL standalone
+                # word -- anchored so it can't corrupt real names (" ST" used to eat the
+                # " St" inside "Stewart" -> "ewart").
+                .str.replace(r"(?i)\s(ST|GA|UL|FL|OH|NC)$", "")
                 .str.replace(r'(?i) "', "")
                 .str.replace(r"(?i) \\u00c9", "")
                 .str.replace(r"(?i) fumbled,", "")
@@ -6034,13 +6077,27 @@ class CFBPlayProcess(object):
         entirely -- used by offline/disk reprocessing and the offline test suite so neither
         hits ESPN. Defaults to enabled for the normal live path.
         """
-        if not getattr(self, "join_participants", True):
+        passed = getattr(self, "participants", None)
+        if passed is None and not getattr(self, "join_participants", True):
             return play_df
         original_play_df = play_df
         try:
-            from sportsdataverse.cfb.cfb_play_participants import espn_cfb_play_participants
+            if passed is not None:
+                # Caller-supplied participants (offline reprocess) -- avoids the
+                # network fetch AND keeps 2014+ clean names when join_participants
+                # is off. Accepts a polars frame, {"data": [...]}, or a row list.
+                parts = (
+                    passed
+                    if hasattr(passed, "height")
+                    else pl.from_dicts(
+                        passed.get("data") if isinstance(passed, dict) else (passed or []),
+                        infer_schema_length=None,
+                    )
+                )
+            else:
+                from sportsdataverse.cfb.cfb_play_participants import espn_cfb_play_participants
 
-            parts = espn_cfb_play_participants(self.gameId)
+                parts = espn_cfb_play_participants(self.gameId)
 
             # Graceful fallback conditions
             if parts is None or parts.height == 0 or "id" not in play_df.columns:
@@ -6146,6 +6203,137 @@ class CFBPlayProcess(object):
         except Exception as exc:
             logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
             return original_play_df
+
+    #: (name_col, id_col, team_col) for every extractable player type. ``team_col``
+    #: is the play column holding that player's team id, used for team-aware roster
+    #: matching (offense pos_team / defense def_pos_team / special-teams kicking,
+    #: return, recovery columns from __add_attribution_cols).
+    _PLAYER_ID_TEAM_MAP = [
+        ("rusher_player_name", "rusher_player_id", "pos_team"),
+        ("passer_player_name", "passer_player_id", "pos_team"),
+        ("receiver_player_name", "receiver_player_id", "pos_team"),
+        ("fumble_player_name", "fumble_player_id", "pos_team"),
+        ("sack_player_name", "sack_player_id", "def_pos_team"),
+        ("sack_player_name2", "sack_player_id2", "def_pos_team"),
+        ("interception_player_name", "interception_player_id", "def_pos_team"),
+        ("pass_breakup_player_name", "pass_breakup_player_id", "def_pos_team"),
+        ("fumble_forced_player_name", "fumble_forced_player_id", "def_pos_team"),
+        ("fumble_recovered_player_name", "fumble_recovered_player_id", "recovery_team"),
+        ("fg_kicker_player_name", "fg_kicker_player_id", "kicking_team"),
+        ("punter_player_name", "punter_player_id", "kicking_team"),
+        ("kickoff_player_name", "kickoff_player_id", "kicking_team"),
+        ("kickoff_return_player_name", "kickoff_return_player_id", "return_team"),
+        ("punt_return_player_name", "punt_return_player_id", "punt_return_team"),
+        ("fg_block_player_name", "fg_block_player_id", "return_team"),
+        ("punt_block_player_name", "punt_block_player_id", "return_team"),
+        ("fg_return_player_name", "fg_return_player_id", "return_team"),
+        ("punt_block_return_player_name", "punt_block_return_player_id", "return_team"),
+    ]
+
+    @staticmethod
+    def __roster_records(roster):
+        """Normalize a roster (list / ``{"data": [...]}`` / DataFrame) into a list
+        of ``(normalized_full_name, athlete_id:int, team_id:str)`` tuples."""
+        if roster is None:
+            return []
+        if hasattr(roster, "to_dicts"):  # polars DataFrame
+            rows = roster.to_dicts()
+        elif hasattr(roster, "to_dict"):  # pandas DataFrame
+            rows = roster.to_dict("records")
+        elif isinstance(roster, dict):
+            rows = roster.get("data") or []
+        else:
+            rows = roster
+        out = []
+        for a in rows:
+            if not isinstance(a, dict):
+                continue
+            aid = a.get("athlete_id") if a.get("athlete_id") is not None else a.get("id")
+            name = a.get("full_name") or a.get("athlete_display_name") or a.get("displayName")
+            tid = a.get("team_id") if a.get("team_id") is not None else a.get("teamId")
+            nn = _norm_player_name(name)
+            if aid is None or not nn:
+                continue
+            try:
+                out.append((nn, int(aid), str(tid)))
+            except (TypeError, ValueError):
+                continue
+        return out
+
+    def __attach_player_ids(self, play_df):
+        """Null garbage names, then attach a roster-resolved ``{type}_player_id``
+        for each extracted ``{type}_player_name``.
+
+        Games without a structured ``participants[]`` array (pre-2014) carry names
+        parsed from the play text but no ids. This matches each name against the
+        game roster (``self.game_roster`` if supplied, else fetched once on the
+        live path) to recover the ESPN ``athlete_id``. Matching is **team-aware**
+        -- each player type maps to the team that fielded it -- so identical names
+        on opposing rosters don't collide; a globally-unique name is the fallback.
+        Ids already populated (participants, 2014+) are preserved. No roster ->
+        only the garbage-name cleanup is applied.
+        """
+        from collections import defaultdict
+
+        # 1) null obvious play-text artifacts masquerading as names (always runs)
+        present_names = [nc for nc, _, _ in self._PLAYER_ID_TEAM_MAP if nc in play_df.columns]
+        if present_names:
+            play_df = play_df.with_columns(
+                [
+                    pl.when(pl.col(nc).str.contains(_PLAYER_NAME_GARBAGE.pattern))
+                    .then(None)
+                    .otherwise(pl.col(nc))
+                    .alias(nc)
+                    for nc in present_names
+                ],
+            )
+
+        # 2) resolve a roster (passed in, or live fetch when allowed)
+        roster = self.game_roster
+        if roster is None and getattr(self, "join_participants", True):
+            try:
+                from sportsdataverse.cfb.cfb_game_rosters import espn_cfb_game_rosters
+
+                roster = espn_cfb_game_rosters(self.gameId)
+            except Exception as exc:  # pragma: no cover - network dependent
+                logging.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
+                roster = None
+        records = self.__roster_records(roster)
+        if not records:
+            return play_df
+
+        # 3) team-aware + global-unique lookups (ambiguous names are dropped)
+        by_name, by_name_team = defaultdict(set), defaultdict(set)
+        for nn, aid, tid in records:
+            by_name[nn].add(aid)
+            by_name_team[(nn, tid)].add(aid)
+        team_lu = {k: next(iter(v)) for k, v in by_name_team.items() if len(v) == 1}
+        global_lu = {k: next(iter(v)) for k, v in by_name.items() if len(v) == 1}
+
+        def _match(name, team_id):
+            nn = _norm_player_name(name)
+            if not nn:
+                return None
+            aid = team_lu.get((nn, str(team_id)))
+            return aid if aid is not None else global_lu.get(nn)
+
+        # 4) attach {type}_player_id (fill nulls only; preserve participant ids)
+        exprs = []
+        for name_col, id_col, team_col in self._PLAYER_ID_TEAM_MAP:
+            if name_col not in play_df.columns or team_col not in play_df.columns:
+                continue
+            roster_id = pl.struct(
+                [pl.col(name_col).alias("_n"), pl.col(team_col).cast(pl.Utf8).alias("_t")],
+            ).map_elements(lambda s: _match(s["_n"], s["_t"]), return_dtype=pl.Int64)
+            if id_col in play_df.columns:
+                exprs.append(
+                    pl.when(pl.col(id_col).is_null()).then(roster_id).otherwise(pl.col(id_col)).alias(id_col),
+                )
+            else:
+                exprs.append(roster_id.alias(id_col))
+        if exprs:
+            play_df = play_df.with_columns(exprs)
+        return play_df
 
     # cfb4th decision-surface columns appended to 4th-down plays when
     # ``run_processing_pipeline(fourth_down_probs=True)``.
@@ -6364,6 +6552,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__process_qbr)
                 )
                 self.plays_json = self.plays_json.pipe(self.__join_participants)
+                self.plays_json = self.plays_json.pipe(self.__attach_player_ids)
                 if fourth_down_probs:
                     self.plays_json = self.__add_fourth_down_probs(self.plays_json)
                 if two_pt_probs:
