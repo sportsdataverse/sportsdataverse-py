@@ -496,7 +496,7 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     For each row, scores the post-touchdown state under three scoring outcomes
     (0 / 1 / 2 added points) from the kicking-off team's ensuing-drive WP, and
     combines them with the 2-pt conversion probability (``two_pt_model``) and the
-    PAT make probability (the FG grid at ``yardline_100 = 15``) into ``wp_td`` —
+    PAT make probability (the FG model at ``yardline_100 = 15``) into ``wp_td`` —
     the better of go-for-2 and kick-the-PAT.
 
     Args:
@@ -546,6 +546,11 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     # PAT make probability: the FG model at yardline_100 = 15 (the PAT spot).
     pat_yl: np.ndarray = np.full(n, 15, dtype=float)
     conv_1pt = _fg_make_prob(pat_yl, d["fg_roof"].to_numpy(), d["fg_era"].to_numpy())
+    if conv_1pt is None:  # FG model unobtainable on the re-load (race/eviction) — emit NaN, never crash
+        out = d[["go_index"]].copy()
+        out["yardline_100"] = 0
+        out["wp_td"] = np.nan
+        return out[["go_index", "yardline_100", "wp_td"]]
 
     rows = []
     for pts in (0, 1, 2):
