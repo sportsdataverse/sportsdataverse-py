@@ -10,7 +10,7 @@ sidebar_label: CFB
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 85 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 6 | sportsdataverse raw data / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 38 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 39 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

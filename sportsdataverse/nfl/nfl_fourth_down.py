@@ -652,10 +652,12 @@ def get_go_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
     long["wt_wp"] = long["prob"].to_numpy() * long["vegas_wp"].to_numpy()
 
     go = long.groupby("go_index")["wt_wp"].sum().rename("go_wp")
-    rep = long.groupby(["go_index", "turnover"], as_index=False).apply(
-        lambda g: pd.Series({"pct": g["prob"].sum(), "wp": (g["prob"] * g["vegas_wp"]).sum() / g["prob"].sum()}),
-        include_groups=False,
-    )
+    # Named agg (not groupby.apply) so this works on the pandas>=2.0 floor:
+    # apply(include_groups=) only exists in pandas>=2.2.  wt_wp == prob*vegas_wp
+    # (set above), so wp = sum(wt_wp)/sum(prob) is the prob-weighted mean.
+    rep = long.groupby(["go_index", "turnover"], as_index=False).agg(pct=("prob", "sum"), _pwsum=("wt_wp", "sum"))
+    rep["wp"] = rep["_pwsum"] / rep["pct"]
+    rep = rep.drop(columns="_pwsum")
     piv = rep.pivot(index="go_index", columns="turnover")
     pct0 = piv["pct"].get(0)
     wp0 = piv["wp"].get(0)

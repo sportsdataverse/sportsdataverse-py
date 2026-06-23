@@ -658,6 +658,39 @@ result = proc.run_processing_pipeline()
 
 **Methods**
 
+#### `CFBPlayProcess.add_2pt_probs()`
+
+Add the cfb4th two-point-conversion decision surface to the processed plays.
+
+Runs `run_processing_pipeline` first if it hasn't already, then
+computes the extra-point vs go-for-2 win-probability options on every
+**point-after / two-point conversion** row via
+`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`. A row is treated
+as a PAT / two-point attempt when `pointAfterAttempt.text` is present
+(or the derived `extra_point_result` / `two_point_conv_result` is
+non-null). The new columns -- `two_pt_wp`, `xp_wp`, `prob_2pt`,
+`two_pt_recommendation` (`"go_for_2"` / `"kick_xp"`) and
+`two_pt_wp_diff` (`two_pt_wp - xp_wp`, positive => go for 2) -- are
+written back onto `self.plays_json` (and `self.json`'s `plays`);
+every other row carries nulls.
+
+**Returns**
+
+`self.plays_json` as a frame with the decision columns appended (also persisted back onto the instance).
+
+**Example**
+
+```python
+from sportsdataverse.cfb import CFBPlayProcess
+game = CFBPlayProcess(gameId=401628334)
+game.espn_cfb_pbp()
+game.run_processing_pipeline()
+out = game.add_2pt_probs()
+print(out.filter(pl.col("two_pt_recommendation").is_not_null())
+         .select(["two_pt_wp", "xp_wp", "two_pt_recommendation"])
+         .head())
+```
+
 #### `CFBPlayProcess.add_fourth_down_probs()`
 
 Add the cfb4th 4th-down decision surface to the processed plays.
@@ -1439,6 +1472,35 @@ Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
 **Returns**
 
 A dict shaped like ESPN's `college-football/summary` response (`header` + `drives` + stub `pickcenter`/`boxscore`/...), ready to assign onto `CFBPlayProcess(...).json`.
+
+### `get_2pt_probs(pbp_df: 'Any') -> 'pd.DataFrame'` {#get_2pt_probs}
+
+Two-point-conversion decision surface (cfb4th `get_2pt_wp`).
+
+Treats each row as "the scoring team just made a touchdown; decide between
+the extra point and going for two". Enumerates the three point outcomes
+(`0` / `1` / `2`) of the try, scores the opponent's ensuing-drive WP for
+each from the scoring team's perspective, and combines them with the
+two-point conversion probability (bundled CFB model) and the empirical CFB
+extra-point make rate (XP_MAKE_PROB`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` | `Any` |  | Play-by-play frame (polars or pandas) carrying the `start.*` state columns in `sportsdataverse.cfb.cfb_fourth_down._PBP_COLS`. |
+
+**Returns**
+
+A pandas copy of `pbp_df` plus: * `two_pt_wp` -- `prob_2pt * wp(pts=2) + (1 - prob_2pt) * wp(pts=0)`. * `xp_wp` -- `prob_xp * wp(pts=1) + (1 - prob_xp) * wp(pts=0)` with `prob_xp = _XP_MAKE_PROB`. * `prob_2pt` -- the bundled-model two-point conversion probability. * `two_pt_recommendation` -- `"go_for_2"` iff `two_pt_wp > xp_wp` else `"kick_xp"` (None where the inputs are NaN). * `two_pt_wp_diff` -- `two_pt_wp - xp_wp` (positive => go for 2). When the two-point model isn't bundled (`TWO_PT_MODEL_AVAILABLE` is False) or the required state columns are missing, all decision columns are null -- probabilities are never fabricated.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_two_point import get_2pt_probs
+out = get_2pt_probs(touchdown_rows)
+print(out[["two_pt_wp", "xp_wp", "two_pt_recommendation"]].head())
+```
 
 ### `get_4th_down_probs(pbp_df) -> 'pd.DataFrame'` {#get_4th_down_probs}
 
