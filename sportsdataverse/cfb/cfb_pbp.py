@@ -6088,6 +6088,85 @@ class CFBPlayProcess(object):
             self.ran_pipeline = True
             return self.json if self.return_keys is None else {k: self.json.get(f"{k}") for k in self.return_keys}
 
+    def add_fourth_down_probs(self):
+        """Add the cfb4th 4th-down decision surface to the processed plays.
+
+        Runs :meth:`run_processing_pipeline` first if it hasn't already, then
+        computes the go / punt / field-goal win-probability options plus the
+        max-WP ``fourth_down_recommendation`` (and per-option ``*_wp_diff`` and
+        ``go_boost``) on every 4th-down row via
+        :func:`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`. The new
+        columns are written back onto ``self.plays_json`` (and ``self.json``'s
+        ``plays``); non-4th-down rows carry nulls for the decision columns.
+
+        Field-goal columns (``fg_make_prob`` / ``make_fg_wp`` / ``miss_fg_wp`` /
+        ``fg_wp``) are null when the cfb4th FG model isn't bundled
+        (``cfb_fourth_down.FG_MODEL_AVAILABLE`` is False) -- the go + punt surface
+        and the recommendation over the available options are still computed.
+
+        Returns:
+            polars.DataFrame: ``self.plays_json`` as a frame with the decision
+            columns appended (also persisted back onto the instance).
+
+        Example:
+            Quick start::
+
+                from sportsdataverse.cfb import CFBPlayProcess
+                game = CFBPlayProcess(gameId=401628334)
+                game.espn_cfb_pbp()
+                game.run_processing_pipeline()
+                fourth = game.add_fourth_down_probs()
+                print(fourth.filter(pl.col("start.down") == 4)
+                            .select(["go_wp", "punt_wp", "fg_wp", "fourth_down_recommendation"])
+                            .head())
+
+            See Also:
+                * `cfb4th <https://github.com/sportsdataverse/cfb4th>`_ -- R 4th-down decision model
+        """
+        from sportsdataverse.cfb.cfb_fourth_down import get_4th_down_probs
+
+        if self.ran_pipeline == False:
+            self.run_processing_pipeline()
+
+        plays = pl.DataFrame(self.plays_json, infer_schema_length=None)
+        decision_cols = [
+            "go_wp",
+            "first_down_prob",
+            "wp_succeed",
+            "wp_fail",
+            "fg_make_prob",
+            "make_fg_wp",
+            "miss_fg_wp",
+            "fg_wp",
+            "punt_wp",
+            "go_boost",
+            "go_wp_diff",
+            "punt_wp_diff",
+            "fg_wp_diff",
+            "fourth_down_recommendation",
+        ]
+        plays = plays.with_row_index("__fourth_row_idx")
+        fourth = plays.filter(pl.col("start.down") == 4)
+
+        if fourth.height == 0:
+            for c in decision_cols:
+                dtype = pl.Utf8 if c == "fourth_down_recommendation" else pl.Float64
+                plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
+            plays = plays.drop("__fourth_row_idx")
+            self.plays_json = plays.to_dicts()
+            self.json["plays"] = self.plays_json
+            return plays
+
+        scored = get_4th_down_probs(fourth)  # pandas
+        scored_pl = pl.from_pandas(scored[["__fourth_row_idx", *decision_cols]]).with_columns(
+            pl.col("__fourth_row_idx").cast(pl.UInt32)
+        )
+
+        plays = plays.join(scored_pl, on="__fourth_row_idx", how="left").drop("__fourth_row_idx")
+        self.plays_json = plays.to_dicts()
+        self.json["plays"] = self.plays_json
+        return plays
+
     def run_cleaning_pipeline(self):
         """Run the lighter cleaning pipeline (no EPA/WPA/QBR/box-score).
 
