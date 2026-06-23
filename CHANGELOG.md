@@ -2,12 +2,18 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.0.68 Release: June 23, 2026](#0068-release-june-23-2026)
   - [CFB — completion-probability (`cp`/`cpoe`) + expected-pass (`xpass`/`pass_oe`) surface](#cfb--completion-probability-cpcpoe--expected-pass-xpasspass_oe-surface)
   - [CFB — spread-free (naive) win-probability surface (`wp_*_naive`)](#cfb--spread-free-naive-win-probability-surface-wp__naive)
   - [CFB — QBR model retrained on the full 2004–2025 history](#cfb--qbr-model-retrained-on-the-full-20042025-history)
   - [CFB — fourth-down decision surface (`get_4th_down_probs`, cfb4th port)](#cfb--fourth-down-decision-surface-get_4th_down_probs-cfb4th-port)
   - [CFB — two-point-conversion decision surface (`get_2pt_probs`, cfb4th port)](#cfb--two-point-conversion-decision-surface-get_2pt_probs-cfb4th-port)
+  - [CFB — rule-era QBR / FG / fourth-down models + `spread_time` sign fix](#cfb--rule-era-qbr--fg--fourth-down-models--spread_time-sign-fix)
+  - [CFB — pre-2014 play-text player-name extraction](#cfb--pre-2014-play-text-player-name-extraction)
+  - [NFL — expected pass (`xpass` / `pass_oe`) + nfl4th fourth-down decision surface](#nfl--expected-pass-xpass--pass_oe--nfl4th-fourth-down-decision-surface)
+  - [NFL — self-trained XGBoost field-goal model in the fourth-down surface](#nfl--self-trained-xgboost-field-goal-model-in-the-fourth-down-surface)
+  - [NFL — `load_nfl_espn_qbr` (ESPN QBR loader, nflreadpy parity)](#nfl--load_nfl_espn_qbr-espn-qbr-loader-nflreadpy-parity)
+  - [NFL — bundled self-derived xpass model (offline, no first-use download)](#nfl--bundled-self-derived-xpass-model-offline-no-first-use-download)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
@@ -135,7 +141,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.0.68 Release: June 23, 2026
 
 ### CFB — completion-probability (`cp`/`cpoe`) + expected-pass (`xpass`/`pass_oe`) surface
 
@@ -174,6 +180,39 @@ The extra-point vs go-for-2 decision, a faithful Python port of [cfb4th](https:/
 - **`sportsdataverse.cfb.get_2pt_probs(pbp_df)`** treats each row as "the scoring team just made a touchdown; decide". For each of the three point outcomes (`0` / `1` / `2`) it subtracts the points, flips to the opponent's ensuing kickoff-return drive (1st-&-10 at the 25, `yards_to_goal = 75`), scores EP → WP, and flips WP back to the scoring team. It adds `two_pt_wp` (= `prob_2pt·wp(2) + (1−prob_2pt)·wp(0)`), `xp_wp` (= `prob_xp·wp(1) + (1−prob_xp)·wp(0)`), `prob_2pt`, a `two_pt_recommendation` ∈ {`go_for_2`, `kick_xp`} (go for 2 iff `two_pt_wp > xp_wp`), and `two_pt_wp_diff` (= `two_pt_wp − xp_wp`, positive ⇒ go for 2). The ensuing-drive frame reuses the reviewed 4th-down state machinery (`_flip_team_state` + EP/WP scorers).
 - **`CFBPlayProcess.add_2pt_probs()`** applies the same to a processed game's point-after / two-point-conversion rows (those with `pointAfterAttempt.text` present) after `run_processing_pipeline()`; every other row carries nulls.
 - **New model:** `two_pt_model.ubj` (a `binary:logistic` 4-feature booster — `posteam_spread`, `posteam_total`, `pos_score_diff`, ordinal `era`) is bundled under `cfb/models/`. `prob_2pt` comes from this model (cfb4th hardcodes 0.45); `prob_xp` is the empirical CFB extra-point make rate `0.9851` (cfb4th derives XP from its FG GAM, but the empirical rate is more accurate for CFB).
+
+### CFB — rule-era QBR / FG / fourth-down models + `spread_time` sign fix
+
+The QBR, field-goal, and fourth-down (yards) models gain one-hot rule-era dummies (`era0..era3`, cuts 2006/2013/2020) where they improve out-of-fold, and the bundled boosters are swapped to the era-augmented versions.
+
+- **QBR** — `qbr_vars` gains `era0..era3` (LOSO RMSE 17.9 → 17.4); `__process_qbr` injects the per-game era one-hot before prediction; bundled `qbr_model.ubj` swapped to the 10-feature era model.
+- **Fourth-down** — `fd_model.ubj` switched to the 9-feature one-hot era model (first-down cal-MAE 0.0035 → 0.0027) and **bundled** in the package (was download-on-demand); `fg_model.ubj` swapped to the 5-feature era model.
+- **WP-spread** — bundled `wp_spread.ubj` retrained on the odds-backfilled frame (the ~2,167 missing-spread games now carry real consensus spreads; LOSO logloss 0.362 → 0.352; same 13-feature contract, no inference change).
+- **`spread_time` sign fix** — `_predict_wp` computed `spread_time = −pos_team_spread·exp(…)`, inverted vs the trained-on convention (favorites scored as underdogs in `get_go_wp`/`get_fg_wp`/`get_punt_wp`); corrected to `+pos_team_spread·exp(−4·elapsed_share)`.
+- **Decision surfaces on by default** — `run_processing_pipeline(fourth_down_probs=True, two_pt_probs=True)` now appends the fourth-down and two-point decision columns to a processed game by default.
+
+### CFB — pre-2014 play-text player-name extraction
+
+`CFBPlayProcess` now recovers per-play player names for **2004–2013** games, where ESPN ships no structured per-play participants array (only `teamParticipants`). Two latent bugs in the play-text regex extraction were fixed: a multi-alternative `str.extract` group-index bug (the matched branch's name landed in a non-default capture group, returning null for ESPN "rush" / "Punt by" / "on-side" / "returned by" phrasings) and a `\d`-escaping bug (a literal backslash instead of a digit, which broke field-goal-kicker extraction). Pre-2014 games now populate rusher / passer / receiver / sack / fg-kicker / punter / returner / fumble player names (all null before); 2014+ output is unchanged (the structured-participants overwrite still wins).
+
+### NFL — expected pass (`xpass` / `pass_oe`) + nfl4th fourth-down decision surface
+
+`calculate_xpass` adds `xpass` (P(dropback)) and `pass_oe = 100·(pass − xpass)` to the enriched NFL PBP, plus a faithful Python port of [nfl4th](https://github.com/nflverse/nfl4th)'s fourth-down decision surface (`nfl/nfl_fourth_down.py`) scoring go / field-goal / punt win probability + a recommendation.
+
+- **`calculate_xpass`** — the self-derived dropback booster; `xpass`/`pass_oe` mirror nflfastR's `add_xpass`.
+- **nfl4th surface** — go / FG / punt WP via the download-on-demand `fd_model` / `wp_model` artifacts (cached on first use), mirroring nfl4th's `add_4th_probs`.
+
+### NFL — self-trained XGBoost field-goal model in the fourth-down surface
+
+`get_fg_wp` / `get_2pt_wp` switched from the mgcv-GAM prediction grid to a self-trained `binary:logistic` XGBoost FG model (`fg_model.ubj`, features `yardline_100` / `fg_roof` / `fg_era`) with the unchanged nfl4th long-kick clamps. Oracle parity (2022): `fg_wp` 0.9995, `go_wp` 0.9998, `punt_wp` 0.9996.
+
+### NFL — `load_nfl_espn_qbr` (ESPN QBR loader, nflreadpy parity)
+
+New `load_nfl_espn_qbr` (also aliased `load_espn_qbr`) — the last nflreadpy dataset without an sdv-py loader. `summary_type=` season|week, 2006+ floor, `source=` dual (nflverse `espn_data` release or the SDV-native `nfl_espn_qbr` release, 2006–2025), read-once-then-filter, with a 23-column returns-schema.
+
+### NFL — bundled self-derived xpass model (offline, no first-use download)
+
+`xpass_model.ubj` (the self-derived dropback booster, 1121 trees, 7.4 MB) moves from download-on-demand to bundled under `nfl/models/`, so `calculate_xpass` works offline. It is the **same** model the release ships — xpass output is unchanged; removed from `_MODEL_URLS` (the bundled path wins in `_load_model`'s resolution order).
 
 ## 0.0.67 Release: June 17, 2026
 
