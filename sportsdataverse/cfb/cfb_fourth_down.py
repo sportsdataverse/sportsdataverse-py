@@ -124,12 +124,14 @@ _punt_distribution_file = _cfb_resource_filename("sportsdataverse", "cfb/models/
 punt_distribution = pl.read_parquet(_punt_distribution_file)
 
 
-# --- fourth-down yards model: download-on-demand (~16 MB, too large to bundle) ---
-# Mirrors the NFL xYAC pattern: published to the espn_cfb_model_artifacts release
-# and fetched + cached on first use under the CFB model cache dir.
-# Versioned filename (era one-hot model, 9 features) — distinct from the legacy
-# ordinal fd_model.ubj so a cached older copy is never reused with the new contract.
-_FD_MODEL_URL = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_artifacts/fd_model_era.ubj"
+# --- fourth-down yards model: bundled in the package (~16 MB era one-hot model) ---
+# The era one-hot model (9 features) ships with the package under cfb/models/fd_model.ubj.
+# _load_fd_model prefers the bundled copy, so it is version-pinned by the package and any
+# older cached download is never reached (no filename versioning needed). The release
+# download stays only as a fallback for trimmed installs.
+_FD_MODEL_URL = (
+    "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_artifacts/fd_model.ubj"
+)
 
 
 def _cfb_model_cache_dir() -> Path:
@@ -146,14 +148,15 @@ def _load_booster(path: Path | str) -> Booster:
 
 @lru_cache(maxsize=1)
 def _load_fd_model() -> Booster:
-    """Load the fourth-down yards model (``fd_model.ubj``), downloading on demand.
+    """Load the fourth-down yards model (``fd_model.ubj``).
 
-    Resolution order: a bundled copy (normally absent — the model is ~16 MB) ->
-    the cache dir -> download from the ``espn_cfb_model_artifacts`` release
-    (written atomically). Raises :class:`FileNotFoundError` when unobtainable
-    (offline + no cache), so callers / tests can skip or degrade gracefully.
+    Resolution order: the bundled copy (``cfb/models/fd_model.ubj``, shipped with the
+    package — the normal path) -> the cache dir -> download from the
+    ``espn_cfb_model_artifacts`` release (written atomically) as a trimmed-install
+    fallback. Raises :class:`FileNotFoundError` when unobtainable (offline + no cache),
+    so callers / tests can skip or degrade gracefully.
     """
-    name = "fd_model_era.ubj"
+    name = "fd_model.ubj"
     bundled = Path(_cfb_resource_filename("sportsdataverse", f"cfb/models/{name}"))
     if bundled.exists():
         return _load_booster(bundled)
