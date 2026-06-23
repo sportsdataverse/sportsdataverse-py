@@ -6110,7 +6110,51 @@ class CFBPlayProcess(object):
             logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
             return original_play_df
 
-    def run_processing_pipeline(self):
+    # cfb4th decision-surface columns appended to 4th-down plays when
+    # ``run_processing_pipeline(fourth_down_probs=True)``.
+    _FOURTH_DOWN_DECISION_COLS = [
+        "go_wp",
+        "first_down_prob",
+        "wp_succeed",
+        "wp_fail",
+        "fg_make_prob",
+        "make_fg_wp",
+        "miss_fg_wp",
+        "fg_wp",
+        "punt_wp",
+        "go_wp_diff",
+        "fg_wp_diff",
+        "punt_wp_diff",
+        "fourth_down_recommendation",
+    ]
+
+    def __add_fourth_down_probs(self, play_df):
+        """Append the cfb4th 4th-down decision columns to 4th-down plays.
+
+        Runs the decision surface (:func:`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`
+        — go / field-goal / punt WP + the max-WP recommendation) on the 4th-down
+        subset of the already-enriched frame, then left-joins the decision columns
+        back onto every play (non-4th-down rows are null). Imported lazily because
+        ``cfb_fourth_down`` imports the EP/WP boosters from this module.
+        """
+        from sportsdataverse.cfb.cfb_fourth_down import get_4th_down_probs
+
+        cols = self._FOURTH_DOWN_DECISION_COLS
+        str_cols = {"fourth_down_recommendation"}
+        if "start.down" not in play_df.columns:
+            return play_df
+        fourth = play_df.filter(pl.col("start.down") == 4)
+        if fourth.height == 0:
+            # stable schema: emit the decision columns as nulls
+            return play_df.with_columns(
+                [pl.lit(None).cast(pl.Utf8 if c in str_cols else pl.Float64).alias(c) for c in cols]
+            )
+        scored = get_4th_down_probs(fourth)  # pandas; preserves input cols incl. ``id``
+        keep = ["id"] + [c for c in cols if c in scored.columns]
+        dec = pl.from_pandas(scored[keep]).with_columns(pl.col("id").cast(play_df.schema["id"]))
+        return play_df.join(dec, on="id", how="left")
+
+    def run_processing_pipeline(self, fourth_down_probs: bool = True):
         """Run the full play-by-play processing pipeline.
 
         Applies every scoring/feature step in order: down detection, play type
@@ -6120,6 +6164,13 @@ class CFBPlayProcess(object):
         box score and stores it under ``advBoxScore`` on the returned dict.
 
         Idempotent -- subsequent calls return the cached ``self.json``.
+
+        Args:
+            fourth_down_probs: when True (default), run the cfb4th decision surface
+                (:func:`sportsdataverse.cfb.cfb_fourth_down.get_4th_down_probs`) on the
+                enriched frame and append the go/field-goal/punt WP columns plus the
+                ``fourth_down_recommendation`` to 4th-down plays (null elsewhere). Pass
+                False to skip it (e.g. to avoid loading the fourth-down model).
 
         Returns:
             dict: The fully-processed game payload. If the constructor was
@@ -6204,6 +6255,8 @@ class CFBPlayProcess(object):
                     .pipe(self.__process_qbr)
                 )
                 self.plays_json = self.plays_json.pipe(self.__join_participants)
+                if fourth_down_probs:
+                    self.plays_json = self.__add_fourth_down_probs(self.plays_json)
                 self.ran_pipeline = True
                 advBoxScore = self.plays_json.pipe(self.create_box_score)
                 self.plays_json = self.plays_json.to_dicts()
