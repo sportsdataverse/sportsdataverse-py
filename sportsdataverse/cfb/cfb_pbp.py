@@ -6306,6 +6306,82 @@ class CFBPlayProcess(object):
         self.json["plays"] = self.plays_json
         return plays
 
+    def add_2pt_probs(self):
+        """Add the cfb4th two-point-conversion decision surface to the processed plays.
+
+        Runs :meth:`run_processing_pipeline` first if it hasn't already, then
+        computes the extra-point vs go-for-2 win-probability options on every
+        **point-after / two-point conversion** row via
+        :func:`sportsdataverse.cfb.cfb_two_point.get_2pt_probs`. A row is treated
+        as a PAT / two-point attempt when ``pointAfterAttempt.text`` is present
+        (or the derived ``extra_point_result`` / ``two_point_conv_result`` is
+        non-null). The new columns -- ``two_pt_wp``, ``xp_wp``, ``prob_2pt``,
+        ``two_pt_recommendation`` (``"go_for_2"`` / ``"kick_xp"``) and
+        ``two_pt_wp_diff`` (``two_pt_wp - xp_wp``, positive => go for 2) -- are
+        written back onto ``self.plays_json`` (and ``self.json``'s ``plays``);
+        every other row carries nulls.
+
+        Returns:
+            polars.DataFrame: ``self.plays_json`` as a frame with the decision
+            columns appended (also persisted back onto the instance).
+
+        Example:
+            Quick start::
+
+                from sportsdataverse.cfb import CFBPlayProcess
+                game = CFBPlayProcess(gameId=401628334)
+                game.espn_cfb_pbp()
+                game.run_processing_pipeline()
+                out = game.add_2pt_probs()
+                print(out.filter(pl.col("two_pt_recommendation").is_not_null())
+                         .select(["two_pt_wp", "xp_wp", "two_pt_recommendation"])
+                         .head())
+
+            See Also:
+                * `cfb4th <https://github.com/sportsdataverse/cfb4th>`_ -- R 4th-down / 2pt decision model
+        """
+        from sportsdataverse.cfb.cfb_two_point import get_2pt_probs
+
+        if self.ran_pipeline == False:
+            self.run_processing_pipeline()
+
+        plays = pl.DataFrame(self.plays_json, infer_schema_length=None)
+        decision_cols = ["two_pt_wp", "xp_wp", "prob_2pt", "two_pt_recommendation", "two_pt_wp_diff"]
+
+        # PAT / two-point attempt mask: pointAfterAttempt.text present, or the
+        # derived extra_point_result / two_point_conv_result non-null.
+        pat_mask = pl.lit(False)
+        if "pointAfterAttempt.text" in plays.columns:
+            pat_mask = pat_mask | (
+                pl.col("pointAfterAttempt.text").is_not_null()
+                & (pl.col("pointAfterAttempt.text").cast(pl.Utf8).str.strip_chars() != "")
+            )
+        for c in ("extra_point_result", "two_point_conv_result"):
+            if c in plays.columns:
+                pat_mask = pat_mask | pl.col(c).is_not_null()
+
+        plays = plays.with_row_index("__twopt_row_idx")
+        pat = plays.filter(pat_mask)
+
+        if pat.height == 0:
+            for c in decision_cols:
+                dtype = pl.Utf8 if c == "two_pt_recommendation" else pl.Float64
+                plays = plays.with_columns(pl.lit(None, dtype=dtype).alias(c))
+            plays = plays.drop("__twopt_row_idx")
+            self.plays_json = plays.to_dicts()
+            self.json["plays"] = self.plays_json
+            return plays
+
+        scored = get_2pt_probs(pat)  # pandas
+        scored_pl = pl.from_pandas(scored[["__twopt_row_idx", *decision_cols]]).with_columns(
+            pl.col("__twopt_row_idx").cast(pl.UInt32)
+        )
+
+        plays = plays.join(scored_pl, on="__twopt_row_idx", how="left").drop("__twopt_row_idx")
+        self.plays_json = plays.to_dicts()
+        self.json["plays"] = self.plays_json
+        return plays
+
     def run_cleaning_pipeline(self):
         """Run the lighter cleaning pipeline (no EPA/WPA/QBR/box-score).
 

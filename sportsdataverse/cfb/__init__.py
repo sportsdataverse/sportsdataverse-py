@@ -7,6 +7,7 @@ from sportsdataverse.cfb.cfb_loaders import *
 from sportsdataverse.cfb.cfb_loaders_extra import *
 from sportsdataverse.cfb.cfb_pbp import *
 from sportsdataverse.cfb.cfb_fourth_down import *
+from sportsdataverse.cfb.cfb_two_point import *
 from sportsdataverse.cfb.cfb_pbp_fox import *
 from sportsdataverse.cfb.cfb_play_participants import *
 from sportsdataverse.cfb.cfb_player_stats import *
