@@ -5453,6 +5453,71 @@ espn_nfl_teams.cache_clear()  # underlying lru_cache
 teams = espn_nfl_teams()
 ```
 
+### `get_2pt_wp(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_2pt_wp}
+
+Win probability of the PAT-vs-2pt choice after a touchdown (nfl4th `get_2pt_wp`).
+
+For each row, scores the post-touchdown state under three scoring outcomes
+(0 / 1 / 2 added points) from the kicking-off team's ensuing-drive WP, and
+combines them with the 2-pt conversion probability (`two_pt_model`) and the
+PAT make probability (the FG grid at `yardline_100 = 15`) into `wp_td` —
+the better of go-for-2 and kick-the-PAT.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` | `Union[DataFrame, 'DataFrame']` |  | Play-by-play frame (polars or pandas) of post-touchdown states, already carrying the prepared state columns (see module docstring). |
+
+**Returns**
+
+A pandas frame with `go_index`, `yardline_100` (always 0) and `wp_td`. `wp_td` is NaN when the WP / 2-pt models are unavailable.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_fourth_down import get_2pt_wp
+out = get_2pt_wp(touchdown_states)
+print(out[["go_index", "wp_td"]].head())
+```
+
+### `get_4th_down_probs(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_4th_down_probs}
+
+Full 4th-down decision surface (nfl4th `add_4th_probs`) + recommendation.
+
+Runs `get_go_wp`, `get_fg_wp`, `get_punt_wp` on the
+fourth-down rows and adds the combined option columns plus:
+
+* `go_boost` -- nfl4th's headline number: `100 * (go_wp - max(fg_wp,
+  punt_wp))` in percentage points (a NaN `punt_wp` is treated as 0).
+* `fourth_down_recommendation` -- the max-WP choice among `{go, punt,
+  field_goal}` (NaN options are excluded).
+* `go_wp_diff` / `punt_wp_diff` / `fg_wp_diff` -- each option's WP minus
+  the recommended option's WP (the recommended option's diff is 0, the others
+  <= 0).  NaN where the option WP is NaN.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` | `Union[DataFrame, 'DataFrame']` |  | Play-by-play frame (polars or pandas) of fourth-down situations (the nflverse-shape output of `load_nfl_pbp`; see module docstring for required columns). |
+
+**Returns**
+
+A pandas copy of `pbp_df` with the decision columns added. Empty input returns the input plus empty decision columns.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_fourth_down import get_4th_down_probs
+
+pbp = load_nfl_pbp([2023])
+fourth = pbp.filter((pl.col("down") == 4) & pl.col("yardline_100").is_not_null())
+out = get_4th_down_probs(fourth)
+print(out[["go_wp", "punt_wp", "fg_wp", "go_boost", "fourth_down_recommendation"]].head())
+```
+
 ### `get_config() -> 'NflConfig'` {#get_config}
 
 Return the live `NflConfig` singleton.
@@ -5473,6 +5538,106 @@ print(cfg.cache_mode, cfg.cache_duration, cfg.cache_dir)
 from sportsdataverse.nfl import update_config, get_config
 update_config(cache_mode="off")
 assert get_config().cache_mode == "off"
+```
+
+### `get_fg_wp(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_fg_wp}
+
+Expected win probability of attempting a field goal (nfl4th `get_fg_wp`).
+
+The make probability is looked up from the mgcv-GAM grid (`fg_model_grid`,
+keyed on `yardline_100` × `fg_model_roof`), shrunk by 0.9 for kicks at/
+beyond `yardline_100 = 38` and zeroed at/beyond `yardline_100 = 45`
+(>= ~63-yard kicks).  The made-FG state (opponent receives a touchback
+kickoff at the 25, kicking team +3) and the missed-FG state (opponent takes
+over 8 yards back of the spot, capped at the 80) are each scored with win
+probability; `fg_wp = make_prob * make_wp + (1 - make_prob) * miss_wp`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` | `Union[DataFrame, 'DataFrame']` |  | Play-by-play frame (polars or pandas) of fourth-down situations. |
+
+**Returns**
+
+A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `fg_wp` (from the kicking team's perspective). All four are NaN when the FG grid or WP model is unavailable.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_fourth_down import get_fg_wp
+
+pbp = load_nfl_pbp([2023])
+fourth = pbp.filter((pl.col("down") == 4) & pl.col("yardline_100").is_not_null())
+out = get_fg_wp(fourth)
+print(out[["fg_make_prob", "fg_wp"]].head())
+```
+
+### `get_go_wp(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_go_wp}
+
+Expected win probability of going for it on 4th down (nfl4th `get_go_wp`).
+
+The fd_model 76-class yards-gained distribution is expanded per play; each
+outcome's hypothetical post-play game state (turnover-on-downs flip, +6
+touchdown with the PAT/2-pt branch routed through `get_2pt_wp`, 6-second
+runoff, goal-to-go distance shrink) is scored with win probability and the
+end-of-game kneel-out clamps are applied; the option value is the
+prob-weighted WP.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` | `Union[DataFrame, 'DataFrame']` |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the prepared state columns (see module docstring). The frame is prepared internally if it lacks the derived columns. |
+
+**Returns**
+
+A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `first_down_prob` (P(conversion)), `wp_succeed` (mean WP over conversion outcomes) and `wp_fail` (mean WP over failure outcomes). All are NaN when the fourth-down / WP models are unavailable (`FD_MODEL_AVAILABLE` / `WP_MODEL_AVAILABLE`).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_fourth_down import get_go_wp
+
+pbp = load_nfl_pbp([2023])
+fourth = pbp.filter((pl.col("down") == 4) & pl.col("yardline_100").is_not_null())
+out = get_go_wp(fourth)
+print(out[["go_wp", "first_down_prob"]].head())
+```
+
+### `get_punt_wp(pbp_df: "Union[pl.DataFrame, 'pd.DataFrame']") -> 'pd.DataFrame'` {#get_punt_wp}
+
+Expected win probability of punting on 4th down (nfl4th `get_punt_wp`).
+
+The punt landing distribution (`punt_data`: `yardline_after` / `pct` /
+`muff` per `yardline_100`) is joined per play; possession is flipped to
+the receiving team, with return-touchdown (`yardline_after == 100`) and muff
+(`muff == 1`) recoveries flipping the ball back to the punting team; each
+landing spot's ensuing-drive WP is scored and the option value is the
+prob-weighted WP from the punting team's perspective.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp_df` | `Union[DataFrame, 'DataFrame']` |  | Play-by-play frame (polars or pandas) of fourth-down situations. |
+
+**Returns**
+
+A pandas copy of `pbp_df` plus `punt_wp`. `punt_wp` is NaN where the punt distribution has no support for the play's `yardline_100` (inside the punting team's own 31, where the table is empty — matching the R reference's left-join NA behavior) or when the WP model is unavailable.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_fourth_down import get_punt_wp
+
+pbp = load_nfl_pbp([2023])
+fourth = pbp.filter((pl.col("down") == 4) & pl.col("yardline_100").is_not_null())
+out = get_punt_wp(fourth)
+print(out[["punt_wp"]].head())
 ```
 
 ### `nfl_clear_token_cache() -> 'None'` {#nfl_clear_token_cache}

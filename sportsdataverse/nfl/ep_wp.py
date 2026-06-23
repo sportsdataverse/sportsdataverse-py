@@ -241,6 +241,15 @@ _MODEL_URLS: dict[str, str] = {
     "xpass_model.ubj": (
         "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_artifacts/xpass_model.ubj"
     ),
+    # nfl4th 4th-down decision models (the fourth-down yards model ``fd_model.ubj``
+    # is ~73 MB and the nfl4th win-probability model ``wp_model.ubj`` ~7.6 MB —
+    # both too large to bundle).  Consumed by ``nfl/nfl_fourth_down.py``.
+    "fd_model.ubj": (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_4th_down_models/fd_model.ubj"
+    ),
+    "wp_model.ubj": (
+        "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_4th_down_models/wp_model.ubj"
+    ),
 }
 
 

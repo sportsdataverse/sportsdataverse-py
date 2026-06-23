@@ -95,6 +95,7 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_xpass,
     calculate_xyac,
 )
+from sportsdataverse.nfl.nfl_fourth_down import *
 from sportsdataverse.nfl.nfl_pbp import *
 from sportsdataverse.nfl.nfl_player_stats import *
 from sportsdataverse.nfl.nfl_stats import build_nfl_player_stats, build_nfl_team_stats
