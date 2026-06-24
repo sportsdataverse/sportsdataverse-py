@@ -6,6 +6,7 @@ from sportsdataverse.cfb.cfb_game_rosters import *
 from sportsdataverse.cfb.cfb_loaders import *
 from sportsdataverse.cfb.cfb_loaders_extra import *
 from sportsdataverse.cfb.cfb_pbp import *
+from sportsdataverse.cfb.cfb_adjusted_epa import *
 from sportsdataverse.cfb.cfb_fourth_down import *
 from sportsdataverse.cfb.cfb_two_point import *
 from sportsdataverse.cfb.cfb_pbp_fox import *

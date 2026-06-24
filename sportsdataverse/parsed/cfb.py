@@ -155,6 +155,8 @@ from sportsdataverse.cfb import yahoo_cfb_team_season_stats as _raw_yahoo_cfb_te
 from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy as _raw_yahoo_cfb_team_season_stats_legacy
 from sportsdataverse.cfb import yahoo_cfb_teams as _raw_yahoo_cfb_teams
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
+from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
+from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
@@ -193,6 +195,8 @@ from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 
 __all__ = [
     "CFBPlayProcess",
+    "cfb_adjusted_epa",
+    "cfb_adjusted_epa_by_game",
     "cfb_odds_events_crosswalk",
     "cfb_rosters_crosswalk",
     "cfb_schedule_crosswalk",

@@ -937,6 +937,69 @@ sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 
 ## Other
 
+### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 325.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
+
+Season opponent-adjusted per-team EPA from a season's play-by-play.
+
+Fits one ridge of per-play `EPA` on offense-team, defense-team, and
+home-field indicators over the competitive (`0.1 <= wp_before <= 0.9`) pass
+and rush plays, nets each team's per-game raw EPA against the opponent's
+fitted strength, and averages to a season figure. In-sample/descriptive (the
+fit uses the whole season); for leak-free per-game values use
+`cfb_adjusted_epa_by_game`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the columns listed in the module docstring. One season at a time. |
+| `ridge_lambda` | `float` | `325.0` | Ridge penalty (glmnet-scale; default 325). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
+
+**Example**
+
+```python
+import sportsdataverse.cfb as cfb
+pbp = cfb.load_cfb_pbp(seasons=[2023])
+cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
+```
+
+### `cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 325.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa_by_game}
+
+Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
+
+For each week `w` the opponent-strength ridge is fit on competitive plays
+from **weeks before `w` only**, then that week's games are adjusted with
+those as-of strengths -- so the value uses no future information and is valid
+as an in-season power-rating / model feature. Week 1 (no prior) yields null
+adjustments; not-yet-seen opponents fall back to the league baseline (with the
+heavy ridge penalty this is the intended early-season shrinkage to average).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
+| `ridge_lambda` | `float` | `325.0` | Ridge penalty (glmnet-scale; default 325). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per (game, team), sorted by `week` then `team_id`: `game_id`, `week`, `team_id`, `opponent_id`, `pos_team`, `raw_off_epa`, `adj_off_epa`, `raw_def_epa`, `adj_def_epa`, `off_strength_faced` (opponent offense), `def_strength_faced` (opponent defense), `net_adj_epa`. The `adj_*` / `net` columns are null for week 1 (and any week with no prior fit).
+
+**Example**
+
+```python
+import sportsdataverse.cfb as cfb
+pbp = cfb.load_cfb_pbp(seasons=[2023])
+tg = cfb.cfb_adjusted_epa_by_game(pbp)
+tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
+```
+
 ### `cfb_odds_events_crosswalk(season: 'Optional[int]' = None, week: 'Optional[int]' = None, *, sport: 'str' = 'americanfootball_ncaaf', api_key: 'Optional[str]' = None, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_odds_events_crosswalk}
 
 Match The Odds API CFB events to ESPN game ids.
