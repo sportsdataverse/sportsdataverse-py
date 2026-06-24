@@ -139,7 +139,7 @@ repos:
         name: codegen drift check (pre-push)
         entry: uv run python tools/codegen/generate.py --check
         language: system
-        files: ^tools/codegen/(endpoints|schemas|templates)/.*$
+        files: ^(tools/codegen/(endpoints|schemas|templates)|docs/docs)/.*$
         pass_filenames: false
         stages: [pre-push]
 # - repo: https://github.com/nbQA-dev/nbQA

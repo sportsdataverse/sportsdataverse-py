@@ -89,12 +89,14 @@ def main() -> None:
     # (Claude windows are effectively one or the other; a fixed 200k denominator
     # reads as >100% on a large-context session).
     env_lim = os.environ.get("CLAUDE_STATUSLINE_CONTEXT")
+    limit = 0
     if env_lim:
-        limit = int(env_lim)
-    elif data.get("exceeds_200k_tokens") or used > 200_000:
-        limit = 1_000_000
-    else:
-        limit = 200_000
+        try:
+            limit = int(env_lim)
+        except ValueError:
+            limit = 0  # malformed env -> fall through to auto-detect
+    if not limit:
+        limit = 1_000_000 if (data.get("exceeds_200k_tokens") or used > 200_000) else 200_000
     pct = (used / limit * 100) if limit else 0.0
     left = max(0, limit - used)
 

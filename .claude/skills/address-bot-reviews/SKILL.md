@@ -42,6 +42,10 @@ is a decline-with-citation, not a fix (see Guardrails).
            | map(select(.isResolved==false and (.comments.nodes[0].author.login|test("(?i)coderabbit|copilot"))))'
    ```
 
+   For a PR with >100 threads, paginate: add `pageInfo{ hasNextPage endCursor }`
+   to `reviewThreads` and loop with `after: <endCursor>` until `hasNextPage` is
+   false (a hard-coded `first:100` silently drops the tail).
+
    Also read the PR-level summary review (CodeRabbit's walkthrough / Copilot's
    overview), which often holds suggestions not attached to a line:
 

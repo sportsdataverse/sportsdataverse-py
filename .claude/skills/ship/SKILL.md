@@ -13,7 +13,8 @@ clean."** Create one todo per numbered step and check them off as you go.
 
 ## Preconditions
 
-- Run from the repo root: `c:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-py`.
+- Run from the repo root (any checkout; do not hard-code a path — use
+  `git rev-parse --show-toplevel` if you need it).
 - This repo uses **uv**. Prefix Python tooling with `uv run`.
 - **Never branch-ship from `main`.** If `git branch --show-current` is `main`,
   create a feature branch first (`git switch -c <type>/<slug>`) before committing.
@@ -40,8 +41,8 @@ clean."** Create one todo per numbered step and check them off as you go.
    but run the suite-wide pass before committing so nothing slips through:
 
    ```sh
-   uv run ruff format sportsdataverse/ tools/
-   uv run ruff check sportsdataverse/ tools/
+   uv run ruff format sportsdataverse/ tools/ .claude/
+   uv run ruff check sportsdataverse/ tools/ .claude/
    ```
 
    A ruff-format hook can **silently abort a commit** — if `git commit` reports

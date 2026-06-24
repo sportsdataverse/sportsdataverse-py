@@ -14,7 +14,8 @@ feedback; use `/ship` for the full release-gate flow.
 1. **Find changed Python files** (staged + unstaged + untracked):
 
    ```sh
-   git status --porcelain | awk '{print $2}' | grep -E '^sportsdataverse/.*\.py$'
+   # all changed .py (handles renames "old -> new" and space-containing paths)
+   git status --porcelain | sed 's/^...//; s/.* -> //' | grep -E '\.py$'
    ```
 
 2. **Ruff** — format + lint the changed files (the PostToolUse hook already

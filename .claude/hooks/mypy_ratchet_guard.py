@@ -26,14 +26,24 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]  # .claude/hooks/ -> repo root
 
 
-def _ratchet() -> set[str]:
-    """Parse the ``files = [...]`` list under ``[tool.mypy]`` in pyproject.toml."""
+def _ratchet() -> set[str] | None:
+    """Ratchet file list from ``[tool.mypy].files``. ``None`` = could not parse,
+    so the caller fails closed (runs mypy on any source change) instead of
+    silently going inert."""
     try:
-        text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        raw = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     except OSError:
-        return set()
-    m = re.search(r"\[tool\.mypy\].*?\bfiles\s*=\s*\[(.*?)\]", text, re.S)
-    return set(re.findall(r'"([^"]+)"', m.group(1))) if m else set()
+        return None
+    try:  # prefer a real TOML parse (3.11+) — robust to quoting / inline arrays
+        import tomllib
+
+        files = tomllib.loads(raw).get("tool", {}).get("mypy", {}).get("files")
+        if isinstance(files, list):
+            return {str(f) for f in files}
+    except Exception:
+        pass
+    m = re.search(r"\[tool\.mypy\].*?\bfiles\s*=\s*\[(.*?)\]", raw, re.S)
+    return set(re.findall(r'"([^"]+)"', m.group(1))) if m else None
 
 
 def _changed() -> set[str]:
@@ -66,7 +76,12 @@ def _mypy_cmd() -> list[str]:
 
 def main() -> int:
     ratchet = _ratchet()
-    if not ratchet or not (_changed() & ratchet):
+    changed = _changed()
+    if ratchet is None:  # parse failed -> fail closed: run if any source py changed
+        relevant = any(p.startswith("sportsdataverse/") and p.endswith(".py") for p in changed)
+    else:
+        relevant = bool(changed & ratchet)
+    if not relevant:
         return 0  # nothing ratcheted changed — stay silent & fast
 
     res = subprocess.run(_mypy_cmd(), cwd=ROOT, capture_output=True, text=True)

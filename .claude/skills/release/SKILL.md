@@ -63,7 +63,7 @@ creating that release. Create one todo per numbered step; the ordering matters.
    frozen per-release archive:
 
    ```sh
-   cd docs && yarn version:docs 0.0.X      # = docusaurus docs:version
+   (cd docs && yarn version:docs 0.0.X)    # subshell: stays at repo root after
    ```
 
    This writes `docs/versioned_docs/version-0.0.X/`. **Keep `lastVersion:
