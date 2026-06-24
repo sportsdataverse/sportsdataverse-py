@@ -2,6 +2,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
+  - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
+  - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
 - [0.0.70 Release: June 24, 2026](#0070-release-june-24-2026)
   - [CFB — `qbr` / `fg` / `wp_spread` models refreshed on the consensus-odds full-corpus reprocess](#cfb--qbr--fg--wp_spread-models-refreshed-on-the-consensus-odds-full-corpus-reprocess)
 - [0.0.69 Release: June 23, 2026](#0069-release-june-23-2026)
@@ -144,6 +147,18 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.71 Release: June 24, 2026
+
+### CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward
+
+`sportsdataverse.cfb.cfb_adjusted_epa()` and `cfb_adjusted_epa_by_game()` add a reusable ridge / RAPM-style opponent-adjustment primitive — separating a team's per-play EPA from its schedule with a ridge regression on offense/defense team indicators (plus home-field), fit over the competitive (`0.1 ≤ wp_before ≤ 0.9`) pass and rush plays. The season function returns one row per team (adjusted off / def / net EPA + ranks); the **walk-forward** function returns one row per team-game and is point-in-time — each week is adjusted using opponent strengths fit only on *prior* weeks, so the values are leak-free and valid as in-season power-rating or model inputs (week 1 has no prior, so its adjustments are null; not-yet-seen opponents fall back to the league baseline, the intended early-season shrinkage). This is an in-sample per-season estimator lifted out of the cfb-data `team_summaries` builder — not a bundled `.ubj` artifact. `scikit-learn` is now a runtime dependency.
+
+### NFL — era-aware decision models + both-path (ESPN + nflverse) model parity
+
+Ships the era-aware NFL model suite and brings both PBP construction paths to model parity. Rule-era one-hots (`era0..era4`, cuts 2001/2005/2013/2017) are added to the `xpass` / fourth-down / `fg` models so the curves are era-aware across all of 1999–2025 (fourth-down 14-feature, fg 7-feature, xpass 19-feature), and the bundled `nfl/models/*` are refreshed to the 1999–2025 retrain (two-point on 2010–2025).
+
+Both builders now produce the same modeled columns: the **ESPN path** (`NFLPlayProcess`) gains `qb_epa`, `wp` / `vegas_wp` (+ `def_wp` / `home_wp` / `away_wp`), and `xpass` / `pass_oe`, wired into `run_processing_pipeline` in nflfastR order; the **nflverse path** (`enrich_nfl_pbp`) gains the per-play QBR EPA components. The fourth-down decision surface is **default-on in both builders**, scored on its play-type subset and merged back by play id, with each model applied on its correct play-type shape (xpass on scrimmage dropbacks, cp/xyac on pass + air-yards, fourth-down on `down == 4`). xYAC remains the documented null stub on the ESPN path (no `air_epa`). A latent bug the era refresh introduced is fixed: `calculate_xpass` now backfills the `era0`/`era1` features `_make_cp_mutations` did not build. Pairs with the nfl-data 1999–2025 retrain that produced the artifacts.
 
 ## 0.0.70 Release: June 24, 2026
 
