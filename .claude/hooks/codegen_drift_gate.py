@@ -17,7 +17,10 @@ is launched with) and only git plumbing.
 
 from __future__ import annotations
 
+import json
 import pathlib
+import re
+import shlex
 import subprocess
 import sys
 
@@ -40,7 +43,50 @@ def _pushed_paths() -> list[str] | None:
     return [ln.strip().replace("\\", "/") for ln in diff.stdout.splitlines() if ln.strip()]
 
 
+def _command_is_push(cmd: str) -> bool:
+    """True only if some segment of `cmd` is a real ``git push`` invocation.
+
+    Guards against the PreToolUse ``if:`` matcher firing on a "push" *substring* (e.g. a
+    commit message like ``regen-before-push``): split on shell sequencing operators,
+    strip leading env-assignments, and require ``git`` immediately followed by ``push``."""
+    for seg in re.split(r"&&|\|\||;|\||\n", cmd):
+        try:
+            toks = shlex.split(seg, posix=True)
+        except ValueError:
+            toks = seg.split()
+        i = 0
+        while i < len(toks) and re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", toks[i]):
+            i += 1
+        rest = toks[i:]
+        if len(rest) >= 2 and rest[0].rsplit("/", 1)[-1] in ("git", "git.exe") and rest[1] == "push":
+            return True
+    return False
+
+
+def _stdin_command() -> str | None:
+    """The Bash command from a PreToolUse payload on stdin, or None when run standalone."""
+    try:
+        if sys.stdin.isatty():
+            return None
+        raw = sys.stdin.read()
+    except Exception:
+        return None
+    if not raw.strip():
+        return None
+    try:
+        return (json.loads(raw).get("tool_input") or {}).get("command") or ""
+    except Exception:
+        return None
+
+
 def main() -> int:
+    # PreToolUse stdin guard: when invoked with a command that is NOT a real `git push`
+    # (e.g. a "push" substring in another command), no-op so the hook can't misfire.
+    # No stdin (manual run) -> fall through and run the check.
+    cmd = _stdin_command()
+    if cmd is not None and not _command_is_push(cmd):
+        return 0
+
     pushed = _pushed_paths()
     if pushed is not None and not any(p.startswith(TRIGGERS) for p in pushed):
         return 0  # nothing codegen-relevant in this push -> allow, instantly
