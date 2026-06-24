@@ -543,7 +543,7 @@ def test_pass_oe_null_when_xpass_null(monkeypatch) -> None:  # noqa: ANN001
 
 
 def test_xpass_features_contract() -> None:
-    """The 17-feature contract order is the nflfastR ``prepare_xpass_data`` order."""
+    """The 19-feature contract order (era0..era4 one-hot, era-aware retrain)."""
     assert XPASS_FEATURES == [
         "down",
         "ydstogo",
@@ -551,6 +551,8 @@ def test_xpass_features_contract() -> None:
         "qtr",
         "wp",
         "vegas_wp",
+        "era0",
+        "era1",
         "era2",
         "era3",
         "era4",

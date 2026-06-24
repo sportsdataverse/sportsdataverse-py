@@ -1566,6 +1566,19 @@ def calculate_xpass(
         if "air_yards" not in play_df.columns:
             play_df = play_df.with_columns(pl.lit(0.0).alias("air_yards"))
         feats = _make_cp_mutations(play_df)
+        # XPASS_FEATURES needs era0 / era1, which _make_cp_mutations deliberately
+        # omits (CP excludes them — see its docstring).  Backfill them from
+        # ``season`` here so the feature select resolves whether or not the input
+        # frame already carried the era one-hots.  Same era boundaries as
+        # _make_model_mutations / _espn_ep_features.
+        if "era0" not in feats.columns:
+            feats = feats.with_columns(
+                pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
+            )
+        if "era1" not in feats.columns:
+            feats = feats.with_columns(
+                pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("era1"),
+            )
         X = feats.select(XPASS_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
         preds = _load_model(_XPASS_MODEL_FILE, models_dir=models_dir).predict(DMatrix(X, feature_names=XPASS_FEATURES))
         xpass_frame = play_df.select("_xpass_index").with_columns(pl.Series("xpass", preds.tolist(), dtype=pl.Float64))
@@ -2763,11 +2776,211 @@ def _derive_wpa(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _derive_qbr_epa(df: pl.DataFrame) -> pl.DataFrame:
+    """Add the per-play Total-QBR EPA components (nflverse port of ``__process_qbr``).
+
+    Mirrors ``NFLPlayProcess.__process_qbr`` (the ESPN construction path) in
+    nflverse column space.  These are the per-play *inputs* to the ESPN Total-QBR
+    rating (the rating itself is an aggregation performed downstream); this
+    function emits the same component contract the ESPN path produces so the two
+    builders agree column-for-column.
+
+    Mapping ESPN -> nflverse columns:
+
+    * ``EPA`` -> ``qb_epa`` (the QB-credited EPA; equals ``epa`` except on
+      completed-pass-then-fumble plays — see :func:`_derive_qb_epa`).  The QBR
+      clamp / fumble floor reads ``qb_epa`` so the components stay QB-centric.
+    * ``fumble_vec`` -> ``fumble`` ; ``sack_vec`` -> ``sack`` ;
+      ``penalty_flag`` -> ``penalty`` ; ``home_wp_before`` -> ``home_wp``.
+    * ``pass`` / ``rush`` are the nflverse 0/1 dropback / rush indicators.
+
+    Adds (all float64 / bool, null where the gating play-type does not apply):
+
+    * ``qbr_epa`` — ``qb_epa`` clamped at ``-5.0`` (or ``-3.5`` on a fumble play).
+    * ``weight`` — win-probability leverage weight (low-leverage blowout states
+      are down-weighted, matching ESPN's QBR clutch weighting).
+    * ``non_fumble_sack`` — sack without a fumble.
+    * ``sack_epa`` / ``pass_epa`` / ``rush_epa`` / ``pen_epa`` — ``qbr_epa``
+      partitioned by play family.
+    * ``sack_weight`` / ``pass_weight`` / ``rush_weight`` / ``pen_weight`` — the
+      matching ``weight`` partition.
+    * ``action_play`` — ``qb_epa != 0`` (a play that moved the needle).
+
+    The function is a no-op-shaped addition: when the required columns are absent
+    it returns ``df`` unchanged.  ``qb_epa`` must already be present (run after
+    :func:`_derive_qb_epa`); ``home_wp`` after the WP / WPA step.
+
+    Args:
+        df: Enriched nflverse frame carrying ``qb_epa`` and ``home_wp`` plus the
+            nflverse play-family flags ``pass`` / ``rush`` / ``sack`` / ``fumble``
+            / ``penalty``.
+
+    Returns:
+        ``df`` with the QBR component columns added.
+    """
+    required = ("qb_epa", "home_wp", "pass", "rush")
+    if any(c not in df.columns for c in required):
+        return df
+
+    # nflverse play-family flags may be Int (0/1) or Bool depending on source;
+    # build boolean expressions defensively so the gating is dtype-agnostic.
+    def _flag(col: str) -> pl.Expr:
+        if col in df.columns:
+            return pl.col(col).cast(pl.Float64).fill_null(0.0) == 1.0
+        return pl.lit(False)
+
+    pass_flag = _flag("pass")
+    rush_flag = _flag("rush")
+    sack_flag = _flag("sack")
+    fumble_flag = _flag("fumble")
+    penalty_flag = _flag("penalty")
+
+    qb_epa = pl.col("qb_epa").cast(pl.Float64)
+    home_wp = pl.col("home_wp").cast(pl.Float64)
+
+    df = df.with_columns(
+        qbr_epa=pl.when(qb_epa < -5.0).then(-5.0).when(fumble_flag).then(-3.5).otherwise(qb_epa),
+        weight=pl.when(home_wp < 0.1)
+        .then(0.6)
+        .when((home_wp >= 0.1) & (home_wp < 0.2))
+        .then(0.9)
+        .when((home_wp >= 0.8) & (home_wp < 0.9))
+        .then(0.9)
+        .when(home_wp > 0.9)
+        .then(0.6)
+        .otherwise(1.0),
+        non_fumble_sack=(sack_flag & ~fumble_flag),
+    )
+    df = df.with_columns(
+        sack_epa=pl.when(pl.col("non_fumble_sack")).then(pl.col("qbr_epa")).otherwise(None),
+        pass_epa=pl.when(pass_flag).then(pl.col("qbr_epa")).otherwise(None),
+        rush_epa=pl.when(rush_flag).then(pl.col("qbr_epa")).otherwise(None),
+        pen_epa=pl.when(penalty_flag).then(pl.col("qbr_epa")).otherwise(None),
+    )
+    df = df.with_columns(
+        sack_weight=pl.when(pl.col("non_fumble_sack")).then(pl.col("weight")).otherwise(None),
+        pass_weight=pl.when(pass_flag).then(pl.col("weight")).otherwise(None),
+        rush_weight=pl.when(rush_flag).then(pl.col("weight")).otherwise(None),
+        pen_weight=pl.when(penalty_flag).then(pl.col("weight")).otherwise(None),
+    )
+    df = df.with_columns(action_play=(qb_epa != 0))
+    return df
+
+
+def _add_fourth_down_decisions(
+    df: pl.DataFrame,
+    *,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame:
+    """Attach the nfl4th 4th-down decision columns to a full nflverse frame.
+
+    Filters ``df`` to the qualifying 4th-down rows (``down == 4`` with a
+    non-null ``yardline_100``), scores them through
+    :func:`sportsdataverse.nfl.nfl_fourth_down.get_4th_down_probs`, and merges
+    the decision columns back onto every row (non-4th-down rows receive null
+    decision columns).  ``get_4th_down_probs`` returns pandas, so the result is
+    converted back to polars and joined on ``(game_id, play_id)``.
+
+    The 4th-down models (``fd_model`` / ``wp_model``) are download-on-demand; if
+    they are unavailable offline the decision columns are emitted as all-null so
+    the frame keeps a stable column set.
+
+    Args:
+        df: Full nflverse-shape play-by-play frame (every play, not just 4th
+            downs).  Must carry the columns
+            :func:`get_4th_down_probs` requires (``game_id``, ``play_id``,
+            ``season``, ``posteam``, ``roof``, ``qtr``,
+            ``quarter_seconds_remaining``, ``ydstogo``, ``yardline_100``,
+            ``score_differential``, the timeout columns, ``home_opening_kickoff``,
+            ``spread_line``, ``total_line``).
+        return_as_pandas: unused here (the caller controls final conversion);
+            retained for signature symmetry.
+
+    Returns:
+        ``df`` with the 14 decision columns added (null on non-4th-down rows).
+    """
+    import sportsdataverse.nfl.nfl_fourth_down as _fd
+
+    decision_cols = [
+        "go_wp",
+        "first_down_prob",
+        "wp_succeed",
+        "wp_fail",
+        "fg_make_prob",
+        "make_fg_wp",
+        "miss_fg_wp",
+        "fg_wp",
+        "punt_wp",
+        "go_boost",
+        "go_wp_diff",
+        "punt_wp_diff",
+        "fg_wp_diff",
+        "fourth_down_recommendation",
+    ]
+
+    def _with_null_decisions(frame: pl.DataFrame) -> pl.DataFrame:
+        """Emit a stable, all-null decision-column set (schema stability)."""
+        return frame.with_columns(
+            [
+                (
+                    pl.lit(None, dtype=pl.Utf8).alias(c)
+                    if c == "fourth_down_recommendation"
+                    else pl.lit(None, dtype=pl.Float64).alias(c)
+                )
+                for c in decision_cols
+                if c not in frame.columns
+            ]
+        )
+
+    # Stable join keys must be present; if not, return unchanged + null columns.
+    if not all(c in df.columns for c in ("game_id", "play_id", "down", "yardline_100")):
+        return _with_null_decisions(df)
+
+    fourth = df.filter((pl.col("down") == 4) & pl.col("yardline_100").is_not_null())
+
+    if fourth.height == 0:
+        return _with_null_decisions(df)
+
+    try:
+        probs_pd = _fd.get_4th_down_probs(fourth)
+    except Exception as exc:  # noqa: BLE001 — degrade gracefully on any scoring failure
+        # The 4th-down models (fd_model / wp_model) are download-on-demand and
+        # may be unavailable (FileNotFoundError), or an incompatible cached
+        # booster can raise an xgboost feature-count error (XGBoostError) — in
+        # either case skip the step and emit null decision columns rather than
+        # failing the whole enrichment.
+        import warnings
+
+        warnings.warn(
+            f"enrich_nfl_pbp: skipping 4th-down decision step — {type(exc).__name__}: {exc}.",
+            RuntimeWarning,
+            stacklevel=2,
+        )
+        return _with_null_decisions(df)
+
+    probs = pl.from_pandas(probs_pd)
+    keep = ["game_id", "play_id", *[c for c in decision_cols if c in probs.columns]]
+    probs = probs.select(keep)
+
+    # Align join-key dtypes to the left frame so the merge lines up exactly.
+    cast_exprs = []
+    for key in ("game_id", "play_id"):
+        if key in probs.columns and probs.schema[key] != df.schema[key]:
+            cast_exprs.append(pl.col(key).cast(df.schema[key]).alias(key))
+    if cast_exprs:
+        probs = probs.with_columns(cast_exprs)
+
+    # Drop any pre-existing decision columns so this is idempotent.
+    df = df.drop([c for c in decision_cols if c in df.columns])
+    return df.join(probs, on=["game_id", "play_id"], how="left")
+
+
 def enrich_nfl_pbp(
     df: pl.DataFrame,
     *,
     method: str = "lead_diff",
     models_dir: Union[str, None] = None,
+    add_fourth_down: bool = True,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC.
@@ -2802,6 +3015,13 @@ def enrich_nfl_pbp(
             (default) the bundled EP/WP/CP models load from
             ``sportsdataverse/nfl/models/`` and the large xYAC model is
             resolved bundled → cache → downloaded-from-release.
+        add_fourth_down: When ``True`` (default), attach the nfl4th 4th-down
+            decision columns (``go_wp`` / ``fg_wp`` / ``punt_wp`` / ``go_boost``
+            / ``fourth_down_recommendation`` etc.) — scored only on the
+            qualifying 4th-down rows and null elsewhere.  The 4th-down models are
+            download-on-demand; when they are unavailable offline the columns are
+            emitted as all-null (with a ``RuntimeWarning``).  Set ``False`` to
+            skip the step entirely.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``.
 
     Returns:
@@ -2849,6 +3069,22 @@ def enrich_nfl_pbp(
           If the model is unavailable offline (no cache + no network) the xYAC
           step is skipped with a ``RuntimeWarning`` and the five columns stay
           null while the rest of the enrichment proceeds.
+        * ``qbr_epa``, ``weight``, ``non_fumble_sack``, ``sack_epa``,
+          ``pass_epa``, ``rush_epa``, ``pen_epa``, ``sack_weight``,
+          ``pass_weight``, ``rush_weight``, ``pen_weight``, ``action_play`` —
+          the per-play Total-QBR EPA components (nflverse port of the ESPN
+          ``__process_qbr`` step): ``qb_epa`` clamped at ``-5``/``-3.5`` (fumble),
+          the win-probability leverage ``weight``, and the play-family EPA /
+          weight partitions.  These are the inputs the QBR rating aggregates
+          downstream (the rating itself is not computed here).
+        * ``go_wp``, ``first_down_prob``, ``wp_succeed``, ``wp_fail``,
+          ``fg_make_prob``, ``make_fg_wp``, ``miss_fg_wp``, ``fg_wp``,
+          ``punt_wp``, ``go_boost``, ``go_wp_diff``, ``punt_wp_diff``,
+          ``fg_wp_diff``, ``fourth_down_recommendation`` — the nfl4th 4th-down
+          decision surface (default-on; see *add_fourth_down*).  Scored only on
+          4th-down rows (``down == 4`` with a non-null ``yardline_100``); null on
+          every other play.  Omitted / all-null when *add_fourth_down* is
+          ``False`` or the 4th-down models are unavailable offline.
 
     Raises:
         ValueError: when ``method`` is not ``"lead_diff"``, or required
@@ -2970,6 +3206,15 @@ def enrich_nfl_pbp(
         raw = raw.with_columns(
             [pl.lit(None, dtype=pl.Float64).alias(c) for c in _XYAC_OUT_COLS if c not in raw.columns]
         )
+
+    # 7. QBR components — nflverse port of the ESPN __process_qbr step. Needs
+    #    qb_epa (step 2b) and home_wp (step 4) which are now both present.
+    raw = _derive_qbr_epa(raw)
+
+    # 8. 4th-down decision surface — default-on, scored only on the qualifying
+    #    4th-down rows and null elsewhere (nfl4th add_4th_probs + recommendation).
+    if add_fourth_down:
+        raw = _add_fourth_down_decisions(raw)
 
     if return_as_pandas:
         return raw.to_pandas()
