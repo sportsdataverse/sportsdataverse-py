@@ -46,3 +46,8 @@ dist_check/
 coverage.xml
 htmlcov/
 .mypy_cache/
+
+# Claude Code personal/machine-specific settings (hooks reference local venv
+# paths). Project-shared config (.claude/settings.json, skills, commands) is
+# intentionally NOT ignored so it can be committed for the team.
+.claude/settings.local.json

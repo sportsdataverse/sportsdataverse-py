@@ -6218,7 +6218,7 @@ class CFBPlayProcess(object):
         ("interception_player_name", "interception_player_id", "def_pos_team"),
         ("pass_breakup_player_name", "pass_breakup_player_id", "def_pos_team"),
         ("fumble_forced_player_name", "fumble_forced_player_id", "def_pos_team"),
-        ("fumble_recovered_player_name", "fumble_recovered_player_id", "recovery_team"),
+        ("fumble_recovered_player_name", "fumble_recovered_player_id", "fumble_recovery_team"),
         ("fg_kicker_player_name", "fg_kicker_player_id", "kicking_team"),
         ("punter_player_name", "punter_player_id", "kicking_team"),
         ("kickoff_player_name", "kickoff_player_id", "kicking_team"),
