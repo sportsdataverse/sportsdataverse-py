@@ -208,6 +208,8 @@ XPASS_FEATURES: list[str] = [
     "qtr",
     "wp",
     "vegas_wp",
+    "era0",
+    "era1",
     "era2",
     "era3",
     "era4",
@@ -234,7 +236,7 @@ _XYAC_NUM_CLASSES: int = 76
 #: ``nfl_model_artifacts`` GitHub release and fetched + cached on first use.
 #: The EP/WP/CP/xpass models stay bundled under ``nfl/models/`` (each < 10 MB)
 #: and are NOT listed here. ``xpass_model.ubj`` is the self-derived dropback
-#: (track7) booster — identical to the model the release ships, just bundled so
+#: (decision_models) booster — identical to the model the release ships, just bundled so
 #: :func:`calculate_xpass` works offline with no first-use download.
 _MODEL_URLS: dict[str, str] = {
     "xyac_model.ubj": (
@@ -343,7 +345,7 @@ def _load_model(name: str, models_dir: Optional[Union[str, Path]] = None) -> "Bo
     # 5. Unknown model with no bundled/cached file and no download URL.
     raise FileNotFoundError(
         f"NFL model '{name}' not found (bundled: {bundled}, cache: {_model_cache_dir() / name}). "
-        f"It is not registered for download in _MODEL_URLS. Run the track6 training pipeline to "
+        f"It is not registered for download in _MODEL_URLS. Run the play_level training pipeline to "
         f"produce the bundled model files, or pass models_dir= pointing at a directory containing it."
     )
 
@@ -455,7 +457,7 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     Computes the three derived features that aren't direct column copies:
     - ``air_is_zero`` — air_yards == 0
     - ``distance_to_sticks`` — air_yards - ydstogo (nflfastR sign; the models
-      were trained on this orientation — see track6 features.py)
+      were trained on this orientation — see play_level features.py)
     - Era flags era2..4 (era0/era1 are intentionally excluded from CP)
     - ``home`` indicator (if not already present)
     - Roof one-hots (identical to :func:`_make_model_mutations`)

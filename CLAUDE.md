@@ -523,7 +523,7 @@ exactly one place.
   `wp` 0.997, `vegas_wp` 0.998, `cpoe` scale-correct; `wpa` ≈0.89 is an SNR
   ceiling (the derivation is exact — corr 1.0 when fed nflverse's own `wp`; the
   residual is WP-model per-play noise amplified by first-differencing, not a
-  bug). The track6 EP/WP/CP recipe + this surface are validated against the
+  bug). The play_level EP/WP/CP recipe + this surface are validated against the
   nflfastR source in the workspace (`nflverse-dev/nflfastR/R/helper_add_ep_wp.R`).
 
 ### CFB — `cfb_play_participants` and the 0.36-live reconciliation
