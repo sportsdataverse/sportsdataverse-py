@@ -102,13 +102,17 @@ _WP_MODEL_FILE = "wp_model.ubj"  # download-on-demand (nfl4th home-WP, binary:lo
 _TWO_PT_MODEL_FILE = "two_pt_model.ubj"  # bundled (binary:logistic, 9 features)
 _FG_MODEL_FILE = "fg_model.ubj"  # bundled (binary:logistic, 3 features)
 
-#: ``fg_model`` feature order (track7 ``FG_FEATURES``).  The booster carries its
+#: ``fg_model`` feature order (decision_models ``FG_FEATURES``).  The booster carries its
 #: own feature names, but the DMatrix is built in this exact order to match:
 #: ``fg_roof = 1`` when ``roof == "outdoors"``, ``fg_era = 1`` when ``season >= 2020``.
 FG_FEATURES: list[str] = [
     "yardline_100",
     "fg_roof",
-    "fg_era",
+    "era0",
+    "era1",
+    "era2",
+    "era3",
+    "era4",
 ]
 
 #: ``fd_model`` feature order (nfl4th ``get_go_wp``).  The model has no embedded
@@ -117,6 +121,9 @@ FD_FEATURES: list[str] = [
     "down",
     "ydstogo",
     "yardline_100",
+    "era0",
+    "era1",
+    "era2",
     "era3",
     "era4",
     "outdoors",
@@ -180,7 +187,7 @@ def _load_fg_model() -> Optional["Booster"]:
         return None
 
 
-def _fg_make_prob(yardline_100: np.ndarray, fg_roof: np.ndarray, fg_era: np.ndarray) -> Optional[np.ndarray]:
+def _fg_make_prob(yardline_100: np.ndarray, fg_roof: np.ndarray, era: np.ndarray) -> Optional[np.ndarray]:
     """Predict the FG make probability from the bundled ``fg_model``.
 
     Builds the feature matrix in :data:`FG_FEATURES` order
@@ -195,7 +202,7 @@ def _fg_make_prob(yardline_100: np.ndarray, fg_roof: np.ndarray, fg_era: np.ndar
     from xgboost import DMatrix
 
     yl: np.ndarray = yardline_100.astype(float)
-    x_fg = np.column_stack([yl, fg_roof.astype(float), fg_era.astype(float)]).astype(np.float32)
+    x_fg = np.column_stack([yl, fg_roof.astype(float), era.astype(float)]).astype(np.float32)
     make_prob: np.ndarray = model.predict(DMatrix(x_fg, feature_names=FG_FEATURES)).astype(float)
     # nfl4th long-kick clamps: zero at/beyond the 45 (>= ~63 yd), shrink 0.9 at/beyond the 38.
     make_prob = np.where(yl >= 45, 0.0, make_prob)
@@ -298,13 +305,15 @@ def _prepare(df: pd.DataFrame) -> pd.DataFrame:
     )
     d["model_roof"] = model_roof
     season = d["season"].to_numpy()
+    d["era0"] = (season <= 2001).astype(int)
+    d["era1"] = ((season > 2001) & (season <= 2005)).astype(int)
+    d["era2"] = ((season > 2005) & (season <= 2013)).astype(int)
     d["era3"] = ((season > 2013) & (season <= 2017)).astype(int)
     d["era4"] = (season > 2017).astype(int)
-    # fg_model features (track7 FG_FEATURES): fg_roof = (roof == "outdoors"),
-    # fg_era = (season >= 2020).  Stored as columns so the FG/PAT paths can build
-    # the DMatrix in FG_FEATURES order.
+    # fg_model features (decision_models FG_FEATURES): yardline_100, fg_roof, and the
+    # era0..era4 one-hot above. fg is era-aware across all kicking eras; the PAT path
+    # (fg @ yardline_100 = 15) reads the modern era directly via era4.
     d["fg_roof"] = np.where(roof.to_numpy() == "outdoors", 1, 0)
-    d["fg_era"] = np.where(season >= 2020, 1, 0)
     d["home_total"] = (d["total_line"] + d["spread_line"]) / 2.0
     d["away_total"] = (d["total_line"] - d["spread_line"]) / 2.0
     d["retractable"] = (d["model_roof"] == "retractable").astype(int)
@@ -545,7 +554,7 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     # PAT make probability: the FG model at yardline_100 = 15 (the PAT spot).
     pat_yl: np.ndarray = np.full(n, 15, dtype=float)
-    conv_1pt = _fg_make_prob(pat_yl, d["fg_roof"].to_numpy(), d["fg_era"].to_numpy())
+    conv_1pt = _fg_make_prob(pat_yl, d["fg_roof"].to_numpy(), d[["era0", "era1", "era2", "era3", "era4"]].to_numpy())
     if conv_1pt is None:  # FG model unobtainable on the re-load (race/eviction) — emit NaN, never crash
         out = d[["go_index"]].copy()
         out["yardline_100"] = 0
@@ -778,7 +787,7 @@ def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         return out
 
     yl = d["yardline_100"].to_numpy().astype(float)
-    make_prob = _fg_make_prob(yl, d["fg_roof"].to_numpy(), d["fg_era"].to_numpy())
+    make_prob = _fg_make_prob(yl, d["fg_roof"].to_numpy(), d[["era0", "era1", "era2", "era3", "era4"]].to_numpy())
     assert make_prob is not None  # guarded above
 
     # made FG: flip to opponent receiving a touchback (the 25), kicking team +3.

@@ -27,6 +27,7 @@ from sportsdataverse.dl_utils import download
 from sportsdataverse.nfl.ep_wp import (
     CP_FEATURES,
     EP_FEATURES,
+    WP_NAIVE_FEATURES,
     WP_SPREAD_FEATURES,
     _EP_POINT_VALUES,
     _XYAC_OUT_COLS,
@@ -36,6 +37,7 @@ from sportsdataverse.nfl.ep_wp import (
     _load_model as _ep_wp_load_model,
     calculate_epa,
     calculate_wpa,
+    calculate_xpass,
 )
 from sportsdataverse.nfl.model_vars import (
     TOUCHBACK_YARDLINE_POST_2016,
@@ -3610,6 +3612,406 @@ class NFLPlayProcess(object):
         )
         return play_df
 
+    def __process_qb_epa(self, play_df):
+        """Add ``qb_epa`` — EPA crediting the QB on completed-pass-then-fumble plays.
+
+        ESPN-column port of :func:`sportsdataverse.nfl.ep_wp._derive_qb_epa`
+        (nflfastR ``add_qb_epa``).  On every play ``qb_epa == EPA`` EXCEPT plays
+        where the receiver caught the ball and *then* lost a fumble
+        (``completion == True & fumble_vec == True``): those are RE-SPOTTED as if
+        the receiver had simply been tackled at the fumble spot (no turnover),
+        EP is re-scored with the bundled ``ep_model``, and
+        ``qb_epa = ep_respotted - EP_start`` (negated when the re-spot is a
+        turnover on downs).  The QB thereby keeps completion + YAC credit and is
+        NOT penalised for the fumble turnover.
+
+        Faithful no-op fallback: when the required columns are absent (or no
+        completed-pass-fumble play exists in the game), ``qb_epa == EPA``
+        exactly.  ``qb_epa`` is float64 and null wherever ``EPA`` is null.
+        """
+        required = ("completion", "fumble_vec", "statYardage", "EPA", "EP_start")
+        if any(c not in play_df.columns for c in required):
+            return play_df.with_columns(pl.col("EPA").cast(pl.Float64).alias("qb_epa"))
+
+        play_df = play_df.with_row_index("_qbepa_idx")
+
+        fumbles = play_df.filter(
+            (pl.col("completion") == True)
+            .and_(pl.col("fumble_vec") == True)
+            .and_(pl.col("EPA").is_not_null())
+            .and_(pl.col("start.down").is_not_null())
+        )
+
+        if fumbles.height == 0:
+            return play_df.drop("_qbepa_idx").with_columns(pl.col("EPA").cast(pl.Float64).alias("qb_epa"))
+
+        # Re-spot the play as if the receiver were tackled at the fumble spot.
+        # ``statYardage`` is the ESPN gain; ``start.distance`` the yards to go and
+        # ``start.yardsToEndzone`` the field position.  Mirrors _derive_qb_epa.
+        respotted = (
+            fumbles.with_columns(
+                pl.when(pl.col("start.TimeSecsRem") <= 6)
+                .then(pl.lit(0.0))
+                .otherwise(pl.col("start.TimeSecsRem").cast(pl.Float64) - 6.0)
+                .alias("start.TimeSecsRem"),
+                pl.col("start.down").cast(pl.Float64).alias("_down"),
+                pl.col("start.posTeamTimeouts").alias("_pos_to_pre"),
+                pl.col("start.defPosTeamTimeouts").alias("_def_to_pre"),
+                pl.col("start.is_home").alias("_is_home_pre"),
+                pl.col("EP_start").alias("_ep_old"),
+            )
+            # New yard line from the play result.
+            .with_columns((pl.col("start.yardsToEndzone") - pl.col("statYardage")).alias("_yl"))
+            # New down: 1st down if the gain made the sticks, else down + 1.
+            .with_columns(
+                pl.when(pl.col("statYardage") >= pl.col("start.distance"))
+                .then(pl.lit(1.0))
+                .otherwise(pl.col("_down") + 1.0)
+                .alias("_down")
+            )
+            # down == 5 -> turnover on downs at the fumble spot -> possession change.
+            .with_columns(
+                pl.when(pl.col("_down") == 5).then(pl.lit(1)).otherwise(pl.lit(0)).alias("_change"),
+            )
+            .with_columns(
+                pl.when(pl.col("_down") == 5).then(pl.lit(1.0)).otherwise(pl.col("_down")).alias("_down"),
+            )
+            # ydstogo: 10 on a fresh first down, else what's left after the gain.
+            .with_columns(
+                pl.when(pl.col("_down") == 1)
+                .then(pl.lit(10.0))
+                .otherwise(pl.col("start.distance") - pl.col("statYardage"))
+                .alias("_ydstogo"),
+            )
+            # Possession change -> 10 yards to go, flip field + timeouts + home.
+            .with_columns(
+                pl.when(pl.col("_change") == 1).then(pl.lit(10.0)).otherwise(pl.col("_ydstogo")).alias("_ydstogo"),
+                pl.when(pl.col("_change") == 1).then(100 - pl.col("_yl")).otherwise(pl.col("_yl")).alias("_yl"),
+                pl.when(pl.col("_change") == 1)
+                .then(pl.col("_def_to_pre"))
+                .otherwise(pl.col("_pos_to_pre"))
+                .alias("_pos_to"),
+                pl.when(pl.col("_change") == 1)
+                .then(pl.col("_pos_to_pre"))
+                .otherwise(pl.col("_def_to_pre"))
+                .alias("_def_to"),
+                pl.when(pl.col("_change") == 1)
+                .then(~pl.col("_is_home_pre"))
+                .otherwise(pl.col("_is_home_pre"))
+                .alias("_is_home"),
+            )
+            # Goal-line clamp: can't have more yards to go than yards to the end zone.
+            .with_columns(
+                pl.when(pl.col("_yl") < pl.col("_ydstogo"))
+                .then(pl.col("_yl"))
+                .otherwise(pl.col("_ydstogo"))
+                .alias("_ydstogo"),
+            )
+            .with_columns(pl.col("_down").cast(pl.Int64).alias("_down"))
+            # Down one-hots for the re-spotted state.
+            .with_columns(
+                (pl.col("_down") == 1).alias("_down1"),
+                (pl.col("_down") == 2).alias("_down2"),
+                (pl.col("_down") == 3).alias("_down3"),
+                (pl.col("_down") == 4).alias("_down4"),
+            )
+        )
+
+        # Re-score EP on the re-spotted state with the bundled ep_model.
+        _ep_model = _ep_wp_load_model("ep_model.ubj")
+        X_ep_respot = _espn_ep_features(
+            respotted,
+            half_sec_col="start.TimeSecsRem",
+            yardline_col="_yl",
+            home_col="_is_home",
+            ydstogo_col="_ydstogo",
+            down1_col="_down1",
+            down2_col="_down2",
+            down3_col="_down3",
+            down4_col="_down4",
+            pos_timeouts_col="_pos_to",
+            def_timeouts_col="_def_to",
+        )
+        _probs_respot = _ep_model.predict(DMatrix(X_ep_respot, feature_names=EP_FEATURES)).reshape(-1, 7)
+        ep_respot = np.clip(_probs_respot @ _EP_POINT_VALUES, -10.0, 10.0)
+
+        fixed = respotted.select(
+            pl.col("_qbepa_idx"),
+            pl.col("_change"),
+            pl.col("_ep_old"),
+            pl.Series("_ep_respot", ep_respot, dtype=pl.Float64),
+        ).with_columns(
+            (
+                pl.when(pl.col("_change") == 1).then(-pl.col("_ep_respot")).otherwise(pl.col("_ep_respot"))
+                - pl.col("_ep_old")
+            ).alias("_fixed_epa")
+        )
+
+        play_df = play_df.join(fixed.select("_qbepa_idx", "_fixed_epa"), on="_qbepa_idx", how="left").with_columns(
+            pl.coalesce(pl.col("_fixed_epa"), pl.col("EPA")).cast(pl.Float64).alias("qb_epa")
+        )
+        return play_df.drop([c for c in ("_qbepa_idx", "_fixed_epa") if c in play_df.columns])
+
+    def __process_wp(self, play_df):
+        """Score the start-of-play ``wp`` (naive) and ``vegas_wp`` (spread) columns.
+
+        Emits the model ``wp`` / ``vegas_wp`` / ``def_wp`` / ``home_wp`` /
+        ``away_wp`` columns consistent with
+        :func:`sportsdataverse.nfl.ep_wp.enrich_nfl_pbp` so the ESPN construction
+        path agrees with the nflverse path.  ``wp`` is scored from the bundled
+        ``wp_naive.ubj`` model (11-feature) and ``vegas_wp`` from
+        ``wp_spread.ubj`` (12-feature), both on the START feature view (the same
+        view ``__process_wpa`` already builds for ``wp_before``).  The
+        possession-team -> home perspective flip mirrors
+        :func:`calculate_wpa` so ``home_wp`` is the home team's pre-snap WP.
+
+        Must run BEFORE :meth:`__process_xpass` (xpass consumes ``wp`` /
+        ``vegas_wp``).  All five columns are float64.
+        """
+        _wp_naive_model = _ep_wp_load_model("wp_naive.ubj")
+        _wp_spread_model = _ep_wp_load_model("wp_spread.ubj")
+
+        # Naive WP — START view, 11-feature (no spread_time).
+        X_wp_naive = _espn_wp_features(
+            play_df,
+            receive_ko_col="start.pos_team_receives_2H_kickoff",
+            spread_time_col="start.spread_time",
+            home_col="start.is_home",
+            half_sec_col="start.TimeSecsRem",
+            game_sec_col="start.adj_TimeSecsRem",
+            score_diff_col="pos_score_diff_start",
+            down_col="start.down",
+            ydstogo_col="start.distance",
+            yardline_col="start.yardsToEndzone",
+            pos_timeouts_col="start.posTeamTimeouts",
+            def_timeouts_col="start.defPosTeamTimeouts",
+            include_spread=False,
+        )
+        wp_naive = _wp_naive_model.predict(DMatrix(X_wp_naive, feature_names=WP_NAIVE_FEATURES))
+
+        # Spread WP — START view, 12-feature (with spread_time).
+        X_wp_spread = _espn_wp_features(
+            play_df,
+            receive_ko_col="start.pos_team_receives_2H_kickoff",
+            spread_time_col="start.spread_time",
+            home_col="start.is_home",
+            half_sec_col="start.TimeSecsRem",
+            game_sec_col="start.adj_TimeSecsRem",
+            score_diff_col="pos_score_diff_start",
+            down_col="start.down",
+            ydstogo_col="start.distance",
+            yardline_col="start.yardsToEndzone",
+            pos_timeouts_col="start.posTeamTimeouts",
+            def_timeouts_col="start.defPosTeamTimeouts",
+            include_spread=True,
+        )
+        wp_spread = _wp_spread_model.predict(DMatrix(X_wp_spread, feature_names=WP_SPREAD_FEATURES))
+
+        play_df = play_df.with_columns(
+            pl.Series("wp", wp_naive, dtype=pl.Float64),
+            pl.Series("vegas_wp", wp_spread, dtype=pl.Float64),
+        ).with_columns(
+            def_wp=1.0 - pl.col("wp"),
+        )
+        # Possession-team -> home perspective flip (mirror calculate_wpa).
+        play_df = play_df.with_columns(
+            home_wp=pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("wp"))
+            .otherwise(pl.col("def_wp")),
+            away_wp=pl.when(pl.col("start.pos_team.id") != pl.col("homeTeamId"))
+            .then(pl.col("wp"))
+            .otherwise(pl.col("def_wp")),
+        )
+        return play_df
+
+    def __process_xpass(self, play_df):
+        """Add ``xpass`` (expected dropback probability) and ``pass_oe``.
+
+        Delegates to :func:`sportsdataverse.nfl.ep_wp.calculate_xpass` — the same
+        faithful nflfastR ``add_xpass`` scorer the nflverse path uses.  It scores
+        only the ``valid_play`` subset (``season >= 2006``, dropback-eligible
+        scrimmage plays with a valid down / score state) and nulls everywhere
+        else (kicks, PATs, two-point tries).  ``calculate_xpass`` keys off
+        nflverse column names, so this maps the ESPN frame to the minimal
+        nflverse-shape inputs first, scores, and joins ``xpass`` / ``pass_oe``
+        back onto the ESPN frame by a stable row index.
+
+        Requires ``wp`` / ``vegas_wp`` (run after :meth:`__process_wp`).  If the
+        ``xpass_model.ubj`` is unavailable offline the step degrades gracefully:
+        ``xpass`` / ``pass_oe`` are emitted as all-null (with a ``RuntimeWarning``).
+        """
+        play_df = play_df.with_row_index("_xpass_join_idx")
+
+        # Map ESPN play type text -> nflverse play_type for the valid_play filter.
+        # rush==1 -> "run", pass==1 -> "pass"; penalties -> "no_play"; everything
+        # else (kicks / PATs / 2pt) -> a non-eligible label so xpass nulls.
+        nfl_play_type = (
+            pl.when(pl.col("type.text") == "Penalty")
+            .then(pl.lit("no_play"))
+            .when(pl.col("pass") == True)
+            .then(pl.lit("pass"))
+            .when(pl.col("rush") == True)
+            .then(pl.lit("run"))
+            .otherwise(pl.lit("other"))
+        )
+
+        nflverse_view = play_df.select(
+            pl.col("_xpass_join_idx"),
+            pl.col("season"),
+            nfl_play_type.alias("play_type"),
+            pl.col("start.pos_team.id").cast(pl.Utf8).alias("posteam"),
+            pl.col("start.is_home").alias("home_team_flag"),
+            pl.col("start.down").alias("down"),
+            pl.col("start.distance").alias("ydstogo"),
+            pl.col("start.yardsToEndzone").alias("yardline_100"),
+            pl.col("period").alias("qtr"),
+            pl.col("wp"),
+            pl.col("vegas_wp"),
+            pl.col("pos_score_diff_start").alias("score_differential"),
+            pl.col("start.TimeSecsRem").alias("half_seconds_remaining"),
+            pl.col("start.posTeamTimeouts").alias("posteam_timeouts_remaining"),
+            pl.col("start.defPosTeamTimeouts").alias("defteam_timeouts_remaining"),
+            pl.col("pass").cast(pl.Int8).alias("pass"),
+            pl.col("rush").cast(pl.Int8).alias("rush"),
+        ).with_columns(
+            # _make_cp_mutations derives `home` from posteam == home_team; the
+            # ESPN frame already knows home via start.is_home, so synthesize a
+            # home_team string that makes `home` resolve correctly.
+            home_team=pl.when(pl.col("home_team_flag") == True).then(pl.col("posteam")).otherwise(pl.lit("__away__")),
+            roof=pl.lit("retractable"),
+        )
+
+        try:
+            scored = calculate_xpass(nflverse_view)
+        except FileNotFoundError as exc:
+            import warnings
+
+            warnings.warn(
+                f"NFLPlayProcess.__process_xpass: skipping xpass step — {type(exc).__name__}: {exc}.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return play_df.drop("_xpass_join_idx").with_columns(
+                pl.lit(None, dtype=pl.Float64).alias("xpass"),
+                pl.lit(None, dtype=pl.Float64).alias("pass_oe"),
+            )
+
+        xpass_frame = scored.select("_xpass_join_idx", "xpass", "pass_oe")
+        play_df = play_df.join(xpass_frame, on="_xpass_join_idx", how="left").drop("_xpass_join_idx")
+        return play_df
+
+    def __process_fourth_down(self, play_df):
+        """Attach the nfl4th 4th-down decision columns (default-on).
+
+        The decision surface
+        (:func:`sportsdataverse.nfl.nfl_fourth_down.get_4th_down_probs`) keys off
+        nflverse column names, so this maps the ESPN frame to the minimal
+        nflverse-shape 4th-down inputs, scores only the qualifying 4th-down rows
+        (``start.down == 4`` with a non-null ``start.yardsToEndzone``), and joins
+        the 14 decision columns back onto the full ESPN frame by play ``id``
+        (non-4th-down rows receive null decision columns).
+
+        The 4th-down models (``fd_model`` / ``wp_model``) are download-on-demand;
+        when they are unavailable offline — or an incompatible cached booster
+        raises — the columns are emitted as all-null (schema-stable) with a
+        ``RuntimeWarning`` rather than failing the pipeline.
+        """
+        import sportsdataverse.nfl.nfl_fourth_down as _fd
+
+        decision_cols = [
+            "go_wp",
+            "first_down_prob",
+            "wp_succeed",
+            "wp_fail",
+            "fg_make_prob",
+            "make_fg_wp",
+            "miss_fg_wp",
+            "fg_wp",
+            "punt_wp",
+            "go_boost",
+            "go_wp_diff",
+            "punt_wp_diff",
+            "fg_wp_diff",
+            "fourth_down_recommendation",
+        ]
+
+        def _with_null_decisions(frame):
+            return frame.with_columns(
+                [
+                    (
+                        pl.lit(None, dtype=pl.Utf8).alias(c)
+                        if c == "fourth_down_recommendation"
+                        else pl.lit(None, dtype=pl.Float64).alias(c)
+                    )
+                    for c in decision_cols
+                    if c not in frame.columns
+                ]
+            )
+
+        required = ("id", "start.down", "start.yardsToEndzone", "start.distance", "period")
+        if any(c not in play_df.columns for c in required):
+            return _with_null_decisions(play_df)
+
+        fourth = play_df.filter((pl.col("start.down") == 4).and_(pl.col("start.yardsToEndzone").is_not_null()))
+        if fourth.height == 0:
+            return _with_null_decisions(play_df)
+
+        # quarter_seconds_remaining from the within-quarter clock (minutes/seconds).
+        qsr = (60 * pl.col("clock.minutes") + pl.col("clock.seconds")).cast(pl.Float64)
+        # home_opening_kickoff: the home team received the opening kickoff iff it
+        # does NOT receive the 2H kickoff.  start.pos_team_receives_2H_kickoff is a
+        # per-play flag for the *current* posteam, so resolve it to the home team.
+        home_receives_2h = (
+            pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("start.pos_team_receives_2H_kickoff"))
+            .otherwise(~pl.col("start.pos_team_receives_2H_kickoff"))
+        )
+
+        nflverse_view = fourth.select(
+            pl.col("id").alias("play_id"),
+            pl.lit(int(self.gameId)).alias("game_id"),
+            pl.col("season"),
+            pl.col("start.pos_team.id").cast(pl.Utf8).alias("posteam"),
+            pl.col("start.def_pos_team.id").cast(pl.Utf8).alias("defteam"),
+            pl.col("homeTeamId").cast(pl.Utf8).alias("home_team"),
+            pl.col("awayTeamId").cast(pl.Utf8).alias("away_team"),
+            pl.lit("outdoors").alias("roof"),
+            pl.col("period").alias("qtr"),
+            qsr.alias("quarter_seconds_remaining"),
+            pl.col("start.distance").cast(pl.Float64).alias("ydstogo"),
+            pl.col("start.yardsToEndzone").cast(pl.Float64).alias("yardline_100"),
+            pl.col("pos_score_diff_start").cast(pl.Float64).alias("score_differential"),
+            pl.col("start.posTeamTimeouts").cast(pl.Int64).alias("posteam_timeouts_remaining"),
+            pl.col("start.defPosTeamTimeouts").cast(pl.Int64).alias("defteam_timeouts_remaining"),
+            home_receives_2h.cast(pl.Int64).alias("home_opening_kickoff"),
+            # nflverse spread_line is home-team-favored-positive; homeTeamSpread is
+            # the home team's point spread (negative when favored), so flip sign.
+            (-pl.col("homeTeamSpread").cast(pl.Float64)).alias("spread_line"),
+            pl.col("overUnder").cast(pl.Float64).alias("total_line"),
+        )
+
+        try:
+            probs_pd = _fd.get_4th_down_probs(nflverse_view)
+        except Exception as exc:  # noqa: BLE001 — degrade gracefully on any scoring failure
+            import warnings
+
+            warnings.warn(
+                f"NFLPlayProcess.__process_fourth_down: skipping 4th-down decision step — {type(exc).__name__}: {exc}.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
+            return _with_null_decisions(play_df)
+
+        probs = pl.from_pandas(probs_pd)
+        keep = ["play_id", *[c for c in decision_cols if c in probs.columns]]
+        probs = probs.select(keep).rename({"play_id": "id"})
+        # Align the join-key dtype to the left frame.
+        if probs.schema["id"] != play_df.schema["id"]:
+            probs = probs.with_columns(pl.col("id").cast(play_df.schema["id"]))
+
+        play_df = play_df.drop([c for c in decision_cols if c in play_df.columns])
+        return play_df.join(probs, on="id", how="left")
+
     def __process_qbr(self, play_df):
         play_df = (
             play_df.with_columns(
@@ -5182,11 +5584,15 @@ class NFLPlayProcess(object):
                     .pipe(self.__add_spread_time)
                     .pipe(self.__add_description_features)
                     .pipe(self.__process_epa)
+                    .pipe(self.__process_qb_epa)
                     .pipe(self.__process_wpa)
+                    .pipe(self.__process_wp)
                     .pipe(self.__process_cp)
+                    .pipe(self.__process_xpass)
                     .pipe(self.__process_xyac)
                     .pipe(self.__add_drive_data)
                     .pipe(self.__add_fixed_drives_series)
+                    .pipe(self.__process_fourth_down)
                     .pipe(self.__process_qbr)
                 )
                 self.ran_pipeline = True
