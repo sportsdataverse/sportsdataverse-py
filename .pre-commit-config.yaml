@@ -10,6 +10,10 @@
 # default rule set does not include I001, so import ordering is no
 # longer auto-enforced. The ``# isort: off`` markers will continue to
 # protect the __init__.py block if I001 is opted back in later.
+# Install all three stages with a plain `pre-commit install` (the local
+# commit-msg + pre-push hooks below need their stages wired, not just pre-commit).
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
+
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version. Kept in sync with the dev-group ``ruff`` pin in pyproject.toml
@@ -82,7 +86,7 @@ repos:
         # page render. Exclude that tree (docs/architecture/ etc. still get TOCs).
         # docs/versioned_docs/ holds frozen `yarn version:docs` snapshots of
         # docs/docs/ — same frontmatter pages, so it must be excluded too.
-        exclude: ^docs/(docs|versioned_docs)/
+        exclude: ^(docs/(docs|versioned_docs)|\.claude)/
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.20.0
     hooks:
@@ -114,6 +118,30 @@ repos:
         language: system
         files: ^tools/codegen/(endpoints|schemas|templates)/.*$
         pass_filenames: false
+      # commit-msg: enforce Conventional Commits + forbid AI Co-Authored-By
+      # trailers (both are CLAUDE.md rules that were previously unenforced).
+      - id: conventional-commit-no-ai
+        name: conventional commit + no AI co-author
+        entry: python tools/hooks/check_commit_msg.py
+        language: system
+        stages: [commit-msg]
+      # pre-push: CI parity for manual terminal pushes. Each is self-gating via
+      # `files:` (pre-commit's pre-push stage filters by the pushed range), so the
+      # slow codegen --check only runs when codegen inputs are actually pushed.
+      - id: mypy-ratchet-prepush
+        name: mypy strict ratchet (pre-push)
+        entry: python -m mypy
+        language: system
+        files: ^sportsdataverse/.*\.py$
+        pass_filenames: false
+        stages: [pre-push]
+      - id: codegen-drift-prepush
+        name: codegen drift check (pre-push)
+        entry: python tools/codegen/generate.py --check
+        language: system
+        files: ^tools/codegen/(endpoints|schemas|templates)/.*$
+        pass_filenames: false
+        stages: [pre-push]
 # - repo: https://github.com/nbQA-dev/nbQA
 #   rev: 1.9.1
 #   hooks:
