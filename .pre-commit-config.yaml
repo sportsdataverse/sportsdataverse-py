@@ -130,14 +130,14 @@ repos:
       # slow codegen --check only runs when codegen inputs are actually pushed.
       - id: mypy-ratchet-prepush
         name: mypy strict ratchet (pre-push)
-        entry: python -m mypy
+        entry: uv run mypy
         language: system
         files: ^sportsdataverse/.*\.py$
         pass_filenames: false
         stages: [pre-push]
       - id: codegen-drift-prepush
         name: codegen drift check (pre-push)
-        entry: python tools/codegen/generate.py --check
+        entry: uv run python tools/codegen/generate.py --check
         language: system
         files: ^tools/codegen/(endpoints|schemas|templates)/.*$
         pass_filenames: false
