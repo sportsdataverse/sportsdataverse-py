@@ -47,6 +47,13 @@ feedback; use `/ship` for the full release-gate flow.
    (`uv run pytest -q`) and say so. Live-API tests stay skipped unless
    `SDV_PY_LIVE_TESTS=1`.
 
+   **Always also run the ID / name-matching contract** — a sub-second offline guard
+   for the recurring int-vs-str / `id→Utf8` / case-sensitive-regex bug class:
+
+   ```sh
+   uv run pytest tests/test_id_conventions.py -q
+   ```
+
 5. **Report** a one-line verdict per stage (ruff / mypy / tests: pass|fail) and,
    on any failure, the specific file:line. This is a sanity sweep — surface
    problems, don't auto-fix beyond ruff's own `--fix`.
