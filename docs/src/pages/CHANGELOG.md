@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [0.0.70 Release: June 24, 2026](#0070-release-june-24-2026)
+  - [CFB — `qbr` / `fg` / `wp_spread` models refreshed on the consensus-odds full-corpus reprocess](#cfb--qbr--fg--wp_spread-models-refreshed-on-the-consensus-odds-full-corpus-reprocess)
 - [0.0.69 Release: June 23, 2026](#0069-release-june-23-2026)
   - [CFB — roster-backed `{type}_player_id` + player-name cleanup fixes](#cfb--roster-backed-type_player_id--player-name-cleanup-fixes)
 - [0.0.68 Release: June 23, 2026](#0068-release-june-23-2026)
@@ -142,6 +144,14 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## 0.0.70 Release: June 24, 2026
+
+### CFB — `qbr` / `fg` / `wp_spread` models refreshed on the consensus-odds full-corpus reprocess
+
+The bundled CFB `qbr_model`, `fg_model`, and `wp_spread` XGBoost artifacts are retrained on the full 2004–2025 play-by-play corpus after it was re-reprocessed with two upgraded modeling inputs: the **`cfb_line_odds` multi-book consensus** pregame spread/total (replacing ESPN's single pickcenter as the EPA/WPA odds source) and **roster-backed pre-2014 player IDs**. Feature contracts are byte-identical to the shipped models (`qbr` 10-feature incl. `era0–3`, `fg` 5-feature, `wp_spread` 13-feature), so this is a drop-in artifact refresh — no model-application changes.
+
+Leave-one-season-out CV over all 22 seasons confirms the gains: **`qbr` RMSE 17.60 → 17.29** (r² 0.598 → 0.612), **`fg` logloss 0.5265 → 0.5247**, and **`wp_spread` baseline logloss 0.3616 → 0.3486** — the win-probability model improves most, since the consensus odds sharpen the `spread_time` feature directly (the signal the rule-era one-hot dummies previously had to recover). The `fourth_down` model is intentionally left unchanged: on the refreshed corpus its era variant no longer beats the consensus-odds baseline, so it was not promoted.
 
 ## 0.0.69 Release: June 23, 2026
 
