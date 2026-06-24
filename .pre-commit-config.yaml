@@ -142,6 +142,21 @@ repos:
         files: ^(tools/codegen/(endpoints|schemas|templates)|docs/docs)/.*$
         pass_filenames: false
         stages: [pre-push]
+      # pre-push: the /preflight offline guard. Runs the ID-type / name-matching
+      # convention contract (tests/test_id_conventions.py) — the sub-second, fully
+      # offline regression for the recurring int-vs-str / `id -> Utf8` paper-over /
+      # case-sensitive-regex bug class. Gated to fire only when sportsdataverse/**.py
+      # is in the pushed range; pass_filenames: false so it runs once, not per-file.
+      # The heavier targeted-test sweep stays the manual /preflight inner loop on
+      # purpose — per-push pytest would tax every push. See CLAUDE.md "ID column
+      # types" and .claude/skills/preflight/SKILL.md.
+      - id: preflight-id-contract-prepush
+        name: preflight ID/name-matching contract (pre-push)
+        entry: uv run pytest tests/test_id_conventions.py -q
+        language: system
+        files: ^sportsdataverse/.*\.py$
+        pass_filenames: false
+        stages: [pre-push]
 # - repo: https://github.com/nbQA-dev/nbQA
 #   rev: 1.9.1
 #   hooks:

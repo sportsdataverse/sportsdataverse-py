@@ -15,6 +15,8 @@ Invoke with `/<name>`; Claude also auto-uses them when the description matches.
 | `/preflight` | Fast scoped sweep on changed files (ruff + mypy ratchet + targeted tests) before a commit/PR. |
 | `/address-bot-reviews` | Triage + resolve CodeRabbit / Copilot review threads on a PR (fix valid, decline convention-conflicts with a citation, reply + resolve). Used by `/ship` post-CI. |
 | `/reprocess` | OOM-safe bounded/resumable sweep methodology for the `-raw`/`-data` repos. **(user-level: `~/.claude/skills/reprocess/`)** |
+| `/port-r-to-python` | Parity-test-first port of R logic (nflfastR / cfbfastR / `0.36-live`) into sdv-py polars: golden fixture → failing parity test → port → green, with the polars-1x + ID-dtype + no-lookaround conventions. |
+| `/port-python-to-r` | The mirror direction — port sdv-py Python/polars logic into a SDV R package (cfbfastR, hoopR, …): golden fixture → failing testthat test → port → green, with the polars→tidyverse map + roxygen/pkgdown conventions. |
 
 ## Hook scripts (`.claude/hooks/*.py`, committed)
 
@@ -54,8 +56,11 @@ Beyond ruff/doctoc/codegen, two local hooks enforce repo rules:
 
 - **`commit-msg`** (`tools/hooks/check_commit_msg.py`) — Conventional-Commit
   subject + **rejects AI `Co-Authored-By` trailers** (CLAUDE.md rule).
-- **`pre-push`** — mypy ratchet + codegen drift, scoped to the pushed files, so
-  manual terminal pushes get the same CI-parity the Claude hooks give in-session.
+- **`pre-push`** — mypy ratchet + codegen drift + the `/preflight` **ID/name-matching
+  contract** (`tests/test_id_conventions.py`), each scoped to the pushed files, so
+  manual terminal pushes get the same CI-parity the Claude hooks give in-session. The
+  ID contract is the sub-second offline guard for the recurring int-vs-str / `id→Utf8`
+  bug class; the heavier targeted-test sweep stays the manual `/preflight` inner loop.
 
 `default_install_hook_types` installs all three stages, so a plain
 `uv run pre-commit install` wires up `pre-commit` + `commit-msg` + `pre-push`.
