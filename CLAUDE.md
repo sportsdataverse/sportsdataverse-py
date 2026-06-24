@@ -21,11 +21,13 @@
     - [NFL — `ep_wp` model application + EPA/WPA (nflfastR alignment, 0.0.67+)](#nfl--ep_wp-model-application--epawpa-nflfastr-alignment-0067)
     - [CFB — `cfb_play_participants` and the 0.36-live reconciliation](#cfb--cfb_play_participants-and-the-036-live-reconciliation)
     - [CFB — offline reprocess (`odds_override`, raw allowlist, `odds_source`) (0.0.52+)](#cfb--offline-reprocess-odds_override-raw-allowlist-odds_source-0052)
+    - [CFB — rule-era models + decision surfaces (0.0.68)](#cfb--rule-era-models--decision-surfaces-0068)
     - [MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)](#mlb--statcast-baseball-savant-comprehensive-surface-0064)
     - [HTTP / retry layer](#http--retry-layer)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
     - [Test gating](#test-gating)
+    - [ID column types (join keys / player & team IDs)](#id-column-types-join-keys--player--team-ids)
   - [Common Pitfalls](#common-pitfalls)
   - [Documentation Maintenance](#documentation-maintenance)
   - [Docstring conventions for new functions](#docstring-conventions-for-new-functions)
@@ -102,7 +104,7 @@ setuptools is the build backend (`build-system.build-backend =
 "setuptools.build_meta"`). Runtime deps live under `[project.dependencies]`,
 extras under `[project.optional-dependencies]` (`tests`, `docs`, `models`,
 `all`). Package data ships via `[tool.setuptools.package-data]` (currently
-`cfb/models/*` + `nfl/models/*`). The `[tool.setuptools.packages.find]`
+`cfb/models/*`, `nfl/models/*`, and `py.typed`). The `[tool.setuptools.packages.find]`
 block excludes `tests*`, `Sphinx-docs*`, `docs*`, `examples*`, `archive*`,
 `recipe*`, `dev*` from the wheel.
 
@@ -156,7 +158,7 @@ sportsdataverse/
   mlb/        # MLB (mlbam endpoints + retrosheet/retrosplits)
   nba/        # NBA
   nfl/        # NFL — nflreadpy-parity surface
-    nfl_loaders.py    # 23 canonical load_nfl_* + 11 deprecated per-type aliases
+    nfl_loaders.py    # 24 canonical load_nfl_* + 11 deprecated per-type aliases
     nfl_pbp.py, nfl_schedule.py, nfl_teams.py, nfl_games.py, nfl_game_rosters.py
     cache.py          # @cached_loader, memory/filesystem/off, clear_cache()
     config.py         # NflConfig dataclass + get_config / update_config / reset_config
@@ -384,7 +386,8 @@ The NFL submodule is a near drop-in replacement for [nflreadpy](https://github.c
 The canonical sdv-py names use the `load_nfl_*` prefix (cross-sport
 disambiguation under the umbrella `sportsdataverse` package); inside
 `sportsdataverse.nfl` itself we additionally export 25 nflreadpy-style
-aliases without the prefix:
+aliases without the prefix. `load_nfl_espn_qbr` (0.0.68) loads ESPN Total
+QBR (nflreadpy `load_espn_qbr` parity) and brings the canonical count to 24:
 
 ```python
 import sportsdataverse.nfl as nfl
@@ -419,7 +422,7 @@ codebase prefers `kind` internally.
 | `filesystem` | parquet under `cache_dir` | `cache_duration` seconds |
 | `off` | no caching | n/a |
 
-All 23 canonical loaders + 11 deprecated aliases are wrapped with
+All 24 canonical loaders + 11 deprecated aliases are wrapped with
 `@cached_loader`. The cache key hashes `(qualified_name, args, sorted_kwargs)`
 and **excludes** `return_as_pandas` so a single stored polars frame serves
 both polars and pandas callers (the conversion happens on read).
@@ -512,7 +515,10 @@ exactly one place.
 - **Models** `nfl/models/*.ubj` are the **faithful** `nfl_model_artifacts`
   (EP 18-feat / wp_spread 12 / wp_naive 11 / cp 18) from `sportsdataverse-data`,
   not the old CFB-shape placeholders. Refresh by downloading that release and
-  verifying `Booster.feature_names == *_FEATURES`.
+  verifying `Booster.feature_names == *_FEATURES`. As of 0.0.68 the bundle also
+  ships `fg_model`, `qbr_model`, `two_pt_model`, the self-derived `xpass_model`
+  (offline — **no first-use download**), and `punt_data.parquet`; the
+  fourth-down decision surface lives in `nfl/nfl_fourth_down.py`.
 - **Parity** (`lead_diff` vs nflverse, model domain): `ep` 0.996, `epa` 0.994,
   `wp` 0.997, `vegas_wp` 0.998, `cpoe` scale-correct; `wpa` ≈0.89 is an SNR
   ceiling (the derivation is exact — corr 1.0 when fed nflverse's own `wp`; the
@@ -576,6 +582,15 @@ pipeline relies on. Three additive pieces:
   `__init__`** (missing key / non-dict → `ValueError`). Default `None` = unchanged behavior.
 
 Offline-rebuild pattern: `CFBPlayProcess(gameId, path_to_json=raw_dir, odds_override=<persisted>).cfb_pbp_disk()` then `.run_processing_pipeline()`.
+
+### CFB — rule-era models + decision surfaces (0.0.68)
+
+`cfb/models/` bundles rule-era XGBoost artifacts trained per the CFB Modeling
+Suite: `ep_model`, `wp_naive`, `wp_spread`, `cfb_cp_model`, plus the 0.0.68
+additions `qbr_model`, `fg_model`, `fd_model` (fourth-down), `two_pt_model`,
+`xpass_model`, and `punt_distribution.parquet`. The fourth-down / FG / 2pt
+**decision surfaces are integrated default-on**. The `spread_time` sign fix
+landed alongside these (commit `fbe11c4`, #129).
 
 ### MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)
 
@@ -673,6 +688,32 @@ Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run only
 when `SDV_PY_LIVE_TESTS=1` is set. CI does NOT set the var; live runs are
 opt-in by contributor.
 
+### ID column types (join keys / player & team IDs)
+
+Player / athlete / team IDs are **join keys**, and a join is only as correct as
+the dtype agreement on both sides. Pin the type early and keep it consistent
+across the whole pipeline:
+
+- **Pick one canonical dtype per id and never silently flip it.** ESPN ships
+  athlete / team IDs as both ints and numeric strings depending on the endpoint
+  (`participants[]` vs the `playerHash` sidecar vs a `$ref` payload). Decide the
+  id's dtype at the boundary and cast there — don't let two code paths feed the
+  same column as `Int64` in one frame and `Utf8` in another.
+- **Beware the `id -> Utf8` "paper-over" cast.** Casting an Int/Float id to
+  string to make a join line up is a latent-bug factory: a float-origin id
+  stringifies as `"123.0"` (not `"123"`), and zero-padded source ids lose/gain
+  leading zeros. If you must stringify, cast the *raw* integer
+  (`pl.col("id").cast(pl.Int64).cast(pl.Utf8)`), never a float, and assert the
+  result on both sides before joining.
+- **Assert dtype agreement on join keys.** Before a `.join(...)` on an id,
+  confirm `left.schema[key] == right.schema[key]`. The roster-backed
+  `{type}_player_id` join (cfb) and any crosswalk join are the high-risk spots —
+  a dtype mismatch surfaces only as wrong/empty matches at test time.
+- **Match names case-insensitively unless case is load-bearing.** Player-name
+  reconciliation (roster joins, alias tables, narrative extraction) should fold
+  case rather than require an exact match. For polars/Rust regex use the inline
+  case toggle `(?i)...` (lookaround is unsupported — see "Polars version" above).
+
 ## Common Pitfalls
 
 - **Statcast parsers must be validated against REAL captures, not synthetic
@@ -683,6 +724,27 @@ opt-in by contributor.
   `section`); and CSV leaderboards need the content-type-aware
   `mlb_statcast_runtime._get` (the JSON-only getter returns `{}`). When adding a
   Savant endpoint, capture a real response and assert against it.
+
+- **Regenerate generated docs before pushing, or CI fails on drift.** If a
+  change touched endpoint YAML, schemas, docstrings, loaders, or wrappers, the
+  generated reference subtree under `docs/docs/` is stale until you run
+  `uv run python tools/codegen/generate.py`. The `--check` drift gate runs in CI
+  and the `sdv-codegen` pre-commit hook, so an un-regenerated tree turns a
+  green-locally change red in CI. Fold regeneration into the pre-push checklist
+  (the `/ship` skill does this as step 1). Related: do NOT clean up / delete a
+  branch until the PR `state` is `MERGED` — a premature cleanup stranded work in
+  a past session.
+
+- **Don't dump large outputs into a reply — redirect, then hand back a read
+  command.** A single response that pastes a multi-MB log, a full data dump, or
+  a whole file can blow the output-token limit and truncate the entire turn
+  (this has killed long sessions outright). Instead: redirect the big output to a
+  file, summarize the salient lines in the reply, and **give a copy-pasteable
+  command to read the full output live at that path** — e.g.
+  `cat c:/path/to/output.output` (or `tail -f c:/path/to/output.output` to
+  stream a still-running job). The context-mode tooling already nudges this
+  (write artifacts to files, return the path + a one-line description); this
+  makes it the durable default for ordinary work too.
 
 - **`cfb_play_participants` sidecar gaps are now (mostly) backfilled.**
   ESPN's `cdn.espn.com/.../playbyplay` sidecar omits ~6 athletes per game
