@@ -2,6 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Unreleased](#unreleased)
+  - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
   - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
@@ -147,6 +149,19 @@
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Unreleased
+
+### NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)
+
+Two new codegen-generated flat-API stems wrap the official stats API surface:
+
+- **`nba_stats`** (`sportsdataverse/nba/nba_stats.py`) — **151 wrappers** targeting `stats.nba.com`. League routing is a single `league_id` parameter on each endpoint: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. Named `nba_stats_<slug>` (e.g. `nba_stats_leaguedashplayerstats`, `nba_stats_playercareerstats`, `nba_stats_commonallplayers`).
+- **`wnba_stats`** (`sportsdataverse/wnba/wnba_stats.py`) — **115 wrappers** targeting `stats.wnba.com` (WNBA `LeagueID=10`), named `wnba_stats_<slug>`. Implemented as a thin shim re-exporting the NBA-stats runtime with the WNBA host.
+- **One generic parser** `parse_nba_stats_result_sets(raw, result_set=None, *, return_as_pandas=False)` handles the uniform `{resultSets: [{name, headers, rowSet}]}` envelope. Returns a single `polars.DataFrame` when a `result_set` name is given or the payload has one set; returns `dict[str, DataFrame]` for multi-set payloads (e.g. `playercareerstats`). Empty / malformed payloads return a zero-row frame; columns are snake-cased via `dl_utils.underscore`. `parse_wnba_stats_result_sets` is a re-export alias.
+- **Browser-TLS runtime:** `stats.nba.com` TLS/JA3-fingerprint-blocks plain `requests` (silent timeout, not an IP block). The runtime `_get` uses **`curl_cffi` with `impersonate="chrome"`**. `curl_cffi` is a **lazy optional import** shipped under the `tests` and `all` extras — not a hard runtime dep. A clear `ImportError` guides users to `pip install curl_cffi` (or `pip install sportsdataverse[all]`). The HTTP transport is injectable so wrappers and tests can run fully offline.
+- Wrappers default to `return_parsed=True` (tidy polars DataFrame). Pass `return_parsed=False` for the raw `Dict` or `return_as_pandas=True` for pandas. There is no user-facing `headers=` param — the TLS impersonation is handled inside the runtime, not via a user token.
+- Generated from the enriched canonical catalog (`tools/codegen/gen_nba_stats.py`) and registered in `FLAT_APIS` in `tools/codegen/generate.py`. Returns-table descriptions are authored for the 5 pilot slugs; the remaining ~3,369 columns are tracked in `_DEFERRED_DESC_BUCKETS`.
 
 ## 0.0.71 Release: June 24, 2026
 

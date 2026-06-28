@@ -23,6 +23,7 @@
     - [CFB — offline reprocess (`odds_override`, raw allowlist, `odds_source`) (0.0.52+)](#cfb--offline-reprocess-odds_override-raw-allowlist-odds_source-0052)
     - [CFB — rule-era models + decision surfaces (0.0.68)](#cfb--rule-era-models--decision-surfaces-0068)
     - [MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)](#mlb--statcast-baseball-savant-comprehensive-surface-0064)
+    - [NBA / WNBA — stats.nba.com / stats.wnba.com stats API (0.0.72+)](#nba--wnba--statsnbacom--statswnbacom-stats-api-0072)
     - [HTTP / retry layer](#http--retry-layer)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
@@ -622,6 +623,35 @@ Savant surface** (`baseballsavant.mlb.com`) under the canonical naming
   `tools/codegen/schemas/native/mlb_statcast/*.yaml` (generated) +
   `schemas/autodoc/mlb/mlb_statcast_*.yaml` (hand-written); column names match
   the parser's snake-cased output exactly.
+
+### NBA / WNBA — stats.nba.com / stats.wnba.com stats API (0.0.72+)
+
+Two codegen-generated flat-API stems wrap the official stats API surface:
+
+- **`nba_stats`** — 151 wrappers at `stats.nba.com`. League is chosen per call via `league_id`: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host. Named `nba_stats_<slug>` (e.g. `nba_stats_leaguedashplayerstats`, `nba_stats_playercareerstats`).
+- **`wnba_stats`** — 115 wrappers at `stats.wnba.com` (WNBA `LeagueID=10`). Thin shim re-exporting the NBA-stats runtime with the WNBA host. Named `wnba_stats_<slug>`.
+
+**Browser-TLS gotcha (critical):** `stats.nba.com` TLS/JA3-fingerprint-blocks plain `requests` — it produces a silent timeout, NOT an IP block, so `dl_utils.download()` cannot be used for this family. The runtime `_get` uses **`curl_cffi` with `impersonate="chrome"`**. `curl_cffi` is a **lazy optional import** in the `tests` and `all` extras (not a hard runtime dep); missing it surfaces as a clear `ImportError` directing users to `pip install curl_cffi` or `pip install sportsdataverse[all]`. The transport is injectable so wrappers and tests run fully offline. There is **no user-facing `headers=` param** — the "auth" is the TLS impersonation inside the runtime; custom headers still passable via `**kwargs`.
+
+**One generic parser** `parse_nba_stats_result_sets(raw, result_set=None, *, return_as_pandas=False)` handles the uniform `{resultSets: [{name, headers, rowSet}]}` envelope — one `polars.DataFrame` for single-set / named-set payloads, `dict[str, DataFrame]` for multi-set (e.g. `playercareerstats`). Empty / malformed → zero-row frame (never raises); columns snake-cased via `dl_utils.underscore`. `parse_wnba_stats_result_sets` is a re-export alias.
+
+Wrappers default `return_parsed=True` (tidy polars). `return_parsed=False` → raw `Dict`; `return_as_pandas=True` → pandas.
+
+Generated from the enriched canonical catalog via `tools/codegen/gen_nba_stats.py` → endpoint YAML + returns-schemas → registered in `FLAT_APIS` in `tools/codegen/generate.py`. Five pilot slugs (`leaguedashplayerstats` across NBA/WNBA/G-League/Summer + `playercareerstats`) are validated offline against committed real-capture fixtures; live tests gated by `SDV_PY_LIVE_TESTS=1`. Returns-table descriptions are authored for the pilots; the remaining ~3,369 columns are tracked in `_DEFERRED_DESC_BUCKETS` in `tools/codegen/extract_residual_columns.py`.
+
+```python
+from sportsdataverse.nba import nba_stats
+
+df      = nba_stats.nba_stats_leaguedashplayerstats(league_id="00")   # NBA
+gleague = nba_stats.nba_stats_leaguedashplayerstats(league_id="20")   # G-League
+summer  = nba_stats.nba_stats_leaguedashplayerstats(league_id="15")   # Summer League
+career  = nba_stats.nba_stats_playercareerstats(player_id="2544")     # dict[str, DataFrame]
+
+from sportsdataverse.wnba import wnba_stats
+wdf = wnba_stats.wnba_stats_leaguedashplayerstats()                    # WNBA
+```
+
+See Also: [`nba_api`](https://github.com/swar/nba_api), [`hoopR`](https://hoopR.sportsdataverse.org), [`wehoop`](https://wehoop.sportsdataverse.org).
 
 ### HTTP / retry layer
 

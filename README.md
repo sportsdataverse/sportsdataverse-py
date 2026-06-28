@@ -155,6 +155,11 @@ For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
   `SDV_PY_NFL_CACHE=filesystem` for cross-session reuse, or
   `SDV_PY_NFL_CACHE=off` to disable. See
   `sportsdataverse.nfl.config.update_config()` for runtime control.
+- **stats.nba.com / stats.wnba.com surface (`nba_stats_*` / `wnba_stats_*`):**
+  151 NBA (+ G-League + Summer League via `league_id`) and 115 WNBA wrappers
+  are available. Live calls to `stats.nba.com` require the `curl_cffi` package
+  (TLS fingerprint protection); install it via
+  `pip install "sportsdataverse[all]"` or `pip install curl_cffi` separately.
 
 ## Examples and tutorials
 
