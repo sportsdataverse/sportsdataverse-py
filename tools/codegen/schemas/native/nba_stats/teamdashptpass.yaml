@@ -10,46 +10,46 @@ columns:
   type: character
 - description: ''
   name: g
-  type: character
+  type: integer
 - description: ''
-  name: pass_from
+  name: pass_to
   type: character
 - description: ''
   name: pass_teammate_player_id
   type: integer
 - description: ''
   name: frequency
-  type: character
+  type: numeric
 - description: ''
   name: pass
-  type: character
+  type: numeric
 - description: ''
   name: ast
-  type: character
+  type: numeric
 - description: ''
   name: fgm
-  type: character
+  type: numeric
 - description: ''
   name: fga
-  type: character
+  type: numeric
 - description: ''
   name: fg_pct
   type: numeric
 - description: ''
   name: fg2m
-  type: character
+  type: numeric
 - description: ''
   name: fg2a
-  type: character
+  type: numeric
 - description: ''
   name: fg2_pct
   type: numeric
 - description: ''
   name: fg3m
-  type: character
+  type: numeric
 - description: ''
   name: fg3a
-  type: character
+  type: numeric
 - description: ''
   name: fg3_pct
   type: numeric

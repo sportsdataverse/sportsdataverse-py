@@ -48,14 +48,14 @@ ESPN endpoint.
 | `status_period` | integer | Current period. |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
-| `attendance` | integer | Reported game attendance. |
+| `attendance` | integer | Reported attendance (NA on the redesigned page). |
 | `venue_id` | character | MLBAM venue ID. |
 | `venue_full_name` | character | Venue full name. |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / province. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast information string. |
-| `note` | character | Game note or headline. |
+| `note` | character | Injury status and description. |
 | `home_id` | character | Unique identifier for home. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |

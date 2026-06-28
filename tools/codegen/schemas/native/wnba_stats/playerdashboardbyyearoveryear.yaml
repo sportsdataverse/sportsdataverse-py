@@ -19,180 +19,183 @@ columns:
   type: integer
 - description: ''
   name: w
-  type: character
+  type: integer
 - description: ''
   name: l
-  type: character
+  type: integer
 - description: ''
   name: w_pct
   type: numeric
 - description: ''
   name: min
-  type: integer
+  type: numeric
 - description: ''
   name: fgm
-  type: character
+  type: numeric
 - description: ''
   name: fga
-  type: character
+  type: numeric
 - description: ''
   name: fg_pct
   type: numeric
 - description: ''
   name: fg3m
-  type: character
+  type: numeric
 - description: ''
   name: fg3a
-  type: character
+  type: numeric
 - description: ''
   name: fg3_pct
   type: numeric
 - description: ''
   name: ftm
-  type: character
+  type: numeric
 - description: ''
   name: fta
-  type: character
+  type: numeric
 - description: ''
   name: ft_pct
   type: numeric
 - description: ''
   name: oreb
-  type: character
+  type: numeric
 - description: ''
   name: dreb
-  type: character
+  type: numeric
 - description: ''
   name: reb
-  type: character
+  type: numeric
 - description: ''
   name: ast
-  type: character
+  type: numeric
 - description: ''
   name: tov
-  type: character
+  type: numeric
 - description: ''
   name: stl
-  type: character
+  type: numeric
 - description: ''
   name: blk
-  type: character
+  type: numeric
 - description: ''
   name: blka
-  type: character
+  type: numeric
 - description: ''
   name: pf
-  type: character
+  type: numeric
 - description: ''
   name: pfd
-  type: character
+  type: numeric
 - description: ''
   name: pts
-  type: character
+  type: numeric
 - description: ''
   name: plus_minus
-  type: character
+  type: numeric
 - description: ''
   name: nba_fantasy_pts
-  type: character
+  type: numeric
 - description: ''
   name: dd2
-  type: character
+  type: integer
 - description: ''
   name: td3
-  type: character
+  type: integer
+- description: ''
+  name: wnba_fantasy_pts
+  type: numeric
 - description: ''
   name: gp_rank
-  type: character
+  type: integer
 - description: ''
   name: w_rank
-  type: character
+  type: integer
 - description: ''
   name: l_rank
-  type: character
+  type: integer
 - description: ''
   name: w_pct_rank
-  type: numeric
+  type: integer
 - description: ''
   name: min_rank
-  type: character
+  type: integer
 - description: ''
   name: fgm_rank
-  type: character
+  type: integer
 - description: ''
   name: fga_rank
-  type: character
+  type: integer
 - description: ''
   name: fg_pct_rank
-  type: numeric
+  type: integer
 - description: ''
   name: fg3m_rank
-  type: character
+  type: integer
 - description: ''
   name: fg3a_rank
-  type: character
+  type: integer
 - description: ''
   name: fg3_pct_rank
-  type: numeric
+  type: integer
 - description: ''
   name: ftm_rank
-  type: character
+  type: integer
 - description: ''
   name: fta_rank
-  type: character
+  type: integer
 - description: ''
   name: ft_pct_rank
-  type: numeric
+  type: integer
 - description: ''
   name: oreb_rank
-  type: character
+  type: integer
 - description: ''
   name: dreb_rank
-  type: character
+  type: integer
 - description: ''
   name: reb_rank
-  type: character
+  type: integer
 - description: ''
   name: ast_rank
-  type: character
+  type: integer
 - description: ''
   name: tov_rank
-  type: character
+  type: integer
 - description: ''
   name: stl_rank
-  type: character
+  type: integer
 - description: ''
   name: blk_rank
-  type: character
+  type: integer
 - description: ''
   name: blka_rank
-  type: character
+  type: integer
 - description: ''
   name: pf_rank
-  type: character
+  type: integer
 - description: ''
   name: pfd_rank
-  type: character
+  type: integer
 - description: ''
   name: pts_rank
-  type: character
+  type: integer
 - description: ''
   name: plus_minus_rank
-  type: character
+  type: integer
 - description: ''
   name: nba_fantasy_pts_rank
-  type: character
+  type: integer
 - description: ''
   name: dd2_rank
-  type: character
+  type: integer
 - description: ''
   name: td3_rank
-  type: character
+  type: integer
 - description: ''
-  name: cfid
-  type: character
+  name: wnba_fantasy_pts_rank
+  type: integer
 - description: ''
-  name: cfparams
-  type: character
+  name: team_count
+  type: integer
 kind: dataframe
 schema: playerdashboardbyyearoveryear

@@ -7,7 +7,7 @@ columns:
   type: integer
 - description: ''
   name: gamestreak
-  type: character
+  type: integer
 - description: ''
   name: startdate
   type: character
@@ -16,10 +16,10 @@ columns:
   type: character
 - description: ''
   name: activestreak
-  type: character
+  type: integer
 - description: ''
   name: numseasons
-  type: character
+  type: integer
 - description: ''
   name: lastseason
   type: character

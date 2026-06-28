@@ -1,13 +1,13 @@
 columns:
 - description: ''
   name: season_id
-  type: integer
+  type: character
 - description: ''
   name: player_id
   type: integer
 - description: ''
   name: game_id
-  type: integer
+  type: character
 - description: ''
   name: game_date
   type: character
@@ -22,63 +22,63 @@ columns:
   type: integer
 - description: ''
   name: fgm
-  type: character
+  type: integer
 - description: ''
   name: fga
-  type: character
+  type: integer
 - description: ''
   name: fg_pct
   type: numeric
 - description: ''
   name: fg3m
-  type: character
+  type: integer
 - description: ''
   name: fg3a
-  type: character
+  type: integer
 - description: ''
   name: fg3_pct
   type: numeric
 - description: ''
   name: ftm
-  type: character
+  type: integer
 - description: ''
   name: fta
-  type: character
+  type: integer
 - description: ''
   name: ft_pct
   type: numeric
 - description: ''
   name: oreb
-  type: character
+  type: integer
 - description: ''
   name: dreb
-  type: character
+  type: integer
 - description: ''
   name: reb
-  type: character
+  type: integer
 - description: ''
   name: ast
-  type: character
+  type: integer
 - description: ''
   name: stl
-  type: character
+  type: integer
 - description: ''
   name: blk
-  type: character
+  type: integer
 - description: ''
   name: tov
-  type: character
+  type: integer
 - description: ''
   name: pf
-  type: character
+  type: integer
 - description: ''
   name: pts
-  type: character
+  type: integer
 - description: ''
   name: plus_minus
-  type: character
+  type: integer
 - description: ''
   name: video_available
-  type: character
+  type: integer
 kind: dataframe
 schema: playergamelog

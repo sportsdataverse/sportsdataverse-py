@@ -12,7 +12,7 @@ columns:
   name: team_name
   type: character
 - description: ''
-  name: pts
+  name: blk
   type: character
 kind: dataframe
 schema: homepagev2

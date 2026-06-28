@@ -10,19 +10,19 @@ columns:
   type: character
 - description: ''
   name: fgm
-  type: character
+  type: integer
 - description: ''
   name: fga
-  type: character
+  type: integer
 - description: ''
   name: fg_pct
   type: numeric
 - description: ''
   name: fg3m
-  type: character
+  type: integer
 - description: ''
   name: fg3a
-  type: character
+  type: integer
 - description: ''
   name: fg3_pct
   type: numeric
@@ -31,7 +31,7 @@ columns:
   type: numeric
 - description: ''
   name: blka
-  type: character
+  type: integer
 - description: ''
   name: pct_ast_2pm
   type: numeric
@@ -52,51 +52,45 @@ columns:
   type: numeric
 - description: ''
   name: fgm_rank
-  type: character
+  type: integer
 - description: ''
   name: fga_rank
-  type: character
+  type: integer
 - description: ''
   name: fg_pct_rank
-  type: numeric
+  type: integer
 - description: ''
   name: fg3m_rank
-  type: character
+  type: integer
 - description: ''
   name: fg3a_rank
-  type: character
+  type: integer
 - description: ''
   name: fg3_pct_rank
-  type: numeric
+  type: integer
 - description: ''
   name: efg_pct_rank
-  type: numeric
+  type: integer
 - description: ''
   name: blka_rank
-  type: character
+  type: integer
 - description: ''
   name: pct_ast_2pm_rank
-  type: numeric
+  type: integer
 - description: ''
   name: pct_uast_2pm_rank
-  type: numeric
+  type: integer
 - description: ''
   name: pct_ast_3pm_rank
-  type: numeric
+  type: integer
 - description: ''
   name: pct_uast_3pm_rank
-  type: numeric
+  type: integer
 - description: ''
   name: pct_ast_fgm_rank
-  type: numeric
+  type: integer
 - description: ''
   name: pct_uast_fgm_rank
-  type: numeric
-- description: ''
-  name: cfid
-  type: character
-- description: ''
-  name: cfparams
-  type: character
+  type: integer
 kind: dataframe
 schema: teamdashboardbyshootingsplits

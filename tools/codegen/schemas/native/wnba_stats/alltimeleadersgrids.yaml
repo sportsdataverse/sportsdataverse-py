@@ -6,10 +6,10 @@ columns:
   name: player_name
   type: character
 - description: ''
-  name: ast
+  name: tov
   type: character
 - description: ''
-  name: ast_rank
+  name: tov_rank
   type: character
 kind: dataframe
 schema: alltimeleadersgrids

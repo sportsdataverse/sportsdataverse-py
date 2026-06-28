@@ -30,6 +30,51 @@ _DTYPE = {
 # only endpoints that ANSWER for a league are "applicable" (drop "dead"/absent)
 _APPLICABLE = ("live", "untested")
 
+# Representative result-set used for the generated returns-table schema. The
+# runtime parser still exposes every result set; this only controls which table
+# shape appears in reference docs for multi-set endpoints.
+_REPRESENTATIVE_RESULT_SETS = {
+    "boxscoreadvancedv2": "PlayerStats",
+    "boxscoreadvancedv3": "PlayerStats",
+    "boxscoredefensivev2": "PlayerStats",
+    "boxscorefourfactorsv2": "sqlPlayersFourFactors",
+    "boxscorefourfactorsv3": "PlayerStats",
+    "boxscorehustlev2": "PlayerStats",
+    "boxscoremiscv2": "sqlPlayersMisc",
+    "boxscoremiscv3": "PlayerStats",
+    "boxscoreplayertrackv3": "PlayerStats",
+    "boxscorescoringv2": "sqlPlayersScoring",
+    "boxscorescoringv3": "PlayerStats",
+    "boxscoresummaryv2": "LineScore",
+    "boxscoresummaryv3": "OtherStats",
+    "boxscoretraditionalv2": "PlayerStats",
+    "boxscoretraditionalv3": "PlayerStats",
+    "boxscoreusagev2": "sqlPlayersUsage",
+    "boxscoreusagev3": "PlayerStats",
+    "commonplayerinfo": "CommonPlayerInfo",
+    "commonteamroster": "CommonTeamRoster",
+    "cumestatsplayer": "TotalPlayerStats",
+    "cumestatsteam": "GameByGameStats",
+    "franchisehistory": "FranchiseHistory",
+    "gamerotation": "HomeTeam",
+    "homepageleaders": "HomePageLeaders",
+    "leaderstiles": "LeadersTiles",
+    "playbyplay": "PlayByPlay",
+    "playbyplayv2": "PlayByPlay",
+    "playbyplayv3": "PlayByPlay",
+    "playercareerstats": "SeasonTotalsRegularSeason",
+    "playerprofilev2": "SeasonTotalsRegularSeason",
+    "playoffpicture": "EastConfStandings",
+    "scheduleleaguev2": "SeasonGames",
+    "scheduleleaguev2int": "SeasonGames",
+    "scoreboardv2": "LineScore",
+    "shotchartdetail": "Shot_Chart_Detail",
+    "shotchartlineupdetail": "ShotChartLineupDetail",
+    "teamdetails": "TeamBackground",
+    "teamplayerdashboard": "PlayersSeasonTotals",
+    "winprobabilitypbp": "WinProbPBP",
+}
+
 
 def _stats_eps(league_id: str) -> List[dict]:
     return sorted(
@@ -69,6 +114,16 @@ def _write_yaml(path: Path, obj: Any) -> None:
         yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
 
 
+def _representative_result_set(ep: dict) -> str | None:
+    result_sets = ep.get("result_sets") or {}
+    if not result_sets:
+        return None
+    preferred = _REPRESENTATIVE_RESULT_SETS.get(ep["slug"])
+    if preferred in result_sets:
+        return preferred
+    return max(result_sets, key=lambda name: (len(result_sets[name]), name))
+
+
 def main() -> None:
     for stem, cfg in STEMS.items():
         eps = _stats_eps(cfg["league_id"])
@@ -84,7 +139,7 @@ def main() -> None:
         }
         _write_yaml(ROOT / f"tools/codegen/endpoints/{stem}.yaml", doc)
         for e in eps:
-            primary = sorted(e["result_sets"])[0] if e["result_sets"] else None
+            primary = _representative_result_set(e)
             cols = e["result_sets"].get(primary, []) if primary else []
             schema = {
                 "schema": e["slug"],

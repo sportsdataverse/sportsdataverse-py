@@ -7,22 +7,22 @@ columns:
   type: character
 - description: ''
   name: sort_order
-  type: character
+  type: integer
 - description: ''
   name: g
-  type: character
+  type: integer
 - description: ''
-  name: close_def_dist_range
+  name: touch_time_range
   type: character
 - description: ''
   name: fga_frequency
-  type: character
+  type: numeric
 - description: ''
   name: fgm
-  type: character
+  type: numeric
 - description: ''
   name: fga
-  type: character
+  type: numeric
 - description: ''
   name: fg_pct
   type: numeric
@@ -31,25 +31,25 @@ columns:
   type: numeric
 - description: ''
   name: fg2a_frequency
-  type: character
+  type: numeric
 - description: ''
   name: fg2m
-  type: character
+  type: numeric
 - description: ''
   name: fg2a
-  type: character
+  type: numeric
 - description: ''
   name: fg2_pct
   type: numeric
 - description: ''
   name: fg3a_frequency
-  type: character
+  type: numeric
 - description: ''
   name: fg3m
-  type: character
+  type: numeric
 - description: ''
   name: fg3a
-  type: character
+  type: numeric
 - description: ''
   name: fg3_pct
   type: numeric

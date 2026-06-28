@@ -1,7 +1,7 @@
 columns:
 - description: ''
   name: game_id
-  type: integer
+  type: character
 - description: ''
   name: home_team_id
   type: integer
@@ -10,9 +10,9 @@ columns:
   type: integer
 - description: ''
   name: series_id
-  type: integer
+  type: character
 - description: ''
   name: game_num
-  type: character
+  type: integer
 kind: dataframe
 schema: commonplayoffseries

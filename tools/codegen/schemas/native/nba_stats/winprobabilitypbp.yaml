@@ -3,25 +3,46 @@ columns:
   name: game_id
   type: integer
 - description: ''
-  name: game_date
+  name: event_num
   type: character
 - description: ''
-  name: home_team_id
-  type: integer
+  name: home_pct
+  type: numeric
 - description: ''
-  name: home_team_abr
+  name: visitor_pct
+  type: numeric
+- description: ''
+  name: home_pts
   type: character
 - description: ''
-  name: home_team_pts
+  name: visitor_pts
   type: character
 - description: ''
-  name: visitor_team_id
-  type: integer
-- description: ''
-  name: visitor_team_abr
+  name: home_score_margin
   type: character
 - description: ''
-  name: visitor_team_pts
+  name: period
+  type: character
+- description: ''
+  name: seconds_remaining
+  type: character
+- description: ''
+  name: home_poss_ind
+  type: character
+- description: ''
+  name: home_g
+  type: character
+- description: ''
+  name: description
+  type: character
+- description: ''
+  name: location
+  type: character
+- description: ''
+  name: pctimestring
+  type: numeric
+- description: ''
+  name: isvisible
   type: character
 kind: dataframe
 schema: winprobabilitypbp

@@ -4,6 +4,6 @@ columns:
   type: character
 - description: ''
   name: game_id
-  type: integer
+  type: character
 kind: dataframe
 schema: cumestatsplayergames

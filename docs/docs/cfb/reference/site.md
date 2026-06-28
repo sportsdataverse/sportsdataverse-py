@@ -55,7 +55,7 @@ ESPN endpoint.
 | `venue_state` | character | State (or province/country) where the venue is located. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast network short name. |
-| `note` | character | Game note or headline. |
+| `note` | character | Injury status and description. |
 | `home_id` | character | Home team referencing id. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |

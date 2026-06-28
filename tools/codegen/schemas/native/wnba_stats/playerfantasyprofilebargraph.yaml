@@ -13,34 +13,34 @@ columns:
   type: character
 - description: ''
   name: fan_duel_pts
-  type: character
+  type: numeric
 - description: ''
   name: nba_fantasy_pts
-  type: character
+  type: numeric
 - description: ''
   name: pts
-  type: character
+  type: numeric
 - description: ''
   name: reb
-  type: character
+  type: numeric
 - description: ''
   name: ast
-  type: character
+  type: numeric
 - description: ''
   name: fg3m
-  type: character
+  type: numeric
 - description: ''
   name: ft_pct
   type: numeric
 - description: ''
   name: stl
-  type: character
+  type: numeric
 - description: ''
   name: blk
-  type: character
+  type: numeric
 - description: ''
   name: tov
-  type: character
+  type: numeric
 - description: ''
   name: fg_pct
   type: numeric

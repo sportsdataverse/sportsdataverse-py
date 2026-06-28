@@ -150,7 +150,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 | `team_name` | character | Team name. |
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
 | `parent_team_id` | integer | MLB Stats API identifier for the player's parent (MLB-level) organization, useful for tracking players on optional assignment. |
-| `batting_order` | character | Spot in the batting order (1-9). |
+| `batting_order` | character | Spot in the batting order (box-score row order). |
 | `all_positions` | character | All fielding positions played by the player during the game, as a list of position codes. |
 | `person_id` | integer | MLB player ID. |
 | `person_full_name` | character | Player full name. |
@@ -1292,7 +1292,7 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Season year identifier. |
+| `season_id` | character | stats.ncaa.org season identifier. |
 | `has_wildcard` | logical | Whether the season has a wild card round. |
 | `pre_season_start_date` | character | Pre-season start date. |
 | `pre_season_end_date` | character | Pre-season end date. |
@@ -1483,7 +1483,7 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 | `season` | character | Season year. |
 | `team_id` | integer | Unique ESPN team identifier. |
 | `team_link` | character | API link to the team. |
-| `player_id` | integer | MLBAM player ID. |
+| `player_id` | integer | stats.ncaa.org player identifier. |
 | `player_link` | character | API relative link to the player. |
 | `player_primary_position_code` | character | Recipient primary fielding position code. |
 | `player_primary_position_name` | character | Recipient primary fielding position name. |
@@ -1662,7 +1662,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `number` | integer | Week number as returned by the API. |
+| `number` | integer | Jersey number. |
 | `next_up` | character | Indicates whether this draft slot is the next pick to be made in the current draft. |
 | `pick_pick_round` | character | Draft round in which this pick was made (e.g., '1', '2', 'CB-A' for competitive balance). |
 | `pick_pick_number` | integer | Overall pick number of this selection counting sequentially across all rounds of the draft. |
@@ -2841,7 +2841,7 @@ View biographical information and stats for Free Agents.
 |---|---|---|
 | `notes` | character | Notes. |
 | `date_declared` | character | Date the player declared free agency (YYYY-MM-DD). |
-| `player_id` | integer | MLBAM player ID. |
+| `player_id` | integer | stats.ncaa.org player identifier. |
 | `player_full_name` | character | Player full name. |
 | `player_link` | character | API relative link to the player. |
 | `original_team_id` | double | Team id the player left. |
@@ -3122,7 +3122,7 @@ View schedule info for postseason based on series.
 | `total_items` | integer | Total schedule items on the date. |
 | `total_games` | integer | Total games on the date. |
 | `total_games_in_progress` | integer | Games currently in progress on the date. |
-| `games` | character | Number of games included in the ATS summary. |
+| `games` | character | Games played. |
 | `sort_order` | integer | Display sort order for the sport. |
 | `series_id` | character | Series identifier (e.g. 'W_1'). |
 | `series_sort_number` | integer | Sort number for the series. |
@@ -3189,7 +3189,7 @@ View information for all seasons based on id.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Season year identifier. |
+| `season_id` | character | stats.ncaa.org season identifier. |
 | `has_wildcard` | logical | Whether the season has a wild card round. |
 | `pre_season_start_date` | character | Pre-season start date. |
 | `season_start_date` | character | Season start date. |

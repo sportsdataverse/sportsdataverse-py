@@ -3,11 +3,8 @@ columns:
   name: group_set
   type: character
 - description: ''
-  name: group_value
-  type: character
-- description: ''
   name: team_id
-  type: integer
+  type: character
 - description: ''
   name: team_abbreviation
   type: character
@@ -15,8 +12,17 @@ columns:
   name: team_name
   type: character
 - description: ''
+  name: vs_player_id
+  type: character
+- description: ''
+  name: vs_player_name
+  type: character
+- description: ''
+  name: court_status
+  type: character
+- description: ''
   name: gp
-  type: integer
+  type: character
 - description: ''
   name: w
   type: character
@@ -25,10 +31,10 @@ columns:
   type: character
 - description: ''
   name: w_pct
-  type: numeric
+  type: character
 - description: ''
   name: min
-  type: integer
+  type: character
 - description: ''
   name: fgm
   type: character
@@ -37,7 +43,7 @@ columns:
   type: character
 - description: ''
   name: fg_pct
-  type: numeric
+  type: character
 - description: ''
   name: fg3m
   type: character
@@ -46,7 +52,7 @@ columns:
   type: character
 - description: ''
   name: fg3_pct
-  type: numeric
+  type: character
 - description: ''
   name: ftm
   type: character
@@ -55,7 +61,7 @@ columns:
   type: character
 - description: ''
   name: ft_pct
-  type: numeric
+  type: character
 - description: ''
   name: oreb
   type: character
@@ -103,7 +109,7 @@ columns:
   type: character
 - description: ''
   name: w_pct_rank
-  type: numeric
+  type: character
 - description: ''
   name: min_rank
   type: character
@@ -115,7 +121,7 @@ columns:
   type: character
 - description: ''
   name: fg_pct_rank
-  type: numeric
+  type: character
 - description: ''
   name: fg3m_rank
   type: character
@@ -124,7 +130,7 @@ columns:
   type: character
 - description: ''
   name: fg3_pct_rank
-  type: numeric
+  type: character
 - description: ''
   name: ftm_rank
   type: character
@@ -133,7 +139,7 @@ columns:
   type: character
 - description: ''
   name: ft_pct_rank
-  type: numeric
+  type: character
 - description: ''
   name: oreb_rank
   type: character

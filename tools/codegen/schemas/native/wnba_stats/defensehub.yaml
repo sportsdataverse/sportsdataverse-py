@@ -12,7 +12,7 @@ columns:
   name: team_name
   type: character
 - description: ''
-  name: dreb
-  type: character
+  name: def_rim_pct
+  type: numeric
 kind: dataframe
 schema: defensehub

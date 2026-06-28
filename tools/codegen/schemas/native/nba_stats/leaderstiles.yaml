@@ -1,5 +1,8 @@
 columns:
 - description: ''
+  name: rank
+  type: character
+- description: ''
   name: team_id
   type: integer
 - description: ''
@@ -7,9 +10,6 @@ columns:
   type: character
 - description: ''
   name: team_name
-  type: character
-- description: ''
-  name: season_year
   type: character
 - description: ''
   name: pts

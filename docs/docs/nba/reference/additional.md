@@ -62,7 +62,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `position_name` | character | Listed roster position ('Guard', 'Forward', 'Center'). |
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation ('G' / 'F' / 'C'). |
-| `college_name` | character | College name. |
+| `college_name` | character | College / pre-draft team. |
 | `status_id` | integer | Status identifier. |
 | `status_name` | character | Status label. |
 | `defensive_blocks` | double | Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player. |

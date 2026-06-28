@@ -1,24 +1,72 @@
 columns:
 - description: ''
-  name: game_id
+  name: game_date_est
+  type: character
+- description: ''
+  name: game_sequence
   type: integer
 - description: ''
-  name: video_available_flag
+  name: game_id
   type: character
 - description: ''
-  name: pt_available
+  name: team_id
+  type: integer
+- description: ''
+  name: team_abbreviation
   type: character
 - description: ''
-  name: pt_xyz_available
+  name: team_city_name
   type: character
 - description: ''
-  name: wh_status
+  name: team_nickname
   type: character
 - description: ''
-  name: hustle_status
+  name: team_wins_losses
   type: character
 - description: ''
-  name: historical_status
-  type: character
+  name: pts_qtr1
+  type: integer
+- description: ''
+  name: pts_qtr2
+  type: integer
+- description: ''
+  name: pts_qtr3
+  type: integer
+- description: ''
+  name: pts_qtr4
+  type: integer
+- description: ''
+  name: pts_ot1
+  type: integer
+- description: ''
+  name: pts_ot2
+  type: integer
+- description: ''
+  name: pts_ot3
+  type: integer
+- description: ''
+  name: pts_ot4
+  type: integer
+- description: ''
+  name: pts_ot5
+  type: integer
+- description: ''
+  name: pts_ot6
+  type: integer
+- description: ''
+  name: pts_ot7
+  type: integer
+- description: ''
+  name: pts_ot8
+  type: integer
+- description: ''
+  name: pts_ot9
+  type: integer
+- description: ''
+  name: pts_ot10
+  type: integer
+- description: ''
+  name: pts
+  type: integer
 kind: dataframe
 schema: boxscoresummaryv2

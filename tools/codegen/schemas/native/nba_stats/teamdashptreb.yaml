@@ -7,46 +7,46 @@ columns:
   type: character
 - description: ''
   name: sort_order
-  type: character
+  type: integer
 - description: ''
   name: g
-  type: character
+  type: integer
 - description: ''
-  name: reb_num_contesting_range
+  name: shot_type_range
   type: character
 - description: ''
   name: reb_frequency
-  type: character
+  type: numeric
 - description: ''
   name: oreb
-  type: character
+  type: numeric
 - description: ''
   name: dreb
-  type: character
+  type: numeric
 - description: ''
   name: reb
-  type: character
+  type: numeric
 - description: ''
   name: c_oreb
-  type: character
+  type: numeric
 - description: ''
   name: c_dreb
-  type: character
+  type: numeric
 - description: ''
   name: c_reb
-  type: character
+  type: numeric
 - description: ''
   name: c_reb_pct
   type: numeric
 - description: ''
   name: uc_oreb
-  type: character
+  type: numeric
 - description: ''
   name: uc_dreb
-  type: character
+  type: numeric
 - description: ''
   name: uc_reb
-  type: character
+  type: numeric
 - description: ''
   name: uc_reb_pct
   type: numeric

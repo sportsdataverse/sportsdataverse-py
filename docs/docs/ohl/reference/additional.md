@@ -118,8 +118,8 @@ OHL play-by-play — one row per event, fully enriched.
 | `team_id` | character | Unique team identifier. |
 | `period_of_game` | character | Period in which the event occurred. |
 | `time_of_period` | character | Elapsed time within the period (MM:SS). |
-| `x_coord` | double | Transformed x-coordinate of the event. |
-| `y_coord` | double | Transformed y-coordinate of the event. |
+| `x_coord` | double | Transformed x-coordinate of the event (feet scale). |
+| `y_coord` | double | Transformed y-coordinate of the event (feet scale). |
 | `player_id` | double | Unique player identifier. |
 | `player_name_first` | character | Primary player first name. |
 | `player_name_last` | character | Primary player last name. |

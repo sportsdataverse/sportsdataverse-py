@@ -13,10 +13,10 @@ columns:
   type: character
 - description: ''
   name: fga
-  type: character
+  type: integer
 - description: ''
   name: fgm
-  type: character
+  type: integer
 - description: ''
   name: fg_pct
   type: numeric

@@ -3,6 +3,42 @@ columns:
   name: grid_type
   type: character
 - description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: game_event_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: period
+  type: character
+- description: ''
+  name: minutes_remaining
+  type: character
+- description: ''
+  name: seconds_remaining
+  type: character
+- description: ''
+  name: event_type
+  type: character
+- description: ''
+  name: action_type
+  type: character
+- description: ''
+  name: shot_type
+  type: character
+- description: ''
   name: shot_zone_basic
   type: character
 - description: ''
@@ -12,13 +48,28 @@ columns:
   name: shot_zone_range
   type: character
 - description: ''
-  name: fga
+  name: shot_distance
   type: character
 - description: ''
-  name: fgm
+  name: loc_x
   type: character
 - description: ''
-  name: fg_pct
-  type: numeric
+  name: loc_y
+  type: character
+- description: ''
+  name: shot_attempted_flag
+  type: character
+- description: ''
+  name: shot_made_flag
+  type: character
+- description: ''
+  name: game_date
+  type: character
+- description: ''
+  name: htm
+  type: character
+- description: ''
+  name: vtm
+  type: character
 kind: dataframe
 schema: shotchartdetail

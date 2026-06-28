@@ -13,13 +13,6 @@ from tools.codegen.generate import _manual_col_desc, _r_col_desc
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCHEMA_DIR = os.path.join(ROOT, "tools", "codegen", "schemas")
 
-# Description-coverage deferral (USER DECISION, Plan 3): the stats.nba.com / stats.wnba.com
-# returns-schemas were bulk-generated with empty descriptions. The PILOT slugs below are authored
-# in manual_column_descriptions.yaml now; the remaining nba_stats/wnba_stats schemas are a tracked
-# follow-up and are exempted from the coverage ratchet until authored.
-_DEFERRED_DESC_BUCKETS = {"native/nba_stats", "native/wnba_stats"}
-_AUTHORED_PILOT_SCHEMAS = {"leaguedashplayerstats", "playercareerstats", "commonallplayers"}
-
 
 def _league_of(path: str) -> str | None:
     """Best-effort league slug from a schema path.
@@ -89,8 +82,6 @@ def iter_schema_columns() -> list[dict]:
 def residual_columns() -> list[dict]:
     res = []
     for r in iter_schema_columns():
-        if r["bucket"] in _DEFERRED_DESC_BUCKETS and r["schema"] not in _AUTHORED_PILOT_SCHEMAS:
-            continue  # tracked deferral — descriptions authored in a follow-up
         if not r["blank"]:
             continue
         if _manual_col_desc(r["schema"], r["col"]):
@@ -103,18 +94,7 @@ def residual_columns() -> list[dict]:
 
 def deferred_columns() -> list[dict]:
     """Return blank columns that are currently deferred from the coverage ratchet."""
-    res = []
-    for r in iter_schema_columns():
-        if r["bucket"] not in _DEFERRED_DESC_BUCKETS or r["schema"] in _AUTHORED_PILOT_SCHEMAS:
-            continue
-        if not r["blank"]:
-            continue
-        if _manual_col_desc(r["schema"], r["col"]):
-            continue
-        if _r_col_desc(r["league"], r["col"]):
-            continue
-        res.append(r)
-    return res
+    return []
 
 
 def residual_by_bucket() -> dict:

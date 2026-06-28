@@ -3,23 +3,11 @@ columns:
   name: group_set
   type: character
 - description: ''
-  name: team_id
+  name: group_value
+  type: character
+- description: ''
+  name: player_id
   type: integer
-- description: ''
-  name: team_abbreviation
-  type: character
-- description: ''
-  name: team_name
-  type: character
-- description: ''
-  name: vs_player_id
-  type: integer
-- description: ''
-  name: vs_player_name
-  type: character
-- description: ''
-  name: court_status
-  type: character
 - description: ''
   name: gp
   type: integer
@@ -99,6 +87,15 @@ columns:
   name: plus_minus
   type: character
 - description: ''
+  name: nba_fantasy_pts
+  type: character
+- description: ''
+  name: dd2
+  type: character
+- description: ''
+  name: td3
+  type: character
+- description: ''
   name: gp_rank
   type: character
 - description: ''
@@ -175,6 +172,15 @@ columns:
   type: character
 - description: ''
   name: plus_minus_rank
+  type: character
+- description: ''
+  name: nba_fantasy_pts_rank
+  type: character
+- description: ''
+  name: dd2_rank
+  type: character
+- description: ''
+  name: td3_rank
   type: character
 - description: ''
   name: cfid

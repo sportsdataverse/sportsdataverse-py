@@ -1,12 +1,12 @@
 columns:
 - description: ''
-  name: date_est
+  name: display_fi_last
   type: character
 - description: ''
-  name: visitor_team
-  type: character
+  name: person_id
+  type: integer
 - description: ''
-  name: home_team
+  name: jersey_num
   type: character
 - description: ''
   name: gp
@@ -57,9 +57,6 @@ columns:
   name: tot_reb
   type: character
 - description: ''
-  name: avg_tot_reb
-  type: character
-- description: ''
   name: ast
   type: character
 - description: ''
@@ -81,7 +78,70 @@ columns:
   name: pts
   type: character
 - description: ''
+  name: max_actual_minutes
+  type: character
+- description: ''
+  name: max_actual_seconds
+  type: character
+- description: ''
+  name: max_reb
+  type: character
+- description: ''
+  name: max_ast
+  type: character
+- description: ''
+  name: max_stl
+  type: character
+- description: ''
+  name: max_turnovers
+  type: character
+- description: ''
+  name: max_blk
+  type: character
+- description: ''
+  name: max_pts
+  type: character
+- description: ''
+  name: avg_actual_minutes
+  type: character
+- description: ''
+  name: avg_actual_seconds
+  type: character
+- description: ''
+  name: avg_tot_reb
+  type: character
+- description: ''
+  name: avg_ast
+  type: character
+- description: ''
+  name: avg_stl
+  type: character
+- description: ''
+  name: avg_turnovers
+  type: character
+- description: ''
+  name: avg_blk
+  type: character
+- description: ''
   name: avg_pts
+  type: character
+- description: ''
+  name: per_min_tot_reb
+  type: character
+- description: ''
+  name: per_min_ast
+  type: character
+- description: ''
+  name: per_min_stl
+  type: character
+- description: ''
+  name: per_min_turnovers
+  type: character
+- description: ''
+  name: per_min_blk
+  type: character
+- description: ''
+  name: per_min_pts
   type: character
 kind: dataframe
 schema: cumestatsplayer

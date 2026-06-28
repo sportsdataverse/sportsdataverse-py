@@ -1,6 +1,39 @@
 columns:
 - description: ''
-  name: video_available_flag
+  name: game_id
+  type: integer
+- description: ''
+  name: eventnum
+  type: character
+- description: ''
+  name: eventmsgtype
+  type: character
+- description: ''
+  name: eventmsgactiontype
+  type: character
+- description: ''
+  name: period
+  type: character
+- description: ''
+  name: wctimestring
+  type: character
+- description: ''
+  name: pctimestring
+  type: numeric
+- description: ''
+  name: homedescription
+  type: character
+- description: ''
+  name: neutraldescription
+  type: character
+- description: ''
+  name: visitordescription
+  type: character
+- description: ''
+  name: score
+  type: character
+- description: ''
+  name: scoremargin
   type: character
 kind: dataframe
 schema: playbyplay

@@ -165,7 +165,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character | Group identifier (e.g. conference 'group_id'). |
+| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
 | `team` | character | Team-side label or team identifier. |
 | `team_id` | character | Unique team identifier. |
 | `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |

@@ -5,7 +5,7 @@ sidebar_position: 10
 ---
 # WNBA — WNBA Stats API (stats.wnba.com)
 
-`sportsdataverse.wnba` — 115 endpoints.
+`sportsdataverse.wnba` — 106 endpoints.
 
 ## `wnba_stats_alltimeleadersgrids`
 
@@ -29,8 +29,8 @@ GET /stats/alltimeleadersgrids
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `ast` | character | Assists. |
-| `ast_rank` | character |  |
+| `tov` | character | Turnovers. |
+| `tov_rank` | character | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -63,11 +63,15 @@ GET /stats/assistleaders
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `rank` | character | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `player_id` | integer | Unique player identifier. |
+| `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `ast` | character | Assists. |
+| `jersey_num` | character | Jersey number worn by the player. |
+| `player_position` | character | Position of the player accordinng to NGS |
+| `ast` | numeric | Assists. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -123,7 +127,7 @@ GET /stats/assisttracker
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `assists` | character | Total assists. |
+| `assists` | numeric | Total assists. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -163,27 +167,27 @@ GET /stats/boxscoreadvancedv2
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `start_position` | character |  |
+| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
 | `min` | integer | Minutes played. |
-| `e_off_rating` | character |  |
-| `off_rating` | character |  |
-| `e_def_rating` | character |  |
-| `def_rating` | character |  |
-| `e_net_rating` | character |  |
+| `e_off_rating` | character | Estimated offensive rating for the requested NBA or WNBA Stats split. |
+| `off_rating` | character | Offensive rating for the requested NBA or WNBA Stats split. |
+| `e_def_rating` | character | Estimated defensive rating for the requested NBA or WNBA Stats split. |
+| `def_rating` | character | Defensive rating for the requested NBA or WNBA Stats split. |
+| `e_net_rating` | character | Estimated net rating for the requested NBA or WNBA Stats split. |
 | `net_rating` | character | Net rating (off rating - def rating). |
-| `ast_pct` | numeric |  |
-| `ast_tov` | character |  |
-| `ast_ratio` | character |  |
-| `oreb_pct` | numeric |  |
-| `dreb_pct` | numeric |  |
-| `reb_pct` | numeric |  |
-| `tm_tov_pct` | numeric |  |
-| `efg_pct` | numeric |  |
+| `ast_pct` | numeric | Assist percentage. |
+| `ast_tov` | character | Assist-to-turnover ratio for the requested NBA or WNBA Stats split. |
+| `ast_ratio` | character | Assist ratio for the requested NBA or WNBA Stats split. |
+| `oreb_pct` | numeric | Percentage or rate for offensive rebounds percentage in the requested NBA or WNBA Stats split. |
+| `dreb_pct` | numeric | Percentage or rate for defensive rebounds percentage in the requested NBA or WNBA Stats split. |
+| `reb_pct` | numeric | Percentage or rate for rebounds percentage in the requested NBA or WNBA Stats split. |
+| `tm_tov_pct` | numeric | Percentage or rate for team turnovers percentage in the requested NBA or WNBA Stats split. |
+| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `ts_pct` | numeric | True shooting percentage (0-1). |
-| `usg_pct` | numeric |  |
-| `e_usg_pct` | numeric |  |
-| `e_pace` | character |  |
+| `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
+| `e_usg_pct` | numeric | Estimated usage percentage for the requested NBA or WNBA Stats split. |
+| `e_pace` | character | Estimated pace for the requested NBA or WNBA Stats split. |
 | `pace` | character | Possessions per 48 minutes. |
 | `pace_per40` | character | Pace per40. |
 | `poss` | character | Poss. |
@@ -221,41 +225,41 @@ GET /stats/boxscoreadvancedv3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `gameid` | character |  |
+| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
 | `teamid` | character | FanGraphs team ID. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
+| `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `personid` | character | Stats API identifier for personid associated with this NBA or WNBA Stats row. |
 | `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
+| `familyname` | character | Display name for familyname associated with this NBA or WNBA Stats row. |
+| `namei` | character | NBA or WNBA Stats value for namei in the boxscoreadvancedv3 result set. |
+| `playerslug` | character | URL slug for playerslug used by NBA or WNBA Stats pages. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
+| `jerseynum` | character | NBA or WNBA Stats value for jerseynum in the boxscoreadvancedv3 result set. |
 | `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `estimatedoffensiverating` | character |  |
-| `offensiverating` | character |  |
-| `estimateddefensiverating` | character |  |
-| `defensiverating` | character |  |
-| `estimatednetrating` | character |  |
-| `netrating` | character |  |
-| `assistpercentage` | numeric |  |
-| `assisttoturnover` | character |  |
-| `assistratio` | character |  |
-| `offensivereboundpercentage` | numeric |  |
-| `defensivereboundpercentage` | numeric |  |
-| `reboundpercentage` | numeric |  |
-| `turnoverratio` | character |  |
-| `effectivefieldgoalpercentage` | numeric |  |
-| `trueshootingpercentage` | numeric |  |
-| `usagepercentage` | numeric |  |
-| `estimatedusagepercentage` | numeric |  |
-| `estimatedpace` | character |  |
+| `estimatedoffensiverating` | character | Advanced team or player metric for estimatedoffensiverating in the requested NBA or WNBA Stats split. |
+| `offensiverating` | character | Advanced team or player metric for offensiverating in the requested NBA or WNBA Stats split. |
+| `estimateddefensiverating` | character | Advanced team or player metric for estimateddefensiverating in the requested NBA or WNBA Stats split. |
+| `defensiverating` | character | Advanced team or player metric for defensiverating in the requested NBA or WNBA Stats split. |
+| `estimatednetrating` | character | Advanced team or player metric for estimatednetrating in the requested NBA or WNBA Stats split. |
+| `netrating` | character | Advanced team or player metric for netrating in the requested NBA or WNBA Stats split. |
+| `assistpercentage` | numeric | Percentage or rate for assistpercentage in the requested NBA or WNBA Stats split. |
+| `assisttoturnover` | character | Passing or assist metric for assisttoturnover in the requested NBA or WNBA Stats split. |
+| `assistratio` | character | Passing or assist metric for assistratio in the requested NBA or WNBA Stats split. |
+| `offensivereboundpercentage` | numeric | Percentage or rate for offensivereboundpercentage in the requested NBA or WNBA Stats split. |
+| `defensivereboundpercentage` | numeric | Percentage or rate for defensivereboundpercentage in the requested NBA or WNBA Stats split. |
+| `reboundpercentage` | numeric | Percentage or rate for reboundpercentage in the requested NBA or WNBA Stats split. |
+| `turnoverratio` | character | Turnover or loose-ball metric for turnoverratio in the requested NBA or WNBA Stats split. |
+| `effectivefieldgoalpercentage` | numeric | Percentage or rate for effectivefieldgoalpercentage in the requested NBA or WNBA Stats split. |
+| `trueshootingpercentage` | numeric | Percentage or rate for trueshootingpercentage in the requested NBA or WNBA Stats split. |
+| `usagepercentage` | numeric | Percentage or rate for usagepercentage in the requested NBA or WNBA Stats split. |
+| `estimatedusagepercentage` | numeric | Percentage or rate for estimatedusagepercentage in the requested NBA or WNBA Stats split. |
+| `estimatedpace` | character | Advanced team or player metric for estimatedpace in the requested NBA or WNBA Stats split. |
 | `pace` | character | Possessions per 48 minutes. |
-| `paceper40` | character |  |
+| `paceper40` | character | Advanced team or player metric for paceper40 in the requested NBA or WNBA Stats split. |
 | `possessions` | character | Possessions used. |
 | `pie` | character | Player Impact Estimate (0-1). |
 
@@ -265,63 +269,6 @@ GET /stats/boxscoreadvancedv3
 
 ```python
 wnba_stats_boxscoreadvancedv3()
-```
-
-_Last validated n/a._
-
-## `wnba_stats_boxscoredefensivev2`
-
-GET /stats/boxscoredefensivev2
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoredefensivev2`
-
-**Valid URL:** [https://stats.wnba.com/stats/boxscoredefensivev2](https://stats.wnba.com/stats/boxscoredefensivev2)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameID` | `game_id` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `gameid` | character |  |
-| `teamid` | character | FanGraphs team ID. |
-| `teamcity` | character | Teamcity. |
-| `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
-| `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
-| `matchupminutes` | character |  |
-| `partialpossessions` | character |  |
-| `switcheson` | character |  |
-| `playerpoints` | character |  |
-| `defensiverebounds` | character |  |
-| `matchupassists` | character |  |
-| `matchupturnovers` | character |  |
-| `steals` | character | Total steals. |
-| `blocks` | character | Total blocks. |
-| `matchupfieldgoalsmade` | character |  |
-| `matchupfieldgoalsattempted` | character |  |
-| `matchupfieldgoalpercentage` | numeric |  |
-| `matchupthreepointersmade` | character |  |
-| `matchupthreepointersattempted` | character |  |
-| `matchupthreepointerpercentage` | numeric |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_boxscoredefensivev2()
 ```
 
 _Last validated n/a._
@@ -354,17 +301,17 @@ GET /stats/boxscorefourfactorsv2
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `start_position` | character |  |
+| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
 | `min` | integer | Minutes played. |
-| `efg_pct` | numeric |  |
-| `fta_rate` | character |  |
-| `tm_tov_pct` | numeric |  |
-| `oreb_pct` | numeric |  |
-| `opp_efg_pct` | numeric |  |
-| `opp_fta_rate` | character |  |
-| `opp_tov_pct` | numeric |  |
-| `opp_oreb_pct` | numeric |  |
+| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `fta_rate` | character | NBA or WNBA Stats value for fta rate in the boxscorefourfactorsv2 result set. |
+| `tm_tov_pct` | numeric | Percentage or rate for team turnovers percentage in the requested NBA or WNBA Stats split. |
+| `oreb_pct` | numeric | Percentage or rate for offensive rebounds percentage in the requested NBA or WNBA Stats split. |
+| `opp_efg_pct` | numeric | Opponent efg percentage for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_fta_rate` | character | Opponent fta rate for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_tov_pct` | numeric | Opponent turnovers percentage for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_oreb_pct` | numeric | Opponent offensive rebounds percentage for the requested NBA or WNBA team, player, lineup, or game split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -398,29 +345,29 @@ GET /stats/boxscorefourfactorsv3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `gameid` | character |  |
+| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
 | `teamid` | character | FanGraphs team ID. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
+| `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `personid` | character | Stats API identifier for personid associated with this NBA or WNBA Stats row. |
 | `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
+| `familyname` | character | Display name for familyname associated with this NBA or WNBA Stats row. |
+| `namei` | character | NBA or WNBA Stats value for namei in the boxscorefourfactorsv3 result set. |
+| `playerslug` | character | URL slug for playerslug used by NBA or WNBA Stats pages. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
+| `jerseynum` | character | NBA or WNBA Stats value for jerseynum in the boxscorefourfactorsv3 result set. |
 | `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `effectivefieldgoalpercentage` | numeric |  |
-| `freethrowattemptrate` | character |  |
-| `teamturnoverpercentage` | numeric |  |
-| `offensivereboundpercentage` | numeric |  |
-| `oppeffectivefieldgoalpercentage` | numeric |  |
-| `oppfreethrowattemptrate` | character |  |
-| `oppteamturnoverpercentage` | numeric |  |
-| `oppoffensivereboundpercentage` | numeric |  |
+| `effectivefieldgoalpercentage` | numeric | Percentage or rate for effectivefieldgoalpercentage in the requested NBA or WNBA Stats split. |
+| `freethrowattemptrate` | character | Shooting metric for freethrowattemptrate in the requested NBA or WNBA Stats split. |
+| `teamturnoverpercentage` | numeric | Percentage or rate for teamturnoverpercentage in the requested NBA or WNBA Stats split. |
+| `offensivereboundpercentage` | numeric | Percentage or rate for offensivereboundpercentage in the requested NBA or WNBA Stats split. |
+| `oppeffectivefieldgoalpercentage` | numeric | Percentage or rate for oppeffectivefieldgoalpercentage in the requested NBA or WNBA Stats split. |
+| `oppfreethrowattemptrate` | character | Shooting metric for oppfreethrowattemptrate in the requested NBA or WNBA Stats split. |
+| `oppteamturnoverpercentage` | numeric | Percentage or rate for oppteamturnoverpercentage in the requested NBA or WNBA Stats split. |
+| `oppoffensivereboundpercentage` | numeric | Percentage or rate for oppoffensivereboundpercentage in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -428,80 +375,6 @@ GET /stats/boxscorefourfactorsv3
 
 ```python
 wnba_stats_boxscorefourfactorsv3()
-```
-
-_Last validated n/a._
-
-## `wnba_stats_boxscorematchupsv3`
-
-GET /stats/boxscorematchupsv3
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscorematchupsv3`
-
-**Valid URL:** [https://stats.wnba.com/stats/boxscorematchupsv3](https://stats.wnba.com/stats/boxscorematchupsv3)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameID` | `game_id` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `gameid` | character |  |
-| `teamid` | character | FanGraphs team ID. |
-| `teamcity` | character | Teamcity. |
-| `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personidoff` | character |  |
-| `firstnameoff` | character |  |
-| `familynameoff` | character |  |
-| `nameioff` | character |  |
-| `playerslugoff` | character |  |
-| `jerseynumoff` | character |  |
-| `personiddef` | character |  |
-| `firstnamedef` | character |  |
-| `familynamedef` | character |  |
-| `nameidef` | character |  |
-| `playerslugdef` | character |  |
-| `positiondef` | character |  |
-| `commentdef` | character |  |
-| `jerseynumdef` | character |  |
-| `matchupminutes` | character |  |
-| `matchupminutessort` | character |  |
-| `partialpossessions` | character |  |
-| `percentagedefendertotaltime` | character |  |
-| `percentageoffensivetotaltime` | character |  |
-| `percentagetotaltimebothon` | character |  |
-| `switcheson` | character |  |
-| `playerpoints` | character |  |
-| `teampoints` | character |  |
-| `matchupassists` | character |  |
-| `matchuppotentialassists` | character |  |
-| `matchupturnovers` | character |  |
-| `matchupblocks` | character |  |
-| `matchupfieldgoalsmade` | character |  |
-| `matchupfieldgoalsattempted` | character |  |
-| `matchupfieldgoalspercentage` | numeric |  |
-| `matchupthreepointersmade` | character |  |
-| `matchupthreepointersattempted` | character |  |
-| `matchupthreepointerspercentage` | numeric |  |
-| `helpblocks` | character |  |
-| `helpfieldgoalsmade` | character |  |
-| `helpfieldgoalsattempted` | character |  |
-| `helpfieldgoalspercentage` | numeric |  |
-| `matchupfreethrowsmade` | character |  |
-| `matchupfreethrowsattempted` | character |  |
-| `shootingfouls` | character |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_boxscorematchupsv3()
 ```
 
 _Last validated n/a._
@@ -534,21 +407,21 @@ GET /stats/boxscoremiscv2
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `start_position` | character |  |
+| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
 | `min` | integer | Minutes played. |
-| `pts_off_tov` | character |  |
-| `pts_2nd_chance` | character |  |
-| `pts_fb` | character |  |
-| `pts_paint` | character |  |
-| `opp_pts_off_tov` | character |  |
-| `opp_pts_2nd_chance` | character |  |
-| `opp_pts_fb` | character |  |
-| `opp_pts_paint` | character |  |
+| `pts_off_tov` | character | Turnover or loose-ball metric for points offensive turnovers in the requested NBA or WNBA Stats split. |
+| `pts_2nd_chance` | character | Scoring or score-margin metric for points 2nd chance in the requested NBA or WNBA Stats split. |
+| `pts_fb` | character | Scoring or score-margin metric for points fb in the requested NBA or WNBA Stats split. |
+| `pts_paint` | character | Scoring or score-margin metric for points paint in the requested NBA or WNBA Stats split. |
+| `opp_pts_off_tov` | character | Opponent points offensive turnovers for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_pts_2nd_chance` | character | Opponent points 2nd chance for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_pts_fb` | character | Opponent points fb for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_pts_paint` | character | Opponent points paint for the requested NBA or WNBA team, player, lineup, or game split. |
 | `blk` | character | Blocks. |
-| `blka` | character |  |
+| `blka` | character | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | character | Personal fouls. |
-| `pfd` | character |  |
+| `pfd` | character | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -582,33 +455,33 @@ GET /stats/boxscoremiscv3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `gameid` | character |  |
+| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
 | `teamid` | character | FanGraphs team ID. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
+| `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `personid` | character | Stats API identifier for personid associated with this NBA or WNBA Stats row. |
 | `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
+| `familyname` | character | Display name for familyname associated with this NBA or WNBA Stats row. |
+| `namei` | character | NBA or WNBA Stats value for namei in the boxscoremiscv3 result set. |
+| `playerslug` | character | URL slug for playerslug used by NBA or WNBA Stats pages. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
+| `jerseynum` | character | NBA or WNBA Stats value for jerseynum in the boxscoremiscv3 result set. |
 | `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `pointsoffturnovers` | character |  |
-| `pointssecondchance` | character |  |
-| `pointsfastbreak` | character |  |
-| `pointspaint` | character |  |
-| `opppointsoffturnovers` | character |  |
-| `opppointssecondchance` | character |  |
-| `opppointsfastbreak` | character |  |
-| `opppointspaint` | character |  |
+| `pointsoffturnovers` | character | Turnover or loose-ball metric for pointsoffturnovers in the requested NBA or WNBA Stats split. |
+| `pointssecondchance` | character | Scoring or score-margin metric for pointssecondchance in the requested NBA or WNBA Stats split. |
+| `pointsfastbreak` | character | Scoring or score-margin metric for pointsfastbreak in the requested NBA or WNBA Stats split. |
+| `pointspaint` | character | Scoring or score-margin metric for pointspaint in the requested NBA or WNBA Stats split. |
+| `opppointsoffturnovers` | character | Turnover or loose-ball metric for opppointsoffturnovers in the requested NBA or WNBA Stats split. |
+| `opppointssecondchance` | character | Scoring or score-margin metric for opppointssecondchance in the requested NBA or WNBA Stats split. |
+| `opppointsfastbreak` | character | Scoring or score-margin metric for opppointsfastbreak in the requested NBA or WNBA Stats split. |
+| `opppointspaint` | character | Scoring or score-margin metric for opppointspaint in the requested NBA or WNBA Stats split. |
 | `blocks` | character | Total blocks. |
-| `blocksagainst` | character |  |
-| `foulspersonal` | character |  |
-| `foulsdrawn` | character |  |
+| `blocksagainst` | character | NBA or WNBA Stats value for blocksagainst in the boxscoremiscv3 result set. |
+| `foulspersonal` | character | NBA or WNBA Stats value for foulspersonal in the boxscoremiscv3 result set. |
+| `foulsdrawn` | character | NBA or WNBA Stats value for foulsdrawn in the boxscoremiscv3 result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -644,69 +517,6 @@ wnba_stats_boxscoreplayertrackv2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoreplayertrackv3`
-
-GET /stats/boxscoreplayertrackv3
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreplayertrackv3`
-
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreplayertrackv3](https://stats.wnba.com/stats/boxscoreplayertrackv3)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameID` | `game_id` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `gameid` | character |  |
-| `teamid` | character | FanGraphs team ID. |
-| `teamcity` | character | Teamcity. |
-| `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
-| `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `speed` | character | Speed. |
-| `distance` | character | Distance value (in feet for shot data; otherwise context-dependent). |
-| `reboundchancesoffensive` | character |  |
-| `reboundchancesdefensive` | character |  |
-| `reboundchancestotal` | character |  |
-| `touches` | character | Touches. |
-| `secondaryassists` | character |  |
-| `freethrowassists` | character |  |
-| `passes` | character | Passes. |
-| `assists` | character | Total assists. |
-| `contestedfieldgoalsmade` | character |  |
-| `contestedfieldgoalsattempted` | character |  |
-| `contestedfieldgoalpercentage` | numeric |  |
-| `uncontestedfieldgoalsmade` | character |  |
-| `uncontestedfieldgoalsattempted` | character |  |
-| `uncontestedfieldgoalspercentage` | numeric |  |
-| `fieldgoalpercentage` | numeric |  |
-| `defendedatrimfieldgoalsmade` | character |  |
-| `defendedatrimfieldgoalsattempted` | character |  |
-| `defendedatrimfieldgoalpercentage` | numeric |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_boxscoreplayertrackv3()
-```
-
-_Last validated n/a._
-
 ## `wnba_stats_boxscorescoringv2`
 
 GET /stats/boxscorescoringv2
@@ -735,24 +545,24 @@ GET /stats/boxscorescoringv2
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `start_position` | character |  |
+| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
 | `min` | integer | Minutes played. |
-| `pct_fga_2pt` | numeric |  |
-| `pct_fga_3pt` | numeric |  |
-| `pct_pts_2pt` | numeric |  |
-| `pct_pts_2pt_mr` | numeric |  |
-| `pct_pts_3pt` | numeric |  |
-| `pct_pts_fb` | numeric |  |
-| `pct_pts_ft` | numeric |  |
-| `pct_pts_off_tov` | numeric |  |
-| `pct_pts_paint` | numeric |  |
-| `pct_ast_2pm` | numeric |  |
-| `pct_uast_2pm` | numeric |  |
-| `pct_ast_3pm` | numeric |  |
-| `pct_uast_3pm` | numeric |  |
-| `pct_ast_fgm` | numeric |  |
-| `pct_uast_fgm` | numeric |  |
+| `pct_fga_2pt` | numeric | Percentage share of fga 2pt for the requested NBA or WNBA Stats split. |
+| `pct_fga_3pt` | numeric | Percentage share of fga 3pt for the requested NBA or WNBA Stats split. |
+| `pct_pts_2pt` | numeric | Percentage share of points 2pt for the requested NBA or WNBA Stats split. |
+| `pct_pts_2pt_mr` | numeric | Percentage share of points 2pt mr for the requested NBA or WNBA Stats split. |
+| `pct_pts_3pt` | numeric | Percentage share of points 3pt for the requested NBA or WNBA Stats split. |
+| `pct_pts_fb` | numeric | Percentage share of points fb for the requested NBA or WNBA Stats split. |
+| `pct_pts_ft` | numeric | Percentage share of points free throws for the requested NBA or WNBA Stats split. |
+| `pct_pts_off_tov` | numeric | Percentage share of points offensive turnovers for the requested NBA or WNBA Stats split. |
+| `pct_pts_paint` | numeric | Percentage share of points paint for the requested NBA or WNBA Stats split. |
+| `pct_ast_2pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -786,36 +596,36 @@ GET /stats/boxscorescoringv3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `gameid` | character |  |
+| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
 | `teamid` | character | FanGraphs team ID. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
+| `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `personid` | character | Stats API identifier for personid associated with this NBA or WNBA Stats row. |
 | `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
+| `familyname` | character | Display name for familyname associated with this NBA or WNBA Stats row. |
+| `namei` | character | NBA or WNBA Stats value for namei in the boxscorescoringv3 result set. |
+| `playerslug` | character | URL slug for playerslug used by NBA or WNBA Stats pages. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
+| `jerseynum` | character | NBA or WNBA Stats value for jerseynum in the boxscorescoringv3 result set. |
 | `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `percentagefieldgoalsattempted2pt` | character |  |
-| `percentagefieldgoalsattempted3pt` | character |  |
-| `percentagepoints2pt` | character |  |
-| `percentagepointsmidrange2pt` | character |  |
-| `percentagepoints3pt` | character |  |
-| `percentagepointsfastbreak` | character |  |
-| `percentagepointsfreethrow` | character |  |
-| `percentagepointsoffturnovers` | character |  |
-| `percentagepointspaint` | character |  |
-| `percentageassisted2pt` | character |  |
-| `percentageunassisted2pt` | character |  |
-| `percentageassisted3pt` | character |  |
-| `percentageunassisted3pt` | character |  |
-| `percentageassistedfgm` | character |  |
-| `percentageunassistedfgm` | character |  |
+| `percentagefieldgoalsattempted2pt` | character | Percentage share or rate for fieldgoalsattempted2pt in the requested NBA or WNBA Stats split. |
+| `percentagefieldgoalsattempted3pt` | character | Percentage share or rate for fieldgoalsattempted3pt in the requested NBA or WNBA Stats split. |
+| `percentagepoints2pt` | character | Percentage share or rate for points2pt in the requested NBA or WNBA Stats split. |
+| `percentagepointsmidrange2pt` | character | Percentage share or rate for pointsmidrange2pt in the requested NBA or WNBA Stats split. |
+| `percentagepoints3pt` | character | Percentage share or rate for points3pt in the requested NBA or WNBA Stats split. |
+| `percentagepointsfastbreak` | character | Percentage share or rate for pointsfastbreak in the requested NBA or WNBA Stats split. |
+| `percentagepointsfreethrow` | character | Percentage share or rate for pointsfreethrow in the requested NBA or WNBA Stats split. |
+| `percentagepointsoffturnovers` | character | Percentage share or rate for pointsoffturnovers in the requested NBA or WNBA Stats split. |
+| `percentagepointspaint` | character | Percentage share or rate for pointspaint in the requested NBA or WNBA Stats split. |
+| `percentageassisted2pt` | character | Percentage share or rate for assisted2pt in the requested NBA or WNBA Stats split. |
+| `percentageunassisted2pt` | character | Percentage share or rate for unassisted2pt in the requested NBA or WNBA Stats split. |
+| `percentageassisted3pt` | character | Percentage share or rate for assisted3pt in the requested NBA or WNBA Stats split. |
+| `percentageunassisted3pt` | character | Percentage share or rate for unassisted3pt in the requested NBA or WNBA Stats split. |
+| `percentageassistedfgm` | character | Percentage share or rate for assistedfgm in the requested NBA or WNBA Stats split. |
+| `percentageunassistedfgm` | character | Percentage share or rate for unassistedfgm in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -844,13 +654,29 @@ GET /stats/boxscoresummaryv2
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
-| `video_available_flag` | character | Video available flag. |
-| `pt_available` | character | Pt available. |
-| `pt_xyz_available` | character | Pt xyz available. |
-| `wh_status` | character | Wh status. |
-| `hustle_status` | character | Hustle status. |
-| `historical_status` | character | Historical status. |
+| `game_date_est` | character | Game date est. |
+| `game_sequence` | integer | Game sequence. |
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city_name` | character | Team city name. |
+| `team_nickname` | character | Team nickname. |
+| `team_wins_losses` | character | Team wins losses. |
+| `pts_qtr1` | integer | Pts qtr1. |
+| `pts_qtr2` | integer | Pts qtr2. |
+| `pts_qtr3` | integer | Pts qtr3. |
+| `pts_qtr4` | integer | Pts qtr4. |
+| `pts_ot1` | integer | Pts ot1. |
+| `pts_ot2` | integer | Scoring or score-margin metric for points ot2 in the requested NBA or WNBA Stats split. |
+| `pts_ot3` | integer | Scoring or score-margin metric for points ot3 in the requested NBA or WNBA Stats split. |
+| `pts_ot4` | integer | Scoring or score-margin metric for points ot4 in the requested NBA or WNBA Stats split. |
+| `pts_ot5` | integer | Scoring or score-margin metric for points ot5 in the requested NBA or WNBA Stats split. |
+| `pts_ot6` | integer | Scoring or score-margin metric for points ot6 in the requested NBA or WNBA Stats split. |
+| `pts_ot7` | integer | Scoring or score-margin metric for points ot7 in the requested NBA or WNBA Stats split. |
+| `pts_ot8` | integer | Scoring or score-margin metric for points ot8 in the requested NBA or WNBA Stats split. |
+| `pts_ot9` | integer | Scoring or score-margin metric for points ot9 in the requested NBA or WNBA Stats split. |
+| `pts_ot10` | integer | Scoring or score-margin metric for points ot10 in the requested NBA or WNBA Stats split. |
+| `pts` | integer | Points scored. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -858,41 +684,6 @@ GET /stats/boxscoresummaryv2
 
 ```python
 wnba_stats_boxscoresummaryv2()
-```
-
-_Last validated n/a._
-
-## `wnba_stats_boxscoresummaryv3`
-
-GET /stats/boxscoresummaryv3
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoresummaryv3`
-
-**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv3](https://stats.wnba.com/stats/boxscoresummaryv3)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameID` | `gameid` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `gameid` | character |  |
-| `arenaid` | character |  |
-| `arenaname` | character |  |
-| `arenacity` | character |  |
-| `arenastate` | character |  |
-| `arenacountry` | character |  |
-| `arenatimezone` | character |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_boxscoresummaryv3()
 ```
 
 _Last validated n/a._
@@ -925,7 +716,7 @@ GET /stats/boxscoretraditionalv2
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `start_position` | character |  |
+| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
 | `min` | integer | Minutes played. |
 | `fgm` | character | Field goals made. |
@@ -980,40 +771,40 @@ GET /stats/boxscoretraditionalv3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `gameid` | character |  |
+| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
 | `teamid` | character | FanGraphs team ID. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
+| `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `personid` | character | Stats API identifier for personid associated with this NBA or WNBA Stats row. |
 | `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
+| `familyname` | character | Display name for familyname associated with this NBA or WNBA Stats row. |
+| `namei` | character | NBA or WNBA Stats value for namei in the boxscoretraditionalv3 result set. |
+| `playerslug` | character | URL slug for playerslug used by NBA or WNBA Stats pages. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
+| `jerseynum` | character | NBA or WNBA Stats value for jerseynum in the boxscoretraditionalv3 result set. |
 | `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `fieldgoalsmade` | character |  |
-| `fieldgoalsattempted` | character |  |
-| `fieldgoalspercentage` | numeric |  |
-| `threepointersmade` | character |  |
-| `threepointersattempted` | character |  |
-| `threepointerspercentage` | numeric |  |
-| `freethrowsmade` | character |  |
-| `freethrowsattempted` | character |  |
-| `freethrowspercentage` | numeric |  |
-| `reboundsoffensive` | character |  |
-| `reboundsdefensive` | character |  |
-| `reboundstotal` | character |  |
+| `fieldgoalsmade` | character | Shooting metric for fieldgoalsmade in the requested NBA or WNBA Stats split. |
+| `fieldgoalsattempted` | character | Shooting metric for fieldgoalsattempted in the requested NBA or WNBA Stats split. |
+| `fieldgoalspercentage` | numeric | Percentage or rate for fieldgoalspercentage in the requested NBA or WNBA Stats split. |
+| `threepointersmade` | character | Shooting metric for threepointersmade in the requested NBA or WNBA Stats split. |
+| `threepointersattempted` | character | Shooting metric for threepointersattempted in the requested NBA or WNBA Stats split. |
+| `threepointerspercentage` | numeric | Percentage or rate for threepointerspercentage in the requested NBA or WNBA Stats split. |
+| `freethrowsmade` | character | Shooting metric for freethrowsmade in the requested NBA or WNBA Stats split. |
+| `freethrowsattempted` | character | Shooting metric for freethrowsattempted in the requested NBA or WNBA Stats split. |
+| `freethrowspercentage` | numeric | Percentage or rate for freethrowspercentage in the requested NBA or WNBA Stats split. |
+| `reboundsoffensive` | character | Rebounding metric for reboundsoffensive in the requested NBA or WNBA Stats split. |
+| `reboundsdefensive` | character | Rebounding metric for reboundsdefensive in the requested NBA or WNBA Stats split. |
+| `reboundstotal` | character | Rebounding metric for reboundstotal in the requested NBA or WNBA Stats split. |
 | `assists` | character | Total assists. |
 | `steals` | character | Total steals. |
 | `blocks` | character | Total blocks. |
 | `turnovers` | character | Total turnovers. |
-| `foulspersonal` | character |  |
+| `foulspersonal` | character | NBA or WNBA Stats value for foulspersonal in the boxscoretraditionalv3 result set. |
 | `points` | character | Points scored. |
-| `plusminuspoints` | character |  |
+| `plusminuspoints` | character | Scoring or score-margin metric for plusminuspoints in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1053,27 +844,27 @@ GET /stats/boxscoreusagev2
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `start_position` | character |  |
+| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
 | `min` | integer | Minutes played. |
-| `usg_pct` | numeric |  |
-| `pct_fgm` | numeric |  |
-| `pct_fga` | numeric |  |
-| `pct_fg3m` | numeric |  |
-| `pct_fg3a` | numeric |  |
-| `pct_ftm` | numeric |  |
-| `pct_fta` | numeric |  |
-| `pct_oreb` | numeric |  |
-| `pct_dreb` | numeric |  |
-| `pct_reb` | numeric |  |
-| `pct_ast` | numeric |  |
-| `pct_tov` | numeric |  |
-| `pct_stl` | numeric |  |
-| `pct_blk` | numeric |  |
-| `pct_blka` | numeric |  |
-| `pct_pf` | numeric |  |
-| `pct_pfd` | numeric |  |
-| `pct_pts` | numeric |  |
+| `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
+| `pct_fgm` | numeric | Percentage share of fgm for the requested NBA or WNBA Stats split. |
+| `pct_fga` | numeric | Percentage share of fga for the requested NBA or WNBA Stats split. |
+| `pct_fg3m` | numeric | Percentage share of fg3m for the requested NBA or WNBA Stats split. |
+| `pct_fg3a` | numeric | Percentage share of fg3a for the requested NBA or WNBA Stats split. |
+| `pct_ftm` | numeric | Percentage share of ftm for the requested NBA or WNBA Stats split. |
+| `pct_fta` | numeric | Percentage share of fta for the requested NBA or WNBA Stats split. |
+| `pct_oreb` | numeric | Percentage share of offensive rebounds for the requested NBA or WNBA Stats split. |
+| `pct_dreb` | numeric | Percentage share of defensive rebounds for the requested NBA or WNBA Stats split. |
+| `pct_reb` | numeric | Percentage share of rebounds for the requested NBA or WNBA Stats split. |
+| `pct_ast` | numeric | Percentage share of assists for the requested NBA or WNBA Stats split. |
+| `pct_tov` | numeric | Percentage share of turnovers for the requested NBA or WNBA Stats split. |
+| `pct_stl` | numeric | Percentage share of steals for the requested NBA or WNBA Stats split. |
+| `pct_blk` | numeric | Percentage share of blocks for the requested NBA or WNBA Stats split. |
+| `pct_blka` | numeric | Percentage share of blocked attempts for the requested NBA or WNBA Stats split. |
+| `pct_pf` | numeric | Percentage share of personal fouls for the requested NBA or WNBA Stats split. |
+| `pct_pfd` | numeric | Percentage share of personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pct_pts` | numeric | Percentage share of points for the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1107,39 +898,39 @@ GET /stats/boxscoreusagev3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `gameid` | character |  |
+| `gameid` | character | Unique stats.nba.com game identifier in endpoints that use compact schedule field names. |
 | `teamid` | character | FanGraphs team ID. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
-| `teamtricode` | character |  |
-| `teamslug` | character |  |
-| `personid` | character |  |
+| `teamtricode` | character | Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds. |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `personid` | character | Stats API identifier for personid associated with this NBA or WNBA Stats row. |
 | `firstname` | character | Firstname. |
-| `familyname` | character |  |
-| `namei` | character |  |
-| `playerslug` | character |  |
+| `familyname` | character | Display name for familyname associated with this NBA or WNBA Stats row. |
+| `namei` | character | NBA or WNBA Stats value for namei in the boxscoreusagev3 result set. |
+| `playerslug` | character | URL slug for playerslug used by NBA or WNBA Stats pages. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jerseynum` | character |  |
+| `jerseynum` | character | NBA or WNBA Stats value for jerseynum in the boxscoreusagev3 result set. |
 | `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `usagepercentage` | numeric |  |
-| `percentagefieldgoalsmade` | character |  |
-| `percentagefieldgoalsattempted` | character |  |
-| `percentagethreepointersmade` | character |  |
-| `percentagethreepointersattempted` | character |  |
-| `percentagefreethrowsmade` | character |  |
-| `percentagefreethrowsattempted` | character |  |
-| `percentagereboundsoffensive` | character |  |
-| `percentagereboundsdefensive` | character |  |
-| `percentagereboundstotal` | character |  |
-| `percentageassists` | character |  |
-| `percentageturnovers` | character |  |
-| `percentagesteals` | character |  |
-| `percentageblocks` | character |  |
-| `percentageblocksallowed` | character |  |
-| `percentagepersonalfouls` | character |  |
-| `percentagepersonalfoulsdrawn` | character |  |
-| `percentagepoints` | character |  |
+| `usagepercentage` | numeric | Percentage or rate for usagepercentage in the requested NBA or WNBA Stats split. |
+| `percentagefieldgoalsmade` | character | Percentage share or rate for fieldgoalsmade in the requested NBA or WNBA Stats split. |
+| `percentagefieldgoalsattempted` | character | Percentage share or rate for fieldgoalsattempted in the requested NBA or WNBA Stats split. |
+| `percentagethreepointersmade` | character | Percentage share or rate for threepointersmade in the requested NBA or WNBA Stats split. |
+| `percentagethreepointersattempted` | character | Percentage share or rate for threepointersattempted in the requested NBA or WNBA Stats split. |
+| `percentagefreethrowsmade` | character | Percentage share or rate for freethrowsmade in the requested NBA or WNBA Stats split. |
+| `percentagefreethrowsattempted` | character | Percentage share or rate for freethrowsattempted in the requested NBA or WNBA Stats split. |
+| `percentagereboundsoffensive` | character | Percentage share or rate for reboundsoffensive in the requested NBA or WNBA Stats split. |
+| `percentagereboundsdefensive` | character | Percentage share or rate for reboundsdefensive in the requested NBA or WNBA Stats split. |
+| `percentagereboundstotal` | character | Percentage share or rate for reboundstotal in the requested NBA or WNBA Stats split. |
+| `percentageassists` | character | Percentage share or rate for assists in the requested NBA or WNBA Stats split. |
+| `percentageturnovers` | character | Percentage share or rate for turnovers in the requested NBA or WNBA Stats split. |
+| `percentagesteals` | character | Percentage share or rate for steals in the requested NBA or WNBA Stats split. |
+| `percentageblocks` | character | Percentage share or rate for blocks in the requested NBA or WNBA Stats split. |
+| `percentageblocksallowed` | character | Percentage share or rate for blocksallowed in the requested NBA or WNBA Stats split. |
+| `percentagepersonalfouls` | character | Percentage share or rate for personalfouls in the requested NBA or WNBA Stats split. |
+| `percentagepersonalfoulsdrawn` | character | Percentage share or rate for personalfoulsdrawn in the requested NBA or WNBA Stats split. |
+| `percentagepoints` | character | Percentage share or rate for points in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1170,18 +961,18 @@ GET /stats/commonallplayers
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Unique stats.nba.com identifier for the player. |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
 | `display_last_comma_first` | character | Player name formatted as 'Last, First' for alphabetical directory sorting. |
 | `display_first_last` | character | Player name formatted as 'First Last' for display in player-facing contexts. |
 | `rosterstatus` | character | Whether the player is currently on an active roster (1 = active, 0 = inactive or retired). |
-| `from_year` | character | First season year the player appeared in the NBA or WNBA. |
-| `to_year` | character | Most recent season year the player appeared in the NBA or WNBA. |
+| `from_year` | character | First season. |
+| `to_year` | character | Most recent season. |
 | `playercode` | character | Slug-style identifier for the player used in stats.nba.com profile URLs. |
-| `team_id` | integer | Unique stats.nba.com identifier for the player's current team (0 if unsigned). |
-| `team_city` | character | City name of the player's current NBA or WNBA franchise. |
-| `team_name` | character | Nickname/mascot of the player's current NBA or WNBA franchise. |
-| `team_abbreviation` | character | Two- or three-letter abbreviation for the player's current team. |
-| `team_code` | character | Slug-style code for the player's current team used in stats.nba.com team URLs. |
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_code` | character | Internal team code. |
 | `games_played_flag` | character | Flag indicating whether the player has appeared in at least one game ('Y' or 'N'). |
 | `otherleague_experience_ch` | character | Flag for whether the player has experience in a non-NBA/WNBA league prior to entering the NBA or WNBA. |
 
@@ -1213,7 +1004,39 @@ GET /stats/commonplayerinfo
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `season_id` | character | Unique season identifier. |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `display_first_last` | character | NBA or WNBA Stats value for display first last in the commonplayerinfo result set. |
+| `display_last_comma_first` | character | NBA or WNBA Stats value for display last comma first in the commonplayerinfo result set. |
+| `display_fi_last` | character | NBA or WNBA Stats value for display fi last in the commonplayerinfo result set. |
+| `player_slug` | character | URL-safe player identifier. |
+| `birthdate` | character | Date of birth. |
+| `school` | character | Player's school / college (when distinct from 'college'). |
+| `country` | character | Country (full name or code). |
+| `last_affiliation` | character | NBA or WNBA Stats value for last affiliation in the commonplayerinfo result set. |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `weight` | character | Player weight in pounds. |
+| `season_exp` | integer | NBA or WNBA Stats value for season exp in the commonplayerinfo result set. |
+| `jersey` | character | Jersey number worn by the player. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `rosterstatus` | character | NBA or WNBA Stats value for rosterstatus in the commonplayerinfo result set. |
+| `games_played_current_season_flag` | character | Flag indicating games played current season flag for the requested NBA or WNBA Stats context. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_code` | character | Internal team code. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `playercode` | character | NBA or WNBA Stats value for playercode in the commonplayerinfo result set. |
+| `from_year` | integer | First season. |
+| `to_year` | integer | Most recent season. |
+| `dleague_flag` | character | Flag indicating dleague flag for the requested NBA or WNBA Stats context. |
+| `nba_flag` | character | Flag indicating NBA flag for the requested NBA or WNBA Stats context. |
+| `games_played_flag` | character | Flag indicating games played flag for the requested NBA or WNBA Stats context. |
+| `draft_year` | character | Draft year (4-digit). |
+| `draft_round` | character | Round of the draft selection. |
+| `draft_number` | character | The number pick that was used to select a given player. |
+| `greatest_75_flag` | character | Flag indicating greatest 75 flag for the requested NBA or WNBA Stats context. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1244,11 +1067,11 @@ GET /stats/commonplayoffseries
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `home_team_id` | integer | Unique identifier for the home team. |
 | `visitor_team_id` | integer | Unique identifier for visitor team. |
-| `series_id` | integer | Series identifier (e.g. 'W_1'). |
-| `game_num` | character |  |
+| `series_id` | character | Series identifier (e.g. 'W_1'). |
+| `game_num` | integer | NBA or WNBA Stats value for game number in the commonplayoffseries result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1256,45 +1079,6 @@ GET /stats/commonplayoffseries
 
 ```python
 wnba_stats_commonplayoffseries(league_id='10')
-```
-
-_Last validated n/a._
-
-## `wnba_stats_commonteamroster`
-
-GET /stats/commonteamroster
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/commonteamroster`
-
-**Valid URL:** [https://stats.wnba.com/stats/commonteamroster?LeagueID=10](https://stats.wnba.com/stats/commonteamroster?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `TeamID` | `team_id` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `season` | character | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `coach_id` | integer | Unique identifier for coach. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `coach_name` | character |  |
-| `is_assistant` | character |  |
-| `coach_type` | character |  |
-| `sort_sequence` | character |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_commonteamroster(league_id='10')
 ```
 
 _Last validated n/a._
@@ -1318,8 +1102,8 @@ GET /stats/commonteamyears
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |
 | `team_id` | integer | Unique team identifier. |
-| `min_year` | character |  |
-| `max_year` | character |  |
+| `min_year` | character | Minimum year queried (echoes `min_year`). |
+| `max_year` | character | Maximum year queried (echoes `max_year`). |
 | `abbreviation` | character | Short abbreviation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1353,34 +1137,54 @@ GET /stats/cumestatsplayer
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `date_est` | character |  |
-| `visitor_team` | character |  |
-| `home_team` | character | Home team name. |
+| `display_fi_last` | character | NBA or WNBA Stats value for display fi last in the cumestatsplayer result set. |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `jersey_num` | character | Jersey number worn by the player. |
 | `gp` | integer | Games played. |
-| `gs` | integer |  |
-| `actual_minutes` | character |  |
-| `actual_seconds` | character |  |
-| `fg` | character |  |
+| `gs` | integer | Games started. |
+| `actual_minutes` | character | NBA or WNBA Stats value for actual minutes in the cumestatsplayer result set. |
+| `actual_seconds` | character | NBA or WNBA Stats value for actual seconds in the cumestatsplayer result set. |
+| `fg` | character | Shooting metric for field goals in the requested NBA or WNBA Stats split. |
 | `fga` | character | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3` | character |  |
+| `fg3` | character | Shooting metric for three-point field goals in the requested NBA or WNBA Stats split. |
 | `fg3a` | character | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ft` | character |  |
+| `ft` | character | NBA or WNBA Stats value for free throws in the cumestatsplayer result set. |
 | `fta` | character | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `off_reb` | character |  |
-| `def_reb` | character |  |
-| `tot_reb` | character |  |
-| `avg_tot_reb` | character |  |
+| `off_reb` | character | Rebounding metric for offensive rebounds in the requested NBA or WNBA Stats split. |
+| `def_reb` | character | Rebounding metric for defensive rebounds in the requested NBA or WNBA Stats split. |
+| `tot_reb` | character | Rebounding metric for tot rebounds in the requested NBA or WNBA Stats split. |
 | `ast` | character | Assists. |
 | `pf` | character | Personal fouls. |
-| `dq` | character |  |
+| `dq` | character | NBA or WNBA Stats value for dq in the cumestatsplayer result set. |
 | `stl` | character | Steals. |
 | `turnovers` | character | Total turnovers. |
 | `blk` | character | Blocks. |
 | `pts` | character | Points scored. |
-| `avg_pts` | character |  |
+| `max_actual_minutes` | character | NBA or WNBA Stats value for maximum actual minutes in the cumestatsplayer result set. |
+| `max_actual_seconds` | character | NBA or WNBA Stats value for maximum actual seconds in the cumestatsplayer result set. |
+| `max_reb` | character | Rebounding metric for maximum rebounds in the requested NBA or WNBA Stats split. |
+| `max_ast` | character | NBA or WNBA Stats value for maximum assists in the cumestatsplayer result set. |
+| `max_stl` | character | NBA or WNBA Stats value for maximum steals in the cumestatsplayer result set. |
+| `max_turnovers` | character | Turnover or loose-ball metric for maximum turnovers in the requested NBA or WNBA Stats split. |
+| `max_blk` | character | NBA or WNBA Stats value for maximum blocks in the cumestatsplayer result set. |
+| `max_pts` | character | Scoring or score-margin metric for maximum points in the requested NBA or WNBA Stats split. |
+| `avg_actual_minutes` | character | NBA or WNBA Stats value for average actual minutes in the cumestatsplayer result set. |
+| `avg_actual_seconds` | character | NBA or WNBA Stats value for average actual seconds in the cumestatsplayer result set. |
+| `avg_tot_reb` | character | Rebounding metric for average tot rebounds in the requested NBA or WNBA Stats split. |
+| `avg_ast` | character | NBA or WNBA Stats value for average assists in the cumestatsplayer result set. |
+| `avg_stl` | character | NBA or WNBA Stats value for average steals in the cumestatsplayer result set. |
+| `avg_turnovers` | character | Turnover or loose-ball metric for average turnovers in the requested NBA or WNBA Stats split. |
+| `avg_blk` | character | NBA or WNBA Stats value for average blocks in the cumestatsplayer result set. |
+| `avg_pts` | character | Scoring or score-margin metric for average points in the requested NBA or WNBA Stats split. |
+| `per_min_tot_reb` | character | Rebounding metric for per minutes tot rebounds in the requested NBA or WNBA Stats split. |
+| `per_min_ast` | character | NBA or WNBA Stats value for per minutes assists in the cumestatsplayer result set. |
+| `per_min_stl` | character | NBA or WNBA Stats value for per minutes steals in the cumestatsplayer result set. |
+| `per_min_turnovers` | character | Turnover or loose-ball metric for per minutes turnovers in the requested NBA or WNBA Stats split. |
+| `per_min_blk` | character | NBA or WNBA Stats value for per minutes blocks in the cumestatsplayer result set. |
+| `per_min_pts` | character | Scoring or score-margin metric for per minutes points in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1418,7 +1222,7 @@ GET /stats/cumestatsplayergames
 | col_name | type | description |
 |---|---|---|
 | `matchup` | character | Matchup. |
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1452,54 +1256,54 @@ GET /stats/cumestatsteam
 | col_name | type | description |
 |---|---|---|
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player` | character | Penalized player name. |
+| `player` | character | Player name. |
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
 | `team_id` | integer | Unique team identifier. |
 | `gp` | integer | Games played. |
-| `gs` | integer |  |
-| `actual_minutes` | character |  |
-| `actual_seconds` | character |  |
-| `fg` | character |  |
+| `gs` | integer | Games started. |
+| `actual_minutes` | character | NBA or WNBA Stats value for actual minutes in the cumestatsteam result set. |
+| `actual_seconds` | character | NBA or WNBA Stats value for actual seconds in the cumestatsteam result set. |
+| `fg` | character | Shooting metric for field goals in the requested NBA or WNBA Stats split. |
 | `fga` | character | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3` | character |  |
+| `fg3` | character | Shooting metric for three-point field goals in the requested NBA or WNBA Stats split. |
 | `fg3a` | character | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ft` | character |  |
+| `ft` | character | NBA or WNBA Stats value for free throws in the cumestatsteam result set. |
 | `fta` | character | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `off_reb` | character |  |
-| `def_reb` | character |  |
-| `tot_reb` | character |  |
+| `off_reb` | character | Rebounding metric for offensive rebounds in the requested NBA or WNBA Stats split. |
+| `def_reb` | character | Rebounding metric for defensive rebounds in the requested NBA or WNBA Stats split. |
+| `tot_reb` | character | Rebounding metric for tot rebounds in the requested NBA or WNBA Stats split. |
 | `ast` | character | Assists. |
 | `pf` | character | Personal fouls. |
-| `dq` | character |  |
+| `dq` | character | NBA or WNBA Stats value for dq in the cumestatsteam result set. |
 | `stl` | character | Steals. |
 | `turnovers` | character | Total turnovers. |
 | `blk` | character | Blocks. |
 | `pts` | character | Points scored. |
-| `max_actual_minutes` | character |  |
-| `max_actual_seconds` | character |  |
-| `max_reb` | character |  |
-| `max_ast` | character |  |
-| `max_stl` | character |  |
-| `max_turnovers` | character |  |
-| `max_blkp` | character |  |
-| `max_pts` | character |  |
-| `avg_actual_minutes` | character |  |
-| `avg_actual_seconds` | character |  |
-| `avg_reb` | character |  |
-| `avg_ast` | character |  |
-| `avg_stl` | character |  |
-| `avg_turnovers` | character |  |
-| `avg_blkp` | character |  |
-| `avg_pts` | character |  |
-| `per_min_reb` | character |  |
-| `per_min_ast` | character |  |
-| `per_min_stl` | character |  |
-| `per_min_turnovers` | character |  |
-| `per_min_blk` | character |  |
-| `per_min_pts` | character |  |
+| `max_actual_minutes` | character | NBA or WNBA Stats value for maximum actual minutes in the cumestatsteam result set. |
+| `max_actual_seconds` | character | NBA or WNBA Stats value for maximum actual seconds in the cumestatsteam result set. |
+| `max_reb` | character | Rebounding metric for maximum rebounds in the requested NBA or WNBA Stats split. |
+| `max_ast` | character | NBA or WNBA Stats value for maximum assists in the cumestatsteam result set. |
+| `max_stl` | character | NBA or WNBA Stats value for maximum steals in the cumestatsteam result set. |
+| `max_turnovers` | character | Turnover or loose-ball metric for maximum turnovers in the requested NBA or WNBA Stats split. |
+| `max_blkp` | character | NBA or WNBA Stats value for maximum blocks percentage in the cumestatsteam result set. |
+| `max_pts` | character | Scoring or score-margin metric for maximum points in the requested NBA or WNBA Stats split. |
+| `avg_actual_minutes` | character | NBA or WNBA Stats value for average actual minutes in the cumestatsteam result set. |
+| `avg_actual_seconds` | character | NBA or WNBA Stats value for average actual seconds in the cumestatsteam result set. |
+| `avg_reb` | character | Rebounding metric for average rebounds in the requested NBA or WNBA Stats split. |
+| `avg_ast` | character | NBA or WNBA Stats value for average assists in the cumestatsteam result set. |
+| `avg_stl` | character | NBA or WNBA Stats value for average steals in the cumestatsteam result set. |
+| `avg_turnovers` | character | Turnover or loose-ball metric for average turnovers in the requested NBA or WNBA Stats split. |
+| `avg_blkp` | character | NBA or WNBA Stats value for average blocks percentage in the cumestatsteam result set. |
+| `avg_pts` | character | Scoring or score-margin metric for average points in the requested NBA or WNBA Stats split. |
+| `per_min_reb` | character | Rebounding metric for per minutes rebounds in the requested NBA or WNBA Stats split. |
+| `per_min_ast` | character | NBA or WNBA Stats value for per minutes assists in the cumestatsteam result set. |
+| `per_min_stl` | character | NBA or WNBA Stats value for per minutes steals in the cumestatsteam result set. |
+| `per_min_turnovers` | character | Turnover or loose-ball metric for per minutes turnovers in the requested NBA or WNBA Stats split. |
+| `per_min_blk` | character | NBA or WNBA Stats value for per minutes blocks in the cumestatsteam result set. |
+| `per_min_pts` | character | Scoring or score-margin metric for per minutes points in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1507,45 +1311,6 @@ GET /stats/cumestatsteam
 
 ```python
 wnba_stats_cumestatsteam(league_id='10')
-```
-
-_Last validated n/a._
-
-## `wnba_stats_cumestatsteamgames`
-
-GET /stats/cumestatsteamgames
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/cumestatsteamgames`
-
-**Valid URL:** [https://stats.wnba.com/stats/cumestatsteamgames?LeagueID=10](https://stats.wnba.com/stats/cumestatsteamgames?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonID` | `season_id_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `TeamID` | `team_id` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-| `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `matchup` | character | Matchup. |
-| `game_id` | integer | Unique game identifier. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_cumestatsteamgames(league_id='10')
 ```
 
 _Last validated n/a._
@@ -1576,7 +1341,7 @@ GET /stats/defensehub
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `dreb` | character | Defensive rebounds. |
+| `def_rim_pct` | numeric | Percentage or rate for defensive rim percentage in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1606,18 +1371,18 @@ GET /stats/draftcombinedrillresults
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer |  |
+| `temp_player_id` | integer | Stats API identifier for temp player identifier associated with this NBA or WNBA Stats row. |
 | `player_id` | integer | Unique player identifier. |
 | `first_name` | character | Player's first name. |
 | `last_name` | character | Player's last name. |
 | `player_name` | character | Player name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
-| `standing_vertical_leap` | character |  |
-| `max_vertical_leap` | character |  |
-| `lane_agility_time` | character |  |
-| `modified_lane_agility_time` | character |  |
-| `three_quarter_sprint` | character |  |
-| `bench_press` | character |  |
+| `standing_vertical_leap` | character | NBA or WNBA Stats value for standing vertical leap in the draftcombinedrillresults result set. |
+| `max_vertical_leap` | character | NBA or WNBA Stats value for maximum vertical leap in the draftcombinedrillresults result set. |
+| `lane_agility_time` | character | Time value for lane agility time in the NBA or WNBA Stats result set. |
+| `modified_lane_agility_time` | character | Time value for modified lane agility time in the NBA or WNBA Stats result set. |
+| `three_quarter_sprint` | character | NBA or WNBA Stats value for three quarter sprint in the draftcombinedrillresults result set. |
+| `bench_press` | character | NBA or WNBA Stats value for bench press in the draftcombinedrillresults result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1647,36 +1412,36 @@ GET /stats/draftcombinenonstationaryshooting
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer |  |
+| `temp_player_id` | integer | Stats API identifier for temp player identifier associated with this NBA or WNBA Stats row. |
 | `player_id` | integer | Unique player identifier. |
 | `first_name` | character | Player's first name. |
 | `last_name` | character | Player's last name. |
 | `player_name` | character | Player name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
-| `off_drib_fifteen_break_left_made` | character |  |
-| `off_drib_fifteen_break_left_attempt` | character |  |
-| `off_drib_fifteen_break_left_pct` | numeric |  |
-| `off_drib_fifteen_top_key_made` | character |  |
-| `off_drib_fifteen_top_key_attempt` | character |  |
-| `off_drib_fifteen_top_key_pct` | numeric |  |
-| `off_drib_fifteen_break_right_made` | character |  |
-| `off_drib_fifteen_break_right_attempt` | character |  |
-| `off_drib_fifteen_break_right_pct` | numeric |  |
-| `off_drib_college_break_left_made` | character |  |
-| `off_drib_college_break_left_attempt` | character |  |
-| `off_drib_college_break_left_pct` | numeric |  |
-| `off_drib_college_top_key_made` | character |  |
-| `off_drib_college_top_key_attempt` | character |  |
-| `off_drib_college_top_key_pct` | numeric |  |
-| `off_drib_college_break_right_made` | character |  |
-| `off_drib_college_break_right_attempt` | character |  |
-| `off_drib_college_break_right_pct` | numeric |  |
-| `on_move_fifteen_made` | character |  |
-| `on_move_fifteen_attempt` | character |  |
-| `on_move_fifteen_pct` | numeric |  |
-| `on_move_college_made` | character |  |
-| `on_move_college_attempt` | character |  |
-| `on_move_college_pct` | numeric |  |
+| `off_drib_fifteen_break_left_made` | character | NBA or WNBA Stats value for offensive drib fifteen break left made in the draftcombinenonstationaryshooting result set. |
+| `off_drib_fifteen_break_left_attempt` | character | NBA or WNBA Stats value for offensive drib fifteen break left attempt in the draftcombinenonstationaryshooting result set. |
+| `off_drib_fifteen_break_left_pct` | numeric | Percentage or rate for offensive drib fifteen break left percentage in the requested NBA or WNBA Stats split. |
+| `off_drib_fifteen_top_key_made` | character | NBA or WNBA Stats value for offensive drib fifteen top key made in the draftcombinenonstationaryshooting result set. |
+| `off_drib_fifteen_top_key_attempt` | character | NBA or WNBA Stats value for offensive drib fifteen top key attempt in the draftcombinenonstationaryshooting result set. |
+| `off_drib_fifteen_top_key_pct` | numeric | Percentage or rate for offensive drib fifteen top key percentage in the requested NBA or WNBA Stats split. |
+| `off_drib_fifteen_break_right_made` | character | NBA or WNBA Stats value for offensive drib fifteen break right made in the draftcombinenonstationaryshooting result set. |
+| `off_drib_fifteen_break_right_attempt` | character | NBA or WNBA Stats value for offensive drib fifteen break right attempt in the draftcombinenonstationaryshooting result set. |
+| `off_drib_fifteen_break_right_pct` | numeric | Percentage or rate for offensive drib fifteen break right percentage in the requested NBA or WNBA Stats split. |
+| `off_drib_college_break_left_made` | character | NBA or WNBA Stats value for offensive drib college break left made in the draftcombinenonstationaryshooting result set. |
+| `off_drib_college_break_left_attempt` | character | NBA or WNBA Stats value for offensive drib college break left attempt in the draftcombinenonstationaryshooting result set. |
+| `off_drib_college_break_left_pct` | numeric | Percentage or rate for offensive drib college break left percentage in the requested NBA or WNBA Stats split. |
+| `off_drib_college_top_key_made` | character | NBA or WNBA Stats value for offensive drib college top key made in the draftcombinenonstationaryshooting result set. |
+| `off_drib_college_top_key_attempt` | character | NBA or WNBA Stats value for offensive drib college top key attempt in the draftcombinenonstationaryshooting result set. |
+| `off_drib_college_top_key_pct` | numeric | Percentage or rate for offensive drib college top key percentage in the requested NBA or WNBA Stats split. |
+| `off_drib_college_break_right_made` | character | NBA or WNBA Stats value for offensive drib college break right made in the draftcombinenonstationaryshooting result set. |
+| `off_drib_college_break_right_attempt` | character | NBA or WNBA Stats value for offensive drib college break right attempt in the draftcombinenonstationaryshooting result set. |
+| `off_drib_college_break_right_pct` | numeric | Percentage or rate for offensive drib college break right percentage in the requested NBA or WNBA Stats split. |
+| `on_move_fifteen_made` | character | NBA or WNBA Stats value for on move fifteen made in the draftcombinenonstationaryshooting result set. |
+| `on_move_fifteen_attempt` | character | NBA or WNBA Stats value for on move fifteen attempt in the draftcombinenonstationaryshooting result set. |
+| `on_move_fifteen_pct` | numeric | Percentage or rate for on move fifteen percentage in the requested NBA or WNBA Stats split. |
+| `on_move_college_made` | character | NBA or WNBA Stats value for on move college made in the draftcombinenonstationaryshooting result set. |
+| `on_move_college_attempt` | character | NBA or WNBA Stats value for on move college attempt in the draftcombinenonstationaryshooting result set. |
+| `on_move_college_pct` | numeric | Percentage or rate for on move college percentage in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1706,24 +1471,24 @@ GET /stats/draftcombineplayeranthro
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer |  |
+| `temp_player_id` | integer | Stats API identifier for temp player identifier associated with this NBA or WNBA Stats row. |
 | `player_id` | integer | Unique player identifier. |
 | `first_name` | character | Player's first name. |
 | `last_name` | character | Player's last name. |
 | `player_name` | character | Player name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
-| `height_wo_shoes` | character |  |
-| `height_wo_shoes_ft_in` | character |  |
-| `height_w_shoes` | character |  |
-| `height_w_shoes_ft_in` | character |  |
+| `height_wo_shoes` | character | NBA or WNBA Stats value for height wo shoes in the draftcombineplayeranthro result set. |
+| `height_wo_shoes_ft_in` | character | NBA or WNBA Stats value for height wo shoes free throws in in the draftcombineplayeranthro result set. |
+| `height_w_shoes` | character | NBA or WNBA Stats value for height w shoes in the draftcombineplayeranthro result set. |
+| `height_w_shoes_ft_in` | character | NBA or WNBA Stats value for height w shoes free throws in in the draftcombineplayeranthro result set. |
 | `weight` | character | Player weight in pounds. |
-| `wingspan` | character |  |
-| `wingspan_ft_in` | character |  |
-| `standing_reach` | character |  |
-| `standing_reach_ft_in` | character |  |
-| `body_fat_pct` | numeric |  |
-| `hand_length` | character |  |
-| `hand_width` | character |  |
+| `wingspan` | character | NBA or WNBA Stats value for wingspan in the draftcombineplayeranthro result set. |
+| `wingspan_ft_in` | character | NBA or WNBA Stats value for wingspan free throws in in the draftcombineplayeranthro result set. |
+| `standing_reach` | character | NBA or WNBA Stats value for standing reach in the draftcombineplayeranthro result set. |
+| `standing_reach_ft_in` | character | NBA or WNBA Stats value for standing reach free throws in in the draftcombineplayeranthro result set. |
+| `body_fat_pct` | numeric | Percentage or rate for body fat percentage in the requested NBA or WNBA Stats split. |
+| `hand_length` | character | NBA or WNBA Stats value for hand length in the draftcombineplayeranthro result set. |
+| `hand_width` | character | NBA or WNBA Stats value for hand width in the draftcombineplayeranthro result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1753,57 +1518,57 @@ GET /stats/draftcombinespotshooting
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `temp_player_id` | integer |  |
+| `temp_player_id` | integer | Stats API identifier for temp player identifier associated with this NBA or WNBA Stats row. |
 | `player_id` | integer | Unique player identifier. |
 | `first_name` | character | Player's first name. |
 | `last_name` | character | Player's last name. |
 | `player_name` | character | Player name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
-| `fifteen_corner_left_made` | character |  |
-| `fifteen_corner_left_attempt` | character |  |
-| `fifteen_corner_left_pct` | numeric |  |
-| `fifteen_break_left_made` | character |  |
-| `fifteen_break_left_attempt` | character |  |
-| `fifteen_break_left_pct` | numeric |  |
-| `fifteen_top_key_made` | character |  |
-| `fifteen_top_key_attempt` | character |  |
-| `fifteen_top_key_pct` | numeric |  |
-| `fifteen_break_right_made` | character |  |
-| `fifteen_break_right_attempt` | character |  |
-| `fifteen_break_right_pct` | numeric |  |
-| `fifteen_corner_right_made` | character |  |
-| `fifteen_corner_right_attempt` | character |  |
-| `fifteen_corner_right_pct` | numeric |  |
-| `college_corner_left_made` | character |  |
-| `college_corner_left_attempt` | character |  |
-| `college_corner_left_pct` | numeric |  |
-| `college_break_left_made` | character |  |
-| `college_break_left_attempt` | character |  |
-| `college_break_left_pct` | numeric |  |
-| `college_top_key_made` | character |  |
-| `college_top_key_attempt` | character |  |
-| `college_top_key_pct` | numeric |  |
-| `college_break_right_made` | character |  |
-| `college_break_right_attempt` | character |  |
-| `college_break_right_pct` | numeric |  |
-| `college_corner_right_made` | character |  |
-| `college_corner_right_attempt` | character |  |
-| `college_corner_right_pct` | numeric |  |
-| `nba_corner_left_made` | character |  |
-| `nba_corner_left_attempt` | character |  |
-| `nba_corner_left_pct` | numeric |  |
-| `nba_break_left_made` | character |  |
-| `nba_break_left_attempt` | character |  |
-| `nba_break_left_pct` | numeric |  |
-| `nba_top_key_made` | character |  |
-| `nba_top_key_attempt` | character |  |
-| `nba_top_key_pct` | numeric |  |
-| `nba_break_right_made` | character |  |
-| `nba_break_right_attempt` | character |  |
-| `nba_break_right_pct` | numeric |  |
-| `nba_corner_right_made` | character |  |
-| `nba_corner_right_attempt` | character |  |
-| `nba_corner_right_pct` | numeric |  |
+| `fifteen_corner_left_made` | character | NBA or WNBA Stats value for fifteen corner left made in the draftcombinespotshooting result set. |
+| `fifteen_corner_left_attempt` | character | NBA or WNBA Stats value for fifteen corner left attempt in the draftcombinespotshooting result set. |
+| `fifteen_corner_left_pct` | numeric | Percentage or rate for fifteen corner left percentage in the requested NBA or WNBA Stats split. |
+| `fifteen_break_left_made` | character | NBA or WNBA Stats value for fifteen break left made in the draftcombinespotshooting result set. |
+| `fifteen_break_left_attempt` | character | NBA or WNBA Stats value for fifteen break left attempt in the draftcombinespotshooting result set. |
+| `fifteen_break_left_pct` | numeric | Percentage or rate for fifteen break left percentage in the requested NBA or WNBA Stats split. |
+| `fifteen_top_key_made` | character | NBA or WNBA Stats value for fifteen top key made in the draftcombinespotshooting result set. |
+| `fifteen_top_key_attempt` | character | NBA or WNBA Stats value for fifteen top key attempt in the draftcombinespotshooting result set. |
+| `fifteen_top_key_pct` | numeric | Percentage or rate for fifteen top key percentage in the requested NBA or WNBA Stats split. |
+| `fifteen_break_right_made` | character | NBA or WNBA Stats value for fifteen break right made in the draftcombinespotshooting result set. |
+| `fifteen_break_right_attempt` | character | NBA or WNBA Stats value for fifteen break right attempt in the draftcombinespotshooting result set. |
+| `fifteen_break_right_pct` | numeric | Percentage or rate for fifteen break right percentage in the requested NBA or WNBA Stats split. |
+| `fifteen_corner_right_made` | character | NBA or WNBA Stats value for fifteen corner right made in the draftcombinespotshooting result set. |
+| `fifteen_corner_right_attempt` | character | NBA or WNBA Stats value for fifteen corner right attempt in the draftcombinespotshooting result set. |
+| `fifteen_corner_right_pct` | numeric | Percentage or rate for fifteen corner right percentage in the requested NBA or WNBA Stats split. |
+| `college_corner_left_made` | character | NBA or WNBA Stats value for college corner left made in the draftcombinespotshooting result set. |
+| `college_corner_left_attempt` | character | NBA or WNBA Stats value for college corner left attempt in the draftcombinespotshooting result set. |
+| `college_corner_left_pct` | numeric | Percentage or rate for college corner left percentage in the requested NBA or WNBA Stats split. |
+| `college_break_left_made` | character | NBA or WNBA Stats value for college break left made in the draftcombinespotshooting result set. |
+| `college_break_left_attempt` | character | NBA or WNBA Stats value for college break left attempt in the draftcombinespotshooting result set. |
+| `college_break_left_pct` | numeric | Percentage or rate for college break left percentage in the requested NBA or WNBA Stats split. |
+| `college_top_key_made` | character | NBA or WNBA Stats value for college top key made in the draftcombinespotshooting result set. |
+| `college_top_key_attempt` | character | NBA or WNBA Stats value for college top key attempt in the draftcombinespotshooting result set. |
+| `college_top_key_pct` | numeric | Percentage or rate for college top key percentage in the requested NBA or WNBA Stats split. |
+| `college_break_right_made` | character | NBA or WNBA Stats value for college break right made in the draftcombinespotshooting result set. |
+| `college_break_right_attempt` | character | NBA or WNBA Stats value for college break right attempt in the draftcombinespotshooting result set. |
+| `college_break_right_pct` | numeric | Percentage or rate for college break right percentage in the requested NBA or WNBA Stats split. |
+| `college_corner_right_made` | character | NBA or WNBA Stats value for college corner right made in the draftcombinespotshooting result set. |
+| `college_corner_right_attempt` | character | NBA or WNBA Stats value for college corner right attempt in the draftcombinespotshooting result set. |
+| `college_corner_right_pct` | numeric | Percentage or rate for college corner right percentage in the requested NBA or WNBA Stats split. |
+| `nba_corner_left_made` | character | NBA or WNBA Stats value for NBA corner left made in the draftcombinespotshooting result set. |
+| `nba_corner_left_attempt` | character | NBA or WNBA Stats value for NBA corner left attempt in the draftcombinespotshooting result set. |
+| `nba_corner_left_pct` | numeric | Percentage or rate for NBA corner left percentage in the requested NBA or WNBA Stats split. |
+| `nba_break_left_made` | character | NBA or WNBA Stats value for NBA break left made in the draftcombinespotshooting result set. |
+| `nba_break_left_attempt` | character | NBA or WNBA Stats value for NBA break left attempt in the draftcombinespotshooting result set. |
+| `nba_break_left_pct` | numeric | Percentage or rate for NBA break left percentage in the requested NBA or WNBA Stats split. |
+| `nba_top_key_made` | character | NBA or WNBA Stats value for NBA top key made in the draftcombinespotshooting result set. |
+| `nba_top_key_attempt` | character | NBA or WNBA Stats value for NBA top key attempt in the draftcombinespotshooting result set. |
+| `nba_top_key_pct` | numeric | Percentage or rate for NBA top key percentage in the requested NBA or WNBA Stats split. |
+| `nba_break_right_made` | character | NBA or WNBA Stats value for NBA break right made in the draftcombinespotshooting result set. |
+| `nba_break_right_attempt` | character | NBA or WNBA Stats value for NBA break right attempt in the draftcombinespotshooting result set. |
+| `nba_break_right_pct` | numeric | Percentage or rate for NBA break right percentage in the requested NBA or WNBA Stats split. |
+| `nba_corner_right_made` | character | NBA or WNBA Stats value for NBA corner right made in the draftcombinespotshooting result set. |
+| `nba_corner_right_attempt` | character | NBA or WNBA Stats value for NBA corner right attempt in the draftcombinespotshooting result set. |
+| `nba_corner_right_pct` | numeric | Percentage or rate for NBA corner right percentage in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1839,47 +1604,47 @@ GET /stats/draftcombinestats
 | `last_name` | character | Player's last name. |
 | `player_name` | character | Player name. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
-| `height_wo_shoes` | character |  |
-| `height_wo_shoes_ft_in` | character |  |
-| `height_w_shoes` | character |  |
-| `height_w_shoes_ft_in` | character |  |
+| `height_wo_shoes` | character | NBA or WNBA Stats value for height wo shoes in the draftcombinestats result set. |
+| `height_wo_shoes_ft_in` | character | NBA or WNBA Stats value for height wo shoes free throws in in the draftcombinestats result set. |
+| `height_w_shoes` | character | NBA or WNBA Stats value for height w shoes in the draftcombinestats result set. |
+| `height_w_shoes_ft_in` | character | NBA or WNBA Stats value for height w shoes free throws in in the draftcombinestats result set. |
 | `weight` | character | Player weight in pounds. |
-| `wingspan` | character |  |
-| `wingspan_ft_in` | character |  |
-| `standing_reach` | character |  |
-| `standing_reach_ft_in` | character |  |
-| `body_fat_pct` | numeric |  |
-| `hand_length` | character |  |
-| `hand_width` | character |  |
-| `standing_vertical_leap` | character |  |
-| `max_vertical_leap` | character |  |
-| `lane_agility_time` | character |  |
-| `modified_lane_agility_time` | character |  |
-| `three_quarter_sprint` | character |  |
-| `bench_press` | character |  |
-| `spot_fifteen_corner_left` | character |  |
-| `spot_fifteen_break_left` | character |  |
-| `spot_fifteen_top_key` | character |  |
-| `spot_fifteen_break_right` | character |  |
-| `spot_fifteen_corner_right` | character |  |
-| `spot_college_corner_left` | character |  |
-| `spot_college_break_left` | character |  |
-| `spot_college_top_key` | character |  |
-| `spot_college_break_right` | character |  |
-| `spot_college_corner_right` | character |  |
-| `spot_nba_corner_left` | character |  |
-| `spot_nba_break_left` | character |  |
-| `spot_nba_top_key` | character |  |
-| `spot_nba_break_right` | character |  |
-| `spot_nba_corner_right` | character |  |
-| `off_drib_fifteen_break_left` | character |  |
-| `off_drib_fifteen_top_key` | character |  |
-| `off_drib_fifteen_break_right` | character |  |
-| `off_drib_college_break_left` | character |  |
-| `off_drib_college_top_key` | character |  |
-| `off_drib_college_break_right` | character |  |
-| `on_move_fifteen` | character |  |
-| `on_move_college` | character |  |
+| `wingspan` | character | NBA or WNBA Stats value for wingspan in the draftcombinestats result set. |
+| `wingspan_ft_in` | character | NBA or WNBA Stats value for wingspan free throws in in the draftcombinestats result set. |
+| `standing_reach` | character | NBA or WNBA Stats value for standing reach in the draftcombinestats result set. |
+| `standing_reach_ft_in` | character | NBA or WNBA Stats value for standing reach free throws in in the draftcombinestats result set. |
+| `body_fat_pct` | numeric | Percentage or rate for body fat percentage in the requested NBA or WNBA Stats split. |
+| `hand_length` | character | NBA or WNBA Stats value for hand length in the draftcombinestats result set. |
+| `hand_width` | character | NBA or WNBA Stats value for hand width in the draftcombinestats result set. |
+| `standing_vertical_leap` | character | NBA or WNBA Stats value for standing vertical leap in the draftcombinestats result set. |
+| `max_vertical_leap` | character | NBA or WNBA Stats value for maximum vertical leap in the draftcombinestats result set. |
+| `lane_agility_time` | character | Time value for lane agility time in the NBA or WNBA Stats result set. |
+| `modified_lane_agility_time` | character | Time value for modified lane agility time in the NBA or WNBA Stats result set. |
+| `three_quarter_sprint` | character | NBA or WNBA Stats value for three quarter sprint in the draftcombinestats result set. |
+| `bench_press` | character | NBA or WNBA Stats value for bench press in the draftcombinestats result set. |
+| `spot_fifteen_corner_left` | character | NBA or WNBA Stats value for spot fifteen corner left in the draftcombinestats result set. |
+| `spot_fifteen_break_left` | character | NBA or WNBA Stats value for spot fifteen break left in the draftcombinestats result set. |
+| `spot_fifteen_top_key` | character | NBA or WNBA Stats value for spot fifteen top key in the draftcombinestats result set. |
+| `spot_fifteen_break_right` | character | NBA or WNBA Stats value for spot fifteen break right in the draftcombinestats result set. |
+| `spot_fifteen_corner_right` | character | NBA or WNBA Stats value for spot fifteen corner right in the draftcombinestats result set. |
+| `spot_college_corner_left` | character | NBA or WNBA Stats value for spot college corner left in the draftcombinestats result set. |
+| `spot_college_break_left` | character | NBA or WNBA Stats value for spot college break left in the draftcombinestats result set. |
+| `spot_college_top_key` | character | NBA or WNBA Stats value for spot college top key in the draftcombinestats result set. |
+| `spot_college_break_right` | character | NBA or WNBA Stats value for spot college break right in the draftcombinestats result set. |
+| `spot_college_corner_right` | character | NBA or WNBA Stats value for spot college corner right in the draftcombinestats result set. |
+| `spot_nba_corner_left` | character | NBA or WNBA Stats value for spot NBA corner left in the draftcombinestats result set. |
+| `spot_nba_break_left` | character | NBA or WNBA Stats value for spot NBA break left in the draftcombinestats result set. |
+| `spot_nba_top_key` | character | NBA or WNBA Stats value for spot NBA top key in the draftcombinestats result set. |
+| `spot_nba_break_right` | character | NBA or WNBA Stats value for spot NBA break right in the draftcombinestats result set. |
+| `spot_nba_corner_right` | character | NBA or WNBA Stats value for spot NBA corner right in the draftcombinestats result set. |
+| `off_drib_fifteen_break_left` | character | NBA or WNBA Stats value for offensive drib fifteen break left in the draftcombinestats result set. |
+| `off_drib_fifteen_top_key` | character | NBA or WNBA Stats value for offensive drib fifteen top key in the draftcombinestats result set. |
+| `off_drib_fifteen_break_right` | character | NBA or WNBA Stats value for offensive drib fifteen break right in the draftcombinestats result set. |
+| `off_drib_college_break_left` | character | NBA or WNBA Stats value for offensive drib college break left in the draftcombinestats result set. |
+| `off_drib_college_top_key` | character | NBA or WNBA Stats value for offensive drib college top key in the draftcombinestats result set. |
+| `off_drib_college_break_right` | character | NBA or WNBA Stats value for offensive drib college break right in the draftcombinestats result set. |
+| `on_move_fifteen` | character | NBA or WNBA Stats value for on move fifteen in the draftcombinestats result set. |
+| `on_move_college` | character | NBA or WNBA Stats value for on move college in the draftcombinestats result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1921,7 +1686,7 @@ GET /stats/drafthistory
 | `round_number` | integer | Numeric round. |
 | `round_pick` | integer | Round pick. |
 | `overall_pick` | integer | Overall pick. |
-| `draft_type` | character |  |
+| `draft_type` | character | NBA or WNBA Stats value for draft type in the drafthistory result set. |
 | `team_id` | integer | Unique team identifier. |
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -1982,8 +1747,8 @@ GET /stats/fantasywidget
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `gp` | integer | Games played. |
 | `min` | integer | Minutes played. |
-| `fan_duel_pts` | character |  |
-| `nba_fantasy_pts` | character |  |
+| `fan_duel_pts` | character | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
+| `nba_fantasy_pts` | character | Nba fantasy points for the requested NBA or WNBA Stats split. |
 | `pts` | character | Points scored. |
 | `reb` | character | Total rebounds. |
 | `ast` | character | Assists. |
@@ -2030,14 +1795,14 @@ GET /stats/franchisehistory
 | `start_year` | character | Span starting year. |
 | `end_year` | character | Span ending year. |
 | `years` | integer | Years. |
-| `games` | integer | Number of games included in the ATS summary. |
+| `games` | integer | Games played. |
 | `wins` | integer | Total wins. |
 | `losses` | integer | Total losses. |
 | `win_pct` | numeric | Win percentage (0-1 decimal). |
-| `po_appearances` | integer |  |
-| `div_titles` | integer |  |
-| `conf_titles` | integer |  |
-| `league_titles` | integer |  |
+| `po_appearances` | integer | NBA or WNBA Stats value for playoff appearances in the franchisehistory result set. |
+| `div_titles` | integer | NBA or WNBA Stats value for div titles in the franchisehistory result set. |
+| `conf_titles` | integer | NBA or WNBA Stats value for conf titles in the franchisehistory result set. |
+| `league_titles` | integer | NBA or WNBA Stats value for league titles in the franchisehistory result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2069,20 +1834,20 @@ GET /stats/franchiseleaders
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `pts` | integer | Points scored. |
-| `pts_person_id` | integer |  |
-| `pts_player` | character |  |
+| `pts_person_id` | integer | Stats API identifier for points person identifier associated with this NBA or WNBA Stats row. |
+| `pts_player` | character | Scoring or score-margin metric for points player in the requested NBA or WNBA Stats split. |
 | `ast` | integer | Assists. |
-| `ast_person_id` | integer |  |
-| `ast_player` | character |  |
+| `ast_person_id` | integer | Stats API identifier for assists person identifier associated with this NBA or WNBA Stats row. |
+| `ast_player` | character | NBA or WNBA Stats value for assists player in the franchiseleaders result set. |
 | `reb` | integer | Total rebounds. |
-| `reb_person_id` | integer |  |
-| `reb_player` | character |  |
+| `reb_person_id` | integer | Stats API identifier for rebounds person identifier associated with this NBA or WNBA Stats row. |
+| `reb_player` | character | Rebounding metric for rebounds player in the requested NBA or WNBA Stats split. |
 | `blk` | integer | Blocks. |
-| `blk_person_id` | integer |  |
-| `blk_player` | character |  |
+| `blk_person_id` | integer | Stats API identifier for blocks person identifier associated with this NBA or WNBA Stats row. |
+| `blk_player` | character | NBA or WNBA Stats value for blocks player in the franchiseleaders result set. |
 | `stl` | integer | Steals. |
-| `stl_person_id` | integer |  |
-| `stl_player` | character |  |
+| `stl_person_id` | integer | Stats API identifier for steals person identifier associated with this NBA or WNBA Stats row. |
+| `stl_player` | character | NBA or WNBA Stats value for steals player in the franchiseleaders result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2090,87 +1855,6 @@ GET /stats/franchiseleaders
 
 ```python
 wnba_stats_franchiseleaders(league_id='10')
-```
-
-_Last validated n/a._
-
-## `wnba_stats_franchiseleaderswrank`
-
-GET /stats/franchiseleaderswrank
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseleaderswrank`
-
-**Valid URL:** [https://stats.wnba.com/stats/franchiseleaderswrank](https://stats.wnba.com/stats/franchiseleaderswrank)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_wnba_stats_result_sets`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_franchiseleaderswrank()
-```
-
-_Last validated n/a._
-
-## `wnba_stats_franchiseplayers`
-
-GET /stats/franchiseplayers
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseplayers`
-
-**Valid URL:** [https://stats.wnba.com/stats/franchiseplayers?LeagueID=10](https://stats.wnba.com/stats/franchiseplayers?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `TeamID` | `team_id` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `league_id` | integer | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team` | character | Team-side label or team identifier. |
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player` | character | Penalized player name. |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `active_with_team` | character |  |
-| `gp` | integer | Games played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `pf` | character | Personal fouls. |
-| `stl` | character | Steals. |
-| `tov` | character | Turnovers. |
-| `blk` | character | Blocks. |
-| `pts` | character | Points scored. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_franchiseplayers(league_id='10')
 ```
 
 _Last validated n/a._
@@ -2193,18 +1877,18 @@ GET /stats/gamerotation
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `team_id` | integer | Unique team identifier. |
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player_first` | character |  |
-| `player_last` | character |  |
-| `in_time_real` | character |  |
-| `out_time_real` | character |  |
-| `player_pts` | character |  |
-| `pt_diff` | character |  |
-| `usg_pct` | numeric |  |
+| `player_first` | character | NBA or WNBA Stats value for player first in the gamerotation result set. |
+| `player_last` | character | NBA or WNBA Stats value for player last in the gamerotation result set. |
+| `in_time_real` | numeric | Real-time clock value when the player entered the game rotation stint. |
+| `out_time_real` | numeric | Real-time clock value when the player exited the game rotation stint. |
+| `player_pts` | integer | Scoring or score-margin metric for player points in the requested NBA or WNBA Stats split. |
+| `pt_diff` | numeric | NBA or WNBA Stats value for pt diff in the gamerotation result set. |
+| `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2247,9 +1931,9 @@ GET /stats/homepageleaders
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `efg_pct` | numeric |  |
+| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
 | `ts_pct` | numeric | True shooting percentage (0-1). |
-| `pts_per48` | character |  |
+| `pts_per48` | character | Scoring or score-margin metric for points per48 in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2288,7 +1972,7 @@ GET /stats/homepagev2
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `pts` | character | Points scored. |
+| `blk` | character | Blocks. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2296,6 +1980,59 @@ GET /stats/homepagev2
 
 ```python
 wnba_stats_homepagev2(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_hustlestatsboxscore`
+
+GET /stats/hustlestatsboxscore
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/hustlestatsboxscore`
+
+**Valid URL:** [https://stats.wnba.com/stats/hustlestatsboxscore](https://stats.wnba.com/stats/hustlestatsboxscore)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameID` | `game_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | character | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `player_id` | character | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `pts` | integer | Points scored. |
+| `contested_shots` | numeric | Defensively contested shots. |
+| `contested_shots_2pt` | numeric | Shooting metric for contested shots 2pt in the requested NBA or WNBA Stats split. |
+| `contested_shots_3pt` | numeric | Shooting metric for contested shots 3pt in the requested NBA or WNBA Stats split. |
+| `deflections` | numeric | Defensive deflections. |
+| `charges_drawn` | numeric | Charges drawn. |
+| `screen_assists` | numeric | Screen assists (resulting in a basket). |
+| `screen_ast_pts` | numeric | Scoring or score-margin metric for screen assists points in the requested NBA or WNBA Stats split. |
+| `off_loose_balls_recovered` | numeric | Turnover or loose-ball metric for offensive loose balls recovered in the requested NBA or WNBA Stats split. |
+| `def_loose_balls_recovered` | numeric | Turnover or loose-ball metric for defensive loose balls recovered in the requested NBA or WNBA Stats split. |
+| `loose_balls_recovered` | numeric | Turnover or loose-ball metric for loose balls recovered in the requested NBA or WNBA Stats split. |
+| `off_boxouts` | numeric | Rebounding metric for offensive boxouts in the requested NBA or WNBA Stats split. |
+| `def_boxouts` | numeric | Rebounding metric for defensive boxouts in the requested NBA or WNBA Stats split. |
+| `box_out_player_team_rebs` | numeric | Rebounding metric for box out player team rebs in the requested NBA or WNBA Stats split. |
+| `box_out_player_rebs` | numeric | Rebounding metric for box out player rebs in the requested NBA or WNBA Stats split. |
+| `box_outs` | numeric | Box-outs executed. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_hustlestatsboxscore()
 ```
 
 _Last validated n/a._
@@ -2325,31 +2062,31 @@ GET /stats/infographicfanduelplayer
 | `jersey_num` | character | Jersey number worn by the player. |
 | `player_position` | character | Position of the player accordinng to NGS |
 | `location` | character | Filter results by game location. |
-| `fan_duel_pts` | character |  |
-| `nba_fantasy_pts` | character |  |
-| `usg_pct` | numeric |  |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `fan_duel_pts` | numeric | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
+| `min` | numeric | Minutes played. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Total rebounds. |
+| `ast` | integer | Assists. |
+| `tov` | integer | Turnovers. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | integer | Personal fouls. |
+| `pfd` | integer | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | integer | Points scored. |
+| `plus_minus` | integer | Plus/minus point differential while on court. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2384,10 +2121,10 @@ GET /stats/leaderstiles
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
+| `rank` | character | Whether to include statistical ranks in the returned table. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `season_year` | character | Season year string ('YYYY-YY' format). |
 | `pts` | character | Points scored. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -2442,7 +2179,7 @@ GET /stats/leaguedashlineups
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_id` | character | ESPN group id. |
 | `group_name` | character | Group name (conference / division). |
 | `team_id` | integer | Unique team identifier. |
@@ -2468,38 +2205,38 @@ GET /stats/leaguedashlineups
 | `tov` | numeric | Turnovers. |
 | `stl` | numeric | Steals. |
 | `blk` | numeric | Blocks. |
-| `blka` | numeric |  |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | numeric | Personal fouls. |
-| `pfd` | numeric |  |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | numeric | Points scored. |
 | `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `fgm_rank` | integer |  |
-| `fga_rank` | integer |  |
-| `fg_pct_rank` | integer |  |
-| `fg3m_rank` | integer |  |
-| `fg3a_rank` | integer |  |
-| `fg3_pct_rank` | integer |  |
-| `ftm_rank` | integer |  |
-| `fta_rank` | integer |  |
-| `ft_pct_rank` | integer |  |
-| `oreb_rank` | integer |  |
-| `dreb_rank` | integer |  |
-| `reb_rank` | integer |  |
-| `ast_rank` | integer |  |
-| `tov_rank` | integer |  |
-| `stl_rank` | integer |  |
-| `blk_rank` | integer |  |
-| `blka_rank` | integer |  |
-| `pf_rank` | integer |  |
-| `pfd_rank` | integer |  |
-| `pts_rank` | integer |  |
-| `plus_minus_rank` | integer |  |
-| `sum_time_played` | integer |  |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `sum_time_played` | integer | Time value for sum time played in the NBA or WNBA Stats result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2564,7 +2301,7 @@ GET /stats/leaguedashplayerbiostats
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `age` | numeric | Player age (in years). |
 | `player_height` | character | Participant height (e.g. "6' 5\""). |
-| `player_height_inches` | integer |  |
+| `player_height_inches` | integer | NBA or WNBA Stats value for player height inches in the leaguedashplayerbiostats result set. |
 | `player_weight` | character | Participant weight in pounds. |
 | `college` | character | College or school attended. |
 | `country` | character | Country (full name or code). |
@@ -2576,11 +2313,11 @@ GET /stats/leaguedashplayerbiostats
 | `reb` | numeric | Total rebounds. |
 | `ast` | numeric | Assists. |
 | `net_rating` | numeric | Net rating (off rating - def rating). |
-| `oreb_pct` | numeric |  |
-| `dreb_pct` | numeric |  |
-| `usg_pct` | numeric |  |
+| `oreb_pct` | numeric | Percentage or rate for offensive rebounds percentage in the requested NBA or WNBA Stats split. |
+| `dreb_pct` | numeric | Percentage or rate for defensive rebounds percentage in the requested NBA or WNBA Stats split. |
+| `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
 | `ts_pct` | numeric | True shooting percentage (0-1). |
-| `ast_pct` | numeric |  |
+| `ast_pct` | numeric | Assist percentage. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2646,7 +2383,7 @@ GET /stats/leaguedashplayerclutch
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
@@ -2673,45 +2410,45 @@ GET /stats/leaguedashplayerclutch
 | `tov` | character | Turnovers. |
 | `stl` | character | Steals. |
 | `blk` | character | Blocks. |
-| `blka` | character |  |
+| `blka` | character | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | character | Personal fouls. |
-| `pfd` | character |  |
+| `pfd` | character | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | character | Points scored. |
 | `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `nba_fantasy_pts` | character | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | character | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | character | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `gp_rank` | character | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | character | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | character | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | numeric | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | character | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | character | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | character | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | numeric | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | character | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | character | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | numeric | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | character | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | character | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | numeric | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | character | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | character | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | character | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | character | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | character | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | character | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | character | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | character | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | character | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | character | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | character | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | character | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | character | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | character | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | character | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `cfid` | character | NBA Stats custom-filter identifier attached to the row or request context. |
+| `cfparams` | character | NBA Stats custom-filter parameter string attached to the row or request context. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2775,38 +2512,38 @@ GET /stats/leaguedashplayerstats
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique stats.nba.com identifier for the player. |
-| `player_name` | character | Full display name of the player as used by the NBA or WNBA. |
-| `nickname` | character | Common nickname or shortened name for the player, if available. |
-| `team_id` | integer | Unique stats.nba.com identifier for the player's team during the span. |
-| `team_abbreviation` | character | Two- or three-letter abbreviation for the player's team. |
-| `age` | numeric | Player's age at the start of the season or as of the stat snapshot date. |
-| `gp` | integer | Number of games in which the player appeared during the span. |
-| `w` | integer | Number of games the player's team won while the player was active in the span. |
-| `l` | integer | Number of games the player's team lost while the player was active in the span. |
-| `w_pct` | numeric | Win percentage for games in which the player appeared (wins divided by games played). |
-| `min` | numeric | Total or average minutes played, depending on the requested per-mode. |
-| `fgm` | numeric | Field goals made (total or per-game depending on the requested PerMode). |
-| `fga` | numeric | Field goal attempts (total or per-game depending on the requested PerMode). |
-| `fg_pct` | numeric | Field goal percentage (fgm divided by fga). |
-| `fg3m` | numeric | Three-point field goals made (total or per-game depending on the requested PerMode). |
-| `fg3a` | numeric | Three-point field goal attempts (total or per-game depending on the requested PerMode). |
-| `fg3_pct` | numeric | Three-point field goal percentage (fg3m divided by fg3a). |
-| `ftm` | numeric | Free throws made (total or per-game depending on the requested PerMode). |
-| `fta` | numeric | Free throw attempts (total or per-game depending on the requested PerMode). |
-| `ft_pct` | numeric | Free throw percentage (ftm divided by fta). |
-| `oreb` | numeric | Offensive rebounds (total or per-game depending on the requested PerMode). |
-| `dreb` | numeric | Defensive rebounds (total or per-game depending on the requested PerMode). |
-| `reb` | numeric | Total rebounds — sum of offensive and defensive rebounds. |
-| `ast` | numeric | Assists (total or per-game depending on the requested PerMode). |
-| `tov` | numeric | Turnovers committed (total or per-game depending on the requested PerMode). |
-| `stl` | numeric | Steals recorded (total or per-game depending on the requested PerMode). |
-| `blk` | numeric | Blocked shots (total or per-game depending on the requested PerMode). |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `age` | numeric | Player age (in years). |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
 | `blka` | numeric | Blocked shot attempts against the player — shots the player attempted that were blocked by opponents. |
-| `pf` | numeric | Personal fouls committed (total or per-game depending on the requested PerMode). |
+| `pf` | numeric | Personal fouls. |
 | `pfd` | numeric | Personal fouls drawn — fouls committed by opponents against this player. |
-| `pts` | numeric | Points scored (total or per-game depending on the requested PerMode). |
-| `plus_minus` | numeric | Plus/minus: team point differential while the player was on the court. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
 | `nba_fantasy_pts` | numeric | NBA fantasy points accrued under the standard NBA fantasy scoring formula. |
 | `dd2` | integer | Number of double-doubles recorded over the span. |
 | `td3` | integer | Number of triple-doubles recorded over the span. |
@@ -2849,6 +2586,78 @@ GET /stats/leaguedashplayerstats
 
 ```python
 wnba_stats_leaguedashplayerstats(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_leaguedashptdefend`
+
+GET /stats/leaguedashptdefend
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/leaguedashptdefend`
+
+**Valid URL:** [https://stats.wnba.com/stats/leaguedashptdefend?LeagueID=10](https://stats.wnba.com/stats/leaguedashptdefend?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `College` | `college_nullable` |  |  | `Y` |  |
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `Country` | `country_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `DefenseCategory` | `defense_category` |  |  | `Y` |  |
+| `Division` | `division_nullable` |  |  | `Y` |  |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `Height` | `height_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Month` | `month_nullable` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
+| `Period` | `period_nullable` |  |  | `Y` |  |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
+| `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `Weight` | `weight_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `close_def_person_id` | integer | Stats API identifier for close defensive person identifier associated with this NBA or WNBA Stats row. |
+| `player_name` | character | Player name. |
+| `player_last_team_id` | integer | Stats API identifier for player last team identifier associated with this NBA or WNBA Stats row. |
+| `player_last_team_abbreviation` | character | NBA or WNBA Stats value for player last team abbreviation in the leaguedashptdefend result set. |
+| `player_position` | character | Position of the player accordinng to NGS |
+| `age` | numeric | Player age (in years). |
+| `gp` | integer | Games played. |
+| `g` | integer | Goals (skaters). |
+| `freq` | numeric | NBA or WNBA Stats value for freq in the leaguedashptdefend result set. |
+| `d_fgm` | numeric | Shooting metric for d fgm in the requested NBA or WNBA Stats split. |
+| `d_fga` | numeric | Shooting metric for d fga in the requested NBA or WNBA Stats split. |
+| `d_fg_pct` | numeric | Percentage or rate for d field goals percentage in the requested NBA or WNBA Stats split. |
+| `normal_fg_pct` | numeric | Percentage or rate for normal field goals percentage in the requested NBA or WNBA Stats split. |
+| `pct_plusminus` | numeric | Percentage share of plusminus for the requested NBA or WNBA Stats split. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_leaguedashptdefend(league_id='10')
 ```
 
 _Last validated n/a._
@@ -2924,39 +2733,39 @@ GET /stats/leaguedashteamclutch
 | `tov` | character | Turnovers. |
 | `stl` | character | Steals. |
 | `blk` | character | Blocks. |
-| `blka` | character |  |
+| `blka` | character | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | character | Personal fouls. |
-| `pfd` | character |  |
+| `pfd` | character | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | character | Points scored. |
 | `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `gp_rank` | character | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | character | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | character | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | numeric | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | character | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | character | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | character | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | numeric | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | character | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | character | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | numeric | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | character | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | character | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | numeric | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | character | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | character | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | character | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | character | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | character | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | character | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | character | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | character | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | character | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | character | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | character | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | character | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `cfid` | character | NBA Stats custom-filter identifier attached to the row or request context. |
+| `cfparams` | character | NBA Stats custom-filter parameter string attached to the row or request context. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3037,37 +2846,37 @@ GET /stats/leaguedashteamstats
 | `tov` | numeric | Turnovers. |
 | `stl` | numeric | Steals. |
 | `blk` | numeric | Blocks. |
-| `blka` | numeric |  |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | numeric | Personal fouls. |
-| `pfd` | numeric |  |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | numeric | Points scored. |
 | `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `fgm_rank` | integer |  |
-| `fga_rank` | integer |  |
-| `fg_pct_rank` | integer |  |
-| `fg3m_rank` | integer |  |
-| `fg3a_rank` | integer |  |
-| `fg3_pct_rank` | integer |  |
-| `ftm_rank` | integer |  |
-| `fta_rank` | integer |  |
-| `ft_pct_rank` | integer |  |
-| `oreb_rank` | integer |  |
-| `dreb_rank` | integer |  |
-| `reb_rank` | integer |  |
-| `ast_rank` | integer |  |
-| `tov_rank` | integer |  |
-| `stl_rank` | integer |  |
-| `blk_rank` | integer |  |
-| `blka_rank` | integer |  |
-| `pf_rank` | integer |  |
-| `pfd_rank` | integer |  |
-| `pts_rank` | integer |  |
-| `plus_minus_rank` | integer |  |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3312,7 +3121,7 @@ GET /stats/leagueleaders
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `rank` | character | Whether to include statistical ranks in the returned table. |
-| `player` | character | Penalized player name. |
+| `player` | character | Player name. |
 | `team` | character | Team-side label or team identifier. |
 | `gp` | integer | Games played. |
 | `min` | integer | Minutes played. |
@@ -3335,8 +3144,8 @@ GET /stats/leagueleaders
 | `pf` | character | Personal fouls. |
 | `pts` | character | Points scored. |
 | `eff` | character | Eff. |
-| `ast_tov` | character |  |
-| `stl_tov` | character |  |
+| `ast_tov` | character | Assist-to-turnover ratio for the requested NBA or WNBA Stats split. |
+| `stl_tov` | character | Turnover or loose-ball metric for steals turnovers in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3396,25 +3205,25 @@ GET /stats/leaguelineupviz
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `min` | integer | Minutes played. |
-| `off_rating` | character |  |
-| `def_rating` | character |  |
+| `off_rating` | character | Offensive rating for the requested NBA or WNBA Stats split. |
+| `def_rating` | character | Defensive rating for the requested NBA or WNBA Stats split. |
 | `net_rating` | character | Net rating (off rating - def rating). |
 | `pace` | character | Possessions per 48 minutes. |
 | `ts_pct` | numeric | True shooting percentage (0-1). |
-| `fta_rate` | character |  |
-| `tm_ast_pct` | numeric |  |
-| `pct_fga_2pt` | numeric |  |
-| `pct_fga_3pt` | numeric |  |
-| `pct_pts_2pt_mr` | numeric |  |
-| `pct_pts_fb` | numeric |  |
-| `pct_pts_ft` | numeric |  |
-| `pct_pts_paint` | numeric |  |
-| `pct_ast_fgm` | numeric |  |
-| `pct_uast_fgm` | numeric |  |
-| `opp_fg3_pct` | numeric |  |
-| `opp_efg_pct` | numeric |  |
-| `opp_fta_rate` | character |  |
-| `opp_tov_pct` | numeric |  |
+| `fta_rate` | character | NBA or WNBA Stats value for fta rate in the leaguelineupviz result set. |
+| `tm_ast_pct` | numeric | Percentage or rate for team assists percentage in the requested NBA or WNBA Stats split. |
+| `pct_fga_2pt` | numeric | Percentage share of fga 2pt for the requested NBA or WNBA Stats split. |
+| `pct_fga_3pt` | numeric | Percentage share of fga 3pt for the requested NBA or WNBA Stats split. |
+| `pct_pts_2pt_mr` | numeric | Percentage share of points 2pt mr for the requested NBA or WNBA Stats split. |
+| `pct_pts_fb` | numeric | Percentage share of points fb for the requested NBA or WNBA Stats split. |
+| `pct_pts_ft` | numeric | Percentage share of points free throws for the requested NBA or WNBA Stats split. |
+| `pct_pts_paint` | numeric | Percentage share of points paint for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `opp_fg3_pct` | numeric | Opponent three-point field goals percentage for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_efg_pct` | numeric | Opponent efg percentage for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_fta_rate` | character | Opponent fta rate for the requested NBA or WNBA team, player, lineup, or game split. |
+| `opp_tov_pct` | numeric | Opponent turnovers percentage for the requested NBA or WNBA team, player, lineup, or game split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3463,65 +3272,65 @@ GET /stats/leagueplayerondetails
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `vs_player_id` | integer |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
+| `vs_player_id` | integer | Stats API identifier for vs player identifier associated with this NBA or WNBA Stats row. |
+| `vs_player_name` | character | Display name for vs player name associated with this NBA or WNBA Stats row. |
+| `court_status` | character | Indicates whether the compared player was on court or off court for the split row. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3557,32 +3366,32 @@ GET /stats/leagueseasonmatchups
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Unique season identifier. |
-| `off_player_id` | integer |  |
-| `off_player_name` | character |  |
-| `def_player_id` | integer |  |
-| `def_player_name` | character |  |
+| `season_id` | character | Unique season identifier. |
+| `off_player_id` | integer | Stats API identifier for offensive player identifier associated with this NBA or WNBA Stats row. |
+| `off_player_name` | character | Display name for offensive player name associated with this NBA or WNBA Stats row. |
+| `def_player_id` | integer | Stats API identifier for defensive player identifier associated with this NBA or WNBA Stats row. |
+| `def_player_name` | character | Display name for defensive player name associated with this NBA or WNBA Stats row. |
 | `gp` | integer | Games played. |
-| `matchup_min` | character |  |
-| `partial_poss` | character |  |
-| `player_pts` | character |  |
-| `team_pts` | character |  |
-| `matchup_ast` | character |  |
-| `matchup_tov` | character |  |
-| `matchup_blk` | character |  |
-| `matchup_fgm` | character |  |
-| `matchup_fga` | character |  |
-| `matchup_fg_pct` | numeric |  |
-| `matchup_fg3m` | character |  |
-| `matchup_fg3a` | character |  |
-| `matchup_fg3_pct` | numeric |  |
-| `help_blk` | character |  |
-| `help_fgm` | character |  |
-| `help_fga` | character |  |
-| `help_fg_perc` | character |  |
-| `matchup_ftm` | character |  |
-| `matchup_fta` | character |  |
-| `sfl` | character |  |
+| `matchup_min` | numeric | NBA or WNBA Stats value for matchup minutes in the leagueseasonmatchups result set. |
+| `partial_poss` | numeric | Estimated partial possessions credited to the stint or rotation interval. |
+| `player_pts` | numeric | Scoring or score-margin metric for player points in the requested NBA or WNBA Stats split. |
+| `team_pts` | numeric | Scoring or score-margin metric for team points in the requested NBA or WNBA Stats split. |
+| `matchup_ast` | numeric | NBA or WNBA Stats value for matchup assists in the leagueseasonmatchups result set. |
+| `matchup_tov` | numeric | Turnover or loose-ball metric for matchup turnovers in the requested NBA or WNBA Stats split. |
+| `matchup_blk` | numeric | NBA or WNBA Stats value for matchup blocks in the leagueseasonmatchups result set. |
+| `matchup_fgm` | numeric | Shooting metric for matchup fgm in the requested NBA or WNBA Stats split. |
+| `matchup_fga` | numeric | Shooting metric for matchup fga in the requested NBA or WNBA Stats split. |
+| `matchup_fg_pct` | numeric | Percentage or rate for matchup field goals percentage in the requested NBA or WNBA Stats split. |
+| `matchup_fg3m` | numeric | Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split. |
+| `matchup_fg3a` | numeric | Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split. |
+| `matchup_fg3_pct` | numeric | Percentage or rate for matchup three-point field goals percentage in the requested NBA or WNBA Stats split. |
+| `help_blk` | integer | NBA or WNBA Stats value for help blocks in the leagueseasonmatchups result set. |
+| `help_fgm` | integer | Shooting metric for help fgm in the requested NBA or WNBA Stats split. |
+| `help_fga` | integer | Shooting metric for help fga in the requested NBA or WNBA Stats split. |
+| `help_fg_perc` | integer | Shooting metric for help field goals perc in the requested NBA or WNBA Stats split. |
+| `matchup_ftm` | numeric | NBA or WNBA Stats value for matchup ftm in the leagueseasonmatchups result set. |
+| `matchup_fta` | numeric | NBA or WNBA Stats value for matchup fta in the leagueseasonmatchups result set. |
+| `sfl` | numeric | NBA or WNBA Stats value for sfl in the leagueseasonmatchups result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3614,97 +3423,97 @@ GET /stats/leaguestandingsv3
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `leagueid` | character |  |
-| `seasonid` | character |  |
+| `leagueid` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
+| `seasonid` | character | Stats API identifier for seasonid associated with this NBA or WNBA Stats row. |
 | `teamid` | integer | FanGraphs team ID. |
 | `teamcity` | character | Teamcity. |
 | `teamname` | character | Teamname. |
-| `teamslug` | character |  |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 | `conference` | character | Filter players or teams by conference. |
-| `conferencerecord` | character |  |
-| `playoffrank` | integer |  |
-| `clinchindicator` | character |  |
+| `conferencerecord` | character | NBA or WNBA Stats value for conferencerecord in the leaguestandingsv3 result set. |
+| `playoffrank` | integer | NBA or WNBA Stats value for playoffrank in the leaguestandingsv3 result set. |
+| `clinchindicator` | character | NBA or WNBA Stats value for clinchindicator in the leaguestandingsv3 result set. |
 | `division` | character | Team division. |
-| `divisionrecord` | character |  |
-| `divisionrank` | integer |  |
+| `divisionrecord` | character | NBA or WNBA Stats value for divisionrecord in the leaguestandingsv3 result set. |
+| `divisionrank` | integer | NBA or WNBA Stats value for divisionrank in the leaguestandingsv3 result set. |
 | `wins` | integer | Total wins. |
 | `losses` | integer | Total losses. |
-| `winpct` | numeric |  |
-| `leaguerank` | integer |  |
+| `winpct` | numeric | Winning percentage for the team or split represented by this row. |
+| `leaguerank` | integer | NBA or WNBA Stats value for leaguerank in the leaguestandingsv3 result set. |
 | `record` | character | Record string (e.g. '12-4'). |
 | `home` | character | Home. |
 | `road` | character | Road. |
 | `l10` | character | L10. |
-| `last10home` | character |  |
-| `last10road` | character |  |
+| `last10home` | character | NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set. |
+| `last10road` | character | NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set. |
 | `ot` | character | Overtime results. |
-| `threeptsorless` | character |  |
-| `tenptsormore` | character |  |
-| `longhomestreak` | integer |  |
-| `strlonghomestreak` | character |  |
-| `longroadstreak` | integer |  |
-| `strlongroadstreak` | character |  |
-| `longwinstreak` | integer |  |
-| `longlossstreak` | integer |  |
-| `currenthomestreak` | integer |  |
-| `strcurrenthomestreak` | character |  |
-| `currentroadstreak` | integer |  |
-| `strcurrentroadstreak` | character |  |
-| `currentstreak` | integer |  |
+| `threeptsorless` | character | Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split. |
+| `tenptsormore` | character | Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split. |
+| `longhomestreak` | integer | NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set. |
+| `strlonghomestreak` | character | NBA or WNBA Stats value for strlonghomestreak in the leaguestandingsv3 result set. |
+| `longroadstreak` | integer | NBA or WNBA Stats value for longroadstreak in the leaguestandingsv3 result set. |
+| `strlongroadstreak` | character | NBA or WNBA Stats value for strlongroadstreak in the leaguestandingsv3 result set. |
+| `longwinstreak` | integer | NBA or WNBA Stats value for longwinstreak in the leaguestandingsv3 result set. |
+| `longlossstreak` | integer | NBA or WNBA Stats value for longlossstreak in the leaguestandingsv3 result set. |
+| `currenthomestreak` | integer | NBA or WNBA Stats value for currenthomestreak in the leaguestandingsv3 result set. |
+| `strcurrenthomestreak` | character | NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandingsv3 result set. |
+| `currentroadstreak` | integer | NBA or WNBA Stats value for currentroadstreak in the leaguestandingsv3 result set. |
+| `strcurrentroadstreak` | character | NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandingsv3 result set. |
+| `currentstreak` | integer | NBA or WNBA Stats value for currentstreak in the leaguestandingsv3 result set. |
 | `strcurrentstreak` | character | Strcurrentstreak. |
-| `conferencegamesback` | numeric |  |
-| `divisiongamesback` | numeric |  |
-| `clinchedconferencetitle` | integer |  |
-| `clincheddivisiontitle` | integer |  |
-| `clinchedplayoffbirth` | integer |  |
-| `clinchedplayin` | integer |  |
-| `eliminatedconference` | integer |  |
-| `eliminateddivision` | integer |  |
-| `aheadathalf` | character |  |
-| `behindathalf` | character |  |
-| `tiedathalf` | character |  |
-| `aheadatthird` | character |  |
-| `behindatthird` | character |  |
-| `tiedatthird` | character |  |
-| `score100pts` | character |  |
-| `oppscore100pts` | character |  |
-| `oppover500` | character |  |
-| `leadinfgpct` | character |  |
-| `leadinreb` | character |  |
-| `fewerturnovers` | character |  |
-| `pointspg` | numeric |  |
-| `opppointspg` | numeric |  |
-| `diffpointspg` | numeric |  |
-| `vseast` | character |  |
-| `vsatlantic` | character |  |
-| `vscentral` | character |  |
-| `vssoutheast` | character |  |
-| `vswest` | character |  |
-| `vsnorthwest` | character |  |
-| `vspacific` | character |  |
-| `vssouthwest` | character |  |
-| `jan` | character |  |
-| `feb` | character |  |
-| `mar` | character |  |
-| `apr` | character |  |
-| `may` | character |  |
-| `jun` | character |  |
-| `jul` | character |  |
-| `aug` | character |  |
-| `sep` | character |  |
-| `oct` | character |  |
-| `nov` | character |  |
-| `dec` | character |  |
-| `score_80_plus` | character |  |
-| `opp_score_80_plus` | character |  |
-| `score_below_80` | character |  |
-| `opp_score_below_80` | character |  |
-| `totalpoints` | integer |  |
-| `opptotalpoints` | integer |  |
-| `difftotalpoints` | integer |  |
-| `leaguegamesback` | numeric |  |
-| `playoffseeding` | integer |  |
-| `clinchedpostseason` | integer |  |
+| `conferencegamesback` | numeric | NBA or WNBA Stats value for conferencegamesback in the leaguestandingsv3 result set. |
+| `divisiongamesback` | numeric | NBA or WNBA Stats value for divisiongamesback in the leaguestandingsv3 result set. |
+| `clinchedconferencetitle` | integer | Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context. |
+| `clincheddivisiontitle` | integer | Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context. |
+| `clinchedplayoffbirth` | integer | Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context. |
+| `clinchedplayin` | integer | Flag indicating clinchedplayin for the requested NBA or WNBA Stats context. |
+| `eliminatedconference` | integer | Flag indicating eliminatedconference for the requested NBA or WNBA Stats context. |
+| `eliminateddivision` | integer | Flag indicating eliminateddivision for the requested NBA or WNBA Stats context. |
+| `aheadathalf` | character | NBA or WNBA Stats value for aheadathalf in the leaguestandingsv3 result set. |
+| `behindathalf` | character | NBA or WNBA Stats value for behindathalf in the leaguestandingsv3 result set. |
+| `tiedathalf` | character | NBA or WNBA Stats value for tiedathalf in the leaguestandingsv3 result set. |
+| `aheadatthird` | character | NBA or WNBA Stats value for aheadatthird in the leaguestandingsv3 result set. |
+| `behindatthird` | character | NBA or WNBA Stats value for behindatthird in the leaguestandingsv3 result set. |
+| `tiedatthird` | character | NBA or WNBA Stats value for tiedatthird in the leaguestandingsv3 result set. |
+| `score100pts` | character | Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split. |
+| `oppscore100pts` | character | Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split. |
+| `oppover500` | character | NBA or WNBA Stats value for oppover500 in the leaguestandingsv3 result set. |
+| `leadinfgpct` | character | Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split. |
+| `leadinreb` | character | Rebounding metric for leadinreb in the requested NBA or WNBA Stats split. |
+| `fewerturnovers` | character | Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split. |
+| `pointspg` | numeric | Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split. |
+| `opppointspg` | numeric | Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split. |
+| `diffpointspg` | numeric | Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split. |
+| `vseast` | character | NBA or WNBA Stats value for vseast in the leaguestandingsv3 result set. |
+| `vsatlantic` | character | NBA or WNBA Stats value for vsatlantic in the leaguestandingsv3 result set. |
+| `vscentral` | character | NBA or WNBA Stats value for vscentral in the leaguestandingsv3 result set. |
+| `vssoutheast` | character | NBA or WNBA Stats value for vssoutheast in the leaguestandingsv3 result set. |
+| `vswest` | character | NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set. |
+| `vsnorthwest` | character | NBA or WNBA Stats value for vsnorthwest in the leaguestandingsv3 result set. |
+| `vspacific` | character | NBA or WNBA Stats value for vspacific in the leaguestandingsv3 result set. |
+| `vssouthwest` | character | NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set. |
+| `jan` | character | Value for January in the endpoint's monthly NBA or WNBA Stats split. |
+| `feb` | character | Value for February in the endpoint's monthly NBA or WNBA Stats split. |
+| `mar` | character | Value for March in the endpoint's monthly NBA or WNBA Stats split. |
+| `apr` | character | Value for April in the endpoint's monthly NBA or WNBA Stats split. |
+| `may` | character | Value for May in the endpoint's monthly NBA or WNBA Stats split. |
+| `jun` | character | Value for June in the endpoint's monthly NBA or WNBA Stats split. |
+| `jul` | character | Value for July in the endpoint's monthly NBA or WNBA Stats split. |
+| `aug` | character | Value for August in the endpoint's monthly NBA or WNBA Stats split. |
+| `sep` | character | Value for September in the endpoint's monthly NBA or WNBA Stats split. |
+| `oct` | character | Value for October in the endpoint's monthly NBA or WNBA Stats split. |
+| `nov` | character | Value for November in the endpoint's monthly NBA or WNBA Stats split. |
+| `dec` | character | Value for December in the endpoint's monthly NBA or WNBA Stats split. |
+| `score_80_plus` | character | Scoring or score-margin metric for score 80 plus in the requested NBA or WNBA Stats split. |
+| `opp_score_80_plus` | character | Opponent score 80 plus for the requested NBA or WNBA team, player, lineup, or game split. |
+| `score_below_80` | character | Scoring or score-margin metric for score below 80 in the requested NBA or WNBA Stats split. |
+| `opp_score_below_80` | character | Opponent score below 80 for the requested NBA or WNBA team, player, lineup, or game split. |
+| `totalpoints` | integer | Scoring or score-margin metric for totalpoints in the requested NBA or WNBA Stats split. |
+| `opptotalpoints` | integer | Scoring or score-margin metric for opptotalpoints in the requested NBA or WNBA Stats split. |
+| `difftotalpoints` | integer | Scoring or score-margin metric for difftotalpoints in the requested NBA or WNBA Stats split. |
+| `leaguegamesback` | numeric | NBA or WNBA Stats value for leaguegamesback in the leaguestandingsv3 result set. |
+| `playoffseeding` | integer | NBA or WNBA Stats value for playoffseeding in the leaguestandingsv3 result set. |
+| `clinchedpostseason` | integer | Flag indicating clinchedpostseason for the requested NBA or WNBA Stats context. |
 | `neutral` | character | Neutral. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -3736,7 +3545,18 @@ GET /stats/playbyplay
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `video_available_flag` | character | Video available flag. |
+| `game_id` | integer | Unique game identifier. |
+| `eventnum` | character | NBA or WNBA Stats value for eventnum in the playbyplay result set. |
+| `eventmsgtype` | character | NBA or WNBA Stats value for eventmsgtype in the playbyplay result set. |
+| `eventmsgactiontype` | character | NBA or WNBA Stats value for eventmsgactiontype in the playbyplay result set. |
+| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
+| `wctimestring` | character | Time value for wall-clock time in the NBA or WNBA Stats result set. |
+| `pctimestring` | numeric | Time value for period clock time in the NBA or WNBA Stats result set. |
+| `homedescription` | character | Play-by-play text description from the home-team perspective. |
+| `neutraldescription` | character | Neutral play-by-play text description for the event. |
+| `visitordescription` | character | Play-by-play text description from the visiting-team perspective. |
+| `score` | character | Final score. |
+| `scoremargin` | character | Scoring or score-margin metric for scoremargin in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3767,7 +3587,40 @@ GET /stats/playbyplayv2
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `video_available_flag` | character | Video available flag. |
+| `game_id` | character | Unique game identifier. |
+| `eventnum` | integer | NBA or WNBA Stats value for eventnum in the playbyplayv2 result set. |
+| `eventmsgtype` | integer | NBA or WNBA Stats value for eventmsgtype in the playbyplayv2 result set. |
+| `eventmsgactiontype` | integer | NBA or WNBA Stats value for eventmsgactiontype in the playbyplayv2 result set. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `wctimestring` | character | Time value for wall-clock time in the NBA or WNBA Stats result set. |
+| `pctimestring` | character | Time value for period clock time in the NBA or WNBA Stats result set. |
+| `homedescription` | character | Play-by-play text description from the home-team perspective. |
+| `neutraldescription` | character | Neutral play-by-play text description for the event. |
+| `visitordescription` | character | Play-by-play text description from the visiting-team perspective. |
+| `score` | character | Final score. |
+| `scoremargin` | character | Scoring or score-margin metric for scoremargin in the requested NBA or WNBA Stats split. |
+| `person1type` | integer | Person1type. |
+| `player1_id` | integer | V2 PBP primary player ID (e.g. shooter / fouler). |
+| `player1_name` | character | V2 PBP primary player name. |
+| `player1_team_id` | integer | Team ID of player1. |
+| `player1_team_city` | character | Player1 team city. |
+| `player1_team_nickname` | character | Player1 team nickname. |
+| `player1_team_abbreviation` | character | Player1 team abbreviation. |
+| `person2type` | integer | Person2type. |
+| `player2_id` | integer | V2 PBP secondary player ID (e.g. assister / fouled-by). |
+| `player2_name` | character | V2 PBP secondary player name. |
+| `player2_team_id` | integer | Team ID of player2. |
+| `player2_team_city` | character | Player2 team city. |
+| `player2_team_nickname` | character | Player2 team nickname. |
+| `player2_team_abbreviation` | character | Player2 team abbreviation. |
+| `person3type` | integer | Person3type. |
+| `player3_id` | integer | V2 PBP tertiary player ID (e.g. blocker). |
+| `player3_name` | character | V2 PBP tertiary player name. |
+| `player3_team_id` | integer | Team ID of player3. |
+| `player3_team_city` | character | Player3 team city. |
+| `player3_team_nickname` | character | Player3 team nickname. |
+| `player3_team_abbreviation` | character | Player3 team abbreviation. |
+| `video_available_flag` | integer | Video available flag. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3775,37 +3628,6 @@ GET /stats/playbyplayv2
 
 ```python
 wnba_stats_playbyplayv2()
-```
-
-_Last validated n/a._
-
-## `wnba_stats_playbyplayv3`
-
-GET /stats/playbyplayv3
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/playbyplayv3`
-
-**Valid URL:** [https://stats.wnba.com/stats/playbyplayv3](https://stats.wnba.com/stats/playbyplayv3)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `EndPeriod` | `end_period` |  |  | `Y` |  |
-| `GameID` | `game_id` |  |  | `Y` |  |
-| `StartPeriod` | `start_period` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `videoavailable` | character |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_playbyplayv3()
 ```
 
 _Last validated n/a._
@@ -3832,15 +3654,15 @@ GET /stats/playerawards
 | `last_name` | character | Player's last name. |
 | `team` | character | Team-side label or team identifier. |
 | `description` | character | Long-form description text. |
-| `all_nba_team_number` | character |  |
+| `all_nba_team_number` | character | NBA or WNBA Stats value for all NBA team number in the playerawards result set. |
 | `season` | character | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `month` | character |  |
+| `month` | character | NBA or WNBA Stats value for month in the playerawards result set. |
 | `week` | character | Week number. |
 | `conference` | character | Filter players or teams by conference. |
 | `type` | character | Record type / category. |
-| `subtype1` | character |  |
-| `subtype2` | character |  |
-| `subtype3` | character |  |
+| `subtype1` | character | NBA or WNBA Stats value for subtype1 in the playerawards result set. |
+| `subtype2` | character | NBA or WNBA Stats value for subtype2 in the playerawards result set. |
+| `subtype3` | character | NBA or WNBA Stats value for subtype3 in the playerawards result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3907,61 +3729,6 @@ wnba_stats_playercareerbycollege(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playercareerbycollegerollup`
-
-GET /stats/playercareerbycollegerollup
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/playercareerbycollegerollup`
-
-**Valid URL:** [https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10](https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `region` | character | Region label. |
-| `seed` | character |  |
-| `college` | character | College or school attended. |
-| `players` | character |  |
-| `gp` | integer | Games played. |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `tov` | character | Turnovers. |
-| `pf` | character | Personal fouls. |
-| `pts` | character | Points scored. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_playercareerbycollegerollup(league_id='10')
-```
-
-_Last validated n/a._
-
 ## `wnba_stats_playercareerstats`
 
 GET /stats/playercareerstats
@@ -3981,18 +3748,33 @@ GET /stats/playercareerstats
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique stats.nba.com identifier for the player whose career highs are listed. |
-| `game_date` | character | Date the career-high game was played, formatted as YYYY-MM-DD. |
-| `vs_team_id` | integer | Unique stats.nba.com identifier for the opponent the career high was set against. |
-| `vs_team_city` | character | City name of the opponent franchise the career high was achieved against. |
-| `vs_team_name` | character | Nickname/mascot of the opponent franchise the career high was set against. |
-| `vs_team_abbreviation` | character | Abbreviation of the opponent team the career high was set against. |
-| `stat` | character | Stat category for this career-high entry (e.g. PTS, REB, AST). |
-| `stats_value` | integer | Raw numeric value of the career high for this stat category (legacy field; see stat_value). |
-| `stat_order` | integer | Sort order index used to control the display sequence of career-high stat rows. |
-| `date_est` | character | Estimated or confirmed date flag for the career-high game record. |
-| `game_id` | character | Unique stats.nba.com game identifier for the game in which the career high was set. |
-| `stat_value` | integer | Value of the career high for this stat category. |
+| `player_id` | integer | Unique player identifier. |
+| `season_id` | character | Unique season identifier. |
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_age` | numeric | NBA or WNBA Stats value for player age in the playercareerstats result set. |
+| `gp` | integer | Games played. |
+| `gs` | integer | Games started. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `tov` | numeric | Turnovers. |
+| `pf` | numeric | Personal fouls. |
+| `pts` | numeric | Points scored. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4045,7 +3827,7 @@ GET /stats/playercompare
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `description` | character | Long-form description text. |
 | `min` | integer | Minutes played. |
 | `fgm` | character | Field goals made. |
@@ -4064,9 +3846,9 @@ GET /stats/playercompare
 | `tov` | character | Turnovers. |
 | `stl` | character | Steals. |
 | `blk` | character | Blocks. |
-| `blka` | character |  |
+| `blka` | character | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | character | Personal fouls. |
-| `pfd` | character |  |
+| `pfd` | character | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | character | Points scored. |
 | `plus_minus` | character | Plus/minus point differential while on court. |
 
@@ -4119,68 +3901,69 @@ GET /stats/playerdashboardbyclutch
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the playerdashboardbyclutch result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4231,68 +4014,69 @@ GET /stats/playerdashboardbygamesplits
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the playerdashboardbygamesplits result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4343,68 +4127,69 @@ GET /stats/playerdashboardbygeneralsplits
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the playerdashboardbygeneralsplits result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4455,68 +4240,69 @@ GET /stats/playerdashboardbylastngames
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the playerdashboardbylastngames result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4591,39 +4377,37 @@ GET /stats/playerdashboardbyshootingsplits
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric |  |
-| `blka` | character |  |
-| `pct_ast_2pm` | numeric |  |
-| `pct_uast_2pm` | numeric |  |
-| `pct_ast_3pm` | numeric |  |
-| `pct_uast_3pm` | numeric |  |
-| `pct_ast_fgm` | numeric |  |
-| `pct_uast_fgm` | numeric |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `efg_pct_rank` | numeric |  |
-| `blka_rank` | character |  |
-| `pct_ast_2pm_rank` | numeric |  |
-| `pct_uast_2pm_rank` | numeric |  |
-| `pct_ast_3pm_rank` | numeric |  |
-| `pct_uast_3pm_rank` | numeric |  |
-| `pct_ast_fgm_rank` | numeric |  |
-| `pct_uast_fgm_rank` | numeric |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4674,68 +4458,71 @@ GET /stats/playerdashboardbyteamperformance
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value_order` | integer | Sort order assigned to the grouping value in NBA or WNBA Stats dashboards. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
+| `group_value_2` | character | Secondary grouping value for dashboards that return paired split dimensions. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the playerdashboardbyteamperformance result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4786,71 +4573,72 @@ GET /stats/playerdashboardbyyearoveryear
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `max_game_date` | character |  |
+| `max_game_date` | character | Date or timestamp for maximum game date in the NBA or WNBA Stats result set. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the playerdashboardbyyearoveryear result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4858,6 +4646,61 @@ GET /stats/playerdashboardbyyearoveryear
 
 ```python
 wnba_stats_playerdashboardbyyearoveryear(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_playerdashptshotdefend`
+
+GET /stats/playerdashptshotdefend
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/playerdashptshotdefend`
+
+**Valid URL:** [https://stats.wnba.com/stats/playerdashptshotdefend?LeagueID=10](https://stats.wnba.com/stats/playerdashptshotdefend?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `matchupid` | integer | Stats API identifier for matchupid associated with this NBA or WNBA Stats row. |
+| `gp` | integer | Games played. |
+| `g` | integer | Goals (skaters). |
+| `defense_category` | character | NBA or WNBA Stats value for defense category in the playerdashptshotdefend result set. |
+| `freq` | numeric | NBA or WNBA Stats value for freq in the playerdashptshotdefend result set. |
+| `d_fgm` | numeric | Shooting metric for d fgm in the requested NBA or WNBA Stats split. |
+| `d_fga` | numeric | Shooting metric for d fga in the requested NBA or WNBA Stats split. |
+| `d_fg_pct` | numeric | Percentage or rate for d field goals percentage in the requested NBA or WNBA Stats split. |
+| `normal_fg_pct` | numeric | Percentage or rate for normal field goals percentage in the requested NBA or WNBA Stats split. |
+| `pct_plusminus` | numeric | Percentage share of plusminus for the requested NBA or WNBA Stats split. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_playerdashptshotdefend(league_id='10')
 ```
 
 _Last validated n/a._
@@ -4888,31 +4731,31 @@ GET /stats/playerestimatedmetrics
 | `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
 | `min` | numeric | Minutes played. |
-| `e_off_rating` | numeric |  |
-| `e_def_rating` | numeric |  |
-| `e_net_rating` | numeric |  |
-| `e_ast_ratio` | numeric |  |
-| `e_oreb_pct` | numeric |  |
-| `e_dreb_pct` | numeric |  |
-| `e_reb_pct` | numeric |  |
-| `e_tov_pct` | numeric |  |
-| `e_usg_pct` | numeric |  |
-| `e_pace` | numeric |  |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `e_off_rating_rank` | integer |  |
-| `e_def_rating_rank` | integer |  |
-| `e_net_rating_rank` | integer |  |
-| `e_ast_ratio_rank` | integer |  |
-| `e_oreb_pct_rank` | integer |  |
-| `e_dreb_pct_rank` | integer |  |
-| `e_reb_pct_rank` | integer |  |
-| `e_tov_pct_rank` | integer |  |
-| `e_usg_pct_rank` | integer |  |
-| `e_pace_rank` | integer |  |
+| `e_off_rating` | numeric | Estimated offensive rating for the requested NBA or WNBA Stats split. |
+| `e_def_rating` | numeric | Estimated defensive rating for the requested NBA or WNBA Stats split. |
+| `e_net_rating` | numeric | Estimated net rating for the requested NBA or WNBA Stats split. |
+| `e_ast_ratio` | numeric | Estimated assist ratio for the requested NBA or WNBA Stats split. |
+| `e_oreb_pct` | numeric | Estimated offensive rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_dreb_pct` | numeric | Estimated defensive rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_reb_pct` | numeric | Estimated rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_tov_pct` | numeric | Estimated turnovers percentage for the requested NBA or WNBA Stats split. |
+| `e_usg_pct` | numeric | Estimated usage percentage for the requested NBA or WNBA Stats split. |
+| `e_pace` | numeric | Estimated pace for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_off_rating_rank` | integer | Rank for e offensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_def_rating_rank` | integer | Rank for e defensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_net_rating_rank` | integer | Rank for e net rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_ast_ratio_rank` | integer | Rank for e assists ratio within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_oreb_pct_rank` | integer | Rank for e offensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_dreb_pct_rank` | integer | Rank for e defensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_reb_pct_rank` | integer | Rank for e rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_tov_pct_rank` | integer | Rank for e turnovers percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_usg_pct_rank` | integer | Rank for e usage percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_pace_rank` | integer | Rank for e pace within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -4972,16 +4815,16 @@ GET /stats/playerfantasyprofilebargraph
 | `player_name` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `fan_duel_pts` | character |  |
-| `nba_fantasy_pts` | character |  |
-| `pts` | character | Points scored. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `fg3m` | character | Three-point field goals made. |
+| `fan_duel_pts` | numeric | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `fg3m` | numeric | Three-point field goals made. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `tov` | character | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `tov` | numeric | Turnovers. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -5016,33 +4859,33 @@ GET /stats/playergamelog
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Unique season identifier. |
+| `season_id` | character | Unique season identifier. |
 | `player_id` | integer | Unique player identifier. |
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `matchup` | character | Matchup. |
 | `wl` | character | Wl. |
 | `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `tov` | character | Turnovers. |
-| `pf` | character | Personal fouls. |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `video_available` | character | Video available. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Total rebounds. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `tov` | integer | Turnovers. |
+| `pf` | integer | Personal fouls. |
+| `pts` | integer | Points scored. |
+| `plus_minus` | integer | Plus/minus point differential while on court. |
+| `video_available` | integer | Video available. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5094,67 +4937,73 @@ GET /stats/playergamelogs
 | `season_year` | character | Season year string ('YYYY-YY' format). |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `matchup` | character | Matchup. |
 | `wl` | character | Wl. |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `available_flag` | integer | Flag indicating whether the requested NBA or WNBA Stats video or data asset is available. |
+| `min_sec` | character | Minutes and seconds played, formatted as a game-clock duration string. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the playergamelogs result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5271,15 +5120,15 @@ GET /stats/playergamestreakfinder
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `player_name_last_first` | character |  |
+| `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
 | `player_id` | integer | Unique player identifier. |
-| `gamestreak` | character |  |
-| `startdate` | character |  |
-| `enddate` | character |  |
-| `activestreak` | character |  |
-| `numseasons` | character |  |
-| `lastseason` | character |  |
-| `firstseason` | character |  |
+| `gamestreak` | integer | NBA or WNBA Stats value for gamestreak in the playergamestreakfinder result set. |
+| `startdate` | character | Date or timestamp for startdate in the NBA or WNBA Stats result set. |
+| `enddate` | character | Date or timestamp for enddate in the NBA or WNBA Stats result set. |
+| `activestreak` | integer | NBA or WNBA Stats value for activestreak in the playergamestreakfinder result set. |
+| `numseasons` | integer | NBA or WNBA Stats value for numseasons in the playergamestreakfinder result set. |
+| `lastseason` | character | NBA or WNBA Stats value for lastseason in the playergamestreakfinder result set. |
+| `firstseason` | character | NBA or WNBA Stats value for firstseason in the playergamestreakfinder result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5326,11 +5175,11 @@ GET /stats/playerindex
 | `player_slug` | character | URL-safe player identifier. |
 | `team_id` | integer | Unique team identifier. |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `is_defunct` | integer |  |
+| `is_defunct` | integer | Flag indicating is defunct for the requested NBA or WNBA Stats context. |
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | character | Jersey number. |
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `height` | character | Player height (string e.g. '6-2' or inches). |
 | `weight` | character | Player weight in pounds. |
@@ -5340,12 +5189,12 @@ GET /stats/playerindex
 | `draft_round` | integer | Round of the draft selection. |
 | `draft_number` | integer | The number pick that was used to select a given player. |
 | `roster_status` | numeric | Payroll table the row came from: Active, IL, or Retained Salary. |
-| `from_year` | character |  |
-| `to_year` | character |  |
+| `from_year` | character | First season. |
+| `to_year` | character | Most recent season. |
 | `pts` | numeric | Points scored. |
 | `reb` | numeric | Total rebounds. |
 | `ast` | numeric | Assists. |
-| `stats_timeframe` | character |  |
+| `stats_timeframe` | character | Time value for stats timeframe in the NBA or WNBA Stats result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5383,14 +5232,14 @@ GET /stats/playernextngames
 | `home_team_id` | integer | Unique identifier for the home team. |
 | `visitor_team_id` | integer | Unique identifier for visitor team. |
 | `home_team_name` | character | Home team name. |
-| `visitor_team_name` | character |  |
+| `visitor_team_name` | character | Team name for the visiting team in this NBA or WNBA Stats row. |
 | `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
-| `visitor_team_abbreviation` | character |  |
+| `visitor_team_abbreviation` | character | Team abbreviation for the visiting team in this NBA or WNBA Stats row. |
 | `home_team_nickname` | character | Home team nickname label; `team_detail = TRUE` only. |
-| `visitor_team_nickname` | character |  |
+| `visitor_team_nickname` | character | Team nickname for the visiting team in this NBA or WNBA Stats row. |
 | `game_time` | character | Scheduled start time of the game. |
-| `home_wl` | character |  |
-| `visitor_wl` | character |  |
+| `home_wl` | character | Win-loss result for the home team in this NBA or WNBA Stats row. |
+| `visitor_wl` | character | Win-loss result for the visiting team in this NBA or WNBA Stats row. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5422,15 +5271,32 @@ GET /stats/playerprofilev2
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `vs_team_id` | integer |  |
-| `vs_team_city` | character |  |
-| `vs_team_name` | character |  |
-| `vs_team_abbreviation` | character |  |
-| `stat` | character | Stat. |
-| `stats_value` | character |  |
-| `stat_order` | character |  |
-| `date_est` | character |  |
+| `season_id` | character | Unique season identifier. |
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `player_age` | numeric | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
+| `gp` | integer | Games played. |
+| `gs` | integer | Games started. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `tov` | numeric | Turnovers. |
+| `pf` | numeric | Personal fouls. |
+| `pts` | numeric | Points scored. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5480,12 +5346,12 @@ GET /stats/playervsplayer
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `vs_player_id` | integer |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
+| `vs_player_id` | integer | Stats API identifier for vs player identifier associated with this NBA or WNBA Stats row. |
+| `vs_player_name` | character | Display name for vs player name associated with this NBA or WNBA Stats row. |
+| `court_status` | character | Indicates whether the compared player was on court or off court for the split row. |
 | `gp` | integer | Games played. |
 | `w` | character | Wins. |
 | `l` | character | Losses. |
@@ -5507,14 +5373,14 @@ GET /stats/playervsplayer
 | `tov` | character | Turnovers. |
 | `stl` | character | Steals. |
 | `blk` | character | Blocks. |
-| `blka` | character |  |
+| `blka` | character | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | character | Personal fouls. |
-| `pfd` | character |  |
+| `pfd` | character | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | character | Points scored. |
 | `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `nba_fantasy_pts` | character | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `cfid` | character | NBA Stats custom-filter identifier attached to the row or request context. |
+| `cfparams` | character | NBA Stats custom-filter parameter string attached to the row or request context. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5545,17 +5411,65 @@ GET /stats/playoffpicture
 | col_name | type | description |
 |---|---|---|
 | `conference` | character | Filter players or teams by conference. |
-| `high_seed_rank` | character |  |
-| `high_seed_team` | character |  |
-| `high_seed_team_id` | integer |  |
-| `low_seed_rank` | character |  |
-| `low_seed_team` | character |  |
-| `low_seed_team_id` | integer |  |
-| `high_seed_series_w` | character |  |
-| `high_seed_series_l` | character |  |
-| `high_seed_series_remaining_g` | character |  |
-| `high_seed_series_remaining_home_g` | character |  |
-| `high_seed_series_remaining_away_g` | character |  |
+| `rank` | character | Whether to include statistical ranks in the returned table. |
+| `team` | character | Team-side label or team identifier. |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_id` | integer | Unique team identifier. |
+| `wins` | character | Total wins. |
+| `losses` | character | Total losses. |
+| `pct` | numeric | Win percentage. |
+| `div` | character | NBA or WNBA Stats value for div in the playoffpicture result set. |
+| `conf` | character | character. |
+| `home` | character | Home. |
+| `away` | character | Away team shots in the period. |
+| `gb` | character | Average exit velocity on ground balls (mph). |
+| `gr_over_500` | character | NBA or WNBA Stats value for gr over 500 in the playoffpicture result set. |
+| `gr_over_500_home` | character | NBA or WNBA Stats value for gr over 500 home in the playoffpicture result set. |
+| `gr_over_500_away` | character | NBA or WNBA Stats value for gr over 500 away in the playoffpicture result set. |
+| `gr_under_500` | character | NBA or WNBA Stats value for gr under 500 in the playoffpicture result set. |
+| `gr_under_500_home` | character | NBA or WNBA Stats value for gr under 500 home in the playoffpicture result set. |
+| `gr_under_500_away` | character | NBA or WNBA Stats value for gr under 500 away in the playoffpicture result set. |
+| `ranking_criteria` | character | NBA or WNBA Stats value for ranking criteria in the playoffpicture result set. |
+| `clinched_playoffs` | character | Flag indicating clinched playoffs for the requested NBA or WNBA Stats context. |
+| `clinched_conference` | character | Flag indicating clinched conference for the requested NBA or WNBA Stats context. |
+| `clinched_division` | character | Flag indicating clinched division for the requested NBA or WNBA Stats context. |
+| `clinched_play_in` | character | Flag indicating clinched play in for the requested NBA or WNBA Stats context. |
+| `eliminated_playoffs` | character | Flag indicating eliminated playoffs for the requested NBA or WNBA Stats context. |
+| `sosa_remaining` | character | NBA or WNBA Stats value for sosa remaining in the playoffpicture result set. |
+| `returntoplay_east_pi_flag` | character | Flag indicating returntoplay east pi flag for the requested NBA or WNBA Stats context. |
+| `returntoplay_already_eliminated` | character | NBA or WNBA Stats value for returntoplay already eliminated in the playoffpicture result set. |
+| `seeding_game_1_outcome` | character | Outcome for seeding game 1 in the playoff or return-to-play picture. |
+| `seeding_game_2_outcome` | character | Outcome for seeding game 2 in the playoff or return-to-play picture. |
+| `seeding_game_3_outcome` | character | Outcome for seeding game 3 in the playoff or return-to-play picture. |
+| `seeding_game_4_outcome` | character | Outcome for seeding game 4 in the playoff or return-to-play picture. |
+| `seeding_game_5_outcome` | character | Outcome for seeding game 5 in the playoff or return-to-play picture. |
+| `seeding_game_6_outcome` | character | Outcome for seeding game 6 in the playoff or return-to-play picture. |
+| `seeding_game_7_outcome` | character | Outcome for seeding game 7 in the playoff or return-to-play picture. |
+| `seeding_game_8_outcome` | character | Outcome for seeding game 8 in the playoff or return-to-play picture. |
+| `seeding_game_1_id` | integer | Identifier for seeding game 1 in the playoff or return-to-play picture. |
+| `seeding_game_2_id` | integer | Identifier for seeding game 2 in the playoff or return-to-play picture. |
+| `seeding_game_3_id` | integer | Identifier for seeding game 3 in the playoff or return-to-play picture. |
+| `seeding_game_4_id` | integer | Identifier for seeding game 4 in the playoff or return-to-play picture. |
+| `seeding_game_5_id` | integer | Identifier for seeding game 5 in the playoff or return-to-play picture. |
+| `seeding_game_6_id` | integer | Identifier for seeding game 6 in the playoff or return-to-play picture. |
+| `seeding_game_7_id` | integer | Identifier for seeding game 7 in the playoff or return-to-play picture. |
+| `seeding_game_8_id` | integer | Identifier for seeding game 8 in the playoff or return-to-play picture. |
+| `seeding_game_1_opponent` | character | Opponent for seeding game 1 in the playoff or return-to-play picture. |
+| `seeding_game_2_opponent` | character | Opponent for seeding game 2 in the playoff or return-to-play picture. |
+| `seeding_game_3_opponent` | character | Opponent for seeding game 3 in the playoff or return-to-play picture. |
+| `seeding_game_4_opponent` | character | Opponent for seeding game 4 in the playoff or return-to-play picture. |
+| `seeding_game_5_opponent` | character | Opponent for seeding game 5 in the playoff or return-to-play picture. |
+| `seeding_game_6_opponent` | character | Opponent for seeding game 6 in the playoff or return-to-play picture. |
+| `seeding_game_7_opponent` | character | Opponent for seeding game 7 in the playoff or return-to-play picture. |
+| `seeding_game_8_opponent` | character | Opponent for seeding game 8 in the playoff or return-to-play picture. |
+| `seeding_game_1_label` | character | Label for seeding game 1 in the playoff or return-to-play picture. |
+| `seeding_game_2_label` | character | Label for seeding game 2 in the playoff or return-to-play picture. |
+| `seeding_game_3_label` | character | Label for seeding game 3 in the playoff or return-to-play picture. |
+| `seeding_game_4_label` | character | Label for seeding game 4 in the playoff or return-to-play picture. |
+| `seeding_game_5_label` | character | Label for seeding game 5 in the playoff or return-to-play picture. |
+| `seeding_game_6_label` | character | Label for seeding game 6 in the playoff or return-to-play picture. |
+| `seeding_game_7_label` | character | Label for seeding game 7 in the playoff or return-to-play picture. |
+| `seeding_game_8_label` | character | Label for seeding game 8 in the playoff or return-to-play picture. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5610,8 +5524,35 @@ GET /stats/scoreboardv2
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
+| `game_date_est` | character | Game date est. |
+| `game_sequence` | character | Game sequence. |
 | `game_id` | integer | Unique game identifier. |
-| `pt_available` | character | Pt available. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_city_name` | character | Team city name. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_wins_losses` | character | Team wins losses. |
+| `pts_qtr1` | character | Pts qtr1. |
+| `pts_qtr2` | character | Pts qtr2. |
+| `pts_qtr3` | character | Pts qtr3. |
+| `pts_qtr4` | character | Pts qtr4. |
+| `pts_ot1` | character | Pts ot1. |
+| `pts_ot2` | character | Scoring or score-margin metric for points ot2 in the requested NBA or WNBA Stats split. |
+| `pts_ot3` | character | Scoring or score-margin metric for points ot3 in the requested NBA or WNBA Stats split. |
+| `pts_ot4` | character | Scoring or score-margin metric for points ot4 in the requested NBA or WNBA Stats split. |
+| `pts_ot5` | character | Scoring or score-margin metric for points ot5 in the requested NBA or WNBA Stats split. |
+| `pts_ot6` | character | Scoring or score-margin metric for points ot6 in the requested NBA or WNBA Stats split. |
+| `pts_ot7` | character | Scoring or score-margin metric for points ot7 in the requested NBA or WNBA Stats split. |
+| `pts_ot8` | character | Scoring or score-margin metric for points ot8 in the requested NBA or WNBA Stats split. |
+| `pts_ot9` | character | Scoring or score-margin metric for points ot9 in the requested NBA or WNBA Stats split. |
+| `pts_ot10` | character | Scoring or score-margin metric for points ot10 in the requested NBA or WNBA Stats split. |
+| `pts` | character | Points scored. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ast` | character | Assists. |
+| `reb` | character | Total rebounds. |
+| `tov` | character | Turnovers. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5694,13 +5635,30 @@ GET /stats/shotchartdetail
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character |  |
+| `grid_type` | character | NBA or WNBA Stats value for grid type in the shotchartdetail result set. |
+| `game_id` | integer | Unique game identifier. |
+| `game_event_id` | integer | Unique identifier for game event. |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
+| `minutes_remaining` | character | Minutes remaining. |
+| `seconds_remaining` | character | Seconds remaining in the period. |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
 | `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
 | `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
 | `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `fga` | character | Field goal attempts. |
-| `fgm` | character | Field goals made. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `shot_distance` | character | Shot distance from the basket, in feet. |
+| `loc_x` | character | X coordinate on the court (units of inches; 0 = basket center). |
+| `loc_y` | character | Y coordinate on the court (units of inches; baseline at 0). |
+| `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
+| `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `htm` | character | NBA or WNBA Stats value for htm in the shotchartdetail result set. |
+| `vtm` | character | NBA or WNBA Stats value for vtm in the shotchartdetail result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5730,12 +5688,12 @@ GET /stats/shotchartleaguewide
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character |  |
+| `grid_type` | character | NBA or WNBA Stats value for grid type in the shotchartleaguewide result set. |
 | `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
 | `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
 | `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
-| `fga` | character | Field goal attempts. |
-| `fgm` | character | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fgm` | integer | Field goals made. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -5784,7 +5742,7 @@ GET /stats/shotchartlineupdetail
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `grid_type` | character |  |
+| `grid_type` | character | NBA or WNBA Stats value for grid type in the shotchartlineupdetail result set. |
 | `game_id` | integer | Unique game identifier. |
 | `game_event_id` | integer | Unique identifier for game event. |
 | `group_id` | integer | ESPN group id. |
@@ -5808,8 +5766,8 @@ GET /stats/shotchartlineupdetail
 | `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
 | `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
-| `htm` | character |  |
-| `vtm` | character |  |
+| `htm` | character | NBA or WNBA Stats value for htm in the shotchartlineupdetail result set. |
+| `vtm` | character | NBA or WNBA Stats value for vtm in the shotchartlineupdetail result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -5908,63 +5866,61 @@ GET /stats/teamdashboardbygeneralsplits
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
-| `team_days_rest_range` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
+| `game_result` | character | Game result for the player's team (`W`/`L`). |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -6063,39 +6019,37 @@ GET /stats/teamdashboardbyshootingsplits
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `efg_pct` | numeric |  |
-| `blka` | character |  |
-| `pct_ast_2pm` | numeric |  |
-| `pct_uast_2pm` | numeric |  |
-| `pct_ast_3pm` | numeric |  |
-| `pct_uast_3pm` | numeric |  |
-| `pct_ast_fgm` | numeric |  |
-| `pct_uast_fgm` | numeric |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `efg_pct_rank` | numeric |  |
-| `blka_rank` | character |  |
-| `pct_ast_2pm_rank` | numeric |  |
-| `pct_uast_2pm_rank` | numeric |  |
-| `pct_ast_3pm_rank` | numeric |  |
-| `pct_uast_3pm_rank` | numeric |  |
-| `pct_ast_fgm_rank` | numeric |  |
-| `pct_uast_fgm_rank` | numeric |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `efg_pct` | numeric | Percentage or rate for efg percentage in the requested NBA or WNBA Stats split. |
+| `blka` | integer | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pct_ast_2pm` | numeric | Percentage share of assists 2pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_2pm` | numeric | Percentage share of uast 2pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_3pm` | numeric | Percentage share of assists 3pm for the requested NBA or WNBA Stats split. |
+| `pct_uast_3pm` | numeric | Percentage share of uast 3pm for the requested NBA or WNBA Stats split. |
+| `pct_ast_fgm` | numeric | Percentage share of assists fgm for the requested NBA or WNBA Stats split. |
+| `pct_uast_fgm` | numeric | Percentage share of uast fgm for the requested NBA or WNBA Stats split. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `efg_pct_rank` | integer | Rank for effective field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_2pm_rank` | integer | Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_2pm_rank` | integer | Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_3pm_rank` | integer | Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_3pm_rank` | integer | Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_ast_fgm_rank` | integer | Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pct_uast_fgm_rank` | integer | Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -6155,113 +6109,6 @@ wnba_stats_teamdashboardbyyearoveryear()
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashlineups`
-
-GET /stats/teamdashlineups
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/teamdashlineups`
-
-**Valid URL:** [https://stats.wnba.com/stats/teamdashlineups?LeagueID=10](https://stats.wnba.com/stats/teamdashlineups?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `GameID` | `game_id_nullable` |  |  | `Y` |  |
-| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
-| `GroupQuantity` | `group_quantity` |  |  | `Y` |  |
-| `LastNGames` | `last_n_games` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
-| `Month` | `month` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `PORound` | `po_round_nullable` |  |  | `Y` |  |
-| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
-| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
-| `Period` | `period` |  |  | `Y` |  |
-| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
-| `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
-| `TeamID` | `team_id` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `group_set` | character |  |
-| `group_id` | integer | ESPN group id. |
-| `group_name` | character | Group name (conference / division). |
-| `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_teamdashlineups(league_id='10')
-```
-
-_Last validated n/a._
-
 ## `wnba_stats_teamdetails`
 
 GET /stats/teamdetails
@@ -6279,8 +6126,17 @@ GET /stats/teamdetails
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `yearawarded` | character |  |
-| `oppositeteam` | character |  |
+| `team_id` | integer | Unique team identifier. |
+| `abbreviation` | character | Short abbreviation. |
+| `nickname` | character | Team or athlete nickname. |
+| `yearfounded` | character | NBA or WNBA Stats value for yearfounded in the teamdetails result set. |
+| `city` | character | Venue city. |
+| `arena` | character | Arena. |
+| `arenacapacity` | character | NBA or WNBA Stats value for arenacapacity in the teamdetails result set. |
+| `owner` | character | NBA or WNBA Stats value for owner in the teamdetails result set. |
+| `generalmanager` | character | NBA or WNBA Stats value for generalmanager in the teamdetails result set. |
+| `headcoach` | character | NBA or WNBA Stats value for headcoach in the teamdetails result set. |
+| `dleagueaffiliation` | character | NBA or WNBA Stats value for dleagueaffiliation in the teamdetails result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -6318,29 +6174,29 @@ GET /stats/teamestimatedmetrics
 | `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
 | `min` | numeric | Minutes played. |
-| `e_off_rating` | numeric |  |
-| `e_def_rating` | numeric |  |
-| `e_net_rating` | numeric |  |
-| `e_pace` | numeric |  |
-| `e_ast_ratio` | numeric |  |
-| `e_oreb_pct` | numeric |  |
-| `e_dreb_pct` | numeric |  |
-| `e_reb_pct` | numeric |  |
-| `e_tm_tov_pct` | numeric |  |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `e_off_rating_rank` | integer |  |
-| `e_def_rating_rank` | integer |  |
-| `e_net_rating_rank` | integer |  |
-| `e_ast_ratio_rank` | integer |  |
-| `e_oreb_pct_rank` | integer |  |
-| `e_dreb_pct_rank` | integer |  |
-| `e_reb_pct_rank` | integer |  |
-| `e_tm_tov_pct_rank` | integer |  |
-| `e_pace_rank` | integer |  |
+| `e_off_rating` | numeric | Estimated offensive rating for the requested NBA or WNBA Stats split. |
+| `e_def_rating` | numeric | Estimated defensive rating for the requested NBA or WNBA Stats split. |
+| `e_net_rating` | numeric | Estimated net rating for the requested NBA or WNBA Stats split. |
+| `e_pace` | numeric | Estimated pace for the requested NBA or WNBA Stats split. |
+| `e_ast_ratio` | numeric | Estimated assist ratio for the requested NBA or WNBA Stats split. |
+| `e_oreb_pct` | numeric | Estimated offensive rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_dreb_pct` | numeric | Estimated defensive rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_reb_pct` | numeric | Estimated rebound percentage for the requested NBA or WNBA Stats split. |
+| `e_tm_tov_pct` | numeric | Estimated team turnover percentage for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_off_rating_rank` | integer | Rank for e offensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_def_rating_rank` | integer | Rank for e defensive rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_net_rating_rank` | integer | Rank for e net rating within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_ast_ratio_rank` | integer | Rank for e assists ratio within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_oreb_pct_rank` | integer | Rank for e offensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_dreb_pct_rank` | integer | Rank for e defensive rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_reb_pct_rank` | integer | Rank for e rebounds percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_tm_tov_pct_rank` | integer | Rank for e team turnovers percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `e_pace_rank` | integer | Rank for e pace within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -6348,66 +6204,6 @@ GET /stats/teamestimatedmetrics
 
 ```python
 wnba_stats_teamestimatedmetrics(league_id='10')
-```
-
-_Last validated n/a._
-
-## `wnba_stats_teamgamelog`
-
-GET /stats/teamgamelog
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/teamgamelog`
-
-**Valid URL:** [https://stats.wnba.com/stats/teamgamelog?LeagueID=10](https://stats.wnba.com/stats/teamgamelog?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `TeamID` | `team_id` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `team_id` | integer | Unique team identifier. |
-| `game_id` | integer | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `matchup` | character | Matchup. |
-| `wl` | character | Wl. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `tov` | character | Turnovers. |
-| `pf` | character | Personal fouls. |
-| `pts` | character | Points scored. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-wnba_stats_teamgamelog(league_id='10')
 ```
 
 _Last validated n/a._
@@ -6453,58 +6249,59 @@ GET /stats/teamgamelogs
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `game_id` | integer | Unique game identifier. |
+| `game_id` | character | Unique game identifier. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `matchup` | character | Matchup. |
 | `wl` | character | Wl. |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `available_flag` | integer | Flag indicating whether the requested NBA or WNBA Stats video or data asset is available. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -6722,13 +6519,13 @@ GET /stats/teamgamestreakfinder
 |---|---|---|
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_id` | integer | Unique team identifier. |
-| `gamestreak` | character |  |
-| `startdate` | character |  |
-| `enddate` | character |  |
-| `activestreak` | character |  |
-| `numseasons` | character |  |
-| `lastseason` | character |  |
-| `firstseason` | character |  |
+| `gamestreak` | character | NBA or WNBA Stats value for gamestreak in the teamgamestreakfinder result set. |
+| `startdate` | character | Date or timestamp for startdate in the NBA or WNBA Stats result set. |
+| `enddate` | character | Date or timestamp for enddate in the NBA or WNBA Stats result set. |
+| `activestreak` | character | NBA or WNBA Stats value for activestreak in the teamgamestreakfinder result set. |
+| `numseasons` | character | NBA or WNBA Stats value for numseasons in the teamgamestreakfinder result set. |
+| `lastseason` | character | NBA or WNBA Stats value for lastseason in the teamgamestreakfinder result set. |
+| `firstseason` | character | NBA or WNBA Stats value for firstseason in the teamgamestreakfinder result set. |
 | `abbreviation` | character | Short abbreviation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -6762,20 +6559,20 @@ GET /stats/teamhistoricalleaders
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `pts` | character | Points scored. |
-| `pts_person_id` | integer |  |
-| `pts_player` | character |  |
+| `pts_person_id` | integer | Stats API identifier for points person identifier associated with this NBA or WNBA Stats row. |
+| `pts_player` | character | Scoring or score-margin metric for points player in the requested NBA or WNBA Stats split. |
 | `ast` | character | Assists. |
-| `ast_person_id` | integer |  |
-| `ast_player` | character |  |
+| `ast_person_id` | integer | Stats API identifier for assists person identifier associated with this NBA or WNBA Stats row. |
+| `ast_player` | character | NBA or WNBA Stats value for assists player in the teamhistoricalleaders result set. |
 | `reb` | character | Total rebounds. |
-| `reb_person_id` | integer |  |
-| `reb_player` | character |  |
+| `reb_person_id` | integer | Stats API identifier for rebounds person identifier associated with this NBA or WNBA Stats row. |
+| `reb_player` | character | Rebounding metric for rebounds player in the requested NBA or WNBA Stats split. |
 | `blk` | character | Blocks. |
-| `blk_person_id` | integer |  |
-| `blk_player` | character |  |
+| `blk_person_id` | integer | Stats API identifier for blocks person identifier associated with this NBA or WNBA Stats row. |
+| `blk_player` | character | NBA or WNBA Stats value for blocks player in the teamhistoricalleaders result set. |
 | `stl` | character | Steals. |
-| `stl_person_id` | integer |  |
-| `stl_player` | character |  |
+| `stl_person_id` | integer | Stats API identifier for steals person identifier associated with this NBA or WNBA Stats row. |
+| `stl_player` | character | NBA or WNBA Stats value for steals player in the teamhistoricalleaders result set. |
 | `season_year` | character | Season year string ('YYYY-YY' format). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -6808,7 +6605,21 @@ GET /stats/teaminfocommon
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Unique season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `season_year` | character | Season year string ('YYYY-YY' format). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_conference` | character | NBA or WNBA Stats value for team conference in the teaminfocommon result set. |
+| `team_division` | character | NBA or WNBA Stats value for team division in the teaminfocommon result set. |
+| `team_code` | character | Internal team code. |
+| `w` | character | Wins. |
+| `l` | character | Losses. |
+| `pct` | numeric | Win percentage. |
+| `conf_rank` | character | Rank for conf within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `div_rank` | character | Rank for div within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_year` | character | Minimum year queried (echoes `min_year`). |
+| `max_year` | character | Maximum year queried (echoes `max_year`). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -6859,67 +6670,71 @@ GET /stats/teamplayerdashboard
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | character |  |
-| `dd2` | character |  |
-| `td3` | character |  |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `nba_fantasy_pts_rank` | character |  |
-| `dd2_rank` | character |  |
-| `td3_rank` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | integer | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | integer | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `wnba_fantasy_pts` | numeric | Wnba fantasy points for the requested NBA or WNBA Stats split. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | integer | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | integer | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | integer | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `wnba_fantasy_pts_rank` | integer | Rank for WNBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `team_count` | integer | NBA or WNBA Stats value for team count in the teamplayerdashboard result set. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -6968,25 +6783,27 @@ GET /stats/teamplayeronoffdetails
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
-| `team_id` | integer | Unique team identifier. |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `team_id` | character | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `gp` | integer | Games played. |
+| `vs_player_id` | character | Stats API identifier for vs player identifier associated with this NBA or WNBA Stats row. |
+| `vs_player_name` | character | Display name for vs player name associated with this NBA or WNBA Stats row. |
+| `court_status` | character | Indicates whether the compared player was on court or off court for the split row. |
+| `gp` | character | Games played. |
 | `w` | character | Wins. |
 | `l` | character | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
+| `w_pct` | character | Wins percentage (0-1 decimal). |
+| `min` | character | Minutes played. |
 | `fgm` | character | Field goals made. |
 | `fga` | character | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg_pct` | character | Field goal percentage (0-1). |
 | `fg3m` | character | Three-point field goals made. |
 | `fg3a` | character | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `fg3_pct` | character | Three-point field goal percentage (0-1). |
 | `ftm` | character | Free throws made. |
 | `fta` | character | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `ft_pct` | character | Free throw percentage (0-1). |
 | `oreb` | character | Offensive rebounds. |
 | `dreb` | character | Defensive rebounds. |
 | `reb` | character | Total rebounds. |
@@ -6994,37 +6811,37 @@ GET /stats/teamplayeronoffdetails
 | `tov` | character | Turnovers. |
 | `stl` | character | Steals. |
 | `blk` | character | Blocks. |
-| `blka` | character |  |
+| `blka` | character | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | character | Personal fouls. |
-| `pfd` | character |  |
+| `pfd` | character | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | character | Points scored. |
 | `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
+| `gp_rank` | character | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | character | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | character | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | character | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | character | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | character | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | character | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | character | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | character | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | character | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | character | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | character | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | character | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | character | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | character | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | character | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | character | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | character | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | character | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | character | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | character | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | character | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | character | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | character | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | character | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | character | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -7073,63 +6890,63 @@ GET /stats/teamplayeronoffsummary
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `group_value` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `gp` | integer | Games played. |
-| `w` | character | Wins. |
-| `l` | character | Losses. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
 | `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | integer | Minutes played. |
-| `fgm` | character | Field goals made. |
-| `fga` | character | Field goal attempts. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | character | Three-point field goals made. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | character | Free throws made. |
-| `fta` | character | Free throw attempts. |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | character | Offensive rebounds. |
-| `dreb` | character | Defensive rebounds. |
-| `reb` | character | Total rebounds. |
-| `ast` | character | Assists. |
-| `tov` | character | Turnovers. |
-| `stl` | character | Steals. |
-| `blk` | character | Blocks. |
-| `blka` | character |  |
-| `pf` | character | Personal fouls. |
-| `pfd` | character |  |
-| `pts` | character | Points scored. |
-| `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -7180,13 +6997,9 @@ GET /stats/teamvsplayer
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `group_set` | character |  |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `vs_player_id` | integer |  |
-| `vs_player_name` | character |  |
-| `court_status` | character |  |
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
+| `player_id` | integer | Unique player identifier. |
 | `gp` | integer | Games played. |
 | `w` | character | Wins. |
 | `l` | character | Losses. |
@@ -7208,39 +7021,45 @@ GET /stats/teamvsplayer
 | `tov` | character | Turnovers. |
 | `stl` | character | Steals. |
 | `blk` | character | Blocks. |
-| `blka` | character |  |
+| `blka` | character | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
 | `pf` | character | Personal fouls. |
-| `pfd` | character |  |
+| `pfd` | character | Personal fouls drawn for the requested NBA or WNBA Stats split. |
 | `pts` | character | Points scored. |
 | `plus_minus` | character | Plus/minus point differential while on court. |
-| `gp_rank` | character |  |
-| `w_rank` | character |  |
-| `l_rank` | character |  |
-| `w_pct_rank` | numeric |  |
-| `min_rank` | character |  |
-| `fgm_rank` | character |  |
-| `fga_rank` | character |  |
-| `fg_pct_rank` | numeric |  |
-| `fg3m_rank` | character |  |
-| `fg3a_rank` | character |  |
-| `fg3_pct_rank` | numeric |  |
-| `ftm_rank` | character |  |
-| `fta_rank` | character |  |
-| `ft_pct_rank` | numeric |  |
-| `oreb_rank` | character |  |
-| `dreb_rank` | character |  |
-| `reb_rank` | character |  |
-| `ast_rank` | character |  |
-| `tov_rank` | character |  |
-| `stl_rank` | character |  |
-| `blk_rank` | character |  |
-| `blka_rank` | character |  |
-| `pf_rank` | character |  |
-| `pfd_rank` | character |  |
-| `pts_rank` | character |  |
-| `plus_minus_rank` | character |  |
-| `cfid` | character |  |
-| `cfparams` | character |  |
+| `nba_fantasy_pts` | character | Nba fantasy points for the requested NBA or WNBA Stats split. |
+| `dd2` | character | Double-doubles for the requested NBA or WNBA Stats split. |
+| `td3` | character | Triple-doubles for the requested NBA or WNBA Stats split. |
+| `gp_rank` | character | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | character | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | character | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | numeric | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | character | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | character | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | character | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | numeric | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | character | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | character | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | numeric | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | character | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | character | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | numeric | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | character | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | character | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | character | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | character | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | character | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | character | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | character | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | character | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | character | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | character | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | character | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | character | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `nba_fantasy_pts_rank` | character | Rank for NBA fantasy points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dd2_rank` | character | Rank for double-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `td3_rank` | character | Rank for triple-doubles within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `cfid` | character | NBA Stats custom-filter identifier attached to the row or request context. |
+| `cfparams` | character | NBA Stats custom-filter parameter string attached to the row or request context. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -7299,16 +7118,16 @@ GET /stats/videostatus
 | `game_id` | integer | Unique game identifier. |
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `visitor_team_id` | integer | Unique identifier for visitor team. |
-| `visitor_team_city` | character |  |
-| `visitor_team_name` | character |  |
-| `visitor_team_abbreviation` | character |  |
+| `visitor_team_city` | character | Team city for the visiting team in this NBA or WNBA Stats row. |
+| `visitor_team_name` | character | Team name for the visiting team in this NBA or WNBA Stats row. |
+| `visitor_team_abbreviation` | character | Team abbreviation for the visiting team in this NBA or WNBA Stats row. |
 | `home_team_id` | integer | Unique identifier for the home team. |
 | `home_team_city` | character | Home team city / location. |
 | `home_team_name` | character | Home team name. |
 | `home_team_abbreviation` | character | Home team abbreviation; `team_detail = TRUE` only. |
 | `game_status` | character | Game status label. |
 | `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
-| `is_available` | character |  |
+| `is_available` | character | Flag indicating is available for the requested NBA or WNBA Stats context. |
 | `pt_xyz_available` | character | Pt xyz available. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

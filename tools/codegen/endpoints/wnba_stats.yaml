@@ -237,17 +237,6 @@ endpoints:
 - example_args: {}
   extra_params:
   - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/boxscoredefensivev2
-  returns_schema: native/wnba_stats/boxscoredefensivev2
-  short: boxscoredefensivev2
-  summary: GET /stats/boxscoredefensivev2
-- example_args: {}
-  extra_params:
-  - default: null
     name: end_period
     query_key: EndPeriod
     type: str
@@ -307,17 +296,6 @@ endpoints:
   returns_schema: native/wnba_stats/boxscorefourfactorsv3
   short: boxscorefourfactorsv3
   summary: GET /stats/boxscorefourfactorsv3
-- example_args: {}
-  extra_params:
-  - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/boxscorematchupsv3
-  returns_schema: native/wnba_stats/boxscorematchupsv3
-  short: boxscorematchupsv3
-  summary: GET /stats/boxscorematchupsv3
 - example_args: {}
   extra_params:
   - default: null
@@ -387,17 +365,6 @@ endpoints:
   returns_schema: native/wnba_stats/boxscoreplayertrackv2
   short: boxscoreplayertrackv2
   summary: GET /stats/boxscoreplayertrackv2
-- example_args: {}
-  extra_params:
-  - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/boxscoreplayertrackv3
-  returns_schema: native/wnba_stats/boxscoreplayertrackv3
-  short: boxscoreplayertrackv3
-  summary: GET /stats/boxscoreplayertrackv3
 - example_args: {}
   extra_params:
   - default: null
@@ -471,17 +438,6 @@ endpoints:
   returns_schema: native/wnba_stats/boxscoresummaryv2
   short: boxscoresummaryv2
   summary: GET /stats/boxscoresummaryv2
-- example_args: {}
-  extra_params:
-  - default: null
-    name: gameid
-    query_key: GameID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/boxscoresummaryv3
-  returns_schema: native/wnba_stats/boxscoresummaryv3
-  short: boxscoresummaryv3
-  summary: GET /stats/boxscoresummaryv3
 - example_args: {}
   extra_params:
   - default: null
@@ -669,26 +625,6 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/commonteamroster
-  returns_schema: native/wnba_stats/commonteamroster
-  short: commonteamroster
-  summary: GET /stats/commonteamroster
-- example_args:
-    league_id: '10'
-  extra_params:
-  - default: '10'
-    name: league_id
-    query_key: LeagueID
-    type: str
   parser: parse_wnba_stats_result_sets
   path: /stats/commonteamyears
   returns_schema: native/wnba_stats/commonteamyears
@@ -794,54 +730,6 @@ endpoints:
   returns_schema: native/wnba_stats/cumestatsteam
   short: cumestatsteam
   summary: GET /stats/cumestatsteam
-- example_args:
-    league_id: '10'
-  extra_params:
-  - default: '10'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: location_nullable
-    query_key: Location
-    type: str
-  - default: null
-    name: outcome_nullable
-    query_key: Outcome
-    type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  - default: null
-    name: season_id_nullable
-    query_key: SeasonID
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  - default: null
-    name: vs_conference_nullable
-    query_key: VsConference
-    type: str
-  - default: null
-    name: vs_division_nullable
-    query_key: VsDivision
-    type: str
-  - default: null
-    name: vs_team_id_nullable
-    query_key: VsTeamID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/cumestatsteamgames
-  returns_schema: native/wnba_stats/cumestatsteamgames
-  short: cumestatsteamgames
-  summary: GET /stats/cumestatsteamgames
 - example_args:
     league_id: '10'
   extra_params:
@@ -1106,37 +994,6 @@ endpoints:
   returns_schema: native/wnba_stats/franchiseleaders
   short: franchiseleaders
   summary: GET /stats/franchiseleaders
-- example_args: {}
-  extra_params: []
-  parser: parse_wnba_stats_result_sets
-  path: /stats/franchiseleaderswrank
-  returns_schema: native/wnba_stats/franchiseleaderswrank
-  short: franchiseleaderswrank
-  summary: GET /stats/franchiseleaderswrank
-- example_args:
-    league_id: '10'
-  extra_params:
-  - default: '10'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: per_mode_detailed
-    query_key: PerMode
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/franchiseplayers
-  returns_schema: native/wnba_stats/franchiseplayers
-  short: franchiseplayers
-  summary: GET /stats/franchiseplayers
 - example_args:
     league_id: '10'
   extra_params:
@@ -1225,6 +1082,17 @@ endpoints:
   returns_schema: native/wnba_stats/homepagev2
   short: homepagev2
   summary: GET /stats/homepagev2
+- example_args: {}
+  extra_params:
+  - default: null
+    name: game_id
+    query_key: GameID
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/hustlestatsboxscore
+  returns_schema: native/wnba_stats/hustlestatsboxscore
+  short: hustlestatsboxscore
+  summary: GET /stats/hustlestatsboxscore
 - example_args: {}
   extra_params:
   - default: null
@@ -1828,6 +1696,138 @@ endpoints:
   returns_schema: native/wnba_stats/leaguedashplayerstats
   short: leaguedashplayerstats
   summary: GET /stats/leaguedashplayerstats
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: null
+    name: college_nullable
+    query_key: College
+    type: str
+  - default: null
+    name: conference_nullable
+    query_key: Conference
+    type: str
+  - default: null
+    name: country_nullable
+    query_key: Country
+    type: str
+  - default: null
+    name: date_from_nullable
+    query_key: DateFrom
+    type: str
+  - default: null
+    name: date_to_nullable
+    query_key: DateTo
+    type: str
+  - default: null
+    name: defense_category
+    query_key: DefenseCategory
+    type: str
+  - default: null
+    name: division_nullable
+    query_key: Division
+    type: str
+  - default: null
+    name: draft_pick_nullable
+    query_key: DraftPick
+    type: str
+  - default: null
+    name: draft_year_nullable
+    query_key: DraftYear
+    type: str
+  - default: null
+    name: game_segment_nullable
+    query_key: GameSegment
+    type: str
+  - default: null
+    name: height_nullable
+    query_key: Height
+    type: str
+  - default: null
+    name: last_n_games_nullable
+    query_key: LastNGames
+    type: str
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: null
+    name: location_nullable
+    query_key: Location
+    type: str
+  - default: null
+    name: month_nullable
+    query_key: Month
+    type: str
+  - default: null
+    name: opponent_team_id_nullable
+    query_key: OpponentTeamID
+    type: str
+  - default: null
+    name: outcome_nullable
+    query_key: Outcome
+    type: str
+  - default: null
+    name: po_round_nullable
+    query_key: PORound
+    type: str
+  - default: null
+    name: per_mode_simple
+    query_key: PerMode
+    type: str
+  - default: null
+    name: period_nullable
+    query_key: Period
+    type: str
+  - default: null
+    name: player_experience_nullable
+    query_key: PlayerExperience
+    type: str
+  - default: null
+    name: player_id_nullable
+    query_key: PlayerID
+    type: str
+  - default: null
+    name: player_position_nullable
+    query_key: PlayerPosition
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: null
+    name: season_segment_nullable
+    query_key: SeasonSegment
+    type: str
+  - default: null
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  - default: null
+    name: starter_bench_nullable
+    query_key: StarterBench
+    type: str
+  - default: null
+    name: team_id_nullable
+    query_key: TeamID
+    type: str
+  - default: null
+    name: vs_conference_nullable
+    query_key: VsConference
+    type: str
+  - default: null
+    name: vs_division_nullable
+    query_key: VsDivision
+    type: str
+  - default: null
+    name: weight_nullable
+    query_key: Weight
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/leaguedashptdefend
+  returns_schema: native/wnba_stats/leaguedashptdefend
+  short: leaguedashptdefend
+  summary: GET /stats/leaguedashptdefend
 - example_args:
     league_id: '10'
   extra_params:
@@ -2845,25 +2845,6 @@ endpoints:
 - example_args: {}
   extra_params:
   - default: null
-    name: end_period
-    query_key: EndPeriod
-    type: str
-  - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  - default: null
-    name: start_period
-    query_key: StartPeriod
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/playbyplayv3
-  returns_schema: native/wnba_stats/playbyplayv3
-  short: playbyplayv3
-  summary: GET /stats/playbyplayv3
-- example_args: {}
-  extra_params:
-  - default: null
     name: player_id
     query_key: PlayerID
     type: str
@@ -2900,30 +2881,6 @@ endpoints:
   returns_schema: native/wnba_stats/playercareerbycollege
   short: playercareerbycollege
   summary: GET /stats/playercareerbycollege
-- example_args:
-    league_id: '10'
-  extra_params:
-  - default: '10'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: per_mode_simple
-    query_key: PerMode
-    type: str
-  - default: null
-    name: season_nullable
-    query_key: Season
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/playercareerbycollegerollup
-  returns_schema: native/wnba_stats/playercareerbycollegerollup
-  short: playercareerbycollegerollup
-  summary: GET /stats/playercareerbycollegerollup
 - example_args:
     league_id: '10'
   extra_params:
@@ -3759,6 +3716,86 @@ endpoints:
   returns_schema: native/wnba_stats/playerdashboardbyyearoveryear
   short: playerdashboardbyyearoveryear
   summary: GET /stats/playerdashboardbyyearoveryear
+- example_args:
+    league_id: '10'
+  extra_params:
+  - default: null
+    name: date_from_nullable
+    query_key: DateFrom
+    type: str
+  - default: null
+    name: date_to_nullable
+    query_key: DateTo
+    type: str
+  - default: null
+    name: game_segment_nullable
+    query_key: GameSegment
+    type: str
+  - default: null
+    name: last_n_games
+    query_key: LastNGames
+    type: str
+  - default: '10'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: null
+    name: location_nullable
+    query_key: Location
+    type: str
+  - default: null
+    name: month
+    query_key: Month
+    type: str
+  - default: null
+    name: opponent_team_id
+    query_key: OpponentTeamID
+    type: str
+  - default: null
+    name: outcome_nullable
+    query_key: Outcome
+    type: str
+  - default: null
+    name: per_mode_simple
+    query_key: PerMode
+    type: str
+  - default: null
+    name: period
+    query_key: Period
+    type: str
+  - default: null
+    name: player_id
+    query_key: PlayerID
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: null
+    name: season_segment_nullable
+    query_key: SeasonSegment
+    type: str
+  - default: null
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  - default: null
+    name: team_id
+    query_key: TeamID
+    type: str
+  - default: null
+    name: vs_conference_nullable
+    query_key: VsConference
+    type: str
+  - default: null
+    name: vs_division_nullable
+    query_key: VsDivision
+    type: str
+  parser: parse_wnba_stats_result_sets
+  path: /stats/playerdashptshotdefend
+  returns_schema: native/wnba_stats/playerdashptshotdefend
+  short: playerdashptshotdefend
+  summary: GET /stats/playerdashptshotdefend
 - example_args:
     league_id: '10'
   extra_params:
@@ -5030,114 +5067,6 @@ endpoints:
   returns_schema: native/wnba_stats/teamdashboardbyyearoveryear
   short: teamdashboardbyyearoveryear
   summary: GET /stats/teamdashboardbyyearoveryear
-- example_args:
-    league_id: '10'
-  extra_params:
-  - default: null
-    name: date_from_nullable
-    query_key: DateFrom
-    type: str
-  - default: null
-    name: date_to_nullable
-    query_key: DateTo
-    type: str
-  - default: null
-    name: game_id_nullable
-    query_key: GameID
-    type: str
-  - default: null
-    name: game_segment_nullable
-    query_key: GameSegment
-    type: str
-  - default: null
-    name: group_quantity
-    query_key: GroupQuantity
-    type: str
-  - default: null
-    name: last_n_games
-    query_key: LastNGames
-    type: str
-  - default: '10'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: location_nullable
-    query_key: Location
-    type: str
-  - default: null
-    name: measure_type_detailed_defense
-    query_key: MeasureType
-    type: str
-  - default: null
-    name: month
-    query_key: Month
-    type: str
-  - default: null
-    name: opponent_team_id
-    query_key: OpponentTeamID
-    type: str
-  - default: null
-    name: outcome_nullable
-    query_key: Outcome
-    type: str
-  - default: null
-    name: po_round_nullable
-    query_key: PORound
-    type: str
-  - default: null
-    name: pace_adjust
-    query_key: PaceAdjust
-    type: str
-  - default: null
-    name: per_mode_detailed
-    query_key: PerMode
-    type: str
-  - default: null
-    name: period
-    query_key: Period
-    type: str
-  - default: null
-    name: plus_minus
-    query_key: PlusMinus
-    type: str
-  - default: null
-    name: rank
-    query_key: Rank
-    type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  - default: null
-    name: season_segment_nullable
-    query_key: SeasonSegment
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  - default: null
-    name: shot_clock_range_nullable
-    query_key: ShotClockRange
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  - default: null
-    name: vs_conference_nullable
-    query_key: VsConference
-    type: str
-  - default: null
-    name: vs_division_nullable
-    query_key: VsDivision
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/teamdashlineups
-  returns_schema: native/wnba_stats/teamdashlineups
-  short: teamdashlineups
-  summary: GET /stats/teamdashlineups
 - example_args: {}
   extra_params:
   - default: null
@@ -5169,38 +5098,6 @@ endpoints:
   returns_schema: native/wnba_stats/teamestimatedmetrics
   short: teamestimatedmetrics
   summary: GET /stats/teamestimatedmetrics
-- example_args:
-    league_id: '10'
-  extra_params:
-  - default: null
-    name: date_from_nullable
-    query_key: DateFrom
-    type: str
-  - default: null
-    name: date_to_nullable
-    query_key: DateTo
-    type: str
-  - default: '10'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  parser: parse_wnba_stats_result_sets
-  path: /stats/teamgamelog
-  returns_schema: native/wnba_stats/teamgamelog
-  short: teamgamelog
-  summary: GET /stats/teamgamelog
 - example_args:
     league_id: '10'
   extra_params:

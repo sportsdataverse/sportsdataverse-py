@@ -244,17 +244,6 @@ endpoints:
 - example_args: {}
   extra_params:
   - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/boxscoredefensivev2
-  returns_schema: native/nba_stats/boxscoredefensivev2
-  short: boxscoredefensivev2
-  summary: GET /stats/boxscoredefensivev2
-- example_args: {}
-  extra_params:
-  - default: null
     name: end_period
     query_key: EndPeriod
     type: str
@@ -315,34 +304,12 @@ endpoints:
   short: boxscorefourfactorsv3
   summary: GET /stats/boxscorefourfactorsv3
 - example_args: {}
-  extra_params:
-  - default: null
-    name: gameid
-    query_key: GameID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/boxscorehustlev2
-  returns_schema: native/nba_stats/boxscorehustlev2
-  short: boxscorehustlev2
-  summary: GET /stats/boxscorehustlev2
-- example_args: {}
   extra_params: []
   parser: parse_nba_stats_result_sets
   path: /stats/boxscorematchups
   returns_schema: native/nba_stats/boxscorematchups
   short: boxscorematchups
   summary: GET /stats/boxscorematchups
-- example_args: {}
-  extra_params:
-  - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/boxscorematchupsv3
-  returns_schema: native/nba_stats/boxscorematchupsv3
-  short: boxscorematchupsv3
-  summary: GET /stats/boxscorematchupsv3
 - example_args: {}
   extra_params:
   - default: null
@@ -412,17 +379,6 @@ endpoints:
   returns_schema: native/nba_stats/boxscoreplayertrackv2
   short: boxscoreplayertrackv2
   summary: GET /stats/boxscoreplayertrackv2
-- example_args: {}
-  extra_params:
-  - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/boxscoreplayertrackv3
-  returns_schema: native/nba_stats/boxscoreplayertrackv3
-  short: boxscoreplayertrackv3
-  summary: GET /stats/boxscoreplayertrackv3
 - example_args: {}
   extra_params:
   - default: null
@@ -503,17 +459,6 @@ endpoints:
   returns_schema: native/nba_stats/boxscoresummaryv2
   short: boxscoresummaryv2
   summary: GET /stats/boxscoresummaryv2
-- example_args: {}
-  extra_params:
-  - default: null
-    name: gameid
-    query_key: GameID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/boxscoresummaryv3
-  returns_schema: native/nba_stats/boxscoresummaryv3
-  short: boxscoresummaryv3
-  summary: GET /stats/boxscoresummaryv3
 - example_args: {}
   extra_params:
   - default: null
@@ -701,26 +646,6 @@ endpoints:
     name: league_id
     query_key: LeagueID
     type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/commonteamroster
-  returns_schema: native/nba_stats/commonteamroster
-  short: commonteamroster
-  summary: GET /stats/commonteamroster
-- example_args:
-    league_id: '00'
-  extra_params:
-  - default: '00'
-    name: league_id
-    query_key: LeagueID
-    type: str
   parser: parse_nba_stats_result_sets
   path: /stats/commonteamyears
   returns_schema: native/nba_stats/commonteamyears
@@ -826,54 +751,6 @@ endpoints:
   returns_schema: native/nba_stats/cumestatsteam
   short: cumestatsteam
   summary: GET /stats/cumestatsteam
-- example_args:
-    league_id: '00'
-  extra_params:
-  - default: '00'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: location_nullable
-    query_key: Location
-    type: str
-  - default: null
-    name: outcome_nullable
-    query_key: Outcome
-    type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  - default: null
-    name: season_id_nullable
-    query_key: SeasonID
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  - default: null
-    name: vs_conference_nullable
-    query_key: VsConference
-    type: str
-  - default: null
-    name: vs_division_nullable
-    query_key: VsDivision
-    type: str
-  - default: null
-    name: vs_team_id_nullable
-    query_key: VsTeamID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/cumestatsteamgames
-  returns_schema: native/nba_stats/cumestatsteamgames
-  short: cumestatsteamgames
-  summary: GET /stats/cumestatsteamgames
 - example_args:
     league_id: '00'
   extra_params:
@@ -1145,37 +1022,6 @@ endpoints:
   returns_schema: native/nba_stats/franchiseleaders
   short: franchiseleaders
   summary: GET /stats/franchiseleaders
-- example_args: {}
-  extra_params: []
-  parser: parse_nba_stats_result_sets
-  path: /stats/franchiseleaderswrank
-  returns_schema: native/nba_stats/franchiseleaderswrank
-  short: franchiseleaderswrank
-  summary: GET /stats/franchiseleaderswrank
-- example_args:
-    league_id: '00'
-  extra_params:
-  - default: '00'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: per_mode_detailed
-    query_key: PerMode
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/franchiseplayers
-  returns_schema: native/nba_stats/franchiseplayers
-  short: franchiseplayers
-  summary: GET /stats/franchiseplayers
 - example_args:
     league_id: '00'
   extra_params:
@@ -3960,44 +3806,6 @@ endpoints:
 - example_args: {}
   extra_params:
   - default: null
-    name: end_period
-    query_key: EndPeriod
-    type: str
-  - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  - default: null
-    name: start_period
-    query_key: StartPeriod
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/playbyplayv2
-  returns_schema: native/nba_stats/playbyplayv2
-  short: playbyplayv2
-  summary: GET /stats/playbyplayv2
-- example_args: {}
-  extra_params:
-  - default: null
-    name: end_period
-    query_key: EndPeriod
-    type: str
-  - default: null
-    name: game_id
-    query_key: GameID
-    type: str
-  - default: null
-    name: start_period
-    query_key: StartPeriod
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/playbyplayv3
-  returns_schema: native/nba_stats/playbyplayv3
-  short: playbyplayv3
-  summary: GET /stats/playbyplayv3
-- example_args: {}
-  extra_params:
-  - default: null
     name: player_id
     query_key: PlayerID
     type: str
@@ -4034,30 +3842,6 @@ endpoints:
   returns_schema: native/nba_stats/playercareerbycollege
   short: playercareerbycollege
   summary: GET /stats/playercareerbycollege
-- example_args:
-    league_id: '00'
-  extra_params:
-  - default: '00'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: per_mode_simple
-    query_key: PerMode
-    type: str
-  - default: null
-    name: season_nullable
-    query_key: Season
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/playercareerbycollegerollup
-  returns_schema: native/nba_stats/playercareerbycollegerollup
-  short: playercareerbycollegerollup
-  summary: GET /stats/playercareerbycollegerollup
 - example_args:
     league_id: '00'
   extra_params:
@@ -5964,38 +5748,6 @@ endpoints:
   returns_schema: native/nba_stats/playoffpicture
   short: playoffpicture
   summary: GET /stats/playoffpicture
-- example_args:
-    league_id: '00'
-  extra_params:
-  - default: '00'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/scheduleleaguev2
-  returns_schema: native/nba_stats/scheduleleaguev2
-  short: scheduleleaguev2
-  summary: GET /stats/scheduleleaguev2
-- example_args:
-    league_id: '00'
-  extra_params:
-  - default: '00'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/scheduleleaguev2int
-  returns_schema: native/nba_stats/scheduleleaguev2int
-  short: scheduleleaguev2int
-  summary: GET /stats/scheduleleaguev2int
 - example_args: {}
   extra_params: []
   parser: parse_nba_stats_result_sets
@@ -7051,38 +6803,6 @@ endpoints:
   returns_schema: native/nba_stats/teamestimatedmetrics
   short: teamestimatedmetrics
   summary: GET /stats/teamestimatedmetrics
-- example_args:
-    league_id: '00'
-  extra_params:
-  - default: null
-    name: date_from_nullable
-    query_key: DateFrom
-    type: str
-  - default: null
-    name: date_to_nullable
-    query_key: DateTo
-    type: str
-  - default: '00'
-    name: league_id
-    query_key: LeagueID
-    type: str
-  - default: null
-    name: season
-    query_key: Season
-    type: str
-  - default: null
-    name: season_type_all_star
-    query_key: SeasonType
-    type: str
-  - default: null
-    name: team_id
-    query_key: TeamID
-    type: str
-  parser: parse_nba_stats_result_sets
-  path: /stats/teamgamelog
-  returns_schema: native/nba_stats/teamgamelog
-  short: teamgamelog
-  summary: GET /stats/teamgamelog
 - example_args:
     league_id: '00'
   extra_params:
@@ -8634,13 +8354,6 @@ endpoints:
   returns_schema: native/nba_stats/videoevents
   short: videoevents
   summary: GET /stats/videoevents
-- example_args: {}
-  extra_params: []
-  parser: parse_nba_stats_result_sets
-  path: /stats/videoeventsasset
-  returns_schema: native/nba_stats/videoeventsasset
-  short: videoeventsasset
-  summary: GET /stats/videoeventsasset
 - example_args:
     league_id: '00'
   extra_params:

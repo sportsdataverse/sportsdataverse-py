@@ -1,7 +1,7 @@
 columns:
 - description: ''
   name: season_id
-  type: integer
+  type: character
 - description: ''
   name: off_player_id
   type: integer
@@ -19,63 +19,63 @@ columns:
   type: integer
 - description: ''
   name: matchup_min
-  type: character
+  type: numeric
 - description: ''
   name: partial_poss
-  type: character
+  type: numeric
 - description: ''
   name: player_pts
-  type: character
+  type: numeric
 - description: ''
   name: team_pts
-  type: character
+  type: numeric
 - description: ''
   name: matchup_ast
-  type: character
+  type: numeric
 - description: ''
   name: matchup_tov
-  type: character
+  type: numeric
 - description: ''
   name: matchup_blk
-  type: character
+  type: numeric
 - description: ''
   name: matchup_fgm
-  type: character
+  type: numeric
 - description: ''
   name: matchup_fga
-  type: character
+  type: numeric
 - description: ''
   name: matchup_fg_pct
   type: numeric
 - description: ''
   name: matchup_fg3m
-  type: character
+  type: numeric
 - description: ''
   name: matchup_fg3a
-  type: character
+  type: numeric
 - description: ''
   name: matchup_fg3_pct
   type: numeric
 - description: ''
   name: help_blk
-  type: character
+  type: integer
 - description: ''
   name: help_fgm
-  type: character
+  type: integer
 - description: ''
   name: help_fga
-  type: character
+  type: integer
 - description: ''
   name: help_fg_perc
-  type: character
+  type: integer
 - description: ''
   name: matchup_ftm
-  type: character
+  type: numeric
 - description: ''
   name: matchup_fta
-  type: character
+  type: numeric
 - description: ''
   name: sfl
-  type: character
+  type: numeric
 kind: dataframe
 schema: leagueseasonmatchups

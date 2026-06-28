@@ -6,7 +6,10 @@ columns:
   name: title_description
   type: character
 - description: ''
-  name: description
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name
   type: character
 - description: ''
   name: min

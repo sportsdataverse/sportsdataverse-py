@@ -1,48 +1,45 @@
 columns:
 - description: ''
-  name: player_id
+  name: close_def_person_id
   type: integer
 - description: ''
   name: player_name
   type: character
 - description: ''
-  name: team_id
+  name: player_last_team_id
   type: integer
 - description: ''
-  name: team_abbreviation
+  name: player_last_team_abbreviation
   type: character
+- description: ''
+  name: player_position
+  type: character
+- description: ''
+  name: age
+  type: numeric
 - description: ''
   name: gp
   type: integer
 - description: ''
-  name: w
+  name: g
   type: integer
 - description: ''
-  name: l
-  type: integer
-- description: ''
-  name: min
+  name: freq
   type: numeric
 - description: ''
-  name: dist_feet
+  name: d_fgm
   type: numeric
 - description: ''
-  name: dist_miles
+  name: d_fga
   type: numeric
 - description: ''
-  name: dist_miles_off
+  name: d_fg_pct
   type: numeric
 - description: ''
-  name: dist_miles_def
+  name: normal_fg_pct
   type: numeric
 - description: ''
-  name: avg_speed
-  type: numeric
-- description: ''
-  name: avg_speed_off
-  type: numeric
-- description: ''
-  name: avg_speed_def
+  name: pct_plusminus
   type: numeric
 kind: dataframe
-schema: leaguedashptstats
+schema: leaguedashptdefend
