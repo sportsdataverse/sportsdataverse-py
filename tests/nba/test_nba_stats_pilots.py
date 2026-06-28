@@ -60,11 +60,13 @@ def test_live_leaguedashplayerstats_nba():
 
 @skip_if_no_live
 def test_live_leaguedashplayerstats_gleague():
+    # off-season endpoints may return a valid but empty frame
     df = nba_stats.nba_stats_leaguedashplayerstats(league_id="20")
     assert isinstance(df, pl.DataFrame)
 
 
 @skip_if_no_live
 def test_live_leaguedashplayerstats_summer():
+    # off-season endpoints may return a valid but empty frame
     df = nba_stats.nba_stats_leaguedashplayerstats(league_id="15")
     assert isinstance(df, pl.DataFrame)

@@ -31,6 +31,11 @@ def test_get_returns_empty_dict_on_non_200():
     assert out == {}
 
 
+def test_get_returns_empty_dict_on_blank_body():
+    out = _get("x", {}, transport=lambda *a: (200, "   "))
+    assert out == {}
+
+
 def test_get_passes_full_url_through():
     captured = {}
 

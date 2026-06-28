@@ -57,3 +57,9 @@ def test_parse_multi_set_return_as_pandas():
     out = parse_nba_stats_result_sets(raw, return_as_pandas=True)
     assert isinstance(out, dict)
     assert all(isinstance(v, pd.DataFrame) for v in out.values())
+
+
+def test_parse_ragged_rows_returns_zero_row_frame():
+    raw = {"resultSets": [{"name": "X", "headers": ["A", "B"], "rowSet": [[1]]}]}  # row width != headers
+    df = parse_nba_stats_result_sets(raw, result_set="X")
+    assert isinstance(df, pl.DataFrame) and df.height == 0

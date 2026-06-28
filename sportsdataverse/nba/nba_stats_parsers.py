@@ -62,8 +62,13 @@ def _to_frame(rs: dict) -> pl.DataFrame:
         return pl.DataFrame()
     # Stringify any list-valued cells so polars accepts a uniform schema
     norm = [[("|".join(map(str, c)) if isinstance(c, list) else c) for c in row] for row in rows]
+    # Drop ragged rows (width mismatch → ShapeError otherwise)
+    norm = [r for r in norm if len(r) == len(headers)]
     if norm:
-        return pl.DataFrame(norm, schema=headers, orient="row")
+        try:
+            return pl.DataFrame(norm, schema=headers, orient="row")
+        except Exception:
+            pass
     return pl.DataFrame(schema={h: pl.Utf8 for h in headers})
 
 
