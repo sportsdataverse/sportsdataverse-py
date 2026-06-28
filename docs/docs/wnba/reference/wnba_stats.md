@@ -1170,20 +1170,20 @@ GET /stats/commonallplayers
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `display_last_comma_first` | character |  |
-| `display_first_last` | character |  |
-| `rosterstatus` | character |  |
-| `from_year` | character |  |
-| `to_year` | character |  |
-| `playercode` | character |  |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_code` | character | Internal team code. |
-| `games_played_flag` | character |  |
-| `otherleague_experience_ch` | character |  |
+| `person_id` | integer | Unique stats.nba.com identifier for the player. |
+| `display_last_comma_first` | character | Player name formatted as 'Last, First' for alphabetical directory sorting. |
+| `display_first_last` | character | Player name formatted as 'First Last' for display in player-facing contexts. |
+| `rosterstatus` | character | Whether the player is currently on an active roster (1 = active, 0 = inactive or retired). |
+| `from_year` | character | First season year the player appeared in the NBA or WNBA. |
+| `to_year` | character | Most recent season year the player appeared in the NBA or WNBA. |
+| `playercode` | character | Slug-style identifier for the player used in stats.nba.com profile URLs. |
+| `team_id` | integer | Unique stats.nba.com identifier for the player's current team (0 if unsigned). |
+| `team_city` | character | City name of the player's current NBA or WNBA franchise. |
+| `team_name` | character | Nickname/mascot of the player's current NBA or WNBA franchise. |
+| `team_abbreviation` | character | Two- or three-letter abbreviation for the player's current team. |
+| `team_code` | character | Slug-style code for the player's current team used in stats.nba.com team URLs. |
+| `games_played_flag` | character | Flag indicating whether the player has appeared in at least one game ('Y' or 'N'). |
+| `otherleague_experience_ch` | character | Flag for whether the player has experience in a non-NBA/WNBA league prior to entering the NBA or WNBA. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2775,73 +2775,73 @@ GET /stats/leaguedashplayerstats
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `nickname` | character | Team or athlete nickname. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `age` | numeric | Player age (in years). |
-| `gp` | integer | Games played. |
-| `w` | integer | Wins. |
-| `l` | integer | Losses. |
-| `w_pct` | numeric | Wins percentage (0-1 decimal). |
-| `min` | numeric | Minutes played. |
-| `fgm` | numeric | Field goals made. |
-| `fga` | numeric | Field goal attempts. |
-| `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
-| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ftm` | numeric | Free throws made. |
-| `fta` | numeric | Free throw attempts. |
-| `ft_pct` | numeric | Free throw percentage (0-1). |
-| `oreb` | numeric | Offensive rebounds. |
-| `dreb` | numeric | Defensive rebounds. |
-| `reb` | numeric | Total rebounds. |
-| `ast` | numeric | Assists. |
-| `tov` | numeric | Turnovers. |
-| `stl` | numeric | Steals. |
-| `blk` | numeric | Blocks. |
-| `blka` | numeric |  |
-| `pf` | numeric | Personal fouls. |
-| `pfd` | numeric |  |
-| `pts` | numeric | Points scored. |
-| `plus_minus` | numeric | Plus/minus point differential while on court. |
-| `nba_fantasy_pts` | numeric |  |
-| `dd2` | integer |  |
-| `td3` | integer |  |
-| `wnba_fantasy_pts` | numeric |  |
-| `gp_rank` | integer |  |
-| `w_rank` | integer |  |
-| `l_rank` | integer |  |
-| `w_pct_rank` | integer |  |
-| `min_rank` | integer |  |
-| `fgm_rank` | integer |  |
-| `fga_rank` | integer |  |
-| `fg_pct_rank` | integer |  |
-| `fg3m_rank` | integer |  |
-| `fg3a_rank` | integer |  |
-| `fg3_pct_rank` | integer |  |
-| `ftm_rank` | integer |  |
-| `fta_rank` | integer |  |
-| `ft_pct_rank` | integer |  |
-| `oreb_rank` | integer |  |
-| `dreb_rank` | integer |  |
-| `reb_rank` | integer |  |
-| `ast_rank` | integer |  |
-| `tov_rank` | integer |  |
-| `stl_rank` | integer |  |
-| `blk_rank` | integer |  |
-| `blka_rank` | integer |  |
-| `pf_rank` | integer |  |
-| `pfd_rank` | integer |  |
-| `pts_rank` | integer |  |
-| `plus_minus_rank` | integer |  |
-| `nba_fantasy_pts_rank` | integer |  |
-| `dd2_rank` | integer |  |
-| `td3_rank` | integer |  |
-| `wnba_fantasy_pts_rank` | integer |  |
-| `team_count` | integer |  |
+| `player_id` | integer | Unique stats.nba.com identifier for the player. |
+| `player_name` | character | Full display name of the player as used by the NBA or WNBA. |
+| `nickname` | character | Common nickname or shortened name for the player, if available. |
+| `team_id` | integer | Unique stats.nba.com identifier for the player's team during the span. |
+| `team_abbreviation` | character | Two- or three-letter abbreviation for the player's team. |
+| `age` | numeric | Player's age at the start of the season or as of the stat snapshot date. |
+| `gp` | integer | Number of games in which the player appeared during the span. |
+| `w` | integer | Number of games the player's team won while the player was active in the span. |
+| `l` | integer | Number of games the player's team lost while the player was active in the span. |
+| `w_pct` | numeric | Win percentage for games in which the player appeared (wins divided by games played). |
+| `min` | numeric | Total or average minutes played, depending on the requested per-mode. |
+| `fgm` | numeric | Field goals made (total or per-game depending on the requested PerMode). |
+| `fga` | numeric | Field goal attempts (total or per-game depending on the requested PerMode). |
+| `fg_pct` | numeric | Field goal percentage (fgm divided by fga). |
+| `fg3m` | numeric | Three-point field goals made (total or per-game depending on the requested PerMode). |
+| `fg3a` | numeric | Three-point field goal attempts (total or per-game depending on the requested PerMode). |
+| `fg3_pct` | numeric | Three-point field goal percentage (fg3m divided by fg3a). |
+| `ftm` | numeric | Free throws made (total or per-game depending on the requested PerMode). |
+| `fta` | numeric | Free throw attempts (total or per-game depending on the requested PerMode). |
+| `ft_pct` | numeric | Free throw percentage (ftm divided by fta). |
+| `oreb` | numeric | Offensive rebounds (total or per-game depending on the requested PerMode). |
+| `dreb` | numeric | Defensive rebounds (total or per-game depending on the requested PerMode). |
+| `reb` | numeric | Total rebounds — sum of offensive and defensive rebounds. |
+| `ast` | numeric | Assists (total or per-game depending on the requested PerMode). |
+| `tov` | numeric | Turnovers committed (total or per-game depending on the requested PerMode). |
+| `stl` | numeric | Steals recorded (total or per-game depending on the requested PerMode). |
+| `blk` | numeric | Blocked shots (total or per-game depending on the requested PerMode). |
+| `blka` | numeric | Blocked shot attempts against the player — shots the player attempted that were blocked by opponents. |
+| `pf` | numeric | Personal fouls committed (total or per-game depending on the requested PerMode). |
+| `pfd` | numeric | Personal fouls drawn — fouls committed by opponents against this player. |
+| `pts` | numeric | Points scored (total or per-game depending on the requested PerMode). |
+| `plus_minus` | numeric | Plus/minus: team point differential while the player was on the court. |
+| `nba_fantasy_pts` | numeric | NBA fantasy points accrued under the standard NBA fantasy scoring formula. |
+| `dd2` | integer | Number of double-doubles recorded over the span. |
+| `td3` | integer | Number of triple-doubles recorded over the span. |
+| `wnba_fantasy_pts` | numeric | WNBA fantasy points accrued under the standard WNBA fantasy scoring formula. |
+| `gp_rank` | integer | Player's league rank for games played among qualified players (1 = most games). |
+| `w_rank` | integer | Player's league rank for wins (1 = most wins while active). |
+| `l_rank` | integer | Player's league rank for losses (1 = most losses while active). |
+| `w_pct_rank` | integer | Player's league rank for win percentage (1 = highest win pct). |
+| `min_rank` | integer | Player's league rank for minutes played (1 = most minutes). |
+| `fgm_rank` | integer | Player's league rank for field goals made (1 = most made). |
+| `fga_rank` | integer | Player's league rank for field goal attempts (1 = most attempts). |
+| `fg_pct_rank` | integer | Player's league rank for field goal percentage (1 = highest pct). |
+| `fg3m_rank` | integer | Player's league rank for three-point field goals made (1 = most made). |
+| `fg3a_rank` | integer | Player's league rank for three-point field goal attempts (1 = most attempts). |
+| `fg3_pct_rank` | integer | Player's league rank for three-point percentage (1 = highest pct). |
+| `ftm_rank` | integer | Player's league rank for free throws made (1 = most made). |
+| `fta_rank` | integer | Player's league rank for free throw attempts (1 = most attempts). |
+| `ft_pct_rank` | integer | Player's league rank for free throw percentage (1 = highest pct). |
+| `oreb_rank` | integer | Player's league rank for offensive rebounds (1 = most offensive rebounds). |
+| `dreb_rank` | integer | Player's league rank for defensive rebounds (1 = most defensive rebounds). |
+| `reb_rank` | integer | Player's league rank for total rebounds (1 = most rebounds). |
+| `ast_rank` | integer | Player's league rank for assists (1 = most assists). |
+| `tov_rank` | integer | Player's league rank for turnovers — note: lower turnovers is typically better. |
+| `stl_rank` | integer | Player's league rank for steals (1 = most steals). |
+| `blk_rank` | integer | Player's league rank for blocked shots (1 = most blocks). |
+| `blka_rank` | integer | Player's league rank for shots blocked by opponents (1 = most blocked). |
+| `pf_rank` | integer | Player's league rank for personal fouls committed (1 = most fouls). |
+| `pfd_rank` | integer | Player's league rank for personal fouls drawn from opponents (1 = most drawn). |
+| `pts_rank` | integer | Player's league rank for points scored (1 = league leader). |
+| `plus_minus_rank` | integer | Player's league rank for plus/minus rating (1 = best differential). |
+| `nba_fantasy_pts_rank` | integer | Player's league rank for NBA fantasy points scored (1 = most fantasy points). |
+| `dd2_rank` | integer | Player's league rank for double-doubles recorded (1 = most double-doubles). |
+| `td3_rank` | integer | Player's league rank for triple-doubles recorded (1 = most triple-doubles). |
+| `wnba_fantasy_pts_rank` | integer | Player's league rank for WNBA fantasy points scored (1 = most fantasy points). |
+| `team_count` | integer | Number of teams the player appeared for within the span. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3981,18 +3981,18 @@ GET /stats/playercareerstats
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `vs_team_id` | integer |  |
-| `vs_team_city` | character |  |
-| `vs_team_name` | character |  |
-| `vs_team_abbreviation` | character |  |
-| `stat` | character | Stat. |
-| `stats_value` | integer |  |
-| `stat_order` | integer |  |
-| `date_est` | character |  |
-| `game_id` | character | Unique game identifier. |
-| `stat_value` | integer | Stat value. |
+| `player_id` | integer | Unique stats.nba.com identifier for the player whose career highs are listed. |
+| `game_date` | character | Date the career-high game was played, formatted as YYYY-MM-DD. |
+| `vs_team_id` | integer | Unique stats.nba.com identifier for the opponent the career high was set against. |
+| `vs_team_city` | character | City name of the opponent franchise the career high was achieved against. |
+| `vs_team_name` | character | Nickname/mascot of the opponent franchise the career high was set against. |
+| `vs_team_abbreviation` | character | Abbreviation of the opponent team the career high was set against. |
+| `stat` | character | Stat category for this career-high entry (e.g. PTS, REB, AST). |
+| `stats_value` | integer | Raw numeric value of the career high for this stat category (legacy field; see stat_value). |
+| `stat_order` | integer | Sort order index used to control the display sequence of career-high stat rows. |
+| `date_est` | character | Estimated or confirmed date flag for the career-high game record. |
+| `game_id` | character | Unique stats.nba.com game identifier for the game in which the career high was set. |
+| `stat_value` | integer | Value of the career high for this stat category. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
