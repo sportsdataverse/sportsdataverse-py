@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: leagueid
+  type: character
+- description: ''
+  name: seasonyear
+  type: character
+- description: ''
+  name: broadcasterabbreviation
+  type: character
+- description: ''
+  name: broadcasterdisplay
+  type: character
+- description: ''
+  name: broadcasterid
+  type: character
+- description: ''
+  name: regionid
+  type: character
+kind: dataframe
+schema: scheduleleaguev2int

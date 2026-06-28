@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: rank
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: dreb
+  type: character
+kind: dataframe
+schema: defensehub

@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: yearawarded
+  type: character
+- description: ''
+  name: oppositeteam
+  type: character
+kind: dataframe
+schema: teamdetails

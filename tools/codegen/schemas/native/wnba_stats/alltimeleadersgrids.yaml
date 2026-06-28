@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: ast
+  type: character
+- description: ''
+  name: ast_rank
+  type: character
+kind: dataframe
+schema: alltimeleadersgrids

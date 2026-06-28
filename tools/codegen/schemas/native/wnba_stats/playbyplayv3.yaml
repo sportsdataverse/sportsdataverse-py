@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: videoavailable
+  type: character
+kind: dataframe
+schema: playbyplayv3

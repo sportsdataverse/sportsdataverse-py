@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: description
+  type: character
+- description: ''
+  name: all_nba_team_number
+  type: character
+- description: ''
+  name: season
+  type: character
+- description: ''
+  name: month
+  type: character
+- description: ''
+  name: week
+  type: character
+- description: ''
+  name: conference
+  type: character
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: subtype1
+  type: character
+- description: ''
+  name: subtype2
+  type: character
+- description: ''
+  name: subtype3
+  type: character
+kind: dataframe
+schema: playerawards

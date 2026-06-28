@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: season_id
+  type: integer
+kind: dataframe
+schema: teaminfocommon

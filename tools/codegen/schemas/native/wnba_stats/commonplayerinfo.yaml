@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: season_id
+  type: character
+kind: dataframe
+schema: commonplayerinfo

@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: game_date
+  type: character
+- description: ''
+  name: vs_team_id
+  type: integer
+- description: ''
+  name: vs_team_city
+  type: character
+- description: ''
+  name: vs_team_name
+  type: character
+- description: ''
+  name: vs_team_abbreviation
+  type: character
+- description: ''
+  name: stat
+  type: character
+- description: ''
+  name: stats_value
+  type: character
+- description: ''
+  name: stat_order
+  type: character
+- description: ''
+  name: date_est
+  type: character
+kind: dataframe
+schema: playerprofilev2

@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: video_available_flag
+  type: character
+kind: dataframe
+schema: playbyplay

@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: gp
+  type: integer
+- description: ''
+  name: g
+  type: integer
+- description: ''
+  name: freq
+  type: numeric
+- description: ''
+  name: d_fgm
+  type: numeric
+- description: ''
+  name: d_fga
+  type: numeric
+- description: ''
+  name: d_fg_pct
+  type: numeric
+- description: ''
+  name: normal_fg_pct
+  type: numeric
+- description: ''
+  name: pct_plusminus
+  type: numeric
+kind: dataframe
+schema: leaguedashptteamdefend

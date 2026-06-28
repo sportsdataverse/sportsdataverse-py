@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: person_2_id
+  type: integer
+- description: ''
+  name: person_2
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: similarity_score
+  type: character
+kind: dataframe
+schema: glalumboxscoresimilarityscore

@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: pt_available
+  type: character
+kind: dataframe
+schema: scoreboardv2

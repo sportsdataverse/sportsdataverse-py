@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: hustle_status
+  type: character
+kind: dataframe
+schema: hustlestatsboxscore

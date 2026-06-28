@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: grid_type
+  type: character
+- description: ''
+  name: shot_zone_basic
+  type: character
+- description: ''
+  name: shot_zone_area
+  type: character
+- description: ''
+  name: shot_zone_range
+  type: character
+- description: ''
+  name: fga
+  type: character
+- description: ''
+  name: fgm
+  type: character
+- description: ''
+  name: fg_pct
+  type: numeric
+kind: dataframe
+schema: shotchartleaguewide

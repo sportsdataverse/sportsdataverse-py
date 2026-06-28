@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: game_date
+  type: character
+- description: ''
+  name: home_team_id
+  type: integer
+- description: ''
+  name: home_team_abr
+  type: character
+- description: ''
+  name: home_team_pts
+  type: character
+- description: ''
+  name: visitor_team_id
+  type: integer
+- description: ''
+  name: visitor_team_abr
+  type: character
+- description: ''
+  name: visitor_team_pts
+  type: character
+kind: dataframe
+schema: winprobabilitypbp

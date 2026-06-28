@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: display_last_comma_first
+  type: character
+- description: ''
+  name: display_first_last
+  type: character
+- description: ''
+  name: rosterstatus
+  type: character
+- description: ''
+  name: from_year
+  type: character
+- description: ''
+  name: to_year
+  type: character
+- description: ''
+  name: playercode
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_city
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: games_played_flag
+  type: character
+- description: ''
+  name: otherleague_experience_ch
+  type: character
+kind: dataframe
+schema: commonallplayers

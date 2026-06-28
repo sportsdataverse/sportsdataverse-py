@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: game_date
+  type: character
+- description: ''
+  name: home_team_id
+  type: integer
+- description: ''
+  name: visitor_team_id
+  type: integer
+- description: ''
+  name: home_team_name
+  type: character
+- description: ''
+  name: visitor_team_name
+  type: character
+- description: ''
+  name: home_team_abbreviation
+  type: character
+- description: ''
+  name: visitor_team_abbreviation
+  type: character
+- description: ''
+  name: home_team_nickname
+  type: character
+- description: ''
+  name: visitor_team_nickname
+  type: character
+- description: ''
+  name: game_time
+  type: character
+- description: ''
+  name: home_wl
+  type: character
+- description: ''
+  name: visitor_wl
+  type: character
+kind: dataframe
+schema: playernextngames

@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: temp_player_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: standing_vertical_leap
+  type: character
+- description: ''
+  name: max_vertical_leap
+  type: character
+- description: ''
+  name: lane_agility_time
+  type: character
+- description: ''
+  name: modified_lane_agility_time
+  type: character
+- description: ''
+  name: three_quarter_sprint
+  type: character
+- description: ''
+  name: bench_press
+  type: character
+kind: dataframe
+schema: draftcombinedrillresults

@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: video_available_flag
+  type: character
+- description: ''
+  name: pt_available
+  type: character
+- description: ''
+  name: pt_xyz_available
+  type: character
+- description: ''
+  name: wh_status
+  type: character
+- description: ''
+  name: hustle_status
+  type: character
+- description: ''
+  name: historical_status
+  type: character
+kind: dataframe
+schema: boxscoresummaryv2

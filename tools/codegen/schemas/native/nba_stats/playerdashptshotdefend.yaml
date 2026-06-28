@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: close_def_person_id
+  type: integer
+- description: ''
+  name: gp
+  type: integer
+- description: ''
+  name: g
+  type: character
+- description: ''
+  name: defense_category
+  type: character
+- description: ''
+  name: freq
+  type: character
+- description: ''
+  name: d_fgm
+  type: character
+- description: ''
+  name: d_fga
+  type: character
+- description: ''
+  name: d_fg_pct
+  type: numeric
+- description: ''
+  name: normal_fg_pct
+  type: numeric
+- description: ''
+  name: pct_plusminus
+  type: numeric
+kind: dataframe
+schema: playerdashptshotdefend

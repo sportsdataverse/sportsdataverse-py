@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: conference
+  type: character
+- description: ''
+  name: high_seed_rank
+  type: character
+- description: ''
+  name: high_seed_team
+  type: character
+- description: ''
+  name: high_seed_team_id
+  type: integer
+- description: ''
+  name: low_seed_rank
+  type: character
+- description: ''
+  name: low_seed_team
+  type: character
+- description: ''
+  name: low_seed_team_id
+  type: integer
+- description: ''
+  name: high_seed_series_w
+  type: character
+- description: ''
+  name: high_seed_series_l
+  type: character
+- description: ''
+  name: high_seed_series_remaining_g
+  type: character
+- description: ''
+  name: high_seed_series_remaining_home_g
+  type: character
+- description: ''
+  name: high_seed_series_remaining_away_g
+  type: character
+kind: dataframe
+schema: playoffpicture

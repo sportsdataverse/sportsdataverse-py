@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_abbreviation
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: gp
+  type: integer
+- description: ''
+  name: w
+  type: character
+- description: ''
+  name: l
+  type: character
+- description: ''
+  name: min
+  type: integer
+- description: ''
+  name: dist_feet
+  type: character
+- description: ''
+  name: dist_miles
+  type: character
+- description: ''
+  name: dist_miles_off
+  type: character
+- description: ''
+  name: dist_miles_def
+  type: character
+- description: ''
+  name: avg_speed
+  type: character
+- description: ''
+  name: avg_speed_off
+  type: character
+- description: ''
+  name: avg_speed_def
+  type: character
+kind: dataframe
+schema: leaguedashptstats

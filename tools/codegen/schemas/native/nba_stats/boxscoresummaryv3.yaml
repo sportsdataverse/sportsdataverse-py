@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: gameid
+  type: character
+- description: ''
+  name: arenaid
+  type: character
+- description: ''
+  name: arenaname
+  type: character
+- description: ''
+  name: arenacity
+  type: character
+- description: ''
+  name: arenastate
+  type: character
+- description: ''
+  name: arenacountry
+  type: character
+- description: ''
+  name: arenatimezone
+  type: character
+kind: dataframe
+schema: boxscoresummaryv3
