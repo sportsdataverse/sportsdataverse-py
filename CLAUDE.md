@@ -637,7 +637,7 @@ Two codegen-generated flat-API stems wrap the official stats API surface:
 
 Wrappers default `return_parsed=True` (tidy polars). `return_parsed=False` → raw `Dict`; `return_as_pandas=True` → pandas.
 
-Generated from the enriched canonical catalog via `tools/codegen/gen_nba_stats.py` → endpoint YAML + returns-schemas → registered in `FLAT_APIS` in `tools/codegen/generate.py`. Five pilot slugs (`leaguedashplayerstats` across NBA/WNBA/G-League/Summer + `playercareerstats`) are validated offline against committed real-capture fixtures; live tests gated by `SDV_PY_LIVE_TESTS=1`. Returns-table descriptions are authored for the pilots; the remaining ~3,369 columns are tracked in `_DEFERRED_DESC_BUCKETS` in `tools/codegen/extract_residual_columns.py`.
+Generated from the enriched canonical catalog via `tools/codegen/gen_nba_stats.py` → endpoint YAML + returns-schemas → registered in `FLAT_APIS` in `tools/codegen/generate.py`. Five pilot slugs (`leaguedashplayerstats` across NBA/WNBA/G-League/Summer + `playercareerstats`) are validated offline against committed real-capture fixtures. Live tests use the dedicated `@skip_if_no_nba_stats_live` gate (env `SDV_PY_NBA_STATS_LIVE=1`), NOT `SDV_PY_LIVE_TESTS` — stats.nba.com/stats.wnba.com hang on datacenter/cloud IPs, so they're excluded from CI and run only from a residential IP. Returns-table descriptions are authored for the pilots; the remaining ~3,369 columns are tracked in `_DEFERRED_DESC_BUCKETS` in `tools/codegen/extract_residual_columns.py`.
 
 ```python
 from sportsdataverse.nba import nba_stats
@@ -715,8 +715,20 @@ un-typed and stay out of the gate's `files` scope until cleaned.
 ### Test gating
 
 Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run only
-when `SDV_PY_LIVE_TESTS=1` is set. CI does NOT set the var; live runs are
-opt-in by contributor.
+when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml` sets it on every PR + push by
+default (a `workflow_dispatch` with `live_tests=false` opts out), and the weekly
+`live-tests-cron.yml` always sets it — so the live suite DOES run on CI; keep
+gated tests resilient to upstream flakiness.
+
+**`stats.nba.com` / `stats.wnba.com` exception (`skip_if_no_nba_stats_live`):**
+those hosts hang on datacenter / cloud IPs (the TLS/JA3 fingerprint block
+compounds with IP reputation — the request silently stalls rather than failing
+fast), so their live tests would hang CI even with `SDV_PY_LIVE_TESTS=1`. The
+`nba_stats` / `wnba_stats` live tests therefore use a SEPARATE gate
+`@skip_if_no_nba_stats_live` (env `SDV_PY_NBA_STATS_LIVE=1`) that NO workflow
+sets — they run only when a contributor explicitly enables them from a
+residential IP. Do NOT put new `nba_stats`/`wnba_stats` live tests on the
+generic `skip_if_no_live`.
 
 ### ID column types (join keys / player & team IDs)
 

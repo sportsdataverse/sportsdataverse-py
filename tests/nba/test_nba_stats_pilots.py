@@ -3,7 +3,7 @@ from pathlib import Path
 import polars as pl
 
 from sportsdataverse.nba import nba_stats
-from tests.conftest import skip_if_no_live
+from tests.conftest import skip_if_no_nba_stats_live
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -52,20 +52,20 @@ def test_pilot_nba_url_routes_to_stats_nba_com():
     assert captured["url"] == "https://stats.nba.com/stats/leaguedashplayerstats"
 
 
-@skip_if_no_live
+@skip_if_no_nba_stats_live
 def test_live_leaguedashplayerstats_nba():
     df = nba_stats.nba_stats_leaguedashplayerstats(league_id="00")
     assert isinstance(df, pl.DataFrame) and df.height > 0
 
 
-@skip_if_no_live
+@skip_if_no_nba_stats_live
 def test_live_leaguedashplayerstats_gleague():
     # off-season endpoints may return a valid but empty frame
     df = nba_stats.nba_stats_leaguedashplayerstats(league_id="20")
     assert isinstance(df, pl.DataFrame)
 
 
-@skip_if_no_live
+@skip_if_no_nba_stats_live
 def test_live_leaguedashplayerstats_summer():
     # off-season endpoints may return a valid but empty frame
     df = nba_stats.nba_stats_leaguedashplayerstats(league_id="15")

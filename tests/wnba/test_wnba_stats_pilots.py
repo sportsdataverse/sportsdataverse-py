@@ -3,7 +3,7 @@ from pathlib import Path
 import polars as pl
 
 from sportsdataverse.wnba import wnba_stats
-from tests.conftest import skip_if_no_live
+from tests.conftest import skip_if_no_nba_stats_live
 
 FIX = Path(__file__).resolve().parents[1] / "nba" / "fixtures"
 
@@ -24,7 +24,7 @@ def test_pilot_leaguedashplayerstats_wnba_second_host():
     assert captured["host_header"] == "stats.wnba.com"
 
 
-@skip_if_no_live
+@skip_if_no_nba_stats_live
 def test_live_leaguedashplayerstats_wnba():
     df = wnba_stats.wnba_stats_leaguedashplayerstats()
     assert isinstance(df, pl.DataFrame) and df.height > 0
