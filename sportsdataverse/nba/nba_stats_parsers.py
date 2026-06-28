@@ -136,6 +136,8 @@ def parse_nba_stats_result_sets(
 
     if result_set is not None:
         return _maybe_pandas(frames.get(result_set, pl.DataFrame()))
+    if not frames:
+        return _maybe_pandas(pl.DataFrame())
     if len(frames) == 1:
         return _maybe_pandas(next(iter(frames.values())))
     return {name: _maybe_pandas(df) for name, df in frames.items()}
@@ -176,10 +178,9 @@ def parse_nba_stats_leaguedashplayerstats(
         .. _nba_api: https://github.com/swar/nba_api
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    result: Union[pl.DataFrame, "pd.DataFrame", dict] = parse_nba_stats_result_sets(
-        raw, "LeagueDashPlayerStats", return_as_pandas=return_as_pandas
-    )
-    return result
+    out = parse_nba_stats_result_sets(raw, "LeagueDashPlayerStats", return_as_pandas=return_as_pandas)
+    assert not isinstance(out, dict)  # a fixed result_set always yields a single frame
+    return out
 
 
 def parse_nba_stats_playercareerstats(
@@ -255,7 +256,6 @@ def parse_nba_stats_commonallplayers(
         .. _nba_api: https://github.com/swar/nba_api
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    result: Union[pl.DataFrame, "pd.DataFrame", dict] = parse_nba_stats_result_sets(
-        raw, "CommonAllPlayers", return_as_pandas=return_as_pandas
-    )
-    return result
+    out = parse_nba_stats_result_sets(raw, "CommonAllPlayers", return_as_pandas=return_as_pandas)
+    assert not isinstance(out, dict)  # a fixed result_set always yields a single frame
+    return out
