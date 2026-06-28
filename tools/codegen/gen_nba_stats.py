@@ -80,7 +80,6 @@ def main() -> None:
             "module": stem,
             "parser_module": f"{cfg['league']}.{stem}_parsers",
             "getter_module": f"sportsdataverse.{cfg['league']}.{stem}_runtime",
-            "auth": True,
             "endpoints": [_endpoint_entry(e, stem, cfg["default_league"], parser_name) for e in eps],
         }
         _write_yaml(ROOT / f"tools/codegen/endpoints/{stem}.yaml", doc)

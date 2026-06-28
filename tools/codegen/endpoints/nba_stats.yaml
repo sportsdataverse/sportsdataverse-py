@@ -1,5 +1,4 @@
 api: nba_stats
-auth: true
 endpoints:
 - example_args:
     league_id: '00'

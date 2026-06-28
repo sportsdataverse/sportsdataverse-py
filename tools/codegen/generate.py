@@ -1464,6 +1464,8 @@ FLAT_APIS = [
     ("mlb_api", "mlb"),
     ("mlb_statcast", "mlb"),
     ("nfl_api", "nfl"),
+    ("nba_stats", "nba"),
+    ("wnba_stats", "wnba"),
 ]
 
 
@@ -1951,6 +1953,8 @@ _FLAT_API_DOC = {
     "mlb_api": "MLB Stats API",
     "mlb_statcast": "MLB Statcast (Baseball Savant)",
     "nfl_api": "NFL.com API",
+    "nba_stats": "NBA Stats API (stats.nba.com)",
+    "wnba_stats": "WNBA Stats API (stats.wnba.com)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
