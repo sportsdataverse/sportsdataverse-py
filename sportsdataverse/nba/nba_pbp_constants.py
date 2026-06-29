@@ -34,28 +34,7 @@ EVENT_FLAG_COLUMNS: list[str] = [
 
 
 def iso_clock_to_seconds(expr: pl.Expr) -> pl.Expr:
-    """Parse 'PTmmMss.ssS' ISO 8601 duration format to seconds remaining (Float64).
-
-    Args:
-        expr: A polars expression containing ISO 8601 duration strings.
-
-    Returns:
-        A polars expression that evaluates to Float64 seconds.
-
-    Example:
-        >>> import polars as pl
-        >>> df = pl.DataFrame({"clock": ["PT08M24.00S", "PT12M00.00S"]})
-        >>> df.select(iso_clock_to_seconds(pl.col("clock")).alias("s"))
-        shape: (2, 1)
-        ┌─────┐
-        │ s   │
-        │ --- │
-        │ f64 │
-        ╞═════╡
-        │ 504.0 │
-        │ 720.0 │
-        └─────┘
-    """
+    """'PTmmMss.ssS' -> seconds remaining (Float64)."""
     mins = expr.str.extract(r"PT(\d+)M", 1).cast(pl.Float64)
     secs = expr.str.extract(r"M([\d.]+)S", 1).cast(pl.Float64)
     return mins * 60 + secs
