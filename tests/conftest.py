@@ -56,7 +56,7 @@ skip_if_no_live = pytest.mark.skipif(
 def _rscript_available() -> bool:
     try:
         from tools.validation.lint.leakage_r import rscript_path
-    except Exception:
+    except ImportError:
         return False
     return rscript_path() is not None
 
