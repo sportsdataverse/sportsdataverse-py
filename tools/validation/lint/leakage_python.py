@@ -6,6 +6,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from tools.validation.findings import Finding, Severity
+from tools.validation.lint import EXCLUDE_DIRS as _EXCLUDE_DIRS
 
 _LAG_CALLS = frozenset(
     {
@@ -24,20 +25,6 @@ _LAG_CALLS = frozenset(
     }
 )
 _GROUP_CALLS = frozenset({"over", "group_by", "groupby"})
-_EXCLUDE_DIRS = frozenset(
-    {
-        ".venv",
-        "venv",
-        "site-packages",
-        "node_modules",
-        "__pycache__",
-        ".git",
-        "build",
-        "dist",
-        ".mypy_cache",
-        ".pytest_cache",
-    }
-)
 
 
 def _iter_py_files(root: Path) -> Iterator[Path]:

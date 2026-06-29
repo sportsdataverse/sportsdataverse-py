@@ -10,7 +10,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from tools.validation.findings import Finding, Severity
-from tools.validation.lint.leakage_python import _EXCLUDE_DIRS as _PY_EXCLUDE_DIRS
+from tools.validation.lint import EXCLUDE_DIRS as _BASE_EXCLUDE_DIRS
 
 _HELPER = Path(__file__).parent / "getparsedata.R"
 _RSCRIPT_TIMEOUT = 60  # seconds per file
@@ -20,7 +20,7 @@ _LAG_CALLS = frozenset({"lag", "lead", "cumsum", "cumprod", "cummax", "cummin", 
 # calls that establish a grouping scope (ungroup() deliberately excluded — it REMOVES grouping)
 _GROUP_CALLS = frozenset({"group_by", "with_groups", "group_split"})
 _BY_ARG = ".by"  # dplyr per-operation grouping, a SYMBOL_SUB named arg
-_EXCLUDE_DIRS = _PY_EXCLUDE_DIRS | frozenset({"renv", "packrat"})
+_EXCLUDE_DIRS = _BASE_EXCLUDE_DIRS | frozenset({"renv", "packrat"})
 
 _VERSION_RE = re.compile(r"R-(\d+)\.(\d+)\.(\d+)")
 
@@ -114,8 +114,20 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
     Returns:
         One WARN ``needs_judgment`` Finding per ungrouped lag/cumulative call.
     """
-    ids = {int(r["id"]) for r in rows}
-    parent = {int(r["id"]): int(r["parent"]) for r in rows}
+    try:
+        ids = {int(r["id"]) for r in rows}
+        parent = {int(r["id"]): int(r["parent"]) for r in rows}
+    except (ValueError, KeyError) as exc:
+        return [
+            Finding(
+                "leakage_lint",
+                Severity.WARN,
+                "",
+                rel,
+                f"could not parse getParseData CSV for {rel}: {exc}",
+                locator={"file": rel},
+            )
+        ]
     group_roots: set[int] = set()
     for r in rows:
         token, text = r["token"], r["text"]
