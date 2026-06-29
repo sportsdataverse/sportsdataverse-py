@@ -39,7 +39,8 @@ def boxscore_home_away(box: dict) -> tuple[int, int]:
             from ``nba_stats_boxscoretraditionalv3``).
 
     Returns:
-        A ``(home_team_id, away_team_id)`` tuple of ``int``.
+        A ``(home_team_id, away_team_id)`` tuple of ``int``.  A malformed or
+        empty payload returns ``(0, 0)`` rather than raising.
 
     Example:
         Quick start::
@@ -51,7 +52,7 @@ def boxscore_home_away(box: dict) -> tuple[int, int]:
             print(home, away)
     """
     b = _bt(box)
-    return int(b.get("homeTeamId")), int(b.get("awayTeamId"))
+    return int(b.get("homeTeamId") or 0), int(b.get("awayTeamId") or 0)
 
 
 def boxscore_name_map(box: dict) -> dict[int, dict[str, int]]:
@@ -62,7 +63,8 @@ def boxscore_name_map(box: dict) -> dict[int, dict[str, int]]:
 
     Returns:
         ``{team_id: {familyName_lower: person_id}}`` mapping.  Both home and
-        away teams are included.  Values are ``int`` (never ``float``).
+        away teams are included.  Values are ``int`` (never ``float``).  A
+        malformed or empty payload returns ``{}`` rather than raising.
 
     Example:
         Quick start::
@@ -79,6 +81,8 @@ def boxscore_name_map(box: dict) -> dict[int, dict[str, int]]:
     out: dict[int, dict[str, int]] = {}
     for side in ("homeTeam", "awayTeam"):
         t = b.get(side) or {}
+        if t.get("teamId") is None:
+            continue
         tid = int(t.get("teamId"))
         out[tid] = {str(p.get("familyName", "")).lower(): int(p["personId"]) for p in (t.get("players") or [])}
     return out
@@ -93,12 +97,15 @@ def _box_starters(box: dict) -> dict[int, list[int]]:
         box: Raw boxscore payload dict.
 
     Returns:
-        ``{team_id: [person_id, ...]}`` with exactly 5 ids per team.
+        ``{team_id: [person_id, ...]}`` with up to 5 ids per team.  A malformed
+        or empty payload returns ``{}`` rather than raising.
     """
     b = _bt(box)
     out: dict[int, list[int]] = {}
     for side in ("homeTeam", "awayTeam"):
         t = b.get(side) or {}
+        if t.get("teamId") is None:
+            continue
         tid = int(t.get("teamId"))
         out[tid] = [int(p["personId"]) for p in (t.get("players") or []) if str(p.get("position", "")).strip()]
     return out
@@ -124,13 +131,13 @@ def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int
 
     Args:
         enhanced_pbp: Output of :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
-            Must contain columns ``period``, ``order_index``, ``team_id``,
-            ``person_id``, and ``is_substitution``.
+            Must contain columns ``period``, ``order_index``, ``team_id``, and
+            ``person_id``.
         box: Raw boxscore payload dict (same as passed to :func:`boxscore_home_away`).
 
     Returns:
         ``{period: {team_id: [person_id_1, ..., person_id_5]}}`` covering all
-        periods present in *enhanced_pbp*.  Each inner list has exactly 5 ids.
+        periods present in *enhanced_pbp*.  Each inner list holds up to 5 ids.
 
     Example:
         Quick start::
@@ -157,6 +164,7 @@ def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int
 
     for period in periods:
         if period == 1:
+            # NOTE: best-effort — a boxscore with !=5 flagged starters yields <5 silently (pbpstats convention).
             starters[1] = {tid: list(ids[:5]) for tid, ids in box_st.items()}
             continue
 
@@ -172,6 +180,7 @@ def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int
             if pid not in team_seen:
                 team_seen.append(pid)
 
+        # NOTE: best-effort — a period with !=5 detected players yields <5 silently (pbpstats convention).
         starters[period] = {tid: ids[:5] for tid, ids in seen.items()}
 
     return starters
