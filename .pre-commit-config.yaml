@@ -159,7 +159,10 @@ repos:
         stages: [pre-push]
       - id: validation-contracts-prepush
         name: validation harness contract tests (pre-push)
-        entry: uv run pytest tests/contracts/ -q
+        # --frozen: run against the committed lockfile and never re-lock, so the
+        # hook can't trip pre-commit's "files were modified" check on uv's no-op
+        # uv.lock re-serialization (matches the quality.yml CI step).
+        entry: uv run --frozen pytest tests/contracts/ -q
         language: system
         files: ^(tools/validation/|tests/contracts/).*$
         pass_filenames: false
