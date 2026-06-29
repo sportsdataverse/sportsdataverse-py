@@ -61,9 +61,6 @@ _FG_PCT_RE: Final[re.Pattern[str]] = re.compile(r"^(.+)_fg_pct$")
 #   <prefix>_ft_pct  →  needs <prefix>_ftm / <prefix>_fta
 _FT_PCT_RE: Final[re.Pattern[str]] = re.compile(r"^(.+)_ft_pct$")
 
-# String-type column names that carry identity info (not numeric, not key)
-_IDENTITY_DTYPES: Final[frozenset[type]] = frozenset({pl.String, pl.Utf8, pl.Categorical})
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -79,7 +76,11 @@ def _null_safe_divide(
     numerator: pl.Expr,
     denominator: pl.Expr,
 ) -> pl.Expr:
-    """Return numerator / denominator as Float64; null when denominator == 0."""
+    """Return numerator / denominator as Float64; null when denominator is 0 or null.
+
+    The explicit ``denominator == 0`` guard handles the zero case; polars null
+    propagation handles a null denominator (the division yields null on its own).
+    """
     return pl.when(denominator == 0).then(None).otherwise(numerator.cast(pl.Float64) / denominator.cast(pl.Float64))
 
 
@@ -228,9 +229,12 @@ def aggregate_tracking_frames(
     if recompute_exprs:
         grouped = grouped.with_columns(recompute_exprs)
 
-    # Drop non-recomputable *_pct columns that ended up in the frame
-    # (recomputable ones were added via with_columns; the rest were never included
-    # in the agg_exprs, so they are already absent — guard with an existence check)
+    # Drop non-recomputable *_pct columns.
+    # In the expected path this list is empty: the non-recomputable *_pct cols were
+    # never added to agg_exprs, so they are already absent after the group_by. The
+    # `c in existing_cols` filter is therefore defensive (dead in the normal path) —
+    # it keeps the drop safe for any future measure type whose schema routes a *_pct
+    # column into the grouped frame.
     recomputable_pcts = set(fg_pct_cols) | set(ft_pct_cols)
     existing_cols = set(grouped.columns)
     cols_to_drop = [c for c in pct_cols if c not in recomputable_pcts and c in existing_cols]

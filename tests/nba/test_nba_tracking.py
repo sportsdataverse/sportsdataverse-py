@@ -99,13 +99,46 @@ def test_identity_single_frame_unchanged() -> None:
         assert dropped not in agg.columns, f"Column {dropped} should be dropped"
 
 
-def test_identity_recomputed_pct_null_when_zero_attempts() -> None:
-    """Players with 0 drive_fga must get null fg_pct, not 0 or NaN."""
-    f = _frame("2324")
-    agg = aggregate_tracking_frames([f], entity_key="player_id")
-    zero_fga = agg.filter(pl.col("drive_fga") == 0)
-    if zero_fga.shape[0] > 0:
-        assert zero_fga["drive_fg_pct"].is_null().all(), "drive_fg_pct must be null when drive_fga == 0"
+def test_recomputed_pct_null_when_zero_attempts() -> None:
+    """A zero-attempt entity must get null fg_pct/ft_pct, not 0 or NaN.
+
+    Unconditional: uses a crafted one-row frame with 0 attempts so the
+    null-safe-divide path is always exercised regardless of fixture contents.
+    """
+    crafted = pl.DataFrame(
+        {
+            "player_id": [9999],
+            "player_name": ["Zero Attempts"],
+            "team_id": [1610612737],
+            "team_abbreviation": ["ATL"],
+            "drives": [3],
+            "drive_fgm": [0],
+            "drive_fga": [0],
+            "drive_fg_pct": [None],
+            "drive_ftm": [0],
+            "drive_fta": [0],
+            "drive_ft_pct": [None],
+        },
+        schema={
+            "player_id": pl.Int64,
+            "player_name": pl.String,
+            "team_id": pl.Int64,
+            "team_abbreviation": pl.String,
+            "drives": pl.Int64,
+            "drive_fgm": pl.Int64,
+            "drive_fga": pl.Int64,
+            "drive_fg_pct": pl.Float64,
+            "drive_ftm": pl.Int64,
+            "drive_fta": pl.Int64,
+            "drive_ft_pct": pl.Float64,
+        },
+    )
+    agg = aggregate_tracking_frames([crafted], entity_key="player_id")
+    row = agg.filter(pl.col("player_id") == 9999).to_dicts()[0]
+    assert row["drive_fga"] == 0
+    assert row["drive_fg_pct"] is None, "drive_fg_pct must be null when drive_fga == 0"
+    assert row["drive_fta"] == 0
+    assert row["drive_ft_pct"] is None, "drive_ft_pct must be null when drive_fta == 0"
 
 
 # ---------------------------------------------------------------------------
@@ -142,7 +175,7 @@ def test_additivity_two_seasons() -> None:
     fga = ra["drive_fga"] + rb["drive_fga"]
     if fga > 0:
         expected_fg_pct = fgm / fga
-        assert abs(rg["drive_fg_pct"] - expected_fg_pct) < 1e-6, (
+        assert abs(rg["drive_fg_pct"] - expected_fg_pct) < 1e-9, (
             f"drive_fg_pct should be {expected_fg_pct}, got {rg['drive_fg_pct']}"
         )
     else:
@@ -152,7 +185,7 @@ def test_additivity_two_seasons() -> None:
     fta = ra["drive_fta"] + rb["drive_fta"]
     if fta > 0:
         expected_ft_pct = ftm / fta
-        assert abs(rg["drive_ft_pct"] - expected_ft_pct) < 1e-6, (
+        assert abs(rg["drive_ft_pct"] - expected_ft_pct) < 1e-9, (
             f"drive_ft_pct should be {expected_ft_pct}, got {rg['drive_ft_pct']}"
         )
     else:
