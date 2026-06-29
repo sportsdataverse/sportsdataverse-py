@@ -66,12 +66,14 @@ def test_lint_target_unknown_raises_keyerror():
         cli.lint_target("nonexistent")
 
 
-def test_lint_target_r_language_not_implemented(monkeypatch):
-    import pytest
-
+def test_lint_target_r_dispatches_to_r_linter(monkeypatch):
     from tools.validation import cli
+    from tools.validation.lint import leakage_r
     from tools.validation.registry import LintTarget
 
-    monkeypatch.setitem(cli.LINT_TARGETS, "rtgt", LintTarget(name="rtgt", path="x", language="r"))
-    with pytest.raises(NotImplementedError):
-        cli.lint_target("rtgt")
+    # no live R needed: force the graceful "Rscript absent" path and assert it
+    # dispatched (INFO finding) rather than raising NotImplementedError.
+    monkeypatch.setattr(leakage_r, "rscript_path", lambda: None)
+    monkeypatch.setitem(cli.LINT_TARGETS, "rtgt", LintTarget(name="rtgt", path=".", language="r"))
+    out = cli.lint_target("rtgt")
+    assert any(d["severity"] == "info" for d in out)
