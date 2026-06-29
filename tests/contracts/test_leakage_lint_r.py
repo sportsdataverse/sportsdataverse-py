@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
+from tests.conftest import skip_if_no_rscript
 from tools.validation.findings import Severity
 from tools.validation.lint import leakage_r
 
@@ -42,3 +43,23 @@ def test_no_rscript_returns_info(monkeypatch):
     assert len(findings) == 1
     assert findings[0].severity is Severity.INFO
     assert "Rscript not found" in findings[0].message
+
+
+@skip_if_no_rscript
+def test_run_leaky_live_warns():
+    findings = leakage_r.run(str(_FIXTURES / "leaky.R"))
+    assert len(findings) == 2
+    assert {f.locator["call"] for f in findings} == {"lag", "cumsum"}
+    assert all(f.severity is Severity.WARN and f.needs_judgment for f in findings)
+
+
+@skip_if_no_rscript
+def test_run_clean_live_is_empty():
+    assert leakage_r.run(str(_FIXTURES / "clean.R")) == []
+
+
+@skip_if_no_rscript
+def test_run_broken_live_warns_parse_error():
+    findings = leakage_r.run(str(_FIXTURES / "broken.R"))
+    assert findings and findings[0].severity is Severity.WARN
+    assert "could not parse" in findings[0].message
