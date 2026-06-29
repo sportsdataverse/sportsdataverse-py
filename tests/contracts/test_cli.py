@@ -36,3 +36,22 @@ def test_main_returns_0_when_no_errors(monkeypatch):
         lambda dataset, release=None: [{"severity": "warn", "check": "x", "dataset": "d", "message": "m"}],
     )
     assert cli.main(["run", "--dataset", "nfl_pbp", "--json"]) == 0
+
+
+def test_lint_target_dispatches_python(monkeypatch):
+    from tools.validation import cli
+    from tools.validation.registry import LintTarget
+
+    monkeypatch.setitem(
+        cli.LINT_TARGETS,
+        "t",
+        LintTarget(name="t", path=str(_LEAKY_DIR()), language="python"),
+    )
+    out = cli.lint_target("t")
+    assert any(d["check"] == "leakage_lint" and d["severity"] == "warn" for d in out)
+
+
+def _LEAKY_DIR():
+    from pathlib import Path
+
+    return Path(__file__).parent / "fixtures" / "lint_python" / "leaky.py"
