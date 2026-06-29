@@ -81,7 +81,7 @@ def test_cfb_adv_box_score_wr_names():
     }
     assert expected_sections.issubset(set(result.keys()))
 
-    bad_wr_names = [x for x in result["receiver"] if x["receiver_player_name"] and "hurried" in x["receiver_player_name"]]
+    bad_wr_names = [x["receiver_player_name"] for x in result["receiver"] if x["receiver_player_name"] and "hurried" in x["receiver_player_name"]]
     assert len(bad_wr_names) == 0
 
 

@@ -5232,13 +5232,15 @@ class CFBPlayProcess(object):
                 SR=pl.col("EPA_success").mean(),
                 Sck=pl.col("sack_vec").sum(),
             )
-            .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(
                 CompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("Comp") / pl.col("Att"))),
                 xCompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("xComp") / pl.col("Att"))),
             )
             .with_columns(
                 CPOE=(pl.col("CompPct") - pl.col("xCompPct")),
+            )
+            .with_columns(pl.col(pl.Float32).round(2))
+            .with_columns(
                 pos_team=pl.col("pos_team").cast(pl.Int32)
             )
         )
