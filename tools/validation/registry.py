@@ -36,6 +36,18 @@ class DatasetSpec:
 DATASETS: dict[str, DatasetSpec] = {}  # registered incrementally; see spec §11
 
 
+@dataclass(frozen=True)
+class LintTarget:
+    """A source tree to lint: where it is and what language it is."""
+
+    name: str
+    path: str
+    language: str  # "python" | "r"
+
+
+LINT_TARGETS: dict[str, LintTarget] = {}  # registered incrementally (follow-up)
+
+
 def load_thresholds(domain: str) -> dict[str, float]:
     """Load merged validation thresholds for a domain.
 

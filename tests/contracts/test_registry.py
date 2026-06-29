@@ -33,3 +33,11 @@ def test_checkcontext_carries_leakage_fields():
     assert ctx.lag_columns == ("prev_ep",)
     assert ctx.cumulative_columns == ("cum_epa",)
     assert ctx.group_key == "game_id"
+
+
+def test_lint_target_is_frozen_and_registry_exists():
+    from tools.validation.registry import LINT_TARGETS, LintTarget
+
+    t = LintTarget(name="x", path="${ROOT}/src", language="python")
+    assert t.language == "python"
+    assert isinstance(LINT_TARGETS, dict)
