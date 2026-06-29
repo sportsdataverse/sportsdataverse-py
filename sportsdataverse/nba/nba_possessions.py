@@ -120,6 +120,13 @@ def _resolve_teams(df: pl.DataFrame) -> tuple[int, int]:
 
 _NON_BOUNDARY_EVENT_TYPES = frozenset(("period", "timeout", "substitution", "replay", "other", "foul", "jump_ball"))
 
+# Event types that reliably indicate which team is on offense (shot attempts and
+# turnovers).  Administrative events such as ``"other"`` (Delay of Game),
+# ``"jump_ball"``, ``"replay"``, and ``"foul"`` carry a ``location`` but do NOT
+# tell us who is shooting, so they must not seed ``current_offense`` — doing so
+# mis-labels the subsequent rebound as offensive or defensive.
+_OFFENSE_SEEDING_TYPES = frozenset(("missed_shot", "made_shot", "free_throw", "turnover"))
+
 
 def _build_possession_groups(
     rows: list[dict],
@@ -160,10 +167,13 @@ def _build_possession_groups(
 
         current.append(row)
 
-        # Track offense team: first non-foul event with a location that isn't
-        # a period/timeout/substitution sets the possession's offense.
+        # Track offense team: only shot attempts and turnovers seed this —
+        # administrative events (``"other"``, ``"foul"``, ``"jump_ball"``,
+        # ``"replay"``) carry a location but do not identify the offensive team,
+        # so they must be excluded to avoid mis-classifying the subsequent
+        # rebound as offensive vs defensive.
         ev_team = home_id if loc == "h" else (away_id if loc == "v" else 0)
-        if current_offense == 0 and ev_team != 0 and et not in ("foul", "period", "timeout", "substitution"):
+        if current_offense == 0 and ev_team != 0 and et in _OFFENSE_SEEDING_TYPES:
             current_offense = ev_team
 
         # Non-boundary events — just accumulate
