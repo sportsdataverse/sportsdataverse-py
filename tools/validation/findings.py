@@ -74,3 +74,6 @@ class CheckContext:
     oracle: OracleLike | None = None
     prior_frame: pl.DataFrame | None = None
     thresholds: dict[str, float] = field(default_factory=dict)
+    lag_columns: tuple[str, ...] = ()
+    cumulative_columns: tuple[str, ...] = ()
+    group_key: str = "game_id"
