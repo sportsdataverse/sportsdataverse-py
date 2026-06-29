@@ -27,3 +27,12 @@ def test_main_returns_1_on_error(monkeypatch):
         lambda dataset, release=None: [{"severity": "error", "check": "x", "dataset": "d", "message": "m"}],
     )
     assert cli.main(["run", "--dataset", "nfl_pbp", "--json"]) == 1
+
+
+def test_main_returns_0_when_no_errors(monkeypatch):
+    monkeypatch.setattr(
+        cli,
+        "run_dataset",
+        lambda dataset, release=None: [{"severity": "warn", "check": "x", "dataset": "d", "message": "m"}],
+    )
+    assert cli.main(["run", "--dataset", "nfl_pbp", "--json"]) == 0

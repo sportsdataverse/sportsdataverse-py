@@ -5,6 +5,7 @@ import json
 import sys
 
 from tools.validation.checks import extraction, numeric_parity, schema_contract, sweep
+from tools.validation.findings import Finding
 from tools.validation.registry import resolve
 
 _CHECKS = (schema_contract, extraction, numeric_parity, sweep)
@@ -21,7 +22,7 @@ def run_dataset(dataset: str, release: str | None = None) -> list[dict]:
         A flat list of finding dicts (each from ``Finding.to_dict()``).
     """
     frame, ctx = resolve(dataset, release=release)
-    findings: list = []
+    findings: list[Finding] = []
     for mod in _CHECKS:
         findings.extend(mod.run(dataset, frame, ctx))
     return [f.to_dict() for f in findings]
