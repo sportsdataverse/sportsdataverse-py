@@ -63,3 +63,20 @@ def test_cumulative_nonreset_is_warn_needs_judgment():
     assert len(findings) == 1
     assert findings[0].severity is Severity.WARN and findings[0].needs_judgment
     assert findings[0].locator["column"] == "game_play_number"
+
+
+def test_cumulative_multiple_nonresets_aggregate_into_one_finding():
+    frame = pl.DataFrame(
+        {
+            "game_id": ["g1", "g1", "g2", "g2", "g3", "g3"],
+            "game_play_number": [1, 2, 3, 4, 5, 6],  # g2 first(3)>g1 last(2); g3 first(5)>g2 last(4)
+            "ep": [0.1, 0.2, 0.1, 0.2, 0.1, 0.2],
+        }
+    )
+    ctx = CheckContext(
+        domain="cfb", dataset="d", schema={}, group_key="game_id", cumulative_columns=("game_play_number",)
+    )
+    findings = boundary_leakage.run("d", frame, ctx)
+    assert len(findings) == 1  # one finding per column, not per boundary
+    assert findings[0].metric == 2.0  # two non-reset boundaries counted
+    assert findings[0].severity is Severity.WARN and findings[0].needs_judgment

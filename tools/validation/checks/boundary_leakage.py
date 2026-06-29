@@ -55,6 +55,11 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
     # Cumulative columns: each group's first value should reset (<=) below the
     # prior group's last value; a first-of-group value exceeding the prior
     # group's last is a non-reset (possible carried accumulation) -> WARN.
+    # This is a CROSS-GROUP check only (first-of-group vs prior-group-last); it
+    # does not check intra-group monotonicity. A group whose last value is null
+    # (an all-null column for that group) breaks the prior_last chain, so the
+    # FOLLOWING group's comparison is skipped — unreachable for game_play_number
+    # (games always have plays), relevant only for future null-bearing columns.
     for col in ctx.cumulative_columns:
         if col not in frame.columns:
             continue
