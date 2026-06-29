@@ -201,9 +201,10 @@ def run(path: str) -> list[Finding]:
     Locates ``Rscript`` (env override / PATH / Program Files); if none is found
     returns a single INFO Finding rather than failing. Otherwise dumps each
     ``.R``/``.r`` file's ``utils::getParseData`` parse tree (skipping vendored
-    dirs) and flags ``lag``/``lead``/``cum*`` calls whose top-level statement is
-    not grouped by ``group_by()``/``group_split()``/``with_groups()``/``.by=`` as
-    WARN findings routed to judgment.
+    dirs) and flags ``lag``/``lead``/``cum*`` calls whose nearest enclosing
+    statement (within its brace block) is not grouped by
+    ``group_by()``/``group_split()``/``with_groups()``/``.by=`` as WARN findings
+    routed to judgment.
 
     Args:
         path: A file or directory to lint (``${ENV}`` vars are expanded).
