@@ -4,7 +4,8 @@ import polars as pl
 from sportsdataverse.nba.nba_rapm import build_rapm_design
 
 
-def _poss(rows):  # rows: list of (off5 tuple, def5 tuple, points)
+def _poss(rows: list[tuple[tuple[int, ...], tuple[int, ...], int]]) -> pl.DataFrame:
+    # rows: list of (off5 tuple, def5 tuple, points)
     data = {f"off_player_{i + 1}": [r[0][i] for r in rows] for i in range(5)}
     data.update({f"def_player_{i + 1}": [r[1][i] for r in rows] for i in range(5)})
     data["points"] = [r[2] for r in rows]
@@ -56,3 +57,42 @@ def test_design_matrix_shared_players():
     assert Xd[1, idx[1]] == 0  # offense col, poss 1
     assert Xd[1, P + idx[1]] == 1  # defense col, poss 1
     assert list(y) == [1.0, 3.0]
+
+
+def test_design_matrix_drops_null_lineup_rows():
+    """A possession with a null lineup cell is dropped, never injecting a phantom id."""
+    # Three possessions; the middle one has a null off_player_5 (partial lineup).
+    data = {
+        "off_player_1": [1, 21, 31],
+        "off_player_2": [2, 22, 32],
+        "off_player_3": [3, 23, 33],
+        "off_player_4": [4, 24, 34],
+        "off_player_5": [5, None, 35],  # poss index 1 is partial -> dropped
+        "def_player_1": [11, 26, 36],
+        "def_player_2": [12, 27, 37],
+        "def_player_3": [13, 28, 38],
+        "def_player_4": [14, 29, 39],
+        "def_player_5": [15, 30, 40],
+        "points": [2, 1, 0],
+    }
+    schema = {
+        col: pl.Int64
+        for col in [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)] + ["points"]
+    }
+    poss = pl.DataFrame(data, schema_overrides=schema)
+    # Confirm the partial column is genuinely nullable Int64 with a null present.
+    assert poss.schema["off_player_5"] == pl.Int64
+    assert poss["off_player_5"].null_count() == 1
+
+    X, y, pids = build_rapm_design(poss)
+    # No phantom / sentinel ids: every id is a real positive player id.
+    assert all(p > 0 for p in pids)
+    assert -9223372036854775808 not in pids
+    # The null-lineup possession (index 1) was dropped: only 2 rows survive.
+    assert X.shape[0] == 2
+    assert len(y) == 2
+    # Each surviving possession encodes exactly 5 offense + 5 defense indicators.
+    Xd = X.toarray()
+    assert Xd[0].sum() == 10
+    assert Xd[1].sum() == 10
+    assert list(y) == [2.0, 0.0]

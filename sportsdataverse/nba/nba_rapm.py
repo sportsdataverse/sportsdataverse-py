@@ -34,20 +34,24 @@ def build_rapm_design(
             ``def_player_1`` … ``def_player_5`` (Int64 player IDs on defense),
             and ``points`` (Int64 points scored on the possession).
             Produced by ``sportsdataverse.nba.nba_possessions.attach_possession_lineups``.
+            Possessions with any null lineup cell are dropped (a partial lineup
+            is unreliable for RAPM); if that leaves no rows, an empty design is
+            returned.
 
     Returns:
         A 3-tuple ``(X, y, player_ids)`` where:
 
         * **X** — :class:`scipy.sparse.csr_matrix` of shape ``(n_poss, 2P)``
           with dtype ``float64``.  Binary offense/defense indicators as
-          described above.
+          described above.  ``n_poss`` counts only possessions with all 10
+          lineup slots populated (null-lineup rows are dropped).
         * **y** — :class:`numpy.ndarray` of shape ``(n_poss,)`` with dtype
           ``float64``.  Points scored on each possession.
         * **player_ids** — ``list[int]`` of length ``P``: the sorted distinct
           player IDs appearing in any lineup cell across the input.
 
-        When *possessions* is empty, returns
-        ``(csr_matrix((0, 0)), np.empty(0), [])``.
+        When *possessions* is empty (or every row is dropped for a null lineup
+        cell), returns ``(csr_matrix((0, 0)), np.empty(0), [])``.
 
     Example:
         Basic two-possession example::
@@ -77,6 +81,13 @@ def build_rapm_design(
     if possessions.is_empty():
         return csr_matrix((0, 0)), np.empty(0), []
 
+    # A possession missing any of its 10 lineup slots is unreliable for RAPM
+    # (a partial <5-man lineup would otherwise inject a phantom player id via the
+    # NaN->int64 sentinel). Drop those rows; never raise. (never-raise discipline)
+    possessions = possessions.drop_nulls(subset=_OFF + _DEF)
+    if possessions.is_empty():
+        return csr_matrix((0, 0)), np.empty(0), []
+
     off = possessions.select(_OFF).to_numpy().astype(np.int64)
     deff = possessions.select(_DEF).to_numpy().astype(np.int64)
 
@@ -88,6 +99,8 @@ def build_rapm_design(
     rows: list[int] = []
     cols: list[int] = []
     for r in range(n):
+        # off[r]/deff[r] each hold 5 DISTINCT player ids per the upstream contract;
+        # csr_matrix sums duplicate (row,col) entries, so duplicates would corrupt the matrix.
         for p in off[r]:
             rows.append(r)
             cols.append(idx[int(p)])
