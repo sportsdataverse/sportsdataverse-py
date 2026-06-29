@@ -96,6 +96,27 @@ def _null_safe_divide(
     return pl.when(denominator == 0).then(None).otherwise(numerator.cast(pl.Float64) / denominator.cast(pl.Float64))
 
 
+def _is_id_column(col_name: str, entity_key: str) -> bool:
+    """Return True when *col_name* is an ID-like column that must NOT be summed.
+
+    A column is treated as a (non-active) identity key — carried via ``first()``,
+    never summed — when it is either:
+
+    * one of ``TRACKING_ENTITY_KEYS`` values other than the active ``entity_key``
+      (e.g. ``team_id`` when grouping by ``player_id``, and vice versa), or
+    * any column whose name ends in ``_id`` and is not the active ``entity_key``.
+
+    Summing an ID (e.g. a season-stable ``team_id``) produces a meaningless value
+    — 2x a valid franchise id is an invalid id — and silently breaks any
+    downstream join on that key. This is the join-key/ID-dtype discipline.
+    """
+    if col_name == entity_key:
+        return False
+    if col_name in TRACKING_ENTITY_KEYS.values():
+        return True
+    return col_name.endswith("_id")
+
+
 def _classify_columns(
     schema: pl.Schema,
     entity_key: str,
@@ -108,8 +129,12 @@ def _classify_columns(
 
     Returns:
         A 3-tuple:
-        * ``additive_cols`` — numeric, non-``*_pct``, non-key columns to SUM.
-        * ``identity_cols`` — string/categorical non-key columns to keep via ``first()``.
+        * ``additive_cols`` — TRUE counting columns to SUM (numeric, non-``*_pct``,
+          non-key, and NOT an ID-like column).
+        * ``identity_cols`` — columns kept via ``first()``: string/categorical
+          identity columns AND ID-like numeric columns (``team_id`` when grouping
+          by ``player_id``, any other ``*_id``) — these are season-stable keys,
+          not counts, so summing them is incorrect.
         * ``pct_cols`` — all ``*_pct`` columns (will be dropped or recomputed).
     """
     additive: list[str] = []
@@ -121,6 +146,9 @@ def _classify_columns(
             continue
         if col_name.endswith("_pct"):
             pct.append(col_name)
+        elif _is_id_column(col_name, entity_key):
+            # ID-like (e.g. team_id when grouping by player_id) → identity, not summed
+            identity.append(col_name)
         elif _is_numeric(dtype):
             additive.append(col_name)
         else:

@@ -179,6 +179,14 @@ def test_additivity_two_seasons() -> None:
     rb = b.filter(pl.col("player_id") == pid).to_dicts()[0]
     rg = agg.filter(pl.col("player_id") == pid).to_dicts()[0]
 
+    # team_id is a season-stable IDENTITY key, NOT a count — it must be carried
+    # (first()), never summed. A summed team_id (2x a valid franchise id) is an
+    # invalid id and silently breaks any downstream join. Regression guard:
+    assert rg["team_id"] in (ra["team_id"], rb["team_id"]), (
+        f"aggregated team_id {rg['team_id']} must be one of the source ids {ra['team_id']}/{rb['team_id']}, not summed"
+    )
+    assert rg["team_id"] != ra["team_id"] + rb["team_id"], "team_id was summed (the bug)"
+
     # additive counts must be summed exactly
     assert rg["drives"] == ra["drives"] + rb["drives"], "drives not summed correctly"
     assert rg["drive_fgm"] == ra["drive_fgm"] + rb["drive_fgm"], "drive_fgm not summed"
