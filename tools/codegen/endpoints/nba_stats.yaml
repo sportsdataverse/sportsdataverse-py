@@ -1592,6 +1592,158 @@ endpoints:
     name: date_to_nullable
     query_key: DateTo
     type: str
+  - default: By Zone
+    name: distance_range
+    query_key: DistanceRange
+    type: str
+  - default: ''
+    name: division_simple_nullable
+    query_key: Division
+    type: str
+  - default: ''
+    name: draft_pick_nullable
+    query_key: DraftPick
+    type: str
+  - default: ''
+    name: draft_year_nullable
+    query_key: DraftYear
+    type: str
+  - default: ''
+    name: game_scope_simple_nullable
+    query_key: GameScope
+    type: str
+  - default: ''
+    name: game_segment_nullable
+    query_key: GameSegment
+    type: str
+  - default: ''
+    name: height_nullable
+    query_key: Height
+    type: str
+  - default: '0'
+    name: last_n_games
+    query_key: LastNGames
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: ''
+    name: location_nullable
+    query_key: Location
+    type: str
+  - default: Base
+    name: measure_type_simple
+    query_key: MeasureType
+    type: str
+  - default: '0'
+    name: month
+    query_key: Month
+    type: str
+  - default: '0'
+    name: opponent_team_id
+    query_key: OpponentTeamID
+    type: str
+  - default: ''
+    name: outcome_nullable
+    query_key: Outcome
+    type: str
+  - default: ''
+    name: po_round_nullable
+    query_key: PORound
+    type: str
+  - default: N
+    name: pace_adjust
+    query_key: PaceAdjust
+    type: str
+  - default: Totals
+    name: per_mode_detailed
+    query_key: PerMode
+    type: str
+  - default: '0'
+    name: period
+    query_key: Period
+    type: str
+  - default: ''
+    name: player_experience_nullable
+    query_key: PlayerExperience
+    type: str
+  - default: ''
+    name: player_position_abbreviation_nullable
+    query_key: PlayerPosition
+    type: str
+  - default: N
+    name: plus_minus
+    query_key: PlusMinus
+    type: str
+  - default: N
+    name: rank
+    query_key: Rank
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: ''
+    name: season_segment_nullable
+    query_key: SeasonSegment
+    type: str
+  - default: Regular Season
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  - default: ''
+    name: shot_clock_range_nullable
+    query_key: ShotClockRange
+    type: str
+  - default: ''
+    name: starter_bench_nullable
+    query_key: StarterBench
+    type: str
+  - default: ''
+    name: team_id_nullable
+    query_key: TeamID
+    type: str
+  - default: ''
+    name: vs_conference_nullable
+    query_key: VsConference
+    type: str
+  - default: ''
+    name: vs_division_nullable
+    query_key: VsDivision
+    type: str
+  - default: ''
+    name: weight_nullable
+    query_key: Weight
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/leaguedashplayershotlocations
+  returns_schema: native/nba_stats/leaguedashplayershotlocations
+  short: leaguedashplayershotlocations
+  summary: GET /stats/leaguedashplayershotlocations
+- example_args:
+    league_id: '00'
+  extra_params:
+  - default: ''
+    name: college_nullable
+    query_key: College
+    type: str
+  - default: ''
+    name: conference_nullable
+    query_key: Conference
+    type: str
+  - default: ''
+    name: country_nullable
+    query_key: Country
+    type: str
+  - default: ''
+    name: date_from_nullable
+    query_key: DateFrom
+    type: str
+  - default: ''
+    name: date_to_nullable
+    query_key: DateTo
+    type: str
   - default: ''
     name: division_simple_nullable
     query_key: Division
@@ -2321,6 +2473,134 @@ endpoints:
   returns_schema: native/nba_stats/leaguedashteamptshot
   short: leaguedashteamptshot
   summary: GET /stats/leaguedashteamptshot
+- example_args:
+    league_id: '00'
+  extra_params:
+  - default: ''
+    name: conference_nullable
+    query_key: Conference
+    type: str
+  - default: ''
+    name: date_from_nullable
+    query_key: DateFrom
+    type: str
+  - default: ''
+    name: date_to_nullable
+    query_key: DateTo
+    type: str
+  - default: By Zone
+    name: distance_range
+    query_key: DistanceRange
+    type: str
+  - default: ''
+    name: division_simple_nullable
+    query_key: Division
+    type: str
+  - default: ''
+    name: game_scope_simple_nullable
+    query_key: GameScope
+    type: str
+  - default: ''
+    name: game_segment_nullable
+    query_key: GameSegment
+    type: str
+  - default: '0'
+    name: last_n_games
+    query_key: LastNGames
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: ''
+    name: location_nullable
+    query_key: Location
+    type: str
+  - default: Base
+    name: measure_type_simple
+    query_key: MeasureType
+    type: str
+  - default: '0'
+    name: month
+    query_key: Month
+    type: str
+  - default: '0'
+    name: opponent_team_id
+    query_key: OpponentTeamID
+    type: str
+  - default: ''
+    name: outcome_nullable
+    query_key: Outcome
+    type: str
+  - default: ''
+    name: po_round_nullable
+    query_key: PORound
+    type: str
+  - default: N
+    name: pace_adjust
+    query_key: PaceAdjust
+    type: str
+  - default: Totals
+    name: per_mode_detailed
+    query_key: PerMode
+    type: str
+  - default: '0'
+    name: period
+    query_key: Period
+    type: str
+  - default: ''
+    name: player_experience_nullable
+    query_key: PlayerExperience
+    type: str
+  - default: ''
+    name: player_position_abbreviation_nullable
+    query_key: PlayerPosition
+    type: str
+  - default: N
+    name: plus_minus
+    query_key: PlusMinus
+    type: str
+  - default: N
+    name: rank
+    query_key: Rank
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: ''
+    name: season_segment_nullable
+    query_key: SeasonSegment
+    type: str
+  - default: Regular Season
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  - default: ''
+    name: shot_clock_range_nullable
+    query_key: ShotClockRange
+    type: str
+  - default: ''
+    name: starter_bench_nullable
+    query_key: StarterBench
+    type: str
+  - default: ''
+    name: team_id_nullable
+    query_key: TeamID
+    type: str
+  - default: ''
+    name: vs_conference_nullable
+    query_key: VsConference
+    type: str
+  - default: ''
+    name: vs_division_nullable
+    query_key: VsDivision
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/leaguedashteamshotlocations
+  returns_schema: native/nba_stats/leaguedashteamshotlocations
+  short: leaguedashteamshotlocations
+  summary: GET /stats/leaguedashteamshotlocations
 - example_args:
     league_id: '00'
   extra_params:
@@ -5295,6 +5575,22 @@ endpoints:
   returns_schema: native/nba_stats/scheduleleaguev2int
   short: scheduleleaguev2int
   summary: GET /stats/scheduleleaguev2int
+- example_args:
+    league_id: '00'
+  extra_params:
+  - default: '2022-06-26'
+    name: game_date
+    query_key: GameDate
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/scoreboardv3
+  returns_schema: native/nba_stats/scoreboardv3
+  short: scoreboardv3
+  summary: GET /stats/scoreboardv3
 - example_args:
     league_id: '00'
   extra_params:

@@ -5,7 +5,7 @@ sidebar_position: 10
 ---
 # NBA — NBA Stats API (stats.nba.com)
 
-`sportsdataverse.nba` — 109 endpoints.
+`sportsdataverse.nba` — 112 endpoints.
 
 ## `nba_stats_alltimeleadersgrids`
 
@@ -2407,6 +2407,102 @@ nba_stats_leaguedashplayerptshot(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_leaguedashplayershotlocations`
+
+GET /stats/leaguedashplayershotlocations
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguedashplayershotlocations`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguedashplayershotlocations?LeagueID=00](https://stats.nba.com/stats/leaguedashplayershotlocations?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `College` | `college_nullable` |  |  | `Y` |  |
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `Country` | `country_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `DistanceRange` | `distance_range` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `GameScope` | `game_scope_simple_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `Height` | `height_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_simple` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `Weight` | `weight_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `age` | numeric | Player age (in years). |
+| `nickname` | character | Team or athlete nickname. |
+| `less_than_5_ft_fgm` | numeric |  |
+| `less_than_5_ft_fga` | numeric |  |
+| `less_than_5_ft_fg_pct` | numeric |  |
+| `5-9_ft_fgm` | numeric |  |
+| `5-9_ft_fga` | numeric |  |
+| `5-9_ft_fg_pct` | numeric |  |
+| `10-14_ft_fgm` | numeric |  |
+| `10-14_ft_fga` | numeric |  |
+| `10-14_ft_fg_pct` | numeric |  |
+| `15-19_ft_fgm` | numeric |  |
+| `15-19_ft_fga` | numeric |  |
+| `15-19_ft_fg_pct` | numeric |  |
+| `20-24_ft_fgm` | numeric |  |
+| `20-24_ft_fga` | numeric |  |
+| `20-24_ft_fg_pct` | numeric |  |
+| `25-29_ft_fgm` | numeric |  |
+| `25-29_ft_fga` | numeric |  |
+| `25-29_ft_fg_pct` | numeric |  |
+| `30-34_ft_fgm` | numeric |  |
+| `30-34_ft_fga` | numeric |  |
+| `30-34_ft_fg_pct` | numeric |  |
+| `35-39_ft_fgm` | numeric |  |
+| `35-39_ft_fga` | numeric |  |
+| `35-39_ft_fg_pct` | numeric |  |
+| `40+_ft_fgm` | numeric |  |
+| `40+_ft_fga` | numeric |  |
+| `40+_ft_fg_pct` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_leaguedashplayershotlocations(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_leaguedashplayerstats`
 
 GET /stats/leaguedashplayerstats
@@ -2920,6 +3016,92 @@ GET /stats/leaguedashteamptshot
 
 ```python
 nba_stats_leaguedashteamptshot(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_leaguedashteamshotlocations`
+
+GET /stats/leaguedashteamshotlocations
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguedashteamshotlocations`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguedashteamshotlocations?LeagueID=00](https://stats.nba.com/stats/leaguedashteamshotlocations?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `DistanceRange` | `distance_range` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `GameScope` | `game_scope_simple_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_simple` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `less_than_5_ft_fgm` | numeric |  |
+| `less_than_5_ft_fga` | numeric |  |
+| `less_than_5_ft_fg_pct` | numeric |  |
+| `5-9_ft_fgm` | numeric |  |
+| `5-9_ft_fga` | numeric |  |
+| `5-9_ft_fg_pct` | numeric |  |
+| `10-14_ft_fgm` | numeric |  |
+| `10-14_ft_fga` | numeric |  |
+| `10-14_ft_fg_pct` | numeric |  |
+| `15-19_ft_fgm` | numeric |  |
+| `15-19_ft_fga` | numeric |  |
+| `15-19_ft_fg_pct` | numeric |  |
+| `20-24_ft_fgm` | numeric |  |
+| `20-24_ft_fga` | numeric |  |
+| `20-24_ft_fg_pct` | numeric |  |
+| `25-29_ft_fgm` | numeric |  |
+| `25-29_ft_fga` | numeric |  |
+| `25-29_ft_fg_pct` | numeric |  |
+| `30-34_ft_fgm` | numeric |  |
+| `30-34_ft_fga` | numeric |  |
+| `30-34_ft_fg_pct` | numeric |  |
+| `35-39_ft_fgm` | numeric |  |
+| `35-39_ft_fga` | numeric |  |
+| `35-39_ft_fg_pct` | numeric |  |
+| `40+_ft_fgm` | numeric |  |
+| `40+_ft_fga` | numeric |  |
+| `40+_ft_fg_pct` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_leaguedashteamshotlocations(league_id='00')
 ```
 
 _Last validated n/a._
@@ -6082,6 +6264,115 @@ GET /stats/scheduleleaguev2int
 
 ```python
 nba_stats_scheduleleaguev2int(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_scoreboardv3`
+
+GET /stats/scoreboardv3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv3`
+
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?LeagueID=00](https://stats.nba.com/stats/scoreboardv3?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameDate` | `game_date` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `awayteam_inbonus` | character |  |
+| `awayteam_losses` | integer |  |
+| `awayteam_score` | integer |  |
+| `awayteam_seed` | integer |  |
+| `awayteam_teamcity` | character |  |
+| `awayteam_teamid` | integer |  |
+| `awayteam_teamname` | character |  |
+| `awayteam_teamslug` | character |  |
+| `awayteam_teamtricode` | character |  |
+| `awayteam_timeoutsremaining` | integer |  |
+| `awayteam_wins` | integer |  |
+| `gameclock` | character |  |
+| `gamecode` | character | Gamecode. |
+| `gamedate` | character | Game date as parsed from the source feed. |
+| `gameet` | character |  |
+| `gameid` | character |  |
+| `gamelabel` | character |  |
+| `gameleaders_awayleaders_assists` | integer |  |
+| `gameleaders_awayleaders_jerseynum` | character |  |
+| `gameleaders_awayleaders_name` | character |  |
+| `gameleaders_awayleaders_personid` | integer |  |
+| `gameleaders_awayleaders_playerslug` | character |  |
+| `gameleaders_awayleaders_points` | integer |  |
+| `gameleaders_awayleaders_position` | character |  |
+| `gameleaders_awayleaders_rebounds` | integer |  |
+| `gameleaders_awayleaders_teamtricode` | character |  |
+| `gameleaders_homeleaders_assists` | integer |  |
+| `gameleaders_homeleaders_jerseynum` | character |  |
+| `gameleaders_homeleaders_name` | character |  |
+| `gameleaders_homeleaders_personid` | integer |  |
+| `gameleaders_homeleaders_playerslug` | character |  |
+| `gameleaders_homeleaders_points` | integer |  |
+| `gameleaders_homeleaders_position` | character |  |
+| `gameleaders_homeleaders_rebounds` | integer |  |
+| `gameleaders_homeleaders_teamtricode` | character |  |
+| `gamestatus` | integer |  |
+| `gamestatustext` | character |  |
+| `gamesublabel` | character |  |
+| `gamesubtype` | character |  |
+| `gametimeutc` | character |  |
+| `hometeam_inbonus` | character |  |
+| `hometeam_losses` | integer |  |
+| `hometeam_score` | integer |  |
+| `hometeam_seed` | integer |  |
+| `hometeam_teamcity` | character |  |
+| `hometeam_teamid` | integer |  |
+| `hometeam_teamname` | character |  |
+| `hometeam_teamslug` | character |  |
+| `hometeam_teamtricode` | character |  |
+| `hometeam_timeoutsremaining` | integer |  |
+| `hometeam_wins` | integer |  |
+| `ifnecessary` | logical |  |
+| `isneutral` | logical |  |
+| `leagueid` | character |  |
+| `leaguename` | character |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `porounddesc` | character |  |
+| `regulationperiods` | integer |  |
+| `seriesconference` | character |  |
+| `seriesgamenumber` | character |  |
+| `seriestext` | character |  |
+| `teamleaders_awayleaders_assists` | numeric |  |
+| `teamleaders_awayleaders_jerseynum` | character |  |
+| `teamleaders_awayleaders_name` | character |  |
+| `teamleaders_awayleaders_personid` | integer |  |
+| `teamleaders_awayleaders_playerslug` | character |  |
+| `teamleaders_awayleaders_points` | numeric |  |
+| `teamleaders_awayleaders_position` | character |  |
+| `teamleaders_awayleaders_rebounds` | numeric |  |
+| `teamleaders_awayleaders_teamtricode` | character |  |
+| `teamleaders_homeleaders_assists` | numeric |  |
+| `teamleaders_homeleaders_jerseynum` | character |  |
+| `teamleaders_homeleaders_name` | character |  |
+| `teamleaders_homeleaders_personid` | integer |  |
+| `teamleaders_homeleaders_playerslug` | character |  |
+| `teamleaders_homeleaders_points` | numeric |  |
+| `teamleaders_homeleaders_position` | character |  |
+| `teamleaders_homeleaders_rebounds` | numeric |  |
+| `teamleaders_homeleaders_teamtricode` | character |  |
+| `teamleaders_seasonleadersflag` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_scoreboardv3(league_id='00')
 ```
 
 _Last validated n/a._

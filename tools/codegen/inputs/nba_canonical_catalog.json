@@ -18550,7 +18550,7 @@
     },
     {
       "deprecation": {
-        "capture": "dead",
+        "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -18561,10 +18561,10 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "dead",
-        "10": "dead",
-        "15": "dead",
-        "20": "dead"
+        "00": "live",
+        "10": "live",
+        "15": "live",
+        "20": "live"
       },
       "params": [
         {
@@ -18968,41 +18968,6 @@
         "ShotLocations": [
           {
             "description": "",
-            "name": "restricted area",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "in the paint (non-ra)",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "mid-range",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "left corner 3",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "right corner 3",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "above the break 3",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "backcourt",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "player_id",
             "type": "integer"
           },
@@ -19028,107 +18993,142 @@
           },
           {
             "description": "",
-            "name": "fgm",
+            "name": "nickname",
             "type": "string"
           },
           {
             "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "less_than_5_ft_fgm",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "less_than_5_ft_fga",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "less_than_5_ft_fg_pct",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "5-9_ft_fgm",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "5-9_ft_fga",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "5-9_ft_fg_pct",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
+            "name": "10-14_ft_fgm",
+            "type": "number"
           },
           {
             "description": "",
-            "name": "fga",
-            "type": "string"
+            "name": "10-14_ft_fga",
+            "type": "number"
           },
           {
             "description": "",
-            "name": "fg_pct",
+            "name": "10-14_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "15-19_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "15-19_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "15-19_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "20-24_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "20-24_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "20-24_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "25-29_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "25-29_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "25-29_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "30-34_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "30-34_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "30-34_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "35-39_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "35-39_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "35-39_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "40+_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "40+_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "40+_ft_fg_pct",
             "type": "number"
           }
         ]
@@ -22146,7 +22146,7 @@
     },
     {
       "deprecation": {
-        "capture": "dead",
+        "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -22157,10 +22157,10 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "dead",
-        "10": "dead",
-        "15": "dead",
-        "20": "dead"
+        "00": "live",
+        "10": "live",
+        "15": "live",
+        "20": "live"
       },
       "params": [
         {
@@ -22498,41 +22498,6 @@
         "ShotLocations": [
           {
             "description": "",
-            "name": "restricted area",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "in the paint (non-ra)",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "mid-range",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "left corner 3",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "right corner 3",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "above the break 3",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "backcourt",
-            "type": "string"
-          },
-          {
-            "description": "",
             "name": "team_id",
             "type": "integer"
           },
@@ -22543,107 +22508,137 @@
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "less_than_5_ft_fgm",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "less_than_5_ft_fga",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "less_than_5_ft_fg_pct",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "5-9_ft_fgm",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "5-9_ft_fga",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fga",
-            "type": "string"
-          },
-          {
-            "description": "",
-            "name": "fg_pct",
+            "name": "5-9_ft_fg_pct",
             "type": "number"
           },
           {
             "description": "",
-            "name": "fgm",
-            "type": "string"
+            "name": "10-14_ft_fgm",
+            "type": "number"
           },
           {
             "description": "",
-            "name": "fga",
-            "type": "string"
+            "name": "10-14_ft_fga",
+            "type": "number"
           },
           {
             "description": "",
-            "name": "fg_pct",
+            "name": "10-14_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "15-19_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "15-19_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "15-19_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "20-24_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "20-24_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "20-24_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "25-29_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "25-29_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "25-29_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "30-34_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "30-34_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "30-34_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "35-39_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "35-39_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "35-39_ft_fg_pct",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "40+_ft_fgm",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "40+_ft_fga",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "40+_ft_fg_pct",
             "type": "number"
           }
         ]
@@ -59065,6 +59060,7 @@
     },
     {
       "deprecation": {
+        "capture": "live",
         "hoopR": "unknown",
         "wehoop": "unknown"
       },
@@ -59074,10 +59070,10 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested",
-        "15": "untested",
-        "20": "untested"
+        "00": "live",
+        "10": "live",
+        "15": "live",
+        "20": "live"
       },
       "params": [
         {
@@ -59103,7 +59099,410 @@
           "type": "int"
         }
       ],
-      "result_sets": {},
+      "result_sets": {
+        "GameHeader": [
+          {
+            "description": "",
+            "name": "awayteam_inbonus",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "awayteam_losses",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "awayteam_score",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "awayteam_seed",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "awayteam_teamcity",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "awayteam_teamid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "awayteam_teamname",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "awayteam_teamslug",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "awayteam_teamtricode",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "awayteam_timeoutsremaining",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "awayteam_wins",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameclock",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gamecode",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gamedate",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameet",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameid",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gamelabel",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_assists",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_jerseynum",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_name",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_personid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_playerslug",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_points",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_position",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_rebounds",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_awayleaders_teamtricode",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_assists",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_jerseynum",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_name",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_personid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_playerslug",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_points",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_position",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_rebounds",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gameleaders_homeleaders_teamtricode",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gamestatus",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "gamestatustext",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gamesublabel",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gamesubtype",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "gametimeutc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hometeam_inbonus",
+            "type": "unknown"
+          },
+          {
+            "description": "",
+            "name": "hometeam_losses",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hometeam_score",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hometeam_seed",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hometeam_teamcity",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hometeam_teamid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hometeam_teamname",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hometeam_teamslug",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hometeam_teamtricode",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "hometeam_timeoutsremaining",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "hometeam_wins",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "ifnecessary",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "name": "isneutral",
+            "type": "boolean"
+          },
+          {
+            "description": "",
+            "name": "leagueid",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "leaguename",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "period",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "porounddesc",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "regulationperiods",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "seriesconference",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "seriesgamenumber",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "seriestext",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_assists",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_jerseynum",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_name",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_personid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_playerslug",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_points",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_position",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_rebounds",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_awayleaders_teamtricode",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_assists",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_jerseynum",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_name",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_personid",
+            "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_playerslug",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_points",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_position",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_rebounds",
+            "type": "number"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_homeleaders_teamtricode",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "teamleaders_seasonleadersflag",
+            "type": "integer"
+          }
+        ]
+      },
       "slug": "scoreboardv3",
       "sources": [
         "hoopR",

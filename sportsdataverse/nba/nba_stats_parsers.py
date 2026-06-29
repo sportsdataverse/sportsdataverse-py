@@ -38,12 +38,84 @@ def _result_sets(raw: dict) -> list:
     """
     if isinstance(raw.get("resultSets"), list):
         return raw["resultSets"]
+    if isinstance(raw.get("resultSets"), dict):
+        # shot-location family ships a single result set as a dict (with 2-level headers)
+        return [raw["resultSets"]]
     rs = raw.get("resultSet")
     if isinstance(rs, dict):
         return [rs]
     if isinstance(rs, list):
         return rs
+    sb = raw.get("scoreboard")
+    if isinstance(sb, dict) and isinstance(sb.get("games"), list):
+        # scoreboardv3 has no resultSets envelope — synthesize one from scoreboard.games
+        return [_scoreboard_result_set(sb)]
     return []
+
+
+def _flatten_headers(headers: list) -> list:
+    """Flatten stats.nba.com 2-level shot-location headers into composite column names.
+
+    The shot-location endpoints (``leaguedash{player,team}shotlocations``) return
+    ``headers`` as ``[group_header, flat_header]`` rather than a flat list of strings:
+    ``group_header`` carries the distance-range group names plus ``columnsToSkip``
+    (leading identity columns) and ``columnSpan`` (columns per group). Identity columns
+    keep their name; each grouped column becomes ``"<group> <stat>"``. A plain flat
+    header list is returned unchanged.
+
+    Args:
+        headers: Either a flat ``list[str]`` or the 2-element nested-header form.
+
+    Returns:
+        A flat ``list[str]`` of column names.
+    """
+    if not headers or not isinstance(headers[0], dict):
+        return list(headers)
+    group, flat_hdr = headers[0], headers[1]
+    flat = list(flat_hdr.get("columnNames") or [])
+    skip = group.get("columnsToSkip", 0)
+    span = group.get("columnSpan", 1)
+    out = list(flat[:skip])
+    idx = skip
+    for grp in group.get("columnNames") or []:
+        # join with underscores so the later ``underscore()`` pass (which keeps spaces)
+        # yields the same snake name the catalog schema uses (e.g. less_than_5_ft_fgm)
+        prefix = str(grp).replace(".", "").strip().replace(" ", "_")
+        for _ in range(span):
+            if idx < len(flat):
+                out.append(f"{prefix}_{flat[idx]}")
+                idx += 1
+    out.extend(flat[idx:])
+    return out
+
+
+def _flatten_game(record: dict, prefix: str = "") -> dict:
+    """Flatten a nested scoreboardv3 game object (home/away team dicts inlined with a
+    prefix; list-valued keys like gameLeaders/broadcasters dropped). Keys are lowered so
+    the subsequent ``underscore`` pass is idempotent and matches the catalog schema."""
+    out: dict = {}
+    for key, value in record.items():
+        name = f"{prefix}{key}" if prefix else key
+        if isinstance(value, dict):
+            out.update(_flatten_game(value, f"{name}_"))
+        elif isinstance(value, list):
+            continue
+        else:
+            out[name.lower()] = value
+    return out
+
+
+def _scoreboard_result_set(sb: dict) -> dict:
+    """Build a ``{name, headers, rowSet}`` result-set (one row per game) from the v3
+    ``scoreboard.games`` feed so the generic parser can render it as a tidy frame."""
+    base = {k: v for k, v in sb.items() if k != "games" and not isinstance(v, (dict, list))}
+    rows = [
+        _flatten_game({**base, **{k: v for k, v in g.items() if not isinstance(v, list)}})
+        for g in sb.get("games", [])
+        if isinstance(g, dict)
+    ]
+    headers = sorted({k for r in rows for k in r})
+    return {"name": "GameHeader", "headers": headers, "rowSet": [[r.get(h) for h in headers] for r in rows]}
 
 
 def _to_frame(rs: dict) -> pl.DataFrame:
@@ -56,7 +128,7 @@ def _to_frame(rs: dict) -> pl.DataFrame:
         A polars DataFrame with snake_cased column names. Returns an empty DataFrame
         when ``headers`` is absent or ``rowSet`` is empty.
     """
-    headers = [underscore(h) for h in rs.get("headers", [])]
+    headers = [underscore(h) for h in _flatten_headers(rs.get("headers", []))]
     rows = rs.get("rowSet", []) or []
     if not headers:
         return pl.DataFrame()

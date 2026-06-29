@@ -44,6 +44,27 @@ def test_parse_empty_payload_no_result_set_zero_row_frame():
     assert isinstance(df, pl.DataFrame) and df.height == 0
 
 
+def test_parse_shotlocations_nested_headers():
+    # leaguedash*shotlocations ship resultSets as a dict with 2-level (grouped) headers;
+    # the parser must flatten them into composite columns with real rows.
+    raw = _load("cap_shotlocations_nba.json")
+    df = parse_nba_stats_result_sets(raw)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 2
+    assert "player_id" in df.columns
+    assert any(c.startswith("less_than_5_ft_fgm") for c in df.columns)  # grouped + snake-cased
+
+
+def test_parse_scoreboardv3_game_feed():
+    # scoreboardv3 has no resultSets envelope — one row per game from scoreboard.games.
+    raw = _load("cap_scoreboardv3_nba.json")
+    df = parse_nba_stats_result_sets(raw)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 2
+    assert any(c.startswith("hometeam") for c in df.columns)
+    assert any(c.startswith("awayteam") for c in df.columns)
+
+
 def test_parse_single_set_without_name_returns_frame():
     raw = _load("cap_leaguedashplayerstats_nba.json")  # exactly one result-set
     df = parse_nba_stats_result_sets(raw)  # no result_set -> single-frame short-circuit
