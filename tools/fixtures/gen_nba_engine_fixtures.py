@@ -6,6 +6,12 @@ Usage
     cd <worktree>
     uv run --with pbpstats python tools/fixtures/gen_nba_engine_fixtures.py 0022200001
 
+    # Rotation-only (skips pbpstats oracle; adds/refreshes gamerotation.json):
+    uv run python tools/fixtures/gen_nba_engine_fixtures.py --rotation-only 0022200001
+
+    # Force-recapture rotation even if gamerotation.json already exists:
+    uv run python tools/fixtures/gen_nba_engine_fixtures.py --force-rotation 0022200001
+
 This script is intentionally NOT part of the package wheel — it is a dev helper
 that runs ONCE (or when the oracle needs refreshing) and commits the output to
 ``tests/fixtures/nba_engine/<game_id>/``.
@@ -34,11 +40,13 @@ Captured endpoints
 ------------------
 - ``nba_stats_playbyplayv3``          → via sdv-py curl_cffi runtime (stats.nba.com)
 - ``nba_stats_boxscoretraditionalv3`` → via sdv-py curl_cffi runtime (stats.nba.com)
+- ``nba_stats_gamerotation``          → via sdv-py curl_cffi runtime (stats.nba.com)
 
 Output schema
 -------------
 - ``playbyplayv3.json``              : raw v3 play-by-play payload
 - ``boxscoretraditionalv3.json``     : raw v3 box score payload
+- ``gamerotation.json``              : raw gamerotation payload
 - ``lineups_expected.parquet``       : per-event on-court 10 from pbpstats (primary oracle)
   Columns: game_id:Utf8, action_number:Int64, period:Int64,
            home_player_1..5:Int64, away_player_1..5:Int64
@@ -57,6 +65,7 @@ import argparse
 import bisect
 import json
 import re
+import time
 from pathlib import Path
 
 import polars as pl
@@ -89,6 +98,103 @@ def _clock_to_seconds(clock: str) -> float:
     minutes = int(m.group(1))
     seconds = float(m.group(2))
     return minutes * 60.0 + seconds
+
+
+# ---------------------------------------------------------------------------
+# Step 0 (new): capture nba_gamerotation
+# ---------------------------------------------------------------------------
+
+
+def parse_rotation_resultsets(raw_rotation: dict) -> dict[str, list[dict]]:
+    """Convert raw gamerotation resultSets into a team-keyed dict.
+
+    Pure function — no network calls.  Shared with the test suite via
+    :func:`sportsdataverse.nba.nba_lineups.parse_rotation_resultsets`.
+
+    Args:
+        raw_rotation: Raw dict returned by
+            ``nba_stats_gamerotation(return_parsed=False)``.
+
+    Returns:
+        ``{"HomeTeam": [{PERSON_ID, TEAM_ID, IN_TIME_REAL, OUT_TIME_REAL, ...}, ...],
+           "AwayTeam": [...]}``
+    """
+    out: dict[str, list[dict]] = {}
+    result_sets = (raw_rotation or {}).get("resultSets") or []
+    for rs in result_sets:
+        name = rs.get("name", "")
+        headers: list[str] = rs.get("headers") or []
+        row_set: list[list] = rs.get("rowSet") or []
+        if not headers or not row_set:
+            continue
+        records = [dict(zip(headers, row)) for row in row_set]
+        out[name] = records
+    return out
+
+
+def _validate_rotation(raw: dict) -> bool:
+    """Return True if raw_rotation has HomeTeam and AwayTeam with stints and required columns."""
+    parsed = parse_rotation_resultsets(raw)
+    required_cols = {"PERSON_ID", "IN_TIME_REAL", "OUT_TIME_REAL"}
+    for team_key in ("HomeTeam", "AwayTeam"):
+        stints = parsed.get(team_key)
+        if not stints:
+            print(f"  WARN: rotation missing or empty '{team_key}' key")
+            return False
+        if not required_cols.issubset(set(stints[0].keys())):
+            print(f"  WARN: rotation '{team_key}' missing required columns: {required_cols - set(stints[0].keys())}")
+            return False
+    return True
+
+
+def capture_gamerotation(game_id: str, fixture_dir: Path) -> dict:
+    """Fetch ``nba_gamerotation`` for *game_id* and write ``gamerotation.json``.
+
+    Up to 3 retries with 5-second backoff between attempts.
+
+    Args:
+        game_id: NBA game_id string (e.g. ``"0022200001"``).
+        fixture_dir: Directory to write ``gamerotation.json`` into.
+
+    Returns:
+        The raw rotation dict.
+
+    Raises:
+        RuntimeError: If all retries fail or the response is invalid.
+    """
+    from sportsdataverse.nba import nba_stats  # noqa: PLC0415
+
+    max_retries = 3
+    backoff_sec = 5.0
+    last_exc: Exception | None = None
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            print(f"  [attempt {attempt}/{max_retries}] nba_stats_gamerotation(game_id={game_id!r})")
+            raw = nba_stats.nba_stats_gamerotation(game_id=game_id, league_id="00", return_parsed=False)
+            if not raw:
+                raise ValueError(f"nba_stats_gamerotation returned empty payload for game_id={game_id}")
+            if not _validate_rotation(raw):
+                raise ValueError(f"nba_stats_gamerotation payload failed validation for game_id={game_id}")
+            # Write to fixture dir.
+            rotation_path = fixture_dir / "gamerotation.json"
+            rotation_path.write_text(json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8")
+            print(f"  wrote {rotation_path}")
+            # Print stats.
+            parsed = parse_rotation_resultsets(raw)
+            for team_key in ("HomeTeam", "AwayTeam"):
+                stints = parsed.get(team_key, [])
+                team_ids = {s.get("TEAM_ID") for s in stints}
+                print(f"    {team_key}: {len(stints)} stints, team_id(s)={sorted(team_ids)}")
+            return raw
+        except Exception as exc:
+            last_exc = exc
+            print(f"  attempt {attempt} failed: {exc}")
+            if attempt < max_retries:
+                print(f"  sleeping {backoff_sec}s before retry...")
+                time.sleep(backoff_sec)
+
+    raise RuntimeError(f"capture_gamerotation: all {max_retries} attempts failed for game_id={game_id}") from last_exc
 
 
 # ---------------------------------------------------------------------------
@@ -602,7 +708,7 @@ def cross_check_order_index(
 # ---------------------------------------------------------------------------
 
 
-def main(game_id: str) -> None:
+def main(game_id: str, rotation_only: bool = False, force_rotation: bool = False) -> None:
     # File lives at tools/fixtures/gen_nba_engine_fixtures.py
     # parent       = tools/fixtures/
     # parent.parent = tools/
@@ -615,16 +721,43 @@ def main(game_id: str) -> None:
     print(f"    worktree : {worktree}")
     print(f"    fixture dir: {fixture_dir}")
 
+    # --- Step 0: capture gamerotation ---
+    rotation_path = fixture_dir / "gamerotation.json"
+    if rotation_path.exists() and not force_rotation:
+        print("\n[0] gamerotation.json already exists — skipping capture (use --force-rotation to overwrite)")
+        raw_rotation = json.loads(rotation_path.read_text(encoding="utf-8"))
+        parsed = parse_rotation_resultsets(raw_rotation)
+        for team_key in ("HomeTeam", "AwayTeam"):
+            stints = parsed.get(team_key, [])
+            print(f"    {team_key}: {len(stints)} stints (from existing fixture)")
+    else:
+        print("\n[0] Capturing gamerotation via sdv-py wrappers...")
+        raw_rotation = capture_gamerotation(game_id, fixture_dir)
+
+    if rotation_only:
+        print(f"\n=== Done [ROTATION_ONLY]. Fixture dir: {fixture_dir} ===")
+        print(f"Next: git add tests/fixtures/nba_engine/{game_id}/gamerotation.json")
+        return
+
     # --- Step 1: capture v3 payloads ---
     print("\n[1/5] Capturing v3 payloads via sdv-py wrappers...")
-    pbp_raw, bxs_raw = capture_v3_payloads(game_id)
 
     pbp_path = fixture_dir / "playbyplayv3.json"
     bxs_path = fixture_dir / "boxscoretraditionalv3.json"
-    pbp_path.write_text(json.dumps(pbp_raw, indent=2, ensure_ascii=False), encoding="utf-8")
-    bxs_path.write_text(json.dumps(bxs_raw, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  wrote {pbp_path}")
-    print(f"  wrote {bxs_path}")
+
+    # Use existing fixtures if present (idempotent re-run).
+    if pbp_path.exists() and bxs_path.exists():
+        print("  playbyplayv3.json and boxscoretraditionalv3.json already exist — loading from disk")
+        pbp_raw = json.loads(pbp_path.read_text(encoding="utf-8"))
+        bxs_raw = json.loads(bxs_path.read_text(encoding="utf-8"))
+        actions = pbp_raw.get("game", {}).get("actions", [])
+        print(f"  playbyplayv3: {len(actions)} actions (from existing fixture)")
+    else:
+        pbp_raw, bxs_raw = capture_v3_payloads(game_id)
+        pbp_path.write_text(json.dumps(pbp_raw, indent=2, ensure_ascii=False), encoding="utf-8")
+        bxs_path.write_text(json.dumps(bxs_raw, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"  wrote {pbp_path}")
+        print(f"  wrote {bxs_path}")
 
     # --- Step 2: primary oracle ---
     print("\n[2/5] Running primary oracle (pbpstats LiveEnhancedPbp)...")
@@ -668,5 +801,15 @@ def main(game_id: str) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate golden fixtures for the NBA possession engine.")
     parser.add_argument("game_id", help="NBA game_id (e.g. 0022200001)")
+    parser.add_argument(
+        "--rotation-only",
+        action="store_true",
+        help="Only capture gamerotation.json; skip pbpstats oracle and other steps.",
+    )
+    parser.add_argument(
+        "--force-rotation",
+        action="store_true",
+        help="Re-capture gamerotation.json even if it already exists.",
+    )
     args = parser.parse_args()
-    main(args.game_id)
+    main(args.game_id, rotation_only=args.rotation_only, force_rotation=args.force_rotation)

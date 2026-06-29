@@ -1,6 +1,6 @@
 """On-court lineup reconstruction for the v3 pbp engine.
 
-Provides four utilities consumed by the Phase 1 lineup engine:
+Provides utilities consumed by the Phase 1 lineup engine:
 
 - :func:`boxscore_home_away` — extract home/away team ids from a
   ``boxScoreTraditional`` payload.
@@ -9,8 +9,35 @@ Provides four utilities consumed by the Phase 1 lineup engine:
 - :func:`period_starters` — infer which five players started each period for
   each team using the boxscore (period 1) and play-by-play substitution logic
   (periods 2+).
-- :func:`players_on_court` — reconstruct the 5-on-5 on-court lineup for every
-  play-by-play action via v3 substitution replay.
+- :func:`parse_rotation_resultsets` — convert raw ``nba_stats_gamerotation``
+  resultSets JSON into a ``{"HomeTeam": [...], "AwayTeam": [...]}`` dict.
+- :func:`players_on_court_from_rotation` — pure rotation-based on-court
+  reconstruction (no network calls) from a pre-parsed rotation dict.
+- :func:`players_on_court` — public entry point; delegates to
+  :func:`players_on_court_from_rotation`.
+
+Algorithm (hoopR port)
+----------------------
+The rotation-based reconstruction is a faithful port of hoopR's
+``.players_on_court_v3()`` (R/nba_stats_pbp.R lines 857-1041).
+
+For each team, ``nba_gamerotation`` provides stint rows with
+``IN_TIME_REAL`` / ``OUT_TIME_REAL`` as tenths-of-second elapsed from
+game start.  Each PBP row's elapsed time is computed from its period and
+``seconds_remaining`` clock using the same formula:
+
+  periods 1-4:  elapsed = ((period - 1) * 720 + (720 - seconds_remaining)) * 10
+  OT (periods 5+): elapsed = (2880 + (period - 5) * 300 + (300 - seconds_remaining)) * 10
+
+``_resolve_team_oncourt`` maps elapsed times to a sorted 5-player lineup
+using a boundary-interval approach (equivalent to R's ``findInterval``):
+
+1. Collect unique in/out time boundaries and compute midpoints.
+2. For each interval, the active players are those whose stint spans the
+   midpoint (``in_time <= mid`` and ``out_time > mid``).
+3. A final "game-end" row covers ``t == max_boundary``.
+4. ``np.searchsorted(boundaries, times, side='right') - 1`` maps each PBP
+   elapsed time to its interval index (clamped to ``[0, n_intervals]``).
 """
 
 from __future__ import annotations
@@ -18,6 +45,7 @@ from __future__ import annotations
 import logging
 import re
 
+import numpy as np
 import polars as pl
 
 from sportsdataverse.nba.nba_pbp_constants import LINEUPS_SCHEMA
@@ -31,13 +59,100 @@ _SUB_RE = re.compile(r"SUB:\s*(.+?)\s+FOR\s+", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
-# Internal helper
+# Internal helpers
 # ---------------------------------------------------------------------------
 
 
 def _bt(box: dict) -> dict:
     """Return the ``boxScoreTraditional`` sub-dict, or empty dict if absent."""
     return (box or {}).get("boxScoreTraditional") or {}
+
+
+def _box_starters(box: dict) -> dict[int, list[int]]:
+    """Return period-1 starters keyed by team_id from boxscore ``position`` field.
+
+    A player is a starter iff their ``position`` string is non-empty.
+
+    Args:
+        box: Raw boxscore payload dict.
+
+    Returns:
+        ``{team_id: [person_id, ...]}`` with up to 5 ids per team.  A malformed
+        or empty payload returns ``{}`` rather than raising.
+    """
+    b = _bt(box)
+    out: dict[int, list[int]] = {}
+    for side in ("homeTeam", "awayTeam"):
+        t = b.get(side) or {}
+        if t.get("teamId") is None:
+            continue
+        tid = int(t.get("teamId"))
+        out[tid] = [int(p["personId"]) for p in (t.get("players") or []) if str(p.get("position", "")).strip()]
+    return out
+
+
+def _resolve_team_oncourt(stints: list[dict], times: list[float]) -> list[list[int | None]]:
+    """Map PBP elapsed times to sorted 5-player lineups using rotation stints.
+
+    Port of hoopR's ``.resolve_team_oncourt()`` (nba_stats_pbp.R).
+
+    Args:
+        stints: List of stint dicts with keys ``PERSON_ID``, ``IN_TIME_REAL``,
+            ``OUT_TIME_REAL`` (all numeric, in tenths-of-second elapsed from
+            game start).
+        times: Per-row elapsed times for the PBP frame, in the same units.
+
+    Returns:
+        List of length ``len(times)``, each element a list of up to 5 ``int``
+        player IDs (sorted ascending) padded with ``None`` to length 5.
+    """
+    if not stints or not times:
+        lineup: list[int | None] = [None] * 5
+        return [lineup] * len(times)
+
+    in_times = np.array([float(s["IN_TIME_REAL"]) for s in stints])
+    out_times = np.array([float(s["OUT_TIME_REAL"]) for s in stints])
+    person_ids = np.array([int(s["PERSON_ID"]) for s in stints])
+    times_arr = np.array(times)
+
+    boundaries = np.unique(np.concatenate([in_times, out_times]))
+    n_bounds = len(boundaries)
+
+    if n_bounds < 2:
+        # Edge case: all stints have the same in/out time.
+        active = list(dict.fromkeys(person_ids.tolist()))[:5]
+        lineup_edge: list[int | None] = (active + [None] * 5)[:5]
+        return [lineup_edge] * len(times)
+
+    n_intervals = n_bounds - 1
+    midpoints = (boundaries[:-1] + boundaries[1:]) / 2.0
+
+    # Build lineup for each interval k via its midpoint.
+    all_lineups: list[list[int | None]] = []
+    for k in range(n_intervals):
+        mid = float(midpoints[k])
+        mask = (in_times <= mid) & (out_times > mid)
+        active_raw = person_ids[mask].tolist()
+        active_dedup = list(dict.fromkeys(active_raw))
+        active_sorted: list[int] = sorted(active_dedup)[:5]
+        row_lineup: list[int | None] = active_sorted + [None] * (5 - len(active_sorted))
+        all_lineups.append(row_lineup)
+
+    # Game-end lineup: players with in_time <= max_t AND out_time >= max_t.
+    max_t = float(boundaries[n_bounds - 1])
+    mask_end = (in_times <= max_t) & (out_times >= max_t)
+    active_end_raw = person_ids[mask_end].tolist()
+    active_end_dedup = list(dict.fromkeys(active_end_raw))
+    active_end_sorted: list[int] = sorted(active_end_dedup)[:5]
+    final_lineup: list[int | None] = active_end_sorted + [None] * (5 - len(active_end_sorted))
+    all_lineups.append(final_lineup)
+
+    # findInterval equivalent: searchsorted(boundaries, t, side='right') - 1
+    # then clamp to [0, n_intervals] (all_lineups has n_intervals+1 rows).
+    idx = np.searchsorted(boundaries, times_arr, side="right") - 1
+    idx = np.clip(idx, 0, n_intervals).tolist()
+
+    return [all_lineups[i] for i in idx]
 
 
 # ---------------------------------------------------------------------------
@@ -102,29 +217,6 @@ def boxscore_name_map(box: dict) -> dict[int, dict[str, int]]:
     return out
 
 
-def _box_starters(box: dict) -> dict[int, list[int]]:
-    """Return period-1 starters keyed by team_id from boxscore ``position`` field.
-
-    A player is a starter iff their ``position`` string is non-empty.
-
-    Args:
-        box: Raw boxscore payload dict.
-
-    Returns:
-        ``{team_id: [person_id, ...]}`` with up to 5 ids per team.  A malformed
-        or empty payload returns ``{}`` rather than raising.
-    """
-    b = _bt(box)
-    out: dict[int, list[int]] = {}
-    for side in ("homeTeam", "awayTeam"):
-        t = b.get(side) or {}
-        if t.get("teamId") is None:
-            continue
-        tid = int(t.get("teamId"))
-        out[tid] = [int(p["personId"]) for p in (t.get("players") or []) if str(p.get("position", "")).strip()]
-    return out
-
-
 def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int, list[int]]]:
     """Infer the five-man lineup that started each period for each team.
 
@@ -144,11 +236,6 @@ def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int
        are NOT excluded.
     2. The first five ``person_id`` values per team that are not confirmed
        bench sub-ins are the period starters.
-
-    This correctly handles coaches' between-period lineup changes (a player who
-    sat out period 1 and returns for period 2 appears early and is picked up)
-    as well as bench players who receive early playing time (they are marked
-    as sub-ins before their first ``person_id`` appearance and are excluded).
 
     Args:
         enhanced_pbp: Output of :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
@@ -186,39 +273,18 @@ def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int
 
     for period in periods:
         if period == 1:
-            # NOTE: best-effort — a boxscore with !=5 flagged starters yields <5 silently (pbpstats convention).
             starters[1] = {tid: list(ids[:5]) for tid, ids in box_st.items()}
             continue
 
         pe = enhanced_pbp.filter(pl.col("period") == period).sort("order_index")
 
-        # Single-pass scan that distinguishes period starters from mid-period
-        # substitutions:
-        #
-        # For each row (in order_index order):
-        #   • If it is a substitution event, parse the IN-player from the
-        #     description.  If that IN-player has *not yet appeared* in this
-        #     period (i.e., they were sitting on the bench), mark them as a
-        #     confirmed bench sub-in.  If they have already appeared, they
-        #     are a returning starter — do not mark them.
-        #   • When a non-substitution row (or a sub-out row) exposes a person_id
-        #     that has not been seen yet AND is not a confirmed bench sub-in,
-        #     add them to the starter list.
-        #
-        # A player who started the period appears via person_id (sub-out or
-        # action) before any sub-in event involving them.  A bench player first
-        # appears in person_id only AFTER their sub-in event stamps them as a
-        # non-starter.  Returning starters (subbed out then back in) are already
-        # in ``seen`` by the time the second sub-in is processed, so the second
-        # sub-in event is correctly ignored.
-        confirmed_bench: dict[int, set[int]] = {}  # {team_id: {person_id, ...}}
+        confirmed_bench: dict[int, set[int]] = {}
         seen: dict[int, list[int]] = {}
 
         for r in pe.iter_rows(named=True):
             tid = r["team_id"]
             pid = r["person_id"]
 
-            # Process sub-in detection from description (team and description must be valid).
             if r["is_substitution"] and tid is not None and tid > 0:
                 desc: str = r["description"] or ""
                 tid_int_sub = int(tid)
@@ -227,84 +293,96 @@ def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int
                     in_name = m.group(1).strip().lower()
                     in_pid = name_map.get(tid_int_sub, {}).get(in_name)
                     if in_pid is not None:
-                        # Only mark as bench sub-in if not already seen in this period.
                         if in_pid not in (seen.get(tid_int_sub) or []):
                             confirmed_bench.setdefault(tid_int_sub, set()).add(in_pid)
 
-            # Collect starters from person_id appearances.
             if tid is None or pid is None or tid <= 0 or pid <= 0:
                 continue
             tid_int = int(tid)
             pid_int = int(pid)
             if pid_int in confirmed_bench.get(tid_int, set()):
-                continue  # bench player — skip
+                continue
             team_seen = seen.setdefault(tid_int, [])
             if pid_int not in team_seen:
                 team_seen.append(pid_int)
 
-        # NOTE: best-effort — a period with !=5 detected starters yields <5 silently (pbpstats convention).
         starters[period] = {tid: ids[:5] for tid, ids in seen.items()}
 
     return starters
 
 
-def players_on_court(
+def parse_rotation_resultsets(raw_rotation: dict) -> dict[str, list[dict]]:
+    """Convert raw ``nba_stats_gamerotation`` payload into a tidy team-keyed dict.
+
+    Args:
+        raw_rotation: Raw dict returned by
+            ``nba_stats_gamerotation(return_parsed=False)``.  Expected shape::
+
+                {
+                  "resultSets": [
+                    {"name": "HomeTeam", "headers": [...], "rowSet": [...]},
+                    {"name": "AwayTeam", "headers": [...], "rowSet": [...]},
+                  ]
+                }
+
+    Returns:
+        ``{"HomeTeam": [{col: val, ...}, ...], "AwayTeam": [...]}`` where each
+        dict has at least the keys ``PERSON_ID``, ``TEAM_ID``,
+        ``IN_TIME_REAL``, ``OUT_TIME_REAL``.  Returns ``{}`` on malformed input
+        rather than raising.
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            from sportsdataverse.nba.nba_lineups import parse_rotation_resultsets
+            raw = json.loads(pathlib.Path("gamerotation.json").read_text())
+            rotation = parse_rotation_resultsets(raw)
+            print(len(rotation["HomeTeam"]), "home stints")
+    """
+    out: dict[str, list[dict]] = {}
+    result_sets = (raw_rotation or {}).get("resultSets") or []
+    for rs in result_sets:
+        name = rs.get("name", "")
+        headers: list[str] = rs.get("headers") or []
+        row_set: list[list] = rs.get("rowSet") or []
+        if not headers or not row_set:
+            continue
+        records = [dict(zip(headers, row)) for row in row_set]
+        out[name] = records
+    return out
+
+
+def players_on_court_from_rotation(
     enhanced_pbp: pl.DataFrame,
-    period_starters: dict[int, dict[int, list[int]]],
-    name_map: dict[int, dict[str, int]],
+    rotation: dict[str, list[dict]],
     *,
     home_team_id: int,
     away_team_id: int,
 ) -> pl.DataFrame:
-    """Reconstruct the 5-on-5 on-court lineup for every play-by-play action.
+    """Reconstruct the 5-on-5 on-court lineup via the rotation (gamerotation) algorithm.
 
-    Seeds each period from *period_starters*, then replays substitution events
-    in ``order_index`` order to track which ten players are on the floor at
-    each action.
+    Pure function — no network calls.  Port of hoopR's ``.players_on_court_v3()``
+    (R/nba_stats_pbp.R lines 857-1041).
 
-    The stamping rule mirrors the pbpstats oracle:
-
-    * **Non-substitution rows** — stamp the current lineup (post any subs
-      already applied in this period).
-    * **Isolated substitution** (only one sub at this clock tick, and the
-      next row has a higher action_number than the current row) — stamp
-      **pre-sub**, then apply.  This is the most common case.
-    * **Isolated substitution with reversed action_number ordering** (only
-      one sub at this clock tick, but the next row has a *lower*
-      action_number) — apply the sub first, then stamp **post-sub**.  This
-      covers a rare v3 ordering quirk where a later-numbered action is
-      interleaved before an earlier-numbered one at the same clock.
-    * **Clustered substitution** (two or more subs share the same
-      ``seconds_remaining`` within a period **and have consecutive
-      action_numbers with no gaps**) — all subs in the cluster are stamped
-      with the **pre-cluster** lineup (the lineup as it stood *before the
-      first* sub in the cluster).  Each sub is still applied to ``current``
-      so that the first non-sub row after the cluster sees the fully-updated
-      lineup.  A gap of >1 between consecutive action_numbers at the same
-      clock breaks the chain — those subs are treated as isolated.
-
-    Player IDs within each team's five are sorted ascending before stamping,
-    so ``home_player_1 < home_player_2 < ... < home_player_5`` (and likewise
-    for away).
+    The rotation dict may use either ``"HomeTeam"``/``"AwayTeam"`` or
+    ``"homeTeam"``/``"awayTeam"`` as keys — both are accepted.
 
     Args:
         enhanced_pbp: Output of
             :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
-            Must contain ``game_id``, ``action_number``, ``period``,
-            ``order_index``, ``seconds_remaining``, ``is_substitution``,
-            ``person_id``, ``team_id``, and ``description``.
-        period_starters: Output of :func:`period_starters` — maps
-            ``{period: {team_id: [person_id, ...]}}`` for each period.
-        name_map: Output of :func:`boxscore_name_map` — maps
-            ``{team_id: {familyName_lower: person_id}}`` for name resolution.
+            Must contain ``game_id``, ``action_number``, ``period``, and
+            ``seconds_remaining`` (clock remaining in the current period, seconds).
+        rotation: Parsed rotation dict, typically from
+            :func:`parse_rotation_resultsets`.  Each team's list contains stint
+            dicts with numeric ``PERSON_ID``, ``IN_TIME_REAL``, ``OUT_TIME_REAL``.
         home_team_id: Integer team ID of the home team.
         away_team_id: Integer team ID of the away team.
 
     Returns:
         :class:`polars.DataFrame` conforming to ``LINEUPS_SCHEMA`` with one
         row per action in *enhanced_pbp* (same row count, same ordering).
-        Never raises — name-resolution failures are logged and the lineup is
-        left unchanged for that substitution event.
+        Never raises — empty/malformed rotation returns a zero-row frame.
 
     Example:
         Quick start::
@@ -313,21 +391,19 @@ def players_on_court(
             import polars as pl
             from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
             from sportsdataverse.nba.nba_lineups import (
-                boxscore_home_away, boxscore_name_map,
-                period_starters, players_on_court,
+                boxscore_home_away, parse_rotation_resultsets,
+                players_on_court_from_rotation,
             )
             box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
             pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+            rot = json.loads(pathlib.Path("gamerotation.json").read_text())
             enh = enhanced_pbp_from_payload(pbp)
             home, away = boxscore_home_away(box)
-            df = players_on_court(
-                enh,
-                period_starters(enh, box),
-                boxscore_name_map(box),
-                home_team_id=home,
-                away_team_id=away,
+            rotation = parse_rotation_resultsets(rot)
+            df = players_on_court_from_rotation(
+                enh, rotation, home_team_id=home, away_team_id=away
             )
-            print(df.shape)  # (468, 13)
+            print(df.shape)
 
         See Also:
             * `hoopR`_ -- R package providing equivalent lineup utilities
@@ -339,169 +415,108 @@ def players_on_court(
     if enhanced_pbp.is_empty():
         return pl.DataFrame(schema=LINEUPS_SCHEMA)
 
-    # Work in order_index order within each period.
-    sorted_pbp = enhanced_pbp.sort(["period", "order_index"])
+    # Accept both capitalisation variants.
+    home_stints = rotation.get("HomeTeam") or rotation.get("homeTeam") or []
+    away_stints = rotation.get("AwayTeam") or rotation.get("awayTeam") or []
 
-    # Pre-compute per-clock chain size.  A substitution is "clustered" when
-    # two or more subs share the same (period, seconds_remaining) AND have
-    # consecutive action_numbers (no gaps).  A gap > 1 between consecutive
-    # action_numbers within the same clock group breaks the chain — those subs
-    # are isolated.  Cross-team subs that share a clock and are truly consecutive
-    # (e.g. an=126 HOME + 127 AWAY + 128 AWAY with no gaps) form one cluster;
-    # subs with gaps (e.g. an=188 HOME + 190 AWAY, gap at 189) are isolated.
-    subs_only = (
-        sorted_pbp.filter(pl.col("is_substitution") == True)  # noqa: E712
-        .select(["period", "seconds_remaining", "action_number"])
-        .sort(["period", "seconds_remaining", "action_number"])
-    )
-    if subs_only.is_empty():
-        sorted_pbp = sorted_pbp.with_columns(pl.lit(0).cast(pl.Int64).alias("_sub_count_at_clock"))
-    else:
-        # Assign chain IDs in Python (few dozen subs per game, O(n) cost).
-        chain_rows: list[dict] = []
-        chain_id = 0
-        prev_period: int | None = None
-        prev_sr: float | None = None
-        prev_an: int | None = None
-        for sr_row in subs_only.to_dicts():
-            p, s, a = int(sr_row["period"]), float(sr_row["seconds_remaining"]), int(sr_row["action_number"])
-            if p != prev_period or s != prev_sr:
-                chain_id += 1  # new clock group → new chain
-            elif prev_an is not None and a - prev_an > 1:
-                chain_id += 1  # action_number gap within same clock → isolated
-            chain_rows.append({"action_number": a, "_chain_id": chain_id})
-            prev_period, prev_sr, prev_an = p, s, a
+    if not home_stints and not away_stints:
+        logger.warning("players_on_court_from_rotation: rotation dict has no stints — returning empty frame")
+        return pl.DataFrame(schema=LINEUPS_SCHEMA)
 
-        chain_df = pl.DataFrame(chain_rows, schema={"action_number": pl.Int64, "_chain_id": pl.Int64})
-        chain_sizes = chain_df.group_by("_chain_id").agg(pl.len().alias("_sub_count_at_clock"))
-        chain_with_count = chain_df.join(chain_sizes, on="_chain_id", how="left").select(
-            ["action_number", "_sub_count_at_clock"]
-        )
-        sorted_pbp = sorted_pbp.join(chain_with_count, on="action_number", how="left").with_columns(
-            pl.col("_sub_count_at_clock").fill_null(0).cast(pl.Int64)
-        )
+    # Compute elapsed time (tenths-of-second from game start) for each PBP row.
+    # periods 1-4: ((period - 1) * 720 + (720 - seconds_remaining)) * 10
+    # OT (periods 5+): (2880 + (period - 5) * 300 + (300 - seconds_remaining)) * 10
+    pbp_rows = enhanced_pbp.select(["game_id", "action_number", "period", "seconds_remaining"]).to_dicts()
 
-    rows: list[dict] = sorted_pbp.select(
-        [
-            "game_id",
-            "action_number",
-            "period",
-            "order_index",
-            "seconds_remaining",
-            "is_substitution",
-            "person_id",
-            "team_id",
-            "description",
-            "_sub_count_at_clock",
-        ]
-    ).to_dicts()
-
-    n = len(rows)
-
-    # current[team_id] = set of person_ids currently on the floor.
-    current: dict[int, set[int]] = {}
-    cur_period: int | None = None
-    out_rows: list[dict] = []
-
-    # Cluster tracking: when multiple subs share the same (period, sr) we stamp
-    # all of them with the lineup as it stood before the *first* sub in that
-    # cluster.
-    cluster_period: int | None = None
-    cluster_sr: float | None = None
-    cluster_home: list[int] = []
-    cluster_away: list[int] = []
-
-    for idx, r in enumerate(rows):
-        period: int = int(r["period"])
-
-        # Seed period on first row of each new period.
-        if period != cur_period:
-            cur_period = period
-            period_map = period_starters.get(period, {})
-            current = {tid: set(ids) for tid, ids in period_map.items()}
-            cluster_period = None
-            cluster_sr = None
-
-        if r["is_substitution"]:
-            sr: float = r["seconds_remaining"]
-            sub_count: int = int(r["_sub_count_at_clock"])
-            tid_val = r["team_id"]
-            tid_int: int | None = int(tid_val) if tid_val is not None else None
-            out_pid = r["person_id"]
-            desc: str = r["description"] or ""
-
-            def _apply(tid: int, out_p: object, desc_str: str) -> None:
-                """Apply a substitution to *current* in-place."""
-                m = _SUB_RE.search(desc_str)
-                if m:
-                    in_name = m.group(1).strip().lower()
-                    in_pid = name_map.get(tid, {}).get(in_name)
-                    if in_pid is not None and out_p is not None:
-                        current[tid].discard(int(out_p))
-                        current[tid].add(int(in_pid))
-                    else:
-                        logger.debug(
-                            "players_on_court: name miss — game=%s an=%s team=%s "
-                            "in_name=%r in_pid=%s out_pid=%s desc=%r",
-                            r["game_id"],
-                            r["action_number"],
-                            tid,
-                            in_name,
-                            in_pid,
-                            out_p,
-                            desc_str,
-                        )
-                else:
-                    logger.debug(
-                        "players_on_court: no SUB pattern — game=%s an=%s desc=%r",
-                        r["game_id"],
-                        r["action_number"],
-                        desc_str,
-                    )
-
-            if sub_count > 1:
-                # Clustered: stamp pre-cluster lineup for all subs in cluster.
-                is_new_cluster = cluster_period != period or cluster_sr != sr
-                if is_new_cluster:
-                    cluster_period = period
-                    cluster_sr = sr
-                    cluster_home = sorted(current.get(home_team_id, set()))
-                    cluster_away = sorted(current.get(away_team_id, set()))
-                home_ids = cluster_home
-                away_ids = cluster_away
-                if tid_int is not None and tid_int in current:
-                    _apply(tid_int, out_pid, desc)
-            else:
-                # Isolated: one sub at this clock.
-                next_an = rows[idx + 1]["action_number"] if idx + 1 < n else int(r["action_number"]) + 1
-                reversed_order = next_an < int(r["action_number"])
-                if reversed_order:
-                    # Apply THEN stamp post-sub (pbpstats stamps post when
-                    # action_number ordering is inverted relative to clock order).
-                    if tid_int is not None and tid_int in current:
-                        _apply(tid_int, out_pid, desc)
-                    home_ids = sorted(current.get(home_team_id, set()))
-                    away_ids = sorted(current.get(away_team_id, set()))
-                else:
-                    # Normal isolated sub: stamp pre-sub, then apply.
-                    home_ids = sorted(current.get(home_team_id, set()))
-                    away_ids = sorted(current.get(away_team_id, set()))
-                    if tid_int is not None and tid_int in current:
-                        _apply(tid_int, out_pid, desc)
+    pbp_times: list[float] = []
+    for r in pbp_rows:
+        period = int(r["period"])
+        sr = float(r["seconds_remaining"] or 0.0)
+        if period <= 4:
+            elapsed = ((period - 1) * 720.0 + (720.0 - sr)) * 10.0
         else:
-            # Non-sub: stamp current lineup (post any subs already applied).
-            home_ids = sorted(current.get(home_team_id, set()))
-            away_ids = sorted(current.get(away_team_id, set()))
+            elapsed = (2880.0 + (period - 5) * 300.0 + (300.0 - sr)) * 10.0
+        pbp_times.append(elapsed)
 
+    # Resolve lineups for each team.
+    home_lineups = _resolve_team_oncourt(home_stints, pbp_times)
+    away_lineups = _resolve_team_oncourt(away_stints, pbp_times)
+
+    out_rows: list[dict] = []
+    for i, r in enumerate(pbp_rows):
+        h = home_lineups[i]
+        a = away_lineups[i]
         row: dict = {
             "game_id": r["game_id"],
             "action_number": int(r["action_number"]),
-            "period": period,
+            "period": int(r["period"]),
         }
-        for i in range(5):
-            row[f"home_player_{i + 1}"] = home_ids[i] if i < len(home_ids) else None
-        for i in range(5):
-            row[f"away_player_{i + 1}"] = away_ids[i] if i < len(away_ids) else None
+        for j in range(5):
+            row[f"home_player_{j + 1}"] = h[j] if j < len(h) and h[j] is not None else None
+        for j in range(5):
+            row[f"away_player_{j + 1}"] = a[j] if j < len(a) and a[j] is not None else None
         out_rows.append(row)
 
     return pl.DataFrame(out_rows, schema=LINEUPS_SCHEMA)
+
+
+def players_on_court(
+    enhanced_pbp: pl.DataFrame,
+    rotation: dict[str, list[dict]],
+    *,
+    home_team_id: int,
+    away_team_id: int,
+) -> pl.DataFrame:
+    """Reconstruct the 5-on-5 on-court lineup for every play-by-play action.
+
+    Delegates to :func:`players_on_court_from_rotation` using the
+    ``nba_gamerotation`` rotation data (hoopR algorithm port).
+
+    The rotation dict should be produced by :func:`parse_rotation_resultsets`.
+    Both ``"HomeTeam"``/``"AwayTeam"`` and ``"homeTeam"``/``"awayTeam"`` keys
+    are accepted.
+
+    Args:
+        enhanced_pbp: Output of
+            :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
+            Must contain ``game_id``, ``action_number``, ``period``, and
+            ``seconds_remaining``.
+        rotation: Parsed rotation dict from :func:`parse_rotation_resultsets`.
+        home_team_id: Integer team ID of the home team.
+        away_team_id: Integer team ID of the away team.
+
+    Returns:
+        :class:`polars.DataFrame` conforming to ``LINEUPS_SCHEMA`` with one
+        row per action in *enhanced_pbp*.  Never raises.
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            import polars as pl
+            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+            from sportsdataverse.nba.nba_lineups import (
+                boxscore_home_away, parse_rotation_resultsets, players_on_court,
+            )
+            box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+            pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+            rot = json.loads(pathlib.Path("gamerotation.json").read_text())
+            enh = enhanced_pbp_from_payload(pbp)
+            home, away = boxscore_home_away(box)
+            rotation = parse_rotation_resultsets(rot)
+            df = players_on_court(enh, rotation, home_team_id=home, away_team_id=away)
+            print(df.shape)
+
+        See Also:
+            * `hoopR`_ -- R package providing equivalent lineup utilities
+            * `nba_api`_ -- reference Python client for stats.nba.com
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    return players_on_court_from_rotation(
+        enhanced_pbp,
+        rotation,
+        home_team_id=home_team_id,
+        away_team_id=away_team_id,
+    )
