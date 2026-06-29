@@ -1,7 +1,8 @@
 # tests/nba/test_nba_rapm.py
+import numpy as np
 import polars as pl
 
-from sportsdataverse.nba.nba_rapm import build_rapm_design
+from sportsdataverse.nba.nba_rapm import RAPM_SCHEMA, build_rapm_design, nba_rapm
 
 
 def _poss(rows: list[tuple[tuple[int, ...], tuple[int, ...], int]]) -> pl.DataFrame:
@@ -96,3 +97,85 @@ def test_design_matrix_drops_null_lineup_rows():
     assert Xd[0].sum() == 10
     assert Xd[1].sum() == 10
     assert list(y) == [2.0, 0.0]
+
+
+# ---------------------------------------------------------------------------
+# Task 2: nba_rapm() tests
+# ---------------------------------------------------------------------------
+
+
+def test_rapm_empty_input_returns_schema_frame():
+    """nba_rapm on empty input must return zero-row frame with exact RAPM_SCHEMA."""
+    # completely empty DataFrame (no columns)
+    out = nba_rapm(pl.DataFrame())
+    assert out.is_empty()
+    assert dict(out.schema) == RAPM_SCHEMA
+
+    # empty but correctly-structured DataFrame
+    out2 = nba_rapm(_poss([]))
+    assert out2.is_empty()
+    assert dict(out2.schema) == RAPM_SCHEMA
+
+
+def test_rapm_schema_sign_and_counts():
+    """Small hand-built frame: verify schema dtypes, sign convention, off/def poss counts."""
+    # 4 possessions: players 1-5 offense vs 6-10 defense (twice), then reversed (twice)
+    rows = [
+        ((1, 2, 3, 4, 5), (6, 7, 8, 9, 10), 2),
+        ((1, 2, 3, 4, 5), (6, 7, 8, 9, 10), 2),
+        ((6, 7, 8, 9, 10), (1, 2, 3, 4, 5), 1),
+        ((6, 7, 8, 9, 10), (1, 2, 3, 4, 5), 1),
+    ]
+    out = nba_rapm(_poss(rows)).sort("player_id")
+
+    # Exactly the 6 RAPM_SCHEMA columns with correct dtypes
+    assert dict(out.schema) == RAPM_SCHEMA
+
+    # rapm == o_rapm + d_rapm row-wise
+    computed_rapm = (out["o_rapm"] + out["d_rapm"]).to_numpy()
+    stored_rapm = out["rapm"].to_numpy()
+    np.testing.assert_allclose(computed_rapm, stored_rapm, atol=1e-10)
+
+    # Players 1-5 were on offense 2× and defense 2×; players 6-10 likewise
+    assert (out["off_poss"] == 2).all()
+    assert (out["def_poss"] == 2).all()
+
+    # dtype checks
+    assert out["player_id"].dtype == pl.Int64
+    assert out["o_rapm"].dtype == pl.Float64
+    assert out["d_rapm"].dtype == pl.Float64
+    assert out["rapm"].dtype == pl.Float64
+    assert out["off_poss"].dtype == pl.Int64
+    assert out["def_poss"].dtype == pl.Int64
+
+
+def test_synthetic_recovery():
+    """Ridge regression must recover planted per-100-possession effects (corr > 0.7)."""
+    rng = np.random.default_rng(42)
+    P = 40
+    true_off = rng.normal(0, 0.06, P)  # per-possession effects
+    true_def = rng.normal(0, 0.06, P)
+    players = list(range(1, P + 1))
+    M = 8000
+    rows = []
+    for _ in range(M):
+        pick = rng.choice(players, size=10, replace=False)
+        off5, def5 = pick[:5], pick[5:]
+        oi = [p - 1 for p in off5]
+        di = [p - 1 for p in def5]
+        pts = 1.05 + true_off[oi].sum() - true_def[di].sum() + rng.normal(0, 0.4)
+        pts = int(max(0, round(pts)))  # integer points per possession
+        rows.append((tuple(int(x) for x in off5), tuple(int(x) for x in def5), pts))
+    df = _poss(rows)
+    out = nba_rapm(df).sort("player_id")
+    o_est = out["o_rapm"].to_numpy()
+    d_est = out["d_rapm"].to_numpy()
+    # Ridge shrinks magnitude but must RECOVER the structure
+    corr_o = np.corrcoef(o_est, true_off[: len(o_est)])[0, 1]
+    corr_d = np.corrcoef(d_est, true_def[: len(d_est)])[0, 1]
+    assert corr_o > 0.7, f"Offense recovery corr={corr_o:.4f} below threshold 0.7"
+    assert corr_d > 0.7, f"Defense recovery corr={corr_d:.4f} below threshold 0.7"
+
+    # Determinism: same input → same output
+    out2 = nba_rapm(df).sort("player_id")
+    assert out.equals(out2)
