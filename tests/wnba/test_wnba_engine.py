@@ -25,11 +25,20 @@ import json
 import pathlib
 import re
 
+import numpy as np
 import pandas as pd
 import polars as pl
 import pytest
 
 import sportsdataverse.wnba.wnba_engine as W
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away,
+    parse_rotation_resultsets,
+    players_on_court_from_rotation,
+)
+from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
+from sportsdataverse.nba.nba_rapm import RAPM_SCHEMA
 
 FXR = pathlib.Path("tests/fixtures/wnba_engine")
 GAMES = ["1022400001", "1022400003"]
@@ -289,28 +298,14 @@ def test_wnba_oncourt_ids_in_roster(monkeypatch: pytest.MonkeyPatch, game_id: st
 # Task 3: wnba_rapm_from_games() tests
 # ---------------------------------------------------------------------------
 
-import numpy as np
-
-from sportsdataverse.nba.nba_rapm import RAPM_SCHEMA
-from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
-from sportsdataverse.nba.nba_lineups import (
-    boxscore_home_away,
-    parse_rotation_resultsets,
-    players_on_court_from_rotation,
-)
-from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
-
 
 def _game_poss_wnba(gid: str) -> pl.DataFrame:
     """Build WNBA possession frame from captured fixtures for game *gid*."""
-    fx = FXR / gid
-    enh = enhanced_pbp_from_payload(json.loads((fx / "playbyplayv3.json").read_text()))
-    box = json.loads((fx / "boxscoretraditionalv3.json").read_text())
-    home, away = boxscore_home_away(box)
-    rotation_raw = json.loads((fx / "gamerotation.json").read_text())
+    enh = enhanced_pbp_from_payload(json.loads((FXR / gid / "playbyplayv3.json").read_text()))
+    home, away = boxscore_home_away(_raw_box(gid))
     oc = players_on_court_from_rotation(
         enh,
-        parse_rotation_resultsets(rotation_raw),
+        parse_rotation_resultsets(_raw_rotation(gid)),
         home_team_id=home,
         away_team_id=away,
     )
