@@ -85,6 +85,9 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
 
     Returns:
         A ``(frame, CheckContext)`` tuple.
+
+    Raises:
+        FileNotFoundError: If the resolved parquet glob matches no files.
     """
     glob_expanded = os.path.expandvars(spec.parquet_glob)
     frame = pl.read_parquet(glob_expanded)

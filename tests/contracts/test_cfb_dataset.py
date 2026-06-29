@@ -5,6 +5,7 @@ from pathlib import Path
 import polars as pl
 
 from tools.validation.checks import schema_contract
+from tools.validation.findings import Severity
 from tools.validation.registry import (
     DATASETS,
     DatasetSpec,
@@ -65,6 +66,6 @@ def test_checks_run_on_resolved_fixture() -> None:
     # corrupt game_id dtype — should produce a join-key dtype ERROR
     bad_frame = frame.with_columns(pl.col("game_id").cast(pl.Utf8))
     bad_findings = schema_contract.run("t", bad_frame, ctx)
-    assert any(f.locator.get("is_join_key") is True for f in bad_findings), (
+    assert any(f.locator.get("is_join_key") is True and f.severity is Severity.ERROR for f in bad_findings), (
         f"expected a join-key dtype ERROR, got: {bad_findings}"
     )
