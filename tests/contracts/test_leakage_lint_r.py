@@ -63,3 +63,11 @@ def test_run_broken_live_warns_parse_error():
     findings = leakage_r.run(str(_FIXTURES / "broken.R"))
     assert findings and findings[0].severity is Severity.WARN
     assert "could not parse" in findings[0].message
+
+
+def test_analyze_finer_root_flags_ungrouped_lag_inside_function():
+    findings = leakage_r._analyze_parsedata(_rows("fnwrap.getparsedata.csv"), "fnwrap.R")
+    assert len(findings) == 1
+    assert findings[0].locator["call"] == "lag"
+    assert findings[0].locator["line"] == 8  # the ungrouped `b <- ... lag(w)`
+    assert findings[0].severity is Severity.WARN and findings[0].needs_judgment

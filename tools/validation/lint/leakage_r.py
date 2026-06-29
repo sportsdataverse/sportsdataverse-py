@@ -76,23 +76,28 @@ def _iter_r_files(root: Path) -> Iterator[Path]:
         yield p
 
 
-def _root(nid: int, parent: dict[int, int], ids: set[int]) -> int:
-    """Walk ``parent`` from ``nid`` to its top-level statement node (parent ``0``).
+def _root(nid: int, parent: dict[int, int], ids: set[int], block_ids: set[int]) -> int:
+    """Walk ``parent`` from ``nid`` to its nearest enclosing statement node.
+
+    A statement boundary is the top level (parent ``0``), an out-of-set parent
+    (e.g. a negative COMMENT parent), or a braced-block expr (``block_ids``) — so
+    each pipe chain inside a ``function(){...}``/``{`` block roots to its own
+    statement rather than to the whole top-level definition.
 
     Args:
         nid: Starting node id.
-        parent: ``id -> parent`` map from the parse-data frame.
-        ids: Set of all known (positive) node ids; an out-of-set parent (e.g. a
-            negative COMMENT parent) terminates the walk.
+        parent: ``id -> parent`` map.
+        ids: All known (positive) node ids.
+        block_ids: Ids of braced-block expr nodes (parents of a ``'{'`` token).
 
     Returns:
-        The id of the enclosing top-level statement node.
+        The id of the enclosing statement node.
     """
     cur = nid
     seen: set[int] = set()
     while True:
         p = parent.get(cur, 0)
-        if p == 0 or p not in ids or cur in seen:
+        if p == 0 or p not in ids or cur in seen or p in block_ids:
             return cur
         seen.add(cur)
         cur = p
@@ -115,15 +120,12 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
         One WARN ``needs_judgment`` Finding per ungrouped lag/cumulative call.
 
     Note:
-        Grouping is matched at TOP-LEVEL-STATEMENT granularity. Inside a
-        function body or a ``{`` block (the dominant shape for real R package
-        code) every pipe chain shares one statement root, so a grouping signal
-        in ANY chain marks every lag/cumulative call in that whole statement
-        clean — a grouped chain therefore MASKS a genuinely-ungrouped lag/
-        cumulative elsewhere in the same function. This is an accepted, deliberate
-        false negative (never a false positive); WARN-only / ``needs_judgment``
-        routes survivors to Tier-2, and finer per-statement granularity is a
-        planned follow-up.
+        Grouping is matched at STATEMENT granularity — each pipe chain inside a
+        ``function(){...}`` / ``{`` block roots to its own statement (the brace
+        block is a boundary), so a grouped chain no longer masks an ungrouped
+        lag/cumulative elsewhere in the same function. A residual false negative
+        remains only for multiple chains sharing ONE statement (rare); WARN-only
+        / ``needs_judgment`` routes survivors to Tier-2.
     """
     try:
         ids = {int(r["id"]) for r in rows}
@@ -139,16 +141,17 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
                 locator={"file": rel},
             )
         ]
+    block_ids = {int(r["parent"]) for r in rows if r.get("token") == "'{'"}
     group_roots: set[int] = set()
     for r in rows:
         token, text = r.get("token", ""), r.get("text", "")
         if (token == "SYMBOL_FUNCTION_CALL" and text in _GROUP_CALLS) or (token == "SYMBOL_SUB" and text == _BY_ARG):
-            group_roots.add(_root(int(r["id"]), parent, ids))
+            group_roots.add(_root(int(r["id"]), parent, ids, block_ids))
     findings: list[Finding] = []
     for r in rows:
         if r.get("token") != "SYMBOL_FUNCTION_CALL" or r.get("text") not in _LAG_CALLS:
             continue
-        if _root(int(r["id"]), parent, ids) in group_roots:
+        if _root(int(r["id"]), parent, ids, block_ids) in group_roots:
             continue
         line, call = int(r["line1"]), r.get("text", "")
         findings.append(
