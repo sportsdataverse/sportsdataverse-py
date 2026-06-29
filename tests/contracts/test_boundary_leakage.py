@@ -1,7 +1,11 @@
+from pathlib import Path
+
 import polars as pl
 
 from tools.validation.checks import boundary_leakage
 from tools.validation.findings import CheckContext, Severity
+
+_FIX = Path(__file__).parent / "fixtures"
 
 
 def _ctx(**kw):
@@ -40,3 +44,22 @@ def test_no_group_key_column_skips():
 def test_lag_column_absent_from_frame_skips():
     frame = pl.DataFrame({"game_id": [1, 1]})  # prev_ep absent
     assert boundary_leakage.run("nfl_pbp", frame, _ctx()) == []
+
+
+def test_cumulative_reset_is_clean():
+    frame = pl.read_parquet(_FIX / "boundary_cumulative_clean.parquet")
+    ctx = CheckContext(
+        domain="cfb", dataset="d", schema={}, group_key="game_id", cumulative_columns=("game_play_number",)
+    )
+    assert boundary_leakage.run("d", frame, ctx) == []
+
+
+def test_cumulative_nonreset_is_warn_needs_judgment():
+    frame = pl.read_parquet(_FIX / "boundary_cumulative_leak.parquet")
+    ctx = CheckContext(
+        domain="cfb", dataset="d", schema={}, group_key="game_id", cumulative_columns=("game_play_number",)
+    )
+    findings = boundary_leakage.run("d", frame, ctx)
+    assert len(findings) == 1
+    assert findings[0].severity is Severity.WARN and findings[0].needs_judgment
+    assert findings[0].locator["column"] == "game_play_number"

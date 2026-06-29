@@ -158,4 +158,5 @@ DATASETS["cfb_model_pbp"] = DatasetSpec(
         "ep_after": (-8.0, 8.0),
     },
     oracle_domain="cfb",
+    cumulative_columns=("game_play_number",),
 )
