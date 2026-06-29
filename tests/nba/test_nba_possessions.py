@@ -65,7 +65,7 @@ def test_possessions_schema_matches_constant() -> None:
         "points",
         "is_second_chance",
     }
-    assert required <= set(POSSESSIONS_SCHEMA.keys())
+    assert set(POSSESSIONS_SCHEMA.keys()) == required
     assert POSSESSIONS_SCHEMA["game_id"] == pl.Utf8
     assert POSSESSIONS_SCHEMA["offense_team_id"] == pl.Int64
     assert POSSESSIONS_SCHEMA["defense_team_id"] == pl.Int64
@@ -80,6 +80,131 @@ def test_build_possessions_empty_input_never_raises() -> None:
     assert isinstance(result, pl.DataFrame)
     assert result.height == 0
     assert result.schema == pl.Schema(POSSESSIONS_SCHEMA)
+
+
+def test_unattributed_group_points_attributed_to_scoring_team() -> None:
+    """A scoring group with no offense-attributable event must NOT leak points.
+
+    Crafted minimal frame: a standalone made free throw whose possession group
+    contains no scoring/shooting/rebound/turnover event with a usable
+    ``location`` to set offense (the FT here carries an empty ``location``),
+    yet ``score_home`` increments.  The point-leak fix must attribute that
+    point to the scoring team (home) via score-delta direction, and total
+    points must be preserved.
+
+    This path is NOT exercised by the three real fixture games — it is a
+    deliberate unit test of the structural correctness guard.
+    """
+    from sportsdataverse.nba import nba_pbp_constants as C
+
+    home_id = 1610612738
+    away_id = 1610612755
+
+    # Build a tiny enhanced-pbp frame.  Rows (in order_index order):
+    #   0: period start (no team, no score)
+    #   1: an away-team made shot -> anchors away as a real team via location 'v'
+    #      and gives a home/away identity anchor for both sides
+    #   2: a home-team made shot  -> anchors home via location 'h'
+    #   3: a standalone made free throw with EMPTY location but score_home++
+    #      -> its group has no location-bearing scoring event, so offense
+    #         resolves to 0; the fix must attribute the +1 to home by delta.
+    rows = [
+        {
+            "game_id": "0099900001",
+            "action_number": 1,
+            "period": 1,
+            "order_index": 0,
+            "event_type": "period",
+            "sub_type": "start",
+            "location": "",
+            "team_id": 0,
+            "person_id": 0,
+            "seconds_remaining": 720.0,
+            "score_home": "",
+            "score_away": "",
+        },
+        {
+            "game_id": "0099900001",
+            "action_number": 2,
+            "period": 1,
+            "order_index": 1,
+            "event_type": "made_shot",
+            "sub_type": "Jump Shot",
+            "location": "v",
+            "team_id": away_id,
+            "person_id": 201,
+            "seconds_remaining": 700.0,
+            "score_home": "0",
+            "score_away": "2",
+        },
+        {
+            "game_id": "0099900001",
+            "action_number": 3,
+            "period": 1,
+            "order_index": 2,
+            "event_type": "made_shot",
+            "sub_type": "Jump Shot",
+            "location": "h",
+            "team_id": home_id,
+            "person_id": 101,
+            "seconds_remaining": 680.0,
+            "score_home": "2",
+            "score_away": "2",
+        },
+        {
+            # Standalone made FT: empty location -> offense unresolvable from
+            # location, but score_home increments by 1.
+            "game_id": "0099900001",
+            "action_number": 4,
+            "period": 1,
+            "order_index": 3,
+            "event_type": "free_throw",
+            "sub_type": "Free Throw Technical",
+            "location": "",
+            "team_id": 0,
+            "person_id": 0,
+            "seconds_remaining": 660.0,
+            "score_home": "3",
+            "score_away": "2",
+        },
+    ]
+
+    # Coerce to the enhanced-pbp dtypes the builder relies on.
+    df = pl.DataFrame(
+        rows,
+        schema_overrides={
+            "game_id": pl.Utf8,
+            "action_number": pl.Int64,
+            "period": pl.Int64,
+            "order_index": pl.Int64,
+            "event_type": pl.Utf8,
+            "sub_type": pl.Utf8,
+            "location": pl.Utf8,
+            "team_id": pl.Int64,
+            "person_id": pl.Int64,
+            "seconds_remaining": pl.Float64,
+            "score_home": pl.Utf8,
+            "score_away": pl.Utf8,
+        },
+    )
+    # Add the event-flag columns the enhanced frame normally carries (unused by
+    # the builder, but keeps the input shape faithful).
+    df = df.with_columns([(pl.col("event_type") == et.removeprefix("is_")).alias(et) for et in C.EVENT_FLAG_COLUMNS])
+
+    poss = build_possessions(df)
+
+    pts_by_team: dict[int, int] = {
+        int(r["offense_team_id"]): int(r["points"])
+        for r in poss.group_by("offense_team_id").agg(pl.col("points").sum().alias("points")).to_dicts()
+    }
+
+    # The standalone technical FT point (+1 home) MUST land on home, not be
+    # absorbed into another team's possession.
+    assert pts_by_team.get(home_id, 0) == 3, f"home points leaked: expected 3, got {pts_by_team.get(home_id, 0)}"
+    assert pts_by_team.get(away_id, 0) == 2, f"away points wrong: expected 2, got {pts_by_team.get(away_id, 0)}"
+
+    # Total points preserved: 3 (home) + 2 (away) == 5
+    assert int(poss["points"].sum()) == 5
 
 
 # ---------------------------------------------------------------------------

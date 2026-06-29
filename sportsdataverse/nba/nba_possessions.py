@@ -300,10 +300,19 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         end_away: int = events[-1]["_away"]
 
         if offense == 0:
-            # Unattributable group — advance score tracking, skip
-            prev_home = end_home
-            prev_away = end_away
-            continue
+            # Unattributable group (no scoring/shooting/rebound/turnover event
+            # to assign offense from — e.g. a standalone technical FT or an
+            # opening tip-off group).  Never silently drop a score delta: if
+            # the score moved inside this group, attribute the points to the
+            # team whose score actually increased (delta direction), so total
+            # points still reconcile.  If no score change, dropping it is fine.
+            home_delta = end_home - prev_home
+            away_delta = end_away - prev_away
+            if home_delta <= 0 and away_delta <= 0:
+                prev_home = end_home
+                prev_away = end_away
+                continue
+            offense = home_id if home_delta > 0 else away_id
 
         defense = away_id if offense == home_id else home_id
         start_ev = events[0]
