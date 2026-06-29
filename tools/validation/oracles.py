@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import glob
 import os
 
 import polars as pl
@@ -26,6 +27,12 @@ class NflfastrOracle:
 
     domain = "nfl"
     column_map = {"ep": "ep", "epa": "epa", "wp": "wp", "vegas_wp": "vegas_wp", "cp": "cp"}
+    # Correlation floors for parity vs the RAW full-history nflverse reference
+    # (all play types). The producer is model-domain feature-substituted, so a
+    # raw-vs-model comparison legitimately runs ~0.93-0.99 on some columns —
+    # sub-floor matches are EXPECTED WARN needs_judgment findings routed to
+    # Tier-2, not regressions (model-domain parity is ~0.99+). Recalibrating
+    # these floors / filtering the reference to the model domain is a Tier-2 follow-up.
     thresholds = {"ep": 0.99, "epa": 0.99, "wp": 0.99, "vegas_wp": 0.99}
 
     def __init__(self, source_glob: str | None = None) -> None:
@@ -35,6 +42,8 @@ class NflfastrOracle:
         if self._source_glob is None:
             return None
         path = os.path.expandvars(self._source_glob)
+        if not glob.glob(path):
+            return None
         lazy = pl.scan_parquet(path)
         ref_cols = lazy.collect_schema().names()
         on = [c for c in keys.columns if c in ref_cols]

@@ -126,6 +126,11 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
         lag/cumulative elsewhere in the same function. A residual false negative
         remains only for multiple chains sharing ONE statement (rare); WARN-only
         / ``needs_judgment`` routes survivors to Tier-2.
+        Conversely, a lag/cumulative wrapped in an inline ``{...}`` block or a
+        lambda body inside an otherwise-grouped pipe re-roots to that inner block
+        and may be flagged — a rare false positive (near-zero incidence in real
+        package code); WARN-only / ``needs_judgment`` makes it benign (Tier-2
+        dismisses it).
     """
     try:
         ids = {int(r["id"]) for r in rows}

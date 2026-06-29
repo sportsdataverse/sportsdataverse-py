@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import glob
+
 import polars as pl
 from tools.validation.oracles import ORACLES, CfbSelfOracle, NflfastrOracle
 
@@ -27,6 +29,8 @@ def test_reference_frame_casts_float_key_to_producer_int(monkeypatch):
             "ep": pl.Series([2.5], dtype=pl.Float64),
         }
     )
+    # the glob guard runs before scan_parquet; stub both so the synthetic path is exercised
+    monkeypatch.setattr(glob, "glob", lambda path: ["fake.parquet"])
     monkeypatch.setattr(pl, "scan_parquet", lambda path: ref_data.lazy())
     oracle = NflfastrOracle(source_glob="/fake/*.parquet")
     keys = pl.DataFrame(
@@ -43,6 +47,7 @@ def test_reference_frame_casts_float_key_to_producer_int(monkeypatch):
 
 def test_reference_frame_none_when_no_shared_keys(monkeypatch):
     ref_data = pl.DataFrame({"foo": pl.Series([1], dtype=pl.Int64)})
+    monkeypatch.setattr(glob, "glob", lambda path: ["fake.parquet"])
     monkeypatch.setattr(pl, "scan_parquet", lambda path: ref_data.lazy())
     oracle = NflfastrOracle(source_glob="/fake/*.parquet")
     keys = pl.DataFrame({"game_id": pl.Series(["x"], dtype=pl.Utf8)})
@@ -51,3 +56,14 @@ def test_reference_frame_none_when_no_shared_keys(monkeypatch):
 
 def test_reference_frame_none_when_unwired():
     assert NflfastrOracle(source_glob=None).reference_frame("nfl_model_pbp", pl.DataFrame({"game_id": ["x"]})) is None
+
+
+def test_reference_frame_none_when_glob_matches_no_files():
+    oracle = NflfastrOracle(source_glob="C:/definitely/nonexistent/pbp_*.parquet")
+    keys = pl.DataFrame(
+        {
+            "game_id": pl.Series(["x"], dtype=pl.Utf8),
+            "play_id": pl.Series([1], dtype=pl.Int64),
+        }
+    )
+    assert oracle.reference_frame("nfl_model_pbp", keys) is None  # degrade, not crash
