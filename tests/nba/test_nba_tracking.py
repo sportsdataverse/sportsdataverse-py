@@ -1,18 +1,34 @@
-"""Tests for nba_tracking.aggregate_tracking_frames — identity + additivity oracles.
+"""Tests for nba_tracking — engine oracles + public fetcher + gated live smoke.
 
-These are INDEPENDENT oracle tests:
+INDEPENDENT oracle tests:
 - identity: aggregating a single frame reproduces its additive columns per entity.
 - additivity: aggregating two frames sums counts and recomputes rates correctly.
+
+Fetcher tests:
+- offline monkeypatch: _fetch_ptstats is replaced with fixture loader; result
+  equals aggregate_tracking_frames([frame2223, frame2324], entity_key="player_id").
+- return_as_pandas=True yields a pandas DataFrame.
+
+Gated live smoke (SDV_PY_NBA_STATS_LIVE=1 only):
+- nba_tracking_aggregate(seasons=("2023-24",)) returns a non-empty polars frame.
+- A single-season aggregate matches a direct wrapper Totals call on counting columns.
 """
 
 import json
 import pathlib
 
+import pandas as pd
 import polars as pl
 import pytest
 
+from tests.conftest import skip_if_no_nba_stats_live
+from sportsdataverse.nba import nba_stats
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
-from sportsdataverse.nba.nba_tracking import TRACKING_ENTITY_KEYS, aggregate_tracking_frames
+from sportsdataverse.nba.nba_tracking import (
+    TRACKING_ENTITY_KEYS,
+    aggregate_tracking_frames,
+    nba_tracking_aggregate,
+)
 
 FX = pathlib.Path("tests/fixtures/nba_engine/tracking")
 
@@ -20,6 +36,10 @@ FX = pathlib.Path("tests/fixtures/nba_engine/tracking")
 def _frame(season_tag: str) -> pl.DataFrame:
     raw = json.loads((FX / f"leaguedashptstats_drives_player_{season_tag}.json").read_text())
     return parse_nba_stats_result_sets(raw)
+
+
+def _raw(season_tag: str) -> dict:
+    return json.loads((FX / f"leaguedashptstats_drives_player_{season_tag}.json").read_text())
 
 
 # ---------------------------------------------------------------------------
@@ -213,3 +233,120 @@ def test_additivity_player_only_in_one_season() -> None:
 
     assert rg["drives"] == ra["drives"]
     assert rg["drive_fgm"] == ra["drive_fgm"]
+
+
+# ---------------------------------------------------------------------------
+# Fetcher offline tests: monkeypatch _fetch_ptstats
+# ---------------------------------------------------------------------------
+
+
+def test_fetcher_offline(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Monkeypatch _fetch_ptstats with fixture data; verify aggregate matches engine output."""
+    import sportsdataverse.nba.nba_tracking as T
+
+    by_season = {"2022-23": _raw("2223"), "2023-24": _raw("2324")}
+
+    def _fake_fetch(season: str, st: str, mt: str, pot: str, lg: str) -> dict:
+        return by_season[season]
+
+    monkeypatch.setattr(T, "_fetch_ptstats", _fake_fetch)
+
+    out = T.nba_tracking_aggregate(
+        measure_type="Drives",
+        player_or_team="Player",
+        seasons=("2022-23", "2023-24"),
+        season_types=("Regular Season",),
+    )
+
+    exp = aggregate_tracking_frames(
+        [_frame("2223"), _frame("2324")],
+        entity_key="player_id",
+    )
+
+    assert isinstance(out, pl.DataFrame)
+    assert out.shape[0] > 0
+
+    # Sort both by player_id for a deterministic comparison
+    out_sorted = out.sort("player_id")
+    exp_sorted = exp.sort("player_id")
+
+    assert out_sorted.shape == exp_sorted.shape, f"Shape mismatch: out={out_sorted.shape}, exp={exp_sorted.shape}"
+    assert out_sorted.columns == exp_sorted.columns, "Column mismatch"
+
+    for col in ["drives", "drive_fgm", "drive_fga", "drive_pts", "gp", "w", "l"]:
+        assert (out_sorted[col] == exp_sorted[col]).all(), f"Column {col} mismatch in fetcher test"
+
+
+def test_fetcher_offline_pandas(monkeypatch: pytest.MonkeyPatch) -> None:
+    """return_as_pandas=True must yield a pandas DataFrame."""
+    import sportsdataverse.nba.nba_tracking as T
+
+    monkeypatch.setattr(T, "_fetch_ptstats", lambda season, st, mt, pot, lg: _raw("2324"))
+
+    result = T.nba_tracking_aggregate(
+        seasons=("2023-24",),
+        return_as_pandas=True,
+    )
+    assert isinstance(result, pd.DataFrame), f"Expected pd.DataFrame, got {type(result)}"
+    assert len(result) > 0
+
+
+# ---------------------------------------------------------------------------
+# Gated live smoke: SDV_PY_NBA_STATS_LIVE=1 only
+# ---------------------------------------------------------------------------
+
+
+@skip_if_no_nba_stats_live
+def test_live_nba_tracking_aggregate_nonempty() -> None:
+    """nba_tracking_aggregate for a single season must return a non-empty frame."""
+    result = nba_tracking_aggregate(
+        measure_type="Drives",
+        player_or_team="Player",
+        seasons=("2023-24",),
+        season_types=("Regular Season",),
+    )
+    assert isinstance(result, pl.DataFrame)
+    assert result.shape[0] > 0, "Expected non-empty frame from live nba_tracking_aggregate"
+    assert "player_id" in result.columns
+    assert "drives" in result.columns
+
+
+@skip_if_no_nba_stats_live
+def test_live_nba_tracking_aggregate_identity_vs_direct_wrapper() -> None:
+    """Single-season aggregate must match a direct leaguedashptstats Totals call.
+
+    This is the identity validation gate: aggregate([single slice]) == the raw
+    wrapper frame on counting columns (the independent oracle).
+    """
+    season = "2023-24"
+    season_type = "Regular Season"
+
+    # Direct wrapper call — the independent oracle
+    direct_raw = nba_stats.nba_stats_leaguedashptstats(
+        season=season,
+        season_type_all_star=season_type,
+        pt_measure_type="Drives",
+        per_mode_simple="Totals",
+        player_or_team="Player",
+        league_id="00",
+        return_parsed=False,
+    )
+    direct_frame = parse_nba_stats_result_sets(direct_raw)
+
+    # Aggregate the same single slice via the public API
+    agg = nba_tracking_aggregate(
+        measure_type="Drives",
+        player_or_team="Player",
+        seasons=(season,),
+        season_types=(season_type,),
+    )
+
+    assert isinstance(agg, pl.DataFrame)
+    assert agg.shape[0] == direct_frame["player_id"].n_unique(), "Row count mismatch: aggregate vs direct wrapper"
+
+    # Join and verify additive counting columns are identical per player
+    j = direct_frame.join(agg, on="player_id", suffix="_agg")
+    for col in ["drives", "drive_fgm", "drive_fga", "drive_pts", "gp", "w", "l"]:
+        col_agg = f"{col}_agg"
+        assert col_agg in j.columns, f"Column {col_agg} missing from join"
+        assert (j[col] == j[col_agg]).all(), f"Column {col} mismatch: aggregate vs direct wrapper"

@@ -38,11 +38,23 @@ Example:
 from __future__ import annotations
 
 import re
-from typing import Final
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Final, Literal, Union, overload
 
 import polars as pl
 
-__all__ = ["TRACKING_ENTITY_KEYS", "aggregate_tracking_frames"]
+from sportsdataverse.nba import nba_stats
+from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+
+if TYPE_CHECKING:
+    import pandas as pd
+
+__all__ = [
+    "TRACKING_ENTITY_KEYS",
+    "aggregate_tracking_frames",
+    "nba_tracking_aggregate",
+    "_fetch_ptstats",
+]
 
 # ---------------------------------------------------------------------------
 # Public constants
@@ -242,3 +254,195 @@ def aggregate_tracking_frames(
         grouped = grouped.drop(cols_to_drop)
 
     return grouped
+
+
+# ---------------------------------------------------------------------------
+# Public fetcher
+# ---------------------------------------------------------------------------
+
+
+def _fetch_ptstats(
+    season: str,
+    season_type: str,
+    measure_type: str,
+    player_or_team: str,
+    league_id: str,
+) -> dict:
+    """Fetch a single ``leaguedashptstats`` slice and return the raw payload.
+
+    This thin wrapper is a module-level function (not a closure) so tests can
+    monkeypatch it without touching the real ``nba_stats`` wrapper.
+
+    Args:
+        season: NBA season string, e.g. ``"2023-24"``.
+        season_type: Season type, e.g. ``"Regular Season"`` or ``"Playoffs"``.
+        measure_type: Tracking measure type, e.g. ``"Drives"`` or
+            ``"SpeedDistance"``.
+        player_or_team: ``"Player"`` or ``"Team"``.
+        league_id: League identifier; ``"00"`` for NBA, ``"20"`` for G-League,
+            ``"10"`` for WNBA.
+
+    Returns:
+        Raw JSON payload as a ``dict`` (the ``return_parsed=False`` response
+        from ``nba_stats_leaguedashptstats``).
+    """
+    return nba_stats.nba_stats_leaguedashptstats(
+        season=season,
+        season_type_all_star=season_type,
+        pt_measure_type=measure_type,
+        per_mode_simple="Totals",
+        player_or_team=player_or_team,
+        league_id=league_id,
+        return_parsed=False,
+    )
+
+
+@overload
+def nba_tracking_aggregate(
+    measure_type: str = ...,
+    player_or_team: str = ...,
+    seasons: Sequence[str] = ...,
+    season_types: Sequence[str] = ...,
+    *,
+    league_id: str = ...,
+    return_as_pandas: Literal[False],
+) -> pl.DataFrame: ...
+
+
+@overload
+def nba_tracking_aggregate(
+    measure_type: str = ...,
+    player_or_team: str = ...,
+    seasons: Sequence[str] = ...,
+    season_types: Sequence[str] = ...,
+    *,
+    league_id: str = ...,
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+
+
+@overload
+def nba_tracking_aggregate(
+    measure_type: str = ...,
+    player_or_team: str = ...,
+    seasons: Sequence[str] = ...,
+    season_types: Sequence[str] = ...,
+    *,
+    league_id: str = ...,
+    return_as_pandas: bool = ...,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
+
+
+def nba_tracking_aggregate(
+    measure_type: str = "Drives",
+    player_or_team: str = "Player",
+    seasons: Sequence[str] = ("2023-24",),
+    season_types: Sequence[str] = ("Regular Season",),
+    *,
+    league_id: str = "00",
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Aggregate ``leaguedashptstats`` tracking data across seasons and season types.
+
+    For each ``(season, season_type)`` combination, fetches raw Totals data
+    from ``stats.nba.com``, parses it into a tidy frame, then aggregates all
+    frames via :func:`aggregate_tracking_frames`.  Additive counting columns
+    are summed; ``*_fg_pct`` / ``*_ft_pct`` columns are recomputed from the
+    summed makes and attempts; all other ``*_pct`` columns (e.g.
+    ``drive_pts_pct``, ``drive_passes_pct``) are dropped because their
+    denominators are not present in the tracking frame and are therefore
+    not correctly aggregatable.
+
+    .. note::
+        **Totals only** — the wrapper is always called with
+        ``per_mode_simple="Totals"``.  PerGame or Per36 modes would require
+        a different aggregation strategy (weighted averaging, not summation)
+        and are not supported in this phase.
+
+        **``leaguedashptstats`` measure types only** — supported values
+        include ``"Drives"``, ``"SpeedDistance"``, ``"Touches"``,
+        ``"Passing"``, ``"ElbowTouch"``, ``"PostTouch"``, ``"PaintTouch"``
+        and others from the ``pt_measure_type`` parameter.  Other tracking
+        endpoints (``leaguedashptdefend``, hustle, shot-zone dashboards) are
+        a planned follow-up (P3.1) and reuse the same engine.
+
+    Args:
+        measure_type: Tracking measure type, e.g. ``"Drives"`` (default),
+            ``"SpeedDistance"``, ``"Touches"``.  Passed directly to
+            ``nba_stats_leaguedashptstats`` as ``pt_measure_type``.
+        player_or_team: ``"Player"`` (default) or ``"Team"``.  Determines
+            which entity key is used for grouping in
+            :func:`aggregate_tracking_frames`.
+        seasons: Sequence of NBA season strings to aggregate, e.g.
+            ``("2022-23", "2023-24")``.  Default is ``("2023-24",)``.
+        season_types: Sequence of season-type strings to aggregate, e.g.
+            ``("Regular Season", "Playoffs")``.  Default is
+            ``("Regular Season",)``.
+        league_id: League identifier.  ``"00"`` for NBA (default),
+            ``"20"`` for G-League, ``"10"`` for WNBA.
+        return_as_pandas: If ``True``, convert the result to a
+            :class:`pandas.DataFrame` before returning.  Default ``False``
+            returns a :class:`polars.DataFrame`.
+
+    Returns:
+        A :class:`polars.DataFrame` (or :class:`pandas.DataFrame` when
+        ``return_as_pandas=True``) with one row per entity (player or team):
+
+        * **Additive numeric columns** (e.g. ``drives``, ``drive_fgm``,
+          ``drive_fga``, ``gp``, ``w``, ``l``) summed across all
+          ``(season, season_type)`` slices.
+        * ``*_fg_pct`` / ``*_ft_pct`` recomputed from summed makes/attempts
+          (``null`` when the denominator is 0).
+        * ``*_pct`` "percent of total" columns dropped (e.g.
+          ``drive_pts_pct``, ``drive_passes_pct``).
+        * Identity string columns (e.g. ``player_name``,
+          ``team_abbreviation``) kept via ``first()`` per entity.
+
+        Returns a zero-row DataFrame on empty or malformed input without
+        raising an exception.
+
+    Example:
+        Two-season player Drives aggregation::
+
+            from sportsdataverse.nba.nba_tracking import nba_tracking_aggregate
+
+            df = nba_tracking_aggregate(
+                measure_type="Drives",
+                player_or_team="Player",
+                seasons=("2022-23", "2023-24"),
+            )
+            print(df.shape)
+
+        Single-season team SpeedDistance::
+
+            df_team = nba_tracking_aggregate(
+                measure_type="SpeedDistance",
+                player_or_team="Team",
+                seasons=("2023-24",),
+            )
+            print(df_team.columns)
+
+        Pandas output::
+
+            df_pd = nba_tracking_aggregate(seasons=("2023-24",), return_as_pandas=True)
+            print(type(df_pd))
+
+        See Also:
+            * `nba_api`_ — companion NBA statistics Python client
+
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    entity_key = TRACKING_ENTITY_KEYS[player_or_team]
+
+    frames: list[pl.DataFrame] = []
+    for season in seasons:
+        for season_type in season_types:
+            raw = _fetch_ptstats(season, season_type, measure_type, player_or_team, league_id)
+            parsed = parse_nba_stats_result_sets(raw)
+            frames.append(parsed)
+
+    result = aggregate_tracking_frames(frames, entity_key=entity_key)
+
+    if return_as_pandas:
+        return result.to_pandas()
+    return result
