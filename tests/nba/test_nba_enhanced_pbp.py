@@ -36,3 +36,19 @@ def test_ingest_normalizes_v3():
     row = df.filter(pl.col("clock") == "PT08M24.00S").head(1)
     assert abs(row["seconds_remaining"][0] - 504.0) < 1e-6
     assert df.height == 468
+
+
+FX = pathlib.Path("tests/fixtures/nba_engine/0022200001")
+
+
+def test_event_flags_and_order_match_fixture():
+    """Event type, is_substitution, and order_index must exactly match the committed fixture."""
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+
+    exp = pl.read_parquet(FX / "enhanced_pbp_expected.parquet")
+    df = enhanced_pbp_from_payload(_payload())
+    got = df.select(["action_number", "event_type", "is_substitution", "order_index"]).sort("order_index")
+    e = exp.select(["action_number", "event_type", "is_substitution", "order_index"]).sort("order_index")
+    assert got.equals(e)
+    assert df.filter(pl.col("event_type") == "substitution").height == 44
+    assert df["order_index"].n_unique() == df.height

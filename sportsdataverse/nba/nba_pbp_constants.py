@@ -46,7 +46,7 @@ ENHANCED_PBP_SCHEMA: dict[str, pl.DataType] = {
     "period": pl.Int64,
     "action_type": pl.Utf8,
     "sub_type": pl.Utf8,
-    "event_type": pl.Utf8,
+    "event_type": pl.Utf8,  # string slug (e.g. "made_shot", "substitution")
     "clock": pl.Utf8,
     "seconds_remaining": pl.Float64,
     "person_id": pl.Int64,

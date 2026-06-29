@@ -11,13 +11,15 @@ from sportsdataverse.nba import nba_pbp_constants as C
 
 
 def enhanced_pbp_from_payload(payload: dict[str, Any], *, league_id: str = "00") -> pl.DataFrame:
-    """Ingest and normalize v3 play-by-play actions.
+    """Ingest, normalize, classify, and order v3 play-by-play actions.
 
     Flattens ``payload["game"]["actions"]``, snake-cases columns via
     ``underscore()``, parses ``seconds_remaining`` from ISO 8601 clock,
-    and casts ID columns to their canonical dtypes.
-
-    Event flags and ``order_index`` are added in Task 3.
+    casts ID columns to their canonical dtypes, derives ``event_type``
+    string slugs via ``ACTION_TYPE_EVENT``, adds boolean ``is_*`` event
+    flag columns, and assigns a deterministic ``order_index`` via the
+    fixture-verified sort rule:
+    ``period asc → seconds_remaining desc → action_number asc → payload_position asc``.
 
     Args:
         payload: Raw ``playbyplayv3`` dict from stats.nba.com.
@@ -68,6 +70,42 @@ def enhanced_pbp_from_payload(payload: dict[str, Any], *, league_id: str = "00")
         pl.col("person_id").cast(pl.Int64),
         pl.col("team_id").cast(pl.Int64),
         C.iso_clock_to_seconds(pl.col("clock")).alias("seconds_remaining"),
+    )
+
+    # --- Task 3: event classification, flags, and total order ---
+
+    # 1. event_type string slug via ACTION_TYPE_EVENT mapping
+    df = df.with_columns(
+        pl.col("action_type").cast(pl.Utf8).replace_strict(C.ACTION_TYPE_EVENT, default="other").alias("event_type"),
+    )
+
+    # 2. Boolean event-flag columns
+    et = pl.col("event_type")
+    df = df.with_columns(
+        (et == "made_shot").alias("is_made_shot"),
+        (et == "missed_shot").alias("is_missed_shot"),
+        (et == "free_throw").alias("is_free_throw"),
+        (et == "rebound").alias("is_rebound"),
+        (et == "turnover").alias("is_turnover"),
+        (et == "foul").alias("is_foul"),
+        (et == "substitution").alias("is_substitution"),
+        (et == "jump_ball").alias("is_jump_ball"),
+        (et == "timeout").alias("is_timeout"),
+        (et == "period").alias("is_period"),
+    )
+
+    # 3. Fixture-verified v3 ordering rule (Task 0 ece5e30):
+    #    period asc → seconds_remaining desc → action_number asc → payload_position asc.
+    #    An event-type priority tiebreak was empirically DISPROVEN — adding one
+    #    made agreement with pbpstats worse.  Never add one here.
+    df = (
+        df.sort(
+            ["period", "seconds_remaining", "action_number", "payload_position"],
+            descending=[False, True, False, False],
+        )
+        .with_row_index("order_index")
+        .with_columns(pl.col("order_index").cast(pl.Int64))
+        .drop("payload_position")
     )
 
     return df
