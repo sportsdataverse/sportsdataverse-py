@@ -479,7 +479,7 @@ standings = safe('2025 standings', lambda: wbb.espn_wbb_standings(season=SEASON)
     │ State Jackrabbits ┆                  ┆      ┆        ┆             ┆            ┆                │
     │ James Madison     ┆ belt             ┆ 18   ┆ 0      ┆ 1.0         ┆ 1358.0     ┆ 1072.0         │
     │ Dukes             ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ Grand Canyon      ┆ wac              ┆ 16   ┆ 0      ┆ 1.0         ┆ 1219.0     ┆ 894.0          │
+    │ Grand Canyon      ┆ UAC              ┆ 16   ┆ 0      ┆ 1.0         ┆ 1219.0     ┆ 894.0          │
     │ Lopes             ┆                  ┆      ┆        ┆             ┆            ┆                │
     │ Green Bay Phoenix ┆ hor              ┆ 19   ┆ 1      ┆ 0.95        ┆ 1408.0     ┆ 1037.0         │
     │ Fairfield Stags   ┆ maac             ┆ 19   ┆ 1      ┆ 0.95        ┆ 1498.0     ┆ 1034.0         │
@@ -658,16 +658,16 @@ top_scorers
     │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
     │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
     ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 5177257    ┆ Charlotte Climenhage ┆ Nevada                  ┆ 32    ┆ 0            ┆ null │
-    │ 4899637    ┆ Caroline de Klauman  ┆ Manhattan               ┆ 30    ┆ 0            ┆ null │
-    │ 5175868    ┆ Montaya Dew          ┆ Arizona                 ┆ 34    ┆ 0            ┆ null │
-    │ 5105722    ┆ Jaylah Robinson      ┆ Arizona St              ┆ 31    ┆ 0            ┆ null │
-    │ 5175847    ┆ Emma Larios          ┆ High Point              ┆ 32    ┆ 0            ┆ null │
-    │ 5109401    ┆ Tiara Bellamy        ┆ Saint Peter's           ┆ 30    ┆ 0            ┆ null │
-    │ 4705035    ┆ Diamond Hunter       ┆ Southern                ┆ 30    ┆ 0            ┆ null │
-    │ 4704165    ┆ Lindsey Syrek        ┆ NJIT                    ┆ 30    ┆ 0            ┆ null │
-    │ 4594867    ┆ Margarita Satini     ┆ Weber St                ┆ 33    ┆ 0            ┆ null │
-    │ 5175569    ┆ Crystianna Whitehead ┆ AR-Pine Bluff           ┆ 33    ┆ 0            ┆ null │
+    │ 5174313    ┆ Elle Papahronis      ┆ San Francisco           ┆ 30    ┆ 0            ┆ null │
+    │ 4433532    ┆ Kiya Dorroh          ┆ UT Martin               ┆ 33    ┆ 0            ┆ null │
+    │ 4682955    ┆ Talaysia Cooper      ┆ Tennessee               ┆ 33    ┆ 0            ┆ null │
+    │ 4594728    ┆ Nya Mitchels         ┆ UT Rio Grande           ┆ 29    ┆ 0            ┆ null │
+    │ 5175994    ┆ Macy Donarski        ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
+    │ 4400119    ┆ Taylor Caldwell      ┆ Bakersfield             ┆ 29    ┆ 0            ┆ null │
+    │ 5174330    ┆ Endigo Parker        ┆ Pacific                 ┆ 34    ┆ 0            ┆ null │
+    │ 5174509    ┆ Jessica Cooper       ┆ UAlbany                 ┆ 32    ┆ 0            ┆ null │
+    │ 4704030    ┆ Ciara Smith          ┆ Georgia St              ┆ 30    ┆ 0            ┆ null │
+    │ 5174437    ┆ Gabby Brooks         ┆ Virginia Tech           ┆ 33    ┆ 0            ┆ null │
     └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
@@ -790,12 +790,12 @@ three_pt
     │ ---     ┆ ---                            ┆ ---   ┆ --- ┆ ---  ┆ ---       │
     │ i32     ┆ str                            ┆ u32   ┆ i32 ┆ i32  ┆ f64       │
     ╞═════════╪════════════════════════════════╪═══════╪═════╪══════╪═══════════╡
-    │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
+    │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
     │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
+    │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
     │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
@@ -939,10 +939,10 @@ dd
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
     │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
     │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
-    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
-    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
+    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
+    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 
 
@@ -985,8 +985,8 @@ defense
     │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
     │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
-    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
+    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2217    ┆ Fairfield Stags           ┆ 33    ┆ 55.2    ┆ 72.5    ┆ 17.3    │
     └─────────┴───────────────────────────┴───────┴─────────┴─────────┴─────────┘
 

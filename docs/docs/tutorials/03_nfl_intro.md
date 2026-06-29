@@ -445,29 +445,10 @@ cols = ["leader_playerName", "leader_teamAbbr", "leader_maxSpeed", "leader_yards
 
 
 
-    shape: (8, 5)
-    ┌───────────────────┬─────────────────┬─────────────────┬──────────────┬───────────────────────────┐
-    │ leader_playerName ┆ leader_teamAbbr ┆ leader_maxSpeed ┆ leader_yards ┆ play_playDescription      │
-    │ ---               ┆ ---             ┆ ---             ┆ ---          ┆ ---                       │
-    │ str               ┆ str             ┆ f64             ┆ i64          ┆ str                       │
-    ╞═══════════════════╪═════════════════╪═════════════════╪══════════════╪═══════════════════════════╡
-    │ KaVontae Turpin   ┆ DAL             ┆ 22.356818       ┆ 64           ┆ (15:00) (Shotgun) C.Rush  │
-    │                   ┆                 ┆                 ┆              ┆ pass …                    │
-    │ Brian Thomas Jr.  ┆ JAX             ┆ 22.152273       ┆ 85           ┆ (7:12) (Shotgun)          │
-    │                   ┆                 ┆                 ┆              ┆ T.Lawrence pa…            │
-    │ Jahmyr Gibbs      ┆ DET             ┆ 22.029546       ┆ 70           ┆ (4:07) (Shotgun) J.Gibbs  │
-    │                   ┆                 ┆                 ┆              ┆ left …                    │
-    │ Saquon Barkley    ┆ PHI             ┆ 21.927273       ┆ 55           ┆ (11:04) (No Huddle,       │
-    │                   ┆                 ┆                 ┆              ┆ Shotgun) S…               │
-    │ Saquon Barkley    ┆ PHI             ┆ 21.906818       ┆ 72           ┆ (2:54) (Shotgun)          │
-    │                   ┆                 ┆                 ┆              ┆ S.Barkley lef…            │
-    │ Nico Collins      ┆ HOU             ┆ 21.886364       ┆ 55           ┆ (12:56) C.Stroud pass     │
-    │                   ┆                 ┆                 ┆              ┆ deep mid…                 │
-    │ James Cook        ┆ BUF             ┆ 21.845455       ┆ 65           ┆ (8:48) A.Anderson         │
-    │                   ┆                 ┆                 ┆              ┆ reported in …             │
-    │ KaVontae Turpin   ┆ DAL             ┆ 21.845455       ┆ 18           ┆ J.Elliott kicks 60 yards  │
-    │                   ┆                 ┆                 ┆              ┆ from …                    │
-    └───────────────────┴─────────────────┴─────────────────┴──────────────┴───────────────────────────┘
+    shape: (0, 0)
+    ┌┐
+    ╞╡
+    └┘
 
 
 
@@ -758,8 +739,6 @@ winners
 ```
 
     ✅ standings
-
-
 
 
 
@@ -1111,8 +1090,8 @@ rec_out
     4   Amon-Ra St. Brown         DET  115   1263.0           11.0        81.6
     5         Jerry Jeudy         CLE   90   1229.0           13.7        62.1
     6        Malik Nabers         NYG  109   1204.0           11.0        64.1
-    7         CeeDee Lamb         DAL  101   1194.0           11.8        66.4
-    8        Brock Bowers          LV  112   1194.0           10.7        73.2
+    7        Brock Bowers          LV  112   1194.0           10.7        73.2
+    8         CeeDee Lamb         DAL  101   1194.0           11.8        66.4
     9       Ladd McConkey         LAC   82   1149.0           14.0        73.2
 
 

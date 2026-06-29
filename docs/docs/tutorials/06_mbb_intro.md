@@ -344,13 +344,13 @@ out
     │ Silas Demary Jr. ┆ 2      ┆ 6' 4"          ┆ 195 lbs        │
     │ Rrezon Elezaj    ┆ 10     ┆ 7' 1"          ┆ 225 lbs        │
     │ Jacob Furphy     ┆ 7      ┆ 6' 6"          ┆ 205 lbs        │
-    │ Alex Karaban     ┆ 11     ┆ 6' 8"          ┆ 230 lbs        │
+    │ Dwayne Koroma    ┆ 4      ┆ 6' 8"          ┆ 212 lbs        │
     │ …                ┆ …      ┆ …              ┆ …              │
-    │ Braylon Mullins  ┆ 24     ┆ 6' 6"          ┆ 196 lbs        │
     │ Uroš Paunovic    ┆ 77     ┆ 6' 3"          ┆ 190 lbs        │
-    │ Tarris Reed Jr.  ┆ 5      ┆ 6' 11"         ┆ 265 lbs        │
     │ Eric Reibe       ┆ 12     ┆ 7' 1"          ┆ 260 lbs        │
     │ Jacob Ross       ┆ 13     ┆ 6' 5"          ┆ 195 lbs        │
+    │ Jayden Ross      ┆ 23     ┆ 6' 7"          ┆ 205 lbs        │
+    │ Malachi Smith    ┆ 0      ┆ 6' 1"          ┆ 180 lbs        │
     └──────────────────┴────────┴────────────────┴────────────────┘
 
 
@@ -546,8 +546,8 @@ Same team-box parquet, different question: sum makes and attempts across the sea
     │ Colorado Buffaloes      ┆ 254.0 ┆ 649.0 ┆ 39.1      │
     │ Northwestern Wildcats   ┆ 278.0 ┆ 713.0 ┆ 39.0      │
     │ Baylor Bears            ┆ 301.0 ┆ 773.0 ┆ 38.9      │
-    │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
     │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
+    │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
     └─────────────────────────┴───────┴───────┴───────────┘
 
 
@@ -627,6 +627,8 @@ out
 
     ✅ conferences
     some conferences: ['NCAA Division I', 'Non-NCAA Division I']
+
+
     ✅ standings 2024
 
 

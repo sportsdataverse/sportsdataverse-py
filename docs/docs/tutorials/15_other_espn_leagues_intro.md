@@ -416,8 +416,6 @@ else:
 
 
 
-
-
 ```python
 # CFL team schedule — Winnipeg Blue Bombers (team_id=100) 2023 season
 schedule_cfl = safe(
@@ -435,8 +433,6 @@ else:
 ```
 
     ✅ CFL team schedule
-
-
 
 
 ---
@@ -474,8 +470,6 @@ else:
 ```
 
     ✅ college baseball scoreboard (parsed)
-
-
 
 
 
@@ -632,9 +626,7 @@ else:
     'rankings unavailable (only current during the season)'
 ```
 
-    ✅ college softball rankings
-
-
+    ⏭️  college softball rankings: unavailable right now (NoESPNDataError)
 
 
 ### 🥎 College softball: game summary
@@ -946,8 +938,6 @@ else:
 
 
     ✅ xfl teams
-
-
     ✅ cfl teams
 
 
@@ -958,6 +948,8 @@ else:
 
 
     ✅ mch teams
+
+
     ✅ wch teams
     Total teams across all 7 leagues: 1067
 
@@ -986,7 +978,7 @@ else:
     'no CFL games today (or offseason)'
 ```
 
-    ✅ today's CFL slate (20260617)
+    ✅ today's CFL slate (20260629)
 
 
 ### Recipe 3 — Player info for any athlete 🧑‍💻
@@ -1037,8 +1029,6 @@ _keys(injuries_cfl)
 ```
 
     ✅ UFL news
-
-
     <class 'polars.dataframe.frame.DataFrame'>
     ✅ CFL injuries
     <class 'polars.dataframe.frame.DataFrame'>

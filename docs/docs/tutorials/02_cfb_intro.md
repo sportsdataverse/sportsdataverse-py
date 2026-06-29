@@ -249,6 +249,8 @@ pbp.select(have).head() if have else 'pbp not published for these seasons right 
 ```
 
     ✅ load_cfb_pbp 2023
+
+
     ✅ load_cfb_pbp 2022
 
 
@@ -501,12 +503,12 @@ out
     │ OL       ┆ 21      │
     │ WR       ┆ 19      │
     │ LB       ┆ 18      │
-    │ DE       ┆ 12      │
     │ DL       ┆ 12      │
-    │ TE       ┆ 11      │
+    │ DE       ┆ 12      │
     │ RB       ┆ 11      │
-    │ PK       ┆ 6       │
+    │ TE       ┆ 11      │
     │ QB       ┆ 6       │
+    │ PK       ┆ 6       │
     └──────────┴─────────┘
 
 
@@ -604,16 +606,16 @@ standings_tbl.head(10)
     │ ---                      ┆ ---  ┆ ---    ┆ ---     │
     │ str                      ┆ u32  ┆ u32    ┆ f64     │
     ╞══════════════════════════╪══════╪════════╪═════════╡
-    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
     │ Michigan                 ┆ 15   ┆ 0      ┆ 1.0     │
     │ South Dakota State       ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Harding University       ┆ 15   ┆ 0      ┆ 1.0     │
+    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
     │ Cortland                 ┆ 14   ┆ 1      ┆ 0.933   │
     │ Colorado School Of Mines ┆ 14   ┆ 1      ┆ 0.933   │
     │ North Central College    ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Washington               ┆ 14   ┆ 1      ┆ 0.933   │
-    │ Liberty                  ┆ 13   ┆ 1      ┆ 0.929   │
-    │ Florida State            ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Randolph-Macon           ┆ 13   ┆ 1      ┆ 0.929   │
     │ Wartburg                 ┆ 13   ┆ 1      ┆ 0.929   │
+    │ Georgia                  ┆ 13   ┆ 1      ┆ 0.929   │
     └──────────────────────────┴──────┴────────┴─────────┘
 
 
@@ -948,8 +950,8 @@ out
     │ Northwestern State@LSU          ┆ LSU  ┆ -51.6      │
     │ Murray State@Georgia            ┆ UGA  ┆ -49.2      │
     │ Wofford@Clemson                 ┆ CLE  ┆ -48.5      │
-    │ Butler@North Dakota State       ┆ NDS  ┆ -47.5      │
     │ Oklahoma Panhandle State@Sam H… ┆ SHS  ┆ -47.5      │
+    │ Butler@North Dakota State       ┆ NDS  ┆ -47.5      │
     │ Idaho@Penn State                ┆ PSU  ┆ -47.3      │
     └─────────────────────────────────┴──────┴────────────┘
 
@@ -1014,8 +1016,6 @@ rankings = safe('ESPN rankings (polls)', sdv.cfb.espn_cfb_rankings)
 ```
 
     ✅ ESPN standings
-
-
     ✅ ESPN rankings (polls)
 
 
@@ -1119,11 +1119,11 @@ out
     │ ---    ┆ ---      ┆ ---  ┆ ---      ┆ ---       │
     │ i64    ┆ i64      ┆ i64  ┆ i64      ┆ f64       │
     ╞════════╪══════════╪══════╪══════════╪═══════════╡
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -1.309487 │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.130336  │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 0.963541  │
-    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.674958 │
-    │ 1      ┆ 99       ┆ 2    ┆ 8        ┆ 0.250361  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -1.056855 │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.160273  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ 1.005587  │
+    │ 1      ┆ 99       ┆ 1    ┆ 10       ┆ -0.563137 │
+    │ 1      ┆ 99       ┆ 2    ┆ 8        ┆ 0.052125  │
     └────────┴──────────┴──────┴──────────┴───────────┘
 
 

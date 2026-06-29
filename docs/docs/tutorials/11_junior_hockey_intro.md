@@ -156,13 +156,13 @@ cols = ["team", "games_played", "wins", "losses", "ot_losses", "points", "goals_
     │ ---              ┆ ---          ┆ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---       ┆ ---           │
     │ str              ┆ str          ┆ str  ┆ str    ┆ str       ┆ i64    ┆ str       ┆ str           │
     ╞══════════════════╪══════════════╪══════╪════════╪═══════════╪════════╪═══════════╪═══════════════╡
-    │ Val-d'Or         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
     │ Niagara IceDogs  ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
     │ North Bay        ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
     │ Battalion        ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
     │ Brampton         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
     │ Steelheads       ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
     │ Sudbury Wolves   ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Barrie Colts     ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
     └──────────────────┴──────────────┴──────┴────────┴───────────┴────────┴───────────┴───────────────┘
 
 
@@ -298,7 +298,7 @@ pl.DataFrame(rows)
     │ ---    ┆ ---    ┆ ---   │
     │ str    ┆ i64    ┆ i64   │
     ╞════════╪════════╪═══════╡
-    │ AHL    ┆ 2026   ┆ 10000 │
+    │ AHL    ┆ 2027   ┆ 10000 │
     │ OHL    ┆ 2027   ┆ 10000 │
     │ WHL    ┆ 2026   ┆ 10000 │
     │ QMJHL  ┆ 2027   ┆ 10000 │
@@ -362,17 +362,18 @@ out
 
 
 
-    shape: (4, 5)
-    ┌─────────────────────────────┬────────┬───────────┬───────────────┬───────────┐
-    │ team                        ┆ points ┆ goals_for ┆ goals_against ┆ goal_diff │
-    │ ---                         ┆ ---    ┆ ---       ┆ ---           ┆ ---       │
-    │ str                         ┆ i64    ┆ str       ┆ str           ┆ i64       │
-    ╞═════════════════════════════╪════════╪═══════════╪═══════════════╪═══════════╡
-    │ Pacific Division All-Stars  ┆ 6      ┆ 10        ┆ 8             ┆ 2         │
-    │ Atlantic Division All-Stars ┆ 3      ┆ 7         ┆ 4             ┆ 3         │
-    │ Central Division All-Stars  ┆ 3      ┆ 8         ┆ 7             ┆ 1         │
-    │ North Division All-Stars    ┆ 2      ┆ 4         ┆ 10            ┆ -6        │
-    └─────────────────────────────┴────────┴───────────┴───────────────┴───────────┘
+    shape: (5, 5)
+    ┌────────────────────────────────┬────────┬───────────┬───────────────┬───────────┐
+    │ team                           ┆ points ┆ goals_for ┆ goals_against ┆ goal_diff │
+    │ ---                            ┆ ---    ┆ ---       ┆ ---           ┆ ---       │
+    │ str                            ┆ i64    ┆ str       ┆ str           ┆ i64       │
+    ╞════════════════════════════════╪════════╪═══════════╪═══════════════╪═══════════╡
+    │ Hartford Wolf Pack             ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Springfield Thunderbirds       ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Charlotte Checkers             ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Hershey Bears                  ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Wilkes-Barre/Scranton Penguins ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    └────────────────────────────────┴────────┴───────────┴───────────────┴───────────┘
 
 
 
@@ -661,11 +662,11 @@ out
 
 
        season_id               season_name  season_yr game_type_label
-    0         92  2026 Calder Cup Playoffs       2026        playoffs
-    1         91   2026 All-Star Challenge       2026         regular
-    2         90    2025-26 Regular Season       2026         regular
-    3         88  2025 Calder Cup Playoffs       2025        playoffs
-    4         87   2025 All-Star Challenge       2025         regular
+    0         94    2026-27 Regular Season       2027         regular
+    1         92  2026 Calder Cup Playoffs       2026        playoffs
+    2         91   2026 All-Star Challenge       2026         regular
+    3         90    2025-26 Regular Season       2026         regular
+    4         88  2025 Calder Cup Playoffs       2025        playoffs
 
 
 

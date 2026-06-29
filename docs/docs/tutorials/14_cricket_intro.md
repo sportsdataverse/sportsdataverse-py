@@ -573,11 +573,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ Phillips rides the Archer ligh… ┆ 2026-06-17T19:41:29Z ┆ Story        │
-    │ Glenn Phillips repels England … ┆ 2026-06-17T19:41:47Z ┆ Recap        │
-    │ Gill and Kishan hundreds carry… ┆ 2026-06-17T18:05:42Z ┆ Recap        │
-    │ Shafali's all-round show helps… ┆ 2026-06-17T17:54:49Z ┆ Recap        │
-    │ Shreyanka Patil stretchered of… ┆ 2026-06-17T17:54:27Z ┆ HeadlineNews │
+    │ Kaia's maiden ton, Madhevere a… ┆ 2026-06-29T16:31:19Z ┆ Recap        │
+    │ Stats - New Zealand's rare com… ┆ 2026-06-29T16:15:12Z ┆ Story        │
+    │ Brendon McCullum on coaching f… ┆ 2026-06-29T15:46:43Z ┆ HeadlineNews │
+    │ Ben Stokes gives Harry Brook '… ┆ 2026-06-29T15:20:34Z ┆ HeadlineNews │
+    │ New Zealand seal famous come-f… ┆ 2026-06-29T15:12:37Z ┆ Recap        │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 
@@ -594,8 +594,6 @@ else:
 ```
 
     ✅ IPL injuries
-
-
     injuries feed unavailable or empty right now
 
 

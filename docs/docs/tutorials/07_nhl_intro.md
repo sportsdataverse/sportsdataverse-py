@@ -194,22 +194,22 @@ out
 
 
     shape: (10, 2)
-    ┌───────────────┬────────┐
-    │ type_desc_key ┆ events │
-    │ ---           ┆ ---    │
-    │ str           ┆ u32    │
-    ╞═══════════════╪════════╡
-    │ faceoff       ┆ 59     │
-    │ hit           ┆ 53     │
-    │ stoppage      ┆ 52     │
-    │ shot-on-goal  ┆ 42     │
-    │ missed-shot   ┆ 36     │
-    │ blocked-shot  ┆ 32     │
-    │ giveaway      ┆ 22     │
-    │ takeaway      ┆ 19     │
-    │ penalty       ┆ 3      │
-    │ period-end    ┆ 3      │
-    └───────────────┴────────┘
+    ┌─────────────────┬────────┐
+    │ type_desc_key   ┆ events │
+    │ ---             ┆ ---    │
+    │ str             ┆ u32    │
+    ╞═════════════════╪════════╡
+    │ faceoff         ┆ 59     │
+    │ hit             ┆ 53     │
+    │ stoppage        ┆ 52     │
+    │ shot-on-goal    ┆ 42     │
+    │ missed-shot     ┆ 36     │
+    │ blocked-shot    ┆ 32     │
+    │ giveaway        ┆ 22     │
+    │ takeaway        ┆ 19     │
+    │ delayed-penalty ┆ 3      │
+    │ goal            ┆ 3      │
+    └─────────────────┴────────┘
 
 
 
@@ -852,8 +852,6 @@ out
 
 
 
-
-
     shape: (10, 7)
     ┌──────────────┬─────────────┬─────────────┬─────────────┬─────────────┬─────────────┬─────────────┐
     │ overall_pick ┆ team_abbrev ┆ first_name_ ┆ last_name_d ┆ position_co ┆ amateur_clu ┆ amateur_lea │
@@ -940,6 +938,8 @@ out
 ```
 
     ✅ franchise team totals
+
+
     ✅ franchises
 
 
