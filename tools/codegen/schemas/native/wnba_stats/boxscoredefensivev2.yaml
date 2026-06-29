@@ -1,34 +1,64 @@
 columns:
 - description: ''
-  name: gameid
+  name: blocks
+  type: integer
+- description: ''
+  name: comment
   type: character
 - description: ''
-  name: teamid
-  type: character
+  name: defensiverebounds
+  type: integer
 - description: ''
-  name: teamcity
-  type: character
-- description: ''
-  name: teamname
-  type: character
-- description: ''
-  name: teamtricode
-  type: character
-- description: ''
-  name: teamslug
-  type: character
-- description: ''
-  name: personid
+  name: familyname
   type: character
 - description: ''
   name: firstname
   type: character
 - description: ''
-  name: familyname
+  name: gameid
   type: character
+- description: ''
+  name: jerseynum
+  type: character
+- description: ''
+  name: matchupassists
+  type: integer
+- description: ''
+  name: matchupfieldgoalpercentage
+  type: numeric
+- description: ''
+  name: matchupfieldgoalsattempted
+  type: integer
+- description: ''
+  name: matchupfieldgoalsmade
+  type: integer
+- description: ''
+  name: matchupminutes
+  type: character
+- description: ''
+  name: matchupthreepointerpercentage
+  type: numeric
+- description: ''
+  name: matchupthreepointersattempted
+  type: integer
+- description: ''
+  name: matchupthreepointersmade
+  type: integer
+- description: ''
+  name: matchupturnovers
+  type: integer
 - description: ''
   name: namei
   type: character
+- description: ''
+  name: partialpossessions
+  type: numeric
+- description: ''
+  name: personid
+  type: integer
+- description: ''
+  name: playerpoints
+  type: integer
 - description: ''
   name: playerslug
   type: character
@@ -36,55 +66,25 @@ columns:
   name: position
   type: character
 - description: ''
-  name: comment
-  type: character
-- description: ''
-  name: jerseynum
-  type: character
-- description: ''
-  name: matchupminutes
-  type: character
-- description: ''
-  name: partialpossessions
-  type: character
+  name: steals
+  type: integer
 - description: ''
   name: switcheson
+  type: integer
+- description: ''
+  name: teamcity
   type: character
 - description: ''
-  name: playerpoints
+  name: teamid
+  type: integer
+- description: ''
+  name: teamname
   type: character
 - description: ''
-  name: defensiverebounds
+  name: teamslug
   type: character
 - description: ''
-  name: matchupassists
+  name: teamtricode
   type: character
-- description: ''
-  name: matchupturnovers
-  type: character
-- description: ''
-  name: steals
-  type: character
-- description: ''
-  name: blocks
-  type: character
-- description: ''
-  name: matchupfieldgoalsmade
-  type: character
-- description: ''
-  name: matchupfieldgoalsattempted
-  type: character
-- description: ''
-  name: matchupfieldgoalpercentage
-  type: numeric
-- description: ''
-  name: matchupthreepointersmade
-  type: character
-- description: ''
-  name: matchupthreepointersattempted
-  type: character
-- description: ''
-  name: matchupthreepointerpercentage
-  type: numeric
 kind: dataframe
 schema: boxscoredefensivev2

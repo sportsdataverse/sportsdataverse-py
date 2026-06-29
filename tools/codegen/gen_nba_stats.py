@@ -27,8 +27,9 @@ _DTYPE = {
     "boolean": "logical",
     "unknown": "character",
 }
-# only endpoints that ANSWER for a league are "applicable" (drop "dead"/absent)
-_APPLICABLE = ("live", "untested")
+# only endpoints with committed live captures and no upstream deprecation marker
+# are codegen-ready (drop untested/barren/dead/deprecated).
+_APPLICABLE = ("live",)
 
 # Representative result-set used for the generated returns-table schema. The
 # runtime parser still exposes every result set; this only controls which table
@@ -81,7 +82,9 @@ def _stats_eps(league_id: str) -> List[dict]:
         (
             e
             for e in CAT["endpoints"]
-            if e["family"] == "stats" and e["league_applicability"].get(league_id) in _APPLICABLE
+            if e["family"] == "stats"
+            and e["league_applicability"].get(league_id) in _APPLICABLE
+            and not any(status == "deprecated" for status in e.get("deprecation", {}).values())
         ),
         key=lambda e: e["slug"],
     )
@@ -114,6 +117,12 @@ def _write_yaml(path: Path, obj: Any) -> None:
         yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
 
 
+def _clean_generated_schema_dir(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
+    for schema_path in path.glob("*.yaml"):
+        schema_path.unlink()
+
+
 def _representative_result_set(ep: dict) -> str | None:
     result_sets = ep.get("result_sets") or {}
     if not result_sets:
@@ -138,6 +147,8 @@ def main() -> None:
             "endpoints": [_endpoint_entry(e, stem, cfg["default_league"], parser_name) for e in eps],
         }
         _write_yaml(ROOT / f"tools/codegen/endpoints/{stem}.yaml", doc)
+        schema_dir = ROOT / f"tools/codegen/schemas/native/{stem}"
+        _clean_generated_schema_dir(schema_dir)
         for e in eps:
             primary = _representative_result_set(e)
             cols = e["result_sets"].get(primary, []) if primary else []
@@ -153,7 +164,7 @@ def main() -> None:
                     for c in cols
                 ],
             }
-            _write_yaml(ROOT / f"tools/codegen/schemas/native/{stem}/{e['slug']}.yaml", schema)
+            _write_yaml(schema_dir / f"{e['slug']}.yaml", schema)
         print(f"{stem}: {len(eps)} endpoints")
 
 

@@ -1,171 +1,147 @@
 columns:
 - description: ''
-  name: team_id
+  name: arenacity
+  type: character
+- description: ''
+  name: arenaname
+  type: character
+- description: ''
+  name: arenastate
+  type: character
+- description: ''
+  name: awayteamtime
+  type: character
+- description: ''
+  name: awayteam_losses
   type: integer
 - description: ''
-  name: team_name
-  type: character
-- description: ''
-  name: gp
+  name: awayteam_score
   type: integer
 - description: ''
-  name: w
-  type: character
-- description: ''
-  name: l
-  type: character
-- description: ''
-  name: w_pct
-  type: numeric
-- description: ''
-  name: min
+  name: awayteam_seed
   type: integer
 - description: ''
-  name: fgm
+  name: awayteam_teamcity
   type: character
 - description: ''
-  name: fga
+  name: awayteam_teamid
+  type: integer
+- description: ''
+  name: awayteam_teamname
   type: character
 - description: ''
-  name: fg_pct
-  type: numeric
-- description: ''
-  name: fg3m
+  name: awayteam_teamslug
   type: character
 - description: ''
-  name: fg3a
+  name: awayteam_teamtricode
   type: character
 - description: ''
-  name: fg3_pct
-  type: numeric
+  name: awayteam_wins
+  type: integer
 - description: ''
-  name: ftm
+  name: branchlink
   type: character
 - description: ''
-  name: fta
+  name: day
   type: character
 - description: ''
-  name: ft_pct
-  type: numeric
-- description: ''
-  name: oreb
+  name: gamecode
   type: character
 - description: ''
-  name: dreb
+  name: gamedate
   type: character
 - description: ''
-  name: reb
+  name: gamedateest
   type: character
 - description: ''
-  name: ast
+  name: gamedatetimeest
   type: character
 - description: ''
-  name: tov
+  name: gamedatetimeutc
   type: character
 - description: ''
-  name: stl
+  name: gamedateutc
   type: character
 - description: ''
-  name: blk
+  name: gameid
   type: character
 - description: ''
-  name: blka
+  name: gamelabel
   type: character
 - description: ''
-  name: pf
+  name: gamesequence
+  type: integer
+- description: ''
+  name: gamestatus
+  type: integer
+- description: ''
+  name: gamestatustext
   type: character
 - description: ''
-  name: pfd
+  name: gamesublabel
   type: character
 - description: ''
-  name: pts
+  name: gamesubtype
   type: character
 - description: ''
-  name: plus_minus
+  name: gametimeest
   type: character
 - description: ''
-  name: gp_rank
+  name: gametimeutc
   type: character
 - description: ''
-  name: w_rank
+  name: hometeamtime
   type: character
 - description: ''
-  name: l_rank
+  name: hometeam_losses
+  type: integer
+- description: ''
+  name: hometeam_score
+  type: integer
+- description: ''
+  name: hometeam_seed
+  type: integer
+- description: ''
+  name: hometeam_teamcity
   type: character
 - description: ''
-  name: w_pct_rank
-  type: numeric
+  name: hometeam_teamid
+  type: integer
 - description: ''
-  name: min_rank
+  name: hometeam_teamname
   type: character
 - description: ''
-  name: fgm_rank
+  name: hometeam_teamslug
   type: character
 - description: ''
-  name: fga_rank
+  name: hometeam_teamtricode
   type: character
 - description: ''
-  name: fg_pct_rank
-  type: numeric
+  name: hometeam_wins
+  type: integer
 - description: ''
-  name: fg3m_rank
+  name: ifnecessary
   type: character
 - description: ''
-  name: fg3a_rank
+  name: isneutral
+  type: logical
+- description: ''
+  name: monthnum
+  type: integer
+- description: ''
+  name: postponedstatus
   type: character
 - description: ''
-  name: fg3_pct_rank
-  type: numeric
-- description: ''
-  name: ftm_rank
+  name: seriesgamenumber
   type: character
 - description: ''
-  name: fta_rank
+  name: seriestext
   type: character
 - description: ''
-  name: ft_pct_rank
-  type: numeric
-- description: ''
-  name: oreb_rank
+  name: weekname
   type: character
 - description: ''
-  name: dreb_rank
-  type: character
-- description: ''
-  name: reb_rank
-  type: character
-- description: ''
-  name: ast_rank
-  type: character
-- description: ''
-  name: tov_rank
-  type: character
-- description: ''
-  name: stl_rank
-  type: character
-- description: ''
-  name: blk_rank
-  type: character
-- description: ''
-  name: blka_rank
-  type: character
-- description: ''
-  name: pf_rank
-  type: character
-- description: ''
-  name: pfd_rank
-  type: character
-- description: ''
-  name: pts_rank
-  type: character
-- description: ''
-  name: plus_minus_rank
-  type: character
-- description: ''
-  name: cfid
-  type: character
-- description: ''
-  name: cfparams
-  type: character
+  name: weeknumber
+  type: integer
 kind: dataframe
-schema: leaguedashteamclutch
+schema: scheduleleaguev2

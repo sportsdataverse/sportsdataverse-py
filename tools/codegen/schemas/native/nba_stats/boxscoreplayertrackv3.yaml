@@ -1,42 +1,45 @@
 columns:
 - description: ''
-  name: gameid
+  name: assists
+  type: integer
+- description: ''
+  name: comment
   type: character
 - description: ''
-  name: teamid
-  type: character
+  name: contestedfieldgoalpercentage
+  type: numeric
 - description: ''
-  name: teamcity
-  type: character
+  name: contestedfieldgoalsattempted
+  type: integer
 - description: ''
-  name: teamname
-  type: character
+  name: contestedfieldgoalsmade
+  type: integer
 - description: ''
-  name: teamtricode
-  type: character
+  name: defendedatrimfieldgoalpercentage
+  type: numeric
 - description: ''
-  name: teamslug
-  type: character
+  name: defendedatrimfieldgoalsattempted
+  type: integer
 - description: ''
-  name: personid
-  type: character
+  name: defendedatrimfieldgoalsmade
+  type: integer
 - description: ''
-  name: firstname
-  type: character
+  name: distance
+  type: numeric
 - description: ''
   name: familyname
   type: character
 - description: ''
-  name: namei
+  name: fieldgoalpercentage
+  type: numeric
+- description: ''
+  name: firstname
   type: character
 - description: ''
-  name: playerslug
-  type: character
+  name: freethrowassists
+  type: integer
 - description: ''
-  name: position
-  type: character
-- description: ''
-  name: comment
+  name: gameid
   type: character
 - description: ''
   name: jerseynum
@@ -45,64 +48,61 @@ columns:
   name: minutes
   type: character
 - description: ''
-  name: speed
-  type: character
-- description: ''
-  name: distance
-  type: character
-- description: ''
-  name: reboundchancesoffensive
-  type: character
-- description: ''
-  name: reboundchancesdefensive
-  type: character
-- description: ''
-  name: reboundchancestotal
-  type: character
-- description: ''
-  name: touches
-  type: character
-- description: ''
-  name: secondaryassists
-  type: character
-- description: ''
-  name: freethrowassists
+  name: namei
   type: character
 - description: ''
   name: passes
+  type: integer
+- description: ''
+  name: personid
+  type: integer
+- description: ''
+  name: playerslug
   type: character
 - description: ''
-  name: assists
+  name: position
   type: character
 - description: ''
-  name: contestedfieldgoalsmade
-  type: character
+  name: reboundchancesdefensive
+  type: integer
 - description: ''
-  name: contestedfieldgoalsattempted
-  type: character
+  name: reboundchancesoffensive
+  type: integer
 - description: ''
-  name: contestedfieldgoalpercentage
+  name: reboundchancestotal
+  type: integer
+- description: ''
+  name: secondaryassists
+  type: integer
+- description: ''
+  name: speed
   type: numeric
 - description: ''
-  name: uncontestedfieldgoalsmade
+  name: teamcity
   type: character
+- description: ''
+  name: teamid
+  type: integer
+- description: ''
+  name: teamname
+  type: character
+- description: ''
+  name: teamslug
+  type: character
+- description: ''
+  name: teamtricode
+  type: character
+- description: ''
+  name: touches
+  type: integer
 - description: ''
   name: uncontestedfieldgoalsattempted
-  type: character
+  type: integer
+- description: ''
+  name: uncontestedfieldgoalsmade
+  type: integer
 - description: ''
   name: uncontestedfieldgoalspercentage
-  type: numeric
-- description: ''
-  name: fieldgoalpercentage
-  type: numeric
-- description: ''
-  name: defendedatrimfieldgoalsmade
-  type: character
-- description: ''
-  name: defendedatrimfieldgoalsattempted
-  type: character
-- description: ''
-  name: defendedatrimfieldgoalpercentage
   type: numeric
 kind: dataframe
 schema: boxscoreplayertrackv3
