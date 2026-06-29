@@ -36,3 +36,11 @@ def test_unparseable_file_is_warn():
     findings = leakage_python.run(str(_FIXTURES / "broken.py"))
     assert findings and findings[0].severity is Severity.WARN
     assert "could not parse" in findings[0].message
+
+
+def test_pandas_groupby_shift_is_clean():
+    assert leakage_python.run(str(_FIXTURES / "pandas_grouped.py")) == []
+
+
+def test_polars_over_then_shift_is_clean():
+    assert leakage_python.run(str(_FIXTURES / "polars_over_first.py")) == []

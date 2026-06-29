@@ -55,3 +55,23 @@ def _LEAKY_DIR():
     from pathlib import Path
 
     return Path(__file__).parent / "fixtures" / "lint_python" / "leaky.py"
+
+
+def test_lint_target_unknown_raises_keyerror():
+    import pytest
+
+    from tools.validation import cli
+
+    with pytest.raises(KeyError):
+        cli.lint_target("nonexistent")
+
+
+def test_lint_target_r_language_not_implemented(monkeypatch):
+    import pytest
+
+    from tools.validation import cli
+    from tools.validation.registry import LintTarget
+
+    monkeypatch.setitem(cli.LINT_TARGETS, "rtgt", LintTarget(name="rtgt", path="x", language="r"))
+    with pytest.raises(NotImplementedError):
+        cli.lint_target("rtgt")

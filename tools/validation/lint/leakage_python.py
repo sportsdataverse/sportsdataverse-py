@@ -58,6 +58,28 @@ def _is_grouped(node: ast.AST, parents: dict[int, ast.AST]) -> bool:
     return False
 
 
+def _receiver_is_grouped(node: ast.Call) -> bool:
+    """True if the lag call's receiver chain originates from a grouping call.
+
+    Catches pandas ``df.groupby("g")["x"].shift(1)`` and polars
+    ``pl.col("y").over("g").shift(1)`` — where the grouping call is a
+    *descendant* of the lag call (in ``node.func.value``), not an ancestor.
+    """
+    cur: ast.AST | None = node.func
+    while cur is not None:
+        if isinstance(cur, ast.Call) and isinstance(cur.func, ast.Attribute) and cur.func.attr in _GROUP_CALLS:
+            return True
+        if isinstance(cur, ast.Attribute):
+            cur = cur.value
+        elif isinstance(cur, ast.Subscript):
+            cur = cur.value
+        elif isinstance(cur, ast.Call):
+            cur = cur.func
+        else:
+            cur = None
+    return False
+
+
 def _lint_source(src: str, rel: str) -> list[Finding]:
     findings: list[Finding] = []
     try:
@@ -74,6 +96,7 @@ def _lint_source(src: str, rel: str) -> list[Finding]:
             and isinstance(node.func, ast.Attribute)
             and node.func.attr in _LAG_CALLS
             and not _is_grouped(node, parents)
+            and not _receiver_is_grouped(node)
         ):
             findings.append(
                 Finding(
