@@ -5,7 +5,7 @@ sidebar_position: 10
 ---
 # WNBA — WNBA Stats API (stats.wnba.com)
 
-`sportsdataverse.wnba` — 89 endpoints.
+`sportsdataverse.wnba` — 92 endpoints.
 
 ## `wnba_stats_alltimeleadersgrids`
 
@@ -2563,6 +2563,214 @@ GET /stats/leaguedashteamstats
 
 ```python
 wnba_stats_leaguedashteamstats(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_leaguegamefinder`
+
+GET /stats/leaguegamefinder
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/leaguegamefinder`
+
+**Valid URL:** [https://stats.wnba.com/stats/leaguegamefinder?LeagueID=10](https://stats.wnba.com/stats/leaguegamefinder?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `DraftNumber` | `draft_number_nullable` |  |  | `Y` |  |
+| `DraftRound` | `draft_round_nullable` |  |  | `Y` |  |
+| `DraftTeamID` | `draft_team_id_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `EqAST` | `eq_ast_nullable` |  |  | `Y` |  |
+| `EqBLK` | `eq_blk_nullable` |  |  | `Y` |  |
+| `EqDD` | `eq_dd_nullable` |  |  | `Y` |  |
+| `EqDREB` | `eq_dreb_nullable` |  |  | `Y` |  |
+| `EqFG3A` | `eq_fg3a_nullable` |  |  | `Y` |  |
+| `EqFG3M` | `eq_fg3m_nullable` |  |  | `Y` |  |
+| `EqFG3_PCT` | `eq_fg3_pct_nullable` |  |  | `Y` |  |
+| `EqFGA` | `eq_fga_nullable` |  |  | `Y` |  |
+| `EqFGM` | `eq_fgm_nullable` |  |  | `Y` |  |
+| `EqFG_PCT` | `eq_fg_pct_nullable` |  |  | `Y` |  |
+| `EqFTA` | `eq_fta_nullable` |  |  | `Y` |  |
+| `EqFTM` | `eq_ftm_nullable` |  |  | `Y` |  |
+| `EqFT_PCT` | `eq_ft_pct_nullable` |  |  | `Y` |  |
+| `EqMINUTES` | `eq_minutes_nullable` |  |  | `Y` |  |
+| `EqOREB` | `eq_oreb_nullable` |  |  | `Y` |  |
+| `EqPF` | `eq_pf_nullable` |  |  | `Y` |  |
+| `EqPTS` | `eq_pts_nullable` |  |  | `Y` |  |
+| `EqREB` | `eq_reb_nullable` |  |  | `Y` |  |
+| `EqSTL` | `eq_stl_nullable` |  |  | `Y` |  |
+| `EqTD` | `eq_td_nullable` |  |  | `Y` |  |
+| `EqTOV` | `eq_tov_nullable` |  |  | `Y` |  |
+| `GameID` | `game_id_nullable` |  |  | `Y` |  |
+| `GtAST` | `gt_ast_nullable` |  |  | `Y` |  |
+| `GtBLK` | `gt_blk_nullable` |  |  | `Y` |  |
+| `GtDD` | `gt_dd_nullable` |  |  | `Y` |  |
+| `GtDREB` | `gt_dreb_nullable` |  |  | `Y` |  |
+| `GtFG3A` | `gt_fg3a_nullable` |  |  | `Y` |  |
+| `GtFG3M` | `gt_fg3m_nullable` |  |  | `Y` |  |
+| `GtFG3_PCT` | `gt_fg3_pct_nullable` |  |  | `Y` |  |
+| `GtFGA` | `gt_fga_nullable` |  |  | `Y` |  |
+| `GtFGM` | `gt_fgm_nullable` |  |  | `Y` |  |
+| `GtFG_PCT` | `gt_fg_pct_nullable` |  |  | `Y` |  |
+| `GtFTA` | `gt_fta_nullable` |  |  | `Y` |  |
+| `GtFTM` | `gt_ftm_nullable` |  |  | `Y` |  |
+| `GtFT_PCT` | `gt_ft_pct_nullable` |  |  | `Y` |  |
+| `GtMINUTES` | `gt_minutes_nullable` |  |  | `Y` |  |
+| `GtOREB` | `gt_oreb_nullable` |  |  | `Y` |  |
+| `GtPF` | `gt_pf_nullable` |  |  | `Y` |  |
+| `GtPTS` | `gt_pts_nullable` |  |  | `Y` |  |
+| `GtREB` | `gt_reb_nullable` |  |  | `Y` |  |
+| `GtSTL` | `gt_stl_nullable` |  |  | `Y` |  |
+| `GtTD` | `gt_td_nullable` |  |  | `Y` |  |
+| `GtTOV` | `gt_tov_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `LtAST` | `lt_ast_nullable` |  |  | `Y` |  |
+| `LtBLK` | `lt_blk_nullable` |  |  | `Y` |  |
+| `LtDD` | `lt_dd_nullable` |  |  | `Y` |  |
+| `LtDREB` | `lt_dreb_nullable` |  |  | `Y` |  |
+| `LtFG3A` | `lt_fg3a_nullable` |  |  | `Y` |  |
+| `LtFG3M` | `lt_fg3m_nullable` |  |  | `Y` |  |
+| `LtFG3_PCT` | `lt_fg3_pct_nullable` |  |  | `Y` |  |
+| `LtFGA` | `lt_fga_nullable` |  |  | `Y` |  |
+| `LtFGM` | `lt_fgm_nullable` |  |  | `Y` |  |
+| `LtFG_PCT` | `lt_fg_pct_nullable` |  |  | `Y` |  |
+| `LtFTA` | `lt_fta_nullable` |  |  | `Y` |  |
+| `LtFTM` | `lt_ftm_nullable` |  |  | `Y` |  |
+| `LtFT_PCT` | `lt_ft_pct_nullable` |  |  | `Y` |  |
+| `LtMINUTES` | `lt_minutes_nullable` |  |  | `Y` |  |
+| `LtOREB` | `lt_oreb_nullable` |  |  | `Y` |  |
+| `LtPF` | `lt_pf_nullable` |  |  | `Y` |  |
+| `LtPTS` | `lt_pts_nullable` |  |  | `Y` |  |
+| `LtREB` | `lt_reb_nullable` |  |  | `Y` |  |
+| `LtSTL` | `lt_stl_nullable` |  |  | `Y` |  |
+| `LtTD` | `lt_td_nullable` |  |  | `Y` |  |
+| `LtTOV` | `lt_tov_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
+| `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
+| `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` |  |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
+| `YearsExperience` | `years_experience_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Unique season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `matchup` | character | Matchup. |
+| `wl` | character | Wl. |
+| `min` | integer | Minutes played. |
+| `pts` | integer | Points scored. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Total rebounds. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `tov` | integer | Turnovers. |
+| `pf` | integer | Personal fouls. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_leaguegamefinder(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_leaguegamelog`
+
+GET /stats/leaguegamelog
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/leaguegamelog`
+
+**Valid URL:** [https://stats.wnba.com/stats/leaguegamelog?LeagueID=10](https://stats.wnba.com/stats/leaguegamelog?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Counter` | `counter` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Direction` | `direction` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `Sorter` | `sorter` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Unique season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `matchup` | character | Matchup. |
+| `wl` | character | Wl. |
+| `min` | integer | Minutes played. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Total rebounds. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `tov` | integer | Turnovers. |
+| `pf` | integer | Personal fouls. |
+| `pts` | integer | Points scored. |
+| `plus_minus` | integer | Plus/minus point differential while on court. |
+| `video_available` | integer | Video available. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_leaguegamelog(league_id='10')
 ```
 
 _Last validated n/a._
@@ -5996,6 +6204,115 @@ GET /stats/teamdashboardbyyearoveryear
 
 ```python
 wnba_stats_teamdashboardbyyearoveryear(league_id='10')
+```
+
+_Last validated n/a._
+
+## `wnba_stats_teamdashlineups`
+
+GET /stats/teamdashlineups
+
+**Endpoint URL:** `GET https://stats.wnba.com/stats/teamdashlineups`
+
+**Valid URL:** [https://stats.wnba.com/stats/teamdashlineups?LeagueID=10](https://stats.wnba.com/stats/teamdashlineups?LeagueID=10)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `GameID` | `game_id_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `GroupQuantity` | `group_quantity` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `group_value` | character | Specific grouping value for this dashboard or split row. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Total rebounds. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+wnba_stats_teamdashlineups(league_id='10')
 ```
 
 _Last validated n/a._

@@ -2453,6 +2453,410 @@ endpoints:
     league_id: '00'
   extra_params:
   - default: ''
+    name: conference_nullable
+    query_key: Conference
+    type: str
+  - default: ''
+    name: date_from_nullable
+    query_key: DateFrom
+    type: str
+  - default: ''
+    name: date_to_nullable
+    query_key: DateTo
+    type: str
+  - default: ''
+    name: division_simple_nullable
+    query_key: Division
+    type: str
+  - default: ''
+    name: draft_number_nullable
+    query_key: DraftNumber
+    type: str
+  - default: ''
+    name: draft_round_nullable
+    query_key: DraftRound
+    type: str
+  - default: ''
+    name: draft_team_id_nullable
+    query_key: DraftTeamID
+    type: str
+  - default: ''
+    name: draft_year_nullable
+    query_key: DraftYear
+    type: str
+  - default: ''
+    name: eq_ast_nullable
+    query_key: EqAST
+    type: str
+  - default: ''
+    name: eq_blk_nullable
+    query_key: EqBLK
+    type: str
+  - default: ''
+    name: eq_dd_nullable
+    query_key: EqDD
+    type: str
+  - default: ''
+    name: eq_dreb_nullable
+    query_key: EqDREB
+    type: str
+  - default: ''
+    name: eq_fg3a_nullable
+    query_key: EqFG3A
+    type: str
+  - default: ''
+    name: eq_fg3m_nullable
+    query_key: EqFG3M
+    type: str
+  - default: ''
+    name: eq_fg3_pct_nullable
+    query_key: EqFG3_PCT
+    type: str
+  - default: ''
+    name: eq_fga_nullable
+    query_key: EqFGA
+    type: str
+  - default: ''
+    name: eq_fgm_nullable
+    query_key: EqFGM
+    type: str
+  - default: ''
+    name: eq_fg_pct_nullable
+    query_key: EqFG_PCT
+    type: str
+  - default: ''
+    name: eq_fta_nullable
+    query_key: EqFTA
+    type: str
+  - default: ''
+    name: eq_ftm_nullable
+    query_key: EqFTM
+    type: str
+  - default: ''
+    name: eq_ft_pct_nullable
+    query_key: EqFT_PCT
+    type: str
+  - default: ''
+    name: eq_minutes_nullable
+    query_key: EqMINUTES
+    type: str
+  - default: ''
+    name: eq_oreb_nullable
+    query_key: EqOREB
+    type: str
+  - default: ''
+    name: eq_pf_nullable
+    query_key: EqPF
+    type: str
+  - default: ''
+    name: eq_pts_nullable
+    query_key: EqPTS
+    type: str
+  - default: ''
+    name: eq_reb_nullable
+    query_key: EqREB
+    type: str
+  - default: ''
+    name: eq_stl_nullable
+    query_key: EqSTL
+    type: str
+  - default: ''
+    name: eq_td_nullable
+    query_key: EqTD
+    type: str
+  - default: ''
+    name: eq_tov_nullable
+    query_key: EqTOV
+    type: str
+  - default: ''
+    name: game_id_nullable
+    query_key: GameID
+    type: str
+  - default: ''
+    name: gt_ast_nullable
+    query_key: GtAST
+    type: str
+  - default: ''
+    name: gt_blk_nullable
+    query_key: GtBLK
+    type: str
+  - default: ''
+    name: gt_dd_nullable
+    query_key: GtDD
+    type: str
+  - default: ''
+    name: gt_dreb_nullable
+    query_key: GtDREB
+    type: str
+  - default: ''
+    name: gt_fg3a_nullable
+    query_key: GtFG3A
+    type: str
+  - default: ''
+    name: gt_fg3m_nullable
+    query_key: GtFG3M
+    type: str
+  - default: ''
+    name: gt_fg3_pct_nullable
+    query_key: GtFG3_PCT
+    type: str
+  - default: ''
+    name: gt_fga_nullable
+    query_key: GtFGA
+    type: str
+  - default: ''
+    name: gt_fgm_nullable
+    query_key: GtFGM
+    type: str
+  - default: ''
+    name: gt_fg_pct_nullable
+    query_key: GtFG_PCT
+    type: str
+  - default: ''
+    name: gt_fta_nullable
+    query_key: GtFTA
+    type: str
+  - default: ''
+    name: gt_ftm_nullable
+    query_key: GtFTM
+    type: str
+  - default: ''
+    name: gt_ft_pct_nullable
+    query_key: GtFT_PCT
+    type: str
+  - default: ''
+    name: gt_minutes_nullable
+    query_key: GtMINUTES
+    type: str
+  - default: ''
+    name: gt_oreb_nullable
+    query_key: GtOREB
+    type: str
+  - default: ''
+    name: gt_pf_nullable
+    query_key: GtPF
+    type: str
+  - default: ''
+    name: gt_pts_nullable
+    query_key: GtPTS
+    type: str
+  - default: ''
+    name: gt_reb_nullable
+    query_key: GtREB
+    type: str
+  - default: ''
+    name: gt_stl_nullable
+    query_key: GtSTL
+    type: str
+  - default: ''
+    name: gt_td_nullable
+    query_key: GtTD
+    type: str
+  - default: ''
+    name: gt_tov_nullable
+    query_key: GtTOV
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: ''
+    name: location_nullable
+    query_key: Location
+    type: str
+  - default: ''
+    name: lt_ast_nullable
+    query_key: LtAST
+    type: str
+  - default: ''
+    name: lt_blk_nullable
+    query_key: LtBLK
+    type: str
+  - default: ''
+    name: lt_dd_nullable
+    query_key: LtDD
+    type: str
+  - default: ''
+    name: lt_dreb_nullable
+    query_key: LtDREB
+    type: str
+  - default: ''
+    name: lt_fg3a_nullable
+    query_key: LtFG3A
+    type: str
+  - default: ''
+    name: lt_fg3m_nullable
+    query_key: LtFG3M
+    type: str
+  - default: ''
+    name: lt_fg3_pct_nullable
+    query_key: LtFG3_PCT
+    type: str
+  - default: ''
+    name: lt_fga_nullable
+    query_key: LtFGA
+    type: str
+  - default: ''
+    name: lt_fgm_nullable
+    query_key: LtFGM
+    type: str
+  - default: ''
+    name: lt_fg_pct_nullable
+    query_key: LtFG_PCT
+    type: str
+  - default: ''
+    name: lt_fta_nullable
+    query_key: LtFTA
+    type: str
+  - default: ''
+    name: lt_ftm_nullable
+    query_key: LtFTM
+    type: str
+  - default: ''
+    name: lt_ft_pct_nullable
+    query_key: LtFT_PCT
+    type: str
+  - default: ''
+    name: lt_minutes_nullable
+    query_key: LtMINUTES
+    type: str
+  - default: ''
+    name: lt_oreb_nullable
+    query_key: LtOREB
+    type: str
+  - default: ''
+    name: lt_pf_nullable
+    query_key: LtPF
+    type: str
+  - default: ''
+    name: lt_pts_nullable
+    query_key: LtPTS
+    type: str
+  - default: ''
+    name: lt_reb_nullable
+    query_key: LtREB
+    type: str
+  - default: ''
+    name: lt_stl_nullable
+    query_key: LtSTL
+    type: str
+  - default: ''
+    name: lt_td_nullable
+    query_key: LtTD
+    type: str
+  - default: ''
+    name: lt_tov_nullable
+    query_key: LtTOV
+    type: str
+  - default: ''
+    name: outcome_nullable
+    query_key: Outcome
+    type: str
+  - default: ''
+    name: po_round_nullable
+    query_key: PORound
+    type: str
+  - default: ''
+    name: player_id_nullable
+    query_key: PlayerID
+    type: str
+  - default: T
+    name: player_or_team_abbreviation
+    query_key: PlayerOrTeam
+    type: str
+  - default: ''
+    name: rookie_year_nullable
+    query_key: RookieYear
+    type: str
+  - default: null
+    name: season_nullable
+    query_key: Season
+    type: str
+  - default: ''
+    name: season_segment_nullable
+    query_key: SeasonSegment
+    type: str
+  - default: Regular Season
+    name: season_type_nullable
+    query_key: SeasonType
+    type: str
+  - default: ''
+    name: starter_bench_nullable
+    query_key: StarterBench
+    type: str
+  - default: ''
+    name: team_id_nullable
+    query_key: TeamID
+    type: str
+  - default: ''
+    name: vs_conference_nullable
+    query_key: VsConference
+    type: str
+  - default: ''
+    name: vs_division_nullable
+    query_key: VsDivision
+    type: str
+  - default: ''
+    name: vs_team_id_nullable
+    query_key: VsTeamID
+    type: str
+  - default: ''
+    name: years_experience_nullable
+    query_key: YearsExperience
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/leaguegamefinder
+  returns_schema: native/nba_stats/leaguegamefinder
+  short: leaguegamefinder
+  summary: GET /stats/leaguegamefinder
+- example_args:
+    league_id: '00'
+  extra_params:
+  - default: '0'
+    name: counter
+    query_key: Counter
+    type: str
+  - default: ''
+    name: date_from_nullable
+    query_key: DateFrom
+    type: str
+  - default: ''
+    name: date_to_nullable
+    query_key: DateTo
+    type: str
+  - default: ASC
+    name: direction
+    query_key: Direction
+    type: str
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: T
+    name: player_or_team_abbreviation
+    query_key: PlayerOrTeam
+    type: str
+  - default: null
+    name: season
+    query_key: Season
+    type: str
+  - default: Regular Season
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  - default: DATE
+    name: sorter
+    query_key: Sorter
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/leaguegamelog
+  returns_schema: native/nba_stats/leaguegamelog
+  short: leaguegamelog
+  summary: GET /stats/leaguegamelog
+- example_args:
+    league_id: '00'
+  extra_params:
+  - default: ''
     name: active_flag_nullable
     query_key: ActiveFlag
     type: str
@@ -5127,6 +5531,42 @@ endpoints:
   returns_schema: native/nba_stats/shotchartlineupdetail
   short: shotchartlineupdetail
   summary: GET /stats/shotchartlineupdetail
+- example_args:
+    league_id: '00'
+  extra_params:
+  - default: '00'
+    name: league_id
+    query_key: LeagueID
+    type: str
+  - default: PerGame
+    name: per_mode_simple
+    query_key: PerMode
+    type: str
+  - default: Isolation
+    name: play_type_nullable
+    query_key: PlayType
+    type: str
+  - default: P
+    name: player_or_team_abbreviation
+    query_key: PlayerOrTeam
+    type: str
+  - default: Regular Season
+    name: season_type_all_star
+    query_key: SeasonType
+    type: str
+  - default: null
+    name: season
+    query_key: SeasonYear
+    type: str
+  - default: Offensive
+    name: type_grouping_nullable
+    query_key: TypeGrouping
+    type: str
+  parser: parse_nba_stats_result_sets
+  path: /stats/synergyplaytypes
+  returns_schema: native/nba_stats/synergyplaytypes
+  short: synergyplaytypes
+  summary: GET /stats/synergyplaytypes
 - example_args:
     league_id: '00'
   extra_params:

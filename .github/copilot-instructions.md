@@ -156,9 +156,9 @@ against real captured payloads (the JSON/CSV/HTML shapes are easy to guess
 wrong); see `CLAUDE.md` → "MLB — Statcast".
 
 **NBA / WNBA stats API (`nba_stats_*` / `wnba_stats_*`, 0.0.72+):** two
-codegen-generated flat-API stems — `nba_stats` (106 wrappers, `stats.nba.com`,
+codegen-generated flat-API stems — `nba_stats` (109 wrappers, `stats.nba.com`,
 `league_id="00"` NBA / `"20"` G-League / `"15"` Summer League) and `wnba_stats`
-(89 wrappers, `stats.wnba.com`). Key gotcha: **`stats.nba.com` TLS/JA3-
+(92 wrappers, `stats.wnba.com`). Key gotcha: **`stats.nba.com` TLS/JA3-
 fingerprint-blocks plain `requests`** — the runtime uses `curl_cffi` with
 `impersonate="chrome"`, which is a **lazy optional import** in the `tests`/`all`
 extras (not a hard dep). One generic parser `parse_nba_stats_result_sets`

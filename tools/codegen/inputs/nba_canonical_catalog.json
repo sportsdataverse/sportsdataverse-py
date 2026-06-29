@@ -8914,7 +8914,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -12382,6 +12382,7 @@
     },
     {
       "deprecation": {
+        "capture": "dead",
         "hoopR": "unknown"
       },
       "family": "stats",
@@ -12389,7 +12390,7 @@
         "stats.nba.com"
       ],
       "league_applicability": {
-        "00": "untested",
+        "00": "dead",
         "15": "untested",
         "20": "untested"
       },
@@ -12450,7 +12451,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -13116,7 +13117,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -13425,7 +13426,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -13923,6 +13924,7 @@
     },
     {
       "deprecation": {
+        "capture": "dead",
         "hoopR": "unknown"
       },
       "family": "stats",
@@ -13930,7 +13932,8 @@
         "stats.nba.com"
       ],
       "league_applicability": {
-        "00": "untested",
+        "00": "dead",
+        "10": "dead",
         "15": "untested",
         "20": "untested"
       },
@@ -23285,6 +23288,7 @@
     },
     {
       "deprecation": {
+        "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -23295,10 +23299,10 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested",
-        "15": "untested",
-        "20": "untested"
+        "00": "live",
+        "10": "live",
+        "15": "barren",
+        "20": "barren"
       },
       "params": [
         {
@@ -24275,7 +24279,7 @@
           {
             "description": "",
             "name": "season_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -24295,7 +24299,7 @@
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -24320,17 +24324,17 @@
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fgm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fga",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -24340,12 +24344,12 @@
           {
             "description": "",
             "name": "fg3m",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fg3a",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -24355,12 +24359,12 @@
           {
             "description": "",
             "name": "ftm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fta",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -24370,47 +24374,47 @@
           {
             "description": "",
             "name": "oreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "dreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "stl",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "blk",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "tov",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pf",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "plus_minus",
-            "type": "string"
+            "type": "number"
           }
         ]
       },
@@ -24423,6 +24427,7 @@
     },
     {
       "deprecation": {
+        "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -24433,10 +24438,10 @@
         "stats.wnba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "10": "untested",
-        "15": "untested",
-        "20": "untested"
+        "00": "live",
+        "10": "live",
+        "15": "live",
+        "20": "live"
       },
       "params": [
         {
@@ -24544,7 +24549,7 @@
           {
             "description": "",
             "name": "season_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -24564,7 +24569,7 @@
           {
             "description": "",
             "name": "game_id",
-            "type": "integer"
+            "type": "string"
           },
           {
             "description": "",
@@ -24589,12 +24594,12 @@
           {
             "description": "",
             "name": "fgm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fga",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -24604,12 +24609,12 @@
           {
             "description": "",
             "name": "fg3m",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fg3a",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -24619,12 +24624,12 @@
           {
             "description": "",
             "name": "ftm",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "fta",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
@@ -24634,57 +24639,57 @@
           {
             "description": "",
             "name": "oreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "dreb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "reb",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "ast",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "stl",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "blk",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "tov",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pf",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "plus_minus",
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "video_available",
-            "type": "string"
+            "type": "integer"
           }
         ]
       },
@@ -32633,7 +32638,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -36402,7 +36407,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -38269,7 +38274,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -40770,7 +40775,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -42953,7 +42958,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -44502,7 +44507,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -45935,7 +45940,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -50933,7 +50938,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -51875,7 +51880,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -52102,7 +52107,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -52334,7 +52339,7 @@
         "00": "live",
         "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -54291,7 +54296,7 @@
     },
     {
       "deprecation": {
-        "capture": "barren",
+        "capture": "live",
         "hoopR": "deprecated",
         "nba_api": "live",
         "wehoop": "unknown"
@@ -54303,7 +54308,7 @@
       ],
       "league_applicability": {
         "00": "barren",
-        "10": "barren",
+        "10": "live",
         "15": "barren",
         "20": "barren"
       },
@@ -54369,67 +54374,67 @@
           {
             "description": "",
             "name": "game_id",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "game_date",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "home_team_id",
-            "type": "unknown"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "visitor_team_id",
-            "type": "unknown"
+            "type": "integer"
           },
           {
             "description": "",
             "name": "home_team_name",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "visitor_team_name",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "home_team_abbreviation",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "visitor_team_abbreviation",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "home_team_nickname",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "visitor_team_nickname",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "game_time",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "home_wl",
-            "type": "unknown"
+            "type": "string"
           },
           {
             "description": "",
             "name": "visitor_wl",
-            "type": "unknown"
+            "type": "string"
           }
         ]
       },
@@ -60142,6 +60147,7 @@
     },
     {
       "deprecation": {
+        "capture": "live",
         "hoopR": "unknown",
         "nba_api": "live"
       },
@@ -60150,9 +60156,10 @@
         "stats.nba.com"
       ],
       "league_applicability": {
-        "00": "untested",
-        "15": "untested",
-        "20": "untested"
+        "00": "live",
+        "10": "barren",
+        "15": "barren",
+        "20": "barren"
       },
       "params": [
         {
@@ -60238,7 +60245,17 @@
           {
             "description": "",
             "name": "season_id",
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "player_id",
             "type": "integer"
+          },
+          {
+            "description": "",
+            "name": "player_name",
+            "type": "string"
           },
           {
             "description": "",
@@ -60268,7 +60285,7 @@
           {
             "description": "",
             "name": "percentile",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
@@ -60283,7 +60300,7 @@
           {
             "description": "",
             "name": "ppp",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
@@ -60323,27 +60340,27 @@
           {
             "description": "",
             "name": "poss",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
             "name": "pts",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
             "name": "fgm",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
             "name": "fga",
-            "type": "string"
+            "type": "number"
           },
           {
             "description": "",
             "name": "fgmx",
-            "type": "string"
+            "type": "number"
           }
         ]
       },
@@ -61422,7 +61439,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -64694,7 +64711,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -68278,7 +68295,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -70190,7 +70207,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -72909,7 +72926,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -74307,7 +74324,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -75130,9 +75147,9 @@
       ],
       "league_applicability": {
         "00": "live",
-        "10": "barren",
+        "10": "live",
         "15": "barren",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -78250,7 +78267,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {
@@ -81325,7 +81342,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "untested"
+        "20": "live"
       },
       "params": [
         {
@@ -85752,7 +85769,7 @@
         "00": "live",
         "10": "live",
         "15": "live",
-        "20": "barren"
+        "20": "live"
       },
       "params": [
         {

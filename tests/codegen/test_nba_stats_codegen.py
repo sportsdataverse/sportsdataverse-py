@@ -13,7 +13,7 @@ def test_nba_stats_module_imports_and_has_workhorse():
     # upstream-deprecated endpoints stay excluded from codegen
     assert not hasattr(mod, "nba_stats_scoreboardv2")
     assert not hasattr(mod, "nba_stats_boxscoretraditionalv2")
-    assert len(mod.__all__) == 106  # live, non-deprecated stats endpoints
+    assert len(mod.__all__) == 109  # live, non-deprecated stats endpoints
 
 
 def test_wnba_stats_module_imports():
@@ -22,4 +22,4 @@ def test_wnba_stats_module_imports():
     assert hasattr(mod, "wnba_stats_playbyplayv3")
     # wehoop hard-deprecated (lifecycle::deprecate_stop) endpoints stay excluded
     assert not hasattr(mod, "wnba_stats_hustlestatsboxscore")
-    assert len(mod.__all__) == 89  # live, non-deprecated stats endpoints
+    assert len(mod.__all__) == 92  # live, non-deprecated stats endpoints

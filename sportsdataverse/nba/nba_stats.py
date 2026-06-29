@@ -60,6 +60,8 @@ __all__ = [
     "nba_stats_leaguedashteamclutch",
     "nba_stats_leaguedashteamptshot",
     "nba_stats_leaguedashteamstats",
+    "nba_stats_leaguegamefinder",
+    "nba_stats_leaguegamelog",
     "nba_stats_leagueleaders",
     "nba_stats_leaguelineupviz",
     "nba_stats_leagueplayerondetails",
@@ -98,6 +100,7 @@ __all__ = [
     "nba_stats_shotchartdetail",
     "nba_stats_shotchartleaguewide",
     "nba_stats_shotchartlineupdetail",
+    "nba_stats_synergyplaytypes",
     "nba_stats_teamdashboardbyclutch",
     "nba_stats_teamdashboardbygamesplits",
     "nba_stats_teamdashboardbygeneralsplits",
@@ -3256,6 +3259,365 @@ def nba_stats_leaguedashteamstats(
     return raw
 
 
+def nba_stats_leaguegamefinder(
+    conference_nullable: Optional[str] = "",
+    date_from_nullable: Optional[str] = "",
+    date_to_nullable: Optional[str] = "",
+    division_simple_nullable: Optional[str] = "",
+    draft_number_nullable: Optional[str] = "",
+    draft_round_nullable: Optional[str] = "",
+    draft_team_id_nullable: Optional[str] = "",
+    draft_year_nullable: Optional[str] = "",
+    eq_ast_nullable: Optional[str] = "",
+    eq_blk_nullable: Optional[str] = "",
+    eq_dd_nullable: Optional[str] = "",
+    eq_dreb_nullable: Optional[str] = "",
+    eq_fg3a_nullable: Optional[str] = "",
+    eq_fg3m_nullable: Optional[str] = "",
+    eq_fg3_pct_nullable: Optional[str] = "",
+    eq_fga_nullable: Optional[str] = "",
+    eq_fgm_nullable: Optional[str] = "",
+    eq_fg_pct_nullable: Optional[str] = "",
+    eq_fta_nullable: Optional[str] = "",
+    eq_ftm_nullable: Optional[str] = "",
+    eq_ft_pct_nullable: Optional[str] = "",
+    eq_minutes_nullable: Optional[str] = "",
+    eq_oreb_nullable: Optional[str] = "",
+    eq_pf_nullable: Optional[str] = "",
+    eq_pts_nullable: Optional[str] = "",
+    eq_reb_nullable: Optional[str] = "",
+    eq_stl_nullable: Optional[str] = "",
+    eq_td_nullable: Optional[str] = "",
+    eq_tov_nullable: Optional[str] = "",
+    game_id_nullable: Optional[str] = "",
+    gt_ast_nullable: Optional[str] = "",
+    gt_blk_nullable: Optional[str] = "",
+    gt_dd_nullable: Optional[str] = "",
+    gt_dreb_nullable: Optional[str] = "",
+    gt_fg3a_nullable: Optional[str] = "",
+    gt_fg3m_nullable: Optional[str] = "",
+    gt_fg3_pct_nullable: Optional[str] = "",
+    gt_fga_nullable: Optional[str] = "",
+    gt_fgm_nullable: Optional[str] = "",
+    gt_fg_pct_nullable: Optional[str] = "",
+    gt_fta_nullable: Optional[str] = "",
+    gt_ftm_nullable: Optional[str] = "",
+    gt_ft_pct_nullable: Optional[str] = "",
+    gt_minutes_nullable: Optional[str] = "",
+    gt_oreb_nullable: Optional[str] = "",
+    gt_pf_nullable: Optional[str] = "",
+    gt_pts_nullable: Optional[str] = "",
+    gt_reb_nullable: Optional[str] = "",
+    gt_stl_nullable: Optional[str] = "",
+    gt_td_nullable: Optional[str] = "",
+    gt_tov_nullable: Optional[str] = "",
+    league_id: Optional[str] = "00",
+    location_nullable: Optional[str] = "",
+    lt_ast_nullable: Optional[str] = "",
+    lt_blk_nullable: Optional[str] = "",
+    lt_dd_nullable: Optional[str] = "",
+    lt_dreb_nullable: Optional[str] = "",
+    lt_fg3a_nullable: Optional[str] = "",
+    lt_fg3m_nullable: Optional[str] = "",
+    lt_fg3_pct_nullable: Optional[str] = "",
+    lt_fga_nullable: Optional[str] = "",
+    lt_fgm_nullable: Optional[str] = "",
+    lt_fg_pct_nullable: Optional[str] = "",
+    lt_fta_nullable: Optional[str] = "",
+    lt_ftm_nullable: Optional[str] = "",
+    lt_ft_pct_nullable: Optional[str] = "",
+    lt_minutes_nullable: Optional[str] = "",
+    lt_oreb_nullable: Optional[str] = "",
+    lt_pf_nullable: Optional[str] = "",
+    lt_pts_nullable: Optional[str] = "",
+    lt_reb_nullable: Optional[str] = "",
+    lt_stl_nullable: Optional[str] = "",
+    lt_td_nullable: Optional[str] = "",
+    lt_tov_nullable: Optional[str] = "",
+    outcome_nullable: Optional[str] = "",
+    po_round_nullable: Optional[str] = "",
+    player_id_nullable: Optional[str] = "",
+    player_or_team_abbreviation: Optional[str] = "T",
+    rookie_year_nullable: Optional[str] = "",
+    season_nullable: Optional[str] = None,
+    season_segment_nullable: Optional[str] = "",
+    season_type_nullable: Optional[str] = "Regular Season",
+    starter_bench_nullable: Optional[str] = "",
+    team_id_nullable: Optional[str] = "",
+    vs_conference_nullable: Optional[str] = "",
+    vs_division_nullable: Optional[str] = "",
+    vs_team_id_nullable: Optional[str] = "",
+    years_experience_nullable: Optional[str] = "",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/leaguegamefinder
+
+    Endpoint: ``GET https://stats.nba.com/stats/leaguegamefinder``
+    Example URL: https://stats.nba.com/stats/leaguegamefinder?LeagueID=00
+
+    Args:
+        conference_nullable: Conference query parameter.
+        date_from_nullable: DateFrom query parameter.
+        date_to_nullable: DateTo query parameter.
+        division_simple_nullable: Division query parameter.
+        draft_number_nullable: DraftNumber query parameter.
+        draft_round_nullable: DraftRound query parameter.
+        draft_team_id_nullable: DraftTeamID query parameter.
+        draft_year_nullable: DraftYear query parameter.
+        eq_ast_nullable: EqAST query parameter.
+        eq_blk_nullable: EqBLK query parameter.
+        eq_dd_nullable: EqDD query parameter.
+        eq_dreb_nullable: EqDREB query parameter.
+        eq_fg3a_nullable: EqFG3A query parameter.
+        eq_fg3m_nullable: EqFG3M query parameter.
+        eq_fg3_pct_nullable: EqFG3_PCT query parameter.
+        eq_fga_nullable: EqFGA query parameter.
+        eq_fgm_nullable: EqFGM query parameter.
+        eq_fg_pct_nullable: EqFG_PCT query parameter.
+        eq_fta_nullable: EqFTA query parameter.
+        eq_ftm_nullable: EqFTM query parameter.
+        eq_ft_pct_nullable: EqFT_PCT query parameter.
+        eq_minutes_nullable: EqMINUTES query parameter.
+        eq_oreb_nullable: EqOREB query parameter.
+        eq_pf_nullable: EqPF query parameter.
+        eq_pts_nullable: EqPTS query parameter.
+        eq_reb_nullable: EqREB query parameter.
+        eq_stl_nullable: EqSTL query parameter.
+        eq_td_nullable: EqTD query parameter.
+        eq_tov_nullable: EqTOV query parameter.
+        game_id_nullable: GameID query parameter.
+        gt_ast_nullable: GtAST query parameter.
+        gt_blk_nullable: GtBLK query parameter.
+        gt_dd_nullable: GtDD query parameter.
+        gt_dreb_nullable: GtDREB query parameter.
+        gt_fg3a_nullable: GtFG3A query parameter.
+        gt_fg3m_nullable: GtFG3M query parameter.
+        gt_fg3_pct_nullable: GtFG3_PCT query parameter.
+        gt_fga_nullable: GtFGA query parameter.
+        gt_fgm_nullable: GtFGM query parameter.
+        gt_fg_pct_nullable: GtFG_PCT query parameter.
+        gt_fta_nullable: GtFTA query parameter.
+        gt_ftm_nullable: GtFTM query parameter.
+        gt_ft_pct_nullable: GtFT_PCT query parameter.
+        gt_minutes_nullable: GtMINUTES query parameter.
+        gt_oreb_nullable: GtOREB query parameter.
+        gt_pf_nullable: GtPF query parameter.
+        gt_pts_nullable: GtPTS query parameter.
+        gt_reb_nullable: GtREB query parameter.
+        gt_stl_nullable: GtSTL query parameter.
+        gt_td_nullable: GtTD query parameter.
+        gt_tov_nullable: GtTOV query parameter.
+        league_id: LeagueID query parameter.
+        location_nullable: Location query parameter.
+        lt_ast_nullable: LtAST query parameter.
+        lt_blk_nullable: LtBLK query parameter.
+        lt_dd_nullable: LtDD query parameter.
+        lt_dreb_nullable: LtDREB query parameter.
+        lt_fg3a_nullable: LtFG3A query parameter.
+        lt_fg3m_nullable: LtFG3M query parameter.
+        lt_fg3_pct_nullable: LtFG3_PCT query parameter.
+        lt_fga_nullable: LtFGA query parameter.
+        lt_fgm_nullable: LtFGM query parameter.
+        lt_fg_pct_nullable: LtFG_PCT query parameter.
+        lt_fta_nullable: LtFTA query parameter.
+        lt_ftm_nullable: LtFTM query parameter.
+        lt_ft_pct_nullable: LtFT_PCT query parameter.
+        lt_minutes_nullable: LtMINUTES query parameter.
+        lt_oreb_nullable: LtOREB query parameter.
+        lt_pf_nullable: LtPF query parameter.
+        lt_pts_nullable: LtPTS query parameter.
+        lt_reb_nullable: LtREB query parameter.
+        lt_stl_nullable: LtSTL query parameter.
+        lt_td_nullable: LtTD query parameter.
+        lt_tov_nullable: LtTOV query parameter.
+        outcome_nullable: Outcome query parameter.
+        po_round_nullable: PORound query parameter.
+        player_id_nullable: PlayerID query parameter.
+        player_or_team_abbreviation: PlayerOrTeam query parameter.
+        rookie_year_nullable: RookieYear query parameter.
+        season_nullable: Season query parameter.
+        season_segment_nullable: SeasonSegment query parameter.
+        season_type_nullable: SeasonType query parameter.
+        starter_bench_nullable: StarterBench query parameter.
+        team_id_nullable: TeamID query parameter.
+        vs_conference_nullable: VsConference query parameter.
+        vs_division_nullable: VsDivision query parameter.
+        vs_team_id_nullable: VsTeamID query parameter.
+        years_experience_nullable: YearsExperience query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_leaguegamefinder(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/leaguegamefinder",
+        params={
+            "Conference": conference_nullable,
+            "DateFrom": date_from_nullable,
+            "DateTo": date_to_nullable,
+            "Division": division_simple_nullable,
+            "DraftNumber": draft_number_nullable,
+            "DraftRound": draft_round_nullable,
+            "DraftTeamID": draft_team_id_nullable,
+            "DraftYear": draft_year_nullable,
+            "EqAST": eq_ast_nullable,
+            "EqBLK": eq_blk_nullable,
+            "EqDD": eq_dd_nullable,
+            "EqDREB": eq_dreb_nullable,
+            "EqFG3A": eq_fg3a_nullable,
+            "EqFG3M": eq_fg3m_nullable,
+            "EqFG3_PCT": eq_fg3_pct_nullable,
+            "EqFGA": eq_fga_nullable,
+            "EqFGM": eq_fgm_nullable,
+            "EqFG_PCT": eq_fg_pct_nullable,
+            "EqFTA": eq_fta_nullable,
+            "EqFTM": eq_ftm_nullable,
+            "EqFT_PCT": eq_ft_pct_nullable,
+            "EqMINUTES": eq_minutes_nullable,
+            "EqOREB": eq_oreb_nullable,
+            "EqPF": eq_pf_nullable,
+            "EqPTS": eq_pts_nullable,
+            "EqREB": eq_reb_nullable,
+            "EqSTL": eq_stl_nullable,
+            "EqTD": eq_td_nullable,
+            "EqTOV": eq_tov_nullable,
+            "GameID": game_id_nullable,
+            "GtAST": gt_ast_nullable,
+            "GtBLK": gt_blk_nullable,
+            "GtDD": gt_dd_nullable,
+            "GtDREB": gt_dreb_nullable,
+            "GtFG3A": gt_fg3a_nullable,
+            "GtFG3M": gt_fg3m_nullable,
+            "GtFG3_PCT": gt_fg3_pct_nullable,
+            "GtFGA": gt_fga_nullable,
+            "GtFGM": gt_fgm_nullable,
+            "GtFG_PCT": gt_fg_pct_nullable,
+            "GtFTA": gt_fta_nullable,
+            "GtFTM": gt_ftm_nullable,
+            "GtFT_PCT": gt_ft_pct_nullable,
+            "GtMINUTES": gt_minutes_nullable,
+            "GtOREB": gt_oreb_nullable,
+            "GtPF": gt_pf_nullable,
+            "GtPTS": gt_pts_nullable,
+            "GtREB": gt_reb_nullable,
+            "GtSTL": gt_stl_nullable,
+            "GtTD": gt_td_nullable,
+            "GtTOV": gt_tov_nullable,
+            "LeagueID": league_id,
+            "Location": location_nullable,
+            "LtAST": lt_ast_nullable,
+            "LtBLK": lt_blk_nullable,
+            "LtDD": lt_dd_nullable,
+            "LtDREB": lt_dreb_nullable,
+            "LtFG3A": lt_fg3a_nullable,
+            "LtFG3M": lt_fg3m_nullable,
+            "LtFG3_PCT": lt_fg3_pct_nullable,
+            "LtFGA": lt_fga_nullable,
+            "LtFGM": lt_fgm_nullable,
+            "LtFG_PCT": lt_fg_pct_nullable,
+            "LtFTA": lt_fta_nullable,
+            "LtFTM": lt_ftm_nullable,
+            "LtFT_PCT": lt_ft_pct_nullable,
+            "LtMINUTES": lt_minutes_nullable,
+            "LtOREB": lt_oreb_nullable,
+            "LtPF": lt_pf_nullable,
+            "LtPTS": lt_pts_nullable,
+            "LtREB": lt_reb_nullable,
+            "LtSTL": lt_stl_nullable,
+            "LtTD": lt_td_nullable,
+            "LtTOV": lt_tov_nullable,
+            "Outcome": outcome_nullable,
+            "PORound": po_round_nullable,
+            "PlayerID": player_id_nullable,
+            "PlayerOrTeam": player_or_team_abbreviation,
+            "RookieYear": rookie_year_nullable,
+            "Season": season_nullable,
+            "SeasonSegment": season_segment_nullable,
+            "SeasonType": season_type_nullable,
+            "StarterBench": starter_bench_nullable,
+            "TeamID": team_id_nullable,
+            "VsConference": vs_conference_nullable,
+            "VsDivision": vs_division_nullable,
+            "VsTeamID": vs_team_id_nullable,
+            "YearsExperience": years_experience_nullable,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_leaguegamelog(
+    counter: Optional[str] = "0",
+    date_from_nullable: Optional[str] = "",
+    date_to_nullable: Optional[str] = "",
+    direction: Optional[str] = "ASC",
+    league_id: Optional[str] = "00",
+    player_or_team_abbreviation: Optional[str] = "T",
+    season: Optional[str] = None,
+    season_type_all_star: Optional[str] = "Regular Season",
+    sorter: Optional[str] = "DATE",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/leaguegamelog
+
+    Endpoint: ``GET https://stats.nba.com/stats/leaguegamelog``
+    Example URL: https://stats.nba.com/stats/leaguegamelog?LeagueID=00
+
+    Args:
+        counter: Counter query parameter.
+        date_from_nullable: DateFrom query parameter.
+        date_to_nullable: DateTo query parameter.
+        direction: Direction query parameter.
+        league_id: LeagueID query parameter.
+        player_or_team_abbreviation: PlayerOrTeam query parameter.
+        season: Season query parameter.
+        season_type_all_star: SeasonType query parameter.
+        sorter: Sorter query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_leaguegamelog(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/leaguegamelog",
+        params={
+            "Counter": counter,
+            "DateFrom": date_from_nullable,
+            "DateTo": date_to_nullable,
+            "Direction": direction,
+            "LeagueID": league_id,
+            "PlayerOrTeam": player_or_team_abbreviation,
+            "Season": season,
+            "SeasonType": season_type_all_star,
+            "Sorter": sorter,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
 def nba_stats_leagueleaders(
     active_flag_nullable: Optional[str] = "",
     league_id: Optional[str] = "00",
@@ -6322,6 +6684,61 @@ def nba_stats_shotchartlineupdetail(
             "TeamID": team_id_nullable,
             "VsConference": vs_conference_nullable,
             "VsDivision": vs_division_nullable,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_nba_stats_result_sets(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def nba_stats_synergyplaytypes(
+    league_id: Optional[str] = "00",
+    per_mode_simple: Optional[str] = "PerGame",
+    play_type_nullable: Optional[str] = "Isolation",
+    player_or_team_abbreviation: Optional[str] = "P",
+    season_type_all_star: Optional[str] = "Regular Season",
+    season: Optional[str] = None,
+    type_grouping_nullable: Optional[str] = "Offensive",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """GET /stats/synergyplaytypes
+
+    Endpoint: ``GET https://stats.nba.com/stats/synergyplaytypes``
+    Example URL: https://stats.nba.com/stats/synergyplaytypes?LeagueID=00
+
+    Args:
+        league_id: LeagueID query parameter.
+        per_mode_simple: PerMode query parameter.
+        play_type_nullable: PlayType query parameter.
+        player_or_team_abbreviation: PlayerOrTeam query parameter.
+        season_type_all_star: SeasonType query parameter.
+        season: SeasonYear query parameter.
+        type_grouping_nullable: TypeGrouping query parameter.
+        return_parsed: parse the payload through parse_nba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            nba_stats_synergyplaytypes(league_id='00')
+    """
+    raw = _get(
+        "https://stats.nba.com/stats/synergyplaytypes",
+        params={
+            "LeagueID": league_id,
+            "PerMode": per_mode_simple,
+            "PlayType": play_type_nullable,
+            "PlayerOrTeam": player_or_team_abbreviation,
+            "SeasonType": season_type_all_star,
+            "SeasonYear": season,
+            "TypeGrouping": type_grouping_nullable,
         },
         **kwargs,
     )
