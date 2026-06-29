@@ -53,3 +53,14 @@ def test_lint_targets_registered():
     # sdv-py's own source is repo-relative; nfl-data is env-rooted
     assert "${SDV_VALIDATION_NFL_DATA_ROOT}" in LINT_TARGETS["nfl_native_pbp"].path
     assert LINT_TARGETS["sdv_nfl_ep_wp"].path == "sportsdataverse/nfl/ep_wp.py"
+
+
+def test_nfl_model_pbp_registered_with_oracle():
+    from tools.validation.oracles import ORACLES
+    from tools.validation.registry import DATASETS
+
+    spec = DATASETS["nfl_model_pbp"]
+    assert spec.join_keys == ("game_id", "play_id")
+    assert spec.oracle_domain == "nfl"
+    assert "${SDV_VALIDATION_NFL_DATA_ROOT}" in spec.parquet_glob
+    assert ORACLES["nfl"]._source_glob is not None  # oracle now wired

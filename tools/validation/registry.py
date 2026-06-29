@@ -171,3 +171,20 @@ DATASETS["cfb_model_pbp"] = DatasetSpec(
     oracle_domain="cfb",
     cumulative_columns=("game_play_number",),
 )
+
+DATASETS["nfl_model_pbp"] = DatasetSpec(
+    name="nfl_model_pbp",
+    domain="nfl",
+    parquet_glob="${SDV_VALIDATION_NFL_DATA_ROOT}/out/model_pbp_*.parquet",
+    schema=load_schema("nfl_model_pbp"),
+    required_columns=("game_id", "play_id"),
+    join_keys=("game_id", "play_id"),
+    range_constraints={
+        "wp": (0.0, 1.0),
+        "vegas_wp": (0.0, 1.0),
+        "cp": (0.0, 1.0),
+        "ep": (-10.0, 10.0),
+        "epa": (-15.0, 15.0),
+    },
+    oracle_domain="nfl",
+)
