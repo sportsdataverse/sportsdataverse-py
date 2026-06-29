@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import pathlib
 
+import pandas as pd
 import polars as pl
 import pytest
 
@@ -24,6 +25,7 @@ from sportsdataverse.nba.nba_possessions import (
     attach_possession_lineups,
     build_possessions,
 )
+from tests.conftest import skip_if_no_nba_stats_live
 
 FXROOT = pathlib.Path("tests/fixtures/nba_engine")
 GAMES = ["0022200001", "0022300001", "0022100001"]
@@ -368,4 +370,92 @@ def test_attach_possession_lineups(game_id: str) -> None:
         assert def_players <= rosters[def_team], (
             f"Game {game_id}: defense players {def_players - rosters[def_team]} "
             f"not on defense team {def_team}'s roster (possible off/def swap)"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Task 4: offline monkeypatch tests for the public nba_possessions() fetcher
+# ---------------------------------------------------------------------------
+
+
+def test_nba_possessions_offline(monkeypatch: pytest.MonkeyPatch) -> None:
+    """nba_possessions() offline: monkeypatch _fetch_* to committed fixtures.
+
+    Asserts:
+    - Returns non-empty polars frame with required stint columns.
+    - Frame matches the in-process pipeline (same height and schema).
+    - return_as_pandas=True returns a pandas DataFrame.
+    """
+    import sportsdataverse.nba.nba_possessions as P
+
+    g = "0022200001"
+    monkeypatch.setattr(P, "_fetch_pbp", lambda gid, lg: json.loads((FXROOT / g / "playbyplayv3.json").read_text()))
+    monkeypatch.setattr(
+        P, "_fetch_rotation", lambda gid, lg: json.loads((FXROOT / g / "gamerotation.json").read_text())
+    )
+    monkeypatch.setattr(
+        P, "_fetch_box", lambda gid, lg: json.loads((FXROOT / g / "boxscoretraditionalv3.json").read_text())
+    )
+
+    df = P.nba_possessions(g)
+
+    # Non-empty frame with required columns
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+    required_cols = {"off_player_1", "def_player_1", "points"}
+    assert required_cols.issubset(set(df.columns)), f"Missing columns: {required_cols - set(df.columns)}"
+
+    # Must match in-process pipeline exactly
+    enh = enhanced_pbp_from_payload(json.loads((FXROOT / g / "playbyplayv3.json").read_text()))
+    box = json.loads((FXROOT / g / "boxscoretraditionalv3.json").read_text())
+    rot = parse_rotation_resultsets(json.loads((FXROOT / g / "gamerotation.json").read_text()))
+    home, away = boxscore_home_away(box)
+    oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+    poss_ref = attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
+    assert df.height == poss_ref.height, f"Row count mismatch: fetcher={df.height}, in-process={poss_ref.height}"
+    assert df.schema == poss_ref.schema, f"Schema mismatch: fetcher={df.schema}, in-process={poss_ref.schema}"
+
+    # return_as_pandas=True
+    # Re-patch since monkeypatch lambdas are stateless
+    df_pd = P.nba_possessions(g, return_as_pandas=True)
+    assert isinstance(df_pd, pd.DataFrame), f"Expected pd.DataFrame, got {type(df_pd)}"
+    assert len(df_pd) > 0
+
+
+# ---------------------------------------------------------------------------
+# Task 4: gated live smoke test for nba_possessions()
+# ---------------------------------------------------------------------------
+
+
+@skip_if_no_nba_stats_live
+def test_nba_possessions_live() -> None:
+    """Live smoke: nba_possessions() returns non-empty frame and reconciles with boxscore.
+
+    Gated behind SDV_PY_NBA_STATS_LIVE=1 — stats.nba.com hangs on datacenter
+    IPs; run only from a residential IP.
+    """
+    from sportsdataverse.nba.nba_possessions import nba_possessions
+
+    g = "0022200001"
+    df = nba_possessions(g)
+
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0, "Live nba_possessions() returned empty frame"
+    assert {"off_player_1", "def_player_1", "points"}.issubset(set(df.columns))
+
+    # Boxscore reconciliation (independent oracle): sum of possession points
+    # per offense team must equal the boxscore team points.
+    from sportsdataverse.nba.nba_possessions import _fetch_box
+
+    box = _fetch_box(g)
+    oracle = _box_team_points(box)
+
+    eng: dict[int, int] = {
+        int(r["offense_team_id"]): int(r["points"])
+        for r in df.group_by("offense_team_id").agg(pl.col("points").sum().alias("points")).to_dicts()
+    }
+    for team_id, expected_pts in oracle.items():
+        got_pts = eng.get(team_id, 0)
+        assert got_pts == expected_pts, (
+            f"Live game {g}, team {team_id}: possession points={got_pts} != boxscore={expected_pts}"
         )

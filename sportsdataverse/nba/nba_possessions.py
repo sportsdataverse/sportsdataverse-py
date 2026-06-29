@@ -12,8 +12,9 @@ games (0022100001, 0022200001, 0022300001).
 from __future__ import annotations
 
 import re
-from typing import Optional
+from typing import Optional, Union
 
+import pandas as pd
 import polars as pl
 
 # Columns added by attach_possession_lineups (the RAPM stint design matrix).
@@ -511,3 +512,153 @@ def attach_possession_lineups(
         schema=_LINEUP_ATTACHMENT_SCHEMA,
     )
     return possessions.hstack(lineup_df)
+
+
+# ---------------------------------------------------------------------------
+# Task 4: Network fetchers (module-level so tests can monkeypatch them)
+# ---------------------------------------------------------------------------
+
+
+def _fetch_pbp(game_id: str, league_id: str = "00") -> dict:
+    """Fetch raw play-by-play v3 payload from stats.nba.com.
+
+    Args:
+        game_id: Ten-character NBA game identifier.
+        league_id: League identifier (accepted for API symmetry; not forwarded
+            to ``nba_stats_playbyplayv3`` which does not expose it).
+
+    Returns:
+        Raw ``dict`` from ``nba_stats_playbyplayv3``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_playbyplayv3
+
+    return nba_stats_playbyplayv3(game_id=game_id, return_parsed=False)
+
+
+def _fetch_rotation(game_id: str, league_id: str = "00") -> dict:
+    """Fetch raw gamerotation payload from stats.nba.com.
+
+    Args:
+        game_id: Ten-character NBA game identifier.
+        league_id: League identifier (default ``"00"`` for NBA).
+
+    Returns:
+        Raw ``dict`` from ``nba_stats_gamerotation``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_gamerotation
+
+    return nba_stats_gamerotation(game_id=game_id, league_id=league_id, return_parsed=False)
+
+
+def _fetch_box(game_id: str, league_id: str = "00") -> dict:
+    """Fetch raw boxscore traditional v3 payload from stats.nba.com.
+
+    Args:
+        game_id: Ten-character NBA game identifier.
+        league_id: League identifier (accepted for API symmetry; not forwarded
+            to ``nba_stats_boxscoretraditionalv3`` which does not expose it).
+
+    Returns:
+        Raw ``dict`` from ``nba_stats_boxscoretraditionalv3``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3
+
+    return nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False)
+
+
+# ---------------------------------------------------------------------------
+# Public fetcher
+# ---------------------------------------------------------------------------
+
+_FULL_SCHEMA: dict[str, pl.DataType] = {
+    **POSSESSIONS_SCHEMA,
+    **_LINEUP_ATTACHMENT_SCHEMA,
+}
+
+
+def nba_possessions(
+    game_id: str,
+    league_id: str = "00",
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Fetch and build the possession-level lineup stint matrix for a single game.
+
+    Makes three live network calls (play-by-play v3, game rotation, boxscore
+    traditional v3) then chains
+    :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`,
+    :func:`~sportsdataverse.nba.nba_lineups.parse_rotation_resultsets`,
+    :func:`~sportsdataverse.nba.nba_lineups.boxscore_home_away`,
+    :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`,
+    :func:`build_possessions`, and :func:`attach_possession_lineups` to
+    produce the RAPM stint design matrix.
+
+    The three module-level fetchers (:func:`_fetch_pbp`, :func:`_fetch_rotation`,
+    :func:`_fetch_box`) are monkeypatchable for offline tests.
+
+    Args:
+        game_id: Ten-character NBA game identifier (e.g. ``"0022200001"``).
+        league_id: League identifier (default ``"00"`` for NBA).  In Phase 2,
+            only ``nba_gamerotation`` forwards ``league_id``; ``playbyplayv3``
+            and ``boxscoretraditionalv3`` have no ``league_id`` parameter, so
+            a non-``"00"`` value does not change the pbp or boxscore output.
+            Full WNBA/G-League support is a later phase.
+        return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
+            instead of :class:`polars.DataFrame`.
+
+    Returns:
+        Polars (or pandas) DataFrame with schema combining
+        :data:`POSSESSIONS_SCHEMA` and the ten lineup columns
+        ``off_player_1..5`` / ``def_player_1..5``.  One row per possession.
+        Empty or malformed payloads return a zero-row frame (never raises).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_possessions import nba_possessions
+            df = nba_possessions("0022200001")
+            print(df.shape, df["off_player_1"].dtype)
+
+        Pandas output::
+
+            df_pd = nba_possessions("0022200001", return_as_pandas=True)
+            print(type(df_pd))
+
+        RAPM stint aggregation::
+
+            import polars as pl
+            stints = df.group_by(
+                [f"off_player_{i}" for i in range(1, 6)]
+                + [f"def_player_{i}" for i in range(1, 6)]
+            ).agg(pl.col("points").sum(), pl.len().alias("possessions"))
+            print(stints.head())
+
+        See Also:
+            * `nba_api`_ -- reference Python client for stats.nba.com
+            * `hoopR`_ -- R package providing equivalent lineup utilities
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+    from sportsdataverse.nba.nba_lineups import (
+        boxscore_home_away,
+        parse_rotation_resultsets,
+        players_on_court_from_rotation,
+    )
+
+    raw_pbp = _fetch_pbp(game_id, league_id)
+    raw_rot = _fetch_rotation(game_id, league_id)
+    raw_box = _fetch_box(game_id, league_id)
+
+    enh = enhanced_pbp_from_payload(raw_pbp, league_id=league_id)
+    rot = parse_rotation_resultsets(raw_rot)
+    home, away = boxscore_home_away(raw_box)
+
+    oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+    poss = build_possessions(enh)
+    df = attach_possession_lineups(poss, oc, enh, home_team_id=home)
+
+    if return_as_pandas:
+        return df.to_pandas()
+    return df
