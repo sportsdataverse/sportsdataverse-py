@@ -6,6 +6,7 @@ made.  All assertions use the real columns emitted by the shared nba/ cores.
 
 import json
 import pathlib
+import re
 
 import pandas as pd
 import polars as pl
@@ -163,4 +164,193 @@ def test_nbagl_engine_public_exports() -> None:
         nbagl_on_court,
         nbagl_possessions,
         nbagl_rapm_from_games,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Task 2: independent-oracle validation gates (G-League)
+# ---------------------------------------------------------------------------
+#
+# Three oracle gates prove G-League reconstruction correctness using the same
+# external sources as the NBA/WNBA keystones — no fixture is regenerated from
+# the engine's own output:
+#
+# 1. MINUTES RECONCILIATION: sum each player's on-court real-time from the
+#    G-League rotation stints (``(OUT_TIME_REAL - IN_TIME_REAL) / 10``) and
+#    assert it matches that player's ``boxScoreTraditional`` minutes within
+#    1.5 s (same tolerance as NBA/WNBA keystones — NOT widened).
+#
+# 2. POSSESSION POINTS: total possession ``points`` per ``offense_team_id``
+#    must equal the boxscore team points (exact).
+#
+# 3. ROSTER MEMBERSHIP: every player id in ``home_player_1..5`` /
+#    ``away_player_1..5`` from ``nbagl_on_court()`` must belong to the
+#    corresponding team's boxscore roster — no phantom or stray ids.
+
+# Tolerance for minutes reconciliation: the boxscore rounds minutes to whole
+# seconds and the rotation IN/OUT times are tenths-of-a-second, so a small
+# amount of rounding slack is expected.  Mirror the NBA/WNBA keystone constant.
+_MINUTES_TOLERANCE_SEC = 1.5
+
+
+def _parse_box_minutes(minutes_str: str) -> float:
+    """Parse a boxscore minutes value into seconds.
+
+    Handles both the "MM:SS" form and the ISO-8601 ``PT..M..S`` form.
+
+    Copied from tests.nba.test_nba_lineups (same helper, same contract);
+    mirrored verbatim from tests.wnba.test_wnba_engine.
+    """
+    s = (minutes_str or "").strip()
+    if not s:
+        return 0.0
+    iso = re.match(r"PT(\d+)M([\d.]+)S", s)
+    if iso:
+        return int(iso.group(1)) * 60.0 + float(iso.group(2))
+    parts = s.split(":")
+    if len(parts) == 2:
+        return int(parts[0]) * 60.0 + float(parts[1])
+    return 0.0
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_nbagl_minutes_reconciliation(game_id: str) -> None:
+    """Rotation stint minutes must match the independent boxscore minutes oracle (G-League).
+
+    Summing ``(OUT_TIME_REAL - IN_TIME_REAL) / 10`` per player from the G-League
+    rotation feed and comparing to ``boxScoreTraditional`` minutes (an
+    independent source) is the strongest available correctness check on the
+    stint data that drives the on-court reconstruction.
+
+    Uses the same tolerance and method as the NBA keystone
+    ``test_minutes_reconciliation`` in ``tests/nba/test_nba_lineups.py`` and
+    the WNBA mirror in ``tests/wnba/test_wnba_engine.py``.
+    """
+    # No monkeypatch needed — reads the fixture files directly via _raw_rotation/_raw_box.
+    from sportsdataverse.nba.nba_lineups import parse_rotation_resultsets
+
+    rotation = parse_rotation_resultsets(_raw_rotation(game_id))
+
+    # Sum rotation on-court seconds per player (tenths-of-a-second → seconds).
+    rotation_sec: dict[int, float] = {}
+    for team in ("HomeTeam", "AwayTeam"):
+        for stint in rotation.get(team, []):
+            pid = int(stint["PERSON_ID"])
+            dur = (float(stint["OUT_TIME_REAL"]) - float(stint["IN_TIME_REAL"])) / 10.0
+            rotation_sec[pid] = rotation_sec.get(pid, 0.0) + dur
+
+    # Boxscore minutes per player (independent oracle).
+    bxt = _raw_box(game_id).get("boxScoreTraditional", {})
+    box_sec: dict[int, float] = {}
+    for side in ("homeTeam", "awayTeam"):
+        for p in bxt.get(side, {}).get("players", []):
+            pid = int(p["personId"])
+            box_sec[pid] = _parse_box_minutes(p.get("statistics", {}).get("minutes", ""))
+
+    all_pids = set(rotation_sec) | set(box_sec)
+    failures: list[str] = []
+    max_err = 0.0
+    for pid in all_pids:
+        # DNP players (box_sec[pid]=0; rotation_sec miss → .get(pid, 0.0)) give diff=0 and pass — correct.
+        diff = abs(rotation_sec.get(pid, 0.0) - box_sec.get(pid, 0.0))
+        max_err = max(max_err, diff)
+        if diff > _MINUTES_TOLERANCE_SEC:
+            failures.append(
+                f"  pid={pid}: rotation={rotation_sec.get(pid, 0.0):.1f}s "
+                f"boxscore={box_sec.get(pid, 0.0):.1f}s diff={diff:.1f}s"
+            )
+
+    print(f"[{game_id}] G-League minutes reconciliation: max_error={max_err:.1f}s over {len(rotation_sec)} players")
+    assert not failures, (
+        f"[{game_id}] G-League minutes reconciliation FAILED "
+        f"({len(failures)} players over {_MINUTES_TOLERANCE_SEC}s):\n" + "\n".join(failures[:10])
+    )
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_nbagl_possession_points_reconcile(monkeypatch: pytest.MonkeyPatch, game_id: str) -> None:
+    """Total possession points per offense team MUST equal boxscore points (G-League).
+
+    The boxscore is an independent external oracle — not derived from the
+    engine's own output.  Mirrors ``test_possessions_reconcile_boxscore_points``
+    in ``tests/nba/test_nba_possessions.py`` and the WNBA mirror in
+    ``tests/wnba/test_wnba_engine.py``.
+    """
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+    from sportsdataverse.nba.nba_possessions import build_possessions
+
+    _patch(monkeypatch, game_id)
+
+    payload = json.loads((FXR / game_id / "playbyplayv3.json").read_text())
+    enh = enhanced_pbp_from_payload(payload, league_id="20")
+    poss = build_possessions(enh)
+
+    assert poss.height > 0, f"Game {game_id}: build_possessions returned empty frame"
+
+    # Engine totals: possession points grouped by offense team.
+    eng: dict[int, int] = {
+        int(r["offense_team_id"]): int(r["points"])
+        for r in poss.group_by("offense_team_id").agg(pl.col("points").sum().alias("points")).to_dicts()
+    }
+
+    # Independent oracle: sum player points per team from the boxscore.
+    bxt = _raw_box(game_id)["boxScoreTraditional"]
+    oracle: dict[int, int] = {}
+    for side in ("homeTeam", "awayTeam"):
+        t = bxt[side]
+        pts = sum(int(p.get("statistics", {}).get("points", 0) or 0) for p in t["players"])
+        oracle[int(t["teamId"])] = pts
+
+    for team_id, expected_pts in oracle.items():
+        got_pts = eng.get(team_id, 0)
+        assert got_pts == expected_pts, (
+            f"Game {game_id}, team {team_id}: possession points={got_pts} != boxscore={expected_pts}"
+        )
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_nbagl_oncourt_ids_in_roster(monkeypatch: pytest.MonkeyPatch, game_id: str) -> None:
+    """Every player id in the on-court frame must be on the team's boxscore roster.
+
+    Checks that ``nbagl_on_court()`` never emits phantom or stray player ids —
+    all ``home_player_1..5`` ids must belong to the home team's boxscore
+    roster and all ``away_player_1..5`` ids to the away team's roster.
+    This is the no-swap / no-stray guard analogous to the NBA roster-membership
+    assertion in ``test_attach_possession_lineups`` and the WNBA mirror in
+    ``tests/wnba/test_wnba_engine.py``.
+    """
+    _patch(monkeypatch, game_id)
+    oc = G.nbagl_on_court(game_id)
+
+    # Build independent roster oracle from boxscore.
+    bxt = _raw_box(game_id)["boxScoreTraditional"]
+    home_team_id = int(bxt["homeTeam"]["teamId"])
+    away_team_id = int(bxt["awayTeam"]["teamId"])
+    home_roster: set[int] = {int(p["personId"]) for p in bxt["homeTeam"]["players"]}
+    away_roster: set[int] = {int(p["personId"]) for p in bxt["awayTeam"]["players"]}
+
+    home_cols = [f"home_player_{i}" for i in range(1, 6)]
+    away_cols = [f"away_player_{i}" for i in range(1, 6)]
+
+    stray: list[str] = []
+    for r in oc.to_dicts():
+        for c in home_cols:
+            pid = r.get(c)
+            if pid is not None and int(pid) not in home_roster:
+                stray.append(
+                    f"  row action_number={r.get('action_number')}: "
+                    f"home col {c!r} pid={pid} not in home roster "
+                    f"(home_team_id={home_team_id})"
+                )
+        for c in away_cols:
+            pid = r.get(c)
+            if pid is not None and int(pid) not in away_roster:
+                stray.append(
+                    f"  row action_number={r.get('action_number')}: "
+                    f"away col {c!r} pid={pid} not in away roster "
+                    f"(away_team_id={away_team_id})"
+                )
+
+    assert not stray, (
+        f"[{game_id}] G-League on-court roster-membership FAILED ({len(stray)} stray id(s)):\n" + "\n".join(stray[:10])
     )
