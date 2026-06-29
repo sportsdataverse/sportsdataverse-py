@@ -551,7 +551,11 @@ def nba_on_court(
 
     Args:
         game_id: Ten-character NBA game identifier (e.g. ``"0022200001"``).
-        league_id: League identifier (default ``"00"`` for NBA).
+        league_id: League identifier (default ``"00"`` for NBA).  In Phase 1,
+            only ``nba_gamerotation`` forwards ``league_id``; ``playbyplayv3``
+            and ``boxscoretraditionalv3`` have no ``league_id`` parameter, so
+            a non-``"00"`` value does not change the pbp or boxscore output.
+            Full WNBA/G-League support is a later phase.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of :class:`polars.DataFrame`.
 

@@ -52,7 +52,12 @@ def nba_enhanced_pbp(
 
     Args:
         game_id: Ten-character NBA game identifier (e.g. ``"0022200001"``).
-        league_id: League identifier (default ``"00"`` for NBA).
+        league_id: League identifier (default ``"00"`` for NBA).  In Phase 1,
+            ``playbyplayv3`` and ``boxscoretraditionalv3`` have no ``league_id``
+            parameter, so a non-``"00"`` value does not change the pbp or
+            boxscore output.  Only ``nba_gamerotation`` (used by
+            :func:`~sportsdataverse.nba.nba_lineups.nba_on_court`) forwards
+            ``league_id``.  Full WNBA/G-League support is a later phase.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of :class:`polars.DataFrame`.
 
@@ -123,10 +128,10 @@ def enhanced_pbp_from_payload(payload: dict[str, Any], *, league_id: str = "00")
 
         See Also:
             * `nba_pbp_constants`_ -- schemas and helper functions
-            * `Task 3 (event flags)`_ -- adds is_* event columns and order_index
+            * `nba_api`_ -- reference Python client for stats.nba.com
 
         .. _nba_pbp_constants: sportsdataverse.nba.nba_pbp_constants
-        .. _Task 3 (event flags): https://github.com/sportsdataverse/sportsdataverse-py/issues/???
+        .. _nba_api: https://github.com/swar/nba_api
     """
     actions = (((payload or {}).get("game") or {}).get("actions")) or []
     if not actions:

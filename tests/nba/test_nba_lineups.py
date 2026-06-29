@@ -45,6 +45,7 @@ import re
 import polars as pl
 import pytest
 
+from tests.conftest import skip_if_no_nba_stats_live
 
 _FIXTURES_ROOT = pathlib.Path("tests/fixtures/nba_engine")
 # Game 0022200001 is the original keystone game used throughout Task 4/5 development.
@@ -382,3 +383,24 @@ def test_nba_on_court_return_as_pandas(monkeypatch) -> None:
     assert isinstance(df_pd, pd.DataFrame)
     assert len(df_pd) > 0
     assert "home_player_1" in df_pd.columns
+
+
+# ---------------------------------------------------------------------------
+# Live smoke test (gated — requires SDV_PY_NBA_STATS_LIVE=1 + residential IP)
+# ---------------------------------------------------------------------------
+
+
+@skip_if_no_nba_stats_live
+def test_nba_on_court_live_smoke() -> None:
+    """nba_on_court() fetches a real game and returns a non-empty lineup frame.
+
+    Requires ``SDV_PY_NBA_STATS_LIVE=1`` and a residential IP (stats.nba.com
+    TLS-blocks datacenter egress).  Skipped automatically in CI.
+    """
+    from sportsdataverse.nba.nba_lineups import nba_on_court
+
+    df = nba_on_court("0022200001")
+    assert df.height > 0
+    assert df.select([f"home_player_{i}" for i in range(1, 6)]).null_count().sum_horizontal()[0] == 0, (
+        "home_player_1..5 must be fully populated (no nulls)"
+    )
