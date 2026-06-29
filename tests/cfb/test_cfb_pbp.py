@@ -57,6 +57,7 @@ def test_cfb_adv_box_score(cfb_box_score):
     }
     assert expected_sections.issubset(set(cfb_box_score.keys()))
 
+
 @skip_if_no_live
 def test_cfb_adv_box_score_wr_names():
     test = CFBPlayProcess(gameId=401779840)
@@ -81,7 +82,11 @@ def test_cfb_adv_box_score_wr_names():
     }
     assert expected_sections.issubset(set(result.keys()))
 
-    bad_wr_names = [x["receiver_player_name"] for x in result["receiver"] if x["receiver_player_name"] and "hurried" in x["receiver_player_name"]]
+    bad_wr_names = [
+        x["receiver_player_name"]
+        for x in result["receiver"]
+        if x["receiver_player_name"] and "hurried" in x["receiver_player_name"]
+    ]
     assert len(bad_wr_names) == 0
 
 
