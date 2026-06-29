@@ -66,7 +66,7 @@ def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
 #: whole word (real surnames effectively never do). Used to null garbage
 #: extractions like "bea loss of" / "for a loss" before the roster id-join.
 _PLAYER_NAME_GARBAGE = re.compile(
-    r"(?i)\b(loss|gain|yards?|incomplete|penalty|fumbled|sacked|touchdown|kickoff|punt|return)\b"
+    r"(?i)\b(loss|gain|yards?|incomplete|penalty|fumbled|sacked|touchdown|kickoff|punt|return|hurried by|QB)\b"
 )
 
 

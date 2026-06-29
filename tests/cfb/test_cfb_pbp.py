@@ -57,6 +57,33 @@ def test_cfb_adv_box_score(cfb_box_score):
     }
     assert expected_sections.issubset(set(cfb_box_score.keys()))
 
+@skip_if_no_live
+def test_cfb_adv_box_score_wr_names():
+    test = CFBPlayProcess(gameId=401779840)
+    fetch_pbp_or_skip(test)
+    test.run_processing_pipeline()
+    result = test.create_box_score(pl.DataFrame(test.plays_json, infer_schema_length=400))
+
+    assert result is not None
+    # Subset direction (expected ⊆ actual): the box score must contain these sections;
+    # additive sections are allowed so the test doesn't break when new ones are introduced.
+    expected_sections = {
+        "pass",
+        "rush",
+        "receiver",
+        "team",
+        "situational",
+        "defensive",
+        "defensive_players",
+        "specialists",
+        "turnover",
+        "drives",
+    }
+    assert expected_sections.issubset(set(result.keys()))
+
+    bad_wr_names = [x for x in result["receiver"] if x["receiver_player_name"] and "hurried" in x["receiver_player_name"]]
+    assert len(bad_wr_names) == 0
+
 
 def test_havoc_rate(cfb_box_score):
     defense_home = cfb_box_score["defensive"][0]
