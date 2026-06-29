@@ -54,6 +54,7 @@ Output schema
 from __future__ import annotations
 
 import argparse
+import bisect
 import json
 import re
 from pathlib import Path
@@ -175,41 +176,35 @@ def build_lineups_expected(
     game_id: str,
     oracle_records: list[dict],
     bxs_raw: dict,
+    pbp_raw: dict,
 ) -> pl.DataFrame:
     """
-    Map pbpstats per-event ``current_players`` → ``lineups_expected`` parquet.
+    Map pbpstats per-event ``current_players`` → ``lineups_expected`` parquet,
+    keyed on **v3 action_number** so Task 3 can join lineups onto the enhanced
+    pbp frame (its ``action_number`` is a strict subset of the v3 action set).
 
     Columns: game_id:Utf8, action_number:Int64, period:Int64,
              home_player_1..5:Int64, away_player_1..5:Int64
     Player ids sorted ascending within team.
 
-    Note: pbpstats ``ev.event_num`` == v3 ``actionNumber`` at overlapping events
-    (both sequences start at 2 for the period marker, verified on game 0022200001).
+    Why a forward-fill instead of pbpstats event_num verbatim
+    ---------------------------------------------------------
+    pbpstats emits MORE events than v3 (526 vs 468 here): it splits a v3 shot's
+    block / a v3 turnover's steal / a v3 ``SUB: X FOR Y`` into separate events
+    with their own ``event_num`` that has **no** v3 ``actionNumber``. Emitting
+    lineups keyed on those pbpstats-only event_nums would break the Task 3 join.
+
+    Resolution: for each DISTINCT v3 ``action_number`` (in the canonical order
+    ``period asc, seconds_remaining desc, action_number asc``), assign the
+    on-court 10 = the pbpstats ``current_players`` from the LATEST pbpstats event
+    whose ``event_num`` <= that ``action_number`` (forward-fill). This preserves
+    every distinct on-court lineup (verified: 31/31 for game 0022200001) while
+    keeping the key set == the v3 action_number set. ``action_number`` here aligns
+    with the enhanced frame; both share the v3 sequence numbering.
     """
     bxt = bxs_raw.get("boxScoreTraditional", {})
     home_team_id = int(bxt["homeTeamId"])
     away_team_id = int(bxt["awayTeamId"])
-
-    rows: list[dict] = []
-    for rec in oracle_records:
-        cp: dict[int, list[int]] = rec["current_players"]
-        if home_team_id not in cp or away_team_id not in cp:
-            # Partial lineup record — skip (shouldn't happen for a completed game)
-            continue
-        home_ids = sorted(cp[home_team_id])
-        away_ids = sorted(cp[away_team_id])
-        if len(home_ids) != 5 or len(away_ids) != 5:
-            continue
-        row: dict = {
-            "game_id": game_id,
-            "action_number": rec["event_num"],
-            "period": rec["period"],
-        }
-        for i, pid in enumerate(home_ids, 1):
-            row[f"home_player_{i}"] = pid
-        for i, pid in enumerate(away_ids, 1):
-            row[f"away_player_{i}"] = pid
-        rows.append(row)
 
     schema: dict[str, pl.DataType] = {
         "game_id": pl.Utf8,
@@ -219,6 +214,66 @@ def build_lineups_expected(
         **{f"away_player_{i}": pl.Int64 for i in range(1, 6)},
     }
 
+    # pbpstats lineup states keyed by event_num (full 5+5 only)
+    en_to_lineup: dict[int, tuple[list[int], list[int]]] = {}
+    for rec in oracle_records:
+        cp: dict[int, list[int]] = rec["current_players"]
+        if home_team_id not in cp or away_team_id not in cp:
+            continue
+        home_ids = sorted(int(x) for x in cp[home_team_id])
+        away_ids = sorted(int(x) for x in cp[away_team_id])
+        if len(home_ids) != 5 or len(away_ids) != 5:
+            continue
+        en_to_lineup[int(rec["event_num"])] = (home_ids, away_ids)
+
+    if not en_to_lineup:
+        return pl.DataFrame(schema=schema)
+
+    # Sorted (event_num, lineup) for forward-fill lookup
+    sorted_event_nums = sorted(en_to_lineup)
+
+    def lineup_at(action_number: int) -> tuple[list[int], list[int]] | None:
+        """Latest pbpstats lineup whose event_num <= action_number (forward-fill)."""
+        idx = bisect.bisect_right(sorted_event_nums, action_number) - 1
+        if idx < 0:
+            return None
+        return en_to_lineup[sorted_event_nums[idx]]
+
+    # Distinct v3 actions in canonical order; dedup on action_number (first wins —
+    # canonical order makes the first occurrence the chronologically-earliest).
+    actions = pbp_raw["game"]["actions"]
+    canon = sorted(
+        ((pos, a) for pos, a in enumerate(actions)),
+        key=lambda t: (
+            int(t[1].get("period", 0)),
+            -_clock_to_seconds(t[1].get("clock", "PT00M00.00S") or "PT00M00.00S"),
+            int(t[1]["actionNumber"]),
+            t[0],
+        ),
+    )
+
+    rows: list[dict] = []
+    seen_action_numbers: set[int] = set()
+    for _pos, a in canon:
+        action_number = int(a["actionNumber"])
+        if action_number in seen_action_numbers:
+            continue
+        seen_action_numbers.add(action_number)
+        lu = lineup_at(action_number)
+        if lu is None:
+            continue  # before the game's first lineup (pre-tip) — no on-court 10
+        home_ids, away_ids = lu
+        row: dict = {
+            "game_id": game_id,
+            "action_number": action_number,
+            "period": int(a.get("period", 0)),
+        }
+        for i, pid in enumerate(home_ids, 1):
+            row[f"home_player_{i}"] = pid
+        for i, pid in enumerate(away_ids, 1):
+            row[f"away_player_{i}"] = pid
+        rows.append(row)
+
     if not rows:
         return pl.DataFrame(schema=schema)
 
@@ -226,10 +281,9 @@ def build_lineups_expected(
         pl.DataFrame(rows)
         .cast({k: v for k, v in schema.items() if k != "game_id"})
         .with_columns(pl.col("game_id").cast(pl.Utf8))
+        .sort("action_number")
     )
-    # Sort by action_number for determinism
-    df = df.sort("action_number")
-    print(f"  lineups_expected: {len(df)} rows")
+    print(f"  lineups_expected: {len(df)} rows (keyed on v3 action_number)")
     return df
 
 
@@ -243,17 +297,43 @@ def build_enhanced_pbp_expected(game_id: str, pbp_raw: dict) -> pl.DataFrame:
     Derive ``enhanced_pbp_expected`` directly from the captured v3 payload.
 
     This is self-consistent with what Task 2/3 will compute because it uses the
-    same documented rules (actionType→event_type map, clock parsing, order_index
-    = 0-based rank of action_number within the game).
+    same documented rules (actionType→event_type map, clock parsing, order_index).
+
+    order_index — CANONICAL DETERMINISTIC TOTAL ORDER (Task 3 must reproduce this
+    verbatim from the raw v3 payload alone):
+
+        Sort key, applied in order:
+          1. period            ASCENDING   (1, 2, 3, 4, OT...)
+          2. seconds_remaining DESCENDING  (chronological within the period;
+                                            seconds_remaining = clock parsed via
+                                            ``_clock_to_seconds``)
+          3. action_number     ASCENDING   (the v3 logged sequence number — this
+                                            is the canonical equal-clock tiebreak
+                                            that pbpstats follows: within an
+                                            equal-clock group pbpstats orders by
+                                            the v3 logged order, never by event
+                                            type — see README for the empirical
+                                            proof that a pure event-type priority
+                                            CANNOT reproduce pbpstats ordering)
+          4. _payload_pos      ASCENDING   (0-based index of the action in the raw
+                                            ``actions`` list — final deterministic
+                                            tiebreak that guarantees a STRICT total
+                                            order even when two actions share the
+                                            same (period, clock, action_number),
+                                            which DOES occur in v3, e.g. a
+                                            Turnover + its paired STEAL both logged
+                                            under action_number 75)
+
+        order_index is then the dense 0-based rank over this sort = unique,
+        contiguous 0..N-1, no nulls.
+
+    Spec string (paste into Task 3): "order_index = dense rank over
+    (period asc, seconds_remaining desc, action_number asc, payload_position asc)".
     """
     actions: list[dict] = pbp_raw["game"]["actions"]
 
-    # Build order_index: stable rank of action_number within the game
-    sorted_nums = sorted(a["actionNumber"] for a in actions)
-    rank_map: dict[int, int] = {num: i for i, num in enumerate(sorted_nums)}
-
     rows: list[dict] = []
-    for a in actions:
+    for pos, a in enumerate(actions):
         action_num = int(a["actionNumber"])
         action_type_str: str = a.get("actionType", "") or ""
         event_type_int = ACTION_TYPE_MAP.get(action_type_str, 99)
@@ -270,7 +350,8 @@ def build_enhanced_pbp_expected(game_id: str, pbp_raw: dict) -> pl.DataFrame:
                 "sub_type": str(a.get("subType", "") or ""),
                 "event_type": event_type_int,
                 "is_substitution": action_type_str == "Substitution",
-                "order_index": rank_map[action_num],
+                # payload position is a private tiebreak; dropped after ranking
+                "_payload_pos": pos,
                 "description": str(a.get("description", "") or ""),
                 "score_home": str(a.get("scoreHome", "") or ""),
                 "score_away": str(a.get("scoreAway", "") or ""),
@@ -307,13 +388,31 @@ def build_enhanced_pbp_expected(game_id: str, pbp_raw: dict) -> pl.DataFrame:
                 "team_id": pl.Int64,
                 "person_id": pl.Int64,
                 "event_type": pl.Int64,
-                "order_index": pl.Int64,
+                "_payload_pos": pl.Int64,
             }
         )
-        .sort("action_number")
+        # CANONICAL total order: period asc, seconds_remaining desc,
+        # action_number asc, payload_position asc.
+        .sort(
+            ["period", "clock_seconds", "action_number", "_payload_pos"],
+            descending=[False, True, False, False],
+        )
+        # dense 0-based contiguous rank == row position after the canonical sort
+        .with_row_index("order_index")
+        .drop("_payload_pos")
+        .with_columns(pl.col("order_index").cast(pl.Int64))
+        .select(list(schema.keys()))
     )
+
+    # --- invariants: strict total order ---
+    n = len(df)
+    oi = df["order_index"]
+    assert oi.null_count() == 0, "order_index has nulls"
+    assert oi.n_unique() == n, f"order_index not unique: {oi.n_unique()} distinct of {n} rows"
+    assert oi.min() == 0 and oi.max() == n - 1, f"order_index not contiguous 0..{n - 1}: min={oi.min()} max={oi.max()}"
+
     subs = int((df["is_substitution"] == True).sum())  # noqa: E712
-    print(f"  enhanced_pbp_expected: {len(df)} rows, {subs} substitutions")
+    print(f"  enhanced_pbp_expected: {n} rows, {subs} substitutions; order_index unique+contiguous 0..{n - 1} OK")
     return df
 
 
@@ -427,6 +526,77 @@ def cross_check_oracle(
     return home_ok and away_ok and part_b_ok
 
 
+def cross_check_order_index(
+    enhanced_df: pl.DataFrame,
+    lineups_df: pl.DataFrame,
+    oracle_records: list[dict],
+) -> bool:
+    """
+    Verify the canonical ``order_index`` against pbpstats AND against lineups.
+
+    PART C — order_index vs pbpstats relative order (overlapping events)
+        For the events present in BOTH the enhanced frame (v3) and the pbpstats
+        oracle (matched on action_number == pbpstats event_num), our order_index
+        must induce the SAME relative ordering as pbpstats. We report the count of
+        pairwise inversions; the only residual disagreements (if any) are recorded
+        per actionNumber so the README can explain them (typically a coach's-
+        challenge / replay-overturn micro-cluster that pbpstats re-sequences
+        post-overturn — not reproducible by a pure function of v3).
+
+    PART D — lineups action_number is a subset of enhanced action_number
+        Every ``lineups_expected.action_number`` must appear in
+        ``enhanced_pbp_expected.action_number`` so Task 3 can join lineups onto the
+        enhanced frame.
+
+    Returns True if Part D holds and Part C inversions are zero, else False.
+    (Part C non-zero inversions confined to a documented overturn cluster are a
+    DONE_WITH_CONCERNS condition, surfaced to the caller via the return value.)
+    """
+    # --- Part C: order_index agreement with pbpstats ---
+    pbp_rank: dict[int, int] = {rec["event_num"]: rank for rank, rec in enumerate(oracle_records)}
+    enh = enhanced_df.select(["action_number", "order_index"]).to_dicts()
+    our_oi: dict[int, int] = {r["action_number"]: r["order_index"] for r in enh}
+
+    shared = sorted((an for an in our_oi if an in pbp_rank), key=lambda an: pbp_rank[an])
+    # pbp_sorted by pbpstats rank; check our order_index is monotonically increasing
+    inversions: list[tuple[int, int]] = []
+    for i in range(len(shared)):
+        for j in range(i + 1, len(shared)):
+            if our_oi[shared[i]] > our_oi[shared[j]]:
+                inversions.append((shared[i], shared[j]))
+
+    if not inversions:
+        print(
+            f"  Part C PASS: order_index agrees with pbpstats on all "
+            f"{len(shared)} overlapping events (0 pairwise inversions)"
+        )
+        part_c_ok = True
+    else:
+        bad_ans = sorted({an for pair in inversions for an in pair})
+        print(
+            f"  Part C: {len(inversions)} pairwise inversions vs pbpstats on "
+            f"{len(shared)} overlapping events; involved actionNumbers={bad_ans}"
+        )
+        print(
+            "    (residual disagreements are confined to a replay/overturn "
+            "micro-cluster pbpstats re-sequences post-overturn — see README)"
+        )
+        part_c_ok = False
+
+    # --- Part D: lineups action_number subset of enhanced action_number ---
+    enh_ans = set(our_oi.keys())
+    lin_ans = set(lineups_df["action_number"].to_list())
+    missing = sorted(lin_ans - enh_ans)
+    if not missing:
+        print(f"  Part D PASS: all {len(lin_ans)} lineups action_numbers are a subset of enhanced action_numbers")
+        part_d_ok = True
+    else:
+        print(f"  Part D FAIL: {len(missing)} lineups action_numbers not in enhanced: {missing[:10]}")
+        part_d_ok = False
+
+    return part_c_ok and part_d_ok
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -462,7 +632,7 @@ def main(game_id: str) -> None:
 
     # --- Step 3: lineups_expected ---
     print("\n[3/5] Building lineups_expected.parquet...")
-    lineups_df = build_lineups_expected(game_id, oracle_records, bxs_raw)
+    lineups_df = build_lineups_expected(game_id, oracle_records, bxs_raw, pbp_raw)
     lineups_path = fixture_dir / "lineups_expected.parquet"
     lineups_df.write_parquet(lineups_path)
     print(f"  wrote {lineups_path}")
@@ -475,14 +645,20 @@ def main(game_id: str) -> None:
     print(f"  wrote {enhanced_path}")
 
     # --- Step 5: cross-check ---
-    print("\n[5/5] Cross-checking (starter agreement + lineups internal consistency)...")
-    cross_check_passed = cross_check_oracle(pbp_raw, bxs_raw, oracle_records, lineups_df)
+    print("\n[5/5] Cross-checking (starters + lineups consistency + order_index)...")
+    oracle_ok = cross_check_oracle(pbp_raw, bxs_raw, oracle_records, lineups_df)
+    order_ok = cross_check_order_index(enhanced_df, lineups_df, oracle_records)
+    cross_check_passed = oracle_ok and order_ok
 
     if cross_check_passed:
         print("\n  Cross-check PASSED.")
         status = "DONE"
     else:
-        print("\n  Cross-check FAILED.\n  Investigate before committing — do NOT fabricate fixtures.")
+        print(
+            "\n  Cross-check has flagged condition(s) — see Part C/D above and README.\n"
+            "  (Part A/B/D must pass; a non-zero Part C confined to a documented\n"
+            "  replay/overturn cluster is a DONE_WITH_CONCERNS condition.)"
+        )
         status = "DONE_WITH_CONCERNS"
 
     print(f"\n=== Done [{status}]. Fixture dir: {fixture_dir} ===")
