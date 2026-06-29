@@ -14,8 +14,9 @@ def test_duplicate_join_keys_is_error():
 
 
 def test_mean_shift_vs_prior_release_is_warn():
-    prior = pl.DataFrame({"game_id": [1, 2], "epa": [0.0, 0.0]})
-    frame = pl.DataFrame({"game_id": [3, 4], "epa": [5.0, 5.0]})  # large shift
+    # game_id mean matches current (no drift); epa drifts 1.0 -> 5.0 (rel 4.0 >> 0.10)
+    prior = pl.DataFrame({"game_id": [3, 4], "epa": [1.0, 1.0]})
+    frame = pl.DataFrame({"game_id": [3, 4], "epa": [5.0, 5.0]})
     ctx = CheckContext(
         domain="nfl",
         dataset="nfl_pbp",
@@ -25,4 +26,7 @@ def test_mean_shift_vs_prior_release_is_warn():
         thresholds={"mean_shift_warn": 0.10},
     )
     findings = sweep.run("nfl_pbp", frame, ctx)
-    assert any(f.severity is Severity.WARN and "shifted" in f.message and f.needs_judgment for f in findings)
+    assert any(
+        f.severity is Severity.WARN and f.needs_judgment and f.locator.get("column") == "epa" and "shifted" in f.message
+        for f in findings
+    )
