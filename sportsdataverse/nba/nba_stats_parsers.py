@@ -1,9 +1,12 @@
 """Parsers for the stats.nba.com / stats.wnba.com resultSets envelope.
 
-One generic parser handles every endpoint because the response shape is uniform:
-``{resultSets: [{name, headers, rowSet}]}`` (a few endpoints use singular ``resultSet``).
-Honors the universal parser contract: polars by default, pandas via flag, empty/malformed
-returns a zero-row frame, columns snake_cased via dl_utils.underscore.
+One generic parser handles every endpoint. Most responses use the uniform
+``{resultSets: [{name, headers, rowSet}]}`` envelope (a few use singular ``resultSet``);
+the parser also normalizes the family's two non-uniform shapes — the shot-location
+endpoints' single-dict ``resultSets`` with 2-level grouped headers (flattened to
+composite columns like ``less_than_5_ft_fgm``) and ``scoreboardv3``'s ``scoreboard.games``
+feed (one row per game). Honors the universal parser contract: polars by default, pandas
+via flag, empty/malformed returns a zero-row frame, columns snake_cased via dl_utils.underscore.
 """
 
 from __future__ import annotations

@@ -263,7 +263,10 @@ line-ending = "lf"
 
 
 [tool.mypy]
-python_version = "3.10"
+# 3.12 (not the 3.9 floor): modern dep stubs (numpy 2.3+, which itself requires py3.11+)
+# use PEP 695 `type` aliases that mypy rejects under an older target. The curated modules
+# below stay 3.9-compatible regardless; this only sets the type-checker's target syntax.
+python_version = "3.12"
 # Strict-typing ratchet via ``files`` (NOT ``[[tool.mypy.overrides]]``): the gate
 # checks ONLY the curated modules listed below, in isolation. This is deliberate
 # and load-bearing -- ``files`` scopes *which* modules are checked, whereas
