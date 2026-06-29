@@ -4,11 +4,11 @@ import argparse
 import json
 import sys
 
-from tools.validation.checks import extraction, numeric_parity, schema_contract, sweep
+from tools.validation.checks import boundary_leakage, extraction, numeric_parity, schema_contract, sweep
 from tools.validation.findings import Finding
 from tools.validation.registry import resolve
 
-_CHECKS = (schema_contract, extraction, numeric_parity, sweep)
+_CHECKS = (schema_contract, extraction, numeric_parity, sweep, boundary_leakage)
 
 
 def run_dataset(dataset: str, release: str | None = None) -> list[dict]:
