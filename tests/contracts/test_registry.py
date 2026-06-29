@@ -41,3 +41,15 @@ def test_lint_target_is_frozen_and_registry_exists():
     t = LintTarget(name="x", path="${ROOT}/src", language="python")
     assert t.language == "python"
     assert isinstance(LINT_TARGETS, dict)
+
+
+def test_lint_targets_registered():
+    from tools.validation.registry import LINT_TARGETS
+
+    assert "nfl_native_pbp" in LINT_TARGETS
+    assert "sdv_nfl_ep_wp" in LINT_TARGETS
+    assert LINT_TARGETS["nfl_native_pbp"].language == "python"
+    assert LINT_TARGETS["sdv_nfl_ep_wp"].language == "python"
+    # sdv-py's own source is repo-relative; nfl-data is env-rooted
+    assert "${SDV_VALIDATION_NFL_DATA_ROOT}" in LINT_TARGETS["nfl_native_pbp"].path
+    assert LINT_TARGETS["sdv_nfl_ep_wp"].path == "sportsdataverse/nfl/ep_wp.py"

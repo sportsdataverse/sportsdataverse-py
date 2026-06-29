@@ -47,6 +47,17 @@ class LintTarget:
 
 LINT_TARGETS: dict[str, LintTarget] = {}  # registered incrementally (follow-up)
 
+LINT_TARGETS["nfl_native_pbp"] = LintTarget(
+    name="nfl_native_pbp",
+    path="${SDV_VALIDATION_NFL_DATA_ROOT}/python/native_pbp",
+    language="python",
+)
+LINT_TARGETS["sdv_nfl_ep_wp"] = LintTarget(
+    name="sdv_nfl_ep_wp",
+    path="sportsdataverse/nfl/ep_wp.py",
+    language="python",
+)
+
 
 def load_thresholds(domain: str) -> dict[str, float]:
     """Load merged validation thresholds for a domain.
