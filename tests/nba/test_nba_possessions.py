@@ -22,6 +22,7 @@ from sportsdataverse.nba.nba_lineups import (
 )
 from sportsdataverse.nba.nba_possessions import (
     POSSESSIONS_SCHEMA,
+    _is_last_ft,
     attach_possession_lineups,
     build_possessions,
 )
@@ -77,6 +78,31 @@ def _oncourt(g: str) -> tuple[pl.DataFrame, pl.DataFrame]:
     rot = parse_rotation_resultsets(json.loads((FXROOT / g / "gamerotation.json").read_text()))
     home, away = boxscore_home_away(_box(g))
     return players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away), enh
+
+
+# ---------------------------------------------------------------------------
+# _is_last_ft unit tests
+# ---------------------------------------------------------------------------
+
+
+def test_is_last_ft_nba_behavior() -> None:
+    """NBA/WNBA 'N of N' behavior preserved; G-League '{N}PT' closes its trip."""
+    # NBA/WNBA: last FT of sequence → True
+    assert _is_last_ft("Free Throw 2 of 2") is True
+    assert _is_last_ft("Free Throw 1 of 1") is True
+    assert _is_last_ft("Free Throw Flagrant 3 of 3") is True
+
+    # NBA/WNBA: not last FT of sequence → False
+    assert _is_last_ft("Free Throw 1 of 2") is False
+    assert _is_last_ft("Free Throw 2 of 3") is False
+
+    # Technical FT: never closes a possession trip (unchanged)
+    assert _is_last_ft("Free Throw Technical") is False
+
+    # G-League single-FT format: standalone trip → always last → True
+    assert _is_last_ft("Free Throw 1PT") is True
+    assert _is_last_ft("Free Throw 2PT") is True
+    assert _is_last_ft("Free Throw 3PT") is True
 
 
 # ---------------------------------------------------------------------------

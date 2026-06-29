@@ -44,16 +44,30 @@ POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
 
 _FT_NofN_RE = re.compile(r"(\d+)\s+of\s+(\d+)")
 
+# G-League single-FT format: one free throw worth N points ("Free Throw 1PT",
+# "Free Throw 2PT", "Free Throw 3PT").  Each event is a standalone FT trip and
+# is therefore always the *last* (and only) FT of that trip.
+_FT_GL_PT_RE = re.compile(r"Free Throw \d+\s*PT\b")
+
 
 def _is_last_ft(sub_type: str) -> bool:
     """Return True if *sub_type* represents the final free throw of a trip.
 
-    Matches patterns like ``'Free Throw 2 of 2'``, ``'Free Throw 1 of 1'``,
-    ``'Free Throw 3 of 3'``, ``'Free Throw Flagrant 3 of 3'`` — any
-    ``'N of N'`` where both numbers are equal.  ``'Free Throw Technical'``
-    does NOT match (no ``N of N`` substring).
+    NBA/WNBA: matches ``'N of N'`` patterns where both numbers are equal —
+    ``'Free Throw 2 of 2'``, ``'Free Throw 1 of 1'``, ``'Free Throw Flagrant
+    3 of 3'``, etc.  ``'Free Throw Technical'`` does NOT match (no ``N of N``
+    substring).
+
+    G-League: also matches ``'Free Throw {N}PT'`` (``'Free Throw 1PT'``,
+    ``'Free Throw 2PT'``, ``'Free Throw 3PT'``) — the G-League single-FT rule
+    where one free throw is worth the value of the fouled shot.  These are
+    standalone trips, so the event is always the last (and only) FT of its
+    trip.
     """
-    m = _FT_NofN_RE.search(sub_type or "")
+    s = sub_type or ""
+    if _FT_GL_PT_RE.search(s):
+        return True
+    m = _FT_NofN_RE.search(s)
     return bool(m and m.group(1) == m.group(2))
 
 
