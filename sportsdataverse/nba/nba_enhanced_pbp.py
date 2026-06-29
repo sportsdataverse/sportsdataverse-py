@@ -2,12 +2,88 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Union
 
+import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.nba import nba_pbp_constants as C
+
+
+# ---------------------------------------------------------------------------
+# Network fetchers (injectable for offline tests)
+# ---------------------------------------------------------------------------
+
+
+def _fetch_pbp(game_id: str, league_id: str = "00") -> dict:
+    """Fetch raw play-by-play v3 payload from stats.nba.com.
+
+    Args:
+        game_id: Ten-character NBA game identifier (e.g. ``"0022200001"``).
+        league_id: League identifier (``"00"`` = NBA, ``"20"`` = G-League).
+            Note: ``nba_stats_playbyplayv3`` does not expose ``league_id``
+            directly; the parameter is accepted for API symmetry.
+
+    Returns:
+        Raw ``dict`` from ``nba_stats_playbyplayv3``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_playbyplayv3
+
+    return nba_stats_playbyplayv3(game_id=game_id, return_parsed=False)
+
+
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
+
+def nba_enhanced_pbp(
+    game_id: str,
+    league_id: str = "00",
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Fetch and parse enhanced v3 play-by-play for a single game.
+
+    Combines a live network call to ``nba_stats_playbyplayv3`` with
+    :func:`enhanced_pbp_from_payload` to return a fully normalized
+    play-by-play DataFrame.
+
+    Args:
+        game_id: Ten-character NBA game identifier (e.g. ``"0022200001"``).
+        league_id: League identifier (default ``"00"`` for NBA).
+        return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
+            instead of :class:`polars.DataFrame`.
+
+    Returns:
+        Polars (or pandas) DataFrame with schema ``ENHANCED_PBP_SCHEMA``.
+        Empty or malformed payloads return a zero-row frame (never raises).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_enhanced_pbp import nba_enhanced_pbp
+            df = nba_enhanced_pbp("0022200001")
+            print(df.shape, df.schema["game_id"])
+
+        Pandas output::
+
+            df_pd = nba_enhanced_pbp("0022200001", return_as_pandas=True)
+            print(type(df_pd))
+
+        See Also:
+            * `nba_pbp_constants`_ -- schemas and helper functions
+            * `nba_api`_ -- reference Python client for stats.nba.com
+
+        .. _nba_pbp_constants: sportsdataverse.nba.nba_pbp_constants
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    payload = _fetch_pbp(game_id, league_id)
+    df = enhanced_pbp_from_payload(payload, league_id=league_id)
+    if return_as_pandas:
+        return df.to_pandas()
+    return df
 
 
 def enhanced_pbp_from_payload(payload: dict[str, Any], *, league_id: str = "00") -> pl.DataFrame:

@@ -315,3 +315,70 @@ def test_on_court_rotation_matches_fixture(game_id: str) -> None:
         f"[{game_id}] interior non-sub rows matched: {interior_exp.height} rows, "
         f"{total} mismatches (on-boundary rows assert 5+5 consistency only)"
     )
+
+
+# ---------------------------------------------------------------------------
+# Offline tests for the public nba_on_court() fetcher (Task 6)
+# ---------------------------------------------------------------------------
+
+
+def test_nba_on_court_offline(monkeypatch) -> None:
+    """nba_on_court() with monkeypatched fetchers returns a consistent frame.
+
+    Monkeypatches the three module-level _fetch_* helpers so no network call
+    is made.  Asserts:
+    1. The returned frame is non-empty with home_player_1..5 columns.
+    2. The result equals players_on_court_from_rotation() run on the same fixtures
+       (internal consistency).
+    """
+    import sportsdataverse.nba.nba_lineups as mod
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+    from sportsdataverse.nba.nba_lineups import (
+        boxscore_home_away,
+        nba_on_court,
+        parse_rotation_resultsets,
+        players_on_court_from_rotation,
+    )
+
+    pbp_payload = _payload()
+    rot_payload = _rotation_raw(_GAME1)
+    box_payload = _box()
+
+    monkeypatch.setattr(mod, "_fetch_pbp", lambda game_id, league_id="00": pbp_payload)
+    monkeypatch.setattr(mod, "_fetch_rotation", lambda game_id, league_id="00": rot_payload)
+    monkeypatch.setattr(mod, "_fetch_box", lambda game_id, league_id="00": box_payload)
+
+    df = nba_on_court(_GAME1)
+
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+
+    hcols = [f"home_player_{i}" for i in range(1, 6)]
+    acols = [f"away_player_{i}" for i in range(1, 6)]
+    for col in hcols + acols:
+        assert col in df.columns, f"missing column {col}"
+
+    # Internal consistency: must equal the pure-function path on the same fixtures.
+    enh = enhanced_pbp_from_payload(pbp_payload)
+    rot = parse_rotation_resultsets(rot_payload)
+    home, away = boxscore_home_away(box_payload)
+    expected = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+
+    assert df.equals(expected), "nba_on_court() result must equal players_on_court_from_rotation() on same fixtures"
+
+
+def test_nba_on_court_return_as_pandas(monkeypatch) -> None:
+    """nba_on_court(return_as_pandas=True) returns a pandas DataFrame."""
+    import pandas as pd
+
+    import sportsdataverse.nba.nba_lineups as mod
+    from sportsdataverse.nba.nba_lineups import nba_on_court
+
+    monkeypatch.setattr(mod, "_fetch_pbp", lambda game_id, league_id="00": _payload())
+    monkeypatch.setattr(mod, "_fetch_rotation", lambda game_id, league_id="00": _rotation_raw(_GAME1))
+    monkeypatch.setattr(mod, "_fetch_box", lambda game_id, league_id="00": _box())
+
+    df_pd = nba_on_court(_GAME1, return_as_pandas=True)
+    assert isinstance(df_pd, pd.DataFrame)
+    assert len(df_pd) > 0
+    assert "home_player_1" in df_pd.columns

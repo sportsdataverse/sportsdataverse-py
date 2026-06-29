@@ -52,3 +52,44 @@ def test_event_flags_and_order_match_fixture():
     assert got.equals(e)
     assert df.filter(pl.col("event_type") == "substitution").height == 44
     assert df["order_index"].n_unique() == df.height
+
+
+# ---------------------------------------------------------------------------
+# Offline tests for the public nba_enhanced_pbp() fetcher (Task 6)
+# ---------------------------------------------------------------------------
+
+
+def test_nba_enhanced_pbp_offline(monkeypatch) -> None:
+    """nba_enhanced_pbp() with monkeypatched _fetch_pbp returns the same frame as the pure function."""
+    import sportsdataverse.nba.nba_enhanced_pbp as mod
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload, nba_enhanced_pbp
+
+    fixture_payload = _payload()
+    monkeypatch.setattr(mod, "_fetch_pbp", lambda game_id, league_id="00": fixture_payload)
+
+    df = nba_enhanced_pbp("0022200001")
+    expected = enhanced_pbp_from_payload(fixture_payload)
+
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+    assert df.equals(expected), "nba_enhanced_pbp() must return the same frame as enhanced_pbp_from_payload()"
+    # home_player_* columns are not part of enhanced_pbp — verify the key schema fields
+    assert "home_player_1" not in df.columns
+    assert df.schema["game_id"] == pl.Utf8
+    assert df.schema["person_id"] == pl.Int64
+
+
+def test_nba_enhanced_pbp_return_as_pandas(monkeypatch) -> None:
+    """nba_enhanced_pbp(return_as_pandas=True) returns a pandas DataFrame."""
+    import pandas as pd
+
+    import sportsdataverse.nba.nba_enhanced_pbp as mod
+    from sportsdataverse.nba.nba_enhanced_pbp import nba_enhanced_pbp
+
+    fixture_payload = _payload()
+    monkeypatch.setattr(mod, "_fetch_pbp", lambda game_id, league_id="00": fixture_payload)
+
+    df_pd = nba_enhanced_pbp("0022200001", return_as_pandas=True)
+    assert isinstance(df_pd, pd.DataFrame)
+    assert len(df_pd) > 0
+    assert "game_id" in df_pd.columns

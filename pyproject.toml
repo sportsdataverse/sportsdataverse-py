@@ -303,6 +303,9 @@ files = [
     "sportsdataverse/mlb/mlb_statcast_extra.py",
     "sportsdataverse/nba/nba_stats_runtime.py",
     "sportsdataverse/nba/nba_stats_parsers.py",
+    "sportsdataverse/nba/nba_pbp_constants.py",
+    "sportsdataverse/nba/nba_enhanced_pbp.py",
+    "sportsdataverse/nba/nba_lineups.py",
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
 ]

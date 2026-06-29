@@ -36,20 +36,97 @@ using a boundary-interval approach (equivalent to R's ``findInterval``):
 2. For each interval, the active players are those whose stint spans the
    midpoint (``in_time <= mid`` and ``out_time > mid``).
 3. A final "game-end" row covers ``t == max_boundary``.
-4. ``np.searchsorted(boundaries, times, side='right') - 1`` maps each PBP
-   elapsed time to its interval index (clamped to ``[0, n_intervals]``).
+4. For each PBP event, the interval index is determined by boundary
+   disambiguation (see Boundary disambiguation below).
+
+Boundary disambiguation
+-----------------------
+When a PBP event's elapsed time exactly coincides with a rotation boundary,
+we need to decide whether the event sees the lineup *before* or *after* the
+rotation change.  Two heuristics resolve this:
+
+- **Period-start**: an event with ``seconds_remaining >= 720`` (regulation)
+  or ``>= 300`` (OT) is at the very start of a period — it sees the new
+  lineup set after the period-transition substitutions.  POST-boundary
+  (``side='right'``) is correct here.
+
+- **Team-separated substitution ordering**: for each team, we track the
+  minimum ``action_number`` of any substitution recorded at each elapsed
+  time in the PBP.  If a same-team substitution at time T has a lower
+  ``action_number`` than the current event, the rotation boundary at T was
+  created by that substitution *before* this event — POST-sub (``side='right'``).
+  If no same-team sub preceded this event at T, the event sees the
+  PRE-boundary lineup (``side='left'``).
+
+  Home and away sub maps are kept *separate* so that a substitution by the
+  away team at time T does not influence the boundary resolution for a home
+  team event at the same T.
 """
 
 from __future__ import annotations
 
 import logging
+from typing import Union
 
 import numpy as np
+import pandas as pd
 import polars as pl
 
 from sportsdataverse.nba.nba_pbp_constants import LINEUPS_SCHEMA
 
 logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Network fetchers (module-level so tests can monkeypatch them)
+# ---------------------------------------------------------------------------
+
+
+def _fetch_pbp(game_id: str, league_id: str = "00") -> dict:
+    """Fetch raw play-by-play v3 payload from stats.nba.com.
+
+    Args:
+        game_id: Ten-character NBA game identifier.
+        league_id: League identifier (accepted for API symmetry; not forwarded
+            to ``nba_stats_playbyplayv3`` which does not expose it).
+
+    Returns:
+        Raw ``dict`` from ``nba_stats_playbyplayv3``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_playbyplayv3
+
+    return nba_stats_playbyplayv3(game_id=game_id, return_parsed=False)
+
+
+def _fetch_rotation(game_id: str, league_id: str = "00") -> dict:
+    """Fetch raw gamerotation payload from stats.nba.com.
+
+    Args:
+        game_id: Ten-character NBA game identifier.
+        league_id: League identifier (default ``"00"`` for NBA).
+
+    Returns:
+        Raw ``dict`` from ``nba_stats_gamerotation``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_gamerotation
+
+    return nba_stats_gamerotation(game_id=game_id, league_id=league_id, return_parsed=False)
+
+
+def _fetch_box(game_id: str, league_id: str = "00") -> dict:
+    """Fetch raw boxscore traditional v3 payload from stats.nba.com.
+
+    Args:
+        game_id: Ten-character NBA game identifier.
+        league_id: League identifier (accepted for API symmetry; not forwarded
+            to ``nba_stats_boxscoretraditionalv3`` which does not expose it).
+
+    Returns:
+        Raw ``dict`` from ``nba_stats_boxscoretraditionalv3``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3
+
+    return nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False)
 
 
 # ---------------------------------------------------------------------------
@@ -62,29 +139,87 @@ def _bt(box: dict) -> dict:
     return (box or {}).get("boxScoreTraditional") or {}
 
 
-def _resolve_team_oncourt(stints: list[dict], times: list[float]) -> list[list[int | None]]:
+def _elapsed_time(period: int, seconds_remaining: float) -> float:
+    """Convert period + seconds_remaining to tenths-of-second elapsed from game start.
+
+    Mirrors the formula used by ``nba_gamerotation`` for ``IN_TIME_REAL`` and
+    ``OUT_TIME_REAL``:
+
+    - Periods 1-4 (12-minute quarters): ``((period-1)*720 + (720-sr))*10``
+    - OT periods (5+, 5-minute periods): ``(2880 + (period-5)*300 + (300-sr))*10``
+    """
+    if period <= 4:
+        return ((period - 1) * 720.0 + (720.0 - seconds_remaining)) * 10.0
+    return (2880.0 + (period - 5) * 300.0 + (300.0 - seconds_remaining)) * 10.0
+
+
+def _is_period_start(period: int, seconds_remaining: float) -> bool:
+    """Return True if this clock value is at the very start of *period*.
+
+    For regulation periods (1-4) the period is 720 seconds; for OT (5+) it is
+    300 seconds.  An event whose ``seconds_remaining`` equals or exceeds the
+    period length is at the start boundary and should see the POST-rotation lineup.
+    """
+    return seconds_remaining >= (720.0 if period <= 4 else 300.0)
+
+
+def _build_sub_map(
+    pbp_rows: list[dict],
+    pbp_times: list[float],
+    team_id: int,
+) -> dict[float, int]:
+    """Return a map of ``elapsed -> min_action_number`` for *team_id* substitutions.
+
+    Only rows where ``is_substitution is True`` and ``team_id`` matches are
+    considered.  The minimum ``action_number`` across all substitutions at a
+    given elapsed time gives the earliest boundary-creating event for that team
+    at that time.
+    """
+    sub_map: dict[float, int] = {}
+    for row, elapsed in zip(pbp_rows, pbp_times):
+        if row.get("is_substitution") and row.get("team_id") == team_id:
+            an = int(row["action_number"])
+            if elapsed not in sub_map or an < sub_map[elapsed]:
+                sub_map[elapsed] = an
+    return sub_map
+
+
+def _resolve_team_oncourt(
+    stints: list[dict],
+    pbp_rows: list[dict],
+    pbp_times: list[float],
+    pbp_period_start: list[bool],
+    sub_map: dict[float, int],
+) -> list[list[int | None]]:
     """Map PBP elapsed times to sorted 5-player lineups using rotation stints.
 
-    Port of hoopR's ``.resolve_team_oncourt()`` (nba_stats_pbp.R).
+    Port of hoopR's ``.resolve_team_oncourt()`` (nba_stats_pbp.R), extended
+    with period-start and team-separated substitution-ordering disambiguation
+    for events that land exactly on rotation boundaries.
 
     Args:
         stints: List of stint dicts with keys ``PERSON_ID``, ``IN_TIME_REAL``,
             ``OUT_TIME_REAL`` (all numeric, in tenths-of-second elapsed from
             game start).
-        times: Per-row elapsed times for the PBP frame, in the same units.
+        pbp_rows: Per-row dicts from the PBP frame (used for ``action_number``).
+        pbp_times: Per-row elapsed times in tenths-of-second (same units as
+            ``IN_TIME_REAL``/``OUT_TIME_REAL``).
+        pbp_period_start: Per-row boolean — True if the event is at the very
+            start of its period (``seconds_remaining >= period_length``).
+        sub_map: ``{elapsed: min_action_number}`` for substitutions belonging
+            to *this* team only (see :func:`_build_sub_map`).
 
     Returns:
-        List of length ``len(times)``, each element a list of up to 5 ``int``
-        player IDs (sorted ascending) padded with ``None`` to length 5.
+        List of length ``len(pbp_times)``, each element a list of up to 5
+        ``int`` player IDs (sorted ascending) padded with ``None`` to length 5.
     """
-    if not stints or not times:
+    if not stints or not pbp_times:
         lineup: list[int | None] = [None] * 5
-        return [lineup] * len(times)
+        return [lineup] * len(pbp_times)
 
     in_times = np.array([float(s["IN_TIME_REAL"]) for s in stints])
     out_times = np.array([float(s["OUT_TIME_REAL"]) for s in stints])
     person_ids = np.array([int(s["PERSON_ID"]) for s in stints])
-    times_arr = np.array(times)
 
     boundaries = np.unique(np.concatenate([in_times, out_times]))
     n_bounds = len(boundaries)
@@ -93,7 +228,7 @@ def _resolve_team_oncourt(stints: list[dict], times: list[float]) -> list[list[i
         # Edge case: all stints have the same in/out time.
         active = list(dict.fromkeys(person_ids.tolist()))[:5]
         lineup_edge: list[int | None] = (active + [None] * 5)[:5]
-        return [lineup_edge] * len(times)
+        return [lineup_edge] * len(pbp_times)
 
     n_intervals = n_bounds - 1
     midpoints = (boundaries[:-1] + boundaries[1:]) / 2.0
@@ -122,12 +257,36 @@ def _resolve_team_oncourt(stints: list[dict], times: list[float]) -> list[list[i
     final_lineup: list[int | None] = active_end_sorted + [None] * (5 - len(active_end_sorted))
     all_lineups.append(final_lineup)
 
-    # findInterval equivalent: searchsorted(boundaries, t, side='right') - 1
-    # then clamp to [0, n_intervals] (all_lineups has n_intervals+1 rows).
-    idx = np.searchsorted(boundaries, times_arr, side="right") - 1
-    idx = np.clip(idx, 0, n_intervals).tolist()
+    # Build a fast boundary-membership set for O(1) lookup.
+    boundary_set: set[float] = set(boundaries.tolist())
 
-    return [all_lineups[i] for i in idx]
+    result: list[list[int | None]] = []
+    for row, elapsed, is_ps in zip(pbp_rows, pbp_times, pbp_period_start):
+        an = int(row["action_number"])
+
+        if elapsed not in boundary_set:
+            # Interior of an interval — standard right-biased searchsorted.
+            idx = int(np.searchsorted(boundaries, elapsed, side="right") - 1)
+        elif is_ps:
+            # Exactly on a boundary AND this is the period-start event.
+            # The rotation boundary here was created by the period transition,
+            # so this event sees the POST-boundary (new-period) lineup.
+            idx = int(np.searchsorted(boundaries, elapsed, side="right") - 1)
+        else:
+            # Exactly on a boundary; use same-team substitution ordering to
+            # decide whether this event sees the pre- or post-rotation lineup.
+            min_sub_an = sub_map.get(elapsed)
+            if min_sub_an is not None and min_sub_an < an:
+                # A same-team sub at this time preceded this event → POST-sub.
+                idx = int(np.searchsorted(boundaries, elapsed, side="right") - 1)
+            else:
+                # No same-team sub preceded this event → PRE-boundary lineup.
+                idx = int(np.searchsorted(boundaries, elapsed, side="left") - 1)
+
+        idx = max(0, min(idx, n_intervals))
+        result.append(all_lineups[idx])
+
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -219,8 +378,8 @@ def players_on_court_from_rotation(
     Args:
         enhanced_pbp: Output of
             :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
-            Must contain ``game_id``, ``action_number``, ``period``, and
-            ``seconds_remaining`` (clock remaining in the current period, seconds).
+            Must contain ``game_id``, ``action_number``, ``period``,
+            ``seconds_remaining``, ``is_substitution``, and ``team_id``.
         rotation: Parsed rotation dict, typically from
             :func:`parse_rotation_resultsets`.  Each team's list contains stint
             dicts with numeric ``PERSON_ID``, ``IN_TIME_REAL``, ``OUT_TIME_REAL``.
@@ -271,24 +430,27 @@ def players_on_court_from_rotation(
         logger.warning("players_on_court_from_rotation: rotation dict has no stints — returning empty frame")
         return pl.DataFrame(schema=LINEUPS_SCHEMA)
 
-    # Compute elapsed time (tenths-of-second from game start) for each PBP row.
-    # periods 1-4: ((period - 1) * 720 + (720 - seconds_remaining)) * 10
-    # OT (periods 5+): (2880 + (period - 5) * 300 + (300 - seconds_remaining)) * 10
-    pbp_rows = enhanced_pbp.select(["game_id", "action_number", "period", "seconds_remaining"]).to_dicts()
+    # Fetch per-row elapsed times, period-start flags, and team-separated sub maps.
+    need_cols = ["game_id", "action_number", "period", "seconds_remaining", "is_substitution", "team_id"]
+    pbp_rows = enhanced_pbp.select(need_cols).to_dicts()
 
     pbp_times: list[float] = []
+    pbp_period_start: list[bool] = []
     for r in pbp_rows:
         period = int(r["period"])
         sr = float(r["seconds_remaining"] or 0.0)
-        if period <= 4:
-            elapsed = ((period - 1) * 720.0 + (720.0 - sr)) * 10.0
-        else:
-            elapsed = (2880.0 + (period - 5) * 300.0 + (300.0 - sr)) * 10.0
-        pbp_times.append(elapsed)
+        pbp_times.append(_elapsed_time(period, sr))
+        pbp_period_start.append(_is_period_start(period, sr))
 
-    # Resolve lineups for each team.
-    home_lineups = _resolve_team_oncourt(home_stints, pbp_times)
-    away_lineups = _resolve_team_oncourt(away_stints, pbp_times)
+    # Build per-team substitution ordering maps (elapsed → min action_number).
+    # Kept separate so that an away sub at time T does not affect home boundary
+    # resolution at the same T.
+    home_sub_map = _build_sub_map(pbp_rows, pbp_times, home_team_id)
+    away_sub_map = _build_sub_map(pbp_rows, pbp_times, away_team_id)
+
+    # Resolve lineups for each team independently.
+    home_lineups = _resolve_team_oncourt(home_stints, pbp_rows, pbp_times, pbp_period_start, home_sub_map)
+    away_lineups = _resolve_team_oncourt(away_stints, pbp_rows, pbp_times, pbp_period_start, away_sub_map)
 
     out_rows: list[dict] = []
     for i, r in enumerate(pbp_rows):
@@ -368,3 +530,66 @@ def players_on_court(
         home_team_id=home_team_id,
         away_team_id=away_team_id,
     )
+
+
+def nba_on_court(
+    game_id: str,
+    league_id: str = "00",
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Fetch and reconstruct the 5-on-5 on-court lineup for every play-by-play action.
+
+    Makes three live network calls (play-by-play v3, game rotation, boxscore
+    traditional v3), then chains
+    :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`,
+    :func:`parse_rotation_resultsets`, :func:`boxscore_home_away`, and
+    :func:`players_on_court_from_rotation` to build a tidy lineup frame.
+
+    The three module-level fetchers (:func:`_fetch_pbp`, :func:`_fetch_rotation`,
+    :func:`_fetch_box`) are monkeypatchable for offline tests.
+
+    Args:
+        game_id: Ten-character NBA game identifier (e.g. ``"0022200001"``).
+        league_id: League identifier (default ``"00"`` for NBA).
+        return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
+            instead of :class:`polars.DataFrame`.
+
+    Returns:
+        Polars (or pandas) DataFrame with schema ``LINEUPS_SCHEMA``, one row
+        per play-by-play action.  Never raises — empty/malformed payloads
+        return a zero-row frame.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_lineups import nba_on_court
+            df = nba_on_court("0022200001")
+            print(df.shape)
+
+        Pandas output::
+
+            df_pd = nba_on_court("0022200001", return_as_pandas=True)
+            print(type(df_pd))
+
+        See Also:
+            * `hoopR`_ -- R package providing equivalent lineup utilities
+            * `nba_api`_ -- reference Python client for stats.nba.com
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+
+    raw_pbp = _fetch_pbp(game_id, league_id)
+    raw_rot = _fetch_rotation(game_id, league_id)
+    raw_box = _fetch_box(game_id, league_id)
+
+    enh = enhanced_pbp_from_payload(raw_pbp, league_id=league_id)
+    rot = parse_rotation_resultsets(raw_rot)
+    home, away = boxscore_home_away(raw_box)
+
+    df = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+    if return_as_pandas:
+        return df.to_pandas()
+    return df
