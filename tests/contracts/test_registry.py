@@ -64,3 +64,6 @@ def test_nfl_model_pbp_registered_with_oracle():
     assert spec.oracle_domain == "nfl"
     assert "${SDV_VALIDATION_NFL_DATA_ROOT}" in spec.parquet_glob
     assert ORACLES["nfl"]._source_glob is not None  # oracle now wired
+    oracle = ORACLES["nfl"]
+    assert set(oracle.column_map) == {"ep", "epa", "wp", "vegas_wp", "cp"}
+    assert oracle.thresholds["ep"] == 0.99

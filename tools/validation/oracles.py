@@ -42,12 +42,11 @@ class NflfastrOracle:
             return None
         want = on + [c for c in self.column_map.values() if c in ref_cols and c not in on]
         ref = lazy.select(want).collect()
-        # R serialises integer columns as Float64 in parquet; cast join keys to
-        # match the producer's Int64 dtype so the join succeeds without coercion.
+        # Align reference join-key dtypes to the producer's (R writes ints as Float64;
+        # this also coerces any other width mismatch — a non-coercible type raises
+        # loudly instead of yielding a silent near-empty join).
         key_schema = keys.schema
-        casts = [
-            pl.col(c).cast(key_schema[c]) for c in on if ref.schema[c] != key_schema[c] and ref.schema[c] == pl.Float64
-        ]
+        casts = [pl.col(c).cast(key_schema[c]) for c in on if ref.schema[c] != key_schema[c]]
         if casts:
             ref = ref.with_columns(casts)
         return ref.join(keys, on=on, how="inner")
