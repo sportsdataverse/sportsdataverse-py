@@ -3,7 +3,7 @@
 Monkeypatches the three module-level _fetch_* helpers so no network calls are
 made.  All assertions use the real columns emitted by the shared nba/ cores.
 
-Independent-oracle validation gates (Tasks 2)
+Independent-oracle validation gates (Task 2)
 ---------------------------------------------
 Three oracle gates prove WNBA reconstruction correctness using the same
 external sources as the NBA keystone — no fixture is regenerated from the
@@ -146,7 +146,7 @@ def _raw_rotation(game_id: str) -> dict:
 
 
 @pytest.mark.parametrize("game_id", GAMES)
-def test_wnba_minutes_reconciliation(monkeypatch: pytest.MonkeyPatch, game_id: str) -> None:
+def test_wnba_minutes_reconciliation(game_id: str) -> None:
     """Rotation stint minutes must match the independent boxscore minutes oracle (WNBA).
 
     Summing ``(OUT_TIME_REAL - IN_TIME_REAL) / 10`` per player from the WNBA
@@ -157,6 +157,7 @@ def test_wnba_minutes_reconciliation(monkeypatch: pytest.MonkeyPatch, game_id: s
     Uses the same tolerance and method as the NBA keystone
     ``test_minutes_reconciliation`` in ``tests/nba/test_nba_lineups.py``.
     """
+    # No monkeypatch needed — reads the fixture files directly via _raw_rotation/_raw_box.
     from sportsdataverse.nba.nba_lineups import parse_rotation_resultsets
 
     rotation = parse_rotation_resultsets(_raw_rotation(game_id))
@@ -181,6 +182,7 @@ def test_wnba_minutes_reconciliation(monkeypatch: pytest.MonkeyPatch, game_id: s
     failures: list[str] = []
     max_err = 0.0
     for pid in all_pids:
+        # DNP players (box_sec[pid]=0; rotation_sec miss → .get(pid, 0.0)) give diff=0 and pass — correct.
         diff = abs(rotation_sec.get(pid, 0.0) - box_sec.get(pid, 0.0))
         max_err = max(max_err, diff)
         if diff > _MINUTES_TOLERANCE_SEC:
