@@ -43,7 +43,9 @@ def lint_target(name: str) -> list[dict]:
 
     Raises:
         KeyError: If ``name`` is not registered.
-        NotImplementedError: If the target's language has no linter yet (e.g. "r").
+        NotImplementedError: If the target's language has no registered linter
+            ("python" and "r" are both registered; this fires only for some other
+            unregistered language).
     """
     target = LINT_TARGETS[name]
     linter = _LINTERS.get(target.language)

@@ -113,6 +113,17 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
 
     Returns:
         One WARN ``needs_judgment`` Finding per ungrouped lag/cumulative call.
+
+    Note:
+        Grouping is matched at TOP-LEVEL-STATEMENT granularity. Inside a
+        function body or a ``{`` block (the dominant shape for real R package
+        code) every pipe chain shares one statement root, so a grouping signal
+        in ANY chain marks every lag/cumulative call in that whole statement
+        clean — a grouped chain therefore MASKS a genuinely-ungrouped lag/
+        cumulative elsewhere in the same function. This is an accepted, deliberate
+        false negative (never a false positive); WARN-only / ``needs_judgment``
+        routes survivors to Tier-2, and finer per-statement granularity is a
+        planned follow-up.
     """
     try:
         ids = {int(r["id"]) for r in rows}
@@ -130,16 +141,16 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
         ]
     group_roots: set[int] = set()
     for r in rows:
-        token, text = r["token"], r["text"]
+        token, text = r.get("token", ""), r.get("text", "")
         if (token == "SYMBOL_FUNCTION_CALL" and text in _GROUP_CALLS) or (token == "SYMBOL_SUB" and text == _BY_ARG):
             group_roots.add(_root(int(r["id"]), parent, ids))
     findings: list[Finding] = []
     for r in rows:
-        if r["token"] != "SYMBOL_FUNCTION_CALL" or r["text"] not in _LAG_CALLS:
+        if r.get("token") != "SYMBOL_FUNCTION_CALL" or r.get("text") not in _LAG_CALLS:
             continue
         if _root(int(r["id"]), parent, ids) in group_roots:
             continue
-        line, call = int(r["line1"]), r["text"]
+        line, call = int(r["line1"]), r.get("text", "")
         findings.append(
             Finding(
                 "leakage_lint",
