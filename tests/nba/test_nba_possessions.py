@@ -14,7 +14,16 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
-from sportsdataverse.nba.nba_possessions import POSSESSIONS_SCHEMA, build_possessions
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away,
+    parse_rotation_resultsets,
+    players_on_court_from_rotation,
+)
+from sportsdataverse.nba.nba_possessions import (
+    POSSESSIONS_SCHEMA,
+    attach_possession_lineups,
+    build_possessions,
+)
 
 FXROOT = pathlib.Path("tests/fixtures/nba_engine")
 GAMES = ["0022200001", "0022300001", "0022100001"]
@@ -43,6 +52,14 @@ def _box_team_points(box: dict) -> dict[int, int]:
         pts = sum(int(p.get("statistics", {}).get("points", 0) or 0) for p in t["players"])
         out[int(t["teamId"])] = pts
     return out
+
+
+def _oncourt(g: str) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Return (oncourt_frame, enhanced_pbp) for fixture game *g*."""
+    enh = _enh(g)
+    rot = parse_rotation_resultsets(json.loads((FXROOT / g / "gamerotation.json").read_text()))
+    home, away = boxscore_home_away(_box(g))
+    return players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away), enh
 
 
 # ---------------------------------------------------------------------------
@@ -282,3 +299,35 @@ def test_possessions_structural_sanity(game_id: str) -> None:
     # start_order_index <= end_order_index for every possession
     bad_order = poss.filter(pl.col("start_order_index") > pl.col("end_order_index"))
     assert bad_order.height == 0, f"Game {game_id}: {bad_order.height} possessions with start > end order_index"
+
+
+# ---------------------------------------------------------------------------
+# Task 3: on-court lineup attachment (RAPM stint matrix)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_attach_possession_lineups(game_id: str) -> None:
+    """Every possession must carry exactly 5 offense + 5 defense player IDs, no nulls.
+
+    The 10 on-court players at each possession's start action are assigned to
+    ``off_player_1..5`` / ``def_player_1..5`` by comparing ``offense_team_id``
+    to the home team.  Both quintuples must be sets of 5 distinct Int64 IDs.
+    """
+    oncourt, enh = _oncourt(game_id)
+    poss = attach_possession_lineups(build_possessions(enh), oncourt, enh)
+
+    off_cols = [f"off_player_{i}" for i in range(1, 6)]
+    def_cols = [f"def_player_{i}" for i in range(1, 6)]
+
+    # Every cell must be non-null.
+    assert poss.select(off_cols + def_cols).null_count().sum_horizontal().sum() == 0, (
+        f"Game {game_id}: null player IDs in lineup columns"
+    )
+
+    # Each possession's 5 offense players and 5 defense players must be distinct.
+    for r in poss.head(20).to_dicts():
+        off_set = {r[c] for c in off_cols}
+        def_set = {r[c] for c in def_cols}
+        assert len(off_set) == 5, f"Game {game_id}: duplicate offense player IDs in possession {r}"
+        assert len(def_set) == 5, f"Game {game_id}: duplicate defense player IDs in possession {r}"
