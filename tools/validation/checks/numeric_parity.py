@@ -78,7 +78,7 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
         else:
             joined = frame.join(ref, on=list(ctx.join_keys), how="inner", suffix="_oracle")
             for col, oracle_col in ctx.oracle.column_map.items():
-                rcol = f"{oracle_col}_oracle" if oracle_col == col else oracle_col
+                rcol = f"{oracle_col}_oracle" if oracle_col in frame.columns else oracle_col
                 if col not in joined.columns or rcol not in joined.columns:
                     continue
                 corr = joined.select(pl.corr(pl.col(col), pl.col(rcol))).item()
