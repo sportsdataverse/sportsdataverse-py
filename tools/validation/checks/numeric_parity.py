@@ -8,6 +8,23 @@ _PROB_EPS = 1e-3
 
 
 def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
+    """Validate numeric columns against invariants, ranges, and the domain oracle.
+
+    Emits ERROR findings for probability groups that do not sum to 1 (within
+    1e-3) and for values outside their configured range; an INFO finding when an
+    oracle is configured but supplies no reference frame; and WARN findings
+    (routed to the parity-divergence judgment agent) when a column's correlation
+    against the oracle falls below its threshold.
+
+    Args:
+        dataset: Dataset identifier recorded on each finding.
+        frame: The data frame under validation.
+        ctx: Check context supplying prob_groups, range_constraints, join_keys,
+            and the optional oracle.
+
+    Returns:
+        A list of Finding records; empty if every numeric check passes.
+    """
     findings: list[Finding] = []
 
     for group in ctx.prob_groups:

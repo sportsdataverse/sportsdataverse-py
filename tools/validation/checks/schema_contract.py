@@ -6,6 +6,21 @@ from tools.validation.findings import CheckContext, Finding, Severity
 
 
 def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
+    """Validate a frame's columns and dtypes against the dataset's schema contract.
+
+    Emits an ERROR finding for each missing column, unexpected column, dtype
+    mismatch (flagging join keys via ``locator['is_join_key']``), and null value
+    in a required column.
+
+    Args:
+        dataset: Dataset identifier recorded on each finding.
+        frame: The data frame under validation.
+        ctx: Check context supplying the expected schema, required_columns,
+            and join_keys.
+
+    Returns:
+        A list of Finding records; empty if the frame matches the contract.
+    """
     findings: list[Finding] = []
     actual = {name: str(dtype) for name, dtype in frame.schema.items()}
     expected_cols, actual_cols = set(ctx.schema), set(actual)
