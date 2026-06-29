@@ -5221,6 +5221,7 @@ class CFBPlayProcess(object):
             .agg(
                 Comp=pl.col("completion").sum(),
                 Att=pl.col("pass_attempt").sum(),
+                xComp=pl.col("cp").sum(),
                 Yds=pl.col("yds_receiving").sum(),
                 Pass_TD=pl.col("pass_td").sum(),
                 Int=pl.col("int").sum(),
@@ -5232,7 +5233,14 @@ class CFBPlayProcess(object):
                 Sck=pl.col("sack_vec").sum(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
-            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            .with_columns(
+                CompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("Comp") / pl.col("Att"))),
+                xCompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("xComp") / pl.col("Att"))),
+            )
+            .with_columns(
+                CPOE=(pl.col("CompPct") - pl.col("xCompPct")),
+                pos_team=pl.col("pos_team").cast(pl.Int32)
+            )
         )
         # passer_box = passer_box.replace(pl.all(), pl.Null)
         qbs_list = passer_box["passer_player_name"].to_list()
