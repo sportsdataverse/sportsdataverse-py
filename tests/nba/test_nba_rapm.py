@@ -230,6 +230,7 @@ def test_three_game_smoke_and_offline_fetcher(monkeypatch):
     monkeypatch.setattr(R, "_fetch_possessions", lambda gid, lg: by_game[gid])
     out = R.nba_rapm_from_games(GAMES)
     assert out.height > 0
+    assert dict(out.schema) == R.RAPM_SCHEMA
     assert np.isfinite(out["rapm"].to_numpy()).all()
     assert abs(out["rapm"].mean()) < 5.0  # ridge-centered
     # Deterministic: same input → same sorted output
@@ -243,6 +244,23 @@ def test_rapm_from_games_empty_list():
     """Empty game_ids returns a zero-row frame with RAPM_SCHEMA, no network call, no raise."""
     out = R.nba_rapm_from_games([])
     assert out.is_empty()
+    assert dict(out.schema) == R.RAPM_SCHEMA
+
+
+def test_rapm_from_games_skips_empty_games(monkeypatch):
+    # one game fetches empty, one fetches a real frame -> empty filtered out, still valid output
+    by_game = {"bad_game": pl.DataFrame(), "0022200001": _game_poss("0022200001")}
+    monkeypatch.setattr(R, "_fetch_possessions", lambda gid, lg: by_game[gid])
+    out = R.nba_rapm_from_games(["bad_game", "0022200001"])
+    assert out.height > 0
+    assert dict(out.schema) == R.RAPM_SCHEMA
+
+
+def test_rapm_from_games_all_empty_nonempty_ids(monkeypatch):
+    # non-empty game_ids but every fetch is empty -> hits the `if not frames` guard, no concat([])
+    monkeypatch.setattr(R, "_fetch_possessions", lambda gid, lg: pl.DataFrame())
+    out = R.nba_rapm_from_games(["x", "y"])
+    assert out.height == 0
     assert dict(out.schema) == R.RAPM_SCHEMA
 
 

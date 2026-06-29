@@ -267,7 +267,8 @@ def _fetch_possessions(game_id: str, league_id: str) -> pl.DataFrame:
 
     Module-level so tests can monkeypatch it without touching the public API.
     """
-    from .nba_possessions import nba_possessions  # local import — avoids circular-import risk at module load
+    # Local import: no cycle today, kept defensive against a future nba_possessions<->nba_rapm refactor.
+    from .nba_possessions import nba_possessions
 
     return nba_possessions(game_id, league_id)
 
