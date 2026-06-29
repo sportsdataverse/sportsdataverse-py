@@ -4,17 +4,17 @@ Provides utilities consumed by the Phase 1 lineup engine:
 
 - :func:`boxscore_home_away` — extract home/away team ids from a
   ``boxScoreTraditional`` payload.
-- :func:`boxscore_name_map` — build a ``{team_id: {familyName_lower: person_id}}``
-  lookup used to resolve player names from narrative text.
-- :func:`period_starters` — infer which five players started each period for
-  each team using the boxscore (period 1) and play-by-play substitution logic
-  (periods 2+).
 - :func:`parse_rotation_resultsets` — convert raw ``nba_stats_gamerotation``
   resultSets JSON into a ``{"HomeTeam": [...], "AwayTeam": [...]}`` dict.
 - :func:`players_on_court_from_rotation` — pure rotation-based on-court
   reconstruction (no network calls) from a pre-parsed rotation dict.
 - :func:`players_on_court` — public entry point; delegates to
   :func:`players_on_court_from_rotation`.
+
+The lineup source is the ``nba_gamerotation`` endpoint (per-player stints
+keyed on ``PERSON_ID``), so the earlier name-resolution + first-appearance
+starter heuristics (``boxscore_name_map`` / ``period_starters`` /
+``_box_starters``) are no longer needed and have been removed.
 
 Algorithm (hoopR port)
 ----------------------
@@ -43,7 +43,6 @@ using a boundary-interval approach (equivalent to R's ``findInterval``):
 from __future__ import annotations
 
 import logging
-import re
 
 import numpy as np
 import polars as pl
@@ -51,11 +50,6 @@ import polars as pl
 from sportsdataverse.nba.nba_pbp_constants import LINEUPS_SCHEMA
 
 logger = logging.getLogger(__name__)
-
-# Regex to parse the incoming player's family name from a SUB description.
-# Format: "SUB: <IN_familyName> FOR <OUT_familyName>"
-# Lazy match so multi-word names like "House Jr." are captured fully.
-_SUB_RE = re.compile(r"SUB:\s*(.+?)\s+FOR\s+", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -66,29 +60,6 @@ _SUB_RE = re.compile(r"SUB:\s*(.+?)\s+FOR\s+", re.IGNORECASE)
 def _bt(box: dict) -> dict:
     """Return the ``boxScoreTraditional`` sub-dict, or empty dict if absent."""
     return (box or {}).get("boxScoreTraditional") or {}
-
-
-def _box_starters(box: dict) -> dict[int, list[int]]:
-    """Return period-1 starters keyed by team_id from boxscore ``position`` field.
-
-    A player is a starter iff their ``position`` string is non-empty.
-
-    Args:
-        box: Raw boxscore payload dict.
-
-    Returns:
-        ``{team_id: [person_id, ...]}`` with up to 5 ids per team.  A malformed
-        or empty payload returns ``{}`` rather than raising.
-    """
-    b = _bt(box)
-    out: dict[int, list[int]] = {}
-    for side in ("homeTeam", "awayTeam"):
-        t = b.get(side) or {}
-        if t.get("teamId") is None:
-            continue
-        tid = int(t.get("teamId"))
-        out[tid] = [int(p["personId"]) for p in (t.get("players") or []) if str(p.get("position", "")).strip()]
-    return out
 
 
 def _resolve_team_oncourt(stints: list[dict], times: list[float]) -> list[list[int | None]]:
@@ -134,6 +105,8 @@ def _resolve_team_oncourt(stints: list[dict], times: list[float]) -> list[list[i
         mask = (in_times <= mid) & (out_times > mid)
         active_raw = person_ids[mask].tolist()
         active_dedup = list(dict.fromkeys(active_raw))
+        # [:5] matches hoopR: if >5 stints overlap a midpoint (a rare NBA-API
+        # data quirk), keep the first 5 by ascending id.
         active_sorted: list[int] = sorted(active_dedup)[:5]
         row_lineup: list[int | None] = active_sorted + [None] * (5 - len(active_sorted))
         all_lineups.append(row_lineup)
@@ -143,6 +116,8 @@ def _resolve_team_oncourt(stints: list[dict], times: list[float]) -> list[list[i
     mask_end = (in_times <= max_t) & (out_times >= max_t)
     active_end_raw = person_ids[mask_end].tolist()
     active_end_dedup = list(dict.fromkeys(active_end_raw))
+    # [:5] matches hoopR: keep the first 5 by ascending id if >5 stints overlap
+    # the game-end boundary (same rare NBA-API quirk as the per-interval case).
     active_end_sorted: list[int] = sorted(active_end_dedup)[:5]
     final_lineup: list[int | None] = active_end_sorted + [None] * (5 - len(active_end_sorted))
     all_lineups.append(final_lineup)
@@ -182,133 +157,6 @@ def boxscore_home_away(box: dict) -> tuple[int, int]:
     """
     b = _bt(box)
     return int(b.get("homeTeamId") or 0), int(b.get("awayTeamId") or 0)
-
-
-def boxscore_name_map(box: dict) -> dict[int, dict[str, int]]:
-    """Build a family-name lookup for in-player resolution.
-
-    Args:
-        box: Raw boxscore payload dict.
-
-    Returns:
-        ``{team_id: {familyName_lower: person_id}}`` mapping.  Both home and
-        away teams are included.  Values are ``int`` (never ``float``).  A
-        malformed or empty payload returns ``{}`` rather than raising.
-
-    Example:
-        Quick start::
-
-            import json, pathlib
-            from sportsdataverse.nba.nba_lineups import boxscore_name_map
-            box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
-            nm = boxscore_name_map(box)
-            # resolve "brown" for the home team
-            home_id = list(nm.keys())[0]
-            print(nm[home_id].get("brown"))
-    """
-    b = _bt(box)
-    out: dict[int, dict[str, int]] = {}
-    for side in ("homeTeam", "awayTeam"):
-        t = b.get(side) or {}
-        if t.get("teamId") is None:
-            continue
-        tid = int(t.get("teamId"))
-        out[tid] = {str(p.get("familyName", "")).lower(): int(p["personId"]) for p in (t.get("players") or [])}
-    return out
-
-
-def period_starters(enhanced_pbp: pl.DataFrame, box: dict) -> dict[int, dict[int, list[int]]]:
-    """Infer the five-man lineup that started each period for each team.
-
-    Period 1 starters are read directly from the boxscore ``position`` field —
-    players with a non-empty ``position`` value were in the starting lineup.
-
-    For periods 2+, starters are inferred from the play-by-play using a
-    **sub-aware first-appearance** heuristic.  The v3 feed does not publish
-    explicit "period-start" lineup events, so the algorithm walks rows in
-    ``order_index`` order and applies two rules:
-
-    1. When a substitution event is encountered, parse the incoming player from
-       the description (``"SUB: <in_name> FOR <out_name>"``).  If that player
-       has **not yet appeared** in this period they are a confirmed bench
-       sub-in — they are excluded from the starter candidate pool.  If they
-       have already appeared (returning starter subbed out and back in), they
-       are NOT excluded.
-    2. The first five ``person_id`` values per team that are not confirmed
-       bench sub-ins are the period starters.
-
-    Args:
-        enhanced_pbp: Output of :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
-            Must contain columns ``period``, ``order_index``, ``is_substitution``,
-            ``team_id``, ``person_id``, and ``description``.
-        box: Raw boxscore payload dict (same as passed to :func:`boxscore_home_away`).
-
-    Returns:
-        ``{period: {team_id: [person_id_1, ..., person_id_5]}}`` covering all
-        periods present in *enhanced_pbp*.  Each inner list holds up to 5 ids.
-
-    Example:
-        Quick start::
-
-            import json, pathlib
-            import polars as pl
-            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
-            from sportsdataverse.nba.nba_lineups import period_starters
-            box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
-            pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
-            s = period_starters(enhanced_pbp_from_payload(pbp), box)
-            print(s[1])  # period-1 starters keyed by team_id
-
-        See Also:
-            * `hoopR`_ -- R package providing equivalent lineup utilities
-            * `nba_api`_ -- reference Python client for stats.nba.com
-
-        .. _hoopR: https://hoopR.sportsdataverse.org
-        .. _nba_api: https://github.com/swar/nba_api
-    """
-    name_map = boxscore_name_map(box)
-    starters: dict[int, dict[int, list[int]]] = {}
-    box_st = _box_starters(box)
-    periods: list[int] = enhanced_pbp["period"].unique().sort().to_list()
-
-    for period in periods:
-        if period == 1:
-            starters[1] = {tid: list(ids[:5]) for tid, ids in box_st.items()}
-            continue
-
-        pe = enhanced_pbp.filter(pl.col("period") == period).sort("order_index")
-
-        confirmed_bench: dict[int, set[int]] = {}
-        seen: dict[int, list[int]] = {}
-
-        for r in pe.iter_rows(named=True):
-            tid = r["team_id"]
-            pid = r["person_id"]
-
-            if r["is_substitution"] and tid is not None and tid > 0:
-                desc: str = r["description"] or ""
-                tid_int_sub = int(tid)
-                m = _SUB_RE.search(desc)
-                if m:
-                    in_name = m.group(1).strip().lower()
-                    in_pid = name_map.get(tid_int_sub, {}).get(in_name)
-                    if in_pid is not None:
-                        if in_pid not in (seen.get(tid_int_sub) or []):
-                            confirmed_bench.setdefault(tid_int_sub, set()).add(in_pid)
-
-            if tid is None or pid is None or tid <= 0 or pid <= 0:
-                continue
-            tid_int = int(tid)
-            pid_int = int(pid)
-            if pid_int in confirmed_bench.get(tid_int, set()):
-                continue
-            team_seen = seen.setdefault(tid_int, [])
-            if pid_int not in team_seen:
-                team_seen.append(pid_int)
-
-        starters[period] = {tid: ids[:5] for tid, ids in seen.items()}
-
-    return starters
 
 
 def parse_rotation_resultsets(raw_rotation: dict) -> dict[str, list[dict]]:

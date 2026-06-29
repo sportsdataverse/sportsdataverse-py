@@ -51,9 +51,10 @@ _FIXTURES_ROOT = pathlib.Path("tests/fixtures/nba_engine")
 _GAME1 = "0022200001"
 
 # Tolerance for minutes reconciliation: the boxscore rounds minutes to whole
-# seconds and the rotation IN/OUT times are tenths-of-a-second, so a couple of
-# seconds of rounding slack is expected.
-_MINUTES_TOLERANCE_SEC = 3.0
+# seconds and the rotation IN/OUT times are tenths-of-a-second, so a small
+# amount of rounding slack is expected.  Observed max error is <0.5s/game, so
+# 1.5s is tight enough to catch regressions while absorbing legitimate rounding.
+_MINUTES_TOLERANCE_SEC = 1.5
 
 # Game directories that carry a captured gamerotation.json fixture — the
 # rotation-based tests parametrize over exactly these.
@@ -99,27 +100,15 @@ def _parse_box_minutes(minutes_str: str) -> float:
 
 
 # ---------------------------------------------------------------------------
-# Unchanged tests — kept from Task 4
+# boxscore_home_away
 # ---------------------------------------------------------------------------
 
 
-def test_name_map_and_home_away() -> None:
-    from sportsdataverse.nba.nba_lineups import boxscore_home_away, boxscore_name_map
+def test_home_away() -> None:
+    from sportsdataverse.nba.nba_lineups import boxscore_home_away
 
-    nm = boxscore_name_map(_box())
     home, away = boxscore_home_away(_box())
     assert home == 1610612738 and away == 1610612755
-    assert all(isinstance(v, int) for team in nm.values() for v in team.values())
-
-
-def test_period_starters_five_each() -> None:
-    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
-    from sportsdataverse.nba.nba_lineups import period_starters
-
-    s = period_starters(enhanced_pbp_from_payload(_payload()), _box())
-    assert set(s.keys()) >= {1, 2, 3, 4}
-    for teams in s.values():
-        assert len(teams) == 2 and all(len(p) == 5 for p in teams.values())
 
 
 # ---------------------------------------------------------------------------
