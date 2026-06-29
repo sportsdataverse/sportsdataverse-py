@@ -364,24 +364,27 @@ def attach_possession_lineups(
     possessions: pl.DataFrame,
     oncourt: pl.DataFrame,
     enhanced_pbp: pl.DataFrame,
+    *,
+    home_team_id: int,
 ) -> pl.DataFrame:
     """Attach the 5v5 on-court lineup to each possession (the RAPM stint matrix).
 
     For each possession, looks up the 10 players on court at the possession's
     first action (``start_order_index``), then splits them into
     ``off_player_1..5`` (offense) and ``def_player_1..5`` (defense) by
-    comparing ``offense_team_id`` to the home team's lineup slot.
+    comparing ``offense_team_id`` to *home_team_id*.
 
     The *oncourt* frame is home/away-keyed
-    (``home_player_1..5`` / ``away_player_1..5``).  The home team is inferred
-    from which set of players belongs to the offense: when
-    ``offense_team_id`` matches the home team, ``home_player_*`` become
-    ``off_player_*`` and ``away_player_*`` become ``def_player_*``;
-    otherwise the assignment is flipped.
+    (``home_player_1..5`` / ``away_player_1..5``).  When ``offense_team_id``
+    matches *home_team_id*, ``home_player_*`` become ``off_player_*`` and
+    ``away_player_*`` become ``def_player_*``; otherwise the assignment is
+    flipped.
 
-    The home team identity is derived from the *oncourt* frame by taking the
-    ``team_id`` most frequently associated with location ``'h'`` in the
-    *enhanced_pbp* frame (same approach as :func:`_resolve_teams`).
+    *home_team_id* MUST come from the canonical, deterministic
+    :func:`~sportsdataverse.nba.nba_lineups.boxscore_home_away` — the **same**
+    source the *oncourt* frame was built with.  Passing it explicitly avoids
+    a non-deterministic home/away inference that could silently swap the
+    whole game's offense/defense columns.
 
     Mapping ``start_order_index`` → ``action_number`` is done via the
     *enhanced_pbp* frame which carries both columns.
@@ -397,13 +400,16 @@ def attach_possession_lineups(
             :func:`build_possessions` and
             :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`.
             Used to map ``order_index`` → ``action_number``.
+        home_team_id: Integer team ID of the home team, from
+            :func:`~sportsdataverse.nba.nba_lineups.boxscore_home_away`.
 
     Returns:
         The *possessions* frame with ten additional Int64 columns:
         ``off_player_1..5`` and ``def_player_1..5``.  Every row is populated
         (no nulls) when the on-court frame covers all actions.  Returns the
-        possessions frame with zero-filled lineup columns on malformed/empty
-        input — never raises.
+        possessions frame with null-filled lineup columns on genuinely
+        empty/malformed input — never raises on empty input.  Real lookup or
+        column errors (e.g. a renamed column) are NOT swallowed; they surface.
 
     Example:
         Quick start::
@@ -424,7 +430,7 @@ def attach_possession_lineups(
             rot = parse_rotation_resultsets(json.loads((root / "gamerotation.json").read_text()))
             home, away = boxscore_home_away(box)
             oncourt = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
-            poss = attach_possession_lineups(build_possessions(enh), oncourt, enh)
+            poss = attach_possession_lineups(build_possessions(enh), oncourt, enh, home_team_id=home)
             print(poss[["off_player_1", "def_player_1"]].head())
 
         See Also:
@@ -434,93 +440,74 @@ def attach_possession_lineups(
         .. _nba_api: https://github.com/swar/nba_api
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    # Empty-input guard: return possessions with null-filled lineup columns.
-    empty_lineup = pl.DataFrame(schema=_LINEUP_ATTACHMENT_SCHEMA)
+    # Never-raise contract: ONLY genuinely empty/malformed input is tolerated.
     if possessions is None or possessions.height == 0:
         return (
-            possessions.hstack(
-                pl.DataFrame(
-                    {col: pl.Series(col, [], dtype=pl.Int64) for col in _LINEUP_ATTACHMENT_SCHEMA},
-                )
-            )
+            possessions.with_columns([pl.lit(None).cast(pl.Int64).alias(c) for c in _LINEUP_ATTACHMENT_SCHEMA])
             if possessions is not None
             else pl.DataFrame(schema={**POSSESSIONS_SCHEMA, **_LINEUP_ATTACHMENT_SCHEMA})
         )
 
     if oncourt is None or oncourt.height == 0 or enhanced_pbp is None or enhanced_pbp.height == 0:
-        # Return possessions with null lineup columns.
+        # Genuinely empty oncourt / pbp → null lineup columns (no source data).
         null_cols = [pl.lit(None).cast(pl.Int64).alias(c) for c in _LINEUP_ATTACHMENT_SCHEMA]
         return possessions.with_columns(null_cols)
 
-    try:
-        # ------------------------------------------------------------------
-        # Step 1: derive home_team_id from enhanced_pbp (location='h').
-        # ------------------------------------------------------------------
-        home_candidates = (
-            enhanced_pbp.filter((pl.col("location") == "h") & (pl.col("team_id") != 0))["team_id"].unique().to_list()
-        )
-        home_team_id: int = home_candidates[0] if home_candidates else 0
+    # ----------------------------------------------------------------------
+    # Step 1: build order_index → action_number map from enhanced_pbp.
+    # ----------------------------------------------------------------------
+    idx_to_action: dict[int, int] = {
+        int(r["order_index"]): int(r["action_number"])
+        for r in enhanced_pbp.select(["order_index", "action_number"]).to_dicts()
+    }
 
-        # ------------------------------------------------------------------
-        # Step 2: build order_index → action_number map from enhanced_pbp.
-        # ------------------------------------------------------------------
-        idx_to_action: dict[int, int] = {
-            int(r["order_index"]): int(r["action_number"])
-            for r in enhanced_pbp.select(["order_index", "action_number"]).to_dicts()
-        }
+    # ----------------------------------------------------------------------
+    # Step 2: build action_number → lineup dict from oncourt frame.
+    # ----------------------------------------------------------------------
+    home_cols = [f"home_player_{i}" for i in range(1, 6)]
+    away_cols = [f"away_player_{i}" for i in range(1, 6)]
+    action_to_lineup: dict[int, dict] = {
+        int(r["action_number"]): r for r in oncourt.select(["action_number"] + home_cols + away_cols).to_dicts()
+    }
 
-        # ------------------------------------------------------------------
-        # Step 3: build action_number → lineup dict from oncourt frame.
-        # ------------------------------------------------------------------
-        home_cols = [f"home_player_{i}" for i in range(1, 6)]
-        away_cols = [f"away_player_{i}" for i in range(1, 6)]
-        action_to_lineup: dict[int, dict] = {
-            int(r["action_number"]): r for r in oncourt.select(["action_number"] + home_cols + away_cols).to_dicts()
-        }
+    # ----------------------------------------------------------------------
+    # Step 3: for each possession, resolve the lineup and flip to
+    #         offense/defense orientation using the explicit home_team_id.
+    # ----------------------------------------------------------------------
+    off_cols_data: dict[str, list[Optional[int]]] = {f"off_player_{i}": [] for i in range(1, 6)}
+    def_cols_data: dict[str, list[Optional[int]]] = {f"def_player_{i}": [] for i in range(1, 6)}
 
-        # ------------------------------------------------------------------
-        # Step 4: for each possession, resolve the lineup and flip to
-        #         offense/defense orientation.
-        # ------------------------------------------------------------------
-        off_cols_data: dict[str, list[Optional[int]]] = {f"off_player_{i}": [] for i in range(1, 6)}
-        def_cols_data: dict[str, list[Optional[int]]] = {f"def_player_{i}": [] for i in range(1, 6)}
+    for r in possessions.select(["start_order_index", "offense_team_id"]).to_dicts():
+        order_idx = int(r["start_order_index"])
+        offense_id = int(r["offense_team_id"])
 
-        for r in possessions.select(["start_order_index", "offense_team_id"]).to_dicts():
-            order_idx = int(r["start_order_index"])
-            offense_id = int(r["offense_team_id"])
+        action_num = idx_to_action.get(order_idx)
+        lineup = action_to_lineup.get(action_num) if action_num is not None else None
 
-            action_num = idx_to_action.get(order_idx)
-            lineup = action_to_lineup.get(action_num) if action_num is not None else None
+        if lineup is None:
+            # No on-court coverage for this action — leave null (test catches it).
+            for i in range(1, 6):
+                off_cols_data[f"off_player_{i}"].append(None)
+                def_cols_data[f"def_player_{i}"].append(None)
+            continue
 
-            if lineup is None:
-                # Fallback: no lineup found — fill with None (will be caught by test).
-                for i in range(1, 6):
-                    off_cols_data[f"off_player_{i}"].append(None)
-                    def_cols_data[f"def_player_{i}"].append(None)
-                continue
+        # Deterministic flip: offense is home iff offense_team_id == home_team_id.
+        offense_is_home = offense_id == home_team_id
 
-            # Determine if offense == home or offense == away.
-            offense_is_home = offense_id == home_team_id
+        if offense_is_home:
+            for i in range(1, 6):
+                off_cols_data[f"off_player_{i}"].append(lineup[f"home_player_{i}"])
+                def_cols_data[f"def_player_{i}"].append(lineup[f"away_player_{i}"])
+        else:
+            for i in range(1, 6):
+                off_cols_data[f"off_player_{i}"].append(lineup[f"away_player_{i}"])
+                def_cols_data[f"def_player_{i}"].append(lineup[f"home_player_{i}"])
 
-            if offense_is_home:
-                for i in range(1, 6):
-                    off_cols_data[f"off_player_{i}"].append(lineup[f"home_player_{i}"])
-                    def_cols_data[f"def_player_{i}"].append(lineup[f"away_player_{i}"])
-            else:
-                for i in range(1, 6):
-                    off_cols_data[f"off_player_{i}"].append(lineup[f"away_player_{i}"])
-                    def_cols_data[f"def_player_{i}"].append(lineup[f"home_player_{i}"])
-
-        # ------------------------------------------------------------------
-        # Step 5: build the lineup DataFrame and hstack onto possessions.
-        # ------------------------------------------------------------------
-        lineup_df = pl.DataFrame(
-            {**off_cols_data, **def_cols_data},
-            schema=_LINEUP_ATTACHMENT_SCHEMA,
-        )
-        return possessions.hstack(lineup_df)
-
-    except Exception:
-        # Never-raise contract: return possessions with null lineup columns.
-        null_cols = [pl.lit(None).cast(pl.Int64).alias(c) for c in _LINEUP_ATTACHMENT_SCHEMA]
-        return possessions.with_columns(null_cols)
+    # ----------------------------------------------------------------------
+    # Step 4: build the lineup DataFrame and hstack onto possessions.
+    # ----------------------------------------------------------------------
+    lineup_df = pl.DataFrame(
+        {**off_cols_data, **def_cols_data},
+        schema=_LINEUP_ATTACHMENT_SCHEMA,
+    )
+    return possessions.hstack(lineup_df)

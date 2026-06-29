@@ -54,6 +54,21 @@ def _box_team_points(box: dict) -> dict[int, int]:
     return out
 
 
+def _box_team_rosters(box: dict) -> dict[int, set[int]]:
+    """Return {team_id: {personId, ...}} from boxscore — every player on each team.
+
+    This is the INDEPENDENT roster oracle used to detect a home/away off↔def
+    swap: a possession's offense players must belong to the offense team's
+    roster, and defense players to the defense team's roster.
+    """
+    b = box["boxScoreTraditional"]
+    out: dict[int, set[int]] = {}
+    for side in ("homeTeam", "awayTeam"):
+        t = b[side]
+        out[int(t["teamId"])] = {int(p["personId"]) for p in t["players"]}
+    return out
+
+
 def _oncourt(g: str) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Return (oncourt_frame, enhanced_pbp) for fixture game *g*."""
     enh = _enh(g)
@@ -313,9 +328,15 @@ def test_attach_possession_lineups(game_id: str) -> None:
     The 10 on-court players at each possession's start action are assigned to
     ``off_player_1..5`` / ``def_player_1..5`` by comparing ``offense_team_id``
     to the home team.  Both quintuples must be sets of 5 distinct Int64 IDs.
+
+    The roster-membership assertion is the no-swap guard: 5-distinct alone
+    cannot detect a home/away off↔def swap, so we also assert each
+    possession's offense players belong to the offense team's boxscore roster
+    and defense players to the defense team's roster.
     """
+    home, _away = boxscore_home_away(_box(game_id))
     oncourt, enh = _oncourt(game_id)
-    poss = attach_possession_lineups(build_possessions(enh), oncourt, enh)
+    poss = attach_possession_lineups(build_possessions(enh), oncourt, enh, home_team_id=home)
 
     off_cols = [f"off_player_{i}" for i in range(1, 6)]
     def_cols = [f"def_player_{i}" for i in range(1, 6)]
@@ -331,3 +352,20 @@ def test_attach_possession_lineups(game_id: str) -> None:
         def_set = {r[c] for c in def_cols}
         assert len(off_set) == 5, f"Game {game_id}: duplicate offense player IDs in possession {r}"
         assert len(def_set) == 5, f"Game {game_id}: duplicate defense player IDs in possession {r}"
+
+    # NO-SWAP INVARIANT (independent oracle): offense players ⊆ offense team's
+    # roster, defense players ⊆ defense team's roster — on EVERY possession.
+    rosters = _box_team_rosters(_box(game_id))
+    for r in poss.to_dicts():
+        off_team = int(r["offense_team_id"])
+        def_team = int(r["defense_team_id"])
+        off_players = {int(r[c]) for c in off_cols}
+        def_players = {int(r[c]) for c in def_cols}
+        assert off_players <= rosters[off_team], (
+            f"Game {game_id}: offense players {off_players - rosters[off_team]} "
+            f"not on offense team {off_team}'s roster (possible off/def swap)"
+        )
+        assert def_players <= rosters[def_team], (
+            f"Game {game_id}: defense players {def_players - rosters[def_team]} "
+            f"not on defense team {def_team}'s roster (possible off/def swap)"
+        )
