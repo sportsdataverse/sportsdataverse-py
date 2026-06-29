@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: tov
+  type: numeric
+- description: ''
+  name: tov_rank
+  type: integer
+- description: ''
+  name: is_active_flag
+  type: character
+kind: dataframe
+schema: alltimeleadersgrids

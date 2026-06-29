@@ -1,78 +1,81 @@
 columns:
 - description: ''
-  name: game_id
+  name: player_id
+  type: integer
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: player
   type: character
 - description: ''
   name: team_id
-  type: character
-- description: ''
-  name: team_abbreviation
-  type: character
-- description: ''
-  name: team_city
-  type: character
-- description: ''
-  name: player_id
-  type: character
-- description: ''
-  name: player_name
-  type: character
-- description: ''
-  name: start_position
-  type: character
-- description: ''
-  name: comment
-  type: character
-- description: ''
-  name: minutes
-  type: character
-- description: ''
-  name: pts
   type: integer
 - description: ''
-  name: contested_shots
+  name: team
+  type: character
+- description: ''
+  name: gp
+  type: integer
+- description: ''
+  name: min
   type: numeric
 - description: ''
-  name: contested_shots_2pt
+  name: fgm
   type: numeric
 - description: ''
-  name: contested_shots_3pt
+  name: fga
   type: numeric
 - description: ''
-  name: deflections
+  name: fg_pct
   type: numeric
 - description: ''
-  name: charges_drawn
+  name: fg3m
   type: numeric
 - description: ''
-  name: screen_assists
+  name: fg3a
   type: numeric
 - description: ''
-  name: screen_ast_pts
+  name: fg3_pct
   type: numeric
 - description: ''
-  name: off_loose_balls_recovered
+  name: ftm
   type: numeric
 - description: ''
-  name: def_loose_balls_recovered
+  name: fta
   type: numeric
 - description: ''
-  name: loose_balls_recovered
+  name: ft_pct
   type: numeric
 - description: ''
-  name: off_boxouts
+  name: oreb
   type: numeric
 - description: ''
-  name: def_boxouts
+  name: dreb
   type: numeric
 - description: ''
-  name: box_out_player_team_rebs
+  name: reb
   type: numeric
 - description: ''
-  name: box_out_player_rebs
+  name: ast
   type: numeric
 - description: ''
-  name: box_outs
+  name: stl
   type: numeric
+- description: ''
+  name: blk
+  type: numeric
+- description: ''
+  name: tov
+  type: numeric
+- description: ''
+  name: pts
+  type: numeric
+- description: ''
+  name: eff
+  type: numeric
+- description: ''
+  name: nickname
+  type: character
 kind: dataframe
-schema: hustlestatsboxscore
+schema: leagueleaders

@@ -1975,20 +1975,6 @@ home_run_derby_pool:
   current_team_venue_name: The official name of the regular-season home ballpark for the pool participant's current team.
 home_team_record:
   goals_per_game: Average number of goals the team scored per home game over the recorded period.
-hustlestatsboxscore:
-  box_out_player_rebs: Rebounding metric for box out player rebs in the requested NBA or WNBA Stats split.
-  box_out_player_team_rebs: Rebounding metric for box out player team rebs in the requested NBA or WNBA Stats split.
-  contested_shots_2pt: Shooting metric for contested shots 2pt in the requested NBA or WNBA Stats split.
-  contested_shots_3pt: Shooting metric for contested shots 3pt in the requested NBA or WNBA Stats split.
-  def_boxouts: Rebounding metric for defensive boxouts in the requested NBA or WNBA Stats split.
-  def_loose_balls_recovered: Turnover or loose-ball metric for defensive loose balls recovered in the requested NBA or WNBA
-    Stats split.
-  loose_balls_recovered: Turnover or loose-ball metric for loose balls recovered in the requested NBA or WNBA Stats split.
-  off_boxouts: Rebounding metric for offensive boxouts in the requested NBA or WNBA Stats split.
-  off_loose_balls_recovered: Turnover or loose-ball metric for offensive loose balls recovered in the requested NBA or WNBA
-    Stats split.
-  screen_ast_pts: Scoring or score-margin metric for screen assists points in the requested NBA or WNBA Stats split.
-  start_position: Starting lineup position code for the player in this game or roster row.
 infographicfanduelplayer:
   blka: Blocked field-goal attempts against for the requested NBA or WNBA Stats split.
   fan_duel_pts: Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split.
@@ -2198,40 +2184,6 @@ leaguedashteamstats:
   tov_rank: Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   w_pct_rank: Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   w_rank: Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
-leaguehustlestatsplayer:
-  box_out_player_rebs: Rebounding metric for box out player rebs in the requested NBA or WNBA Stats split.
-  box_out_player_team_rebs: Rebounding metric for box out player team rebs in the requested NBA or WNBA Stats split.
-  contested_shots_2pt: Shooting metric for contested shots 2pt in the requested NBA or WNBA Stats split.
-  contested_shots_3pt: Shooting metric for contested shots 3pt in the requested NBA or WNBA Stats split.
-  def_boxouts: Rebounding metric for defensive boxouts in the requested NBA or WNBA Stats split.
-  def_loose_balls_recovered: Turnover or loose-ball metric for defensive loose balls recovered in the requested NBA or WNBA
-    Stats split.
-  loose_balls_recovered: Turnover or loose-ball metric for loose balls recovered in the requested NBA or WNBA Stats split.
-  off_boxouts: Rebounding metric for offensive boxouts in the requested NBA or WNBA Stats split.
-  off_loose_balls_recovered: Turnover or loose-ball metric for offensive loose balls recovered in the requested NBA or WNBA
-    Stats split.
-  pct_box_outs_def: Percentage share of box outs defensive for the requested NBA or WNBA Stats split.
-  pct_box_outs_off: Percentage share of box outs offensive for the requested NBA or WNBA Stats split.
-  pct_box_outs_reb: Percentage share of box outs rebounds for the requested NBA or WNBA Stats split.
-  pct_box_outs_team_reb: Percentage share of box outs team rebounds for the requested NBA or WNBA Stats split.
-  pct_loose_balls_recovered_def: Percentage share of loose balls recovered defensive for the requested NBA or WNBA Stats split.
-  pct_loose_balls_recovered_off: Percentage share of loose balls recovered offensive for the requested NBA or WNBA Stats split.
-  screen_ast_pts: Scoring or score-margin metric for screen assists points in the requested NBA or WNBA Stats split.
-leaguehustlestatsteam:
-  contested_shots_2pt: Shooting metric for contested shots 2pt in the requested NBA or WNBA Stats split.
-  contested_shots_3pt: Shooting metric for contested shots 3pt in the requested NBA or WNBA Stats split.
-  def_boxouts: Rebounding metric for defensive boxouts in the requested NBA or WNBA Stats split.
-  def_loose_balls_recovered: Turnover or loose-ball metric for defensive loose balls recovered in the requested NBA or WNBA
-    Stats split.
-  loose_balls_recovered: Turnover or loose-ball metric for loose balls recovered in the requested NBA or WNBA Stats split.
-  off_boxouts: Rebounding metric for offensive boxouts in the requested NBA or WNBA Stats split.
-  off_loose_balls_recovered: Turnover or loose-ball metric for offensive loose balls recovered in the requested NBA or WNBA
-    Stats split.
-  pct_box_outs_def: Percentage share of box outs defensive for the requested NBA or WNBA Stats split.
-  pct_box_outs_off: Percentage share of box outs offensive for the requested NBA or WNBA Stats split.
-  pct_loose_balls_recovered_def: Percentage share of loose balls recovered defensive for the requested NBA or WNBA Stats split.
-  pct_loose_balls_recovered_off: Percentage share of loose balls recovered offensive for the requested NBA or WNBA Stats split.
-  screen_ast_pts: Scoring or score-margin metric for screen assists points in the requested NBA or WNBA Stats split.
 leagueplayerondetails:
   ast_rank: Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   blk_rank: Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.

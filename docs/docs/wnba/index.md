@@ -9,7 +9,7 @@ sidebar_label: WNBA
 | [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 80 | `https://sports.core.api.espn.com/v2/sports` |
-| [WNBA Stats API (stats.wnba.com)](reference/wnba_stats) | 52 | `https://stats.wnba.com` |
+| [WNBA Stats API (stats.wnba.com)](reference/wnba_stats) | 89 | `https://stats.wnba.com` |
 | [Dataset loaders](reference/loaders) | 25 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 8 | hand-written wrappers, loaders & helpers |
 

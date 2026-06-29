@@ -5,7 +5,43 @@ sidebar_position: 10
 ---
 # NBA — NBA Stats API (stats.nba.com)
 
-`sportsdataverse.nba` — 67 endpoints.
+`sportsdataverse.nba` — 106 endpoints.
+
+## `nba_stats_alltimeleadersgrids`
+
+GET /stats/alltimeleadersgrids
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/alltimeleadersgrids`
+
+**Valid URL:** [https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00](https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `TopX` | `topx` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `tov` | numeric | Turnovers. |
+| `tov_rank` | integer |  |
+| `is_active_flag` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_alltimeleadersgrids(league_id='00')
+```
+
+_Last validated n/a._
 
 ## `nba_stats_assistleaders`
 
@@ -104,6 +140,76 @@ nba_stats_assisttracker(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_boxscoreadvancedv3`
+
+GET /stats/boxscoreadvancedv3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/boxscoreadvancedv3`
+
+**Valid URL:** [https://stats.nba.com/stats/boxscoreadvancedv3](https://stats.nba.com/stats/boxscoreadvancedv3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `pie` | numeric | Player Impact Estimate (0-1). |
+| `assistpercentage` | numeric |  |
+| `assistratio` | numeric |  |
+| `assisttoturnover` | numeric |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `defensiverating` | numeric |  |
+| `defensivereboundpercentage` | numeric |  |
+| `effectivefieldgoalpercentage` | numeric |  |
+| `estimateddefensiverating` | numeric |  |
+| `estimatednetrating` | numeric |  |
+| `estimatedoffensiverating` | numeric |  |
+| `estimatedpace` | numeric |  |
+| `estimatedusagepercentage` | numeric |  |
+| `familyname` | character |  |
+| `firstname` | character | Firstname. |
+| `gameid` | character |  |
+| `jerseynum` | character |  |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `namei` | character |  |
+| `netrating` | numeric |  |
+| `offensiverating` | numeric |  |
+| `offensivereboundpercentage` | numeric |  |
+| `pace` | numeric | Possessions per 48 minutes. |
+| `paceper40` | numeric |  |
+| `personid` | integer |  |
+| `playerslug` | character |  |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `possessions` | numeric | Possessions used. |
+| `reboundpercentage` | numeric |  |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+| `trueshootingpercentage` | numeric |  |
+| `turnoverratio` | numeric |  |
+| `usagepercentage` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_boxscoreadvancedv3()
+```
+
+_Last validated n/a._
+
 ## `nba_stats_boxscoredefensivev2`
 
 GET /stats/boxscoredefensivev2
@@ -161,6 +267,62 @@ nba_stats_boxscoredefensivev2()
 
 _Last validated n/a._
 
+## `nba_stats_boxscorefourfactorsv3`
+
+GET /stats/boxscorefourfactorsv3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/boxscorefourfactorsv3`
+
+**Valid URL:** [https://stats.nba.com/stats/boxscorefourfactorsv3](https://stats.nba.com/stats/boxscorefourfactorsv3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `effectivefieldgoalpercentage` | numeric |  |
+| `familyname` | character |  |
+| `firstname` | character | Firstname. |
+| `freethrowattemptrate` | numeric |  |
+| `gameid` | character |  |
+| `jerseynum` | character |  |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `namei` | character |  |
+| `offensivereboundpercentage` | numeric |  |
+| `oppeffectivefieldgoalpercentage` | numeric |  |
+| `oppfreethrowattemptrate` | numeric |  |
+| `oppoffensivereboundpercentage` | numeric |  |
+| `oppteamturnoverpercentage` | numeric |  |
+| `personid` | integer |  |
+| `playerslug` | character |  |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+| `teamturnoverpercentage` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_boxscorefourfactorsv3()
+```
+
+_Last validated n/a._
+
 ## `nba_stats_boxscorematchupsv3`
 
 GET /stats/boxscorematchupsv3
@@ -199,6 +361,66 @@ GET /stats/boxscorematchupsv3
 
 ```python
 nba_stats_boxscorematchupsv3()
+```
+
+_Last validated n/a._
+
+## `nba_stats_boxscoremiscv3`
+
+GET /stats/boxscoremiscv3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/boxscoremiscv3`
+
+**Valid URL:** [https://stats.nba.com/stats/boxscoremiscv3](https://stats.nba.com/stats/boxscoremiscv3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `blocks` | integer | Total blocks. |
+| `blocksagainst` | integer |  |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `familyname` | character |  |
+| `firstname` | character | Firstname. |
+| `foulsdrawn` | integer |  |
+| `foulspersonal` | integer |  |
+| `gameid` | character |  |
+| `jerseynum` | character |  |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `namei` | character |  |
+| `opppointsfastbreak` | integer |  |
+| `opppointsoffturnovers` | integer |  |
+| `opppointspaint` | integer |  |
+| `opppointssecondchance` | integer |  |
+| `personid` | integer |  |
+| `playerslug` | character |  |
+| `pointsfastbreak` | integer |  |
+| `pointsoffturnovers` | integer |  |
+| `pointspaint` | integer |  |
+| `pointssecondchance` | integer |  |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_boxscoremiscv3()
 ```
 
 _Last validated n/a._
@@ -266,6 +488,69 @@ nba_stats_boxscoreplayertrackv3()
 
 _Last validated n/a._
 
+## `nba_stats_boxscorescoringv3`
+
+GET /stats/boxscorescoringv3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/boxscorescoringv3`
+
+**Valid URL:** [https://stats.nba.com/stats/boxscorescoringv3](https://stats.nba.com/stats/boxscorescoringv3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `familyname` | character |  |
+| `firstname` | character | Firstname. |
+| `gameid` | character |  |
+| `jerseynum` | character |  |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `namei` | character |  |
+| `percentageassisted2pt` | numeric |  |
+| `percentageassisted3pt` | numeric |  |
+| `percentageassistedfgm` | numeric |  |
+| `percentagefieldgoalsattempted2pt` | numeric |  |
+| `percentagefieldgoalsattempted3pt` | numeric |  |
+| `percentagepoints2pt` | numeric |  |
+| `percentagepoints3pt` | numeric |  |
+| `percentagepointsfastbreak` | numeric |  |
+| `percentagepointsfreethrow` | numeric |  |
+| `percentagepointsmidrange2pt` | numeric |  |
+| `percentagepointsoffturnovers` | numeric |  |
+| `percentagepointspaint` | numeric |  |
+| `percentageunassisted2pt` | numeric |  |
+| `percentageunassisted3pt` | numeric |  |
+| `percentageunassistedfgm` | numeric |  |
+| `personid` | integer |  |
+| `playerslug` | character |  |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_boxscorescoringv3()
+```
+
+_Last validated n/a._
+
 ## `nba_stats_boxscoresummaryv2`
 
 GET /stats/boxscoresummaryv2
@@ -313,6 +598,225 @@ GET /stats/boxscoresummaryv2
 
 ```python
 nba_stats_boxscoresummaryv2()
+```
+
+_Last validated n/a._
+
+## `nba_stats_boxscoretraditionalv3`
+
+GET /stats/boxscoretraditionalv3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/boxscoretraditionalv3`
+
+**Valid URL:** [https://stats.nba.com/stats/boxscoretraditionalv3](https://stats.nba.com/stats/boxscoretraditionalv3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `assists` | integer | Total assists. |
+| `bench_assists` | integer |  |
+| `bench_blocks` | integer |  |
+| `bench_fieldgoalsattempted` | integer |  |
+| `bench_fieldgoalsmade` | integer |  |
+| `bench_fieldgoalspercentage` | numeric |  |
+| `bench_foulspersonal` | integer |  |
+| `bench_freethrowsattempted` | integer |  |
+| `bench_freethrowsmade` | integer |  |
+| `bench_freethrowspercentage` | numeric |  |
+| `bench_minutes` | character |  |
+| `bench_points` | integer | Points scored by the bench. |
+| `bench_reboundsdefensive` | integer |  |
+| `bench_reboundsoffensive` | integer |  |
+| `bench_reboundstotal` | integer |  |
+| `bench_steals` | integer |  |
+| `bench_threepointersattempted` | integer |  |
+| `bench_threepointersmade` | integer |  |
+| `bench_threepointerspercentage` | numeric |  |
+| `bench_turnovers` | integer |  |
+| `blocks` | integer | Total blocks. |
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `familyname` | character |  |
+| `fieldgoalsattempted` | integer |  |
+| `fieldgoalsmade` | integer |  |
+| `fieldgoalspercentage` | numeric |  |
+| `firstname` | character | Firstname. |
+| `foulspersonal` | integer |  |
+| `freethrowsattempted` | integer |  |
+| `freethrowsmade` | integer |  |
+| `freethrowspercentage` | numeric |  |
+| `gameid` | character |  |
+| `jerseynum` | character |  |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `namei` | character |  |
+| `personid` | integer |  |
+| `playerslug` | character |  |
+| `plusminuspoints` | numeric |  |
+| `points` | integer | Points scored. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `reboundsdefensive` | integer |  |
+| `reboundsoffensive` | integer |  |
+| `reboundstotal` | integer |  |
+| `starters_assists` | integer |  |
+| `starters_blocks` | integer |  |
+| `starters_fieldgoalsattempted` | integer |  |
+| `starters_fieldgoalsmade` | integer |  |
+| `starters_fieldgoalspercentage` | numeric |  |
+| `starters_foulspersonal` | integer |  |
+| `starters_freethrowsattempted` | integer |  |
+| `starters_freethrowsmade` | integer |  |
+| `starters_freethrowspercentage` | numeric |  |
+| `starters_minutes` | character |  |
+| `starters_points` | integer |  |
+| `starters_reboundsdefensive` | integer |  |
+| `starters_reboundsoffensive` | integer |  |
+| `starters_reboundstotal` | integer |  |
+| `starters_steals` | integer |  |
+| `starters_threepointersattempted` | integer |  |
+| `starters_threepointersmade` | integer |  |
+| `starters_threepointerspercentage` | numeric |  |
+| `starters_turnovers` | integer |  |
+| `steals` | integer | Total steals. |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+| `threepointersattempted` | integer |  |
+| `threepointersmade` | integer |  |
+| `threepointerspercentage` | numeric |  |
+| `turnovers` | integer | Total turnovers. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_boxscoretraditionalv3()
+```
+
+_Last validated n/a._
+
+## `nba_stats_boxscoreusagev3`
+
+GET /stats/boxscoreusagev3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/boxscoreusagev3`
+
+**Valid URL:** [https://stats.nba.com/stats/boxscoreusagev3](https://stats.nba.com/stats/boxscoreusagev3)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `EndPeriod` | `end_period` |  |  | `Y` |  |
+| `EndRange` | `end_range` |  |  | `Y` |  |
+| `GameID` | `game_id` |  |  | `Y` |  |
+| `RangeType` | `range_type` |  |  | `Y` |  |
+| `StartPeriod` | `start_period` |  |  | `Y` |  |
+| `StartRange` | `start_range` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
+| `familyname` | character |  |
+| `firstname` | character | Firstname. |
+| `gameid` | character |  |
+| `jerseynum` | character |  |
+| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `namei` | character |  |
+| `percentageassists` | numeric |  |
+| `percentageblocks` | numeric |  |
+| `percentageblocksallowed` | numeric |  |
+| `percentagefieldgoalsattempted` | numeric |  |
+| `percentagefieldgoalsmade` | numeric |  |
+| `percentagefreethrowsattempted` | numeric |  |
+| `percentagefreethrowsmade` | numeric |  |
+| `percentagepersonalfouls` | numeric |  |
+| `percentagepersonalfoulsdrawn` | numeric |  |
+| `percentagepoints` | numeric |  |
+| `percentagereboundsdefensive` | numeric |  |
+| `percentagereboundsoffensive` | numeric |  |
+| `percentagereboundstotal` | numeric |  |
+| `percentagesteals` | numeric |  |
+| `percentagethreepointersattempted` | numeric |  |
+| `percentagethreepointersmade` | numeric |  |
+| `percentageturnovers` | numeric |  |
+| `personid` | integer |  |
+| `playerslug` | character |  |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `teamcity` | character | Teamcity. |
+| `teamid` | integer | Teamid. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character |  |
+| `teamtricode` | character |  |
+| `usagepercentage` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_boxscoreusagev3()
+```
+
+_Last validated n/a._
+
+## `nba_stats_commonallplayers`
+
+GET /stats/commonallplayers
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/commonallplayers`
+
+**Valid URL:** [https://stats.nba.com/stats/commonallplayers?LeagueID=00](https://stats.nba.com/stats/commonallplayers?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `IsOnlyCurrentSeason` | `is_only_current_season` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `display_last_comma_first` | character |  |
+| `display_first_last` | character |  |
+| `rosterstatus` | integer |  |
+| `from_year` | character | First season. |
+| `to_year` | character | Most recent season. |
+| `playercode` | character |  |
+| `player_slug` | character | URL-safe player identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_code` | character | Internal team code. |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `games_played_flag` | character |  |
+| `otherleague_experience_ch` | character |  |
+| `is_nba_assigned` | integer |  |
+| `nba_assigned_team_id` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_commonallplayers(league_id='00')
 ```
 
 _Last validated n/a._
@@ -414,6 +918,52 @@ nba_stats_commonplayoffseries(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_commonteamroster`
+
+GET /stats/commonteamroster
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/commonteamroster`
+
+**Valid URL:** [https://stats.nba.com/stats/commonteamroster?LeagueID=00](https://stats.nba.com/stats/commonteamroster?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `teamid` | integer | Teamid. |
+| `season` | character | Season year. |
+| `leagueid` | character |  |
+| `player` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `player_slug` | character | URL-safe player identifier. |
+| `num` | character | Inning number. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `weight` | character | Player weight in pounds. |
+| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `age` | numeric | Player age (in years). |
+| `exp` | character | Exp. |
+| `school` | character | Player school / pre-draft team. |
+| `player_id` | integer | Unique player identifier. |
+| `how_acquired` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_commonteamroster(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_commonteamyears`
 
 GET /stats/commonteamyears
@@ -443,6 +993,86 @@ GET /stats/commonteamyears
 
 ```python
 nba_stats_commonteamyears(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_cumestatsplayer`
+
+GET /stats/cumestatsplayer
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsplayer`
+
+**Valid URL:** [https://stats.nba.com/stats/cumestatsplayer?LeagueID=00](https://stats.nba.com/stats/cumestatsplayer?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameIDs` | `game_ids` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `display_fi_last` | character |  |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `jersey_num` | character | Jersey number worn by the player. |
+| `gp` | integer | Games played. |
+| `gs` | integer | Games started. |
+| `actual_minutes` | integer |  |
+| `actual_seconds` | integer |  |
+| `fg` | integer |  |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ft` | integer |  |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `off_reb` | integer |  |
+| `def_reb` | integer |  |
+| `tot_reb` | integer |  |
+| `ast` | integer | Assists. |
+| `pf` | integer | Personal fouls. |
+| `dq` | integer |  |
+| `stl` | integer | Steals. |
+| `turnovers` | integer | Total turnovers. |
+| `blk` | integer | Blocks. |
+| `pts` | integer | Points scored. |
+| `max_actual_minutes` | integer |  |
+| `max_actual_seconds` | integer |  |
+| `max_reb` | integer |  |
+| `max_ast` | integer |  |
+| `max_stl` | integer |  |
+| `max_turnovers` | integer |  |
+| `max_blk` | integer |  |
+| `max_pts` | integer |  |
+| `avg_actual_minutes` | integer |  |
+| `avg_actual_seconds` | numeric |  |
+| `avg_tot_reb` | numeric |  |
+| `avg_ast` | numeric |  |
+| `avg_stl` | numeric |  |
+| `avg_turnovers` | numeric |  |
+| `avg_blk` | numeric |  |
+| `avg_pts` | numeric |  |
+| `per_min_tot_reb` | numeric |  |
+| `per_min_ast` | numeric |  |
+| `per_min_stl` | numeric |  |
+| `per_min_turnovers` | numeric |  |
+| `per_min_blk` | numeric |  |
+| `per_min_pts` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_cumestatsplayer(league_id='00')
 ```
 
 _Last validated n/a._
@@ -481,6 +1111,495 @@ GET /stats/cumestatsplayergames
 
 ```python
 nba_stats_cumestatsplayergames(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_cumestatsteam`
+
+GET /stats/cumestatsteam
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteam`
+
+**Valid URL:** [https://stats.nba.com/stats/cumestatsteam?LeagueID=00](https://stats.nba.com/stats/cumestatsteam?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `GameIDs` | `game_ids` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `jersey_num` | character | Jersey number worn by the player. |
+| `player` | character | Player name. |
+| `person_id` | character | Unique player identifier (V3 endpoints). |
+| `team_id` | character | Unique team identifier. |
+| `gp` | character | Games played. |
+| `gs` | character | Games started. |
+| `actual_minutes` | character |  |
+| `actual_seconds` | character |  |
+| `fg` | character |  |
+| `fga` | character | Field goal attempts. |
+| `fg_pct` | character | Field goal percentage (0-1). |
+| `fg3` | character |  |
+| `fg3a` | character | Three-point field goal attempts. |
+| `fg3_pct` | character | Three-point field goal percentage (0-1). |
+| `ft` | character |  |
+| `fta` | character | Free throw attempts. |
+| `ft_pct` | character | Free throw percentage (0-1). |
+| `off_reb` | character |  |
+| `def_reb` | character |  |
+| `tot_reb` | character |  |
+| `ast` | character | Assists. |
+| `pf` | character | Personal fouls. |
+| `dq` | character |  |
+| `stl` | character | Steals. |
+| `turnovers` | character | Total turnovers. |
+| `blk` | character | Blocks. |
+| `pts` | character | Points scored. |
+| `max_actual_minutes` | character |  |
+| `max_actual_seconds` | character |  |
+| `max_reb` | character |  |
+| `max_ast` | character |  |
+| `max_stl` | character |  |
+| `max_turnovers` | character |  |
+| `max_blkp` | character |  |
+| `max_pts` | character |  |
+| `avg_actual_minutes` | character |  |
+| `avg_actual_seconds` | character |  |
+| `avg_reb` | character |  |
+| `avg_ast` | character |  |
+| `avg_stl` | character |  |
+| `avg_turnovers` | character |  |
+| `avg_blkp` | character |  |
+| `avg_pts` | character |  |
+| `per_min_reb` | character |  |
+| `per_min_ast` | character |  |
+| `per_min_stl` | character |  |
+| `per_min_turnovers` | character |  |
+| `per_min_blk` | character |  |
+| `per_min_pts` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_cumestatsteam(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_cumestatsteamgames`
+
+GET /stats/cumestatsteamgames
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteamgames`
+
+**Valid URL:** [https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00](https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonID` | `season_id_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `matchup` | character | Matchup. |
+| `game_id` | character | Unique game identifier. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_cumestatsteamgames(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_draftcombinedrillresults`
+
+GET /stats/draftcombinedrillresults
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinedrillresults`
+
+**Valid URL:** [https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00](https://stats.nba.com/stats/draftcombinedrillresults?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `temp_player_id` | integer |  |
+| `player_id` | integer | Unique player identifier. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `player_name` | character | Player name. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `standing_vertical_leap` | numeric |  |
+| `max_vertical_leap` | numeric |  |
+| `lane_agility_time` | numeric |  |
+| `modified_lane_agility_time` | numeric |  |
+| `three_quarter_sprint` | numeric |  |
+| `bench_press` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_draftcombinedrillresults(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_draftcombinenonstationaryshooting`
+
+GET /stats/draftcombinenonstationaryshooting
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinenonstationaryshooting`
+
+**Valid URL:** [https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00](https://stats.nba.com/stats/draftcombinenonstationaryshooting?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `temp_player_id` | integer |  |
+| `player_id` | integer | Unique player identifier. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `player_name` | character | Player name. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `off_drib_fifteen_break_left_made` | character |  |
+| `off_drib_fifteen_break_left_attempt` | character |  |
+| `off_drib_fifteen_break_left_pct` | character |  |
+| `off_drib_fifteen_top_key_made` | character |  |
+| `off_drib_fifteen_top_key_attempt` | character |  |
+| `off_drib_fifteen_top_key_pct` | character |  |
+| `off_drib_fifteen_break_right_made` | character |  |
+| `off_drib_fifteen_break_right_attempt` | character |  |
+| `off_drib_fifteen_break_right_pct` | character |  |
+| `off_drib_college_break_left_made` | integer |  |
+| `off_drib_college_break_left_attempt` | integer |  |
+| `off_drib_college_break_left_pct` | numeric |  |
+| `off_drib_college_top_key_made` | character |  |
+| `off_drib_college_top_key_attempt` | character |  |
+| `off_drib_college_top_key_pct` | character |  |
+| `off_drib_college_break_right_made` | character |  |
+| `off_drib_college_break_right_attempt` | character |  |
+| `off_drib_college_break_right_pct` | character |  |
+| `on_move_fifteen_made` | character |  |
+| `on_move_fifteen_attempt` | character |  |
+| `on_move_fifteen_pct` | character |  |
+| `on_move_college_made` | integer |  |
+| `on_move_college_attempt` | integer |  |
+| `on_move_college_pct` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_draftcombinenonstationaryshooting(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_draftcombineplayeranthro`
+
+GET /stats/draftcombineplayeranthro
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/draftcombineplayeranthro`
+
+**Valid URL:** [https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00](https://stats.nba.com/stats/draftcombineplayeranthro?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `temp_player_id` | integer |  |
+| `player_id` | integer | Unique player identifier. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `player_name` | character | Player name. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height_wo_shoes` | numeric |  |
+| `height_wo_shoes_ft_in` | character |  |
+| `height_w_shoes` | character |  |
+| `height_w_shoes_ft_in` | character |  |
+| `weight` | character | Player weight in pounds. |
+| `wingspan` | numeric |  |
+| `wingspan_ft_in` | character |  |
+| `standing_reach` | numeric |  |
+| `standing_reach_ft_in` | character |  |
+| `body_fat_pct` | character |  |
+| `hand_length` | numeric |  |
+| `hand_width` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_draftcombineplayeranthro(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_draftcombinespotshooting`
+
+GET /stats/draftcombinespotshooting
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinespotshooting`
+
+**Valid URL:** [https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00](https://stats.nba.com/stats/draftcombinespotshooting?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `SeasonYear` | `season_year` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `temp_player_id` | integer |  |
+| `player_id` | integer | Unique player identifier. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `player_name` | character | Player name. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `fifteen_corner_left_made` | character |  |
+| `fifteen_corner_left_attempt` | character |  |
+| `fifteen_corner_left_pct` | character |  |
+| `fifteen_break_left_made` | character |  |
+| `fifteen_break_left_attempt` | character |  |
+| `fifteen_break_left_pct` | character |  |
+| `fifteen_top_key_made` | character |  |
+| `fifteen_top_key_attempt` | character |  |
+| `fifteen_top_key_pct` | character |  |
+| `fifteen_break_right_made` | character |  |
+| `fifteen_break_right_attempt` | character |  |
+| `fifteen_break_right_pct` | character |  |
+| `fifteen_corner_right_made` | character |  |
+| `fifteen_corner_right_attempt` | character |  |
+| `fifteen_corner_right_pct` | character |  |
+| `college_corner_left_made` | integer |  |
+| `college_corner_left_attempt` | integer |  |
+| `college_corner_left_pct` | numeric |  |
+| `college_break_left_made` | character |  |
+| `college_break_left_attempt` | character |  |
+| `college_break_left_pct` | character |  |
+| `college_top_key_made` | character |  |
+| `college_top_key_attempt` | character |  |
+| `college_top_key_pct` | character |  |
+| `college_break_right_made` | character |  |
+| `college_break_right_attempt` | character |  |
+| `college_break_right_pct` | character |  |
+| `college_corner_right_made` | character |  |
+| `college_corner_right_attempt` | character |  |
+| `college_corner_right_pct` | character |  |
+| `nba_corner_left_made` | character |  |
+| `nba_corner_left_attempt` | character |  |
+| `nba_corner_left_pct` | character |  |
+| `nba_break_left_made` | character |  |
+| `nba_break_left_attempt` | character |  |
+| `nba_break_left_pct` | character |  |
+| `nba_top_key_made` | character |  |
+| `nba_top_key_attempt` | character |  |
+| `nba_top_key_pct` | character |  |
+| `nba_break_right_made` | character |  |
+| `nba_break_right_attempt` | character |  |
+| `nba_break_right_pct` | character |  |
+| `nba_corner_right_made` | character |  |
+| `nba_corner_right_attempt` | character |  |
+| `nba_corner_right_pct` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_draftcombinespotshooting(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_draftcombinestats`
+
+GET /stats/draftcombinestats
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/draftcombinestats`
+
+**Valid URL:** [https://stats.nba.com/stats/draftcombinestats?LeagueID=00](https://stats.nba.com/stats/draftcombinestats?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `SeasonYear` | `season_all_time` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `season` | character | Season year. |
+| `player_id` | integer | Unique player identifier. |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `player_name` | character | Player name. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height_wo_shoes` | numeric |  |
+| `height_wo_shoes_ft_in` | character |  |
+| `height_w_shoes` | character |  |
+| `height_w_shoes_ft_in` | character |  |
+| `weight` | character | Player weight in pounds. |
+| `wingspan` | numeric |  |
+| `wingspan_ft_in` | character |  |
+| `standing_reach` | numeric |  |
+| `standing_reach_ft_in` | character |  |
+| `body_fat_pct` | character |  |
+| `hand_length` | numeric |  |
+| `hand_width` | numeric |  |
+| `standing_vertical_leap` | numeric |  |
+| `max_vertical_leap` | numeric |  |
+| `lane_agility_time` | numeric |  |
+| `modified_lane_agility_time` | numeric |  |
+| `three_quarter_sprint` | numeric |  |
+| `bench_press` | character |  |
+| `spot_fifteen_corner_left` | character |  |
+| `spot_fifteen_break_left` | character |  |
+| `spot_fifteen_top_key` | character |  |
+| `spot_fifteen_break_right` | character |  |
+| `spot_fifteen_corner_right` | character |  |
+| `spot_college_corner_left` | character |  |
+| `spot_college_break_left` | character |  |
+| `spot_college_top_key` | character |  |
+| `spot_college_break_right` | character |  |
+| `spot_college_corner_right` | character |  |
+| `spot_nba_corner_left` | character |  |
+| `spot_nba_break_left` | character |  |
+| `spot_nba_top_key` | character |  |
+| `spot_nba_break_right` | character |  |
+| `spot_nba_corner_right` | character |  |
+| `off_drib_fifteen_break_left` | character |  |
+| `off_drib_fifteen_top_key` | character |  |
+| `off_drib_fifteen_break_right` | character |  |
+| `off_drib_college_break_left` | character |  |
+| `off_drib_college_top_key` | character |  |
+| `off_drib_college_break_right` | character |  |
+| `on_move_fifteen` | character |  |
+| `on_move_college` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_draftcombinestats(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_fantasywidget`
+
+GET /stats/fantasywidget
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/fantasywidget`
+
+**Valid URL:** [https://stats.nba.com/stats/fantasywidget?LeagueID=00](https://stats.nba.com/stats/fantasywidget?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `ActivePlayers` | `active_players` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Month` | `month_nullable` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
+| `Position` | `position_nullable` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `TodaysOpponent` | `todays_opponent` |  |  | `Y` |  |
+| `TodaysPlayers` | `todays_players` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `player_position` | character | Position of the player accordinng to NGS |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `gp` | integer | Games played. |
+| `min` | numeric | Minutes played. |
+| `fan_duel_pts` | numeric |  |
+| `nba_fantasy_pts` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `blk` | numeric | Blocks. |
+| `stl` | numeric | Steals. |
+| `tov` | numeric | Turnovers. |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_fantasywidget(league_id='00')
 ```
 
 _Last validated n/a._
@@ -573,6 +1692,141 @@ nba_stats_franchiseleaders(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_franchiseleaderswrank`
+
+GET /stats/franchiseleaderswrank
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/franchiseleaderswrank`
+
+**Valid URL:** [https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00](https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `team_id` | integer | Unique team identifier. |
+| `team` | character | Team-side label or team identifier. |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `player` | character | Player name. |
+| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `active_with_team` | integer |  |
+| `gp` | integer | Games played. |
+| `minutes` | numeric | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `pf` | numeric | Personal fouls. |
+| `stl` | numeric | Steals. |
+| `tov` | numeric | Turnovers. |
+| `blk` | numeric | Blocks. |
+| `pts` | numeric | Points scored. |
+| `f_rank_gp` | integer |  |
+| `f_rank_minutes` | integer |  |
+| `f_rank_fgm` | integer |  |
+| `f_rank_fga` | integer |  |
+| `f_rank_fg_pct` | integer |  |
+| `f_rank_fg3m` | integer |  |
+| `f_rank_fg3a` | integer |  |
+| `f_rank_fg3_pct` | integer |  |
+| `f_rank_ftm` | integer |  |
+| `f_rank_fta` | integer |  |
+| `f_rank_ft_pct` | integer |  |
+| `f_rank_oreb` | integer |  |
+| `f_rank_dreb` | integer |  |
+| `f_rank_reb` | integer |  |
+| `f_rank_ast` | integer |  |
+| `f_rank_pf` | integer |  |
+| `f_rank_stl` | integer |  |
+| `f_rank_tov` | integer |  |
+| `f_rank_blk` | integer |  |
+| `f_rank_pts` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_franchiseleaderswrank(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_franchiseplayers`
+
+GET /stats/franchiseplayers
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/franchiseplayers`
+
+**Valid URL:** [https://stats.nba.com/stats/franchiseplayers?LeagueID=00](https://stats.nba.com/stats/franchiseplayers?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `team_id` | integer | Unique team identifier. |
+| `team` | character | Team-side label or team identifier. |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `player` | character | Player name. |
+| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `active_with_team` | integer |  |
+| `gp` | integer | Games played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `pf` | numeric | Personal fouls. |
+| `stl` | numeric | Steals. |
+| `tov` | numeric | Turnovers. |
+| `blk` | numeric | Blocks. |
+| `pts` | numeric | Points scored. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_franchiseplayers(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_gamerotation`
 
 GET /stats/gamerotation
@@ -610,59 +1864,6 @@ GET /stats/gamerotation
 
 ```python
 nba_stats_gamerotation(league_id='00')
-```
-
-_Last validated n/a._
-
-## `nba_stats_hustlestatsboxscore`
-
-GET /stats/hustlestatsboxscore
-
-**Endpoint URL:** `GET https://stats.nba.com/stats/hustlestatsboxscore`
-
-**Valid URL:** [https://stats.nba.com/stats/hustlestatsboxscore](https://stats.nba.com/stats/hustlestatsboxscore)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameID` | `game_id` |  |  | `Y` |  |
-
-### Returns
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `team_id` | character | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
-| `start_position` | character | Starting lineup position code for the player in this game or roster row. |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `pts` | integer | Points scored. |
-| `contested_shots` | numeric | Defensively contested shots. |
-| `contested_shots_2pt` | numeric | Shooting metric for contested shots 2pt in the requested NBA or WNBA Stats split. |
-| `contested_shots_3pt` | numeric | Shooting metric for contested shots 3pt in the requested NBA or WNBA Stats split. |
-| `deflections` | numeric | Defensive deflections. |
-| `charges_drawn` | numeric | Charges drawn. |
-| `screen_assists` | numeric | Screen assists (resulting in a basket). |
-| `screen_ast_pts` | numeric | Scoring or score-margin metric for screen assists points in the requested NBA or WNBA Stats split. |
-| `off_loose_balls_recovered` | numeric | Turnover or loose-ball metric for offensive loose balls recovered in the requested NBA or WNBA Stats split. |
-| `def_loose_balls_recovered` | numeric | Turnover or loose-ball metric for defensive loose balls recovered in the requested NBA or WNBA Stats split. |
-| `loose_balls_recovered` | numeric | Turnover or loose-ball metric for loose balls recovered in the requested NBA or WNBA Stats split. |
-| `off_boxouts` | numeric | Rebounding metric for offensive boxouts in the requested NBA or WNBA Stats split. |
-| `def_boxouts` | numeric | Rebounding metric for defensive boxouts in the requested NBA or WNBA Stats split. |
-| `box_out_player_team_rebs` | numeric | Rebounding metric for box out player team rebs in the requested NBA or WNBA Stats split. |
-| `box_out_player_rebs` | numeric | Rebounding metric for box out player rebs in the requested NBA or WNBA Stats split. |
-| `box_outs` | numeric | Box-outs executed. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example
-
-```python
-nba_stats_hustlestatsboxscore()
 ```
 
 _Last validated n/a._
@@ -987,6 +2188,139 @@ GET /stats/leaguedashplayerbiostats
 
 ```python
 nba_stats_leaguedashplayerbiostats(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_leaguedashplayerclutch`
+
+GET /stats/leaguedashplayerclutch
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguedashplayerclutch`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguedashplayerclutch?LeagueID=00](https://stats.nba.com/stats/leaguedashplayerclutch?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `AheadBehind` | `ahead_behind` |  |  | `Y` |  |
+| `ClutchTime` | `clutch_time` |  |  | `Y` |  |
+| `College` | `college_nullable` |  |  | `Y` |  |
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `Country` | `country_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `GameScope` | `game_scope_simple_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `Height` | `height_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `PointDiff` | `point_diff` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `Weight` | `weight_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `nickname` | character | Team or athlete nickname. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `age` | numeric | Player age (in years). |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric |  |
+| `dd2` | integer |  |
+| `td3` | integer |  |
+| `wnba_fantasy_pts` | numeric |  |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+| `nba_fantasy_pts_rank` | integer |  |
+| `dd2_rank` | integer |  |
+| `td3_rank` | integer |  |
+| `wnba_fantasy_pts_rank` | integer |  |
+| `team_count` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_leaguedashplayerclutch(league_id='00')
 ```
 
 _Last validated n/a._
@@ -1406,6 +2740,119 @@ nba_stats_leaguedashptteamdefend(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_leaguedashteamclutch`
+
+GET /stats/leaguedashteamclutch
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguedashteamclutch`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguedashteamclutch?LeagueID=00](https://stats.nba.com/stats/leaguedashteamclutch?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `AheadBehind` | `ahead_behind` |  |  | `Y` |  |
+| `ClutchTime` | `clutch_time` |  |  | `Y` |  |
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `GameScope` | `game_scope_simple_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `PointDiff` | `point_diff` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_leaguedashteamclutch(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_leaguedashteamptshot`
 
 GET /stats/leaguedashteamptshot
@@ -1588,41 +3035,23 @@ nba_stats_leaguedashteamstats(league_id='00')
 
 _Last validated n/a._
 
-## `nba_stats_leaguehustlestatsplayer`
+## `nba_stats_leagueleaders`
 
-GET /stats/leaguehustlestatsplayer
+GET /stats/leagueleaders
 
-**Endpoint URL:** `GET https://stats.nba.com/stats/leaguehustlestatsplayer`
+**Endpoint URL:** `GET https://stats.nba.com/stats/leagueleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsplayer?LeagueID=00](https://stats.nba.com/stats/leaguehustlestatsplayer?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/leagueleaders?LeagueID=00](https://stats.nba.com/stats/leagueleaders?LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `College` | `college_nullable` |  |  | `Y` |  |
-| `Conference` | `conference_nullable` |  |  | `Y` |  |
-| `Country` | `country_nullable` |  |  | `Y` |  |
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `Division` | `division_simple_nullable` |  |  | `Y` |  |
-| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
-| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
-| `Height` | `height_nullable` |  |  | `Y` |  |
+| `ActiveFlag` | `active_flag_nullable` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `Month` | `month_nullable` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `PORound` | `po_round_nullable` |  |  | `Y` |  |
-| `PerMode` | `per_mode_time` |  |  | `Y` |  |
-| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
-| `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
+| `PerMode` | `per_mode48` |  |  | `Y` |  |
+| `Scope` | `scope` |  |  | `Y` |  |
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-| `Weight` | `weight_nullable` |  |  | `Y` |  |
+| `StatCategory` | `stat_category_abbreviation` |  |  | `Y` |  |
 
 ### Returns
 
@@ -1630,112 +3059,117 @@ GET /stats/leaguehustlestatsplayer
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `rank` | integer | Rank. |
+| `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `age` | numeric | Player age (in years). |
-| `g` | integer | Games played. |
+| `team` | character | Team-side label or team identifier. |
+| `gp` | integer | Games played. |
 | `min` | numeric | Minutes played. |
-| `contested_shots` | numeric | Defensively contested shots. |
-| `contested_shots_2pt` | numeric | Shooting metric for contested shots 2pt in the requested NBA or WNBA Stats split. |
-| `contested_shots_3pt` | numeric | Shooting metric for contested shots 3pt in the requested NBA or WNBA Stats split. |
-| `deflections` | numeric | Defensive deflections. |
-| `charges_drawn` | numeric | Charges drawn. |
-| `screen_assists` | numeric | Screen assists (resulting in a basket). |
-| `screen_ast_pts` | numeric | Scoring or score-margin metric for screen assists points in the requested NBA or WNBA Stats split. |
-| `off_loose_balls_recovered` | numeric | Turnover or loose-ball metric for offensive loose balls recovered in the requested NBA or WNBA Stats split. |
-| `def_loose_balls_recovered` | numeric | Turnover or loose-ball metric for defensive loose balls recovered in the requested NBA or WNBA Stats split. |
-| `loose_balls_recovered` | numeric | Turnover or loose-ball metric for loose balls recovered in the requested NBA or WNBA Stats split. |
-| `pct_loose_balls_recovered_off` | numeric | Percentage share of loose balls recovered offensive for the requested NBA or WNBA Stats split. |
-| `pct_loose_balls_recovered_def` | numeric | Percentage share of loose balls recovered defensive for the requested NBA or WNBA Stats split. |
-| `off_boxouts` | numeric | Rebounding metric for offensive boxouts in the requested NBA or WNBA Stats split. |
-| `def_boxouts` | numeric | Rebounding metric for defensive boxouts in the requested NBA or WNBA Stats split. |
-| `box_outs` | numeric | Box-outs executed. |
-| `box_out_player_team_rebs` | numeric | Rebounding metric for box out player team rebs in the requested NBA or WNBA Stats split. |
-| `box_out_player_rebs` | numeric | Rebounding metric for box out player rebs in the requested NBA or WNBA Stats split. |
-| `pct_box_outs_off` | numeric | Percentage share of box outs offensive for the requested NBA or WNBA Stats split. |
-| `pct_box_outs_def` | numeric | Percentage share of box outs defensive for the requested NBA or WNBA Stats split. |
-| `pct_box_outs_team_reb` | numeric | Percentage share of box outs team rebounds for the requested NBA or WNBA Stats split. |
-| `pct_box_outs_reb` | numeric | Percentage share of box outs rebounds for the requested NBA or WNBA Stats split. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `tov` | numeric | Turnovers. |
+| `pts` | numeric | Points scored. |
+| `eff` | numeric | Eff. |
+| `nickname` | character | Team or athlete nickname. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
 ```python
-nba_stats_leaguehustlestatsplayer(league_id='00')
+nba_stats_leagueleaders(league_id='00')
 ```
 
 _Last validated n/a._
 
-## `nba_stats_leaguehustlestatsteam`
+## `nba_stats_leaguelineupviz`
 
-GET /stats/leaguehustlestatsteam
+GET /stats/leaguelineupviz
 
-**Endpoint URL:** `GET https://stats.nba.com/stats/leaguehustlestatsteam`
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguelineupviz`
 
-**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsteam?LeagueID=00](https://stats.nba.com/stats/leaguehustlestatsteam?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/leaguelineupviz?LeagueID=00](https://stats.nba.com/stats/leaguelineupviz?LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `College` | `college_nullable` |  |  | `Y` |  |
 | `Conference` | `conference_nullable` |  |  | `Y` |  |
-| `Country` | `country_nullable` |  |  | `Y` |  |
 | `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
 | `DateTo` | `date_to_nullable` |  |  | `Y` |  |
 | `Division` | `division_simple_nullable` |  |  | `Y` |  |
-| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
-| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
-| `Height` | `height_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `GroupQuantity` | `group_quantity` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `Location` | `location_nullable` |  |  | `Y` |  |
-| `Month` | `month_nullable` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `MinutesMin` | `minutes_min` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
 | `Outcome` | `outcome_nullable` |  |  | `Y` |  |
 | `PORound` | `po_round_nullable` |  |  | `Y` |  |
-| `PerMode` | `per_mode_time` |  |  | `Y` |  |
-| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
-| `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-| `Weight` | `weight_nullable` |  |  | `Y` |  |
 
 ### Returns
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
+| `group_id` | character | ESPN group id. |
+| `group_name` | character | Group name (conference / division). |
 | `team_id` | integer | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `min` | numeric | Minutes played. |
-| `contested_shots` | numeric | Defensively contested shots. |
-| `contested_shots_2pt` | numeric | Shooting metric for contested shots 2pt in the requested NBA or WNBA Stats split. |
-| `contested_shots_3pt` | numeric | Shooting metric for contested shots 3pt in the requested NBA or WNBA Stats split. |
-| `deflections` | numeric | Defensive deflections. |
-| `charges_drawn` | numeric | Charges drawn. |
-| `screen_assists` | numeric | Screen assists (resulting in a basket). |
-| `screen_ast_pts` | numeric | Scoring or score-margin metric for screen assists points in the requested NBA or WNBA Stats split. |
-| `off_loose_balls_recovered` | numeric | Turnover or loose-ball metric for offensive loose balls recovered in the requested NBA or WNBA Stats split. |
-| `def_loose_balls_recovered` | numeric | Turnover or loose-ball metric for defensive loose balls recovered in the requested NBA or WNBA Stats split. |
-| `loose_balls_recovered` | numeric | Turnover or loose-ball metric for loose balls recovered in the requested NBA or WNBA Stats split. |
-| `pct_loose_balls_recovered_off` | numeric | Percentage share of loose balls recovered offensive for the requested NBA or WNBA Stats split. |
-| `pct_loose_balls_recovered_def` | numeric | Percentage share of loose balls recovered defensive for the requested NBA or WNBA Stats split. |
-| `off_boxouts` | numeric | Rebounding metric for offensive boxouts in the requested NBA or WNBA Stats split. |
-| `def_boxouts` | numeric | Rebounding metric for defensive boxouts in the requested NBA or WNBA Stats split. |
-| `box_outs` | numeric | Box-outs executed. |
-| `pct_box_outs_off` | numeric | Percentage share of box outs offensive for the requested NBA or WNBA Stats split. |
-| `pct_box_outs_def` | numeric | Percentage share of box outs defensive for the requested NBA or WNBA Stats split. |
+| `off_rating` | numeric |  |
+| `def_rating` | numeric |  |
+| `net_rating` | numeric | Net rating (off rating - def rating). |
+| `pace` | numeric | Possessions per 48 minutes. |
+| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `fta_rate` | numeric |  |
+| `tm_ast_pct` | numeric |  |
+| `pct_fga_2pt` | numeric |  |
+| `pct_fga_3pt` | numeric |  |
+| `pct_pts_2pt_mr` | numeric |  |
+| `pct_pts_fb` | numeric |  |
+| `pct_pts_ft` | numeric |  |
+| `pct_pts_paint` | numeric |  |
+| `pct_ast_fgm` | numeric |  |
+| `pct_uast_fgm` | numeric |  |
+| `opp_fg3_pct` | numeric |  |
+| `opp_efg_pct` | numeric |  |
+| `opp_fta_rate` | numeric |  |
+| `opp_tov_pct` | numeric |  |
+| `sum_tm_min` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example
 
 ```python
-nba_stats_leaguehustlestatsteam(league_id='00')
+nba_stats_leaguelineupviz(league_id='00')
 ```
 
 _Last validated n/a._
@@ -2353,6 +3787,82 @@ nba_stats_playercareerstats(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_playercompare`
+
+GET /stats/playercompare
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/playercompare`
+
+**Valid URL:** [https://stats.nba.com/stats/playercompare?LeagueID=00](https://stats.nba.com/stats/playercompare?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerIDList` | `player_id_list` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `VsPlayerIDList` | `vs_player_id_list` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `description` | character | Long-form description text. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_playercompare(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_playerdashboardbyclutch`
 
 GET /stats/playerdashboardbyclutch
@@ -2801,6 +4311,119 @@ GET /stats/playerdashboardbylastngames
 
 ```python
 nba_stats_playerdashboardbylastngames(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_playerdashboardbyopponent`
+
+GET /stats/playerdashboardbyopponent
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/playerdashboardbyopponent`
+
+**Valid URL:** [https://stats.nba.com/stats/playerdashboardbyopponent?LeagueID=00](https://stats.nba.com/stats/playerdashboardbyopponent?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from` |  |  | `Y` |  |
+| `DateTo` | `date_to` |  |  | `Y` |  |
+| `GameSegment` | `game_segment` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome` |  |  | `Y` |  |
+| `PORound` | `po_round` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `ShotClockRange` | `shot_clock_range` |  |  | `Y` |  |
+| `VsConference` | `vs_conference` |  |  | `Y` |  |
+| `VsDivision` | `vs_division` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric |  |
+| `dd2` | integer |  |
+| `td3` | integer |  |
+| `wnba_fantasy_pts` | numeric |  |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+| `nba_fantasy_pts_rank` | integer |  |
+| `dd2_rank` | integer |  |
+| `td3_rank` | integer |  |
+| `wnba_fantasy_pts_rank` | integer |  |
+| `team_count` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_playerdashboardbyopponent(league_id='00')
 ```
 
 _Last validated n/a._
@@ -3424,6 +5047,75 @@ nba_stats_playerestimatedmetrics(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_playerfantasyprofile`
+
+GET /stats/playerfantasyprofile
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/playerfantasyprofile`
+
+**Valid URL:** [https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00](https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `season_year` | character | Season year string ('YYYY-YY' format). |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `dd2` | integer |  |
+| `td3` | integer |  |
+| `fan_duel_pts` | numeric |  |
+| `nba_fantasy_pts` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_playerfantasyprofile(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_playerfantasyprofilebargraph`
 
 GET /stats/playerfantasyprofilebargraph
@@ -3896,6 +5588,142 @@ nba_stats_playerprofilev2(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_playervsplayer`
+
+GET /stats/playervsplayer
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/playervsplayer`
+
+**Valid URL:** [https://stats.nba.com/stats/playervsplayer?LeagueID=00](https://stats.nba.com/stats/playervsplayer?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `VsPlayerID` | `vs_player_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `vs_player_id` | integer |  |
+| `vs_player_name` | character |  |
+| `court_status` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_playervsplayer(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_playoffpicture`
+
+GET /stats/playoffpicture
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/playoffpicture`
+
+**Valid URL:** [https://stats.nba.com/stats/playoffpicture?LeagueID=00](https://stats.nba.com/stats/playoffpicture?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `SeasonID` | `season_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `conference` | character | Conference name. |
+| `rank` | integer | Rank. |
+| `team` | character | Team-side label or team identifier. |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_id` | integer | Unique team identifier. |
+| `wins` | integer | Total wins. |
+| `losses` | integer | Total losses. |
+| `pct` | numeric | Win percentage. |
+| `div` | character |  |
+| `conf` | character | character. |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `gb` | numeric | Games behind the conference leader. |
+| `gr_over_500` | integer |  |
+| `gr_over_500_home` | integer |  |
+| `gr_over_500_away` | integer |  |
+| `gr_under_500` | integer |  |
+| `gr_under_500_home` | integer |  |
+| `gr_under_500_away` | integer |  |
+| `ranking_criteria` | integer |  |
+| `clinched_playoffs` | integer |  |
+| `clinched_conference` | integer |  |
+| `clinched_division` | integer |  |
+| `eliminated_playoffs` | integer |  |
+| `sosa_remaining` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_playoffpicture(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_scheduleleaguev2`
 
 GET /stats/scheduleleaguev2
@@ -4050,6 +5878,88 @@ nba_stats_scheduleleaguev2int(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_shotchartdetail`
+
+GET /stats/shotchartdetail
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/shotchartdetail`
+
+**Valid URL:** [https://stats.nba.com/stats/shotchartdetail?LeagueID=00](https://stats.nba.com/stats/shotchartdetail?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `AheadBehind` | `ahead_behind_nullable` |  |  | `Y` |  |
+| `ClutchTime` | `clutch_time_nullable` |  |  | `Y` |  |
+| `ContextFilter` | `context_filter_nullable` |  |  | `Y` |  |
+| `ContextMeasure` | `context_measure_simple` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `EndPeriod` | `end_period_nullable` |  |  | `Y` |  |
+| `EndRange` | `end_range_nullable` |  |  | `Y` |  |
+| `GameID` | `game_id_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerID` | `player_id` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
+| `PointDiff` | `point_diff_nullable` |  |  | `Y` |  |
+| `Position` | `position_nullable` |  |  | `Y` |  |
+| `RangeType` | `range_type_nullable` |  |  | `Y` |  |
+| `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` |  |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `StartPeriod` | `start_period_nullable` |  |  | `Y` |  |
+| `StartRange` | `start_range_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `grid_type` | character |  |
+| `game_id` | character | Unique game identifier. |
+| `game_event_id` | character | Unique identifier for game event. |
+| `player_id` | character | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `team_id` | character | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
+| `minutes_remaining` | character | Minutes remaining. |
+| `seconds_remaining` | character | Seconds remaining in the period. |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `shot_type` | character | Type of shot taken (e.g. wrist, snap, backhand). |
+| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `shot_distance` | character | Shot distance from the basket, in feet. |
+| `loc_x` | character | X coordinate on the court (units of inches; 0 = basket center). |
+| `loc_y` | character | Y coordinate on the court (units of inches; baseline at 0). |
+| `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
+| `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `htm` | character |  |
+| `vtm` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_shotchartdetail(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_shotchartleaguewide`
 
 GET /stats/shotchartleaguewide
@@ -4082,6 +5992,287 @@ GET /stats/shotchartleaguewide
 
 ```python
 nba_stats_shotchartleaguewide(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_shotchartlineupdetail`
+
+GET /stats/shotchartlineupdetail
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/shotchartlineupdetail`
+
+**Valid URL:** [https://stats.nba.com/stats/shotchartlineupdetail?LeagueID=00](https://stats.nba.com/stats/shotchartlineupdetail?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `ContextFilter` | `context_filter_nullable` |  |  | `Y` |  |
+| `ContextMeasure` | `context_measure_detailed` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `GROUP_ID` | `group_id` |  |  | `Y` |  |
+| `GameID` | `game_id_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Month` | `month_nullable` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `grid_type` | character |  |
+| `game_id` | character | Unique game identifier. |
+| `game_event_id` | character | Unique identifier for game event. |
+| `group_id` | character | ESPN group id. |
+| `group_name` | character | Group name (conference / division). |
+| `player_id` | character | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `team_id` | character | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
+| `minutes_remaining` | character | Minutes remaining. |
+| `seconds_remaining` | character | Seconds remaining in the period. |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `shot_type` | character | Type of shot taken (e.g. wrist, snap, backhand). |
+| `shot_zone_basic` | character | Shot zone (e.g. 'Restricted Area', 'Mid-Range', 'Above the Break 3'). |
+| `shot_zone_area` | character | Shot zone area ('Left Side', 'Right Side', 'Center'). |
+| `shot_zone_range` | character | Shot zone range ('Less Than 8 ft.', '8-16 ft.', '16-24 ft.', etc.). |
+| `shot_distance` | character | Shot distance from the basket, in feet. |
+| `loc_x` | character | X coordinate on the court (units of inches; 0 = basket center). |
+| `loc_y` | character | Y coordinate on the court (units of inches; baseline at 0). |
+| `shot_attempted_flag` | character | 1 if a shot was attempted on this event. |
+| `shot_made_flag` | character | 1 if the shot was made; 0 if missed. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `htm` | character |  |
+| `vtm` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_shotchartlineupdetail(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamdashboardbyclutch`
+
+GET /stats/teamdashboardbyclutch
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbyclutch`
+
+**Valid URL:** [https://stats.nba.com/stats/teamdashboardbyclutch?LeagueID=00](https://stats.nba.com/stats/teamdashboardbyclutch?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from` |  |  | `Y` |  |
+| `DateTo` | `date_to` |  |  | `Y` |  |
+| `GameSegment` | `game_segment` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome` |  |  | `Y` |  |
+| `PORound` | `po_round` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `ShotClockRange` | `shot_clock_range` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference` |  |  | `Y` |  |
+| `VsDivision` | `vs_division` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamdashboardbyclutch(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamdashboardbygamesplits`
+
+GET /stats/teamdashboardbygamesplits
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbygamesplits`
+
+**Valid URL:** [https://stats.nba.com/stats/teamdashboardbygamesplits?LeagueID=00](https://stats.nba.com/stats/teamdashboardbygamesplits?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from` |  |  | `Y` |  |
+| `DateTo` | `date_to` |  |  | `Y` |  |
+| `GameSegment` | `game_segment` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome` |  |  | `Y` |  |
+| `PORound` | `po_round` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `ShotClockRange` | `shot_clock_range` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference` |  |  | `Y` |  |
+| `VsDivision` | `vs_division` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamdashboardbygamesplits(league_id='00')
 ```
 
 _Last validated n/a._
@@ -4191,6 +6382,214 @@ nba_stats_teamdashboardbygeneralsplits(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_teamdashboardbylastngames`
+
+GET /stats/teamdashboardbylastngames
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbylastngames`
+
+**Valid URL:** [https://stats.nba.com/stats/teamdashboardbylastngames?LeagueID=00](https://stats.nba.com/stats/teamdashboardbylastngames?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from` |  |  | `Y` |  |
+| `DateTo` | `date_to` |  |  | `Y` |  |
+| `GameSegment` | `game_segment` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome` |  |  | `Y` |  |
+| `PORound` | `po_round` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `ShotClockRange` | `shot_clock_range` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference` |  |  | `Y` |  |
+| `VsDivision` | `vs_division` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamdashboardbylastngames(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamdashboardbyopponent`
+
+GET /stats/teamdashboardbyopponent
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbyopponent`
+
+**Valid URL:** [https://stats.nba.com/stats/teamdashboardbyopponent?LeagueID=00](https://stats.nba.com/stats/teamdashboardbyopponent?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from` |  |  | `Y` |  |
+| `DateTo` | `date_to` |  |  | `Y` |  |
+| `GameSegment` | `game_segment` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome` |  |  | `Y` |  |
+| `PORound` | `po_round` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `ShotClockRange` | `shot_clock_range` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference` |  |  | `Y` |  |
+| `VsDivision` | `vs_division` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamdashboardbyopponent(league_id='00')
+```
+
+_Last validated n/a._
+
 ## `nba_stats_teamdashboardbyshootingsplits`
 
 GET /stats/teamdashboardbyshootingsplits
@@ -4268,6 +6667,216 @@ GET /stats/teamdashboardbyshootingsplits
 
 ```python
 nba_stats_teamdashboardbyshootingsplits(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamdashboardbyteamperformance`
+
+GET /stats/teamdashboardbyteamperformance
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbyteamperformance`
+
+**Valid URL:** [https://stats.nba.com/stats/teamdashboardbyteamperformance?LeagueID=00](https://stats.nba.com/stats/teamdashboardbyteamperformance?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from` |  |  | `Y` |  |
+| `DateTo` | `date_to` |  |  | `Y` |  |
+| `GameSegment` | `game_segment` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome` |  |  | `Y` |  |
+| `PORound` | `po_round` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `ShotClockRange` | `shot_clock_range` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference` |  |  | `Y` |  |
+| `VsDivision` | `vs_division` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value_order` | integer |  |
+| `group_value` | character |  |
+| `group_value_2` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamdashboardbyteamperformance(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamdashboardbyyearoveryear`
+
+GET /stats/teamdashboardbyyearoveryear
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamdashboardbyyearoveryear`
+
+**Valid URL:** [https://stats.nba.com/stats/teamdashboardbyyearoveryear?LeagueID=00](https://stats.nba.com/stats/teamdashboardbyyearoveryear?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from` |  |  | `Y` |  |
+| `DateTo` | `date_to` |  |  | `Y` |  |
+| `GameSegment` | `game_segment` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location` |  |  | `Y` |  |
+| `MeasureType` | `measure_type` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome` |  |  | `Y` |  |
+| `PORound` | `po_round` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment` |  |  | `Y` |  |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `ShotClockRange` | `shot_clock_range` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference` |  |  | `Y` |  |
+| `VsDivision` | `vs_division` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamdashboardbyyearoveryear(league_id='00')
 ```
 
 _Last validated n/a._
@@ -4564,6 +7173,45 @@ nba_stats_teamdashptshots(league_id='00')
 
 _Last validated n/a._
 
+## `nba_stats_teamdetails`
+
+GET /stats/teamdetails
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamdetails`
+
+**Valid URL:** [https://stats.nba.com/stats/teamdetails](https://stats.nba.com/stats/teamdetails)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `abbreviation` | character | Short abbreviation. |
+| `nickname` | character | Team or athlete nickname. |
+| `yearfounded` | integer |  |
+| `city` | character | Venue city. |
+| `arena` | character | Arena. |
+| `arenacapacity` | character |  |
+| `owner` | character |  |
+| `generalmanager` | character |  |
+| `headcoach` | character |  |
+| `dleagueaffiliation` | character |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamdetails()
+```
+
+_Last validated n/a._
+
 ## `nba_stats_teamestimatedmetrics`
 
 GET /stats/teamestimatedmetrics
@@ -4620,6 +7268,66 @@ GET /stats/teamestimatedmetrics
 
 ```python
 nba_stats_teamestimatedmetrics(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamgamelog`
+
+GET /stats/teamgamelog
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamgamelog`
+
+**Valid URL:** [https://stats.nba.com/stats/teamgamelog?LeagueID=00](https://stats.nba.com/stats/teamgamelog?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `matchup` | character | Matchup. |
+| `wl` | character | Wl. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | integer | Minutes played. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Rebounds per game. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `tov` | integer | Turnovers. |
+| `pf` | integer | Personal fouls. |
+| `pts` | integer | Points scored. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamgamelog(league_id='00')
 ```
 
 _Last validated n/a._
@@ -4725,6 +7433,53 @@ GET /stats/teamgamelogs
 
 ```python
 nba_stats_teamgamelogs(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teaminfocommon`
+
+GET /stats/teaminfocommon
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teaminfocommon`
+
+**Valid URL:** [https://stats.nba.com/stats/teaminfocommon?LeagueID=00](https://stats.nba.com/stats/teaminfocommon?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `season_year` | character | Season year string ('YYYY-YY' format). |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_conference` | character |  |
+| `team_division` | character |  |
+| `team_code` | character | Internal team code. |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `pct` | numeric | Win percentage. |
+| `conf_rank` | integer |  |
+| `div_rank` | integer |  |
+| `min_year` | character | Minimum year queried (echoes `min_year`). |
+| `max_year` | character | Maximum year queried (echoes `max_year`). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teaminfocommon(league_id='00')
 ```
 
 _Last validated n/a._
@@ -5052,6 +7807,185 @@ GET /stats/teamplayeronoffsummary
 
 ```python
 nba_stats_teamplayeronoffsummary(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamvsplayer`
+
+GET /stats/teamvsplayer
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamvsplayer`
+
+**Valid URL:** [https://stats.nba.com/stats/teamvsplayer?LeagueID=00](https://stats.nba.com/stats/teamvsplayer?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `VsPlayerID` | `vs_player_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character |  |
+| `group_value` | character |  |
+| `player_id` | integer | Unique player identifier. |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric |  |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric |  |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `nba_fantasy_pts` | numeric |  |
+| `dd2` | integer |  |
+| `td3` | integer |  |
+| `wnba_fantasy_pts` | numeric |  |
+| `gp_rank` | integer |  |
+| `w_rank` | integer |  |
+| `l_rank` | integer |  |
+| `w_pct_rank` | integer |  |
+| `min_rank` | integer |  |
+| `fgm_rank` | integer |  |
+| `fga_rank` | integer |  |
+| `fg_pct_rank` | integer |  |
+| `fg3m_rank` | integer |  |
+| `fg3a_rank` | integer |  |
+| `fg3_pct_rank` | integer |  |
+| `ftm_rank` | integer |  |
+| `fta_rank` | integer |  |
+| `ft_pct_rank` | integer |  |
+| `oreb_rank` | integer |  |
+| `dreb_rank` | integer |  |
+| `reb_rank` | integer |  |
+| `ast_rank` | integer |  |
+| `tov_rank` | integer |  |
+| `stl_rank` | integer |  |
+| `blk_rank` | integer |  |
+| `blka_rank` | integer |  |
+| `pf_rank` | integer |  |
+| `pfd_rank` | integer |  |
+| `pts_rank` | integer |  |
+| `plus_minus_rank` | integer |  |
+| `nba_fantasy_pts_rank` | integer |  |
+| `dd2_rank` | integer |  |
+| `td3_rank` | integer |  |
+| `wnba_fantasy_pts_rank` | integer |  |
+| `team_count` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamvsplayer(league_id='00')
+```
+
+_Last validated n/a._
+
+## `nba_stats_teamyearbyyearstats`
+
+GET /stats/teamyearbyyearstats
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/teamyearbyyearstats`
+
+**Valid URL:** [https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00](https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `year` | character | 4-digit year. |
+| `gp` | integer | Games played. |
+| `wins` | integer | Total wins. |
+| `losses` | integer | Total losses. |
+| `win_pct` | numeric | Win percentage (0-1 decimal). |
+| `conf_rank` | integer |  |
+| `div_rank` | integer |  |
+| `po_wins` | integer |  |
+| `po_losses` | integer |  |
+| `conf_count` | integer |  |
+| `div_count` | integer |  |
+| `nba_finals_appearance` | character |  |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `pf` | numeric | Personal fouls. |
+| `stl` | numeric | Steals. |
+| `tov` | numeric | Turnovers. |
+| `blk` | numeric | Blocks. |
+| `pts` | numeric | Points scored. |
+| `pts_rank` | integer |  |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+nba_stats_teamyearbyyearstats(league_id='00')
 ```
 
 _Last validated n/a._

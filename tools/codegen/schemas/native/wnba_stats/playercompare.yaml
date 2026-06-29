@@ -1,63 +1,75 @@
 columns:
 - description: ''
-  name: team_id
-  type: integer
+  name: group_set
+  type: character
 - description: ''
-  name: team_name
+  name: description
   type: character
 - description: ''
   name: min
   type: numeric
 - description: ''
-  name: contested_shots
+  name: fgm
   type: numeric
 - description: ''
-  name: contested_shots_2pt
+  name: fga
   type: numeric
 - description: ''
-  name: contested_shots_3pt
+  name: fg_pct
   type: numeric
 - description: ''
-  name: deflections
+  name: fg3m
   type: numeric
 - description: ''
-  name: charges_drawn
+  name: fg3a
   type: numeric
 - description: ''
-  name: screen_assists
+  name: fg3_pct
   type: numeric
 - description: ''
-  name: screen_ast_pts
+  name: ftm
   type: numeric
 - description: ''
-  name: off_loose_balls_recovered
+  name: fta
   type: numeric
 - description: ''
-  name: def_loose_balls_recovered
+  name: ft_pct
   type: numeric
 - description: ''
-  name: loose_balls_recovered
+  name: oreb
   type: numeric
 - description: ''
-  name: pct_loose_balls_recovered_off
+  name: dreb
   type: numeric
 - description: ''
-  name: pct_loose_balls_recovered_def
+  name: reb
   type: numeric
 - description: ''
-  name: off_boxouts
+  name: ast
   type: numeric
 - description: ''
-  name: def_boxouts
+  name: tov
   type: numeric
 - description: ''
-  name: box_outs
+  name: stl
   type: numeric
 - description: ''
-  name: pct_box_outs_off
+  name: blk
   type: numeric
 - description: ''
-  name: pct_box_outs_def
+  name: blka
+  type: numeric
+- description: ''
+  name: pf
+  type: numeric
+- description: ''
+  name: pfd
+  type: numeric
+- description: ''
+  name: pts
+  type: numeric
+- description: ''
+  name: plus_minus
   type: numeric
 kind: dataframe
-schema: leaguehustlestatsteam
+schema: playercompare

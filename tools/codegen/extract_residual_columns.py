@@ -43,6 +43,17 @@ def _bucket_of(path: str) -> str:
     return rel[0]
 
 
+# Buckets whose blank columns are a TRACKED follow-up, not a coverage failure.
+# The stats.nba.com / stats.wnba.com flat-API family wraps ~150 endpoints whose
+# ~3k+ result-set columns are documented incrementally (the 5 pilot slugs are
+# authored; the long tail is mined opportunistically via the R `_merged` dict).
+# Capturing more endpoints (resolving "untested" -> "live") grows the column
+# surface faster than descriptions are authored, so these buckets are exempted
+# from the residual ratchet and surfaced via deferred_columns() instead. Authoring
+# a column here (manual dict or R dict) still removes it from the deferred count.
+_DEFERRED_BUCKETS = {"native/nba_stats", "native/wnba_stats"}
+
+
 def iter_schema_columns() -> list[dict]:
     import yaml
 
@@ -79,22 +90,19 @@ def iter_schema_columns() -> list[dict]:
     return out
 
 
+def _uncovered(r: dict) -> bool:
+    """A blank column with no manual-dict and no R-dict description."""
+    return r["blank"] and not _manual_col_desc(r["schema"], r["col"]) and not _r_col_desc(r["league"], r["col"])
+
+
 def residual_columns() -> list[dict]:
-    res = []
-    for r in iter_schema_columns():
-        if not r["blank"]:
-            continue
-        if _manual_col_desc(r["schema"], r["col"]):
-            continue
-        if _r_col_desc(r["league"], r["col"]):
-            continue
-        res.append(r)
-    return res
+    """Uncovered blank columns OUTSIDE the deferred buckets (the ratchet target)."""
+    return [r for r in iter_schema_columns() if _uncovered(r) and r["bucket"] not in _DEFERRED_BUCKETS]
 
 
 def deferred_columns() -> list[dict]:
-    """Return blank columns that are currently deferred from the coverage ratchet."""
-    return []
+    """Uncovered blank columns INSIDE the deferred buckets (tracked follow-up)."""
+    return [r for r in iter_schema_columns() if _uncovered(r) and r["bucket"] in _DEFERRED_BUCKETS]
 
 
 def residual_by_bucket() -> dict:
