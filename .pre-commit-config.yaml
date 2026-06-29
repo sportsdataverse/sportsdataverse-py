@@ -157,6 +157,13 @@ repos:
         files: ^sportsdataverse/.*\.py$
         pass_filenames: false
         stages: [pre-push]
+      - id: validation-contracts-prepush
+        name: validation harness contract tests (pre-push)
+        entry: uv run pytest tests/contracts/ -q
+        language: system
+        files: ^(tools/validation/|tests/contracts/).*$
+        pass_filenames: false
+        stages: [pre-push]
 # - repo: https://github.com/nbQA-dev/nbQA
 #   rev: 1.9.1
 #   hooks:
