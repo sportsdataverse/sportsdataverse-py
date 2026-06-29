@@ -179,3 +179,12 @@ def test_synthetic_recovery():
     # Determinism: same input → same output
     out2 = nba_rapm(df).sort("player_id")
     assert out.equals(out2)
+
+
+def test_rapm_single_possession():
+    # A 1-possession design must not crash; ridge shrinks to ~0 but the frame is valid.
+    rows = [((1, 2, 3, 4, 5), (6, 7, 8, 9, 10), 2)]
+    out = nba_rapm(_poss(rows))
+    assert not out.is_empty()
+    assert dict(out.schema) == RAPM_SCHEMA
+    assert np.isfinite(out["rapm"].to_numpy()).all()  # no NaN/inf coefficients

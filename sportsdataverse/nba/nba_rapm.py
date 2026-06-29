@@ -241,7 +241,7 @@ def nba_rapm(
     rapm: np.ndarray = o_rapm + d_rapm
 
     # Possession counts: sum each design column (sparse column sums)
-    col_sums: np.ndarray = np.asarray(X.sum(axis=0)).ravel()  # shape (2P,)
+    col_sums: np.ndarray = np.asarray(X.sum(axis=0), dtype=np.float64).ravel()  # shape (2P,)
     off_poss: np.ndarray = col_sums[:P]
     def_poss: np.ndarray = col_sums[P:]
 
