@@ -30,6 +30,8 @@ repos:
       - id: trailing-whitespace
       - id: check-merge-conflict
       - id: check-ast
+        # Deliberately-malformed lint fixture (tests the unparseable-file path).
+        exclude: ^tests/contracts/fixtures/lint_python/broken\.py$
       - id: check-toml
       - id: check-json
       - id: check-xml
@@ -46,6 +48,8 @@ repos:
         # loosen the limit for everything.
         exclude: '^sportsdataverse/cfb/models/fd_model\.ubj$'
       - id: debug-statements
+        # Deliberately-malformed lint fixture (tests the unparseable-file path).
+        exclude: ^tests/contracts/fixtures/lint_python/broken\.py$
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0 # Use the ref you want to point at
     hooks:

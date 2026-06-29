@@ -230,6 +230,9 @@ exclude = [
     "build",
     "dist",
     "*.ipynb",
+    # Deliberately-malformed lint fixture (tests the unparseable-file path);
+    # it is not real source and ruff cannot build its AST.
+    "tests/contracts/fixtures/lint_python/broken.py",
 ]
 
 

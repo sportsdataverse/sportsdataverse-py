@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import os
+from collections.abc import Iterator
 from pathlib import Path
 
 from tools.validation.findings import Finding, Severity
@@ -39,7 +40,7 @@ _EXCLUDE_DIRS = frozenset(
 )
 
 
-def _iter_py_files(root: Path):
+def _iter_py_files(root: Path) -> Iterator[Path]:
     for p in root.rglob("*.py"):
         if any(part in _EXCLUDE_DIRS for part in p.parts):
             continue

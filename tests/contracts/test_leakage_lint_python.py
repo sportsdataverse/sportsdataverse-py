@@ -30,3 +30,9 @@ def test_dir_scan_excludes_vendored_dirs():
 def test_missing_path_is_error():
     findings = leakage_python.run(str(_FIXTURES / "does_not_exist"))
     assert any(f.severity is Severity.ERROR for f in findings)
+
+
+def test_unparseable_file_is_warn():
+    findings = leakage_python.run(str(_FIXTURES / "broken.py"))
+    assert findings and findings[0].severity is Severity.WARN
+    assert "could not parse" in findings[0].message
