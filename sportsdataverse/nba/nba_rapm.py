@@ -7,7 +7,10 @@ possession-level lineup data produced by ``attach_possession_lineups``.
 
 from __future__ import annotations
 
+from typing import Sequence, Union
+
 import numpy as np
+import pandas as pd
 import polars as pl
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
@@ -257,3 +260,122 @@ def nba_rapm(
     ).sort("player_id")
 
     return df
+
+
+def _fetch_possessions(game_id: str, league_id: str) -> pl.DataFrame:
+    """Fetch the possession stint frame for *game_id* via :func:`~sportsdataverse.nba.nba_possessions.nba_possessions`.
+
+    Module-level so tests can monkeypatch it without touching the public API.
+    """
+    from .nba_possessions import nba_possessions  # local import — avoids circular-import risk at module load
+
+    return nba_possessions(game_id, league_id)
+
+
+def nba_rapm_from_games(
+    game_ids: Sequence[str],
+    league_id: str = "00",
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Fit plain RAPM over one or more games by fetching possessions and combining them.
+
+    For each game identifier in *game_ids*, the module-level
+    :func:`_fetch_possessions` helper is called to retrieve the possession
+    stint frame (monkeypatchable in tests).  Non-empty frames are concatenated
+    with :func:`polars.concat` (``how="diagonal_relaxed"`` for schema
+    robustness), then passed to :func:`nba_rapm`.
+
+    **Important**: a single game typically has ~100 possessions — far too few
+    for meaningful RAPM estimates.  A full regular season (~90 000 possessions
+    for ~500 players) is the intended input.  With few possessions the ridge
+    penalty dominates and all estimates shrink toward zero; the function never
+    raises, but the estimates are not informative.
+
+    **Sign convention** (same as :func:`nba_rapm`):
+
+    * ``o_rapm`` — positive = player helped his team score more per 100
+      possessions on offense.
+    * ``d_rapm`` — positive = player suppressed opponent scoring (good
+      defender).  The raw defensive regression coefficient is negated.
+    * ``rapm`` = ``o_rapm + d_rapm``.
+
+    **Per-100-possessions scale**: all three columns are multiplied by 100
+    relative to the raw per-possession regression coefficients.
+
+    Args:
+        game_ids: Sequence of ten-character NBA game identifiers
+            (e.g. ``["0022200001", "0022200002"]``).  An empty sequence
+            returns a zero-row frame immediately without any network calls.
+        league_id: League identifier forwarded to
+            :func:`~sportsdataverse.nba.nba_possessions.nba_possessions`
+            (default ``"00"`` for NBA).
+        return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
+            instead of :class:`polars.DataFrame`.
+
+    Returns:
+        A :class:`polars.DataFrame` (or :class:`pandas.DataFrame` when
+        *return_as_pandas* is ``True``) with exactly the columns defined in
+        :data:`RAPM_SCHEMA`:
+
+        * **player_id** (Int64)
+        * **o_rapm** (Float64) — offensive RAPM per 100 possessions
+        * **d_rapm** (Float64) — defensive RAPM per 100 possessions
+        * **rapm** (Float64)
+        * **off_poss** (Int64)
+        * **def_poss** (Int64)
+
+        Returns a zero-row frame with :data:`RAPM_SCHEMA` when *game_ids*
+        is empty or every game returns no possessions.  Never raises.
+
+    Example:
+        Quick start (single game — illustrative, not statistically meaningful)::
+
+            from sportsdataverse.nba.nba_rapm import nba_rapm_from_games
+            df = nba_rapm_from_games(["0022200001"])
+            print(df.sort("rapm", descending=True).head(10))
+
+        Full-season batch (meaningful estimates)::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_schedule import load_nba_schedule
+            schedule = load_nba_schedule(seasons=[2023])
+            game_ids = schedule["game_id"].to_list()
+            df = nba_rapm_from_games(game_ids)
+            df.filter(pl.col("off_poss") >= 500).sort("rapm", descending=True)
+
+        Pandas output::
+
+            df_pd = nba_rapm_from_games(["0022200001"], return_as_pandas=True)
+            print(type(df_pd))
+
+        See Also:
+            * `08-nba-rapm`_ — Evan Zamir's plain-RAPM reference implementation
+            * `nba_api`_ — upstream play-by-play source used by sdv-py
+
+        .. _08-nba-rapm: https://github.com/EvanZ/nba-rapm
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    if not game_ids:
+        result: pl.DataFrame = _empty_rapm_frame()
+        if return_as_pandas:
+            return result.to_pandas()
+        return result
+
+    frames: list[pl.DataFrame] = []
+    for gid in game_ids:
+        poss = _fetch_possessions(gid, league_id)
+        if not poss.is_empty():
+            frames.append(poss)
+
+    if not frames:
+        result = _empty_rapm_frame()
+        if return_as_pandas:
+            return result.to_pandas()
+        return result
+
+    combined = pl.concat(frames, how="diagonal_relaxed")
+    result = nba_rapm(combined)
+    if return_as_pandas:
+        return result.to_pandas()
+    return result

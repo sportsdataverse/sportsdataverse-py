@@ -188,3 +188,69 @@ def test_rapm_single_possession():
     assert not out.is_empty()
     assert dict(out.schema) == RAPM_SCHEMA
     assert np.isfinite(out["rapm"].to_numpy()).all()  # no NaN/inf coefficients
+
+
+# ---------------------------------------------------------------------------
+# Task 3: nba_rapm_from_games() tests
+# ---------------------------------------------------------------------------
+
+import json
+import pathlib
+
+import sportsdataverse.nba.nba_rapm as R
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away,
+    parse_rotation_resultsets,
+    players_on_court_from_rotation,
+)
+from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
+
+FXR = pathlib.Path("tests/fixtures/nba_engine")
+GAMES = ["0022200001", "0022300001", "0022100001"]
+
+
+def _game_poss(g: str) -> pl.DataFrame:
+    """Build possession frame from captured fixtures for game *g*."""
+    fx = FXR / g
+    enh = enhanced_pbp_from_payload(json.loads((fx / "playbyplayv3.json").read_text()))
+    box = json.loads((fx / "boxscoretraditionalv3.json").read_text())
+    home, away = boxscore_home_away(box)
+    oc = players_on_court_from_rotation(
+        enh,
+        parse_rotation_resultsets(json.loads((fx / "gamerotation.json").read_text())),
+        home_team_id=home,
+        away_team_id=away,
+    )
+    return attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
+
+
+def test_three_game_smoke_and_offline_fetcher(monkeypatch):
+    by_game = {g: _game_poss(g) for g in GAMES}
+    monkeypatch.setattr(R, "_fetch_possessions", lambda gid, lg: by_game[gid])
+    out = R.nba_rapm_from_games(GAMES)
+    assert out.height > 0
+    assert np.isfinite(out["rapm"].to_numpy()).all()
+    assert abs(out["rapm"].mean()) < 5.0  # ridge-centered
+    # Deterministic: same input → same sorted output
+    assert out.sort("player_id").equals(R.nba_rapm_from_games(GAMES).sort("player_id"))
+    import pandas as pd
+
+    assert isinstance(R.nba_rapm_from_games(GAMES, return_as_pandas=True), pd.DataFrame)
+
+
+def test_rapm_from_games_empty_list():
+    """Empty game_ids returns a zero-row frame with RAPM_SCHEMA, no network call, no raise."""
+    out = R.nba_rapm_from_games([])
+    assert out.is_empty()
+    assert dict(out.schema) == R.RAPM_SCHEMA
+
+
+from tests.conftest import skip_if_no_nba_stats_live
+
+
+@skip_if_no_nba_stats_live
+def test_nba_rapm_from_games_live():
+    out = R.nba_rapm_from_games(["0022200001"])
+    assert out.height > 0
+    assert np.isfinite(out["rapm"].to_numpy()).all()

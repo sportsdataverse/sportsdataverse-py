@@ -309,6 +309,7 @@ files = [
     "sportsdataverse/nba/nba_possessions.py",
     "sportsdataverse/nba/nba_shot_zones.py",
     "sportsdataverse/nba/nba_tracking.py",
+    "sportsdataverse/nba/nba_rapm.py",
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
 ]
