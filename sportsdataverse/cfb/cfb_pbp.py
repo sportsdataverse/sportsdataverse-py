@@ -5240,9 +5240,7 @@ class CFBPlayProcess(object):
                 CPOE=(pl.col("CompPct") - pl.col("xCompPct")),
             )
             .with_columns(pl.col(pl.Float32).round(2))
-            .with_columns(
-                pos_team=pl.col("pos_team").cast(pl.Int32)
-            )
+            .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
         )
         # passer_box = passer_box.replace(pl.all(), pl.Null)
         qbs_list = passer_box["passer_player_name"].to_list()
