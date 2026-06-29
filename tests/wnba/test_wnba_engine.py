@@ -283,3 +283,115 @@ def test_wnba_oncourt_ids_in_roster(monkeypatch: pytest.MonkeyPatch, game_id: st
     assert not stray, f"[{game_id}] WNBA on-court roster-membership FAILED ({len(stray)} stray id(s)):\n" + "\n".join(
         stray[:10]
     )
+
+
+# ---------------------------------------------------------------------------
+# Task 3: wnba_rapm_from_games() tests
+# ---------------------------------------------------------------------------
+
+import numpy as np
+
+from sportsdataverse.nba.nba_rapm import RAPM_SCHEMA
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away,
+    parse_rotation_resultsets,
+    players_on_court_from_rotation,
+)
+from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
+
+
+def _game_poss_wnba(gid: str) -> pl.DataFrame:
+    """Build WNBA possession frame from captured fixtures for game *gid*."""
+    fx = FXR / gid
+    enh = enhanced_pbp_from_payload(json.loads((fx / "playbyplayv3.json").read_text()))
+    box = json.loads((fx / "boxscoretraditionalv3.json").read_text())
+    home, away = boxscore_home_away(box)
+    rotation_raw = json.loads((fx / "gamerotation.json").read_text())
+    oc = players_on_court_from_rotation(
+        enh,
+        parse_rotation_resultsets(rotation_raw),
+        home_team_id=home,
+        away_team_id=away,
+    )
+    return attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
+
+
+def test_wnba_rapm_smoke(monkeypatch: pytest.MonkeyPatch) -> None:
+    """wnba_rapm_from_games returns a valid RAPM frame over 2 offline games."""
+    by_game = {g: _game_poss_wnba(g) for g in GAMES}
+    monkeypatch.setattr(W, "_fetch_possessions", lambda gid: by_game[gid])
+    out = W.wnba_rapm_from_games(GAMES)
+    assert out.height > 0
+    assert np.isfinite(out["rapm"].to_numpy()).all()
+    assert dict(out.schema) == RAPM_SCHEMA
+    assert abs(out["rapm"].mean()) < 5.0  # ridge-centered
+    # Deterministic: same input → same sorted output
+    out2 = W.wnba_rapm_from_games(GAMES)
+    assert out.sort("player_id").equals(out2.sort("player_id"))
+    # pandas path
+    import pandas as pd
+
+    assert isinstance(W.wnba_rapm_from_games(GAMES, return_as_pandas=True), pd.DataFrame)
+
+
+def test_wnba_rapm_from_games_empty_list() -> None:
+    """Empty game_ids returns a zero-row frame with RAPM_SCHEMA, no network call, no raise."""
+    out = W.wnba_rapm_from_games([])
+    assert out.height == 0
+    assert dict(out.schema) == RAPM_SCHEMA
+
+
+def test_wnba_rapm_from_games_skips_empty_games(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A game whose possession frame is empty is silently skipped; valid game still produces output."""
+    by_game: dict[str, pl.DataFrame] = {
+        "bad_game": pl.DataFrame(),
+        GAMES[0]: _game_poss_wnba(GAMES[0]),
+    }
+    monkeypatch.setattr(W, "_fetch_possessions", lambda gid: by_game[gid])
+    out = W.wnba_rapm_from_games(["bad_game", GAMES[0]])
+    assert out.height > 0
+    assert dict(out.schema) == RAPM_SCHEMA
+
+
+def test_wnba_rapm_from_games_all_empty_nonempty_ids(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Non-empty game_ids but every fetch empty → hits `if not frames` guard, returns RAPM_SCHEMA frame."""
+    monkeypatch.setattr(W, "_fetch_possessions", lambda gid: pl.DataFrame())
+    out = W.wnba_rapm_from_games(["x", "y"])
+    assert out.height == 0
+    assert dict(out.schema) == RAPM_SCHEMA
+
+
+# ---------------------------------------------------------------------------
+# Task 3: public export smoke
+# ---------------------------------------------------------------------------
+
+
+def test_wnba_engine_public_exports() -> None:
+    """wnba_enhanced_pbp / wnba_on_court / wnba_possessions / wnba_rapm_from_games are importable from sportsdataverse.wnba."""
+    from sportsdataverse.wnba import (  # noqa: F401
+        wnba_enhanced_pbp,
+        wnba_on_court,
+        wnba_possessions,
+        wnba_rapm_from_games,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Task 3: gated live tests
+# ---------------------------------------------------------------------------
+
+from tests.conftest import skip_if_no_nba_stats_live
+
+
+@skip_if_no_nba_stats_live
+def test_wnba_on_court_live() -> None:
+    oc = W.wnba_on_court(GAMES[0])
+    assert oc.height > 0
+
+
+@skip_if_no_nba_stats_live
+def test_wnba_rapm_from_games_live() -> None:
+    out = W.wnba_rapm_from_games([GAMES[0]])
+    assert out.height > 0
+    assert np.isfinite(out["rapm"].to_numpy()).all()

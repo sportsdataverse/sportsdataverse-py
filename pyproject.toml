@@ -312,4 +312,5 @@ files = [
     "sportsdataverse/nba/nba_rapm.py",
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
+    "sportsdataverse/wnba/wnba_engine.py",
 ]
