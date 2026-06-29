@@ -48,14 +48,16 @@ def run(
             )
         )
 
-    joined = prep.join(published, on=keys, how="inner", suffix="_published")
+    joined = prep.join(published, on=keys, how="inner", suffix="__pub__")
     for col, dtype in prep.schema.items():
         if col in keys or col not in published.columns or not dtype.is_numeric():
             continue
-        pcol = f"{col}_published"
+        pcol = f"{col}__pub__"
         if pcol not in joined.columns:
             continue
-        n_div = joined.filter((pl.col(col) - pl.col(pcol)).abs() > tolerance).height
+        n_div = joined.filter(
+            ((pl.col(col) - pl.col(pcol)).abs() > tolerance) | (pl.col(col).is_null() != pl.col(pcol).is_null())
+        ).height
         if n_div > 0:
             findings.append(
                 Finding(

@@ -35,3 +35,8 @@ def test_clean_lag_resets_yield_no_findings():
 def test_no_group_key_column_skips():
     frame = pl.DataFrame({"prev_ep": [None, 1.0]})
     assert boundary_leakage.run("nfl_pbp", frame, _ctx()) == []
+
+
+def test_lag_column_absent_from_frame_skips():
+    frame = pl.DataFrame({"game_id": [1, 1]})  # prev_ep absent
+    assert boundary_leakage.run("nfl_pbp", frame, _ctx()) == []
