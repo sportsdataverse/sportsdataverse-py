@@ -121,7 +121,7 @@ def run(path: str) -> list[Finding]:
     Returns:
         A list of Finding records; one ERROR finding if ``path`` does not exist.
     """
-    root = Path(os.path.expandvars(path))
+    root = Path(os.path.expanduser(os.path.expandvars(path)))
     if not root.exists():
         return [
             Finding(
@@ -140,7 +140,17 @@ def run(path: str) -> list[Finding]:
             continue
         try:
             src = f.read_text(encoding="utf-8")
-        except OSError:
+        except OSError as exc:
+            findings.append(
+                Finding(
+                    "leakage_lint",
+                    Severity.WARN,
+                    "",
+                    str(f),
+                    f"could not read {f}: {exc} (file skipped — coverage may be incomplete)",
+                    locator={"file": str(f)},
+                )
+            )
             continue
         findings.extend(_lint_source(src, str(f)))
     return findings
