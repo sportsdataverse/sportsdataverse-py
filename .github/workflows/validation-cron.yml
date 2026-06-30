@@ -12,12 +12,21 @@
 #
 # Release coordinates (resolved 2026-06-29):
 #   cfb_model_pbp : sportsdataverse/sportsdataverse-data @ espn_cfb_model_pbp
-#                   asset pattern: cfb_model_pbp_*.parquet
+#                   asset pattern: model_pbp_*.parquet  (matches model_pbp_2024.parquet
+#                                  and any future model_pbp_YYYY.parquet — these match the
+#                                  registry glob model_pbp_*.parquet. The release also
+#                                  ships a cfb_-prefixed full-history file
+#                                  cfb_model_pbp_2004_2025.parquet, which the registry glob
+#                                  does NOT match, so we deliberately do NOT pull it.)
 #                   glob root    : $SDV_VALIDATION_DATA_ROOT/cfb/model_pbp/parquet/
 #   nfl_model_pbp : sportsdataverse/nfl-data @ nfl_model_pbp
 #                   asset pattern: model_pbp_*.parquet
 #                   glob root    : $SDV_VALIDATION_NFL_DATA_ROOT/out/
-#                   NOTE: no release exists yet → graceful skip until published.
+#                   NOTE: re-verified 2026-06-29 — sportsdataverse/nfl-data has NO
+#                   releases (the nfl_model_pbp tag does not exist yet), so this
+#                   dataset gracefully skips. The download step is already wired to
+#                   the correct tag/repo/pattern, so it auto-activates with no edit
+#                   the first cron run after the nfl_model_pbp parquet is published.
 #
 # Triggers:
 #   * schedule        — every Monday at 12:00 UTC
@@ -76,14 +85,17 @@ jobs:
         run: |
           dest="${SDV_VALIDATION_DATA_ROOT}/cfb/model_pbp/parquet"
           mkdir -p "$dest"
+          # Match the registry glob model_pbp_*.parquet (e.g. model_pbp_2024.parquet).
+          # The cfb_-prefixed full-history asset is intentionally excluded — it does
+          # not match the glob the validation CLI reads.
           if gh release download espn_cfb_model_pbp \
               -R sportsdataverse/sportsdataverse-data \
-              --pattern 'cfb_model_pbp_*.parquet' \
+              --pattern 'model_pbp_*.parquet' \
               --dir "$dest" \
               --clobber 2>&1; then
-            count=$(ls "$dest"/cfb_model_pbp_*.parquet 2>/dev/null | wc -l)
+            count=$(ls "$dest"/model_pbp_*.parquet 2>/dev/null | wc -l)
             if [ "$count" -eq 0 ]; then
-              echo "::notice::cfb_model_pbp — download succeeded but no cfb_model_pbp_*.parquet assets found; skipping"
+              echo "::notice::cfb_model_pbp — download succeeded but no model_pbp_*.parquet assets found; skipping"
               echo "available=false" >> "$GITHUB_OUTPUT"
             else
               echo "::notice::cfb_model_pbp — downloaded $count parquet file(s)"
@@ -166,7 +178,11 @@ jobs:
             const today = new Date().toISOString().slice(0, 10);
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
-            // Collect findings from each dataset JSON (missing file → empty array).
+            // Collect findings from each dataset JSON. A dataset may have been
+            // skipped (file is `[]`) or its validate step may have crashed
+            // (file missing / empty / truncated / non-JSON). In every such case
+            // treat it as "no findings" and continue — never let a read or parse
+            // failure abort the aggregation.
             const datasets = ['cfb_model_pbp', 'nfl_model_pbp'];
             const allFindings = {};
             let anyError = false;
@@ -174,12 +190,26 @@ jobs:
               const path = `findings_${ds}.json`;
               let findings = [];
               try {
-                findings = JSON.parse(fs.readFileSync(path, 'utf8'));
+                if (!fs.existsSync(path)) {
+                  core.info(`${path} missing — treating ${ds} as no findings.`);
+                } else {
+                  const raw = fs.readFileSync(path, 'utf8').trim();
+                  if (raw === '') {
+                    core.info(`${path} empty — treating ${ds} as no findings.`);
+                  } else {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) {
+                      findings = parsed;
+                    } else {
+                      core.warning(`${path} is not a JSON array — treating ${ds} as no findings.`);
+                    }
+                  }
+                }
               } catch (e) {
-                core.info(`Could not read ${path}: ${e.message}`);
+                core.warning(`Could not parse ${path} (${e.message}) — treating ${ds} as no findings.`);
               }
               allFindings[ds] = findings;
-              if (findings.some(f => f.severity === 'error')) {
+              if (findings.some(f => f && f.severity === 'error')) {
                 anyError = true;
               }
             }
