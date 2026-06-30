@@ -19,14 +19,15 @@
 #                                  cfb_model_pbp_2004_2025.parquet, which the registry glob
 #                                  does NOT match, so we deliberately do NOT pull it.)
 #                   glob root    : $SDV_VALIDATION_DATA_ROOT/cfb/model_pbp/parquet/
-#   nfl_model_pbp : sportsdataverse/nfl-data @ nfl_model_pbp
-#                   asset pattern: model_pbp_*.parquet
+#   nfl_model_pbp : sportsdataverse/sportsdataverse-data @ nfl_model_pbp
+#                   asset pattern: model_pbp_202*.parquet  (recent seasons only —
+#                                  2020-2024 today, ~5 files. The release publishes
+#                                  per-season parquet back to model_pbp_1999.parquet
+#                                  (26 files / ~300MB); a weekly cron shouldn't pull
+#                                  all of them. Recent seasons still catch contract
+#                                  regressions and the glob auto-extends through
+#                                  model_pbp_2029.parquet.)
 #                   glob root    : $SDV_VALIDATION_NFL_DATA_ROOT/out/
-#                   NOTE: re-verified 2026-06-29 — sportsdataverse/nfl-data has NO
-#                   releases (the nfl_model_pbp tag does not exist yet), so this
-#                   dataset gracefully skips. The download step is already wired to
-#                   the correct tag/repo/pattern, so it auto-activates with no edit
-#                   the first cron run after the nfl_model_pbp parquet is published.
 #
 # Triggers:
 #   * schedule        — every Monday at 12:00 UTC
@@ -123,23 +124,26 @@ jobs:
 
       # -----------------------------------------------------------------------
       # Dataset: nfl_model_pbp
-      # Release: sportsdataverse/nfl-data @ nfl_model_pbp
+      # Release: sportsdataverse/sportsdataverse-data @ nfl_model_pbp
       # Glob root: $SDV_VALIDATION_NFL_DATA_ROOT/out/
-      # NOTE: no release exists yet; graceful skip expected until published.
       # -----------------------------------------------------------------------
       - name: Download nfl_model_pbp parquet
         id: dl_nfl
         run: |
           dest="${SDV_VALIDATION_NFL_DATA_ROOT}/out"
           mkdir -p "$dest"
+          # Pull recent seasons only (model_pbp_2020.parquet .. model_pbp_2024.parquet,
+          # ~5 files). The release ships per-season parquet back to 1999 (26 files /
+          # ~300MB); a weekly cron shouldn't pull all of them. Recent seasons catch
+          # contract regressions and the glob auto-extends through model_pbp_2029.parquet.
           if gh release download nfl_model_pbp \
-              -R sportsdataverse/nfl-data \
-              --pattern 'model_pbp_*.parquet' \
+              -R sportsdataverse/sportsdataverse-data \
+              --pattern 'model_pbp_202*.parquet' \
               --dir "$dest" \
               --clobber 2>&1; then
-            count=$(ls "$dest"/model_pbp_*.parquet 2>/dev/null | wc -l)
+            count=$(ls "$dest"/model_pbp_202*.parquet 2>/dev/null | wc -l)
             if [ "$count" -eq 0 ]; then
-              echo "::notice::nfl_model_pbp — download succeeded but no model_pbp_*.parquet assets found; skipping"
+              echo "::notice::nfl_model_pbp — download succeeded but no model_pbp_202*.parquet assets found; skipping"
               echo "available=false" >> "$GITHUB_OUTPUT"
             else
               echo "::notice::nfl_model_pbp — downloaded $count parquet file(s)"
