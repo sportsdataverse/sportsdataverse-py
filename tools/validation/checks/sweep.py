@@ -27,19 +27,32 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
 
     if ctx.join_keys:
         keys = list(ctx.join_keys)
-        n_dups = frame.height - frame.select(keys).unique().height
-        if n_dups > 0:
+        missing_keys = [k for k in keys if k not in frame.columns]
+        if missing_keys:
             findings.append(
                 Finding(
                     "sweep",
                     Severity.ERROR,
                     ctx.domain,
                     dataset,
-                    f"{n_dups} duplicate row(s) on join keys {keys}",
-                    locator={"join_keys": keys},
-                    metric=float(n_dups),
+                    f"join key(s) {missing_keys!r} absent from frame; duplicate check skipped",
+                    locator={"missing_join_keys": missing_keys},
                 )
             )
+        else:
+            n_dups = frame.height - frame.select(keys).unique().height
+            if n_dups > 0:
+                findings.append(
+                    Finding(
+                        "sweep",
+                        Severity.ERROR,
+                        ctx.domain,
+                        dataset,
+                        f"{n_dups} duplicate row(s) on join keys {keys}",
+                        locator={"join_keys": keys},
+                        metric=float(n_dups),
+                    )
+                )
 
     null_floor = ctx.thresholds.get("null_rate_warn", 0.5)
     null_counts = frame.null_count()
@@ -66,9 +79,14 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
                 continue
             cur = frame.select(pl.col(col).mean()).item()
             pri = ctx.prior_frame.select(pl.col(col).mean()).item()
-            if cur is None or pri is None or pri == 0:
+            if cur is None or pri is None:
                 continue
-            rel = abs(cur - pri) / abs(pri)
+            if pri == 0:
+                # Prior mean is zero — use absolute shift instead of relative
+                # to avoid permanently disabling drift detection for zero-baseline metrics.
+                rel = abs(cur - pri)
+            else:
+                rel = abs(cur - pri) / abs(pri)
             if rel > drift:
                 findings.append(
                     Finding(

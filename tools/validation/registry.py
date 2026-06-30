@@ -101,7 +101,7 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
         join_keys=spec.join_keys,
         prob_groups=spec.prob_groups,
         range_constraints=dict(spec.range_constraints),
-        oracle=ORACLES.get(spec.oracle_domain) if spec.oracle_domain else None,
+        oracle=ORACLES[spec.oracle_domain] if spec.oracle_domain else None,
         prior_frame=None,
         thresholds=load_thresholds(spec.domain),
     )
