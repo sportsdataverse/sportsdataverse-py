@@ -28,6 +28,9 @@ class DatasetSpec:
     prob_groups: tuple[tuple[str, ...], ...] = ()
     range_constraints: dict[str, tuple[float, float]] = field(default_factory=dict)
     oracle_domain: str | None = None
+    lag_columns: tuple[str, ...] = ()
+    cumulative_columns: tuple[str, ...] = ()
+    group_key: str = "game_id"
 
 
 DATASETS: dict[str, DatasetSpec] = {}  # registered incrementally; see spec §11
@@ -104,6 +107,9 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
         oracle=ORACLES[spec.oracle_domain] if spec.oracle_domain else None,
         prior_frame=None,
         thresholds=load_thresholds(spec.domain),
+        lag_columns=spec.lag_columns,
+        cumulative_columns=spec.cumulative_columns,
+        group_key=spec.group_key,
     )
     return frame, ctx
 
