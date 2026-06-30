@@ -2867,6 +2867,28 @@ def _derive_qbr_epa(df: pl.DataFrame) -> pl.DataFrame:
     return df
 
 
+def _ensure_home_opening_kickoff(df: pl.DataFrame) -> pl.DataFrame:
+    """Derive ``home_opening_kickoff`` when absent (1 iff the home team received
+    the opening kickoff, i.e. it had the game's first possession).
+
+    The nfl4th 4th-down decision features require it (it sets ``home_receive_2h_ko``).
+    nflverse pbp and the ESPN construction path carry it, but native producers
+    reconstructed from the Shield feed (``native_pbp``) do not — without it
+    :func:`_add_fourth_down_decisions` skips the whole decision step on a
+    ``KeyError``.  Mirrors the ``receive_2h_ko`` derivation in :func:`_add_wp_aux`:
+    derived only when absent (never overrides an upstream column), and only when
+    the source columns exist.
+    """
+    if "home_opening_kickoff" in df.columns or "posteam" not in df.columns or "home_team" not in df.columns:
+        return df
+    return df.with_columns(
+        pl.when(pl.col("posteam").drop_nulls().first().over("game_id") == pl.col("home_team"))
+        .then(1)
+        .otherwise(0)
+        .alias("home_opening_kickoff"),
+    )
+
+
 def _add_fourth_down_decisions(
     df: pl.DataFrame,
     *,
@@ -2935,6 +2957,11 @@ def _add_fourth_down_decisions(
     # Stable join keys must be present; if not, return unchanged + null columns.
     if not all(c in df.columns for c in ("game_id", "play_id", "down", "yardline_100")):
         return _with_null_decisions(df)
+
+    # Derive home_opening_kickoff if the producer didn't supply it (native_pbp);
+    # the nfl4th features require it. Done on the full frame so the per-game
+    # first-possession lookup sees every play, not just the 4th-down subset.
+    df = _ensure_home_opening_kickoff(df)
 
     fourth = df.filter((pl.col("down") == 4) & pl.col("yardline_100").is_not_null())
 

@@ -542,6 +542,62 @@ def test_pass_oe_null_when_xpass_null(monkeypatch) -> None:  # noqa: ANN001
     assert out["pass_oe"].to_list()[0] is None
 
 
+# ---------------------------------------------------------------------------
+# home_opening_kickoff — derived when absent (native producers omit it).
+# ---------------------------------------------------------------------------
+
+
+def test_ensure_home_opening_kickoff_derived_when_absent() -> None:
+    """home_opening_kickoff = 1 iff the home team had the game's first possession."""
+    from sportsdataverse.nfl.ep_wp import _ensure_home_opening_kickoff
+
+    df = pl.DataFrame(
+        {
+            "game_id": ["G1", "G1", "G2", "G2"],
+            "play_id": [1, 2, 1, 2],
+            # G1: home (HOME1) received the opening KO; G2: away (AWAY2) did.
+            "posteam": ["HOME1", "AWAY1", "AWAY2", "HOME2"],
+            "home_team": ["HOME1", "HOME1", "HOME2", "HOME2"],
+        }
+    )
+    out = _ensure_home_opening_kickoff(df).sort(["game_id", "play_id"])
+    assert out.filter(pl.col("game_id") == "G1")["home_opening_kickoff"].to_list() == [1, 1]
+    assert out.filter(pl.col("game_id") == "G2")["home_opening_kickoff"].to_list() == [0, 0]
+
+
+def test_ensure_home_opening_kickoff_skips_null_leading_posteam() -> None:
+    """A leading null posteam (the opening-kickoff row) is skipped — first NON-null wins."""
+    from sportsdataverse.nfl.ep_wp import _ensure_home_opening_kickoff
+
+    df = pl.DataFrame(
+        {
+            "game_id": ["G", "G", "G"],
+            "play_id": [1, 2, 3],
+            "posteam": [None, "HOME", "AWAY"],  # kickoff null; first real possession = HOME
+            "home_team": ["HOME", "HOME", "HOME"],
+        }
+    )
+    out = _ensure_home_opening_kickoff(df)
+    assert out["home_opening_kickoff"].to_list() == [1, 1, 1]
+
+
+def test_ensure_home_opening_kickoff_does_not_override_existing() -> None:
+    """An upstream-provided home_opening_kickoff (nflverse / ESPN path) is untouched."""
+    from sportsdataverse.nfl.ep_wp import _ensure_home_opening_kickoff
+
+    df = pl.DataFrame(
+        {
+            "game_id": ["G1"],
+            "play_id": [1],
+            "posteam": ["HOME1"],  # would derive 1 ...
+            "home_team": ["HOME1"],
+            "home_opening_kickoff": [0],  # ... but the existing value must win
+        }
+    )
+    out = _ensure_home_opening_kickoff(df)
+    assert out["home_opening_kickoff"].to_list() == [0]
+
+
 def test_xpass_features_contract() -> None:
     """The 19-feature contract order (era0..era4 one-hot, era-aware retrain)."""
     assert XPASS_FEATURES == [
