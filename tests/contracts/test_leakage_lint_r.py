@@ -71,3 +71,13 @@ def test_analyze_finer_root_flags_ungrouped_lag_inside_function():
     assert findings[0].locator["call"] == "lag"
     assert findings[0].locator["line"] == 8  # the ungrouped `b <- ... lag(w)`
     assert findings[0].severity is Severity.WARN and findings[0].needs_judgment
+
+
+def test_analyze_inline_brace_in_grouped_pipe_is_clean():
+    # lag inside an inline {} block within a grouped pipe must NOT be flagged.
+    assert leakage_r._analyze_parsedata(_rows("inlinebrace.getparsedata.csv"), "inlinebrace.R") == []
+
+
+@skip_if_no_rscript
+def test_run_inlinebrace_live_is_empty():
+    assert leakage_r.run(str(_FIXTURES / "inlinebrace.R")) == []

@@ -80,15 +80,20 @@ def _root(nid: int, parent: dict[int, int], ids: set[int], block_ids: set[int]) 
     """Walk ``parent`` from ``nid`` to its nearest enclosing statement node.
 
     A statement boundary is the top level (parent ``0``), an out-of-set parent
-    (e.g. a negative COMMENT parent), or a braced-block expr (``block_ids``) — so
-    each pipe chain inside a ``function(){...}``/``{`` block roots to its own
-    statement rather than to the whole top-level definition.
+    (e.g. a negative COMMENT parent), or a function-definition body block expr
+    (``block_ids``) — so each pipe chain inside a ``function(){...}`` body roots
+    to its own statement rather than to the whole top-level definition. Inline
+    ``{...}`` blocks that are NOT function-definition bodies (e.g. ``{ tmp <- ep;
+    lag(tmp) }`` inside a grouped pipe argument) are NOT boundaries, so a
+    lag/cum* nested in one roots up to the enclosing grouped statement correctly.
 
     Args:
         nid: Starting node id.
         parent: ``id -> parent`` map.
         ids: All known (positive) node ids.
-        block_ids: Ids of braced-block expr nodes (parents of a ``'{'`` token).
+        block_ids: Ids of function-definition body block expr nodes (the ``expr``
+            that is the direct parent of a ``'{'`` token whose own parent is a
+            function-definition expr — i.e. the parent of a ``FUNCTION`` token).
 
     Returns:
         The id of the enclosing statement node.
@@ -121,16 +126,14 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
 
     Note:
         Grouping is matched at STATEMENT granularity — each pipe chain inside a
-        ``function(){...}`` / ``{`` block roots to its own statement (the brace
-        block is a boundary), so a grouped chain no longer masks an ungrouped
-        lag/cumulative elsewhere in the same function. A residual false negative
-        remains only for multiple chains sharing ONE statement (rare); WARN-only
-        / ``needs_judgment`` routes survivors to Tier-2.
-        Conversely, a lag/cumulative wrapped in an inline ``{...}`` block or a
-        lambda body inside an otherwise-grouped pipe re-roots to that inner block
-        and may be flagged — a rare false positive (near-zero incidence in real
-        package code); WARN-only / ``needs_judgment`` makes it benign (Tier-2
-        dismisses it).
+        ``function(){...}`` body roots to its own statement (the function-definition
+        body brace is a boundary), so a grouped chain no longer masks an ungrouped
+        lag/cumulative elsewhere in the same function body. Inline ``{...}`` blocks
+        that are NOT function-definition bodies (e.g. ``{ tmp <- ep; lag(tmp) }``
+        inside a grouped pipe argument) are NOT boundaries, so a lag/cum* nested in
+        one roots up to the enclosing grouped statement and is correctly clean.
+        A residual false negative remains only for multiple chains sharing ONE
+        statement (rare); WARN-only / ``needs_judgment`` routes survivors to Tier-2.
     """
     try:
         ids = {int(r["id"]) for r in rows}
@@ -146,7 +149,16 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
                 locator={"file": rel},
             )
         ]
-    block_ids = {int(r["parent"]) for r in rows if r.get("token") == "'{'"}
+    # Statement boundaries are FUNCTION-DEFINITION body braces only — not every
+    # '{'. An inline `{...}` block inside a grouped pipe is NOT a boundary, so a
+    # lag/cum* nested in one still roots to its enclosing grouped statement
+    # (drops the documented inline-brace false positive). Named/anonymous function
+    # bodies stay boundaries: their '{' parent expr's parent is a FUNCTION-parent,
+    # preserving the fn-wrapped masking fix from Phase 1.5 slice A.
+    func_def_exprs = {int(r["parent"]) for r in rows if r.get("token") == "FUNCTION"}
+    block_ids = {
+        int(r["parent"]) for r in rows if r.get("token") == "'{'" and parent.get(int(r["parent"])) in func_def_exprs
+    }
     group_roots: set[int] = set()
     for r in rows:
         token, text = r.get("token", ""), r.get("text", "")
