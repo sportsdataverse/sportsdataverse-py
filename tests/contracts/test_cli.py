@@ -77,3 +77,4 @@ def test_lint_target_r_dispatches_to_r_linter(monkeypatch):
     monkeypatch.setitem(cli.LINT_TARGETS, "rtgt", LintTarget(name="rtgt", path=".", language="r"))
     out = cli.lint_target("rtgt")
     assert any(d["severity"] == "info" for d in out)
+    assert any(d["severity"] == "info" and d["message"] == "R lint skipped: Rscript not found" for d in out)
