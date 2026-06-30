@@ -1,0 +1,277 @@
+# Weekly deterministic validation cron for the registered datasets.
+#
+# Downloads the published model_pbp parquet for each registered dataset from
+# the public GitHub releases and runs the Tier-1 validation CLI over them.
+# Any ERROR-severity finding opens (or re-comments on) a single tracking
+# issue labelled ``validation:drift`` instead of opening a new issue every
+# week.
+#
+# Graceful degrade: if a release / asset is absent (network failure, release
+# tag not yet published) the dataset is skipped with a ::notice:: annotation
+# and the rest of the datasets continue.
+#
+# Release coordinates (resolved 2026-06-29):
+#   cfb_model_pbp : sportsdataverse/sportsdataverse-data @ espn_cfb_model_pbp
+#                   asset pattern: cfb_model_pbp_*.parquet
+#                   glob root    : $SDV_VALIDATION_DATA_ROOT/cfb/model_pbp/parquet/
+#   nfl_model_pbp : sportsdataverse/nfl-data @ nfl_model_pbp
+#                   asset pattern: model_pbp_*.parquet
+#                   glob root    : $SDV_VALIDATION_NFL_DATA_ROOT/out/
+#                   NOTE: no release exists yet → graceful skip until published.
+#
+# Triggers:
+#   * schedule        — every Monday at 12:00 UTC
+#   * workflow_dispatch — manual trigger for ad-hoc validation outside the
+#                         schedule cadence.
+name: validation-cron
+on:
+  schedule:
+    - cron: "0 12 * * 1" # Every Monday at 12:00 UTC
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write # required to open / update the drift tracking issue
+concurrency:
+  group: validation-cron
+  cancel-in-progress: false
+jobs:
+  validate:
+    name: Validation drift check (ubuntu / py3.13.2)
+    runs-on: ubuntu-latest
+    env:
+      # Roots that match the registry glob patterns.
+      SDV_VALIDATION_DATA_ROOT: ${{ github.workspace }}/validation-data
+      SDV_VALIDATION_NFL_DATA_ROOT: ${{ github.workspace }}/validation-data-nfl
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        # setup-uv stopped publishing major/minor tags at v8 for supply-chain
+        # hardening. Pin to an immutable patch tag.
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python 3.13.2
+        run: uv python install 3.13.2
+
+      - name: Install Linux build deps for pyreadr sdist fallback
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libbz2-dev liblzma-dev
+
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+
+      # -----------------------------------------------------------------------
+      # Dataset: cfb_model_pbp
+      # Release: sportsdataverse/sportsdataverse-data @ espn_cfb_model_pbp
+      # Glob root: $SDV_VALIDATION_DATA_ROOT/cfb/model_pbp/parquet/
+      # -----------------------------------------------------------------------
+      - name: Download cfb_model_pbp parquet
+        id: dl_cfb
+        run: |
+          dest="${SDV_VALIDATION_DATA_ROOT}/cfb/model_pbp/parquet"
+          mkdir -p "$dest"
+          if gh release download espn_cfb_model_pbp \
+              -R sportsdataverse/sportsdataverse-data \
+              --pattern 'cfb_model_pbp_*.parquet' \
+              --dir "$dest" \
+              --clobber 2>&1; then
+            count=$(ls "$dest"/cfb_model_pbp_*.parquet 2>/dev/null | wc -l)
+            if [ "$count" -eq 0 ]; then
+              echo "::notice::cfb_model_pbp — download succeeded but no cfb_model_pbp_*.parquet assets found; skipping"
+              echo "available=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "::notice::cfb_model_pbp — downloaded $count parquet file(s)"
+              echo "available=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "::notice::cfb_model_pbp — release download failed (release or asset absent); skipping dataset"
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run validation — cfb_model_pbp
+        id: validate_cfb
+        if: steps.dl_cfb.outputs.available == 'true'
+        run: |
+          set +e
+          uv run --frozen python -m tools.validation.cli run \
+            --dataset cfb_model_pbp \
+            --json > findings_cfb_model_pbp.json 2>validate_cfb.log
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+      - name: Skip cfb_model_pbp (no data)
+        if: steps.dl_cfb.outputs.available != 'true'
+        run: echo '[]' > findings_cfb_model_pbp.json
+
+      # -----------------------------------------------------------------------
+      # Dataset: nfl_model_pbp
+      # Release: sportsdataverse/nfl-data @ nfl_model_pbp
+      # Glob root: $SDV_VALIDATION_NFL_DATA_ROOT/out/
+      # NOTE: no release exists yet; graceful skip expected until published.
+      # -----------------------------------------------------------------------
+      - name: Download nfl_model_pbp parquet
+        id: dl_nfl
+        run: |
+          dest="${SDV_VALIDATION_NFL_DATA_ROOT}/out"
+          mkdir -p "$dest"
+          if gh release download nfl_model_pbp \
+              -R sportsdataverse/nfl-data \
+              --pattern 'model_pbp_*.parquet' \
+              --dir "$dest" \
+              --clobber 2>&1; then
+            count=$(ls "$dest"/model_pbp_*.parquet 2>/dev/null | wc -l)
+            if [ "$count" -eq 0 ]; then
+              echo "::notice::nfl_model_pbp — download succeeded but no model_pbp_*.parquet assets found; skipping"
+              echo "available=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "::notice::nfl_model_pbp — downloaded $count parquet file(s)"
+              echo "available=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "::notice::nfl_model_pbp — release download failed (release or asset absent); skipping dataset"
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run validation — nfl_model_pbp
+        id: validate_nfl
+        if: steps.dl_nfl.outputs.available == 'true'
+        run: |
+          set +e
+          uv run --frozen python -m tools.validation.cli run \
+            --dataset nfl_model_pbp \
+            --json > findings_nfl_model_pbp.json 2>validate_nfl.log
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+      - name: Skip nfl_model_pbp (no data)
+        if: steps.dl_nfl.outputs.available != 'true'
+        run: echo '[]' > findings_nfl_model_pbp.json
+
+      # -----------------------------------------------------------------------
+      # Aggregate findings and open/update the drift tracking issue
+      # -----------------------------------------------------------------------
+      - name: Aggregate findings and file drift issue
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const label = 'validation:drift';
+            const today = new Date().toISOString().slice(0, 10);
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            // Collect findings from each dataset JSON (missing file → empty array).
+            const datasets = ['cfb_model_pbp', 'nfl_model_pbp'];
+            const allFindings = {};
+            let anyError = false;
+            for (const ds of datasets) {
+              const path = `findings_${ds}.json`;
+              let findings = [];
+              try {
+                findings = JSON.parse(fs.readFileSync(path, 'utf8'));
+              } catch (e) {
+                core.info(`Could not read ${path}: ${e.message}`);
+              }
+              allFindings[ds] = findings;
+              if (findings.some(f => f.severity === 'error')) {
+                anyError = true;
+              }
+            }
+
+            if (!anyError) {
+              core.info('No ERROR findings — checking for open drift issue to close.');
+              // Close any previously-open drift issue so stale issues don't linger.
+              const open = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                state: 'open',
+                labels: label,
+                per_page: 5,
+              });
+              for (const issue of open.data) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo:  context.repo.repo,
+                  issue_number: issue.number,
+                  body: `Validation cron on **${today}** found no ERROR findings — drift resolved.\n\nRun: ${runUrl}`,
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo:  context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                });
+                core.info(`Closed drift issue #${issue.number} (no errors this run).`);
+              }
+              return;
+            }
+
+            // Build the body: group ERROR findings by dataset.
+            const lines = [
+              `Validation drift detected on **${today}**.`,
+              ``,
+              `Run: ${runUrl}`,
+              ``,
+            ];
+            for (const [ds, findings] of Object.entries(allFindings)) {
+              const errors = findings.filter(f => f.severity === 'error');
+              if (errors.length === 0) continue;
+              lines.push(`## \`${ds}\` — ${errors.length} ERROR finding(s)`);
+              lines.push('');
+              lines.push('| check | message |');
+              lines.push('|---|---|');
+              for (const f of errors) {
+                const msg = f.message.replace(/\|/g, '\\|');
+                lines.push(`| \`${f.check}\` | ${msg} |`);
+              }
+              lines.push('');
+            }
+            lines.push('---');
+            lines.push('**Resolve by**: fixing the producer pipeline, updating the schema snapshot, or adjusting thresholds, then closing this issue. The next cron run that finds no ERRORs will close it automatically.');
+            const body = lines.join('\n');
+
+            // Open a new issue or comment on the existing one (dedup by label).
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              state: 'open',
+              labels: label,
+              per_page: 5,
+            });
+            if (open.data.length > 0) {
+              const issue = open.data[0];
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                issue_number: issue.number,
+                body: `Re-occurred on ${today}.\n\n${body}`,
+              });
+              core.info(`Commented on existing drift issue #${issue.number}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                title: `validation drift detected (${today})`,
+                body:  body,
+                labels: [label],
+              });
+              core.info(`Opened new drift issue #${created.data.number}`);
+            }
+
+      # -----------------------------------------------------------------------
+      # Upload findings JSON for inspection (always — even on skip)
+      # -----------------------------------------------------------------------
+      - name: Upload findings artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: validation-findings-${{ github.run_id }}
+          path: findings_*.json
+          if-no-files-found: warn
+          retention-days: 30
