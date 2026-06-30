@@ -104,6 +104,11 @@ def test_is_last_ft_nba_behavior() -> None:
     assert _is_last_ft("Free Throw 2PT") is True
     assert _is_last_ft("Free Throw 3PT") is True
 
+    # G-League single-FT format is case-SENSITIVE (matches the existing
+    # _FT_NofN_RE convention):
+    assert _is_last_ft("Free Throw 2pt") is False  # lowercase 'pt' must NOT match
+    assert _is_last_ft("Free Throw 2 PT") is True  # the regex's \s* tolerates a space variant
+
 
 # ---------------------------------------------------------------------------
 # Schema / empty-frame contract

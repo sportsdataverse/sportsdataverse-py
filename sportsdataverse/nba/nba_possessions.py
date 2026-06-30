@@ -59,10 +59,11 @@ def _is_last_ft(sub_type: str) -> bool:
     substring).
 
     G-League: also matches ``'Free Throw {N}PT'`` (``'Free Throw 1PT'``,
-    ``'Free Throw 2PT'``, ``'Free Throw 3PT'``) — the G-League single-FT rule
-    where one free throw is worth the value of the fouled shot.  These are
-    standalone trips, so the event is always the last (and only) FT of its
-    trip.
+    ``'Free Throw 2PT'``, ``'Free Throw 3PT'`` — and the optional-space variant
+    ``'Free Throw 2 PT'``, since the regex tolerates the space via ``\\s*``) —
+    the G-League single-FT rule where one free throw is worth the value of the
+    fouled shot.  These are standalone trips, so the event is always the last
+    (and only) FT of its trip.
     """
     s = sub_type or ""
     if _FT_GL_PT_RE.search(s):
