@@ -57,6 +57,13 @@ LINT_TARGETS["sdv_nfl_ep_wp"] = LintTarget(
     path="sportsdataverse/nfl/ep_wp.py",
     language="python",
 )
+LINT_TARGETS["cfb_data_r"] = LintTarget(
+    name="cfb_data_r",
+    # cfb-data is the R producer of the public CFB datasets; SDV_VALIDATION_DATA_ROOT
+    # is the cfb-data repo root, so its data-prep R lives under R/.
+    path="${SDV_VALIDATION_DATA_ROOT}/R",
+    language="r",
+)
 
 
 def load_thresholds(domain: str) -> dict[str, float]:

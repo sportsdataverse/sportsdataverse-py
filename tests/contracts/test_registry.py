@@ -67,3 +67,12 @@ def test_nfl_model_pbp_registered_with_oracle():
     oracle = ORACLES["nfl"]
     assert set(oracle.column_map) == {"ep", "epa", "wp", "vegas_wp", "cp"}
     assert oracle.thresholds["ep"] == 0.99
+
+
+def test_cfb_data_r_lint_target_registered():
+    from tools.validation.registry import LINT_TARGETS
+
+    assert "cfb_data_r" in LINT_TARGETS
+    t = LINT_TARGETS["cfb_data_r"]
+    assert t.language == "r"
+    assert t.path == "${SDV_VALIDATION_DATA_ROOT}/R"
