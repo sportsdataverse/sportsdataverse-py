@@ -2877,14 +2877,24 @@ def _ensure_home_opening_kickoff(df: pl.DataFrame) -> pl.DataFrame:
     :func:`_add_fourth_down_decisions` skips the whole decision step on a
     ``KeyError``.  Mirrors the ``receive_2h_ko`` derivation in :func:`_add_wp_aux`:
     derived only when absent (never overrides an upstream column), and only when
-    the source columns exist.
+    the source columns exist.  The first-possession lookup is ordered by
+    ``play_id`` so the flag is deterministic regardless of input row order.
     """
-    if "home_opening_kickoff" in df.columns or "posteam" not in df.columns or "home_team" not in df.columns:
+    if (
+        "home_opening_kickoff" in df.columns
+        or "posteam" not in df.columns
+        or "home_team" not in df.columns
+        or "game_id" not in df.columns
+        or "play_id" not in df.columns
+    ):
         return df
     return df.with_columns(
-        pl.when(pl.col("posteam").drop_nulls().first().over("game_id") == pl.col("home_team"))
+        pl.when(pl.col("posteam").sort_by("play_id").drop_nulls().first().over("game_id") == pl.col("home_team"))
         .then(1)
         .otherwise(0)
+        # nflverse ships home_opening_kickoff as Float64; match it so a native-derived
+        # frame stays schema-compatible with nflverse-sourced frames under diagonal_relaxed.
+        .cast(pl.Float64)
         .alias("home_opening_kickoff"),
     )
 
