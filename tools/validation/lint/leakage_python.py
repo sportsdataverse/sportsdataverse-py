@@ -67,12 +67,13 @@ def _receiver_is_grouped(node: ast.Call) -> bool:
     return False
 
 
-# Known false-negative (under-warn, by design): a lag/cum call inside a lambda
-# passed to ``group_by(...).agg(lambda s: s.shift(1))`` is NOT flagged — the
-# shift sits in the lambda's AST subtree, which is neither an ancestor of the
-# call (``_is_grouped``) nor on its receiver chain (``_receiver_is_grouped``).
-# The Tier-2 leakage-reviewer references this limit; WARN-only routing means the
-# inverse (a survivor) is adjudicated downstream rather than silently trusted.
+# Known false-positive (over-warn): a lag/cum call inside a lambda passed to
+# ``group_by(...).agg(lambda s: s.shift(1))`` IS WARN-flagged even though the
+# enclosing ``group_by`` makes it safe — the grouping is an "uncle" of the call
+# (it is the receiver of ``.agg``), invisible to both ``_is_grouped`` (the
+# ancestor walk) and ``_receiver_is_grouped`` (the call's own receiver chain),
+# so the call falls through to flagged. WARN-only routing sends it to the Tier-2
+# leakage-reviewer, which dismisses this grouped-but-unprovable case.
 def _lint_source(src: str, rel: str) -> list[Finding]:
     findings: list[Finding] = []
     try:

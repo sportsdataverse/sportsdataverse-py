@@ -27,6 +27,8 @@ const CHECK_TO_AGENT = {
 // The runner agent must export the data roots so the CLI can resolve the
 // env-var-rooted dataset globs / lint targets (cfb is User-scope; nfl is passed
 // here). A dataset whose parquet is absent should be reported, not crash the run.
+// NOTE: these absolute paths are MACHINE-SPECIFIC — this harness is the on-demand
+// local-session path; the portable CI path is .github/workflows/validation-cron.yml.
 const SDV_PY = 'c:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-py'
 const NFL_DATA_ROOT = 'C:/Users/saiem/Documents/GitHub-Data/sdv-dev/nflverse-dev/nfl-data'
 
