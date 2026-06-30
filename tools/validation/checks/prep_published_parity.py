@@ -48,11 +48,23 @@ def run(
             )
         )
 
-    joined = prep.join(published, on=keys, how="inner", suffix="__pub__")
+    _suffix = "__pub__"
+    # Guard against published columns that already end with the join suffix (e.g.
+    # "epa__pub__").  If left as-is, polars raises DuplicateError when the join
+    # appends the suffix to published's "epa" column, because "epa__pub__" would
+    # already exist.  Rename the pre-existing colliders so the join can proceed.
+    _colliders = {
+        c: c + "_orig__"
+        for c in published.columns
+        if c not in keys and c.endswith(_suffix) and c[: -len(_suffix)] in prep.columns
+    }
+    pub_for_join = published.rename(_colliders) if _colliders else published
+
+    joined = prep.join(pub_for_join, on=keys, how="inner", suffix=_suffix)
     for col, dtype in prep.schema.items():
         if col in keys or col not in published.columns or not dtype.is_numeric():
             continue
-        pcol = f"{col}__pub__"
+        pcol = f"{col}{_suffix}"
         if pcol not in joined.columns:
             continue
         n_div = joined.filter(
