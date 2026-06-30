@@ -296,4 +296,13 @@ files = [
     "sportsdataverse/mlb/mlb_statcast_runtime.py",
     "sportsdataverse/mlb/mlb_statcast_parsers.py",
     "sportsdataverse/mlb/mlb_statcast_extra.py",
+    "tools/validation/findings.py",
+    "tools/validation/oracles.py",
+    "tools/validation/registry.py",
+    "tools/validation/cli.py",
+    "tools/validation/checks/schema_contract.py",
+    "tools/validation/checks/extraction.py",
+    "tools/validation/checks/numeric_parity.py",
+    "tools/validation/checks/sweep.py",
+    "tools/validation/checks/e2e.py",
 ]
