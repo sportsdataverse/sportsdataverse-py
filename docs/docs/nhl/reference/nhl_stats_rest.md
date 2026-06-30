@@ -607,7 +607,7 @@ Retrieve shift-chart data.
 | `id` | integer | Unique player identifier. |
 | `detail_code` | integer | Numeric code identifying the specific detail type or sub-category within the shift or event record. |
 | `duration` | character | Penalty duration in minutes. |
-| `end_time` | character | End time (local). |
+| `end_time` | character | Shift end time (MM:SS countdown clock). |
 | `event_description` | character | Human-readable event description. |
 | `event_details` | character | Serialized details describing the on-ice event associated with the shift, such as play type and participants. |
 | `event_number` | integer | Event number identifier. |
@@ -618,7 +618,7 @@ Retrieve shift-chart data.
 | `period` | integer | Period number. |
 | `player_id` | integer | Unique player identifier. |
 | `shift_number` | integer | Sequential number identifying the shift within the game, ordered chronologically by start time. |
-| `start_time` | character | Start time (local). |
+| `start_time` | character | Shift start time (MM:SS countdown clock). |
 | `team_abbrev` | character | Team abbreviation. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Team name. |

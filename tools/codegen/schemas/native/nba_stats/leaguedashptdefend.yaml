@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: close_def_person_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: player_last_team_id
+  type: integer
+- description: ''
+  name: player_last_team_abbreviation
+  type: character
+- description: ''
+  name: player_position
+  type: character
+- description: ''
+  name: age
+  type: numeric
+- description: ''
+  name: gp
+  type: integer
+- description: ''
+  name: g
+  type: integer
+- description: ''
+  name: freq
+  type: numeric
+- description: ''
+  name: d_fgm
+  type: numeric
+- description: ''
+  name: d_fga
+  type: numeric
+- description: ''
+  name: d_fg_pct
+  type: numeric
+- description: ''
+  name: normal_fg_pct
+  type: numeric
+- description: ''
+  name: pct_plusminus
+  type: numeric
+kind: dataframe
+schema: leaguedashptdefend

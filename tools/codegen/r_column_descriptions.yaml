@@ -1820,22 +1820,29 @@ hoopR:
   adj2fp_rk: Adj2fp rk.
   adj_d: Adj d.
   adj_d_rk: Adj d rk.
-  adj_de: Adj de.
+  adj_de: Adjusted defensive efficiency.
   adj_de_rk: Adj de rk.
   adj_em: Adj em.
   adj_em_rk: Adj em rk.
   adj_o: Adj o.
   adj_o_rk: Adj o rk.
-  adj_oe: Adj oe.
+  adj_oe: Adjusted offensive efficiency.
   adj_oe_rk: Adj oe rk.
   adj_t: Adj t.
   adj_t_chg: Adj t chg.
   adj_t_rk: Adj t rk.
+  adjde: Adjusted defensive efficiency (pts/100 poss).
+  adjoe: Adjusted offensive efficiency (pts/100 poss).
+  adjt: Adjusted tempo (possessions per 40 minutes).
   age: Player age (in years).
+  agent: Listed player agent.
   alley_oop: Alley oop.
   alternate: Alternate.
   alternate_color: Alternate color (hex without leading '#').
+  apg: Assists per game.
   app_url: URL for app.
+  arate: Assist rate (offense).
+  arate_d: Assist rate allowed (defense).
   area: Area.
   area_detail: Area detail.
   arena: Arena.
@@ -1852,9 +1859,12 @@ hoopR:
   assist_ratio: Assist ratio (assists per 100 possessions used).
   assist_to_turnover: Assist-to-turnover ratio.
   assist_total: Assist total.
+  assisted_pct: Assisted field-goal percentage.
   assists: Total assists.
   assists_turnover_ratio: Assists turnover ratio.
   ast: Assists.
+  ast_pct: Assist percentage.
+  athlete: Athlete name.
   athlete_display_name: Athlete display name (full).
   athlete_guid: ESPN athlete GUID.
   athlete_headshot_href: Athlete headshot image URL.
@@ -1870,8 +1880,10 @@ hoopR:
   athlete_short_name: Athlete short display name.
   athlete_type: Athlete type / class.
   athlete_uid: ESPN athlete UID (universal identifier).
+  athletes: List of athletes in the lineup.
   athletes_ref: '`$ref` to team roster resource (college-only).'
   attendance: Reported attendance.
+  avg_age_team: Average roster age.
   avg_hgt: Avg hgt.
   avg_hgt_rk: Avg hgt rk.
   avg_poss_length_def: Avg poss length def.
@@ -1885,12 +1897,17 @@ hoopR:
   avgonballperimetergravityscore: Avgonballperimetergravityscore.
   avgpointsagainst: Avgpointsagainst.
   avgpointsfor: Avgpointsfor.
+  award: Award slug (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`).
   award_id: ESPN award identifier.
+  award_share: Share of the maximum voting points.
+  away: Away record.
   away_abbreviation: Away team's abbreviation.
   away_alternate_color: Color code (hex) for away alternate.
   away_color: Color code (hex) for away.
+  away_conference: Away team conference.
   away_conference_id: Unique identifier for away conference.
   away_display_name: Away display name.
+  away_espn_team_id: ESPN away team id (NA for bart-only rows).
   away_id: Unique identifier for away.
   away_in_bonus: Away team's in bonus.
   away_is_active: Away team's is active.
@@ -1913,10 +1930,12 @@ hoopR:
   away_player3: Away team's player3.
   away_player4: Away team's player4.
   away_player5: Away team's player5.
+  away_points: Away team points.
   away_record: Away win-loss record.
   away_score: Away team score at the time of the play.
   away_seed: Away team's seed.
   away_short_display_name: Away short display name.
+  away_team: Away team name.
   away_team_abb: Away team's team abb.
   away_team_abbrev: Away team three-letter abbreviation.
   away_team_alternate_color: Away team alternate color (hex).
@@ -1963,9 +1982,18 @@ hoopR:
   away_win_percentage: Away win percentage (0-1 decimal).
   away_winner: Away team's winner.
   away_wins: Away team's wins.
+  bae: Bi-annual exception.
   ball_distance_traveled: Ball distance traveled.
   ball_reach_back: Ball reach back.
   ball_speed_through_rim: Ball speed through rim.
+  bart_conf: Torvik conference abbreviation (NA if unmatched).
+  bart_match_confidence: 1 for matched, NA for unmatched.
+  bart_muid: Torvik muid (NA for espn-only rows).
+  bart_team: Torvik team name (NA if unmatched).
+  bart_team1: Torvik team1 name (NA for espn-only rows).
+  bart_team2: Torvik team2 name (NA for espn-only rows).
+  bart_winner: Torvik winner name (NA for espn-only rows).
+  barthag: 'Power rating: win probability vs. an average team.'
   base_year_compensation_active: Base-year-compensation rule active.
   bench: Bench.
   bench_pct: Bench percentage (0-1 decimal).
@@ -2002,6 +2030,7 @@ hoopR:
   box_out_player_rebounds: Box-outs that led to a player rebound.
   box_out_player_team_rebounds: Box-outs that led to either a player or team rebound.
   box_outs: Box-outs executed.
+  bpm: Career box plus/minus.
   branch_link: Branch link.
   broadcast: Broadcast information string.
   broadcast_market: Broadcast market label (e.g. 'national', 'home').
@@ -2009,7 +2038,7 @@ hoopR:
   broadcaster_abbreviation: Broadcaster abbreviation.
   broadcaster_display: Broadcaster display.
   broadcaster_id: Unique identifier for broadcaster.
-  broadcasts: JSON array of broadcast records.
+  broadcasts: Nested list of broadcast outlets.
   byline: News article byline / author.
   c_hgt: C hgt.
   c_hgt_rk: C hgt rk.
@@ -2022,6 +2051,8 @@ hoopR:
   c_player_last_name: C player last name.
   c_wgt: C wgt.
   c_yr: C yr.
+  cap_allocation: Cap allocation for the season (USD).
+  cap_space_all: Cap space / over-the-cap amount (USD).
   catch_distance: Catch distance.
   catching_hand: Catching hand.
   category: Category label.
@@ -2031,12 +2062,15 @@ hoopR:
   category_short: Category short display.
   category_type: Category type code (e.g. "moneyLineOverall").
   ch: Ch.
+  champ: National championships.
+  champ_percent: Championship rate.
   charges_drawn: Charges drawn.
   chg: Chg.
   child_group_id: Child group id.
   children_ref: '`$ref` to child-groups endpoint.'
   citizenship: Citizenship.
-  city: City.
+  city: Venue city.
+  class: College class / draft eligibility note.
   clinch_indicator: Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated).
   clinched_ist_group: Clinched ist group.
   clinched_ist_knockout: Clinched ist knockout.
@@ -2051,23 +2085,29 @@ hoopR:
   coach: Coach.
   coach_id: ESPN coach id.
   coaches_ref: '`$ref` to team coaches resource (if present).'
+  college: College.
+  college_name: College / pre-draft team.
   college_ref: '`$ref` to college.'
+  colleges: College(s).
   color: Primary color (hex without leading '#').
   comeback: Comeback.
   comment: Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive').
   comparisons: Comparisons.
+  con_rec: Conference record.
   conf: character.
   conf_sos: Conf sos.
   conf_sos_rk: Conf sos rk.
-  conference: Conference.
+  conference: Conference name.
   conference_competition: Conference competition.
-  conference_game: Conference game.
+  conference_game: Whether the game was a conference game.
   conference_id: Conference identifier.
   conference_logo: Logo image URL for conference.
   conference_name: Full conference name.
   conference_short_name: Conference short name (e.g. 'ACC').
   conference_uid: ESPN universal conference identifier.
   conference_url: URL for conference.
+  conmatch: Conference matchup descriptor.
+  consos: Conference strength of schedule.
   contested_field_goal_percentage: Contested field goal percentage (0-1).
   contested_field_goals_attempted: Contested field goal attempts.
   contested_field_goals_made: Contested field goals made.
@@ -2104,14 +2144,23 @@ hoopR:
   coordinate_y_raw: Y coordinate as returned by the API before any adjustment.
   correlations_r_x_100: Correlations r x 100.
   count: Count of count.
+  country: Venue country.
   current: Current rank.
+  current_city: Current home venue city.
+  current_state: Current home venue state.
+  current_team: Current NBA team.
+  current_venue: Current home venue name.
+  current_venue_id: Current home venue id.
   d: D.
   data: Data.
   date: Date in YYYY-MM-DD format.
   date_of_birth: Date of birth (YYYY-MM-DD).
+  date_update: Date the status was last updated.
   day: Day number within the month.
   day_date: Date in YYYY-MM-DD format.
-  de: De.
+  dbpm: Defensive box plus/minus.
+  de: Raw defensive efficiency (points allowed/100 poss).
+  de_rank: National rank of adjusted defensive efficiency.
   de_rk: De rk.
   debut_year: Year of professional debut.
   def_a_pct: Def a percentage (0-1 decimal).
@@ -2124,6 +2173,7 @@ hoopR:
   def_e_fg_pct_rk: Def e fg pct rk.
   def_eff: Def eff.
   def_eff_rk: Def eff rk.
+  def_efg: Defensive effective field goal percentage allowed.
   def_fg_2_pct: Def field goals 2 percentage (0-1 decimal).
   def_fg_2_pct_rk: Def fg 2 pct rk.
   def_fg_3_pct: Def field goals 3 percentage (0-1 decimal).
@@ -2141,15 +2191,18 @@ hoopR:
   def_ftr: Def ftr.
   def_non_stl_pct: Def non steals percentage (0-1 decimal).
   def_non_stl_pct_rk: Def non stl pct rk.
+  def_or: Defensive (opponent) rebound percentage.
   def_or_pct: Def or percentage (0-1 decimal).
   def_or_pct_rk: Def or pct rk.
   def_stl_pct: Def steals percentage (0-1 decimal).
   def_stl_pct_rk: Def stl pct rk.
+  def_to: Defensive turnover percentage forced.
   def_to_pct: Def to percentage (0-1 decimal).
   def_to_pct_rk: Def to pct rk.
   defended_at_rim_field_goal_percentage: Field goal percentage allowed at the rim (0-1).
   defended_at_rim_field_goals_attempted: Field goal attempts allowed when defending at the rim.
   defended_at_rim_field_goals_made: Field goals made allowed when defending at the rim.
+  defense_rating: Lineup defensive rating.
   defensive_avg48blocks: The average number of blocks per 48 minutes.
   defensive_avg48defensive_rebounds: The average number of defensive rebounds per 48 minutes.
   defensive_avg48steals: The average number of steals per 48 minutes.
@@ -2180,7 +2233,7 @@ hoopR:
   descriptor: Descriptor.
   details: Details.
   did_not_play: TRUE if the player did not appear in the game.
-  diff: Diff.
+  diff: Scoring margin.
   differential: Differential.
   display_height: Player height in display format (e.g. '6-2').
   display_name: Display name.
@@ -2195,21 +2248,30 @@ hoopR:
   dr: Dr.
   dr_pct: Dr percentage (0-1 decimal).
   dr_pct_rk: Dr pct rk.
+  dr_percent: Defensive rebound percentage.
   draft_display_text: Draft display text.
   draft_round: Round of the draft selection.
   draft_selection: Draft selection.
+  draft_status: Draft pick / undrafted status.
+  draft_team: NBA team name.
+  draft_team_id: NBA team id.
+  draft_trades: Draft-night trade note, if any.
   draft_x_ref: Draft x ref.
   draft_x_ref_1: Draft x ref 1.
   draft_year: Draft year (4-digit).
+  drb_pct: Defensive rebound percentage.
   dsc: Dsc.
   dunk360: Dunk360.
   dunk_score: Dunk score.
   dunking_hand: Dunking hand.
   dur: Dur.
   duration: Duration.
-  e_fg: E fg.
+  e8: Elite 8 appearances.
+  e_fg: Effective field goal percentage.
   e_fg_pct: E field goals percentage (0-1 decimal).
   e_fg_pct_rk: E fg pct rk.
+  e_fg_percent: Effective field goal percentage (offense).
+  e_fg_percent_def: Effective field goal percentage allowed (defense).
   edited: Edited.
   eff: Eff.
   eff_hgt: Eff hgt.
@@ -2221,13 +2283,26 @@ hoopR:
   ejected: TRUE if the player was ejected from the game.
   elev: Elev.
   elev_rk: Elev rk.
+  eligibility: Eligibility status.
+  elo: End-of-season Elo rating.
   em_chg: Em chg.
   end: End.
   end_date: End date (YYYY-MM-DD).
   end_game_seconds_remaining: Seconds remaining in the game at the end of the play.
   end_half_seconds_remaining: Seconds remaining in the half at the end of the play.
   end_quarter_seconds_remaining: Seconds remaining in the period at the end of the play.
-  espn_team_id: Unique identifier for espn team.
+  espn_abbreviation: ESPN abbreviation.
+  espn_athlete_id: ESPN athlete id.
+  espn_conference: ESPN conference name.
+  espn_display_name: ESPN display name (school + mascot).
+  espn_full_name: ESPN full name.
+  espn_game_id: ESPN game id (NA for bart-only rows).
+  espn_jersey: ESPN jersey number.
+  espn_location: ESPN school/location only.
+  espn_mascot: ESPN mascot/nickname.
+  espn_position: ESPN position abbreviation.
+  espn_short_name: ESPN short name.
+  espn_team_id: ESPN team id (canonical key).
   estimated_defensive_rating: Estimated defensive rating (points allowed per 100 possessions estimate).
   estimated_net_rating: Estimated net rating (off rating - def rating).
   estimated_offensive_rating: Estimated offensive rating (points per 100 possessions estimate).
@@ -2250,7 +2325,9 @@ hoopR:
   experience_display_value: Experience display value.
   experience_rk: Experience rk.
   experience_years: Experience years.
+  f2: Championship-game appearances.
   f4: F4.
+  f4_percent: Final 4 rate.
   f_cper40: F cper40.
   f_cper40_rk: F cper40 rk.
   f_dper40: F dper40.
@@ -2306,6 +2383,15 @@ hoopR:
   fouls_team: Fouls team.
   fouls_team_technical: Fouls team technical.
   fouls_technical: Technical fouls.
+  fox_athlete_id: Fox athlete id (NA if unmatched).
+  fox_game_id: Fox game id (NA placeholder).
+  fox_jersey: Fox jersey number (NA if unmatched).
+  fox_match_confidence: 1 for matched, NA for unmatched.
+  fox_player: Fox player name (NA if unmatched).
+  fox_position_group: Fox position group label (NA if unmatched).
+  fox_section: Fox conference/section label (NA if unmatched).
+  fox_team_id: Fox Bifrost team id (NA if unmatched).
+  fox_team_name: Fox team name (NA if unmatched).
   frames: Frames.
   franchise_id: ESPN franchise identifier.
   franchise_ref: '`$ref` to franchise resource.'
@@ -2316,12 +2402,17 @@ hoopR:
   free_throws_made: Free throws made.
   free_throws_made_free_throws_attempted: Free Throws Made-Attempted.
   free_throws_percentage: Free throw percentage (0-1 decimal).
+  from_year: First season.
   ft_pct: Free throw percentage (0-1).
   ft_pct_rk: Ft pct rk.
+  ft_percent: Free-throw percentage (offense).
+  ft_percent_d: Free-throw percentage allowed (defense).
   ft_rate: Ft rate.
   ft_rate_rk: Ft rate rk.
   fta: Free throw attempts.
   ftm: Free throws made.
+  ftr: Free-throw rate (offense).
+  ftr_def: Free-throw rate allowed (defense).
   full_date: Date in YYYY-MM-DD format.
   full_name: Player's full name.
   g: Games played.
@@ -2357,9 +2448,12 @@ hoopR:
   game_home_leaders_rebounds: Game home leaders rebounds.
   game_home_leaders_team_tricode: Game home leaders team tricode.
   game_id: Unique game identifier.
+  game_minutes: Total team minutes.
   game_mv_ps: Game mv ps.
   game_number: Game number.
+  game_pace: Game pace (possessions).
   game_play_number: Sequential play number within the game.
+  game_score: Bart Torvik single-game quality score.
   game_sequence: Game sequence.
   game_spread: Game spread (signed; positive = home favored).
   game_spread_available: TRUE if a point spread was available.
@@ -2374,8 +2468,11 @@ hoopR:
   game_time_utc: Game start time in UTC (ISO 8601 timestamp).
   game_type: Game type.
   game_uid: Game uid.
+  games: Games played.
   gamesbehind: Gamesbehind.
   gamesplayed: Gamesplayed.
+  gamevalue: Game quality value.
+  gb: Games behind the conference leader.
   gc: Gc.
   general_assist_turnover_ratio: The average number of assists a player or team records per turnover.
   general_avg48disqualifications: The average number of disqualifications per 48 minutes.
@@ -2427,6 +2524,7 @@ hoopR:
   geo_broadcasts: Geo broadcasts.
   gi: Gi.
   gms: Gms.
+  gp: Games played.
   gravityscore: Gravityscore.
   group: Group identifier (e.g. conference 'group_id').
   group_id: ESPN group id.
@@ -2436,6 +2534,7 @@ hoopR:
   groups_name: Groups name.
   groups_ref: '`$ref` to the groups endpoint.'
   groups_short_name: Groups short name.
+  gs: Games started.
   guid: Stable cross-league team GUID.
   ha: Ha.
   half: Half of the game (1 or 2).
@@ -2452,7 +2551,9 @@ hoopR:
   headshot: Headshot image URL.
   headshot_alt: Alternative-text label for the headshot.
   headshot_href: Headshot image URL.
+  headshot_url: NBA CDN headshot URL.
   height: Player height (string e.g. '6-2' or inches).
+  height_inches: Height in inches.
   help_blocks: Help blocks.
   help_field_goals_attempted: Number of help field goals attempted.
   help_field_goals_made: Number of help field goals made.
@@ -2467,9 +2568,11 @@ hoopR:
   home_avgpointsfor: Home team's avgpointsfor.
   home_away: Game venue label ('home' or 'away').
   home_color: Color code (hex) for home.
+  home_conference: Home team conference.
   home_conference_id: Unique identifier for home conference.
   home_description: Home team's description.
   home_display_name: Home display name.
+  home_espn_team_id: ESPN home team id (NA for bart-only rows).
   home_favorite: TRUE if the home team is the betting favorite.
   home_gamesbehind: Home team's gamesbehind.
   home_id: Unique identifier for home.
@@ -2496,6 +2599,7 @@ hoopR:
   home_player4: Home team's player4.
   home_player5: Home team's player5.
   home_playoffseed: Home team's playoffseed.
+  home_points: Home team points.
   home_pointsagainst: Home team's pointsagainst.
   home_pointsfor: Home team's pointsfor.
   home_record: Home win-loss record.
@@ -2505,7 +2609,7 @@ hoopR:
   home_seed: Home team's seed.
   home_short_display_name: Home short display name.
   home_streak: Home team's streak.
-  home_team: Home team's team.
+  home_team: Home team name.
   home_team_abb: Home team's team abb.
   home_team_abbrev: Home team three-letter abbreviation.
   home_team_alternate_color: Home team alternate color (hex).
@@ -2561,16 +2665,20 @@ hoopR:
   hpa: Hpa.
   hpb: Hpb.
   href: Link / page URL.
-  ht: Ht.
+  ht: Listed height.
   hustle_status: Hustle status.
   id: Id.
+  id_hash: Unique hash identifying the lineup.
   if_necessary: If necessary.
   incoming_trade_value: Trade value if receiving this contract ($).
+  injury: Injury (body part / description).
   is_active: Is active.
   is_all_star: Is all star.
   is_conference: Whether this group is a conference.
   is_draft_live: Is draft live.
   is_field_goal: 1 if the action was a field goal; 0 otherwise.
+  is_home: Whether the team was home.
+  is_starter: 1 if the player started.
   is_target_score_last_period: Is target score last period.
   ist_group: Ist group.
   ist_group_gb: Ist group gb.
@@ -2580,6 +2688,7 @@ hoopR:
   ist_wildcard_rank: League/season rank for ist wildcard.
   jersey: Jersey number worn by the player.
   jersey_num: Jersey number worn by the player.
+  jersey_number: Jersey number.
   jump_ball_lost_person_id: Unique identifier for jump ball lost person.
   jump_ball_lost_player_name: Jump ball lost player name.
   jump_ball_recoverd_person_id: Unique identifier for jump ball recoverd person.
@@ -2588,9 +2697,14 @@ hoopR:
   jump_ball_won_player_name: Jump ball won player name.
   jump_subscore: Jump subscore.
   jumping_foot: Jumping foot.
+  kp_conf: KenPom conference abbreviation (NA if unmatched).
+  kp_game_id: KenPom game id (NA unless kenpom enabled).
+  kp_match_confidence: 1 for matched, NA for unmatched.
   kp_median: Kp median.
+  kp_team: KenPom team name (NA if unmatched).
   kpoy_rating: Kpoy rating.
   l: Losses.
+  l10: Last-ten record.
   l_conference: L conference.
   l_conference_proj: L conference proj.
   l_proj: L proj.
@@ -2615,6 +2729,8 @@ hoopR:
   league_id: League identifier ('10' = WNBA).
   leaguestandings: Leaguestandings.
   leaguewinpercent: Leaguewinpercent.
+  letter: Last-name initial (echoes the `letter` argument).
+  lines: Nested list of per-provider betting lines.
   link_web: Web link / URL.
   linked: TRUE if the record is linked to a related entity.
   live_draft_current_pick_number: Live draft current pick number.
@@ -2623,6 +2739,7 @@ hoopR:
   logo_dark: Dark-mode logo URL.
   logo_dark_href: Logo URL for dark backgrounds.
   logo_href: Team or league logo URL.
+  logo_url: NBA CDN primary logo URL.
   logos: Logos.
   logos_href_2: Logos href 2.
   logos_href_3: Logos href 3.
@@ -2631,6 +2748,8 @@ hoopR:
   loose_balls_recovered_defensive: Loose balls recovered on defense.
   loose_balls_recovered_offensive: Loose balls recovered on offense.
   loose_balls_recovered_total: Loose balls recovered total.
+  loser: Losing team.
+  loss: Total tournament losses.
   loss_rk: Loss rk.
   loss_score: Loss score.
   loss_team: Loss team.
@@ -2642,12 +2761,16 @@ hoopR:
   luck: Luck.
   luck_rk: Luck rk.
   lurl: Lurl.
+  luxury_tax: Luxury-tax threshold.
   m: M.
   market_display: Human-readable name (e.g. "NBA Championship Winner").
   market_id: ESPN futures-market identifier.
   market_name: Internal market name (e.g. "NBA - Winner").
   market_type: Market type code (`winLeague`, `winConference`, `winDivision`, ...).
   mascot: Team mascot.
+  match_confidence: Jaro-Winkler score or 1 for exact (NA if none).
+  match_keys: NA (reserved for future use).
+  match_method: Combination of matched sources, e.g.
   matchup: Matchup.
   matchup_assists: Matchup assists.
   matchup_blocks: Matchup blocks.
@@ -2673,6 +2796,7 @@ hoopR:
   matchups_person_id: Unique identifier for matchups person.
   matchups_player_slug: Matchups player slug.
   max_ball_height: Max ball height.
+  max_year: Maximum year queried (echoes `max_year`).
   mdur: Mdur.
   media_id: Media identifier (video / image).
   midsize_name: Mid-size display name.
@@ -2680,6 +2804,7 @@ hoopR:
   min_pct: Min percentage (0-1 decimal).
   min_pct_rk: Min pct rk.
   min_wp: Min wp.
+  min_year: Minimum year queried (echoes `min_year`).
   minimum_salary_exception: Signed under the minimum-salary exception.
   minimum_wp_rk: Minimum wp rk.
   minimum_wp_season_rk: Minimum wp season rk.
@@ -2690,10 +2815,14 @@ hoopR:
   minutes_calculated: Minutes calculated from game-clock differences.
   minutes_played: Minutes played.
   month_num: Month num.
+  mp: Minutes played.
+  mp_per_g: Minutes (per_game table) / `mp` total (totals table).
+  mpg: Minutes per game.
   mth: Mth.
   mtp: Mtp.
   mtt: Mtt.
   mtw: Mtw.
+  muid: Matchup unique id.
   murl: Murl.
   mvp: Mvp.
   n_career_records: Count of career-records entries.
@@ -2702,8 +2831,11 @@ hoopR:
   name: Display name.
   name_i: Initialed name (e.g. 'A. Wilson').
   national_rank: League/season rank for national.
+  nationality: Player nationality.
   nba_logo_svg: Nba logo svg.
+  nba_status: NBA contract / rights status.
   ncaa_seed: Ncaa seed.
+  ncsos: Non-conference strength of schedule.
   ncsos_adj_em: Ncsos adj em.
   ncsos_adj_em_rk: Ncsos adj em rk.
   net_rating: Net rating (off rating - def rating).
@@ -2712,8 +2844,10 @@ hoopR:
   next_game: Next game date or opponent.
   nickname: Team or athlete nickname.
   non_stl_pct: Non steals percentage (0-1 decimal).
+  non_taxpayer_mle: Non-taxpayer mid-level exception.
   not_playing_description: Not playing description.
   not_playing_reason: Not playing reason.
+  note: Injury status and description.
   notes: Free-form notes attached to the record.
   notes_headline: Notes headline.
   notes_type: Notes type.
@@ -2722,13 +2856,15 @@ hoopR:
   number: Number.
   o_rtg: O rtg.
   o_rtg_rk: O rtg rk.
+  obpm: Offensive box plus/minus.
   occurrence_display_value: Occurrence display value.
   occurrence_last: Occurrence last.
   occurrence_number: Occurrence number.
   occurrence_type: Occurrence type.
   occurrence_value: Occurrence value.
   odds_value: American odds for the team (e.g. "-250", "+800").
-  oe: Oe.
+  oe: Raw offensive efficiency (points/100 poss).
+  oe_rank: National rank of adjusted offensive efficiency.
   oe_rk: Oe rk.
   off_a_pct: Off a percentage (0-1 decimal).
   off_a_pct_rk: Off a pct rk.
@@ -2740,6 +2876,7 @@ hoopR:
   off_e_fg_pct_rk: Off e fg pct rk.
   off_eff: Off eff.
   off_eff_rk: Off eff rk.
+  off_efg: Offensive effective field goal percentage.
   off_fg_2_pct: Off field goals 2 percentage (0-1 decimal).
   off_fg_2_pct_rk: Off fg 2 pct rk.
   off_fg_3_pct: Off field goals 3 percentage (0-1 decimal).
@@ -2757,16 +2894,19 @@ hoopR:
   off_ftr: Off ftr.
   off_non_stl_pct: Off non steals percentage (0-1 decimal).
   off_non_stl_pct_rk: Off non stl pct rk.
+  off_or: Offensive rebound percentage.
   off_or_pct: Off or percentage (0-1 decimal).
   off_or_pct_rk: Off or pct rk.
   off_stl_pct: Off steals percentage (0-1 decimal).
   off_stl_pct_rk: Off stl pct rk.
+  off_to: Offensive turnover percentage.
   off_to_pct: Off to percentage (0-1 decimal).
   off_to_pct_rk: Off to pct rk.
   offballinteriorframes: Offballinteriorframes.
   offballinteriorgravityscore: Offballinteriorgravityscore.
   offballperimeterframes: Offballperimeterframes.
   offballperimetergravityscore: Offballperimetergravityscore.
+  offense_rating: Lineup offensive rating.
   offense_team_id: Unique identifier for offense team.
   offensive_a40: Assists Per 40 Minutes.
   offensive_assist_ratio: The percentage of a team's possessions that ends in an assist. Assist Ratio = (Assists x 100) divided
@@ -2854,6 +2994,9 @@ hoopR:
   onballperimeterframes: Onballperimeterframes.
   onballperimetergravityscore: Onballperimetergravityscore.
   oncourt: Oncourt.
+  opp: Opponent abbreviation.
+  opp_coach: Opponent head coach.
+  opp_conf: Opponent conference.
   opp_effective_field_goal_percentage: Opponent effective field goal percentage (0-1 decimal).
   opp_free_throw_attempt_rate: Opponent free throw attempt rate.
   opp_offensive_rebound_percentage: Opponent offensive rebound percentage (0-1 decimal).
@@ -2862,9 +3005,12 @@ hoopR:
   opp_points_paint: Opponent points paint.
   opp_points_second_chance: Opponent points second chance.
   opp_pts: Opponent points.
+  opp_pts_per_g: Opponent points per game.
   opp_team_turnover_percentage: Opponent team turnover percentage (0-1 decimal).
+  oppg: Opponent points per game.
   opponent: Opponent.
   opponent_abbrev: Abbreviation for opponent.
+  opponent_conference: Opponent conference.
   opponent_id: Unique identifier for opponent.
   opponent_mascot: Opponent mascot.
   opponent_name: Opponent name.
@@ -2889,20 +3035,26 @@ hoopR:
   or: Or.
   or_pct: Or percentage (0-1 decimal).
   or_pct_rk: Or pct rk.
+  or_percent: Offensive rebound percentage.
+  orb_pct: Offensive rebound percentage.
   order: Display order within the result set.
   ot: Ot.
   outgoing_trade_value: Trade value if sending out this contract ($).
   over_under: Over under.
-  overall: Overall.
+  overall: Overall pick number.
+  overall_rank: Pre-draft overall rank.
+  overtimes: Number of overtimes.
   p: P.
   pace: Possessions per 48 minutes.
   pace_per40: Pace per40.
+  pake: Performance above KenPom expectation (wins).
   parent_group_id: Unique identifier for parent group.
   parent_ref: '`$ref` to parent group (if any).'
   partial_possessions: Partial possessions.
   participants: Participants.
   participants_0_athlete_id: V2 PBP participant 0 (primary) athlete ID.
   participants_1_athlete_id: V2 PBP participant 1 (secondary) athlete ID.
+  pase: Performance above seed expectation (wins).
   pass_length: Pass length.
   pass_release_point: Pass release point.
   passer_first_name: Passer first name.
@@ -2913,7 +3065,8 @@ hoopR:
   pb_odds_odds: Pb odds odds.
   pb_odds_suspended: Pb odds suspended.
   pb_odds_team: Pb odds team.
-  pct: Pct.
+  pct: Win percentage.
+  per: Player Efficiency Rating.
   percent_ps: Percent ps.
   percentage_assisted2pt: Percentage assisted2pt.
   percentage_assisted3pt: Percentage assisted3pt.
@@ -2989,15 +3142,18 @@ hoopR:
   pg_player_last_name: Pg player last name.
   pg_wgt: Pg wgt.
   pg_yr: Pg yr.
-  pick: Pick within the round.
+  pick: Pick number within the round.
   pick_details: Pick details.
   pick_number: Pick number.
+  pick_overall: Overall draft pick number.
   picked_first_round: Picked first round.
   picked_second_round: Picked second round.
   pie: Player Impact Estimate (0-1).
   play_id: Unique play identifier within a game.
+  play_text: Play description text.
+  play_type: Play type description.
   played: Played.
-  player: Player.
+  player: Player name.
   player1_id: V2 PBP primary player ID (e.g. shooter / fouler).
   player1_name: V2 PBP primary player name.
   player1_team_abbreviation: Player1 team abbreviation.
@@ -3017,15 +3173,20 @@ hoopR:
   player3_team_id: Team ID of player3.
   player3_team_nickname: Player3 team nickname.
   player_box: Player box.
+  player_game_num_career: Career game number.
   player_id: Unique player identifier.
   player_lateral_speed: Player lateral speed.
   player_name: Player name.
   player_name_i: Player name i.
+  player_option: Whether the season is a player option.
   player_points: Player points.
   player_rotation: Player rotation.
   player_slug: URL-safe player identifier.
   player_vertical: Player vertical.
   playerid: Playerid.
+  players: Nested list of per-player box scores.
+  players_active: Number of active players.
+  playoffs: '`TRUE` if the team made the playoffs (`*` marker).'
   playoffseed: Playoffseed.
   plus: Plus.
   plus_minus: Plus/minus point differential while on court.
@@ -3040,19 +3201,26 @@ hoopR:
   points_in_the_paint_attempted: Number of points in the paint attempted.
   points_in_the_paint_made: Number of points in the paint made.
   points_in_the_paint_percentage: Points in the paint percentage (0-1 decimal).
+  points_max: Maximum possible voting points.
   points_off_turnovers: Points scored off opponent turnovers.
   points_paint: Points scored in the paint.
   points_second_chance: Second-chance points scored.
   points_total: Running total of points scored.
+  points_won: Voting points won.
   pointsagainst: Pointsagainst.
   pointsfor: Pointsfor.
   poison_pill_provision_active: Poison-pill provision active.
+  poll_date: Date the poll was released.
+  poll_type: Poll type (`ap` or `coaches`).
+  porpag: Points over replacement per adjusted game.
+  pos: Position.
   position: Listed roster position (G, F, C, etc.).
   position_abbreviation: Position abbreviation ('G' / 'F' / 'C').
   position_display_name: Position display name.
   position_id: Unique position identifier.
   position_leaf: Position leaf.
   position_name: Listed roster position ('Guard', 'Forward', 'Center').
+  position_rank: Pre-draft position rank.
   position_ref: '`$ref` URL to position resource.'
   poss: Poss.
   poss_pct: Poss percentage (0-1 decimal).
@@ -3065,9 +3233,15 @@ hoopR:
   postseason: Postseason.
   power_subscore: Power subscore.
   ppg: Points per game.
+  pre_draft_team: Pre-draft team / school / club.
   pre_wp: Pre wp.
-  prediction: Prediction.
+  prediction: Pre-game prediction (favorite, score, win %).
   previous: Previous-week rank.
+  primary_color: Primary team color (hex).
+  pro_con_l: Projected conference losses.
+  pro_con_w: Projected conference wins.
+  proj_l: Projected losses.
+  proj_w: Projected wins.
   prospect_app_url: URL for prospect app.
   prospect_birthday: Prospect birthday.
   prospect_country: Prospect country.
@@ -3092,6 +3266,7 @@ hoopR:
   pt_xyz_available: Pt xyz available.
   pta: Pta.
   pts: Points scored.
+  pts_per_g: Points (scaled to the chosen `table`).
   pts_rk: Pts rk.
   published: Publication timestamp (ISO 8601).
   q1: Q1.
@@ -3099,12 +3274,20 @@ hoopR:
   q3: Q3.
   q4: Q4.
   qtr: Quarter (1-4) or OT period (5+).
+  qual_barthag: Quality-adjusted power rating.
+  qual_d: Quality-adjusted defensive efficiency.
+  qual_o: Quality-adjusted offensive efficiency.
   qualifiers: Qualifiers.
+  qualifying_offer: Whether it is a qualifying offer.
   r1: R1.
+  r32: Round of 32 appearances.
+  r64: Round of 64 appearances.
   rank: Rank.
+  ranker: Row rank.
+  ranking: Team recruiting ranking.
   ranking_id: ESPN ranking id.
   rankings_ref: '`$ref` to the per-week rankings endpoint.'
-  rating: Rating.
+  rating: Simple Rating System (SRS) value.
   raw_d: Raw d.
   raw_d_rk: Raw d rk.
   raw_o: Raw o.
@@ -3112,7 +3295,7 @@ hoopR:
   raw_t: Raw t.
   raw_t_rk: Raw t rk.
   reason: Reason.
-  reb: Total rebounds.
+  reb: Rebounds per game.
   rebound_chances_defensive: Rebound chances defensive.
   rebound_chances_offensive: Rebound chances offensive.
   rebound_chances_total: Rebound chances total.
@@ -3130,6 +3313,7 @@ hoopR:
   rebounds_total: Total rebounds.
   recency_order: Recency order.
   recent: Recent.
+  record: Overall win-loss record.
   record_id: Record sub-id.
   record_ref: '`$ref` to team record resource (if present).'
   record_summary: Team's record at time of poll (e.g. "20-2").
@@ -3144,6 +3328,7 @@ hoopR:
   regulation_periods: Regulation periods.
   rel: Comma-joined `rel` tags from ESPN.
   result: Result.
+  return_date: Projected return (`NA` unless a subscriber).
   reverse_dunk: Reverse dunk.
   rk: Rk.
   rk_chg: Rk chg.
@@ -3164,12 +3349,16 @@ hoopR:
   role: Role.
   roster_href: URL for roster.
   round: Tournament / playoff round.
+  rpg: Rebounds per game.
   rtg: Rtg.
   s: S.
   s16: S16.
   salary: Total cap-counting salary for the season ($).
+  salary_cap: Salary cap.
   salary_remaining: Remaining salary owed.
   scc: Scc.
+  school: Player school / pre-draft team.
+  school_id: High school / club id.
   score: Final score.
   score_away: Score away.
   score_home: Score home.
@@ -3197,11 +3386,14 @@ hoopR:
   season_type_name: Season type name.
   season_type_type: Season type type.
   season_year: Season year string ('YYYY-YY' format).
+  seasons: NBA seasons played.
   seasons_ref: '`$ref` to the seasons-list endpoint.'
   second_chance_points_attempted: Number of second chance points attempted.
   second_chance_points_made: Number of second chance points made.
   second_chance_points_percentage: Second chance points percentage (0-1 decimal).
   secondary_assists: Secondary assists.
+  secondary_color: Secondary team color (hex).
+  seconds_remaining: Seconds remaining in the period.
   seconds_remaining_quarter: Seconds remaining quarter.
   self_oop: Self oop.
   sellout: Sellout.
@@ -3250,24 +3442,35 @@ hoopR:
   shots_pct_rk: Shots pct rk.
   side: Side label (e.g. 'home', 'away', or 'overUnder').
   slug: URL-safe identifier.
+  sos: Strength of schedule.
   sos_adj_em: Sos adj em.
   sos_adj_em_rk: Sos adj em rk.
   sos_opp_d: Sos opp d.
   sos_opp_d_rk: Sos opp d rk.
   sos_opp_o: Sos opp o.
   sos_opp_o_rk: Sos opp o rk.
+  source_id: Source (ESPN) conference id.
+  source_team_college_id: College id.
+  source_team_id: College team id.
+  source_team_league_affiliation: College team league affiliation.
+  source_team_location: College team location.
+  source_team_name: College team name.
   speed: Speed.
   split_id: Split id.
   split_name: Split name (typically "All Splits").
   split_type: Split type code.
   spread: Spread.
+  srs: Simple Rating System (point margin + SOS).
   srt: Srt.
+  staff: Coach name.
   standings_ref: '`$ref` to standings endpoint.'
+  stars: Star rating.
   start: Start.
   start_date: Start date (YYYY-MM-DD).
   start_game_seconds_remaining: Seconds remaining in the game at the start of the play.
   start_half_seconds_remaining: Seconds remaining in the half at the start of the play.
   start_quarter_seconds_remaining: Seconds remaining in the period at the start of the play.
+  start_season: Season the coach started with the team.
   starter: TRUE if the player was in the starting lineup; FALSE otherwise.
   stat: Stat.
   stat_abbrev: Stat abbreviation (e.g. "W", "L").
@@ -3276,6 +3479,7 @@ hoopR:
   stat_short: Stat short display.
   stat_type: Stat type code (e.g. "win", "loss").
   stat_type_id: Stat-type code (0 = reg, 1 = post, 2 = career).
+  state: Venue state.
   statistics_ref: '`$ref` to team statistics resource (if present).'
   status: Status label.
   status_abbreviation: Status abbreviation.
@@ -3302,6 +3506,7 @@ hoopR:
   stl_pct_rk: Stl pct rk.
   stp: Stp.
   streak: Current streak (e.g. 'W3' for three-game win streak).
+  strk: Current streak.
   stt: Stt.
   stw: Stw.
   style_subscore: Style subscore.
@@ -3310,12 +3515,21 @@ hoopR:
   surl: Surl.
   switches_on: Switches on.
   t: T.
+  t1de: Team 1 defensive efficiency in the game.
+  t1oe: Team 1 offensive efficiency in the game.
+  t1ppp: Team 1 points per possession.
+  t1pts: Team 1 points.
+  t2de: Team 2 defensive efficiency in the game.
+  t2oe: Team 2 offensive efficiency in the game.
+  t2ppp: Team 2 points per possession.
+  t2pts: Team 2 points.
   takeoff_distance: Takeoff distance.
+  taxpayer_mle: Taxpayer mid-level exception.
   team: Team-side label or team identifier.
-  team1: Team1.
+  team1: Team 1 name.
   team1_rk: Team1 rk.
   team1score: Team1score.
-  team2: Team2.
+  team2: Team 2 name.
   team2_rk: Team2 rk.
   team2score: Team2score.
   team_abbr: Team abbr.
@@ -3336,6 +3550,7 @@ hoopR:
   team_color: Team primary color (hex without leading '#').
   team_display_name: Full team display name.
   team_finish: Team finish.
+  team_full: Full team name.
   team_guid: ESPN team GUID.
   team_home_away: Team home away.
   team_home_leaders_assists: Team home leaders assists.
@@ -3358,6 +3573,7 @@ hoopR:
   team_name: Full team display name (e.g. 'Las Vegas Aces').
   team_name_full: Team name full.
   team_nickname: Team nickname.
+  team_option: Whether the season is a team option.
   team_permalink: Team permalink.
   team_picked_first_round: Team picked first round.
   team_picked_second_round: Team picked second round.
@@ -3365,12 +3581,15 @@ hoopR:
   team_record: Team record string (e.g. '8-3' or '8-3 Overall').
   team_ref: '`$ref` to the team-in-season resource.'
   team_rk: Team rk.
+  team_room_mle: Room mid-level exception.
+  team_s: Current overseas team(s) and NBA affiliation.
   team_score: Team's score / final score.
   team_sdr: ESPN team SDR identifier.
   team_season: Team season.
   team_season_leaders_flag: Team season leaders flag.
   team_short_display_name: Short team display name (e.g. 'Aces').
   team_slug: URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces').
+  team_source_id: Source (ESPN) team id.
   team_team_abbr: Team team abbr.
   team_team_id: Unique identifier for team team.
   team_team_name: Team team name.
@@ -3392,6 +3611,7 @@ hoopR:
   teamcity: Teamcity.
   teamid: Teamid.
   teamname: Teamname.
+  teams: Nested list of member-team membership spans.
   teams_ref: '`$ref` to teams-in-group endpoint.'
   technical_fouls: Total technical fouls.
   tempo: Tempo.
@@ -3400,6 +3620,7 @@ hoopR:
   tension_rk: Tension rk.
   tension_season_rk: Tension season rk.
   text: Text description of the play / record.
+  three_p_pct: Three-point field goal percentage.
   three_point_field_goal_pct: Three-point field goal percentage (0-1).
   three_point_field_goals_attempted: Three-point field goal attempts.
   three_point_field_goals_made: Three-point field goals made.
@@ -3424,19 +3645,27 @@ hoopR:
   to: To.
   to_pct: To percentage (0-1 decimal).
   to_pct_rk: To pct rk.
+  to_percent: Turnover percentage (offense).
+  to_percent_def: Turnover percentage forced (defense).
   to_rate: To rate.
   to_rate_rk: To rate rk.
+  to_year: Most recent season.
   top10: Top10.
+  top2: Top-2 (runner-up or champion) finishes.
   top25: Top25.
   top50: Top50.
   total: Total.
   total_ball_acceleration: Total ball acceleration.
+  total_cap_allocations: Total cap allocations (USD).
+  total_minutes: Total minutes played.
   total_rebounds: Total rebounds.
+  total_seconds: Total seconds the lineup played.
   total_technical_fouls: Total technical fouls (player + team).
   total_turnovers: Total turnovers (player + team).
   touches: Touches.
   tournament_id: ESPN tournament identifier.
   tourney_champ: Tourney champ.
+  tracked_shots: Number of tracked shots.
   trade_details: Trade details.
   trade_kicker_active: Trade kicker active.
   trade_kicker_percentage: Trade kicker percentage of salary.
@@ -3445,27 +3674,33 @@ hoopR:
   trade_note: Trade note (if any).
   trade_restriction: Whether a trade restriction is active.
   traded: Whether the pick was traded.
+  transaction: Transaction description.
   transactions_ref: '`$ref` to team transactions resource (if present).'
+  trb: Career total rebounds.
   trend: Trend indicator (e.g. "+3", "-2", "-").
   true_shooting_attempts: Number of true shooting attempted.
   true_shooting_percentage: True shooting percentage (0-1).
   ts_pct: True shooting percentage (0-1).
   ts_pct_rk: Ts pct rk.
+  ttq: Torvik Thrill Quotient (game excitement).
   turnover_points: Turnover points.
   turnover_ratio: Turnover ratio (turnovers per 100 possessions used).
   turnover_total: Turnover total.
   turnovers: Total turnovers.
   turnovers_team: Turnovers team.
   turnovers_total: Turnovers total.
+  tv: Broadcast TV network.
   two_foul_particpation_pct: Two foul particpation percentage (0-1 decimal).
   two_foul_particpation_pct_rk: Two foul particpation pct rk.
   two_foul_time_on: Two foul time on.
   two_foul_time_on_rk: Two foul time on rk.
   two_foul_total_time: Time / clock value.
   two_foul_total_time_rk: Two foul total time rk.
+  two_p_pct: Two-point field goal percentage.
   two_pointers_attempted: Number of two pointers attempted.
   two_pointers_made: Number of two pointers made.
   two_pointers_percentage: Two pointers percentage (0-1 decimal).
+  two_way: Whether it is a two-way contract.
   type: Record type / category.
   type_abbreviation: Type abbreviation.
   type_id: Type identifier (numeric).
@@ -3475,6 +3710,8 @@ hoopR:
   uncontested_field_goals_made: Number of uncontested field goals made.
   uncontested_field_goals_percentage: Uncontested field goals percentage (0-1 decimal).
   unsigned_foreign_pick: Unsigned-foreign-pick flag.
+  url: RotoWire player page URL.
+  usage: Usage rate.
   usage_percentage: Usage percentage (0-1).
   uuid: Uuid.
   va: Va.
@@ -3491,6 +3728,7 @@ hoopR:
   venue_name: Venue name.
   venue_ref: '`$ref` to franchise''s primary venue.'
   venue_state: Venue state / region.
+  veteran_fa_status: Bird / Non-Bird / veteran FA status.
   vid: Vid.
   video_available: Video available.
   video_available_flag: Video available flag.
@@ -3498,6 +3736,8 @@ hoopR:
   visitor_description: Visitor description.
   visitor_score: Visitor score.
   visitor_scoring: Visitor scoring.
+  vorp: Career value over replacement player.
+  votes_first: First-place votes.
   vpa: Vpa.
   vpb: Vpb.
   vsaprankedteams: Vsaprankedteams.
@@ -3542,7 +3782,10 @@ hoopR:
   w_conference: W conference.
   w_conference_proj: W conference proj.
   w_l: W l.
+  w_percent: Tournament win percentage.
   w_proj: W proj.
+  wab: Wins above bubble.
+  wab_rk: National rank of wins above bubble.
   wallclock: Wallclock.
   wc_time_string: Wc time string.
   week: Week number.
@@ -3550,8 +3793,11 @@ hoopR:
   week_number: Week number.
   weeks_ref: '`$ref` to the weeks endpoint.'
   weight: Player weight in pounds.
+  weight_pounds: Weight in pounds.
   wgt: Wgt.
   wh_status: Wh status.
+  win_loss_pct: Win-loss percentage.
+  win_prob: Pre-game win probability for `team`.
   win_rk: Win rk.
   win_score: Win score.
   win_team: Win team.
@@ -3564,14 +3810,33 @@ hoopR:
   worst_yr: Worst yr.
   wp: Wp.
   wp_note: Wp note.
-  wt: Wt.
+  ws: Career win shares.
+  wt: Listed weight (lbs).
   x: X.
+  x1st_apron: First apron.
+  x2nd_apron: Second apron.
+  x2p_percent: Two-point percentage (offense).
+  x2p_percent_d: Two-point percentage allowed (defense).
+  x3p_d_percent: Three-point percentage allowed (defense).
+  x3p_percent: Three-point percentage (offense).
+  x3p_rate: Three-point attempt rate (offense).
+  x3p_rate_d: Three-point attempt rate allowed (defense).
   x_legacy: V2-format X coordinate (preserved for V3-to-V2 compatibility).
   y: Y.
   y_legacy: V2-format Y coordinate (preserved for V3-to-V2 compatibility).
+  yahoo_game_id: Yahoo game id (NA placeholder).
+  yahoo_player_id: Yahoo player id (NA placeholder).
+  yahoo_player_name: Yahoo player name (NA placeholder).
+  yahoo_team_id: Yahoo team id (NA placeholder).
+  yahoo_team_name: Yahoo team name (NA placeholder).
   year: 4-digit year.
+  year_max: Last season played.
+  year_min: First season played.
   years: Years.
-  years_remaining: Years left on the contract.
+  years_experience: Years of NBA experience (`R` for rookies).
+  years_in_role: Seasons in the role.
+  years_remaining: Years of eligibility remaining.
+  yos: Years of service.
   yr: Yr.
 wehoop:
   ABBREVIATION: Short abbreviation.
@@ -3811,6 +4076,7 @@ wehoop:
   avgpointsagainst: Avgpointsagainst.
   avgpointsfor: Avgpointsfor.
   award_id: ESPN award identifier.
+  away_espn_team_id: ESPN away team id (NA for bart-only rows).
   away_in_bonus: Away team's in bonus.
   away_leaders_assists: Away team's leaders assists.
   away_leaders_jersey_num: Away team's leaders jersey num.
@@ -3863,6 +4129,13 @@ wehoop:
   away_win: Away team's win.
   away_win_percentage: Away win percentage (0-1 decimal).
   away_wins: Away team's wins.
+  bart_conf: Torvik conference abbreviation (NA if unmatched).
+  bart_match_confidence: 1 for matched, NA for unmatched.
+  bart_muid: Torvik muid (NA for espn-only rows).
+  bart_team: Torvik team name (NA if unmatched).
+  bart_team1: Torvik team1 name (NA for espn-only rows).
+  bart_team2: Torvik team2 name (NA for espn-only rows).
+  bart_winner: Torvik winner name (NA for espn-only rows).
   bench_points: Points scored by the bench.
   biggest_lead: Biggest lead.
   biggest_lead_score: Biggest lead score.
@@ -3997,7 +4270,18 @@ wehoop:
   end_game_seconds_remaining: Game seconds remaining at the end of the play (''')
   end_half_seconds_remaining: Game half seconds remaining at the end of the play (''')
   end_quarter_seconds_remaining: Quarter seconds remaining at the end of the play (''')
-  espn_team_id: Unique identifier for espn team.
+  espn_abbreviation: ESPN abbreviation.
+  espn_athlete_id: ESPN athlete id.
+  espn_conference: ESPN conference name.
+  espn_display_name: ESPN display name (school + mascot).
+  espn_full_name: ESPN full name.
+  espn_game_id: ESPN game id (NA for bart-only rows).
+  espn_jersey: ESPN jersey number.
+  espn_location: ESPN school/location only.
+  espn_mascot: ESPN team mascot/nickname.
+  espn_position: ESPN position abbreviation.
+  espn_short_name: ESPN short name.
+  espn_team_id: ESPN team id (canonical key).
   estimated_defensive_rating: Estimated defensive rating (points allowed per 100 possessions estimate).
   estimated_net_rating: Estimated net rating (off rating - def rating).
   estimated_offensive_rating: Estimated offensive rating (points per 100 possessions estimate).
@@ -4045,6 +4329,15 @@ wehoop:
   fouls_team: Fouls team.
   fouls_team_technical: Fouls team technical.
   fouls_technical: Technical fouls.
+  fox_athlete_id: Fox athlete id (NA if unmatched).
+  fox_game_id: Fox game id (NA placeholder).
+  fox_jersey: Fox jersey number (NA if unmatched).
+  fox_match_confidence: 1 for matched, NA for unmatched.
+  fox_player: Fox player name (NA if unmatched).
+  fox_position_group: Fox position group label (NA if unmatched).
+  fox_section: Fox conference/section label (NA if unmatched).
+  fox_team_id: Fox Bifrost team id (NA if unmatched).
+  fox_team_name: Fox team name (NA if unmatched).
   franchise_id: ESPN franchise identifier.
   franchise_ref: '`$ref` to franchise resource.'
   free_throw_assists: Free throw assists (passes that led to a fouled shot attempt).
@@ -4178,6 +4471,7 @@ wehoop:
   home_avgpointsfor: Home team's avgpointsfor.
   home_away: Game venue label ('home' or 'away').
   home_description: Home team's description.
+  home_espn_team_id: ESPN home team id (NA for bart-only rows).
   home_favorite: Logical (TRUE/FALSE) indicating whether the home team is favored
   home_gamesbehind: Home team's gamesbehind.
   home_in_bonus: Home team's in bonus.
@@ -4310,6 +4604,9 @@ wehoop:
   market_name: Internal market name.
   market_type: Market type.
   mascot: Team mascot.
+  match_confidence: Jaro-Winkler score or 1 for exact (NA if none).
+  match_keys: NA (reserved for future use).
+  match_method: '"fox+bart"/"fox_only"/"bart_only"/"espn_only".'
   matchup: Matchup.
   matchup_short: Matchup short.
   mdur: Mdur.
@@ -4918,10 +5215,21 @@ wehoop:
   winpercent: Winpercent.
   wins: Total wins.
   wnba_logo_svg: Wnba logo svg.
+  wnba_team_city: WNBA Stats team city.
+  wnba_team_id: WNBA Stats team id.
+  wnba_team_name: WNBA Stats team name.
+  wnba_team_slug: WNBA Stats team slug.
+  wnba_team_tricode: WNBA Stats tricode.
   x: X.
   x_legacy: V2-format X coordinate (preserved for V3-to-V2 compatibility).
   y: Y.
   y_legacy: V2-format Y coordinate (preserved for V3-to-V2 compatibility).
+  yahoo_game_id: Yahoo game id (NA placeholder).
+  yahoo_player_id: Yahoo player id (NA placeholder).
+  yahoo_player_name: Yahoo player name (NA placeholder).
+  yahoo_team_abbreviation: Yahoo abbreviation (NA placeholder).
+  yahoo_team_id: Yahoo team id (NA placeholder).
+  yahoo_team_name: Yahoo team name (NA placeholder).
   year: 4-digit year.
   years: Years.
 baseballr:
@@ -4930,7 +5238,9 @@ baseballr:
   1B: Singles.
   1yr: 1-year park factor (100 = neutral).
   2B: Doubles.
+  2B-A: Doubles allowed.
   3B: Triples.
+  3B-A: Triples allowed.
   3yr: 3-year park factor (100 = neutral).
   A: Assists.
   AB: At-bats.
@@ -4939,6 +5249,7 @@ baseballr:
   AVG+: Park/league-adjusted batting average (100 = average).
   Age: Player age during the season.
   AgeRng: Player age range across the span.
+  App: Appearances.
   AttackAngle: Average attack angle (degrees).
   AttackDirection: Average attack direction (degrees).
   Attendance: Announced attendance.
@@ -4976,6 +5287,7 @@ baseballr:
   BatOrder: Spot in the batting order.
   Bats: Batting handedness (L/R/S).
   Batting: Batting runs above average.
+  Bk: Balks.
   BlastContact%: Blast rate per contact.
   BlastContact_pct: Blast percentage per batted-ball contact.
   BlastSwing%: Blast rate per swing.
@@ -5002,11 +5314,15 @@ baseballr:
   Cent_pct+: Park/league-adjusted up-the-middle rate (100 = average).
   Clutch: Clutch performance relative to context-neutral performance.
   CompetitiveSwings: Competitive swings tracked.
+  Con_R: Run-scoring consistency score for the season.
+  Con_RA: Run-prevention (runs allowed) consistency score.
+  Con_RA_Ptile: Percentile rank of run-prevention consistency.
+  Con_R_Ptile: Percentile rank of run-scoring consistency.
   Contact%: Overall contact rate.
   Contact_pct: Overall contact percentage.
   D/N: Day (D) or night (N) game.
   DGV: Defensive game value (raw component).
-  DP: Double plays.
+  DP: Grounded into double plays (site's "OPP DP").
   DPF: Double plays finished.
   DPR: Double-play runs (UZR component).
   DPS: Double plays started.
@@ -5042,6 +5358,7 @@ baseballr:
   FE: Fielding errors.
   FIP: Fielding independent pitching.
   FIP-: Park/league-adjusted FIP (100 = average, lower is better).
+  FO: Fly outs induced.
   FP: Fielding percentage.
   FRP: Total Fielding Run Prevention.
   FastSwing%: Rate of fast swings.
@@ -5057,15 +5374,19 @@ baseballr:
   GB_pct+: Park/league-adjusted ground-ball rate (100 = average).
   GDP: Grounded into double plays.
   GDPRuns: Runs from grounded-into-double-play avoidance.
+  GO: Ground outs induced.
+  GP: Games played.
   GS: Games started.
   GSv2: Game Score (version 2).
   Games: Games (relief context).
   Gm: Game number / label in the schedule (includes postseason labels).
   H: Hits.
   H/9: Hits per 9 innings.
-  HBP: Times hit by pitch.
+  HB: Hit batters.
+  HBP: Hit by pitch.
   HLD: Holds.
   HR: Home runs.
+  HR-A: Home runs allowed.
   HR/9: Home runs allowed per 9 innings.
   HR/FB: Home-run-per-fly-ball rate.
   HRFB_pct+: Park/league-adjusted home-run-per-fly-ball rate (100 = average).
@@ -5095,12 +5416,17 @@ baseballr:
   ISO+: Park/league-adjusted isolated power (100 = average).
   IdealAttackAngle%: Rate of swings in the ideal attack-angle range.
   IdealAttackAngle_pct: Percentage of swings in the ideal attack-angle range.
+  Inh Run: Inherited runners.
+  Inh Run Score: Inherited runners who scored.
   Inn: Innings played in the field.
+  Jersey: Jersey number (the site's "#" column).
+  K: Strikeouts.
   K%: Strikeout rate.
   K-BB%: Strikeout rate minus walk rate.
   K-BB_pct: Strikeout rate minus walk rate.
   K/9: Strikeouts per 9 innings.
   K/BB: Strikeout-to-walk ratio.
+  KL: Strikeouts looking (called third strike).
   KN_pct: Knuckleball percentage (pitch usage).
   KNv: Average knuckleball velocity.
   K_9: Strikeouts per nine innings.
@@ -5134,6 +5460,7 @@ baseballr:
   OAA: Outs Above Average (Statcast).
   OBP: On-base percentage.
   OBP+: Park/league-adjusted on-base percentage (100 = average).
+  OBPct: On-base percentage.
   OOZ: Plays made out of zone.
   OPS: On-base plus slugging.
   Offense: Total offensive value (runs above average).
@@ -5142,13 +5469,17 @@ baseballr:
   Oppo%: Opposite-field batted-ball rate.
   Oppo_pct: Opposite-field percentage.
   Oppo_pct+: Park/league-adjusted opposite-field rate (100 = average).
+  Opponent: Opponent name.
+  OrdAppeared: Order in which the pitcher appeared.
   Orig_Scheduled: Original scheduled date (for rescheduled games).
+  P-OAB: Opponent at-bats.
   PA: Plate appearances.
   PB: Passed balls.
   PH: Pinch-hit appearances.
   PO: Putouts.
   PPTV: Pitch-type pitch values (raw component).
-  PU: Pop-up (infield fly) share.
+  PU: Pop ups (infield fly) induced
+  Picked: Times picked off.
   Pit: Total pitches thrown.
   Pitches: Total pitches seen or thrown.
   PlayerName: Player name.
@@ -5169,6 +5500,7 @@ baseballr:
   RA9-Wins: Wins based on runs allowed per nine.
   RAR: Runs Above Replacement.
   RBI: Runs batted in.
+  RBI2out: Runs batted in with two outs.
   RE24: Run Expectancy based on the 24 base-out states.
   REW: Run Expectancy Wins.
   RS: Run support.
@@ -5186,9 +5518,12 @@ baseballr:
   SD: Shutdowns (relief appearances that improved win probability).
   SF: Sacrifice flies.
   SF%: split-finger fastball usage rate.
+  SFA: Sacrifice flies allowed.
   SF_pct: Splitter percentage (pitch usage).
   SFv: Average splitter velocity.
   SH: Sacrifice hits (bunts).
+  SHA: Sacrifice hits allowed.
+  SHO: Shutouts.
   SIERA: Skill-Interactive ERA.
   SL%: slider usage rate.
   SLG: Slugging percentage.
@@ -5197,9 +5532,9 @@ baseballr:
   SLv: Average slider velocity.
   SO: Strikeouts.
   SO.W: Strikeout-to-walk ratio.
-  SO9: Strikeouts per 9 innings.
+  SO9: Strikeouts per nine innings
   SO_perc: Strikeout rate (per batter faced).
-  SO_uBB: Strikeouts minus unintentional walks.
+  SO_uBB: Strikeout percentage minus unintentional walk percentage
   SV: Saves.
   Save: Pitcher credited with the save (N if none).
   Scp: Scoops (first-base picks).
@@ -5207,6 +5542,7 @@ baseballr:
   SeasonMax: Last season in the queried span.
   SeasonMin: First season in the queried span.
   ShO: Shutouts.
+  SlgPct: Slugging percentage.
   Soft: Soft-contact balls in play.
   Soft%: Soft-contact rate.
   Soft_pct: Soft-contact percentage.
@@ -5217,7 +5553,7 @@ baseballr:
   SquaredUpSwing%: Squared-up rate per swing.
   SquaredUpSwing_pct: Squared-up percentage per swing.
   StL: Looking (called) strikes share.
-  StS: Swinging strikes share.
+  StS: Strikes swinging (whiffs)
   Start_IP: Innings pitched as a starter.
   Starting: Starting-pitcher value (runs).
   Str: Strikes thrown (as a share of pitches).
@@ -5229,6 +5565,7 @@ baseballr:
   SwingLength: Average swing length (feet).
   Swing_pct: Overall swing percentage.
   Swords: Swords (awkward, defensive swinging strikes induced).
+  TB: Total bases.
   TBF: Total batters faced.
   TE: Throwing errors.
   TG: Total games in the span.
@@ -5236,7 +5573,7 @@ baseballr:
   TInn: Total innings played in the field.
   TPA: Total plate appearances in the span.
   TTO_pct: Three-true-outcomes percentage (BB, K, HR).
-  Team: Team the player appeared for.
+  Team: Team name.
   Throws: Throwing handedness (L/R).
   Tilt: Average swing tilt (degrees).
   Time: Duration of the game.
@@ -5265,6 +5602,7 @@ baseballr:
   XX%: unknown/other pitch usage rate.
   XX_pct: Unidentified-pitch percentage (pitch usage).
   Year: Season year.
+  Yr: Academic class/year (Fr, So, Jr, Sr).
   Z-Contact%: Contact rate on pitches in the zone.
   Z-Contact_pct: Contact percentage on pitches inside the zone.
   Z-Swing%: Swing rate on pitches in the zone.
@@ -5383,7 +5721,7 @@ baseballr:
   attack_angle: Angle of the bat's path at contact (degrees).
   attack_direction: Horizontal direction of the swing at contact (degrees).
   attempts: Number of batted-ball events (attempts).
-  attendance: Reported game attendance.
+  attendance: Reported attendance (NA on the redesigned page).
   attendance_average_away: Average away-game attendance.
   attendance_average_home: Average home-game attendance.
   attendance_average_ytd: Year-to-date average attendance.
@@ -5418,6 +5756,7 @@ baseballr:
   away_bonus_state: Away bonus state.
   away_errors: Away errors in the inning.
   away_fouls_to_give: Away fouls to give.
+  away_game: Number of away games in the sample.
   away_hits: Away hits in the inning.
   away_league_id: Away team league id.
   away_league_name: Away team league name.
@@ -5439,6 +5778,9 @@ baseballr:
   away_team_chance_loss: Away team's team chance loss.
   away_team_club_name: Away club name.
   away_team_color: Away team color.
+  away_team_conference: Away team conference name.
+  away_team_conference_id: Away team conference id.
+  away_team_division: Away team NCAA division (1, 2, 3).
   away_team_division_id: Away team division ID.
   away_team_division_link: MLB Stats API relative away division link.
   away_team_division_name: Away team division name.
@@ -5492,6 +5834,7 @@ baseballr:
   away_team_score: Away team score.
   away_team_season: Away team season (YYYY).
   away_team_short_name: Away team short name.
+  away_team_slug: Relative stats.ncaa.org url for the away team.
   away_team_sport_id: Away team sport ID.
   away_team_sport_link: MLB Stats API relative away sport link.
   away_team_sport_name: Away team sport name.
@@ -5518,6 +5861,7 @@ baseballr:
   balls: Ball count before the pitch.
   barrels: Number of barreled batted balls.
   base_on_balls: Walks (bases on balls).
+  base_pf: Base park factor (before adjustment).
   base_running_event: Whether the event is a base-running event.
   base_salary: Player base salary for the season (USD).
   base_year_compensation_active: Base-year-compensation rule active.
@@ -5539,8 +5883,11 @@ baseballr:
   batter: Full name of the batter for this swing record.
   batter_days_since_prev_game: Days since the batter's previous game appearance.
   batter_days_until_next_game: Days until the batter's next game appearance.
+  batter_first_name: Batter first name.
+  batter_full_name: Batter full name.
   batter_id: MLB player id of the batter.
-  batter_link: API relative link to the batter.
+  batter_last_name: Batter last name.
+  batter_link: MLB Stats API relative link for the batter.
   batters_faced: Batters faced.
   batting: Whether the situation applies to batting stats.
   battingOrder: Batting order slot.
@@ -5576,7 +5923,7 @@ baseballr:
   batting_leader_value: 'Team batting: batting leader value.'
   batting_on_base_pct: 'Team batting: batting on base pct.'
   batting_ops: 'Team batting: batting ops.'
-  batting_order: Spot in the batting order (1-9).
+  batting_order: Spot in the batting order (box-score row order).
   batting_pinch_at_bats: 'Team batting: batting pinch at bats.'
   batting_pinch_avg: 'Team batting: batting pinch avg.'
   batting_pinch_hits: 'Team batting: batting pinch hits.'
@@ -5672,6 +6019,7 @@ baseballr:
   change_re: Change in run expectancy between the current and next state.
   child_group_id: Child group id.
   children_ref: '`$ref` to child-groups endpoint.'
+  class: Academic class/year (Fr, So, Jr, Sr).
   clincher: Clincher.
   clock: Game clock value (typically empty for baseball).
   club_name: Club name.
@@ -5701,6 +6049,7 @@ baseballr:
   content.link: MLB Stats API relative game content link.
   content_id: Content identifier.
   content_link: API link to the game content.
+  contest_id: stats.ncaa.org contest (game) identifier.
   coordinate_x: Coordinate x.
   coordinate_y: Coordinate y.
   count: Count of count.
@@ -5846,6 +6195,7 @@ baseballr:
   fielding: Whether the situation applies to fielding stats.
   fielding_team: Team fielding on the play (factor).
   file_code: File code abbreviation.
+  final_pf: Park factor after adjustments.
   final_pitch_at_bat: 1 if the row is the last pitch of the plate appearance, 0 otherwise.
   final_pitch_game: 1 if the row is the last pitch of the game, 0 otherwise.
   final_pitch_inning: 1 if the row is the last pitch of the half-inning, 0 otherwise.
@@ -5907,10 +6257,13 @@ baseballr:
   game_duration: Elapsed game time (H:MM).
   game_guid: Globally unique game identifier (GUID).
   game_id: Unique ESPN game/event identifier.
+  game_info_url: Full stats.ncaa.org box-score url for the game.
   game_innings: Number of innings played in the game.
   game_level_gameday_type: Game-level Gameday data feed type.
   game_link: API relative link to the game live feed.
   game_number: Game number within a doubleheader.
+  game_pbp_id: stats.ncaa.org play-by-play (contest) identifier.
+  game_pbp_url: stats.ncaa.org play-by-play url for the game.
   game_pk: Unique game identifier.
   game_position: Whether it is an on-field game position.
   game_result: Game result (W/L).
@@ -5942,7 +6295,7 @@ baseballr:
   ground_into_triple_play: Grounded into triple plays.
   ground_outs: Ground outs.
   ground_outs_to_airouts: Ratio of ground outs to air outs.
-  group: 'Stat group: fielding, hitting, or pitching.'
+  group: Stat group (e.g. "hitting", "pitching", "fielding").
   group_display_name: Stat group display name.
   group_id: ESPN group id.
   group_is_conference: Group is conference.
@@ -6004,6 +6357,8 @@ baseballr:
   home_country: Prospect home country.
   home_errors: Home errors in the inning.
   home_fouls_to_give: Home fouls to give.
+  home_game: Number of home games in the sample.
+  home_game_adj: Adjustment for the share of home games played.
   home_hits: Home hits in the inning.
   home_league_id: Home team league id.
   home_league_name: Home team league name.
@@ -6039,6 +6394,9 @@ baseballr:
   home_team_alternate_color: Home team alternate color.
   home_team_club_name: Home club name.
   home_team_color: Home team color.
+  home_team_conference: Home team conference name.
+  home_team_conference_id: Home team conference id.
+  home_team_division: Home team NCAA division (1, 2, 3).
   home_team_division_id: Home team division ID.
   home_team_division_link: MLB Stats API relative home division link.
   home_team_division_name: Home team division name.
@@ -6091,6 +6449,7 @@ baseballr:
   home_team_score: Home team score.
   home_team_season: Home team season (YYYY).
   home_team_short_name: Home team short name.
+  home_team_slug: Relative stats.ncaa.org url for the home team.
   home_team_sport_id: Home team sport ID.
   home_team_sport_link: MLB Stats API relative home sport link.
   home_team_sport_name: Home team sport name.
@@ -6137,7 +6496,9 @@ baseballr:
   inning: Inning number.
   inningBreakLength: Length of the inning break (seconds).
   inning_break_length: Length of inning breaks in seconds.
+  inning_top_bot: Half-inning ("top" or "bot").
   inning_topbot: Half of the inning (Top or Bot).
+  innings: Innings played when other than regulation (extras).
   innings_pitched: Innings pitched.
   innings_played_per_game: Innings played per game.
   intentional_walks: Intentional walks.
@@ -6408,7 +6769,7 @@ baseballr:
   name_title: Name title.
   names: Associated detail names for the type.
   navigation_menu: Navigation menu grouping (e.g. 'Game').
-  neutral_site: Neutral site.
+  neutral_site: Neutral-site venue (when not hosted by either team).
   new_team_id: Team id the player signed with.
   new_team_link: API relative link to the new team.
   new_team_name: Name of the team the player signed with.
@@ -6420,6 +6781,7 @@ baseballr:
   num: Inning number.
   num_playoff_teams: Number of playoff teams from the division.
   num_teams: Number of teams the player appeared for.
+  number: Jersey number.
   number_of_picks: Number of picks in the round.
   number_of_pitches: Total pitches seen.
   number_p: Pitches seen / thrown.
@@ -6446,7 +6808,7 @@ baseballr:
   opponent_abbreviation: Opponent abbreviation.
   opponent_display_name: Display name.
   opponent_id: Unique identifier for opponent.
-  opponent_link: API relative link to the opponent team.
+  opponent_link: MLB Stats API relative link for the opponent.
   opponent_logo: Opponent logo.
   opponent_name: Opponent team name.
   opponent_score: Opponent score.
@@ -6988,6 +7350,11 @@ baseballr:
   pitcher: Whether the position is a pitcher.
   pitcher_days_since_prev_game: Days since the pitcher's previous game appearance.
   pitcher_days_until_next_game: Days until the pitcher's next game appearance.
+  pitcher_first_name: Pitcher first name.
+  pitcher_full_name: Pitcher full name.
+  pitcher_id: Pitcher MLBAMID.
+  pitcher_last_name: Pitcher last name.
+  pitcher_link: MLB Stats API relative link for the pitcher.
   pitchers_per_game: Pitchers used per game.
   pitches_per9inn: Pitches per 9 innings.
   pitches_per_game: Pitches per game.
@@ -7086,7 +7453,7 @@ baseballr:
   player_full_name: Player full name.
   player_gender: Participant gender code (e.g. 'M').
   player_height: Participant height (e.g. "6' 5\"").
-  player_id: MLBAM player ID.
+  player_id: stats.ncaa.org player identifier.
   player_init_last_name: Participant name as first initial last.
   player_is_player: Whether the person is classified as a player.
   player_is_verified: Whether the player profile is verified.
@@ -7096,7 +7463,7 @@ baseballr:
   player_link: API relative link to the player.
   player_middle_name: Participant middle name.
   player_mlb_debut_date: Participant MLB debut date (YYYY-MM-DD).
-  player_name: Pitcher (or batter, by query) name, Last, First.
+  player_name: Player name.
   player_name_first_last: Participant name in first-last order.
   player_name_matrilineal: Participant matrilineal name when provided.
   player_name_slug: URL slug for the participant (name plus id).
@@ -7114,6 +7481,7 @@ baseballr:
   player_status_description: Description of the player status (e.g. 'Active').
   player_strike_zone_bottom: Bottom of the participant's strike zone (feet).
   player_strike_zone_top: Top of the participant's strike zone (feet).
+  player_url: Full stats.ncaa.org url for the player page.
   player_use_name: Participant preferred display first name.
   player_weight: Participant weight in pounds.
   playerid: FanGraphs player ID.
@@ -7280,7 +7648,7 @@ baseballr:
   reschedule_game_date: Reschedule game date, if rescheduled.
   rescheduled_from: Original date-time the game was rescheduled from.
   rescheduled_from_date: Original date the game was rescheduled from.
-  result: Result.
+  result: Win/loss/tie result for `team_id`.
   result.awayScore: Away score after the at-bat.
   result.description: Narrative description of the at-bat result.
   result.event: At-bat result event (e.g. 'Strikeout').
@@ -7316,8 +7684,12 @@ baseballr:
   runCS: Run value of a caught stealing.
   runSB: Run value of a stolen base.
   runs: Runs scored.
+  runs_allowed_away: Runs allowed by the team in away games.
+  runs_allowed_home: Runs allowed by the team in home games.
   runs_per9inn: Runs per 9 innings.
   runs_per_game: Runs per game.
+  runs_scored_away: Runs scored by the team in away games.
+  runs_scored_home: Runs scored by the team in home games.
   runs_scored_on_pitch: Runs that scored on the pitch (parsed from the play description, plus the batter on a home run).
   runs_scored_per9: Runs scored per nine innings.
   runs_to_end_inning: Runs scored from the current state to the end of the half-inning.
@@ -7379,11 +7751,12 @@ baseballr:
   schedule_event_type_name: Name of the event type (e.g. 'All-Star Weekend Event').
   scheduledInnings: Number of scheduled innings.
   scheduled_innings: Scheduled number of innings.
+  school: Team name.
   school_country: School country.
   school_name: School name.
   school_school_class: School class (e.g. 4YR JR, HS SR).
   school_state: School state.
-  score: Score.
+  score: Running score (away-home) after the play.
   score_value: Runs scored on the play.
   scoring_play: TRUE if the play scored a run.
   scouting_report: Link to the scouting report.
@@ -7412,7 +7785,7 @@ baseballr:
   season_date_info_spring_start_date: Spring training start date (YYYY-MM-DD).
   season_display: Display string for the season.
   season_end_date: Season end date.
-  season_id: Season year identifier.
+  season_id: stats.ncaa.org season identifier.
   season_level_gameday_type: Season-level Gameday data feed type.
   season_ref: '`$ref` to the season resource.'
   season_slug: Season slug.
@@ -7519,19 +7892,91 @@ baseballr:
   start_time: First-pitch local start time.
   starter: TRUE if the player started the game.
   stat_abbrev: Stat abbrev.
+  stat_air_outs: Air outs (fly + line outs).
+  stat_assists: Assists.
   stat_at_bats: Value of the sorted statistic (here at bats) for the split.
+  stat_at_bats_per_home_run: At-bats per home run.
+  stat_avg: Batting average.
+  stat_balks: Balks.
+  stat_balls: Balls thrown.
+  stat_base_on_balls: Walks (bases on balls).
+  stat_batters_faced: Batters faced.
+  stat_blown_saves: Blown saves.
+  stat_catchers_interference: Catcher's interference.
+  stat_caught_stealing: Runners caught stealing.
+  stat_chances: Total chances (fielding).
+  stat_complete_games: Complete games.
   stat_display: Stat display.
   stat_display_value: Statistic display value.
+  stat_doubles: Doubles.
+  stat_earned_runs: Earned runs.
+  stat_errors: Errors.
+  stat_fielding: Fielding percentage.
+  stat_fly_outs: Fly outs.
+  stat_games_finished: Games finished.
+  stat_games_pitched: Games pitched.
+  stat_games_played: Games played.
+  stat_games_started: Games started.
+  stat_ground_into_double_play: Grounded into double plays.
+  stat_ground_into_triple_play: Grounded into triple plays.
+  stat_ground_outs: Ground outs.
+  stat_ground_outs_to_airouts: Ground-out to air-out ratio.
   stat_group: Stat group (e.g., hitting).
   stat_group_name: Stat group display name (e.g., hitting).
   stat_groups: List-column of stat group display names the stat belongs to.
+  stat_hit_batsmen: Hit batsmen.
+  stat_hit_by_pitch: Hit by pitch.
+  stat_hits: Hits.
+  stat_hits_per9inn: Hits per nine innings.
+  stat_holds: Holds.
+  stat_home_runs: Home runs.
+  stat_home_runs_per9: Home runs allowed per nine innings.
+  stat_inherited_runners: Inherited runners.
+  stat_inherited_runners_scored: Inherited runners who scored.
+  stat_innings_pitched: Innings pitched.
+  stat_intentional_walks: Intentional walks.
   stat_label: Human-readable label of the statistic (e.g. 'At bats').
+  stat_left_on_base: Runners left on base.
   stat_lookup_param: API lookup parameter for the statistic (e.g. 'atBats').
+  stat_losses: Losses.
   stat_name: Statistic name.
+  stat_number_of_pitches: Number of pitches.
+  stat_obp: On-base percentage.
+  stat_ops: On-base plus slugging.
+  stat_outs: Outs recorded.
+  stat_outs_pitched: Outs pitched.
+  stat_passed_ball: Passed balls.
+  stat_pickoffs: Pickoffs.
+  stat_pitches_per_inning: Pitches per inning.
+  stat_pitches_thrown: Pitches thrown.
+  stat_plate_appearances: Plate appearances.
+  stat_put_outs: Putouts.
+  stat_rbi: Runs batted in.
+  stat_runs: Runs.
+  stat_runs_scored_per9: Runs scored per nine innings.
+  stat_sac_bunts: Sacrifice bunts.
+  stat_sac_flies: Sacrifice flies.
+  stat_save_opportunities: Save opportunities.
+  stat_saves: Saves.
   stat_short: Stat short display.
+  stat_shutouts: Shutouts.
+  stat_slg: Slugging percentage.
+  stat_stolen_base_percentage: Stolen-base percentage.
+  stat_stolen_bases: Stolen bases allowed (catcher/fielding).
+  stat_strike_outs: Strikeouts.
+  stat_strike_percentage: Strike percentage.
+  stat_strikeout_walk_ratio: Strikeout-to-walk ratio.
+  stat_strikeouts_per9inn: Strikeouts per nine innings.
+  stat_strikes: Strikes thrown.
+  stat_total_bases: Total bases.
+  stat_triples: Triples.
   stat_type: Stat type code (e.g. "win", "loss").
   stat_type_id: Stat-type code (0 = reg, 1 = post, 2 = career).
   stat_type_name: Stat type display name (e.g., projected).
+  stat_walks_per9inn: Walks per nine innings.
+  stat_whip: Walks plus hits per inning pitched.
+  stat_wild_pitches: Wild pitches.
+  stat_wins: Wins.
   statistics_ref: '`$ref` to team statistics resource (if present).'
   status: Status label.
   status.abstractGameCode: Abstract game code.
@@ -7820,7 +8265,7 @@ baseballr:
   type_state: Type state.
   type_text: Type text.
   type_type: Play type category.
-  uBB: Unintentional walks allowed.
+  uBB: Unintentional walks (BB minus IBB)
   uBB_perc: Unintentional walk rate (per batter faced).
   uid: ESPN UID string.
   umpire: Deprecated umpire field, no longer populated.
@@ -7868,6 +8313,9 @@ baseballr:
   wKN_C: Knuckleball linear weight runs per 100 pitches.
   wLeague: League adjustment runs.
   wOBA: Weighted on-base average.
+  wOBA_CON: Weighted on-base average per instance of fair contact
+  wOBA_CON_against: Weighted on-base average against per instance of fair contact
+  wOBA_against: Weighted on-base average against (based on batters faced)
   wRAA: Weighted runs above average.
   wRC: Weighted runs created.
   wRC+: Weighted runs created plus (league/park adjusted, 100=avg).
@@ -7902,7 +8350,7 @@ baseballr:
   xMLBAMID: MLBAM player ID.
   xSLG: Expected slugging percentage (Statcast).
   xwOBA: Expected Weighted On-Base Average (Statcast).
-  year: Draft year (YYYY).
+  year: Season (4-digit year).
   years: Years.
   years_remaining: Years left on the contract.
   zone: Strike-zone region the pitch crossed (1-14 Gameday zone).
@@ -7976,6 +8424,7 @@ fastRhockey:
   athlete_team_short_name: Team short name.
   athletes_ref: Ref URL for team athletes resource.
   attendance: Game attendance.
+  avg_shift_s: Average shift length in seconds.
   avg_shifts_per_game: Average shifts per game.
   avg_time_on_ice_per_game: Average time on ice per game.
   avg_toi: Average time on ice.
@@ -8192,6 +8641,11 @@ fastRhockey:
   coordinate_y: Y coordinate on the ice surface.
   correction_id: Correction id parsed from the `$ref` URL.
   corrections_ref: '`$ref` URL for corrections.'
+  corsi_against: On-ice shot attempts against.
+  corsi_for: On-ice shot attempts for (shot + blocked_shot + goal).
+  corsi_for_pct: Corsi for percentage (NA when total = 0).
+  corsi_for_per60: Corsi For per 60 minutes (NA when toi_seconds is 0 or NA).
+  corsi_includes_missed: Always FALSE (no missed-shot events in the HockeyTech feed).
   count: Total athlete count matching the filter.
   country: Country for the postal code.
   countryCode: Country code of the broadcast.
@@ -8339,7 +8793,8 @@ fastRhockey:
   empty_net_goals: Empty-net goals.
   endTime: Broadcast end time (UTC).
   end_date: Season end date.
-  end_time: End time (local).
+  end_s: Shift end in countdown seconds.
+  end_time: Shift end time (MM:SS countdown clock).
   entry_draft_in_use: Whether an entry draft was in use this season.
   ep_player_id: EliteProspects player identifier.
   espn_id: ESPN internal coach id.
@@ -8388,6 +8843,9 @@ fastRhockey:
   faceoffs_lost: Faceoffs lost in the season.
   faceoffs_taken: Faceoffs taken in the season.
   faceoffs_won: Faceoffs won in the season.
+  fenwick_against: On-ice unblocked shot attempts against.
+  fenwick_for: On-ice unblocked shot attempts for (shot + goal).
+  fenwick_for_pct: Fenwick for percentage (NA when total = 0).
   final: Flag for whether the game is final.
   final_playoff_round: Final playoff round reached.
   final_rank: Prospect's final draft ranking.
@@ -8494,6 +8952,7 @@ fastRhockey:
   goalModifier: Goal modifier (e.g. empty-net, power-play).
   goal_count: Total goals recorded.
   goal_differential: Goal differential.
+  goal_on_shift: 1 if a goal occurred during this shift, else 0.
   goal_type: Type of goal.
   goalie: Whether the player was the goalie.
   goalieInNetId: Goalie identifier in net for the event.
@@ -8858,6 +9317,7 @@ fastRhockey:
   now_id: ESPN Now identifier.
   num_off: Number of players going off (line change).
   num_on: Number of players coming on (line change).
+  num_shifts: Number of individual shift stints.
   num_teams: Number of teams the player has played for.
   number: Week number as returned by the API.
   number_of_games: Number of games per team this season.
@@ -8886,6 +9346,8 @@ fastRhockey:
   officials_ref: '`$ref` URL for the officials collection.'
   officials_schema_id: Officials schema identifier.
   olympics_participation: Whether NHL players participated in the Olympics this season.
+  on_ice_away: Comma-joined sorted player_ids on ice for the away team.
+  on_ice_home: Comma-joined sorted player_ids on ice for the home team.
   on_roster: Whether the player is on a roster.
   on_watch_espn: Whether the game is/was on WatchESPN.
   ongoing: Whether the streak is ongoing.
@@ -8936,6 +9398,7 @@ fastRhockey:
   penalty_length: Penalty length in minutes.
   penalty_minutes: Penalty minutes.
   penalty_minutes_per_game: Penalty minutes per game.
+  penalty_on_shift: 1 if a penalty occurred during this shift, else 0.
   penalty_severity: Severity of the penalty.
   penalty_shot: Whether the goal came on a penalty shot.
   penalty_summary: Whether penalty summary data is available.
@@ -9188,6 +9651,7 @@ fastRhockey:
   scorer_position: Scorer position.
   scoringPlayerId: Player identifier scoring the goal.
   scoringPlayerTotal: Season goal total for the scorer.
+  scoring_chance: TRUE when event is a shot-type within 25 ft of the net.
   scoring_play: Whether this play resulted in a goal.
   scoring_summary: Whether scoring summary data is available.
   scouting_report: Scouting report text.
@@ -9371,7 +9835,8 @@ fastRhockey:
   startTime: Broadcast start time (UTC).
   startTimeUTC: Scheduled start time in UTC.
   start_date: Season start date.
-  start_time: Start time (local).
+  start_s: Shift start in countdown seconds.
+  start_time: Shift start time (MM:SS countdown clock).
   start_time_utc: Scheduled start time in UTC.
   started: Flag for whether the game has started.
   starter: Whether the goalie started the game.
@@ -9524,6 +9989,7 @@ fastRhockey:
   toi_minutes: Time on ice in minutes.
   toi_pk: Time on ice on the penalty kill (seconds).
   toi_pp: Time on ice on the power play (seconds).
+  toi_seconds: Total time on ice in seconds (NA if not in shift data).
   topSeedRank: Seed rank of the top-seeded team.
   topSeedRankAbbrev: Abbreviated seed rank of the top-seeded team.
   topSeedTeam.abbrev: Top-seeded team abbreviation.
@@ -9644,7 +10110,7 @@ fastRhockey:
   wins_in_shootout: Wins in shootout.
   x: Raw x-coordinate of the event.
   xCoord: X coordinate of the event on the ice.
-  x_coord: Transformed x-coordinate of the event.
+  x_coord: Transformed x-coordinate of the event (feet scale).
   x_coord_fixed: Fixed-orientation x-coordinate.
   x_coord_neutral: Neutral-zone-centered x-coordinate.
   x_coord_original: Original raw x-coordinate from the feed.
@@ -9655,7 +10121,7 @@ fastRhockey:
   xg: Expected goals value for the shot event.
   y: Raw y-coordinate of the event.
   yCoord: Y coordinate of the event on the ice.
-  y_coord: Transformed y-coordinate of the event.
+  y_coord: Transformed y-coordinate of the event (feet scale).
   y_coord_fixed: Fixed-orientation y-coordinate.
   y_coord_neutral: Neutral-zone-centered y-coordinate.
   y_coord_original: Original raw y-coordinate from the feed.
@@ -11211,7 +11677,9 @@ _merged:
   1B: Singles.
   1yr: 1-year park factor (100 = neutral).
   2B: Doubles.
+  2B-A: Doubles allowed.
   3B: Triples.
+  3B-A: Triples allowed.
   3yr: 3-year park factor (100 = neutral).
   A: Assists.
   AB: At-bats.
@@ -11233,6 +11701,7 @@ _merged:
   AWAY_TV_BROADCASTER_ABBREVIATION: Away team's tv broadcaster abbreviation.
   Age: Player age during the season.
   AgeRng: Player age range across the span.
+  App: Appearances.
   AttackAngle: Average attack angle (degrees).
   AttackDirection: Average attack direction (degrees).
   Attendance: Announced attendance.
@@ -11273,6 +11742,7 @@ _merged:
   BatOrder: Spot in the batting order.
   Bats: Batting handedness (L/R/S).
   Batting: Batting runs above average.
+  Bk: Balks.
   BlastContact%: Blast rate per contact.
   BlastContact_pct: Blast percentage per batted-ball contact.
   BlastSwing%: Blast rate per swing.
@@ -11311,6 +11781,10 @@ _merged:
   Cent_pct+: Park/league-adjusted up-the-middle rate (100 = average).
   Clutch: Clutch performance relative to context-neutral performance.
   CompetitiveSwings: Competitive swings tracked.
+  Con_R: Run-scoring consistency score for the season.
+  Con_RA: Run-prevention (runs allowed) consistency score.
+  Con_RA_Ptile: Percentile rank of run-prevention consistency.
+  Con_R_Ptile: Percentile rank of run-scoring consistency.
   Conference: Filter players or teams by conference.
   Contact%: Overall contact rate.
   Contact_pct: Overall contact percentage.
@@ -11320,7 +11794,7 @@ _merged:
   DESCRIPTION: Long-form description text.
   DEV: On the practice squad
   DGV: Defensive game value (raw component).
-  DP: Double plays.
+  DP: Grounded into double plays (site's "OPP DP").
   DPF: Double plays finished.
   DPR: Double-play runs (UZR component).
   DPS: Double plays started.
@@ -11382,6 +11856,7 @@ _merged:
   FIP: Fielding independent pitching.
   FIP-: Park/league-adjusted FIP (100 = average, lower is better).
   FIRST_NAME: Player's first name.
+  FO: Fly outs induced.
   FP: Fielding percentage.
   FRP: Total Fielding Run Prevention.
   FTA: Free throw attempts.
@@ -11411,6 +11886,7 @@ _merged:
   GB_pct+: Park/league-adjusted ground-ball rate (100 = average).
   GDP: Grounded into double plays.
   GDPRuns: Runs from grounded-into-double-play avoidance.
+  GO: Ground outs induced.
   GP: Games played.
   GROUP_ID: Group identifier (e.g. conference group_id).
   GROUP_NAME: Group name.
@@ -11423,7 +11899,8 @@ _merged:
   Goal_To_Go_end: TRUE when the post-play state is goal-to-go.
   H: Hits.
   H/9: Hits per 9 innings.
-  HBP: Times hit by pitch.
+  HB: Hit batters.
+  HBP: Hit by pitch.
   HEIGHT: Player height (string e.g. '6-2' or inches).
   HISTORICAL_STATUS: Historical status.
   HLD: Holds.
@@ -11437,6 +11914,7 @@ _merged:
   HOME_TEAM_WINS: Home team's team wins.
   HOME_TV_BROADCASTER_ABBREVIATION: Home team's tv broadcaster abbreviation.
   HR: Home runs.
+  HR-A: Home runs allowed.
   HR/9: Home runs allowed per 9 innings.
   HR/FB: Home-run-per-fly-ball rate.
   HRFB_pct+: Park/league-adjusted home-run-per-fly-ball rate (100 = average).
@@ -11468,14 +11946,19 @@ _merged:
   ISO+: Park/league-adjusted isolated power (100 = average).
   IdealAttackAngle%: Rate of swings in the ideal attack-angle range.
   IdealAttackAngle_pct: Percentage of swings in the ideal attack-angle range.
+  Inh Run: Inherited runners.
+  Inh Run Score: Inherited runners who scored.
   Inn: Innings played in the field.
   JERSEY: Jersey number worn by the player.
   JERSEY_NUM: Jersey number worn by the player.
+  Jersey: Jersey number (the site's "#" column).
+  K: Strikeouts.
   K%: Strikeout rate.
   K-BB%: Strikeout rate minus walk rate.
   K-BB_pct: Strikeout rate minus walk rate.
   K/9: Strikeouts per 9 innings.
   K/BB: Strikeout-to-walk ratio.
+  KL: Strikeouts looking (called third strike).
   KN_pct: Knuckleball percentage (pitch usage).
   KNv: Average knuckleball velocity.
   K_9: Strikeouts per nine innings.
@@ -11533,6 +12016,7 @@ _merged:
   OAA: Outs Above Average (Statcast).
   OBP: On-base percentage.
   OBP+: Park/league-adjusted on-base percentage (100 = average).
+  OBPct: On-base percentage.
   OFFICIAL_ID: Unique official / referee identifier.
   OFF_RATING: Offensive rating (points produced per 100 possessions).
   OOZ: Plays made out of zone.
@@ -11555,7 +12039,10 @@ _merged:
   Oppo%: Opposite-field batted-ball rate.
   Oppo_pct: Opposite-field percentage.
   Oppo_pct+: Park/league-adjusted opposite-field rate (100 = average).
+  Opponent: Opponent name.
+  OrdAppeared: Order in which the pitcher appeared.
   Orig_Scheduled: Original scheduled date (for rescheduled games).
+  P-OAB: Opponent at-bats.
   PA: Plate appearances.
   PACE: Possessions per 48 minutes.
   PACE_PER40: Pace per40.
@@ -11588,8 +12075,9 @@ _merged:
   PTS_QTR4: Pts qtr4.
   PT_AVAILABLE: Pt available.
   PT_XYZ_AVAILABLE: Pt xyz available.
-  PU: Pop-up (infield fly) share.
+  PU: Pop ups (infield fly) induced
   PUP: On the "Physically Unable to Perform" list
+  Picked: Times picked off.
   Pit: Total pitches thrown.
   Pitches: Total pitches seen or thrown.
   PlayerName: Player name.
@@ -11612,6 +12100,7 @@ _merged:
   RANK: Whether to include statistical ranks in the returned table.
   RAR: Runs Above Replacement.
   RBI: Runs batted in.
+  RBI2out: Runs batted in with two outs.
   RE24: Run Expectancy based on the 24 base-out states.
   REB: Total rebounds.
   REB_PCT: Total rebound percentage (0-1).
@@ -11651,9 +12140,12 @@ _merged:
   SEED: Tournament seed.
   SF: Sacrifice flies.
   SF%: split-finger fastball usage rate.
+  SFA: Sacrifice flies allowed.
   SF_pct: Splitter percentage (pitch usage).
   SFv: Average splitter velocity.
   SH: Sacrifice hits (bunts).
+  SHA: Sacrifice hits allowed.
+  SHO: Shutouts.
   SHOT_ATTEMPTED_FLAG: 1 if a shot was attempted on this event.
   SHOT_DISTANCE: Shot distance from the basket, in feet.
   SHOT_MADE_FLAG: 1 if the shot was made; 0 if missed.
@@ -11669,9 +12161,9 @@ _merged:
   SLv: Average slider velocity.
   SO: Strikeouts.
   SO.W: Strikeout-to-walk ratio.
-  SO9: Strikeouts per 9 innings.
+  SO9: Strikeouts per nine innings
   SO_perc: Strikeout rate (per batter faced).
-  SO_uBB: Strikeouts minus unintentional walks.
+  SO_uBB: Strikeout percentage minus unintentional walk percentage
   STAT: Stat.
   STAT_VALUE: Stat value.
   STL: Steals.
@@ -11685,6 +12177,7 @@ _merged:
   SeasonMax: Last season in the queried span.
   SeasonMin: First season in the queried span.
   ShO: Shutouts.
+  SlgPct: Slugging percentage.
   Soft: Soft-contact balls in play.
   Soft%: Soft-contact rate.
   Soft_pct: Soft-contact percentage.
@@ -11695,7 +12188,7 @@ _merged:
   SquaredUpSwing%: Squared-up rate per swing.
   SquaredUpSwing_pct: Squared-up percentage per swing.
   StL: Looking (called) strikes share.
-  StS: Swinging strikes share.
+  StS: Strikes swinging (whiffs)
   Start_IP: Innings pitched as a starter.
   Starting: Starting-pitcher value (runs).
   Str: Strikes thrown (as a share of pitches).
@@ -11707,6 +12200,7 @@ _merged:
   SwingLength: Average swing length (feet).
   Swing_pct: Overall swing percentage.
   Swords: Swords (awkward, defensive swinging strikes induced).
+  TB: Total bases.
   TBF: Total batters faced.
   TD_after: Post-play predicted probability of a posteam touchdown next (0-1).
   TD_before: Pre-play predicted probability of a posteam touchdown next (0-1).
@@ -11738,7 +12232,7 @@ _merged:
   TTO_pct: Three-true-outcomes percentage (BB, K, HR).
   TURNOVERS: Total turnovers.
   TYPE: Record type / category.
-  Team: Team the player appeared for.
+  Team: Team name.
   TeamCity: Teamcity.
   TeamID: Teamid.
   TeamName: Teamname.
@@ -11790,6 +12284,7 @@ _merged:
   YEAR: 4-digit year.
   YEARS: Years.
   Year: Season year.
+  Yr: Academic class/year (Fr, So, Jr, Sr).
   Z-Contact%: Contact rate on pitches in the zone.
   Z-Contact_pct: Contact percentage on pitches inside the zone.
   Z-Swing%: Swing rate on pitches in the zone.
@@ -11865,17 +12360,20 @@ _merged:
   adj_TimeSecsRem: Adjusted seconds remaining used by the EPA/WP models.
   adj_d: Adj d.
   adj_d_rk: Adj d rk.
-  adj_de: Adj de.
+  adj_de: Adjusted defensive efficiency.
   adj_de_rk: Adj de rk.
   adj_em: Adj em.
   adj_em_rk: Adj em rk.
   adj_o: Adj o.
   adj_o_rk: Adj o rk.
-  adj_oe: Adj oe.
+  adj_oe: Adjusted offensive efficiency.
   adj_oe_rk: Adj oe rk.
   adj_t: Adj t.
   adj_t_chg: Adj t chg.
   adj_t_rk: Adj t rk.
+  adjde: Adjusted defensive efficiency (pts/100 poss).
+  adjoe: Adjusted offensive efficiency (pts/100 poss).
+  adjt: Adjusted tempo (possessions per 40 minutes).
   age: Player age (in years).
   age_bat: Batter age for the season.
   age_bat_legacy: Batter age using the legacy calculation.
@@ -11886,6 +12384,7 @@ _merged:
   age_pit_legacy: Pitcher age using the legacy calculation.
   age_sign_waiver: Age at which the player signed a waiver.
   age_signel_fa: Age at which the player signed as a free agent.
+  agent: Listed player agent.
   aggressiveness: Aggressiveness tracks the amount of passing attempts a quarterback makes that are into tight coverage, where
     there is a defender within 1 yard or less of the receiver at the time of completion or incompletion. AGG is shown as a
     % of attempts into tight windows over all passing attempts.
@@ -11932,6 +12431,8 @@ _merged:
   app_url: URL for app.
   apy: Average money per contract year
   apy_cap_pct: Average money per contract year as percentage of the team's salary cap at signing
+  arate: Assist rate (offense).
+  arate_d: Assist rate allowed (defense).
   area: Net/ice zone the shots were taken from.
   area_detail: Area detail.
   arena: Arena.
@@ -11977,10 +12478,12 @@ _merged:
   assist_tackle_4_team: Team of one of the players with a tackle assist.
   assist_to_turnover: Assist-to-turnover ratio.
   assist_total: Assist total.
+  assisted_pct: Assisted field-goal percentage.
   assists: Total assists.
   assists_turnover_ratio: Assists turnover ratio.
   association_url: URL to the official's association profile.
   ast: Assists.
+  ast_pct: Assist percentage.
   atBatIndex: At-bat index within the game (factor).
   at_bat_id: Identifier of the at-bat the play belongs to.
   at_bat_index: Zero-based index of the at-bat within the game.
@@ -11989,6 +12492,7 @@ _merged:
   at_bats: At bats.
   at_bats_per_home_run: At bats per home run.
   at_vs: '"at" or "vs" home/away indicator.'
+  athlete: Athlete name.
   athlete_active: Whether the athlete was active.
   athlete_age: Athlete age.
   athlete_alternate_ids_sdr: Athlete alternate ids sdr.
@@ -12054,6 +12558,7 @@ _merged:
   athlete_type: Athlete type / class.
   athlete_uid: ESPN athlete UID (universal identifier).
   athlete_weight: Athlete weight.
+  athletes: List of athletes in the lineup.
   athletes_ref: '`$ref` to team roster resource (college-only).'
   ats_description: ESPN's description of the ATS split.
   ats_losses: Games the team failed to cover the spread.
@@ -12124,6 +12629,7 @@ _merged:
   avg_re: Average run expectancy for the current base-out (or count-base-out) state.
   avg_rush_yards: AVerage rush yards gained
   avg_separation: The distance (in yards) measured between a WR/TE and the nearest defender at the time of catch or incompletion.
+  avg_shift_s: Average shift length in seconds.
   avg_shifts_per_game: Average shifts per game.
   avg_stars: Average star rating of recruits in the position group.
   avg_time_on_ice_per_game: Average time on ice per game.
@@ -12140,10 +12646,12 @@ _merged:
   avgonballperimetergravityscore: Avgonballperimetergravityscore.
   avgpointsagainst: Avgpointsagainst.
   avgpointsfor: Avgpointsfor.
+  award: Award slug (`mvp`, `roy`, `dpoy`, `smoy`, `mip`, `clutch_poy`, `coy`).
   award_description: Short description of the award.
   award_id: ESPN award identifier.
   award_name: Award display name (e.g. `John Mackey Award`).
   award_ref: '`$ref` URL for the award object (if returned).'
+  award_share: Share of the maximum voting points.
   awarded_posthumously: Whether the award was given posthumously.
   awards_ref: '`$ref` URL to the season awards index.'
   away: Away team shots in the period.
@@ -12177,9 +12685,11 @@ _merged:
   away_division: Away team division.
   away_drives: Number of offensive drives by the away team.
   away_errors: Away errors in the inning.
+  away_espn_team_id: ESPN away team id (NA for bart-only rows).
   away_explosiveness: Away explosiveness metric (average PPA on successful plays).
   away_favorite: '`TRUE` if the away team is the favorite.'
   away_fouls_to_give: Away fouls to give.
+  away_game: Number of away games in the sample.
   away_games: Total away games.
   away_goalie: Name of the away goalie on the ice.
   away_goalie_id: Player ID of the away goalie on the ice.
@@ -12289,8 +12799,10 @@ _merged:
   away_team_common_name_default: Away team common name (default language).
   away_team_common_name_fr: Away team common name (French).
   away_team_conference: Conference name of the away team.
+  away_team_conference_id: Away team conference id.
   away_team_dark_logo: URL to the away team dark logo.
   away_team_display_name: Away team full display name; `team_detail = TRUE` only.
+  away_team_division: Away team NCAA division (1, 2, 3).
   away_team_division_id: Away team division ID.
   away_team_division_link: MLB Stats API relative away division link.
   away_team_division_name: Away team division name.
@@ -12414,6 +12926,7 @@ _merged:
   babip_value: BABIP value assigned to the event (0 or 1).
   bad_throw_pct: Percent of throws that were bad
   bad_throws: Bad throws
+  bae: Bi-annual exception.
   balks: Balks.
   ball_distance_traveled: Ball distance traveled.
   ball_reach_back: Ball reach back.
@@ -12421,7 +12934,16 @@ _merged:
   ball_status: Whether the code counts as a ball.
   balls: Ball count before the pitch.
   barrels: Number of barreled batted balls.
+  bart_conf: Torvik conference abbreviation (NA if unmatched).
+  bart_match_confidence: 1 for matched, NA for unmatched.
+  bart_muid: Torvik muid (NA for espn-only rows).
+  bart_team: Torvik team name (NA if unmatched).
+  bart_team1: Torvik team1 name (NA for espn-only rows).
+  bart_team2: Torvik team2 name (NA for espn-only rows).
+  bart_winner: Torvik winner name (NA for espn-only rows).
+  barthag: 'Power rating: win probability vs. an average team.'
   base_on_balls: Walks (bases on balls).
+  base_pf: Base park factor (before adjustment).
   base_running_event: Whether the event is a base-running event.
   base_salary: Player base salary for the season (USD).
   base_year_compensation_active: Base-year-compensation rule active.
@@ -12444,8 +12966,11 @@ _merged:
   batter: Full name of the batter for this swing record.
   batter_days_since_prev_game: Days since the batter's previous game appearance.
   batter_days_until_next_game: Days until the batter's next game appearance.
+  batter_first_name: Batter first name.
+  batter_full_name: Batter full name.
   batter_id: MLB player id of the batter.
-  batter_link: API relative link to the batter.
+  batter_last_name: Batter last name.
+  batter_link: MLB Stats API relative link for the batter.
   batters_faced: Batters faced.
   batting: Whether the situation applies to batting stats.
   battingOrder: Batting order slot.
@@ -12481,7 +13006,7 @@ _merged:
   batting_leader_value: 'Team batting: batting leader value.'
   batting_on_base_pct: 'Team batting: batting on base pct.'
   batting_ops: 'Team batting: batting ops.'
-  batting_order: Spot in the batting order (1-9).
+  batting_order: Spot in the batting order (box-score row order).
   batting_pinch_at_bats: 'Team batting: batting pinch at bats.'
   batting_pinch_avg: 'Team batting: batting pinch avg.'
   batting_pinch_hits: 'Team batting: batting pinch hits.'
@@ -12619,6 +13144,7 @@ _merged:
   boxscore_name: Name as shown in box scores.
   boxscore_url: URL to the boxscore.
   bpg: Blocks per game.
+  bpm: Career box plus/minus.
   branch_link: Branch link.
   break_angle_deprecated: Deprecated legacy break-angle field, no longer populated.
   break_length_deprecated: Deprecated legacy break-length field, no longer populated.
@@ -12636,7 +13162,7 @@ _merged:
   broadcaster_abbreviation: Broadcaster abbreviation.
   broadcaster_display: Broadcaster display.
   broadcaster_id: Unique identifier for broadcaster.
-  broadcasts: JSON array of broadcast records.
+  broadcasts: Nested list of broadcast outlets.
   bs: Blocked shots (skaters).
   building_id: Building identifier for the venue.
   bunt_attempt_status: Whether the code represents a bunt attempt.
@@ -12663,6 +13189,8 @@ _merged:
   calendar_start_date: Calendar season start date.
   calendar_type: Calendar type (e.g. `"day"`).
   call_letters: Broadcaster call letters.
+  cap_allocation: Cap allocation for the season (USD).
+  cap_space_all: Cap space / over-the-cap amount (USD).
   capacity: Seating capacity (if returned; often `NA` for NHL).
   captain_history: Franchise captain history text.
   car_av: Career Approximate Value
@@ -12703,6 +13231,8 @@ _merged:
   cfb_player_id: ID from College Football Reference
   cfbref_id: College Football Reference ID - usual format is firstname-lastname-integer
   ch: Ch.
+  champ: National championships.
+  champ_percent: Championship rate.
   chance: Whether the detail counts as a fielding chance.
   chances: Total fielding chances.
   change_of_pos_team: Binary flag for change of possession-team on the play.
@@ -12715,7 +13245,7 @@ _merged:
   children_ref: '`$ref` to child-groups endpoint.'
   cid: Competition id (echoed from arg).
   citizenship: Citizenship.
-  city: City where the venue is located.
+  city: Venue city.
   class: Class / experience label (e.g. `Junior`).
   classification: Conference classification (fbs, fcs, ii, iii).
   clinch_indicator: Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated).
@@ -12756,6 +13286,7 @@ _merged:
   college_ref: '`$ref` to college.'
   college_short_name: College short name.
   college_team: College team name.
+  colleges: College(s).
   color: Primary color (hex without leading '#').
   combined_stats: Whether the stat combines multiple split sources.
   comeback: Comeback.
@@ -12804,6 +13335,7 @@ _merged:
   completion_player_id: CFBD athlete_id of the passer credited with a completion.
   completion_yds: Passing yards gained on the completion.
   completions: The number of completed passes.
+  con_rec: Conference record.
   condensed_game: Link to the condensed game video.
   condensed_game_fr: Link to the French condensed game video.
   conditional: Binary indicator of whether or not traded pick was conditional
@@ -12811,7 +13343,7 @@ _merged:
   conf: character.
   conf_sos: Conf sos.
   conf_sos_rk: Conf sos rk.
-  conference: Filter players or teams by conference.
+  conference: Conference name.
   conferenceAbbrev: Conference abbreviation.
   conferenceName: Conference name.
   conference_abbr: Conference abbreviation.
@@ -12833,11 +13365,14 @@ _merged:
   conference_url: URL for conference.
   conference_wins: Total conference wins.
   conferences_in_use: Whether conferences were in use that season.
+  conmatch: Conference matchup descriptor.
+  consos: Conference strength of schedule.
   contact_status: Whether the code represents bat-ball contact.
   content.link: MLB Stats API relative game content link.
   content_id: Content identifier.
   content_key: Content management key.
   content_link: API link to the game content.
+  contest_id: stats.ncaa.org contest (game) identifier.
   contested_field_goal_percentage: Contested field goal percentage (0-1).
   contested_field_goals_attempted: Contested field goal attempts.
   contested_field_goals_made: Contested field goals made.
@@ -12879,6 +13414,11 @@ _merged:
   correction_id: Correction id parsed from the `$ref` URL.
   corrections_ref: '`$ref` URL for corrections.'
   correlations_r_x_100: Correlations r x 100.
+  corsi_against: On-ice shot attempts against.
+  corsi_for: On-ice shot attempts for (shot + blocked_shot + goal).
+  corsi_for_pct: Corsi for percentage (NA when total = 0).
+  corsi_for_per60: Corsi For per 60 minutes (NA when toi_seconds is 0 or NA).
+  corsi_includes_missed: Always FALSE (no missed-shot events in the HockeyTech feed).
   count: Count of count.
   count.balls.end: Ball count after the pitch.
   count.balls.start: Ball count before the pitch.
@@ -12888,7 +13428,7 @@ _merged:
   count.strikes.start: Strike count before the pitch.
   count_base_out_state: Count, outs, and base-occupancy state string (pitch-level run expectancy).
   countable_plays: DEPRECATED Number of plays which can be counted.
-  country: Country (full name or code).
+  country: Venue country.
   countryCode: Country code of the broadcast.
   country_code: Team/venue country code.
   country_id: ESPN country id parsed from the `$ref` URL.
@@ -12919,10 +13459,13 @@ _merged:
   curated_rank: Curated poll rank at game time (`99` if unranked).
   current: Current rank.
   current_age: Current age in years.
+  current_city: Current home venue city.
   current_clock: Current game clock at the time of the live API snapshot.
   current_possession: Team currently in possession at the snapshot time.
   current_rank: Current rank (`0` for receiving-votes teams).
+  current_state: Current home venue state.
   current_target: Current target.
+  current_team: Current NBA team.
   current_team_id: Player's current team identifier.
   current_team_link: API link to the current team.
   current_team_name: Current team name.
@@ -12930,6 +13473,8 @@ _merged:
   current_type_id: Current season-type identifier.
   current_type_name: Current season-type name.
   current_type_slug: Current season-type slug.
+  current_venue: Current home venue name.
+  current_venue_id: Current home venue id.
   cw_average: Clutch-weighted average win value per play.
   cwepa_fumbles: Clutch-weighted EPA lost to fumbles.
   cwepa_interceptions: Clutch-weighted EPA lost to interceptions.
@@ -12959,14 +13504,17 @@ _merged:
   date_pulled: Date the data was retrieved from the FTN Data API by nflverse jobs
   date_signed: Date the player signed a new contract (YYYY-MM-DD).
   date_type: Calendar date type (e.g. `"day"`).
+  date_update: Date the status was last updated.
   dates: Dates filter (echoed from arg, if supplied).
   day: Day number within the month.
   dayNight: Day/night designation.
   day_date: Date in YYYY-MM-DD format.
   day_night: Day or night game indicator.
   db_season: Year of database build. Previous years may also be available via dynastyprocess.
+  dbpm: Defensive box plus/minus.
   dda_id: DDA identifier.
-  de: De.
+  de: Raw defensive efficiency (points allowed/100 poss).
+  de_rank: National rank of adjusted defensive efficiency.
   de_rk: De rk.
   death_city: City of death.
   death_country: Country of death.
@@ -13000,6 +13548,7 @@ _merged:
   def_e_fg_pct_rk: Def e fg pct rk.
   def_eff: Def eff.
   def_eff_rk: Def eff rk.
+  def_efg: Defensive effective field goal percentage allowed.
   def_explosiveness: Defense explosiveness rate.
   def_fg_2_pct: Def field goals 2 percentage (0-1 decimal).
   def_fg_2_pct_rk: Def fg 2 pct rk.
@@ -13042,6 +13591,7 @@ _merged:
   def_non_stl_pct_rk: Def non stl pct rk.
   def_open_field_yds: Defense open field yards.
   def_open_field_yds_total: Defense open field yards total.
+  def_or: Defensive (opponent) rebound percentage.
   def_or_pct: Def or percentage (0-1 decimal).
   def_or_pct_rk: Def or pct rk.
   def_overall: Defense overall predicted points added (PPA).
@@ -13099,6 +13649,7 @@ _merged:
   def_third_down: Defense 3rd down predicted points added (PPA).
   def_timeout_called: Binary flag for a defensive timeout called during the play.
   def_timeouts_rem_before: Defense timeouts remaining before the play.
+  def_to: Defensive turnover percentage forced.
   def_to_pct: Def to percentage (0-1 decimal).
   def_to_pct_rk: Def to pct rk.
   def_total_havoc_events: Total havoc events created by the defense.
@@ -13231,7 +13782,7 @@ _merged:
   dew_point: Dew point at kickoff, in degrees Fahrenheit.
   dh: Doubleheader game indicator (0 = single game).
   did_not_play: TRUE if the player did not appear in the game.
-  diff: Diff.
+  diff: Scoring margin.
   diff_points_pg: Diff points pg.
   differential: Differential.
   directory_url: Franchise directory URL.
@@ -13342,6 +13893,7 @@ _merged:
   dr_av: Draft Approximate Value
   dr_pct: Dr percentage (0-1 decimal).
   dr_pct_rk: Dr pct rk.
+  dr_percent: Defensive rebound percentage.
   draft_club: The team that originally drafted a player. NA if a player went undrafted in their draft-eligible year.
   draft_date: Date the player was drafted.
   draft_display_text: Draft display text.
@@ -13355,10 +13907,12 @@ _merged:
   draft_pick: Draft pick within round, i.e. 32nd pick of second round.
   draft_round: Round of the draft selection.
   draft_selection: Draft selection.
+  draft_status: Draft pick / undrafted status.
   draft_status_code: Draft eligibility status code.
   draft_team: Team that drafted player
   draft_team_abbr: Abbreviation of the drafting team.
   draft_team_id: Team identifier holding the resulting pick.
+  draft_trades: Draft-night trade note, if any.
   draft_type_code: Draft type code.
   draft_type_description: Draft type description.
   draft_x_ref: Draft x ref.
@@ -13367,6 +13921,7 @@ _merged:
   drafted_by_team_id: Identifier of the drafting team.
   drawnBy: Player who drew the penalty (localized list).
   drawnByPlayerId: Player identifier who drew the penalty.
+  drb_pct: Defensive rebound percentage.
   dreb: Defensive rebounds.
   drive: Numeric drive number in the game.
   drive_defense_id: CFBD team id of the defense on the drive.
@@ -13442,9 +13997,12 @@ _merged:
   durationSeconds: Broadcast duration in seconds.
   duration_min_sec: Streak duration (MM:SS).
   duration_seconds: Streak duration in seconds.
-  e_fg: E fg.
+  e8: Elite 8 appearances.
+  e_fg: Effective field goal percentage.
   e_fg_pct: E field goals percentage (0-1 decimal).
   e_fg_pct_rk: E fg pct rk.
+  e_fg_percent: Effective field goal percentage (offense).
+  e_fg_percent_def: Effective field goal percentage allowed (defense).
   earned_runs: Earned runs allowed.
   easternUTCOffset: UTC offset for US Eastern time.
   eastern_start_time: Game start time in Eastern time.
@@ -13473,6 +14031,7 @@ _merged:
   elev: Elev.
   elev_rk: Elev rk.
   elevation: Venue elevation above sea level.
+  eligibility: Eligibility status.
   eligibilty: Player's eligibility status at time of transfer.
   elo: CFBD-calculated Elo rating for the team as of the requested week.
   em_chg: Em chg.
@@ -13496,11 +14055,12 @@ _merged:
   end_period_type: Period type at the end of the drive (e.g. `quarter`).
   end_possession_text: Field-position text at the end of the play.
   end_quarter_seconds_remaining: Seconds remaining in the period at the end of the play.
+  end_s: Shift end in countdown seconds.
   end_short_down_distance_text: Short down-and-distance text at the end of the play.
   end_team_id: ESPN team id in possession at the end of the play.
   end_team_ref: '`$ref` URL to the team in possession at the play end.'
   end_text: Field-position text at the end of the drive.
-  end_time: End time (local).
+  end_time: Shift end time (MM:SS countdown clock).
   end_yard_line: String indicating the yardline at the end of the given play consisting of team half and yard line number.
   end_yardline: Yard line at drive end.
   end_yards_to_endzone: Yards to the end zone at the end of the play.
@@ -13529,9 +14089,20 @@ _merged:
   esb_id: Player ID for Elias Sports Bureau
   espn: The id of the game issued by [ESPN](https://www.espn.com/)
   espn2auth_required: Whether ESPN2 authentication is required.
+  espn_abbreviation: ESPN abbreviation.
+  espn_athlete_id: ESPN athlete id.
   espn_auth_required: Whether ESPN authentication is required.
+  espn_conference: ESPN conference name.
+  espn_display_name: ESPN display name (school + mascot).
+  espn_full_name: ESPN full name.
+  espn_game_id: ESPN game id (NA for bart-only rows).
   espn_id: ESPN ID - usual format is an integer with ~5 digits
-  espn_team_id: Unique identifier for espn team.
+  espn_jersey: ESPN jersey number.
+  espn_location: ESPN school/location only.
+  espn_mascot: ESPN team mascot/nickname.
+  espn_position: ESPN position abbreviation.
+  espn_short_name: ESPN short name.
+  espn_team_id: ESPN team id (canonical key).
   essv: Even-strength saves (goalies).
   estimated_ba_using_speedangle: Expected batting average based on exit velocity and launch angle.
   estimated_defensive_rating: Estimated defensive rating (points allowed per 100 possessions estimate).
@@ -13614,7 +14185,9 @@ _merged:
   extra_point_prob: Predicted probability of the posteam scoring an extra point.
   extra_point_result: 'String indicator for the result of the extra point attempt: good, failed, blocked, safety (touchback
     in defensive endzone is 1 point apparently), or aborted.'
+  f2: Championship-game appearances.
   f4: F4.
+  f4_percent: Final 4 rate.
   fFRP: Framing component of Fielding Run Prevention.
   f_cper40: F cper40.
   f_cper40_rk: F cper40 rk.
@@ -13649,6 +14222,9 @@ _merged:
   fast_break_points_percentage: Fast break points percentage (0-1 decimal).
   favchg: Favchg.
   fbld: Average exit velocity on fly balls and line drives (mph).
+  fenwick_against: On-ice unblocked shot attempts against.
+  fenwick_for: On-ice unblocked shot attempts for (shot + goal).
+  fenwick_for_pct: Fenwick for percentage (NA when total = 0).
   fg3_pct: Three-point field goal percentage (0-1).
   fg3a: Three-point field goal attempts.
   fg3m: Three-point field goals made.
@@ -13716,6 +14292,7 @@ _merged:
   final_adj_o_rk: Final adj o rk.
   final_adj_t: Final adj t.
   final_adj_t_rk: Final adj t rk.
+  final_pf: Park factor after adjustments.
   final_pitch_at_bat: 1 if the row is the last pitch of the plate appearance, 0 otherwise.
   final_pitch_game: 1 if the row is the last pitch of the game, 0 otherwise.
   final_pitch_inning: 1 if the row is the last pitch of the half-inning, 0 otherwise.
@@ -13804,7 +14381,16 @@ _merged:
   fourth_down_eff_allowed: Opponent fourth down efficiency.
   fourth_down_failed: Binary indicator for if the posteam failed to convert first down on fourth down.
   fourth_downs: Fourth downs.
+  fox_athlete_id: Fox athlete id (NA if unmatched).
   fox_auth_required: Whether FOX authentication is required.
+  fox_game_id: Fox game id (NA placeholder).
+  fox_jersey: Fox jersey number (NA if unmatched).
+  fox_match_confidence: 1 for matched, NA for unmatched.
+  fox_player: Fox player name (NA if unmatched).
+  fox_position_group: Fox position group label (NA if unmatched).
+  fox_section: Fox conference/section label (NA if unmatched).
+  fox_team_id: Fox Bifrost team id (NA if unmatched).
+  fox_team_name: Fox team name (NA if unmatched).
   fp_page: The relative url that the data was scraped from (add the prefix https://www.fantasypros.com/ to visit the page)
   fpi: ESPN Football Power Index rating (projected scoring margin vs. average team).
   fraction: Fraction.
@@ -13851,15 +14437,20 @@ _merged:
   free_throws_percentage: Free throw percentage (0-1 decimal).
   french: Whether the team uses French naming.
   from_team_id: Unique identifier for from team.
+  from_year: First season.
   fs1auth_required: Whether FS1 authentication is required.
   ft_pct: Free throw percentage (0-1).
   ft_pct_rk: Ft pct rk.
+  ft_percent: Free-throw percentage (offense).
+  ft_percent_d: Free-throw percentage allowed (defense).
   ft_rate: Ft rate.
   ft_rate_rk: Ft rate rk.
   fta: Free throw attempts.
   ftm: Free throws made.
   ftn_game_id: FTN game ID
   ftn_play_id: FTN play ID
+  ftr: Free-throw rate (offense).
+  ftr_def: Free-throw rate allowed (defense).
   fullName: Full name of the probable starting pitcher.
   full_date: Date in YYYY-MM-DD format.
   full_fml_name: Full name (first-middle-last).
@@ -13966,15 +14557,20 @@ _merged:
   game_id: Unique game identifier.
   game_indoors: TRUE/FALSE flag for if the game is indoors.
   game_info: Whether game info data is available.
+  game_info_url: Full stats.ncaa.org box-score url for the game.
   game_innings: Number of innings played in the game.
   game_json: Whether processed game JSON is available.
   game_json_url: URL to the processed game JSON.
   game_level_gameday_type: Game-level Gameday data feed type.
   game_link: API relative link to the game live feed.
+  game_minutes: Total team minutes.
   game_mv_ps: Game mv ps.
   game_name: Full event name.
   game_number: Game number within a doubleheader.
   game_outcome_last_period_type: Period type in which the game ended.
+  game_pace: Game pace (possessions).
+  game_pbp_id: stats.ncaa.org play-by-play (contest) identifier.
+  game_pbp_url: stats.ncaa.org play-by-play url for the game.
   game_penalty_id: Penalty identifier within the game.
   game_pk: Unique game identifier.
   game_play_number: Sequential play number within the game (excludes timeouts/end markers).
@@ -13986,6 +14582,7 @@ _merged:
   game_row_number: Row index within the game grouping.
   game_schedule_state: Schedule state of the game.
   game_schedule_state_id: Schedule state identifier.
+  game_score: Bart Torvik single-game quality score.
   game_season: Season (concluding year, YYYY).
   game_season_id: HockeyTech season identifier.
   game_seconds: Elapsed seconds in the game.
@@ -14031,7 +14628,7 @@ _merged:
   gamedayType: Gameday data type code.
   gameday_sw: Gameday data type code.
   gameday_type: Gameday data feed type.
-  games: Number of games included in the ATS summary.
+  games: Games played.
   gamesInSeries: Total games in the series.
   games_away_total: Total away games.
   games_finished: Games finished.
@@ -14047,6 +14644,7 @@ _merged:
   gamesplayed: Gamesplayed.
   gametime: The kickoff time of the game. This is represented in 24-hour time and the Eastern time zone, regardless of what
     time zone the game was being played in.
+  gamevalue: Game quality value.
   garbage_time: TRUE if the play occurred during garbage time.
   gave: Team that gave pick/player in row
   gb: Average exit velocity on ground balls (mph).
@@ -14115,6 +14713,7 @@ _merged:
   goalModifier: Goal modifier (e.g. empty-net, power-play).
   goal_count: Total goals recorded.
   goal_differential: Goal differential.
+  goal_on_shift: 1 if a goal occurred during this shift, else 0.
   goal_to_go: Binary indicator for whether or not the posteam is in a goal down situation.
   goal_type: Type of goal.
   goalie: Whether the player was the goalie.
@@ -14145,7 +14744,7 @@ _merged:
   ground_into_triple_play: Grounded into triple plays.
   ground_outs: Ground outs.
   ground_outs_to_airouts: Ratio of ground outs to air outs.
-  group: Group identifier (e.g. conference 'group_id').
+  group: Stat group (e.g. "hitting", "pitching", "fielding").
   group5election: Group 5 free agency election indicator.
   group5seasons_earned: Group 5 seasons earned.
   group6proration: Group 6 proration indicator.
@@ -14164,6 +14763,7 @@ _merged:
   groups_name: Groups name.
   groups_ref: '`$ref` to the groups endpoint.'
   groups_short_name: Groups short name.
+  gs: Games started.
   gsis: The id of the game issued by the NFL Game Statistics & Information System.
   gsis_id: 'Game Stats and Info Service ID: the primary ID for play-by-play data.'
   gsis_it_id: Player ID for the GSIS IT API
@@ -14309,9 +14909,12 @@ _merged:
   home_division: Home team division.
   home_drives: Number of offensive drives by the home team.
   home_errors: Home errors in the inning.
+  home_espn_team_id: ESPN home team id (NA for bart-only rows).
   home_explosiveness: Home explosiveness metric (average PPA on successful plays).
   home_favorite: Logical (TRUE/FALSE) indicating whether the home team is favored
   home_fouls_to_give: Home fouls to give.
+  home_game: Number of home games in the sample.
+  home_game_adj: Adjustment for the share of home games played.
   home_games: Total home games.
   home_gamesbehind: Home team's gamesbehind.
   home_goalie: Name of the home goalie on the ice.
@@ -14449,8 +15052,10 @@ _merged:
   home_team_common_name_default: Home team common name (default language).
   home_team_common_name_fr: Home team common name (French).
   home_team_conference: Conference name of the home team.
+  home_team_conference_id: Home team conference id.
   home_team_dark_logo: URL to the home team dark logo.
   home_team_display_name: Home team full display name; `team_detail = TRUE` only.
+  home_team_division: Home team NCAA division (1, 2, 3).
   home_team_division_id: Home team division ID.
   home_team_division_link: MLB Stats API relative home division link.
   home_team_division_name: Home team division name.
@@ -14610,6 +15215,7 @@ _merged:
   ice_time_per_game_avg: Average ice time per game.
   id: ID of the player in the 'name' column.
   id_drive: Composite drive identifier (game_id concatenated with drive_num).
+  id_hash: Unique hash identifying the lineup.
   id_play: Unique CFBD play identifier (concatenates game_id and play index).
   ids_off: Player ids going off.
   ids_on: Player ids coming on.
@@ -14652,6 +15258,7 @@ _merged:
   init_last_name: First initial with last name.
   injured: Payroll allocated to players on the injured list (USD).
   injuries_ref: Ref URL for team injuries resource.
+  injury: Injury (body part / description).
   injuryType: Injury type when the event is injury-related.
   injury_abbreviation: Injury type abbreviation.
   injury_date: Injury date (ISO 8601).
@@ -14663,7 +15270,9 @@ _merged:
   inning: Inning number.
   inningBreakLength: Length of the inning break (seconds).
   inning_break_length: Length of inning breaks in seconds.
+  inning_top_bot: Half-inning ("top" or "bot").
   inning_topbot: Half of the inning (Top or Bot).
+  innings: Innings played when other than regulation (extras).
   innings_pitched: Innings pitched.
   innings_played_per_game: Innings played per game.
   insurance: Whether the goal was an insurance goal.
@@ -14748,6 +15357,7 @@ _merged:
   is_screen_pass: screen pass
   is_short_handed: Short-handed flag.
   is_start_time_tbd: TRUE/FALSE flag for if the start time is still to be determined.
+  is_starter: 1 if the player started.
   is_suspended: Whether the player is suspended.
   is_target_score_last_period: Is target score last period.
   is_throw_away: quarterback thrown away
@@ -14767,7 +15377,7 @@ _merged:
   ist_wildcard_rank: League/season rank for ist wildcard.
   jersey: Jersey number worn by the player.
   jersey_num: Jersey number worn by the player.
-  jersey_number: Jersey number. Often useful for joins by name/team/jersey.
+  jersey_number: Jersey number.
   job: Job title (e.g. 'Umpire').
   job_code: Four-letter job type code (e.g. 'UMPR').
   job_id: Job code identifier.
@@ -14833,12 +15443,16 @@ _merged:
   kickoff_returner_player_name: String name for the kickoff returner.
   kickoff_safety: Binary flag for a kickoff safety.
   kickoff_tb: Binary flag for a kickoff touchback.
+  kp_conf: KenPom conference abbreviation (NA if unmatched).
+  kp_game_id: KenPom game id (NA unless kenpom enabled).
+  kp_match_confidence: 1 for matched, NA for unmatched.
   kp_median: Kp median.
+  kp_team: KenPom team name (NA if unmatched).
   kpoy_rating: Kpoy rating.
   ktc_id: KeepTradeCut ID - usual format is an integer with ~four digits.
   kwERA: Strikeout/walk-based ERA estimator.
   l: Losses.
-  l10: L10.
+  l10: Last-ten record.
   l10_losses: Losses in the last ten games.
   l10_ot_losses: Overtime losses in the last ten games.
   l10_wins: Wins in the last ten games.
@@ -15063,6 +15677,7 @@ _merged:
   leaguewinpercent: Leaguewinpercent.
   left_on_base: Runners left on base.
   length: Length of the streak in games.
+  letter: Last-name initial (echoes the `letter` argument).
   leverage_index: Leverage index quantifying the importance of the at-bat situation.
   lg_r_pa: League runs per plate appearance.
   lg_r_w: League runs per win.
@@ -15070,6 +15685,7 @@ _merged:
   linear_weights_above_average: Average change in run expectancy (RE24) for the event, i.e. linear weight above average.
   linear_weights_above_outs: Linear weight expressed above the value of an out (above-average value plus the absolute out
     value).
+  lines: Nested list of per-provider betting lines.
   linescore_available: Whether linescore data is available.
   linescore_ref: '`$ref` URL to the per-period linescore resource.'
   linescores_ref: '`$ref` URL to the team linescores resource.'
@@ -15094,6 +15710,7 @@ _merged:
   logo_dark: Dark-mode logo URL.
   logo_dark_href: Logo URL for dark backgrounds.
   logo_href: Team or league logo URL.
+  logo_url: NBA CDN primary logo URL.
   logos: Logos.
   logos_alt_10: Logos alt 10.
   logos_alt_11: Logos alt 11.
@@ -15190,6 +15807,7 @@ _merged:
   loose_balls_recovered_defensive: Loose balls recovered on defense.
   loose_balls_recovered_offensive: Loose balls recovered on offense.
   loose_balls_recovered_total: Loose balls recovered total.
+  loser: Losing team.
   loser_id: Player id of the losing goalie.
   loser_name: Name of the losing goalie.
   losingPlayerId: Player identifier who lost the faceoff.
@@ -15207,6 +15825,7 @@ _merged:
   luck: Luck.
   luck_rk: Luck rk.
   lurl: Lurl.
+  luxury_tax: Luxury-tax threshold.
   m: M.
   magicnumberdivision: Magicnumberdivision.
   magicnumberwildcard: Magicnumberwildcard.
@@ -15217,6 +15836,9 @@ _merged:
   market_name: Internal market name (e.g. `NCAA(F) - Championship`).
   market_type: Market type code (`winLeague`, `winConference`, `winDivision`, ...).
   mascot: Team mascot.
+  match_confidence: Jaro-Winkler score or 1 for exact (NA if none).
+  match_keys: NA (reserved for future use).
+  match_method: '"fox+bart"/"fox_only"/"bart_only"/"espn_only".'
   matchup: Matchup.
   matchup.batSide.code: Batter handedness code (e.g. 'L', 'R').
   matchup.batSide.description: Batter handedness description.
@@ -15274,6 +15896,7 @@ _merged:
   max_distance: Maximum batted-ball distance (feet).
   max_hit_speed: Maximum exit velocity recorded (mph).
   max_start_date: Latest game start date for the season.
+  max_year: Maximum year queried (echoes `max_year`).
   mdur: Mdur.
   media_call_letters: Broadcast call letters for the outlet.
   media_feed_sub_type: Media feed sub-type code.
@@ -15308,6 +15931,7 @@ _merged:
   min_pct: Min percentage (0-1 decimal).
   min_pct_rk: Min pct rk.
   min_wp: Min wp.
+  min_year: Minimum year queried (echoes `min_year`).
   minimum_playoff_minutes_for_goalie_stats_leaders: Minimum playoff minutes to qualify for goalie stats leaders.
   minimum_regular_games_for_goalie_stats_leaders: Minimum regular-season games to qualify for goalie stats leaders.
   minimum_salary_exception: Signed under the minimum-salary exception.
@@ -15360,10 +15984,14 @@ _merged:
   moneyline_winner: Whether the moneyline winner was determined.
   month_num: Month num.
   most_recent_team_id: Most recent team identifier.
+  mp: Minutes played.
+  mp_per_g: Minutes (per_game table) / `mp` total (totals table).
+  mpg: Minutes per game.
   mth: Mth.
   mtp: Mtp.
   mtt: Mtt.
   mtw: Mtw.
+  muid: Matchup unique id.
   murl: Murl.
   mvp: Mvp.
   n_blitzers: number of blitzers
@@ -15404,7 +16032,9 @@ _merged:
   natl_tv_broadcaster_abbreviation: Natl tv broadcaster abbreviation.
   navigation_menu: Navigation menu grouping (e.g. 'Game').
   nba_logo_svg: Nba logo svg.
+  nba_status: NBA contract / rights status.
   ncaa_seed: Ncaa seed.
+  ncsos: Non-conference strength of schedule.
   ncsos_adj_em: Ncsos adj em.
   ncsos_adj_em_rk: Ncsos adj em rk.
   net_away_EPA: Net EPA differential (away minus home) through the play.
@@ -15471,9 +16101,10 @@ _merged:
   non_reg_losses: Non-regulation losses.
   non_reg_wins: Non-regulation wins.
   non_stl_pct: Non steals percentage (0-1 decimal).
+  non_taxpayer_mle: Non-taxpayer mid-level exception.
   not_playing_description: Not playing description.
   not_playing_reason: Not playing reason.
-  note: Game note or headline.
+  note: Injury status and description.
   note_id: ESPN note id parsed from the `$ref` URL.
   notes: Free-form notes attached to the record.
   notes_headline: Notes headline.
@@ -15485,6 +16116,7 @@ _merged:
   num_off: Number of players going off (line change).
   num_on: Number of players coming on (line change).
   num_playoff_teams: Number of playoff teams from the division.
+  num_shifts: Number of individual shift stints.
   num_teams: Number of teams the player has played for.
   number: Week number as returned by the API.
   number_of_drives: Cumulative count of drives in the game.
@@ -15497,6 +16129,7 @@ _merged:
   o_rtg: O rtg.
   o_rtg_rk: O rtg rk.
   obp: On-base percentage.
+  obpm: Offensive box plus/minus.
   occurrence: Poll occurrence label (e.g. `Week 8`, `Preseason`).
   occurrence_display_value: Occurrence display value.
   occurrence_last: Occurrence last.
@@ -15506,7 +16139,8 @@ _merged:
   odds_content: Description of the lottery odds.
   odds_ref: '`$ref` URL for the odds collection.'
   odds_value: American odds for the team (e.g. "-250", "+800").
-  oe: Oe.
+  oe: Raw offensive efficiency (points/100 poss).
+  oe_rank: National rank of adjusted offensive efficiency.
   oe_rk: Oe rk.
   of_fielding_alignment: Outfield defensive alignment (Standard, Strategic, 4th outfielder).
   off_a_pct: Off a percentage (0-1 decimal).
@@ -15525,6 +16159,7 @@ _merged:
   off_e_fg_pct_rk: Off e fg pct rk.
   off_eff: Off eff.
   off_eff_rk: Off eff rk.
+  off_efg: Offensive effective field goal percentage.
   off_explosiveness: Offense explosiveness rate.
   off_fg_2_pct: Off field goals 2 percentage (0-1 decimal).
   off_fg_2_pct_rk: Off fg 2 pct rk.
@@ -15556,6 +16191,7 @@ _merged:
   off_non_stl_pct_rk: Off non stl pct rk.
   off_open_field_yds: Offense open field yards.
   off_open_field_yds_total: Offense open field yards total.
+  off_or: Offensive rebound percentage.
   off_or_pct: Off or percentage (0-1 decimal).
   off_or_pct_rk: Off or pct rk.
   off_overall: Offense overall predicted points added (PPA).
@@ -15594,6 +16230,7 @@ _merged:
   off_third_down: Offense 3rd down predicted points added (PPA).
   off_timeout_called: Binary flag for an offensive timeout called during the play.
   off_timeouts_rem_before: Offense timeouts remaining before the play.
+  off_to: Offensive turnover percentage.
   off_to_pct: Off to percentage (0-1 decimal).
   off_to_pct_rk: Off to pct rk.
   off_total_havoc_events: Total havoc events allowed by the offense.
@@ -15742,6 +16379,8 @@ _merged:
   on_2b: MLBAM ID of the runner on second base, if any.
   on_3b: MLBAM ID of the runner on third base, if any.
   on_first_athlete_id: Athlete id of the runner on first base.
+  on_ice_away: Comma-joined sorted player_ids on ice for the away team.
+  on_ice_home: Comma-joined sorted player_ids on ice for the home team.
   on_roster: Whether the player is on a roster.
   on_second_athlete_id: Athlete id of the runner on second base.
   on_tgt_pct: Percent of throws on target
@@ -15762,6 +16401,9 @@ _merged:
   openings_total_away: Total away openings.
   openings_total_home: Total home openings.
   openings_total_lost: Openings lost (e.g. to rainouts).
+  opp: Opponent abbreviation.
+  opp_coach: Opponent head coach.
+  opp_conf: Opponent conference.
   opp_effective_field_goal_percentage: Opponent effective field goal percentage (0-1 decimal).
   opp_fg_prob: Predicted probability of the defteam scoring a FG next. 'Next' in this context means the next score in the
     same game half.
@@ -15773,11 +16415,13 @@ _merged:
   opp_points_pg: Opponent points pg.
   opp_points_second_chance: Opponent points second chance.
   opp_pts: Opponent points.
+  opp_pts_per_g: Opponent points per game.
   opp_safety_prob: Predicted probability of the defteam scoring a safety next. 'Next' in this context means the next score
     in the same game half.
   opp_td_prob: Predicted probability of the defteam scoring a TD next. 'Next' in this context means the next score in the
     same game half.
   opp_team_turnover_percentage: Opponent team turnover percentage (0-1 decimal).
+  oppg: Opponent points per game.
   opponent: Opposing team of player
   opponent_abbr: Opponent team abbreviation.
   opponent_abbrev: Abbreviation for opponent.
@@ -15786,7 +16430,7 @@ _merged:
   opponent_conference: Conference of the opponent team.
   opponent_display_name: Display name.
   opponent_id: Unique identifier for opponent.
-  opponent_link: API relative link to the opponent team.
+  opponent_link: MLB Stats API relative link for the opponent.
   opponent_logo: Opponent logo.
   opponent_mascot: Opponent mascot.
   opponent_name: Opponent team display name.
@@ -15817,6 +16461,8 @@ _merged:
   or: Or.
   or_pct: Or percentage (0-1 decimal).
   or_pct_rk: Or pct rk.
+  or_percent: Offensive rebound percentage.
+  orb_pct: Offensive rebound percentage.
   order: Display order within the result set.
   order_sequence: Column provided by NFL to fix out-of-order plays. Available 2011 and beyond with source "nfl".
   ordinal_num: Inning ordinal label (e.g. 1st).
@@ -15848,7 +16494,7 @@ _merged:
   over_odds: Odds that total score of game would be over the total_ine.
   over_under: Over under.
   over_under_open: Opening over/under (total) for the game.
-  overall: Overall.
+  overall: Overall pick number.
   overall_pick: Overall pick number in the draft.
   overall_pick_number: Overall pick number in the draft.
   overall_rank: Overall recruit ranking (top recruits only; may be `NA`).
@@ -15863,6 +16509,7 @@ _merged:
   overtime_ties: Overtime ties.
   overtime_time_on_ice: Overtime time on ice (seconds).
   overtime_wins: Overtime wins.
+  overtimes: Number of overtimes.
   own_kickoff_recovery: Binary indicator for if the kicking team recovered the kickoff.
   own_kickoff_recovery_player_id: Unique identifier for the player that recovered their own kickoff.
   own_kickoff_recovery_player_name: String name for the player that recovered their own kickoff.
@@ -15883,6 +16530,7 @@ _merged:
   pagination_count: Total athlete count.
   pagination_limit: Athletes per page.
   pagination_pages: Total page count.
+  pake: Performance above KenPom expectation (wins).
   parent_group_id: Unique identifier for parent group.
   parent_id: ESPN id of the parent position (`NA` at the root).
   parent_org_id: Parent organization MLBAM ID.
@@ -15895,6 +16543,7 @@ _merged:
   participants_1_athlete_id: V2 PBP participant 1 (secondary) athlete ID.
   participants_2_athlete_id: Unique player identification number
   partnered: '`TRUE` if the outlet is an ESPN broadcast partner.'
+  pase: Performance above seed expectation (wins).
   pass: Binary indicator if the play was a pass play (sacks and scrambles included).
   pass_TDs: Passing touchdowns.
   pass_air_yards: Total air yards thrown for a given game
@@ -16074,7 +16723,7 @@ _merged:
   pb_xRV100: PitchingBot expected run value per 100 pitches.
   pc: Pitch count.
   pc_st: Pitch count - strikes (e.g. '95-58').
-  pct: Pct.
+  pct: Win percentage.
   penalties: Total number of penalties.
   penalties_penalty_minutes: Career penalty minutes.
   penalties_pg: Penalties per game.
@@ -16091,6 +16740,7 @@ _merged:
   penalty_minutes_per_game: Penalty minutes per game.
   penalty_no_play: TRUE when the penalty nullified the play (no play counted).
   penalty_offset: TRUE when offsetting penalties were called.
+  penalty_on_shift: 1 if a penalty occurred during this shift, else 0.
   penalty_play_text: Penalty-related substring extracted from the play text.
   penalty_player_id: Unique identifier for the player with the penalty.
   penalty_player_name: String name for the player with the penalty.
@@ -16105,6 +16755,7 @@ _merged:
   penalty_yards: Yards gained (or lost) by the posteam from the penalty.
   penalty_yds: Penalty yards total.
   penalty_yds_pg: Penalty yardage per game.
+  per: Player Efficiency Rating.
   per_game_display_value: Display-formatted per-game value.
   per_game_value: Per-game value of the stat.
   percent_attempts_gte_eight_defenders: On every play, Next Gen Stats calculates how many defenders are stacked in the box
@@ -16630,11 +17281,12 @@ _merged:
   pi_wSL_C: PITCHInfo sliders linear weight runs per 100 pitches.
   pi_wXX: PITCHInfo unidentified pitches linear weight runs.
   pi_wXX_C: PITCHInfo unidentified pitches linear weight runs per 100 pitches.
-  pick: Pick number of the NFL draftee within the round they were picked in.
+  pick: Pick number within the round.
   pick_details: Pick details.
   pick_id: ESPN pick id parsed from the `$ref` URL.
   pick_in_round: Pick number within the round.
   pick_number: Pick number of traded pick
+  pick_overall: Overall draft pick number.
   pick_round: Round in which traded pick was in
   pick_season: Draft in which traded pick was in
   pick_value: Assigned slot/pick value (dollars).
@@ -16697,6 +17349,11 @@ _merged:
   pitcher: Whether the position is a pitcher.
   pitcher_days_since_prev_game: Days since the pitcher's previous game appearance.
   pitcher_days_until_next_game: Days until the pitcher's next game appearance.
+  pitcher_first_name: Pitcher first name.
+  pitcher_full_name: Pitcher full name.
+  pitcher_id: Pitcher MLBAMID.
+  pitcher_last_name: Pitcher last name.
+  pitcher_link: MLB Stats API relative link for the pitcher.
   pitchers_per_game: Pitchers used per game.
   pitches_per9inn: Pitches per 9 innings.
   pitches_per_game: Pitches per game.
@@ -16758,7 +17415,7 @@ _merged:
   play_type_id: CFBD play type identifier (matches `play_type` IDs in [cfbd_plays()]).
   play_type_nfl: Play type as listed in the NFL source. Slightly different to the regular play_type variable.
   played: Played.
-  player: Penalized player name.
+  player: Player name.
   player.id: Player id for action-event participant.
   player.link: API relative link to the action player.
   player1_id: V2 PBP primary player ID (e.g. shooter / fouler).
@@ -16841,6 +17498,7 @@ _merged:
   player_full_fml_name: Participant full first-middle-last name.
   player_full_lfm_name: Participant full last, first-middle name.
   player_full_name: Player full name.
+  player_game_num_career: Career game number.
   player_gender: Participant gender code (e.g. 'M').
   player_gsis_id: Unique identifier of the player
   player_headshot: URL to the player headshot image.
@@ -16873,6 +17531,7 @@ _merged:
   player_nick_name: Participant nickname.
   player_notes: Notes about the selected player.
   player_on_home_team: Whether the player was on the home team.
+  player_option: Whether the season is a player option.
   player_owned_avg: The average percentage this player is rostered across ESPN and Yahoo
   player_owned_espn: The percentage that this player is rostered in ESPN leagues
   player_owned_yahoo: The percentage that this player is rostered in Yahoo leagues
@@ -16918,10 +17577,13 @@ _merged:
   player_two_name_last: Second player last name.
   player_two_position: Second player position.
   player_type: Player type (skater or goalie).
+  player_url: Full stats.ncaa.org url for the player page.
   player_use_name: Participant preferred display first name.
   player_vertical: Player vertical.
   player_weight: Participant weight in pounds.
   playerid: Unique player identifier.
+  players: Nested list of per-player box scores.
+  players_active: Number of active players.
   players_off: Names of players going off.
   players_on: Names of players coming on.
   players_on_play: A list of every player on the field for the play, by gsis_id
@@ -16933,6 +17595,7 @@ _merged:
   playoff_seasons: Number of playoff seasons.
   playoff_seed: Current playoff seed.
   playoffpercent: Playoffpercent.
+  playoffs: '`TRUE` if the team made the playoffs (`*` marker).'
   playoffseed: Playoffseed.
   plays: Total qualifying passing plays included in the WEPA calculation.
   plays_ref: '`$ref` URL to the drive''s plays resource.'
@@ -16983,20 +17646,24 @@ _merged:
   points_in_the_paint_attempted: Number of points in the paint attempted.
   points_in_the_paint_made: Number of points in the paint made.
   points_in_the_paint_percentage: Points in the paint percentage (0-1 decimal).
+  points_max: Maximum possible voting points.
   points_off_turnovers: Points scored off opponent turnovers.
   points_paint: Points scored in the paint.
   points_per_game: Points per game.
   points_pg: Points pg.
   points_second_chance: Second-chance points scored.
   points_total: Running total of points scored.
+  points_won: Voting points won.
   pointsagainst: Pointsagainst.
   pointsfor: Pointsfor.
   poison_pill_provision_active: Poison-pill provision active.
   poll: Poll name (e.g. "AP Top 25", "Coaches Poll", "Playoff Committee Rankings").
+  poll_date: Date the poll was released.
   poll_id: ESPN poll id (e.g. `21` = CFP Committee Rankings).
   poll_name: Poll display name.
   poll_short_name: Poll short name.
   poll_type: Poll type code (e.g. `cfp`, `ap`, `usa`).
+  porpag: Points over replacement per adjusted game.
   pos: Position as tracked by FP
   pos_abb: Player position abbreviation
   pos_grp: 'Player position group: formation of offense, defense, or special teams'
@@ -17039,7 +17706,7 @@ _merged:
   position_parent_id: ESPN id of the parent position; `position_detail = TRUE` only.
   position_parent_leaf: Whether parent position is leaf.
   position_parent_name: Parent position name.
-  position_rank: Position ranking.
+  position_rank: Pre-draft position rank.
   position_ref: '`$ref` URL to position resource.'
   position_short_name: Short position name (e.g. 'Pitcher').
   position_type: Position category (e.g. 'Pitcher', 'Infielder').
@@ -17159,12 +17826,13 @@ _merged:
   pre_draft_grade: Pre-draft scouts grade (ESPN).
   pre_draft_position_ranking: Pre-draft position ranking (ESPN).
   pre_draft_ranking: Pre-draft ranking (ESPN).
+  pre_draft_team: Pre-draft team / school / club.
   pre_season_end_date: Pre-season end date.
   pre_season_start_date: Pre-season start date.
   pre_wp: Pre wp.
   precipitation: Precipitation total at kickoff, in inches.
   predicted_points: Predicted points in that down-distance-yardline scenario.
-  prediction: Prediction.
+  prediction: Pre-game prediction (favorite, score, win %).
   premium: Whether the article is premium content.
   preseason_rank: Preseason AP rank for the school of coach (NA if unranked).
   preseason_startdate: Preseason start date.
@@ -17172,6 +17840,7 @@ _merged:
   pressure_pct: Percent of the time pressured
   previous: Previous-week rank.
   previous_rank: Team's rank in the prior release of this poll.
+  primary_color: Primary team color (hex).
   primary_hand: Player shooting/catching hand.
   primary_number: Player uniform number.
   primary_position_abbreviation: Primary position abbreviation.
@@ -17180,6 +17849,8 @@ _merged:
   primary_position_type: Primary position type (e.g. Infielder).
   prior_team_id: Unique identifier for prior team.
   priority: '`TRUE` if ESPN flags the play as a priority highlight.'
+  pro_con_l: Projected conference losses.
+  pro_con_w: Projected conference wins.
   pro_managed_first: First professional season as a manager.
   pro_managed_last: Last professional season as a manager.
   pro_played_first: First season the person played professional baseball.
@@ -17191,6 +17862,8 @@ _merged:
   probowls: Number of Pro Bowls
   production: Production metric.
   profile: Prospect profile text.
+  proj_l: Projected losses.
+  proj_w: Projected wins.
   pronunciation: Phonetic name pronunciation.
   prop_type_id: Prop type id.
   prop_type_name: Prop type name.
@@ -17224,6 +17897,7 @@ _merged:
   pts: Points scored.
   pts_added: Number of points contributed by a quarterback above the average level QB
   pts_ot1: Pts ot1.
+  pts_per_g: Points (scaled to the chosen `table`).
   pts_qtr1: Pts qtr1.
   pts_qtr2: Pts qtr2.
   pts_qtr3: Pts qtr3.
@@ -17304,15 +17978,21 @@ _merged:
   qbr_total: Adjusted Total QBR, which adjusts quarterback play on 0-100 scale adjusted for strength of opposing defenses
     played.
   qtr: Quarter of the game (5 is overtime).
+  qual_barthag: Quality-adjusted power rating.
+  qual_d: Quality-adjusted defensive efficiency.
+  qual_o: Quality-adjusted offensive efficiency.
   qualified: True/False indicator of whether or not player meets minimum play requirement
   qualifier_outs_pitched: Outs pitched per team game to qualify.
   qualifier_plate_appearances: Plate appearances per team game to qualify.
   qualifiers: Qualifiers.
+  qualifying_offer: Whether it is a qualifying offer.
   quarter_end: Binary indicator for whether or not the row of the data is marking the end of a quarter.
   quarter_seconds_remaining: Numeric seconds remaining in the quarter.
   quotes: Quotes about the prospect.
   r: Runs scored.
   r1: R1.
+  r32: Round of 32 appearances.
+  r64: Round of 64 appearances.
   rARM: Outfield-arm runs.
   rBPTV: Regressed batter pitch-type value.
   rBTV: Regressed base-state team value.
@@ -17337,6 +18017,7 @@ _merged:
   rank_delta: Change in ranks over a recent period
   rank_display_value: Rank display value.
   rank_type: '`ranked` for ranked teams, `others` for receiving-votes teams.'
+  ranker: Row rank.
   ranking: National rank of the team's overall SP+ rating (1 = best).
   ranking_id: ESPN ranking id.
   ranking_name: Poll name (e.g. `AP Top 25`).
@@ -17363,7 +18044,7 @@ _merged:
   re24: 'RE24: change in run expectancy plus runs scored on the pitch.'
   read_thrown: read the ball was thrown
   reason: Reason.
-  reb: Total rebounds.
+  reb: Rebounds per game.
   rebound_chances_defensive: Rebound chances defensive.
   rebound_chances_offensive: Rebound chances offensive.
   rebound_chances_total: Rebound chances total.
@@ -17584,6 +18265,7 @@ _merged:
   retained: Retained salary owed to players no longer on the roster (USD).
   retired_numbers_summary: Summary of retired jersey numbers.
   retrosheet_id: Retrosheet player ID.
+  return_date: Projected return (`NA` unless a subscriber).
   return_team: 'String abbreviation of the return team. Returns may occur on any of: interception, fumble, kickoff, punt,
     or blocked kicks.'
   return_touchdown: 'Binary indicator for if the play resulted in a return TD. Returns may occur on any of: interception,
@@ -17667,8 +18349,12 @@ _merged:
   run_gap_dir: Combines run gap and direction, e.g. left guard
   run_location: 'String indicator for location of run: left, middle, or right.'
   runs: Runs scored.
+  runs_allowed_away: Runs allowed by the team in away games.
+  runs_allowed_home: Runs allowed by the team in home games.
   runs_per9inn: Runs per 9 innings.
   runs_per_game: Runs per game.
+  runs_scored_away: Runs scored by the team in away games.
+  runs_scored_home: Runs scored by the team in home games.
   runs_scored_on_pitch: Runs that scored on the pitch (parsed from the play description, plus the batter on a home run).
   runs_scored_per9: Runs scored per nine innings.
   runs_to_end_inning: Runs scored from the current state to the end of the half-inning.
@@ -17813,6 +18499,7 @@ _merged:
     the same game half.
   salary: Total cap-counting salary for the season ($).
   salary_arbitration_exp: Salary arbitration experience.
+  salary_cap: Salary cap.
   salary_remaining: Remaining salary owed.
   savePctg: Save percentage (goalies).
   save_opportunities: Save opportunities.
@@ -17878,8 +18565,9 @@ _merged:
   schedule_event_type_name: Name of the event type (e.g. 'All-Star Weekend Event').
   scheduledInnings: Number of scheduled innings.
   scheduled_innings: Scheduled number of innings.
-  school: Player's school / college (when distinct from 'college').
+  school: Team name.
   school_country: School country.
+  school_id: High school / club id.
   school_name: School name.
   school_school_class: School class (e.g. 4YR JR, HS SR).
   school_state: School state.
@@ -17903,6 +18591,7 @@ _merged:
   scoring: TRUE when the play results in a score (TD, FG, safety, two-point conversion).
   scoringPlayerId: Player identifier scoring the goal.
   scoringPlayerTotal: Season goal total for the scorer.
+  scoring_chance: TRUE when event is a shot-type within 25 ft of the net.
   scoring_opp: Binary flag for a scoring opportunity (yards_to_goal <= 40).
   scoring_opps_opportunities: Number of scoring opportunities.
   scoring_opps_points: Points on scoring opportunity drives.
@@ -17978,6 +18667,7 @@ _merged:
   season_wins: Season wins entering/after the game.
   season_year: Season year string ('YYYY-YY' format).
   season_yr: Year derived from the season name (concluding year).
+  seasons: NBA seasons played.
   seasons_played: Number of seasons played.
   seasons_ref: '`$ref` to the seasons-list endpoint.'
   seasons_started: Number of seasons recorded as primary starter for position
@@ -17992,6 +18682,7 @@ _merged:
   second_start: Second mark of the period when the event started.
   secondaryReason: Secondary reason for a stoppage.
   secondary_assists: Secondary assists.
+  secondary_color: Secondary team color (hex).
   secondary_type: Secondary event type (e.g. shot type).
   secondsRemaining: Seconds remaining in the period.
   seconds_left: Seconds left in the game at the play.
@@ -18213,6 +18904,11 @@ _merged:
   source_description: ESPN data-source description (e.g. `Basic/Manual`).
   source_id: ESPN data-source id for the probability row.
   source_state: ESPN data-source state (e.g. `full`).
+  source_team_college_id: College id.
+  source_team_id: College team id.
+  source_team_league_affiliation: College team league affiliation.
+  source_team_location: College team location.
+  source_team_name: College team name.
   sp: Binary indicator for whether or not a score occurred on the play.
   sp_defense: Bill Connelly's SP+ defense rating for team.
   sp_l_CH: Location+ grade on changeups (100 = average).
@@ -18291,13 +18987,14 @@ _merged:
   spring_start_date: Spring training start date.
   spring_venue_id: Spring training venue MLBAM ID.
   spring_venue_link: API link to the spring venue.
-  srs: Simple Rating System adjustment for team.
+  srs: Simple Rating System (point margin + SOS).
   srt: Srt.
   st_pct: Percent of special teams snaps taken
   st_play_type: Type of special teams play from NFL source. Available 2011 and beyond with source "nfl".
   st_snaps: Number of snaps on special teams
   stadium: Name of the stadium
   stadium_id: 'ID of the stadium the game was played in. (Source: Pro-Football-Reference)'
+  staff: Coach name.
   stand: Side of the plate the batter is standing (L or R).
   stand_summary: Standing summary string.
   standingSummary: StandingSummary.
@@ -18343,6 +19040,8 @@ _merged:
   start_possession_text: Field-position text at the start of the play.
   start_quarter_seconds_remaining: Quarter seconds remaining at the start of the play (these are more or less code artifacts
     from other sports, but may eventually be used more seriously)
+  start_s: Shift start in countdown seconds.
+  start_season: Season the coach started with the team.
   start_short_down_distance_text: Short down-and-distance text at the start of the play.
   start_team_id: ESPN team id in possession at the start of the play.
   start_team_ref: '`$ref` URL to the team in possession at the play start.'
@@ -18361,26 +19060,98 @@ _merged:
   starting_hash: hash the ball was place(L = left, M = middle, R = right)
   stat: Stat.
   stat_abbrev: Stat abbreviation (e.g. "W", "L").
+  stat_air_outs: Air outs (fly + line outs).
+  stat_assists: Assists.
   stat_at_bats: Value of the sorted statistic (here at bats) for the split.
+  stat_at_bats_per_home_run: At-bats per home run.
+  stat_avg: Batting average.
+  stat_balks: Balks.
+  stat_balls: Balls thrown.
+  stat_base_on_balls: Walks (bases on balls).
+  stat_batters_faced: Batters faced.
+  stat_blown_saves: Blown saves.
+  stat_catchers_interference: Catcher's interference.
+  stat_caught_stealing: Runners caught stealing.
+  stat_chances: Total chances (fielding).
+  stat_complete_games: Complete games.
   stat_display: Stat display name.
   stat_display_name: Stat display name (from `displayNames`).
   stat_display_value: Statistic display value.
+  stat_doubles: Doubles.
+  stat_earned_runs: Earned runs.
+  stat_errors: Errors.
+  stat_fielding: Fielding percentage.
+  stat_fly_outs: Fly outs.
+  stat_games_finished: Games finished.
+  stat_games_pitched: Games pitched.
+  stat_games_played: Games played.
+  stat_games_started: Games started.
+  stat_ground_into_double_play: Grounded into double plays.
+  stat_ground_into_triple_play: Grounded into triple plays.
+  stat_ground_outs: Ground outs.
+  stat_ground_outs_to_airouts: Ground-out to air-out ratio.
   stat_group: Stat group name ("forwards","defenses","goalies").
   stat_group_name: Stat group display name (e.g., hitting).
   stat_groups: List-column of stat group display names the stat belongs to.
+  stat_hit_batsmen: Hit batsmen.
+  stat_hit_by_pitch: Hit by pitch.
+  stat_hits: Hits.
+  stat_hits_per9inn: Hits per nine innings.
+  stat_holds: Holds.
+  stat_home_runs: Home runs.
+  stat_home_runs_per9: Home runs allowed per nine innings.
+  stat_inherited_runners: Inherited runners.
+  stat_inherited_runners_scored: Inherited runners who scored.
+  stat_innings_pitched: Innings pitched.
+  stat_intentional_walks: Intentional walks.
   stat_label: Human-readable label of the statistic (e.g. 'At bats').
+  stat_left_on_base: Runners left on base.
   stat_lookup_param: API lookup parameter for the statistic (e.g. 'atBats').
+  stat_losses: Losses.
   stat_name: Internal stat key (e.g. `passingYards`).
+  stat_number_of_pitches: Number of pitches.
+  stat_obp: On-base percentage.
+  stat_ops: On-base plus slugging.
+  stat_outs: Outs recorded.
+  stat_outs_pitched: Outs pitched.
+  stat_passed_ball: Passed balls.
+  stat_pickoffs: Pickoffs.
+  stat_pitches_per_inning: Pitches per inning.
+  stat_pitches_thrown: Pitches thrown.
+  stat_plate_appearances: Plate appearances.
+  stat_put_outs: Putouts.
   stat_rank: League/season rank for stat.
+  stat_rbi: Runs batted in.
+  stat_runs: Runs.
+  stat_runs_scored_per9: Runs scored per nine innings.
+  stat_sac_bunts: Sacrifice bunts.
+  stat_sac_flies: Sacrifice flies.
+  stat_save_opportunities: Save opportunities.
+  stat_saves: Saves.
   stat_season: Season this row's stat line describes.
   stat_short: Stat short display.
   stat_short_display_name: Short human-readable stat name.
+  stat_shutouts: Shutouts.
+  stat_slg: Slugging percentage.
+  stat_stolen_base_percentage: Stolen-base percentage.
+  stat_stolen_bases: Stolen bases allowed (catcher/fielding).
+  stat_strike_outs: Strikeouts.
+  stat_strike_percentage: Strike percentage.
+  stat_strikeout_walk_ratio: Strikeout-to-walk ratio.
+  stat_strikeouts_per9inn: Strikeouts per nine innings.
+  stat_strikes: Strikes thrown.
+  stat_total_bases: Total bases.
+  stat_triples: Triples.
   stat_type: Stat type code (e.g. "win", "loss").
   stat_type_id: Stat-type code (0 = reg, 1 = post, 2 = career).
   stat_type_name: Stat type display name (e.g., projected).
   stat_value: Numeric stat value.
+  stat_walks_per9inn: Walks per nine innings.
+  stat_whip: Walks plus hits per inning pitched.
+  stat_wild_pitches: Wild pitches.
+  stat_wins: Wins.
   stat_yardage: Yards gained or lost on the play.
-  state: Pick state (e.g., on the clock, complete).
+  state: Venue state.
   stateProvince: State or province for the postal code.
   state_province: Hometown state or province of the recruit.
   state_province_code: State or province code of the official.
@@ -18456,6 +19227,7 @@ _merged:
   strike_zone_bottom: Bottom of the player's strike zone (feet).
   strike_zone_top: Top of the player's strike zone (feet).
   strikes: Strike count before the pitch.
+  strk: Current streak.
   stt: Stt.
   stuffed_run: Binary flag for a stuffed run (zero or negative yards gained).
   stw: Stw.
@@ -18510,6 +19282,14 @@ _merged:
   sz_bot: Bottom of the batter's strike zone for the pitch (feet).
   sz_top: Top of the batter's strike zone for the pitch (feet).
   t: T.
+  t1de: Team 1 defensive efficiency in the game.
+  t1oe: Team 1 offensive efficiency in the game.
+  t1ppp: Team 1 points per possession.
+  t1pts: Team 1 points.
+  t2de: Team 2 defensive efficiency in the game.
+  t2oe: Team 2 offensive efficiency in the game.
+  t2ppp: Team 2 points per possession.
+  t2pts: Team 2 points.
   tERA: True ERA (batted-ball-based ERA estimator).
   tFRP: Throwing component of Fielding Run Prevention.
   tackle_for_loss_1_player_id: Unique identifier for one of the potential players with the tackle for loss.
@@ -18541,6 +19321,7 @@ _merged:
   target_share: '"Player''s share of team receiving targets in this game"'
   target_stat: Target stat value reported by CFBD (typically 1 per target).
   targets: The number of pass plays where the player was the targeted receiver.
+  taxpayer_mle: Taxpayer mid-level exception.
   tbs_auth_required: Whether TBS authentication is required.
   td_play: Binary flag for a touchdown play.
   td_player_id: Unique identifier of the player who scored a touchdown.
@@ -18608,6 +19389,7 @@ _merged:
   team_first_year_of_play: First year the franchise played.
   team_franchise_id: Team franchise identifier.
   team_franchise_name: Franchise name.
+  team_full: Full team name.
   team_full_name: Full team name.
   team_full_name_default: Team full name (default language).
   team_full_name_fr: Team full name (French).
@@ -18654,6 +19436,7 @@ _merged:
   team_name_sv: Team name (Swedish localization).
   team_names: Team names.
   team_nickname: Team nickname.
+  team_option: Whether the season is a team option.
   team_permalink: Team permalink.
   team_pick_history: History of the team's picks at this slot.
   team_picked_first_round: Team picked first round.
@@ -18716,6 +19499,8 @@ _merged:
   team_records_wins: Total wins.
   team_ref: '`$ref` to the team-in-season resource.'
   team_rk: Team rk.
+  team_room_mle: Room mid-level exception.
+  team_s: Current overseas team(s) and NBA affiliation.
   team_score: Team's score / final score.
   team_sdr: ESPN team SDR identifier.
   team_season: Team season (YYYY).
@@ -18725,6 +19510,7 @@ _merged:
   team_shutouts: Team shutouts.
   team_side: Home or away indicator.
   team_slug: URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces').
+  team_source_id: Source (ESPN) team id.
   team_sport_id: MLB sport ID.
   team_sport_link: MLB Stats API relative sport link.
   team_sport_name: Sport name.
@@ -18765,6 +19551,7 @@ _merged:
   teamid: FanGraphs team ID.
   teamlink: HTML link for the team.
   teamname: Teamname.
+  teams: Nested list of member-team membership spans.
   teams.away.isWinner: Whether the away team won.
   teams.away.leagueRecord.losses: Away team league-record losses.
   teams.away.leagueRecord.pct: Away team winning percentage.
@@ -18837,6 +19624,7 @@ _merged:
   third_downs: Number of third downs.
   three_min_recap: Link to the three-minute recap.
   three_min_recap_fr: Link to the French three-minute recap.
+  three_p_pct: Three-point field goal percentage.
   three_point_field_goal_pct: Three-point field goal percentage (0-1).
   three_point_field_goals_attempted: Three-point field goal attempts.
   three_point_field_goals_made: Three-point field goals made.
@@ -18913,16 +19701,21 @@ _merged:
   to: Final season played in NFL
   to_pct: To percentage (0-1 decimal).
   to_pct_rk: To pct rk.
+  to_percent: Turnover percentage (offense).
+  to_percent_def: Turnover percentage forced (defense).
   to_rate: To rate.
   to_rate_rk: To rate rk.
   to_team_id: Unique identifier for to team.
+  to_year: Most recent season.
   toi: Time on ice.
   toi_all: Total time on ice across all strengths (seconds).
   toi_even: Time on ice (even strength), in seconds.
   toi_minutes: Time on ice in minutes.
   toi_pk: Time on ice on the penalty kill (seconds).
   toi_pp: Time on ice on the power play (seconds).
+  toi_seconds: Total time on ice in seconds (NA if not in shift data).
   top10: Top10.
+  top2: Top-2 (runner-up or champion) finishes.
   top25: Top25.
   top50: Top50.
   topSeedRank: Seed rank of the top-seeded team.
@@ -18988,6 +19781,7 @@ _merged:
   total_away_score: Score for the away team at the start of the play.
   total_ball_acceleration: Total ball acceleration.
   total_bases: Total bases.
+  total_cap_allocations: Total cap allocations (USD).
   total_events: Total non-game events on the date.
   total_extra_inn_games: Total extra-inning games.
   total_extra_inn_time: Total extra-inning time (HHH:MM:SS).
@@ -19038,6 +19832,7 @@ _merged:
   total_items: Total schedule items on the date.
   total_line: 'The closing total line for the game. (Source: Pro-Football-Reference)'
   total_losses: Total losses to date (goalie).
+  total_minutes: Total minutes played.
   total_over_prob: Probability the game total goes over.
   total_passing_ppa: Total passing predicted points added returning.
   total_payroll_allocations: Total payroll allocations across all roster statuses (USD).
@@ -19055,6 +19850,7 @@ _merged:
   total_regular_season_games: Total number of regular-season games this season.
   total_runs: Total runs.
   total_rushing_ppa: Total rushing predicted points added returning.
+  total_seconds: Total seconds the lineup played.
   total_splits: Total number of splits in the leaderboard.
   total_stats_ref: '`$ref` URL for season totals statistics.'
   total_technical_fouls: Total technical fouls (player + team).
@@ -19093,6 +19889,7 @@ _merged:
   tournament_id: ESPN tournament identifier.
   tourney_champ: Tourney champ.
   tov: Turnovers.
+  tracked_shots: Number of tracked shots.
   trade_date: Exact date that trade occurred
   trade_details: Trade details.
   trade_id: ID of Trade
@@ -19104,12 +19901,14 @@ _merged:
   trade_restriction: Whether a trade restriction is active.
   traded: Whether the pick was traded.
   trajectory: Batted-ball trajectory.
+  transaction: Transaction description.
   transaction_date: Transaction date.
   transaction_id: Unique identifier for transaction.
   transaction_time: Transaction time.
   transaction_type: Type of transaction.
   transactions_ref: '`$ref` to team transactions resource (if present).'
   transfer_date: Date the transfer was reported (parsed downstream to POSIXct).
+  trb: Career total rebounds.
   trend: Trend indicator (e.g. "+3", "-2", "-").
   tri_code: Team three-letter code.
   triple: Park factor for triples.
@@ -19122,6 +19921,7 @@ _merged:
   true_shooting_percentage: True shooting percentage (0-1).
   ts_pct: True shooting percentage (0-1).
   ts_pct_rk: Ts pct rk.
+  ttq: Torvik Thrill Quotient (game excitement).
   ttype: Transaction type code.
   ttype_text: Transaction type description.
   turnover: Binary flag for any turnover on the play.
@@ -19146,6 +19946,7 @@ _merged:
   two_foul_time_on_rk: Two foul time on rk.
   two_foul_total_time: Time / clock value.
   two_foul_total_time_rk: Two foul total time rk.
+  two_p_pct: Two-point field goal percentage.
   two_point_attempt: Binary indicator for two point conversion attempt.
   two_point_conv_exp: Expected number of two_point_conv in this game (weekly) or on this play (pbp_rush/pbp_pass) given situation
   two_point_conv_result: 'String indicator for result of two point conversion attempt: success, failure, safety (touchback
@@ -19155,6 +19956,7 @@ _merged:
   two_pointers_attempted: Number of two pointers attempted.
   two_pointers_made: Number of two pointers made.
   two_pointers_percentage: Two pointers percentage (0-1 decimal).
+  two_way: Whether it is a two-way contract.
   type: Record type / category.
   typeCode: Numeric event type code.
   typeDescKey: Event type description key.
@@ -19175,7 +19977,7 @@ _merged:
   type_text: Display text for the type field.
   type_type: Play type category.
   types_ref: '`$ref` URL for the season-types collection.'
-  uBB: Unintentional walks allowed.
+  uBB: Unintentional walks (BB minus IBB)
   uBB_perc: Unintentional walk rate (per batter faced).
   uid: ESPN UID string.
   umpire: Deprecated umpire field, no longer populated.
@@ -19189,6 +19991,7 @@ _merged:
   unqualified_rank: QBR rank including unqualified passers.
   unsigned_foreign_pick: Unsigned-foreign-pick flag.
   update_timestamp: Timestamp of the last record update.
+  url: RotoWire player page URL.
   us_hof_induction_year: US Hockey Hall of Fame induction year.
   usage: Share of prior year's overall offensive usage returning.
   usage_percentage: Usage percentage (0-1).
@@ -19240,6 +20043,7 @@ _merged:
   vertical: Player's vertical jump at combine (inches)
   vet_cap_excptn: Veteran cap exception indicator.
   veteran: Whether the player is a veteran.
+  veteran_fa_status: Bird / Non-Bird / veteran FA status.
   veteran_status: Player veteran status.
   vid: Vid.
   video: Associated video content.
@@ -19256,8 +20060,10 @@ _merged:
   visitor_score: Visitor score.
   visitor_scoring: Visitor scoring.
   visitor_team_id: Unique identifier for visitor team.
+  vorp: Career value over replacement player.
   vote_count: Number of votes received.
   votes: Number of votes received.
+  votes_first: First-place votes.
   vpa: Vpa.
   vpb: Vpb.
   vsaprankedteams: Vsaprankedteams.
@@ -19326,6 +20132,9 @@ _merged:
   wKN_C: Knuckleball linear weight runs per 100 pitches.
   wLeague: League adjustment runs.
   wOBA: Weighted on-base average.
+  wOBA_CON: Weighted on-base average per instance of fair contact
+  wOBA_CON_against: Weighted on-base average against per instance of fair contact
+  wOBA_against: Weighted on-base average against (based on batters faced)
   wRAA: Weighted runs above average.
   wRC: Weighted runs created.
   wRC+: Weighted runs created plus (league/park adjusted, 100=avg).
@@ -19341,7 +20150,10 @@ _merged:
   w_conference_proj: W conference proj.
   w_l: W l.
   w_pct: Wins percentage (0-1 decimal).
+  w_percent: Tournament win percentage.
   w_proj: W proj.
+  wab: Wins above bubble.
+  wab_rk: National rank of wins above bubble.
   waiver_amount: Waiver amount.
   waiver_draft: Waiver draft indicator.
   waiver_options: Waiver and option flags reported by Spotrac.
@@ -19379,8 +20191,10 @@ _merged:
   wildcard_sequence: Team's wild card seeding position.
   wildcardpercent: Wildcardpercent.
   win: Whether the game was a win (goalie).
+  win_loss_pct: Win-loss percentage.
   win_pct: Win percentage (0-1 decimal).
   win_percent: Win percent.
+  win_prob: Pre-game win probability for `team`.
   win_rk: Win rk.
   win_score: Win score.
   win_team: Win team.
@@ -19427,6 +20241,11 @@ _merged:
   wl: Wl.
   wl_conf: Wl conf.
   wnba_logo_svg: Wnba logo svg.
+  wnba_team_city: WNBA Stats team city.
+  wnba_team_id: WNBA Stats team id.
+  wnba_team_name: WNBA Stats team name.
+  wnba_team_slug: WNBA Stats team slug.
+  wnba_team_tricode: WNBA Stats tricode.
   woba_denom: wOBA denominator (plate-appearance weight) for the event.
   woba_scale: wOBA scale factor (converts wOBA to runs).
   woba_value: wOBA value assigned to the event.
@@ -19449,8 +20268,17 @@ _merged:
   wpa_change_nxt: WPA change-of-possession component for the next play.
   wpa_change_nxt_ind: Indicator selecting the wpa_change_nxt path for the next play.
   wpa_half_end: WPA contribution from the end-of-half adjustment.
+  ws: Career win shares.
   wt: Weight of player (lbs)
   x: X.
+  x1st_apron: First apron.
+  x2nd_apron: Second apron.
+  x2p_percent: Two-point percentage (offense).
+  x2p_percent_d: Two-point percentage allowed (defense).
+  x3p_d_percent: Three-point percentage allowed (defense).
+  x3p_percent: Three-point percentage (offense).
+  x3p_rate: Three-point attempt rate (offense).
+  x3p_rate_d: Three-point attempt rate allowed (defense).
   xAVG: Expected batting average (Statcast).
   xCoord: X coordinate of the event on the ice.
   xERA: Expected ERA (Statcast-based).
@@ -19458,7 +20286,7 @@ _merged:
   xFIP-: Park/league-adjusted xFIP (100 = average, lower is better).
   xMLBAMID: MLBAM player ID.
   xSLG: Expected slugging percentage (Statcast).
-  x_coord: Transformed x-coordinate of the event.
+  x_coord: Transformed x-coordinate of the event (feet scale).
   x_coord_fixed: Fixed-orientation x-coordinate.
   x_coord_neutral: Neutral-zone-centered x-coordinate.
   x_coord_original: Original raw x-coordinate from the feed.
@@ -19478,7 +20306,7 @@ _merged:
   xyac_success: Probability play earns positive EPA (relative to where play started) based on where ball was caught.
   y: Y.
   yCoord: Y coordinate of the event on the ice.
-  y_coord: Transformed y-coordinate of the event.
+  y_coord: Transformed y-coordinate of the event (feet scale).
   y_coord_fixed: Fixed-orientation y-coordinate.
   y_coord_neutral: Neutral-zone-centered y-coordinate.
   y_coord_original: Original raw y-coordinate from the feed.
@@ -19491,7 +20319,13 @@ _merged:
     For incompletions this represents the difference between the hypothetical air_epa and the play's raw observed EPA (how
     much the incomplete pass cost the posteam).
   yac_wpa: WPA from yards after the catch (same logic as yac_epa).
+  yahoo_game_id: Yahoo game id (NA placeholder).
   yahoo_id: Yahoo ID - usual format is an integer with ~5 digits
+  yahoo_player_id: Yahoo player id (NA placeholder).
+  yahoo_player_name: Yahoo player name (NA placeholder).
+  yahoo_team_abbreviation: Yahoo abbreviation (NA placeholder).
+  yahoo_team_id: Yahoo team id (NA placeholder).
+  yahoo_team_name: Yahoo team name (NA placeholder).
   yard_line: Field-position yard line at the start of the play (0-50 scale from the offense's side).
   yardline_100: Numeric distance in the number of yards from the opponent's endzone for the posteam.
   yardline_exp: Expected number of yardline in this game (weekly) or on this play (pbp_rush/pbp_pass) given situation
@@ -19524,12 +20358,17 @@ _merged:
   ydstogo: Numeric yards in distance from either the first down marker or the endzone in goal down situations.
   year: 4-digit year.
   year_constructed: Year in which the venue was constructed.
+  year_max: Last season played.
+  year_min: First season played.
   year_signed: Year the contract was signed
   years: Years.
   years_exp: Years played in league
+  years_experience: Years of NBA experience (`R` for rookies).
+  years_in_role: Seasons in the role.
   years_of_experience: Years played in league
   years_pro: Number of professional years played.
-  years_remaining: Years left on the contract.
+  years_remaining: Years of eligibility remaining.
+  yos: Years of service.
   yr: Yr.
   yrdln: String indicating the current field position for a given play.
   ytdg: Year-to-date goals (skaters/goalies).

@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: matchupid
+  type: integer
+- description: ''
+  name: gp
+  type: integer
+- description: ''
+  name: g
+  type: integer
+- description: ''
+  name: defense_category
+  type: character
+- description: ''
+  name: freq
+  type: numeric
+- description: ''
+  name: d_fgm
+  type: numeric
+- description: ''
+  name: d_fga
+  type: numeric
+- description: ''
+  name: d_fg_pct
+  type: numeric
+- description: ''
+  name: normal_fg_pct
+  type: numeric
+- description: ''
+  name: pct_plusminus
+  type: numeric
+kind: dataframe
+schema: playerdashptshotdefend

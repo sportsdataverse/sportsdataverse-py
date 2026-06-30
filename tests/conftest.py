@@ -52,6 +52,22 @@ skip_if_no_live = pytest.mark.skipif(
     reason="Set SDV_PY_LIVE_TESTS=1 to run tests that hit live external APIs",
 )
 
+# stats.nba.com / stats.wnba.com hang on datacenter / cloud IPs: the TLS/JA3
+# fingerprint block compounds with IP reputation, so even with curl_cffi browser
+# impersonation the request silently stalls (not a fast failure) from CI runners.
+# These live tests therefore need a SEPARATE opt-in that NO CI workflow sets
+# (tests.yml + live-tests-cron.yml only ever set SDV_PY_LIVE_TESTS), so they run
+# only when a contributor explicitly enables them from a residential IP.
+NBA_STATS_LIVE: bool = os.environ.get("SDV_PY_NBA_STATS_LIVE") == "1"
+
+skip_if_no_nba_stats_live = pytest.mark.skipif(
+    not NBA_STATS_LIVE,
+    reason=(
+        "stats.nba.com/stats.wnba.com hang on datacenter/cloud IPs; set "
+        "SDV_PY_NBA_STATS_LIVE=1 to run these live tests from a residential IP"
+    ),
+)
+
 
 def _rscript_available() -> bool:
     try:

@@ -1,0 +1,13 @@
+# CodeRabbit configuration.
+#
+# Keep automated reviews focused on hand-written source by excluding generated and
+# vendored artifacts. The per-endpoint returns-schemas under schemas/native/** are
+# fully generated from endpoint YAML (no hand edits), and tools/codegen/inputs/**
+# holds vendored upstream snapshots. Excluding them also keeps large codegen PRs
+# under CodeRabbit's per-PR file limit so the hand-written changes actually get
+# reviewed instead of the review being skipped wholesale.
+reviews:
+  path_filters:
+    - "!**/schemas/native/**"
+    - "!tools/codegen/inputs/**"
+    - "!uv.lock"

@@ -78,6 +78,7 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
     "black>=22.3.0",
+    "curl_cffi>=0.6.0",
     "flake8>=5.0.0",
     "isort>=5.10.1",
     "mypy>=1.0.0",
@@ -108,6 +109,7 @@ all = [
     # groups) because PEP 621 does not have a "union of groups" mechanism that
     # older pip / build-frontends understand uniformly.
     "black>=22.3.0",
+    "curl_cffi>=0.6.0",
     "flake8>=5.0.0",
     "isort>=5.10.1",
     "mypy>=1.0.0",
@@ -264,7 +266,10 @@ line-ending = "lf"
 
 
 [tool.mypy]
-python_version = "3.10"
+# 3.12 (not the 3.9 floor): modern dep stubs (numpy 2.3+, which itself requires py3.11+)
+# use PEP 695 `type` aliases that mypy rejects under an older target. The curated modules
+# below stay 3.9-compatible regardless; this only sets the type-checker's target syntax.
+python_version = "3.12"
 # Strict-typing ratchet via ``files`` (NOT ``[[tool.mypy.overrides]]``): the gate
 # checks ONLY the curated modules listed below, in isolation. This is deliberate
 # and load-bearing -- ``files`` scopes *which* modules are checked, whereas
@@ -299,6 +304,19 @@ files = [
     "sportsdataverse/mlb/mlb_statcast_runtime.py",
     "sportsdataverse/mlb/mlb_statcast_parsers.py",
     "sportsdataverse/mlb/mlb_statcast_extra.py",
+    "sportsdataverse/nba/nba_stats_runtime.py",
+    "sportsdataverse/nba/nba_stats_parsers.py",
+    "sportsdataverse/nba/nba_pbp_constants.py",
+    "sportsdataverse/nba/nba_enhanced_pbp.py",
+    "sportsdataverse/nba/nba_lineups.py",
+    "sportsdataverse/nba/nba_possessions.py",
+    "sportsdataverse/nba/nba_shot_zones.py",
+    "sportsdataverse/nba/nba_tracking.py",
+    "sportsdataverse/nba/nba_rapm.py",
+    "sportsdataverse/wnba/wnba_stats_runtime.py",
+    "sportsdataverse/wnba/wnba_stats_parsers.py",
+    "sportsdataverse/wnba/wnba_engine.py",
+    "sportsdataverse/nbagl/nbagl_engine.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",

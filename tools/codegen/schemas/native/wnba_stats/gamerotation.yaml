@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: game_id
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_city
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: player_first
+  type: character
+- description: ''
+  name: player_last
+  type: character
+- description: ''
+  name: in_time_real
+  type: numeric
+- description: ''
+  name: out_time_real
+  type: numeric
+- description: ''
+  name: player_pts
+  type: integer
+- description: ''
+  name: pt_diff
+  type: numeric
+- description: ''
+  name: usg_pct
+  type: numeric
+kind: dataframe
+schema: gamerotation

@@ -55,7 +55,7 @@ ESPN endpoint.
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | TRUE if the venue is indoors. |
 | `broadcast` | character | Broadcast information string. |
-| `note` | character | Game note or headline. |
+| `note` | character | Injury status and description. |
 | `home_id` | character | Unique identifier for home. |
 | `home_name` | character | Home name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
@@ -257,7 +257,7 @@ ESPN endpoint.
 | `team_id` | character | Team id. |
 | `team_uid` | character | Team uid. |
 | `team_location` | character | Team location. |
-| `overall` | character | Overall. |
+| `overall` | character | Overall pick number. |
 | `games_behind` | character | Games behind. |
 | `vs. conf.` | character | Team's record against conference opponents, shown as part of the standings snapshot in the box score. |
 

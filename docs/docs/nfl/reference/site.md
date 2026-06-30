@@ -55,7 +55,7 @@ ESPN endpoint.
 | `venue_state` | character | Venue state / region. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast information string. |
-| `note` | character | Game note or headline. |
+| `note` | character | Injury status and description. |
 | `home_id` | character | Unique identifier for home. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
@@ -277,7 +277,7 @@ ESPN endpoint.
 | `ties` | character | Number of ties in the series. |
 | `win_percent` | character | Win percent. |
 | `wins` | character | Wins. |
-| `overall` | character | Overall. |
+| `overall` | character | Overall pick number. |
 
 **format**
 

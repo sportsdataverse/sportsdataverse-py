@@ -187,7 +187,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character | Group identifier (e.g. conference 'group_id'). |
+| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
 | `team` | character | Team-side label or team identifier. |
 | `team_id` | character | Unique team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
@@ -198,7 +198,7 @@ ESPN endpoint.
 | `ties` | double | Number of ties in the series. |
 | `wins` | double | Total wins. |
 | `rank` | double | Position of the school within the poll for the given week (1 = top-ranked). |
-| `overall` | character | Overall. |
+| `overall` | character | Overall pick number. |
 
 **head_to_head**
 
@@ -266,7 +266,7 @@ ESPN endpoint.
 | `team_name` | character | Full display name of the team. |
 | `shot_id` | character | ESPN identifier for an individual shootout or penalty kick attempt. |
 | `player_id` | character | Unique player identifier. |
-| `player` | character | Penalized player name. |
+| `player` | character | Player name. |
 | `shot_number` | integer | Sequential number of the penalty kick or shootout attempt within the series. |
 | `did_score` | logical | Boolean flag indicating whether the penalty kick or shootout attempt resulted in a goal. |
 

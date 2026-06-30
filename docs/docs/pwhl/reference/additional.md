@@ -194,8 +194,8 @@ Columns include `player_id`, `first_name`, `last_name`, `home`, `period`, `start
 | `jersey_number` | character | Jersey number. |
 | `home` | integer | Whether the player's team was home. |
 | `period` | integer | Period number. |
-| `start_time` | character | Start time (local). |
-| `end_time` | character | End time (local). |
+| `start_time` | character | Shift start time (MM:SS countdown clock). |
+| `end_time` | character | Shift end time (MM:SS countdown clock). |
 | `length` | character | Length of the streak in games. |
 | `start_s` | integer | Shift start time in seconds elapsed from the start of the period. |
 | `end_s` | double | Shift end time in seconds elapsed from the start of the period. |
