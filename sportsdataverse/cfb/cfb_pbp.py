@@ -66,7 +66,7 @@ def _extract_player_name(text_expr: pl.Expr, pattern: str) -> pl.Expr:
 #: whole word (real surnames effectively never do). Used to null garbage
 #: extractions like "bea loss of" / "for a loss" before the roster id-join.
 _PLAYER_NAME_GARBAGE = re.compile(
-    r"(?i)\b(loss|gain|yards?|incomplete|penalty|fumbled|sacked|touchdown|kickoff|punt|return)\b"
+    r"(?i)\b(loss|gain|yards?|incomplete|penalty|fumbled|sacked|touchdown|kickoff|punt|return|hurried by|QB)\b"
 )
 
 
@@ -5221,6 +5221,7 @@ class CFBPlayProcess(object):
             .agg(
                 Comp=pl.col("completion").sum(),
                 Att=pl.col("pass_attempt").sum(),
+                xComp=pl.col("cp").sum(),
                 Yds=pl.col("yds_receiving").sum(),
                 Pass_TD=pl.col("pass_td").sum(),
                 Int=pl.col("int").sum(),
@@ -5230,6 +5231,13 @@ class CFBPlayProcess(object):
                 WPA=pl.col("wpa").sum(),
                 SR=pl.col("EPA_success").mean(),
                 Sck=pl.col("sack_vec").sum(),
+            )
+            .with_columns(
+                CompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("Comp") / pl.col("Att"))),
+                xCompPct=(pl.when(pl.col("Att") == pl.lit(0)).then(0).otherwise(pl.col("xComp") / pl.col("Att"))),
+            )
+            .with_columns(
+                CPOE=(pl.col("CompPct") - pl.col("xCompPct")),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
