@@ -63,6 +63,19 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
             )
 
     if ctx.oracle is not None and ctx.join_keys:
+        missing_keys = [k for k in ctx.join_keys if k not in frame.columns]
+        if missing_keys:
+            findings.append(
+                Finding(
+                    "numeric_parity",
+                    Severity.ERROR,
+                    ctx.domain,
+                    dataset,
+                    f"join key(s) {missing_keys!r} absent from frame; oracle join skipped",
+                    locator={"missing_join_keys": missing_keys},
+                )
+            )
+            return findings
         keys = frame.select(list(ctx.join_keys))
         ref = ctx.oracle.reference_frame(dataset, keys)
         if ref is None:

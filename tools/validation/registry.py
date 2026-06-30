@@ -46,6 +46,8 @@ def load_thresholds(domain: str) -> dict[str, float]:
         A dict of threshold name -> float, domain values overriding defaults.
     """
     data = yaml.safe_load(_THRESHOLDS_PATH.read_text()) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"thresholds.yaml must be a YAML mapping at the top level; got {type(data).__name__!r}")
     merged = dict(data.get("default", {}))
     merged.update(data.get(domain, {}) or {})
     return merged

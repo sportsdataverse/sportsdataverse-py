@@ -53,7 +53,26 @@ def run(
     dtype_disagreement_keys = {f.locator["join_key"] for f in findings if "join_key" in f.locator}
     safe_keys = [k for k in keys if k not in dtype_disagreement_keys]
 
-    if safe_keys and all(k in upstream.columns and k in downstream.columns for k in safe_keys):
+    for k in safe_keys:
+        missing_sides: list[str] = []
+        if k not in upstream.columns:
+            missing_sides.append("upstream")
+        if k not in downstream.columns:
+            missing_sides.append("downstream")
+        if missing_sides:
+            findings.append(
+                Finding(
+                    "e2e",
+                    Severity.ERROR,
+                    domain,
+                    dataset,
+                    f"join key {k!r} absent from {' and '.join(missing_sides)}; orphan check skipped",
+                    locator={"join_key": k, "missing_in": missing_sides},
+                )
+            )
+    safe_keys = [k for k in safe_keys if k in upstream.columns and k in downstream.columns]
+
+    if safe_keys:
         orphans = downstream.join(upstream.select(safe_keys).unique(), on=safe_keys, how="anti")
         n_orphans = orphans.select(safe_keys).unique().height
         if n_orphans > 0:

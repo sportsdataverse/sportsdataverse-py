@@ -26,6 +26,57 @@ def test_clean_frame_yields_no_findings():
     assert numeric_parity.run("nfl_pbp", frame, ctx) == []
 
 
+def test_missing_join_key_emits_error_finding():
+    frame = pl.DataFrame({"col_a": [1.0, 2.0]})  # "game_id" join key absent
+
+    class _FakeOracle:
+        domain = "nfl"
+        column_map: dict = {}
+        thresholds: dict = {}
+
+        def reference_frame(self, dataset, keys):  # pragma: no cover
+            return None
+
+    ctx = CheckContext(domain="nfl", dataset="nfl_pbp", schema={}, join_keys=("game_id",), oracle=_FakeOracle())
+    findings = numeric_parity.run("nfl_pbp", frame, ctx)
+    assert any(f.severity is Severity.ERROR and "absent from frame" in f.message for f in findings)
+
+
+def test_oracle_returns_none_emits_info_finding():
+    frame = pl.DataFrame({"game_id": [1, 2, 3], "ep": [0.1, 0.2, 0.3]})
+
+    class _NoneOracle:
+        domain = "nfl"
+        column_map = {"ep": "ep"}
+        thresholds: dict = {}
+
+        def reference_frame(self, dataset, keys):
+            return None
+
+    ctx = CheckContext(domain="nfl", dataset="nfl_pbp", schema={}, join_keys=("game_id",), oracle=_NoneOracle())
+    findings = numeric_parity.run("nfl_pbp", frame, ctx)
+    assert any(f.severity is Severity.INFO and "returned no reference frame" in f.message for f in findings)
+
+
+def test_low_correlation_emits_warn_with_needs_judgment():
+    frame = pl.DataFrame({"game_id": [1, 2, 3], "ep": [1.0, 2.0, 3.0]})
+
+    class _LowCorrOracle:
+        domain = "nfl"
+        column_map = {"ep": "ep"}
+        thresholds = {"ep": 0.99}
+
+        def reference_frame(self, dataset, keys):
+            # Anti-correlated reference — corr will be -1.0, below threshold
+            return pl.DataFrame({"game_id": [1, 2, 3], "ep": [3.0, 2.0, 1.0]})
+
+    ctx = CheckContext(domain="nfl", dataset="nfl_pbp", schema={}, join_keys=("game_id",), oracle=_LowCorrOracle())
+    findings = numeric_parity.run("nfl_pbp", frame, ctx)
+    warn_findings = [f for f in findings if f.severity is Severity.WARN and "corr" in f.message]
+    assert warn_findings, "expected at least one WARN finding for low correlation"
+    assert all(f.needs_judgment is True for f in warn_findings)
+
+
 def test_oracle_corr_resolves_suffixed_column_under_asymmetric_map():
     class _FakeOracle:
         domain = "nfl"
