@@ -229,8 +229,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     if "end.homeScore" in play_df.columns and "end.awayScore" in play_df.columns:
         end_team_score_diff = (
             pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
-            .then(pl.col("end.homeScore") - pl.col("end.awayScore"))
-            .otherwise(pl.col("end.awayScore") - pl.col("end.homeScore"))
+            .then(pl.col("end.homeScore").cast(pl.Int64) - pl.col("end.awayScore").cast(pl.Int64))
+            .otherwise(pl.col("end.awayScore").cast(pl.Int64) - pl.col("end.homeScore").cast(pl.Int64))
         )
     else:
         end_team_score_diff = pl.col("pos_score_diff_end")

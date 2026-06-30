@@ -39,7 +39,9 @@ def _run(monkeypatch, gid: int) -> pl.DataFrame:
 
 
 def _final_play(df: pl.DataFrame) -> dict:
-    return df.filter(pl.col("game_play_number") == df["game_play_number"].max()).row(0, named=True)
+    final = df.filter(pl.col("game_play_number") == df["game_play_number"].max())
+    assert final.height == 1, "expected exactly one final play per game"
+    return final.row(0, named=True)
 
 
 def test_safety_game_ender_wp_matches_actual_winner(monkeypatch):
