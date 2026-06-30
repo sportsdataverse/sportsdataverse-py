@@ -8,11 +8,19 @@ import json
 import pathlib
 import re
 
+import numpy as np
 import pandas as pd
 import polars as pl
 import pytest
 
 import sportsdataverse.nbagl.nbagl_engine as G
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away,
+    parse_rotation_resultsets,
+    players_on_court_from_rotation,
+)
+from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
 from sportsdataverse.nba.nba_rapm import RAPM_SCHEMA
 
 FXR = pathlib.Path("tests/fixtures/nbagl_engine")
@@ -112,13 +120,10 @@ def test_nbagl_rapm_from_games_empty_list() -> None:
 
 def test_nbagl_rapm_from_games_skips_empty_games(monkeypatch: pytest.MonkeyPatch) -> None:
     """A game whose possession frame is empty is silently skipped; valid game still produces output."""
-    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
     from sportsdataverse.nba.nba_lineups import (
-        boxscore_home_away,
         parse_rotation_resultsets,
-        players_on_court_from_rotation,
     )
-    from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
+    from sportsdataverse.nba.nba_possessions import build_possessions
 
     def _game_poss_gl(gid: str) -> pl.DataFrame:
         enh = enhanced_pbp_from_payload(
@@ -227,7 +232,6 @@ def test_nbagl_minutes_reconciliation(game_id: str) -> None:
     the WNBA mirror in ``tests/wnba/test_wnba_engine.py``.
     """
     # No monkeypatch needed — reads the fixture files directly via _raw_rotation/_raw_box.
-    from sportsdataverse.nba.nba_lineups import parse_rotation_resultsets
 
     rotation = parse_rotation_resultsets(_raw_rotation(game_id))
 
@@ -276,8 +280,6 @@ def test_nbagl_possession_points_reconcile(monkeypatch: pytest.MonkeyPatch, game
     in ``tests/nba/test_nba_possessions.py`` and the WNBA mirror in
     ``tests/wnba/test_wnba_engine.py``.
     """
-    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
-    from sportsdataverse.nba.nba_possessions import build_possessions
 
     _patch(monkeypatch, game_id)
 
@@ -354,3 +356,65 @@ def test_nbagl_oncourt_ids_in_roster(monkeypatch: pytest.MonkeyPatch, game_id: s
     assert not stray, (
         f"[{game_id}] G-League on-court roster-membership FAILED ({len(stray)} stray id(s)):\n" + "\n".join(stray[:10])
     )
+
+
+# ---------------------------------------------------------------------------
+# Task 3: helper for building possessions from fixtures
+# ---------------------------------------------------------------------------
+
+
+def _game_poss_nbagl(gid: str) -> pl.DataFrame:
+    """Build G-League possession frame from captured fixtures for game *gid*."""
+    enh = enhanced_pbp_from_payload(
+        json.loads((FXR / gid / "playbyplayv3.json").read_text()),
+        league_id="20",
+    )
+    home, away = boxscore_home_away(_raw_box(gid))
+    oc = players_on_court_from_rotation(
+        enh,
+        parse_rotation_resultsets(_raw_rotation(gid)),
+        home_team_id=home,
+        away_team_id=away,
+    )
+    return attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
+
+
+# ---------------------------------------------------------------------------
+# Task 3: RAPM smoke test
+# ---------------------------------------------------------------------------
+
+
+def test_nbagl_rapm_smoke(monkeypatch: pytest.MonkeyPatch) -> None:
+    """nbagl_rapm_from_games returns a valid RAPM frame over 2 offline games."""
+    by_game = {g: _game_poss_nbagl(g) for g in GAMES}
+    monkeypatch.setattr(G, "_fetch_possessions", lambda gid: by_game[gid])
+    out = G.nbagl_rapm_from_games(GAMES)
+    assert out.height > 0
+    assert np.isfinite(out["rapm"].to_numpy()).all()
+    assert dict(out.schema) == RAPM_SCHEMA
+    assert abs(out["rapm"].mean()) < 5.0  # ridge-centered
+    # Deterministic: same input → same sorted output
+    out2 = G.nbagl_rapm_from_games(GAMES)
+    assert out.sort("player_id").equals(out2.sort("player_id"))
+    # pandas path
+    assert isinstance(G.nbagl_rapm_from_games(GAMES, return_as_pandas=True), pd.DataFrame)
+
+
+# ---------------------------------------------------------------------------
+# Task 3: gated live tests
+# ---------------------------------------------------------------------------
+
+from tests.conftest import skip_if_no_nba_stats_live
+
+
+@skip_if_no_nba_stats_live
+def test_nbagl_on_court_live() -> None:
+    oc = G.nbagl_on_court(GAMES[0])
+    assert oc.height > 0
+
+
+@skip_if_no_nba_stats_live
+def test_nbagl_rapm_from_games_live() -> None:
+    out = G.nbagl_rapm_from_games([GAMES[0]])
+    assert out.height > 0
+    assert np.isfinite(out["rapm"].to_numpy()).all()

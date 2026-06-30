@@ -313,4 +313,5 @@ files = [
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
     "sportsdataverse/wnba/wnba_engine.py",
+    "sportsdataverse/nbagl/nbagl_engine.py",
 ]
