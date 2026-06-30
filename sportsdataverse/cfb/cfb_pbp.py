@@ -3433,10 +3433,10 @@ class CFBPlayProcess(object):
 
         play_df = play_df.with_columns(
             _catch_abbr=pl.col("text")
-            .str.extract(r"(?i)(?:caught at|thrown to) ([A-Za-z]+)\d{2}", 1)
+            .str.extract(r"(?i)(?:caught at|thrown to) ([A-Za-z]+)\d{1,2}", 1)
             .str.to_uppercase(),
             _catch_yardline=pl.col("text")
-            .str.extract(r"(?i)(?:caught at|thrown to) [A-Za-z]+(\d{2})", 1)
+            .str.extract(r"(?i)(?:caught at|thrown to) [A-Za-z]+(\d{1,2})", 1)
             .cast(pl.Int64),
         )
         play_df = play_df.with_columns(
@@ -5358,7 +5358,11 @@ class CFBPlayProcess(object):
         # ---- prepare variables for wp_before calculations ----
         play_df = (
             play_df.with_columns(
-                pl.when(pl.col("type.text").is_in(kickoff_vec))
+                # B5: the penalty-assessed-on-kickoff play takes the touchback wp_before
+                # (see _apply_wp_derivation); its touchback ExpScoreDiff must reflect the
+                # real score state (like a kickoff), not the neutral 0.0 default, or the
+                # substituted wp_before would imply an even game on a non-even one.
+                pl.when((pl.col("type.text").is_in(kickoff_vec)).or_(pl.col("penalty_assessed_on_kickoff") == True))
                 .then(pl.col("pos_score_diff_start") + pl.col("EP_start_touchback"))
                 .otherwise(0.000)
                 .alias("start.ExpScoreDiff_touchback"),
