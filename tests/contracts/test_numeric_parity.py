@@ -63,6 +63,7 @@ def test_constant_column_yields_undefined_corr_warning():
     warns = [f for f in findings if f.locator.get("column") == "ep"]
     assert len(warns) == 1
     assert warns[0].severity is Severity.WARN and warns[0].needs_judgment
+    assert warns[0].check == "numeric_parity"
     assert "undefined" in warns[0].message.lower()
     assert warns[0].metric is None  # NaN must not be stored as a float metric (invalid JSON)
 
@@ -83,3 +84,4 @@ def test_subfloor_corr_still_warns():
     assert len(warns) == 1
     assert "oracle floor" in warns[0].message
     assert warns[0].metric is not None
+    assert warns[0].needs_judgment

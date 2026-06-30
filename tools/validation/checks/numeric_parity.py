@@ -87,8 +87,8 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
                 corr = joined.select(pl.corr(pl.col(col), pl.col(rcol))).item()
                 floor = ctx.oracle.thresholds.get(col, 0.99)
                 if corr is None:
-                    # No overlapping/usable rows for this column; empty-ref is
-                    # already reported as INFO above. Nothing to assert here.
+                    # Defensive: some polars builds may return null for a
+                    # degenerate correlation; nothing to assert here.
                     continue
                 if math.isnan(corr):
                     # A constant column on either side makes Pearson r undefined
@@ -100,7 +100,7 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
                             Severity.WARN,
                             ctx.domain,
                             dataset,
-                            f"{col!r} correlation is undefined (NaN) — constant column on one side; cannot verify parity",
+                            f"{col!r} correlation is undefined (NaN) — constant column or insufficient overlapping rows; cannot verify parity",
                             locator={"column": col, "oracle_column": oracle_col},
                             metric=None,
                             needs_judgment=True,
