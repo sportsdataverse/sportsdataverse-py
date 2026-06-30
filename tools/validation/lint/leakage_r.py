@@ -182,7 +182,11 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
             continue
         if _root(int(r["id"]), parent, ids, block_ids) in group_roots:
             continue
-        line, call = int(r["line1"]), r.get("text", "")
+        try:
+            line = int(r["line1"])
+        except (KeyError, ValueError):
+            continue
+        call = r.get("text", "")
         findings.append(
             Finding(
                 "leakage_lint",
@@ -220,7 +224,7 @@ def _parse_data_csv(rscript: str, file: Path) -> tuple[str | None, str]:
     except OSError as exc:
         return None, f"R lint could not invoke Rscript for {file}: {exc}"
     if proc.returncode != 0:
-        return None, f"could not parse {file} (Rscript exit {proc.returncode})"
+        return None, f"could not parse {file} (Rscript exit {proc.returncode}): {proc.stderr[:500]}"
     return proc.stdout, ""
 
 
