@@ -115,8 +115,17 @@ jobs:
           uv run --frozen python -m tools.validation.cli run \
             --dataset cfb_model_pbp \
             --json > findings_cfb_model_pbp.json 2>validate_cfb.log
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          exit_code=$?
+          echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
           set -e
+          # If the CLI crashed (non-zero exit), inject a run_error sentinel so
+          # the aggregation step surfaces this as an ERROR finding rather than
+          # treating a missing/truncated findings file as a clean zero-finding run.
+          if [ "${exit_code}" -ne 0 ]; then
+            log_tail=$(tail -c 500 validate_cfb.log 2>/dev/null || true)
+            printf '[{"check":"run_error","severity":"error","message":"cfb_model_pbp validation CLI exited %s: %s"}]\n' \
+              "${exit_code}" "${log_tail}" > findings_cfb_model_pbp.json
+          fi
 
       - name: Skip cfb_model_pbp (no data)
         if: steps.dl_cfb.outputs.available != 'true'
@@ -162,8 +171,17 @@ jobs:
           uv run --frozen python -m tools.validation.cli run \
             --dataset nfl_model_pbp \
             --json > findings_nfl_model_pbp.json 2>validate_nfl.log
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          exit_code=$?
+          echo "exit_code=${exit_code}" >> "$GITHUB_OUTPUT"
           set -e
+          # If the CLI crashed (non-zero exit), inject a run_error sentinel so
+          # the aggregation step surfaces this as an ERROR finding rather than
+          # treating a missing/truncated findings file as a clean zero-finding run.
+          if [ "${exit_code}" -ne 0 ]; then
+            log_tail=$(tail -c 500 validate_nfl.log 2>/dev/null || true)
+            printf '[{"check":"run_error","severity":"error","message":"nfl_model_pbp validation CLI exited %s: %s"}]\n' \
+              "${exit_code}" "${log_tail}" > findings_nfl_model_pbp.json
+          fi
 
       - name: Skip nfl_model_pbp (no data)
         if: steps.dl_nfl.outputs.available != 'true'
@@ -261,7 +279,7 @@ jobs:
               lines.push('| check | message |');
               lines.push('|---|---|');
               for (const f of errors) {
-                const msg = f.message.replace(/\|/g, '\\|');
+                let msg = f.message.replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>').replace(/`/g, '\\`');
                 lines.push(`| \`${f.check}\` | ${msg} |`);
               }
               lines.push('');
