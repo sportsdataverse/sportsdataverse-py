@@ -217,6 +217,13 @@ def _parse_data_csv(rscript: str, file: Path) -> tuple[str | None, str]:
             [rscript, str(_HELPER), str(file)],
             capture_output=True,
             text=True,
+            # getParseData emits UTF-8 (R source carries non-ASCII: smart quotes,
+            # em-dashes, accented names). Decode it as UTF-8 explicitly — the
+            # Windows default (cp1252) raises UnicodeDecodeError and the file is
+            # silently dropped instead of linted. errors="replace" is a last-resort
+            # guard so a stray byte degrades one char rather than the whole file.
+            encoding="utf-8",
+            errors="replace",
             timeout=_RSCRIPT_TIMEOUT,
         )
     except subprocess.TimeoutExpired:
