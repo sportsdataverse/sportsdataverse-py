@@ -39,3 +39,5 @@ jobs:
         # File list comes from [tool.mypy] in pyproject.toml; it is a ratchet
         # that grows as modules reach clean typing.
         run: uv run --frozen mypy
+      - name: validation harness contract tests
+        run: uv run --frozen pytest tests/contracts/ -q

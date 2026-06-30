@@ -30,6 +30,8 @@ repos:
       - id: trailing-whitespace
       - id: check-merge-conflict
       - id: check-ast
+        # Deliberately-malformed lint fixture (tests the unparseable-file path).
+        exclude: ^tests/contracts/fixtures/lint_python/broken\.py$
       - id: check-toml
       - id: check-json
       - id: check-xml
@@ -46,6 +48,8 @@ repos:
         # loosen the limit for everything.
         exclude: '^sportsdataverse/cfb/models/fd_model\.ubj$'
       - id: debug-statements
+        # Deliberately-malformed lint fixture (tests the unparseable-file path).
+        exclude: ^tests/contracts/fixtures/lint_python/broken\.py$
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0 # Use the ref you want to point at
     hooks:
@@ -155,6 +159,16 @@ repos:
         entry: uv run pytest tests/test_id_conventions.py -q
         language: system
         files: ^sportsdataverse/.*\.py$
+        pass_filenames: false
+        stages: [pre-push]
+      - id: validation-contracts-prepush
+        name: validation harness contract tests (pre-push)
+        # --frozen: run against the committed lockfile and never re-lock, so the
+        # hook can't trip pre-commit's "files were modified" check on uv's no-op
+        # uv.lock re-serialization (matches the quality.yml CI step).
+        entry: uv run --frozen pytest tests/contracts/ -q
+        language: system
+        files: ^(tools/validation/|tests/contracts/).*$
         pass_filenames: false
         stages: [pre-push]
 # - repo: https://github.com/nbQA-dev/nbQA

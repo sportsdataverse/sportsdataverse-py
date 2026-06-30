@@ -1,0 +1,7 @@
+# Per-domain validation tolerances. Conservative defaults; tune here, not in code.
+default:
+  extraction_coverage_floor: 0.95
+  null_rate_warn: 0.50
+  mean_shift_warn: 0.10
+nfl: {}
+cfb: {}
