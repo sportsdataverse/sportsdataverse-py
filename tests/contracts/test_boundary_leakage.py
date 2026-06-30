@@ -40,3 +40,24 @@ def test_no_group_key_column_skips():
 def test_lag_column_absent_from_frame_skips():
     frame = pl.DataFrame({"game_id": [1, 1]})  # prev_ep absent
     assert boundary_leakage.run("nfl_pbp", frame, _ctx()) == []
+
+
+def test_two_lag_columns_both_detected():
+    # regression: when two lag columns are configured, leaks in both must be reported
+    frame = pl.DataFrame(
+        {
+            "game_id": [1, 1, 2, 2],
+            "prev_ep": [3.5, 1.0, None, 2.0],  # game 1 row0 leaks
+            "prev_wp": [0.8, 0.6, None, 0.5],  # game 1 row0 leaks
+        }
+    )
+    ctx = _ctx(lag_columns=("prev_ep", "prev_wp"))
+    findings = boundary_leakage.run("nfl_pbp", frame, ctx)
+    assert any("prev_ep" in f.message for f in findings)
+    assert any("prev_wp" in f.message for f in findings)
+
+
+def test_empty_lag_columns_returns_no_findings():
+    # early-exit: no lag columns configured → no findings regardless of frame content
+    frame = pl.DataFrame({"game_id": [1, 1], "prev_ep": [3.5, 1.0]})
+    assert boundary_leakage.run("nfl_pbp", frame, _ctx(lag_columns=())) == []
