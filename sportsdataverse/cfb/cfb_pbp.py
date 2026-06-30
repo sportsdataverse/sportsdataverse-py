@@ -209,6 +209,13 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     hwa = f"home_wp_after{suffix}"
     awa = f"away_wp_after{suffix}"
     wpa = f"wpa{suffix}"
+    # B5: the penalty-assessed-on-kickoff play takes the touchback wp_before too
+    # (0.36-live L5095), alongside the existing kickoff_vec substitution. The flag is
+    # only present on the full-pipeline frame; guard on its presence so the helper
+    # stays callable on a minimal synthetic frame (kickoff-only fallback).
+    touchback_mask = pl.col("type.text").is_in(kickoff_vec)
+    if "penalty_assessed_on_kickoff" in play_df.columns:
+        touchback_mask = touchback_mask.or_(pl.col("penalty_assessed_on_kickoff") == True)
     return (
         play_df.with_columns(
             pl.lit(wp_before_raw).alias(wb),
@@ -216,7 +223,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
             pl.lit(wp_after_raw).alias(wa),
         )
         .with_columns(
-            pl.when(pl.col("type.text").is_in(kickoff_vec)).then(pl.col(wt)).otherwise(pl.col(wb)).alias(wb),
+            pl.when(touchback_mask).then(pl.col(wt)).otherwise(pl.col(wb)).alias(wb),
         )
         .with_columns(
             (1 - pl.col(wb)).alias(dwb),
@@ -405,6 +412,41 @@ def _parse_penalty_abbrev(text):
     return m.group(1).upper() if m else None
 
 
+def _abbr_compat(abbr_col: pl.Expr, team_u: pl.Expr) -> pl.Expr:
+    """Prefix-tolerant team-abbreviation match, as a polars expression.
+
+    ESPN ships two abbreviation forms for some teams -- the play text uses one
+    (e.g. "recovered by BUF", "caught at BUF35") while ``homeTeamAbbrev`` /
+    ``awayTeamAbbrev`` carry another ("BUFF"). Treat them as the same team when
+    they are equal or when either is a prefix of the other. Both operands are
+    assumed already upper-cased; in a two-team game cross-opponent prefix
+    collisions are effectively nonexistent.
+    """
+    return (abbr_col == team_u) | team_u.str.starts_with(abbr_col) | abbr_col.str.starts_with(team_u)
+
+
+def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
+    """Chronological play sort with a 2023+ ESPN overtime correction.
+
+    Regulation plays sort by ``(id, start.adj_TimeSecsRem)``. From 2023 ESPN slots
+    every overtime play into the same ``period.number`` rather than adding new
+    periods, and the clock-derived ``adj_TimeSecsRem`` collapses in OT -- so OT
+    plays (``period.number >= 5``) are instead ordered by ``sequenceNumber`` and
+    appended after regulation. Ported from 0.36-live ``__helper_cfb_sort_plays__``
+    (commit ``a3dff20``); no-op for games without OT.
+    """
+    plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"])
+    if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
+        return plays_df
+    period = pl.col("period.number").cast(pl.Int32, strict=False)
+    ot = plays_df.filter(period >= 5)
+    if ot.height == 0:
+        return plays_df
+    non_ot = plays_df.filter((period < 5).or_(period.is_null()))
+    ot = ot.sort(pl.col("sequenceNumber").cast(pl.Int64, strict=False))
+    return pl.concat([non_ot, ot])
+
+
 def _espn_num(value):
     """Best-effort numeric cast of an ESPN ``displayValue``.
 
@@ -541,6 +583,7 @@ class CFBPlayProcess(object):
         odds_override=None,
         game_roster=None,
         participants=None,
+        join_participants=True,
         **kwargs,
     ):
         """CFBPlayProcess.
@@ -562,6 +605,15 @@ class CFBPlayProcess(object):
                 ``participants[]`` array (pre-2014). Passing it makes offline
                 rebuilds fetch-free; when omitted the live path fetches the roster
                 on demand only if needed.
+            join_participants: when True (default) the pipeline coalesces ESPN
+                per-play participant names over the regex-extracted names and
+                resolves a roster-backed ``{type}_player_id`` -- both of which hit
+                the network (the participants/playbyplay endpoints and the game
+                roster). Set False (``CFBPlayProcess(..., join_participants=False)``)
+                to skip those lookups for a ~20x faster, network-free run. EPA / WPA /
+                CPOE are unaffected (the models key on game state, not player
+                identity); the cost is that ``{type}_player_id`` columns go null and
+                names fall back to regex-from-text instead of clean ESPN displays.
 
         Attributes:
             odds_source: provenance of the resolved spread —
@@ -593,6 +645,7 @@ class CFBPlayProcess(object):
         self.odds_override = odds_override
         self.game_roster = game_roster
         self.participants = participants
+        self.join_participants = bool(join_participants)
 
     def espn_cfb_pbp(self, **kwargs):
         """espn_cfb_pbp() - Pull the game by id. Data from API endpoints: `college-football/playbyplay`,
@@ -914,7 +967,7 @@ class CFBPlayProcess(object):
                 pl.col("sequenceNumber").cast(pl.Int32),
             )
         )
-        pbp_txt["plays"] = pbp_txt["plays"].sort(by=["id", "start.adj_TimeSecsRem"])
+        pbp_txt["plays"] = _sort_plays_ot_aware(pbp_txt["plays"])
 
         # drop play text dupes intelligently, even if they have different play_id values
         pbp_txt["plays"] = (
@@ -965,7 +1018,19 @@ class CFBPlayProcess(object):
             .with_columns(
                 pl.col("start.team.id").fill_null(strategy="forward").fill_null(strategy="backward").cast(pl.Int32),
             )
-            .with_columns(pl.col("end.team.id").fill_null(value=pl.col("start.team.id")).cast(pl.Int32))
+            # B3 (0.36-live 1bb28fe): capture the end-state-missing flag BEFORE filling,
+            # then fill end.team.id from the NEXT play's start team (the team that took
+            # over) before falling back to the current play's start team. ESPN drops the
+            # end-state on some short-yardage / penalty plays; the bare current-play
+            # fallback mis-attributes possession after a turnover/score, whereas the next
+            # play's start team is the correct post-play possessor.
+            .with_columns(end_state_missing=pl.col("end.team.id").is_null())
+            .with_columns(
+                pl.col("end.team.id")
+                .fill_null(value=pl.col("start.team.id").shift(-1))
+                .fill_null(value=pl.col("start.team.id"))
+                .cast(pl.Int32),
+            )
             .with_columns(
                 pl.col("start.team.id").cast(pl.Int32),
                 pl.col("end.team.id").cast(pl.Int32),
@@ -1249,6 +1314,20 @@ class CFBPlayProcess(object):
             .with_columns(
                 pl.when((pl.col("type.text") == "Penalty").and_(pl.col("text").str.contains(r"(?i)declined")))
                 .then(pl.col("start.yardsToEndzone"))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .with_columns(
+                # B3 part (b) (0.36-live dc4224b): for end-state-missing plays whose NEXT
+                # play is the same possessing team, backfill end.yardsToEndzone from that
+                # next play's start yardline -- the actual resulting field position.
+                # Pairs with the end.team.id next-play fill above.
+                pl.when(
+                    (pl.col("end_state_missing") == True).and_(
+                        pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"),
+                    ),
+                )
+                .then(pl.col("start.yardsToEndzone").shift(-1))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )
@@ -1548,7 +1627,7 @@ class CFBPlayProcess(object):
             * id, drive_id, game_id
             * down, ydstogo (distance), game_half, period
         """
-        play_df = play_df.sort(by=["id", "start.adj_TimeSecsRem"])
+        play_df = _sort_plays_ot_aware(play_df)
 
         play_df = play_df.unique(
             subset=["text", "id", "type.text", "start.down", "sequenceNumber"],
@@ -1620,6 +1699,17 @@ class CFBPlayProcess(object):
             )
             .with_columns(
                 kickoff_tb=pl.when((pl.col("text").str.contains("(?i)touchback")).and_(pl.col("kickoff_play") == True))
+                .then(True)
+                # 2018+ NCAA rule: a fair catch of a kickoff between the goal line and
+                # the receiver's 25 is a touchback (ball spotted at the 25). Gated on
+                # season so it does not mis-place pre-rule fair-caught kickoffs.
+                # (0.36-live applied this ungated; the season gate is the correctness
+                # refinement. Confirm the 2018 cutoff if porting to other rulebooks.)
+                .when(
+                    (pl.col("text").str.contains(r"(?i)fair catch|fair caught"))
+                    .and_(pl.col("kickoff_play") == True)
+                    .and_(pl.col("season") >= 2018),
+                )
                 .then(True)
                 .when((pl.col("text").str.contains("(?i)kickoff$")).and_(pl.col("kickoff_play") == True))
                 .then(True)
@@ -2774,6 +2864,10 @@ class CFBPlayProcess(object):
                 rush_direction=pl.when(pl.col("rush") == True)
                 .then(pl.col("text").str.extract(r"\s(left|middle|right)\s", 1))
                 .otherwise(None),
+                # QB pressured into a hurried throw -- ESPN appends "QB hurried by
+                # #NN X.Name" to the play text. A whitespace-bounded flag (null text
+                # -> False) so it stays a clean boolean for downstream filters/models.
+                qb_hurry=pl.col("text").str.contains(r"(?i)\shurried by\s").fill_null(False),
                 # --- Change of possession via turnover
                 turnover_vec=pl.col("type.text").is_in(turnover_vec),
                 offense_score_play=pl.col("type.text").is_in(offense_score_vec),
@@ -2859,8 +2953,72 @@ class CFBPlayProcess(object):
                 .otherwise(False),
             )
             .with_columns(
+                # Presentational-token-stripped play text (leading game clock, the
+                # No-Huddle/Shotgun formation tags, and the depth/direction modifiers
+                # short|deep|left|middle|right) so verb-anchored parsers match modern
+                # ESPN phrasing -- e.g. "rush middle for 5 yards" -> "rush for 5 yards".
+                # Without this, main's `rush for`/`complete to` extractors miss every
+                # play that carries a direction word. Ported from cfbfastR-cfb-data
+                # 0.36-live. pass_direction/rush_direction still read raw `text`.
+                cleaned_text=(
+                    pl.col("text")
+                    .str.replace(r"^\(\d{1,2}:\d{2}\)\s*", "")
+                    .str.replace_all(r"(?i)\s*No Huddle-Shotgun\s+", " ")
+                    .str.replace_all(r"(?i)No Huddle-", "")
+                    .str.replace_all(r"(?i)\s*Shotgun\s+", " ")
+                    # Two passes: depth ("short"/"deep") then direction. ESPN stacks
+                    # them ("complete short right to"); a single combined pass would
+                    # consume the shared space and strip only the first modifier.
+                    .str.replace_all(r"(?i) (short|deep) ", " ")
+                    .str.replace_all(r"(?i) (left|middle|right) ", " ")
+                    .str.replace_all(r"\s+", " ")
+                    .str.strip_chars()
+                ),
+            )
+            .with_columns(
+                # Kneel-down detection (ported 0.36-live). Guards first (special
+                # teams, non-scrimmage type, pass) so the text matches only apply to
+                # genuine offensive kneels; then explicit "kneel"/"takes a knee", and
+                # finally an end-of-half/-game TEAM-rush-for-(-1/-2) heuristic for
+                # plays ESPN anonymizes without the word "kneel".
+                kneel_down=pl.when(pl.col("sp") == True)
+                .then(False)
+                .when(
+                    pl.col("type.text").is_in(
+                        [
+                            "Timeout",
+                            "Extra Point Good",
+                            "Extra Point Missed",
+                            "Two-Point Pass",
+                            "Two-Point Rush",
+                            "Penalty",
+                        ],
+                    ),
+                )
+                .then(False)
+                .when(pl.col("pass") == True)
+                .then(False)
+                .when(pl.col("cleaned_text").str.contains(r"(?i)kneel"))
+                .then(True)
+                .when(pl.col("cleaned_text").str.contains(r"(?i)takes a knee"))
+                .then(True)
+                .when(
+                    (
+                        ((pl.col("start.adj_TimeSecsRem") <= 1860).and_(pl.col("start.adj_TimeSecsRem") >= 1800)).or_(
+                            (pl.col("start.adj_TimeSecsRem") <= 60).and_(pl.col("start.adj_TimeSecsRem") >= 0),
+                        )
+                    ).and_(
+                        pl.col("cleaned_text").str.contains(r"(?i)^team run for a loss of (?:1 yard|2 yards)"),
+                    ),
+                )
+                .then(True)
+                .otherwise(False),
+            )
+            .with_columns(
                 scrimmage_play=pl.when(
-                    (pl.col("sp") == False).and_(
+                    (pl.col("sp") == False)
+                    .and_(pl.col("kneel_down") == False)
+                    .and_(
                         pl.col("type.text").is_in(
                             [
                                 "Timeout",
@@ -2976,62 +3134,104 @@ class CFBPlayProcess(object):
         return play_df
 
     def __add_yardage_cols(self, play_df):
+        # A5 (0.36-live): some ESPN feeds (the 2024 Week 1 batch) report
+        # statYardage==0 on completions that actually gained yards (the text carries
+        # no "for N yards"). Rebuild the yardage from the yardline delta -- on RAW
+        # yardlines, since this runs before __process_epa clamps end-of-half to 99 --
+        # using ``start - (100 - end)`` when the play flipped possession (cross-team)
+        # and ``start - end`` otherwise. Gated on the ``completion`` flag (NOT a
+        # "complete to" text match -- that substring also matches "incomplete to" and
+        # would wrongly rebuild incompletions), and on non-penalty plays
+        # (penalty_detail null) so the penalty-residual chain below -- which only fires
+        # when penalty_detail is set -- is untouched. Completions are never
+        # interceptions, so A3's interception handling is also unaffected.
         play_df = play_df.with_columns(
-            yds_rushed=pl.when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)run for no gain")))
+            statYardage=pl.when(
+                (pl.col("completion") == True)
+                .and_(pl.col("statYardage") == 0)
+                .and_(pl.col("penalty_detail").is_null())
+                .and_(pl.col("start.team.id") != pl.col("end.team.id")),
+            )
+            .then((pl.col("start.yardsToEndzone") - (100 - pl.col("end.yardsToEndzone"))).cast(pl.Int64))
+            .when(
+                (pl.col("completion") == True)
+                .and_(pl.col("statYardage") == 0)
+                .and_(pl.col("penalty_detail").is_null()),
+            )
+            .then((pl.col("start.yardsToEndzone") - pl.col("end.yardsToEndzone")).cast(pl.Int64))
+            .otherwise(pl.col("statYardage")),
+        )
+        play_df = play_df.with_columns(
+            # Rush yardage reads cleaned_text (direction word stripped) so
+            # "rush middle for 5 yards" -> "rush for 5 yards" matches; raw `text`
+            # silently missed every direction-carrying rush on modern ESPN feeds.
+            yds_rushed=pl.when(
+                (pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for no gain"))
+            )
             .then(0)
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)for no gain")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)for no gain")))
             .then(0)
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)run for a loss of")))
-            .then(-1 * pl.col("text").str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)rush for a loss of")))
-            .then(-1 * pl.col("text").str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)run for")))
-            .then(pl.col("text").str.extract(r"(?i)run for (\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)rush for")))
-            .then(pl.col("text").str.extract(r"(?i)rush for (\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)Yd Run")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)Yd Rush")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("text").str.contains("(?i)Yard Rush")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for a loss of")))
+            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for a loss of")))
+            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)run for (\d+)").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)rush for (\d+)").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Run")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Rush")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yard Rush")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
+            # ESPN "N yds loss" / "N yds gain" phrasings (0.36-live port)
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds loss")))
+            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)(\d+) y\w*ds loss").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds gain")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) y\w*ds gain").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
-                .and_(pl.col("text").str.contains("(?i)rushed"))
-                .and_(pl.col("text").str.contains("(?i)touchdown") == False),
+                .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
+                .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == False),
             )
-            .then(pl.col("text").str.extract(r"(?i)for (\d+) yards").cast(pl.Int32))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)for (\d+) yards").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
-                .and_(pl.col("text").str.contains("(?i)rushed"))
-                .and_(pl.col("text").str.contains("(?i)touchdown") == True),
+                .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
+                .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == True),
             )
-            .then(pl.col("text").str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)for a (\d+) yard").cast(pl.Int32))
             .otherwise(None),
+            # Receiving yardage reads cleaned_text so the "complete to" guard fires
+            # on modern "complete short middle to ..." phrasing (raw `text` left it
+            # null on every completion, zeroing the receiving box-score yards).
             yds_receiving=pl.when(
                 (pl.col("pass") == True)
-                .and_(pl.col("text").str.contains(r"(?i)complete to"))
-                .and_(pl.col("text").str.contains(r"(?i)for no gain")),
+                .and_(pl.col("cleaned_text").str.contains(r"(?i)complete to"))
+                .and_(pl.col("cleaned_text").str.contains(r"(?i)for no gain")),
             )
             .then(0)
             .when(
                 (pl.col("pass") == True)
-                .and_(pl.col("text").str.contains(r"(?i)complete to"))
-                .and_(pl.col("text").str.contains(r"(?i)for a loss of")),
+                .and_(pl.col("cleaned_text").str.contains(r"(?i)complete to"))
+                .and_(pl.col("cleaned_text").str.contains(r"(?i)for a loss of")),
             )
-            .then(-1 * pl.col("text").str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
-            .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r"(?i)complete to")))
-            .then(pl.col("text").str.extract(r"(?i)for (\d+)").cast(pl.Int32))
+            .then(-1 * pl.col("cleaned_text").str.extract(r"(?i)for a loss of (\d+)").cast(pl.Int32))
+            .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)complete to")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)for (\d+)").cast(pl.Int32))
             .when(
                 (pl.col("pass") == True).and_(
-                    pl.col("text").str.contains(r"(?i)incomplete|(?i) sacked|(?i)intercepted|(?i)pass defensed"),
+                    pl.col("cleaned_text").str.contains(
+                        r"(?i)incomplete|(?i) sacked|(?i)intercepted|(?i)pass defensed",
+                    ),
                 ),
             )
             .then(0)
-            .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r"(?i)incompletion")))
+            .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)incompletion")))
             .then(0)
-            .when((pl.col("pass") == True).and_(pl.col("text").str.contains(r"(?i)Yd pass")))
-            .then(pl.col("text").str.extract(r"(?i)(\d+) Yd pass").cast(pl.Int32))
+            .when((pl.col("pass") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)Yd pass")))
+            .then(pl.col("cleaned_text").str.extract(r"(?i)(\d+) Yd pass").cast(pl.Int32))
             .otherwise(None),
             yds_int_return=pl.when(
                 (pl.col("pass") == True)
@@ -3169,6 +3369,84 @@ class CFBPlayProcess(object):
             .otherwise(None),
         )
         return play_df
+
+    def __add_air_yards_cols(self, play_df):
+        """Derive air yards / yards-after-catch from the ESPN play text.
+
+        ESPN annotates pass plays with the on-field catch/target point as
+        ``"caught at OU35"`` (completions) or ``"thrown to TEX42"`` (targets).
+        The stated yardline is relative to whichever team owns that side of the
+        field, not the offense, so the abbreviation in the text is resolved to
+        the possessing-vs-defending team -- using the same prefix-tolerant
+        matcher (:func:`_abbr_compat`) that resolves recovery/penalty teams, so
+        ESPN's BUF/BUFF two-abbreviation-form inconsistency still resolves --
+        then converted to yards-to-endzone:
+
+        * catch abbrev on the possessing team's side -> ``100 - yardline``
+        * catch abbrev on the defending team's side  -> ``yardline``
+        * no air-yards text / unresolved abbreviation -> null
+
+        ``air_yards = start.yardsToEndzone - air_yardsToEndzone`` and
+        ``yards_after_catch = statYardage - air_yards`` (completed passes only;
+        ``statYardage`` is ESPN's reliable net-yardage field == ``air_yards +
+        YAC``). Ported from the cfbfastR-cfb-data air-yards derivation
+        (R/pandas ``0.36-live``); the original character-count cosine-similarity
+        disambiguation is replaced by the codebase's abbreviation matcher, and
+        the R's ``yds_receiving`` (same quantity, but its sdv-py text extractor
+        is empty on modern ESPN text) by ``statYardage``.
+
+        Args:
+            play_df: the in-flight plays frame; must already carry ``text``,
+                ``start.yardsToEndzone``, ``pos_team`` / ``def_pos_team`` (team
+                ids), ``homeTeamId`` / ``awayTeamId``, ``homeTeamAbbrev`` /
+                ``awayTeamAbbrev``, ``statYardage`` and ``completion``.
+
+        Returns:
+            polars.DataFrame: the frame with ``air_yardsToEndzone``,
+            ``air_yards`` and ``yards_after_catch`` (all nullable ``Int64``)
+            appended.
+        """
+        home_u = pl.col("homeTeamAbbrev").str.to_uppercase()
+        away_u = pl.col("awayTeamAbbrev").str.to_uppercase()
+        # pos_team / def_pos_team are team ids; map each back to its abbreviation
+        # for THIS play so the catch-point abbrev can be sided against them.
+        pos_abbr = pl.when(pl.col("pos_team") == pl.col("homeTeamId")).then(home_u).otherwise(away_u)
+        def_abbr = pl.when(pl.col("def_pos_team") == pl.col("homeTeamId")).then(home_u).otherwise(away_u)
+
+        play_df = play_df.with_columns(
+            _catch_abbr=pl.col("text")
+            .str.extract(r"(?i)(?:caught at|thrown to) ([A-Za-z]+)\d{2}", 1)
+            .str.to_uppercase(),
+            _catch_yardline=pl.col("text")
+            .str.extract(r"(?i)(?:caught at|thrown to) [A-Za-z]+(\d{2})", 1)
+            .cast(pl.Int64),
+        )
+        play_df = play_df.with_columns(
+            air_yardsToEndzone=pl.when(
+                pl.col("_catch_abbr").is_null().or_(pl.col("_catch_yardline").is_null()),
+            )
+            .then(pl.lit(None, dtype=pl.Int64))
+            # possessing-team side of the field: yards still to go from the catch point
+            .when(_abbr_compat(pl.col("_catch_abbr"), pos_abbr))
+            .then(100 - pl.col("_catch_yardline"))
+            # defending-team side: the stated yardline IS the distance to the endzone
+            .when(_abbr_compat(pl.col("_catch_abbr"), def_abbr))
+            .then(pl.col("_catch_yardline"))
+            .otherwise(pl.lit(None, dtype=pl.Int64)),
+        )
+        play_df = play_df.with_columns(
+            air_yards=(pl.col("start.yardsToEndzone").cast(pl.Int64) - pl.col("air_yardsToEndzone")),
+        ).with_columns(
+            # YAC = total play yardage - air yards. statYardage is ESPN's reliable
+            # net-yards field (== air_yards + YAC for a completion); the R source's
+            # yds_receiving is the same quantity but its sdv-py text extractor is
+            # empty on modern ESPN text ("complete short middle to ...") so it can't
+            # be used here.
+            yards_after_catch=pl.when(pl.col("completion") == True)
+            .then(pl.col("statYardage").cast(pl.Int64) - pl.col("air_yards"))
+            .otherwise(pl.lit(None, dtype=pl.Int64)),
+        )
+        return play_df.drop("_catch_abbr", "_catch_yardline")
 
     def __add_player_cols(self, play_df):
         play_df = (
@@ -3699,9 +3977,6 @@ class CFBPlayProcess(object):
         # In a two-team game cross-opponent prefix collisions are effectively nonexistent.
         _home_u = pl.col("homeTeamAbbrev").str.to_uppercase()
         _away_u = pl.col("awayTeamAbbrev").str.to_uppercase()
-
-        def _abbr_compat(abbr_col, team_u):
-            return (abbr_col == team_u) | team_u.str.starts_with(abbr_col) | abbr_col.str.starts_with(team_u)
 
         def _abbrev_to_team_id(abbr_col):
             return (
@@ -4399,33 +4674,55 @@ class CFBPlayProcess(object):
         )
 
     def __process_epa(self, play_df):
+        # B5 (0.36-live): a penalty assessed BETWEEN a scoring play and the ensuing
+        # kickoff (the 2024 USC/LSU edge) inherits the prior play's field position and
+        # earns a large spurious EPA/WPA. Flag it and give it the kickoff-touchback
+        # treatment below. The ``penalty_flag`` guard excludes Timeouts that also sit
+        # between a score and a kickoff (main already scores those EPA=0); the
+        # ``kickoff_vec`` exclusion keeps the flag strictly disjoint from main's
+        # existing ``kickoff_vec & penalty_in_text`` path (no double-handling).
+        play_df = play_df.with_columns(
+            penalty_assessed_on_kickoff=(
+                (pl.col("scoring_play").shift(1) == True)
+                .and_(pl.col("kickoff_play").shift(-1) == True)
+                .and_(pl.col("end.pos_score_diff") != pl.col("start.pos_score_diff"))
+                .and_(pl.col("penalty_flag") == True)
+                .and_(pl.col("type.text").is_in(kickoff_vec) == False)
+            ).fill_null(False),
+        )
+        # treat the flagged penalty like a kickoff for the start-state substitution
+        kick_mask = (pl.col("type.text").is_in(kickoff_vec)).or_(pl.col("penalty_assessed_on_kickoff") == True)
         play_df = (
             play_df.with_columns(
-                down=pl.when(pl.col("type.text").is_in(kickoff_vec)).then(1).otherwise(pl.col("start.down")),
-                down_1=pl.when(pl.col("type.text").is_in(kickoff_vec)).then(True).otherwise(pl.col("down_1")),
-                down_2=pl.when(pl.col("type.text").is_in(kickoff_vec)).then(False).otherwise(pl.col("down_2")),
-                down_3=pl.when(pl.col("type.text").is_in(kickoff_vec)).then(False).otherwise(pl.col("down_3")),
-                down_4=pl.when(pl.col("type.text").is_in(kickoff_vec)).then(False).otherwise(pl.col("down_4")),
-                distance=pl.when(pl.col("type.text").is_in(kickoff_vec)).then(10).otherwise(pl.col("start.distance")),
+                down=pl.when(kick_mask).then(1).otherwise(pl.col("start.down")),
+                down_1=pl.when(kick_mask).then(True).otherwise(pl.col("down_1")),
+                down_2=pl.when(kick_mask).then(False).otherwise(pl.col("down_2")),
+                down_3=pl.when(kick_mask).then(False).otherwise(pl.col("down_3")),
+                down_4=pl.when(kick_mask).then(False).otherwise(pl.col("down_4")),
+                distance=pl.when(kick_mask).then(10).otherwise(pl.col("start.distance")),
             )
             .with_columns(
-                pl.when(pl.col("type.text").is_in(kickoff_vec))
-                .then(1)
-                .otherwise(pl.col("start.down"))
-                .alias("start.down"),
-                pl.when(pl.col("type.text").is_in(kickoff_vec))
-                .then(10)
-                .otherwise(pl.col("start.distance"))
-                .alias("start.distance"),
+                pl.when(kick_mask).then(1).otherwise(pl.col("start.down")).alias("start.down"),
+                pl.when(kick_mask).then(10).otherwise(pl.col("start.distance")).alias("start.distance"),
                 pl.lit(99).alias("start.yardsToEndzone.touchback"),
             )
             .with_columns(
-                pl.when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") > 2013))
+                pl.when((kick_mask).and_(pl.col("season") > 2013))
                 .then(75)
-                .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("season") <= 2013))
+                .when((kick_mask).and_(pl.col("season") <= 2013))
                 .then(80)
                 .otherwise(pl.col("start.yardsToEndzone"))
                 .alias("start.yardsToEndzone.touchback"),
+            )
+            .with_columns(
+                # B5: the flagged penalty's REAL start yardline is replaced by the
+                # touchback yardline so EP_start / wp_before reflect the ensuing
+                # kickoff, not the prior scoring play's field position. (Kickoffs keep
+                # their real start yardline; only EP_start_touchback uses the 75/80.)
+                pl.when(pl.col("penalty_assessed_on_kickoff") == True)
+                .then(pl.col("start.yardsToEndzone.touchback"))
+                .otherwise(pl.col("start.yardsToEndzone"))
+                .alias("start.yardsToEndzone"),
             )
         )
 
@@ -4476,6 +4773,25 @@ class CFBPlayProcess(object):
                 .alias("down_4_end"),
             )
             .with_columns(
+                # B2 (0.36-live): errored-format punt end-state. When a punt changed
+                # possession, ESPN's end.yardsToEndzone is frequently wrong; substitute
+                # the NEXT play's start yardline (the receiving team's actual field
+                # position, same possessing-team perspective). Guarded off OOB punts
+                # (ESPN yardline already correct) and penalty plays; the punt_tb
+                # override below still wins for touchbacks. ``text`` (raw) carries the
+                # leading "(MM:SS)" clock that marks the modern feed format.
+                pl.when(
+                    (pl.col("punt") == True)
+                    .and_(pl.col("text").str.contains(r"^\(\d{1,2}:\d{2}\) "))
+                    .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                    .and_(pl.col("punt_oob") == False)
+                    .and_(pl.col("penalty_in_text") == False),
+                )
+                .then(pl.col("start.yardsToEndzone").shift(-1))
+                .otherwise(pl.col("end.yardsToEndzone"))
+                .alias("end.yardsToEndzone"),
+            )
+            .with_columns(
                 pl.when(pl.col("end.yardsToEndzone") >= 100)
                 .then(99)
                 .otherwise(pl.col("end.yardsToEndzone"))
@@ -4488,12 +4804,61 @@ class CFBPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .with_columns(
-                pl.when(pl.col("kickoff_tb") == True)
+                # B5: the flagged penalty's END state is also a touchback (the ensuing
+                # kickoff), alongside the existing kickoff_tb handling.
+                pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
                 .then(75)
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
-                pl.when(pl.col("kickoff_tb") == True).then(1).otherwise(pl.col("end.down")).alias("end.down"),
-                pl.when(pl.col("kickoff_tb") == True).then(10).otherwise(pl.col("end.distance")).alias("end.distance"),
+                pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
+                .then(1)
+                .otherwise(pl.col("end.down"))
+                .alias("end.down"),
+                pl.when((pl.col("kickoff_tb") == True).or_(pl.col("penalty_assessed_on_kickoff") == True))
+                .then(10)
+                .otherwise(pl.col("end.distance"))
+                .alias("end.distance"),
+            )
+            .with_columns(
+                # B5: complete the END-state touchback for the flagged penalty by
+                # resetting the EP model's *feature* columns (``down_*_end``,
+                # ``pos_score_diff_end``) -- not just the display ``end.down`` above.
+                # 0.36-live set only ``end.down``, which the EP model never reads, so a
+                # penalty flagged on a 3rd-down play kept a 3rd-down end-state and
+                # manufactured a phantom EPA; resetting the feature booleans makes
+                # EP_end match EP_start (a true touchback -> EPA ~ 0). Flag-only: the
+                # parity-validated kickoff_tb path is left untouched.
+                pl.when(pl.col("penalty_assessed_on_kickoff") == True)
+                .then(True)
+                .otherwise(pl.col("down_1_end"))
+                .alias("down_1_end"),
+                pl.when(pl.col("penalty_assessed_on_kickoff") == True)
+                .then(False)
+                .otherwise(pl.col("down_2_end"))
+                .alias("down_2_end"),
+                pl.when(pl.col("penalty_assessed_on_kickoff") == True)
+                .then(False)
+                .otherwise(pl.col("down_3_end"))
+                .alias("down_3_end"),
+                pl.when(pl.col("penalty_assessed_on_kickoff") == True)
+                .then(False)
+                .otherwise(pl.col("down_4_end"))
+                .alias("down_4_end"),
+            )
+            .with_columns(
+                # B5: neutralize the spurious score-diff change ESPN attributes to the
+                # penalty play. ``pos_score_diff_end`` is the EP end-state feature and
+                # ``end.pos_score_diff`` the WP end-state feature (``wp_end_columns``);
+                # set both to the start value so neither model sees a phantom scoring
+                # swing on the penalty play.
+                pl.when(pl.col("penalty_assessed_on_kickoff") == True)
+                .then(pl.col("pos_score_diff_start"))
+                .otherwise(pl.col("pos_score_diff_end"))
+                .alias("pos_score_diff_end"),
+                pl.when(pl.col("penalty_assessed_on_kickoff") == True)
+                .then(pl.col("start.pos_score_diff"))
+                .otherwise(pl.col("end.pos_score_diff"))
+                .alias("end.pos_score_diff"),
             )
             .with_columns(
                 pl.when(pl.col("punt_tb") == True).then(1).otherwise(pl.col("end.down")).alias("end.down"),
@@ -5098,7 +5463,12 @@ class CFBPlayProcess(object):
                 .otherwise(0),
                 prog_drive_EPA=pl.col("EPA_scrimmage").cum_sum().over("drive.id"),
                 prog_drive_WPA=pl.col("wpa").cum_sum().over("drive.id"),
-                drive_offense_yards=pl.when((pl.col("sp") == False).and_(pl.col("scrimmage_play") == True))
+                # A3 (0.36-live): exclude interception plays -- a pick-six's RETURN
+                # yardage rides in statYardage on the offensive INT play, so without
+                # this it inflates the drive's offensive total.
+                drive_offense_yards=pl.when(
+                    (pl.col("sp") == False).and_(pl.col("scrimmage_play") == True).and_(pl.col("int") == False),
+                )
                 .then(pl.col("statYardage"))
                 .otherwise(0),
             )
@@ -5273,7 +5643,7 @@ class CFBPlayProcess(object):
             pass_qbr,
             left_on=["passer_player_name", "pos_team"],
             right_on=["athlete_name", "pos_team"],
-        )
+        ).sort("Att", descending=True)  # 0.36-live: box tables sorted by volume
 
         rusher_box = (
             rush_box.fill_null(0.0)
@@ -5292,6 +5662,7 @@ class CFBPlayProcess(object):
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            .sort("Car", descending=True)  # 0.36-live: box tables sorted by volume
         )
         # rusher_box = rusher_box.replace({np.nan: None})
 
@@ -5313,13 +5684,17 @@ class CFBPlayProcess(object):
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
+            .sort("Tar", descending=True)  # 0.36-live: box tables sorted by volume
         )
 
         team_base_box = (
             play_df.group_by(["pos_team"])
             .agg(
                 EPA_plays=pl.col("play").sum(),
-                total_yards=pl.col("statYardage").sum(),
+                # A3 (0.36-live): exclude interception plays so a pick-six's RETURN
+                # yardage isn't attributed to the offense that threw it -- consistent
+                # with the off_yards/drive exclusions above.
+                total_yards=pl.when(pl.col("int") == False).then(pl.col("statYardage")).otherwise(0).sum(),
                 EPA_overall_total=pl.col("EPA").sum(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
@@ -5380,9 +5755,14 @@ class CFBPlayProcess(object):
                 EPA_explosive=pl.col("EPA_explosive").sum(),
                 EPA_explosive_rate=pl.col("EPA_explosive").mean(),
                 passes_rate=pl.col("pass").mean(),
-                off_yards=pl.col("statYardage").sum(),
-                total_off_yards=pl.col("statYardage").sum(),
-                yards_per_play=pl.col("statYardage").mean(),
+                # A3 (0.36-live): exclude interception plays so a pick-six's RETURN
+                # yardage (carried in statYardage on the offensive INT play) isn't
+                # counted as offense. Zeroing keeps the INT as a 0-yard play, so the
+                # yards_per_play denominator is unchanged (matches 0.36-live's
+                # statYardage zeroing) without mutating the shared statYardage column.
+                off_yards=pl.when(pl.col("int") == False).then(pl.col("statYardage")).otherwise(0).sum(),
+                total_off_yards=pl.when(pl.col("int") == False).then(pl.col("statYardage")).otherwise(0).sum(),
+                yards_per_play=pl.when(pl.col("int") == False).then(pl.col("statYardage")).otherwise(0).mean(),
             )
             .with_columns(pl.col(pl.Float32).round(2))
             .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32))
@@ -6539,6 +6919,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__setup_penalty_data)
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
+                    .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_player_cols)
                     .pipe(self.__add_attribution_cols)
                     .pipe(self.__refine_play_types_post_attribution)
@@ -6775,6 +7156,7 @@ class CFBPlayProcess(object):
                     .pipe(self.__setup_penalty_data)
                     .pipe(self.__add_play_category_flags)
                     .pipe(self.__add_yardage_cols)
+                    .pipe(self.__add_air_yards_cols)
                     .pipe(self.__add_player_cols)
                     .pipe(self.__after_cols)
                     .pipe(self.__add_spread_time)
