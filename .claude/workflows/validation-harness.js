@@ -49,6 +49,7 @@ const FINDINGS_SCHEMA = {
           locator: { type: 'object', additionalProperties: true },
           metric: { type: ['number', 'null'] },
           needs_judgment: { type: 'boolean' },
+          sample: { type: ['array', 'null'], items: { type: 'object', additionalProperties: true } },
         },
         required: ['check', 'severity', 'message', 'needs_judgment'],
       },
