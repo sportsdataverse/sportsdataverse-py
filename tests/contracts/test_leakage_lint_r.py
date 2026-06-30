@@ -81,3 +81,17 @@ def test_analyze_inline_brace_in_grouped_pipe_is_clean():
 @skip_if_no_rscript
 def test_run_inlinebrace_live_is_empty():
     assert leakage_r.run(str(_FIXTURES / "inlinebrace.R")) == []
+
+
+def test_analyze_lambda_wrapped_ungrouped_lag_is_flagged():
+    findings = leakage_r._analyze_parsedata(_rows("lambdawrap.getparsedata.csv"), "lambdawrap.R")
+    assert len(findings) == 1
+    assert findings[0].locator["call"] == "lag"
+    assert findings[0].locator["line"] == 8  # the ungrouped `b <- ... lag(w)`
+    assert findings[0].severity is Severity.WARN and findings[0].needs_judgment
+
+
+@skip_if_no_rscript
+def test_run_lambdawrap_live_warns():
+    findings = leakage_r.run(str(_FIXTURES / "lambdawrap.R"))
+    assert len(findings) == 1 and findings[0].locator["call"] == "lag"

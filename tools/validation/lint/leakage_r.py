@@ -81,11 +81,12 @@ def _root(nid: int, parent: dict[int, int], ids: set[int], block_ids: set[int]) 
 
     A statement boundary is the top level (parent ``0``), an out-of-set parent
     (e.g. a negative COMMENT parent), or a function-definition body block expr
-    (``block_ids``) — so each pipe chain inside a ``function(){...}`` body roots
-    to its own statement rather than to the whole top-level definition. Inline
-    ``{...}`` blocks that are NOT function-definition bodies (e.g. ``{ tmp <- ep;
-    lag(tmp) }`` inside a grouped pipe argument) are NOT boundaries, so a
-    lag/cum* nested in one roots up to the enclosing grouped statement correctly.
+    (``block_ids``) — so each pipe chain inside a ``function(){...}`` or
+    ``\\(...){...}`` lambda body roots to its own statement rather than to the
+    whole top-level definition. Inline ``{...}`` blocks that are NOT
+    function-definition bodies (e.g. ``{ tmp <- ep; lag(tmp) }`` inside a
+    grouped pipe argument) are NOT boundaries, so a lag/cum* nested in one
+    roots up to the enclosing grouped statement correctly.
 
     Args:
         nid: Starting node id.
@@ -93,7 +94,8 @@ def _root(nid: int, parent: dict[int, int], ids: set[int], block_ids: set[int]) 
         ids: All known (positive) node ids.
         block_ids: Ids of function-definition body block expr nodes (the ``expr``
             that is the direct parent of a ``'{'`` token whose own parent is a
-            function-definition expr — i.e. the parent of a ``FUNCTION`` token).
+            function-definition expr — i.e. the parent of a ``FUNCTION`` token
+            or the R 4.1+ backslash-lambda head token ``'\\'``).
 
     Returns:
         The id of the enclosing statement node.
@@ -126,12 +128,15 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
 
     Note:
         Grouping is matched at STATEMENT granularity — each pipe chain inside a
-        ``function(){...}`` body roots to its own statement (the function-definition
-        body brace is a boundary), so a grouped chain no longer masks an ungrouped
-        lag/cumulative elsewhere in the same function body. Inline ``{...}`` blocks
-        that are NOT function-definition bodies (e.g. ``{ tmp <- ep; lag(tmp) }``
-        inside a grouped pipe argument) are NOT boundaries, so a lag/cum* nested in
-        one roots up to the enclosing grouped statement and is correctly clean.
+        ``function(){...}`` or ``\\(...){...}`` lambda body roots to its own
+        statement (the function-definition body brace is a boundary), so a grouped
+        chain no longer masks an ungrouped lag/cumulative elsewhere in the same
+        function or lambda body. Inline ``{...}`` blocks that are NOT
+        function-definition bodies (e.g. ``{ tmp <- ep; lag(tmp) }`` inside a
+        grouped pipe argument) are NOT boundaries, so a lag/cum* nested in one
+        roots up to the enclosing grouped statement and is correctly clean. Both
+        the ``function`` keyword form and the R 4.1+ ``\\()`` backslash-lambda
+        form are treated as function-definition heads and produce body boundaries.
         A residual false negative remains only for multiple chains sharing ONE
         statement (rare); WARN-only / ``needs_judgment`` routes survivors to Tier-2.
     """
@@ -152,10 +157,17 @@ def _analyze_parsedata(rows: list[dict[str, str]], rel: str) -> list[Finding]:
     # Statement boundaries are FUNCTION-DEFINITION body braces only — not every
     # '{'. An inline `{...}` block inside a grouped pipe is NOT a boundary, so a
     # lag/cum* nested in one still roots to its enclosing grouped statement
-    # (drops the documented inline-brace false positive). Named/anonymous function
-    # bodies stay boundaries: their '{' parent expr's parent is a FUNCTION-parent,
-    # preserving the fn-wrapped masking fix from Phase 1.5 slice A.
-    func_def_exprs = {int(r["parent"]) for r in rows if r.get("token") == "FUNCTION"}
+    # (drops the documented inline-brace false positive).
+    #
+    # A function-definition head is either the `function` keyword token OR the
+    # R 4.1+ `\(...)` backslash-lambda head (getParseData token == the 4-char
+    # string `'\\'`). Both produce `func_def_exprs` entries (their parent expr).
+    # Named/anonymous/lambda function bodies all become boundaries via the
+    # two-level chain: `'{'` token → braced-body expr → function-definition expr.
+    _FUNC_DEF_HEAD_TOKENS = ("FUNCTION", r"'\\'")
+    func_def_exprs = {int(r["parent"]) for r in rows if r.get("token") in _FUNC_DEF_HEAD_TOKENS}
+    # A `'{'` is a boundary iff its parent expr's parent is a function-definition
+    # expr (two-level chain: `'{'` → braced-body expr → function-definition expr).
     block_ids = {
         int(r["parent"]) for r in rows if r.get("token") == "'{'" and parent.get(int(r["parent"])) in func_def_exprs
     }
