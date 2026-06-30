@@ -216,6 +216,24 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
     touchback_mask = pl.col("type.text").is_in(kickoff_vec)
     if "penalty_assessed_on_kickoff" in play_df.columns:
         touchback_mask = touchback_mask.or_(pl.col("penalty_assessed_on_kickoff") == True)
+    # Game-ender win-prob (the two status_type_completed branches below) must reflect
+    # the END-possession team's actual final score, not pos_score_diff_end. On a
+    # possession-flipping final play whose type is absent from end_change_vec (notably
+    # a SAFETY), pos_score_diff_end stays in the pos_team perspective while the
+    # home/away mapping keys off end.pos_team.id -> the losing team wrongly gets 1.0.
+    # Deriving the winner from the absolute end score relative to end.pos_team.id is
+    # perspective-consistent with that mapping and changes no model feature.
+    # Guard: synthetic test frames omit end.homeScore/end.awayScore; fall back to
+    # pos_score_diff_end so those tests remain valid (status_type_completed=False
+    # means the game-ender branches never fire on synthetic data anyway).
+    if "end.homeScore" in play_df.columns and "end.awayScore" in play_df.columns:
+        end_team_score_diff = (
+            pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))
+            .then(pl.col("end.homeScore") - pl.col("end.awayScore"))
+            .otherwise(pl.col("end.awayScore") - pl.col("end.homeScore"))
+        )
+    else:
+        end_team_score_diff = pl.col("pos_score_diff_end")
     return (
         play_df.with_columns(
             pl.lit(wp_before_raw).alias(wb),
@@ -252,7 +270,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                         pl.col("game_play_number") == pl.col("game_play_number").max(),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") > 0),
+                .and_(end_team_score_diff > 0),
             )
             .then(1.0)
             .when(
@@ -262,7 +280,7 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                         pl.col("game_play_number") == pl.col("game_play_number").max(),
                     ),
                 )
-                .and_(pl.col("pos_score_diff_end") < 0),
+                .and_(end_team_score_diff < 0),
             )
             .then(0.0)
             .when(
