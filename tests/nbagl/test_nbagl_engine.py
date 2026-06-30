@@ -120,28 +120,9 @@ def test_nbagl_rapm_from_games_empty_list() -> None:
 
 def test_nbagl_rapm_from_games_skips_empty_games(monkeypatch: pytest.MonkeyPatch) -> None:
     """A game whose possession frame is empty is silently skipped; valid game still produces output."""
-    from sportsdataverse.nba.nba_lineups import (
-        parse_rotation_resultsets,
-    )
-    from sportsdataverse.nba.nba_possessions import build_possessions
-
-    def _game_poss_gl(gid: str) -> pl.DataFrame:
-        enh = enhanced_pbp_from_payload(
-            json.loads((FXR / gid / "playbyplayv3.json").read_text()),
-            league_id="20",
-        )
-        home, away = boxscore_home_away(_raw_box(gid))
-        oc = players_on_court_from_rotation(
-            enh,
-            parse_rotation_resultsets(_raw_rotation(gid)),
-            home_team_id=home,
-            away_team_id=away,
-        )
-        return attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
-
     by_game: dict[str, pl.DataFrame] = {
         "bad_game": pl.DataFrame(),
-        GAMES[0]: _game_poss_gl(GAMES[0]),
+        GAMES[0]: _game_poss_nbagl(GAMES[0]),
     }
     monkeypatch.setattr(G, "_fetch_possessions", lambda gid: by_game[gid])
     out = G.nbagl_rapm_from_games(["bad_game", GAMES[0]])
