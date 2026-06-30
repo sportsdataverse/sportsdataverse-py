@@ -178,7 +178,11 @@ from sportsdataverse.wnba import most_recent_wnba_season as most_recent_wnba_sea
 from sportsdataverse.wnba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.wnba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.wnba import underscore as underscore  # noqa: F401
+from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
+from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
+from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
+from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
 
 __all__ = [
     "download",
@@ -336,7 +340,11 @@ __all__ = [
     "normalize_team_roster_columns",
     "scoreboard_event_parsing",
     "underscore",
+    "wnba_enhanced_pbp",
+    "wnba_on_court",
     "wnba_pbp_disk",
+    "wnba_possessions",
+    "wnba_rapm_from_games",
 ]
 
 
