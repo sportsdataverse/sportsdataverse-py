@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import polars as pl
 
 from tools.validation.findings import CheckContext, Finding, Severity
@@ -14,7 +16,8 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
     1e-3) and for values outside their configured range; an INFO finding when an
     oracle is configured but supplies no reference frame; and WARN findings
     (routed to the parity-divergence judgment agent) when a column's correlation
-    against the oracle falls below its threshold.
+    against the oracle falls below its threshold or is undefined (NaN) due to a
+    constant column on either side.
 
     Args:
         dataset: Dataset identifier recorded on each finding.
@@ -83,7 +86,27 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
                     continue
                 corr = joined.select(pl.corr(pl.col(col), pl.col(rcol))).item()
                 floor = ctx.oracle.thresholds.get(col, 0.99)
-                if corr is not None and corr < floor:
+                if corr is None:
+                    # No overlapping/usable rows for this column; empty-ref is
+                    # already reported as INFO above. Nothing to assert here.
+                    continue
+                if math.isnan(corr):
+                    # A constant column on either side makes Pearson r undefined
+                    # (NaN). `NaN < floor` is False, so this would otherwise pass
+                    # silently and hide an all-constant producer column.
+                    findings.append(
+                        Finding(
+                            "numeric_parity",
+                            Severity.WARN,
+                            ctx.domain,
+                            dataset,
+                            f"{col!r} correlation is undefined (NaN) — constant column on one side; cannot verify parity",
+                            locator={"column": col, "oracle_column": oracle_col},
+                            metric=None,
+                            needs_judgment=True,
+                        )
+                    )
+                elif corr < floor:
                     findings.append(
                         Finding(
                             "numeric_parity",
