@@ -53,6 +53,20 @@ skip_if_no_live = pytest.mark.skipif(
 )
 
 
+def _rscript_available() -> bool:
+    try:
+        from tools.validation.lint.leakage_r import rscript_path
+    except ImportError:
+        return False
+    return rscript_path() is not None
+
+
+skip_if_no_rscript = pytest.mark.skipif(
+    not _rscript_available(),
+    reason="Rscript not found — install R or set SDV_RSCRIPT to run the R-lint live tests",
+)
+
+
 # ---------------------------------------------------------------------------
 # Captured-fixture loader
 # ---------------------------------------------------------------------------

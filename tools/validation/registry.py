@@ -28,9 +28,42 @@ class DatasetSpec:
     prob_groups: tuple[tuple[str, ...], ...] = ()
     range_constraints: dict[str, tuple[float, float]] = field(default_factory=dict)
     oracle_domain: str | None = None
+    lag_columns: tuple[str, ...] = ()
+    cumulative_columns: tuple[str, ...] = ()
+    group_key: str = "game_id"
 
 
 DATASETS: dict[str, DatasetSpec] = {}  # registered incrementally; see spec §11
+
+
+@dataclass(frozen=True)
+class LintTarget:
+    """A source tree to lint: where it is and what language it is."""
+
+    name: str
+    path: str
+    language: str  # "python" | "r"
+
+
+LINT_TARGETS: dict[str, LintTarget] = {}  # registered incrementally (follow-up)
+
+LINT_TARGETS["nfl_native_pbp"] = LintTarget(
+    name="nfl_native_pbp",
+    path="${SDV_VALIDATION_NFL_DATA_ROOT}/python/native_pbp",
+    language="python",
+)
+LINT_TARGETS["sdv_nfl_ep_wp"] = LintTarget(
+    name="sdv_nfl_ep_wp",
+    path="sportsdataverse/nfl/ep_wp.py",
+    language="python",
+)
+LINT_TARGETS["cfb_data_r"] = LintTarget(
+    name="cfb_data_r",
+    # cfb-data is the R producer of the public CFB datasets; SDV_VALIDATION_DATA_ROOT
+    # is the cfb-data repo root, so its data-prep R lives under R/.
+    path="${SDV_VALIDATION_DATA_ROOT}/R",
+    language="r",
+)
 
 
 def load_thresholds(domain: str) -> dict[str, float]:
@@ -104,6 +137,9 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
         oracle=ORACLES[spec.oracle_domain] if spec.oracle_domain else None,
         prior_frame=None,
         thresholds=load_thresholds(spec.domain),
+        lag_columns=spec.lag_columns,
+        cumulative_columns=spec.cumulative_columns,
+        group_key=spec.group_key,
     )
     return frame, ctx
 
@@ -142,4 +178,22 @@ DATASETS["cfb_model_pbp"] = DatasetSpec(
         "ep_after": (-8.0, 8.0),
     },
     oracle_domain="cfb",
+    cumulative_columns=("game_play_number",),
+)
+
+DATASETS["nfl_model_pbp"] = DatasetSpec(
+    name="nfl_model_pbp",
+    domain="nfl",
+    parquet_glob="${SDV_VALIDATION_NFL_DATA_ROOT}/out/model_pbp_*.parquet",
+    schema=load_schema("nfl_model_pbp"),
+    required_columns=("game_id", "play_id"),
+    join_keys=("game_id", "play_id"),
+    range_constraints={
+        "wp": (0.0, 1.0),
+        "vegas_wp": (0.0, 1.0),
+        "cp": (0.0, 1.0),
+        "ep": (-10.0, 10.0),
+        "epa": (-15.0, 15.0),
+    },
+    oracle_domain="nfl",
 )
