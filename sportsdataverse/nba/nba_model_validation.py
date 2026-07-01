@@ -16,7 +16,7 @@ import polars as pl
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
 
-from .nba_rapm import DEFAULT_RAPM_ALPHAS
+from .nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
 
 _OFF: List[str] = [f"off_player_{i}" for i in range(1, 6)]
 _DEF: List[str] = [f"def_player_{i}" for i in range(1, 6)]
@@ -140,6 +140,162 @@ def predict_points(X: csr_matrix, fit: FitResult) -> np.ndarray:
         Float64 array of shape ``(n_possessions,)`` with predicted points.
     """
     return np.asarray(X @ fit.coef, dtype=np.float64) + fit.intercept
+
+
+@dataclass(frozen=True)
+class RetrodictionResult:
+    """Out-of-sample retrodiction metrics from k-fold-over-games cross-validation.
+
+    Attributes:
+        game_margin_rmse: RMSE of predicted vs actual per-(game, team) margins on
+            held-out games, pooled across all folds.
+        game_margin_corr: Pearson correlation of predicted vs actual margins,
+            pooled across all folds. ``nan`` / 0 when fewer than 2 test margins.
+        baseline_rmse: RMSE of a zero-margin (intercept-only) predictor on the same
+            held-out margins — the floor any model must beat.
+        poss_rmse: RMSE of per-possession predicted vs actual points, pooled across
+            all folds (granular sanity check).
+        n_test_games: Total number of distinct game_ids held out across all folds.
+    """
+
+    game_margin_rmse: float
+    game_margin_corr: float
+    baseline_rmse: float
+    poss_rmse: float
+    n_test_games: int
+
+
+def _team_game_margins(
+    possessions: pl.DataFrame,
+    pred_points: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Aggregate per-possession predicted vs actual points to per-(game, team) margins.
+
+    A team's margin = (points it scored on its offensive possessions) minus
+    (points it allowed on its defensive possessions = the opponent's offensive
+    possessions). Returned as aligned (predicted, actual) arrays over each
+    (game_id, team) present.
+
+    Args:
+        possessions: Possession frame with ``game_id``, ``offense_team_id``, and
+            ``points`` columns. Must not be empty.
+        pred_points: Per-possession predicted points, shape ``(n_rows,)``, aligned
+            row-for-row with ``possessions``.
+
+    Returns:
+        ``(predicted_margins, actual_margins)`` as float64 numpy arrays of equal
+        length — one entry per (game_id, offense_team_id) pair.
+    """
+    df = possessions.select(["game_id", "offense_team_id", "points"]).with_columns(pl.Series("pred", pred_points))
+    scored = df.group_by(["game_id", "offense_team_id"]).agg(
+        pl.col("points").sum().alias("scored"),
+        pl.col("pred").sum().alias("scored_pred"),
+    )
+    game_tot = df.group_by("game_id").agg(
+        pl.col("points").sum().alias("g_pts"),
+        pl.col("pred").sum().alias("g_pred"),
+    )
+    m = scored.join(game_tot, on="game_id", how="left")
+    m = m.with_columns(
+        (pl.col("scored") - (pl.col("g_pts") - pl.col("scored"))).alias("actual_margin"),
+        (pl.col("scored_pred") - (pl.col("g_pred") - pl.col("scored_pred"))).alias("pred_margin"),
+    )
+    return (
+        m["pred_margin"].to_numpy().astype(np.float64),
+        m["actual_margin"].to_numpy().astype(np.float64),
+    )
+
+
+def _rmse(a: np.ndarray, b: np.ndarray) -> float:
+    """Root mean squared error between arrays ``a`` and ``b``.
+
+    Args:
+        a: Predicted values.
+        b: Actual values.
+
+    Returns:
+        ``float`` RMSE, or ``nan`` when the arrays are empty.
+    """
+    return float(np.sqrt(np.mean((a - b) ** 2))) if a.size else float("nan")
+
+
+def retrodiction(
+    model: RapmModel,
+    possessions: pl.DataFrame,
+    *,
+    k_folds: int = 5,
+    seed: int = 0,
+) -> RetrodictionResult:
+    """Oracle ①: k-fold-over-games out-of-sample game-margin RMSE + correlation.
+
+    Games are partitioned into ``k_folds`` disjoint folds (never split a game
+    across train/test). For each fold: fit on the other games, predict the held-out
+    games' possessions, aggregate to per-(game, team) margins. Scores pool all
+    held-out margins. Baseline = predict every possession with the train mean
+    (zero margin everywhere).
+
+    Args:
+        model: A ``RapmModel`` instance.
+        possessions: A season (or multi-game) possession+lineup frame with
+            ``game_id``, ``offense_team_id``, ``points``, and the ten lineup
+            columns (``off_player_1..5``, ``def_player_1..5``).
+        k_folds: Number of game folds (default 5).
+        seed: RNG seed for the game shuffle (default 0 for determinism).
+
+    Returns:
+        ``RetrodictionResult``. All metrics are ``nan`` and ``n_test_games=0``
+        on empty input or when every fold is degenerate (no train or test rows).
+    """
+    if possessions.is_empty():
+        return RetrodictionResult(float("nan"), float("nan"), float("nan"), float("nan"), 0)
+
+    games = possessions["game_id"].unique().to_list()
+    rng = np.random.default_rng(seed)
+    rng.shuffle(games)
+    folds = np.array_split(np.array(games, dtype=object), min(k_folds, len(games)))
+
+    pred_m: List[np.ndarray] = []
+    act_m: List[np.ndarray] = []
+    base_m: List[np.ndarray] = []
+    poss_pred: List[np.ndarray] = []
+    poss_act: List[np.ndarray] = []
+
+    for fold in folds:
+        test_ids = set(fold.tolist())
+        train = possessions.filter(~pl.col("game_id").is_in(list(test_ids)))
+        test = possessions.filter(pl.col("game_id").is_in(list(test_ids)))
+        if train.is_empty() or test.is_empty():
+            continue
+        X_tr, y_tr, pids = build_rapm_design(train)
+        if not pids:
+            continue
+        fit = model.fit(X_tr, y_tr)
+        X_te, y_te = _design_with_ids(test, pids)
+        # rebuild aligned test frame (rows with null lineups are dropped by _design_with_ids)
+        test_valid = test.drop_nulls(subset=_OFF + _DEF)
+        pp = predict_points(X_te, fit)
+        p_pred, p_act = _team_game_margins(test_valid, pp)
+        pred_m.append(p_pred)
+        act_m.append(p_act)
+        base_m.append(np.zeros_like(p_act))  # mean model → 0 predicted margin
+        poss_pred.append(pp)
+        poss_act.append(y_te)
+
+    if not pred_m:
+        return RetrodictionResult(float("nan"), float("nan"), float("nan"), float("nan"), 0)
+
+    P = np.concatenate(pred_m)
+    A = np.concatenate(act_m)
+    B = np.concatenate(base_m)
+    corr = float(np.corrcoef(P, A)[0, 1]) if P.size > 1 and np.std(P) > 0 else 0.0
+    n_test = len(set().union(*[set(f.tolist()) for f in folds]))
+    return RetrodictionResult(
+        game_margin_rmse=_rmse(P, A),
+        game_margin_corr=corr,
+        baseline_rmse=_rmse(B, A),
+        poss_rmse=_rmse(np.concatenate(poss_pred), np.concatenate(poss_act)),
+        n_test_games=n_test,
+    )
 
 
 _TEAM_A, _TEAM_B = 100, 200

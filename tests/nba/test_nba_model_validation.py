@@ -94,3 +94,48 @@ def test_ridge_recovers_planted_ratings_in_sample():
     planted_o = np.array([o[p] for p in pids])
     corr = np.corrcoef(fit.coef[:P], planted_o)[0, 1]
     assert corr > 0.5  # ridge shrinks, but signal present
+
+
+# ---------------------------------------------------------------------------
+# Task 3: Oracle ① holdout retrodiction tests
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_model_validation import retrodiction, RetrodictionResult  # noqa: E402
+
+
+class _NoSkillModel:
+    """Fits an intercept only; all player coefficients are exactly 0 (no skill)."""
+
+    def fit(self, X, y):
+        return FitResult(coef=np.zeros(X.shape[1]), intercept=float(np.mean(y)))
+
+
+def test_retrodiction_planted_skill_beats_baseline():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(o, d, n_games=80, poss_per_game=100, noise_sd=0.3, seed=2)
+    res = retrodiction(RidgeRapmModel(), poss, k_folds=5, seed=0)
+    assert isinstance(res, RetrodictionResult)
+    assert res.game_margin_corr > 0.2  # real out-of-sample signal
+    assert res.game_margin_rmse < res.baseline_rmse  # beats intercept-only
+
+
+def test_retrodiction_no_skill_model_matches_baseline():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(o, d, n_games=80, poss_per_game=100, noise_sd=0.3, seed=3)
+    res = retrodiction(_NoSkillModel(), poss, k_folds=5, seed=0)
+    # a no-skill (zero-coef) model can't beat the mean out-of-sample
+    assert abs(res.game_margin_corr) < 0.15
+    assert res.game_margin_rmse >= res.baseline_rmse - 1e-6
+
+
+def test_retrodiction_never_raises_on_empty():
+    empty = pl.DataFrame(
+        schema={
+            "game_id": pl.Utf8,
+            "offense_team_id": pl.Int64,
+            "points": pl.Int64,
+            **{c: pl.Int64 for c in _OFF + _DEF},
+        }
+    )
+    res = retrodiction(RidgeRapmModel(), empty, k_folds=5, seed=0)
+    assert res.n_test_games == 0
