@@ -71,12 +71,12 @@ def test_compile_never_raises_on_no_games(tmp_path, monkeypatch):
 
 
 # ---------------------------------------------------------------------------
-# Gated live slice — only runs when SDV_PY_LIVE_TESTS=1
+# Gated live slice — only runs when SDV_PY_NBA_STATS_LIVE=1
 # ---------------------------------------------------------------------------
-from tests.conftest import skip_if_no_live  # noqa: E402
+from tests.conftest import skip_if_no_nba_stats_live  # noqa: E402
 
 
-@skip_if_no_live
+@skip_if_no_nba_stats_live
 def test_compile_live_small_slice(tmp_path, monkeypatch):
     # only the first 3 real regular-season game ids, real fetch, real cache
     real_ids = C._game_ids_for_season(2023, "Regular Season")[:3]

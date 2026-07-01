@@ -123,15 +123,14 @@ def compile_nba_season(
             except Exception as exc:  # corrupt cache -> fall through to re-fetch
                 _LOG.warning("re-fetch %s: bad cache (%s)", gid, exc)
 
-        # --- live fetch (throttle only on this path) ---
+        # --- live fetch (throttle only on successful fetches, not failures) ---
         try:
             poss = _fetch_possessions(gid, _LEAGUE_ID)
         except Exception as exc:
             _LOG.warning("skip game %s (%d/%d): fetch failed: %s", gid, i, total, exc)
             continue
-        finally:
-            if delay_s:
-                time.sleep(delay_s)
+        if delay_s:
+            time.sleep(delay_s)
 
         if poss.is_empty():
             _LOG.info("skip game %s (%d/%d): no possessions", gid, i, total)
