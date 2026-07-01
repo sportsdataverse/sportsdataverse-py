@@ -6,7 +6,7 @@ from tools.validation.findings import CheckContext, Finding, Severity
 
 
 def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
-    """Flag dead columns: entirely-null or zero-variance (single-valued) columns.
+    """Flag dead columns: entirely-null (or all-NaN) or zero-variance (single-valued) columns.
 
     A column that never varies is usually a producer that silently fails to
     populate it (e.g. an all-zero ``sacked`` count, an all-null ``fox_jersey``).
@@ -16,12 +16,16 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
 
     For each column NOT in ``ctx.expected_constant_columns``:
 
-    - **all-null** -> WARN ``needs_judgment`` (``kind="all_null"``).
-    - **zero-variance** (one distinct non-null value, incl. all-zero numeric) ->
+    - **all-null or all-NaN** -> WARN ``needs_judgment`` (``kind="all_null"``).
+    - **zero-variance** (one distinct non-null/non-NaN value, incl. all-zero numeric) ->
       WARN ``needs_judgment`` (``kind="constant"``).
 
-    An all-null column is reported once (as ``all_null``), never also as
+    An all-null (or all-NaN) column is reported once (as ``all_null``), never also as
     ``constant``. Judgment is routed to the ``anomaly-triage-reviewer``.
+
+    For float columns, NaN is treated the same as null for deadness classification
+    (polars treats NaN as a distinct non-null value, but an all-NaN column is
+    equally dead/unpopulated as an all-null one).
 
     Args:
         dataset: Dataset identifier recorded on each finding.
@@ -41,30 +45,40 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
         if col in allow:
             continue
         s = frame.get_column(col)
-        nulls = s.null_count()
-        if nulls == n:
+
+        # Build a series with nulls dropped; for float columns also drop NaN so
+        # that an all-NaN column is treated as dead (same as all-null).
+        dropped = s.drop_nulls()
+        if dropped.dtype.is_float():
+            dropped = dropped.filter(dropped.is_not_nan())
+
+        if dropped.len() == 0:
+            # metric=1.0: all-null/NaN fraction (every row is null or NaN → dead)
             findings.append(
                 Finding(
                     "constant_column",
                     Severity.WARN,
                     ctx.domain,
                     dataset,
-                    f"column {col!r} is entirely null across all {n} rows (dead/unpopulated?)",
+                    f"column {col!r} is entirely null/NaN across all {n} rows (dead/unpopulated?)",
                     locator={"column": col, "kind": "all_null"},
                     metric=1.0,
                     needs_judgment=True,
                 )
             )
             continue
-        if s.drop_nulls().n_unique() == 1:
-            value = s.drop_nulls().item(0)
+
+        if dropped.n_unique() == 1:
+            # Reuse the already-materialized series — avoid a second drop_nulls() call.
+            value = dropped.item(0)
+            # metric=0.0: zero-variance proxy (variance is 0 for a constant column)
             findings.append(
                 Finding(
                     "constant_column",
                     Severity.WARN,
                     ctx.domain,
                     dataset,
-                    f"column {col!r} is constant at {value!r} across all {n - nulls} non-null rows "
+                    f"column {col!r} is constant at {value!r} across all {n - s.null_count()} non-null rows "
                     "(dead/stuck default?)",
                     locator={"column": col, "kind": "constant", "value": str(value)},
                     metric=0.0,
