@@ -139,3 +139,33 @@ def test_retrodiction_never_raises_on_empty():
     )
     res = retrodiction(RidgeRapmModel(), empty, k_folds=5, seed=0)
     assert res.n_test_games == 0
+
+
+# ---------------------------------------------------------------------------
+# Task 4: Oracle ② split-half reliability tests
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_model_validation import reliability, ReliabilityResult  # noqa: E402
+
+
+def test_reliability_rises_with_possession_count():
+    o, d = _planted_ratings()
+    small = _synthetic_possessions(o, d, n_games=20, poss_per_game=40, noise_sd=0.3, seed=4)
+    large = _synthetic_possessions(o, d, n_games=120, poss_per_game=100, noise_sd=0.3, seed=4)
+    r_small = reliability(RidgeRapmModel(), small, seed=0)
+    r_large = reliability(RidgeRapmModel(), large, seed=0)
+    assert isinstance(r_small, ReliabilityResult)
+    assert r_large.split_half_corr > r_small.split_half_corr  # more data -> more stable
+    assert -1.0 <= r_small.split_half_corr <= 1.0
+
+
+def test_reliability_never_raises_on_empty():
+    empty = pl.DataFrame(
+        schema={
+            "game_id": pl.Utf8,
+            "offense_team_id": pl.Int64,
+            "points": pl.Int64,
+            **{c: pl.Int64 for c in _OFF + _DEF},
+        }
+    )
+    assert reliability(RidgeRapmModel(), empty, seed=0).n_shared_players == 0

@@ -301,6 +301,84 @@ def retrodiction(
     )
 
 
+@dataclass(frozen=True)
+class ReliabilityResult:
+    """Split-half reliability of per-player ratings with Spearman-Brown adjustment.
+
+    Attributes:
+        split_half_corr: Pearson correlation of per-player total ratings fitted on
+            the two random game halves. ``nan`` when fewer than 3 shared players.
+        spearman_brown: Spearman-Brown prophecy formula correction for the full-season
+            test length: ``2r / (1 + r)``. ``nan`` when ``split_half_corr`` is ``nan``
+            or exactly -1.
+        n_shared_players: Number of players present in both halves (the basis for
+            the correlation).
+    """
+
+    split_half_corr: float
+    spearman_brown: float
+    n_shared_players: int
+
+
+def _fit_ratings(model: RapmModel, possessions: pl.DataFrame) -> Dict[int, float]:
+    """Fit the model on ``possessions`` and return player_id -> total rating (o - d_raw).
+
+    Args:
+        model: A ``RapmModel`` instance.
+        possessions: A possession+lineup frame.
+
+    Returns:
+        Dict mapping player_id to total impact rating (offense coef minus defense coef).
+        Empty dict when ``possessions`` has no players.
+    """
+    X, y, pids = build_rapm_design(possessions)
+    if not pids:
+        return {}
+    fit = model.fit(X, y)
+    P = len(pids)
+    total = fit.coef[:P] - fit.coef[P:]  # offense minus (raw) defense coef = total impact
+    return {int(p): float(total[k]) for k, p in enumerate(pids)}
+
+
+def reliability(model: RapmModel, possessions: pl.DataFrame, *, seed: int = 0) -> ReliabilityResult:
+    """Oracle ②: split-half reliability of the per-player rating across two game halves.
+
+    Randomly halves the games, fits each half independently, and correlates the
+    per-player total ratings over players present in both. Reports the raw split-
+    half correlation and the Spearman-Brown-adjusted full-season reliability
+    ``2r / (1 + r)``.
+
+    Args:
+        model: A ``RapmModel`` instance.
+        possessions: A season (or multi-game) possession+lineup frame with
+            ``game_id``, ``offense_team_id``, ``points``, and the ten lineup
+            columns (``off_player_1..5``, ``def_player_1..5``).
+        seed: RNG seed for the game shuffle (default 0 for determinism).
+
+    Returns:
+        ``ReliabilityResult``. ``split_half_corr`` and ``spearman_brown`` are ``nan``
+        and ``n_shared_players=0`` on empty input or when fewer than 3 players are
+        shared between the two halves.
+    """
+    if possessions.is_empty():
+        return ReliabilityResult(float("nan"), float("nan"), 0)
+    games = possessions["game_id"].unique().to_list()
+    rng = np.random.default_rng(seed)
+    rng.shuffle(games)
+    mid = len(games) // 2
+    a = possessions.filter(pl.col("game_id").is_in(games[:mid]))
+    b = possessions.filter(pl.col("game_id").is_in(games[mid:]))
+    ra, rb = _fit_ratings(model, a), _fit_ratings(model, b)
+    shared = sorted(set(ra) & set(rb))
+    if len(shared) < 3:
+        return ReliabilityResult(float("nan"), float("nan"), len(shared))
+    va = np.array([ra[p] for p in shared])
+    vb = np.array([rb[p] for p in shared])
+    r = float(np.corrcoef(va, vb)[0, 1]) if np.std(va) > 0 and np.std(vb) > 0 else 0.0
+    sb = (2 * r / (1 + r)) if r > -1 else float("nan")
+    return ReliabilityResult(split_half_corr=r, spearman_brown=sb, n_shared_players=len(shared))
+
+
 _TEAM_A, _TEAM_B = 100, 200
 
 
