@@ -284,15 +284,19 @@ DATASETS["cfb_team_summaries"] = DatasetSpec(
     expected_constant_columns=_TEAM_SUMMARY_CONST,
 )
 
-# yahoo_* are an unwired source (documented dead placeholders); fox_jersey is a
-# real extraction gap (track a fixes it) and is DELIBERATELY left un-allowlisted
-# so the harness keeps flagging it until then.
+# The crosswalk grain is person x team (no season column; a transferred player
+# appears under several espn_team_ids), so (person_key, espn_team_id) is the key —
+# person_key alone collides on 2088 multi-team players. 3 genuinely-duplicate
+# person x team rows remain (a real crosswalk dedup gap for the cfb-data producer,
+# surfaced by the sweep uniqueness check). yahoo_* are an unwired source
+# (documented dead placeholders); fox_jersey is a real extraction gap (track a
+# fixes it) and is DELIBERATELY left un-allowlisted so the harness keeps flagging it.
 DATASETS["cfb_rosters_crosswalk"] = DatasetSpec(
     name="cfb_rosters_crosswalk",
     domain="cfb",
     parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/crosswalk/parquet/cfb_rosters_crosswalk.parquet",
     schema=load_schema("cfb_rosters_crosswalk"),
-    join_keys=("person_key",),
+    join_keys=("person_key", "espn_team_id"),
     oracle_domain="cfb",
     expected_constant_columns=("yahoo_athlete_id", "yahoo_position"),
 )
