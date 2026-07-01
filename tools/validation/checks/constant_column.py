@@ -78,8 +78,8 @@ def run(dataset: str, frame: pl.DataFrame, ctx: CheckContext) -> list[Finding]:
                     Severity.WARN,
                     ctx.domain,
                     dataset,
-                    f"column {col!r} is constant at {value!r} across all {n - s.null_count()} non-null rows "
-                    "(dead/stuck default?)",
+                    f"column {col!r} is constant at {value!r} across all {dropped.len()} real "
+                    "(non-null, non-NaN) rows (dead/stuck default?)",
                     locator={"column": col, "kind": "constant", "value": str(value)},
                     metric=0.0,
                     needs_judgment=True,
