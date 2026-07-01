@@ -113,7 +113,10 @@ def test_parse_data_csv_decodes_rscript_output_as_utf8(monkeypatch):
 
     monkeypatch.setattr(leakage_r.subprocess, "run", _fake_run)
     out, err = leakage_r._parse_data_csv("rscript", Path("x.R"))
+    # Pin the full decode contract: UTF-8 with a replace fallback (a stray byte
+    # degrades one char instead of dropping the whole file).
     assert captured.get("encoding") == "utf-8", "Rscript output must be decoded as UTF-8"
+    assert captured.get("errors") == "replace", "a stray byte must degrade one char, not drop the file"
     assert out == _Proc.stdout and err == ""
 
 

@@ -19,7 +19,14 @@ _WORKFLOW = Path(__file__).resolve().parents[2] / ".claude" / "workflows" / "val
 
 
 def _js_string_array(const_name: str) -> set[str]:
-    """Extract the quoted entries of a ``const <name> = [...]`` JS array."""
+    """Extract the quoted entries of a ``const <name> = [...]`` JS array.
+
+    Assumes a single-line array literal with no ``]`` or line comment between the
+    brackets (``[^\\]]*`` stops at the first ``]``). The workflow's ``DATASETS`` /
+    ``LINT_TARGETS`` are deliberately kept single-line for exactly this reason; if
+    a future edit wraps one across lines this returns a partial set and the
+    match/equality assertions below fail loudly rather than passing silently.
+    """
     text = _WORKFLOW.read_text(encoding="utf-8")
     m = re.search(rf"const\s+{const_name}\s*=\s*\[([^\]]*)\]", text)
     assert m, f"{const_name} array not found in {_WORKFLOW.name}"
