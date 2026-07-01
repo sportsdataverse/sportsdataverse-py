@@ -140,6 +140,9 @@ from sportsdataverse.nba import fox_nba_standings as _raw_fox_nba_standings
 from sportsdataverse.nba import fox_nba_team_gamelog as _raw_fox_nba_team_gamelog
 from sportsdataverse.nba import fox_nba_team_roster as _raw_fox_nba_team_roster
 from sportsdataverse.nba import fox_nba_team_stats as _raw_fox_nba_team_stats
+from sportsdataverse.nba import RidgeRapmModel as RidgeRapmModel  # noqa: F401
+from sportsdataverse.nba import ValidationReport as ValidationReport  # noqa: F401
+from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
 from sportsdataverse.nba import espn_nba_calendar as espn_nba_calendar  # noqa: F401
 from sportsdataverse.nba import espn_nba_game_rosters as espn_nba_game_rosters  # noqa: F401
@@ -172,11 +175,16 @@ from sportsdataverse.nba import load_nba_team_season_stats as load_nba_team_seas
 from sportsdataverse.nba import most_recent_nba_season as most_recent_nba_season  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.nba import render_report as render_report  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nba import underscore as underscore  # noqa: F401
+from sportsdataverse.nba import validate_model as validate_model  # noqa: F401
 from sportsdataverse.nba import year_to_season as year_to_season  # noqa: F401
 
 __all__ = [
+    "RidgeRapmModel",
+    "ValidationReport",
+    "compile_nba_season",
     "download",
     "espn_nba_award",
     "espn_nba_awards",
@@ -326,8 +334,10 @@ __all__ = [
     "most_recent_nba_season",
     "nba_pbp_disk",
     "normalize_team_roster_columns",
+    "render_report",
     "scoreboard_event_parsing",
     "underscore",
+    "validate_model",
     "year_to_season",
 ]
 

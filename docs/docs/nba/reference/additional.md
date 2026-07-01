@@ -367,6 +367,137 @@ print(year_to_season(1999))  # "1999-00"
 
 ## Other
 
+### `RidgeRapmModel(alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
+         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ])) -> 'None'` {#RidgeRapmModel}
+
+Reference model: the merged plain-RAPM RidgeCV fit, adapted to `RapmModel`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `alphas` | `ndarray` | `array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
+         5179.47467923,  13894.95494373,  37275.93720315, 100000.        ])` | Ridge penalty grid for cross-validation. Defaults to the merged `DEFAULT_RAPM_ALPHAS`. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_rapm import build_rapm_design
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
+
+rows = {
+    "off_player_1": [1, 6], "off_player_2": [2, 7],
+    "off_player_3": [3, 8], "off_player_4": [4, 9],
+    "off_player_5": [5, 10],
+    "def_player_1": [6, 1], "def_player_2": [7, 2],
+    "def_player_3": [8, 3], "def_player_4": [9, 4],
+    "def_player_5": [10, 5],
+    "points": [2, 0],
+}
+poss = pl.DataFrame(rows)
+X, y, pids = build_rapm_design(poss)
+fit = RidgeRapmModel().fit(X, y)
+print(fit.coef.shape)    # (20,) — 10 players × 2 sides
+print(fit.posterior)     # None — point estimator
+```
+
+**Methods**
+
+#### `RidgeRapmModel.fit(X: 'csr_matrix', y: 'np.ndarray') -> 'FitResult'`
+
+Fit RidgeCV and return coefficients + intercept (no posterior).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `csr_matrix` |  | Sparse design matrix of shape `(n_possessions, 2P)`. |
+| `y` | `ndarray` |  | Target points per possession, shape `(n_possessions,)`. |
+
+**Returns**
+
+FitResult with `coef` shape `(2P,)`, scalar `intercept`, and `posterior=None`.
+
+### `ValidationReport(model_name: 'str', n_seasons: 'int', retrodiction: 'Optional[RetrodictionResult]' = None, reliability: 'Optional[ReliabilityResult]' = None, cross_season: 'Optional[CrossSeasonResult]' = None, calibration: 'Optional[CalibrationResult]' = None) -> None` {#ValidationReport}
+
+Holds all oracle results for a single model evaluation run.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model_name` | `str` |  | Human-readable label for the model being evaluated. |
+| `n_seasons` | `int` |  | Number of season frames supplied to `validate_model`. |
+| `retrodiction` | `Optional[RetrodictionResult]` | `None` | Result from Oracle 1, or `None` if not selected. |
+| `reliability` | `Optional[ReliabilityResult]` | `None` | Result from Oracle 2, or `None` if not selected. |
+| `cross_season` | `Optional[CrossSeasonResult]` | `None` | Result from Oracle 3, or `None` if not selected. |
+| `calibration` | `Optional[CalibrationResult]` | `None` | Result from Oracle 4, or `None` if not selected or the model is a point estimator. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_model_validation import (
+    RidgeRapmModel, validate_model,
+)
+
+# season_frames is a list[pl.DataFrame] of possession stints per season
+rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
+print(rep.model_name)                        # "plain_rapm"
+print(rep.n_seasons)                         # len(season_frames)
+print(rep.retrodiction.game_margin_rmse)     # float
+print(rep.reliability.spearman_brown)        # float
+print(rep.calibration)                       # None — point estimator
+```
+
+### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
+
+Compile a full season's possession stint matrix (cached + resumable + throttled).
+
+Discovers game ids, dedupes, then per game loads the cached parquet if present
+(`resume`), else fetches via fetch_possessions`, caches it, and sleeps
+`delay_s` (throttle; only on live fetches). A game that errors or returns no
+possessions is logged and skipped (best-effort, never raises). The assembled
+frame is tagged with a `season` column.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season start year (e.g. 2023 for 2023-24). |
+| `season_type` | `str` | `'Regular Season'` | `"Regular Season"` (default) or `"Playoffs"`. |
+| `resume` | `bool` | `True` | Reuse per-game cached parquet when present. |
+| `cache_dir` | `Optional[str]` | `None` | Cache root; defaults to `SDV_PY_NBA_CACHE_DIR` or `~/.sdv_py_nba_cache/possessions`. |
+| `delay_s` | `float` | `0.6` | Seconds to sleep after each live fetch (rate-limit throttle). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+The season possession frame (+ `season` col). Empty typed frame if no games.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_season_compile import compile_nba_season
+
+poss = compile_nba_season(2023)
+print(poss.shape)          # (n_possessions, n_cols)
+print(poss["season"][0])   # 2023
+
+# Resume a partially completed run and return as pandas
+
+poss_pd = compile_nba_season(2023, resume=True, return_as_pandas=True)
+print(type(poss_pd))       # <class 'pandas.core.frame.DataFrame'>
+
+# Compile Playoffs with a custom cache directory
+
+poss = compile_nba_season(
+    2023,
+    season_type="Playoffs",
+    cache_dir="/tmp/nba_cache",
+)
+```
+
 ### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_teams}
 
 espn_nba_teams - look up NBA teams
@@ -627,6 +758,37 @@ pbp = nba_pbp_disk(game_id=401585183, path_to_json="./cache")
 print(list(pbp.keys()))
 ```
 
+### `render_report(report: 'ValidationReport') -> 'str'` {#render_report}
+
+Render a `ValidationReport` as a human-readable markdown validation card.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `report` | `ValidationReport` |  | A populated `ValidationReport` from `validate_model`. |
+
+**Returns**
+
+A multi-section markdown string with one `##` heading per oracle. Sections whose oracle result is `None` (either skipped or not applicable for a point-estimate model) are rendered as `- n/a`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_model_validation import (
+    RidgeRapmModel, validate_model, render_report,
+)
+
+rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
+md = render_report(rep)
+print(md)
+
+# Capture the markdown string for downstream use
+
+with open("validation_card.md", "w") as f:
+    f.write(render_report(rep))
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 Internal helper that flattens an ESPN NBA scoreboard event dict into a
@@ -648,4 +810,48 @@ The same event dict, mutated in place with `home`/`away` copies of the competito
 ```python
 from sportsdataverse.nba import espn_nba_schedule
 sched = espn_nba_schedule(dates=20230102)
+```
+
+### `validate_model(model: 'RapmModel', season_frames: 'List[pl.DataFrame]', *, model_name: 'str' = 'model', oracles: 'Tuple[str, ...]' = ('retrodiction', 'reliability', 'cross_season', 'calibration'), seed: 'int' = 0) -> 'ValidationReport'` {#validate_model}
+
+Run the selected oracles and assemble a `ValidationReport`.
+
+`retrodiction`/`reliability`/`calibration` run on the pooled possessions
+(all seasons concatenated); `cross_season` runs on the ordered per-season
+frames. Any oracle not selected is left `None`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `RapmModel` |  | A fitted or unfitted RAPM-family estimator (`fit(X, y)` protocol). |
+| `season_frames` | `List[DataFrame]` |  | Ordered list of per-season possession frames. All frames are concatenated into a single pooled frame for Oracles 1, 2, and 4. |
+| `model_name` | `str` | `'model'` | Label written into the returned report and markdown card. |
+| `oracles` | `Tuple[str, ...]` | `('retrodiction', 'reliability', 'cross_season', 'calibration')` | Tuple of oracle names to run. Omit a name to skip that oracle and leave its result field `None`. |
+| `seed` | `int` | `0` | RNG seed forwarded to each oracle for determinism. |
+
+**Returns**
+
+A `ValidationReport` whose fields are populated for every selected oracle and `None` for every skipped oracle.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_model_validation import (
+    RidgeRapmModel, validate_model,
+)
+
+# season_frames is a list[pl.DataFrame] of possession stints
+rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
+print(rep.retrodiction.game_margin_rmse)   # out-of-sample margin RMSE
+print(rep.reliability.spearman_brown)      # split-half Spearman-Brown
+print(rep.calibration)                     # None — RidgeRapmModel has no posterior
+
+# Skip slow oracles when iterating quickly
+
+rep = validate_model(
+    RidgeRapmModel(), season_frames,
+    oracles=("retrodiction", "reliability"),
+)
+print(rep.cross_season)   # None — not selected
 ```
