@@ -379,6 +379,105 @@ def reliability(model: RapmModel, possessions: pl.DataFrame, *, seed: int = 0) -
     return ReliabilityResult(split_half_corr=r, spearman_brown=sb, n_shared_players=len(shared))
 
 
+@dataclass(frozen=True)
+class CrossSeasonResult:
+    """Cross-season predictivity metrics from season-N ratings applied to season N+1.
+
+    Attributes:
+        outcome_corr: Pearson correlation of predicted vs actual per-(game, team)
+            margins in season N+1 when predicted with season-N coefficients.
+            ``nan`` when fewer than 2 adjacent season pairs are available.
+        outcome_rmse: RMSE of the same margin predictions. ``nan`` on insufficient data.
+        rating_corr: Pearson correlation of season-N per-player ratings with
+            season N+1 ratings over players shared across both seasons. Tests
+            whether skill persists year-to-year. ``nan`` when fewer than 3 shared
+            players exist.
+        coverage_pct: Percentage of season N+1 lineup slots (across all valid
+            possessions) whose player was seen in season N. Measures how much of
+            the N+1 population is covered by the N model.
+        n_shared_players: Total shared-player count summed across all adjacent pairs.
+    """
+
+    outcome_corr: float
+    outcome_rmse: float
+    rating_corr: float
+    coverage_pct: float
+    n_shared_players: int
+
+
+def cross_season(
+    model: RapmModel,
+    season_frames: List[pl.DataFrame],
+    *,
+    unknown_player_rating: float = 0.0,
+) -> CrossSeasonResult:
+    """Oracle ③: do season-N ratings predict season N+1 outcomes and ratings?
+
+    For each adjacent (N, N+1) pair: fit N -> coef_N; predict N+1's possessions
+    with coef_N (players unseen in N contribute ``unknown_player_rating``, v1=0);
+    aggregate to N+1 game margins for the outcome scores. Also correlate the N
+    ratings with the N+1 ratings over shared players. Multiple pairs are averaged.
+    ``coverage_pct`` = share of N+1 lineup slots whose player was seen in N.
+
+    Args:
+        model: A ``RapmModel`` instance.
+        season_frames: Ordered list of per-season possession frames (season N,
+            season N+1, ...). Must contain at least 2 frames to produce non-nan
+            results.
+        unknown_player_rating: Reserved; only ``0.0`` (skip unknown players) is
+            implemented in v1.
+
+    Returns:
+        ``CrossSeasonResult``. All metrics are ``nan`` and ``n_shared_players=0``
+        when fewer than 2 season frames are provided.
+    """
+    if len(season_frames) < 2:
+        return CrossSeasonResult(float("nan"), float("nan"), float("nan"), float("nan"), 0)
+    out_corrs: List[float] = []
+    out_rmses: List[float] = []
+    rate_corrs: List[float] = []
+    covs: List[float] = []
+    shared_counts: List[int] = []
+    for n, np1 in zip(season_frames, season_frames[1:]):
+        X_n, y_n, pids_n = build_rapm_design(n)
+        if not pids_n:
+            continue
+        fit_n = model.fit(X_n, y_n)
+        # outcome: predict N+1 with coef_N
+        X_np1, _ = _design_with_ids(np1, pids_n, unknown_player_rating=unknown_player_rating)
+        np1_valid = np1.drop_nulls(subset=_OFF + _DEF)
+        pp = predict_points(X_np1, fit_n)
+        p_pred, p_act = _team_game_margins(np1_valid, pp)
+        if p_act.size > 1 and np.std(p_pred) > 0:
+            out_corrs.append(float(np.corrcoef(p_pred, p_act)[0, 1]))
+            out_rmses.append(_rmse(p_pred, p_act))
+        # rating persistence
+        ratings_n = _fit_ratings(model, n)
+        ratings_np1 = _fit_ratings(model, np1)
+        shared = sorted(set(ratings_n) & set(ratings_np1))
+        if len(shared) >= 3:
+            va = np.array([ratings_n[p] for p in shared])
+            vb = np.array([ratings_np1[p] for p in shared])
+            if np.std(va) > 0 and np.std(vb) > 0:
+                rate_corrs.append(float(np.corrcoef(va, vb)[0, 1]))
+            shared_counts.append(len(shared))
+        # coverage: fraction of N+1 lineup ids seen in N
+        seen = set(pids_n)
+        np1_ids = np1_valid.select(_OFF + _DEF).to_numpy().ravel()
+        covs.append(100.0 * np.mean([int(x) in seen for x in np1_ids]) if np1_ids.size else 0.0)
+
+    def _mean(xs: List[float]) -> float:
+        return float(np.mean(xs)) if xs else float("nan")
+
+    return CrossSeasonResult(
+        outcome_corr=_mean(out_corrs),
+        outcome_rmse=_mean(out_rmses),
+        rating_corr=_mean(rate_corrs),
+        coverage_pct=_mean(covs),
+        n_shared_players=int(np.sum(shared_counts)) if shared_counts else 0,
+    )
+
+
 _TEAM_A, _TEAM_B = 100, 200
 
 

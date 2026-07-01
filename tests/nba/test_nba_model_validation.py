@@ -169,3 +169,31 @@ def test_reliability_never_raises_on_empty():
         }
     )
     assert reliability(RidgeRapmModel(), empty, seed=0).n_shared_players == 0
+
+
+# ---------------------------------------------------------------------------
+# Task 5: Oracle ③ cross-season predictivity tests
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_model_validation import cross_season, CrossSeasonResult  # noqa: E402
+
+
+def test_cross_season_predicts_next_season_with_shared_players():
+    o, d = _planted_ratings(seed=0)
+    season_n = _synthetic_possessions(o, d, n_games=60, poss_per_game=100, noise_sd=0.3, seed=10)
+    # season N+1: same ratings (persistent skill) + 4 new players 17..20 replace 1..4
+    o2 = {**o, 17: 0.04, 18: -0.03, 19: 0.02, 20: -0.01}
+    d2 = {**d, 17: 0.01, 18: -0.02, 19: 0.03, 20: 0.00}
+    season_np1 = _synthetic_possessions(o2, d2, n_games=60, poss_per_game=100, noise_sd=0.3, seed=11)
+    res = cross_season(RidgeRapmModel(), [season_n, season_np1])
+    assert isinstance(res, CrossSeasonResult)
+    assert res.rating_corr > 0.3  # last year's rating forecasts this year's
+    assert 0.0 <= res.coverage_pct <= 100.0
+    assert res.n_shared_players > 0
+
+
+def test_cross_season_single_season_is_nan():
+    o, d = _planted_ratings()
+    one = _synthetic_possessions(o, d, n_games=10, poss_per_game=50, noise_sd=0.3, seed=1)
+    res = cross_season(RidgeRapmModel(), [one])
+    assert np.isnan(res.rating_corr)
