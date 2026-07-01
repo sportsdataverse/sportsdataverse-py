@@ -265,3 +265,29 @@ def test_validate_model_respects_oracle_selection():
     s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
     rep = validate_model(RidgeRapmModel(), [s1], oracles=("reliability",))
     assert rep.reliability is not None and rep.retrodiction is None
+
+
+# ---------------------------------------------------------------------------
+# Task 9: Gated end-to-end real-report test
+# ---------------------------------------------------------------------------
+
+from tests.conftest import skip_if_no_nba_stats_live  # noqa: E402
+from sportsdataverse.nba import nba_season_compile as C  # noqa: E402
+from sportsdataverse.nba.nba_season_compile import compile_nba_season  # noqa: E402
+
+
+@skip_if_no_nba_stats_live
+def test_end_to_end_real_slice_report(tmp_path, monkeypatch):
+    # small real slice compiled once, then validated (report shape only, not thresholds)
+    real_ids = C._game_ids_for_season(2023, "Regular Season")[:8]
+    monkeypatch.setattr(C, "_game_ids_for_season", lambda s, st: real_ids)
+    s = compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=1.0)
+    rep = validate_model(
+        RidgeRapmModel(),
+        [s],
+        model_name="plain_rapm",
+        oracles=("retrodiction", "reliability"),
+    )
+    assert rep.retrodiction is not None
+    md = render_report(rep)
+    assert "plain_rapm" in md

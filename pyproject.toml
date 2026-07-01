@@ -330,4 +330,6 @@ files = [
     "tools/validation/checks/prep_published_parity.py",
     "tools/validation/lint/leakage_python.py",
     "tools/validation/lint/leakage_r.py",
+    "sportsdataverse/nba/nba_model_validation.py",
+    "sportsdataverse/nba/nba_season_compile.py",
 ]
