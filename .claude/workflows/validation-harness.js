@@ -10,9 +10,10 @@ export const meta = {
 
 // --- configuration -----------------------------------------------------------
 // Registered datasets (tools/validation/registry.py DATASETS) and lint targets
-// (LINT_TARGETS). Keep in sync with the registry.
+// (LINT_TARGETS). Must stay in sync with the registry — enforced by
+// tests/contracts/test_workflow_registry_sync.py (drift fails CI).
 const DATASETS = ['cfb_model_pbp', 'nfl_model_pbp']
-const LINT_TARGETS = ['nfl_native_pbp', 'sdv_nfl_ep_wp']
+const LINT_TARGETS = ['nfl_native_pbp', 'sdv_nfl_ep_wp', 'cfb_data_r']
 
 // finding.check -> the sdv-toolkit judgment agent that adjudicates it.
 // Every check that emits needs_judgment=True has exactly one consumer here.

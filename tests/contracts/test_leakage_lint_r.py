@@ -95,3 +95,36 @@ def test_analyze_lambda_wrapped_ungrouped_lag_is_flagged():
 def test_run_lambdawrap_live_warns():
     findings = leakage_r.run(str(_FIXTURES / "lambdawrap.R"))
     assert len(findings) == 1 and findings[0].locator["call"] == "lag"
+
+
+def test_parse_data_csv_decodes_rscript_output_as_utf8(monkeypatch):
+    """getParseData emits UTF-8; _parse_data_csv must decode it as UTF-8, not the
+    Windows cp1252 default (which UnicodeDecodeError's and silently drops the file)."""
+    captured: dict = {}
+
+    class _Proc:
+        returncode = 0
+        stdout = "id,parent,token,text\n"
+        stderr = ""
+
+    def _fake_run(_cmd, **kwargs):
+        captured.update(kwargs)
+        return _Proc()
+
+    monkeypatch.setattr(leakage_r.subprocess, "run", _fake_run)
+    out, err = leakage_r._parse_data_csv("rscript", Path("x.R"))
+    # Pin the full decode contract: UTF-8 with a replace fallback (a stray byte
+    # degrades one char instead of dropping the whole file).
+    assert captured.get("encoding") == "utf-8", "Rscript output must be decoded as UTF-8"
+    assert captured.get("errors") == "replace", "a stray byte must degrade one char, not drop the file"
+    assert out == _Proc.stdout and err == ""
+
+
+@skip_if_no_rscript
+def test_run_handles_utf8_source_file():
+    """A UTF-8 R file (smart quotes / em-dash / accents) is linted, not silently
+    dropped — regression for the cp1252 decode bug. The ungrouped lag is flagged."""
+    findings = leakage_r.run(str(_FIXTURES / "utf8.R"))
+    assert len(findings) == 1
+    assert findings[0].locator["call"] == "lag"
+    assert findings[0].severity is Severity.WARN and findings[0].needs_judgment
