@@ -238,3 +238,30 @@ def test_calibration_returns_curve_for_posterior_model():
     # an over-confident model (tiny posterior) should under-cover at 0.9
     tight = calibration(_PosteriorModel(sd_scale=0.05), poss, levels=(0.9,))
     assert tight.coverage[0] < 0.9
+
+
+# ---------------------------------------------------------------------------
+# Task 7: validate_model orchestrator + ValidationReport + render_report
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_model_validation import validate_model, render_report, ValidationReport  # noqa: E402
+
+
+def test_validate_model_runs_selected_oracles_and_renders():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=40, poss_per_game=80, noise_sd=0.3, seed=1)
+    s2 = _synthetic_possessions(o, d, n_games=40, poss_per_game=80, noise_sd=0.3, seed=2)
+    rep = validate_model(RidgeRapmModel(), [s1, s2], model_name="plain_rapm")
+    assert isinstance(rep, ValidationReport)
+    assert rep.retrodiction is not None and rep.reliability is not None
+    assert rep.cross_season is not None
+    assert rep.calibration is None  # point model -> n/a
+    md = render_report(rep)
+    assert "plain_rapm" in md and "Retrodiction" in md and "n/a" in md.lower()
+
+
+def test_validate_model_respects_oracle_selection():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
+    rep = validate_model(RidgeRapmModel(), [s1], oracles=("reliability",))
+    assert rep.reliability is not None and rep.retrodiction is None

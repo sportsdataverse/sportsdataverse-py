@@ -616,3 +616,119 @@ def _synthetic_possessions(
         **{c: pl.Int64 for c in _OFF + _DEF},
     }
     return pl.DataFrame(rows, schema=schema)
+
+
+# ---------------------------------------------------------------------------
+# Task 7: validate_model orchestrator + ValidationReport + render_report
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class ValidationReport:
+    """Holds all oracle results for a single model evaluation run.
+
+    Attributes:
+        model_name: Human-readable label for the model being evaluated.
+        n_seasons: Number of season frames supplied to ``validate_model``.
+        retrodiction: Result from Oracle 1, or ``None`` if not selected.
+        reliability: Result from Oracle 2, or ``None`` if not selected.
+        cross_season: Result from Oracle 3, or ``None`` if not selected.
+        calibration: Result from Oracle 4, or ``None`` if not selected or
+            the model is a point estimator.
+    """
+
+    model_name: str
+    n_seasons: int
+    retrodiction: Optional[RetrodictionResult] = None
+    reliability: Optional[ReliabilityResult] = None
+    cross_season: Optional[CrossSeasonResult] = None
+    calibration: Optional[CalibrationResult] = None
+
+
+def validate_model(
+    model: RapmModel,
+    season_frames: List[pl.DataFrame],
+    *,
+    model_name: str = "model",
+    oracles: Tuple[str, ...] = ("retrodiction", "reliability", "cross_season", "calibration"),
+    seed: int = 0,
+) -> ValidationReport:
+    """Run the selected oracles and assemble a ``ValidationReport``.
+
+    ``retrodiction``/``reliability``/``calibration`` run on the pooled possessions
+    (all seasons concatenated); ``cross_season`` runs on the ordered per-season
+    frames. Any oracle not selected is left ``None``.
+
+    Args:
+        model: A fitted or unfitted RAPM-family estimator (``fit(X, y)`` protocol).
+        season_frames: Ordered list of per-season possession frames.  All frames
+            are concatenated into a single pooled frame for Oracles 1, 2, and 4.
+        model_name: Label written into the returned report and markdown card.
+        oracles: Tuple of oracle names to run.  Omit a name to skip that oracle
+            and leave its result field ``None``.
+        seed: RNG seed forwarded to each oracle for determinism.
+
+    Returns:
+        A ``ValidationReport`` whose fields are populated for every selected oracle
+        and ``None`` for every skipped oracle.
+    """
+    pooled = (
+        pl.concat(season_frames, how="diagonal_relaxed") if season_frames else pl.DataFrame(schema={"game_id": pl.Utf8})
+    )
+    return ValidationReport(
+        model_name=model_name,
+        n_seasons=len(season_frames),
+        retrodiction=retrodiction(model, pooled, seed=seed) if "retrodiction" in oracles else None,
+        reliability=reliability(model, pooled, seed=seed) if "reliability" in oracles else None,
+        cross_season=cross_season(model, season_frames) if "cross_season" in oracles else None,
+        calibration=calibration(model, pooled, seed=seed) if "calibration" in oracles else None,
+    )
+
+
+def render_report(report: ValidationReport) -> str:
+    """Render a ``ValidationReport`` as a human-readable markdown validation card.
+
+    Args:
+        report: A populated ``ValidationReport`` from ``validate_model``.
+
+    Returns:
+        A multi-section markdown string with one ``##`` heading per oracle.
+        Sections whose oracle result is ``None`` (either skipped or not
+        applicable for a point-estimate model) are rendered as ``- n/a``.
+    """
+    L: List[str] = [
+        f"# Validation report — `{report.model_name}`",
+        f"\n_{report.n_seasons} season(s)_\n",
+    ]
+    r = report.retrodiction
+    L.append("## Retrodiction (Oracle 1)")
+    L.append(
+        f"- game-margin RMSE: **{r.game_margin_rmse:.3f}** (baseline {r.baseline_rmse:.3f}); "
+        f"corr **{r.game_margin_corr:.3f}**; poss-RMSE {r.poss_rmse:.3f}; "
+        f"test games {r.n_test_games}"
+        if r
+        else "- n/a"
+    )
+    rel = report.reliability
+    L.append("## Split-half reliability (Oracle 2)")
+    L.append(
+        f"- split-half corr **{rel.split_half_corr:.3f}**, Spearman-Brown "
+        f"**{rel.spearman_brown:.3f}** ({rel.n_shared_players} shared players)"
+        if rel
+        else "- n/a"
+    )
+    cs = report.cross_season
+    L.append("## Cross-season predictivity (Oracle 3)")
+    L.append(
+        f"- rating corr **{cs.rating_corr:.3f}**, outcome corr {cs.outcome_corr:.3f}, coverage {cs.coverage_pct:.1f}%"
+        if cs
+        else "- n/a"
+    )
+    cal = report.calibration
+    L.append("## Interval calibration (Oracle 4)")
+    L.append(
+        "- n/a (point-estimate model — no posterior)"
+        if cal is None
+        else "- " + ", ".join(f"{int(lvl * 100)}%→{c:.2f}" for lvl, c in zip(cal.levels, cal.coverage))
+    )
+    return "\n".join(L) + "\n"
