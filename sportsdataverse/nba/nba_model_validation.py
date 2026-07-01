@@ -51,6 +51,28 @@ class RidgeRapmModel:
     Args:
         alphas: Ridge penalty grid for cross-validation. Defaults to the merged
             ``DEFAULT_RAPM_ALPHAS``.
+
+    Example:
+        Build a design from possession stints and fit the reference model::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_rapm import build_rapm_design
+            from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
+
+            rows = {
+                "off_player_1": [1, 6], "off_player_2": [2, 7],
+                "off_player_3": [3, 8], "off_player_4": [4, 9],
+                "off_player_5": [5, 10],
+                "def_player_1": [6, 1], "def_player_2": [7, 2],
+                "def_player_3": [8, 3], "def_player_4": [9, 4],
+                "def_player_5": [10, 5],
+                "points": [2, 0],
+            }
+            poss = pl.DataFrame(rows)
+            X, y, pids = build_rapm_design(poss)
+            fit = RidgeRapmModel().fit(X, y)
+            print(fit.coef.shape)    # (20,) — 10 players × 2 sides
+            print(fit.posterior)     # None — point estimator
     """
 
     def __init__(self, alphas: np.ndarray = DEFAULT_RAPM_ALPHAS) -> None:
@@ -635,6 +657,21 @@ class ValidationReport:
         cross_season: Result from Oracle 3, or ``None`` if not selected.
         calibration: Result from Oracle 4, or ``None`` if not selected or
             the model is a point estimator.
+
+    Example:
+        ``ValidationReport`` is returned by ``validate_model``; access fields directly::
+
+            from sportsdataverse.nba.nba_model_validation import (
+                RidgeRapmModel, validate_model,
+            )
+
+            # season_frames is a list[pl.DataFrame] of possession stints per season
+            rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
+            print(rep.model_name)                        # "plain_rapm"
+            print(rep.n_seasons)                         # len(season_frames)
+            print(rep.retrodiction.game_margin_rmse)     # float
+            print(rep.reliability.spearman_brown)        # float
+            print(rep.calibration)                       # None — point estimator
     """
 
     model_name: str
@@ -671,6 +708,27 @@ def validate_model(
     Returns:
         A ``ValidationReport`` whose fields are populated for every selected oracle
         and ``None`` for every skipped oracle.
+
+    Example:
+        Run all four oracles on a single season::
+
+            from sportsdataverse.nba.nba_model_validation import (
+                RidgeRapmModel, validate_model,
+            )
+
+            # season_frames is a list[pl.DataFrame] of possession stints
+            rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
+            print(rep.retrodiction.game_margin_rmse)   # out-of-sample margin RMSE
+            print(rep.reliability.spearman_brown)      # split-half Spearman-Brown
+            print(rep.calibration)                     # None — RidgeRapmModel has no posterior
+
+        Skip slow oracles when iterating quickly::
+
+            rep = validate_model(
+                RidgeRapmModel(), season_frames,
+                oracles=("retrodiction", "reliability"),
+            )
+            print(rep.cross_season)   # None — not selected
     """
     pooled = (
         pl.concat(season_frames, how="diagonal_relaxed") if season_frames else pl.DataFrame(schema={"game_id": pl.Utf8})
@@ -695,6 +753,22 @@ def render_report(report: ValidationReport) -> str:
         A multi-section markdown string with one ``##`` heading per oracle.
         Sections whose oracle result is ``None`` (either skipped or not
         applicable for a point-estimate model) are rendered as ``- n/a``.
+
+    Example:
+        Print a full markdown card after running validation::
+
+            from sportsdataverse.nba.nba_model_validation import (
+                RidgeRapmModel, validate_model, render_report,
+            )
+
+            rep = validate_model(RidgeRapmModel(), season_frames, model_name="plain_rapm")
+            md = render_report(rep)
+            print(md)
+
+        Capture the markdown string for downstream use::
+
+            with open("validation_card.md", "w") as f:
+                f.write(render_report(rep))
     """
     L: List[str] = [
         f"# Validation report — `{report.model_name}`",

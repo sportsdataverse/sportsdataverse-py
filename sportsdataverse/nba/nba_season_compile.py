@@ -102,6 +102,28 @@ def compile_nba_season(
 
     Returns:
         The season possession frame (+ ``season`` col). Empty typed frame if no games.
+
+    Example:
+        Compile the 2023-24 regular season (requires live stats.nba.com access)::
+
+            from sportsdataverse.nba.nba_season_compile import compile_nba_season
+
+            poss = compile_nba_season(2023)
+            print(poss.shape)          # (n_possessions, n_cols)
+            print(poss["season"][0])   # 2023
+
+        Resume a partially completed run and return as pandas::
+
+            poss_pd = compile_nba_season(2023, resume=True, return_as_pandas=True)
+            print(type(poss_pd))       # <class 'pandas.core.frame.DataFrame'>
+
+        Compile Playoffs with a custom cache directory::
+
+            poss = compile_nba_season(
+                2023,
+                season_type="Playoffs",
+                cache_dir="/tmp/nba_cache",
+            )
     """
     cdir = Path(cache_dir) if cache_dir else _default_cache_dir()
     cdir.mkdir(parents=True, exist_ok=True)
