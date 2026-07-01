@@ -9,7 +9,7 @@ synthetic meta-oracle that proves the harness itself correct.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Protocol, Tuple
+from typing import Dict, List, Optional, Protocol, Tuple
 
 import numpy as np
 import polars as pl
@@ -140,3 +140,64 @@ def predict_points(X: csr_matrix, fit: FitResult) -> np.ndarray:
         Float64 array of shape ``(n_possessions,)`` with predicted points.
     """
     return np.asarray(X @ fit.coef, dtype=np.float64) + fit.intercept
+
+
+_TEAM_A, _TEAM_B = 100, 200
+
+
+def _synthetic_possessions(
+    o_ratings: Dict[int, float],
+    d_ratings: Dict[int, float],
+    *,
+    n_games: int,
+    poss_per_game: int,
+    noise_sd: float,
+    seed: int,
+    base_points: float = 1.0,
+) -> pl.DataFrame:
+    """Generate possessions from KNOWN player ratings (the meta-oracle ground truth).
+
+    Two teams (A=100 players are the first half of the id set, B=200 the second
+    half). Each possession draws 5 offense from the possessing team and 5 defense
+    from the opponent; expected points = ``base_points + sum(o) - sum(d)`` on the
+    per-possession scale, observed = expected + Gaussian(0, ``noise_sd``), clamped
+    at 0. Each game, both teams take ``poss_per_game`` offensive possessions.
+
+    Args:
+        o_ratings: player_id -> per-possession offensive rating.
+        d_ratings: player_id -> per-possession defensive rating.
+        n_games: Number of games to simulate.
+        poss_per_game: Offensive possessions per team per game.
+        noise_sd: Standard deviation of Gaussian observation noise.
+        seed: Integer seed for the ``np.random.default_rng`` generator.
+        base_points: League-average points per possession baseline.
+
+    Returns:
+        A possession+lineup frame (``game_id``/``offense_team_id``/``points``/
+        ``off_player_1..5``/``def_player_1..5``), ``2 * n_games * poss_per_game`` rows.
+    """
+    rng = np.random.default_rng(seed)
+    ids = sorted(o_ratings)
+    half = len(ids) // 2
+    team_players: Dict[int, List[int]] = {_TEAM_A: ids[:half], _TEAM_B: ids[half:]}
+    rows: List[dict] = []
+    for g in range(n_games):
+        gid = f"SYN{g:05d}"
+        for off_team, def_team in ((_TEAM_A, _TEAM_B), (_TEAM_B, _TEAM_A)):
+            for _ in range(poss_per_game):
+                off5 = rng.choice(team_players[off_team], size=5, replace=False)
+                def5 = rng.choice(team_players[def_team], size=5, replace=False)
+                mu = base_points + sum(o_ratings[int(p)] for p in off5) - sum(d_ratings[int(p)] for p in def5)
+                pts = max(0.0, mu + rng.normal(0.0, noise_sd))
+                row: dict = {"game_id": gid, "offense_team_id": off_team, "points": int(round(pts))}
+                for i in range(5):
+                    row[f"off_player_{i + 1}"] = int(off5[i])
+                    row[f"def_player_{i + 1}"] = int(def5[i])
+                rows.append(row)
+    schema: Dict[str, pl.DataType] = {
+        "game_id": pl.Utf8,
+        "offense_team_id": pl.Int64,
+        "points": pl.Int64,
+        **{c: pl.Int64 for c in _OFF + _DEF},
+    }
+    return pl.DataFrame(rows, schema=schema)

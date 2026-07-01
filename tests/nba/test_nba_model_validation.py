@@ -5,12 +5,12 @@ from sportsdataverse.nba.nba_model_validation import (
     FitResult,
     RidgeRapmModel,
     _design_with_ids,
+    _synthetic_possessions,
     predict_points,
+    _OFF,
+    _DEF,
 )
 from sportsdataverse.nba.nba_rapm import build_rapm_design
-
-_OFF = [f"off_player_{i}" for i in range(1, 6)]
-_DEF = [f"def_player_{i}" for i in range(1, 6)]
 
 
 def _toy_possessions() -> pl.DataFrame:
@@ -63,3 +63,34 @@ def test_predict_points_is_linear():
     pred = predict_points(X, fit)
     assert pred.shape == (2,)
     np.testing.assert_allclose(pred, X @ fit.coef + fit.intercept)
+
+
+def _planted_ratings(seed: int = 0):
+    rng = np.random.default_rng(seed)
+    # team A players 1..8, team B players 9..16; ratings ~ per-possession points contribution
+    o = {p: float(rng.normal(0, 0.05)) for p in range(1, 17)}
+    d = {p: float(rng.normal(0, 0.05)) for p in range(1, 17)}
+    return o, d
+
+
+def test_synthetic_possessions_schema_and_determinism():
+    o, d = _planted_ratings()
+    a = _synthetic_possessions(o, d, n_games=4, poss_per_game=50, noise_sd=0.3, seed=7)
+    b = _synthetic_possessions(o, d, n_games=4, poss_per_game=50, noise_sd=0.3, seed=7)
+    assert a.equals(b)  # deterministic
+    for col in ["game_id", "offense_team_id", "points", *_OFF, *_DEF]:
+        assert col in a.columns
+    assert a.height == 4 * 50 * 2  # both teams take poss_per_game each
+    assert set(a["offense_team_id"].unique().to_list()) == {100, 200}
+
+
+def test_ridge_recovers_planted_ratings_in_sample():
+    # sanity: with enough possessions RidgeCV coef correlates with planted ratings
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(o, d, n_games=60, poss_per_game=100, noise_sd=0.3, seed=1)
+    X, y, pids = build_rapm_design(poss)
+    fit = RidgeRapmModel().fit(X, y)
+    P = len(pids)
+    planted_o = np.array([o[p] for p in pids])
+    corr = np.corrcoef(fit.coef[:P], planted_o)[0, 1]
+    assert corr > 0.5  # ridge shrinks, but signal present
