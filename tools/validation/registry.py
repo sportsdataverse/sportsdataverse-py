@@ -181,6 +181,17 @@ DATASETS["cfb_model_pbp"] = DatasetSpec(
     },
     oracle_domain="cfb",
     cumulative_columns=("game_play_number",),
+    # season (partition id) + the build-metadata version stamps are constant by
+    # design, not dead data — allowlist so constant_column adds no noise. `week`
+    # is deliberately NOT listed: it is real play data (constant only in a
+    # single-week local sample; it varies across a full published season).
+    expected_constant_columns=(
+        "season",
+        "model_pbp_version",
+        "cp_model_version",
+        "ep_model_version",
+        "wp_model_version",
+    ),
 )
 
 DATASETS["nfl_model_pbp"] = DatasetSpec(
@@ -198,6 +209,11 @@ DATASETS["nfl_model_pbp"] = DatasetSpec(
         "epa": (-15.0, 15.0),
     },
     oracle_domain="nfl",
+    # season is a partition id, constant only when the glob resolves to one
+    # season. nfl_model_pbp has no *_version stamp columns and its data root is
+    # not locally auditable; a fuller allowlist can follow if the cron surfaces
+    # a genuine build-metadata constant.
+    expected_constant_columns=("season",),
 )
 
 _CFB_SEASON_STAT_CONST = ("season", "division")
