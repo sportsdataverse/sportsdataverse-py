@@ -31,6 +31,7 @@ class DatasetSpec:
     lag_columns: tuple[str, ...] = ()
     cumulative_columns: tuple[str, ...] = ()
     group_key: str = "game_id"
+    expected_constant_columns: tuple[str, ...] = ()
 
 
 DATASETS: dict[str, DatasetSpec] = {}  # registered incrementally; see spec §11
@@ -140,6 +141,7 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
         lag_columns=spec.lag_columns,
         cumulative_columns=spec.cumulative_columns,
         group_key=spec.group_key,
+        expected_constant_columns=spec.expected_constant_columns,
     )
     return frame, ctx
 
