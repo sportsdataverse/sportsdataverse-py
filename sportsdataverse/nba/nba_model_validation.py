@@ -151,11 +151,13 @@ class RetrodictionResult:
             held-out games, pooled across all folds.
         game_margin_corr: Pearson correlation of predicted vs actual margins,
             pooled across all folds. ``nan`` / 0 when fewer than 2 test margins.
-        baseline_rmse: RMSE of a zero-margin (intercept-only) predictor on the same
-            held-out margins — the floor any model must beat.
+        baseline_rmse: RMSE of a zero-margin (tossup) baseline on the same held-out
+            margins — predicts 0 margin for every game; the floor any model must beat.
         poss_rmse: RMSE of per-possession predicted vs actual points, pooled across
             all folds (granular sanity check).
-        n_test_games: Total number of distinct game_ids held out across all folds.
+        n_test_games: Total number of distinct game_ids actually evaluated across all
+            non-degenerate folds (folds skipped for empty train/test or no players
+            are excluded).
     """
 
     game_margin_rmse: float
@@ -231,8 +233,8 @@ def retrodiction(
     Games are partitioned into ``k_folds`` disjoint folds (never split a game
     across train/test). For each fold: fit on the other games, predict the held-out
     games' possessions, aggregate to per-(game, team) margins. Scores pool all
-    held-out margins. Baseline = predict every possession with the train mean
-    (zero margin everywhere).
+    held-out margins. Baseline = zero-margin (tossup) predictor: predicts 0 margin
+    for every held-out game.
 
     Args:
         model: A ``RapmModel`` instance.
@@ -259,6 +261,7 @@ def retrodiction(
     base_m: List[np.ndarray] = []
     poss_pred: List[np.ndarray] = []
     poss_act: List[np.ndarray] = []
+    evaluated_games: set = set()
 
     for fold in folds:
         test_ids = set(fold.tolist())
@@ -277,9 +280,10 @@ def retrodiction(
         p_pred, p_act = _team_game_margins(test_valid, pp)
         pred_m.append(p_pred)
         act_m.append(p_act)
-        base_m.append(np.zeros_like(p_act))  # mean model → 0 predicted margin
+        base_m.append(np.zeros_like(p_act))  # zero-margin (tossup) baseline
         poss_pred.append(pp)
         poss_act.append(y_te)
+        evaluated_games |= test_ids
 
     if not pred_m:
         return RetrodictionResult(float("nan"), float("nan"), float("nan"), float("nan"), 0)
@@ -288,13 +292,12 @@ def retrodiction(
     A = np.concatenate(act_m)
     B = np.concatenate(base_m)
     corr = float(np.corrcoef(P, A)[0, 1]) if P.size > 1 and np.std(P) > 0 else 0.0
-    n_test = len(set().union(*[set(f.tolist()) for f in folds]))
     return RetrodictionResult(
         game_margin_rmse=_rmse(P, A),
         game_margin_corr=corr,
         baseline_rmse=_rmse(B, A),
         poss_rmse=_rmse(np.concatenate(poss_pred), np.concatenate(poss_act)),
-        n_test_games=n_test,
+        n_test_games=len(evaluated_games),
     )
 
 
