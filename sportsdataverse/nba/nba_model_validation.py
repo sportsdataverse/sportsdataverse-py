@@ -478,6 +478,85 @@ def cross_season(
     )
 
 
+@dataclass(frozen=True)
+class CalibrationResult:
+    """Empirical coverage of a posterior model's credible intervals.
+
+    Attributes:
+        levels: The nominal coverage levels requested (e.g. ``[0.5, 0.9]``).
+        coverage: Empirical fraction of held-out player ratings falling inside
+            the credible interval at each corresponding level in ``levels``.
+        n_players: Number of players shared across both game halves (the basis
+            for coverage computation).
+    """
+
+    levels: List[float]
+    coverage: List[float]
+    n_players: int
+
+
+def calibration(
+    model: RapmModel,
+    possessions: pl.DataFrame,
+    *,
+    levels: Tuple[float, ...] = (0.5, 0.8, 0.9, 0.95),
+    seed: int = 0,
+) -> Optional[CalibrationResult]:
+    """Oracle ④ (forward-looking hook): empirical coverage of the model's intervals.
+
+    Fits the full frame; if the fit has no ``posterior`` (point model) returns
+    ``None`` (n/a). Otherwise splits games in half, treats each player's half-B
+    rating as the held-out "truth", forms central credible intervals from the
+    half-A posterior at each level, and reports the fraction of players whose
+    truth falls inside — the calibration curve.
+
+    Args:
+        model: A ``RapmModel`` instance; must emit ``FitResult.posterior`` (an
+            ``(S, 2P)`` sample array) to produce a non-``None`` result.
+        possessions: A season (or multi-game) possession+lineup frame with
+            ``game_id``, ``offense_team_id``, ``points``, and the ten lineup
+            columns (``off_player_1..5``, ``def_player_1..5``).
+        levels: Nominal coverage levels to evaluate (default
+            ``(0.5, 0.8, 0.9, 0.95)``).
+        seed: RNG seed for the game shuffle (default 0 for determinism).
+
+    Returns:
+        ``CalibrationResult`` with the empirical coverage curve, or ``None``
+        when the model is a point estimator (``posterior`` is ``None``) or when
+        fewer than 3 players are shared between the two game halves.
+    """
+    if possessions.is_empty():
+        return None
+    games = possessions["game_id"].unique().to_list()
+    rng = np.random.default_rng(seed)
+    rng.shuffle(games)
+    mid = len(games) // 2
+    a = possessions.filter(pl.col("game_id").is_in(games[:mid]))
+    b = possessions.filter(pl.col("game_id").is_in(games[mid:]))
+    Xa, ya, pids_a = build_rapm_design(a)
+    if not pids_a:
+        return None
+    fit_a = model.fit(Xa, ya)
+    if fit_a.posterior is None:
+        return None
+    P = len(pids_a)
+    post_total = fit_a.posterior[:, :P] - fit_a.posterior[:, P:]  # (S, P) total-impact posterior
+    truth_b = _fit_ratings(model, b)
+    shared = [(k, p) for k, p in enumerate(pids_a) if p in truth_b]
+    if len(shared) < 3:
+        return None
+    cover: List[float] = []
+    for lvl in levels:
+        lo_q, hi_q = (1 - lvl) / 2, 1 - (1 - lvl) / 2
+        hits = 0
+        for k, p in shared:
+            lo, hi = np.quantile(post_total[:, k], [lo_q, hi_q])
+            if lo <= truth_b[p] <= hi:
+                hits += 1
+        cover.append(hits / len(shared))
+    return CalibrationResult(levels=list(levels), coverage=cover, n_players=len(shared))
+
+
 _TEAM_A, _TEAM_B = 100, 200
 
 

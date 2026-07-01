@@ -197,3 +197,44 @@ def test_cross_season_single_season_is_nan():
     one = _synthetic_possessions(o, d, n_games=10, poss_per_game=50, noise_sd=0.3, seed=1)
     res = cross_season(RidgeRapmModel(), [one])
     assert np.isnan(res.rating_corr)
+
+
+# ---------------------------------------------------------------------------
+# Task 6: Oracle ④ interval calibration tests
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_model_validation import calibration, CalibrationResult  # noqa: E402
+
+
+class _PosteriorModel:
+    """RidgeCV point fit + a Gaussian posterior of chosen width (calibration knob)."""
+
+    def __init__(self, sd_scale: float, n_samples: int = 200, seed: int = 0):
+        self._sd_scale, self._n, self._seed = sd_scale, n_samples, seed
+
+    def fit(self, X, y):
+        base = RidgeRapmModel().fit(X, y)
+        rng = np.random.default_rng(self._seed)
+        # true residual scale ~ from fit; posterior width = sd_scale * that
+        resid = float(np.std(y - (X @ base.coef + base.intercept)))
+        sd = self._sd_scale * resid / np.sqrt(max(1, X.shape[0]))
+        post = base.coef + rng.normal(0, sd, size=(self._n, base.coef.shape[0]))
+        return FitResult(coef=base.coef, intercept=base.intercept, posterior=post)
+
+
+def test_calibration_none_for_point_model():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=5)
+    assert calibration(RidgeRapmModel(), poss) is None
+
+
+def test_calibration_returns_curve_for_posterior_model():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(o, d, n_games=40, poss_per_game=80, noise_sd=0.3, seed=6)
+    res = calibration(_PosteriorModel(sd_scale=1.0), poss, levels=(0.5, 0.9))
+    assert isinstance(res, CalibrationResult)
+    assert res.levels == [0.5, 0.9]
+    assert all(0.0 <= c <= 1.0 for c in res.coverage)
+    # an over-confident model (tiny posterior) should under-cover at 0.9
+    tight = calibration(_PosteriorModel(sd_scale=0.05), poss, levels=(0.9,))
+    assert tight.coverage[0] < 0.9
