@@ -494,21 +494,36 @@ def test_v3_to_v2_pbp_home_and_visitor_descriptions_are_mutually_exclusive() -> 
 
 
 def test_v3_to_v2_pbp_score_forward_fill_never_null_and_constant_between_scores() -> None:
+    """Verified against the real 0022300001 output (not synthetic):
+
+    actionNumber 7 (Turner cutting dunk, made shot) sets score "0 - 2" /
+    margin "2". actionNumbers 9-12 (MISS Mobley, Turner REBOUND, MISS Brown,
+    Brown REBOUND -- all non-scoring) must forward-fill that exact value with
+    zero drift. actionNumber 13 (Mathurin 3PT) changes it to "0 - 5" / "5",
+    and actionNumber 15 (Mitchell dunk) changes it again to "2 - 5" / "3".
+    """
     df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
     assert df["score"].null_count() == 0
     assert df["score_margin"].null_count() == 0
 
-    # Slice around the first scoring play (actionNumber 7, score becomes "0 - 2")
-    # through the next scoring play: score/score_margin must hold constant on
-    # every non-scoring row in between.
-    slice_df = df.filter((pl.col("event_num").cast(pl.Int64) >= 7) & (pl.col("event_num").cast(pl.Int64) <= 15))
-    scores = slice_df["score"].to_list()
-    margins = slice_df["score_margin"].to_list()
-    # Every row in the slice must reflect the score set at actionNumber 7 until
-    # the next scoring event changes it -- i.e. no null and no mid-run drift
-    # back to an earlier (smaller) state.
-    assert all(s is not None for s in scores)
-    assert all(m is not None for m in margins)
+    # Run of consecutive non-scoring rows between two made shots: score and
+    # score_margin must hold EXACTLY constant across the whole run -- this is
+    # the forward-fill regression teeth (would catch e.g. an accidental
+    # `.fill_null()` without `.forward_fill()`, or a period-boundary reset).
+    non_scoring_run = df.filter((pl.col("event_num").cast(pl.Int64) >= 9) & (pl.col("event_num").cast(pl.Int64) <= 12))
+    assert non_scoring_run.height == 4
+    assert non_scoring_run["score"].to_list() == ["0 - 2", "0 - 2", "0 - 2", "0 - 2"]
+    assert non_scoring_run["score_margin"].to_list() == ["2", "2", "2", "2"]
+
+    # The value DOES change at the next real scoring events -- proves the
+    # constancy above isn't just a frozen/stuck column.
+    row_13 = df.filter(pl.col("event_num") == "13")
+    assert row_13["score"].to_list() == ["0 - 5"]
+    assert row_13["score_margin"].to_list() == ["5"]
+
+    row_15 = df.filter(pl.col("event_num") == "15")
+    assert row_15["score"].to_list() == ["2 - 5"]
+    assert row_15["score_margin"].to_list() == ["3"]
 
 
 def test_v3_to_v2_pbp_row_count_equals_v3_actions_minus_dropped_block_steal_rows() -> None:
@@ -519,10 +534,21 @@ def test_v3_to_v2_pbp_row_count_equals_v3_actions_minus_dropped_block_steal_rows
 
 
 def test_v3_to_v2_pbp_ids_are_utf8_strings() -> None:
+    """Binding id-dtype rule (CLAUDE.md): every join-key id column is Utf8,
+    and casting never strips a leading zero off the game id.
+    """
     df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    assert df.schema["game_id"] == pl.Utf8
+    assert df.schema["event_num"] == pl.Utf8
     assert df.schema["player1_id"] == pl.Utf8
     assert df.schema["player2_id"] == pl.Utf8
     assert df.schema["player3_id"] == pl.Utf8
+    assert df.schema["player1_team_id"] == pl.Utf8
+    assert df.schema["player2_team_id"] == pl.Utf8
+    assert df.schema["player3_team_id"] == pl.Utf8
+
+    # Leading zero preserved -- proves no int/float round-trip stripped it.
+    assert df["game_id"][0] == "0022300001"
 
 
 def test_v3_to_v2_pbp_return_as_pandas() -> None:

@@ -720,6 +720,10 @@ def nba_v3_to_v2_pbp(
         malformed input returns a zero-row frame with the same schema
         (never raises).
 
+    Raises:
+        None: Malformed or empty input returns a zero-row frame with the
+            documented schema instead of raising.
+
     Example:
         Quick start::
 
@@ -808,7 +812,12 @@ def nba_v3_to_v2_pbp(
     ]
     df = df.with_columns(pl.Series("event_action_type", event_action_types, dtype=pl.Utf8))
 
-    # Descriptions split by location (R 664-669).
+    # Descriptions split by location (R 664-669). NOTE: `location` was already
+    # cast + `.fill_null("")` above (see the with_columns block that builds
+    # `game_id_str` etc.), so `location.is_null()` below is never true at this
+    # point -- it's inherited redundancy faithfully ported from the R source
+    # (which has the same is-null check after its own empty-string coercion).
+    # Dead but harmless; kept for parity rather than "fixed".
     df = df.with_columns(
         pl.when(pl.col("location") == "h").then(pl.col("description")).otherwise(None).alias("home_description"),
         pl.when(pl.col("location") == "v").then(pl.col("description")).otherwise(None).alias("visitor_description"),
