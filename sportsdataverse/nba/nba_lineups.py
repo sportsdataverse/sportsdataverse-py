@@ -139,11 +139,40 @@ def _bt(box: dict) -> dict:
     return (box or {}).get("boxScoreTraditional") or {}
 
 
+def _played(stats: dict) -> bool:
+    """Return True when *stats* contains non-zero recorded playing time.
+
+    The ``minutes`` field in ``boxscoretraditionalv3`` is a ``"MM:SS"``
+    string (e.g. ``"34:12"``).  A DNP player has ``""`` or ``None``.
+    A player who entered but recorded no clock time has ``"0:00"``.
+
+    Args:
+        stats: The ``statistics`` sub-dict from a player entry, or ``{}``.
+
+    Returns:
+        ``True`` when the player recorded positive minutes; ``False``
+        for DNP (empty string, ``None``) or zero-duration (``"0:00"``).
+    """
+    mins = (stats or {}).get("minutes") or ""
+    if not mins:
+        return False
+    # Parse "MM:SS"; treat "0:00" and "00:00" as not played
+    parts = mins.split(":")
+    try:
+        total_seconds = int(parts[0]) * 60 + int(parts[1]) if len(parts) == 2 else 0
+    except (ValueError, IndexError):
+        return False
+    return total_seconds > 0
+
+
 def _starters_from_boxscore_v3(raw_box: dict) -> Dict[int, List[int]]:
     """Extract each team's 5 starters from a boxscoretraditionalv3 payload.
 
-    A player is a starter when its ``position`` field is non-empty. If a side
-    yields != 5 starters, pad from players with recorded minutes until 5.
+    A player is a starter when its ``position`` field is non-empty.  If a
+    side yields != 5 positional starters, pad from remaining players who
+    recorded playing time (``minutes`` > ``"0:00"`` in their ``statistics``)
+    until 5.  Did-not-play players (empty or zero ``minutes``) are excluded
+    from the pad pool.
 
     Args:
         raw_box: Raw dict from ``nba_stats_boxscoretraditionalv3``.
@@ -170,11 +199,7 @@ def _starters_from_boxscore_v3(raw_box: dict) -> Dict[int, List[int]]:
             continue
         starters = [int(p["personId"]) for p in players if p.get("personId") and (p.get("position") or "").strip()]
         if len(starters) != 5:
-            pool = [
-                int(p["personId"])
-                for p in players
-                if p.get("personId") and int((p.get("statistics") or {}).get("points", 0) or 0) >= 0
-            ]
+            pool = [int(p["personId"]) for p in players if p.get("personId") and _played(p.get("statistics") or {})]
             starters = (starters + [p for p in pool if p not in starters])[:5]
         out[int(tid)] = starters
     return out
