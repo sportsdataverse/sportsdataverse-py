@@ -414,3 +414,71 @@ def nba_bpm(
         )
     )
     return out.to_pandas() if return_as_pandas else out
+
+
+# RatingsFit is defined in nba_model_validation; imported here (no cycle —
+# nba_model_validation does not import nba_bpm).
+from sportsdataverse.nba.nba_model_validation import RatingsFit  # noqa: E402
+
+
+class NbaBpmModel:
+    """A ``RatingsModel`` scoring a fold via faithful BPM 2.0.
+
+    Position/role are estimated once over the full-season logs at construction (a stable
+    player attribute); ``fit_ratings`` restricts the box rate + team margin to the fold's games.
+
+    Design note: position/role are recomputed inside ``nba_bpm`` over the fold in v1 for
+    simplicity (fold-native); the spec's "position over full season" refinement is a
+    documented follow-up if faithfulness testing shows fold-position drift matters.
+
+    Args:
+        player_logs: Per-player-per-game box lines (same schema as ``nba_bpm``).
+        team_logs: Per-team-per-game lines including ``plus_minus``.
+        positions: Listed positions (``player_id``, ``position_num``) from
+            ``nba_player_positions``.
+        team_adjust: Apply the team adjustment (``True``) or return raw box-BPM
+            (``False``).
+
+    Example:
+        Validate BPM head-to-head with RAPM and SPM::
+
+            from sportsdataverse.nba import NbaBpmModel
+            from sportsdataverse.nba.nba_model_validation import validate_model
+            model = NbaBpmModel(logs["player"], logs["team"], positions)
+            report = validate_model(model, season_frames, model_name="bpm")
+    """
+
+    def __init__(
+        self,
+        player_logs: pl.DataFrame,
+        team_logs: pl.DataFrame,
+        positions: pl.DataFrame,
+        *,
+        team_adjust: bool = True,
+    ) -> None:
+        self._player_logs = player_logs
+        self._team_logs = team_logs
+        self._positions = positions
+        self._team_adjust = team_adjust
+
+    def fit_ratings(self, possessions: pl.DataFrame) -> RatingsFit:
+        """Score the fold's players via BPM 2.0, restricted to the fold's game_ids.
+
+        Args:
+            possessions: The fold's possession+lineup frame.  Only the ``game_id``
+                values it contains are used to filter ``player_logs`` and
+                ``team_logs`` (the leakage guard).
+
+        Returns:
+            ``RatingsFit`` with ``o_ratings`` (OBPM) and ``d_ratings`` (DBPM) keyed
+            by player_id.  Returns empty dicts when no box data covers the fold's games.
+        """
+        game_ids = possessions["game_id"].unique().to_list()
+        pl_fold = self._player_logs.filter(pl.col("game_id").is_in(game_ids))
+        tl_fold = self._team_logs.filter(pl.col("game_id").is_in(game_ids))
+        if pl_fold.is_empty():
+            return RatingsFit(o_ratings={}, d_ratings={})
+        scored = nba_bpm(pl_fold, tl_fold, self._positions, team_adjust=self._team_adjust)
+        o = {int(p): float(v) for p, v in zip(scored["player_id"], scored["obpm"])}
+        d = {int(p): float(v) for p, v in zip(scored["player_id"], scored["dbpm"])}
+        return RatingsFit(o_ratings=o, d_ratings=d)

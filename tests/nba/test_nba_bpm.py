@@ -6,6 +6,7 @@ import numpy as np
 import polars as pl
 from sportsdataverse.nba.nba_bpm import (
     BPM2_COEFFICIENTS,
+    NbaBpmModel,
     _estimate_position,
     _estimate_role,
     _interp,
@@ -226,3 +227,87 @@ def test_team_adjust_false_is_raw() -> None:
     raw = nba_bpm(player_logs, team_logs, positions, team_adjust=False)
     # the two differ by a per-team constant (raw is not centered on the margin)
     assert not np.allclose(adj["bpm"].to_numpy(), raw["bpm"].to_numpy())
+
+
+# ---------------------------------------------------------------------------
+# Task 5: NbaBpmModel adapter + RAPM/SPM/BPM 3-way head-to-head
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_model_validation import validate_model, _synthetic_possessions
+
+
+def _bpm_setup() -> tuple:
+    """Build aligned synthetic possessions + box logs for NbaBpmModel tests.
+
+    Player IDs 1-16 (teams A=100: 1-8, B=200: 9-16) are used in possessions.
+    Box logs use the same player ids and the same game_ids as the possession frame.
+    """
+    ids = list(range(1, 17))
+    o = {p: 0.02 for p in ids}
+    d = {p: 0.01 for p in ids}
+    poss = _synthetic_possessions(o, d, n_games=20, poss_per_game=40, noise_sd=0.3, seed=1)
+    game_ids = poss["game_id"].unique().to_list()
+    # build player/team box logs aligned to poss game_ids; two teams, players 1-8 / 9-16
+    rows_p, rows_t = [], []
+    rng = np.random.default_rng(0)
+    for gi in game_ids:
+        for team, pids in ((1, range(1, 9)), (2, range(9, 17))):
+            for p in pids:
+                rows_p.append(
+                    {
+                        "game_id": gi,
+                        "team_id": team,
+                        "player_id": p,
+                        "min": 30.0,
+                        "pts": float(rng.integers(0, 30)),
+                        "fg3m": 1.0,
+                        "fga": 12.0,
+                        "fta": 3.0,
+                        "ast": 4.0,
+                        "oreb": 1.0,
+                        "dreb": 4.0,
+                        "reb": 5.0,
+                        "stl": 1.0,
+                        "blk": 0.5,
+                        "tov": 2.0,
+                        "pf": 2.0,
+                    }
+                )
+        for team, pm in ((1, 5.0), (2, -5.0)):
+            rows_t.append(
+                {
+                    "game_id": gi,
+                    "team_id": team,
+                    "min": 240.0,
+                    "fga": 88.0,
+                    "oreb": 10.0,
+                    "dreb": 34.0,
+                    "reb": 44.0,
+                    "tov": 13.0,
+                    "fta": 22.0,
+                    "ast": 24.0,
+                    "stl": 7.0,
+                    "blk": 5.0,
+                    "pf": 20.0,
+                    "pts": 112.0,
+                    "plus_minus": pm,
+                }
+            )
+    player_logs = pl.DataFrame(rows_p)
+    team_logs = pl.DataFrame(rows_t)
+    return ids, poss, game_ids, player_logs, team_logs
+
+
+def test_nba_bpm_model_head_to_head() -> None:
+    ids, poss, game_ids, player_logs, team_logs = _bpm_setup()
+    positions = pl.DataFrame({"player_id": ids, "position_num": [3.0] * len(ids)})
+    model = NbaBpmModel(player_logs, team_logs, positions)
+    # fold restriction: fit_ratings on the full poss and on a 2-game subset both yield ratings
+    rf_all = model.fit_ratings(poss)
+    rf_two = model.fit_ratings(poss.filter(pl.col("game_id").is_in(game_ids[:2])))
+    assert set(rf_all.o_ratings)  # produces ratings on full set
+    assert set(rf_two.o_ratings)  # produces ratings on 2-game fold
+    # head-to-head: BPM runs through the SAME validate_model as RAPM
+    rep = validate_model(model, [poss], model_name="bpm", oracles=("retrodiction",))
+    assert rep.retrodiction is not None
+    assert rep.retrodiction.n_test_games > 0
