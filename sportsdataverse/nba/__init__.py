@@ -15,3 +15,11 @@ from sportsdataverse.nba.nba_model_validation import (  # noqa: F401
     validate_model,
     render_report,
 )
+from sportsdataverse.nba.nba_box_logs import box_features, nba_box_logs  # noqa: F401
+from sportsdataverse.nba.nba_spm import (  # noqa: F401
+    NbaSpmModel,
+    SpmCoefficients,
+    SPM_FEATURES,
+    nba_spm,
+    train_spm,
+)

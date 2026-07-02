@@ -9,7 +9,7 @@ synthetic meta-oracle that proves the harness itself correct.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Protocol, Tuple
+from typing import Dict, List, Optional, Protocol, Tuple, TypeAlias, Union
 
 import numpy as np
 import polars as pl
@@ -43,6 +43,67 @@ class RapmModel(Protocol):
     """Design-matrix estimator: fit a sparse design ``X`` against targets ``y``."""
 
     def fit(self, X: csr_matrix, y: np.ndarray) -> FitResult: ...
+
+
+@dataclass
+class RatingsFit:
+    """A ratings model's per-player per-100 offense/defense ratings.
+
+    Attributes:
+        o_ratings: player_id -> offensive rating (points per 100 possessions).
+        d_ratings: player_id -> defensive rating (per-100; positive = good defense,
+            i.e. lowers opponent points — the ``nba_rapm`` d_rapm convention).
+        posterior: Optional posterior samples; only models emitting one populate it.
+    """
+
+    o_ratings: Dict[int, float]
+    d_ratings: Dict[int, float]
+    posterior: Optional[np.ndarray] = None
+
+
+class RatingsModel(Protocol):
+    """A box/ratings model: emits per-player OBPM/DBPM from a fold's possessions.
+
+    ``fit_ratings`` receives the fold's possession frame and must restrict any box
+    aggregation to ``possessions["game_id"]`` (the leakage guard).
+    """
+
+    def fit_ratings(self, possessions: pl.DataFrame) -> RatingsFit: ...
+
+
+# a harness model is either a design-matrix RapmModel or a box/ratings RatingsModel
+AnyModel: TypeAlias = Union[RapmModel, RatingsModel]
+
+
+def _fit_on(model: object, possessions: pl.DataFrame) -> Tuple[FitResult, List[int]]:
+    """Fit any harness model on ``possessions`` and return ``(FitResult, player_ids)``.
+
+    Routes by model kind: a ``RatingsModel`` (has ``fit_ratings``) has its per-100
+    ratings mapped onto the design's per-possession coef vector
+    (``coef[i]=o/100``, ``coef[P+i]=-d/100``, ``intercept=mean(y - X @ coef)``);
+    otherwise the model's ``fit(X, y)`` is used unchanged (byte-identical RAPM path).
+
+    Args:
+        model: A ``RapmModel`` (``fit``) or ``RatingsModel`` (``fit_ratings``).
+        possessions: The (train) possession+lineup frame.
+
+    Returns:
+        ``(FitResult, pids)`` where ``pids`` is ``build_rapm_design``'s ordered player-id
+        list. Returns ``(FitResult(np.zeros(0), 0.0), [])`` when there are no players.
+    """
+    X, y, pids = build_rapm_design(possessions)
+    if not pids:
+        return FitResult(coef=np.zeros(0, dtype=np.float64), intercept=0.0), pids
+    if hasattr(model, "fit_ratings"):
+        rf = model.fit_ratings(possessions)
+        P = len(pids)
+        coef: np.ndarray = np.zeros(2 * P, dtype=np.float64)
+        for k, pid in enumerate(pids):
+            coef[k] = rf.o_ratings.get(int(pid), 0.0) / 100.0
+            coef[P + k] = -rf.d_ratings.get(int(pid), 0.0) / 100.0
+        intercept = float(np.mean(y - (X @ coef)))  # after the loop: coef fully built, one matmul
+        return FitResult(coef=coef, intercept=intercept, posterior=rf.posterior), pids
+    return model.fit(X, y), pids  # type: ignore[attr-defined]
 
 
 class RidgeRapmModel:
@@ -244,7 +305,7 @@ def _rmse(a: np.ndarray, b: np.ndarray) -> float:
 
 
 def retrodiction(
-    model: RapmModel,
+    model: AnyModel,
     possessions: pl.DataFrame,
     *,
     k_folds: int = 5,
@@ -291,10 +352,9 @@ def retrodiction(
         test = possessions.filter(pl.col("game_id").is_in(list(test_ids)))
         if train.is_empty() or test.is_empty():
             continue
-        X_tr, y_tr, pids = build_rapm_design(train)
+        fit, pids = _fit_on(model, train)
         if not pids:
             continue
-        fit = model.fit(X_tr, y_tr)
         X_te, y_te = _design_with_ids(test, pids)
         # rebuild aligned test frame (rows with null lineups are dropped by _design_with_ids)
         test_valid = test.drop_nulls(subset=_OFF + _DEF)
@@ -342,7 +402,7 @@ class ReliabilityResult:
     n_shared_players: int
 
 
-def _fit_ratings(model: RapmModel, possessions: pl.DataFrame) -> Dict[int, float]:
+def _fit_ratings(model: AnyModel, possessions: pl.DataFrame) -> Dict[int, float]:
     """Fit the model on ``possessions`` and return player_id -> total rating (o - d_raw).
 
     Args:
@@ -353,16 +413,15 @@ def _fit_ratings(model: RapmModel, possessions: pl.DataFrame) -> Dict[int, float
         Dict mapping player_id to total impact rating (offense coef minus defense coef).
         Empty dict when ``possessions`` has no players.
     """
-    X, y, pids = build_rapm_design(possessions)
+    fit, pids = _fit_on(model, possessions)
     if not pids:
         return {}
-    fit = model.fit(X, y)
     P = len(pids)
     total = fit.coef[:P] - fit.coef[P:]  # offense minus (raw) defense coef = total impact
     return {int(p): float(total[k]) for k, p in enumerate(pids)}
 
 
-def reliability(model: RapmModel, possessions: pl.DataFrame, *, seed: int = 0) -> ReliabilityResult:
+def reliability(model: AnyModel, possessions: pl.DataFrame, *, seed: int = 0) -> ReliabilityResult:
     """Oracle ②: split-half reliability of the per-player rating across two game halves.
 
     Randomly halves the games, fits each half independently, and correlates the
@@ -428,7 +487,7 @@ class CrossSeasonResult:
 
 
 def cross_season(
-    model: RapmModel,
+    model: AnyModel,
     season_frames: List[pl.DataFrame],
     *,
     unknown_player_rating: float = 0.0,
@@ -461,10 +520,9 @@ def cross_season(
     covs: List[float] = []
     shared_counts: List[int] = []
     for n, np1 in zip(season_frames, season_frames[1:]):
-        X_n, y_n, pids_n = build_rapm_design(n)
+        fit_n, pids_n = _fit_on(model, n)
         if not pids_n:
             continue
-        fit_n = model.fit(X_n, y_n)
         # outcome: predict N+1 with coef_N
         X_np1, _ = _design_with_ids(np1, pids_n, unknown_player_rating=unknown_player_rating)
         np1_valid = np1.drop_nulls(subset=_OFF + _DEF)
@@ -518,7 +576,7 @@ class CalibrationResult:
 
 
 def calibration(
-    model: RapmModel,
+    model: AnyModel,
     possessions: pl.DataFrame,
     *,
     levels: Tuple[float, ...] = (0.5, 0.8, 0.9, 0.95),
@@ -555,10 +613,9 @@ def calibration(
     mid = len(games) // 2
     a = possessions.filter(pl.col("game_id").is_in(games[:mid]))
     b = possessions.filter(pl.col("game_id").is_in(games[mid:]))
-    Xa, ya, pids_a = build_rapm_design(a)
+    fit_a, pids_a = _fit_on(model, a)
     if not pids_a:
         return None
-    fit_a = model.fit(Xa, ya)
     if fit_a.posterior is None:
         return None
     P = len(pids_a)
@@ -683,7 +740,7 @@ class ValidationReport:
 
 
 def validate_model(
-    model: RapmModel,
+    model: AnyModel,
     season_frames: List[pl.DataFrame],
     *,
     model_name: str = "model",
