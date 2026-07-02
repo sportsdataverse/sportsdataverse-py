@@ -95,9 +95,9 @@ def _fit_on(model: object, possessions: pl.DataFrame) -> Tuple[FitResult, List[i
     if not pids:
         return FitResult(coef=np.zeros(0, dtype=np.float64), intercept=0.0), pids
     if hasattr(model, "fit_ratings"):
-        rf = model.fit_ratings(possessions)  # type: ignore[union-attr]
+        rf = model.fit_ratings(possessions)
         P = len(pids)
-        coef = np.zeros(2 * P, dtype=np.float64)
+        coef: np.ndarray = np.zeros(2 * P, dtype=np.float64)
         for k, pid in enumerate(pids):
             coef[k] = rf.o_ratings.get(int(pid), 0.0) / 100.0
             coef[P + k] = -rf.d_ratings.get(int(pid), 0.0) / 100.0
@@ -613,10 +613,9 @@ def calibration(
     mid = len(games) // 2
     a = possessions.filter(pl.col("game_id").is_in(games[:mid]))
     b = possessions.filter(pl.col("game_id").is_in(games[mid:]))
-    Xa, ya, pids_a = build_rapm_design(a)
+    fit_a, pids_a = _fit_on(model, a)
     if not pids_a:
         return None
-    fit_a = model.fit(Xa, ya)  # type: ignore[union-attr]  # calibration only meaningful for RapmModel
     if fit_a.posterior is None:
         return None
     P = len(pids_a)

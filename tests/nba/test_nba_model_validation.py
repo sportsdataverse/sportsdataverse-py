@@ -349,3 +349,15 @@ def test_fit_on_maps_ratings_to_perpossession_coef():
     k = pids.index(100)
     assert abs(fit.coef[k] - o100[100] / 100) < 1e-9  # coef[i] = o/100
     assert abs(fit.coef[P + k] + d100[100] / 100) < 1e-9  # coef[P+i] = -d/100
+
+
+def test_validate_model_ratings_all_oracles_no_crash():
+    """A ratings model through validate_model with ALL default oracles must not crash;
+    calibration returns None (ratings models are point estimators)."""
+    o100, d100, poss = _planted_ratings_setup()
+    from sportsdataverse.nba.nba_model_validation import validate_model
+
+    rep = validate_model(_PlantedRatings(o100, d100), [poss], model_name="planted")
+    assert rep.calibration is None  # point model -> no posterior -> None, not a crash
+    assert rep.retrodiction is not None  # the predictive oracles still populate
+    assert rep.reliability is not None
