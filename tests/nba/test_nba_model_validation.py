@@ -291,3 +291,61 @@ def test_end_to_end_real_slice_report(tmp_path, monkeypatch):
     assert rep.retrodiction is not None
     md = render_report(rep)
     assert "plain_rapm" in md
+
+
+# ---------------------------------------------------------------------------
+# Task 1 (SPM sub-project): RatingsModel harness path
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_model_validation import (  # noqa: E402
+    RatingsFit,
+    _fit_on,
+)
+
+
+class _PlantedRatings:
+    """A RatingsModel that returns KNOWN per-100 ratings (meta-oracle ground truth)."""
+
+    def __init__(self, o100, d100):
+        self._o, self._d = o100, d100
+
+    def fit_ratings(self, possessions):
+        return RatingsFit(o_ratings=dict(self._o), d_ratings=dict(self._d))
+
+
+def _planted_ratings_setup():
+    ids = list(range(100, 110)) + list(range(200, 210))  # team A ids, team B ids
+    rng = __import__("numpy").random.default_rng(7)
+    # Use SD=20 (per-100) so rating signal (5*20/100*100poss = 10pts/game) >> noise
+    # (noise_sd=0.3 per poss -> sqrt(100)*0.3*sqrt(2) ~ 4.2 pts game noise)
+    o100 = {p: float(rng.normal(0, 20)) for p in ids}
+    d100 = {p: float(rng.normal(0, 20)) for p in ids}
+    # DGP is per-possession, so divide the per-100 ratings by 100 to generate
+    poss = _synthetic_possessions(
+        {p: v / 100 for p, v in o100.items()},
+        {p: v / 100 for p, v in d100.items()},
+        n_games=40,
+        poss_per_game=100,
+        noise_sd=0.3,
+        seed=1,
+    )
+    return o100, d100, poss
+
+
+def test_ratings_meta_oracle_planted_beats_noskill():
+    o100, d100, poss = _planted_ratings_setup()
+    planted = _PlantedRatings(o100, d100)
+    zero = _PlantedRatings({p: 0.0 for p in o100}, {p: 0.0 for p in d100})
+    rp = retrodiction(planted, poss, seed=2)
+    rz = retrodiction(zero, poss, seed=2)
+    assert rp.game_margin_rmse < rz.game_margin_rmse  # planted predicts; no-skill ~baseline
+    assert rp.game_margin_corr > 0.5  # planted tracks truth (no fold leakage collapse)
+
+
+def test_fit_on_maps_ratings_to_perpossession_coef():
+    o100, d100, poss = _planted_ratings_setup()
+    fit, pids = _fit_on(_PlantedRatings(o100, d100), poss)
+    P = len(pids)
+    k = pids.index(100)
+    assert abs(fit.coef[k] - o100[100] / 100) < 1e-9  # coef[i] = o/100
+    assert abs(fit.coef[P + k] + d100[100] / 100) < 1e-9  # coef[P+i] = -d/100
