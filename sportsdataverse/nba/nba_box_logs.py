@@ -22,6 +22,9 @@ def box_features(
 
     Restricting ``game_ids`` to a fold's games is the harness leakage guard.
 
+    Per-100 possessions are computed per game (so mid-window trades use each
+    game's own team pace), then summed — the result is fully deterministic.
+
     Args:
         player_logs: Per-player-per-game box lines (``game_id``, ``team_id``,
             ``player_id``, ``min``, and the counting stats in ``_STATS``).
@@ -36,21 +39,31 @@ def box_features(
     if game_ids is not None:
         player_logs = player_logs.filter(pl.col("game_id").is_in(game_ids))
         team_logs = team_logs.filter(pl.col("game_id").is_in(game_ids))
-    team = (
-        team_logs.with_columns((pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("poss"))
-        .group_by("team_id")
-        .agg(pl.col("poss").sum().alias("team_poss"), pl.col("min").sum().alias("team_min"))
+    # Step 1: per-team-game possession frame
+    team_poss = team_logs.with_columns(
+        (pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("team_poss"),
+        pl.col("min").alias("team_min"),
+    ).select("game_id", "team_id", "team_poss", "team_min")
+    # Step 2: join each player-game to its team-game; compute per-game player possessions
+    player_with_poss = player_logs.join(team_poss, on=["game_id", "team_id"], how="left").with_columns(
+        pl.when(pl.col("team_min") > 0)
+        .then(pl.col("team_poss") * (pl.col("min") / pl.col("team_min")))
+        .otherwise(0.0)
+        .alias("player_poss")
     )
-    agg = player_logs.group_by("player_id").agg(
-        pl.col("team_id").first(),
+    # Step 3: aggregate per player
+    agg = player_with_poss.group_by("player_id").agg(
         pl.col("min").sum().alias("min"),
         pl.len().alias("gp"),
+        pl.col("player_poss").sum().alias("player_poss"),
         *[pl.col(s).sum().alias(s) for s in _STATS],
     )
-    joined = agg.join(team, on="team_id", how="left")
-    player_poss = pl.col("team_poss") * (pl.col("min") / pl.col("team_min"))
-    per100 = [pl.when(player_poss > 0).then(pl.col(s) / player_poss * 100.0).otherwise(0.0).alias(s) for s in _STATS]
-    return joined.with_columns(per100).select(
+    # Step 4: per-100 rates
+    per100 = [
+        pl.when(pl.col("player_poss") > 0).then(pl.col(s) / pl.col("player_poss") * 100.0).otherwise(0.0).alias(s)
+        for s in _STATS
+    ]
+    return agg.with_columns(per100).select(
         pl.col("player_id").cast(pl.Int64),
         *_STATS,
         pl.col("min").cast(pl.Float64),
@@ -80,7 +93,7 @@ def nba_box_logs(
     Example:
         Fetch a season's logs (residential IP)::
 
-            from sportsdataverse.nba import nba_box_logs
+            from sportsdataverse.nba.nba_box_logs import nba_box_logs
             logs = nba_box_logs("2023-24")
             print(logs["player"].shape)
     """
