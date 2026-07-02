@@ -114,3 +114,22 @@ def test_adj_rapm_beats_plain_rapm_cross_season() -> None:
     plain = cross_season(RidgeRapmModel(), [s1, s2])
     # the informative prior should predict season N+1 outcomes at least as well as plain RAPM
     assert adj.outcome_corr >= plain.outcome_corr - 1e-9
+
+
+from tests.conftest import skip_if_no_nba_stats_live
+
+
+@skip_if_no_nba_stats_live
+def test_adj_rapm_live_smoke() -> None:
+    from sportsdataverse.nba import compile_nba_season, nba_adj_rapm
+
+    poss = compile_nba_season(2023)
+    out = nba_adj_rapm(poss, {}, n_samples=50)  # empty prior -> shrinks to 0 (≈ plain RAPM), still valid
+    assert out.height > 0 and set(out.columns) == {
+        "player_id",
+        "o_adj_rapm",
+        "d_adj_rapm",
+        "adj_rapm",
+        "off_poss",
+        "def_poss",
+    }
