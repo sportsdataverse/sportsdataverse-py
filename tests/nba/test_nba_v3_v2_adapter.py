@@ -46,8 +46,7 @@ def test_event_type_map_core_values():
 
 
 def test_event_type_map_unknown_falls_back_to_zero():
-    """Unmapped actionType strings resolve to '0' via .get(..., '0') at call sites."""
-    assert _EVENT_TYPE_MAP.get("Nonsense", "0") == "0"
+    """Unmapped actionType strings are absent, so callers' .get(..., '0') falls back."""
     assert "Nonsense" not in _EVENT_TYPE_MAP
 
 
@@ -186,6 +185,43 @@ def test_lookup_player_abbrev_match():
     roster = _build_roster(_box("0022300001"))
     # "F. Family" abbreviation built from first-initial + family, distinct from name_i.
     assert _lookup_player("E. Mobley", roster) == 1630596
+
+
+def test_lookup_player_tier3_abbrev_isolated_from_name_i_and_fuzzy():
+    """Isolate Tier 3 ("F. Family" abbreviation) from Tiers 2 and 4.
+
+    ``test_lookup_player_abbrev_match`` above uses Evan Mobley, but his
+    fixture ``name_i`` IS literally "E. Mobley" -- that lookup resolves at
+    Tier 2 and never exercises Tier 3. This test uses a synthetic roster
+    where ``name_i`` deliberately diverges from the plain "F. Family"
+    abbreviation (a "Jr." suffix), so:
+
+    - Tier 1 (exact family) misses: "O. Porter" != "Porter".
+    - Tier 2 (exact name_i) misses: "O. Porter" != "O. Porter Jr.".
+    - Tier 4 (fuzzy substring within full_name/family) also misses: the
+      literal ". " in "O. Porter" never appears in "Otto Porter" or
+      "Porter", so "o. porter" is not a substring of either.
+    - Tier 3 (first-initial + ". " + family, built from "Otto" + "Porter")
+      is therefore the *only* tier able to produce "o. porter" == "o. porter".
+    """
+    roster = {
+        900: {
+            "first": "Otto",
+            "family": "Porter",
+            "name_i": "O. Porter Jr.",
+            "team_id": 3,
+            "city": "City C",
+            "nickname": "Team C",
+            "tricode": "CCC",
+            "full_name": "Otto Porter",
+        },
+    }
+    # Sanity: confirm the fixture-divergence precondition the test relies on.
+    assert roster[900]["name_i"] != "O. Porter"
+    assert "o. porter" not in roster[900]["full_name"].lower()
+    assert "o. porter" not in roster[900]["family"].lower()
+
+    assert _lookup_player("O. Porter", roster) == 900
 
 
 def test_lookup_player_fuzzy_substring_match():

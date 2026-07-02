@@ -74,6 +74,8 @@ _ACTION_TYPE_MAPS: Dict[str, Dict[str, str]] = {
         "Driving Layup Shot": "42",
         "Alley Oop Layup": "43",
         "Alley Oop Layup Shot": "43",
+        # Fixture extension: lowercase "shot" variant of "Alley Oop Layup
+        # Shot" above -- reuses the same code (43).
         "Alley Oop Layup shot": "43",
         "Alley Oop Dunk Shot": "43",
         "Running Alley Oop Dunk Shot": "43",
@@ -160,6 +162,8 @@ _ACTION_TYPE_MAPS: Dict[str, Dict[str, str]] = {
         "Palming": "21",
         "5 Second Inbound": "38",
         "Step Out of Bounds": "39",
+        # Fixture extension: "Turnover"-suffixed variant of "Step Out of
+        # Bounds" above -- reuses the same code (39).
         "Step Out of Bounds Turnover": "39",
         "Out of Bounds Lost Ball Turnover": "40",
         "Out of Bounds - Bad Pass Turnover": "45",
