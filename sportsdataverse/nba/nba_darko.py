@@ -54,7 +54,7 @@ def fit_aging_curve(panel: pl.DataFrame, ages: pl.DataFrame, *, smooth: int = 3)
         (pl.col("rating_next") - pl.col("rating")).alias("delta"),
         pl.col("age").round(0).cast(pl.Int64).alias("age_int"),
     )
-    grp = nxt.group_by("age_int").agg(pl.col("delta").mean().alias("mean_delta")).sort("age_int")
+    grp = nxt.group_by("age_int").agg(pl.col("delta").mean().round(12).alias("mean_delta")).sort("age_int")
     ages_arr = grp["age_int"].to_list()
     deltas = np.array(grp["mean_delta"].to_list(), dtype=np.float64)
     if smooth > 1 and len(deltas) >= smooth:

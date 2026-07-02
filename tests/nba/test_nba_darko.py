@@ -156,6 +156,25 @@ def test_forecast_does_not_beat_baseline_on_noise_panel() -> None:
 from tests.conftest import skip_if_no_nba_stats_live  # noqa: E402
 
 
+def test_nba_darko_is_bit_deterministic() -> None:
+    """fit_aging_curve mean rounding makes nba_darko bit-for-bit reproducible across calls."""
+    import numpy as np
+    import polars as pl
+    from sportsdataverse.nba.nba_darko import nba_darko
+
+    rng = np.random.default_rng(0)
+    rows, arows = [], []
+    for pid in range(50):
+        skill = float(rng.normal(0, 3))
+        start = int(rng.integers(23, 30))
+        for k, season in enumerate(range(2018, 2023)):
+            rows.append({"player_id": pid, "season": season, "rating": skill + rng.normal(0, 0.8), "weight": 1.0})
+            arows.append({"player_id": pid, "season": season, "age": float(start + k)})
+            skill += rng.normal(0, 0.3)
+    panel, ages = pl.DataFrame(rows), pl.DataFrame(arows)
+    assert nba_darko(panel, ages).equals(nba_darko(panel, ages))  # bit-for-bit reproducible
+
+
 @skip_if_no_nba_stats_live
 def test_darko_live_smoke() -> None:
     """Live smoke: build a 2-season panel from nba_rapm + nba_player_ages and run nba_darko."""
