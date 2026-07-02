@@ -83,6 +83,13 @@ def train_spm(
             coef = train_spm(box_feats, rapm_ratings, alpha=50.0)
     """
     names: List[str] = feature_names if feature_names is not None else SPM_FEATURES
+    missing_feats = [c for c in names if c not in box_features.columns]
+    if missing_feats:
+        raise ValueError(f"box_features is missing feature columns: {missing_feats}")
+    required_target = ["player_id", "o_rapm", "d_rapm"]
+    missing_target = [c for c in required_target if c not in rapm_target.columns]
+    if missing_target:
+        raise ValueError(f"rapm_target is missing required columns: {missing_target}")
     joined = box_features.join(
         rapm_target.select(["player_id", "o_rapm", "d_rapm"]),
         on="player_id",

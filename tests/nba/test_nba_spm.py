@@ -239,6 +239,20 @@ def test_nba_spm_model_fold_restriction_and_validate():
 from tests.conftest import skip_if_no_nba_stats_live
 
 
+def test_train_spm_raises_valueerror_on_missing_columns():
+    n = 10
+    bf = pl.DataFrame(
+        {"player_id": range(n), **{f: np.zeros(n) for f in SPM_FEATURES}, "min": np.full(n, 100.0), "gp": [5] * n}
+    )
+    good_target = pl.DataFrame({"player_id": range(n), "o_rapm": np.zeros(n), "d_rapm": np.zeros(n)})
+    # missing feature column
+    with pytest.raises(ValueError):
+        train_spm(bf.drop("pts"), good_target)
+    # missing target column
+    with pytest.raises(ValueError):
+        train_spm(bf, good_target.drop("d_rapm"))
+
+
 @skip_if_no_nba_stats_live
 def test_nba_spm_live_season_smoke():
     from sportsdataverse.nba import nba_box_logs, box_features, train_spm, nba_spm
