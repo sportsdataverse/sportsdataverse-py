@@ -1,0 +1,56 @@
+"""Tests for BPM2_COEFFICIENTS constant and position/role estimators."""
+
+from __future__ import annotations
+
+import polars as pl
+from sportsdataverse.nba.nba_bpm import BPM2_COEFFICIENTS, _estimate_position, _estimate_role
+
+
+def test_position_regression_team_sums_to_three_and_clamps() -> None:
+    # 5 players, one team, arbitrary team-stat shares summing to 100% each
+    shares = pl.DataFrame(
+        {
+            "player_id": [1, 2, 3, 4, 5],
+            "team_id": [10] * 5,
+            "min": [200.0] * 5,
+            "pct_trb": [0.10, 0.15, 0.20, 0.25, 0.30],
+            "pct_stl": [0.2] * 5,
+            "pct_pf": [0.2] * 5,
+            "pct_ast": [0.4, 0.3, 0.15, 0.1, 0.05],
+            "pct_blk": [0.2] * 5,
+        }
+    )
+    listed = pl.DataFrame({"player_id": [1, 2, 3, 4, 5], "position_num": [1.0, 2.0, 3.0, 4.0, 5.0]})
+    pos = _estimate_position(shares, listed)
+    # minute-weighted team mean position == 3.0 (the recursive constraint)
+    m = (
+        pos.join(shares.select(["player_id", "min"]), on="player_id")
+        .select((pl.col("position_num") * pl.col("min")).sum() / pl.col("min").sum())
+        .item()
+    )
+    assert abs(m - 3.0) < 1e-6
+    assert pos["position_num"].min() >= 1.0 and pos["position_num"].max() <= 5.0
+
+
+def test_role_regression_clamps_1_5() -> None:
+    shares = pl.DataFrame(
+        {
+            "player_id": [1, 2],
+            "team_id": [10, 10],
+            "min": [200.0, 200.0],
+            "pct_ast": [0.05, 0.40],
+            "pct_threshold_pts": [0.30, 0.02],
+        }
+    )
+    role = _estimate_role(shares)
+    assert role["role_num"].min() >= 1.0 and role["role_num"].max() <= 5.0
+
+
+def test_coefficients_constant_has_lebron_anchor_values() -> None:
+    base = BPM2_COEFFICIENTS["base"]
+    assert base["pts"] == (0.860, 0.860)  # (pos1, pos5)
+    assert base["ast"] == (0.580, 1.034)
+    assert base["fga_role"] == (-0.560, -0.780)  # (role1 creator, role5 receiver)
+    off = BPM2_COEFFICIENTS["offense"]
+    assert off["pts"] == (0.605, 0.605)
+    assert off["blk"] == (0.725, 0.097)

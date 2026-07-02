@@ -1,0 +1,130 @@
+"""Faithful BPM 2.0 (Box Plus/Minus) — published-coefficient box-score player value."""
+
+from __future__ import annotations
+
+from typing import Dict, Tuple, Union
+
+import polars as pl
+
+# Published BPM 2.0 coefficients (Basketball-Reference "About BPM 2.0", Daniel Myers 2020).
+# position-varying cols are (pos1_PG, pos5_C); *_role cols are (role1_Creator, role5_Receiver).
+# Inner dicts are either (pos1, pos5) tuples (base/offense) or scalar floats (regression sub-dicts).
+BPM2_COEFFICIENTS: Dict[str, Dict[str, Union[Tuple[float, float], float]]] = {
+    "base": {
+        "pts": (0.860, 0.860),
+        "fg3m": (0.389, 0.389),
+        "ast": (0.580, 1.034),
+        "tov": (-0.964, -0.964),
+        "orb": (0.613, 0.181),
+        "drb": (0.116, 0.181),
+        "stl": (1.369, 1.008),
+        "blk": (1.327, 0.703),
+        "pf": (-0.367, -0.367),
+        "fga_role": (-0.560, -0.780),
+        "fta_role": (-0.246, -0.343),
+    },
+    "offense": {
+        "pts": (0.605, 0.605),
+        "fg3m": (0.477, 0.477),
+        "ast": (0.476, 0.476),
+        "tov": (-0.579, -0.882),
+        "orb": (0.606, 0.422),
+        "drb": (-0.112, 0.103),
+        "stl": (0.177, 0.294),
+        "blk": (0.725, 0.097),
+        "pf": (-0.439, -0.439),
+        "fga_role": (-0.330, -0.472),
+        "fta_role": (-0.145, -0.208),
+    },
+    # position regression on % of team stats (min-weighted); blended with 50 min listed position
+    "position_reg": {
+        "intercept": 2.130,
+        "pct_trb": 8.668,
+        "pct_stl": -2.486,
+        "pct_pf": 0.992,
+        "pct_ast": -3.536,
+        "pct_blk": 1.667,
+    },
+    # offensive-role regression on % of team AST + % of team threshold-points
+    "role_reg": {"intercept": 6.00, "pct_ast": -6.642, "pct_threshold_pts": -8.544},
+}
+# baseline pts per adjusted (true) shot attempt used by the shooting-context step
+# (calibrated to reproduce the B-Ref 2016-17 LeBron worked example 34.9 -> 30.4)
+SHOOTING_BASELINE: float = 1.00
+# shooting-efficiency threshold: 0.33 pts/TSA below team average (offensive-role "threshold points")
+THRESHOLD_MARGIN: float = 0.33
+_LISTED_BLEND_MIN: float = 50.0  # 50 minutes of listed position blended into the estimate
+
+
+def _clamp(expr: pl.Expr, lo: float = 1.0, hi: float = 5.0) -> pl.Expr:
+    return expr.clip(lo, hi)
+
+
+def _estimate_position(shares: pl.DataFrame, listed: pl.DataFrame) -> pl.DataFrame:
+    """Estimate each player's position (1-5) from % of team stats, blended with 50 min of
+    listed position, then recursively shifted so the minute-weighted team mean is 3.0, clamped.
+
+    Args:
+        shares: player_id, team_id, min, and pct_trb/pct_stl/pct_pf/pct_ast/pct_blk (min-weighted
+            % of team totals).
+        listed: player_id, position_num (from ``nba_player_positions``).
+
+    Returns:
+        Frame player_id, position_num (Float64, in [1,5]).
+    """
+    c = BPM2_COEFFICIENTS["position_reg"]
+    raw = (
+        shares.join(listed, on="player_id", how="left")
+        .with_columns(pl.col("position_num").fill_null(3.0))
+        .with_columns(
+            (
+                c["intercept"]
+                + c["pct_trb"] * pl.col("pct_trb")
+                + c["pct_stl"] * pl.col("pct_stl")
+                + c["pct_pf"] * pl.col("pct_pf")
+                + c["pct_ast"] * pl.col("pct_ast")
+                + c["pct_blk"] * pl.col("pct_blk")
+            ).alias("reg_pos")
+        )
+        .with_columns(
+            # blend regression with 50 min of listed position (min-weighted)
+            (
+                (pl.col("reg_pos") * pl.col("min") + pl.col("position_num") * _LISTED_BLEND_MIN)
+                / (pl.col("min") + _LISTED_BLEND_MIN)
+            ).alias("blended")
+        )
+    )
+    # recursive team-sum-to-3.0 with clamping (iterate: shift by team-mean deviation, clamp)
+    return _recursive_team_center(raw, "blended", "position_num", target=3.0)
+
+
+def _recursive_team_center(df: pl.DataFrame, col: str, out: str, *, target: float, iters: int = 25) -> pl.DataFrame:
+    """Add a per-team constant so the min-weighted team mean of ``col`` equals ``target``,
+    re-clamping to [1,5] each pass (recursive because clamping perturbs the mean)."""
+    work = df.select(["player_id", "team_id", "min", col]).rename({col: "_v"})
+    for _ in range(iters):
+        team_mean = work.group_by("team_id").agg(
+            ((pl.col("_v") * pl.col("min")).sum() / pl.col("min").sum()).alias("_m")
+        )
+        work = (
+            work.join(team_mean, on="team_id").with_columns(_clamp(pl.col("_v") + (target - pl.col("_m")))).drop("_m")
+        )
+    return work.select("player_id", pl.col("_v").alias(out))
+
+
+def _estimate_role(shares: pl.DataFrame) -> pl.DataFrame:
+    """Estimate offensive role (1 Creator .. 5 Receiver) from % of team AST + threshold points, clamped.
+
+    Args:
+        shares: player_id, team_id, min, pct_ast, pct_threshold_pts.
+
+    Returns:
+        Frame player_id, role_num (Float64, in [1,5]).
+    """
+    c = BPM2_COEFFICIENTS["role_reg"]
+    return shares.select(
+        "player_id",
+        _clamp(
+            c["intercept"] + c["pct_ast"] * pl.col("pct_ast") + c["pct_threshold_pts"] * pl.col("pct_threshold_pts")
+        ).alias("role_num"),
+    )
