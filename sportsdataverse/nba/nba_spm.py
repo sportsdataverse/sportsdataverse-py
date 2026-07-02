@@ -3,10 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, List, Optional, Union
-
-if TYPE_CHECKING:
-    from sportsdataverse.nba.nba_model_validation import RatingsFit
+from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -14,6 +11,7 @@ import polars as pl
 from sklearn.linear_model import Ridge
 
 from sportsdataverse.nba.nba_box_logs import _STATS, box_features
+from sportsdataverse.nba.nba_model_validation import RatingsFit
 
 SPM_FEATURES: List[str] = list(_STATS)
 
@@ -199,7 +197,7 @@ class NbaSpmModel:
         self._player_logs = player_logs
         self._team_logs = team_logs
 
-    def fit_ratings(self, possessions: pl.DataFrame) -> "RatingsFit":
+    def fit_ratings(self, possessions: pl.DataFrame) -> RatingsFit:
         """Aggregate the fold's box (restricted to its game_ids) and apply SPM coeffs.
 
         Args:
@@ -212,8 +210,6 @@ class NbaSpmModel:
             player_id to per-100 OSPM/DSPM. Returns empty dicts when no
             box features can be built from the fold's games.
         """
-        from sportsdataverse.nba.nba_model_validation import RatingsFit
-
         game_ids = possessions["game_id"].unique().to_list()
         bf = box_features(self._player_logs, self._team_logs, game_ids=game_ids)
         if bf.is_empty():

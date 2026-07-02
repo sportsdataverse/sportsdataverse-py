@@ -196,7 +196,7 @@ def _spm_setup():
     return ids, poss, game_ids
 
 
-def test_nba_spm_model_fold_restriction_and_validate(monkeypatch):
+def test_nba_spm_model_fold_restriction_and_validate():
     from sportsdataverse.nba.nba_spm import SPM_FEATURES, train_spm
 
     ids, poss, game_ids = _spm_setup()
@@ -230,3 +230,32 @@ def test_nba_spm_model_fold_restriction_and_validate(monkeypatch):
     rep_rapm = validate_model(RidgeRapmModel(), [poss], model_name="plain_rapm", oracles=("retrodiction",))
     assert rep_spm.model_name == "spm" and rep_rapm.model_name == "plain_rapm"
     assert rep_spm.retrodiction is not None and rep_rapm.retrodiction is not None
+
+
+# ---------------------------------------------------------------------------
+# Gated live smoke test
+# ---------------------------------------------------------------------------
+
+from tests.conftest import skip_if_no_nba_stats_live
+
+
+@skip_if_no_nba_stats_live
+def test_nba_spm_live_season_smoke():
+    from sportsdataverse.nba import nba_box_logs, box_features, train_spm, nba_spm
+
+    logs = nba_box_logs("2023-24")
+    bf = box_features(logs["player"], logs["team"])
+    assert bf.height > 0
+    # a self-referential target just to exercise the fit+apply plumbing live
+    import numpy as np
+    import polars as pl
+
+    target = pl.DataFrame(
+        {
+            "player_id": bf["player_id"],
+            "o_rapm": np.zeros(bf.height),
+            "d_rapm": np.zeros(bf.height),
+        }
+    )
+    out = nba_spm(bf, train_spm(bf, target))
+    assert set(out.columns) == {"player_id", "ospm", "dspm", "spm", "min", "gp"}
