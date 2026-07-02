@@ -66,7 +66,8 @@ rotation change.  Two heuristics resolve this:
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Union
+import re
+from typing import Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -203,6 +204,51 @@ def _starters_from_boxscore_v3(raw_box: dict) -> Dict[int, List[int]]:
             starters = (starters + [p for p in pool if p not in starters])[:5]
         out[int(tid)] = starters
     return out
+
+
+def _boxscore_name_map(raw_box: dict) -> Dict[int, Dict[str, List[int]]]:
+    """Map each team's roster family-name -> [person_ids] (list handles collisions).
+
+    Args:
+        raw_box: Raw dict from ``nba_stats_boxscoretraditionalv3``.
+
+    Returns:
+        ``{team_id: {familyname_lower: [person_id, ...]}}``. Empty on malformed
+        input (never raises).
+    """
+    bt = (raw_box or {}).get("boxScoreTraditional") or {}
+    out: Dict[int, Dict[str, List[int]]] = {}
+    for side in ("homeTeam", "awayTeam"):
+        team = bt.get(side) or {}
+        tid = team.get("teamId")
+        if not tid:
+            continue
+        m: Dict[str, List[int]] = {}
+        for p in team.get("players") or []:
+            pid = p.get("personId")
+            fam = (p.get("familyName") or "").strip().lower()
+            if pid and fam:
+                m.setdefault(fam, []).append(int(pid))
+        out[int(tid)] = m
+    return out
+
+
+def _parse_sub_in_name(description: str) -> Optional[str]:
+    """Return the lowercased INCOMING family name from a ``SUB: X FOR Y`` string.
+
+    Args:
+        description: Play description string, e.g. ``"SUB: Vonleh FOR Horford"``.
+
+    Returns:
+        Lowercased family name of the incoming player, or ``None`` if the
+        description is not a substitution string.
+    """
+    if not description:
+        return None
+    match = re.search(r"SUB:\s*(.+?)\s+FOR\s+", description, flags=re.IGNORECASE)
+    if not match:
+        return None
+    return match.group(1).strip().lower()
 
 
 def _elapsed_time(period: int, seconds_remaining: float) -> float:

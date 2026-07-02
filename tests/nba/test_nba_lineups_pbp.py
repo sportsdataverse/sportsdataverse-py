@@ -94,3 +94,26 @@ def test_played_zero_duration() -> None:
 
 def test_played_empty_stats() -> None:
     assert _played({}) is False
+
+
+# ---------------------------------------------------------------------------
+# Task 2: _boxscore_name_map + _parse_sub_in_name
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_lineups import _boxscore_name_map, _parse_sub_in_name
+
+
+def test_boxscore_name_map_lists_collisions() -> None:
+    nm = _boxscore_name_map(_box("0022200001"))
+    celtics = nm[1610612738]
+    # Grant Williams (1629684) + Robert Williams both map under "williams"
+    assert 1629684 in celtics["williams"]
+    assert len(celtics["williams"]) >= 2
+    # a unique name resolves to exactly one id
+    assert celtics["tatum"] == [1628369]
+
+
+def test_parse_sub_in_name() -> None:
+    assert _parse_sub_in_name("SUB: Vonleh FOR Horford") == "vonleh"
+    assert _parse_sub_in_name("SUB: Williams FOR White") == "williams"
+    assert _parse_sub_in_name("not a sub") is None
