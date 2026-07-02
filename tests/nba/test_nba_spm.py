@@ -151,3 +151,26 @@ def test_train_spm_custom_feature_names():
     assert coef.feature_names == subset
     assert len(coef.o_coef) == 3
     assert len(coef.d_coef) == 3
+
+
+def test_nba_spm_enforces_int64_id_and_gp():
+    n = 30
+    feats = {f: np.linspace(0, 1, n) for f in SPM_FEATURES}
+    bf = pl.DataFrame(
+        {
+            "player_id": pl.Series(range(n), dtype=pl.Int32),
+            **feats,
+            "min": np.full(n, 100.0),
+            "gp": pl.Series([5] * n, dtype=pl.Int32),
+        }
+    )
+    target = pl.DataFrame(
+        {
+            "player_id": range(n),
+            "o_rapm": np.zeros(n),
+            "d_rapm": np.zeros(n),
+        }
+    )
+    out = nba_spm(bf, train_spm(bf, target, alpha=1.0))
+    assert out.schema["player_id"] == pl.Int64
+    assert out.schema["gp"] == pl.Int64

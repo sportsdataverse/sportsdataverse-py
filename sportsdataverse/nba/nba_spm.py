@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import List, Optional, Union
 
 import numpy as np
+import pandas as pd
 import polars as pl
 from sklearn.linear_model import Ridge
 
@@ -105,7 +106,7 @@ def nba_spm(
     coefficients: SpmCoefficients,
     *,
     return_as_pandas: bool = False,
-) -> Union[pl.DataFrame, "pd.DataFrame"]:  # noqa: F821
+) -> Union[pl.DataFrame, pd.DataFrame]:
     """Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM.
 
     Applies a linear scoring rule:
@@ -152,6 +153,8 @@ def nba_spm(
     out = (
         box_features.select(["player_id", "min", "gp"])
         .with_columns(
+            pl.col("player_id").cast(pl.Int64),
+            pl.col("gp").cast(pl.Int64),
             pl.Series("ospm", ospm).cast(pl.Float64),
             pl.Series("dspm", dspm).cast(pl.Float64),
             pl.Series("spm", (ospm + dspm)).cast(pl.Float64),
