@@ -9,7 +9,7 @@ synthetic meta-oracle that proves the harness itself correct.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Protocol, Tuple
+from typing import Dict, List, Optional, Protocol, Tuple, TypeAlias, Union
 
 import numpy as np
 import polars as pl
@@ -71,6 +71,10 @@ class RatingsModel(Protocol):
     def fit_ratings(self, possessions: pl.DataFrame) -> RatingsFit: ...
 
 
+# a harness model is either a design-matrix RapmModel or a box/ratings RatingsModel
+AnyModel: TypeAlias = Union[RapmModel, RatingsModel]
+
+
 def _fit_on(model: object, possessions: pl.DataFrame) -> Tuple[FitResult, List[int]]:
     """Fit any harness model on ``possessions`` and return ``(FitResult, player_ids)``.
 
@@ -84,8 +88,8 @@ def _fit_on(model: object, possessions: pl.DataFrame) -> Tuple[FitResult, List[i
         possessions: The (train) possession+lineup frame.
 
     Returns:
-        ``(FitResult, pids)`` where ``pids`` is ``build_rapm_design``'s player-id column
-        map. Returns ``(FitResult(np.zeros(0), 0.0), [])`` when there are no players.
+        ``(FitResult, pids)`` where ``pids`` is ``build_rapm_design``'s ordered player-id
+        list. Returns ``(FitResult(np.zeros(0), 0.0), [])`` when there are no players.
     """
     X, y, pids = build_rapm_design(possessions)
     if not pids:
@@ -301,7 +305,7 @@ def _rmse(a: np.ndarray, b: np.ndarray) -> float:
 
 
 def retrodiction(
-    model: RapmModel,
+    model: AnyModel,
     possessions: pl.DataFrame,
     *,
     k_folds: int = 5,
@@ -398,7 +402,7 @@ class ReliabilityResult:
     n_shared_players: int
 
 
-def _fit_ratings(model: RapmModel, possessions: pl.DataFrame) -> Dict[int, float]:
+def _fit_ratings(model: AnyModel, possessions: pl.DataFrame) -> Dict[int, float]:
     """Fit the model on ``possessions`` and return player_id -> total rating (o - d_raw).
 
     Args:
@@ -417,7 +421,7 @@ def _fit_ratings(model: RapmModel, possessions: pl.DataFrame) -> Dict[int, float
     return {int(p): float(total[k]) for k, p in enumerate(pids)}
 
 
-def reliability(model: RapmModel, possessions: pl.DataFrame, *, seed: int = 0) -> ReliabilityResult:
+def reliability(model: AnyModel, possessions: pl.DataFrame, *, seed: int = 0) -> ReliabilityResult:
     """Oracle ②: split-half reliability of the per-player rating across two game halves.
 
     Randomly halves the games, fits each half independently, and correlates the
@@ -483,7 +487,7 @@ class CrossSeasonResult:
 
 
 def cross_season(
-    model: RapmModel,
+    model: AnyModel,
     season_frames: List[pl.DataFrame],
     *,
     unknown_player_rating: float = 0.0,
@@ -572,7 +576,7 @@ class CalibrationResult:
 
 
 def calibration(
-    model: RapmModel,
+    model: AnyModel,
     possessions: pl.DataFrame,
     *,
     levels: Tuple[float, ...] = (0.5, 0.8, 0.9, 0.95),
@@ -612,7 +616,7 @@ def calibration(
     Xa, ya, pids_a = build_rapm_design(a)
     if not pids_a:
         return None
-    fit_a = model.fit(Xa, ya)
+    fit_a = model.fit(Xa, ya)  # type: ignore[union-attr]  # calibration only meaningful for RapmModel
     if fit_a.posterior is None:
         return None
     P = len(pids_a)
@@ -737,7 +741,7 @@ class ValidationReport:
 
 
 def validate_model(
-    model: RapmModel,
+    model: AnyModel,
     season_frames: List[pl.DataFrame],
     *,
     model_name: str = "model",
