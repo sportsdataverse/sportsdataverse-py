@@ -184,7 +184,14 @@ def _bpm_from_table(
     Returns:
         Frame with ``player_id`` and ``out`` (Float64).
     """
-    j = feats.join(positions, on="player_id").join(roles, on="player_id")
+    j = (
+        feats.join(positions, on="player_id", how="left")
+        .join(roles, on="player_id", how="left")
+        .with_columns(
+            pl.col("position_num").fill_null(3.0),
+            pl.col("role_num").fill_null(3.0),
+        )
+    )
 
     def _contrib(row_pos: float, row_role: float, r: Dict[str, object]) -> float:
         total = 0.0

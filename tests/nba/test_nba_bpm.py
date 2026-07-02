@@ -116,3 +116,28 @@ def test_raw_bpm_reproduces_bref_lebron_2017() -> None:
     assert out.schema["raw_bpm"] == pl.Float64
     assert out.schema["raw_obpm"] == pl.Float64
     assert abs(out["raw_bpm"][0] - 18.7) < 0.3  # published raw total 18.7
+
+
+def test_raw_bpm_missing_position_defaults_neutral_not_dropped():
+    feats = pl.DataFrame(
+        {
+            "player_id": [1, 2],
+            "pts": [20.0, 15.0],
+            "fg3m": [1.0, 1.0],
+            "ast": [4.0, 3.0],
+            "tov": [2.0, 2.0],
+            "orb": [1.0, 1.0],
+            "drb": [4.0, 4.0],
+            "stl": [1.0, 1.0],
+            "blk": [0.5, 0.5],
+            "pf": [2.0, 2.0],
+            "fga": [12.0, 10.0],
+            "fta": [3.0, 2.0],
+        }
+    )
+    # player 2 is missing from positions AND roles -> must still appear (neutral 3.0), not dropped
+    positions = pl.DataFrame({"player_id": [1], "position_num": [2.0]})
+    roles = pl.DataFrame({"player_id": [1], "role_num": [1.0]})
+    out = _raw_bpm(feats, positions, roles)
+    assert set(out["player_id"].to_list()) == {1, 2}  # player 2 NOT dropped
+    assert out.filter(pl.col("player_id") == 2)["raw_bpm"].item() is not None
