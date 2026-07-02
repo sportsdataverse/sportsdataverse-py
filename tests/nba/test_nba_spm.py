@@ -174,3 +174,59 @@ def test_nba_spm_enforces_int64_id_and_gp():
     out = nba_spm(bf, train_spm(bf, target, alpha=1.0))
     assert out.schema["player_id"] == pl.Int64
     assert out.schema["gp"] == pl.Int64
+
+
+# ---------------------------------------------------------------------------
+# Task 4: NbaSpmModel adapter + head-to-head integration
+# ---------------------------------------------------------------------------
+
+from sportsdataverse.nba.nba_spm import NbaSpmModel
+from sportsdataverse.nba.nba_model_validation import validate_model, RidgeRapmModel, _synthetic_possessions
+
+
+def _spm_setup():
+    # synthetic possessions whose ids double as the box-log player_ids
+    ids = list(range(100, 110)) + list(range(200, 210))
+    rng = np.random.default_rng(3)
+    o = {p: float(rng.normal(0, 0.03)) for p in ids}
+    d = {p: float(rng.normal(0, 0.03)) for p in ids}
+    poss = _synthetic_possessions(o, d, n_games=30, poss_per_game=40, noise_sd=0.3, seed=4)
+    # trivial box logs: each player one game, one team, features = their o rating signal
+    game_ids = poss["game_id"].unique().to_list()
+    return ids, poss, game_ids
+
+
+def test_nba_spm_model_fold_restriction_and_validate(monkeypatch):
+    from sportsdataverse.nba.nba_spm import SPM_FEATURES, train_spm
+
+    ids, poss, game_ids = _spm_setup()
+    # build box logs covering all games; player features constant per player
+    rows_p, rows_t = [], []
+    for gi in game_ids:
+        for p in ids:
+            team = 1 if p < 200 else 2
+            rows_p.append(
+                {"game_id": gi, "team_id": team, "player_id": p, "min": 24.0, **{s: float(p % 7) for s in SPM_FEATURES}}
+            )
+        for team in (1, 2):
+            rows_t.append(
+                {"game_id": gi, "team_id": team, "min": 240.0, "fga": 85.0, "oreb": 10.0, "tov": 13.0, "fta": 20.0}
+            )
+    player_logs = pl.DataFrame(rows_p)
+    team_logs = pl.DataFrame(rows_t)
+    # a coefficients object (fit on a tiny synthetic target)
+    from sportsdataverse.nba.nba_box_logs import box_features
+
+    bf = box_features(player_logs, team_logs)
+    target = pl.DataFrame({"player_id": bf["player_id"], "o_rapm": np.zeros(bf.height), "d_rapm": np.zeros(bf.height)})
+    coef = train_spm(bf, target, alpha=1.0)
+    model = NbaSpmModel(coef, player_logs, team_logs)
+    # fold restriction: a 2-game fold's ratings come from only those games
+    rf_all = model.fit_ratings(poss)
+    rf_two = model.fit_ratings(poss.filter(pl.col("game_id").is_in(game_ids[:2])))
+    assert set(rf_all.o_ratings) and set(rf_two.o_ratings)  # both produce ratings
+    # head-to-head: SPM and RAPM both run through the SAME validate_model
+    rep_spm = validate_model(model, [poss], model_name="spm", oracles=("retrodiction",))
+    rep_rapm = validate_model(RidgeRapmModel(), [poss], model_name="plain_rapm", oracles=("retrodiction",))
+    assert rep_spm.model_name == "spm" and rep_rapm.model_name == "plain_rapm"
+    assert rep_spm.retrodiction is not None and rep_rapm.retrodiction is not None

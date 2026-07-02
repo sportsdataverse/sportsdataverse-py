@@ -3,14 +3,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import TYPE_CHECKING, List, Optional, Union
+
+if TYPE_CHECKING:
+    from sportsdataverse.nba.nba_model_validation import RatingsFit
 
 import numpy as np
 import pandas as pd
 import polars as pl
 from sklearn.linear_model import Ridge
 
-from sportsdataverse.nba.nba_box_logs import _STATS
+from sportsdataverse.nba.nba_box_logs import _STATS, box_features
 
 SPM_FEATURES: List[str] = list(_STATS)
 
@@ -164,3 +167,58 @@ def nba_spm(
     if return_as_pandas:
         return out.to_pandas()
     return out
+
+
+class NbaSpmModel:
+    """A ``RatingsModel`` that scores a fold via fitted SPM coefficients.
+
+    Restricts its box aggregation to the fold's ``game_id`` (the leakage guard),
+    then applies the (globally pre-fit) SPM coefficients.
+
+    Args:
+        coefficients: A ``SpmCoefficients`` instance from ``train_spm``.
+        player_logs: Per-player-per-game box lines used to build fold features.
+        team_logs: Per-team-per-game lines used to estimate per-game possessions.
+
+    Example:
+        Validate SPM head-to-head with plain RAPM::
+
+            from sportsdataverse.nba import NbaSpmModel, train_spm
+            from sportsdataverse.nba.nba_model_validation import validate_model
+            model = NbaSpmModel(coef, logs["player"], logs["team"])
+            report = validate_model(model, season_frames, model_name="spm")
+    """
+
+    def __init__(
+        self,
+        coefficients: SpmCoefficients,
+        player_logs: pl.DataFrame,
+        team_logs: pl.DataFrame,
+    ) -> None:
+        self._coef = coefficients
+        self._player_logs = player_logs
+        self._team_logs = team_logs
+
+    def fit_ratings(self, possessions: pl.DataFrame) -> "RatingsFit":
+        """Aggregate the fold's box (restricted to its game_ids) and apply SPM coeffs.
+
+        Args:
+            possessions: The fold's possession+lineup frame.  Only the ``game_id``
+                values it contains are used to filter ``player_logs`` and
+                ``team_logs`` (the leakage guard).
+
+        Returns:
+            ``RatingsFit`` with ``o_ratings`` and ``d_ratings`` dicts mapping
+            player_id to per-100 OSPM/DSPM. Returns empty dicts when no
+            box features can be built from the fold's games.
+        """
+        from sportsdataverse.nba.nba_model_validation import RatingsFit
+
+        game_ids = possessions["game_id"].unique().to_list()
+        bf = box_features(self._player_logs, self._team_logs, game_ids=game_ids)
+        if bf.is_empty():
+            return RatingsFit(o_ratings={}, d_ratings={})
+        scored = nba_spm(bf, self._coef)
+        o = {int(p): float(v) for p, v in zip(scored["player_id"], scored["ospm"])}
+        d = {int(p): float(v) for p, v in zip(scored["player_id"], scored["dspm"])}
+        return RatingsFit(o_ratings=o, d_ratings=d)
