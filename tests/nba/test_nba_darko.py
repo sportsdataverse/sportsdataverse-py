@@ -1,4 +1,4 @@
-"""Tests for AgingCurve + fit_aging_curve (Task 2), Kalman filter (Task 3), and MLE fit + projection (Task 4)."""
+"""Tests for AgingCurve + fit_aging_curve (Task 2), Kalman filter (Task 3), MLE fit + projection (Task 4), and forecast validator (Task 5)."""
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ from sportsdataverse.nba.nba_darko import (
     _fit_noise_params,
     _forecast,
     _kalman_filter,
+    darko_forecast_accuracy,
     fit_aging_curve,
     nba_darko,
 )
@@ -98,3 +99,51 @@ def test_nba_darko_projection_frame() -> None:
     assert out.schema["player_id"] == pl.Int64 and out.schema["projected_sd"] == pl.Float64
     assert (out["forecast_season"] == out["last_season"] + 1).all()
     assert (out["projected_sd"] > 0).all() and out.height == 60
+
+
+# ---------------------------------------------------------------------------
+# Task 5 — meta-oracle helpers
+# ---------------------------------------------------------------------------
+
+
+def _skill_panel(seed: int) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """80 players × 6 seasons with persistent latent skill + small drift + obs noise."""
+    rng = np.random.default_rng(seed)
+    rows, arows = [], []
+    for pid in range(80):
+        skill = float(rng.normal(0, 4))
+        start = int(rng.integers(23, 29))
+        for k, season in enumerate(range(2017, 2023)):
+            rows.append({"player_id": pid, "season": season, "rating": skill + rng.normal(0, 0.7), "weight": 1.0})
+            arows.append({"player_id": pid, "season": season, "age": float(start + k)})
+            skill += rng.normal(0, 0.2)
+    return pl.DataFrame(rows), pl.DataFrame(arows)
+
+
+def _noise_panel(seed: int) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """80 players × 6 seasons of pure i.i.d. noise — no persistent skill."""
+    rng = np.random.default_rng(seed)
+    rows, arows = [], []
+    for pid in range(80):
+        start = int(rng.integers(23, 29))
+        for k, season in enumerate(range(2017, 2023)):
+            rows.append({"player_id": pid, "season": season, "rating": float(rng.normal(0, 4)), "weight": 1.0})
+            arows.append({"player_id": pid, "season": season, "age": float(start + k)})
+    return pl.DataFrame(rows), pl.DataFrame(arows)
+
+
+def test_forecast_beats_baseline_on_skill_panel() -> None:
+    """Meta-oracle (skill panel): Kalman projection beats carry-forward and achieves corr > 0.5."""
+    panel, ages = _skill_panel(3)
+    res = darko_forecast_accuracy(panel, ages)
+    assert res.n_forecasts > 0
+    assert res.forecast_rmse < res.baseline_rmse  # projection beats carry-forward
+    assert res.forecast_corr > 0.5
+
+
+def test_forecast_does_not_beat_baseline_on_noise_panel() -> None:
+    """Meta-oracle (noise panel): pure noise ratings -> projection cannot meaningfully beat flat baseline."""
+    panel, ages = _noise_panel(3)
+    res = darko_forecast_accuracy(panel, ages)
+    # no persistent skill -> projection must NOT beat the carry-forward by more than 0.15
+    assert res.forecast_rmse >= res.baseline_rmse - 0.15

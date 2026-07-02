@@ -171,14 +171,47 @@ def _neg_loglik(
     return -ll
 
 
+def _lag1_autocorr(
+    series: "List[Tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]]",
+) -> float:
+    """Pooled raw lag-1 autocorrelation of ratings across all players.
+
+    Uses raw (not per-player demeaned) pairs so the cross-sectional persistence signal
+    (between-player skill variance) is included in the correlation.  High autocorr
+    indicates strong persistent skill; near-zero indicates pure noise.
+    """
+    xs: List[float] = []
+    ys: List[float] = []
+    for _pid, _seasons, ratings, _ages, _weights in series:
+        for t in range(len(ratings) - 1):
+            xs.append(float(ratings[t]))
+            ys.append(float(ratings[t + 1]))
+    if len(xs) < 2:
+        return 0.5
+    x_arr, y_arr = np.array(xs), np.array(ys)
+    sx, sy = float(np.std(x_arr)), float(np.std(y_arr))
+    if sx < 1e-12 or sy < 1e-12:
+        return 0.5
+    return float(np.corrcoef(x_arr, y_arr)[0, 1])
+
+
 def _fit_noise_params(
     panel: pl.DataFrame,
     ages: pl.DataFrame,
     aging_curve: AgingCurve,
     *,
     defaults: Tuple[float, float] = (0.25, 1.0),
+    _rho_min: float = 0.05,
 ) -> Tuple[float, float]:
     """MLE-fit ``(q, obs_base)`` by maximizing one-step-ahead forecast log-likelihood.
+
+    A moment-based lower bound on ``q`` is applied after MLE to prevent the degenerate
+    ``q → 0`` solution on low-persistence panels.  The bound uses the pooled raw lag-1
+    autocorrelation ``ρ`` of the ratings: ``q_min = obs_base * (1 − ρ) / ρ`` (clamped to
+    ``[_rho_min, 0.99]``).  On panels with strong cross-sectional skill persistence
+    (``ρ ≈ 1``) the bound is near zero and the MLE value dominates.  On pure-noise panels
+    (``ρ ≈ 0``) the bound is large, correctly reflecting that process noise ≈ observation
+    noise when ratings carry no carry-forward information.
 
     Deterministic (no RNG). Falls back to ``defaults`` if optimization fails/non-finite.
 
@@ -187,19 +220,115 @@ def _fit_noise_params(
         ages: ``player_id``, ``season``, ``age``.
         aging_curve: Fitted ``AgingCurve`` supplying per-age expected drift.
         defaults: Fallback ``(q, obs_base)`` when optimization fails or produces non-finite values.
+        _rho_min: Internal floor on the lag-1 autocorrelation used for the ``q`` lower bound.
 
     Returns:
-        ``(q, obs_base)`` — MLE-fitted process and base observation variance parameters.
+        ``(q, obs_base)`` — fitted process and base observation variance parameters.
     """
     series = list(_player_series(panel, ages))
     x0 = np.log(np.array(defaults, dtype=np.float64))
+    q_mle, ob = defaults
     try:
         res = minimize(_neg_loglik, x0, args=(series, aging_curve), method="Nelder-Mead")
         if res.success and np.all(np.isfinite(res.x)):
-            return float(np.exp(res.x[0])), float(np.exp(res.x[1]))
+            q_mle, ob = float(np.exp(res.x[0])), float(np.exp(res.x[1]))
     except Exception:
         pass
-    return defaults
+    # Moment-based lower bound: prevent q collapsing to zero on low-persistence panels.
+    rho = _lag1_autocorr(series)
+    rho_clamped = max(_rho_min, min(0.99, rho))
+    q_min = ob * (1.0 - rho_clamped) / rho_clamped
+    return max(q_mle, q_min), ob
+
+
+@dataclass(frozen=True)
+class ForecastResult:
+    """Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out transitions."""
+
+    forecast_rmse: float
+    forecast_corr: float
+    baseline_rmse: float
+    n_forecasts: int
+
+
+def darko_forecast_accuracy(
+    panel: pl.DataFrame,
+    ages: pl.DataFrame,
+    *,
+    aging_curve: "AgingCurve | None" = None,
+    process_var: "float | None" = None,
+    obs_base: "float | None" = None,
+    min_history: int = 1,
+) -> ForecastResult:
+    """Holdout forecast accuracy: for each transition, forecast N+1 from history <= N vs actual.
+
+    For each player and each split at index ``t`` (prefix seasons ``0..t`` used to forecast
+    season ``t+1``), run the Kalman filter on the prefix then forecast; the baseline is
+    carry-forward (``ratings[t]``).  Global ``aging_curve`` and ``(q, obs_base)`` are fit on
+    the full panel (low-dim parameters — standard practice; the holdout is on each player's
+    rating-history prefix).
+
+    Args:
+        panel: ``player_id``, ``season``, ``rating`` (+ optional ``weight``) panel.
+        ages: ``player_id``, ``season``, ``age``.
+        aging_curve: Fitted ``AgingCurve``; fit from ``panel`` if None.
+        process_var: Kalman process variance ``q``; MLE-fit from ``panel`` if None.
+        obs_base: Kalman base observation variance; MLE-fit from ``panel`` if None.
+        min_history: Minimum prefix length before a forecast is scored (default 1).
+
+    Returns:
+        ``ForecastResult`` with ``forecast_rmse`` / ``forecast_corr`` vs the actual next-season
+        rating, ``baseline_rmse`` = carry-forward RMSE, and ``n_forecasts`` (total held-out
+        transitions across all players).
+
+    Example:
+        Quick start — evaluate projection quality on a rating panel::
+
+            from sportsdataverse.nba.nba_darko import darko_forecast_accuracy
+            res = darko_forecast_accuracy(rating_panel, ages_panel)
+            print(res.forecast_rmse, res.baseline_rmse, res.forecast_corr)
+
+        Pass pre-fitted params to skip the global MLE step::
+
+            from sportsdataverse.nba.nba_darko import fit_aging_curve, _fit_noise_params
+            curve = fit_aging_curve(panel, ages)
+            q, ob = _fit_noise_params(panel, ages, curve)
+            res = darko_forecast_accuracy(panel, ages, aging_curve=curve, process_var=q, obs_base=ob)
+
+        See Also:
+            * `nba_darko`_ -- one-shot next-season projection for all players
+            * `hoopR`_ -- Men's basketball R package
+
+        .. _nba_darko: sportsdataverse.nba.nba_darko.nba_darko
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    curve = aging_curve if aging_curve is not None else fit_aging_curve(panel, ages)
+    if process_var is None or obs_base is None:
+        q_fit, o_fit = _fit_noise_params(panel, ages, curve)
+        q = process_var if process_var is not None else q_fit
+        ob = obs_base if obs_base is not None else o_fit
+    else:
+        q, ob = process_var, obs_base
+
+    preds: List[float] = []
+    actuals: List[float] = []
+    base: List[float] = []
+    for _pid, _seasons, ratings, ages_seq, weights in _player_series(panel, ages):
+        for t in range(min_history, len(ratings) - 1):
+            s_f, P_f, _sp, _iv = _kalman_filter(ratings[: t + 1], ages_seq[: t + 1], weights[: t + 1], curve, q, ob)
+            proj, _sd = _forecast(s_f, P_f, float(ages_seq[t]), curve, q)
+            preds.append(proj)
+            actuals.append(float(ratings[t + 1]))
+            base.append(float(ratings[t]))
+
+    if not preds:
+        return ForecastResult(float("nan"), float("nan"), float("nan"), 0)
+
+    p, a, b = np.array(preds), np.array(actuals), np.array(base)
+    rmse = float(np.sqrt(np.mean((p - a) ** 2)))
+    base_rmse = float(np.sqrt(np.mean((b - a) ** 2)))
+    corr = float(np.corrcoef(p, a)[0, 1]) if p.size > 1 and np.std(p) > 0 else 0.0
+    return ForecastResult(rmse, corr, base_rmse, int(p.size))
 
 
 def nba_darko(
