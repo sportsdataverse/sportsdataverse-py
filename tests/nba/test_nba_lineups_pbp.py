@@ -104,13 +104,44 @@ from sportsdataverse.nba.nba_lineups import _boxscore_name_map, _parse_sub_in_na
 
 
 def test_boxscore_name_map_lists_collisions() -> None:
+    """Collision handling is tested with a synthetic boxscore — never edits the real fixture."""
+
+    def _player(pid: int, family: str, position: str = "F", minutes: str = "30:00") -> dict:
+        return {
+            "personId": pid,
+            "familyName": family,
+            "position": position,
+            "statistics": {"minutes": minutes, "points": 0},
+        }
+
+    synthetic = {
+        "boxScoreTraditional": {
+            "homeTeam": {
+                "teamId": 8888,
+                "players": [
+                    _player(111, "Williams"),
+                    _player(222, "Williams"),
+                    _player(333, "Tatum"),
+                ],
+            },
+            "awayTeam": {"teamId": 7777, "players": []},
+        }
+    }
+    nm = _boxscore_name_map(synthetic)
+    team = nm[8888]
+    # both Williams ids appear under the "williams" key
+    assert 111 in team["williams"]
+    assert 222 in team["williams"]
+    assert len(team["williams"]) >= 2
+    # a uniquely-named player maps to exactly one id
+    assert team["tatum"] == [333]
+
+
+def test_boxscore_name_map_real_fixture_unique_name() -> None:
+    """Sanity-check the map works on the real 0022200001 fixture via a uniquely-named player."""
     nm = _boxscore_name_map(_box("0022200001"))
-    celtics = nm[1610612738]
-    # Grant Williams (1629684) + Robert Williams both map under "williams"
-    assert 1629684 in celtics["williams"]
-    assert len(celtics["williams"]) >= 2
-    # a unique name resolves to exactly one id
-    assert celtics["tatum"] == [1628369]
+    # Tatum is unique on the Celtics roster — should resolve to exactly one id
+    assert nm[1610612738]["tatum"] == [1628369]
 
 
 def test_parse_sub_in_name() -> None:
