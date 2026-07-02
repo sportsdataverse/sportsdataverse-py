@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import numpy as np
 import polars as pl
 from sportsdataverse.nba.nba_bpm import (
     BPM2_COEFFICIENTS,
@@ -10,6 +11,7 @@ from sportsdataverse.nba.nba_bpm import (
     _interp,
     _raw_bpm,
     _recursive_team_center,
+    nba_bpm,
 )
 
 
@@ -141,3 +143,86 @@ def test_raw_bpm_missing_position_defaults_neutral_not_dropped():
     out = _raw_bpm(feats, positions, roles)
     assert set(out["player_id"].to_list()) == {1, 2}  # player 2 NOT dropped
     assert out.filter(pl.col("player_id") == 2)["raw_bpm"].item() is not None
+
+
+# ---------------------------------------------------------------------------
+# Task 4: team adjustment + shooting-context + nba_bpm public function
+# ---------------------------------------------------------------------------
+
+
+def _synth_logs(seed: int = 0) -> tuple[pl.DataFrame, pl.DataFrame]:
+    rng = np.random.default_rng(seed)
+    rows_p, rows_t = [], []
+    for gi in range(20):
+        for team, pids in ((1, range(1, 9)), (2, range(9, 17))):
+            for p in pids:
+                rows_p.append(
+                    {
+                        "game_id": f"G{gi}",
+                        "team_id": team,
+                        "player_id": p,
+                        "min": 30.0,
+                        "pts": float(rng.integers(0, 30)),
+                        "fg3m": 1.0,
+                        "fga": 12.0,
+                        "fta": 3.0,
+                        "ast": 4.0,
+                        "oreb": 1.0,
+                        "dreb": 4.0,
+                        "reb": 5.0,
+                        "stl": 1.0,
+                        "blk": 0.5,
+                        "tov": 2.0,
+                        "pf": 2.0,
+                    }
+                )
+        for team, pm in ((1, 5.0), (2, -5.0)):
+            rows_t.append(
+                {
+                    "game_id": f"G{gi}",
+                    "team_id": team,
+                    "min": 240.0,
+                    "fga": 88.0,
+                    "oreb": 10.0,
+                    "dreb": 34.0,
+                    "reb": 44.0,
+                    "tov": 13.0,
+                    "fta": 22.0,
+                    "ast": 24.0,
+                    "stl": 7.0,
+                    "blk": 5.0,
+                    "pf": 20.0,
+                    "pts": 112.0,
+                    "plus_minus": pm,
+                }
+            )
+    return pl.DataFrame(rows_p), pl.DataFrame(rows_t)
+
+
+def test_team_adjustment_invariant() -> None:
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    out = nba_bpm(player_logs, team_logs, positions, team_adjust=True)
+    # minute-weighted team BPM == team efficiency margin (plus_minus per 100), for ANY coeffs
+    # team 1 margin = 5 pm/game over its possessions; compute the same way nba_bpm does and compare
+    merged = out.join(
+        player_logs.group_by("player_id").agg(pl.col("team_id").first(), pl.col("min").sum().alias("mins")),
+        on="player_id",
+    )
+    for team in (1, 2):
+        t = merged.filter(pl.col("team_id") == team)
+        wbpm = (t["bpm"] * t["mins"]).sum() / t["mins"].sum()
+        # expected margin recomputed from team_logs
+        tl = team_logs.filter(pl.col("team_id") == team)
+        poss = (tl["fga"] - tl["oreb"] + tl["tov"] + 0.44 * tl["fta"]).sum()
+        margin = tl["plus_minus"].sum() / poss * 100
+        assert abs(wbpm - margin) < 1e-6
+
+
+def test_team_adjust_false_is_raw() -> None:
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    adj = nba_bpm(player_logs, team_logs, positions, team_adjust=True)
+    raw = nba_bpm(player_logs, team_logs, positions, team_adjust=False)
+    # the two differ by a per-team constant (raw is not centered on the margin)
+    assert not np.allclose(adj["bpm"].to_numpy(), raw["bpm"].to_numpy())

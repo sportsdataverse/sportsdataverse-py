@@ -6,6 +6,8 @@ from typing import Dict, Tuple
 
 import polars as pl
 
+from sportsdataverse.nba.nba_box_logs import box_features
+
 # Published BPM 2.0 coefficients (Basketball-Reference "About BPM 2.0", Daniel Myers 2020).
 # position-varying cols are (pos1_PG, pos5_C); *_role cols are (role1_Creator, role5_Receiver).
 BPM2_COEFFICIENTS: Dict[str, Dict[str, Tuple[float, float]]] = {
@@ -246,3 +248,169 @@ def _raw_bpm(feats: pl.DataFrame, positions: pl.DataFrame, roles: pl.DataFrame) 
     total = _bpm_from_table(feats, BPM2_COEFFICIENTS["base"], positions, roles, "raw_bpm")
     off = _bpm_from_table(feats, BPM2_COEFFICIENTS["offense"], positions, roles, "raw_obpm")
     return total.join(off, on="player_id")
+
+
+# ---------------------------------------------------------------------------
+# Task 4: team shares, team adjustment, shooting-context, and public nba_bpm
+# ---------------------------------------------------------------------------
+
+
+def _team_shares(player_logs: pl.DataFrame, team_logs: pl.DataFrame) -> pl.DataFrame:
+    """Per-player % of team TRB/STL/PF/AST/BLK + threshold-points share (min-weighted totals).
+
+    Args:
+        player_logs: Per-player-per-game box lines with ``player_id``, ``team_id``, ``min``,
+            ``reb``, ``stl``, ``pf``, ``ast``, ``blk``, ``pts``, ``fga``, ``fta``.
+        team_logs: Per-team-per-game lines with ``team_id``, ``reb``, ``stl``, ``pf``,
+            ``ast``, ``blk``, ``pts``, ``fga``, ``fta``.
+
+    Returns:
+        Frame with ``player_id``, ``team_id``, ``min``, ``pct_trb``, ``pct_stl``,
+        ``pct_pf``, ``pct_ast``, ``pct_blk``, ``pct_threshold_pts``.
+    """
+    pl_agg = player_logs.group_by("player_id").agg(
+        pl.col("team_id").first(),
+        pl.col("min").sum().alias("min"),
+        *[pl.col(s).sum().alias(s) for s in ["reb", "stl", "pf", "ast", "blk", "pts", "fga", "fta"]],
+    )
+    team_tot = team_logs.group_by("team_id").agg(
+        *[pl.col(s).sum().alias(f"team_{s}") for s in ["reb", "stl", "pf", "ast", "blk", "pts", "fga", "fta"]]
+    )
+    j = pl_agg.join(team_tot, on="team_id", how="left")
+    tsa = pl.col("fga") + 0.44 * pl.col("fta")
+    team_tsa = pl.col("team_fga") + 0.44 * pl.col("team_fta")
+    team_pps = pl.col("team_pts") / team_tsa  # team avg pts / true-shot-attempt
+    thr_pts = pl.col("pts") - (team_pps - THRESHOLD_MARGIN) * tsa  # points above threshold
+    return j.with_columns(
+        (pl.col("reb") / pl.col("team_reb")).alias("pct_trb"),
+        (pl.col("stl") / pl.col("team_stl")).alias("pct_stl"),
+        (pl.col("pf") / pl.col("team_pf")).alias("pct_pf"),
+        (pl.col("ast") / pl.col("team_ast")).alias("pct_ast"),
+        (pl.col("blk") / pl.col("team_blk")).alias("pct_blk"),
+        (thr_pts / pl.col("team_pts")).alias("pct_threshold_pts"),
+    ).select(["player_id", "team_id", "min", "pct_trb", "pct_stl", "pct_pf", "pct_ast", "pct_blk", "pct_threshold_pts"])
+
+
+def _team_adjust(raw: pl.DataFrame, team_margin: pl.DataFrame, ptm: pl.DataFrame) -> pl.DataFrame:
+    """Add a per-team constant so minute-weighted team raw_bpm == the team's efficiency margin.
+
+    Args:
+        raw: Frame with ``player_id``, ``raw_bpm``, ``raw_obpm``.
+        team_margin: Frame with ``team_id``, ``margin`` (efficiency margin per 100 possessions).
+        ptm: Frame with ``player_id``, ``team_id``, ``min`` (total minutes per player).
+
+    Returns:
+        Frame with ``player_id``, ``obpm``, ``bpm`` (team-adjusted).
+    """
+    j = raw.join(ptm, on="player_id")  # ptm: player_id, team_id, min
+    cur = (
+        j.group_by("team_id")
+        .agg(((pl.col("raw_bpm") * pl.col("min")).sum() / pl.col("min").sum()).alias("cur"))
+        .join(team_margin, on="team_id")
+    )
+    const = cur.with_columns((pl.col("margin") - pl.col("cur")).alias("k")).select(["team_id", "k"])
+    return (
+        j.join(const, on="team_id")
+        .with_columns(
+            (pl.col("raw_bpm") + pl.col("k")).alias("bpm"),
+            (pl.col("raw_obpm") + pl.col("k")).alias("obpm"),
+        )
+        .select(["player_id", "obpm", "bpm"])
+    )
+
+
+def nba_bpm(
+    player_logs: pl.DataFrame,
+    team_logs: pl.DataFrame,
+    positions: pl.DataFrame,
+    *,
+    team_adjust: bool = True,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame:
+    """Faithful BPM 2.0 per player over the given logs (a season).
+
+    Args:
+        player_logs: per-player-per-game box lines (``nba_box_logs``'s ``player``).
+        team_logs: per-team-per-game lines incl. ``plus_minus`` (``nba_box_logs``'s ``team``).
+        positions: listed positions (``nba_player_positions``): player_id, position_num.
+        team_adjust: apply the team adjustment (True) or return raw box-BPM (False).
+        return_as_pandas: return pandas instead of polars.
+
+    Returns:
+        Frame with ``player_id``, ``obpm``, ``dbpm``, ``bpm``, ``min``, ``gp``
+        (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min).
+
+    Example:
+        Season BPM (residential IP)::
+
+            from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
+            logs = nba_box_logs("2023-24"); pos = nba_player_positions("2023-24")
+            bpm = nba_bpm(logs["player"], logs["team"], pos)
+            print(bpm.sort("bpm", descending=True).head())
+
+        Raw (no team adjustment)::
+
+            bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
+
+        Pandas output::
+
+            bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
+
+        See Also:
+            * `Basketball-Reference BPM 2.0`_ — published coefficient table and methodology
+            * `hoopR`_ — R companion package
+
+        .. _Basketball-Reference BPM 2.0: https://www.basketball-reference.com/about/bpm2.html
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    # box_features returns oreb/dreb; _raw_bpm expects orb/drb — rename at the boundary
+    feats_raw = box_features(player_logs, team_logs)
+    feats_renamed = feats_raw.rename({"oreb": "orb", "dreb": "drb"})
+
+    shares = _team_shares(player_logs, team_logs)
+    positions_est = _estimate_position(shares, positions)
+    roles = _estimate_role(shares)
+
+    # shooting-context: adjust per-100 pts toward the baseline given team shooting environment
+    tl = (
+        team_logs.group_by("team_id")
+        .agg(
+            pl.col("pts").sum().alias("tp"),
+            (pl.col("fga").sum() + 0.44 * pl.col("fta").sum()).alias("ttsa"),
+            pl.col("plus_minus").sum().alias("pm"),
+            (pl.col("fga").sum() - pl.col("oreb").sum() + pl.col("tov").sum() + 0.44 * pl.col("fta").sum()).alias(
+                "poss"
+            ),
+        )
+        .with_columns(
+            (SHOOTING_BASELINE - pl.col("tp") / pl.col("ttsa")).alias("pps_delta"),
+            (pl.col("pm") / pl.col("poss") * 100).alias("margin"),
+        )
+    )
+    feats_adj = (
+        feats_renamed.join(shares.select(["player_id", "team_id"]), on="player_id")
+        .join(tl.select(["team_id", "pps_delta"]), on="team_id")
+        .with_columns((pl.col("pts") + pl.col("pps_delta") * (pl.col("fga") + 0.44 * pl.col("fta"))).alias("pts"))
+    )
+
+    raw = _raw_bpm(feats_adj, positions_est, roles)
+    ptm = shares.select(["player_id", "team_id", "min"])
+
+    if team_adjust:
+        adj = _team_adjust(raw, tl.select(["team_id", "margin"]), ptm)
+    else:
+        adj = raw.select("player_id", pl.col("raw_obpm").alias("obpm"), pl.col("raw_bpm").alias("bpm"))
+
+    out = (
+        adj.join(feats_raw.select(["player_id", "min", "gp"]), on="player_id")
+        .with_columns((pl.col("bpm") - pl.col("obpm")).alias("dbpm"))
+        .select(
+            pl.col("player_id").cast(pl.Int64),
+            pl.col("obpm").cast(pl.Float64),
+            pl.col("dbpm").cast(pl.Float64),
+            pl.col("bpm").cast(pl.Float64),
+            pl.col("min").cast(pl.Float64),
+            pl.col("gp").cast(pl.Int64),
+        )
+    )
+    return out.to_pandas() if return_as_pandas else out
