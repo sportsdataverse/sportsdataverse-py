@@ -32,6 +32,8 @@ import pandas as pd
 import polars as pl
 import pytest
 
+from tests.conftest import skip_if_no_nba_stats_live
+
 from sportsdataverse.nba.nba_v3_v2_adapter import (
     _ACTION_TYPE_MAPS,
     _EVENT_TYPE_MAP,
@@ -851,3 +853,47 @@ def test_pbpstats_stats_nba_roundtrip_possessions_and_starters(tmp_path: pathlib
     assert set(stats_starters) == set(live_starters), f"{game_id}: period set mismatch"
     for period, teams in stats_starters.items():
         assert teams == live_starters[period], f"{game_id} period {period}: starters mismatch"
+
+
+# ---------------------------------------------------------------------------
+# Task 5: export + gated live smoke
+# ---------------------------------------------------------------------------
+
+
+def test_nba_v3_to_v2_pbp_is_exported() -> None:
+    """``nba_v3_to_v2_pbp`` is re-exported from the ``sportsdataverse.nba`` package."""
+    import sportsdataverse.nba as nba
+
+    assert hasattr(nba, "nba_v3_to_v2_pbp")
+    assert callable(nba.nba_v3_to_v2_pbp)
+
+
+@skip_if_no_nba_stats_live
+def test_nba_v3_to_v2_pbp_live_smoke() -> None:
+    """End-to-end live smoke: real ``playbyplayv3``/``boxscoretraditionalv3`` -> non-empty v2 frame.
+
+    Fetches RAW payloads (``return_parsed=False``) so ``nba_v3_to_v2_pbp`` gets
+    the exact shape it expects (``pbp_v3["game"]["actions"]`` /
+    ``box_v3["boxScoreTraditional"]``) -- the same wrappers used throughout
+    this module's offline fixtures, just live rather than committed JSON. The
+    shape asserts fail loudly on a payload-shape drift instead of silently
+    producing an empty frame that the final height/columns asserts might
+    otherwise mask.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3, nba_stats_playbyplayv3
+
+    game_id = "0022200001"
+    pbp_v3 = nba_stats_playbyplayv3(game_id=game_id, return_parsed=False)
+    box_v3 = nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False)
+
+    assert isinstance(pbp_v3, dict), f"expected dict from return_parsed=False, got {type(pbp_v3)}"
+    actions = (pbp_v3.get("game") or {}).get("actions")
+    assert actions, "live playbyplayv3 payload missing game.actions -- shape drift, not a soft failure"
+
+    assert isinstance(box_v3, dict), f"expected dict from return_parsed=False, got {type(box_v3)}"
+    assert box_v3.get("boxScoreTraditional"), "live boxscoretraditionalv3 payload missing boxScoreTraditional"
+
+    df = nba_v3_to_v2_pbp(pbp_v3, box_v3)
+    assert df.height == len(actions) - sum(1 for action in actions if _is_dropped_block_steal(action))
+    for column in _V2_REPRESENTATIVE_COLUMNS:
+        assert column in df.columns, f"missing v2 column: {column}"
