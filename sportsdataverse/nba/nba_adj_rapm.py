@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+from typing import Any, Dict, Tuple
+
 import numpy as np
+import polars as pl
 from scipy.sparse import csr_matrix
 from scipy.sparse import eye as sp_eye
 from scipy.sparse.linalg import factorized
 from sklearn.linear_model import RidgeCV
 
 from sportsdataverse.nba.nba_model_validation import FitResult
-from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS
+from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
 
 
 def _fit_prior_ridge(
@@ -100,3 +104,160 @@ def _fit_prior_ridge(
         samples[s] = prior_mean + solve(rhs)
 
     return FitResult(coef=beta_hat, intercept=0.0, posterior=samples)
+
+
+@dataclass
+class AdjRapmModel:
+    """Prior-informed RAPM: ridge toward a per-player box prior with an RTO posterior.
+
+    Implements the :class:`~sportsdataverse.nba.nba_model_validation.PriorModel`
+    protocol so the validation harness routes through ``fit_with_prior`` and the
+    resulting :class:`~sportsdataverse.nba.nba_model_validation.FitResult` carries
+    a posterior — enabling Oracle ④ (interval calibration).
+
+    Attributes:
+        prior: Per-player ``{player_id: (o_prior, d_prior)}`` in per-100 units.
+        alphas: RidgeCV alpha grid forwarded to ``_fit_prior_ridge``.
+        n_samples: Number of RTO posterior samples.
+        seed: RNG seed for the RTO sampler.
+
+    Example:
+        Fit adj-RAPM with an SPM prior and validate (calibration now populated)::
+
+            from sportsdataverse.nba import AdjRapmModel, nba_spm
+            from sportsdataverse.nba.nba_model_validation import validate_model
+            prior = AdjRapmModel.from_spm(nba_spm(box_feats, coef))
+            report = validate_model(prior, season_frames, model_name="adj_rapm")
+            print(report.calibration.coverage)      # non-None: the prior model has a posterior
+    """
+
+    prior: Dict[int, Tuple[float, float]]
+    alphas: np.ndarray = field(default_factory=lambda: DEFAULT_RAPM_ALPHAS)
+    n_samples: int = 200
+    seed: int = 0
+
+    def fit_with_prior(self, X: csr_matrix, y: np.ndarray, prior_mean: np.ndarray) -> FitResult:
+        """Delegate to ``_fit_prior_ridge`` using this model's hyperparameters.
+
+        Args:
+            X: Sparse design ``(n, 2P)`` from :func:`~sportsdataverse.nba.nba_rapm.build_rapm_design`.
+            y: Possession points ``(n,)``.
+            prior_mean: Per-possession prior mean ``(2P,)`` built by the harness.
+
+        Returns:
+            :class:`~sportsdataverse.nba.nba_model_validation.FitResult` with posterior
+            of shape ``(n_samples, 2P)``.
+        """
+        return _fit_prior_ridge(
+            X,
+            y,
+            prior_mean,
+            alphas=self.alphas,
+            n_samples=self.n_samples,
+            seed=self.seed,
+        )
+
+    @classmethod
+    def from_spm(cls, spm: pl.DataFrame, **kw: object) -> "AdjRapmModel":
+        """Construct from an SPM output frame (``ospm`` / ``dspm`` columns).
+
+        Args:
+            spm: Frame with ``player_id``, ``ospm``, ``dspm`` columns (per-100 units).
+            **kw: Extra keyword arguments forwarded to the constructor
+                (``alphas``, ``n_samples``, ``seed``).
+
+        Returns:
+            ``AdjRapmModel`` whose ``prior`` maps each player_id to ``(ospm, dspm)``.
+        """
+        prior: Dict[int, Tuple[float, float]] = {
+            int(r["player_id"]): (float(r["ospm"]), float(r["dspm"])) for r in spm.iter_rows(named=True)
+        }
+        return cls(prior, **kw)  # type: ignore[arg-type]
+
+    @classmethod
+    def from_bpm(cls, bpm: pl.DataFrame, **kw: object) -> "AdjRapmModel":
+        """Construct from a BPM output frame (``obpm`` / ``dbpm`` columns).
+
+        Args:
+            bpm: Frame with ``player_id``, ``obpm``, ``dbpm`` columns (per-100 units).
+            **kw: Extra keyword arguments forwarded to the constructor
+                (``alphas``, ``n_samples``, ``seed``).
+
+        Returns:
+            ``AdjRapmModel`` whose ``prior`` maps each player_id to ``(obpm, dbpm)``.
+        """
+        prior: Dict[int, Tuple[float, float]] = {
+            int(r["player_id"]): (float(r["obpm"]), float(r["dbpm"])) for r in bpm.iter_rows(named=True)
+        }
+        return cls(prior, **kw)  # type: ignore[arg-type]
+
+
+def nba_adj_rapm(
+    possessions: pl.DataFrame,
+    prior: Dict[int, Tuple[float, float]],
+    *,
+    alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    n_samples: int = 200,
+    seed: int = 0,
+    return_as_pandas: bool = False,
+) -> Any:
+    """One-shot prior-informed RAPM over a possession frame -> per-player ratings.
+
+    Builds the sparse design matrix via
+    :func:`~sportsdataverse.nba.nba_rapm.build_rapm_design`, constructs the
+    per-possession ``prior_mean`` vector from ``prior``, fits a residualized
+    ridge with an RTO posterior via :func:`_fit_prior_ridge`, and returns the
+    per-player offensive, defensive, and combined adj-RAPM ratings alongside
+    possession counts.
+
+    Sign convention (matches :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`):
+    ``d_adj_rapm`` is positive for a good defender (lowers opponent points);
+    ``adj_rapm = o_adj_rapm + d_adj_rapm``.
+
+    Args:
+        possessions: A possession+lineup frame produced by the possession engine
+            (``game_id``, ``offense_team_id``, ``points``,
+            ``off_player_1..5``, ``def_player_1..5``).
+        prior: Per-player ``{player_id: (o_prior, d_prior)}`` in per-100 units.
+            Players absent from ``prior`` receive a ``(0.0, 0.0)`` default.
+        alphas: RidgeCV alpha grid for the regularisation strength (default
+            ``DEFAULT_RAPM_ALPHAS``).
+        n_samples: Number of RTO posterior samples (default 200).
+        seed: RNG seed for the RTO sampler (default 0).
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        Frame with columns ``player_id`` (Int64), ``o_adj_rapm`` (Float64),
+        ``d_adj_rapm`` (Float64), ``adj_rapm`` (Float64), ``off_poss`` (Int64),
+        ``def_poss`` (Int64).
+
+    Example:
+        Fit with an SPM prior::
+
+            from sportsdataverse.nba import nba_adj_rapm
+            ratings = nba_adj_rapm(possessions, spm_prior_dict)
+            print(ratings.sort("adj_rapm", descending=True).head())
+    """
+    X, y, pids = build_rapm_design(possessions)
+    P = len(pids)
+    prior_mean: np.ndarray = np.zeros(2 * P, dtype=np.float64)
+    for k, pid in enumerate(pids):
+        o, d = prior.get(int(pid), (0.0, 0.0))
+        prior_mean[k] = o / 100.0
+        prior_mean[P + k] = -d / 100.0
+    fit = _fit_prior_ridge(X, y, prior_mean, alphas=alphas, n_samples=n_samples, seed=seed)
+    o_r = fit.coef[:P] * 100.0
+    d_r = -fit.coef[P:] * 100.0
+    off_poss = np.asarray(X[:, :P].sum(axis=0)).ravel().astype(np.int64)
+    def_poss = np.asarray(X[:, P:].sum(axis=0)).ravel().astype(np.int64)
+    out = pl.DataFrame(
+        {
+            "player_id": pl.Series(pids, dtype=pl.Int64),
+            "o_adj_rapm": pl.Series(o_r, dtype=pl.Float64),
+            "d_adj_rapm": pl.Series(d_r, dtype=pl.Float64),
+            "adj_rapm": pl.Series(o_r + d_r, dtype=pl.Float64),
+            "off_poss": pl.Series(off_poss, dtype=pl.Int64),
+            "def_poss": pl.Series(def_poss, dtype=pl.Int64),
+        }
+    )
+    return out.to_pandas() if return_as_pandas else out

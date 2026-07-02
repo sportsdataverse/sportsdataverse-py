@@ -25,3 +25,4 @@ from sportsdataverse.nba.nba_spm import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_player_positions import nba_player_positions  # noqa: F401
 from sportsdataverse.nba.nba_bpm import BPM2_COEFFICIENTS, NbaBpmModel, nba_bpm  # noqa: F401
+from sportsdataverse.nba.nba_adj_rapm import AdjRapmModel, nba_adj_rapm  # noqa: F401

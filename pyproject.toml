@@ -336,4 +336,5 @@ files = [
     "sportsdataverse/nba/nba_spm.py",
     "sportsdataverse/nba/nba_player_positions.py",
     "sportsdataverse/nba/nba_bpm.py",
+    "sportsdataverse/nba/nba_adj_rapm.py",
 ]
