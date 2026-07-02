@@ -59,19 +59,23 @@ def _game_ids_for_season(season: int, season_type: str) -> List[str]:
     return log["game_id"].cast(pl.Utf8).unique(maintain_order=True).to_list()
 
 
-def _fetch_possessions(game_id: str, league_id: str) -> pl.DataFrame:
+def _fetch_possessions(game_id: str, league_id: str, *, lineup_source: str = "auto") -> pl.DataFrame:
     """Fetch one game's possession+lineup frame (monkeypatchable).
 
     Args:
         game_id: ESPN/NBA game identifier string.
         league_id: NBA league id (``"00"`` for NBA, ``"20"`` for G-League).
+        lineup_source: Which on-court lineup producer to use — ``"auto"``
+            (default; tries rotation then falls back to pbp), ``"rotation"``
+            (gamerotation endpoint only), or ``"pbp"`` (pbp-derived, no
+            gamerotation fetch).
 
     Returns:
         Possession stint matrix as a polars DataFrame.
     """
     from .nba_possessions import nba_possessions
 
-    return nba_possessions(game_id, league_id)
+    return nba_possessions(game_id, league_id, lineup_source=lineup_source)
 
 
 def compile_nba_season(
@@ -81,6 +85,7 @@ def compile_nba_season(
     resume: bool = True,
     cache_dir: Optional[str] = None,
     delay_s: float = 0.6,
+    lineup_source: str = "auto",
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Compile a full season's possession stint matrix (cached + resumable + throttled).
@@ -98,6 +103,11 @@ def compile_nba_season(
         cache_dir: Cache root; defaults to ``SDV_PY_NBA_CACHE_DIR`` or
             ``~/.sdv_py_nba_cache/possessions``.
         delay_s: Seconds to sleep after each live fetch (rate-limit throttle).
+        lineup_source: Which on-court lineup producer to use — ``"auto"``
+            (default; tries rotation then falls back to pbp), ``"rotation"``
+            (gamerotation endpoint only), or ``"pbp"`` (pbp-derived, no
+            gamerotation fetch — useful when the gamerotation endpoint is
+            throttled or unavailable).
         return_as_pandas: Return pandas instead of polars.
 
     Returns:
@@ -147,7 +157,7 @@ def compile_nba_season(
 
         # --- live fetch (throttle only on successful fetches, not failures) ---
         try:
-            poss = _fetch_possessions(gid, _LEAGUE_ID)
+            poss = _fetch_possessions(gid, _LEAGUE_ID, lineup_source=lineup_source)
         except Exception as exc:
             _LOG.warning("skip game %s (%d/%d): fetch failed: %s", gid, i, total, exc)
             continue

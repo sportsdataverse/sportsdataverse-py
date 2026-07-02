@@ -8,6 +8,10 @@ from sportsdataverse.nba.nba_pbp import *
 from sportsdataverse.nba.nba_player_stats import *
 from sportsdataverse.nba.nba_schedule import *
 from sportsdataverse.nba.nba_teams import *
+from sportsdataverse.nba.nba_lineups import (  # noqa: F401
+    players_on_court_from_pbp,
+    players_on_court_from_rotation,
+)
 from sportsdataverse.nba.nba_season_compile import compile_nba_season  # noqa: F401
 from sportsdataverse.nba.nba_model_validation import (  # noqa: F401
     RidgeRapmModel,

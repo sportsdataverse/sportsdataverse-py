@@ -8,6 +8,9 @@ import pathlib
 import polars as pl
 import pytest
 
+
+from tests.conftest import skip_if_no_nba_stats_live
+
 from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
 from sportsdataverse.nba.nba_lineups import (
     _boxscore_name_map,
@@ -278,3 +281,25 @@ def test_pbp_agrees_with_rotation(game_id: str) -> None:
     # Report + assert the parity floor. If a fixture legitimately drops below,
     # print `rate` and set the floor to the measured value with a comment.
     assert rate >= 0.95, f"game {game_id}: pbp/rotation agreement {rate:.3f} < 0.95"
+
+
+# ---------------------------------------------------------------------------
+# Task 6: export + gated live smoke
+# ---------------------------------------------------------------------------
+
+
+def test_players_on_court_from_pbp_is_exported() -> None:
+    import sportsdataverse.nba as nba
+
+    assert hasattr(nba, "players_on_court_from_pbp")
+
+
+@skip_if_no_nba_stats_live
+def test_pbp_lineup_source_live_smoke() -> None:
+    from sportsdataverse.nba.nba_possessions import nba_possessions
+
+    df = nba_possessions("0022200001", lineup_source="pbp")
+    assert df.height > 0
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    cols = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
+    assert int(df.select(pl.sum_horizontal([pl.col(c).is_null() for c in cols]).alias("n"))["n"].sum()) == 0
