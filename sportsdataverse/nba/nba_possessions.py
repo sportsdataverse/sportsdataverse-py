@@ -11,11 +11,14 @@ games (0022100001, 0022200001, 0022300001).
 
 from __future__ import annotations
 
+import logging
 import re
 from typing import Optional, Union
 
 import pandas as pd
 import polars as pl
+
+logger = logging.getLogger(__name__)
 
 # Columns added by attach_possession_lineups (the RAPM stint design matrix).
 LINEUP_COLUMNS: list[str] = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
@@ -605,16 +608,16 @@ def nba_possessions(
     game_id: str,
     league_id: str = "00",
     *,
+    lineup_source: str = "auto",
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Fetch and build the possession-level lineup stint matrix for a single game.
 
-    Makes three live network calls (play-by-play v3, game rotation, boxscore
-    traditional v3) then chains
+    Makes two or three live network calls (play-by-play v3, optionally game
+    rotation, and boxscore traditional v3) then chains
     :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`,
-    :func:`~sportsdataverse.nba.nba_lineups.parse_rotation_resultsets`,
     :func:`~sportsdataverse.nba.nba_lineups.boxscore_home_away`,
-    :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`,
+    the selected on-court lineup producer,
     :func:`build_possessions`, and :func:`attach_possession_lineups` to
     produce the RAPM stint design matrix.
 
@@ -628,21 +631,39 @@ def nba_possessions(
             and ``boxscoretraditionalv3`` have no ``league_id`` parameter, so
             a non-``"00"`` value does not change the pbp or boxscore output.
             Full WNBA/G-League support is a later phase.
+        lineup_source: Which on-court lineup producer to use.  One of:
+
+            - ``"rotation"`` — fetch ``gamerotation`` and use
+              :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`.
+            - ``"pbp"`` — skip the rotation fetch entirely and use
+              :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_pbp`
+              (~96.7 % agreement with rotation; requires no extra network call).
+            - ``"auto"`` (default) — try rotation first; if the rotation fetch
+              raises or produces an empty on-court frame, fall back to pbp.
+
+            The returned frame gains a constant ``lineup_source`` column
+            (``"rotation"`` or ``"pbp"``) recording which producer was used.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of :class:`polars.DataFrame`.
 
     Returns:
         Polars (or pandas) DataFrame with schema combining
-        :data:`POSSESSIONS_SCHEMA` and the ten lineup columns
-        ``off_player_1..5`` / ``def_player_1..5``.  One row per possession.
+        :data:`POSSESSIONS_SCHEMA`, the ten lineup columns
+        ``off_player_1..5`` / ``def_player_1..5``, and a ``lineup_source``
+        Utf8 column.  One row per possession.
         Empty or malformed payloads return a zero-row frame (never raises).
 
     Example:
-        Quick start::
+        Quick start (rotation, default)::
 
             from sportsdataverse.nba.nba_possessions import nba_possessions
             df = nba_possessions("0022200001")
             print(df.shape, df["off_player_1"].dtype)
+
+        Pure-pbp lineups (no rotation fetch)::
+
+            df_pbp = nba_possessions("0022200001", lineup_source="pbp")
+            print(df_pbp["lineup_source"].unique())
 
         Pandas output::
 
@@ -669,20 +690,42 @@ def nba_possessions(
     from sportsdataverse.nba.nba_lineups import (
         boxscore_home_away,
         parse_rotation_resultsets,
+        players_on_court_from_pbp,
         players_on_court_from_rotation,
     )
 
-    raw_pbp = _fetch_pbp(game_id, league_id)
-    raw_rot = _fetch_rotation(game_id, league_id)
-    raw_box = _fetch_box(game_id, league_id)
+    if lineup_source not in ("auto", "rotation", "pbp"):
+        raise ValueError(f"lineup_source must be 'auto'|'rotation'|'pbp', got {lineup_source!r}")
 
+    raw_pbp = _fetch_pbp(game_id, league_id)
+    raw_box = _fetch_box(game_id, league_id)
     enh = enhanced_pbp_from_payload(raw_pbp, league_id=league_id)
-    rot = parse_rotation_resultsets(raw_rot)
     home, away = boxscore_home_away(raw_box)
 
-    oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+    def _from_pbp() -> "tuple[pl.DataFrame, str]":
+        return players_on_court_from_pbp(enh, raw_box, home_team_id=home, away_team_id=away), "pbp"
+
+    def _from_rotation() -> "tuple[pl.DataFrame, str]":
+        raw_rot = _fetch_rotation(game_id, league_id)
+        rot = parse_rotation_resultsets(raw_rot)
+        oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
+        if oc.is_empty():
+            raise ValueError("rotation produced empty on-court frame")
+        return oc, "rotation"
+
+    if lineup_source == "pbp":
+        oc, used = _from_pbp()
+    elif lineup_source == "rotation":
+        oc, used = _from_rotation()
+    else:  # auto: rotation primary, pbp fallback
+        try:
+            oc, used = _from_rotation()
+        except Exception as exc:  # noqa: BLE001 - fall back on any rotation failure
+            logger.warning("nba_possessions(%s): rotation failed (%s) -> pbp fallback", game_id, exc)
+            oc, used = _from_pbp()
+
     poss = build_possessions(enh)
-    df = attach_possession_lineups(poss, oc, enh, home_team_id=home)
+    df = attach_possession_lineups(poss, oc, enh, home_team_id=home).with_columns(pl.lit(used).alias("lineup_source"))
 
     if return_as_pandas:
         return df.to_pandas()
