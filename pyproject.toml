@@ -334,4 +334,6 @@ files = [
     "sportsdataverse/nba/nba_season_compile.py",
     "sportsdataverse/nba/nba_box_logs.py",
     "sportsdataverse/nba/nba_spm.py",
+    "sportsdataverse/nba/nba_player_positions.py",
+    "sportsdataverse/nba/nba_bpm.py",
 ]

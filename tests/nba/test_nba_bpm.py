@@ -313,3 +313,20 @@ def test_nba_bpm_model_head_to_head() -> None:
     rep = validate_model(model, [poss], model_name="bpm", oracles=("retrodiction",))
     assert rep.retrodiction is not None
     assert rep.retrodiction.n_test_games > 0
+
+
+# ---------------------------------------------------------------------------
+# Task 6: gated live smoke test
+# ---------------------------------------------------------------------------
+
+from tests.conftest import skip_if_no_nba_stats_live
+
+
+@skip_if_no_nba_stats_live
+def test_nba_bpm_live_season_smoke() -> None:
+    from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
+
+    logs = nba_box_logs("2023-24")
+    pos = nba_player_positions("2023-24")
+    out = nba_bpm(logs["player"], logs["team"], pos)
+    assert out.height > 0 and set(out.columns) == {"player_id", "obpm", "dbpm", "bpm", "min", "gp"}
