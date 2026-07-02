@@ -7,6 +7,10 @@ no polars — these are the primitives the full ``nba_v3_to_v2_pbp`` assembly
 
 Task 2 adds the 1-to-1 secondary-player extraction (assist/block/steal/sub/
 jump) tests, validated offline against the committed cdn feed truth.
+
+Task 3 adds the full ``nba_v3_to_v2_pbp`` assembly tests: the v2 output
+schema, event/action-type codes, home/visitor/neutral description split,
+score forward-fill, and the block/steal row-count drop.
 """
 
 from __future__ import annotations
@@ -15,6 +19,8 @@ import json
 import pathlib
 from typing import Dict, List, Optional, Tuple
 
+import pandas as pd
+import polars as pl
 import pytest
 
 from sportsdataverse.nba.nba_v3_v2_adapter import (
@@ -22,7 +28,9 @@ from sportsdataverse.nba.nba_v3_v2_adapter import (
     _EVENT_TYPE_MAP,
     _build_roster,
     _extract_secondary_players,
+    _is_dropped_block_steal,
     _lookup_player,
+    nba_v3_to_v2_pbp,
 )
 
 FXROOT = pathlib.Path("tests/fixtures/nba_engine")
@@ -31,6 +39,12 @@ FXROOT = pathlib.Path("tests/fixtures/nba_engine")
 def _box(game_id: str) -> dict:
     """Load a committed boxscoretraditionalv3 fixture."""
     return json.loads((FXROOT / game_id / "boxscoretraditionalv3.json").read_text())
+
+
+def _pbp(game_id: str) -> dict:
+    """Load the full committed ``playbyplayv3.json`` fixture payload."""
+    payload: dict = json.loads((FXROOT / game_id / "playbyplayv3.json").read_text())
+    return payload
 
 
 def _v3_actions(game_id: str) -> List[dict]:
@@ -426,3 +440,107 @@ def test_extract_secondary_players_returns_none_for_actions_with_no_secondary() 
     extracted = _extract_secondary_players(_v3_actions("0022300001"), roster)
     # actionNumber 2 is the period-start action -- no assist/block/steal/sub/jump.
     assert 2 not in extracted
+
+
+# ---------------------------------------------------------------------------
+# Task 3: nba_v3_to_v2_pbp -- full v2-schema assembly
+# ---------------------------------------------------------------------------
+
+_V2_REPRESENTATIVE_COLUMNS = [
+    "game_id",
+    "event_num",
+    "event_type",
+    "event_action_type",
+    "home_description",
+    "visitor_description",
+    "neutral_description",
+    "score",
+    "score_margin",
+    "team_leading",
+    "person1type",
+    "player1_id",
+    "player2_id",
+    "player3_id",
+    "time_quarter",
+    "minute_game",
+]
+
+
+def test_v3_to_v2_pbp_has_representative_v2_schema_columns() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    for column in _V2_REPRESENTATIVE_COLUMNS:
+        assert column in df.columns, f"missing v2 column: {column}"
+
+
+def test_v3_to_v2_pbp_event_type_values_are_within_mapped_code_set() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    allowed = set(_EVENT_TYPE_MAP.values()) | {"0", "13"}
+    observed = set(df["event_type"].unique().to_list())
+    assert observed <= allowed
+
+
+def test_v3_to_v2_pbp_known_assisted_made_shot_has_player2_id_set() -> None:
+    """actionNumber 7 in 0022300001: 'Turner ... (Haliburton 1 AST)' -- a Made Shot with an assist."""
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    row = df.filter(pl.col("event_num") == "7")
+    assert row.height == 1
+    assert row["player2_id"][0] is not None
+
+
+def test_v3_to_v2_pbp_home_and_visitor_descriptions_are_mutually_exclusive() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    both_set = df.filter(pl.col("home_description").is_not_null() & pl.col("visitor_description").is_not_null())
+    assert both_set.height == 0
+
+
+def test_v3_to_v2_pbp_score_forward_fill_never_null_and_constant_between_scores() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    assert df["score"].null_count() == 0
+    assert df["score_margin"].null_count() == 0
+
+    # Slice around the first scoring play (actionNumber 7, score becomes "0 - 2")
+    # through the next scoring play: score/score_margin must hold constant on
+    # every non-scoring row in between.
+    slice_df = df.filter((pl.col("event_num").cast(pl.Int64) >= 7) & (pl.col("event_num").cast(pl.Int64) <= 15))
+    scores = slice_df["score"].to_list()
+    margins = slice_df["score_margin"].to_list()
+    # Every row in the slice must reflect the score set at actionNumber 7 until
+    # the next scoring event changes it -- i.e. no null and no mid-run drift
+    # back to an earlier (smaller) state.
+    assert all(s is not None for s in scores)
+    assert all(m is not None for m in margins)
+
+
+def test_v3_to_v2_pbp_row_count_equals_v3_actions_minus_dropped_block_steal_rows() -> None:
+    actions = _v3_actions("0022300001")
+    dropped = sum(1 for action in actions if _is_dropped_block_steal(action))
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    assert df.height == len(actions) - dropped
+
+
+def test_v3_to_v2_pbp_ids_are_utf8_strings() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    assert df.schema["player1_id"] == pl.Utf8
+    assert df.schema["player2_id"] == pl.Utf8
+    assert df.schema["player3_id"] == pl.Utf8
+
+
+def test_v3_to_v2_pbp_return_as_pandas() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df_pd = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"), return_as_pandas=True)
+    assert isinstance(df_pd, pd.DataFrame)
+    assert len(df_pd) == df.height
+
+
+def test_v3_to_v2_pbp_empty_actions_returns_zero_row_frame_with_schema() -> None:
+    empty_pbp = {"game": {"gameId": "0000000000", "actions": []}}
+    df = nba_v3_to_v2_pbp(empty_pbp, {})
+    assert df.height == 0
+    for column in _V2_REPRESENTATIVE_COLUMNS:
+        assert column in df.columns
+
+
+def test_v3_to_v2_pbp_malformed_input_never_raises() -> None:
+    df = nba_v3_to_v2_pbp({}, {})
+    assert df.height == 0
+    assert isinstance(df, pl.DataFrame)

@@ -17,14 +17,30 @@ the older v2 feed carried as ``player2``/``player3``. This function recovers
 them from the v3 ``description`` text (assist/sub/jump) plus a structural
 block/steal consolidation trick (standalone rows that carry the blocker/
 stealer as ``personId`` directly), validated 1-to-1 against the richer cdn
-live feed on 3 committed fixtures. Event assembly and score/description
-derivation land in later tasks of Phase A.
+live feed on 3 committed fixtures.
+
+Task 3 scope: ``nba_v3_to_v2_pbp`` -- the public assembly function. Turns a
+``playbyplayv3`` payload + ``boxscoretraditionalv3`` payload into the full
+v2-schema polars frame that Phases B/C/D (possessions, lineups, stat
+tracking) build on. It drops the consolidated block/steal rows (Task 2 wires
+them into their parent Missed Shot / Turnover instead), derives
+``event_type``/``event_action_type`` from the lookup tables above, splits
+``description`` by ``location`` into home/visitor/neutral, forward-fills the
+running score, and enriches ``player2``/``player3`` fields from the roster
+**by id** -- the one deliberate divergence from hoopR, which re-resolves
+block/steal names in its per-row loop and can silently override the
+reliable ``personId`` it already captured (see :func:`_secondary_fields`).
 """
 
 from __future__ import annotations
 
 import re
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import pandas as pd
+import polars as pl
+
+from sportsdataverse.dl_utils import underscore
 
 # ---------------------------------------------------------------------------
 # V3 description-regex extraction (Task 2)
@@ -472,3 +488,475 @@ def _extract_secondary_players(actions: List[dict], roster: Dict[int, dict]) -> 
             _record(action_number, "player3_id", _lookup_player(tip_to, roster))
 
     return result
+
+
+# ---------------------------------------------------------------------------
+# Task 3: full v2 output schema assembly
+# ---------------------------------------------------------------------------
+
+# ISO 8601 clock pattern: "PT10M30.00S" -> minutes / seconds remaining in
+# the quarter. No lookaround needed (Python's ``re`` isn't used here -- this
+# constant feeds polars' ``str.extract``, whose Rust regex engine also has no
+# lookaround support, but this pattern doesn't need any).
+_CLOCK_PATTERN = r"PT([0-9]+)M([0-9.]+)S"
+
+# actionType -> the _ACTION_TYPE_MAPS sub-table key used to resolve
+# event_action_type (EVENTMSGACTIONTYPE) from subType. actionType values not
+# present here (Substitution, Jump Ball, Rebound, period/Game/Ejection/
+# Instant Replay/Stoppage, or any unrecognized value) always resolve to "0",
+# mirroring hoopR's ``vapply`` switch (R 682-702).
+_EVENT_ACTION_TYPE_FAMILY: Dict[str, str] = {
+    "Made Shot": "shot",
+    "Missed Shot": "shot",
+    "Free Throw": "ft",
+    "Turnover": "turnover",
+    "Foul": "foul",
+    "Timeout": "timeout",
+    "Violation": "violation",
+}
+
+# The full v2 output schema (column order + dtype), used both to select the
+# real frame's columns and to build the empty/malformed-input zero-row frame.
+# Per-event columns first, then the v3 passthrough columns, matching the
+# design spec's "v2 output schema" section verbatim.
+_V2_SCHEMA: Dict[str, Any] = {
+    "game_id": pl.Utf8,
+    "event_num": pl.Utf8,
+    "event_type": pl.Utf8,
+    "event_action_type": pl.Utf8,
+    "period": pl.Int64,
+    "clock": pl.Utf8,
+    "minute_game": pl.Float64,
+    "time_remaining": pl.Float64,
+    "wc_time_string": pl.Utf8,
+    "time_quarter": pl.Utf8,
+    "minute_remaining_quarter": pl.Int64,
+    "seconds_remaining_quarter": pl.Int64,
+    "action_type": pl.Utf8,
+    "sub_type": pl.Utf8,
+    "home_description": pl.Utf8,
+    "neutral_description": pl.Utf8,
+    "visitor_description": pl.Utf8,
+    "description": pl.Utf8,
+    "location": pl.Utf8,
+    "score": pl.Utf8,
+    "away_score": pl.Int64,
+    "home_score": pl.Int64,
+    "score_margin": pl.Utf8,
+    "team_leading": pl.Utf8,
+    "person1type": pl.Utf8,
+    "player1_id": pl.Utf8,
+    "player1_name": pl.Utf8,
+    "player1_team_id": pl.Utf8,
+    "player1_team_city": pl.Utf8,
+    "player1_team_nickname": pl.Utf8,
+    "player1_team_abbreviation": pl.Utf8,
+    "person2type": pl.Utf8,
+    "player2_id": pl.Utf8,
+    "player2_name": pl.Utf8,
+    "player2_team_id": pl.Utf8,
+    "player2_team_city": pl.Utf8,
+    "player2_team_nickname": pl.Utf8,
+    "player2_team_abbreviation": pl.Utf8,
+    "person3type": pl.Utf8,
+    "player3_id": pl.Utf8,
+    "player3_name": pl.Utf8,
+    "player3_team_id": pl.Utf8,
+    "player3_team_city": pl.Utf8,
+    "player3_team_nickname": pl.Utf8,
+    "player3_team_abbreviation": pl.Utf8,
+    "video_available_flag": pl.Utf8,
+    "x_legacy": pl.Int64,
+    "y_legacy": pl.Int64,
+    "shot_distance": pl.Int64,
+    "shot_result": pl.Utf8,
+    "is_field_goal": pl.Int64,
+    "points_total": pl.Int64,
+    "shot_value": pl.Int64,
+    "action_number": pl.Int64,
+    "team_id": pl.Int64,
+    "team_tricode": pl.Utf8,
+    "person_id": pl.Int64,
+    "player_name": pl.Utf8,
+    "score_home": pl.Utf8,
+    "score_away": pl.Utf8,
+    "action_id": pl.Int64,
+}
+
+_V2_COLUMNS: List[str] = list(_V2_SCHEMA.keys())
+
+
+def _event_action_type(action_type: str, sub_type: str) -> str:
+    """Resolve EVENTMSGACTIONTYPE from ``(actionType, subType)``.
+
+    Ports hoopR's ``vapply`` switch (R 682-702): blank ``subType`` always
+    resolves to ``"0"``; otherwise the ``actionType`` selects one of the 6
+    :data:`_ACTION_TYPE_MAPS` sub-tables (``shot`` covers both Made Shot and
+    Missed Shot), and the ``subType`` is looked up in it, defaulting to
+    ``"0"`` on a miss. ``actionType`` values with no sub-table (Substitution,
+    Jump Ball, Rebound, etc.) always return ``"0"``.
+    """
+    if not sub_type:
+        return "0"
+    family = _EVENT_ACTION_TYPE_FAMILY.get(action_type)
+    if family is None:
+        return "0"
+    return _ACTION_TYPE_MAPS[family].get(sub_type, "0")
+
+
+def _is_dropped_block_steal(action: dict) -> bool:
+    """True for a standalone block/steal row consolidated into its parent (R 361-419).
+
+    These are rows with ``actionType == ""`` and ``"BLOCK"``/``"STEAL"`` in
+    ``description`` -- :func:`_extract_secondary_players` already folds the
+    blocker/stealer into the parent Missed Shot / Turnover row, so the
+    standalone row itself must be dropped from the output frame.
+    """
+    if (action.get("actionType") or "") != "":
+        return False
+    description = action.get("description") or ""
+    return "BLOCK" in description or "STEAL" in description
+
+
+def _secondary_fields(
+    action_number: Optional[int],
+    key: str,
+    secondary: Dict[int, dict],
+    roster: Dict[int, dict],
+) -> Tuple[Optional[str], Optional[str], Optional[str], Optional[str], Optional[str], Optional[str]]:
+    """Enrich a Task 2 ``player2_id``/``player3_id`` with roster name + team fields.
+
+    **The deliberate divergence from hoopR**: hoopR re-resolves block/steal
+    players by NAME inside its per-row loop (R 542-553), which can silently
+    override the reliable ``personId`` it captured a few lines earlier (R
+    374-416). This helper takes the id straight from
+    :func:`_extract_secondary_players` -- computed once, already proven
+    1-to-1 against the cdn truth -- and uses the roster **only** to attach
+    display name / team metadata for that id. It never re-resolves by name.
+
+    Args:
+        action_number: The row's ``actionNumber`` (the key
+            :func:`_extract_secondary_players` results are keyed by).
+        key: ``"player2_id"`` or ``"player3_id"``.
+        secondary: Output of :func:`_extract_secondary_players`.
+        roster: Output of :func:`_build_roster`.
+
+    Returns:
+        ``(id_str, name, team_id_str, team_city, team_nickname,
+        team_tricode)``. All ``None`` when there is no secondary player for
+        this action/slot, or when the id has no roster entry (only
+        ``id_str`` is then populated).
+    """
+    if action_number is None:
+        return (None, None, None, None, None, None)
+    person_id = secondary.get(action_number, {}).get(key)
+    if person_id is None:
+        return (None, None, None, None, None, None)
+    id_str = str(int(person_id))
+    info = roster.get(int(person_id))
+    if info is None:
+        return (id_str, None, None, None, None, None)
+    team_id = info.get("team_id")
+    team_id_str = str(int(team_id)) if team_id is not None else None
+    return (id_str, info.get("full_name"), team_id_str, info.get("city"), info.get("nickname"), info.get("tricode"))
+
+
+def _empty_v2_frame() -> pl.DataFrame:
+    """Zero-row frame carrying the full documented v2 schema (never raises on empty input)."""
+    return pl.DataFrame(schema=_V2_SCHEMA)
+
+
+def _finish(df: pl.DataFrame, return_as_pandas: bool) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Return ``df`` as-is, or converted to pandas when requested."""
+    if return_as_pandas:
+        return df.to_pandas()
+    return df
+
+
+def nba_v3_to_v2_pbp(
+    pbp_v3: dict,
+    box_v3: dict,
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Convert a v3 ``playbyplayv3`` payload into the full v2-schema pbp frame.
+
+    Ports hoopR's ``.v3_to_v2_format()`` (``R/nba_stats_pbp.R`` lines
+    210-810) to polars: the v3 feed (``stats.nba.com`` ``playbyplayv3``) is
+    reshaped into the older v2 schema that the committed hoopR-nba-stats-data
+    dataset carries and that ``pbpstats``' ``stats_nba`` provider consumes.
+    This is a pure, network-free function -- both payloads must already be
+    fetched (e.g. via ``nba_stats_playbyplayv3`` / ``nba_stats_boxscoretraditionalv3``).
+
+    Pipeline:
+
+    1. Build the per-``person_id`` roster from ``box_v3``
+       (:func:`_build_roster`) and recover ``player2_id``/``player3_id``
+       (assist/block/steal/sub-in/jump) from ``pbp_v3`` (
+       :func:`_extract_secondary_players`).
+    2. Drop the standalone block/steal rows consolidated into their parent
+       Missed Shot / Turnover (:func:`_is_dropped_block_steal`) -- the only
+       row-count change versus the raw v3 action list.
+    3. Derive ``event_type``/``event_action_type`` from the module's lookup
+       tables, split ``description`` by ``location`` into home/visitor/
+       neutral, forward-fill the running score, and enrich ``player2``/
+       ``player3`` from the roster **by id** (see :func:`_secondary_fields`
+       for the deliberate divergence from hoopR's name-based re-resolution).
+
+    Args:
+        pbp_v3: Raw ``playbyplayv3`` dict (``nba_stats_playbyplayv3`` /
+            ``wnba_stats_playbyplayv3`` payload shape); actions live at
+            ``pbp_v3["game"]["actions"]``.
+        box_v3: Raw ``boxscoretraditionalv3`` dict, passed through to
+            :func:`_build_roster`.
+        return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
+            instead of :class:`polars.DataFrame`.
+
+    Returns:
+        Polars (or pandas) DataFrame with the full v2 schema (game/event
+        identifiers, event/action type codes, home/visitor/neutral
+        descriptions, forward-filled score + margin + leader, per-player
+        columns for players 1-3, and the v3 passthrough columns). Empty or
+        malformed input returns a zero-row frame with the same schema
+        (never raises).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_v3_v2_adapter import nba_v3_to_v2_pbp
+            from sportsdataverse.nba.nba_stats import nba_stats_playbyplayv3, nba_stats_boxscoretraditionalv3
+
+            pbp_v3 = nba_stats_playbyplayv3(game_id="0022300001", return_parsed=False)
+            box_v3 = nba_stats_boxscoretraditionalv3(game_id="0022300001", return_parsed=False)
+            df = nba_v3_to_v2_pbp(pbp_v3, box_v3)
+            print(df.shape, df.columns)
+
+        Pandas output::
+
+            df_pd = nba_v3_to_v2_pbp(pbp_v3, box_v3, return_as_pandas=True)
+            print(type(df_pd))
+
+        Pipeline next step (feed a pbpstats-style consumer)::
+
+            df.filter(pl.col("event_type") == "1").select("player1_name", "player2_name")
+
+        See Also:
+            * `hoopR`_ -- the R implementation this function ports (``.v3_to_v2_format``)
+            * `nba_api`_ -- reference Python client for stats.nba.com
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    game = (pbp_v3 or {}).get("game") or {}
+    game_id = game.get("gameId") or (pbp_v3 or {}).get("gameId")
+    actions: List[dict] = game.get("actions") or []
+
+    roster = _build_roster(box_v3)
+    secondary = _extract_secondary_players(actions, roster)
+
+    kept = [action for action in actions if not _is_dropped_block_steal(action)]
+
+    if not kept:
+        return _finish(_empty_v2_frame(), return_as_pandas)
+
+    df = pl.DataFrame(kept, infer_schema_length=None)
+    df = df.rename({column: underscore(column) for column in df.columns})
+
+    game_id_str: Optional[str] = str(game_id) if game_id is not None else None
+    df = df.with_columns(
+        pl.lit(game_id_str, dtype=pl.Utf8).alias("game_id"),
+        pl.col("action_number").cast(pl.Int64),
+        pl.col("period").cast(pl.Int64),
+        pl.col("person_id").cast(pl.Int64),
+        pl.col("team_id").cast(pl.Int64),
+        pl.col("x_legacy").cast(pl.Int64),
+        pl.col("y_legacy").cast(pl.Int64),
+        pl.col("shot_distance").cast(pl.Int64),
+        pl.col("is_field_goal").cast(pl.Int64),
+        pl.col("points_total").cast(pl.Int64),
+        pl.col("shot_value").cast(pl.Int64),
+        pl.col("action_id").cast(pl.Int64),
+        pl.col("video_available").cast(pl.Int64, strict=False),
+        pl.col("action_type").cast(pl.Utf8).fill_null(""),
+        pl.col("sub_type").cast(pl.Utf8).fill_null(""),
+        pl.col("location").cast(pl.Utf8).fill_null(""),
+        pl.col("description").cast(pl.Utf8).fill_null(""),
+        pl.col("team_tricode").cast(pl.Utf8).fill_null(""),
+        pl.col("player_name").cast(pl.Utf8).fill_null(""),
+        pl.col("shot_result").cast(pl.Utf8).fill_null(""),
+        pl.col("clock").cast(pl.Utf8).fill_null(""),
+        pl.col("score_home").cast(pl.Utf8),
+        pl.col("score_away").cast(pl.Utf8),
+    )
+
+    # event_num / event_type (R 671-676, 713-714)
+    df = df.with_columns(
+        pl.col("action_number").cast(pl.Utf8).alias("event_num"),
+        pl.col("action_type").replace_strict(_EVENT_TYPE_MAP, default="0").alias("event_type"),
+    )
+    df = df.with_columns(
+        pl.when((pl.col("action_type") == "period") & (pl.col("sub_type") == "end"))
+        .then(pl.lit("13"))
+        .otherwise(pl.col("event_type"))
+        .alias("event_type")
+    )
+
+    # event_action_type (R 678-702) -- per-row family+subType lookup, mirroring
+    # hoopR's own per-row `vapply` (not a vectorizable dplyr expression).
+    event_action_types: List[str] = [
+        _event_action_type(action.get("actionType") or "", action.get("subType") or "") for action in kept
+    ]
+    df = df.with_columns(pl.Series("event_action_type", event_action_types, dtype=pl.Utf8))
+
+    # Descriptions split by location (R 664-669).
+    df = df.with_columns(
+        pl.when(pl.col("location") == "h").then(pl.col("description")).otherwise(None).alias("home_description"),
+        pl.when(pl.col("location") == "v").then(pl.col("description")).otherwise(None).alias("visitor_description"),
+        pl.when((pl.col("location") == "") | pl.col("location").is_null())
+        .then(pl.col("description"))
+        .otherwise(None)
+        .alias("neutral_description"),
+    )
+
+    # person1type (R 704-709).
+    df = df.with_columns(
+        pl.when(pl.col("location") == "h")
+        .then(pl.lit("4"))
+        .when(pl.col("location") == "v")
+        .then(pl.lit("5"))
+        .otherwise(pl.lit("0"))
+        .alias("person1type")
+    )
+
+    # player1 (R 737-743) + person2type/person3type -- hoopR never assigns
+    # these in its per-row loop (R 517-525), so they stay null (Task brief #8).
+    df = df.with_columns(
+        pl.col("person_id").cast(pl.Utf8).alias("player1_id"),
+        pl.col("player_name").alias("player1_name"),
+        pl.col("team_id").cast(pl.Utf8).alias("player1_team_id"),
+        pl.lit(None, dtype=pl.Utf8).alias("player1_team_city"),
+        pl.lit(None, dtype=pl.Utf8).alias("player1_team_nickname"),
+        pl.col("team_tricode").alias("player1_team_abbreviation"),
+        pl.lit(None, dtype=pl.Utf8).alias("person2type"),
+        pl.lit(None, dtype=pl.Utf8).alias("person3type"),
+    )
+
+    # player2 / player3: id straight from Task 2's extraction, enriched via
+    # roster BY ID -- never re-resolved by name (the deliberate divergence).
+    p2_id: List[Optional[str]] = []
+    p2_name: List[Optional[str]] = []
+    p2_team_id: List[Optional[str]] = []
+    p2_city: List[Optional[str]] = []
+    p2_nick: List[Optional[str]] = []
+    p2_abbr: List[Optional[str]] = []
+    p3_id: List[Optional[str]] = []
+    p3_name: List[Optional[str]] = []
+    p3_team_id: List[Optional[str]] = []
+    p3_city: List[Optional[str]] = []
+    p3_nick: List[Optional[str]] = []
+    p3_abbr: List[Optional[str]] = []
+    for action in kept:
+        action_number = action.get("actionNumber")
+        i2, n2, t2, c2, k2, a2 = _secondary_fields(action_number, "player2_id", secondary, roster)
+        p2_id.append(i2)
+        p2_name.append(n2)
+        p2_team_id.append(t2)
+        p2_city.append(c2)
+        p2_nick.append(k2)
+        p2_abbr.append(a2)
+        i3, n3, t3, c3, k3, a3 = _secondary_fields(action_number, "player3_id", secondary, roster)
+        p3_id.append(i3)
+        p3_name.append(n3)
+        p3_team_id.append(t3)
+        p3_city.append(c3)
+        p3_nick.append(k3)
+        p3_abbr.append(a3)
+
+    df = df.with_columns(
+        pl.Series("player2_id", p2_id, dtype=pl.Utf8),
+        pl.Series("player2_name", p2_name, dtype=pl.Utf8),
+        pl.Series("player2_team_id", p2_team_id, dtype=pl.Utf8),
+        pl.Series("player2_team_city", p2_city, dtype=pl.Utf8),
+        pl.Series("player2_team_nickname", p2_nick, dtype=pl.Utf8),
+        pl.Series("player2_team_abbreviation", p2_abbr, dtype=pl.Utf8),
+        pl.Series("player3_id", p3_id, dtype=pl.Utf8),
+        pl.Series("player3_name", p3_name, dtype=pl.Utf8),
+        pl.Series("player3_team_id", p3_team_id, dtype=pl.Utf8),
+        pl.Series("player3_team_city", p3_city, dtype=pl.Utf8),
+        pl.Series("player3_team_nickname", p3_nick, dtype=pl.Utf8),
+        pl.Series("player3_team_abbreviation", p3_abbr, dtype=pl.Utf8),
+    )
+
+    # video_available_flag = str(video_available).
+    df = df.with_columns(pl.col("video_available").cast(pl.Utf8).alias("video_available_flag"))
+
+    # Time columns (R 606-637): parse ISO clock -> minute/second remaining in
+    # the quarter, then derive minute_game / time_remaining.
+    df = df.with_columns(
+        pl.col("clock").str.extract(_CLOCK_PATTERN, 1).cast(pl.Float64, strict=False).alias("_mins"),
+        pl.col("clock").str.extract(_CLOCK_PATTERN, 2).cast(pl.Float64, strict=False).alias("_secs"),
+    )
+    df = df.with_columns(
+        pl.col("_mins").floor().cast(pl.Int64).alias("minute_remaining_quarter"),
+        pl.col("_secs").floor().cast(pl.Int64).alias("seconds_remaining_quarter"),
+    )
+    df = df.with_columns(
+        (
+            pl.col("minute_remaining_quarter").cast(pl.Utf8).str.zfill(2)
+            + pl.lit(":")
+            + pl.col("seconds_remaining_quarter").cast(pl.Utf8).str.zfill(2)
+        ).alias("time_quarter")
+    )
+    quarter_len = pl.when(pl.col("period") <= 4).then(pl.lit(12.0)).otherwise(pl.lit(5.0))
+    elapsed_in_period = quarter_len - (
+        pl.col("minute_remaining_quarter").cast(pl.Float64)
+        + pl.col("seconds_remaining_quarter").cast(pl.Float64) / 60.0
+    )
+    df = df.with_columns(elapsed_in_period.alias("_elapsed"))
+    minute_game = (
+        pl.when(pl.col("period") <= 4)
+        .then((pl.col("period") - 1) * 12 + pl.col("_elapsed"))
+        .otherwise(48 + (pl.col("period") - 5) * 5 + pl.col("_elapsed"))
+    )
+    time_remaining = (
+        pl.when(pl.col("period") <= 4)
+        .then(
+            (4 - pl.col("period")) * 12
+            + pl.col("minute_remaining_quarter").cast(pl.Float64)
+            + pl.col("seconds_remaining_quarter").cast(pl.Float64) / 60.0
+        )
+        .otherwise(
+            pl.col("minute_remaining_quarter").cast(pl.Float64)
+            + pl.col("seconds_remaining_quarter").cast(pl.Float64) / 60.0
+        )
+    )
+    df = df.with_columns(
+        minute_game.round(2).alias("minute_game"),
+        time_remaining.round(2).alias("time_remaining"),
+        pl.lit(None, dtype=pl.Utf8).alias("wc_time_string"),
+    )
+
+    # Score columns (R 639-662): cast raw string scores to nullable Int64,
+    # forward-fill (polars .forward_fill()) with an initial 0 before the
+    # first score, then derive score / score_margin / team_leading.
+    df = df.with_columns(
+        pl.col("score_home").cast(pl.Int64, strict=False).alias("_home_num"),
+        pl.col("score_away").cast(pl.Int64, strict=False).alias("_away_num"),
+    )
+    df = df.with_columns(
+        pl.col("_home_num").forward_fill().fill_null(0).alias("home_score"),
+        pl.col("_away_num").forward_fill().fill_null(0).alias("away_score"),
+    )
+    df = df.with_columns(
+        (pl.col("away_score").cast(pl.Utf8) + pl.lit(" - ") + pl.col("home_score").cast(pl.Utf8)).alias("score"),
+        (pl.col("home_score") - pl.col("away_score")).cast(pl.Utf8).alias("score_margin"),
+        pl.when(pl.col("home_score") == pl.col("away_score"))
+        .then(pl.lit("Tie"))
+        .when(pl.col("home_score") > pl.col("away_score"))
+        .then(pl.lit("Home"))
+        .otherwise(pl.lit("Away"))
+        .alias("team_leading"),
+    )
+
+    df = df.select(_V2_COLUMNS)
+    return _finish(df, return_as_pandas)
