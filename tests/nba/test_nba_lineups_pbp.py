@@ -148,3 +148,52 @@ def test_parse_sub_in_name() -> None:
     assert _parse_sub_in_name("SUB: Vonleh FOR Horford") == "vonleh"
     assert _parse_sub_in_name("SUB: Williams FOR White") == "williams"
     assert _parse_sub_in_name("not a sub") is None
+
+
+# ---------------------------------------------------------------------------
+# Task 3: players_on_court_from_pbp
+# ---------------------------------------------------------------------------
+
+import polars as pl
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import players_on_court_from_pbp
+from sportsdataverse.nba.nba_pbp_constants import LINEUPS_SCHEMA
+
+
+def _pbp(g: str) -> dict:
+    return json.loads((FXROOT / g / "playbyplayv3.json").read_text())
+
+
+def test_pbp_producer_schema_and_coverage() -> None:
+    enh = enhanced_pbp_from_payload(_pbp("0022200001"))
+    oc = players_on_court_from_pbp(enh, _box("0022200001"), home_team_id=1610612738, away_team_id=1610612755)
+    assert oc.schema == LINEUPS_SCHEMA
+    assert oc.height == enh.height  # one row per action
+    # every row has exactly 5 home + 5 away non-null (fully covered)
+    home_cols = [f"home_player_{i}" for i in range(1, 6)]
+    away_cols = [f"away_player_{i}" for i in range(1, 6)]
+    nulls = oc.select(pl.sum_horizontal([pl.col(c).is_null() for c in home_cols + away_cols]).alias("n"))
+    assert int(nulls["n"].sum()) == 0
+
+
+def test_pbp_producer_seeds_starters_first_action() -> None:
+    enh = enhanced_pbp_from_payload(_pbp("0022200001"))
+    oc = players_on_court_from_pbp(enh, _box("0022200001"), home_team_id=1610612738, away_team_id=1610612755).sort(
+        "action_number"
+    )
+    first = oc.row(0, named=True)
+    home5 = {first[f"home_player_{i}"] for i in range(1, 6)}
+    assert home5 == {1627759, 1628369, 201143, 1628401, 203935}  # Celtics starters
+
+
+def test_pbp_producer_applies_first_sub() -> None:
+    # action 67: SUB Vonleh(203943) FOR Horford(201143) on Celtics
+    enh = enhanced_pbp_from_payload(_pbp("0022200001"))
+    oc = players_on_court_from_pbp(enh, _box("0022200001"), home_team_id=1610612738, away_team_id=1610612755).sort(
+        "action_number"
+    )
+    # find the row for the action immediately AFTER 67
+    after = oc.filter(pl.col("action_number") > 67).sort("action_number").row(0, named=True)
+    home5 = {after[f"home_player_{i}"] for i in range(1, 6)}
+    assert 201143 not in home5  # Horford subbed out
+    assert 203943 in home5  # Vonleh subbed in

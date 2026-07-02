@@ -644,6 +644,206 @@ def players_on_court(
     )
 
 
+def _seed_five(starters: List[int]) -> List[Optional[int]]:
+    """Return a 5-slot list seeded from *starters* (first 5, rest None).
+
+    Args:
+        starters: List of player ids (typically 5 from boxscore starters).
+
+    Returns:
+        A ``List[Optional[int]]`` of length 5.
+    """
+    five: List[Optional[int]] = [None] * 5
+    for i, pid in enumerate(starters[:5]):
+        five[i] = int(pid)
+    return five
+
+
+def _backfill_five(five: List[Optional[int]], pid: Optional[int]) -> None:
+    """Fill the first ``None`` slot in *five* with *pid*, if *pid* is not already present.
+
+    Mutates *five* in place.
+
+    Args:
+        five: Running 5-slot list for a team.
+        pid: Player id to insert, or ``None`` (no-op).
+    """
+    if not pid or pid in five:
+        return
+    for i, v in enumerate(five):
+        if v is None:
+            five[i] = pid
+            return
+
+
+def _resolve_sub_in(
+    description: str,
+    name_map_team: Dict[str, List[int]],
+    five: List[Optional[int]],
+) -> Optional[int]:
+    """Resolve the incoming player id from a substitution description.
+
+    Prefers a candidate currently **off** court (not in *five*) when
+    there are name collisions on the roster.
+
+    Args:
+        description: Raw substitution description, e.g. ``"SUB: Vonleh FOR Horford"``.
+        name_map_team: ``{familyname_lower: [person_id, ...]}`` for the
+            substituting team (from :func:`_boxscore_name_map`).
+        five: The team's current running 5-slot list.
+
+    Returns:
+        Resolved ``person_id`` int, or ``None`` if the name cannot be matched
+        or the match is ambiguous.
+    """
+    name = _parse_sub_in_name(description)
+    if not name:
+        return None
+    candidates = name_map_team.get(name, [])
+    if len(candidates) == 1:
+        return candidates[0]
+    # collision: prefer a candidate currently OFF court
+    off = [c for c in candidates if c not in five]
+    if len(off) == 1:
+        return off[0]
+    return None  # ambiguous -> leave slot for first-appearance backfill
+
+
+def _apply_pbp_sub(five: List[Optional[int]], sub_out: Optional[int], sub_in: Optional[int]) -> None:
+    """Apply a substitution to *five* in place.
+
+    When *sub_out* is present in *five*, it is replaced by *sub_in*.
+    If *sub_out* is not found (data gap), *sub_in* is backfilled into a
+    free slot instead.
+
+    Args:
+        five: The team's current running 5-slot list (mutated in place).
+        sub_out: The outgoing player id (``person_id`` on a sub row).
+        sub_in: The incoming player id resolved via :func:`_resolve_sub_in`.
+    """
+    if sub_out and sub_out in five:
+        five[five.index(sub_out)] = sub_in
+    elif sub_in and sub_in not in five:
+        _backfill_five(five, sub_in)
+
+
+def players_on_court_from_pbp(
+    enhanced_pbp: pl.DataFrame,
+    raw_box: dict,
+    *,
+    home_team_id: int,
+    away_team_id: int,
+) -> pl.DataFrame:
+    """Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
+
+    Pure function (no network). A gamerotation-free alternative to
+    :func:`players_on_court_from_rotation` returning the identical
+    ``LINEUPS_SCHEMA`` frame (one row per action, slots sorted ascending or
+    ``None``). See the module design for the algorithm.
+
+    Args:
+        enhanced_pbp: Output of ``enhanced_pbp_from_payload``. Must carry
+            ``game_id``, ``action_number``, ``order_index``, ``period``,
+            ``team_id``, ``person_id``, ``description``, ``is_substitution``.
+        raw_box: Raw ``boxscoretraditionalv3`` dict (starters + name map).
+        home_team_id: Home team id (from ``boxscore_home_away``).
+        away_team_id: Away team id (from ``boxscore_home_away``).
+
+    Returns:
+        :class:`polars.DataFrame` conforming to ``LINEUPS_SCHEMA``. Empty input
+        returns a zero-row frame (never raises).
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+            from sportsdataverse.nba.nba_lineups import (
+                boxscore_home_away, players_on_court_from_pbp,
+            )
+            box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+            pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+            enh = enhanced_pbp_from_payload(pbp)
+            home, away = boxscore_home_away(box)
+            oc = players_on_court_from_pbp(enh, box, home_team_id=home, away_team_id=away)
+            print(oc.shape)
+
+        See Also:
+            * `hoopR`_ -- R package providing equivalent lineup utilities
+            * `nba_api`_ -- reference Python client for stats.nba.com
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    if enhanced_pbp.is_empty():
+        return pl.DataFrame(schema=LINEUPS_SCHEMA)
+
+    starters = _starters_from_boxscore_v3(raw_box)
+    name_map = _boxscore_name_map(raw_box)
+    home5: List[Optional[int]] = _seed_five(starters.get(home_team_id, []))
+    away5: List[Optional[int]] = _seed_five(starters.get(away_team_id, []))
+
+    sort_col = "order_index" if "order_index" in enhanced_pbp.columns else "action_number"
+    rows = (
+        enhanced_pbp.sort(sort_col)
+        .select(
+            [
+                "game_id",
+                "action_number",
+                "period",
+                "team_id",
+                "person_id",
+                "description",
+                "is_substitution",
+            ]
+        )
+        .to_dicts()
+    )
+
+    out_rows: List[dict] = []
+    for r in rows:
+        tid = int(r["team_id"] or 0)
+        pid = int(r["person_id"]) if r["person_id"] else None
+        team5: Optional[List[Optional[int]]] = home5 if tid == home_team_id else away5 if tid == away_team_id else None
+        if r["is_substitution"] and team5 is not None:
+            sub_in = _resolve_sub_in(r["description"] or "", name_map.get(tid, {}), team5)
+            _apply_pbp_sub(team5, pid, sub_in)  # pid = OUTGOING player
+        elif team5 is not None and pid:
+            _backfill_five(team5, pid)  # first-appearance backfill for actors
+        out_rows.append(
+            {
+                "game_id": r["game_id"],
+                "action_number": r["action_number"],
+                "period": r["period"],
+                **{f"home_player_{i + 1}": home5[i] for i in range(5)},
+                **{f"away_player_{i + 1}": away5[i] for i in range(5)},
+            }
+        )
+
+    df = pl.DataFrame(out_rows, schema=LINEUPS_SCHEMA)
+
+    # ffill/bfill each positional slot within game to patch unresolved-sub gaps
+    slot_cols = [f"home_player_{i}" for i in range(1, 6)] + [f"away_player_{i}" for i in range(1, 6)]
+    df = df.with_columns([pl.col(c).forward_fill().backward_fill().over("game_id") for c in slot_cols])
+
+    # Sort each team's 5 ascending per row (matches rotation producer convention)
+    df = (
+        df.with_columns(
+            [
+                pl.concat_list([f"home_player_{i}" for i in range(1, 6)]).list.sort().alias("_h"),
+                pl.concat_list([f"away_player_{i}" for i in range(1, 6)]).list.sort().alias("_a"),
+            ]
+        )
+        .with_columns(
+            [pl.col("_h").list.get(i - 1).alias(f"home_player_{i}") for i in range(1, 6)]
+            + [pl.col("_a").list.get(i - 1).alias(f"away_player_{i}") for i in range(1, 6)]
+        )
+        .drop(["_h", "_a"])
+    )
+
+    return df.select(list(LINEUPS_SCHEMA.keys()))
+
+
 def nba_on_court(
     game_id: str,
     league_id: str = "00",
