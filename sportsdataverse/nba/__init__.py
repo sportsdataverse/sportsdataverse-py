@@ -23,3 +23,4 @@ from sportsdataverse.nba.nba_spm import (  # noqa: F401
     nba_spm,
     train_spm,
 )
+from sportsdataverse.nba.nba_bpm import NbaBpmModel, nba_bpm  # noqa: F401
