@@ -30,6 +30,13 @@ running score, and enriches ``player2``/``player3`` fields from the roster
 **by id** -- the one deliberate divergence from hoopR, which re-resolves
 block/steal names in its per-row loop and can silently override the
 reliable ``personId`` it already captured (see :func:`_secondary_fields`).
+
+Task 4 scope: ``_to_pbpstats_stats_nba_rows`` / ``_to_pbpstats_stats_nba_envelope``
+-- a shim that renames the ``nba_v3_to_v2_pbp`` output into the UPPERCASE
+``playbyplayv2`` shape pbpstats' ``stats_nba`` provider consumes (see
+``pbpstats.resources.enhanced_pbp.stats_nba.enhanced_pbp_item``), so a
+v3-derived frame can be round-tripped through pbpstats and compared against
+pbpstats' own ``live`` provider on the same game.
 """
 
 from __future__ import annotations
@@ -236,6 +243,18 @@ _ACTION_TYPE_MAPS: Dict[str, Dict[str, str]] = {
         # charge -- reuses the Offensive code (4), same family as "Offensive".
         "Offensive Charge": "4",
         "Shooting Block": "29",
+        # Fixture extension (game 0022200001, actionNumber 94): "Transition
+        # Take" has its OWN dedicated NBA EVENTMSGACTIONTYPE code (31,
+        # distinct from "Personal Take"'s 28) -- confirmed independently
+        # against pbpstats' own foul-code catalog
+        # (``StatsFoul.is_transition_take_foul`` checks
+        # ``event_action_type == 31``). Missing this entry left the subType
+        # unmapped ("0"), which made pbpstats treat the take-foul free throw
+        # as a normal shooting-foul FT (flips possession) instead of a
+        # take-foul FT (offense retains the ball) -- surfaced as a
+        # ``TeamHasBackToBackPossessionsException`` in the Task 4 pbpstats
+        # round-trip.
+        "Transition Take": "31",
     },
     "timeout": {
         "Regular": "1",
@@ -969,3 +988,251 @@ def nba_v3_to_v2_pbp(
 
     df = df.select(_V2_COLUMNS)
     return _finish(df, return_as_pandas)
+
+
+# ---------------------------------------------------------------------------
+# Task 4: pbpstats stats_nba feed shim
+# ---------------------------------------------------------------------------
+# Rename map: v2 snake_case column -> UPPERCASE playbyplayv2 key, per the
+# design spec's "Validation #2" section, extended to the full set pbpstats'
+# ``StatsEnhancedPbpItem`` (``pbpstats/resources/enhanced_pbp/stats_nba/
+# enhanced_pbp_item.py``) reads off the raw event dict (``KEY_ATTR_MAPPER`` +
+# the HOME/VISITOR/NEUTRAL description fallback chain) plus the sibling
+# PLAYER{2,3}_TEAM_* / PERSON{1,2,3}TYPE columns a v2 ``playbyplayv2`` payload
+# conventionally carries (pbpstats' base class does not read every one of
+# these, but downstream consumers of a "real" v2 feed may).
+_PBPSTATS_RENAME_MAP: Dict[str, str] = {
+    "game_id": "GAME_ID",
+    "event_num": "EVENTNUM",
+    "event_type": "EVENTMSGTYPE",
+    "event_action_type": "EVENTMSGACTIONTYPE",
+    "period": "PERIOD",
+    "wc_time_string": "WCTIMESTRING",
+    "time_quarter": "PCTIMESTRING",
+    "home_description": "HOMEDESCRIPTION",
+    "neutral_description": "NEUTRALDESCRIPTION",
+    "visitor_description": "VISITORDESCRIPTION",
+    "score": "SCORE",
+    "score_margin": "SCOREMARGIN",
+    "person1type": "PERSON1TYPE",
+    "player1_id": "PLAYER1_ID",
+    "player1_name": "PLAYER1_NAME",
+    "player1_team_id": "PLAYER1_TEAM_ID",
+    "player1_team_city": "PLAYER1_TEAM_CITY",
+    "player1_team_nickname": "PLAYER1_TEAM_NICKNAME",
+    "player1_team_abbreviation": "PLAYER1_TEAM_ABBREVIATION",
+    "person2type": "PERSON2TYPE",
+    "player2_id": "PLAYER2_ID",
+    "player2_name": "PLAYER2_NAME",
+    "player2_team_id": "PLAYER2_TEAM_ID",
+    "player2_team_city": "PLAYER2_TEAM_CITY",
+    "player2_team_nickname": "PLAYER2_TEAM_NICKNAME",
+    "player2_team_abbreviation": "PLAYER2_TEAM_ABBREVIATION",
+    "person3type": "PERSON3TYPE",
+    "player3_id": "PLAYER3_ID",
+    "player3_name": "PLAYER3_NAME",
+    "player3_team_id": "PLAYER3_TEAM_ID",
+    "player3_team_city": "PLAYER3_TEAM_CITY",
+    "player3_team_nickname": "PLAYER3_TEAM_NICKNAME",
+    "player3_team_abbreviation": "PLAYER3_TEAM_ABBREVIATION",
+    "video_available_flag": "VIDEO_AVAILABLE_FLAG",
+}
+
+# The UPPERCASE key order used for both the per-row dicts (informationally)
+# and the envelope's ``headers`` / ``rowSet`` column order.
+_PBPSTATS_HEADERS: List[str] = list(_PBPSTATS_RENAME_MAP.values())
+
+# Columns pbpstats expects as Python ``int`` (verified against
+# ``StatsEnhancedPbpItem.__init__``'s ``KEY_ATTR_MAPPER`` + the jump-ball
+# ``PLAYER3_TEAM_ID`` raw access, plus the PERSON*TYPE / PLAYER2_TEAM_ID
+# siblings a real v2 payload always ships as ints). A null/empty id casts to
+# ``0`` -- pbpstats' own convention for "no player"
+# (``if ... self.player2_id == 0: delattr(self, "player2_id")``).
+_PBPSTATS_INT_COLUMNS: Tuple[str, ...] = (
+    "EVENTNUM",
+    "EVENTMSGTYPE",
+    "EVENTMSGACTIONTYPE",
+    "PERIOD",
+    "PERSON1TYPE",
+    "PERSON2TYPE",
+    "PERSON3TYPE",
+    "PLAYER1_ID",
+    "PLAYER2_ID",
+    "PLAYER3_ID",
+    "PLAYER1_TEAM_ID",
+    "PLAYER2_TEAM_ID",
+    "PLAYER3_TEAM_ID",
+    "VIDEO_AVAILABLE_FLAG",
+)
+
+# Description / score-ish string columns: a null value becomes "" rather than
+# None -- the safest null-representation pbpstats tolerates for these fields
+# (its description fallback chain checks ``is not None``, so a `None` would
+# skip that field silently, but "" reads unambiguously as "no text").
+_PBPSTATS_EMPTY_STRING_COLUMNS: Tuple[str, ...] = (
+    "HOMEDESCRIPTION",
+    "VISITORDESCRIPTION",
+    "NEUTRALDESCRIPTION",
+    "SCORE",
+    "SCOREMARGIN",
+)
+
+# PLAYER1_TEAM_ID is special: real stats.nba.com v2 payloads emit a JSON
+# ``null`` (not ``0``) for team-attributed events with no specific player
+# (e.g. a "Team Rebound", where v3 stashes the team id in ``personId`` and
+# zeroes its own ``teamId``). pbpstats' ``StatsEnhancedPbpItem.__init__`` has
+# a dedicated fix-up for exactly this: when ``PLAYER1_TEAM_ID is None`` and
+# ``PLAYER1_ID`` is present, it moves ``PLAYER1_ID`` into ``team_id`` and
+# zeroes ``player1_id``. If we instead emitted the pbpstats "no id" sentinel
+# (``0``) here, that fix-up never fires (``0 is not None``), and pbpstats
+# would treat the row as belonging to team id ``0`` -- corrupting its
+# backward-walking ``get_offense_team_id()`` possession-alternation logic
+# (reproduced against a committed fixture: game 0022300001 action 34 is a
+# "PACERS Rebound" team rebound with v3 ``teamId=0`` / ``personId=<team
+# id>``). So a parsed-zero ``PLAYER1_TEAM_ID`` becomes ``None`` here instead
+# of ``0`` -- no real NBA team id is ever ``0``, so this is unambiguous.
+_PBPSTATS_NULLABLE_TEAM_ID_COLUMNS: Tuple[str, ...] = ("PLAYER1_TEAM_ID",)
+
+
+def _pbpstats_int(value: Any, default: int = 0) -> int:
+    """Parse a v2-frame cell into the Python ``int`` pbpstats expects.
+
+    The v2 frame's id columns are Utf8 strings of a bare integer (e.g.
+    ``"1630596"``) or ``None`` (see the module docstring's id-dtype
+    convention) -- this never sees a float-stringified id (``"123.0"``) in
+    practice, but parses one defensively rather than raising, since this
+    function feeds an external library's parser rather than an internal
+    join.
+
+    Args:
+        value: A cell from the v2 frame -- ``str``, ``int``, ``None``, or
+            (defensively) any value ``str()``-able to a numeral.
+        default: Returned for ``None`` / empty-string input. pbpstats' own
+            convention for "no player" is ``0``.
+
+    Returns:
+        The parsed ``int``, or ``default`` when ``value`` is ``None``/empty
+        or not parseable.
+    """
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, int):
+        return value
+    text = str(value).strip()
+    if not text:
+        return default
+    try:
+        return int(text)
+    except ValueError:
+        try:
+            return int(float(text))
+        except ValueError:
+            return default
+
+
+def _to_pbpstats_stats_nba_rows(v2_df: pl.DataFrame) -> List[Dict[str, Any]]:
+    """Rename an ``nba_v3_to_v2_pbp`` frame into pbpstats' UPPERCASE ``stats_nba`` shape.
+
+    Applies :data:`_PBPSTATS_RENAME_MAP` (snake_case v2 column -> UPPERCASE
+    ``playbyplayv2`` key) and the type coercions pbpstats'
+    ``StatsEnhancedPbpItem`` requires: the id/type/flag columns in
+    :data:`_PBPSTATS_INT_COLUMNS` become Python ``int`` (null/empty -> ``0``,
+    pbpstats' "no player" convention) EXCEPT :data:`_PBPSTATS_NULLABLE_TEAM_ID_COLUMNS`
+    (``PLAYER1_TEAM_ID``), where a parsed zero becomes ``None`` instead (see
+    that constant's docstring for why), the description/score columns in
+    :data:`_PBPSTATS_EMPTY_STRING_COLUMNS` become ``""`` on null, and every
+    other column (names, team city/nickname/abbreviation, ``GAME_ID``,
+    ``PCTIMESTRING``) passes through as-is. ``PCTIMESTRING`` is the v2 frame's
+    ``time_quarter`` ("MM:SS" clock-remaining-in-quarter string) -- NOT the
+    v3 ISO ``clock`` column.
+
+    Args:
+        v2_df: Output of :func:`nba_v3_to_v2_pbp`.
+
+    Returns:
+        One dict per row, keyed by the UPPERCASE ``playbyplayv2`` column
+        names in :data:`_PBPSTATS_HEADERS` order.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_v3_v2_adapter import (
+                nba_v3_to_v2_pbp,
+                _to_pbpstats_stats_nba_rows,
+            )
+
+            v2_df = nba_v3_to_v2_pbp(pbp_v3, box_v3)
+            rows = _to_pbpstats_stats_nba_rows(v2_df)
+            print(rows[0]["EVENTMSGTYPE"], type(rows[0]["EVENTMSGTYPE"]))
+    """
+    source_columns = list(_PBPSTATS_RENAME_MAP.keys())
+    rows: List[Dict[str, Any]] = []
+    for record in v2_df.select(source_columns).iter_rows(named=True):
+        row: Dict[str, Any] = {}
+        for source_column, target_column in _PBPSTATS_RENAME_MAP.items():
+            value = record[source_column]
+            if target_column in _PBPSTATS_NULLABLE_TEAM_ID_COLUMNS:
+                parsed_team_id = _pbpstats_int(value)
+                row[target_column] = parsed_team_id if parsed_team_id != 0 else None
+            elif target_column in _PBPSTATS_INT_COLUMNS:
+                row[target_column] = _pbpstats_int(value)
+            elif target_column in _PBPSTATS_EMPTY_STRING_COLUMNS:
+                row[target_column] = value if value is not None else ""
+            else:
+                row[target_column] = value
+        rows.append(row)
+    return rows
+
+
+def _to_pbpstats_stats_nba_envelope(v2_df: pl.DataFrame, game_id: str) -> Dict[str, Any]:
+    """Wrap :func:`_to_pbpstats_stats_nba_rows` in the ``resultSets`` envelope pbpstats reads from disk.
+
+    Matches the exact shape ``pbpstats.data_loader.stats_nba.base.
+    StatsNbaLoaderBase.make_list_of_dicts`` expects:
+    ``resultSets[0].headers`` zipped against each ``resultSets[0].rowSet``
+    row. This is the payload a caller writes to
+    ``{file_directory}/pbp/stats_{game_id}.json`` for pbpstats'
+    ``StatsNbaPbpFileLoader`` (and, transitively, ``StatsNbaEnhancedPbpLoader``
+    / ``StatsNbaPossessionLoader``) to load from file with
+    ``data_provider="stats_nba"``.
+
+    Args:
+        v2_df: Output of :func:`nba_v3_to_v2_pbp`.
+        game_id: The NBA Stats game id this envelope represents. Written into
+            every row's ``GAME_ID`` (overriding whatever the frame itself
+            carries), matching how pbpstats' own loaders key off the
+            ``game_id`` passed to ``Client(...).Game(game_id)`` rather than
+            the payload contents.
+
+    Returns:
+        ``{"resultSets": [{"name": "PlayByPlay", "headers": [...], "rowSet":
+        [[...], ...]}]}``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_v3_v2_adapter import (
+                nba_v3_to_v2_pbp,
+                _to_pbpstats_stats_nba_envelope,
+            )
+
+            v2_df = nba_v3_to_v2_pbp(pbp_v3, box_v3)
+            envelope = _to_pbpstats_stats_nba_envelope(v2_df, "0022300001")
+            print(len(envelope["resultSets"][0]["rowSet"]))
+    """
+    game_id_str = str(game_id)
+    rows = _to_pbpstats_stats_nba_rows(v2_df)
+    for row in rows:
+        row["GAME_ID"] = game_id_str
+    row_set = [[row[header] for header in _PBPSTATS_HEADERS] for row in rows]
+    return {
+        "resultSets": [
+            {
+                "name": "PlayByPlay",
+                "headers": list(_PBPSTATS_HEADERS),
+                "rowSet": row_set,
+            }
+        ]
+    }

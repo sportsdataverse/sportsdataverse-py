@@ -11,13 +11,22 @@ jump) tests, validated offline against the committed cdn feed truth.
 Task 3 adds the full ``nba_v3_to_v2_pbp`` assembly tests: the v2 output
 schema, event/action-type codes, home/visitor/neutral description split,
 score forward-fill, and the block/steal row-count drop.
+
+Task 4 adds the pbpstats ``stats_nba`` feed shim tests: an always-on
+structural test of ``_to_pbpstats_stats_nba_rows`` / ``_to_pbpstats_stats_nba_envelope``
+(no pbpstats import required), plus a gated round-trip test that feeds the
+shimmed envelope through a vendored local checkout of pbpstats and compares
+possessions/starters against pbpstats' own ``live`` provider on the same
+committed cdn fixture.
 """
 
 from __future__ import annotations
 
 import json
 import pathlib
-from typing import Dict, List, Optional, Tuple
+import re
+import sys
+from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
 import polars as pl
@@ -30,10 +39,17 @@ from sportsdataverse.nba.nba_v3_v2_adapter import (
     _extract_secondary_players,
     _is_dropped_block_steal,
     _lookup_player,
+    _to_pbpstats_stats_nba_envelope,
+    _to_pbpstats_stats_nba_rows,
     nba_v3_to_v2_pbp,
 )
 
 FXROOT = pathlib.Path("tests/fixtures/nba_engine")
+
+# Vendored local pbpstats checkout used only by the Deliverable-2 gated
+# round-trip test below. NOT a project dependency -- CI (and any contributor
+# without this path) hits ImportError and the test skips cleanly.
+_PBPSTATS_ROOT = "c:/Users/saiem/Documents/GitHub-Data/sdv-dev/pbpstats"
 
 
 def _box(game_id: str) -> dict:
@@ -570,3 +586,268 @@ def test_v3_to_v2_pbp_malformed_input_never_raises() -> None:
     df = nba_v3_to_v2_pbp({}, {})
     assert df.height == 0
     assert isinstance(df, pl.DataFrame)
+
+
+# ---------------------------------------------------------------------------
+# Task 4: pbpstats stats_nba feed shim -- always-on structural tests
+# ---------------------------------------------------------------------------
+# These never import pbpstats -- they assert the shim's own contract (the
+# UPPERCASE keys pbpstats' StatsEnhancedPbpItem reads are present, the id/type
+# columns it needs are Python int, PCTIMESTRING is "MM:SS" and matches the v2
+# frame's time_quarter, and the resultSets envelope shape is well-formed).
+# They MUST run in CI.
+
+_PBPSTATS_REQUIRED_KEYS = [
+    "GAME_ID",
+    "EVENTNUM",
+    "EVENTMSGTYPE",
+    "EVENTMSGACTIONTYPE",
+    "PERIOD",
+    "PCTIMESTRING",
+    "PLAYER1_ID",
+    "PLAYER2_ID",
+    "PLAYER3_ID",
+]
+
+_PBPSTATS_INT_KEYS = [
+    "EVENTMSGTYPE",
+    "EVENTMSGACTIONTYPE",
+    "EVENTNUM",
+    "PERIOD",
+    "PLAYER1_ID",
+    "PLAYER2_ID",
+    "PLAYER3_ID",
+]
+
+
+def test_to_pbpstats_stats_nba_rows_has_uppercase_keys() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    rows = _to_pbpstats_stats_nba_rows(df)
+    assert len(rows) == df.height
+    for row in rows:
+        for key in _PBPSTATS_REQUIRED_KEYS:
+            assert key in row, f"missing pbpstats key: {key}"
+
+
+def test_to_pbpstats_stats_nba_rows_key_ids_and_types_are_python_int() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    rows = _to_pbpstats_stats_nba_rows(df)
+    for row in rows:
+        for key in _PBPSTATS_INT_KEYS:
+            value = row[key]
+            assert isinstance(value, int) and not isinstance(value, bool), f"{key} not int: {value!r}"
+
+
+def test_to_pbpstats_stats_nba_rows_known_assisted_made_shot_player2_id_is_correct_int() -> None:
+    """actionNumber 7 in 0022300001: known assisted made shot (see Task 3 test above)."""
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    row7 = df.filter(pl.col("event_num") == "7")
+    expected_player2_id = int(row7["player2_id"][0])
+
+    rows = _to_pbpstats_stats_nba_rows(df)
+    target = next(row for row in rows if row["EVENTNUM"] == 7)
+    assert target["PLAYER2_ID"] == expected_player2_id
+
+
+def test_to_pbpstats_stats_nba_rows_pctimestring_format_and_matches_time_quarter() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    time_quarter_by_event_num: Dict[str, str] = dict(zip(df["event_num"].to_list(), df["time_quarter"].to_list()))
+
+    rows = _to_pbpstats_stats_nba_rows(df)
+    for row in rows:
+        pctimestring = row["PCTIMESTRING"]
+        assert re.match(r"^\d{2}:\d{2}$", pctimestring), f"bad PCTIMESTRING format: {pctimestring!r}"
+        assert pctimestring == time_quarter_by_event_num[str(row["EVENTNUM"])]
+
+
+def test_to_pbpstats_stats_nba_rows_null_player_ids_default_to_zero() -> None:
+    """A row with no player2/player3 (no assist/block/steal/sub/jump) casts null id -> 0.
+
+    actionNumber 2 in 0022300001 is the period-start action -- no
+    assist/block/steal/sub/jump (see the Task 2 test of the same fixture row
+    above), so its v2 player2_id/player3_id are null and must cast to 0
+    (pbpstats' own "no player" convention).
+    """
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    rows = _to_pbpstats_stats_nba_rows(df)
+    row2 = next(row for row in rows if row["EVENTNUM"] == 2)
+    assert row2["PLAYER2_ID"] == 0
+    assert row2["PLAYER3_ID"] == 0
+
+
+def test_to_pbpstats_stats_nba_envelope_shape() -> None:
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    envelope = _to_pbpstats_stats_nba_envelope(df, "0022300001")
+
+    result_set = envelope["resultSets"][0]
+    assert result_set["name"] == "PlayByPlay"
+    headers: List[str] = result_set["headers"]
+    row_set: List[List[Any]] = result_set["rowSet"]
+
+    assert len(row_set) == df.height
+    for row in row_set:
+        assert len(row) == len(headers)
+
+    game_id_index = headers.index("GAME_ID")
+    assert all(row[game_id_index] == "0022300001" for row in row_set)
+
+
+def test_to_pbpstats_stats_nba_envelope_game_id_override() -> None:
+    """The envelope's game_id param overrides whatever the frame itself carries."""
+    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    envelope = _to_pbpstats_stats_nba_envelope(df, "9999999999")
+    result_set = envelope["resultSets"][0]
+    headers = result_set["headers"]
+    game_id_index = headers.index("GAME_ID")
+    assert all(row[game_id_index] == "9999999999" for row in result_set["rowSet"])
+
+
+# ---------------------------------------------------------------------------
+# Task 4: pbpstats round-trip -- gated, best-effort "ultimate 1-to-1"
+# ---------------------------------------------------------------------------
+# Feeds the shimmed envelope through a vendored local pbpstats checkout's
+# stats_nba file-mode loader and compares possessions/period-starters against
+# pbpstats' own live provider fed from the committed cdn fixture. Entirely
+# offline (committed fixtures only, no network) -- NOT gated by
+# SDV_PY_LIVE_TESTS. Skips (rather than fails) when pbpstats can't be
+# imported in this environment (it is vendored, not a project dependency) or
+# when a required cdn fixture is missing.
+#
+# Measured possession counts (stats_nba-fed, live-fed) per game, pinned as a
+# regression guard on the committed fixtures. The residual documented in the
+# design spec ("foul-drawn player" gap -- fouls carry null player2_id/
+# player3_id in the v3-derived frame, an accepted limitation) plus the
+# v2-vs-live provider difference keeps the delta small but not always zero;
+# Phase 0's own harness measured a +2..+5 possession/game ceiling for the
+# related v3-engine-vs-pbpstats-live comparison, used here as the documented
+# tolerance bound.
+_ROUNDTRIP_EXPECTED_POSSESSION_COUNTS: Dict[str, Tuple[int, int]] = {
+    "0022100001": (204, 206),
+    "0022200001": (193, 195),
+    "0022300001": (205, 205),
+}
+_ROUNDTRIP_MAX_ABS_POSSESSION_DELTA = 5
+
+
+def _pbpstats_client_or_skip() -> Any:
+    """Import pbpstats' ``Client`` from the vendored checkout, or skip the test."""
+    if _PBPSTATS_ROOT not in sys.path:
+        sys.path.insert(0, _PBPSTATS_ROOT)
+    try:
+        from pbpstats.client import Client
+    except ImportError as exc:
+        pytest.skip(f"pbpstats not importable in this env (vendored, not a dep): {exc}")
+    return Client
+
+
+def _write_stats_nba_inputs(game_dir: pathlib.Path, game_id: str) -> None:
+    """Write the pbpstats stats_nba file-mode inputs for one game.
+
+    ``StatsNbaPbpFileLoader`` reads ``{dir}/pbp/stats_{game_id}.json`` (our
+    shimmed envelope). ``StatsNbaEnhancedPbpLoader._add_shot_x_y_coords``
+    additionally, unconditionally loads a shot-chart file pair
+    (``{dir}/game_details/stats_{home,away}_shots_{game_id}.json``) to attach
+    x/y coords to made/missed-shot events -- unused by the possession/starter
+    comparison below, but required to construct the pbpstats ``Game`` object
+    at all. Synthesized here from the v2 frame's own x_legacy/y_legacy
+    passthrough columns; this plumbing is test-harness-only, not part of the
+    ``_to_pbpstats_stats_nba_*`` shim contract.
+    """
+    (game_dir / "pbp").mkdir(parents=True, exist_ok=True)
+    (game_dir / "game_details").mkdir(parents=True, exist_ok=True)
+
+    v2_df = nba_v3_to_v2_pbp(_pbp(game_id), _box(game_id))
+    envelope = _to_pbpstats_stats_nba_envelope(v2_df, game_id)
+    (game_dir / "pbp" / f"stats_{game_id}.json").write_text(json.dumps(envelope))
+
+    shots = v2_df.filter(pl.col("event_type").is_in(["1", "2"]))
+    shot_headers = ["GAME_EVENT_ID", "LOC_X", "LOC_Y"]
+    shot_rows = [
+        [int(event_num), int(loc_x or 0), int(loc_y or 0)]
+        for event_num, loc_x, loc_y in zip(
+            shots["event_num"].to_list(),
+            shots["x_legacy"].to_list(),
+            shots["y_legacy"].to_list(),
+        )
+    ]
+    home_shots = {"resultSets": [{"headers": shot_headers, "rowSet": shot_rows}]}
+    away_shots = {"resultSets": [{"headers": shot_headers, "rowSet": []}]}
+    (game_dir / "game_details" / f"stats_home_shots_{game_id}.json").write_text(json.dumps(home_shots))
+    (game_dir / "game_details" / f"stats_away_shots_{game_id}.json").write_text(json.dumps(away_shots))
+
+
+def _write_live_inputs(game_dir: pathlib.Path, game_id: str) -> None:
+    """Write the committed cdn fixtures into pbpstats' live file-mode paths."""
+    (game_dir / "pbp").mkdir(parents=True, exist_ok=True)
+    (game_dir / "game_details").mkdir(parents=True, exist_ok=True)
+    pbp_text = (FXROOT / game_id / "cdn_playbyplay.json").read_text()
+    box_text = (FXROOT / game_id / "cdn_boxscore.json").read_text()
+    (game_dir / "pbp" / f"live_{game_id}.json").write_text(pbp_text)
+    (game_dir / "game_details" / f"live_{game_id}.json").write_text(box_text)
+
+
+def _period_starters(possessions: List[Any]) -> Dict[int, Dict[int, set]]:
+    """``{period: {team_id: {player_id, ...}}}`` from a list of pbpstats Possessions."""
+    from pbpstats.resources.enhanced_pbp import StartOfPeriod
+
+    starters: Dict[int, Dict[int, set]] = {}
+    for possession in possessions:
+        for event in possession.events:
+            if isinstance(event, StartOfPeriod):
+                starters[event.period] = {team_id: set(players) for team_id, players in event.period_starters.items()}
+    return starters
+
+
+@pytest.mark.parametrize("game_id", sorted(_ROUNDTRIP_EXPECTED_POSSESSION_COUNTS))
+def test_pbpstats_stats_nba_roundtrip_possessions_and_starters(tmp_path: pathlib.Path, game_id: str) -> None:
+    """The 1-to-1: pbpstats-stats_nba (fed by our adapter) vs pbpstats-live, same cdn fixture."""
+    Client = _pbpstats_client_or_skip()
+
+    cdn_pbp = FXROOT / game_id / "cdn_playbyplay.json"
+    cdn_box = FXROOT / game_id / "cdn_boxscore.json"
+    if not cdn_pbp.exists() or not cdn_box.exists():
+        pytest.skip(f"cdn fixture missing for {game_id}")
+
+    game_dir = tmp_path / game_id
+    _write_stats_nba_inputs(game_dir, game_id)
+    _write_live_inputs(game_dir, game_id)
+
+    stats_client = Client(
+        {
+            "dir": str(game_dir),
+            "Possessions": {"source": "file", "data_provider": "stats_nba"},
+        }
+    )
+    stats_possessions = stats_client.Game(game_id).possessions.items
+
+    live_client = Client(
+        {
+            "dir": str(game_dir),
+            "Boxscore": {"source": "file", "data_provider": "live"},
+            "Possessions": {"source": "file", "data_provider": "live"},
+        }
+    )
+    live_possessions = live_client.Game(game_id).possessions.items
+
+    expected_stats_count, expected_live_count = _ROUNDTRIP_EXPECTED_POSSESSION_COUNTS[game_id]
+    assert len(stats_possessions) == expected_stats_count, (
+        f"{game_id}: pbpstats-stats_nba possession count drifted from the "
+        f"pinned measurement ({len(stats_possessions)} != {expected_stats_count})"
+    )
+    assert len(live_possessions) == expected_live_count, (
+        f"{game_id}: pbpstats-live possession count drifted from the pinned "
+        f"measurement ({len(live_possessions)} != {expected_live_count})"
+    )
+
+    delta = len(stats_possessions) - len(live_possessions)
+    assert abs(delta) <= _ROUNDTRIP_MAX_ABS_POSSESSION_DELTA, (
+        f"{game_id}: possession count delta {delta} exceeds the documented "
+        f"tolerance of {_ROUNDTRIP_MAX_ABS_POSSESSION_DELTA} (foul-drawn-player "
+        "gap + v2-vs-live provider difference)"
+    )
+
+    stats_starters = _period_starters(stats_possessions)
+    live_starters = _period_starters(live_possessions)
+    assert set(stats_starters) == set(live_starters), f"{game_id}: period set mismatch"
+    for period, teams in stats_starters.items():
+        assert teams == live_starters[period], f"{game_id} period {period}: starters mismatch"
