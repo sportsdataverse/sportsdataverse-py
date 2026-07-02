@@ -7,6 +7,8 @@ from sportsdataverse.nba.nba_bpm import (
     BPM2_COEFFICIENTS,
     _estimate_position,
     _estimate_role,
+    _interp,
+    _raw_bpm,
     _recursive_team_center,
 )
 
@@ -79,3 +81,38 @@ def test_recursive_team_center_converges_with_clamping() -> None:
     )
     assert abs(m - 3.0) < 1e-6
     assert out["position_num"].min() >= 1.0 and out["position_num"].max() <= 5.0
+
+
+def test_interp_endpoints_and_midpoint() -> None:
+    # at scale=1 should return lo; at scale=5 should return hi; at scale=3 midpoint
+    assert _interp((0.860, 0.860), 1.0) == 0.860
+    assert _interp((0.860, 0.860), 5.0) == 0.860
+    assert abs(_interp((0.580, 1.034), 1.0) - 0.580) < 1e-9
+    assert abs(_interp((0.580, 1.034), 5.0) - 1.034) < 1e-9
+    assert abs(_interp((0.580, 1.034), 3.0) - (0.580 + 1.034) / 2) < 1e-9
+
+
+def test_raw_bpm_reproduces_bref_lebron_2017() -> None:
+    # B-Ref worked example, per-100 (pts already shooting-context-adjusted 34.9 -> 30.4)
+    feats = pl.DataFrame(
+        {
+            "player_id": [23],
+            "pts": [30.4],
+            "fg3m": [2.2],
+            "ast": [11.5],
+            "tov": [5.4],
+            "orb": [1.7],
+            "drb": [9.7],
+            "stl": [1.6],
+            "blk": [0.8],
+            "pf": [2.4],
+            "fga": [24.0],
+            "fta": [9.5],
+        }
+    )
+    positions = pl.DataFrame({"player_id": [23], "position_num": [2.30]})
+    roles = pl.DataFrame({"player_id": [23], "role_num": [1.0]})
+    out = _raw_bpm(feats, positions, roles)
+    assert out.schema["raw_bpm"] == pl.Float64
+    assert out.schema["raw_obpm"] == pl.Float64
+    assert abs(out["raw_bpm"][0] - 18.7) < 0.3  # published raw total 18.7
