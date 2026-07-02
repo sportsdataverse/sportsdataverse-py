@@ -288,8 +288,8 @@ def test_lookup_player_name_i_match():
 def test_lookup_player_tier3_abbrev_isolated_from_name_i_and_fuzzy():
     """Isolate Tier 3 ("F. Family" abbreviation) from Tiers 2 and 4.
 
-    ``test_lookup_player_abbrev_match`` above uses Evan Mobley, but his
-    fixture ``name_i`` IS literally "E. Mobley" -- that lookup resolves at
+    A real fixture player like Evan Mobley cannot isolate Tier 3: his
+    ``name_i`` IS literally "E. Mobley", so a "E. Mobley" lookup resolves at
     Tier 2 and never exercises Tier 3. This test uses a synthetic roster
     where ``name_i`` deliberately diverges from the plain "F. Family"
     abbreviation (a "Jr." suffix), so:
