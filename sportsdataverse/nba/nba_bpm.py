@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Dict, Tuple, Union
+from typing import Dict, Tuple
 
 import polars as pl
 
 # Published BPM 2.0 coefficients (Basketball-Reference "About BPM 2.0", Daniel Myers 2020).
 # position-varying cols are (pos1_PG, pos5_C); *_role cols are (role1_Creator, role5_Receiver).
-# Inner dicts are either (pos1, pos5) tuples (base/offense) or scalar floats (regression sub-dicts).
-BPM2_COEFFICIENTS: Dict[str, Dict[str, Union[Tuple[float, float], float]]] = {
+BPM2_COEFFICIENTS: Dict[str, Dict[str, Tuple[float, float]]] = {
     "base": {
         "pts": (0.860, 0.860),
         "fg3m": (0.389, 0.389),
@@ -36,18 +35,19 @@ BPM2_COEFFICIENTS: Dict[str, Dict[str, Union[Tuple[float, float], float]]] = {
         "fga_role": (-0.330, -0.472),
         "fta_role": (-0.145, -0.208),
     },
-    # position regression on % of team stats (min-weighted); blended with 50 min listed position
-    "position_reg": {
-        "intercept": 2.130,
-        "pct_trb": 8.668,
-        "pct_stl": -2.486,
-        "pct_pf": 0.992,
-        "pct_ast": -3.536,
-        "pct_blk": 1.667,
-    },
-    # offensive-role regression on % of team AST + % of team threshold-points
-    "role_reg": {"intercept": 6.00, "pct_ast": -6.642, "pct_threshold_pts": -8.544},
 }
+# position regression on % of team stats (min-weighted); blended with 50 min listed position
+BPM2_POSITION_REG: Dict[str, float] = {
+    "intercept": 2.130,
+    "pct_trb": 8.668,
+    "pct_stl": -2.486,
+    "pct_pf": 0.992,
+    "pct_ast": -3.536,
+    "pct_blk": 1.667,
+}
+# offensive-role regression on % of team AST + % of team threshold-points
+BPM2_ROLE_REG: Dict[str, float] = {"intercept": 6.00, "pct_ast": -6.642, "pct_threshold_pts": -8.544}
+
 # baseline pts per adjusted (true) shot attempt used by the shooting-context step
 # (calibrated to reproduce the B-Ref 2016-17 LeBron worked example 34.9 -> 30.4)
 SHOOTING_BASELINE: float = 1.00
@@ -72,7 +72,7 @@ def _estimate_position(shares: pl.DataFrame, listed: pl.DataFrame) -> pl.DataFra
     Returns:
         Frame player_id, position_num (Float64, in [1,5]).
     """
-    c = BPM2_COEFFICIENTS["position_reg"]
+    c = BPM2_POSITION_REG
     raw = (
         shares.join(listed, on="player_id", how="left")
         .with_columns(pl.col("position_num").fill_null(3.0))
@@ -98,14 +98,24 @@ def _estimate_position(shares: pl.DataFrame, listed: pl.DataFrame) -> pl.DataFra
     return _recursive_team_center(raw, "blended", "position_num", target=3.0)
 
 
-def _recursive_team_center(df: pl.DataFrame, col: str, out: str, *, target: float, iters: int = 25) -> pl.DataFrame:
+def _recursive_team_center(df: pl.DataFrame, col: str, out: str, *, target: float, iters: int = 100) -> pl.DataFrame:
     """Add a per-team constant so the min-weighted team mean of ``col`` equals ``target``,
-    re-clamping to [1,5] each pass (recursive because clamping perturbs the mean)."""
+    re-clamping to [1,5] each pass (recursive because clamping perturbs the mean).
+
+    Exits early when the max per-team absolute deviation of the min-weighted mean from ``target``
+    is below 1e-9.  If the roster geometry makes the constraint infeasible (e.g. four of five
+    players are true 5.0 centers), the iteration converges to the closest feasible point without
+    raising — this mirrors B-Ref's own algorithm behaviour.
+    """
     work = df.select(["player_id", "team_id", "min", col]).rename({col: "_v"})
     for _ in range(iters):
         team_mean = work.group_by("team_id").agg(
             ((pl.col("_v") * pl.col("min")).sum() / pl.col("min").sum()).alias("_m")
         )
+        # early-exit: if every team's weighted mean is already at target, stop before mutating
+        max_dev = (team_mean["_m"] - target).abs().max()
+        if max_dev is not None and max_dev < 1e-9:
+            break
         work = (
             work.join(team_mean, on="team_id").with_columns(_clamp(pl.col("_v") + (target - pl.col("_m")))).drop("_m")
         )
@@ -116,12 +126,12 @@ def _estimate_role(shares: pl.DataFrame) -> pl.DataFrame:
     """Estimate offensive role (1 Creator .. 5 Receiver) from % of team AST + threshold points, clamped.
 
     Args:
-        shares: player_id, team_id, min, pct_ast, pct_threshold_pts.
+        shares: player_id, pct_ast, pct_threshold_pts.
 
     Returns:
         Frame player_id, role_num (Float64, in [1,5]).
     """
-    c = BPM2_COEFFICIENTS["role_reg"]
+    c = BPM2_ROLE_REG
     return shares.select(
         "player_id",
         _clamp(

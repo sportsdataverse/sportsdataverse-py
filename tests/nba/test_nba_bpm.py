@@ -3,7 +3,12 @@
 from __future__ import annotations
 
 import polars as pl
-from sportsdataverse.nba.nba_bpm import BPM2_COEFFICIENTS, _estimate_position, _estimate_role
+from sportsdataverse.nba.nba_bpm import (
+    BPM2_COEFFICIENTS,
+    _estimate_position,
+    _estimate_role,
+    _recursive_team_center,
+)
 
 
 def test_position_regression_team_sums_to_three_and_clamps() -> None:
@@ -54,3 +59,23 @@ def test_coefficients_constant_has_lebron_anchor_values() -> None:
     off = BPM2_COEFFICIENTS["offense"]
     assert off["pts"] == (0.605, 0.605)
     assert off["blk"] == (0.725, 0.097)
+
+
+def test_recursive_team_center_converges_with_clamping() -> None:
+    # raw positions span outside [1,5] so clamping engages, but a mean-3 solution exists
+    df = pl.DataFrame(
+        {
+            "player_id": [1, 2, 3, 4, 5],
+            "team_id": [7] * 5,
+            "min": [240.0] * 5,
+            "raw": [0.2, 1.0, 3.0, 5.0, 6.5],  # 0.2 and 6.5 will clamp
+        }
+    )
+    out = _recursive_team_center(df, "raw", "position_num", target=3.0)
+    m = (
+        out.join(df.select(["player_id", "min"]), on="player_id")
+        .select((pl.col("position_num") * pl.col("min")).sum() / pl.col("min").sum())
+        .item()
+    )
+    assert abs(m - 3.0) < 1e-6
+    assert out["position_num"].min() >= 1.0 and out["position_num"].max() <= 5.0
