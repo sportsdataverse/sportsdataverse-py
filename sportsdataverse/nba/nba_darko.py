@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Tuple
+from typing import Dict, Generator, List, Tuple
 
 import numpy as np
 import polars as pl
+from scipy.optimize import minimize
 
 
 @dataclass
@@ -131,3 +132,137 @@ def _forecast(
     projected = s_final + aging_curve.delta(age_last)
     sd = float(np.sqrt(P_final + q))
     return float(projected), sd
+
+
+def _player_series(
+    panel: pl.DataFrame,
+    ages: pl.DataFrame,
+) -> Generator[Tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray], None, None]:
+    """Yield ``(player_id, seasons, ratings, ages, weights)`` per player, season-ordered."""
+    w = "weight" if "weight" in panel.columns else None
+    df = panel.join(ages, on=["player_id", "season"], how="inner").sort(["player_id", "season"])
+    for (pid,), g in df.group_by("player_id", maintain_order=True):
+        yield (
+            int(pid),
+            g["season"].to_numpy(),
+            g["rating"].to_numpy().astype(np.float64),
+            g["age"].to_numpy().astype(np.float64),
+            (g[w].to_numpy().astype(np.float64) if w else np.ones(g.height)),
+        )
+
+
+def _neg_loglik(
+    log_params: np.ndarray,
+    series: List[Tuple[int, np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
+    aging_curve: AgingCurve,
+) -> float:
+    """Negative one-step-ahead Gaussian log-likelihood over all players (for MLE)."""
+    q = float(np.exp(log_params[0]))
+    obs_base = float(np.exp(log_params[1]))
+    ll = 0.0
+    for _pid, _seasons, ratings, player_ages, weights in series:
+        if len(ratings) < 2:
+            continue
+        _s, _P, s_preds, innov_vars = _kalman_filter(ratings, player_ages, weights, aging_curve, q, obs_base)
+        for t in range(1, len(ratings)):
+            v = innov_vars[t]
+            resid = ratings[t] - s_preds[t]
+            ll += -0.5 * (np.log(2.0 * np.pi * v) + resid * resid / v)
+    return -ll
+
+
+def _fit_noise_params(
+    panel: pl.DataFrame,
+    ages: pl.DataFrame,
+    aging_curve: AgingCurve,
+    *,
+    defaults: Tuple[float, float] = (0.25, 1.0),
+) -> Tuple[float, float]:
+    """MLE-fit ``(q, obs_base)`` by maximizing one-step-ahead forecast log-likelihood.
+
+    Deterministic (no RNG). Falls back to ``defaults`` if optimization fails/non-finite.
+
+    Args:
+        panel: ``player_id``, ``season``, ``rating`` (+ optional ``weight``) panel.
+        ages: ``player_id``, ``season``, ``age``.
+        aging_curve: Fitted ``AgingCurve`` supplying per-age expected drift.
+        defaults: Fallback ``(q, obs_base)`` when optimization fails or produces non-finite values.
+
+    Returns:
+        ``(q, obs_base)`` — MLE-fitted process and base observation variance parameters.
+    """
+    series = list(_player_series(panel, ages))
+    x0 = np.log(np.array(defaults, dtype=np.float64))
+    try:
+        res = minimize(_neg_loglik, x0, args=(series, aging_curve), method="Nelder-Mead")
+        if res.success and np.all(np.isfinite(res.x)):
+            return float(np.exp(res.x[0])), float(np.exp(res.x[1]))
+    except Exception:
+        pass
+    return defaults
+
+
+def nba_darko(
+    panel: pl.DataFrame,
+    ages: pl.DataFrame,
+    *,
+    aging_curve: "AgingCurve | None" = None,
+    process_var: "float | None" = None,
+    obs_base: "float | None" = None,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame:
+    """Project each player's next-season rating via a per-player Kalman filter + aging curve.
+
+    Args:
+        panel: ``player_id, season, rating`` (+ optional ``weight``) — a multi-season rating panel.
+        ages: ``player_id, season, age`` (from ``nba_player_ages``).
+        aging_curve: an ``AgingCurve``; fitted from ``panel`` if None.
+        process_var: Kalman process variance ``q``; MLE-fit from ``panel`` if None.
+        obs_base: Kalman base observation variance; MLE-fit from ``panel`` if None.
+        return_as_pandas: return pandas instead of polars.
+
+    Returns:
+        ``player_id, last_season, forecast_season, filtered_skill, projected_rating, projected_sd``.
+
+    Example:
+        Project next season from a multi-season adj-RAPM panel::
+
+            from sportsdataverse.nba import nba_darko, nba_player_ages
+            proj = nba_darko(rating_panel, ages_panel)
+            print(proj.sort("projected_rating", descending=True).head())
+    """
+    curve = aging_curve if aging_curve is not None else fit_aging_curve(panel, ages)
+    if process_var is None or obs_base is None:
+        q_fit, o_fit = _fit_noise_params(panel, ages, curve)
+        q = process_var if process_var is not None else q_fit
+        ob = obs_base if obs_base is not None else o_fit
+    else:
+        q = process_var
+        ob = obs_base
+    rows: List[Dict[str, object]] = []
+    for pid, seasons, ratings, ages_seq, weights in _player_series(panel, ages):
+        s_final, P_final, _sp, _iv = _kalman_filter(ratings, ages_seq, weights, curve, q, ob)
+        proj, sd = _forecast(s_final, P_final, float(ages_seq[-1]), curve, q)
+        last_season = int(seasons[-1])
+        rows.append(
+            {
+                "player_id": pid,
+                "last_season": last_season,
+                "forecast_season": last_season + 1,
+                "filtered_skill": float(s_final),
+                "projected_rating": proj,
+                "projected_sd": sd,
+            }
+        )
+    out = pl.DataFrame(
+        rows,
+        schema={
+            "player_id": pl.Int64,
+            "last_season": pl.Int64,
+            "forecast_season": pl.Int64,
+            "filtered_skill": pl.Float64,
+            "projected_rating": pl.Float64,
+            "projected_sd": pl.Float64,
+        },
+    )
+    return out.to_pandas() if return_as_pandas else out

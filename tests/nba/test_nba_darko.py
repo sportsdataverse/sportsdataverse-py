@@ -1,4 +1,4 @@
-"""Tests for AgingCurve + fit_aging_curve (Task 2) and Kalman filter (Task 3)."""
+"""Tests for AgingCurve + fit_aging_curve (Task 2), Kalman filter (Task 3), and MLE fit + projection (Task 4)."""
 
 from __future__ import annotations
 
@@ -7,10 +7,25 @@ import polars as pl
 
 from sportsdataverse.nba.nba_darko import (
     AgingCurve,
+    _fit_noise_params,
     _forecast,
     _kalman_filter,
     fit_aging_curve,
+    nba_darko,
 )
+
+
+def _panel(seed: int = 0) -> tuple[pl.DataFrame, pl.DataFrame]:
+    rng = np.random.default_rng(seed)
+    rows, arows = [], []
+    for pid in range(60):
+        skill = float(rng.normal(0, 3))
+        start = int(rng.integers(22, 30))
+        for k, season in enumerate(range(2018, 2023)):
+            rows.append({"player_id": pid, "season": season, "rating": skill + rng.normal(0, 0.8), "weight": 1.0})
+            arows.append({"player_id": pid, "season": season, "age": float(start + k)})
+            skill += rng.normal(0, 0.3)
+    return pl.DataFrame(rows), pl.DataFrame(arows)
 
 
 def test_fit_aging_curve_recovers_planted_deltas() -> None:
@@ -57,3 +72,29 @@ def test_kalman_recovers_latent_and_forecasts() -> None:
     assert abs(s_final - latents[-1]) < abs(ratings[-1] - latents[-1]) + 0.5
     proj, sd = _forecast(s_final, P_final, ages[-1], curve, q=0.09)
     assert sd > 0 and abs(proj - latents[-1]) < 2.0
+
+
+def test_fit_noise_params_positive_deterministic() -> None:
+    """MLE fit returns positive params and is deterministic (no RNG)."""
+    panel, ages = _panel()
+    curve = fit_aging_curve(panel, ages, smooth=1)
+    q1, o1 = _fit_noise_params(panel, ages, curve)
+    q2, o2 = _fit_noise_params(panel, ages, curve)
+    assert q1 > 0 and o1 > 0 and q1 == q2 and o1 == o2
+
+
+def test_nba_darko_projection_frame() -> None:
+    """nba_darko returns the 6-col schema with correct dtypes, forecast_season, and row count."""
+    panel, ages = _panel()
+    out = nba_darko(panel, ages)
+    assert set(out.columns) == {
+        "player_id",
+        "last_season",
+        "forecast_season",
+        "filtered_skill",
+        "projected_rating",
+        "projected_sd",
+    }
+    assert out.schema["player_id"] == pl.Int64 and out.schema["projected_sd"] == pl.Float64
+    assert (out["forecast_season"] == out["last_season"] + 1).all()
+    assert (out["projected_sd"] > 0).all() and out.height == 60
