@@ -117,10 +117,11 @@ def test_played_empty_stats() -> None:
 def test_boxscore_name_map_lists_collisions() -> None:
     """Collision handling is tested with a synthetic boxscore — never edits the real fixture."""
 
-    def _player(pid: int, family: str, position: str = "F", minutes: str = "30:00") -> dict:
+    def _player(pid: int, family: str, position: str = "F", minutes: str = "30:00", first: str = "") -> dict:
         return {
             "personId": pid,
             "familyName": family,
+            "firstName": first,
             "position": position,
             "statistics": {"minutes": minutes, "points": 0},
         }
@@ -148,6 +149,42 @@ def test_boxscore_name_map_lists_collisions() -> None:
     assert team["tatum"] == [333]
 
 
+def test_boxscore_name_map_first_initial_disambiguates() -> None:
+    """First-initial keys resolve same-family teammates to distinct ids."""
+
+    def _player(pid: int, family: str, position: str = "F", minutes: str = "30:00", first: str = "") -> dict:
+        return {
+            "personId": pid,
+            "familyName": family,
+            "firstName": first,
+            "position": position,
+            "statistics": {"minutes": minutes, "points": 0},
+        }
+
+    team_id = 5555
+    synthetic = {
+        "boxScoreTraditional": {
+            "homeTeam": {
+                "teamId": team_id,
+                "players": [
+                    _player(111, "Antetokounmpo", first="Giannis"),
+                    _player(222, "Antetokounmpo", first="Thanasis"),
+                    _player(333, "Holiday", first="Jrue"),
+                ],
+            },
+            "awayTeam": {"teamId": 4444, "players": []},
+        }
+    }
+    nm = _boxscore_name_map(synthetic)
+    team = nm[team_id]
+    # first-initial keys resolve to exactly one id each
+    assert team["g. antetokounmpo"] == [111]
+    assert team["t. antetokounmpo"] == [222]
+    # bare family key still contains BOTH ids (for backward-compat collision lookup)
+    assert 111 in team["antetokounmpo"]
+    assert 222 in team["antetokounmpo"]
+
+
 def test_boxscore_name_map_real_fixture_unique_name() -> None:
     """Sanity-check the map works on the real 0022200001 fixture via a uniquely-named player."""
     nm = _boxscore_name_map(_box("0022200001"))
@@ -170,9 +207,11 @@ def _pbp(g: str) -> dict:
     return json.loads((FXROOT / g / "playbyplayv3.json").read_text())
 
 
-def test_pbp_producer_schema_and_coverage() -> None:
-    enh = enhanced_pbp_from_payload(_pbp("0022200001"))
-    oc = players_on_court_from_pbp(enh, _box("0022200001"), home_team_id=1610612738, away_team_id=1610612755)
+@pytest.mark.parametrize("game_id", ["0022100001", "0022200001", "0022300001"])
+def test_pbp_producer_schema_and_coverage(game_id: str) -> None:
+    home, away = boxscore_home_away(_box(game_id))
+    enh = enhanced_pbp_from_payload(_pbp(game_id))
+    oc = players_on_court_from_pbp(enh, _box(game_id), home_team_id=home, away_team_id=away)
     assert oc.schema == LINEUPS_SCHEMA
     assert oc.height == enh.height  # one row per action
     # every row has exactly 5 home + 5 away non-null (fully covered)

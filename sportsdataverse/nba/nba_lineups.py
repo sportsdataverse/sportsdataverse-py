@@ -96,7 +96,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Dict, List, Optional, Sequence, Union
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -822,21 +822,26 @@ def _period_starters(
     return _seed_five(starters)
 
 
-def _row_elapsed_key(r: dict) -> tuple[int, float]:
-    """Return a ``(period, seconds_remaining)`` tick key for grouping same-clock rows.
+def _row_elapsed_key(r: dict) -> Tuple[int, float]:
+    """Return a ``(period, clock)`` tick key for grouping same-clock rows.
 
     Two rows share a key when they are in the same period at the same game
-    clock — i.e. they land on the same rotation boundary.  ``None`` clocks map
-    to ``-1.0`` so they group deterministically.
+    clock — i.e. they land on the same rotation boundary.  Real clocks group
+    by tick; null clocks are treated as individually distinct so that two
+    consecutive null-clock subs never collapse into the same boundary.
 
     Args:
-        r: A per-row dict carrying ``period`` and ``seconds_remaining``.
+        r: A per-row dict carrying ``period``, ``seconds_remaining``, and
+            ``action_number``.
 
     Returns:
-        A ``(period, seconds_remaining)`` tuple usable as a dict/equality key.
+        A ``(period, clock)`` tuple usable as a dict/equality key.
     """
     sr = r.get("seconds_remaining")
-    return (int(r["period"]), float(sr) if sr is not None else -1.0)
+    if sr is not None:
+        return (int(r["period"]), float(sr))
+    # Null-clock rows get a per-row-unique sentinel so each is its own group.
+    return (int(r["period"]), -1.0 - float(r["action_number"]))
 
 
 def _snapshot_row(
@@ -963,6 +968,7 @@ def players_on_court_from_pbp(
                 "game_id",
                 "action_number",
                 "period",
+                "seconds_remaining",
                 "team_id",
                 "person_id",
                 "description",
