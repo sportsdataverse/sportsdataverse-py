@@ -361,3 +361,38 @@ def test_validate_model_ratings_all_oracles_no_crash():
     assert rep.calibration is None  # point model -> no posterior -> None, not a crash
     assert rep.retrodiction is not None  # the predictive oracles still populate
     assert rep.reliability is not None
+
+
+# ---------------------------------------------------------------------------
+# Task 1 (adj-RAPM sub-project): PriorModel harness path
+# ---------------------------------------------------------------------------
+
+
+class _StubPriorModel:
+    """Minimal PriorModel: returns the prior_mean as coef (no fitting) + a trivial posterior."""
+
+    def __init__(self, prior):
+        self.prior = prior  # Dict[int, (o, d)]
+
+    def fit_with_prior(self, X, y, prior_mean):
+        import numpy as np
+
+        return FitResult(coef=prior_mean.copy(), intercept=0.0, posterior=np.tile(prior_mean, (8, 1)))
+
+
+def test_fit_on_routes_prior_model():
+    o100, d100, poss = _planted_ratings_setup()  # existing helper in this file
+    prior = {p: (o100[p], d100[p]) for p in o100}
+    fit, pids = _fit_on(_StubPriorModel(prior), poss)
+    P = len(pids)
+    k = pids.index(100)
+    assert abs(fit.coef[k] - o100[100] / 100) < 1e-9  # prior_mean[i] = o/100
+    assert abs(fit.coef[P + k] + d100[100] / 100) < 1e-9  # prior_mean[P+i] = -d/100
+    assert fit.posterior is not None and fit.posterior.shape == (8, 2 * P)
+
+
+def test_validate_model_prior_all_oracles_no_crash():
+    o100, d100, poss = _planted_ratings_setup()
+    prior = {p: (o100[p], d100[p]) for p in o100}
+    rep = validate_model(_StubPriorModel(prior), [poss], model_name="stub_prior")
+    assert rep.retrodiction is not None and rep.calibration is not None  # posterior -> calibration populated
