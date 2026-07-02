@@ -635,11 +635,13 @@ def nba_possessions(
 
             - ``"rotation"`` — fetch ``gamerotation`` and use
               :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`.
+              **Strict mode**: raises :exc:`ValueError` if the gamerotation
+              endpoint returns no on-court data; there is no fallback.
             - ``"pbp"`` — skip the rotation fetch entirely and use
               :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_pbp`
               (~96.7 % agreement with rotation; requires no extra network call).
             - ``"auto"`` (default) — try rotation first; if the rotation fetch
-              raises or produces an empty on-court frame, fall back to pbp.
+              raises *or* produces an empty on-court frame, fall back to pbp.
 
             The returned frame gains a constant ``lineup_source`` column
             (``"rotation"`` or ``"pbp"``) recording which producer was used.

@@ -510,11 +510,11 @@ def _install_fixture_fetchers(
     *,
     rotation_raises: bool = False,
     rotation_empty: bool = False,
-) -> dict:
+) -> dict[str, int]:
     root = FXROOT / game_id
     monkeypatch.setattr(npm, "_fetch_pbp", lambda g, lg: json.loads((root / "playbyplayv3.json").read_text()))
     monkeypatch.setattr(npm, "_fetch_box", lambda g, lg: json.loads((root / "boxscoretraditionalv3.json").read_text()))
-    calls: dict = {"rotation": 0}
+    calls: dict[str, int] = {"rotation": 0}
 
     def _rot(g: str, lg: str) -> dict:
         calls["rotation"] += 1
@@ -560,3 +560,11 @@ def test_pbp_source_reconciles_boxscore_points(monkeypatch: pytest.MonkeyPatch, 
     oracle = _box_team_points(_box(game_id))
     for team_id, expected in oracle.items():
         assert got.get(team_id, 0) == expected, f"{game_id} team {team_id}: {got.get(team_id, 0)} != {expected}"
+
+
+def test_lineup_source_auto_falls_back_on_empty_stints(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_empty=True)
+    df = npm.nba_possessions("0022200001", lineup_source="auto")
+    assert calls["rotation"] == 1  # tried rotation, got empty stints, fell back
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert df.height > 0
