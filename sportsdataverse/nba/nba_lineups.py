@@ -66,7 +66,7 @@ rotation change.  Two heuristics resolve this:
 from __future__ import annotations
 
 import logging
-from typing import Union
+from typing import Dict, List, Union
 
 import numpy as np
 import pandas as pd
@@ -137,6 +137,47 @@ def _fetch_box(game_id: str, league_id: str = "00") -> dict:
 def _bt(box: dict) -> dict:
     """Return the ``boxScoreTraditional`` sub-dict, or empty dict if absent."""
     return (box or {}).get("boxScoreTraditional") or {}
+
+
+def _starters_from_boxscore_v3(raw_box: dict) -> Dict[int, List[int]]:
+    """Extract each team's 5 starters from a boxscoretraditionalv3 payload.
+
+    A player is a starter when its ``position`` field is non-empty. If a side
+    yields != 5 starters, pad from players with recorded minutes until 5.
+
+    Args:
+        raw_box: Raw dict from ``nba_stats_boxscoretraditionalv3``.
+
+    Returns:
+        ``{team_id: [person_id, ...]}`` (5 ids per team). Empty dict on
+        malformed/empty input (never raises).
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            from sportsdataverse.nba.nba_lineups import _starters_from_boxscore_v3
+            box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+            print(_starters_from_boxscore_v3(box))
+    """
+    bt = (raw_box or {}).get("boxScoreTraditional") or {}
+    out: Dict[int, List[int]] = {}
+    for side in ("homeTeam", "awayTeam"):
+        team = bt.get(side) or {}
+        tid = team.get("teamId")
+        players = team.get("players") or []
+        if not tid or not players:
+            continue
+        starters = [int(p["personId"]) for p in players if p.get("personId") and (p.get("position") or "").strip()]
+        if len(starters) != 5:
+            pool = [
+                int(p["personId"])
+                for p in players
+                if p.get("personId") and int((p.get("statistics") or {}).get("points", 0) or 0) >= 0
+            ]
+            starters = (starters + [p for p in pool if p not in starters])[:5]
+        out[int(tid)] = starters
+    return out
 
 
 def _elapsed_time(period: int, seconds_remaining: float) -> float:
