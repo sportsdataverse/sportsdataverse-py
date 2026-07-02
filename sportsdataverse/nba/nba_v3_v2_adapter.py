@@ -1065,14 +1065,21 @@ _PBPSTATS_INT_COLUMNS: Tuple[str, ...] = (
     "VIDEO_AVAILABLE_FLAG",
 )
 
-# Description / score-ish string columns: a null value becomes "" rather than
-# None -- the safest null-representation pbpstats tolerates for these fields
-# (its description fallback chain checks ``is not None``, so a `None` would
-# skip that field silently, but "" reads unambiguously as "no text").
+# Score-ish string columns: a null value becomes "" rather than None. pbpstats
+# doesn't read these fields at all, so "" is just the existing convention for
+# "no text" here -- it has no effect on pbpstats' own logic either way.
+#
+# The three description columns (HOMEDESCRIPTION / VISITORDESCRIPTION /
+# NEUTRALDESCRIPTION) are deliberately NOT in this set -- they're left to pass
+# through a null as ``None`` instead (see the catch-all branch in
+# ``_to_pbpstats_stats_nba_rows``). pbpstats' ``StatsEnhancedPbpItem.__init__``
+# concatenates ``f"{HOMEDESCRIPTION}: {VISITORDESCRIPTION}"`` whenever *both*
+# fields are ``is not None`` -- sending "" for the empty side would satisfy
+# that check and force the concat branch, injecting a stray leading/trailing
+# ": " into the reconstructed ``.description``. Sending `None` instead lets
+# pbpstats' single-description fallback (home-only / visitor-only /
+# neutral-only) fire as intended.
 _PBPSTATS_EMPTY_STRING_COLUMNS: Tuple[str, ...] = (
-    "HOMEDESCRIPTION",
-    "VISITORDESCRIPTION",
-    "NEUTRALDESCRIPTION",
     "SCORE",
     "SCOREMARGIN",
 )
@@ -1141,12 +1148,16 @@ def _to_pbpstats_stats_nba_rows(v2_df: pl.DataFrame) -> List[Dict[str, Any]]:
     :data:`_PBPSTATS_INT_COLUMNS` become Python ``int`` (null/empty -> ``0``,
     pbpstats' "no player" convention) EXCEPT :data:`_PBPSTATS_NULLABLE_TEAM_ID_COLUMNS`
     (``PLAYER1_TEAM_ID``), where a parsed zero becomes ``None`` instead (see
-    that constant's docstring for why), the description/score columns in
-    :data:`_PBPSTATS_EMPTY_STRING_COLUMNS` become ``""`` on null, and every
-    other column (names, team city/nickname/abbreviation, ``GAME_ID``,
-    ``PCTIMESTRING``) passes through as-is. ``PCTIMESTRING`` is the v2 frame's
-    ``time_quarter`` ("MM:SS" clock-remaining-in-quarter string) -- NOT the
-    v3 ISO ``clock`` column.
+    that constant's docstring for why), the score columns in
+    :data:`_PBPSTATS_EMPTY_STRING_COLUMNS` become ``""`` on null, the three
+    description columns (``HOMEDESCRIPTION`` / ``VISITORDESCRIPTION`` /
+    ``NEUTRALDESCRIPTION``) pass a null through as ``None`` (see that
+    constant's docstring -- this lets pbpstats' single-description fallback
+    fire instead of its both-sides concatenation), and every other column
+    (names, team city/nickname/abbreviation, ``GAME_ID``, ``PCTIMESTRING``)
+    passes through as-is. ``PCTIMESTRING`` is the v2 frame's ``time_quarter``
+    ("MM:SS" clock-remaining-in-quarter string) -- NOT the v3 ISO ``clock``
+    column.
 
     Args:
         v2_df: Output of :func:`nba_v3_to_v2_pbp`.

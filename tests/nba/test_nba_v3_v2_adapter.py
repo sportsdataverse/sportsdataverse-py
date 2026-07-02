@@ -285,12 +285,6 @@ def test_lookup_player_name_i_match():
     assert _lookup_player("E. Mobley", roster) == 1630596
 
 
-def test_lookup_player_abbrev_match():
-    roster = _build_roster(_box("0022300001"))
-    # "F. Family" abbreviation built from first-initial + family, distinct from name_i.
-    assert _lookup_player("E. Mobley", roster) == 1630596
-
-
 def test_lookup_player_tier3_abbrev_isolated_from_name_i_and_fuzzy():
     """Isolate Tier 3 ("F. Family" abbreviation) from Tiers 2 and 4.
 
