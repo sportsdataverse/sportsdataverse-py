@@ -71,8 +71,20 @@ class RatingsModel(Protocol):
     def fit_ratings(self, possessions: pl.DataFrame) -> RatingsFit: ...
 
 
-# a harness model is either a design-matrix RapmModel or a box/ratings RatingsModel
-AnyModel: TypeAlias = Union[RapmModel, RatingsModel]
+class PriorModel(Protocol):
+    """A design-matrix model that shrinks toward a per-player prior mean.
+
+    ``prior`` maps player_id -> (o_prior, d_prior) in per-100 units; the harness aligns it
+    onto the 2P design columns and passes ``prior_mean`` (per-possession) to ``fit_with_prior``.
+    """
+
+    prior: Dict[int, Tuple[float, float]]
+
+    def fit_with_prior(self, X: csr_matrix, y: np.ndarray, prior_mean: np.ndarray) -> FitResult: ...
+
+
+# a harness model is a design-matrix RapmModel, a box/ratings RatingsModel, or a prior-informed PriorModel
+AnyModel: TypeAlias = Union[RapmModel, RatingsModel, PriorModel]
 
 
 def _fit_on(model: object, possessions: pl.DataFrame) -> Tuple[FitResult, List[int]]:
@@ -94,6 +106,15 @@ def _fit_on(model: object, possessions: pl.DataFrame) -> Tuple[FitResult, List[i
     X, y, pids = build_rapm_design(possessions)
     if not pids:
         return FitResult(coef=np.zeros(0, dtype=np.float64), intercept=0.0), pids
+    if hasattr(model, "fit_with_prior"):
+        P = len(pids)
+        prior_mean: np.ndarray = np.zeros(2 * P, dtype=np.float64)
+        prior = getattr(model, "prior", {})
+        for k, pid in enumerate(pids):
+            o, d = prior.get(int(pid), (0.0, 0.0))
+            prior_mean[k] = o / 100.0
+            prior_mean[P + k] = -d / 100.0
+        return model.fit_with_prior(X, y, prior_mean), pids
     if hasattr(model, "fit_ratings"):
         rf = model.fit_ratings(possessions)
         P = len(pids)
