@@ -90,13 +90,16 @@ AnyModel: TypeAlias = Union[RapmModel, RatingsModel, PriorModel]
 def _fit_on(model: object, possessions: pl.DataFrame) -> Tuple[FitResult, List[int]]:
     """Fit any harness model on ``possessions`` and return ``(FitResult, player_ids)``.
 
-    Routes by model kind: a ``RatingsModel`` (has ``fit_ratings``) has its per-100
-    ratings mapped onto the design's per-possession coef vector
+    Routes by model kind: a ``PriorModel`` (has ``fit_with_prior``) has its
+    per-player prior aligned to the design columns and fit via ``fit_with_prior``;
+    a ``RatingsModel`` (has ``fit_ratings``) has its per-100 ratings mapped onto
+    the design's per-possession coef vector
     (``coef[i]=o/100``, ``coef[P+i]=-d/100``, ``intercept=mean(y - X @ coef)``);
     otherwise the model's ``fit(X, y)`` is used unchanged (byte-identical RAPM path).
 
     Args:
-        model: A ``RapmModel`` (``fit``) or ``RatingsModel`` (``fit_ratings``).
+        model: A ``RapmModel`` (``fit``), a ``RatingsModel`` (``fit_ratings``),
+            or a ``PriorModel`` (``fit_with_prior``).
         possessions: The (train) possession+lineup frame.
 
     Returns:
@@ -612,8 +615,9 @@ def calibration(
     truth falls inside — the calibration curve.
 
     Args:
-        model: A ``RapmModel`` instance; must emit ``FitResult.posterior`` (an
-            ``(S, 2P)`` sample array) to produce a non-``None`` result.
+        model: A harness model (``RapmModel``/``RatingsModel``/``PriorModel``);
+            must emit ``FitResult.posterior`` (an ``(S, 2P)`` sample array) to
+            produce a non-``None`` result.
         possessions: A season (or multi-game) possession+lineup frame with
             ``game_id``, ``offense_team_id``, ``points``, and the ten lineup
             columns (``off_player_1..5``, ``def_player_1..5``).

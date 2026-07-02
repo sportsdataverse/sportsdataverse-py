@@ -112,7 +112,7 @@ def test_adj_rapm_beats_plain_rapm_cross_season() -> None:
     prior = {p: (o[p] * 100, d[p] * 100) for p in ids}  # box prior carries the signal
     adj = cross_season(AdjRapmModel(prior, n_samples=50, seed=0), [s1, s2])
     plain = cross_season(RidgeRapmModel(), [s1, s2])
-    # the informative prior should predict season N+1 outcomes at least as well as plain RAPM
+    # non-regression guard: the box prior must not HURT out-of-sample (a real payoff demonstration needs a realistic signal/noise regime, out of scope for the unit suite).
     assert adj.outcome_corr >= plain.outcome_corr - 1e-9
 
 
