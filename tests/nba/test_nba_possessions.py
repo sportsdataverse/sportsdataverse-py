@@ -510,6 +510,7 @@ def _install_fixture_fetchers(
     *,
     rotation_raises: bool = False,
     rotation_empty: bool = False,
+    rotation_partial: bool = False,
 ) -> dict[str, int]:
     root = FXROOT / game_id
     monkeypatch.setattr(npm, "_fetch_pbp", lambda g, lg: json.loads((root / "playbyplayv3.json").read_text()))
@@ -522,7 +523,16 @@ def _install_fixture_fetchers(
             raise RuntimeError("gamerotation throttled")
         if rotation_empty:
             return {"resultSets": []}
-        return json.loads((root / "gamerotation.json").read_text())
+        raw = json.loads((root / "gamerotation.json").read_text())
+        if rotation_partial:
+            # Simulate a one-sided-degraded payload: AwayTeam stints are empty.
+            # This produces a non-empty on-court frame (HomeTeam rows present)
+            # with all away_player_* slots null — the silent-null failure mode.
+            # We mutate the in-memory copy of the loaded dict, NOT the fixture.
+            for rs in raw.get("resultSets", []):
+                if rs.get("name") == "AwayTeam":
+                    rs["rowSet"] = []
+        return raw
 
     monkeypatch.setattr(npm, "_fetch_rotation", _rot)
     return calls
@@ -568,3 +578,22 @@ def test_lineup_source_auto_falls_back_on_empty_stints(monkeypatch: pytest.Monke
     assert calls["rotation"] == 1  # tried rotation, got empty stints, fell back
     assert df["lineup_source"].unique().to_list() == ["pbp"]
     assert df.height > 0
+
+
+def test_lineup_source_auto_falls_back_on_partial_rotation(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Auto mode falls back to pbp when rotation has one-sided-null coverage.
+
+    A gamerotation payload where one team's stints are missing (AwayTeam
+    rowSet=[]) produces a non-empty on-court frame with all away_player_*
+    slots null — the coverage guard detects >2% null rows and raises, so
+    "auto" falls back to the complete pbp reconstruction.
+    """
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_partial=True)
+    df = npm.nba_possessions("0022200001", lineup_source="auto")
+    assert calls["rotation"] == 1  # tried rotation, detected partial coverage, fell back
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert df.height > 0
+    # pbp fallback must produce fully-populated off/def slots (no null player slots)
+    off_def_cols = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
+    for col in off_def_cols:
+        assert df[col].null_count() == 0, f"pbp fallback left nulls in {col}"

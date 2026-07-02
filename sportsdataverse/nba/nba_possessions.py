@@ -23,6 +23,12 @@ logger = logging.getLogger(__name__)
 # Columns added by attach_possession_lineups (the RAPM stint design matrix).
 LINEUP_COLUMNS: list[str] = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
 
+# Fraction of on-court rows that may have at least one null player slot before
+# we treat the rotation payload as degraded. A healthy gamerotation produces
+# ~0% null rows; a one-sided-missing payload produces ~100%. Threshold of 2%
+# gives generous headroom while still catching the one-sided failure mode.
+_ROTATION_NULL_TOLERANCE = 0.02  # >2% of actions missing a player slot => degraded rotation, fall back to pbp
+
 # ---------------------------------------------------------------------------
 # Schema
 # ---------------------------------------------------------------------------
@@ -713,6 +719,15 @@ def nba_possessions(
         oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
         if oc.is_empty():
             raise ValueError("rotation produced empty on-court frame")
+        # Coverage guard: a partially-degraded rotation payload (e.g. one side missing
+        # stints) yields a non-empty frame with null player slots. Treat that as a
+        # failure so "auto" falls back to the complete pbp reconstruction.
+        _slot_cols = [f"home_player_{i}" for i in range(1, 6)] + [f"away_player_{i}" for i in range(1, 6)]
+        _null_row_frac = oc.select(
+            (pl.sum_horizontal([pl.col(c).is_null() for c in _slot_cols]) > 0).mean().alias("f")
+        )["f"][0]
+        if _null_row_frac is not None and _null_row_frac > _ROTATION_NULL_TOLERANCE:
+            raise ValueError(f"rotation on-court frame has {_null_row_frac:.1%} rows with null slots")
         return oc, "rotation"
 
     if lineup_source == "pbp":

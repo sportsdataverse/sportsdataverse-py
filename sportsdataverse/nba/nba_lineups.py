@@ -756,12 +756,21 @@ def _apply_pbp_sub(five: List[Optional[int]], sub_out: Optional[int], sub_in: Op
     If *sub_out* is not found (data gap), *sub_in* is backfilled into a
     free slot instead.
 
+    When *sub_in* is ``None`` (the incoming player could not be resolved —
+    ambiguous ``SUB: X FOR Y`` description or missing name-map entry), the
+    outgoing slot is written as ``None``, intentionally leaving a gap that
+    the terminal ``forward_fill().backward_fill()`` pass in
+    :func:`players_on_court_from_pbp` will patch.
+
     Args:
         five: The team's current running 5-slot list (mutated in place).
         sub_out: The outgoing player id (``person_id`` on a sub row).
         sub_in: The incoming player id resolved via :func:`_resolve_sub_in`.
+            ``None`` means the incoming player is unresolvable; the slot is
+            left as ``None`` for the terminal ffill/bfill gap-patching step.
     """
     if sub_out and sub_out in five:
+        # sub_in=None here intentionally defers to the terminal ffill/bfill gap-patching.
         five[five.index(sub_out)] = sub_in
     elif sub_in and sub_in not in five:
         _backfill_five(five, sub_in)
