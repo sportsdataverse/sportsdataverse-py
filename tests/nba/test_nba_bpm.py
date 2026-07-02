@@ -307,6 +307,8 @@ def test_nba_bpm_model_head_to_head() -> None:
     rf_two = model.fit_ratings(poss.filter(pl.col("game_id").is_in(game_ids[:2])))
     assert set(rf_all.o_ratings)  # produces ratings on full set
     assert set(rf_two.o_ratings)  # produces ratings on 2-game fold
+    assert set(rf_two.o_ratings) == set(rf_all.o_ratings)  # same players
+    assert rf_two.o_ratings != rf_all.o_ratings  # but different values -> fold actually restricted the input
     # head-to-head: BPM runs through the SAME validate_model as RAPM
     rep = validate_model(model, [poss], model_name="bpm", oracles=("retrodiction",))
     assert rep.retrodiction is not None

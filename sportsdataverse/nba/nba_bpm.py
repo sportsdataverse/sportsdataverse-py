@@ -7,6 +7,7 @@ from typing import Dict, Tuple
 import polars as pl
 
 from sportsdataverse.nba.nba_box_logs import box_features
+from sportsdataverse.nba.nba_model_validation import RatingsFit
 
 # Published BPM 2.0 coefficients (Basketball-Reference "About BPM 2.0", Daniel Myers 2020).
 # position-varying cols are (pos1_PG, pos5_C); *_role cols are (role1_Creator, role5_Receiver).
@@ -416,16 +417,13 @@ def nba_bpm(
     return out.to_pandas() if return_as_pandas else out
 
 
-# RatingsFit is defined in nba_model_validation; imported here (no cycle —
-# nba_model_validation does not import nba_bpm).
-from sportsdataverse.nba.nba_model_validation import RatingsFit  # noqa: E402
-
-
 class NbaBpmModel:
     """A ``RatingsModel`` scoring a fold via faithful BPM 2.0.
 
-    Position/role are estimated once over the full-season logs at construction (a stable
-    player attribute); ``fit_ratings`` restricts the box rate + team margin to the fold's games.
+    Scores a fold via faithful BPM 2.0; position/role are estimated **fold-native**
+    (recomputed over the fold's games) in v1 — a full-season-position refinement is a
+    documented follow-up. ``fit_ratings`` restricts the box rate + team margin to the
+    fold's games (the leakage guard).
 
     Design note: position/role are recomputed inside ``nba_bpm`` over the fold in v1 for
     simplicity (fold-native); the spec's "position over full season" refinement is a
