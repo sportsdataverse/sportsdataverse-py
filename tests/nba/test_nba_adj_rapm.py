@@ -69,3 +69,48 @@ def test_nba_adj_rapm_public_schema() -> None:
     out = nba_adj_rapm(poss, prior, n_samples=50)
     assert set(out.columns) == {"player_id", "o_adj_rapm", "d_adj_rapm", "adj_rapm", "off_poss", "def_poss"}
     assert out.schema["player_id"] == pl.Int64 and out.schema["adj_rapm"] == pl.Float64
+
+
+def _planted_season(seed: int, o: dict, d: dict) -> pl.DataFrame:
+    return _synthetic_possessions(o, d, n_games=40, poss_per_game=60, noise_sd=0.3, seed=seed)
+
+
+def test_adj_rapm_posterior_is_calibrated() -> None:
+    from sportsdataverse.nba.nba_model_validation import calibration, RidgeRapmModel  # noqa: F401
+
+    ids = list(range(100, 110)) + list(range(200, 210))
+    rng = np.random.default_rng(5)
+    o = {p: float(rng.normal(0, 0.04)) for p in ids}
+    d = {p: float(rng.normal(0, 0.04)) for p in ids}
+    poss = _planted_season(1, o, d)
+    prior = {p: (o[p] * 100, d[p] * 100) for p in ids}  # informative prior ≈ truth
+    res = calibration(AdjRapmModel(prior, n_samples=300, seed=0), poss, levels=(0.5, 0.9))
+    assert res is not None
+    # a well-specified posterior covers ~nominally (loose band for sampling/among-players noise)
+    assert 0.6 <= res.coverage[res.levels.index(0.9)] <= 1.0
+
+    # an OVER-CONFIDENT posterior (shrink samples toward the mean) under-covers at 0.9
+    class _Overconfident(AdjRapmModel):
+        def fit_with_prior(self, X, y, prior_mean):  # type: ignore[override]
+            fit = super().fit_with_prior(X, y, prior_mean)
+            m = fit.posterior.mean(axis=0)
+            fit.posterior[:] = m + 0.05 * (fit.posterior - m)  # 20x too tight
+            return fit
+
+    tight = calibration(_Overconfident(prior, n_samples=300, seed=0), poss, levels=(0.9,))
+    assert tight.coverage[0] < 0.9
+
+
+def test_adj_rapm_beats_plain_rapm_cross_season() -> None:
+    from sportsdataverse.nba.nba_model_validation import cross_season, RidgeRapmModel
+
+    ids = list(range(100, 112)) + list(range(200, 212))
+    rng = np.random.default_rng(7)
+    o = {p: float(rng.normal(0, 0.05)) for p in ids}
+    d = {p: float(rng.normal(0, 0.05)) for p in ids}
+    s1, s2 = _planted_season(1, o, d), _planted_season(2, o, d)
+    prior = {p: (o[p] * 100, d[p] * 100) for p in ids}  # box prior carries the signal
+    adj = cross_season(AdjRapmModel(prior, n_samples=50, seed=0), [s1, s2])
+    plain = cross_season(RidgeRapmModel(), [s1, s2])
+    # the informative prior should predict season N+1 outcomes at least as well as plain RAPM
+    assert adj.outcome_corr >= plain.outcome_corr - 1e-9
