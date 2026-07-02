@@ -4,18 +4,43 @@ Ports hoopR's ``.v3_to_v2_format()`` (``R/nba_stats_pbp.R``) into sdv-py. This
 module is the **pure, network-free** substrate for the full v3 -> v2
 transformation (Phase A of the pbpstats-adaptation program): the v3
 ``actionType`` -> v2 ``EVENTMSGTYPE`` map, the parent-keyed ``subType`` ->
-``EVENTMSGACTIONTYPE`` tables, the per-game roster builder, and the 4-tier
+``EVENTMSGACTIONTYPE`` tables, the per-game roster builder, the 4-tier
 player name-match used to resolve names embedded in v3 play descriptions
-(assists, substitutions, jump balls, blocks/steals) back to a ``person_id``.
+(assists, substitutions, jump balls, blocks/steals) back to a ``person_id``,
+and the description-regex secondary-player extraction itself.
 
-Task 1 scope only: the tables + ``_build_roster`` + ``_lookup_player``. The
-description-regex extraction, event assembly, and score/description
+Task 1 scope: the tables + ``_build_roster`` + ``_lookup_player``.
+
+Task 2 scope: ``_extract_secondary_players`` -- the v3 ``playbyplayv3``
+feed drops the secondary participants (assist/block/steal/sub-in/jump) that
+the older v2 feed carried as ``player2``/``player3``. This function recovers
+them from the v3 ``description`` text (assist/sub/jump) plus a structural
+block/steal consolidation trick (standalone rows that carry the blocker/
+stealer as ``personId`` directly), validated 1-to-1 against the richer cdn
+live feed on 3 committed fixtures. Event assembly and score/description
 derivation land in later tasks of Phase A.
 """
 
 from __future__ import annotations
 
-from typing import Dict, Optional
+import re
+from typing import Dict, List, Optional
+
+# ---------------------------------------------------------------------------
+# V3 description-regex extraction (Task 2)
+# ---------------------------------------------------------------------------
+# Compiled once at module scope. Verbatim from the design spec / proven
+# ``desc_extract2.py`` scratchpad recipe -- polars/Rust regex lookaround
+# restrictions do not apply here (this module uses Python's stdlib ``re``,
+# not polars expressions).
+_ASSIST_RE = re.compile(r"\(([^)]+?)\s+[0-9]+\s+AST\)")
+_SUB_IN_RE = re.compile(r"SUB:\s+(.+?)\s+FOR\s+.+")
+_JUMP_BALL_RE = re.compile(r"Jump Ball\s+.+?\s+vs\.\s+(.+?)(?::\s+Tip to\s+(.+?))?\s*$")
+
+# Block/steal standalone-row association window: search +/- this many rows
+# around the standalone row for the Missed Shot / Turnover at the same
+# (period, clock). Verbatim from desc_extract2.py.
+_BLOCK_STEAL_WINDOW = 6
 
 # ---------------------------------------------------------------------------
 # V3 actionType -> V2 EVENTMSGTYPE
@@ -324,3 +349,126 @@ def _lookup_player(name: Optional[str], roster: Dict[int, dict]) -> Optional[int
             return person_id
 
     return None
+
+
+def _extract_secondary_players(actions: List[dict], roster: Dict[int, dict]) -> Dict[int, dict]:
+    """Recover v2 ``player2_id``/``player3_id`` from v3 ``playbyplayv3`` actions.
+
+    The v3 feed drops the secondary participants (assist/block/steal/sub-in/
+    jump-ball) that the v2 feed carried directly as ``player2``/``player3``.
+    This ports the proven ``desc_extract2.py`` scratchpad recipe (assist
+    55/55, block 14/14, steal 17/17 on game 0022300001) and adds sub + jump
+    extraction per spec sections 2/3, resolving names via :func:`_lookup_player`
+    instead of a family-only resolver.
+
+    Extraction rules, in order:
+
+    1. **Assist -> player2_id**: on a ``Made Shot``, regex
+       ``\\(([^)]+?)\\s+[0-9]+\\s+AST\\)`` against ``description``; the
+       captured name is resolved via :func:`_lookup_player`.
+    2. **Block -> player3_id** / **Steal -> player2_id**: a standalone row
+       (``actionType == ""`` with ``"BLOCK"``/``"STEAL"`` in ``description``)
+       carries the blocker/stealer as ``personId`` directly (no name
+       resolution -- never ``None``). It is associated with the nearest
+       ``Missed Shot`` (block) / ``Turnover`` (steal) at the same
+       ``(period, clock)``, searching rows ``[i-6, i+6]`` around the
+       standalone row. The standalone rows themselves are never emitted as
+       keys of the output.
+    3. **Sub-in -> player2_id**: on a ``Substitution``, regex
+       ``SUB:\\s+(.+?)\\s+FOR\\s+.+`` captures the INCOMING player's name
+       (the row's own ``personId`` is the OUTGOING player = player1,
+       handled elsewhere); resolved via :func:`_lookup_player`.
+    4. **Jump ball -> player2_id (vs.) + player3_id (tip-to)**: regex
+       ``Jump Ball\\s+.+?\\s+vs\\.\\s+(.+?)(?::\\s+Tip to\\s+(.+?))?\\s*$``;
+       group 1 (the "vs." jumper) resolves to ``player2_id``, the optional
+       group 2 ("Tip to" recipient, when present) resolves to
+       ``player3_id``. The row's own ``personId`` is the first jumper =
+       player1, handled elsewhere.
+
+    A resolved value is recorded even when :func:`_lookup_player` misses
+    (``None``) so misses stay countable against the cdn structured-truth
+    oracle, mirroring the ``desc_extract2.py`` agree/miss/mismatch
+    accounting; block/steal values come from ``personId`` directly and are
+    therefore never ``None``.
+
+    Args:
+        actions: The v3 ``playbyplayv3`` payload's ``["game"]["actions"]``
+            list. Each element is expected to carry ``actionNumber``,
+            ``actionType``, ``subType``, ``description``, ``personId``,
+            ``period``, and ``clock``.
+        roster: Roster dict from :func:`_build_roster`.
+
+    Returns:
+        ``{actionNumber: {"player2_id": Optional[int], "player3_id":
+        Optional[int]}}`` -- only ``actionNumber`` keys that had at least
+        one extraction rule fire are present; each present dict carries
+        only the key(s) that rule set.
+    """
+    result: Dict[int, dict] = {}
+
+    def _record(action_number: Optional[int], key: str, value: Optional[int]) -> None:
+        if action_number is None:
+            return
+        result.setdefault(action_number, {})[key] = value
+
+    # 1. Assist -> player2_id on Made Shot.
+    for action in actions:
+        if action.get("actionType") != "Made Shot":
+            continue
+        match = _ASSIST_RE.search(action.get("description") or "")
+        if match:
+            _record(action.get("actionNumber"), "player2_id", _lookup_player(match.group(1), roster))
+
+    # 2. Block -> player3_id / Steal -> player2_id: standalone rows carry
+    # personId directly, associated to the nearest Missed Shot / Turnover
+    # at the same (period, clock) within +/- _BLOCK_STEAL_WINDOW rows.
+    n = len(actions)
+    for i, action in enumerate(actions):
+        if (action.get("actionType") or "") != "":
+            continue
+        description = action.get("description") or ""
+        if "BLOCK" in description:
+            target_action_type, target_key = "Missed Shot", "player3_id"
+        elif "STEAL" in description:
+            target_action_type, target_key = "Turnover", "player2_id"
+        else:
+            continue
+        person_id = action.get("personId")
+        if person_id is None:
+            continue
+        period = action.get("period")
+        clock = action.get("clock")
+        lo = max(0, i - _BLOCK_STEAL_WINDOW)
+        hi = min(n, i + _BLOCK_STEAL_WINDOW + 1)
+        for j in range(lo, hi):
+            candidate = actions[j]
+            if (
+                candidate.get("actionType") == target_action_type
+                and candidate.get("period") == period
+                and candidate.get("clock") == clock
+            ):
+                _record(candidate.get("actionNumber"), target_key, int(person_id))
+                break
+
+    # 3. Sub-in -> player2_id.
+    for action in actions:
+        if action.get("actionType") != "Substitution":
+            continue
+        match = _SUB_IN_RE.search(action.get("description") or "")
+        if match:
+            _record(action.get("actionNumber"), "player2_id", _lookup_player(match.group(1), roster))
+
+    # 4. Jump ball -> player2_id (vs.) + player3_id (tip-to, optional).
+    for action in actions:
+        if action.get("actionType") != "Jump Ball":
+            continue
+        match = _JUMP_BALL_RE.search(action.get("description") or "")
+        if not match:
+            continue
+        action_number = action.get("actionNumber")
+        _record(action_number, "player2_id", _lookup_player(match.group(1), roster))
+        tip_to = match.group(2)
+        if tip_to:
+            _record(action_number, "player3_id", _lookup_player(tip_to, roster))
+
+    return result
