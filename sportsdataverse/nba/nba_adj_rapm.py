@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, Union
 
 import numpy as np
+import pandas as pd
 import polars as pl
 from scipy.sparse import csr_matrix
 from scipy.sparse import eye as sp_eye
@@ -158,7 +159,7 @@ class AdjRapmModel:
         )
 
     @classmethod
-    def from_spm(cls, spm: pl.DataFrame, **kw: object) -> "AdjRapmModel":
+    def from_spm(cls, spm: pl.DataFrame, **kw: Any) -> "AdjRapmModel":
         """Construct from an SPM output frame (``ospm`` / ``dspm`` columns).
 
         Args:
@@ -172,10 +173,10 @@ class AdjRapmModel:
         prior: Dict[int, Tuple[float, float]] = {
             int(r["player_id"]): (float(r["ospm"]), float(r["dspm"])) for r in spm.iter_rows(named=True)
         }
-        return cls(prior, **kw)  # type: ignore[arg-type]
+        return cls(prior, **kw)
 
     @classmethod
-    def from_bpm(cls, bpm: pl.DataFrame, **kw: object) -> "AdjRapmModel":
+    def from_bpm(cls, bpm: pl.DataFrame, **kw: Any) -> "AdjRapmModel":
         """Construct from a BPM output frame (``obpm`` / ``dbpm`` columns).
 
         Args:
@@ -189,7 +190,7 @@ class AdjRapmModel:
         prior: Dict[int, Tuple[float, float]] = {
             int(r["player_id"]): (float(r["obpm"]), float(r["dbpm"])) for r in bpm.iter_rows(named=True)
         }
-        return cls(prior, **kw)  # type: ignore[arg-type]
+        return cls(prior, **kw)
 
 
 def nba_adj_rapm(
@@ -200,7 +201,7 @@ def nba_adj_rapm(
     n_samples: int = 200,
     seed: int = 0,
     return_as_pandas: bool = False,
-) -> Any:
+) -> Union[pl.DataFrame, pd.DataFrame]:
     """One-shot prior-informed RAPM over a possession frame -> per-player ratings.
 
     Builds the sparse design matrix via
