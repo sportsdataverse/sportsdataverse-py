@@ -8,13 +8,42 @@ Provides utilities consumed by the Phase 1 lineup engine:
   resultSets JSON into a ``{"HomeTeam": [...], "AwayTeam": [...]}`` dict.
 - :func:`players_on_court_from_rotation` — pure rotation-based on-court
   reconstruction (no network calls) from a pre-parsed rotation dict.
+- :func:`players_on_court_from_pbp` — pure gamerotation-*free* on-court
+  reconstruction from boxscore starters + play-by-play substitutions only.
 - :func:`players_on_court` — public entry point; delegates to
   :func:`players_on_court_from_rotation`.
 
-The lineup source is the ``nba_gamerotation`` endpoint (per-player stints
-keyed on ``PERSON_ID``), so the earlier name-resolution + first-appearance
-starter heuristics (``boxscore_name_map`` / ``period_starters`` /
-``_box_starters``) are no longer needed and have been removed.
+Two independent producers reconstruct the same ``LINEUPS_SCHEMA`` frame:
+
+- The **rotation** producer (:func:`players_on_court_from_rotation`) uses the
+  ``nba_gamerotation`` endpoint (per-player stints keyed on ``PERSON_ID``).
+- The **pbp** producer (:func:`players_on_court_from_pbp`) needs no rotation
+  feed — it seeds each team's 5 and updates them from the play-by-play itself
+  (see the pbp-producer algorithm note below).  It agrees with the rotation
+  producer on ≈0.97 of fully-covered actions across the fixture games, and is
+  validated against it by the ``test_pbp_agrees_with_rotation`` meta-oracle.
+
+pbp-producer algorithm (per-period first-appearance seeding)
+------------------------------------------------------------
+The NBA play-by-play stream emits **no** substitution events at period starts,
+so a period-ending lineup cannot simply be carried into the next period.  The
+pbp producer therefore processes periods in ascending order and RE-SEEDS each
+one from the play-by-play:
+
+- **Period 1**: seed both teams from the boxscore starters
+  (:func:`_starters_from_boxscore_v3`).
+- **Each later period P**: re-seed via :func:`_period_starters` — a player who
+  appears in an event (or is subbed *out*) before ever being subbed *in* that
+  period must have been on court at the period start.  The prior period's
+  ending lineup is used only as a carry-forward fallback for a silent starter.
+
+Within a period the running 5-slot lists are updated on each row: a
+substitution's own action row snapshots the PRE-sub lineup (the swap takes
+effect on the next action), and a *contiguous run* of substitutions sharing one
+game-clock tick is applied together so mid-run rows see the settled lineup —
+both conventions match the boundary-based rotation producer.  Same-family
+teammates in ``SUB: X FOR Y`` strings are disambiguated by the first-initial
+keys :func:`_boxscore_name_map` registers (e.g. ``"t. antetokounmpo"``).
 
 Algorithm (hoopR port)
 ----------------------
@@ -67,7 +96,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Sequence, Union
 
 import numpy as np
 import pandas as pd
@@ -209,12 +238,19 @@ def _starters_from_boxscore_v3(raw_box: dict) -> Dict[int, List[int]]:
 def _boxscore_name_map(raw_box: dict) -> Dict[int, Dict[str, List[int]]]:
     """Map each team's roster family-name -> [person_ids] (list handles collisions).
 
+    In addition to the bare ``familyname_lower`` key, an ``"i. familyname"`` key
+    (first-initial + family name) is registered for every player.  This is how
+    the NBA pbp stream disambiguates same-family teammates in substitution
+    strings — e.g. ``"SUB: T. Antetokounmpo FOR G. Antetokounmpo"`` — so
+    :func:`_resolve_sub_in` can match the incoming name uniquely even when the
+    bare family name collides.
+
     Args:
         raw_box: Raw dict from ``nba_stats_boxscoretraditionalv3``.
 
     Returns:
-        ``{team_id: {familyname_lower: [person_id, ...]}}``. Empty on malformed
-        input (never raises).
+        ``{team_id: {familyname_lower: [person_id, ...],
+        "i. familyname": [person_id]}}``.  Empty on malformed input (never raises).
     """
     bt = (raw_box or {}).get("boxScoreTraditional") or {}
     out: Dict[int, Dict[str, List[int]]] = {}
@@ -227,8 +263,12 @@ def _boxscore_name_map(raw_box: dict) -> Dict[int, Dict[str, List[int]]]:
         for p in team.get("players") or []:
             pid = p.get("personId")
             fam = (p.get("familyName") or "").strip().lower()
-            if pid and fam:
-                m.setdefault(fam, []).append(int(pid))
+            if not (pid and fam):
+                continue
+            m.setdefault(fam, []).append(int(pid))
+            first = (p.get("firstName") or "").strip().lower()
+            if first:
+                m.setdefault(f"{first[0]}. {fam}", []).append(int(pid))
         out[int(tid)] = m
     return out
 
@@ -679,7 +719,7 @@ def _backfill_five(five: List[Optional[int]], pid: Optional[int]) -> None:
 def _resolve_sub_in(
     description: str,
     name_map_team: Dict[str, List[int]],
-    five: List[Optional[int]],
+    five: Sequence[Optional[int]],
 ) -> Optional[int]:
     """Resolve the incoming player id from a substitution description.
 
@@ -725,6 +765,138 @@ def _apply_pbp_sub(five: List[Optional[int]], sub_out: Optional[int], sub_in: Op
         five[five.index(sub_out)] = sub_in
     elif sub_in and sub_in not in five:
         _backfill_five(five, sub_in)
+
+
+def _period_starters(
+    period_rows: List[dict],
+    team_id: int,
+    name_map: Dict[int, Dict[str, List[int]]],
+    carry: List[Optional[int]],
+) -> List[Optional[int]]:
+    """Infer *team_id*'s on-court-at-period-start 5 from that period's pbp rows.
+
+    Re-seeds a period's lineup directly from the play-by-play — the NBA stream
+    emits **no** substitution events at period starts, so the ending lineup of
+    the prior period cannot simply be carried forward. Instead, a player who
+    appears in an event (or is subbed *out*) before ever being subbed *in* this
+    period must have been on court at the period start.
+
+    Args:
+        period_rows: The rows for one period, in order. Each dict carries
+            ``team_id``, ``person_id``, ``description``, ``is_substitution``.
+        team_id: The team whose 5 starters we are inferring.
+        name_map: ``{team_id: {familyname_lower: [person_id, ...]}}`` from
+            :func:`_boxscore_name_map` (used to resolve ``SUB: X FOR Y`` in-names).
+        carry: The team's lineup as it stood at the END of the prior period —
+            used only to fill remaining slots for a silent starter who stayed on
+            court but produced no event before being subbed off.
+
+    Returns:
+        A 5-slot ``List[Optional[int]]`` (from :func:`_seed_five`) of the
+        players on court for *team_id* at the start of this period.
+    """
+    starters: List[int] = []  # ordered, <=5: on-court-at-start
+    entered_via_sub: set[int] = set()  # subbed IN this period -> off the bench -> not a starter
+    for r in period_rows:
+        if int(r["team_id"] or 0) != team_id:
+            continue
+        pid = int(r["person_id"]) if r["person_id"] else None
+        if r["is_substitution"]:
+            # OUTGOING (person_id) was on court before this sub -> a starter
+            # unless they entered via an earlier sub this period.
+            if pid and pid not in entered_via_sub and pid not in starters and len(starters) < 5:
+                starters.append(pid)
+            sub_in = _resolve_sub_in(r["description"] or "", name_map.get(team_id, {}), starters)
+            if sub_in:
+                entered_via_sub.add(sub_in)
+        else:
+            # non-sub event: actor was on court; a starter unless they entered via sub earlier.
+            if pid and pid not in entered_via_sub and pid not in starters and len(starters) < 5:
+                starters.append(pid)
+    # Fill any remaining slots from carry-forward (silent starter who stayed on
+    # from the prior period but produced no event before being subbed off).
+    if carry:
+        for pid in carry:
+            if pid and pid not in starters and pid not in entered_via_sub and len(starters) < 5:
+                starters.append(pid)
+    return _seed_five(starters)
+
+
+def _row_elapsed_key(r: dict) -> tuple[int, float]:
+    """Return a ``(period, seconds_remaining)`` tick key for grouping same-clock rows.
+
+    Two rows share a key when they are in the same period at the same game
+    clock — i.e. they land on the same rotation boundary.  ``None`` clocks map
+    to ``-1.0`` so they group deterministically.
+
+    Args:
+        r: A per-row dict carrying ``period`` and ``seconds_remaining``.
+
+    Returns:
+        A ``(period, seconds_remaining)`` tuple usable as a dict/equality key.
+    """
+    sr = r.get("seconds_remaining")
+    return (int(r["period"]), float(sr) if sr is not None else -1.0)
+
+
+def _snapshot_row(
+    r: dict,
+    home5: List[Optional[int]],
+    away5: List[Optional[int]],
+) -> dict:
+    """Return one output row snapshotting the current *home5* / *away5* lineups.
+
+    Args:
+        r: The source pbp row (for ``game_id`` / ``action_number`` / ``period``).
+        home5: The home team's running 5-slot list.
+        away5: The away team's running 5-slot list.
+
+    Returns:
+        A dict with the ``LINEUPS_SCHEMA`` id columns plus the 10 slot columns.
+    """
+    return {
+        "game_id": r["game_id"],
+        "action_number": r["action_number"],
+        "period": r["period"],
+        **{f"home_player_{i + 1}": home5[i] for i in range(5)},
+        **{f"away_player_{i + 1}": away5[i] for i in range(5)},
+    }
+
+
+def _apply_tick_subs(
+    group: List[dict],
+    name_map: Dict[int, Dict[str, List[int]]],
+    home5: List[Optional[int]],
+    away5: List[Optional[int]],
+    home_team_id: int,
+    away_team_id: int,
+) -> None:
+    """Apply every substitution in a same-tick *group* to *home5* / *away5* in place.
+
+    The rotation producer collapses all substitutions on one game-clock tick
+    into a single boundary, so a mid-tick event sees the *fully-settled*
+    post-batch lineup rather than a partially-applied intermediate.  Applying
+    the whole tick's subs at once reproduces that convention.
+
+    Args:
+        group: Consecutive rows sharing one elapsed tick (see
+            :func:`_row_elapsed_key`).
+        name_map: ``{team_id: {familyname_lower: [person_id, ...]}}``.
+        home5: Home running 5-slot list (mutated in place).
+        away5: Away running 5-slot list (mutated in place).
+        home_team_id: Home team id.
+        away_team_id: Away team id.
+    """
+    for r in group:
+        if not r["is_substitution"]:
+            continue
+        tid = int(r["team_id"] or 0)
+        team5 = home5 if tid == home_team_id else away5 if tid == away_team_id else None
+        if team5 is None:
+            continue
+        pid = int(r["person_id"]) if r["person_id"] else None
+        sub_in = _resolve_sub_in(r["description"] or "", name_map.get(tid, {}), team5)
+        _apply_pbp_sub(team5, pid, sub_in)  # pid = OUTGOING player
 
 
 def players_on_court_from_pbp(
@@ -800,25 +972,63 @@ def players_on_court_from_pbp(
         .to_dicts()
     )
 
-    out_rows: List[dict] = []
+    # Group rows by period, preserving the sorted (order_index) order within each.
+    periods: List[int] = sorted({int(r["period"]) for r in rows})
+    rows_by_period: Dict[int, List[dict]] = {p: [] for p in periods}
     for r in rows:
-        tid = int(r["team_id"] or 0)
-        pid = int(r["person_id"]) if r["person_id"] else None
-        team5: Optional[List[Optional[int]]] = home5 if tid == home_team_id else away5 if tid == away_team_id else None
-        if r["is_substitution"] and team5 is not None:
-            sub_in = _resolve_sub_in(r["description"] or "", name_map.get(tid, {}), team5)
-            _apply_pbp_sub(team5, pid, sub_in)  # pid = OUTGOING player
-        elif team5 is not None and pid:
-            _backfill_five(team5, pid)  # first-appearance backfill for actors
-        out_rows.append(
-            {
-                "game_id": r["game_id"],
-                "action_number": r["action_number"],
-                "period": r["period"],
-                **{f"home_player_{i + 1}": home5[i] for i in range(5)},
-                **{f"away_player_{i + 1}": away5[i] for i in range(5)},
-            }
-        )
+        rows_by_period[int(r["period"])].append(r)
+
+    out_rows: List[dict] = []
+    for pi, period in enumerate(periods):
+        period_rows = rows_by_period[period]
+        # Re-seed each period's 5-per-team FROM the play-by-play. The NBA stream
+        # emits no substitution events at period starts, so the prior period's
+        # ending lineup cannot be carried unchanged (that is the bug this fixes).
+        # Period 1 keeps the boxscore-starters seeding; every later period is
+        # re-seeded via first-appearance inference, using the prior period's
+        # ending lineup only as a carry-forward fallback for silent starters.
+        if pi > 0:
+            home5 = _period_starters(period_rows, home_team_id, name_map, home5)
+            away5 = _period_starters(period_rows, away_team_id, name_map, away5)
+
+        # Walk the period's rows in order.  Substitutions are contiguously
+        # batched by game-clock tick: consecutive substitution rows that share
+        # one elapsed tick are applied together, so a mid-batch sub row sees the
+        # fully-settled lineup (matching the rotation producer, which collapses
+        # all subs on a tick into a single boundary).  Only an *unbroken run of
+        # substitutions* is batched — a non-sub event ends the run — so the
+        # coarse 1-second pbp clock never lumps unrelated plays together.
+        i = 0
+        n = len(period_rows)
+        while i < n:
+            r = period_rows[i]
+            tid = int(r["team_id"] or 0)
+            pid = int(r["person_id"]) if r["person_id"] else None
+            team5: Optional[List[Optional[int]]] = (
+                home5 if tid == home_team_id else away5 if tid == away_team_id else None
+            )
+            is_sub = bool(r["is_substitution"]) and team5 is not None
+            if not is_sub:
+                if team5 is not None and pid:
+                    _backfill_five(team5, pid)  # first-appearance backfill for actors
+                out_rows.append(_snapshot_row(r, home5, away5))
+                i += 1
+                continue
+
+            # First substitution of a same-tick run.  Gather the contiguous run
+            # of substitutions sharing this exact elapsed tick.
+            key = _row_elapsed_key(r)
+            j = i
+            while j < n and bool(period_rows[j]["is_substitution"]) and _row_elapsed_key(period_rows[j]) == key:
+                j += 1
+            run = period_rows[i:j]
+            # The first sub row snapshots the PRE-batch lineup; then apply all of
+            # the run's subs so the remaining sub rows see the settled lineup.
+            out_rows.append(_snapshot_row(r, home5, away5))
+            _apply_tick_subs(run, name_map, home5, away5, home_team_id, away_team_id)
+            for r2 in run[1:]:
+                out_rows.append(_snapshot_row(r2, home5, away5))
+            i = j
 
     df = pl.DataFrame(out_rows, schema=LINEUPS_SCHEMA)
 
