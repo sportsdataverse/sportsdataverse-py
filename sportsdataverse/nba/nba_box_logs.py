@@ -39,6 +39,11 @@ def box_features(
     if game_ids is not None:
         player_logs = player_logs.filter(pl.col("game_id").is_in(game_ids))
         team_logs = team_logs.filter(pl.col("game_id").is_in(game_ids))
+    # Canonicalize real-parser column-name variants to the names ``_STATS`` expects:
+    # ``leaguegamelog`` snake-cases ``FG3M`` -> ``"fg3_m"`` but our stats use ``"fg3m"``.
+    # Backward-compatible: synthetic fixtures already use ``"fg3m"`` (no rename applied).
+    if "fg3_m" in player_logs.columns and "fg3m" not in player_logs.columns:
+        player_logs = player_logs.rename({"fg3_m": "fg3m"})
     # Step 1: per-team-game possession frame
     team_poss = team_logs.with_columns(
         (pl.col("fga") - pl.col("oreb") + pl.col("tov") + 0.44 * pl.col("fta")).alias("team_poss"),

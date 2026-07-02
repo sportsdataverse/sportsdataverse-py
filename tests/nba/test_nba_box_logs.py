@@ -52,6 +52,22 @@ def test_box_features_per100_and_totals():
     assert abs(f["pts"][0] - (50 / 187.48 * 100)) < 1e-6
 
 
+def test_box_features_real_parser_fg3_m_column():
+    # The live ``leaguegamelog`` parser snake-cases ``FG3M`` -> ``"fg3_m"`` (underscore
+    # before the trailing M), NOT ``"fg3m"``. ``box_features`` must canonicalize that at
+    # the boundary or it raises ``ColumnNotFoundError`` on real data (synthetic fixtures
+    # hid the bug by using ``"fg3m"`` directly). This exercises the real column name.
+    player, team = _logs()
+    player = player.rename({"fg3m": "fg3_m"})
+    f = box_features(player, team)
+    # Same team_poss as test_box_features_per100_and_totals (187.48); fg3m total = 2+3 = 5
+    assert f.height == 1 and f["player_id"][0] == 10
+    assert "fg3m" in f.columns and "fg3_m" not in f.columns
+    assert abs(f["fg3m"][0] - (5 / 187.48 * 100)) < 1e-6
+    # pts unaffected by the rename
+    assert abs(f["pts"][0] - (50 / 187.48 * 100)) < 1e-6
+
+
 def test_box_features_game_id_restriction():
     player, team = _logs()
     only_g1 = box_features(player, team, game_ids=["G1"])
