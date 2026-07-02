@@ -147,3 +147,48 @@ def test_forecast_does_not_beat_baseline_on_noise_panel() -> None:
     res = darko_forecast_accuracy(panel, ages)
     # no persistent skill -> projection must NOT beat the carry-forward by more than 0.15
     assert res.forecast_rmse >= res.baseline_rmse - 0.15
+
+
+# ---------------------------------------------------------------------------
+# Task 6 — gated live smoke test
+# ---------------------------------------------------------------------------
+
+from tests.conftest import skip_if_no_nba_stats_live  # noqa: E402
+
+
+@skip_if_no_nba_stats_live
+def test_darko_live_smoke() -> None:
+    """Live smoke: build a 2-season panel from nba_rapm + nba_player_ages and run nba_darko."""
+    import polars as pl
+
+    from sportsdataverse.nba import compile_nba_season, nba_darko, nba_player_ages
+    from sportsdataverse.nba.nba_rapm import nba_rapm
+
+    frames = []
+    for season, yr in (("2022-23", 2022), ("2023-24", 2023)):
+        r = (
+            nba_rapm(compile_nba_season(yr))
+            .select(
+                pl.col("player_id"),
+                pl.col("rapm").alias("rating"),
+                (pl.col("off_poss") + pl.col("def_poss")).alias("weight"),
+            )
+            .with_columns(pl.lit(yr).alias("season"))
+        )
+        frames.append(r)
+    panel = pl.concat(frames)
+    ages = pl.concat(
+        [
+            nba_player_ages(s).with_columns(pl.lit(yr).alias("season"))
+            for s, yr in (("2022-23", 2022), ("2023-24", 2023))
+        ]
+    )
+    out = nba_darko(panel, ages)
+    assert out.height > 0 and set(out.columns) == {
+        "player_id",
+        "last_season",
+        "forecast_season",
+        "filtered_skill",
+        "projected_rating",
+        "projected_sd",
+    }

@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Generator, List, Tuple
+from typing import Dict, Generator, List, Tuple, Union
 
 import numpy as np
+import pandas as pd
 import polars as pl
 from scipy.optimize import minimize
 
@@ -213,6 +214,14 @@ def _fit_noise_params(
     (``ρ ≈ 0``) the bound is large, correctly reflecting that process noise ≈ observation
     noise when ratings carry no carry-forward information.
 
+    **Model caveat (accept-with-doc):** The moment-based floor ``q_min = obs_base*(1-ρ)/ρ``
+    assumes a local-level (random-walk-plus-noise) model and uses the ratings' pooled lag-1
+    autocorrelation as a *heuristic* proxy for signal persistence — not the exact IMA(1,1)
+    closed form — so it only ever *raises* a collapsed MLE ``q``, never lowers it.
+    Additionally, ``rho_min=0.05`` caps the floor and can over-penalise (shrink toward
+    carry-forward) a genuinely low-autocorrelation-but-skilled panel; this is acceptable for
+    season-to-season NBA ratings where cross-sectional persistence ``ρ ≈ 0.9+`` is the norm.
+
     Deterministic (no RNG). Falls back to ``defaults`` if optimization fails/non-finite.
 
     Args:
@@ -339,7 +348,7 @@ def nba_darko(
     process_var: "float | None" = None,
     obs_base: "float | None" = None,
     return_as_pandas: bool = False,
-) -> pl.DataFrame:
+) -> Union[pl.DataFrame, pd.DataFrame]:
     """Project each player's next-season rating via a per-player Kalman filter + aging curve.
 
     Args:
