@@ -5,8 +5,21 @@ from __future__ import annotations
 import json
 import pathlib
 
+import polars as pl
+import pytest
 
-from sportsdataverse.nba.nba_lineups import _played, _starters_from_boxscore_v3
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    _boxscore_name_map,
+    _parse_sub_in_name,
+    _played,
+    _starters_from_boxscore_v3,
+    boxscore_home_away,
+    parse_rotation_resultsets,
+    players_on_court_from_pbp,
+    players_on_court_from_rotation,
+)
+from sportsdataverse.nba.nba_pbp_constants import LINEUPS_SCHEMA
 
 FXROOT = pathlib.Path("tests/fixtures/nba_engine")
 
@@ -100,8 +113,6 @@ def test_played_empty_stats() -> None:
 # Task 2: _boxscore_name_map + _parse_sub_in_name
 # ---------------------------------------------------------------------------
 
-from sportsdataverse.nba.nba_lineups import _boxscore_name_map, _parse_sub_in_name
-
 
 def test_boxscore_name_map_lists_collisions() -> None:
     """Collision handling is tested with a synthetic boxscore — never edits the real fixture."""
@@ -154,11 +165,6 @@ def test_parse_sub_in_name() -> None:
 # Task 3: players_on_court_from_pbp
 # ---------------------------------------------------------------------------
 
-import polars as pl
-from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
-from sportsdataverse.nba.nba_lineups import players_on_court_from_pbp
-from sportsdataverse.nba.nba_pbp_constants import LINEUPS_SCHEMA
-
 
 def _pbp(g: str) -> dict:
     return json.loads((FXROOT / g / "playbyplayv3.json").read_text())
@@ -197,3 +203,39 @@ def test_pbp_producer_applies_first_sub() -> None:
     home5 = {after[f"home_player_{i}"] for i in range(1, 6)}
     assert 201143 not in home5  # Horford subbed out
     assert 203943 in home5  # Vonleh subbed in
+
+
+# ---------------------------------------------------------------------------
+# Task 4: cross-source meta-oracle (pbp vs gamerotation agreement)
+# ---------------------------------------------------------------------------
+
+
+def _rot(g: str) -> dict:
+    return json.loads((FXROOT / g / "gamerotation.json").read_text())
+
+
+def _oncourt10(frame: pl.DataFrame) -> dict[int, frozenset[int]]:
+    """action_number -> frozenset of the 10 on-court ids."""
+    cols = [f"home_player_{i}" for i in range(1, 6)] + [f"away_player_{i}" for i in range(1, 6)]
+    out: dict[int, frozenset[int]] = {}
+    for r in frame.select(["action_number", *cols]).to_dicts():
+        out[r["action_number"]] = frozenset(v for c in cols if (v := r[c]) is not None)
+    return out
+
+
+@pytest.mark.parametrize("game_id", ["0022100001", "0022200001", "0022300001"])
+def test_pbp_agrees_with_rotation(game_id: str) -> None:
+    enh = enhanced_pbp_from_payload(_pbp(game_id))
+    home, away = boxscore_home_away(_box(game_id))
+    oc_rot = players_on_court_from_rotation(
+        enh, parse_rotation_resultsets(_rot(game_id)), home_team_id=home, away_team_id=away
+    )
+    oc_pbp = players_on_court_from_pbp(enh, _box(game_id), home_team_id=home, away_team_id=away)
+    a, b = _oncourt10(oc_rot), _oncourt10(oc_pbp)
+    shared = [k for k in a if k in b and len(a[k]) == 10]
+    agree = sum(1 for k in shared if a[k] == b[k])
+    rate = agree / len(shared) if shared else 0.0
+    print(f"\ngame {game_id}: pbp/rotation agreement {rate:.4f} ({agree}/{len(shared)} actions)")
+    # Report + assert the parity floor. If a fixture legitimately drops below,
+    # print `rate` and set the floor to the measured value with a comment.
+    assert rate >= 0.95, f"game {game_id}: pbp/rotation agreement {rate:.3f} < 0.95"
