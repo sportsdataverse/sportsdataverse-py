@@ -26,7 +26,7 @@ def test_compile_dedups_gameids_and_tags_season(tmp_path, monkeypatch):
     monkeypatch.setattr(C, "_game_ids_for_season", lambda s, st: ["001", "001", "002"])
     calls = []
 
-    def fake_fetch(gid, league_id):
+    def fake_fetch(gid, league_id, *, lineup_source: str = "auto"):
         calls.append(gid)
         return _poss(gid)
 
@@ -39,13 +39,13 @@ def test_compile_dedups_gameids_and_tags_season(tmp_path, monkeypatch):
 
 def test_compile_resume_skips_cached(tmp_path, monkeypatch):
     monkeypatch.setattr(C, "_game_ids_for_season", lambda s, st: ["001", "002"])
-    monkeypatch.setattr(C, "_fetch_possessions", lambda gid, lid: _poss(gid))
+    monkeypatch.setattr(C, "_fetch_possessions", lambda gid, lid, *, lineup_source="auto": _poss(gid))
     C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)  # warm cache
     calls = []
     monkeypatch.setattr(
         C,
         "_fetch_possessions",
-        lambda gid, lid: (calls.append(gid), _poss(gid))[1],
+        lambda gid, lid, *, lineup_source="auto": (calls.append(gid), _poss(gid))[1],
     )
     C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)  # all cached
     assert calls == []  # nothing re-fetched
@@ -54,7 +54,7 @@ def test_compile_resume_skips_cached(tmp_path, monkeypatch):
 def test_compile_best_effort_skips_failing_game(tmp_path, monkeypatch):
     monkeypatch.setattr(C, "_game_ids_for_season", lambda s, st: ["ok1", "bad", "ok2"])
 
-    def fetch(gid, lid):
+    def fetch(gid, lid, *, lineup_source: str = "auto"):
         if gid == "bad":
             raise RuntimeError("api boom")
         return _poss(gid)

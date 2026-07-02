@@ -436,7 +436,8 @@ def test_nba_possessions_offline(monkeypatch: pytest.MonkeyPatch) -> None:
     required_cols = {"off_player_1", "def_player_1", "points"}
     assert required_cols.issubset(set(df.columns)), f"Missing columns: {required_cols - set(df.columns)}"
 
-    # Must match in-process pipeline exactly
+    # Must match in-process pipeline exactly (excluding the lineup_source column
+    # added by the public function — the reference is built from lower-level helpers).
     enh = enhanced_pbp_from_payload(json.loads((FXROOT / g / "playbyplayv3.json").read_text()))
     box = json.loads((FXROOT / g / "boxscoretraditionalv3.json").read_text())
     rot = parse_rotation_resultsets(json.loads((FXROOT / g / "gamerotation.json").read_text()))
@@ -444,7 +445,11 @@ def test_nba_possessions_offline(monkeypatch: pytest.MonkeyPatch) -> None:
     oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
     poss_ref = attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
     assert df.height == poss_ref.height, f"Row count mismatch: fetcher={df.height}, in-process={poss_ref.height}"
-    assert df.schema == poss_ref.schema, f"Schema mismatch: fetcher={df.schema}, in-process={poss_ref.schema}"
+    # Schema check: nba_possessions() adds lineup_source; drop it before comparing.
+    assert "lineup_source" in df.columns, "nba_possessions() must include lineup_source column"
+    assert df.drop("lineup_source").schema == poss_ref.schema, (
+        f"Schema mismatch: fetcher={df.schema}, in-process={poss_ref.schema}"
+    )
 
     # return_as_pandas=True
     # Re-patch since monkeypatch lambdas are stateless
@@ -490,3 +495,105 @@ def test_nba_possessions_live() -> None:
         assert got_pts == expected_pts, (
             f"Live game {g}, team {team_id}: possession points={got_pts} != boxscore={expected_pts}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Task 5: lineup_source selector tests
+# ---------------------------------------------------------------------------
+
+import sportsdataverse.nba.nba_possessions as npm
+
+
+def _install_fixture_fetchers(
+    monkeypatch: pytest.MonkeyPatch,
+    game_id: str,
+    *,
+    rotation_raises: bool = False,
+    rotation_empty: bool = False,
+    rotation_partial: bool = False,
+) -> dict[str, int]:
+    root = FXROOT / game_id
+    monkeypatch.setattr(npm, "_fetch_pbp", lambda g, lg: json.loads((root / "playbyplayv3.json").read_text()))
+    monkeypatch.setattr(npm, "_fetch_box", lambda g, lg: json.loads((root / "boxscoretraditionalv3.json").read_text()))
+    calls: dict[str, int] = {"rotation": 0}
+
+    def _rot(g: str, lg: str) -> dict:
+        calls["rotation"] += 1
+        if rotation_raises:
+            raise RuntimeError("gamerotation throttled")
+        if rotation_empty:
+            return {"resultSets": []}
+        raw = json.loads((root / "gamerotation.json").read_text())
+        if rotation_partial:
+            # Simulate a one-sided-degraded payload: AwayTeam stints are empty.
+            # This produces a non-empty on-court frame (HomeTeam rows present)
+            # with all away_player_* slots null — the silent-null failure mode.
+            # We mutate the in-memory copy of the loaded dict, NOT the fixture.
+            for rs in raw.get("resultSets", []):
+                if rs.get("name") == "AwayTeam":
+                    rs["rowSet"] = []
+        return raw
+
+    monkeypatch.setattr(npm, "_fetch_rotation", _rot)
+    return calls
+
+
+def test_lineup_source_pbp_skips_rotation(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001")
+    df = npm.nba_possessions("0022200001", lineup_source="pbp")
+    assert calls["rotation"] == 0  # gamerotation never called
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert df.height > 0
+
+
+def test_lineup_source_auto_falls_back_on_rotation_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_raises=True)
+    df = npm.nba_possessions("0022200001", lineup_source="auto")
+    assert calls["rotation"] == 1  # tried rotation, then fell back
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+
+
+def test_lineup_source_rotation_default_marks_rotation(monkeypatch: pytest.MonkeyPatch) -> None:
+    _install_fixture_fetchers(monkeypatch, "0022200001")
+    df = npm.nba_possessions("0022200001", lineup_source="rotation")
+    assert df["lineup_source"].unique().to_list() == ["rotation"]
+
+
+@pytest.mark.parametrize("game_id", ["0022100001", "0022200001", "0022300001"])
+def test_pbp_source_reconciles_boxscore_points(monkeypatch: pytest.MonkeyPatch, game_id: str) -> None:
+    _install_fixture_fetchers(monkeypatch, game_id)
+    df = npm.nba_possessions(game_id, lineup_source="pbp")
+    got = {
+        int(r["offense_team_id"]): int(r["points"])
+        for r in df.group_by("offense_team_id").agg(pl.col("points").sum().alias("points")).to_dicts()
+    }
+    oracle = _box_team_points(_box(game_id))
+    for team_id, expected in oracle.items():
+        assert got.get(team_id, 0) == expected, f"{game_id} team {team_id}: {got.get(team_id, 0)} != {expected}"
+
+
+def test_lineup_source_auto_falls_back_on_empty_stints(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_empty=True)
+    df = npm.nba_possessions("0022200001", lineup_source="auto")
+    assert calls["rotation"] == 1  # tried rotation, got empty stints, fell back
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert df.height > 0
+
+
+def test_lineup_source_auto_falls_back_on_partial_rotation(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Auto mode falls back to pbp when rotation has one-sided-null coverage.
+
+    A gamerotation payload where one team's stints are missing (AwayTeam
+    rowSet=[]) produces a non-empty on-court frame with all away_player_*
+    slots null — the coverage guard detects >2% null rows and raises, so
+    "auto" falls back to the complete pbp reconstruction.
+    """
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_partial=True)
+    df = npm.nba_possessions("0022200001", lineup_source="auto")
+    assert calls["rotation"] == 1  # tried rotation, detected partial coverage, fell back
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert df.height > 0
+    # pbp fallback must produce fully-populated off/def slots (no null player slots)
+    off_def_cols = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
+    for col in off_def_cols:
+        assert df[col].null_count() == 0, f"pbp fallback left nulls in {col}"
