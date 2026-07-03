@@ -149,6 +149,7 @@ from sportsdataverse.nba import RidgeRapmModel as RidgeRapmModel  # noqa: F401
 from sportsdataverse.nba import SpmCoefficients as SpmCoefficients  # noqa: F401
 from sportsdataverse.nba import ValidationReport as ValidationReport  # noqa: F401
 from sportsdataverse.nba import box_features as box_features  # noqa: F401
+from sportsdataverse.nba import build_possession_shooting as build_possession_shooting  # noqa: F401
 from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
 from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accuracy  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
@@ -211,6 +212,7 @@ __all__ = [
     "SpmCoefficients",
     "ValidationReport",
     "box_features",
+    "build_possession_shooting",
     "compile_nba_season",
     "darko_forecast_accuracy",
     "download",

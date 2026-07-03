@@ -653,6 +653,49 @@ game's own team pace), then summed — the result is fully deterministic.
 
 One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
 
+### `build_possession_shooting(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#build_possession_shooting}
+
+Build the per-shooter companion frame from an enhanced play-by-play DataFrame.
+
+Companion to `build_possessions`: instead of one team-level row per
+possession, emits one row per distinct shooter (`player_id`) per
+possession, with their own `fg2a/fg2m/fg3a/fg3m/fta/ftm` counts. Shares
+the same possession-group traversal as `build_possessions` via
+assemble` — the two frames are always built from a single
+consistent pass over the play-by-play. Consumed by WP2's luck-adjusted
+shooting response.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Polars DataFrame with schema `ENHANCED_PBP_SCHEMA` (from `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`). An empty or malformed frame returns a zero-row frame with `POSSESSION_SHOOTING_SCHEMA` — never raises. |
+
+**Returns**
+
+Polars DataFrame with schema `POSSESSION_SHOOTING_SCHEMA`. One row per `(possession_number, player_id)` pair. Events with `person_id == 0` are skipped (unattributable to a shooter — they still count toward `build_possessions`' team-level totals). Per-possession sums of the six shooting columns match the corresponding `build_possessions` columns exactly.
+
+**Example**
+
+```python
+import json, pathlib
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_possessions import build_possession_shooting
+
+payload = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+pbp = enhanced_pbp_from_payload(payload)
+sh = build_possession_shooting(pbp)
+print(sh.shape, sh.schema["player_id"])
+
+# Per-player shooting totals
+
+import polars as pl
+totals = sh.group_by("player_id").agg(
+    pl.col("fg3m").sum(), pl.col("ftm").sum()
+)
+print(totals.head())
+```
+
 ### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
 
 Compile a full season's possession stint matrix (cached + resumable + throttled).
@@ -677,7 +720,7 @@ frame is tagged with a `season` column.
 
 **Returns**
 
-The season possession frame (+ `season` col). Empty typed frame if no games.
+The season possession frame (+ `season` and `game_date` cols). Empty typed frame if no games.
 
 **Example**
 
