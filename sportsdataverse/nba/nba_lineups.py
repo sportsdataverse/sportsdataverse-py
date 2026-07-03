@@ -108,6 +108,56 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
+# Period-range boxscoretraditionalv3 params (quarter-box grounding, Task 1)
+# ---------------------------------------------------------------------------
+
+#: RangeType for period-opening on-court range-boxscores. Verified 2026-07 by
+#: reading pbpstats' own ``StartOfPeriod._get_period_boxscore_request_params``
+#: ("rt2_start_window" mode) and by a live capture against 3 real games
+#: (``0022300001``, ``0022200001``, ``0022100001``): ``RangeType=2`` with a
+#: window opening at the period's elapsed-time tick reproduces the boxscore
+#: starters exactly for period 1 on every fixture game.
+_QUARTER_BOX_RANGE_TYPE: str = "2"
+
+#: Window width (tenths of a second) added to a period's opening elapsed tick
+#: to form ``EndRange``. Matches pbpstats' own convention exactly
+#: (``EndRange = period_start_tenths + 10``, i.e. a 1-second opening window).
+_QUARTER_BOX_WINDOW_WIDTH_TENTHS: int = 10
+
+
+def _period_start_range(period: int) -> Tuple[str, str]:
+    """(StartRange, EndRange) tenths-of-a-second window at a period's opening tick.
+
+    Verified against a real ``boxscoretraditionalv3`` capture (Task 1, 3 fixture
+    games): this window's candidate roster equals the boxscore starters exactly
+    for **period 1** on every fixture game. For periods 2+, the raw candidate
+    list can exceed 5 players per team when a substitution happens at (or
+    essentially at) the period-opening tick -- the endpoint has no built-in way
+    to disambiguate "about to sub out" from "about to sub in" at an exact
+    boundary tie. pbpstats resolves this with a secondary substitution-order
+    narrowing pass (and a ``RangeType=1`` fallback); this function only pins
+    the verified request window -- narrowing is a downstream (Task 2) concern.
+
+    Args:
+        period: 1-indexed period number (5+ = overtime, 5 minutes each).
+
+    Returns:
+        ``(start_range, end_range)`` as decimal strings, in tenths of a second
+        elapsed since game start.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_lineups import _period_start_range
+            start, end = _period_start_range(1)
+            print(start, end)  # "0" "10"
+    """
+    elapsed_s = (period - 1) * 720 if period <= 4 else 2880 + (period - 5) * 300
+    t = elapsed_s * 10
+    return str(t), str(t + _QUARTER_BOX_WINDOW_WIDTH_TENTHS)
+
+
+# ---------------------------------------------------------------------------
 # Network fetchers (module-level so tests can monkeypatch them)
 # ---------------------------------------------------------------------------
 

@@ -386,6 +386,105 @@ def test_nba_on_court_return_as_pandas(monkeypatch) -> None:
 
 
 # ---------------------------------------------------------------------------
+# boxv3_periods fixture + _period_start_range (Task 1: quarter-box grounding)
+#
+# Live-verified 2026-07 against all 3 fixture games at the pinned window
+# (RangeType=2, StartRange=period_start_tenths, EndRange=+10 tenths):
+#
+# - Period 1 ALWAYS resolves to exactly 5 range-box candidates per team,
+#   matching the boxscore starters exactly (the hard grounding oracle). Every
+#   player shows the "0:00" minutes sentinel (the window is only 1/10s wide).
+# - Periods 2+ can return MORE than 5 raw candidates (observed up to 9) when a
+#   substitution happens at, or essentially at, the period-opening tick — the
+#   endpoint has no way to disambiguate "about to sub out" from "about to sub
+#   in" at an exact boundary tie. Narrowing that down to exactly 5 (e.g. via
+#   substitution-order classification, the approach pbpstats itself uses) is
+#   a downstream concern; these tests only pin the verified request window
+#   and the resulting fixture shape.
+# ---------------------------------------------------------------------------
+
+# Game directories that carry a captured boxv3_periods.json fixture.
+_BOXV3_PERIODS_GAME_IDS = [
+    p.name for p in sorted(_FIXTURES_ROOT.iterdir()) if p.is_dir() and (p / "boxv3_periods.json").exists()
+]
+
+
+def _period_box_candidates(payload: dict) -> dict[int, list[int]]:
+    """{team_id: [person_id, ...]} of every player listed in one period's range payload."""
+    bt = payload.get("boxScoreTraditional") or {}
+    out: dict[int, list[int]] = {}
+    for side in ("homeTeam", "awayTeam"):
+        team = bt.get(side) or {}
+        tid = team.get("teamId")
+        if not tid:
+            continue
+        out[int(tid)] = [int(p["personId"]) for p in team.get("players") or [] if p.get("personId")]
+    return out
+
+
+@pytest.mark.parametrize("game_id", _BOXV3_PERIODS_GAME_IDS)
+def test_period_start_range_period1_matches_boxscore_starters(game_id: str) -> None:
+    """Period 1's range-box candidates equal the boxscore starters exactly.
+
+    This is the hard grounding oracle for Task 1: at period 1's opening tick
+    (``_period_start_range(1)`` == ``("0", "10")``) there is no boundary
+    ambiguity — the range box returns exactly the 5 boxscore starters per
+    team.
+    """
+    from sportsdataverse.nba.nba_lineups import _starters_from_boxscore_v3
+
+    full = json.loads((_FIXTURES_ROOT / game_id / "boxscoretraditionalv3.json").read_text())
+    starters = _starters_from_boxscore_v3(full)
+
+    periods = json.loads((_FIXTURES_ROOT / game_id / "boxv3_periods.json").read_text())
+    candidates = _period_box_candidates(periods["1"])
+
+    assert set(candidates.keys()) == set(starters.keys())
+    for team_id, starter_ids in starters.items():
+        assert len(candidates[team_id]) == 5, (
+            f"{game_id} period 1 team {team_id}: expected 5 candidates, got {candidates[team_id]}"
+        )
+        assert set(candidates[team_id]) == set(starter_ids), (
+            f"{game_id} period 1 team {team_id}: range-box candidates {candidates[team_id]} != "
+            f"boxscore starters {starter_ids}"
+        )
+
+
+@pytest.mark.parametrize("game_id", _BOXV3_PERIODS_GAME_IDS)
+def test_boxv3_periods_fixture_shape(game_id: str) -> None:
+    """Every captured period has 2 teams with >=5 range-box candidates each.
+
+    Period 1 always resolves to EXACTLY 5 (see the starters-match test
+    above); periods 2+ may return more (see the module comment above this
+    section for why).
+    """
+    periods = json.loads((_FIXTURES_ROOT / game_id / "boxv3_periods.json").read_text())
+    assert set(periods.keys()) == {"1", "2", "3", "4"}
+    for period_key, payload in periods.items():
+        candidates = _period_box_candidates(payload)
+        assert len(candidates) == 2, f"{game_id} period {period_key}: expected 2 teams, got {candidates}"
+        for team_id, ids in candidates.items():
+            assert len(ids) >= 5, f"{game_id} period {period_key} team {team_id}: expected >=5 candidates, got {ids}"
+
+
+@pytest.mark.parametrize(
+    "period,expected",
+    [
+        (1, ("0", "10")),
+        (2, ("7200", "7210")),
+        (3, ("14400", "14410")),
+        (4, ("21600", "21610")),
+        (5, ("28800", "28810")),
+    ],
+)
+def test_period_start_range(period: int, expected: tuple[str, str]) -> None:
+    """_period_start_range pins the verified StartRange/EndRange window."""
+    from sportsdataverse.nba.nba_lineups import _period_start_range
+
+    assert _period_start_range(period) == expected
+
+
+# ---------------------------------------------------------------------------
 # Live smoke test (gated — requires SDV_PY_NBA_STATS_LIVE=1 + residential IP)
 # ---------------------------------------------------------------------------
 
