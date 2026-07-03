@@ -341,4 +341,5 @@ files = [
     "sportsdataverse/nba/nba_player_ages.py",
     "sportsdataverse/nba/nba_v3_v2_adapter.py",
     "sportsdataverse/nba/nba_possession_rules.py",
+    "sportsdataverse/nba/nba_ratings_panel.py",
 ]
