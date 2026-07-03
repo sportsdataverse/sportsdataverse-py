@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import copy
-import json
-from pathlib import Path
 
 import pytest
 
@@ -12,92 +10,34 @@ from sportsdataverse.mbb.mbb_lineup_stats import (
     IGNORE_FIELDS,
     SUM_FIELDS,
     calculate_aggregated_lineup_stats,
+    get_stats_diff,
+    lineup_to_team_report,
     weighted_avg,
 )
-
-#: Verbatim from ``LuckUtils.affectedFieldSet`` (``LuckUtils.ts:159``) --
-#: the jest test file's ``insertOldValues`` local helper stamps
-#: ``old_value``/``override`` onto every stat whose key is in this set
-#: (see ``tests/fixtures/hoop_explorer/README.md``).
-_LUCK_AFFECTED_FIELDS = frozenset(
-    {
-        "off_adj_ppp",
-        "off_ppp",
-        "off_efg",
-        "off_3p",
-        "def_adj_ppp",
-        "def_ppp",
-        "def_efg",
-        "def_3p",
-        "oppo_def_3p",
-    }
+from tests.mbb._hoop_explorer_replay import (
+    approx_tree,
+    find_snapshot_exact,
+    find_snapshot_for,
+    first_lineup_list,
+    insert_old_values,
+    load_inputs,
+    load_snap,
+    to_fixed,
 )
-
-FIXTURES = Path(__file__).resolve().parents[1] / "fixtures/hoop_explorer"
 
 
 @pytest.fixture(scope="module")
 def snap() -> dict:
-    return json.loads((FIXTURES / "lineup_utils_snap.json").read_text(encoding="utf-8"))
+    return load_snap()
 
 
 @pytest.fixture(scope="module")
 def inputs() -> dict:
-    return json.loads((FIXTURES / "lineup_utils_inputs.json").read_text(encoding="utf-8"))
-
-
-def _approx_tree(a, b, path=""):
-    """Recursively assert numeric equality to 1e-9 rel, exact otherwise."""
-    if isinstance(b, dict):
-        assert isinstance(a, dict), f"{path}: expected dict"
-        for k, v in b.items():
-            assert k in a, f"{path}.{k}: missing"
-            _approx_tree(a[k], v, f"{path}.{k}")
-    elif isinstance(b, (int, float)) and not isinstance(b, bool):
-        assert a == pytest.approx(b, rel=1e-9, abs=1e-12), f"{path}: {a} != {b}"
-    elif isinstance(b, list):
-        assert len(a) == len(b), f"{path}: length {len(a)} != {len(b)}"
-        for i, (x, y) in enumerate(zip(a, b)):
-            _approx_tree(x, y, f"{path}[{i}]")
-    else:
-        assert a == b, f"{path}: {a!r} != {b!r}"
-
-
-def _first_lineup_list(inputs: dict) -> list[dict]:
-    # Known vendored shape (see tests/fixtures/hoop_explorer/README.md):
-    # sampleLineupStatsResponse.responses[0].aggregations.lineups.buckets
-    try:
-        buckets = inputs["sampleLineupStatsResponse"]["responses"][0]["aggregations"]["lineups"]["buckets"]
-        if isinstance(buckets, list) and buckets and isinstance(buckets[0], dict) and "off_poss" in buckets[0]:
-            return buckets
-    except (KeyError, IndexError, TypeError):
-        pass
-
-    def _search(node, depth: int = 0) -> list[dict] | None:
-        if depth > 6:
-            return None
-        if isinstance(node, list) and node and isinstance(node[0], dict) and "off_poss" in node[0]:
-            return node
-        if isinstance(node, dict):
-            for v in node.values():
-                found = _search(v, depth + 1)
-                if found is not None:
-                    return found
-        elif isinstance(node, list):
-            for v in node:
-                found = _search(v, depth + 1)
-                if found is not None:
-                    return found
-        return None
-
-    found = _search(inputs)
-    if found is not None:
-        return found
-    pytest.skip("no lineup list found in vendored inputs")
+    return load_inputs()
 
 
 def test_weighted_avg_two_lineups(inputs, snap):
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     acc = copy.deepcopy(lineups[0])
     weighted_avg(acc, lineups[1])
     # acc possession counts must sum
@@ -108,7 +48,7 @@ def test_weighted_avg_sum_fields_plain_sum(inputs):
     """SUM_FIELDS (off_poss/def_poss/duration_mins) always plain-sum,
     regardless of the accumulator's starting point -- LineupUtils.ts:478.
     """
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     l0, l1 = lineups[0], lineups[1]
     acc = copy.deepcopy(l0)
     weighted_avg(acc, l1)
@@ -124,7 +64,7 @@ def test_weighted_avg_ignore_fields_never_populated(inputs):
     LineupUtils.ts:464 (ignoreFieldSet). ``game_info`` is excluded here
     since it raises NotImplementedError (see other test).
     """
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     acc: dict = {}
     weighted_avg(acc, lineups[0])
     for field in IGNORE_FIELDS - {"game_info"}:
@@ -142,7 +82,7 @@ def test_weighted_avg_shot_pct_field_weighted_by_own_lineup_total(inputs):
     each merge step weights the *incoming* object's own totals, not any
     running total already on the accumulator.
     """
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     l0, l1 = lineups[0], lineups[1]
     acc: dict = {}
     weighted_avg(acc, l0)
@@ -160,7 +100,7 @@ def test_weighted_avg_shot_type_pct_field_weighted_by_total_made_attempts(inputs
     weight source (LineupUtils.ts:635-641, 672-677), not the generic FGA
     fallback used by off_efg.
     """
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     l0, l1 = lineups[0], lineups[1]
     acc: dict = {}
     weighted_avg(acc, l0)
@@ -174,7 +114,7 @@ def test_weighted_avg_shot_type_pct_field_weighted_by_total_made_attempts(inputs
 
 def test_weighted_avg_total_fields_plain_sum(inputs):
     """total_* fields always plain-sum (LineupUtils.ts:693-696)."""
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     l0, l1 = lineups[0], lineups[1]
     acc: dict = {}
     weighted_avg(acc, l0)
@@ -199,7 +139,7 @@ def test_weighted_avg_trans_scramble_fields_stay_zero(inputs):
     of the key). Callers must not treat "absent from acc" as the signal
     for "not accumulated"; check the *value*, not membership.
     """
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     acc: dict = {}
     weighted_avg(acc, lineups[0])
     weighted_avg(acc, lineups[1])
@@ -223,12 +163,12 @@ def test_weighted_avg_game_info_not_implemented():
 
 def test_weighted_avg_does_not_mutate_obj(inputs):
     """weighted_avg must only mutate mutable_acc, never obj."""
-    lineups = _first_lineup_list(inputs)
+    lineups = first_lineup_list(inputs)
     obj = copy.deepcopy(lineups[1])
     obj_snapshot = copy.deepcopy(obj)
     acc: dict = {}
     weighted_avg(acc, obj)
-    _approx_tree(obj, obj_snapshot)
+    approx_tree(obj, obj_snapshot)
 
 
 def test_weighted_avg_override_old_value_accumulation():
@@ -269,46 +209,6 @@ def test_weighted_avg_override_old_value_accumulation():
     assert acc["off_efg"]["override"] == "luck-a"
 
 
-def _insert_old_values(lineup: dict) -> dict:
-    """Python replay of the jest test file's local ``insertOldValues``
-    helper (``LineupUtils.test.ts``, inside the ``describe("LineupUtils")``
-    block): for every stat whose key is in ``LuckUtils.affectedFieldSet``
-    and whose ``value`` is not nil, stamp ``old_value = value`` and
-    ``override = "Test override"``. Mutates ``lineup`` in place and returns
-    it (matching the jest helper's own mutate-and-return shape).
-    """
-    for key, stat in lineup.items():
-        if key in _LUCK_AFFECTED_FIELDS and isinstance(stat, dict) and stat.get("value") is not None:
-            stat["old_value"] = stat["value"]
-            stat["override"] = "Test override"
-    return lineup
-
-
-def _to_fixed(obj):
-    """Python replay of the jest test file's local ``toFixed`` helper:
-    3-decimal string formatting for snapshot comparison, preserving the
-    ``override``/``old_value`` shape when present.
-    """
-    if not isinstance(obj, dict):
-        return obj
-    if obj.get("override"):
-        return {
-            "value": f"{obj['value']:.3f}",
-            "old_value": f"{obj['old_value']:.3f}",
-            "override": obj["override"],
-        }
-    if "value" in obj:
-        return {"value": f"{obj['value']:.3f}"}
-    return obj
-
-
-def _find_snapshot_for(snap: dict, needle: str):
-    for name, val in snap.items():
-        if needle.lower() in name.lower() and isinstance(val, dict):
-            return val
-    pytest.skip(f"no parsed snapshot entry matching {needle!r}")
-
-
 def test_aggregated_lineup_stats_matches_snapshot(inputs, snap):
     """Oracle test for calculate_aggregated_lineup_stats, replaying the two
     jest test-local transforms documented in
@@ -321,11 +221,252 @@ def test_aggregated_lineup_stats_matches_snapshot(inputs, snap):
     toFixed(3) before matching -- replicate both the pick and the
     formatting so the comparison is apples-to-apples.
     """
-    lineups = [_insert_old_values(copy.deepcopy(lineup)) for lineup in _first_lineup_list(inputs)]
+    lineups = [insert_old_values(copy.deepcopy(lineup)) for lineup in first_lineup_list(inputs)]
     lineups[1]["rapmRemove"] = True
 
     agg = calculate_aggregated_lineup_stats(lineups)
-    picked = {key: _to_fixed(agg[key]) for key in ("off_poss", "def_poss", "off_adj_ppp", "def_adj_ppp")}
+    picked = {key: to_fixed(agg[key]) for key in ("off_poss", "def_poss", "off_adj_ppp", "def_adj_ppp")}
 
-    expected = _find_snapshot_for(snap, "calculateAggregatedLineupStats")
-    _approx_tree(picked, expected)
+    expected = find_snapshot_for(snap, "calculateAggregatedLineupStats")
+    approx_tree(picked, expected)
+
+
+# --------------------------------------------------------------------------
+# Task 1.3: lineup_to_team_report / get_stats_diff
+# --------------------------------------------------------------------------
+
+
+def test_on_off_partition_micro():
+    """Hand-computable micro-case (brief, adapted to the real ES
+    players_array hits shape used by _get_player_set): player E is on in
+    lineup 1 (A_B_C_D_E), off in lineup 2 (A_B_C_D_F). E's ON off_poss must
+    equal lineup 1's off_poss (10.0); E's OFF off_poss must equal lineup 2's
+    off_poss (10.0, the only lineup E doesn't appear in).
+    """
+
+    def _players_array(codes: str) -> dict:
+        return {"hits": {"hits": [{"_source": {"players": [{"id": p, "code": p} for p in codes]}}]}}
+
+    a = {
+        "key": "A_B_C_D_E",
+        "players_array": _players_array("ABCDE"),
+        "off_poss": {"value": 10.0},
+        "def_poss": {"value": 10.0},
+        "off_pts": {"value": 12.0},
+        "def_pts": {"value": 8.0},
+    }
+    b = {
+        "key": "A_B_C_D_F",
+        "players_array": _players_array("ABCDF"),
+        "off_poss": {"value": 10.0},
+        "def_poss": {"value": 10.0},
+        "off_pts": {"value": 9.0},
+        "def_pts": {"value": 11.0},
+    }
+    rep = lineup_to_team_report({"lineups": [a, b], "error_code": None})
+    e = next(p for p in rep["players"] if p["playerId"] == "E")
+    assert e["on"]["off_poss"]["value"] == pytest.approx(10.0)
+    assert e["off"]["off_poss"]["value"] == pytest.approx(10.0)
+    # D is on in both lineups -> never OFF -> zero-filled via _copy_and_zero
+    d = next(p for p in rep["players"] if p["playerId"] == "D")
+    assert d["off"]["off_poss"]["value"] == pytest.approx(0.0)
+
+
+def test_get_stats_diff_synthetic():
+    """Hand-crafted straight-diff check for get_stats_diff (LineupUtils.ts:185)
+    -- getStatsDiff has no dedicated jest test/snapshot upstream, so this is
+    a synthetic oracle exercising the value/old_value/override/missing-field
+    branches directly.
+    """
+    stat_set1 = {
+        "off_ppp": {"value": 110.0, "old_value": 108.0, "override": "luck"},
+        "off_poss": {"value": 500.0},
+        "only_in_1": {"value": 5.0},
+    }
+    stat_set2 = {
+        "off_ppp": {"value": 100.0, "old_value": 102.0},
+        "off_poss": {"value": 480.0},
+        "only_in_2": {"value": 3.0},
+    }
+    diff = get_stats_diff(stat_set1, stat_set2, "Team A", "Team B")
+
+    assert diff["off_ppp"]["value"] == pytest.approx(10.0)
+    # old_value diffed too, but the *result*'s override comes only from
+    # stat_set1's own override (LineupUtils.ts:207) -- old_value is diffed
+    # unconditionally when both sides carry one, independent of override:
+    assert diff["off_ppp"]["old_value"] == pytest.approx(6.0)
+    assert diff["off_ppp"]["override"] == "luck"
+
+    assert diff["off_poss"]["value"] == pytest.approx(20.0)
+    assert diff["off_poss"]["old_value"] is None  # neither side carries old_value
+    assert diff["off_poss"]["override"] is None
+
+    # only_in_1 has no counterpart on stat_set2 -> nil -> None (JS undefined)
+    assert diff["only_in_1"] is None
+    # only_in_2 isn't iterated at all (loop is over stat_set1's own keys)
+    assert "only_in_2" not in diff
+
+    assert diff["off_title"] == "Team A"
+    assert diff["def_title"] == "Team B"
+
+
+def _build_lineup_report(inputs: dict) -> dict:
+    """Replays the jest ``lineupReport`` const (``LineupUtils.test.ts``):
+    the 3 vendored lineup buckets, each run through ``insertOldValues``,
+    plus the hardcoded scalar companions documented in
+    ``tests/fixtures/hoop_explorer/README.md``.
+    """
+    lineups = [insert_old_values(copy.deepcopy(lineup)) for lineup in first_lineup_list(inputs)]
+    return {"lineups": lineups, "avgOff": 100.0, "error_code": "test"}
+
+
+_SOME_ONOFF_PICK_FIELDS = [
+    "key",
+    "off_poss",
+    "def_poss",
+    "off_ppp",
+    "def_ppp",
+    "off_adj_opp",
+    "def_adj_opp",
+    "def_2prim",
+    "def_2primr",
+    "off_ft",
+    "off_orb",
+    "def_orb",
+    "off_ftr",
+    "total_off_fga",
+    "total_off_pts",
+    "doc_count",
+    "player_array",  # (upstream typo for players_array; never present -- always ignored)
+    "duration_mins",
+    "total_off_trans_poss",
+    "off_scramble_ppp",
+]
+
+
+def _pick_to_fixed(obj: dict, fields: list[str]) -> dict:
+    return {f: to_fixed(obj[f]) for f in fields if f in obj}
+
+
+def _some_on_off_vals(players: list[dict]) -> list[dict]:
+    ayala = next(p for p in players if p["on"]["key"] == "'On' Ayala, Eric")
+    items = [ayala["on"], ayala["off"], ayala.get("replacement") or {}]
+    return [_pick_to_fixed(item, _SOME_ONOFF_PICK_FIELDS) for item in items]
+
+
+def _snap_key_for(diag_mode: int, regress_diffs: float, inc_on_off: bool) -> str:
+    regress_str = "-500" if regress_diffs < 0 else "0"
+    inc_str = "true" if inc_on_off else "false"
+    return (
+        f"LineupUtils LineupUtils - lineupToTeamReport: "
+        f"diagMode=[{diag_mode}] regressDiffs=[{regress_str}] incOnOff=[{inc_str}] 1"
+    )
+
+
+_SWEEP = [
+    (diag_mode, regress_diffs, inc_on_off)
+    for diag_mode in (0, 10)
+    for regress_diffs in (0.0, -500.0)
+    for inc_on_off in (False, True)
+]
+
+
+@pytest.mark.parametrize("diag_mode,regress_diffs,inc_on_off", _SWEEP)
+def test_lineup_to_team_report_matches_snapshot(inputs, snap, diag_mode, regress_diffs, inc_on_off):
+    """Oracle test for lineup_to_team_report, sweeping the same
+    (diagMode x regressDiffs x incOnOff) grid as
+    ``LineupUtils.test.ts``'s ``lineupToTeamReport`` test (its
+    ``[0, 100 - 100, -500]`` regressDiffs sweep collapses to two distinct
+    values -- ``100 - 100`` evaluates to plain ``0`` in JS, so it's dropped
+    here as a duplicate of the literal ``0`` case; both produce
+    byte-identical snapshot entries upstream).
+
+    Replicates every structural jest assertion (player roster, replacement
+    roster, Wiggins' all-zero OFF split, Ayala/Cowan lineup composition,
+    Wiggins' empty replacement, and -- when applicable -- Ayala's
+    same-4-lineups replacement diagnostic) plus the numeric ``someOnOffVals``
+    projection (pick + toFixed(3)) against the vendored snapshot.
+    """
+    lineup_report = _build_lineup_report(inputs)
+    report = lineup_to_team_report(
+        lineup_report,
+        inc_replacement=inc_on_off,
+        regress_diffs=regress_diffs,
+        rep_on_off_diag_mode=diag_mode,
+    )
+    players = report["players"]
+
+    # Player roster: flatMap(on.key, off.key), sorted.
+    player_list = sorted(kv for p in players for kv in (p["on"]["key"], p["off"]["key"]))
+    assert player_list == [
+        "'Off' Ayala, Eric",
+        "'Off' Cowan, Anthony",
+        "'Off' Morsell, Darryl",
+        "'Off' Scott, Donta",
+        "'Off' Smith, Jalen",
+        "'Off' Wiggins, Aaron",
+        "'On' Ayala, Eric",
+        "'On' Cowan, Anthony",
+        "'On' Morsell, Darryl",
+        "'On' Scott, Donta",
+        "'On' Smith, Jalen",
+        "'On' Wiggins, Aaron",
+    ]
+
+    # Replacement roster: only present (non-None) when inc_on_off.
+    replacement_player_list = sorted(p["replacement"]["key"] for p in players if p.get("replacement") is not None)
+    expected_replacements = (
+        [
+            "'r:On-Off' Ayala, Eric",
+            "'r:On-Off' Cowan, Anthony",
+            "'r:On-Off' Morsell, Darryl",
+            "'r:On-Off' Scott, Donta",
+            "'r:On-Off' Smith, Jalen",
+            "'r:On-Off' Wiggins, Aaron",
+        ]
+        if inc_on_off
+        else []
+    )
+    assert replacement_player_list == expected_replacements
+
+    # Wiggins is on in all 3 lineups -> never OFF -> "off" is zero-filled
+    # (_copy_and_zero), so every off field except "key" must be exactly 0.
+    wiggins = next(p for p in players if p["off"]["key"] == "'Off' Wiggins, Aaron")
+    for key, field in wiggins["off"].items():
+        if key == "key":
+            continue
+        assert isinstance(field, dict) and field.get("value", 0) == 0, f"{key}: {field}"
+
+    # Lineup composition: Ayala's teammate-possession overlap with Cowan.
+    ayala = next(p for p in players if p["on"]["key"] == "'On' Ayala, Eric")
+    cowan = ayala["teammates"]["Cowan, Anthony"]
+    assert cowan["on"]["off_poss"] == pytest.approx(598.0)
+    assert cowan["on"]["def_poss"] == pytest.approx(581.0)
+    assert cowan["off"]["off_poss"] == pytest.approx(211.0)
+    assert cowan["off"]["def_poss"] == pytest.approx(213.0)
+
+    # Empty replacement check: Wiggins is never OFF, so no complement
+    # off-lineup is ever found for any of his (3) on-lineups.
+    if inc_on_off:
+        wiggins_repl = next(p["replacement"] for p in players if p["replacement"]["key"] == "'r:On-Off' Wiggins, Aaron")
+        assert wiggins_repl["lineupUsage"] == {}
+        if diag_mode > 0:
+            assert wiggins_repl.get("myLineups") == []
+        else:
+            assert "myLineups" not in wiggins_repl
+
+    # Diagnostic myLineups retention: Ayala's 2 lineups both find a
+    # complement (lineup 2, the only Ayala-less lineup, is 4/5-complementary
+    # to both), in original bucket order.
+    if diag_mode > 0 and inc_on_off:
+        ayala_repl = next(p["replacement"] for p in players if p["on"]["key"] == "'On' Ayala, Eric")
+        same4 = [lineup["key"] for lineup in ayala_repl["myLineups"]]
+        assert same4 == [
+            "AaWiggins_AnCowan_DaMorsell_ErAyala_JaSmith",
+            "AaWiggins_AnCowan_DoScott_ErAyala_JaSmith",
+        ]
+
+    # Numeric oracle: someOnOffVals (pick + toFixed(3)) vs. vendored snapshot.
+    expected = find_snapshot_exact(snap, _snap_key_for(diag_mode, regress_diffs, inc_on_off))
+    actual = _some_on_off_vals(players)
+    approx_tree(actual, expected)

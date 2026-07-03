@@ -56,11 +56,71 @@ Task 1.2 additionally ports the finishing + aggregation layer:
   ``off_net`` (``off_adj_ppp - def_adj_ppp``) and ``off_raw_net``
   (``off_ppp - def_ppp``).
 
+Task 1.3 additionally ports the on/off engine:
+
+- :func:`get_stats_diff` -- port of ``LineupUtils.getStatsDiff``
+  (``LineupUtils.ts:185``). A "no clever weighting" straight subtraction of
+  two ``LineupStatSet`` team-stat dicts field-by-field (``value`` and, when
+  both sides carry one, ``old_value``); fields missing a ``value`` on either
+  side become ``None`` (the JS ``undefined`` analog) rather than being
+  silently dropped, matching ``_.fromPairs`` explicit-undefined semantics.
+  Not called internally by :func:`lineup_to_team_report` -- it is a
+  standalone utility used elsewhere in the upstream app (UI diff tables).
+- :func:`lineup_to_team_report` -- port of ``LineupUtils.lineupToTeamReport``
+  (``LineupUtils.ts:277``). Partitions every distinct player across a
+  team's lineups into ON (lineups the player appears in) and OFF (lineups
+  they don't) ``LineupStatSet`` accumulators via :func:`weighted_avg` /
+  :func:`complete_weighted_avg`, plus an optional "replacement" (on-minus-
+  off, harmonic-mean-weighted) composite when ``inc_replacement=True``. Also
+  builds a per-player ``teammates`` possession-overlap map and (when a
+  player never appears OFF, e.g. played every lineup) zero-fills their OFF
+  side via :func:`_copy_and_zero` rather than leaving it a bare ``{"key":
+  ...}`` stub.
+- Private helpers backing the above: ``_get_player_set`` (roster extraction
+  from the ES ``players_array`` hits payload), ``_update_lineup_composition``
+  (teammate on/off possession tally), ``_copy_and_zero``,
+  ``_is_complement_lineup`` (4-of-5-shared-players check for the
+  replacement on/off pairing), ``_calc_harmonic_mean``, and
+  ``_combine_replacement_on_off`` (``LineupUtils.ts:924`` --
+  ``completeWeightedAvg``'s ``harmonic_weighting=True`` mode applied to the
+  on-minus-off diff of every complementary lineup pair).
+
+**Faithful bug-for-bug port in ``_combine_replacement_on_off``**: the
+upstream ``combineReplacementOnOff`` (``LineupUtils.ts:1005-1038``) captures
+an unused ``oldValue`` local, then immediately reassigns ``myLineup[key]``
+to a fresh ``{value: ...}`` object (dropping any prior ``old_value``),
+*then* -- in the very next block -- reads ``myLineup[key]?.old_value`` off
+that just-reassigned object (which never has an ``old_value`` property) to
+decide the harmonic-mean-of-old-values branch. The read therefore always
+sees ``undefined`` / ``0``, so the "both old values > 0" branch is
+unreachable and ``old_value`` is unconditionally pinned to ``0`` whenever
+an ``override`` was present pre-reassignment. This looks like an upstream
+bug (the captured ``oldValue`` local is dead code), but it is preserved
+verbatim here for oracle fidelity -- see the inline comment at the call
+site.
+
+**``game_info`` is not exercised by ``lineup_to_team_report``'s jest
+oracle.** ``LineupUtils.test.ts``'s ``getGameInfo`` test calls
+``LineupUtils.getGameInfo`` directly on a hand-built ES date-histogram
+payload (``testIn``) -- a separate code path from
+``lineupToTeamReport``/``weightedAvg``/``completeWeightedAvg``. None of the
+3 vendored lineup buckets used by the ``lineupToTeamReport`` jest test carry
+a ``game_info`` key, so the ``weighted_avg``/``complete_weighted_avg``
+``game_info`` stubs (raising :class:`NotImplementedError`) remain
+unreached through this call path too, and ``getGameInfo`` itself stays
+unported (deferred to a later task if/when ``lineup_to_team_report`` gains
+a game-info-aggregation caller).
+
 Deliberately NOT ported:
 
+- ``LineupUtils.getGameInfo`` (``LineupUtils.ts:222``) -- the ES
+  date-histogram-bucket parser behind the ``game_info`` merge branches (see
+  above). Exercised by a dedicated ``getGameInfo`` jest test/snapshot that
+  is out of this task's scope (``lineupToTeamReport`` never reaches it with
+  the vendored fixtures).
 - The ``game_info`` merge/finishing branches
   (``weightedAvg`` ``LineupUtils.ts:722-746`` and ``completeWeightedAvg``
-  ``LineupUtils.ts:849-853``), which are reachable despite ``game_info``
+  ``LineupUtils.ts:860-865``), which are reachable despite ``game_info``
   being a member of ``ignoreFieldSet`` (the upstream code special-cases it
   via a separate ``else if (key == "game_info")`` branch in both
   functions). Both branches depend on ``LineupUtils.getGameInfo``
@@ -525,7 +585,7 @@ def complete_weighted_avg(
         elif key == "game_info":
             raise NotImplementedError(
                 "complete_weighted_avg: the 'game_info' finishing branch "
-                "(LineupUtils.ts:849-853, associative-array -> list "
+                "(LineupUtils.ts:860-865, associative-array -> list "
                 "conversion via getGameInfo) is not yet ported -- see the "
                 "mbb_lineup_stats module docstring. Unreachable via "
                 "calculate_aggregated_lineup_stats today because "
@@ -702,3 +762,458 @@ def calculate_aggregated_lineup_stats(lineups: list[LineupStatSet] | None) -> Li
     # (don't bother for "all_lineups" since off_net is not used in any stats)
 
     return team_info
+
+
+def get_stats_diff(
+    stat_set1: LineupStatSet,
+    stat_set2: LineupStatSet,
+    off_title: str,
+    def_title: str | None = None,
+) -> LineupStatSet:
+    """Straight (unweighted) field-by-field diff of two team stat sets.
+
+    Faithful port of ``LineupUtils.getStatsDiff`` (``LineupUtils.ts:185``).
+    For every field on ``stat_set1``, subtracts the matching field's
+    ``value`` (and, when both sides carry one, ``old_value``) from
+    ``stat_set2``. No possession weighting or regression -- this is a raw
+    subtraction, unlike :func:`weighted_avg` / :func:`complete_weighted_avg`.
+
+    Args:
+        stat_set1: The "from" team stat set (e.g. this team).
+        stat_set2: The "to subtract" team stat set (e.g. the opponent, or a
+            prior period).
+        off_title: Written into the result's ``off_title`` field verbatim.
+        def_title: Written into the result's ``def_title`` field verbatim
+            (``None`` when omitted, mirroring the upstream optional arg).
+
+    Returns:
+        A new ``LineupStatSet``: one ``{"value": ..., "old_value": ...,
+        "override": ...}`` dict per field present on ``stat_set1``, plus
+        ``off_title`` / ``def_title``. A field becomes ``None`` (the JS
+        ``undefined`` analog) instead of a diff dict when either side is
+        missing a ``value`` -- e.g. because that field was never populated
+        for one of the two stat sets.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_lineup_stats import get_stats_diff
+
+            diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
+            print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    stats_diff: LineupStatSet = {}
+    for key, start_val in stat_set1.items():
+        to_sub = stat_set2.get(key)
+        start_value = start_val.get("value") if isinstance(start_val, dict) else None
+        to_sub_value = to_sub.get("value") if isinstance(to_sub, dict) else None
+        if to_sub_value is None or start_value is None:
+            stats_diff[key] = None
+            continue
+        start_old = start_val.get("old_value") if isinstance(start_val, dict) else None
+        to_sub_old = to_sub.get("old_value") if isinstance(to_sub, dict) else None
+        stats_diff[key] = {
+            "value": start_value - to_sub_value,
+            "old_value": None if (to_sub_old is None or start_old is None) else start_old - to_sub_old,
+            "override": start_val.get("override") if isinstance(start_val, dict) else None,
+        }
+    stats_diff["off_title"] = off_title
+    stats_diff["def_title"] = def_title
+    return stats_diff
+
+
+def _empty_lineup() -> LineupStatSet:
+    """Port of ``StatModels.emptyLineup()`` (referenced throughout
+    ``LineupUtils.ts``, e.g. ``LineupUtils.ts:120-122``). Returns a fresh
+    dict each call -- callers must not share a single instance across
+    multiple accumulators.
+    """
+    return {"key": "empty", "doc_count": 0}
+
+
+def _get_player_set(lineup: LineupStatSet) -> dict[str, str]:
+    """Port of the ``getPlayerSet`` closure inside ``lineupToTeamReport``
+    (``LineupUtils.ts:283-291``).
+
+    Returns ``{player_id: player_code}`` for every player on the lineup's
+    roster, read from the ES hits payload at
+    ``lineup.players_array.hits.hits[0]._source.players``. Every hop is
+    optional-chained (mirroring the upstream ``?.``); a missing/malformed
+    payload yields an empty dict rather than raising.
+    """
+    players_array = lineup.get("players_array")
+    hits_outer = players_array.get("hits") if isinstance(players_array, dict) else None
+    hits = hits_outer.get("hits") if isinstance(hits_outer, dict) else None
+    first = hits[0] if isinstance(hits, list) and hits else None
+    source = first.get("_source") if isinstance(first, dict) else None
+    players = source.get("players") if isinstance(source, dict) else None
+    return {p["id"]: p["code"] for p in (players or [])}
+
+
+def _update_lineup_composition(
+    mutable_teammate_info: dict[str, float] | None,
+    player: str,
+    lineup_info: LineupStatSet,
+) -> None:
+    """Port of ``LineupUtils.updateLineupComposition`` (``LineupUtils.ts:485``).
+
+    Accumulates ``off_poss`` / ``def_poss`` from ``lineup_info`` onto
+    ``mutable_teammate_info`` in place (a no-op when ``mutable_teammate_info``
+    is ``None``, mirroring the upstream ``if (mutableTeammateInfo)`` guard).
+    ``player`` is accepted for signature parity with the upstream function
+    but, like upstream, is unused in the body.
+    """
+    del player  # (unused, kept for signature parity with LineupUtils.ts:485)
+    if mutable_teammate_info is not None:
+        mutable_teammate_info["off_poss"] += _num(lineup_info, "off_poss", 0.0)
+        mutable_teammate_info["def_poss"] += _num(lineup_info, "def_poss", 0.0)
+
+
+def _copy_and_zero(mutable_to_zero: LineupStatSet, from_: LineupStatSet) -> None:
+    """Port of ``LineupUtils.copyAndZero`` (``LineupUtils.ts:871``).
+
+    Zero-fills every non-``IGNORE_FIELDS`` key present on ``from_`` onto
+    ``mutable_to_zero`` in place, as ``{"value": 0.0}``. Used by
+    :func:`lineup_to_team_report` to give a player who never appears OFF
+    (e.g. played every lineup) a same-shaped, all-zero OFF stat set instead
+    of a bare ``{"key": ...}`` stub.
+    """
+    for key in from_:
+        if key not in IGNORE_FIELDS:
+            mutable_to_zero[key] = {"value": 0.0}
+
+
+def _is_complement_lineup(player: str, on_lineup: LineupStatSet, off_lineup: LineupStatSet) -> bool:
+    """Port of ``LineupUtils.isComplementLineup`` (``LineupUtils.ts:888``).
+
+    ``True`` iff ``off_lineup`` shares exactly 4 of its 5 players with
+    ``on_lineup`` (excluding ``player`` itself) -- i.e. ``off_lineup`` is
+    "the same lineup, minus ``player``, plus one substitute". Used to find
+    the OFF-lineup complements that feed a player's "replacement" on/off
+    diff.
+    """
+    on_lineup_player_map = _get_player_set(on_lineup)
+    off_lineup_player_ids = _get_player_set(off_lineup).keys()
+    overlap = sum(1 for pid in off_lineup_player_ids if pid != player and pid in on_lineup_player_map)
+    return overlap == 4
+
+
+def _calc_harmonic_mean(w1: float, w2: float) -> float:
+    """Port of ``LineupUtils.calcHarmonicMean`` (``LineupUtils.ts:919``)."""
+    return 2.0 / (1.0 / w1 + 1.0 / w2)
+
+
+def _combine_replacement_on_off(
+    mutable_replacement_obj: LineupStatSet,
+    key_source: list[str],
+    regress_diffs: float = 0.0,
+    rep_on_off_diag_mode: int = 0,
+) -> None:
+    """Port of ``LineupUtils.combineReplacementOnOff`` (``LineupUtils.ts:924``).
+
+    For every "my lineup" (a lineup ``mutable_replacement_obj``'s player
+    appeared ON in) that accumulated at least one complementary OFF lineup
+    into its ``offLineups`` sub-accumulator, finishes ``offLineups`` via
+    :func:`complete_weighted_avg`, then overwrites each field on the
+    ``myLineups`` entry with either a harmonic mean (for
+    ``total_*``/``*_poss`` fields -- ``key_source``-derived
+    ``harmonic_weights``) or a straight on-minus-off diff (everything else).
+    Finally re-merges the diffed ``myLineups`` entries into
+    ``mutable_replacement_obj`` via :func:`weighted_avg` and finishes with
+    ``complete_weighted_avg(..., harmonic_weighting=True, regress_diffs)``.
+
+    Mutates ``mutable_replacement_obj`` (and every retained ``myLineups``
+    entry) in place; returns ``None``.
+
+    **Faithful bug-for-bug port** (see module docstring): the ``old_value``
+    branch of the per-key harmonic-mean loop reads
+    ``my_lineup[key]["old_value"]`` *after* ``my_lineup[key]`` has already
+    been reassigned to a fresh ``{"value": ...}`` dict (no ``old_value``
+    key), so it always resolves to ``0.0`` and the "harmonic mean of old
+    values" branch is unreachable in the ported code, exactly as it is
+    upstream.
+
+    Args:
+        mutable_replacement_obj: The player's ``replacement`` entry (from
+            :func:`lineup_to_team_report`'s ``players`` list), carrying
+            ``myLineups`` (the ON lineups this player appeared in, each
+            augmented with an ``offLineups`` sub-accumulator of
+            complementary OFF-lineup stats).
+        key_source: The field-name list used to derive which fields get
+            harmonic-mean treatment vs. straight diffing (upstream passes
+            ``_.keys(playerObj.on)`` -- the finished ON stat set's field
+            names).
+        regress_diffs: Forwarded to the final ``complete_weighted_avg`` call.
+        rep_on_off_diag_mode: When ``> 0``, retains ``myLineups`` (each
+            entry additionally gets an ``onLineup`` shallow-clone snapshot
+            taken before this function mutates it) instead of deleting the
+            key entirely.
+
+    Returns:
+        None. ``mutable_replacement_obj`` is mutated in place.
+    """
+    harmonic_weights = {k for k in key_source if k.startswith("total_") or k.endswith("_poss")}
+
+    weighted_lineups: list[LineupStatSet] = []
+    for my_lineup in mutable_replacement_obj.get("myLineups") or []:
+        off_lineups = my_lineup.get("offLineups") or _empty_lineup()
+        if "off_poss" not in off_lineups:
+            # (remove lineups with no possessions at all -- no complement
+            # OFF lineup was ever found for this ON lineup)
+            continue
+        weighted_lineups.append(my_lineup)
+
+    for my_lineup in weighted_lineups:
+        if rep_on_off_diag_mode > 0:
+            my_lineup["onLineup"] = dict(my_lineup)  # (shallow clone, pre-mutation)
+
+        off_lineups = my_lineup.get("offLineups") or _empty_lineup()
+        complete_weighted_avg(off_lineups)  # mutates off_lineups in place
+
+        for key in harmonic_weights:
+            existing = my_lineup.get(key)
+            old_val_override = existing.get("override") if isinstance(existing, dict) else None
+            my_val = _num(my_lineup, key, 0.0)
+            off_val = _num(off_lineups, key, 0.0)
+            if my_val > 0 and off_val > 0:
+                my_lineup[key] = {"value": _calc_harmonic_mean(my_val, off_val)}
+            else:
+                my_lineup[key] = {"value": 0.0}
+            if old_val_override:
+                # (bug-for-bug: reads my_lineup[key]["old_value"] off the
+                # object just reassigned above -- see docstring)
+                cur_old_val = _field_val(my_lineup.get(key), "old_value", 0.0)
+                off_old_val = _field_val(off_lineups.get(key), "old_value", 0.0)
+                if cur_old_val > 0 and off_old_val > 0:
+                    my_lineup[key]["old_value"] = _calc_harmonic_mean(cur_old_val, off_old_val)
+                    my_lineup[key]["override"] = old_val_override
+                else:
+                    my_lineup[key]["old_value"] = 0.0
+
+        for key, field in list(my_lineup.items()):
+            if key in IGNORE_FIELDS or key in harmonic_weights:
+                continue
+            val = _field_val(field, "value", 0.0)
+            off_field = off_lineups.get(key)
+            off_val = _field_val(off_field, "value", 0.0)
+            new_field: LineupStatSet = {"value": val - off_val}
+            override = field.get("override") if isinstance(field, dict) else None
+            if override:
+                old_val = _field_val(field, "old_value", 0.0)
+                off_old_val = _field_val(off_field, "old_value", 0.0)
+                new_field["old_value"] = old_val - off_old_val
+                new_field["override"] = override
+            my_lineup[key] = new_field
+
+    if rep_on_off_diag_mode == 0:
+        mutable_replacement_obj.pop("myLineups", None)
+    else:
+        # (remove any lineups that don't contribute)
+        mutable_replacement_obj["myLineups"] = weighted_lineups
+
+    for lineup in weighted_lineups:
+        weighted_avg(mutable_replacement_obj, lineup)
+    complete_weighted_avg(mutable_replacement_obj, True, regress_diffs)
+
+
+def lineup_to_team_report(
+    lineup_report: LineupStatSet,
+    inc_replacement: bool = False,
+    regress_diffs: float = 0.0,
+    rep_on_off_diag_mode: int = 0,
+) -> LineupStatSet:
+    """Build per-player on/off splits out of a team's lineups.
+
+    Faithful port of ``LineupUtils.lineupToTeamReport`` (``LineupUtils.ts:277``).
+    For every distinct player across ``lineup_report["lineups"]``, partitions
+    the team's lineups into ON (the player was on the floor) and OFF (they
+    weren't) buckets, merging each bucket via :func:`weighted_avg` /
+    :func:`complete_weighted_avg`. Also builds a ``teammates`` map of
+    possession overlap with every other player, and -- when
+    ``inc_replacement=True`` -- a "replacement" on-minus-off composite via
+    :func:`_combine_replacement_on_off`.
+
+    Lineups whose ``key`` is the empty string are skipped in the
+    on/off-partition loop (workaround for an upstream data issue, tracked
+    as upstream issue #53) but still contribute to the player roster.
+    Every lineup's ``rapmRemove`` key (if present, e.g. left over from a
+    prior :func:`calculate_aggregated_lineup_stats` call sharing the same
+    input list) is deleted as a side effect while building the roster --
+    ``lineup_to_team_report`` itself never consults ``rapmRemove``.
+
+    Args:
+        lineup_report: ``{"lineups": [...], "avgOff": ..., "error_code":
+            ...}`` -- the per-team lineup list plus metadata (mirrors
+            upstream's ``LineupStatsModel``). Only ``lineups`` and
+            ``error_code`` are consumed here.
+        inc_replacement: When ``True``, additionally builds each player's
+            ``replacement`` on-minus-off composite (more expensive -- scans
+            every OFF lineup against every ON lineup for a 4-of-5-shared-
+            players complement match).
+        regress_diffs: Forwarded to :func:`_combine_replacement_on_off`'s
+            final ``complete_weighted_avg`` call -- regression toward
+            ~1000 possessions for the replacement diff (only meaningful
+            when ``inc_replacement=True``).
+        rep_on_off_diag_mode: When ``> 0``, retains diagnostic detail
+            (``myLineups`` on each player's replacement entry, plus
+            ``lineupUsage`` bookkeeping) instead of discarding it after use.
+
+    Returns:
+        ``{"playerMap": {code: id}, "players": [...], "error_code": ...}``.
+        Each entry in ``players`` is ``{"playerId", "playerCode",
+        "teammates", "on", "off", "replacement"}`` -- ``on``/``off`` are
+        finished ``LineupStatSet`` averages (or, for a player who's always
+        ON, an all-zero ``off``); ``replacement`` is ``None`` unless
+        ``inc_replacement=True``.
+
+    Raises:
+        NotImplementedError: Propagated from :func:`weighted_avg` /
+            :func:`complete_weighted_avg` if any lineup carries a
+            ``game_info`` key -- not exercised by this module's oracle
+            fixtures (see module docstring).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
+
+            report = lineup_to_team_report({"lineups": buckets, "error_code": None})
+            for player in report["players"]:
+                print(player["playerId"], player["on"]["off_poss"]["value"])
+
+        With replacement (on-minus-off) splits::
+
+            report = lineup_to_team_report(
+                {"lineups": buckets, "error_code": None},
+                inc_replacement=True,
+                regress_diffs=-500,
+            )
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    lineups = lineup_report.get("lineups") or []
+
+    all_players_set: dict[str, str] = {}
+    for lineup in lineups:
+        lineup.pop("rapmRemove", None)  # (ugly hack/coupling with RAPM utils, ported verbatim)
+        all_players_set.update(_get_player_set(lineup))
+
+    player_map = {code: pid for pid, code in all_players_set.items()}
+
+    players: list[LineupStatSet] = []
+    for player_id, player_code in all_players_set.items():
+        teammates: dict[str, LineupStatSet] = {
+            player: {
+                "on": {"off_poss": 0.0, "def_poss": 0.0},
+                "off": {"off_poss": 0.0, "def_poss": 0.0},
+            }
+            for player in all_players_set
+        }
+
+        replacement: LineupStatSet | None = None
+        if inc_replacement:
+            my_lineups: list[LineupStatSet] = []
+            for lineup in lineups:
+                players_set = _get_player_set(lineup)
+                if player_id in players_set and lineup.get("key") != "":
+                    my_lineups.append(
+                        {
+                            "offLineups": _empty_lineup(),
+                            "offLineupKeys": [],
+                            "onLineup": _empty_lineup(),
+                            **lineup,
+                        }
+                    )
+            replacement = {
+                "key": f"'r:On-Off' {player_id}",
+                "lineupUsage": {},
+                "myLineups": my_lineups,
+            }
+
+        players.append(
+            {
+                "playerId": player_id,
+                "playerCode": player_code,
+                "teammates": teammates,
+                "on": {"key": f"'On' {player_id}"},
+                "off": {"key": f"'Off' {player_id}"},
+                "replacement": replacement,
+            }
+        )
+
+    mutable_state: LineupStatSet = {
+        "playerMap": player_map,
+        "players": players,
+        "error_code": lineup_report.get("error_code"),
+    }
+
+    for lineup in lineups:
+        if lineup.get("key") == "":
+            # (workaround for upstream #53 pending fix)
+            continue
+        players_set = _get_player_set(lineup)
+
+        for player_obj in mutable_state["players"]:
+            if player_obj["playerId"] in players_set:
+                # ON!
+                weighted_avg(player_obj["on"], lineup)
+                for player in players_set:
+                    _update_lineup_composition(player_obj["teammates"].get(player, {}).get("on"), player, lineup)
+            else:
+                # OFF!
+                weighted_avg(player_obj["off"], lineup)
+                for player in players_set:
+                    _update_lineup_composition(player_obj["teammates"].get(player, {}).get("off"), player, lineup)
+
+                if inc_replacement:
+                    replacement_obj = player_obj.get("replacement") or {}
+                    for on_lineup in replacement_obj.get("myLineups") or []:
+                        if not _is_complement_lineup(player_obj["playerId"], on_lineup, lineup):
+                            continue
+                        if rep_on_off_diag_mode > 0:
+                            off_lineup_keys = on_lineup.get("offLineupKeys")
+                            if off_lineup_keys is not None:
+                                off_lineup_keys.append(lineup["key"])
+                            lineup_usage = replacement_obj.setdefault("lineupUsage", {})
+                            if lineup["key"] not in lineup_usage:
+                                lineup_usage[lineup["key"]] = {
+                                    "poss": _num(lineup, "off_poss", 0.0),
+                                    "keyArray": lineup["key"].split("_"),
+                                    "overlap": 1,
+                                }
+                            else:
+                                tmp = lineup_usage.get(lineup["key"])
+                                if tmp and tmp.get("overlap"):
+                                    tmp["overlap"] += 1
+                        if on_lineup.get("offLineups"):
+                            weighted_avg(on_lineup["offLineups"], lineup)
+
+    # Finish off the weighted averages:
+    for player_obj in mutable_state["players"]:
+        if "off_poss" in player_obj["on"]:
+            complete_weighted_avg(player_obj["on"])
+            if "off_poss" not in player_obj["off"]:
+                _copy_and_zero(player_obj["off"], player_obj["on"])
+        if "off_poss" in player_obj["off"]:
+            complete_weighted_avg(player_obj["off"])
+        if inc_replacement and player_obj.get("replacement"):
+            _combine_replacement_on_off(
+                player_obj["replacement"],
+                list(player_obj["on"].keys()),
+                regress_diffs,
+                rep_on_off_diag_mode,
+            )
+
+    return mutable_state
