@@ -319,6 +319,7 @@ files = [
     "sportsdataverse/wnba/wnba_engine.py",
     "sportsdataverse/nbagl/nbagl_engine.py",
     "sportsdataverse/mbb/mbb_lineup_stats.py",
+    "sportsdataverse/wbb/wbb_lineup_stats.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",

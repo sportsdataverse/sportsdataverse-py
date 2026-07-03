@@ -140,7 +140,7 @@ def to_fixed(obj: Any) -> Any:
 def find_snapshot_for(snap: dict, needle: str) -> Any:
     """Find the (first) vendored snapshot entry whose name contains ``needle``."""
     for name, val in snap.items():
-        if needle.lower() in name.lower():
+        if needle.lower() in name.lower() and isinstance(val, dict):
             return val
     pytest.skip(f"no parsed snapshot entry matching {needle!r}")
 
