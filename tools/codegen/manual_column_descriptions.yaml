@@ -487,6 +487,87 @@ cat_skater_detail:
     tracking period.
   zone_time_details_offensive_zone_percentile: Percentile rank among all NHL skaters for percentage of ice time spent in the
     offensive zone.
+cfb_compute_results:
+  away_team: Team name of the away team in the simulated game (returned games frame).
+  game_type: Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship)
+    or POST (postseason/CFP).
+  home_team: Team name of the home team in the simulated game (returned games frame).
+  neutral: Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive the ELO home bump).
+  result: Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed
+    games are filled from the ELO model.
+  sim: Simulation identifier the game row belongs to (1..n simulated seasons; ELO ratings never mix across simulations).
+  week: Week of the season the game is played in; only games matching the requested week_num are filled.
+cfb_games_from_schedule:
+  away_team: Team name of the away team, passed through from the schedule frame.
+  game_type: Derived game classification - CONF_CHAMP when the schedule notes mention a (non-CFP, non-national) championship,
+    REG for regular-season rows, POST otherwise.
+  home_team: Team name of the home team, passed through from the schedule frame.
+  neutral: Neutral-site flag derived from the schedule's neutral_site column (1 = neutral site, 0 = home game).
+  result: Home-team margin (home_points minus away_points); null when either score is missing, marking the game as unplayed
+    for the simulation engine.
+  season: Season the game belongs to; consumed as the sim/season identifier by cfb_standings and cfb_simulations.
+  week: Week of the season the game is scheduled in, passed through from the schedule frame.
+cfb_playoff_seeds:
+  conf_champ: Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the
+    conference's rank-1 team; always false for independents.
+  conf_games: Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded).
+  conf_losses: Losses in conference regular-season games.
+  conf_pct: Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary
+    sort key for conference ranks.
+  conf_pd: Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung.
+  conf_rank: Rank within the conference from the tiebreaker cascade (1 = best); null for independents.
+  conf_ties: Ties in conference regular-season games.
+  conf_wins: Wins in conference regular-season games.
+  conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
+  games: Total games played across all game types (regular season, conference championship and postseason).
+  losses: Losses across all played games.
+  pd: Point differential (points for minus points against, via game margins) summed over all played games.
+  seed: College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. The five
+    best-ordered conference champions are guaranteed inclusion.
+  sim: Season or simulation identifier the standings row belongs to.
+  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference
+    opponents' conference win pct across all conference games played; 0.0 for independents.
+  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference
+    opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins.
+  team: Team name (join key across the seedr engine frames).
+  ties: Ties across all played games.
+  win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.
+  wins: Wins across all played games (conference championship and postseason included).
+cfb_simulations:
+  conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
+  first_round_bye: Share of simulations in which the team earned a CFP first-round bye (seed 4 or better).
+  losses: Mean losses per simulated season (all game types through the conference championship).
+  made_playoff: Share of simulations in which the team made the College Football Playoff field.
+  team: Team name the simulated probabilities belong to (overall summary frame).
+  ties: Mean ties per simulated season.
+  win_pct: Mean overall win percentage across the simulated seasons.
+  wins: Mean wins per simulated season (all game types through the conference championship).
+  won_cfp: Share of simulations in which the team won the College Football Playoff national championship.
+  won_conf: Share of simulations in which the team won its conference (CONF_CHAMP game winner, or rank-1 fallback).
+cfb_standings:
+  conf_champ: Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the
+    conference's rank-1 team; always false for independents.
+  conf_games: Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded).
+  conf_losses: Losses in conference regular-season games.
+  conf_pct: Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary
+    sort key for conference ranks.
+  conf_pd: Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung.
+  conf_rank: Rank within the conference from the tiebreaker cascade (1 = best); null for independents.
+  conf_ties: Ties in conference regular-season games.
+  conf_wins: Wins in conference regular-season games.
+  conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
+  games: Total games played across all game types (regular season, conference championship and postseason).
+  losses: Losses across all played games.
+  pd: Point differential (points for minus points against, via game margins) summed over all played games.
+  sim: Season or simulation identifier the standings row belongs to.
+  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference
+    opponents' conference win pct across all conference games played; 0.0 for independents.
+  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference
+    opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins.
+  team: Team name (join key across the seedr engine frames).
+  ties: Ties across all played games.
+  win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.
+  wins: Wins across all played games (conference championship and postseason included).
 club_schedule_season:
   club_current_season: Indicator for whether the game falls within the current season for the requesting club (1 = current
     season, 0 otherwise).

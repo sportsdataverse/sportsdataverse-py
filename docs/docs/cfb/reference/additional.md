@@ -1001,6 +1001,99 @@ tg = cfb.cfb_adjusted_epa_by_game(pbp)
 tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 ```
 
+### `cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'Optional[np.random.Generator]' = None, elo: 'Optional[Dict[str, float]]' = None, **kwargs: 'Any') -> 'Dict[str, pl.DataFrame]'` {#cfb_compute_results}
+
+Default results generator — nflseedR's dynamic ELO model for CFB.
+
+Fills `result` for week `week_num` games that are still unplayed and
+updates each team's ELO rating from that week's results (real results
+included). Constants are nflseedR's `nflseedR_compute_results` exactly,
+minus the NFL rest-day adjustment (CFB plays weekly — documented
+simplification).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `teams` | `DataFrame` |  | Per-sim team table (`sim`, `team`, `conference`, optionally `elo` carried over from the previous week). |
+| `games` | `DataFrame` |  | Per-sim games table (engine schema; see `sportsdataverse.cfb.cfb_standings`). |
+| `week_num` | `int` |  | The week to fill. |
+| `rng` | `Optional[Generator]` | `None` | numpy Generator (seeded by `cfb_simulations`). A fresh default generator is created when omitted. |
+| `elo` | `Optional[Dict[str, float]]` | `None` | Optional initial ratings `{team: elo}` applied to every sim. Teams missing from the dict start at 1500. When neither `elo` nor a `teams.elo` column exists, ratings initialize randomly at `N(1500, 150)` per (sim, team) — nflseedR behavior. |
+
+**Returns**
+
+..., "games": ...}`` — updated frames, mirroring nflseedR's returned list.
+
+| col_name | type | description |
+|---|---|---|
+| `sim` | integer | Simulation identifier the game row belongs to (1..n simulated seasons; ELO ratings never mix across simulations). |
+| `week` | integer | Week of the season the game is played in; only games matching the requested week_num are filled. |
+| `game_type` | character | Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship) or POST (postseason/CFP). |
+| `home_team` | character | Team name of the home team in the simulated game (returned games frame). |
+| `away_team` | character | Team name of the away team in the simulated game (returned games frame). |
+| `result` | double | Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed games are filled from the ELO model. |
+| `neutral` | integer | Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive the ELO home bump). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_simulations import cfb_compute_results
+out = cfb_compute_results(teams, games, 5, rng=rng)
+teams, games = out["teams"], out["games"]
+```
+
+### `cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'` {#cfb_games_from_schedule}
+
+Map a `load_cfb_schedule()` frame into the seedr engine `games` schema.
+
+Derives `game_type` heuristically: games whose `notes` mention a
+championship (but not the CFP / national championship) are
+`CONF_CHAMP`; otherwise `season_type == "regular"` maps to `REG`
+and everything else to `POST`. `result` is the home margin
+(`home_points - away_points`; null when either score is missing) and
+`neutral` comes from `neutral_site`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `FrameLike` |  | Output of `sportsdataverse.cfb.load_cfb_schedule` (needs `season`, `week`, `season_type`, `home_team`, `away_team`, `home_points`, `away_points`, `neutral_site` and optionally `notes`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home_team`, `away_team`, `result`, `neutral` — the `cfb_standings` / `cfb_simulations` input schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the game belongs to; consumed as the sim/season identifier by cfb_standings and cfb_simulations. |
+| `week` | integer | Week of the season the game is scheduled in, passed through from the schedule frame. |
+| `game_type` | character | Derived game classification - CONF_CHAMP when the schedule notes mention a (non-CFP, non-national) championship, REG for regular-season rows, POST otherwise. |
+| `home_team` | character | Team name of the home team, passed through from the schedule frame. |
+| `away_team` | character | Team name of the away team, passed through from the schedule frame. |
+| `result` | double | Home-team margin (home_points minus away_points); null when either score is missing, marking the game as unplayed for the simulation engine. |
+| `neutral` | integer | Neutral-site flag derived from the schedule's neutral_site column (1 = neutral site, 0 = home game). |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import (
+    load_cfb_schedule, cfb_games_from_schedule, cfb_standings,
+)
+
+sched = load_cfb_schedule(seasons=2024)
+games = cfb_games_from_schedule(sched)
+teams = (
+    sched.select(team=pl.col("home_team"), conference=pl.col("home_conference"))
+    .vstack(sched.select(team=pl.col("away_team"), conference=pl.col("away_conference")))
+    .unique(subset=["team"], keep="first")
+)
+st = cfb_standings(games, teams)
+print(st.head())
+```
+
 ### `cfb_odds_events_crosswalk(season: 'Optional[int]' = None, week: 'Optional[int]' = None, *, sport: 'str' = 'americanfootball_ncaaf', api_key: 'Optional[str]' = None, season_type: 'int' = 2, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_odds_events_crosswalk}
 
 Match The Odds API CFB events to ESPN game ids.
@@ -1032,6 +1125,66 @@ A polars DataFrame (pandas when `return_as_pandas=True`), one row per odds event
 from sportsdataverse.cfb import cfb_odds_events_crosswalk
 xwalk = cfb_odds_events_crosswalk(season=2024, week=5)
 matched = xwalk.filter(pl.col("espn_game_id").is_not_null())
+```
+
+### `cfb_playoff_seeds(standings: 'FrameLike', rankings: 'Optional[FrameLike]' = None, playoff_seeds: 'int' = 12, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'` {#cfb_playoff_seeds}
+
+Assign College Football Playoff seeds (current straight-seeding rule).
+
+Implements the 2025 CFP rule: the field is the `playoff_seeds` (12)
+best-ranked teams with the 5 highest-ranked conference champions
+guaranteed inclusion; seeds are assigned straight by ranking order (no
+champion bump to the top four). The rule evolves — it lives in this ONE
+function so it can be updated in one place.
+
+When `rankings` is None the ordering falls back to the standings
+tiebreaker metrics — `win_pct` desc, then `sov`, `sos`, `pd`
+desc, then team name (documented deterministic fallback; a committee
+ranking is the intended input).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `standings` | `FrameLike` |  | Output of `cfb_standings` (needs `sim`, `team`, `conf_champ`, `win_pct`, `sov`, `sos`, `pd`). |
+| `rankings` | `Optional[FrameLike]` | `None` | Optional frame with columns `team` and `rank` (1 = best). Unranked teams order after ranked ones by the fallback. |
+| `playoff_seeds` | `int` | `12` | Field size (default 12). The champion guarantee is `min(5, number of champions, playoff_seeds)`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The standings frame with a `seed` column (Int64; null for teams outside the field), sorted by sim and seed.
+
+| col_name | type | description |
+|---|---|---|
+| `sim` | integer | Season or simulation identifier the standings row belongs to. |
+| `team` | character | Team name (join key across the seedr engine frames). |
+| `conference` | character | Conference the team belongs to; null or "FBS Independents" marks an independent. |
+| `games` | integer | Total games played across all game types (regular season, conference championship and postseason). |
+| `wins` | integer | Wins across all played games (conference championship and postseason included). |
+| `losses` | integer | Losses across all played games. |
+| `ties` | integer | Ties across all played games. |
+| `win_pct` | double | Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played. |
+| `pd` | double | Point differential (points for minus points against, via game margins) summed over all played games. |
+| `conf_games` | integer | Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded). |
+| `conf_wins` | integer | Wins in conference regular-season games. |
+| `conf_losses` | integer | Losses in conference regular-season games. |
+| `conf_ties` | integer | Ties in conference regular-season games. |
+| `conf_pct` | double | Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary sort key for conference ranks. |
+| `conf_pd` | double | Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung. |
+| `sov` | double | Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins. |
+| `sos` | double | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference opponents' conference win pct across all conference games played; 0.0 for independents. |
+| `conf_rank` | integer | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
+| `conf_champ` | logical | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
+| `seed` | integer | College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. The five best-ordered conference champions are guaranteed inclusion. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_standings, cfb_playoff_seeds
+st = cfb_standings(games, teams)
+seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
+print(seeded.filter(pl.col("seed").is_not_null()))
 ```
 
 ### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
@@ -1127,6 +1280,127 @@ all_three = full.filter(pl.col("matched_sources") == "espn+fox+yahoo")
 # Or just one week
 
 wk5 = cfb_schedule_crosswalk(2024, 5)
+```
+
+### `cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'` {#cfb_simulations}
+
+Simulate college football seasons (nflseedR-style week loop).
+
+Replicates the input season `simulations` times, fills unplayed games
+week by week through the pluggable `compute_results`, then simulates
+the postseason (conference championships + CFP bracket) and aggregates
+per-team probabilities. See the module docstring for every documented
+CFB simplification.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `FrameLike` |  | One season of games in the engine schema (`season` or `sim`, `week`, `game_type`, `home_team`, `away_team`, `result` — null = unplayed, `neutral`). Played results are kept as-is. |
+| `teams` | `FrameLike` |  | Team table (`team`, `conference`). |
+| `compute_results` | `Optional[ComputeResultsFn]` | `None` | Results generator with the signature `fn(teams, games, week_num, **kwargs) -> {"teams": ..., "games": ...}` filling `result` for that week's unplayed games only. Defaults to `cfb_compute_results` (dynamic ELO). |
+| `simulations` | `int` | `10000` | Number of simulated seasons (sequential, no chunking). |
+| `playoff_seeds` | `int` | `12` | CFP field size passed to `cfb_playoff_seeds`. |
+| `tiebreaker_depth` | `str` | `'SOS'` | nflseedR depth ladder (`RANDOM` < `PRE-SOV` < `SOS` < `POINTS`) used by every standings computation. |
+| `sim_include` | `str` | `'POST'` | How deep to simulate: `"REG"` (regular season only), `"CONF"` (+ conference championships) or `"POST"` (+ CFP bracket, default). |
+| `rankings` | `Optional[FrameLike]` | `None` | Optional committee rankings (`team`, `rank`) forwarded to `cfb_playoff_seeds`. When None, seeding falls back to the per-sim standings ordering (documented in `cfb_playoff_seeds`). |
+| `seed` | `Optional[int]` | `None` | Seed for the numpy RNG (deterministic runs). |
+| `return_as_pandas` | `bool` | `False` | Return pandas DataFrames instead of polars. |
+
+**Returns**
+
+Dict of frames mirroring the nflseedR summary list: * `"standings"` — per (sim, team) standings incl. `conf_rank`, `conf_champ` and (`sim_include="POST"`) `seed`. * `"games"` — all games incl. simulated results and generated postseason rows. * `"overall"` — per-team probabilities (`won_conf`, `made_playoff`, `first_round_bye`, `won_cfp`) and mean record columns. * `"game_summary"` — per unique matchup: games played, home win / tie rates and mean margin.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team name the simulated probabilities belong to (overall summary frame). |
+| `conference` | character | Conference the team belongs to; null or "FBS Independents" marks an independent. |
+| `wins` | double | Mean wins per simulated season (all game types through the conference championship). |
+| `losses` | double | Mean losses per simulated season (all game types through the conference championship). |
+| `ties` | double | Mean ties per simulated season. |
+| `win_pct` | double | Mean overall win percentage across the simulated seasons. |
+| `won_conf` | double | Share of simulations in which the team won its conference (CONF_CHAMP game winner, or rank-1 fallback). |
+| `made_playoff` | double | Share of simulations in which the team made the College Football Playoff field. |
+| `first_round_bye` | double | Share of simulations in which the team earned a CFP first-round bye (seed 4 or better). |
+| `won_cfp` | double | Share of simulations in which the team won the College Football Playoff national championship. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_simulations
+out = cfb_simulations(games, teams, simulations=100, seed=42,
+                      playoff_seeds=12)
+print(out["overall"].sort("won_cfp", descending=True).head())
+
+# Regular season only
+
+out = cfb_simulations(games, teams, simulations=100,
+                      sim_include="REG", seed=1)
+```
+
+### `cfb_standings(games: 'FrameLike', teams: 'FrameLike', *, tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, rankings: 'Optional[FrameLike]' = None, return_as_pandas: 'bool' = False, rng: 'Optional[np.random.Generator]' = None) -> 'Union[pl.DataFrame, Any]'` {#cfb_standings}
+
+Compute college football standings with conference ranks and champions.
+
+Engine design adapted from nflseedR (MIT, Sebastian Carl & Lee Sharpe);
+see the module docstring for the documented CFB simplifications.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `FrameLike` |  | Game results with columns `sim` (or `season`), `week`, `game_type` (`REG` \| `CONF_CHAMP` \| `POST`), `home_team`, `away_team`, `result` (home margin: home - away; null = unplayed) and optional `neutral` (0/1). |
+| `teams` | `FrameLike` |  | Team table with columns `team` and `conference` (null or `"FBS Independents"` marks an independent). |
+| `tiebreaker_depth` | `str` | `'SOS'` | One of `"RANDOM"`, `"PRE-SOV"`, `"SOS"`, `"POINTS"` — the nflseedR depth ladder. Steps beyond the chosen depth are skipped and remaining ties are broken by coin flip. |
+| `playoff_seeds` | `Optional[int]` | `None` | If set, adds a `seed` column via `cfb_playoff_seeds` with this field size. |
+| `rankings` | `Optional[FrameLike]` | `None` | Optional committee-style rankings frame (`team`, `rank`) forwarded to `cfb_playoff_seeds`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `rng` | `Optional[Generator]` | `None` | Optional numpy Generator used only for coin-flip tiebreaks (simulations pass their seeded generator through here). |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per (sim, team): overall record (`games`/`wins`/`losses`/`ties`/`win_pct`/ `pd`), conference record (`conf_*`), `sov`, `sos`, `conf_rank` (null for independents), `conf_champ` and, when `playoff_seeds` is set, `seed`.
+
+| col_name | type | description |
+|---|---|---|
+| `sim` | integer | Season or simulation identifier the standings row belongs to. |
+| `team` | character | Team name (join key across the seedr engine frames). |
+| `conference` | character | Conference the team belongs to; null or "FBS Independents" marks an independent. |
+| `games` | integer | Total games played across all game types (regular season, conference championship and postseason). |
+| `wins` | integer | Wins across all played games (conference championship and postseason included). |
+| `losses` | integer | Losses across all played games. |
+| `ties` | integer | Ties across all played games. |
+| `win_pct` | double | Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played. |
+| `pd` | double | Point differential (points for minus points against, via game margins) summed over all played games. |
+| `conf_games` | integer | Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded). |
+| `conf_wins` | integer | Wins in conference regular-season games. |
+| `conf_losses` | integer | Losses in conference regular-season games. |
+| `conf_ties` | integer | Ties in conference regular-season games. |
+| `conf_pct` | double | Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary sort key for conference ranks. |
+| `conf_pd` | double | Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung. |
+| `sov` | double | Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins. |
+| `sos` | double | Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference opponents' conference win pct across all conference games played; 0.0 for independents. |
+| `conf_rank` | integer | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
+| `conf_champ` | logical | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import cfb_standings
+
+games = pl.DataFrame({
+    "sim": [2024, 2024], "week": [1, 2],
+    "game_type": ["REG", "REG"],
+    "home_team": ["A", "B"], "away_team": ["B", "A"],
+    "result": [7.0, -3.0], "neutral": [0, 0],
+})
+teams = pl.DataFrame({"team": ["A", "B"], "conference": ["X", "X"]})
+print(cfb_standings(games, teams))
+
+# With CFP seeds from committee rankings
+
+st = cfb_standings(games, teams, playoff_seeds=12, rankings=ranks_df)
 ```
 
 ### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
