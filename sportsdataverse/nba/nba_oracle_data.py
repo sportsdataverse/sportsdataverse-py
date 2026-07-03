@@ -17,7 +17,9 @@ from __future__ import annotations
 import re
 import unicodedata
 
-__all__ = ["normalize_player_name"]
+import polars as pl
+
+__all__ = ["normalize_player_name", "RAPM_ORACLE_SCHEMA", "load_rapm_ryan_davis"]
 
 
 def normalize_player_name(name: str) -> str:
@@ -55,3 +57,61 @@ def normalize_player_name(name: str) -> str:
     no_punct = re.sub(r"[.'\-]", "", lowered)
     collapsed = re.sub(r"\s+", " ", no_punct).strip()
     return re.sub(r"\s+(jr|sr|ii|iii|iv)$", "", collapsed)
+
+
+#: Tidy schema for :func:`load_rapm_ryan_davis`.
+RAPM_ORACLE_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "player_name": pl.Utf8,
+    "season": pl.Utf8,
+    "LA_RAPM": pl.Float64,
+    "RAPM": pl.Float64,
+    "RA_EFG": pl.Float64,
+    "RA_FTR": pl.Float64,
+    "RA_ORBD": pl.Float64,
+    "RA_TOV": pl.Float64,
+}
+
+
+def load_rapm_ryan_davis(path: str) -> pl.DataFrame:
+    """Parse a Ryan Davis published RAPM CSV (single-season or multi-year window).
+
+    Serves BOTH real files -- ``rapm_ryan_davis.csv`` (``season`` like
+    ``"2009-10"``) and ``rapm_multi_ryan_davis.csv`` (``season`` like
+    ``"2011-16"``, a multi-year decay window) -- since they share an
+    identical header. Only the combined (not per-side ``__Off``/``__Def``)
+    rating columns are kept, matching the model zoo's combined-rating
+    convention (``nba_rapm``'s ``rapm`` column, not separate offense/defense).
+
+    Args:
+        path: Filesystem path to a Ryan Davis RAPM CSV.
+
+    Returns:
+        Frame with schema :data:`RAPM_ORACLE_SCHEMA`. Zero rows (with that
+        schema) when the file has a header but no data rows.
+
+    Raises:
+        FileNotFoundError: If ``path`` does not exist.
+
+    Example:
+        Load and filter to one season::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+            oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv")
+            season = oracle.filter(pl.col("season") == "2022-23")
+    """
+    raw = pl.read_csv(path)
+    if raw.is_empty():
+        return pl.DataFrame(schema=RAPM_ORACLE_SCHEMA)
+    return raw.select(
+        pl.col("playerId").cast(pl.Int64).alias("player_id"),
+        pl.col("playerName").cast(pl.Utf8).alias("player_name"),
+        pl.col("season").cast(pl.Utf8),
+        pl.col("LA_RAPM").cast(pl.Float64),
+        pl.col("RAPM").cast(pl.Float64),
+        pl.col("RA_EFG").cast(pl.Float64),
+        pl.col("RA_FTR").cast(pl.Float64),
+        pl.col("RA_ORBD").cast(pl.Float64),
+        pl.col("RA_TOV").cast(pl.Float64),
+    )
