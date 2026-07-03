@@ -346,4 +346,7 @@ files = [
     "sportsdataverse/nba/nba_ratings_panel.py",
     "sportsdataverse/nba/nba_war.py",
     "sportsdataverse/nba/nba_rapm_variants.py",
+    "sportsdataverse/nfl/nfl_clean.py",
+    "sportsdataverse/nfl/nfl_series.py",
+    "sportsdataverse/nfl/nfl_standings_calc.py",
 ]
