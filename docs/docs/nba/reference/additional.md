@@ -851,6 +851,34 @@ q, ob = _fit_noise_params(panel, ages, curve)
 res = darko_forecast_accuracy(panel, ages, aging_curve=curve, process_var=q, obs_base=ob)
 ```
 
+### `decay_weights(game_date: 'pl.Series', asof: 'Optional[datetime.date]', half_life_days: 'float') -> 'np.ndarray'` {#decay_weights}
+
+Exponential time-decay sample weights `w = 0.5 ** (days_ago / half_life)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_date` | `Series` |  | Per-possession game dates (`pl.Date` Series), aligned row-for-row with the design the weights will be applied to. |
+| `asof` | `Optional[date]` |  | Reference "today". `None` disables decay (all weights `1.0`). Games dated after `asof` are clamped to `days_ago = 0` (weight `1.0`); callers that want a strict as-of cutoff must filter first. |
+| `half_life_days` | `float` |  | Days at which a possession's weight halves. Must be > 0. |
+
+**Returns**
+
+Float64 array of weights, one per row of `game_date`.
+
+**Example**
+
+```python
+import datetime
+import polars as pl
+from sportsdataverse.nba.nba_rapm_variants import decay_weights
+
+dates = pl.Series("game_date", [datetime.date(2023, 1, 1)])
+w = decay_weights(dates, datetime.date(2023, 1, 31), half_life_days=30.0)
+print(round(float(w[0]), 3))  # 0.5
+```
+
 ### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_teams}
 
 espn_nba_teams - look up NBA teams
@@ -1114,6 +1142,55 @@ from sportsdataverse.nba import fox_nba_team_stats
 df = fox_nba_team_stats("...")
 ```
 
+### `luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'` {#luck_adjusted_response}
+
+Attach a per-possession `la_points` expected-points response.
+
+**DECISION 2/4**: `la_points = 2*fg2m + 3*Σ_shooter fg3a·p̂3 + Σ_shooter fta·p̂ft`
+(offense-only, "one_way"). 2-pt makes stay realized. `p̂` come from
+`player_rates` when given, else shrunk_shooter_rates` on `shooting`.
+
+**Defense-shooter exclusion (bugfix)**: `shooting`
+(`~sportsdataverse.nba.nba_possessions.build_possession_shooting`)
+deliberately retains defense-team shooters in a possession group — e.g. a
+defensive technical free throw shooter — because it is a per-shooter
+companion frame, not a team-attributed one (that's why it carries its own
+`team_id` column). The expected-points sum is offense-only by
+definition (**DECISION 2**), so *before* aggregating `exp_extra` this
+function joins `possessions[["game_id", "possession_number",
+"offense_team_id"]]` onto `shooting` and filters to
+`team_id == offense_team_id`, dropping any defense-team shooter row.
+Without this filter a defense tech-FT's `fta·p̂ft` term leaks into the
+offense's `la_points`, inflating it (reproduced: 2.9 vs. the
+offense-only-correct 2.0 for a single offense 2-pt make plus one defense
+tech FT).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m` and the join keys `game_id` + `possession_number` + `offense_team_id`. |
+| `shooting` | `DataFrame` |  | Per-(possession, shooter) frame (`build_possession_shooting`), which may include defense-team shooter rows (e.g. technical FTs) — filtered out here before aggregation. |
+| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override (e.g. planted truth in tests); `None` → shrink from `shooting`. |
+| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to shrunk_shooter_rates` when `player_rates` is `None`. |
+| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to shrunk_shooter_rates` when `player_rates` is `None`. |
+
+**Returns**
+
+`possessions` with an added `la_points: Float64` column (same rows, same order). Empty `possessions` → returned unchanged with an empty `la_points` column.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import luck_adjusted_response
+out = luck_adjusted_response(possessions_df, shooting_df)
+print(out["la_points"].mean())
+
+# Planted-truth override for testing
+
+out = luck_adjusted_response(possessions_df, shooting_df, {7: (0.4, 0.8)})
+```
+
 ### `nba_adj_rapm(possessions: 'pl.DataFrame', prior: 'Dict[int, Tuple[float, float]]', *, alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
          5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_adj_rapm}
 
@@ -1245,6 +1322,114 @@ Project each player's next-season rating via a per-player Kalman filter + aging 
 from sportsdataverse.nba import nba_darko, nba_player_ages
 proj = nba_darko(rating_panel, ages_panel)
 print(proj.sort("projected_rating", descending=True).head())
+```
+
+### `nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_decay_rapm}
+
+Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`.
+
+`asof=None` disables decay: every possession is weighted `1.0` and the
+fit uses **exactly** plain `~sportsdataverse.nba.nba_rapm.nba_rapm`'s
+own schedule (`alphas=DEFAULT_RAPM_ALPHAS`, sklearn's efficient default
+LOOCV) so the two agree byte-for-byte (see
+`test_decay_rapm_asof_none_equals_plain_rapm`). When `asof` is set,
+possessions dated after `asof` are dropped, the remainder is
+exponentially down-weighted by age, and the fit switches to the
+**oracle** regularization schedule (`oracle_rapm_alphas` evaluated
+at the post-filter possession count, `cv=` `ORACLE_RAPM_CV`) per
+the binding WP2 ridge-schedule ruling documented in the module docstring.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Multi-season possession+lineup frame. Must carry a `game_date` (`pl.Date`) column when `asof` is not `None`. |
+| `asof` | `Optional[date]` | `None` | Reference date; `None` -> unweighted, plain-RAPM-equivalent fit. |
+| `half_life_days` | `float` | `180.0` | Weight half-life in days (default 180). |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `DECAY_RAPM_SCHEMA`. Empty input, or an `asof` that drops every possession, -> zero-row frame.
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_rapm_variants import nba_decay_rapm
+
+df = nba_decay_rapm(season_poss, asof=datetime.date(2024, 3, 1), half_life_days=120.0)
+print(df.sort("decay_rapm", descending=True).head())
+
+# Plain-RAPM-equivalent (no decay)
+
+df = nba_decay_rapm(season_poss)  # asof=None
+```
+
+### `nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_four_factor_rapm}
+
+Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
+
+Each factor is regressed on the identical offense/defense design matrix,
+differing only in the per-possession response (FACTOR_RESPONSES`).
+Output mirrors the oracle's `RA_*__Off/__Def` layout. **DECISION 5/6/7**
+govern the response definitions.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m, fg3m, ftm, oreb, tov` and the ten lineup columns. Must also carry a `points` column -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally) requires it unconditionally even though none of the four factor responses use it. `offense_team_id` is NOT required here (unlike `nba_la_rapm`): none of the four factor responses need the offense-only shooter join. |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override, shared by all four factor fits. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns per factor, plus possession counts. Empty input → zero-row frame.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import nba_four_factor_rapm
+ff = nba_four_factor_rapm(season_poss)
+print(ff.sort("efg__off", descending=True).head())
+```
+
+### `nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_la_rapm}
+
+Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
+
+Replaces realized 3-point and free-throw outcomes with the shooter's shrunk
+expected value (`luck_adjusted_response`); 2-pt makes stay realized.
+**DECISION 2/3/4** govern the response recipe and shrinkage constants.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame with team-level `fg2m` and the ten lineup columns; join keys `game_id` + `possession_number` + `offense_team_id` (the last is required by `luck_adjusted_response`'s defense-shooter leak filter). Must also carry a `points` column even though the LA response (`la_points`) supersedes it for fitting -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally via prepare`) requires it unconditionally. |
+| `shooting` | `DataFrame` |  | Per-(possession, shooter) frame from `build_possession_shooting`. |
+| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override; `None` → shrink from `shooting`. |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule (`cv=` `ORACLE_RAPM_CV` always; there is no plain-schedule mode). |
+| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
+| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `LA_RAPM_SCHEMA`. Empty input → zero-row frame.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import nba_la_rapm
+df = nba_la_rapm(season_poss, season_shooting)
+print(df.sort("la_rapm", descending=True).head())
+
+# Planted-truth shooter rates (e.g. for testing)
+
+df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
 ```
 
 ### `nba_pbp_disk(game_id, path_to_json)` {#nba_pbp_disk}
