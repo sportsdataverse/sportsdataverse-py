@@ -10,6 +10,7 @@ from sportsdataverse.nba.nba_schedule import *
 from sportsdataverse.nba.nba_teams import *
 from sportsdataverse.nba.nba_lineups import (  # noqa: F401
     players_on_court_from_pbp,
+    players_on_court_from_quarter_boxscores,
     players_on_court_from_rotation,
 )
 from sportsdataverse.nba.nba_season_compile import compile_nba_season  # noqa: F401

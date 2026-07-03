@@ -10,6 +10,7 @@
   - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
   - [NBA — possession event-detail columns, per-shooter shooting frame, `game_date`](#nba--possession-event-detail-columns-per-shooter-shooting-frame-game_date)
   - [NBA — faithful possession boundaries (pbpstats parity)](#nba--faithful-possession-boundaries-pbpstats-parity)
+  - [NBA — quarter-box on-court lineup seeding + `lineup_source="quarter_box"`](#nba--quarter-box-on-court-lineup-seeding--lineup_sourcequarter_box)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
   - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
@@ -240,6 +241,18 @@ Two new codegen-generated flat-API stems wrap the official stats API surface:
   (possession cache `PIPELINE_VERSION` 2 -> 3).
 - test(nba): pbpstats-live oracle gate — like-for-like possession counts +
   boundary-by-boundary diff on the committed cdn fixtures (`SDV_PBPSTATS_ROOT`).
+
+### NBA — quarter-box on-court lineup seeding + `lineup_source="quarter_box"`
+
+- feat(nba): exact quarter-box on-court seeding — `players_on_court_from_quarter_boxscores`
+  and `lineup_source="quarter_box"` on `nba_possessions` (auto chain: rotation ->
+  quarter_box -> pbp), seeded from per-period `boxscoretraditionalv3` range payloads.
+- fix(nba): `players_on_court_from_quarter_boxscores` gains an optional `raw_box`
+  full-game-boxscore name-map source (mirrors `players_on_court_from_pbp`'s own
+  signature), closing a mid-period name-resolution gap that regressed one fixture
+  to 0.8817 gamerotation-agreement; with `raw_box` threaded through, quarter_box
+  now matches `players_on_court_from_pbp` exactly on all 3 fixture games
+  (0.9689 / 0.9686 / 0.9662).
 
 ## 0.0.71 Release: June 24, 2026
 

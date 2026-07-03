@@ -213,6 +213,7 @@ from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
+from sportsdataverse.nba import players_on_court_from_quarter_boxscores as players_on_court_from_quarter_boxscores  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_rotation as players_on_court_from_rotation  # noqa: F401
 from sportsdataverse.nba import ratings_as_of as ratings_as_of  # noqa: F401
 from sportsdataverse.nba import render_report as render_report  # noqa: F401
@@ -414,6 +415,7 @@ __all__ = [
     "normalize_player_name",
     "normalize_team_roster_columns",
     "players_on_court_from_pbp",
+    "players_on_court_from_quarter_boxscores",
     "players_on_court_from_rotation",
     "ratings_as_of",
     "render_report",

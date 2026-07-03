@@ -309,6 +309,7 @@ files = [
     "sportsdataverse/nba/nba_pbp_constants.py",
     "sportsdataverse/nba/nba_enhanced_pbp.py",
     "sportsdataverse/nba/nba_lineups.py",
+    "sportsdataverse/nba/tools/capture_boxv3_periods.py",
     "sportsdataverse/nba/nba_possessions.py",
     "sportsdataverse/nba/nba_shot_zones.py",
     "sportsdataverse/nba/nba_tracking.py",
