@@ -165,6 +165,20 @@ def test_series_empty_pbp_returns_zero_row_schema() -> None:
     assert "week" not in season.columns
 
 
+def test_series_outer_join_defense_only_team_gets_null_offense() -> None:
+    """CCC only ever appears as ``defteam`` (week 2, vs AAA's offense) -- never
+    as ``posteam`` -- so it's absent from the ``offense`` sub-frame entirely.
+    The full outer join must still surface CCC's row (per the documented
+    schema semantics) with the missing offense side null, not drop it."""
+    df = calculate_nfl_series_conversion_rates(_synthetic_pbp(), weekly=True)
+    ccc = df.filter((pl.col("season") == 2023) & (pl.col("team") == "CCC") & (pl.col("week") == 2)).row(0, named=True)
+    assert ccc["off_n"] is None
+    assert ccc["off_scr"] is None
+    assert ccc["def_n"] == 1
+    assert ccc["def_scr"] == 1.0
+    assert ccc["def_td"] == 1.0
+
+
 def test_series_return_as_pandas() -> None:
     import pandas as pd
 

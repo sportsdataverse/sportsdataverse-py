@@ -267,7 +267,11 @@ def calculate_nfl_standings(
             with both scores present are used.
         teams: A ``load_nfl_teams``-shaped frame (``team_abbr``, ``team_conf``,
             ``team_division``). When ``None`` (default), calls
-            :func:`sportsdataverse.nfl.load_nfl_teams`.
+            :func:`sportsdataverse.nfl.load_nfl_teams`. Must cover every team
+            abbreviation appearing in ``games`` -- a team absent from
+            ``teams`` gets null ``conf``/``division`` and is silently pooled
+            into the ``(season, None)`` division/conference group rather than
+            raising.
         tiebreaker_depth: ``1`` (win_pct only), ``2`` (adds head-to-head +
             division record), or ``3`` (default; adds conference record too).
         playoff_seeds: Number of teams per conference that receive a

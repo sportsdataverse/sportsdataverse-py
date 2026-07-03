@@ -180,9 +180,6 @@ def calculate_nfl_series_conversion_rates(
 
     combined = offense.join(defense, on=grp, how="full", coalesce=True).sort(grp)
 
-    if combined.height == 0:
-        return _empty_series_frame(weekly=weekly, return_as_pandas=return_as_pandas)
-
     if return_as_pandas:
         return combined.to_pandas()
     return combined

@@ -3276,8 +3276,11 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
     # non-null defteam across ALL plays; deriving it on the pass subset would
     # misidentify it whenever possession changes before the game's first
     # qualifying pass (flag inverted game-wide).  Mirrors _add_wp_aux.
+    # ``_r2k_col`` names whichever column holds the flag: the existing
+    # ``receive_2h_ko`` is referenced directly (no duplicate materialized),
+    # else a fresh ``_ay_r2k`` is computed and cleaned up below.
     if "receive_2h_ko" in df.columns:
-        df = df.with_columns(pl.col("receive_2h_ko").cast(pl.Float64).alias("_ay_r2k"))
+        _r2k_col = "receive_2h_ko"
     elif "qtr" in df.columns and "defteam" in df.columns:
         df = df.with_columns(
             pl.when(
@@ -3287,8 +3290,10 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .otherwise(0.0)
             .alias("_ay_r2k")
         )
+        _r2k_col = "_ay_r2k"
     else:
         df = df.with_columns(pl.lit(0.0).alias("_ay_r2k"))
+        _r2k_col = "_ay_r2k"
 
     pass_df = df.filter(pl.col("air_yards").is_not_null() & (pl.col("play_type") == "pass"))
 
@@ -3309,7 +3314,7 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
             if "elapsed_share" in pass_df.columns
             else ((3600.0 - gsr) / 3600.0).clip(0.0, 1.0)
         )
-        receive_2h_ko = pl.col("_ay_r2k")
+        receive_2h_ko = pl.col(_r2k_col).cast(pl.Float64)
 
         pass_df = pass_df.with_columns(
             _r_ifelse((down == 4) & (air < tg), 1.0, 0.0).alias("_ay_turnover"),
@@ -3387,7 +3392,8 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
     else:
         merged = _null_air_yac(df, ("air_wpa", "yac_wpa"))
 
-    return _air_yac_family_block(merged, kind="wpa").drop("_ay_idx", "_ay_r2k")
+    drop_cols = ["_ay_idx"] + (["_ay_r2k"] if _r2k_col == "_ay_r2k" else [])
+    return _air_yac_family_block(merged, kind="wpa").drop(drop_cols)
 
 
 def _derive_qbr_epa(df: pl.DataFrame) -> pl.DataFrame:

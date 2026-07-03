@@ -1549,7 +1549,10 @@ def build_nfl_team_stats(
     # String lists default to empty string.
     team_df = team_df.with_columns([pl.col(c).fill_null("") for c in _TEAM_STR_COLUMNS if c in team_df.columns])
 
-    # FG / PAT percentages (avoid 0/0).
+    # FG / PAT percentages (avoid 0/0). The reference's per-dtype NaN->null
+    # cleanup is intentionally skipped here for these float columns: the
+    # when-guard only divides when the attempt count is > 0, so NaN (0/0) is
+    # unreachable.
     team_df = team_df.with_columns(
         pl.when(pl.col("fg_att") > 0)
         .then(pl.col("fg_made") / pl.col("fg_att"))
@@ -1596,6 +1599,7 @@ def _collapse_team_to_season(team_df: pl.DataFrame, *, season_type: str) -> pl.D
         team_df.group_by(["season", "team"])
         .agg(agg)
         .with_columns(
+            # Same NaN-unreachable reasoning as the weekly fg_pct/pat_pct above.
             pl.when(pl.col("fg_att") > 0)
             .then(pl.col("fg_made") / pl.col("fg_att"))
             .otherwise(None)
@@ -1709,7 +1713,10 @@ def _empty_player_stats_def(*, weekly: bool, return_as_pandas: bool) -> pl.DataF
         "team",
         "season_type",
     }
-    int_cols = {"season", "week", "games"}
+    # "season" is only ever in ``cols`` on the weekly grain (season-grain
+    # drops it above), so it's included here conditionally rather than
+    # carrying a dead entry on the season-grain path.
+    int_cols = {"week", "games"} | ({"season"} if weekly else set())
     for c in cols:
         if c in str_cols:
             schema[c] = pl.Utf8
@@ -2264,7 +2271,17 @@ def build_nfl_player_stats_def(
     player_df = player_df.with_columns([pl.col(c).fill_null(0.0) for c in count_cols])
 
     # season_type per (season, week), joined from the down-restricted grain.
-    s_type = data.select(["season", "week", "season_type"]).unique(subset=["season", "week"], keep="first")
+    # Cast season/week identically to _def_cast_keys so this join shares the
+    # same dtype guarantee as every other def-path join (player_df's keys
+    # were already routed through _def_cast_keys above).
+    s_type = (
+        data.select(["season", "week", "season_type"])
+        .unique(subset=["season", "week"], keep="first")
+        .with_columns(
+            pl.col("season").cast(pl.Int64, strict=False),
+            pl.col("week").cast(pl.Int64, strict=False),
+        )
+    )
     player_df = player_df.join(s_type, on=["season", "week"], how="left")
 
     from sportsdataverse.nfl.nfl_loaders import load_nfl_players  # noqa: PLC0415
@@ -2548,6 +2565,8 @@ def _kick_field_goals(base: pl.DataFrame, grp: List[str]) -> pl.DataFrame:
             dist.filter(blk).sum().cast(pl.Int64).alias("fg_blocked_distance"),
         )
         .with_columns(
+            # NaN-unreachable (only divides when fg_att > 0): the reference's
+            # per-dtype NaN->null cleanup is intentionally skipped for floats.
             pl.when(pl.col("fg_att") > 0)
             .then((pl.col("fg_made") / pl.col("fg_att")).round(3))
             .otherwise(None)
@@ -2580,6 +2599,7 @@ def _kick_pat(base: pl.DataFrame, grp: List[str]) -> pl.DataFrame:
             (pl.col("pat_res") == "blocked").sum().cast(pl.Int64).alias("pat_blocked"),
         )
         .with_columns(
+            # Same NaN-unreachable reasoning as fg_pct above.
             pl.when(pl.col("pat_att") > 0)
             .then((pl.col("pat_made") / pl.col("pat_att")).round(3))
             .otherwise(None)
@@ -2778,6 +2798,11 @@ def build_nfl_player_stats_kicking(
 
     from sportsdataverse.nfl.nfl_loaders import load_nfl_players  # noqa: PLC0415
 
+    # Deliberate divergence from R: R's calculate_player_stats_kicking yields
+    # NA for a kicker missing from load_players(); _join_player_meta's
+    # coalesce falls back to the pbp-derived kicker_player_name (set on
+    # kick_df's "player_name" above via _kick_base_frame) instead -- a strict
+    # superset, not a bug.
     kick_df = _join_player_meta(kick_df, load_nfl_players())
 
     kick_df = _finalize_kicking(kick_df, weekly=weekly)
