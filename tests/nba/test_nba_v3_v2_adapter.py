@@ -22,7 +22,9 @@ committed cdn fixture.
 
 from __future__ import annotations
 
+import functools
 import json
+import os
 import pathlib
 import re
 import sys
@@ -48,27 +50,41 @@ from sportsdataverse.nba.nba_v3_v2_adapter import (
 
 FXROOT = pathlib.Path("tests/fixtures/nba_engine")
 
-# Vendored local pbpstats checkout used only by the Deliverable-2 gated
-# round-trip test below. NOT a project dependency -- CI (and any contributor
-# without this path) hits ImportError and the test skips cleanly.
-_PBPSTATS_ROOT = "c:/Users/saiem/Documents/GitHub-Data/sdv-dev/pbpstats"
+# Local pbpstats checkout used only by the Deliverable-2 gated round-trip
+# test below. NOT a project dependency: opt in by pointing SDV_PBPSTATS_ROOT
+# at a https://github.com/dblackrun/pbpstats checkout (mirrors the project's
+# env-var-gated live-test pattern). Unset -> the round-trip test skips
+# cleanly; every other test in this file runs regardless.
+_PBPSTATS_ROOT = os.environ.get("SDV_PBPSTATS_ROOT", "")
 
 
+@functools.lru_cache(maxsize=None)
 def _box(game_id: str) -> dict:
-    """Load a committed boxscoretraditionalv3 fixture."""
+    """Load a committed boxscoretraditionalv3 fixture (cached; never mutated)."""
     return json.loads((FXROOT / game_id / "boxscoretraditionalv3.json").read_text())
 
 
+@functools.lru_cache(maxsize=None)
 def _pbp(game_id: str) -> dict:
-    """Load the full committed ``playbyplayv3.json`` fixture payload."""
+    """Load the full committed ``playbyplayv3.json`` fixture payload (cached)."""
     payload: dict = json.loads((FXROOT / game_id / "playbyplayv3.json").read_text())
     return payload
 
 
+@functools.lru_cache(maxsize=None)
+def _v2_frame(game_id: str) -> pl.DataFrame:
+    """Assemble the v2 frame once per fixture and share it across tests.
+
+    ``nba_v3_to_v2_pbp`` is pure and polars operations return new frames, so
+    the repeated Task 3/4 tests can reuse a single assembly per game instead
+    of re-running the full pipeline (and re-parsing the fixtures) each test.
+    """
+    return nba_v3_to_v2_pbp(_pbp(game_id), _box(game_id))
+
+
 def _v3_actions(game_id: str) -> List[dict]:
     """Load the committed ``playbyplayv3.json`` fixture's action list."""
-    payload = json.loads((FXROOT / game_id / "playbyplayv3.json").read_text())
-    actions: List[dict] = payload["game"]["actions"]
+    actions: List[dict] = _pbp(game_id)["game"]["actions"]
     return actions
 
 
@@ -79,9 +95,16 @@ def _cdn_actions(game_id: str) -> List[dict]:
     never fetched over the network in tests, only read from the committed
     fixture.
     """
-    payload = json.loads((FXROOT / game_id / "cdn_playbyplay.json").read_text())
+    payload = _cdn_payload(game_id)
     actions: List[dict] = payload["game"]["actions"]
     return actions
+
+
+@functools.lru_cache(maxsize=None)
+def _cdn_payload(game_id: str) -> dict:
+    """Load the committed ``cdn_playbyplay.json`` fixture payload (cached)."""
+    payload: dict = json.loads((FXROOT / game_id / "cdn_playbyplay.json").read_text())
+    return payload
 
 
 def _cdn_truth(game_id: str) -> Dict[int, Dict[str, Optional[int]]]:
@@ -479,13 +502,13 @@ _V2_REPRESENTATIVE_COLUMNS = [
 
 
 def test_v3_to_v2_pbp_has_representative_v2_schema_columns() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     for column in _V2_REPRESENTATIVE_COLUMNS:
         assert column in df.columns, f"missing v2 column: {column}"
 
 
 def test_v3_to_v2_pbp_event_type_values_are_within_mapped_code_set() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     allowed = set(_EVENT_TYPE_MAP.values()) | {"0", "13"}
     observed = set(df["event_type"].unique().to_list())
     assert observed <= allowed
@@ -493,14 +516,14 @@ def test_v3_to_v2_pbp_event_type_values_are_within_mapped_code_set() -> None:
 
 def test_v3_to_v2_pbp_known_assisted_made_shot_has_player2_id_set() -> None:
     """actionNumber 7 in 0022300001: 'Turner ... (Haliburton 1 AST)' -- a Made Shot with an assist."""
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     row = df.filter(pl.col("event_num") == "7")
     assert row.height == 1
     assert row["player2_id"][0] is not None
 
 
 def test_v3_to_v2_pbp_home_and_visitor_descriptions_are_mutually_exclusive() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     both_set = df.filter(pl.col("home_description").is_not_null() & pl.col("visitor_description").is_not_null())
     assert both_set.height == 0
 
@@ -514,7 +537,7 @@ def test_v3_to_v2_pbp_score_forward_fill_never_null_and_constant_between_scores(
     zero drift. actionNumber 13 (Mathurin 3PT) changes it to "0 - 5" / "5",
     and actionNumber 15 (Mitchell dunk) changes it again to "2 - 5" / "3".
     """
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     assert df["score"].null_count() == 0
     assert df["score_margin"].null_count() == 0
 
@@ -541,7 +564,7 @@ def test_v3_to_v2_pbp_score_forward_fill_never_null_and_constant_between_scores(
 def test_v3_to_v2_pbp_row_count_equals_v3_actions_minus_dropped_block_steal_rows() -> None:
     actions = _v3_actions("0022300001")
     dropped = sum(1 for action in actions if _is_dropped_block_steal(action))
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     assert df.height == len(actions) - dropped
 
 
@@ -549,7 +572,7 @@ def test_v3_to_v2_pbp_ids_are_utf8_strings() -> None:
     """Binding id-dtype rule (CLAUDE.md): every join-key id column is Utf8,
     and casting never strips a leading zero off the game id.
     """
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     assert df.schema["game_id"] == pl.Utf8
     assert df.schema["event_num"] == pl.Utf8
     assert df.schema["player1_id"] == pl.Utf8
@@ -564,7 +587,7 @@ def test_v3_to_v2_pbp_ids_are_utf8_strings() -> None:
 
 
 def test_v3_to_v2_pbp_return_as_pandas() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     df_pd = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"), return_as_pandas=True)
     assert isinstance(df_pd, pd.DataFrame)
     assert len(df_pd) == df.height
@@ -617,7 +640,7 @@ _PBPSTATS_INT_KEYS = [
 
 
 def test_to_pbpstats_stats_nba_rows_has_uppercase_keys() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     rows = _to_pbpstats_stats_nba_rows(df)
     assert len(rows) == df.height
     for row in rows:
@@ -626,7 +649,7 @@ def test_to_pbpstats_stats_nba_rows_has_uppercase_keys() -> None:
 
 
 def test_to_pbpstats_stats_nba_rows_key_ids_and_types_are_python_int() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     rows = _to_pbpstats_stats_nba_rows(df)
     for row in rows:
         for key in _PBPSTATS_INT_KEYS:
@@ -636,7 +659,7 @@ def test_to_pbpstats_stats_nba_rows_key_ids_and_types_are_python_int() -> None:
 
 def test_to_pbpstats_stats_nba_rows_known_assisted_made_shot_player2_id_is_correct_int() -> None:
     """actionNumber 7 in 0022300001: known assisted made shot (see Task 3 test above)."""
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     row7 = df.filter(pl.col("event_num") == "7")
     expected_player2_id = int(row7["player2_id"][0])
 
@@ -646,7 +669,7 @@ def test_to_pbpstats_stats_nba_rows_known_assisted_made_shot_player2_id_is_corre
 
 
 def test_to_pbpstats_stats_nba_rows_pctimestring_format_and_matches_time_quarter() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     time_quarter_by_event_num: Dict[str, str] = dict(zip(df["event_num"].to_list(), df["time_quarter"].to_list()))
 
     rows = _to_pbpstats_stats_nba_rows(df)
@@ -664,7 +687,7 @@ def test_to_pbpstats_stats_nba_rows_null_player_ids_default_to_zero() -> None:
     above), so its v2 player2_id/player3_id are null and must cast to 0
     (pbpstats' own "no player" convention).
     """
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     rows = _to_pbpstats_stats_nba_rows(df)
     row2 = next(row for row in rows if row["EVENTNUM"] == 2)
     assert row2["PLAYER2_ID"] == 0
@@ -672,7 +695,7 @@ def test_to_pbpstats_stats_nba_rows_null_player_ids_default_to_zero() -> None:
 
 
 def test_to_pbpstats_stats_nba_envelope_shape() -> None:
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     envelope = _to_pbpstats_stats_nba_envelope(df, "0022300001")
 
     result_set = envelope["resultSets"][0]
@@ -690,7 +713,7 @@ def test_to_pbpstats_stats_nba_envelope_shape() -> None:
 
 def test_to_pbpstats_stats_nba_envelope_game_id_override() -> None:
     """The envelope's game_id param overrides whatever the frame itself carries."""
-    df = nba_v3_to_v2_pbp(_pbp("0022300001"), _box("0022300001"))
+    df = _v2_frame("0022300001")
     envelope = _to_pbpstats_stats_nba_envelope(df, "9999999999")
     result_set = envelope["resultSets"][0]
     headers = result_set["headers"]
@@ -726,7 +749,9 @@ _ROUNDTRIP_MAX_ABS_POSSESSION_DELTA = 5
 
 
 def _pbpstats_client_or_skip() -> Any:
-    """Import pbpstats' ``Client`` from the vendored checkout, or skip the test."""
+    """Import pbpstats' ``Client`` from the opt-in checkout, or skip the test."""
+    if not _PBPSTATS_ROOT:
+        pytest.skip("SDV_PBPSTATS_ROOT not set; local pbpstats checkout unavailable")
     if _PBPSTATS_ROOT not in sys.path:
         sys.path.insert(0, _PBPSTATS_ROOT)
     try:
@@ -752,7 +777,7 @@ def _write_stats_nba_inputs(game_dir: pathlib.Path, game_id: str) -> None:
     (game_dir / "pbp").mkdir(parents=True, exist_ok=True)
     (game_dir / "game_details").mkdir(parents=True, exist_ok=True)
 
-    v2_df = nba_v3_to_v2_pbp(_pbp(game_id), _box(game_id))
+    v2_df = _v2_frame(game_id)
     envelope = _to_pbpstats_stats_nba_envelope(v2_df, game_id)
     (game_dir / "pbp" / f"stats_{game_id}.json").write_text(json.dumps(envelope))
 
