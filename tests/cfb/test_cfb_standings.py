@@ -1,0 +1,262 @@
+"""Offline tests for the CFB standings engine (nflseedR-style port).
+
+Engine design adapted from nflseedR (MIT, Sebastian Carl & Lee Sharpe).
+The toy fixture under ``tests/fixtures/seedr/cfb_toy/`` is the shared
+cross-validation oracle: the R ``cfbseedR`` port runs the same CSVs and the
+sorted standings outputs are diffed by the orchestrator.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import polars as pl
+import pytest
+
+from sportsdataverse.cfb.cfb_standings import (
+    cfb_games_from_schedule,
+    cfb_playoff_seeds,
+    cfb_standings,
+)
+
+FIXTURE_DIR = Path(__file__).parent.parent / "fixtures" / "seedr" / "cfb_toy"
+
+
+def _toy() -> tuple[pl.DataFrame, pl.DataFrame]:
+    games = pl.read_csv(FIXTURE_DIR / "toy_games.csv")
+    teams = pl.read_csv(FIXTURE_DIR / "toy_teams.csv")
+    return games, teams
+
+
+def _reg_games(rows: list[tuple[str, str, float]], sim: int = 2024) -> pl.DataFrame:
+    """(home, away, result) triples -> engine games frame, one week apart."""
+    return pl.DataFrame(
+        {
+            "sim": [sim] * len(rows),
+            "week": list(range(1, len(rows) + 1)),
+            "game_type": ["REG"] * len(rows),
+            "home_team": [r[0] for r in rows],
+            "away_team": [r[1] for r in rows],
+            "result": [float(r[2]) for r in rows],
+            "neutral": [0] * len(rows),
+        }
+    )
+
+
+class TestToyFixture:
+    """The shared spec's cross-validation expectations (tiebreaker_depth=POINTS)."""
+
+    def test_toy_shape_and_ranks(self) -> None:
+        games, teams = _toy()
+        st = cfb_standings(games, teams, tiebreaker_depth="POINTS")
+        assert isinstance(st, pl.DataFrame)
+        assert st.height == 9
+
+        ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
+        # Alpha 3-way 2-1 tie resolves A1 > A2 > A3 (conf point diff 25 > 10 > 3)
+        assert [ranks[t] for t in ("A1", "A2", "A3", "A4")] == [1, 2, 3, 4]
+        # Beta is clean B1 > B2 > B3 > B4
+        assert [ranks[t] for t in ("B1", "B2", "B3", "B4")] == [1, 2, 3, 4]
+        # Independent has no conference rank
+        assert ranks["I1"] is None
+
+    def test_toy_conf_champs_from_conf_champ_games(self) -> None:
+        games, teams = _toy()
+        st = cfb_standings(games, teams, tiebreaker_depth="POINTS")
+        champs = set(st.filter(pl.col("conf_champ") == True)["team"].to_list())  # noqa: E712
+        assert champs == {"A1", "B1"}
+
+    def test_toy_records_and_point_diffs(self) -> None:
+        games, teams = _toy()
+        st = cfb_standings(games, teams, tiebreaker_depth="POINTS")
+        rows = {r["team"]: r for r in st.iter_rows(named=True)}
+        # CONF_CHAMP counts toward the overall record, not the conference record
+        assert (rows["A1"]["wins"], rows["A1"]["losses"], rows["A1"]["ties"]) == (3, 2, 0)
+        assert (rows["A1"]["conf_wins"], rows["A1"]["conf_losses"]) == (2, 1)
+        assert (rows["B1"]["wins"], rows["B1"]["losses"]) == (5, 0)
+        assert rows["I1"]["conf_games"] == 0
+        # the deliberate tiebreak lever
+        assert [rows[t]["conf_pd"] for t in ("A1", "A2", "A3")] == [25.0, 10.0, 3.0]
+
+    def test_toy_public_numerics_are_float64(self) -> None:
+        games, teams = _toy()
+        st = cfb_standings(games, teams, tiebreaker_depth="POINTS")
+        assert isinstance(st, pl.DataFrame)
+        for col in ("win_pct", "conf_pct", "sov", "sos", "pd", "conf_pd"):
+            assert st.schema[col] == pl.Float64, col
+
+    def test_toy_return_as_pandas(self) -> None:
+        games, teams = _toy()
+        pdf = cfb_standings(games, teams, tiebreaker_depth="POINTS", return_as_pandas=True)
+        assert not isinstance(pdf, pl.DataFrame)
+        assert len(pdf) == 9
+
+
+class TestTiebreakerEdges:
+    def test_head_to_head_pair(self) -> None:
+        # X and Y both 2-1; X beat Y head-to-head -> X ranks first.
+        games = _reg_games(
+            [
+                ("X", "Y", 3.0),
+                ("Y", "Z", 7.0),
+                ("Y", "Q", 7.0),
+                ("X", "Z", 2.0),
+                ("Q", "X", 2.0),
+                ("Z", "Q", 4.0),
+            ]
+        )
+        teams = pl.DataFrame({"team": ["X", "Y", "Z", "Q"], "conference": ["C"] * 4})
+        st = cfb_standings(games, teams, tiebreaker_depth="PRE-SOV")
+        assert isinstance(st, pl.DataFrame)
+        ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
+        assert ranks["X"] == 1 and ranks["Y"] == 2
+        # Z beat Q head-to-head for the 3/4 spot
+        assert ranks["Z"] == 3 and ranks["Q"] == 4
+
+    def test_common_opponents_without_head_to_head(self) -> None:
+        # T1 and T2 (both 1-1) never met; their only common opponent is C:
+        # T1 beat C, T2 lost to C -> T1 ranks above T2.
+        games = _reg_games(
+            [
+                ("T1", "C", 7.0),
+                ("E", "T1", 7.0),
+                ("C", "T2", 3.0),
+                ("T2", "D", 3.0),
+                ("C", "E", 3.0),
+                ("E", "D", 3.0),
+            ]
+        )
+        teams = pl.DataFrame({"team": ["T1", "T2", "C", "D", "E"], "conference": ["X"] * 5})
+        st = cfb_standings(games, teams, tiebreaker_depth="SOS")
+        assert isinstance(st, pl.DataFrame)
+        ranks = {r["team"]: r["conf_rank"] for r in st.iter_rows(named=True)}
+        assert ranks["C"] == 1 and ranks["E"] == 2  # 2-1 tier, C beat E h2h
+        assert ranks["T1"] == 3 and ranks["T2"] == 4
+        assert ranks["D"] == 5
+
+    def test_independents_excluded_from_conf_ranks(self) -> None:
+        games, teams = _toy()
+        st = cfb_standings(games, teams, tiebreaker_depth="SOS")
+        assert isinstance(st, pl.DataFrame)
+        ind = st.filter(pl.col("conference") == "FBS Independents")
+        assert ind["conf_rank"].to_list() == [None]
+        assert ind["conf_champ"].to_list() == [False]
+        # but included in overall standings
+        assert ind["wins"].to_list() == [2]
+
+    def test_invalid_tiebreaker_depth_raises(self) -> None:
+        games, teams = _toy()
+        with pytest.raises(ValueError, match="tiebreaker_depth"):
+            cfb_standings(games, teams, tiebreaker_depth="MAX")
+
+    def test_invalid_game_type_raises(self) -> None:
+        games, teams = _toy()
+        with pytest.raises(ValueError, match="game_type"):
+            cfb_standings(games.with_columns(pl.lit("SB").alias("game_type")), teams)
+
+
+class TestPlayoffSeeds:
+    @staticmethod
+    def _standings_14() -> pl.DataFrame:
+        """14 ranked teams; champs are R01/R03/R05/R08 and lowly R13."""
+        teams = [f"R{i:02d}" for i in range(1, 15)]
+        champs = {"R01", "R03", "R05", "R08", "R13"}
+        return pl.DataFrame(
+            {
+                "sim": [1] * 14,
+                "team": teams,
+                "conference": [f"C{i}" for i in range(14)],
+                "conf_champ": [t in champs for t in teams],
+                "win_pct": [1.0 - i / 100 for i in range(14)],
+                "sov": [0.5] * 14,
+                "sos": [0.5] * 14,
+                "pd": [100.0 - i for i in range(14)],
+            }
+        )
+
+    def test_champ_outside_top12_bumps_last_at_large(self) -> None:
+        st = self._standings_14()
+        rankings = pl.DataFrame({"team": st["team"], "rank": list(range(1, 15))})
+        seeded = cfb_playoff_seeds(st, rankings=rankings, playoff_seeds=12)
+        assert isinstance(seeded, pl.DataFrame)
+        seeds = {r["team"]: r["seed"] for r in seeded.iter_rows(named=True)}
+        # champ ranked 13 gets in with the last seed (straight seeding, no bump)
+        assert seeds["R13"] == 12
+        # the 12th-best at-large is bumped out
+        assert seeds["R12"] is None
+        assert seeds["R14"] is None
+        # everyone else seeded straight by committee rank
+        for i in range(1, 12):
+            assert seeds[f"R{i:02d}"] == i
+
+    def test_fallback_ordering_without_rankings(self) -> None:
+        st = self._standings_14()
+        seeded = cfb_playoff_seeds(st, rankings=None, playoff_seeds=12)
+        assert isinstance(seeded, pl.DataFrame)
+        seeds = {r["team"]: r["seed"] for r in seeded.iter_rows(named=True)}
+        # win_pct descends with team index, so the fallback matches the rank order
+        assert seeds["R01"] == 1
+        assert seeds["R13"] == 12  # champ guarantee still applies
+        assert seeds["R12"] is None
+        in_field = [s for s in seeds.values() if s is not None]
+        assert sorted(in_field) == list(range(1, 13))
+
+    def test_via_cfb_standings_playoff_seeds_kwarg(self) -> None:
+        games, teams = _toy()
+        st = cfb_standings(games, teams, tiebreaker_depth="POINTS", playoff_seeds=4)
+        assert isinstance(st, pl.DataFrame)
+        field = st.filter(pl.col("seed").is_not_null())
+        assert field.height == 4
+        # both conference champs (A1, B1) must be in the 4-team field
+        assert {"A1", "B1"} <= set(field["team"].to_list())
+
+
+class TestGamesFromSchedule:
+    def test_mapper_shapes_engine_schema(self) -> None:
+        sched = pl.DataFrame(
+            {
+                "season": [2024] * 4,
+                "week": [1, 14, 16, 17],
+                "season_type": ["regular", "regular", "postseason", "postseason"],
+                "home_team": ["H1", "H2", "H3", "H4"],
+                "away_team": ["A1", "A2", "A3", "A4"],
+                "home_points": [28, 21, None, 35],
+                "away_points": [14, 24, None, 20],
+                "neutral_site": [False, True, True, True],
+                "notes": [None, "Big 12 Championship", None, "CFP National Championship"],
+            }
+        )
+        games = cfb_games_from_schedule(sched)
+        assert isinstance(games, pl.DataFrame)
+        assert games.columns == [
+            "season",
+            "week",
+            "game_type",
+            "home_team",
+            "away_team",
+            "result",
+            "neutral",
+        ]
+        assert games["game_type"].to_list() == ["REG", "CONF_CHAMP", "POST", "POST"]
+        assert games["result"].to_list() == [14.0, -3.0, None, 15.0]
+        assert games["neutral"].to_list() == [0, 1, 1, 1]
+
+    def test_mapper_pipes_into_standings(self) -> None:
+        sched = pl.DataFrame(
+            {
+                "season": [2024, 2024],
+                "week": [1, 2],
+                "season_type": ["regular", "regular"],
+                "home_team": ["H", "A"],
+                "away_team": ["A", "H"],
+                "home_points": [21, 14],
+                "away_points": [14, 28],
+                "neutral_site": [False, False],
+                "notes": [None, None],
+            }
+        )
+        games = cfb_games_from_schedule(sched)
+        teams = pl.DataFrame({"team": ["H", "A"], "conference": ["X", "X"]})
+        st = cfb_standings(games, teams)
+        assert isinstance(st, pl.DataFrame)
+        assert {r["team"]: r["wins"] for r in st.iter_rows(named=True)} == {"H": 2, "A": 0}
