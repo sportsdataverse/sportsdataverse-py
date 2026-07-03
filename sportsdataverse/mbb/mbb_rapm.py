@@ -161,6 +161,23 @@ does (``_.omit(results, ["filteredLineups", "teamInfo"])`` before
    no resolvable ``players_array`` membership is therefore (correctly, and
    identically to upstream) treated as "composed entirely of removed
    players" and excluded from ``filtered_lineups``.
+7. **Length mismatch in :func:`calculate_residual_error` raises, TS
+   silently NaNs** (regime: scalar-raise). TS zips ``playerOuts``/
+   ``regressedOuts`` via lodash ``_.zip`` (pads the shorter side with
+   ``undefined``, contributing ``NaN`` to the sum); this port's numpy
+   subtraction raises ``ValueError`` instead. Dead territory -- both args
+   are always index-aligned to the same lineup count in production. A
+   ``NaN`` *value* already inside either input numpy-propagates in both
+   languages. See the function docstring.
+8. **``num_lineups == num_players`` in :func:`calculate_sd_rapm` raises
+   ``ZeroDivisionError``, JS yields ``Infinity``** (regime: scalar-raise;
+   same convention as landmine 2). Not reachable via the oracle fixtures.
+   See the function docstring.
+9. **Negative ``param_errs`` entries in :func:`calculate_sd_rapm`
+   numpy-propagate to ``NaN``** (regime: numpy-propagate, matching JS
+   ``Math.sqrt(negative) -> NaN``) -- only possible if ``XᵀX + λI`` isn't
+   positive-definite (e.g. ``ridge_lambda < 0``). See the function
+   docstring.
 
 **Deliberately NOT ported (this task -- Tasks 3.5-3.6 own these):**
 
@@ -177,10 +194,14 @@ does (``_.omit(results, ["filteredLineups", "teamInfo"])`` before
   (:func:`slow_regression`, :func:`calculate_rapm`,
   :func:`calc_slow_pseudo_inverse`, :func:`calculate_predicted_out`,
   :func:`calculate_residual_error`, :func:`calculate_sd_rapm`) in a
-  ``lambdaRange`` search loop, Task 3.5.
-- ``calcCollinearityDiag`` -- the ``svd-js``-based collinearity-diagnostics
-  surface (the *only* function in this file that actually uses ``SVD`` --
-  see the "2] PROCESSING" section banner below), Task 3.6.
+  ``lambdaRange`` search loop, Task 3.5. Note ``pickRidgeRegression`` also
+  calls ``svd-js``'s ``SVD`` once per side (``RapmUtils.ts:1065-1070``) to
+  compute ``avgEigenVal`` (``:1077``), the mean singular value that scales
+  the lambda range -- Task 3.5 needs ``numpy.linalg.svd`` for that step
+  (this task's six solve functions are ``inv``-only; see the
+  "2] PROCESSING" section banner below).
+- ``calcCollinearityDiag`` -- the other ``SVD`` consumer
+  (``RapmUtils.ts:1643``), the collinearity-diagnostics surface, Task 3.6.
 
 **Task 3.3 coverage gap (inherited from upstream, not introduced by this
 port):** neither ``calcLineupOutputs``'s own jest test nor the vendored
@@ -954,11 +975,16 @@ def calc_lineup_outputs(
 # ``RapmUtils.ts`` imports `svd-js`'s `SVD` (`RapmUtils.ts:101`) but the solve
 # functions below (`slowRegression`/`calculateRapm`/`calcSlowPseudoInverse`)
 # do NOT use it -- they call mathjs's plain `inv()` (an LU/Gauss-Jordan
-# matrix inverse, not an SVD) on `X^T X + lambda I`. `SVD` is reserved for
-# `calcCollinearityDiag` (Task 3.6, `RapmUtils.ts:1643`), a completely
-# separate diagnostic path. There is therefore no SVD-vs-normal-equations
-# parity risk to resolve here: this port uses `numpy.linalg.inv`, the direct
-# equivalent of mathjs `inv()`, matching TS's ACTUAL operation exactly.
+# matrix inverse, not an SVD) on `X^T X + lambda I`. `SVD` IS used elsewhere
+# in the TS file, in exactly two places, both outside this task's six
+# functions: (a) `pickRidgeRegression` (Task 3.5) calls it once per side on
+# the weight matrices (`RapmUtils.ts:1065-1070`) to compute `avgEigenVal`
+# (`:1077`, the mean singular value that scales the lambda range -- Task 3.5
+# needs `numpy.linalg.svd` for that step); and (b) `calcCollinearityDiag`
+# (Task 3.6, `RapmUtils.ts:1643`), a separate diagnostic path. There is
+# therefore no SVD-vs-normal-equations parity risk in THIS layer: this port
+# uses `numpy.linalg.inv`, the direct equivalent of mathjs `inv()`, matching
+# TS's ACTUAL operation exactly.
 # ---------------------------------------------------------------------------
 
 
