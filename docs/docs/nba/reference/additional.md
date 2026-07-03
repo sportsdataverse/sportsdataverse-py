@@ -1596,6 +1596,9 @@ This is the through-date primitive: possessions with `game_date > asof`
 are excluded from the fit entirely (never merely down-weighted), which is
 what makes the panel built from repeated calls to this function leakage-free
 by construction — see `tests/nba/test_nba_ratings_panel.py::test_ratings_as_of_is_leakage_free_append_invariant`.
+NOTE: the leakage property is proven by the append-invariance test TOGETHER
+with the panel's per-date-parity test — neither alone covers
+cross-checkpoint-window leaks; do not prune one without the other.
 
 **Parameters**
 
