@@ -154,6 +154,7 @@ from sportsdataverse.nba import calibrate_pts_per_win as calibrate_pts_per_win  
 from sportsdataverse.nba import calibrate_replacement_level as calibrate_replacement_level  # noqa: F401
 from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
 from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accuracy  # noqa: F401
+from sportsdataverse.nba import decay_weights as decay_weights  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
 from sportsdataverse.nba import espn_nba_calendar as espn_nba_calendar  # noqa: F401
 from sportsdataverse.nba import espn_nba_game_rosters as espn_nba_game_rosters  # noqa: F401
@@ -184,11 +185,15 @@ from sportsdataverse.nba import load_nba_standings as load_nba_standings  # noqa
 from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_schedules  # noqa: F401
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
 from sportsdataverse.nba import load_nba_team_season_stats as load_nba_team_season_stats  # noqa: F401
+from sportsdataverse.nba import luck_adjusted_response as luck_adjusted_response  # noqa: F401
 from sportsdataverse.nba import most_recent_nba_season as most_recent_nba_season  # noqa: F401
 from sportsdataverse.nba import nba_adj_rapm as nba_adj_rapm  # noqa: F401
 from sportsdataverse.nba import nba_box_logs as nba_box_logs  # noqa: F401
 from sportsdataverse.nba import nba_bpm as nba_bpm  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
+from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
+from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
+from sportsdataverse.nba import nba_la_rapm as nba_la_rapm  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
@@ -222,6 +227,7 @@ __all__ = [
     "calibrate_replacement_level",
     "compile_nba_season",
     "darko_forecast_accuracy",
+    "decay_weights",
     "download",
     "espn_nba_award",
     "espn_nba_awards",
@@ -369,11 +375,15 @@ __all__ = [
     "load_nba_stats_schedules",
     "load_nba_team_boxscore",
     "load_nba_team_season_stats",
+    "luck_adjusted_response",
     "most_recent_nba_season",
     "nba_adj_rapm",
     "nba_box_logs",
     "nba_bpm",
     "nba_darko",
+    "nba_decay_rapm",
+    "nba_four_factor_rapm",
+    "nba_la_rapm",
     "nba_pbp_disk",
     "nba_player_ages",
     "nba_player_positions",
