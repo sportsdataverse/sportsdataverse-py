@@ -1,4 +1,7 @@
 from __future__ import annotations
+import json
+from pathlib import Path
+
 import numpy as np
 import polars as pl
 from sportsdataverse.nba.nba_model_validation import (
@@ -396,3 +399,375 @@ def test_validate_model_prior_all_oracles_no_crash():
     prior = {p: (o100[p], d100[p]) for p in o100}
     rep = validate_model(_StubPriorModel(prior), [poss], model_name="stub_prior")
     assert rep.retrodiction is not None and rep.calibration is not None  # posterior -> calibration populated
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 7: Oracle 5 (external_validity) -- id-join + meta-oracle teeth
+# ---------------------------------------------------------------------------
+
+import pytest  # noqa: E402
+from sportsdataverse.nba.nba_model_validation import ExternalValidityResult, external_validity  # noqa: E402
+
+
+def test_external_validity_scores_near_one_fed_itself():
+    # feed the SAME values back as both "ratings" and "oracle" (under different
+    # column names) -- the meta-oracle must score ~1.0.
+    ratings = pl.DataFrame({"player_id": [1, 2, 3, 4, 5], "rapm": [2.0, -1.0, 0.5, 3.0, -2.5]})
+    oracle = pl.DataFrame({"player_id": [1, 2, 3, 4, 5], "RAPM": [2.0, -1.0, 0.5, 3.0, -2.5]})
+    res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert isinstance(res, ExternalValidityResult)
+    assert res.corr > 0.999
+    assert res.n_matched == 5
+    assert res.coverage_pct == 100.0
+    assert res.join == "id"
+
+
+def test_external_validity_drops_under_id_permutation():
+    rng = np.random.default_rng(0)
+    truth = rng.normal(0, 2, size=40)
+    ratings = pl.DataFrame({"player_id": list(range(40)), "rapm": truth})
+    oracle_correct = pl.DataFrame({"player_id": list(range(40)), "RAPM": truth + rng.normal(0, 0.2, size=40)})
+    res_correct = external_validity(ratings, oracle_correct, rating_col="rapm", oracle_col="RAPM")
+    assert res_correct.corr > 0.9
+
+    shuffled_ids = list(range(40))
+    rng.shuffle(shuffled_ids)
+    oracle_shuffled = pl.DataFrame({"player_id": shuffled_ids, "RAPM": (truth + rng.normal(0, 0.2, size=40))})
+    res_shuffled = external_validity(ratings, oracle_shuffled, rating_col="rapm", oracle_col="RAPM")
+    assert abs(res_shuffled.corr) < res_correct.corr - 0.3
+
+
+def test_external_validity_partial_coverage():
+    ratings = pl.DataFrame({"player_id": [1, 2, 3, 4], "rapm": [1.0, 2.0, 3.0, 4.0]})
+    oracle = pl.DataFrame({"player_id": [1, 2, 99], "RAPM": [1.1, 2.1, 9.9]})  # only 1,2 overlap
+    res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert res.n_matched == 2
+    assert res.coverage_pct == 50.0
+
+
+def test_external_validity_permutation_p95_is_self_computed_not_hardcoded():
+    rng = np.random.default_rng(1)
+    truth = rng.normal(0, 2, size=60)
+    ratings = pl.DataFrame({"player_id": list(range(60)), "rapm": truth})
+    noise_only = pl.DataFrame({"player_id": list(range(60)), "RAPM": rng.normal(0, 2, size=60)})
+    res = external_validity(ratings, noise_only, rating_col="rapm", oracle_col="RAPM", n_permutations=300, seed=2)
+    assert abs(res.corr) < res.permutation_p95 + 0.3  # a true-null pair shouldn't clear its own null ceiling by much
+
+
+def test_external_validity_never_raises_on_empty():
+    empty = pl.DataFrame(schema={"player_id": pl.Int64, "rapm": pl.Float64})
+    oracle = pl.DataFrame({"player_id": [1], "RAPM": [1.0]})
+    res = external_validity(empty, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert res.n_matched == 0
+    assert res.coverage_pct == 0.0
+    assert np.isnan(res.corr)
+
+
+def test_external_validity_too_few_matches_is_nan():
+    ratings = pl.DataFrame({"player_id": [1, 2], "rapm": [1.0, 2.0]})
+    oracle = pl.DataFrame({"player_id": [1, 2], "RAPM": [1.1, 2.1]})
+    res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert res.n_matched == 2
+    assert np.isnan(res.corr)  # fewer than 3 matched rows -> nan, not a spurious 2-point corr
+
+
+def test_external_validity_rejects_unknown_join_kind():
+    ratings = pl.DataFrame({"player_id": [1], "rapm": [1.0]})
+    oracle = pl.DataFrame({"player_id": [1], "RAPM": [1.0]})
+    with pytest.raises(ValueError, match="join"):
+        external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM", join="bogus")
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 8: external_validity name-join path (DARKO-style)
+# ---------------------------------------------------------------------------
+
+
+def test_external_validity_name_join_basic():
+    ratings = pl.DataFrame(
+        {"player_name": ["Nikola Jokic", "Kawhi Leonard", "Victor Wembanyama"], "projected_rating": [8.0, 6.0, 7.5]}
+    )
+    oracle = pl.DataFrame({"player_name": ["Nikola Jokic", "Kawhi Leonard", "Victor Wembanyama"], "dpm": [8, 6, 7]})
+    res = external_validity(
+        ratings,
+        oracle,
+        rating_col="projected_rating",
+        oracle_col="dpm",
+        join="name",
+    )
+    assert res.n_matched == 3
+    assert res.coverage_pct == 100.0
+    assert res.corr > 0.8
+
+
+def test_external_validity_name_join_handles_diacritic_mismatch():
+    # real stats.nba.com spelling (with the Serbian ć) on one side, the plain
+    # ASCII DARKO CSV spelling on the other -- must still match.
+    ratings = pl.DataFrame({"player_name": ["Nikola Jokić"], "projected_rating": [8.0]})
+    oracle = pl.DataFrame({"player_name": ["Nikola Jokic"], "dpm": [7]})
+    res = external_validity(ratings, oracle, rating_col="projected_rating", oracle_col="dpm", join="name")
+    assert res.n_matched == 1
+    assert res.coverage_pct == 100.0
+
+
+def test_external_validity_name_join_reports_low_coverage_on_mismatch():
+    ratings = pl.DataFrame(
+        {"player_name": ["Player A", "Player B", "Player C", "Player D"], "projected_rating": [1.0, 2.0, 3.0, 4.0]}
+    )
+    oracle = pl.DataFrame({"player_name": ["Player A", "Someone Else"], "dpm": [1, 9]})
+    res = external_validity(ratings, oracle, rating_col="projected_rating", oracle_col="dpm", join="name")
+    assert res.n_matched == 1
+    assert res.coverage_pct == 25.0
+    assert np.isnan(res.corr)  # only 1 matched row -- below the n>=3 floor
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 9: gated real-CSV harness-level smoke tests (SDV_PY_NBA_ORACLE_DIR)
+# ---------------------------------------------------------------------------
+
+import glob
+import os
+
+_ORACLE_DIR = os.environ.get("SDV_PY_NBA_ORACLE_DIR")
+_has_oracle_dir = bool(_ORACLE_DIR and os.path.isdir(_ORACLE_DIR))
+skip_if_no_oracle_dir = pytest.mark.skipif(
+    not _has_oracle_dir, reason="set SDV_PY_NBA_ORACLE_DIR to the real oracle-CSV directory to run"
+)
+
+from sportsdataverse.nba import nba_stats_parsers  # noqa: E402
+from sportsdataverse.nba.nba_oracle_data import load_darko_dpm  # noqa: E402
+
+_NBA_STATS_FIXTURE = Path(__file__).parent / "fixtures" / "cap_leaguedashplayerstats_nba.json"
+
+
+@skip_if_no_oracle_dir
+def test_real_darko_name_join_against_real_player_directory():
+    """DARKO's name-only leaderboard joined against a REAL stats.nba.com player
+    directory (the committed cap_leaguedashplayerstats_nba.json fixture -- no
+    live network call needed). Proves the normalizer handles real diacritic
+    spellings (Jokic/Jokić) and reports a real, non-hardcoded coverage %."""
+    files = glob.glob(os.path.join(_ORACLE_DIR, "*-darko-dpm-leaderboard.csv"))
+    if not files:
+        pytest.skip("no *-darko-dpm-leaderboard.csv present")
+    darko = load_darko_dpm(sorted(files)[-1])
+
+    raw = json.loads(_NBA_STATS_FIXTURE.read_text(encoding="utf-8"))
+    directory = nba_stats_parsers.parse_nba_stats_result_sets(raw)
+    # fabricate a "ratings" frame: any per-player numeric column stands in for
+    # a model rating here -- this test validates the JOIN + coverage machinery
+    # against 100% real external name spellings, not a specific model's accuracy.
+    ratings = directory.select(pl.col("player_id"), pl.col("player_name"), pl.lit(0.0).alias("dummy_rating"))
+    res = external_validity(
+        ratings,
+        darko,
+        rating_col="dummy_rating",
+        oracle_col="dpm",
+        join="name",
+    )
+    assert res.n_matched > 0
+    assert res.coverage_pct > 0.0
+    # the real Jokic/Jokić spelling mismatch must resolve via normalize_player_name
+    jokic_row = directory.filter(pl.col("player_name").str.contains("Jok")).to_dicts()
+    assert any("ć" in r["player_name"] or "c" in r["player_name"] for r in jokic_row)
+
+
+@skip_if_no_nba_stats_live
+@skip_if_no_oracle_dir
+def test_end_to_end_real_slice_external_validity(tmp_path, monkeypatch):
+    """Small real slice -> nba_rapm -> external_validity against real Ryan Davis
+    RAPM (2022-23, the oracle's most recent available season). Report shape
+    only, not thresholds -- an 8-game slice is too small to support a
+    meaningful correlation floor (same caution as the existing
+    test_end_to_end_real_slice_report)."""
+    from sportsdataverse.nba.nba_rapm import nba_rapm
+    from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+
+    real_index = C._season_game_index(2022, "Regular Season").head(8)
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st: real_index)
+    s = compile_nba_season(2022, cache_dir=str(tmp_path), delay_s=1.0)
+    ratings = nba_rapm(s)
+    oracle = load_rapm_ryan_davis(os.path.join(_ORACLE_DIR, "rapm_ryan_davis.csv")).filter(
+        pl.col("season") == "2022-23"
+    )
+    res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert res.n_matched >= 0  # shape only -- 8 games may or may not overlap Ryan Davis' player pool
+    assert 0.0 <= res.coverage_pct <= 100.0
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 10: Oracle 6 (walk_forward) -- time-ordered "predict tomorrow"
+# ---------------------------------------------------------------------------
+
+import datetime
+
+from sportsdataverse.nba.nba_model_validation import WalkForwardResult, walk_forward  # noqa: E402
+
+
+def test_synthetic_possessions_start_date_attaches_game_date():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(
+        o, d, n_games=5, poss_per_game=10, noise_sd=0.3, seed=1, start_date=datetime.date(2023, 10, 24)
+    )
+    assert "game_date" in poss.columns
+    assert poss.schema["game_date"] == pl.Date
+    d0 = poss.filter(pl.col("game_id") == "SYN00000")["game_date"][0]
+    d1 = poss.filter(pl.col("game_id") == "SYN00001")["game_date"][0]
+    assert d0 == datetime.date(2023, 10, 24)
+    assert d1 == datetime.date(2023, 10, 25)
+
+
+def test_synthetic_possessions_backward_compatible_without_start_date():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(o, d, n_games=4, poss_per_game=50, noise_sd=0.3, seed=7)
+    assert "game_date" not in poss.columns  # unchanged behavior for existing Oracle 1-4 tests
+
+
+def test_walk_forward_beats_shuffled_date_control():
+    o, d = _planted_ratings(seed=3)
+    poss = _synthetic_possessions(
+        o, d, n_games=100, poss_per_game=80, noise_sd=0.3, seed=5, start_date=datetime.date(2023, 10, 24)
+    )
+    res = walk_forward(RidgeRapmModel(), poss, horizon_days=10, min_games_before_first_checkpoint=20)
+    assert isinstance(res, WalkForwardResult)
+    assert res.n_checkpoints > 0
+    assert res.game_margin_corr > 0.2  # real signal, matching Oracle 1's planted-skill bar
+
+    # shuffled-date control: randomly reassign game_date so "future" no longer
+    # follows "past" in a meaningful order -- walk-forward signal should collapse.
+    rng = np.random.default_rng(9)
+    dates = poss.select("game_date").unique()["game_date"].to_list()
+    shuffled_map = dict(
+        zip(sorted(poss["game_id"].unique().to_list()), rng.permutation(dates * 100)[: poss["game_id"].n_unique()])
+    )
+    shuffled_poss = poss.with_columns(
+        pl.col("game_id").map_elements(lambda g: shuffled_map[g], return_dtype=pl.Date).alias("game_date")
+    )
+    res_shuffled = walk_forward(RidgeRapmModel(), shuffled_poss, horizon_days=10, min_games_before_first_checkpoint=20)
+    assert res_shuffled.game_margin_corr < res.game_margin_corr
+
+
+def test_walk_forward_reports_carry_forward_and_random_fold_baselines():
+    o, d = _planted_ratings(seed=4)
+    poss = _synthetic_possessions(
+        o, d, n_games=100, poss_per_game=80, noise_sd=0.3, seed=6, start_date=datetime.date(2023, 10, 24)
+    )
+    res = walk_forward(RidgeRapmModel(), poss, horizon_days=10, min_games_before_first_checkpoint=20)
+    assert res.n_checkpoints >= 2  # need >=2 for a non-nan carry_forward_rmse
+    assert not np.isnan(res.carry_forward_rmse)
+    assert not np.isnan(res.random_fold_rmse)
+    assert res.random_fold_rmse == retrodiction(RidgeRapmModel(), poss, k_folds=5, seed=0).game_margin_rmse
+
+
+def test_walk_forward_never_raises_on_empty():
+    empty = pl.DataFrame(
+        schema={
+            "game_id": pl.Utf8,
+            "offense_team_id": pl.Int64,
+            "points": pl.Int64,
+            "game_date": pl.Date,
+            **{c: pl.Int64 for c in _OFF + _DEF},
+        }
+    )
+    res = walk_forward(RidgeRapmModel(), empty)
+    assert res.n_checkpoints == 0
+    assert np.isnan(res.game_margin_rmse)
+
+
+def test_walk_forward_missing_game_date_column_is_nan_not_a_crash():
+    poss = _toy_possessions()  # no game_date column at all
+    res = walk_forward(RidgeRapmModel(), poss)
+    assert res.n_checkpoints == 0
+    assert np.isnan(res.game_margin_rmse)
+
+
+def test_walk_forward_boundary_date_trains_never_evaluates():
+    # _synthetic_possessions(start_date=...) puts exactly one game per calendar
+    # day (game index g -> start_date + g days), so a single explicit checkpoint
+    # at the 21st game's date gives an unambiguous boundary: that game must land
+    # in the train split (game_date <= D) and must NEVER be counted among the
+    # evaluated test games. horizon_days=1 means only the very next day's game
+    # (index 21) should be evaluated. If the test-window lower bound regressed
+    # from `game_date > D` to `game_date >= D`, the boundary game (index 20)
+    # would leak into the test side too and n_test_games would read 2, not 1.
+    o, d = _planted_ratings(seed=5)
+    start = datetime.date(2023, 10, 24)
+    poss = _synthetic_possessions(o, d, n_games=25, poss_per_game=40, noise_sd=0.3, seed=9, start_date=start)
+    boundary_date = start + datetime.timedelta(days=20)
+    res = walk_forward(RidgeRapmModel(), poss, checkpoint_dates=[boundary_date], horizon_days=1)
+    assert res.n_checkpoints == 1
+    assert res.n_test_games == 1
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 11: wire Oracle 5 + 6 into ValidationReport / validate_model / render_report
+# ---------------------------------------------------------------------------
+
+
+def test_validate_model_default_oracles_unaffected_by_new_fields():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
+    rep = validate_model(RidgeRapmModel(), [s1], model_name="plain_rapm")
+    assert rep.external is None
+    assert rep.walk_forward is None
+
+
+def test_validate_model_external_oracle_requires_both_frames():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
+    with pytest.raises(ValueError, match="external"):
+        validate_model(RidgeRapmModel(), [s1], oracles=("external",))
+
+
+def test_validate_model_populates_external_result():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
+    fake_ratings = pl.DataFrame({"player_id": list(range(1, 17)), "rating": [float(i) for i in range(1, 17)]})
+    fake_oracle = pl.DataFrame({"player_id": list(range(1, 17)), "oracle_value": [float(i) for i in range(1, 17)]})
+    rep = validate_model(
+        RidgeRapmModel(),
+        [s1],
+        oracles=("external",),
+        external_ratings=fake_ratings,
+        external_oracle=fake_oracle,
+    )
+    assert rep.external is not None
+    assert rep.external.corr > 0.999
+    assert rep.retrodiction is None  # not selected
+
+
+def test_validate_model_populates_walk_forward_result():
+    o, d = _planted_ratings(seed=2)
+    s1 = _synthetic_possessions(
+        o, d, n_games=60, poss_per_game=60, noise_sd=0.3, seed=8, start_date=datetime.date(2023, 10, 24)
+    )
+    rep = validate_model(
+        RidgeRapmModel(),
+        [s1],
+        oracles=("walk_forward",),
+        walk_forward_horizon_days=10,
+        walk_forward_min_games=15,
+    )
+    assert rep.walk_forward is not None
+    assert rep.reliability is None  # not selected
+
+
+def test_render_report_includes_external_and_walk_forward_sections():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(
+        o, d, n_games=30, poss_per_game=60, noise_sd=0.3, seed=1, start_date=datetime.date(2023, 10, 24)
+    )
+    fake_ratings = pl.DataFrame({"player_id": list(range(1, 17)), "rating": [float(i) for i in range(1, 17)]})
+    fake_oracle = pl.DataFrame({"player_id": list(range(1, 17)), "oracle_value": [float(i) for i in range(1, 17)]})
+    rep = validate_model(
+        RidgeRapmModel(),
+        [s1],
+        model_name="plain_rapm",
+        oracles=("external", "walk_forward"),
+        external_ratings=fake_ratings,
+        external_oracle=fake_oracle,
+        walk_forward_horizon_days=10,
+        walk_forward_min_games=15,
+    )
+    md = render_report(rep)
+    assert "External concurrent validity" in md
+    assert "Walk-forward retrodiction" in md

@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NBA — external concurrent validity + walk-forward retrodiction (WP3)](#nba--external-concurrent-validity--walk-forward-retrodiction-wp3)
   - [NBA — RAPM variants (WP2)](#nba--rapm-variants-wp2)
   - [NBA — through-date ratings panel, WAR, and single-game BPM (WP4)](#nba--through-date-ratings-panel-war-and-single-game-bpm-wp4)
   - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
@@ -156,6 +157,15 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NBA — external concurrent validity + walk-forward retrodiction (WP3)
+
+- feat(nba): model-zoo v2 WP3 — Oracle 5 external concurrent validity
+  (`external_validity`, five published-metric loaders in `nba_oracle_data.py`:
+  Ryan Davis RAPM, Dunks & Threes EPM, LEBRON season/daily, DARKO DPM,
+  Dunks & Threes ewins) and Oracle 6 walk-forward retrodiction
+  (`walk_forward`, time-ordered "predict tomorrow" with carry-forward and
+  random-fold baselines) in `nba_model_validation.py`.
 
 ### NBA — RAPM variants (WP2)
 

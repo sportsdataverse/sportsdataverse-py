@@ -331,6 +331,7 @@ files = [
     "tools/validation/lint/leakage_python.py",
     "tools/validation/lint/leakage_r.py",
     "sportsdataverse/nba/nba_model_validation.py",
+    "sportsdataverse/nba/nba_oracle_data.py",
     "sportsdataverse/nba/nba_season_compile.py",
     "sportsdataverse/nba/nba_box_logs.py",
     "sportsdataverse/nba/nba_spm.py",
