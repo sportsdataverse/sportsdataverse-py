@@ -1,0 +1,176 @@
+{
+ "LuckUtils LuckUtils - calcDefTeamLuckAdj: Defensive Luck Adjustments 1": {
+  "adjDef3P": 0.32379827978580994,
+  "avg3PSosAdj": 0.0012561111111111195,
+  "avgEff": 100,
+  "base3PSosAdj": -0.0015908882521489841,
+  "baseDef3P": 0.32521489971346706,
+  "baseDef3PA": 698,
+  "baseDef3PSos": 0.3298939828080229,
+  "basePoss": 2081,
+  "delta3P": -0.03764750334672018,
+  "deltaDefAdjEff": -3.2516487055165952,
+  "deltaDefEfg": -0.021749949729311657,
+  "deltaDefOrbFactor": 0.004292591434828319,
+  "deltaDefPpp": -3.429139517883975,
+  "deltaDefPppNoOrb": -3.834040218132239,
+  "deltaMissesPct": 0.014499966486207773,
+  "deltaPtsOffMisses": 0.4049007002482638,
+  "luckPct": 0.66,
+  "sample3PSosAdj": 0.013227228915662642,
+  "sampleDef3P": 0.3614457831325301,
+  "sampleDef3PA": 166,
+  "sampleDef3PRate": 0.3851508120649652,
+  "sampleDef3PSos": 0.3225421686746988,
+  "sampleDefEfg": 0.4733178654292343,
+  "sampleDefFGA": 431,
+  "sampleDefOrb": 0.2947761194029851,
+  "sampleDefPpp": 98.15950920245399,
+  "sampleOffSos": 105.45848670756645,
+  "samplePoss": 489
+ },
+ "LuckUtils LuckUtils - calcOffTeamLuckAdj (+manual overrides): Offensive Luck Adjustments 1": {
+  "avgEff": 100,
+  "base3PA": 765,
+  "delta3P": 0.05255974573674593,
+  "deltaMissesPct": -0.18749247942557806,
+  "deltaOffAdjEff": 11.789718118019456,
+  "deltaOffEfg": 0.1987387191383671,
+  "deltaOffOrbFactor": -0.054802989796280586,
+  "deltaOffPpp": 11.357597719308,
+  "deltaOffPppNoOrb": 9.898209491657834,
+  "deltaPtsOffMisses": -6.481152490398434,
+  "player3PInfo": {
+   "Cowan, Anthony": {
+    "assisted3P": 0.3414544650751547,
+    "base3P": 0.3218390804597701,
+    "baseAssistPct": 0.6730769230769231,
+    "expected3P": 0.5,
+    "shot_info_ast_3pm": 29,
+    "shot_info_early_3pa": 15,
+    "shot_info_scramble_3pa": 7,
+    "shot_info_total_3p": 144,
+    "shot_info_unast_3pm": 15,
+    "shot_info_unknown_3pM": 78,
+    "unassisted3P": 0.2814544650751547
+   },
+   "Wiggins, Aaron": {
+    "assisted3P": 0.3208268079226163,
+    "base3P": 0.31736526946107785,
+    "baseAssistPct": 0.9423076923076923,
+    "expected3P": 0.31700089699144224,
+    "shot_info_ast_3pm": 35,
+    "shot_info_early_3pa": 28,
+    "shot_info_scramble_3pa": 7,
+    "shot_info_total_3p": 133,
+    "shot_info_unast_3pm": 3,
+    "shot_info_unknown_3pM": 60,
+    "unassisted3P": 0.2608268079226163
+   }
+  },
+  "regress3P": 0.3721473746027253,
+  "sample3P": 0.31958762886597936,
+  "sample3PA": 582,
+  "sampleBase3P": 0.4121340046926419,
+  "sampleDefSos": 96.33476903870161,
+  "sampleOff3PRate": 0.4279411764705882,
+  "sampleOffEfg": 0.49779411764705883,
+  "sampleOffFGA": 1360,
+  "sampleOffOrb": 0.30924170616113744,
+  "sampleOffPpp": 108.3645443196005,
+  "samplePoss": 1602
+ },
+ "LuckUtils LuckUtils - calcOffTeamLuckAdj: Offensive Luck Adjustments 1": {
+  "avgEff": 100,
+  "base3PA": 765,
+  "delta3P": -0.00011635237243068364,
+  "deltaMissesPct": 4.979197114313079e-05,
+  "deltaOffAdjEff": -0.011431698376449875,
+  "deltaOffEfg": -7.468795671469618e-05,
+  "deltaOffOrbFactor": 1.5397991203910222e-05,
+  "deltaOffPpp": -0.011012700228153989,
+  "deltaOffPppNoOrb": -0.012681101264917205,
+  "deltaPtsOffMisses": 0.0016684010367632148,
+  "player3PInfo": {
+   "Cowan, Anthony": {
+    "assisted3P": 0.3414544650751547,
+    "base3P": 0.3218390804597701,
+    "baseAssistPct": 0.6730769230769231,
+    "expected3P": 0.32158267020335984,
+    "shot_info_ast_3pm": 29,
+    "shot_info_early_3pa": 15,
+    "shot_info_scramble_3pa": 7,
+    "shot_info_total_3p": 144,
+    "shot_info_unast_3pm": 15,
+    "shot_info_unknown_3pM": 78,
+    "unassisted3P": 0.2814544650751547
+   },
+   "Wiggins, Aaron": {
+    "assisted3P": 0.3208268079226163,
+    "base3P": 0.31736526946107785,
+    "baseAssistPct": 0.9423076923076923,
+    "expected3P": 0.31700089699144224,
+    "shot_info_ast_3pm": 35,
+    "shot_info_early_3pa": 28,
+    "shot_info_scramble_3pa": 7,
+    "shot_info_total_3p": 133,
+    "shot_info_unast_3pm": 3,
+    "shot_info_unknown_3pM": 60,
+    "unassisted3P": 0.2608268079226163
+   }
+  },
+  "regress3P": 0.3194712764935487,
+  "sample3P": 0.31958762886597936,
+  "sample3PA": 582,
+  "sampleBase3P": 0.31938275743373873,
+  "sampleDefSos": 96.33476903870161,
+  "sampleOff3PRate": 0.4279411764705882,
+  "sampleOffEfg": 0.49779411764705883,
+  "sampleOffFGA": 1360,
+  "sampleOffOrb": 0.30924170616113744,
+  "sampleOffPpp": 108.3645443196005,
+  "samplePoss": 1602
+ },
+ "LuckUtils LuckUtils - injectLuck 1": {
+  "def_3p": {
+   "old_value": 0.31390977443609025,
+   "override": "Luck adjusted",
+   "value": 0.32379827978580994
+  },
+  "def_adj_ppp": {
+   "old_value": 90.212208900746,
+   "override": "Adjusted from Def 3P%",
+   "value": 86.9605601952294
+  },
+  "def_efg": {
+   "old_value": 0.4575,
+   "override": "Adjusted from Def 3P%",
+   "value": 0.43575005027068836
+  },
+  "def_ppp": {
+   "old_value": 95.41457286432161,
+   "override": "Adjusted from Def 3P%",
+   "value": 91.98543334643765
+  },
+  "off_3p": {
+   "old_value": 0.31958762886597936,
+   "override": "Luck adjusted",
+   "value": 0.3194712764935487
+  },
+  "off_adj_ppp": {
+   "old_value": 115.21113764911924,
+   "override": "Adjusted from Off 3P%",
+   "value": 115.19970595074278
+  },
+  "off_efg": {
+   "old_value": 0.49779411764705883,
+   "override": "Adjusted from Off 3P%",
+   "value": 0.49771942969034416
+  },
+  "off_ppp": {
+   "old_value": 108.3645443196005,
+   "override": "Adjusted from Off 3P%",
+   "value": 108.35353161937235
+  }
+ }
+}
