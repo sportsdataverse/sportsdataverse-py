@@ -64,11 +64,26 @@ def test_constants_verbatim():
 
 
 def test_build_o_rtg_none_stat_set_returns_all_none():
-    """``buildORtg`` returns an all-``undefined`` 5-tuple for a falsy
-    ``statSet`` (``RatingUtils.ts:412-413``).
+    """``buildORtg`` returns an all-``undefined`` 5-tuple for a
+    null/undefined ``statSet`` (``RatingUtils.ts:412-413``'s
+    ``if (!statSet)``) -- ``None`` only, matching JS object truthiness.
     """
     assert build_o_rtg(None, {}, {}, 100.0, True, False) == (None, None, None, None, None)
-    assert build_o_rtg({}, {}, {}, 100.0, True, False) == (None, None, None, None, None)
+
+
+def test_build_o_rtg_empty_stat_set_falls_through_to_landmine():
+    """``{}`` is truthy in JS, so the TS does NOT short-circuit -- it falls
+    through and computes a degenerate result whose ``Team_FTM / Team_FTA``
+    is ``0/0 = NaN`` (verified against node; the NaN is contained to the
+    ``teamProbFtHitOnePlus`` diagnostic since every downstream use is behind
+    a ``Team_FTA > 0`` guard). This port matches the TS control flow
+    (``is None`` short-circuit only) but, per the module's documented
+    no-NaN-emulation policy (unguarded-division landmine 1,
+    ``RatingUtils.ts:627``), Python raises ``ZeroDivisionError`` at that
+    expression instead of degrading to NaN.
+    """
+    with pytest.raises(ZeroDivisionError):
+        build_o_rtg({}, {}, {}, 100.0, True, False)
 
 
 def test_build_o_rtg_baseline_call(player_info, inputs, snap):

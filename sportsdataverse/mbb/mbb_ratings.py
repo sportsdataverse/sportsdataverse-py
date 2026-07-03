@@ -106,17 +106,33 @@ Ported behavior (``RatingUtils.ts`` anchors):
 **Known unguarded-division landmines (preserved for fidelity).** Several TS
 expressions divide without a ``|| 1`` safety net and rely on JS's
 ``x / 0 -> Infinity`` / ``0 / 0 -> NaN`` semantics rather than raising:
-``Team_Prob_Hit_1plus_FT = 1 - (1 - Team_FTM / Team_FTA) ** 2`` (no guard on
-``Team_FTA``) and ``_build_off_overrides``'s
-``extra_tos = (adj_new_to_pct * curr_poss - old_tos) / (1 - adj_new_to_pct)``
-(no guard when ``adj_new_to_pct == 1``, though it's capped at ``0.9`` just
-above). Python raises ``ZeroDivisionError`` for a literal ``x / 0.0`` where
-JS would silently produce ``inf``/``nan`` and keep going -- this module does
-**not** add a defensive ``or 1`` to these two spots (that would be an
-unfaithful deviation from the TS), so a caller feeding a stat set with
-``team_total_off_fta == 0`` will see an exception where the JS original
-degrades to NaN propagation. None of this task's oracle fixtures exercise
-that edge case.
+
+1. ``Team_Prob_Hit_1plus_FT = 1 - (1 - Team_FTM / Team_FTA) ** 2``
+   (``RatingUtils.ts:627``, no guard on ``Team_FTA``).
+2. ``_build_off_overrides``'s
+   ``extra_tos = (adj_new_to_pct * curr_poss - old_tos) / (1 - adj_new_to_pct)``
+   (``RatingUtils.ts:347``, unguarded when ``adj_new_to_pct == 1``, though
+   the cap to ``0.9`` just above makes the zero denominator unreachable in
+   practice -- the *expression* itself carries no guard).
+3. ``o_adj = avgEfficiency / Def_SOS`` (``RatingUtils.ts:789``, no guard on
+   ``Def_SOS``). ``Def_SOS`` falls back to ``avg_efficiency`` when
+   ``def_adj_opp`` is absent or falsy (the ``|| avgEfficiency`` coalesce at
+   ``RatingUtils.ts:463`` -- note a ``{"value": 0}`` is *also* falsy and
+   folds to the fallback), so the zero denominator is reachable only when
+   the caller passes ``avg_efficiency == 0`` itself -- but the expression
+   carries no guard.
+
+Python raises ``ZeroDivisionError`` for a literal ``x / 0.0`` where JS would
+silently produce ``inf``/``nan`` and keep going -- this module does **not**
+add a defensive ``or 1`` to these spots (that would be an unfaithful
+deviation from the TS), so e.g. a caller feeding a stat set with
+``team_total_off_fta == 0`` -- including the degenerate empty-``{}`` stat
+set, which (matching TS ``!statSet`` truthiness: ``{}`` is truthy in JS)
+does NOT short-circuit and instead falls through into landmine 1 -- will
+see an exception where the JS original degrades to NaN propagation (for the
+``{}`` case the upstream NaN is contained to the ``teamProbFtHitOnePlus``
+diagnostic; every downstream use is behind a ``Team_FTA > 0`` guard). None
+of this task's oracle fixtures exercise these edge cases.
 
 Deferred to Task 2.3 (``.superpowers/sdd/hoop-explorer-port/PLAN-phase2.md``):
 ``build_d_rtg`` (``buildDRtg``, ``RatingUtils.ts:1252``), ``build_net_points``
@@ -309,8 +325,14 @@ def build_o_rtg(
 
     Args:
         stat_set: The player's ``LineupStatSet`` (ES-aggregation-shaped
-            per-player doc, "IndivStatSet" upstream). ``None``/falsy returns
-            an all-``None`` 5-tuple (``RatingUtils.ts:412-413``).
+            per-player doc, "IndivStatSet" upstream). ``None`` returns an
+            all-``None`` 5-tuple (``RatingUtils.ts:412-413``'s
+            ``if (!statSet)`` -- null/undefined only). An **empty dict does
+            NOT short-circuit** (``{}`` is truthy in JS and falls through to
+            compute upstream); in this port it falls into unguarded-division
+            landmine 1 and raises ``ZeroDivisionError`` where the TS
+            degrades to a NaN-laced degenerate result -- see the module
+            docstring's landmine list.
         roster_stats_by_code: ``{player_code: LineupStatSet}`` for every
             player on the roster -- used for the approximate team-ORB
             apportionment and the per-shot-location assisted-eFG fallback.
@@ -372,7 +394,9 @@ def build_o_rtg(
     .. _hoopR: https://hoopR.sportsdataverse.org
     .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    if not stat_set:
+    # TS `if (!statSet)` (RatingUtils.ts:412) -- only null/undefined are
+    # falsy for an object-typed arg; `{}` is truthy in JS and falls through:
+    if stat_set is None:
         return (None, None, None, None, None)
 
     roster = roster_stats_by_code or {}
