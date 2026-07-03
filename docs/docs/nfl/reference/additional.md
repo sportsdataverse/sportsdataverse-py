@@ -5493,6 +5493,45 @@ print(pbp.select("xyac_epa", "xyac_mean_yardage").head())
 pbp.filter(pl.col("xyac_epa").is_not_null()).select("xyac_epa", "xyac_fd").head()
 ```
 
+### `clean_nfl_pbp(df: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#clean_nfl_pbp}
+
+Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port).
+
+See the module docstring for the full column set added, the
+compute-if-absent scope note on `pass`/`rush`, and the lookaround ->
+capture-group regex rewrites.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | An nflverse-shape (or ESPN/native) play-by-play `polars.DataFrame`. Required columns: `desc`, `epa`, `game_id`, `play_id`, `season`, `posteam`. See the module docstring for the full optional-column-with-default list. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+
+**Returns**
+
+The input frame with every §6 column added/overwritten (idempotent -- pre-existing values of those columns, except `pass`/`rush`, are dropped and recomputed). A zero-row input yields a zero-row frame carrying the full documented schema rather than raising.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp
+
+pbp = load_nfl_pbp([2023])
+cleaned = clean_nfl_pbp(pbp)
+print(cleaned.select("name", "id", "fantasy").head())
+
+# Pandas output
+
+cleaned_pd = clean_nfl_pbp(pbp, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+import polars as pl
+cleaned.filter(pl.col("play") == 1).group_by("passer").len()
+```
+
 ### `clear_cache() -> 'None'` {#clear_cache}
 
 Clear both memory and filesystem caches.
@@ -7131,6 +7170,28 @@ wk1.select(["season", "week", "player_display_name", "team_abbr"]).head()
 
 tot = scrape_ngs_week("rushing", 2023, week=0)
 ```
+
+### `team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'` {#team_name_fn}
+
+Fold historical/relocated team codes onto their current abbreviation.
+
+Verbatim port of nflfastR's `team_name_fn` (a plain
+`stringr::str_replace_all` over a 10-entry named vector). Operates as a
+**substring** replace (not a full-value lookup) so it also fixes
+embedded codes like `"SD 49" -> "LAC 49"` on yard-line columns. The
+10 from-codes are disjoint from all of their to-values, so the order of
+the 10 sequential replacements does not matter (verified in
+`tests.nfl.test_nfl_clean`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `expr` | `Expr` |  | A `polars.Expr` over a Utf8 column (e.g. `pl.col("posteam")`). |
+
+**Returns**
+
+The same expression with every occurrence of the 10 historical codes replaced by their current-franchise code.
 
 ### `update_config(**kwargs: 'object') -> 'NflConfig'` {#update_config}
 

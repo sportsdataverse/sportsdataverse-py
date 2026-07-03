@@ -160,6 +160,7 @@ from sportsdataverse.nfl import calculate_win_probability as calculate_win_proba
 from sportsdataverse.nfl import calculate_wpa as calculate_wpa  # noqa: F401
 from sportsdataverse.nfl import calculate_xpass as calculate_xpass  # noqa: F401
 from sportsdataverse.nfl import calculate_xyac as calculate_xyac  # noqa: F401
+from sportsdataverse.nfl import clean_nfl_pbp as clean_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import clear_cache as clear_cache  # noqa: F401
 from sportsdataverse.nfl import download as download  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_calendar as espn_nfl_calendar  # noqa: F401
@@ -265,6 +266,7 @@ from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.nfl import scrape_ngs_season as scrape_ngs_season  # noqa: F401
 from sportsdataverse.nfl import scrape_ngs_week as scrape_ngs_week  # noqa: F401
 from sportsdataverse.nfl import season_not_found_error as season_not_found_error  # noqa: F401
+from sportsdataverse.nfl import team_name_fn as team_name_fn  # noqa: F401
 from sportsdataverse.nfl import underscore as underscore  # noqa: F401
 from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 
@@ -284,6 +286,7 @@ __all__ = [
     "calculate_wpa",
     "calculate_xpass",
     "calculate_xyac",
+    "clean_nfl_pbp",
     "clear_cache",
     "download",
     "espn_nfl_award",
@@ -511,6 +514,7 @@ __all__ = [
     "scrape_ngs_season",
     "scrape_ngs_week",
     "season_not_found_error",
+    "team_name_fn",
     "underscore",
     "update_config",
 ]
