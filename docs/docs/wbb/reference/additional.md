@@ -562,6 +562,130 @@ sched = espn_wbb_schedule(dates=season)
 
 ## Other
 
+### `build_efficiency_margins(mutable_stat_set: 'LineupStatSet', key_override: 'str | None' = None) -> 'None'` {#build_efficiency_margins}
+
+Derive `off_net` / `off_raw_net` on a stat set, in place.
+
+Faithful port of `LineupUtils.buildEfficiencyMargins` (`LineupUtils.ts:145`).
+`off_net` is `off_adj_ppp - def_adj_ppp` (adjusted efficiency margin);
+`off_raw_net` is `off_ppp - def_ppp` (raw/unadjusted margin). Both are
+only written when their two source fields are both present on
+`mutable_stat_set`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `mutable_stat_set` | `LineupStatSet` |  | The `LineupStatSet` (or team-report equivalent) to mutate in place. |
+| `key_override` | `str \| None` | `None` | `"value"` or `"old_value"` -- which sub-key to read from the source fields and write into `off_net` / `off_raw_net`. When `None` (the default), the upstream `nonLuckKey` fallback applies: use `"old_value"` if `mutable_stat_set["off_ppp"]["old_value"]` is present, otherwise `"value"`. When given explicitly, the written field is merged onto any existing `off_net` / `off_raw_net` dict (so a second call with the other key preserves the first call's key) rather than replacing it outright. |
+
+**Returns**
+
+None. `mutable_stat_set` is mutated in place.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import build_efficiency_margins
+
+build_efficiency_margins(team_info, "value")
+off_ppp = team_info.get("off_ppp")
+if isinstance(off_ppp, dict) and off_ppp.get("old_value") is not None:
+    build_efficiency_margins(team_info, "old_value")
+print(team_info["off_net"]["value"])
+```
+
+### `calculate_aggregated_lineup_stats(lineups: 'list[LineupStatSet] | None') -> 'LineupStatSet'` {#calculate_aggregated_lineup_stats}
+
+Combine all lineups into a single team stat set.
+
+Faithful port of `LineupUtils.calculateAggregatedLineupStats`
+(`LineupUtils.ts:106`). Seeds an accumulator from
+`StatModels.emptyLineup()` (`{"key": "empty", "doc_count": 0}`) plus
+an `all_lineups` sub-accumulator of the same shape, then merges every
+lineup via `weighted_avg`: lineups without a truthy `rapmRemove`
+key merge into the main accumulator, while `rapmRemove` lineups merge
+into `all_lineups` instead (their contribution is folded back in
+afterward). Calls `complete_weighted_avg` to turn the main
+accumulator's weighted sums into weighted averages, then -- because
+`StatModels.emptyLineup()` always carries `key`/`doc_count` and so
+is never considered "empty" by the upstream `lodash.isEmpty` check --
+unconditionally re-merges the (now-averaged) team totals into
+`all_lineups` and finishes that sub-accumulator too. Finally rebuilds
+`off_net` / `off_raw_net` via `build_efficiency_margins`
+(value-key always; old-value-key too when the team is in luck-adjusted
+mode, i.e. `off_ppp.old_value` is present) -- but only on the top-level
+result, matching upstream's "don't bother for all_lineups" comment.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `list[LineupStatSet] \| None` |  | The per-lineup `LineupStatSet` docs to fold together (e.g. the ES aggregation buckets under `responses[0].aggregations.lineups.buckets`). `None` or an empty list yields an all-zero/empty team stat set (mirrors the upstream `lineups \|\| []` guard). |
+
+**Returns**
+
+The aggregated team-total `LineupStatSet`, including a nested `all_lineups` key holding the `rapmRemove`-lineups-plus-team-total composite sub-aggregate.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import calculate_aggregated_lineup_stats
+
+buckets = raw_response["responses"][0]["aggregations"]["lineups"]["buckets"]
+team_info = calculate_aggregated_lineup_stats(buckets)
+print(team_info["off_ppp"]["value"], team_info["off_poss"]["value"])
+
+# RAPM-exclusion flag
+
+buckets[1]["rapmRemove"] = True  # divert into all_lineups instead
+team_info = calculate_aggregated_lineup_stats(buckets)
+```
+
+### `complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'` {#complete_weighted_avg}
+
+Finish a `weighted_avg` accumulator into true weighted averages.
+
+Faithful port of `LineupUtils.completeWeightedAvg` (`LineupUtils.ts:752`).
+Mutates `mutable_acc` in place and returns `None`, mirroring the
+upstream `void` + mutable-arg contract. Recomputes the per-field weight
+tables from `mutable_acc` itself (`getSimpleWeights(mutableAcc, 1,
+regressDiffs)` -- note the `default_val=1`, unlike `weighted_avg`'s
+`default_val=0`), then, unless `harmonic_weighting` is set, calls
+recalculate_play_type_poss` to fix up the transition/scramble
+possession fields that `weighted_avg` skipped. Finally divides every
+non-ignored field's accumulated weighted sum by its matching weight
+total (shot-type / `ppp_totals` / `orb_totals` / `fta_totals` /
+`ast_totals` / generic FGA fallback); `total_*` and `SUM_FIELDS`
+fields are left untouched (they are already true totals, not sums to be
+averaged). `off_ftr` / `def_ftr` get a special non-`harmonic_weighting`
+recompute straight from the accumulated `total_{off|def}_fta` rather
+than dividing their own weighted sum.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `mutable_acc` | `LineupStatSet` |  | The `weighted_avg`-accumulated `LineupStatSet` to finish in place. Every field with a non-`total_`/`SUM_FIELDS` key is converted from a weighted sum to a weighted average. |
+| `harmonic_weighting` | `bool` | `False` | When `True`, skips the recalculate_play_type_poss` fixup and uses a harmonic-style division for `off_ftr`/`def_ftr` instead of the totals-based recompute. Matches the upstream default (`False`) used by `calculate_aggregated_lineup_stats`. |
+| `regress_diffs` | `float` | `0.0` | Forwarded to get_simple_weights` -- regression toward ~1000 possessions for on/off diff calculations. Defaults to `0.0` (no regression), matching `calculate_aggregated_lineup_stats`'s call site. |
+
+**Returns**
+
+None. `mutable_acc` is mutated in place.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg, complete_weighted_avg
+
+acc: dict = {}
+for lineup in lineups:
+    weighted_avg(acc, lineup)
+complete_weighted_avg(acc)
+print(acc["off_ppp"]["value"])  # now a true weighted average
+```
+
 ### `espn_wbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wbb_teams}
 
 espn_wbb_teams - look up the women's college basketball teams
@@ -613,6 +737,90 @@ d2_d3 = espn_wbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
+### `get_stats_diff(stat_set1: 'LineupStatSet', stat_set2: 'LineupStatSet', off_title: 'str', def_title: 'str | None' = None) -> 'LineupStatSet'` {#get_stats_diff}
+
+Straight (unweighted) field-by-field diff of two team stat sets.
+
+Faithful port of `LineupUtils.getStatsDiff` (`LineupUtils.ts:185`).
+For every field on `stat_set1`, subtracts the matching field's
+`value` (and, when both sides carry one, `old_value`) from
+`stat_set2`. No possession weighting or regression -- this is a raw
+subtraction, unlike `weighted_avg` / `complete_weighted_avg`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stat_set1` | `LineupStatSet` |  | The "from" team stat set (e.g. this team). |
+| `stat_set2` | `LineupStatSet` |  | The "to subtract" team stat set (e.g. the opponent, or a prior period). |
+| `off_title` | `str` |  | Written into the result's `off_title` field verbatim. |
+| `def_title` | `str \| None` | `None` | Written into the result's `def_title` field verbatim (`None` when omitted, mirroring the upstream optional arg). |
+
+**Returns**
+
+A new `LineupStatSet`: one `{"value": ..., "old_value": ..., "override": ...}` dict per field present on `stat_set1`, plus `off_title` / `def_title`. A field becomes `None` (the JS `undefined` analog) instead of a diff dict when either side is missing a `value` -- e.g. because that field was never populated for one of the two stat sets.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import get_stats_diff
+
+diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
+print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
+```
+
+### `lineup_to_team_report(lineup_report: 'LineupStatSet', inc_replacement: 'bool' = False, regress_diffs: 'float' = 0.0, rep_on_off_diag_mode: 'int' = 0) -> 'LineupStatSet'` {#lineup_to_team_report}
+
+Build per-player on/off splits out of a team's lineups.
+
+Faithful port of `LineupUtils.lineupToTeamReport` (`LineupUtils.ts:277`).
+For every distinct player across `lineup_report["lineups"]`, partitions
+the team's lineups into ON (the player was on the floor) and OFF (they
+weren't) buckets, merging each bucket via `weighted_avg` /
+`complete_weighted_avg`. Also builds a `teammates` map of
+possession overlap with every other player, and -- when
+`inc_replacement=True` -- a "replacement" on-minus-off composite via
+combine_replacement_on_off`.
+
+Lineups whose `key` is the empty string are skipped in the
+on/off-partition loop (workaround for an upstream data issue, tracked
+as upstream issue #53) but still contribute to the player roster.
+Every lineup's `rapmRemove` key (if present, e.g. left over from a
+prior `calculate_aggregated_lineup_stats` call sharing the same
+input list) is deleted as a side effect while building the roster --
+`lineup_to_team_report` itself never consults `rapmRemove`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_report` | `LineupStatSet` |  | `{"lineups": [...], "avgOff": ..., "error_code": ...}` -- the per-team lineup list plus metadata (mirrors upstream's `LineupStatsModel`). Only `lineups` and `error_code` are consumed here. |
+| `inc_replacement` | `bool` | `False` | When `True`, additionally builds each player's `replacement` on-minus-off composite (more expensive -- scans every OFF lineup against every ON lineup for a 4-of-5-shared- players complement match). |
+| `regress_diffs` | `float` | `0.0` | Forwarded to combine_replacement_on_off`'s final `complete_weighted_avg` call -- regression toward ~1000 possessions for the replacement diff (only meaningful when `inc_replacement=True`). |
+| `rep_on_off_diag_mode` | `int` | `0` | When `> 0`, retains diagnostic detail (`myLineups` on each player's replacement entry, plus `lineupUsage` bookkeeping) instead of discarding it after use. |
+
+**Returns**
+
+{code: id}, "players": [...], "error_code": ...}`. Each entry in `players` is `{"playerId", "playerCode", "teammates", "on", "off", "replacement"}` -- `on`/`off` are finished `LineupStatSet` averages (or, for a player who's always ON, an all-zero `off`); `replacement` is `None` unless `inc_replacement=True``.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
+
+report = lineup_to_team_report({"lineups": buckets, "error_code": None})
+for player in report["players"]:
+    print(player["playerId"], player["on"]["off_poss"]["value"])
+
+# With replacement (on-minus-off) splits
+
+report = lineup_to_team_report(
+    {"lineups": buckets, "error_code": None},
+    inc_replacement=True,
+    regress_diffs=-500,
+)
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -633,3 +841,49 @@ _No description available._
 |---|---|---|---|
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
+
+### `weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'` {#weighted_avg}
+
+Merge `obj` into `mutable_acc` with possession weighting.
+
+Faithful port of `LineupUtils.weightedAvg` (`LineupUtils.ts:645`).
+Mutates `mutable_acc` in place (matching the upstream mutable-state
+contract) and returns `None`. Each call accumulates a **weighted
+sum**, not a weighted average -- the companion `completeWeightedAvg`
+(upstream `LineupUtils.ts:752`, not yet ported) divides by the
+accumulated weight totals to finish the average. The per-field weight
+used at each merge step is derived from `obj`'s *own* totals (e.g.
+that single lineup's `total_off_fga`), not from any running total on
+`mutable_acc` -- callers accumulating many lineups must call
+`weighted_avg` once per lineup so every lineup contributes its own
+weight.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `mutable_acc` | `LineupStatSet` |  | The running accumulator (`LineupStatSet`). Mutated in place; fields absent from the accumulator are initialized to `{"value": 0.0}` (plus `old_value` / `override` when `obj`'s field carries a luck-adjustment `override` marker) before `obj`'s contribution is added. |
+| `obj` | `LineupStatSet` |  | The per-lineup `LineupStatSet` document to merge in. |
+
+**Returns**
+
+None. `mutable_acc` is mutated in place.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg
+
+acc: dict = {}
+weighted_avg(acc, lineup_a)
+weighted_avg(acc, lineup_b)
+print(acc["off_poss"]["value"])  # plain sum (SUM_FIELDS)
+
+# Two-lineup possession-weighted merge
+
+acc = {}
+for lineup in three_lineups:
+    weighted_avg(acc, lineup)
+# acc now holds weighted SUMS; complete_weighted_avg (not yet
+# ported) is required to turn these into rate-stat averages.
+```
