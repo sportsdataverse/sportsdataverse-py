@@ -133,7 +133,19 @@ from sportsdataverse.wbb import espn_wbb_transactions as _raw_espn_wbb_transacti
 from sportsdataverse.wbb import espn_wbb_venue as _raw_espn_wbb_venue
 from sportsdataverse.wbb import espn_wbb_venues as _raw_espn_wbb_venues
 from sportsdataverse.wbb import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
+from sportsdataverse.wbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
+from sportsdataverse.wbb import build_3p_shot_info as build_3p_shot_info  # noqa: F401
+from sportsdataverse.wbb import build_adjusted_3p as build_adjusted_3p  # noqa: F401
+from sportsdataverse.wbb import build_d_rtg as build_d_rtg  # noqa: F401
 from sportsdataverse.wbb import build_efficiency_margins as build_efficiency_margins  # noqa: F401
+from sportsdataverse.wbb import build_exp_3p as build_exp_3p  # noqa: F401
+from sportsdataverse.wbb import build_net_points as build_net_points  # noqa: F401
+from sportsdataverse.wbb import build_o_rtg as build_o_rtg  # noqa: F401
+from sportsdataverse.wbb import build_productivity as build_productivity  # noqa: F401
+from sportsdataverse.wbb import calc_def_player_luck_adj as calc_def_player_luck_adj  # noqa: F401
+from sportsdataverse.wbb import calc_def_team_luck_adj as calc_def_team_luck_adj  # noqa: F401
+from sportsdataverse.wbb import calc_off_player_luck_adj as calc_off_player_luck_adj  # noqa: F401
+from sportsdataverse.wbb import calc_off_team_luck_adj as calc_off_team_luck_adj  # noqa: F401
 from sportsdataverse.wbb import calculate_aggregated_lineup_stats as calculate_aggregated_lineup_stats  # noqa: F401
 from sportsdataverse.wbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
 from sportsdataverse.wbb import download as download  # noqa: F401
@@ -157,6 +169,7 @@ from sportsdataverse.wbb import helper_wbb_pbp_features as helper_wbb_pbp_featur
 from sportsdataverse.wbb import helper_wbb_pickcenter as helper_wbb_pickcenter  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_roster_items as helper_wbb_roster_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import inject_luck as inject_luck  # noqa: F401
 from sportsdataverse.wbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
 from sportsdataverse.wbb import load_wbb_game_rosters as load_wbb_game_rosters  # noqa: F401
 from sportsdataverse.wbb import load_wbb_officials as load_wbb_officials  # noqa: F401
@@ -178,7 +191,19 @@ from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
 
 __all__ = [
     "SeasonNotFoundError",
+    "adjust_off_rating_stats",
+    "build_3p_shot_info",
+    "build_adjusted_3p",
+    "build_d_rtg",
     "build_efficiency_margins",
+    "build_exp_3p",
+    "build_net_points",
+    "build_o_rtg",
+    "build_productivity",
+    "calc_def_player_luck_adj",
+    "calc_def_team_luck_adj",
+    "calc_off_player_luck_adj",
+    "calc_off_team_luck_adj",
     "calculate_aggregated_lineup_stats",
     "complete_weighted_avg",
     "download",
@@ -311,6 +336,7 @@ __all__ = [
     "helper_wbb_pickcenter",
     "helper_wbb_roster_items",
     "helper_wbb_team_items",
+    "inject_luck",
     "lineup_to_team_report",
     "load_wbb_game_rosters",
     "load_wbb_officials",
