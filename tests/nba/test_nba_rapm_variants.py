@@ -11,6 +11,7 @@ from sportsdataverse.nba.nba_model_validation import _synthetic_possessions
 from sportsdataverse.nba.nba_rapm import nba_rapm
 from sportsdataverse.nba.nba_rapm_variants import (
     DECAY_RAPM_SCHEMA,
+    LA_RAPM_SCHEMA,
     ORACLE_RAPM_LAMBDAS,
     _fit_weighted,
     _prepare,
@@ -18,6 +19,7 @@ from sportsdataverse.nba.nba_rapm_variants import (
     decay_weights,
     luck_adjusted_response,
     nba_decay_rapm,
+    nba_la_rapm,
     oracle_rapm_alphas,
 )
 
@@ -253,3 +255,50 @@ def test_decay_rapm_weighting_changes_fit():
 def test_decay_rapm_schema_and_dtypes():
     out = nba_decay_rapm(_synth_with_dates())
     assert dict(out.schema) == DECAY_RAPM_SCHEMA
+
+
+def test_la_rapm_empty_input():
+    empty_sh = pl.DataFrame(
+        schema={
+            "game_id": pl.Utf8,
+            "possession_number": pl.Int64,
+            "player_id": pl.Int64,
+            "team_id": pl.Int64,
+            "fg2a": pl.Int64,
+            "fg2m": pl.Int64,
+            "fg3a": pl.Int64,
+            "fg3m": pl.Int64,
+            "fta": pl.Int64,
+            "ftm": pl.Int64,
+        }
+    )
+    out = nba_la_rapm(pl.DataFrame(), empty_sh)
+    assert out.height == 0 and dict(out.schema) == LA_RAPM_SCHEMA
+
+
+def test_la_rapm_equals_plain_rapm_when_rates_realized():
+    poss = _with_possession_number(_synth()).with_columns((pl.col("points") // 3).alias("fg3m"), pl.lit(1).alias("ftm"))
+    poss = poss.with_columns(
+        ((pl.col("points") - 3 * pl.col("fg3m") - pl.col("ftm")).clip(0) // 2).alias("fg2m")
+    ).with_columns((2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("points"))
+    sh = _shooting_for(poss)
+    realized = {
+        int(r["player_id"]): (
+            (r["fg3m"] / r["fg3a"]) if r["fg3a"] else 0.0,
+            (r["ftm"] / r["fta"]) if r["fta"] else 0.0,
+        )
+        for r in sh.group_by("player_id").agg(pl.col(["fg3a", "fg3m", "fta", "ftm"]).sum()).iter_rows(named=True)
+    }
+    la = nba_la_rapm(poss, sh, realized).sort("player_id")
+    ref = nba_rapm(poss).sort("player_id")
+    # la_points == points => LA-RAPM == plain RAPM (formula-independent invariant)
+    assert np.allclose(la["la_rapm"].to_numpy(), ref["rapm"].to_numpy(), atol=1e-6)
+
+
+def test_la_rapm_schema_and_dtypes():
+    poss = _with_possession_number(_synth()).with_columns(
+        pl.lit(0).alias("fg3m"), pl.lit(0).alias("ftm"), (pl.col("points") // 2).alias("fg2m")
+    )
+    out = nba_la_rapm(poss, _shooting_for(poss))
+    assert dict(out.schema) == LA_RAPM_SCHEMA
+    assert out.height > 0

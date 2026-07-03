@@ -490,3 +490,107 @@ def luck_adjusted_response(
     return out.with_columns((2.0 * pl.col("fg2m") + pl.col("exp_extra")).cast(pl.Float64).alias("la_points")).drop(
         "exp_extra"
     )
+
+
+#: Output schema for :func:`nba_la_rapm`.
+LA_RAPM_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "o_la_rapm": pl.Float64,
+    "d_la_rapm": pl.Float64,
+    "la_rapm": pl.Float64,
+    "off_poss": pl.Int64,
+    "def_poss": pl.Int64,
+}
+
+
+def nba_la_rapm(
+    possessions: pl.DataFrame,
+    shooting: pl.DataFrame,
+    player_rates: Optional[dict[int, tuple[float, float]]] = None,
+    *,
+    alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    fg3_k: float = 100.0,
+    ft_k: float = 50.0,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
+
+    Replaces realized 3-point and free-throw outcomes with the shooter's shrunk
+    expected value (:func:`luck_adjusted_response`); 2-pt makes stay realized.
+    **DECISION 2/3/4** govern the response recipe and shrinkage constants.
+
+    .. note::
+        **Ridge schedule, deliberately NOT the oracle default**: unlike
+        :func:`nba_decay_rapm`'s decay-weighted branch, this function fits
+        with :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` and
+        sklearn's efficient default LOOCV (``cv=None``) -- **the exact
+        schedule** :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` itself
+        uses. There is no data-independent "disable substitution" flag on
+        this function's signature (unlike ``nba_decay_rapm``'s ``asof``),
+        so the reduces-to-plain-RAPM invariant
+        (``test_la_rapm_equals_plain_rapm_when_rates_realized``) can only
+        hold when the fitting schedule is identical to ``nba_rapm``'s own --
+        that invariant is this function's correctness gate. Pass an explicit
+        ``alphas=oracle_rapm_alphas(n_samples)`` to opt into the WP2 oracle
+        grid instead; note that doing so does *not* also switch ``cv`` (this
+        function has no ``cv`` parameter), so an oracle-alphas override still
+        fits under sklearn's efficient LOOCV rather than the oracle's
+        explicit 5-fold.
+
+    Args:
+        possessions: Possession+lineup frame with team-level ``fg2m`` and the
+            ten lineup columns; join keys ``game_id`` + ``possession_number``.
+        shooting: Per-(possession, shooter) frame from ``build_possession_shooting``.
+        player_rates: Optional ``{player_id: (p3, pft)}`` override; ``None`` →
+            shrink from ``shooting``.
+        alphas: RidgeCV alpha grid. Defaults to
+            :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` (see note
+            above for why this differs from the other WP2 variants' oracle default).
+        fg3_k: 3-point shrinkage pseudo-count, forwarded to
+            :func:`luck_adjusted_response` when ``player_rates`` is ``None``.
+        ft_k: Free-throw shrinkage pseudo-count, forwarded to
+            :func:`luck_adjusted_response` when ``player_rates`` is ``None``.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        Frame with :data:`LA_RAPM_SCHEMA`. Empty input → zero-row frame.
+
+    Example:
+        Fit LA-RAPM over a compiled season plus its shooting companion::
+
+            from sportsdataverse.nba.nba_rapm_variants import nba_la_rapm
+            df = nba_la_rapm(season_poss, season_shooting)
+            print(df.sort("la_rapm", descending=True).head())
+
+        Planted-truth shooter rates (e.g. for testing)::
+
+            df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
+
+        See Also:
+            * `NBA_Tutorials (Ryan Davis)`_ — the oracle RAPM reference implementation
+            * `nba_api`_ — upstream play-by-play / shooting source
+
+        .. _NBA_Tutorials (Ryan Davis): https://github.com/rd11490/NBA_Tutorials
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    if possessions.is_empty():
+        out = _empty(LA_RAPM_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    enriched = luck_adjusted_response(possessions, shooting, player_rates, fg3_k=fg3_k, ft_k=ft_k)
+    X, y, _w, pids = _prepare(enriched, "la_points", weight_col=None)
+    if not pids:
+        out = _empty(LA_RAPM_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+    o, d, off_poss, def_poss = _fit_weighted(X, y, alphas=alphas)
+    out = pl.DataFrame(
+        {
+            "player_id": pl.Series(pids, dtype=pl.Int64),
+            "o_la_rapm": pl.Series(o, dtype=pl.Float64),
+            "d_la_rapm": pl.Series(d, dtype=pl.Float64),
+            "la_rapm": pl.Series(o + d, dtype=pl.Float64),
+            "off_poss": pl.Series(off_poss, dtype=pl.Int64),
+            "def_poss": pl.Series(def_poss, dtype=pl.Int64),
+        }
+    ).sort("player_id")
+    return out.to_pandas() if return_as_pandas else out
