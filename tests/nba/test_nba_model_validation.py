@@ -592,3 +592,89 @@ def test_end_to_end_real_slice_external_validity(tmp_path, monkeypatch):
     res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
     assert res.n_matched >= 0  # shape only -- 8 games may or may not overlap Ryan Davis' player pool
     assert 0.0 <= res.coverage_pct <= 100.0
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 10: Oracle 6 (walk_forward) -- time-ordered "predict tomorrow"
+# ---------------------------------------------------------------------------
+
+import datetime
+
+from sportsdataverse.nba.nba_model_validation import WalkForwardResult, walk_forward  # noqa: E402
+
+
+def test_synthetic_possessions_start_date_attaches_game_date():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(
+        o, d, n_games=5, poss_per_game=10, noise_sd=0.3, seed=1, start_date=datetime.date(2023, 10, 24)
+    )
+    assert "game_date" in poss.columns
+    assert poss.schema["game_date"] == pl.Date
+    d0 = poss.filter(pl.col("game_id") == "SYN00000")["game_date"][0]
+    d1 = poss.filter(pl.col("game_id") == "SYN00001")["game_date"][0]
+    assert d0 == datetime.date(2023, 10, 24)
+    assert d1 == datetime.date(2023, 10, 25)
+
+
+def test_synthetic_possessions_backward_compatible_without_start_date():
+    o, d = _planted_ratings()
+    poss = _synthetic_possessions(o, d, n_games=4, poss_per_game=50, noise_sd=0.3, seed=7)
+    assert "game_date" not in poss.columns  # unchanged behavior for existing Oracle 1-4 tests
+
+
+def test_walk_forward_beats_shuffled_date_control():
+    o, d = _planted_ratings(seed=3)
+    poss = _synthetic_possessions(
+        o, d, n_games=100, poss_per_game=80, noise_sd=0.3, seed=5, start_date=datetime.date(2023, 10, 24)
+    )
+    res = walk_forward(RidgeRapmModel(), poss, horizon_days=10, min_games_before_first_checkpoint=20)
+    assert isinstance(res, WalkForwardResult)
+    assert res.n_checkpoints > 0
+    assert res.game_margin_corr > 0.2  # real signal, matching Oracle 1's planted-skill bar
+
+    # shuffled-date control: randomly reassign game_date so "future" no longer
+    # follows "past" in a meaningful order -- walk-forward signal should collapse.
+    rng = np.random.default_rng(9)
+    dates = poss.select("game_date").unique()["game_date"].to_list()
+    shuffled_map = dict(
+        zip(sorted(poss["game_id"].unique().to_list()), rng.permutation(dates * 100)[: poss["game_id"].n_unique()])
+    )
+    shuffled_poss = poss.with_columns(
+        pl.col("game_id").map_elements(lambda g: shuffled_map[g], return_dtype=pl.Date).alias("game_date")
+    )
+    res_shuffled = walk_forward(RidgeRapmModel(), shuffled_poss, horizon_days=10, min_games_before_first_checkpoint=20)
+    assert res_shuffled.game_margin_corr < res.game_margin_corr
+
+
+def test_walk_forward_reports_carry_forward_and_random_fold_baselines():
+    o, d = _planted_ratings(seed=4)
+    poss = _synthetic_possessions(
+        o, d, n_games=100, poss_per_game=80, noise_sd=0.3, seed=6, start_date=datetime.date(2023, 10, 24)
+    )
+    res = walk_forward(RidgeRapmModel(), poss, horizon_days=10, min_games_before_first_checkpoint=20)
+    assert res.n_checkpoints >= 2  # need >=2 for a non-nan carry_forward_rmse
+    assert not np.isnan(res.carry_forward_rmse)
+    assert not np.isnan(res.random_fold_rmse)
+    assert res.random_fold_rmse == retrodiction(RidgeRapmModel(), poss, k_folds=5, seed=0).game_margin_rmse
+
+
+def test_walk_forward_never_raises_on_empty():
+    empty = pl.DataFrame(
+        schema={
+            "game_id": pl.Utf8,
+            "offense_team_id": pl.Int64,
+            "points": pl.Int64,
+            "game_date": pl.Date,
+            **{c: pl.Int64 for c in _OFF + _DEF},
+        }
+    )
+    res = walk_forward(RidgeRapmModel(), empty)
+    assert res.n_checkpoints == 0
+    assert np.isnan(res.game_margin_rmse)
+
+
+def test_walk_forward_missing_game_date_column_is_nan_not_a_crash():
+    poss = _toy_possessions()  # no game_date column at all
+    res = walk_forward(RidgeRapmModel(), poss)
+    assert res.n_checkpoints == 0
+    assert np.isnan(res.game_margin_rmse)

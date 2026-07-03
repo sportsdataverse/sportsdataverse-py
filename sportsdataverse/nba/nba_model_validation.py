@@ -8,6 +8,7 @@ synthetic meta-oracle that proves the harness itself correct.
 
 from __future__ import annotations
 
+import datetime
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Protocol, Tuple, TypeAlias, Union
 
@@ -359,7 +360,9 @@ def retrodiction(
     if possessions.is_empty():
         return RetrodictionResult(float("nan"), float("nan"), float("nan"), float("nan"), 0)
 
-    games = possessions["game_id"].unique().to_list()
+    games = sorted(
+        possessions["game_id"].unique().to_list()
+    )  # sort: polars unique() order isn't guaranteed stable across calls
     rng = np.random.default_rng(seed)
     rng.shuffle(games)
     folds = np.array_split(np.array(games, dtype=object), min(k_folds, len(games)))
@@ -468,7 +471,9 @@ def reliability(model: AnyModel, possessions: pl.DataFrame, *, seed: int = 0) ->
     """
     if possessions.is_empty():
         return ReliabilityResult(float("nan"), float("nan"), 0)
-    games = possessions["game_id"].unique().to_list()
+    games = sorted(
+        possessions["game_id"].unique().to_list()
+    )  # sort: polars unique() order isn't guaranteed stable across calls
     rng = np.random.default_rng(seed)
     rng.shuffle(games)
     mid = len(games) // 2
@@ -633,7 +638,9 @@ def calibration(
     """
     if possessions.is_empty():
         return None
-    games = possessions["game_id"].unique().to_list()
+    games = sorted(
+        possessions["game_id"].unique().to_list()
+    )  # sort: polars unique() order isn't guaranteed stable across calls
     rng = np.random.default_rng(seed)
     rng.shuffle(games)
     mid = len(games) // 2
@@ -811,6 +818,7 @@ def _synthetic_possessions(
     noise_sd: float,
     seed: int,
     base_points: float = 1.0,
+    start_date: Optional[datetime.date] = None,
 ) -> pl.DataFrame:
     """Generate possessions from KNOWN player ratings (the meta-oracle ground truth).
 
@@ -828,10 +836,17 @@ def _synthetic_possessions(
         noise_sd: Standard deviation of Gaussian observation noise.
         seed: Integer seed for the ``np.random.default_rng`` generator.
         base_points: League-average points per possession baseline.
+        start_date: When given, attaches a ``game_date: pl.Date`` column, one
+            calendar day apart per game index (``SYN00000`` -> ``start_date``,
+            ``SYN00001`` -> ``start_date + 1 day``, ...) -- enables Oracle 6
+            (``walk_forward``) tests. ``None`` (default) omits the column
+            entirely, preserving byte-identical behavior for every existing
+            Oracle 1-4 test that doesn't pass it.
 
     Returns:
         A possession+lineup frame (``game_id``/``offense_team_id``/``points``/
         ``off_player_1..5``/``def_player_1..5``), ``2 * n_games * poss_per_game`` rows.
+        Includes a ``game_date`` column iff ``start_date`` is given.
     """
     rng = np.random.default_rng(seed)
     ids = sorted(o_ratings)
@@ -857,7 +872,169 @@ def _synthetic_possessions(
         "points": pl.Int64,
         **{c: pl.Int64 for c in _OFF + _DEF},
     }
-    return pl.DataFrame(rows, schema=schema)
+    df = pl.DataFrame(rows, schema=schema)
+    if start_date is not None:
+        game_dates = {f"SYN{g:05d}": start_date + datetime.timedelta(days=g) for g in range(n_games)}
+        df = df.with_columns(pl.col("game_id").replace_strict(game_dates, return_dtype=pl.Date).alias("game_date"))
+    return df
+
+
+@dataclass(frozen=True)
+class WalkForwardResult:
+    """Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
+
+    Attributes:
+        game_margin_rmse: RMSE of predicted vs actual per-(game, team) margins,
+            pooled across all checkpoints -- the model refit through each
+            checkpoint date, predicting the following ``horizon_days`` window.
+        game_margin_corr: Pearson correlation of the same pooled predictions.
+        carry_forward_rmse: RMSE using the PRIOR checkpoint's fit (no refit)
+            applied to the current window -- isolates whether refitting
+            through each checkpoint actually helps. ``nan`` when fewer than
+            2 checkpoints produce a valid window.
+        random_fold_rmse: Oracle 1's (``retrodiction``) pooled game-margin
+            RMSE on the same possessions -- the non-time-ordered baseline.
+        n_checkpoints: Number of checkpoint dates that produced a
+            non-degenerate (train, test) split.
+        n_test_games: Total distinct game_ids evaluated across all checkpoints.
+    """
+
+    game_margin_rmse: float
+    game_margin_corr: float
+    carry_forward_rmse: float
+    random_fold_rmse: float
+    n_checkpoints: int
+    n_test_games: int
+
+
+def _default_checkpoints(
+    possessions: pl.DataFrame, *, horizon_days: int, min_games_before_first: int
+) -> List[datetime.date]:
+    """Derive a checkpoint-date grid: every ``horizon_days`` starting at the
+    ``min_games_before_first``-th distinct game_date (spec default: ~game 15)."""
+    dates: List[datetime.date] = sorted(possessions.select("game_date").unique()["game_date"].to_list())
+    if len(dates) <= min_games_before_first:
+        return []
+    start, end = dates[min_games_before_first], dates[-1]
+    checkpoints: List[datetime.date] = []
+    d = start
+    while d <= end:
+        checkpoints.append(d)
+        d = d + datetime.timedelta(days=horizon_days)
+    return checkpoints
+
+
+def walk_forward(
+    model: AnyModel,
+    possessions: pl.DataFrame,
+    *,
+    checkpoint_dates: Optional[List[datetime.date]] = None,
+    horizon_days: int = 14,
+    min_games_before_first_checkpoint: int = 15,
+) -> WalkForwardResult:
+    """Oracle 6: time-ordered "predict tomorrow" retrodiction.
+
+    For each checkpoint date D: fit on games with ``game_date <= D``, predict
+    games with ``D < game_date <= D + horizon_days``, aggregate to
+    per-(game, team) margins -- reusing :func:`_fit_on` / :func:`_design_with_ids`
+    / :func:`predict_points` / :func:`_team_game_margins` (the same machinery
+    :func:`retrodiction` uses). ``carry_forward_rmse`` reapplies the PREVIOUS
+    checkpoint's fit (no refit) to the current window. ``random_fold_rmse`` is
+    :func:`retrodiction`'s pooled game-margin RMSE on the same possessions.
+
+    Args:
+        model: A harness model (``RapmModel``/``RatingsModel``/``PriorModel``).
+        possessions: A season possession+lineup frame with ``game_date`` (from
+            ``compile_nba_season``), ``game_id``, ``offense_team_id``,
+            ``points``, and the ten lineup columns.
+        checkpoint_dates: Explicit checkpoint grid; derived from
+            ``possessions`` via ``horizon_days``/``min_games_before_first_checkpoint``
+            when ``None`` (default).
+        horizon_days: Days-ahead prediction window per checkpoint (default 14).
+        min_games_before_first_checkpoint: Distinct-game-date index of the
+            first checkpoint when deriving the default grid (default 15,
+            "~game 15 of the season").
+
+    Returns:
+        ``WalkForwardResult``. All metrics ``nan`` and counts ``0`` when
+        ``possessions`` is empty, lacks a ``game_date`` column, or the
+        derived/given grid produces zero non-degenerate checkpoints.
+
+    Example:
+        Walk-forward a season with the default 14-day cadence::
+
+            from sportsdataverse.nba.nba_model_validation import RidgeRapmModel, walk_forward
+            res = walk_forward(RidgeRapmModel(), season_possessions)
+            print(res.game_margin_rmse, res.carry_forward_rmse, res.random_fold_rmse)
+    """
+    if possessions.is_empty() or "game_date" not in possessions.columns:
+        return WalkForwardResult(float("nan"), float("nan"), float("nan"), float("nan"), 0, 0)
+
+    dates = (
+        checkpoint_dates
+        if checkpoint_dates is not None
+        else _default_checkpoints(
+            possessions, horizon_days=horizon_days, min_games_before_first=min_games_before_first_checkpoint
+        )
+    )
+    if not dates:
+        return WalkForwardResult(float("nan"), float("nan"), float("nan"), float("nan"), 0, 0)
+
+    pred_m: List[np.ndarray] = []
+    act_m: List[np.ndarray] = []
+    cf_pred: List[np.ndarray] = []
+    cf_act: List[np.ndarray] = []
+    evaluated_games: set = set()
+    prior_fit: Optional[FitResult] = None
+    prior_pids: Optional[List[int]] = None
+
+    for D in dates:
+        train = possessions.filter(pl.col("game_date") <= D)
+        window_end = D + datetime.timedelta(days=horizon_days)
+        test = possessions.filter((pl.col("game_date") > D) & (pl.col("game_date") <= window_end))
+        if train.is_empty() or test.is_empty():
+            continue
+        fit, pids = _fit_on(model, train)
+        if not pids:
+            continue
+        test_valid = test.drop_nulls(subset=_OFF + _DEF)
+        if test_valid.is_empty():
+            prior_fit, prior_pids = fit, pids
+            continue
+
+        X_te, _ = _design_with_ids(test_valid, pids)
+        pp = predict_points(X_te, fit)
+        p_pred, p_act = _team_game_margins(test_valid, pp)
+        pred_m.append(p_pred)
+        act_m.append(p_act)
+        evaluated_games |= set(test_valid["game_id"].unique().to_list())
+
+        if prior_fit is not None and prior_pids is not None:
+            X_cf, _ = _design_with_ids(test_valid, prior_pids)
+            pp_cf = predict_points(X_cf, prior_fit)
+            cfp_pred, cfp_act = _team_game_margins(test_valid, pp_cf)
+            cf_pred.append(cfp_pred)
+            cf_act.append(cfp_act)
+
+        prior_fit, prior_pids = fit, pids
+
+    if not pred_m:
+        return WalkForwardResult(float("nan"), float("nan"), float("nan"), float("nan"), 0, 0)
+
+    P = np.concatenate(pred_m)
+    A = np.concatenate(act_m)
+    corr = float(np.corrcoef(P, A)[0, 1]) if P.size > 1 and np.std(P) > 0 else 0.0
+    carry_rmse = _rmse(np.concatenate(cf_pred), np.concatenate(cf_act)) if cf_pred else float("nan")
+    random_fold = retrodiction(model, possessions, k_folds=5, seed=0).game_margin_rmse
+
+    return WalkForwardResult(
+        game_margin_rmse=_rmse(P, A),
+        game_margin_corr=corr,
+        carry_forward_rmse=carry_rmse,
+        random_fold_rmse=random_fold,
+        n_checkpoints=len(pred_m),
+        n_test_games=len(evaluated_games),
+    )
 
 
 # ---------------------------------------------------------------------------
