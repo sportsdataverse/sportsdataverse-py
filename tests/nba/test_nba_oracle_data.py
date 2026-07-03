@@ -6,10 +6,12 @@ from pathlib import Path
 import polars as pl
 
 from sportsdataverse.nba.nba_oracle_data import (
+    DARKO_DPM_ORACLE_SCHEMA,
     EPM_ORACLE_SCHEMA,
     LEBRON_DAILY_ORACLE_SCHEMA,
     LEBRON_SEASON_ORACLE_SCHEMA,
     RAPM_ORACLE_SCHEMA,
+    load_darko_dpm,
     load_epm,
     load_lebron_daily,
     load_lebron_season,
@@ -115,3 +117,22 @@ def test_load_lebron_daily_empty_header_only(tmp_path):
     df = load_lebron_daily(str(empty))
     assert df.height == 0
     assert dict(df.schema) == LEBRON_DAILY_ORACLE_SCHEMA
+
+
+def test_load_darko_dpm_schema_and_values():
+    df = load_darko_dpm(str(FIXTURES / "darko_dpm_sample.csv"))
+    assert dict(df.schema) == DARKO_DPM_ORACLE_SCHEMA
+    assert df.height == 4
+    row = df.filter(pl.col("player_name") == "Nikola Jokic").to_dicts()[0]
+    assert row["team"] == "Denver Nuggets"
+    assert row["dpm"] == 7
+    assert row["odpm"] == 5
+    assert row["ddpm"] == 2
+
+
+def test_load_darko_dpm_empty_header_only(tmp_path):
+    empty = tmp_path / "empty.csv"
+    empty.write_text("﻿#,Player,Team,DPM,ODPM,DDPM\n", encoding="utf-8")
+    df = load_darko_dpm(str(empty))
+    assert df.height == 0
+    assert dict(df.schema) == DARKO_DPM_ORACLE_SCHEMA

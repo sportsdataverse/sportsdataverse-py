@@ -14,6 +14,7 @@ directory (see ``tests/nba/test_nba_oracle_data.py`` for the gate pattern).
 
 from __future__ import annotations
 
+import csv
 import re
 import unicodedata
 
@@ -29,6 +30,8 @@ __all__ = [
     "load_lebron_season",
     "LEBRON_DAILY_ORACLE_SCHEMA",
     "load_lebron_daily",
+    "DARKO_DPM_ORACLE_SCHEMA",
+    "load_darko_dpm",
 ]
 
 
@@ -270,4 +273,61 @@ def load_lebron_daily(path: str) -> pl.DataFrame:
         pl.col("OLEBRON").cast(pl.Float64).alias("o_lebron"),
         pl.col("DLEBRON").cast(pl.Float64).alias("d_lebron"),
         pl.col("LEBRON WAR").cast(pl.Float64).alias("war"),
+    )
+
+
+#: Tidy schema for :func:`load_darko_dpm`.
+DARKO_DPM_ORACLE_SCHEMA: dict[str, pl.DataType] = {
+    "player_name": pl.Utf8,
+    "team": pl.Utf8,
+    "dpm": pl.Int64,
+    "odpm": pl.Int64,
+    "ddpm": pl.Int64,
+}
+
+
+def _signed_int(s: str) -> int:
+    """Parse a sign-prefixed integer string (``"+7"`` / ``"-2"``) -> int."""
+    return int(s.replace("+", "").strip())
+
+
+def load_darko_dpm(path: str) -> pl.DataFrame:
+    """Parse a DARKO DPM leaderboard CSV (e.g. ``2026-darko-dpm-leaderboard.csv``).
+
+    Name-keyed only (no shared player id with the model zoo) -- this is the
+    family :func:`~sportsdataverse.nba.nba_model_validation.external_validity`
+    joins with ``join="name"``. Handles two real-file quirks: a leading UTF-8
+    BOM (read with ``encoding="utf-8-sig"``, which strips it) and
+    sign-prefixed integer columns (``"+7"``, not ``"7"``).
+
+    Args:
+        path: Filesystem path to a DARKO DPM leaderboard CSV.
+
+    Returns:
+        Frame with schema :data:`DARKO_DPM_ORACLE_SCHEMA`. Zero rows (with
+        that schema) when the file has a header but no data rows.
+
+    Raises:
+        FileNotFoundError: If ``path`` does not exist.
+
+    Example:
+        Load the leaderboard and inspect the DPM column::
+
+            from sportsdataverse.nba.nba_oracle_data import load_darko_dpm
+            oracle = load_darko_dpm(f"{oracle_dir}/2026-darko-dpm-leaderboard.csv")
+            print(oracle.sort("dpm", descending=True).head())
+    """
+    with open(path, "r", encoding="utf-8-sig", newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    if not rows:
+        return pl.DataFrame(schema=DARKO_DPM_ORACLE_SCHEMA)
+    return pl.DataFrame(
+        {
+            "player_name": [r["Player"] for r in rows],
+            "team": [r["Team"] for r in rows],
+            "dpm": [_signed_int(r["DPM"]) for r in rows],
+            "odpm": [_signed_int(r["ODPM"]) for r in rows],
+            "ddpm": [_signed_int(r["DDPM"]) for r in rows],
+        },
+        schema=DARKO_DPM_ORACLE_SCHEMA,
     )
