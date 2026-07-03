@@ -279,8 +279,8 @@ from sportsdataverse.nba.nba_season_compile import compile_nba_season  # noqa: E
 @skip_if_no_nba_stats_live
 def test_end_to_end_real_slice_report(tmp_path, monkeypatch):
     # small real slice compiled once, then validated (report shape only, not thresholds)
-    real_ids = C._game_ids_for_season(2023, "Regular Season")[:8]
-    monkeypatch.setattr(C, "_game_ids_for_season", lambda s, st: real_ids)
+    real_index = C._season_game_index(2023, "Regular Season").head(8)
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st: real_index)
     s = compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=1.0)
     rep = validate_model(
         RidgeRapmModel(),
