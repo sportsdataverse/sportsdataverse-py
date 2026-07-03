@@ -79,20 +79,30 @@ def test_shrinkage_zero_attempts_gets_league_mean():
 
 
 def test_shrinkage_high_volume_approaches_raw_rate():
+    # Two shooters: player 7's huge volume dominates the pooled totals, player 9's
+    # smaller-volume, different rate pulls the pooled league mean away from 0.5 --
+    # with only one shooter the league mean equals the player's own raw rate
+    # exactly, so the shrinkage pseudo-count k does no real work and the
+    # assertion would pass even with a broken formula. With two shooters the
+    # league mean genuinely diverges from 0.5, so k must actually pull the
+    # estimate toward it; the assertion still holds because player 7's volume
+    # (10000 attempts) swamps the pseudo-count (k=100).
     sh = pl.DataFrame(
         {
-            "game_id": ["g"],
-            "possession_number": [1],
-            "player_id": [7],
-            "team_id": [100],
-            "fg2a": [0],
-            "fg2m": [0],
-            "fg3a": [10000],
-            "fg3m": [5000],
-            "fta": [0],
-            "ftm": [0],
+            "game_id": ["g", "g"],
+            "possession_number": [1, 1],
+            "player_id": [7, 9],
+            "team_id": [100, 100],
+            "fg2a": [0, 0],
+            "fg2m": [0, 0],
+            "fg3a": [10000, 100],
+            "fg3m": [5000, 0],
+            "fta": [0, 0],
+            "ftm": [0, 0],
         }
     )
+    lg3 = 5000 / 10100
+    assert lg3 != 0.5  # pooled league mean now genuinely differs from player 7's raw rate
     rates = _shrunk_shooter_rates(sh, fg3_k=100.0)
     assert abs(rates.filter(pl.col("player_id") == 7)["p3"][0] - 0.5) < 0.02
 
@@ -141,6 +151,73 @@ def test_la_response_empty_shooting_is_two_point_only():
     )
     out = luck_adjusted_response(poss, empty_sh)
     assert np.allclose(out["la_points"].to_numpy(), (2 * poss["fg2m"]).to_numpy())
+
+
+def test_la_response_excludes_defense_team_shooters():
+    # Reviewer-reproduced bug: build_possession_shooting legitimately keeps a
+    # DEFENSE-team shooter row (e.g. a defensive technical FT -- its own
+    # team_id != offense_team_id, which is exactly why the frame carries a
+    # team_id column). la_points is offense-only by definition (DECISION 2), so
+    # a single offense 2-pt make plus one defense tech-FT shooter must produce
+    # la_points == 2.0. Before the fix the defense shooter's fta * p_hat_ft term
+    # leaked into the aggregation (0 + 1 * 0.9 = 0.9), inflating la_points to 2.9.
+    poss = pl.DataFrame(
+        {
+            "game_id": ["g"],
+            "possession_number": [1],
+            "offense_team_id": [100],
+            "fg2m": [1],
+        }
+    )
+    sh = pl.DataFrame(
+        {
+            "game_id": ["g", "g"],
+            "possession_number": [1, 1],
+            "player_id": [7, 8],
+            "team_id": [100, 200],  # 7 = offense shooter, 8 = defense tech-FT shooter
+            "fg2a": [1, 0],
+            "fg2m": [1, 0],
+            "fg3a": [0, 0],
+            "fg3m": [0, 0],
+            "fta": [0, 1],
+            "ftm": [0, 1],
+        }
+    )
+    player_rates = {7: (0.0, 0.0), 8: (0.0, 0.9)}
+    out = luck_adjusted_response(poss, sh, player_rates)
+    assert out["la_points"][0] == 2.0
+
+
+def test_la_response_sums_multiple_offense_shooters_in_one_possession():
+    # Exercise the n>1 summation path: two offense shooters each attempt a 3 in
+    # the SAME possession -- exp_extra must sum both shooters' contributions,
+    # not just the first / last.
+    poss = pl.DataFrame(
+        {
+            "game_id": ["g"],
+            "possession_number": [1],
+            "offense_team_id": [100],
+            "fg2m": [0],
+        }
+    )
+    sh = pl.DataFrame(
+        {
+            "game_id": ["g", "g"],
+            "possession_number": [1, 1],
+            "player_id": [7, 9],
+            "team_id": [100, 100],
+            "fg2a": [0, 0],
+            "fg2m": [0, 0],
+            "fg3a": [2, 4],
+            "fg3m": [0, 0],
+            "fta": [0, 0],
+            "ftm": [0, 0],
+        }
+    )
+    player_rates = {7: (0.25, 0.0), 9: (0.5, 0.0)}
+    out = luck_adjusted_response(poss, sh, player_rates)
+    # la_points = 2*fg2m(0) + 3*(2*0.25 + 4*0.5) = 3*(0.5 + 2.0) = 7.5
+    assert out["la_points"][0] == 7.5
 
 
 def _synth(seed: int = 1, n_games: int = 20) -> pl.DataFrame:

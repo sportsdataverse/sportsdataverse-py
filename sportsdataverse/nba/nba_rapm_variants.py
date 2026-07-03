@@ -421,10 +421,27 @@ def luck_adjusted_response(
     (offense-only, "one_way"). 2-pt makes stay realized. ``p̂`` come from
     ``player_rates`` when given, else :func:`_shrunk_shooter_rates` on ``shooting``.
 
+    **Defense-shooter exclusion (bugfix)**: ``shooting``
+    (:func:`~sportsdataverse.nba.nba_possessions.build_possession_shooting`)
+    deliberately retains defense-team shooters in a possession group — e.g. a
+    defensive technical free throw shooter — because it is a per-shooter
+    companion frame, not a team-attributed one (that's why it carries its own
+    ``team_id`` column). The expected-points sum is offense-only by
+    definition (**DECISION 2**), so *before* aggregating ``exp_extra`` this
+    function joins ``possessions[["game_id", "possession_number",
+    "offense_team_id"]]`` onto ``shooting`` and filters to
+    ``team_id == offense_team_id``, dropping any defense-team shooter row.
+    Without this filter a defense tech-FT's ``fta·p̂ft`` term leaks into the
+    offense's ``la_points``, inflating it (reproduced: 2.9 vs. the
+    offense-only-correct 2.0 for a single offense 2-pt make plus one defense
+    tech FT).
+
     Args:
         possessions: Possession+lineup frame carrying team-level ``fg2m`` and the
-            join keys ``game_id`` + ``possession_number``.
-        shooting: Per-(possession, shooter) frame (``build_possession_shooting``).
+            join keys ``game_id`` + ``possession_number`` + ``offense_team_id``.
+        shooting: Per-(possession, shooter) frame (``build_possession_shooting``),
+            which may include defense-team shooter rows (e.g. technical FTs) —
+            filtered out here before aggregation.
         player_rates: Optional ``{player_id: (p3, pft)}`` override (e.g. planted
             truth in tests); ``None`` → shrink from ``shooting``.
         fg3_k: 3-point shrinkage pseudo-count, forwarded to
@@ -473,12 +490,20 @@ def luck_adjusted_response(
     if not shooting.is_empty():
         assert shooting.schema["player_id"] == rates.schema["player_id"]  # Int64 both sides
 
-    # per-(game, possession) expected 3pt + ft contributions
+    # per-(game, possession) expected 3pt + ft contributions, OFFENSE SHOOTERS ONLY:
+    # shooting (build_possession_shooting) intentionally retains defense-team shooters
+    # (e.g. a defensive technical FT) alongside their own team_id -- join the offense
+    # team id onto each shooting row and filter to team_id == offense_team_id BEFORE
+    # aggregating, so a defense tech-FT never leaks into this offense-only response.
     if shooting.is_empty():
         contrib = pl.DataFrame(schema={"game_id": pl.Utf8, "possession_number": pl.Int64, "exp_extra": pl.Float64})
     else:
-        joined = shooting.join(rates, on="player_id", how="left").with_columns(
-            pl.col("p3").fill_null(0.0), pl.col("pft").fill_null(0.0)
+        offense_side = possessions.select("game_id", "possession_number", "offense_team_id")
+        joined = (
+            shooting.join(offense_side, on=["game_id", "possession_number"], how="left")
+            .filter(pl.col("team_id") == pl.col("offense_team_id"))
+            .join(rates, on="player_id", how="left")
+            .with_columns(pl.col("p3").fill_null(0.0), pl.col("pft").fill_null(0.0))
         )
         contrib = joined.group_by(["game_id", "possession_number"]).agg(
             (3.0 * (pl.col("fg3a") * pl.col("p3")).sum() + (pl.col("fta") * pl.col("pft")).sum()).alias("exp_extra")
