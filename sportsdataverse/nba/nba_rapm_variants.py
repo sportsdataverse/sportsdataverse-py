@@ -360,3 +360,133 @@ def nba_decay_rapm(
         }
     ).sort("player_id")
     return out.to_pandas() if return_as_pandas else out
+
+
+def _shrunk_shooter_rates(
+    shooting: pl.DataFrame,
+    *,
+    fg3_k: float = 100.0,
+    ft_k: float = 50.0,
+) -> pl.DataFrame:
+    """Per-shooter 3P% / FT% shrunk toward the pooled league mean (empirical-Bayes flavor).
+
+    ``p̂ = (makes + k * lg_mean) / (attempts + k)`` with pseudo-count ``k`` in shots.
+    **DECISION 3**: the ``fg3_k`` / ``ft_k`` defaults and this estimator form are
+    the plan's v1 default, not an oracle-verified match.
+
+    Args:
+        shooting: Per-(possession, shooter) frame (WP1 ``build_possession_shooting``).
+        fg3_k: 3-point shrinkage pseudo-count (shots).
+        ft_k: Free-throw shrinkage pseudo-count (shots).
+
+    Returns:
+        Frame ``player_id: Int64, p3: Float64, pft: Float64``. Empty input →
+        zero-row frame with that schema.
+
+    Example:
+        Shrink raw shooter rates toward the league mean::
+
+            from sportsdataverse.nba.nba_rapm_variants import _shrunk_shooter_rates
+            rates = _shrunk_shooter_rates(shooting_df, fg3_k=100.0, ft_k=50.0)
+            print(rates.columns)  # ['player_id', 'p3', 'pft']
+    """
+    schema = {"player_id": pl.Int64, "p3": pl.Float64, "pft": pl.Float64}
+    if shooting.is_empty():
+        return _empty(schema)
+    agg = shooting.group_by("player_id").agg(
+        pl.col("fg3a").sum(), pl.col("fg3m").sum(), pl.col("fta").sum(), pl.col("ftm").sum()
+    )
+    tot3a, tot3m = int(agg["fg3a"].sum()), int(agg["fg3m"].sum())
+    totfta, totftm = int(agg["fta"].sum()), int(agg["ftm"].sum())
+    lg3 = tot3m / tot3a if tot3a else 0.0
+    lgft = totftm / totfta if totfta else 0.0
+    return agg.select(
+        pl.col("player_id").cast(pl.Int64),
+        ((pl.col("fg3m") + fg3_k * lg3) / (pl.col("fg3a") + fg3_k)).cast(pl.Float64).alias("p3"),
+        ((pl.col("ftm") + ft_k * lgft) / (pl.col("fta") + ft_k)).cast(pl.Float64).alias("pft"),
+    )
+
+
+def luck_adjusted_response(
+    possessions: pl.DataFrame,
+    shooting: pl.DataFrame,
+    player_rates: Optional[dict[int, tuple[float, float]]] = None,
+    *,
+    fg3_k: float = 100.0,
+    ft_k: float = 50.0,
+) -> pl.DataFrame:
+    """Attach a per-possession ``la_points`` expected-points response.
+
+    **DECISION 2/4**: ``la_points = 2*fg2m + 3*Σ_shooter fg3a·p̂3 + Σ_shooter fta·p̂ft``
+    (offense-only, "one_way"). 2-pt makes stay realized. ``p̂`` come from
+    ``player_rates`` when given, else :func:`_shrunk_shooter_rates` on ``shooting``.
+
+    Args:
+        possessions: Possession+lineup frame carrying team-level ``fg2m`` and the
+            join keys ``game_id`` + ``possession_number``.
+        shooting: Per-(possession, shooter) frame (``build_possession_shooting``).
+        player_rates: Optional ``{player_id: (p3, pft)}`` override (e.g. planted
+            truth in tests); ``None`` → shrink from ``shooting``.
+        fg3_k: 3-point shrinkage pseudo-count, forwarded to
+            :func:`_shrunk_shooter_rates` when ``player_rates`` is ``None``.
+        ft_k: Free-throw shrinkage pseudo-count, forwarded to
+            :func:`_shrunk_shooter_rates` when ``player_rates`` is ``None``.
+
+    Returns:
+        ``possessions`` with an added ``la_points: Float64`` column (same rows,
+        same order). Empty ``possessions`` → returned unchanged with an empty
+        ``la_points`` column.
+
+    Example:
+        Expected-points response with shrunk shooter rates::
+
+            from sportsdataverse.nba.nba_rapm_variants import luck_adjusted_response
+            out = luck_adjusted_response(possessions_df, shooting_df)
+            print(out["la_points"].mean())
+
+        Planted-truth override for testing::
+
+            out = luck_adjusted_response(possessions_df, shooting_df, {7: (0.4, 0.8)})
+
+        See Also:
+            * `nba_api`_ — upstream play-by-play / shooting source
+            * `hoopR`_ — R-side possession + shot-detail parity
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    if possessions.is_empty():
+        return possessions.with_columns(pl.Series("la_points", [], dtype=pl.Float64))
+
+    if player_rates is not None:
+        rates = pl.DataFrame(
+            {
+                "player_id": pl.Series([int(k) for k in player_rates], dtype=pl.Int64),
+                "p3": pl.Series([float(v[0]) for v in player_rates.values()], dtype=pl.Float64),
+                "pft": pl.Series([float(v[1]) for v in player_rates.values()], dtype=pl.Float64),
+            }
+        )
+    else:
+        rates = _shrunk_shooter_rates(shooting, fg3_k=fg3_k, ft_k=ft_k)
+
+    assert possessions.schema["game_id"] == pl.Utf8
+    if not shooting.is_empty():
+        assert shooting.schema["player_id"] == rates.schema["player_id"]  # Int64 both sides
+
+    # per-(game, possession) expected 3pt + ft contributions
+    if shooting.is_empty():
+        contrib = pl.DataFrame(schema={"game_id": pl.Utf8, "possession_number": pl.Int64, "exp_extra": pl.Float64})
+    else:
+        joined = shooting.join(rates, on="player_id", how="left").with_columns(
+            pl.col("p3").fill_null(0.0), pl.col("pft").fill_null(0.0)
+        )
+        contrib = joined.group_by(["game_id", "possession_number"]).agg(
+            (3.0 * (pl.col("fg3a") * pl.col("p3")).sum() + (pl.col("fta") * pl.col("pft")).sum()).alias("exp_extra")
+        )
+
+    out = possessions.join(contrib, on=["game_id", "possession_number"], how="left").with_columns(
+        pl.col("exp_extra").fill_null(0.0)
+    )
+    return out.with_columns((2.0 * pl.col("fg2m") + pl.col("exp_extra")).cast(pl.Float64).alias("la_points")).drop(
+        "exp_extra"
+    )

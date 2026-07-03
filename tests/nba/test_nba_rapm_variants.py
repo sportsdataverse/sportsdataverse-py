@@ -14,10 +14,131 @@ from sportsdataverse.nba.nba_rapm_variants import (
     ORACLE_RAPM_LAMBDAS,
     _fit_weighted,
     _prepare,
+    _shrunk_shooter_rates,
     decay_weights,
+    luck_adjusted_response,
     nba_decay_rapm,
     oracle_rapm_alphas,
 )
+
+
+def _with_possession_number(poss: pl.DataFrame) -> pl.DataFrame:
+    """Assign a within-game ``possession_number`` (resets per ``game_id``, like real data).
+
+    ``_synthetic_possessions`` doesn't emit this column; luck-adjusted-response
+    tests need it as a join key alongside ``game_id`` -- using a per-game index
+    (values repeat across games) keeps the join a real two-column join instead
+    of accidentally being unique on ``possession_number`` alone.
+    """
+    return poss.with_columns(pl.int_range(pl.len()).over("game_id").cast(pl.Int64).alias("possession_number"))
+
+
+def _shooting_for(poss: pl.DataFrame) -> pl.DataFrame:
+    """Minimal per-shooter frame consistent with a possessions frame's team fg2m/fg3m/ftm."""
+    rows = []
+    for r in poss.iter_rows(named=True):
+        # attribute all of the possession's makes to its first offense player (synthetic)
+        pid = r["off_player_1"]
+        rows.append(
+            {
+                "game_id": r["game_id"],
+                "possession_number": r["possession_number"],
+                "player_id": pid,
+                "team_id": r["offense_team_id"],
+                "fg2a": r["fg2m"],
+                "fg2m": r["fg2m"],
+                "fg3a": r["fg3m"],
+                "fg3m": r["fg3m"],
+                "fta": r["ftm"],
+                "ftm": r["ftm"],
+            }
+        )
+    return pl.DataFrame(rows)
+
+
+def test_shrinkage_zero_attempts_gets_league_mean():
+    sh = pl.DataFrame(
+        {
+            "game_id": ["g"],
+            "possession_number": [1],
+            "player_id": [7],
+            "team_id": [100],
+            "fg2a": [0],
+            "fg2m": [0],
+            "fg3a": [0],
+            "fg3m": [0],
+            "fta": [0],
+            "ftm": [0],
+        }
+    )
+    rates = _shrunk_shooter_rates(sh)
+    # no attempts anywhere -> league mean is 0/0 guarded to 0.0, rate == that mean
+    assert rates.filter(pl.col("player_id") == 7)["p3"][0] == 0.0
+
+
+def test_shrinkage_high_volume_approaches_raw_rate():
+    sh = pl.DataFrame(
+        {
+            "game_id": ["g"],
+            "possession_number": [1],
+            "player_id": [7],
+            "team_id": [100],
+            "fg2a": [0],
+            "fg2m": [0],
+            "fg3a": [10000],
+            "fg3m": [5000],
+            "fta": [0],
+            "ftm": [0],
+        }
+    )
+    rates = _shrunk_shooter_rates(sh, fg3_k=100.0)
+    assert abs(rates.filter(pl.col("player_id") == 7)["p3"][0] - 0.5) < 0.02
+
+
+def test_la_response_reduces_to_points_when_rates_are_realized():
+    poss = _with_possession_number(_synth())
+    # give every possession a couple of made 3s/FTs so the terms are non-trivial
+    poss = (
+        poss.with_columns(
+            (pl.col("points") // 3).alias("fg3m"),
+            pl.lit(1).alias("ftm"),
+        )
+        .with_columns(((pl.col("points") - 3 * pl.col("fg3m") - pl.col("ftm")).clip(0) // 2).alias("fg2m"))
+        .with_columns((2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm")).alias("points"))
+    )
+    sh = _shooting_for(poss)
+    # realized per-shooter rates => la_points == points exactly (invariant, formula-independent)
+    realized = {
+        int(r["player_id"]): (
+            (r["fg3m"] / r["fg3a"]) if r["fg3a"] else 0.0,
+            (r["ftm"] / r["fta"]) if r["fta"] else 0.0,
+        )
+        for r in sh.group_by("player_id").agg(pl.col(["fg3a", "fg3m", "fta", "ftm"]).sum()).iter_rows(named=True)
+    }
+    out = luck_adjusted_response(poss, sh, realized)
+    assert np.allclose(out["la_points"].to_numpy(), out["points"].to_numpy(), atol=1e-6)
+
+
+def test_la_response_empty_shooting_is_two_point_only():
+    poss = _with_possession_number(_synth()).with_columns(
+        pl.lit(0).alias("fg3m"), pl.lit(0).alias("ftm"), (pl.col("points") // 2).alias("fg2m")
+    )
+    empty_sh = pl.DataFrame(
+        schema={
+            "game_id": pl.Utf8,
+            "possession_number": pl.Int64,
+            "player_id": pl.Int64,
+            "team_id": pl.Int64,
+            "fg2a": pl.Int64,
+            "fg2m": pl.Int64,
+            "fg3a": pl.Int64,
+            "fg3m": pl.Int64,
+            "fta": pl.Int64,
+            "ftm": pl.Int64,
+        }
+    )
+    out = luck_adjusted_response(poss, empty_sh)
+    assert np.allclose(out["la_points"].to_numpy(), (2 * poss["fg2m"]).to_numpy())
 
 
 def _synth(seed: int = 1, n_games: int = 20) -> pl.DataFrame:
