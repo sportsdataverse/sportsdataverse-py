@@ -78,6 +78,30 @@ class TestToyFixture:
         # the deliberate tiebreak lever
         assert [rows[t]["conf_pd"] for t in ("A1", "A2", "A3")] == [25.0, 10.0, 3.0]
 
+    def test_toy_conference_scoped_sov_sos(self) -> None:
+        # Cross-validation ruling: sov/sos are conference-scoped (mean of
+        # conference opponents' conf win pct — per victory for SOV, per game
+        # for SOS). The Alpha trio must tie through SOV and SOS so the tie
+        # resolves at the POINTS rung (conf_pd 25 > 10 > 3).
+        games, teams = _toy()
+        st = cfb_standings(games, teams, tiebreaker_depth="POINTS")
+        assert isinstance(st, pl.DataFrame)
+        vals = {r["team"]: (r["sov"], r["sos"]) for r in st.iter_rows(named=True)}
+        expected = {
+            "A1": (1 / 3, 4 / 9),
+            "A2": (1 / 3, 4 / 9),
+            "A3": (1 / 3, 4 / 9),
+            "A4": (0.0, 2 / 3),
+            "B1": (1 / 3, 1 / 3),
+            "B2": (1 / 6, 4 / 9),
+            "B3": (0.0, 5 / 9),
+            "B4": (0.0, 2 / 3),
+            "I1": (0.0, 0.0),
+        }
+        for team, (sov, sos) in expected.items():
+            assert vals[team][0] == pytest.approx(sov, abs=1e-6), f"{team} sov"
+            assert vals[team][1] == pytest.approx(sos, abs=1e-6), f"{team} sos"
+
     def test_toy_public_numerics_are_float64(self) -> None:
         games, teams = _toy()
         st = cfb_standings(games, teams, tiebreaker_depth="POINTS")

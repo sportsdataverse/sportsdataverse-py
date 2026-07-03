@@ -17,15 +17,26 @@ the SAME semantics so outputs cross-validate):
 * **Generic tiebreaker cascade.** Real CFB tiebreakers are per-conference;
   this engine applies one documented cascade to every conference:
   conference win pct (primary sort) -> head-to-head among tied ->
-  record vs common opponents (min 1) -> SOV -> SOS -> conference point
-  differential -> overall point differential -> coin flip. Steps are gated
+  record vs common conference opponents (min 1) -> SOV -> SOS ->
+  conference point differential -> coin flip. Steps are gated
   by ``tiebreaker_depth`` exactly like nflseedR
   (``RANDOM=0 < PRE-SOV=1 < SOS=2 < POINTS=3``).
 * **Record semantics.** Overall W/L/T counts ALL played games. The
   conference record counts only ``game_type == "REG"`` games between two
   teams of the same conference. ``CONF_CHAMP`` games count toward the
   overall record and decide the conference champion, but NOT the
-  conference record/rank. SOV/SOS use REG games only (nflseedR parity).
+  conference record/rank.
+* **SOV/SOS are conference-scoped** (cross-validation ruling — UNLIKE
+  nflseedR's overall-REG, games-weighted convention). Both use only
+  conference REG games and the opponents' conference win pct:
+  ``sos`` = mean of conference opponents' conference win pct across all
+  conference games played (per game — a twice-played opponent counts
+  twice); ``sov`` = mean of defeated conference opponents' conference win
+  pct (per conference victory — a twice-beaten opponent contributes twice;
+  documented choice, unobservable on the toy fixture). Independents and
+  teams without conference games/wins get 0.0. The ENTIRE tiebreaker
+  cascade (head-to-head, common opponents, SOV, SOS, point differential)
+  is likewise scoped to conference REG games.
 * **CFP seeding rule evolves.** :func:`cfb_playoff_seeds` implements the
   current (2025) straight-seeding 12-team rule in ONE function so the rule
   can be updated in one place.
@@ -44,9 +55,10 @@ TIEBREAKER_DEPTHS: Dict[str, int] = {"RANDOM": 0, "PRE-SOV": 1, "SOS": 2, "POINT
 INDEPENDENT_LABEL = "FBS Independents"
 _VALID_GAME_TYPES = ("REG", "CONF_CHAMP", "POST")
 
-# rec map: sim -> team -> opp -> [outcome_points, n_games] (REG games only)
+# rec map: sim -> team -> opp -> [outcome_points, n_games] (conference REG games only)
 _RecMap = Dict[Any, Dict[str, Dict[str, List[float]]]]
-_Metrics = Dict[str, Tuple[float, float, float, float, float]]
+# per-team cascade metrics: (conf_pct, sov, sos, conf_pd)
+_Metrics = Dict[str, Tuple[float, float, float, float]]
 
 FrameLike = Union[pl.DataFrame, Any]
 
@@ -155,31 +167,32 @@ def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> Tuple[pl.DataFrame, pl.
         pl.col("result").sum().cast(pl.Float64).alias("conf_pd"),
     )
 
-    reg_rec = dg_reg.group_by("sim", "team").agg(
-        pl.col("outcome").sum().alias("opp_wins"),
-        pl.len().cast(pl.Int64).alias("opp_games"),
+    # Conference-scoped SOV/SOS (cross-validation ruling): mean of conference
+    # opponents' conference win pct — per conference game for SOS, per
+    # conference victory for SOV. Every opp in `dgc` has a `conf` row (it
+    # played at least this conference game), so the join never misses.
+    conf_pct_opp = conf.select(
+        "sim",
+        pl.col("team").alias("opp"),
+        ((pl.col("conf_wins") + 0.5 * pl.col("conf_ties")) / pl.col("conf_games"))
+        .cast(pl.Float64)
+        .alias("_opp_conf_pct"),
     )
     sovsos = (
-        dg_reg.join(reg_rec.rename({"team": "opp"}), on=["sim", "opp"], how="left")
+        dgc.join(conf_pct_opp, on=["sim", "opp"], how="left")
         .with_columns(won=(pl.col("outcome") == 1.0).cast(pl.Float64))
         .group_by("sim", "team")
         .agg(
-            (pl.col("opp_wins") * pl.col("won")).sum().alias("sov_num"),
-            (pl.col("opp_games") * pl.col("won")).sum().alias("sov_den"),
-            pl.col("opp_wins").sum().alias("sos_num"),
-            pl.col("opp_games").sum().alias("sos_den"),
+            pl.col("_opp_conf_pct").mean().cast(pl.Float64).alias("sos"),
+            (pl.col("_opp_conf_pct") * pl.col("won")).sum().alias("sov_num"),
+            pl.col("won").sum().alias("sov_den"),
         )
         .with_columns(
             pl.when(pl.col("sov_den") > 0)
             .then(pl.col("sov_num") / pl.col("sov_den"))
             .otherwise(0.0)
             .cast(pl.Float64)
-            .alias("sov"),
-            pl.when(pl.col("sos_den") > 0)
-            .then(pl.col("sos_num") / pl.col("sos_den"))
-            .otherwise(0.0)
-            .cast(pl.Float64)
-            .alias("sos"),
+            .alias("sov")
         )
         .select("sim", "team", "sov", "sos")
     )
@@ -209,17 +222,17 @@ def _standings_base(g: pl.DataFrame, t: pl.DataFrame) -> Tuple[pl.DataFrame, pl.
             .alias("conf_pct"),
         )
     )
-    return st, dg_reg
+    return st, dgc
 
 
-def _build_rec_map(dg_reg: pl.DataFrame) -> _RecMap:
-    """Per-sim head-to-head map from doubled REG games.
+def _build_rec_map(dg_conf: pl.DataFrame) -> _RecMap:
+    """Per-sim head-to-head map from doubled conference REG games.
 
     ponytail: python dict build — O(rows) and fine at test/sim scale (100 sims);
     vectorize per-step if 10k-sim standings ever become a hot path.
     """
     rec: _RecMap = {}
-    for sim, team, opp, outcome in dg_reg.select("sim", "team", "opp", "outcome").iter_rows():
+    for sim, team, opp, outcome in dg_conf.select("sim", "team", "opp", "outcome").iter_rows():
         d = rec.setdefault(sim, {}).setdefault(team, {}).setdefault(opp, [0.0, 0.0])
         d[0] += outcome
         d[1] += 1.0
@@ -251,26 +264,24 @@ def _pick_winner(
     """Reduce a tied set through the cascade; coin-flip whatever remains."""
     cands = sorted(tied)
     if depth >= 1 and len(cands) > 1:
-        # head-to-head among the tied set (REG games); skipped if any candidate
-        # has no game against the set (documented simplification).
+        # head-to-head among the tied set (conference REG games); skipped if any
+        # candidate has no game against the set (documented simplification).
         h2h = {c: _pct_vs(rec_sim, c, [x for x in cands if x != c]) for c in cands}
         if all(n > 0 for _, n in h2h.values()):
             cands = _keep_max(cands, {c: p / n for c, (p, n) in h2h.items()})
         if len(cands) > 1:
-            # common opponents (min 1), excluding the tied set itself
+            # common conference opponents (min 1), excluding the tied set itself
             opp_sets = [set(rec_sim.get(c, {})) for c in cands]
             commons = set.intersection(*opp_sets) - set(cands) if opp_sets else set()
             if commons:
                 vs = {c: _pct_vs(rec_sim, c, sorted(commons)) for c in cands}
                 cands = _keep_max(cands, {c: p / n for c, (p, n) in vs.items()})
     if depth >= 2 and len(cands) > 1:
-        cands = _keep_max(cands, {c: metrics[c][1] for c in cands})  # sov
+        cands = _keep_max(cands, {c: metrics[c][1] for c in cands})  # sov (conference-scoped)
         if len(cands) > 1:
-            cands = _keep_max(cands, {c: metrics[c][2] for c in cands})  # sos
+            cands = _keep_max(cands, {c: metrics[c][2] for c in cands})  # sos (conference-scoped)
     if depth >= 3 and len(cands) > 1:
-        cands = _keep_max(cands, {c: metrics[c][3] for c in cands})  # conf_pd
-        if len(cands) > 1:
-            cands = _keep_max(cands, {c: metrics[c][4] for c in cands})  # pd
+        cands = _keep_max(cands, {c: metrics[c][3] for c in cands})  # conference point diff
     if len(cands) > 1:
         return str(rng.choice(sorted(cands)))
     return cands[0]
@@ -294,11 +305,11 @@ def _order_tied(
 
 def _add_conf_ranks(
     st: pl.DataFrame,
-    dg_reg: pl.DataFrame,
+    dg_conf: pl.DataFrame,
     depth: int,
     rng: Optional[np.random.Generator],
 ) -> pl.DataFrame:
-    rec = _build_rec_map(dg_reg)
+    rec = _build_rec_map(dg_conf)
     non_ind = st.filter(_is_independent() == False)  # noqa: E712
     rank_rows: List[Tuple[int, str, int]] = []
     lazy_rng: Optional[np.random.Generator] = rng
@@ -307,8 +318,8 @@ def _add_conf_ranks(
         grp = parts[key]
         sim = key[0]
         metrics: _Metrics = {}
-        for row in grp.select("team", "conf_pct", "sov", "sos", "conf_pd", "pd").iter_rows():
-            metrics[row[0]] = (row[1], row[2], row[3], row[4], row[5])
+        for row in grp.select("team", "conf_pct", "sov", "sos", "conf_pd").iter_rows():
+            metrics[row[0]] = (row[1], row[2], row[3], row[4])
         # tiers by conference win pct (primary sort), rounded to kill float fuzz
         tiers: Dict[float, List[str]] = {}
         for team, m in metrics.items():
@@ -429,8 +440,8 @@ def cfb_standings(
     depth = TIEBREAKER_DEPTHS[tiebreaker_depth]
     g = _validate_games(games)
     t = _validate_teams(teams)
-    st, dg_reg = _standings_base(g, t)
-    st = _add_conf_ranks(st, dg_reg, depth, rng)
+    st, dg_conf = _standings_base(g, t)
+    st = _add_conf_ranks(st, dg_conf, depth, rng)
     st = _add_conf_champ(st, g, t)
     st = st.select(
         "sim",
