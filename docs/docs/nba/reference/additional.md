@@ -696,6 +696,71 @@ totals = sh.group_by("player_id").agg(
 print(totals.head())
 ```
 
+### `calibrate_pts_per_win(team_season: 'pl.DataFrame') -> 'float'` {#calibrate_pts_per_win}
+
+Regress team wins on season point margin; return points-per-marginal-win.
+
+Fits `wins ~ total_margin` via ordinary least squares over one (or more,
+pooled) season's team-level rows and returns `1 / slope` — the amount of
+full-season point differential associated with one additional win. This is
+`nba_war`'s `pts_per_win` input.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_season` | `DataFrame` |  | One row per team-season with `team_id` (any dtype), `wins` (numeric), and `total_margin` (numeric — the team's full-season point differential: points scored minus points allowed across all its games, NOT a per-game average). |
+
+**Returns**
+
+`float` points of season margin per marginal win.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import calibrate_pts_per_win
+pts_per_win = calibrate_pts_per_win(team_standings)  # team_id/wins/total_margin
+print(pts_per_win)
+```
+
+### `calibrate_replacement_level(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, pts_per_win: 'float', target_total_war: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss') -> 'float'` {#calibrate_replacement_level}
+
+Solve for the `replacement_level` that makes summed league WAR hit a target.
+
+WAR is affine in `replacement_level`:
+`war_i = (rating_i - replacement) * poss_i / 100 / pts_per_win`. Summed
+over all players this is a single linear equation in `replacement_level`;
+this function solves it in closed form (not an iterative search) for the
+`replacement_level` that makes `sum(war_i) == target_total_war`.
+
+`target_total_war` is a value the CALLER computes from real standings
+(e.g. total league wins above a chosen replacement-team win percentage) —
+this function does not assume or invent any such win-percentage convention.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | Frame with `player_id` and `rating_col`. |
+| `poss` | `DataFrame` |  | Frame with `player_id` and `poss_col` (total possessions played). |
+| `pts_per_win` | `float` |  | Points of season margin per marginal win (`calibrate_pts_per_win`'s output). |
+| `target_total_war` | `float` |  | The desired sum of every player's WAR. |
+| `rating_col` | `str` | `'rating'` | Column in `ratings` holding the per-100-possession rating. |
+| `poss_col` | `str` | `'poss'` | Column in `poss` holding total possessions played. |
+
+**Returns**
+
+`float` replacement_level solving the equation exactly.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import calibrate_replacement_level
+repl = calibrate_replacement_level(
+    ratings, poss, pts_per_win=250.0, target_total_war=300.0,
+)
+```
+
 ### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
 
 Compile a full season's possession stint matrix (cached + resumable + throttled).
@@ -1114,23 +1179,24 @@ logs = nba_box_logs("2023-24")
 print(logs["player"].shape)
 ```
 
-### `nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#nba_bpm}
+### `nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#nba_bpm}
 
-Faithful BPM 2.0 per player over the given logs (a season).
+Faithful BPM 2.0 per player, at season or single-game granularity.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_logs` | `DataFrame` |  | per-player-per-game box lines (`nba_box_logs`'s `player`). |
-| `team_logs` | `DataFrame` |  | per-team-per-game lines incl. `plus_minus` (`nba_box_logs`'s `team`). |
+| `player_logs` | `DataFrame` |  | per-player-per-game box lines (`nba_box_logs`'s `player`); must carry `game_id` when `granularity="game"`. |
+| `team_logs` | `DataFrame` |  | per-team-per-game lines incl. `plus_minus` (`nba_box_logs`'s `team`); must carry `game_id` when `granularity="game"`. |
 | `positions` | `DataFrame` |  | listed positions (`nba_player_positions`): player_id, position_num. |
 | `team_adjust` | `bool` | `True` | apply the team adjustment (True) or return raw box-BPM (False). |
+| `granularity` | `str` | `'season'` | `"season"` (default) aggregates every row in `player_logs`/ `team_logs` into one row per player. `"game"` runs the exact same pipeline independently per `game_id` (position/role are estimated game-native, mirroring `NbaBpmModel`'s existing fold-native design) and returns one row per (game_id, player_id) with a leading `game_id` column; `gp` is always 1 in this mode. |
 | `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
 
 **Returns**
 
-Frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min).
+frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min). `"game"`: the same columns prefixed with `game_id` (Utf8), one row per (game_id, player_id). Empty (that schema) input -> zero-row frame with the same schema; never raises on empty.
 
 **Example**
 
@@ -1139,6 +1205,11 @@ from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
 logs = nba_box_logs("2023-24"); pos = nba_player_positions("2023-24")
 bpm = nba_bpm(logs["player"], logs["team"], pos)
 print(bpm.sort("bpm", descending=True).head())
+
+# Per-game BPM
+
+bpm_game = nba_bpm(logs["player"], logs["team"], pos, granularity="game")
+print(bpm_game.filter(pl.col("game_id") == "0022300001").sort("bpm", descending=True))
 
 # Raw (no team adjustment)
 
@@ -1255,6 +1326,48 @@ stub = lambda **kw: pl.DataFrame({"person_id": [1], "position": ["PG"]})
 pos = nba_player_positions("2023-24", fetch=stub)
 ```
 
+### `nba_ratings_panel(model: 'AnyModel', possessions: 'pl.DataFrame', dates: 'Optional[Sequence[datetime.date]]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_ratings_panel}
+
+Player-ratings-through-date long panel: one row per (player_id, date).
+
+Refit-per-checkpoint (v1; no warm-start incrementality) — each date's row
+calls `ratings_as_of` independently, so the panel is leakage-free by
+construction: a possession dated after a given checkpoint can never affect
+that checkpoint's row, no matter what other dates are also being computed
+or what future rows exist in `possessions`. Cost is a full refit per
+checkpoint date; for a season's sparse RAPM-family design this is seconds
+per date, not minutes — acceptable for a nightly/daily cadence but not for
+live in-game updating (out of scope; see spec non-goals).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `AnyModel` |  | A harness model conforming to `nba_model_validation.AnyModel`. |
+| `possessions` | `DataFrame` |  | A possession+lineup frame with a `game_date` (`pl.Date`) column (as emitted by `compile_nba_season`). |
+| `dates` | `Optional[Sequence[date]]` | `None` | Checkpoint dates to compute. `None` (default) uses every distinct `game_date` present in `possessions`, sorted ascending — a rating for every game day, matching what EPM/LEBRON publish nightly. Duplicates are deduped; input order does not matter (the output is always sorted by date). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+Long frame with `RATINGS_PANEL_SCHEMA` columns (`player_id`, `date`, `o_rating`, `d_rating`, `rating`). Zero-row (that schema) when `possessions` is empty or no date yields any players.
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
+from sportsdataverse.nba.nba_ratings_panel import nba_ratings_panel
+
+checkpoints = [datetime.date(2023, 11, 1), datetime.date(2023, 12, 1)]
+panel = nba_ratings_panel(RidgeRapmModel(), season_poss, dates=checkpoints)
+print(panel.filter(pl.col("player_id") == 201939).sort("date"))
+
+# Every game day, no explicit grid
+
+panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
+```
+
 ### `nba_spm(box_features: 'pl.DataFrame', coefficients: 'SpmCoefficients', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_spm}
 
 Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM.
@@ -1350,6 +1463,48 @@ print(type(df_pd))
 df.filter(pl.col("event_type") == "1").select("player1_name", "player2_name")
 ```
 
+### `nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_war}
+
+Points-above-replacement -> wins for each player.
+
+`war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
+| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col` (e.g. `off_poss + def_poss` from `nba_rapm`). |
+| `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
+| `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
+| `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
+| `poss_col` | `str` | `'poss'` | Column in `poss` giving total possessions played. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when either input is empty.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import nba_war
+war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
+               replacement_level=-2.0, pts_per_win=250.0)
+print(war.sort("war", descending=True).head())
+
+# Derive both required kwargs from real data first
+
+from sportsdataverse.nba.nba_war import (
+    calibrate_pts_per_win, calibrate_replacement_level, nba_war,
+)
+pts_per_win = calibrate_pts_per_win(team_standings)
+repl = calibrate_replacement_level(
+    ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
+)
+war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
+```
+
 ### `players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_pbp}
 
 Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
@@ -1431,6 +1586,38 @@ df = players_on_court_from_rotation(
     enh, rotation, home_team_id=home, away_team_id=away
 )
 print(df.shape)
+```
+
+### `ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'` {#ratings_as_of}
+
+Fit `model` on every possession dated on or before `asof` and return ratings.
+
+This is the through-date primitive: possessions with `game_date > asof`
+are excluded from the fit entirely (never merely down-weighted), which is
+what makes the panel built from repeated calls to this function leakage-free
+by construction — see `tests/nba/test_nba_ratings_panel.py::test_ratings_as_of_is_leakage_free_append_invariant`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `AnyModel` |  | A harness model conforming to `nba_model_validation.AnyModel` (a `RapmModel`, `RatingsModel`, or `PriorModel`). |
+| `possessions` | `DataFrame` |  | A possession+lineup frame that MUST carry a `game_date` (`pl.Date`) column (as emitted by `compile_nba_season`). |
+| `asof` | `date` |  | The through-date checkpoint (inclusive). |
+
+**Returns**
+
+`RatingsFit` with per-player offense/defense ratings (per-100-possession scale, same sign convention as `nba_rapm`: positive `d_ratings` means good defense). Empty dicts when no possessions fall on or before `asof` or when `possessions` is empty.
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
+from sportsdataverse.nba.nba_ratings_panel import ratings_as_of
+
+rf = ratings_as_of(RidgeRapmModel(), season_poss, datetime.date(2023, 12, 1))
+print(rf.o_ratings[201939])   # per-100 offensive rating through Dec 1
 ```
 
 ### `render_report(report: 'ValidationReport') -> 'str'` {#render_report}

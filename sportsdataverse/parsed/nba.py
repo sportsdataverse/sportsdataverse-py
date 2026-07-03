@@ -150,6 +150,8 @@ from sportsdataverse.nba import SpmCoefficients as SpmCoefficients  # noqa: F401
 from sportsdataverse.nba import ValidationReport as ValidationReport  # noqa: F401
 from sportsdataverse.nba import box_features as box_features  # noqa: F401
 from sportsdataverse.nba import build_possession_shooting as build_possession_shooting  # noqa: F401
+from sportsdataverse.nba import calibrate_pts_per_win as calibrate_pts_per_win  # noqa: F401
+from sportsdataverse.nba import calibrate_replacement_level as calibrate_replacement_level  # noqa: F401
 from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
 from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accuracy  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
@@ -190,11 +192,14 @@ from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
+from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
 from sportsdataverse.nba import nba_v3_to_v2_pbp as nba_v3_to_v2_pbp  # noqa: F401
+from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_rotation as players_on_court_from_rotation  # noqa: F401
+from sportsdataverse.nba import ratings_as_of as ratings_as_of  # noqa: F401
 from sportsdataverse.nba import render_report as render_report  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nba import train_spm as train_spm  # noqa: F401
@@ -213,6 +218,8 @@ __all__ = [
     "ValidationReport",
     "box_features",
     "build_possession_shooting",
+    "calibrate_pts_per_win",
+    "calibrate_replacement_level",
     "compile_nba_season",
     "darko_forecast_accuracy",
     "download",
@@ -370,11 +377,14 @@ __all__ = [
     "nba_pbp_disk",
     "nba_player_ages",
     "nba_player_positions",
+    "nba_ratings_panel",
     "nba_spm",
     "nba_v3_to_v2_pbp",
+    "nba_war",
     "normalize_team_roster_columns",
     "players_on_court_from_pbp",
     "players_on_court_from_rotation",
+    "ratings_as_of",
     "render_report",
     "scoreboard_event_parsing",
     "train_spm",
