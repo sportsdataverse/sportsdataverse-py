@@ -157,7 +157,8 @@ def main() -> None:
     for snap_name, out_name in SNAPS.items():
         parsed, n_total, n_failed = parse_snap(SNAP_DIR / snap_name)
         out = OUT_DIR / out_name
-        out.write_text(json.dumps(parsed, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        with out.open("w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(parsed, indent=1, sort_keys=True) + "\n")
         rate = 100.0 * (n_total - n_failed) / n_total if n_total else 0.0
         print(f"{snap_name}: {len(parsed)} entries -> {out.name} ({n_total - n_failed}/{n_total} parsed, {rate:.1f}%)")
 
@@ -187,7 +188,8 @@ def main() -> None:
         totals[out_name] = (prev_total + n_total, prev_failed + n_failed)
     for out_name, entries in merged.items():
         out = OUT_DIR / out_name
-        out.write_text(json.dumps(entries, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        with out.open("w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(entries, indent=1, sort_keys=True) + "\n")
         n_total, n_failed = totals[out_name]
         rate = 100.0 * (n_total - n_failed) / n_total if n_total else 0.0
         print(

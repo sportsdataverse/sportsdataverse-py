@@ -12,7 +12,7 @@ Vendored from Alex-At-Home/cbb-on-off-analyzer (hoop-explorer.com SPA), local
 clone `GitHub-Data/cbb-on-off-analyzer` @ `0252725cd94bf54dd5384d0d9af3f2382367c057`
 on 2026-07-03, via `tools/vendor_hoop_explorer_fixtures.py`.
 
-Regenerate all four fixture files (after bumping the upstream clone) via:
+Regenerate all seven fixture files (after bumping the upstream clone) via:
 
 ```sh
 uv run python tools/vendor_hoop_explorer_fixtures.py
