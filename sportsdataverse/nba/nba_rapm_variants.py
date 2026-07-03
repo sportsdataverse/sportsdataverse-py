@@ -597,7 +597,13 @@ def nba_la_rapm(
 
     Args:
         possessions: Possession+lineup frame with team-level ``fg2m`` and the
-            ten lineup columns; join keys ``game_id`` + ``possession_number``.
+            ten lineup columns; join keys ``game_id`` + ``possession_number``
+            + ``offense_team_id`` (the last is required by
+            :func:`luck_adjusted_response`'s defense-shooter leak filter).
+            Must also carry a ``points`` column even though the LA response
+            (``la_points``) supersedes it for fitting --
+            :func:`~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked
+            internally via :func:`_prepare`) requires it unconditionally.
         shooting: Per-(possession, shooter) frame from ``build_possession_shooting``.
         player_rates: Optional ``{player_id: (p3, pft)}`` override; ``None`` →
             shrink from ``shooting``.
@@ -658,12 +664,33 @@ def nba_la_rapm(
 
 #: Per-possession four-factor response expressions (points-per-possession scale).
 #: **DECISION 5/6/7** (binding): ``RA_EFG = 2*fg2m + 3*fg3m``, ``RA_FTR = ftm``,
-#: ``RA_ORBD`` = raw ``oreb``, ``RA_TOV`` = raw ``tov`` -- the plan's v1 defaults.
+#: ``RA_ORBD`` = raw ``oreb``, ``RA_TOV`` = **negated** raw ``tov`` (``-tov``) --
+#: the plan's v1 defaults, with the TOV sign fixed per the polarity note below.
+#:
+#: **TOV polarity (bugfix):** :func:`_fit_weighted` assumes points-like polarity
+#: -- ``o = +raw_off`` (a higher raw offense coefficient is good: e.g. more
+#: points/made-FTs/oreb while on offense) and ``d = -raw_def`` (a defender who
+#: SUPPRESSES the response while on the floor gets a POSITIVE rating, since the
+#: raw coefficient is negated). That polarity holds for efg/ftr/orbd unmodified
+#: -- but turnovers invert it on BOTH sides: *committing* turnovers while on
+#: offense is bad (opposite of points, where more is good), and *forcing*
+#: turnovers while on defense is good (also opposite of the points convention,
+#: where suppressing the response is what's rewarded). Fitting on the raw
+#: ``tov`` response as shipped therefore read "more turnovers = higher
+#: ``tov__off``" and flipped a good takeaway defender NEGATIVE via ``tov__def``
+#: -- backwards on both sides. Fitting on the NEGATED response (``-tov``)
+#: restores the module-wide "higher = better" convention symmetrically:
+#: least-squares/ridge coefficients are exactly negated under a response sign
+#: flip (identical squared error at every alpha, so RidgeCV picks the same
+#: alpha and just negates ``coef_``), so this is equivalent to -- and cheaper
+#: than -- an explicit post-fit sign flip applied only to the ``tov`` factor's
+#: ``o``/``d`` arrays. See ``test_four_factor_tov_directionality_*`` for the
+#: planted-turnover-prone-player regression gate.
 _FACTOR_RESPONSES: dict[str, pl.Expr] = {
     "efg": (2 * pl.col("fg2m") + 3 * pl.col("fg3m")).cast(pl.Float64),
     "ftr": pl.col("ftm").cast(pl.Float64),
     "orbd": pl.col("oreb").cast(pl.Float64),
-    "tov": pl.col("tov").cast(pl.Float64),
+    "tov": (-pl.col("tov")).cast(pl.Float64),
 }
 
 #: Output schema for :func:`nba_four_factor_rapm`.
@@ -698,9 +725,25 @@ def nba_four_factor_rapm(
         :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s ``DEFAULT_RAPM_ALPHAS``/
         ``cv=None`` schedule. Pass an explicit ``alphas=`` to override.
 
+    .. note::
+        **TOV polarity (bugfix)**: unlike efg/ftr/orbd, ``RA_TOV`` is fit on
+        the NEGATED raw ``tov`` response (see :data:`_FACTOR_RESPONSES`) so
+        that ``tov__off``/``tov__def`` follow the same module-wide
+        "higher = better" convention as the other three factors -- a
+        turnover-prone offensive player gets a LOWER ``tov__off``, and a
+        takeaway-forcing defender gets a HIGHER ``tov__def``. Fitting on the
+        raw (un-negated) response would flip both: more turnovers reading as
+        a higher (better) ``tov__off``, and a good takeaway defender reading
+        negative on ``tov__def``.
+
     Args:
         possessions: Possession+lineup frame carrying team-level ``fg2m, fg3m,
-            ftm, oreb, tov`` and the ten lineup columns.
+            ftm, oreb, tov`` and the ten lineup columns. Must also carry a
+            ``points`` column -- :func:`~sportsdataverse.nba.nba_rapm.build_rapm_design`
+            (invoked internally) requires it unconditionally even though none
+            of the four factor responses use it. ``offense_team_id`` is NOT
+            required here (unlike :func:`nba_la_rapm`): none of the four
+            factor responses need the offense-only shooter join.
         alphas: Optional RidgeCV alpha grid override, shared by all four
             factor fits. ``None`` (default) auto-selects
             :func:`oracle_rapm_alphas` evaluated at the possession count --

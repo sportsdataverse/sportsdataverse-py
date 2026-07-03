@@ -440,12 +440,29 @@ def test_four_factor_uses_oracle_schedule_matches_same_schedule_reference():
         ("efg", (2 * pl.col("fg2m") + 3 * pl.col("fg3m")).cast(pl.Float64)),
         ("ftr", pl.col("ftm").cast(pl.Float64)),
         ("orbd", pl.col("oreb").cast(pl.Float64)),
-        ("tov", pl.col("tov").cast(pl.Float64)),
+        ("tov", (-pl.col("tov")).cast(pl.Float64)),  # RA_TOV fits on -tov (polarity fix)
     ):
         ref_poss = poss.with_columns(response_expr.alias("_resp"))
         ref = _same_schedule_reference(ref_poss, "_resp").sort("player_id")
         got = out[f"{factor}__off"].to_numpy() + out[f"{factor}__def"].to_numpy()
         assert np.allclose(got, ref["rapm"].to_numpy(), atol=1e-6)
+
+
+def test_four_factor_tov_directionality_turnover_prone_offense_is_lower():
+    # Bugfix regression gate: RA_TOV must follow the module-wide "higher = better"
+    # convention on BOTH sides. Plant a turnover-prone offensive player (player 100:
+    # every possession he's on offense for has tov=1, all others tov=0) alongside a
+    # clean teammate (player 101, never elevated). A correctly-signed fit must give
+    # the turnover-prone player a LOWER tov__off than the clean one -- fitting on the
+    # raw (un-negated) response would get this backwards (more turnovers reading as
+    # a HIGHER, i.e. "better", tov__off).
+    poss = _synth_four_factor(seed=11)
+    prone_on_offense = pl.any_horizontal([pl.col(f"off_player_{i}") == 100 for i in range(1, 6)])
+    poss = poss.with_columns(pl.when(prone_on_offense).then(1).otherwise(0).alias("tov"))
+    out = nba_four_factor_rapm(poss)
+    prone = out.filter(pl.col("player_id") == 100)["tov__off"][0]
+    clean = out.filter(pl.col("player_id") == 101)["tov__off"][0]
+    assert prone < clean
 
 
 def test_la_rapm_schema_and_dtypes():
