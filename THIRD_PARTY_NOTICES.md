@@ -85,16 +85,22 @@ that license's own attribution obligations.
 - **Copyright:** Copyright (c) Alex-At-Home
   (<https://github.com/Alex-At-Home>) and contributors. Licensed under the
   Apache License, Version 2.0.
-- **What was derived:** `src/utils/stats/LuckUtils.ts`'s offensive 3P
-  luck-adjustment surface (`calcOffTeamLuckAdj`, `calcOffPlayerLuckAdj`,
-  `build3PShotInfo`, `buildAdjusted3P`, `buildExp3P`, the generalized
-  `buildShotInfo` / `buildAdjustedFG` they wrap, and the `affectedFieldSet`
-  constant) was ported line-for-line into
-  [`sportsdataverse/mbb/mbb_luck.py`](sportsdataverse/mbb/mbb_luck.py). The
-  defensive counterpart (`calcDefTeamLuckAdj`, `calcDefPlayerLuckAdj`) and
-  `injectLuck` are being ported incrementally into the same module; this
-  entry covers the module as a whole. The jest snapshot fixtures and their
-  input literals used as an offline correctness oracle are vendored under
+- **What was derived:** `src/utils/stats/LuckUtils.ts`'s full 3P
+  luck-adjustment surface -- both the offensive half (`calcOffTeamLuckAdj`,
+  `calcOffPlayerLuckAdj`, `build3PShotInfo`, `buildAdjusted3P`, `buildExp3P`,
+  the generalized `buildShotInfo` / `buildAdjustedFG` they wrap) and the
+  defensive half (`calcDefTeamLuckAdj`, `calcDefPlayerLuckAdj`), plus the
+  mutate-in-place `injectLuck` application glue and the `affectedFieldSet`
+  constant -- was ported line-for-line into
+  [`sportsdataverse/mbb/mbb_luck.py`](sportsdataverse/mbb/mbb_luck.py).
+  Alongside `injectLuck`, a scoped port of
+  `src/utils/stats/OverrideUtils.ts`'s `overrideMutableVal` primitive (plus
+  its two small dependencies, `getOriginalVal`/`getIgnoreNil`) was added to
+  the same module -- the only `OverrideUtils` member `injectLuck` calls; the
+  shot-quality-override-UI-specific remainder of `OverrideUtils.ts` was not
+  ported (see `mbb_luck.py`'s module docstring for the exact scope). The
+  jest snapshot fixtures and their input literals used as an offline
+  correctness oracle are vendored under
   [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
   are test-only fixtures and are not shipped in the distributed wheel or
   sdist.
