@@ -46,6 +46,18 @@ INPUT_SOURCES = {
     UPSTREAM / "src/sample-data/sampleTeamStatsResponse.ts": "luck_utils_inputs.json",
     UPSTREAM / "src/sample-data/sampleOnOffLuckDiagnostics.ts": "luck_utils_inputs.json",
     UPSTREAM / "src/utils/stats/__tests__/LuckUtils.test.ts": "luck_utils_inputs.json",
+    # RapmUtils.test.ts (Task 3.1). Its own sample data (`playersInfoByKey`,
+    # `lineupReport`) is derived from sampleLineupStatsResponse/samplePlayerStatsResponse
+    # (already vendored above) via lodash chains, not fresh literals -- see the
+    # README's replay-recipe notes. The one genuinely new, purely-literal top-level
+    # const is `reducedFilteredLineups` (the 31-row semi-synthetic lineup array
+    # feeding `semiRealRapmResults.testContext`, which `pickRidgeRegression` /
+    # `injectRapmIntoPlayers` / the pseudo-real `calcCollinearityDiag` test all
+    # exercise via `ctx.filteredLineups(...)`); `semiRealRapmResults` itself (and
+    # `lineupReport`, `playersInfoByKey`, `insertOldValues`) fail json5 (function
+    # calls / object spread / arrow functions / expressions referencing other
+    # consts) and are documented as replay recipes in the README instead.
+    UPSTREAM / "src/utils/stats/__tests__/RapmUtils.test.ts": "rapm_utils_inputs.json",
 }
 
 # `export const X = {...};` (sample-data modules) or bare `const X = {...};`
