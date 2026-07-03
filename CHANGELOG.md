@@ -5,6 +5,7 @@
 - [Unreleased](#unreleased)
   - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
   - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
+  - [NBA — possession event-detail columns, per-shooter shooting frame, `game_date`](#nba--possession-event-detail-columns-per-shooter-shooting-frame-game_date)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
   - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
@@ -194,6 +195,12 @@ Two new codegen-generated flat-API stems wrap the official stats API surface:
 - **Browser-TLS runtime:** `stats.nba.com` TLS/JA3-fingerprint-blocks plain `requests` (silent timeout, not an IP block). The runtime `_get` uses **`curl_cffi` with `impersonate="chrome"`**. `curl_cffi` is a **lazy optional import** shipped under the `tests` and `all` extras — not a hard runtime dep. A clear `ImportError` guides users to `pip install curl_cffi` (or `pip install sportsdataverse[all]`). The HTTP transport is injectable so wrappers and tests can run fully offline.
 - Wrappers default to `return_parsed=True` (tidy polars DataFrame). Pass `return_parsed=False` for the raw `Dict` or `return_as_pandas=True` for pandas. There is no user-facing `headers=` param — the TLS impersonation is handled inside the runtime, not via a user token.
 - Generated from the enriched canonical catalog (`tools/codegen/gen_nba_stats.py`) and registered in `FLAT_APIS` in `tools/codegen/generate.py`. Param `default`/`example` values are mined from the hoopR/wehoop roxygen signatures + `@examples`. Returns-table descriptions are authored for the pilot slugs and back-filled by column name from the SDV R-package docs (`_r_col_desc`); the remaining un-authored `native/nba_stats` + `native/wnba_stats` columns are a tracked follow-up exempted from the coverage ratchet via `extract_residual_columns._DEFERRED_BUCKETS` (surfaced by `deferred_columns()`).
+
+### NBA — possession event-detail columns, per-shooter shooting frame, `game_date`
+
+- feat(nba): possession event-detail columns (`fg2a/fg2m/fg3a/fg3m/fta/ftm/oreb/tov`),
+  per-shooter `build_possession_shooting` companion frame, and `game_date` on
+  `compile_nba_season` output (possession cache `PIPELINE_VERSION` 1 -> 2).
 
 ## 0.0.71 Release: June 24, 2026
 
