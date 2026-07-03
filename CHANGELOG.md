@@ -6,6 +6,7 @@
   - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
   - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
   - [NBA — possession event-detail columns, per-shooter shooting frame, `game_date`](#nba--possession-event-detail-columns-per-shooter-shooting-frame-game_date)
+  - [NBA — faithful possession boundaries (pbpstats parity)](#nba--faithful-possession-boundaries-pbpstats-parity)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
   - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
@@ -201,6 +202,18 @@ Two new codegen-generated flat-API stems wrap the official stats API surface:
 - feat(nba): possession event-detail columns (`fg2a/fg2m/fg3a/fg3m/fta/ftm/oreb/tov`),
   per-shooter `build_possession_shooting` companion frame, and `game_date` on
   `compile_nba_season` output (possession cache `PIPELINE_VERSION` 1 -> 2).
+
+### NBA — faithful possession boundaries (pbpstats parity)
+
+- feat(nba): `_build_possession_groups` rewritten to pbpstats `stats_nba`
+  `is_possession_ending_event` semantics (and-1 + FT-trip exceptions, real-rebound
+  and no-turnover filtering, jump-ball logic); technical FTs are inline again with
+  team-filtered event detail (per-possession points identity preserved exactly).
+- feat(nba): possessions gain `dreb`, `number_in_period`, `possession_start_type`
+  (coarse vocabulary), `count_as_possession`; shooting frame gains `team_id`
+  (possession cache `PIPELINE_VERSION` 2 -> 3).
+- test(nba): pbpstats-live oracle gate — like-for-like possession counts +
+  boundary-by-boundary diff on the committed cdn fixtures (`SDV_PBPSTATS_ROOT`).
 
 ## 0.0.71 Release: June 24, 2026
 
