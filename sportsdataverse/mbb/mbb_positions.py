@@ -12,16 +12,25 @@ constant tables (``PositionUtils.ts:23/28/37/129/184``), the memoized
 :func:`incorporate_height` (``PositionUtils.incorporateHeight``, plus its
 private ``cdf`` helper, ``PositionUtils.ts:341/346``).
 
-**Deferred to later Phase-4 tasks (intentionally absent from this file):**
-the decision-tree layer -- ``buildPosition`` / ``usingRosterPos`` /
-``posClassToScore`` and the ``idToPosition`` / ``positionClasses`` lookup
-tables (Task 4.3, ``PositionUtils.ts:387/401/583/629``) -- and the
-lineup-ordering layer -- ``orderLineup`` /
-``applyRelativePositionalOverrides`` / ``buildPositionalAwareFilter`` /
-``testPositionalAwareFilter`` (Task 4.4, ``PositionUtils.ts:657/696/764/831``).
-Those two tasks also pull in the ``PositionalManualFixes.ts`` data tables
-(``absolutePositionFixes`` / ``relativePositionFixes``), which this task does
-not read.
+**Task 4.3 (this update) adds the decision-tree layer**: :func:`build_position`
+(``PositionUtils.buildPosition``, ``PositionUtils.ts:401-580``) -- the PG /
+s-PG / CG / WG / WF / S-PF / PF/C / C branch cascade, the manual-override
+short-circuit, and the roster reconciliation -- plus :func:`using_roster_pos`
+(``PositionUtils.usingRosterPos``, ``:583-626``), :func:`pos_class_to_score`
+(``PositionUtils.posClassToScore``, ``:629-654``), the :data:`ID_TO_POSITION`
+lookup table (``PositionUtils.idToPosition``, ``:387-398``), and the tested
+subset of ``PositionalManualFixes.absolutePositionFixes`` as
+:data:`ABSOLUTE_POSITION_FIXES`.
+
+**Deferred to Task 4.4 (intentionally absent from this file):** the
+lineup-ordering layer -- ``orderLineup`` / ``applyRelativePositionalOverrides``
+/ ``buildPositionalAwareFilter`` / ``testPositionalAwareFilter``
+(``PositionUtils.ts:657/696/764/831``) -- and the ``positionClasses`` /
+``posClassToNickname`` / ``nicknameToPosClass`` / ``positionGroupings`` /
+``positionsToGroup`` / ``expandedPosClasses`` lookup tables (``:371-385``,
+``:863-919``; confirmed unused by ``buildPosition``/``usingRosterPos``/
+``posClassToScore`` -- they're read only by ``orderLineup`` and the
+positional-aware filter helpers), plus ``PositionalManualFixes.relativePositionFixes``.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``PositionUtils.ts`` (and, for Tasks 4.3/4.4,
@@ -57,6 +66,10 @@ its regime:
      faithfully as Python ``or 1`` / ``or 0`` -- see the "JS-semantics"
      note below), so none can reach a zero divisor. This index is opened at 1
      for the module; Tasks 4.3/4.4 append their own sites as they land.
+  2. **(No division sites in the 4.3 scope either.)** :func:`build_position`
+     multiplies (``effective_poss = poss * usage``) but never divides;
+     :func:`using_roster_pos` / :func:`pos_class_to_score` are pure
+     string/dict lookups. No new landmine sites to log.
 
 **JS-semantics fidelity (``||`` falsy-coalesce is load-bearing here).** The
 upstream denominators use JS ``x.value || 1`` (falsy-coalesce), NOT ``?? 1``
@@ -98,9 +111,14 @@ __all__ = [
     "POSITION_FEATURE_AVERAGES",
     "HEIGHT_MEAN_STDS",
     "AVERAGE_SCORES_BY_POS",
+    "ID_TO_POSITION",
+    "ABSOLUTE_POSITION_FIXES",
     "regress_shot_quality",
     "build_position_confidences",
     "incorporate_height",
+    "build_position",
+    "using_roster_pos",
+    "pos_class_to_score",
 ]
 
 _SQRT2 = math.sqrt(2)
@@ -429,3 +447,327 @@ def incorporate_height(height_in: float, confs: list[float]) -> list[float]:
         new_scores[i] = new_score
     # `(confs[i] * v) / (sumProduct || 1)` (ts:365-367)
     return [(confs[i] * v) / (sum_product or 1) for i, v in enumerate(new_scores)]
+
+
+#: Human-readable descriptions for the short position-class codes returned by
+#: :func:`build_position` / :func:`using_roster_pos` (``PositionUtils.ts:387-398``
+#: ``idToPosition``). Ported verbatim.
+ID_TO_POSITION: dict[str, str] = {
+    "PG": "Pure PG",
+    "s-PG": "Scoring PG",
+    "CG": "Combo Guard",
+    "WG": "Wing Guard",
+    "WF": "Wing Forward",
+    "S-PF": "Stretch PF",
+    "PF/C": "Power Forward/Center",
+    "C": "Center",
+    "G?": "Unknown - probably Guard",
+    "F/C?": "Unknown - probably Forward/Center",
+}
+
+#: Team/season -> player key -> forced-position override
+#: (``PositionalManualFixes.absolutePositionFixes``, 386 LOC upstream file).
+#: **Only the row exercised by this module's test suite is ported** -- the
+#: ``"Men_Boston College_2019/20"`` -> ``"Popovic, Nik"`` -> ``PF/C`` fix
+#: (``PositionalManualFixes.ts:25-29``). The remaining ~35 rows (other
+#: team/seasons -- Baylor's "Vital, Mark", Cincinnati's "DeJulius, David",
+#: Iowa's "Garza, Luka", etc.) are a **deliberate deferral**: no jest case in
+#: ``PositionUtils.test.ts`` exercises them, and the table is pure data with
+#: no branching logic to get wrong -- vendor the remaining rows verbatim from
+#: ``PositionalManualFixes.ts`` if/when a caller needs a specific team/season
+#: override not listed here (a missing entry is not a silent bug: an
+#: unlisted ``(team_season, player_key)`` pair simply falls through to the
+#: normal stats-driven classification, same as upstream for any team/season
+#: string not present in the real 386-line table).
+ABSOLUTE_POSITION_FIXES: dict[str, dict[str, dict[str, str]]] = {
+    "Men_Boston College_2019/20": {
+        "Popovic, Nik": {"position": "PF/C"},
+    },
+}
+
+_MIN_AST_RATE = 0.09
+_MIN_THREE_RATE = 0.2
+
+
+def _field_value(player: dict[str, Any], field: str) -> Any:
+    """``player?.field?.value`` optional-chain read (e.g.
+    ``player?.off_assist?.value``, ``PositionUtils.ts:426``).
+
+    Returns ``None`` (not ``0``) when ``field`` is absent from ``player`` --
+    an ``is not None`` check on the wrapper, mirroring JS ``?.`` (which only
+    short-circuits on ``null``/``undefined``, not on a falsy-but-present
+    value). Callers apply their own trailing ``or 0`` per the TS call site,
+    same convention as :func:`build_position_confidences`.
+    """
+    stat = player.get(field)
+    return stat.get("value") if isinstance(stat, dict) else None
+
+
+def _max_conf_pos(confs: dict[str, float], pos_list: list[str]) -> str:
+    """``_.maxBy(posList, pos => confs[pos] || 0) || 0`` (``PositionUtils.ts:424``).
+
+    Lodash ``maxBy`` scans left-to-right and keeps the first element that
+    reaches the running maximum (only a *strictly greater* value replaces
+    it) -- replicated with an explicit scan so the tie-breaking behavior is
+    documented rather than incidental. The trailing ``|| 0`` in the TS never
+    actually fires (``posList`` is always the fixed 5-element
+    :data:`TRAD_POS_LIST`, never empty), so it isn't reproduced here.
+    """
+    best_pos = pos_list[0]
+    best_val = confs[best_pos] or 0
+    for pos in pos_list[1:]:
+        val = confs[pos] or 0
+        if val > best_val:
+            best_val = val
+            best_pos = pos
+    return best_pos
+
+
+def build_position(
+    confs: dict[str, float],
+    confs_no_height: dict[str, float] | None,
+    player: dict[str, Any],
+    team_season: str,
+) -> tuple[str, str]:
+    """Classify a player into a position label + diagnostic trace string.
+
+    Faithful port of ``PositionUtils.buildPosition`` (``PositionUtils.ts:401-580``)
+    -- the PG / s-PG / CG / WG / WF / S-PF / PF/C / C decision tree. A
+    :data:`ABSOLUTE_POSITION_FIXES` manual override short-circuits the whole
+    tree (recursing once, with ``team_season=""``, purely to compute the
+    diagnostic "what would this have been" string); otherwise the function
+    walks the confidence-threshold / assist-rate / 3PT-rate branch cascade,
+    applies the "too few effective possessions" (< 25) fallback, and
+    reconciles the result against roster metadata via :func:`using_roster_pos`.
+
+    Args:
+        confs: The 5-way positional confidence dict (:data:`TRAD_POS_LIST`
+            keys), typically the height-adjusted output of
+            :func:`build_position_confidences`.
+        confs_no_height: The pre-height-adjustment confidences, or ``None``
+            when the caller has no height data. When present, a PG <-> s-PG
+            flip caused solely by the height adjustment is reverted (the
+            ``maybeIgnoreHeight`` closure, ``ts:433-457``). The check is
+            ``is not None`` (JS object-truthiness: an empty dict is still a
+            truthy JS object), NOT a Python-falsy ``if confs_no_height``.
+        player: The player stat dict. Reads ``key`` (override lookup),
+            ``off_assist`` / ``off_3pr`` / ``off_usage`` / ``off_team_poss``
+            (each ``{"value": N}``-wrapped), and ``roster`` (a plain
+            ``{"pos": ..., "role": ...}`` dict of un-wrapped strings).
+        team_season: ``"{sport}_{team}_{season}"`` key into
+            :data:`ABSOLUTE_POSITION_FIXES`. Pass ``""`` to disable override
+            lookup for a given call (the recursive diagnostic call inside the
+            override branch does exactly this).
+
+    Returns:
+        A ``(position, diagnostic)`` tuple. ``position`` is one of
+        :data:`ID_TO_POSITION`'s keys; ``diagnostic`` is a human-readable
+        trace of which rule fired, byte-identical to the TS's template
+        strings (including ``.toFixed(1)``-style percentage formatting).
+
+    Example:
+        A confident, high-assist point guard::
+
+            from sportsdataverse.mbb.mbb_positions import build_position, TRAD_POS_LIST
+            confs = dict(zip(TRAD_POS_LIST, [0.9, 0.1, 0, 0, 0]))
+            player = {"off_assist": {"value": 0.10}, "off_3pr": {"value": 0.20},
+                      "off_team_poss": {"value": 1000}, "off_usage": {"value": 0.20}}
+            build_position(confs, None, player, "Men_Boston College_2019/20")
+
+        A manual-override short-circuit::
+
+            build_position(confs, None, {"key": "Popovic, Nik",
+                "off_usage": {"value": 1}, "off_team_poss": {"value": 200},
+                "off_assist": {"value": 0.10}}, "Men_Boston College_2019/20")
+    """
+    player_key = player.get("key")
+    override = ABSOLUTE_POSITION_FIXES.get(team_season, {}).get(player_key) if isinstance(player_key, str) else None
+    if override:
+        manual_pos, diag = build_position(confs, confs_no_height, player, "")
+        return override["position"], f"Override from [{manual_pos}] which matched rule [{diag}]"
+
+    pos_list = TRAD_POS_LIST
+    max_pos = _max_conf_pos(confs, pos_list)
+
+    # `player?.off_assist?.value || 0` / `player?.off_3pr?.value || 0` (ts:426/428).
+    assist_rate = _field_value(player, "off_assist") or 0
+    three_rate = _field_value(player, "off_3pr") or 0
+    min_ast_rate = _MIN_AST_RATE
+    min_three_rate = _MIN_THREE_RATE
+
+    fwd_conf_sum = confs["pos_sf"] + confs["pos_pf"] + confs["pos_c"]
+
+    def _maybe_ignore_height(in_pos_info: tuple[str, str, str]) -> tuple[str, str, str]:
+        # `if (confsNoHeight)` (ts:434) -- JS object-truthiness: `is not None`,
+        # NOT Python-falsy (an empty dict would still be a truthy JS object).
+        if confs_no_height is not None:
+            pos_with_height = in_pos_info[0]
+            pos_no_height, diag_no_height = build_position(confs_no_height, None, player, team_season)
+            if (pos_no_height == "s-PG" and pos_with_height == "PG") or (
+                pos_no_height == "PG" and pos_with_height == "s-PG"
+            ):
+                return pos_no_height, f"{diag_no_height} ('PG' vs 's-PG', ignore height)", in_pos_info[2]
+            return in_pos_info
+        return in_pos_info
+
+    def _get_position() -> tuple[str, str, str]:
+        # Big if/elif cascade, branch-for-branch from PositionUtils.ts:460-549.
+        if confs["pos_pg"] > 0.85:
+            if assist_rate >= min_ast_rate:
+                return _maybe_ignore_height(("PG", "(P[PG] >= 85%)", "G?"))
+            return "WG", f"(PG:)(P[PG] >= 85%) BUT (AST%[{assist_rate * 100:.1f}] < 9%)", "G?"
+        elif confs["pos_pg"] > 0.5:
+            if assist_rate >= min_ast_rate:
+                return _maybe_ignore_height(("s-PG", "(P[PG] >= 50%)", "G?"))
+            return "WG", f"(pG:)(P[PG] >= 50%) BUT (AST%[{assist_rate * 100:.1f}] < 9%)", "G?"
+        elif max_pos == pos_list[0]:
+            if assist_rate >= min_ast_rate:
+                return "CG", "(Max[P] == PG)", "G?"
+            return "WG", f"(CG:)(Max[P] == PG) BUT (AST%[{assist_rate * 100:.1f}] < 9%)", "G?"
+        elif max_pos == pos_list[1] and confs["pos_pg"] >= fwd_conf_sum:
+            if assist_rate >= min_ast_rate:
+                return "CG", "(Max[P] == SG) AND (P[PG] >= P[SF] + P[PF] + P[C])", "G?"
+            return (
+                "WG",
+                f"(CG:)(Max[P] == SG) AND (P[PG] >= P[SF] + P[PF] + P[C]) BUT (AST%[{assist_rate * 100:.1f}] < 9%)",
+                "G?",
+            )
+        elif max_pos == pos_list[1] and confs["pos_pg"] < fwd_conf_sum:
+            return "WG", "(Max[P] == SG) AND (P[PG] < P[SF] + P[PF] + P[C])", "G?"
+        elif max_pos == pos_list[2] and confs["pos_pg"] + confs["pos_sg"] >= confs["pos_pf"] + confs["pos_c"]:
+            return "WG", "(Max[P] == SF) AND (P[PG] + P[SG] >= P[PF] + P[C])", "G?"
+        elif max_pos == pos_list[2]:
+            return "WF", "(Max[P] == SF) AND (P[PG] + P[SG] < P[PF] + P[C])", "F/C?"
+        elif confs["pos_pf"] >= 0.85:
+            return "PF/C", "(P[PF] >= 85%)", "F/C?"
+        elif max_pos == pos_list[3] and confs["pos_pg"] + confs["pos_sg"] + confs["pos_sf"] >= confs["pos_c"]:
+            if three_rate >= min_three_rate:
+                return "S-PF", "(Max[P] == PF) AND (P[PG] + P[SG] + P[SF] >= P[C])", "F/C?"
+            return (
+                "PF/C",
+                f"(S4:)(Max[P] == PF) AND (P[PG] + P[SG] + P[SF] >= P[C]) BUT 3PR%[{three_rate * 100:.1f}] < 20%",
+                "F/C?",
+            )
+        elif confs["pos_c"] >= 0.85:
+            return "C", "(P[C] >= 85%)", "F/C?"
+        # (else fallback, ts:544-549)
+        return (
+            "PF/C",
+            "(Max[P] == C) OR ((Max[P] == PF) AND (P[PG] + P[SG] + P[SF] < P[C]))",
+            "F/C?",
+        )
+
+    pos, diag, fallback_pos = _get_position()
+
+    # `player?.off_usage?.value || 0` / `player?.off_team_poss?.value || 0` (ts:553-554).
+    usage = _field_value(player, "off_usage") or 0
+    poss = _field_value(player, "off_team_poss") or 0
+    effective_poss = poss * usage
+
+    pos_from_stats = fallback_pos if effective_poss < 25.0 else pos
+
+    # `player.roster?.pos` / `player.roster?.role` (ts:561/570) -- optional
+    # chaining on a plain (un-wrapped) sub-dict, not a `{"value": N}` stat.
+    roster = player.get("roster")
+    roster_pos = roster.get("pos") if roster is not None else None
+    roster_role = roster.get("role") if roster is not None else None
+
+    pos_with_roster, pos_with_roster_info = using_roster_pos(pos_from_stats, roster_pos)
+    extra_info = f"{pos_with_roster_info}. From stats: " if pos_with_roster_info else ""
+
+    if effective_poss < 25.0:
+        # `player.roster?.role || posWithRoster` (ts:570) -- falsy-coalesce:
+        # an empty-string role is treated the same as a missing one.
+        return (
+            roster_role or pos_with_roster,
+            f"{extra_info}Too few used possessions [{effective_poss:.1f}]=[{poss:.0f}]*"
+            f"[{usage * 100:.1f}]% < [25.0]. Would have matched [{pos}] from rule [{diag}]",
+        )
+    return pos_with_roster, f"{extra_info}{diag}"
+
+
+def pos_class_to_score(pos_class: str) -> int:
+    """Ordinal "positional weight" for a position class, PG=1000..C=8000.
+
+    Faithful port of ``PositionUtils.posClassToScore`` (``PositionUtils.ts:629-654``,
+    a literal ``switch``). Unmapped classes default to ``4000`` (the TS
+    default-case comment notes "won't happen").
+
+    Args:
+        pos_class: A position-class code (e.g. ``"PG"``, ``"WF"``, ``"C"``).
+
+    Returns:
+        The class's ordinal score.
+
+    Example:
+        ::
+
+            from sportsdataverse.mbb.mbb_positions import pos_class_to_score
+            pos_class_to_score("WF")
+    """
+    return {
+        "PG": 1000,
+        "s-PG": 2000,
+        "CG": 3000,
+        "G?": 3000,
+        "WG": 4000,
+        "WF": 5000,
+        "S-PF": 6000,
+        "PF/C": 7000,
+        "F/C?": 7000,
+        "C": 8000,
+    }.get(pos_class, 4000)
+
+
+def using_roster_pos(pos_class: str, roster_pos: str | None) -> tuple[str, str | None]:
+    """Reconcile a stats-derived position class against roster metadata.
+
+    Faithful port of ``PositionUtils.usingRosterPos`` (``PositionUtils.ts:583-626``).
+    When the classifier landed on an "unsure" bucket (``"G?"``/``"F/C?"``),
+    roster info narrows it (a roster ``"C"`` always wins outright); otherwise
+    an obviously-wrong stats classification is compromised toward the
+    roster-implied side, gated by :func:`pos_class_to_score` thresholds.
+
+    Args:
+        pos_class: The stats-derived position class.
+        roster_pos: The roster-reported position (``"G"``/``"F"``/``"C"``),
+            or ``None``/``""`` when unknown. ``if (rosterPos)`` (ts:587) is a
+            plain JS truthiness check on a string -- ``""`` and ``None``
+            behave identically (both mean "no correction"), so ``if not
+            roster_pos`` is the faithful Python mirror, not an ``is None``
+            landmine.
+
+    Returns:
+        A ``(position, info)`` tuple. ``info`` is ``None`` when no
+        correction/explanation applies (matches the TS ``undefined``), else
+        a human-readable note on why the position was adjusted.
+
+    Example:
+        A "C" roster position always wins over an unsure stats read::
+
+            from sportsdataverse.mbb.mbb_positions import using_roster_pos
+            using_roster_pos("G?", "C")
+    """
+    if not roster_pos:
+        return pos_class, None
+
+    if pos_class in ("G?", "F/C?"):
+        if roster_pos == "G":
+            return "G?", "Based on roster info"
+        if roster_pos == "C":
+            # (if someone's roster pos is a C then they are always a C!)
+            return "C", "Based on roster info"
+        return "F/C?", "Based on roster info"
+
+    score = pos_class_to_score(pos_class)
+    if score < 7000 and roster_pos == "C":
+        return "PF/C", f"Roster info says 'C', stats say [{pos_class}] - compromize at 'PF/C'"
+    if score < 4000 and roster_pos == "F":
+        return "WG", f"Roster info says 'F', stats say [{pos_class}] - compromize at 'WG'"
+    if score == 4000 and roster_pos == "F":
+        return "WF", "Roster info says 'F', stats say 'WG'"
+    if score == 5000 and roster_pos == "G":
+        return "WG", "Roster info says 'G', stats say 'WF'"
+    if score > 5000 and roster_pos == "G":
+        return "WF", f"Roster info says 'G', stats say [{pos_class}] - compromize at 'WF'"
+    return pos_class, None

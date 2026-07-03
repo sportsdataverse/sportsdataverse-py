@@ -1,4 +1,4 @@
-"""Oracle-replay tests for ``sportsdataverse.mbb.mbb_positions`` (Task 4.2).
+"""Oracle-replay tests for ``sportsdataverse.mbb.mbb_positions`` (Tasks 4.2-4.3).
 
 Every assertion here replays an inline literal from the upstream jest suite
 ``cbb-on-off-analyzer/src/utils/stats/__tests__/PositionUtils.test.ts`` (382
@@ -14,12 +14,20 @@ the full assertion classification map live in
 * ``PositionUtils - buildPositionConfidences`` (jest ``:28-52``)
 * ``PositionUtils - regressShotQuality`` (jest ``:173-205``)
 
-**Out of scope for Task 4.2 (deferred to later Phase-4 tasks, NOT tested
-here) -- accounted for so none are silently skipped:**
+**In scope for Task 4.3 (the decision tree + roster reconciliation) --
+consumed below:**
 
-* ``PositionUtils - buildPosition`` (jest ``:53-172``) -> Task 4.3 (decision
-  tree + ``PositionalManualFixes.absolutePositionFixes``).
-* ``PositionUtils - usingRosterPos`` (jest ``:207-225``) -> Task 4.3.
+* ``PositionUtils - buildPosition`` (jest ``:53-172``) -- all 19 hand-checked
+  ``testCases`` rows, the too-few-possessions fallback (17 of the 19 rows --
+  excludes the row with ``confsNoHeight`` and the roster-override row, same
+  as the jest ``if (!caseObj.roster && !caseObj.confsNoHeight)`` guard), and
+  the 2 post-loop assertions (absolute-override plumbing +
+  ``idToPosition`` lookups).
+* ``PositionUtils - usingRosterPos`` (jest ``:207-225``) -- all 10 rows.
+
+**Out of scope (deferred to Task 4.4, NOT tested here) -- accounted for so
+none are silently skipped:**
+
 * ``PositionUtils - orderLineup`` (jest ``:227-312``) -> Task 4.4 (lineup
   ordering + ``relativePositionFixes``).
 * ``PositionUtils - buildPositionalAwareFilter`` (jest ``:313-334``) -> Task 4.4.
@@ -34,12 +42,17 @@ from __future__ import annotations
 
 from typing import Any
 
+import pytest
+
 from sportsdataverse.mbb.mbb_positions import (
     AVERAGE_SCORES_BY_POS,
+    ID_TO_POSITION,
     TRAD_POS_LIST,
+    build_position,
     build_position_confidences,
     incorporate_height,
     regress_shot_quality,
+    using_roster_pos,
 )
 
 from ._hoop_explorer_replay import load_fixture, load_rating_inputs
@@ -144,3 +157,248 @@ def test_regress_shot_quality() -> None:
     assert f"{regress_shot_quality(-15.5, 2, 'calc_mid_relative', player2):.2f}" == "-12.26"
     # player2 rim share > 25% of total_off_fga -> no regression, passthrough.
     assert f"{regress_shot_quality(100, 3, 'calc_rim_relative', player2):.2f}" == "100.00"
+
+
+# --- Test 4: PositionUtils - buildPosition (jest :53-172) ------------------
+
+#: Verbatim transcription of the jest ``testCases`` array (``PositionUtils.test.ts:56-142``).
+#: `confs`/`confs_no_height` are tradPosList-ordered `[pg, sg, sf, pf, c]`; `extra`
+#: keys become `{field: {"value": v}}` player stats (`assist`->`off_assist`,
+#: `3pr`->`off_3pr`, `poss`->`off_team_poss`, `usage`->`off_usage`); `roster` is
+#: the optional `{"pos": ...}` override-plumbing case. This const fails json5
+#: vendoring (backtick template-literal `diag` strings) -- see
+#: ``tests/fixtures/hoop_explorer/README.md`` PositionUtils section item 4.
+BUILD_POSITION_CASES: list[dict[str, Any]] = [
+    {
+        "confs": [0.9, 0.1, 0, 0, 0],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "PG",
+        "fallback_pos": "G?",
+        "diag": "(P[PG] >= 85%)",
+        "name": "Pure PG",
+    },
+    {
+        "confs": [0.9, 0.1, 0, 0, 0],
+        "extra": {"assist": 0.05, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "WG",
+        "fallback_pos": "G?",
+        "diag": "(PG:)(P[PG] >= 85%) BUT (AST%[5.0] < 9%)",
+    },
+    {
+        "confs": [0.6, 0.4, 0, 0, 0],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "s-PG",
+        "fallback_pos": "G?",
+        "diag": "(P[PG] >= 50%)",
+        "name": "Scoring PG",
+    },
+    {
+        "confs": [0.6, 0.4, 0, 0, 0],
+        "confs_no_height": [0.9, 0.1, 0, 0, 0],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "PG",
+        "fallback_pos": "G?",
+        "diag": "(P[PG] >= 85%) ('PG' vs 's-PG', ignore height)",
+        "name": "Pure PG",
+    },
+    {
+        "confs": [0.6, 0.4, 0, 0, 0],
+        "extra": {"assist": 0.05, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "WG",
+        "fallback_pos": "G?",
+        "diag": "(pG:)(P[PG] >= 50%) BUT (AST%[5.0] < 9%)",
+    },
+    {
+        "confs": [0.4, 0.3, 0.2, 0.1, 0],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "CG",
+        "fallback_pos": "G?",
+        "diag": "(Max[P] == PG)",
+        "name": "Combo Guard",
+    },
+    {
+        "confs": [0.4, 0.3, 0.2, 0.1, 0],
+        "extra": {"assist": 0.05, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "WG",
+        "fallback_pos": "G?",
+        "diag": "(CG:)(Max[P] == PG) BUT (AST%[5.0] < 9%)",
+        "name": "Wing Guard",
+    },
+    {
+        "confs": [0.2, 0.6, 0.1, 0.0, 0.1],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "CG",
+        "fallback_pos": "G?",
+        "diag": "(Max[P] == SG) AND (P[PG] >= P[SF] + P[PF] + P[C])",
+    },
+    {
+        "confs": [0.2, 0.6, 0.1, 0.0, 0.1],
+        "extra": {"assist": 0.05, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "WG",
+        "fallback_pos": "G?",
+        "diag": "(CG:)(Max[P] == SG) AND (P[PG] >= P[SF] + P[PF] + P[C]) BUT (AST%[5.0] < 9%)",
+    },
+    {
+        "confs": [0.1, 0.6, 0.1, 0.1, 0.1],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "WG",
+        "fallback_pos": "G?",
+        "diag": "(Max[P] == SG) AND (P[PG] < P[SF] + P[PF] + P[C])",
+    },
+    {
+        "confs": [0.2, 0.2, 0.3, 0.2, 0.1],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "WG",
+        "fallback_pos": "G?",
+        "diag": "(Max[P] == SF) AND (P[PG] + P[SG] >= P[PF] + P[C])",
+    },
+    {
+        "confs": [0.2, 0.1, 0.3, 0.2, 0.2],
+        "extra": {"assist": 0.10, "3pr": 0.20, "poss": 1000, "usage": 0.20},
+        "pos": "WF",
+        "fallback_pos": "F/C?",
+        "diag": "(Max[P] == SF) AND (P[PG] + P[SG] < P[PF] + P[C])",
+        "name": "Wing Forward",
+    },
+    {
+        "confs": [0.0, 0.1, 0.1, 0.6, 0.2],
+        "extra": {"assist": 0.10, "3pr": 0.25, "poss": 1000, "usage": 0.20},
+        "pos": "S-PF",
+        "fallback_pos": "F/C?",
+        "diag": "(Max[P] == PF) AND (P[PG] + P[SG] + P[SF] >= P[C])",
+        "name": "Stretch PF",
+    },
+    {
+        "confs": [0.0, 0.1, 0.1, 0.6, 0.2],
+        "extra": {"assist": 0.10, "3pr": 0.15, "poss": 1000, "usage": 0.20},
+        "pos": "PF/C",
+        "fallback_pos": "F/C?",
+        "diag": "(S4:)(Max[P] == PF) AND (P[PG] + P[SG] + P[SF] >= P[C]) BUT 3PR%[15.0] < 20%",
+    },
+    {
+        "confs": [0.0, 0.0, 0.1, 0.9, 0.0],
+        "extra": {"assist": 0.10, "3pr": 0.25, "poss": 1000, "usage": 0.20},
+        "pos": "PF/C",
+        "fallback_pos": "F/C?",
+        "diag": "(P[PF] >= 85%)",
+        "name": "Power Forward/Center",
+    },
+    {
+        "confs": [0.0, 0.0, 0.05, 0.8, 0.15],
+        "extra": {"assist": 0.10, "3pr": 0.25, "poss": 1000, "usage": 0.20},
+        "pos": "PF/C",
+        "fallback_pos": "F/C?",
+        "diag": "(Max[P] == C) OR ((Max[P] == PF) AND (P[PG] + P[SG] + P[SF] < P[C]))",
+    },
+    {
+        "confs": [0.0, 0.0, 0.0, 0.2, 0.8],
+        "extra": {"assist": 0.10, "3pr": 0.25, "poss": 1000, "usage": 0.20},
+        "pos": "PF/C",
+        "fallback_pos": "F/C?",
+        "diag": "(Max[P] == C) OR ((Max[P] == PF) AND (P[PG] + P[SG] + P[SF] < P[C]))",
+    },
+    {
+        "confs": [0.0, 0.0, 0.0, 0.1, 0.9],
+        "extra": {"assist": 0.10, "3pr": 0.25, "poss": 1000, "usage": 0.20},
+        "pos": "C",
+        "fallback_pos": "F/C?",
+        "diag": "(P[C] >= 85%)",
+        "name": "Center",
+    },
+    {
+        "confs": [0.0, 0.0, 0.0, 0.1, 0.9],
+        "roster": {"pos": "G"},
+        "extra": {"assist": 0.10, "3pr": 0.25, "poss": 1000, "usage": 0.20},
+        "pos": "WF",
+        "fallback_pos": "G?",
+        "diag": "Roster info says 'G', stats say [C] - compromize at 'WF'. From stats: (P[C] >= 85%)",
+        "name": "Wing Forward",
+    },
+]
+
+_SAMPLE_TEAM_SEASON_1 = "Men_Boston College_2019/20"
+_SAMPLE_TEAM_SEASON_2 = "RandomLookup"
+
+#: `extra` key -> player stat field name (``PositionUtils.test.ts:148`` `_.mapValues`).
+_EXTRA_FIELD_MAP = {"assist": "off_assist", "3pr": "off_3pr", "poss": "off_team_poss", "usage": "off_usage"}
+
+
+def _case_player(case: dict[str, Any]) -> dict[str, Any]:
+    """Per-case `player` replay (jest ``:148``): extra stats wrapped as
+    ``{"value": v}``, plus the optional `roster` sub-dict."""
+    player: dict[str, Any] = {_EXTRA_FIELD_MAP[k]: {"value": v} for k, v in case["extra"].items()}
+    if "roster" in case:
+        player["roster"] = case["roster"]
+    return player
+
+
+@pytest.mark.parametrize("case", BUILD_POSITION_CASES, ids=range(len(BUILD_POSITION_CASES)))
+def test_build_position_cases(case: dict[str, Any]) -> None:
+    """All 19 hand-checked ``buildPosition`` rows (jest ``:56-142``)."""
+    conf_obj = dict(zip(TRAD_POS_LIST, case["confs"]))
+    conf_obj_no_height = dict(zip(TRAD_POS_LIST, case["confs_no_height"])) if "confs_no_height" in case else None
+    player = _case_player(case)
+
+    assert build_position(conf_obj, conf_obj_no_height, player, _SAMPLE_TEAM_SEASON_1) == (
+        case["pos"],
+        case["diag"],
+    )
+    if "name" in case:
+        assert ID_TO_POSITION[case["pos"]] == case["name"]
+
+
+@pytest.mark.parametrize(
+    "case",
+    [c for c in BUILD_POSITION_CASES if "roster" not in c and "confs_no_height" not in c],
+    ids=[i for i, c in enumerate(BUILD_POSITION_CASES) if "roster" not in c and "confs_no_height" not in c],
+)
+def test_build_position_too_few_possessions_fallback(case: dict[str, Any]) -> None:
+    """Too-few-effective-possessions fallback (jest ``:155-160``) -- 17 of the
+    19 rows (excludes the ``confsNoHeight`` row and the roster-override row,
+    same as the jest ``if (!caseObj.roster && !caseObj.confsNoHeight)`` guard).
+    """
+    conf_obj = dict(zip(TRAD_POS_LIST, case["confs"]))
+    player_too_few_pos = _case_player(case) | {"off_team_poss": {"value": 100}}
+
+    assert build_position(conf_obj, None, player_too_few_pos, _SAMPLE_TEAM_SEASON_2) == (
+        case["fallback_pos"],
+        f"Too few used possessions [20.0]=[100]*[20.0]% < [25.0]. "
+        f"Would have matched [{case['pos']}] from rule [{case['diag']}]",
+    )
+
+
+def test_build_position_absolute_override() -> None:
+    """Absolute-override plumbing check (jest ``:163-168``) -- exercises
+    ``ABSOLUTE_POSITION_FIXES``'s ``"Men_Boston College_2019/20"`` ->
+    ``"Popovic, Nik"`` -> ``PF/C`` row."""
+    conf_obj = dict(zip(TRAD_POS_LIST, BUILD_POSITION_CASES[0]["confs"]))
+    player = {
+        "key": "Popovic, Nik",
+        "off_usage": {"value": 1},
+        "off_team_poss": {"value": 200},
+        "off_assist": {"value": 0.10},
+    }
+    assert build_position(conf_obj, None, player, _SAMPLE_TEAM_SEASON_1) == (
+        "PF/C",
+        "Override from [PG] which matched rule [(P[PG] >= 85%)]",
+    )
+
+
+def test_id_to_position_unknown_lookups() -> None:
+    """Lookup-table checks (jest ``:170-171``)."""
+    assert ID_TO_POSITION["G?"] == "Unknown - probably Guard"
+    assert ID_TO_POSITION["F/C?"] == "Unknown - probably Forward/Center"
+
+
+# --- Test 6: PositionUtils - usingRosterPos (jest :207-225) ----------------
+
+
+def test_using_roster_pos() -> None:
+    """All 10 rows of the vendored ``testCases`` (this key belongs to
+    ``usingRosterPos``, not ``buildPosition`` -- see the README collision
+    note in ``tests/fixtures/hoop_explorer/README.md``)."""
+    inputs = load_fixture("position_utils_inputs.json")
+    for case in inputs["testCases"]:
+        expected_pos, info = using_roster_pos(case["stats"], case["roster"])
+        assert expected_pos == case["expected"]
+        assert (info is not None) == case["hasInfo"]
