@@ -22,3 +22,9 @@ columns:
 - name: neutral
   type: integer
   description: ''
+- name: home_points
+  type: double
+  description: ''
+- name: away_points
+  type: double
+  description: ''

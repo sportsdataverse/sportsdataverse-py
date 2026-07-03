@@ -1,0 +1,10 @@
+sim,week,game_type,home_team,away_team,result,neutral,home_points,away_points
+2024,1,REG,A,B,50.0,0,50.0,0.0
+2024,2,REG,B,C,3.0,0,20.0,17.0
+2024,3,REG,C,A,3.0,0,20.0,17.0
+2024,4,REG,X,Z,7.0,0,,
+2024,5,REG,Y,Z,7.0,0,,
+2024,6,REG,X,FCS1,7.0,0,,
+2024,7,REG,X,FCS2,7.0,0,,
+2024,8,REG,Y,W,7.0,0,,
+2024,9,REG,Y,FCS3,7.0,0,,

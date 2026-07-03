@@ -498,9 +498,13 @@ cfb_compute_results:
   sim: Simulation identifier the game row belongs to (1..n simulated seasons; ELO ratings never mix across simulations).
   week: Week of the season the game is played in; only games matching the requested week_num are filled.
 cfb_games_from_schedule:
+  away_points: Away team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds
+    the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent.
   away_team: Team name of the away team, passed through from the schedule frame.
   game_type: Derived game classification - CONF_CHAMP when the schedule notes mention a (non-CFP, non-national) championship,
     REG for regular-season rows, POST otherwise.
+  home_points: Home team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds
+    the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent.
   home_team: Team name of the home team, passed through from the schedule frame.
   neutral: Neutral-site flag derived from the schedule's neutral_site column (1 = neutral site, 0 = home game).
   result: Home-team margin (home_points minus away_points); null when either score is missing, marking the game as unplayed

@@ -1063,7 +1063,7 @@ and everything else to `POST`. `result` is the home margin
 
 **Returns**
 
-A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home_team`, `away_team`, `result`, `neutral` — the `cfb_standings` / `cfb_simulations` input schema.
+A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home_team`, `away_team`, `result`, `neutral`, `home_points`, `away_points` — the `cfb_standings` / `cfb_simulations` input schema. The trailing per-game points columns feed the SEC `capped_scoring_margin` official tiebreaker rung (see `CONFERENCE_TIEBREAKERS`); `cfb_standings` skips that rung when they're absent, so passing this frame straight through is always safe.
 
 | col_name | type | description |
 |---|---|---|
@@ -1074,6 +1074,8 @@ A polars (or pandas) DataFrame with columns `season`, `week`, `game_type`, `home
 | `away_team` | character | Team name of the away team, passed through from the schedule frame. |
 | `result` | double | Home-team margin (home_points minus away_points); null when either score is missing, marking the game as unplayed for the simulation engine. |
 | `neutral` | integer | Neutral-site flag derived from the schedule's neutral_site column (1 = neutral site, 0 = home game). |
+| `home_points` | double | Home team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent. |
+| `away_points` | double | Away team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent. |
 
 **Example**
 
@@ -1338,28 +1340,32 @@ out = cfb_simulations(games, teams, simulations=100,
                       sim_include="REG", seed=1)
 ```
 
-### `cfb_standings(games: 'FrameLike', teams: 'FrameLike', *, tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, rankings: 'Optional[FrameLike]' = None, return_as_pandas: 'bool' = False, rng: 'Optional[np.random.Generator]' = None) -> 'Union[pl.DataFrame, Any]'` {#cfb_standings}
+### `cfb_standings(games: 'FrameLike', teams: 'FrameLike', *, tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, rankings: 'Optional[FrameLike]' = None, tiebreaker_data: 'Optional[Dict[str, FrameLike]]' = None, return_as_pandas: 'bool' = False, rng: 'Optional[np.random.Generator]' = None) -> 'Union[pl.DataFrame, Any]'` {#cfb_standings}
 
 Compute college football standings with conference ranks and champions.
 
 Engine design adapted from nflseedR (MIT, Sebastian Carl & Lee Sharpe);
-see the module docstring for the documented CFB simplifications.
+see the module docstring for the documented CFB simplifications, and its
+"Official per-conference tiebreakers (registry)" section for how
+`CONFERENCE_TIEBREAKERS` overrides the generic cascade for the SEC,
+Big Ten, Big 12, ACC and MAC.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `games` | `FrameLike` |  | Game results with columns `sim` (or `season`), `week`, `game_type` (`REG` \| `CONF_CHAMP` \| `POST`), `home_team`, `away_team`, `result` (home margin: home - away; null = unplayed) and optional `neutral` (0/1). |
-| `teams` | `FrameLike` |  | Team table with columns `team` and `conference` (null or `"FBS Independents"` marks an independent). |
-| `tiebreaker_depth` | `str` | `'SOS'` | One of `"RANDOM"`, `"PRE-SOV"`, `"SOS"`, `"POINTS"` — the nflseedR depth ladder. Steps beyond the chosen depth are skipped and remaining ties are broken by coin flip. |
+| `games` | `FrameLike` |  | Game results with columns `sim` (or `season`), `week`, `game_type` (`REG` \| `CONF_CHAMP` \| `POST`), `home_team`, `away_team`, `result` (home margin: home - away; null = unplayed), optional `neutral` (0/1), and optional `home_points`/`away_points` (per-game scores — feeds the SEC capped-scoring-margin rung; `cfb_games_from_schedule` emits both). Either optional input absent -> that rung is skipped, not an error. |
+| `teams` | `FrameLike` |  | Team table with columns `team` and `conference` (null or `"FBS Independents"` marks an independent), and an optional `division` column (`"FBS"`/`"FCS"` or similar — feeds the Big 12 `total_wins` FCS cap; absent -> the cap degrades to uncapped win totals, noted in `tiebreak_notes`). |
+| `tiebreaker_depth` | `str` | `'SOS'` | One of `"RANDOM"`, `"PRE-SOV"`, `"SOS"`, `"POINTS"` — the nflseedR depth ladder. Steps beyond the chosen depth are skipped and remaining ties are broken by coin flip. Gates ONLY the generic fallback cascade; registered official conference procedures (below) always run in full. |
 | `playoff_seeds` | `Optional[int]` | `None` | If set, adds a `seed` column via `cfb_playoff_seeds` with this field size. |
 | `rankings` | `Optional[FrameLike]` | `None` | Optional committee-style rankings frame (`team`, `rank`) forwarded to `cfb_playoff_seeds`. |
+| `tiebreaker_data` | `Optional[Dict[str, FrameLike]]` | `None` | Optional external inputs for the registry rungs, as a dict with key `"analytics_ratings"` -> a frame with columns `team` and `rating` (feeds the `analytics_rating` rung used by Big Ten/Big 12/ACC/MAC). A `"cfp_rankings"` key (`team`, `rank`) is accepted for forward compatibility but unused by the current registry (no registered conference has a `cfp_ranking` rung yet). Missing -> the rung is skipped, noted. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 | `rng` | `Optional[Generator]` | `None` | Optional numpy Generator used only for coin-flip tiebreaks (simulations pass their seeded generator through here). |
 
 **Returns**
 
-A polars (or pandas) DataFrame with one row per (sim, team): overall record (`games`/`wins`/`losses`/`ties`/`win_pct`/ `pd`), conference record (`conf_*`), `sov`, `sos`, `conf_rank` (null for independents), `conf_champ` and, when `playoff_seeds` is set, `seed`.
+A polars (or pandas) DataFrame with one row per (sim, team): overall record (`games`/`wins`/`losses`/`ties`/`win_pct`/ `pd`), conference record (`conf_*`), `sov`, `sos`, `conf_rank` (null for independents), `conf_champ` and, when `playoff_seeds` is set, `seed`. The result also carries a `tiebreak_notes` list of skipped-rung messages (see the module docstring): `result.tiebreak_notes` for a polars frame, `result.attrs["tiebreak_notes"]` for a pandas frame (pandas' own metadata mechanism — avoids its "new attribute" warning).
 
 | col_name | type | description |
 |---|---|---|
@@ -1401,6 +1407,12 @@ print(cfb_standings(games, teams))
 # With CFP seeds from committee rankings
 
 st = cfb_standings(games, teams, playoff_seeds=12, rankings=ranks_df)
+
+# With an official-registry analytics rating input
+
+ratings = pl.DataFrame({"team": ["A", "B"], "rating": [92.1, 88.4]})
+st = cfb_standings(games, teams, tiebreaker_data={"analytics_ratings": ratings})
+print(st.tiebreak_notes)
 ```
 
 ### `cfb_teams_crosswalk(*, season: 'Optional[int]' = None, week: 'int' = 1, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_teams_crosswalk}
