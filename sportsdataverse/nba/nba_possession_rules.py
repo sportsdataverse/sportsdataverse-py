@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 logger = logging.getLogger(__name__)
 
 #: Unknown subType strings seen at rule-decision time (conservative fallback taken).
-UNKNOWN_SUBTYPE_COUNTER: Counter = Counter()
+UNKNOWN_SUBTYPE_COUNTER: "Counter[str]" = Counter()
 
 
 def _norm(s: object) -> str:
@@ -23,7 +23,35 @@ def _norm(s: object) -> str:
 
 
 def resolve_event_team(row: dict, home_id: int, away_id: int) -> int:
-    """Row ``team_id`` if truthy, else location ``h``/``v`` mapping, else 0."""
+    """Resolve the acting team id for one enhanced-pbp row.
+
+    Prefers the row's own ``team_id`` when present and truthy; falls back to
+    the ``location`` flag (``"h"`` / ``"v"``) mapped onto the game's home/away
+    team ids for rows that carry a location but no team id (e.g. some
+    period/jump-ball rows); returns ``0`` when neither signal is available.
+
+    Args:
+        row: A single enhanced-pbp row dict (as produced by
+            :func:`sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`).
+        home_id: The home team's ``team_id``.
+        away_id: The away team's ``team_id``.
+
+    Returns:
+        The resolved team id, or ``0`` if the row carries neither a truthy
+        ``team_id`` nor a recognized ``location``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_possession_rules import resolve_event_team
+
+            team_id = resolve_event_team({"team_id": 0, "location": "h"}, 1610612747, 1610612738)
+            print(team_id)  # 1610612747
+
+        Pipeline next step (resolve the acting team for every row)::
+
+            teams = [resolve_event_team(r, home_id, away_id) for r in rows]
+    """
     team = row.get("team_id") or 0
     if team:
         return int(team)
@@ -41,13 +69,31 @@ class EventContext:
 
     Mirrors pbpstats ``get_all_events_at_current_time``
     (pbpstats: resources/enhanced_pbp/enhanced_pbp_item.py:52-69).
+
+    Args:
+        rows: The full ordered list of enhanced-pbp row dicts for one game.
+        at_clock: Index mapping ``(period, seconds_remaining)`` to the list
+            of row indices sharing that exact clock instant. Built once by
+            :func:`build_event_context`; not intended to be constructed or
+            mutated by hand.
     """
 
-    rows: list = field(default_factory=list)
-    at_clock: dict = field(default_factory=dict)
+    rows: list[dict] = field(default_factory=list)
+    at_clock: dict[tuple[int, float], list[int]] = field(default_factory=dict)
 
-    def co_clock(self, i: int) -> list:
-        """Indices of all rows sharing (period, seconds_remaining) with row i."""
+    def co_clock(self, i: int) -> list[int]:
+        """Indices of all rows sharing (period, seconds_remaining) with row i.
+
+        Args:
+            i: Index of the row (into ``self.rows``) to look up.
+
+        Returns:
+            List of row indices sharing the same ``(period,
+            seconds_remaining)`` instant as row ``i``, always including ``i``
+            itself. Falls back to ``[i]`` when the exact clock key was not
+            recorded during index construction (should not occur for
+            in-range indices built via :func:`build_event_context`).
+        """
         row = self.rows[i]
         return self.at_clock.get(
             (int(row.get("period") or 0), float(row.get("seconds_remaining") or 0.0)),
@@ -55,9 +101,38 @@ class EventContext:
         )
 
 
-def build_event_context(rows: list) -> EventContext:
-    """Build the co-clock index in one pass over the row dicts."""
-    at_clock: dict = {}
+def build_event_context(rows: list[dict]) -> EventContext:
+    """Build the co-clock index in one pass over the row dicts.
+
+    Groups row indices by their ``(period, seconds_remaining)`` clock instant
+    so that :meth:`EventContext.co_clock` can later answer "which other rows
+    happened at the exact same moment" in O(1) -- the building block several
+    possession-rule exclusions (e.g. rebound/turnover coincidence) rely on.
+
+    Args:
+        rows: Ordered enhanced-pbp row dicts for one game, as produced by
+            :func:`sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
+
+    Returns:
+        An :class:`EventContext` wrapping ``rows`` plus the derived
+        ``at_clock`` index. An empty ``rows`` list returns an
+        :class:`EventContext` with empty ``rows``/``at_clock``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+            from sportsdataverse.nba.nba_possession_rules import build_event_context
+
+            rows = enhanced_pbp_from_payload(pbp_v3_payload).to_dicts()
+            ctx = build_event_context(rows)
+            print(len(ctx.rows), len(ctx.at_clock))
+
+        Pipeline next step (look up co-clock rows for a rebound)::
+
+            co_clock_indices = ctx.co_clock(i)
+    """
+    at_clock: dict[tuple[int, float], list[int]] = {}
     for i, row in enumerate(rows):
         key = (int(row.get("period") or 0), float(row.get("seconds_remaining") or 0.0))
         at_clock.setdefault(key, []).append(i)
