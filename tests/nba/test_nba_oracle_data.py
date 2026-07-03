@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import datetime
+import glob
+import os
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.nba.nba_oracle_data import (
     DARKO_DPM_ORACLE_SCHEMA,
@@ -22,6 +25,12 @@ from sportsdataverse.nba.nba_oracle_data import (
 )
 
 FIXTURES = Path(__file__).parent.parent / "fixtures" / "nba_oracle"
+
+_ORACLE_DIR = os.environ.get("SDV_PY_NBA_ORACLE_DIR")
+_has_oracle_dir = bool(_ORACLE_DIR and os.path.isdir(_ORACLE_DIR))
+skip_if_no_oracle_dir = pytest.mark.skipif(
+    not _has_oracle_dir, reason="set SDV_PY_NBA_ORACLE_DIR to the real oracle-CSV directory to run"
+)
 
 
 def test_normalize_lowercases_and_strips_punctuation():
@@ -156,3 +165,69 @@ def test_load_dunks_threes_stats_empty_header_only(tmp_path):
     df = load_dunks_threes_stats(str(empty))
     assert df.height == 0
     assert dict(df.schema) == DT_STATS_ORACLE_SCHEMA
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 9: gated real-CSV smoke tests (SDV_PY_NBA_ORACLE_DIR)
+# ---------------------------------------------------------------------------
+
+
+@skip_if_no_oracle_dir
+def test_real_rapm_ryan_davis_parses():
+    df = load_rapm_ryan_davis(os.path.join(_ORACLE_DIR, "rapm_ryan_davis.csv"))
+    assert df.height > 1000
+    assert df.select(pl.col("RAPM").is_between(-15, 15).all()).item()
+
+
+@skip_if_no_oracle_dir
+def test_real_rapm_multi_ryan_davis_parses():
+    df = load_rapm_ryan_davis(os.path.join(_ORACLE_DIR, "rapm_multi_ryan_davis.csv"))
+    assert df.height > 1000
+    assert df.select(pl.col("RAPM").is_between(-15, 15).all()).item()
+
+
+@skip_if_no_oracle_dir
+def test_real_epm_parses():
+    for fname in glob.glob(os.path.join(_ORACLE_DIR, "*_EPM_data.csv")):
+        df = load_epm(fname)
+        assert df.height > 50
+        assert df.select(pl.col("epm").is_between(-15, 15).all()).item()
+
+
+@skip_if_no_oracle_dir
+def test_real_lebron_season_parses():
+    files = glob.glob(os.path.join(_ORACLE_DIR, "lebron-data-[0-9][0-9][0-9][0-9].csv"))
+    if not files:
+        pytest.skip("no per-season lebron-data-YYYY.csv file present")
+    df = load_lebron_season(sorted(files)[-1])
+    assert df.height > 50
+
+
+@skip_if_no_oracle_dir
+def test_real_lebron_daily_parses():
+    files = glob.glob(os.path.join(_ORACLE_DIR, "lebron_daily_*.csv"))
+    if not files:
+        pytest.skip("no lebron_daily_*.csv snapshot present")
+    df = load_lebron_daily(sorted(files)[-1])
+    assert df.height > 50
+    assert df.select(pl.col("through_date").is_not_null().all()).item()
+
+
+@skip_if_no_oracle_dir
+def test_real_darko_dpm_parses():
+    files = glob.glob(os.path.join(_ORACLE_DIR, "*-darko-dpm-leaderboard.csv"))
+    if not files:
+        pytest.skip("no *-darko-dpm-leaderboard.csv present")
+    df = load_darko_dpm(sorted(files)[-1])
+    assert df.height > 50
+    assert df.select(pl.col("dpm").is_between(-15, 15).all()).item()
+
+
+@skip_if_no_oracle_dir
+def test_real_dunks_threes_stats_parses():
+    files = glob.glob(os.path.join(_ORACLE_DIR, "*_Dunks_&_Threes_Stats.csv"))
+    if not files:
+        pytest.skip("no *_Dunks_&_Threes_Stats.csv present")
+    df = load_dunks_threes_stats(sorted(files)[-1])
+    assert df.height > 50
+    assert df.select(pl.col("ewins").is_between(-5, 40).all()).item()

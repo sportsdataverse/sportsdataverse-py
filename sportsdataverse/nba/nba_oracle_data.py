@@ -116,7 +116,11 @@ def load_rapm_ryan_davis(path: str) -> pl.DataFrame:
             oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv")
             season = oracle.filter(pl.col("season") == "2022-23")
     """
-    raw = pl.read_csv(path)
+    # infer_schema_length=None scans the whole file: the real CSV carries several
+    # unselected `*_Rank` columns whose tie-broken values are floats (e.g. "353.5")
+    # that only appear well past the default 100-row inference window, otherwise
+    # tripping a ComputeError on a column this loader doesn't even keep.
+    raw = pl.read_csv(path, infer_schema_length=None)
     if raw.is_empty():
         return pl.DataFrame(schema=RAPM_ORACLE_SCHEMA)
     return raw.select(
