@@ -307,6 +307,161 @@ finals = espn_nba_schedule(dates=20230102).filter(
 )
 ```
 
+## Dataset loaders
+
+### `load_darko_dpm(path: 'str') -> 'pl.DataFrame'` {#load_darko_dpm}
+
+Parse a DARKO DPM leaderboard CSV (e.g. `2026-darko-dpm-leaderboard.csv`).
+
+Name-keyed only (no shared player id with the model zoo) -- this is the
+family `~sportsdataverse.nba.nba_model_validation.external_validity`
+joins with `join="name"`. Handles two real-file quirks: a leading UTF-8
+BOM (read with `encoding="utf-8-sig"`, which strips it) and
+sign-prefixed integer columns (`"+7"`, not `"7"`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a DARKO DPM leaderboard CSV. |
+
+**Returns**
+
+Frame with schema `DARKO_DPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_darko_dpm
+oracle = load_darko_dpm(f"{oracle_dir}/2026-darko-dpm-leaderboard.csv")
+print(oracle.sort("dpm", descending=True).head())
+```
+
+### `load_dunks_threes_stats(path: 'str') -> 'pl.DataFrame'` {#load_dunks_threes_stats}
+
+Parse a Dunks & Threes counting-stats CSV (e.g. `2025_Dunks_&_Threes_Stats.csv`).
+
+Only `ewins` (estimated wins) is kept -- the WAR-layer oracle target
+the spec pairs with LEBRON's `WAR` column. WP4's `nba_war` doesn't
+exist yet, so this loader is built and tested standalone (see the
+plan's "WP4/WP2 dependency notes").
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a D&T counting-stats CSV. |
+
+**Returns**
+
+Frame with schema `DT_STATS_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_dunks_threes_stats
+oracle = load_dunks_threes_stats(f"{oracle_dir}/2025_Dunks_&_Threes_Stats.csv")
+```
+
+### `load_epm(path: 'str') -> 'pl.DataFrame'` {#load_epm}
+
+Parse a Dunks & Threes EPM CSV (`{season}_EPM_data.csv`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a D&T EPM CSV. |
+
+**Returns**
+
+Frame with schema `EPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_epm
+oracle = load_epm(f"{oracle_dir}/2025_EPM_data.csv")
+```
+
+### `load_lebron_daily(path: 'str') -> 'pl.DataFrame'` {#load_lebron_daily}
+
+Parse a LEBRON daily-snapshot CSV (e.g. `lebron_daily_2026-07-02.csv`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a LEBRON daily-snapshot CSV. |
+
+**Returns**
+
+Frame with schema `LEBRON_DAILY_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+import glob
+from sportsdataverse.nba.nba_oracle_data import load_lebron_daily
+latest = sorted(glob.glob(f"{oracle_dir}/lebron_daily_*.csv"))[-1]
+oracle = load_lebron_daily(latest)
+```
+
+### `load_lebron_season(path: 'str') -> 'pl.DataFrame'` {#load_lebron_season}
+
+Parse a LEBRON season-file CSV (e.g. `lebron-data-2026.csv`).
+
+`seasons` is passed through as a raw string -- per-season files carry a
+single year (`"2026"`); the combined all-years file carries a
+multi-year window (`"2010-2013"`). Both parse with this one function.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a LEBRON season CSV. |
+
+**Returns**
+
+Frame with schema `LEBRON_SEASON_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_lebron_season
+oracle = load_lebron_season(f"{oracle_dir}/lebron-data-2026.csv")
+```
+
+### `load_rapm_ryan_davis(path: 'str') -> 'pl.DataFrame'` {#load_rapm_ryan_davis}
+
+Parse a Ryan Davis published RAPM CSV (single-season or multi-year window).
+
+Serves BOTH real files -- `rapm_ryan_davis.csv` (`season` like
+`"2009-10"`) and `rapm_multi_ryan_davis.csv` (`season` like
+`"2011-16"`, a multi-year decay window) -- since they share an
+identical header. Only the combined (not per-side Off`/Def`)
+rating columns are kept, matching the model zoo's combined-rating
+convention (`nba_rapm`'s `rapm` column, not separate offense/defense).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a Ryan Davis RAPM CSV. |
+
+**Returns**
+
+Frame with schema `RAPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv")
+season = oracle.filter(pl.col("season") == "2022-23")
+```
+
 ## Utilities & helpers
 
 ### `most_recent_nba_season()` {#most_recent_nba_season}
@@ -434,6 +589,20 @@ Aging drift for a player of (rounded) `age`; 0.0 outside the fitted range.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `age` | `float` |  |  |
+
+### `ExternalValidityResult(corr: 'float', n_matched: 'int', coverage_pct: 'float', permutation_p95: 'float', join: 'str') -> None` {#ExternalValidityResult}
+
+Concurrent-validity correlation of model ratings against a published oracle metric.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `corr` | `float` |  | Pearson correlation of the model's rating column against the oracle's value column, over matched rows. `nan` when fewer than 3 rows matched. |
+| `n_matched` | `int` |  | Number of rows successfully joined (ratings <-> oracle). |
+| `coverage_pct` | `float` |  | `100 * n_matched / len(ratings)` -- how much of the model's player population the oracle covers. `0.0` when `ratings` is empty. |
+| `permutation_p95` | `float` |  | 95th percentile of `\|corr\|` over `n_permutations` random shuffles of the oracle's matched value column -- a self-computed null-correlation ceiling. The spec deliberately avoids a hardcoded floor constant; compare `corr` against this instead. `nan` when fewer than 3 rows matched. |
+| `join` | `str` |  | The join strategy used (`"id"` or `"name"`). |
 
 ### `ForecastResult(forecast_rmse: 'float', forecast_corr: 'float', baseline_rmse: 'float', n_forecasts: 'int') -> None` {#ForecastResult}
 
@@ -601,7 +770,7 @@ Fitted SPM coefficients (box features -> offense/defense RAPM, per-100).
 | `d_intercept` | `float` |  | Intercept for the defense regression. |
 | `feature_names` | `List[str]` |  | Ordered list of feature column names corresponding to the coefficient vectors. |
 
-### `ValidationReport(model_name: 'str', n_seasons: 'int', retrodiction: 'Optional[RetrodictionResult]' = None, reliability: 'Optional[ReliabilityResult]' = None, cross_season: 'Optional[CrossSeasonResult]' = None, calibration: 'Optional[CalibrationResult]' = None) -> None` {#ValidationReport}
+### `ValidationReport(model_name: 'str', n_seasons: 'int', retrodiction: 'Optional[RetrodictionResult]' = None, reliability: 'Optional[ReliabilityResult]' = None, cross_season: 'Optional[CrossSeasonResult]' = None, calibration: 'Optional[CalibrationResult]' = None, external: 'Optional[ExternalValidityResult]' = None, walk_forward: 'Optional[WalkForwardResult]' = None) -> None` {#ValidationReport}
 
 Holds all oracle results for a single model evaluation run.
 
@@ -615,6 +784,8 @@ Holds all oracle results for a single model evaluation run.
 | `reliability` | `Optional[ReliabilityResult]` | `None` | Result from Oracle 2, or `None` if not selected. |
 | `cross_season` | `Optional[CrossSeasonResult]` | `None` | Result from Oracle 3, or `None` if not selected. |
 | `calibration` | `Optional[CalibrationResult]` | `None` | Result from Oracle 4, or `None` if not selected or the model is a point estimator. |
+| `external` | `Optional[ExternalValidityResult]` | `None` | Result from Oracle 5 (`external_validity`), or `None` if not selected. |
+| `walk_forward` | `Optional[WalkForwardResult]` | `None` | Result from Oracle 6 (`walk_forward`), or `None` if not selected. |
 
 **Example**
 
@@ -631,6 +802,21 @@ print(rep.retrodiction.game_margin_rmse)     # float
 print(rep.reliability.spearman_brown)        # float
 print(rep.calibration)                       # None — point estimator
 ```
+
+### `WalkForwardResult(game_margin_rmse: 'float', game_margin_corr: 'float', carry_forward_rmse: 'float', random_fold_rmse: 'float', n_checkpoints: 'int', n_test_games: 'int') -> None` {#WalkForwardResult}
+
+Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_margin_rmse` | `float` |  | RMSE of predicted vs actual per-(game, team) margins, pooled across all checkpoints -- the model refit through each checkpoint date, predicting the following `horizon_days` window. |
+| `game_margin_corr` | `float` |  | Pearson correlation of the same pooled predictions. |
+| `carry_forward_rmse` | `float` |  | RMSE using the PRIOR checkpoint's fit (no refit) applied to the current window -- isolates whether refitting through each checkpoint actually helps. `nan` when fewer than 2 checkpoints produce a valid window. |
+| `random_fold_rmse` | `float` |  | Oracle 1's (`retrodiction`) pooled game-margin RMSE on the same possessions -- the non-time-ordered baseline. |
+| `n_checkpoints` | `int` |  | Number of checkpoint dates that produced a non-degenerate (train, test) split. |
+| `n_test_games` | `int` |  | Total distinct game_ids evaluated across all checkpoints. |
 
 ### `box_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', *, game_ids: 'Optional[List[str]]' = None) -> 'pl.DataFrame'` {#box_features}
 
@@ -926,6 +1112,58 @@ teams_pd.head()
 
 teams = espn_nba_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
+```
+
+### `external_validity(ratings: 'pl.DataFrame', oracle: 'pl.DataFrame', *, rating_col: 'str', oracle_col: 'str', join: 'str' = 'id', ratings_id_col: 'str' = 'player_id', oracle_id_col: 'str' = 'player_id', ratings_name_col: 'str' = 'player_name', oracle_name_col: 'str' = 'player_name', n_permutations: 'int' = 200, seed: 'int' = 0) -> 'ExternalValidityResult'` {#external_validity}
+
+Oracle 5: correlate a model's ratings against a published external metric.
+
+`join="id"` inner-joins on `ratings_id_col`/`oracle_id_col` (both
+cast to Int64 defensively, per the project's join-key dtype discipline).
+`join="name"` normalizes both name columns with
+`~sportsdataverse.nba.nba_oracle_data.normalize_player_name` and
+inner-joins on the normalized key -- the DARKO-family case: no shared id,
+a brittle display-name join whose `coverage_pct` is the signal to watch.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | The model's own per-player ratings frame (from `nba_rapm`, `nba_adj_rapm`, `nba_spm`, `nba_darko`, etc.). |
+| `oracle` | `DataFrame` |  | A tidy oracle frame from one of the `nba_oracle_data` loaders. |
+| `rating_col` | `str` |  | Column in `ratings` holding the model's rating value. |
+| `oracle_col` | `str` |  | Column in `oracle` holding the published metric value. |
+| `join` | `str` | `'id'` | `"id"` (default) or `"name"`. |
+| `ratings_id_col` | `str` | `'player_id'` | Player-id column name in `ratings` (`join="id"`). |
+| `oracle_id_col` | `str` | `'player_id'` | Player-id column name in `oracle` (`join="id"`). |
+| `ratings_name_col` | `str` | `'player_name'` | Player-name column name in `ratings` (`join="name"`). |
+| `oracle_name_col` | `str` | `'player_name'` | Player-name column name in `oracle` (`join="name"`). |
+| `n_permutations` | `int` | `200` | Number of random shuffles for the self-computed null ceiling. |
+| `seed` | `int` | `0` | RNG seed for the permutation shuffle. |
+
+**Returns**
+
+`ExternalValidityResult`. `corr` and `permutation_p95` are `nan` when fewer than 3 rows matched; `coverage_pct` is `0.0` when `ratings` is empty.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+from sportsdataverse.nba.nba_model_validation import external_validity
+
+oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv").filter(
+    pl.col("season") == "2022-23"
+)
+res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+print(res.corr, res.coverage_pct)
+
+# A name-keyed family (DARKO)
+
+res = external_validity(
+    ratings, darko_oracle, rating_col="projected_rating", oracle_col="dpm",
+    join="name", ratings_name_col="player_name", oracle_name_col="player_name",
+)
 ```
 
 ### `fit_aging_curve(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, smooth: 'int' = 3) -> 'AgingCurve'` {#fit_aging_curve}
@@ -1690,6 +1928,38 @@ repl = calibrate_replacement_level(
 war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
 ```
 
+### `normalize_player_name(name: 'str') -> 'str'` {#normalize_player_name}
+
+Fold a player display name to a join-safe key.
+
+Lower-cases, strips diacritics (`"Jokić"` -> `"jokic"` -- the real
+stats.nba.com feed spells Nikola Jokic's name with the Serbian `ć`,
+while the DARKO/D&T CSVs use plain ASCII), drops periods/apostrophes/
+hyphens, collapses internal whitespace, and strips a trailing
+Jr./Sr./II/III/IV suffix. Two names normalize equal iff they refer to
+the same join key under this scheme -- it is NOT guaranteed globally
+unique (rare true duplicate full names are a known, accepted residual;
+`external_validity`'s `coverage_pct` surfaces the effect rather
+than hiding it).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | A raw display name, e.g. `"Nikola Jokić"` or `"A.J. Green"`. |
+
+**Returns**
+
+The normalized key, e.g. `"nikola jokic"`, `"aj green"`. Empty string in, empty string out (never raises).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import normalize_player_name
+assert normalize_player_name("Nikola Jokić") == normalize_player_name("Nikola Jokic")
+assert normalize_player_name("Gary Trent Jr.") == normalize_player_name("Gary Trent")
+```
+
 ### `players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_pbp}
 
 Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
@@ -1893,7 +2163,7 @@ coef = train_spm(box_feats, rapm_ratings)
 coef = train_spm(box_feats, rapm_ratings, alpha=50.0)
 ```
 
-### `validate_model(model: 'AnyModel', season_frames: 'List[pl.DataFrame]', *, model_name: 'str' = 'model', oracles: 'Tuple[str, ...]' = ('retrodiction', 'reliability', 'cross_season', 'calibration'), seed: 'int' = 0) -> 'ValidationReport'` {#validate_model}
+### `validate_model(model: 'AnyModel', season_frames: 'List[pl.DataFrame]', *, model_name: 'str' = 'model', oracles: 'Tuple[str, ...]' = ('retrodiction', 'reliability', 'cross_season', 'calibration'), seed: 'int' = 0, external_ratings: 'Optional[pl.DataFrame]' = None, external_oracle: 'Optional[pl.DataFrame]' = None, external_rating_col: 'str' = 'rating', external_oracle_col: 'str' = 'oracle_value', external_join: 'str' = 'id', walk_forward_horizon_days: 'int' = 14, walk_forward_min_games: 'int' = 15) -> 'ValidationReport'` {#validate_model}
 
 Run the selected oracles and assemble a `ValidationReport`.
 
@@ -1908,8 +2178,15 @@ frames. Any oracle not selected is left `None`.
 | `model` | `AnyModel` |  | A fitted or unfitted RAPM-family estimator (`fit(X, y)` protocol). |
 | `season_frames` | `List[DataFrame]` |  | Ordered list of per-season possession frames. All frames are concatenated into a single pooled frame for Oracles 1, 2, and 4. |
 | `model_name` | `str` | `'model'` | Label written into the returned report and markdown card. |
-| `oracles` | `Tuple[str, ...]` | `('retrodiction', 'reliability', 'cross_season', 'calibration')` | Tuple of oracle names to run. Omit a name to skip that oracle and leave its result field `None`. |
+| `oracles` | `Tuple[str, ...]` | `('retrodiction', 'reliability', 'cross_season', 'calibration')` | Tuple of oracle names to run. Omit a name to skip that oracle and leave its result field `None`. Accepts `"external"` and `"walk_forward"` in addition to the four original names; the default tuple is unchanged, so existing callers are unaffected. |
 | `seed` | `int` | `0` | RNG seed forwarded to each oracle for determinism. |
+| `external_ratings` | `Optional[DataFrame]` | `None` | The model's own ratings frame -- required when `"external"` is in `oracles`. |
+| `external_oracle` | `Optional[DataFrame]` | `None` | A loaded oracle frame (from `nba_oracle_data`) -- required when `"external"` is in `oracles`. |
+| `external_rating_col` | `str` | `'rating'` | Rating column name in `external_ratings`. |
+| `external_oracle_col` | `str` | `'oracle_value'` | Value column name in `external_oracle`. |
+| `external_join` | `str` | `'id'` | `"id"` or `"name"`, forwarded to `external_validity`. |
+| `walk_forward_horizon_days` | `int` | `14` | Forwarded to `walk_forward`. |
+| `walk_forward_min_games` | `int` | `15` | Forwarded to `walk_forward` as `min_games_before_first_checkpoint`. |
 
 **Returns**
 
@@ -1935,4 +2212,38 @@ rep = validate_model(
     oracles=("retrodiction", "reliability"),
 )
 print(rep.cross_season)   # None — not selected
+```
+
+### `walk_forward(model: 'AnyModel', possessions: 'pl.DataFrame', *, checkpoint_dates: 'Optional[List[datetime.date]]' = None, horizon_days: 'int' = 14, min_games_before_first_checkpoint: 'int' = 15) -> 'WalkForwardResult'` {#walk_forward}
+
+Oracle 6: time-ordered "predict tomorrow" retrodiction.
+
+For each checkpoint date D: fit on games with `game_date <= D`, predict
+games with `D < game_date <= D + horizon_days`, aggregate to
+per-(game, team) margins -- reusing fit_on` / design_with_ids`
+/ `predict_points` / team_game_margins` (the same machinery
+`retrodiction` uses). `carry_forward_rmse` reapplies the PREVIOUS
+checkpoint's fit (no refit) to the current window. `random_fold_rmse` is
+`retrodiction`'s pooled game-margin RMSE on the same possessions.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `AnyModel` |  | A harness model (`RapmModel`/`RatingsModel`/`PriorModel`). |
+| `possessions` | `DataFrame` |  | A season possession+lineup frame with `game_date` (from `compile_nba_season`), `game_id`, `offense_team_id`, `points`, and the ten lineup columns. |
+| `checkpoint_dates` | `Optional[List[date]]` | `None` | Explicit checkpoint grid; derived from `possessions` via `horizon_days`/`min_games_before_first_checkpoint` when `None` (default). |
+| `horizon_days` | `int` | `14` | Days-ahead prediction window per checkpoint (default 14). |
+| `min_games_before_first_checkpoint` | `int` | `15` | Distinct-game-date index of the first checkpoint when deriving the default grid (default 15, "~game 15 of the season"). |
+
+**Returns**
+
+`WalkForwardResult`. All metrics `nan` and counts `0` when `possessions` is empty, lacks a `game_date` column, or the derived/given grid produces zero non-degenerate checkpoints.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel, walk_forward
+res = walk_forward(RidgeRapmModel(), season_possessions)
+print(res.game_margin_rmse, res.carry_forward_rmse, res.random_fold_rmse)
 ```

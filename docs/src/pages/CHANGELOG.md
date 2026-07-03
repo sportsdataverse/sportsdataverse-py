@@ -166,6 +166,7 @@
   Dunks & Threes ewins) and Oracle 6 walk-forward retrodiction
   (`walk_forward`, time-ordered "predict tomorrow" with carry-forward and
   random-fold baselines) in `nba_model_validation.py`.
+
 ### NBA — RAPM variants (WP2)
 
 - feat(nba): RAPM variants (`nba_rapm_variants`) — luck-adjusted (`nba_la_rapm`),
