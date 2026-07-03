@@ -53,6 +53,9 @@ POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
     "end_seconds_remaining": pl.Float64,
     "points": pl.Int64,
     "is_second_chance": pl.Boolean,
+    "number_in_period": pl.Int64,
+    "possession_start_type": pl.Utf8,
+    "count_as_possession": pl.Boolean,
     # WP1 event detail (team-level counts within the possession)
     "fg2a": pl.Int64,
     "fg2m": pl.Int64,
@@ -309,6 +312,73 @@ def _resolve_teams(df: pl.DataFrame) -> tuple[int, int]:
     return (h[0] if h else 0), (v[0] if v else 0)
 
 
+def _possession_start_type(
+    prev_end_row: Optional[dict],
+    prev_rows: Optional[list[dict]],
+    cur_rows: list[dict],
+) -> str:
+    """Coarse pbpstats ``possession_start_type`` (``possession.py:206-242``; no shot-type buckets).
+
+    ``OffDeadball``: period start / team rebound / dead-ball turnover /
+    unresolved. ``OffTimeout``: a timeout event in the previous OR current
+    possession's rows. ``OffMadeShot`` / ``OffMissedShot``: prior boundary was
+    a made shot-or-FT / a player defensive rebound. ``OffLiveBallTurnover``:
+    prior boundary was a steal.
+
+    Real-fixture verification note: the v3 feed's ``"STEAL"`` text does NOT
+    live on the ``Turnover``-type row's own ``description`` (verified against
+    all three canonical fixtures -- zero ``event_type == "turnover"`` rows
+    contain ``"steal"``). It lives on a *companion* row sharing the same
+    ``action_number`` with an empty ``actionType`` (``event_type == "other"``,
+    e.g. ``"Nwora STEAL (1 STL)"``). Because the turnover row is itself the
+    boundary event that flushes the previous possession group, that companion
+    row always lands as the first row of the NEXT group -- i.e. ``cur_rows``,
+    not ``prev_end_row``. The steal signal is therefore read from
+    ``cur_rows`` (``.casefold()`` applied for case-insensitivity), not from
+    ``prev_end_row``'s own description.
+    """
+
+    def _has_timeout(rows: Optional[list[dict]]) -> bool:
+        return any((r.get("event_type") or "") == "timeout" for r in rows or [])
+
+    if prev_end_row is None:
+        return "OffDeadball"
+    if _has_timeout(prev_rows) or _has_timeout(cur_rows):
+        return "OffTimeout"
+    et = prev_end_row.get("event_type") or ""
+    if et in ("made_shot", "free_throw"):
+        return "OffMadeShot"
+    if et == "rebound":
+        return "OffMissedShot" if (prev_end_row.get("person_id") or 0) else "OffDeadball"
+    if et == "turnover":
+        has_steal = any("steal" in (r.get("description") or "").casefold() for r in cur_rows or [])
+        return "OffLiveBallTurnover" if has_steal else "OffDeadball"
+    return "OffDeadball"
+
+
+def _count_as_possession(
+    start_seconds: float,
+    end_seconds: float,
+    group_rows: list[dict],
+    rows_after_in_period: list[dict],
+) -> bool:
+    """pbpstats ``count_as_possession`` (``enhanced_pbp_item.py:180-208``).
+
+    A possession STARTING with <=2s left in the period counts only if a made
+    FT or made FG occurs before the period ends. Deliberate divergence: the
+    salvage scan here is scoped to the same period (``rows_after_in_period``
+    stops at the period boundary); pbpstats' own ``next_event`` walk is
+    unscoped and could in principle look past a period boundary. Documented
+    trade-off, not a bug.
+    """
+    if end_seconds > 2.0 or start_seconds > 2.0:
+        return True
+    for r in list(group_rows) + list(rows_after_in_period):
+        if (r.get("event_type") or "") in ("free_throw", "made_shot"):
+            return True
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Core possession builder
 # ---------------------------------------------------------------------------
@@ -476,6 +546,13 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
 
     groups = _build_possession_groups(rows, home_id, away_id)
 
+    # Per-period last-row index, for count_as_possession's period-scoped salvage scan.
+    # rows[i]["order_index"] == i (the frame is sorted by order_index before to_dicts()),
+    # so this can be sliced by plain list index.
+    period_end_index: dict[int, int] = {}
+    for idx, r in enumerate(rows):
+        period_end_index[int(r.get("period") or 0)] = idx
+
     # Build output rows with score-delta points
     prev_home = 0
     prev_away = 0
@@ -483,9 +560,27 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
     shooting: list[dict] = []
     poss_num = 0
 
+    # possession_start_type context: tracked across EVERY group (including ones
+    # dropped for lacking an attributable offense) so a timeout/turnover inside
+    # a dropped group still informs the next emitted possession's start type —
+    # this reflects true event chronology, not output chronology.
+    prev_end_row: Optional[dict] = None
+    prev_group_rows: Optional[list[dict]] = None
+    prev_group_period: Optional[int] = None
+    # number_in_period resets on the period of the last EMITTED record (dropped
+    # groups don't consume a slot in the per-period possession count).
+    prev_record_period: Optional[int] = None
+    number_in_period = 0
+
     for events, is_sc, offense in groups:
         end_home: int = events[-1]["_home"]
         end_away: int = events[-1]["_away"]
+        cur_period = int(events[0].get("period") or 0)
+
+        if prev_group_period is not None and cur_period != prev_group_period:
+            start_type = "OffDeadball"
+        else:
+            start_type = _possession_start_type(prev_end_row, prev_group_rows, events)
 
         if offense == 0:
             # Unattributable group (no scoring/shooting/rebound/turnover event
@@ -499,6 +594,9 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
             if home_delta <= 0 and away_delta <= 0:
                 prev_home = end_home
                 prev_away = end_away
+                prev_end_row = events[-1]
+                prev_group_rows = events
+                prev_group_period = cur_period
                 continue
             offense = home_id if home_delta > 0 else away_id
 
@@ -509,6 +607,19 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
         pts = (end_home - prev_home) if offense == home_id else (end_away - prev_away)
 
         poss_num += 1
+        if prev_record_period is None or cur_period != prev_record_period:
+            number_in_period = 1
+        else:
+            number_in_period += 1
+        prev_record_period = cur_period
+
+        start_seconds = float(start_ev.get("seconds_remaining") or 0.0)
+        end_seconds = float(end_ev.get("seconds_remaining") or 0.0)
+        end_idx = int(end_ev.get("order_index") or 0)
+        period_last_idx = period_end_index.get(cur_period, end_idx)
+        rows_after_in_period = rows[end_idx + 1 : period_last_idx + 1]
+        count_flag = _count_as_possession(start_seconds, end_seconds, events, rows_after_in_period)
+
         detail = _event_detail(events, int(offense), home_id, away_id)
         records.append(
             {
@@ -519,10 +630,13 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
                 "defense_team_id": int(defense),
                 "start_order_index": int(start_ev.get("order_index") or 0),
                 "end_order_index": int(end_ev.get("order_index") or 0),
-                "start_seconds_remaining": float(start_ev.get("seconds_remaining") or 0.0),
-                "end_seconds_remaining": float(end_ev.get("seconds_remaining") or 0.0),
+                "start_seconds_remaining": start_seconds,
+                "end_seconds_remaining": end_seconds,
                 "points": int(pts),
                 "is_second_chance": bool(is_sc),
+                "number_in_period": number_in_period,
+                "possession_start_type": start_type,
+                "count_as_possession": count_flag,
                 **detail,
             }
         )
@@ -530,6 +644,9 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
 
         prev_home = end_home
         prev_away = end_away
+        prev_end_row = end_ev
+        prev_group_rows = events
+        prev_group_period = cur_period
 
     if not records:
         return empty_poss, empty_shooting
@@ -575,7 +692,15 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         computed by :func:`_event_detail` from the possession's events, each
         filtered to the offense team (except ``dreb``, which counts the
         defense's real rebounds); ``points == 2*fg2m + 3*fg3m + ftm`` holds
-        exactly on every possession.
+        exactly on every possession.  Also includes three pbpstats-parity
+        columns from :func:`_possession_start_type` / :func:`_count_as_possession`:
+        ``number_in_period`` (Int64, the flat ``possession_number`` reset to 1
+        at the start of each period -- pbpstats' ``number``), ``possession_start_type``
+        (Utf8, one of ``OffDeadball``/``OffTimeout``/``OffMadeShot``/
+        ``OffMissedShot``/``OffLiveBallTurnover`` -- every period's first
+        possession is ``OffDeadball``), and ``count_as_possession`` (Boolean,
+        False only for a possession starting with <=2s left in the period
+        with no made FT/FG salvaging it before the period ends).
 
     Example:
         Quick start::

@@ -131,6 +131,9 @@ def test_possessions_schema_matches_constant() -> None:
         "end_seconds_remaining",
         "points",
         "is_second_chance",
+        "number_in_period",
+        "possession_start_type",
+        "count_as_possession",
         "fg2a",
         "fg2m",
         "fg3a",
@@ -147,6 +150,9 @@ def test_possessions_schema_matches_constant() -> None:
     assert POSSESSIONS_SCHEMA["defense_team_id"] == pl.Int64
     assert POSSESSIONS_SCHEMA["points"] == pl.Int64
     assert POSSESSIONS_SCHEMA["is_second_chance"] == pl.Boolean
+    assert POSSESSIONS_SCHEMA["number_in_period"] == pl.Int64
+    assert POSSESSIONS_SCHEMA["possession_start_type"] == pl.Utf8
+    assert POSSESSIONS_SCHEMA["count_as_possession"] == pl.Boolean
 
 
 def test_build_possessions_empty_input_never_raises() -> None:
@@ -784,3 +790,25 @@ def test_shooting_frame_player_boxscore_reconciliation(game_id):
         assert exp is not None, f"shooter {row['player_id']} missing from boxscore"
         assert row["fg3m"] == exp["fg3m"], row
         assert row["ftm"] == exp["ftm"], row
+
+
+# ---------------------------------------------------------------------------
+# Task 5: number_in_period, possession_start_type, count_as_possession
+# ---------------------------------------------------------------------------
+
+START_TYPES = {"OffDeadball", "OffTimeout", "OffMadeShot", "OffMissedShot", "OffLiveBallTurnover"}
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_new_possession_columns(game_id):
+    poss = build_possessions(_enh(game_id))
+    assert poss.schema["number_in_period"] == pl.Int64
+    assert poss.schema["possession_start_type"] == pl.Utf8
+    assert poss.schema["count_as_possession"] == pl.Boolean
+    firsts = poss.sort("possession_number").group_by("period", maintain_order=True).first()
+    assert firsts["number_in_period"].to_list() == [1] * firsts.height
+    assert set(poss["possession_start_type"].unique().to_list()) <= START_TYPES
+    assert set(firsts["possession_start_type"].to_list()) == {"OffDeadball"}
+    not_counted = poss.filter(pl.col("count_as_possession") == False)  # noqa: E712
+    for r in not_counted.to_dicts():
+        assert r["start_seconds_remaining"] <= 2.0, r
