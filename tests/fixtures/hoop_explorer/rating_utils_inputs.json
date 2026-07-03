@@ -1,0 +1,4611 @@
+{
+ "expDRtg": {
+  "value": 99.2719681851988
+ },
+ "expDRtgAdj": {
+  "value": -1.6230609318106304
+ },
+ "expORtg": {
+  "value": 119.84956630535876
+ },
+ "expORtg2": {
+  "value": 111.95544936503978
+ },
+ "expORtg3": {
+  "value": 111.48470743647295
+ },
+ "expORtgAd2": {
+  "value": 4.680453508281225
+ },
+ "expORtgAd3": {
+  "value": 4.57834474024571
+ },
+ "expORtgAdj": {
+  "value": 6.856412755959791
+ },
+ "outputs": {
+  "team_total_off_3p_made": {
+   "value": 0.0007
+  },
+  "team_total_off_fgm": null,
+  "team_total_off_ftm": {
+   "value": 0.0008
+  },
+  "team_total_off_pts": {
+   "value": 0.0005
+  },
+  "team_total_off_to": {
+   "value": 0.0009
+  },
+  "total_off_2p_made": {
+   "value": 0.0002
+  },
+  "total_off_3p_made": {
+   "value": 0.0003
+  },
+  "total_off_fgm": {
+   "value": 0.0001
+  },
+  "total_off_ftm": {
+   "value": 0.0004
+  }
+ },
+ "sampleDrtgDiagnostics": {
+  "BlkBonus": -1.352164044620423,
+  "DrbBonus": -20.695542211909995,
+  "StlBonus": -17.945504514469192,
+  "adjDRtg": 91.88469534094685,
+  "adjDRtgPlus": -1.6230609318106304,
+  "adjPossFactor": 1,
+  "adjPtsFactor": 1,
+  "avgEff": 100,
+  "blk": 5,
+  "dRtg": 99.2719681851988,
+  "drb": 96,
+  "missFtCredit": 2.5382812499999994,
+  "noShotCredit": 32.260450315336996,
+  "offSos": 108.03972067039106,
+  "oppoFgMiss": 843,
+  "oppoFga": 1588,
+  "oppoFgm": 637,
+  "oppoFtHitOnePlus": 166.32421874999997,
+  "oppoFtPct": 0.703125,
+  "oppoFtPoss": 182.39999999999998,
+  "oppoFta": 384,
+  "oppoFtm": 270,
+  "oppoNonStlTov": 186,
+  "oppoPoss": 1790,
+  "oppoProbFtHitOnePlus": 0.911865234375,
+  "oppoPts": 1738,
+  "oppoPtsPerScore": 2.163510024264409,
+  "oppoScPoss": 803.32421875,
+  "oppoTov": 312,
+  "opponentFgPct": 0.40113350125944586,
+  "opponentOrbPct": 0.274,
+  "pfPct": 0.15789473684210525,
+  "playerDelta": 2.1769961181596957,
+  "playerRtg": 106.99203655186903,
+  "reboundCredit": 34.59731465653162,
+  "scPossConceded": 0.49452988593499214,
+  "stl": 30,
+  "stopsIndPct": 0.1918713952164029,
+  "stopsTeamPct": 0.313598718848605,
+  "teamBlk": 108,
+  "teamDrb": 726,
+  "teamDvsRebCredit": 0.6396113056611289,
+  "teamMissWeight": 0.45209006306739913,
+  "teamOrbCreditToDefender": 0.29122292191435767,
+  "teamOrbCreditToRebounder": 0.16408942065491183,
+  "teamRtg": 97.09497206703911,
+  "teamStl": 126
+ },
+ "sampleOnBallDefenseStats": [
+  {
+   "code": "totals",
+   "fgMade": 424,
+   "fgMiss": 615,
+   "plays": 1336,
+   "pts": 1158,
+   "scorePct": 39.2,
+   "sfPct": 6.5,
+   "title": "Team",
+   "totalFgMade": -1,
+   "totalFgMiss": -1,
+   "totalPlays": -1,
+   "totalPts": -1,
+   "totalScorePct": -1,
+   "totalSfPlays": -1,
+   "totalTos": -1,
+   "tovPct": 13.4,
+   "uncatFgMade": -1,
+   "uncatFgMiss": -1,
+   "uncatPlays": -1,
+   "uncatPts": -1,
+   "uncatPtsPerScPlay": -1,
+   "uncatScorePct": -1,
+   "uncatSfPlays": -1,
+   "uncatTos": -1
+  },
+  [
+   {
+    "code": "PlayerOne",
+    "fgMade": 33,
+    "fgMiss": 63,
+    "plays": 106,
+    "pts": 81,
+    "scorePct": 33,
+    "sfPct": 4.7,
+    "title": "#1 Player One",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 7.5,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   },
+   {
+    "code": "PlayerTwo",
+    "fgMade": 46,
+    "fgMiss": 92,
+    "plays": 169,
+    "pts": 129,
+    "scorePct": 30.8,
+    "sfPct": 3,
+    "title": "#1 Player Two",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 13.6,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   },
+   {
+    "code": "PlayerThree",
+    "fgMade": 70,
+    "fgMiss": 88,
+    "plays": 179,
+    "pts": 186,
+    "scorePct": 43.6,
+    "sfPct": 3.4,
+    "title": "#3 Player Three",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 7.3,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   },
+   {
+    "code": "PlayerFour",
+    "fgMade": 35,
+    "fgMiss": 80,
+    "plays": 130,
+    "pts": 88,
+    "scorePct": 29.2,
+    "sfPct": 3.1,
+    "title": "#4 Player Four",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 9.2,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   },
+   {
+    "code": "PlayerFive",
+    "fgMade": 17,
+    "fgMiss": 47,
+    "plays": 81,
+    "pts": 55,
+    "scorePct": 29.6,
+    "sfPct": 6.2,
+    "title": "#5 Player Five",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 11.1,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   },
+   {
+    "code": "PlayerSix",
+    "fgMade": 21,
+    "fgMiss": 30,
+    "plays": 66,
+    "pts": 53,
+    "scorePct": 39.4,
+    "sfPct": 4.5,
+    "title": "#6 Player Six",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 13.6,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   },
+   {
+    "code": "PlayerSeven",
+    "fgMade": 19,
+    "fgMiss": 25,
+    "plays": 57,
+    "pts": 55,
+    "scorePct": 40.4,
+    "sfPct": 8.8,
+    "title": "#7 Player Seven",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 14,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   },
+   {
+    "code": "PlayerEight",
+    "fgMade": 29,
+    "fgMiss": 46,
+    "plays": 89,
+    "pts": 69,
+    "scorePct": 33.7,
+    "sfPct": 3.4,
+    "title": "#8 Player Eight",
+    "totalFgMade": -1,
+    "totalFgMiss": -1,
+    "totalPlays": -1,
+    "totalPts": -1,
+    "totalScorePct": -1,
+    "totalSfPlays": -1,
+    "totalTos": -1,
+    "tovPct": 13.5,
+    "uncatFgMade": -1,
+    "uncatFgMiss": -1,
+    "uncatPlays": -1,
+    "uncatPts": -1,
+    "uncatPtsPerScPlay": -1,
+    "uncatScorePct": -1,
+    "uncatSfPlays": -1,
+    "uncatTos": -1
+   }
+  ]
+ ],
+ "sampleOrtgDiagnostics": {
+  "Raw_Usage": null,
+  "Regressed_ORtg": 121.82392174370084,
+  "SD_at_Usage": 9.225388241385453,
+  "SD_at_Usage_20": 10.143,
+  "SDs_Above_Mean": 2.1516239518585065,
+  "SoS_Bonus": 1.111840500852435,
+  "Usage": 26.37230387926769,
+  "Usage_Bonus": 2.5489215517070773,
+  "actualFtaToPoss": 0.4542314335060449,
+  "adjORtg": 124.06550627762071,
+  "adjORtgPlus": 6.856412755959791,
+  "adjPoss": 475.2289159044038,
+  "adjPossFactor": 1.0,
+  "adjPtsFactor": 1.0,
+  "astPart": 35.8574120603015,
+  "astPart_Classic": 35.857412060301506,
+  "astThreePProd": 51.224874371859286,
+  "astThreePoss": 17.074958123953095,
+  "astTwoPProd": 37.56490787269682,
+  "astTwoPoss": 18.782453936348407,
+  "avgEff": 100,
+  "defSos": 96.60184357541898,
+  "eFG": 0.4691011235955056,
+  "fgPart": 125.8295019157088,
+  "fgxPoss": 143.85071138211381,
+  "ftPart": 92.86890214097176,
+  "ftPct": 0.8113207547169812,
+  "ftPoss": 96.29706390328151,
+  "ftxPoss": 3.428161762309771,
+  "midPoss": 49.15660569105691,
+  "midPtsProd": 36,
+  "missedBothFTs": 0.03559985760056958,
+  "oRtg": 119.84956630535876,
+  "oRtg_Classic": 119.51567418026275,
+  "offPlaysLessPoss": 69.81254009375766,
+  "offPoss": 451.4845238095238,
+  "orbPart": 4.394226642998126,
+  "otherEfg": 0.48785594639866,
+  "otherEfgInfo": [
+   "48.8",
+   "48.8",
+   "48.8"
+  ],
+  "otherPtsPerFgm": 2.3115079365079363,
+  "othersAssist": 214,
+  "ppAssist": 88.78978224455611,
+  "ppAssist_Classic": 82.88469256002232,
+  "ppFg": 299.2107279693486,
+  "ppFgTeamAstPct": 0.09475178477907331,
+  "ppFgTeamAstPct_Classic": 0.08774553390995068,
+  "ppOrb": 9.55928445518132,
+  "ptsFgm": 334,
+  "ptsProd": 569.559794669086,
+  "raw2midFga": 65,
+  "raw2midFgm": 18,
+  "raw2rimFga": 117,
+  "raw2rimFgm": 65,
+  "raw3Fga": 174,
+  "raw3Fgm": 56,
+  "rawAssist": 147,
+  "rawAssistInfo": [
+   "70",
+   "10",
+   "67"
+  ],
+  "rawFga": 356,
+  "rawFgm": 139,
+  "rawFgx": 217,
+  "rawFtm": 172,
+  "rawOrb": 17,
+  "rawPts": 506,
+  "rawTo": 69,
+  "rimPoss": 94.74891598915988,
+  "rimPtsProd": 120.55555555555556,
+  "rosterOrb": 0,
+  "scoringPoss": 258.9500427599802,
+  "teamAssistRate": 0.37410071942446044,
+  "teamAssistRate_Classic": 0.3794090202177294,
+  "teamAssistedEfg": 0.5065576186265842,
+  "teamFga": 1550,
+  "teamFgm": 643,
+  "teamFtHitOnePlus": 247.4031517624634,
+  "teamFtPct": 0.7564766839378239,
+  "teamFta": 579,
+  "teamOrb": 310,
+  "teamOrbContribPct": 0,
+  "teamOrbCreditToRebounder": 0.2887736570583408,
+  "teamOrbCreditToScorer": 0.18222190606216335,
+  "teamOrbPct": 0.3150406504065041,
+  "teamOrbWeight": 0.6131133277458456,
+  "teamPlays": 2112,
+  "teamPoss": 1802,
+  "teamProbFtHitOnePlus": 0.9406963945340815,
+  "teamPts": 1937,
+  "teamPtsPerScore": 2.175419074119295,
+  "teamScoreFromReboundPct": 0,
+  "teamScoredPlayPct": 0.4215924014026815,
+  "teamScoringPoss": 890.4031517624634,
+  "teamTo": 299,
+  "threePoss": 125.77469161760582,
+  "threePtsProd": 142.65517241379308
+ },
+ "samplePlayerStatsResponse": {
+  "responses": [
+   {
+    "_shards": {
+     "failed": 0,
+     "skipped": 0,
+     "successful": 1,
+     "total": 1
+    },
+    "aggregations": {
+     "tri_filter": {
+      "buckets": {
+       "baseline": {
+        "player": {
+         "buckets": [
+          {
+           "def_2prim": {
+            "value": 0.005065856129685917
+           },
+           "def_adj_opp": {
+            "value": 96.60184357541898
+           },
+           "def_ftr": {
+            "value": 0.024636871508379884
+           },
+           "def_orb": {
+            "value": 0.096
+           },
+           "def_team_poss": {
+            "value": 1790
+           },
+           "def_to": {
+            "value": 0.01675977653631285
+           },
+           "doc_count": 486,
+           "duration_mins": {
+            "value": 900
+           },
+           "key": "Cowan, Anthony",
+           "off_2p": {
+            "value": 0.45604395604395603
+           },
+           "off_2p_ast": {
+            "value": 0
+           },
+           "off_2pmid": {
+            "value": 0.27692307692307694
+           },
+           "off_2pmid_ast": {
+            "value": 0
+           },
+           "off_2pmidr": {
+            "value": 0.18258426966292135
+           },
+           "off_2prim": {
+            "value": 0.5555555555555556
+           },
+           "off_2prim_ast": {
+            "value": 0.26153846153846155
+           },
+           "off_2primr": {
+            "value": 0.32865168539325845
+           },
+           "off_3p": {
+            "value": 0.3218390804597701
+           },
+           "off_3p_ast": {
+            "value": 0.625
+           },
+           "off_3pr": {
+            "value": 0.4887640449438202
+           },
+           "off_adj_opp": {
+            "value": 108.03972067039106
+           },
+           "off_assist": {
+            "value": 0.2916666666666667
+           },
+           "off_ast_3p": {
+            "value": 0.47619047619047616
+           },
+           "off_ast_3p_source": {
+            "value": {
+             "AaWiggins": 9,
+             "DaMorsell": 10,
+             "DoScott": 1,
+             "ErAyala": 8,
+             "JaSmith": 3,
+             "MlMitchell": 1,
+             "RiLindo": 1,
+             "SeSmith": 2
+            }
+           },
+           "off_ast_3p_target": {
+            "value": {
+             "AaWiggins": 20,
+             "DaMorsell": 7,
+             "DoScott": 5,
+             "ErAyala": 23,
+             "JaSmith": 12,
+             "RiLindo": 1,
+             "SeSmith": 2
+            }
+           },
+           "off_ast_mid": {
+            "value": 0.06802721088435375
+           },
+           "off_ast_mid_source": {
+            "value": {}
+           },
+           "off_ast_mid_target": {
+            "value": {
+             "AaWiggins": 4,
+             "DaMorsell": 4,
+             "JaSmith": 1,
+             "MiMitchell": 1
+            }
+           },
+           "off_ast_rim": {
+            "value": 0.4557823129251701
+           },
+           "off_ast_rim_source": {
+            "value": {
+             "AaWiggins": 3,
+             "DaMorsell": 5,
+             "ErAyala": 3,
+             "HaHart": 1,
+             "JaSmith": 3,
+             "MiMitchell": 1,
+             "SeSmith": 1
+            }
+           },
+           "off_ast_rim_target": {
+            "value": {
+             "AaWiggins": 7,
+             "DaMorsell": 12,
+             "DoScott": 8,
+             "ErAyala": 3,
+             "HaHart": 1,
+             "JaSmith": 32,
+             "JoTomaic": 2,
+             "MlMitchell": 2
+            }
+           },
+           "off_efg": {
+            "value": 0.4691011235955056
+           },
+           "off_ft": {
+            "value": 0.8113207547169812
+           },
+           "off_ftr": {
+            "value": 0.5955056179775281
+           },
+           "off_orb": {
+            "value": 0.017276422764227643
+           },
+           "off_poss": {
+            "value": 451.4845238095238
+           },
+           "off_scramble_2p": {
+            "value": 0.5555555555555556
+           },
+           "off_scramble_2p_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmid": {
+            "value": 0.25
+           },
+           "off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmidr": {
+            "value": 0.18181818181818182
+           },
+           "off_scramble_2prim": {
+            "value": 0.8
+           },
+           "off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "off_scramble_2primr": {
+            "value": 0.22727272727272727
+           },
+           "off_scramble_3p": {
+            "value": 0.46153846153846156
+           },
+           "off_scramble_3p_ast": {
+            "value": 0.8333333333333334
+           },
+           "off_scramble_3pr": {
+            "value": 0.5909090909090909
+           },
+           "off_scramble_assist": {
+            "value": 0.9090909090909091
+           },
+           "off_scramble_efg": {
+            "value": 0.6363636363636364
+           },
+           "off_scramble_ft": {
+            "value": 0.9166666666666666
+           },
+           "off_scramble_ftr": {
+            "value": 0.5454545454545454
+           },
+           "off_team_poss": {
+            "value": 1802
+           },
+           "off_to": {
+            "value": 0.1528291588331615
+           },
+           "off_trans_2p": {
+            "value": 0.5625
+           },
+           "off_trans_2p_ast": {
+            "value": 0
+           },
+           "off_trans_2pmid": {
+            "value": 0.5
+           },
+           "off_trans_2pmid_ast": {
+            "value": 0
+           },
+           "off_trans_2pmidr": {
+            "value": 0.03636363636363636
+           },
+           "off_trans_2prim": {
+            "value": 0.5666666666666667
+           },
+           "off_trans_2prim_ast": {
+            "value": 0.29411764705882354
+           },
+           "off_trans_2primr": {
+            "value": 0.5454545454545454
+           },
+           "off_trans_3p": {
+            "value": 0.34782608695652173
+           },
+           "off_trans_3p_ast": {
+            "value": 0.625
+           },
+           "off_trans_3pr": {
+            "value": 0.41818181818181815
+           },
+           "off_trans_assist": {
+            "value": 1.4615384615384615
+           },
+           "off_trans_efg": {
+            "value": 0.5454545454545454
+           },
+           "off_trans_ft": {
+            "value": 0.8235294117647058
+           },
+           "off_trans_ftr": {
+            "value": 1.5454545454545454
+           },
+           "off_usage": {
+            "value": 0.250546350615718
+           },
+           "oppo_def_3p_opp": {
+            "value": 33.15740432612313
+           },
+           "oppo_total_def_2p_attempts": {
+            "value": 987
+           },
+           "oppo_total_def_3p_attempts": {
+            "value": 601
+           },
+           "oppo_total_def_3p_made": {
+            "value": 194
+           },
+           "oppo_total_def_drb": {
+            "value": 674
+           },
+           "oppo_total_def_fga": {
+            "value": 1588
+           },
+           "oppo_total_def_fgm": {
+            "value": 637
+           },
+           "oppo_total_def_fta": {
+            "value": 384
+           },
+           "oppo_total_def_ftm": {
+            "value": 270
+           },
+           "oppo_total_def_orb": {
+            "value": 274
+           },
+           "oppo_total_def_poss": {
+            "value": 1790
+           },
+           "oppo_total_def_pts": {
+            "value": 1738
+           },
+           "oppo_total_def_to": {
+            "value": 312
+           },
+           "player_array": {
+            "hits": {
+             "hits": [
+              {
+               "_id": "GdtArXQBjSGDKv5YlXqK",
+               "_index": "bigten_2019_lpong",
+               "_score": 4.823819,
+               "_source": {
+                "player": {
+                 "code": "AnCowan",
+                 "id": "Cowan, Anthony"
+                }
+               },
+               "_type": "_doc"
+              }
+             ],
+             "max_score": 4.823819,
+             "total": {
+              "relation": "eq",
+              "value": 72
+             }
+            }
+           },
+           "team_total_off_3p_made": {
+            "value": 213
+           },
+           "team_total_off_assist": {
+            "value": 361
+           },
+           "team_total_off_blk": {
+            "value": 108
+           },
+           "team_total_off_drb": {
+            "value": 726
+           },
+           "team_total_off_fga": {
+            "value": 1550
+           },
+           "team_total_off_fgm": {
+            "value": 643
+           },
+           "team_total_off_foul": {
+            "value": 399
+           },
+           "team_total_off_fta": {
+            "value": 579
+           },
+           "team_total_off_ftm": {
+            "value": 438
+           },
+           "team_total_off_orb": {
+            "value": 310
+           },
+           "team_total_off_poss": {
+            "value": 1802
+           },
+           "team_total_off_pts": {
+            "value": 1937
+           },
+           "team_total_off_stl": {
+            "value": 126
+           },
+           "team_total_off_to": {
+            "value": 299
+           },
+           "total_off_2p_ast": {
+            "value": 0
+           },
+           "total_off_2p_attempts": {
+            "value": 182
+           },
+           "total_off_2p_made": {
+            "value": 83
+           },
+           "total_off_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_2pmid_attempts": {
+            "value": 65
+           },
+           "total_off_2pmid_made": {
+            "value": 18
+           },
+           "total_off_2prim_ast": {
+            "value": 17
+           },
+           "total_off_2prim_attempts": {
+            "value": 117
+           },
+           "total_off_2prim_made": {
+            "value": 65
+           },
+           "total_off_3p_ast": {
+            "value": 35
+           },
+           "total_off_3p_attempts": {
+            "value": 174
+           },
+           "total_off_3p_made": {
+            "value": 56
+           },
+           "total_off_assist": {
+            "value": 147
+           },
+           "total_off_ast_3p": {
+            "value": 70
+           },
+           "total_off_ast_mid": {
+            "value": 10
+           },
+           "total_off_ast_rim": {
+            "value": 67
+           },
+           "total_off_blk": {
+            "value": 5
+           },
+           "total_off_drb": {
+            "value": 96
+           },
+           "total_off_fga": {
+            "value": 356
+           },
+           "total_off_fgm": {
+            "value": 139
+           },
+           "total_off_foul": {
+            "value": 63
+           },
+           "total_off_fta": {
+            "value": 212
+           },
+           "total_off_ftm": {
+            "value": 172
+           },
+           "total_off_orb": {
+            "value": 17
+           },
+           "total_off_poss": {
+            "value": 0
+           },
+           "total_off_pts": {
+            "value": 0
+           },
+           "total_off_scramble_2p_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2p_attempts": {
+            "value": 9
+           },
+           "total_off_scramble_2p_made": {
+            "value": 5
+           },
+           "total_off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2pmid_attempts": {
+            "value": 4
+           },
+           "total_off_scramble_2pmid_made": {
+            "value": 1
+           },
+           "total_off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_attempts": {
+            "value": 5
+           },
+           "total_off_scramble_2prim_made": {
+            "value": 4
+           },
+           "total_off_scramble_3p_ast": {
+            "value": 5
+           },
+           "total_off_scramble_3p_attempts": {
+            "value": 13
+           },
+           "total_off_scramble_3p_made": {
+            "value": 6
+           },
+           "total_off_scramble_assist": {
+            "value": 10
+           },
+           "total_off_scramble_fga": {
+            "value": 22
+           },
+           "total_off_scramble_fgm": {
+            "value": 11
+           },
+           "total_off_scramble_fta": {
+            "value": 12
+           },
+           "total_off_scramble_ftm": {
+            "value": 11
+           },
+           "total_off_scramble_pts": {
+            "value": 39
+           },
+           "total_off_scramble_to": {
+            "value": 2
+           },
+           "total_off_stl": {
+            "value": 30
+           },
+           "total_off_to": {
+            "value": 69
+           },
+           "total_off_trans_2p_ast": {
+            "value": 0
+           },
+           "total_off_trans_2p_attempts": {
+            "value": 32
+           },
+           "total_off_trans_2p_made": {
+            "value": 18
+           },
+           "total_off_trans_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_trans_2pmid_attempts": {
+            "value": 2
+           },
+           "total_off_trans_2pmid_made": {
+            "value": 1
+           },
+           "total_off_trans_2prim_ast": {
+            "value": 5
+           },
+           "total_off_trans_2prim_attempts": {
+            "value": 30
+           },
+           "total_off_trans_2prim_made": {
+            "value": 17
+           },
+           "total_off_trans_3p_ast": {
+            "value": 5
+           },
+           "total_off_trans_3p_attempts": {
+            "value": 23
+           },
+           "total_off_trans_3p_made": {
+            "value": 8
+           },
+           "total_off_trans_assist": {
+            "value": 38
+           },
+           "total_off_trans_fga": {
+            "value": 55
+           },
+           "total_off_trans_fgm": {
+            "value": 26
+           },
+           "total_off_trans_fta": {
+            "value": 85
+           },
+           "total_off_trans_ftm": {
+            "value": 70
+           },
+           "total_off_trans_pts": {
+            "value": 130
+           },
+           "total_off_trans_to": {
+            "value": 20
+           }
+          },
+          {
+           "def_2prim": {
+            "value": 0.016290726817042606
+           },
+           "def_adj_opp": {
+            "value": 96.76946308724833
+           },
+           "def_ftr": {
+            "value": 0.022550335570469794
+           },
+           "def_orb": {
+            "value": 0.1380952380952381
+           },
+           "def_team_poss": {
+            "value": 1490
+           },
+           "def_to": {
+            "value": 0.0174496644295302
+           },
+           "doc_count": 421,
+           "duration_mins": {
+            "value": 800
+           },
+           "key": "Wiggins, Aaron",
+           "off_2p": {
+            "value": 0.45112781954887216
+           },
+           "off_2p_ast": {
+            "value": 0
+           },
+           "off_2pmid": {
+            "value": 0.24324324324324326
+           },
+           "off_2pmid_ast": {
+            "value": 0.3333333333333333
+           },
+           "off_2pmidr": {
+            "value": 0.24666666666666667
+           },
+           "off_2prim": {
+            "value": 0.711864406779661
+           },
+           "off_2prim_ast": {
+            "value": 0.4523809523809524
+           },
+           "off_2primr": {
+            "value": 0.19666666666666666
+           },
+           "off_3p": {
+            "value": 0.31736526946107785
+           },
+           "off_3p_ast": {
+            "value": 0.9245283018867925
+           },
+           "off_3pr": {
+            "value": 0.5566666666666666
+           },
+           "off_adj_opp": {
+            "value": 107.7926845637584
+           },
+           "off_assist": {
+            "value": 0.10185185185185185
+           },
+           "off_ast_3p": {
+            "value": 0.5
+           },
+           "off_ast_3p_source": {
+            "value": {
+             "AnCowan": 20,
+             "DaMorsell": 6,
+             "DoScott": 2,
+             "ErAyala": 18,
+             "HaHart": 1,
+             "JaSmith": 1,
+             "SeSmith": 1
+            }
+           },
+           "off_ast_3p_target": {
+            "value": {
+             "AnCowan": 9,
+             "DaMorsell": 1,
+             "DoScott": 6,
+             "ErAyala": 1,
+             "HaHart": 1,
+             "JaSmith": 2,
+             "RiLindo": 1,
+             "SeSmith": 1
+            }
+           },
+           "off_ast_mid": {
+            "value": 0.09090909090909091
+           },
+           "off_ast_mid_source": {
+            "value": {
+             "AnCowan": 4,
+             "JaSmith": 1,
+             "MiMitchell": 1
+            }
+           },
+           "off_ast_mid_target": {
+            "value": {
+             "DaMorsell": 2,
+             "JaSmith": 2
+            }
+           },
+           "off_ast_rim": {
+            "value": 0.4090909090909091
+           },
+           "off_ast_rim_source": {
+            "value": {
+             "AnCowan": 7,
+             "DaMorsell": 6,
+             "ErAyala": 3,
+             "HaHart": 1,
+             "JaSmith": 2
+            }
+           },
+           "off_ast_rim_target": {
+            "value": {
+             "AnCowan": 3,
+             "DaMorsell": 1,
+             "DoScott": 1,
+             "ErAyala": 1,
+             "JaSmith": 9,
+             "MiMitchell": 1,
+             "RiLindo": 1,
+             "SeSmith": 1
+            }
+           },
+           "off_efg": {
+            "value": 0.465
+           },
+           "off_ft": {
+            "value": 0.7166666666666667
+           },
+           "off_ftr": {
+            "value": 0.2
+           },
+           "off_orb": {
+            "value": 0.043532338308457715
+           },
+           "off_poss": {
+            "value": 312.7630952380952
+           },
+           "off_scramble_2p": {
+            "value": 0.5294117647058824
+           },
+           "off_scramble_2p_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmid": {
+            "value": 0.2
+           },
+           "off_scramble_2pmid_ast": {
+            "value": 1
+           },
+           "off_scramble_2pmidr": {
+            "value": 0.19230769230769232
+           },
+           "off_scramble_2prim": {
+            "value": 0.6666666666666666
+           },
+           "off_scramble_2prim_ast": {
+            "value": 0.25
+           },
+           "off_scramble_2primr": {
+            "value": 0.46153846153846156
+           },
+           "off_scramble_3p": {
+            "value": 0.2222222222222222
+           },
+           "off_scramble_3p_ast": {
+            "value": 1
+           },
+           "off_scramble_3pr": {
+            "value": 0.34615384615384615
+           },
+           "off_scramble_assist": {
+            "value": 0.09090909090909091
+           },
+           "off_scramble_efg": {
+            "value": 0.46153846153846156
+           },
+           "off_scramble_ft": {
+            "value": 0.6
+           },
+           "off_scramble_ftr": {
+            "value": 0.19230769230769232
+           },
+           "off_team_poss": {
+            "value": 1499
+           },
+           "off_to": {
+            "value": 0.15986540855127684
+           },
+           "off_trans_2p": {
+            "value": 0.6538461538461539
+           },
+           "off_trans_2p_ast": {
+            "value": 0
+           },
+           "off_trans_2pmid": {
+            "value": 0.5
+           },
+           "off_trans_2pmid_ast": {
+            "value": 0.25
+           },
+           "off_trans_2pmidr": {
+            "value": 0.1095890410958904
+           },
+           "off_trans_2prim": {
+            "value": 0.7222222222222222
+           },
+           "off_trans_2prim_ast": {
+            "value": 0.6153846153846154
+           },
+           "off_trans_2primr": {
+            "value": 0.2465753424657534
+           },
+           "off_trans_3p": {
+            "value": 0.2765957446808511
+           },
+           "off_trans_3p_ast": {
+            "value": 0.9230769230769231
+           },
+           "off_trans_3pr": {
+            "value": 0.6438356164383562
+           },
+           "off_trans_assist": {
+            "value": 0.36666666666666664
+           },
+           "off_trans_efg": {
+            "value": 0.5
+           },
+           "off_trans_ft": {
+            "value": 0.7916666666666666
+           },
+           "off_trans_ftr": {
+            "value": 0.3287671232876712
+           },
+           "off_usage": {
+            "value": 0.20864782871120427
+           },
+           "oppo_def_3p_opp": {
+            "value": 33.168145161290326
+           },
+           "oppo_total_def_2p_attempts": {
+            "value": 798
+           },
+           "oppo_total_def_3p_attempts": {
+            "value": 496
+           },
+           "oppo_total_def_3p_made": {
+            "value": 151
+           },
+           "oppo_total_def_drb": {
+            "value": 545
+           },
+           "oppo_total_def_fga": {
+            "value": 1294
+           },
+           "oppo_total_def_fgm": {
+            "value": 504
+           },
+           "oppo_total_def_fta": {
+            "value": 314
+           },
+           "oppo_total_def_ftm": {
+            "value": 217
+           },
+           "oppo_total_def_orb": {
+            "value": 221
+           },
+           "oppo_total_def_poss": {
+            "value": 1490
+           },
+           "oppo_total_def_pts": {
+            "value": 1376
+           },
+           "oppo_total_def_to": {
+            "value": 278
+           },
+           "player_array": {
+            "hits": {
+             "hits": [
+              {
+               "_id": "GdtArXQBjSGDKv5YlXqK",
+               "_index": "bigten_2019_lpong",
+               "_score": 4.823819,
+               "_source": {
+                "player": {
+                 "code": "AaWiggins",
+                 "id": "Wiggins, Aaron"
+                }
+               },
+               "_type": "_doc"
+              }
+             ],
+             "max_score": 4.823819,
+             "total": {
+              "relation": "eq",
+              "value": 72
+             }
+            }
+           },
+           "team_total_off_3p_made": {
+            "value": 177
+           },
+           "team_total_off_assist": {
+            "value": 288
+           },
+           "team_total_off_blk": {
+            "value": 91
+           },
+           "team_total_off_drb": {
+            "value": 619
+           },
+           "team_total_off_fga": {
+            "value": 1278
+           },
+           "team_total_off_fgm": {
+            "value": 545
+           },
+           "team_total_off_foul": {
+            "value": 343
+           },
+           "team_total_off_fta": {
+            "value": 523
+           },
+           "team_total_off_ftm": {
+            "value": 392
+           },
+           "team_total_off_orb": {
+            "value": 259
+           },
+           "team_total_off_poss": {
+            "value": 1499
+           },
+           "team_total_off_pts": {
+            "value": 1659
+           },
+           "team_total_off_stl": {
+            "value": 111
+           },
+           "team_total_off_to": {
+            "value": 246
+           },
+           "total_off_2p_ast": {
+            "value": 0
+           },
+           "total_off_2p_attempts": {
+            "value": 133
+           },
+           "total_off_2p_made": {
+            "value": 60
+           },
+           "total_off_2pmid_ast": {
+            "value": 6
+           },
+           "total_off_2pmid_attempts": {
+            "value": 74
+           },
+           "total_off_2pmid_made": {
+            "value": 18
+           },
+           "total_off_2prim_ast": {
+            "value": 19
+           },
+           "total_off_2prim_attempts": {
+            "value": 59
+           },
+           "total_off_2prim_made": {
+            "value": 42
+           },
+           "total_off_3p_ast": {
+            "value": 49
+           },
+           "total_off_3p_attempts": {
+            "value": 167
+           },
+           "total_off_3p_made": {
+            "value": 53
+           },
+           "total_off_assist": {
+            "value": 44
+           },
+           "total_off_ast_3p": {
+            "value": 22
+           },
+           "total_off_ast_mid": {
+            "value": 4
+           },
+           "total_off_ast_rim": {
+            "value": 18
+           },
+           "total_off_blk": {
+            "value": 13
+           },
+           "total_off_drb": {
+            "value": 116
+           },
+           "total_off_fga": {
+            "value": 300
+           },
+           "total_off_fgm": {
+            "value": 113
+           },
+           "total_off_foul": {
+            "value": 48
+           },
+           "total_off_fta": {
+            "value": 60
+           },
+           "total_off_ftm": {
+            "value": 43
+           },
+           "total_off_orb": {
+            "value": 35
+           },
+           "total_off_poss": {
+            "value": 0
+           },
+           "total_off_pts": {
+            "value": 0
+           },
+           "total_off_scramble_2p_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2p_attempts": {
+            "value": 17
+           },
+           "total_off_scramble_2p_made": {
+            "value": 9
+           },
+           "total_off_scramble_2pmid_ast": {
+            "value": 1
+           },
+           "total_off_scramble_2pmid_attempts": {
+            "value": 5
+           },
+           "total_off_scramble_2pmid_made": {
+            "value": 1
+           },
+           "total_off_scramble_2prim_ast": {
+            "value": 2
+           },
+           "total_off_scramble_2prim_attempts": {
+            "value": 12
+           },
+           "total_off_scramble_2prim_made": {
+            "value": 8
+           },
+           "total_off_scramble_3p_ast": {
+            "value": 2
+           },
+           "total_off_scramble_3p_attempts": {
+            "value": 9
+           },
+           "total_off_scramble_3p_made": {
+            "value": 2
+           },
+           "total_off_scramble_assist": {
+            "value": 1
+           },
+           "total_off_scramble_fga": {
+            "value": 26
+           },
+           "total_off_scramble_fgm": {
+            "value": 11
+           },
+           "total_off_scramble_fta": {
+            "value": 5
+           },
+           "total_off_scramble_ftm": {
+            "value": 3
+           },
+           "total_off_scramble_pts": {
+            "value": 27
+           },
+           "total_off_scramble_to": {
+            "value": 7
+           },
+           "total_off_stl": {
+            "value": 26
+           },
+           "total_off_to": {
+            "value": 50
+           },
+           "total_off_trans_2p_ast": {
+            "value": 0
+           },
+           "total_off_trans_2p_attempts": {
+            "value": 26
+           },
+           "total_off_trans_2p_made": {
+            "value": 17
+           },
+           "total_off_trans_2pmid_ast": {
+            "value": 1
+           },
+           "total_off_trans_2pmid_attempts": {
+            "value": 8
+           },
+           "total_off_trans_2pmid_made": {
+            "value": 4
+           },
+           "total_off_trans_2prim_ast": {
+            "value": 8
+           },
+           "total_off_trans_2prim_attempts": {
+            "value": 18
+           },
+           "total_off_trans_2prim_made": {
+            "value": 13
+           },
+           "total_off_trans_3p_ast": {
+            "value": 12
+           },
+           "total_off_trans_3p_attempts": {
+            "value": 47
+           },
+           "total_off_trans_3p_made": {
+            "value": 13
+           },
+           "total_off_trans_assist": {
+            "value": 11
+           },
+           "total_off_trans_fga": {
+            "value": 73
+           },
+           "total_off_trans_fgm": {
+            "value": 30
+           },
+           "total_off_trans_fta": {
+            "value": 24
+           },
+           "total_off_trans_ftm": {
+            "value": 19
+           },
+           "total_off_trans_pts": {
+            "value": 92
+           },
+           "total_off_trans_to": {
+            "value": 6
+           }
+          }
+         ]
+        }
+       },
+       "off": {
+        "player": {
+         "buckets": [
+          {
+           "def_2prim": {
+            "value": 0
+           },
+           "def_adj_opp": {
+            "value": 98.20405904059041
+           },
+           "def_ftr": {
+            "value": 0.028413284132841325
+           },
+           "def_orb": {
+            "value": 0.10526315789473684
+           },
+           "def_team_poss": {
+            "value": 271
+           },
+           "def_to": {
+            "value": 0.007380073800738007
+           },
+           "doc_count": 110,
+           "duration_mins": {
+            "value": 200
+           },
+           "key": "Cowan, Anthony",
+           "off_2p": {
+            "value": 0.4411764705882353
+           },
+           "off_2p_ast": {
+            "value": 0
+           },
+           "off_2pmid": {
+            "value": 0.3076923076923077
+           },
+           "off_2pmid_ast": {
+            "value": 0
+           },
+           "off_2pmidr": {
+            "value": 0.203125
+           },
+           "off_2prim": {
+            "value": 0.5238095238095238
+           },
+           "off_2prim_ast": {
+            "value": 0.18181818181818182
+           },
+           "off_2primr": {
+            "value": 0.328125
+           },
+           "off_3p": {
+            "value": 0.3
+           },
+           "off_3p_ast": {
+            "value": 0.6666666666666666
+           },
+           "off_3pr": {
+            "value": 0.46875
+           },
+           "off_adj_opp": {
+            "value": 106.80295202952028
+           },
+           "off_assist": {
+            "value": 0.3230769230769231
+           },
+           "off_ast_3p": {
+            "value": 0.6190476190476191
+           },
+           "off_ast_3p_source": {
+            "value": {
+             "AaWiggins": 1,
+             "DaMorsell": 2,
+             "RiLindo": 1,
+             "SeSmith": 2
+            }
+           },
+           "off_ast_3p_target": {
+            "value": {
+             "AaWiggins": 7,
+             "DoScott": 1,
+             "ErAyala": 1,
+             "JaSmith": 1,
+             "RiLindo": 1,
+             "SeSmith": 2
+            }
+           },
+           "off_ast_mid": {
+            "value": 0.047619047619047616
+           },
+           "off_ast_mid_source": {
+            "value": {}
+           },
+           "off_ast_mid_target": {
+            "value": {
+             "AaWiggins": 1
+            }
+           },
+           "off_ast_rim": {
+            "value": 0.3333333333333333
+           },
+           "off_ast_rim_source": {
+            "value": {
+             "HaHart": 1,
+             "SeSmith": 1
+            }
+           },
+           "off_ast_rim_target": {
+            "value": {
+             "AaWiggins": 2,
+             "HaHart": 1,
+             "JaSmith": 2,
+             "JoTomaic": 1,
+             "MlMitchell": 1
+            }
+           },
+           "off_efg": {
+            "value": 0.4453125
+           },
+           "off_ft": {
+            "value": 0.8837209302325582
+           },
+           "off_ftr": {
+            "value": 0.671875
+           },
+           "off_orb": {
+            "value": 0.029069767441860465
+           },
+           "off_poss": {
+            "value": 78.06547619047619
+           },
+           "off_scramble_2p": {
+            "value": 0.5
+           },
+           "off_scramble_2p_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmid": {
+            "value": 0.5
+           },
+           "off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmidr": {
+            "value": 0.2857142857142857
+           },
+           "off_scramble_2prim": {
+            "value": 0.5
+           },
+           "off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "off_scramble_2primr": {
+            "value": 0.2857142857142857
+           },
+           "off_scramble_3p": {
+            "value": 0.6666666666666666
+           },
+           "off_scramble_3p_ast": {
+            "value": 1
+           },
+           "off_scramble_3pr": {
+            "value": 0.42857142857142855
+           },
+           "off_scramble_assist": {
+            "value": 1.25
+           },
+           "off_scramble_efg": {
+            "value": 0.7142857142857143
+           },
+           "off_scramble_ft": {
+            "value": 1
+           },
+           "off_scramble_ftr": {
+            "value": 0.2857142857142857
+           },
+           "off_team_poss": {
+            "value": 272
+           },
+           "off_to": {
+            "value": 0.11528783835303089
+           },
+           "off_trans_2p": {
+            "value": 0.6
+           },
+           "off_trans_2p_ast": {
+            "value": 0
+           },
+           "off_trans_2pmid": {
+            "value": 0
+           },
+           "off_trans_2pmid_ast": {
+            "value": 0
+           },
+           "off_trans_2pmidr": {
+            "value": 0
+           },
+           "off_trans_2prim": {
+            "value": 0.6
+           },
+           "off_trans_2prim_ast": {
+            "value": 0.3333333333333333
+           },
+           "off_trans_2primr": {
+            "value": 0.5555555555555556
+           },
+           "off_trans_3p": {
+            "value": 0.5
+           },
+           "off_trans_3p_ast": {
+            "value": 0.5
+           },
+           "off_trans_3pr": {
+            "value": 0.4444444444444444
+           },
+           "off_trans_assist": {
+            "value": 1
+           },
+           "off_trans_efg": {
+            "value": 0.6666666666666666
+           },
+           "off_trans_ft": {
+            "value": 0.9411764705882353
+           },
+           "off_trans_ftr": {
+            "value": 1.8888888888888888
+           },
+           "off_usage": {
+            "value": 0.28700542717086835
+           },
+           "oppo_def_3p_opp": {
+            "value": 32.68260869565218
+           },
+           "oppo_total_def_2p_attempts": {
+            "value": 152
+           },
+           "oppo_total_def_3p_attempts": {
+            "value": 92
+           },
+           "oppo_total_def_3p_made": {
+            "value": 32
+           },
+           "oppo_total_def_drb": {
+            "value": 115
+           },
+           "oppo_total_def_fga": {
+            "value": 244
+           },
+           "oppo_total_def_fgm": {
+            "value": 97
+           },
+           "oppo_total_def_fta": {
+            "value": 57
+           },
+           "oppo_total_def_ftm": {
+            "value": 46
+           },
+           "oppo_total_def_orb": {
+            "value": 53
+           },
+           "oppo_total_def_poss": {
+            "value": 271
+           },
+           "oppo_total_def_pts": {
+            "value": 272
+           },
+           "oppo_total_def_to": {
+            "value": 52
+           },
+           "player_array": {
+            "hits": {
+             "hits": [
+              {
+               "_id": "GdtArXQBjSGDKv5YlXqK",
+               "_index": "bigten_2019_lpong",
+               "_score": 4.823819,
+               "_source": {
+                "player": {
+                 "code": "AnCowan",
+                 "id": "Cowan, Anthony"
+                }
+               },
+               "_type": "_doc"
+              }
+             ],
+             "max_score": 4.823819,
+             "total": {
+              "relation": "eq",
+              "value": 72
+             }
+            }
+           },
+           "team_total_off_3p_made": {
+            "value": 32
+           },
+           "team_total_off_assist": {
+            "value": 49
+           },
+           "team_total_off_blk": {
+            "value": 15
+           },
+           "team_total_off_drb": {
+            "value": 99
+           },
+           "team_total_off_fga": {
+            "value": 250
+           },
+           "team_total_off_fgm": {
+            "value": 89
+           },
+           "team_total_off_foul": {
+            "value": 69
+           },
+           "team_total_off_fta": {
+            "value": 92
+           },
+           "team_total_off_ftm": {
+            "value": 72
+           },
+           "team_total_off_orb": {
+            "value": 57
+           },
+           "team_total_off_poss": {
+            "value": 272
+           },
+           "team_total_off_pts": {
+            "value": 282
+           },
+           "team_total_off_stl": {
+            "value": 17
+           },
+           "team_total_off_to": {
+            "value": 38
+           },
+           "total_off_2p_ast": {
+            "value": 0
+           },
+           "total_off_2p_attempts": {
+            "value": 34
+           },
+           "total_off_2p_made": {
+            "value": 15
+           },
+           "total_off_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_2pmid_attempts": {
+            "value": 13
+           },
+           "total_off_2pmid_made": {
+            "value": 4
+           },
+           "total_off_2prim_ast": {
+            "value": 2
+           },
+           "total_off_2prim_attempts": {
+            "value": 21
+           },
+           "total_off_2prim_made": {
+            "value": 11
+           },
+           "total_off_3p_ast": {
+            "value": 6
+           },
+           "total_off_3p_attempts": {
+            "value": 30
+           },
+           "total_off_3p_made": {
+            "value": 9
+           },
+           "total_off_assist": {
+            "value": 21
+           },
+           "total_off_ast_3p": {
+            "value": 13
+           },
+           "total_off_ast_mid": {
+            "value": 1
+           },
+           "total_off_ast_rim": {
+            "value": 7
+           },
+           "total_off_blk": {
+            "value": 0
+           },
+           "total_off_drb": {
+            "value": 16
+           },
+           "total_off_fga": {
+            "value": 64
+           },
+           "total_off_fgm": {
+            "value": 24
+           },
+           "total_off_foul": {
+            "value": 11
+           },
+           "total_off_fta": {
+            "value": 43
+           },
+           "total_off_ftm": {
+            "value": 38
+           },
+           "total_off_orb": {
+            "value": 5
+           },
+           "total_off_poss": {
+            "value": 0
+           },
+           "total_off_pts": {
+            "value": 0
+           },
+           "total_off_scramble_2p_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2p_attempts": {
+            "value": 4
+           },
+           "total_off_scramble_2p_made": {
+            "value": 2
+           },
+           "total_off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2pmid_attempts": {
+            "value": 2
+           },
+           "total_off_scramble_2pmid_made": {
+            "value": 1
+           },
+           "total_off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_attempts": {
+            "value": 2
+           },
+           "total_off_scramble_2prim_made": {
+            "value": 1
+           },
+           "total_off_scramble_3p_ast": {
+            "value": 2
+           },
+           "total_off_scramble_3p_attempts": {
+            "value": 3
+           },
+           "total_off_scramble_3p_made": {
+            "value": 2
+           },
+           "total_off_scramble_assist": {
+            "value": 5
+           },
+           "total_off_scramble_fga": {
+            "value": 7
+           },
+           "total_off_scramble_fgm": {
+            "value": 4
+           },
+           "total_off_scramble_fta": {
+            "value": 2
+           },
+           "total_off_scramble_ftm": {
+            "value": 2
+           },
+           "total_off_scramble_pts": {
+            "value": 12
+           },
+           "total_off_scramble_to": {
+            "value": 0
+           },
+           "total_off_stl": {
+            "value": 2
+           },
+           "total_off_to": {
+            "value": 9
+           },
+           "total_off_trans_2p_ast": {
+            "value": 0
+           },
+           "total_off_trans_2p_attempts": {
+            "value": 5
+           },
+           "total_off_trans_2p_made": {
+            "value": 3
+           },
+           "total_off_trans_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_trans_2pmid_attempts": {
+            "value": 0
+           },
+           "total_off_trans_2pmid_made": {
+            "value": 0
+           },
+           "total_off_trans_2prim_ast": {
+            "value": 1
+           },
+           "total_off_trans_2prim_attempts": {
+            "value": 5
+           },
+           "total_off_trans_2prim_made": {
+            "value": 3
+           },
+           "total_off_trans_3p_ast": {
+            "value": 1
+           },
+           "total_off_trans_3p_attempts": {
+            "value": 4
+           },
+           "total_off_trans_3p_made": {
+            "value": 2
+           },
+           "total_off_trans_assist": {
+            "value": 5
+           },
+           "total_off_trans_fga": {
+            "value": 9
+           },
+           "total_off_trans_fgm": {
+            "value": 5
+           },
+           "total_off_trans_fta": {
+            "value": 17
+           },
+           "total_off_trans_ftm": {
+            "value": 16
+           },
+           "total_off_trans_pts": {
+            "value": 28
+           },
+           "total_off_trans_to": {
+            "value": 4
+           }
+          },
+          {
+           "def_2prim": {
+            "value": 0.058823529411764705
+           },
+           "def_adj_opp": {
+            "value": 102.20714285714286
+           },
+           "def_ftr": {
+            "value": 0.04999999999999999
+           },
+           "def_orb": {
+            "value": 0.06666666666666667
+           },
+           "def_team_poss": {
+            "value": 42
+           },
+           "def_to": {
+            "value": 0.023809523809523808
+           },
+           "doc_count": 17,
+           "duration_mins": {
+            "value": 30
+           },
+           "key": "Mona, Reese",
+           "off_2p": {
+            "value": 1
+           },
+           "off_2p_ast": {
+            "value": 0
+           },
+           "off_2pmid": {
+            "value": 1
+           },
+           "off_2pmid_ast": {
+            "value": 1
+           },
+           "off_2pmidr": {
+            "value": 0.3333333333333333
+           },
+           "off_2prim": {
+            "value": 1
+           },
+           "off_2prim_ast": {
+            "value": 0
+           },
+           "off_2primr": {
+            "value": 0.3333333333333333
+           },
+           "off_3p": {
+            "value": 1
+           },
+           "off_3p_ast": {
+            "value": 1
+           },
+           "off_3pr": {
+            "value": 0.3333333333333333
+           },
+           "off_adj_opp": {
+            "value": 101.45714285714286
+           },
+           "off_assist": {
+            "value": 0.16666666666666666
+           },
+           "off_ast_3p": {
+            "value": 0.5
+           },
+           "off_ast_3p_source": {
+            "value": {
+             "HaHart": 1
+            }
+           },
+           "off_ast_3p_target": {
+            "value": {
+             "HaHart": 1
+            }
+           },
+           "off_ast_mid": {
+            "value": 0
+           },
+           "off_ast_mid_source": {
+            "value": {
+             "SeSmith": 1
+            }
+           },
+           "off_ast_mid_target": {
+            "value": {}
+           },
+           "off_ast_rim": {
+            "value": 0.5
+           },
+           "off_ast_rim_source": {
+            "value": {}
+           },
+           "off_ast_rim_target": {
+            "value": {
+             "RiLindo": 1
+            }
+           },
+           "off_efg": {
+            "value": 1.1666666666666667
+           },
+           "off_ft": {
+            "value": 1
+           },
+           "off_ftr": {
+            "value": 0.6666666666666666
+           },
+           "off_orb": {
+            "value": 0
+           },
+           "off_poss": {
+            "value": 4.95
+           },
+           "off_scramble_2p": {
+            "value": 0
+           },
+           "off_scramble_2p_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmid": {
+            "value": 0
+           },
+           "off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmidr": {
+            "value": 0
+           },
+           "off_scramble_2prim": {
+            "value": 0
+           },
+           "off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "off_scramble_2primr": {
+            "value": 0
+           },
+           "off_scramble_3p": {
+            "value": 0
+           },
+           "off_scramble_3p_ast": {
+            "value": 0
+           },
+           "off_scramble_3pr": {
+            "value": 0
+           },
+           "off_scramble_assist": {
+            "value": 0
+           },
+           "off_scramble_efg": {
+            "value": 0
+           },
+           "off_scramble_ft": {
+            "value": 0
+           },
+           "off_scramble_ftr": {
+            "value": 0
+           },
+           "off_team_poss": {
+            "value": 38
+           },
+           "off_to": {
+            "value": 0.20202020202020202
+           },
+           "off_trans_2p": {
+            "value": 1
+           },
+           "off_trans_2p_ast": {
+            "value": 0
+           },
+           "off_trans_2pmid": {
+            "value": 1
+           },
+           "off_trans_2pmid_ast": {
+            "value": 1
+           },
+           "off_trans_2pmidr": {
+            "value": 0.5
+           },
+           "off_trans_2prim": {
+            "value": 0
+           },
+           "off_trans_2prim_ast": {
+            "value": 0
+           },
+           "off_trans_2primr": {
+            "value": 0
+           },
+           "off_trans_3p": {
+            "value": 1
+           },
+           "off_trans_3p_ast": {
+            "value": 1
+           },
+           "off_trans_3pr": {
+            "value": 0.5
+           },
+           "off_trans_assist": {
+            "value": 0
+           },
+           "off_trans_efg": {
+            "value": 1.25
+           },
+           "off_trans_ft": {
+            "value": 0
+           },
+           "off_trans_ftr": {
+            "value": 0
+           },
+           "off_usage": {
+            "value": 0.13026315789473686
+           },
+           "oppo_def_3p_opp": {
+            "value": 31.123529411764707
+           },
+           "oppo_total_def_2p_attempts": {
+            "value": 17
+           },
+           "oppo_total_def_3p_attempts": {
+            "value": 17
+           },
+           "oppo_total_def_3p_made": {
+            "value": 10
+           },
+           "oppo_total_def_drb": {
+            "value": 12
+           },
+           "oppo_total_def_fga": {
+            "value": 34
+           },
+           "oppo_total_def_fgm": {
+            "value": 19
+           },
+           "oppo_total_def_fta": {
+            "value": 12
+           },
+           "oppo_total_def_ftm": {
+            "value": 9
+           },
+           "oppo_total_def_orb": {
+            "value": 3
+           },
+           "oppo_total_def_poss": {
+            "value": 42
+           },
+           "oppo_total_def_pts": {
+            "value": 57
+           },
+           "oppo_total_def_to": {
+            "value": 6
+           },
+           "player_array": {
+            "hits": {
+             "hits": [
+              {
+               "_id": "GdtArXQBjSGDKv5YlXqK",
+               "_index": "bigten_2019_lpong",
+               "_score": 4.823819,
+               "_source": {
+                "player": {
+                 "code": "ReMona",
+                 "id": "Mona, Reese"
+                }
+               },
+               "_type": "_doc"
+              }
+             ],
+             "max_score": 4.823819,
+             "total": {
+              "relation": "eq",
+              "value": 72
+             }
+            }
+           },
+           "team_total_off_3p_made": {
+            "value": 3
+           },
+           "team_total_off_assist": {
+            "value": 7
+           },
+           "team_total_off_blk": {
+            "value": 2
+           },
+           "team_total_off_drb": {
+            "value": 12
+           },
+           "team_total_off_fga": {
+            "value": 28
+           },
+           "team_total_off_fgm": {
+            "value": 15
+           },
+           "team_total_off_foul": {
+            "value": 7
+           },
+           "team_total_off_fta": {
+            "value": 16
+           },
+           "team_total_off_ftm": {
+            "value": 13
+           },
+           "team_total_off_orb": {
+            "value": 2
+           },
+           "team_total_off_poss": {
+            "value": 38
+           },
+           "team_total_off_pts": {
+            "value": 46
+           },
+           "team_total_off_stl": {
+            "value": 2
+           },
+           "team_total_off_to": {
+            "value": 6
+           },
+           "total_off_2p_ast": {
+            "value": 0
+           },
+           "total_off_2p_attempts": {
+            "value": 2
+           },
+           "total_off_2p_made": {
+            "value": 2
+           },
+           "total_off_2pmid_ast": {
+            "value": 1
+           },
+           "total_off_2pmid_attempts": {
+            "value": 1
+           },
+           "total_off_2pmid_made": {
+            "value": 1
+           },
+           "total_off_2prim_ast": {
+            "value": 0
+           },
+           "total_off_2prim_attempts": {
+            "value": 1
+           },
+           "total_off_2prim_made": {
+            "value": 1
+           },
+           "total_off_3p_ast": {
+            "value": 1
+           },
+           "total_off_3p_attempts": {
+            "value": 1
+           },
+           "total_off_3p_made": {
+            "value": 1
+           },
+           "total_off_assist": {
+            "value": 2
+           },
+           "total_off_ast_3p": {
+            "value": 1
+           },
+           "total_off_ast_mid": {
+            "value": 0
+           },
+           "total_off_ast_rim": {
+            "value": 1
+           },
+           "total_off_blk": {
+            "value": 1
+           },
+           "total_off_drb": {
+            "value": 1
+           },
+           "total_off_fga": {
+            "value": 3
+           },
+           "total_off_fgm": {
+            "value": 3
+           },
+           "total_off_foul": {
+            "value": 3
+           },
+           "total_off_fta": {
+            "value": 2
+           },
+           "total_off_ftm": {
+            "value": 2
+           },
+           "total_off_orb": {
+            "value": 0
+           },
+           "total_off_poss": {
+            "value": 0
+           },
+           "total_off_pts": {
+            "value": 0
+           },
+           "total_off_scramble_2p_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2p_attempts": {
+            "value": 0
+           },
+           "total_off_scramble_2p_made": {
+            "value": 0
+           },
+           "total_off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2pmid_attempts": {
+            "value": 0
+           },
+           "total_off_scramble_2pmid_made": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_attempts": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_made": {
+            "value": 0
+           },
+           "total_off_scramble_3p_ast": {
+            "value": 0
+           },
+           "total_off_scramble_3p_attempts": {
+            "value": 0
+           },
+           "total_off_scramble_3p_made": {
+            "value": 0
+           },
+           "total_off_scramble_assist": {
+            "value": 0
+           },
+           "total_off_scramble_fga": {
+            "value": 0
+           },
+           "total_off_scramble_fgm": {
+            "value": 0
+           },
+           "total_off_scramble_fta": {
+            "value": 0
+           },
+           "total_off_scramble_ftm": {
+            "value": 0
+           },
+           "total_off_scramble_pts": {
+            "value": 0
+           },
+           "total_off_scramble_to": {
+            "value": 0
+           },
+           "total_off_stl": {
+            "value": 1
+           },
+           "total_off_to": {
+            "value": 1
+           },
+           "total_off_trans_2p_ast": {
+            "value": 0
+           },
+           "total_off_trans_2p_attempts": {
+            "value": 1
+           },
+           "total_off_trans_2p_made": {
+            "value": 1
+           },
+           "total_off_trans_2pmid_ast": {
+            "value": 1
+           },
+           "total_off_trans_2pmid_attempts": {
+            "value": 1
+           },
+           "total_off_trans_2pmid_made": {
+            "value": 1
+           },
+           "total_off_trans_2prim_ast": {
+            "value": 0
+           },
+           "total_off_trans_2prim_attempts": {
+            "value": 0
+           },
+           "total_off_trans_2prim_made": {
+            "value": 0
+           },
+           "total_off_trans_3p_ast": {
+            "value": 1
+           },
+           "total_off_trans_3p_attempts": {
+            "value": 1
+           },
+           "total_off_trans_3p_made": {
+            "value": 1
+           },
+           "total_off_trans_assist": {
+            "value": 0
+           },
+           "total_off_trans_fga": {
+            "value": 2
+           },
+           "total_off_trans_fgm": {
+            "value": 2
+           },
+           "total_off_trans_fta": {
+            "value": 0
+           },
+           "total_off_trans_ftm": {
+            "value": 0
+           },
+           "total_off_trans_pts": {
+            "value": 5
+           },
+           "total_off_trans_to": {
+            "value": 0
+           }
+          }
+         ]
+        }
+       },
+       "on": {
+        "player": {
+         "buckets": [
+          {
+           "def_2prim": {
+            "value": 0.005988023952095809
+           },
+           "def_adj_opp": {
+            "value": 96.3159973666886
+           },
+           "def_ftr": {
+            "value": 0.023963133640552994
+           },
+           "def_orb": {
+            "value": 0.09433962264150944
+           },
+           "def_team_poss": {
+            "value": 1519
+           },
+           "def_to": {
+            "value": 0.018433179723502304
+           },
+           "doc_count": 376,
+           "duration_mins": {
+            "value": 500
+           },
+           "key": "Cowan, Anthony",
+           "off_2p": {
+            "value": 0.4594594594594595
+           },
+           "off_2p_ast": {
+            "value": 0
+           },
+           "off_2pmid": {
+            "value": 0.2692307692307692
+           },
+           "off_2pmid_ast": {
+            "value": 0
+           },
+           "off_2pmidr": {
+            "value": 0.1780821917808219
+           },
+           "off_2prim": {
+            "value": 0.5625
+           },
+           "off_2prim_ast": {
+            "value": 0.2777777777777778
+           },
+           "off_2primr": {
+            "value": 0.3287671232876712
+           },
+           "off_3p": {
+            "value": 0.3263888888888889
+           },
+           "off_3p_ast": {
+            "value": 0.6170212765957447
+           },
+           "off_3pr": {
+            "value": 0.4931506849315068
+           },
+           "off_adj_opp": {
+            "value": 108.26036866359448
+           },
+           "off_assist": {
+            "value": 0.2870159453302961
+           },
+           "off_ast_3p": {
+            "value": 0.4523809523809524
+           },
+           "off_ast_3p_source": {
+            "value": {
+             "AaWiggins": 8,
+             "DaMorsell": 8,
+             "DoScott": 1,
+             "ErAyala": 8,
+             "JaSmith": 3,
+             "MlMitchell": 1
+            }
+           },
+           "off_ast_3p_target": {
+            "value": {
+             "AaWiggins": 13,
+             "DaMorsell": 7,
+             "DoScott": 4,
+             "ErAyala": 22,
+             "JaSmith": 11
+            }
+           },
+           "off_ast_mid": {
+            "value": 0.07142857142857142
+           },
+           "off_ast_mid_source": {
+            "value": {}
+           },
+           "off_ast_mid_target": {
+            "value": {
+             "AaWiggins": 3,
+             "DaMorsell": 4,
+             "JaSmith": 1,
+             "MiMitchell": 1
+            }
+           },
+           "off_ast_rim": {
+            "value": 0.47619047619047616
+           },
+           "off_ast_rim_source": {
+            "value": {
+             "AaWiggins": 3,
+             "DaMorsell": 5,
+             "ErAyala": 3,
+             "JaSmith": 3,
+             "MiMitchell": 1
+            }
+           },
+           "off_ast_rim_target": {
+            "value": {
+             "AaWiggins": 5,
+             "DaMorsell": 12,
+             "DoScott": 8,
+             "ErAyala": 3,
+             "JaSmith": 30,
+             "JoTomaic": 1,
+             "MlMitchell": 1
+            }
+           },
+           "off_efg": {
+            "value": 0.4743150684931507
+           },
+           "off_ft": {
+            "value": 0.7928994082840237
+           },
+           "off_ftr": {
+            "value": 0.5787671232876712
+           },
+           "off_orb": {
+            "value": 0.014778325123152709
+           },
+           "off_poss": {
+            "value": 373.4190476190476
+           },
+           "off_scramble_2p": {
+            "value": 0.6
+           },
+           "off_scramble_2p_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmid": {
+            "value": 0
+           },
+           "off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmidr": {
+            "value": 0.13333333333333333
+           },
+           "off_scramble_2prim": {
+            "value": 1
+           },
+           "off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "off_scramble_2primr": {
+            "value": 0.2
+           },
+           "off_scramble_3p": {
+            "value": 0.4
+           },
+           "off_scramble_3p_ast": {
+            "value": 0.75
+           },
+           "off_scramble_3pr": {
+            "value": 0.6666666666666666
+           },
+           "off_scramble_assist": {
+            "value": 0.7142857142857143
+           },
+           "off_scramble_efg": {
+            "value": 0.6
+           },
+           "off_scramble_ft": {
+            "value": 0.9
+           },
+           "off_scramble_ftr": {
+            "value": 0.6666666666666666
+           },
+           "off_team_poss": {
+            "value": 1530
+           },
+           "off_to": {
+            "value": 0.16067739549593207
+           },
+           "off_trans_2p": {
+            "value": 0.5555555555555556
+           },
+           "off_trans_2p_ast": {
+            "value": 0
+           },
+           "off_trans_2pmid": {
+            "value": 0.5
+           },
+           "off_trans_2pmid_ast": {
+            "value": 0
+           },
+           "off_trans_2pmidr": {
+            "value": 0.043478260869565216
+           },
+           "off_trans_2prim": {
+            "value": 0.56
+           },
+           "off_trans_2prim_ast": {
+            "value": 0.2857142857142857
+           },
+           "off_trans_2primr": {
+            "value": 0.5434782608695652
+           },
+           "off_trans_3p": {
+            "value": 0.3157894736842105
+           },
+           "off_trans_3p_ast": {
+            "value": 0.6666666666666666
+           },
+           "off_trans_3pr": {
+            "value": 0.41304347826086957
+           },
+           "off_trans_assist": {
+            "value": 1.5714285714285714
+           },
+           "off_trans_efg": {
+            "value": 0.5217391304347826
+           },
+           "off_trans_ft": {
+            "value": 0.7941176470588235
+           },
+           "off_trans_ftr": {
+            "value": 1.4782608695652173
+           },
+           "off_usage": {
+            "value": 0.24406473700591347
+           },
+           "oppo_def_3p_opp": {
+            "value": 33.24322200392927
+           },
+           "oppo_total_def_2p_attempts": {
+            "value": 835
+           },
+           "oppo_total_def_3p_attempts": {
+            "value": 509
+           },
+           "oppo_total_def_3p_made": {
+            "value": 162
+           },
+           "oppo_total_def_drb": {
+            "value": 559
+           },
+           "oppo_total_def_fga": {
+            "value": 1344
+           },
+           "oppo_total_def_fgm": {
+            "value": 540
+           },
+           "oppo_total_def_fta": {
+            "value": 327
+           },
+           "oppo_total_def_ftm": {
+            "value": 224
+           },
+           "oppo_total_def_orb": {
+            "value": 221
+           },
+           "oppo_total_def_poss": {
+            "value": 1519
+           },
+           "oppo_total_def_pts": {
+            "value": 1466
+           },
+           "oppo_total_def_to": {
+            "value": 260
+           },
+           "player_array": {
+            "hits": {
+             "hits": [
+              {
+               "_id": "GdtArXQBjSGDKv5YlXqK",
+               "_index": "bigten_2019_lpong",
+               "_score": 4.823819,
+               "_source": {
+                "player": {
+                 "code": "AnCowan",
+                 "id": "Cowan, Anthony"
+                }
+               },
+               "_type": "_doc"
+              }
+             ],
+             "max_score": 4.823819,
+             "total": {
+              "relation": "eq",
+              "value": 72
+             }
+            }
+           },
+           "team_total_off_3p_made": {
+            "value": 181
+           },
+           "team_total_off_assist": {
+            "value": 312
+           },
+           "team_total_off_blk": {
+            "value": 93
+           },
+           "team_total_off_drb": {
+            "value": 627
+           },
+           "team_total_off_fga": {
+            "value": 1300
+           },
+           "team_total_off_fgm": {
+            "value": 554
+           },
+           "team_total_off_foul": {
+            "value": 330
+           },
+           "team_total_off_fta": {
+            "value": 487
+           },
+           "team_total_off_ftm": {
+            "value": 366
+           },
+           "team_total_off_orb": {
+            "value": 253
+           },
+           "team_total_off_poss": {
+            "value": 1530
+           },
+           "team_total_off_pts": {
+            "value": 1655
+           },
+           "team_total_off_stl": {
+            "value": 109
+           },
+           "team_total_off_to": {
+            "value": 261
+           },
+           "total_off_2p_ast": {
+            "value": 0
+           },
+           "total_off_2p_attempts": {
+            "value": 148
+           },
+           "total_off_2p_made": {
+            "value": 68
+           },
+           "total_off_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_2pmid_attempts": {
+            "value": 52
+           },
+           "total_off_2pmid_made": {
+            "value": 14
+           },
+           "total_off_2prim_ast": {
+            "value": 15
+           },
+           "total_off_2prim_attempts": {
+            "value": 96
+           },
+           "total_off_2prim_made": {
+            "value": 54
+           },
+           "total_off_3p_ast": {
+            "value": 29
+           },
+           "total_off_3p_attempts": {
+            "value": 144
+           },
+           "total_off_3p_made": {
+            "value": 47
+           },
+           "total_off_assist": {
+            "value": 126
+           },
+           "total_off_ast_3p": {
+            "value": 57
+           },
+           "total_off_ast_mid": {
+            "value": 9
+           },
+           "total_off_ast_rim": {
+            "value": 60
+           },
+           "total_off_blk": {
+            "value": 5
+           },
+           "total_off_drb": {
+            "value": 80
+           },
+           "total_off_fga": {
+            "value": 292
+           },
+           "total_off_fgm": {
+            "value": 115
+           },
+           "total_off_foul": {
+            "value": 52
+           },
+           "total_off_fta": {
+            "value": 169
+           },
+           "total_off_ftm": {
+            "value": 134
+           },
+           "total_off_orb": {
+            "value": 12
+           },
+           "total_off_poss": {
+            "value": 0
+           },
+           "total_off_pts": {
+            "value": 0
+           },
+           "total_off_scramble_2p_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2p_attempts": {
+            "value": 5
+           },
+           "total_off_scramble_2p_made": {
+            "value": 3
+           },
+           "total_off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2pmid_attempts": {
+            "value": 2
+           },
+           "total_off_scramble_2pmid_made": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_attempts": {
+            "value": 3
+           },
+           "total_off_scramble_2prim_made": {
+            "value": 3
+           },
+           "total_off_scramble_3p_ast": {
+            "value": 3
+           },
+           "total_off_scramble_3p_attempts": {
+            "value": 10
+           },
+           "total_off_scramble_3p_made": {
+            "value": 4
+           },
+           "total_off_scramble_assist": {
+            "value": 5
+           },
+           "total_off_scramble_fga": {
+            "value": 15
+           },
+           "total_off_scramble_fgm": {
+            "value": 7
+           },
+           "total_off_scramble_fta": {
+            "value": 10
+           },
+           "total_off_scramble_ftm": {
+            "value": 9
+           },
+           "total_off_scramble_pts": {
+            "value": 27
+           },
+           "total_off_scramble_to": {
+            "value": 2
+           },
+           "total_off_stl": {
+            "value": 28
+           },
+           "total_off_to": {
+            "value": 60
+           },
+           "total_off_trans_2p_ast": {
+            "value": 0
+           },
+           "total_off_trans_2p_attempts": {
+            "value": 27
+           },
+           "total_off_trans_2p_made": {
+            "value": 15
+           },
+           "total_off_trans_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_trans_2pmid_attempts": {
+            "value": 2
+           },
+           "total_off_trans_2pmid_made": {
+            "value": 1
+           },
+           "total_off_trans_2prim_ast": {
+            "value": 4
+           },
+           "total_off_trans_2prim_attempts": {
+            "value": 25
+           },
+           "total_off_trans_2prim_made": {
+            "value": 14
+           },
+           "total_off_trans_3p_ast": {
+            "value": 4
+           },
+           "total_off_trans_3p_attempts": {
+            "value": 19
+           },
+           "total_off_trans_3p_made": {
+            "value": 6
+           },
+           "total_off_trans_assist": {
+            "value": 33
+           },
+           "total_off_trans_fga": {
+            "value": 46
+           },
+           "total_off_trans_fgm": {
+            "value": 21
+           },
+           "total_off_trans_fta": {
+            "value": 68
+           },
+           "total_off_trans_ftm": {
+            "value": 54
+           },
+           "total_off_trans_pts": {
+            "value": 102
+           },
+           "total_off_trans_to": {
+            "value": 16
+           }
+          },
+          {
+           "def_2prim": {
+            "value": 0.012558869701726845
+           },
+           "def_adj_opp": {
+            "value": 96.3929941618015
+           },
+           "def_ftr": {
+            "value": 0.02335279399499583
+           },
+           "def_orb": {
+            "value": 0.14831130690161526
+           },
+           "def_team_poss": {
+            "value": 1199
+           },
+           "def_to": {
+            "value": 0.0158465387823186
+           },
+           "doc_count": 311,
+           "duration_mins": {
+            "value": 450
+           },
+           "key": "Wiggins, Aaron",
+           "off_2p": {
+            "value": 0.4424778761061947
+           },
+           "off_2p_ast": {
+            "value": 0
+           },
+           "off_2pmid": {
+            "value": 0.24615384615384617
+           },
+           "off_2pmid_ast": {
+            "value": 0.3125
+           },
+           "off_2pmidr": {
+            "value": 0.26422764227642276
+           },
+           "off_2prim": {
+            "value": 0.7083333333333334
+           },
+           "off_2prim_ast": {
+            "value": 0.38235294117647056
+           },
+           "off_2primr": {
+            "value": 0.1951219512195122
+           },
+           "off_3p": {
+            "value": 0.2932330827067669
+           },
+           "off_3p_ast": {
+            "value": 0.8974358974358975
+           },
+           "off_3pr": {
+            "value": 0.540650406504065
+           },
+           "off_adj_opp": {
+            "value": 107.99691409507923
+           },
+           "off_assist": {
+            "value": 0.09192200557103064
+           },
+           "off_ast_3p": {
+            "value": 0.45454545454545453
+           },
+           "off_ast_3p_source": {
+            "value": {
+             "AnCowan": 13,
+             "DaMorsell": 5,
+             "DoScott": 2,
+             "ErAyala": 14,
+             "JaSmith": 1
+            }
+           },
+           "off_ast_3p_target": {
+            "value": {
+             "AnCowan": 8,
+             "DaMorsell": 1,
+             "DoScott": 6
+            }
+           },
+           "off_ast_mid": {
+            "value": 0.09090909090909091
+           },
+           "off_ast_mid_source": {
+            "value": {
+             "AnCowan": 3,
+             "JaSmith": 1,
+             "MiMitchell": 1
+            }
+           },
+           "off_ast_mid_target": {
+            "value": {
+             "DaMorsell": 1,
+             "JaSmith": 2
+            }
+           },
+           "off_ast_rim": {
+            "value": 0.45454545454545453
+           },
+           "off_ast_rim_source": {
+            "value": {
+             "AnCowan": 5,
+             "DaMorsell": 5,
+             "ErAyala": 2,
+             "JaSmith": 1
+            }
+           },
+           "off_ast_rim_target": {
+            "value": {
+             "AnCowan": 3,
+             "DaMorsell": 1,
+             "DoScott": 1,
+             "ErAyala": 1,
+             "JaSmith": 8,
+             "MiMitchell": 1
+            }
+           },
+           "off_efg": {
+            "value": 0.4410569105691057
+           },
+           "off_ft": {
+            "value": 0.7254901960784313
+           },
+           "off_ftr": {
+            "value": 0.2073170731707317
+           },
+           "off_orb": {
+            "value": 0.0390625
+           },
+           "off_poss": {
+            "value": 259.89285714285717
+           },
+           "off_scramble_2p": {
+            "value": 0.5
+           },
+           "off_scramble_2p_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmid": {
+            "value": 0
+           },
+           "off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "off_scramble_2pmidr": {
+            "value": 0.2
+           },
+           "off_scramble_2prim": {
+            "value": 0.75
+           },
+           "off_scramble_2prim_ast": {
+            "value": 0.16666666666666666
+           },
+           "off_scramble_2primr": {
+            "value": 0.4
+           },
+           "off_scramble_3p": {
+            "value": 0.125
+           },
+           "off_scramble_3p_ast": {
+            "value": 1
+           },
+           "off_scramble_3pr": {
+            "value": 0.4
+           },
+           "off_scramble_assist": {
+            "value": 0.14285714285714285
+           },
+           "off_scramble_efg": {
+            "value": 0.375
+           },
+           "off_scramble_ft": {
+            "value": 0.6
+           },
+           "off_scramble_ftr": {
+            "value": 0.25
+           },
+           "off_team_poss": {
+            "value": 1220
+           },
+           "off_to": {
+            "value": 0.16160505702899544
+           },
+           "off_trans_2p": {
+            "value": 0.7
+           },
+           "off_trans_2p_ast": {
+            "value": 0
+           },
+           "off_trans_2pmid": {
+            "value": 0.6666666666666666
+           },
+           "off_trans_2pmid_ast": {
+            "value": 0.25
+           },
+           "off_trans_2pmidr": {
+            "value": 0.10714285714285714
+           },
+           "off_trans_2prim": {
+            "value": 0.7142857142857143
+           },
+           "off_trans_2prim_ast": {
+            "value": 0.5
+           },
+           "off_trans_2primr": {
+            "value": 0.25
+           },
+           "off_trans_3p": {
+            "value": 0.25
+           },
+           "off_trans_3p_ast": {
+            "value": 0.8888888888888888
+           },
+           "off_trans_3pr": {
+            "value": 0.6428571428571429
+           },
+           "off_trans_assist": {
+            "value": 0.391304347826087
+           },
+           "off_trans_efg": {
+            "value": 0.49107142857142855
+           },
+           "off_trans_ft": {
+            "value": 0.8947368421052632
+           },
+           "off_trans_ftr": {
+            "value": 0.3392857142857143
+           },
+           "off_usage": {
+            "value": 0.21302693208430915
+           },
+           "oppo_def_3p_opp": {
+            "value": 33.28283582089552
+           },
+           "oppo_total_def_2p_attempts": {
+            "value": 637
+           },
+           "oppo_total_def_3p_attempts": {
+            "value": 402
+           },
+           "oppo_total_def_3p_made": {
+            "value": 117
+           },
+           "oppo_total_def_drb": {
+            "value": 439
+           },
+           "oppo_total_def_fga": {
+            "value": 1039
+           },
+           "oppo_total_def_fgm": {
+            "value": 399
+           },
+           "oppo_total_def_fta": {
+            "value": 265
+           },
+           "oppo_total_def_ftm": {
+            "value": 183
+           },
+           "oppo_total_def_orb": {
+            "value": 176
+           },
+           "oppo_total_def_poss": {
+            "value": 1199
+           },
+           "oppo_total_def_pts": {
+            "value": 1098
+           },
+           "oppo_total_def_to": {
+            "value": 221
+           },
+           "player_array": {
+            "hits": {
+             "hits": [
+              {
+               "_id": "GdtArXQBjSGDKv5YlXqK",
+               "_index": "bigten_2019_lpong",
+               "_score": 4.823819,
+               "_source": {
+                "player": {
+                 "code": "AaWiggins",
+                 "id": "Wiggins, Aaron"
+                }
+               },
+               "_type": "_doc"
+              }
+             ],
+             "max_score": 4.823819,
+             "total": {
+              "relation": "eq",
+              "value": 72
+             }
+            }
+           },
+           "team_total_off_3p_made": {
+            "value": 142
+           },
+           "team_total_off_assist": {
+            "value": 231
+           },
+           "team_total_off_blk": {
+            "value": 72
+           },
+           "team_total_off_drb": {
+            "value": 505
+           },
+           "team_total_off_fga": {
+            "value": 1029
+           },
+           "team_total_off_fgm": {
+            "value": 448
+           },
+           "team_total_off_foul": {
+            "value": 268
+           },
+           "team_total_off_fta": {
+            "value": 427
+           },
+           "team_total_off_ftm": {
+            "value": 321
+           },
+           "team_total_off_orb": {
+            "value": 201
+           },
+           "team_total_off_poss": {
+            "value": 1220
+           },
+           "team_total_off_pts": {
+            "value": 1359
+           },
+           "team_total_off_stl": {
+            "value": 94
+           },
+           "team_total_off_to": {
+            "value": 199
+           },
+           "total_off_2p_ast": {
+            "value": 0
+           },
+           "total_off_2p_attempts": {
+            "value": 113
+           },
+           "total_off_2p_made": {
+            "value": 50
+           },
+           "total_off_2pmid_ast": {
+            "value": 5
+           },
+           "total_off_2pmid_attempts": {
+            "value": 65
+           },
+           "total_off_2pmid_made": {
+            "value": 16
+           },
+           "total_off_2prim_ast": {
+            "value": 13
+           },
+           "total_off_2prim_attempts": {
+            "value": 48
+           },
+           "total_off_2prim_made": {
+            "value": 34
+           },
+           "total_off_3p_ast": {
+            "value": 35
+           },
+           "total_off_3p_attempts": {
+            "value": 133
+           },
+           "total_off_3p_made": {
+            "value": 39
+           },
+           "total_off_assist": {
+            "value": 33
+           },
+           "total_off_ast_3p": {
+            "value": 15
+           },
+           "total_off_ast_mid": {
+            "value": 3
+           },
+           "total_off_ast_rim": {
+            "value": 15
+           },
+           "total_off_blk": {
+            "value": 8
+           },
+           "total_off_drb": {
+            "value": 101
+           },
+           "total_off_fga": {
+            "value": 246
+           },
+           "total_off_fgm": {
+            "value": 89
+           },
+           "total_off_foul": {
+            "value": 40
+           },
+           "total_off_fta": {
+            "value": 51
+           },
+           "total_off_ftm": {
+            "value": 37
+           },
+           "total_off_orb": {
+            "value": 25
+           },
+           "total_off_poss": {
+            "value": 0
+           },
+           "total_off_pts": {
+            "value": 0
+           },
+           "total_off_scramble_2p_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2p_attempts": {
+            "value": 12
+           },
+           "total_off_scramble_2p_made": {
+            "value": 6
+           },
+           "total_off_scramble_2pmid_ast": {
+            "value": 0
+           },
+           "total_off_scramble_2pmid_attempts": {
+            "value": 4
+           },
+           "total_off_scramble_2pmid_made": {
+            "value": 0
+           },
+           "total_off_scramble_2prim_ast": {
+            "value": 1
+           },
+           "total_off_scramble_2prim_attempts": {
+            "value": 8
+           },
+           "total_off_scramble_2prim_made": {
+            "value": 6
+           },
+           "total_off_scramble_3p_ast": {
+            "value": 1
+           },
+           "total_off_scramble_3p_attempts": {
+            "value": 8
+           },
+           "total_off_scramble_3p_made": {
+            "value": 1
+           },
+           "total_off_scramble_assist": {
+            "value": 1
+           },
+           "total_off_scramble_fga": {
+            "value": 20
+           },
+           "total_off_scramble_fgm": {
+            "value": 7
+           },
+           "total_off_scramble_fta": {
+            "value": 5
+           },
+           "total_off_scramble_ftm": {
+            "value": 3
+           },
+           "total_off_scramble_pts": {
+            "value": 18
+           },
+           "total_off_scramble_to": {
+            "value": 6
+           },
+           "total_off_stl": {
+            "value": 19
+           },
+           "total_off_to": {
+            "value": 42
+           },
+           "total_off_trans_2p_ast": {
+            "value": 0
+           },
+           "total_off_trans_2p_attempts": {
+            "value": 20
+           },
+           "total_off_trans_2p_made": {
+            "value": 14
+           },
+           "total_off_trans_2pmid_ast": {
+            "value": 1
+           },
+           "total_off_trans_2pmid_attempts": {
+            "value": 6
+           },
+           "total_off_trans_2pmid_made": {
+            "value": 4
+           },
+           "total_off_trans_2prim_ast": {
+            "value": 5
+           },
+           "total_off_trans_2prim_attempts": {
+            "value": 14
+           },
+           "total_off_trans_2prim_made": {
+            "value": 10
+           },
+           "total_off_trans_3p_ast": {
+            "value": 8
+           },
+           "total_off_trans_3p_attempts": {
+            "value": 36
+           },
+           "total_off_trans_3p_made": {
+            "value": 9
+           },
+           "total_off_trans_assist": {
+            "value": 9
+           },
+           "total_off_trans_fga": {
+            "value": 56
+           },
+           "total_off_trans_fgm": {
+            "value": 23
+           },
+           "total_off_trans_fta": {
+            "value": 19
+           },
+           "total_off_trans_ftm": {
+            "value": 17
+           },
+           "total_off_trans_pts": {
+            "value": 72
+           },
+           "total_off_trans_to": {
+            "value": 5
+           }
+          }
+         ]
+        }
+       }
+      }
+     }
+    },
+    "hits": {
+     "hits": [],
+     "max_score": null,
+     "total": {
+      "relation": "eq",
+      "value": 2970
+     }
+    },
+    "status": 200,
+    "timed_out": false,
+    "took": 202
+   }
+  ],
+  "took": 202
+ },
+ "samplePlayerStatsTemplate": {
+  "2p": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.46111111111111114
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.4461538461538462
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.42105263157894735
+   },
+   "off: Mona, Reese": {
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.4796747967479675
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.4461538461538462
+   }
+  },
+  "2p_attempts": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 975,
+    "total_off_": 180
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 784,
+    "total_off_": 130
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 283,
+    "total_off_": 57
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 7,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 692,
+    "total_off_": 123
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 784,
+    "total_off_": 130
+   }
+  },
+  "2p_made": {
+   "baseline: Cowan, Anthony": {
+    "total_off_": 83
+   },
+   "baseline: Wiggins, Aaron": {
+    "total_off_": 58
+   },
+   "off: Cowan, Anthony": {
+    "total_off_": 24
+   },
+   "off: Mona, Reese": {
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "total_off_": 59
+   },
+   "on: Wiggins, Aaron": {
+    "total_off_": 58
+   }
+  },
+  "2pmid": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.42990654205607476
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.2891566265060241
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.4358974358974359
+   },
+   "off: Mona, Reese": {
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.4264705882352941
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.2891566265060241
+   }
+  },
+  "2pmid_attempts": {
+   "baseline: Cowan, Anthony": {
+    "total_off_": 107
+   },
+   "baseline: Wiggins, Aaron": {
+    "total_off_": 83
+   },
+   "off: Cowan, Anthony": {
+    "total_off_": 39
+   },
+   "off: Mona, Reese": {
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "total_off_": 68
+   },
+   "on: Wiggins, Aaron": {
+    "total_off_": 83
+   }
+  },
+  "2pmid_made": {
+   "baseline: Cowan, Anthony": {
+    "total_off_": 46
+   },
+   "baseline: Wiggins, Aaron": {
+    "total_off_": 24
+   },
+   "off: Cowan, Anthony": {
+    "total_off_": 17
+   },
+   "off: Mona, Reese": {
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "total_off_": 29
+   },
+   "on: Wiggins, Aaron": {
+    "total_off_": 24
+   }
+  },
+  "2pmidr": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.30484330484330485
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.2832764505119454
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.36792452830188677
+   },
+   "off: Mona, Reese": {
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.27755102040816326
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.2832764505119454
+   }
+  },
+  "2prim": {
+   "baseline: Cowan, Anthony": {
+    "def_": 0.005128205128205128,
+    "off_": 0.5068493150684932
+   },
+   "baseline: Wiggins, Aaron": {
+    "def_": 0.016581632653061226,
+    "off_": 0.723404255319149
+   },
+   "off: Cowan, Anthony": {
+    "def_": 0,
+    "off_": 0.3888888888888889
+   },
+   "off: Mona, Reese": {
+    "def_": 0,
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "def_": 0.0072254335260115606,
+    "off_": 0.5454545454545454
+   },
+   "on: Wiggins, Aaron": {
+    "def_": 0.016581632653061226,
+    "off_": 0.723404255319149
+   }
+  },
+  "2prim_attempts": {
+   "baseline: Cowan, Anthony": {
+    "total_off_": 73
+   },
+   "baseline: Wiggins, Aaron": {
+    "total_off_": 47
+   },
+   "off: Cowan, Anthony": {
+    "total_off_": 18
+   },
+   "off: Mona, Reese": {
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "total_off_": 55
+   },
+   "on: Wiggins, Aaron": {
+    "total_off_": 47
+   }
+  },
+  "2prim_made": {
+   "baseline: Cowan, Anthony": {
+    "total_off_": 37
+   },
+   "baseline: Wiggins, Aaron": {
+    "total_off_": 34
+   },
+   "off: Cowan, Anthony": {
+    "total_off_": 7
+   },
+   "off: Mona, Reese": {
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "total_off_": 30
+   },
+   "on: Wiggins, Aaron": {
+    "total_off_": 34
+   }
+  },
+  "2primr": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.20797720797720798
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.16040955631399317
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.16981132075471697
+   },
+   "off: Mona, Reese": {
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.22448979591836735
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.16040955631399317
+   }
+  },
+  "3p": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.3216374269005848
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.3128834355828221
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.32653061224489793
+   },
+   "off: Mona, Reese": {
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.319672131147541
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.3128834355828221
+   }
+  },
+  "3p_attempts": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 500,
+    "total_off_": 171
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 400,
+    "total_off_": 163
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 200,
+    "total_off_": 49
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 1,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 300,
+    "total_off_": 122
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 100,
+    "total_off_": 163
+   }
+  },
+  "3p_made": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 200,
+    "team_total_off_": 210,
+    "total_off_": 55
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 100,
+    "team_total_off_": 174,
+    "total_off_": 51
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 20,
+    "team_total_off_": 51,
+    "total_off_": 16
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 1,
+    "team_total_off_": 0,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 100,
+    "team_total_off_": 159,
+    "total_off_": 39
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 30,
+    "team_total_off_": 174,
+    "total_off_": 51
+   }
+  },
+  "3p_opp": {
+   "baseline: Cowan, Anthony": {
+    "oppo_def_": 30.240722891566264
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_def_": 31.240722891566264
+   },
+   "off: Cowan, Anthony": {
+    "oppo_def_": 32.240722891566264
+   },
+   "off: Mona, Reese": {
+    "oppo_def_": 33.240722891566264
+   },
+   "on: Cowan, Anthony": {
+    "oppo_def_": 35.240722891566264
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_def_": 34.240722891566264
+   }
+  },
+  "3pr": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.48717948717948717
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.5563139931740614
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.46226415094339623
+   },
+   "off: Mona, Reese": {
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.49795918367346936
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.5563139931740614
+   }
+  },
+  "adj_opp": {
+   "baseline: Cowan, Anthony": {
+    "def_": 96.52304643261608,
+    "off_": 108.0781993204983
+   },
+   "baseline: Wiggins, Aaron": {
+    "def_": 96.80587833219413,
+    "off_": 107.77293233082706
+   },
+   "off: Cowan, Anthony": {
+    "def_": 96.31485355648536,
+    "off_": 108.49037656903766
+   },
+   "off: Mona, Reese": {
+    "def_": 93,
+    "off_": 115.3
+   },
+   "on: Cowan, Anthony": {
+    "def_": 96.6003105590062,
+    "off_": 107.92523291925467
+   },
+   "on: Wiggins, Aaron": {
+    "def_": 96.80587833219413,
+    "off_": 107.77293233082706
+   }
+  },
+  "assist": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.2903225806451613,
+    "team_total_off_": 354,
+    "total_off_": 144
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.0988235294117647,
+    "team_total_off_": 283,
+    "total_off_": 42
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.3770491803278688,
+    "team_total_off_": 99,
+    "total_off_": 46
+   },
+   "off: Mona, Reese": {
+    "off_": 0,
+    "team_total_off_": 1,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.2620320855614973,
+    "team_total_off_": 255,
+    "total_off_": 98
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.0988235294117647,
+    "team_total_off_": 283,
+    "total_off_": 42
+   }
+  },
+  "blk": {
+   "baseline: Cowan, Anthony": {
+    "team_total_off_": 60,
+    "total_off_": 5
+   },
+   "baseline: Wiggins, Aaron": {
+    "team_total_off_": 60,
+    "total_off_": 13
+   },
+   "off: Cowan, Anthony": {
+    "team_total_off_": 60,
+    "total_off_": 0
+   },
+   "off: Mona, Reese": {
+    "team_total_off_": 60,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "team_total_off_": 60,
+    "total_off_": 5
+   },
+   "on: Wiggins, Aaron": {
+    "team_total_off_": 60,
+    "total_off_": 13
+   }
+  },
+  "drb": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 665,
+    "team_total_off_": 716,
+    "total_off_": 94
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 606,
+    "total_off_": 112
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 186,
+    "team_total_off_": 191,
+    "total_off_": 32
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 6,
+    "team_total_off_": 2,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 479,
+    "team_total_off_": 525,
+    "total_off_": 62
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 606,
+    "total_off_": 112
+   }
+  },
+  "efg": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.47150997150997154
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.4590443686006826
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.4528301886792453
+   },
+   "off: Mona, Reese": {
+    "off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.47959183673469385
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.4590443686006826
+   }
+  },
+  "fga": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 1429,
+    "team_total_off_": 1529,
+    "total_off_": 351
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 1429,
+    "team_total_off_": 1253,
+    "total_off_": 293
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 1429,
+    "team_total_off_": 410,
+    "total_off_": 106
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 1429,
+    "team_total_off_": 7,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 1429,
+    "team_total_off_": 1119,
+    "total_off_": 245
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 1429,
+    "team_total_off_": 1253,
+    "total_off_": 293
+   }
+  },
+  "fgm": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 634,
+    "total_off_": 138
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 534,
+    "total_off_": 109
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 162,
+    "total_off_": 40
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 1,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 472,
+    "total_off_": 98
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 534,
+    "team_total_off_": 534,
+    "total_off_": 109
+   }
+  },
+  "foul": {
+   "baseline: Cowan, Anthony": {
+    "team_total_off_": 310,
+    "total_off_": 62
+   },
+   "baseline: Wiggins, Aaron": {
+    "team_total_off_": 310,
+    "total_off_": 47
+   },
+   "off: Cowan, Anthony": {
+    "team_total_off_": 310,
+    "total_off_": 15
+   },
+   "off: Mona, Reese": {
+    "team_total_off_": 310,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "team_total_off_": 310,
+    "total_off_": 47
+   },
+   "on: Wiggins, Aaron": {
+    "team_total_off_": 310,
+    "total_off_": 47
+   }
+  },
+  "fta": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 626,
+    "team_total_off_": 566,
+    "total_off_": 206
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 626,
+    "team_total_off_": 508,
+    "total_off_": 59
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 626,
+    "team_total_off_": 110,
+    "total_off_": 43
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 626,
+    "team_total_off_": 1,
+    "total_off_": 1
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 626,
+    "team_total_off_": 456,
+    "total_off_": 163
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 626,
+    "team_total_off_": 508,
+    "total_off_": 59
+   }
+  },
+  "ftm": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 426,
+    "team_total_off_": 426,
+    "total_off_": 166
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 426,
+    "team_total_off_": 379,
+    "total_off_": 43
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 426,
+    "team_total_off_": 84,
+    "total_off_": 35
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 426,
+    "team_total_off_": 0,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 426,
+    "team_total_off_": 342,
+    "total_off_": 131
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 426,
+    "team_total_off_": 379,
+    "total_off_": 43
+   }
+  },
+  "ftr": {
+   "baseline: Cowan, Anthony": {
+    "def_": 0.024575311438278596,
+    "off_": 0.5868945868945868
+   },
+   "baseline: Wiggins, Aaron": {
+    "def_": 0.02248803827751196,
+    "off_": 0.20136518771331058
+   },
+   "off: Cowan, Anthony": {
+    "def_": 0.021966527196652718,
+    "off_": 0.4056603773584906
+   },
+   "off: Mona, Reese": {
+    "def_": 0,
+    "off_": null
+   },
+   "on: Cowan, Anthony": {
+    "def_": 0.025543478260869563,
+    "off_": 0.6653061224489796
+   },
+   "on: Wiggins, Aaron": {
+    "def_": 0.02248803827751196,
+    "off_": 0.20136518771331058
+   }
+  },
+  "main": {
+   "doc_count": {
+    "baseline: Cowan, Anthony": 470,
+    "baseline: Wiggins, Aaron": 404,
+    "off: Cowan, Anthony": 129,
+    "off: Mona, Reese": 3,
+    "on: Cowan, Anthony": 341,
+    "on: Wiggins, Aaron": 404
+   }
+  },
+  "orb": {
+   "baseline: Cowan, Anthony": {
+    "def_": 0.09572301425661914,
+    "off_": 0.017507723995880537,
+    "oppo_total_def_": 266,
+    "team_total_off_": 306,
+    "total_off_": 17
+   },
+   "baseline: Wiggins, Aaron": {
+    "def_": 0.13658536585365855,
+    "off_": 0.044416243654822336,
+    "oppo_total_def_": 214,
+    "team_total_off_": 254,
+    "total_off_": 35
+   },
+   "off: Cowan, Anthony": {
+    "def_": 0.12213740458015267,
+    "off_": 0.03435114503816794,
+    "oppo_total_def_": 71,
+    "team_total_off_": 76,
+    "total_off_": 9
+   },
+   "off: Mona, Reese": {
+    "def_": 0,
+    "off_": 0.14285714285714285,
+    "oppo_total_def_": 3,
+    "team_total_off_": 1,
+    "total_off_": 1
+   },
+   "on: Cowan, Anthony": {
+    "def_": 0.08611111111111111,
+    "off_": 0.011283497884344146,
+    "oppo_total_def_": 195,
+    "team_total_off_": 230,
+    "total_off_": 8
+   },
+   "on: Wiggins, Aaron": {
+    "def_": 0.13658536585365855,
+    "off_": 0.044416243654822336,
+    "oppo_total_def_": 214,
+    "team_total_off_": 254,
+    "total_off_": 35
+   }
+  },
+  "poss": {
+   "baseline: Cowan, Anthony": {
+    "off_": 444.6345238095238,
+    "oppo_total_def_": 1766,
+    "team_total_off_": 1778,
+    "total_off_": 0
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 304.78809523809525,
+    "oppo_total_def_": 1463,
+    "team_total_off_": 1469,
+    "total_off_": 0
+   },
+   "off: Cowan, Anthony": {
+    "off_": 122.94642857142857,
+    "oppo_total_def_": 478,
+    "team_total_off_": 471,
+    "total_off_": 0
+   },
+   "off: Mona, Reese": {
+    "off_": 1.475,
+    "oppo_total_def_": 10,
+    "team_total_off_": 9,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "off_": 321.68809523809523,
+    "oppo_total_def_": 1288,
+    "team_total_off_": 1307,
+    "total_off_": 0
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 304.78809523809525,
+    "oppo_total_def_": 1463,
+    "team_total_off_": 1469,
+    "total_off_": 0
+   }
+  },
+  "pts": {
+   "baseline: Cowan, Anthony": {
+    "oppo_total_def_": 1804,
+    "team_total_off_": 1904,
+    "total_off_": 0
+   },
+   "baseline: Wiggins, Aaron": {
+    "oppo_total_def_": 1804,
+    "team_total_off_": 1621,
+    "total_off_": 0
+   },
+   "off: Cowan, Anthony": {
+    "oppo_total_def_": 1804,
+    "team_total_off_": 459,
+    "total_off_": 0
+   },
+   "off: Mona, Reese": {
+    "oppo_total_def_": 1804,
+    "team_total_off_": 2,
+    "total_off_": 0
+   },
+   "on: Cowan, Anthony": {
+    "oppo_total_def_": 1804,
+    "team_total_off_": 1445,
+    "total_off_": 0
+   },
+   "on: Wiggins, Aaron": {
+    "oppo_total_def_": 1804,
+    "team_total_off_": 1621,
+    "total_off_": 0
+   }
+  },
+  "stl": {
+   "baseline: Cowan, Anthony": {
+    "team_total_off_": 150,
+    "total_off_": 30
+   },
+   "baseline: Wiggins, Aaron": {
+    "team_total_off_": 150,
+    "total_off_": 26
+   },
+   "off: Cowan, Anthony": {
+    "team_total_off_": 150,
+    "total_off_": 4
+   },
+   "off: Mona, Reese": {
+    "team_total_off_": 150,
+    "total_off_": 1
+   },
+   "on: Cowan, Anthony": {
+    "team_total_off_": 150,
+    "total_off_": 26
+   },
+   "on: Wiggins, Aaron": {
+    "team_total_off_": 150,
+    "total_off_": 26
+   }
+  },
+  "team_poss": {
+   "baseline: Cowan, Anthony": {
+    "def_": 1766,
+    "off_": 1778
+   },
+   "baseline: Wiggins, Aaron": {
+    "def_": 1463,
+    "off_": 1469
+   },
+   "off: Cowan, Anthony": {
+    "def_": 478,
+    "off_": 471
+   },
+   "off: Mona, Reese": {
+    "def_": 10,
+    "off_": 9
+   },
+   "on: Cowan, Anthony": {
+    "def_": 1288,
+    "off_": 1307
+   },
+   "on: Wiggins, Aaron": {
+    "def_": 1463,
+    "off_": 1469
+   }
+  },
+  "to": {
+   "baseline: Cowan, Anthony": {
+    "def_": 0.01698754246885617,
+    "off_": 0.1551836312862624,
+    "oppo_total_def_": 59,
+    "team_total_off_": 298,
+    "total_off_": 69
+   },
+   "baseline: Wiggins, Aaron": {
+    "def_": 0.0177717019822283,
+    "off_": 0.16076743404863644,
+    "oppo_total_def_": 59,
+    "team_total_off_": 243,
+    "total_off_": 49
+   },
+   "off: Cowan, Anthony": {
+    "def_": 0.008368200836820083,
+    "off_": 0.11387073347857662,
+    "oppo_total_def_": 59,
+    "team_total_off_": 88,
+    "total_off_": 14
+   },
+   "off: Mona, Reese": {
+    "def_": 0.1,
+    "off_": 0.6779661016949152,
+    "oppo_total_def_": 59,
+    "team_total_off_": 3,
+    "total_off_": 1
+   },
+   "on: Cowan, Anthony": {
+    "def_": 0.020186335403726708,
+    "off_": 0.17097306619100133,
+    "oppo_total_def_": 59,
+    "team_total_off_": 210,
+    "total_off_": 55
+   },
+   "on: Wiggins, Aaron": {
+    "def_": 0.0177717019822283,
+    "off_": 0.16076743404863644,
+    "oppo_total_def_": 59,
+    "team_total_off_": 243,
+    "total_off_": 49
+   }
+  },
+  "usage": {
+   "baseline: Cowan, Anthony": {
+    "off_": 0.25007566018533395
+   },
+   "baseline: Wiggins, Aaron": {
+    "off_": 0.20747998314369998
+   },
+   "off: Cowan, Anthony": {
+    "off_": 0.26103275705186535
+   },
+   "off: Mona, Reese": {
+    "off_": 0.1638888888888889
+   },
+   "on: Cowan, Anthony": {
+    "off_": 0.24612708128392902
+   },
+   "on: Wiggins, Aaron": {
+    "off_": 0.20747998314369998
+   }
+  }
+ }
+}
