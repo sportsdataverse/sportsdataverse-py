@@ -533,7 +533,7 @@ def nba_la_rapm(
     shooting: pl.DataFrame,
     player_rates: Optional[dict[int, tuple[float, float]]] = None,
     *,
-    alphas: np.ndarray = DEFAULT_RAPM_ALPHAS,
+    alphas: Optional[np.ndarray] = None,
     fg3_k: float = 100.0,
     ft_k: float = 50.0,
     return_as_pandas: bool = False,
@@ -545,22 +545,27 @@ def nba_la_rapm(
     **DECISION 2/3/4** govern the response recipe and shrinkage constants.
 
     .. note::
-        **Ridge schedule, deliberately NOT the oracle default**: unlike
-        :func:`nba_decay_rapm`'s decay-weighted branch, this function fits
-        with :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` and
-        sklearn's efficient default LOOCV (``cv=None``) -- **the exact
-        schedule** :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` itself
-        uses. There is no data-independent "disable substitution" flag on
-        this function's signature (unlike ``nba_decay_rapm``'s ``asof``),
-        so the reduces-to-plain-RAPM invariant
-        (``test_la_rapm_equals_plain_rapm_when_rates_realized``) can only
-        hold when the fitting schedule is identical to ``nba_rapm``'s own --
-        that invariant is this function's correctness gate. Pass an explicit
-        ``alphas=oracle_rapm_alphas(n_samples)`` to opt into the WP2 oracle
-        grid instead; note that doing so does *not* also switch ``cv`` (this
-        function has no ``cv`` parameter), so an oracle-alphas override still
-        fits under sklearn's efficient LOOCV rather than the oracle's
-        explicit 5-fold.
+        **Ridge schedule -- the oracle grid (controller ruling, extends the
+        binding decision #8 documented in the module docstring)**: this
+        function's *operative* fit uses :func:`oracle_rapm_alphas` (evaluated
+        at the post-filter possession count, ``X.shape[0]``) with
+        ``cv=`` :data:`ORACLE_RAPM_CV`, matching every other WP2 RAPM variant
+        -- **not** plain :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s own
+        ``DEFAULT_RAPM_ALPHAS`` / ``cv=None`` schedule (an earlier revision of
+        this function fit at the plain schedule solely to satisfy the
+        reduces-to-plain gate; the controller ruling supersedes that).
+        Consequently the reduces-to-plain-response correctness gate
+        (``test_la_rapm_equals_same_schedule_reference_when_rates_realized``)
+        no longer compares against the public ``nba_rapm`` -- doing so would be a
+        cross-schedule comparison and could fail on schedule drift alone,
+        independent of whether the luck-adjustment recipe is correct. Instead
+        it fits a SAME-SCHEDULE internal reference directly --
+        ``_fit_weighted(*_prepare(possessions, "points")[:2],
+        alphas=oracle_rapm_alphas(n), cv=ORACLE_RAPM_CV)`` on the plain
+        realized-``points`` response -- and asserts LA-RAPM equals that
+        reference when the luck-adjustment rates are set to the realized
+        (non-shrunk) values, so ``la_points == points`` exactly and only the
+        response-substitution logic is under test, not the ridge schedule.
 
     Args:
         possessions: Possession+lineup frame with team-level ``fg2m`` and the
@@ -568,9 +573,10 @@ def nba_la_rapm(
         shooting: Per-(possession, shooter) frame from ``build_possession_shooting``.
         player_rates: Optional ``{player_id: (p3, pft)}`` override; ``None`` →
             shrink from ``shooting``.
-        alphas: RidgeCV alpha grid. Defaults to
-            :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` (see note
-            above for why this differs from the other WP2 variants' oracle default).
+        alphas: Optional RidgeCV alpha grid override. ``None`` (default)
+            auto-selects :func:`oracle_rapm_alphas` evaluated at the
+            possession count -- the operative WP2 oracle schedule (``cv=``
+            :data:`ORACLE_RAPM_CV` always; there is no plain-schedule mode).
         fg3_k: 3-point shrinkage pseudo-count, forwarded to
             :func:`luck_adjusted_response` when ``player_rates`` is ``None``.
         ft_k: Free-throw shrinkage pseudo-count, forwarded to
@@ -607,7 +613,8 @@ def nba_la_rapm(
     if not pids:
         out = _empty(LA_RAPM_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
-    o, d, off_poss, def_poss = _fit_weighted(X, y, alphas=alphas)
+    fit_alphas = alphas if alphas is not None else oracle_rapm_alphas(X.shape[0])
+    o, d, off_poss, def_poss = _fit_weighted(X, y, alphas=fit_alphas, cv=ORACLE_RAPM_CV)
     out = pl.DataFrame(
         {
             "player_id": pl.Series(pids, dtype=pl.Int64),

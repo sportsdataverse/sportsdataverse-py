@@ -12,6 +12,7 @@ from sportsdataverse.nba.nba_rapm import nba_rapm
 from sportsdataverse.nba.nba_rapm_variants import (
     DECAY_RAPM_SCHEMA,
     LA_RAPM_SCHEMA,
+    ORACLE_RAPM_CV,
     ORACLE_RAPM_LAMBDAS,
     _fit_weighted,
     _prepare,
@@ -22,6 +23,19 @@ from sportsdataverse.nba.nba_rapm_variants import (
     nba_la_rapm,
     oracle_rapm_alphas,
 )
+
+
+def _same_schedule_reference(poss: pl.DataFrame, response_col: str) -> pl.DataFrame:
+    """Internal oracle-schedule reference fit: ``_fit_weighted`` at ``(oracle_rapm_alphas, ORACLE_RAPM_CV)``.
+
+    Used by the WP2 variants' reduces-to-plain gates instead of the public
+    ``nba_rapm`` (which fits at the plain ``DEFAULT_RAPM_ALPHAS``/``cv=None``
+    schedule) -- comparing against ``nba_rapm`` directly would be a
+    cross-schedule comparison per the controller ruling extending decision #8.
+    """
+    X, y, _w, pids = _prepare(poss, response_col, weight_col=None)
+    o, d, _off_poss, _def_poss = _fit_weighted(X, y, alphas=oracle_rapm_alphas(X.shape[0]), cv=ORACLE_RAPM_CV)
+    return pl.DataFrame({"player_id": pl.Series(pids, dtype=pl.Int64), "rapm": pl.Series(o + d, dtype=pl.Float64)})
 
 
 def _with_possession_number(poss: pl.DataFrame) -> pl.DataFrame:
@@ -353,7 +367,14 @@ def test_la_rapm_empty_input():
     assert out.height == 0 and dict(out.schema) == LA_RAPM_SCHEMA
 
 
-def test_la_rapm_equals_plain_rapm_when_rates_realized():
+def test_la_rapm_equals_same_schedule_reference_when_rates_realized():
+    # Controller ruling: nba_la_rapm's operative fit is the ORACLE schedule
+    # (oracle_rapm_alphas + cv=ORACLE_RAPM_CV), same as every other WP2 variant --
+    # so this reduces-to-plain-response gate must compare against a SAME-SCHEDULE
+    # internal reference (_same_schedule_reference), never the public nba_rapm
+    # (which fits at the plain DEFAULT_RAPM_ALPHAS/cv=None schedule -- a
+    # cross-schedule comparison would conflate "response recipe is correct" with
+    # "ridge schedule happens to match", which it no longer does).
     poss = _with_possession_number(_synth()).with_columns((pl.col("points") // 3).alias("fg3m"), pl.lit(1).alias("ftm"))
     poss = poss.with_columns(
         ((pl.col("points") - 3 * pl.col("fg3m") - pl.col("ftm")).clip(0) // 2).alias("fg2m")
@@ -367,8 +388,9 @@ def test_la_rapm_equals_plain_rapm_when_rates_realized():
         for r in sh.group_by("player_id").agg(pl.col(["fg3a", "fg3m", "fta", "ftm"]).sum()).iter_rows(named=True)
     }
     la = nba_la_rapm(poss, sh, realized).sort("player_id")
-    ref = nba_rapm(poss).sort("player_id")
-    # la_points == points => LA-RAPM == plain RAPM (formula-independent invariant)
+    ref = _same_schedule_reference(poss, "points").sort("player_id")
+    # la_points == points => LA-RAPM equals the same-schedule internal reference
+    # (formula-independent invariant, isolated from the ridge-schedule choice)
     assert np.allclose(la["la_rapm"].to_numpy(), ref["rapm"].to_numpy(), atol=1e-6)
 
 
