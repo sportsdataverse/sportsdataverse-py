@@ -18,6 +18,14 @@ from typing import Optional, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.nba.nba_possession_rules import (
+    build_event_context,
+    is_possession_ending_event,
+    is_real_rebound,
+    is_technical_ft_row,
+    resolve_event_team,
+)
+
 logger = logging.getLogger(__name__)
 
 # Columns added by attach_possession_lineups (the RAPM stint design matrix).
@@ -53,6 +61,7 @@ POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
     "fta": pl.Int64,
     "ftm": pl.Int64,
     "oreb": pl.Int64,
+    "dreb": pl.Int64,
     "tov": pl.Int64,
 }
 
@@ -61,6 +70,7 @@ POSSESSION_SHOOTING_SCHEMA: dict[str, pl.DataType] = {
     "game_id": pl.Utf8,
     "possession_number": pl.Int64,
     "player_id": pl.Int64,
+    "team_id": pl.Int64,
     "fg2a": pl.Int64,
     "fg2m": pl.Int64,
     "fg3a": pl.Int64,
@@ -103,11 +113,6 @@ def _is_last_ft(sub_type: str) -> bool:
     return bool(m and m.group(1) == m.group(2))
 
 
-def _is_technical_ft(sub_type: str) -> bool:
-    """Return True if *sub_type* indicates a technical free throw."""
-    return "Technical" in (sub_type or "") or "technical" in (sub_type or "")
-
-
 def _offense_from_events(
     events: list[dict],
     home_id: int,
@@ -120,17 +125,28 @@ def _offense_from_events(
     ball-holding team).  Falls back to any non-foul event with a
     ``location``.  Returns 0 if attribution is impossible (e.g.
     period-boundary-only groups).
+
+    A TECHNICAL free throw is skipped in both passes: its ``location``
+    reflects whoever benefits from the opponent's technical foul, not the
+    team about to have the ball once play resumes, so it must not drive the
+    group's offense attribution any more than it may seed
+    :func:`_build_possession_groups`'s ``current_offense`` (same rationale,
+    same real-fixture case — see that function's docstring/comment).
     """
     scoring_types = frozenset(("made_shot", "missed_shot", "free_throw", "turnover", "rebound"))
     non_foul_types = frozenset(("foul", "period", "timeout", "substitution"))
     for ev in events:
         et = ev.get("event_type") or ""
         loc = ev.get("location") or ""
+        if et == "free_throw" and is_technical_ft_row(ev):
+            continue
         if et in scoring_types and loc:
             return home_id if loc == "h" else (away_id if loc == "v" else 0)
     for ev in events:
         loc = ev.get("location") or ""
         et = ev.get("event_type") or ""
+        if et == "free_throw" and is_technical_ft_row(ev):
+            continue
         if loc and et not in non_foul_types:
             return home_id if loc == "h" else (away_id if loc == "v" else 0)
     return 0
@@ -147,74 +163,109 @@ def _event_detail(
     home_id: int,
     away_id: int,
 ) -> dict[str, int]:
-    """Team-level counting-stat detail for one possession group.
+    """Team-level counting-stat detail for one possession group, offense-filtered.
 
-    ``fg2*``/``fg3*`` split on ``shot_value``; FT makes use the score-string
-    signal (:func:`_ft_made`); ``oreb`` replicates the rebound-team resolution
-    used for boundary detection (player rebound -> ``team_id``, team rebound ->
-    ``location``); ``tov`` counts turnover events.
+    Every count is filtered to the event's *resolved* team
+    (:func:`~sportsdataverse.nba.nba_possession_rules.resolve_event_team`):
+    ``fg2*``/``fg3*``/``fta``/``ftm`` only count when the shot/FT's team ==
+    ``offense``; ``tov`` only counts a turnover whose team == ``offense``.
+    This keeps ``points == 2*fg2m + 3*fg3m + ftm`` exact now that technical
+    FTs are ordinary inline events: a DEFENSE technical FT shooter is present
+    in the group but its team != offense, so it contributes to NEITHER
+    ``points`` NOR ``ftm``.
+
+    ``oreb``/``dreb`` additionally require the rebound to be a *real* rebound
+    (``ev.get("_is_real_rebound", True)`` — the placeholder-exclusion flag
+    :func:`_build_possession_groups` annotates during the scan via
+    :func:`~sportsdataverse.nba.nba_possession_rules.is_real_rebound`):
+    ``oreb`` counts real rebounds whose resolved team == ``offense``; ``dreb``
+    counts real rebounds whose resolved team is nonzero and != ``offense``.
 
     Args:
         events: The possession group's event rows (row-dicts from
-            ``enhanced_pbp.to_dicts()``).
+            ``enhanced_pbp.to_dicts()``), rebound rows carrying the
+            ``_is_real_rebound`` annotation from the scan.
         offense: Resolved offense team ID for this possession (0 if
             unattributable at the time of the call — see
             :func:`build_possessions`, which resolves ``offense`` via
-            delta-attribution before calling this helper, so ``oreb`` is
-            correctly attributed even for delta-attributed groups).
+            delta-attribution before calling this helper).
         home_id: Home team ID.
         away_id: Away team ID.
 
     Returns:
-        Dict with keys ``fg2a, fg2m, fg3a, fg3m, fta, ftm, oreb, tov`` (all
-        ``int`` counts for this possession group).
+        Dict with keys ``fg2a, fg2m, fg3a, fg3m, fta, ftm, oreb, dreb, tov``
+        (all ``int`` counts for this possession group).
     """
-    d = {"fg2a": 0, "fg2m": 0, "fg3a": 0, "fg3m": 0, "fta": 0, "ftm": 0, "oreb": 0, "tov": 0}
+    d = {
+        "fg2a": 0,
+        "fg2m": 0,
+        "fg3a": 0,
+        "fg3m": 0,
+        "fta": 0,
+        "ftm": 0,
+        "oreb": 0,
+        "dreb": 0,
+        "tov": 0,
+    }
     for ev in events:
         et = ev.get("event_type") or ""
+        team = resolve_event_team(ev, home_id, away_id)
         if et in ("made_shot", "missed_shot"):
+            if offense == 0 or team != offense:
+                continue
             three = int(ev.get("shot_value") or 0) == 3
             d["fg3a" if three else "fg2a"] += 1
             if et == "made_shot":
                 d["fg3m" if three else "fg2m"] += 1
         elif et == "free_throw":
+            if offense == 0 or team != offense:
+                continue
             d["fta"] += 1
             if _ft_made(ev):
                 d["ftm"] += 1
         elif et == "turnover":
+            if offense == 0 or team != offense:
+                continue
             d["tov"] += 1
         elif et == "rebound":
-            reb_team = ev.get("team_id") or 0
-            if reb_team == 0:
-                loc = ev.get("location") or ""
-                reb_team = home_id if loc == "h" else (away_id if loc == "v" else 0)
-            if offense != 0 and reb_team == offense:
+            if not ev.get("_is_real_rebound", True):
+                continue
+            if team == 0:
+                continue
+            if offense != 0 and team == offense:
                 d["oreb"] += 1
+            elif team != offense:
+                d["dreb"] += 1
     return d
 
 
-def _shooting_rows(events: list[dict], game_id: str, poss_num: int) -> list[dict]:
+def _shooting_rows(events: list[dict], game_id: str, poss_num: int, home_id: int, away_id: int) -> list[dict]:
     """Per-shooter shooting lines for one possession group (person_id-attributed events only).
 
     Companion to :func:`_event_detail`: instead of one team-level row per
     possession, emits one row per distinct shooter (``person_id``) who
     attempted a shot or free throw during the possession's events. Reuses the
     ``shot_value`` 2/3 split convention and the :func:`_ft_made` score-string
-    signal for free-throw makes.
+    signal for free-throw makes. Unlike :func:`_event_detail`, ALL shooters
+    are kept regardless of resolved team — a defense technical FT shooter
+    (excluded from the team-level columns) still appears here with its own
+    ``team_id``.
 
     Args:
         events: The possession group's event rows (row-dicts from
             ``enhanced_pbp.to_dicts()``).
         game_id: The game identifier to stamp onto each output row.
         poss_num: The 1-indexed possession number to stamp onto each output row.
+        home_id: Home team ID (for :func:`resolve_event_team`).
+        away_id: Away team ID (for :func:`resolve_event_team`).
 
     Returns:
         List of row-dicts (one per shooter), each with keys ``game_id``,
-        ``possession_number``, ``player_id``, and the six shooting-count keys
-        ``fg2a, fg2m, fg3a, fg3m, fta, ftm``. Events with ``person_id == 0``
-        (unattributable to a shooter) are skipped — they still count toward
-        the team-level :func:`_event_detail` totals but cannot be attributed
-        to a player here.
+        ``possession_number``, ``player_id``, ``team_id``, and the six
+        shooting-count keys ``fg2a, fg2m, fg3a, fg3m, fta, ftm``. Events with
+        ``person_id == 0`` (unattributable to a shooter) are skipped — they
+        still count toward the team-level :func:`_event_detail` totals but
+        cannot be attributed to a player here.
     """
     by_shooter: dict[int, dict[str, int]] = {}
     for ev in events:
@@ -224,7 +275,18 @@ def _shooting_rows(events: list[dict], game_id: str, poss_num: int) -> list[dict
         pid = int(ev.get("person_id") or 0)
         if pid == 0:
             continue
-        s = by_shooter.setdefault(pid, {"fg2a": 0, "fg2m": 0, "fg3a": 0, "fg3m": 0, "fta": 0, "ftm": 0})
+        s = by_shooter.setdefault(
+            pid,
+            {
+                "team_id": resolve_event_team(ev, home_id, away_id),
+                "fg2a": 0,
+                "fg2m": 0,
+                "fg3a": 0,
+                "fg3m": 0,
+                "fta": 0,
+                "ftm": 0,
+            },
+        )
         if et == "free_throw":
             s["fta"] += 1
             if _ft_made(ev):
@@ -251,8 +313,6 @@ def _resolve_teams(df: pl.DataFrame) -> tuple[int, int]:
 # Core possession builder
 # ---------------------------------------------------------------------------
 
-_NON_BOUNDARY_EVENT_TYPES = frozenset(("period", "timeout", "substitution", "replay", "other", "foul", "jump_ball"))
-
 # Event types that reliably indicate which team is on offense (shot attempts and
 # turnovers).  Administrative events such as ``"other"`` (Delay of Game),
 # ``"jump_ball"``, ``"replay"``, and ``"foul"`` carry a ``location`` but do NOT
@@ -266,7 +326,20 @@ def _build_possession_groups(
     home_id: int,
     away_id: int,
 ) -> list[tuple[list[dict], bool, int]]:
-    """Partition sorted PBP rows into possession groups.
+    """Partition sorted PBP rows into possession groups (pbpstats-faithful).
+
+    Boundary decisions are fully delegated to the rule dispatcher
+    :func:`~sportsdataverse.nba.nba_possession_rules.is_possession_ending_event`
+    (built on a per-game :class:`~sportsdataverse.nba.nba_possession_rules.EventContext`),
+    which folds in the and-1 / away-from-play / transition-take / inbound FT
+    exceptions and the rare jump-ball-changes-possession case. Rebound rows
+    are annotated in-place with ``row["_is_real_rebound"]`` (the placeholder
+    exclusion from :func:`~sportsdataverse.nba.nba_possession_rules.is_real_rebound`)
+    so downstream consumers (:func:`_event_detail`'s ``oreb``/``dreb``) don't
+    have to recompute it. Technical free throws are ordinary inline events —
+    the dispatcher's free-throw branch already returns False for them via
+    ``is_technical_ft_row`` inside ``ft_ends_possession``, so no separate
+    isolation is needed.
 
     Returns a list of ``(events, is_second_chance, offense_team_id)`` tuples.
     Groups with ``offense_team_id == 0`` have no attributable offense and
@@ -287,10 +360,11 @@ def _build_possession_groups(
         is_sc = False
         current_offense = 0
 
-    for row in rows:
+    ctx = build_event_context(rows)
+
+    for i, row in enumerate(rows):
         et = row.get("event_type") or ""
         loc = row.get("location") or ""
-        sub_type = row.get("sub_type") or ""
         period: int = row.get("period") or 0
 
         # Period change → flush current possession
@@ -298,21 +372,11 @@ def _build_possession_groups(
             _flush()
         prev_period = period
 
-        # A technical free throw is an isolated administrative scoring event:
-        # its shooter is whoever benefits from the OPPONENT's technical foul,
-        # not the team about to have the ball (play resumes with whoever had
-        # it before the stoppage). Merging it into the surrounding drive would
-        # misattribute both the technical FT itself (to the wrong team, since
-        # the group can only carry one offense_team_id) and the real shot/
-        # rebound that follows (by wrongly seeding current_offense from the
-        # FT's location). Flush whatever was building, emit the technical FT
-        # as its own single-event group (offense resolved independently via
-        # its own location), then resume with a clean slate.
-        if et == "free_throw" and _is_technical_ft(sub_type):
-            _flush()
-            current.append(row)
-            _flush()
-            continue
+        # Annotate rebound rows with the real-rebound placeholder-exclusion
+        # verdict once here, so both this scan's second-chance flagging and
+        # _event_detail's oreb/dreb attribution read the same computed value.
+        if et == "rebound":
+            row["_is_real_rebound"] = is_real_rebound(ctx, i)
 
         current.append(row)
 
@@ -320,53 +384,29 @@ def _build_possession_groups(
         # administrative events (``"other"``, ``"foul"``, ``"jump_ball"``,
         # ``"replay"``) carry a location but do not identify the offensive team,
         # so they must be excluded to avoid mis-classifying the subsequent
-        # rebound as offensive vs defensive.
+        # rebound as offensive vs defensive. A TECHNICAL free throw is also
+        # excluded here even though it belongs to the ordinary ``"free_throw"``
+        # event category -- its shooter is whoever benefits from the opponent's
+        # technical foul, not the team about to have the ball once play resumes.
+        # Since techs are no longer isolated into their own group, seeding from
+        # one would mislabel the real shot/rebound that follows (verified
+        # against a real fixture case: a tech FT wrongly seeding the opposing
+        # team, causing the next team's own missed shot + defensive rebound to
+        # be attributed to the tech-FT shooter's team instead).
         ev_team = home_id if loc == "h" else (away_id if loc == "v" else 0)
-        if current_offense == 0 and ev_team != 0 and et in _OFFENSE_SEEDING_TYPES:
+        can_seed = et in _OFFENSE_SEEDING_TYPES and not (et == "free_throw" and is_technical_ft_row(row))
+        if current_offense == 0 and ev_team != 0 and can_seed:
             current_offense = ev_team
 
-        # Non-boundary events — just accumulate
-        if et in _NON_BOUNDARY_EVENT_TYPES:
-            continue
+        # Second-chance flagging: a REAL offensive rebound extends the
+        # possession (the dispatcher itself never treats it as a boundary,
+        # since it only returns True for a rebound resolving to the DEFENSE).
+        if et == "rebound" and row.get("_is_real_rebound", True):
+            reb_team = resolve_event_team(row, home_id, away_id)
+            if current_offense != 0 and reb_team != 0 and reb_team == current_offense:
+                is_sc = True
 
-        # Boundary detection
-        ends_possession = False
-
-        if et == "made_shot":
-            # Made field goal always ends possession.
-            # And-1 FTs are in the NEXT possession group and scored separately.
-            ends_possession = True
-
-        elif et == "turnover":
-            ends_possession = True
-
-        elif et == "rebound":
-            # Determine rebounding team:
-            #   - Player rebound: team_id = player's team
-            #   - Team rebound:   team_id=0, person_id=team_id, location reliable
-            reb_team = row.get("team_id") or 0
-            if reb_team == 0:
-                # team rebound — use location
-                reb_team = ev_team
-            if current_offense != 0 and reb_team != 0:
-                if reb_team == current_offense:
-                    # Offensive rebound → extends possession, mark second-chance
-                    is_sc = True
-                else:
-                    # Defensive rebound → ends possession
-                    ends_possession = True
-
-        elif et == "free_throw":
-            # Technical FTs don't end a possession trip.
-            # A regular last-FT that was MADE ends the possession.
-            # A missed last-FT lets the defensive rebound end it naturally.
-            if not _is_technical_ft(sub_type) and _is_last_ft(sub_type):
-                sh = (row.get("score_home") or "").strip()
-                sa = (row.get("score_away") or "").strip()
-                if sh or sa:
-                    ends_possession = True
-
-        if ends_possession:
+        if is_possession_ending_event(ctx, i, current_offense, home_id, away_id):
             _flush()
 
     _flush()  # remaining events
@@ -486,7 +526,7 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
                 **detail,
             }
         )
-        shooting.extend(_shooting_rows(events, game_id, poss_num))
+        shooting.extend(_shooting_rows(events, game_id, poss_num, home_id, away_id))
 
         prev_home = end_home
         prev_away = end_away
@@ -530,10 +570,12 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
     Returns:
         Polars DataFrame with schema :data:`POSSESSIONS_SCHEMA`.  One row
         per possession, ordered by ``possession_number`` ascending.  Includes
-        eight team-level event-detail count columns (``fg2a``, ``fg2m``,
-        ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``, ``tov``) computed by
-        :func:`_event_detail` from the possession's events; ``points ==
-        2*fg2m + 3*fg3m + ftm`` holds on every possession.
+        nine team-level event-detail count columns (``fg2a``, ``fg2m``,
+        ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``, ``dreb``, ``tov``)
+        computed by :func:`_event_detail` from the possession's events, each
+        filtered to the offense team (except ``dreb``, which counts the
+        defense's real rebounds); ``points == 2*fg2m + 3*fg3m + ftm`` holds
+        exactly on every possession.
 
     Example:
         Quick start::
