@@ -357,7 +357,7 @@ def _possession_start_type(
 
 
 def _count_as_possession(
-    start_seconds: float,
+    prev_poss_end_seconds: float,
     end_seconds: float,
     group_rows: list[dict],
     rows_after_in_period: list[dict],
@@ -365,13 +365,27 @@ def _count_as_possession(
     """pbpstats ``count_as_possession`` (``enhanced_pbp_item.py:180-208``).
 
     A possession STARTING with <=2s left in the period counts only if a made
-    FT or made FG occurs before the period ends. Deliberate divergence: the
-    salvage scan here is scoped to the same period (``rows_after_in_period``
-    stops at the period boundary); pbpstats' own ``next_event`` walk is
-    unscoped and could in principle look past a period boundary. Documented
-    trade-off, not a bug.
+    FT or made FG occurs before the period ends.
+
+    The possession's *start* reference is ``prev_poss_end_seconds`` — the
+    ``seconds_remaining`` of the event that ended the PREVIOUS possession, i.e.
+    the moment the ball changed hands (period start → a large sentinel). This
+    is the faithful port of pbpstats, whose salvage branch walks ``prev_event``
+    back to the previous possession-ending event and tests
+    ``prev_event.seconds_remaining > 2`` (``enhanced_pbp_item.py:194-197``) —
+    NOT the current possession's own first-event clock. A possession whose
+    first event is already inside the final 2s (e.g. a defensive rebound of a
+    last-second miss) still counts as a real possession as long as it *started*
+    (the ball changed hands) with >2s on the clock. Passing the group's own
+    first-event seconds here (the prior bug) under-counted exactly those
+    end-of-period possessions relative to the pbpstats-live oracle.
+
+    Deliberate divergence: the salvage scan here is scoped to the same period
+    (``rows_after_in_period`` stops at the period boundary); pbpstats' own
+    ``next_event`` walk is unscoped and could in principle look past a period
+    boundary. Documented trade-off, not a bug.
     """
-    if end_seconds > 2.0 or start_seconds > 2.0:
+    if end_seconds > 2.0 or prev_poss_end_seconds > 2.0:
         return True
     for r in list(group_rows) + list(rows_after_in_period):
         if (r.get("event_type") or "") in ("free_throw", "made_shot"):
@@ -618,7 +632,16 @@ def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
         end_idx = int(end_ev.get("order_index") or 0)
         period_last_idx = period_end_index.get(cur_period, end_idx)
         rows_after_in_period = rows[end_idx + 1 : period_last_idx + 1]
-        count_flag = _count_as_possession(start_seconds, end_seconds, events, rows_after_in_period)
+        # pbpstats-faithful count_as_possession start reference: the moment the
+        # ball changed hands = the PREVIOUS possession-ending event's clock, not
+        # this possession's own first-event clock. The first possession of a
+        # period (no same-period predecessor) started at the period tip → a
+        # large sentinel so it always counts (end_seconds > 2 dominates anyway).
+        if prev_end_row is not None and prev_group_period == cur_period:
+            prev_poss_end_seconds = float(prev_end_row.get("seconds_remaining") or 0.0)
+        else:
+            prev_poss_end_seconds = 720.0
+        count_flag = _count_as_possession(prev_poss_end_seconds, end_seconds, events, rows_after_in_period)
 
         detail = _event_detail(events, int(offense), home_id, away_id)
         records.append(
