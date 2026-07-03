@@ -147,7 +147,7 @@ def nfl_compute_results(
         .alias("result")
     )
     g = g.with_columns(
-        pl.when(~wk | pl.col("result").is_null())
+        pl.when((wk == False) | pl.col("result").is_null())  # noqa: E712
         .then(None)
         .when(pl.col("result") > 0)
         .then(1.0)
@@ -155,7 +155,7 @@ def nfl_compute_results(
         .then(0.0)
         .otherwise(0.5)
         .alias("__outcome"),
-        pl.when(~wk | pl.col("result").is_null())
+        pl.when((wk == False) | pl.col("result").is_null())  # noqa: E712
         .then(None)
         .when(pl.col("result") > 0)
         .then(pl.col("__elo_diff") * 0.001 + 2.2)
@@ -401,7 +401,7 @@ def nfl_simulations(
             pl.lit(None, dtype=pl.Utf8).alias("away_round_id"),
         )
         dummy = _playoff_dummy(byes_per_conf)
-        dummy = dummy.filter(~pl.col("week").is_in(games["week"].implode()))
+        dummy = dummy.filter(pl.col("week").is_in(games["week"].implode()) == False)  # noqa: E712
         if dummy.height > 0:
             max_reg_week = int(games.filter(pl.col("game_type") == "REG")["old_week"].max())
             dummy = dummy.with_columns(
