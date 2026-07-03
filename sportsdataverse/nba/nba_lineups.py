@@ -182,35 +182,38 @@ def _period_box_oncourt(period_box_payload: dict) -> Dict[int, List[int]]:
     /start_of_period.py``), which sorts a *dynamic*, several-seconds-wide
     range by *highest* recorded seconds. It was deliberately re-derived
     empirically against this project's own fixed 1-second window rather than
-    assumed, because the two windows behave differently at an exact
-    substitution tie:
+    assumed, because a real capture shows **two distinct data regimes**
+    across the fixtures — not a single boundary-tie artifact:
 
-    - Cross-checking every fixture period against the ``nba_gamerotation``
-      ground truth (``tests/nba/test_nba_lineups.py::
-      test_quarter_box_beats_pbp_agreement``) shows that at a boundary tie —
-      a substitution whose elapsed time exactly equals the period-opening
-      tick — the incoming (period-start) five are recorded with the
-      **zero-minutes sentinel** in this narrow window, while the outgoing
-      (prior-period-closing) five that just left show a **non-zero** value.
-      This is a real observed quirk of the fixed 1-second window (almost
-      certainly a rounding/attribution artifact at the exact tie instant),
-      not a hypothesis — see the module-level ``_MINUTES_ZERO`` note and the
-      per-game validation in the test file above for the concrete evidence.
-    - For an *unambiguous, non-tied* candidate (on court well before the
-      window and remaining well after, no substitution at this exact tick),
-      the entire 1-second window is spent on court and the value is
-      non-zero — such players are correctly (and safely) excluded from this
-      function's narrow *exact-seed* signal, deferring to the pbp fallback,
-      which already handles the unambiguous case reliably on its own.
+    - **Quiet periods** (no substitution at the period-opening tick — every
+      fixture's period 1, plus several later periods on quieter fixtures):
+      the range-box candidate list is exactly the 5 on-court players per
+      team, and *every one of them* reads the zero-minutes sentinel (the
+      1-second window is too narrow for the endpoint to accrue a non-zero
+      ``"MM:SS"`` reading for anyone who was already on court). The
+      zero-filter here is exact — narrowing to precisely 5 reproduces the
+      true period-start lineup with no ambiguity.
+    - **Real-rotation periods** (a substitution lands at, or essentially at,
+      the period-opening tick): the raw candidate list balloons past 5 (up
+      to 9 observed) and splits into a **mixed** zero/non-zero pattern — some
+      candidates read the zero sentinel, others read a small non-zero value
+      (``"0:01"``, ``"0:09"``, etc.) depending on how much of the 1-second
+      window each candidate's stint overlapped. Empirically (see
+      ``tests/nba/test_nba_lineups.py::test_quarter_box_agreement_floors``
+      for the per-fixture counts) this split does **not** cleanly separate
+      the true on-court five from the players who just left or are about to
+      enter — the zero-reading group in these periods is smaller than 5
+      (as few as 0 observed). The zero-filter therefore *undercounts* rather
+      than misidentifying: it never produces a wrong set of exactly 5, it
+      just fails to reach 5 at all.
     - Because this filter can only ever *positively confirm* players via the
-      zero-sentinel tie signal — never invent a false positive from an
-      unrelated bench player (who never appears in the raw candidate list at
-      all) — the caller's ``len(...) == 5`` gate is what makes this safe:
-      when the true period-start five are not *all* simultaneously tied at
-      this exact instant (a partial-unit swap, or a fully untied
-      continuation), the zero-filtered set undercounts to fewer than 5 and
-      the caller correctly falls back to pbp seeding instead of trusting a
-      partial/wrong set.
+      zero-sentinel signal — never invent a false positive from an unrelated
+      bench player (who never appears in the raw candidate list at all) —
+      the caller's ``len(...) == 5`` gate is what makes this safe across both
+      regimes: a quiet period clears the gate with the correct 5, and a
+      real-rotation period reliably undercounts below 5 and the caller
+      correctly falls back to pbp seeding instead of trusting a partial or
+      ambiguous set.
 
     Args:
         period_box_payload: One period's raw range-boxscore payload (the same
@@ -1330,6 +1333,7 @@ def _merge_name_maps(
 def players_on_court_from_quarter_boxscores(
     enhanced_pbp: pl.DataFrame,
     period_boxscores: Dict[int, dict],
+    raw_box: Optional[dict] = None,
     *,
     home_team_id: int,
     away_team_id: int,
@@ -1348,20 +1352,29 @@ def players_on_court_from_quarter_boxscores(
     narrowing recipe (empirically re-derived against pbpstats'
     ``StartOfPeriod._get_starters_from_boxscore_request`` — see that
     function's docstring for the concrete evidence behind its zero-sentinel
-    polarity). Because ``period_boxscores`` alone does not carry a full-game
-    roster, substitution name resolution is backed by
-    :func:`_name_map_from_period_boxes` merged with
-    :func:`_name_map_from_pbp_actors` (every row's own actor identity, not
-    just substitutions) via :func:`_merge_name_maps`.
+    polarity).
 
-    Known limitation (see ``tests/nba/test_nba_lineups.py::
-    test_quarter_box_beats_pbp_agreement`` for the full write-up): the
-    exact-seed mechanism only ever fires on an unambiguous full-unit swap (no
-    continuer diluting the pool) — precisely the case pbp inference already
-    reconstructs correctly on its own — so it does not systematically resolve
-    genuine mid-tie ambiguity, and a player who records zero actions anywhere
-    in ``enhanced_pbp`` after entering (and never appears in any period-box
-    capture) is unresolvable from this function's inputs alone.
+    Substitution name resolution merges up to three sources via
+    :func:`_merge_name_maps`: :func:`_name_map_from_period_boxes` (the union
+    of every period's range-box roster), :func:`_name_map_from_pbp_actors`
+    (every row's own actor identity — covers bench players who never touch a
+    period boundary but do record at least one action), and — when the
+    caller supplies it — :func:`_boxscore_name_map` over the full-game
+    ``raw_box`` payload, the SAME full-roster source
+    :func:`players_on_court_from_pbp` uses. That third source is what fixes
+    the one residual name-resolution gap the first two cannot cover: a
+    player who is subbed in and then records **zero** further pbp actions for
+    the rest of the game (so never appears in ``_name_map_from_pbp_actors``)
+    and never happens to be on court at an exact period-opening tick (so
+    never appears in ``_name_map_from_period_boxes``) is still present in the
+    full-game boxscore roster — which lists every player on both teams
+    regardless of playing time — and therefore still resolvable. Passing
+    ``raw_box`` is optional (``None`` preserves the pre-existing two-source
+    behavior) but strongly recommended: without it this producer's per-game
+    agreement with the gamerotation oracle can regress well below
+    :func:`players_on_court_from_pbp`'s own floor on a fixture with a
+    late, stat-less bench appearance (see
+    ``tests/nba/test_nba_lineups.py::test_quarter_box_agreement_floors``).
 
     Args:
         enhanced_pbp: Output of
@@ -1373,6 +1386,11 @@ def players_on_court_from_quarter_boxscores(
             — one entry per period, captured at that period's
             :func:`_period_start_range` window. A missing period key falls
             back to pbp seeding for that period only (never raises).
+        raw_box: Optional raw full-game ``boxscoretraditionalv3`` payload (the
+            same one :func:`players_on_court_from_pbp` and
+            :func:`boxscore_home_away` consume) — supplies the full-roster
+            name map described above. ``None`` (default) falls back to
+            resolving names from ``period_boxscores`` + pbp actors only.
         home_team_id: Home team id (from :func:`boxscore_home_away`).
         away_team_id: Away team id (from :func:`boxscore_home_away`).
 
@@ -1395,7 +1413,7 @@ def players_on_court_from_quarter_boxscores(
             enh = enhanced_pbp_from_payload(pbp)
             home, away = boxscore_home_away(box)
             oc = players_on_court_from_quarter_boxscores(
-                enh, period_boxscores, home_team_id=home, away_team_id=away
+                enh, period_boxscores, box, home_team_id=home, away_team_id=away
             )
             print(oc.shape)
 
@@ -1436,10 +1454,15 @@ def players_on_court_from_quarter_boxscores(
     # own actor identity across the whole game — the latter covers bench
     # players who never touch a period boundary (see
     # _name_map_from_pbp_actors for why the period-box-only map alone is
-    # insufficient).
+    # insufficient) — plus, when supplied, the full-game boxscore roster
+    # (_boxscore_name_map), which is the only source blind to neither a
+    # period-boundary appearance nor a recorded pbp action: it lists every
+    # rostered player regardless of playing time, closing the residual gap
+    # a stat-less late bench sub would otherwise leave unresolvable.
     name_map = _merge_name_maps(
         _name_map_from_period_boxes(period_boxscores),
         _name_map_from_pbp_actors(rows),
+        _boxscore_name_map(raw_box) if raw_box else {},
     )
 
     periods: List[int] = sorted({int(r["period"]) for r in rows})

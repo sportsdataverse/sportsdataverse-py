@@ -539,7 +539,9 @@ def test_quarter_box_schema_and_five(game_id: str) -> None:
     enh = _enh(game_id)
     box = _box(game_id)
     home, away = boxscore_home_away(box)
-    out = players_on_court_from_quarter_boxscores(enh, _boxv3_periods(game_id), home_team_id=home, away_team_id=away)
+    out = players_on_court_from_quarter_boxscores(
+        enh, _boxv3_periods(game_id), box, home_team_id=home, away_team_id=away
+    )
     assert dict(out.schema) == LINEUPS_SCHEMA
     assert out.height == enh.height
 
@@ -552,25 +554,34 @@ def test_quarter_box_schema_and_five(game_id: str) -> None:
         assert nn["n"].min() == 5, (game_id, cols)
 
 
-#: Measured-floor agreement gates for ``test_quarter_box_beats_pbp_agreement``,
-#: set just under each fixture's actually-observed rate rather than the
-#: brief's originally-assumed 0.99 (see the test docstring for why: the
-#: gamerotation-vs-pbp baseline itself never clears ~0.966-0.969 on any of
-#: these 3 fixtures, and the exact-box seed only ever resolves *unambiguous*
-#: full-unit swaps -- exactly the periods pbp inference already gets right --
-#: never a genuine mid-tie ambiguity, so it cannot systematically close that
-#: baseline gap). ``0022100001`` carries an additional, fully root-caused
-#: shortfall: see the test docstring.
+#: Measured-floor agreement gates for ``test_quarter_box_agreement_floors``,
+#: set just under each fixture's actually-observed rate (post FIX 1: the
+#: full-game boxscore roster is now threaded into the producer's name map —
+#: see ``players_on_court_from_quarter_boxscores``'s ``raw_box`` parameter).
+#: With that fix, all 3 fixtures measure IDENTICAL to the
+#: ``players_on_court_from_pbp`` baseline this function is a structural
+#: sibling of (0022100001: 0.9689; 0022200001: 0.9686; 0022300001: 0.9662 —
+#: see ``test_nba_lineups_pbp.py::test_pbp_agrees_with_rotation`` for the pbp
+#: side of that comparison). The brief's originally-assumed 0.99 gate remains
+#: unreachable on this data: the residual ~3-4% gap on both producers is
+#: on-boundary-tie rows, an inherent non-bug convention difference between a
+#: coarse 1-second pbp clock and the tenths-of-second rotation oracle (see
+#: this module's own docstring). These floors are each fixture's measured
+#: rate with a small safety margin, not an arbitrary loosening.
 _QUARTER_BOX_AGREEMENT_FLOOR: dict[str, float] = {
-    "0022100001": 0.87,
-    "0022200001": 0.96,
-    "0022300001": 0.96,
+    "0022100001": 0.965,
+    "0022200001": 0.965,
+    "0022300001": 0.965,
 }
 
 
 @pytest.mark.parametrize("game_id", _BOXV3_PERIODS_GAME_IDS)
-def test_quarter_box_beats_pbp_agreement(game_id: str) -> None:
-    """Quarter-box agreement with the gamerotation ground truth, at its measured floor.
+def test_quarter_box_agreement_floors(game_id: str) -> None:
+    """Quarter-box agreement with the gamerotation ground truth meets its measured floor.
+
+    Also asserts quarter_box is never worse than the ``players_on_court_from_pbp``
+    baseline it is a structural sibling of — a regression guard for the FIX 1
+    finding below, not just a static floor.
 
     FINDING (escalated, not silently patched over): the brief's originally
     specified gate was ``agree >= 0.99``. Empirically, across all 3 fixture
@@ -594,19 +605,22 @@ def test_quarter_box_beats_pbp_agreement(game_id: str) -> None:
       resolve the *ambiguous* rows that make up pbp's own error floor. So the
       exact-seed mechanism is safe (never regresses pbp) but does not
       systematically close the gap to 0.99 on these fixtures.
-    - ``0022100001`` additionally falls well below even that ~0.966 floor
-      (down to ~0.88) for a fully root-caused, unrelated reason: in period 4,
-      action 631 subs in a player ("Bembry", person_id 1627761) who records
-      **zero** further actions anywhere in the rest of ``playbyplayv3`` before
-      the game ends, and who never appears in any period-opening
-      ``boxv3_periods`` capture either. Both of this producer's name sources
-      (:func:`_name_map_from_period_boxes`, :func:`_name_map_from_pbp_actors`)
-      are therefore blind to his identity -- a genuine information gap
-      inherent to the ``(enhanced_pbp, period_boxscores)`` signature (no
-      full-roster source), not a resolvable bug. The unresolved sub freezes
-      that slot at its pre-sub occupant for the rest of the game via the
-      terminal ffill (there is no period 5 to re-anchor with a fresh exact
-      box seed).
+    - ``0022100001`` PREVIOUSLY fell well below even that ~0.966 floor (down
+      to ~0.88, in an earlier version of this producer) for a fixable, not
+      inherent, reason: in period 4, action 631 subs in a player ("Bembry",
+      person_id 1627761) who records **zero** further actions anywhere in the
+      rest of ``playbyplayv3`` before the game ends, and who never appears in
+      any period-opening ``boxv3_periods`` capture either. The producer's
+      original two name sources (:func:`_name_map_from_period_boxes`,
+      :func:`_name_map_from_pbp_actors`) were both blind to his identity — but
+      only because the function's signature withheld the one source that
+      *does* know him: the full-game boxscore roster (every rostered player
+      regardless of playing time), which :func:`players_on_court_from_pbp`
+      already had access to via its own ``raw_box`` argument. FIX 1 threads
+      that same ``raw_box`` into :func:`players_on_court_from_quarter_boxscores`
+      (see its ``raw_box`` parameter), which resolves Bembry's name and
+      restores 0022100001 to exact pbp parity (0.9689) — measured below, no
+      longer a documented shortfall.
 
     Per the brief's own allowance ("do NOT loosen the threshold without
     documenting the specific period that legitimately fell back"), the floors
@@ -616,6 +630,7 @@ def test_quarter_box_beats_pbp_agreement(game_id: str) -> None:
     from sportsdataverse.nba.nba_lineups import (
         boxscore_home_away,
         parse_rotation_resultsets,
+        players_on_court_from_pbp,
         players_on_court_from_quarter_boxscores,
         players_on_court_from_rotation,
     )
@@ -626,11 +641,18 @@ def test_quarter_box_beats_pbp_agreement(game_id: str) -> None:
     rot = players_on_court_from_rotation(
         enh, parse_rotation_resultsets(_rotation_raw(game_id)), home_team_id=home, away_team_id=away
     )
-    qb = players_on_court_from_quarter_boxscores(enh, _boxv3_periods(game_id), home_team_id=home, away_team_id=away)
-    agree = _rowwise_lineup_agreement(rot, qb)
+    pbp = players_on_court_from_pbp(enh, box, home_team_id=home, away_team_id=away)
+    qb = players_on_court_from_quarter_boxscores(
+        enh, _boxv3_periods(game_id), box, home_team_id=home, away_team_id=away
+    )
+    agree_qb = _rowwise_lineup_agreement(rot, qb)
+    agree_pbp = _rowwise_lineup_agreement(rot, pbp)
     floor = _QUARTER_BOX_AGREEMENT_FLOOR[game_id]
-    print(f"[{game_id}] quarter-box/rotation agreement: {agree:.4f} (floor {floor})")
-    assert agree >= floor, (game_id, agree, floor)
+    print(f"[{game_id}] quarter-box/rotation agreement: {agree_qb:.4f} (floor {floor}, pbp baseline {agree_pbp:.4f})")
+    assert agree_qb >= floor, (game_id, agree_qb, floor)
+    # FIX 1 (raw_box full-roster name map threaded through): quarter_box must
+    # never fall below the pbp baseline it is a structural sibling of.
+    assert agree_qb >= agree_pbp, (game_id, agree_qb, agree_pbp)
 
 
 # ---------------------------------------------------------------------------
