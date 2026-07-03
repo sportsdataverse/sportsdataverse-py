@@ -21,9 +21,11 @@ from sportsdataverse.nba.nba_lineups import (
     players_on_court_from_rotation,
 )
 from sportsdataverse.nba.nba_possessions import (
+    POSSESSION_SHOOTING_SCHEMA,
     POSSESSIONS_SCHEMA,
     _is_last_ft,
     attach_possession_lineups,
+    build_possession_shooting,
     build_possessions,
 )
 from tests.conftest import skip_if_no_nba_stats_live
@@ -678,3 +680,57 @@ def test_event_detail_boxscore_reconciliation(game_id):
         # OREB/TOV: pbp counts include TEAM rebounds/turnovers, player sums don't.
         assert row["oreb"] >= exp["oreb"]
         assert row["tov"] >= exp["tov"]
+
+
+# ---------------------------------------------------------------------------
+# WP1 Task 2: possession_shooting companion frame
+# ---------------------------------------------------------------------------
+
+_SHOOT_COLS = ["fg2a", "fg2m", "fg3a", "fg3m", "fta", "ftm"]
+
+
+def _box_player_shooting(box: dict) -> dict[int, dict[str, int]]:
+    b = box["boxScoreTraditional"]
+    out: dict[int, dict[str, int]] = {}
+    for side in ("homeTeam", "awayTeam"):
+        for p in b[side]["players"]:
+            s = p.get("statistics", {}) or {}
+            out[int(p["personId"])] = {
+                "fg3m": int(s.get("threePointersMade", 0) or 0),
+                "ftm": int(s.get("freeThrowsMade", 0) or 0),
+            }
+    return out
+
+
+def test_shooting_frame_empty_input():
+    sh = build_possession_shooting(pl.DataFrame())
+    assert sh.height == 0
+    assert dict(sh.schema) == POSSESSION_SHOOTING_SCHEMA
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_shooting_frame_matches_team_columns(game_id):
+    """Per-possession shooter sums == the team-level detail columns (exact)."""
+    enh = _enh(game_id)
+    poss = build_possessions(enh)
+    sh = build_possession_shooting(enh)
+    sums = sh.group_by("possession_number").agg([pl.col(c).sum() for c in _SHOOT_COLS])
+    j = poss.join(sums, on="possession_number", how="left", suffix="_sh").with_columns(
+        [pl.col(f"{c}_sh").fill_null(0) for c in _SHOOT_COLS]
+    )
+    for c in _SHOOT_COLS:
+        bad = j.filter(pl.col(c) != pl.col(f"{c}_sh"))
+        assert bad.height == 0, (c, bad.select("possession_number", c, f"{c}_sh").to_dicts()[:5])
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_shooting_frame_player_boxscore_reconciliation(game_id):
+    """Per-player fg3m/ftm sums == boxscore player rows (independent oracle)."""
+    sh = build_possession_shooting(_enh(game_id))
+    box = _box_player_shooting(_box(game_id))
+    got = sh.group_by("player_id").agg(pl.col("fg3m").sum(), pl.col("ftm").sum()).to_dicts()
+    for row in got:
+        exp = box.get(row["player_id"])
+        assert exp is not None, f"shooter {row['player_id']} missing from boxscore"
+        assert row["fg3m"] == exp["fg3m"], row
+        assert row["ftm"] == exp["ftm"], row

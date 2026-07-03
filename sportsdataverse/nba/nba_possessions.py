@@ -56,6 +56,19 @@ POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
     "tov": pl.Int64,
 }
 
+#: Schema of the per-shooter companion frame from :func:`build_possession_shooting`.
+POSSESSION_SHOOTING_SCHEMA: dict[str, pl.DataType] = {
+    "game_id": pl.Utf8,
+    "possession_number": pl.Int64,
+    "player_id": pl.Int64,
+    "fg2a": pl.Int64,
+    "fg2m": pl.Int64,
+    "fg3a": pl.Int64,
+    "fg3m": pl.Int64,
+    "fta": pl.Int64,
+    "ftm": pl.Int64,
+}
+
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
@@ -178,6 +191,50 @@ def _event_detail(
             if offense != 0 and reb_team == offense:
                 d["oreb"] += 1
     return d
+
+
+def _shooting_rows(events: list[dict], game_id: str, poss_num: int) -> list[dict]:
+    """Per-shooter shooting lines for one possession group (person_id-attributed events only).
+
+    Companion to :func:`_event_detail`: instead of one team-level row per
+    possession, emits one row per distinct shooter (``person_id``) who
+    attempted a shot or free throw during the possession's events. Reuses the
+    ``shot_value`` 2/3 split convention and the :func:`_ft_made` score-string
+    signal for free-throw makes.
+
+    Args:
+        events: The possession group's event rows (row-dicts from
+            ``enhanced_pbp.to_dicts()``).
+        game_id: The game identifier to stamp onto each output row.
+        poss_num: The 1-indexed possession number to stamp onto each output row.
+
+    Returns:
+        List of row-dicts (one per shooter), each with keys ``game_id``,
+        ``possession_number``, ``player_id``, and the six shooting-count keys
+        ``fg2a, fg2m, fg3a, fg3m, fta, ftm``. Events with ``person_id == 0``
+        (unattributable to a shooter) are skipped — they still count toward
+        the team-level :func:`_event_detail` totals but cannot be attributed
+        to a player here.
+    """
+    by_shooter: dict[int, dict[str, int]] = {}
+    for ev in events:
+        et = ev.get("event_type") or ""
+        if et not in ("made_shot", "missed_shot", "free_throw"):
+            continue
+        pid = int(ev.get("person_id") or 0)
+        if pid == 0:
+            continue
+        s = by_shooter.setdefault(pid, {"fg2a": 0, "fg2m": 0, "fg3a": 0, "fg3m": 0, "fta": 0, "ftm": 0})
+        if et == "free_throw":
+            s["fta"] += 1
+            if _ft_made(ev):
+                s["ftm"] += 1
+        else:
+            three = int(ev.get("shot_value") or 0) == 3
+            s["fg3a" if three else "fg2a"] += 1
+            if et == "made_shot":
+                s["fg3m" if three else "fg2m"] += 1
+    return [{"game_id": game_id, "possession_number": poss_num, "player_id": pid, **s} for pid, s in by_shooter.items()]
 
 
 def _resolve_teams(df: pl.DataFrame) -> tuple[int, int]:
@@ -321,79 +378,45 @@ def _build_possession_groups(
 # ---------------------------------------------------------------------------
 
 
-def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
-    """Build one row per possession from an enhanced play-by-play DataFrame.
+def _assemble(enhanced_pbp: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Shared possession-construction pass: build both companion frames in one traversal.
 
-    Consumes the output of
-    :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
-    Possession boundaries follow pbpstats-core rules: made field goal,
-    turnover, defensive rebound, made last free throw of a trip, or end of
-    period.  An offensive rebound extends the current possession and sets
-    ``is_second_chance = True``.
-
-    Points are the offense team's score delta over the possession, derived
-    by forward-filling ``score_home`` / ``score_away`` and differencing at
-    possession boundaries.  The sum of ``points`` per offense team is
-    reconciled against the boxscore oracle for the three canonical fixture
-    games.
+    Does the full possession-group traversal exactly once — empty guards, home/away
+    team resolution, score forward-fill, and the group loop — and emits both the
+    team-level possession frame (:data:`POSSESSIONS_SCHEMA`) and the per-shooter
+    companion frame (:data:`POSSESSION_SHOOTING_SCHEMA`) from it.
+    :func:`build_possessions` and :func:`build_possession_shooting` are thin
+    wrappers over this function's two return slots.
 
     Args:
-        enhanced_pbp: Polars DataFrame with schema
-            ``ENHANCED_PBP_SCHEMA`` (from
+        enhanced_pbp: Polars DataFrame with schema ``ENHANCED_PBP_SCHEMA`` (from
             :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`).
-            An empty or malformed frame returns a zero-row frame with
-            ``POSSESSIONS_SCHEMA`` — never raises.
+            An empty or malformed frame returns ``(empty_possessions,
+            empty_shooting)`` — never raises.
 
     Returns:
-        Polars DataFrame with schema :data:`POSSESSIONS_SCHEMA`.  One row
-        per possession, ordered by ``possession_number`` ascending.  Includes
-        eight team-level event-detail count columns (``fg2a``, ``fg2m``,
-        ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``, ``tov``) computed by
-        :func:`_event_detail` from the possession's events; ``points ==
-        2*fg2m + 3*fg3m + ftm`` holds on every possession.
-
-    Example:
-        Quick start::
-
-            import json, pathlib
-            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
-            from sportsdataverse.nba.nba_possessions import build_possessions
-
-            payload = json.loads(pathlib.Path("playbyplayv3.json").read_text())
-            pbp = enhanced_pbp_from_payload(payload)
-            poss = build_possessions(pbp)
-            print(poss.shape, poss.schema["offense_team_id"])
-
-        Boxscore reconciliation check::
-
-            import polars as pl
-            pts = poss.group_by("offense_team_id").agg(pl.col("points").sum())
-            print(pts)
-
-        See Also:
-            * `nba_api`_ -- reference Python client for stats.nba.com
-            * `nflverse`_ -- analogous NFL possession engine
-
-        .. _nba_api: https://github.com/swar/nba_api
-        .. _nflverse: https://nflverse.nflverse.com
+        Tuple ``(possessions, shooting)`` — the first with schema
+        :data:`POSSESSIONS_SCHEMA`, the second with schema
+        :data:`POSSESSION_SHOOTING_SCHEMA`.
     """
-    empty = pl.DataFrame(schema=POSSESSIONS_SCHEMA)
+    empty_poss = pl.DataFrame(schema=POSSESSIONS_SCHEMA)
+    empty_shooting = pl.DataFrame(schema=POSSESSION_SHOOTING_SCHEMA)
 
     if enhanced_pbp is None or enhanced_pbp.height == 0:
-        return empty
+        return empty_poss, empty_shooting
 
     try:
         home_id, away_id = _resolve_teams(enhanced_pbp)
     except Exception:
-        return empty
+        return empty_poss, empty_shooting
 
     if home_id == 0 or away_id == 0:
-        return empty
+        return empty_poss, empty_shooting
 
     try:
         game_id: str = str(enhanced_pbp["game_id"][0])
     except Exception:
-        return empty
+        return empty_poss, empty_shooting
 
     # Sort by order_index and convert to row-dicts for imperative traversal
     rows = enhanced_pbp.sort("order_index").to_dicts()
@@ -417,6 +440,7 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
     prev_home = 0
     prev_away = 0
     records: list[dict] = []
+    shooting: list[dict] = []
     poss_num = 0
 
     for events, is_sc, offense in groups:
@@ -462,14 +486,137 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
                 **detail,
             }
         )
+        shooting.extend(_shooting_rows(events, game_id, poss_num))
 
         prev_home = end_home
         prev_away = end_away
 
     if not records:
-        return empty
+        return empty_poss, empty_shooting
 
-    return pl.DataFrame(records, schema=POSSESSIONS_SCHEMA)
+    return (
+        pl.DataFrame(records, schema=POSSESSIONS_SCHEMA),
+        pl.DataFrame(shooting, schema=POSSESSION_SHOOTING_SCHEMA) if shooting else empty_shooting,
+    )
+
+
+def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
+    """Build one row per possession from an enhanced play-by-play DataFrame.
+
+    Consumes the output of
+    :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
+    Possession boundaries follow pbpstats-core rules: made field goal,
+    turnover, defensive rebound, made last free throw of a trip, or end of
+    period.  An offensive rebound extends the current possession and sets
+    ``is_second_chance = True``.
+
+    Points are the offense team's score delta over the possession, derived
+    by forward-filling ``score_home`` / ``score_away`` and differencing at
+    possession boundaries.  The sum of ``points`` per offense team is
+    reconciled against the boxscore oracle for the three canonical fixture
+    games.
+
+    Thin wrapper over :func:`_assemble`, which does the shared possession-group
+    traversal once and also produces the per-shooter companion frame consumed
+    by :func:`build_possession_shooting`.
+
+    Args:
+        enhanced_pbp: Polars DataFrame with schema
+            ``ENHANCED_PBP_SCHEMA`` (from
+            :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`).
+            An empty or malformed frame returns a zero-row frame with
+            ``POSSESSIONS_SCHEMA`` — never raises.
+
+    Returns:
+        Polars DataFrame with schema :data:`POSSESSIONS_SCHEMA`.  One row
+        per possession, ordered by ``possession_number`` ascending.  Includes
+        eight team-level event-detail count columns (``fg2a``, ``fg2m``,
+        ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``, ``tov``) computed by
+        :func:`_event_detail` from the possession's events; ``points ==
+        2*fg2m + 3*fg3m + ftm`` holds on every possession.
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+            from sportsdataverse.nba.nba_possessions import build_possessions
+
+            payload = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+            pbp = enhanced_pbp_from_payload(payload)
+            poss = build_possessions(pbp)
+            print(poss.shape, poss.schema["offense_team_id"])
+
+        Boxscore reconciliation check::
+
+            import polars as pl
+            pts = poss.group_by("offense_team_id").agg(pl.col("points").sum())
+            print(pts)
+
+        See Also:
+            * `nba_api`_ -- reference Python client for stats.nba.com
+            * `nflverse`_ -- analogous NFL possession engine
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _nflverse: https://nflverse.nflverse.com
+    """
+    return _assemble(enhanced_pbp)[0]
+
+
+def build_possession_shooting(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
+    """Build the per-shooter companion frame from an enhanced play-by-play DataFrame.
+
+    Companion to :func:`build_possessions`: instead of one team-level row per
+    possession, emits one row per distinct shooter (``player_id``) per
+    possession, with their own ``fg2a/fg2m/fg3a/fg3m/fta/ftm`` counts. Shares
+    the same possession-group traversal as :func:`build_possessions` via
+    :func:`_assemble` — the two frames are always built from a single
+    consistent pass over the play-by-play. Consumed by WP2's luck-adjusted
+    shooting response.
+
+    Args:
+        enhanced_pbp: Polars DataFrame with schema
+            ``ENHANCED_PBP_SCHEMA`` (from
+            :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`).
+            An empty or malformed frame returns a zero-row frame with
+            ``POSSESSION_SHOOTING_SCHEMA`` — never raises.
+
+    Returns:
+        Polars DataFrame with schema :data:`POSSESSION_SHOOTING_SCHEMA`. One
+        row per ``(possession_number, player_id)`` pair. Events with
+        ``person_id == 0`` are skipped (unattributable to a shooter — they
+        still count toward :func:`build_possessions`' team-level totals).
+        Per-possession sums of the six shooting columns match the
+        corresponding :func:`build_possessions` columns exactly.
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+            from sportsdataverse.nba.nba_possessions import build_possession_shooting
+
+            payload = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+            pbp = enhanced_pbp_from_payload(payload)
+            sh = build_possession_shooting(pbp)
+            print(sh.shape, sh.schema["player_id"])
+
+        Per-player shooting totals::
+
+            import polars as pl
+            totals = sh.group_by("player_id").agg(
+                pl.col("fg3m").sum(), pl.col("ftm").sum()
+            )
+            print(totals.head())
+
+        See Also:
+            * `nba_api`_ -- reference Python client for stats.nba.com
+            * `nflverse`_ -- analogous NFL possession engine
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _nflverse: https://nflverse.nflverse.com
+    """
+    return _assemble(enhanced_pbp)[1]
 
 
 # ---------------------------------------------------------------------------
