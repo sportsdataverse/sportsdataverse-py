@@ -396,3 +396,80 @@ def test_validate_model_prior_all_oracles_no_crash():
     prior = {p: (o100[p], d100[p]) for p in o100}
     rep = validate_model(_StubPriorModel(prior), [poss], model_name="stub_prior")
     assert rep.retrodiction is not None and rep.calibration is not None  # posterior -> calibration populated
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 7: Oracle 5 (external_validity) -- id-join + meta-oracle teeth
+# ---------------------------------------------------------------------------
+
+import pytest  # noqa: E402
+from sportsdataverse.nba.nba_model_validation import ExternalValidityResult, external_validity  # noqa: E402
+
+
+def test_external_validity_scores_near_one_fed_itself():
+    # feed the SAME values back as both "ratings" and "oracle" (under different
+    # column names) -- the meta-oracle must score ~1.0.
+    ratings = pl.DataFrame({"player_id": [1, 2, 3, 4, 5], "rapm": [2.0, -1.0, 0.5, 3.0, -2.5]})
+    oracle = pl.DataFrame({"player_id": [1, 2, 3, 4, 5], "RAPM": [2.0, -1.0, 0.5, 3.0, -2.5]})
+    res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert isinstance(res, ExternalValidityResult)
+    assert res.corr > 0.999
+    assert res.n_matched == 5
+    assert res.coverage_pct == 100.0
+    assert res.join == "id"
+
+
+def test_external_validity_drops_under_id_permutation():
+    rng = np.random.default_rng(0)
+    truth = rng.normal(0, 2, size=40)
+    ratings = pl.DataFrame({"player_id": list(range(40)), "rapm": truth})
+    oracle_correct = pl.DataFrame({"player_id": list(range(40)), "RAPM": truth + rng.normal(0, 0.2, size=40)})
+    res_correct = external_validity(ratings, oracle_correct, rating_col="rapm", oracle_col="RAPM")
+    assert res_correct.corr > 0.9
+
+    shuffled_ids = list(range(40))
+    rng.shuffle(shuffled_ids)
+    oracle_shuffled = pl.DataFrame({"player_id": shuffled_ids, "RAPM": (truth + rng.normal(0, 0.2, size=40))})
+    res_shuffled = external_validity(ratings, oracle_shuffled, rating_col="rapm", oracle_col="RAPM")
+    assert abs(res_shuffled.corr) < res_correct.corr - 0.3
+
+
+def test_external_validity_partial_coverage():
+    ratings = pl.DataFrame({"player_id": [1, 2, 3, 4], "rapm": [1.0, 2.0, 3.0, 4.0]})
+    oracle = pl.DataFrame({"player_id": [1, 2, 99], "RAPM": [1.1, 2.1, 9.9]})  # only 1,2 overlap
+    res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert res.n_matched == 2
+    assert res.coverage_pct == 50.0
+
+
+def test_external_validity_permutation_p95_is_self_computed_not_hardcoded():
+    rng = np.random.default_rng(1)
+    truth = rng.normal(0, 2, size=60)
+    ratings = pl.DataFrame({"player_id": list(range(60)), "rapm": truth})
+    noise_only = pl.DataFrame({"player_id": list(range(60)), "RAPM": rng.normal(0, 2, size=60)})
+    res = external_validity(ratings, noise_only, rating_col="rapm", oracle_col="RAPM", n_permutations=300, seed=2)
+    assert abs(res.corr) < res.permutation_p95 + 0.3  # a true-null pair shouldn't clear its own null ceiling by much
+
+
+def test_external_validity_never_raises_on_empty():
+    empty = pl.DataFrame(schema={"player_id": pl.Int64, "rapm": pl.Float64})
+    oracle = pl.DataFrame({"player_id": [1], "RAPM": [1.0]})
+    res = external_validity(empty, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert res.n_matched == 0
+    assert res.coverage_pct == 0.0
+    assert np.isnan(res.corr)
+
+
+def test_external_validity_too_few_matches_is_nan():
+    ratings = pl.DataFrame({"player_id": [1, 2], "rapm": [1.0, 2.0]})
+    oracle = pl.DataFrame({"player_id": [1, 2], "RAPM": [1.1, 2.1]})
+    res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+    assert res.n_matched == 2
+    assert np.isnan(res.corr)  # fewer than 3 matched rows -> nan, not a spurious 2-point corr
+
+
+def test_external_validity_rejects_unknown_join_kind():
+    ratings = pl.DataFrame({"player_id": [1], "rapm": [1.0]})
+    oracle = pl.DataFrame({"player_id": [1], "RAPM": [1.0]})
+    with pytest.raises(ValueError, match="join"):
+        external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM", join="bogus")

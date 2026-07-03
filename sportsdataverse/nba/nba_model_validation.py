@@ -16,6 +16,7 @@ import polars as pl
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
 
+from .nba_oracle_data import normalize_player_name
 from .nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
 
 _OFF: List[str] = [f"off_player_{i}" for i in range(1, 6)]
@@ -659,6 +660,143 @@ def calibration(
                 hits += 1
         cover.append(hits / len(shared))
     return CalibrationResult(levels=list(levels), coverage=cover, n_players=len(shared))
+
+
+@dataclass(frozen=True)
+class ExternalValidityResult:
+    """Concurrent-validity correlation of model ratings against a published oracle metric.
+
+    Attributes:
+        corr: Pearson correlation of the model's rating column against the
+            oracle's value column, over matched rows. ``nan`` when fewer
+            than 3 rows matched.
+        n_matched: Number of rows successfully joined (ratings <-> oracle).
+        coverage_pct: ``100 * n_matched / len(ratings)`` -- how much of the
+            model's player population the oracle covers. ``0.0`` when
+            ``ratings`` is empty.
+        permutation_p95: 95th percentile of ``|corr|`` over ``n_permutations``
+            random shuffles of the oracle's matched value column -- a
+            self-computed null-correlation ceiling. The spec deliberately
+            avoids a hardcoded floor constant; compare ``corr`` against this
+            instead. ``nan`` when fewer than 3 rows matched.
+        join: The join strategy used (``"id"`` or ``"name"``).
+    """
+
+    corr: float
+    n_matched: int
+    coverage_pct: float
+    permutation_p95: float
+    join: str
+
+
+def external_validity(
+    ratings: pl.DataFrame,
+    oracle: pl.DataFrame,
+    *,
+    rating_col: str,
+    oracle_col: str,
+    join: str = "id",
+    ratings_id_col: str = "player_id",
+    oracle_id_col: str = "player_id",
+    ratings_name_col: str = "player_name",
+    oracle_name_col: str = "player_name",
+    n_permutations: int = 200,
+    seed: int = 0,
+) -> ExternalValidityResult:
+    """Oracle 5: correlate a model's ratings against a published external metric.
+
+    ``join="id"`` inner-joins on ``ratings_id_col``/``oracle_id_col`` (both
+    cast to Int64 defensively, per the project's join-key dtype discipline).
+    ``join="name"`` normalizes both name columns with
+    :func:`~sportsdataverse.nba.nba_oracle_data.normalize_player_name` and
+    inner-joins on the normalized key -- the DARKO-family case: no shared id,
+    a brittle display-name join whose ``coverage_pct`` is the signal to watch.
+
+    Args:
+        ratings: The model's own per-player ratings frame (from ``nba_rapm``,
+            ``nba_adj_rapm``, ``nba_spm``, ``nba_darko``, etc.).
+        oracle: A tidy oracle frame from one of the ``nba_oracle_data`` loaders.
+        rating_col: Column in ``ratings`` holding the model's rating value.
+        oracle_col: Column in ``oracle`` holding the published metric value.
+        join: ``"id"`` (default) or ``"name"``.
+        ratings_id_col: Player-id column name in ``ratings`` (``join="id"``).
+        oracle_id_col: Player-id column name in ``oracle`` (``join="id"``).
+        ratings_name_col: Player-name column name in ``ratings`` (``join="name"``).
+        oracle_name_col: Player-name column name in ``oracle`` (``join="name"``).
+        n_permutations: Number of random shuffles for the self-computed null ceiling.
+        seed: RNG seed for the permutation shuffle.
+
+    Returns:
+        ``ExternalValidityResult``. ``corr`` and ``permutation_p95`` are
+        ``nan`` when fewer than 3 rows matched; ``coverage_pct`` is ``0.0``
+        when ``ratings`` is empty.
+
+    Raises:
+        ValueError: If ``join`` is not ``"id"`` or ``"name"``.
+
+    Example:
+        Validate plain RAPM against Ryan Davis' published RAPM column::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+            from sportsdataverse.nba.nba_model_validation import external_validity
+
+            oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv").filter(
+                pl.col("season") == "2022-23"
+            )
+            res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+            print(res.corr, res.coverage_pct)
+
+        A name-keyed family (DARKO)::
+
+            res = external_validity(
+                ratings, darko_oracle, rating_col="projected_rating", oracle_col="dpm",
+                join="name", ratings_name_col="player_name", oracle_name_col="player_name",
+            )
+    """
+    if join not in ("id", "name"):
+        raise ValueError(f"join must be 'id' or 'name', got {join!r}")
+    if ratings.is_empty():
+        return ExternalValidityResult(float("nan"), 0, 0.0, float("nan"), join)
+
+    if join == "id":
+        left = ratings.select(
+            pl.col(ratings_id_col).cast(pl.Int64).alias("_key"),
+            pl.col(rating_col).cast(pl.Float64).alias("_rating"),
+        )
+        right = oracle.select(
+            pl.col(oracle_id_col).cast(pl.Int64).alias("_key"),
+            pl.col(oracle_col).cast(pl.Float64).alias("_oracle"),
+        )
+    else:  # join == "name"
+        left = ratings.select(
+            pl.col(ratings_name_col).map_elements(normalize_player_name, return_dtype=pl.Utf8).alias("_key"),
+            pl.col(rating_col).cast(pl.Float64).alias("_rating"),
+        )
+        right = oracle.select(
+            pl.col(oracle_name_col).map_elements(normalize_player_name, return_dtype=pl.Utf8).alias("_key"),
+            pl.col(oracle_col).cast(pl.Float64).alias("_oracle"),
+        )
+
+    matched = left.join(right, on="_key", how="inner").drop_nulls(["_rating", "_oracle"])
+    n_matched = matched.height
+    coverage = 100.0 * n_matched / ratings.height
+
+    if n_matched < 3:
+        return ExternalValidityResult(float("nan"), n_matched, coverage, float("nan"), join)
+
+    a = matched["_rating"].to_numpy()
+    b = matched["_oracle"].to_numpy()
+    corr = float(np.corrcoef(a, b)[0, 1]) if np.std(a) > 0 and np.std(b) > 0 else 0.0
+
+    rng = np.random.default_rng(seed)
+    perm_corrs: np.ndarray = np.empty(n_permutations, dtype=np.float64)
+    for i in range(n_permutations):
+        shuffled = rng.permutation(b)
+        perm_corrs[i] = np.corrcoef(a, shuffled)[0, 1] if np.std(a) > 0 else 0.0
+    permutation_p95 = float(np.quantile(np.abs(perm_corrs), 0.95))
+
+    return ExternalValidityResult(corr, n_matched, coverage, permutation_p95, join)
 
 
 _TEAM_A, _TEAM_B = 100, 200
