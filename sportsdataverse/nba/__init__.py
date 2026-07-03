@@ -38,3 +38,4 @@ from sportsdataverse.nba.nba_darko import (  # noqa: F401
     fit_aging_curve,
     nba_darko,
 )
+from sportsdataverse.nba.nba_v3_v2_adapter import nba_v3_to_v2_pbp  # noqa: F401

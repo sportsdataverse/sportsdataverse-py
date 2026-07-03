@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
   - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
@@ -151,6 +152,36 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)
+
+New `sportsdataverse/nba/nba_v3_v2_adapter.py` ports hoopR's `.v3_to_v2_format()` to Python:
+`nba_v3_to_v2_pbp(pbp_v3, box_v3, *, return_as_pandas=False)` turns a `playbyplayv3` payload +
+`boxscoretraditionalv3` boxscore into the full 61-column v2-schema frame (NBA retired `playbyplayv2`,
+which now returns 0 rows for every season — this restores v2-dataset compatibility from the live v3 feed).
+
+- **Recovers the secondary players v3 drops**: assist via the `(Name N AST)` description parenthetical,
+  block/steal via the standalone `actionType == ""` rows (the blocker/stealer ships as `personId`,
+  associated to the shot/turnover at the same period+clock), sub-in via `SUB: X FOR Y`, and jump-ball
+  via `vs. / Tip to` — each resolved through a 4-tier roster name-match (family → name_i → "F. Family" →
+  fuzzy). Validated 1-to-1 against the cdn live feed's structured `assistPersonId`/`blockPersonId`/
+  `stealPersonId` fields: **100% agreement on all three committed fixture games**. Documented gap: the
+  foul-drawn player is unrecoverable from v3 (fouls carry null `player2`/`player3`).
+- **v2 schema faithful to hoopR** — event/action-type codes (EVENTMSGTYPE/EVENTMSGACTIONTYPE),
+  home/neutral/visitor description split by `location`, forward-filled `score`/`score_margin`/
+  `team_leading`, person types, time columns from the ISO clock, string-typed ids (leading zeros
+  preserved), plus the v3 passthrough columns. One deliberate divergence: `player2`/`player3` are
+  enriched **by id** from the extraction rather than hoopR's name re-resolution (which can mismatch on
+  family-name collisions).
+- **pbpstats interop**: a `stats_nba` feed shim (`resultSets` envelope) lets the adapted frame drive the
+  [`pbpstats`](https://github.com/dblackrun/pbpstats) library's v2 provider. A gated round-trip test
+  feeds our v3-derived output through pbpstats-`stats_nba` and matches pbpstats' own `live` provider on
+  the same games (possession counts within 0–2, period starters exact 8/8). The round-trip surfaced two
+  fixes: `PLAYER1_TEAM_ID` serializes as null (not 0) on team-rebound rows, and the `"Transition Take"`
+  foul subtype (EVENTMSGACTIONTYPE 31, added with the 2022-23 transition take foul rule) joined the foul
+  table. Opt in locally with `SDV_PBPSTATS_ROOT=<path to a pbpstats checkout>`.
+- Six cdn oracle fixtures committed under `tests/fixtures/nba_engine/{gid}/cdn_{playbyplay,boxscore}.json`
+  (provenance documented in the fixtures README); exported as `sportsdataverse.nba.nba_v3_to_v2_pbp`.
 
 ### NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)
 
