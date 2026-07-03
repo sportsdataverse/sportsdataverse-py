@@ -562,6 +562,36 @@ sched = espn_wbb_schedule(dates=season)
 
 ## Other
 
+### `RapmConfig(...)` {#RapmConfig}
+
+Port of `RapmConfig` (`RapmUtils.ts:175-179`).
+
+### `RapmPlayerContext(...)` {#RapmPlayerContext}
+
+Port of `RapmPlayerContext` (`RapmUtils.ts:147-173`).
+
+See the module docstring for why `filtered_lineups` is a Python
+callable rather than a materialized dict.
+
+### `RapmPreProcDiagnostics(...)` {#RapmPreProcDiagnostics}
+
+Port of `RapmPreProcDiagnostics` (`RapmUtils.ts:187-194`) -- the
+
+multi-collinearity diagnostic `calc_collinearity_diag` returns.
+
+### `RapmPriorInfo(...)` {#RapmPriorInfo}
+
+Port of `RapmPriorInfo` (`RapmUtils.ts:124-133`).
+
+### `RapmProcessingInputs(...)` {#RapmProcessingInputs}
+
+Port of `RapmProcessingInputs` (`RapmUtils.ts:196-203`).
+
+See the module docstring's "Task 3.5 notes" for why `soln_matrix` and
+`sd_rapm` are plain nested `list`s rather than `NDArray`s, and why
+`sd_rapm` exists at all (a Python-only addition beyond upstream's own
+return shape).
+
 ### `adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'` {#adjust_off_rating_stats}
 
 Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place.
@@ -599,6 +629,42 @@ _, _, raw_o_rtg, _, o_diags = build_o_rtg(player, {}, {}, 100.0, True, False)
 maybe_raw = raw_o_rtg["value"] if raw_o_rtg else None
 adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
 print(o_diags["oRtg"], o_diags["adjORtgPlus"])
+```
+
+### `apply_weak_priors(field: 'str', player_poss_pcts: 'list[float]', prior_info: 'RapmPriorInfo', debug_mode: 'bool' = False) -> 'Callable[[float, list[float]], list[float]]'` {#apply_weak_priors}
+
+Build a closure that nudges ridge-regressed RAPM back towards its weak prior.
+
+Faithful port of `RapmUtils.applyWeakPriors` (`RapmUtils.ts:921-995`).
+Ridge regression depresses estimates towards `0`; this "fills" the
+team-total error (see `pick_ridge_regression`'s
+`[IMPORTANT-EQUATION-01]` team-total reconciliation) back in using each
+player's weak (KenPom-derived) prior as the fallback signal, capped so no
+more than half the team-total error gets attributed via this path
+(`max_multiplier = -0.5`) -- an alternate flat-translation path
+(`use_alt_rating`) kicks in for `off_adj_ppp`/`def_adj_ppp` fields
+when the capped path can't fully explain the error.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `field` | `str` |  | The prior key to read off each `prior_info["players_weak"]` entry, e.g. `"off_adj_ppp"`. |
+| `player_poss_pcts` | `list[float]` |  | Per-player possession-share weights (index-aligned with `prior_info["players_weak"]`), e.g. `pick_ridge_regression`'s own `pct_by_player[off_or_def]`. |
+| `prior_info` | `RapmPriorInfo` |  | A `RapmPriorInfo` (only `["players_weak"]` is read). |
+| `debug_mode` | `bool` | `False` | Kept for TS signature parity -- upstream gates a `console.log` behind this flag (`RapmUtils.ts:979-984`), which this port deliberately does not reproduce: every production call site pins it `False` (`offDefDebugMode.off`/`.def` are hardcoded `False` constants inside `pickRidgeRegression`), so it is dead in every current caller and would only ever emit console noise, not test-observable behavior. |
+
+**Returns**
+
+A closure `(error, base_results) -> adjusted_results` -- call it with the team-total efficiency error and the pre-adjustment RAPM vector to get the weak-prior-nudged result.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import apply_weak_priors
+
+nudge = apply_weak_priors("off_adj_ppp", pct_by_player, ctx["prior_info"])
+adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
 ```
 
 ### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
@@ -840,6 +906,84 @@ o_rtg2, adj_o_rtg2, raw_o_rtg2, raw_adj_o_rtg2, _ = build_o_rtg(
 )
 ```
 
+### `build_player_context(players: 'list[PlayerOnOffStats]', lineups: 'list[LineupStatSet]', players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', agg_value_key: 'ValueKey' = 'value', config: 'RapmConfig' = {'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}) -> 'RapmPlayerContext'` {#build_player_context}
+
+Build the context object the RAPM matrix-solve layer consumes.
+
+Faithful port of `RapmUtils.buildPlayerContext` (`RapmUtils.ts:427-541`).
+Removes low-possession players (`config["removal_pct"]` of total
+on+off possessions), flags fully-removed lineups (mutating `lineups`
+in place -- see the module docstring's landmine 5), builds the
+player-to-column index, and folds `build_priors` into
+`prior_info`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players` | `list[PlayerOnOffStats]` |  | The per-player on/off splits (`PlayerOnOffStats`), e.g. `mbb_lineup_stats.lineup_to_team_report(...)["players"]`. |
+| `lineups` | `list[LineupStatSet]` |  | The per-lineup `LineupStatSet` docs feeding this team's aggregate (**mutated in place** -- see landmine 5). |
+| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- forwarded to `build_priors` unchanged. |
+| `stats_averages` | `PureStatSet` |  | League/context average stat set -- forwarded to `build_priors` unchanged. |
+| `avg_efficiency` | `float` |  | League/context average efficiency. |
+| `agg_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- forwarded to `build_priors` as its `value_key` (only affects prior calculations, not the lineup-filtering/aggregation above it). |
+| `config` | `RapmConfig` | `{'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}` | Removal-percent / prior-mode / regression config. Defaults to `DEFAULT_RAPM_CONFIG`; never mutated by this function (only `config["removal_pct"]`/`config["prior_mode"]` are read), matching the TS default parameter's own read-only usage. |
+
+**Returns**
+
+A `RapmPlayerContext`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
+from sportsdataverse.mbb.mbb_rapm import build_player_context, DEFAULT_RAPM_CONFIG
+
+report = lineup_to_team_report({"lineups": buckets, "error_code": None})
+ctx = build_player_context(
+    report["players"], buckets, {}, {}, 100.0, "value", DEFAULT_RAPM_CONFIG
+)
+print(ctx["num_players"], ctx["team_info"]["off_poss"]["value"])
+
+# Filtering lineups by side (the ``filtered_lineups`` closure)
+
+off_lineups = ctx["filtered_lineups"]("off")
+def_lineups = ctx["filtered_lineups"]("def")
+```
+
+### `build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'` {#build_priors}
+
+Build strong/weak per-player RAPM priors for every column.
+
+Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
+See the module docstring's landmine list, item 1, for the critical
+Python-vs-JS `{}`-truthiness gotcha this function's implementation
+deliberately avoids.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
+| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
+| `avg_efficiency` | `float` |  | League/context average efficiency. |
+| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
+| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
+| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
+
+**Returns**
+
+A `RapmPriorInfo`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import build_priors
+
+priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
+print(priors["players_weak"][0])
+```
+
 ### `build_productivity(o_rtg: 'float', o_adj: 'float', usage: 'float', avg_efficiency: 'float') -> 'dict[str, float]'` {#build_productivity}
 
 Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`).
@@ -866,6 +1010,103 @@ see `PLAN-phase2.md`'s self-review notes.
 **Returns**
 
 float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}`` -- keys kept TS-verbatim (see module docstring's naming-convention note).
+
+### `build_weak_prior_from_rapm(rapm_results: 'list[float]', off_or_def: 'str') -> 'list[dict[str, float]]'` {#build_weak_prior_from_rapm}
+
+Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts.
+
+Faithful port of `RapmUtils.buildWeakPriorFromRapm` (`RapmUtils.ts:410-419`),
+used only by `pick_ridge_regression`'s `use_recursive_weak_prior`
+branch to substitute the just-computed (pre-strong-prior) RAPM values as
+the *weak* prior for a follow-up `apply_weak_priors` call -- "the
+recursive prior" per the upstream `/** For "recursive" prior */` comment.
+
+**Uncovered by the oracle** -- `semiRealRapmResults.testContext.priorInfo
+.useRecursiveWeakPrior` is `false`, so `RapmUtils.test.ts`'s
+`"pickRidgeRegression"` test never calls this function. Ported
+faithfully from TS regardless (per "TS governs"); flagged as a documented
+gap rather than backed by a synthetic test, matching this module's
+existing convention for other upstream-untested branches (e.g. the
+"Task 3.3 coverage gap" note above).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rapm_results` | `list[float]` |  | A flat per-player RAPM estimate vector, e.g. `pick_ridge_regression`'s own `results_pre_prior`. |
+| `off_or_def` | `str` |  | `"off"` or `"def"` -- selects the output key, `f"{off_or_def}_adj_ppp"`. |
+
+**Returns**
+
+One `{f"{off_or_def}_adj_ppp": rapm}` dict per input element, index-aligned with `rapm_results`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import build_weak_prior_from_rapm
+
+weak_prior = build_weak_prior_from_rapm([5.0, 4.5], "off")
+print(weak_prior[0])  # {"off_adj_ppp": 5.0}
+```
+
+### `calc_collinearity_diag(weight_matrix: 'NDArray[np.float64]', ctx: 'RapmPlayerContext') -> 'RapmPreProcDiagnostics'` {#calc_collinearity_diag}
+
+Multi-collinearity diagnostic between the players in an off/def design matrix.
+
+Faithful port of `RapmUtils.calcCollinearityDiag` (`RapmUtils.ts:1629-1760`).
+Runs an SVD of `weight_matrix`, builds condition indices ("lineup
+combos") from the ratio of the largest to each singular value, and a
+variance-decomposition-proportions ("VDP") matrix identifying which
+players load onto which collinear combo -- the classic Belsley-Kuh-Welsch
+collinearity-diagnostics recipe (see the upstream comment's
+[colldiag.m](https://github.com/brian-lau/colldiag/blob/master/colldiag.m)
+citation). Also builds a plain Pearson player/player correlation matrix
+(calc_player_correlations`) and folds it into a possession
+-weighted `adaptive_correl_weights` summary per player.
+
+**`numpy.linalg.svd(weight_matrix, full_matrices=False)` replaces
+`svd-js`'s `SVD(weightMatrix, false)`.** Both are the standard
+Golub-Kahan-Reinsch decomposition (`A = U @ diag(S) @ Vᵀ`); numpy's
+`Vh` return value already *is* `Vᵀ` (what the TS code separately
+computes via `transpose(matrix(v))`), so this port skips that
+transpose. The TS code (and this port) never reads `u`/the first SVD
+return -- only `q`/`S` (singular values) and `v`/`Vᵀ`. Singular
+-vector **sign is immaterial here**: every place `V` is used
+(`phiMatrix`/`phi_matrix`) squares each entry (`val * val`), and a
+per-singular-value sign flip on `U`/`V` together is a valid SVD
+regardless -- so any `U`/`V` sign convention difference between
+`svd-js` and LAPACK (numpy's backend) cannot change this function's
+output. **Singular-value ordering is likewise immaterial**: both this
+port and the TS source explicitly re-sort `q` (ascending, carrying the
+original index along) before using it, so whichever order either SVD
+implementation returns values in, the final result only depends on the
+*values themselves* (up to the explicit resort), not on numpy's native
+descending convention vs whatever order `svd-js` happens to return.
+
+**`correl_matrix`/`poss_correl_matrix` stay `numpy.ndarray`** (see
+the module docstring's "Task 3.6 notes" for why this doesn't hit the
+Task 3.5 "`ndarray` breaks deep `==`" concern).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `weight_matrix` | `NDArray[float64]` |  | An off/def design matrix, shape `(num_lineups, ctx["num_players"])` (e.g. `calc_player_weights`'s first return value, or a hand-built matrix for isolated testing). |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`. `ctx["num_players"]` sizes every per-player structure; `ctx["col_to_player"]` keys `player_combos`. |
+
+**Returns**
+
+A `RapmPreProcDiagnostics`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_collinearity_diag, calc_player_weights
+
+off_weights, _ = calc_player_weights(ctx)
+diag = calc_collinearity_diag(off_weights, ctx)
+print(diag["lineup_combos"][0])  # the worst-conditioned combo
+```
 
 ### `calc_def_player_luck_adj(sample: 'LineupStatSet', base: 'LineupStatSet', avg_eff: 'float') -> 'DefLuckAdjustmentDiags'` {#calc_def_player_luck_adj}
 
@@ -926,6 +1167,59 @@ from sportsdataverse.mbb.mbb_luck import calc_def_team_luck_adj
 
 diags = calc_def_team_luck_adj(sample_team_off, base_team, 100.0)
 print(diags["deltaDefAdjEff"])
+```
+
+### `calc_lineup_outputs(field: 'str', off_offset: 'float', def_offset: 'float', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None' = None, use_old_val_if_possible: 'tuple[bool, bool]' = (False, False)) -> 'list[NDArray[np.float64]]'` {#calc_lineup_outputs}
+
+Build the off/def target vectors the RAPM design matrices are fit against.
+
+Faithful port of `RapmUtils.calcLineupOutputs` (`RapmUtils.ts:598-751`).
+For each filtered lineup, computes a possession-weighted residual: the
+lineup's own stat value, plus any global luck adjustment, minus the
+accumulated "prior offset" contributed by every player on the lineup
+(a strong-prior blend for kept players -- see get_strong_weight`
+-- or a fixed baseline contribution for removed players).
+
+Upstream keeps this as a plain `Array<Array<number>>` (*not* a mathjs
+`Matrix`, unlike `calc_player_weights`'s `offWeights`/
+`defWeights` -- `RapmUtils.test.ts`'s own `tidyResults` helper for
+this function has a visibly different shape, see the classification map
+in `tests/fixtures/hoop_explorer/README.md`). This port still
+materializes both output vectors as `numpy.ndarray` for consistency
+with `calc_player_weights` at the same dict -> array boundary --
+Task 3.4's ridge-regression solve consumes both as arrays regardless of
+the upstream distinction.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `field` | `str` |  | The stat suffix to read off each lineup, e.g. `"adj_ppp"` (read as `{prefix}_{field}`, e.g. `"off_adj_ppp"`). |
+| `off_offset` | `float` |  | The D1-average offensive value for `field` (the regression's starting/baseline value on the RHS). |
+| `def_offset` | `float` |  | The D1-average defensive value for `field`. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
+| `adaptive_correl_weights` | `list[float] \| None` | `None` | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`), used as the strong-prior blend fallback when `ctx["prior_info"] ["strong_weight"] < 0` -- see get_strong_weight`. |
+| `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook Task 3.1's classification map flags as an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's "Task 3.3 coverage gap" note. |
+
+**Returns**
+
+`[off_outputs, def_outputs]` -- two 1-D `numpy.ndarray` target vectors, index-aligned with `ctx["filtered_lineups"]("off"/"def")` (plus one extra element each when `ctx["unbias_weight"] > 0`, an "unbiasing observation" target -- always unreached in production, same as `calc_player_weights`'s extra row).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_lineup_outputs
+
+off_outputs, def_outputs = calc_lineup_outputs(
+    "adj_ppp", 100.0, 100.0, ctx
+)
+print(off_outputs.shape)  # (num_off_lineups,)
+
+# Luck-adjusted variant (reads ``old_value`` where present)
+
+off_luck, def_luck = calc_lineup_outputs(
+    "adj_ppp", 100.0, 100.0, ctx, use_old_val_if_possible=(True, True)
+)
 ```
 
 ### `calc_off_player_luck_adj(sample_player: 'LineupStatSet', base_player: 'LineupStatSet', avg_eff: 'float') -> 'OffLuckAdjustmentDiags'` {#calc_off_player_luck_adj}
@@ -1004,6 +1298,69 @@ diags = calc_off_team_luck_adj(
 )
 ```
 
+### `calc_player_weights(ctx: 'RapmPlayerContext') -> 'list[NDArray[np.float64]]'` {#calc_player_weights}
+
+Build the off/def player-weight (design) matrices for the RAPM solve.
+
+Faithful port of `RapmUtils.calcPlayerWeights` (`RapmUtils.ts:544-595`).
+One row per (filtered) lineup, one column per remaining player; each
+filled cell is `sqrt(lineup_possessions / total_side_possessions)` --
+the possession-weighted design-matrix entry the ridge regression (Task
+3.4) solves against. This is the first function in the module where a
+`dict`-shaped `RapmPlayerContext` gets materialized into a
+`numpy.ndarray` -- see the module docstring's "dict -> `numpy.ndarray`
+boundary" note.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
+
+**Returns**
+
+`[off_weights, def_weights]` -- two `numpy.ndarray` matrices of shape `(num_{off,def}_lineups [+1 if ctx["unbias_weight"] > 0], ctx["num_players"])`. The optional extra row (only emitted when `ctx["unbias_weight"] > 0` -- always `0.0` in production per `build_player_context`'s hardcoded local, but settable directly on the returned context dict, as the oracle test does) holds each column's `unbias_weight`-scaled sum-of-squares, an "unbiasing observation" row (`RapmUtils.ts:578-593`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_player_weights
+
+off_weights, def_weights = calc_player_weights(ctx)
+print(off_weights.shape)  # (num_off_lineups, num_players)
+```
+
+### `calc_slow_pseudo_inverse(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#calc_slow_pseudo_inverse}
+
+Per-parameter variance terms for the ridge-regression standard errors.
+
+Faithful port of the private `RapmUtils.calcSlowPseudoInverse`
+(`RapmUtils.ts:1544-1557`): the same `(XᵀX + ridge_lambda·I)⁻¹` as
+`slow_regression`'s `bottomInv`, but this function returns the
+square root of its diagonal instead of the full solver matrix -- the
+`paramErrs` term consumed by the standard-error formula (see
+`calculate_sd_rapm`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, same shape as `slow_regression`'s. |
+| `ridge_lambda` | `float` |  | The Tikhonov regularization strength (must match the `ridge_lambda` used to build the corresponding `slow_regression` solver, for the SEs to be meaningful). |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` -- only `ctx["num_players"]` is read. |
+
+**Returns**
+
+A length-`num_players` array, `sqrt(diag((XᵀX + λI)⁻¹))`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_slow_pseudo_inverse
+
+param_errs = calc_slow_pseudo_inverse(x, 1.0, ctx)
+```
+
 ### `calculate_aggregated_lineup_stats(lineups: 'list[LineupStatSet] | None') -> 'LineupStatSet'` {#calculate_aggregated_lineup_stats}
 
 Combine all lineups into a single team stat set.
@@ -1049,6 +1406,153 @@ print(team_info["off_ppp"]["value"], team_info["off_poss"]["value"])
 
 buckets[1]["rapmRemove"] = True  # divert into all_lineups instead
 team_info = calculate_aggregated_lineup_stats(buckets)
+```
+
+### `calculate_predicted_out(player_weight_matrix: 'NDArray[np.float64]', regressed_players: 'list[float]', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#calculate_predicted_out}
+
+Predict per-lineup outputs from fitted per-player RAPM values.
+
+Faithful port of `RapmUtils.calculatePredictedOut` (`RapmUtils.ts:1559-1567`).
+`ctx` is accepted for signature parity with the TS source but unused in
+the body (ported verbatim -- upstream's own `ctx` param is likewise
+dead in this function).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, num_players)`. |
+| `regressed_players` | `list[float]` |  | The fitted per-player values (e.g. the final, strong-prior-blended RAPM from Task 3.5's `pickRidgeRegression`, or a raw `calculate_rapm` output), length `num_players`. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (unused). |
+
+**Returns**
+
+The predicted per-lineup value, length `num_lineups` -- feed into `calculate_residual_error` alongside the actual lineup outputs.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_predicted_out
+
+predicted = calculate_predicted_out(x, [0.875, 1.375], ctx)
+```
+
+### `calculate_rapm(regression_matrix: 'NDArray[np.float64]', player_outputs: 'list[float]') -> 'NDArray[np.float64]'` {#calculate_rapm}
+
+Apply a regression solver matrix to a target-outputs vector.
+
+Faithful port of `RapmUtils.calculateRapm` (`RapmUtils.ts:772-775`).
+Note the TS signature carries no `ctx` parameter (unlike its solve-layer
+siblings) -- ported verbatim, param-for-param.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `regression_matrix` | `NDArray[float64]` |  | The `(num_players, num_lineups)` solver from `slow_regression`. |
+| `player_outputs` | `list[float]` |  | The per-lineup target vector, length `num_lineups` (e.g. `calc_lineup_outputs`'s `off_outputs`/`def_outputs`). |
+
+**Returns**
+
+The per-player RAPM estimate, length `num_players`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_rapm
+
+rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+print(rapm.shape)  # (num_players,)
+```
+
+### `calculate_residual_error(player_outs: 'list[float]', regressed_outs: 'list[float]', ctx: 'RapmPlayerContext') -> 'float'` {#calculate_residual_error}
+
+Sum of squared residuals between actual and predicted lineup outputs.
+
+Faithful port of `RapmUtils.calculateResidualError` (`RapmUtils.ts:1569-1579`).
+`ctx` is accepted for signature parity but unused in the body (dead
+upstream too).
+
+**NaN/shape regime (landmine 7):** TS zips the two arrays via lodash
+.zip` (pads the shorter side with `undefined`, so a length
+mismatch silently contributes `NaN` to the running sum via
+`undefined - number`) then reduces with plain `+`. This port instead
+subtracts the two as `numpy` arrays: a length mismatch **raises**
+`ValueError` (numpy broadcast rules), rather than the TS silent-NaN
+behavior -- not reachable via either language's own call sites (both
+arguments are always index-aligned to the same lineup count in
+production), so this is a divergence in dead territory, not a fixed bug.
+A `NaN` *value already present* inside either input (as opposed to a
+length mismatch) propagates through the `numpy` subtraction/sum
+exactly as it would through the JS arithmetic (both regimes:
+numpy-propagate).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_outs` | `list[float]` |  | The actual per-lineup target values (e.g. `calc_lineup_outputs`'s output). |
+| `regressed_outs` | `list[float]` |  | The predicted per-lineup values (e.g. `calculate_predicted_out`'s output). |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (unused). |
+
+**Returns**
+
+`sum((player_outs[i] - regressed_outs[i]) ** 2)` -- the `errSq` term consumed by `calculate_sd_rapm`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_residual_error
+
+err_sq = calculate_residual_error([1.0, 2.0, 3.0], [0.875, 1.375, 2.25], ctx)
+```
+
+### `calculate_sd_rapm(param_errs: 'NDArray[np.float64]', err_sq: 'float', num_lineups: 'int', num_players: 'int') -> 'NDArray[np.float64]'` {#calculate_sd_rapm}
+
+Per-player RAPM standard errors.
+
+Faithful port of the inline `sdRapm` computation in
+`RapmUtils.pickRidgeRegression` (`RapmUtils.ts:1373-1390`, not itself
+a named TS function -- promoted to a standalone, independently testable
+helper here since Task 3.4's brief calls out the formula explicitly).
+Cites [arXiv:1509.09169](https://arxiv.org/pdf/1509.09169.pdf).
+
+**Two NaN/error regimes (landmines 8-9):**
+
+8. `dof_inv = 1.0 / (num_lineups - num_players)` -- if
+   `num_lineups == num_players` exactly, JS silently produces
+   `Infinity` (float division by zero); this port instead **raises**
+   `ZeroDivisionError` (Python float division by zero), matching this
+   module's already-established landmine-2 convention (unguarded
+   division, Python-raises vs JS-Infinity/NaN). Not reachable via the
+   oracle fixtures (`num_off_lineups`/`num_def_lineups` always
+   comfortably exceed `num_players` there).
+9. `sqrt(sqrt(param_errs) * err_sq * dof_inv)` -- a negative
+   `param_errs` entry (only possible if `XᵀX + λI` isn't actually
+   positive-definite, e.g. `ridge_lambda < 0`) silently
+   **numpy-propagates** to `NaN` (matching JS `Math.sqrt(negative)
+   -> NaN`, with a `RuntimeWarning` rather than a raise) -- both
+   language regimes agree here, unlike landmine 8.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `param_errs` | `NDArray[float64]` |  | Per-player variance terms from `calc_slow_pseudo_inverse`, length `num_players`. |
+| `err_sq` | `float` |  | The residual sum of squares from `calculate_residual_error`. |
+| `num_lineups` | `int` |  | `ctx["num_off_lineups"]` or `ctx["num_def_lineups"]` (whichever side `param_errs`/`err_sq` were computed for). |
+| `num_players` | `int` |  | `ctx["num_players"]`. |
+
+**Returns**
+
+A length-`num_players` array of per-player RAPM standard errors.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_sd_rapm
+
+sd_rapm = calculate_sd_rapm(param_errs, err_sq, num_lineups=3, num_players=2)
 ```
 
 ### `complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'` {#complete_weighted_avg}
@@ -1222,6 +1726,61 @@ print(sample_team_on["off_3p"])
 inject_luck(sample_team_on, None, None)
 ```
 
+### `inject_rapm_into_players(players: 'list[PlayerOnOffStats]', off_rapm_input: 'RapmProcessingInputs', def_rapm_input: 'RapmProcessingInputs', stats_averages: 'PureStatSet', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', read_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value'), write_value_key: 'ValueKey' = 'value') -> 'None'` {#inject_rapm_into_players}
+
+Write `pick_ridge_regression`'s RAPM predictions back onto each player.
+
+Faithful port of `RapmUtils.injectRapmIntoPlayers` (`RapmUtils.ts:781-916`).
+For every `onOffReportReplacement` field (minus the possession/title/
+separator/`adj_opp` housekeeping keys -- see landmine 11 for the exact,
+faithfully-ported omit-key quirk), re-derives that field's off/def target
+vectors via `calc_lineup_outputs`, applies each side's
+`calculate_rapm` solver, blends in the strong prior (mirroring
+`pick_ridge_regression`'s own blend, except for `adj_ppp` which
+reuses `off_rapm_input["rapm_adj_ppp"]`/`def_rapm_input["rapm_adj_ppp"]`
+directly rather than recomputing), then writes `{playerId}.rapm[field]
+= {write_value_key: result, "override": ...}` onto every player not in
+`ctx["removed_players"]`.
+
+**NOTE (upstream comment, verbatim): when `write_value_key ==
+"old_value"`, this must be called *after* an initial `write_value_key
+== "value"` call on the same `players` list** -- the `old_value`
+pass .merge`s (lodash_merge`) its results into each player's
+*existing* `rapm` dict rather than replacing it, so a player's
+`rapm["field"]` ends up carrying both a `value` (from the first
+call) and an `old_value` (from the second) side by side.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players` | `list[PlayerOnOffStats]` |  | The players to write RAPM results onto (mutated in place -- each qualifying player gets a `"rapm"` key set/merged). |
+| `off_rapm_input` | `RapmProcessingInputs` |  | `pick_ridge_regression`'s offensive output. |
+| `def_rapm_input` | `RapmProcessingInputs` |  | `pick_ridge_regression`'s defensive output. |
+| `stats_averages` | `PureStatSet` |  | League/context average stat set -- consulted for each field's off/def offset before `ctx["team_info"]`. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (the same one `pick_ridge_regression` was called with). |
+| `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights, forwarded to `calc_lineup_outputs` / get_strong_weight` exactly as `pick_ridge_regression` does. |
+| `read_value_keys` | `tuple[ValueKey, ValueKey]` | `('value', 'value')` | `(off_key, def_key)` -- which key (`"value"`/`"old_value"`) to prefer when reading `stats_averages`/`ctx["team_info"]` offsets and when calling `calc_lineup_outputs` (forwarded as its `use_old_val_if_possible` flag). |
+| `write_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- which key each written field carries its result under. |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import inject_rapm_into_players
+
+inject_rapm_into_players(players, off_results, def_results, {}, ctx, None)
+print(players[0]["rapm"]["off_adj_ppp"])  # {"value": ..., "override": None}
+
+# Luck-adjusted two-call sequence (``"value"`` first, THEN ``"old_value"``)
+
+inject_rapm_into_players(
+    players, off_results, def_results, {}, ctx, None, ("value", "old_value"), "value"
+)
+inject_rapm_into_players(
+    players, off_results, def_results, {}, ctx, None, ("old_value", "old_value"), "old_value"
+)
+```
+
 ### `lineup_to_team_report(lineup_report: 'LineupStatSet', inc_replacement: 'bool' = False, regress_diffs: 'float' = 0.0, rep_on_off_diag_mode: 'int' = 0) -> 'LineupStatSet'` {#lineup_to_team_report}
 
 Build per-player on/off splits out of a team's lineups.
@@ -1274,6 +1833,118 @@ report = lineup_to_team_report(
 )
 ```
 
+### `pick_ridge_regression(off_weights: 'NDArray[np.float64]', def_weights: 'NDArray[np.float64]', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', diag_mode: 'bool', agg_value_key: 'ValueKey' = 'value', lineup_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value')) -> 'tuple[RapmProcessingInputs, RapmProcessingInputs]'` {#pick_ridge_regression}
+
+Adaptively pick a ridge-regression lambda and blend in the RAPM priors.
+
+Faithful port of `RapmUtils.pickRidgeRegression` (`RapmUtils.ts:1001-1540`)
+-- the top-level driver that, per off/def side: scales a dimensionless
+`lambda_range` by the design matrix's mean singular value
+(`avg_eigen_val`) into an actual ridge strength, solves via
+`slow_regression`/`calculate_rapm`, blends in each player's
+strong prior (get_strong_weight`), reconciles the possession
+-weighted team total against the actual team efficiency
+(`[IMPORTANT-EQUATION-01]`, see below), nudges the result back towards
+the weak priors on any remaining error (`apply_weak_priors`), and
+decides whether to keep sweeping `lambda` upward, roll back to the
+previous step, or stop.
+
+**`[IMPORTANT-EQUATION-01]`** (`RapmUtils.ts:1306-1314`/`:1325-1333`):
+`combined_adj_eff = sum(pct_by_player[i] * rapm[i] for i) +
+add_low_volume_adj_rtg`, compared against `actual_eff[off_or_def]`
+(the team's actual, prior-basis-adjusted efficiency, including
+bench/removed-player possessions) to derive `adj_eff_err` -- the error
+signal both the weak-prior nudge and the stopping rule react to.
+
+**Stopping rule** (checked once per `lambda` step, in order): (1) once a
+*second* step has run (`not_first_step`) and, unless in `diag_mode`,
+the current step is past `lambda_range_to_use[3]`, roll back to the
+*previous* step's `soln_matrix`/`ridge_lambda` (but **not**
+`rapm_adj_ppp`/`rapm_raw_adj_ppp`/`sd_rapm`, which stay at the
+current, over-threshold step's values -- a faithful, non-obvious TS
+asymmetry, `RapmUtils.ts:1443-1448` vs `:1483-1484`) when
+`adj_eff_err >= error_exit_thresh` (`1.35` for the low-possession
+-count offense special case, else `1.05`) **and** the error is still
+increasing (`>= last_error`); else (2) stop in place once
+`mean_diff` (the mean per-player RAPM change since the previous step)
+drops below `pick_ridge_thresh` (`0.061` off / `0.091` def --
+"more confident in offensive priors"); else (3) keep sweeping.
+
+**Adaptive-weight / prior asymmetry** (the deep-equality oracle's load
+-bearing behavior): the per-player strong-prior blend
+(get_strong_weight(ctx["prior_info"], adaptive_correl_weights[i])`)
+only consults `adaptive_correl_weights` when
+`ctx["prior_info"]["strong_weight"] < 0` (adaptive mode) -- a fixed,
+non-negative `strong_weight` always wins. A fixture whose
+`players_strong` entries carry no `def_adj_ppp` key makes the blend's
+`stat.get(f"{off_or_def}_adj_ppp") or 0.0` term (and, transitively,
+`calc_lineup_outputs`'s own `strong_val` term) contribute exactly
+`0` on the def side regardless of `strong_weight` or
+`adaptive_correl_weights` -- see the oracle test's `def_results1`/
+`def_results2` invariance assertions.
+
+**`svd` is `numpy.linalg.svd(..., compute_uv=False)`, singular values
+only.** Upstream's `SVD(weights[side].valueOf())` (`svd-js`) also
+computes `u`/`v`, but only `svd.q` (the singular values, via
+`mean(svd.off.q)`/`mean(svd.def.q)` at `avg_eigen_val`,
+`RapmUtils.ts:1077`) is ever read -- `u`/`v` are dead. Skipping them
+is an efficiency-only deviation with an identical result (singular
+values are unique to a matrix regardless of the underlying SVD
+implementation).
+
+**Dead-debug computation promoted to a real output (Python-side
+addition, not upstream's own shape):** upstream also computes
+`residuals`/`errSq`/`paramErrs`/`sdRapm` at this point
+(`RapmUtils.ts:1363-1394`) purely to feed a `console.log` gated
+behind the same hardcoded-`False` `debugMode` as
+`apply_weak_priors` -- none of the four is ever stored on
+`acc.output` upstream (`RapmProcessingInputs` has no `sdRapm`
+field there either). Since Task 3.4 built
+`calculate_predicted_out`/`calculate_residual_error`/
+`calc_slow_pseudo_inverse`/`calculate_sd_rapm` specifically
+so this task could surface real standard errors, this port keeps
+calling all four (matching TS's actual computation, which reuses the
+exact same `XᵀX + ridge_lambda·I` inverse `slow_regression`
+already computed -- so no *new* failure mode is introduced by keeping
+this) and additionally stores the result on `sd_rapm` -- a superset
+of, not a divergence from, the upstream return shape.
+
+**`soln_matrix`/`sd_rapm` are nested Python `list`s, not
+`NDArray`s.** Every field on the returned `RapmProcessingInputs`
+is a plain (possibly nested) Python `list`/`float` specifically so
+the whole dict stays comparable via plain `==` -- the oracle's deep
+-equality assertions (e.g. `off_results1 == off_results`) would
+otherwise raise `ValueError: truth value of an array with more than one
+element is ambiguous` the moment Python's dict/list equality machinery
+tried to `bool()` a multi-element `ndarray` comparison.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `off_weights` | `NDArray[float64]` |  | The offensive design matrix (e.g. `calc_player_weights`'s first return value). |
+| `def_weights` | `NDArray[float64]` |  | The defensive design matrix. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`. |
+| `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`) -- see the "adaptive-weight / prior asymmetry" note above. |
+| `diag_mode` | `bool` |  | If `True`, keeps sweeping every remaining `lambda` step (collecting `prev_attempts` diagnostics for all of them) even after a stopping condition has already fired, and relaxes the rollback/pick eligibility guards for the first few (`< lambda_range_to_use[3]`) diagnostic-only steps. **Not exercised by this task's oracle** (always called with `False`) -- ported faithfully from TS, uncovered by test. |
+| `agg_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- which key team/aggregate-level reads (`actual_eff`, the low-volume player adjustment) prefer when present. |
+| `lineup_value_keys` | `tuple[ValueKey, ValueKey]` | `('value', 'value')` | `(off_key, def_key)` -- forwarded to `calc_lineup_outputs` as its `use_old_val_if_possible` flag (translated: `key == "old_value"`). |
+
+**Returns**
+
+`(off_results, def_results)` -- two `RapmProcessingInputs`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import pick_ridge_regression
+
+off_results, def_results = pick_ridge_regression(
+    off_weights, def_weights, ctx, None, False
+)
+print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -1283,6 +1954,39 @@ _No description available._
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `event` |  |  |  |
+
+### `slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#slow_regression}
+
+Build the Tikhonov (ridge) regression solver matrix.
+
+Faithful port of the private `RapmUtils.slowRegression`
+(`RapmUtils.ts:756-769`): `(XᵀX + ridge_lambda·I)⁻¹Xᵀ`, where `X`
+is `player_weight_matrix` (one row per lineup, one column per player --
+see `calc_player_weights`). See the section banner above for why
+this is a plain matrix inverse (`numpy.linalg.inv`), not an SVD.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, ctx["num_players"])`. |
+| `ridge_lambda` | `float` |  | The Tikhonov regularization strength. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` -- only `ctx["num_players"]` is read (sizes the identity matrix). |
+
+**Returns**
+
+The `(num_players, num_lineups)` solver matrix; apply it to a target vector via `calculate_rapm`.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
+
+x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
+rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+```
 
 ### `wbb_pbp_disk(game_id, path_to_json)` {#wbb_pbp_disk}
 
