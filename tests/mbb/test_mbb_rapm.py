@@ -80,8 +80,38 @@ See ``tests/fixtures/hoop_explorer/README.md``'s classification map for the
 full accounting of ``RapmUtils.test.ts``'s 7 ``test()`` blocks -- this module
 covers blocks 1-4 (``buildPlayerContext``/``calcPlayerWeights``/
 ``calcLineupOutputs``/``pickRidgeRegression``) plus a from-scratch micro-case
-for Task 3.4's solve primitives; blocks 5-7 (``injectRapmIntoPlayers``
-onward) belong to Task 3.6.
+for Task 3.4's solve primitives.
+
+**Task 3.6** completes the module's coverage with the remaining 3 blocks:
+
+- ``"RapmUtils - injectRapmIntoPlayers"`` (``:774-872``, classification map
+  item 5) -- reuses ``semiRealRapmResults.testOffWeights``/``testDefWeights``/
+  ``testContext`` (the same Task 3.5 hand-transcription below) to get real
+  ``pickRidgeRegression`` output, then builds ``players`` off the *base*
+  ``lineupReport`` (via :func:`_build_lineup_report` + ``lineup_to_team_report``,
+  **not** ``playersInfoByKey``/``build_player_context`` -- this test never
+  builds its own context, it reuses ``semiRealRapmResults.testContext``
+  directly). Parametrized over ``luckAdjusted`` in ``[True, False]``; the
+  ``True`` case replays the upstream two-call mutate-in-place sequence
+  (``["value","old_value"]``/``write="value"`` **then**
+  ``["old_value","old_value"]``/``write="old_value"``, in that order --
+  "needs to be run in normal mode first").
+- ``"RapmUtils - calcCollinearityDiag"`` (``:874-952``, item 6) -- a clean,
+  hand-computed 4x3 micro-case independent of the RAPM pipeline (cited by
+  the upstream comment against MATLAB ``svd``/``corr`` as source of truth).
+- ``"RapmUtils - calcCollinearityDiag (pseudo-real data)"`` (``:953-975``,
+  item 7) -- smoke-only upstream (no assertion of any kind, just "doesn't
+  crash"); ported as a shape-sanity check over the full
+  ``buildPlayerContext`` -> ``calcPlayerWeights`` -> ``calcCollinearityDiag``
+  chain on a doubled-up ``lineupReportFake``.
+
+See ``mbb_rapm.py``'s own module docstring ("Task 3.6 notes") for what
+Task 3.6 does and does not port (``RapmPreProcDiagnostics`` ported,
+``RapmInfo`` deliberately not -- it's UI-orchestration glue) and the two
+gaps this task's oracle still does not close (``pick_ridge_regression``'s
+``diag_mode=True`` path and the recursive-weak-prior branch -- neither is
+exercised by any of the 7 ``RapmUtils.test.ts`` blocks, this task's two
+new ones included).
 """
 
 from __future__ import annotations
@@ -96,6 +126,7 @@ from sportsdataverse.mbb.mbb_rapm import (
     DEFAULT_RAPM_CONFIG,
     build_player_context,
     build_weak_prior_from_rapm,
+    calc_collinearity_diag,
     calc_lineup_outputs,
     calc_player_weights,
     calc_slow_pseudo_inverse,
@@ -103,6 +134,7 @@ from sportsdataverse.mbb.mbb_rapm import (
     calculate_rapm,
     calculate_residual_error,
     calculate_sd_rapm,
+    inject_rapm_into_players,
     pick_ridge_regression,
     slow_regression,
 )
@@ -769,3 +801,192 @@ def test_pick_ridge_regression_matches_oracle(rapm_inputs: dict, luck_adjusted: 
     assert f"{def_results['ridge_lambda']:.3f}" == "1.536"
     assert [f"{v:.2f}" for v in def_results["rapm_adj_ppp"][:3]] == ["-5.64", "-4.22", "-4.94"]
     assert [f"{v:.2f}" for v in def_results["rapm_raw_adj_ppp"][:3]] == ["-5.06", "-3.70", "-4.48"]
+
+
+# ---------------------------------------------------------------------------
+# Task 3.6 -- injectRapmIntoPlayers (RapmUtils.test.ts:774-872, classification
+# map item 5) + calcCollinearityDiag (:874-975, items 6-7).
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("luck_adjusted", [True, False])
+def test_inject_rapm_into_players_matches_oracle(inputs: dict, rapm_inputs: dict, luck_adjusted: bool) -> None:
+    """Replay of ``RapmUtils.test.ts:774-872`` (``"RapmUtils - injectRapmIntoPlayers"``).
+
+    Reuses ``semiRealRapmResults.testOffWeights``/``testDefWeights``/
+    ``testContext`` (same hand-transcription as the ``pickRidgeRegression``
+    test above) to get a real ``[off_results, def_results]`` pair, then
+    builds ``players`` off the *base* ``lineupReport`` (not
+    ``semiRealRapmResults.testContext`` -- this test never calls
+    ``build_player_context``, it reuses the hand-transcribed context
+    directly, per the classification map). Prepends a synthetic player
+    (``"Mitchell, Makhel"``, present in ``testContext["removed_players"]``)
+    to exercise the "no RAPM data for this player" branch.
+
+    When ``luck_adjusted``, replays the exact two-call mutate-in-place
+    sequence the upstream comment insists on ("needs to be run in normal
+    mode first"): ``["value", "old_value"]``/``write_value_key="value"``
+    **then** ``["old_value", "old_value"]``/``write_value_key="old_value"``,
+    on the *same* mutable ``players`` list.
+    """
+    off_weights = np.array(_SEMI_REAL_TEST_OFF_WEIGHTS)
+    def_weights = np.array(_SEMI_REAL_TEST_DEF_WEIGHTS)
+    reduced = rapm_inputs["reducedFilteredLineups"]
+    context = _semi_real_test_context(reduced)
+
+    agg_value_key = "value" if luck_adjusted else "old_value"
+    lineup_value_keys = ("old_value", "old_value") if luck_adjusted else ("value", "value")
+
+    off_results, def_results = pick_ridge_regression(
+        off_weights, def_weights, context, None, False, agg_value_key, lineup_value_keys
+    )
+
+    lineup_report = _build_lineup_report(inputs)
+    on_off_report = lineup_to_team_report(lineup_report)
+
+    players: list[dict] = [{"playerId": "Mitchell, Makhel"}, *(on_off_report.get("players") or [])]
+
+    if luck_adjusted:
+        # (needs to be run in normal mode first -- upstream comment)
+        inject_rapm_into_players(players, off_results, def_results, {}, context, None, ("value", "old_value"), "value")
+        inject_rapm_into_players(
+            players, off_results, def_results, {}, context, None, ("old_value", "old_value"), "old_value"
+        )
+    else:
+        # (not luck adjusted, readKeyValue can be either value or old_value, it doesn't matter)
+        inject_rapm_into_players(players, off_results, def_results, {}, context, None, ("value", "value"), "value")
+
+    key_to_check = "old_value" if luck_adjusted else "value"
+    picked_keys = ["noRapm", "key", "off_adj_ppp", "def_adj_ppp", "off_poss", "def_poss", "off_to", "def_to"]
+
+    def _tidy(p: dict) -> dict:
+        rapm = p.get("rapm") or {"noRapm": True}
+        out: dict = {}
+        for k in picked_keys:
+            if k not in rapm:
+                continue
+            v = rapm[k]
+            out[k] = f"{(v.get(key_to_check) or 0):.2f}" if isinstance(v, dict) and "value" in v else v
+        return out
+
+    results_to_examine = [_tidy(p) for p in players[:2]]
+
+    assert results_to_examine == [
+        {"noRapm": True},
+        {
+            "def_adj_ppp": "-4.94",
+            "def_poss": "0.00" if luck_adjusted else "99.00",  # (these don't get an old_value)
+            "def_to": "0.00" if luck_adjusted else "0.01",
+            "key": "RAPM Wiggins, Aaron",
+            "off_adj_ppp": "2.67",
+            "off_poss": "0.00" if luck_adjusted else "101.00",
+            "off_to": "0.00",
+        },
+    ]
+
+
+def test_calc_collinearity_diag_matches_oracle() -> None:
+    """Replay of ``RapmUtils.test.ts:874-952`` (``"RapmUtils - calcCollinearityDiag"``).
+
+    A clean, hand-computed 4x3 micro-case independent of the RAPM pipeline
+    (``test``/``dummyContext`` hardcoded verbatim from
+    ``RapmUtils.test.ts:878-912``, per the README's replay recipe) -- the
+    upstream comment cites MATLAB ``svd``/``corr`` as the source of truth
+    for these numbers.
+    """
+    test_matrix = np.array(
+        [
+            [1.0, 0.0, 1.0],
+            [-1.0, -2.0, 0.0],
+            [0.0, 1.0, -1.0],
+            [0.5, 0.5, 0.5],
+        ]
+    )
+    dummy_context: dict = {
+        "avg_efficiency": 100.0,
+        "removed_players": {},
+        "player_to_col": {"PlayerB": 1, "PlayerC": 2, "PlayerA": 0},
+        "col_to_player": ["PlayerA", "PlayerB", "PlayerC"],
+        "filtered_lineups": lambda prefix: [],
+        "team_info": {},
+        "num_players": 3,
+        "num_off_lineups": 4,
+        "num_def_lineups": 4,
+        "off_lineup_poss": 10,
+        "def_lineup_poss": 9,
+        "unbias_weight": 0,
+        "prior_info": {
+            "strong_weight": 0.5,
+            "no_weak_prior": False,
+            "use_recursive_weak_prior": False,
+            "include_strong": {},
+            "players_weak": [],
+            "players_strong": [],
+            "key_used": "value",
+            "basis": {"off": 0, "def": 0},
+        },
+        "config": {**DEFAULT_RAPM_CONFIG, "removal_pct": 0.0},
+    }
+
+    results = calc_collinearity_diag(test_matrix, dummy_context)
+
+    tidy = {
+        "lineupCombos": [f"{v:.4f}" for v in results["lineup_combos"]],
+        "playerCombos": {k: [f"{v:.4f}" for v in row] for k, row in results["player_combos"].items()},
+        "correlMatrix": [[f"{v:.4f}" for v in row] for row in results["correl_matrix"]],
+        "adaptiveCorrelWeights": [f"{v:.2f}" for v in results["adaptive_correl_weights"]],
+    }
+
+    assert tidy == {
+        "lineupCombos": ["9.4618", "1.4154", "1.0000"],
+        "playerCombos": {
+            "PlayerA": ["0.9852", "0.0103", "0.0045"],
+            "PlayerB": ["0.9401", "0.0081", "0.0519"],
+            "PlayerC": ["0.9524", "0.0476", "0.0000"],
+        },
+        "correlMatrix": [
+            ["1.0000", "0.6865", "0.5429"],
+            ["0.6865", "1.0000", "-0.2041"],
+            ["0.5429", "-0.2041", "1.0000"],
+        ],
+        "adaptiveCorrelWeights": ["0.25", "0.07", "0.06"],
+    }
+
+
+def test_calc_collinearity_diag_pseudo_real_data_smoke(inputs: dict, rating_inputs: dict) -> None:
+    """Replay of ``RapmUtils.test.ts:953-975`` (``"RapmUtils - calcCollinearityDiag
+    (pseudo-real data)"``) -- smoke-only upstream (no ``toEqual``/snapshot of
+    any kind, just "doesn't crash"). Runs the full
+    ``lineupToTeamReport`` -> ``buildPlayerContext`` -> ``calcPlayerWeights``
+    -> ``calcCollinearityDiag`` chain on a doubled-up ``lineupReportFake``
+    (``lineupReport.lineups`` concatenated with itself).
+
+    Uses ``copy.deepcopy`` for the second half rather than JS's aliasing
+    ``Array.prototype.concat`` (which duplicates *references*, not values):
+    ``build_player_context``'s ``rapmRemove``-flagging loop computes each
+    lineup's removal decision independently from ``ctx["removed_players"]``
+    (never reads ``rapmRemove`` back as an input), so aliased-vs-deep-copied
+    duplicate lineups reach the identical removal decision either way --
+    this is a representational deviation with no behavioral effect, not a
+    fidelity concession.
+    """
+    lineup_report = _build_lineup_report(inputs)
+    lineup_report_fake = {
+        "lineups": lineup_report["lineups"] + copy.deepcopy(lineup_report["lineups"]),
+        "avgOff": lineup_report["avgOff"],
+        "error_code": lineup_report["error_code"],
+    }
+    on_off_report = lineup_to_team_report(lineup_report_fake)
+    context = build_player_context(
+        on_off_report.get("players") or [],
+        lineup_report_fake.get("lineups") or [],
+        _players_info_by_key(rating_inputs),
+        {},
+        100.0,
+    )
+    weights = calc_player_weights(context)
+    results = calc_collinearity_diag(weights[0], context)
+
+    assert results["correl_matrix"].shape == (context["num_players"], context["num_players"])
+    assert len(results["lineup_combos"]) == context["num_players"]
+    assert set(results["player_combos"].keys()) == set(context["col_to_player"])

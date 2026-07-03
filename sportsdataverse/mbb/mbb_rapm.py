@@ -26,11 +26,14 @@ standalone function here for independent testability). **Task 3.5 adds the
 adaptive-lambda orchestration layer**: :func:`pick_ridge_regression`
 (``RapmUtils.pickRidgeRegression``, ``RapmUtils.ts:1001-1540``, the "IMPORTANT
 GATE" oracle), :func:`apply_weak_priors` (``RapmUtils.ts:921-995``), and
-:func:`build_weak_prior_from_rapm` (``RapmUtils.ts:410-419``). Task 3.6 owns
-the remaining collinearity-diagnostics + top-level-orchestration layer
-(``injectRapmIntoPlayers``, ``calcCollinearityDiag`` -- see the "Deliberately
-NOT ported (this task)" section below) on top of what this module now
-provides.
+:func:`build_weak_prior_from_rapm` (``RapmUtils.ts:410-419``). **Task 3.6
+completes the module's own function surface** (5/5 planned tasks): the
+player write-back :func:`inject_rapm_into_players`
+(``RapmUtils.injectRapmIntoPlayers``, ``RapmUtils.ts:781-916``) and the
+multi-collinearity diagnostic :func:`calc_collinearity_diag`
+(``RapmUtils.calcCollinearityDiag``, ``RapmUtils.ts:1629-1760``, plus its
+private helper ``calcPlayerCorrelations``, ``RapmUtils.ts:1584-1621``) --
+see "Task 3.6 notes" below.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``RapmUtils.ts`` from
@@ -192,23 +195,84 @@ does (``_.omit(results, ["filteredLineups", "teamInfo"])`` before
     numpy/Python-propagates the ``NaN`` through the sum. Not reachable via
     the oracle fixtures (no ``NaN`` inputs); a real zero operand behaves
     identically either way (``0 * x == 0`` regardless of the coalesce).
+11. **:func:`inject_rapm_into_players`'s field list inherits an upstream
+    ``_.omit`` key-name typo** (``RapmUtils.ts:819-830``): the omit list
+    reads ``"sep2"``, but ``CommonTableDefs.onOffReportReplacement``'s
+    actual keys are ``"sep2-1"``/``"sep2-2"`` (``CommonTableDefs.tsx:677,
+    683``) -- lodash ``_.omit`` matches exact key paths, so neither is
+    removed. Both survive into the non-``write_other_vals`` field list and
+    get processed as spurious ``"partial_field"`` values (every
+    ``stats_averages``/``ctx["team_info"]`` lookup for
+    ``off_sep2-1``/``def_sep2-1``/etc. misses, defaulting through the same
+    ``0``-fallback path as any other absent field), writing harmless junk
+    ``off_sep2-1``/``def_sep2-1``/``off_sep2-2``/``def_sep2-2`` entries onto
+    every player's ``rapm`` dict. Faithful, dead-weight-only (the oracle's
+    picked-key assertion never reads them) -- ported verbatim per "TS
+    governs", not fixed.
+12. **A player present in the caller's ``players`` list but absent from
+    both ``ctx["removed_players"]`` and ``ctx["player_to_col"]`` raises
+    ``TypeError``** in :func:`inject_rapm_into_players` (Python ``list[None]``
+    indexing), where JS ``arr[undefined]`` silently yields ``undefined``
+    (propagating into every written field as ``value: undefined``). Not
+    reachable via the oracle -- every non-removed player in the fixture's
+    ``players`` list is present in ``ctx["player_to_col"]`` by construction.
+13. **:func:`calc_collinearity_diag`'s ``largest_eig``/``cond_indices_with_index``
+    falsy-coalesce fallbacks** (``RapmUtils.ts:1659,1664`` -- ``zip[0] || 0``
+    / ``zip[0] || 1``) are the same landmine-10-style NaN-as-falsy
+    divergence: JS ``NaN || x -> x``, Python ``float("nan") or x -> nan``
+    (``NaN`` is Python-truthy). Not reachable via either oracle case (both
+    feed well-conditioned matrices with finite, non-degenerate singular
+    values).
 
-**Deliberately NOT ported (this task -- Task 3.6 owns these):**
+**Deliberately NOT ported:**
 
-- ``RapmPreProcDiagnostics`` (``RapmUtils.ts:187-194``) / ``RapmInfo``
-  (``:205-216``) -- the collinearity-diagnostics return shape and the
-  top-level orchestration glue type (wraps ``ctx``, both weight matrices,
-  both :class:`RapmProcessingInputs`, and ``enrichedPlayers``); introduced
-  alongside the functions that produce/consume them. **Note:** this task's
-  brief loosely glossed :func:`pick_ridge_regression`'s return type as
-  ``tuple[RapmInfo, RapmInfo]`` -- the actual TS return type is
-  ``[RapmProcessingInputs, RapmProcessingInputs]`` (``RapmInfo`` is a
-  separate, still-unported top-level glue type only ``injectRapmIntoPlayers``
-  constructs); ported the real type, per "TS governs".
-- ``injectRapmIntoPlayers`` -- writes :func:`pick_ridge_regression`'s output
-  back onto each player's ``rapm`` field, Task 3.6.
-- ``calcCollinearityDiag`` -- the other ``SVD`` consumer
-  (``RapmUtils.ts:1643``), the collinearity-diagnostics surface, Task 3.6.
+- ``RapmInfo`` (``RapmUtils.ts:205-216``) -- a top-level orchestration glue
+  type (wraps ``ctx``, both weight matrices, both
+  :class:`RapmProcessingInputs`, and ``enrichedPlayers``) that neither
+  :func:`inject_rapm_into_players` nor :func:`calc_collinearity_diag`
+  itself constructs or returns -- grepping the upstream repo shows its only
+  *constructors* live in UI-orchestration files
+  (``TeamReportTableUtils.ts``, ``GameAnalysisUtils.tsx``), out of scope
+  per this port's UI-exclusion convention (same rationale as e.g.
+  ``mbb_luck.py``'s deferred ``PlayTypeUtils.ts``/override-UI functions).
+  **Note:** an earlier draft of this task's brief loosely glossed
+  :func:`pick_ridge_regression`'s return type as ``tuple[RapmInfo,
+  RapmInfo]`` -- the actual TS return type is ``[RapmProcessingInputs,
+  RapmProcessingInputs]``; Task 3.5 ported the real type, per "TS governs".
+
+**Task 3.6 notes:**
+
+- ``RapmPreProcDiagnostics`` (``RapmUtils.ts:187-194``) -- ported verbatim
+  as a :class:`TypedDict`; see :func:`calc_collinearity_diag`'s docstring
+  for why its ``correl_matrix``/``poss_correl_matrix`` fields stay
+  ``numpy.ndarray`` (unlike :class:`RapmProcessingInputs`'s plain-``list``
+  fields) -- the oracle test never deep-``==``-compares a whole
+  :class:`RapmPreProcDiagnostics`, only formats individual scalar entries,
+  so the Task 3.5 "``ndarray`` breaks ``==``" concern doesn't apply here.
+- :data:`AFFECTED_PARTIAL_FIELDNAMES` (``LuckUtils.affectedPartialFieldnames``,
+  ``LuckUtils.ts:171``) and :data:`ON_OFF_REPORT_REPLACEMENT_KEYS` (the *key
+  list* of ``CommonTableDefs.onOffReportReplacement``,
+  ``CommonTableDefs.tsx:637-731``) are promoted into this module rather than
+  ``mbb_luck.py``/a hypothetical ``mbb_tables.py`` because
+  :func:`inject_rapm_into_players` (``RapmUtils.ts:816-832``) is their only
+  numeric-engine consumer -- ``mbb_luck.py``'s own docstring flags this
+  exact deferral in its "Deliberately NOT ported" section. Only the *key
+  names* are ported; ``onOffReportReplacement``'s dict *values* are React
+  table-column UI defs, out of scope.
+- ``_lodash_merge`` is a narrow, purpose-built port of lodash ``_.merge``'s
+  recursion (not a general-purpose deep-merge utility) -- see its own
+  docstring for the exact ``None``-as-``undefined`` convention it relies on
+  and why that convention is safe only at this call site.
+- **Gaps NOT closed by this task** (both already flagged by Task 3.5's
+  docstrings as oracle-uncovered, and still uncovered after Task 3.6):
+  ``pick_ridge_regression``'s ``diag_mode=True`` path (every
+  ``RapmUtils.test.ts`` call site across all 7 test blocks -- including the
+  two this task adds -- passes ``diagMode=false``) and the
+  ``prior_info["use_recursive_weak_prior"]`` branch (``semiRealRapmResults
+  .testContext.priorInfo.useRecursiveWeakPrior`` is ``false``). Both remain
+  ported-but-untested-by-the-oracle; see :func:`pick_ridge_regression`'s own
+  docstring for the ``diag_mode`` semantics and :func:`build_weak_prior_from_rapm`'s
+  docstring for the recursive-prior semantics.
 
 **Task 3.3 coverage gap (inherited from upstream, not introduced by this
 port):** neither ``calcLineupOutputs``'s own jest test nor the vendored
@@ -1811,3 +1875,449 @@ def pick_ridge_regression(
         return output
 
     return process_side("off"), process_side("def")
+
+
+# ---------------------------------------------------------------------------
+# 5] PLAYER WRITE-BACK + COLLINEARITY DIAGNOSTICS (Task 3.6).
+# ---------------------------------------------------------------------------
+
+#: Port of ``LuckUtils.affectedPartialFieldnames`` (``LuckUtils.ts:171``) --
+#: see the module docstring's "Task 3.6 notes" for why this is promoted here
+#: rather than into ``mbb_luck.py``.
+AFFECTED_PARTIAL_FIELDNAMES: list[str] = ["adj_ppp", "ppp", "efg", "3p"]
+
+#: Port of the ``CommonTableDefs.onOffReportReplacement`` *key list*
+#: (``CommonTableDefs.tsx:637-731``), in source order -- only the key names
+#: matter to :func:`inject_rapm_into_players`'s field walk; the dict
+#: *values* (React table-column UI defs) are out of scope for this port.
+#: See the module docstring's "Task 3.6 notes" and landmine 11 (the
+#: ``"sep2"`` vs ``"sep2-1"``/``"sep2-2"`` omit-key mismatch this list
+#: participates in).
+ON_OFF_REPORT_REPLACEMENT_KEYS: list[str] = [
+    "title",
+    "sep0",
+    "ppp",
+    "adj_ppp",
+    "sep1",
+    "efg",
+    "to",
+    "orb",
+    "ftr",
+    "sep2-1",
+    "assist",
+    "sep2-2",
+    "3pr",
+    "2pmidr",
+    "2primr",
+    "sep3",
+    "3p",
+    "2p",
+    "2pmid",
+    "2prim",
+    "sep4",
+    "poss",
+    "adj_opp",
+]
+
+#: The upstream ``_.omit(["title", "sep0", "ppp", "sep1", "sep2", "sep3",
+#: "sep4", "poss", "adj_opp"])`` key set (``RapmUtils.ts:820-830``) --
+#: ported verbatim, including the ``"sep2"`` entry that (per landmine 11)
+#: matches neither of :data:`ON_OFF_REPORT_REPLACEMENT_KEYS`'s actual
+#: ``"sep2-1"``/``"sep2-2"`` keys.
+_ON_OFF_REPORT_OMIT_KEYS: frozenset[str] = frozenset(
+    {"title", "sep0", "ppp", "sep1", "sep2", "sep3", "sep4", "poss", "adj_opp"}
+)
+
+
+def _lodash_merge(dest: dict[str, Any] | None, src: dict[str, Any]) -> dict[str, Any]:
+    """Narrow port of lodash ``_.merge(dest, src)``'s recursion, for
+    :func:`inject_rapm_into_players`'s ``p.rapm = writeOtherVals ?
+    _.merge(p.rapm, playerRapm) : playerRapm`` (``RapmUtils.ts:913``).
+
+    Recursively merges nested plain-``dict`` values in place (mutates and
+    returns ``dest``, matching lodash's own mutate-in-place contract); for
+    any other value, lodash's real rule is "source properties that resolve
+    to ``undefined`` are skipped" -- **this port treats a Python ``None``
+    ``src`` value as that ``undefined`` sentinel** and skips it (the
+    destination keeps whatever it already had, possibly nothing at all).
+
+    This ``None``-as-``undefined`` convention is deliberately narrow, not a
+    general-purpose deep-merge utility: it is safe only because the sole
+    call site's ``src`` (a freshly-built ``playerRapm`` dict) can only ever
+    carry an actual ``None`` on its ``"override"`` sub-key (via
+    :func:`inject_rapm_into_players`'s own ``None``-when-absent lookup) --
+    every ``value``/``old_value``/``key``/``off_poss``/``def_poss`` entry is
+    always a real, non-``None`` value or dict.
+
+    Args:
+        dest: The destination dict to merge into (``None`` treated as
+            ``{}``, matching ``p.rapm`` being unset on a player's first
+            write). Mutated in place when not ``None``.
+        src: The source dict whose entries get merged in.
+
+    Returns:
+        ``dest`` (or a fresh ``{}`` if ``dest`` was ``None``), mutated.
+    """
+    if dest is None:
+        dest = {}
+    for key, val in src.items():
+        if val is None:
+            continue
+        if isinstance(val, dict) and isinstance(dest.get(key), dict):
+            _lodash_merge(dest[key], val)
+        else:
+            dest[key] = val
+    return dest
+
+
+def inject_rapm_into_players(
+    players: list[PlayerOnOffStats],
+    off_rapm_input: RapmProcessingInputs,
+    def_rapm_input: RapmProcessingInputs,
+    stats_averages: PureStatSet,
+    ctx: RapmPlayerContext,
+    adaptive_correl_weights: list[float] | None,
+    read_value_keys: tuple[ValueKey, ValueKey] = ("value", "value"),
+    write_value_key: ValueKey = "value",
+) -> None:
+    """Write :func:`pick_ridge_regression`'s RAPM predictions back onto each player.
+
+    Faithful port of ``RapmUtils.injectRapmIntoPlayers`` (``RapmUtils.ts:781-916``).
+    For every ``onOffReportReplacement`` field (minus the possession/title/
+    separator/``adj_opp`` housekeeping keys -- see landmine 11 for the exact,
+    faithfully-ported omit-key quirk), re-derives that field's off/def target
+    vectors via :func:`calc_lineup_outputs`, applies each side's
+    :func:`calculate_rapm` solver, blends in the strong prior (mirroring
+    :func:`pick_ridge_regression`'s own blend, except for ``adj_ppp`` which
+    reuses ``off_rapm_input["rapm_adj_ppp"]``/``def_rapm_input["rapm_adj_ppp"]``
+    directly rather than recomputing), then writes ``{playerId}.rapm[field]
+    = {write_value_key: result, "override": ...}`` onto every player not in
+    ``ctx["removed_players"]``.
+
+    **NOTE (upstream comment, verbatim): when ``write_value_key ==
+    "old_value"``, this must be called *after* an initial ``write_value_key
+    == "value"`` call on the same ``players`` list** -- the ``old_value``
+    pass ``_.merge``s (:func:`_lodash_merge`) its results into each player's
+    *existing* ``rapm`` dict rather than replacing it, so a player's
+    ``rapm["field"]`` ends up carrying both a ``value`` (from the first
+    call) and an ``old_value`` (from the second) side by side.
+
+    Args:
+        players: The players to write RAPM results onto (mutated in place --
+            each qualifying player gets a ``"rapm"`` key set/merged).
+        off_rapm_input: :func:`pick_ridge_regression`'s offensive output.
+        def_rapm_input: :func:`pick_ridge_regression`'s defensive output.
+        stats_averages: League/context average stat set -- consulted for
+            each field's off/def offset before ``ctx["team_info"]``.
+        ctx: A :class:`RapmPlayerContext` (the same one
+            :func:`pick_ridge_regression` was called with).
+        adaptive_correl_weights: Optional per-player adaptive-correlation
+            weights, forwarded to :func:`calc_lineup_outputs` /
+            :func:`_get_strong_weight` exactly as :func:`pick_ridge_regression`
+            does.
+        read_value_keys: ``(off_key, def_key)`` -- which key
+            (``"value"``/``"old_value"``) to prefer when reading
+            ``stats_averages``/``ctx["team_info"]`` offsets and when calling
+            :func:`calc_lineup_outputs` (forwarded as its
+            ``use_old_val_if_possible`` flag).
+        write_value_key: ``"value"`` or ``"old_value"`` -- which key each
+            written field carries its result under.
+
+    Raises:
+        TypeError: If a player in ``players`` is absent from both
+            ``ctx["removed_players"]`` and ``ctx["player_to_col"]`` -- see
+            landmine 12 (a Python-vs-JS divergence in genuinely dead
+            territory for the oracle).
+
+    Example:
+        Quick start (single write, ``"value"``)::
+
+            from sportsdataverse.mbb.mbb_rapm import inject_rapm_into_players
+
+            inject_rapm_into_players(players, off_results, def_results, {}, ctx, None)
+            print(players[0]["rapm"]["off_adj_ppp"])  # {"value": ..., "override": None}
+
+        Luck-adjusted two-call sequence (``"value"`` first, THEN ``"old_value"``)::
+
+            inject_rapm_into_players(
+                players, off_results, def_results, {}, ctx, None, ("value", "old_value"), "value"
+            )
+            inject_rapm_into_players(
+                players, off_results, def_results, {}, ctx, None, ("old_value", "old_value"), "old_value"
+            )
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    write_other_vals = write_value_key == "old_value"
+    read_other_vals_off = read_value_keys[0] == "old_value"
+    read_other_vals_def = read_value_keys[1] == "old_value"
+
+    if off_rapm_input["soln_matrix"] is None or def_rapm_input["soln_matrix"] is None:
+        return  # (else do nothing -- matches upstream's `if (...) {...}` with no `else`)
+
+    rapm_input: dict[str, RapmProcessingInputs] = {"off": off_rapm_input, "def": def_rapm_input}
+
+    if write_other_vals:
+        partial_fields = [p for p in AFFECTED_PARTIAL_FIELDNAMES if p != "ppp"]
+    else:
+        partial_fields = [k for k in ON_OFF_REPORT_REPLACEMENT_KEYS if k not in _ON_OFF_REPORT_OMIT_KEYS]
+
+    field_to_player_rapm_array: dict[str, list[float]] = {}
+    for partial_field in partial_fields:
+        if partial_field in ("ppp", "adj_ppp"):
+            off_offset = ctx["avg_efficiency"]
+            def_offset = ctx["avg_efficiency"]
+        else:
+            off_avg = stats_averages.get(f"off_{partial_field}")
+            off_avg_val = off_avg.get("value") if isinstance(off_avg, dict) else None
+            off_offset = (
+                off_avg_val
+                if off_avg_val
+                else _get_val_for_key(ctx["team_info"].get(f"off_{partial_field}"), read_value_keys[0])
+            )
+            def_avg = stats_averages.get(f"def_{partial_field}")
+            def_avg_val = def_avg.get("value") if isinstance(def_avg, dict) else None
+            def_offset = (
+                def_avg_val
+                if def_avg_val
+                else _get_val_for_key(ctx["team_info"].get(f"def_{partial_field}"), read_value_keys[1])
+            )
+
+        off_vals, def_vals = calc_lineup_outputs(
+            partial_field,
+            off_offset,
+            def_offset,
+            ctx,
+            adaptive_correl_weights,
+            (read_other_vals_off, read_other_vals_def),
+        )
+        vals = {"off": off_vals, "def": def_vals}
+
+        for off_or_def in ("off", "def"):
+            field = f"{off_or_def}_{partial_field}"
+            solver: NDArray[np.float64] = np.asarray(rapm_input[off_or_def]["soln_matrix"], dtype=np.float64)
+            results_pre_prior = calculate_rapm(solver, list(vals[off_or_def]))
+            if partial_field == "adj_ppp":
+                results = list(rapm_input[off_or_def]["rapm_adj_ppp"])
+            else:
+                results = [
+                    _get_strong_weight(
+                        ctx["prior_info"],
+                        adaptive_correl_weights[index] if adaptive_correl_weights is not None else None,
+                    )
+                    * (stat.get(f"{off_or_def}_{partial_field}") or 0.0)
+                    + float(results_pre_prior[index])
+                    for index, stat in enumerate(ctx["prior_info"]["players_strong"])
+                ]
+            field_to_player_rapm_array[field] = results
+
+    for p in players:
+        player_id = p.get("playerId") or ""
+        if player_id in ctx["removed_players"]:
+            continue
+        index = ctx["player_to_col"].get(player_id)
+        player_rapm: dict[str, Any] = {}
+        for field, arr in field_to_player_rapm_array.items():
+            override = None
+            if write_other_vals:
+                team_field = ctx["team_info"].get(field)
+                override = team_field.get("override") if isinstance(team_field, dict) else None
+            player_rapm[field] = {write_value_key: arr[index], "override": override}  # type: ignore[index]
+        player_rapm["key"] = f"RAPM {player_id}"
+        player_rapm["off_poss"] = ctx["team_info"].get("off_poss")
+        player_rapm["def_poss"] = ctx["team_info"].get("def_poss")
+
+        if write_other_vals:
+            p["rapm"] = _lodash_merge(p.get("rapm"), player_rapm)
+        else:
+            p["rapm"] = player_rapm
+
+
+class RapmPreProcDiagnostics(TypedDict):
+    """Port of ``RapmPreProcDiagnostics`` (``RapmUtils.ts:187-194``) -- the
+    multi-collinearity diagnostic :func:`calc_collinearity_diag` returns.
+    """
+
+    #: The lineup-combo condition indices (largest-singular-value ratio),
+    #: descending by "concern" (index 0 = the worst combo).
+    lineup_combos: list[float]
+    #: ``{player_id: [variance-decomposition proportion per lineup combo]}``,
+    #: index-aligned with ``lineup_combos``.
+    player_combos: dict[str, list[float]]
+    #: Pearson player/player correlation matrix (see :func:`_calc_player_correlations`).
+    correl_matrix: NDArray[np.float64]
+    #: ``weight_matrix.T @ weight_matrix`` -- raw possession-weight correlation.
+    poss_correl_matrix: NDArray[np.float64]
+    #: Per-player possession-weighted absolute-correlation summary.
+    adaptive_correl_weights: list[float]
+
+
+def _calc_player_correlations(weight_matrix: NDArray[np.float64], ctx: RapmPlayerContext) -> NDArray[np.float64]:
+    """Pearson correlation matrix between players' lineup-weight columns.
+
+    Faithful port of the private ``RapmUtils.calcPlayerCorrelations``
+    (``RapmUtils.ts:1584-1621``). Each cell is the Pearson correlation
+    between two players' possession-weight columns (:func:`calc_player_weights`'s
+    design-matrix columns) across every lineup row.
+
+    Args:
+        weight_matrix: An off/def design matrix, shape
+            ``(num_lineups, ctx["num_players"])`` (e.g.
+            :func:`calc_player_weights`'s first return value).
+        ctx: A :class:`RapmPlayerContext` -- only ``ctx["num_players"]`` is
+            read (sizes the identity matrix this function starts from).
+
+    Returns:
+        A symmetric ``(num_players, num_players)`` matrix with ``1.0`` on
+        the diagonal.
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    weight_matrix_t = weight_matrix.T  # (num_players, num_lineups)
+    weight_means = weight_matrix_t.mean(axis=1)
+    squares = np.sqrt(((weight_matrix_t - weight_means[:, None]) ** 2).sum(axis=1))
+
+    correl_matrix = np.eye(ctx["num_players"])
+    for i in range(ctx["num_players"]):
+        for j in range(i):
+            veci = weight_matrix_t[i]
+            vecj = weight_matrix_t[j]
+            meani = weight_means[i]
+            meanj = weight_means[j]
+            sqi = squares[i] if squares[i] else 1.0
+            sqj = squares[j] if squares[j] else 1.0
+            numerator = float(np.sum((veci - meani) * (vecj - meanj)))
+            correl_matrix[j, i] = numerator / (sqi * sqj)
+            correl_matrix[i, j] = correl_matrix[j, i]
+    return correl_matrix
+
+
+def calc_collinearity_diag(weight_matrix: NDArray[np.float64], ctx: RapmPlayerContext) -> RapmPreProcDiagnostics:
+    """Multi-collinearity diagnostic between the players in an off/def design matrix.
+
+    Faithful port of ``RapmUtils.calcCollinearityDiag`` (``RapmUtils.ts:1629-1760``).
+    Runs an SVD of ``weight_matrix``, builds condition indices ("lineup
+    combos") from the ratio of the largest to each singular value, and a
+    variance-decomposition-proportions ("VDP") matrix identifying which
+    players load onto which collinear combo -- the classic Belsley-Kuh-Welsch
+    collinearity-diagnostics recipe (see the upstream comment's
+    `colldiag.m <https://github.com/brian-lau/colldiag/blob/master/colldiag.m>`_
+    citation). Also builds a plain Pearson player/player correlation matrix
+    (:func:`_calc_player_correlations`) and folds it into a possession
+    -weighted ``adaptive_correl_weights`` summary per player.
+
+    **``numpy.linalg.svd(weight_matrix, full_matrices=False)`` replaces
+    ``svd-js``'s ``SVD(weightMatrix, false)``.** Both are the standard
+    Golub-Kahan-Reinsch decomposition (``A = U @ diag(S) @ Vᵀ``); numpy's
+    ``Vh`` return value already *is* ``Vᵀ`` (what the TS code separately
+    computes via ``transpose(matrix(v))``), so this port skips that
+    transpose. The TS code (and this port) never reads ``u``/the first SVD
+    return -- only ``q``/``S`` (singular values) and ``v``/``Vᵀ``. Singular
+    -vector **sign is immaterial here**: every place ``V`` is used
+    (``phiMatrix``/``phi_matrix``) squares each entry (``val * val``), and a
+    per-singular-value sign flip on ``U``/``V`` together is a valid SVD
+    regardless -- so any ``U``/``V`` sign convention difference between
+    ``svd-js`` and LAPACK (numpy's backend) cannot change this function's
+    output. **Singular-value ordering is likewise immaterial**: both this
+    port and the TS source explicitly re-sort ``q`` (ascending, carrying the
+    original index along) before using it, so whichever order either SVD
+    implementation returns values in, the final result only depends on the
+    *values themselves* (up to the explicit resort), not on numpy's native
+    descending convention vs whatever order ``svd-js`` happens to return.
+
+    **``correl_matrix``/``poss_correl_matrix`` stay ``numpy.ndarray``** (see
+    the module docstring's "Task 3.6 notes" for why this doesn't hit the
+    Task 3.5 "``ndarray`` breaks deep ``==``" concern).
+
+    Args:
+        weight_matrix: An off/def design matrix, shape ``(num_lineups,
+            ctx["num_players"])`` (e.g. :func:`calc_player_weights`'s first
+            return value, or a hand-built matrix for isolated testing).
+        ctx: A :class:`RapmPlayerContext`. ``ctx["num_players"]`` sizes every
+            per-player structure; ``ctx["col_to_player"]`` keys
+            ``player_combos``.
+
+    Returns:
+        A :class:`RapmPreProcDiagnostics`.
+
+    Raises:
+        numpy.linalg.LinAlgError: If the SVD fails to converge (not
+            reachable via either oracle fixture).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calc_collinearity_diag, calc_player_weights
+
+            off_weights, _ = calc_player_weights(ctx)
+            diag = calc_collinearity_diag(off_weights, ctx)
+            print(diag["lineup_combos"][0])  # the worst-conditioned combo
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    _, q, vt = np.linalg.svd(weight_matrix, full_matrices=False)
+
+    sorted_q_with_index = sorted(zip(q.tolist(), range(ctx["num_players"])), key=lambda zi: zi[0])
+
+    # NOTE (landmine 13): `zip[0] || 0` / `zip[0] || 1` falsy-coalesce --
+    # not reachable via either oracle fixture (finite, well-conditioned
+    # singular values in both cases).
+    largest_eig = sorted_q_with_index[len(sorted_q_with_index) - 1][0] or 0.0
+
+    cond_indices_with_index = [
+        [largest_eig / (zi[0] if zi[0] else 1.0), zi[1] or 0] for zi in sorted_q_with_index if (zi[0] or 0) > 0
+    ]
+
+    lambda_inv_array = [(1.0 / (eig * eig)) if eig > 0 else 0.0 for eig in q]
+
+    v_matrix_t = vt  # numpy's `Vh` already IS `transpose(matrix(v))` -- see docstring.
+    phi_matrix = np.array(
+        [[val * val * lambda_inv_array[index] for val in row] for index, row in enumerate(v_matrix_t)]
+    )
+    phi_matrix_inv_sum_array = [1.0 / v for v in phi_matrix.sum(axis=0)]
+
+    vdp_matrix = np.array(
+        [[val * phi_matrix_inv_sum_array[index] for index, val in enumerate(row)] for row in phi_matrix]
+    )
+
+    cond_indices_sorted_index = [zi[1] for zi in cond_indices_with_index]
+
+    off_poss_correl = weight_matrix.T @ weight_matrix
+    correl_matrix = _calc_player_correlations(weight_matrix, ctx)
+
+    adaptive_correl_row: list[float] = []
+    for i, row in enumerate(off_poss_correl):
+        self_pct = row[i]
+        weight = 0.25 / self_pct if self_pct > 0 else 0.0
+        weighted_abs_correl = weight * sum(
+            abs(correl_matrix[i][j]) * val if i != j else 0.0 for j, val in enumerate(row)
+        )
+        adaptive_correl_row.append(float(weighted_abs_correl))
+
+    return {
+        "lineup_combos": [float(zi[0]) for zi in cond_indices_with_index],
+        "player_combos": {
+            player: [
+                float(vdp_matrix[lineup_combo_index][player_index]) for lineup_combo_index in cond_indices_sorted_index
+            ]
+            for player_index, player in enumerate(ctx["col_to_player"])
+        },
+        "correl_matrix": correl_matrix,
+        "poss_correl_matrix": off_poss_correl,
+        "adaptive_correl_weights": adaptive_correl_row,
+    }
