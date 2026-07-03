@@ -39,14 +39,36 @@ LUCK_AFFECTED_FIELDS = frozenset(
 )
 
 
+def load_fixture(name: str) -> dict:
+    """Load any vendored fixture JSON by filename (e.g. ``"rating_utils_snap.json"``).
+
+    Generic counterpart to :func:`load_snap` / :func:`load_inputs` (which
+    remain hardcoded to the ``LineupUtils`` pair for backward compatibility
+    with Task 1.x tests) -- added in Task 2.2 once a second jest-suite pair
+    (``RatingUtils``) needed the same load-and-cache-per-module pattern
+    without duplicating this function.
+    """
+    return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
+
+
 def load_snap() -> dict:
     """Load the vendored jest snapshot JSON (``lineup_utils_snap.json``)."""
-    return json.loads((FIXTURES / "lineup_utils_snap.json").read_text(encoding="utf-8"))
+    return load_fixture("lineup_utils_snap.json")
 
 
 def load_inputs() -> dict:
     """Load the vendored jest test-input JSON (``lineup_utils_inputs.json``)."""
-    return json.loads((FIXTURES / "lineup_utils_inputs.json").read_text(encoding="utf-8"))
+    return load_fixture("lineup_utils_inputs.json")
+
+
+def load_rating_snap() -> dict:
+    """Load the vendored ``RatingUtils`` jest snapshot JSON (``rating_utils_snap.json``)."""
+    return load_fixture("rating_utils_snap.json")
+
+
+def load_rating_inputs() -> dict:
+    """Load the vendored ``RatingUtils`` jest test-input JSON (``rating_utils_inputs.json``)."""
+    return load_fixture("rating_utils_inputs.json")
 
 
 def approx_tree(a: Any, b: Any, path: str = "") -> None:
