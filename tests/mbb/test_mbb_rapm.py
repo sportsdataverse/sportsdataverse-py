@@ -39,17 +39,34 @@ calcPlayerWeights"`` (``:527-573``) and ``"RapmUtils - calcLineupOutputs"``
 exact (non-approximate) equality against hand-transcribed literal arrays
 (no ``toMatchSnapshot`` in either block).
 
+**Task 3.4** adds the core ridge-regression solve
+(:func:`~sportsdataverse.mbb.mbb_rapm.slow_regression`,
+:func:`~sportsdataverse.mbb.mbb_rapm.calculate_rapm`,
+:func:`~sportsdataverse.mbb.mbb_rapm.calc_slow_pseudo_inverse`,
+:func:`~sportsdataverse.mbb.mbb_rapm.calculate_predicted_out`,
+:func:`~sportsdataverse.mbb.mbb_rapm.calculate_residual_error`,
+:func:`~sportsdataverse.mbb.mbb_rapm.calculate_sd_rapm`). Unlike blocks 1-3,
+these functions have **no dedicated jest ``test()`` block of their own** --
+``RapmUtils.test.ts``'s only oracle for this layer is the
+``"pickRidgeRegression"`` block (classification map item 4), which exercises
+them indirectly through the full adaptive-lambda loop (Task 3.5). This
+module instead unit-tests them against an independent, hand-computed
+closed-form ridge-regression micro-case (2 players, 3 lineups) -- see the
+``_MICRO_*`` module constants below.
+
 See ``tests/fixtures/hoop_explorer/README.md``'s classification map for the
 full accounting of ``RapmUtils.test.ts``'s 7 ``test()`` blocks -- this module
 covers blocks 1-3 (``buildPlayerContext``/``calcPlayerWeights``/
-``calcLineupOutputs``); blocks 4-7 (``pickRidgeRegression`` onward) belong to
-Tasks 3.4-3.6.
+``calcLineupOutputs``) plus a from-scratch micro-case for Task 3.4's solve
+primitives; blocks 4-7 (``pickRidgeRegression`` onward) belong to
+Tasks 3.5-3.6.
 """
 
 from __future__ import annotations
 
 import copy
 
+import numpy as np
 import pytest
 
 from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
@@ -58,6 +75,12 @@ from sportsdataverse.mbb.mbb_rapm import (
     build_player_context,
     calc_lineup_outputs,
     calc_player_weights,
+    calc_slow_pseudo_inverse,
+    calculate_predicted_out,
+    calculate_rapm,
+    calculate_residual_error,
+    calculate_sd_rapm,
+    slow_regression,
 )
 from tests.mbb._hoop_explorer_replay import (
     first_lineup_list,
@@ -66,6 +89,27 @@ from tests.mbb._hoop_explorer_replay import (
     load_rapm_snap,
     load_rating_inputs,
 )
+
+# Task 3.4 hand-computed micro-case (2 players, 3 lineups) shared by the
+# solve-layer tests below -- an independent closed-form ridge regression,
+# NOT derived from any vendored jest fixture (RapmUtils.test.ts's own
+# pickRidgeRegression oracle uses pre-computed weight matrices belonging to
+# Task 3.5). X = [[1,0],[0,1],[1,1]] (lineup 3 has both players), ridge
+# lambda = 1.0. Closed form: XtX = [[2,1],[1,2]], bottom = XtX + I =
+# [[3,1],[1,3]], det = 8, bottom^-1 = 1/8 * [[3,-1],[-1,3]] =
+# [[0.375,-0.125],[-0.125,0.375]]; solver = bottom^-1 @ X.T. Cross-checked
+# against an independent numpy computation (not this module's own functions)
+# -- see Task 3.4's report for the full derivation.
+_MICRO_X = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+_MICRO_LAMBDA = 1.0
+_MICRO_CTX = {"num_players": 2}
+_MICRO_Y = [1.0, 2.0, 3.0]
+_MICRO_SOLVER = [[0.375, -0.125, 0.25], [-0.125, 0.375, 0.25]]
+_MICRO_PARAMS = [0.875, 1.375]
+_MICRO_PARAM_ERRS = [0.6123724356957945, 0.6123724356957945]
+_MICRO_PREDICTED = [0.875, 1.375, 2.25]
+_MICRO_ERR_SQ = 0.96875
+_MICRO_SD_RAPM = [0.8706824010355317, 0.8706824010355317]
 
 
 @pytest.fixture(scope="module")
@@ -358,3 +402,69 @@ def test_calc_lineup_outputs(inputs: dict, rating_inputs: dict, prior_mode: floa
         (False, True),
     )
     assert _tidy_matrix(old_val_results, 2) == expected
+
+
+# ---------------------------------------------------------------------------
+# Task 3.4 -- core ridge-regression solve, hand-computed 2-player/3-lineup
+# micro-case (no vendored jest oracle exists for this layer in isolation;
+# see the module docstring's "Task 3.4" paragraph).
+# ---------------------------------------------------------------------------
+
+
+def test_slow_regression_matches_closed_form() -> None:
+    """``slow_regression`` reproduces the hand-derived ``(XᵀX + λI)⁻¹Xᵀ``
+    solver matrix for the shared micro-case."""
+    solver = slow_regression(_MICRO_X, _MICRO_LAMBDA, _MICRO_CTX)
+    np.testing.assert_allclose(solver, _MICRO_SOLVER, rtol=1e-12)
+
+
+def test_calculate_rapm_applies_solver_to_outputs() -> None:
+    """``calculate_rapm(solver, y)`` recovers the hand-derived per-player
+    ridge estimates (``RapmUtils.ts:772`` -- note: no ``ctx`` parameter)."""
+    solver = np.array(_MICRO_SOLVER)
+    rapm = calculate_rapm(solver, _MICRO_Y)
+    np.testing.assert_allclose(rapm, _MICRO_PARAMS, rtol=1e-12)
+
+
+def test_calc_slow_pseudo_inverse_matches_closed_form() -> None:
+    """``calc_slow_pseudo_inverse`` returns ``sqrt(diag((XᵀX + λI)⁻¹))`` for
+    the shared micro-case."""
+    param_errs = calc_slow_pseudo_inverse(_MICRO_X, _MICRO_LAMBDA, _MICRO_CTX)
+    np.testing.assert_allclose(param_errs, _MICRO_PARAM_ERRS, rtol=1e-12)
+
+
+def test_calculate_predicted_out_and_residual_error() -> None:
+    """``calculate_predicted_out`` predicts per-lineup values from the fitted
+    RAPM params, and ``calculate_residual_error`` sums their squared
+    deviation from the actual outputs (``RapmUtils.ts:1559/1569``)."""
+    predicted = calculate_predicted_out(_MICRO_X, _MICRO_PARAMS, _MICRO_CTX)
+    np.testing.assert_allclose(predicted, _MICRO_PREDICTED, rtol=1e-12)
+
+    err_sq = calculate_residual_error(_MICRO_Y, predicted, _MICRO_CTX)
+    assert err_sq == pytest.approx(_MICRO_ERR_SQ, rel=1e-12)
+
+
+def test_calculate_residual_error_length_mismatch_raises() -> None:
+    """Landmine 7: a length mismatch between ``player_outs``/``regressed_outs``
+    raises ``ValueError`` in this numpy port (TS silently produces ``NaN``
+    via lodash ``_.zip`` padding) -- not reachable via any real call site,
+    both arguments are always index-aligned to the same lineup count."""
+    with pytest.raises(ValueError):
+        calculate_residual_error([1.0, 2.0], [1.0, 2.0, 3.0], _MICRO_CTX)
+
+
+def test_calculate_sd_rapm_matches_closed_form() -> None:
+    """``calculate_sd_rapm`` composes ``dof_inv`` +
+    ``sqrt(sqrt(param_errs) * err_sq * dof_inv)`` for the shared micro-case
+    (``RapmUtils.ts:1373-1390``, cites arXiv:1509.09169)."""
+    sd_rapm = calculate_sd_rapm(np.array(_MICRO_PARAM_ERRS), _MICRO_ERR_SQ, num_lineups=3, num_players=2)
+    np.testing.assert_allclose(sd_rapm, _MICRO_SD_RAPM, rtol=1e-12)
+
+
+def test_calculate_sd_rapm_zero_dof_raises() -> None:
+    """Landmine 8: ``num_lineups == num_players`` raises ``ZeroDivisionError``
+    in this Python port (JS float division by zero silently yields
+    ``Infinity``) -- matches this module's already-established landmine-2
+    convention (unguarded division, Python-raises vs JS-Infinity/NaN)."""
+    with pytest.raises(ZeroDivisionError):
+        calculate_sd_rapm(np.array(_MICRO_PARAM_ERRS), _MICRO_ERR_SQ, num_lineups=2, num_players=2)

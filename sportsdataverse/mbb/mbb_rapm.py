@@ -15,10 +15,18 @@ layer**: :func:`calc_player_weights` (``RapmUtils.calcPlayerWeights``,
 is the **dict -> ``numpy.ndarray`` boundary**: everything upstream of these
 two functions (``build_priors``/``build_player_context``) stays plain-dict
 math; from here on, per-lineup/per-player numeric data is materialized into
-``numpy`` arrays. Later Phase-3 tasks add the regression-solve layer
+``numpy`` arrays. **Task 3.4 adds the core ridge-regression solve**:
+:func:`slow_regression` / :func:`calculate_rapm` (``RapmUtils.slowRegression``
+/ ``.calculateRapm``, ``RapmUtils.ts:756/772``), the standard-error inputs
+:func:`calc_slow_pseudo_inverse` / :func:`calculate_predicted_out` /
+:func:`calculate_residual_error` (``RapmUtils.ts:1544/1559/1569``), and
+:func:`calculate_sd_rapm` (the ``sdRapm`` formula inlined in
+``RapmUtils.pickRidgeRegression``, ``RapmUtils.ts:1373-1390``, promoted to a
+standalone function here for independent testability). Later Phase-3 tasks
+add the adaptive-lambda orchestration + collinearity diagnostics layer
 (``pickRidgeRegression``, ``injectRapmIntoPlayers``, ``calcCollinearityDiag``
 -- see the "Deliberately NOT ported (this task)" section below) on top of the
-matrices/vectors this module now produces.
+solve primitives this module now provides.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``RapmUtils.ts`` from
@@ -154,19 +162,25 @@ does (``_.omit(results, ["filteredLineups", "teamInfo"])`` before
    identically to upstream) treated as "composed entirely of removed
    players" and excluded from ``filtered_lineups``.
 
-**Deliberately NOT ported (this task -- Tasks 3.4-3.6 own these):**
+**Deliberately NOT ported (this task -- Tasks 3.5-3.6 own these):**
 
 - ``buildWeakPriorFromRapm`` (``RapmUtils.ts:410-419``) -- the "recursive
-  prior" helper, needed once ``calculatePredictedOut``/``calculateResidualError``
-  land.
+  prior" helper, needed once the adaptive-lambda loop
+  (``pickRidgeRegression``) lands.
 - ``RapmPreProcDiagnostics`` / ``RapmProcessingInputs`` / ``RapmInfo``
   (``RapmUtils.ts:187-216``) -- return-shape types for
   ``calcCollinearityDiag`` / ``pickRidgeRegression`` / the top-level
   orchestration glue, respectively; introduced alongside the functions that
   produce them.
-- ``pickRidgeRegression``, ``injectRapmIntoPlayers``, ``calcCollinearityDiag``
-  -- the ridge-regression-solve / collinearity-diagnostics surface, Tasks
-  3.4-3.6.
+- ``pickRidgeRegression``, ``injectRapmIntoPlayers`` -- the adaptive-lambda
+  orchestration loop that calls this task's solve primitives
+  (:func:`slow_regression`, :func:`calculate_rapm`,
+  :func:`calc_slow_pseudo_inverse`, :func:`calculate_predicted_out`,
+  :func:`calculate_residual_error`, :func:`calculate_sd_rapm`) in a
+  ``lambdaRange`` search loop, Task 3.5.
+- ``calcCollinearityDiag`` -- the ``svd-js``-based collinearity-diagnostics
+  surface (the *only* function in this file that actually uses ``SVD`` --
+  see the "2] PROCESSING" section banner below), Task 3.6.
 
 **Task 3.3 coverage gap (inherited from upstream, not introduced by this
 port):** neither ``calcLineupOutputs``'s own jest test nor the vendored
@@ -179,6 +193,12 @@ not crash, not that luck-adjustment changes the RAPM numbers correctly --
 the luck-divergence math itself is validated by Phase 2's ``mbb_luck``
 tests, not here. See ``tests/fixtures/hoop_explorer/README.md``'s
 classification map, item 3, for the full accounting.
+
+**Task 3.4 numpy-dependency note:** ``numpy`` was already an explicit
+``[project.dependencies]`` entry (``pyproject.toml``, ``numpy>=1.23.0``)
+before this task -- no ``pyproject.toml`` change was needed to promote it;
+this module was already importing it (Task 3.3's ``calc_player_weights``/
+``calc_lineup_outputs``).
 """
 
 from __future__ import annotations
@@ -786,6 +806,18 @@ def calc_lineup_outputs(
             doesn't crash. See the module docstring's "Task 3.3 coverage
             gap" note.
 
+    **Additional inherited-jest coverage gap (Task 3.4 note, distinct from
+    the value/old_value gap above):** this function's own "extra row"
+    branch (``ctx["unbias_weight"] > 0``, the ``build_side`` closure's
+    ``if extra: ...`` tail) is **never exercised** by
+    ``RapmUtils.test.ts``'s ``"calcLineupOutputs"`` block or this port's
+    replay test -- unlike :func:`calc_player_weights`'s structurally
+    identical extra row (its own oracle test's ``unbias_weight=2.0``
+    parametrized case *does* cover it). Both extra rows are unreachable in
+    production regardless (``build_player_context`` hardcodes
+    ``unbias_weight = 0.0``), so this is a documented gap in upstream's own
+    test suite, not a bug introduced by this port.
+
     Returns:
         ``[off_outputs, def_outputs]`` -- two 1-D ``numpy.ndarray`` target
         vectors, index-aligned with ``ctx["filtered_lineups"]("off"/"def")``
@@ -866,7 +898,17 @@ def calc_lineup_outputs(
                     # contribution on the RHS instead)
                     removed_player_info = ctx["removed_players"].get(player_id)
                     if removed_player_info is not None:
-                        removed_player_stat = removed_player_info[2] or {}
+                        # NOTE (Task 3.4 cleanup, matches landmine 1's `is None`
+                        # style): TS reads `removedPlayerInfo[2] || {}`, but that
+                        # slot is always a real (non-empty) dict by construction
+                        # (`build_player_context` always populates it with at
+                        # least `off_poss`/`def_poss`), so the JS `||` is a
+                        # defensive null-guard only, never an anti-emptiness one
+                        # -- `or {}` here would incorrectly swap in a fresh `{}`
+                        # for a legitimately-falsy-but-absent Python value.
+                        removed_player_stat = removed_player_info[2]
+                        if removed_player_stat is None:
+                            removed_player_stat = {}
                         # (temp overrides so shot-rate fields sum to 1 for removed
                         # players -- restored via the `del`s below, matching the
                         # upstream "avoid mutating the removedPlayerStat" comment)
@@ -904,3 +946,306 @@ def calc_lineup_outputs(
         return np.array(vector, dtype=np.float64)
 
     return [build_side("off"), build_side("def")]
+
+
+# ---------------------------------------------------------------------------
+# 2] PROCESSING -- the ridge-regression solve (Task 3.4).
+#
+# ``RapmUtils.ts`` imports `svd-js`'s `SVD` (`RapmUtils.ts:101`) but the solve
+# functions below (`slowRegression`/`calculateRapm`/`calcSlowPseudoInverse`)
+# do NOT use it -- they call mathjs's plain `inv()` (an LU/Gauss-Jordan
+# matrix inverse, not an SVD) on `X^T X + lambda I`. `SVD` is reserved for
+# `calcCollinearityDiag` (Task 3.6, `RapmUtils.ts:1643`), a completely
+# separate diagnostic path. There is therefore no SVD-vs-normal-equations
+# parity risk to resolve here: this port uses `numpy.linalg.inv`, the direct
+# equivalent of mathjs `inv()`, matching TS's ACTUAL operation exactly.
+# ---------------------------------------------------------------------------
+
+
+def slow_regression(
+    player_weight_matrix: NDArray[np.float64], ridge_lambda: float, ctx: RapmPlayerContext
+) -> NDArray[np.float64]:
+    """Build the Tikhonov (ridge) regression solver matrix.
+
+    Faithful port of the private ``RapmUtils.slowRegression``
+    (``RapmUtils.ts:756-769``): ``(XᵀX + ridge_lambda·I)⁻¹Xᵀ``, where ``X``
+    is ``player_weight_matrix`` (one row per lineup, one column per player --
+    see :func:`calc_player_weights`). See the section banner above for why
+    this is a plain matrix inverse (``numpy.linalg.inv``), not an SVD.
+
+    Args:
+        player_weight_matrix: The off/def design matrix, shape
+            ``(num_lineups, ctx["num_players"])``.
+        ridge_lambda: The Tikhonov regularization strength.
+        ctx: A :class:`RapmPlayerContext` -- only ``ctx["num_players"]`` is
+            read (sizes the identity matrix).
+
+    Returns:
+        The ``(num_players, num_lineups)`` solver matrix; apply it to a
+        target vector via :func:`calculate_rapm`.
+
+    Raises:
+        numpy.linalg.LinAlgError: If ``XᵀX + ridge_lambda·I`` is singular --
+            not reachable with ``ridge_lambda > 0`` (which always makes the
+            matrix positive-definite), but possible with
+            ``ridge_lambda <= 0`` on a rank-deficient ``X``.
+
+    Example:
+        Quick start::
+
+            import numpy as np
+            from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
+
+            x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+            solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
+            rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    weight_t = player_weight_matrix.T
+    bottom = weight_t @ player_weight_matrix + ridge_lambda * np.eye(ctx["num_players"])
+    bottom_inv = np.linalg.inv(bottom)
+    return bottom_inv @ weight_t
+
+
+def calculate_rapm(regression_matrix: NDArray[np.float64], player_outputs: list[float]) -> NDArray[np.float64]:
+    """Apply a regression solver matrix to a target-outputs vector.
+
+    Faithful port of ``RapmUtils.calculateRapm`` (``RapmUtils.ts:772-775``).
+    Note the TS signature carries no ``ctx`` parameter (unlike its solve-layer
+    siblings) -- ported verbatim, param-for-param.
+
+    Args:
+        regression_matrix: The ``(num_players, num_lineups)`` solver from
+            :func:`slow_regression`.
+        player_outputs: The per-lineup target vector, length ``num_lineups``
+            (e.g. :func:`calc_lineup_outputs`'s ``off_outputs``/``def_outputs``).
+
+    Returns:
+        The per-player RAPM estimate, length ``num_players``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calculate_rapm
+
+            rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+            print(rapm.shape)  # (num_players,)
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    return regression_matrix @ np.asarray(player_outputs, dtype=np.float64)
+
+
+# ---------------------------------------------------------------------------
+# 3] ERROR VALIDATION (Task 3.4).
+# ---------------------------------------------------------------------------
+
+
+def calc_slow_pseudo_inverse(
+    player_weight_matrix: NDArray[np.float64], ridge_lambda: float, ctx: RapmPlayerContext
+) -> NDArray[np.float64]:
+    """Per-parameter variance terms for the ridge-regression standard errors.
+
+    Faithful port of the private ``RapmUtils.calcSlowPseudoInverse``
+    (``RapmUtils.ts:1544-1557``): the same ``(XᵀX + ridge_lambda·I)⁻¹`` as
+    :func:`slow_regression`'s ``bottomInv``, but this function returns the
+    square root of its diagonal instead of the full solver matrix -- the
+    ``paramErrs`` term consumed by the standard-error formula (see
+    :func:`calculate_sd_rapm`).
+
+    Args:
+        player_weight_matrix: The off/def design matrix, same shape as
+            :func:`slow_regression`'s.
+        ridge_lambda: The Tikhonov regularization strength (must match the
+            ``ridge_lambda`` used to build the corresponding
+            :func:`slow_regression` solver, for the SEs to be meaningful).
+        ctx: A :class:`RapmPlayerContext` -- only ``ctx["num_players"]`` is
+            read.
+
+    Returns:
+        A length-``num_players`` array, ``sqrt(diag((XᵀX + λI)⁻¹))``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calc_slow_pseudo_inverse
+
+            param_errs = calc_slow_pseudo_inverse(x, 1.0, ctx)
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    weight_t = player_weight_matrix.T
+    bottom = weight_t @ player_weight_matrix + ridge_lambda * np.eye(ctx["num_players"])
+    bottom_inv = np.linalg.inv(bottom)
+    return np.sqrt(np.diag(bottom_inv))
+
+
+def calculate_predicted_out(
+    player_weight_matrix: NDArray[np.float64], regressed_players: list[float], ctx: RapmPlayerContext
+) -> NDArray[np.float64]:
+    """Predict per-lineup outputs from fitted per-player RAPM values.
+
+    Faithful port of ``RapmUtils.calculatePredictedOut`` (``RapmUtils.ts:1559-1567``).
+    ``ctx`` is accepted for signature parity with the TS source but unused in
+    the body (ported verbatim -- upstream's own ``ctx`` param is likewise
+    dead in this function).
+
+    Args:
+        player_weight_matrix: The off/def design matrix, shape
+            ``(num_lineups, num_players)``.
+        regressed_players: The fitted per-player values (e.g. the final,
+            strong-prior-blended RAPM from Task 3.5's ``pickRidgeRegression``,
+            or a raw :func:`calculate_rapm` output), length ``num_players``.
+        ctx: A :class:`RapmPlayerContext` (unused).
+
+    Returns:
+        The predicted per-lineup value, length ``num_lineups`` -- feed into
+        :func:`calculate_residual_error` alongside the actual lineup outputs.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calculate_predicted_out
+
+            predicted = calculate_predicted_out(x, [0.875, 1.375], ctx)
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    return player_weight_matrix @ np.asarray(regressed_players, dtype=np.float64)
+
+
+def calculate_residual_error(player_outs: list[float], regressed_outs: list[float], ctx: RapmPlayerContext) -> float:
+    """Sum of squared residuals between actual and predicted lineup outputs.
+
+    Faithful port of ``RapmUtils.calculateResidualError`` (``RapmUtils.ts:1569-1579``).
+    ``ctx`` is accepted for signature parity but unused in the body (dead
+    upstream too).
+
+    **NaN/shape regime (landmine 7):** TS zips the two arrays via lodash
+    ``_.zip`` (pads the shorter side with ``undefined``, so a length
+    mismatch silently contributes ``NaN`` to the running sum via
+    ``undefined - number``) then reduces with plain ``+``. This port instead
+    subtracts the two as ``numpy`` arrays: a length mismatch **raises**
+    ``ValueError`` (numpy broadcast rules), rather than the TS silent-NaN
+    behavior -- not reachable via either language's own call sites (both
+    arguments are always index-aligned to the same lineup count in
+    production), so this is a divergence in dead territory, not a fixed bug.
+    A ``NaN`` *value already present* inside either input (as opposed to a
+    length mismatch) propagates through the ``numpy`` subtraction/sum
+    exactly as it would through the JS arithmetic (both regimes:
+    numpy-propagate).
+
+    Args:
+        player_outs: The actual per-lineup target values (e.g.
+            :func:`calc_lineup_outputs`'s output).
+        regressed_outs: The predicted per-lineup values (e.g.
+            :func:`calculate_predicted_out`'s output).
+        ctx: A :class:`RapmPlayerContext` (unused).
+
+    Returns:
+        ``sum((player_outs[i] - regressed_outs[i]) ** 2)`` -- the ``errSq``
+        term consumed by :func:`calculate_sd_rapm`.
+
+    Raises:
+        ValueError: If ``player_outs`` and ``regressed_outs`` have different
+            lengths -- see landmine 7 above.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calculate_residual_error
+
+            err_sq = calculate_residual_error([1.0, 2.0, 3.0], [0.875, 1.375, 2.25], ctx)
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    diff = np.asarray(player_outs, dtype=np.float64) - np.asarray(regressed_outs, dtype=np.float64)
+    return float(np.sum(diff**2))
+
+
+def calculate_sd_rapm(
+    param_errs: NDArray[np.float64], err_sq: float, num_lineups: int, num_players: int
+) -> NDArray[np.float64]:
+    """Per-player RAPM standard errors.
+
+    Faithful port of the inline ``sdRapm`` computation in
+    ``RapmUtils.pickRidgeRegression`` (``RapmUtils.ts:1373-1390``, not itself
+    a named TS function -- promoted to a standalone, independently testable
+    helper here since Task 3.4's brief calls out the formula explicitly).
+    Cites `arXiv:1509.09169 <https://arxiv.org/pdf/1509.09169.pdf>`_.
+
+    **Two NaN/error regimes (landmines 8-9):**
+
+    8. ``dof_inv = 1.0 / (num_lineups - num_players)`` -- if
+       ``num_lineups == num_players`` exactly, JS silently produces
+       ``Infinity`` (float division by zero); this port instead **raises**
+       ``ZeroDivisionError`` (Python float division by zero), matching this
+       module's already-established landmine-2 convention (unguarded
+       division, Python-raises vs JS-Infinity/NaN). Not reachable via the
+       oracle fixtures (``num_off_lineups``/``num_def_lineups`` always
+       comfortably exceed ``num_players`` there).
+    9. ``sqrt(sqrt(param_errs) * err_sq * dof_inv)`` -- a negative
+       ``param_errs`` entry (only possible if ``XᵀX + λI`` isn't actually
+       positive-definite, e.g. ``ridge_lambda < 0``) silently
+       **numpy-propagates** to ``NaN`` (matching JS ``Math.sqrt(negative)
+       -> NaN``, with a ``RuntimeWarning`` rather than a raise) -- both
+       language regimes agree here, unlike landmine 8.
+
+    Args:
+        param_errs: Per-player variance terms from
+            :func:`calc_slow_pseudo_inverse`, length ``num_players``.
+        err_sq: The residual sum of squares from
+            :func:`calculate_residual_error`.
+        num_lineups: ``ctx["num_off_lineups"]`` or ``ctx["num_def_lineups"]``
+            (whichever side ``param_errs``/``err_sq`` were computed for).
+        num_players: ``ctx["num_players"]``.
+
+    Returns:
+        A length-``num_players`` array of per-player RAPM standard errors.
+
+    Raises:
+        ZeroDivisionError: If ``num_lineups == num_players`` -- see
+            landmine 8 above.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calculate_sd_rapm
+
+            sd_rapm = calculate_sd_rapm(param_errs, err_sq, num_lineups=3, num_players=2)
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    dof_inv = 1.0 / (num_lineups - num_players)
+    return np.sqrt(np.sqrt(param_errs) * err_sq * dof_inv)
