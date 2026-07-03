@@ -25,6 +25,10 @@ __all__ = [
     "load_rapm_ryan_davis",
     "EPM_ORACLE_SCHEMA",
     "load_epm",
+    "LEBRON_SEASON_ORACLE_SCHEMA",
+    "load_lebron_season",
+    "LEBRON_DAILY_ORACLE_SCHEMA",
+    "load_lebron_daily",
 ]
 
 
@@ -165,4 +169,105 @@ def load_epm(path: str) -> pl.DataFrame:
         pl.col("oepm").cast(pl.Float64),
         pl.col("depm").cast(pl.Float64),
         pl.col("epm").cast(pl.Float64),
+    )
+
+
+#: Tidy schema for :func:`load_lebron_season`.
+LEBRON_SEASON_ORACLE_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "player_name": pl.Utf8,
+    "seasons": pl.Utf8,
+    "team": pl.Utf8,
+    "lebron": pl.Float64,
+    "o_lebron": pl.Float64,
+    "d_lebron": pl.Float64,
+    "war": pl.Float64,
+}
+
+#: Tidy schema for :func:`load_lebron_daily`.
+LEBRON_DAILY_ORACLE_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "through_date": pl.Date,
+    "season": pl.Utf8,
+    "player_name": pl.Utf8,
+    "mins": pl.Float64,
+    "lebron": pl.Float64,
+    "o_lebron": pl.Float64,
+    "d_lebron": pl.Float64,
+    "war": pl.Float64,
+}
+
+
+def load_lebron_season(path: str) -> pl.DataFrame:
+    """Parse a LEBRON season-file CSV (e.g. ``lebron-data-2026.csv``).
+
+    ``seasons`` is passed through as a raw string -- per-season files carry a
+    single year (``"2026"``); the combined all-years file carries a
+    multi-year window (``"2010-2013"``). Both parse with this one function.
+
+    Args:
+        path: Filesystem path to a LEBRON season CSV.
+
+    Returns:
+        Frame with schema :data:`LEBRON_SEASON_ORACLE_SCHEMA`. Zero rows
+        (with that schema) when the file has a header but no data rows.
+
+    Raises:
+        FileNotFoundError: If ``path`` does not exist.
+
+    Example:
+        Load the current-season LEBRON file::
+
+            from sportsdataverse.nba.nba_oracle_data import load_lebron_season
+            oracle = load_lebron_season(f"{oracle_dir}/lebron-data-2026.csv")
+    """
+    raw = pl.read_csv(path)
+    if raw.is_empty():
+        return pl.DataFrame(schema=LEBRON_SEASON_ORACLE_SCHEMA)
+    return raw.select(
+        pl.col("nba_id").cast(pl.Int64).alias("player_id"),
+        pl.col("Player").cast(pl.Utf8).alias("player_name"),
+        pl.col("Seasons").cast(pl.Utf8).alias("seasons"),
+        pl.col("Team").cast(pl.Utf8).alias("team"),
+        pl.col("LEBRON").cast(pl.Float64).alias("lebron"),
+        pl.col("O-LEBRON").cast(pl.Float64).alias("o_lebron"),
+        pl.col("D-LEBRON").cast(pl.Float64).alias("d_lebron"),
+        pl.col("WAR").cast(pl.Float64).alias("war"),
+    )
+
+
+def load_lebron_daily(path: str) -> pl.DataFrame:
+    """Parse a LEBRON daily-snapshot CSV (e.g. ``lebron_daily_2026-07-02.csv``).
+
+    Args:
+        path: Filesystem path to a LEBRON daily-snapshot CSV.
+
+    Returns:
+        Frame with schema :data:`LEBRON_DAILY_ORACLE_SCHEMA`. Zero rows
+        (with that schema) when the file has a header but no data rows.
+
+    Raises:
+        FileNotFoundError: If ``path`` does not exist.
+
+    Example:
+        Load the most recent daily snapshot (glob for the dated filename)::
+
+            import glob
+            from sportsdataverse.nba.nba_oracle_data import load_lebron_daily
+            latest = sorted(glob.glob(f"{oracle_dir}/lebron_daily_*.csv"))[-1]
+            oracle = load_lebron_daily(latest)
+    """
+    raw = pl.read_csv(path)
+    if raw.is_empty():
+        return pl.DataFrame(schema=LEBRON_DAILY_ORACLE_SCHEMA)
+    return raw.select(
+        pl.col("PLAYER_ID").cast(pl.Int64).alias("player_id"),
+        pl.col("ThroughDate").cast(pl.Utf8).str.to_date("%Y-%m-%d").alias("through_date"),
+        pl.col("Season").cast(pl.Utf8).alias("season"),
+        pl.col("Name").cast(pl.Utf8).alias("player_name"),
+        pl.col("Mins").cast(pl.Float64).alias("mins"),
+        pl.col("LEBRON").cast(pl.Float64).alias("lebron"),
+        pl.col("OLEBRON").cast(pl.Float64).alias("o_lebron"),
+        pl.col("DLEBRON").cast(pl.Float64).alias("d_lebron"),
+        pl.col("LEBRON WAR").cast(pl.Float64).alias("war"),
     )

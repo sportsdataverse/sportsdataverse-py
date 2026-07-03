@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+import datetime
 from pathlib import Path
 
 import polars as pl
 
 from sportsdataverse.nba.nba_oracle_data import (
     EPM_ORACLE_SCHEMA,
+    LEBRON_DAILY_ORACLE_SCHEMA,
+    LEBRON_SEASON_ORACLE_SCHEMA,
     RAPM_ORACLE_SCHEMA,
     load_epm,
+    load_lebron_daily,
+    load_lebron_season,
     load_rapm_ryan_davis,
     normalize_player_name,
 )
@@ -74,3 +79,39 @@ def test_load_epm_empty_header_only(tmp_path):
     df = load_epm(str(empty))
     assert df.height == 0
     assert dict(df.schema) == EPM_ORACLE_SCHEMA
+
+
+def test_load_lebron_season_schema_and_values():
+    df = load_lebron_season(str(FIXTURES / "lebron_season_sample.csv"))
+    assert dict(df.schema) == LEBRON_SEASON_ORACLE_SCHEMA
+    assert df.height == 3
+    row = df.filter(pl.col("player_id") == 2544).to_dicts()[0]
+    assert row["player_name"] == "Lebron James"
+    assert row["seasons"] == "2026"
+    assert row["war"] == 6.154
+
+
+def test_load_lebron_daily_schema_and_values():
+    df = load_lebron_daily(str(FIXTURES / "lebron_daily_sample.csv"))
+    assert dict(df.schema) == LEBRON_DAILY_ORACLE_SCHEMA
+    assert df.height == 2
+    row = df.filter(pl.col("player_id") == 1641705).to_dicts()[0]
+    assert row["through_date"] == datetime.date(2026, 4, 12)
+    assert row["player_name"] == "Victor Wembanyama"
+    assert abs(row["war"] - 11.5398803) < 1e-6
+
+
+def test_load_lebron_season_empty_header_only(tmp_path):
+    empty = tmp_path / "empty.csv"
+    empty.write_text("nba_id,Player,Seasons,Team,LEBRON,O-LEBRON,D-LEBRON,WAR\n")
+    df = load_lebron_season(str(empty))
+    assert df.height == 0
+    assert dict(df.schema) == LEBRON_SEASON_ORACLE_SCHEMA
+
+
+def test_load_lebron_daily_empty_header_only(tmp_path):
+    empty = tmp_path / "empty.csv"
+    empty.write_text("ThroughDate,PLAYER_ID,Name,Season,Mins,LEBRON,OLEBRON,DLEBRON,LEBRON WAR\n")
+    df = load_lebron_daily(str(empty))
+    assert df.height == 0
+    assert dict(df.schema) == LEBRON_DAILY_ORACLE_SCHEMA
