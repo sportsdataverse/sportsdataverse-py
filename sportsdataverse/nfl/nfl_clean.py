@@ -69,13 +69,15 @@ Scope decisions (read before using on non-nflverse frames)
   the one capture group that corresponds to the name (or jersey number) --
   see :data:`_NAME_CORE` / :data:`_PASS_CONTEXT` / :data:`_RUSH_CONTEXT` and
   the ``_PASSER_PATTERN`` / ``_RUSHER_PATTERN`` / ``_RECEIVER_PATTERN``
-  family below. One deliberate simplification: R's ``rush_finder`` has a
-  literal (almost certainly accidental) stray ``" | "`` alternative
-  (``"(FUMBLES) | (left end)|..."``) that -- taken literally in a
-  non-``(?x)`` R regex -- adds a bare space as a matching alternative, making
-  the lookahead nearly vacuous. This port implements the *intended* semantics
-  (the named FUMBLES/rush-direction phrases only) rather than replicating
-  that stray-space quirk; see the task report for the parity discussion.
+  family below. R's ``rush_finder`` contains stray literal spaces around its
+  first ``|`` (``"(FUMBLES) | (left end)|..."``); in a non-``(?x)`` regex
+  those spaces are part of the alternatives, so the FUMBLES branch requires a
+  trailing space (a desc ending exactly at ``"...FUMBLES"`` does NOT match in
+  R) and the ``left end`` branch carries a leading space. Almost certainly
+  accidental, but empirically verified against R and **replicated verbatim**
+  here (see :data:`_RUSH_CONTEXT`) -- R's accidents are the parity target.
+  The one deviation NOT replicated is `big_parser`'s ``[A-z]`` class typo;
+  see :data:`_NAME_CORE`.
 * **``fix_weird_pass_plays``** (§3, the 15-row hardcoded ``game_id_play_id``
   false-positive override) is ported as :data:`_FIX_WEIRD_PASS_PLAYS` and
   applied in the same post-hoc position as the R source (after ``pass`` has
@@ -219,9 +221,13 @@ def team_name_fn(expr: pl.Expr) -> pl.Expr:
 # support at all). See the module docstring's "Regex rewrite" note.
 # ---------------------------------------------------------------------------
 
-#: First.Last name core -- rewrite of nflfastR's `big_parser` (the leading
-#: `(?<=)` in the R source is a zero-width empty lookbehind, i.e. a no-op, so
-#: it is simply dropped here).
+#: First.Last name core -- rewrite of nflfastR's `big_parser`. Two deliberate
+#: deviations from the R source, both documented rather than replicated:
+#: (1) the leading `(?<=)` is a zero-width EMPTY lookbehind, i.e. a no-op --
+#: dropped; (2) R's `[A-z]` character class is replaced with `[A-Za-z]` --
+#: `[A-z]` is an ASCII-range typo that additionally spans the six punctuation
+#: codepoints between 'Z' and 'a' (`[ \ ] ^ _` and backtick), which are never
+#: legitimate name characters; replicating it would only admit garbage.
 _NAME_CORE = r"[A-Z][A-Za-z]*(?:\.|\s)+[A-Z][A-Za-z']*-?[A-Za-z]*(?:\s(?:Jr\.|Sr\.|I{2,3})|IV)?"
 
 #: Trailing context for a pass play -- rewrite of `pass_finder`'s lookahead
@@ -229,10 +235,15 @@ _NAME_CORE = r"[A-Z][A-Za-z]*(?:\.|\s)+[A-Z][A-Za-z']*-?[A-Za-z]*(?:\s(?:Jr\.|Sr
 _PASS_CONTEXT = r"(?:\s*[a-z]*\s*(?: pass|sack|scramble))"
 
 #: Trailing context for a rush play -- rewrite of `rush_finder`'s lookahead.
-#: Intentionally implements the *named* rush-direction/FUMBLES alternatives
-#: only (see the module docstring's stray-space note on the R source).
+#: The R source's alternation is transcribed VERBATIM including its stray
+#: literal spaces around the first `|` ("(FUMBLES) | (left end)|..."): the
+#: FUMBLES alternative therefore requires a TRAILING space (a desc ending
+#: exactly at "...FUMBLES" does not match -- R-verified behavior, pinned in
+#: tests), and the `left end` alternative carries a leading space (absorbed
+#: by the preceding `\s*` in practice). Almost certainly accidental in R,
+#: but R's accidents are the parity target.
 _RUSH_CONTEXT = (
-    r"(?:\s*[a-z]*\s*(?:FUMBLES|left end|left tackle|left guard"
+    r"(?:\s*[a-z]*\s*(?:FUMBLES | left end|left tackle|left guard"
     r"|up the middle|right guard|right tackle|right end))"
 )
 
@@ -401,6 +412,14 @@ def _resolve_name_id(
     share one id, and (verbatim R semantics) nulls ``name_col`` out wherever
     ``id_col`` is null, even if a name string was present pre-resolution.
 
+    Both joins use ``nulls_equal=True``: dplyr's ``group_by`` treats ``NA``
+    as an ordinary groupable value (a ``(name, NA, NA)`` group still gets a
+    mode vote), so the polars join that maps each group's result back onto
+    the rows must also match null keys to null keys. With polars' default
+    (``nulls_equal=False``, SQL semantics) a row with a null ``posteam`` or
+    ``season`` would never re-join its own group row, silently nulling BOTH
+    the id and (via pass 2) the name -- a data-loss divergence from R.
+
     Assumes ``df`` already carries the row-order-restoring index column (the
     caller re-sorts once, after all three name/id pairs are resolved, rather
     than after each one) and that any pre-existing ``id_col`` has already
@@ -415,7 +434,7 @@ def _resolve_name_id(
         .with_columns(pl.col("_ids").map_elements(_first_seen_mode, return_dtype=pl.Utf8).alias(id_col))
         .select([*group_cols, id_col])
     )
-    df = df.join(pass1, on=group_cols, how="left")
+    df = df.join(pass1, on=group_cols, how="left", nulls_equal=True)
 
     pass2 = (
         df.filter(pl.col(id_col).is_not_null())
@@ -424,7 +443,7 @@ def _resolve_name_id(
         .with_columns(pl.col("_names").map_elements(_first_seen_mode, return_dtype=pl.Utf8).alias("_name_mode"))
         .select([id_col, "_name_mode"])
     )
-    df = df.drop(name_col).join(pass2, on=id_col, how="left").rename({"_name_mode": name_col})
+    df = df.drop(name_col).join(pass2, on=id_col, how="left", nulls_equal=True).rename({"_name_mode": name_col})
     return df
 
 
@@ -580,6 +599,16 @@ def clean_nfl_pbp(
     )
 
     # pass / rush / first_down / special / play flags.
+    #
+    # Cross-port note: nfl-data's native pipeline (native_pbp/description.py)
+    # derives its pass/rush from the RAW `rusher_player_name` column, whereas
+    # this module -- following §6's mutate ordering -- uses the CLEANED
+    # `rusher` (post abnormal-play overwrite / passer-nulling). Residual gap:
+    # on lateral / direct-snap plays the abnormal-play overwrite can null
+    # `rusher` here without `pass` being forced to 1, so the backward/lateral
+    # `pass -> 0` exception can fire differently between the two ports for
+    # those rare descs. Known + accepted; revisit if a parity sweep against
+    # real nflverse data surfaces divergent `pass` values on lateral plays.
     if had_pass:
         pass_expr = pl.col("pass")
     else:

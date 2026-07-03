@@ -369,3 +369,111 @@ def test_fix_weird_pass_plays_forces_zero() -> None:
     )
     out = clean_nfl_pbp(df)
     assert out["pass"][0] == 0
+
+
+# ---------------------------------------------------------------------------
+# Review fixes (task-6 verdict): null-key join regression, rush_finder
+# stray-space parity, success / jersey / home_opening_kickoff coverage
+# ---------------------------------------------------------------------------
+
+
+def test_null_posteam_season_does_not_wipe_name_and_id() -> None:
+    """CRITICAL regression: a row with null posteam AND null season must keep
+    its resolved passer + passer_id. dplyr's group_by treats NA as an ordinary
+    groupable value, so the mode vote still runs within the (name, NA, NA)
+    group; the polars joins in _resolve_name_id therefore need
+    nulls_equal=True or the row never re-matches its own group row and BOTH
+    passer and passer_id come back null (silent data loss)."""
+    df = pl.DataFrame(
+        [
+            _row(
+                desc="(15:00) 12-T.Brady pass short right to 15-D.Parker for 9 yards",
+                posteam=None,
+                season=None,
+                passer_player_name="T.Brady",
+                passer_player_id="00-0019596",
+            )
+        ],
+        schema_overrides={"posteam": pl.Utf8, "season": pl.Int64},
+    )
+    out = clean_nfl_pbp(df)
+    assert out["passer"][0] == "T.Brady"
+    assert out["passer_id"][0] == "00-0019596"
+
+
+def test_rush_finder_fumbles_requires_trailing_space() -> None:
+    """R-parity pin (verified against R 4.5.3 running the verbatim nflfastR
+    regexes): the stray literal space in rush_finder's "(FUMBLES) | ..."
+    alternation makes the FUMBLES branch require a TRAILING space, so a desc
+    ending exactly at "...FUMBLES" does NOT extract a rusher, while
+    "...FUMBLES (Aggressive)..." does."""
+    from sportsdataverse.nfl.nfl_clean import _RUSHER_PATTERN
+
+    df = pl.DataFrame(
+        {
+            "desc": [
+                "J.Doe FUMBLES",
+                "J.Doe FUMBLES (Aggressive) at NYG 44",
+                "(1:00) 22-D.Henry left end for 5 yards",
+            ]
+        }
+    )
+    out = df.select(pl.col("desc").str.extract(_RUSHER_PATTERN, 1).alias("rusher"))
+    # R oracle: c(NA, "J.Doe", "D.Henry")
+    assert out["rusher"].to_list() == [None, "J.Doe", "D.Henry"]
+
+
+def test_success_from_epa() -> None:
+    """success = 1.0 when epa > 0, 0.0 when epa <= 0, null passthrough."""
+    df = pl.DataFrame(
+        [
+            _row(play_id=1, epa=0.5),
+            _row(play_id=2, epa=-0.5),
+            _row(play_id=3, epa=0.0),
+            _row(play_id=4, epa=None),
+        ]
+    )
+    out = clean_nfl_pbp(df)
+    assert out["success"].to_list() == [1.0, 0.0, 0.0, None]
+    assert out["success"].dtype == pl.Float64
+
+
+def test_jersey_number_extraction() -> None:
+    """passer/receiver jersey numbers come from the NN- prefix in desc;
+    jersey_number is passer-else-rusher."""
+    df = pl.DataFrame(
+        [
+            _row(
+                desc="(15:00) 6-G.Minshew pass short right to 15-D.Parker for 9 yards",
+                passer_player_id="00-0035228",
+            ),
+            _row(
+                play_id=200,
+                desc="(14:00) 22-D.Henry left tackle for 5 yards",
+                play_type="run",
+                rusher_player_id="00-0033118",
+            ),
+        ]
+    )
+    out = clean_nfl_pbp(df)
+    assert out["passer_jersey_number"].to_list() == [6, None]
+    assert out["receiver_jersey_number"].to_list() == [15, None]
+    assert out["rusher_jersey_number"].to_list() == [None, 22]
+    assert out["jersey_number"].to_list() == [6, 22]
+
+
+def test_home_opening_kickoff_per_game() -> None:
+    """home_opening_kickoff = 1 for every row of a game whose first non-null
+    posteam is the home team, 0 otherwise -- computed per game_id."""
+    df = pl.DataFrame(
+        [
+            # game A: home team (IND) has the ball first -> 1 on all rows
+            _row(game_id="2023_01_JAX_IND", play_id=1, posteam="IND", home_team="IND", away_team="JAX"),
+            _row(game_id="2023_01_JAX_IND", play_id=2, posteam="JAX", home_team="IND", away_team="JAX"),
+            # game B: away team (KC) has the ball first -> 0 on all rows
+            _row(game_id="2023_01_KC_BUF", play_id=1, posteam="KC", home_team="BUF", away_team="KC"),
+            _row(game_id="2023_01_KC_BUF", play_id=2, posteam="BUF", home_team="BUF", away_team="KC"),
+        ]
+    )
+    out = clean_nfl_pbp(df)
+    assert out["home_opening_kickoff"].to_list() == [1, 1, 0, 0]
