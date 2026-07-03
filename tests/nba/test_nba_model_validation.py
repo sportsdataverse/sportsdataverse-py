@@ -678,3 +678,21 @@ def test_walk_forward_missing_game_date_column_is_nan_not_a_crash():
     res = walk_forward(RidgeRapmModel(), poss)
     assert res.n_checkpoints == 0
     assert np.isnan(res.game_margin_rmse)
+
+
+def test_walk_forward_boundary_date_trains_never_evaluates():
+    # _synthetic_possessions(start_date=...) puts exactly one game per calendar
+    # day (game index g -> start_date + g days), so a single explicit checkpoint
+    # at the 21st game's date gives an unambiguous boundary: that game must land
+    # in the train split (game_date <= D) and must NEVER be counted among the
+    # evaluated test games. horizon_days=1 means only the very next day's game
+    # (index 21) should be evaluated. If the test-window lower bound regressed
+    # from `game_date > D` to `game_date >= D`, the boundary game (index 20)
+    # would leak into the test side too and n_test_games would read 2, not 1.
+    o, d = _planted_ratings(seed=5)
+    start = datetime.date(2023, 10, 24)
+    poss = _synthetic_possessions(o, d, n_games=25, poss_per_game=40, noise_sd=0.3, seed=9, start_date=start)
+    boundary_date = start + datetime.timedelta(days=20)
+    res = walk_forward(RidgeRapmModel(), poss, checkpoint_dates=[boundary_date], horizon_days=1)
+    assert res.n_checkpoints == 1
+    assert res.n_test_games == 1
