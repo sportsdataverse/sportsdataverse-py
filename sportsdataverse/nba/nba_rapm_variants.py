@@ -91,6 +91,13 @@ def oracle_rapm_alphas(
             from sportsdataverse.nba.nba_rapm_variants import oracle_rapm_alphas
             alphas = oracle_rapm_alphas(50_000)
             print(alphas)  # array([ 250., 1250., 2500.])
+
+        See Also:
+            * `NBA_Tutorials (Ryan Davis)`_ — the oracle ``rapm.py`` reference implementation
+            * `nba_api`_ — upstream play-by-play source
+
+        .. _NBA_Tutorials (Ryan Davis): https://github.com/rd11490/NBA_Tutorials
+        .. _nba_api: https://github.com/swar/nba_api
     """
     return np.asarray([lam * n_samples / 2.0 for lam in lambdas], dtype=np.float64)
 
@@ -123,6 +130,11 @@ def decay_weights(
             dates = pl.Series("game_date", [datetime.date(2023, 1, 1)])
             w = decay_weights(dates, datetime.date(2023, 1, 31), half_life_days=30.0)
             print(round(float(w[0]), 3))  # 0.5
+
+        See Also:
+            * `nba_api`_ — upstream play-by-play source (``game_date`` provenance)
+
+        .. _nba_api: https://github.com/swar/nba_api
     """
     n = game_date.len()
     if asof is None or half_life_days <= 0:
@@ -296,6 +308,13 @@ def nba_decay_rapm(
         Plain-RAPM-equivalent (no decay)::
 
             df = nba_decay_rapm(season_poss)  # asof=None
+
+        See Also:
+            * `NBA_Tutorials (Ryan Davis)`_ — the oracle ridge-schedule this variant fits against
+            * `nba_api`_ — upstream play-by-play source
+
+        .. _NBA_Tutorials (Ryan Davis): https://github.com/rd11490/NBA_Tutorials
+        .. _nba_api: https://github.com/swar/nba_api
     """
     if possessions.is_empty():
         out = _empty(DECAY_RAPM_SCHEMA)

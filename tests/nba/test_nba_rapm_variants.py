@@ -108,11 +108,25 @@ def test_decay_rapm_asof_none_equals_plain_rapm():
 
 
 def test_decay_rapm_weighting_changes_fit():
+    # Isolate the decay-WEIGHT effect from the ridge-schedule switch: both calls
+    # pass `asof` (so both take the oracle-alphas / cv=ORACLE_RAPM_CV branch and,
+    # since asof == the max game_date, neither filters any possessions --
+    # `oracle_rapm_alphas(X.shape[0])` is evaluated at an identical sample count
+    # on both sides). Only `half_life_days` differs: a huge half-life makes every
+    # weight ~1.0 (decay-neutral), vs a short one that decays hard.
+    #
+    # A prior version compared asof=None (DEFAULT_RAPM_ALPHAS, cv=None) against
+    # asof=<date> (oracle alphas, cv=5): that discriminates on the schedule
+    # switch ALONE (empirically: max diff ~2.55 even with weights forced to 1),
+    # so it would still "pass" if the `_w` decay-weight wiring were silently
+    # broken -- it proved "two configs differ," not "recency weighting changes
+    # the fit." This version holds the schedule fixed and isolates the
+    # decay-only effect (empirically: max diff ~2.57 at atol=1e-3).
     poss = _synth_with_dates()
-    plain = nba_decay_rapm(poss, asof=None).sort("player_id")
     asof = poss["game_date"].max()
+    neutral = nba_decay_rapm(poss, asof=asof, half_life_days=1e9).sort("player_id")
     decayed = nba_decay_rapm(poss, asof=asof, half_life_days=5.0).sort("player_id")
-    assert not np.allclose(plain["decay_rapm"].to_numpy(), decayed["decay_rapm"].to_numpy(), atol=1e-3)
+    assert not np.allclose(neutral["decay_rapm"].to_numpy(), decayed["decay_rapm"].to_numpy(), atol=1e-3)
 
 
 def test_decay_rapm_schema_and_dtypes():
