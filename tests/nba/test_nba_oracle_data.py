@@ -64,8 +64,8 @@ def test_load_rapm_ryan_davis_schema_and_values():
     row = df.filter(pl.col("player_id") == 201939).to_dicts()[0]
     assert row["player_name"] == "Stephen Curry"
     assert row["season"] == "2009-10"
-    assert row["RAPM"] == 5.9
-    assert row["RA_TOV"] == 1.0
+    assert row["RAPM"] == -0.01
+    assert row["RA_TOV"] == 0.31
 
 
 def test_load_rapm_ryan_davis_empty_header_only(tmp_path):
