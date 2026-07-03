@@ -278,8 +278,8 @@ uv run python tools/vendor_hoop_explorer_fixtures.py
       `noWeakPrior: false`, `useRecursiveWeakPrior: false`, `includeStrong: {}`,
       `playersStrong`: 8 entries with **only** `off_adj_ppp` (no `def_adj_ppp` —
       this is exactly why the def branch is invariant to the adaptive
-      correlation weights in the `pickRidgeRegression` test's identity
-      assertions, see the classification map below), `playersWeak`: 8
+      correlation weights in the `pickRidgeRegression` test's
+      deep-equality assertions, see the classification map below), `playersWeak`: 8
       entries with both `off_adj_ppp`/`def_adj_ppp`, `keyUsed: "value"`,
       `basis: {off: 0, def: 0}`; `filteredLineups: (prefix) => reducedFilteredLineups`
       (replay as a Python callable/lambda returning the vendored array
@@ -387,8 +387,9 @@ oracle anchors for Tasks 3.2-3.6. Unlike Phases 1-2 (mostly
 whole file** (`:517`, inside `buildPlayerContext`'s `[0.0, 0.2].forEach`
 loop, executed twice -> the 2 `rapm_utils_snap.json` entries). Every other
 assertion across the other 6 test blocks is an inline `.toFixed`/`toEqual`
-literal or an identity (`===`/`!==`) check — these must be hand-transcribed
-into the Python tests, not looked up via `load_rapm_snap()`.
+literal or a `.toEqual()`/`.not.toEqual()` deep-equality check between two
+computed results — these must be hand-transcribed into the Python tests,
+not looked up via `load_rapm_snap()`.
 
 1. **`RapmUtils - buildPlayerContext`** (`:476-525`) — 2× `toMatchSnapshot()`
    (loop over `threshold` in `[0.0, 0.2]`) → `rapm_utils_snap.json` keys
@@ -476,14 +477,24 @@ into the Python tests, not looked up via `load_rapm_snap()`.
    `reducedFilteredLineups`) **is** exercised transitively (`pickRidgeRegression`
    calls its own internal `calcLineupOutputs`, which calls
    `ctx.filteredLineups(prefix)` — `RapmUtils.ts:1212`/`:652`).
-   - **Identity assertions** (adaptive-correlation-weight mechanism,
-     "Parity risk #2" in the plan): `offResults1 === offResults`
-     (`testContext1` clones `testContext`, sets `priorInfo.strongWeight =
-     -1`, passes `adaptiveWeights1 = [0.5]*8` — same effective weight as
-     the default/`undefined` case); `offResults2 !== offResults`
-     (`adaptiveWeights2 = [0.2]*8` diverges); `defResults1 === defResults`
-     and `defResults2 === defResults` (**defense is invariant to the
-     adaptive weights in this fixture** — because
+   - **Deep-equality assertions** (adaptive-correlation-weight mechanism,
+     "Parity risk #2" in the plan). CORRECTION: these are jest
+     `.toEqual()` / `.not.toEqual()` **deep** (structural value) equality
+     checks (`RapmUtils.test.ts:679-682`), NOT `===` reference-identity —
+     the plan's `offResults1===offResults` shorthand is loose wording.
+     Python replay = dict/array **value** equality with EXACT float
+     matching (`assert a == b`, no `pytest.approx` tolerance — both sides
+     are deterministic recomputations of the same solve, so any bitwise
+     difference is a real divergence):
+     `expect(offResults1).toEqual(offResults)` (`testContext1` clones
+     `testContext`, sets `priorInfo.strongWeight = -1`, passes
+     `adaptiveWeights1 = [0.5]*8` — same effective weight as the
+     default/`undefined` case);
+     `expect(offResults2).not.toEqual(offResults)`
+     (`adaptiveWeights2 = [0.2]*8` diverges);
+     `expect(defResults1).toEqual(defResults)` and
+     `expect(defResults2).toEqual(defResults)` (**defense is invariant to
+     the adaptive weights in this fixture** — because
      `testContext.priorInfo.playersStrong` entries have **only**
      `off_adj_ppp`, no `def_adj_ppp`, so the strong-prior blend / adaptive
      weighting never activates for defense — port `getStrongWeight` to
@@ -580,8 +591,8 @@ into the Python tests, not looked up via `load_rapm_snap()`.
 the `"1.536"` λ and the 4 `.toFixed(2)` RAPM arrays are the load-bearing
 parity numbers the plan's Global Constraints and Task 3.5 both cite — this
 map confirms they're exactly as the plan states, plus documents the
-*mechanism* (identity assertions + the off/def prior asymmetry) the plan
-only gestured at.
+*mechanism* (the deep-equality assertions + the off/def prior asymmetry)
+the plan only gestured at.
 
 ### Note for Tasks 3.2-3.6: the `PlayerOnOffStats` build chain
 
