@@ -1695,7 +1695,8 @@ def _empty_player_stats_def(*, weekly: bool, return_as_pandas: bool) -> pl.DataF
     """Return a zero-row def-stats frame carrying the canonical schema."""
     cols = list(_DEF_OUTPUT_COLUMNS)
     if not weekly:
-        cols = [c for c in cols if c not in ("week", "season_type")]
+        # Season grain drops season too (grouped on player_id/team only).
+        cols = [c for c in cols if c not in ("season", "week", "season_type")]
         cols.insert(cols.index("player_display_name") + 1, "games")
     schema: dict[str, type[pl.DataType] | pl.DataType] = {}
     str_cols = {
@@ -1975,7 +1976,14 @@ def _def_fumble_own_frame(data: pl.DataFrame) -> pl.DataFrame:
 
 
 def _def_fumble_yards_own_frame(data: pl.DataFrame) -> pl.DataFrame:
-    """``def_fumble_recovery_yards_own`` -- sum of recovery yards for the own-fumble rows."""
+    """``def_fumble_recovery_yards_own`` -- sum of recovery yards for the own-fumble rows.
+
+    Deviation from the verbatim R source (mirroring :func:`_def_fumble_own_frame`'s
+    documented choice): each recovery slot is additionally gated on
+    ``fumble_recovery_{k}_team == defteam``, where R's ``fumble_yds_own_df``
+    groups on the raw recovery team with no such guard -- the formula-table
+    semantics ("restricted to the own recovery rows") rather than the R quirk.
+    """
     fumbled_cols = [f"fumbled_{k}_team" for k in (1, 2) if f"fumbled_{k}_team" in data.columns]
     if not fumbled_cols:
         return _def_empty({"def_fumble_recovery_yards_own": pl.Float64})
@@ -2114,6 +2122,9 @@ def _collapse_def_to_season(player_df: pl.DataFrame) -> pl.DataFrame:
     sum_cols = [c for c in _DEF_OUTPUT_COLUMNS if c.startswith("def_") and c in player_df.columns]
     return player_df.group_by(["player_id", "team"]).agg(
         pl.len().alias("games"),
+        # pl.first is equivalent to R's custom_mode here: all five meta
+        # columns come solely from the deduped players-master join, so they
+        # are constant within a (player_id, team) group.
         pl.first("player_name").alias("player_name"),
         pl.first("player_display_name").alias("player_display_name"),
         pl.first("position").alias("position"),
@@ -2124,10 +2135,14 @@ def _collapse_def_to_season(player_df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _finalize_def(player_df: pl.DataFrame, *, weekly: bool) -> pl.DataFrame:
-    """Select the canonical def-stats column order + cast + sort."""
+    """Select the canonical def-stats column order + cast + sort.
+
+    The season grain drops ``season`` too, not just ``week``/``season_type`` --
+    R's ``group_by(player_id, team) |> summarise(...)`` consumes them all.
+    """
     cols = list(_DEF_OUTPUT_COLUMNS)
     if not weekly:
-        cols = [c for c in cols if c not in ("week", "season_type")]
+        cols = [c for c in cols if c not in ("season", "week", "season_type")]
         cols.insert(cols.index("player_display_name") + 1, "games")
     for c in cols:
         if c not in player_df.columns:
@@ -2359,8 +2374,12 @@ _KICK_INT_COLUMNS: tuple[str, ...] = (
 
 
 def _kick_season_columns(cols: List[str]) -> List[str]:
-    """Season-grain column list: drop week/season_type, insert games, rename gwfg_distance."""
-    out = [c for c in cols if c not in ("week", "season_type")]
+    """Season-grain column list: drop season/week/season_type, insert games, rename gwfg_distance.
+
+    ``season`` is dropped too -- the R season grain groups on
+    ``(player_id, team)`` only, so its output carries no season column.
+    """
+    out = [c for c in cols if c not in ("season", "week", "season_type")]
     out.insert(out.index("player_display_name") + 1, "games")
     return ["gwfg_distance_list" if c == "gwfg_distance" else c for c in out]
 

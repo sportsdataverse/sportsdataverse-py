@@ -256,6 +256,9 @@ def test_def_weekly_vs_season_collapse():
     lb1_season = season.filter(pl.col("player_id") == "LB1").to_dicts()[0]
     assert lb1_season["def_tackles_solo"] == lb1_weekly_solo == 2
     assert lb1_season["games"] == 2
+    # R's season grain groups on (player_id, team) only -- no season column.
+    assert "season" not in season.columns
+    assert "season" in weekly.columns
     assert "week" not in season.columns
     assert "season_type" not in season.columns
     assert "games" in season.columns
@@ -267,6 +270,8 @@ def test_def_empty_frame_schema():
     assert empty_weekly.height == 0
     assert empty_season.height == 0
     assert "week" in empty_weekly.columns
+    assert "season" in empty_weekly.columns
+    assert "season" not in empty_season.columns
     assert "games" in empty_season.columns
     assert "def_sacks" in empty_weekly.columns
     assert "def_sacks" in empty_season.columns
@@ -304,11 +309,26 @@ def test_kicking_weekly_vs_season_collapse():
     assert k1["fg_made"] == 2
     assert k1["fg_att"] == 3
     assert k1["games"] == 2
+    # R's season grain groups on (player_id, team) only -- no season column.
+    assert "season" not in season.columns
+    assert "season" in weekly.columns
     assert "week" not in season.columns
     assert "gwfg_distance" not in season.columns
     assert "gwfg_distance_list" in season.columns
     assert "gwfg_distance_list" not in weekly.columns
     assert "gwfg_distance" in weekly.columns
+
+    # Positive GWFG: week 2's lone made 30-yarder is the only FG on the
+    # team's final drive with score_differential in [-2, 0] (week 1's final
+    # drive ends on the PAT, so it never qualifies).
+    wk2 = weekly.filter(pl.col("week") == 2).to_dicts()[0]
+    assert wk2["gwfg_att"] == 1
+    assert wk2["gwfg_made"] == 1
+    assert wk2["gwfg_distance"] == [30.0]
+    assert weekly.filter(pl.col("week") == 1).to_dicts()[0]["gwfg_att"] == 0
+    assert k1["gwfg_att"] == 1
+    assert k1["gwfg_made"] == 1
+    assert k1["gwfg_distance_list"] == "30"
 
 
 def test_kicking_empty_frame_schema():
@@ -317,6 +337,8 @@ def test_kicking_empty_frame_schema():
     assert empty_weekly.height == 0
     assert empty_season.height == 0
     assert "fg_made" in empty_weekly.columns
+    assert "season" in empty_weekly.columns
+    assert "season" not in empty_season.columns
     assert "games" in empty_season.columns
     assert "gwfg_distance" in empty_weekly.columns
     assert "gwfg_distance_list" in empty_season.columns
