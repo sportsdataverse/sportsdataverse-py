@@ -140,9 +140,17 @@ from sportsdataverse.nba import fox_nba_standings as _raw_fox_nba_standings
 from sportsdataverse.nba import fox_nba_team_gamelog as _raw_fox_nba_team_gamelog
 from sportsdataverse.nba import fox_nba_team_roster as _raw_fox_nba_team_roster
 from sportsdataverse.nba import fox_nba_team_stats as _raw_fox_nba_team_stats
+from sportsdataverse.nba import AdjRapmModel as AdjRapmModel  # noqa: F401
+from sportsdataverse.nba import AgingCurve as AgingCurve  # noqa: F401
+from sportsdataverse.nba import ForecastResult as ForecastResult  # noqa: F401
+from sportsdataverse.nba import NbaBpmModel as NbaBpmModel  # noqa: F401
+from sportsdataverse.nba import NbaSpmModel as NbaSpmModel  # noqa: F401
 from sportsdataverse.nba import RidgeRapmModel as RidgeRapmModel  # noqa: F401
+from sportsdataverse.nba import SpmCoefficients as SpmCoefficients  # noqa: F401
 from sportsdataverse.nba import ValidationReport as ValidationReport  # noqa: F401
+from sportsdataverse.nba import box_features as box_features  # noqa: F401
 from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
+from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accuracy  # noqa: F401
 from sportsdataverse.nba import download as download  # noqa: F401
 from sportsdataverse.nba import espn_nba_calendar as espn_nba_calendar  # noqa: F401
 from sportsdataverse.nba import espn_nba_game_rosters as espn_nba_game_rosters  # noqa: F401
@@ -150,6 +158,7 @@ from sportsdataverse.nba import espn_nba_pbp as espn_nba_pbp  # noqa: F401
 from sportsdataverse.nba import espn_nba_player_stats as espn_nba_player_stats  # noqa: F401
 from sportsdataverse.nba import espn_nba_schedule as espn_nba_schedule  # noqa: F401
 from sportsdataverse.nba import espn_nba_teams as espn_nba_teams  # noqa: F401
+from sportsdataverse.nba import fit_aging_curve as fit_aging_curve  # noqa: F401
 from sportsdataverse.nba import flatten_json_iterative as flatten_json_iterative  # noqa: F401
 from sportsdataverse.nba import helper_nba_athlete_items as helper_nba_athlete_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_game_data as helper_nba_game_data  # noqa: F401
@@ -173,18 +182,37 @@ from sportsdataverse.nba import load_nba_stats_schedules as load_nba_stats_sched
 from sportsdataverse.nba import load_nba_team_boxscore as load_nba_team_boxscore  # noqa: F401
 from sportsdataverse.nba import load_nba_team_season_stats as load_nba_team_season_stats  # noqa: F401
 from sportsdataverse.nba import most_recent_nba_season as most_recent_nba_season  # noqa: F401
+from sportsdataverse.nba import nba_adj_rapm as nba_adj_rapm  # noqa: F401
+from sportsdataverse.nba import nba_box_logs as nba_box_logs  # noqa: F401
+from sportsdataverse.nba import nba_bpm as nba_bpm  # noqa: F401
+from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
+from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
+from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
+from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
+from sportsdataverse.nba import nba_v3_to_v2_pbp as nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
+from sportsdataverse.nba import players_on_court_from_rotation as players_on_court_from_rotation  # noqa: F401
 from sportsdataverse.nba import render_report as render_report  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
+from sportsdataverse.nba import train_spm as train_spm  # noqa: F401
 from sportsdataverse.nba import underscore as underscore  # noqa: F401
 from sportsdataverse.nba import validate_model as validate_model  # noqa: F401
 from sportsdataverse.nba import year_to_season as year_to_season  # noqa: F401
 
 __all__ = [
+    "AdjRapmModel",
+    "AgingCurve",
+    "ForecastResult",
+    "NbaBpmModel",
+    "NbaSpmModel",
     "RidgeRapmModel",
+    "SpmCoefficients",
     "ValidationReport",
+    "box_features",
     "compile_nba_season",
+    "darko_forecast_accuracy",
     "download",
     "espn_nba_award",
     "espn_nba_awards",
@@ -301,6 +329,7 @@ __all__ = [
     "espn_nba_transactions",
     "espn_nba_venue",
     "espn_nba_venues",
+    "fit_aging_curve",
     "flatten_json_iterative",
     "fox_nba_boxscore",
     "fox_nba_league_leaders",
@@ -332,10 +361,21 @@ __all__ = [
     "load_nba_team_boxscore",
     "load_nba_team_season_stats",
     "most_recent_nba_season",
+    "nba_adj_rapm",
+    "nba_box_logs",
+    "nba_bpm",
+    "nba_darko",
     "nba_pbp_disk",
+    "nba_player_ages",
+    "nba_player_positions",
+    "nba_spm",
+    "nba_v3_to_v2_pbp",
     "normalize_team_roster_columns",
+    "players_on_court_from_pbp",
+    "players_on_court_from_rotation",
     "render_report",
     "scoreboard_event_parsing",
+    "train_spm",
     "underscore",
     "validate_model",
     "year_to_season",
