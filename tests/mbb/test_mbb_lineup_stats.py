@@ -11,7 +11,26 @@ import pytest
 from sportsdataverse.mbb.mbb_lineup_stats import (
     IGNORE_FIELDS,
     SUM_FIELDS,
+    calculate_aggregated_lineup_stats,
     weighted_avg,
+)
+
+#: Verbatim from ``LuckUtils.affectedFieldSet`` (``LuckUtils.ts:159``) --
+#: the jest test file's ``insertOldValues`` local helper stamps
+#: ``old_value``/``override`` onto every stat whose key is in this set
+#: (see ``tests/fixtures/hoop_explorer/README.md``).
+_LUCK_AFFECTED_FIELDS = frozenset(
+    {
+        "off_adj_ppp",
+        "off_ppp",
+        "off_efg",
+        "off_3p",
+        "def_adj_ppp",
+        "def_ppp",
+        "def_efg",
+        "def_3p",
+        "oppo_def_3p",
+    }
 )
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures/hoop_explorer"
@@ -210,3 +229,103 @@ def test_weighted_avg_does_not_mutate_obj(inputs):
     acc: dict = {}
     weighted_avg(acc, obj)
     _approx_tree(obj, obj_snapshot)
+
+
+def test_weighted_avg_override_old_value_accumulation():
+    """Reviewer-mandated synthetic test (from Task 1.1's report) exercising
+    the override/old_value luck-adjustment bookkeeping branches of
+    weighted_avg. No vendored fixture lineup carries an override on its own
+    -- that's a jest test-local mutation applied by ``insertOldValues`` (see
+    test_aggregated_lineup_stats_matches_snapshot below) -- so this is a
+    hand-crafted minimal 2-lineup case with hand-computed expected values.
+    """
+    lineup_a = {
+        "total_off_fga": {"value": 8.0},
+        "off_efg": {"value": 0.5, "old_value": 0.4, "override": "luck-a"},
+    }
+    lineup_b = {
+        "total_off_fga": {"value": 10.0},
+        "off_efg": {"value": 0.6, "old_value": 0.55, "override": "luck-b"},
+    }
+    acc: dict = {}
+    weighted_avg(acc, lineup_a)
+    weighted_avg(acc, lineup_b)
+
+    # off_efg doesn't match the shot-type regex (getShotTypeField requires
+    # the type to start with 2/3), isn't in any of the ppp/orb/fta/ast
+    # weight tables, and isn't total_/SUM_FIELDS -- so it falls through to
+    # the generic off_-prefix FGA-weight fallback (LineupUtils.ts:709-713).
+    # With regress_diffs=0 (weighted_avg's only mode), that weight is
+    # exactly each merged lineup's own total_off_fga.
+    w_a, w_b = 8.0, 10.0
+    expected_value = 0.5 * w_a + 0.6 * w_b
+    expected_old_value = 0.4 * w_a + 0.55 * w_b
+    assert acc["off_efg"]["value"] == pytest.approx(expected_value, rel=1e-9)
+    assert acc["off_efg"]["old_value"] == pytest.approx(expected_old_value, rel=1e-9)
+    # override is stamped once on first-sight init (from lineup_a, merged
+    # first) and never overwritten by a later lineup's own override value:
+    # the "was init'd without override" elif (LineupUtils.ts:665-668) only
+    # fires when the accumulator doesn't already carry a truthy override.
+    assert acc["off_efg"]["override"] == "luck-a"
+
+
+def _insert_old_values(lineup: dict) -> dict:
+    """Python replay of the jest test file's local ``insertOldValues``
+    helper (``LineupUtils.test.ts``, inside the ``describe("LineupUtils")``
+    block): for every stat whose key is in ``LuckUtils.affectedFieldSet``
+    and whose ``value`` is not nil, stamp ``old_value = value`` and
+    ``override = "Test override"``. Mutates ``lineup`` in place and returns
+    it (matching the jest helper's own mutate-and-return shape).
+    """
+    for key, stat in lineup.items():
+        if key in _LUCK_AFFECTED_FIELDS and isinstance(stat, dict) and stat.get("value") is not None:
+            stat["old_value"] = stat["value"]
+            stat["override"] = "Test override"
+    return lineup
+
+
+def _to_fixed(obj):
+    """Python replay of the jest test file's local ``toFixed`` helper:
+    3-decimal string formatting for snapshot comparison, preserving the
+    ``override``/``old_value`` shape when present.
+    """
+    if not isinstance(obj, dict):
+        return obj
+    if obj.get("override"):
+        return {
+            "value": f"{obj['value']:.3f}",
+            "old_value": f"{obj['old_value']:.3f}",
+            "override": obj["override"],
+        }
+    if "value" in obj:
+        return {"value": f"{obj['value']:.3f}"}
+    return obj
+
+
+def _find_snapshot_for(snap: dict, needle: str):
+    for name, val in snap.items():
+        if needle.lower() in name.lower() and isinstance(val, dict):
+            return val
+    pytest.skip(f"no parsed snapshot entry matching {needle!r}")
+
+
+def test_aggregated_lineup_stats_matches_snapshot(inputs, snap):
+    """Oracle test for calculate_aggregated_lineup_stats, replaying the two
+    jest test-local transforms documented in
+    tests/fixtures/hoop_explorer/README.md before calling the ported
+    function: (1) ``insertOldValues`` stamps old_value/override onto every
+    LuckUtils.affectedFieldSet field of every lineup, and (2)
+    ``lineups[1].rapmRemove = true`` diverts the 2nd lineup into the
+    all_lineups sub-accumulator. The jest snapshot only picks 4 fields
+    (off_poss/def_poss/off_adj_ppp/def_adj_ppp) and formats them with
+    toFixed(3) before matching -- replicate both the pick and the
+    formatting so the comparison is apples-to-apples.
+    """
+    lineups = [_insert_old_values(copy.deepcopy(lineup)) for lineup in _first_lineup_list(inputs)]
+    lineups[1]["rapmRemove"] = True
+
+    agg = calculate_aggregated_lineup_stats(lineups)
+    picked = {key: _to_fixed(agg[key]) for key in ("off_poss", "def_poss", "off_adj_ppp", "def_adj_ppp")}
+
+    expected = _find_snapshot_for(snap, "calculateAggregatedLineupStats")
+    _approx_tree(picked, expected)
