@@ -5,7 +5,9 @@ from pathlib import Path
 import polars as pl
 
 from sportsdataverse.nba.nba_oracle_data import (
+    EPM_ORACLE_SCHEMA,
     RAPM_ORACLE_SCHEMA,
+    load_epm,
     load_rapm_ryan_davis,
     normalize_player_name,
 )
@@ -54,3 +56,21 @@ def test_load_rapm_ryan_davis_empty_header_only(tmp_path):
     df = load_rapm_ryan_davis(str(empty))
     assert df.height == 0
     assert dict(df.schema) == RAPM_ORACLE_SCHEMA
+
+
+def test_load_epm_schema_and_values():
+    df = load_epm(str(FIXTURES / "epm_sample.csv"))
+    assert dict(df.schema) == EPM_ORACLE_SCHEMA
+    assert df.height == 3
+    row = df.filter(pl.col("player_id") == 203999).to_dicts()[0]
+    assert row["player_name"] == "Nikola Jokic"
+    assert row["season"] == 2025
+    assert abs(row["epm"] - 8.082) < 1e-9
+
+
+def test_load_epm_empty_header_only(tmp_path):
+    empty = tmp_path / "empty.csv"
+    empty.write_text("season,nba_id,name,team,oepm,depm,epm\n")
+    df = load_epm(str(empty))
+    assert df.height == 0
+    assert dict(df.schema) == EPM_ORACLE_SCHEMA

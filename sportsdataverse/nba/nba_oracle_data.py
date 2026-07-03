@@ -19,7 +19,13 @@ import unicodedata
 
 import polars as pl
 
-__all__ = ["normalize_player_name", "RAPM_ORACLE_SCHEMA", "load_rapm_ryan_davis"]
+__all__ = [
+    "normalize_player_name",
+    "RAPM_ORACLE_SCHEMA",
+    "load_rapm_ryan_davis",
+    "EPM_ORACLE_SCHEMA",
+    "load_epm",
+]
 
 
 def normalize_player_name(name: str) -> str:
@@ -114,4 +120,49 @@ def load_rapm_ryan_davis(path: str) -> pl.DataFrame:
         pl.col("RA_FTR").cast(pl.Float64),
         pl.col("RA_ORBD").cast(pl.Float64),
         pl.col("RA_TOV").cast(pl.Float64),
+    )
+
+
+#: Tidy schema for :func:`load_epm`.
+EPM_ORACLE_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "season": pl.Int64,
+    "player_name": pl.Utf8,
+    "team": pl.Utf8,
+    "oepm": pl.Float64,
+    "depm": pl.Float64,
+    "epm": pl.Float64,
+}
+
+
+def load_epm(path: str) -> pl.DataFrame:
+    """Parse a Dunks & Threes EPM CSV (``{season}_EPM_data.csv``).
+
+    Args:
+        path: Filesystem path to a D&T EPM CSV.
+
+    Returns:
+        Frame with schema :data:`EPM_ORACLE_SCHEMA`. Zero rows (with that
+        schema) when the file has a header but no data rows.
+
+    Raises:
+        FileNotFoundError: If ``path`` does not exist.
+
+    Example:
+        Load one season's EPM::
+
+            from sportsdataverse.nba.nba_oracle_data import load_epm
+            oracle = load_epm(f"{oracle_dir}/2025_EPM_data.csv")
+    """
+    raw = pl.read_csv(path)
+    if raw.is_empty():
+        return pl.DataFrame(schema=EPM_ORACLE_SCHEMA)
+    return raw.select(
+        pl.col("nba_id").cast(pl.Int64).alias("player_id"),
+        pl.col("season").cast(pl.Int64),
+        pl.col("name").cast(pl.Utf8).alias("player_name"),
+        pl.col("team").cast(pl.Utf8),
+        pl.col("oepm").cast(pl.Float64),
+        pl.col("depm").cast(pl.Float64),
+        pl.col("epm").cast(pl.Float64),
     )
