@@ -1,20 +1,49 @@
-"""Oracle tests for mbb_ratings.build_o_rtg against vendored hoop-explorer fixtures.
+"""Oracle tests for ``mbb_ratings`` against vendored hoop-explorer fixtures.
 
-Replays ``RatingUtils.test.ts``'s ``"RatingUtils - buildORtg"`` jest test
-(``src/utils/stats/__tests__/RatingUtils.test.ts:27-117``) call-for-call: 3
-progressive calls sharing a single mutated ``playerInfo`` (baseline, then a
-manual ``off_3p`` override, then a team-TO scenario), asserting the ``oRtg``/
-``adjORtg`` oracle values (``expORtg``/``expORtgAdj``/... vendored in
-``rating_utils_inputs.json``) plus the full ``oRtgDiags`` snapshot
-(``rating_utils_snap.json``'s ``"RatingUtils - buildORtg 1"`` entry, 92
-keys -- baseline call only, per upstream) and the ``sampleOrtgDiagnostics``
+**Task 2.2** replayed ``RatingUtils.test.ts``'s ``"RatingUtils - buildORtg"``
+jest test (``src/utils/stats/__tests__/RatingUtils.test.ts:27-117``)
+call-for-call: 3 progressive calls sharing a single mutated ``playerInfo``
+(baseline, then a manual ``off_3p`` override, then a team-TO scenario),
+asserting the ``oRtg``/``adjORtg`` oracle values (``expORtg``/``expORtgAdj``/
+... vendored in ``rating_utils_inputs.json``) plus the full ``oRtgDiags``
+snapshot (``rating_utils_snap.json``'s ``"RatingUtils - buildORtg 1"`` entry,
+92 keys -- baseline call only, per upstream) and the ``sampleOrtgDiagnostics``
 ``toMatchObject`` oracle (93 keys, the extra key being an explicit
 ``Raw_Usage: undefined`` literal in the upstream sample file).
 
-``build_o_rtg`` mirrors ``buildORtg``'s actual 6-positional-arg / 5-tuple TS
-signature (snake_cased) -- see ``sportsdataverse/mbb/mbb_ratings.py``'s
+**Task 2.3** adds: ``build_d_rtg`` (replays ``"RatingUtils - buildDRtg"``,
+``RatingUtils.test.ts:247-275`` -- baseline + ``oppo_def_3p``-override
+calls, both the ``expDRtg``/``expDRtgAdj`` oracle values and the full
+47-key ``dRtgDiags`` snapshot/``sampleDrtgDiagnostics`` ``toEqual`` oracle);
+``build_net_points`` (replays ``"RatingUtils - buildNetPoints uses
+adjPtsFactor and adjPossFactor"``, ``RatingUtils.test.ts:119-155``, 20-key
+snapshot); ``adjust_off_rating_stats`` (replays ``"RatingUtils -
+adjustOffRatingStats updates the right fields"``,
+``RatingUtils.test.ts:157-182``, 7-key projection snapshot); and
+``build_productivity`` (promoted from private -- ``_build_productivity`` in
+Task 2.2 -- see ``mbb_ratings.py``'s module docstring for the promotion
+rationale).
+
+``build_o_rtg``/``build_d_rtg`` mirror ``buildORtg``/``buildDRtg``'s actual
+TS signatures (snake_cased) -- see ``sportsdataverse/mbb/mbb_ratings.py``'s
 module docstring for why this deliberately diverges from the Phase-2 plan
 brief's proposed stub signature.
+
+**Unreachable-via-this-task's-scope** (``rating_utils_snap.json`` entries NOT
+consumed by any test in this module -- see ``mbb_ratings.py``'s module
+docstring "Deferred beyond this task" section for the full rationale, this
+is the test-side accounting the oracle-discipline rule requires):
+
+- ``"RatingUtils - injectUncatOnBallDefenseStats 1"``
+- ``"RatingUtils - buildOnBallDefenseAdjustmentsPhase1 1"``
+- ``"RatingUtils - injectOnBallDefenseAdjustmentsPhase2 1"``
+
+These 3 belong to the on-ball-defense adjustment family, which is out of
+scope for Phase 2 (no owning task in ``PLAN-phase2.md``; depends on a
+proprietary Synergy-style ``OnBallDefenseModel`` input this port has no
+producer for). All other ``rating_utils_snap.json`` entries (``buildORtg``,
+``buildDRtg``, ``buildNetPoints``, ``adjustOffRatingStats``) are consumed
+below or in the Task 2.2 tests above.
 """
 
 from __future__ import annotations
@@ -27,8 +56,11 @@ from sportsdataverse.mbb.mbb_ratings import (
     REPLACEMENT_LEVEL,
     RETAIN_POSS_WITH_REBOUND_RATE,
     _build_off_overrides,
-    _build_productivity,
+    adjust_off_rating_stats,
+    build_d_rtg,
+    build_net_points,
     build_o_rtg,
+    build_productivity,
 )
 from tests.mbb._hoop_explorer_replay import approx_tree, load_rating_inputs, load_rating_snap
 
@@ -256,11 +288,131 @@ def test_build_productivity_is_pure_arithmetic():
     """``buildProductivity`` has no direct jest test (Task 2.1 surprise #3)
     -- it's only exercised indirectly through ``build_o_rtg`` (covered
     above). This is a targeted unit check of the Dean-Oliver PUE formula
-    itself, independent of the ORtg possession-chain plumbing.
+    itself, independent of the ORtg possession-chain plumbing. Promoted to
+    public in Task 2.3 (was ``_build_productivity`` in Task 2.2).
     """
-    result = _build_productivity(o_rtg=110.0, o_adj=1.05, usage=20.0, avg_efficiency=100.0)
+    result = build_productivity(o_rtg=110.0, o_adj=1.05, usage=20.0, avg_efficiency=100.0)
     assert set(result.keys()) == {"Adj_ORtg", "Adj_ORtgPlus", "Usage_Bonus", "SoS_Bonus"}
     assert result["Adj_ORtg"] == pytest.approx(110.0 * 1.05)
     # SoS_Bonus should vanish when o_adj == 1 (no schedule adjustment):
-    identity = _build_productivity(o_rtg=110.0, o_adj=1.0, usage=20.0, avg_efficiency=100.0)
+    identity = build_productivity(o_rtg=110.0, o_adj=1.0, usage=20.0, avg_efficiency=100.0)
     assert identity["SoS_Bonus"] == pytest.approx(0.0, abs=1e-9)
+
+
+def test_build_d_rtg_none_stat_set_returns_all_none():
+    """``buildDRtg`` returns an all-``undefined`` 5-tuple for a
+    null/undefined ``statSet`` (``RatingUtils.ts:1264-1265``), same
+    ``is None``-only short-circuit convention as ``build_o_rtg``.
+    """
+    assert build_d_rtg(None, 100.0, True, False) == (None, None, None, None, None)
+
+
+def test_build_d_rtg_empty_stat_set_computes_without_error():
+    """Contrast with ``build_o_rtg``: every division inside ``buildDRtg`` is
+    guard-ternary'd (``x > 0 ? a/b : 0``), so an empty ``{}`` stat set
+    computes a degenerate all-zero(ish) result instead of raising
+    ``ZeroDivisionError`` (see the module docstring's "Contrast" note).
+    """
+    d_rtg, adj_d_rtg, raw_d_rtg, raw_adj_d_rtg, diags = build_d_rtg({}, 100.0, True, False)
+    # Opponent_Possessions_Box == 0, not > 0 -- both value tuples are None:
+    assert d_rtg is None
+    assert adj_d_rtg is None
+    assert raw_d_rtg is None
+    assert raw_adj_d_rtg is None
+    assert diags is not None
+    assert diags["dRtg"] == 0.0
+    assert diags["oppoPoss"] == 0.0
+
+
+def test_build_d_rtg_baseline_call(player_info, inputs, snap):
+    """Replay of ``"RatingUtils - buildDRtg"`` (``RatingUtils.test.ts:247-275``):
+    baseline call (``calc_diags=True, override_adjusted=False``), then an
+    ``oppo_def_3p`` override call (``calc_diags=True, override_adjusted=True``).
+    """
+    d_rtg, adj_d_rtg, raw_d_rtg, raw_adj_d_rtg, d_rtg_diags = build_d_rtg(player_info, 100, True, False)
+
+    exp_d_rtg = inputs["expDRtg"]
+    exp_d_rtg_adj = inputs["expDRtgAdj"]
+    assert d_rtg["value"] == pytest.approx(exp_d_rtg["value"], rel=1e-9)
+    assert adj_d_rtg["value"] == pytest.approx(exp_d_rtg_adj["value"], rel=1e-9)
+    assert raw_d_rtg is None
+    assert raw_adj_d_rtg is None
+
+    # Full dRtgDiags snapshot (47 keys, jest toMatchSnapshot) + toEqual(sampleDrtgDiagnostics):
+    expected_diags = snap["RatingUtils RatingUtils - buildDRtg 1"]
+    approx_tree(d_rtg_diags, expected_diags)
+    approx_tree(d_rtg_diags, inputs["sampleDrtgDiagnostics"])
+
+    # Check with override (RatingUtils.test.ts:264-274):
+    player_info["oppo_def_3p"] = {"value": 0.3, "old_value": 0.4}
+    d_rtg2, adj_d_rtg2, raw_d_rtg2, raw_adj_d_rtg2, _ = build_d_rtg(player_info, 100, True, True)
+
+    assert d_rtg2["value"] == pytest.approx(90.04849177213895, rel=1e-9)
+    assert adj_d_rtg2["value"] == pytest.approx(-3.3304841564964764, rel=1e-9)
+    # raw values == the un-overridden baseline values:
+    assert raw_d_rtg2["value"] == pytest.approx(exp_d_rtg["value"], rel=1e-9)
+    assert raw_adj_d_rtg2["value"] == pytest.approx(exp_d_rtg_adj["value"], rel=1e-9)
+
+
+def test_build_net_points(inputs, snap):
+    """Replay of ``"RatingUtils - buildNetPoints uses adjPtsFactor and
+    adjPossFactor"`` (``RatingUtils.test.ts:119-155``): a fresh player doc
+    with ``off_team_poss_pct``/``def_team_poss_pct`` set to ``0.25``, ORtg
+    and DRtg diagnostics built from it, then ``adjPtsFactor``/
+    ``adjPossFactor`` overridden to ``1.1``/``0.9`` on a shallow copy of the
+    ORtg diags before calling ``build_net_points``.
+    """
+    buckets = inputs["samplePlayerStatsResponse"]["responses"][0]["aggregations"]["tri_filter"]["buckets"]["baseline"][
+        "player"
+    ]["buckets"]
+    player_info = copy.deepcopy(buckets[0])
+    player_info["off_team_poss_pct"] = {"value": 0.25}
+    player_info["def_team_poss_pct"] = {"value": 0.25}
+
+    _, _, _, _, o_rtg_diags = build_o_rtg(
+        player_info, {}, {"total_off_to": {"value": 0}, "sum_total_off_to": {}}, 100, True, False
+    )
+    _, _, _, _, d_rtg_diags = build_d_rtg(player_info, 100, True, False)
+
+    ortg_with_factors = {**o_rtg_diags, "adjPtsFactor": 1.1, "adjPossFactor": 0.9}
+    net_points = build_net_points(player_info, ortg_with_factors, d_rtg_diags, 100, "T%", 1, 1)
+
+    expected = snap["RatingUtils RatingUtils - buildNetPoints uses adjPtsFactor and adjPossFactor 1"]
+    approx_tree(net_points, expected)
+    assert "defNetPtsIndiv" not in net_points  # onBallDiags never set by this port
+
+
+def test_adjust_off_rating_stats(inputs, snap):
+    """Replay of ``"RatingUtils - adjustOffRatingStats updates the right
+    fields"`` (``RatingUtils.test.ts:157-182``): builds a fresh baseline
+    ``oRtgDiags`` (``override_adjusted=False``, so ``rawORtg`` and hence
+    ``Raw_Usage``/``maybe_raw_o_rtg`` are both ``None``), deep-copies it,
+    applies a ``1.1``/``0.9`` pts/poss correction, and asserts the 7-field
+    projection against the jest snapshot.
+    """
+    buckets = inputs["samplePlayerStatsResponse"]["responses"][0]["aggregations"]["tri_filter"]["buckets"]["baseline"][
+        "player"
+    ]["buckets"]
+    player_info = copy.deepcopy(buckets[0])
+
+    _, _, raw_o_rtg, _, o_rtg_diags = build_o_rtg(
+        player_info, {}, {"total_off_to": {"value": 0}, "sum_total_off_to": {}}, 100, True, False
+    )
+    mutable_diag = copy.deepcopy(o_rtg_diags)
+    maybe_raw_o_rtg = raw_o_rtg["value"] if raw_o_rtg else None
+    assert maybe_raw_o_rtg is None  # no override was applied -- rawORtg is undefined upstream
+
+    result = adjust_off_rating_stats(1.1, 0.9, mutable_diag, maybe_raw_o_rtg)
+    assert result is None  # Raw_Usage is also None -- both nil, matches jest's implicit expectation
+
+    projection = {
+        "oRtg": mutable_diag["oRtg"],
+        "adjORtg": mutable_diag["adjORtg"],
+        "adjORtgPlus": mutable_diag["adjORtgPlus"],
+        "Usage_Bonus": mutable_diag["Usage_Bonus"],
+        "SoS_Bonus": mutable_diag["SoS_Bonus"],
+        "adjPtsFactor": mutable_diag["adjPtsFactor"],
+        "adjPossFactor": mutable_diag["adjPossFactor"],
+    }
+    expected = snap["RatingUtils RatingUtils - adjustOffRatingStats updates the right fields 1"]
+    approx_tree(projection, expected)

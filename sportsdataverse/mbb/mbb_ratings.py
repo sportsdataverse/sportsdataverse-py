@@ -1,15 +1,19 @@
-"""Individual offensive rating (Dean-Oliver ORtg + Adj Rtg+ productivity).
+"""Individual offensive/defensive rating (Dean-Oliver ORtg/DRtg + Adj Rtg+ productivity).
 
 Faithful port of hoop-explorer's ``RatingUtils``
 (`Alex-At-Home/cbb-on-off-analyzer <https://github.com/Alex-At-Home/cbb-on-off-analyzer>`_
-``src/utils/stats/RatingUtils.ts``, 2260 LOC). This task (Phase 2, Task 2.2)
-ports :func:`build_o_rtg` -- the ``buildORtg`` static method
+``src/utils/stats/RatingUtils.ts``, 2260 LOC). Task 2.2 (Phase 2) ported
+:func:`build_o_rtg` -- the ``buildORtg`` static method
 (``RatingUtils.ts:398``) -- which derives an individual player's offensive
 rating (points produced per 100 individual possessions, adapted from
 `basketball-reference.com's NBA box-score method
 <https://www.basketball-reference.com/about/ratings.html>`_) plus the
 "Adj Rtg+" (SoS + usage adjusted efficiency above replacement) used
-downstream as a RAPM prior (Phase 3).
+downstream as a RAPM prior (Phase 3). Task 2.3 adds the defensive
+counterpart :func:`build_d_rtg` (``buildDRtg``), the Net-Points breakdown
+:func:`build_net_points` (``buildNetPoints``), the missing-possession
+correction :func:`adjust_off_rating_stats` (``adjustOffRatingStats``), and
+promotes :func:`build_productivity` (``buildProductivity``) to public.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``RatingUtils.ts`` from
@@ -82,17 +86,21 @@ Ported behavior (``RatingUtils.ts`` anchors):
   ``rating_utils_snap.json`` entry, so it isn't this task's oracle gate) --
   but the math is ported verbatim now since ``build_o_rtg`` cannot compute
   its 2nd/3rd progressive-override oracle assertions without it.
-- :func:`_build_productivity` -- private port of ``buildProductivity``
-  (``RatingUtils.ts:963-990``, Dean Oliver's "PUE" with diagnostics). Turns
-  ``(ORtg, o_adj, usage, avgEfficiency)`` into ``{Adj_ORtg, Adj_ORtgPlus,
-  Usage_Bonus, SoS_Bonus}``. Per Task 2.1's report, this function has **no
-  direct jest test** -- it is only exercised indirectly through
-  ``buildORtg`` (this task) and ``adjustOffRatingStats`` (Task 2.3). Kept
-  private and structured as a standalone helper (not inlined into
-  :func:`build_o_rtg`) specifically so Task 2.3's ``build_d_rtg`` /
-  ``adjust_off_rating_stats`` can import and reuse it without duplicating
-  the formula -- Task 2.3 owns whether it graduates to a public
-  ``build_productivity``.
+- :func:`build_productivity` -- **public** (promoted in Task 2.3) port of
+  ``buildProductivity`` (``RatingUtils.ts:963-990``, Dean Oliver's "PUE" with
+  diagnostics). Turns ``(ORtg, o_adj, usage, avgEfficiency)`` into
+  ``{Adj_ORtg, Adj_ORtgPlus, Usage_Bonus, SoS_Bonus}``. Per Task 2.1's
+  report, this function has **no direct jest test** -- it is only exercised
+  indirectly through ``buildORtg``, ``buildDRtg``'s sibling
+  ``adjustOffRatingStats``, and (in Task 2.3) :func:`build_d_rtg` /
+  :func:`adjust_off_rating_stats`. Task 2.2 kept it private
+  (``_build_productivity``) pending Task 2.3's promotion decision; Task 2.3
+  promotes it to public because it is the documented **RAPM prior source for
+  Phase 3** (a *different* Python module will need to import it across
+  package boundaries -- Python's private-name convention, not the TS
+  source's own visibility, gates this decision. ``buildProductivity`` is
+  itself only called from within ``RatingUtils.ts``, so this is a Python
+  packaging call, not a TS-parity one).
 - :func:`build_o_rtg` -- the full ``buildORtg`` possession-chain port
   (``RatingUtils.ts:398-960``): points-produced decomposition (FG/AST/FT/ORB
   parts, with both the "classic" and the new per-shot-location assisted-eFG
@@ -102,6 +110,42 @@ Ported behavior (``RatingUtils.ts`` anchors):
   diagnostics (``SD_at_Usage`` etc., upstream-flagged "not used any more"
   but preserved for parity), and the recursive un-overridden
   raw-value pass when ``override_adjusted=True``.
+- :func:`_build_def_overrides` -- private port of ``buildDefOverrides``
+  (``RatingUtils.ts:1237-1249``). ``buildDRtg``'s own override source --
+  **not** the same helper as :func:`_build_off_overrides` (confirmed by
+  reading the TS: ``buildDefOverrides`` is a separate, already
+  ``private static`` method in the TS class itself, only projecting the 3P
+  defensive-shooting override onto ``oppo_total_def_pts``/
+  ``oppo_total_def_fgm``). Kept private -- the TS source itself marks it
+  private, so there is no promotion question here.
+- :func:`build_d_rtg` -- the full ``buildDRtg`` port (``RatingUtils.ts:1252-1485``),
+  Task 2.3's headline addition: individual defensive rating (Dean-Oliver
+  ``DRtg``) + diagnostics, mirroring :func:`build_o_rtg`'s structure
+  (``stat_get`` closure, ``calc_diags``/``override_adjusted`` flag pair,
+  recursive un-overridden raw-value pass) but over a simpler
+  ``(stat_set, avg_efficiency, calc_diags, override_adjusted)`` signature
+  (no roster/extra-team-stat args -- confirmed against the TS, per Task
+  2.1's surprise #2). **Every division in ``buildDRtg`` is
+  guard-ternary'd** (``x > 0 ? a/b : 0``) -- unlike :func:`build_o_rtg`,
+  this function introduces **zero** new unguarded-division landmines (see
+  the landmine list below, which stays at 3 entries plus one added by
+  :func:`adjust_off_rating_stats`, not by this function).
+- :func:`build_net_points` -- port of ``buildNetPoints``
+  (``RatingUtils.ts:1036-1234``), decomposing :func:`build_o_rtg` /
+  :func:`build_d_rtg`'s diagnostics dicts into a Net-Points breakdown (by
+  shot location, assists, FT, TO, ORB, volume/usage bonus, SoS bonus, and a
+  RAPM "WOWY" -- with-or-without-you -- delta on both sides). Uses a
+  dedicated nullish-coalesce helper (:func:`_nullish`) for the two spots
+  (``RatingUtils.ts:1049,1119-1120,1143``) where the TS uses ``??`` rather
+  than ``||`` -- an explicit ``0`` RAPM value must NOT be treated as absent,
+  which ``_field_val``'s falsy-coalesce would get wrong.
+- :func:`adjust_off_rating_stats` -- port of ``adjustOffRatingStats``
+  (``RatingUtils.ts:993-1033``), which mutates an ``ORtgDiagnostics`` dict
+  in place to apply a pts/possession correction factor (used when a lineup
+  sample is missing possessions) and recomputes the productivity fields via
+  :func:`build_productivity` -- reused, not re-derived, per Task 2.1's
+  surprise #2. Python dict mutation-in-place mirrors the TS's mutation of
+  ``mutableORtg`` directly.
 
 **Known unguarded-division landmines (preserved for fidelity).** Several TS
 expressions divide without a ``|| 1`` safety net and rely on JS's
@@ -121,6 +165,15 @@ expressions divide without a ``|| 1`` safety net and rely on JS's
    folds to the fallback), so the zero denominator is reachable only when
    the caller passes ``avg_efficiency == 0`` itself -- but the expression
    carries no guard.
+4. :func:`adjust_off_rating_stats`'s ``o_adj = mutable_o_rtg["avgEff"] /
+   mutable_o_rtg["defSos"] or 1`` (``RatingUtils.ts:1008,1027`` -- the same
+   ``avgEff / Def_SOS`` computation as landmine 3, recomputed twice more at
+   this call site since ``adjustOffRatingStats`` re-derives ``o_adj`` rather
+   than threading it through). Same reachability analysis as landmine 3:
+   only reachable when a diagnostics dict carries ``defSos == 0``, which
+   only happens if the original :func:`build_o_rtg` call was itself given
+   ``avg_efficiency == 0`` (since ``def_adj_opp`` falls back to
+   ``avg_efficiency``, never to a literal ``0``, when absent).
 
 Python raises ``ZeroDivisionError`` for a literal ``x / 0.0`` where JS would
 silently produce ``inf``/``nan`` and keep going -- this module does **not**
@@ -134,25 +187,73 @@ see an exception where the JS original degrades to NaN propagation (for the
 diagnostic; every downstream use is behind a ``Team_FTA > 0`` guard). None
 of this task's oracle fixtures exercise these edge cases.
 
-Deferred to Task 2.3 (``.superpowers/sdd/hoop-explorer-port/PLAN-phase2.md``):
-``build_d_rtg`` (``buildDRtg``, ``RatingUtils.ts:1252``), ``build_net_points``
-(``buildNetPoints``, ``RatingUtils.ts:1036``), ``adjust_off_rating_stats``
-(``adjustOffRatingStats``, ``RatingUtils.ts:993``), and the on-ball-defense
-adjustment family (``injectUncatOnBallDefenseStats``,
-``buildOnBallDefenseAdjustmentsPhase1``,
-``injectOnBallDefenseAdjustmentsPhase2``). ``build_off_overrides`` may be
-promoted to public by that task if it decides to test it directly.
+**Contrast: ``build_d_rtg`` (``buildDRtg``) is fully guard-ternary'd.** Every
+division inside ``buildDRtg`` (``RatingUtils.ts:1252-1485``) is written
+``x > 0 ? a / b : 0`` -- there is no TS source line to preserve as a
+landmine, and an empty-``{}`` ``stat_set`` computes cleanly (all guards
+degrade to ``0``/the ``avg_efficiency`` fallback) rather than raising. This
+is a genuine, confirmed-by-reading contrast with :func:`build_o_rtg`, not an
+oversight in this port.
+
+**Deferred beyond this task (no owning task in ``PLAN-phase2.md``):**
+
+- ``adjustDefRatingStats`` (``RatingUtils.ts:1488-1522``) -- the DRtg analog
+  of :func:`adjust_off_rating_stats`. **No jest test exercises it**
+  (``RatingUtils.test.ts`` has no ``adjustDefRatingStats`` test/snapshot, and
+  it is absent from Task 2.1's snapshot inventory), so there is no oracle to
+  validate a port against. A future task can add it as a direct structural
+  analog of :func:`adjust_off_rating_stats` + :func:`build_d_rtg`'s
+  ``Off_SOS > 0`` guard once a caller (e.g. Phase 3 RAPM/lineup aggregation)
+  needs it -- at which point a synthetic hand-computed test (the same
+  strategy used for :func:`build_productivity`) should accompany it.
+- The on-ball-defense adjustment family --
+  ``injectUncatOnBallDefenseStats`` (``RatingUtils.ts:1527``),
+  ``buildOnBallDefenseAdjustmentsPhase1`` (``RatingUtils.ts:1590``), and
+  ``injectOnBallDefenseAdjustmentsPhase2`` (further in the file) -- each has
+  a ``rating_utils_snap.json`` entry (jest-covered) but no task in
+  ``PLAN-phase2.md`` claims them; this task's scope (per its brief and the
+  orchestrating prompt) is ``build_d_rtg`` + finalizing
+  ``build_productivity``/override surfaces + ``build_net_points`` +
+  ``adjust_off_rating_stats`` (the helpers ``buildDRtg`` itself needs plus
+  the jest-covered override/correction-factor paths). The on-ball-defense
+  family is a separate, proprietary-data-model-dependent (Synergy-style
+  on-ball tracking) surface that consumes ``OnBallDefenseModel`` inputs this
+  port has no producer for yet -- flagged for a follow-up task rather than
+  silently dropped. Every one of these 3 snapshot entries remains
+  unconsumed by ``tests/mbb/test_mbb_ratings.py`` as of this task; see that
+  module's docstring for the same accounting.
+- ``build_off_overrides`` promotion: **kept private.** Grepped
+  ``RatingUtils.buildOffOverrides`` across ``src/`` (excluding
+  ``RatingUtils.ts`` itself and the test file) -- the only hit is a
+  *comment* in ``OverrideUtils.ts:389`` ("There's some weirdness with
+  RatingUtils.buildOffOverrides...") noting a design tension, not an actual
+  call. ``buildOffOverrides`` is therefore not a public API consumed outside
+  ``RatingUtils.ts`` in the upstream source, so per this task's promotion
+  rule it stays ``_build_off_overrides`` (private). Contrast with
+  ``buildNetPoints`` (called from ``buildLeaderboards.ts``,
+  ``PlayerImpactBreakdownTable.tsx``, ``ImpactBreakdownUtils.ts``) and
+  ``adjustOffRatingStats``/``adjustDefRatingStats`` (called from
+  ``LineupTableUtils.ts``) -- both are genuinely public upstream, which is
+  why both are ported as public functions in this task.
 """
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 
 from sportsdataverse.mbb.mbb_lineup_stats import LineupStatSet, _field_val, _num
 
 #: ``ORtgDiagnostics`` (``RatingUtils.ts:12-131``) -- kept as a plain dict
 #: alias (field names verbatim from TS, see module docstring).
 ORtgDiagnostics = dict[str, Any]
+
+#: ``DRtgDiagnostics`` (``RatingUtils.ts:186-245``) -- same convention as
+#: :data:`ORtgDiagnostics` (TS-verbatim keys, plain dict alias).
+DRtgDiagnostics = dict[str, Any]
+
+#: ``NetPoints`` (``RatingUtils.ts:133-157``) -- ``build_net_points``'s
+#: return shape; TS-verbatim keys.
+NetPoints = dict[str, float]
 
 #: The % of average efficiency that represents replacement level.
 #: Verbatim from ``RatingUtils.ts:321`` (``RatingUtils.Replacement_Level``).
@@ -193,6 +294,21 @@ def _override_diff(field: Any) -> float:
         return 0.0
     val = field.get("value")
     return (val if val else 0.0) - field["old_value"]
+
+
+def _nullish(field: Any, attr: str, default: float) -> float:
+    """Port of JS ``field?.[attr] ?? default`` -- the nullish-coalescing
+    sibling of :func:`_field_val`'s falsy-coalescing (``field?.[attr] ||
+    default``). Used where the TS deliberately uses ``??`` so that an
+    explicit ``0`` value is NOT treated as absent (e.g.
+    :func:`build_net_points`'s RAPM-delta defaults, ``RatingUtils.ts:1049,
+    1119-1120, 1143``) -- ``_field_val`` would incorrectly substitute
+    ``default`` for a genuine ``{"value": 0}``.
+    """
+    if not isinstance(field, dict):
+        return default
+    val = field.get(attr)
+    return val if val is not None else default
 
 
 def _build_off_overrides(stat_set: LineupStatSet) -> dict[str, dict[str, float]]:
@@ -253,13 +369,17 @@ def _build_off_overrides(stat_set: LineupStatSet) -> dict[str, dict[str, float]]
     }
 
 
-def _build_productivity(
+def build_productivity(
     o_rtg: float,
     o_adj: float,
     usage: float,
     avg_efficiency: float,
 ) -> dict[str, float]:
-    """Private port of ``RatingUtils.buildProductivity`` (``RatingUtils.ts:963-990``).
+    """Public port of ``RatingUtils.buildProductivity`` (``RatingUtils.ts:963-990``).
+
+    Promoted to public in Task 2.3 -- see the module docstring's "Ported
+    behavior" section for the promotion rationale (Phase-3 RAPM needs to
+    import this across module boundaries).
 
     Converts ``ORtg`` and a few other numbers into "productivity" using Dean
     Oliver's PUE ("Player Usage Efficiency") formulation, SoS-adjusted via
@@ -596,7 +716,7 @@ def build_o_rtg(
     sd_at_usage_20 = 10.143
     regressed_o_rtg = avg_efficiency + sds_above_mean * sd_at_usage_20
 
-    productivity = _build_productivity(o_rtg, o_adj, usage, avg_efficiency)
+    productivity = build_productivity(o_rtg, o_adj, usage, avg_efficiency)
     adj_o_rtg = productivity["Adj_ORtg"]
     adj_o_rtg_plus = productivity["Adj_ORtgPlus"]
     usage_bonus = productivity["Usage_Bonus"]
@@ -728,3 +848,553 @@ def build_o_rtg(
         raw_adj_rating,
         diags,
     )
+
+
+def _build_def_overrides(stat_set: LineupStatSet) -> dict[str, dict[str, float]]:
+    """Private port of ``RatingUtils.buildDefOverrides`` (``RatingUtils.ts:1237-1249``).
+
+    ``build_d_rtg``'s own override source -- separate from
+    :func:`_build_off_overrides` (see the module docstring). Projects the
+    manual 3P-defense-percentage override (``oppo_def_3p`` ``value`` vs.
+    ``old_value``) onto the two raw fields :func:`build_d_rtg` reads via its
+    internal ``stat_get`` when ``override_adjusted=True``.
+
+    Args:
+        stat_set: The player's stat dict (``Record<string, any>`` upstream,
+            not the narrower ``IndivStatSet`` -- ``buildDRtg`` itself is
+            loosely typed in the TS source).
+
+    Returns:
+        ``{"oppo_total_def_pts": {"value": float}, "oppo_total_def_fgm":
+        {"value": float}}``.
+    """
+    three_p_tries = _num(stat_set, "oppo_total_def_3p_attempts", 0.0)
+    extra_3p_makes = _override_diff(stat_set.get("oppo_def_3p")) * three_p_tries
+    return {
+        "oppo_total_def_pts": {"value": _num(stat_set, "oppo_total_def_pts", 0.0) + 3 * extra_3p_makes},
+        "oppo_total_def_fgm": {"value": _num(stat_set, "oppo_total_def_fgm", 0.0) + extra_3p_makes},
+    }
+
+
+def build_d_rtg(
+    stat_set: LineupStatSet | None,
+    avg_efficiency: float,
+    calc_diags: bool,
+    override_adjusted: bool,
+) -> tuple[
+    dict[str, float] | None,
+    dict[str, float] | None,
+    dict[str, float] | None,
+    dict[str, float] | None,
+    DRtgDiagnostics | None,
+]:
+    """Individual defensive rating (Dean-Oliver DRtg) + diagnostics.
+
+    Faithful port of ``RatingUtils.buildDRtg`` (``RatingUtils.ts:1252-1485``).
+    Mirrors :func:`build_o_rtg`'s structure (``stat_get`` closure,
+    ``calc_diags``/``override_adjusted`` flag pair, recursive
+    un-overridden raw-value pass) over the simpler
+    ``(stat_set, avg_efficiency, calc_diags, override_adjusted)`` 4-arg
+    signature (no roster/extra-team-stat args, confirmed against the TS).
+
+    Args:
+        stat_set: The player's stat dict. ``None`` returns an all-``None``
+            5-tuple (``RatingUtils.ts:1264-1265``'s ``if (!statSet)`` --
+            null/undefined only). Unlike :func:`build_o_rtg`, an **empty
+            dict computes cleanly** -- every division in ``buildDRtg`` is
+            guard-ternary'd (see the module docstring's "Contrast" note),
+            so ``{}`` does not raise ``ZeroDivisionError``.
+        avg_efficiency: League/context average efficiency (``100`` in every
+            vendored jest call).
+        calc_diags: When ``True``, populate the 5th tuple slot
+            (``DRtgDiagnostics``); otherwise it is ``None``.
+        override_adjusted: When ``True``, apply :func:`_build_def_overrides`
+            to the raw opponent-FGM/points fields before computing, and
+            additionally recurse once (with ``calc_diags=False,
+            override_adjusted=False``) to compute the un-overridden "raw"
+            values for the 3rd/4th tuple slots.
+
+    Returns:
+        A 5-tuple ``(d_rtg, adj_d_rtg, raw_d_rtg, raw_adj_d_rtg,
+        d_rtg_diags)``:
+
+        - ``d_rtg``: ``{"value": DRtg}`` when ``Opponent_Possessions_Box >
+          0``, else ``None``.
+        - ``adj_d_rtg``: ``{"value": Adj_DRtgPlus}`` under the same guard.
+        - ``raw_d_rtg`` / ``raw_adj_d_rtg``: the un-overridden values from
+          the recursive call when ``override_adjusted=True``; ``None``
+          otherwise (unlike :func:`build_o_rtg`, there is no internal-usage
+          special case here -- the TS destructures only the first 2 slots
+          of the recursive 5-tuple).
+        - ``d_rtg_diags``: the full ``DRtgDiagnostics`` dict (``None``
+          unless ``calc_diags=True``).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ratings import build_d_rtg
+
+            d_rtg, adj_d_rtg, _, _, diags = build_d_rtg(player, 100.0, True, False)
+            print(d_rtg["value"], diags["dRtg"])
+
+        Override-adjusted (manual 3P-defense-% override applied)::
+
+            d_rtg2, adj_d_rtg2, raw_d_rtg2, raw_adj_d_rtg2, _ = build_d_rtg(
+                player, 100.0, False, True,
+            )
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    if stat_set is None:
+        return (None, None, None, None, None)
+
+    overrides: dict[str, dict[str, float]] = _build_def_overrides(stat_set) if override_adjusted else {}
+
+    def stat_get(key: str) -> float:
+        """Port of the ``buildDRtg``-local ``statGet`` closure
+        (``RatingUtils.ts:1270-1274``): prefer the override projection,
+        fall back to the raw stat-set field, then ``|| 0``.
+        """
+        override_field = overrides.get(key)
+        if override_field is not None:
+            raw = override_field.get("value")
+        else:
+            field = stat_set.get(key)
+            raw = field.get("value") if isinstance(field, dict) else None
+        return raw if raw else 0.0
+
+    stl = _num(stat_set, "total_off_stl", 0.0)
+    blk = _num(stat_set, "total_off_blk", 0.0)
+    drb = _num(stat_set, "total_off_drb", 0.0)
+    pf = _num(stat_set, "total_off_foul", 0.0)
+    team_drb = _num(stat_set, "team_total_off_drb", 0.0)
+    team_blk = _num(stat_set, "team_total_off_blk", 0.0)
+    team_stl = _num(stat_set, "team_total_off_stl", 0.0)
+    team_pf = _num(stat_set, "team_total_off_foul", 0.0)
+    opponent_fga = _num(stat_set, "oppo_total_def_fga", 0.0)
+    opponent_fgm = stat_get("oppo_total_def_fgm")
+    opponent_orb = _num(stat_set, "oppo_total_def_orb", 0.0)
+    opponent_tov = _num(stat_set, "oppo_total_def_to", 0.0)
+    opponent_fta = _num(stat_set, "oppo_total_def_fta", 0.0)
+    opponent_ftm = _num(stat_set, "oppo_total_def_ftm", 0.0)
+    opponent_possessions_pbp = _num(stat_set, "oppo_total_def_poss", 0.0)
+    opponent_ft_poss = 0.475 * opponent_fta
+    opponent_possessions_box = opponent_ft_poss + opponent_fga + opponent_tov - opponent_orb
+    opponent_pts = stat_get("oppo_total_def_pts")
+
+    dfg_pct = opponent_fgm / opponent_fga if opponent_fga > 0 else 0.0
+    total_rbs = opponent_orb + team_drb
+    team_dor_pct = opponent_orb / total_rbs if total_rbs > 0 else 0.0
+    credit_to_shot_defense = dfg_pct * (1 - team_dor_pct)
+    credit_to_rebounder = (1 - dfg_pct) * team_dor_pct
+    fm_wt = (
+        credit_to_shot_defense / (credit_to_shot_defense + credit_to_rebounder)
+        if (credit_to_shot_defense + credit_to_rebounder) > 0
+        else 0.0
+    )
+
+    team_miss_weight = fm_wt * (1 - RETAIN_POSS_WITH_REBOUND_RATE * team_dor_pct)
+    pf_pct = pf / team_pf if team_pf > 0 else 0.0
+    opponent_miss_all_fts = (1 - opponent_ftm / opponent_fta) ** 2 if opponent_fta > 0 else 0.0
+    no_shot_credit = stl + blk * team_miss_weight
+    rebound_credit = drb * (1 - fm_wt)
+    ft_miss_credit = pf_pct * opponent_ft_poss * opponent_miss_all_fts
+    stops_ind = no_shot_credit + rebound_credit + ft_miss_credit
+
+    opponent_fg_miss = opponent_fga - opponent_fgm - team_blk
+    opponent_non_stl_tov = opponent_tov - team_stl
+    stops_team = 0.2 * (opponent_fg_miss * team_miss_weight + opponent_non_stl_tov)
+
+    stops = stops_ind + stops_team
+
+    stop_pct = stops / (0.2 * opponent_possessions_box) if opponent_possessions_box > 0 else 0.0
+    stop_pct_no_blks = (
+        (stops - blk * team_miss_weight) / (0.2 * opponent_possessions_box) if opponent_possessions_box > 0 else 0.0
+    )
+    stop_pct_no_stls = (stops - stl) / (0.2 * opponent_possessions_box) if opponent_possessions_box > 0 else 0.0
+    stop_pct_no_rebs = (
+        (stops - drb * (1 - fm_wt)) / (0.2 * opponent_possessions_box) if opponent_possessions_box > 0 else 0.0
+    )
+
+    opponent_hit_fts = 1 - opponent_miss_all_fts
+    team_drtg_pbp = 100 * (opponent_pts / opponent_possessions_pbp) if opponent_possessions_pbp > 0 else 0.0
+    team_drtg_box = 100 * (opponent_pts / opponent_possessions_box) if opponent_possessions_box > 0 else 0.0
+
+    sc_poss = opponent_fgm + opponent_hit_fts * opponent_ft_poss
+    d_pts_per_sc_poss = opponent_pts / sc_poss if sc_poss > 0 else 0.0
+
+    player_drtg = 100 * d_pts_per_sc_poss * (1 - stop_pct)
+    blk_bonus = player_drtg - 100 * d_pts_per_sc_poss * (1 - stop_pct_no_blks)
+    stl_bonus = player_drtg - 100 * d_pts_per_sc_poss * (1 - stop_pct_no_stls)
+    drb_bonus = player_drtg - 100 * d_pts_per_sc_poss * (1 - stop_pct_no_rebs)
+    player_delta = 0.2 * (player_drtg - team_drtg_box)
+
+    d_rtg = team_drtg_pbp + player_delta
+    off_sos = _num(stat_set, "off_adj_opp", avg_efficiency)
+    adj_d_rtg = d_rtg * (avg_efficiency / off_sos) if off_sos > 0 else 0.0
+    adj_d_rtg_plus = 0.2 * (adj_d_rtg - avg_efficiency)
+
+    raw_d_rtg: dict[str, float] | None
+    raw_adj_rating: dict[str, float] | None
+    if override_adjusted:
+        raw_result = build_d_rtg(stat_set, avg_efficiency, False, False)
+        raw_d_rtg, raw_adj_rating = raw_result[0], raw_result[1]
+    else:
+        raw_d_rtg = raw_adj_rating = None
+
+    diags: DRtgDiagnostics | None = None
+    if calc_diags:
+        diags = {
+            "stl": stl,
+            "blk": blk,
+            "drb": drb,
+            "pfPct": pf_pct,
+            "playerRtg": player_drtg,
+            "playerDelta": player_delta,
+            "scPossConceded": 1 - stop_pct,
+            "noShotCredit": no_shot_credit,
+            "reboundCredit": rebound_credit,
+            "missFtCredit": ft_miss_credit,
+            "stopsIndPct": stops_ind / (0.2 * opponent_possessions_box) if opponent_possessions_box > 0 else 0.0,
+            "stopsTeamPct": stops_team / (0.2 * opponent_possessions_box) if opponent_possessions_box > 0 else 0.0,
+            "teamBlk": team_blk,
+            "oppoPts": opponent_pts,
+            "oppoPoss": opponent_possessions_pbp,
+            "oppoFga": opponent_fga,
+            "oppoFgm": opponent_fgm,
+            "oppoFtm": opponent_ftm,
+            "oppoFta": opponent_fta,
+            "oppoFtPoss": opponent_ft_poss,
+            "oppoTov": opponent_tov,
+            "teamStl": team_stl,
+            "teamDrb": team_drb,
+            "opponentOrbPct": team_dor_pct,
+            "opponentFgPct": dfg_pct,
+            "teamOrbCreditToDefender": credit_to_shot_defense,
+            "teamOrbCreditToRebounder": credit_to_rebounder,
+            "teamDvsRebCredit": fm_wt,
+            "oppoFgMiss": opponent_fg_miss,
+            "oppoNonStlTov": opponent_non_stl_tov,
+            "teamMissWeight": team_miss_weight,
+            "oppoFtPct": opponent_ftm / opponent_fta if opponent_fta > 0 else 0.0,
+            "oppoFtHitOnePlus": opponent_hit_fts * opponent_ft_poss,
+            "oppoProbFtHitOnePlus": opponent_hit_fts,
+            "oppoScPoss": sc_poss,
+            "oppoPtsPerScore": d_pts_per_sc_poss,
+            "teamRtg": team_drtg_pbp,
+            "dRtg": d_rtg,
+            "offSos": off_sos,
+            "avgEff": avg_efficiency,
+            "adjDRtg": adj_d_rtg,
+            "adjDRtgPlus": adj_d_rtg_plus,
+            "StlBonus": stl_bonus,
+            "BlkBonus": blk_bonus,
+            "DrbBonus": drb_bonus,
+            "adjPossFactor": 1,
+            "adjPtsFactor": 1,
+        }
+
+    return (
+        {"value": d_rtg} if opponent_possessions_box > 0 else None,
+        {"value": adj_d_rtg_plus} if opponent_possessions_box > 0 else None,
+        raw_d_rtg,
+        raw_adj_rating,
+        diags,
+    )
+
+
+def build_net_points(
+    player_rapm_and_poss_pct: LineupStatSet,
+    ortg: ORtgDiagnostics,
+    drtg: DRtgDiagnostics,
+    avg_eff: float,
+    scale_type: Literal["T%", "P%", "/G"],
+    num_games: float = 1,
+    missing_game_adjustment: float = 1,
+) -> NetPoints:
+    """Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown.
+
+    Faithful port of ``RatingUtils.buildNetPoints`` (``RatingUtils.ts:1036-1234``).
+    Genuinely public upstream (called from ``buildLeaderboards.ts``,
+    ``PlayerImpactBreakdownTable.tsx``, and ``ImpactBreakdownUtils.ts``), so
+    this port is public too.
+
+    Args:
+        player_rapm_and_poss_pct: The player's stat dict -- reads
+            ``off_team_poss_pct``/``def_team_poss_pct`` (nullish-coalesced
+            to ``0.0``, see :func:`_nullish`) and, when present,
+            ``off_adj_rapm``/``def_adj_rapm`` (each a ``{"value": float}``
+            "Statistic"-shaped field) for the RAPM "with-or-without-you"
+            (WOWY) deltas.
+        ortg: An :data:`ORtgDiagnostics` dict from :func:`build_o_rtg`
+            (``calc_diags=True``), typically with ``adjPtsFactor``/
+            ``adjPossFactor`` overridden from their ``1`` default by a
+            missing-possession correction.
+        drtg: A :data:`DRtgDiagnostics` dict from :func:`build_d_rtg`
+            (``calc_diags=True``). If it carries an ``onBallDiags`` key
+            (this port's :func:`build_d_rtg` never sets one -- see the
+            module docstring's deferred-work note), the on-ball-adjusted
+            branch is used instead of the base ``dRtg``/``adjDRtgPlus``.
+        avg_eff: League/context average efficiency.
+        scale_type: ``"T%"`` (scale by on-floor team-possession share,
+            ``avgEff``-adjusted possession count), ``"P%"`` (scale to
+            100 possessions), or ``"/G"`` (scale to per-game).
+        num_games: Divisor for the ``"/G"`` scale type. Default ``1``.
+        missing_game_adjustment: Multiplier folded into the ``"T%"`` scale
+            factor for imputed-missing-games correction. Default ``1``.
+
+    Returns:
+        A :data:`NetPoints` dict -- 20 keys, plus an optional
+        ``defNetPtsIndiv`` 21st key present only when ``drtg["onBallDiags"]``
+        is set (TS-verbatim key names throughout).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ratings import build_o_rtg, build_d_rtg, build_net_points
+
+            _, _, _, _, o_diags = build_o_rtg(player, {}, {}, 100.0, True, False)
+            _, _, _, _, d_diags = build_d_rtg(player, 100.0, True, False)
+            net_pts = build_net_points(player, o_diags, d_diags, 100.0, "T%")
+            print(net_pts["offNetPts"], net_pts["defNetPts"])
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    avg_ppp = 0.01 * avg_eff
+
+    # Offense:
+    off_poss_pct = _nullish(player_rapm_and_poss_pct.get("off_team_poss_pct"), "value", 0.0)
+    off_pos_while_on_floor = ortg["teamPoss"]
+
+    if scale_type == "/G":
+        off_scale = 1.0 / (num_games or 1)
+    elif scale_type == "P%":
+        off_scale = 100 / (off_pos_while_on_floor or 1)
+    else:
+        off_scale = (100 * off_poss_pct * missing_game_adjustment) / (off_pos_while_on_floor or 1)
+
+    off_net_pts_3p = (
+        ortg["threePtsProd"] * ortg["adjPtsFactor"] - ortg["threePoss"] * ortg["adjPossFactor"] * avg_ppp
+    ) * off_scale
+    off_net_pts_mid = (
+        ortg["midPtsProd"] * ortg["adjPtsFactor"] - ortg["midPoss"] * ortg["adjPossFactor"] * avg_ppp
+    ) * off_scale
+    off_net_pts_rim = (
+        ortg["rimPtsProd"] * ortg["adjPtsFactor"] - ortg["rimPoss"] * ortg["adjPossFactor"] * avg_ppp
+    ) * off_scale
+    off_net_pts_orb = (
+        ortg["ppOrb"] * ortg["adjPtsFactor"] - ortg["orbPart"] * ortg["adjPossFactor"] * avg_ppp
+    ) * off_scale
+    adjusted_ft_poss = ortg["ftPart"] * (1 - ortg["teamOrbContribPct"]) + ortg["ftxPoss"]
+    off_net_pts_ft = (
+        ortg["rawFtm"] * (1 - ortg["teamOrbContribPct"]) * ortg["adjPtsFactor"]
+        - adjusted_ft_poss * ortg["adjPossFactor"] * avg_ppp
+    ) * off_scale
+    off_net_pts_to = -ortg["rawTo"] * ortg["adjPossFactor"] * avg_ppp * off_scale
+    off_net_pts_ast2 = (
+        ortg["astThreePProd"] * ortg["adjPtsFactor"] - ortg["astThreePoss"] * ortg["adjPossFactor"] * avg_ppp
+    ) * off_scale
+    off_net_pts_ast3 = (
+        ortg["astTwoPProd"] * ortg["adjPtsFactor"] - ortg["astTwoPoss"] * ortg["adjPossFactor"] * avg_ppp
+    ) * off_scale
+
+    off_net_pts_volume = ortg["Usage_Bonus"] * 0.2 * ortg["teamPoss"] * 0.01 * off_scale
+    off_net_pts_sos = ortg["SoS_Bonus"] * ortg["teamPoss"] * 0.01 * off_scale
+
+    off_adj_rapm = player_rapm_and_poss_pct.get("off_adj_rapm")
+    if off_adj_rapm is not None:
+        off_delta = _field_val(off_adj_rapm, "value", 0.0) - ortg["adjORtgPlus"]
+        off_net_pts_wowy = off_delta * ortg["teamPoss"] * 0.01 * off_scale
+    else:
+        off_net_pts_wowy = 0.0
+
+    off_net_pts = _nullish(off_adj_rapm, "value", ortg["adjORtgPlus"]) * ortg["teamPoss"] * 0.01 * off_scale
+
+    off_net_pts_derived = (
+        off_net_pts_3p
+        + off_net_pts_mid
+        + off_net_pts_rim
+        + off_net_pts_ft
+        + off_net_pts_ast2
+        + off_net_pts_ast3
+        + off_net_pts_to
+        + off_net_pts_orb
+        + off_net_pts_volume
+        + off_net_pts_wowy
+        + off_net_pts_sos
+    )
+
+    # Defense (note: def net points are +ve == good):
+    def_poss_pct = _nullish(player_rapm_and_poss_pct.get("def_team_poss_pct"), "value", 0.0)
+    def_pos_while_on_floor = drtg["oppoPoss"]
+
+    if scale_type == "/G":
+        def_scale = 1.0 / (num_games or 1)
+    elif scale_type == "P%":
+        def_scale = 100 / (def_pos_while_on_floor or 1)
+    else:
+        def_scale = (100 * missing_game_adjustment * def_poss_pct) / (def_pos_while_on_floor or 1)
+
+    on_ball_diags: dict[str, Any] | None = drtg.get("onBallDiags")
+    has_on_ball = on_ball_diags is not None
+    if on_ball_diags is not None:
+        adj_drtg_to_use = on_ball_diags["adjDRtgPlus"]
+        on_ball_drtg_delta = drtg["adjDRtgPlus"] - on_ball_diags["adjDRtgPlus"]
+        d_rtg_to_use = on_ball_diags["dRtg"]
+    else:
+        adj_drtg_to_use = drtg["adjDRtgPlus"]
+        on_ball_drtg_delta = 0.0
+        d_rtg_to_use = drtg["dRtg"]
+
+    def_adj_rapm = player_rapm_and_poss_pct.get("def_adj_rapm")
+    if def_adj_rapm is not None:
+        def_delta = _field_val(def_adj_rapm, "value", 0.0) - adj_drtg_to_use
+        def_net_pts_wowy = -def_delta * drtg["oppoPoss"] * 0.01 * def_scale
+    else:
+        def_net_pts_wowy = 0.0
+    def_net_pts_before_rapm = -adj_drtg_to_use * drtg["oppoPoss"] * 0.01 * def_scale
+
+    unadj_def_net = (avg_eff - d_rtg_to_use) * 0.2 * drtg["oppoPoss"] * 0.01 * def_scale
+
+    def_net_pts_stl = -0.2 * 0.2 * drtg["StlBonus"] * drtg["oppoPoss"] * 0.01 * def_scale
+    def_net_pts_blk = -0.2 * 0.2 * drtg["BlkBonus"] * drtg["oppoPoss"] * 0.01 * def_scale
+    def_net_pts_reb = -0.2 * 0.2 * drtg["DrbBonus"] * drtg["oppoPoss"] * 0.01 * def_scale
+
+    if on_ball_diags is not None:
+        def_net_pts_sos = (on_ball_diags["dRtg"] - on_ball_diags["adjDRtg"]) * 0.2
+    else:
+        def_net_pts_sos = def_net_pts_before_rapm - unadj_def_net
+
+    def_net_pts_team = (
+        def_net_pts_before_rapm
+        - def_net_pts_sos
+        - def_net_pts_reb
+        - def_net_pts_blk
+        - def_net_pts_stl
+        - on_ball_drtg_delta
+    )
+
+    result: NetPoints = {
+        "offNetPts": off_net_pts,
+        "offNetPtsDerived": off_net_pts_derived,
+        "offNetPtsAst2": off_net_pts_ast2,
+        "offNetPtsAst3": off_net_pts_ast3,
+        "offNetPtsOrb": off_net_pts_orb,
+        "offNetPtsRim": off_net_pts_rim,
+        "offNetPts3P": off_net_pts_3p,
+        "offNetPtsMid": off_net_pts_mid,
+        "offNetPtsFt": off_net_pts_ft,
+        "offNetPtsTo": off_net_pts_to,
+        "offNetPtsVolume": off_net_pts_volume,
+        "offNetPtsWowy": off_net_pts_wowy,
+        "offNetPtsSos": off_net_pts_sos,
+        "defNetPts": def_net_pts_before_rapm + def_net_pts_wowy,
+        "defNetPtsWowy": def_net_pts_wowy,
+        "defNetPtsSos": def_net_pts_sos,
+        "defNetPtsStl": def_net_pts_stl,
+        "defNetPtsBlk": def_net_pts_blk,
+        "defNetPtsReb": def_net_pts_reb,
+        "defNetPtsTeam": def_net_pts_team,
+    }
+    if has_on_ball:
+        result["defNetPtsIndiv"] = on_ball_drtg_delta
+    return result
+
+
+def adjust_off_rating_stats(
+    pts_correction_factor: float,
+    poss_correction_factor: float,
+    mutable_o_rtg: ORtgDiagnostics,
+    maybe_raw_o_rtg: float | None,
+) -> tuple[float, float] | None:
+    """Apply a missing-possession correction factor to an ``ORtgDiagnostics`` dict in place.
+
+    Faithful port of ``RatingUtils.adjustOffRatingStats`` (``RatingUtils.ts:993-1033``).
+    Genuinely public upstream (called from ``LineupTableUtils.ts`` after a
+    lineup-level pts/poss reconciliation), so this port is public too.
+    Recomputes the productivity fields via :func:`build_productivity`
+    (reused, not re-derived).
+
+    **Landmine 4** (see module docstring): the ``o_adj = avgEff / defSos or
+    1`` recomputation here is unguarded against ``defSos == 0`` -- same
+    reachability analysis as landmine 3 (only reachable if the diagnostics
+    dict's original :func:`build_o_rtg` call used ``avg_efficiency == 0``).
+
+    Args:
+        pts_correction_factor: Points correction factor (e.g. team pts /
+            sum of player pts, capped to ``[0.95, 1.05]`` by callers).
+        poss_correction_factor: Possession correction factor, same shape.
+        mutable_o_rtg: The :data:`ORtgDiagnostics` dict to mutate in place
+            (``oRtg``, ``Usage``, ``adjORtg``, ``adjORtgPlus``,
+            ``Usage_Bonus``, ``SoS_Bonus``, ``adjPtsFactor``,
+            ``adjPossFactor``, and (conditionally) ``Raw_Usage`` are all
+            updated).
+        maybe_raw_o_rtg: The un-overridden raw ``oRtg`` value (``rawORtg``'s
+            ``.value``, or ``None`` when no override was in play), used to
+            compute the raw-side return.
+
+    Returns:
+        ``(new_raw_o_rtg, raw_adj_o_rtg_plus)`` when both
+        ``mutable_o_rtg["Raw_Usage"]`` and ``maybe_raw_o_rtg`` are not
+        ``None``; otherwise ``None`` (``_.isNil`` semantics -- an explicit
+        ``0`` does NOT count as nil).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ratings import build_o_rtg, adjust_off_rating_stats
+
+            _, _, raw_o_rtg, _, o_diags = build_o_rtg(player, {}, {}, 100.0, True, False)
+            maybe_raw = raw_o_rtg["value"] if raw_o_rtg else None
+            adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
+            print(o_diags["oRtg"], o_diags["adjORtgPlus"])
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    correction_factor = pts_correction_factor / (poss_correction_factor or 1)
+    new_o_rtg = mutable_o_rtg["oRtg"] * correction_factor
+    new_usage = mutable_o_rtg["Usage"] * poss_correction_factor
+    mutable_o_rtg["oRtg"] = new_o_rtg
+    mutable_o_rtg["Usage"] = new_usage
+
+    productivity = build_productivity(
+        mutable_o_rtg["oRtg"],
+        mutable_o_rtg["avgEff"] / mutable_o_rtg["defSos"] or 1,
+        mutable_o_rtg["Usage"],
+        mutable_o_rtg["avgEff"],
+    )
+    mutable_o_rtg["adjORtg"] = productivity["Adj_ORtg"]
+    mutable_o_rtg["adjORtgPlus"] = productivity["Adj_ORtgPlus"]
+    mutable_o_rtg["Usage_Bonus"] = productivity["Usage_Bonus"]
+    mutable_o_rtg["SoS_Bonus"] = productivity["SoS_Bonus"]
+    mutable_o_rtg["adjPtsFactor"] = pts_correction_factor
+    mutable_o_rtg["adjPossFactor"] = poss_correction_factor
+
+    raw_usage = mutable_o_rtg.get("Raw_Usage")
+    if raw_usage is None or maybe_raw_o_rtg is None:
+        return None
+
+    mutable_o_rtg["Raw_Usage"] = raw_usage * poss_correction_factor
+    new_raw_o_rtg = maybe_raw_o_rtg * correction_factor
+    raw_productivity = build_productivity(
+        new_raw_o_rtg,
+        mutable_o_rtg["avgEff"] / mutable_o_rtg["defSos"] or 1,
+        mutable_o_rtg["Raw_Usage"],
+        mutable_o_rtg["avgEff"],
+    )
+    return (new_raw_o_rtg, raw_productivity["Adj_ORtgPlus"])
