@@ -474,7 +474,19 @@ def _ft_trip_shape(row: dict) -> "tuple[int, int] | None":
 
 
 def is_technical_ft_row(row: dict) -> bool:
-    """# pbpstats: free_throw.py is_technical_ft (subType contains 'Technical')."""
+    """FT row is from a technical foul.
+
+    ``is_technical_ft`` is one of the properties pbpstats overrides per
+    enhanced-pbp provider rather than defining once on the abstract
+    ``FreeThrow`` base: ``live/free_throw.py:46-48`` (``hasattr(self,
+    "descriptor") and self.descriptor == "technical"``) vs
+    ``stats_nba/free_throw.py:56-58`` (``" Technical" in self.description``).
+    v3 carries neither a ``descriptor`` field nor a raw description string
+    shaped like stats_nba's -- this port checks the ``sub_type`` substring
+    instead, which is functionally equivalent to the stats_nba string check
+    since v3's Free Throw ``sub_type`` carries the ``"Technical"`` token
+    directly (e.g. ``"Free Throw Technical"``).
+    """
     return "technical" in _norm(row.get("sub_type"))
 
 
@@ -682,40 +694,35 @@ def is_make_that_does_not_end_possession(ctx: EventContext, i: int) -> bool:
 
 
 def _is_away_from_play_ft(ctx: EventContext, i: int) -> bool:
-    """# pbpstats: free_throw.py:101-145 (is_away_from_play_ft), team-level port.
+    """# pbpstats: live/free_throw.py:82-88 (is_away_from_play_ft, LIVE override) governs.
 
-    v3 exposes ``person_id`` for the FT shooter (but no assist/block/steal
-    secondary ids), so the "same player" tie-breaks below use ``person_id``
-    directly; team-level fallbacks are used only where pbpstats itself
-    compares team ids.
+    pbpstats defines ``is_away_from_play_ft`` on the abstract ``FreeThrow``
+    base (``free_throw.py:101-145``) with an FT-trip-shape gate
+    (``is_ft_1_of_1 or is_ft_1pt`` / ``is_ft_2_of_2 or is_ft_2pt``) plus a
+    made-shot / other-player-FT tie-break, and ``StatsFreeThrow``
+    (stats_nba) inherits that body unmodified. But ``LiveFreeThrow``
+    (live) overrides the property with a materially simpler rule --
+    ``hasattr(self, "descriptor") and self.stripped_descriptor ==
+    "awayfromplay"`` -- no shape gate, no tie-break at all.
+
+    LIVE-governs ruling (Task 3 fix wave, 2026-07-03): where the two
+    provider variants decidably disagree, the live variant wins because
+    live produced the oracle possession counts this engine is validated
+    against. ``is_inbound_foul_ft`` / ``is_transition_take_foul_ft`` were
+    checked and are NOT similarly overridden in ``live/free_throw.py`` --
+    this divergence is specific to away-from-play, so only this one
+    property's abstract/stats_nba body (shape gate + tie-break) was
+    deliberately NOT ported.
+
+    v3 carries no FT ``descriptor`` field at all (see the module docstring
+    on ``_FOUL_INBOUND``), so the v3-native analogue of "this FT carries
+    the awayfromplay descriptor" is: the foul resolved via
+    :func:`foul_that_led_to_ft` has subType ``"Away From Play"``.
     """
-    rows = ctx.rows
-    row = rows[i]
-    if _ft_trip_shape(row) not in ((1, 1), (2, 2)):
-        return False
     foul_idx = foul_that_led_to_ft(ctx, i)
-    if foul_idx < 0 or _norm(rows[foul_idx].get("sub_type")) not in _FOUL_AWAY_FROM_PLAY:
+    if foul_idx < 0:
         return False
-
-    co = ctx.co_clock(i)
-    made_shots = [j for j in co if j != i and (rows[j].get("event_type") or "") == "made_shot"]
-    other_player_fts = [
-        j
-        for j in co
-        if j != i
-        and (rows[j].get("event_type") or "") == "free_throw"
-        and rows[j].get("person_id") != row.get("person_id")
-    ]
-    if not made_shots:
-        if not other_player_fts:
-            return True
-        return any(rows[j].get("team_id") != row.get("team_id") for j in other_player_fts)
-
-    first_make = min(made_shots)
-    return bool(
-        rows[first_make].get("team_id") == rows[foul_idx].get("team_id")
-        and row.get("person_id") != rows[first_make].get("person_id")
-    )
+    return _norm(ctx.rows[foul_idx].get("sub_type")) in _FOUL_AWAY_FROM_PLAY
 
 
 def _ft_1_of_1_co_clock_foul_in(ctx: EventContext, i: int, subtypes: "frozenset[str]") -> bool:

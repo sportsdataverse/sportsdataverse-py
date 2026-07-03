@@ -9,6 +9,7 @@ import pytest
 
 from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
 from sportsdataverse.nba.nba_possession_rules import (
+    _is_away_from_play_ft,
     _norm,
     build_event_context,
     ft_ends_possession,
@@ -262,6 +263,76 @@ def test_is_last_ft_of_trip_flagrant_carveout():
     assert is_last_ft_of_trip({"sub_type": "Free Throw Flagrant 1 of 1"}) is False
     assert is_last_ft_of_trip({"sub_type": "Free Throw 2 of 2"}) is True
     assert is_last_ft_of_trip({"sub_type": "Free Throw Technical"}) is False
+
+
+def test_away_from_play_ft_suppresses_boundary_on_real_fixture():
+    """The only "Away From Play" foul in the committed fixture set (game
+    0022100001, per the season subType catalog) -- row 148 (Claxton, BKN,
+    "AWAY.FROM.PLAY.FOUL") draws a made 1-of-1 FT from Allen (MIL) at the
+    same clock instant (row 150), with no co-clock made shot or other-player
+    FT. Under both the removed abstract/stats_nba shape+tie-break body and
+    the live rule this row resolves the same way (the tie-break only
+    diverges when a co-clock made shot or other-player FT exists, which this
+    sequence doesn't have) -- this test pins that baseline agreement so a
+    future regression in either direction is caught.
+    """
+    rows = _rows("0022100001")
+    ctx = build_event_context(rows)
+    i = 150
+    row = rows[i]
+    assert row["action_number"] == 209
+    assert row["sub_type"] == "Free Throw 1 of 1"
+    assert _is_away_from_play_ft(ctx, i) is True
+    assert ft_ends_possession(ctx, i) is False
+
+
+def test_away_from_play_ft_ignores_coclock_made_shot_tie_break():
+    """Live-governs regression guard: a co-clock made shot by the *fouled*
+    team (i.e. NOT the team that committed the away-from-play foul) used to
+    flip the abstract/stats_nba tie-break to False (``free_throw.py:139-141``
+    only returns True when the made shot's team matches the *fouling*
+    team). The live variant (``live/free_throw.py:82-88``) has no such
+    tie-break at all -- it resolves purely off the foul's descriptor (here,
+    the v3 analogue: the resolved foul's subType). This synthetic sequence
+    reproduces exactly the shape that used to diverge: a made shot by team
+    200 (the team that drew the foul / shot the FT) at the same instant as
+    an "Away From Play" foul by team 100 and a made 1-of-1 FT by team 200.
+    """
+    rows = [
+        {
+            "event_type": "foul",
+            "sub_type": "Away From Play",
+            "team_id": 100,
+            "person_id": 1,
+            "period": 1,
+            "seconds_remaining": 500.0,
+            "score_home": "",
+            "score_away": "",
+        },
+        {
+            "event_type": "made_shot",
+            "sub_type": "Jump Shot",
+            "team_id": 200,
+            "person_id": 999,
+            "period": 1,
+            "seconds_remaining": 500.0,
+            "score_home": "2",
+            "score_away": "",
+        },
+        {
+            "event_type": "free_throw",
+            "sub_type": "Free Throw 1 of 1",
+            "team_id": 200,
+            "person_id": 55,
+            "period": 1,
+            "seconds_remaining": 500.0,
+            "score_home": "3",
+            "score_away": "",
+        },
+    ]
+    ctx = build_event_context(rows)
+    assert _is_away_from_play_ft(ctx, 2) is True
+    assert ft_ends_possession(ctx, 2) is False
 
 
 def test_and1_make_does_not_end_possession():
