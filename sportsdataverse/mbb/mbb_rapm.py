@@ -2,16 +2,23 @@
 
 Faithful port of hoop-explorer's ``RapmUtils``
 (`Alex-At-Home/cbb-on-off-analyzer <https://github.com/Alex-At-Home/cbb-on-off-analyzer>`_
-``src/utils/stats/RapmUtils.ts``, 1660+ LOC). Task 3.2 (Phase 3) ports the
+``src/utils/stats/RapmUtils.ts``, 1660+ LOC). Task 3.2 (Phase 3) ported the
 **initialization layer**: the three ``RapmPriorInfo`` / ``RapmPlayerContext`` /
 ``RapmConfig`` types (``RapmUtils.ts:124/147/175``), :func:`build_priors`
 (``RapmUtils.buildPriors``, ``RapmUtils.ts:237``), and
 :func:`build_player_context` (``RapmUtils.buildPlayerContext``,
-``RapmUtils.ts:427``). Later Phase-3 tasks add the matrix-solve layer
-(``calcPlayerWeights``, ``calcLineupOutputs``, ``pickRidgeRegression``,
-``injectRapmIntoPlayers``, ``calcCollinearityDiag`` -- see the "Deliberately
-NOT ported (this task)" section below) on top of the types/context this
-module produces.
+``RapmUtils.ts:427``). **Task 3.3 adds the design-matrix + target-vector
+layer**: :func:`calc_player_weights` (``RapmUtils.calcPlayerWeights``,
+``RapmUtils.ts:544``), :func:`calc_lineup_outputs`
+(``RapmUtils.calcLineupOutputs``, ``RapmUtils.ts:598``), and the small
+:func:`_get_strong_weight` helper (``RapmUtils.ts:135``) both depend on. This
+is the **dict -> ``numpy.ndarray`` boundary**: everything upstream of these
+two functions (``build_priors``/``build_player_context``) stays plain-dict
+math; from here on, per-lineup/per-player numeric data is materialized into
+``numpy`` arrays. Later Phase-3 tasks add the regression-solve layer
+(``pickRidgeRegression``, ``injectRapmIntoPlayers``, ``calcCollinearityDiag``
+-- see the "Deliberately NOT ported (this task)" section below) on top of the
+matrices/vectors this module now produces.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``RapmUtils.ts`` from
@@ -147,28 +154,40 @@ does (``_.omit(results, ["filteredLineups", "teamInfo"])`` before
    identically to upstream) treated as "composed entirely of removed
    players" and excluded from ``filtered_lineups``.
 
-**Deliberately NOT ported (this task -- Tasks 3.3-3.6 own these):**
+**Deliberately NOT ported (this task -- Tasks 3.4-3.6 own these):**
 
-- ``getStrongWeight`` (``RapmUtils.ts:135-144``) -- not called by
-  ``buildPriors``/``buildPlayerContext``; first needed by
-  ``calcPlayerWeights``/``calcLineupOutputs`` (Task 3.3) and the
-  adaptive-correlation-weight blend (Task 3.5).
 - ``buildWeakPriorFromRapm`` (``RapmUtils.ts:410-419``) -- the "recursive
   prior" helper, needed once ``calculatePredictedOut``/``calculateResidualError``
   land.
 - ``RapmPreProcDiagnostics`` / ``RapmProcessingInputs`` / ``RapmInfo``
   (``RapmUtils.ts:187-216``) -- return-shape types for
-  ``calcCollinearityDiag`` / ``calcLineupOutputs``+``pickRidgeRegression`` /
-  the top-level orchestration glue, respectively; introduced alongside the
-  functions that produce them.
-- ``calcPlayerWeights``, ``calcLineupOutputs``, ``pickRidgeRegression``,
-  ``injectRapmIntoPlayers``, ``calcCollinearityDiag`` -- the matrix-solve /
-  ridge-regression / collinearity-diagnostics surface, Tasks 3.3-3.6.
+  ``calcCollinearityDiag`` / ``pickRidgeRegression`` / the top-level
+  orchestration glue, respectively; introduced alongside the functions that
+  produce them.
+- ``pickRidgeRegression``, ``injectRapmIntoPlayers``, ``calcCollinearityDiag``
+  -- the ridge-regression-solve / collinearity-diagnostics surface, Tasks
+  3.4-3.6.
+
+**Task 3.3 coverage gap (inherited from upstream, not introduced by this
+port):** neither ``calcLineupOutputs``'s own jest test nor the vendored
+fixture it uses ever exercises a real ``value``/``old_value`` divergence --
+`` lineupReport``'s lineups were built via ``insertOldValues``, which stamps
+``old_value = value`` on every luck-affected field, so the
+``useOldValIfPossible=[False, True]`` variant asserts byte-identical output
+to the ``[False, False]`` default. This proves the value-key plumbing does
+not crash, not that luck-adjustment changes the RAPM numbers correctly --
+the luck-divergence math itself is validated by Phase 2's ``mbb_luck``
+tests, not here. See ``tests/fixtures/hoop_explorer/README.md``'s
+classification map, item 3, for the full accounting.
 """
 
 from __future__ import annotations
 
+import math
 from typing import Any, Callable, Literal, TypedDict
+
+import numpy as np
+from numpy.typing import NDArray
 
 from sportsdataverse.mbb.mbb_lineup_stats import (
     LineupStatSet,
@@ -624,3 +643,264 @@ def build_player_context(
         ),
         "config": config,
     }
+
+
+def _get_strong_weight(prior: RapmPriorInfo, maybe_adaptive_fallback: float | None) -> float:
+    """Port of ``getStrongWeight`` (``RapmUtils.ts:135-144``).
+
+    A fixed ``prior["strong_weight"]`` (``>= 0``, set via ``config["prior_mode"]``)
+    always wins; only when it's in adaptive mode (``< 0``, the sentinel for
+    "adaptive strong prior") does the caller-supplied per-player
+    ``maybe_adaptive_fallback`` (falsy-coalesced to ``0.0``) apply.
+    """
+    if prior["strong_weight"] >= 0:
+        return prior["strong_weight"]
+    return maybe_adaptive_fallback if maybe_adaptive_fallback else 0.0
+
+
+def calc_player_weights(ctx: RapmPlayerContext) -> list[NDArray[np.float64]]:
+    """Build the off/def player-weight (design) matrices for the RAPM solve.
+
+    Faithful port of ``RapmUtils.calcPlayerWeights`` (``RapmUtils.ts:544-595``).
+    One row per (filtered) lineup, one column per remaining player; each
+    filled cell is ``sqrt(lineup_possessions / total_side_possessions)`` --
+    the possession-weighted design-matrix entry the ridge regression (Task
+    3.4) solves against. This is the first function in the module where a
+    ``dict``-shaped ``RapmPlayerContext`` gets materialized into a
+    ``numpy.ndarray`` -- see the module docstring's "dict -> ``numpy.ndarray``
+    boundary" note.
+
+    Args:
+        ctx: A :class:`RapmPlayerContext`, e.g. from :func:`build_player_context`.
+
+    Returns:
+        ``[off_weights, def_weights]`` -- two ``numpy.ndarray`` matrices of
+        shape ``(num_{off,def}_lineups [+1 if ctx["unbias_weight"] > 0],
+        ctx["num_players"])``. The optional extra row (only emitted when
+        ``ctx["unbias_weight"] > 0`` -- always ``0.0`` in production per
+        :func:`build_player_context`'s hardcoded local, but settable directly
+        on the returned context dict, as the oracle test does) holds each
+        column's ``unbias_weight``-scaled sum-of-squares, an "unbiasing
+        observation" row (``RapmUtils.ts:578-593``).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calc_player_weights
+
+            off_weights, def_weights = calc_player_weights(ctx)
+            print(off_weights.shape)  # (num_off_lineups, num_players)
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    extra = ctx["unbias_weight"] > 0
+    off_weights: NDArray[np.float64] = np.zeros((ctx["num_off_lineups"] + (1 if extra else 0), ctx["num_players"]))
+    def_weights: NDArray[np.float64] = np.zeros((ctx["num_def_lineups"] + (1 if extra else 0), ctx["num_players"]))
+
+    def populate_matrix(in_matrix: NDArray[np.float64], prefix: str) -> None:
+        """Port of the ``populateMatrix`` closure (``RapmUtils.ts:558-573``)."""
+        lineup_poss_count = (ctx["off_lineup_poss"] if prefix == "off" else ctx["def_lineup_poss"]) or 1.0
+        for index, lineup in enumerate(ctx["filtered_lineups"](prefix)):
+            poss_count = _num(lineup, f"{prefix}_poss", 0.0)
+            poss_count_weight = math.sqrt(poss_count / lineup_poss_count)
+            for player_id in _lineup_get_player_set(lineup):
+                player_index = ctx["player_to_col"].get(player_id)
+                if player_index is not None and player_index >= 0:
+                    in_matrix[index, player_index] = poss_count_weight
+                # (else this player is filtered out so ignore -- we'll just use their adj_rtg)
+
+    populate_matrix(off_weights, "off")
+    populate_matrix(def_weights, "def")
+
+    # Add the possession %s for each player (RapmUtils.ts:578-593) -- an
+    # "unbiasing observation" row, unreachable in production (unbias_weight
+    # is hardcoded 0.0 in build_player_context) but exercised by the oracle
+    # test, which sets ctx["unbias_weight"] directly on the returned context.
+    if ctx["unbias_weight"] > 0:
+
+        def add_extra_row(in_matrix: NDArray[np.float64], prefix: str) -> None:
+            bottom_row = ctx["num_off_lineups"] if prefix == "off" else ctx["num_def_lineups"]
+            # The extra row itself is still all-zero at this point, so
+            # summing over every row (rather than just the populated ones)
+            # is equivalent to the TS transpose-then-sum, which likewise
+            # includes the (zero) extra row in its column sums.
+            in_matrix[bottom_row, :] = ctx["unbias_weight"] * np.sum(in_matrix**2, axis=0)
+
+        add_extra_row(off_weights, "off")
+        add_extra_row(def_weights, "def")
+
+    return [off_weights, def_weights]
+
+
+def calc_lineup_outputs(
+    field: str,
+    off_offset: float,
+    def_offset: float,
+    ctx: RapmPlayerContext,
+    adaptive_correl_weights: list[float] | None = None,
+    use_old_val_if_possible: tuple[bool, bool] = (False, False),
+) -> list[NDArray[np.float64]]:
+    """Build the off/def target vectors the RAPM design matrices are fit against.
+
+    Faithful port of ``RapmUtils.calcLineupOutputs`` (``RapmUtils.ts:598-751``).
+    For each filtered lineup, computes a possession-weighted residual: the
+    lineup's own stat value, plus any global luck adjustment, minus the
+    accumulated "prior offset" contributed by every player on the lineup
+    (a strong-prior blend for kept players -- see :func:`_get_strong_weight`
+    -- or a fixed baseline contribution for removed players).
+
+    Upstream keeps this as a plain ``Array<Array<number>>`` (*not* a mathjs
+    ``Matrix``, unlike :func:`calc_player_weights`'s ``offWeights``/
+    ``defWeights`` -- ``RapmUtils.test.ts``'s own ``tidyResults`` helper for
+    this function has a visibly different shape, see the classification map
+    in ``tests/fixtures/hoop_explorer/README.md``). This port still
+    materializes both output vectors as ``numpy.ndarray`` for consistency
+    with :func:`calc_player_weights` at the same dict -> array boundary --
+    Task 3.4's ridge-regression solve consumes both as arrays regardless of
+    the upstream distinction.
+
+    Args:
+        field: The stat suffix to read off each lineup, e.g. ``"adj_ppp"``
+            (read as ``{prefix}_{field}``, e.g. ``"off_adj_ppp"``).
+        off_offset: The D1-average offensive value for ``field`` (the
+            regression's starting/baseline value on the RHS).
+        def_offset: The D1-average defensive value for ``field``.
+        ctx: A :class:`RapmPlayerContext`, e.g. from :func:`build_player_context`.
+        adaptive_correl_weights: Optional per-player adaptive-correlation
+            weights (index-aligned with ``ctx["col_to_player"]``), used as
+            the strong-prior blend fallback when ``ctx["prior_info"]
+            ["strong_weight"] < 0`` -- see :func:`_get_strong_weight`.
+        use_old_val_if_possible: ``(use_old_val_for_off, use_old_val_for_def)``
+            -- whether to prefer each lineup/team stat's luck-adjusted
+            ``old_value`` over its raw ``value`` when present. This is the
+            luck-adjustment hook Task 3.1's classification map flags as an
+            **inherited coverage gap**: the vendored oracle fixture has
+            ``old_value == value`` on every field (via ``insertOldValues``),
+            so neither jest nor this port's replay test ever observes this
+            flag change the resulting numbers -- only that passing it
+            doesn't crash. See the module docstring's "Task 3.3 coverage
+            gap" note.
+
+    Returns:
+        ``[off_outputs, def_outputs]`` -- two 1-D ``numpy.ndarray`` target
+        vectors, index-aligned with ``ctx["filtered_lineups"]("off"/"def")``
+        (plus one extra element each when ``ctx["unbias_weight"] > 0``, an
+        "unbiasing observation" target -- always unreached in production,
+        same as :func:`calc_player_weights`'s extra row).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import calc_lineup_outputs
+
+            off_outputs, def_outputs = calc_lineup_outputs(
+                "adj_ppp", 100.0, 100.0, ctx
+            )
+            print(off_outputs.shape)  # (num_off_lineups,)
+
+        Luck-adjusted variant (reads ``old_value`` where present)::
+
+            off_luck, def_luck = calc_lineup_outputs(
+                "adj_ppp", 100.0, 100.0, ctx, use_old_val_if_possible=(True, True)
+            )
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+
+    def get_off_val(o: Any) -> float:
+        return _get_val_for_key(o, "old_value" if use_old_val_if_possible[0] else "value")
+
+    def get_def_val(o: Any) -> float:
+        return _get_val_for_key(o, "old_value" if use_old_val_if_possible[1] else "value")
+
+    get_val: dict[str, Callable[[Any], float]] = {"off": get_off_val, "def": get_def_val}
+    offsets = {"off": off_offset, "def": def_offset}
+
+    def do_global_luck_adj(off_or_def: str) -> float:
+        """Port of the ``doGlobalLuckAdj`` closure (``RapmUtils.ts:625-646``)."""
+        if field != "adj_ppp":
+            return 0.0
+        use_old_val = use_old_val_if_possible[0] if off_or_def == "off" else use_old_val_if_possible[1]
+        if not use_old_val or ctx["prior_info"]["key_used"] != "value":
+            return 0.0
+        all_lineups = ctx["team_info"].get("all_lineups") or {}
+        field_stat = all_lineups.get(f"{off_or_def}_{field}") or {}
+        if not isinstance(field_stat, dict) or field_stat.get("old_value") is None:
+            return 0.0
+        return (field_stat.get("value") or 0.0) - (field_stat.get("old_value") or 0.0)
+
+    global_luck_adj_offsets = {"off": do_global_luck_adj("off"), "def": do_global_luck_adj("def")}
+
+    def calculate_vector(prefix: str) -> list[float]:
+        """Port of the ``calculateVector`` closure (``RapmUtils.ts:651-726``)."""
+        lineup_poss_count = (ctx["off_lineup_poss"] if prefix == "off" else ctx["def_lineup_poss"]) or 1.0
+        out: list[float] = []
+        for lineup in ctx["filtered_lineups"](prefix):
+            poss_count = _num(lineup, f"{prefix}_poss", 0.0)
+            poss_count_weight = math.sqrt(poss_count / lineup_poss_count)
+            val = get_val[prefix](lineup.get(f"{prefix}_{field}"))
+
+            prior_offset = offsets[prefix]
+            for player_id in _lineup_get_player_set(lineup):
+                player_index = ctx["player_to_col"].get(player_id)
+                if player_index is not None and player_index >= 0:
+                    # (case 1: a kept/rotation player -- blend in their strong prior)
+                    strong_weight = _get_strong_weight(
+                        ctx["prior_info"],
+                        adaptive_correl_weights[player_index] if adaptive_correl_weights is not None else None,
+                    )
+                    strong_val = ctx["prior_info"]["players_strong"][player_index].get(f"{prefix}_{field}") or 0.0
+                    prior_offset += strong_weight * strong_val
+                else:
+                    # (case 2: a removed player -- use their fixed baseline
+                    # contribution on the RHS instead)
+                    removed_player_info = ctx["removed_players"].get(player_id)
+                    if removed_player_info is not None:
+                        removed_player_stat = removed_player_info[2] or {}
+                        # (temp overrides so shot-rate fields sum to 1 for removed
+                        # players -- restored via the `del`s below, matching the
+                        # upstream "avoid mutating the removedPlayerStat" comment)
+                        removed_player_stat["def_3pr"] = {"value": 0.33}
+                        removed_player_stat["def_2primr"] = {"value": 0.33}
+                        removed_player_stat["def_2pmidr"] = {"value": 0.33}
+                        if field == "adj_ppp":
+                            removed_above_mean = (
+                                get_val[prefix](removed_player_stat.get(f"{prefix}_adj_rtg"))
+                                + ctx["prior_info"]["basis"][prefix]
+                            )
+                        else:
+                            removed_above_mean = (
+                                get_val[prefix](removed_player_stat.get(f"{prefix}_{field}")) - offsets[prefix]
+                            )
+                        del removed_player_stat["def_3pr"]
+                        del removed_player_stat["def_2primr"]
+                        del removed_player_stat["def_2pmidr"]
+                        prior_offset += removed_above_mean
+                    # (else exception case -- no-op, matches TS `return acc`)
+
+            out.append((val + global_luck_adj_offsets[prefix] - prior_offset) * poss_count_weight)
+        return out
+
+    extra = ctx["unbias_weight"] > 0
+
+    def build_side(prefix: str) -> NDArray[np.float64]:
+        vector = calculate_vector(prefix)
+        if extra:
+            if ctx["prior_info"]["include_strong"].get(f"{prefix}_{field}"):
+                vector = vector + [0.0]
+            else:
+                team_val = get_val[prefix](ctx["team_info"].get(f"{prefix}_{field}"))
+                vector = vector + [ctx["unbias_weight"] * (team_val - offsets[prefix])]
+        return np.array(vector, dtype=np.float64)
+
+    return [build_side("off"), build_side("def")]

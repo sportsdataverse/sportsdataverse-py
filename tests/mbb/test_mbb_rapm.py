@@ -31,10 +31,19 @@ overlay -- **not** a call to ``mbb_ratings.build_productivity`` (see Task
 3.1's report + ``mbb_rapm.py``'s own module docstring "RAPM prior source"
 note for why this test doesn't exercise that production wiring).
 
+**Task 3.3** extends this with ``RapmUtils.test.ts``'s ``"RapmUtils -
+calcPlayerWeights"`` (``:527-573``) and ``"RapmUtils - calcLineupOutputs"``
+(``:575-629``) blocks -- both build their own fresh ``lineup_report``/
+``build_player_context`` off the *base* 3-lineup ``lineupReport`` (not
+``lineupReportWithExtra``), per the classification map, and both use
+exact (non-approximate) equality against hand-transcribed literal arrays
+(no ``toMatchSnapshot`` in either block).
+
 See ``tests/fixtures/hoop_explorer/README.md``'s classification map for the
 full accounting of ``RapmUtils.test.ts``'s 7 ``test()`` blocks -- this module
-covers block 1 only (``buildPlayerContext``); blocks 2-7 (``calcPlayerWeights``
-onward) belong to Tasks 3.3-3.6.
+covers blocks 1-3 (``buildPlayerContext``/``calcPlayerWeights``/
+``calcLineupOutputs``); blocks 4-7 (``pickRidgeRegression`` onward) belong to
+Tasks 3.4-3.6.
 """
 
 from __future__ import annotations
@@ -44,7 +53,12 @@ import copy
 import pytest
 
 from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
-from sportsdataverse.mbb.mbb_rapm import DEFAULT_RAPM_CONFIG, build_player_context
+from sportsdataverse.mbb.mbb_rapm import (
+    DEFAULT_RAPM_CONFIG,
+    build_player_context,
+    calc_lineup_outputs,
+    calc_player_weights,
+)
 from tests.mbb._hoop_explorer_replay import (
     first_lineup_list,
     insert_old_values,
@@ -237,3 +251,110 @@ def test_build_player_context_matches_snapshot(
 def test_default_rapm_config_verbatim() -> None:
     """``defaultRapmConfig`` copied verbatim (``RapmUtils.ts:181-185``)."""
     assert DEFAULT_RAPM_CONFIG == {"prior_mode": -1, "removal_pct": 0.06, "fixed_regression": -1}
+
+
+def _tidy_matrix(matrix: object, decimals: int) -> list[list[str]]:
+    """Replays the test-local ``tidyResults`` helper for both
+    ``calcPlayerWeights`` (``RapmUtils.test.ts:546-548``, 3 decimals) and
+    ``calcLineupOutputs`` (``:607-611``, 2 decimals) -- both format every
+    scalar to a fixed-decimal string; only the decimal count differs.
+    """
+    return [[f"{v:.{decimals}f}" for v in row] for row in matrix]  # type: ignore[union-attr]
+
+
+@pytest.mark.parametrize("unbias_weight", [0.0, 2.0])
+def test_calc_player_weights(inputs: dict, rating_inputs: dict, unbias_weight: float) -> None:
+    """Replay of ``RapmUtils.test.ts:527-573`` (``"RapmUtils - calcPlayerWeights"``).
+
+    Builds ``context`` fresh (via ``build_player_context(removal_pct=0.0)``
+    off the *base* ``lineupReport``, not ``lineupReportWithExtra`` -- see
+    Task 3.2's report, "Concerns for Tasks 3.3-3.6" item 3) per parametrized
+    case, since ``build_player_context`` mutates its ``lineups`` argument in
+    place and this module's fixture-building helpers are not shared with
+    ``test_build_player_context_matches_snapshot`` above.
+    """
+    lineup_report = _build_lineup_report(inputs)
+    on_off_report = lineup_to_team_report(lineup_report)
+    context = build_player_context(
+        on_off_report.get("players") or [],
+        lineup_report.get("lineups") or [],
+        _players_info_by_key(rating_inputs),
+        {},
+        100.0,
+        "value",
+        {**DEFAULT_RAPM_CONFIG, "removal_pct": 0.0},
+    )
+    context["unbias_weight"] = unbias_weight
+
+    results = calc_player_weights(context)
+
+    expected_off = [
+        ["0.704", "0.704", "0.704", "0.704", "0.704", "0.000"],
+        ["0.511", "0.511", "0.511", "0.511", "0.000", "0.511"],
+        ["0.493", "0.493", "0.493", "0.000", "0.493", "0.493"],
+        ["2.000", "2.000", "2.000", "1.513", "1.478", "1.009"],  # (extra row if adding unbiasing obs)
+    ]
+    expected_def = [
+        ["0.699", "0.699", "0.699", "0.699", "0.699", "0.000"],
+        ["0.518", "0.518", "0.518", "0.518", "0.000", "0.518"],
+        ["0.493", "0.493", "0.493", "0.000", "0.493", "0.493"],
+        ["2.000", "2.000", "2.000", "1.514", "1.463", "1.023"],  # (extra row if adding unbiasing obs)
+    ]
+    n_rows = len(expected_off) if unbias_weight != 0 else 3
+    assert _tidy_matrix(results[0], 3) == expected_off[:n_rows]
+    assert _tidy_matrix(results[1], 3) == expected_def[:n_rows]
+
+
+@pytest.mark.parametrize("prior_mode", [-1, 0.5])
+def test_calc_lineup_outputs(inputs: dict, rating_inputs: dict, prior_mode: float) -> None:
+    """Replay of ``RapmUtils.test.ts:575-629`` (``"RapmUtils - calcLineupOutputs"``).
+
+    Both loop values (``-1``/``0.5``) are JS-truthy, so both parametrized
+    cases assert the *same* literal array (the classification map's item 3)
+    -- this is not a copy/paste bug, it faithfully replays the jest
+    ``strongWeight ? X : []`` ternary always taking the ``X`` branch. Also
+    replays the ``oldValResults`` variant (``useOldValIfPossible=[False,
+    True]``) asserting the identical literal -- a documented, upstream-
+    inherited coverage gap (see the module docstring's "Task 3.3 coverage
+    gap" note): ``lineupReport``'s lineups were built via ``insertOldValues``,
+    which stamps ``old_value = value`` everywhere, so this variant doesn't
+    exercise an actual value/old_value divergence, only that the plumbing
+    doesn't crash.
+    """
+    lineup_report = _build_lineup_report(inputs)
+    on_off_report = lineup_to_team_report(lineup_report)
+    context = build_player_context(
+        on_off_report.get("players") or [],
+        lineup_report.get("lineups") or [],
+        _players_info_by_key(rating_inputs),
+        {},
+        100.0,
+        "value",
+        {**DEFAULT_RAPM_CONFIG, "prior_mode": prior_mode, "removal_pct": 0.0},
+    )
+    assert context["prior_info"]["basis"] == {"off": 0.0, "def": 0.0}
+
+    adjusted_basis_off_eff = 100.0 - 5 * context["prior_info"]["basis"]["off"]
+    adjusted_basis_def_eff = 100.0 - 5 * context["prior_info"]["basis"]["def"]
+    adaptive_weights = [0.5 for _ in (on_off_report.get("players") or [])]
+
+    expected = [["13.07", "5.84", "7.70"], ["-8.48", "-10.69", "-8.83"]]
+
+    results = calc_lineup_outputs(
+        "adj_ppp",
+        adjusted_basis_off_eff,
+        adjusted_basis_def_eff,
+        context,
+        adaptive_weights if prior_mode < 0 else None,
+    )
+    assert _tidy_matrix(results, 2) == expected
+
+    old_val_results = calc_lineup_outputs(
+        "adj_ppp",
+        adjusted_basis_off_eff,
+        adjusted_basis_def_eff,
+        context,
+        adaptive_weights if prior_mode < 0 else None,
+        (False, True),
+    )
+    assert _tidy_matrix(old_val_results, 2) == expected
