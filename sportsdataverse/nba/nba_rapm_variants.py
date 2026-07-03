@@ -146,6 +146,36 @@ def decay_weights(
     return np.power(0.5, days_ago / float(half_life_days)).astype(np.float64)
 
 
+def _prepare_design(possessions: pl.DataFrame) -> tuple[csr_matrix, pl.DataFrame, list[int]]:
+    """Null-drop the lineup columns and build the shared design ``X`` ONCE.
+
+    Factored out of :func:`_prepare` so a caller that needs to fit MULTIPLE
+    responses against the identical design (:func:`nba_four_factor_rapm`, four
+    factors) can build it a single time and read each response straight off
+    the returned ``kept`` frame -- :func:`build_rapm_design` depends only on
+    the lineup columns, never on the response, so rebuilding it per response
+    is pure waste (it was previously rebuilt once per factor: one useful call
+    plus three discarded ones).
+
+    Args:
+        possessions: Possession+lineup frame (``off_player_1..5``,
+            ``def_player_1..5``, ``points`` -- see :func:`build_rapm_design`).
+
+    Returns:
+        ``(X, kept, pids)``. ``kept`` is the null-lineup-dropped frame,
+        row-aligned to ``X`` -- callers read any per-possession response/weight
+        column directly off of it. Empty / all-null-lineup input ->
+        ``(csr_matrix((0, 0)), <empty frame>, [])``.
+    """
+    if possessions.is_empty():
+        return csr_matrix((0, 0)), possessions, []
+    kept = possessions.drop_nulls(subset=_OFF + _DEF)
+    if kept.is_empty():
+        return csr_matrix((0, 0)), kept, []
+    X, _y_points, pids = build_rapm_design(kept)
+    return X, kept, pids
+
+
 def _prepare(
     possessions: pl.DataFrame,
     response_col: str,
@@ -157,7 +187,8 @@ def _prepare(
     Drops null-lineup rows ONCE (identical subset to ``build_rapm_design``) so the
     response/weight columns stay aligned to the surviving design rows, then builds
     ``X`` from the dropped frame (its internal re-drop is then a no-op that
-    preserves row order).
+    preserves row order). Delegates the null-drop + design build to
+    :func:`_prepare_design`.
 
     Args:
         possessions: Possession+lineup frame carrying ``response_col`` (and
@@ -169,12 +200,9 @@ def _prepare(
         ``(X, y, w, pids)`` where ``w`` is ``None`` when ``weight_col`` is ``None``.
         Empty / all-null-lineup input -> ``(csr_matrix((0, 0)), empty, None, [])``.
     """
-    if possessions.is_empty():
-        return csr_matrix((0, 0)), np.empty(0, dtype=np.float64), None, []
-    kept = possessions.drop_nulls(subset=_OFF + _DEF)
-    if kept.is_empty():
-        return csr_matrix((0, 0)), np.empty(0, dtype=np.float64), None, []
-    X, _y_points, pids = build_rapm_design(kept)
+    X, kept, pids = _prepare_design(possessions)
+    if not pids:
+        return X, np.empty(0, dtype=np.float64), None, []
     y = kept[response_col].to_numpy().astype(np.float64)
     w = kept[weight_col].to_numpy().astype(np.float64) if weight_col is not None else None
     assert X.shape[0] == len(y), (X.shape, len(y))  # alignment contract
@@ -702,9 +730,11 @@ def nba_four_factor_rapm(
         return out.to_pandas() if return_as_pandas else out
 
     enriched = possessions.with_columns([expr.alias(f"_resp_{f}") for f, expr in _FACTOR_RESPONSES.items()])
-    # build design ONCE off the first factor's prepare; all factors share X + pids
-    first = next(iter(_FACTOR_RESPONSES))
-    X, _y0, _w, pids = _prepare(enriched, f"_resp_{first}", weight_col=None)
+    # Build the design ONCE (build_rapm_design depends only on the lineup columns,
+    # never on the response) and read each factor's response straight off the
+    # retained null-dropped frame -- rebuilding the design once per factor (as an
+    # earlier revision did via 4 extra _prepare calls) was pure waste.
+    X, kept, pids = _prepare_design(enriched)
     if not pids:
         out = _empty(FOUR_FACTOR_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
@@ -714,8 +744,8 @@ def nba_four_factor_rapm(
     off_poss: np.ndarray = np.empty(0, dtype=np.int64)
     def_poss: np.ndarray = np.empty(0, dtype=np.int64)
     for f in _FACTOR_RESPONSES:
-        _Xf, yf, _wf, pids_f = _prepare(enriched, f"_resp_{f}", weight_col=None)
-        assert pids_f == pids  # same design across factors (identical drop-null + player set)
+        yf = kept[f"_resp_{f}"].to_numpy().astype(np.float64)
+        assert X.shape[0] == len(yf), (X.shape, len(yf))  # alignment sanity (single shared design)
         o, d, off_poss, def_poss = _fit_weighted(X, yf, alphas=fit_alphas, cv=ORACLE_RAPM_CV)
         cols[f"{f}__off"] = pl.Series(o, dtype=pl.Float64)
         cols[f"{f}__def"] = pl.Series(d, dtype=pl.Float64)
