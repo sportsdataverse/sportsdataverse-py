@@ -626,3 +626,100 @@ def nba_la_rapm(
         }
     ).sort("player_id")
     return out.to_pandas() if return_as_pandas else out
+
+
+#: Per-possession four-factor response expressions (points-per-possession scale).
+#: **DECISION 5/6/7** (binding): ``RA_EFG = 2*fg2m + 3*fg3m``, ``RA_FTR = ftm``,
+#: ``RA_ORBD`` = raw ``oreb``, ``RA_TOV`` = raw ``tov`` -- the plan's v1 defaults.
+_FACTOR_RESPONSES: dict[str, pl.Expr] = {
+    "efg": (2 * pl.col("fg2m") + 3 * pl.col("fg3m")).cast(pl.Float64),
+    "ftr": pl.col("ftm").cast(pl.Float64),
+    "orbd": pl.col("oreb").cast(pl.Float64),
+    "tov": pl.col("tov").cast(pl.Float64),
+}
+
+#: Output schema for :func:`nba_four_factor_rapm`.
+FOUR_FACTOR_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    **{f"{f}__{side}": pl.Float64 for f in _FACTOR_RESPONSES for side in ("off", "def")},
+    "off_poss": pl.Int64,
+    "def_poss": pl.Int64,
+}
+
+
+def nba_four_factor_rapm(
+    possessions: pl.DataFrame,
+    *,
+    alphas: Optional[np.ndarray] = None,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
+
+    Each factor is regressed on the identical offense/defense design matrix,
+    differing only in the per-possession response (:data:`_FACTOR_RESPONSES`).
+    Output mirrors the oracle's ``RA_*__Off/__Def`` layout. **DECISION 5/6/7**
+    govern the response definitions.
+
+    .. note::
+        **Ridge schedule -- the oracle grid**: like every other WP2 RAPM
+        variant (module docstring's binding schedule ruling, decision #8,
+        extended to :func:`nba_la_rapm`), each of the four factors' operative
+        fit uses :func:`oracle_rapm_alphas` (evaluated once, at the possession
+        count shared by all four fits since they use the identical design)
+        with ``cv=`` :data:`ORACLE_RAPM_CV` -- not plain
+        :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s ``DEFAULT_RAPM_ALPHAS``/
+        ``cv=None`` schedule. Pass an explicit ``alphas=`` to override.
+
+    Args:
+        possessions: Possession+lineup frame carrying team-level ``fg2m, fg3m,
+            ftm, oreb, tov`` and the ten lineup columns.
+        alphas: Optional RidgeCV alpha grid override, shared by all four
+            factor fits. ``None`` (default) auto-selects
+            :func:`oracle_rapm_alphas` evaluated at the possession count --
+            the operative WP2 oracle schedule.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        Frame with :data:`FOUR_FACTOR_SCHEMA` — ``{factor}__off`` / ``{factor}__def``
+        columns per factor, plus possession counts. Empty input → zero-row frame.
+
+    Example:
+        Per-player four-factor impact::
+
+            from sportsdataverse.nba.nba_rapm_variants import nba_four_factor_rapm
+            ff = nba_four_factor_rapm(season_poss)
+            print(ff.sort("efg__off", descending=True).head())
+
+        See Also:
+            * `NBA_Tutorials (Ryan Davis)`_ — the oracle RAPM reference implementation
+            * `nba_api`_ — upstream play-by-play source
+
+        .. _NBA_Tutorials (Ryan Davis): https://github.com/rd11490/NBA_Tutorials
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    if possessions.is_empty():
+        out = _empty(FOUR_FACTOR_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    enriched = possessions.with_columns([expr.alias(f"_resp_{f}") for f, expr in _FACTOR_RESPONSES.items()])
+    # build design ONCE off the first factor's prepare; all factors share X + pids
+    first = next(iter(_FACTOR_RESPONSES))
+    X, _y0, _w, pids = _prepare(enriched, f"_resp_{first}", weight_col=None)
+    if not pids:
+        out = _empty(FOUR_FACTOR_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    fit_alphas = alphas if alphas is not None else oracle_rapm_alphas(X.shape[0])
+    cols: dict[str, pl.Series] = {"player_id": pl.Series(pids, dtype=pl.Int64)}
+    off_poss: np.ndarray = np.empty(0, dtype=np.int64)
+    def_poss: np.ndarray = np.empty(0, dtype=np.int64)
+    for f in _FACTOR_RESPONSES:
+        _Xf, yf, _wf, pids_f = _prepare(enriched, f"_resp_{f}", weight_col=None)
+        assert pids_f == pids  # same design across factors (identical drop-null + player set)
+        o, d, off_poss, def_poss = _fit_weighted(X, yf, alphas=fit_alphas, cv=ORACLE_RAPM_CV)
+        cols[f"{f}__off"] = pl.Series(o, dtype=pl.Float64)
+        cols[f"{f}__def"] = pl.Series(d, dtype=pl.Float64)
+    cols["off_poss"] = pl.Series(off_poss, dtype=pl.Int64)
+    cols["def_poss"] = pl.Series(def_poss, dtype=pl.Int64)
+    out = pl.DataFrame(cols).sort("player_id")
+    return out.to_pandas() if return_as_pandas else out

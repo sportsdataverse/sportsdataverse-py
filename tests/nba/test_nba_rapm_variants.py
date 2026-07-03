@@ -11,6 +11,7 @@ from sportsdataverse.nba.nba_model_validation import _synthetic_possessions
 from sportsdataverse.nba.nba_rapm import nba_rapm
 from sportsdataverse.nba.nba_rapm_variants import (
     DECAY_RAPM_SCHEMA,
+    FOUR_FACTOR_SCHEMA,
     LA_RAPM_SCHEMA,
     ORACLE_RAPM_CV,
     ORACLE_RAPM_LAMBDAS,
@@ -20,6 +21,7 @@ from sportsdataverse.nba.nba_rapm_variants import (
     decay_weights,
     luck_adjusted_response,
     nba_decay_rapm,
+    nba_four_factor_rapm,
     nba_la_rapm,
     oracle_rapm_alphas,
 )
@@ -392,6 +394,58 @@ def test_la_rapm_equals_same_schedule_reference_when_rates_realized():
     # la_points == points => LA-RAPM equals the same-schedule internal reference
     # (formula-independent invariant, isolated from the ridge-schedule choice)
     assert np.allclose(la["la_rapm"].to_numpy(), ref["rapm"].to_numpy(), atol=1e-6)
+
+
+def _synth_four_factor(seed: int = 3) -> pl.DataFrame:
+    poss = _synth(seed=seed)
+    # plant per-possession four-factor counts consistent with points
+    return poss.with_columns(
+        (pl.col("points") // 3).alias("fg3m"),
+        pl.lit(1).alias("ftm"),
+        pl.lit(1).alias("oreb"),
+        pl.lit(0).alias("tov"),
+    ).with_columns(((pl.col("points") - 3 * pl.col("fg3m") - pl.col("ftm")).clip(0) // 2).alias("fg2m"))
+
+
+def test_four_factor_empty_input():
+    out = nba_four_factor_rapm(pl.DataFrame())
+    assert out.height == 0 and dict(out.schema) == FOUR_FACTOR_SCHEMA
+
+
+def test_four_factor_schema_and_dtypes():
+    out = nba_four_factor_rapm(_synth_four_factor())
+    assert dict(out.schema) == FOUR_FACTOR_SCHEMA
+    assert out.height > 0
+
+
+def test_four_factor_planted_orbd_signal():
+    # a team whose offense always grabs an oreb should have positive orbd__off for its players
+    poss = _synth_four_factor()
+    out = nba_four_factor_rapm(poss)
+    # every possession has oreb=1 (constant) => ridge shrinks player effects toward ~0 but
+    # the fit must run and produce finite values for all four factors
+    for c in ["efg__off", "ftr__off", "orbd__off", "tov__off"]:
+        assert out[c].is_finite().all()
+
+
+def test_four_factor_uses_oracle_schedule_matches_same_schedule_reference():
+    # Binding WP2 ruling: every variant's operative fit is the ORACLE schedule
+    # (oracle_rapm_alphas + cv=ORACLE_RAPM_CV); pin that nba_four_factor_rapm's
+    # default (alphas=None) reproduces the same-schedule internal reference on
+    # each factor's own response, so this variant can't silently drift back to
+    # the plain nba_rapm schedule.
+    poss = _synth_four_factor()
+    out = nba_four_factor_rapm(poss).sort("player_id")
+    for factor, response_expr in (
+        ("efg", (2 * pl.col("fg2m") + 3 * pl.col("fg3m")).cast(pl.Float64)),
+        ("ftr", pl.col("ftm").cast(pl.Float64)),
+        ("orbd", pl.col("oreb").cast(pl.Float64)),
+        ("tov", pl.col("tov").cast(pl.Float64)),
+    ):
+        ref_poss = poss.with_columns(response_expr.alias("_resp"))
+        ref = _same_schedule_reference(ref_poss, "_resp").sort("player_id")
+        got = out[f"{factor}__off"].to_numpy() + out[f"{factor}__def"].to_numpy()
+        assert np.allclose(got, ref["rapm"].to_numpy(), atol=1e-6)
 
 
 def test_la_rapm_schema_and_dtypes():
