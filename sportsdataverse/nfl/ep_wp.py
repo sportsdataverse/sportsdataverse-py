@@ -1956,6 +1956,12 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         ep_end=pl.col("EP_end"),
     )
 
+    # Per-game cumulative EPA totals (shared nflfastR add_ep_variables tail).
+    # No-op when the frame lacks the nflverse identity columns (the raw ESPN
+    # internal frame carries start.pos_team.id / type.text instead of
+    # posteam / play_type) — the totals then simply aren't emitted.
+    play_df = _add_epa_running_totals(play_df)
+
     return play_df
 
 
@@ -2207,6 +2213,11 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
         home_wp=pl.col("home_wp_before"),
         away_wp=pl.col("away_wp_before"),
     )
+
+    # Per-game cumulative rush/pass WPA totals (shared nflfastR
+    # add_wp_variables tail).  No-op when the frame lacks the nflverse
+    # identity columns (see calculate_epa) — the totals then aren't emitted.
+    play_df = _add_wpa_running_totals(play_df)
 
     return play_df
 
@@ -2524,7 +2535,12 @@ def _derive_epa(df: pl.DataFrame) -> pl.DataFrame:
             pl.when(pl.col("desc") == pl.lit("END QUARTER 2")).then(None).otherwise(pl.col("ep")).alias("ep"),
         )
 
-    return df.drop([c for c in ("_tmp_posteam", "_home_ep", "_home_epa", "_end_game") if c in df.columns])
+    df = df.drop([c for c in ("_tmp_posteam", "_home_ep", "_home_epa", "_end_game") if c in df.columns])
+
+    # Per-game cumulative EPA totals (add_ep_variables L735-801) — computed on
+    # the FINAL ``epa`` (post end-of-half / end-of-game overlays), matching the
+    # R mutate order.
+    return _add_epa_running_totals(df)
 
 
 def _derive_qb_epa(df: pl.DataFrame) -> pl.DataFrame:
@@ -2748,15 +2764,20 @@ def _derive_wpa(df: pl.DataFrame) -> pl.DataFrame:
     )
     df = df.with_columns((1.0 - pl.col("wp")).alias("def_wp"))
 
-    # WPA: lead of home WP, flipped into possession-team frame.
+    # WPA: lead of home WP, flipped into possession-team frame.  nflfastR keeps
+    # ``vegas_home_wpa`` as a public column (add_wp_variables L1153) — the plain
+    # home-frame lead difference, deliberately NOT NA'd on kneel/end-of-game
+    # rows (only ``wpa`` / ``vegas_wpa`` are) — while ``home_wpa`` "isn't saved".
     df = df.with_columns(
-        (pl.col("vegas_home_wp").shift(-1).over(grp) - pl.col("vegas_home_wp")).alias("_vegas_home_wpa"),
+        (pl.col("vegas_home_wp").shift(-1).over(grp) - pl.col("vegas_home_wp"))
+        .cast(pl.Float64)
+        .alias("vegas_home_wpa"),
         (pl.col("home_wp").shift(-1).over(grp) - pl.col("home_wp")).alias("_home_wpa"),
     )
     df = df.with_columns(
         pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
-        .then(pl.col("_vegas_home_wpa"))
-        .otherwise(-pl.col("_vegas_home_wpa"))
+        .then(pl.col("vegas_home_wpa"))
+        .otherwise(-pl.col("vegas_home_wpa"))
         .alias("vegas_wpa"),
         pl.when(pl.col("_tmp_posteam") == pl.col("home_team"))
         .then(pl.col("_home_wpa"))
@@ -2771,9 +2792,583 @@ def _derive_wpa(df: pl.DataFrame) -> pl.DataFrame:
             pl.when(kneel_or_end).then(None).otherwise(pl.col("wpa")).alias("wpa"),
         )
 
-    return df.drop(
-        [c for c in ("_tmp_posteam", "_end_game", "_vegas_home_wpa", "_home_wpa", "vegas_home_wp") if c in df.columns]
+    df = df.drop([c for c in ("_tmp_posteam", "_end_game", "_home_wpa", "vegas_home_wp") if c in df.columns])
+
+    # Per-game cumulative rush/pass WPA totals (add_wp_variables L1252-1324) —
+    # computed on the FINAL ``wpa`` (post kneel / end-of-game NA overrides),
+    # matching the R mutate order.
+    return _add_wpa_running_totals(df)
+
+
+# ---------------------------------------------------------------------------
+# Air / YAC EPA-WPA column family + per-game running totals
+# (nflfastR helper_add_ep_wp.R — add_air_yac_ep[_variables],
+#  add_air_yac_wp[_variables], and the totals blocks of add_ep_variables /
+#  add_wp_variables)
+# ---------------------------------------------------------------------------
+
+#: Average seconds elapsed on a pass play; subtracted from the clock before the
+#: air-yards EP / WP re-score (nflfastR ``helper_add_ep_wp.R``, same literal in
+#: both the air-yac EP and air-yac WP functions).
+_PASS_TIME_ELAPSED: float = 5.704673
+
+#: Per-game running totals emitted by the ``add_ep_variables`` tail (L735-801).
+_EPA_RUNNING_TOTAL_COLS: tuple[str, ...] = (
+    "total_home_epa",
+    "total_away_epa",
+    "total_home_rush_epa",
+    "total_away_rush_epa",
+    "total_home_pass_epa",
+    "total_away_pass_epa",
+)
+
+#: Per-game running totals emitted by the ``add_wp_variables`` tail
+#: (L1252-1324).  nflfastR has NO ``total_home_wpa`` / ``total_away_wpa`` —
+#: only the rush/pass splits.
+_WPA_RUNNING_TOTAL_COLS: tuple[str, ...] = (
+    "total_home_rush_wpa",
+    "total_away_rush_wpa",
+    "total_home_pass_wpa",
+    "total_away_pass_wpa",
+)
+
+#: Public air/YAC EPA family columns (``add_air_yac_ep_variables``).  The
+#: intermediate signed columns the R computes (``home_team_comp_air_epa`` etc.)
+#: are folded into the cumulative expressions and never materialised — the
+#: published nflverse play-by-play drops them, so this is the shipped surface.
+_AIR_YAC_EPA_COLS: tuple[str, ...] = (
+    "air_epa",
+    "yac_epa",
+    "comp_air_epa",
+    "comp_yac_epa",
+    "total_home_comp_air_epa",
+    "total_away_comp_air_epa",
+    "total_home_comp_yac_epa",
+    "total_away_comp_yac_epa",
+    "total_home_raw_air_epa",
+    "total_away_raw_air_epa",
+    "total_home_raw_yac_epa",
+    "total_away_raw_yac_epa",
+)
+
+#: Public air/YAC WPA family columns (``add_air_yac_wp_variables``) — exact
+#: WPA mirrors of :data:`_AIR_YAC_EPA_COLS`.
+_AIR_YAC_WPA_COLS: tuple[str, ...] = tuple(c.replace("epa", "wpa") for c in _AIR_YAC_EPA_COLS)
+
+#: §5 input columns ``_derive_air_yac_epa`` needs; when any is absent the
+#: family is emitted as all-null Float64 (schema-stable degradation).
+_AIR_YAC_EPA_REQUIRED: tuple[str, ...] = (
+    "game_id",
+    "air_yards",
+    "play_type",
+    "yardline_100",
+    "ydstogo",
+    "down",
+    "half_seconds_remaining",
+    "posteam_timeouts_remaining",
+    "defteam_timeouts_remaining",
+    "posteam",
+    "home_team",
+    "away_team",
+    "season",
+    "ep",
+    "epa",
+    "complete_pass",
+    "penalty",
+    "yards_after_catch",
+    "two_point_attempt",
+)
+
+#: §5 input columns ``_derive_air_yac_wpa`` needs (same degradation rule).
+_AIR_YAC_WPA_REQUIRED: tuple[str, ...] = (
+    "game_id",
+    "air_yards",
+    "play_type",
+    "yardline_100",
+    "ydstogo",
+    "down",
+    "half_seconds_remaining",
+    "game_seconds_remaining",
+    "score_differential",
+    "posteam_timeouts_remaining",
+    "defteam_timeouts_remaining",
+    "posteam",
+    "home_team",
+    "away_team",
+    "wp",
+    "wpa",
+    "complete_pass",
+    "penalty",
+    "yards_after_catch",
+    "two_point_attempt",
+)
+
+
+def _r_ifelse(
+    cond: pl.Expr,
+    if_true: Union[pl.Expr, float],
+    if_false: Union[pl.Expr, float],
+) -> pl.Expr:
+    """``dplyr::if_else`` semantics: a null condition yields null.
+
+    polars' ``when/then/otherwise`` sends a Kleene-null condition down the
+    ``otherwise`` branch, which silently rewrites R's NA-propagation into the
+    false branch — this helper restores the R behaviour.
+    """
+    return pl.when(cond.is_null()).then(None).when(cond).then(if_true).otherwise(if_false)
+
+
+def _signed_to_team(value: pl.Expr, team_col: str) -> pl.Expr:
+    """nflfastR's signed-then-zeroed team attribution, as one expression.
+
+    ``dplyr::if_else(posteam == <team>, v, -v)`` followed by ``NA -> 0`` —
+    a null ``posteam`` or null ``v`` contributes ``0`` to the cumulative
+    totals (R L745-753 and the equivalent blocks in the air/yac functions).
+    """
+    return (
+        pl.when(pl.col("posteam") == pl.col(team_col))
+        .then(value)
+        .when(pl.col("posteam") != pl.col(team_col))
+        .then(-value)
+        .otherwise(None)
+        .fill_null(0.0)
+        .cast(pl.Float64)
     )
+
+
+def _add_epa_running_totals(df: pl.DataFrame) -> pl.DataFrame:
+    """Add the per-game cumulative EPA totals (nflfastR ``add_ep_variables`` tail).
+
+    Ports L735-801 of ``helper_add_ep_wp.R``: ``home_team_epa`` /
+    ``away_team_epa`` flip ``epa`` into the home/away frame (NA -> 0), the
+    rush/pass gates zero everything except ``play_type == "run"`` /
+    ``"pass"`` rows (NA ``play_type`` -> 0), and each series is ``cumsum``'d
+    **within** ``game_id``.  The single shared implementation is called from
+    both :func:`_derive_epa` (nflverse lead_diff path) and
+    :func:`calculate_epa` (ESPN construction path).
+
+    Requires ``game_id`` / ``posteam`` / ``home_team`` / ``away_team`` /
+    ``play_type`` / ``epa``; when any is absent (e.g. the ESPN internal frame,
+    which carries ``start.pos_team.id`` / ``type.text`` instead) the frame is
+    returned unchanged.
+    """
+    required = ("game_id", "posteam", "home_team", "away_team", "play_type", "epa")
+    if any(c not in df.columns for c in required):
+        return df
+    df = df.drop([c for c in _EPA_RUNNING_TOTAL_COLS if c in df.columns])
+
+    epa = pl.col("epa").cast(pl.Float64)
+    home_epa = _signed_to_team(epa, "home_team")
+    away_epa = _signed_to_team(epa, "away_team")
+    is_run = pl.col("play_type") == "run"
+    is_pass = pl.col("play_type") == "pass"
+    home_rush = _r_ifelse(is_run, home_epa, 0.0).fill_null(0.0)
+    away_rush = _r_ifelse(is_run, away_epa, 0.0).fill_null(0.0)
+    home_pass = _r_ifelse(is_pass, home_epa, 0.0).fill_null(0.0)
+    away_pass = _r_ifelse(is_pass, away_epa, 0.0).fill_null(0.0)
+
+    return df.with_columns(
+        home_epa.cum_sum().over("game_id").alias("total_home_epa"),
+        away_epa.cum_sum().over("game_id").alias("total_away_epa"),
+        home_rush.cum_sum().over("game_id").cast(pl.Float64).alias("total_home_rush_epa"),
+        away_rush.cum_sum().over("game_id").cast(pl.Float64).alias("total_away_rush_epa"),
+        home_pass.cum_sum().over("game_id").cast(pl.Float64).alias("total_home_pass_epa"),
+        away_pass.cum_sum().over("game_id").cast(pl.Float64).alias("total_away_pass_epa"),
+    )
+
+
+def _add_wpa_running_totals(df: pl.DataFrame) -> pl.DataFrame:
+    """Add the per-game cumulative rush/pass WPA totals (``add_wp_variables`` tail).
+
+    Ports L1252-1324 of ``helper_add_ep_wp.R``.  Identical structure to
+    :func:`_add_epa_running_totals` but on ``wpa``, and — matching nflfastR —
+    emitting ONLY the rush/pass splits (there is no ``total_home_wpa``).
+    Called from both :func:`_derive_wpa` and :func:`calculate_wpa`; returns
+    the frame unchanged when the nflverse input columns are absent.
+    """
+    required = ("game_id", "posteam", "home_team", "away_team", "play_type", "wpa")
+    if any(c not in df.columns for c in required):
+        return df
+    df = df.drop([c for c in _WPA_RUNNING_TOTAL_COLS if c in df.columns])
+
+    wpa = pl.col("wpa").cast(pl.Float64)
+    home_wpa = _signed_to_team(wpa, "home_team")
+    away_wpa = _signed_to_team(wpa, "away_team")
+    is_run = pl.col("play_type") == "run"
+    is_pass = pl.col("play_type") == "pass"
+    home_rush = _r_ifelse(is_run, home_wpa, 0.0).fill_null(0.0)
+    away_rush = _r_ifelse(is_run, away_wpa, 0.0).fill_null(0.0)
+    home_pass = _r_ifelse(is_pass, home_wpa, 0.0).fill_null(0.0)
+    away_pass = _r_ifelse(is_pass, away_wpa, 0.0).fill_null(0.0)
+
+    return df.with_columns(
+        home_rush.cum_sum().over("game_id").cast(pl.Float64).alias("total_home_rush_wpa"),
+        away_rush.cum_sum().over("game_id").cast(pl.Float64).alias("total_away_rush_wpa"),
+        home_pass.cum_sum().over("game_id").cast(pl.Float64).alias("total_home_pass_wpa"),
+        away_pass.cum_sum().over("game_id").cast(pl.Float64).alias("total_away_pass_wpa"),
+    )
+
+
+def _null_air_yac(df: pl.DataFrame, cols: tuple[str, ...]) -> pl.DataFrame:
+    """Emit *cols* as all-null ``Float64`` (short-circuit / degraded input)."""
+    return df.with_columns([pl.lit(None, dtype=pl.Float64).alias(c) for c in cols])
+
+
+def _air_yac_family_block(df: pl.DataFrame, *, kind: str) -> pl.DataFrame:
+    """Completion gating + signed per-game cumulative totals for air/yac columns.
+
+    Shared tail of ``add_air_yac_ep_variables`` / ``add_air_yac_wp_variables``
+    (the ``group_by(game_id) |> mutate(...)`` block): ``comp_air_* `` /
+    ``comp_yac_*`` gate the raw values to ``complete_pass == 1`` (R
+    ``dplyr::if_else`` — a null ``complete_pass`` yields null), then the
+    completion-gated and raw values are home/away-signed (NA -> 0) and
+    ``cumsum``'d within ``game_id``.  The R's intermediate
+    ``home_team_comp_air_*`` columns are folded into the cumulative
+    expressions (the published nflverse frame does not carry them).
+
+    Args:
+        df: Frame already carrying ``air_<kind>`` / ``yac_<kind>``.
+        kind: ``"epa"`` or ``"wpa"`` (column-name suffix).
+    """
+    air, yac = f"air_{kind}", f"yac_{kind}"
+    complete = pl.col("complete_pass").cast(pl.Float64)
+    df = df.with_columns(
+        _r_ifelse(complete == 1, pl.col(air), 0.0).cast(pl.Float64).alias(f"comp_air_{kind}"),
+        _r_ifelse(complete == 1, pl.col(yac), 0.0).cast(pl.Float64).alias(f"comp_yac_{kind}"),
+    )
+    comp_air = pl.col(f"comp_air_{kind}")
+    comp_yac = pl.col(f"comp_yac_{kind}")
+    raw_air = pl.col(air)
+    raw_yac = pl.col(yac)
+    return df.with_columns(
+        _signed_to_team(comp_air, "home_team").cum_sum().over("game_id").alias(f"total_home_comp_air_{kind}"),
+        _signed_to_team(comp_air, "away_team").cum_sum().over("game_id").alias(f"total_away_comp_air_{kind}"),
+        _signed_to_team(comp_yac, "home_team").cum_sum().over("game_id").alias(f"total_home_comp_yac_{kind}"),
+        _signed_to_team(comp_yac, "away_team").cum_sum().over("game_id").alias(f"total_away_comp_yac_{kind}"),
+        _signed_to_team(raw_air, "home_team").cum_sum().over("game_id").alias(f"total_home_raw_air_{kind}"),
+        _signed_to_team(raw_air, "away_team").cum_sum().over("game_id").alias(f"total_away_raw_air_{kind}"),
+        _signed_to_team(raw_yac, "home_team").cum_sum().over("game_id").alias(f"total_home_raw_yac_{kind}"),
+        _signed_to_team(raw_yac, "away_team").cum_sum().over("game_id").alias(f"total_away_raw_yac_{kind}"),
+    )
+
+
+def _derive_air_yac_epa(df: pl.DataFrame) -> pl.DataFrame:
+    """Add the nflfastR air/YAC EPA family (``add_air_yac_ep[_variables]``).
+
+    Faithful port of ``helper_add_ep_wp.R`` L1345-1584 plus the
+    ``add_air_yac_ep`` all-NA short-circuit (L13-47).  For every non-sack pass
+    attempt (``air_yards`` non-null and ``play_type == "pass"``) the game state
+    is projected to the catch spot — ``yardline_100 - air_yards`` (flipped to
+    the opponent frame when a 4th-down throw comes up short of the sticks:
+    ``Turnover_Ind``), ``down`` / ``ydstogo`` advanced, the half clock
+    decremented by :data:`_PASS_TIME_ELAPSED` — and re-scored with the EP model
+    (:func:`calculate_expected_points`, resolved off the module so tests can
+    stub it).  Then:
+
+    * ``airEP = 0`` when the projected clock is <= 0;
+    * ``air_epa = 7 - ep`` when the throw crossed the goal line,
+      ``-2 - ep`` when it overshot its own endzone (> 99), ``-airEP - ep`` on
+      a ``Turnover_Ind`` play, else ``airEP - ep`` (``ep`` = the play's
+      start-of-play EP);
+    * two-point attempts get null ``air_epa`` (no real air yards);
+    * ``yac_epa = epa - air_epa``; a zero-YAC completion (``penalty == 0 &
+      yards_after_catch == 0 & complete_pass == 1``) forces ``yac_epa = 0``
+      and ``air_epa = epa``;
+    * completion-gated ``comp_*`` variants and the 8 home/away signed
+      cumulative totals are added via :func:`_air_yac_family_block` — every
+      ``cum_sum`` is ``.over("game_id")``.
+
+    Frames with no non-null ``air_yards`` (the R short-circuit) or missing any
+    :data:`_AIR_YAC_EPA_REQUIRED` input emit the whole family as all-null
+    ``Float64`` — schema-stable degradation instead of raising.
+
+    Args:
+        df: Play-by-play frame carrying :data:`_AIR_YAC_EPA_REQUIRED`
+            (``roof`` optional).  Existing family columns are dropped and
+            recomputed.
+
+    Returns:
+        The frame plus the 12 :data:`_AIR_YAC_EPA_COLS` (all ``Float64``).
+    """
+    import sportsdataverse.nfl.ep_wp as _self
+
+    df = df.drop([c for c in _AIR_YAC_EPA_COLS if c in df.columns])
+    if any(c not in df.columns for c in _AIR_YAC_EPA_REQUIRED):
+        return _null_air_yac(df, _AIR_YAC_EPA_COLS)
+    if df.filter(pl.col("air_yards").is_not_null()).height == 0:
+        # R add_air_yac_ep: "No non-NA air_yards detected" -> all NA.
+        return _null_air_yac(df, _AIR_YAC_EPA_COLS)
+
+    if "_ay_idx" in df.columns:
+        df = df.drop("_ay_idx")
+    df = df.with_row_index("_ay_idx")
+    pass_df = df.filter(pl.col("air_yards").is_not_null() & (pl.col("play_type") == "pass"))
+
+    if pass_df.height > 0:
+        air = pl.col("air_yards").cast(pl.Float64)
+        yl = pl.col("yardline_100").cast(pl.Float64)
+        tg = pl.col("ydstogo").cast(pl.Float64)
+        down = pl.col("down").cast(pl.Float64)
+        pos_to = pl.col("posteam_timeouts_remaining").cast(pl.Float64)
+        def_to = pl.col("defteam_timeouts_remaining").cast(pl.Float64)
+
+        pass_df = pass_df.with_columns(
+            _r_ifelse((down == 4) & (air < tg), 1.0, 0.0).alias("_ay_turnover"),
+        )
+        t = pl.col("_ay_turnover")
+        converted = (air >= tg) | (t == 1)
+        pass_df = pass_df.with_columns(
+            _r_ifelse(t == 0, yl - air, 100.0 - (yl - air)).alias("_ay_yardline_100"),
+            _r_ifelse(converted, 10.0, tg - air).alias("_ay_ydstogo"),
+            _r_ifelse(converted, 1.0, down + 1.0).alias("_ay_down"),
+            (pl.col("half_seconds_remaining").cast(pl.Float64) - _PASS_TIME_ELAPSED).alias("_ay_half_seconds"),
+            _r_ifelse(t == 1, def_to, pos_to).alias("_ay_pos_to"),
+            _r_ifelse(t == 1, pos_to, def_to).alias("_ay_def_to"),
+        )
+
+        # Feature view for the EP re-score (air-yards-projected state).  The
+        # identity columns ride along for stubbed scorers / debuggability.
+        id_cols = [c for c in ("game_id", "play_id", "roof") if c in pass_df.columns]
+        feat = pass_df.select(
+            *[pl.col(c) for c in id_cols],
+            pl.col("season"),
+            pl.col("posteam"),
+            pl.col("home_team"),
+            pl.col("_ay_half_seconds").alias("half_seconds_remaining"),
+            pl.col("_ay_yardline_100").alias("yardline_100"),
+            pl.col("_ay_down").alias("down"),
+            pl.col("_ay_ydstogo").alias("ydstogo"),
+            pl.col("_ay_pos_to").alias("posteam_timeouts_remaining"),
+            pl.col("_ay_def_to").alias("defteam_timeouts_remaining"),
+        )
+        scored = _self.calculate_expected_points(feat)
+        scored_df = scored if isinstance(scored, pl.DataFrame) else pl.from_pandas(scored)
+        pass_df = pass_df.with_columns(scored_df["ep"].cast(pl.Float64).alias("_ay_air_ep"))
+        pass_df = pass_df.with_columns(
+            pl.when(pl.col("_ay_half_seconds") <= 0).then(0.0).otherwise(pl.col("_ay_air_ep")).alias("_ay_air_ep"),
+        )
+
+        ep0 = pl.col("ep").cast(pl.Float64)
+        epa0 = pl.col("epa").cast(pl.Float64)
+        pass_df = pass_df.with_columns(
+            # The 4-scenario airEPA (R L632-643): TD in the air / overshot own
+            # endzone / turnover-in-air flip / plain airEP - ep.
+            pl.when((yl - air) <= 0)
+            .then(7.0 - ep0)
+            .when((yl - air) > 99.0)
+            .then(-2.0 - ep0)
+            .when(t == 1)
+            .then(-1.0 * pl.col("_ay_air_ep") - ep0)
+            .otherwise(pl.col("_ay_air_ep") - ep0)
+            .alias("air_epa"),
+        )
+        pass_df = pass_df.with_columns(
+            pl.when(pl.col("two_point_attempt").cast(pl.Float64) == 1)
+            .then(None)
+            .otherwise(pl.col("air_epa"))
+            .alias("air_epa"),
+        )
+        pass_df = pass_df.with_columns((epa0 - pl.col("air_epa")).alias("yac_epa"))
+        zero_yac = (
+            (pl.col("penalty").cast(pl.Float64) == 0)
+            & (pl.col("yards_after_catch").cast(pl.Float64) == 0)
+            & (pl.col("complete_pass").cast(pl.Float64) == 1)
+        )
+        pass_df = pass_df.with_columns(
+            pl.when(zero_yac).then(0.0).otherwise(pl.col("yac_epa")).alias("yac_epa"),
+            pl.when(zero_yac).then(epa0).otherwise(pl.col("air_epa")).alias("air_epa"),
+        )
+        merged = df.join(
+            pass_df.select(
+                "_ay_idx",
+                pl.col("air_epa").cast(pl.Float64),
+                pl.col("yac_epa").cast(pl.Float64),
+            ),
+            on="_ay_idx",
+            how="left",
+        )
+    else:
+        merged = _null_air_yac(df, ("air_epa", "yac_epa"))
+
+    return _air_yac_family_block(merged, kind="epa").drop("_ay_idx")
+
+
+def _score_wp_naive(features: pl.DataFrame) -> np.ndarray:
+    """Score the naive WP model (``wp_naive.ubj``) on a prepared feature frame.
+
+    Mirrors nflfastR's ``get_preds_wp`` — the air/YAC WPA derivation resolves
+    this off the module so tests can stub the model.  *features* must carry
+    :data:`WP_NAIVE_FEATURES`.
+    """
+    from xgboost import DMatrix
+
+    X = features.select(WP_NAIVE_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
+    preds = _load_model("wp_naive.ubj").predict(DMatrix(X, feature_names=WP_NAIVE_FEATURES))
+    return np.asarray(preds, dtype=np.float64)
+
+
+def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
+    """Add the nflfastR air/YAC WPA family (``add_air_yac_wp[_variables]``).
+
+    Faithful port of ``helper_add_ep_wp.R`` L1591-2036 plus the
+    ``add_air_yac_wp`` all-NA short-circuit (L55-89).  For every non-sack pass
+    attempt the WP-model inputs are projected: both clocks decremented by
+    :data:`_PASS_TIME_ELAPSED`, ``Diff_Time_Ratio`` recomputed from the
+    original ``elapsed_share`` and sign-flipped on ``Turnover_Ind`` (a
+    4th-down throw short of the sticks), timeouts swapped on the flip — note
+    the R deliberately does NOT project field position for the WP re-score
+    (unlike the EP one).  The naive WP model scores the state
+    (:func:`_score_wp_naive`, resolved off the module so tests can stub it),
+    then:
+
+    * ``airWP = 1 - airWP`` on ``Turnover_Ind`` plays (back to the original
+      possession frame); ``airWP = 0`` when either projected clock is <= 0;
+    * ``air_wpa = airWP - wp``; ``yac_wpa = wpa - air_wpa``; two-point
+      attempts get null in both;
+    * a zero-YAC completion forces ``yac_wpa = 0`` and ``air_wpa = wpa``;
+    * completion-gated ``comp_*`` variants and the 8 signed cumulative totals
+      via :func:`_air_yac_family_block` (every ``cum_sum`` over ``game_id``).
+
+    The R source's overtime branch (Sudden-Death / One-FG blend on the
+    projected state, L1674-1912) is **dead code upstream**: line 1907
+    re-assigns ``pass_overtime_df <- pass_pbp_data[pass_overtime_i, ]``
+    immediately before writing back, so the OT rows keep the main-branch
+    values.  The faithful port therefore applies the main-branch formula to
+    overtime rows too.
+
+    Frames with no non-null ``air_yards`` or missing any
+    :data:`_AIR_YAC_WPA_REQUIRED` input emit the family as all-null
+    ``Float64``.
+
+    Args:
+        df: Play-by-play frame carrying :data:`_AIR_YAC_WPA_REQUIRED`
+            (``receive_2h_ko`` / ``elapsed_share`` are derived when absent).
+            Existing family columns are dropped and recomputed.
+
+    Returns:
+        The frame plus the 12 :data:`_AIR_YAC_WPA_COLS` (all ``Float64``).
+    """
+    import sportsdataverse.nfl.ep_wp as _self
+
+    df = df.drop([c for c in _AIR_YAC_WPA_COLS if c in df.columns])
+    if any(c not in df.columns for c in _AIR_YAC_WPA_REQUIRED):
+        return _null_air_yac(df, _AIR_YAC_WPA_COLS)
+    if df.filter(pl.col("air_yards").is_not_null()).height == 0:
+        return _null_air_yac(df, _AIR_YAC_WPA_COLS)
+
+    if "_ay_idx" in df.columns:
+        df = df.drop("_ay_idx")
+    df = df.with_row_index("_ay_idx")
+    pass_df = df.filter(pl.col("air_yards").is_not_null() & (pl.col("play_type") == "pass"))
+
+    if pass_df.height > 0:
+        air = pl.col("air_yards").cast(pl.Float64)
+        tg = pl.col("ydstogo").cast(pl.Float64)
+        down = pl.col("down").cast(pl.Float64)
+        gsr = pl.col("game_seconds_remaining").cast(pl.Float64)
+        pos_to = pl.col("posteam_timeouts_remaining").cast(pl.Float64)
+        def_to = pl.col("defteam_timeouts_remaining").cast(pl.Float64)
+
+        # elapsed_share: reuse the frame's column when present (computed by
+        # _add_wp_aux on the enrich path from the ORIGINAL clock), else derive
+        # it from the un-decremented game clock — matching the R, where
+        # Diff_Time_Ratio reads the pre-existing elapsed_share column.
+        elapsed_share = (
+            pl.col("elapsed_share").cast(pl.Float64)
+            if "elapsed_share" in pass_df.columns
+            else ((3600.0 - gsr) / 3600.0).clip(0.0, 1.0)
+        )
+        if "receive_2h_ko" in pass_df.columns:
+            receive_2h_ko = pl.col("receive_2h_ko").cast(pl.Float64)
+        elif "qtr" in pass_df.columns and "defteam" in pass_df.columns:
+            receive_2h_ko = (
+                pl.when(
+                    (pl.col("qtr") <= 2) & (pl.col("posteam") == pl.col("defteam").drop_nulls().first().over("game_id"))
+                )
+                .then(1.0)
+                .otherwise(0.0)
+            )
+        else:
+            receive_2h_ko = pl.lit(0.0)
+
+        pass_df = pass_df.with_columns(
+            _r_ifelse((down == 4) & (air < tg), 1.0, 0.0).alias("_ay_turnover"),
+            (pl.col("half_seconds_remaining").cast(pl.Float64) - _PASS_TIME_ELAPSED).alias("_ay_half_seconds"),
+            (gsr - _PASS_TIME_ELAPSED).alias("_ay_game_seconds"),
+            (pl.col("score_differential").cast(pl.Float64) / ((-4.0 * elapsed_share).exp())).alias("_ay_dtr"),
+        )
+        t = pl.col("_ay_turnover")
+        pass_df = pass_df.with_columns(
+            _r_ifelse(t == 1, -pl.col("_ay_dtr"), pl.col("_ay_dtr")).alias("_ay_dtr"),
+            _r_ifelse(t == 1, def_to, pos_to).alias("_ay_pos_to"),
+            _r_ifelse(t == 1, pos_to, def_to).alias("_ay_def_to"),
+        )
+
+        feat = pass_df.select(
+            receive_2h_ko.alias("receive_2h_ko"),
+            pl.when(pl.col("posteam") == pl.col("home_team")).then(1.0).otherwise(0.0).alias("home"),
+            pl.col("_ay_half_seconds").alias("half_seconds_remaining"),
+            pl.col("_ay_game_seconds").alias("game_seconds_remaining"),
+            pl.col("_ay_dtr").alias("Diff_Time_Ratio"),
+            pl.col("score_differential").cast(pl.Float64),
+            down.alias("down"),
+            tg.alias("ydstogo"),
+            pl.col("yardline_100").cast(pl.Float64),
+            pl.col("_ay_pos_to").alias("posteam_timeouts_remaining"),
+            pl.col("_ay_def_to").alias("defteam_timeouts_remaining"),
+        )
+        air_wp = _self._score_wp_naive(feat)
+        pass_df = pass_df.with_columns(pl.Series("_ay_air_wp", np.asarray(air_wp, dtype=np.float64), dtype=pl.Float64))
+        pass_df = pass_df.with_columns(
+            # Turnover flip back to the original possession frame, then the
+            # clock-expiry zeroing (R L1639-1649).
+            _r_ifelse(t == 1, 1.0 - pl.col("_ay_air_wp"), pl.col("_ay_air_wp")).alias("_ay_air_wp"),
+        )
+        pass_df = pass_df.with_columns(
+            pl.when((pl.col("_ay_half_seconds") <= 0) | (pl.col("_ay_game_seconds") <= 0))
+            .then(0.0)
+            .otherwise(pl.col("_ay_air_wp"))
+            .alias("_ay_air_wp"),
+        )
+
+        wp0 = pl.col("wp").cast(pl.Float64)
+        wpa0 = pl.col("wpa").cast(pl.Float64)
+        pass_df = pass_df.with_columns((pl.col("_ay_air_wp") - wp0).alias("air_wpa"))
+        pass_df = pass_df.with_columns(
+            pl.when(pl.col("two_point_attempt").cast(pl.Float64) == 1)
+            .then(None)
+            .otherwise(pl.col("air_wpa"))
+            .alias("air_wpa"),
+        )
+        pass_df = pass_df.with_columns((wpa0 - pl.col("air_wpa")).alias("yac_wpa"))
+        pass_df = pass_df.with_columns(
+            pl.when(pl.col("two_point_attempt").cast(pl.Float64) == 1)
+            .then(None)
+            .otherwise(pl.col("yac_wpa"))
+            .alias("yac_wpa"),
+        )
+        zero_yac = (
+            (pl.col("penalty").cast(pl.Float64) == 0)
+            & (pl.col("yards_after_catch").cast(pl.Float64) == 0)
+            & (pl.col("complete_pass").cast(pl.Float64) == 1)
+        )
+        pass_df = pass_df.with_columns(
+            pl.when(zero_yac).then(0.0).otherwise(pl.col("yac_wpa")).alias("yac_wpa"),
+            pl.when(zero_yac).then(wpa0).otherwise(pl.col("air_wpa")).alias("air_wpa"),
+        )
+        merged = df.join(
+            pass_df.select(
+                "_ay_idx",
+                pl.col("air_wpa").cast(pl.Float64),
+                pl.col("yac_wpa").cast(pl.Float64),
+            ),
+            on="_ay_idx",
+            how="left",
+        )
+    else:
+        merged = _null_air_yac(df, ("air_wpa", "yac_wpa"))
+
+    return _air_yac_family_block(merged, kind="wpa").drop("_ay_idx")
 
 
 def _derive_qbr_epa(df: pl.DataFrame) -> pl.DataFrame:
@@ -3081,6 +3676,29 @@ def enrich_nfl_pbp(
         * ``away_wp`` — away-team win probability (``1 - home_wp``).
         * ``wpa`` — win probability added (float64; null on kneel/terminal rows).
         * ``vegas_wpa`` — spread-adjusted WPA.
+        * ``vegas_home_wpa`` — home-frame spread-adjusted WPA lead difference
+          (kept as a real column per nflfastR; NOT null'd on kneel rows).
+        * ``total_home_epa``, ``total_away_epa``, ``total_home_rush_epa``,
+          ``total_away_rush_epa``, ``total_home_pass_epa``,
+          ``total_away_pass_epa``, ``total_home_rush_wpa``,
+          ``total_away_rush_wpa``, ``total_home_pass_wpa``,
+          ``total_away_pass_wpa`` — per-game cumulative home/away-signed
+          EPA/WPA running totals (nflfastR ``add_ep_variables`` /
+          ``add_wp_variables`` tails; every cumsum is within ``game_id``).
+        * ``air_epa``, ``yac_epa``, ``comp_air_epa``, ``comp_yac_epa``,
+          ``total_home_comp_air_epa``, ``total_away_comp_air_epa``,
+          ``total_home_comp_yac_epa``, ``total_away_comp_yac_epa``,
+          ``total_home_raw_air_epa``, ``total_away_raw_air_epa``,
+          ``total_home_raw_yac_epa``, ``total_away_raw_yac_epa`` — the air/YAC
+          EPA family (nflfastR ``add_air_yac_ep_variables``): an EP re-score
+          on the air-yards-projected state splits ``epa`` into its air and
+          yards-after-catch components; ``comp_*`` gate to completions; the
+          totals are per-game signed cumulative sums.  Null on non-qualifying
+          plays (all float64).
+        * ``air_wpa``, ``yac_wpa``, ``comp_air_wpa``, ``comp_yac_wpa``, and
+          the eight ``total_{home,away}_{comp,raw}_{air,yac}_wpa`` mirrors —
+          the air/YAC WPA family (``add_air_yac_wp_variables``), same
+          structure on ``wp`` / ``wpa``.
         * ``cp`` — completion probability for intended pass plays (null
           otherwise; float64).
         * ``cpoe`` — completion probability over expected, percentage-point
@@ -3187,6 +3805,13 @@ def enrich_nfl_pbp(
     #     the QB keeps completion + YAC credit (nflfastR add_qb_epa).
     raw = _derive_qb_epa(raw)
 
+    # 2c. Air/YAC EPA family — nflfastR add_air_yac_ep_variables (an EP
+    #     re-score on the air-yards-projected state; nflfastR order runs it
+    #     right after the EP/EPA step and before WP).  Also the point where
+    #     air_epa becomes a real column, which calculate_xyac (step 6) then
+    #     consumes verbatim instead of re-deriving it.
+    raw = _self._derive_air_yac_epa(raw)
+
     # 3. WP — naive + spread-adjusted.
     raw = raw.drop([c for c in ("wp", "vegas_wp") if c in raw.columns])
     raw = _self.calculate_win_probability(raw)
@@ -3194,6 +3819,11 @@ def enrich_nfl_pbp(
     # 4. WPA + home/away/def WP — native lead-of-home-WP + posteam perspective.
     raw = raw.drop([c for c in ("home_wp", "away_wp", "def_wp", "wpa", "vegas_wpa") if c in raw.columns])
     raw = _derive_wpa(raw)
+
+    # 4b. Air/YAC WPA family — nflfastR add_air_yac_wp_variables (a naive-WP
+    #     re-score on the air-yards state; the R OT branch is dead code
+    #     upstream — see _derive_air_yac_wpa).
+    raw = _self._derive_air_yac_wpa(raw)
 
     # 5. CP / CPOE.
     raw = _self.calculate_completion_probability(raw)
