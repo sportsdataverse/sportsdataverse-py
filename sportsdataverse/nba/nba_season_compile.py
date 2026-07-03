@@ -102,7 +102,8 @@ def compile_nba_season(
     Discovers game ids, dedupes, then per game loads the cached parquet if present
     (``resume``), else fetches via :func:`_fetch_possessions`, caches it, and sleeps
     ``delay_s`` (throttle; only on live fetches). A game that errors or returns no
-    possessions is logged and skipped (best-effort, never raises). The assembled
+    possessions is logged and skipped (best-effort — a per-game failure never
+    raises; see ``Raises`` for the game_date integrity error). The assembled
     frame is tagged with a ``season`` column.
 
     Args:
