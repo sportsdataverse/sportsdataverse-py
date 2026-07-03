@@ -320,6 +320,7 @@ files = [
     "sportsdataverse/nbagl/nbagl_engine.py",
     "sportsdataverse/mbb/mbb_lineup_stats.py",
     "sportsdataverse/mbb/mbb_ratings.py",
+    "sportsdataverse/mbb/mbb_luck.py",
     "sportsdataverse/wbb/wbb_lineup_stats.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
