@@ -45,20 +45,21 @@ discriminated subTypes, by action_type:
   (``is_no_turnover`` False) ends the possession uniformly per pbpstats
   (``stats_nba/enhanced_pbp_item.py:217-218``). ``Lane Violation`` and
   ``Offensive Goaltending`` are referenced (the no-FT branch of
-  ``is_make_that_does_not_end_possession``); ``Jump Ball Violation``
-  participates only through ``jump_ball_ends_possession``'s co-clock/next
-  turnover guard, not a subType table.
-* **Violation** -- ``Jump Ball`` (jumpball-violation guard in
-  ``jump_ball_ends_possession``) and ``Double Lane`` (double-lane-violation,
-  the no-FT branch of ``is_make_that_does_not_end_possession``) are
-  referenced; ``Kicked Ball`` (941), ``Defensive Goaltending`` (669),
-  ``Delay Of Game`` (479), and ``Lane`` (40) are not possession-boundary
-  signals under pbpstats' scheme (the adjacent FieldGoal/Turnover event
-  carries the boundary) and are deliberately left unmapped here.
+  ``is_make_that_does_not_end_possession``); ``Jump Ball Violation`` no
+  longer participates in ``jump_ball_ends_possession`` at all -- see the
+  "Fix wave (jump-ball live parity)" note on that function.
+* **Violation** -- ``Double Lane`` (double-lane-violation, the no-FT branch
+  of ``is_make_that_does_not_end_possession``) is referenced. The former
+  ``Jump Ball`` violation guard inside ``jump_ball_ends_possession`` was
+  retired under the LIVE-governs ruling (see that function's docstring);
+  ``Kicked Ball`` (941), ``Defensive Goaltending`` (669), ``Delay Of Game``
+  (479), and ``Lane`` (40) are not possession-boundary signals under
+  pbpstats' scheme (the adjacent FieldGoal/Turnover event carries the
+  boundary) and are deliberately left unmapped here.
 * **Jump Ball** -- subTypes ``""`` (regular, 2,001 occurrences) and
   ``"Coach Challenge"`` (69) are NOT distinguished; ``jump_ball_ends_possession``
-  applies identically to both (pbpstats' own ``JumpBall`` class has no
-  subType branch either).
+  now returns ``False`` unconditionally for both (see that function's
+  docstring for the LIVE-governs ruling).
 * **Free Throw** -- every subType is handled generically via the numeric
   ``"N of M"`` / G-League ``"NPT"`` pattern (:func:`_ft_trip_shape`) plus the
   ``"technical"``/``"flagrant"`` substring checks already established by
@@ -800,121 +801,78 @@ def ft_ends_possession(ctx: EventContext, i: int) -> bool:
     return True
 
 
-def _is_start_of_period(row: dict) -> bool:
-    """v3's period-start marker row (event_type "period", sub_type "start")
-    -- the closest v3-native analogue of pbpstats' ``StartOfPeriod`` class,
-    used only to replicate the ``not isinstance(previous_event,
-    StartOfPeriod)`` guard on ``jump_ball_ends_possession``
-    (stats_nba/enhanced_pbp_item.py:254-256).
-    """
-    return (row.get("event_type") or "") == "period" and _norm(row.get("sub_type")) == "start"
-
-
-def _is_local_possession_boundary(ctx: EventContext, j: int) -> bool:
-    """Team-scoped approximation of the full is_possession_ending_event
-    dispatcher, used ONLY by ``jump_ball_ends_possession``'s backward walk
-    for "the previous possession boundary".
-
-    ``jump_ball_ends_possession`` -- per its own interface -- has no
-    ``offense_team_id`` / ``home_id`` / ``away_id`` to thread through a full
-    dispatcher call, so this local helper resolves each candidate boundary
-    from row-local fields only (``team_id`` equality, never
-    ``resolve_event_team``). Falls back to False whenever team resolution
-    is ambiguous, matching the brief's own guidance ("Default False
-    (non-boundary) when the tail cannot resolve teams").
-    """
-    rows = ctx.rows
-    row = rows[j]
-    et = row.get("event_type") or ""
-    if et == "made_shot":
-        return not is_make_that_does_not_end_possession(ctx, j)
-    if et == "turnover":
-        return not is_no_turnover(row)
-    if et == "free_throw":
-        return ft_ends_possession(ctx, j)
-    if et == "rebound":
-        if not is_real_rebound(ctx, j):
-            return False
-        k = _rebound_missed_shot_index(ctx, j)
-        if k < 0:
-            return False
-        reb_team = row.get("team_id")
-        shot_team = rows[k].get("team_id")
-        if not reb_team or not shot_team:
-            return False
-        return bool(reb_team != shot_team)
-    if et == "jump_ball":
-        return jump_ball_ends_possession(ctx, j)
-    return False
-
-
 def jump_ball_ends_possession(ctx: EventContext, i: int) -> bool:
-    """True for the rare jump ball that itself changes possession.
+    """A jump ball never itself ends the current possession.
 
-    # pbpstats: stats_nba/enhanced_pbp_item.py:254-299
-    # (_is_jump_ball_possession_ending_event) + the
-    # ``not isinstance(previous_event, StartOfPeriod)`` guard at the call
-    # site (lines 254-256), folded in here since this callable owns the
-    # full jump-ball boundary decision per the Task 3 brief.
+    Fix wave (jump-ball live parity, 2026-07-03; spec Sec.3-Q1 amendment)
+    -------------------------------------------------------------------
+    LIVE-governs ruling: where the ``live`` and ``stats_nba`` pbpstats
+    provider variants decidably disagree on a rule's semantics, ``live``
+    governs for this engine, because ``live`` is the oracle this engine's
+    possession counts are actually validated against (the file-mode
+    round-trip harness in ``tests/nba/test_nba_v3_v2_adapter.py``). This
+    case is decidable both structurally and empirically:
 
-    Guard clauses (return False, no possession change needed via this path):
-    a co-clock real turnover immediately before or after the jump ball (the
-    turnover itself is the boundary), a jump-ball-violation next event (the
-    ensuing turnover is the boundary), or a foul immediately after that
-    itself leads to a co-clock turnover. Otherwise walks back to the
-    previous local possession boundary and compares the jump ball's winning
-    team against who started that possession with the ball; the jump ball
-    is possession-ending only when the winning team did NOT start with the
-    ball AND the next event isn't a real rebound or another jump ball
-    (either of which would themselves carry the boundary).
+    * Structurally, pbpstats' ``live`` enhanced-pbp item computes
+      ``is_possession_ending_event`` generically for every event type as an
+      adjacent-offense-team diff (``live/enhanced_pbp_item.py:81-100``,
+      comparing ``self.offense_team_id`` to ``self.next_event.offense_team_id``)
+      and has no jump-ball-specific branch at all -- there is no code path
+      in ``live`` that can ever answer "True" for a ``JumpBall`` event.
+    * Empirically, a cross-tab of every ``JumpBall`` event (mid-game and
+      period-start) across 6 games confirmed 0/30 came back
+      ``is_possession_ending_event == True`` from the ``live`` provider (see
+      ``c:/Users/saiem/Documents/ClaudeCowork/nba_data/specs/
+      2026-07-03-jumpball-oracle-crosstab.md``, Finding 2).
+
+    This function previously ported pbpstats' *stats_nba*-concrete
+    dispatcher, ``_is_jump_ball_possession_ending_event``
+    (stats_nba/enhanced_pbp_item.py:254-322) -- a co-clock-turnover /
+    jump-ball-violation guard chain plus a backward walk to the prior local
+    possession boundary (``_is_local_possession_boundary``, also retired),
+    comparing the jump ball's winning team against who started that
+    possession with the ball. That port is deliberately retired under the
+    LIVE-governs ruling above; it lives in git history between commits
+    ``b78314cf`` and ``d21d0502`` (this module and its tests), not in the
+    working tree.
+
+    A secondary, independent reason the retired walk was unreliable on this
+    data source: the v3 ``playbyplayv3`` payload's ``teamId`` on a Jump Ball
+    action is the first-listed jumper (from the "X vs. Y: Tip to Z"
+    description), not the tip recipient, and is empirically constant for an
+    entire game regardless of who actually recovers the tip -- so the
+    retired walk's ``jump_ball_winning_team_id = row.get("team_id")`` was
+    comparing a corrupted team against the prior-possession team on this
+    source in a large fraction of cases, independent of whether the walk
+    logic itself was a faithful port.
+
+    Args:
+        ctx: Event context for the game. Unused now that the rule is
+            unconditional; kept for interface parity with the rest of the
+            dispatcher (:func:`is_possession_ending_event`) and any future
+            jump-ball-aware rule.
+        i: Row index of the jump-ball row. Unused for the same reason.
+
+    Returns:
+        Always ``False``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_possession_rules import (
+                build_event_context, jump_ball_ends_possession,
+            )
+
+            ctx = build_event_context(rows)
+            assert jump_ball_ends_possession(ctx, 0) is False
     """
-    rows = ctx.rows
-    row = rows[i]
-    if (row.get("event_type") or "") != "jump_ball":
-        return False
-    if i > 0 and _is_start_of_period(rows[i - 1]):
-        return False
-
-    if i + 1 < len(rows):
-        nrow = rows[i + 1]
-        net = nrow.get("event_type") or ""
-        if net == "turnover" and not is_no_turnover(nrow) and _same_instant(rows, i, i + 1):
-            return False
-        if net == "violation" and _norm(nrow.get("sub_type")) == "jump ball":
-            return False
-        if net == "foul" and _same_instant(rows, i, i + 1) and i + 2 < len(rows):
-            n2 = rows[i + 2]
-            if (n2.get("event_type") or "") == "turnover" and not is_no_turnover(n2) and _same_instant(rows, i, i + 2):
-                return False
-    if i > 0:
-        prow = rows[i - 1]
-        if (prow.get("event_type") or "") == "turnover" and not is_no_turnover(prow) and _same_instant(rows, i, i - 1):
-            return False
-
-    jump_ball_winning_team_id = row.get("team_id")
-
-    prev_j = i - 1
-    while prev_j >= 0 and not _is_local_possession_boundary(ctx, prev_j):
-        prev_j -= 1
-    if prev_j < 0:
-        return False
-
-    prev_row = rows[prev_j]
-    prev_team = prev_row.get("team_id")
-    if (prev_row.get("event_type") or "") == "rebound":
-        started_with_ball = jump_ball_winning_team_id == prev_team
-    else:
-        if not jump_ball_winning_team_id or not prev_team:
-            return False
-        started_with_ball = jump_ball_winning_team_id != prev_team
-
-    next_is_real_rebound = (
-        i + 1 < len(rows) and (rows[i + 1].get("event_type") or "") == "rebound" and is_real_rebound(ctx, i + 1)
-    )
-    next_is_jump_ball = i + 1 < len(rows) and (rows[i + 1].get("event_type") or "") == "jump_ball"
-
-    if not started_with_ball and not (next_is_real_rebound or next_is_jump_ball):
-        return True
+    # Empirical grounding (read-only cross-tab, not re-derived here):
+    # c:/Users/saiem/Documents/ClaudeCowork/nba_data/specs/
+    # 2026-07-03-jumpball-oracle-crosstab.md -- 0/30 JumpBall events across
+    # 6 games ever scored `is_possession_ending_event == True` under the
+    # `live` oracle, and the v3 `teamId` field disagreed with the true tip
+    # recipient in 11/24 sampled mid-game jump balls.
+    del ctx, i
     return False
 
 

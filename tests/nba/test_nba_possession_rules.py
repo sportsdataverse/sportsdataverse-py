@@ -392,9 +392,16 @@ def test_dispatcher_boundary_count_sanity(game_id):
 
 
 def test_jump_ball_start_of_period_is_never_a_boundary():
-    """Every period-opening jump ball is never possession-ending via this rule
-    (pbpstats: ``not isinstance(previous_event, StartOfPeriod)`` guard,
-    stats_nba/enhanced_pbp_item.py:254-256)."""
+    """Every period-opening jump ball is never possession-ending.
+
+    Prior to the jump-ball live-parity fix wave (2026-07-03) this was a
+    dedicated guard clause (the ``not isinstance(previous_event,
+    StartOfPeriod)`` port of stats_nba/enhanced_pbp_item.py:254-256);
+    ``jump_ball_ends_possession`` now returns ``False`` unconditionally for
+    every jump ball, so this remains correct (and this test still pins the
+    period-start case as a permanent regression guard) even though the
+    guard clause itself no longer exists in the source.
+    """
     rows = _rows("0022300001")
     ctx = build_event_context(rows)
     n = 0
@@ -409,3 +416,58 @@ def test_jump_ball_start_of_period_is_never_a_boundary():
             n += 1
             assert jump_ball_ends_possession(ctx, i) is False, (i, row.get("description"))
     assert n > 0  # every period in the fixture opens with a jump ball
+
+
+def test_jump_ball_mid_game_never_ends_possession_even_when_old_walk_said_true():
+    """LIVE-governs regression guard (fix wave, 2026-07-03; spec Sec.3-Q1
+    amendment): ``jump_ball_ends_possession`` returns ``False`` unconditionally
+    now, including for a synthetic sequence shaped exactly like the retired
+    stats_nba-ported walk's "possession-changing jump ball" verdict.
+
+    This mirrors the shape of the oracle cross-tab's ``sdv=True/oracle=False``
+    disagreements (e.g. game 0022300096 action_number 551 -- see
+    ``c:/Users/saiem/Documents/ClaudeCowork/nba_data/specs/
+    2026-07-03-jumpball-oracle-crosstab.md``): a made shot by team 100, then a
+    jump ball whose (buggy, first-jumper) ``team_id`` happens to equal that
+    same team 100 (so the retired walk's ``started_with_ball`` came back
+    False), followed by a made shot (not a rebound / jump ball) so none of
+    the retired walk's suppression guards fired. Under the retired
+    stats_nba-ported walk this synthetic sequence resolved ``True``; the
+    live oracle never marks a jump ball possession-ending (0/30 across 6
+    games), so the unconditional ``False`` is correct here regardless of
+    team/possession shape.
+    """
+    rows = [
+        {
+            "event_type": "made_shot",
+            "sub_type": "Jump Shot",
+            "team_id": 100,
+            "person_id": 1,
+            "period": 1,
+            "seconds_remaining": 500.0,
+            "score_home": "2",
+            "score_away": "",
+        },
+        {
+            "event_type": "jump_ball",
+            "sub_type": "",
+            "team_id": 100,
+            "person_id": 2,
+            "period": 1,
+            "seconds_remaining": 495.0,
+            "score_home": "",
+            "score_away": "",
+        },
+        {
+            "event_type": "made_shot",
+            "sub_type": "Jump Shot",
+            "team_id": 200,
+            "person_id": 3,
+            "period": 1,
+            "seconds_remaining": 490.0,
+            "score_home": "",
+            "score_away": "2",
+        },
+    ]
+    ctx = build_event_context(rows)
+    assert jump_ball_ends_possession(ctx, 1) is False
