@@ -1,0 +1,180 @@
+{
+ "expectedResult": [
+  {
+   "code": "AnCowan",
+   "id": "Cowan, Anthony"
+  },
+  {
+   "code": "ErAyala",
+   "id": "Ayala, Eric"
+  },
+  {
+   "code": "AaWiggins",
+   "id": "Wiggins, Aaron"
+  },
+  {
+   "code": "DaMorsell",
+   "id": "Morsell, Darryl"
+  },
+  {
+   "code": "JaSmith",
+   "id": "Smith, Jalen"
+  }
+ ],
+ "expectedResultFake": [
+  {
+   "code": "JaSmith",
+   "id": "Smith, Jalen"
+  },
+  {
+   "code": "DaMorsell",
+   "id": "Morsell, Darryl"
+  },
+  {
+   "code": "ErAyala",
+   "id": "Ayala, Eric"
+  },
+  {
+   "code": "AaWiggins",
+   "id": "Wiggins, Aaron"
+  },
+  {
+   "code": "AnCowan",
+   "id": "Cowan, Anthony"
+  }
+ ],
+ "expectedResultUnsorted": [
+  {
+   "code": "AnCowan",
+   "id": "Cowan, Anthony"
+  },
+  {
+   "code": "ErAyala",
+   "id": "Ayala, Eric"
+  },
+  {
+   "code": "DaMorsell",
+   "id": "Morsell, Darryl"
+  },
+  {
+   "code": "AaWiggins",
+   "id": "Wiggins, Aaron"
+  },
+  {
+   "code": "JaSmith",
+   "id": "Smith, Jalen"
+  }
+ ],
+ "player": {
+  "total_off_2pmid_attempts": {
+   "value": 16
+  },
+  "total_off_2prim_attempts": {
+   "value": 8
+  },
+  "total_off_3p_attempts": {
+   "value": 1
+  },
+  "total_off_fga": {
+   "value": 25
+  }
+ },
+ "player2": {
+  "total_off_2pmid_attempts": {
+   "value": 20
+  },
+  "total_off_2prim_attempts": {
+   "value": 40
+  },
+  "total_off_3p_attempts": {
+   "value": 1
+  },
+  "total_off_fga": {
+   "value": 100
+  }
+ },
+ "testCases": [
+  {
+   "expected": "C",
+   "hasInfo": false,
+   "roster": "C",
+   "stats": "C"
+  },
+  {
+   "expected": "PF/C",
+   "hasInfo": false,
+   "roster": "C",
+   "stats": "PF/C"
+  },
+  {
+   "expected": "PF/C",
+   "hasInfo": true,
+   "roster": "C",
+   "stats": "CG"
+  },
+  {
+   "expected": "WG",
+   "hasInfo": true,
+   "roster": "F",
+   "stats": "PG"
+  },
+  {
+   "expected": "PG",
+   "hasInfo": false,
+   "roster": "G",
+   "stats": "PG"
+  },
+  {
+   "expected": "WF",
+   "hasInfo": true,
+   "roster": "F",
+   "stats": "WG"
+  },
+  {
+   "expected": "WG",
+   "hasInfo": false,
+   "roster": "G",
+   "stats": "WG"
+  },
+  {
+   "expected": "WF",
+   "hasInfo": false,
+   "roster": "F",
+   "stats": "WF"
+  },
+  {
+   "expected": "WG",
+   "hasInfo": true,
+   "roster": "G",
+   "stats": "WF"
+  },
+  {
+   "expected": "WF",
+   "hasInfo": true,
+   "roster": "G",
+   "stats": "C"
+  }
+ ],
+ "testLineup": [
+  {
+   "code": "AnCowan",
+   "id": "Cowan, Anthony"
+  },
+  {
+   "code": "ErAyala",
+   "id": "Ayala, Eric"
+  },
+  {
+   "code": "AaWiggins",
+   "id": "Wiggins, Aaron"
+  },
+  {
+   "code": "DaMorsell",
+   "id": "Morsell, Darryl"
+  },
+  {
+   "code": "JaSmith",
+   "id": "Smith, Jalen"
+  }
+ ]
+}
