@@ -10,13 +10,12 @@ import polars as pl
 from sportsdataverse.nba.nba_model_validation import _synthetic_possessions
 from sportsdataverse.nba.nba_rapm import nba_rapm
 from sportsdataverse.nba.nba_rapm_variants import (
+    ORACLE_RAPM_LAMBDAS,
     _fit_weighted,
     _prepare,
     decay_weights,
+    oracle_rapm_alphas,
 )
-
-_OFF = [f"off_player_{i}" for i in range(1, 6)]
-_DEF = [f"def_player_{i}" for i in range(1, 6)]
 
 
 def _synth(seed: int = 1, n_games: int = 20) -> pl.DataFrame:
@@ -74,3 +73,11 @@ def test_fit_weighted_honors_weights():
     w[: len(y) // 2] = 1e-6
     o_w, _d2, _o2, _dp2 = _fit_weighted(X, y, weights=w)
     assert not np.allclose(o_unw, o_w, atol=1e-3)
+
+
+def test_oracle_rapm_alphas_scales_by_sample_count_not_player_count():
+    # Regression pin: Ryan Davis's oracle (NBA_Tutorials_Ryan_Davis/rapm/rapm.py:112-125)
+    # scales lambda by `train_x.shape[0]` (possessions / regression samples), NOT the
+    # player count. lambda_to_alpha(l, samples) = (l * samples) / 2.0.
+    alphas = oracle_rapm_alphas(50_000, ORACLE_RAPM_LAMBDAS)
+    assert np.allclose(alphas, [250.0, 1250.0, 2500.0])

@@ -9,11 +9,19 @@ ruling, decision #8):** the RAPM *variants* (luck-adjusted / four-factor /
 time-decay, added in later tasks of this module) fit against the **oracle**
 regularization schedule — Ryan Davis's reference RAPM implementation's 3-point
 lambda grid ``[0.01, 0.05, 0.1]`` converted to sklearn ``alpha`` via
-``alpha = lambda * n_players / 2`` (see :func:`oracle_rapm_alphas`), combined
+``alpha = lambda * n_samples / 2`` (see :func:`oracle_rapm_alphas`), combined
 with explicit 5-fold cross-validation (``cv=5``, see :data:`ORACLE_RAPM_CV`) —
 **not** :data:`sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS`'s 8-point
 ``logspace(2, 5)`` grid with sklearn's default efficient LOOCV (``cv=None``).
 Plain ``nba_rapm`` keeps its own settled convention unchanged.
+
+**``n_samples`` is the design-matrix row count (possessions), NOT the player
+count** — verified against the oracle source
+(``NBA_Tutorials_Ryan_Davis/rapm/rapm.py:112-125``):
+``lambda_to_alpha(lambda_value, samples) = (lambda_value * samples) / 2.0``,
+called as ``lambda_to_alpha(l, train_x.shape[0])`` where ``train_x`` is the
+possession-level design matrix, so ``samples`` is ``X.shape[0]`` (possessions),
+never ``len(player_ids)``.
 
 The shared :func:`_fit_weighted` engine below stays a generic ``(alphas, cv)``
 knob so a **single** fitting routine serves both conventions: its defaults
@@ -21,8 +29,9 @@ knob so a **single** fitting routine serves both conventions: its defaults
 ``nba_rapm`` byte-for-byte (see ``test_fit_weighted_equals_plain_rapm_on_points``
 in the test module — a scaffold-only invariant, since plain RAPM has no
 weights or alternate response to justify diverging from it); the variant
-functions added on top of this scaffold pass ``alphas=oracle_rapm_alphas(P)``
-and ``cv=ORACLE_RAPM_CV`` explicitly, per the ruling above.
+functions added on top of this scaffold pass ``alphas=oracle_rapm_alphas(n)``
+(``n`` = possession count) and ``cv=ORACLE_RAPM_CV`` explicitly, per the
+ruling above.
 """
 
 from __future__ import annotations
@@ -41,8 +50,9 @@ _OFF: list[str] = [f"off_player_{i}" for i in range(1, 6)]
 _DEF: list[str] = [f"def_player_{i}" for i in range(1, 6)]
 
 #: Ryan Davis's oracle RAPM lambda grid (``rapm/rapm.py``), 3 points.
-#: Converted to sklearn's ``alpha`` scale per possession count via
-#: :func:`oracle_rapm_alphas` — the oracle's ``lambda_to_alpha(l, n) = l * n / 2``.
+#: Converted to sklearn's ``alpha`` scale per possession (sample) count via
+#: :func:`oracle_rapm_alphas` — the oracle's ``lambda_to_alpha(l, n) = l * n / 2``
+#: where ``n`` is the number of possessions (design-matrix rows), NOT players.
 ORACLE_RAPM_LAMBDAS: tuple[float, ...] = (0.01, 0.05, 0.1)
 
 #: Oracle RidgeCV fold count (explicit 5-fold, NOT sklearn's default LOOCV).
@@ -50,32 +60,38 @@ ORACLE_RAPM_CV: int = 5
 
 
 def oracle_rapm_alphas(
-    n_players: int,
+    n_samples: int,
     lambdas: Sequence[float] = ORACLE_RAPM_LAMBDAS,
 ) -> np.ndarray:
-    """Convert the oracle's lambda grid to sklearn ``alpha`` values for *n_players*.
+    """Convert the oracle's lambda grid to sklearn ``alpha`` values for *n_samples*.
 
     Ryan Davis's reference RAPM scales the ridge penalty by the number of
-    distinct players in the design (``lambda_to_alpha(l, n) = l * n / 2``), so
-    unlike :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` this grid
-    is **not** a fixed array — it must be recomputed per design.
+    **possessions** (design-matrix rows, i.e. regression samples) —
+    ``NBA_Tutorials_Ryan_Davis/rapm/rapm.py:112-125``:
+    ``lambda_to_alpha(lambda_value, samples) = (lambda_value * samples) / 2.0``,
+    invoked as ``lambda_to_alpha(l, train_x.shape[0])`` where ``train_x`` is the
+    possession-level design matrix. So ``samples`` is ``X.shape[0]``
+    (possessions) — **not** the player count ``P``. Unlike
+    :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` this grid is
+    **not** a fixed array — it must be recomputed per design.
 
     Args:
-        n_players: Number of distinct players ``P`` in the design (i.e.
-            ``len(pids)`` from :func:`_prepare` / :func:`build_rapm_design`).
+        n_samples: Number of possessions (design-matrix rows) in the design,
+            i.e. ``X.shape[0]`` / ``len(y)`` from :func:`_prepare` /
+            :func:`build_rapm_design`.
         lambdas: Lambda grid to convert. Defaults to :data:`ORACLE_RAPM_LAMBDAS`.
 
     Returns:
         Float64 array of RidgeCV ``alphas``, same length as *lambdas*.
 
     Example:
-        Oracle-schedule alphas for a 250-player design::
+        Oracle-schedule alphas for a 50 000-possession design::
 
             from sportsdataverse.nba.nba_rapm_variants import oracle_rapm_alphas
-            alphas = oracle_rapm_alphas(250)
-            print(alphas)  # array([1.25, 6.25, 12.5])
+            alphas = oracle_rapm_alphas(50_000)
+            print(alphas)  # array([ 250., 1250., 2500.])
     """
-    return np.asarray([lam * n_players / 2.0 for lam in lambdas], dtype=np.float64)
+    return np.asarray([lam * n_samples / 2.0 for lam in lambdas], dtype=np.float64)
 
 
 def decay_weights(
@@ -169,7 +185,8 @@ def _fit_weighted(
     Its defaults (``alphas=DEFAULT_RAPM_ALPHAS``, ``cv=None`` i.e. sklearn's
     efficient LOOCV) intentionally reproduce plain ``nba_rapm``'s own fit when
     called unweighted with no overrides. RAPM variants call this with
-    ``alphas=oracle_rapm_alphas(len(pids))`` and ``cv=ORACLE_RAPM_CV`` per the
+    ``alphas=oracle_rapm_alphas(n_samples)`` (``n_samples`` = possession /
+    design-row count, NOT player count) and ``cv=ORACLE_RAPM_CV`` per the
     binding oracle-ridge-schedule ruling documented in the module docstring.
 
     Args:
