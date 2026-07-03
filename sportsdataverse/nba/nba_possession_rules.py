@@ -176,60 +176,119 @@ _TURNOVER_COINCIDENT_SUBTYPES = frozenset(("shot clock turnover", "kicked ball v
 
 
 def is_real_rebound(ctx: EventContext, i: int) -> bool:
-    """The 5 placeholder exclusions of pbpstats ``is_real_rebound``, v3-reconstructed.
+    """The 4 placeholder exclusions of pbpstats ``is_real_rebound``, v3-reconstructed.
 
-    # pbpstats: resources/enhanced_pbp/rebound.py:30-133. v3's rebound subType
-    # ("Unknown"/"Normal Rebound") carries no ``player1_id == 0`` placeholder
-    # signal that the stats.nba.com v2-era ``is_placeholder``/``event_action_type``
-    # fields exposed, so each exclusion below is reconstructed from
-    # clock/event adjacency instead of a field-value check:
-    #  1. non-final-FT-miss placeholder (rebound.py:81-90, is_non_live_ft_placeholder)
-    #     -- reconstructed via _rebound_missed_shot_index + _is_last_ft instead of
-    #     ``missed_shot.is_end_ft``.
-    #  2. turnover-coincident placeholder (rebound.py:65-79, is_turnover_placeholder)
-    #     -- reconstructed via co_clock + is_no_turnover instead of
-    #     ``player1_id == 0`` + ``is_shot_clock_violation``/``is_kicked_ball``.
-    #  3. buzzer-beater-at-0.0s placeholder (rebound.py:92-113, is_buzzer_beater_placeholder)
-    #  4. buzzer-beater-at-shot-time placeholder (rebound.py:115-133,
-    #     is_buzzer_beater_rebound_at_shot_time)
-    #     -- 3+4 reconstructed together below via seconds_remaining <= 3 and the
-    #     next non-rebound row being a period boundary (v3 has no Replay event
-    #     type to skip over, so ``next_event`` is simply the next row).
-    # ``is_placeholder`` itself (rebound.py:56-63, ``player1_id == 0``) has no
-    # exact v3 analogue and is intentionally NOT ported as a standalone
-    # exclusion -- its two concrete manifestations (non-final-FT rebounds and
-    # turnover-coincident rebounds) are each covered by exclusions 1 and 2
-    # above; a bare ``player1_id == 0`` check would also flag ordinary team
-    # rebounds that ARE real (e.g. a team rebound off a live-ball missed FG),
-    # which pbpstats itself only excludes via the other four properties.
+    # pbpstats: resources/enhanced_pbp/rebound.py:30-133 (abstract exclusion
+    # chain) + resources/enhanced_pbp/live/rebound.py:39-52 (concrete
+    # ``LiveRebound.is_placeholder``, the class actually instantiated by the
+    # ``live`` data provider -- the oracle this v3-native engine is validated
+    # against via the file-mode ``pbpstats`` round-trip harness).
+    #
+    # Empirical grounding (2026-07-03, oracle-derived; see dev/ probe script,
+    # not committed): a standalone ``player1_id == 0`` / v3 ``team_id == 0``
+    # exclusion -- the shape of ``StatsRebound.is_placeholder`` (stats_nba/
+    # rebound.py:75-82, ``event_action_type != 0 and player1_id == 0``) -- was
+    # cross-tabulated against pbpstats' own ``live``-provider classification
+    # (``Client({"Possessions": {"data_provider": "live"}})``) for every
+    # Rebound event across all 3 committed cdn fixtures (298 rebound rows
+    # total). Result: it is WRONG to port as a 5th exclusion here. The
+    # concrete ``LiveRebound.is_placeholder`` (deadball qualifier / flagrant
+    # missed FT) does not fire for routine team rebounds, so pbpstats-live
+    # scores essentially every team rebound (v3 ``team_id == 0``) as a REAL
+    # rebound -- confirmed for 96-99 of ~98-107 team-attributed rows across
+    # the 3 games. Blanket-excluding on ``team_id == 0`` alone flips 11-12
+    # per game from correct to wrong (measured: game 0022100001 9->11 false
+    # negatives, 0022200001 1->12, 0022300001 0->11), which is a regression,
+    # not a fix -- so ``StatsRebound``'s reading does not transfer to the
+    # oracle this engine targets, and is deliberately NOT ported as a
+    # standalone rule.
+    #
+    # What the ``player1_id == 0`` signal (v3: ``team_id == 0`` -- a
+    # team-attributed rebound with no individual crediting player) DOES
+    # gate, per the abstract ``Rebound`` class itself, is a REQUIRED
+    # sub-condition of 3 of the 4 remaining exclusions:
+    #   ``is_turnover_placeholder``              (rebound.py:65-79)
+    #   ``is_buzzer_beater_placeholder``          (rebound.py:92-113)
+    #   ``is_buzzer_beater_rebound_at_shot_time`` (rebound.py:115-133)
+    # all three literally read ``... and self.player1_id == 0`` in their
+    # return conditions. Exclusions 2/3/4 below were previously missing that
+    # guard, which the oracle cross-tab caught as 3 real false negatives:
+    # a *personal* (non-team) rebound in the final 3 seconds of a period
+    # followed by period-end was being wrongly excluded as a buzzer-beater
+    # placeholder (e.g. game 0022100001 action_number 163/326 "Harden
+    # REBOUND", game 0022200001 action_number 193 "House Jr. REBOUND" --
+    # oracle scores all 3 as real; the pre-fix predicate scored them False).
+    # Exclusion 2 (turnover-coincident) never manifested this bug in the 3
+    # fixtures (its one qualifying co-clock-turnover row happened to already
+    # be a team rebound) but gets the same guard for pbpstats fidelity.
+    #  1. non-final-(live-ball)-FT-miss placeholder (rebound.py:81-90,
+    #     is_non_live_ft_placeholder) -- reconstructed via
+    #     _rebound_missed_shot_index + _is_last_ft instead of
+    #     ``missed_shot.is_end_ft``. ``is_end_ft`` additionally excludes
+    #     flagrant free throws even when numerically last-of-trip
+    #     (free_throw.py:60-70: ``... and not self.is_flagrant_ft``), which
+    #     the oracle cross-tab caught as 1 false positive (game 0022100001
+    #     action_number 267 "BUCKS Rebound" after a missed "Free Throw
+    #     Flagrant 3 of 3" -- oracle scores it a placeholder; the pre-fix
+    #     predicate, using bare ``_is_last_ft``, scored it real). Handled
+    #     locally here (a "flagrant" substring check on the FT's sub_type)
+    #     rather than editing the shared ``_is_last_ft`` in nba_possessions,
+    #     which serves a different (possession-trip) purpose and is out of
+    #     this module's scope.
+    #  2. turnover-coincident placeholder (rebound.py:65-79,
+    #     is_turnover_placeholder) -- reconstructed via co_clock +
+    #     is_no_turnover instead of ``is_shot_clock_violation``/
+    #     ``is_kicked_ball``; gated on the row being a team rebound
+    #     (v3 team_id == 0), matching the ``player1_id == 0`` conjunct.
+    #  3+4. buzzer-beater-at-0.0s (rebound.py:92-113) + buzzer-beater-at-
+    #     shot-time (rebound.py:115-133) placeholders -- reconstructed
+    #     together via seconds_remaining <= 3 and the next non-rebound row
+    #     being a period boundary (v3 has no Replay event type to skip over,
+    #     so ``next_event`` is simply the next row), gated on the row being
+    #     a team rebound (v3 team_id == 0), matching the ``player1_id == 0``
+    #     conjunct both pbpstats properties require.
+    #
+    # Oracle agreement after this fix (pbpstats-live vs this predicate, all
+    # Rebound rows, 3 committed fixtures): 118/118, 86/86, 94/94 (0 disagree).
     """
     rows = ctx.rows
     row = rows[i]
     if (row.get("event_type") or "") != "rebound":
         return False
-    # 1. rebound after a missed NON-final FT -> placeholder (play continues to next FT)
+    is_team_rebound = int(row.get("team_id") or 0) == 0
+    # 1. rebound after a missed NON-final (or flagrant) FT -> placeholder
+    #    (play continues to the next FT / possession does not go live).
     j = _rebound_missed_shot_index(ctx, i)
     if j >= 0 and (rows[j].get("event_type") or "") == "free_throw":
         # local import: avoids cycle with nba_possessions
         from sportsdataverse.nba.nba_possessions import _is_last_ft
 
-        if not _is_last_ft(rows[j].get("sub_type") or ""):
+        ft_sub_type = rows[j].get("sub_type") or ""
+        is_flagrant_ft = "flagrant" in _norm(ft_sub_type)
+        if not _is_last_ft(ft_sub_type) or is_flagrant_ft:
             return False
-    # 2. coincident with a shot-clock / kicked-ball turnover at the same clock
-    for k in ctx.co_clock(i):
-        if k == i:
-            continue
-        if (rows[k].get("event_type") or "") == "turnover" and not is_no_turnover(rows[k]):
-            if _norm(rows[k].get("sub_type")) in _TURNOVER_COINCIDENT_SUBTYPES:
+    # 2. team rebound coincident with a shot-clock / kicked-ball turnover at
+    #    the same clock (pbpstats requires both the turnover coincidence AND
+    #    player1_id == 0 -- a personal rebound at the same instant is real).
+    if is_team_rebound:
+        for k in ctx.co_clock(i):
+            if k == i:
+                continue
+            if (rows[k].get("event_type") or "") == "turnover" and not is_no_turnover(rows[k]):
+                if _norm(rows[k].get("sub_type")) in _TURNOVER_COINCIDENT_SUBTYPES:
+                    return False
+    # 3+4. buzzer-beater placeholders (team rebounds only -- see docstring):
+    #    rebound at 0.0s, or at the same clock as a <=3s missed shot, when
+    #    the next non-rebound row is a period boundary.
+    if is_team_rebound:
+        secs = float(row.get("seconds_remaining") or 0.0)
+        if secs <= 3.0:
+            nxt = i + 1
+            while nxt < len(rows) and (rows[nxt].get("event_type") or "") == "rebound":
+                nxt += 1
+            next_is_period_end = nxt >= len(rows) or (rows[nxt].get("event_type") or "") == "period"
+            if next_is_period_end and (
+                secs == 0.0 or (j >= 0 and float(rows[j].get("seconds_remaining") or 0.0) == secs)
+            ):
                 return False
-    # 3+4. buzzer-beater placeholders: rebound at 0.0s, or at the same clock as a
-    # <=3s missed shot, when the next non-rebound row is a period boundary.
-    secs = float(row.get("seconds_remaining") or 0.0)
-    if secs <= 3.0:
-        nxt = i + 1
-        while nxt < len(rows) and (rows[nxt].get("event_type") or "") == "rebound":
-            nxt += 1
-        next_is_period_end = nxt >= len(rows) or (rows[nxt].get("event_type") or "") == "period"
-        if next_is_period_end and (secs == 0.0 or (j >= 0 and float(rows[j].get("seconds_remaining") or 0.0) == secs)):
-            return False
     return True
