@@ -61,7 +61,10 @@ that license's own attribution obligations.
   `src/utils/stats/OverrideUtils.ts`. Further `RatingUtils.ts` surface
   (`buildDRtg`, `buildNetPoints`, `adjustOffRatingStats`, the
   on-ball-defense adjustment family) is being ported incrementally into the
-  same module; this entry covers the module as a whole. The jest snapshot
+  same module; this entry covers the module as a whole.
+  [`sportsdataverse/wbb/wbb_ratings.py`](sportsdataverse/wbb/wbb_ratings.py)
+  re-exports the same functions by reference (no separate copy of the
+  logic). The jest snapshot
   fixtures and their input literals used as an offline correctness oracle
   are vendored under
   [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
@@ -98,8 +101,11 @@ that license's own attribution obligations.
   its two small dependencies, `getOriginalVal`/`getIgnoreNil`) was added to
   the same module -- the only `OverrideUtils` member `injectLuck` calls; the
   shot-quality-override-UI-specific remainder of `OverrideUtils.ts` was not
-  ported (see `mbb_luck.py`'s module docstring for the exact scope). The
-  jest snapshot fixtures and their input literals used as an offline
+  ported (see `mbb_luck.py`'s module docstring for the exact scope).
+  [`sportsdataverse/wbb/wbb_luck.py`](sportsdataverse/wbb/wbb_luck.py)
+  re-exports the same functions and the `LUCK_AFFECTED_FIELDS` constant by
+  reference (no separate copy of the logic). The jest snapshot fixtures and
+  their input literals used as an offline
   correctness oracle are vendored under
   [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
   are test-only fixtures and are not shipped in the distributed wheel or
