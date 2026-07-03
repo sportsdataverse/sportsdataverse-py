@@ -107,7 +107,7 @@ from sportsdataverse.nfl.nfl_stats import (
     build_nfl_team_stats,
 )
 from sportsdataverse.nfl.nfl_series import calculate_nfl_series_conversion_rates
-from sportsdataverse.nfl.nfl_standings import calculate_nfl_standings
+from sportsdataverse.nfl.nfl_standings_calc import calculate_nfl_standings
 from sportsdataverse.nfl.nfl_schedule import *
 from sportsdataverse.nfl.nfl_teams import *
 from sportsdataverse.nfl.utils_date import *

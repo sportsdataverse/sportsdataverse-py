@@ -313,14 +313,14 @@ def calculate_nfl_standings(
     if tiebreaker_depth not in (1, 2, 3):
         raise ValueError(f"Invalid tiebreaker_depth {tiebreaker_depth!r}; expected 1, 2, or 3.")
 
+    doubled = _double_games(games)
+    if doubled.height == 0:
+        return _empty_standings(return_as_pandas=return_as_pandas)
+
     if teams is None:
         from sportsdataverse.nfl.nfl_loaders import load_nfl_teams  # noqa: PLC0415
 
         teams = load_nfl_teams()
-
-    doubled = _double_games(games)
-    if doubled.height == 0:
-        return _empty_standings(return_as_pandas=return_as_pandas)
 
     doubled_meta = _with_team_meta(doubled, teams)
     records = _team_records(doubled_meta)

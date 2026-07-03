@@ -157,6 +157,27 @@ def test_standings_empty_games_returns_zero_row_schema() -> None:
     assert "seed" in out.columns
 
 
+def test_standings_empty_games_teams_none_never_hits_network() -> None:
+    # ``teams=None`` normally triggers a ``load_nfl_teams()`` network call, but
+    # the empty-games short-circuit must fire first so this stays offline-safe.
+    empty = pl.DataFrame(
+        schema={
+            "game_id": pl.Utf8,
+            "season": pl.Int64,
+            "game_type": pl.Utf8,
+            "week": pl.Int64,
+            "home_team": pl.Utf8,
+            "away_team": pl.Utf8,
+            "home_score": pl.Int64,
+            "away_score": pl.Int64,
+        }
+    )
+    out = calculate_nfl_standings(empty, teams=None)
+    assert out.height == 0
+    assert "div_rank" in out.columns
+    assert "seed" in out.columns
+
+
 def test_standings_return_as_pandas() -> None:
     import pandas as pd
 
