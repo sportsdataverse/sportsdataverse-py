@@ -1054,6 +1054,10 @@ class ValidationReport:
         cross_season: Result from Oracle 3, or ``None`` if not selected.
         calibration: Result from Oracle 4, or ``None`` if not selected or
             the model is a point estimator.
+        external: Result from Oracle 5 (``external_validity``), or ``None``
+            if not selected.
+        walk_forward: Result from Oracle 6 (``walk_forward``), or ``None``
+            if not selected.
 
     Example:
         ``ValidationReport`` is returned by ``validate_model``; access fields directly::
@@ -1077,6 +1081,8 @@ class ValidationReport:
     reliability: Optional[ReliabilityResult] = None
     cross_season: Optional[CrossSeasonResult] = None
     calibration: Optional[CalibrationResult] = None
+    external: Optional[ExternalValidityResult] = None
+    walk_forward: Optional[WalkForwardResult] = None
 
 
 def validate_model(
@@ -1086,6 +1092,13 @@ def validate_model(
     model_name: str = "model",
     oracles: Tuple[str, ...] = ("retrodiction", "reliability", "cross_season", "calibration"),
     seed: int = 0,
+    external_ratings: Optional[pl.DataFrame] = None,
+    external_oracle: Optional[pl.DataFrame] = None,
+    external_rating_col: str = "rating",
+    external_oracle_col: str = "oracle_value",
+    external_join: str = "id",
+    walk_forward_horizon_days: int = 14,
+    walk_forward_min_games: int = 15,
 ) -> ValidationReport:
     """Run the selected oracles and assemble a ``ValidationReport``.
 
@@ -1099,12 +1112,28 @@ def validate_model(
             are concatenated into a single pooled frame for Oracles 1, 2, and 4.
         model_name: Label written into the returned report and markdown card.
         oracles: Tuple of oracle names to run.  Omit a name to skip that oracle
-            and leave its result field ``None``.
+            and leave its result field ``None``.  Accepts ``"external"`` and
+            ``"walk_forward"`` in addition to the four original names; the
+            default tuple is unchanged, so existing callers are unaffected.
         seed: RNG seed forwarded to each oracle for determinism.
+        external_ratings: The model's own ratings frame -- required when
+            ``"external"`` is in ``oracles``.
+        external_oracle: A loaded oracle frame (from ``nba_oracle_data``) --
+            required when ``"external"`` is in ``oracles``.
+        external_rating_col: Rating column name in ``external_ratings``.
+        external_oracle_col: Value column name in ``external_oracle``.
+        external_join: ``"id"`` or ``"name"``, forwarded to ``external_validity``.
+        walk_forward_horizon_days: Forwarded to ``walk_forward``.
+        walk_forward_min_games: Forwarded to ``walk_forward`` as
+            ``min_games_before_first_checkpoint``.
 
     Returns:
         A ``ValidationReport`` whose fields are populated for every selected oracle
         and ``None`` for every skipped oracle.
+
+    Raises:
+        ValueError: If ``"external"`` is in ``oracles`` but ``external_ratings``
+            or ``external_oracle`` is ``None``.
 
     Example:
         Run all four oracles on a single season::
@@ -1130,6 +1159,26 @@ def validate_model(
     pooled = (
         pl.concat(season_frames, how="diagonal_relaxed") if season_frames else pl.DataFrame(schema={"game_id": pl.Utf8})
     )
+    external_result: Optional[ExternalValidityResult] = None
+    if "external" in oracles:
+        if external_ratings is None or external_oracle is None:
+            raise ValueError("oracles includes 'external' but external_ratings/external_oracle were not provided")
+        external_result = external_validity(
+            external_ratings,
+            external_oracle,
+            rating_col=external_rating_col,
+            oracle_col=external_oracle_col,
+            join=external_join,
+            seed=seed,
+        )
+    walk_forward_result: Optional[WalkForwardResult] = None
+    if "walk_forward" in oracles:
+        walk_forward_result = walk_forward(
+            model,
+            pooled,
+            horizon_days=walk_forward_horizon_days,
+            min_games_before_first_checkpoint=walk_forward_min_games,
+        )
     return ValidationReport(
         model_name=model_name,
         n_seasons=len(season_frames),
@@ -1137,6 +1186,8 @@ def validate_model(
         reliability=reliability(model, pooled, seed=seed) if "reliability" in oracles else None,
         cross_season=cross_season(model, season_frames) if "cross_season" in oracles else None,
         calibration=calibration(model, pooled, seed=seed) if "calibration" in oracles else None,
+        external=external_result,
+        walk_forward=walk_forward_result,
     )
 
 
@@ -1201,5 +1252,22 @@ def render_report(report: ValidationReport) -> str:
         "- n/a (point-estimate model — no posterior)"
         if cal is None
         else "- " + ", ".join(f"{int(lvl * 100)}%→{c:.2f}" for lvl, c in zip(cal.levels, cal.coverage))
+    )
+    ext = report.external
+    L.append("## External concurrent validity (Oracle 5)")
+    L.append(
+        f"- corr **{ext.corr:.3f}** (permutation p95 {ext.permutation_p95:.3f}); "
+        f"{ext.n_matched} matched ({ext.coverage_pct:.1f}% coverage, {ext.join}-join)"
+        if ext
+        else "- n/a"
+    )
+    wf = report.walk_forward
+    L.append("## Walk-forward retrodiction (Oracle 6)")
+    L.append(
+        f"- RMSE **{wf.game_margin_rmse:.3f}** (carry-forward {wf.carry_forward_rmse:.3f}, "
+        f"random-fold {wf.random_fold_rmse:.3f}); corr {wf.game_margin_corr:.3f}; "
+        f"{wf.n_checkpoints} checkpoints, {wf.n_test_games} test games"
+        if wf
+        else "- n/a"
     )
     return "\n".join(L) + "\n"

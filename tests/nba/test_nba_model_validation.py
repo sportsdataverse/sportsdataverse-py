@@ -696,3 +696,78 @@ def test_walk_forward_boundary_date_trains_never_evaluates():
     res = walk_forward(RidgeRapmModel(), poss, checkpoint_dates=[boundary_date], horizon_days=1)
     assert res.n_checkpoints == 1
     assert res.n_test_games == 1
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 11: wire Oracle 5 + 6 into ValidationReport / validate_model / render_report
+# ---------------------------------------------------------------------------
+
+
+def test_validate_model_default_oracles_unaffected_by_new_fields():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
+    rep = validate_model(RidgeRapmModel(), [s1], model_name="plain_rapm")
+    assert rep.external is None
+    assert rep.walk_forward is None
+
+
+def test_validate_model_external_oracle_requires_both_frames():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
+    with pytest.raises(ValueError, match="external"):
+        validate_model(RidgeRapmModel(), [s1], oracles=("external",))
+
+
+def test_validate_model_populates_external_result():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(o, d, n_games=20, poss_per_game=60, noise_sd=0.3, seed=1)
+    fake_ratings = pl.DataFrame({"player_id": list(range(1, 17)), "rating": [float(i) for i in range(1, 17)]})
+    fake_oracle = pl.DataFrame({"player_id": list(range(1, 17)), "oracle_value": [float(i) for i in range(1, 17)]})
+    rep = validate_model(
+        RidgeRapmModel(),
+        [s1],
+        oracles=("external",),
+        external_ratings=fake_ratings,
+        external_oracle=fake_oracle,
+    )
+    assert rep.external is not None
+    assert rep.external.corr > 0.999
+    assert rep.retrodiction is None  # not selected
+
+
+def test_validate_model_populates_walk_forward_result():
+    o, d = _planted_ratings(seed=2)
+    s1 = _synthetic_possessions(
+        o, d, n_games=60, poss_per_game=60, noise_sd=0.3, seed=8, start_date=datetime.date(2023, 10, 24)
+    )
+    rep = validate_model(
+        RidgeRapmModel(),
+        [s1],
+        oracles=("walk_forward",),
+        walk_forward_horizon_days=10,
+        walk_forward_min_games=15,
+    )
+    assert rep.walk_forward is not None
+    assert rep.reliability is None  # not selected
+
+
+def test_render_report_includes_external_and_walk_forward_sections():
+    o, d = _planted_ratings()
+    s1 = _synthetic_possessions(
+        o, d, n_games=30, poss_per_game=60, noise_sd=0.3, seed=1, start_date=datetime.date(2023, 10, 24)
+    )
+    fake_ratings = pl.DataFrame({"player_id": list(range(1, 17)), "rating": [float(i) for i in range(1, 17)]})
+    fake_oracle = pl.DataFrame({"player_id": list(range(1, 17)), "oracle_value": [float(i) for i in range(1, 17)]})
+    rep = validate_model(
+        RidgeRapmModel(),
+        [s1],
+        model_name="plain_rapm",
+        oracles=("external", "walk_forward"),
+        external_ratings=fake_ratings,
+        external_oracle=fake_oracle,
+        walk_forward_horizon_days=10,
+        walk_forward_min_games=15,
+    )
+    md = render_report(rep)
+    assert "External concurrent validity" in md
+    assert "Walk-forward retrodiction" in md
