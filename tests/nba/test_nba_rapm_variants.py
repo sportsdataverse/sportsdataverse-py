@@ -472,3 +472,120 @@ def test_la_rapm_schema_and_dtypes():
     out = nba_la_rapm(poss, _shooting_for(poss))
     assert dict(out.schema) == LA_RAPM_SCHEMA
     assert out.height > 0
+
+
+# ---------------------------------------------------------------------------
+# Task 6 — gated concurrent-validity live tests (vs Ryan Davis oracle CSVs)
+# ---------------------------------------------------------------------------
+#
+# Both gates must be set to run these: SDV_PY_NBA_STATS_LIVE=1 (stats.nba.com
+# hangs on datacenter/cloud IPs -- residential only, see conftest.py) AND
+# SDV_PY_NBA_ORACLE_DIR=<path to the Ryan Davis oracle CSVs> (rapm_ryan_davis.csv
+# / rapm_multi_ryan_davis.csv, `playerId` Int64 + `LA_RAPM`/`RAPM`/`RA_*`
+# columns). These compile FULL NBA seasons over the live stats API, so a run
+# takes a long time -- they're meant for occasional local verification, not CI.
+
+import os  # noqa: E402
+import pathlib  # noqa: E402
+
+from tests.conftest import skip_if_no_nba_oracle, skip_if_no_nba_stats_live  # noqa: E402
+
+
+def _oracle(name: str) -> pl.DataFrame:
+    root = pathlib.Path(os.environ["SDV_PY_NBA_ORACLE_DIR"])
+    return pl.read_csv(root / name, infer_schema_length=10000).with_columns(pl.col("playerId").cast(pl.Int64))
+
+
+@skip_if_no_nba_stats_live
+@skip_if_no_nba_oracle
+def test_la_rapm_concurrent_validity_vs_ryan_davis():
+    """LA-RAPM must track the oracle's LA_RAPM at least as well as plain RAPM does."""
+    from sportsdataverse.nba import build_possession_shooting, compile_nba_season
+
+    # NOTE: import the FUNCTION from its own submodule, not the package level --
+    # `sportsdataverse.nba` also has a `nba_enhanced_pbp` SUBMODULE of the same
+    # name, and Python auto-registers imported submodules as attributes of their
+    # parent package, so `from sportsdataverse.nba import nba_enhanced_pbp` binds
+    # the module object (not callable), not the function.
+    from sportsdataverse.nba.nba_enhanced_pbp import nba_enhanced_pbp
+
+    poss = compile_nba_season(2022)  # 2022-23 regular season -- oracle coverage ends here
+    gids = poss["game_id"].unique().to_list()
+    shoot_frames = [build_possession_shooting(nba_enhanced_pbp(gid)) for gid in gids]
+    shooting = pl.concat(shoot_frames, how="diagonal_relaxed")
+
+    la = nba_la_rapm(poss, shooting).filter(pl.col("off_poss") + pl.col("def_poss") >= 500)
+    plain = nba_rapm(poss).filter(pl.col("off_poss") + pl.col("def_poss") >= 500)
+    orc = (
+        _oracle("rapm_ryan_davis.csv")
+        .filter(pl.col("season") == "2022-23")
+        .select(pl.col("playerId").alias("player_id"), pl.col("LA_RAPM"), pl.col("RAPM"))
+    )
+    assert la.schema["player_id"] == orc.schema["player_id"]  # Int64 both sides
+    j_la = la.join(orc, on="player_id", how="inner")
+    j_pl = plain.join(orc, on="player_id", how="inner")
+    cov = j_la.height / max(orc.height, 1)
+    print(f"LA-RAPM oracle join coverage: {cov:.1%} ({j_la.height}/{orc.height})")
+    la_corr = float(np.corrcoef(j_la["la_rapm"], j_la["LA_RAPM"])[0, 1])
+    plain_corr = float(np.corrcoef(j_pl["rapm"], j_pl["LA_RAPM"])[0, 1])
+    print(f"LA vs LA_RAPM corr={la_corr:.3f} ; plain-RAPM vs LA_RAPM corr={plain_corr:.3f}")
+    # FLOOR set empirically on first real run, then ratcheted (harness convention).
+    # The spec's teeth: the LA variant must track LA_RAPM at least as well as plain RAPM.
+    assert la_corr >= plain_corr - 0.02  # non-regression guard; tighten to a real floor after first run
+
+
+@skip_if_no_nba_stats_live
+@skip_if_no_nba_oracle
+def test_decay_rapm_concurrent_validity_vs_ryan_davis_multi():
+    """decay_rapm (best of half_life_days in [60, 120, 240]) vs a multi-season oracle window.
+
+    Compiles 2 real seasons (2018-19, 2019-20). ``rapm_multi_ryan_davis.csv``'s
+    windows are irregular (mostly 3- or 5-season spans anchored to varying
+    start years -- see the CSV's ``season`` column), so there is no exact
+    2-season match; ``"2015-20"`` (the only window ENDING at 2019-20) is used
+    as the nearest available comparison and the mapping is a printed
+    diagnostic only, never a hard-asserted equivalence (DECISION 9).
+    """
+
+    from sportsdataverse.nba import compile_nba_season
+
+    seasons = [2018, 2019]
+    frames = [compile_nba_season(s) for s in seasons]
+    poss = pl.concat(frames, how="diagonal_relaxed")
+    asof = poss["game_date"].max()
+    print(
+        f"decay_rapm oracle diagnostic: compiled seasons {seasons} (asof={asof}); "
+        "nearest oracle multi-window = '2015-20' (only window ending in 2019-20's season)"
+    )
+
+    oracle_window = "2015-20"
+    orc = (
+        _oracle("rapm_multi_ryan_davis.csv")
+        .filter(pl.col("season") == oracle_window)
+        .select(pl.col("playerId").alias("player_id"), pl.col("LA_RAPM"), pl.col("RAPM"))
+    )
+
+    plain = nba_rapm(poss).filter(pl.col("off_poss") + pl.col("def_poss") >= 500)
+    j_pl = plain.join(orc, on="player_id", how="inner")
+    plain_corr = float(np.corrcoef(j_pl["rapm"], j_pl["RAPM"])[0, 1])
+
+    best_corr, best_hl, best_cov = float("-inf"), None, 0.0
+    for hl in (60.0, 120.0, 240.0):
+        decay = nba_decay_rapm(poss, asof=asof, half_life_days=hl).filter(
+            pl.col("off_poss") + pl.col("def_poss") >= 500
+        )
+        j = decay.join(orc, on="player_id", how="inner")
+        cov = j.height / max(orc.height, 1)
+        corr = float(np.corrcoef(j["decay_rapm"], j["RAPM"])[0, 1]) if j.height > 1 else float("-inf")
+        print(
+            f"half_life_days={hl:.0f}: decay_rapm vs oracle RAPM corr={corr:.3f} coverage={cov:.1%} ({j.height}/{orc.height})"
+        )
+        if corr > best_corr:
+            best_corr, best_hl, best_cov = corr, hl, cov
+
+    print(
+        f"best half_life_days={best_hl}: corr={best_corr:.3f} coverage={best_cov:.1%} ; "
+        f"plain-RAPM vs oracle RAPM corr={plain_corr:.3f}"
+    )
+    # non-regression guard; tighten to a real floor once a first real run establishes one.
+    assert best_corr >= plain_corr - 0.02

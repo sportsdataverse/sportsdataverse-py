@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NBA — RAPM variants (WP2)](#nba--rapm-variants-wp2)
   - [NBA — through-date ratings panel, WAR, and single-game BPM (WP4)](#nba--through-date-ratings-panel-war-and-single-game-bpm-wp4)
   - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
   - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
@@ -155,6 +156,13 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NBA — RAPM variants (WP2)
+
+- feat(nba): RAPM variants (`nba_rapm_variants`) — luck-adjusted (`nba_la_rapm`),
+  four-factor (`nba_four_factor_rapm`), and time-decay (`nba_decay_rapm`) RAPM, all
+  reusing the plain-RAPM design matrix; concurrent-validity vs the Ryan Davis oracle
+  CSVs gated on `SDV_PY_NBA_ORACLE_DIR`.
 
 ### NBA — through-date ratings panel, WAR, and single-game BPM (WP4)
 
