@@ -22,11 +22,15 @@ math; from here on, per-lineup/per-player numeric data is materialized into
 :func:`calculate_residual_error` (``RapmUtils.ts:1544/1559/1569``), and
 :func:`calculate_sd_rapm` (the ``sdRapm`` formula inlined in
 ``RapmUtils.pickRidgeRegression``, ``RapmUtils.ts:1373-1390``, promoted to a
-standalone function here for independent testability). Later Phase-3 tasks
-add the adaptive-lambda orchestration + collinearity diagnostics layer
-(``pickRidgeRegression``, ``injectRapmIntoPlayers``, ``calcCollinearityDiag``
--- see the "Deliberately NOT ported (this task)" section below) on top of the
-solve primitives this module now provides.
+standalone function here for independent testability). **Task 3.5 adds the
+adaptive-lambda orchestration layer**: :func:`pick_ridge_regression`
+(``RapmUtils.pickRidgeRegression``, ``RapmUtils.ts:1001-1540``, the "IMPORTANT
+GATE" oracle), :func:`apply_weak_priors` (``RapmUtils.ts:921-995``), and
+:func:`build_weak_prior_from_rapm` (``RapmUtils.ts:410-419``). Task 3.6 owns
+the remaining collinearity-diagnostics + top-level-orchestration layer
+(``injectRapmIntoPlayers``, ``calcCollinearityDiag`` -- see the "Deliberately
+NOT ported (this task)" section below) on top of what this module now
+provides.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``RapmUtils.ts`` from
@@ -178,28 +182,31 @@ does (``_.omit(results, ["filteredLineups", "teamInfo"])`` before
    ``Math.sqrt(negative) -> NaN``) -- only possible if ``XᵀX + λI`` isn't
    positive-definite (e.g. ``ridge_lambda < 0``). See the function
    docstring.
+10. **:func:`pick_ridge_regression` omits the JS ``zip[0] || 0`` /
+    ``zip[1] || 0`` falsy-coalesce inside its two possession-weighted
+    team-total sums** (``combined_adj_eff_pre_prior``/``combined_adj_eff``,
+    ``RapmUtils.ts:1306-1314``/``:1325-1333``) -- plain
+    ``sum(p * r for p, r in zip(...))`` instead. The two regimes only
+    diverge when an operand is ``NaN``: JS's ``||`` treats ``NaN`` as falsy
+    (silently zeroing that term), while this port's Python multiplication
+    numpy/Python-propagates the ``NaN`` through the sum. Not reachable via
+    the oracle fixtures (no ``NaN`` inputs); a real zero operand behaves
+    identically either way (``0 * x == 0`` regardless of the coalesce).
 
-**Deliberately NOT ported (this task -- Tasks 3.5-3.6 own these):**
+**Deliberately NOT ported (this task -- Task 3.6 owns these):**
 
-- ``buildWeakPriorFromRapm`` (``RapmUtils.ts:410-419``) -- the "recursive
-  prior" helper, needed once the adaptive-lambda loop
-  (``pickRidgeRegression``) lands.
-- ``RapmPreProcDiagnostics`` / ``RapmProcessingInputs`` / ``RapmInfo``
-  (``RapmUtils.ts:187-216``) -- return-shape types for
-  ``calcCollinearityDiag`` / ``pickRidgeRegression`` / the top-level
-  orchestration glue, respectively; introduced alongside the functions that
-  produce them.
-- ``pickRidgeRegression``, ``injectRapmIntoPlayers`` -- the adaptive-lambda
-  orchestration loop that calls this task's solve primitives
-  (:func:`slow_regression`, :func:`calculate_rapm`,
-  :func:`calc_slow_pseudo_inverse`, :func:`calculate_predicted_out`,
-  :func:`calculate_residual_error`, :func:`calculate_sd_rapm`) in a
-  ``lambdaRange`` search loop, Task 3.5. Note ``pickRidgeRegression`` also
-  calls ``svd-js``'s ``SVD`` once per side (``RapmUtils.ts:1065-1070``) to
-  compute ``avgEigenVal`` (``:1077``), the mean singular value that scales
-  the lambda range -- Task 3.5 needs ``numpy.linalg.svd`` for that step
-  (this task's six solve functions are ``inv``-only; see the
-  "2] PROCESSING" section banner below).
+- ``RapmPreProcDiagnostics`` (``RapmUtils.ts:187-194``) / ``RapmInfo``
+  (``:205-216``) -- the collinearity-diagnostics return shape and the
+  top-level orchestration glue type (wraps ``ctx``, both weight matrices,
+  both :class:`RapmProcessingInputs`, and ``enrichedPlayers``); introduced
+  alongside the functions that produce/consume them. **Note:** this task's
+  brief loosely glossed :func:`pick_ridge_regression`'s return type as
+  ``tuple[RapmInfo, RapmInfo]`` -- the actual TS return type is
+  ``[RapmProcessingInputs, RapmProcessingInputs]`` (``RapmInfo`` is a
+  separate, still-unported top-level glue type only ``injectRapmIntoPlayers``
+  constructs); ported the real type, per "TS governs".
+- ``injectRapmIntoPlayers`` -- writes :func:`pick_ridge_regression`'s output
+  back onto each player's ``rapm`` field, Task 3.6.
 - ``calcCollinearityDiag`` -- the other ``SVD`` consumer
   (``RapmUtils.ts:1643``), the collinearity-diagnostics surface, Task 3.6.
 
@@ -220,12 +227,30 @@ classification map, item 3, for the full accounting.
 before this task -- no ``pyproject.toml`` change was needed to promote it;
 this module was already importing it (Task 3.3's ``calc_player_weights``/
 ``calc_lineup_outputs``).
+
+**Task 3.5 notes:**
+
+- **``RapmProcessingInputs``'s ``soln_matrix``/``sd_rapm`` fields are plain
+  nested Python ``list``s, not ``NDArray``s** -- see
+  :func:`pick_ridge_regression`'s docstring for why (the oracle's deep
+  -equality ``==`` assertions would otherwise raise ``ValueError`` the
+  moment a multi-element ``ndarray`` comparison got ``bool()``-coerced).
+- **``sd_rapm`` is a Python-only addition** to :class:`RapmProcessingInputs`
+  -- upstream computes the equivalent value inline inside
+  ``pickRidgeRegression`` purely to feed a hardcoded-``False``-gated
+  ``console.log`` and never stores it on ``acc.output``. See
+  :func:`pick_ridge_regression`'s docstring, "Dead-debug computation
+  promoted to a real output".
+- **``numpy.linalg.svd(..., compute_uv=False)``** replaces ``svd-js``'s
+  ``SVD`` (which also computes ``u``/``v``, unused by
+  ``pickRidgeRegression`` -- only ``svd.q``, the singular values, are ever
+  read). Output-identical, efficiency-only deviation.
 """
 
 from __future__ import annotations
 
 import math
-from typing import Any, Callable, Literal, TypedDict
+from typing import Any, Callable, Literal, TypedDict, cast
 
 import numpy as np
 from numpy.typing import NDArray
@@ -1275,3 +1300,514 @@ def calculate_sd_rapm(
     """
     dof_inv = 1.0 / (num_lineups - num_players)
     return np.sqrt(np.sqrt(param_errs) * err_sq * dof_inv)
+
+
+# ---------------------------------------------------------------------------
+# 4] ADAPTIVE LAMBDA SELECTION (Task 3.5).
+#
+# ``pickRidgeRegression`` sits physically *between* `slowRegression`/
+# `calculateRapm` (TS:756/772, Task 3.4's "2] PROCESSING") and
+# `calcSlowPseudoInverse` (TS:1544, Task 3.4's "3] ERROR VALIDATION") in the
+# TS source. This module groups it (and its two helpers, one of which --
+# `buildWeakPriorFromRapm` -- sits much earlier in TS, at :410, right after
+# `buildPriors`) into its own trailing section instead, by *usage* rather
+# than TS physical line order -- a cosmetic-only reordering with zero
+# behavioral effect.
+# ---------------------------------------------------------------------------
+
+
+class RapmProcessingInputs(TypedDict):
+    """Port of ``RapmProcessingInputs`` (``RapmUtils.ts:196-203``).
+
+    See the module docstring's "Task 3.5 notes" for why ``soln_matrix`` and
+    ``sd_rapm`` are plain nested ``list``s rather than ``NDArray``s, and why
+    ``sd_rapm`` exists at all (a Python-only addition beyond upstream's own
+    return shape).
+    """
+
+    #: ``(XᵀX + ridge_lambda·I)⁻¹Xᵀ`` (see :func:`slow_regression`) at the
+    #: chosen lambda, or ``None`` before any lambda has been picked.
+    soln_matrix: list[list[float]] | None
+    ridge_lambda: float
+    #: The final, strong-and-weak-prior-blended RAPM, re-centered to
+    #: ``prior_info["basis"]``.
+    rapm_adj_ppp: list[float]
+    #: The strong-prior-blended RAPM *before* the weak-prior error nudge,
+    #: also re-centered to ``prior_info["basis"]``.
+    rapm_raw_adj_ppp: list[float]
+    #: Per-player possession-share weights used throughout the solve
+    #: (``pct_by_player[off_or_def]``).
+    player_poss_pcts: list[float]
+    #: One ``{"ridge_lambda": ..., "results": [...]}`` entry per processed
+    #: lambda step (basis-recentered ``results``, matching ``rapm_adj_ppp``'s
+    #: own recentering).
+    prev_attempts: list[dict[str, Any]]
+    #: Python-only addition -- see the module docstring's "Task 3.5 notes".
+    sd_rapm: list[float]
+
+
+def build_weak_prior_from_rapm(rapm_results: list[float], off_or_def: str) -> list[dict[str, float]]:
+    """Wrap a flat RAPM-estimate vector into ``playersWeak``-shaped dicts.
+
+    Faithful port of ``RapmUtils.buildWeakPriorFromRapm`` (``RapmUtils.ts:410-419``),
+    used only by :func:`pick_ridge_regression`'s ``use_recursive_weak_prior``
+    branch to substitute the just-computed (pre-strong-prior) RAPM values as
+    the *weak* prior for a follow-up :func:`apply_weak_priors` call -- "the
+    recursive prior" per the upstream ``/** For "recursive" prior */`` comment.
+
+    **Uncovered by the oracle** -- ``semiRealRapmResults.testContext.priorInfo
+    .useRecursiveWeakPrior`` is ``false``, so ``RapmUtils.test.ts``'s
+    ``"pickRidgeRegression"`` test never calls this function. Ported
+    faithfully from TS regardless (per "TS governs"); flagged as a documented
+    gap rather than backed by a synthetic test, matching this module's
+    existing convention for other upstream-untested branches (e.g. the
+    "Task 3.3 coverage gap" note above).
+
+    Args:
+        rapm_results: A flat per-player RAPM estimate vector, e.g.
+            :func:`pick_ridge_regression`'s own ``results_pre_prior``.
+        off_or_def: ``"off"`` or ``"def"`` -- selects the output key,
+            ``f"{off_or_def}_adj_ppp"``.
+
+    Returns:
+        One ``{f"{off_or_def}_adj_ppp": rapm}`` dict per input element,
+        index-aligned with ``rapm_results``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import build_weak_prior_from_rapm
+
+            weak_prior = build_weak_prior_from_rapm([5.0, 4.5], "off")
+            print(weak_prior[0])  # {"off_adj_ppp": 5.0}
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    return [{f"{off_or_def}_adj_ppp": rapm} for rapm in rapm_results]
+
+
+def apply_weak_priors(
+    field: str,
+    player_poss_pcts: list[float],
+    prior_info: RapmPriorInfo,
+    debug_mode: bool = False,
+) -> Callable[[float, list[float]], list[float]]:
+    """Build a closure that nudges ridge-regressed RAPM back towards its weak prior.
+
+    Faithful port of ``RapmUtils.applyWeakPriors`` (``RapmUtils.ts:921-995``).
+    Ridge regression depresses estimates towards ``0``; this "fills" the
+    team-total error (see :func:`pick_ridge_regression`'s
+    ``[IMPORTANT-EQUATION-01]`` team-total reconciliation) back in using each
+    player's weak (KenPom-derived) prior as the fallback signal, capped so no
+    more than half the team-total error gets attributed via this path
+    (``max_multiplier = -0.5``) -- an alternate flat-translation path
+    (``use_alt_rating``) kicks in for ``off_adj_ppp``/``def_adj_ppp`` fields
+    when the capped path can't fully explain the error.
+
+    Args:
+        field: The prior key to read off each ``prior_info["players_weak"]``
+            entry, e.g. ``"off_adj_ppp"``.
+        player_poss_pcts: Per-player possession-share weights (index-aligned
+            with ``prior_info["players_weak"]``), e.g.
+            :func:`pick_ridge_regression`'s own ``pct_by_player[off_or_def]``.
+        prior_info: A :class:`RapmPriorInfo` (only ``["players_weak"]`` is
+            read).
+        debug_mode: Kept for TS signature parity -- upstream gates a
+            ``console.log`` behind this flag (``RapmUtils.ts:979-984``), which
+            this port deliberately does not reproduce: every production call
+            site pins it ``False`` (``offDefDebugMode.off``/``.def`` are
+            hardcoded ``False`` constants inside ``pickRidgeRegression``), so
+            it is dead in every current caller and would only ever emit
+            console noise, not test-observable behavior.
+
+    Returns:
+        A closure ``(error, base_results) -> adjusted_results`` -- call it
+        with the team-total efficiency error and the pre-adjustment RAPM
+        vector to get the weak-prior-nudged result.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import apply_weak_priors
+
+            nudge = apply_weak_priors("off_adj_ppp", pct_by_player, ctx["prior_info"])
+            adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    is_ppp = field in ("off_adj_ppp", "def_adj_ppp")
+    players_weak = prior_info["players_weak"]
+
+    prior_sum = sum((p.get(field) or 0.0) * player_poss_pcts[ii] for ii, p in enumerate(players_weak))
+    sum_poss = sum(player_poss_pcts[ii] for ii in range(len(players_weak)))
+    sum_poss_inv = 1.0 / min(5.0, max(sum_poss, 4.5))
+    max_multiplier = -0.5
+
+    def apply(error: float, base_results: list[float]) -> list[float]:
+        prior_sum_inv = 1.0 / prior_sum if prior_sum != 0 else 0.0
+        error_times_sum_inv = min(0.0, max(max_multiplier, error * prior_sum_inv))
+        approx_err_with_capped_prior = error - prior_sum * error_times_sum_inv
+
+        use_alt_rating = is_ppp and (error_times_sum_inv == 0 or error_times_sum_inv == max_multiplier)
+
+        return [
+            r
+            - error_times_sum_inv * (players_weak[ii].get(field) or 0.0)
+            - (approx_err_with_capped_prior * sum_poss_inv if use_alt_rating else 0.0)
+            for ii, r in enumerate(base_results)
+        ]
+
+    return apply
+
+
+def pick_ridge_regression(
+    off_weights: NDArray[np.float64],
+    def_weights: NDArray[np.float64],
+    ctx: RapmPlayerContext,
+    adaptive_correl_weights: list[float] | None,
+    diag_mode: bool,
+    agg_value_key: ValueKey = "value",
+    lineup_value_keys: tuple[ValueKey, ValueKey] = ("value", "value"),
+) -> tuple[RapmProcessingInputs, RapmProcessingInputs]:
+    """Adaptively pick a ridge-regression lambda and blend in the RAPM priors.
+
+    Faithful port of ``RapmUtils.pickRidgeRegression`` (``RapmUtils.ts:1001-1540``)
+    -- the top-level driver that, per off/def side: scales a dimensionless
+    ``lambda_range`` by the design matrix's mean singular value
+    (``avg_eigen_val``) into an actual ridge strength, solves via
+    :func:`slow_regression`/:func:`calculate_rapm`, blends in each player's
+    strong prior (:func:`_get_strong_weight`), reconciles the possession
+    -weighted team total against the actual team efficiency
+    (``[IMPORTANT-EQUATION-01]``, see below), nudges the result back towards
+    the weak priors on any remaining error (:func:`apply_weak_priors`), and
+    decides whether to keep sweeping ``lambda`` upward, roll back to the
+    previous step, or stop.
+
+    **``[IMPORTANT-EQUATION-01]``** (``RapmUtils.ts:1306-1314``/``:1325-1333``):
+    ``combined_adj_eff = sum(pct_by_player[i] * rapm[i] for i) +
+    add_low_volume_adj_rtg``, compared against ``actual_eff[off_or_def]``
+    (the team's actual, prior-basis-adjusted efficiency, including
+    bench/removed-player possessions) to derive ``adj_eff_err`` -- the error
+    signal both the weak-prior nudge and the stopping rule react to.
+
+    **Stopping rule** (checked once per ``lambda`` step, in order): (1) once a
+    *second* step has run (``not_first_step``) and, unless in ``diag_mode``,
+    the current step is past ``lambda_range_to_use[3]``, roll back to the
+    *previous* step's ``soln_matrix``/``ridge_lambda`` (but **not**
+    ``rapm_adj_ppp``/``rapm_raw_adj_ppp``/``sd_rapm``, which stay at the
+    current, over-threshold step's values -- a faithful, non-obvious TS
+    asymmetry, ``RapmUtils.ts:1443-1448`` vs ``:1483-1484``) when
+    ``adj_eff_err >= error_exit_thresh`` (``1.35`` for the low-possession
+    -count offense special case, else ``1.05``) **and** the error is still
+    increasing (``>= last_error``); else (2) stop in place once
+    ``mean_diff`` (the mean per-player RAPM change since the previous step)
+    drops below ``pick_ridge_thresh`` (``0.061`` off / ``0.091`` def --
+    "more confident in offensive priors"); else (3) keep sweeping.
+
+    **Adaptive-weight / prior asymmetry** (the deep-equality oracle's load
+    -bearing behavior): the per-player strong-prior blend
+    (``_get_strong_weight(ctx["prior_info"], adaptive_correl_weights[i])``)
+    only consults ``adaptive_correl_weights`` when
+    ``ctx["prior_info"]["strong_weight"] < 0`` (adaptive mode) -- a fixed,
+    non-negative ``strong_weight`` always wins. A fixture whose
+    ``players_strong`` entries carry no ``def_adj_ppp`` key makes the blend's
+    ``stat.get(f"{off_or_def}_adj_ppp") or 0.0`` term (and, transitively,
+    :func:`calc_lineup_outputs`'s own ``strong_val`` term) contribute exactly
+    ``0`` on the def side regardless of ``strong_weight`` or
+    ``adaptive_correl_weights`` -- see the oracle test's ``def_results1``/
+    ``def_results2`` invariance assertions.
+
+    **``svd`` is ``numpy.linalg.svd(..., compute_uv=False)``, singular values
+    only.** Upstream's ``SVD(weights[side].valueOf())`` (``svd-js``) also
+    computes ``u``/``v``, but only ``svd.q`` (the singular values, via
+    ``mean(svd.off.q)``/``mean(svd.def.q)`` at ``avg_eigen_val``,
+    ``RapmUtils.ts:1077``) is ever read -- ``u``/``v`` are dead. Skipping them
+    is an efficiency-only deviation with an identical result (singular
+    values are unique to a matrix regardless of the underlying SVD
+    implementation).
+
+    **Dead-debug computation promoted to a real output (Python-side
+    addition, not upstream's own shape):** upstream also computes
+    ``residuals``/``errSq``/``paramErrs``/``sdRapm`` at this point
+    (``RapmUtils.ts:1363-1394``) purely to feed a ``console.log`` gated
+    behind the same hardcoded-``False`` ``debugMode`` as
+    :func:`apply_weak_priors` -- none of the four is ever stored on
+    ``acc.output`` upstream (``RapmProcessingInputs`` has no ``sdRapm``
+    field there either). Since Task 3.4 built
+    :func:`calculate_predicted_out`/:func:`calculate_residual_error`/
+    :func:`calc_slow_pseudo_inverse`/:func:`calculate_sd_rapm` specifically
+    so this task could surface real standard errors, this port keeps
+    calling all four (matching TS's actual computation, which reuses the
+    exact same ``XᵀX + ridge_lambda·I`` inverse :func:`slow_regression`
+    already computed -- so no *new* failure mode is introduced by keeping
+    this) and additionally stores the result on ``sd_rapm`` -- a superset
+    of, not a divergence from, the upstream return shape.
+
+    **``soln_matrix``/``sd_rapm`` are nested Python ``list``s, not
+    ``NDArray``s.** Every field on the returned :class:`RapmProcessingInputs`
+    is a plain (possibly nested) Python ``list``/``float`` specifically so
+    the whole dict stays comparable via plain ``==`` -- the oracle's deep
+    -equality assertions (e.g. ``off_results1 == off_results``) would
+    otherwise raise ``ValueError: truth value of an array with more than one
+    element is ambiguous`` the moment Python's dict/list equality machinery
+    tried to ``bool()`` a multi-element ``ndarray`` comparison.
+
+    Args:
+        off_weights: The offensive design matrix (e.g.
+            :func:`calc_player_weights`'s first return value).
+        def_weights: The defensive design matrix.
+        ctx: A :class:`RapmPlayerContext`.
+        adaptive_correl_weights: Optional per-player adaptive-correlation
+            weights (index-aligned with ``ctx["col_to_player"]``) -- see the
+            "adaptive-weight / prior asymmetry" note above.
+        diag_mode: If ``True``, keeps sweeping every remaining ``lambda``
+            step (collecting ``prev_attempts`` diagnostics for all of them)
+            even after a stopping condition has already fired, and relaxes
+            the rollback/pick eligibility guards for the first few
+            (``< lambda_range_to_use[3]``) diagnostic-only steps. **Not
+            exercised by this task's oracle** (always called with
+            ``False``) -- ported faithfully from TS, uncovered by test.
+        agg_value_key: ``"value"`` or ``"old_value"`` -- which key
+            team/aggregate-level reads (``actual_eff``, the low-volume
+            player adjustment) prefer when present.
+        lineup_value_keys: ``(off_key, def_key)`` -- forwarded to
+            :func:`calc_lineup_outputs` as its ``use_old_val_if_possible``
+            flag (translated: ``key == "old_value"``).
+
+    Returns:
+        ``(off_results, def_results)`` -- two :class:`RapmProcessingInputs`.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_rapm import pick_ridge_regression
+
+            off_results, def_results = pick_ridge_regression(
+                off_weights, def_weights, ctx, None, False
+            )
+            print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
+
+    See Also:
+        * `hoopR`_ -- R-side college basketball data + on/off analysis.
+        * `wehoop`_ -- women's college basketball counterpart.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    use_agg_old_val_if_possible = agg_value_key == "old_value"
+
+    def get_agg_val(o: Any) -> float:
+        return _get_val_for_key(o, agg_value_key if use_agg_old_val_if_possible else "value")
+
+    use_lineup_old_val_if_possible = (lineup_value_keys[0] == "old_value", lineup_value_keys[1] == "old_value")
+
+    weights: dict[str, NDArray[np.float64]] = {"off": off_weights, "def": def_weights}
+
+    avg_eigen_val = 0.5 * float(np.mean(np.linalg.svd(off_weights, compute_uv=False))) + 0.5 * float(
+        np.mean(np.linalg.svd(def_weights, compute_uv=False))
+    )
+
+    off_efficiency_basis = ctx["avg_efficiency"] - ctx["prior_info"]["basis"]["off"] * 5
+    def_efficiency_basis = ctx["avg_efficiency"] - ctx["prior_info"]["basis"]["def"] * 5
+
+    # NOTE (landmine-adjacent, not itself a landmine): `ctx["team_info"].get("all_lineups")
+    # or ctx["team_info"]` matches JS `_.isEmpty(...) ? ctx.teamInfo : ctx.teamInfo.all_lineups`
+    # for this field's two real shapes (missing/`None`/`{}` are all Python-falsy too).
+    all_lineups = ctx["team_info"].get("all_lineups") or ctx["team_info"]
+    actual_eff = {
+        "off": get_agg_val(all_lineups.get("off_adj_ppp")) - off_efficiency_basis,
+        "def": get_agg_val(all_lineups.get("def_adj_ppp")) - def_efficiency_basis,
+    }
+
+    def build_usage_vector(on_or_off: str) -> list[float]:
+        """Port of the ``buildUsageVector`` closure (``RapmUtils.ts:1111-1123``)."""
+        if ctx["unbias_weight"] > 0:
+            row_idx = ctx["num_off_lineups"] if on_or_off == "off" else ctx["num_def_lineups"]
+            return [float(v) / ctx["unbias_weight"] for v in weights[on_or_off][row_idx]]
+        weight_t = weights[on_or_off].T
+        return [float(np.sum(row**2)) for row in weight_t]
+
+    pct_by_player = {"off": build_usage_vector("off"), "def": build_usage_vector("def")}
+
+    def build_low_volume_player_rapm_adj(on_or_off: str) -> tuple[float, float]:
+        """Port of the ``buildLowVolumePlayerRapmAdj`` closure (``RapmUtils.ts:1145-1177``)."""
+        lineup_poss_count = _num(all_lineups, f"{on_or_off}_poss", 1.0) or 1.0
+        acc = 0.0
+        for v in ctx["removed_players"].values():
+            v_stat = v[2] if v[2] is not None else {}
+            acc += (
+                (get_agg_val(v_stat.get(f"{on_or_off}_adj_rtg")) + ctx["prior_info"]["basis"][on_or_off])
+                * get_agg_val(v_stat.get(f"{on_or_off}_poss"))
+            ) / lineup_poss_count
+        side_lineup_poss = ctx["off_lineup_poss"] if on_or_off == "off" else ctx["def_lineup_poss"]
+        return (acc, side_lineup_poss / lineup_poss_count)
+
+    low_volume_player_rapm_adj = {
+        "off": build_low_volume_player_rapm_adj("off"),
+        "def": build_low_volume_player_rapm_adj("def"),
+    }
+
+    use_weak_priors_to_fix_errors = {
+        "off": apply_weak_priors("off_adj_ppp", pct_by_player["off"], ctx["prior_info"]),
+        "def": apply_weak_priors("def_adj_ppp", pct_by_player["def"], ctx["prior_info"]),
+    }
+
+    off_adj_poss, def_adj_poss = calc_lineup_outputs(
+        "adj_ppp",
+        off_efficiency_basis,
+        def_efficiency_basis,
+        ctx,
+        adaptive_correl_weights,
+        use_lineup_old_val_if_possible,
+    )
+    adj_poss = {"off": off_adj_poss, "def": def_adj_poss}
+
+    pick_ridge_thresh = {"off": 0.061, "def": 0.091}
+    lambda_range = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4.0]
+    low_poss_count_lambda_range = [0.7, 1.1, 1.5, 1.9, 2.3, 2.7, 3.1, 3.5, 3.9, 4.3, 4.7, 5.1, 5.5, 5.9, 6.3, 6.7]
+    first_non_diag_lambda_index = 3
+
+    def process_side(off_or_def: str) -> RapmProcessingInputs:
+        is_low_poss_count_off = ctx["off_lineup_poss"] < 200 and off_or_def == "off"
+        lambda_range_to_use = low_poss_count_lambda_range if is_low_poss_count_off else lambda_range
+
+        fixed_regression = ctx["config"]["fixed_regression"]
+        if fixed_regression < 0:
+            used_lambda_range = lambda_range_to_use[0 if diag_mode else first_non_diag_lambda_index :]
+        else:
+            lower_bound = lambda_range_to_use[first_non_diag_lambda_index]
+            upper_bound = lambda_range_to_use[-1]
+            used_lambda_range = [lower_bound + fixed_regression * (upper_bound - lower_bound)]
+
+        output: RapmProcessingInputs = {
+            "ridge_lambda": -1.0,
+            "rapm_adj_ppp": [],
+            "rapm_raw_adj_ppp": [],
+            "soln_matrix": None,
+            "player_poss_pcts": pct_by_player[off_or_def],
+            "prev_attempts": [],
+            "sd_rapm": [],
+        }
+        last_attempt: dict[str, Any] = {}
+        found_lambda = False
+
+        for lambda_ in used_lambda_range:
+            not_first_step = lambda_ > used_lambda_range[0]
+            if not found_lambda or diag_mode:
+                ridge_lambda = lambda_ * avg_eigen_val
+
+                solver = slow_regression(weights[off_or_def], ridge_lambda, ctx)
+                results_pre_pre_prior = calculate_rapm(solver, list(adj_poss[off_or_def]))
+
+                results_pre_prior = [
+                    _get_strong_weight(
+                        ctx["prior_info"],
+                        adaptive_correl_weights[index] if adaptive_correl_weights is not None else None,
+                    )
+                    * (stat.get(f"{off_or_def}_adj_ppp") or 0.0)
+                    + float(results_pre_pre_prior[index])
+                    for index, stat in enumerate(ctx["prior_info"]["players_strong"])
+                ]
+
+                add_low_volume_adj_rtg, _ = low_volume_player_rapm_adj[off_or_def]
+                # NOTE (landmine 10): plain multiplication, no JS `zip[.]||0`
+                # NaN-as-falsy coalesce -- see module docstring, landmine 10.
+                combined_adj_eff_pre_prior = (
+                    sum(p * r for p, r in zip(pct_by_player[off_or_def], results_pre_prior)) + add_low_volume_adj_rtg
+                )
+                adj_eff_err_pre_prior = combined_adj_eff_pre_prior - actual_eff[off_or_def]
+
+                results = use_weak_priors_to_fix_errors[off_or_def](adj_eff_err_pre_prior, results_pre_prior)
+
+                combined_adj_eff = (
+                    sum(p * r for p, r in zip(pct_by_player[off_or_def], results)) + add_low_volume_adj_rtg
+                )
+                adj_non_abs_eff_err = combined_adj_eff - actual_eff[off_or_def]
+                adj_eff_err = abs(adj_non_abs_eff_err)
+
+                residuals = calculate_predicted_out(weights[off_or_def], results, ctx)
+                num_lineups = ctx["num_off_lineups"] if off_or_def == "off" else ctx["num_def_lineups"]
+                err_sq = calculate_residual_error(list(adj_poss[off_or_def]), list(residuals), ctx)
+                param_errs = calc_slow_pseudo_inverse(weights[off_or_def], ridge_lambda, ctx)
+                sd_rapm = calculate_sd_rapm(param_errs, err_sq, num_lineups, ctx["num_players"])
+
+                if not found_lambda:
+                    if not_first_step:
+                        diffs = [abs(a - b) for a, b in zip(results, last_attempt["results"])]
+                        mean_diff = sum(diffs) / len(diffs)
+                        # (TS's `tempMaxDiff` companion is computed upstream only to
+                        # feed a debug console.log -- deliberately not tracked here.)
+                    else:
+                        mean_diff = -1.0
+
+                    output["ridge_lambda"] = ridge_lambda
+
+                    if ctx["prior_info"]["use_recursive_weak_prior"]:
+                        recursive_prior_info = cast(
+                            RapmPriorInfo,
+                            {
+                                **ctx["prior_info"],
+                                "players_weak": build_weak_prior_from_rapm(results_pre_prior, off_or_def),
+                            },
+                        )
+                        maybe_recursive_weak_prior = apply_weak_priors(
+                            f"{off_or_def}_adj_ppp", pct_by_player[off_or_def], recursive_prior_info
+                        )(adj_eff_err_pre_prior, results_pre_prior)
+                    else:
+                        maybe_recursive_weak_prior = results_pre_prior
+
+                    base_for_adj_ppp = maybe_recursive_weak_prior if ctx["prior_info"]["no_weak_prior"] else results
+                    output["rapm_adj_ppp"] = [n - ctx["prior_info"]["basis"][off_or_def] for n in base_for_adj_ppp]
+                    output["rapm_raw_adj_ppp"] = [n - ctx["prior_info"]["basis"][off_or_def] for n in results_pre_prior]
+                    output["soln_matrix"] = solver.tolist()
+                    output["sd_rapm"] = sd_rapm.tolist()
+
+                    last_error = abs(last_attempt.get("adj_eff_err") or adj_eff_err)
+                    error_exit_thresh = 1.35 if is_low_poss_count_off else 1.05
+
+                    can_pick_prev = (not diag_mode) or (lambda_ > lambda_range_to_use[first_non_diag_lambda_index])
+                    can_pick = (not diag_mode) or (lambda_ >= lambda_range_to_use[first_non_diag_lambda_index])
+
+                    if (
+                        can_pick_prev
+                        and adj_eff_err >= error_exit_thresh
+                        and not_first_step
+                        and abs(adj_eff_err) >= last_error
+                    ):
+                        found_lambda = True
+                        # Roll back to the previous step -- NOTE: only `soln_matrix`/
+                        # `ridge_lambda` roll back; `rapm_adj_ppp`/`rapm_raw_adj_ppp`/
+                        # `sd_rapm` (set just above) deliberately keep this
+                        # over-threshold step's values -- see this function's
+                        # docstring, "Stopping rule".
+                        output["soln_matrix"] = last_attempt["soln_matrix"]
+                        output["ridge_lambda"] = last_attempt["ridge_lambda"]
+                    elif can_pick and mean_diff >= 0 and mean_diff < pick_ridge_thresh[off_or_def]:
+                        found_lambda = True
+                    else:
+                        last_attempt = {
+                            "results": results,
+                            "ridge_lambda": ridge_lambda,
+                            "soln_matrix": solver.tolist(),
+                            "adj_eff_err": adj_eff_err,
+                        }
+
+                output["prev_attempts"].append(
+                    {
+                        "ridge_lambda": ridge_lambda,
+                        "results": [n - ctx["prior_info"]["basis"][off_or_def] for n in results],
+                    }
+                )
+        return output
+
+    return process_side("off"), process_side("def")

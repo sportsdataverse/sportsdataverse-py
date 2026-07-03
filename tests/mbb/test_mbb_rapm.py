@@ -54,12 +54,34 @@ module instead unit-tests them against an independent, hand-computed
 closed-form ridge-regression micro-case (2 players, 3 lineups) -- see the
 ``_MICRO_*`` module constants below.
 
+**Task 3.5** adds ``RapmUtils.test.ts``'s ``"RapmUtils - pickRidgeRegression"``
+block (``:631-772``, classification map item 4 -- "the single strongest
+oracle gate in the file"). Uses ``semiRealRapmResults.testOffWeights``/
+``testDefWeights``/``testContext`` (hand-transcribed below, per the
+classification map's replay recipe -- these are NOT vendorable, they embed
+``StatModels.emptyIndiv()`` calls, an object spread, and an arrow-function
+closure) directly as pre-computed weight matrices; ``ctx.filteredLineups``
+(-> the vendored ``reducedFilteredLineups``, ``rapm_utils_inputs.json``) is
+still exercised transitively via :func:`~sportsdataverse.mbb.mbb_rapm.pick_ridge_regression`'s
+internal :func:`~sportsdataverse.mbb.mbb_rapm.calc_lineup_outputs` call.
+Parametrized over ``luckAdjusted`` in ``[True, False]`` (both iterations
+assert identical numeric literals -- passing ``"old_value"`` vs ``"value"``
+doesn't crash/diverge on this fixture, which has no ``old_value`` fields at
+all), replaying the deep-equality adaptive-weight assertions
+(``off_results1 == off_results``, ``off_results2 != off_results``,
+``def_results1 == def_results``, ``def_results2 == def_results`` -- the def
+side is invariant because ``testContext.priorInfo.playersStrong`` entries
+carry only ``off_adj_ppp``, no ``def_adj_ppp``) plus every hand-transcribed
+``.toFixed`` literal (``playerPossPcts``, the 3-iteration ``prevAttempts``,
+``ridgeLambda == "1.536"``, and the ``rapmAdjPpp``/``rapmRawAdjPpp`` arrays
+for both sides).
+
 See ``tests/fixtures/hoop_explorer/README.md``'s classification map for the
 full accounting of ``RapmUtils.test.ts``'s 7 ``test()`` blocks -- this module
-covers blocks 1-3 (``buildPlayerContext``/``calcPlayerWeights``/
-``calcLineupOutputs``) plus a from-scratch micro-case for Task 3.4's solve
-primitives; blocks 4-7 (``pickRidgeRegression`` onward) belong to
-Tasks 3.5-3.6.
+covers blocks 1-4 (``buildPlayerContext``/``calcPlayerWeights``/
+``calcLineupOutputs``/``pickRidgeRegression``) plus a from-scratch micro-case
+for Task 3.4's solve primitives; blocks 5-7 (``injectRapmIntoPlayers``
+onward) belong to Task 3.6.
 """
 
 from __future__ import annotations
@@ -73,6 +95,7 @@ from sportsdataverse.mbb.mbb_lineup_stats import lineup_to_team_report
 from sportsdataverse.mbb.mbb_rapm import (
     DEFAULT_RAPM_CONFIG,
     build_player_context,
+    build_weak_prior_from_rapm,
     calc_lineup_outputs,
     calc_player_weights,
     calc_slow_pseudo_inverse,
@@ -80,12 +103,14 @@ from sportsdataverse.mbb.mbb_rapm import (
     calculate_rapm,
     calculate_residual_error,
     calculate_sd_rapm,
+    pick_ridge_regression,
     slow_regression,
 )
 from tests.mbb._hoop_explorer_replay import (
     first_lineup_list,
     insert_old_values,
     load_inputs,
+    load_rapm_inputs,
     load_rapm_snap,
     load_rating_inputs,
 )
@@ -468,3 +493,279 @@ def test_calculate_sd_rapm_zero_dof_raises() -> None:
     convention (unguarded division, Python-raises vs JS-Infinity/NaN)."""
     with pytest.raises(ZeroDivisionError):
         calculate_sd_rapm(np.array(_MICRO_PARAM_ERRS), _MICRO_ERR_SQ, num_lineups=2, num_players=2)
+
+
+# ---------------------------------------------------------------------------
+# Task 3.5 -- pickRidgeRegression (RapmUtils.test.ts:631-772), the "single
+# strongest oracle gate in the file" (classification map item 4).
+#
+# ``semiRealRapmResults`` (testOffWeights/testDefWeights/testContext) is NOT
+# vendorable (see the module docstring's "Task 3.5" paragraph) -- hand
+# -transcribed verbatim from ``RapmUtils.test.ts:281-436`` below.
+# ``reducedFilteredLineups`` (the vendored 31-row lineup array
+# ``testContext.filteredLineups`` closes over) IS vendored, in
+# ``rapm_utils_inputs.json`` -- see :func:`load_rapm_inputs`.
+# ---------------------------------------------------------------------------
+
+
+def _empty_indiv() -> dict:
+    """Replay of jest's ``StatModels.emptyIndiv()`` call sites inside
+    ``semiRealRapmResults.testContext.removedPlayers`` (``RapmUtils.test.ts:358-363``).
+    """
+    return {"key": "empty", "doc_count": 0}
+
+
+_SEMI_REAL_COL_TO_PLAYER = [
+    "Smith, Jalen",
+    "Cowan, Anthony",
+    "Wiggins, Aaron",
+    "Morsell, Darryl",
+    "Ayala, Eric",
+    "Scott, Donta",
+    "Lindo Jr., Ricky",
+    "Smith Jr., Serrel",
+]
+
+# ``semiRealRapmResults.testOffWeights`` (``RapmUtils.test.ts:283-316``) --
+# 31 filtered-lineup rows + 1 trailing "unbiasing observation" row (since
+# ``testContext.unbiasWeight == 2``, this row is what
+# ``pick_ridge_regression``'s ``build_usage_vector`` reads back out as
+# ``player_poss_pcts``, see that function's own docstring).
+_SEMI_REAL_TEST_OFF_WEIGHTS = [
+    [0.542, 0.542, 0.542, 0.542, 0.542, 0, 0, 0],
+    [0.3933, 0.3933, 0.3933, 0.3933, 0, 0.3933, 0, 0],
+    [0.3818, 0.3818, 0.3818, 0, 0.3818, 0.3818, 0, 0],
+    [0.3599, 0.3599, 0, 0.3599, 0.3599, 0.3599, 0, 0],
+    [0.2124, 0.2124, 0.2124, 0, 0.2124, 0, 0.2124, 0],
+    [0.1804, 0.1804, 0.1804, 0.1804, 0, 0, 0.1804, 0],
+    [0.1804, 0, 0.1804, 0.1804, 0.1804, 0.1804, 0, 0],
+    [0.1677, 0.1677, 0.1677, 0, 0, 0.1677, 0, 0.1677],
+    [0.1387, 0.1387, 0.1387, 0, 0, 0, 0.1387, 0.1387],
+    [0.1216, 0.1216, 0.1216, 0.1216, 0, 0, 0, 0.1216],
+    [0.1216, 0.1216, 0, 0.1216, 0.1216, 0, 0.1216, 0],
+    [0.1017, 0, 0.1017, 0.1017, 0.1017, 0, 0.1017, 0],
+    [0.1017, 0, 0.1017, 0.1017, 0.1017, 0, 0, 0.1017],
+    [0.098, 0.098, 0, 0.098, 0, 0.098, 0, 0.098],
+    [0.0942, 0.0942, 0, 0.0942, 0.0942, 0, 0, 0.0942],
+    [0, 0.086, 0.086, 0.086, 0, 0.086, 0.086, 0],
+    [0, 0.0816, 0.0816, 0.0816, 0.0816, 0.0816, 0, 0],
+    [0, 0.0769, 0.0769, 0, 0.0769, 0.0769, 0.0769, 0],
+    [0.0719, 0, 0.0719, 0, 0.0719, 0, 0.0719, 0.0719],
+    [0.0544, 0, 0.0544, 0, 0.0544, 0.0544, 0, 0.0544],
+    [0, 0, 0.0544, 0.0544, 0.0544, 0.0544, 0, 0.0544],
+    [0.0544, 0, 0, 0.0544, 0.0544, 0.0544, 0, 0.0544],
+    [0.0544, 0, 0, 0, 0.0544, 0.0544, 0.0544, 0.0544],
+    [0, 0.0471, 0.0471, 0.0471, 0.0471, 0, 0.0471, 0],
+    [0.0471, 0.0471, 0, 0.0471, 0, 0, 0.0471, 0.0471],
+    [0.0471, 0.0471, 0, 0, 0.0471, 0.0471, 0, 0.0471],
+    [0.0471, 0.0471, 0.0471, 0, 0.0471, 0, 0, 0.0471],
+    [0.0384, 0, 0, 0.0384, 0.0384, 0, 0.0384, 0.0384],
+    [0, 0.0272, 0.0272, 0.0272, 0, 0, 0.0272, 0.0272],
+    [0, 0.0272, 0, 0.0272, 0.0272, 0.0272, 0, 0.0272],
+    [0.0272, 0.0272, 0, 0, 0.0272, 0, 0.0272, 0.0272],
+    [1.9467, 1.8564, 1.6476, 1.4789, 1.4611, 1.0703, 0.3019, 0.2368],
+]
+
+# ``semiRealRapmResults.testDefWeights`` (``RapmUtils.test.ts:318-351``).
+_SEMI_REAL_TEST_DEF_WEIGHTS = [
+    [0.5342, 0.5342, 0.5342, 0.5342, 0.5342, 0, 0, 0],
+    [0.3936, 0.3936, 0.3936, 0.3936, 0, 0.3936, 0, 0],
+    [0.3782, 0.3782, 0.3782, 0, 0.3782, 0.3782, 0, 0],
+    [0.3652, 0.3652, 0, 0.3652, 0.3652, 0.3652, 0, 0],
+    [0.2073, 0.2073, 0.2073, 0, 0.2073, 0, 0.2073, 0],
+    [0.1846, 0.1846, 0.1846, 0.1846, 0, 0, 0.1846, 0],
+    [0.1806, 0, 0.1806, 0.1806, 0.1806, 0.1806, 0, 0],
+    [0.1656, 0.1656, 0.1656, 0, 0, 0.1656, 0, 0.1656],
+    [0.1388, 0.1388, 0.1388, 0, 0, 0, 0.1388, 0.1388],
+    [0.1155, 0.1155, 0.1155, 0.1155, 0, 0, 0, 0.1155],
+    [0.1186, 0.1186, 0, 0.1186, 0.1186, 0, 0.1186, 0],
+    [0.1089, 0, 0.1089, 0.1089, 0.1089, 0, 0.1089, 0],
+    [0.1155, 0, 0.1155, 0.1155, 0.1155, 0, 0, 0.1155],
+    [0.1018, 0.1018, 0, 0.1018, 0, 0.1018, 0, 0.1018],
+    [0.0903, 0.0903, 0, 0.0903, 0.0903, 0, 0, 0.0903],
+    [0, 0.086, 0.086, 0.086, 0, 0.086, 0.086, 0],
+    [0, 0.077, 0.077, 0.077, 0.077, 0.077, 0, 0],
+    [0, 0.072, 0.072, 0, 0.072, 0.072, 0.072, 0],
+    [0.086, 0, 0.086, 0, 0.086, 0, 0.086, 0.086],
+    [0.0608, 0, 0.0608, 0, 0.0608, 0.0608, 0, 0.0608],
+    [0, 0, 0.0608, 0.0608, 0.0608, 0.0608, 0, 0.0608],
+    [0.0608, 0, 0, 0.0608, 0.0608, 0.0608, 0, 0.0608],
+    [0.0544, 0, 0, 0, 0.0544, 0.0544, 0.0544, 0.0544],
+    [0, 0.0544, 0.0544, 0.0544, 0.0544, 0, 0.0544, 0],
+    [0.0544, 0.0544, 0, 0.0544, 0, 0, 0.0544, 0.0544],
+    [0.0471, 0.0471, 0, 0, 0.0471, 0.0471, 0, 0.0471],
+    [0.0544, 0.0544, 0.0544, 0, 0.0544, 0, 0, 0.0544],
+    [0.0385, 0, 0, 0.0385, 0.0385, 0, 0.0385, 0.0385],
+    [0, 0.0272, 0.0272, 0.0272, 0, 0, 0.0272, 0.0272],
+    [0, 0.0272, 0, 0.0272, 0.0272, 0.0272, 0, 0.0272],
+    [0.0385, 0.0385, 0, 0, 0.0385, 0, 0.0385, 0.0385],
+    [1.9466, 1.8383, 1.6367, 1.4825, 1.4588, 1.0748, 0.3098, 0.252],
+]
+
+
+def _semi_real_test_context(reduced_filtered_lineups: list[dict]) -> dict:
+    """Replay of ``semiRealRapmResults.testContext`` (``RapmUtils.test.ts:355-436``).
+
+    ``filtered_lineups`` closes over ``reduced_filtered_lineups`` regardless
+    of the ``"off"``/``"def"`` prefix passed in, matching the jest arrow
+    function ``(prefix) => reducedFilteredLineups`` verbatim.
+    """
+    return {
+        "unbias_weight": 2,
+        "removed_players": {
+            "Mitchell, Makhel": [0.21, 0.01, _empty_indiv()],
+            "Tomaic, Joshua": [0.149, 0.02, _empty_indiv()],
+            "Marial, Chol": [0.0208, 0.0208, _empty_indiv()],
+            "Mona, Reese": [0.042, 0.042, _empty_indiv()],
+            "Hart, Hakim": [0.237, 0.0237, _empty_indiv()],
+            "Mitchell, Makhi": [0.264, 0.0264, _empty_indiv()],
+        },
+        "player_to_col": {p: i for i, p in enumerate(_SEMI_REAL_COL_TO_PLAYER)},
+        "col_to_player": list(_SEMI_REAL_COL_TO_PLAYER),
+        "avg_efficiency": 102.4,
+        "num_players": 8,
+        "num_off_lineups": 31,
+        "num_def_lineups": 31,
+        "off_lineup_poss": 1351,
+        "def_lineup_poss": 1349,
+        "prior_info": {
+            "strong_weight": 0.5,
+            "no_weak_prior": False,
+            "use_recursive_weak_prior": False,
+            "include_strong": {},
+            "players_strong": [
+                {"off_adj_ppp": 5.0},
+                {"off_adj_ppp": 4.5},
+                {"off_adj_ppp": 4.0},
+                {"off_adj_ppp": 3.5},
+                {"off_adj_ppp": 3.0},
+                {"off_adj_ppp": 2.5},
+                {"off_adj_ppp": 2.0},
+                {"off_adj_ppp": 2.0},
+            ],
+            "players_weak": [
+                {"off_adj_ppp": 5.0, "def_adj_ppp": -5.0},
+                {"off_adj_ppp": 4.5, "def_adj_ppp": -4.5},
+                {"off_adj_ppp": 4.0, "def_adj_ppp": -4.0},
+                {"off_adj_ppp": 3.5, "def_adj_ppp": -3.5},
+                {"off_adj_ppp": 3.0, "def_adj_ppp": -3.0},
+                {"off_adj_ppp": 2.5, "def_adj_ppp": -2.5},
+                {"off_adj_ppp": 2.0, "def_adj_ppp": -2.0},
+                {"off_adj_ppp": 1.5, "def_adj_ppp": -1.5},
+            ],
+            "key_used": "value",
+            "basis": {"off": 0, "def": 0},
+        },
+        "filtered_lineups": lambda prefix: reduced_filtered_lineups,
+        "team_info": {
+            "key": "teamInfo",
+            "doc_count": 1,
+            "off_adj_ppp": {"value": 112.4},
+            "def_adj_ppp": {"value": 82.4},
+            "off_poss": {"value": 101},
+            "def_poss": {"value": 99},
+        },
+        "config": {"prior_mode": -1, "removal_pct": 0.1, "fixed_regression": -1},
+    }
+
+
+@pytest.fixture(scope="module")
+def rapm_inputs() -> dict:
+    return load_rapm_inputs()
+
+
+def test_build_weak_prior_from_rapm() -> None:
+    """``buildWeakPriorFromRapm`` (``RapmUtils.ts:410-419``) wraps a flat
+    per-player RAPM vector into ``playersWeak``-shaped dicts keyed by
+    ``f"{off_or_def}_adj_ppp"``. Not itself exercised by the oracle (see the
+    function's own docstring for why -- ``useRecursiveWeakPrior`` is
+    ``False`` on ``semiRealRapmResults.testContext``), so covered directly
+    here in isolation.
+    """
+    assert build_weak_prior_from_rapm([5.0, 4.5], "off") == [{"off_adj_ppp": 5.0}, {"off_adj_ppp": 4.5}]
+    assert build_weak_prior_from_rapm([-1.0], "def") == [{"def_adj_ppp": -1.0}]
+
+
+@pytest.mark.parametrize("luck_adjusted", [True, False])
+def test_pick_ridge_regression_matches_oracle(rapm_inputs: dict, luck_adjusted: bool) -> None:
+    """Replay of ``RapmUtils.test.ts:631-772`` (``"RapmUtils - pickRidgeRegression"``),
+    one parametrized case per ``luckAdjusted`` loop iteration (both assert
+    identical numeric literals -- this fixture has no ``old_value`` fields at
+    all, so the ``value``/``old_value`` key-choice doesn't crash or diverge,
+    only exercises the plumbing).
+    """
+    off_weights = np.array(_SEMI_REAL_TEST_OFF_WEIGHTS)
+    def_weights = np.array(_SEMI_REAL_TEST_DEF_WEIGHTS)
+    reduced = rapm_inputs["reducedFilteredLineups"]
+    context = _semi_real_test_context(reduced)
+
+    agg_value_key = "value" if luck_adjusted else "old_value"
+    lineup_value_keys = ("old_value", "old_value") if luck_adjusted else ("value", "value")
+
+    off_results, def_results = pick_ridge_regression(
+        off_weights, def_weights, context, None, False, agg_value_key, lineup_value_keys
+    )
+
+    # Deep-equality adaptive-weight assertions (RapmUtils.test.ts:651-682).
+    # `filtered_lineups` (a lambda) survives `copy.deepcopy` unchanged --
+    # the stdlib `copy` module treats function objects as atomic.
+    context1 = copy.deepcopy(context)
+    context1["prior_info"]["strong_weight"] = -1
+    adaptive_weights1 = [0.5] * len(context["col_to_player"])
+    off_results1, def_results1 = pick_ridge_regression(
+        off_weights, def_weights, context1, adaptive_weights1, False, agg_value_key, lineup_value_keys
+    )
+
+    context2 = copy.deepcopy(context)
+    context2["prior_info"]["strong_weight"] = -1
+    adaptive_weights2 = [0.2] * len(context["col_to_player"])
+    off_results2, def_results2 = pick_ridge_regression(
+        off_weights, def_weights, context2, adaptive_weights2, False, agg_value_key, lineup_value_keys
+    )
+
+    assert off_results1 == off_results  # (same effective adaptive weight, 0.5 == fixed strong_weight)
+    assert off_results2 != off_results  # (0.2 diverges)
+    assert def_results1 == def_results  # (def side: adaptive weights not used, see docstring)
+    assert def_results2 == def_results
+
+    # Hand-checked literals (RapmUtils.test.ts:686-770).
+    assert [f"{v:.2f}" for v in off_results["player_poss_pcts"]] == [
+        "0.97",
+        "0.93",
+        "0.82",
+        "0.74",
+        "0.73",
+        "0.54",
+        "0.15",
+        "0.12",
+    ]
+    assert [f"{v:.2f}" for v in def_results["player_poss_pcts"]] == [
+        "0.97",
+        "0.92",
+        "0.82",
+        "0.74",
+        "0.73",
+        "0.54",
+        "0.15",
+        "0.13",
+    ]
+
+    off_prev = [{"l": f"{a['ridge_lambda']:.2f}", "ex": f"{a['results'][0]:.2f}"} for a in off_results["prev_attempts"]]
+    assert off_prev == [
+        {"l": "1.10", "ex": "2.83"},
+        {"l": "1.32", "ex": "2.87"},
+        {"l": "1.54", "ex": "2.89"},
+    ]
+    assert f"{off_results['ridge_lambda']:.3f}" == "1.536"
+    assert [f"{v:.2f}" for v in off_results["rapm_adj_ppp"][:3]] == ["2.89", "2.79", "2.67"]
+    assert [f"{v:.2f}" for v in off_results["rapm_raw_adj_ppp"][:3]] == ["4.81", "4.71", "4.59"]
+
+    def_prev = [{"l": f"{a['ridge_lambda']:.2f}", "ex": f"{a['results'][0]:.2f}"} for a in def_results["prev_attempts"]]
+    assert def_prev == [
+        {"l": "1.10", "ex": "-5.86"},
+        {"l": "1.32", "ex": "-5.73"},
+        {"l": "1.54", "ex": "-5.64"},
+    ]
+    assert f"{def_results['ridge_lambda']:.3f}" == "1.536"
+    assert [f"{v:.2f}" for v in def_results["rapm_adj_ppp"][:3]] == ["-5.64", "-4.22", "-4.94"]
+    assert [f"{v:.2f}" for v in def_results["rapm_raw_adj_ppp"][:3]] == ["-5.06", "-3.70", "-4.48"]
