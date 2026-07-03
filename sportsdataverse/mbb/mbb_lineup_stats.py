@@ -162,6 +162,18 @@ from __future__ import annotations
 import re
 from typing import Any
 
+__all__ = [
+    "LineupStatSet",
+    "IGNORE_FIELDS",
+    "SUM_FIELDS",
+    "weighted_avg",
+    "complete_weighted_avg",
+    "build_efficiency_margins",
+    "calculate_aggregated_lineup_stats",
+    "get_stats_diff",
+    "lineup_to_team_report",
+]
+
 LineupStatSet = dict[str, Any]
 
 #: Verbatim from ``LineupUtils.ts:464`` (``ignoreFieldSet``). Fields that

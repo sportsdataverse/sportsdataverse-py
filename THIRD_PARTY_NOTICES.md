@@ -138,10 +138,14 @@ that license's own attribution obligations.
   [`sportsdataverse/mbb/mbb_rapm.py`](sportsdataverse/mbb/mbb_rapm.py). The
   module's remaining matrix-solve / ridge-regression / collinearity-
   diagnostics surface (`calcPlayerWeights`, `calcLineupOutputs`,
-  `pickRidgeRegression`, `injectRapmIntoPlayers`, `calcCollinearityDiag`) is
-  being ported incrementally into the same module; this entry covers the
-  module as a whole. The jest snapshot fixtures and their input literals
-  used as an offline correctness oracle are vendored under
+  `pickRidgeRegression`, `injectRapmIntoPlayers`, `calcCollinearityDiag`) was
+  ported incrementally into the same module across subsequent tasks; this
+  entry covers the module as a whole.
+  [`sportsdataverse/wbb/wbb_rapm.py`](sportsdataverse/wbb/wbb_rapm.py)
+  re-exports the same functions, `TypedDict` types, and constants by
+  reference (no separate copy of the logic). The jest snapshot fixtures and
+  their input literals used as an offline correctness oracle are vendored
+  under
   [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
   are test-only fixtures and are not shipped in the distributed wheel or
   sdist.

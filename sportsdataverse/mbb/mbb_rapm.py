@@ -326,6 +326,37 @@ from sportsdataverse.mbb.mbb_lineup_stats import (
 )
 from sportsdataverse.mbb.mbb_lineup_stats import _get_player_set as _lineup_get_player_set
 
+__all__ = [
+    "ValueKey",
+    "PlayerOnOffStats",
+    "IndivStatSet",
+    "PureStatSet",
+    "PlayerId",
+    "RapmConfig",
+    "DEFAULT_RAPM_CONFIG",
+    "RapmPriorInfo",
+    "RapmPlayerContext",
+    "build_priors",
+    "build_player_context",
+    "calc_player_weights",
+    "calc_lineup_outputs",
+    "slow_regression",
+    "calculate_rapm",
+    "calc_slow_pseudo_inverse",
+    "calculate_predicted_out",
+    "calculate_residual_error",
+    "calculate_sd_rapm",
+    "RapmProcessingInputs",
+    "build_weak_prior_from_rapm",
+    "apply_weak_priors",
+    "pick_ridge_regression",
+    "AFFECTED_PARTIAL_FIELDNAMES",
+    "ON_OFF_REPORT_REPLACEMENT_KEYS",
+    "inject_rapm_into_players",
+    "RapmPreProcDiagnostics",
+    "calc_collinearity_diag",
+]
+
 #: ``ValueKey`` (``RapmUtils.ts:121``) -- selects whether prior/aggregation
 #: math reads a stat's luck-adjusted ``old_value`` or its raw ``value``.
 ValueKey = Literal["value", "old_value"]

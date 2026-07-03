@@ -359,6 +359,27 @@ from typing import Any
 
 from sportsdataverse.mbb.mbb_lineup_stats import LineupStatSet, _field_val, _num
 
+__all__ = [
+    "ManualOverride",
+    "OffShotInfoBreakdown",
+    "OffAdjShotBreakdown",
+    "OffLuckShotInfo3P",
+    "OffLuckAdj3P",
+    "OffLuckShotTypeAndAdj3P",
+    "OffLuckAdjustmentDiags",
+    "DefLuckAdjustmentDiags",
+    "LUCK_PCT",
+    "LUCK_AFFECTED_FIELDS",
+    "build_3p_shot_info",
+    "build_adjusted_3p",
+    "build_exp_3p",
+    "calc_off_team_luck_adj",
+    "calc_off_player_luck_adj",
+    "calc_def_team_luck_adj",
+    "calc_def_player_luck_adj",
+    "inject_luck",
+]
+
 #: ``ManualOverride`` (``FilterModels.ts``) -- a UI-originated per-row
 #: manual-value override: ``{"rowId": str, "statName": str, "newVal":
 #: float, "use": bool}``. Kept as a plain dict alias (TS-verbatim keys),
