@@ -16,6 +16,7 @@ ACTION_TYPE_EVENT: dict[str, str] = {
     "Jump Ball": "jump_ball",
     "period": "period",
     "Instant Replay": "replay",
+    "Violation": "violation",
     "": "other",
 }
 
