@@ -52,6 +52,7 @@ import polars as pl
 
 from sportsdataverse.nfl.model_vars import (
     _EP_POINT_VALUES,
+    SPREAD_TIME_DECAY_EXPONENT,
     TOUCHBACK_YARDLINE_POST_2016,
     TOUCHBACK_YARDLINE_PRE_2016,
     defense_score_vec,
@@ -2906,8 +2907,8 @@ _AIR_YAC_WPA_REQUIRED: tuple[str, ...] = (
 
 def _r_ifelse(
     cond: pl.Expr,
-    if_true: Union[pl.Expr, float],
-    if_false: Union[pl.Expr, float],
+    if_true: Union[pl.Expr, float, None],
+    if_false: Union[pl.Expr, float, None],
 ) -> pl.Expr:
     """``dplyr::if_else`` semantics: a null condition yields null.
 
@@ -3152,21 +3153,28 @@ def _derive_air_yac_epa(df: pl.DataFrame) -> pl.DataFrame:
         epa0 = pl.col("epa").cast(pl.Float64)
         pass_df = pass_df.with_columns(
             # The 4-scenario airEPA (R L632-643): TD in the air / overshot own
-            # endzone / turnover-in-air flip / plain airEP - ep.
-            pl.when((yl - air) <= 0)
-            .then(7.0 - ep0)
-            .when((yl - air) > 99.0)
-            .then(-2.0 - ep0)
-            .when(t == 1)
-            .then(-1.0 * pl.col("_ay_air_ep") - ep0)
-            .otherwise(pl.col("_ay_air_ep") - ep0)
-            .alias("air_epa"),
+            # endzone / turnover-in-air flip / plain airEP - ep.  Nested
+            # _r_ifelse mirrors R's nested base ifelse: a null yardline_100 or
+            # null Turnover_Ind yields null airEPA (NA propagation), not the
+            # innermost fall-through branch.
+            _r_ifelse(
+                (yl - air) <= 0,
+                7.0 - ep0,
+                _r_ifelse(
+                    (yl - air) > 99.0,
+                    -2.0 - ep0,
+                    _r_ifelse(
+                        t == 1,
+                        -1.0 * pl.col("_ay_air_ep") - ep0,
+                        pl.col("_ay_air_ep") - ep0,
+                    ),
+                ),
+            ).alias("air_epa"),
         )
         pass_df = pass_df.with_columns(
-            pl.when(pl.col("two_point_attempt").cast(pl.Float64) == 1)
-            .then(None)
-            .otherwise(pl.col("air_epa"))
-            .alias("air_epa"),
+            # R: ifelse(two_point_attempt == 1, NA, airEPA) — a null flag
+            # yields NA, so _r_ifelse (not a raw when-chain) is required.
+            _r_ifelse(pl.col("two_point_attempt").cast(pl.Float64) == 1, None, pl.col("air_epa")).alias("air_epa"),
         )
         pass_df = pass_df.with_columns((epa0 - pl.col("air_epa")).alias("yac_epa"))
         zero_yac = (
@@ -3175,8 +3183,10 @@ def _derive_air_yac_epa(df: pl.DataFrame) -> pl.DataFrame:
             & (pl.col("complete_pass").cast(pl.Float64) == 1)
         )
         pass_df = pass_df.with_columns(
-            pl.when(zero_yac).then(0.0).otherwise(pl.col("yac_epa")).alias("yac_epa"),
-            pl.when(zero_yac).then(epa0).otherwise(pl.col("air_epa")).alias("air_epa"),
+            # R base ifelse: a truly-null condition (e.g. null
+            # yards_after_catch on a completion) yields NA in both columns.
+            _r_ifelse(zero_yac, 0.0, pl.col("yac_epa")).alias("yac_epa"),
+            _r_ifelse(zero_yac, epa0, pl.col("air_epa")).alias("air_epa"),
         )
         merged = df.join(
             pass_df.select(
@@ -3259,6 +3269,27 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
     if "_ay_idx" in df.columns:
         df = df.drop("_ay_idx")
     df = df.with_row_index("_ay_idx")
+
+    # receive_2h_ko: reuse the frame's column when present (it exists on the
+    # enrich path after _add_wp_aux).  When absent, derive it on the FULL
+    # frame BEFORE the pass filter — the opening defense is the game's first
+    # non-null defteam across ALL plays; deriving it on the pass subset would
+    # misidentify it whenever possession changes before the game's first
+    # qualifying pass (flag inverted game-wide).  Mirrors _add_wp_aux.
+    if "receive_2h_ko" in df.columns:
+        df = df.with_columns(pl.col("receive_2h_ko").cast(pl.Float64).alias("_ay_r2k"))
+    elif "qtr" in df.columns and "defteam" in df.columns:
+        df = df.with_columns(
+            pl.when(
+                (pl.col("qtr") <= 2) & (pl.col("posteam") == pl.col("defteam").drop_nulls().first().over("game_id"))
+            )
+            .then(1.0)
+            .otherwise(0.0)
+            .alias("_ay_r2k")
+        )
+    else:
+        df = df.with_columns(pl.lit(0.0).alias("_ay_r2k"))
+
     pass_df = df.filter(pl.col("air_yards").is_not_null() & (pl.col("play_type") == "pass"))
 
     if pass_df.height > 0:
@@ -3278,24 +3309,15 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
             if "elapsed_share" in pass_df.columns
             else ((3600.0 - gsr) / 3600.0).clip(0.0, 1.0)
         )
-        if "receive_2h_ko" in pass_df.columns:
-            receive_2h_ko = pl.col("receive_2h_ko").cast(pl.Float64)
-        elif "qtr" in pass_df.columns and "defteam" in pass_df.columns:
-            receive_2h_ko = (
-                pl.when(
-                    (pl.col("qtr") <= 2) & (pl.col("posteam") == pl.col("defteam").drop_nulls().first().over("game_id"))
-                )
-                .then(1.0)
-                .otherwise(0.0)
-            )
-        else:
-            receive_2h_ko = pl.lit(0.0)
+        receive_2h_ko = pl.col("_ay_r2k")
 
         pass_df = pass_df.with_columns(
             _r_ifelse((down == 4) & (air < tg), 1.0, 0.0).alias("_ay_turnover"),
             (pl.col("half_seconds_remaining").cast(pl.Float64) - _PASS_TIME_ELAPSED).alias("_ay_half_seconds"),
             (gsr - _PASS_TIME_ELAPSED).alias("_ay_game_seconds"),
-            (pl.col("score_differential").cast(pl.Float64) / ((-4.0 * elapsed_share).exp())).alias("_ay_dtr"),
+            (
+                pl.col("score_differential").cast(pl.Float64) / ((SPREAD_TIME_DECAY_EXPONENT * elapsed_share).exp())
+            ).alias("_ay_dtr"),
         )
         t = pl.col("_ay_turnover")
         pass_df = pass_df.with_columns(
@@ -3335,17 +3357,13 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
         wpa0 = pl.col("wpa").cast(pl.Float64)
         pass_df = pass_df.with_columns((pl.col("_ay_air_wp") - wp0).alias("air_wpa"))
         pass_df = pass_df.with_columns(
-            pl.when(pl.col("two_point_attempt").cast(pl.Float64) == 1)
-            .then(None)
-            .otherwise(pl.col("air_wpa"))
-            .alias("air_wpa"),
+            # R: ifelse(two_point_attempt == 1, NA, x) on BOTH columns — a
+            # null flag yields NA, so _r_ifelse (not a raw when-chain).
+            _r_ifelse(pl.col("two_point_attempt").cast(pl.Float64) == 1, None, pl.col("air_wpa")).alias("air_wpa"),
         )
         pass_df = pass_df.with_columns((wpa0 - pl.col("air_wpa")).alias("yac_wpa"))
         pass_df = pass_df.with_columns(
-            pl.when(pl.col("two_point_attempt").cast(pl.Float64) == 1)
-            .then(None)
-            .otherwise(pl.col("yac_wpa"))
-            .alias("yac_wpa"),
+            _r_ifelse(pl.col("two_point_attempt").cast(pl.Float64) == 1, None, pl.col("yac_wpa")).alias("yac_wpa"),
         )
         zero_yac = (
             (pl.col("penalty").cast(pl.Float64) == 0)
@@ -3353,8 +3371,9 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
             & (pl.col("complete_pass").cast(pl.Float64) == 1)
         )
         pass_df = pass_df.with_columns(
-            pl.when(zero_yac).then(0.0).otherwise(pl.col("yac_wpa")).alias("yac_wpa"),
-            pl.when(zero_yac).then(wpa0).otherwise(pl.col("air_wpa")).alias("air_wpa"),
+            # R base ifelse: a truly-null condition yields NA in both columns.
+            _r_ifelse(zero_yac, 0.0, pl.col("yac_wpa")).alias("yac_wpa"),
+            _r_ifelse(zero_yac, wpa0, pl.col("air_wpa")).alias("air_wpa"),
         )
         merged = df.join(
             pass_df.select(
@@ -3368,7 +3387,7 @@ def _derive_air_yac_wpa(df: pl.DataFrame) -> pl.DataFrame:
     else:
         merged = _null_air_yac(df, ("air_wpa", "yac_wpa"))
 
-    return _air_yac_family_block(merged, kind="wpa").drop("_ay_idx")
+    return _air_yac_family_block(merged, kind="wpa").drop("_ay_idx", "_ay_r2k")
 
 
 def _derive_qbr_epa(df: pl.DataFrame) -> pl.DataFrame:

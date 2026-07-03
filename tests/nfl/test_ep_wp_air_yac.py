@@ -465,6 +465,128 @@ def test_air_wpa_short_circuit_all_null_air_yards(stub_air_scorers: None) -> Non
 
 
 # ---------------------------------------------------------------------------
+# dplyr / base-R NA-propagation fidelity (the _r_ifelse sites)
+# ---------------------------------------------------------------------------
+
+
+def test_air_epa_null_yardline_yields_null(stub_air_scorers: None) -> None:
+    """R's nested ifelse propagates NA: null yardline_100 -> null airEPA."""
+    df = _frame(
+        [
+            dict(yardline_100=None, air_yards=5.0, ydstogo=10.0, down=1.0, ep=1.0, epa=0.5, complete_pass=0.0),
+            dict(yardline_100=50.0, air_yards=5.0, ydstogo=10.0, down=1.0, ep=1.0, epa=0.5, complete_pass=0.0),
+        ]
+    )
+    out = _derive_air_yac_epa(df)
+    assert _col(out, "air_epa", 1) is None
+    assert _col(out, "yac_epa", 1) is None
+    # the well-formed sibling row still scores
+    assert _col(out, "air_epa", 2) is not None
+
+
+def test_null_two_point_flag_yields_null(stub_air_scorers: None) -> None:
+    """R: ifelse(two_point_attempt == 1, NA, x) — a null flag yields NA."""
+    df = _frame(
+        [
+            dict(
+                two_point_attempt=None,
+                yardline_100=50.0,
+                air_yards=5.0,
+                ydstogo=10.0,
+                down=1.0,
+                ep=1.0,
+                epa=0.5,
+                complete_pass=1.0,
+                yards_after_catch=5.0,
+                wp=0.5,
+                wpa=0.05,
+            ),
+        ]
+    )
+    out_epa = _derive_air_yac_epa(df)
+    assert out_epa["air_epa"][0] is None
+    assert out_epa["yac_epa"][0] is None
+    out_wpa = _derive_air_yac_wpa(df)
+    assert out_wpa["air_wpa"][0] is None
+    assert out_wpa["yac_wpa"][0] is None
+
+
+def test_zero_yac_null_condition_yields_null(stub_air_scorers: None) -> None:
+    """R base ifelse on the zero-YAC override: null yards_after_catch on a
+    completion (penalty == 0 & complete == 1 & yac NA -> NA cond) NAs both."""
+    df = _frame(
+        [
+            dict(
+                yardline_100=50.0,
+                air_yards=5.0,
+                ydstogo=10.0,
+                down=1.0,
+                ep=1.0,
+                epa=0.5,
+                complete_pass=1.0,
+                yards_after_catch=None,
+                penalty=0.0,
+                wp=0.5,
+                wpa=0.05,
+            ),
+        ]
+    )
+    out_epa = _derive_air_yac_epa(df)
+    assert out_epa["air_epa"][0] is None
+    assert out_epa["yac_epa"][0] is None
+    out_wpa = _derive_air_yac_wpa(df)
+    assert out_wpa["air_wpa"][0] is None
+    assert out_wpa["yac_wpa"][0] is None
+
+
+def test_receive_2h_ko_derived_on_full_frame(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The receive_2h_ko fallback must read the game's TRUE opening defense.
+
+    Possession changes before the game's first qualifying pass: play 1 is a
+    rush by AAA (so the opening defense — the 2H-kickoff receiver — is BBB);
+    the first pass is thrown by BBB.  Deriving the flag on the pass subset
+    would see first defteam == AAA and emit 0.0 game-wide; the full-frame
+    derivation must emit 1.0 for BBB's first-half pass.
+    """
+
+    def fake_cep(df: pl.DataFrame, *, return_as_pandas: bool = False) -> pl.DataFrame:
+        return df.with_columns(((50.0 - pl.col("yardline_100").cast(pl.Float64)) / 10.0).alias("ep"))
+
+    captured: dict = {}
+
+    def fake_wp_naive(feat: pl.DataFrame) -> np.ndarray:
+        captured["r2k"] = feat["receive_2h_ko"].to_list()
+        return np.full(feat.height, 0.55, dtype=np.float64)
+
+    monkeypatch.setattr(ep_wp, "calculate_expected_points", fake_cep)
+    monkeypatch.setattr(ep_wp, "_score_wp_naive", fake_wp_naive)
+
+    df = _frame(
+        [
+            dict(play_type="run", posteam="AAA", defteam="BBB", ep=1.0, epa=0.2),
+            dict(
+                posteam="BBB",
+                defteam="AAA",
+                yardline_100=60.0,
+                air_yards=8.0,
+                ydstogo=10.0,
+                down=1.0,
+                ep=1.0,
+                epa=0.4,
+                complete_pass=1.0,
+                yards_after_catch=3.0,
+                wp=0.5,
+                wpa=0.05,
+            ),
+        ]
+    ).drop("receive_2h_ko")
+    out = _derive_air_yac_wpa(df)
+    assert captured["r2k"] == [1.0]
+    # the temp derivation column must not leak into the output
+    assert "_ay_r2k" not in out.columns
+
+
+# ---------------------------------------------------------------------------
 # Running totals — add_ep_variables / add_wp_variables blocks
 # ---------------------------------------------------------------------------
 
