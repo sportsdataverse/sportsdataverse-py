@@ -543,10 +543,21 @@ def _install_fixture_fetchers(
     rotation_raises: bool = False,
     rotation_empty: bool = False,
     rotation_partial: bool = False,
+    quarter_box_raises: bool = False,
 ) -> dict[str, int]:
     root = FXROOT / game_id
     monkeypatch.setattr(npm, "_fetch_pbp", lambda g, lg: json.loads((root / "playbyplayv3.json").read_text()))
     monkeypatch.setattr(npm, "_fetch_box", lambda g, lg: json.loads((root / "boxscoretraditionalv3.json").read_text()))
+
+    def _box_periods(g: str, n: int, **kwargs: object) -> dict[int, dict]:
+        # Stubbed so "auto"'s quarter_box step (interposed between rotation and
+        # pbp, Sub-project 1 Task 3) never makes a real network call in these
+        # pre-existing rotation-fallback tests.
+        if quarter_box_raises:
+            raise RuntimeError("boxscoretraditionalv3 range fetch throttled")
+        return {int(k): v for k, v in json.loads((root / "boxv3_periods.json").read_text()).items()}
+
+    monkeypatch.setattr(npm, "_fetch_box_periods", _box_periods)
     calls: dict[str, int] = {"rotation": 0}
 
     def _rot(g: str, lg: str) -> dict:
@@ -579,10 +590,15 @@ def test_lineup_source_pbp_skips_rotation(monkeypatch: pytest.MonkeyPatch) -> No
 
 
 def test_lineup_source_auto_falls_back_on_rotation_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Auto mode falls to quarter_box on a rotation failure (Sub-project 1 Task 3:
+
+    the auto chain is rotation -> quarter_box -> pbp, so a healthy quarter_box
+    fetch is preferred over the final pbp fallback).
+    """
     calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_raises=True)
     df = npm.nba_possessions("0022200001", lineup_source="auto")
-    assert calls["rotation"] == 1  # tried rotation, then fell back
-    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert calls["rotation"] == 1  # tried rotation, then fell to quarter_box
+    assert df["lineup_source"].unique().to_list() == ["quarter_box"]
 
 
 def test_lineup_source_rotation_default_marks_rotation(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -610,30 +626,107 @@ def test_pbp_source_reconciles_boxscore_points(monkeypatch: pytest.MonkeyPatch, 
 
 
 def test_lineup_source_auto_falls_back_on_empty_stints(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Auto mode falls to quarter_box (not straight to pbp) when rotation is empty."""
     calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_empty=True)
     df = npm.nba_possessions("0022200001", lineup_source="auto")
-    assert calls["rotation"] == 1  # tried rotation, got empty stints, fell back
-    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert calls["rotation"] == 1  # tried rotation, got empty stints, fell to quarter_box
+    assert df["lineup_source"].unique().to_list() == ["quarter_box"]
     assert df.height > 0
 
 
 def test_lineup_source_auto_falls_back_on_partial_rotation(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Auto mode falls back to pbp when rotation has one-sided-null coverage.
+    """Auto mode falls to quarter_box when rotation has one-sided-null coverage.
 
     A gamerotation payload where one team's stints are missing (AwayTeam
     rowSet=[]) produces a non-empty on-court frame with all away_player_*
     slots null — the coverage guard detects >2% null rows and raises, so
-    "auto" falls back to the complete pbp reconstruction.
+    "auto" tries the next link in the rotation -> quarter_box -> pbp chain
+    (Sub-project 1 Task 3), which here succeeds.
     """
     calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_partial=True)
     df = npm.nba_possessions("0022200001", lineup_source="auto")
-    assert calls["rotation"] == 1  # tried rotation, detected partial coverage, fell back
-    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert calls["rotation"] == 1  # tried rotation, detected partial coverage, fell to quarter_box
+    assert df["lineup_source"].unique().to_list() == ["quarter_box"]
     assert df.height > 0
-    # pbp fallback must produce fully-populated off/def slots (no null player slots)
+    # quarter_box fallback must produce fully-populated off/def slots (no null player slots)
     off_def_cols = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
     for col in off_def_cols:
-        assert df[col].null_count() == 0, f"pbp fallback left nulls in {col}"
+        assert df[col].null_count() == 0, f"quarter_box fallback left nulls in {col}"
+
+
+def test_lineup_source_auto_falls_back_to_pbp_when_quarter_box_also_fails(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Auto mode falls all the way to pbp when BOTH rotation and quarter_box fail."""
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_raises=True, quarter_box_raises=True)
+    df = npm.nba_possessions("0022200001", lineup_source="auto")
+    assert calls["rotation"] == 1
+    assert df["lineup_source"].unique().to_list() == ["pbp"]
+    assert df.height > 0
+
+
+# ---------------------------------------------------------------------------
+# Sub-project 1 Task 3: quarter_box lineup source on nba_possessions
+# ---------------------------------------------------------------------------
+
+
+def _boxv3_periods(game_id: str) -> dict[int, dict]:
+    p = FXROOT / game_id / "boxv3_periods.json"
+    return {int(k): v for k, v in json.loads(p.read_text()).items()}
+
+
+def test_nba_possessions_quarter_box(monkeypatch: pytest.MonkeyPatch) -> None:
+    game_id = "0022300001"
+    calls = _install_fixture_fetchers(monkeypatch, game_id)
+    monkeypatch.setattr(npm, "_fetch_box_periods", lambda g, n, **k: _boxv3_periods(game_id))
+
+    df = npm.nba_possessions(game_id, lineup_source="quarter_box")
+
+    assert calls["rotation"] == 0  # gamerotation never called for an explicit quarter_box request
+    assert df["lineup_source"].unique().to_list() == ["quarter_box"]
+    assert df.height > 0
+
+    # points reconciliation still holds (offense points sum to the boxscore total)
+    got = {
+        int(r["offense_team_id"]): int(r["points"])
+        for r in df.group_by("offense_team_id").agg(pl.col("points").sum().alias("points")).to_dicts()
+    }
+    oracle = _box_team_points(_box(game_id))
+    for team_id, expected in oracle.items():
+        assert abs(got.get(team_id, 0) - expected) <= 1, f"{game_id} team {team_id}: {got.get(team_id, 0)} != expected"
+
+
+def test_nba_possessions_auto_prefers_quarter_over_pbp(monkeypatch: pytest.MonkeyPatch) -> None:
+    """auto must fall to quarter_box on a rotation failure, NOT straight to pbp."""
+    game_id = "0022300001"
+    calls = _install_fixture_fetchers(monkeypatch, game_id, rotation_raises=True)
+    monkeypatch.setattr(npm, "_fetch_box_periods", lambda g, n, **k: _boxv3_periods(game_id))
+
+    df = npm.nba_possessions(game_id, lineup_source="auto")
+
+    assert calls["rotation"] == 1  # tried rotation, then fell to quarter_box
+    assert df["lineup_source"].unique().to_list() == ["quarter_box"]
+    assert df.height > 0
+
+
+def test_nba_possessions_quarter_box_missing_period_falls_back(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A game with an empty period-box map degrades to pbp seeding internally, per-period.
+
+    The TOP-LEVEL ``lineup_source`` column still records ``"quarter_box"`` — the
+    per-period fallback happens INSIDE
+    ``players_on_court_from_quarter_boxscores`` (never raises), it is not a
+    failure of the ``quarter_box`` producer as a whole, so ``nba_possessions``
+    does not escalate to a different top-level producer.
+    """
+    game_id = "0022300001"
+    _install_fixture_fetchers(monkeypatch, game_id)
+    monkeypatch.setattr(npm, "_fetch_box_periods", lambda g, n, **k: {})  # no period boxes
+
+    df = npm.nba_possessions(game_id, lineup_source="quarter_box")
+
+    assert df.height > 0
+    assert set(df["lineup_source"].unique().to_list()) <= {"quarter_box"}
+    off_def_cols = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
+    for col in off_def_cols:
+        assert df[col].null_count() == 0, f"quarter_box fallback left nulls in {col}"
 
 
 # ---------------------------------------------------------------------------

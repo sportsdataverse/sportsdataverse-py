@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 import pandas as pd
 import polars as pl
@@ -1025,6 +1025,55 @@ def _fetch_box(game_id: str, league_id: str = "00") -> dict:
     return nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False)
 
 
+def _fetch_box_periods(
+    game_id: str,
+    n_periods: int,
+    *,
+    league_id: str = "00",
+    proxy_url: Optional[str] = None,
+) -> Dict[int, dict]:
+    """Fetch per-period range-boxscores (one ``boxscoretraditionalv3`` call per period).
+
+    Each period's payload is captured at that period's opening-tick window
+    (:func:`~sportsdataverse.nba.nba_lineups._period_start_range`, the Task 1
+    quarter-box grounding window) via
+    :data:`~sportsdataverse.nba.nba_lineups._QUARTER_BOX_RANGE_TYPE`. Feeds
+    :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_quarter_boxscores`
+    for ``lineup_source="quarter_box"``.
+
+    Module-level so tests can monkeypatch it, mirroring :func:`_fetch_pbp` /
+    :func:`_fetch_rotation` / :func:`_fetch_box`.
+
+    Args:
+        game_id: Ten-character NBA game identifier.
+        n_periods: Number of periods to fetch, 1-indexed (e.g. ``4`` for a
+            regulation game with no overtime).
+        league_id: League identifier (accepted for API symmetry; not
+            forwarded to ``nba_stats_boxscoretraditionalv3``, which has no
+            ``league_id`` parameter).
+        proxy_url: Optional proxy URL forwarded to the underlying transport.
+
+    Returns:
+        ``{period: raw_boxscoretraditionalv3_range_payload}`` — one entry for
+        every period from 1 to *n_periods* inclusive.
+    """
+    from sportsdataverse.nba.nba_lineups import _QUARTER_BOX_RANGE_TYPE, _period_start_range
+    from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3
+
+    out: Dict[int, dict] = {}
+    for period in range(1, n_periods + 1):
+        start_range, end_range = _period_start_range(period)
+        out[period] = nba_stats_boxscoretraditionalv3(
+            game_id=game_id,
+            start_range=start_range,
+            end_range=end_range,
+            range_type=_QUARTER_BOX_RANGE_TYPE,
+            return_parsed=False,
+            proxy_url=proxy_url,
+        )
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Public fetcher
 # ---------------------------------------------------------------------------
@@ -1040,20 +1089,23 @@ def nba_possessions(
     league_id: str = "00",
     *,
     lineup_source: str = "auto",
+    period_boxscores: Optional[Dict[int, dict]] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Fetch and build the possession-level lineup stint matrix for a single game.
 
-    Makes two or three live network calls (play-by-play v3, optionally game
-    rotation, and boxscore traditional v3) then chains
+    Makes two to four live network calls (play-by-play v3, optionally game
+    rotation, boxscore traditional v3, and optionally one
+    ``boxscoretraditionalv3`` range call per period) then chains
     :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`,
     :func:`~sportsdataverse.nba.nba_lineups.boxscore_home_away`,
     the selected on-court lineup producer,
     :func:`build_possessions`, and :func:`attach_possession_lineups` to
     produce the RAPM stint design matrix.
 
-    The three module-level fetchers (:func:`_fetch_pbp`, :func:`_fetch_rotation`,
-    :func:`_fetch_box`) are monkeypatchable for offline tests.
+    The four module-level fetchers (:func:`_fetch_pbp`, :func:`_fetch_rotation`,
+    :func:`_fetch_box`, :func:`_fetch_box_periods`) are monkeypatchable for
+    offline tests.
 
     Args:
         game_id: Ten-character NBA game identifier (e.g. ``"0022200001"``).
@@ -1068,14 +1120,31 @@ def nba_possessions(
               :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`.
               **Strict mode**: raises :exc:`ValueError` if the gamerotation
               endpoint returns no on-court data; there is no fallback.
-            - ``"pbp"`` — skip the rotation fetch entirely and use
+            - ``"quarter_box"`` — fetch one ``boxscoretraditionalv3`` range
+              payload per period (or use *period_boxscores* if supplied) and
+              use
+              :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_quarter_boxscores`
+              (exact-seeds a period from its range-box when unambiguous,
+              otherwise falls back to the same pbp inference as ``"pbp"`` —
+              never raises on a missing/empty period map, so this mode has
+              no strict failure case of its own).
+            - ``"pbp"`` — skip the rotation and per-period-box fetches
+              entirely and use
               :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_pbp`
               (~96.7 % agreement with rotation; requires no extra network call).
-            - ``"auto"`` (default) — try rotation first; if the rotation fetch
-              raises *or* produces an empty on-court frame, fall back to pbp.
+            - ``"auto"`` (default) — try rotation first; on failure or an
+              empty/degraded on-court frame, try quarter_box; on failure or an
+              empty on-court frame there, fall back to pbp.
 
             The returned frame gains a constant ``lineup_source`` column
-            (``"rotation"`` or ``"pbp"``) recording which producer was used.
+            (``"rotation"``, ``"quarter_box"``, or ``"pbp"``) recording which
+            producer was used.
+        period_boxscores: Optional pre-fetched ``{period:
+            raw_boxscoretraditionalv3_range_payload}`` map for
+            ``lineup_source="quarter_box"`` (or the ``"auto"`` chain's
+            quarter_box step). When ``None`` (default) and quarter_box is
+            reached, :func:`_fetch_box_periods` fetches it. Ignored for
+            ``"rotation"``/``"pbp"``.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of :class:`polars.DataFrame`.
 
@@ -1097,6 +1166,11 @@ def nba_possessions(
 
             df_pbp = nba_possessions("0022200001", lineup_source="pbp")
             print(df_pbp["lineup_source"].unique())
+
+        Quarter-box lineups (per-period range-boxscore exact seeding)::
+
+            df_qb = nba_possessions("0022200001", lineup_source="quarter_box")
+            print(df_qb["lineup_source"].unique())
 
         Pandas output::
 
@@ -1124,11 +1198,12 @@ def nba_possessions(
         boxscore_home_away,
         parse_rotation_resultsets,
         players_on_court_from_pbp,
+        players_on_court_from_quarter_boxscores,
         players_on_court_from_rotation,
     )
 
-    if lineup_source not in ("auto", "rotation", "pbp"):
-        raise ValueError(f"lineup_source must be 'auto'|'rotation'|'pbp', got {lineup_source!r}")
+    if lineup_source not in ("auto", "rotation", "pbp", "quarter_box"):
+        raise ValueError(f"lineup_source must be 'auto'|'rotation'|'pbp'|'quarter_box', got {lineup_source!r}")
 
     raw_pbp = _fetch_pbp(game_id, league_id)
     raw_box = _fetch_box(game_id, league_id)
@@ -1155,16 +1230,32 @@ def nba_possessions(
             raise ValueError(f"rotation on-court frame has {_null_row_frac:.1%} rows with null slots")
         return oc, "rotation"
 
+    def _from_quarter_box() -> "tuple[pl.DataFrame, str]":
+        pb = period_boxscores
+        if pb is None:
+            n_periods = int(enh["period"].max() or 0) if not enh.is_empty() else 0
+            pb = _fetch_box_periods(game_id, n_periods, league_id=league_id)
+        oc = players_on_court_from_quarter_boxscores(enh, pb, raw_box, home_team_id=home, away_team_id=away)
+        if oc.is_empty():
+            raise ValueError("quarter_box produced empty on-court frame")
+        return oc, "quarter_box"
+
     if lineup_source == "pbp":
         oc, used = _from_pbp()
     elif lineup_source == "rotation":
         oc, used = _from_rotation()
-    else:  # auto: rotation primary, pbp fallback
+    elif lineup_source == "quarter_box":
+        oc, used = _from_quarter_box()
+    else:  # auto: rotation primary, quarter_box secondary, pbp final fallback
         try:
             oc, used = _from_rotation()
         except Exception as exc:  # noqa: BLE001 - fall back on any rotation failure
-            logger.warning("nba_possessions(%s): rotation failed (%s) -> pbp fallback", game_id, exc)
-            oc, used = _from_pbp()
+            logger.warning("nba_possessions(%s): rotation failed (%s) -> quarter_box fallback", game_id, exc)
+            try:
+                oc, used = _from_quarter_box()
+            except Exception as exc2:  # noqa: BLE001 - fall back on any quarter_box failure
+                logger.warning("nba_possessions(%s): quarter_box failed (%s) -> pbp fallback", game_id, exc2)
+                oc, used = _from_pbp()
 
     poss = build_possessions(enh)
     df = attach_possession_lineups(poss, oc, enh, home_team_id=home).with_columns(pl.lit(used).alias("lineup_source"))
