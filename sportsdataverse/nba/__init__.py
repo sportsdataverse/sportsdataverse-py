@@ -14,10 +14,14 @@ from sportsdataverse.nba.nba_lineups import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_season_compile import compile_nba_season  # noqa: F401
 from sportsdataverse.nba.nba_model_validation import (  # noqa: F401
+    ExternalValidityResult,
     RidgeRapmModel,
     ValidationReport,
-    validate_model,
+    WalkForwardResult,
+    external_validity,
     render_report,
+    validate_model,
+    walk_forward,
 )
 from sportsdataverse.nba.nba_box_logs import box_features, nba_box_logs  # noqa: F401
 from sportsdataverse.nba.nba_spm import (  # noqa: F401
@@ -37,6 +41,15 @@ from sportsdataverse.nba.nba_darko import (  # noqa: F401
     darko_forecast_accuracy,
     fit_aging_curve,
     nba_darko,
+)
+from sportsdataverse.nba.nba_oracle_data import (  # noqa: F401
+    load_darko_dpm,
+    load_dunks_threes_stats,
+    load_epm,
+    load_lebron_daily,
+    load_lebron_season,
+    load_rapm_ryan_davis,
+    normalize_player_name,
 )
 from sportsdataverse.nba.nba_v3_v2_adapter import nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba.nba_possessions import (  # noqa: F401
