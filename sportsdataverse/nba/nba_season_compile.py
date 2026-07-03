@@ -19,7 +19,7 @@ import polars as pl
 _LOG = logging.getLogger(__name__)
 
 #: Bump when the possession pipeline changes in a way that invalidates cached parquet.
-PIPELINE_VERSION: int = 1
+PIPELINE_VERSION: int = 2
 
 _LEAGUE_ID = "00"
 
@@ -33,18 +33,19 @@ def _game_cache_key(game_id: str) -> str:
     return f"{game_id}__v{PIPELINE_VERSION}.parquet"
 
 
-def _game_ids_for_season(season: int, season_type: str) -> List[str]:
-    """Return the (deduped) game ids for a season (monkeypatchable).
+def _season_game_index(season: int, season_type: str) -> pl.DataFrame:
+    """``(game_id, game_date)`` index for a season from leaguegamelog (monkeypatchable).
 
-    ``season`` is the start year (2023 -> "2023-24"). The team-level game log
-    returns two rows per game, so ids are deduplicated (order preserved).
+    One row per game id (the team-level log has two rows per game; first kept).
+    ``game_date`` is parsed from the first 10 chars, tolerating both bare-date
+    and ISO-datetime string forms.
 
     Args:
         season: Season start year (e.g. 2023 for 2023-24).
         season_type: NBA season type string (e.g. ``"Regular Season"``).
 
     Returns:
-        Ordered, deduplicated list of game id strings.
+        Polars DataFrame with ``game_id: Utf8`` and ``game_date: Date``.
     """
     from .nba_schedule import year_to_season
     from .nba_stats import nba_stats_leaguegamelog
@@ -54,9 +55,17 @@ def _game_ids_for_season(season: int, season_type: str) -> List[str]:
         season_type_all_star=season_type,
         league_id=_LEAGUE_ID,
     )
-    if log.is_empty() or "game_id" not in log.columns:
-        return []
-    return log["game_id"].cast(pl.Utf8).unique(maintain_order=True).to_list()
+    if log.is_empty() or "game_id" not in log.columns or "game_date" not in log.columns:
+        return pl.DataFrame(schema={"game_id": pl.Utf8, "game_date": pl.Date})
+    return log.select(
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("game_date").cast(pl.Utf8).str.slice(0, 10).str.to_date("%Y-%m-%d"),
+    ).unique(subset=["game_id"], keep="first", maintain_order=True)
+
+
+def _game_ids_for_season(season: int, season_type: str) -> List[str]:
+    """Return the (deduped) game ids for a season (delegates to :func:`_season_game_index`)."""
+    return _season_game_index(season, season_type)["game_id"].to_list()
 
 
 def _fetch_possessions(game_id: str, league_id: str, *, lineup_source: str = "auto") -> pl.DataFrame:
@@ -93,7 +102,8 @@ def compile_nba_season(
     Discovers game ids, dedupes, then per game loads the cached parquet if present
     (``resume``), else fetches via :func:`_fetch_possessions`, caches it, and sleeps
     ``delay_s`` (throttle; only on live fetches). A game that errors or returns no
-    possessions is logged and skipped (best-effort, never raises). The assembled
+    possessions is logged and skipped (best-effort — a per-game failure never
+    raises; see ``Raises`` for the game_date integrity error). The assembled
     frame is tagged with a ``season`` column.
 
     Args:
@@ -111,7 +121,13 @@ def compile_nba_season(
         return_as_pandas: Return pandas instead of polars.
 
     Returns:
-        The season possession frame (+ ``season`` col). Empty typed frame if no games.
+        The season possession frame (+ ``season`` and ``game_date`` cols). Empty
+        typed frame if no games.
+
+    Raises:
+        ValueError: If any compiled possession's ``game_id`` is missing (or has a
+            null) ``game_date`` in the season index — surfaced as an explicit
+            error rather than silently emitting null dates.
 
     Example:
         Compile the 2023-24 regular season (requires live stats.nba.com access)::
@@ -138,8 +154,9 @@ def compile_nba_season(
     cdir = Path(cache_dir) if cache_dir else _default_cache_dir()
     cdir.mkdir(parents=True, exist_ok=True)
 
+    index = _season_game_index(season, season_type)
     # dedupe preserving order
-    game_ids = list(dict.fromkeys(_game_ids_for_season(season, season_type)))
+    game_ids = list(dict.fromkeys(index["game_id"].to_list()))
 
     frames: List[pl.DataFrame] = []
     total = len(game_ids)
@@ -173,8 +190,12 @@ def compile_nba_season(
         _LOG.info("compiled %s (%d/%d)", gid, i, total)
 
     if frames:
-        out = pl.concat(frames, how="diagonal_relaxed").with_columns(pl.lit(season).alias("season"))
+        out = pl.concat(frames, how="diagonal_relaxed").join(index, on="game_id", how="left")
+        n_missing = int(out["game_date"].null_count())
+        if n_missing:
+            raise ValueError(f"game_date join failed for {n_missing} possessions — season game index incomplete")
+        out = out.with_columns(pl.lit(season).alias("season"))
     else:
-        out = pl.DataFrame(schema={"game_id": pl.Utf8, "season": pl.Int64})
+        out = pl.DataFrame(schema={"game_id": pl.Utf8, "game_date": pl.Date, "season": pl.Int64})
 
     return out.to_pandas() if return_as_pandas else out

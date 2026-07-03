@@ -39,3 +39,7 @@ from sportsdataverse.nba.nba_darko import (  # noqa: F401
     nba_darko,
 )
 from sportsdataverse.nba.nba_v3_v2_adapter import nba_v3_to_v2_pbp  # noqa: F401
+from sportsdataverse.nba.nba_possessions import (  # noqa: F401
+    build_possession_shooting,
+    POSSESSION_SHOOTING_SCHEMA,
+)
