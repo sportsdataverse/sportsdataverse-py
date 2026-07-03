@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NBA — through-date ratings panel, WAR, and single-game BPM (WP4)](#nba--through-date-ratings-panel-war-and-single-game-bpm-wp4)
   - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
   - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
   - [NBA — possession event-detail columns, per-shooter shooting frame, `game_date`](#nba--possession-event-detail-columns-per-shooter-shooting-frame-game_date)
@@ -154,6 +155,13 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NBA — through-date ratings panel, WAR, and single-game BPM (WP4)
+
+- feat(nba): through-date ratings panel (`nba_ratings_panel` + `ratings_as_of`
+  primitive, leakage-free by construction — works with any harness model),
+  WAR layer (`nba_war` + `calibrate_pts_per_win`/`calibrate_replacement_level`
+  calibration helpers), and `nba_bpm(granularity="game")` single-game BPM 2.0.
 
 ### NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)
 
