@@ -10,10 +10,12 @@ import polars as pl
 from sportsdataverse.nba.nba_model_validation import _synthetic_possessions
 from sportsdataverse.nba.nba_rapm import nba_rapm
 from sportsdataverse.nba.nba_rapm_variants import (
+    DECAY_RAPM_SCHEMA,
     ORACLE_RAPM_LAMBDAS,
     _fit_weighted,
     _prepare,
     decay_weights,
+    nba_decay_rapm,
     oracle_rapm_alphas,
 )
 
@@ -81,3 +83,38 @@ def test_oracle_rapm_alphas_scales_by_sample_count_not_player_count():
     # player count. lambda_to_alpha(l, samples) = (l * samples) / 2.0.
     alphas = oracle_rapm_alphas(50_000, ORACLE_RAPM_LAMBDAS)
     assert np.allclose(alphas, [250.0, 1250.0, 2500.0])
+
+
+def _synth_with_dates(seed: int = 1, n_games: int = 20) -> pl.DataFrame:
+    poss = _synth(seed=seed, n_games=n_games)
+    # assign each game a distinct date, oldest game first
+    gids = poss["game_id"].unique(maintain_order=True).to_list()
+    base = datetime.date(2023, 1, 1)
+    dmap = {g: base + datetime.timedelta(days=i) for i, g in enumerate(gids)}
+    return poss.with_columns(pl.col("game_id").replace_strict(dmap, return_dtype=pl.Date).alias("game_date"))
+
+
+def test_decay_rapm_empty_input():
+    out = nba_decay_rapm(pl.DataFrame())
+    assert out.height == 0
+    assert dict(out.schema) == DECAY_RAPM_SCHEMA
+
+
+def test_decay_rapm_asof_none_equals_plain_rapm():
+    poss = _synth_with_dates()
+    dec = nba_decay_rapm(poss, asof=None).sort("player_id")
+    ref = nba_rapm(poss.drop("game_date")).sort("player_id")
+    assert np.allclose(dec["decay_rapm"].to_numpy(), ref["rapm"].to_numpy(), atol=1e-6)
+
+
+def test_decay_rapm_weighting_changes_fit():
+    poss = _synth_with_dates()
+    plain = nba_decay_rapm(poss, asof=None).sort("player_id")
+    asof = poss["game_date"].max()
+    decayed = nba_decay_rapm(poss, asof=asof, half_life_days=5.0).sort("player_id")
+    assert not np.allclose(plain["decay_rapm"].to_numpy(), decayed["decay_rapm"].to_numpy(), atol=1e-3)
+
+
+def test_decay_rapm_schema_and_dtypes():
+    out = nba_decay_rapm(_synth_with_dates())
+    assert dict(out.schema) == DECAY_RAPM_SCHEMA

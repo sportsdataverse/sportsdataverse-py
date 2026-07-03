@@ -37,9 +37,10 @@ ruling above.
 from __future__ import annotations
 
 import datetime
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Union
 
 import numpy as np
+import pandas as pd
 import polars as pl
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
@@ -214,3 +215,129 @@ def _fit_weighted(
     d = -coef[P:] * 100.0
     col_sums = np.asarray(X.sum(axis=0), dtype=np.float64).ravel()
     return o, d, col_sums[:P].astype(np.int64), col_sums[P:].astype(np.int64)
+
+
+#: Output schema for :func:`nba_decay_rapm`.
+DECAY_RAPM_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "o_decay_rapm": pl.Float64,
+    "d_decay_rapm": pl.Float64,
+    "decay_rapm": pl.Float64,
+    "off_poss": pl.Int64,
+    "def_poss": pl.Int64,
+}
+
+
+def _empty(schema: dict[str, pl.DataType]) -> pl.DataFrame:
+    """Zero-row frame with exactly ``schema``."""
+    return pl.DataFrame({c: pl.Series([], dtype=t) for c, t in schema.items()})
+
+
+def nba_decay_rapm(
+    possessions: pl.DataFrame,
+    *,
+    asof: Optional[datetime.date] = None,
+    half_life_days: float = 180.0,
+    alphas: Optional[np.ndarray] = None,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Time-decay RAPM: ridge weighted by ``0.5 ** (days_ago / half_life_days)``.
+
+    ``asof=None`` disables decay: every possession is weighted ``1.0`` and the
+    fit uses **exactly** plain :func:`~sportsdataverse.nba.nba_rapm.nba_rapm`'s
+    own schedule (``alphas=DEFAULT_RAPM_ALPHAS``, sklearn's efficient default
+    LOOCV) so the two agree byte-for-byte (see
+    ``test_decay_rapm_asof_none_equals_plain_rapm``). When ``asof`` is set,
+    possessions dated after ``asof`` are dropped, the remainder is
+    exponentially down-weighted by age, and the fit switches to the
+    **oracle** regularization schedule (:func:`oracle_rapm_alphas` evaluated
+    at the post-filter possession count, ``cv=`` :data:`ORACLE_RAPM_CV`) per
+    the binding WP2 ridge-schedule ruling documented in the module docstring.
+
+    .. note::
+        **Deviation from the task interface sketch**: the brief's draft
+        signature defaulted ``alphas=DEFAULT_RAPM_ALPHAS`` unconditionally,
+        which is exactly the schedule that :func:`_fit_weighted` already uses
+        when nothing is overridden -- fine for the ``asof=None`` branch, but
+        it would silently skip the oracle schedule the binding ruling
+        requires for the decay-weighted branch. This function instead
+        defaults ``alphas=None`` and auto-selects the schedule per branch
+        (described above); passing an explicit ``alphas`` array overrides
+        the auto-selection in either branch.
+
+    Args:
+        possessions: Multi-season possession+lineup frame. Must carry a
+            ``game_date`` (``pl.Date``) column when ``asof`` is not ``None``.
+        asof: Reference date; ``None`` -> unweighted, plain-RAPM-equivalent fit.
+        half_life_days: Weight half-life in days (default 180).
+        alphas: Optional RidgeCV alpha grid override. ``None`` (default)
+            auto-selects :data:`~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS`
+            when ``asof is None`` or :func:`oracle_rapm_alphas` (evaluated at
+            the possession count) when ``asof`` is set.
+        return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
+
+    Returns:
+        Frame with :data:`DECAY_RAPM_SCHEMA`. Empty input, or an ``asof`` that
+        drops every possession, -> zero-row frame.
+
+    Raises:
+        ValueError: ``asof`` is not ``None`` but *possessions* lacks a
+            ``game_date`` column.
+
+    Example:
+        Recency-weighted ratings as of a date::
+
+            import datetime
+            from sportsdataverse.nba.nba_rapm_variants import nba_decay_rapm
+
+            df = nba_decay_rapm(season_poss, asof=datetime.date(2024, 3, 1), half_life_days=120.0)
+            print(df.sort("decay_rapm", descending=True).head())
+
+        Plain-RAPM-equivalent (no decay)::
+
+            df = nba_decay_rapm(season_poss)  # asof=None
+    """
+    if possessions.is_empty():
+        out = _empty(DECAY_RAPM_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    frame = possessions
+    weight_col: Optional[str] = None
+    if asof is not None:
+        if "game_date" not in frame.columns:
+            raise ValueError("nba_decay_rapm(asof=...) requires a 'game_date' column")
+        frame = frame.filter(pl.col("game_date") <= asof)
+        if frame.is_empty():
+            out = _empty(DECAY_RAPM_SCHEMA)
+            return out.to_pandas() if return_as_pandas else out
+        w = decay_weights(frame["game_date"], asof, half_life_days)
+        frame = frame.with_columns(pl.Series("_w", w))
+        weight_col = "_w"
+
+    X, y, wv, pids = _prepare(frame, "points", weight_col=weight_col)
+    if not pids:
+        out = _empty(DECAY_RAPM_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    if asof is None:
+        # Plain-RAPM-equivalent branch: reproduce nba_rapm's own schedule exactly.
+        fit_alphas = alphas if alphas is not None else DEFAULT_RAPM_ALPHAS
+        fit_cv: Optional[int] = None
+    else:
+        # Decay-weighted branch: oracle regularization schedule (binding WP2 ruling),
+        # evaluated at the post-filter possession count (X.shape[0]), NOT player count.
+        fit_alphas = alphas if alphas is not None else oracle_rapm_alphas(X.shape[0])
+        fit_cv = ORACLE_RAPM_CV
+
+    o, d, off_poss, def_poss = _fit_weighted(X, y, weights=wv, alphas=fit_alphas, cv=fit_cv)
+    out = pl.DataFrame(
+        {
+            "player_id": pl.Series(pids, dtype=pl.Int64),
+            "o_decay_rapm": pl.Series(o, dtype=pl.Float64),
+            "d_decay_rapm": pl.Series(d, dtype=pl.Float64),
+            "decay_rapm": pl.Series(o + d, dtype=pl.Float64),
+            "off_poss": pl.Series(off_poss, dtype=pl.Int64),
+            "def_poss": pl.Series(def_poss, dtype=pl.Int64),
+        }
+    ).sort("player_id")
+    return out.to_pandas() if return_as_pandas else out
