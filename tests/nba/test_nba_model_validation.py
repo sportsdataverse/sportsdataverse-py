@@ -473,3 +473,46 @@ def test_external_validity_rejects_unknown_join_kind():
     oracle = pl.DataFrame({"player_id": [1], "RAPM": [1.0]})
     with pytest.raises(ValueError, match="join"):
         external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM", join="bogus")
+
+
+# ---------------------------------------------------------------------------
+# WP3 Task 8: external_validity name-join path (DARKO-style)
+# ---------------------------------------------------------------------------
+
+
+def test_external_validity_name_join_basic():
+    ratings = pl.DataFrame(
+        {"player_name": ["Nikola Jokic", "Kawhi Leonard", "Victor Wembanyama"], "projected_rating": [8.0, 6.0, 7.5]}
+    )
+    oracle = pl.DataFrame({"player_name": ["Nikola Jokic", "Kawhi Leonard", "Victor Wembanyama"], "dpm": [8, 6, 7]})
+    res = external_validity(
+        ratings,
+        oracle,
+        rating_col="projected_rating",
+        oracle_col="dpm",
+        join="name",
+    )
+    assert res.n_matched == 3
+    assert res.coverage_pct == 100.0
+    assert res.corr > 0.8
+
+
+def test_external_validity_name_join_handles_diacritic_mismatch():
+    # real stats.nba.com spelling (with the Serbian ć) on one side, the plain
+    # ASCII DARKO CSV spelling on the other -- must still match.
+    ratings = pl.DataFrame({"player_name": ["Nikola Jokić"], "projected_rating": [8.0]})
+    oracle = pl.DataFrame({"player_name": ["Nikola Jokic"], "dpm": [7]})
+    res = external_validity(ratings, oracle, rating_col="projected_rating", oracle_col="dpm", join="name")
+    assert res.n_matched == 1
+    assert res.coverage_pct == 100.0
+
+
+def test_external_validity_name_join_reports_low_coverage_on_mismatch():
+    ratings = pl.DataFrame(
+        {"player_name": ["Player A", "Player B", "Player C", "Player D"], "projected_rating": [1.0, 2.0, 3.0, 4.0]}
+    )
+    oracle = pl.DataFrame({"player_name": ["Player A", "Someone Else"], "dpm": [1, 9]})
+    res = external_validity(ratings, oracle, rating_col="projected_rating", oracle_col="dpm", join="name")
+    assert res.n_matched == 1
+    assert res.coverage_pct == 25.0
+    assert np.isnan(res.corr)  # only 1 matched row -- below the n>=3 floor
