@@ -470,3 +470,76 @@ def test_lineup_to_team_report_matches_snapshot(inputs, snap, diag_mode, regress
     expected = find_snapshot_exact(snap, _snap_key_for(diag_mode, regress_diffs, inc_on_off))
     actual = _some_on_off_vals(players)
     approx_tree(actual, expected)
+
+
+# --------------------------------------------------------------------------
+# Fixture-integrity canary
+# --------------------------------------------------------------------------
+
+#: The exact 13 ``lineup_utils_snap.json`` top-level keys the oracle tests
+#: above look up by name: the single ``calculateAggregatedLineupStats`` entry
+#: (via ``find_snapshot_for``'s substring search, in
+#: ``test_aggregated_lineup_stats_matches_snapshot``) plus the 12
+#: ``lineupToTeamReport`` sweep entries (via ``find_snapshot_exact``'s exact
+#: lookup in ``test_lineup_to_team_report_matches_snapshot``, one per
+#: ``_SNAP_KEY_FOR``-formatted (diagMode x regressDiffs x incOnOff)
+#: combination -- the four ``regressDiffs=[0]`` combinations each produce two
+#: byte-identical snapshot entries upstream because the jest sweep runs
+#: ``[0, 100 - 100, -500]`` and ``100 - 100`` also evaluates to ``0`` in JS,
+#: see that test's docstring). The 2 ``gameGameInfo`` entries also present in
+#: the fixture are intentionally excluded -- ``LineupUtils.getGameInfo`` is
+#: deliberately unported (see the ``mbb_lineup_stats`` module docstring) and
+#: no test consumes them.
+_ORACLE_RELIED_ON_SNAPSHOT_KEYS = frozenset(
+    {
+        "LineupUtils LineupUtils - calculateAggregatedLineupStats 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[-500] incOnOff=[false] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[-500] incOnOff=[true] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[false] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[false] 2",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[true] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[true] 2",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[-500] incOnOff=[false] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[-500] incOnOff=[true] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[false] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[false] 2",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[true] 1",
+        "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[true] 2",
+    }
+)
+
+
+def test_lineup_utils_snapshot_fixture_keys_intact(snap):
+    """Canary: a future re-vendor of ``lineup_utils_snap.json`` must not
+    silently rename or drop the snapshot keys the oracle tests above rely
+    on.
+
+    ``find_snapshot_for`` / ``find_snapshot_exact``
+    (``tests/mbb/_hoop_explorer_replay.py``) both call ``pytest.skip`` -- not
+    fail -- when a lookup misses. That's the right behavior for a single
+    ad-hoc lookup, but it means a re-vendor that renames a jest describe
+    block (e.g. bumping the upstream clone across a test-title edit) would
+    turn every oracle test in this file into a silently-skipped no-op
+    instead of a loud, red failure. This test hard-asserts the full expected
+    key set is present and each key still parsed to a real dict (not a
+    ``tools/vendor_hoop_explorer_fixtures.py`` raw-string parse-failure
+    fallback), so that failure mode surfaces immediately.
+    """
+    assert len(_ORACLE_RELIED_ON_SNAPSHOT_KEYS) == 13
+    missing = _ORACLE_RELIED_ON_SNAPSHOT_KEYS - snap.keys()
+    assert not missing, (
+        f"lineup_utils_snap.json is missing snapshot keys the oracle tests "
+        f"rely on: {sorted(missing)} -- did a re-vendor rename a jest "
+        f"describe/test title?"
+    )
+    for key in _ORACLE_RELIED_ON_SNAPSHOT_KEYS:
+        # calculateAggregatedLineupStats picks a dict of 4 fields;
+        # lineupToTeamReport's someOnOffVals picks a 3-element
+        # [on, off, replacement] list -- either is a real parse, only a
+        # bare `str` signals vendor_hoop_explorer_fixtures.py's
+        # parse_snap raw-string fallback (ValueError from json5.loads).
+        assert not isinstance(snap[key], str), (
+            f"{key!r} parsed to a raw string -- check for a "
+            f"vendor_hoop_explorer_fixtures.py raw-string parse-failure "
+            f"fallback for this entry"
+        )

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 import json5
@@ -110,6 +111,14 @@ def parse_sample_module(path: Path) -> tuple[dict[str, object], int, int]:
 
 
 def main() -> None:
+    if not UPSTREAM.exists():
+        sys.exit(
+            f"Upstream clone not found at {UPSTREAM}.\n"
+            "Clone https://github.com/Alex-At-Home/cbb-on-off-analyzer to "
+            "that exact path before re-running this vendoring script.\n"
+            "(Update UPSTREAM in this file if your clone lives elsewhere.)"
+        )
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for snap_name, out_name in SNAPS.items():
         parsed, n_total, n_failed = parse_snap(SNAP_DIR / snap_name)
@@ -125,7 +134,21 @@ def main() -> None:
     totals: dict[str, tuple[int, int]] = {}
     for src_path, out_name in INPUT_SOURCES.items():
         parsed, n_total, n_failed = parse_sample_module(src_path)
-        merged.setdefault(out_name, {}).update(parsed)
+        bucket = merged.setdefault(out_name, {})
+        for const_name, value in parsed.items():
+            # A later INPUT_SOURCES entry silently overwriting an earlier
+            # one's same-named const would corrupt an oracle input without
+            # any signal -- fail loudly instead. Two sources are allowed to
+            # coexist in the same out_name (that's the whole point of the
+            # merge), but not to redefine the same const name.
+            assert const_name not in bucket, (
+                f"{src_path.name} defines const {const_name!r}, which "
+                f"collides with an entry already merged into {out_name!r} "
+                f"from an earlier INPUT_SOURCES source. Rename one of the "
+                f"upstream consts (or this script's merge logic) instead of "
+                f"silently clobbering an existing oracle input."
+            )
+            bucket[const_name] = value
         prev_total, prev_failed = totals.get(out_name, (0, 0))
         totals[out_name] = (prev_total + n_total, prev_failed + n_failed)
     for out_name, entries in merged.items():

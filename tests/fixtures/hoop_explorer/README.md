@@ -12,6 +12,12 @@ Vendored from Alex-At-Home/cbb-on-off-analyzer (hoop-explorer.com SPA), local
 clone `GitHub-Data/cbb-on-off-analyzer` @ `0252725cd94bf54dd5384d0d9af3f2382367c057`
 on 2026-07-03, via `tools/vendor_hoop_explorer_fixtures.py`.
 
+Regenerate all four fixture files (after bumping the upstream clone) via:
+
+```sh
+uv run python tools/vendor_hoop_explorer_fixtures.py
+```
+
 - `lineup_utils_snap.json` — jest snapshots of LineupUtils (aggregation,
   on/off reports). Oracle for `sportsdataverse/mbb/mbb_lineup_stats.py`.
 - `rating_utils_snap.json` / `luck_utils_snap.json` / `rapm_utils_snap.json`
@@ -52,7 +58,11 @@ on 2026-07-03, via `tools/vendor_hoop_explorer_fixtures.py`.
   Not vendored: the test file's own `lineupReport` const (an expression —
   `sampleLineupStatsResponse.responses[0]....map(insertOldValues)` — not an
   object/array literal, so it isn't json5-parseable and isn't "input data"
-  in the vendoring sense).
+  in the vendoring sense). Python tests reconstructing `lineupReport`
+  (`tests/mbb/test_mbb_lineup_stats.py::_build_lineup_report`) must hardcode
+  its two scalar companions verbatim from `LineupUtils.test.ts`, since they
+  aren't part of the non-literal expression above: `avgOff = 100.0` and
+  `error_code = "test"`.
 
 Parse rate (jest snapshot entries -> JSON via `json5`, `undefined` folded to
 `null`): 15/15 (LineupUtils), 7/7 (RatingUtils), 4/4 (LuckUtils), 2/2
