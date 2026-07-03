@@ -1,6 +1,6 @@
 """Loaders for external published-metric CSVs used as validation-harness oracles.
 
-Five published-metric families (Ryan Davis RAPM, Dunks & Threes EPM, LEBRON
+Six published-metric families (Ryan Davis RAPM, Dunks & Threes EPM, LEBRON
 season + daily, DARKO DPM, Dunks & Threes counting stats/ewins) are parsed
 into tidy polars frames here so
 :func:`sportsdataverse.nba.nba_model_validation.external_validity` can
@@ -32,6 +32,8 @@ __all__ = [
     "load_lebron_daily",
     "DARKO_DPM_ORACLE_SCHEMA",
     "load_darko_dpm",
+    "DT_STATS_ORACLE_SCHEMA",
+    "load_dunks_threes_stats",
 ]
 
 
@@ -330,4 +332,50 @@ def load_darko_dpm(path: str) -> pl.DataFrame:
             "ddpm": [_signed_int(r["DDPM"]) for r in rows],
         },
         schema=DARKO_DPM_ORACLE_SCHEMA,
+    )
+
+
+#: Tidy schema for :func:`load_dunks_threes_stats`.
+DT_STATS_ORACLE_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "season": pl.Int64,
+    "player_name": pl.Utf8,
+    "team_alias": pl.Utf8,
+    "ewins": pl.Float64,
+}
+
+
+def load_dunks_threes_stats(path: str) -> pl.DataFrame:
+    """Parse a Dunks & Threes counting-stats CSV (e.g. ``2025_Dunks_&_Threes_Stats.csv``).
+
+    Only ``ewins`` (estimated wins) is kept -- the WAR-layer oracle target
+    the spec pairs with LEBRON's ``WAR`` column. WP4's ``nba_war`` doesn't
+    exist yet, so this loader is built and tested standalone (see the
+    plan's "WP4/WP2 dependency notes").
+
+    Args:
+        path: Filesystem path to a D&T counting-stats CSV.
+
+    Returns:
+        Frame with schema :data:`DT_STATS_ORACLE_SCHEMA`. Zero rows (with
+        that schema) when the file has a header but no data rows.
+
+    Raises:
+        FileNotFoundError: If ``path`` does not exist.
+
+    Example:
+        Load one season's ewins::
+
+            from sportsdataverse.nba.nba_oracle_data import load_dunks_threes_stats
+            oracle = load_dunks_threes_stats(f"{oracle_dir}/2025_Dunks_&_Threes_Stats.csv")
+    """
+    raw = pl.read_csv(path)
+    if raw.is_empty():
+        return pl.DataFrame(schema=DT_STATS_ORACLE_SCHEMA)
+    return raw.select(
+        pl.col("player_id").cast(pl.Int64),
+        pl.col("season").cast(pl.Int64),
+        pl.col("player_name").cast(pl.Utf8),
+        pl.col("team_alias").cast(pl.Utf8),
+        pl.col("ewins").cast(pl.Float64),
     )

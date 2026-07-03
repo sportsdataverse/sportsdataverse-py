@@ -7,11 +7,13 @@ import polars as pl
 
 from sportsdataverse.nba.nba_oracle_data import (
     DARKO_DPM_ORACLE_SCHEMA,
+    DT_STATS_ORACLE_SCHEMA,
     EPM_ORACLE_SCHEMA,
     LEBRON_DAILY_ORACLE_SCHEMA,
     LEBRON_SEASON_ORACLE_SCHEMA,
     RAPM_ORACLE_SCHEMA,
     load_darko_dpm,
+    load_dunks_threes_stats,
     load_epm,
     load_lebron_daily,
     load_lebron_season,
@@ -136,3 +138,21 @@ def test_load_darko_dpm_empty_header_only(tmp_path):
     df = load_darko_dpm(str(empty))
     assert df.height == 0
     assert dict(df.schema) == DARKO_DPM_ORACLE_SCHEMA
+
+
+def test_load_dunks_threes_stats_schema_and_values():
+    df = load_dunks_threes_stats(str(FIXTURES / "dunks_threes_sample.csv"))
+    assert dict(df.schema) == DT_STATS_ORACLE_SCHEMA
+    assert df.height == 3
+    row = df.filter(pl.col("player_id") == 1628983).to_dicts()[0]
+    assert row["player_name"] == "Shai Gilgeous-Alexander"
+    assert row["team_alias"] == "OKC"
+    assert abs(row["ewins"] - 20.9422) < 1e-9
+
+
+def test_load_dunks_threes_stats_empty_header_only(tmp_path):
+    empty = tmp_path / "empty.csv"
+    empty.write_text("season,player_id,player_name,team_alias,ewins\n")
+    df = load_dunks_threes_stats(str(empty))
+    assert df.height == 0
+    assert dict(df.schema) == DT_STATS_ORACLE_SCHEMA
