@@ -19,7 +19,7 @@ import polars as pl
 _LOG = logging.getLogger(__name__)
 
 #: Bump when the possession pipeline changes in a way that invalidates cached parquet.
-PIPELINE_VERSION: int = 1
+PIPELINE_VERSION: int = 2
 
 _LEAGUE_ID = "00"
 

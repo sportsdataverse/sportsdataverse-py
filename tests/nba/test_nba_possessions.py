@@ -129,6 +129,14 @@ def test_possessions_schema_matches_constant() -> None:
         "end_seconds_remaining",
         "points",
         "is_second_chance",
+        "fg2a",
+        "fg2m",
+        "fg3a",
+        "fg3m",
+        "fta",
+        "ftm",
+        "oreb",
+        "tov",
     }
     assert set(POSSESSIONS_SCHEMA.keys()) == required
     assert POSSESSIONS_SCHEMA["game_id"] == pl.Utf8
@@ -597,3 +605,76 @@ def test_lineup_source_auto_falls_back_on_partial_rotation(monkeypatch: pytest.M
     off_def_cols = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
     for col in off_def_cols:
         assert df[col].null_count() == 0, f"pbp fallback left nulls in {col}"
+
+
+# ---------------------------------------------------------------------------
+# WP1 Task 1: event-detail columns
+# ---------------------------------------------------------------------------
+
+DETAIL_COLS = ["fg2a", "fg2m", "fg3a", "fg3m", "fta", "ftm", "oreb", "tov"]
+
+
+def _box_team_shooting(box: dict) -> dict[int, dict[str, int]]:
+    """Per-team counting stats from the boxscore (sum of player rows) — external oracle."""
+    b = box["boxScoreTraditional"]
+    out: dict[int, dict[str, int]] = {}
+    keys = {
+        "fga": "fieldGoalsAttempted",
+        "fgm": "fieldGoalsMade",
+        "fg3a": "threePointersAttempted",
+        "fg3m": "threePointersMade",
+        "fta": "freeThrowsAttempted",
+        "ftm": "freeThrowsMade",
+        "oreb": "reboundsOffensive",
+        "tov": "turnovers",
+    }
+    for side in ("homeTeam", "awayTeam"):
+        t = b[side]
+        agg = {k: 0 for k in keys}
+        for p in t["players"]:
+            s = p.get("statistics", {}) or {}
+            for k, bk in keys.items():
+                agg[k] += int(s.get(bk, 0) or 0)
+        out[int(t["teamId"])] = agg
+    return out
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_event_detail_columns_present_and_typed(game_id):
+    poss = build_possessions(_enh(game_id))
+    for c in DETAIL_COLS:
+        assert c in poss.columns, c
+        assert poss.schema[c] == pl.Int64, c
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_points_identity(game_id):
+    """points == 2*fg2m + 3*fg3m + ftm on EVERY possession (exact)."""
+    poss = build_possessions(_enh(game_id))
+    bad = poss.filter(pl.col("points") != 2 * pl.col("fg2m") + 3 * pl.col("fg3m") + pl.col("ftm"))
+    assert bad.height == 0, bad.select("possession_number", "points", "fg2m", "fg3m", "ftm").to_dicts()[:5]
+
+
+@pytest.mark.parametrize("game_id", GAMES)
+def test_event_detail_boxscore_reconciliation(game_id):
+    """Team sums of the new columns reconcile against the boxscore oracle."""
+    poss = build_possessions(_enh(game_id))
+    box = _box_team_shooting(_box(game_id))
+    got = poss.group_by("offense_team_id").agg([pl.col(c).sum() for c in DETAIL_COLS]).to_dicts()
+    assert len(got) == 2
+    for row in got:
+        exp = box[row["offense_team_id"]]
+        # Shooting: exact (shots are always player-attributed and always in kept groups)
+        assert row["fg2a"] + row["fg3a"] == exp["fga"]
+        assert row["fg2a"] == exp["fga"] - exp["fg3a"]
+        assert row["fg2m"] == exp["fgm"] - exp["fg3m"]
+        assert row["fg3a"] == exp["fg3a"]
+        assert row["fg3m"] == exp["fg3m"]
+        assert row["ftm"] == exp["ftm"]
+        # FTA: a MISSED technical FT in a dropped unattributable group can vanish
+        # from pbp-derived counts — bounded, documented divergence.
+        assert row["fta"] <= exp["fta"]
+        assert exp["fta"] - row["fta"] <= 4, (row["fta"], exp["fta"])
+        # OREB/TOV: pbp counts include TEAM rebounds/turnovers, player sums don't.
+        assert row["oreb"] >= exp["oreb"]
+        assert row["tov"] >= exp["tov"]

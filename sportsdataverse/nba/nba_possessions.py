@@ -45,6 +45,15 @@ POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
     "end_seconds_remaining": pl.Float64,
     "points": pl.Int64,
     "is_second_chance": pl.Boolean,
+    # WP1 event detail (team-level counts within the possession)
+    "fg2a": pl.Int64,
+    "fg2m": pl.Int64,
+    "fg3a": pl.Int64,
+    "fg3m": pl.Int64,
+    "fta": pl.Int64,
+    "ftm": pl.Int64,
+    "oreb": pl.Int64,
+    "tov": pl.Int64,
 }
 
 # ---------------------------------------------------------------------------
@@ -114,6 +123,63 @@ def _offense_from_events(
     return 0
 
 
+def _ft_made(ev: dict) -> bool:
+    """A made free throw carries a score string (same signal as boundary detection)."""
+    return bool((ev.get("score_home") or "").strip() or (ev.get("score_away") or "").strip())
+
+
+def _event_detail(
+    events: list[dict],
+    offense: int,
+    home_id: int,
+    away_id: int,
+) -> dict[str, int]:
+    """Team-level counting-stat detail for one possession group.
+
+    ``fg2*``/``fg3*`` split on ``shot_value``; FT makes use the score-string
+    signal (:func:`_ft_made`); ``oreb`` replicates the rebound-team resolution
+    used for boundary detection (player rebound -> ``team_id``, team rebound ->
+    ``location``); ``tov`` counts turnover events.
+
+    Args:
+        events: The possession group's event rows (row-dicts from
+            ``enhanced_pbp.to_dicts()``).
+        offense: Resolved offense team ID for this possession (0 if
+            unattributable at the time of the call — see
+            :func:`build_possessions`, which resolves ``offense`` via
+            delta-attribution before calling this helper, so ``oreb`` is
+            correctly attributed even for delta-attributed groups).
+        home_id: Home team ID.
+        away_id: Away team ID.
+
+    Returns:
+        Dict with keys ``fg2a, fg2m, fg3a, fg3m, fta, ftm, oreb, tov`` (all
+        ``int`` counts for this possession group).
+    """
+    d = {"fg2a": 0, "fg2m": 0, "fg3a": 0, "fg3m": 0, "fta": 0, "ftm": 0, "oreb": 0, "tov": 0}
+    for ev in events:
+        et = ev.get("event_type") or ""
+        if et in ("made_shot", "missed_shot"):
+            three = int(ev.get("shot_value") or 0) == 3
+            d["fg3a" if three else "fg2a"] += 1
+            if et == "made_shot":
+                d["fg3m" if three else "fg2m"] += 1
+        elif et == "free_throw":
+            d["fta"] += 1
+            if _ft_made(ev):
+                d["ftm"] += 1
+        elif et == "turnover":
+            d["tov"] += 1
+        elif et == "rebound":
+            reb_team = ev.get("team_id") or 0
+            if reb_team == 0:
+                loc = ev.get("location") or ""
+                reb_team = home_id if loc == "h" else (away_id if loc == "v" else 0)
+            if offense != 0 and reb_team == offense:
+                d["oreb"] += 1
+    return d
+
+
 def _resolve_teams(df: pl.DataFrame) -> tuple[int, int]:
     """Return ``(home_team_id, away_team_id)`` from the PBP frame.
 
@@ -174,6 +240,22 @@ def _build_possession_groups(
         if prev_period is not None and period != prev_period:
             _flush()
         prev_period = period
+
+        # A technical free throw is an isolated administrative scoring event:
+        # its shooter is whoever benefits from the OPPONENT's technical foul,
+        # not the team about to have the ball (play resumes with whoever had
+        # it before the stoppage). Merging it into the surrounding drive would
+        # misattribute both the technical FT itself (to the wrong team, since
+        # the group can only carry one offense_team_id) and the real shot/
+        # rebound that follows (by wrongly seeding current_offense from the
+        # FT's location). Flush whatever was building, emit the technical FT
+        # as its own single-event group (offense resolved independently via
+        # its own location), then resume with a clean slate.
+        if et == "free_throw" and _is_technical_ft(sub_type):
+            _flush()
+            current.append(row)
+            _flush()
+            continue
 
         current.append(row)
 
@@ -264,7 +346,11 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
 
     Returns:
         Polars DataFrame with schema :data:`POSSESSIONS_SCHEMA`.  One row
-        per possession, ordered by ``possession_number`` ascending.
+        per possession, ordered by ``possession_number`` ascending.  Includes
+        eight team-level event-detail count columns (``fg2a``, ``fg2m``,
+        ``fg3a``, ``fg3m``, ``fta``, ``ftm``, ``oreb``, ``tov``) computed by
+        :func:`_event_detail` from the possession's events; ``points ==
+        2*fg2m + 3*fg3m + ftm`` holds on every possession.
 
     Example:
         Quick start::
@@ -359,6 +445,7 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         pts = (end_home - prev_home) if offense == home_id else (end_away - prev_away)
 
         poss_num += 1
+        detail = _event_detail(events, int(offense), home_id, away_id)
         records.append(
             {
                 "game_id": game_id,
@@ -372,6 +459,7 @@ def build_possessions(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
                 "end_seconds_remaining": float(end_ev.get("seconds_remaining") or 0.0),
                 "points": int(pts),
                 "is_second_chance": bool(is_sc),
+                **detail,
             }
         )
 
