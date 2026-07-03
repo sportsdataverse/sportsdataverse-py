@@ -9,8 +9,18 @@ requires them as explicit keyword arguments.
 
 from __future__ import annotations
 
+from typing import Union
+
 import numpy as np
+import pandas as pd
 import polars as pl
+
+#: Schema of the per-player frame returned by :func:`nba_war`.
+WAR_SCHEMA: dict[str, pl.DataType] = {"player_id": pl.Int64, "war": pl.Float64}
+
+
+def _empty_war_frame() -> pl.DataFrame:
+    return pl.DataFrame({c: pl.Series([], dtype=t) for c, t in WAR_SCHEMA.items()})
 
 
 def calibrate_pts_per_win(team_season: pl.DataFrame) -> float:
@@ -112,3 +122,76 @@ def calibrate_replacement_level(
         raise ValueError("calibrate_replacement_level: total possession weight is zero")
     weighted_rating = float((j[rating_col].cast(pl.Float64) * weight).sum())
     return (weighted_rating - target_total_war) / total_weight
+
+
+def nba_war(
+    ratings: pl.DataFrame,
+    poss: pl.DataFrame,
+    *,
+    replacement_level: float,
+    pts_per_win: float,
+    rating_col: str = "rating",
+    poss_col: str = "poss",
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Points-above-replacement -> wins for each player.
+
+    ``war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win``.
+
+    Args:
+        ratings: Per-player rating frame with ``player_id`` and ``rating_col``
+            (e.g. ``nba_rapm``'s ``rapm`` column renamed, a ``nba_ratings_panel``
+            row filtered to one date, or ``nba_bpm``'s ``bpm`` column).
+        poss: Per-player possession-count frame with ``player_id`` and
+            ``poss_col`` (e.g. ``off_poss + def_poss`` from ``nba_rapm``).
+        replacement_level: Per-100-possession rating of a replacement-level
+            player. No built-in default — calibrate via
+            :func:`calibrate_replacement_level`.
+        pts_per_win: Points of season point-margin per marginal win. No
+            built-in default — calibrate via :func:`calibrate_pts_per_win`.
+        rating_col: Column in ``ratings`` to score.
+        poss_col: Column in ``poss`` giving total possessions played.
+        return_as_pandas: Return pandas instead of polars.
+
+    Returns:
+        Frame with :data:`WAR_SCHEMA` columns (``player_id``, ``war``). Empty
+        (that schema) when either input is empty.
+
+    Raises:
+        ValueError: If both inputs are non-empty but share no ``player_id``
+            (a probable id-source or dtype mismatch, not a normal empty case).
+
+    Example:
+        Score WAR from a calibrated replacement level and pts-per-win::
+
+            from sportsdataverse.nba.nba_war import nba_war
+            war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
+                           replacement_level=-2.0, pts_per_win=250.0)
+            print(war.sort("war", descending=True).head())
+
+        Derive both required kwargs from real data first::
+
+            from sportsdataverse.nba.nba_war import (
+                calibrate_pts_per_win, calibrate_replacement_level, nba_war,
+            )
+            pts_per_win = calibrate_pts_per_win(team_standings)
+            repl = calibrate_replacement_level(
+                ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
+            )
+            war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
+    """
+    if ratings.is_empty() or poss.is_empty():
+        return _empty_war_frame().to_pandas() if return_as_pandas else _empty_war_frame()
+    j = ratings.join(poss, on="player_id", how="inner")
+    if j.is_empty():
+        raise ValueError("nba_war: ratings and poss share no shared player_id")
+    out = j.select(
+        pl.col("player_id").cast(pl.Int64),
+        (
+            (pl.col(rating_col).cast(pl.Float64) - replacement_level)
+            * pl.col(poss_col).cast(pl.Float64)
+            / 100.0
+            / pts_per_win
+        ).alias("war"),
+    )
+    return out.to_pandas() if return_as_pandas else out
