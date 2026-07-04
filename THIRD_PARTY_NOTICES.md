@@ -7,6 +7,7 @@
   - [cbb-on-off-analyzer (`RatingUtils.ts`)](#cbb-on-off-analyzer-ratingutilsts)
   - [cbb-on-off-analyzer (`LuckUtils.ts`)](#cbb-on-off-analyzer-luckutilsts)
   - [cbb-on-off-analyzer (`RapmUtils.ts`)](#cbb-on-off-analyzer-rapmutilsts)
+  - [cbb-on-off-analyzer (`PositionUtils.ts`)](#cbb-on-off-analyzer-positionutilsts)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -146,6 +147,43 @@ that license's own attribution obligations.
   reference (no separate copy of the logic). The jest snapshot fixtures and
   their input literals used as an offline correctness oracle are vendored
   under
+  [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
+  are test-only fixtures and are not shipped in the distributed wheel or
+  sdist.
+- **Modifications:** Translated from TypeScript to Python, following this
+  repository's own conventions (typing, docstrings). No changes were made
+  to the original TypeScript source itself; the Python port is a faithful
+  (including bug-for-bug, where explicitly documented in the module
+  docstring) translation of the upstream logic, not a functional rewrite.
+
+## cbb-on-off-analyzer (`PositionUtils.ts`)
+
+- **Project:** [Alex-At-Home/cbb-on-off-analyzer](https://github.com/Alex-At-Home/cbb-on-off-analyzer)
+  (the hoop-explorer.com single-page app).
+- **License:** Apache License, Version 2.0 -- full text at
+  <http://www.apache.org/licenses/LICENSE-2.0>, and vendored verbatim in the
+  upstream repository's `LICENSE` file.
+- **Copyright:** Copyright (c) Alex-At-Home
+  (<https://github.com/Alex-At-Home>) and contributors. Licensed under the
+  Apache License, Version 2.0.
+- **What was derived:** `src/utils/stats/PositionUtils.ts`'s positional
+  classifier surface -- the LDA constant tables (`positionFeatureInit`,
+  `tradPosList`, `positionFeatureWeights`, `positionFeatureAverages`,
+  `heightMeanStds`), the memoized `averageScoresByPos` derivation,
+  `regressShotQuality`, `buildPositionConfidences`, `incorporateHeight`,
+  `buildPosition` (incl. `idToPosition`), `usingRosterPos`,
+  `posClassToScore`, `orderLineup` (incl. the private
+  `applyRelativePositionalOverrides` recursive helper),
+  `buildPositionalAwareFilter`, and `testPositionalAwareFilter` -- was ported
+  line-for-line (including documented bug-for-bug behavior) into
+  [`sportsdataverse/mbb/mbb_positions.py`](sportsdataverse/mbb/mbb_positions.py).
+  The tested subset of `src/utils/stats/PositionalManualFixes.ts`'s
+  `absolutePositionFixes` and `relativePositionFixes` data tables was ported
+  alongside it (see the module docstring for the exact deferred-rows
+  scope). [`sportsdataverse/wbb/wbb_positions.py`](sportsdataverse/wbb/wbb_positions.py)
+  re-exports the same functions and constants by reference (no separate copy
+  of the logic). The jest test fixtures and their input literals used as an
+  offline correctness oracle are vendored under
   [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
   are test-only fixtures and are not shipped in the distributed wheel or
   sdist.
