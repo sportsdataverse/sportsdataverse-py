@@ -233,11 +233,14 @@ that license's own attribution obligations.
   and
   [`sportsdataverse/wbb/wbb_ncaa_possessions.py`](sportsdataverse/wbb/wbb_ncaa_possessions.py)
   re-export the same types and functions by reference (no separate copy of
-  the logic). The `utest` fixtures and their input literals used as an
-  offline correctness oracle are vendored under
-  [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
-  are test-only fixtures and are not shipped in the distributed wheel or
-  sdist.
+  the logic). Unlike the cbb-on-off-analyzer (TypeScript/jest) entries above,
+  no fixture file is vendored for this port -- every `utest` oracle value
+  transliterated from `EventUtils.scala` / `PossessionUtils.scala` (and their
+  `*Tests.scala` twins) is a short inline literal reproduced directly in the
+  test modules (`tests/mbb/test_mbb_ncaa_models.py`,
+  `tests/mbb/test_mbb_ncaa_events.py`,
+  `tests/mbb/test_mbb_ncaa_possessions.py`), which are test-only and not
+  shipped in the distributed wheel or sdist.
 - **Modifications:** Translated from Scala to Python, following this
   repository's own conventions (typing, docstrings, dataclasses in place of
   case classes). No changes were made to the original Scala source itself;
