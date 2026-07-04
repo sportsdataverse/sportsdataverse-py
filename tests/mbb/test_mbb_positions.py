@@ -25,13 +25,21 @@ consumed below:**
   ``idToPosition`` lookups).
 * ``PositionUtils - usingRosterPos`` (jest ``:207-225``) -- all 10 rows.
 
-**Out of scope (deferred to Task 4.4, NOT tested here) -- accounted for so
-none are silently skipped:**
+**In scope for Task 4.4 (lineup ordering + positional-aware filter) --
+consumed below, COMPLETING the ``PositionUtils.test.ts`` suite:**
 
-* ``PositionUtils - orderLineup`` (jest ``:227-312``) -> Task 4.4 (lineup
-  ordering + ``relativePositionFixes``).
-* ``PositionUtils - buildPositionalAwareFilter`` (jest ``:313-334``) -> Task 4.4.
-* ``PositionUtils - testPositionalAwareFilter`` (jest ``:335-380``) -> Task 4.4.
+* ``PositionUtils - orderLineup`` (jest ``:227-312``) -- the shuffle-order-
+  invariance sweep (3 ``posClass`` scenarios) + the 2 ``relativePositionFixes``
+  override checks (the Maryland 2019/20 Morsell/Wiggins swap, both the
+  overridden and the no-matching-rule cases).
+* ``PositionUtils - buildPositionalAwareFilter`` (jest ``:313-334``) -- all 5
+  inline cases.
+* ``PositionUtils - testPositionalAwareFilter`` (jest ``:335-380``) -- **all 8**
+  ``expect(...).toBe(...)`` calls (correcting the README/map's undercount of
+  "7" -- two are bundled into one prose bullet there: jest ``:359``
+  ``["aaron","anthony"] -> true`` and ``:363`` ``["missing","eric"] -> false``
+  are two separate ``toBe`` call sites, not one) plus the 5-iteration
+  ``forEach`` identity sweep (``:372-379``).
 
 The jest file-scope helper ``tidyObj`` (``:12``,
 ``_.mapValues(vo, v => (v.value || v).toFixed(2))``) is replayed as
@@ -40,6 +48,7 @@ The jest file-scope helper ``tidyObj`` (``:12``,
 
 from __future__ import annotations
 
+import random
 from typing import Any
 
 import pytest
@@ -48,14 +57,20 @@ from sportsdataverse.mbb.mbb_positions import (
     AVERAGE_SCORES_BY_POS,
     ID_TO_POSITION,
     TRAD_POS_LIST,
+    apply_relative_positional_overrides,
     build_position,
     build_position_confidences,
+    build_positional_aware_filter,
     incorporate_height,
+    order_lineup,
     regress_shot_quality,
     using_roster_pos,
 )
+from sportsdataverse.mbb.mbb_positions import (
+    test_positional_aware_filter as _test_positional_aware_filter,
+)
 
-from ._hoop_explorer_replay import load_fixture, load_rating_inputs
+from ._hoop_explorer_replay import load_fixture, load_inputs, load_rating_inputs
 
 
 def _tidy_obj(vo: dict[str, Any]) -> dict[str, str]:
@@ -402,3 +417,263 @@ def test_using_roster_pos() -> None:
         expected_pos, info = using_roster_pos(case["stats"], case["roster"])
         assert expected_pos == case["expected"]
         assert (info is not None) == case["hasInfo"]
+
+
+# --- Test 7: PositionUtils - orderLineup (jest :227-312) -------------------
+
+
+def _player_codes_and_ids() -> list[dict[str, str]]:
+    """The 5-player membership list reused from ``lineup_utils_inputs.json``
+    (jest ``:229-231``): ``sampleLineupStatsResponse.responses[0]
+    .aggregations.lineups.buckets[0].players_array.hits.hits[0]._source.players``
+    -- already vendored, cross-referenced per the README, not re-vendored here.
+    """
+    inputs = load_inputs()
+    lineup = inputs["sampleLineupStatsResponse"]["responses"][0]["aggregations"]["lineups"]["buckets"][0]
+    players: list[dict[str, str]] = lineup["players_array"]["hits"]["hits"][0]["_source"]["players"]
+    return players
+
+
+#: Fixed ``posConfidences`` per player, identical across all 3 ``test_case``
+#: variants (jest ``:239-260``, tradPosList-ordered raw -- NOT normalized --
+#: scores).
+_ORDER_LINEUP_POS_CONFIDENCES: dict[str, list[float]] = {
+    "Wiggins, Aaron": [10, 20, 50, 10, 0],
+    "Cowan, Anthony": [60, 40, 10, 0, 0],
+    "Morsell, Darryl": [10, 40, 50, 30, 10],
+    "Ayala, Eric": [40, 60, 10, 0, 0],
+    "Smith, Jalen": [0, 0, 0, 50, 50],
+}
+
+#: ``posClass`` per player, varying by ``test_case`` (0/1/2) (jest ``:239-260``):
+#: 0 = "will basically just use the posClass" (distinct classes); 1 = "double
+#: check if works if all the same, ie uses only posConfidences"; 2 = "pick
+#: some stupid posClass and check that overrides posConfidence".
+_ORDER_LINEUP_POS_CLASS_BY_CASE: dict[int, dict[str, str]] = {
+    0: {
+        "Wiggins, Aaron": "WG",
+        "Cowan, Anthony": "s-PG",
+        "Morsell, Darryl": "WG",
+        "Ayala, Eric": "CG",
+        "Smith, Jalen": "PF/C",
+    },
+    1: {
+        "Wiggins, Aaron": "C",
+        "Cowan, Anthony": "C",
+        "Morsell, Darryl": "C",
+        "Ayala, Eric": "C",
+        "Smith, Jalen": "C",
+    },
+    2: {
+        "Wiggins, Aaron": "PF/C",
+        "Cowan, Anthony": "C",
+        "Morsell, Darryl": "CG",
+        "Ayala, Eric": "WF",
+        "Smith, Jalen": "s-PG",
+    },
+}
+
+
+def _players_by_id(test_case: int) -> dict[str, dict[str, Any]]:
+    """Replay of the jest ``playersById`` arrow function (``:239-260``),
+    parameterized by ``test_case`` (0/1/2). Returns a fresh dict each call
+    (never shared/mutated across test cases) so per-test mutation (the
+    override check below) can't leak between parametrizations.
+    """
+    return {
+        player: {
+            "posConfidences": list(_ORDER_LINEUP_POS_CONFIDENCES[player]),
+            "posClass": _ORDER_LINEUP_POS_CLASS_BY_CASE[test_case][player],
+        }
+        for player in _ORDER_LINEUP_POS_CONFIDENCES
+    }
+
+
+@pytest.mark.parametrize("test_case", [0, 1, 2])
+def test_order_lineup_shuffle_invariance(test_case: int) -> None:
+    """Order-invariance sweep (jest ``:280-288``): shuffling the input
+    membership list must not change ``order_lineup``'s output for a given
+    ``posClass``/``posConfidences`` scenario. The jest loop runs 50 shuffles
+    per case; a handful suffices here since the property under test is
+    shuffle-order invariance, not a specific PRNG sequence (README note)."""
+    player_codes_and_ids = _player_codes_and_ids()
+    expected_by_case = {
+        0: load_fixture("position_utils_inputs.json")["expectedResult"],
+        1: load_fixture("position_utils_inputs.json")["expectedResult"],
+        2: load_fixture("position_utils_inputs.json")["expectedResultFake"],
+    }
+    expected = expected_by_case[test_case]
+    players_by_id = _players_by_id(test_case)
+    for _ in range(10):
+        shuffled = list(player_codes_and_ids)
+        random.shuffle(shuffled)
+        assert order_lineup(shuffled, players_by_id, "") == expected
+
+
+def test_order_lineup_relative_override_matches() -> None:
+    """Override-rule check (jest ``:290-296``): a raw ``posClass`` tweak
+    (Wiggins ``WG`` -> ``WF``, which by itself would flip the Morsell/Wiggins
+    PF-slot fight) is corrected back to the base ordering by the
+    ``Men_Maryland_2019/20`` :data:`RELATIVE_POSITION_FIXES` rule set."""
+    player_codes_and_ids = _player_codes_and_ids()
+    switch_morsell_wiggins = _players_by_id(0)
+    switch_morsell_wiggins["Wiggins, Aaron"]["posClass"] = "WF"
+
+    expected = load_fixture("position_utils_inputs.json")["expectedResult"]
+    assert order_lineup(player_codes_and_ids, switch_morsell_wiggins, "Men_Maryland_2019/20") == expected
+
+
+def test_order_lineup_relative_override_no_matching_rule() -> None:
+    """Negative check (jest ``:298-310``): the same ``posClass`` tweak, under
+    a team/season string with NO matching :data:`RELATIVE_POSITION_FIXES`
+    entry, is left unsorted/uncorrected -- confirms the tweak really did have
+    an effect (i.e. the prior test's match isn't a no-op)."""
+    player_codes_and_ids = _player_codes_and_ids()
+    switch_morsell_wiggins = _players_by_id(0)
+    switch_morsell_wiggins["Wiggins, Aaron"]["posClass"] = "WF"
+
+    expected_unsorted = load_fixture("position_utils_inputs.json")["expectedResultUnsorted"]
+    assert order_lineup(player_codes_and_ids, switch_morsell_wiggins, "NoOverrideRules/20") == expected_unsorted
+
+
+def test_apply_relative_positional_overrides_unknown_team_season() -> None:
+    """A team/season absent from :data:`RELATIVE_POSITION_FIXES` returns the
+    input unchanged (the ``rules is None`` branch, ``PositionUtils.ts:689-691``)."""
+    results = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
+    assert apply_relative_positional_overrides(results, "NotARealTeamSeason") == results
+
+
+# --- Test 8: PositionUtils - buildPositionalAwareFilter (jest :313-334) ----
+
+
+@pytest.mark.parametrize(
+    ("filter_str", "expected"),
+    [
+        (
+            "test1,test3;test2",
+            ([{"filter": "test1,test3", "pos": []}, {"filter": "test2", "pos": []}], [], False),
+        ),
+        (
+            "Test1,test2",
+            ([{"filter": "test1", "pos": []}, {"filter": "test2", "pos": []}], [], False),
+        ),
+        (
+            "test1,-test2 ,tEst3",
+            ([{"filter": "test1", "pos": []}, {"filter": "test3", "pos": []}], [{"filter": "test2", "pos": []}], False),
+        ),
+        (
+            "test1=pg / -test2=Pf+C / test3",
+            (
+                [{"filter": "test1", "pos": [0]}, {"filter": "test3", "pos": []}],
+                [{"filter": "test2", "pos": [3, 4]}],
+                True,
+            ),
+        ),
+        (
+            "test1=1+2+3;-test2=SG+SF ;test3=4+5",
+            (
+                [{"filter": "test1", "pos": [0, 1, 2]}, {"filter": "test3", "pos": [3, 4]}],
+                [{"filter": "test2", "pos": [1, 2]}],
+                True,
+            ),
+        ),
+    ],
+)
+def test_build_positional_aware_filter(filter_str: str, expected: tuple) -> None:
+    """All 5 inline cases (jest ``:313-334``)."""
+    assert build_positional_aware_filter(filter_str) == expected
+
+
+# --- Test 9: PositionUtils - testPositionalAwareFilter (jest :335-380) -----
+
+
+def _test_lineup() -> list[dict[str, str]]:
+    return load_fixture("position_utils_inputs.json")["testLineup"]
+
+
+def test_positional_aware_filter_no_fragments() -> None:
+    """jest ``:343-345`` -- no filters at all -> vacuously ``True``."""
+    assert _test_positional_aware_filter(_test_lineup(), [], []) is True
+
+
+def test_positional_aware_filter_pve_only_match() -> None:
+    """jest ``:346-348``."""
+    assert _test_positional_aware_filter(_test_lineup(), [{"filter": "eric", "pos": []}], []) is True
+
+
+def test_positional_aware_filter_nve_wrong_pos_does_not_exclude() -> None:
+    """jest ``:349-351`` -- nve fragment matches by name but at the wrong
+    ``pos`` index, so it does not exclude."""
+    assert (
+        _test_positional_aware_filter(
+            _test_lineup(), [{"filter": "jalen", "pos": []}], [{"filter": "darryl", "pos": [0]}]
+        )
+        is True
+    )
+
+
+def test_positional_aware_filter_nve_right_pos_excludes() -> None:
+    """jest ``:352-354`` -- only the ``pos`` needs to be right (among others)."""
+    assert (
+        _test_positional_aware_filter(
+            _test_lineup(), [{"filter": "jalen", "pos": []}], [{"filter": "darryl", "pos": [0, 3]}]
+        )
+        is False
+    )
+
+
+def test_positional_aware_filter_nve_unconstrained_pos_excludes() -> None:
+    """jest ``:356-358`` -- nve fragment with no ``pos`` restriction matches
+    anywhere in the lineup."""
+    assert (
+        _test_positional_aware_filter(
+            _test_lineup(), [{"filter": "jalen", "pos": []}], [{"filter": "darryl", "pos": []}]
+        )
+        is False
+    )
+
+
+def test_positional_aware_filter_all_pve_must_match() -> None:
+    """jest ``:359-362`` -- both positive filters match -> ``True`` (the
+    README's item-9 bullet folds this and the next case into one prose
+    sentence; they are two separate ``toBe`` call sites in the TS)."""
+    assert (
+        _test_positional_aware_filter(
+            _test_lineup(), [{"filter": "aaron", "pos": []}, {"filter": "anthony", "pos": []}], []
+        )
+        is True
+    )
+
+
+def test_positional_aware_filter_one_pve_missing_fails_all() -> None:
+    """jest ``:363-366`` -- one of two positive filters doesn't match -> ``False``."""
+    assert (
+        _test_positional_aware_filter(
+            _test_lineup(), [{"filter": "missing", "pos": []}, {"filter": "eric", "pos": []}], []
+        )
+        is False
+    )
+
+
+def test_positional_aware_filter_one_nve_match_is_enough_to_exclude() -> None:
+    """jest ``:367-370`` -- only one of two negative filters needs to match
+    to exclude the lineup."""
+    assert (
+        _test_positional_aware_filter(
+            _test_lineup(),
+            [{"filter": "jalen", "pos": []}, {"filter": "eric", "pos": []}],
+            [{"filter": "darryl", "pos": []}, {"filter": "darryl", "pos": [0]}],
+        )
+        is False
+    )
+
+
+@pytest.mark.parametrize("index", range(5))
+def test_positional_aware_filter_own_code_identity_sweep(index: int) -> None:
+    """5-iteration ``forEach`` identity sweep (jest ``:372-379``): each
+    player's own code, as a positive filter restricted to their own slot,
+    matches; the same fragment as a negative filter excludes."""
+    lineup = _test_lineup()
+    code = lineup[index]["code"].lower()
+    assert _test_positional_aware_filter(lineup, [{"filter": code, "pos": [index]}], []) is True
+    assert _test_positional_aware_filter(lineup, [], [{"filter": code, "pos": [index]}]) is False

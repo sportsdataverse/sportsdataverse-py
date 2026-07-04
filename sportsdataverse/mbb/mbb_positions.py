@@ -22,15 +22,32 @@ lookup table (``PositionUtils.idToPosition``, ``:387-398``), and the tested
 subset of ``PositionalManualFixes.absolutePositionFixes`` as
 :data:`ABSOLUTE_POSITION_FIXES`.
 
-**Deferred to Task 4.4 (intentionally absent from this file):** the
-lineup-ordering layer -- ``orderLineup`` / ``applyRelativePositionalOverrides``
-/ ``buildPositionalAwareFilter`` / ``testPositionalAwareFilter``
-(``PositionUtils.ts:657/696/764/831``) -- and the ``positionClasses`` /
+**Task 4.4 (this update) completes the module -- the lineup-ordering
+layer**: :func:`order_lineup` (``PositionUtils.orderLineup``,
+``PositionUtils.ts:696-761``) -- the greedy PG/SG/SF/PF/C slot-assignment
+algorithm (with recursive eviction/re-fit) -- plus the private recursive
+helper :func:`apply_relative_positional_overrides`
+(``PositionUtils.applyRelativePositionalOverrides``, ``:657-693``, ``private``
+upstream but exposed here per the port task's naming contract), the
+search-filter utilities :func:`build_positional_aware_filter`
+(``PositionUtils.buildPositionalAwareFilter``, ``:764-828``) and
+:func:`test_positional_aware_filter` (``PositionUtils.testPositionalAwareFilter``,
+``:831-858``), and the tested subset of
+``PositionalManualFixes.relativePositionFixes`` as
+:data:`RELATIVE_POSITION_FIXES`.
+
+**Permanently out of scope (confirmed unused by every ``PositionUtils``
+function, this task closes the question):** the ``positionClasses`` /
 ``posClassToNickname`` / ``nicknameToPosClass`` / ``positionGroupings`` /
-``positionsToGroup`` / ``expandedPosClasses`` lookup tables (``:371-385``,
-``:863-919``; confirmed unused by ``buildPosition``/``usingRosterPos``/
-``posClassToScore`` -- they're read only by ``orderLineup`` and the
-positional-aware filter helpers), plus ``PositionalManualFixes.relativePositionFixes``.
+``positionsToGroup`` / ``expandedPosClasses`` lookup tables
+(``PositionUtils.ts:371-385``, ``:863-919``). Task 4.3 already confirmed
+``buildPosition``/``usingRosterPos``/``posClassToScore`` never read them;
+this task's full read of ``orderLineup``/``applyRelativePositionalOverrides``/
+``buildPositionalAwareFilter``/``testPositionalAwareFilter`` (the entire
+remaining ``PositionUtils`` surface) confirms none of *those* read them
+either -- they are display/legend tables consumed elsewhere in the
+hoop-explorer UI, entirely outside the ``PositionUtils`` class's own
+functional surface, and are not ported.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``PositionUtils.ts`` (and, for Tasks 4.3/4.4,
@@ -70,6 +87,12 @@ its regime:
      multiplies (``effective_poss = poss * usage``) but never divides;
      :func:`using_roster_pos` / :func:`pos_class_to_score` are pure
      string/dict lookups. No new landmine sites to log.
+  3. **(No division sites in the 4.4 scope either -- this closes the index.)**
+     :func:`order_lineup` / :func:`apply_relative_positional_overrides` /
+     :func:`build_positional_aware_filter` / :func:`test_positional_aware_filter`
+     perform no numeric division at all -- pure comparisons, list indexing,
+     and string parsing. Across the full ported ``PositionUtils`` function
+     surface (Tasks 4.2-4.4), item 1 above is the *only* landmine class.
 
 **JS-semantics fidelity (``||`` falsy-coalesce is load-bearing here).** The
 upstream denominators use JS ``x.value || 1`` (falsy-coalesce), NOT ``?? 1``
@@ -102,6 +125,7 @@ See Also:
 from __future__ import annotations
 
 import math
+import re
 from typing import Any
 
 __all__ = [
@@ -113,12 +137,17 @@ __all__ = [
     "AVERAGE_SCORES_BY_POS",
     "ID_TO_POSITION",
     "ABSOLUTE_POSITION_FIXES",
+    "RELATIVE_POSITION_FIXES",
     "regress_shot_quality",
     "build_position_confidences",
     "incorporate_height",
     "build_position",
     "using_roster_pos",
     "pos_class_to_score",
+    "order_lineup",
+    "apply_relative_positional_overrides",
+    "build_positional_aware_filter",
+    "test_positional_aware_filter",
 ]
 
 _SQRT2 = math.sqrt(2)
@@ -771,3 +800,416 @@ def using_roster_pos(pos_class: str, roster_pos: str | None) -> tuple[str, str |
     if score > 5000 and roster_pos == "G":
         return "WF", f"Roster info says 'G', stats say [{pos_class}] - compromize at 'WF'"
     return pos_class, None
+
+
+#: Team/season -> lineup-slot positional-override rules
+#: (``PositionalManualFixes.relativePositionFixes``, 386 LOC upstream file,
+#: rules at ``:206-386``). **Only ``"Men_Maryland_2019/20"`` is ported** --
+#: the one row exercised by ``orderLineup``'s override test
+#: (``PositionUtils.test.ts:290-296``): the shared ``Maryland_2018_2020``
+#: 2-rule base (Morsell<->Wiggins 4-guard-lineup swaps, ``:206-230``) plus the
+#: season-specific "Lindo plays the 4 alongside Jalen Smith" rule
+#: (``:249-261``). The remaining ~10 team/season keys (``Men_Maryland_2014/5``,
+#: ``Men_Maryland_2018/9``, ``_2020/21``, ``_2021/22``, ``_2022/23``,
+#: ``_2023/24``, ``Men_Illinois_2023/24``) are a **deliberate deferral**, same
+#: rationale as :data:`ABSOLUTE_POSITION_FIXES`: no jest case exercises them,
+#: the table is pure data (no branching logic to get wrong), and an unlisted
+#: team/season simply falls through :func:`apply_relative_positional_overrides`
+#: unchanged -- vendor the remaining rows verbatim from
+#: ``PositionalManualFixes.ts`` if/when a caller needs one not listed here.
+#: ``None`` stands in for the TS ``undefined`` wildcard in both ``key``
+#: (any player code matches that slot) and ``rule`` (leave that slot's
+#: player unchanged); an ``int`` in ``rule`` is a 1-based back-reference into
+#: the *pre-rule* ``results`` array (``PositionUtils.ts:677``, ``changeRule -
+#: 1``); a ``dict`` is a literal ``{"code": ..., "id": ...}`` replacement.
+_MARYLAND_2018_2020: list[dict[str, list[Any]]] = [
+    {
+        # 2/2022: In 4-guard lineups, Morsell plays the 4 (even when he's
+        # supposedly playing the 2!) (PositionalManualFixes.ts:208-218).
+        "key": [None, "DaMorsell", None, "AaWiggins", None],
+        "rule": [
+            None,
+            3,
+            {"code": "AaWiggins", "id": "Wiggins, Aaron"},
+            {"code": "DaMorsell", "id": "Morsell, Darryl"},
+            None,
+        ],
+    },
+    {
+        # 7/6/2020: In 4-guard lineups, Morsell plays the 4 (:219-229).
+        "key": [None, None, "DaMorsell", "AaWiggins", None],
+        "rule": [
+            None,
+            None,
+            {"code": "AaWiggins", "id": "Wiggins, Aaron"},
+            {"code": "DaMorsell", "id": "Morsell, Darryl"},
+            None,
+        ],
+    },
+]
+
+RELATIVE_POSITION_FIXES: dict[str, list[dict[str, list[Any]]]] = {
+    "Men_Maryland_2019/20": _MARYLAND_2018_2020
+    + [
+        {
+            # 7/10/2020: Lindo plays the 4 alongside Jalen Smith (:249-260).
+            "key": [None, None, None, "JaSmith", "RiLindo"],
+            "rule": [
+                None,
+                None,
+                None,
+                {"code": "RiLindo", "id": "Lindo Jr., Ricky"},
+                {"code": "JaSmith", "id": "Smith, Jalen"},
+            ],
+        },
+    ],
+}
+
+
+def apply_relative_positional_overrides(
+    results: list[dict[str, str]], team_season: str, recurse_count: int = 0
+) -> list[dict[str, str]]:
+    """Recursively re-shuffle an ordered lineup per :data:`RELATIVE_POSITION_FIXES`.
+
+    Faithful port of the private ``PositionUtils.applyRelativePositionalOverrides``
+    (``PositionUtils.ts:657-693``). Finds the first rule (in table order) whose
+    ``key`` slots all match the current ``results`` codes (a ``None`` key slot
+    matches anything), applies that rule's ``rule`` slots (``None`` = leave
+    unchanged, ``int`` = 1-based back-reference into the *pre-rule* results,
+    ``dict`` = literal replacement) to produce a new ordering, then recurses on
+    the new ordering -- since one swap can expose a second rule to match (e.g.
+    the Maryland 2019/20 Morsell/Wiggins swap can cascade into the Lindo/Smith
+    swap). Recursion is bounded by ``recurse_count < len(rules)`` (ported
+    verbatim from the TS bound), so it always terminates even if two rules
+    somehow ping-ponged each other.
+
+    Args:
+        results: The current 5-slot ``{"code": ..., "id": ...}`` ordering
+            (PG/SG/SF/PF/C, index 0-4).
+        team_season: Key into :data:`RELATIVE_POSITION_FIXES`. A team/season
+            absent from the table (or the recursion exhausting that
+            team/season's rule count) returns ``results`` unchanged.
+        recurse_count: Internal recursion depth counter -- callers should
+            not pass this explicitly (mirrors the TS default parameter).
+
+    Returns:
+        The (possibly re-shuffled) 5-slot ordering.
+
+    Example:
+        A rule-set match swaps two slots and then re-checks for a cascade::
+
+            from sportsdataverse.mbb.mbb_positions import apply_relative_positional_overrides
+            results = [
+                {"code": "AnCowan", "id": "Cowan, Anthony"},
+                {"code": "ErAyala", "id": "Ayala, Eric"},
+                {"code": "DaMorsell", "id": "Morsell, Darryl"},
+                {"code": "AaWiggins", "id": "Wiggins, Aaron"},
+                {"code": "JaSmith", "id": "Smith, Jalen"},
+            ]
+            apply_relative_positional_overrides(results, "Men_Maryland_2019/20")
+    """
+    rules = RELATIVE_POSITION_FIXES.get(team_season)
+    if rules is not None and recurse_count < len(rules):
+        rule_set = next(
+            (
+                rule
+                for rule in rules
+                if all(key is None or key == results[index]["code"] for index, key in enumerate(rule["key"]))
+            ),
+            None,
+        )
+        if rule_set is not None:
+            new_results: list[dict[str, str]] = []
+            for index, val in enumerate(results):
+                change_rule = rule_set["rule"][index]
+                if change_rule is None:
+                    new_results.append(val)
+                elif isinstance(change_rule, int):
+                    new_results.append(results[change_rule - 1])
+                else:
+                    new_results.append(change_rule)
+            return apply_relative_positional_overrides(new_results, team_season, recurse_count + 1)
+        return results
+    return results
+
+
+def _fit_player(
+    pl_index: int,
+    player_ids: list[str],
+    player_infos: list[dict[str, Any] | None],
+    mutable_scores: list[float],
+    mutable_best_fits: list[int],
+) -> None:
+    """Fit one player to their best-available slot, recursively re-fitting
+    any player they displace (``PositionUtils.ts:715-750``, the ``fitPlayer``
+    closure inside ``orderLineup``).
+
+    Candidate slots are tried in a fixed priority order -- PG (0), C (4), SG
+    (1), PF (3), then SF (2) as an always-available fallback (score ``0``,
+    which beats the ``-100000`` initial sentinel) -- mirroring the TS
+    ``_.takeWhile`` loop: keep scanning candidates while the current slot's
+    incumbent score is not beaten (``return true`` => keep going), and stop
+    at the first slot this player *does* beat (``return false`` => the
+    ``takeWhile`` halts), evicting and recursively re-fitting the incumbent
+    first if there was one.
+    """
+    info = player_infos[pl_index]
+    # `playerInfos[plIndex]?.posConfidences || [0,0,0,0,0]` (ts:716).
+    pos_class = (info.get("posConfidences") if info is not None else None) or [0, 0, 0, 0, 0]
+    # `playerInfos[plIndex]?.posClass || ""` (ts:719).
+    pos_class_score = pos_class_to_score((info.get("posClass") if info is not None else None) or "")
+    pg_score = 3 * pos_class[0] + pos_class[1]
+    post_score = 3 * pos_class[4] + pos_class[3]
+    backcourt_score = pos_class[0] + pos_class[1]
+    frontcourt_score = pos_class[4] + pos_class[3]
+
+    pl_scores: list[tuple[float, int]] = [
+        (pg_score - 2 * frontcourt_score - pos_class_score, 0),  # PG
+        (post_score - 2 * backcourt_score + pos_class_score, 4),  # C
+        (backcourt_score - frontcourt_score - pos_class_score, 1),  # SG
+        (frontcourt_score - backcourt_score + pos_class_score, 3),  # PF
+        (0, 2),  # SF is fallback
+    ]
+    for score, score_pos in pl_scores:
+        if score > mutable_scores[score_pos]:
+            prev_best_fit = mutable_best_fits[score_pos]
+            if prev_best_fit >= 0:
+                # Refit the player being replaced.
+                _fit_player(prev_best_fit, player_ids, player_infos, mutable_scores, mutable_best_fits)
+            mutable_best_fits[score_pos] = pl_index
+            mutable_scores[score_pos] = score
+            break
+
+
+def order_lineup(
+    player_codes_and_ids: list[dict[str, str]],
+    players_by_id: dict[str, dict[str, Any]],
+    team_season: str,
+) -> list[dict[str, str]]:
+    """Order a 5-man lineup ``X1_X2_X3_X4_X5`` into PG/SG/SF/PF/C slot order.
+
+    Faithful port of ``PositionUtils.orderLineup`` (``PositionUtils.ts:696-761``).
+    Greedily fits each player (in input order) to their best-scoring slot via
+    :func:`_fit_player` (dominated by :func:`pos_class_to_score` on the
+    player's ``posClass``, tie-broken by their raw ``posConfidences``),
+    evicting and recursively re-fitting any player displaced along the way,
+    then applies :func:`apply_relative_positional_overrides` (keyed on
+    ``team_season``) as a final hand-tuned correction pass.
+
+    Args:
+        player_codes_and_ids: The lineup membership, each a
+            ``{"code": ..., "id": ...}`` dict. Order does not affect the
+            final result (the slot-fitting algorithm is order-invariant by
+            construction -- displaced players are always re-fit).
+        players_by_id: Per-player positional info keyed by ``id``, each a
+            ``{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}``
+            dict (the tradPosList-ordered raw confidence scores plus the
+            classifier's :data:`ID_TO_POSITION`-keyed class label).
+        team_season: Key into :data:`RELATIVE_POSITION_FIXES` for the final
+            override pass.
+
+    Returns:
+        A 5-element list of ``{"code": ..., "id": ...}`` dicts in
+        PG/SG/SF/PF/C order.
+
+    Example:
+        ::
+
+            from sportsdataverse.mbb.mbb_positions import order_lineup
+            players_by_id = {
+                "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
+                "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
+            }
+            order_lineup(
+                [{"code": "AnCowan", "id": "Cowan, Anthony"},
+                 {"code": "ErAyala", "id": "Ayala, Eric"}],
+                players_by_id, "",
+            )
+    """
+    # `_.fromPairs(playerCodesAndIds.map(codeId => [codeId.id, codeId.code]))`
+    # (ts:701-706) -- a dict preserves insertion order, matching lodash.
+    player_id_to_code = {c["id"]: c["code"] for c in player_codes_and_ids}
+    player_ids = list(player_id_to_code.keys())
+    init = -100000.0
+    mutable_scores: list[float] = [init, init, init, init, init]
+    mutable_best_fits: list[int] = [-1, -1, -1, -1, -1]
+    player_infos: list[dict[str, Any] | None] = [players_by_id.get(pid) for pid in player_ids]
+
+    for pl_index in range(len(player_ids)):
+        _fit_player(pl_index, player_ids, player_infos, mutable_scores, mutable_best_fits)
+
+    # NOTE (landmine, unreachable in this codebase's domain): if
+    # `len(player_ids) < 5`, a scorePos slot can be left at `-1` (never
+    # fit). JS `player_ids[-1]` returns `undefined`; Python negative
+    # indexing would instead silently wrap around to the *last* player -- a
+    # real behavioral divergence from the TS. `order_lineup` is only ever
+    # called with exactly 5-player lineups in this codebase, and with 5
+    # players / 5 slots the SF fallback (score `0`, always `>` the `-100000`
+    # sentinel) guarantees every slot is filled, so `-1` never survives to
+    # this point in practice -- left unguarded rather than adding dead code;
+    # guard here first if this function is ever exposed to variable-size
+    # groups.
+    ordered = [{"code": player_id_to_code[player_ids[idx]], "id": player_ids[idx]} for idx in mutable_best_fits]
+    return apply_relative_positional_overrides(ordered, team_season)
+
+
+#: 0-indexed tradPosList slot for each recognized filter position token
+#: (``PositionUtils.ts:784-802``, the ``switch`` inside ``buildPositionalAwareFilter``'s
+#: ``decomp`` closure). Both the 1-based numeric token and the position
+#: abbreviation map to the same slot; an unrecognized token contributes no
+#: index (``PositionUtils.ts:801`` falls through to ``return []``).
+_POSITION_FILTER_TOKENS: dict[str, int] = {
+    "1": 0,
+    "pg": 0,
+    "2": 1,
+    "sg": 1,
+    "3": 2,
+    "sf": 2,
+    "4": 3,
+    "pf": 3,
+    "5": 4,
+    "c": 4,
+}
+
+#: ``([^=]+)(?:=(([a-zA-Z1-5+]+)))?`` (``PositionUtils.ts:781``) -- group 1 is
+#: the filter name (everything up to an optional ``=``), group 2 is the
+#: optional ``+``-joined position-token spec.
+_FILTER_FRAGMENT_RE = re.compile(r"([^=]+)(?:=(([a-zA-Z1-5+]+)))?")
+
+
+def _decomp_positional_filter_fragment(fragment: str, has_position: list[bool]) -> list[dict[str, Any]]:
+    """Parse one filter fragment into 0 or 1 ``{"filter": ..., "pos": [...]}``
+    dicts (``PositionUtils.ts:780-809``, the ``decomp`` closure).
+
+    ``has_position`` is a 1-element mutable list standing in for the TS
+    closure's shared ``var hasPosition`` -- both :func:`build_positional_aware_filter`
+    call sites (positive and negative fragments) mutate the same cell, and
+    the final flag is true iff *any* fragment (either side) carried a
+    recognized position token.
+    """
+    match_info = _FILTER_FRAGMENT_RE.match(fragment)
+    # `matchInfo?.[1]` (ts:782) -- group 1 is always present when the regex
+    # matches at all (it requires >= 1 non-`=` char), so a `None` match
+    # object is the only "no filter" case in practice.
+    filt = match_info.group(1) if match_info is not None else None
+    if filt:
+        # `(matchInfo?.[2] || "").split("+")` (ts:784).
+        pos_spec = (match_info.group(2) or "") if match_info is not None else ""
+        pos: list[int] = []
+        for token in pos_spec.split("+"):
+            index = _POSITION_FILTER_TOKENS.get(token.strip().lower())
+            if index is not None:
+                pos.append(index)
+        # `hasPosition = hasPosition || !_.isEmpty(pos)` (ts:804).
+        if pos:
+            has_position[0] = True
+        return [{"filter": filt.lower(), "pos": pos}]
+    return []
+
+
+def build_positional_aware_filter(
+    filter_str: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], bool]:
+    """Decompose a search-filter string into positionally-aware +ve/-ve fragments.
+
+    Faithful port of ``PositionUtils.buildPositionalAwareFilter``
+    (``PositionUtils.ts:764-828``). Picks a fragment separator by scanning
+    ``[";", "/", ","]`` in priority order for the first one present anywhere
+    in ``filter_str`` (a fragment separator of ``"!!!"`` -- never itself
+    present -- is the "no separator found" fallback, which leaves the whole
+    string as a single fragment). Splits on that separator, trims whitespace,
+    drops empty fragments and ``[``-prefixed ones (reserved for aggregation-key
+    filters elsewhere in the app), then routes each fragment to the positive
+    or negative bucket by a leading ``-``, and parses each fragment's optional
+    ``=<tokens>`` position spec via :func:`_decomp_positional_filter_fragment`.
+
+    Args:
+        filter_str: A raw filter string, e.g. ``"test1=pg / -test2=Pf+C / test3"``.
+
+    Returns:
+        A ``(positive_fragments, negative_fragments, has_position)`` triple.
+        Each fragment is ``{"filter": <lowercased name>, "pos": [indices]}``.
+        ``has_position`` is ``True`` iff any fragment (either side) carried at
+        least one recognized position token.
+
+    Example:
+        ::
+
+            from sportsdataverse.mbb.mbb_positions import build_positional_aware_filter
+            build_positional_aware_filter("test1=pg / -test2=Pf+C / test3")
+    """
+    # Pick the separator: first of `;` / `/` / `,` (in that priority order)
+    # that appears anywhere in filter_str (ts:771-777).
+    separator = "!!!"
+    for candidate in (";", "/", ","):
+        if candidate in filter_str:
+            separator = candidate
+        if separator != "!!!":
+            break
+
+    has_position = [False]
+
+    # `filterStr.split(separator).map(trim).filter(...)` (ts:811-815):
+    # drop `[`-prefixed and empty fragments.
+    fragments = [frag.strip() for frag in filter_str.split(separator)]
+    fragments = [frag for frag in fragments if frag and frag[0] != "["]
+
+    filter_fragments_pve = [frag for frag in fragments if frag[0] != "-"]
+    filter_fragments_nve = [frag[1:] for frag in fragments if frag[0] == "-"]
+
+    pve_frags = [
+        item for frag in filter_fragments_pve for item in _decomp_positional_filter_fragment(frag, has_position)
+    ]
+    nve_frags = [
+        item for frag in filter_fragments_nve for item in _decomp_positional_filter_fragment(frag, has_position)
+    ]
+
+    return pve_frags, nve_frags, has_position[0]
+
+
+def test_positional_aware_filter(
+    sorted_to_test: list[dict[str, str]],
+    pve_frags: list[dict[str, Any]],
+    nve_frags: list[dict[str, Any]],
+) -> bool:
+    """Check a positional-aware filter (from :func:`build_positional_aware_filter`)
+    against a sorted (:func:`order_lineup`-ordered) lineup array.
+
+    Faithful port of ``PositionUtils.testPositionalAwareFilter``
+    (``PositionUtils.ts:831-858``). A fragment matches if any of its
+    position-restricted slots (or, when ``pos`` is empty, any slot at all)
+    has a ``code``/``id`` containing the fragment's filter text
+    (case-insensitive substring match). Every positive fragment must match
+    (vacuously true if there are none); no negative fragment may match
+    (vacuously true if there are none).
+
+    Args:
+        sorted_to_test: The ordered lineup, each a ``{"id": ..., "code": ...}``
+            dict (as returned by :func:`order_lineup`).
+        pve_frags: Positive-filter fragments (must ALL match).
+        nve_frags: Negative-filter fragments (NONE may match).
+
+    Returns:
+        Whether the lineup satisfies both the positive and negative filters.
+
+    Example:
+        ::
+
+            from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
+            lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
+            test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
+    """
+    no_pve_frags = not pve_frags
+    no_nve_frags = not nve_frags
+
+    def _match_frag(cid: dict[str, str], frag: str) -> bool:
+        return frag in cid["id"].lower() or frag in cid["code"].lower()
+
+    def _match(frag: dict[str, Any]) -> bool:
+        pos = frag["pos"]
+        names_to_test = sorted_to_test if not pos else [sorted_to_test[index] for index in pos]
+        return any(_match_frag(cid, frag["filter"]) for cid in names_to_test)
+
+    return (no_pve_frags or all(_match(frag) for frag in pve_frags)) and (
+        no_nve_frags or not any(_match(frag) for frag in nve_frags)
+    )
