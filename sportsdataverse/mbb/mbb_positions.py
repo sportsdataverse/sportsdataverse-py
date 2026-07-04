@@ -1087,7 +1087,10 @@ def _decomp_positional_filter_fragment(fragment: str, has_position: list[bool]) 
     the final flag is true iff *any* fragment (either side) carried a
     recognized position token.
     """
-    match_info = _FILTER_FRAGMENT_RE.match(fragment)
+    # `.search`, not `.match`: JS `.exec()` (ts:781) is unanchored, so a
+    # leading-`=` fragment like "=pg" matches `[^=]+` starting at index 1
+    # (filter "pg"). `re.match` only tries index 0 and would drop it.
+    match_info = _FILTER_FRAGMENT_RE.search(fragment)
     # `matchInfo?.[1]` (ts:782) -- group 1 is always present when the regex
     # matches at all (it requires >= 1 non-`=` char), so a `None` match
     # object is the only "no filter" case in practice.

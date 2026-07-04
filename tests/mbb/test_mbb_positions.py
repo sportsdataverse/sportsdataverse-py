@@ -584,6 +584,15 @@ def test_build_positional_aware_filter(filter_str: str, expected: tuple) -> None
     assert build_positional_aware_filter(filter_str) == expected
 
 
+def test_build_positional_aware_filter_leading_equals_fragment() -> None:
+    """Faithfulness regression (no jest oracle): JS ``.exec()`` (ts:781) is
+    unanchored, so a leading-``=`` fragment ``"=pg"`` parses to filter ``"pg"``
+    (verified in node: ``/([^=]+)(?:=...)?/.exec("=pg")`` -> ``["pg", "pg", ...]``).
+    A ``re.match`` port would anchor at index 0 and silently drop it.
+    """
+    assert build_positional_aware_filter("=pg") == ([{"filter": "pg", "pos": []}], [], False)
+
+
 # --- Test 9: PositionUtils - testPositionalAwareFilter (jest :335-380) -----
 
 
