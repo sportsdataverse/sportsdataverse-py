@@ -139,6 +139,7 @@ from sportsdataverse.wbb import RapmPriorInfo as RapmPriorInfo  # noqa: F401
 from sportsdataverse.wbb import RapmProcessingInputs as RapmProcessingInputs  # noqa: F401
 from sportsdataverse.wbb import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
 from sportsdataverse.wbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
+from sportsdataverse.wbb import apply_relative_positional_overrides as apply_relative_positional_overrides  # noqa: F401
 from sportsdataverse.wbb import apply_weak_priors as apply_weak_priors  # noqa: F401
 from sportsdataverse.wbb import build_3p_shot_info as build_3p_shot_info  # noqa: F401
 from sportsdataverse.wbb import build_adjusted_3p as build_adjusted_3p  # noqa: F401
@@ -148,6 +149,9 @@ from sportsdataverse.wbb import build_exp_3p as build_exp_3p  # noqa: F401
 from sportsdataverse.wbb import build_net_points as build_net_points  # noqa: F401
 from sportsdataverse.wbb import build_o_rtg as build_o_rtg  # noqa: F401
 from sportsdataverse.wbb import build_player_context as build_player_context  # noqa: F401
+from sportsdataverse.wbb import build_position as build_position  # noqa: F401
+from sportsdataverse.wbb import build_position_confidences as build_position_confidences  # noqa: F401
+from sportsdataverse.wbb import build_positional_aware_filter as build_positional_aware_filter  # noqa: F401
 from sportsdataverse.wbb import build_priors as build_priors  # noqa: F401
 from sportsdataverse.wbb import build_productivity as build_productivity  # noqa: F401
 from sportsdataverse.wbb import build_weak_prior_from_rapm as build_weak_prior_from_rapm  # noqa: F401
@@ -186,6 +190,7 @@ from sportsdataverse.wbb import helper_wbb_pbp_features as helper_wbb_pbp_featur
 from sportsdataverse.wbb import helper_wbb_pickcenter as helper_wbb_pickcenter  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_roster_items as helper_wbb_roster_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import incorporate_height as incorporate_height  # noqa: F401
 from sportsdataverse.wbb import inject_luck as inject_luck  # noqa: F401
 from sportsdataverse.wbb import inject_rapm_into_players as inject_rapm_into_players  # noqa: F401
 from sportsdataverse.wbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
@@ -202,10 +207,15 @@ from sportsdataverse.wbb import load_wbb_team_boxscore as load_wbb_team_boxscore
 from sportsdataverse.wbb import load_wbb_team_season_stats as load_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import most_recent_wbb_season as most_recent_wbb_season  # noqa: F401
 from sportsdataverse.wbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.wbb import order_lineup as order_lineup  # noqa: F401
 from sportsdataverse.wbb import pick_ridge_regression as pick_ridge_regression  # noqa: F401
+from sportsdataverse.wbb import pos_class_to_score as pos_class_to_score  # noqa: F401
+from sportsdataverse.wbb import regress_shot_quality as regress_shot_quality  # noqa: F401
 from sportsdataverse.wbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.wbb import slow_regression as slow_regression  # noqa: F401
+from sportsdataverse.wbb import test_positional_aware_filter as test_positional_aware_filter  # noqa: F401
 from sportsdataverse.wbb import underscore as underscore  # noqa: F401
+from sportsdataverse.wbb import using_roster_pos as using_roster_pos  # noqa: F401
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
 from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
 
@@ -217,6 +227,7 @@ __all__ = [
     "RapmProcessingInputs",
     "SeasonNotFoundError",
     "adjust_off_rating_stats",
+    "apply_relative_positional_overrides",
     "apply_weak_priors",
     "build_3p_shot_info",
     "build_adjusted_3p",
@@ -226,6 +237,9 @@ __all__ = [
     "build_net_points",
     "build_o_rtg",
     "build_player_context",
+    "build_position",
+    "build_position_confidences",
+    "build_positional_aware_filter",
     "build_priors",
     "build_productivity",
     "build_weak_prior_from_rapm",
@@ -373,6 +387,7 @@ __all__ = [
     "helper_wbb_pickcenter",
     "helper_wbb_roster_items",
     "helper_wbb_team_items",
+    "incorporate_height",
     "inject_luck",
     "inject_rapm_into_players",
     "lineup_to_team_report",
@@ -389,10 +404,15 @@ __all__ = [
     "load_wbb_team_season_stats",
     "most_recent_wbb_season",
     "normalize_team_roster_columns",
+    "order_lineup",
     "pick_ridge_regression",
+    "pos_class_to_score",
+    "regress_shot_quality",
     "scoreboard_event_parsing",
     "slow_regression",
+    "test_positional_aware_filter",
     "underscore",
+    "using_roster_pos",
     "wbb_pbp_disk",
     "weighted_avg",
 ]

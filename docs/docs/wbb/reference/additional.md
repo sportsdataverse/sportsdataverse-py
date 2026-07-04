@@ -631,6 +631,48 @@ adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
 print(o_diags["oRtg"], o_diags["adjORtgPlus"])
 ```
 
+### `apply_relative_positional_overrides(results: 'list[dict[str, str]]', team_season: 'str', recurse_count: 'int' = 0) -> 'list[dict[str, str]]'` {#apply_relative_positional_overrides}
+
+Recursively re-shuffle an ordered lineup per `RELATIVE_POSITION_FIXES`.
+
+Faithful port of the private `PositionUtils.applyRelativePositionalOverrides`
+(`PositionUtils.ts:657-693`). Finds the first rule (in table order) whose
+`key` slots all match the current `results` codes (a `None` key slot
+matches anything), applies that rule's `rule` slots (`None` = leave
+unchanged, `int` = 1-based back-reference into the *pre-rule* results,
+`dict` = literal replacement) to produce a new ordering, then recurses on
+the new ordering -- since one swap can expose a second rule to match (e.g.
+the Maryland 2019/20 Morsell/Wiggins swap can cascade into the Lindo/Smith
+swap). Recursion is bounded by `recurse_count < len(rules)` (ported
+verbatim from the TS bound), so it always terminates even if two rules
+somehow ping-ponged each other.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `list[dict[str, str]]` |  | The current 5-slot `{"code": ..., "id": ...}` ordering (PG/SG/SF/PF/C, index 0-4). |
+| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES`. A team/season absent from the table (or the recursion exhausting that team/season's rule count) returns `results` unchanged. |
+| `recurse_count` | `int` | `0` | Internal recursion depth counter -- callers should not pass this explicitly (mirrors the TS default parameter). |
+
+**Returns**
+
+The (possibly re-shuffled) 5-slot ordering.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import apply_relative_positional_overrides
+results = [
+    {"code": "AnCowan", "id": "Cowan, Anthony"},
+    {"code": "ErAyala", "id": "Ayala, Eric"},
+    {"code": "DaMorsell", "id": "Morsell, Darryl"},
+    {"code": "AaWiggins", "id": "Wiggins, Aaron"},
+    {"code": "JaSmith", "id": "Smith, Jalen"},
+]
+apply_relative_positional_overrides(results, "Men_Maryland_2019/20")
+```
+
 ### `apply_weak_priors(field: 'str', player_poss_pcts: 'list[float]', prior_info: 'RapmPriorInfo', debug_mode: 'bool' = False) -> 'Callable[[float, list[float]], list[float]]'` {#apply_weak_priors}
 
 Build a closure that nudges ridge-regressed RAPM back towards its weak prior.
@@ -949,6 +991,118 @@ print(ctx["num_players"], ctx["team_info"]["off_poss"]["value"])
 
 off_lineups = ctx["filtered_lineups"]("off")
 def_lineups = ctx["filtered_lineups"]("def")
+```
+
+### `build_position(confs: 'dict[str, float]', confs_no_height: 'dict[str, float] | None', player: 'dict[str, Any]', team_season: 'str') -> 'tuple[str, str]'` {#build_position}
+
+Classify a player into a position label + diagnostic trace string.
+
+Faithful port of `PositionUtils.buildPosition` (`PositionUtils.ts:401-580`)
+-- the PG / s-PG / CG / WG / WF / S-PF / PF/C / C decision tree. A
+`ABSOLUTE_POSITION_FIXES` manual override short-circuits the whole
+tree (recursing once, with `team_season=""`, purely to compute the
+diagnostic "what would this have been" string); otherwise the function
+walks the confidence-threshold / assist-rate / 3PT-rate branch cascade,
+applies the "too few effective possessions" (< 25) fallback, and
+reconciles the result against roster metadata via `using_roster_pos`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `confs` | `dict[str, float]` |  | The 5-way positional confidence dict (`TRAD_POS_LIST` keys), typically the height-adjusted output of `build_position_confidences`. |
+| `confs_no_height` | `dict[str, float] \| None` |  | The pre-height-adjustment confidences, or `None` when the caller has no height data. When present, a PG <-> s-PG flip caused solely by the height adjustment is reverted (the `maybeIgnoreHeight` closure, `ts:433-457`). The check is `is not None` (JS object-truthiness: an empty dict is still a truthy JS object), NOT a Python-falsy `if confs_no_height`. |
+| `player` | `dict[str, Any]` |  | The player stat dict. Reads `key` (override lookup), `off_assist` / `off_3pr` / `off_usage` / `off_team_poss` (each `{"value": N}`-wrapped), and `roster` (a plain `{"pos": ..., "role": ...}` dict of un-wrapped strings). |
+| `team_season` | `str` |  | `"{sport}_{team}_{season}"` key into `ABSOLUTE_POSITION_FIXES`. Pass `""` to disable override lookup for a given call (the recursive diagnostic call inside the override branch does exactly this). |
+
+**Returns**
+
+A `(position, diagnostic)` tuple. `position` is one of `ID_TO_POSITION`'s keys; `diagnostic` is a human-readable trace of which rule fired, byte-identical to the TS's template strings (including `.toFixed(1)`-style percentage formatting).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import build_position, TRAD_POS_LIST
+confs = dict(zip(TRAD_POS_LIST, [0.9, 0.1, 0, 0, 0]))
+player = {"off_assist": {"value": 0.10}, "off_3pr": {"value": 0.20},
+          "off_team_poss": {"value": 1000}, "off_usage": {"value": 0.20}}
+build_position(confs, None, player, "Men_Boston College_2019/20")
+
+# A manual-override short-circuit
+
+build_position(confs, None, {"key": "Popovic, Nik",
+    "off_usage": {"value": 1}, "off_team_poss": {"value": 200},
+    "off_assist": {"value": 0.10}}, "Men_Boston College_2019/20")
+```
+
+### `build_position_confidences(player: 'dict[str, Any]', height_in: 'float | None' = None) -> 'tuple[dict[str, float], dict[str, Any]]'` {#build_position_confidences}
+
+Build the 5-way positional confidence vector for a player.
+
+Faithful port of `PositionUtils.buildPositionConfidences`
+(`PositionUtils.ts:263-338`). Derives the six `calc_*` ratios from the
+player's box-score fields, dot-products the resulting 17-feature vector
+against `POSITION_FEATURE_WEIGHTS` (each field regressed via
+`regress_shot_quality` and multiplied by its per-feature `scale`)
+plus the `POSITION_FEATURE_INIT` intercepts, applies a softmax over
+the five raw scores, and -- when `height_in` is supplied -- reweights the
+confidences via `incorporate_height`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player` | `dict[str, Any]` |  | The player stat dict (ES-aggregation bucket shape); each stat field is `{"value": N}`. Reads `total_off_assist`, `total_off_to`, `off_3p`, `off_efg`, `off_2pmid`, `off_2prim`, `total_off_fga`, `total_off_fta`, `total_off_ftm` (for the `calc_*` ratios) plus every non-`calc_` field in `POSITION_FEATURE_WEIGHTS`. |
+| `height_in` | `float \| None` | `None` | Optional player height in inches. When truthy, the returned confidences are height-adjusted; when `None` / `0`, the raw softmax confidences are returned. (JS `height_in ? ... : ...` falsy check, ts:324 -- a `0` height is treated as "no height".) |
+
+**Returns**
+
+A `(confidences, diagnostics)` tuple. `confidences` maps each `TRAD_POS_LIST` key (in order) to its final confidence. `diagnostics` carries `"scores"` (raw scores x `0.1`, keyed by position), `"confsNoHeight"` (the pre-height confidences, present only when `height_in` is truthy, else `None`), and `"calculated"` (the six derived `calc_*` ratios). The upstream diag object has exactly these three fields -- no UI-only fields are dropped.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import build_position_confidences
+confs, diags = build_position_confidences(player_bucket)
+print(confs["pos_pg"], diags["calculated"]["calc_ast_tov"])
+
+# Height-adjusted confidences
+
+confs_h, diags_h = build_position_confidences(player_bucket, 78.0)
+```
+
+### `build_positional_aware_filter(filter_str: 'str') -> 'tuple[list[dict[str, Any]], list[dict[str, Any]], bool]'` {#build_positional_aware_filter}
+
+Decompose a search-filter string into positionally-aware +ve/-ve fragments.
+
+Faithful port of `PositionUtils.buildPositionalAwareFilter`
+(`PositionUtils.ts:764-828`). Picks a fragment separator by scanning
+`[";", "/", ","]` in priority order for the first one present anywhere
+in `filter_str` (a fragment separator of `"!!!"` -- never itself
+present -- is the "no separator found" fallback, which leaves the whole
+string as a single fragment). Splits on that separator, trims whitespace,
+drops empty fragments and `[`-prefixed ones (reserved for aggregation-key
+filters elsewhere in the app), then routes each fragment to the positive
+or negative bucket by a leading `-`, and parses each fragment's optional
+`=<tokens>` position spec via decomp_positional_filter_fragment`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filter_str` | `str` |  | A raw filter string, e.g. `"test1=pg / -test2=Pf+C / test3"`. |
+
+**Returns**
+
+A `(positive_fragments, negative_fragments, has_position)` triple. Each fragment is `{"filter": <lowercased name>, "pos": [indices]}`. `has_position` is `True` iff any fragment (either side) carried at least one recognized position token.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import build_positional_aware_filter
+build_positional_aware_filter("test1=pg / -test2=Pf+C / test3")
 ```
 
 ### `build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'` {#build_priors}
@@ -1682,6 +1836,36 @@ diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
 print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
 ```
 
+### `incorporate_height(height_in: 'float', confs: 'list[float]') -> 'list[float]'` {#incorporate_height}
+
+Reweight positional confidences by height (Bayesian-ish height prior).
+
+Faithful port of `PositionUtils.incorporateHeight`
+(`PositionUtils.ts:346-368`; see `build_height_adj_probs` in the
+linked hoop-explorer blog post). For each position `i` it computes a
+height-plausibility mass `cdf(height + 1) - cdf(height - 1)` under
+`N(mean_i, sqrt2 * std_i)` (the `sqrt2` "height dampening" widens the
+variance so the effect is not too aggressive), multiplies it into the
+prior confidence, and renormalizes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `height_in` | `float` |  | Player height in inches. |
+| `confs` | `list[float]` |  | The five raw (pre-height) confidences, in `TRAD_POS_LIST` order. |
+
+**Returns**
+
+The five height-adjusted confidences, renormalized to sum to 1 (the `sum_product or 1` guard makes a degenerate all-zero product a no-op rather than a divide-by-zero -- see module landmine index item 1).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import incorporate_height
+incorporate_height(81, [0.03, 0.19, 0.49, 0.09, 0.18])
+```
+
 ### `inject_luck(mutable_stats: 'LineupStatSet', off_luck: 'OffLuckAdjustmentDiags | None', def_luck: 'DefLuckAdjustmentDiags | None') -> 'None'` {#inject_luck}
 
 Reversibly mutate a stat set in place with luck-adjustment deltas.
@@ -1833,6 +2017,47 @@ report = lineup_to_team_report(
 )
 ```
 
+### `order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'` {#order_lineup}
+
+Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
+
+Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
+Greedily fits each player (in input order) to their best-scoring slot via
+fit_player` (dominated by `pos_class_to_score` on the
+player's `posClass`, tie-broken by their raw `posConfidences`),
+evicting and recursively re-fitting any player displaced along the way,
+then applies `apply_relative_positional_overrides` (keyed on
+`team_season`) as a final hand-tuned correction pass.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
+| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
+| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
+
+**Returns**
+
+A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import order_lineup
+players_by_id = {
+    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
+    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
+}
+order_lineup(
+    [{"code": "AnCowan", "id": "Cowan, Anthony"},
+     {"code": "ErAyala", "id": "Ayala, Eric"}],
+    players_by_id, "",
+)
+```
+
 ### `pick_ridge_regression(off_weights: 'NDArray[np.float64]', def_weights: 'NDArray[np.float64]', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', diag_mode: 'bool', agg_value_key: 'ValueKey' = 'value', lineup_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value')) -> 'tuple[RapmProcessingInputs, RapmProcessingInputs]'` {#pick_ridge_regression}
 
 Adaptively pick a ridge-regression lambda and blend in the RAPM priors.
@@ -1945,6 +2170,75 @@ off_results, def_results = pick_ridge_regression(
 print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
 ```
 
+### `pos_class_to_score(pos_class: 'str') -> 'int'` {#pos_class_to_score}
+
+Ordinal "positional weight" for a position class, PG=1000..C=8000.
+
+Faithful port of `PositionUtils.posClassToScore` (`PositionUtils.ts:629-654`,
+a literal `switch`). Unmapped classes default to `4000` (the TS
+default-case comment notes "won't happen").
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pos_class` | `str` |  | A position-class code (e.g. `"PG"`, `"WF"`, `"C"`). |
+
+**Returns**
+
+The class's ordinal score.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import pos_class_to_score
+pos_class_to_score("WF")
+```
+
+### `regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'` {#regress_shot_quality}
+
+Shrink a small-sample shot-quality stat toward its positional average.
+
+Faithful port of `PositionUtils.regressShotQuality`
+(`PositionUtils.ts:216-258`). Only the three relative shot-quality
+features (`calc_three_relative` / `calc_rim_relative` /
+`calc_mid_relative`) are regressed; any other `feat` passes `stat`
+through unchanged. A player is regressed toward the positional average
+whenever the relevant shot volume is below `max(0.25 * total_fga, 15)`
+(i.e. under 25% of their attempts come from that zone, floored at 15
+attempts). A `center` (`pos == 4`) who took 0-2 threes and made none is
+left at `0` to avoid widespread changes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stat` | `float` |  | The raw (unregressed) feature value. |
+| `pos` | `int` |  | Position index (`0=pg` ... `4=c`). |
+| `feat` | `str` |  | Feature field name (only the three relative shot-quality keys trigger regression; anything else is a passthrough). |
+| `player` | `dict[str, Any]` |  | The player stat dict; reads `total_off_fga` and the per-feature volume field (`total_off_{3p,2pmid,2prim}_attempts`), each shaped `{"value": N}`. |
+
+**Returns**
+
+The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import regress_shot_quality
+player = {"total_off_fga": {"value": 25},
+          "total_off_3p_attempts": {"value": 1}}
+regress_shot_quality(-15.5, 2, "misc_feature", player)
+
+# Low-volume shrink toward the positional average
+
+regress_shot_quality(100, 3, "calc_rim_relative",
+    {"total_off_fga": {"value": 25},
+     "total_off_2prim_attempts": {"value": 8}})
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -1986,6 +2280,70 @@ from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
 x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
 solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
 rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+```
+
+### `test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'` {#test_positional_aware_filter}
+
+Check a positional-aware filter (from `build_positional_aware_filter`)
+
+against a sorted (`order_lineup`-ordered) lineup array.
+
+Faithful port of `PositionUtils.testPositionalAwareFilter`
+(`PositionUtils.ts:831-858`). A fragment matches if any of its
+position-restricted slots (or, when `pos` is empty, any slot at all)
+has a `code`/`id` containing the fragment's filter text
+(case-insensitive substring match). Every positive fragment must match
+(vacuously true if there are none); no negative fragment may match
+(vacuously true if there are none).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
+| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
+| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
+
+**Returns**
+
+Whether the lineup satisfies both the positive and negative filters.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
+lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
+test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
+```
+
+### `using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'` {#using_roster_pos}
+
+Reconcile a stats-derived position class against roster metadata.
+
+Faithful port of `PositionUtils.usingRosterPos` (`PositionUtils.ts:583-626`).
+When the classifier landed on an "unsure" bucket (`"G?"`/`"F/C?"`),
+roster info narrows it (a roster `"C"` always wins outright); otherwise
+an obviously-wrong stats classification is compromised toward the
+roster-implied side, gated by `pos_class_to_score` thresholds.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pos_class` | `str` |  | The stats-derived position class. |
+| `roster_pos` | `str \| None` |  | The roster-reported position (`"G"`/`"F"`/`"C"`), or `None`/`""` when unknown. `if (rosterPos)` (ts:587) is a plain JS truthiness check on a string -- `""` and `None` behave identically (both mean "no correction"), so `if not roster_pos` is the faithful Python mirror, not an `is None` landmine. |
+
+**Returns**
+
+A `(position, info)` tuple. `info` is `None` when no correction/explanation applies (matches the TS `undefined`), else a human-readable note on why the position was adjusted.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import using_roster_pos
+using_roster_pos("G?", "C")
 ```
 
 ### `wbb_pbp_disk(game_id, path_to_json)` {#wbb_pbp_disk}
