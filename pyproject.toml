@@ -326,6 +326,7 @@ files = [
     "sportsdataverse/mbb/mbb_ncaa_models.py",
     "sportsdataverse/mbb/mbb_ncaa_events.py",
     "sportsdataverse/mbb/mbb_ncaa_possessions.py",
+    "sportsdataverse/mbb/mbb_ncaa_data_quality.py",
     "sportsdataverse/wbb/wbb_lineup_stats.py",
     "sportsdataverse/wbb/wbb_ratings.py",
     "sportsdataverse/wbb/wbb_luck.py",
