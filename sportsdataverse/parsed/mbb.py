@@ -143,15 +143,37 @@ from sportsdataverse.mbb import fox_mbb_standings as _raw_fox_mbb_standings
 from sportsdataverse.mbb import fox_mbb_team_gamelog as _raw_fox_mbb_team_gamelog
 from sportsdataverse.mbb import fox_mbb_team_roster as _raw_fox_mbb_team_roster
 from sportsdataverse.mbb import fox_mbb_team_stats as _raw_fox_mbb_team_stats
+from sportsdataverse.mbb import AssistEvent as AssistEvent  # noqa: F401
+from sportsdataverse.mbb import AssistInfo as AssistInfo  # noqa: F401
+from sportsdataverse.mbb import ConcurrentClump as ConcurrentClump  # noqa: F401
+from sportsdataverse.mbb import Direction as Direction  # noqa: F401
+from sportsdataverse.mbb import FieldGoalStats as FieldGoalStats  # noqa: F401
+from sportsdataverse.mbb import LineupEvent as LineupEvent  # noqa: F401
+from sportsdataverse.mbb import LineupEventStats as LineupEventStats  # noqa: F401
+from sportsdataverse.mbb import LineupId as LineupId  # noqa: F401
+from sportsdataverse.mbb import LocationType as LocationType  # noqa: F401
+from sportsdataverse.mbb import PlayerCodeId as PlayerCodeId  # noqa: F401
+from sportsdataverse.mbb import PlayerShotInfo as PlayerShotInfo  # noqa: F401
+from sportsdataverse.mbb import PossCalcFragment as PossCalcFragment  # noqa: F401
+from sportsdataverse.mbb import PossState as PossState  # noqa: F401
+from sportsdataverse.mbb import PossessionEvent as PossessionEvent  # noqa: F401
 from sportsdataverse.mbb import RapmConfig as RapmConfig  # noqa: F401
 from sportsdataverse.mbb import RapmPlayerContext as RapmPlayerContext  # noqa: F401
 from sportsdataverse.mbb import RapmPreProcDiagnostics as RapmPreProcDiagnostics  # noqa: F401
 from sportsdataverse.mbb import RapmPriorInfo as RapmPriorInfo  # noqa: F401
 from sportsdataverse.mbb import RapmProcessingInputs as RapmProcessingInputs  # noqa: F401
+from sportsdataverse.mbb import RawGameEvent as RawGameEvent  # noqa: F401
+from sportsdataverse.mbb import Score as Score  # noqa: F401
+from sportsdataverse.mbb import ScoreInfo as ScoreInfo  # noqa: F401
 from sportsdataverse.mbb import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
+from sportsdataverse.mbb import ShotClockStats as ShotClockStats  # noqa: F401
+from sportsdataverse.mbb import TeamId as TeamId  # noqa: F401
+from sportsdataverse.mbb import TeamSeasonId as TeamSeasonId  # noqa: F401
+from sportsdataverse.mbb import Year as Year  # noqa: F401
 from sportsdataverse.mbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
 from sportsdataverse.mbb import apply_relative_positional_overrides as apply_relative_positional_overrides  # noqa: F401
 from sportsdataverse.mbb import apply_weak_priors as apply_weak_priors  # noqa: F401
+from sportsdataverse.mbb import assign_to_right_lineup as assign_to_right_lineup  # noqa: F401
 from sportsdataverse.mbb import build_3p_shot_info as build_3p_shot_info  # noqa: F401
 from sportsdataverse.mbb import build_adjusted_3p as build_adjusted_3p  # noqa: F401
 from sportsdataverse.mbb import build_d_rtg as build_d_rtg  # noqa: F401
@@ -175,11 +197,16 @@ from sportsdataverse.mbb import calc_off_team_luck_adj as calc_off_team_luck_adj
 from sportsdataverse.mbb import calc_player_weights as calc_player_weights  # noqa: F401
 from sportsdataverse.mbb import calc_slow_pseudo_inverse as calc_slow_pseudo_inverse  # noqa: F401
 from sportsdataverse.mbb import calculate_aggregated_lineup_stats as calculate_aggregated_lineup_stats  # noqa: F401
+from sportsdataverse.mbb import calculate_possessions as calculate_possessions  # noqa: F401
+from sportsdataverse.mbb import calculate_possessions_by_event as calculate_possessions_by_event  # noqa: F401
 from sportsdataverse.mbb import calculate_predicted_out as calculate_predicted_out  # noqa: F401
 from sportsdataverse.mbb import calculate_rapm as calculate_rapm  # noqa: F401
 from sportsdataverse.mbb import calculate_residual_error as calculate_residual_error  # noqa: F401
 from sportsdataverse.mbb import calculate_sd_rapm as calculate_sd_rapm  # noqa: F401
+from sportsdataverse.mbb import calculate_stats as calculate_stats  # noqa: F401
 from sportsdataverse.mbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
+from sportsdataverse.mbb import concurrent_event_handler as concurrent_event_handler  # noqa: F401
+from sportsdataverse.mbb import count_matching as count_matching  # noqa: F401
 from sportsdataverse.mbb import download as download  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_calendar as espn_mbb_calendar  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_game_rosters as espn_mbb_game_rosters  # noqa: F401
@@ -200,6 +227,10 @@ from sportsdataverse.mbb import helper_mbb_team_items as helper_mbb_team_items  
 from sportsdataverse.mbb import incorporate_height as incorporate_height  # noqa: F401
 from sportsdataverse.mbb import inject_luck as inject_luck  # noqa: F401
 from sportsdataverse.mbb import inject_rapm_into_players as inject_rapm_into_players  # noqa: F401
+from sportsdataverse.mbb import is_gen2 as is_gen2  # noqa: F401
+from sportsdataverse.mbb import lineup_as_raw_clumps as lineup_as_raw_clumps  # noqa: F401
+from sportsdataverse.mbb import lineup_balancer as lineup_balancer  # noqa: F401
+from sportsdataverse.mbb import lineup_fixer as lineup_fixer  # noqa: F401
 from sportsdataverse.mbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
 from sportsdataverse.mbb import load_mbb_game_rosters as load_mbb_game_rosters  # noqa: F401
 from sportsdataverse.mbb import load_mbb_officials as load_mbb_officials  # noqa: F401
@@ -216,9 +247,50 @@ from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.mbb import order_lineup as order_lineup  # noqa: F401
+from sportsdataverse.mbb import parse_any_play as parse_any_play  # noqa: F401
+from sportsdataverse.mbb import parse_assist as parse_assist  # noqa: F401
+from sportsdataverse.mbb import parse_deadball_rebound as parse_deadball_rebound  # noqa: F401
+from sportsdataverse.mbb import parse_defensive_action_event as parse_defensive_action_event  # noqa: F401
+from sportsdataverse.mbb import parse_defensive_event as parse_defensive_event  # noqa: F401
+from sportsdataverse.mbb import parse_defensive_info_event as parse_defensive_info_event  # noqa: F401
+from sportsdataverse.mbb import parse_defensive_rebound as parse_defensive_rebound  # noqa: F401
+from sportsdataverse.mbb import parse_flagrant_foul as parse_flagrant_foul  # noqa: F401
+from sportsdataverse.mbb import parse_foul_info as parse_foul_info  # noqa: F401
+from sportsdataverse.mbb import parse_free_throw_attempt as parse_free_throw_attempt  # noqa: F401
+from sportsdataverse.mbb import parse_free_throw_event as parse_free_throw_event  # noqa: F401
+from sportsdataverse.mbb import parse_free_throw_event_attempt_gen2 as parse_free_throw_event_attempt_gen2  # noqa: F401
+from sportsdataverse.mbb import parse_free_throw_made as parse_free_throw_made  # noqa: F401
+from sportsdataverse.mbb import parse_free_throw_missed as parse_free_throw_missed  # noqa: F401
+from sportsdataverse.mbb import parse_game_time as parse_game_time  # noqa: F401
+from sportsdataverse.mbb import parse_jumpball_won as parse_jumpball_won  # noqa: F401
+from sportsdataverse.mbb import parse_jumpball_won_or_lost as parse_jumpball_won_or_lost  # noqa: F401
+from sportsdataverse.mbb import parse_live_offensive_rebound as parse_live_offensive_rebound  # noqa: F401
+from sportsdataverse.mbb import parse_offensive_deadball_rebound as parse_offensive_deadball_rebound  # noqa: F401
+from sportsdataverse.mbb import parse_offensive_event as parse_offensive_event  # noqa: F401
+from sportsdataverse.mbb import parse_offensive_foul as parse_offensive_foul  # noqa: F401
+from sportsdataverse.mbb import parse_offensive_rebound as parse_offensive_rebound  # noqa: F401
+from sportsdataverse.mbb import parse_personal_foul as parse_personal_foul  # noqa: F401
+from sportsdataverse.mbb import parse_rebound as parse_rebound  # noqa: F401
+from sportsdataverse.mbb import parse_rim_made as parse_rim_made  # noqa: F401
+from sportsdataverse.mbb import parse_rim_missed as parse_rim_missed  # noqa: F401
+from sportsdataverse.mbb import parse_shot_blocked as parse_shot_blocked  # noqa: F401
+from sportsdataverse.mbb import parse_shot_made as parse_shot_made  # noqa: F401
+from sportsdataverse.mbb import parse_shot_missed as parse_shot_missed  # noqa: F401
+from sportsdataverse.mbb import parse_stolen as parse_stolen  # noqa: F401
+from sportsdataverse.mbb import parse_team_sub_in as parse_team_sub_in  # noqa: F401
+from sportsdataverse.mbb import parse_team_sub_out as parse_team_sub_out  # noqa: F401
+from sportsdataverse.mbb import parse_technical_foul as parse_technical_foul  # noqa: F401
+from sportsdataverse.mbb import parse_three_pointer_made as parse_three_pointer_made  # noqa: F401
+from sportsdataverse.mbb import parse_three_pointer_missed as parse_three_pointer_missed  # noqa: F401
+from sportsdataverse.mbb import parse_timeout as parse_timeout  # noqa: F401
+from sportsdataverse.mbb import parse_turnover as parse_turnover  # noqa: F401
+from sportsdataverse.mbb import parse_two_pointer_made as parse_two_pointer_made  # noqa: F401
+from sportsdataverse.mbb import parse_two_pointer_missed as parse_two_pointer_missed  # noqa: F401
 from sportsdataverse.mbb import pick_ridge_regression as pick_ridge_regression  # noqa: F401
 from sportsdataverse.mbb import pos_class_to_score as pos_class_to_score  # noqa: F401
+from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum  # noqa: F401
 from sportsdataverse.mbb import regress_shot_quality as regress_shot_quality  # noqa: F401
+from sportsdataverse.mbb import score_to_tuple as score_to_tuple  # noqa: F401
 from sportsdataverse.mbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.mbb import slow_regression as slow_regression  # noqa: F401
 from sportsdataverse.mbb import test_positional_aware_filter as test_positional_aware_filter  # noqa: F401
@@ -227,15 +299,37 @@ from sportsdataverse.mbb import using_roster_pos as using_roster_pos  # noqa: F4
 from sportsdataverse.mbb import weighted_avg as weighted_avg  # noqa: F401
 
 __all__ = [
+    "AssistEvent",
+    "AssistInfo",
+    "ConcurrentClump",
+    "Direction",
+    "FieldGoalStats",
+    "LineupEvent",
+    "LineupEventStats",
+    "LineupId",
+    "LocationType",
+    "PlayerCodeId",
+    "PlayerShotInfo",
+    "PossCalcFragment",
+    "PossState",
+    "PossessionEvent",
     "RapmConfig",
     "RapmPlayerContext",
     "RapmPreProcDiagnostics",
     "RapmPriorInfo",
     "RapmProcessingInputs",
+    "RawGameEvent",
+    "Score",
+    "ScoreInfo",
     "SeasonNotFoundError",
+    "ShotClockStats",
+    "TeamId",
+    "TeamSeasonId",
+    "Year",
     "adjust_off_rating_stats",
     "apply_relative_positional_overrides",
     "apply_weak_priors",
+    "assign_to_right_lineup",
     "build_3p_shot_info",
     "build_adjusted_3p",
     "build_d_rtg",
@@ -259,11 +353,16 @@ __all__ = [
     "calc_player_weights",
     "calc_slow_pseudo_inverse",
     "calculate_aggregated_lineup_stats",
+    "calculate_possessions",
+    "calculate_possessions_by_event",
     "calculate_predicted_out",
     "calculate_rapm",
     "calculate_residual_error",
     "calculate_sd_rapm",
+    "calculate_stats",
     "complete_weighted_avg",
+    "concurrent_event_handler",
+    "count_matching",
     "download",
     "espn_mbb_award",
     "espn_mbb_awards",
@@ -404,6 +503,10 @@ __all__ = [
     "incorporate_height",
     "inject_luck",
     "inject_rapm_into_players",
+    "is_gen2",
+    "lineup_as_raw_clumps",
+    "lineup_balancer",
+    "lineup_fixer",
     "lineup_to_team_report",
     "load_mbb_game_rosters",
     "load_mbb_officials",
@@ -420,9 +523,50 @@ __all__ = [
     "most_recent_mbb_season",
     "normalize_team_roster_columns",
     "order_lineup",
+    "parse_any_play",
+    "parse_assist",
+    "parse_deadball_rebound",
+    "parse_defensive_action_event",
+    "parse_defensive_event",
+    "parse_defensive_info_event",
+    "parse_defensive_rebound",
+    "parse_flagrant_foul",
+    "parse_foul_info",
+    "parse_free_throw_attempt",
+    "parse_free_throw_event",
+    "parse_free_throw_event_attempt_gen2",
+    "parse_free_throw_made",
+    "parse_free_throw_missed",
+    "parse_game_time",
+    "parse_jumpball_won",
+    "parse_jumpball_won_or_lost",
+    "parse_live_offensive_rebound",
+    "parse_offensive_deadball_rebound",
+    "parse_offensive_event",
+    "parse_offensive_foul",
+    "parse_offensive_rebound",
+    "parse_personal_foul",
+    "parse_rebound",
+    "parse_rim_made",
+    "parse_rim_missed",
+    "parse_shot_blocked",
+    "parse_shot_made",
+    "parse_shot_missed",
+    "parse_stolen",
+    "parse_team_sub_in",
+    "parse_team_sub_out",
+    "parse_technical_foul",
+    "parse_three_pointer_made",
+    "parse_three_pointer_missed",
+    "parse_timeout",
+    "parse_turnover",
+    "parse_two_pointer_made",
+    "parse_two_pointer_missed",
     "pick_ridge_regression",
     "pos_class_to_score",
+    "poss_calc_fragment_sum",
     "regress_shot_quality",
+    "score_to_tuple",
     "scoreboard_event_parsing",
     "slow_regression",
     "test_positional_aware_filter",
