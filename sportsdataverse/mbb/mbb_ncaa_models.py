@@ -123,7 +123,7 @@ import re
 from dataclasses import astuple, dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import ClassVar, Optional
 
 __all__ = [
     "LocationType",
@@ -388,9 +388,14 @@ class LineupId:
 
     value: str
 
+    #: Placeholder lineup id used before lineup ids are calculated (``:179``).
+    #: Declared as a ``ClassVar`` so cross-module use sites type-check under
+    #: the whole-ratchet mypy run; assigned after the class body (a frozen
+    #: dataclass cannot self-reference during class creation).
+    unknown: ClassVar["LineupId"]
 
-LineupId.unknown = LineupId("")  # type: ignore[attr-defined]
-"""Placeholder lineup id used before lineup ids are calculated (``:179``)."""
+
+LineupId.unknown = LineupId("")
 
 
 @dataclass
