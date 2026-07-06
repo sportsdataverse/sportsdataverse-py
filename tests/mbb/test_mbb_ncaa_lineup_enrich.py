@@ -1,14 +1,16 @@
 """Oracle-replay tests for ``sportsdataverse.mbb.mbb_ncaa_lineup_enrich``
-(Task 5c.1).
+(Tasks 5c.1/5c.2).
 
 Transliterated 1:1 from ``LineupUtilsTests.scala`` (utest,
 ``org.piggottfamily.cbb_explorer.utils.parsers.ncaa``): the ``"enrich_lineup"``
 block (``:61-80``), the ``"fix_possible_score_swap_bug"`` block (``:81-208``,
 incl. the real-game-4690813 fixture), the ``"enrich_stats"`` block's
 table-driven per-event-type cases (``:209-449``, TOTAL-only dispatch --
-scramble/transition tagging lands in Tasks 5c.2/5c.3) plus its two
-assist-pairing cases (``assist_rim_test``/``assist_mid_test``, ``:411-449``),
-and the ``"add_stats_to_lineups"`` block (``:451-460``).
+scramble/transition tagging lands in Task 5c.3) plus its two assist-pairing
+cases (``assist_rim_test``/``assist_mid_test``, ``:411-449``), the
+``"add_stats_to_lineups"`` block (``:451-460``), the ``"is_scramble"`` block's
+13 tag sub-cases (``:478-699``), and the ``"is_end_of_game_fouling_vs_fastbreak"``
+block (``:714-755``).
 
 The ``Events`` fixture is reused (imported) from
 ``test_mbb_ncaa_possessions.py`` rather than redefined -- it already carries
@@ -19,16 +21,22 @@ The oracle's block-3 comparison strips scramble/transition (``.orb``)
 markers from the actual result before comparing against a total-only
 expected value, because the *real* Scala ``enrich_stats`` already has
 ``is_scramble``/``is_transition`` wired in. This port's ``enrich_stats``
-doesn't wire those in until Tasks 5c.2/5c.3 -- it never touches ``.orb``/
-``.early`` at all yet -- so no such stripping is needed here: the actual
-result is asserted directly against a total-only expected value.
+doesn't wire those in until Task 5c.3 -- it never touches ``.orb``/``.early``
+at all yet -- so no such stripping is needed here: the actual result is
+asserted directly against a total-only expected value.
+
+The ``"is_scramble"`` block's FINAL 2 cases (``LineupUtilsTests.scala
+:652-698``) run a scenario through ``enrich_stats`` to prove ``is_scramble``
+is actually wired into the dispatch (team version and player version) --
+that wiring is the ``_shot_clock_selector_builder`` seam, which doesn't land
+until Task 5c.3, so those 2 integration cases are deferred there.
 """
 
 from __future__ import annotations
 
 from dataclasses import replace
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional
 
 import pytest
 
@@ -38,6 +46,8 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import (
     enrich_stats,
     ensure_ev_uniqueness,
     fix_possible_score_swap_bug,
+    is_end_of_game_fouling_vs_fastbreak,
+    is_scramble,
 )
 from sportsdataverse.mbb.mbb_ncaa_models import (
     AssistEvent,
@@ -456,3 +466,251 @@ def test_add_stats_to_lineups() -> None:
     assert lineup.team_stats == replace(LineupEventStats(), foul=ShotClockStats(total=1))
     assert lineup.opponent_stats == replace(LineupEventStats(), to=ShotClockStats(total=1))
     assert lineup.raw_game_events == test_lineup.raw_game_events
+
+
+# ---------------------------------------------------------------------------
+# "is_scramble" (LineupUtilsTests.scala:478-699) -- 13 tag sub-cases.
+#
+# The block's FINAL 2 cases (:652-698) run a scenario through `enrich_stats`
+# to prove `is_scramble` is wired into the dispatch (team + player version);
+# that wiring is the `_shot_clock_selector_builder` seam from Task 5c.3, so
+# those 2 integration cases are deferred there (see the module docstring).
+# ---------------------------------------------------------------------------
+
+_SEC_TO_MIN = 1.0 / 60
+_TEAM_FILTER = PossessionEvent(Direction.TEAM)
+_OPPO_FILTER = PossessionEvent(Direction.OPPONENT)
+
+
+def _clump_scenario_builder(
+    current: list[RawGameEvent], before: list[RawGameEvent], current_sec: float, before_sec: float
+) -> tuple[ConcurrentClump, list[ConcurrentClump]]:
+    """Builds 2 clumps of events with a specified time difference -- also
+    exercises :func:`ensure_ev_uniqueness` (``clump_scenario_builder``,
+    ``LineupUtilsTests.scala:464-476``)."""
+    current_clump = ConcurrentClump([replace(ev, min=current_sec * _SEC_TO_MIN) for ev in current])
+    before_clumps = (
+        [] if not before else [ConcurrentClump([replace(ev, min=before_sec * _SEC_TO_MIN) for ev in before])]
+    )
+    return (
+        ensure_ev_uniqueness(current_clump),
+        [ensure_ev_uniqueness(c) for c in before_clumps],
+    )
+
+
+# Each row: (case id, current events, before events, current_sec, before_sec,
+# expected debug tag, expected per-event booleans for `current_clump.evs`).
+IS_SCRAMBLE_CASES: list[tuple[str, list[RawGameEvent], list[RawGameEvent], float, float, str, list[bool]]] = [
+    (
+        # N/A no offensive events in current
+        "N/A",
+        [Events.foul_team, Events.made_opponent],
+        [Events.made_team, Events.missed_ft1_team, Events.orb_team, Events.missed_rim_team],
+        10.0,
+        5.0,
+        "N/A",
+        [],  # oracle only asserts the tag for this case
+    ),
+    (
+        # 0a.2: (nothing), small gap, turnover, ORB, made shot
+        "0a.2",
+        [Events.turnover_team, Events.orb_team, Events.missed_rim_team],
+        [],
+        10.0,
+        5.0,
+        "0a",
+        [True, True, False],
+    ),
+    (
+        # 1aa.1: missed, short gap, rebound, missed shot + made shot
+        "1aa.1",
+        [Events.missed_rim_team, Events.made_team, Events.orb_team],
+        [Events.missed_rim_team],
+        10.0,
+        5.0,
+        "1aa",
+        [True, True, True],
+    ),
+    (
+        # 1ab.1: TOs then missed shot (TO allowed)
+        "1ab.1",
+        [Events.turnover_team, Events.made_team, Events.missed_ftp1_team],
+        [Events.missed_team, Events.orb_team],
+        10.0,
+        5.0,
+        "1ab",
+        [True, False, False],
+    ),
+    (
+        # 1ab.2: dangling FT bug workaround
+        "1ab.2",
+        [Events.missed_ft_team, Events.made_team],
+        [Events.missed_ft_team],
+        10.0,
+        5.0,
+        "1ab",
+        [False, False],
+    ),
+    (
+        # 1b.1: like 1aa.1 but with large gap
+        "1b.1",
+        [Events.missed_rim_team, Events.made_team, Events.orb_team],
+        [Events.missed_rim_team],
+        12.0,
+        5.0,
+        "1b",
+        [False, True, True],
+    ),
+    (
+        # 1b.2: like 1aa.1 but with large gap and including an assist
+        "1b.2",
+        [Events.made_team, Events.assist_team, Events.missed_ftp1_team, Events.orb_team, Events.missed_rim_team],
+        [Events.missed_rim_team],
+        12.0,
+        5.0,
+        "1b",
+        [False, False, False, True, True],
+    ),
+    (
+        # 2aa.1: def, small gap, old format FTs split by ORBs
+        "2aa.1",
+        [Events.made_ft_team, Events.orb_team, Events.made_ft1_team, Events.made_ft2_team],
+        [Events.foul_team, Events.made_opponent],
+        10.0,
+        5.0,
+        "2aa",
+        [False, True, True, True],
+    ),
+    (
+        # 2aa.2: def, long/irrelevant gap, 2ndchance miss, ORB, miss
+        "2aa.2",
+        [Events.missed_team_2ndchance, Events.orb_team, Events.made_team],
+        [Events.foul_team, Events.made_opponent],
+        12.0,
+        5.0,
+        "2aa",
+        [True, True, False],
+    ),
+    (
+        # 2ab.1: defense, small gap, missed shot, deadball rebound, FT, FT (no ORBs)
+        "2ab.1",
+        [Events.missed_rim_team, Events.deadball_rb_team, Events.made_ft_team, Events.missed_ft2_team],
+        [Events.missed_opponent],
+        10.0,
+        5.0,
+        "2ab",
+        [False, False, False, False],
+    ),
+    (
+        # 2ab.2: (nothing), small gap, FT1, FT2, ORB, FT3 (ie all one offensive event)
+        "2ab.2",
+        [Events.made_ft1_team, Events.orb_team, Events.made_ft2_team],
+        [],
+        10.0,
+        5.0,
+        "2ab",
+        [False, False, False],
+    ),
+    (
+        # 0a.3: like 2ab.2 but the 2nd "made_ft2_team" won't be a dup, thanks to ensure_ev_uniqueness
+        "0a.3",
+        [Events.made_ft1_team, Events.orb_team, Events.made_ft2_team, Events.made_ft2_team],
+        [],
+        10.0,
+        5.0,
+        "0a",
+        [False, True, False, True],
+    ),
+    (
+        # 2ab.3: like 1ab.1 but no misses in prev clump, so first event can't be a rebound either
+        "2ab.3",
+        [Events.turnover_team, Events.made_team, Events.missed_ftp1_team],
+        [Events.made_team],
+        10.0,
+        5.0,
+        "2ab",
+        [False, False, False],
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "current,before,current_sec,before_sec,expected_tag,expected_bools",
+    [case[1:] for case in IS_SCRAMBLE_CASES],
+    ids=[case[0] for case in IS_SCRAMBLE_CASES],
+)
+def test_is_scramble(
+    current: list[RawGameEvent],
+    before: list[RawGameEvent],
+    current_sec: float,
+    before_sec: float,
+    expected_tag: str,
+    expected_bools: list[bool],
+) -> None:
+    current_clump, before_clumps = _clump_scenario_builder(current, before, current_sec, before_sec)
+    predicate, tag = is_scramble(current_clump, before_clumps, _TEAM_FILTER, player_version=False)
+    assert tag == expected_tag
+    if expected_bools:
+        assert [predicate(ev) for ev in current_clump.evs] == expected_bools
+
+
+# ---------------------------------------------------------------------------
+# "is_end_of_game_fouling_vs_fastbreak" (LineupUtilsTests.scala:714-755)
+# ---------------------------------------------------------------------------
+
+
+def _sub_score(new_score: str, ev: RawGameEvent) -> RawGameEvent:
+    """Rewrites the 2nd comma-field (the score) of ``ev``'s populated side to
+    ``new_score``, leaving everything else unchanged (``sub_score``,
+    ``LineupUtilsTests.scala:701-713``)."""
+
+    def _sub(s: Optional[str]) -> Optional[str]:
+        if s is None:
+            return None
+        parts = s.split(",")
+        if len(parts) < 2:
+            return s
+        return ",".join([parts[0], new_score] + parts[2:])
+
+    return replace(ev, team=_sub(ev.team), opponent=_sub(ev.opponent))
+
+
+# Each row: (event_parser, minute, score, pre-event, expected result).
+IS_END_OF_GAME_FOULING_CASES: list[tuple[PossessionEvent, float, str, RawGameEvent, bool]] = [
+    # Basic logic:
+    (_TEAM_FILTER, 37.5, "60-58", Events.made_team, False),
+    (_TEAM_FILTER, 38.1, "60-58", Events.made_ft_team, True),
+    (_TEAM_FILTER, 38.1, "60-58", Events.made_team, False),
+    (_TEAM_FILTER, 38.1, "60-58", Events.made_ft_opponent, False),
+    (_TEAM_FILTER, 38.1, "58-60", Events.made_ft_team, False),
+    (_TEAM_FILTER, 38.1, "70-58", Events.made_team, False),
+    # Check account for the score increase on made FTs:
+    (_TEAM_FILTER, 38.1, "60-59", Events.made_ft_team, False),
+    (_TEAM_FILTER, 38.1, "60-59", Events.missed_ft_team, True),
+    # Opponents:
+    (_OPPO_FILTER, 38.1, "60-58", Events.made_ft_opponent, False),
+    (_OPPO_FILTER, 38.1, "58-60", Events.made_ft_opponent, True),
+    # OTs:
+    (_TEAM_FILTER, 42.0, "60-58", Events.made_ft_team, False),
+    (_TEAM_FILTER, 43.2, "60-58", Events.made_ft_team, True),
+    (_TEAM_FILTER, 45.1, "60-58", Events.made_ft_team, False),
+    (_TEAM_FILTER, 49.5, "60-58", Events.made_ft_team, True),
+    (_TEAM_FILTER, 51.1, "60-58", Events.made_ft_team, False),
+    (_TEAM_FILTER, 55.0, "60-58", Events.made_ft_team, True),
+    (_TEAM_FILTER, 57.1, "60-58", Events.made_ft_team, False),
+    (_TEAM_FILTER, 59.0, "60-58", Events.made_ft_team, True),
+    (_TEAM_FILTER, 63.0, "60-58", Events.made_ft_team, False),
+    (_TEAM_FILTER, 64.9, "60-58", Events.made_ft_team, True),
+]
+
+
+@pytest.mark.parametrize(
+    "event_parser,minute,score,pre_ev,expected",
+    IS_END_OF_GAME_FOULING_CASES,
+    ids=[str(i) for i in range(len(IS_END_OF_GAME_FOULING_CASES))],
+)
+def test_is_end_of_game_fouling_vs_fastbreak(
+    event_parser: PossessionEvent, minute: float, score: str, pre_ev: RawGameEvent, expected: bool
+) -> None:
+    ev = replace(_sub_score(score, pre_ev), min=minute)
+    assert is_end_of_game_fouling_vs_fastbreak(ConcurrentClump([ev]), event_parser) == expected

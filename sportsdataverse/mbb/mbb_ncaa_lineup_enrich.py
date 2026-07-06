@@ -2,32 +2,36 @@
 
 Faithful port of hoop-explorer's ``cbb-explorer`` (Scala 2.12, ``utest``,
 package ``org.piggottfamily.cbb_explorer.utils.parsers.ncaa``)
-``LineupUtils.scala`` -- the first of five Phase-5c modules. **Task 5c.1
-ports the lineup-enrichment core**: :func:`enrich_lineup` (score-delta pts/
-plus_minus), :func:`fix_possible_score_swap_bug`, :func:`ensure_ev_uniqueness`,
-:func:`add_stats_to_lineups`, and the full :func:`enrich_stats` event
-dispatch -- but with a **total-only** shot-clock selector (see "The dispatch
-seam" below). The scramble (:func:`~sportsdataverse.mbb.mbb_ncaa_lineup_enrich
-.is_scramble`, Task 5c.2) and transition (``is_transition``, Task 5c.3)
-heuristics that tag events ``early``/``orb`` are NOT ported yet.
+``LineupUtils.scala`` -- the first two of five Phase-5c modules-in-one-file.
+**Task 5c.1 ported the lineup-enrichment core**: :func:`enrich_lineup`
+(score-delta pts/plus_minus), :func:`fix_possible_score_swap_bug`,
+:func:`ensure_ev_uniqueness`, :func:`add_stats_to_lineups`, and the full
+:func:`enrich_stats` event dispatch -- but with a **total-only** shot-clock
+selector (see "The dispatch seam" below). **Task 5c.2 additionally ports**
+:func:`is_scramble` (+ its private recursive ``_get_first_off_ev_set``
+helper) and :func:`is_end_of_game_fouling_vs_fastbreak` -- but **neither is
+wired into the dispatch yet**: ``_shot_clock_selector_builder`` still
+unconditionally returns ``["total"]``. Task 5c.3 ports ``is_transition``
+(which itself calls ``is_end_of_game_fouling_vs_fastbreak``) and threads both
+heuristics into the seam.
 
 **THE critical port fact.** ``ShotClockStats.mid``/``.late`` are **dead
 fields -- never populated** anywhere in ``LineupUtils.scala``. Only three
 segments are ever written: ``total`` (always), ``early`` (the
 ``is_transition`` heuristic, Task 5c.3), and ``orb`` (the ``is_scramble``
-heuristic, Task 5c.2). These are PLAY-TYPE heuristics, not shot-clock timer
-derivations -- there is no game-clock arithmetic anywhere in this file. Only
-shots/FTs/TOs/assists are ever eligible for ``early``/``orb`` tagging;
-rebounds/steals/blocks/fouls are permanently total-only (``LineupUtils.scala
-:1332-1433`` never wraps those branches' ``implicit`` selector in
-``shot_clock_selector_builder``, using the static ``basic_shotclock_selector``
-instead).
+heuristic, ported this task but not yet wired). These are PLAY-TYPE
+heuristics, not shot-clock timer derivations -- there is no game-clock
+arithmetic anywhere in this file. Only shots/FTs/TOs/assists are ever
+eligible for ``early``/``orb`` tagging; rebounds/steals/blocks/fouls are
+permanently total-only (``LineupUtils.scala:1332-1433`` never wraps those
+branches' ``implicit`` selector in ``shot_clock_selector_builder``, using the
+static ``basic_shotclock_selector`` instead).
 
-**The dispatch seam (5c.2/5c.3).** :func:`_shot_clock_selector_builder`
-mirrors the Scala's ``shot_clock_selector_builder`` closure
-(``:996-1004``) -- it returns the list of segment names to increment for one
-event. For 5c.1 it unconditionally returns ``["total"]``; Task 5c.3 will
-extend it to additionally consult the (not-yet-ported) ``is_scramble``/
+**The dispatch seam (5c.3).** :func:`_shot_clock_selector_builder` mirrors
+the Scala's ``shot_clock_selector_builder`` closure (``:996-1004``) -- it
+returns the list of segment names to increment for one event. It still
+unconditionally returns ``["total"]``; Task 5c.3 will extend it to
+additionally consult :func:`is_scramble` and the not-yet-ported
 ``is_transition`` builders and append ``"orb"``/``"early"`` the same way the
 Scala appends ``selector_shotclock_scramble``/``selector_shotclock_transition``
 on top of the base ``[selector_shotclock_total]`` list. The always-total-only
@@ -44,6 +48,38 @@ caller passes a non-default ``player_index`` before Task 5c.4 ports
 this port omits that helper entirely rather than shipping an
 unreachable-until-5c.4 stub; the 3pt made/missed dispatch branches below
 carry an inline comment marking exactly where 5c.4 wires it back in.
+
+**``is_scramble`` port notes (Task 5c.2).**
+
+* **Returns ``(predicate, tag)``, not just the predicate.** The oracle
+  (``LineupUtilsTests.scala``'s ``"is_scramble"`` block) asserts the debug
+  tag string directly (``"N/A"``/``"0a"``/``"1aa"``/``"1ab"``/``"1b"``/
+  ``"2aa"``/``"2ab"``), so the tuple shape is load-bearing, not incidental.
+* **``player_version`` is a dead parameter.** In the Scala,
+  ``play_type_debug_scramble = false && !player_version`` is always
+  ``false`` (Scala ``&&`` short-circuits on a literal ``false`` left operand
+  regardless of the right side), so every ``debug_check_select_events``/
+  ``debug_scramble_context`` call this flag guards is permanently
+  unreachable -- pure ``println`` debug infra, zero effect on the returned
+  ``(predicate, tag)``. This port keeps the parameter (for call-site/oracle
+  signature parity) but does not port the dead debug-print bodies at all;
+  ``del player_version`` documents the no-op.
+* **Scala ``Set[RawGameEvent]`` becomes ``list[RawGameEvent]``.**
+  :class:`~sportsdataverse.mbb.mbb_ncaa_models.RawGameEvent` is a plain
+  (non-frozen) dataclass, so it has no ``__hash__`` -- a Python ``set``
+  can't hold it. Every place the Scala builds a ``Set`` for ``ev => set(ev)``
+  membership testing uses a plain ``list`` here instead; ``in``/``not in``
+  on a list only needs ``__eq__`` (which the dataclass does define), so
+  membership semantics -- including the ``ensure_ev_uniqueness``-nudged
+  ``min`` making two textually-identical events compare unequal -- are
+  preserved exactly (see ``test_is_scramble_0a_3_ensure_ev_uniqueness_dedup``).
+* **The redundant ``.collect(get_off_ev)`` in ``has_multiple_distinct_off_evs``
+  is a no-op**, ported away. The Scala's ``off_evs`` is already
+  ``curr_clump.evs.collect(get_off_ev)`` (every element already satisfies
+  ``get_off_ev``), so re-``collect``-ing an already-filtered list after
+  ``filterNot`` changes nothing -- this port is
+  ``any(ev not in first_off_ev_set for ev in off_evs)``, with no redundant
+  second filter.
 
 **Scala idiom decisions.**
 
@@ -92,7 +128,9 @@ entry to cover ``LineupUtils.scala``.
 **Landmine index (reachable scalar division).** None. Every computation in
 this module's scope is integer counting, dict/list-shaped mutation, or plain
 string/regex matching (via the already-ported ``mbb_ncaa_events`` parsers) --
-no division by a runtime-derived value exists.
+no division by a runtime-derived value exists. ``is_scramble``'s
+``threshold = 6.5 / 60`` and ``is_end_of_game_fouling_vs_fastbreak``'s score
+arithmetic are both fixed-literal/int-only, not runtime-denominator division.
 
 Example::
 
@@ -117,15 +155,21 @@ from sportsdataverse.mbb.mbb_ncaa_events import (
     parse_assist,
     parse_defensive_rebound,
     parse_flagrant_foul,
+    parse_free_throw_attempt,
+    parse_free_throw_event_attempt_gen2,
     parse_free_throw_made,
     parse_free_throw_missed,
+    parse_live_offensive_rebound,
     parse_offensive_deadball_rebound,
+    parse_offensive_event,
     parse_offensive_foul,
     parse_offensive_rebound,
     parse_personal_foul,
     parse_rim_made,
     parse_rim_missed,
     parse_shot_blocked,
+    parse_shot_made,
+    parse_shot_missed,
     parse_stolen,
     parse_technical_foul,
     parse_three_pointer_made,
@@ -145,6 +189,7 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     Score,
     ScoreInfo,
     ShotClockStats,
+    score_to_tuple,
 )
 from sportsdataverse.mbb.mbb_ncaa_possessions import (
     ConcurrentClump,
@@ -158,6 +203,8 @@ __all__ = [
     "fix_possible_score_swap_bug",
     "enrich_stats",
     "ensure_ev_uniqueness",
+    "is_scramble",
+    "is_end_of_game_fouling_vs_fastbreak",
 ]
 
 PlayerFilterCoder = Callable[[str], "tuple[bool, str]"]
@@ -289,9 +336,9 @@ def _shot_clock_selector_builder(ev: RawGameEvent) -> list[str]:
 
     Returns:
         ``["total"]`` -- Task 5c.3 will append ``"orb"``/``"early"`` here
-        based on the (not-yet-ported) scramble/transition heuristics.
+        based on the scramble/transition heuristics.
     """
-    del ev  # ponytail: seam for Task 5c.2/5c.3 (is_scramble/is_transition)
+    del ev  # ponytail: seam for Task 5c.3 (is_scramble/is_transition wiring)
     return list(_BASE_SELECTORS)
 
 
@@ -533,7 +580,7 @@ def _enrich_stats_with_clump(
             predicate/coder for per-player scoping.
         clump: The merged clump to dispatch.
         prev_clumps: Prior merged clumps, most-recent-first (unused until
-            Task 5c.2/5c.3 wire ``is_scramble``/``is_transition`` in).
+            Task 5c.3 wires ``is_scramble``/``is_transition`` in).
         player_index: Lineup-slot index for :func:`PlayerShotInfo` tuples
             (unused until Task 5c.4 -- see the module docstring).
         stats: The stat tree to mutate in place.
@@ -541,7 +588,7 @@ def _enrich_stats_with_clump(
     Returns:
         ``stats``, mutated.
     """
-    del prev_clumps  # ponytail: seam for Task 5c.2/5c.3
+    del prev_clumps  # ponytail: seam for Task 5c.3
     del player_index  # ponytail: seam for Task 5c.4 (create_player_events)
 
     player_filter: Optional[Callable[[str], bool]]
@@ -786,3 +833,364 @@ def add_stats_to_lineups(lineup: LineupEvent) -> LineupEvent:
         team_stats=enrich_stats(lineup, team_filter, lineup.team_stats),
         opponent_stats=enrich_stats(lineup, oppo_filter, lineup.opponent_stats),
     )
+
+
+# ---------------------------------------------------------------------------
+# is_scramble (Task 5c.2)
+# ---------------------------------------------------------------------------
+
+
+def _clump_has_event(
+    evs: list[RawGameEvent], event_parser: PossessionEvent, check: Callable[[str], Optional[str]]
+) -> bool:
+    """``True`` iff some attacking-side event in ``evs`` matches ``check``
+    (shared by ``curr_clump_has_offense``/``curr_clump_has_orb``,
+    ``LineupUtils.scala:415-431``).
+
+    Args:
+        evs: The events to scan.
+        event_parser: Selects which side of each event is "attacking".
+        check: A ``parse_x`` extractor (e.g. :func:`parse_offensive_event`).
+
+    Returns:
+        ``True`` on the first attacking-side event where ``check`` matches.
+    """
+    for ev in evs:
+        s = event_parser.attacking_team(ev)
+        if s is not None and check(s) is not None:
+            return True
+    return False
+
+
+def _is_off_ev(ev: RawGameEvent, event_parser: PossessionEvent) -> bool:
+    """Shot (made or missed) / FT-attempt / turnover membership test
+    (``get_off_ev``, ``LineupUtils.scala:298-309``).
+
+    Args:
+        ev: The event to test.
+        event_parser: Selects which side of ``ev`` is "attacking".
+
+    Returns:
+        ``True`` iff ``ev`` is attacking-side AND parses as one of shot
+        missed/made, FT attempt, or turnover.
+    """
+    s = event_parser.attacking_team(ev)
+    if s is None:
+        return False
+    return (
+        parse_shot_missed(s) is not None
+        or parse_shot_made(s) is not None
+        or parse_free_throw_attempt(s) is not None
+        or parse_turnover(s) is not None
+    )
+
+
+def _get_first_off_ev_set(
+    curr_clump: ConcurrentClump,
+    event_parser: PossessionEvent,
+    off_evs: list[RawGameEvent],
+    allow_tos: bool,
+    skip_2nd_chance: bool,
+) -> tuple[list[RawGameEvent], list[str], str]:
+    """Find the event(s) making up the *first* offensive play in ``off_evs``
+    (private, recursive; ``get_first_off_ev_set``, ``LineupUtils.scala
+    :318-411``). See the module docstring's ``is_scramble`` port notes for
+    why the Scala's ``Set[RawGameEvent]`` becomes a ``list[RawGameEvent]``
+    here.
+
+    Args:
+        curr_clump: The full current clump (co-location context for the
+            made-shot/FT branches, which scan ``curr_clump.evs`` rather than
+            ``off_evs``).
+        event_parser: Selects which side of each event is "attacking".
+        off_evs: The candidate offensive events (already filtered to
+            :func:`_is_off_ev`) to pick the first play from.
+        allow_tos: If ``False``, a turnover can't be the head of a
+            multi-pseudo-possession clump.
+        skip_2nd_chance: If ``True``, an event whose ``.info`` contains
+            ``"2ndchance"`` is skipped when picking the head (out-of-order
+            2nd-chance-event workaround).
+
+    Returns:
+        ``(ev_list, info_list, debug_context)`` -- the events making up the
+        first offensive play, their ``.info`` strings, and a debug label
+        (``"(made shot)"``/``"(free throws)"``/``"(missed shots,
+        turnovers)"``).
+    """
+
+    def is_to_or_maybe_2ndchance(ev: RawGameEvent) -> bool:
+        if skip_2nd_chance and "2ndchance" in ev.info:
+            return True
+        if not allow_tos:
+            s = event_parser.attacking_team(ev)
+            if s is not None and parse_turnover(s) is not None:
+                return True
+        return False
+
+    head: Optional[RawGameEvent] = None
+    for ev in off_evs:
+        if not is_to_or_maybe_2ndchance(ev):
+            head = ev
+            break
+
+    ev_list: list[RawGameEvent]
+    debug_context: str
+
+    if head is None:
+        ev_list = []
+        debug_context = "(missed shots, turnovers)"
+    else:
+        s = event_parser.attacking_team(head)
+        made_player = parse_shot_made(s) if s is not None else None
+        ft_player = parse_free_throw_attempt(s) if s is not None and made_player is None else None
+
+        if made_player is not None:
+            # made-shot branch: co-located FT attempts + assists (check for and-1/assists)
+            collected = [head]
+            for ev2 in curr_clump.evs:
+                t = event_parser.attacking_team(ev2)
+                if t is None:
+                    continue
+                if parse_free_throw_attempt(t) is not None or parse_assist(t) is not None:
+                    collected.append(ev2)
+            ev_list = collected
+            debug_context = "(made shot)"
+        elif ft_player is not None:
+            gen2 = parse_free_throw_event_attempt_gen2(s) if s is not None else None
+            if gen2 is not None:
+                _, attempt_no, total_fts = gen2
+                if attempt_no == 1 and total_fts == 1 and skip_2nd_chance:
+                    # this is an and-1 so it can't start the event, will just bypass
+                    ev_list = []
+                else:
+                    # new format, can infer the right number of FT events to take
+                    matching: list[RawGameEvent] = []
+                    for ev2 in curr_clump.evs:
+                        t = event_parser.attacking_team(ev2)
+                        if t is not None and parse_free_throw_attempt(t) == ft_player:
+                            matching.append(ev2)
+                    ev_list = matching[:total_fts]
+            else:
+                # old gen... keep going until you see a (live) rebound
+                prefix: list[RawGameEvent] = []
+                for ev2 in curr_clump.evs:
+                    t = event_parser.attacking_team(ev2)
+                    if t is not None and parse_live_offensive_rebound(t) is not None:
+                        break
+                    prefix.append(ev2)
+                gen1_matching: list[RawGameEvent] = []
+                for ev2 in prefix:
+                    t = event_parser.attacking_team(ev2)
+                    if t is not None and parse_free_throw_attempt(t) == ft_player:
+                        gen1_matching.append(ev2)
+                ev_list = gen1_matching
+            debug_context = "(free throws)"
+        else:
+            # just this event (missed shots, turnovers)
+            ev_list = [head]
+            debug_context = "(missed shots, turnovers)"
+
+    if not ev_list and skip_2nd_chance:
+        # try again but allowing 2nd chance this time
+        return _get_first_off_ev_set(curr_clump, event_parser, off_evs, allow_tos, skip_2nd_chance=False)
+    if not ev_list and not allow_tos:
+        # try again but allowing TOs this time
+        return _get_first_off_ev_set(curr_clump, event_parser, off_evs, allow_tos=True, skip_2nd_chance=skip_2nd_chance)
+    return (ev_list, [ev2.info for ev2 in ev_list], debug_context)
+
+
+def is_scramble(
+    curr_clump: ConcurrentClump,
+    prev_clumps: list[ConcurrentClump],
+    event_parser: PossessionEvent,
+    player_version: bool,
+) -> tuple[Callable[[RawGameEvent], bool], str]:
+    """Figure out if (each event of) the current clump is part of a
+    "scramble scenario" following an ORB (``is_scramble``, ``LineupUtils
+    .scala:222-597``).
+
+    Returns a ``(predicate, debug_tag)`` tuple -- **the tuple shape is
+    load-bearing**: the oracle asserts the debug tag string directly
+    (``"N/A"``/``"0a"``/``"1aa"``/``"1ab"``/``"1b"``/``"2aa"``/``"2ab"``).
+
+    Args:
+        curr_clump: The clump to classify.
+        prev_clumps: Prior merged clumps, most-recent-first.
+        event_parser: Selects which side of each event is "attacking".
+        player_version: Unused -- see the module docstring's ``is_scramble``
+            port notes (the Scala's debug-print gate this flag controls is
+            permanently ``false`` regardless of its value).
+
+    Returns:
+        ``(predicate, debug_tag)`` where ``predicate(ev)`` reports whether
+        ``ev`` is part of a scramble.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_scramble
+
+            predicate, tag = is_scramble(curr_clump, prev_clumps, event_parser, player_version=False)
+            [predicate(ev) for ev in curr_clump.evs]
+    """
+    del player_version  # ponytail: only gates a permanently-dead Scala debug println.
+
+    maybe_prev_clump = prev_clumps[0] if prev_clumps else None
+
+    curr_clump_has_offense = _clump_has_event(curr_clump.evs, event_parser, parse_offensive_event)
+    if not curr_clump_has_offense:
+        # (no offensive plays in current clump so can just ignore all this logic)
+        return (lambda ev: False, "N/A")
+
+    curr_clump_has_orb = _clump_has_event(curr_clump.evs, event_parser, parse_live_offensive_rebound)
+
+    prev_evs = maybe_prev_clump.evs if maybe_prev_clump is not None else []
+    last_clump_offense_time: Optional[float] = None
+    for ev in prev_evs:
+        s = event_parser.attacking_team(ev)
+        if s is None:
+            continue
+        if (
+            parse_free_throw_missed(s) is not None
+            or parse_shot_missed(s) is not None
+            or parse_live_offensive_rebound(s) is not None
+        ):
+            last_clump_offense_time = ev.min
+            break
+
+    threshold = 6.5 / 60
+    # (6.5s, leads to about 60% of ORBs being categorized as scrambles - Synergy has 50% being called "putback"s)
+
+    if last_clump_offense_time is not None:
+        # 1] Last play was my offense
+        curr_min = curr_clump.min if curr_clump.min is not None else 0.0
+        events_diff_mins = curr_min - last_clump_offense_time
+        if events_diff_mins < threshold:
+            if curr_clump_has_orb:
+                # 1aa] all happened within threshold, so everything "now" is a scramble
+                return (lambda ev: True, "1aa")
+
+            # 1ab] the _1st_ event set is a scramble, but others aren't
+            off_evs = [ev for ev in curr_clump.evs if _is_off_ev(ev, event_parser)]
+            first_off_ev_set, first_off_ev_list, _ctx = _get_first_off_ev_set(
+                curr_clump, event_parser, off_evs, allow_tos=True, skip_2nd_chance=False
+            )
+            # Look for dangling FT - ignore if so, timing error in PbP
+            if len(first_off_ev_list) == 1 and parse_free_throw_attempt(first_off_ev_list[0]) is not None:
+                first_off_ev_set = []
+
+            def _predicate_1ab(ev: RawGameEvent) -> bool:
+                return ev in first_off_ev_set
+
+            return (_predicate_1ab, "1ab")
+        # else: 1b] longer than threshold ago -- fall through to case 2 below
+        # (the first event _won't_ be a scramble, though subsequent events will be)
+
+    # 2] Last thing that happened was either opponent offense, or my recycled offense
+    # (or a lineup change) -- first shot is _not_ a scramble (possibly including +1s)
+    off_evs = [ev for ev in curr_clump.evs if _is_off_ev(ev, event_parser)]
+    skip_2nd_chance = last_clump_offense_time is None
+    # (ie lineup start or possession switch, start with 2nd chance => probably misordered events)
+    first_off_ev_set, first_off_ev_list, _ctx = _get_first_off_ev_set(
+        curr_clump, event_parser, off_evs, allow_tos=False, skip_2nd_chance=skip_2nd_chance
+    )
+    has_multiple_distinct_off_evs = any(ev not in first_off_ev_set for ev in off_evs)
+
+    if curr_clump_has_orb and has_multiple_distinct_off_evs:
+        # Multiple offensive events so need to do some more scramble analysis
+        if maybe_prev_clump is None:
+            debug_case = "0a"
+        elif last_clump_offense_time is not None:
+            debug_case = "1b"
+        else:
+            debug_case = "2aa"
+
+        def _predicate_multi(ev: RawGameEvent) -> bool:
+            return ev not in first_off_ev_set
+
+        return (_predicate_multi, debug_case)
+
+    # Just have one offensive option so can return simpler method
+    # (or no ORB in current clump -- a "2ab] Weird case (fouls not ORBs?)" per the Scala comment)
+    return (lambda ev: False, "2ab")
+
+
+# ---------------------------------------------------------------------------
+# is_end_of_game_fouling_vs_fastbreak (Task 5c.2)
+# ---------------------------------------------------------------------------
+
+
+def _near_end_of_game(minute: float) -> bool:
+    """``True`` iff ``minute`` falls in the last ~2 minutes of regulation or
+    any of 5 possible overtimes (``near_end_of_game``, ``LineupUtils.scala
+    :613-615``).
+
+    Args:
+        minute: The game-clock minute (fractional).
+
+    Returns:
+        ``True`` iff ``minute`` is in ``(38, 40] | (43, 45] | (48, 50] |
+        (53, 55] | (58, 60] | (63, 65]``.
+    """
+    return (
+        (38 < minute <= 40)
+        or (43 < minute <= 45)
+        or (48 < minute <= 50)
+        or (53 < minute <= 55)
+        or (58 < minute <= 60)
+        or (63 < minute <= 65)
+    )
+
+
+def _scores_close_but_behind(ev: RawGameEvent, event_parser: PossessionEvent, last_shot_made: bool) -> bool:
+    """``True`` iff the attacking team is ahead by ``(0, 10]`` points, per
+    ``ev``'s embedded score string (``scores_close_but_behind``,
+    ``LineupUtils.scala:617-635``).
+
+    Args:
+        ev: The event whose ``score_str`` to parse.
+        event_parser: Selects which side is "attacking" (the perspective the
+            margin is computed from).
+        last_shot_made: If ``True``, subtracts 1 from the margin (the score
+            string already reflects the just-made FT/shot).
+
+    Returns:
+        ``True`` iff ``0 < diff <= 10``.
+    """
+    s1, s2 = score_to_tuple(ev.score_str)
+    extra = 1 if last_shot_made else 0
+    diff = (s1 - s2 if event_parser.dir == Direction.TEAM else s2 - s1) - extra
+    return 0 < diff <= 10
+
+
+def is_end_of_game_fouling_vs_fastbreak(curr_clump: ConcurrentClump, event_parser: PossessionEvent) -> bool:
+    """Check for intentional fouling to prolong the game, specifically so it
+    can be excluded from being counted as a fast break
+    (``is_end_of_game_fouling_vs_fastbreak``, ``LineupUtils.scala:603-656``).
+
+    Args:
+        curr_clump: The clump to classify.
+        event_parser: Selects which side of each event is "attacking".
+
+    Returns:
+        ``True`` iff the FIRST attacking-side FT-made/FT-missed event in
+        ``curr_clump.evs`` is both near the end of a period AND has the
+        attacking team ahead by ``(0, 10]`` points; ``False`` if no such
+        event exists.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_end_of_game_fouling_vs_fastbreak
+
+            is_end_of_game_fouling_vs_fastbreak(curr_clump, event_parser)
+    """
+    for ev in curr_clump.evs:
+        s = event_parser.attacking_team(ev)
+        if s is None:
+            continue
+        if parse_free_throw_missed(s) is not None:
+            return _near_end_of_game(ev.min) and _scores_close_but_behind(ev, event_parser, last_shot_made=False)
+        if parse_free_throw_made(s) is not None:
+            return _near_end_of_game(ev.min) and _scores_close_but_behind(ev, event_parser, last_shot_made=True)
+    return False
