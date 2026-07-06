@@ -1,35 +1,40 @@
 """Oracle-replay tests for ``sportsdataverse.mbb.mbb_ncaa_lineup_enrich``
-(Tasks 5c.1/5c.2).
+(Tasks 5c.1/5c.2/5c.3).
 
 Transliterated 1:1 from ``LineupUtilsTests.scala`` (utest,
 ``org.piggottfamily.cbb_explorer.utils.parsers.ncaa``): the ``"enrich_lineup"``
 block (``:61-80``), the ``"fix_possible_score_swap_bug"`` block (``:81-208``,
 incl. the real-game-4690813 fixture), the ``"enrich_stats"`` block's
-table-driven per-event-type cases (``:209-449``, TOTAL-only dispatch --
-scramble/transition tagging lands in Task 5c.3) plus its two assist-pairing
+table-driven per-event-type cases (``:209-449``) plus its two assist-pairing
 cases (``assist_rim_test``/``assist_mid_test``, ``:411-449``), the
 ``"add_stats_to_lineups"`` block (``:451-460``), the ``"is_scramble"`` block's
-13 tag sub-cases (``:478-699``), and the ``"is_end_of_game_fouling_vs_fastbreak"``
-block (``:714-755``).
+13 tag sub-cases (``:478-699``) plus its 2 ``enrich_stats`` integration cases
+(``:652-698``), the ``"is_end_of_game_fouling_vs_fastbreak"`` block
+(``:714-755``), and the ``"is_transition"`` block (``:757-973``, ~32 unit
+cases plus its own 2 ``enrich_stats`` integration cases proving the
+scramble-wins seam).
 
 The ``Events`` fixture is reused (imported) from
 ``test_mbb_ncaa_possessions.py`` rather than redefined -- it already carries
 every raw-event literal this block needs, transliterated from
 ``PossessionUtilsTests.Events``.
 
-The oracle's block-3 comparison strips scramble/transition (``.orb``)
-markers from the actual result before comparing against a total-only
-expected value, because the *real* Scala ``enrich_stats`` already has
-``is_scramble``/``is_transition`` wired in. This port's ``enrich_stats``
-doesn't wire those in until Task 5c.3 -- it never touches ``.orb``/``.early``
-at all yet -- so no such stripping is needed here: the actual result is
-asserted directly against a total-only expected value.
-
-The ``"is_scramble"`` block's FINAL 2 cases (``LineupUtilsTests.scala
-:652-698``) run a scenario through ``enrich_stats`` to prove ``is_scramble``
-is actually wired into the dispatch (team version and player version) --
-that wiring is the ``_shot_clock_selector_builder`` seam, which doesn't land
-until Task 5c.3, so those 2 integration cases are deferred there.
+**The block-3 ``.orb`` stripping quirk (``LineupUtilsTests.scala:370-376``).**
+The real Scala ``enrich_stats`` always had ``is_scramble``/``is_transition``
+wired in -- the 5c.1/5c.2/5c.3 task split is a Python-porting convenience,
+not a Scala structural one. So the oracle's table-driven comparison strips
+the scramble marker (``.orb``) from the actual result, per transform path,
+before comparing against a total-only expected value (some of the 10
+seam-eligible branches DO get scramble-tagged once every per-type event is
+concatenated into one clump for the ``ALL_AT_ONCE`` case -- see
+``test_enrich_stats_table``'s docstring). The oracle's own strip fold is
+actually a copy-paste no-op (it nulls ``.orb`` twice instead of also nulling
+``.early``), which is harmless here because ``.early`` is never populated in
+this test suite anyway (every row is a single-clump lineup with
+``prev_clumps=[]``, so ``is_transition`` is always ``"N/A"``/``False``) --
+this port preserves that same asymmetry (strips ``.orb`` only) rather than
+"fixing" it, since fixing it would diverge from the oracle without changing
+any assertion's outcome.
 """
 
 from __future__ import annotations
@@ -48,6 +53,7 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import (
     fix_possible_score_swap_bug,
     is_end_of_game_fouling_vs_fastbreak,
     is_scramble,
+    is_transition,
 )
 from sportsdataverse.mbb.mbb_ncaa_models import (
     AssistEvent,
@@ -276,8 +282,13 @@ def test_ensure_ev_uniqueness_nudges_by_index() -> None:
 
 # ---------------------------------------------------------------------------
 # "enrich_stats" -- table-driven per-event-type cases (LineupUtilsTests.scala
-# :209-449). TOTAL-only: the scramble/transition selectors land in Tasks
-# 5c.2/5c.3, so every expected transform below only ever bumps `.total`.
+# :209-449). Each row's `expected` only ever bumps `.total` (isolated,
+# single-event/edge-case lineups always have `prev_clumps=[]`, so neither
+# heuristic ever fires); the `ALL_AT_ONCE` row concatenates every row's
+# events into ONE clump, where `is_scramble` DOES fire for several of the
+# 10 seam-eligible branches (see `test_enrich_stats_table`'s docstring) --
+# `.orb` is stripped from the actual result before comparing, exactly
+# mirroring the oracle's own strip fold.
 # ---------------------------------------------------------------------------
 
 TEST_CASES: list[tuple[list[RawGameEvent], list[tuple[str, ...]]]] = [
@@ -355,6 +366,17 @@ ALL_AT_ONCE: tuple[list[RawGameEvent], list[tuple[str, ...]]] = (
 )
 
 
+def _strip_orb(stats: LineupEventStats, transforms: list[tuple[str, ...]]) -> LineupEventStats:
+    """Nulls ``.orb`` (the scramble marker) at every ``transforms`` leaf,
+    mirroring the oracle's strip fold (``LineupUtilsTests.scala:370-376``)
+    that removes scramble/transition tagging before comparing against a
+    total-only expected value -- see the module docstring's "block-3 .orb
+    stripping quirk" for why only ``.orb`` (never ``.early``) needs it."""
+    for path in transforms:
+        _get_shot_clock(stats, *path).orb = None
+    return stats
+
+
 @pytest.mark.parametrize("use_oppo", [False, True], ids=["team_filter", "oppo_filter"])
 def test_enrich_stats_table(use_oppo: bool) -> None:
     event_parser = PossessionEvent(Direction.OPPONENT if use_oppo else Direction.TEAM)
@@ -362,7 +384,7 @@ def test_enrich_stats_table(use_oppo: bool) -> None:
         test_events = [Events.reverse_dir(ev) for ev in events] if use_oppo else events
         lineup = replace(_build_base_lineup(), raw_game_events=test_events)
 
-        actual = enrich_stats(lineup, event_parser, LineupEventStats())
+        actual = _strip_orb(enrich_stats(lineup, event_parser, LineupEventStats()), transforms)
 
         expected = LineupEventStats()
         for path in transforms:
@@ -469,12 +491,10 @@ def test_add_stats_to_lineups() -> None:
 
 
 # ---------------------------------------------------------------------------
-# "is_scramble" (LineupUtilsTests.scala:478-699) -- 13 tag sub-cases.
-#
-# The block's FINAL 2 cases (:652-698) run a scenario through `enrich_stats`
-# to prove `is_scramble` is wired into the dispatch (team + player version);
-# that wiring is the `_shot_clock_selector_builder` seam from Task 5c.3, so
-# those 2 integration cases are deferred there (see the module docstring).
+# "is_scramble" (LineupUtilsTests.scala:478-699) -- 13 tag sub-cases plus
+# (below, after "is_end_of_game_fouling_vs_fastbreak") its 2 `enrich_stats`
+# integration cases (:652-698), deferred from Task 5c.2 to this task since
+# they prove the `_shot_clock_selector_builder` seam this task wires up.
 # ---------------------------------------------------------------------------
 
 _SEC_TO_MIN = 1.0 / 60
@@ -714,3 +734,245 @@ def test_is_end_of_game_fouling_vs_fastbreak(
 ) -> None:
     ev = replace(_sub_score(score, pre_ev), min=minute)
     assert is_end_of_game_fouling_vs_fastbreak(ConcurrentClump([ev]), event_parser) == expected
+
+
+# ---------------------------------------------------------------------------
+# "is_scramble" `enrich_stats` integration cases, deferred from Task 5c.2
+# (LineupUtilsTests.scala:652-698) -- proves is_scramble is actually wired
+# into the dispatch (team version and player version).
+# ---------------------------------------------------------------------------
+
+
+def test_enrich_stats_is_scramble_integration() -> None:
+    current_clump, before_clumps = _clump_scenario_builder(
+        [Events.orb_team, Events.missed_rim_team, Events.orb_team, Events.made_team],
+        [Events.missed_rim_team],
+        10.0,
+        5.0,
+    )
+    raw_events = [ev for c in before_clumps for ev in c.evs] + current_clump.evs
+    lineup = replace(_build_base_lineup(), raw_game_events=raw_events)
+    zero_stats = LineupEventStats()
+
+    # Player-scoped (Eric Carter only, the rim shooter):
+    stats = enrich_stats(
+        lineup, _TEAM_FILTER, zero_stats, player_filter_coder=lambda p: (p == "Eric Carter", "not_used")
+    )
+    expected = LineupEventStats()
+    expected.fg.attempts.total = 2
+    expected.fg_rim.attempts.total = 2
+    expected.fg_2p.attempts.total = 2
+    expected.fg.attempts.orb = 1
+    expected.fg_rim.attempts.orb = 1
+    expected.fg_2p.attempts.orb = 1
+    assert stats == expected
+
+    # Team-level (no filter):
+    stats = enrich_stats(lineup, _TEAM_FILTER, zero_stats)
+    expected = LineupEventStats()
+    expected.orb = ShotClockStats(total=2)
+    expected.fg.attempts.total = 3
+    expected.fg.made.total = 1
+    expected.fg_rim.attempts.total = 2
+    expected.fg_2p.attempts.total = 2
+    expected.fg_3p.attempts.total = 1
+    expected.fg_3p.made.total = 1
+    expected.fg.attempts.orb = 2
+    expected.fg.made.orb = 1
+    expected.fg_rim.attempts.orb = 1
+    expected.fg_2p.attempts.orb = 1
+    expected.fg_3p.attempts.orb = 1
+    expected.fg_3p.made.orb = 1
+    assert stats == expected
+
+
+# ---------------------------------------------------------------------------
+# "is_transition" (LineupUtilsTests.scala:757-973): the empty case, the
+# gap-dependent "1a" cases (3 gaps x 5 sub-cases), the gap-independent "1b"
+# cases (2 gaps x 2 fastbreak-flags x 4 sub-cases), plus its own 2
+# `enrich_stats` integration cases (proving the seam + scramble-wins).
+# ---------------------------------------------------------------------------
+
+
+def _sub_score_clump(clump: ConcurrentClump, add_fast_break: bool = False) -> ConcurrentClump:
+    """Sets every event's score to ``"60-58"`` and, if ``add_fast_break``,
+    injects a ``"fastbreak"`` marker before ``"missed"``/``"made"`` in the
+    team-side event string (``sub_score_clump``, ``LineupUtilsTests.scala
+    :764-771``)."""
+
+    def _add_fastbreak(s: str) -> str:
+        return s.replace(" missed", " fastbreak missed").replace(" made", " fastbreak made")
+
+    new_evs = []
+    for ev in clump.evs:
+        team = _add_fastbreak(ev.team) if add_fast_break and ev.team is not None else ev.team
+        new_evs.append(_sub_score("60-58", replace(ev, team=team)))
+    return replace(clump, evs=new_evs)
+
+
+def test_is_transition_empty_case() -> None:
+    """For completeness, check the empty case that's optimized out
+    (``LineupUtilsTests.scala:773-777``)."""
+    _predicate, tag = is_transition(ConcurrentClump([]), [], _TEAM_FILTER, player_version=False)
+    assert tag == "N/A"
+
+
+def test_is_transition_gap_dependent_1a_cases() -> None:
+    """Category 1a: result depends on the gap (short gap = transition), plus
+    the "0a" end-of-game-fouling override (``LineupUtilsTests.scala
+    :779-852``)."""
+    for gap, should_be_transition in [(7.0, True), (10.0, True), (11.0, False)]:
+        # 1a.a.1: opponent miss + team DRB
+        current_clump, before_clumps = _clump_scenario_builder(
+            [Events.made_team], [Events.missed_opponent, Events.drb_team], 39 * 60 + gap, 39 * 60
+        )
+        predicate, tag = is_transition(
+            _sub_score_clump(current_clump), before_clumps, _TEAM_FILTER, player_version=False
+        )
+        assert tag == ("1a.a" if should_be_transition else "NOT")
+        assert [predicate(ev, False) for ev in current_clump.evs] == [should_be_transition] * len(current_clump.evs)
+        assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+        # 1a.a.2: opponent make
+        current_clump, before_clumps = _clump_scenario_builder(
+            [Events.made_team], [Events.made_opponent], 39 * 60 + gap, 39 * 60
+        )
+        predicate, tag = is_transition(
+            _sub_score_clump(current_clump), before_clumps, _TEAM_FILTER, player_version=False
+        )
+        assert tag == ("1a.a" if should_be_transition else "NOT")
+        assert [predicate(ev, False) for ev in current_clump.evs] == [should_be_transition] * len(current_clump.evs)
+        assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+        # 1a.a.3: opponent make -- shorter gap required (new format, not fast break)
+        current_clump, before_clumps = _clump_scenario_builder(
+            [Events.made_rim_team], [Events.made_opponent], 39 * 60 + gap, 39 * 60
+        )
+        predicate, tag = is_transition(
+            _sub_score_clump(current_clump), before_clumps, _TEAM_FILTER, player_version=False
+        )
+        should_be_transition_nextgen = should_be_transition and gap < 9.0
+        assert tag == ("1a.a" if should_be_transition_nextgen else "NOT")
+        assert [predicate(ev, False) for ev in current_clump.evs] == [should_be_transition_nextgen] * len(
+            current_clump.evs
+        )
+        assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+        # 1a.b.1: opponent miss, next clump has DRB
+        current_clump, before_clumps = _clump_scenario_builder(
+            [Events.made_team, Events.drb_team], [Events.missed_opponent], 39 * 60 + gap, 39 * 60
+        )
+        predicate, tag = is_transition(
+            _sub_score_clump(current_clump), before_clumps, _TEAM_FILTER, player_version=False
+        )
+        assert tag == ("1a.b" if should_be_transition else "NOT")
+        assert [predicate(ev, False) for ev in current_clump.evs] == [should_be_transition] * len(current_clump.evs)
+        assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+        # 0a.X: end-of-game fouling pre-rejects transition entirely
+        current_clump, before_clumps = _clump_scenario_builder(
+            [Events.made_ft_team], [Events.missed_opponent, Events.drb_team], 39 * 60 + gap, 39 * 60
+        )
+        predicate, tag = is_transition(
+            _sub_score_clump(current_clump), before_clumps, _TEAM_FILTER, player_version=False
+        )
+        assert tag == "0a.X"
+        assert [predicate(ev, False) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+
+def test_is_transition_gap_independent_1b_cases() -> None:
+    """Category 1b: result does NOT depend on the gap, only on the
+    "fastbreak" marker (``LineupUtilsTests.scala:854-916``)."""
+    for gap, should_be_transition_p1 in [(11.0, True), (9.0, True)]:
+        for is_fastbreak in [True, False]:
+            should_be_transition = should_be_transition_p1 and is_fastbreak
+
+            # 1b.a.1: nothing then fast break
+            current_clump, before_clumps = _clump_scenario_builder(
+                [Events.made_team], [Events.jump_won_team], 39 * 60 + gap, 39 * 60
+            )
+            predicate, tag = is_transition(
+                _sub_score_clump(current_clump, is_fastbreak), before_clumps, _TEAM_FILTER, player_version=False
+            )
+            assert tag == ("1b.a" if should_be_transition else "NOT")
+            assert [predicate(ev, False) for ev in current_clump.evs] == [should_be_transition] * len(current_clump.evs)
+            assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+            # 1b.b.1: dangling FT scenario
+            current_clump, before_clumps = _clump_scenario_builder(
+                [Events.missed_ft2_team], [Events.missed_ft1_team], 17 * 60 + gap, 17 * 60
+            )
+            predicate, tag = is_transition(
+                _sub_score_clump(current_clump, is_fastbreak), before_clumps, _TEAM_FILTER, player_version=False
+            )
+            assert tag == ("1b.b" if should_be_transition else "NOT")
+            assert [predicate(ev, False) for ev in current_clump.evs] == [should_be_transition] * len(current_clump.evs)
+            assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+            # 1b.b.2: +1 dangling FT scenario
+            current_clump, before_clumps = _clump_scenario_builder(
+                [Events.made_ftp1_team], [Events.made_team], 17 * 60 + gap, 17 * 60
+            )
+            predicate, tag = is_transition(
+                _sub_score_clump(current_clump, is_fastbreak), before_clumps, _TEAM_FILTER, player_version=False
+            )
+            assert tag == ("1b.b" if should_be_transition else "NOT")
+            assert [predicate(ev, False) for ev in current_clump.evs] == [should_be_transition] * len(current_clump.evs)
+            assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+            # 1b.X.2: my offense then fast break -- should be excluded
+            current_clump, before_clumps = _clump_scenario_builder(
+                [Events.made_team], [Events.made_team], 39 * 60 + gap, 39 * 60
+            )
+            predicate, tag = is_transition(
+                _sub_score_clump(current_clump, is_fastbreak), before_clumps, _TEAM_FILTER, player_version=False
+            )
+            assert tag == ("1b.X" if should_be_transition else "NOT")
+            assert [predicate(ev, False) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+            assert [predicate(ev, True) for ev in current_clump.evs] == [False] * len(current_clump.evs)
+
+
+def test_enrich_stats_is_transition_integration_overridden_by_scramble() -> None:
+    """Proves ``is_transition`` is wired into ``enrich_stats`` AND that it is
+    overridden by ``is_scramble`` (team version and player version)
+    (``LineupUtilsTests.scala:921-972``)."""
+    current_clump, before_clumps = _clump_scenario_builder(
+        [Events.missed_team, Events.orb_team, Events.missed_mid_team],  # missed_team = transition
+        [Events.made_opponent],
+        10.0,
+        5.0,
+    )
+    raw_events = [ev for c in before_clumps for ev in c.evs] + current_clump.evs
+    lineup = replace(_build_base_lineup(), raw_game_events=raw_events)
+    zero_stats = LineupEventStats()
+
+    # Player-scoped (Eric Ayala only, the shooter of both missed_team/missed_mid_team):
+    stats = enrich_stats(
+        lineup, _TEAM_FILTER, zero_stats, player_filter_coder=lambda p: (p == "Eric Ayala", "not_used")
+    )
+    expected = LineupEventStats()
+    expected.fg.attempts.total = 2
+    expected.fg_mid.attempts.total = 1
+    expected.fg_2p.attempts.total = 1
+    expected.fg_3p.attempts.total = 1
+    expected.fg.attempts.orb = 1
+    expected.fg_mid.attempts.orb = 1
+    expected.fg_2p.attempts.orb = 1
+    expected.fg.attempts.early = 1
+    expected.fg_3p.attempts.early = 1
+    assert stats == expected
+
+    # Team-level (no filter):
+    stats = enrich_stats(lineup, _TEAM_FILTER, zero_stats)
+    expected = LineupEventStats()
+    expected.orb = ShotClockStats(total=1)
+    expected.fg.attempts.total = 2
+    expected.fg_mid.attempts.total = 1
+    expected.fg_2p.attempts.total = 1
+    expected.fg_3p.attempts.total = 1
+    expected.fg.attempts.orb = 1
+    expected.fg_mid.attempts.orb = 1
+    expected.fg_2p.attempts.orb = 1
+    expected.fg.attempts.early = 1
+    expected.fg_3p.attempts.early = 1
+    assert stats == expected

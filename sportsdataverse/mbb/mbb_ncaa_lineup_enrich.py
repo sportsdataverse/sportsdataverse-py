@@ -2,42 +2,42 @@
 
 Faithful port of hoop-explorer's ``cbb-explorer`` (Scala 2.12, ``utest``,
 package ``org.piggottfamily.cbb_explorer.utils.parsers.ncaa``)
-``LineupUtils.scala`` -- the first two of five Phase-5c modules-in-one-file.
+``LineupUtils.scala`` -- the first three of five Phase-5c modules-in-one-file.
 **Task 5c.1 ported the lineup-enrichment core**: :func:`enrich_lineup`
 (score-delta pts/plus_minus), :func:`fix_possible_score_swap_bug`,
 :func:`ensure_ev_uniqueness`, :func:`add_stats_to_lineups`, and the full
-:func:`enrich_stats` event dispatch -- but with a **total-only** shot-clock
-selector (see "The dispatch seam" below). **Task 5c.2 additionally ports**
+:func:`enrich_stats` event dispatch. **Task 5c.2 additionally ported**
 :func:`is_scramble` (+ its private recursive ``_get_first_off_ev_set``
-helper) and :func:`is_end_of_game_fouling_vs_fastbreak` -- but **neither is
-wired into the dispatch yet**: ``_shot_clock_selector_builder`` still
-unconditionally returns ``["total"]``. Task 5c.3 ports ``is_transition``
-(which itself calls ``is_end_of_game_fouling_vs_fastbreak``) and threads both
-heuristics into the seam.
+helper) and :func:`is_end_of_game_fouling_vs_fastbreak`. **Task 5c.3 ports**
+:func:`is_transition` (which itself calls
+``is_end_of_game_fouling_vs_fastbreak``) and wires **both** heuristics into
+:func:`_shot_clock_selector_builder` -- the dispatch is now feature-complete
+for scramble/transition tagging.
 
 **THE critical port fact.** ``ShotClockStats.mid``/``.late`` are **dead
 fields -- never populated** anywhere in ``LineupUtils.scala``. Only three
 segments are ever written: ``total`` (always), ``early`` (the
-``is_transition`` heuristic, Task 5c.3), and ``orb`` (the ``is_scramble``
-heuristic, ported this task but not yet wired). These are PLAY-TYPE
-heuristics, not shot-clock timer derivations -- there is no game-clock
-arithmetic anywhere in this file. Only shots/FTs/TOs/assists are ever
-eligible for ``early``/``orb`` tagging; rebounds/steals/blocks/fouls are
-permanently total-only (``LineupUtils.scala:1332-1433`` never wraps those
+``is_transition`` heuristic), and ``orb`` (the ``is_scramble`` heuristic).
+These are PLAY-TYPE heuristics, not shot-clock timer derivations -- there is
+no game-clock arithmetic anywhere in this file. Only shots/FTs/TOs/assists
+are ever eligible for ``early``/``orb`` tagging; rebounds/steals/blocks/fouls
+are permanently total-only (``LineupUtils.scala:1332-1433`` never wraps those
 branches' ``implicit`` selector in ``shot_clock_selector_builder``, using the
 static ``basic_shotclock_selector`` instead).
 
-**The dispatch seam (5c.3).** :func:`_shot_clock_selector_builder` mirrors
-the Scala's ``shot_clock_selector_builder`` closure (``:996-1004``) -- it
-returns the list of segment names to increment for one event. It still
-unconditionally returns ``["total"]``; Task 5c.3 will extend it to
-additionally consult :func:`is_scramble` and the not-yet-ported
-``is_transition`` builders and append ``"orb"``/``"early"`` the same way the
-Scala appends ``selector_shotclock_scramble``/``selector_shotclock_transition``
-on top of the base ``[selector_shotclock_total]`` list. The always-total-only
+**The dispatch seam (wired, Task 5c.3).** :func:`_shot_clock_selector_builder`
+mirrors the Scala's ``shot_clock_selector_builder`` closure (``:996-1004``):
+it takes the per-clump ``is_scramble_builder``/``is_transition_builder``
+predicates (computed ONCE per clump in :func:`_enrich_stats_with_clump`,
+mirroring ``LineupUtils.scala:949-960``) and returns ``["total"]`` plus
+``"orb"`` if the event is a scramble and/or ``"early"`` if it's a
+(non-scramble) transition play -- **scramble always wins**:
+``is_transition_builder(ev, is_scramble)`` takes the just-computed scramble
+result as its second argument, and :func:`is_transition`'s predicate hard-
+codes ``not is_scramble and is_transition_event``. The always-total-only
 branches (ORB/DRB/STL/BLK/foul) use the module-level :data:`_BASE_SELECTORS`
-constant directly and are UNAFFECTED by that future extension -- exactly per
-the plan's "only shots/FTs/TOs/assists get transition/scramble tagging" fact.
+constant directly and are UNAFFECTED by this wiring -- exactly per the
+plan's "only shots/FTs/TOs/assists get transition/scramble tagging" fact.
 
 **Deferred to Task 5c.4 (not stubbed).** ``increment_player_3p_shot_info``
 (``LineupUtils.scala:1147-1178``) buckets a 3pt shot into the shooter's
@@ -129,8 +129,9 @@ entry to cover ``LineupUtils.scala``.
 this module's scope is integer counting, dict/list-shaped mutation, or plain
 string/regex matching (via the already-ported ``mbb_ncaa_events`` parsers) --
 no division by a runtime-derived value exists. ``is_scramble``'s
-``threshold = 6.5 / 60`` and ``is_end_of_game_fouling_vs_fastbreak``'s score
-arithmetic are both fixed-literal/int-only, not runtime-denominator division.
+``threshold = 6.5 / 60``, ``is_transition``'s ``threshold = (7.5 or 10.5) /
+60.0``, and ``is_end_of_game_fouling_vs_fastbreak``'s score arithmetic are all
+fixed-literal/int-only, not runtime-denominator division.
 
 Example::
 
@@ -152,6 +153,7 @@ from dataclasses import replace
 from typing import Any, Callable, Optional
 
 from sportsdataverse.mbb.mbb_ncaa_events import (
+    is_gen2,
     parse_assist,
     parse_defensive_rebound,
     parse_flagrant_foul,
@@ -205,6 +207,7 @@ __all__ = [
     "ensure_ev_uniqueness",
     "is_scramble",
     "is_end_of_game_fouling_vs_fastbreak",
+    "is_transition",
 ]
 
 PlayerFilterCoder = Callable[[str], "tuple[bool, str]"]
@@ -325,21 +328,34 @@ STL/BLK/foul branches, which are permanently total-only per the module
 docstring's "critical port fact"."""
 
 
-def _shot_clock_selector_builder(ev: RawGameEvent) -> list[str]:
+def _shot_clock_selector_builder(
+    ev: RawGameEvent,
+    is_scramble_builder: Callable[[RawGameEvent], bool],
+    is_transition_builder: Callable[[RawGameEvent, bool], bool],
+) -> list[str]:
     """Segment names to increment for one shot/FT/TO/assist event
     (``shot_clock_selector_builder``, ``LineupUtils.scala:996-1004``).
 
     Args:
-        ev: The event being dispatched (unused until Task 5c.3 wires
-            ``is_scramble``/``is_transition`` in -- see the module
-            docstring's "The dispatch seam").
+        ev: The event being dispatched.
+        is_scramble_builder: The per-clump scramble predicate from
+            :func:`is_scramble` (computed once per clump by the caller).
+        is_transition_builder: The per-clump transition predicate from
+            :func:`is_transition` -- takes ``(ev, is_scramble)`` since
+            scramble always wins over transition.
 
     Returns:
-        ``["total"]`` -- Task 5c.3 will append ``"orb"``/``"early"`` here
-        based on the scramble/transition heuristics.
+        ``["total"]`` plus ``"orb"`` if ``ev`` is a scramble event and/or
+        ``"early"`` if ``ev`` is a (non-scramble) transition event.
     """
-    del ev  # ponytail: seam for Task 5c.3 (is_scramble/is_transition wiring)
-    return list(_BASE_SELECTORS)
+    selectors = list(_BASE_SELECTORS)
+    scramble = is_scramble_builder(ev)
+    transition = is_transition_builder(ev, scramble)
+    if scramble:
+        selectors.append("orb")
+    if transition:
+        selectors.append("early")
+    return selectors
 
 
 def _increment_shot_clock(stat: ShotClockStats, selectors: list[str]) -> None:
@@ -579,8 +595,9 @@ def _enrich_stats_with_clump(
         player_filter_coder: Optional ``name -> (is_this_player, code)``
             predicate/coder for per-player scoping.
         clump: The merged clump to dispatch.
-        prev_clumps: Prior merged clumps, most-recent-first (unused until
-            Task 5c.3 wires ``is_scramble``/``is_transition`` in).
+        prev_clumps: Prior merged clumps, most-recent-first -- feeds the
+            per-clump :func:`is_scramble`/:func:`is_transition` builders
+            (``LineupUtils.scala:949-960``).
         player_index: Lineup-slot index for :func:`PlayerShotInfo` tuples
             (unused until Task 5c.4 -- see the module docstring).
         stats: The stat tree to mutate in place.
@@ -588,7 +605,6 @@ def _enrich_stats_with_clump(
     Returns:
         ``stats``, mutated.
     """
-    del prev_clumps  # ponytail: seam for Task 5c.3
     del player_index  # ponytail: seam for Task 5c.4 (create_player_events)
 
     player_filter: Optional[Callable[[str], bool]]
@@ -601,6 +617,11 @@ def _enrich_stats_with_clump(
         player_filter = None
         player_coder = None
 
+    # Computed ONCE per clump (LineupUtils.scala:949-960) -- not per event.
+    player_version = player_filter_coder is not None
+    is_transition_builder, _ = is_transition(clump, prev_clumps, event_parser, player_version)
+    is_scramble_builder, _ = is_scramble(clump, prev_clumps, event_parser, player_version)
+
     for ev in clump.evs:
         s = event_parser.attacking_team(ev)
         if s is None:
@@ -609,7 +630,7 @@ def _enrich_stats_with_clump(
         player = parse_free_throw_made(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.ft.attempts, selectors)
                 _increment_shot_clock(stats.ft.made, selectors)
             continue
@@ -617,14 +638,14 @@ def _enrich_stats_with_clump(
         player = parse_free_throw_missed(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.ft.attempts, selectors)
             continue
 
         player = parse_rim_made(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.fg.attempts, selectors)
                 _increment_shot_clock(stats.fg.made, selectors)
                 _increment_shot_clock(stats.fg_2p.attempts, selectors)
@@ -639,7 +660,7 @@ def _enrich_stats_with_clump(
         player = parse_rim_missed(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.fg.attempts, selectors)
                 _increment_shot_clock(stats.fg_2p.attempts, selectors)
                 _increment_shot_clock(stats.fg_rim.attempts, selectors)
@@ -648,7 +669,7 @@ def _enrich_stats_with_clump(
         player = parse_two_pointer_made(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.fg.attempts, selectors)
                 _increment_shot_clock(stats.fg.made, selectors)
                 _increment_shot_clock(stats.fg_2p.attempts, selectors)
@@ -663,7 +684,7 @@ def _enrich_stats_with_clump(
         player = parse_two_pointer_missed(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.fg.attempts, selectors)
                 _increment_shot_clock(stats.fg_2p.attempts, selectors)
                 _increment_shot_clock(stats.fg_mid.attempts, selectors)
@@ -672,7 +693,7 @@ def _enrich_stats_with_clump(
         player = parse_three_pointer_made(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.fg.attempts, selectors)
                 _increment_shot_clock(stats.fg.made, selectors)
                 _increment_shot_clock(stats.fg_3p.attempts, selectors)
@@ -687,7 +708,7 @@ def _enrich_stats_with_clump(
         player = parse_three_pointer_missed(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.fg.attempts, selectors)
                 _increment_shot_clock(stats.fg_3p.attempts, selectors)
                 # ponytail: see the 3pt-made branch above -- is_make=False
@@ -711,7 +732,7 @@ def _enrich_stats_with_clump(
         player = parse_turnover(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.to, selectors)
             continue
 
@@ -732,7 +753,7 @@ def _enrich_stats_with_clump(
         player = parse_assist(s)
         if player is not None:
             if player_filter is None or player_filter(player):
-                selectors = _shot_clock_selector_builder(ev)
+                selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 assist = _get_or_create_shot_clock(stats, "assist")
                 _increment_shot_clock(assist, selectors)
                 _increment_assisted_fg_stats(stats, clump, event_parser, player_coder, selectors)
@@ -1194,3 +1215,151 @@ def is_end_of_game_fouling_vs_fastbreak(curr_clump: ConcurrentClump, event_parse
         if parse_free_throw_made(s) is not None:
             return _near_end_of_game(ev.min) and _scores_close_but_behind(ev, event_parser, last_shot_made=True)
     return False
+
+
+# ---------------------------------------------------------------------------
+# is_transition (Task 5c.3)
+# ---------------------------------------------------------------------------
+
+
+def is_transition(
+    curr_clump: ConcurrentClump,
+    prev_clumps: list[ConcurrentClump],
+    event_parser: PossessionEvent,
+    player_version: bool,
+) -> tuple[Callable[[RawGameEvent, bool], bool], str]:
+    """Figure out if the current clump is part of a transition offense
+    following opponent offense (or a marked-fastbreak play) (``is_transition``,
+    ``LineupUtils.scala:668-927``).
+
+    Returns a ``(predicate, debug_tag)`` tuple mirroring :func:`is_scramble`
+    -- the oracle asserts the debug tag directly (``"N/A"``/``"0a.X"``/
+    ``"1a.a"``/``"1a.b"``/``"1b.a"``/``"1b.b"``/``"1b.X"``/``"NOT"``).
+    Unlike :func:`is_scramble`'s predicate, this one takes a *second*
+    argument -- ``is_scramble`` -- so **scramble always wins**: an event
+    already classified as a scramble is never additionally tagged
+    transition (``!is_scramble && is_transition_event``).
+
+    Args:
+        curr_clump: The clump to classify.
+        prev_clumps: Prior merged clumps, most-recent-first.
+        event_parser: Selects which side of each event is "attacking" (and,
+            for this heuristic, "defending").
+        player_version: Unused -- see :func:`is_scramble`'s port notes in
+            the module docstring (the Scala's debug-print gate this flag
+            controls is permanently ``false`` regardless of its value).
+
+    Returns:
+        ``(predicate, debug_tag)`` where ``predicate(ev, is_scramble)``
+        reports whether ``ev`` is part of a transition play, given whether
+        it was already classified as a scramble.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_transition
+
+            predicate, tag = is_transition(curr_clump, prev_clumps, event_parser, player_version=False)
+            [predicate(ev, is_scramble=False) for ev in curr_clump.evs]
+    """
+    del player_version  # ponytail: only gates a permanently-dead Scala debug println (same as is_scramble).
+
+    if not prev_clumps:
+        # (if a lineup change has occurred we don't include it as transition by policy)
+        return (lambda ev, is_scramble: False, "N/A")
+
+    prev_clump = prev_clumps[0]
+
+    if is_end_of_game_fouling_vs_fastbreak(curr_clump, event_parser):
+        return (lambda ev, is_scramble: False, "0a.X")
+
+    threshold = (7.5 if curr_clump.evs and is_gen2(curr_clump.evs[0]) else 10.5) / 60.0
+    # (Based on analysis of events marked as fastbreak, this should be in the
+    # 7-9 range; more conservative if we have fastbreak indications.)
+
+    # Category 1a: quick shot/rebound following opponent offense.
+    def _is_oppo_shot_or_team_rebound(ev: RawGameEvent) -> bool:
+        d = event_parser.defending_team(ev)
+        if d is not None and (
+            parse_turnover(d) is not None or parse_shot_made(d) is not None or parse_free_throw_attempt(d) is not None
+        ):
+            return True
+        a = event_parser.attacking_team(ev)
+        return a is not None and parse_defensive_rebound(a) is not None
+
+    candidate: Optional[RawGameEvent] = None
+    for ev in prev_clump.evs:
+        if _is_oppo_shot_or_team_rebound(ev):
+            candidate = ev
+            break
+
+    def _attacking_is_drb(ev: RawGameEvent) -> bool:
+        a = event_parser.attacking_team(ev)
+        return a is not None and parse_defensive_rebound(a) is not None
+
+    # 1a.b special case: the miss and its rebound land in different clumps.
+    rebound_special_case: Optional[RawGameEvent] = None
+    if candidate is None and any(_attacking_is_drb(ev) for ev in curr_clump.evs):
+        for ev in prev_clump.evs:
+            d = event_parser.defending_team(ev)
+            if d is not None and parse_shot_missed(d) is not None:
+                rebound_special_case = ev
+                break
+
+    quick_candidate = candidate if candidate is not None else rebound_special_case
+    curr_min = curr_clump.min if curr_clump.min is not None else 0.0
+    quick_shot_taken = quick_candidate is not None and (curr_min - quick_candidate.min) < threshold
+
+    # Category 1b: "fastbreak"-marked plays (new-format PbP).
+    def _first_team_offense_info(clump: ConcurrentClump) -> Optional[str]:
+        for ev in clump.evs:
+            s = event_parser.attacking_team(ev)
+            if s is not None and parse_offensive_event(s) is not None:
+                return ev.info
+        return None
+
+    first_off_ev = _first_team_offense_info(curr_clump)
+    play_is_fastbreak = first_off_ev is not None and "fastbreak" in first_off_ev
+    # (don't require candidate.nonEmpty because the existence of the fastbreak
+    # in the 1st event trumps that -- but blocks certain prev-clump categories.)
+    is_fastbreak_override_allowed = candidate is not None or _first_team_offense_info(prev_clump) is None
+
+    is_transition_event_standard = (quick_shot_taken and first_off_ev is not None) or (  # (1b.a)
+        play_is_fastbreak and is_fastbreak_override_allowed  # (1b.b, see above)
+    )
+
+    # Special case (also seen in is_scramble): the 2nd half of a FT pair.
+    is_transition_event_dangling_ft = False
+    if candidate is None:
+        for ev in curr_clump.evs:
+            s = event_parser.attacking_team(ev)
+            if s is None:
+                continue
+            gen2 = parse_free_throw_event_attempt_gen2(s)
+            if gen2 is not None and "fastbreak" in ev.info:
+                _, attempt, total = gen2
+                # (if attempts==1 should be 1b if anything, unless it's an +1)
+                is_transition_event_dangling_ft = attempt > 1 or total == 1
+                break
+
+    is_transition_event = is_transition_event_standard or is_transition_event_dangling_ft
+
+    debug_context: str
+    if is_transition_event_standard and quick_shot_taken and rebound_special_case is not None:
+        debug_context = "1a.b"  # short gap (RB in wrong clump)
+    elif is_transition_event_standard and quick_shot_taken:
+        debug_context = "1a.a"  # short gap
+    elif is_transition_event_standard and not is_transition_event_dangling_ft:
+        debug_context = "1b.a"  # play is fast break
+    elif is_transition_event_dangling_ft:
+        debug_context = "1b.b"  # "dangling FT" special case
+    elif not is_transition_event_standard and play_is_fastbreak:
+        debug_context = "1b.X"  # (fastbreak override REJECTED)
+    else:
+        debug_context = "NOT"  # not a transition event
+
+    def _predicate(ev: RawGameEvent, is_scramble: bool) -> bool:
+        del ev  # ponytail: only feeds a dead debug println (check_for_fastbreak).
+        return not is_scramble and is_transition_event
+
+    return (_predicate, debug_context)
