@@ -1,10 +1,9 @@
 """NCAA stint-builder core: player codes + team-name parsing (men's basketball).
 
 Faithful Python port of the player-code generator, team-name parser, the
-play-by-play event ADT, and event reordering from ``ExtractorUtils.scala`` in
-Alex-At-Home/cbb-explorer (the Scala NCAA play-by-play ingestion pipeline
-behind hoop-explorer.com). This module is extended by Task 5b.5 with the
-substitution-tracking stint builder itself (``build_partial_lineup_list``).
+play-by-play event ADT, event reordering, and the substitution-tracking
+stint builder itself from ``ExtractorUtils.scala`` in Alex-At-Home/cbb-explorer
+(the Scala NCAA play-by-play ingestion pipeline behind hoop-explorer.com).
 
 Ported functions/types (Scala anchors in each docstring):
 
@@ -23,6 +22,34 @@ Ported functions/types (Scala anchors in each docstring):
 * :func:`reorder_and_reverse` -- reorders a same-minute block of events so
   subs never enclose the plays they logically precede/follow
   (``ExtractorUtils.scala:435-599``).
+* :func:`build_partial_lineup_list` -- the top-level foldLeft that turns a
+  play-by-play event stream into a chronological list of lineup stints
+  (``ExtractorUtils.scala:118-227``).
+* :func:`build_new_player_list` -- 3-candidate prefer-size-5 reconciliation
+  of the on-floor roster from a lineup's subs (``ExtractorUtils.scala:654-693``).
+* :func:`build_lineup_id` -- sorted-code join identifying a set of players
+  on the floor (``ExtractorUtils.scala:602-606``).
+* :func:`start_time_from_period` / :func:`duration_from_period` -- period
+  clock-time helpers (women's quarters vs. men's halves, then 5-minute OTs;
+  ``ExtractorUtils.scala:272-287``).
+
+**Deferred (call-time) import for ``build_tidy_player_context`` /
+``tidy_player``.** ``mbb_ncaa_names.py`` imports :func:`build_player_code`
+FROM this module at ITS OWN top level; a matching top-level import of
+``mbb_ncaa_names`` back into this module would therefore be a genuine
+circular import (unlike the ``TYPE_CHECKING``-only ``TidyPlayerContext``
+forward reference above, which is inert at runtime). :func:`build_partial_lineup_list`
+instead imports ``build_tidy_player_context``/``tidy_player`` inside its own
+function body -- by the time any caller invokes it, both modules have
+already finished loading, so the cycle never actually forms.
+
+**``date.plusMillis((duration_mins * 60000.0).toInt)`` truncation, ported
+verbatim.** :func:`~_new_lineup_event`'s date arithmetic mirrors Scala's
+``Int`` truncation (toward zero) exactly via Python's ``int(...)`` on the
+same float product -- both languages use IEEE-754 doubles for the
+intermediate ``duration_mins * 60000.0``, so the truncated millisecond count
+is bit-for-bit identical between the two ports (verified against the
+oracle's ``now.plusMillis(6000)`` for a ``duration_mins=0.1`` stint).
 
 **Scala idiom decision: the ``Model`` companion object is flattened.**
 Scala nests the ADT + ``LineupBuildingState`` inside ``private[ExtractorUtils]
@@ -52,8 +79,8 @@ Scala's ``case class.copy``), not in-place mutation.** ``LineupEvent`` /
 dataclasses (see the "Scala idiom decisions" note in ``mbb_ncaa_models.py``)
 because a later phase accumulates stats into them in place. But
 ``LineupBuildingState`` is the accumulator for a Scala ``foldLeft`` -- the
-Scala state machine is copy-on-write by construction, and Task 5b.5's
-``build_partial_lineup_list`` fold will read as ``state =
+Scala state machine is copy-on-write by construction, and
+``build_partial_lineup_list``'s fold reads as ``state =
 state.with_player_in(...)`` at every step. If ``with_*`` mutated ``curr`` in
 place instead, every entry appended to ``prev`` earlier in the same fold
 would need its own independent ``LineupEvent`` object anyway (``prev``
@@ -81,6 +108,15 @@ Landmine index (reachable error sites, numbered across the module):
        only through comprehensions/``sorted()``, never a bare index; no
        reachable ``IndexError``. ``LineupBuildingState.is_active`` divides
        nothing (subtraction only) -- no reachable ``ZeroDivisionError``.
+    3. ``build_partial_lineup_list``/``build_new_player_list``/``build_lineup_id``/
+       ``_complete_lineup``/``_new_lineup_event`` are all dict/list
+       comprehensions, string joins, and one truncating ``int()`` cast (see
+       the module docstring's truncation note) -- no reachable division or
+       bare indexing. ``_complete_lineup`` accepts a ``prevs`` parameter
+       that is unused in its body -- ported verbatim (every Scala call site
+       passes ``state.prev``, but the Scala body itself never reads it; the
+       ``// TODO test the lineup fix logic`` comment at ``:701`` suggests
+       unfinished validation wiring, not a Python-side omission).
 """
 
 from __future__ import annotations
@@ -88,6 +124,7 @@ from __future__ import annotations
 import re
 import unicodedata
 from dataclasses import dataclass, field, replace
+from datetime import timedelta
 from typing import TYPE_CHECKING, Iterable, Optional, Sequence, Union
 
 from sportsdataverse.mbb.mbb_ncaa_data_quality import (
@@ -108,10 +145,13 @@ from sportsdataverse.mbb.mbb_ncaa_events import (
 )
 from sportsdataverse.mbb.mbb_ncaa_models import (
     LineupEvent,
+    LineupEventStats,
+    LineupId,
     PlayerCodeId,
     PlayerId,
     RawGameEvent,
     Score,
+    ScoreInfo,
     TeamId,
     Year,
 )
@@ -142,6 +182,11 @@ __all__ = [
     "PlayByPlayEvent",
     "LineupBuildingState",
     "reorder_and_reverse",
+    "build_partial_lineup_list",
+    "build_new_player_list",
+    "build_lineup_id",
+    "start_time_from_period",
+    "duration_from_period",
 ]
 
 #: Max total length of a player code (``ExtractorUtils.scala:12``).
@@ -538,8 +583,7 @@ class LineupBuildingState:
         curr: The lineup event currently being built.
         tidy_ctx: Name-resolution context for the current game (see
             :class:`~sportsdataverse.mbb.mbb_ncaa_names.TidyPlayerContext`);
-            threaded through, unused by this task's methods -- Task 5b.5's
-            ``build_partial_lineup_list`` calls
+            threaded through :func:`build_partial_lineup_list`, which calls
             :func:`~sportsdataverse.mbb.mbb_ncaa_names.tidy_player` with it
             on every sub event.
         prev: Completed lineup events, most-recently-completed first (i.e.
@@ -819,3 +863,369 @@ def reorder_and_reverse(reversed_partial_events: Iterable[PlayByPlayEvent]) -> l
     for block in tail:
         result.extend(block)
     return result
+
+
+def start_time_from_period(period: int, is_women_game: bool) -> float:
+    """The game-clock time (minutes elapsed) a period starts at
+    (``ExtractorUtils.scala:272-281``).
+
+    Women's games play four 10-minute quarters then 5-minute overtimes; men's
+    games play two 20-minute halves then 5-minute overtimes.
+
+    Args:
+        period: The 1-indexed period number (1/2 = halves for men,
+            1-4 = quarters for women, 5+ = overtimes for both).
+        is_women_game: Whether to use the women's (quarters) or men's
+            (halves) period schedule.
+
+    Returns:
+        The game-clock minute the period begins at.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
+            start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
+            start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
+            start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
+    """
+    n = period - 1
+    if is_women_game:
+        if n < 4:
+            return n * 10.0
+        return 40.0 + (n - 4) * 5.0
+    if n < 2:
+        return n * 20.0
+    return 40.0 + (n - 2) * 5.0
+
+
+def duration_from_period(period: int, is_women_game: bool) -> float:
+    """The game duration (minutes elapsed) once ``period`` has completed
+    (``ExtractorUtils.scala:286-287``: ``start_time_from_period(period + 1,
+    ...)``).
+
+    Args:
+        period: The 1-indexed period number.
+        is_women_game: Whether to use the women's or men's period schedule.
+
+    Returns:
+        The game-clock minute at the end of ``period``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import duration_from_period
+            duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
+            duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
+    """
+    return start_time_from_period(period + 1, is_women_game)
+
+
+def build_lineup_id(players: list[PlayerCodeId]) -> LineupId:
+    """Builds a lineup id from a list of players (``ExtractorUtils.scala:602-606``):
+    every player's ``code``, sorted, joined with ``"_"``.
+
+    Args:
+        players: The players on the floor for this lineup.
+
+    Returns:
+        The opaque :class:`~sportsdataverse.mbb.mbb_ncaa_models.LineupId`.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_models import PlayerCodeId, PlayerId
+            from sportsdataverse.mbb.mbb_ncaa_stints import build_lineup_id
+            build_lineup_id([PlayerCodeId("BbBob", PlayerId("Bob")), PlayerCodeId("AaAl", PlayerId("Al"))])
+            # LineupId("AaAl_BbBob")
+    """
+    return LineupId("_".join(sorted(p.code for p in players)))
+
+
+def build_new_player_list(curr: LineupEvent, prev: LineupEvent) -> list[PlayerCodeId]:
+    """Builds a player list from the previous (or current, if pre-initialized)
+    lineup and the current lineup's in/out subs (``ExtractorUtils.scala:654-693``).
+
+    Three candidate reconciliations are computed --
+
+    * ``poss1``: ``prev.players`` minus everyone in ``curr.players_out``,
+      plus everyone in ``curr.players_in`` (subs-out removed first, then
+      subs-in merged on top).
+    * ``poss2``: ``prev.players`` plus ``curr.players_in``, minus everyone in
+      ``curr.players_out`` (subs-in merged first, then subs-out removed).
+    * ``poss3``: just ``curr.players_in``.
+
+    -- and whichever has exactly 5 players wins (checked in ``poss3``,
+    ``poss1``, ``poss2`` order); if none does, a common play-by-play error
+    (a player appearing in both the in- and out- lists for the same sub
+    event) is corrected by dropping the common players from both sides
+    before reconciling via the ``poss1`` recipe.
+
+    Args:
+        curr: The lineup event whose ``players_in``/``players_out`` describe
+            the subs to apply.
+        prev: The lineup event whose ``players`` is the starting roster
+            (``_complete_lineup`` passes ``curr`` for both arguments -- see
+            its docstring).
+
+    Returns:
+        The reconciled player list, sorted by ``code``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import build_new_player_list
+            build_new_player_list(curr_lineup_event, prev_lineup_event)
+    """
+    curr_players = {p.code: p for p in prev.players}
+    tmp_players_out = {p.code: p for p in curr.players_out}
+    tmp_players_in = {p.code: p for p in curr.players_in}
+
+    poss1_map = {k: v for k, v in curr_players.items() if k not in tmp_players_out}
+    poss1_map.update(tmp_players_in)
+    poss1 = list(poss1_map.values())
+
+    poss2_map = {**curr_players, **tmp_players_in}
+    poss2 = [v for k, v in poss2_map.items() if k not in tmp_players_out]
+
+    poss3 = list(tmp_players_in.values())
+
+    if len(poss3) == 5:
+        new_player_list = poss3
+    elif len(poss1) == 5:
+        new_player_list = poss1
+    elif len(poss2) == 5:
+        new_player_list = poss2
+    else:
+        # Common error case: a player comes in and out in the same sub --
+        # drop the common players from both sides before reconciling.
+        common_players = set(tmp_players_in) & set(tmp_players_out)
+        alt_players_in = {k: v for k, v in tmp_players_in.items() if k not in common_players}
+        alt_players_out_keys = {k for k in tmp_players_out if k not in common_players}
+        poss_n_map = {k: v for k, v in curr_players.items() if k not in alt_players_out_keys}
+        poss_n_map.update(alt_players_in)
+        new_player_list = list(poss_n_map.values())
+
+    return sorted(new_player_list, key=lambda p: p.code)
+
+
+def _new_lineup_event(prev: LineupEvent, in_name: Optional[str] = None, out_name: Optional[str] = None) -> LineupEvent:
+    """Creates an "empty" new lineup following ``prev`` (``ExtractorUtils.scala:611-649``).
+    ``prev`` is expected to have already been through :func:`_complete_lineup`.
+
+    Args:
+        prev: The just-completed lineup event this new one continues from.
+        in_name: The (already ``tidy_player``-resolved) name of the player
+            subbing in that opened this new lineup, if any.
+        out_name: The (already ``tidy_player``-resolved) name of the player
+            subbing out that opened this new lineup, if any.
+
+    Returns:
+        A fresh :class:`~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent`
+        with ``duration_mins=0.0``, ``lineup_id`` unknown, and ``players``
+        carried over from ``prev`` (to be recalculated once all of this
+        lineup's subs are known).
+    """
+    return LineupEvent(
+        date=prev.date + timedelta(milliseconds=int(prev.duration_mins * 60000.0)),
+        location_type=prev.location_type,
+        start_min=prev.end_min,
+        end_min=prev.end_min,  # (updates with every event)
+        duration_mins=0.0,  # (fill in at end of event)
+        score_info=replace(
+            ScoreInfo.empty(),
+            start=prev.score_info.end,
+            end=prev.score_info.end,
+            start_diff=prev.score_info.end_diff,
+        ),
+        team=prev.team,
+        opponent=prev.opponent,
+        lineup_id=LineupId.unknown,  # (will calc once we have all the subs)
+        players=prev.players,  # (will re-calc once we have all the subs)
+        players_in=[build_player_code(in_name, prev.team.team)] if in_name is not None else [],
+        players_out=[build_player_code(out_name, prev.team.team)] if out_name is not None else [],
+        raw_game_events=[],
+        team_stats=LineupEventStats.empty(),  # (calculate these 2 later)
+        opponent_stats=LineupEventStats.empty(),
+    )
+
+
+def _complete_lineup(curr: LineupEvent, prevs: list[LineupEvent], min: float) -> LineupEvent:
+    """Fills in/tidies up a partial lineup event following its completion
+    (``ExtractorUtils.scala:696-727``).
+
+    Args:
+        curr: The lineup event being completed.
+        prevs: Unused -- see the module docstring's landmine-index note
+            (every call site passes ``state.prev``, but the Scala body
+            itself never reads the parameter).
+        min: The game-clock minute the lineup ends at.
+
+    Returns:
+        A copy of ``curr`` with ``end_min``/``duration_mins``/``score_info
+        .end_diff`` filled in, event counts tallied, ``lineup_id``/``players``
+        recalculated (via :func:`build_new_player_list`, passing ``curr`` as
+        both arguments -- a verbatim-ported Scala quirk: since ``curr`` is
+        its own "previous" state here, ``poss1``/``poss2`` degenerate to
+        "``curr.players`` with the subs applied", and ``players_in``/
+        ``players_out``/``raw_game_events`` are the natural fallback), and
+        ``players_in``/``players_out``/``raw_game_events`` reversed back to
+        chronological order (they were built up in prepend/LIFO order by
+        :meth:`LineupBuildingState.with_player_in` etc.).
+    """
+    new_player_list = build_new_player_list(curr, curr)
+
+    return replace(
+        curr,
+        end_min=min,
+        duration_mins=min - curr.start_min,
+        score_info=replace(curr.score_info, end_diff=curr.score_info.end.scored - curr.score_info.end.allowed),
+        team_stats=replace(
+            curr.team_stats,
+            num_events=sum(1 for ev in curr.raw_game_events if ev.team is not None),
+            num_possessions=0,  # (calculate later)
+        ),
+        opponent_stats=replace(
+            curr.opponent_stats,
+            num_events=sum(1 for ev in curr.raw_game_events if ev.opponent is not None),  # TODO exclude subs
+            num_possessions=0,  # (calculate later)
+        ),
+        lineup_id=build_lineup_id(new_player_list),
+        players=new_player_list,
+        players_in=list(reversed(curr.players_in)),
+        players_out=list(reversed(curr.players_out)),
+        raw_game_events=list(reversed(curr.raw_game_events)),
+    )
+
+
+def build_partial_lineup_list(
+    reversed_partial_events: Iterable[PlayByPlayEvent], box_lineup: LineupEvent
+) -> list[LineupEvent]:
+    """Converts a stream of partially parsed events into a list of lineup
+    events (``ExtractorUtils.scala:118-227``).
+
+    ``box_lineup`` is expected to carry every player on the team's roster,
+    with the top 5 (by whatever order the caller supplies) being the
+    starters. The events are first reordered into forward-chronological
+    order via :func:`reorder_and_reverse`, then folded through a
+    :class:`LineupBuildingState`:
+
+    * A ``SubIn``/``SubOut`` event either **opens a new stint** (if the
+      current lineup :meth:`~LineupBuildingState.is_active`: the just-built
+      lineup is completed via :func:`_complete_lineup` and appended, and a
+      fresh lineup is started via :func:`_new_lineup_event`) or **keeps
+      accumulating** onto the current (not-yet-active) lineup via
+      :meth:`~LineupBuildingState.with_player_in`/``with_player_out``. A
+      ``SubIn`` event naming literally ``"team"`` (case-insensitive) is
+      always a no-op, win or lose the active check; ``SubOut`` has no such
+      exemption. Every sub name is resolved through
+      :func:`~sportsdataverse.mbb.mbb_ncaa_names.tidy_player` first.
+    * The **old/new play-by-play format** is latched (once, forever) the
+      first time a sub name is seen: an all-caps name (no lowercase letters
+      at all) means the old (pre-2018-ish) format; this only ever updates on
+      a sub-event branch, never on a ``GameBreakEvent``.
+    * ``OtherTeamEvent``/``OtherOpponentEvent`` accumulate onto the current
+      lineup via :meth:`~LineupBuildingState.with_team_event`/
+      ``with_opponent_event`` plus :meth:`~LineupBuildingState.with_latest_score`.
+    * ``GameBreakEvent`` (half/quarter/OT boundary short of the game's end)
+      completes the current lineup and starts a fresh one -- but whether
+      that fresh lineup **resets to the starting 5** or **carries over** the
+      just-completed lineup's players depends on the (possibly still
+      unlatched) ``old_format`` flag: old format resets to
+      ``starters_only``, new format (2018+, the default once
+      ``box_lineup.team.year.value >= 2018`` if never latched) carries over.
+    * ``GameEndEvent`` only completes the current lineup (no new one is
+      started, and it is not appended to ``prev`` here -- :meth:`LineupBuildingState.build`
+      folds it in as the trailing entry).
+
+    Args:
+        reversed_partial_events: The full play-by-play event stream for one
+            team's box-score lineup, in reverse-chronological order.
+        box_lineup: The team's roster lineup event (``players`` is the full
+            roster; the first 5 are the starters).
+
+    Returns:
+        The chronological list of lineup (stint) events.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import build_partial_lineup_list
+            stints = build_partial_lineup_list(reversed(events), box_lineup)
+            print(len(stints))
+    """
+    # Deferred import -- see the module docstring's "Deferred (call-time)
+    # import" note (a real runtime circular import with mbb_ncaa_names,
+    # unlike the TYPE_CHECKING-only TidyPlayerContext forward ref above).
+    from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context, tidy_player
+
+    starters_only = replace(box_lineup, players=box_lineup.players[:5], players_in=[], players_out=[])
+    tidy_ctx = build_tidy_player_context(box_lineup)
+
+    state = LineupBuildingState(curr=starters_only, tidy_ctx=tidy_ctx)
+    partial_events = reorder_and_reverse(reversed_partial_events)
+
+    def _is_old_format(p: str, s: LineupBuildingState) -> Optional[bool]:
+        """Latches on the FIRST sub name seen -- all-caps means old format
+        (``:138-144``)."""
+        if s.old_format is None:
+            return not any(ch.islower() for ch in p)
+        return s.old_format
+
+    def _no_team_keyword(name: str) -> bool:
+        return name.lower() != "team"
+
+    for event in partial_events:
+        if isinstance(event, SubInEvent) and state.is_active(event.min) and _no_team_keyword(event.player_name):
+            tidier_name, new_ctx = tidy_player(event.player_name, state.tidy_ctx)
+            new_old_format = _is_old_format(event.player_name, state)
+            completed_curr = _complete_lineup(state.curr, state.prev, event.min)
+            state = replace(
+                state,
+                curr=_new_lineup_event(completed_curr, in_name=tidier_name),
+                tidy_ctx=new_ctx,
+                prev=[completed_curr] + state.prev,
+                old_format=new_old_format,
+            )
+        elif isinstance(event, SubOutEvent) and state.is_active(event.min):
+            tidier_name, new_ctx = tidy_player(event.player_name, state.tidy_ctx)
+            new_old_format = _is_old_format(event.player_name, state)
+            completed_curr = _complete_lineup(state.curr, state.prev, event.min)
+            state = replace(
+                state,
+                curr=_new_lineup_event(completed_curr, out_name=tidier_name),
+                tidy_ctx=new_ctx,
+                prev=[completed_curr] + state.prev,
+                old_format=new_old_format,
+            )
+        elif isinstance(event, SubInEvent) and _no_team_keyword(event.player_name):
+            # !state.is_active -- keep adding sub events
+            tidier_name, new_ctx = tidy_player(event.player_name, state.tidy_ctx)
+            new_old_format = _is_old_format(event.player_name, state)
+            state = replace(state.with_player_in(tidier_name), tidy_ctx=new_ctx, old_format=new_old_format)
+        elif isinstance(event, SubOutEvent):
+            # !state.is_active -- keep adding sub events
+            tidier_name, new_ctx = tidy_player(event.player_name, state.tidy_ctx)
+            new_old_format = _is_old_format(event.player_name, state)
+            state = replace(state.with_player_out(tidier_name), tidy_ctx=new_ctx, old_format=new_old_format)
+        elif isinstance(event, OtherTeamEvent):
+            state = state.with_team_event(event.min, event.event_string).with_latest_score(event.score)
+        elif isinstance(event, OtherOpponentEvent):
+            state = state.with_opponent_event(event.min, event.event_string).with_latest_score(event.score)
+        elif isinstance(event, GameBreakEvent):
+            completed_curr = _complete_lineup(state.curr, state.prev, event.min)
+            is_old = state.old_format if state.old_format is not None else (box_lineup.team.year.value < 2018)
+            if is_old:
+                new_lineup_id, new_players = starters_only.lineup_id, starters_only.players
+            else:
+                new_lineup_id, new_players = completed_curr.lineup_id, completed_curr.players
+            state = replace(
+                state,
+                curr=replace(_new_lineup_event(completed_curr), lineup_id=new_lineup_id, players=new_players),
+                prev=[completed_curr] + state.prev,
+            )
+        elif isinstance(event, GameEndEvent):
+            state = replace(state, curr=_complete_lineup(state.curr, state.prev, event.min))
+        # else: wildcard no-op (e.g. a SubInEvent naming literally "team")
+
+    return state.build()
