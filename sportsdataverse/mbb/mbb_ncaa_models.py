@@ -148,6 +148,7 @@ __all__ = [
     "PossCalcFragment",
     "poss_calc_fragment_sum",
     "score_to_tuple",
+    "PlayerEvent",
 ]
 
 
@@ -729,3 +730,71 @@ def score_to_tuple(s: str) -> tuple[int, int]:
     if m is None:
         return (0, 0)
     return (int(m.group(1)), int(m.group(2)))
+
+
+@dataclass
+class PlayerEvent:
+    """A lineup event's stats, narrowed to one player (``PlayerEvent``,
+    ``models/ncaa/PlayerEvent.scala:48-70``). **Scope addition, Task 5c.4**
+    -- deferred by 5a since only :func:`~sportsdataverse.mbb
+    .mbb_ncaa_lineup_enrich.create_player_events` (5c.4) returns it. Appended
+    here (not inserted among the 5a-reviewed classes above) to keep this an
+    additive-only change.
+
+    Same field shape as :class:`LineupEvent` with two fields prepended
+    (``player``, ``player_stats``) -- the Scala builds this via a
+    ``shapeless.LabelledGeneric`` HList splice of ``PlayerEvent``'s own
+    ``player``/``player_stats`` onto every field of a ``LineupEvent``
+    instance; this port has no generic-programming machinery, so
+    :func:`~sportsdataverse.mbb.mbb_ncaa_lineup_enrich.create_player_events`
+    constructs the dataclass directly instead.
+
+    **``SingleEventMeta`` / ``event_meta`` / ``game_id`` are NOT ported.**
+    ``PlayerEvent.scala``'s companion object nests a ``SingleEventMeta`` case
+    class, but the two fields that would carry it (``event_meta``,
+    ``game_id``) are commented out in the Scala source itself
+    (``PlayerEvent.scala:67-69``) -- never part of the live case class, and
+    ``create_player_events`` never constructs a ``SingleEventMeta``. Nothing
+    to defer; there is no live field to port.
+
+    Args:
+        player: The player this narrowed event describes.
+        player_stats: The player's own numerical stats for this lineup event.
+        date: The date of the game.
+        location_type: Home/away/neutral (etc.) for this game.
+        start_min: The point in the game at which the lineup entered.
+        end_min: The point in the game at which the lineup changed.
+        duration_mins: The duration of the lineup.
+        score_info: The score differential context for this event.
+        team: The team under analysis.
+        opponent: The opposing team.
+        lineup_id: A string that defines the set of players on the floor.
+        players: Mapping from player code to full identity, for this lineup.
+        players_in: Players who subbed in for this event.
+        players_out: Players who subbed out for this event.
+        raw_game_events: The raw NCAA event strings for both teams.
+        team_stats: Numerical stats extracted for the lineup (team side).
+        opponent_stats: Numerical stats extracted for the lineup (opponent
+            side).
+        player_count_error: If the lineup is "impossible", the number of
+            players actually seen (for analysis purposes).
+    """
+
+    player: PlayerCodeId
+    player_stats: LineupEventStats
+    date: datetime
+    location_type: LocationType
+    start_min: float
+    end_min: float
+    duration_mins: float
+    score_info: ScoreInfo
+    team: TeamSeasonId
+    opponent: TeamSeasonId
+    lineup_id: LineupId
+    players: list[PlayerCodeId]
+    players_in: list[PlayerCodeId]
+    players_out: list[PlayerCodeId]
+    raw_game_events: list[RawGameEvent]
+    team_stats: LineupEventStats
+    opponent_stats: LineupEventStats
+    player_count_error: Optional[int] = None

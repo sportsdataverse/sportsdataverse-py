@@ -2,17 +2,25 @@
 
 Faithful port of hoop-explorer's ``cbb-explorer`` (Scala 2.12, ``utest``,
 package ``org.piggottfamily.cbb_explorer.utils.parsers.ncaa``)
-``LineupUtils.scala`` -- the first three of five Phase-5c modules-in-one-file.
+``LineupUtils.scala`` -- the first four of five Phase-5c modules-in-one-file.
 **Task 5c.1 ported the lineup-enrichment core**: :func:`enrich_lineup`
 (score-delta pts/plus_minus), :func:`fix_possible_score_swap_bug`,
 :func:`ensure_ev_uniqueness`, :func:`add_stats_to_lineups`, and the full
 :func:`enrich_stats` event dispatch. **Task 5c.2 additionally ported**
 :func:`is_scramble` (+ its private recursive ``_get_first_off_ev_set``
-helper) and :func:`is_end_of_game_fouling_vs_fastbreak`. **Task 5c.3 ports**
+helper) and :func:`is_end_of_game_fouling_vs_fastbreak`. **Task 5c.3 ported**
 :func:`is_transition` (which itself calls
-``is_end_of_game_fouling_vs_fastbreak``) and wires **both** heuristics into
-:func:`_shot_clock_selector_builder` -- the dispatch is now feature-complete
-for scramble/transition tagging.
+``is_end_of_game_fouling_vs_fastbreak``) and wired **both** heuristics into
+:func:`_shot_clock_selector_builder` -- the dispatch became feature-complete
+for scramble/transition tagging. **Task 5c.4 ports** :func:`create_player_events`
+(per-player stat splitting via :func:`~sportsdataverse.mbb.mbb_ncaa_names
+.tidy_player`-backed name resolution + a per-player ``enrich_stats`` call),
+the ``increment_player_3p_shot_info`` seam deferred by 5c.1-5c.3 (now
+:func:`_increment_player_3p_shot_info`, wired into the two 3pt dispatch
+branches), and the debug-only field-wise adders :func:`sum_event_stats` /
+:func:`sum_shot_infos`. The new :class:`~sportsdataverse.mbb.mbb_ncaa_models
+.PlayerEvent` dataclass (``models/ncaa/PlayerEvent.scala``, deferred by 5a)
+is appended to ``mbb_ncaa_models.py`` as this task's scope addition.
 
 **THE critical port fact.** ``ShotClockStats.mid``/``.late`` are **dead
 fields -- never populated** anywhere in ``LineupUtils.scala``. Only three
@@ -39,15 +47,15 @@ branches (ORB/DRB/STL/BLK/foul) use the module-level :data:`_BASE_SELECTORS`
 constant directly and are UNAFFECTED by this wiring -- exactly per the
 plan's "only shots/FTs/TOs/assists get transition/scramble tagging" fact.
 
-**Deferred to Task 5c.4 (not stubbed).** ``increment_player_3p_shot_info``
-(``LineupUtils.scala:1147-1178``) buckets a 3pt shot into the shooter's
-per-lineup-slot :class:`~sportsdataverse.mbb.mbb_ncaa_models.PlayerShotInfo`
-tuple, but it is a no-op unless ``player_index`` is in ``[0, 4]`` -- and no
-caller passes a non-default ``player_index`` before Task 5c.4 ports
-``create_player_events`` (the only call site that ever sets it). Per YAGNI,
-this port omits that helper entirely rather than shipping an
-unreachable-until-5c.4 stub; the 3pt made/missed dispatch branches below
-carry an inline comment marking exactly where 5c.4 wires it back in.
+**3pt shot-info bucketing (Task 5c.4).** :func:`_increment_player_3p_shot_info`
+(``increment_player_3p_shot_info``, ``LineupUtils.scala:1147-1178``) buckets
+a 3pt shot into the shooter's per-lineup-slot :class:`~sportsdataverse.mbb
+.mbb_ncaa_models.PlayerShotInfo` tuple; it is a no-op unless ``player_index``
+is in ``[0, 5)`` -- the only caller that ever passes a non-default
+``player_index`` is :func:`create_player_events`. Bucket priority (first
+match wins): assisted (only possible on a make) -> ``ast_3pm``; else
+transition -> ``early_3pa``; else unassisted make -> ``unast_3pm``; else
+(unassisted miss) -> ``unknown_3pm``.
 
 **``is_scramble`` port notes (Task 5c.2).**
 
@@ -154,6 +162,7 @@ from typing import Any, Callable, Optional
 
 from sportsdataverse.mbb.mbb_ncaa_events import (
     is_gen2,
+    parse_any_play,
     parse_assist,
     parse_defensive_rebound,
     parse_flagrant_foul,
@@ -184,8 +193,12 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     AssistEvent,
     AssistInfo,
     Direction,
+    FieldGoalStats,
     LineupEvent,
     LineupEventStats,
+    PlayerCodeId,
+    PlayerEvent,
+    PlayerShotInfo,
     PossessionEvent,
     RawGameEvent,
     Score,
@@ -193,11 +206,13 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     ShotClockStats,
     score_to_tuple,
 )
+from sportsdataverse.mbb.mbb_ncaa_names import TidyPlayerContext, build_tidy_player_context, tidy_player
 from sportsdataverse.mbb.mbb_ncaa_possessions import (
     ConcurrentClump,
     concurrent_event_handler,
     lineup_as_raw_clumps,
 )
+from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
 
 __all__ = [
     "enrich_lineup",
@@ -208,6 +223,9 @@ __all__ = [
     "is_scramble",
     "is_end_of_game_fouling_vs_fastbreak",
     "is_transition",
+    "create_player_events",
+    "sum_event_stats",
+    "sum_shot_infos",
 ]
 
 PlayerFilterCoder = Callable[[str], "tuple[bool, str]"]
@@ -578,6 +596,98 @@ def _increment_assisted_fg_stats(
         _increment_player_assist(target_list, player_coder(player_name), selectors)
 
 
+def _get_or_create_player_shot_info(stats: LineupEventStats) -> PlayerShotInfo:
+    """Get-or-create ``stats.player_shot_info`` (quicklens
+    ``.atOrElse(emptyPlayerShotInfo)``, ``LineupUtils.scala:1169-1171``).
+
+    Args:
+        stats: The stat tree owning the field.
+
+    Returns:
+        The existing :class:`~sportsdataverse.mbb.mbb_ncaa_models
+        .PlayerShotInfo`, or a freshly-created (and stored) one.
+    """
+    if stats.player_shot_info is None:
+        stats.player_shot_info = PlayerShotInfo()
+    return stats.player_shot_info
+
+
+def _bump_player_tuple(shot_info: PlayerShotInfo, attr: str, player_index: int) -> None:
+    """``+1`` at ``player_index`` of a 5-slot ``PlayerTuple[Int]`` field,
+    get-or-create'ing an all-zero tuple first (quicklens
+    ``.atOrElse(emptyPlayerTupleInt) andThenModify player_tuple_selector
+    (player_index)).using(_ + 1)``, ``LineupUtils.scala:970-992,1169-1174``).
+    Tuples are immutable in Python, so this reads-mutates-as-list-writes-back
+    rather than mutating in place.
+
+    Args:
+        shot_info: The :class:`~sportsdataverse.mbb.mbb_ncaa_models
+            .PlayerShotInfo` owning the field.
+        attr: ``"unknown_3pm"``/``"early_3pa"``/``"unast_3pm"``/``"ast_3pm"``.
+        player_index: The lineup-slot index to bump, already guard-checked
+            by the caller (:func:`_increment_player_3p_shot_info`).
+    """
+    tup = getattr(shot_info, attr)
+    slots = list(tup) if tup is not None else [0, 0, 0, 0, 0]
+    slots[player_index] += 1
+    setattr(shot_info, attr, (slots[0], slots[1], slots[2], slots[3], slots[4]))
+
+
+def _increment_player_3p_shot_info(
+    stats: LineupEventStats,
+    ev: RawGameEvent,
+    is_make: bool,
+    clump: ConcurrentClump,
+    event_parser: PossessionEvent,
+    player_index: int,
+    is_scramble_builder: Callable[[RawGameEvent], bool],
+    is_transition_builder: Callable[[RawGameEvent, bool], bool],
+) -> None:
+    """Bucket a 3pt shot into the shooter's per-lineup-slot
+    :class:`~sportsdataverse.mbb.mbb_ncaa_models.PlayerShotInfo` tuple
+    (``increment_player_3p_shot_info``, ``LineupUtils.scala:1147-1178``).
+    No-op unless ``player_index`` is in ``[0, 5)`` (team-level calls pass
+    ``-1``).
+
+    Bucket priority, first match wins: **assisted** (only checked when
+    ``is_make`` -- the Scala's ``clump.evs.filter(_ => is_make)`` reduces to
+    the empty list on a miss, so a missed 3pt can never land in ``ast_3pm``)
+    -> ``ast_3pm``; else **transition** -> ``early_3pa``; else
+    **unassisted make** -> ``unast_3pm``; else (unassisted miss, or an
+    unassisted/non-transition make that fell through -- can't happen given
+    the ``elif is_make`` branch above it, kept for oracle-signature parity)
+    -> ``unknown_3pm``.
+
+    Args:
+        stats: The stat tree being mutated.
+        ev: The 3pt event being dispatched.
+        is_make: Whether this is the made (``True``) or missed (``False``)
+            3pt branch.
+        clump: The merged clump (for assist co-location).
+        event_parser: Selects which side of each event is "attacking".
+        player_index: Lineup-slot index; no-op unless ``0 <= player_index < 5``.
+        is_scramble_builder: The per-clump scramble predicate (same instance
+            :func:`_shot_clock_selector_builder` uses for this event).
+        is_transition_builder: The per-clump transition predicate.
+    """
+    if not (0 <= player_index < 5):
+        return
+    bucket_attr: str
+    if is_make and _find_matching_assist(clump.evs, event_parser) is not None:
+        bucket_attr = "ast_3pm"
+    else:
+        scramble = is_scramble_builder(ev)
+        transition = is_transition_builder(ev, scramble)
+        if transition:
+            bucket_attr = "early_3pa"
+        elif is_make:
+            bucket_attr = "unast_3pm"
+        else:
+            bucket_attr = "unknown_3pm"
+    shot_info = _get_or_create_player_shot_info(stats)
+    _bump_player_tuple(shot_info, bucket_attr, player_index)
+
+
 def _enrich_stats_with_clump(
     event_parser: PossessionEvent,
     player_filter_coder: Optional[PlayerFilterCoder],
@@ -598,15 +708,15 @@ def _enrich_stats_with_clump(
         prev_clumps: Prior merged clumps, most-recent-first -- feeds the
             per-clump :func:`is_scramble`/:func:`is_transition` builders
             (``LineupUtils.scala:949-960``).
-        player_index: Lineup-slot index for :func:`PlayerShotInfo` tuples
-            (unused until Task 5c.4 -- see the module docstring).
+        player_index: Lineup-slot index for :class:`~sportsdataverse.mbb
+            .mbb_ncaa_models.PlayerShotInfo` tuples (Task 5c.4) -- ``-1`` for
+            team-level calls, in which case :func:`_increment_player_3p_shot_info`
+            is a no-op.
         stats: The stat tree to mutate in place.
 
     Returns:
         ``stats``, mutated.
     """
-    del player_index  # ponytail: seam for Task 5c.4 (create_player_events)
-
     player_filter: Optional[Callable[[str], bool]]
     player_coder: Optional[Callable[[str], str]]
     if player_filter_coder is not None:
@@ -699,10 +809,9 @@ def _enrich_stats_with_clump(
                 _increment_shot_clock(stats.fg_3p.attempts, selectors)
                 _increment_shot_clock(stats.fg_3p.made, selectors)
                 _maybe_increment_assisted_stats(stats, "fg_3p", "ast_3p", clump, event_parser, player_coder, selectors)
-                # ponytail: increment_player_3p_shot_info (PlayerShotInfo
-                # bucketing) is player_index>=0-only with no caller before
-                # Task 5c.4's create_player_events -- deferred, see the
-                # module docstring (LineupUtils.scala:1147-1178, 1316).
+                _increment_player_3p_shot_info(
+                    stats, ev, True, clump, event_parser, player_index, is_scramble_builder, is_transition_builder
+                )
             continue
 
         player = parse_three_pointer_missed(s)
@@ -711,8 +820,9 @@ def _enrich_stats_with_clump(
                 selectors = _shot_clock_selector_builder(ev, is_scramble_builder, is_transition_builder)
                 _increment_shot_clock(stats.fg.attempts, selectors)
                 _increment_shot_clock(stats.fg_3p.attempts, selectors)
-                # ponytail: see the 3pt-made branch above -- is_make=False
-                # path deferred to Task 5c.4 the same way.
+                _increment_player_3p_shot_info(
+                    stats, ev, False, clump, event_parser, player_index, is_scramble_builder, is_transition_builder
+                )
             continue
 
         player = parse_offensive_rebound(s)
@@ -1363,3 +1473,300 @@ def is_transition(
         return not is_scramble and is_transition_event
 
     return (_predicate, debug_context)
+
+
+# ---------------------------------------------------------------------------
+# create_player_events (Task 5c.4)
+# ---------------------------------------------------------------------------
+
+
+def _player_tidier(
+    player: PlayerCodeId, tidy_ctx: TidyPlayerContext, box_lineup: LineupEvent, valid_player_codes: set[str]
+) -> list[PlayerCodeId]:
+    """Re-resolve one lineup-slot player against the (possibly corrupted)
+    box score, dropping it if it isn't actually in the box lineup
+    (``player_tidier``, ``LineupUtils.scala:1463-1473``).
+
+    Args:
+        player: The player to re-resolve.
+        tidy_ctx: The box-score lookup context (:func:`~sportsdataverse.mbb
+            .mbb_ncaa_names.build_tidy_player_context`).
+        box_lineup: The trusted box-score lineup (its ``team.team`` is the
+            misspelling-correction scope).
+        valid_player_codes: ``{p.code for p in box_lineup.players}``.
+
+    Returns:
+        ``[tidied_player]`` if the tidied code is a valid box-score player,
+        else ``[]`` (Scala's ``flatMap``-friendly single-or-none list).
+    """
+    tidy_name, _ = tidy_player(player.id.name, tidy_ctx)
+    tidy_player_code = build_player_code(tidy_name, box_lineup.team.team)
+    if tidy_player_code.code in valid_player_codes:
+        return [tidy_player_code]
+    return []
+
+
+def create_player_events(lineup_event_maybe_bad: LineupEvent, box_lineup: LineupEvent) -> list[PlayerEvent]:
+    """Split a lineup event into one :class:`~sportsdataverse.mbb
+    .mbb_ncaa_models.PlayerEvent` per player on the floor
+    (``create_player_events``, ``LineupUtils.scala:1454-1529``).
+
+    First re-tidies ``lineup_event_maybe_bad``'s ``players``/``players_in``/
+    ``players_out`` against ``box_lineup`` (via :func:`_player_tidier`),
+    dropping any player who doesn't actually resolve to a box-score player --
+    this recovers from "impossible" lineups. Then, for each surviving player
+    (in lineup-slot order, 0-4), builds their own :func:`enrich_stats` call
+    with a per-player ``player_filter_coder`` + that player's slot index (the
+    only caller in this module that ever passes a non-default
+    ``player_index``, wiring :func:`_increment_player_3p_shot_info`).
+
+    Args:
+        lineup_event_maybe_bad: The lineup event to split (its player lists
+            may reference names not actually in ``box_lineup``).
+        box_lineup: The trusted box-score lineup for this game (name
+            resolution + team-scoping context).
+
+    Returns:
+        One :class:`~sportsdataverse.mbb.mbb_ncaa_models.PlayerEvent` per
+        (tidied) player in ``lineup_event_maybe_bad.players``, same order.
+        Kept even if a player has zero matching raw events -- needed
+        downstream for usage/possession math.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import create_player_events
+
+            player_events = create_player_events(lineup, box_lineup)
+            player_events[0].player_stats.fg_3p.made.total
+    """
+    tidy_ctx = build_tidy_player_context(box_lineup)
+    valid_player_codes = {p.code for p in box_lineup.players}
+
+    def player_tidier(player: PlayerCodeId) -> list[PlayerCodeId]:
+        return _player_tidier(player, tidy_ctx, box_lineup, valid_player_codes)
+
+    lineup_event = replace(
+        lineup_event_maybe_bad,
+        players=[tidied for p in lineup_event_maybe_bad.players for tidied in player_tidier(p)],
+        players_in=[tidied for p in lineup_event_maybe_bad.players_in for tidied in player_tidier(p)],
+        players_out=[tidied for p in lineup_event_maybe_bad.players_out for tidied in player_tidier(p)],
+    )
+
+    team_event_filter = PossessionEvent(Direction.TEAM)
+
+    def base_player_event(player_id: PlayerCodeId) -> PlayerEvent:
+        return PlayerEvent(
+            player=player_id,
+            player_stats=LineupEventStats.empty(),
+            date=lineup_event.date,
+            location_type=lineup_event.location_type,
+            start_min=lineup_event.start_min,
+            end_min=lineup_event.end_min,
+            duration_mins=lineup_event.duration_mins,
+            score_info=lineup_event.score_info,
+            team=lineup_event.team,
+            opponent=lineup_event.opponent,
+            lineup_id=lineup_event.lineup_id,
+            players=lineup_event.players,
+            players_in=lineup_event.players_in,
+            players_out=lineup_event.players_out,
+            raw_game_events=lineup_event.raw_game_events,
+            team_stats=lineup_event.team_stats,
+            opponent_stats=lineup_event.opponent_stats,
+            player_count_error=lineup_event.player_count_error,
+        )
+
+    def player_filter(player_id: PlayerCodeId) -> PlayerFilterCoder:
+        def f(player_str: str) -> "tuple[bool, str]":
+            code = build_player_code(tidy_player(player_str, tidy_ctx)[0], lineup_event.team.team).code
+            return (code == player_id.code, code)
+
+        return f
+
+    results: list[PlayerEvent] = []
+    for player_index, player in enumerate(lineup_event.players):
+        this_player_filter = player_filter(player)
+        player_event = base_player_event(player)
+
+        player_raw_game_events: list[RawGameEvent] = []
+        for ev in lineup_event.raw_game_events:
+            s = team_event_filter.attacking_team(ev)
+            if s is None:
+                continue
+            player_str = parse_any_play(s)
+            if player_str is None:
+                continue
+            if this_player_filter(player_str)[0]:
+                player_raw_game_events.append(ev)
+
+        player_stats = enrich_stats(
+            lineup_event, team_event_filter, player_event.player_stats, this_player_filter, player_index
+        )
+        results.append(
+            replace(
+                player_event,
+                player_stats=replace(player_stats, num_events=len(player_raw_game_events)),
+                raw_game_events=player_raw_game_events,
+            )
+        )
+    return results
+
+
+# ---------------------------------------------------------------------------
+# sum_event_stats / sum_shot_infos (Task 5c.4, debug-only field-wise adders)
+# ---------------------------------------------------------------------------
+
+
+def _sum_opt_int(a: Optional[int], b: Optional[int]) -> Optional[int]:
+    """``Some(l+r).filter(_ > 0)`` (``sum_int.case_maybe_int2``,
+    ``LineupUtils.scala:1540-1543``) -- ``None`` if the sum isn't positive."""
+    total = (a or 0) + (b or 0)
+    return total if total > 0 else None
+
+
+def _sum_shot_clock(a: ShotClockStats, b: ShotClockStats) -> ShotClockStats:
+    """Field-wise sum of two :class:`ShotClockStats`
+    (``sum_shot.case_shot2``, ``LineupUtils.scala:1548-1554``)."""
+    return ShotClockStats(
+        total=a.total + b.total,
+        early=_sum_opt_int(a.early, b.early),
+        mid=_sum_opt_int(a.mid, b.mid),
+        late=_sum_opt_int(a.late, b.late),
+        orb=_sum_opt_int(a.orb, b.orb),
+    )
+
+
+def _sum_opt_shot_clock(a: Optional[ShotClockStats], b: Optional[ShotClockStats]) -> Optional[ShotClockStats]:
+    """Field-wise sum if both present, else whichever one is present
+    (``sum_shot.case_maybe_shot2``, ``LineupUtils.scala:1556-1570``)."""
+    if a is not None and b is not None:
+        return _sum_shot_clock(a, b)
+    return a if a is not None else b
+
+
+def _sum_field_goal(a: FieldGoalStats, b: FieldGoalStats) -> FieldGoalStats:
+    """Field-wise sum of two :class:`FieldGoalStats`
+    (``sum.case_field2``, ``LineupUtils.scala:1602-1608``)."""
+    return FieldGoalStats(
+        attempts=_sum_shot_clock(a.attempts, b.attempts),
+        made=_sum_shot_clock(a.made, b.made),
+        ast=_sum_opt_shot_clock(a.ast, b.ast),
+    )
+
+
+def _merge_assist_events(a: Optional[list[AssistEvent]], b: Optional[list[AssistEvent]]) -> Optional[list[AssistEvent]]:
+    """``Some(l.getOrElse(Nil) ++ r.getOrElse(Nil)).filter(_.nonEmpty)``
+    (``sum_assist.case_maybe_assist2``, ``LineupUtils.scala:1589-1592``) --
+    debug-only concatenation, no de-duplication (matches the Scala TODO)."""
+    merged = (a or []) + (b or [])
+    return merged if merged else None
+
+
+def _sum_opt_assist_info(a: Optional[AssistInfo], b: Optional[AssistInfo]) -> Optional[AssistInfo]:
+    """Field-wise sum if both present, else whichever one is present
+    (``sum_assist.case_maybe_assist2``, ``LineupUtils.scala:1575-1597``)."""
+    if a is not None and b is not None:
+        return AssistInfo(
+            counts=_sum_shot_clock(a.counts, b.counts),
+            target=_merge_assist_events(a.target, b.target),
+            source=_merge_assist_events(a.source, b.source),
+        )
+    return a if a is not None else b
+
+
+def _sum_player_tuple(
+    a: Optional[tuple[int, int, int, int, int]], b: Optional[tuple[int, int, int, int, int]]
+) -> Optional[tuple[int, int, int, int, int]]:
+    """Elementwise sum of two 5-slot ``PlayerTuple[Int]``\\ s if both
+    present, else whichever one is present (``combine_info.case_tuple5x2``,
+    ``LineupUtils.scala:1631-1643``)."""
+    if a is not None and b is not None:
+        x0, x1, x2, x3, x4 = a
+        y0, y1, y2, y3, y4 = b
+        return (x0 + y0, x1 + y1, x2 + y2, x3 + y3, x4 + y4)
+    return a if a is not None else b
+
+
+def sum_shot_infos(shot_infos: list[PlayerShotInfo]) -> Optional[PlayerShotInfo]:
+    """Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
+    .PlayerShotInfo`\\ s (``sum_shot_infos``, ``LineupUtils.scala:1625-1655``,
+    debug-only).
+
+    Args:
+        shot_infos: The list to combine, in order.
+
+    Returns:
+        ``None`` if ``shot_infos`` is empty; the single element if there's
+        exactly one; otherwise a left-fold of pairwise field-wise sums
+        (``reduceOption``).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_shot_infos
+            from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
+
+            sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
+    """
+    if not shot_infos:
+        return None
+    result = shot_infos[0]
+    for other in shot_infos[1:]:
+        result = PlayerShotInfo(
+            unknown_3pm=_sum_player_tuple(result.unknown_3pm, other.unknown_3pm),
+            early_3pa=_sum_player_tuple(result.early_3pa, other.early_3pa),
+            unast_3pm=_sum_player_tuple(result.unast_3pm, other.unast_3pm),
+            ast_3pm=_sum_player_tuple(result.ast_3pm, other.ast_3pm),
+        )
+    return result
+
+
+def sum_event_stats(lhs: LineupEventStats, rhs: LineupEventStats) -> LineupEventStats:
+    """Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
+    .LineupEventStats` (``protected def sum_event_stats``, ``LineupUtils.scala
+    :1534-1622``, debug-only -- the Scala's own docstring says "just used for
+    debug"). The Scala builds this via ``shapeless.Generic`` field-zipping;
+    this port is an explicit field-by-field call since Python has no
+    equivalent generic-programming machinery.
+
+    Args:
+        lhs: The left-hand stat tree.
+        rhs: The right-hand stat tree.
+
+    Returns:
+        A new :class:`~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats`
+        with every field summed (see the module's private ``_sum_*`` helpers
+        for the ``Optional``/nested-field summing rules).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_event_stats
+            from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
+
+            sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
+    """
+    return LineupEventStats(
+        num_events=lhs.num_events + rhs.num_events,
+        num_possessions=lhs.num_possessions + rhs.num_possessions,
+        fg=_sum_field_goal(lhs.fg, rhs.fg),
+        fg_rim=_sum_field_goal(lhs.fg_rim, rhs.fg_rim),
+        fg_mid=_sum_field_goal(lhs.fg_mid, rhs.fg_mid),
+        fg_2p=_sum_field_goal(lhs.fg_2p, rhs.fg_2p),
+        fg_3p=_sum_field_goal(lhs.fg_3p, rhs.fg_3p),
+        ft=_sum_field_goal(lhs.ft, rhs.ft),
+        orb=_sum_opt_shot_clock(lhs.orb, rhs.orb),
+        drb=_sum_opt_shot_clock(lhs.drb, rhs.drb),
+        to=_sum_shot_clock(lhs.to, rhs.to),
+        stl=_sum_opt_shot_clock(lhs.stl, rhs.stl),
+        blk=_sum_opt_shot_clock(lhs.blk, rhs.blk),
+        assist=_sum_opt_shot_clock(lhs.assist, rhs.assist),
+        ast_rim=_sum_opt_assist_info(lhs.ast_rim, rhs.ast_rim),
+        ast_mid=_sum_opt_assist_info(lhs.ast_mid, rhs.ast_mid),
+        ast_3p=_sum_opt_assist_info(lhs.ast_3p, rhs.ast_3p),
+        foul=_sum_opt_shot_clock(lhs.foul, rhs.foul),
+        player_shot_info=sum_shot_infos([x for x in (lhs.player_shot_info, rhs.player_shot_info) if x is not None]),
+        pts=lhs.pts + rhs.pts,
+        plus_minus=lhs.plus_minus + rhs.plus_minus,
+    )

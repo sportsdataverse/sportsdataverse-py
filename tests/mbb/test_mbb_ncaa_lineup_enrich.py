@@ -47,6 +47,7 @@ import pytest
 
 from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import (
     add_stats_to_lineups,
+    create_player_events,
     enrich_lineup,
     enrich_stats,
     ensure_ev_uniqueness,
@@ -54,6 +55,8 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import (
     is_end_of_game_fouling_vs_fastbreak,
     is_scramble,
     is_transition,
+    sum_event_stats,
+    sum_shot_infos,
 )
 from sportsdataverse.mbb.mbb_ncaa_models import (
     AssistEvent,
@@ -63,6 +66,9 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     LineupEventStats,
     LineupId,
     LocationType,
+    PlayerCodeId,
+    PlayerEvent,
+    PlayerShotInfo,
     PossessionEvent,
     RawGameEvent,
     Score,
@@ -73,6 +79,7 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     Year,
 )
 from sportsdataverse.mbb.mbb_ncaa_possessions import ConcurrentClump
+from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
 from tests.mbb.test_mbb_ncaa_possessions import Events
 
 # ---------------------------------------------------------------------------
@@ -976,3 +983,136 @@ def test_enrich_stats_is_transition_integration_overridden_by_scramble() -> None
     expected.fg.attempts.early = 1
     expected.fg_3p.attempts.early = 1
     assert stats == expected
+
+
+# ---------------------------------------------------------------------------
+# sum_event_stats / sum_shot_infos (Task 5c.4, LineupUtilsTests.scala:975-995)
+# ---------------------------------------------------------------------------
+
+
+def test_sum_event_stats_and_sum_shot_infos() -> None:
+    """(``LineupUtilsTests.scala``'s ``"sum_event_stats / sum_shot_infos"``
+    block, ``:975-995``)."""
+    test1 = LineupEventStats.empty()
+    test1.num_possessions = 1
+    test1.fg.made.total = 2
+    test1.orb = ShotClockStats(total=3)
+    test1.player_shot_info = PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0), early_3pa=(0, 0, 2, 0, 0))
+
+    test2 = LineupEventStats.empty()
+    test2.fg.made.total = 3
+    test2.drb = ShotClockStats(total=4)
+    test2.player_shot_info = PlayerShotInfo(ast_3pm=(4, 0, 0, 0, 0), unknown_3pm=(0, 0, 0, 0, 3))
+
+    expected = LineupEventStats.empty()
+    expected.num_possessions = 1
+    expected.fg.made.total = 5
+    expected.orb = ShotClockStats(total=3)
+    expected.drb = ShotClockStats(total=4)
+    expected.player_shot_info = PlayerShotInfo(
+        ast_3pm=(5, 0, 0, 0, 0), early_3pa=(0, 0, 2, 0, 0), unknown_3pm=(0, 0, 0, 0, 3)
+    )
+    assert sum_event_stats(test1, test2) == expected
+
+
+def test_sum_shot_infos_empty_and_singleton() -> None:
+    """Edge cases not spelled out by the oracle's single combined case, but
+    load-bearing for :func:`sum_event_stats`'s ``player_shot_info`` field
+    (``sum_shot_infos``, ``LineupUtils.scala:1625-1655`` -- ``reduceOption``
+    on an empty list is ``None``, on a singleton is that element)."""
+    assert sum_shot_infos([]) is None
+    only = PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0))
+    assert sum_shot_infos([only]) == only
+
+
+# ---------------------------------------------------------------------------
+# create_player_events (Task 5c.4, LineupUtilsTests.scala:997-1084)
+# ---------------------------------------------------------------------------
+
+
+def test_create_player_events() -> None:
+    """(``LineupUtilsTests.scala``'s ``"create_player_events"`` block,
+    ``:997-1084``). ``in_lineup`` corrupts the first player's name (all-caps,
+    no comma) and adds an extra player (``Ayala, Eric``) not present in
+    ``test_box`` -- proves ``create_player_events`` tidies names against the
+    box score AND drops players who don't resolve to a box-score player."""
+    base = _build_base_lineup()
+    smith = build_player_code("Smith, Jalen", None)
+    morsell = build_player_code("Morsell, Darryl", None)
+    layman = build_player_code("Layman, Jake", None)
+
+    test_lineup = replace(
+        base,
+        players=[smith, morsell, layman],
+        raw_game_events=[
+            Events.made_team,  # Jalen Smith made 3
+            Events.made_opponent,  # Jalen Smith made 3, ignore (wrong direction)
+            Events.drb_team,  # Morsell DRB
+            Events.drb_opponent,  # Morsell DRB, ignore
+            Events.deadball_rb_team,  # ignore
+            Events.deadball_rb_opponent,  # double ignore
+            Events.assist_team,  # ignore, wrong player (Kyle Guy not in lineup)
+            Events.assist_opponent,  # double ignore
+            Events.block_team,  # Layman block
+            Events.block_opponent,  # Layman block, ignore
+            Events.steal_opponent,  # double ignore
+            Events.made_team,  # another Jalen Smith made 3
+            Events.missed_team,  # Eric Ayala -- not in the box score
+        ],
+    )
+    test_lineup.team_stats.num_possessions = 7
+
+    in_lineup = replace(
+        test_lineup,
+        # Corrupt the box score to ensure it gets tidied up: reformatted
+        # all-caps name for Smith, plus an extra player who gets dropped.
+        players=[build_player_code("JALEN SMITH", None), build_player_code("Ayala, Eric", None)]
+        + [p for p in test_lineup.players if p.code != "JaSmith"],
+    )
+    test_box = replace(test_lineup, team_stats=LineupEventStats.empty(), opponent_stats=LineupEventStats.empty())
+
+    result = create_player_events(in_lineup, test_box)
+    assert len(result) == 3
+    player1, player2, player3 = result
+
+    def _expected(player: "PlayerCodeId", raw_events: "list[RawGameEvent]", stats: LineupEventStats) -> PlayerEvent:
+        return PlayerEvent(
+            player=player,
+            player_stats=stats,
+            date=test_lineup.date,
+            location_type=test_lineup.location_type,
+            start_min=test_lineup.start_min,
+            end_min=test_lineup.end_min,
+            duration_mins=test_lineup.duration_mins,
+            score_info=test_lineup.score_info,
+            team=test_lineup.team,
+            opponent=test_lineup.opponent,
+            lineup_id=test_lineup.lineup_id,
+            players=test_lineup.players,
+            players_in=[],
+            players_out=[],
+            raw_game_events=raw_events,
+            team_stats=test_lineup.team_stats,
+            opponent_stats=test_lineup.opponent_stats,
+        )
+
+    stats1 = LineupEventStats.empty()
+    stats1.num_events = 2
+    stats1.fg_3p.attempts.total = 2
+    stats1.fg_3p.made.total = 2
+    stats1.fg_3p.ast = ShotClockStats(total=2)
+    stats1.fg.attempts.total = 2
+    stats1.fg.made.total = 2
+    stats1.ast_3p = AssistInfo(source=[AssistEvent("KyGuy", ShotClockStats(total=2))])
+    stats1.player_shot_info = PlayerShotInfo(ast_3pm=(2, 0, 0, 0, 0))
+    assert player1 == _expected(smith, [Events.made_team, Events.made_team], stats1)
+
+    stats2 = LineupEventStats.empty()
+    stats2.num_events = 1
+    stats2.drb = ShotClockStats(total=1)
+    assert player2 == _expected(morsell, [Events.drb_team], stats2)
+
+    stats3 = LineupEventStats.empty()
+    stats3.num_events = 1
+    stats3.blk = ShotClockStats(total=1)
+    assert player3 == _expected(layman, [Events.block_team], stats3)
