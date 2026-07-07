@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NCAA HTML parser oracle fixtures](#ncaa-html-parser-oracle-fixtures)
+  - [Live v1 captures (current stats.ncaa.org markup, 2026)](#live-v1-captures-current-statsncaaorg-markup-2026)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -28,3 +29,24 @@ Regenerate by re-copying the same 5 files from the upstream clone's
 re-encode). The parser tests are fixture-specific (unlike the ESPN JSON
 fixtures, these HTML pages aren't payload-agnostic across sports/leagues),
 so a re-capture should only be done if the upstream fixture itself changes.
+
+## Live v1 captures (current stats.ncaa.org markup, 2026)
+
+These two are **not** from cbb-explorer -- they are live raw-server captures
+of a real game, taken 07 Jul 2026 to give the `format_version=1` parser path
+its first oracle coverage. The cbb-explorer `:2018+` selectors were ported
+faithfully but had drifted against *current* NCAA markup (the team header
+moved from `div.card-header img[alt]` / `table[align=center]` to
+`a.skipMask img[alt]`, and the per-player box split out of `box_score` into a
+separate `individual_stats` tab). See `dev/phase5f-live-proof.md` for how the
+Akamai `bm-verify` wall was cleared (a headful browser mints the challenge
+cookie; a cookie-carrying fetch then returns the raw server HTML the parsers
+target).
+
+| File | Bytes | Provenance | Used by |
+|---|---:|---|---|
+| `test_v1_play_by_play.html`    | 133,183 | Raw-server capture of `stats.ncaa.org/contests/1613299/play_by_play` (Illinois @ Maryland, 2019-01-26; legacy game 4690813). Current 2018+ (`format_version=1`) markup. | `mbb_ncaa_pbp_parser.py` v1 path (`test_mbb_ncaa_ncaa_v1_live.py`) |
+| `test_v1_individual_stats.html`| 177,033 | Raw-server capture of `stats.ncaa.org/contests/1613299/individual_stats` (same game) -- the split-out per-player box (`table.dataTable.small_font#competitor_*`). | `mbb_ncaa_boxscore_parser.py` v1 path (same test) |
+
+Re-capture (only if the current NCAA markup drifts again) needs the
+`bm-verify` cookie-mint path documented in `dev/phase5f-live-proof.md`.

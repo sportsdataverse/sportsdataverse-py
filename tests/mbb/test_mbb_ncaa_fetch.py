@@ -9,6 +9,7 @@ see :func:`test_no_proxy_configured_raises` and
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 from typing import Optional
@@ -22,6 +23,7 @@ from sportsdataverse.mbb.mbb_ncaa_fetch import (
     get_config,
     is_cached,
     load_proxybonanza_pool,
+    playwright_transport,
     reset_config,
     update_config,
 )
@@ -272,3 +274,54 @@ def test_env_vars_populate_config(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
 
     monkeypatch.undo()
     reset_config()
+
+
+# --- browser transport (suggested game-detail scraping method) --------------
+
+
+def test_custom_transport_needs_no_proxy_pool(tmp_path: Path) -> None:
+    """The no-direct-fetch guard is scoped to the default curl transport; an
+    injected (browser / unblocker) transport runs pool-less and gets ``{}``
+    for proxies."""
+    transport = FakeTransport([(200, "<html>ok</html>")])
+    fetcher = NcaaFetcher(NcaaFetchConfig(cache_dir=tmp_path, transport=transport))  # no proxy
+    assert fetcher.fetch_html("contests/1/play_by_play") == "<html>ok</html>"
+    assert len(transport.calls) == 1
+    assert transport.calls[0][1] == {}  # empty pool -> direct, no proxy dict
+
+
+def test_playwright_transport_shape() -> None:
+    """The factory returns a callable, closeable, context-managed transport --
+    all without importing Playwright (lazy until first fetch)."""
+    t = playwright_transport()
+    assert callable(t)
+    with t as t2:
+        assert t2 is t
+    t.close()  # idempotent, browser never launched
+
+
+def test_playwright_transport_missing_dep_raises() -> None:
+    """Playwright is not a hard dep; first use without it raises a clear hint."""
+    if importlib.util.find_spec("playwright") is not None:
+        pytest.skip("playwright installed -- ImportError path not exercised")
+    t = playwright_transport()
+    with pytest.raises(ImportError, match="[Pp]laywright"):
+        t("https://stats.ncaa.org/contests/1/play_by_play", {}, {})
+
+
+def test_with_browser_wires_transport_pool_less(tmp_path: Path) -> None:
+    fetcher = NcaaFetcher.with_browser(NcaaFetchConfig(cache_dir=tmp_path))
+    assert callable(fetcher.config.transport)
+    assert hasattr(fetcher.config.transport, "close")
+    assert fetcher._pool == []  # browser path needs no proxy pool
+    fetcher.__exit__()  # closes the (never-launched) transport without error
+
+
+def test_ban_check_ignores_blocked_shot_in_real_content(tmp_path: Path) -> None:
+    """A real game page says "layup blocked" (blocked shots); the WAF-specific
+    ban markers must NOT false-positive on it (regression: bare "blocked")."""
+    real = "<html><body><table><tr><td>Bezhanishvili 2pt layup blocked missed</td></tr></table></body></html>"
+    transport = FakeTransport([(200, real)])
+    fetcher = NcaaFetcher(_cfg(tmp_path, transport))
+    assert fetcher.fetch_html("contests/1613299/play_by_play") == real
+    assert len(transport.calls) == 1  # accepted first response, no rotation

@@ -153,7 +153,7 @@ def test_wbb_ncaa_fetch_all_matches_reexported_symbols():
     # drift guard: the shim must re-export mbb's full public surface (fails if
     # a later mbb change adds a symbol the shim doesn't forward).
     assert set(w.__all__) == set(m.__all__)
-    assert len(w.__all__) == 10
+    assert len(w.__all__) == 11
 
 
 def test_wbb_ncaa_fetch_shares_config_singleton_with_mbb():

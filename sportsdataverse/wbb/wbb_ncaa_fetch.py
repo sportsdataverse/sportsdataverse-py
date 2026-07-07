@@ -48,6 +48,7 @@ from sportsdataverse.mbb.mbb_ncaa_fetch import (
     get_config,
     is_cached,
     load_proxybonanza_pool,
+    playwright_transport,
     reset_config,
     update_config,
 )
@@ -61,6 +62,7 @@ __all__ = [
     "update_config",
     "reset_config",
     "load_proxybonanza_pool",
+    "playwright_transport",
     "cached_path",
     "is_cached",
 ]
