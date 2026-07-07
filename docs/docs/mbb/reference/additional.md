@@ -528,6 +528,188 @@ Field-goal counting stats (`LineupEventStats.FieldGoalStats`,
 | `made` | `ShotClockStats` | `<factory>` | Successful shot attempts. |
 | `ast` | `Optional[ShotClockStats]` | `None` | Successful shot attempts that were assisted, if tracked. |
 
+### `FuzzyMatchError(message: 'str') -> None` {#FuzzyMatchError}
+
+A failed `fuzzy_box_match` resolution (Scala's `Left[String]`
+
+half of `Either[String, String]` -- Python has no `Either`, so the
+error is returned directly; check `isinstance(result, FuzzyMatchError)`,
+matching the `parse_team_name` / `~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError`
+convention already used in this port).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `message` | `str` |  | Human-readable description of why no name won. |
+
+### `GameBreakEvent(min: 'float', score: 'Score') -> None` {#GameBreakEvent}
+
+A break in play (timeout, end of period, etc.) short of the end of
+
+the game (`Model.GameBreakEvent`, `ExtractorUtils.scala:874-877`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The ascending game-clock minute of the event. |
+| `score` | `Score` |  | The score at the time of the event. |
+
+**Methods**
+
+#### `GameBreakEvent.with_min(new_min: 'float') -> "'GameBreakEvent'"`
+
+Return a copy with `min` replaced (`:876`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `new_min` | `float` |  |  |
+
+### `GameEndEvent(min: 'float', score: 'Score') -> None` {#GameEndEvent}
+
+The end of the game (`Model.GameEndEvent`, `ExtractorUtils.scala:878-881`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The ascending game-clock minute of the event. |
+| `score` | `Score` |  | The score at the time of the event. |
+
+**Methods**
+
+#### `GameEndEvent.with_min(new_min: 'float') -> "'GameEndEvent'"`
+
+Return a copy with `min` replaced (`:880`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `new_min` | `float` |  |  |
+
+### `LineupBuildingState(curr: 'LineupEvent', tidy_ctx: "'TidyPlayerContext'", prev: 'list[LineupEvent]' = <factory>, old_format: 'Optional[bool]' = None) -> None` {#LineupBuildingState}
+
+State for building raw lineup data across a fold over play-by-play
+
+events (`Model.LineupBuildingState`, `ExtractorUtils.scala:735-819`).
+
+See the module docstring's "`with_*` methods return NEW instances"
+note -- every mutator below returns a fresh `LineupBuildingState`
+rather than mutating `self`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `curr` | `LineupEvent` |  | The lineup event currently being built. |
+| `tidy_ctx` | `TidyPlayerContext` |  | Name-resolution context for the current game (see `~sportsdataverse.mbb.mbb_ncaa_names.TidyPlayerContext`); threaded through `build_partial_lineup_list`, which calls `~sportsdataverse.mbb.mbb_ncaa_names.tidy_player` with it on every sub event. |
+| `prev` | `list[LineupEvent]` | `<factory>` | Completed lineup events, most-recently-completed first (i.e. the reverse of `build`'s output order). |
+| `old_format` | `Optional[bool]` | `None` | `True` once latched onto the legacy (pre-2018-ish) NCAA play-by-play format, `None` until the first sub is seen. |
+
+**Methods**
+
+#### `LineupBuildingState.build() -> 'list[LineupEvent]'`
+
+The full chronological lineup-event list (`:742-744`:
+
+`(curr :: prev).reverse`).
+
+#### `LineupBuildingState.is_active(min: 'float') -> 'bool'`
+
+Whether the current lineup has non-sub activity, or has simply
+
+been on the floor long enough to trust (`:760-766`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The ascending game-clock minute to check against. |
+
+**Returns**
+
+`True` if any raw event on `curr` isn't an opponent sub, or if `min` is more than `SUB_SAFETY_DELTA_MINS` past `curr`'s `end_min`.
+
+#### `LineupBuildingState.is_sub(raw: 'RawGameEvent') -> 'bool'`
+
+Whether `raw` is an *opponent*-side substitution line
+
+(`:749-758`).
+
+Only `~sportsdataverse.mbb.mbb_ncaa_models.RawGameEvent.opponent`
+is inspected -- per the Scala scaladoc, "opposition subs are
+currently treated as game events but shouldn't result in new
+lineups"; the team's own subs never reach here as raw events in the
+first place (they route through the fold's dedicated `Sub*Event`
+branches, not `with_team_event`), so this check only ever
+needs to look at the opponent side. Ported verbatim, quirk and all.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `raw` | `RawGameEvent` |  | The raw event to classify. |
+
+**Returns**
+
+`True` if `raw.opponent` ends with one of the four substitution phrases (case/whitespace-insensitive), else `False` (including when `raw.opponent` is `None`).
+
+#### `LineupBuildingState.with_latest_score(score: 'Score') -> "'LineupBuildingState'"`
+
+Update `curr`'s running end-of-event score (`:788-796`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `score` | `Score` |  |  |
+
+#### `LineupBuildingState.with_opponent_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
+
+Append an opponent-side raw event and bump `end_min` (`:808-818`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  |  |
+| `event_string` | `str` |  |  |
+
+#### `LineupBuildingState.with_player_in(player_name: 'str') -> "'LineupBuildingState'"`
+
+Prepend a new "subbed in" player code onto `curr` (`:770-778`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_name` | `str` |  |  |
+
+#### `LineupBuildingState.with_player_out(player_name: 'str') -> "'LineupBuildingState'"`
+
+Prepend a new "subbed out" player code onto `curr` (`:779-787`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_name` | `str` |  |  |
+
+#### `LineupBuildingState.with_team_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
+
+Append a team-side raw event and bump `end_min` (`:797-807`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  |  |
+| `event_string` | `str` |  |  |
+
 ### `LineupEvent(date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None` {#LineupEvent}
 
 A portion of a game during which a given lineup was on the floor
@@ -605,6 +787,85 @@ The set of players on the floor, as an opaque id string
 ### `LocationType(*values)` {#LocationType}
 
 Game location (`Game.LocationType`, `Game.scala:36-38`).
+
+### `NoSurnameMatch(box_name: 'str', exact_first_name: 'Optional[str]', near_first_name: 'Optional[str]', err: 'str') -> None` {#NoSurnameMatch}
+
+No candidate surname fragment scored well enough
+
+(`NameFixer.NoSurnameMatch`, `:638-643`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_name` | `str` |  | The box-score name compared against. |
+| `exact_first_name` | `Optional[str]` |  | A first-name fragment shared verbatim between candidate and box name, if any. |
+| `near_first_name` | `Optional[str]` |  | A first-name fragment fuzzy-matching the box name's first name, if any (only computed when `exact_first_name` is absent). |
+| `err` | `str` |  | Human-readable diagnostic (debug-only; see the module docstring's fuzzy-match-parity note for why its embedded score may not byte-match the upstream Java oracle). |
+
+### `OtherOpponentEvent(min: 'float', score: 'Score', event_string: 'str') -> None` {#OtherOpponentEvent}
+
+A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`,
+
+`ExtractorUtils.scala:866-873`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The ascending game-clock minute of the event. |
+| `score` | `Score` |  | The score at the time of the event. |
+| `event_string` | `str` |  | The raw play-by-play event string. |
+
+**Methods**
+
+#### `OtherOpponentEvent.with_min(new_min: 'float') -> "'OtherOpponentEvent'"`
+
+Return a copy with `min` replaced (`:871`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `new_min` | `float` |  |  |
+
+### `OtherTeamEvent(min: 'float', score: 'Score', event_string: 'str') -> None` {#OtherTeamEvent}
+
+A non-sub event belonging to the team under analysis
+
+(`Model.OtherTeamEvent`, `ExtractorUtils.scala:858-865`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The ascending game-clock minute of the event. |
+| `score` | `Score` |  | The score at the time of the event. |
+| `event_string` | `str` |  | The raw play-by-play event string. |
+
+**Methods**
+
+#### `OtherTeamEvent.with_min(new_min: 'float') -> "'OtherTeamEvent'"`
+
+Return a copy with `min` replaced (`:863`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `new_min` | `float` |  |  |
+
+### `ParseError(location: 'str', id: 'str', messages: 'list[str]') -> None` {#ParseError}
+
+A parse-time error (`ParseError`, `ParseError.scala:9`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `location` | `str` |  | The module in which the error occurred. |
+| `id` | `str` |  | The module-specific id for which the error occurred. |
+| `messages` | `list[str]` |  | Human-readable description(s) of the error. |
 
 ### `PlayerCodeId(code: 'str', id: 'PlayerId', ncaa_id: 'Optional[str]' = None) -> None` {#PlayerCodeId}
 
@@ -791,6 +1052,67 @@ Counting stats broken down by shot-clock segment
 | `late` | `Optional[int]` | `None` | Count in the last 10s, if tracked. |
 | `orb` | `Optional[int]` | `None` | Count in the first 10s following an offensive rebound, if tracked (else folded into `mid`/`late` as normal). |
 
+### `StrongSurnameMatch(box_name: 'str', score: 'int') -> None` {#StrongSurnameMatch}
+
+A surname fragment matched and the whole-name score cleared
+
+`MIN_OVERALL_SCORE` (`NameFixer.StrongSurnameMatch`, `:646-647`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_name` | `str` |  | The box-score name compared against. |
+| `score` | `int` |  | The whole-name similarity score. |
+
+### `SubInEvent(min: 'float', score: 'Score', player_name: 'str') -> None` {#SubInEvent}
+
+A player subs into the game (`Model.SubInEvent`, `ExtractorUtils.scala:850-853`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The ascending game-clock minute of the event. |
+| `score` | `Score` |  | The score at the time of the event. |
+| `player_name` | `str` |  | The raw or processed name of the player subbing in. |
+
+**Methods**
+
+#### `SubInEvent.with_min(new_min: 'float') -> "'SubInEvent'"`
+
+Return a copy with `min` replaced (`:852`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `new_min` | `float` |  |  |
+
+### `SubOutEvent(min: 'float', score: 'Score', player_name: 'str') -> None` {#SubOutEvent}
+
+A player subs out of the game (`Model.SubOutEvent`, `ExtractorUtils.scala:854-857`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The ascending game-clock minute of the event. |
+| `score` | `Score` |  | The score at the time of the event. |
+| `player_name` | `str` |  | The raw or processed name of the player subbing out. |
+
+**Methods**
+
+#### `SubOutEvent.with_min(new_min: 'float') -> "'SubOutEvent'"`
+
+Return a copy with `min` replaced (`:856`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `new_min` | `float` |  |  |
+
 ### `TeamId(name: 'str') -> None` {#TeamId}
 
 CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`).
@@ -811,6 +1133,36 @@ A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
 |---|---|---|---|
 | `team` | `TeamId` |  | The team playing the season. |
 | `year` | `Year` |  | The year the season ends. |
+
+### `TidyPlayerContext(box_lineup: 'LineupEvent', all_players_map: 'dict[str, str]', alt_all_players_map: 'dict[str, list[str]]', resolution_cache: 'dict[str, str]' = <factory>) -> None` {#TidyPlayerContext}
+
+Precomputed box-score lookup tables + resolution cache for
+
+`tidy_player` (`LineupErrorAnalysisUtils.TidyPlayerContext`,
+`:31-36`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_lineup` | `LineupEvent` |  | The box-score lineup event this context resolves names against. |
+| `all_players_map` | `dict[str, str]` |  | Player code -> full name, for every player in `box_lineup.players`. |
+| `alt_all_players_map` | `dict[str, list[str]]` |  | Truncated player code (see truncate_code_1` / truncate_code_2`) -> the list of full names sharing that truncation -- used when the exact code doesn't match but a unique truncated one does. |
+| `resolution_cache` | `dict[str, str]` | `<factory>` | Memoizes prior `tidy_player` resolutions. See the module docstring's "Behavioral quirk" note -- this is read by the raw input name but written by the corrected name, faithfully reproducing the upstream asymmetry. |
+
+### `WeakSurnameMatch(box_name: 'str', score: 'int', info: 'str') -> None` {#WeakSurnameMatch}
+
+A surname fragment matched, but the whole-name score fell short of
+
+`MIN_OVERALL_SCORE` (`NameFixer.WeakSurnameMatch`, `:644-645`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_name` | `str` |  | The box-score name compared against. |
+| `score` | `int` |  | The whole-name similarity score. |
+| `info` | `str` |  | Human-readable diagnostic (debug-only; see the fuzzy-match- parity note). |
 
 ### `Year(value: 'int') -> None` {#Year}
 
@@ -860,6 +1212,24 @@ maybe_raw = raw_o_rtg["value"] if raw_o_rtg else None
 adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
 print(o_diags["oRtg"], o_diags["adjORtgPlus"])
 ```
+
+### `alias_combos(first: 'str', last: 'str', to_name: 'str') -> 'dict[str, str]'` {#alias_combos}
+
+Pair each of `combos`' three name variants with a shared alias
+
+target (`DataQualityIssues.alias_combos`, `DataQualityIssues.scala:351-356`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `first` | `str` |  | The player's first (mis-recorded) first name. |
+| `last` | `str` |  | The player's (mis-recorded) last name. |
+| `to_name` | `str` |  | The canonical `"Lastname, Firstname"` this player should resolve to. |
+
+**Returns**
+
+A dict mapping each of the three name variants to `to_name`.
 
 ### `apply_relative_positional_overrides(results: 'list[dict[str, str]]', team_season: 'str', recurse_count: 'int' = 0) -> 'list[dict[str, str]]'` {#apply_relative_positional_overrides}
 
@@ -965,6 +1335,31 @@ candidates if there's more than one) and finally `lineup_fixer`
 **Returns**
 
 The lineup(s) ending in this clump, enriched with possession counts. Empty if `clump.lineups` is empty (see the module docstring's landmine-index note -- unreachable via `calculate_possessions_by_event`).
+
+### `box_aware_compare(candidate_in: 'str', box_name_in: 'str') -> 'MatchResult'` {#box_aware_compare}
+
+Score how well a single play-by-play candidate name fits a single
+
+box-score name (`NameFixer.box_aware_compare`, `:658-766`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `candidate_in` | `str` |  | The raw play-by-play name fragment. |
+| `box_name_in` | `str` |  | One box-score player's full name (`"Surname, First [Middle]"` format). |
+
+**Returns**
+
+A `StrongSurnameMatch` / `WeakSurnameMatch` / `NoSurnameMatch`, per the surname- and whole-name-score thresholds.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import box_aware_compare
+box_aware_compare("Tuitele, Peanut", "Tuitele, Peanut")
+# StrongSurnameMatch(box_name='Tuitele, Peanut', score=100)
+```
 
 ### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
 
@@ -1125,6 +1520,31 @@ info = {**build_3p_shot_info(player), **build_adjusted_3p(base_player, base_info
 expected_makes = build_exp_3p(info)
 ```
 
+### `build_lineup_id(players: 'list[PlayerCodeId]') -> 'LineupId'` {#build_lineup_id}
+
+Builds a lineup id from a list of players (`ExtractorUtils.scala:602-606`):
+
+every player's `code`, sorted, joined with `"_"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players` | `list[PlayerCodeId]` |  | The players on the floor for this lineup. |
+
+**Returns**
+
+The opaque `~sportsdataverse.mbb.mbb_ncaa_models.LineupId`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import PlayerCodeId, PlayerId
+from sportsdataverse.mbb.mbb_ncaa_stints import build_lineup_id
+build_lineup_id([PlayerCodeId("BbBob", PlayerId("Bob")), PlayerCodeId("AaAl", PlayerId("Al"))])
+# LineupId("AaAl_BbBob")
+```
+
 ### `build_net_points(player_rapm_and_poss_pct: 'LineupStatSet', ortg: 'ORtgDiagnostics', drtg: 'DRtgDiagnostics', avg_eff: 'float', scale_type: "Literal['T%', 'P%', '/G']", num_games: 'float' = 1, missing_game_adjustment: 'float' = 1) -> 'NetPoints'` {#build_net_points}
 
 Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown.
@@ -1159,6 +1579,45 @@ _, _, _, _, o_diags = build_o_rtg(player, {}, {}, 100.0, True, False)
 _, _, _, _, d_diags = build_d_rtg(player, 100.0, True, False)
 net_pts = build_net_points(player, o_diags, d_diags, 100.0, "T%")
 print(net_pts["offNetPts"], net_pts["defNetPts"])
+```
+
+### `build_new_player_list(curr: 'LineupEvent', prev: 'LineupEvent') -> 'list[PlayerCodeId]'` {#build_new_player_list}
+
+Builds a player list from the previous (or current, if pre-initialized)
+
+lineup and the current lineup's in/out subs (`ExtractorUtils.scala:654-693`).
+
+Three candidate reconciliations are computed --
+
+* `poss1`: `prev.players` minus everyone in `curr.players_out`,
+  plus everyone in `curr.players_in` (subs-out removed first, then
+  subs-in merged on top).
+* `poss2`: `prev.players` plus `curr.players_in`, minus everyone in
+  `curr.players_out` (subs-in merged first, then subs-out removed).
+* `poss3`: just `curr.players_in`.
+
+-- and whichever has exactly 5 players wins (checked in `poss3`,
+`poss1`, `poss2` order); if none does, a common play-by-play error
+(a player appearing in both the in- and out- lists for the same sub
+event) is corrected by dropping the common players from both sides
+before reconciling via the `poss1` recipe.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `curr` | `LineupEvent` |  | The lineup event whose `players_in`/`players_out` describe the subs to apply. |
+| `prev` | `LineupEvent` |  | The lineup event whose `players` is the starting roster (complete_lineup` passes `curr` for both arguments -- see its docstring). |
+
+**Returns**
+
+The reconciled player list, sorted by `code`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import build_new_player_list
+build_new_player_list(curr_lineup_event, prev_lineup_event)
 ```
 
 ### `build_o_rtg(stat_set: 'LineupStatSet | None', roster_stats_by_code: 'dict[str, LineupStatSet] | None', extra_team_stat_info: 'LineupStatSet', avg_efficiency: 'float', calc_diags: 'bool', override_adjusted: 'bool') -> 'tuple[dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, ORtgDiagnostics | None]'` {#build_o_rtg}
@@ -1203,6 +1662,108 @@ o_rtg2, adj_o_rtg2, raw_o_rtg2, raw_adj_o_rtg2, _ = build_o_rtg(
     player, {}, {"total_off_to": {"value": 0}, "sum_total_off_to": {}},
     100.0, False, True,
 )
+```
+
+### `build_partial_lineup_list(reversed_partial_events: 'Iterable[PlayByPlayEvent]', box_lineup: 'LineupEvent') -> 'list[LineupEvent]'` {#build_partial_lineup_list}
+
+Converts a stream of partially parsed events into a list of lineup
+
+events (`ExtractorUtils.scala:118-227`).
+
+`box_lineup` is expected to carry every player on the team's roster,
+with the top 5 (by whatever order the caller supplies) being the
+starters. The events are first reordered into forward-chronological
+order via `reorder_and_reverse`, then folded through a
+`LineupBuildingState`:
+
+* A `SubIn`/`SubOut` event either **opens a new stint** (if the
+  current lineup `~LineupBuildingState.is_active`: the just-built
+  lineup is completed via complete_lineup` and appended, and a
+  fresh lineup is started via new_lineup_event`) or **keeps
+  accumulating** onto the current (not-yet-active) lineup via
+  `~LineupBuildingState.with_player_in`/`with_player_out`. A
+  `SubIn` event naming literally `"team"` (case-insensitive) is
+  always a no-op, win or lose the active check; `SubOut` has no such
+  exemption. Every sub name is resolved through
+  `~sportsdataverse.mbb.mbb_ncaa_names.tidy_player` first.
+* The **old/new play-by-play format** is latched (once, forever) the
+  first time a sub name is seen: an all-caps name (no lowercase letters
+  at all) means the old (pre-2018-ish) format; this only ever updates on
+  a sub-event branch, never on a `GameBreakEvent`.
+* `OtherTeamEvent`/`OtherOpponentEvent` accumulate onto the current
+  lineup via `~LineupBuildingState.with_team_event`/
+  `with_opponent_event` plus `~LineupBuildingState.with_latest_score`.
+* `GameBreakEvent` (half/quarter/OT boundary short of the game's end)
+  completes the current lineup and starts a fresh one -- but whether
+  that fresh lineup **resets to the starting 5** or **carries over** the
+  just-completed lineup's players depends on the (possibly still
+  unlatched) `old_format` flag: old format resets to
+  `starters_only`, new format (2018+, the default once
+  `box_lineup.team.year.value >= 2018` if never latched) carries over.
+* `GameEndEvent` only completes the current lineup (no new one is
+  started, and it is not appended to `prev` here -- `LineupBuildingState.build`
+  folds it in as the trailing entry).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `reversed_partial_events` | `Iterable[PlayByPlayEvent]` |  | The full play-by-play event stream for one team's box-score lineup, in reverse-chronological order. |
+| `box_lineup` | `LineupEvent` |  | The team's roster lineup event (`players` is the full roster; the first 5 are the starters). |
+
+**Returns**
+
+The chronological list of lineup (stint) events.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import build_partial_lineup_list
+stints = build_partial_lineup_list(reversed(events), box_lineup)
+print(len(stints))
+```
+
+### `build_player_code(in_name: 'str', team: 'Optional[TeamId]') -> 'PlayerCodeId'` {#build_player_code}
+
+Build a short player code from a name, in any of the NCAA formats
+
+(`ExtractorUtils.scala:290-391`).
+
+The code is a compact `FirstInitials + [Middle] + Lastname` string
+(e.g. `"Mitchell, Makhi"` -> `"MiMitchell"`) unique within a team +
+season, used to join play-by-play name fragments to box-score rosters.
+Supported input shapes: `"First [Middle...] Last"` (no comma),
+`"Last, First [Middle...]"`, and `"Last, Suffix, First"`.
+
+The full name is first corrected via the team-scoped misspelling table
+and diacritic-stripped -- that corrected string becomes the returned
+`~sportsdataverse.mbb.mbb_ncaa_models.PlayerId`. Each fragment is
+lowercased, de-dotted, individually misspelling-corrected, and truncated
+to `PLAYER_CODE_MAX_FRAGMENT_LENGTH`. Junk fragments (jr/sr/roman
+numerals/ordinals/digit-leading) are dropped -- except the first-name
+fragment, which is never dropped for being short.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `in_name` | `str` |  | The raw player name as it appears in the source HTML. |
+| `team` | `Optional[TeamId]` |  | The team, for team-scoped misspelling corrections; `None` uses only the generic corrections. |
+
+**Returns**
+
+A `PlayerCodeId` with the derived `code` and the corrected full name as `id` (`ncaa_id` is always `None` here).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
+pc = build_player_code("Mitchell, Makhi", None)
+print(pc.code)  # "MiMitchell"
+
+# Play-by-play (all-caps, truncated) form
+
+build_player_code("BIGBY-WILLIAM,KAVELL", None).code  # "KaBigby-will"
 ```
 
 ### `build_player_context(players: 'list[PlayerOnOffStats]', lineups: 'list[LineupStatSet]', players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', agg_value_key: 'ValueKey' = 'value', config: 'RapmConfig' = {'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}) -> 'RapmPlayerContext'` {#build_player_context}
@@ -1421,6 +1982,70 @@ see `PLAN-phase2.md`'s self-review notes.
 **Returns**
 
 float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}`` -- keys kept TS-verbatim (see module docstring's naming-convention note).
+
+### `build_sub_error(*subids: 'str', error: 'str') -> 'ParseError'` {#build_sub_error}
+
+Build a location-less `ParseError` from id fragments
+
+(`ParseUtils.build_sub_error`, `ParseUtils.scala:83-85`, delegating
+through `build_error`/`build_errors`/`build_error_id` with
+`location=""`/`base_id=""`; the `shapeless`-based
+`sequence_kv_results` accumulation machinery in the same file is out
+of scope).
+
+Scala's call shape is curried -- `build_sub_error("team")("message")`
+(two argument groups: varargs `subids`, then a single `error`
+string). Python has no currying sugar for that shape, so `subids` is
+a plain `*args` tuple and `error` is a required keyword-only
+argument at the same call site.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `error` | `str` |  | The single human-readable error message. |
+
+**Returns**
+
+A `ParseError` with `location=""` and `messages=[error]`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_data_quality import build_sub_error
+
+err = build_sub_error("team", error="Could not match team names")
+err.id  # '[team]'
+```
+
+### `build_tidy_player_context(box_lineup: 'LineupEvent') -> 'TidyPlayerContext'` {#build_tidy_player_context}
+
+Build the alternative player-code lookup maps for a box-score lineup
+
+(`LineupErrorAnalysisUtils.build_tidy_player_context`, `:59-73`).
+
+Sometimes the play-by-play uses `SURNAME,INITIAL` instead of
+`SURNAME,NAME`, or `SURNAME,NAME1` instead of `SURNAME,NAME1
+NAME2` -- both collapse to the same *truncated* code, so grouping by
+truncated code (and only keeping groups with exactly one distinct name)
+lets `tidy_player` recover the box-score name unambiguously.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_lineup` | `LineupEvent` |  | The box-score lineup event to index. |
+
+**Returns**
+
+A fresh `TidyPlayerContext` (empty `resolution_cache`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context
+ctx = build_tidy_player_context(box_lineup)
+```
 
 ### `build_weak_prior_from_rapm(rapm_results: 'list[float]', off_or_def: 'str') -> 'list[dict[str, float]]'` {#build_weak_prior_from_rapm}
 
@@ -2032,6 +2657,38 @@ port reproduces every step in the same order.
 
 A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
 
+### `combos(first: 'str', last: 'str') -> 'list[str]'` {#combos}
+
+Generate the three name-string variants NCAA sources use for one
+
+player (`DataQualityIssues.combos`, `DataQualityIssues.scala:330-337`).
+
+The Scala signature takes a single `(String, String)` tuple, but every
+call site (including the `fix_combos`/`alias_combos` helpers below
+and the upstream `DataQualityIssuesTests` oracle) invokes it with two
+positional arguments via Scala's tuple auto-conversion -- ported here as
+a plain two-argument function since Python has no such conversion.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `first` | `str` |  | The player's first name. |
+| `last` | `str` |  | The player's last name. |
+
+**Returns**
+
+`[f"{last}, {first}", f"{first} {last}", f"{last.upper()},{first.upper()}"]` -- new-box, new-PbP, and old-box/legacy-PbP formats respectively.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_data_quality import combos
+
+combos("Makhi", "Mitchell")
+# ['Mitchell, Makhi', 'Makhi Mitchell', 'MITCHELL,MAKHI']
+```
+
 ### `complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'` {#complete_weighted_avg}
 
 Finish a `weighted_avg` accumulator into true weighted averages.
@@ -2101,6 +2758,57 @@ breakdown and the post-game-break singleton port trap).
 
 The merged clumps, each an in-order concatenation of one batch's `evs`/`lineups`.
 
+### `convert_from_digits(name: 'str', player_numbers: 'list[PlayerCodeId]') -> 'Optional[str]'` {#convert_from_digits}
+
+Resolve a jersey-number-only name to its box-score player
+
+(`LineupErrorAnalysisUtils.convert_from_digits`, `:166-175`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | The candidate name; only matches if every character is a digit (an empty string is vacuously all-digit, matching Scala's `forall` on an empty `String`). |
+| `player_numbers` | `list[PlayerCodeId]` |  | Candidate `(code, id)` pairs -- typically `box_lineup.players_out`, since a number-only PbP mention almost always refers to a player who just left the game. |
+
+**Returns**
+
+The matching player's full name, or `None` if `name` isn't all-digit or no code matches.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import PlayerCodeId, PlayerId
+from sportsdataverse.mbb.mbb_ncaa_names import convert_from_digits
+codes = [PlayerCodeId(code="1000", id=PlayerId("name1"))]
+convert_from_digits("1000", codes)  # "name1"
+```
+
+### `convert_from_initials(name: 'str', codes_to_names: 'dict[str, str]') -> 'Optional[str]'` {#convert_from_initials}
+
+Resolve a 2-initial name (`"A B"` / `"B, A"`) to the single
+
+box-score player whose code starts with those initials
+(`LineupErrorAnalysisUtils.convert_from_initials`, `:147-164`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | The candidate initials string. |
+| `codes_to_names` | `dict[str, str]` |  | Player code -> full name (e.g. `TidyPlayerContext.all_players_map`). |
+
+**Returns**
+
+The single matching full name, or `None` if `name` isn't an initials shorthand, or if zero or multiple codes match.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import convert_from_initials
+convert_from_initials("A B", {"AoBo": "name1"})  # "name1"
+```
+
 ### `count_matching(evs: 'Iterable[RawGameEvent]', side: 'DirFn', *parsers: 'Parser') -> 'int'` {#count_matching}
 
 Count events on one side matching any of the given parsers.
@@ -2121,6 +2829,32 @@ made or a missed free throw on the same event).
 **Returns**
 
 The count of matching events.
+
+### `duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#duration_from_period}
+
+The game duration (minutes elapsed) once `period` has completed
+
+(`ExtractorUtils.scala:286-287`: `start_time_from_period(period + 1,
+...)`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `period` | `int` |  | The 1-indexed period number. |
+| `is_women_game` | `bool` |  | Whether to use the women's or men's period schedule. |
+
+**Returns**
+
+The game-clock minute at the end of `period`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import duration_from_period
+duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
+duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
+```
 
 ### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_teams}
 
@@ -2172,6 +2906,25 @@ print(len(team_ids), "D1 teams")
 d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
+
+### `fix_combos(first: 'str', last: 'str', code_start: 'Optional[str]' = None) -> 'list[tuple[str, Optional[str]]]'` {#fix_combos}
+
+Pair each of `combos`' three name variants with a shared
+
+player-code override (`DataQualityIssues.fix_combos`,
+`DataQualityIssues.scala:340-346`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `first` | `str` |  | The player's first name. |
+| `last` | `str` |  | The player's last name. |
+| `code_start` | `Optional[str]` | `None` | The forced player-code prefix for every variant, or `None` to leave the default `build_player_code` truncation behavior in place. |
+
+**Returns**
+
+Three `(name_variant, code_start)` pairs.
 
 ### `fox_mbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_boxscore}
 
@@ -2357,6 +3110,42 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.mbb import fox_mbb_team_stats
 df = fox_mbb_team_stats("...")
+```
+
+### `fuzzy_box_match(candidate: 'str', unassigned_box_names: 'list[str]', team_context: 'str') -> 'Union[str, FuzzyMatchError]'` {#fuzzy_box_match}
+
+Pick the single unassigned box-score name a mis-spelled play-by-play
+
+name most likely refers to (`NameFixer.fuzzy_box_match`, `:774-905`).
+
+Resolution order: a single strong match wins outright; multiple strong
+matches only resolve if there's a clear (>10-point) winner; failing
+that, a single weak match wins; failing that, a first-name-only match
+only wins if there are no other first-name matches (exact or fuzzy)
+among the un-matched box names.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `candidate` | `str` |  | The raw play-by-play name. |
+| `unassigned_box_names` | `list[str]` |  | Box-score full names not yet claimed by another resolution. |
+| `team_context` | `str` |  | Debug-only context string (Scala used it to de-duplicate diagnostic prints; this port has no logging surface to de-duplicate, so the value is otherwise unused). |
+
+**Returns**
+
+The winning box-score name, or a `FuzzyMatchError` describing why no single name won.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import fuzzy_box_match
+fuzzy_box_match(
+    "sirena tuitele",
+    ["Suitele, Sirena", "Tuitele, Peanut", "Guity, Amaya"],
+    "team_context",
+)
+# "Suitele, Sirena"
 ```
 
 ### `get_stats_diff(stat_set1: 'LineupStatSet', stat_set2: 'LineupStatSet', off_title: 'str', def_title: 'str | None' = None) -> 'LineupStatSet'` {#get_stats_diff}
@@ -2665,6 +3454,35 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `misspellings(team: 'Optional[TeamId]') -> 'dict[str, str]'` {#misspellings}
+
+Team-scoped misspelling map, falling back to the generic map
+
+(`DataQualityIssues.misspellings`, `DataQualityIssues.scala:165-322`
+-- see the module docstring's "fallback semantics" note for why this is
+a precomputed merge, not a runtime two-level lookup).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `Optional[TeamId]` |  | The team to look up team-specific corrections for. `None` (like any team absent from the table) falls back to `generic_misspellings`. |
+
+**Returns**
+
+A fresh dict -- the team's misspelling map merged with `generic_misspellings`, or a copy of `generic_misspellings` if `team` has no specific entries.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_data_quality import misspellings
+from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+
+misspellings(TeamId("NJIT"))["Lewal, Levi"]  # 'Lawal, Levi'
+misspellings(TeamId("Some Unlisted Team"))  # {} (generic fallback)
+misspellings(None)  # {} (generic fallback)
+```
+
 ### `order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'` {#order_lineup}
 
 Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
@@ -2923,6 +3741,76 @@ regress_shot_quality(100, 3, "calc_rim_relative",
      "total_off_2prim_attempts": {"value": 8}})
 ```
 
+### `remove_diacritics(fragment: 'str') -> 'str'` {#remove_diacritics}
+
+Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"`
+
+(`ExtractorUtils.scala:38-43`: NFD normalization then removal of the
+combining-diacritical-marks block).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fragment` | `str` |  | Any string (a full player name or a name fragment). |
+
+**Returns**
+
+The string with combining marks removed.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import remove_diacritics
+print(remove_diacritics("Dorka Juhász"))  # "Dorka Juhasz"
+```
+
+### `reorder_and_reverse(reversed_partial_events: 'Iterable[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'` {#reorder_and_reverse}
+
+Orders same-minute play-by-play events so subs never enclose the plays
+
+they logically precede/follow (`ExtractorUtils.scala:435-599`).
+
+Groups consecutive events sharing the same `min` into a block (the
+input arrives in descending/reverse-chronological order, so blocks are
+discovered and internally accumulated in reverse too), then -- for any
+block containing a sub -- reorders it via `inner_sort`: events
+referencing a subbed-OUT player (or scoring no higher than the sub) land
+in a pre-sub group, the subs themselves come next (in ascending-score
+order), and events referencing a subbed-IN player (or scoring higher
+than the sub) land in a trailing post-sub group. Free-throw attempts
+sharing the sub's inferred "direction" (team vs. opponent, inferred from
+the nearest preceding shot/FT/foul) are pulled into the pre-sub group
+unless the shooter is one of the players being subbed in. Blocks with no
+sub are returned unchanged apart from the initial score-based sort.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `reversed_partial_events` | `Iterable[PlayByPlayEvent]` |  | Events for one lineup event, in reverse-chronological (descending-time) order -- the natural order encountered walking play-by-play text bottom-up. |
+
+**Returns**
+
+The same events, forward-chronological (ascending time), with each same-minute block internally reordered so no sub encloses a play it logically shouldn't.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import Score
+from sportsdataverse.mbb.mbb_ncaa_stints import (
+    OtherTeamEvent,
+    SubInEvent,
+    reorder_and_reverse,
+)
+events = [
+    SubInEvent(0.4, Score(0, 0), "player1"),
+    OtherTeamEvent(0.4, Score(0, 0), "rebound"),
+]
+reorder_and_reverse(events)
+# [OtherTeamEvent(...), SubInEvent(...)]
+```
+
 ### `score_to_tuple(s: 'str') -> 'tuple[int, int]'` {#score_to_tuple}
 
 Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
@@ -2996,6 +3884,35 @@ solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
 rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
 ```
 
+### `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#start_time_from_period}
+
+The game-clock time (minutes elapsed) a period starts at
+
+(`ExtractorUtils.scala:272-281`).
+
+Women's games play four 10-minute quarters then 5-minute overtimes; men's
+games play two 20-minute halves then 5-minute overtimes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `period` | `int` |  | The 1-indexed period number (1/2 = halves for men, 1-4 = quarters for women, 5+ = overtimes for both). |
+| `is_women_game` | `bool` |  | Whether to use the women's (quarters) or men's (halves) period schedule. |
+
+**Returns**
+
+The game-clock minute the period begins at.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
+start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
+start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
+start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
+```
+
 ### `test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'` {#test_positional_aware_filter}
 
 Check a positional-aware filter (from `build_positional_aware_filter`)
@@ -3030,6 +3947,46 @@ Whether the lineup satisfies both the positive and negative filters.
 from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
 lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
 test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
+```
+
+### `tidy_player(p_in: 'str', ctx: 'TidyPlayerContext') -> 'tuple[str, TidyPlayerContext]'` {#tidy_player}
+
+Resolve a raw play-by-play name to its box-score full name, via an
+
+ordered fallback chain (`LineupErrorAnalysisUtils.tidy_player`,
+`:76-144`). Order is semantic -- ported as ordered first-non-`None`:
+
+1. Cache hit (see the module docstring's asymmetric-cache note).
+2. Exact box-score code match.
+3. Unique truncated-code match (`TidyPlayerContext.alt_all_players_map`).
+4. Double-barrel-surname strip retry (`"Smith-Jones"` -> `"Jones"`),
+   recursing into this same function.
+5. Initials (`convert_from_initials`).
+6. Jersey number (`convert_from_digits`, against
+   `ctx.box_lineup.players_out`).
+7. Truncated-code + inserted-"j"-for-"junior" retry.
+8. Fuzzy match (`fuzzy_box_match`) -- skipped (and normalized to
+   `"Team"`) for the four team-stat-row sentinels.
+9. Identity fallthrough (the input is returned unresolved; a later,
+   out-of-scope validation pass is expected to reject it).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `p_in` | `str` |  | The raw play-by-play name. |
+| `ctx` | `TidyPlayerContext` |  | The lookup context (see `build_tidy_player_context`). |
+
+**Returns**
+
+`(resolved_name, updated_ctx)` -- `updated_ctx` carries the new cache entry.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context, tidy_player
+ctx = build_tidy_player_context(box_lineup)
+resolved_name, ctx = tidy_player("MITCHELL,M", ctx)
 ```
 
 ### `using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'` {#using_roster_pos}

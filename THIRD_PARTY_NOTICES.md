@@ -228,19 +228,41 @@ that license's own attribution obligations.
     (`Concurrency.concurrent_event_handler`) is inlined as a direct loop
     (see the module docstring for the rationale); the resulting behavior is
     byte-for-byte verified against the upstream oracle regardless.
+  - `DataQualityIssues.scala`'s curated misspelling/alias tables plus the
+    minimal error-reporting scaffolding from `ParseError.scala` /
+    `ParseUtils.scala` (`ParseError`, `build_sub_error`) were ported into
+    [`sportsdataverse/mbb/mbb_ncaa_data_quality.py`](sportsdataverse/mbb/mbb_ncaa_data_quality.py).
+  - The name-resolution half of `LineupErrorAnalysisUtils.scala` (the
+    `tidy_player` fallback chain, `NameFixer`'s fuzzy single-candidate
+    scoring, and `fuzzy_box_match`) was ported into
+    [`sportsdataverse/mbb/mbb_ncaa_names.py`](sportsdataverse/mbb/mbb_ncaa_names.py).
+    The stint-**validation** half of the same Scala object
+    (`validate_lineup` / `clump_bad_lineups` / `analyze_and_fix_clumps` and
+    supporting types) is **not** part of this port yet -- it is deferred to
+    a later phase, once the stint builder itself has a validation
+    consumer.
+  - `ExtractorUtils.scala`'s player-code generator, team-name parser, the
+    play-by-play event ADT, event reordering, and the substitution-tracking
+    stint builder itself were ported into
+    [`sportsdataverse/mbb/mbb_ncaa_stints.py`](sportsdataverse/mbb/mbb_ncaa_stints.py).
   [`sportsdataverse/wbb/wbb_ncaa_models.py`](sportsdataverse/wbb/wbb_ncaa_models.py),
   [`sportsdataverse/wbb/wbb_ncaa_events.py`](sportsdataverse/wbb/wbb_ncaa_events.py),
-  and
-  [`sportsdataverse/wbb/wbb_ncaa_possessions.py`](sportsdataverse/wbb/wbb_ncaa_possessions.py)
+  [`sportsdataverse/wbb/wbb_ncaa_possessions.py`](sportsdataverse/wbb/wbb_ncaa_possessions.py),
+  [`sportsdataverse/wbb/wbb_ncaa_data_quality.py`](sportsdataverse/wbb/wbb_ncaa_data_quality.py),
+  [`sportsdataverse/wbb/wbb_ncaa_names.py`](sportsdataverse/wbb/wbb_ncaa_names.py), and
+  [`sportsdataverse/wbb/wbb_ncaa_stints.py`](sportsdataverse/wbb/wbb_ncaa_stints.py)
   re-export the same types and functions by reference (no separate copy of
   the logic). Unlike the cbb-on-off-analyzer (TypeScript/jest) entries above,
   no fixture file is vendored for this port -- every `utest` oracle value
-  transliterated from `EventUtils.scala` / `PossessionUtils.scala` (and their
-  `*Tests.scala` twins) is a short inline literal reproduced directly in the
-  test modules (`tests/mbb/test_mbb_ncaa_models.py`,
-  `tests/mbb/test_mbb_ncaa_events.py`,
-  `tests/mbb/test_mbb_ncaa_possessions.py`), which are test-only and not
-  shipped in the distributed wheel or sdist.
+  transliterated from `EventUtils.scala` / `PossessionUtils.scala` /
+  `DataQualityIssues.scala` / `LineupErrorAnalysisUtils.scala` /
+  `ExtractorUtils.scala` (and their `*Tests.scala` twins) is a short inline
+  literal reproduced directly in the test modules
+  (`tests/mbb/test_mbb_ncaa_models.py`, `tests/mbb/test_mbb_ncaa_events.py`,
+  `tests/mbb/test_mbb_ncaa_possessions.py`,
+  `tests/mbb/test_mbb_ncaa_data_quality.py`,
+  `tests/mbb/test_mbb_ncaa_names.py`, `tests/mbb/test_mbb_ncaa_stints.py`),
+  which are test-only and not shipped in the distributed wheel or sdist.
 - **Modifications:** Translated from Scala to Python, following this
   repository's own conventions (typing, docstrings, dataclasses in place of
   case classes). No changes were made to the original Scala source itself;
