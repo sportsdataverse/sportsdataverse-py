@@ -1,8 +1,12 @@
 import numpy as np
+import pytest
 
 from sportsdataverse.mbb.mbb_prediction_constants import (
+    LEAGUE_CONSTANTS,
+    LeagueConstants,
     brier_score,
     calibration_table,
+    get_constants,
     log_loss_score,
     mae,
     spearman_corr,
@@ -43,3 +47,25 @@ def test_log_loss_perfect_is_near_zero():
     y = np.array([1, 0, 1, 0])
     p = np.array([1.0, 0.0, 1.0, 0.0])
     assert log_loss_score(y, p) < 1e-9
+
+
+# --- Task 0.3: league-constants scaffold ---
+
+
+def test_league_constants_table_has_both_leagues():
+    assert set(LEAGUE_CONSTANTS) == {"mens", "womens"}
+
+
+def test_get_constants_resolves_both_leagues():
+    for league in ("mens", "womens"):
+        c = get_constants(league)
+        assert isinstance(c, LeagueConstants)
+        assert c.margin_sd > 0
+        assert c.avg_tempo > 0
+        assert c.avg_efficiency > 0
+        assert set(c.quad_thresholds) == {"home", "neutral", "away"}
+
+
+def test_get_constants_unknown_league_raises():
+    with pytest.raises(ValueError, match="nba"):
+        get_constants("nba")

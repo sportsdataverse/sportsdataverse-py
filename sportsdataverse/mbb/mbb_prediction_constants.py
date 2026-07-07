@@ -14,9 +14,95 @@ split (:func:`as_of_ratings_split`).
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import numpy as np
 import polars as pl
 from scipy.stats import rankdata
+
+
+@dataclass(frozen=True)
+class LeagueConstants:
+    """Per-league fitted constants for the prediction & tournament stack.
+
+    Algorithms in the stack are league-agnostic; every men's/women's-specific
+    number lives here so a WBB caller is a by-reference shim plus this table
+    (the same pattern ``wbb_rapm`` / ``wbb_ratings`` already use).
+
+    Attributes:
+        hfa: Home-court advantage in points (seed; fitted in Phase 2).
+        margin_sd: Std. dev. of the game-margin residual (seed; fitted in Phase 2).
+        avg_tempo: League baseline possessions per game (adjusted-tempo anchor).
+        avg_efficiency: League baseline points per 100 possessions.
+        quad_thresholds: NET-style quadrant opponent-rank upper bounds, keyed by
+            venue (``home`` / ``neutral`` / ``away``) then ``q1`` / ``q2`` / ``q3``
+            (Quad 4 is any opponent ranked worse than ``q3``).
+        in_game_wp_artifact: Filename of the bundled in-game-WP coefficients under
+            ``sportsdataverse/mbb/models`` (fitted + committed in Phase 3).
+    """
+
+    hfa: float
+    margin_sd: float
+    avg_tempo: float
+    avg_efficiency: float
+    quad_thresholds: dict[str, dict[str, int]]
+    in_game_wp_artifact: str
+
+
+# NET-style quadrant opponent-rank upper bounds by venue (Quad 4 = worse than q3).
+# Men's and women's Division I both use the NET with this quadrant structure; the
+# thresholds are seeded identically and may be re-fit per league later.
+_NET_QUAD_THRESHOLDS: dict[str, dict[str, int]] = {
+    "home": {"q1": 30, "q2": 75, "q3": 160},
+    "neutral": {"q1": 50, "q2": 100, "q3": 200},
+    "away": {"q1": 75, "q2": 135, "q3": 240},
+}
+
+# Seed values from published references so the module imports and the engine runs
+# before fitting. Phase 2 (sigma/HFA) and Phase 3 (in-game-WP) overwrite the fitted
+# fields in-code and re-commit; the quad thresholds are canonical NET definitions.
+LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
+    "mens": LeagueConstants(
+        hfa=3.5,
+        margin_sd=11.0,
+        avg_tempo=67.0,
+        avg_efficiency=104.0,
+        quad_thresholds=_NET_QUAD_THRESHOLDS,
+        in_game_wp_artifact="mbb_in_game_wp.json",
+    ),
+    "womens": LeagueConstants(
+        hfa=3.0,
+        margin_sd=12.0,
+        avg_tempo=70.0,
+        avg_efficiency=95.0,
+        quad_thresholds=_NET_QUAD_THRESHOLDS,
+        in_game_wp_artifact="wbb_in_game_wp.json",
+    ),
+}
+
+
+def get_constants(league: str) -> LeagueConstants:
+    """Return the :class:`LeagueConstants` for a league.
+
+    Args:
+        league: Either ``"mens"`` or ``"womens"``.
+
+    Returns:
+        The league's :class:`LeagueConstants`.
+
+    Raises:
+        ValueError: If ``league`` is not a known key of ``LEAGUE_CONSTANTS``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_prediction_constants import get_constants
+            get_constants("mens").hfa
+    """
+    try:
+        return LEAGUE_CONSTANTS[league]
+    except KeyError:
+        raise ValueError(f"Unknown league {league!r}; expected one of {sorted(LEAGUE_CONSTANTS)}") from None
 
 
 def brier_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
