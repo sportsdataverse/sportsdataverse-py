@@ -328,6 +328,7 @@ from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
+from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
@@ -392,6 +393,8 @@ from sportsdataverse.mbb import phase1_shot_event_enrichment as phase1_shot_even
 from sportsdataverse.mbb import pick_ridge_regression as pick_ridge_regression  # noqa: F401
 from sportsdataverse.mbb import pos_class_to_score as pos_class_to_score  # noqa: F401
 from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum  # noqa: F401
+from sportsdataverse.mbb import predict_margin as predict_margin  # noqa: F401
+from sportsdataverse.mbb import predict_total as predict_total  # noqa: F401
 from sportsdataverse.mbb import raw_game_efficiency as raw_game_efficiency  # noqa: F401
 from sportsdataverse.mbb import regress_shot_quality as regress_shot_quality  # noqa: F401
 from sportsdataverse.mbb import remove_diacritics as remove_diacritics  # noqa: F401
@@ -418,6 +421,7 @@ from sportsdataverse.mbb import using_roster_pos as using_roster_pos  # noqa: F4
 from sportsdataverse.mbb import validate_box_score as validate_box_score  # noqa: F401
 from sportsdataverse.mbb import validate_lineup as validate_lineup  # noqa: F401
 from sportsdataverse.mbb import weighted_avg as weighted_avg  # noqa: F401
+from sportsdataverse.mbb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
 __all__ = [
     "AssistEvent",
@@ -725,6 +729,7 @@ __all__ = [
     "load_mbb_team_season_stats",
     "matching_player",
     "mbb_pbp_disk",
+    "mbb_predict_games",
     "mbb_team_ratings",
     "misspellings",
     "most_recent_mbb_season",
@@ -789,6 +794,8 @@ __all__ = [
     "pick_ridge_regression",
     "pos_class_to_score",
     "poss_calc_fragment_sum",
+    "predict_margin",
+    "predict_total",
     "raw_game_efficiency",
     "regress_shot_quality",
     "remove_diacritics",
@@ -815,6 +822,7 @@ __all__ = [
     "validate_box_score",
     "validate_lineup",
     "weighted_avg",
+    "win_prob_from_margin",
 ]
 
 

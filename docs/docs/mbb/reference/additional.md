@@ -5279,6 +5279,35 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `mbb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_predict_games}
+
+Vectorized pregame predictions for a schedule of games.
+
+Joins the ratings frame twice (home / away) and applies the closed-form
+`predict_margin` / `win_prob_from_margin` /
+`predict_total` math column-wise.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
+| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_o, adj_d, adj_em, adj_tempo` (the `mbb_team_ratings` output for one season / as-of date). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import mbb_predict_games
+from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
+preds = mbb_predict_games(games, mbb_team_ratings([2024]))
+```
+
 ### `mbb_team_ratings(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mbb_team_ratings}
 
 Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season.
@@ -5650,6 +5679,66 @@ frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
 frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
 poss_calc_fragment_sum(frag1, frag2)
 # PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
+```
+
+### `predict_margin(home_adj_em: 'float', away_adj_em: 'float', neutral: 'bool' = False, *, league: 'str' = 'mens') -> 'float'` {#predict_margin}
+
+Expected home-minus-away margin from two adjusted efficiency margins.
+
+The AdjEM difference is scaled by the league's fitted `em_scale` (AdjEM
+is per-100-possessions; a game margin scales by roughly tempo/100, further
+attenuated for as-of estimation noise) before the home-court advantage is
+added.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_em` | `float` |  | Home team's adjusted efficiency margin (points / 100 poss). |
+| `away_adj_em` | `float` |  | Away team's adjusted efficiency margin. |
+| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the fitted em_scale / HFA). |
+
+**Returns**
+
+Expected margin in points (positive favors the home team).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import predict_margin
+predict_margin(20.0, 10.0)
+```
+
+### `predict_total(home_adj_o: 'float', home_adj_d: 'float', away_adj_o: 'float', away_adj_d: 'float', home_tempo: 'float', away_tempo: 'float', *, league: 'str' = 'mens') -> 'float'` {#predict_total}
+
+Expected total points from adjusted efficiencies and tempos.
+
+Expected possessions are `home_tempo * away_tempo / avg_tempo`; each
+side's expected points per 100 possessions blend its offense with the
+opponent's defense (`0.5 * (off + opp_def)`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_o` | `float` |  | Home adjusted offensive efficiency (points / 100 poss). |
+| `home_adj_d` | `float` |  | Home adjusted defensive efficiency. |
+| `away_adj_o` | `float` |  | Away adjusted offensive efficiency. |
+| `away_adj_d` | `float` |  | Away adjusted defensive efficiency. |
+| `home_tempo` | `float` |  | Home adjusted tempo (possessions / game). |
+| `away_tempo` | `float` |  | Away adjusted tempo. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the tempo anchor). |
+
+**Returns**
+
+Expected combined points scored by both teams.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import predict_total
+predict_total(110.0, 95.0, 105.0, 100.0, 68.0, 66.0)
 ```
 
 ### `raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'` {#raw_game_efficiency}
@@ -6422,4 +6511,26 @@ for lineup in three_lineups:
     weighted_avg(acc, lineup)
 # acc now holds weighted SUMS; complete_weighted_avg (not yet
 # ported) is required to turn these into rate-stat averages.
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'mens') -> 'float'` {#win_prob_from_margin}
+
+Home win probability from an expected margin (normal-CDF closed form).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | Expected home-minus-away margin in points. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the fitted margin sigma). |
+
+**Returns**
+
+Probability the home team wins, in `(0, 1)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import win_prob_from_margin
+win_prob_from_margin(5.0)
 ```
