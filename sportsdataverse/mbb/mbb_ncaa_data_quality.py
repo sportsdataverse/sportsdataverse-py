@@ -34,12 +34,11 @@ the plain (unmerged) ``generic_misspellings`` via Scala's ``withDefault``.
 merge; team miss (including ``team=None``, which is never a real key in
 the Scala literal either) → a copy of :data:`generic_misspellings`.
 
-**Deferred member: ``players_missing_from_boxscore``.** Grepping every
-``DataQualityIssues.`` reference in ``cbb-explorer`` shows it is consumed
-by exactly one caller, ``BoxscoreParser.scala:245`` -- box-score parsing,
-not the ``build_player_code`` / ``parse_team_name`` / ``tidy_player``
-consumers this phase targets. It is out of scope for 5b and left for
-whichever future phase ports box-score parsing.
+**``players_missing_from_boxscore`` (Task 5e.2 addition).** Deferred by
+Task 5b.1 (its only caller, ``BoxscoreParser.scala:245``'s
+``inject_validated_players``, was out of scope then); ported now verbatim
+alongside the ``BoxscoreParser`` port that consumes it
+(``mbb_ncaa_boxscore_parser.py``).
 
 **Landmine index (reachable scalar division).** None. Every operation in
 this module is dict/list construction, string concatenation, or
@@ -99,6 +98,7 @@ __all__ = [
     "generic_misspellings",
     "misspellings",
     "players_with_duplicate_names",
+    "players_missing_from_boxscore",
     "team_aliases",
 ]
 
@@ -490,3 +490,30 @@ def misspellings(team: Optional[TeamId]) -> dict[str, str]:
     if team is None:
         return dict(generic_misspellings)
     return _MISSPELLINGS_MERGED.get(team, dict(generic_misspellings))
+
+
+# ---------------------------------------------------------------------------
+# players_missing_from_boxscore -- players whose box-score row is absent
+# entirely (DataQualityIssues.scala:16-34). Task 5e.2 addition -- deferred by
+# Task 5b.1 since its only consumer, BoxscoreParser.inject_validated_players,
+# was out of scope then.
+# ---------------------------------------------------------------------------
+
+players_missing_from_boxscore: dict[TeamId, dict[Year, list[str]]] = {
+    TeamId("La Salle"): {  # A10
+        Year(2018): ["Cooney, Kyle", "Shuler, Johnnie", "Kuhar, Chris", "Joseph, Dajour"],
+    },
+    TeamId("Morgan St."): {  # MEAC
+        Year(2020): ["McCray-Pace, Lapri"],
+    },
+    TeamId("Xavier"): {  # BE
+        Year(2018): ["Vanderpohl, Nick"],
+    },
+    TeamId("St. Bonaventure"): {  # A10
+        Year(2023): ["Essamvous, Assa"],
+    },
+}
+"""Team/season-scoped players known to be entirely missing from a box-score
+page's player table (``DataQualityIssues.players_missing_from_boxscore``) --
+manually appended by ``BoxscoreParser.inject_validated_players`` as extra
+lineup entries alongside the roster/other-source fallbacks."""

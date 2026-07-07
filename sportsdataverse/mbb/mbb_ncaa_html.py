@@ -50,6 +50,29 @@ helpers rather than re-deriving the translation.
   wrongly include descendant text).
 * ``[attr~=regex]`` (JSoup attribute-regex matcher) -> :func:`attr_regex_filter`,
   a plain ``re.search`` filter over each candidate tag's named attribute.
+* ``el :contains(text)`` (JSoup substring-containment filter) -> :func:`select_contains`.
+  **Critical divergence, found during Task 5e.2's review of the BoxscoreParser
+  port: JSoup's ``:contains()`` is documented CASE-INSENSITIVE substring
+  containment, but soupsieve's non-deprecated spelling
+  ``:-soup-contains()`` is CASE-SENSITIVE** (soupsieve has no
+  case-insensitive ``:contains()`` variant at all -- verified against the
+  soupsieve selector-reference docs). A ``:contains(...)`` selector ported
+  as ``:-soup-contains(...)`` therefore silently stops matching the moment
+  the captured HTML's casing differs from the selector's literal text.
+  :func:`select_contains` reproduces JSoup's actual semantics: a plain
+  (non-regex) case-folded substring test over :func:`jsoup_text`. Every
+  ``:contains(...)`` selector ported anywhere in this HTML-parser layer
+  should use this helper, never ``:-soup-contains()`` directly.
+* ``el :matchesOwn(regex)`` applied to a candidate list already narrowed by
+  a non-CSS filter (e.g. an :func:`attr_regex_filter` result) ->
+  :func:`filter_matching_own`. :func:`select_matching_own` takes a
+  ``(root, selector)`` pair and calls ``root.select(selector)`` itself,
+  which cannot express a JSoup compound selector that mixes an
+  ``[attr~=regex]`` term with a ``:matchesOwn(regex)`` term in the same
+  chain (soupsieve can filter on structure but not on attribute *regexes*)
+  -- :func:`filter_matching_own` is the same own-text filter, applied to an
+  already-computed candidate list instead of a fresh ``root.select()`` call,
+  so the two filters can be composed in sequence.
 
 **License / provenance (Apache License, Version 2.0).** This module's
 docstrings describe the selector/text semantics of ``RosterParser.scala``,
@@ -102,6 +125,8 @@ __all__ = [
     "select_matching",
     "select_matching_own",
     "attr_regex_filter",
+    "select_contains",
+    "filter_matching_own",
 ]
 
 
@@ -278,4 +303,75 @@ def attr_regex_filter(tags: list[Tag], attr: str, regex: str) -> list[Tag]:
         value = tag.get(attr)
         if value is not None and pattern.search(str(value)):
             matches.append(tag)
+    return matches
+
+
+def select_contains(root: Tag, selector: str, text: str) -> list[Tag]:
+    """JSoup ``root.select(sel + ":contains(text)")``: candidates whose full
+    text (own + every descendant's) case-insensitively CONTAINS ``text`` as
+    a plain substring -- **not** a regex (Task 5e.2 addition; see the module
+    docstring's "Critical divergence" note).
+
+    JSoup's ``:contains()`` is documented case-insensitive substring
+    containment; soupsieve's ``:-soup-contains()`` (the non-deprecated
+    spelling of its ``:contains()``) is case-SENSITIVE, with no
+    case-insensitive variant of its own. Reproducing JSoup's actual
+    semantics therefore needs this helper rather than ``:-soup-contains()``.
+
+    Args:
+        root: The element to search within.
+        selector: A plain (soupsieve-legal) CSS selector for the
+            structural part of the match (everything before ``:contains``).
+        text: The plain substring each candidate's collapsed text must
+            case-insensitively contain.
+
+    Returns:
+        Every ``selector`` match whose :func:`jsoup_text` case-insensitively
+        contains ``text``, in document order.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_html import parse_html, select_contains
+            soup = parse_html("<td>game date:</td><td>Location:</td>")
+            select_contains(soup, "td", "Game Date:")  # [<td>game date:</td>]
+    """
+    needle = text.lower()
+    return [el for el in root.select(selector) if needle in jsoup_text(el).lower()]
+
+
+def filter_matching_own(tags: list[Tag], regex: str) -> list[Tag]:
+    """JSoup ``:matchesOwn(regex)`` applied to an already-computed candidate
+    list, rather than a fresh ``root.select(selector)`` call (Task 5e.2
+    addition; see the module docstring's note on composing this with
+    :func:`attr_regex_filter`).
+
+    Same own-text-only semantics as :func:`select_matching_own` -- JSoup's
+    ``Element.ownText()`` walks only the element's direct ``TextNode``
+    children, not text nested inside child elements.
+
+    Args:
+        tags: Candidate tags to filter (typically the result of an earlier
+            ``.select()``/:func:`attr_regex_filter` call).
+        regex: The pattern each candidate's own (whitespace-collapsed) text
+            must :func:`re.search`-match.
+
+    Returns:
+        The subset of ``tags`` whose own text contains a ``regex`` match,
+        in the input list's order.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_html import attr_regex_filter, filter_matching_own, parse_html
+            soup = parse_html('<td style="font-size:36px">92</td><td style="color:red">x</td>')
+            candidates = attr_regex_filter(soup.find_all("td"), "style", r"font-size:36px")
+            filter_matching_own(candidates, r"[0-9]+")  # [<td style="font-size:36px">92</td>]
+    """
+    own_text_re = re.compile(regex)
+    matches = []
+    for el in tags:
+        own_text = " ".join(child.strip() for child in el.find_all(string=True, recursive=False) if child.strip())
+        if own_text_re.search(own_text):
+            matches.append(el)
     return matches
