@@ -69,3 +69,24 @@ def test_checks_run_on_resolved_fixture() -> None:
     assert any(f.locator.get("is_join_key") is True and f.severity is Severity.ERROR for f in bad_findings), (
         f"expected a join-key dtype ERROR, got: {bad_findings}"
     )
+
+
+def test_seven_cfb_datasets_registered() -> None:
+    names = (
+        "cfb_passing",
+        "cfb_rushing",
+        "cfb_receiving",
+        "cfb_percentiles",
+        "cfb_team_summaries",
+        "cfb_rosters_crosswalk",
+        "cfb_rb_eval",
+    )
+    for n in names:
+        assert n in DATASETS, f"{n} not registered"
+        spec = DATASETS[n]
+        assert spec.oracle_domain == "cfb"
+        assert load_schema(n), f"{n} schema snapshot empty/missing"
+    # fox_jersey must NOT be allowlisted (it is a real gap we want flagged)
+    assert "fox_jersey" not in DATASETS["cfb_rosters_crosswalk"].expected_constant_columns
+    # the tautological team_summaries split cells ARE allowlisted
+    assert "passrate_off_pass" in DATASETS["cfb_team_summaries"].expected_constant_columns

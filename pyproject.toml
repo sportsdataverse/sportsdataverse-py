@@ -189,6 +189,7 @@ dev = [
     # tools/codegen/render_notebooks.py executes the example notebooks and renders
     # them to docs/docs/tutorials/ (run weekly in live-tests-cron). nbclient runs
     # them; nbconvert turns them into markdown. Build/CI-time only.
+    "json5>=0.15.0",
     "nbclient>=0.10",
     "nbconvert>=7.0",
     "nbformat>=5.0",
@@ -301,6 +302,8 @@ files = [
     "sportsdataverse/nfl/nfl_fourth_down.py",
     "sportsdataverse/nfl/nfl_players.py",
     "sportsdataverse/nfl/nfl_roster_builder.py",
+    "sportsdataverse/nfl/nfl_season_standings.py",
+    "sportsdataverse/nfl/nfl_simulations.py",
     "sportsdataverse/nfl/nfl_stats.py",
     "sportsdataverse/nfl/utils_date.py",
     "sportsdataverse/mlb/mlb_statcast_runtime.py",
@@ -320,6 +323,12 @@ files = [
     "sportsdataverse/wnba/wnba_stats_parsers.py",
     "sportsdataverse/wnba/wnba_engine.py",
     "sportsdataverse/nbagl/nbagl_engine.py",
+    "sportsdataverse/mbb/mbb_lineup_stats.py",
+    "sportsdataverse/mbb/mbb_ratings.py",
+    "sportsdataverse/mbb/mbb_luck.py",
+    "sportsdataverse/wbb/wbb_lineup_stats.py",
+    "sportsdataverse/wbb/wbb_ratings.py",
+    "sportsdataverse/wbb/wbb_luck.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",
@@ -330,6 +339,7 @@ files = [
     "tools/validation/checks/sweep.py",
     "tools/validation/checks/e2e.py",
     "tools/validation/checks/boundary_leakage.py",
+    "tools/validation/checks/constant_column.py",
     "tools/validation/checks/prep_published_parity.py",
     "tools/validation/lint/leakage_python.py",
     "tools/validation/lint/leakage_r.py",
@@ -348,4 +358,7 @@ files = [
     "sportsdataverse/nba/nba_ratings_panel.py",
     "sportsdataverse/nba/nba_war.py",
     "sportsdataverse/nba/nba_rapm_variants.py",
+    "sportsdataverse/nfl/nfl_clean.py",
+    "sportsdataverse/nfl/nfl_series.py",
+    "sportsdataverse/nfl/nfl_standings_calc.py",
 ]

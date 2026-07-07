@@ -1,0 +1,46 @@
+schema: nfl_compute_results
+kind: dataframe
+hand_authored: true
+columns:
+- name: teams.sim
+  type: integer
+  description: ''
+- name: teams.team
+  type: character
+  description: ''
+- name: teams.conf
+  type: character
+  description: ''
+- name: teams.division
+  type: character
+  description: ''
+- name: teams.elo
+  type: double
+  description: ''
+- name: games.sim
+  type: integer
+  description: ''
+- name: games.game_type
+  type: character
+  description: ''
+- name: games.week
+  type: character
+  description: ''
+- name: games.away_team
+  type: character
+  description: ''
+- name: games.home_team
+  type: character
+  description: ''
+- name: games.away_rest
+  type: integer
+  description: ''
+- name: games.home_rest
+  type: integer
+  description: ''
+- name: games.location
+  type: character
+  description: ''
+- name: games.result
+  type: integer
+  description: ''

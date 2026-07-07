@@ -148,6 +148,8 @@ from sportsdataverse.nfl import nfl_weeks_by_date as _raw_nfl_weeks_by_date
 from sportsdataverse.nfl import NFLPlayProcess as NFLPlayProcess  # noqa: F401
 from sportsdataverse.nfl import NflConfig as NflConfig  # noqa: F401
 from sportsdataverse.nfl import build_nfl_player_stats as build_nfl_player_stats  # noqa: F401
+from sportsdataverse.nfl import build_nfl_player_stats_def as build_nfl_player_stats_def  # noqa: F401
+from sportsdataverse.nfl import build_nfl_player_stats_kicking as build_nfl_player_stats_kicking  # noqa: F401
 from sportsdataverse.nfl import build_nfl_players as build_nfl_players  # noqa: F401
 from sportsdataverse.nfl import build_nfl_rosters as build_nfl_rosters  # noqa: F401
 from sportsdataverse.nfl import build_nfl_season as build_nfl_season  # noqa: F401
@@ -156,10 +158,13 @@ from sportsdataverse.nfl import cached_loader as cached_loader  # noqa: F401
 from sportsdataverse.nfl import calculate_completion_probability as calculate_completion_probability  # noqa: F401
 from sportsdataverse.nfl import calculate_epa as calculate_epa  # noqa: F401
 from sportsdataverse.nfl import calculate_expected_points as calculate_expected_points  # noqa: F401
+from sportsdataverse.nfl import calculate_nfl_series_conversion_rates as calculate_nfl_series_conversion_rates  # noqa: F401
+from sportsdataverse.nfl import calculate_nfl_standings as calculate_nfl_standings  # noqa: F401
 from sportsdataverse.nfl import calculate_win_probability as calculate_win_probability  # noqa: F401
 from sportsdataverse.nfl import calculate_wpa as calculate_wpa  # noqa: F401
 from sportsdataverse.nfl import calculate_xpass as calculate_xpass  # noqa: F401
 from sportsdataverse.nfl import calculate_xyac as calculate_xyac  # noqa: F401
+from sportsdataverse.nfl import clean_nfl_pbp as clean_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import clear_cache as clear_cache  # noqa: F401
 from sportsdataverse.nfl import download as download  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_calendar as espn_nfl_calendar  # noqa: F401
@@ -242,6 +247,7 @@ from sportsdataverse.nfl import load_teams as load_teams  # noqa: F401
 from sportsdataverse.nfl import load_trades as load_trades  # noqa: F401
 from sportsdataverse.nfl import most_recent_nfl_season as most_recent_nfl_season  # noqa: F401
 from sportsdataverse.nfl import nfl_clear_token_cache as nfl_clear_token_cache  # noqa: F401
+from sportsdataverse.nfl import nfl_compute_results as nfl_compute_results  # noqa: F401
 from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F401
 from sportsdataverse.nfl import nfl_game_pbp as nfl_game_pbp  # noqa: F401
 from sportsdataverse.nfl import nfl_game_schedule as nfl_game_schedule  # noqa: F401
@@ -257,6 +263,8 @@ from sportsdataverse.nfl import nfl_ngs_play_is_highlight as nfl_ngs_play_is_hig
 from sportsdataverse.nfl import nfl_ngs_statboard as nfl_ngs_statboard  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders as nfl_ngs_statboard_leaders  # noqa: F401
 from sportsdataverse.nfl import nfl_players_crosswalk as nfl_players_crosswalk  # noqa: F401
+from sportsdataverse.nfl import nfl_season_standings as nfl_season_standings  # noqa: F401
+from sportsdataverse.nfl import nfl_simulations as nfl_simulations  # noqa: F401
 from sportsdataverse.nfl import nfl_token_gen as nfl_token_gen  # noqa: F401
 from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
@@ -265,6 +273,7 @@ from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.nfl import scrape_ngs_season as scrape_ngs_season  # noqa: F401
 from sportsdataverse.nfl import scrape_ngs_week as scrape_ngs_week  # noqa: F401
 from sportsdataverse.nfl import season_not_found_error as season_not_found_error  # noqa: F401
+from sportsdataverse.nfl import team_name_fn as team_name_fn  # noqa: F401
 from sportsdataverse.nfl import underscore as underscore  # noqa: F401
 from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 
@@ -272,6 +281,8 @@ __all__ = [
     "NFLPlayProcess",
     "NflConfig",
     "build_nfl_player_stats",
+    "build_nfl_player_stats_def",
+    "build_nfl_player_stats_kicking",
     "build_nfl_players",
     "build_nfl_rosters",
     "build_nfl_season",
@@ -280,10 +291,13 @@ __all__ = [
     "calculate_completion_probability",
     "calculate_epa",
     "calculate_expected_points",
+    "calculate_nfl_series_conversion_rates",
+    "calculate_nfl_standings",
     "calculate_win_probability",
     "calculate_wpa",
     "calculate_xpass",
     "calculate_xyac",
+    "clean_nfl_pbp",
     "clear_cache",
     "download",
     "espn_nfl_award",
@@ -478,6 +492,7 @@ __all__ = [
     "most_recent_nfl_season",
     "nfl_clear_token_cache",
     "nfl_combine_profiles",
+    "nfl_compute_results",
     "nfl_draft_picks",
     "nfl_game_details",
     "nfl_game_pbp",
@@ -497,6 +512,8 @@ __all__ = [
     "nfl_ngs_statboard_leaders",
     "nfl_players_crosswalk",
     "nfl_rosters",
+    "nfl_season_standings",
+    "nfl_simulations",
     "nfl_standings",
     "nfl_team",
     "nfl_teams_history",
@@ -511,6 +528,7 @@ __all__ = [
     "scrape_ngs_season",
     "scrape_ngs_week",
     "season_not_found_error",
+    "team_name_fn",
     "underscore",
     "update_config",
 ]

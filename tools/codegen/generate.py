@@ -3038,6 +3038,10 @@ def refresh_autodoc_schemas() -> int:
     if _AUTODOC_SCHEMA_DIR.exists():
         for f in _AUTODOC_SCHEMA_DIR.rglob("*.yaml"):
             if f.resolve() not in written_paths:
+                # Hand-authored schemas (functions the capture step cannot call:
+                # frame-valued args or dict-of-frames returns) are kept, not pruned.
+                if (yaml.safe_load(f.read_text(encoding="utf-8")) or {}).get("hand_authored"):
+                    continue
                 f.unlink()
                 pruned += 1
     _autodoc_return_columns.cache_clear()
