@@ -34,11 +34,15 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
 from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
     BadLineupClump,
     ValidationError,
+    add_missing_players,
+    analyze_and_fix_clumps,
     categorize_bad_lineups,
     clump_bad_lineups,
+    find_missing_subs,
+    handle_common_sub_bug,
     validate_lineup,
 )
-from sportsdataverse.mbb.mbb_ncaa_stints import build_player_code
+from sportsdataverse.mbb.mbb_ncaa_stints import build_lineup_id, build_player_code
 
 # --- Fixture builders for the clump_bad_lineups / categorize_bad_lineups
 # tests below (Task 5d.2, no upstream oracle -- see module docstring). ---
@@ -352,3 +356,570 @@ def test_categorize_bad_lineups_smoke() -> None:
     result = categorize_bad_lineups([ev_a, ev_b, ev_c])
 
     assert result == {5: (1, 5), 6: (1, 10)}
+
+
+# ===========================================================================
+# Task 5d.3: self-healing fixers (handle_common_sub_bug / find_missing_subs /
+# add_missing_players / analyze_and_fix_clumps).
+#
+# NO upstream oracle -- every expected output below was HAND-DERIVED from the
+# Scala algorithm (``LineupErrorAnalysisUtils.scala:269-610``) on paper BEFORE
+# the port was run against it (candidate-set evolution per event,
+# ``matching_index``, per-phase routing, ``validate_lineup`` outcomes). The
+# derivation is walked step-by-step in each test's docstring. The only use of
+# the shipped code during fixture design was pinning the *leaf* name->code
+# mapping (``build_player_code``/``tidy_player``/``parse_any_play`` -- all
+# oracle-backed 5a/5b helpers, NOT the 5d.3 code under test); the fixer
+# algorithm's behavior was never produced by running the fixer.
+#
+# Player codes (build_player_code(name, TeamId("TeamA")), verified via the
+# shipped 5a/5b helpers): A=AaAaronson, B=BeBellson, C=CaCarlson, D=DaDanson,
+# E=EtEthanson, F=FrFrankson, G=GaGarrison.
+# ===========================================================================
+
+_FIXER_TEAM_ID = _TEAM_A.team  # TeamId("TeamA")
+_FIXER_NAMES = {
+    "A": "Aaron Aaronson",
+    "B": "Bella Bellson",
+    "C": "Carl Carlson",
+    "D": "Dana Danson",
+    "E": "Ethan Ethanson",
+    "F": "Frank Frankson",
+    "G": "Gary Garrison",
+}
+#: Player-code map, keyed by single-letter handle -> PlayerCodeId.
+_PC = {k: build_player_code(v, _FIXER_TEAM_ID) for k, v in _FIXER_NAMES.items()}
+#: Code strings, keyed by handle (A -> "AaAaronson", ...).
+_CODE = {k: pc.code for k, pc in _PC.items()}
+
+
+def _codes(players: list[PlayerCodeId]) -> set[str]:
+    """The set of ``.code`` strings for a lineup's players."""
+    return {p.code for p in players}
+
+
+def _mention(handle: str) -> RawGameEvent:
+    """A team-side raw play line naming player ``handle`` in the new NCAA
+    format (``"time,score,Full Name, verb ..."``) -- ``parse_any_play``
+    extracts ``"Full Name"``, which resolves (via ``tidy_player`` ->
+    ``build_player_code``) back to ``_PC[handle]``'s code (round-trip verified
+    against the shipped helpers).
+    """
+    return RawGameEvent.for_team(f"10:00,0-0,{_FIXER_NAMES[handle]}, made Layup", 10.0)
+
+
+def _fev(
+    handles: list[str],
+    *,
+    players_in: list[str] | None = None,
+    players_out: list[str] | None = None,
+    mentions: list[str] | None = None,
+    start_min: float = 0.0,
+    end_min: float = 1.0,
+) -> LineupEvent:
+    """A ``LineupEvent`` on ``TeamA`` whose ``players``/``players_in``/
+    ``players_out`` are the ``_PC`` players for the given handles and whose
+    team-side raw events are ``_mention``\\ s for the given handles.
+    """
+    return LineupEvent(
+        date=datetime(2024, 1, 1),
+        location_type=LocationType.HOME,
+        start_min=start_min,
+        end_min=end_min,
+        duration_mins=end_min - start_min,
+        score_info=ScoreInfo.empty(),
+        team=_TEAM_A,
+        opponent=_OPP,
+        lineup_id=LineupId.unknown,
+        players=[_PC[h] for h in handles],
+        players_in=[_PC[h] for h in (players_in or [])],
+        players_out=[_PC[h] for h in (players_out or [])],
+        raw_game_events=[_mention(h) for h in (mentions or [])],
+        team_stats=LineupEventStats.empty(),
+        opponent_stats=LineupEventStats.empty(),
+    )
+
+
+def _fbox(handles: list[str]) -> LineupEvent:
+    """A box-score ``LineupEvent`` (roster = the ``_PC`` players for the given
+    handles), used as the name-resolution context + roster for the fixers.
+    """
+    return _fev(handles)
+
+
+def _valid(handles: list[str]) -> set[str]:
+    """The set of valid player codes for the given roster handles."""
+    return {_CODE[h] for h in handles}
+
+
+# --- handle_common_sub_bug (Scala ``:269-298``) ---
+
+
+def test_handle_common_sub_bug_guard_hit_fix_accepted() -> None:
+    """Derivation (guard hit, fix accepted).
+
+    clump = single event ``bad`` (players [A,B,C,D,E,F], players_in [A,B]
+    size 2, players_out [C] size 1), next_good = ``good`` (players_in []
+    size 0, players_out [F] size 1). Guard (``:275-278``):
+    ``len(in)=2 > len(out)=1`` True; ``len(good.in)=0`` True;
+    ``len(good.out)=1 > 0`` True -> FIRES.
+
+    Fix (``:279-283``): all_players = bad.players filterNot good.players_out
+    {F} = [A,B,C,D,E] (5). players_out = distinct([C] ++ [F]) = [C,F].
+    validate([A,B,C,D,E], box=[A..F], valid={A..F}): len 5, all known,
+    no raws -> [] empty -> ACCEPTED (``:284-291``).
+
+    Result: fixed = [event with players [A,B,C,D,E], players_out [C,F]];
+    still_to_fix = empty clump (BadLineupClump([], None)).
+    """
+    bad = _fev(["A", "B", "C", "D", "E", "F"], players_in=["A", "B"], players_out=["C"])
+    good = _fev(["A", "B", "C", "D", "E"], players_in=[], players_out=["F"])
+    clump = BadLineupClump([bad], good)
+
+    fixed, still = handle_common_sub_bug(
+        clump, _fbox(["A", "B", "C", "D", "E", "F"]), _valid(["A", "B", "C", "D", "E", "F"])
+    )
+
+    assert len(fixed) == 1
+    assert _codes(fixed[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"]}
+    assert fixed[0].players_out == [_PC["C"], _PC["F"]]
+    assert still.evs == []
+    assert still.next_good is None
+
+
+def test_handle_common_sub_bug_guard_hit_validate_rejects() -> None:
+    """Derivation (guard hit, but the fix still fails validate).
+
+    clump = single event ``bad`` (players [A,B,C,D,E,F,G] -- SEVEN,
+    players_in [A,B] size 2, players_out [C] size 1); next_good ``good``
+    (players_in [] size 0, players_out [G] size 1). Guard fires (2>1, 0, 1>0).
+
+    Fix: all_players = [A,B,C,D,E,F,G] filterNot {G} = [A,B,C,D,E,F] (SIX);
+    players_out = distinct([C] ++ [G]) = [C,G]. validate([A,B,C,D,E,F]):
+    len 6 -> WrongNumberOfPlayers -> non-empty -> REJECTED (``:292-293``).
+
+    Result: fixed = []; still_to_fix = BadLineupClump([the *fixed* event],
+    good) -- the still-to-fix event carries the MUTATED players/players_out,
+    not the original, and keeps ``good`` as next_good.
+    """
+    bad = _fev(["A", "B", "C", "D", "E", "F", "G"], players_in=["A", "B"], players_out=["C"])
+    good = _fev(["A", "B", "C", "D", "E"], players_in=[], players_out=["G"])
+    clump = BadLineupClump([bad], good)
+
+    fixed, still = handle_common_sub_bug(
+        clump, _fbox(["A", "B", "C", "D", "E", "F", "G"]), _valid(["A", "B", "C", "D", "E", "F", "G"])
+    )
+
+    assert fixed == []
+    assert len(still.evs) == 1
+    assert _codes(still.evs[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"], _CODE["F"]}
+    assert still.evs[0].players_out == [_PC["C"], _PC["G"]]
+    assert still.next_good is good
+
+
+def test_handle_common_sub_bug_guard_miss_multi_event() -> None:
+    """Derivation (guard miss -- clump is not single-event).
+
+    The Scala pattern ``BadLineupClump(bad :: Nil, Some(good))`` requires
+    EXACTLY one event; a 2-event clump falls through to ``case _ => (Nil,
+    clump)`` (``:296``). Result: fixed = []; still_to_fix = the input clump
+    unchanged.
+    """
+    ev1 = _fev(["A", "B", "C", "D", "E", "F"], players_in=["A", "B"], players_out=["C"])
+    ev2 = _fev(["A", "B", "C", "D", "E", "F"], players_in=["A", "B"], players_out=["C"])
+    good = _fev(["A", "B", "C", "D", "E"], players_in=[], players_out=["F"])
+    clump = BadLineupClump([ev1, ev2], good)
+
+    fixed, still = handle_common_sub_bug(
+        clump, _fbox(["A", "B", "C", "D", "E", "F"]), _valid(["A", "B", "C", "D", "E", "F"])
+    )
+
+    assert fixed == []
+    assert still is clump
+    assert len(still.evs) == 2
+
+
+def test_handle_common_sub_bug_guard_miss_no_next_good() -> None:
+    """Derivation (guard miss -- no next_good).
+
+    The pattern requires ``Some(good)``; a clump with ``next_good = None``
+    falls through to ``case _ => (Nil, clump)``. Result: fixed = [];
+    still_to_fix = the input clump unchanged.
+    """
+    bad = _fev(["A", "B", "C", "D", "E", "F"], players_in=["A", "B"], players_out=["C"])
+    clump = BadLineupClump([bad], None)
+
+    fixed, still = handle_common_sub_bug(
+        clump, _fbox(["A", "B", "C", "D", "E", "F"]), _valid(["A", "B", "C", "D", "E", "F"])
+    )
+
+    assert fixed == []
+    assert still is clump
+    assert still.next_good is None
+
+
+def test_handle_common_sub_bug_guard_miss_balanced_subs() -> None:
+    """Derivation (guard miss -- the in>out size condition fails).
+
+    Single event, next_good present, but ``len(bad.players_in)=1`` is NOT
+    ``> len(bad.players_out)=1`` -> the ``if`` guard (``:276``) is False ->
+    ``case _ => (Nil, clump)``. Result: fixed = []; still_to_fix unchanged.
+    """
+    bad = _fev(["A", "B", "C", "D", "E", "F"], players_in=["A"], players_out=["B"])
+    good = _fev(["A", "B", "C", "D", "E"], players_in=[], players_out=["F"])
+    clump = BadLineupClump([bad], good)
+
+    fixed, still = handle_common_sub_bug(
+        clump, _fbox(["A", "B", "C", "D", "E", "F"]), _valid(["A", "B", "C", "D", "E", "F"])
+    )
+
+    assert fixed == []
+    assert still is clump
+
+
+# --- find_missing_subs (Scala ``:406-514``) ---
+
+
+def test_find_missing_subs_mid_clump_match_both_phases() -> None:
+    """Derivation (6-player clump, mid-clump matching_index, BOTH phases).
+
+    box = roster [A,B,C,D,E,F,G], valid = {A..G}. next_good = None.
+    clump.evs (all raws empty, so shrinking is driven purely by sub-outs):
+
+        ev0: players [A,B,C,D,E,F], players_out []      (head)
+        ev1: players [A,B,C,D,E,F], players_out [A,B]
+        ev2: players [A,B,C,D,E,F], players_out [C,D]
+        ev3: players [A,B,C,D,E,F], players_out [E]
+        ev4: players [A,B,C,D,E,F], players_in [G], players_out [E]
+
+    Phase 1 (candidates = first-event players):
+      candidates = {A,B,C,D,E,F} (6); expected_size_diff = 6 - 5 = 1.
+      idx0 ev0 (head -> sub-outs skipped, no raws): {A,B,C,D,E,F} (6). 6==1? no.
+      idx1: sub-out [A,B] -> {C,D,E,F} (4). ==1? no.
+      idx2: sub-out [C,D] -> {E,F} (2). ==1? no.
+      idx3: sub-out [E]   -> {F} (1). ==1? YES -> matching_index = 3.
+      idx4: phase 2 (frozen), candidates stay {F}.
+      filtered = {F}; matching_index = 3.
+    Accept gate: non-empty AND size 1 <= expected 1 -> ACCEPT.
+
+    Phase 3 (index > matching_index=3 is the "after" branch):
+      idx0..3 (before/at match): players filterNot {F} -> [A,B,C,D,E] (5).
+      idx4 (after match): rebuild via build_new_player_list(ev4, prev tidied
+        ev3 = [A,B,C,D,E]); ev4 subs OUT [E] IN [G] -> poss1 =
+        [A,B,C,D,E] - {E} + {G} = [A,B,C,D,G] (5) -> wins. So ev4 -> [A,B,C,D,G].
+      -> the "after" branch produces {A,B,C,D,G}, distinct from the "before"
+      branch's {A,B,C,D,E}, which PROVES both phases ran.
+
+    Partition: all 5 rebuilt events have 5 known players, no raws -> all valid.
+    Result: fixed = 5 events; still_to_fix = BadLineupClump([], None).
+    """
+    ev0 = _fev(["A", "B", "C", "D", "E", "F"])
+    ev1 = _fev(["A", "B", "C", "D", "E", "F"], players_out=["A", "B"])
+    ev2 = _fev(["A", "B", "C", "D", "E", "F"], players_out=["C", "D"])
+    ev3 = _fev(["A", "B", "C", "D", "E", "F"], players_out=["E"])
+    ev4 = _fev(["A", "B", "C", "D", "E", "F"], players_in=["G"], players_out=["E"])
+    clump = BadLineupClump([ev0, ev1, ev2, ev3, ev4], None)
+
+    fixed, still = find_missing_subs(
+        clump, _fbox(["A", "B", "C", "D", "E", "F", "G"]), _valid(["A", "B", "C", "D", "E", "F", "G"])
+    )
+
+    assert len(fixed) == 5
+    # ev0..ev3 (before/at match) trimmed the ghost F -> {A,B,C,D,E}.
+    for ev in fixed[:4]:
+        assert _codes(ev.players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"]}
+    # ev4 (after match) rebuilt via build_new_player_list -> {A,B,C,D,G}.
+    assert _codes(fixed[4].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["G"]}
+    assert still.evs == []
+
+
+def test_find_missing_subs_noop_below_six() -> None:
+    """Derivation (no-op: first event has < 6 players).
+
+    candidates = {A,B,C,D,E} (5) < 6 -> the ``candidates.size < 6`` guard
+    (``:416``) returns ``(Nil, clump)`` immediately. Result: fixed = [];
+    still_to_fix = the input clump unchanged.
+    """
+    ev = _fev(["A", "B", "C", "D", "E"])
+    clump = BadLineupClump([ev], None)
+
+    fixed, still = find_missing_subs(clump, _fbox(["A", "B", "C", "D", "E"]), _valid(["A", "B", "C", "D", "E"]))
+
+    assert fixed == []
+    assert still is clump
+
+
+def test_find_missing_subs_reject_candidates_never_shrink() -> None:
+    """Derivation (reject: matching_index stays None, pool never shrinks).
+
+    Single 6-player event, no sub-outs, no raws:
+      candidates = {A,B,C,D,E,F} (6); expected_size_diff = 1.
+      idx0 (head): sub-outs skipped, no raws -> pool stays {A,B,C,D,E,F} (6).
+      6 == 1? no -> matching_index stays None.
+      filtered = {A,B,C,D,E,F} (6).
+    Accept gate: non-empty (True) AND size 6 <= expected 1 (FALSE) -> REJECT
+    (``:510-511``, ``(Nil, clump)``). Result: fixed = []; still_to_fix =
+    input clump unchanged. (This is the ``matching_index is None`` path: with
+    nothing confirmed, the residual pool exceeds ``expected_size_diff``.)
+    """
+    ev = _fev(["A", "B", "C", "D", "E", "F"])
+    clump = BadLineupClump([ev], None)
+
+    fixed, still = find_missing_subs(
+        clump, _fbox(["A", "B", "C", "D", "E", "F"]), _valid(["A", "B", "C", "D", "E", "F"])
+    )
+
+    assert fixed == []
+    assert still is clump
+
+
+# --- add_missing_players (Scala ``:315-401``) ---
+
+
+def test_add_missing_players_next_good_seed_contributes() -> None:
+    """Derivation (4-player clump, next_good sub-out seeds the add).
+
+    box = [A,B,C,D,E], valid = {A,B,C,D,E}. clump = single event ev
+    (players [A,B,C,D], no subs, no raws); next_good = event with
+    players_out [E] (E is NOT on the clump's floor).
+
+    players_in (first-ev players) = {A,B,C,D} (4) <= 4 -> FIRES.
+    candidates = box.players {A,B,C,D,E} filterNot {A,B,C,D} = {E}.
+    all_clump_players = {A,B,C,D}. initial_candidates (seed) =
+    next_good.players_out [E] filterNot {A,B,C,D} = {E}. players_to_add = [E].
+    Walk ev: new_candidates = {E} - players_in([]) = {E}; no raws -> nothing
+    added. players_to_add = [E] (non-empty).
+    Augment: ev.players [A,B,C,D] ++ [E] = [A,B,C,D,E] (5) -> validate ok.
+    Result: fixed = [event with [A,B,C,D,E]]; still = BadLineupClump([],
+    next_good).
+    """
+    ev = _fev(["A", "B", "C", "D"])
+    good = _fev(["A", "B", "C", "D", "E"], players_out=["E"])
+    clump = BadLineupClump([ev], good)
+
+    fixed, still = add_missing_players(clump, _fbox(["A", "B", "C", "D", "E"]), _valid(["A", "B", "C", "D", "E"]))
+
+    assert len(fixed) == 1
+    assert _codes(fixed[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"]}
+    assert still.evs == []
+    assert still.next_good is good
+
+
+def test_add_missing_players_mention_driven_add() -> None:
+    """Derivation (4-player clump, next_good = None -- add driven by a raw
+    play mention).
+
+    box = [A,B,C,D,E], valid = {A,B,C,D,E}. clump = single event ev
+    (players [A,B,C,D], a raw play mentioning E); next_good = None (so the
+    seed is empty).
+
+    players_in = {A,B,C,D} (4) <= 4 -> FIRES.
+    candidates = {A,B,C,D,E} filterNot {A,B,C,D} = {E}.
+    initial_candidates = [] (no next_good). players_to_add = [].
+    Walk ev: new_candidates = {E}; raw mentions E -> parse_any_play ->
+    tidy_player -> build_player_code = E's code, which is in new_candidates
+    and not yet in players_to_add -> players_to_add = [E].
+    Augment: [A,B,C,D] ++ [E] = [A,B,C,D,E] -> valid.
+    Result: fixed = [event with [A,B,C,D,E]]; still = BadLineupClump([], None).
+    """
+    ev = _fev(["A", "B", "C", "D"], mentions=["E"])
+    clump = BadLineupClump([ev], None)
+
+    fixed, still = add_missing_players(clump, _fbox(["A", "B", "C", "D", "E"]), _valid(["A", "B", "C", "D", "E"]))
+
+    assert len(fixed) == 1
+    assert _codes(fixed[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"]}
+    assert still.evs == []
+
+
+def test_add_missing_players_noop_above_four() -> None:
+    """Derivation (no-op: first event already has 5 players).
+
+    players_in = {A,B,C,D,E} (5) > 4 -> the ``players_in.size > 4`` guard
+    (``:325``) returns ``(Nil, clump)``. Result: fixed = []; still_to_fix =
+    input clump unchanged.
+    """
+    ev = _fev(["A", "B", "C", "D", "E"])
+    clump = BadLineupClump([ev], None)
+
+    fixed, still = add_missing_players(clump, _fbox(["A", "B", "C", "D", "E"]), _valid(["A", "B", "C", "D", "E"]))
+
+    assert fixed == []
+    assert still is clump
+
+
+def test_add_missing_players_reject_nothing_to_add() -> None:
+    """Derivation (reject: fires but finds no players to add).
+
+    box = [A,B,C,D,E], clump = single event ev (players [A,B,C,D], a raw
+    mentioning A -- who is ALREADY on the floor, hence NOT a candidate);
+    next_good = None.
+
+    players_in = {A,B,C,D} (4) <= 4 -> FIRES.
+    candidates = {E}. initial_candidates = [] (no next_good).
+    Walk ev: new_candidates = {E}; raw mentions A, whose code is NOT in
+    new_candidates {E} -> not added. players_to_add = [] (empty) -> the
+    ``players_to_add.nonEmpty`` guard (``:386``) is False -> ``(Nil, clump)``.
+    Result: fixed = []; still_to_fix = input clump unchanged.
+    """
+    ev = _fev(["A", "B", "C", "D"], mentions=["A"])
+    clump = BadLineupClump([ev], None)
+
+    fixed, still = add_missing_players(clump, _fbox(["A", "B", "C", "D", "E"]), _valid(["A", "B", "C", "D", "E"]))
+
+    assert fixed == []
+    assert still is clump
+
+
+# --- analyze_and_fix_clumps (Scala ``:556-610``) ---
+
+
+def test_analyze_and_fix_clumps_second_find_missing_subs_pass_matters() -> None:
+    """Derivation (the SECOND find_missing_subs pass fixes an
+    add_missing_players over-add) + lineup_id recompute.
+
+    box = [A,B,C,D,E,F], valid = {A,B,C,D,E,F}. clump = single event ev
+    (players [A,B,C,D] -- FOUR, no subs, raws mentioning A,B,C,D,E);
+    next_good = event with players_out [E,F], players_in [] .
+
+    Stage 1 handle_common_sub_bug: single event + next_good, but
+      ``len(bad.players_in)=0 > len(bad.players_out)=0`` is False -> guard
+      miss -> (fixed=[], to_fix=clump unchanged).
+    Stage 2 find_missing_subs (1st): first-ev players {A,B,C,D} (4) < 6 ->
+      no-op -> (fixed=[], to_fix=clump).
+    Stage 3 add_missing_players: players_in {A,B,C,D} (4) <= 4 -> FIRES.
+      candidates = box {A,B,C,D,E,F} - {A,B,C,D} = {E,F}.
+      initial_candidates (seed) = next_good.players_out [E,F] - clump {A,B,C,D}
+        = {E,F}. players_to_add = [E,F].
+      Walk ev: new_candidates = {E,F}; raws mention A,B,C,D,E -- of those only
+        E is in {E,F}, and E is already in players_to_add -> no change.
+      players_to_add = [E,F] (non-empty).
+      Augment: [A,B,C,D] ++ [E,F] = [A,B,C,D,E,F] (SIX) -> WrongNumberOfPlayers
+        -> lands in the BAD bucket. -> (newly_fixed=[], to_fix =
+        BadLineupClump([ev' with [A,B,C,D,E,F]], next_good)).  <-- over-add.
+    Stage 4 find_missing_subs (2nd): first-ev players {A,B,C,D,E,F} (6) >= 6
+      -> FIRES. expected_size_diff = 1.
+      idx0 (head -> sub-outs skipped): raws mention A,B,C,D,E, all in
+        candidates -> removed; F is never mentioned -> pool = {F} (1) == 1 ->
+        matching_index = 0. filtered = {F}. Accept (non-empty, 1<=1).
+      Phase 3 idx0: (0 > 0) is False -> "before" branch -> players filterNot
+        {F} -> [A,B,C,D,E] (5). validate ok. -> (newly_fixed=[ev'' with
+        [A,B,C,D,E]], to_fix = BadLineupClump([], next_good)).
+    Final: recompute lineup_id = build_lineup_id([A,B,C,D,E]) for the fixed
+      event.
+
+    Result: fixed = 1 event, players {A,B,C,D,E}, lineup_id =
+    build_lineup_id([A,B,C,D,E]); still_to_fix = BadLineupClump([], next_good).
+    """
+    ev = _fev(["A", "B", "C", "D"], mentions=["A", "B", "C", "D", "E"])
+    good = _fev(["A", "B", "C", "D", "E"], players_in=[], players_out=["E", "F"])
+    clump = BadLineupClump([ev], good)
+
+    fixed, still = analyze_and_fix_clumps(
+        clump, _fbox(["A", "B", "C", "D", "E", "F"]), _valid(["A", "B", "C", "D", "E", "F"])
+    )
+
+    assert len(fixed) == 1
+    assert _codes(fixed[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"]}
+    # lineup_id was recomputed from the trimmed 5-player list (not the stale
+    # LineupId.unknown the fixture events carried).
+    assert fixed[0].lineup_id == build_lineup_id([_PC["A"], _PC["B"], _PC["C"], _PC["D"], _PC["E"]])
+    assert fixed[0].lineup_id != LineupId.unknown
+    assert still.evs == []
+    assert still.next_good is good
+
+
+def test_analyze_and_fix_clumps_single_pass_fix_and_lineup_id() -> None:
+    """Derivation (a straightforward single-stage fix, verifying the
+    lineup_id recompute on the fixed lineup).
+
+    box = [A,B,C,D,E], valid = {A,B,C,D,E}. clump = single event ev
+    (players [A,B,C,D], no subs, no raws); next_good = event with
+    players_out [E].
+
+    Stage 1 handle_common_sub_bug: 0 > 0 False -> miss.
+    Stage 2 find_missing_subs (1st): 4 players < 6 -> no-op.
+    Stage 3 add_missing_players: FIRES (4 <= 4); candidates {E}; seed from
+      next_good.players_out [E] = {E}; players_to_add = [E]; augment ->
+      [A,B,C,D,E] (5) valid -> newly_fixed = [ev' with [A,B,C,D,E]],
+      to_fix = BadLineupClump([], next_good).
+    Stage 4 find_missing_subs (2nd): to_fix.evs == [] -> candidates = [] < 6
+      -> no-op.
+    Final: lineup_id recompute -> build_lineup_id([A,B,C,D,E]).
+
+    Result: fixed = 1 event [A,B,C,D,E] with recomputed lineup_id;
+    still_to_fix = BadLineupClump([], next_good).
+    """
+    ev = _fev(["A", "B", "C", "D"])
+    good = _fev(["A", "B", "C", "D", "E"], players_out=["E"])
+    clump = BadLineupClump([ev], good)
+
+    fixed, still = analyze_and_fix_clumps(clump, _fbox(["A", "B", "C", "D", "E"]), _valid(["A", "B", "C", "D", "E"]))
+
+    assert len(fixed) == 1
+    assert _codes(fixed[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"]}
+    assert fixed[0].lineup_id == build_lineup_id([_PC["A"], _PC["B"], _PC["C"], _PC["D"], _PC["E"]])
+    assert still.evs == []
+
+
+def test_analyze_and_fix_clumps_mixed_some_fixed_some_bad() -> None:
+    """Derivation (a mixed clump: one event gets fixed, one stays bad).
+
+    box = [A,B,C,D,E,F,G], valid = {A,B,C,D,E,F,G}. next_good = None.
+    clump.evs (6-player first event -> find_missing_subs path; raws empty so
+    shrinking is sub-out-driven):
+
+        ev0: players [A,B,C,D,E,F]                       (head)
+        ev1: players [A,B,C,D,E,F], players_out [A,B,C,D,E]
+
+    Stage 1 handle_common_sub_bug: 2-event clump -> guard miss (single-event
+      only) -> to_fix = clump.
+    Stage 2 find_missing_subs (1st): candidates {A,B,C,D,E,F} (6);
+      expected_size_diff = 1.
+      idx0 (head): no sub-outs, no raws -> pool {A,B,C,D,E,F} (6). ==1? no.
+      idx1: sub-out [A,B,C,D,E] -> pool {F} (1) == 1 -> matching_index = 1.
+      filtered = {F}; accept (1<=1).
+      Phase 3:
+        idx0 (0 > 1 False -> before): filterNot {F} -> [A,B,C,D,E] (5) -> VALID.
+        idx1 (1 > 1 False -> before): filterNot {F} -> ev1.players
+          [A,B,C,D,E,F] - {F} = [A,B,C,D,E] (5) -> VALID.
+      Both valid -> newly_fixed = 2 events, to_fix = BadLineupClump([], None).
+
+    Hmm -- both are valid, so to make the "mixed" case, ev1 instead carries a
+    7th player G in its own ``players`` so that after removing the single
+    ghost F it still has 6 players and stays BAD. Re-derive with:
+
+        ev0: players [A,B,C,D,E,F]                       (head)
+        ev1: players [A,B,C,D,E,F,G], players_out [A,B,C,D,E]
+
+    Phase 1 uses ONLY the FIRST event for the candidate pool, so ev1's extra
+    G does not change candidates {A,B,C,D,E,F} / expected 1 / matching_index
+    1 / filtered {F} (G is not in the pool, so the [A..E] sub-out still
+    shrinks the pool to {F}).
+    Phase 3:
+      idx0 (before): [A,B,C,D,E,F] - {F} = [A,B,C,D,E] (5) -> VALID -> fixed.
+      idx1 (before, since 1 > 1 is False): [A,B,C,D,E,F,G] - {F} =
+        [A,B,C,D,E,G] (6) -> WrongNumberOfPlayers -> BAD -> still_to_fix.
+    Stage 3 add_missing_players on to_fix = BadLineupClump([ev1''], None):
+      first-ev players {A,B,C,D,E,G} (6) > 4 -> no-op.
+    Stage 4 find_missing_subs (2nd) on the same: 6 >= 6 -> FIRES, expected 1;
+      idx0 (head, no sub-outs/raws) -> pool stays 6 -> matching None,
+      filtered size 6 > 1 -> REJECT -> unchanged.
+    Final lineup_id recompute applies to the ONE fixed event.
+
+    Result: fixed = 1 event ([A,B,C,D,E], recomputed lineup_id);
+    still_to_fix.evs = 1 event ([A,B,C,D,E,G]).
+    """
+    ev0 = _fev(["A", "B", "C", "D", "E", "F"])
+    ev1 = _fev(["A", "B", "C", "D", "E", "F", "G"], players_out=["A", "B", "C", "D", "E"])
+    clump = BadLineupClump([ev0, ev1], None)
+
+    fixed, still = analyze_and_fix_clumps(
+        clump, _fbox(["A", "B", "C", "D", "E", "F", "G"]), _valid(["A", "B", "C", "D", "E", "F", "G"])
+    )
+
+    assert len(fixed) == 1
+    assert _codes(fixed[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"]}
+    assert fixed[0].lineup_id == build_lineup_id([_PC["A"], _PC["B"], _PC["C"], _PC["D"], _PC["E"]])
+    assert len(still.evs) == 1
+    assert _codes(still.evs[0].players) == {_CODE["A"], _CODE["B"], _CODE["C"], _CODE["D"], _CODE["E"], _CODE["G"]}
