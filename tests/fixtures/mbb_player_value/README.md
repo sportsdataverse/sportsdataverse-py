@@ -23,7 +23,21 @@ release backfill widens the trainable era with no code change.
 | `barttorvik_bpm_2026.parquet` | 4,978 | Same, `year=2026`. |
 | `recruits_2025_2026.parquet` | 200 | ESPN Core v2 recruiting rankings ($ref-resolved): top-100 classes of 2024 + 2025 → college seasons 2025/2026. `grade` = composite grade, `rank` = ESPN order. |
 | `draft_2025_2026.parquet` | 119 | NBA Core v2 draft rounds + athlete $refs, 2025 + 2026 drafts: `pick`, `round`, athlete name/college. |
+| `player_seasons_2025.parquet` | 9,805 | Output of `aggregate_player_seasons([2025])` (boxscore + shots releases) frozen so the oracle gates run offline; regenerate after any aggregation change. |
+| `team_ratings_2025.parquet` | 700 | Output of `mbb_team_ratings([2025])`, frozen for the same reason. |
+| `archetype_labeled.parquet` | 11 | Hand-labeled role-certain 2025 player-seasons (e.g. Bandaogo=rim protector, Karaban=stretch forward, Sears/RJ Davis=shot creator, Broome/Kalkbrenner=play-finishing big); the archetype gate asserts each lands in its expected cluster. |
 | `rosters_2025_2026.parquet` | 25,494 | sportsdataverse-data `mbb_rosters` 2025+2026: display_name, position, class (`experience_display_value`), height parsed from `6' 5"` strings. Used to anchor archetype/recruit/transfer joins. |
+
+**RAPM validation (2026-07-07):** the 125-game residential NCAA scrape
+(UMBC hop-1 cluster, 2024-25) was driven through the shipped Phase 5a-5f
+parser stack (`get_box_lineup` -> `create_lineup_data`; 126 contests, 0 parse
+failures, 4,902 five-man stints). A possession-weighted ridge APM on those
+stints correlates +0.13 (Spearman, n=133 players >= 150 stint-poss) with the
+shipped box-BPM, and the stint-level predictive check hits weighted Pearson
+0.092 against a theoretical noise ceiling of ~0.097 (mean stint = 3.4
+possessions; sd(pred)=9.7 vs sd(y)=99) -- i.e. ~95% of the maximum
+correlation achievable at that grain. Documented validation, not a gate;
+scripts: `dev/mbb_player_value/{scrape_rapm_subset,build_rapm_targets}.py`.
 
 **EvanMiya note:** the plan's secondary BPM oracle (evanmiya.com) is
 login-walled with no capturable flat endpoint from this environment — not

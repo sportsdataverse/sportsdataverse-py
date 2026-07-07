@@ -96,3 +96,70 @@ def test_box_bpm_sane_scale(box_bpm_2025: pl.DataFrame) -> None:
     # minutes-weighted league mean should sit near 0 (centering, not per-team sum)
     w = q.get_column("min").to_numpy()
     assert abs(float(np.average(vals, weights=w))) < 1.5
+
+
+# ---------------------------------------------------------------------------
+# Phase 2 -- archetype gates (stability + hand-labeled fixture)
+# ---------------------------------------------------------------------------
+
+GATE_ARI = 0.70
+
+arch_mod = importlib.import_module("sportsdataverse.mbb.mbb_archetypes")
+
+
+@pytest.fixture(scope="module")
+def archetypes_2025() -> pl.DataFrame:
+    agg = pl.read_parquet(_FIX / "player_seasons_2025.parquet")
+    orig = arch_mod.aggregate_player_seasons
+    arch_mod.aggregate_player_seasons = lambda seasons, league="mens": agg  # type: ignore[assignment]
+    try:
+        return arch_mod.mbb_archetypes(2025)
+    finally:
+        arch_mod.aggregate_player_seasons = orig
+
+
+def test_archetype_labeled_fixture_gate(archetypes_2025: pl.DataFrame) -> None:
+    """Every hand-labeled unambiguous player-season lands in its expected
+    archetype (11 role-certain 2025 players; see fixtures README)."""
+    labeled = pl.read_parquet(_FIX / "archetype_labeled.parquet")
+    j = labeled.join(archetypes_2025, on=["player_id", "season"], how="left")
+    assert j.height == labeled.height
+    misses = j.filter((pl.col("archetype").is_null()) | (pl.col("archetype") != pl.col("expected_archetype")))
+    assert misses.height == 0, misses.select("player_id", "expected_archetype", "archetype").to_dicts()
+
+
+def test_archetype_stability_bootstrap_ari() -> None:
+    """Re-fitting on bootstrap resamples reproduces the clustering (ARI gate)."""
+    from functools import partial
+
+    from sportsdataverse.mbb.mbb_player_value_constants import (
+        bootstrap_ari,
+        kmeans_fit,
+        load_artifact,
+        player_per100_features,
+    )
+
+    art = load_artifact("mbb_archetypes")
+    agg = pl.read_parquet(_FIX / "player_seasons_2025.parquet")
+    feats = (
+        player_per100_features(agg)
+        .filter(pl.col("min") >= float(art["min_minutes"]))
+        .join(
+            agg.select("player_id", "season", "team_id", "position"), on=["player_id", "season", "team_id"], how="left"
+        )
+        .with_columns(
+            pl.when(pl.col("position").fill_null("").str.contains("(?i)C"))
+            .then(1.0)
+            .when(pl.col("position").fill_null("").str.contains("(?i)F"))
+            .then(0.5)
+            .otherwise(0.0)
+            .alias("pos_score")
+        )
+        .sort("player_id", "season", "team_id")
+    )
+    cols = art["feature_cols"]
+    mu = np.array([art["feature_mean"][c] for c in cols])
+    sd = np.array([art["feature_sd"][c] for c in cols])
+    Z = (feats.select(cols).fill_null(0.0).to_numpy() - mu) / sd
+    ari = bootstrap_ari(partial(kmeans_fit, k=int(art["k"]), seed=0), Z, n_boot=10, seed=0)
+    assert ari >= GATE_ARI, f"bootstrap ARI {ari:.3f} < gate {GATE_ARI}"
