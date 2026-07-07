@@ -35,6 +35,13 @@ fixtures and against the ratings engine never hit a dtype mismatch.
   Seattle, LIU, St. Thomas, Saint Francis, Southeastern Louisiana, IU Indy,
   East Texas A&M, Texas A&M-Corpus Christi) — dropped from the inner-join
   comparison, which is statistically immaterial to a 350-team rank correlation.
+- **Name-match priority is ordered** (re-captured 2026-07-07): the original
+  capture matched name variants from a *set*, so the lossy bare-base fallback
+  ("Michigan St." → "michigan") could beat the faithful "X State" expansion —
+  17 State schools were keyed to their flagship's `team_id` (34 duplicate
+  rows). The matcher now tries identity → "X State" → bare base in order;
+  `team_id` is unique. Fixing this moved the oracle gate from Spearman 0.952 /
+  MAE 2.79 to **Spearman 0.990 / MAE 2.37**.
 - **`adj_tempo` is null.** barttorvik's `trank.php?csv=1` (which carries the
   adjusted-tempo column) is bot-blocked (returns HTML); the static
   `2024_team_results.csv` has no tempo. This is fine: no gate depends on the
