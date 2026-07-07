@@ -245,24 +245,35 @@ that license's own attribution obligations.
     play-by-play event ADT, event reordering, and the substitution-tracking
     stint builder itself were ported into
     [`sportsdataverse/mbb/mbb_ncaa_stints.py`](sportsdataverse/mbb/mbb_ncaa_stints.py).
+  - `LineupUtils.scala`'s raw-events -> `LineupEventStats` stat-tree
+    population, scramble/transition tagging, assist pairing, the
+    score-swap fixup, and per-player event splitting were ported into
+    [`sportsdataverse/mbb/mbb_ncaa_lineup_enrich.py`](sportsdataverse/mbb/mbb_ncaa_lineup_enrich.py).
+    `models/ncaa/PlayerEvent.scala`'s per-player event record (the one
+    type this port's `create_player_events` returns) was additionally
+    ported -- as an additive append, not touching any existing class --
+    into
+    [`sportsdataverse/mbb/mbb_ncaa_models.py`](sportsdataverse/mbb/mbb_ncaa_models.py).
   [`sportsdataverse/wbb/wbb_ncaa_models.py`](sportsdataverse/wbb/wbb_ncaa_models.py),
   [`sportsdataverse/wbb/wbb_ncaa_events.py`](sportsdataverse/wbb/wbb_ncaa_events.py),
   [`sportsdataverse/wbb/wbb_ncaa_possessions.py`](sportsdataverse/wbb/wbb_ncaa_possessions.py),
   [`sportsdataverse/wbb/wbb_ncaa_data_quality.py`](sportsdataverse/wbb/wbb_ncaa_data_quality.py),
-  [`sportsdataverse/wbb/wbb_ncaa_names.py`](sportsdataverse/wbb/wbb_ncaa_names.py), and
-  [`sportsdataverse/wbb/wbb_ncaa_stints.py`](sportsdataverse/wbb/wbb_ncaa_stints.py)
+  [`sportsdataverse/wbb/wbb_ncaa_names.py`](sportsdataverse/wbb/wbb_ncaa_names.py),
+  [`sportsdataverse/wbb/wbb_ncaa_stints.py`](sportsdataverse/wbb/wbb_ncaa_stints.py), and
+  [`sportsdataverse/wbb/wbb_ncaa_lineup_enrich.py`](sportsdataverse/wbb/wbb_ncaa_lineup_enrich.py)
   re-export the same types and functions by reference (no separate copy of
   the logic). Unlike the cbb-on-off-analyzer (TypeScript/jest) entries above,
   no fixture file is vendored for this port -- every `utest` oracle value
   transliterated from `EventUtils.scala` / `PossessionUtils.scala` /
   `DataQualityIssues.scala` / `LineupErrorAnalysisUtils.scala` /
-  `ExtractorUtils.scala` (and their `*Tests.scala` twins) is a short inline
-  literal reproduced directly in the test modules
+  `ExtractorUtils.scala` / `LineupUtils.scala` (and their `*Tests.scala`
+  twins) is a short inline literal reproduced directly in the test modules
   (`tests/mbb/test_mbb_ncaa_models.py`, `tests/mbb/test_mbb_ncaa_events.py`,
   `tests/mbb/test_mbb_ncaa_possessions.py`,
   `tests/mbb/test_mbb_ncaa_data_quality.py`,
-  `tests/mbb/test_mbb_ncaa_names.py`, `tests/mbb/test_mbb_ncaa_stints.py`),
-  which are test-only and not shipped in the distributed wheel or sdist.
+  `tests/mbb/test_mbb_ncaa_names.py`, `tests/mbb/test_mbb_ncaa_stints.py`,
+  `tests/mbb/test_mbb_ncaa_lineup_enrich.py`), which are test-only and not
+  shipped in the distributed wheel or sdist.
 - **Modifications:** Translated from Scala to Python, following this
   repository's own conventions (typing, docstrings, dataclasses in place of
   case classes). No changes were made to the original Scala source itself;

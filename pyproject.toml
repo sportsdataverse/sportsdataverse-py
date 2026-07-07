@@ -342,6 +342,7 @@ files = [
     "sportsdataverse/wbb/wbb_ncaa_data_quality.py",
     "sportsdataverse/wbb/wbb_ncaa_names.py",
     "sportsdataverse/wbb/wbb_ncaa_stints.py",
+    "sportsdataverse/wbb/wbb_ncaa_lineup_enrich.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",
