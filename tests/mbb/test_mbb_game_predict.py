@@ -154,6 +154,13 @@ def test_in_game_features_columns_and_values():
     assert feats.schema["home_has_ball"] == pl.Int8
 
 
+def test_in_game_features_boundary_pregame_prob_is_finite():
+    # norm.cdf saturates to exact 0/1 for extreme margins; the logit must not crash
+    for p0 in (0.0, 1.0):
+        feats = in_game_features(_pbp(), p0)
+        assert feats["pregame_logit"].is_finite().all()
+
+
 def test_in_game_features_sec_left_clipped_in_overtime():
     ot = _pbp().with_columns(pl.Series("start_game_seconds_remaining", [2400, -60, -120]))
     feats = in_game_features(ot, 0.5)

@@ -62,6 +62,8 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
             ``home_team_id`` (the ``load_mbb_pbp`` schema).
         pregame_home_prob: The pregame home win probability (e.g. from
             :func:`win_prob_from_margin`), encoded as a constant logit column.
+            Clipped to ``[1e-6, 1 - 1e-6]`` so a saturated CDF (exact 0/1)
+            cannot crash the logit.
 
     Returns:
         One row per input play: ``score_diff`` (home - away), ``sec_left``
@@ -77,7 +79,8 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
             pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
             feats = in_game_features(pbp, 0.62)
     """
-    logit = math.log(pregame_home_prob / (1.0 - pregame_home_prob))
+    p = min(max(pregame_home_prob, 1e-6), 1.0 - 1e-6)  # norm.cdf saturates to exact 0/1 for extreme margins
+    logit = math.log(p / (1.0 - p))
     return pbp.select(
         (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("score_diff"),
         pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).alias("sec_left"),

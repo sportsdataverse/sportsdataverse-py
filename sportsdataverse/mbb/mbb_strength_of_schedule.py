@@ -227,13 +227,19 @@ def mbb_strength_of_schedule(
     from sportsdataverse.mbb.mbb_team_ratings import (  # noqa: PLC0415
         _league_loaders,
         _normalize_schedule,
-        mbb_team_ratings,
+        adjust_efficiency,
+        raw_game_efficiency,
     )
 
-    load_schedule, _ = _league_loaders(league)
+    # load schedule/boxscore ONCE and build the ratings inline (delegating to
+    # mbb_team_ratings would re-download the same releases a second time)
+    load_schedule, load_team_box = _league_loaders(league)
     results = _normalize_schedule(load_schedule(seasons)).filter(
         pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
     )
-    ratings = mbb_team_ratings(seasons, league=league)
+    eff = raw_game_efficiency(results, load_team_box(seasons))
+    ratings = adjust_efficiency(eff, league=league).with_columns(
+        pl.col("adj_em").rank(method="dense", descending=True).over("season").cast(pl.Int64).alias("rank")
+    )
     out = strength_of_schedule(results, ratings, league=league)
     return out.to_pandas() if return_as_pandas else out
