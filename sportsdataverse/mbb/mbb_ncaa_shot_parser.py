@@ -214,7 +214,7 @@ class ShotEventBuilders:
 
     team_finder: Callable[[BeautifulSoup], list[str]]
     shot_event_finder: Callable[[BeautifulSoup], list[Tag]]
-    script_extractor: Callable[[BeautifulSoup], Optional[str]]
+    script_extractor: Callable[[str], Optional[str]]
     title_extractor: Callable[[Tag], Optional[str]]
     event_period_finder: Callable[[Tag], Optional[int]]
     event_time_finder: Callable[[Tag], Optional[float]]
@@ -235,10 +235,23 @@ def _v1_shot_event_finder(doc: BeautifulSoup) -> list[Tag]:
     return doc.select("circle.shot")
 
 
-def _v1_script_extractor(doc: BeautifulSoup) -> Optional[str]:
-    """Every ``<script>`` whose first 128 chars contain ``"addShot("``,
-    joined with ``"\\n"`` (``:63-73``)."""
-    joined = "\n".join(str(script) for script in doc.select("script") if "addShot(" in str(script)[:128])
+#: Raw ``<script>...</script>`` blocks, wrapper included (mirrors JSoup
+#: ``outerHtml``). Extraction runs on the RAW page string, NOT the parsed
+#: doc: JSoup treats script content as a DataNode and never decodes HTML
+#: entities inside it, but bs4/lxml's entity handling inside ``<script>``
+#: varies by libxml2 build (Linux/macOS decode ``&#39;`` -> ``'``, Windows
+#: does not), which broke the single-quote-delimited ``addShot`` capture on
+#: titles containing encoded apostrophes (e.g. ``De&#39;Shayne``). A raw-text
+#: regex is platform-independent and byte-faithful to the JSoup semantics.
+_SCRIPT_BLOCK_RE = re.compile(r"<script\b[^>]*>.*?</script\s*>", re.DOTALL | re.IGNORECASE)
+
+
+def _v1_script_extractor(raw_html: str) -> Optional[str]:
+    """Every ``<script>`` block (wrapper included, matching JSoup
+    ``outerHtml``) whose first 128 chars contain ``"addShot("``, joined with
+    ``"\\n"`` (``:63-73``). Operates on the raw HTML string -- see
+    :data:`_SCRIPT_BLOCK_RE` for why the parsed doc must not be used here."""
+    joined = "\n".join(m.group(0) for m in _SCRIPT_BLOCK_RE.finditer(raw_html) if "addShot(" in m.group(0)[:128])
     return joined if joined else None
 
 
@@ -484,8 +497,10 @@ def create_shot_event_data(
 
     html_events = builders.shot_event_finder(doc)
     if not html_events:
-        # The page is built client-side -- convert the JS addShot(...) calls to HTML.
-        script = builders.script_extractor(doc)
+        # The page is built client-side -- convert the JS addShot(...) calls
+        # to HTML. The extractor takes the RAW html (not `doc`): entity
+        # handling inside <script> is libxml2-build-dependent, JSoup's isn't.
+        script = builders.script_extractor(in_html)
         html_events = shot_js_to_html(script) if script is not None else []
         if not html_events:
             return [build_sub_error(_LOCATION_PARSE_SHOTEVENT, error=f"No shot events found [{doc}]")]

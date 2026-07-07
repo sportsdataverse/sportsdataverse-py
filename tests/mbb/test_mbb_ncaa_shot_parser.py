@@ -126,10 +126,13 @@ def test_shot_js_to_html() -> None:
         addShot(94.0, 53.0, 450, false, 2552825138, '1st 13:10:00 : missed by De&#39;Shayne Montgomery(Mount St. Mary&#39;s) 4-7', 'period_1 player_767427911 team_450', false); //2552825138, 116
       </script>
     """
-    script_doc = parse_html(script_html)
-    scripts = script_doc.select("script")
-    joined = "\n".join(str(s) for s in scripts if "addShot(" in str(s)[:128])
-    assert joined
+    # Extract via the module's RAW-text extractor (mirrors JSoup outerHtml).
+    # Deliberately NOT via bs4 `str(tag)`: libxml2 on Linux/macOS decodes
+    # &#39; inside <script> (Windows does not), which broke the Montgomery
+    # line's single-quote-delimited capture on CI -- the De&#39;Shayne case
+    # below is the cross-platform regression pin.
+    joined = v1_builders.script_extractor(script_html)
+    assert joined is not None
 
     circles = shot_js_to_html(joined)
     results = [(v1_builders.shot_location_finder(el), v1_builders.event_player_finder(el)) for el in circles]
