@@ -17,7 +17,10 @@ efficiency baselines) come from
 
 from __future__ import annotations
 
+import numpy as np
 import polars as pl
+
+from sportsdataverse.mbb.mbb_prediction_constants import get_constants
 
 
 def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.DataFrame:
@@ -104,3 +107,105 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
         )
         .sort("game_id", "team_id")
     )
+
+
+_ADJ_SCHEMA = {
+    "season": pl.Int64,
+    "team_id": pl.Utf8,
+    "adj_o": pl.Float64,
+    "adj_d": pl.Float64,
+    "adj_em": pl.Float64,
+    "raw_o": pl.Float64,
+    "raw_d": pl.Float64,
+    "games": pl.Int64,
+}
+
+
+def _adjust_one_season(sub: pl.DataFrame, season: int, hfa: float, max_iter: int, tol: float) -> pl.DataFrame:
+    """Fixed-point opponent adjustment for one season's game-efficiency rows."""
+    teams = sub["team_id"].unique(maintain_order=True).to_list()
+    index = {t: i for i, t in enumerate(teams)}
+    n = len(teams)
+    ti = np.array([index[t] for t in sub["team_id"].to_list()], dtype=np.int64)
+    oi = np.array([index[t] for t in sub["opp_team_id"].to_list()], dtype=np.int64)
+    off = sub["off_eff"].to_numpy().astype(float)
+    dfn = sub["def_eff"].to_numpy().astype(float)
+    is_home = sub["is_home"].to_numpy()
+    neutral = sub["neutral_site"].to_numpy()
+
+    half = hfa / 2.0
+    loc_o = np.where(neutral, 0.0, np.where(is_home, half, -half))
+    loc_d = np.where(neutral, 0.0, np.where(is_home, -half, half))
+    avg = float(off.mean())
+
+    counts = np.bincount(ti, minlength=n).astype(float)
+    raw_o = np.bincount(ti, weights=off, minlength=n) / counts
+    raw_d = np.bincount(ti, weights=dfn, minlength=n) / counts
+
+    adj_o, adj_d = raw_o.copy(), raw_d.copy()
+    for _ in range(max_iter):
+        contrib_o = off - (adj_d[oi] - avg) - loc_o
+        contrib_d = dfn - (adj_o[oi] - avg) - loc_d
+        new_o = np.bincount(ti, weights=contrib_o, minlength=n) / counts
+        new_d = np.bincount(ti, weights=contrib_d, minlength=n) / counts
+        delta = max(float(np.abs(new_o - adj_o).max()), float(np.abs(new_d - adj_d).max()))
+        adj_o, adj_d = new_o, new_d
+        if delta < tol:
+            break
+
+    return pl.DataFrame(
+        {
+            "season": [season] * n,
+            "team_id": teams,
+            "adj_o": adj_o,
+            "adj_d": adj_d,
+            "adj_em": adj_o - adj_d,
+            "raw_o": raw_o,
+            "raw_d": raw_d,
+            "games": counts.astype(np.int64),
+        },
+        schema=_ADJ_SCHEMA,
+    )
+
+
+def adjust_efficiency(
+    game_eff: pl.DataFrame, *, league: str = "mens", max_iter: int = 100, tol: float = 1e-4
+) -> pl.DataFrame:
+    """Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
+
+    KenPom-style fixed point: initialise ``adj_o = raw_o`` / ``adj_d = raw_d``,
+    then repeatedly recompute each team's rating from its games with the
+    opponent's *current* adjusted rating and a home-court adjustment removed,
+    until the largest change is below ``tol``. Ratings are computed independently
+    per season (a team's opponent pool is within-season).
+
+    The per-game offensive update is
+    ``off_eff - (adj_d_opp - avg) - loc_o`` where ``loc_o`` is ``+hfa/2`` at
+    home, ``-hfa/2`` away, ``0`` neutral (defense is symmetric with the opposite
+    sign); ``avg`` is the league mean efficiency and ``hfa`` comes from
+    :func:`~sportsdataverse.mbb.mbb_prediction_constants.get_constants`.
+
+    Args:
+        game_eff: Output of :func:`raw_game_efficiency`.
+        league: ``"mens"`` / ``"womens"`` -- selects the HFA constant.
+        max_iter: Maximum fixed-point iterations.
+        tol: Convergence tolerance on the largest rating change.
+
+    Returns:
+        One row per (season, team_id): ``season, team_id, adj_o, adj_d, adj_em,
+        raw_o, raw_d, games``. Empty input returns that schema with zero rows.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
+            ratings = adjust_efficiency(raw_game_efficiency(sched, box))
+    """
+    if game_eff.height == 0:
+        return pl.DataFrame(schema=_ADJ_SCHEMA)
+    hfa = float(get_constants(league).hfa)
+    frames = [
+        _adjust_one_season(sub, int(sub["season"][0]), hfa, max_iter, tol)
+        for _key, sub in game_eff.group_by("season", maintain_order=True)
+    ]
+    return pl.concat(frames)
