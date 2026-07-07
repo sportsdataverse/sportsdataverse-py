@@ -1,0 +1,8 @@
+sim,team,conference,conf_rank,conf_champ
+2024,Y,Big 12,1,true
+2024,X,Big 12,2,false
+2024,Z,Big 12,3,false
+2024,W,Other,1,true
+2024,A,SEC,1,true
+2024,B,SEC,2,false
+2024,C,SEC,3,false

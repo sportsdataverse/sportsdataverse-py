@@ -77,3 +77,4 @@ class CheckContext:
     lag_columns: tuple[str, ...] = ()
     cumulative_columns: tuple[str, ...] = ()
     group_key: str = "game_id"
+    expected_constant_columns: tuple[str, ...] = ()
