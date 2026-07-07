@@ -9,6 +9,7 @@ from scipy.stats import norm
 
 from sportsdataverse.mbb.mbb_game_predict import (
     in_game_features,
+    mbb_in_game_win_prob,
     mbb_predict_games,
     predict_margin,
     predict_total,
@@ -159,3 +160,34 @@ def test_in_game_features_sec_left_clipped_in_overtime():
     assert feats["sec_left"].to_list() == [2400.0, 0.0, 0.0]
     assert feats["sqrt_sec_left"].to_list() == [math.sqrt(2400), 0.0, 0.0]
     assert feats["pregame_logit"].to_list() == [0.0, 0.0, 0.0]
+
+
+def _play(sec_left: int, home: int, away: int, home_ball: bool = True) -> pl.DataFrame:
+    return pl.DataFrame(
+        {
+            "game_id": [1],
+            "start_game_seconds_remaining": [sec_left],
+            "home_score": [home],
+            "away_score": [away],
+            "team_id": [10 if home_ball else 20],
+            "home_team_id": [10],
+        }
+    )
+
+
+def test_in_game_wp_late_big_lead_near_one():
+    wp = mbb_in_game_win_prob(_play(10, 80, 62), 0.5)
+    assert wp.columns[-1] == "home_win_prob"
+    assert wp["home_win_prob"][0] > 0.95
+
+
+def test_in_game_wp_tied_at_tip_near_pregame():
+    for p0 in (0.30, 0.50, 0.70):
+        wp = mbb_in_game_win_prob(_play(2400, 0, 0), p0)
+        assert abs(wp["home_win_prob"][0] - p0) < 0.10, f"pregame {p0} -> {wp['home_win_prob'][0]}"
+
+
+def test_in_game_wp_monotone_in_score_diff():
+    probs = [mbb_in_game_win_prob(_play(600, 50 + d, 50), 0.5)["home_win_prob"][0] for d in (-15, -5, 0, 5, 15)]
+    assert probs == sorted(probs)
+    assert probs[0] < 0.5 < probs[-1]

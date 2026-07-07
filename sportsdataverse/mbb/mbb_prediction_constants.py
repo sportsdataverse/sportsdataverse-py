@@ -79,7 +79,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_tempo=69.6255,
         avg_efficiency=104.0,
         quad_thresholds=_NET_QUAD_THRESHOLDS,
-        in_game_wp_artifact="mbb_in_game_wp.json",
+        in_game_wp_artifact="mbb_in_game_wp.ubj",
     ),
     "womens": LeagueConstants(
         hfa=3.0,
@@ -88,7 +88,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_tempo=70.0,
         avg_efficiency=95.0,
         quad_thresholds=_NET_QUAD_THRESHOLDS,
-        in_game_wp_artifact="wbb_in_game_wp.json",
+        in_game_wp_artifact="wbb_in_game_wp.ubj",
     ),
 }
 

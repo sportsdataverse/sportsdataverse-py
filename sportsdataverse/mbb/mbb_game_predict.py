@@ -11,9 +11,13 @@ functions are league-agnostic (``league="mens"`` / ``"womens"``).
 
 from __future__ import annotations
 
+import json
 import math
-from typing import Literal, Union, overload
+from functools import lru_cache
+from importlib.resources import files
+from typing import Any, Literal, Union, overload
 
+import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.stats import norm
@@ -22,11 +26,31 @@ from sportsdataverse.mbb.mbb_prediction_constants import get_constants
 
 __all__ = [
     "in_game_features",
+    "mbb_in_game_win_prob",
     "mbb_predict_games",
     "predict_margin",
     "predict_total",
     "win_prob_from_margin",
 ]
+
+
+@lru_cache(maxsize=None)
+def _load_wp_artifact(league: str) -> dict[str, Any]:
+    """Bundled in-game WP artifact: ``.ubj`` xgboost booster or ``.json`` logistic."""
+    name = get_constants(league).in_game_wp_artifact
+    path = files("sportsdataverse.mbb") / "models" / name
+    if name.endswith(".json"):
+        return {"kind": "logistic", **json.loads(path.read_text(encoding="utf-8"))}
+    try:
+        import xgboost as xgb  # noqa: PLC0415 -- optional dep, only the tree artifact needs it
+    except ImportError as exc:  # pragma: no cover
+        raise ImportError(
+            "mbb_in_game_win_prob requires xgboost for the bundled tree artifact; "
+            "install it via 'pip install sportsdataverse[models]'"
+        ) from exc
+    booster = xgb.Booster()
+    booster.load_model(bytearray(path.read_bytes()))
+    return {"kind": "xgboost", "booster": booster, "features": booster.feature_names}
 
 
 def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFrame:
@@ -61,6 +85,71 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
         pl.lit(logit, dtype=pl.Float64).alias("pregame_logit"),
         (pl.col("team_id") == pl.col("home_team_id")).fill_null(False).cast(pl.Int8).alias("home_has_ball"),
     )
+
+
+@overload
+def mbb_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league: str = "mens",
+    return_as_pandas: Literal[False] = False,
+) -> pl.DataFrame: ...
+
+
+@overload
+def mbb_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league: str = "mens",
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+
+
+def mbb_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league: str = "mens",
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Per-play home win probability from the bundled in-game logistic.
+
+    Scores :func:`in_game_features` through the committed artifact
+    (``sportsdataverse/mbb/models``, trained on the season before the pregame
+    gate season so the calibration backtest stays out-of-sample).
+
+    Args:
+        pbp: Play-by-play for ONE game in the ``load_mbb_pbp`` schema
+            (``start_game_seconds_remaining``, ``home_score``, ``away_score``,
+            ``team_id``, ``home_team_id``).
+        pregame_home_prob: Pregame home win probability (e.g. from
+            :func:`win_prob_from_margin`).
+        league: ``"mens"`` or ``"womens"`` (selects the bundled artifact).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per play: the five feature columns plus ``home_win_prob``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob
+            from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+            pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
+            wp = mbb_in_game_win_prob(pbp, 0.62)
+    """
+    art = _load_wp_artifact(league)
+    feats = in_game_features(pbp, pregame_home_prob)
+    X = feats.select(art["features"]).to_numpy()
+    if art["kind"] == "xgboost":
+        p = art["booster"].inplace_predict(X)
+    else:
+        z = X @ np.asarray(art["coef"], dtype=float) + float(art["intercept"])
+        p = 1.0 / (1.0 + np.exp(-z))
+    out = feats.with_columns(pl.Series("home_win_prob", p).cast(pl.Float64))
+    return out.to_pandas() if return_as_pandas else out
 
 
 def predict_margin(
