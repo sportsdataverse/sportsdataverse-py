@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import polars as pl
+import pytest
 from sportsdataverse.nba.nba_bpm import (
     BPM2_COEFFICIENTS,
     NbaBpmModel,
@@ -313,6 +314,67 @@ def test_nba_bpm_model_head_to_head() -> None:
     rep = validate_model(model, [poss], model_name="bpm", oracles=("retrodiction",))
     assert rep.retrodiction is not None
     assert rep.retrodiction.n_test_games > 0
+
+
+# ---------------------------------------------------------------------------
+# Task 7 (WP4): granularity="game" — single-game BPM 2.0
+# ---------------------------------------------------------------------------
+
+
+def test_nba_bpm_game_granularity_one_row_per_game_player():
+    player_logs, team_logs = _synth_logs()  # 20 games, 2 teams x 8 players
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    out = nba_bpm(player_logs, team_logs, positions, granularity="game")
+    assert set(out.columns) == {"game_id", "player_id", "obpm", "dbpm", "bpm", "min", "gp"}
+    assert out.height == 20 * 16
+    assert (out["gp"] == 1).all()
+    assert set(out["game_id"].unique().to_list()) == {f"G{gi}" for gi in range(20)}
+
+
+def test_nba_bpm_game_granularity_per_game_team_adjustment_invariant():
+    """Per game: minute-weighted team BPM == that game's own efficiency margin
+    (same invariant test_team_adjustment_invariant checks at season grain)."""
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    out = nba_bpm(player_logs, team_logs, positions, granularity="game")
+    for gi in range(20):
+        gid = f"G{gi}"
+        og = out.filter(pl.col("game_id") == gid).join(
+            player_logs.filter(pl.col("game_id") == gid).select("player_id", "team_id"), on="player_id"
+        )
+        tlg = team_logs.filter(pl.col("game_id") == gid)
+        for team in (1, 2):
+            t = og.filter(pl.col("team_id") == team)
+            wbpm = (t["bpm"] * t["min"]).sum() / t["min"].sum()
+            tl = tlg.filter(pl.col("team_id") == team)
+            poss = (tl["fga"] - tl["oreb"] + tl["tov"] + 0.44 * tl["fta"]).sum()
+            margin = tl["plus_minus"].sum() / poss * 100
+            assert abs(wbpm - margin) < 1e-6, (gid, team)
+
+
+def test_nba_bpm_season_mode_unchanged_by_refactor():
+    """Regression guard for the _nba_bpm_one extraction: default (season) mode
+    must produce the exact same columns/shape as before the granularity dispatcher."""
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    out = nba_bpm(player_logs, team_logs, positions)  # default granularity="season"
+    assert set(out.columns) == {"player_id", "obpm", "dbpm", "bpm", "min", "gp"}
+    assert out.height == 16
+    assert out["gp"].to_list() == [20] * 16
+
+
+def test_nba_bpm_invalid_granularity_raises():
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    with pytest.raises(ValueError, match="granularity"):
+        nba_bpm(player_logs, team_logs, positions, granularity="quarter")
+
+
+def test_nba_bpm_game_granularity_requires_game_id():
+    player_logs, team_logs = _synth_logs()
+    positions = pl.DataFrame({"player_id": list(range(1, 17)), "position_num": [3.0] * 16})
+    with pytest.raises(ValueError, match="game_id"):
+        nba_bpm(player_logs.drop("game_id"), team_logs, positions, granularity="game")
 
 
 # ---------------------------------------------------------------------------

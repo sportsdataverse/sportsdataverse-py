@@ -1,0 +1,16 @@
+{
+  "espn_team_id": "Int64",
+  "fox_team_id": "String",
+  "person_key": "String",
+  "espn_athlete_id": "Int64",
+  "fox_athlete_id": "String",
+  "yahoo_athlete_id": "String",
+  "name": "String",
+  "espn_jersey": "String",
+  "fox_jersey": "String",
+  "espn_position": "String",
+  "fox_position": "String",
+  "yahoo_position": "String",
+  "match_method": "String",
+  "matched_sources": "String"
+}
