@@ -1000,12 +1000,13 @@ class CutdownShotEvent:
     """A narrowed :class:`ShotEvent`, keeping only the fields needed once a
     shot has been matched to a player/lineup event (``CutdownShotEvent``,
     ``models/ncaa/ShotEvent.scala:31-40``). **Scope addition, Task 5e.5** --
-    ported for shape fidelity even though **this task has zero producers of
-    it**: grepping the upstream tree shows its only construction/consumption
-    sites are in ``PlayByPlayUtils.scala`` (``shot_value``, Task 5e.6) and
-    ``PlayerEvent.scala`` (``shot_info: Option[CutdownShotEvent]``, an
-    extension of :class:`PlayerEvent` also out of this task's scope) --
-    neither is part of ``ShotEventParser.scala``. Appended here (not
+    ported for shape fidelity even though **it is dead code in the ENTIRE
+    upstream tree**: grepping shows it appears only in its own definition
+    (``ShotEvent.scala``) and as the never-populated ``shot_info:
+    Option[CutdownShotEvent]`` field on ``PlayerEvent.scala`` -- it is never
+    constructed anywhere. (``PlayByPlayUtils.shot_value`` is an UNRELATED
+    ``event_str -> int`` point-value classifier that merely shares a similar
+    name -- Task 5e.6 will NOT produce this type either.) Appended here (not
     inserted among the 5a-reviewed classes above) to keep this an
     additive-only change, matching :class:`RosterEntry`/:class:`ConferenceId`'s
     precedent.
