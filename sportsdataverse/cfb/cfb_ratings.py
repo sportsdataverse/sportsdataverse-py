@@ -20,17 +20,25 @@ filtering of its own.
     submodule's fully-qualified path below -- that import path is resolved
     from ``sys.modules`` by the dotted string, not by attribute traversal on
     the already-shadowed package, and keeps mypy able to see the real
-    signatures.
+    signatures. :func:`cfb_ratings` (the public as-of-date orchestrator)
+    imports ``load_cfb_pbp`` / ``load_cfb_schedule`` at module scope for the
+    same reason: monkeypatch-ability in tests requires the names to live on
+    *this* module's namespace, not just re-exported through the package.
 """
 
 from __future__ import annotations
 
+import datetime
+from typing import Literal, overload
+
+import pandas as pd
 import polars as pl
 
 from sportsdataverse.cfb.cfb_adjusted_epa import _REQUIRED_COLUMNS, _fit_opponent_ridge, _prepare
-from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig
+from sportsdataverse.cfb.cfb_loaders import load_cfb_pbp, load_cfb_schedule
+from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig, as_of_ratings_split
 
-__all__ = ["efficiency_ratings", "fei_ratings", "special_teams_ratings"]
+__all__ = ["cfb_ratings", "efficiency_ratings", "fei_ratings", "special_teams_ratings"]
 
 _OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "team_id": pl.Utf8,
@@ -50,6 +58,25 @@ _FEI_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "fei_off": pl.Float64,
     "fei_def": pl.Float64,
     "fei_net": pl.Float64,
+}
+
+# Documented column order + dtypes for the public `cfb_ratings` entry point --
+# see its docstring for what each column means.
+_RATINGS_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "season": pl.Int64,
+    "team_id": pl.Utf8,
+    "adj_off_epa": pl.Float64,
+    "adj_def_epa": pl.Float64,
+    "adj_st_epa": pl.Float64,
+    "adj_net": pl.Float64,
+    "fei_off": pl.Float64,
+    "fei_def": pl.Float64,
+    "fei_net": pl.Float64,
+    "games": pl.Int64,
+    "off_rank": pl.Int64,
+    "def_rank": pl.Int64,
+    "net_rank": pl.Int64,
+    "net_z": pl.Float64,
 }
 
 # Case-insensitive keyword match over the cfbfastR `play_type` vocabulary for
@@ -314,3 +341,168 @@ def fei_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> 
         .select("team_id", "fei_off", "fei_def", "fei_net")
     )
     return out
+
+
+@overload
+def cfb_ratings(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = ...,
+    config: RatingsConfig | None = ...,
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+@overload
+def cfb_ratings(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = ...,
+    config: RatingsConfig | None = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+def cfb_ratings(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = None,
+    config: RatingsConfig | None = None,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """One row per team: the full CFB ratings spine (off/def/ST EPA + FEI).
+
+    Public orchestrator over :func:`efficiency_ratings`,
+    :func:`special_teams_ratings`, and :func:`fei_ratings`. Loads play-by-play
+    + schedule via :func:`sportsdataverse.cfb.cfb_loaders.load_cfb_pbp` /
+    :func:`sportsdataverse.cfb.cfb_loaders.load_cfb_schedule`, joins the
+    schedule's per-game date onto the plays, optionally applies the
+    as-of-date leakage boundary
+    (:func:`sportsdataverse.cfb.cfb_prediction_constants.as_of_ratings_split`),
+    then fits all three component ratings on the (optionally filtered) plays
+    and reshapes them into one wide per-team table with dense ranks and a
+    net-rating z-score.
+
+    Args:
+        seasons: A single season (e.g. ``2023``) or a list of seasons to pool
+            into one combined fit.
+        as_of_date: When given, the leakage boundary -- only plays from games
+            with ``date < as_of_date`` are used to fit the ratings (mirrors
+            what was knowable heading into that date). ``None`` (default)
+            uses the full season(s), unfiltered.
+        config: Ratings tuning knobs forwarded to all three component
+            functions. Defaults to :class:`RatingsConfig` when omitted.
+        return_as_pandas: If True, returns a pandas DataFrame; otherwise polars.
+
+    Returns:
+        A DataFrame with one row per ``team_id``, columns in this order:
+        ``season`` (Int64 -- the single passed season for the common
+        single-season call; ``null`` for a pooled multi-season call, since no
+        single season applies to every row), ``team_id`` (Utf8),
+        ``adj_off_epa``, ``adj_def_epa`` (Float64, from
+        :func:`efficiency_ratings`), ``adj_st_epa`` (Float64, from
+        :func:`special_teams_ratings`), ``adj_net`` (Float64 -- offense minus
+        defense only; special teams is a separate column, not folded in),
+        ``fei_off``, ``fei_def``, ``fei_net`` (Float64, from
+        :func:`fei_ratings`), ``games`` (Int64), ``off_rank`` (Int64, dense
+        rank on ``adj_off_epa`` descending), ``def_rank`` (Int64, dense rank
+        on ``adj_def_epa`` **ascending** -- fewer EPA allowed ranks better),
+        ``net_rank`` (Int64, dense rank on ``adj_net`` descending), ``net_z``
+        (Float64, z-score of ``adj_net``). Zero-row (correctly-typed) when
+        the requested season(s) have no published pbp/schedule asset, or when
+        ``as_of_date`` filters out every play.
+
+    Raises:
+        KeyError: If the loaded plays frame is missing a required column.
+        ImportError: If ``scikit-learn`` is not installed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_ratings import cfb_ratings
+            ratings = cfb_ratings(2023)
+            ratings.sort("net_rank").head()
+
+        As-of-date leakage boundary::
+
+            import datetime as dt
+            week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
+
+        Pandas round-trip::
+
+            ratings_pd = cfb_ratings(2023, return_as_pandas=True)
+
+    See Also:
+        * `cfbfastR`_ -- the R implementation these ratings port from.
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    cfg = config or RatingsConfig()
+    season_list: list[int] = [seasons] if isinstance(seasons, int) else list(seasons)
+
+    plays = load_cfb_pbp(season_list)
+    schedule = load_cfb_schedule(season_list)
+    if plays.is_empty() or schedule.is_empty():
+        empty = pl.DataFrame(schema=_RATINGS_OUTPUT_SCHEMA)
+        return empty.to_pandas() if return_as_pandas else empty
+
+    plays = plays.with_columns(pl.col("game_id").cast(pl.Utf8))
+    schedule = schedule.with_columns(pl.col("game_id").cast(pl.Utf8))
+    assert plays.schema["game_id"] == schedule.schema["game_id"]
+
+    if "date" in schedule.columns:
+        date_expr = pl.col("date").cast(pl.Date)
+    else:
+        # Real `load_cfb_schedule` ships `start_date` (an ISO datetime
+        # string), not a bare `date` column -- take the calendar-day prefix.
+        date_expr = pl.col("start_date").cast(pl.Utf8).str.slice(0, 10).str.to_date()
+    schedule_dates = schedule.select("game_id", date_expr.alias("date"))
+
+    dated_plays = plays.join(schedule_dates, on="game_id", how="left")
+    if as_of_date is not None:
+        dated_plays = as_of_ratings_split(dated_plays, as_of_date)
+
+    eff = efficiency_ratings(dated_plays, config=cfg)
+    st = special_teams_ratings(dated_plays, config=cfg)
+    fei = fei_ratings(dated_plays, config=cfg)
+
+    season_value: int | None = season_list[0] if len(season_list) == 1 else None
+
+    out = (
+        eff.join(st, on="team_id", how="left")
+        .join(fei, on="team_id", how="left")
+        .with_columns(
+            pl.col("adj_st_epa").fill_null(0.0),
+            pl.col("fei_off").fill_null(0.0),
+            pl.col("fei_def").fill_null(0.0),
+            pl.col("fei_net").fill_null(0.0),
+            pl.lit(season_value).cast(pl.Int64).alias("season"),
+        )
+        .with_columns(
+            off_rank=pl.col("adj_off_epa").rank(method="dense", descending=True).cast(pl.Int64),
+            def_rank=pl.col("adj_def_epa").rank(method="dense", descending=False).cast(pl.Int64),
+            net_rank=pl.col("adj_net").rank(method="dense", descending=True).cast(pl.Int64),
+        )
+    )
+
+    mean_net = float(out["adj_net"].mean() or 0.0)
+    std_val = out["adj_net"].std()
+    std_net = float(std_val) if std_val else 0.0
+    if std_net == 0.0:
+        out = out.with_columns(net_z=pl.lit(0.0).cast(pl.Float64))
+    else:
+        out = out.with_columns(net_z=(pl.col("adj_net") - mean_net) / std_net)
+
+    out = out.select(
+        "season",
+        "team_id",
+        "adj_off_epa",
+        "adj_def_epa",
+        "adj_st_epa",
+        "adj_net",
+        "fei_off",
+        "fei_def",
+        "fei_net",
+        "games",
+        "off_rank",
+        "def_rank",
+        "net_rank",
+        "net_z",
+    )
+    return out.to_pandas() if return_as_pandas else out
