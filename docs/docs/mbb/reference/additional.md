@@ -1595,6 +1595,42 @@ Enrich a lineup with play-by-play stats for both team and opponent
 
 A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` populated.
 
+### `adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_efficiency}
+
+Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
+
+KenPom-style fixed point: initialise `adj_o = raw_o` / `adj_d = raw_d`,
+then repeatedly recompute each team's rating from its games with the
+opponent's *current* adjusted rating and a home-court adjustment removed,
+until the largest change is below `tol`. Ratings are computed independently
+per season (a team's opponent pool is within-season).
+
+The per-game offensive update is
+`off_eff - (adj_d_opp - avg) - loc_o` where `loc_o` is `+hfa/2` at
+home, `-hfa/2` away, `0` neutral (defense is symmetric with the opposite
+sign); `avg` is the league mean efficiency and `hfa` comes from
+`~sportsdataverse.mbb.mbb_prediction_constants.get_constants`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_eff` | `DataFrame` |  | Output of `raw_game_efficiency`. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the HFA constant. |
+| `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
+| `tol` | `float` | `0.0001` | Convergence tolerance on the largest rating change. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
+ratings = adjust_efficiency(raw_game_efficiency(sched, box))
+```
+
 ### `adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'` {#adjust_off_rating_stats}
 
 Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place.
@@ -1632,6 +1668,36 @@ _, _, raw_o_rtg, _, o_diags = build_o_rtg(player, {}, {}, 100.0, True, False)
 maybe_raw = raw_o_rtg["value"] if raw_o_rtg else None
 adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
 print(o_diags["oRtg"], o_diags["adjORtgPlus"])
+```
+
+### `adjust_tempo(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_tempo}
+
+Opponent-adjusted tempo (possessions/40) per team-season.
+
+Same fixed point as `adjust_efficiency`, applied to game possessions
+under the additive model `poss = tempo_i + tempo_j - avg`: a team's tempo
+is recovered by removing its opponents' current adjusted tempo. `avg` is
+the league baseline tempo from
+`~sportsdataverse.mbb.mbb_prediction_constants.get_constants`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_eff` | `DataFrame` |  | Output of `raw_game_efficiency`. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the tempo baseline. |
+| `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
+| `tol` | `float` | `0.0001` | Convergence tolerance on the largest tempo change. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_tempo`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_ratings import adjust_tempo, raw_game_efficiency
+tempo = adjust_tempo(raw_game_efficiency(sched, box))
 ```
 
 ### `alias_combos(first: 'str', last: 'str', to_name: 'str') -> 'dict[str, str]'` {#alias_combos}
@@ -5213,6 +5279,34 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `mbb_team_ratings(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mbb_team_ratings}
+
+Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season.
+
+Loads schedule + team boxscore for `seasons`, computes per-game efficiency,
+runs the opponent-adjustment fixed points, and adds a per-season dense
+`rank` (on `adj_em` descending) and `adj_em_z` (z-score of `adj_em`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season (e.g. `2024`) or list of seasons. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the constants. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
+ratings = mbb_team_ratings(2024)
+ratings.sort("rank").head()
+```
+
 ### `misspellings(team: 'Optional[TeamId]') -> 'dict[str, str]'` {#misspellings}
 
 Team-scoped misspelling map, falling back to the generic map
@@ -5556,6 +5650,29 @@ frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
 frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
 poss_calc_fragment_sum(frag1, frag2)
 # PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
+```
+
+### `raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'` {#raw_game_efficiency}
+
+Per-team, per-game possessions + raw offensive/defensive efficiency.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | Frame with `game_id, season, date, home_team_id, away_team_id, neutral_site` (ids as strings or ints; cast to `Utf8` here). |
+| `team_box` | `DataFrame` |  | Per-team boxscore with `game_id, team_id, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted, team_score`. |
+
+**Returns**
+
+One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is_home, neutral_site, poss, off_eff, def_eff`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_mbb_team_boxscore
+from sportsdataverse.mbb.mbb_team_ratings import raw_game_efficiency
+eff = raw_game_efficiency(load_mbb_schedule([2024]), load_mbb_team_boxscore([2024]))
 ```
 
 ### `regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'` {#regress_shot_quality}

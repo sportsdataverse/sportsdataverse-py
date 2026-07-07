@@ -144,7 +144,7 @@ def _adjust_one_season(sub: pl.DataFrame, season: int, hfa: float, max_iter: int
     loc_d = np.where(neutral, 0.0, np.where(is_home, -half, half))
     avg = float(off.mean())
 
-    counts = np.bincount(ti, minlength=n).astype(float)
+    counts: np.ndarray = np.bincount(ti, minlength=n).astype(float)
     raw_o = np.bincount(ti, weights=off, minlength=n) / counts
     raw_d = np.bincount(ti, weights=dfn, minlength=n) / counts
 
@@ -229,7 +229,7 @@ def _adjust_tempo_one_season(sub: pl.DataFrame, season: int, avg: float, max_ite
     oi = np.array([index[t] for t in sub["opp_team_id"].to_list()], dtype=np.int64)
     poss = sub["poss"].to_numpy().astype(float)
 
-    counts = np.bincount(ti, minlength=n).astype(float)
+    counts: np.ndarray = np.bincount(ti, minlength=n).astype(float)
     raw = np.bincount(ti, weights=poss, minlength=n) / counts
 
     adj = raw.copy()

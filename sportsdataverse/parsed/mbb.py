@@ -199,7 +199,9 @@ from sportsdataverse.mbb import WeakSurnameMatch as WeakSurnameMatch  # noqa: F4
 from sportsdataverse.mbb import Year as Year  # noqa: F401
 from sportsdataverse.mbb import add_missing_players as add_missing_players  # noqa: F401
 from sportsdataverse.mbb import add_stats_to_lineups as add_stats_to_lineups  # noqa: F401
+from sportsdataverse.mbb import adjust_efficiency as adjust_efficiency  # noqa: F401
 from sportsdataverse.mbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
+from sportsdataverse.mbb import adjust_tempo as adjust_tempo  # noqa: F401
 from sportsdataverse.mbb import alias_combos as alias_combos  # noqa: F401
 from sportsdataverse.mbb import analyze_and_fix_clumps as analyze_and_fix_clumps  # noqa: F401
 from sportsdataverse.mbb import apply_relative_positional_overrides as apply_relative_positional_overrides  # noqa: F401
@@ -326,6 +328,7 @@ from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
+from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
 from sportsdataverse.mbb import name_in_v0_box_format as name_in_v0_box_format  # noqa: F401
@@ -389,6 +392,7 @@ from sportsdataverse.mbb import phase1_shot_event_enrichment as phase1_shot_even
 from sportsdataverse.mbb import pick_ridge_regression as pick_ridge_regression  # noqa: F401
 from sportsdataverse.mbb import pos_class_to_score as pos_class_to_score  # noqa: F401
 from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum  # noqa: F401
+from sportsdataverse.mbb import raw_game_efficiency as raw_game_efficiency  # noqa: F401
 from sportsdataverse.mbb import regress_shot_quality as regress_shot_quality  # noqa: F401
 from sportsdataverse.mbb import remove_diacritics as remove_diacritics  # noqa: F401
 from sportsdataverse.mbb import remove_html_encoding as remove_html_encoding  # noqa: F401
@@ -472,7 +476,9 @@ __all__ = [
     "Year",
     "add_missing_players",
     "add_stats_to_lineups",
+    "adjust_efficiency",
     "adjust_off_rating_stats",
+    "adjust_tempo",
     "alias_combos",
     "analyze_and_fix_clumps",
     "apply_relative_positional_overrides",
@@ -719,6 +725,7 @@ __all__ = [
     "load_mbb_team_season_stats",
     "matching_player",
     "mbb_pbp_disk",
+    "mbb_team_ratings",
     "misspellings",
     "most_recent_mbb_season",
     "name_in_v0_box_format",
@@ -782,6 +789,7 @@ __all__ = [
     "pick_ridge_regression",
     "pos_class_to_score",
     "poss_calc_fragment_sum",
+    "raw_game_efficiency",
     "regress_shot_quality",
     "remove_diacritics",
     "remove_html_encoding",

@@ -329,6 +329,8 @@ files = [
     "sportsdataverse/mbb/mbb_luck.py",
     "sportsdataverse/mbb/mbb_rapm.py",
     "sportsdataverse/mbb/mbb_positions.py",
+    "sportsdataverse/mbb/mbb_prediction_constants.py",
+    "sportsdataverse/mbb/mbb_team_ratings.py",
     "sportsdataverse/mbb/mbb_ncaa_models.py",
     "sportsdataverse/mbb/mbb_ncaa_events.py",
     "sportsdataverse/mbb/mbb_ncaa_possessions.py",
