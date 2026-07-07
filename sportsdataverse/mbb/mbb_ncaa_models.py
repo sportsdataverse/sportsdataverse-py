@@ -150,6 +150,7 @@ __all__ = [
     "score_to_tuple",
     "PlayerEvent",
     "RosterEntry",
+    "ConferenceId",
 ]
 
 
@@ -847,3 +848,30 @@ class RosterEntry:
     #: Feet-hyphen-inches height matcher (``RosterEntry.height_regex``,
     #: ``models/ncaa/RosterEntry.scala:24``).
     height_regex: ClassVar[re.Pattern[str]] = re.compile(r"([0-9]+)[-]([0-9]+)")
+
+
+@dataclass(frozen=True)
+class ConferenceId:
+    """CBB conference identifier (``ConferenceId``, ``models/ConferenceId
+    .scala:7``, ``AnyVal``). **Scope addition, Task 5e.4** -- the first model
+    consumed by ``mbb_ncaa_team_parsers.py`` (``TeamIdParser.get_team_triples``
+    / ``build_lineup_cli_array`` / ``build_available_team_list``). Appended
+    here (not inserted among the 5a-reviewed classes above) to keep this an
+    additive-only change, matching :class:`RosterEntry`'s precedent.
+
+    **``ConferenceId.is_high_major`` (the companion object's other member,
+    ``models/ConferenceId.scala:11-16``) is NOT ported.** It has no call site
+    anywhere in ``TeamIdParser``/``TeamScheduleParser`` (verified: the only
+    other ``ConferenceId`` construction sites in the upstream tree are
+    ``kenpom/TeamParser.scala`` and ``BuildIngestPipeline.scala``, neither of
+    which is in this port's scope, and neither calls ``is_high_major``
+    either) -- nothing in Phase 5e would exercise it. Noted here rather than
+    silently dropped, matching this module's precedent for other
+    unreferenced companion-object members (see the module docstring's
+    ``Year.until`` / ``Game.Score.by_winner`` notes).
+
+    Args:
+        name: The unique name of the conference.
+    """
+
+    name: str
