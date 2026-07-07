@@ -6337,6 +6337,47 @@ skater_skating_speed_detail:
     during the tracking period.
   top_skating_speeds: JSON-serialized list of the skater's top individual speed bursts, typically the ten highest speed readings
     recorded during the tracking period.
+sports247_institution_rankings:
+  alternate_asset: 'CDN URL of the institution''s alternate logo.'
+  average_composite_rating: 'Average composite rating of counted commits.'
+  average_rating: 'Average 247Sports rating of counted commits.'
+  city: 'Institution city.'
+  commits: 'Number of commits in the class.'
+  composite_five_stars: 'Count of composite five-star commits.'
+  composite_four_stars: 'Count of composite four-star commits.'
+  composite_rank: 'Industry-composite national team-class rank.'
+  composite_rating: 'Total composite class rating (formula points).'
+  composite_three_stars: 'Count of composite three-star commits.'
+  conference_composite_rank: 'Composite class rank within the conference.'
+  conference_rank: '247Sports class rank within the conference.'
+  default_asset: 'CDN URL of the institution''s default logo.'
+  five_stars: 'Count of 247Sports five-star commits.'
+  four_stars: 'Count of 247Sports four-star commits.'
+  full_name: 'Institution full name (school + nickname).'
+  high_school_ranking_position: 'Position of the class in the high-school-only ranking.'
+  institution_key: '247Sports institution key (school-level).'
+  institution_ranking_url: '247sports.com URL of the institution''s class-ranking page.'
+  institution_root_path: '247sports.com root path of the institution''s team site.'
+  light_asset: 'CDN URL of the institution''s light-background logo.'
+  name: 'Short display name of the institution as shown on the 247Sports class-ranking page (e.g. USC, Notre Dame).'
+  rank: '247Sports national team-class rank.'
+  ranking_date: 'Timestamp the ranking row was last updated.'
+  rating: 'Total 247Sports class rating (team-ranking formula points).'
+  site_key: '247Sports team-site key.'
+  state: 'Full name of the U.S. state where the institution is located.'
+  state_abbreviation: 'Institution state abbreviation.'
+  team_key: '247Sports RDB team key (per-sport).'
+  three_stars: 'Count of 247Sports three-star commits.'
+  transfer_number: 'Number of incoming transfers counted in the class.'
+  transfer_points: 'Transfer-portal points contributed to the class rating.'
+sports247_teams:
+  conference: 'Full name of the athletic conference the team competes in (e.g. ACC, Big Ten).'
+  conference_abbreviation: 'Conference abbreviation.'
+  institution_key: '247Sports institution key (school-level, sport-agnostic).'
+  name: 'Team display name (school + nickname).'
+  sport: 'Sport name (Football, Basketball, ...).'
+  team_id: '247Sports RDB team id (per-sport).'
+  type: 'Institution type (College, ...).'
 standings:
   advanced: Whether the team has advanced/qualified.
   against: Runs/goals against.

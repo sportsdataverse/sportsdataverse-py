@@ -312,6 +312,8 @@ files = [
     "sportsdataverse/mlb/mlb_statcast_extra.py",
     "sportsdataverse/cfb/on3_runtime.py",
     "sportsdataverse/cfb/on3_parsers.py",
+    "sportsdataverse/cfb/sports247_runtime.py",
+    "sportsdataverse/cfb/sports247_parsers.py",
     "sportsdataverse/nba/nba_stats_runtime.py",
     "sportsdataverse/nba/nba_stats_parsers.py",
     "sportsdataverse/nba/nba_pbp_constants.py",

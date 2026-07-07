@@ -19,6 +19,8 @@ from sportsdataverse.cfb.cfb_teams import *
 from sportsdataverse.cfb.cfb_yahoo_ext import *
 from sportsdataverse.cfb.on3 import *
 from sportsdataverse.cfb.on3_parsers import *
+from sportsdataverse.cfb.sports247 import *
+from sportsdataverse.cfb.sports247_parsers import *
 
 # Cross-provider crosswalks depend on the provider modules above, so import last.
 from sportsdataverse.cfb.cfb_crosswalk import *

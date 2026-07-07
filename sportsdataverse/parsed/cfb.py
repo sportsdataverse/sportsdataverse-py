@@ -154,6 +154,8 @@ from sportsdataverse.cfb import on3_industry_player_rankings as _raw_on3_industr
 from sportsdataverse.cfb import on3_industry_team_rankings as _raw_on3_industry_team_rankings
 from sportsdataverse.cfb import on3_player_rankings as _raw_on3_player_rankings
 from sportsdataverse.cfb import on3_team_rankings as _raw_on3_team_rankings
+from sportsdataverse.cfb import sports247_institution_rankings as _raw_sports247_institution_rankings
+from sportsdataverse.cfb import sports247_teams as _raw_sports247_teams
 from sportsdataverse.cfb import yahoo_cfb_boxscore as _raw_yahoo_cfb_boxscore
 from sportsdataverse.cfb import yahoo_cfb_player_season_stats as _raw_yahoo_cfb_player_season_stats
 from sportsdataverse.cfb import yahoo_cfb_player_season_stats_legacy as _raw_yahoo_cfb_player_season_stats_legacy
@@ -204,6 +206,8 @@ from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.cfb import parse_on3_rankings as parse_on3_rankings  # noqa: F401
 from sportsdataverse.cfb import parse_on3_team_rankings as parse_on3_team_rankings  # noqa: F401
+from sportsdataverse.cfb import parse_sports247_institution_rankings as parse_sports247_institution_rankings  # noqa: F401
+from sportsdataverse.cfb import parse_sports247_teams as parse_sports247_teams  # noqa: F401
 from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
 
@@ -382,7 +386,11 @@ __all__ = [
     "on3_team_rankings",
     "parse_on3_rankings",
     "parse_on3_team_rankings",
+    "parse_sports247_institution_rankings",
+    "parse_sports247_teams",
     "scoreboard_event_parsing",
+    "sports247_institution_rankings",
+    "sports247_teams",
     "underscore",
     "yahoo_cfb_boxscore",
     "yahoo_cfb_player_season_stats",
@@ -2226,6 +2234,34 @@ def on3_team_rankings(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_on3_team_rankings(*args, **kwargs)
+
+
+def sports247_institution_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_institution_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_institution_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_institution_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_institution_rankings(*args, **kwargs)
+
+
+def sports247_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_teams(*args, **kwargs)
 
 
 def yahoo_cfb_boxscore(*args, **kwargs):
