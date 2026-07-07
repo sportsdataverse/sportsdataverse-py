@@ -209,3 +209,67 @@ def adjust_efficiency(
         for _key, sub in game_eff.group_by("season", maintain_order=True)
     ]
     return pl.concat(frames)
+
+
+_TEMPO_SCHEMA = {"season": pl.Int64, "team_id": pl.Utf8, "adj_tempo": pl.Float64}
+
+
+def _adjust_tempo_one_season(sub: pl.DataFrame, season: int, avg: float, max_iter: int, tol: float) -> pl.DataFrame:
+    """Fixed-point opponent-adjusted tempo for one season's game rows."""
+    teams = sub["team_id"].unique(maintain_order=True).to_list()
+    index = {t: i for i, t in enumerate(teams)}
+    n = len(teams)
+    ti = np.array([index[t] for t in sub["team_id"].to_list()], dtype=np.int64)
+    oi = np.array([index[t] for t in sub["opp_team_id"].to_list()], dtype=np.int64)
+    poss = sub["poss"].to_numpy().astype(float)
+
+    counts = np.bincount(ti, minlength=n).astype(float)
+    raw = np.bincount(ti, weights=poss, minlength=n) / counts
+
+    adj = raw.copy()
+    for _ in range(max_iter):
+        contrib = poss - (adj[oi] - avg)
+        new = np.bincount(ti, weights=contrib, minlength=n) / counts
+        delta = float(np.abs(new - adj).max())
+        adj = new
+        if delta < tol:
+            break
+
+    return pl.DataFrame({"season": [season] * n, "team_id": teams, "adj_tempo": adj}, schema=_TEMPO_SCHEMA)
+
+
+def adjust_tempo(
+    game_eff: pl.DataFrame, *, league: str = "mens", max_iter: int = 100, tol: float = 1e-4
+) -> pl.DataFrame:
+    """Opponent-adjusted tempo (possessions/40) per team-season.
+
+    Same fixed point as :func:`adjust_efficiency`, applied to game possessions
+    under the additive model ``poss = tempo_i + tempo_j - avg``: a team's tempo
+    is recovered by removing its opponents' current adjusted tempo. ``avg`` is
+    the league baseline tempo from
+    :func:`~sportsdataverse.mbb.mbb_prediction_constants.get_constants`.
+
+    Args:
+        game_eff: Output of :func:`raw_game_efficiency`.
+        league: ``"mens"`` / ``"womens"`` -- selects the tempo baseline.
+        max_iter: Maximum fixed-point iterations.
+        tol: Convergence tolerance on the largest tempo change.
+
+    Returns:
+        One row per (season, team_id): ``season, team_id, adj_tempo``. Empty
+        input returns that schema with zero rows.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_team_ratings import adjust_tempo, raw_game_efficiency
+            tempo = adjust_tempo(raw_game_efficiency(sched, box))
+    """
+    if game_eff.height == 0:
+        return pl.DataFrame(schema=_TEMPO_SCHEMA)
+    avg = float(get_constants(league).avg_tempo)
+    frames = [
+        _adjust_tempo_one_season(sub, int(sub["season"][0]), avg, max_iter, tol)
+        for _key, sub in game_eff.group_by("season", maintain_order=True)
+    ]
+    return pl.concat(frames)

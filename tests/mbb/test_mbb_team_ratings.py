@@ -2,7 +2,7 @@ import datetime
 
 import polars as pl
 
-from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
+from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo, raw_game_efficiency
 
 
 def _mini():
@@ -106,3 +106,50 @@ def test_adjust_efficiency_recovers_strength_ordering():
     # all outputs finite (convergence produced sane numbers, not NaN/inf)
     for col in ("adj_o", "adj_d", "adj_em", "raw_o", "raw_d"):
         assert ratings[col].is_finite().all()
+
+
+def _tempo_eff() -> pl.DataFrame:
+    """FAST team (tempo 78) plays only SLOW opponents (tempo 60); league avg 67.
+
+    Game possessions follow the additive model ``poss = tempo_i + tempo_j - avg``,
+    so FAST's observed (raw) tempo is depressed by its slow opponents and the
+    adjustment must push it back up.
+    """
+    tempo = {"FAST": 78.0, "S1": 60.0, "S2": 60.0, "S3": 60.0}
+    avg = 67.0
+    rows: list[dict] = []
+    gid = 0
+
+    def add(i: str, j: str) -> None:
+        nonlocal gid
+        gid += 1
+        poss = tempo[i] + tempo[j] - avg
+        base = dict(
+            game_id=f"T{gid}",
+            season=2024,
+            date=datetime.date(2024, 1, 1),
+            is_home=False,
+            neutral_site=True,
+            off_eff=100.0,
+            def_eff=100.0,
+            poss=poss,
+        )
+        rows.append({**base, "team_id": i, "opp_team_id": j})
+        rows.append({**base, "team_id": j, "opp_team_id": i})
+
+    add("FAST", "S1")
+    add("FAST", "S2")
+    add("FAST", "S3")
+    add("S1", "S2")
+    add("S1", "S3")
+    add("S2", "S3")
+    return pl.DataFrame(rows)
+
+
+def test_adjust_tempo_pushes_fast_team_up():
+    tempo = adjust_tempo(_tempo_eff(), league="mens")
+    assert tempo.columns == ["season", "team_id", "adj_tempo"]
+    row = {r["team_id"]: r["adj_tempo"] for r in tempo.iter_rows(named=True)}
+    # FAST's observed game possessions all = 78+60-67 = 71; adjustment recovers ~78 > 71
+    assert row["FAST"] > 71.0
+    assert row["FAST"] == max(row.values())
