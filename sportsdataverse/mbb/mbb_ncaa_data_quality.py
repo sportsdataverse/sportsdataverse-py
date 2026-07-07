@@ -34,12 +34,11 @@ the plain (unmerged) ``generic_misspellings`` via Scala's ``withDefault``.
 merge; team miss (including ``team=None``, which is never a real key in
 the Scala literal either) → a copy of :data:`generic_misspellings`.
 
-**Deferred member: ``players_missing_from_boxscore``.** Grepping every
-``DataQualityIssues.`` reference in ``cbb-explorer`` shows it is consumed
-by exactly one caller, ``BoxscoreParser.scala:245`` -- box-score parsing,
-not the ``build_player_code`` / ``parse_team_name`` / ``tidy_player``
-consumers this phase targets. It is out of scope for 5b and left for
-whichever future phase ports box-score parsing.
+**``players_missing_from_boxscore`` (Task 5e.2 addition).** Deferred by
+Task 5b.1 (its only caller, ``BoxscoreParser.scala:245``'s
+``inject_validated_players``, was out of scope then); ported now verbatim
+alongside the ``BoxscoreParser`` port that consumes it
+(``mbb_ncaa_boxscore_parser.py``).
 
 **Landmine index (reachable scalar division).** None. Every operation in
 this module is dict/list construction, string concatenation, or
@@ -93,12 +92,15 @@ from sportsdataverse.mbb.mbb_ncaa_models import TeamId, Year
 __all__ = [
     "ParseError",
     "build_sub_error",
+    "enrich_sub_error",
+    "enrich_sub_errors",
     "combos",
     "fix_combos",
     "alias_combos",
     "generic_misspellings",
     "misspellings",
     "players_with_duplicate_names",
+    "players_missing_from_boxscore",
     "team_aliases",
 ]
 
@@ -173,6 +175,63 @@ def build_sub_error(*subids: str, error: str) -> ParseError:
             err.id  # '[team]'
     """
     return ParseError(location="", id="".join(_build_error_id(s) for s in subids), messages=[error])
+
+
+def enrich_sub_errors(location: str, base_id: str, errors: list[ParseError]) -> list[ParseError]:
+    """Adds top-level location information to a list of sub-errors generated
+    by a child parser (``ParseUtils.enrich_sub_errors``, ``ParseUtils.scala:87-89``).
+
+    Args:
+        location: The module in which the (now top-level) error occurred.
+        base_id: An id fragment prepended (bracket-wrapped, if non-empty) to
+            each error's existing ``id``.
+        errors: The child-parser errors to enrich (their ``location`` is
+            **replaced**, not merged -- matching the Scala's ``ParseError(location,
+            ..., error.messages)`` construction, which discards the child's
+            own ``location``).
+
+    Returns:
+        A new list of :class:`ParseError`, one per input error, each with
+        ``location`` set to ``location`` and ``id`` set to
+        ``build_error_id(base_id) + error.id``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_data_quality import build_sub_error, enrich_sub_errors
+
+            child_err = build_sub_error("game_time", error="Could not find time")
+            enrich_sub_errors("ncaa.parse_playbyplay", "", [child_err])
+    """
+    return [
+        ParseError(location=location, id=_build_error_id(base_id) + error.id, messages=error.messages)
+        for error in errors
+    ]
+
+
+def enrich_sub_error(location: str, base_id: str, error: ParseError) -> list[ParseError]:
+    """Adds top-level location information to a single sub-error, returning a
+    list for consistency (``ParseUtils.enrich_sub_error``, ``ParseUtils.scala:91-93``).
+
+    Args:
+        location: The module in which the (now top-level) error occurred.
+        base_id: An id fragment prepended (bracket-wrapped, if non-empty) to
+            ``error``'s existing ``id``.
+        error: The child-parser error to enrich.
+
+    Returns:
+        :func:`enrich_sub_errors` applied to a single-element ``[error]``
+        list.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_data_quality import build_sub_error, enrich_sub_error
+
+            child_err = build_sub_error("game_score", error="Could not find score")
+            enrich_sub_error("ncaa.parse_playbyplay", "", child_err)
+    """
+    return enrich_sub_errors(location, base_id, [error])
 
 
 def combos(first: str, last: str) -> list[str]:
@@ -490,3 +549,30 @@ def misspellings(team: Optional[TeamId]) -> dict[str, str]:
     if team is None:
         return dict(generic_misspellings)
     return _MISSPELLINGS_MERGED.get(team, dict(generic_misspellings))
+
+
+# ---------------------------------------------------------------------------
+# players_missing_from_boxscore -- players whose box-score row is absent
+# entirely (DataQualityIssues.scala:16-34). Task 5e.2 addition -- deferred by
+# Task 5b.1 since its only consumer, BoxscoreParser.inject_validated_players,
+# was out of scope then.
+# ---------------------------------------------------------------------------
+
+players_missing_from_boxscore: dict[TeamId, dict[Year, list[str]]] = {
+    TeamId("La Salle"): {  # A10
+        Year(2018): ["Cooney, Kyle", "Shuler, Johnnie", "Kuhar, Chris", "Joseph, Dajour"],
+    },
+    TeamId("Morgan St."): {  # MEAC
+        Year(2020): ["McCray-Pace, Lapri"],
+    },
+    TeamId("Xavier"): {  # BE
+        Year(2018): ["Vanderpohl, Nick"],
+    },
+    TeamId("St. Bonaventure"): {  # A10
+        Year(2023): ["Essamvous, Assa"],
+    },
+}
+"""Team/season-scoped players known to be entirely missing from a box-score
+page's player table (``DataQualityIssues.players_missing_from_boxscore``) --
+manually appended by ``BoxscoreParser.inject_validated_players`` as extra
+lineup entries alongside the roster/other-source fallbacks."""

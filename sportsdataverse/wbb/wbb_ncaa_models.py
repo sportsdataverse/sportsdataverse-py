@@ -12,6 +12,13 @@ mbb core types and functions **by reference** (not a copy) so
 ``sportsdataverse.wbb`` callers get the identical implementation the mbb side
 uses, with no duplicated logic to drift out of sync.
 
+**Phase 5e additions.** :class:`RosterEntry` (Task 5e.1, the roster-page
+model), :class:`ConferenceId` (Task 5e.4, the team-parser conference id), and
+:class:`ShotLocation` / :class:`ShotGeo` / :class:`ShotEvent` /
+:class:`CutdownShotEvent` (Task 5e.5, the shot-chart models) were appended to
+``mbb_ncaa_models.py`` by the HTML-parser-layer port and are re-exported here
+by the same by-reference convention as the Phase 5a/5c models above.
+
 ``cbb-explorer`` is upstream-licensed under Apache License, Version 2.0; see
 the full attribution (copyright notice, upstream URL, what was derived) in
 the ``sportsdataverse.mbb.mbb_ncaa_models`` module docstring and in
@@ -38,6 +45,8 @@ from __future__ import annotations
 from sportsdataverse.mbb.mbb_ncaa_models import (
     AssistEvent,
     AssistInfo,
+    ConferenceId,
+    CutdownShotEvent,
     Direction,
     FieldGoalStats,
     LineupEvent,
@@ -51,9 +60,13 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     PossCalcFragment,
     PossessionEvent,
     RawGameEvent,
+    RosterEntry,
     Score,
     ScoreInfo,
     ShotClockStats,
+    ShotEvent,
+    ShotGeo,
+    ShotLocation,
     TeamId,
     TeamSeasonId,
     Year,
@@ -85,4 +98,10 @@ __all__ = [
     "poss_calc_fragment_sum",
     "score_to_tuple",
     "PlayerEvent",
+    "RosterEntry",
+    "ConferenceId",
+    "ShotLocation",
+    "ShotGeo",
+    "ShotEvent",
+    "CutdownShotEvent",
 ]

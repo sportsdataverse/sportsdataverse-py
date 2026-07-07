@@ -149,6 +149,12 @@ __all__ = [
     "poss_calc_fragment_sum",
     "score_to_tuple",
     "PlayerEvent",
+    "RosterEntry",
+    "ConferenceId",
+    "ShotLocation",
+    "ShotGeo",
+    "ShotEvent",
+    "CutdownShotEvent",
 ]
 
 
@@ -798,3 +804,229 @@ class PlayerEvent:
     team_stats: LineupEventStats
     opponent_stats: LineupEventStats
     player_count_error: Optional[int] = None
+
+
+@dataclass
+class RosterEntry:
+    """An entry in an NCAA team roster (``RosterEntry``, ``models/ncaa
+    /RosterEntry.scala:11-21``). **Scope addition, Task 5e.1** -- the first
+    model consumed by the HTML-parser layer (``mbb_ncaa_roster_parser.py``).
+    Appended here (not inserted among the 5a-reviewed classes above) to keep
+    this an additive-only change, matching :class:`PlayerEvent`'s precedent.
+
+    The trailing ``role`` field (present in the Scala case class shape but
+    never populated by ``RosterParser.parse_roster`` -- every construction
+    site there, both the real-player and ``__coach__`` branches, passes the
+    literal ``None`` for it) is presumably set by a later phase's box-score
+    parser (``BoxscoreParser``, out of this task's scope); it is carried
+    here for shape fidelity even though Task 5e.1's only producer never
+    populates it.
+
+    Args:
+        player_code_id: The player's code + full identity (the roster-row
+            equivalent of a box-score/PbP player reference).
+        number: The jersey number, as printed (may be non-numeric text).
+        pos: The listed position.
+        height: The listed height, in ``"FT-IN"`` text form (e.g. ``"6-3"``).
+        height_in: :attr:`height` parsed to total inches, if it matched
+            :data:`height_regex`.
+        year_class: The listed academic year (``"Fr"``/``"So"``/``"Jr"``/
+            ``"Sr"``/etc.).
+        gp: Games played.
+        origin: The player's hometown/prior-school text, if the source
+            table has that column (v1 rosters only).
+        role: Reserved for a later phase; always ``None`` from
+            ``parse_roster`` (see above).
+    """
+
+    player_code_id: PlayerCodeId
+    number: str
+    pos: str
+    height: str
+    height_in: Optional[int]
+    year_class: str
+    gp: int
+    origin: Optional[str]
+    role: Optional[str]
+
+    #: Feet-hyphen-inches height matcher (``RosterEntry.height_regex``,
+    #: ``models/ncaa/RosterEntry.scala:24``).
+    height_regex: ClassVar[re.Pattern[str]] = re.compile(r"([0-9]+)[-]([0-9]+)")
+
+
+@dataclass(frozen=True)
+class ConferenceId:
+    """CBB conference identifier (``ConferenceId``, ``models/ConferenceId
+    .scala:7``, ``AnyVal``). **Scope addition, Task 5e.4** -- the first model
+    consumed by ``mbb_ncaa_team_parsers.py`` (``TeamIdParser.get_team_triples``
+    / ``build_lineup_cli_array`` / ``build_available_team_list``). Appended
+    here (not inserted among the 5a-reviewed classes above) to keep this an
+    additive-only change, matching :class:`RosterEntry`'s precedent.
+
+    **``ConferenceId.is_high_major`` (the companion object's other member,
+    ``models/ConferenceId.scala:11-16``) is NOT ported.** It has no call site
+    anywhere in ``TeamIdParser``/``TeamScheduleParser`` (verified: the only
+    other ``ConferenceId`` construction sites in the upstream tree are
+    ``kenpom/TeamParser.scala`` and ``BuildIngestPipeline.scala``, neither of
+    which is in this port's scope, and neither calls ``is_high_major``
+    either) -- nothing in Phase 5e would exercise it. Noted here rather than
+    silently dropped, matching this module's precedent for other
+    unreferenced companion-object members (see the module docstring's
+    ``Year.until`` / ``Game.Score.by_winner`` notes).
+
+    Args:
+        name: The unique name of the conference.
+    """
+
+    name: str
+
+
+@dataclass
+class ShotLocation:
+    """A shot's court-relative coordinates, in feet (``ShotEvent.ShotLocation``,
+    ``models/ncaa/ShotEvent.scala:48``). **Scope addition, Task 5e.5** --
+    flattened out of the Scala ``ShotEvent`` companion object per this
+    module's established nested-object-flattening precedent (see the module
+    docstring's "Scala idiom decisions": ``ScoreInfo``/``PlayerCodeId`` were
+    already flattened out of ``LineupEvent``'s companion the same way).
+
+    Args:
+        x: Feet from the basket; positive is to the right of the basket
+            (facing the goal), negative is to the left.
+        y: Feet from the basket along the baseline-perpendicular axis.
+    """
+
+    x: float
+    y: float
+
+
+@dataclass
+class ShotGeo:
+    """A shot's synthetic lat/lon, for geo-aware visualization tooling
+    (``ShotEvent.ShotGeo``, ``models/ncaa/ShotEvent.scala:45``). **Scope
+    addition, Task 5e.5** -- flattened per :class:`ShotLocation`'s note.
+
+    Args:
+        lat: Synthetic latitude (feet-to-meters converted, offset from an
+            arbitrary base point -- not a real-world location).
+        lon: Synthetic longitude, same convention as :attr:`lat`.
+    """
+
+    lat: float
+    lon: float
+
+
+@dataclass
+class ShotEvent:
+    """Info about one shot taken during a game, all distances in feet
+    (``ShotEvent``, ``models/ncaa/ShotEvent.scala:9-29``). **Scope addition,
+    Task 5e.5** -- the model produced by
+    :func:`~sportsdataverse.mbb.mbb_ncaa_shot_parser.create_shot_event_data`.
+
+    **Fields ``mbb_ncaa_shot_parser.create_shot_event_data`` (this task)
+    actually populates:** ``player`` (best-effort -- tidy-resolved + coded
+    for the team under analysis, name-coded only for the opponent),
+    ``date``/``location_type``/``team``/``opponent`` (copied from the
+    box-score lineup), ``is_off``, ``score`` (re-oriented for home/away/
+    neutral perspective), ``min`` (ascending game-clock time, after
+    ``phase1_shot_event_enrichment``), ``loc``/``dist`` (transformed court
+    coordinates + Euclidean distance from the basket, after the
+    self-correcting flip pass), ``geo`` (synthetic lat/lon), ``raw_event``
+    (the SVG ``<title>`` text, for debugging).
+
+    **Fields left as placeholders for a LATER phase (Task 5e.6,
+    ``PlayByPlayUtils``/``ShotEnrichmentUtils``):** ``lineup_id`` (always
+    ``None`` here -- "discard if bad lineup" per the Scala comment, filled in
+    once the shot is matched against an actual on-floor lineup), ``players``
+    (always ``[]`` here -- filled in from the matched lineup), ``pts``
+    (**not the real point value** -- this task only sets it to ``1``/``0``
+    for made/missed, matching the Scala's own ``// (enrich in final phase)``
+    comment; the real 2pt/3pt value comes from ``PlayByPlayUtils.shot_value``
+    in Task 5e.6), ``value`` (always ``0`` here, same "final phase" note),
+    ``ast_by``/``is_ast``/``is_trans`` (always ``None`` here -- assist/
+    transition attribution needs the play-by-play cross-reference Task 5e.6
+    builds).
+
+    Args:
+        player: The shooting player's code + identity, if resolved (``None``
+            is never actually produced by this task's parser, but the type
+            allows for it per the Scala ``Option``).
+        date: The date of the game.
+        location_type: Home/away/neutral (etc.) for this game.
+        team: The team under analysis.
+        opponent: The opposing team.
+        is_off: Whether the team under analysis is the one shooting.
+        lineup_id: The on-floor lineup id, if/when matched (see above).
+        players: The on-floor lineup's players, if/when matched (see above).
+        score: The score at the time of the shot, team-oriented.
+        min: The ascending game-clock time (minutes) of the shot.
+        loc: The shot's transformed court location, in feet.
+        geo: The shot's synthetic lat/lon.
+        dist: The shot's distance from the basket, in feet.
+        pts: Made(``1``)/missed(``0``) flag from this task -- NOT the real
+            point value (see above).
+        value: Always ``0`` from this task (see above).
+        ast_by: The assisting player, if/when matched (see above).
+        is_ast: Whether the shot was assisted, if/when matched (see above).
+        is_trans: Whether the shot was in transition, if/when matched (see
+            above).
+        raw_event: The raw SVG ``<title>`` text this shot was parsed from,
+            for debugging (discarded before writing to disk upstream).
+    """
+
+    player: Optional[PlayerCodeId]
+    date: datetime
+    location_type: LocationType
+    team: TeamSeasonId
+    opponent: TeamSeasonId
+    is_off: bool
+    lineup_id: Optional[LineupId]
+    players: list[PlayerCodeId]
+    score: Score
+    min: float
+    loc: ShotLocation
+    geo: ShotGeo
+    dist: float
+    pts: int
+    value: int
+    ast_by: Optional[PlayerCodeId]
+    is_ast: Optional[bool]
+    is_trans: Optional[bool]
+    raw_event: Optional[str]
+
+
+@dataclass
+class CutdownShotEvent:
+    """A narrowed :class:`ShotEvent`, keeping only the fields needed once a
+    shot has been matched to a player/lineup event (``CutdownShotEvent``,
+    ``models/ncaa/ShotEvent.scala:31-40``). **Scope addition, Task 5e.5** --
+    ported for shape fidelity even though **it is dead code in the ENTIRE
+    upstream tree**: grepping shows it appears only in its own definition
+    (``ShotEvent.scala``) and as the never-populated ``shot_info:
+    Option[CutdownShotEvent]`` field on ``PlayerEvent.scala`` -- it is never
+    constructed anywhere. (``PlayByPlayUtils.shot_value`` is an UNRELATED
+    ``event_str -> int`` point-value classifier that merely shares a similar
+    name -- Task 5e.6 will NOT produce this type either.) Appended here (not
+    inserted among the 5a-reviewed classes above) to keep this an
+    additive-only change, matching :class:`RosterEntry`/:class:`ConferenceId`'s
+    precedent.
+
+    Args:
+        loc: The shot's court location, in feet, if known.
+        geo: The shot's synthetic lat/lon, if known.
+        dist: The shot's distance from the basket, in feet, if known.
+        pts: The point value if made (``2``/``3``), else ``0``.
+        value: The shot's attempt value (``2``/``3``), regardless of make/miss.
+        is_ast: Whether the shot was assisted, if known.
+        is_trans: Whether the shot was in transition, if known.
+        is_orb: Whether the shot followed an offensive rebound, if known.
+    """
+
+    loc: Optional[ShotLocation]
+    geo: Optional[ShotGeo]
+    dist: Optional[float]
+    pts: int
+    value: int
+    is_ast: Optional[bool]
+    is_trans: Optional[bool]
+    is_orb: Optional[bool]

@@ -2237,12 +2237,28 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
     return tuple(d.get("columns", []) or [])
 
 
+# Modules whose name happens to end in "_parsers" but which are genuine
+# user-facing NCAA HTML-parser modules (Phase 5e), not generic per-source
+# dispatch-registry files -- exempted from the ``endswith("_parsers")`` leak
+# heuristic below so their public functions/classes (``get_team_triples``,
+# ``get_neutral_games``, ``ScheduleBuilders``, ...) get autodoc'd instead of
+# silently vanishing from both the autodoc page AND the coverage allowlist.
+_PARSER_SUFFIX_LEAK_EXCEPTIONS = frozenset(
+    {
+        "sportsdataverse.mbb.mbb_ncaa_team_parsers",
+        "sportsdataverse.wbb.wbb_ncaa_team_parsers",
+    },
+)
+
+
 # Modules that leak into a league's ``dir()`` via ``from ... import *`` but are
 # NOT hand-written league functions: shared download/JSON utilities, the shared
 # error types, and the generic per-source parsers (``parser_for_*``). These are
 # genuine allowlist candidates, NOT autodoc material, so they are excluded from
 # the autodoc set and remain visible to ``--coverage`` for a later allowlist task.
 def _is_shared_leak(module: str) -> bool:
+    if module in _PARSER_SUFFIX_LEAK_EXCEPTIONS:
+        return False
     return module == "sportsdataverse.dl_utils" or module == "sportsdataverse.errors" or module.endswith("_parsers")
 
 

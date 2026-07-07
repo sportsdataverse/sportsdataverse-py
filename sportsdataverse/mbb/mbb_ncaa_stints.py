@@ -9,8 +9,14 @@ Ported functions/types (Scala anchors in each docstring):
 
 * :func:`remove_diacritics` -- NFD-normalize + strip combining marks
   (``ExtractorUtils.scala:38-43``).
+* :func:`remove_html_encoding` -- undo ``&#39;``/``&quot;``/``&amp;`` literal
+  escapes (``ExtractorUtils.scala:25-33``), added in Task 5e.5 for
+  ``mbb_ncaa_shot_parser.py``'s SVG-title name extraction.
 * :func:`build_player_code` -- turn a box-score / play-by-play player name
   into a short unique-within-team code (``ExtractorUtils.scala:290-391``).
+* :func:`name_in_v0_box_format` -- flip a v1-box-format name to v0-box format
+  (``ExtractorUtils.scala:59-81``), added in Task 5e.1 for
+  ``mbb_ncaa_roster_parser.py``'s v1 ``name_finder``.
 * :func:`parse_team_name` -- match the two team-title strings against the
   target team (``ExtractorUtils.scala:240-267``).
 * :data:`SUB_SAFETY_DELTA_MINS` + :class:`SubInEvent` / :class:`SubOutEvent`
@@ -50,6 +56,17 @@ same float product -- both languages use IEEE-754 doubles for the
 intermediate ``duration_mins * 60000.0``, so the truncated millisecond count
 is bit-for-bit identical between the two ports (verified against the
 oracle's ``now.plusMillis(6000)`` for a ``duration_mins=0.1`` stint).
+
+**``ExtractorUtils.v0_box_name_to_first_last`` is NOT ported (Task 5e.1
+scope decision).** ``RosterParser.parse_roster``'s ``include_coach`` branch
+uses it only inside a ``println``-based maintainer diagnostic (the
+"TOFIX1"/"TOFIX2" suggested ``fix_combos(...)`` calls for the duplicate-name
+table) that has **no effect on the function's return value** either way --
+the ``Left(...)`` duplicate error is returned regardless of whether the
+diagnostic prints anything. This is the same situation as
+``mbb_ncaa_names.py``'s documented ``fixes_for_debug`` drop (a Scala
+``println`` aid with no return-value effect, dropped rather than added as
+unused scaffolding); the same call applies here.
 
 **Scala idiom decision: the ``Model`` companion object is flattened.**
 Scala nests the ADT + ``LineupBuildingState`` inside ``private[ExtractorUtils]
@@ -167,7 +184,9 @@ __all__ = [
     "PLAYER_CODE_MAX_LENGTH",
     "PLAYER_CODE_MAX_FRAGMENT_LENGTH",
     "remove_diacritics",
+    "remove_html_encoding",
     "build_player_code",
+    "name_in_v0_box_format",
     "parse_team_name",
     "SUB_SAFETY_DELTA_MINS",
     "SubInEvent",
@@ -223,6 +242,40 @@ def remove_diacritics(fragment: str) -> str:
             print(remove_diacritics("Dorka Juhász"))  # "Dorka Juhasz"
     """
     return "".join(ch for ch in unicodedata.normalize("NFD", fragment) if not unicodedata.combining(ch))
+
+
+def remove_html_encoding(html_str: str) -> str:
+    """Undo a handful of literal HTML entity escapes (``ExtractorUtils
+    .remove_html_encoding``, ``ExtractorUtils.scala:25-33``). **Scope
+    addition, Task 5e.5** -- the first consumer is
+    ``mbb_ncaa_shot_parser.parse_shot_html`` (the ``player`` name / shooting
+    team name extracted from an SVG shot's ``<title>`` text).
+
+    In practice bs4/lxml already decode standard HTML entities (``&#39;``,
+    ``&quot;``, ``&amp;``) while parsing text nodes, so this is usually a
+    no-op by the time it runs on already-parsed text -- ported anyway for
+    exact behavioral parity with any double-escaped input the upstream
+    Scala guards against (JSoup has the same auto-decoding behavior, so the
+    Scala original is equally a defensive no-op in the common case).
+
+    Args:
+        html_str: Any string, typically already-parsed element text.
+
+    Returns:
+        ``html_str`` with ``&#39;``/``&quot;``/``&amp;`` replaced by their
+        literal characters, only if ``"&"`` appears at all (short-circuit
+        matching the Scala's ``if (html_str.indexOf("&") >= 0)`` guard).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import remove_html_encoding
+            remove_html_encoding("De&#39;Shayne")  # "De'Shayne"
+            remove_html_encoding("Plain Name")  # "Plain Name" (unchanged)
+    """
+    if "&" in html_str:
+        return html_str.replace("&#39;", "'").replace("&quot;", '"').replace("&amp;", "&")
+    return html_str
 
 
 def _first_last(fragment: str) -> str:
@@ -368,6 +421,66 @@ def build_player_code(in_name: str, team: Optional[TeamId]) -> PlayerCodeId:
         code = _transform_first_name(head, name.lower()) + middle + _transform(tail[-1], PLAYER_CODE_MAX_LENGTH)
 
     return PlayerCodeId(code=code, id=PlayerId(name))
+
+
+#: Nickname-parenthetical matcher used by :func:`name_in_v0_box_format`
+#: (``ExtractorUtils.complex_v0_case_regex``, ``ExtractorUtils.scala:45``).
+#: Scala's ``last match { case complex_v0_case_regex(nickname, last_name) => ... }``
+#: pattern match requires a FULL match -> :func:`re.fullmatch`.
+_COMPLEX_V0_CASE_RE = re.compile(r"([(].*[)])(.*)")
+
+
+def name_in_v0_box_format(v1_name: str) -> str:
+    """Switch a v1-box-format name (``"first_name names"``) to v0-box format
+    (``"names, first_name"``) (``ExtractorUtils.scala:59-81``).
+
+    Handles a v0-PbP-style all-caps input (``"SURNAME,NAME"``, still seen in
+    older files even in v1-format seasons) by first flipping it to guaranteed
+    v1 shape, then splits on the first space to get ``first``/``last``. A
+    ``last`` starting with ``"("`` is treated as a nickname parenthetical
+    (e.g. ``"Russell (Deuce) Dean"``) and re-split via
+    :data:`_COMPLEX_V0_CASE_RE` -- **ported verbatim including its literal
+    quirk**: the regex's second capture group keeps the leading space before
+    the trailing surname (e.g. yields ``" Dean, Russell (Deuce)"``, not
+    ``"Dean, Russell Deuce"`` as the Scala source comment's stated *intent*
+    describes) and the parenthesis characters are not stripped. This is
+    upstream behavior, not a Python-side bug -- the Scala's own pattern-match
+    reproduces exactly this, so faithful porting keeps it.
+
+    Args:
+        v1_name: The player name as it appears in a v1 (2018+) NCAA roster
+            or box-score row.
+
+    Returns:
+        The name in v0 (``"names, first_name"``) format, or ``v1_name``
+        (via the guaranteed-v1-format intermediate) unchanged if it has no
+        space to split on.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import name_in_v0_box_format
+            name_in_v0_box_format("Daniel Akin")  # "Akin, Daniel"
+            name_in_v0_box_format("AKIN,DANIEL")  # "AKIN, DANIEL" (old PbP form, flipped then re-split)
+    """
+    guaranteed_v1_format = v1_name
+    if v1_name.upper() == v1_name:
+        comma_parts = v1_name.split(",", 1)
+        if len(comma_parts) == 2:
+            last, first = comma_parts
+            guaranteed_v1_format = f"{first} {last}"
+
+    space_parts = guaranteed_v1_format.split(" ", 1)
+    if len(space_parts) != 2:
+        return guaranteed_v1_format
+    first, last = space_parts
+    if last.startswith("("):
+        m = _COMPLEX_V0_CASE_RE.fullmatch(last)
+        if m is not None:
+            nickname, last_name = m.group(1), m.group(2)
+            return f"{last_name}, {first} {nickname}"
+        return f"{last}, {first}"
+    return f"{last}, {first}"
 
 
 def parse_team_name(teams: list[str], target_team: TeamId, year: Year) -> Union[tuple[str, str, bool], ParseError]:

@@ -1,0 +1,3644 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>NCAA Statistics</title>
+    <link href="/assets/test1.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="/assets/test2.js" type="text/javascript"></script>
+    <meta content="authenticity_token" name="csrf-param" />
+<meta content="XXX" name="csrf-token" />
+    <style>
+    </style>
+
+  </head>
+
+  <script>
+
+  </script>
+  <body id="body" onload="if (top != self) { top.location=self.location; }">
+    <div id="header"><img alt="Titlebar_logo" height="81" src="/assets/title.jpg" style="float: left" width="104" />
+      <h1>
+        <span id="title1">NCAA</span><br/>
+        <span id="title2">Statistics</span>
+      </h1>
+
+
+      <div id="nav">
+  <ul>
+     <li id="notactive">
+       <a href="/rankings?academic_year=2018&amp;sport_code=MBB"><span>National Rankings</span></a>
+    </li>
+     <li id="notactive">
+       <a href="/active_career_leaders/test"><span>Active Career Leaders</span></a>
+    </li>
+    <li id="notactive">
+      <a href="/contests/scoreboards"><span>Scoreboard</span></a>
+    </li>
+    <li id="notactive">
+      <a href="/head_coaches"><span>Head Coaches</span></a>
+    </li>
+    <li id="team_search">
+      <script>
+</script>
+
+<span style="display:inline; float:right;">
+  <form accept-charset="UTF-8" action="/team/index" id="change_team_form" method="post" onsubmit="mask(&#x27;Loading&#x27;);" style="display:inline;"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="XXX" /></div>
+  <div style="display:none;">
+  <input id="sport_btn" name="commit" type="submit" value="Submit" />
+  </div>
+    <div id="team_autocomplete" class="ui-widget">
+      <span style="color: #ccc;">Team Search:</span>
+      <input id="org_name" name="org_name" style="width:200px" type="text" />
+      <input id="org_id" name="org_id" type="hidden" />
+    </div>
+</form></span>
+    </li>
+  <li>
+  <a href="http://twitter.com/tweettweet" target="TWITTER"><img alt="Twitter" height="17" src="/assets/twitter.png" width="46" /></a>
+  </li>
+  </ul>
+</div>
+
+</div>
+
+    <div id="contentarea">
+       <div id="stats_app_dialog" style="display:none;">
+        </div>
+      <div id="message_box" class="game"  style="display: none" >
+        <span class="message_box_success"></span>
+        <span class="message_box_error"></span>
+      </div>
+      <br/>
+
+<br/>
+
+
+<table class="mytable" align="center" width="50%">
+
+ <tr class="grey_heading">
+	<td>&nbsp;</td>
+	<td align="center">1st Half</td>
+	<td align="center">2nd Half</td>
+	<td align="center">1st OT</td>
+    <td align="center">Total</td>
+ </tr>
+ <tr>
+	<td><a href="/team/111/22222">TeamA</a></td>
+	<td align="right" class=&quot;boldtext&quot;>45</td>
+	<td align="right" class=&quot;boldtext&quot;>30</td>
+	<td align="right" class=&quot;boldtext&quot;>17</td>
+	<td align="right" class=&quot;boldtext&quot;>92</td>
+</tr>
+
+ <tr>
+	<td><a href="/team/333/4444">TeamB</a></td>
+	<td align="right" >26</td>
+	<td align="right" >49</td>
+	<td align="right" >16</td>
+	<td align="right" >91</td>
+</tr>
+
+
+
+</table>
+
+<table align="center" width="50%">
+</table>
+
+<table align="center" width="50%">
+   <tr>
+      <td class="boldtext" width="20%">Game Date:</td>
+      <td>
+        12/12/2017
+      </td>
+   </tr>
+   <tr>
+      <td class="boldtext">Location:</td>
+      <td>Location, State</td>
+   </tr>
+   <tr>
+      <td class="boldtext">Attendance:</td>
+      <td>10,0000</td>
+   </tr>
+
+</table>
+
+
+<table align="center" width="50%">
+   <tr>
+ 	 <td class="boldtext" width="20%" valign="top">Officials:</td>
+     <td align="left">
+        Ref One
+        <br/>
+        Ref Two
+        <br/>
+        Ref Three
+     </td>
+   </tr>
+</table>
+
+
+
+<br/>
+
+<div class="header_menu" style="width: 990px; margin-left: auto; margin-right: auto ;">
+
+<div id="nav_bar" style="">
+  <div id="primary_nav_wrap">
+		<ul class="level1" id="root">
+		  <li>
+		    <a href="#" class="skipMask">Box Score</a>
+		    <ul class="level2">
+		 		    <li><a href="/game/box_score/111?period_no=1">1st Half</a></li>
+		 		    <li><a href="/game/box_score/222?period_no=2">2nd Half</a></li>
+		 		    <li><a href="/game/box_score/333?period_no=3">1st OT</a></li>
+ 		    <li><a href="/game/box_score/444">Box Score </a></li>
+		    </ul>
+		  </li>
+		  <li class="sep">|</li>
+ 		  <li>
+			<a href="/game/play_by_play/555">Play by Play</a>
+		  </li>
+  	      <li class="sep">|</li>
+ 		  <li>
+			<a href="/game/period_stats/666">Summary by Halves</a>
+		  </li>
+  	 </ul>
+</div>
+</div>
+</div>
+
+
+	<table width="1000px" align="center" class="mytbl">
+    <tr class="heading">
+       <td width="90%" align="center"><a id="pd1">1st Half</a></td>
+  	  <td align="right">
+	      1
+	      <a href="#pd2">2</a>
+	      <a href="#pd3">3</a>
+      </td>
+   </tr>
+</table>
+<table width="1000px" class="mytable" align="center">
+   <tr class="grey_heading">
+	   <td class="boldtext" width="10%" align="center">Time</td>
+	   <td class="boldtext" width="40%" align="center">TeamA</td>
+	   <td class="boldtext" width="10%" align="center">Score</td>
+	   <td class="boldtext" width="40%" align="center">TeamB</td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:40</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+     <td class="smtext">20:00:00</td>
+     <td colspan="3" align="center" class="boldtext"><b></b> random event like timeout </td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:40</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:31</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:31</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:19</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAM missed Layup</td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:19</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:11</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:11</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB missed Layup</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:48</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">0-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:38</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Dunk</b></td>
+	   <td class="smtext" align="center">2-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:38</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">2-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:22</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">2-0</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:22</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">2-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:50</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Two Point Jumper</b></td>
+	   <td class="smtext" align="center">4-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:34</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">4-0</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:33</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Steal</td>
+	   <td class="smtext" align="center">4-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:31</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">6-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:53</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">6-0</td>
+	   <td class="smtext">TEAM Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:38</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:38</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:23</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:21</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Steal</td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:07</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:02</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Steal</td>
+	   <td class="smtext" align="center">8-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:58</td>
+	   <td class="smtext"><b>S5RNAME,F5RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">TEAM Team Timeout</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-0</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:32</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"><b>S6RNAME,F6RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:26</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:26</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:22</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:22</td>
+	   <td class="smtext">,F6RSTNAME TEAMA S6RNAME Enters Game</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <!-- New format sample: -->
+   <tr>
+	   <td class="smtext">15:22</td>
+	   <td class="smtext">F7rstname TeamA S7rname, substitution in</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:22</td>
+	   <td class="smtext">F2rstname TeamA S2rname, substitution out</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <!-- End new format sample: -->
+   <tr>
+	   <td class="smtext">15:22</td>
+     <td class="smtext">S5RNAME,F5RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB missed Layup</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Offensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:59</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:59</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Blocked Shot</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:58</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">10-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:55</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">12-2</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:36</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">12-5</td>
+	   <td class="smtext"><b>S9RNAME,F9RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:36</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">12-5</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:15</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">12-5</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:15</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Free Throw</td>
+	   <td class="smtext" align="center">12-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:15</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+	   <td class="smtext" align="center">12-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:15</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:15</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:15</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:01</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:01</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:38</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Layup</td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:38</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:38</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:38</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:38</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">13-5</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">13-7</td>
+	   <td class="smtext"><b>S10RNAME,F10RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:04</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">13-7</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:47</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">13-9</td>
+	   <td class="smtext"><b>S10RNAME,F10RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:28</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">13-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:28</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">13-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">13-9</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA missed Free Throw</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:27</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:21</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:14</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:58</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:53</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:53</td>
+	   <td class="smtext">TEAM Media Timeout</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:53</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:53</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:40</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:40</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:29</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:29</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:20</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:20</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:20</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:20</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:20</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:06</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:06</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:04</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:04</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:04</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:55</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:40</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:39</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-9</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:37</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-11</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:37</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">14-11</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:27</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">17-11</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:27</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">17-11</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-11</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB missed Layup</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-11</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Offensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:56</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:47</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:47</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">17-13</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:38</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">20-13</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:22</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">20-15</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:07</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Two Point Jumper</b></td>
+	   <td class="smtext" align="center">22-15</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:55</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">22-18</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:55</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">22-18</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:36</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:16</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:16</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:03</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:44</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:44</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">25-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:28</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">27-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:16</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">27-18</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Layup</td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:16</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+	   <td class="smtext" align="center">27-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:16</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">27-18</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:16</td>
+	   <td class="smtext">TEAM Media Timeout</td>
+	   <td class="smtext" align="center">27-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:16</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">27-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:16</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">27-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:01</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">30-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:01</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">30-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:46</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">30-18</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:46</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">30-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:27</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:27</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:08</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:01</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:01</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:38</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:36</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:33</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:33</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-18</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Offensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:28</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">32-20</td>
+	   <td class="smtext"><b>S9RNAME,F9RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:02</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:55</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:55</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:55</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:55</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:45</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:45</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Offensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:39</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:39</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Blocked Shot</td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:37</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">34-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:21</td>
+	   <td class="smtext"><b>S6RNAME,F6RSTNAME TEAMA made Two Point Jumper</b></td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:21</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext">TEAM Team Timeout</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:57</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">36-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:35</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">39-20</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:31</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">39-20</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:31</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">39-20</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:23</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">39-22</td>
+	   <td class="smtext"><b>S9RNAME,F9RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:00</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">39-22</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">39-22</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:32</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">39-22</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:32</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Blocked Shot</td>
+	   <td class="smtext" align="center">39-22</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:29</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">39-22</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:26</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">41-22</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:26</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">41-22</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">41-22</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:05</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">41-22</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:41</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">43-22</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:29</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-22</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:29</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-22</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Offensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-22</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-22</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Offensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:22</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:20</td>
+	   <td class="smtext">TEAM 30 Second Timeout</td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:20</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:20</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">43-24</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:06</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">45-24</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:44</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"><b>S9RNAME,F9RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:20</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Layup</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:20</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:20</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:20</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Blocked Shot</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:01</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+ <tr class="grey_heading">
+      <td colspan="4" align="center">End of 1st Half
+ </tr>
+</table>
+<br/>
+<table width="1000px" align="center" class="mytbl">
+    <tr class="heading">
+       <td width="90%" align="center"><a id="pd2">2nd Half</a></td>
+  	  <td align="right">
+	      <a href="#pd1">1</a>
+	      2
+	      <a href="#pd3">3</a>
+      </td>
+   </tr>
+</table>
+<table width="1000px" class="mytable" align="center">
+   <tr class="grey_heading">
+	   <td class="boldtext" width="10%" align="center">Time</td>
+	   <td class="boldtext" width="40%" align="center">team_autocomplete</td>
+	   <td class="boldtext" width="10%" align="center">Score</td>
+	   <td class="boldtext" width="40%" align="center">TeamB</td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">20:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-26</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">45-28</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:31</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">45-28</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:31</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">45-28</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:22</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">47-28</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:22</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">47-28</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:22</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">47-28</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:22</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">48-28</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">48-30</td>
+	   <td class="smtext"><b>S10RNAME,F10RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">19:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">48-30</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:46</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">48-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:46</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">48-30</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:39</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">48-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:38</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">48-30</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:30</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Dunk</b></td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:30</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:10</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:09</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Steal</td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:07</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:07</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:07</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">18:03</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:40</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:40</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">50-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:27</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">52-30</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:22</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-33</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:22</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-33</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:05</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">52-33</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-33</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:02</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:02</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:02</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:02</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB missed Free Throw</td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:02</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:02</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">17:02</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:50</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:50</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-35</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:40</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:40</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:24</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:24</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:24</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">52-37</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:16</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">16:16</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext">TEAM  Timeout</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:54</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:35</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:26</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA missed Layup</td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:26</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">55-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:23</td>
+	   <td class="smtext"><b>S6RNAME,F6RSTNAME TEAMA made Two Point Jumper</b></td>
+	   <td class="smtext" align="center">57-37</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:15</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-39</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">15:01</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">57-39</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:59</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-39</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:53</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-41</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:31</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-41</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:23</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-41</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:23</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">57-41</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-41</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">14:11</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">57-41</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:58</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:58</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:44</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:43</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB missed Layup</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">57-43</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">58-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:39</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:20</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:20</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:10</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:09</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:09</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:09</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">13:00</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">59-43</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:52</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-46</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:34</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">59-46</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:34</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-46</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMB made Dunk</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:17</td>
+	   <td class="smtext">TEAM Team Timeout</td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:17</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:17</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:17</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:17</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">59-48</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:07</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">12:07</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:40</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:40</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:30</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:30</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext">TEAM Media Timeout</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Free Throw</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">61-48</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">11:25</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:59</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:59</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA missed Free Throw</td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:59</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">61-49</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:57</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">63-49</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:36</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-52</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:36</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-52</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:16</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">63-52</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:14</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-52</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">10:12</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-54</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:50</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">63-54</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:50</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-54</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:41</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:41</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:35</td>
+	   <td class="smtext">TEAM 30 Second Timeout</td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:35</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:35</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:35</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:35</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:35</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:35</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">63-57</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:27</td>
+	   <td class="smtext"><b>S6RNAME,F6RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">64-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:27</td>
+	   <td class="smtext"><b>S6RNAME,F6RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Two Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:09</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:04</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">09:04</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:58</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">65-57</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:38</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">65-59</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:21</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">65-59</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:21</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">66-59</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:21</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">67-59</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:21</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-59</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:21</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-59</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">08:05</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:44</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:44</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:25</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:25</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">07:22</td>
+	   <td class="smtext">TEAM  Timeout</td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:52</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Layup</td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:52</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:46</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA missed Tip In</td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:46</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-61</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:41</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:11</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:11</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:01</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">06:01</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Blocked Shot</td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Offensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:53</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:52</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Steal</td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:30</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:29</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">67-63</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-64</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext">TEAM Team Timeout</td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:27</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">67-65</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:06</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">69-65</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:47</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:47</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:31</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:13</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:13</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:09</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:03</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">69-67</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:03</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-68</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:03</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-69</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:03</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-69</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:03</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-69</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:45</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">69-69</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:45</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-69</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:16</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">69-69</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB missed Three Point Jumper</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:16</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Defensive Rebound</td>
+	   <td class="smtext" align="center">69-69</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:01</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMA made Layup</b></td>
+	   <td class="smtext" align="center">71-69</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:01</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">71-69</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:42</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">71-71</td>
+	   <td class="smtext"><b>S9RNAME,F9RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:42</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">71-71</td>
+	   <td class="smtext">TEAM Team Timeout</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:42</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">71-71</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:42</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">71-71</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:42</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">71-71</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:12</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Two Point Jumper</b></td>
+	   <td class="smtext" align="center">73-71</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:12</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">73-71</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:51</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:51</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:37</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:35</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:33</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:32</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Steal</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:29</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:11</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:58</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:58</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:58</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:48</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:48</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:48</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:48</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:43</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA Turnover</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:42</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Steal</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:38</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:38</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:38</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:18</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:18</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Blocked Shot</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB missed Free Throw</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-74</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Two Point Jumper</td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext">TEAM Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext">TEAM Team Timeout</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Turnover</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:04</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:00</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:00</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Offensive Rebound</td>
+	   <td class="smtext" align="center">73-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:00</td>
+	   <td class="smtext"><b>S6RNAME,F6RSTNAME TEAMA made Tip In</b></td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext"></td>
+   </tr>
+ <tr class="grey_heading">
+      <td colspan="4" align="center">End of 2nd Half
+ </tr>
+</table>
+<br/>
+<table width="1000px" align="center" class="mytbl">
+    <tr class="heading">
+       <td width="90%" align="center"><a id="pd3">1st OT</a></td>
+  	  <td align="right">
+	      <a href="#pd1">1</a>
+	      <a href="#pd2">2</a>
+	      3
+      </td>
+   </tr>
+</table>
+<table width="1000px" class="mytable" align="center">
+   <tr class="grey_heading">
+	   <td class="boldtext" width="10%" align="center">Time</td>
+	   <td class="boldtext" width="40%" align="center">TeamA</td>
+	   <td class="boldtext" width="10%" align="center">Score</td>
+	   <td class="boldtext" width="40%" align="center">TeamB</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">05:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext">S5RNAME,F5RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:34</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA missed Three Point Jumper</td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:34</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:31</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">75-75</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:31</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">75-76</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:31</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">75-77</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:31</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Enters Game</td>
+	   <td class="smtext" align="center">75-77</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:31</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMA Leaves Game</td>
+	   <td class="smtext" align="center">75-77</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:20</td>
+	   <td class="smtext"><b>S6RNAME,F6RSTNAME TEAMA made Dunk</b></td>
+	   <td class="smtext" align="center">77-77</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">04:20</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">77-77</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">77-80</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Three Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:58</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">77-80</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMB Assist</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:37</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">80-80</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:26</td>
+	   <td class="smtext">S7RNAME,F7RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">80-80</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:26</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">80-81</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:26</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">80-82</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:26</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">80-82</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:26</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">80-82</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:26</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">80-82</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:26</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">80-82</td>
+	   <td class="smtext">S3RNAME,F3RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:16</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">80-82</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:16</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">81-82</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:16</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">82-82</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:16</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">82-82</td>
+	   <td class="smtext">S8RNAME,F8RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">03:16</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">82-82</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:51</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">82-84</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:29</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">82-84</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:29</td>
+	   <td class="smtext">S4RNAME,F4RSTNAME TEAMA missed Free Throw</td>
+	   <td class="smtext" align="center">82-84</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:29</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+	   <td class="smtext" align="center">82-84</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:29</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">83-84</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:09</td>
+	   <td class="smtext">S6RNAME,F6RSTNAME TEAMA Commits Foul</td>
+	   <td class="smtext" align="center">83-84</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">83-84</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB missed Free Throw</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">83-84</td>
+	   <td class="smtext">TEAM Deadball Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">83-85</td>
+	   <td class="smtext"><b>S2RNAME,F2RSTNAME TEAMB made Free Throw</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">83-85</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">02:09</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">83-85</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:48</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Two Point Jumper</b></td>
+	   <td class="smtext" align="center">85-85</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">85-85</td>
+	   <td class="smtext">S9RNAME,F9RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:48</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">86-85</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">86-85</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:48</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">86-85</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:37</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">86-87</td>
+	   <td class="smtext"><b>S7RNAME,F7RSTNAME TEAMB made Two Point Jumper</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:29</td>
+	   <td class="smtext">TEAM 30 Second Timeout</td>
+	   <td class="smtext" align="center">86-87</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">01:16</td>
+	   <td class="smtext"><b>S3RNAME,F3RSTNAME TEAMA made Two Point Jumper</b></td>
+	   <td class="smtext" align="center">88-87</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:57</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">88-89</td>
+	   <td class="smtext"><b>S8RNAME,F8RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:39</td>
+	   <td class="smtext"><b>S4RNAME,F4RSTNAME TEAMA made Three Point Jumper</b></td>
+	   <td class="smtext" align="center">91-89</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:39</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA Assist</td>
+	   <td class="smtext" align="center">91-89</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:36</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">91-89</td>
+	   <td class="smtext">TEAM 30 Second Timeout</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:17</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">91-91</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMB made Layup</b></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:01</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">91-91</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Commits Foul</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:01</td>
+	   <td class="smtext"><b>S1RNAME,F1RSTNAME TEAMA made Free Throw</b></td>
+	   <td class="smtext" align="center">92-91</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:01</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMA missed Free Throw</td>
+	   <td class="smtext" align="center">92-91</td>
+	   <td class="smtext"></td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:01</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">92-91</td>
+	   <td class="smtext">S2RNAME,F2RSTNAME TEAMB Defensive Rebound</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:00</td>
+	   <td class="smtext"></td>
+	   <td class="smtext" align="center">92-91</td>
+	   <td class="smtext">S10RNAME,F10RSTNAME TEAMB Enters Game</td>
+   </tr>
+   <tr>
+	   <td class="smtext">00:00</td>
+	   <td class="smtext"></td>
+     <!-- 2018 format: final score in bold -->
+     <td class="smtext boldtext" align="center">92-91</td>
+	   <td class="smtext">S1RNAME,F1RSTNAME TEAMB Leaves Game</td>
+   </tr>
+   <!-- 2018 format: specific end of game marker -->
+   <tr>
+	   <td class="smtext">00:00:00</td>
+       <td colspan="3" align="center" class="boldtext"><b></b> game end confirmed  </td>
+   </tr>
+ <tr class="grey_heading">
+      <td colspan="4" align="center">End of 1st OT
+ </tr>
+</table>
+<br/>
+
+<br/>
+
+    </div>
+
+    <div class="footer"></div>
+
+  </body>
+  <script>
+
+  </script>
+</html>
