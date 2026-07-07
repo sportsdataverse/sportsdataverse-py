@@ -103,23 +103,7 @@ fragments across clumps and, at each lineup boundary, calls
   branch. The explicit guard here makes that invariant visible in Python
   rather than relying on an upstream crash that never fires.
 
-**License / provenance (Apache License, Version 2.0).** This module is a
-derivative work of ``PossessionUtils.scala`` and ``StateUtils.scala``
-(behavior only -- the generic ``Clumper``/``StateContext`` types are not
-ported, see above) from
-`Alex-At-Home/cbb-explorer <https://github.com/Alex-At-Home/cbb-explorer>`_
-(package ``org.piggottfamily.cbb_explorer`` / ``org.piggottfamily.utils``),
-which is licensed under the Apache License, Version 2.0 (the upstream repo's
-``LICENSE`` file; full text at
-`<http://www.apache.org/licenses/LICENSE-2.0>`_). Per Apache-2.0 Section 4's
-redistribution-of-derivative-works obligations, sportsdataverse-py (itself
-MIT-licensed) retains the upstream copyright notice for this derivative::
-
-    Copyright (c) Alex-At-Home (https://github.com/Alex-At-Home) and
-    contributors. Licensed under the Apache License, Version 2.0.
-
-See ``THIRD_PARTY_NOTICES.md`` at the repository root for the full
-third-party attribution entry -- Task 5a.4 adds cbb-explorer's entry there.
+Apache-2.0 third-party port — see the ``NOTICE`` file at the repository root for the upstream copyright and full attribution.
 
 **Landmine index (reachable scalar division / indexing).** No division
 exists in this module's scope -- every computation is integer counting,

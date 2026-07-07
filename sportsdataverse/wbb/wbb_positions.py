@@ -17,7 +17,7 @@ uses, with no duplicated logic to drift out of sync.
 under Apache License, Version 2.0; see the full attribution (copyright
 notice, upstream URL, what was derived) in the
 ``sportsdataverse.mbb.mbb_positions`` module docstring and in
-``THIRD_PARTY_NOTICES.md`` at the repository root.
+``NOTICE`` at the repository root.
 
 Example:
     Quick start::

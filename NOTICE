@@ -1,0 +1,42 @@
+sportsdataverse-py NOTICE
+=========================
+
+sportsdataverse-py is distributed under the MIT License (see LICENSE).
+
+It contains code and test-only fixtures derived from the following third-party
+projects, both licensed under the Apache License, Version 2.0
+(http://www.apache.org/licenses/LICENSE-2.0). Per Apache-2.0 Section 4, their
+copyright and attribution notices are retained below. Neither upstream project
+ships a NOTICE file of its own.
+
+-------------------------------------------------------------------------------
+cbb-on-off-analyzer  —  https://github.com/Alex-At-Home/cbb-on-off-analyzer
+  Copyright (c) Alex-At-Home and contributors. Licensed under Apache-2.0.
+
+  The TypeScript stats utilities LineupUtils.ts, RatingUtils.ts, LuckUtils.ts,
+  RapmUtils.ts, and PositionUtils.ts (with helpers from OverrideUtils.ts and
+  PositionalManualFixes.ts) were ported into:
+      sportsdataverse/mbb/mbb_lineup_stats.py
+      sportsdataverse/mbb/mbb_ratings.py
+      sportsdataverse/mbb/mbb_luck.py
+      sportsdataverse/mbb/mbb_rapm.py
+      sportsdataverse/mbb/mbb_positions.py
+  and re-exported by reference from the parallel sportsdataverse/wbb/ modules.
+
+-------------------------------------------------------------------------------
+cbb-explorer  —  https://github.com/Alex-At-Home/cbb-explorer
+  Copyright (c) Alex-At-Home and contributors. Licensed under Apache-2.0.
+
+  The Scala NCAA play-by-play ingest engine (EventUtils, PossessionUtils,
+  StateUtils, ExtractorUtils, LineupUtils, LineupErrorAnalysisUtils,
+  DataQualityIssues, the ncaa HTML parsers, and the associated models) was
+  ported into sportsdataverse/mbb/mbb_ncaa_*.py and re-exported by reference
+  from sportsdataverse/wbb/wbb_ncaa_*.py.
+
+-------------------------------------------------------------------------------
+Each port is a faithful translation of the upstream logic; documented
+divergences are noted in the respective module docstrings. Test-only oracle
+fixtures vendored byte-exact from the upstream repositories live under
+tests/fixtures/hoop_explorer/ and tests/fixtures/ncaa/ (see each directory's
+README for per-file provenance); these fixtures are not shipped in the
+distributed wheel or sdist.
