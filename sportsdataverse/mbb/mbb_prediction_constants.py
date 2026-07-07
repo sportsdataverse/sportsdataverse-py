@@ -69,11 +69,12 @@ _NET_QUAD_THRESHOLDS: dict[str, dict[str, int]] = {
     "away": {"q1": 75, "q2": 135, "q3": 240},
 }
 
-# Men's hfa / margin_sd / em_scale were fitted on the 2024 as-of-date backtest
-# (``dev/mbb_prediction/fit_pregame.py``: joint least squares of actual margin on
-# em_diff + non-neutral indicator over 4,359 eligible games; residual std 11.224
-# vs Brier-minimizing 11.193). Women's values remain published-reference seeds
-# until the Phase-7 refit. Quad thresholds are canonical NET definitions.
+# Both leagues' hfa / margin_sd / em_scale / avg_tempo / bubble_adj_em were
+# fitted on their 2024 as-of-date backtests (``dev/mbb_prediction/fit_pregame.py``,
+# joint least squares of actual margin on em_diff + non-neutral indicator;
+# mens: 4,359 eligible games, womens: 4,133 with ``PRED_LEAGUE=womens``; each
+# iterated to a fixed point because the ratings engine reads hfa/avg_tempo).
+# Quad thresholds are canonical NET definitions.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "mens": LeagueConstants(
         hfa=2.9281,
@@ -86,13 +87,13 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         in_game_wp_artifact="mbb_in_game_wp.ubj",
     ),
     "womens": LeagueConstants(
-        hfa=3.0,
-        margin_sd=12.0,
-        em_scale=0.5794,
-        avg_tempo=70.0,
+        hfa=2.6432,
+        margin_sd=12.1716,
+        em_scale=0.6230,
+        avg_tempo=71.8212,
         avg_efficiency=95.0,
         quad_thresholds=_NET_QUAD_THRESHOLDS,
-        bubble_adj_em=20.394,
+        bubble_adj_em=27.472,
         in_game_wp_artifact="wbb_in_game_wp.ubj",
     ),
 }
