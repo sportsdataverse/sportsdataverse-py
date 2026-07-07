@@ -1,0 +1,33 @@
+schema: cfb_simulations
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: wins
+  type: double
+  description: ''
+- name: losses
+  type: double
+  description: ''
+- name: ties
+  type: double
+  description: ''
+- name: win_pct
+  type: double
+  description: ''
+- name: won_conf
+  type: double
+  description: ''
+- name: made_playoff
+  type: double
+  description: ''
+- name: first_round_bye
+  type: double
+  description: ''
+- name: won_cfp
+  type: double
+  description: ''

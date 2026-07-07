@@ -307,6 +307,161 @@ finals = espn_nba_schedule(dates=20230102).filter(
 )
 ```
 
+## Dataset loaders
+
+### `load_darko_dpm(path: 'str') -> 'pl.DataFrame'` {#load_darko_dpm}
+
+Parse a DARKO DPM leaderboard CSV (e.g. `2026-darko-dpm-leaderboard.csv`).
+
+Name-keyed only (no shared player id with the model zoo) -- this is the
+family `~sportsdataverse.nba.nba_model_validation.external_validity`
+joins with `join="name"`. Handles two real-file quirks: a leading UTF-8
+BOM (read with `encoding="utf-8-sig"`, which strips it) and
+sign-prefixed integer columns (`"+7"`, not `"7"`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a DARKO DPM leaderboard CSV. |
+
+**Returns**
+
+Frame with schema `DARKO_DPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_darko_dpm
+oracle = load_darko_dpm(f"{oracle_dir}/2026-darko-dpm-leaderboard.csv")
+print(oracle.sort("dpm", descending=True).head())
+```
+
+### `load_dunks_threes_stats(path: 'str') -> 'pl.DataFrame'` {#load_dunks_threes_stats}
+
+Parse a Dunks & Threes counting-stats CSV (e.g. `2025_Dunks_&_Threes_Stats.csv`).
+
+Only `ewins` (estimated wins) is kept -- the WAR-layer oracle target
+the spec pairs with LEBRON's `WAR` column. WP4's `nba_war` doesn't
+exist yet, so this loader is built and tested standalone (see the
+plan's "WP4/WP2 dependency notes").
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a D&T counting-stats CSV. |
+
+**Returns**
+
+Frame with schema `DT_STATS_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_dunks_threes_stats
+oracle = load_dunks_threes_stats(f"{oracle_dir}/2025_Dunks_&_Threes_Stats.csv")
+```
+
+### `load_epm(path: 'str') -> 'pl.DataFrame'` {#load_epm}
+
+Parse a Dunks & Threes EPM CSV (`{season}_EPM_data.csv`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a D&T EPM CSV. |
+
+**Returns**
+
+Frame with schema `EPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_epm
+oracle = load_epm(f"{oracle_dir}/2025_EPM_data.csv")
+```
+
+### `load_lebron_daily(path: 'str') -> 'pl.DataFrame'` {#load_lebron_daily}
+
+Parse a LEBRON daily-snapshot CSV (e.g. `lebron_daily_2026-07-02.csv`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a LEBRON daily-snapshot CSV. |
+
+**Returns**
+
+Frame with schema `LEBRON_DAILY_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+import glob
+from sportsdataverse.nba.nba_oracle_data import load_lebron_daily
+latest = sorted(glob.glob(f"{oracle_dir}/lebron_daily_*.csv"))[-1]
+oracle = load_lebron_daily(latest)
+```
+
+### `load_lebron_season(path: 'str') -> 'pl.DataFrame'` {#load_lebron_season}
+
+Parse a LEBRON season-file CSV (e.g. `lebron-data-2026.csv`).
+
+`seasons` is passed through as a raw string -- per-season files carry a
+single year (`"2026"`); the combined all-years file carries a
+multi-year window (`"2010-2013"`). Both parse with this one function.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a LEBRON season CSV. |
+
+**Returns**
+
+Frame with schema `LEBRON_SEASON_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import load_lebron_season
+oracle = load_lebron_season(f"{oracle_dir}/lebron-data-2026.csv")
+```
+
+### `load_rapm_ryan_davis(path: 'str') -> 'pl.DataFrame'` {#load_rapm_ryan_davis}
+
+Parse a Ryan Davis published RAPM CSV (single-season or multi-year window).
+
+Serves BOTH real files -- `rapm_ryan_davis.csv` (`season` like
+`"2009-10"`) and `rapm_multi_ryan_davis.csv` (`season` like
+`"2011-16"`, a multi-year decay window) -- since they share an
+identical header. Only the combined (not per-side Off`/Def`)
+rating columns are kept, matching the model zoo's combined-rating
+convention (`nba_rapm`'s `rapm` column, not separate offense/defense).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | Filesystem path to a Ryan Davis RAPM CSV. |
+
+**Returns**
+
+Frame with schema `RAPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the file has a header but no data rows.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv")
+season = oracle.filter(pl.col("season") == "2022-23")
+```
+
 ## Utilities & helpers
 
 ### `most_recent_nba_season()` {#most_recent_nba_season}
@@ -434,6 +589,20 @@ Aging drift for a player of (rounded) `age`; 0.0 outside the fitted range.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `age` | `float` |  |  |
+
+### `ExternalValidityResult(corr: 'float', n_matched: 'int', coverage_pct: 'float', permutation_p95: 'float', join: 'str') -> None` {#ExternalValidityResult}
+
+Concurrent-validity correlation of model ratings against a published oracle metric.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `corr` | `float` |  | Pearson correlation of the model's rating column against the oracle's value column, over matched rows. `nan` when fewer than 3 rows matched. |
+| `n_matched` | `int` |  | Number of rows successfully joined (ratings <-> oracle). |
+| `coverage_pct` | `float` |  | `100 * n_matched / len(ratings)` -- how much of the model's player population the oracle covers. `0.0` when `ratings` is empty. |
+| `permutation_p95` | `float` |  | 95th percentile of `\|corr\|` over `n_permutations` random shuffles of the oracle's matched value column -- a self-computed null-correlation ceiling. The spec deliberately avoids a hardcoded floor constant; compare `corr` against this instead. `nan` when fewer than 3 rows matched. |
+| `join` | `str` |  | The join strategy used (`"id"` or `"name"`). |
 
 ### `ForecastResult(forecast_rmse: 'float', forecast_corr: 'float', baseline_rmse: 'float', n_forecasts: 'int') -> None` {#ForecastResult}
 
@@ -601,7 +770,7 @@ Fitted SPM coefficients (box features -> offense/defense RAPM, per-100).
 | `d_intercept` | `float` |  | Intercept for the defense regression. |
 | `feature_names` | `List[str]` |  | Ordered list of feature column names corresponding to the coefficient vectors. |
 
-### `ValidationReport(model_name: 'str', n_seasons: 'int', retrodiction: 'Optional[RetrodictionResult]' = None, reliability: 'Optional[ReliabilityResult]' = None, cross_season: 'Optional[CrossSeasonResult]' = None, calibration: 'Optional[CalibrationResult]' = None) -> None` {#ValidationReport}
+### `ValidationReport(model_name: 'str', n_seasons: 'int', retrodiction: 'Optional[RetrodictionResult]' = None, reliability: 'Optional[ReliabilityResult]' = None, cross_season: 'Optional[CrossSeasonResult]' = None, calibration: 'Optional[CalibrationResult]' = None, external: 'Optional[ExternalValidityResult]' = None, walk_forward: 'Optional[WalkForwardResult]' = None) -> None` {#ValidationReport}
 
 Holds all oracle results for a single model evaluation run.
 
@@ -615,6 +784,8 @@ Holds all oracle results for a single model evaluation run.
 | `reliability` | `Optional[ReliabilityResult]` | `None` | Result from Oracle 2, or `None` if not selected. |
 | `cross_season` | `Optional[CrossSeasonResult]` | `None` | Result from Oracle 3, or `None` if not selected. |
 | `calibration` | `Optional[CalibrationResult]` | `None` | Result from Oracle 4, or `None` if not selected or the model is a point estimator. |
+| `external` | `Optional[ExternalValidityResult]` | `None` | Result from Oracle 5 (`external_validity`), or `None` if not selected. |
+| `walk_forward` | `Optional[WalkForwardResult]` | `None` | Result from Oracle 6 (`walk_forward`), or `None` if not selected. |
 
 **Example**
 
@@ -631,6 +802,21 @@ print(rep.retrodiction.game_margin_rmse)     # float
 print(rep.reliability.spearman_brown)        # float
 print(rep.calibration)                       # None — point estimator
 ```
+
+### `WalkForwardResult(game_margin_rmse: 'float', game_margin_corr: 'float', carry_forward_rmse: 'float', random_fold_rmse: 'float', n_checkpoints: 'int', n_test_games: 'int') -> None` {#WalkForwardResult}
+
+Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_margin_rmse` | `float` |  | RMSE of predicted vs actual per-(game, team) margins, pooled across all checkpoints -- the model refit through each checkpoint date, predicting the following `horizon_days` window. |
+| `game_margin_corr` | `float` |  | Pearson correlation of the same pooled predictions. |
+| `carry_forward_rmse` | `float` |  | RMSE using the PRIOR checkpoint's fit (no refit) applied to the current window -- isolates whether refitting through each checkpoint actually helps. `nan` when fewer than 2 checkpoints produce a valid window. |
+| `random_fold_rmse` | `float` |  | Oracle 1's (`retrodiction`) pooled game-margin RMSE on the same possessions -- the non-time-ordered baseline. |
+| `n_checkpoints` | `int` |  | Number of checkpoint dates that produced a non-degenerate (train, test) split. |
+| `n_test_games` | `int` |  | Total distinct game_ids evaluated across all checkpoints. |
 
 ### `box_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', *, game_ids: 'Optional[List[str]]' = None) -> 'pl.DataFrame'` {#box_features}
 
@@ -694,6 +880,71 @@ totals = sh.group_by("player_id").agg(
     pl.col("fg3m").sum(), pl.col("ftm").sum()
 )
 print(totals.head())
+```
+
+### `calibrate_pts_per_win(team_season: 'pl.DataFrame') -> 'float'` {#calibrate_pts_per_win}
+
+Regress team wins on season point margin; return points-per-marginal-win.
+
+Fits `wins ~ total_margin` via ordinary least squares over one (or more,
+pooled) season's team-level rows and returns `1 / slope` — the amount of
+full-season point differential associated with one additional win. This is
+`nba_war`'s `pts_per_win` input.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_season` | `DataFrame` |  | One row per team-season with `team_id` (any dtype), `wins` (numeric), and `total_margin` (numeric — the team's full-season point differential: points scored minus points allowed across all its games, NOT a per-game average). |
+
+**Returns**
+
+`float` points of season margin per marginal win.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import calibrate_pts_per_win
+pts_per_win = calibrate_pts_per_win(team_standings)  # team_id/wins/total_margin
+print(pts_per_win)
+```
+
+### `calibrate_replacement_level(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, pts_per_win: 'float', target_total_war: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss') -> 'float'` {#calibrate_replacement_level}
+
+Solve for the `replacement_level` that makes summed league WAR hit a target.
+
+WAR is affine in `replacement_level`:
+`war_i = (rating_i - replacement) * poss_i / 100 / pts_per_win`. Summed
+over all players this is a single linear equation in `replacement_level`;
+this function solves it in closed form (not an iterative search) for the
+`replacement_level` that makes `sum(war_i) == target_total_war`.
+
+`target_total_war` is a value the CALLER computes from real standings
+(e.g. total league wins above a chosen replacement-team win percentage) —
+this function does not assume or invent any such win-percentage convention.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | Frame with `player_id` and `rating_col`. |
+| `poss` | `DataFrame` |  | Frame with `player_id` and `poss_col` (total possessions played). |
+| `pts_per_win` | `float` |  | Points of season margin per marginal win (`calibrate_pts_per_win`'s output). |
+| `target_total_war` | `float` |  | The desired sum of every player's WAR. |
+| `rating_col` | `str` | `'rating'` | Column in `ratings` holding the per-100-possession rating. |
+| `poss_col` | `str` | `'poss'` | Column in `poss` holding total possessions played. |
+
+**Returns**
+
+`float` replacement_level solving the equation exactly.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import calibrate_replacement_level
+repl = calibrate_replacement_level(
+    ratings, poss, pts_per_win=250.0, target_total_war=300.0,
+)
 ```
 
 ### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
@@ -786,6 +1037,34 @@ q, ob = _fit_noise_params(panel, ages, curve)
 res = darko_forecast_accuracy(panel, ages, aging_curve=curve, process_var=q, obs_base=ob)
 ```
 
+### `decay_weights(game_date: 'pl.Series', asof: 'Optional[datetime.date]', half_life_days: 'float') -> 'np.ndarray'` {#decay_weights}
+
+Exponential time-decay sample weights `w = 0.5 ** (days_ago / half_life)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_date` | `Series` |  | Per-possession game dates (`pl.Date` Series), aligned row-for-row with the design the weights will be applied to. |
+| `asof` | `Optional[date]` |  | Reference "today". `None` disables decay (all weights `1.0`). Games dated after `asof` are clamped to `days_ago = 0` (weight `1.0`); callers that want a strict as-of cutoff must filter first. |
+| `half_life_days` | `float` |  | Days at which a possession's weight halves. Must be > 0. |
+
+**Returns**
+
+Float64 array of weights, one per row of `game_date`.
+
+**Example**
+
+```python
+import datetime
+import polars as pl
+from sportsdataverse.nba.nba_rapm_variants import decay_weights
+
+dates = pl.Series("game_date", [datetime.date(2023, 1, 1)])
+w = decay_weights(dates, datetime.date(2023, 1, 31), half_life_days=30.0)
+print(round(float(w[0]), 3))  # 0.5
+```
+
 ### `espn_nba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nba_teams}
 
 espn_nba_teams - look up NBA teams
@@ -833,6 +1112,58 @@ teams_pd.head()
 
 teams = espn_nba_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
+```
+
+### `external_validity(ratings: 'pl.DataFrame', oracle: 'pl.DataFrame', *, rating_col: 'str', oracle_col: 'str', join: 'str' = 'id', ratings_id_col: 'str' = 'player_id', oracle_id_col: 'str' = 'player_id', ratings_name_col: 'str' = 'player_name', oracle_name_col: 'str' = 'player_name', n_permutations: 'int' = 200, seed: 'int' = 0) -> 'ExternalValidityResult'` {#external_validity}
+
+Oracle 5: correlate a model's ratings against a published external metric.
+
+`join="id"` inner-joins on `ratings_id_col`/`oracle_id_col` (both
+cast to Int64 defensively, per the project's join-key dtype discipline).
+`join="name"` normalizes both name columns with
+`~sportsdataverse.nba.nba_oracle_data.normalize_player_name` and
+inner-joins on the normalized key -- the DARKO-family case: no shared id,
+a brittle display-name join whose `coverage_pct` is the signal to watch.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | The model's own per-player ratings frame (from `nba_rapm`, `nba_adj_rapm`, `nba_spm`, `nba_darko`, etc.). |
+| `oracle` | `DataFrame` |  | A tidy oracle frame from one of the `nba_oracle_data` loaders. |
+| `rating_col` | `str` |  | Column in `ratings` holding the model's rating value. |
+| `oracle_col` | `str` |  | Column in `oracle` holding the published metric value. |
+| `join` | `str` | `'id'` | `"id"` (default) or `"name"`. |
+| `ratings_id_col` | `str` | `'player_id'` | Player-id column name in `ratings` (`join="id"`). |
+| `oracle_id_col` | `str` | `'player_id'` | Player-id column name in `oracle` (`join="id"`). |
+| `ratings_name_col` | `str` | `'player_name'` | Player-name column name in `ratings` (`join="name"`). |
+| `oracle_name_col` | `str` | `'player_name'` | Player-name column name in `oracle` (`join="name"`). |
+| `n_permutations` | `int` | `200` | Number of random shuffles for the self-computed null ceiling. |
+| `seed` | `int` | `0` | RNG seed for the permutation shuffle. |
+
+**Returns**
+
+`ExternalValidityResult`. `corr` and `permutation_p95` are `nan` when fewer than 3 rows matched; `coverage_pct` is `0.0` when `ratings` is empty.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+from sportsdataverse.nba.nba_model_validation import external_validity
+
+oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv").filter(
+    pl.col("season") == "2022-23"
+)
+res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+print(res.corr, res.coverage_pct)
+
+# A name-keyed family (DARKO)
+
+res = external_validity(
+    ratings, darko_oracle, rating_col="projected_rating", oracle_col="dpm",
+    join="name", ratings_name_col="player_name", oracle_name_col="player_name",
+)
 ```
 
 ### `fit_aging_curve(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, smooth: 'int' = 3) -> 'AgingCurve'` {#fit_aging_curve}
@@ -1049,6 +1380,55 @@ from sportsdataverse.nba import fox_nba_team_stats
 df = fox_nba_team_stats("...")
 ```
 
+### `luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'` {#luck_adjusted_response}
+
+Attach a per-possession `la_points` expected-points response.
+
+**DECISION 2/4**: `la_points = 2*fg2m + 3*Σ_shooter fg3a·p̂3 + Σ_shooter fta·p̂ft`
+(offense-only, "one_way"). 2-pt makes stay realized. `p̂` come from
+`player_rates` when given, else shrunk_shooter_rates` on `shooting`.
+
+**Defense-shooter exclusion (bugfix)**: `shooting`
+(`~sportsdataverse.nba.nba_possessions.build_possession_shooting`)
+deliberately retains defense-team shooters in a possession group — e.g. a
+defensive technical free throw shooter — because it is a per-shooter
+companion frame, not a team-attributed one (that's why it carries its own
+`team_id` column). The expected-points sum is offense-only by
+definition (**DECISION 2**), so *before* aggregating `exp_extra` this
+function joins `possessions[["game_id", "possession_number",
+"offense_team_id"]]` onto `shooting` and filters to
+`team_id == offense_team_id`, dropping any defense-team shooter row.
+Without this filter a defense tech-FT's `fta·p̂ft` term leaks into the
+offense's `la_points`, inflating it (reproduced: 2.9 vs. the
+offense-only-correct 2.0 for a single offense 2-pt make plus one defense
+tech FT).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m` and the join keys `game_id` + `possession_number` + `offense_team_id`. |
+| `shooting` | `DataFrame` |  | Per-(possession, shooter) frame (`build_possession_shooting`), which may include defense-team shooter rows (e.g. technical FTs) — filtered out here before aggregation. |
+| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override (e.g. planted truth in tests); `None` → shrink from `shooting`. |
+| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to shrunk_shooter_rates` when `player_rates` is `None`. |
+| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to shrunk_shooter_rates` when `player_rates` is `None`. |
+
+**Returns**
+
+`possessions` with an added `la_points: Float64` column (same rows, same order). Empty `possessions` → returned unchanged with an empty `la_points` column.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import luck_adjusted_response
+out = luck_adjusted_response(possessions_df, shooting_df)
+print(out["la_points"].mean())
+
+# Planted-truth override for testing
+
+out = luck_adjusted_response(possessions_df, shooting_df, {7: (0.4, 0.8)})
+```
+
 ### `nba_adj_rapm(possessions: 'pl.DataFrame', prior: 'Dict[int, Tuple[float, float]]', *, alphas: 'np.ndarray' = array([   100.        ,    268.26957953,    719.685673  ,   1930.69772888,
          5179.47467923,  13894.95494373,  37275.93720315, 100000.        ]), n_samples: 'int' = 200, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_adj_rapm}
 
@@ -1114,23 +1494,24 @@ logs = nba_box_logs("2023-24")
 print(logs["player"].shape)
 ```
 
-### `nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#nba_bpm}
+### `nba_bpm(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True, granularity: 'str' = 'season', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#nba_bpm}
 
-Faithful BPM 2.0 per player over the given logs (a season).
+Faithful BPM 2.0 per player, at season or single-game granularity.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_logs` | `DataFrame` |  | per-player-per-game box lines (`nba_box_logs`'s `player`). |
-| `team_logs` | `DataFrame` |  | per-team-per-game lines incl. `plus_minus` (`nba_box_logs`'s `team`). |
+| `player_logs` | `DataFrame` |  | per-player-per-game box lines (`nba_box_logs`'s `player`); must carry `game_id` when `granularity="game"`. |
+| `team_logs` | `DataFrame` |  | per-team-per-game lines incl. `plus_minus` (`nba_box_logs`'s `team`); must carry `game_id` when `granularity="game"`. |
 | `positions` | `DataFrame` |  | listed positions (`nba_player_positions`): player_id, position_num. |
 | `team_adjust` | `bool` | `True` | apply the team adjustment (True) or return raw box-BPM (False). |
+| `granularity` | `str` | `'season'` | `"season"` (default) aggregates every row in `player_logs`/ `team_logs` into one row per player. `"game"` runs the exact same pipeline independently per `game_id` (position/role are estimated game-native, mirroring `NbaBpmModel`'s existing fold-native design) and returns one row per (game_id, player_id) with a leading `game_id` column; `gp` is always 1 in this mode. |
 | `return_as_pandas` | `bool` | `False` | return pandas instead of polars. |
 
 **Returns**
 
-Frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min).
+frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min). `"game"`: the same columns prefixed with `game_id` (Utf8), one row per (game_id, player_id). Empty (that schema) input -> zero-row frame with the same schema; never raises on empty.
 
 **Example**
 
@@ -1139,6 +1520,11 @@ from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
 logs = nba_box_logs("2023-24"); pos = nba_player_positions("2023-24")
 bpm = nba_bpm(logs["player"], logs["team"], pos)
 print(bpm.sort("bpm", descending=True).head())
+
+# Per-game BPM
+
+bpm_game = nba_bpm(logs["player"], logs["team"], pos, granularity="game")
+print(bpm_game.filter(pl.col("game_id") == "0022300001").sort("bpm", descending=True))
 
 # Raw (no team adjustment)
 
@@ -1174,6 +1560,114 @@ Project each player's next-season rating via a per-player Kalman filter + aging 
 from sportsdataverse.nba import nba_darko, nba_player_ages
 proj = nba_darko(rating_panel, ages_panel)
 print(proj.sort("projected_rating", descending=True).head())
+```
+
+### `nba_decay_rapm(possessions: 'pl.DataFrame', *, asof: 'Optional[datetime.date]' = None, half_life_days: 'float' = 180.0, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_decay_rapm}
+
+Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`.
+
+`asof=None` disables decay: every possession is weighted `1.0` and the
+fit uses **exactly** plain `~sportsdataverse.nba.nba_rapm.nba_rapm`'s
+own schedule (`alphas=DEFAULT_RAPM_ALPHAS`, sklearn's efficient default
+LOOCV) so the two agree byte-for-byte (see
+`test_decay_rapm_asof_none_equals_plain_rapm`). When `asof` is set,
+possessions dated after `asof` are dropped, the remainder is
+exponentially down-weighted by age, and the fit switches to the
+**oracle** regularization schedule (`oracle_rapm_alphas` evaluated
+at the post-filter possession count, `cv=` `ORACLE_RAPM_CV`) per
+the binding WP2 ridge-schedule ruling documented in the module docstring.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Multi-season possession+lineup frame. Must carry a `game_date` (`pl.Date`) column when `asof` is not `None`. |
+| `asof` | `Optional[date]` | `None` | Reference date; `None` -> unweighted, plain-RAPM-equivalent fit. |
+| `half_life_days` | `float` | `180.0` | Weight half-life in days (default 180). |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `~sportsdataverse.nba.nba_rapm.DEFAULT_RAPM_ALPHAS` when `asof is None` or `oracle_rapm_alphas` (evaluated at the possession count) when `asof` is set. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `DECAY_RAPM_SCHEMA`. Empty input, or an `asof` that drops every possession, -> zero-row frame.
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_rapm_variants import nba_decay_rapm
+
+df = nba_decay_rapm(season_poss, asof=datetime.date(2024, 3, 1), half_life_days=120.0)
+print(df.sort("decay_rapm", descending=True).head())
+
+# Plain-RAPM-equivalent (no decay)
+
+df = nba_decay_rapm(season_poss)  # asof=None
+```
+
+### `nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_four_factor_rapm}
+
+Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
+
+Each factor is regressed on the identical offense/defense design matrix,
+differing only in the per-possession response (FACTOR_RESPONSES`).
+Output mirrors the oracle's `RA_*__Off/__Def` layout. **DECISION 5/6/7**
+govern the response definitions.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m, fg3m, ftm, oreb, tov` and the ten lineup columns. Must also carry a `points` column -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally) requires it unconditionally even though none of the four factor responses use it. `offense_team_id` is NOT required here (unlike `nba_la_rapm`): none of the four factor responses need the offense-only shooter join. |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override, shared by all four factor fits. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns per factor, plus possession counts. Empty input → zero-row frame.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import nba_four_factor_rapm
+ff = nba_four_factor_rapm(season_poss)
+print(ff.sort("efg__off", descending=True).head())
+```
+
+### `nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_la_rapm}
+
+Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
+
+Replaces realized 3-point and free-throw outcomes with the shooter's shrunk
+expected value (`luck_adjusted_response`); 2-pt makes stay realized.
+**DECISION 2/3/4** govern the response recipe and shrinkage constants.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame with team-level `fg2m` and the ten lineup columns; join keys `game_id` + `possession_number` + `offense_team_id` (the last is required by `luck_adjusted_response`'s defense-shooter leak filter). Must also carry a `points` column even though the LA response (`la_points`) supersedes it for fitting -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally via prepare`) requires it unconditionally. |
+| `shooting` | `DataFrame` |  | Per-(possession, shooter) frame from `build_possession_shooting`. |
+| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override; `None` → shrink from `shooting`. |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule (`cv=` `ORACLE_RAPM_CV` always; there is no plain-schedule mode). |
+| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
+| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `LA_RAPM_SCHEMA`. Empty input → zero-row frame.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import nba_la_rapm
+df = nba_la_rapm(season_poss, season_shooting)
+print(df.sort("la_rapm", descending=True).head())
+
+# Planted-truth shooter rates (e.g. for testing)
+
+df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
 ```
 
 ### `nba_pbp_disk(game_id, path_to_json)` {#nba_pbp_disk}
@@ -1253,6 +1747,48 @@ print(pos.head())
 import polars as pl
 stub = lambda **kw: pl.DataFrame({"person_id": [1], "position": ["PG"]})
 pos = nba_player_positions("2023-24", fetch=stub)
+```
+
+### `nba_ratings_panel(model: 'AnyModel', possessions: 'pl.DataFrame', dates: 'Optional[Sequence[datetime.date]]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_ratings_panel}
+
+Player-ratings-through-date long panel: one row per (player_id, date).
+
+Refit-per-checkpoint (v1; no warm-start incrementality) — each date's row
+calls `ratings_as_of` independently, so the panel is leakage-free by
+construction: a possession dated after a given checkpoint can never affect
+that checkpoint's row, no matter what other dates are also being computed
+or what future rows exist in `possessions`. Cost is a full refit per
+checkpoint date; for a season's sparse RAPM-family design this is seconds
+per date, not minutes — acceptable for a nightly/daily cadence but not for
+live in-game updating (out of scope; see spec non-goals).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `AnyModel` |  | A harness model conforming to `nba_model_validation.AnyModel`. |
+| `possessions` | `DataFrame` |  | A possession+lineup frame with a `game_date` (`pl.Date`) column (as emitted by `compile_nba_season`). |
+| `dates` | `Optional[Sequence[date]]` | `None` | Checkpoint dates to compute. `None` (default) uses every distinct `game_date` present in `possessions`, sorted ascending — a rating for every game day, matching what EPM/LEBRON publish nightly. Duplicates are deduped; input order does not matter (the output is always sorted by date). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+Long frame with `RATINGS_PANEL_SCHEMA` columns (`player_id`, `date`, `o_rating`, `d_rating`, `rating`). Zero-row (that schema) when `possessions` is empty or no date yields any players.
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
+from sportsdataverse.nba.nba_ratings_panel import nba_ratings_panel
+
+checkpoints = [datetime.date(2023, 11, 1), datetime.date(2023, 12, 1)]
+panel = nba_ratings_panel(RidgeRapmModel(), season_poss, dates=checkpoints)
+print(panel.filter(pl.col("player_id") == 201939).sort("date"))
+
+# Every game day, no explicit grid
+
+panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
 ```
 
 ### `nba_spm(box_features: 'pl.DataFrame', coefficients: 'SpmCoefficients', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_spm}
@@ -1350,6 +1886,80 @@ print(type(df_pd))
 df.filter(pl.col("event_type") == "1").select("player1_name", "player2_name")
 ```
 
+### `nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_war}
+
+Points-above-replacement -> wins for each player.
+
+`war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
+| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col` (e.g. `off_poss + def_poss` from `nba_rapm`). |
+| `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
+| `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
+| `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
+| `poss_col` | `str` | `'poss'` | Column in `poss` giving total possessions played. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when either input is empty.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_war import nba_war
+war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
+               replacement_level=-2.0, pts_per_win=250.0)
+print(war.sort("war", descending=True).head())
+
+# Derive both required kwargs from real data first
+
+from sportsdataverse.nba.nba_war import (
+    calibrate_pts_per_win, calibrate_replacement_level, nba_war,
+)
+pts_per_win = calibrate_pts_per_win(team_standings)
+repl = calibrate_replacement_level(
+    ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
+)
+war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
+```
+
+### `normalize_player_name(name: 'str') -> 'str'` {#normalize_player_name}
+
+Fold a player display name to a join-safe key.
+
+Lower-cases, strips diacritics (`"Jokić"` -> `"jokic"` -- the real
+stats.nba.com feed spells Nikola Jokic's name with the Serbian `ć`,
+while the DARKO/D&T CSVs use plain ASCII), drops periods/apostrophes/
+hyphens, collapses internal whitespace, and strips a trailing
+Jr./Sr./II/III/IV suffix. Two names normalize equal iff they refer to
+the same join key under this scheme -- it is NOT guaranteed globally
+unique (rare true duplicate full names are a known, accepted residual;
+`external_validity`'s `coverage_pct` surfaces the effect rather
+than hiding it).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | A raw display name, e.g. `"Nikola Jokić"` or `"A.J. Green"`. |
+
+**Returns**
+
+The normalized key, e.g. `"nikola jokic"`, `"aj green"`. Empty string in, empty string out (never raises).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_oracle_data import normalize_player_name
+assert normalize_player_name("Nikola Jokić") == normalize_player_name("Nikola Jokic")
+assert normalize_player_name("Gary Trent Jr.") == normalize_player_name("Gary Trent")
+```
+
 ### `players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_pbp}
 
 Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
@@ -1385,6 +1995,80 @@ pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
 enh = enhanced_pbp_from_payload(pbp)
 home, away = boxscore_home_away(box)
 oc = players_on_court_from_pbp(enh, box, home_team_id=home, away_team_id=away)
+print(oc.shape)
+```
+
+### `players_on_court_from_quarter_boxscores(enhanced_pbp: 'pl.DataFrame', period_boxscores: 'Dict[int, dict]', raw_box: 'Optional[dict]' = None, *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_quarter_boxscores}
+
+Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible.
+
+A structural sibling of `players_on_court_from_pbp` — same
+`LINEUPS_SCHEMA` output, same sub-batching walk / ffill-bfill / ascending
+sort tail — whose only difference is *how each period is seeded*: when
+that period's range-boxscore (period_box_oncourt`) narrows to
+exactly 5 on-court candidates for a team, the period is seeded EXACTLY
+from it; otherwise it falls back to the same gamerotation-free
+first-appearance inference `players_on_court_from_pbp` uses
+(period_starters`, carrying the prior period's ending lineup as
+the silent-starter fallback). See period_box_oncourt` for the
+narrowing recipe (empirically re-derived against pbpstats'
+`StartOfPeriod._get_starters_from_boxscore_request` — see that
+function's docstring for the concrete evidence behind its zero-sentinel
+polarity).
+
+Substitution name resolution merges up to three sources via
+merge_name_maps`: name_map_from_period_boxes` (the union
+of every period's range-box roster), name_map_from_pbp_actors`
+(every row's own actor identity — covers bench players who never touch a
+period boundary but do record at least one action), and — when the
+caller supplies it — boxscore_name_map` over the full-game
+`raw_box` payload, the SAME full-roster source
+`players_on_court_from_pbp` uses. That third source is what fixes
+the one residual name-resolution gap the first two cannot cover: a
+player who is subbed in and then records **zero** further pbp actions for
+the rest of the game (so never appears in name_map_from_pbp_actors`)
+and never happens to be on court at an exact period-opening tick (so
+never appears in name_map_from_period_boxes`) is still present in the
+full-game boxscore roster — which lists every player on both teams
+regardless of playing time — and therefore still resolvable. Passing
+`raw_box` is optional (`None` preserves the pre-existing two-source
+behavior) but strongly recommended: without it this producer's per-game
+agreement with the gamerotation oracle can regress well below
+`players_on_court_from_pbp`'s own floor on a fixture with a
+late, stat-less bench appearance (see
+`tests/nba/test_nba_lineups.py::test_quarter_box_agreement_floors`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Output of `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. Must carry `game_id`, `action_number`, `order_index`, `period`, `team_id`, `person_id`, `player_name`, `player_name_i`, `description`, `is_substitution`. |
+| `period_boxscores` | `Dict[int, dict]` |  | `{period: raw_boxscoretraditionalv3_range_payload}` — one entry per period, captured at that period's period_start_range` window. A missing period key falls back to pbp seeding for that period only (never raises). |
+| `raw_box` | `Optional[dict]` | `None` | Optional raw full-game `boxscoretraditionalv3` payload (the same one `players_on_court_from_pbp` and `boxscore_home_away` consume) — supplies the full-roster name map described above. `None` (default) falls back to resolving names from `period_boxscores` + pbp actors only. |
+| `home_team_id` | `int` |  | Home team id (from `boxscore_home_away`). |
+| `away_team_id` | `int` |  | Away team id (from `boxscore_home_away`). |
+
+**Returns**
+
+`polars.DataFrame` conforming to `LINEUPS_SCHEMA`. Empty `enhanced_pbp` returns a zero-row frame (never raises).
+
+**Example**
+
+```python
+import json, pathlib
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_lineups import (
+    boxscore_home_away, players_on_court_from_quarter_boxscores,
+)
+box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+periods = json.loads(pathlib.Path("boxv3_periods.json").read_text())
+period_boxscores = {int(k): v for k, v in periods.items()}
+enh = enhanced_pbp_from_payload(pbp)
+home, away = boxscore_home_away(box)
+oc = players_on_court_from_quarter_boxscores(
+    enh, period_boxscores, box, home_team_id=home, away_team_id=away
+)
 print(oc.shape)
 ```
 
@@ -1431,6 +2115,41 @@ df = players_on_court_from_rotation(
     enh, rotation, home_team_id=home, away_team_id=away
 )
 print(df.shape)
+```
+
+### `ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'` {#ratings_as_of}
+
+Fit `model` on every possession dated on or before `asof` and return ratings.
+
+This is the through-date primitive: possessions with `game_date > asof`
+are excluded from the fit entirely (never merely down-weighted), which is
+what makes the panel built from repeated calls to this function leakage-free
+by construction — see `tests/nba/test_nba_ratings_panel.py::test_ratings_as_of_is_leakage_free_append_invariant`.
+NOTE: the leakage property is proven by the append-invariance test TOGETHER
+with the panel's per-date-parity test — neither alone covers
+cross-checkpoint-window leaks; do not prune one without the other.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `AnyModel` |  | A harness model conforming to `nba_model_validation.AnyModel` (a `RapmModel`, `RatingsModel`, or `PriorModel`). |
+| `possessions` | `DataFrame` |  | A possession+lineup frame that MUST carry a `game_date` (`pl.Date`) column (as emitted by `compile_nba_season`). |
+| `asof` | `date` |  | The through-date checkpoint (inclusive). |
+
+**Returns**
+
+`RatingsFit` with per-player offense/defense ratings (per-100-possession scale, same sign convention as `nba_rapm`: positive `d_ratings` means good defense). Empty dicts when no possessions fall on or before `asof` or when `possessions` is empty.
+
+**Example**
+
+```python
+import datetime
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel
+from sportsdataverse.nba.nba_ratings_panel import ratings_as_of
+
+rf = ratings_as_of(RidgeRapmModel(), season_poss, datetime.date(2023, 12, 1))
+print(rf.o_ratings[201939])   # per-100 offensive rating through Dec 1
 ```
 
 ### `render_report(report: 'ValidationReport') -> 'str'` {#render_report}
@@ -1518,7 +2237,7 @@ coef = train_spm(box_feats, rapm_ratings)
 coef = train_spm(box_feats, rapm_ratings, alpha=50.0)
 ```
 
-### `validate_model(model: 'AnyModel', season_frames: 'List[pl.DataFrame]', *, model_name: 'str' = 'model', oracles: 'Tuple[str, ...]' = ('retrodiction', 'reliability', 'cross_season', 'calibration'), seed: 'int' = 0) -> 'ValidationReport'` {#validate_model}
+### `validate_model(model: 'AnyModel', season_frames: 'List[pl.DataFrame]', *, model_name: 'str' = 'model', oracles: 'Tuple[str, ...]' = ('retrodiction', 'reliability', 'cross_season', 'calibration'), seed: 'int' = 0, external_ratings: 'Optional[pl.DataFrame]' = None, external_oracle: 'Optional[pl.DataFrame]' = None, external_rating_col: 'str' = 'rating', external_oracle_col: 'str' = 'oracle_value', external_join: 'str' = 'id', walk_forward_horizon_days: 'int' = 14, walk_forward_min_games: 'int' = 15) -> 'ValidationReport'` {#validate_model}
 
 Run the selected oracles and assemble a `ValidationReport`.
 
@@ -1533,8 +2252,15 @@ frames. Any oracle not selected is left `None`.
 | `model` | `AnyModel` |  | A fitted or unfitted RAPM-family estimator (`fit(X, y)` protocol). |
 | `season_frames` | `List[DataFrame]` |  | Ordered list of per-season possession frames. All frames are concatenated into a single pooled frame for Oracles 1, 2, and 4. |
 | `model_name` | `str` | `'model'` | Label written into the returned report and markdown card. |
-| `oracles` | `Tuple[str, ...]` | `('retrodiction', 'reliability', 'cross_season', 'calibration')` | Tuple of oracle names to run. Omit a name to skip that oracle and leave its result field `None`. |
+| `oracles` | `Tuple[str, ...]` | `('retrodiction', 'reliability', 'cross_season', 'calibration')` | Tuple of oracle names to run. Omit a name to skip that oracle and leave its result field `None`. Accepts `"external"` and `"walk_forward"` in addition to the four original names; the default tuple is unchanged, so existing callers are unaffected. |
 | `seed` | `int` | `0` | RNG seed forwarded to each oracle for determinism. |
+| `external_ratings` | `Optional[DataFrame]` | `None` | The model's own ratings frame -- required when `"external"` is in `oracles`. |
+| `external_oracle` | `Optional[DataFrame]` | `None` | A loaded oracle frame (from `nba_oracle_data`) -- required when `"external"` is in `oracles`. |
+| `external_rating_col` | `str` | `'rating'` | Rating column name in `external_ratings`. |
+| `external_oracle_col` | `str` | `'oracle_value'` | Value column name in `external_oracle`. |
+| `external_join` | `str` | `'id'` | `"id"` or `"name"`, forwarded to `external_validity`. |
+| `walk_forward_horizon_days` | `int` | `14` | Forwarded to `walk_forward`. |
+| `walk_forward_min_games` | `int` | `15` | Forwarded to `walk_forward` as `min_games_before_first_checkpoint`. |
 
 **Returns**
 
@@ -1560,4 +2286,38 @@ rep = validate_model(
     oracles=("retrodiction", "reliability"),
 )
 print(rep.cross_season)   # None — not selected
+```
+
+### `walk_forward(model: 'AnyModel', possessions: 'pl.DataFrame', *, checkpoint_dates: 'Optional[List[datetime.date]]' = None, horizon_days: 'int' = 14, min_games_before_first_checkpoint: 'int' = 15) -> 'WalkForwardResult'` {#walk_forward}
+
+Oracle 6: time-ordered "predict tomorrow" retrodiction.
+
+For each checkpoint date D: fit on games with `game_date <= D`, predict
+games with `D < game_date <= D + horizon_days`, aggregate to
+per-(game, team) margins -- reusing fit_on` / design_with_ids`
+/ `predict_points` / team_game_margins` (the same machinery
+`retrodiction` uses). `carry_forward_rmse` reapplies the PREVIOUS
+checkpoint's fit (no refit) to the current window. `random_fold_rmse` is
+`retrodiction`'s pooled game-margin RMSE on the same possessions.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | `AnyModel` |  | A harness model (`RapmModel`/`RatingsModel`/`PriorModel`). |
+| `possessions` | `DataFrame` |  | A season possession+lineup frame with `game_date` (from `compile_nba_season`), `game_id`, `offense_team_id`, `points`, and the ten lineup columns. |
+| `checkpoint_dates` | `Optional[List[date]]` | `None` | Explicit checkpoint grid; derived from `possessions` via `horizon_days`/`min_games_before_first_checkpoint` when `None` (default). |
+| `horizon_days` | `int` | `14` | Days-ahead prediction window per checkpoint (default 14). |
+| `min_games_before_first_checkpoint` | `int` | `15` | Distinct-game-date index of the first checkpoint when deriving the default grid (default 15, "~game 15 of the season"). |
+
+**Returns**
+
+`WalkForwardResult`. All metrics `nan` and counts `0` when `possessions` is empty, lacks a `game_date` column, or the derived/given grid produces zero non-degenerate checkpoints.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_model_validation import RidgeRapmModel, walk_forward
+res = walk_forward(RidgeRapmModel(), season_possessions)
+print(res.game_margin_rmse, res.carry_forward_rmse, res.random_fold_rmse)
 ```

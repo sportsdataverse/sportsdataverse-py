@@ -31,6 +31,7 @@ class DatasetSpec:
     lag_columns: tuple[str, ...] = ()
     cumulative_columns: tuple[str, ...] = ()
     group_key: str = "game_id"
+    expected_constant_columns: tuple[str, ...] = ()
 
 
 DATASETS: dict[str, DatasetSpec] = {}  # registered incrementally; see spec §11
@@ -140,6 +141,7 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
         lag_columns=spec.lag_columns,
         cumulative_columns=spec.cumulative_columns,
         group_key=spec.group_key,
+        expected_constant_columns=spec.expected_constant_columns,
     )
     return frame, ctx
 
@@ -179,6 +181,17 @@ DATASETS["cfb_model_pbp"] = DatasetSpec(
     },
     oracle_domain="cfb",
     cumulative_columns=("game_play_number",),
+    # season (partition id) + the build-metadata version stamps are constant by
+    # design, not dead data — allowlist so constant_column adds no noise. `week`
+    # is deliberately NOT listed: it is real play data (constant only in a
+    # single-week local sample; it varies across a full published season).
+    expected_constant_columns=(
+        "season",
+        "model_pbp_version",
+        "cp_model_version",
+        "ep_model_version",
+        "wp_model_version",
+    ),
 )
 
 DATASETS["nfl_model_pbp"] = DatasetSpec(
@@ -196,4 +209,118 @@ DATASETS["nfl_model_pbp"] = DatasetSpec(
         "epa": (-15.0, 15.0),
     },
     oracle_domain="nfl",
+    # season is a partition id, constant only when the glob resolves to one
+    # season. nfl_model_pbp has no *_version stamp columns and its data root is
+    # not locally auditable; a fuller allowlist can follow if the cron surfaces
+    # a genuine build-metadata constant.
+    expected_constant_columns=("season",),
+)
+
+_CFB_SEASON_STAT_CONST = ("season", "division")
+
+DATASETS["cfb_passing"] = DatasetSpec(
+    name="cfb_passing",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/passing/parquet/cfb_passing_*.parquet",
+    schema=load_schema("cfb_passing"),
+    join_keys=("player_id", "season"),
+    oracle_domain="cfb",
+    expected_constant_columns=_CFB_SEASON_STAT_CONST,
+)
+
+DATASETS["cfb_rushing"] = DatasetSpec(
+    name="cfb_rushing",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/rushing/parquet/cfb_rushing_*.parquet",
+    schema=load_schema("cfb_rushing"),
+    join_keys=("player_id", "season"),
+    oracle_domain="cfb",
+    expected_constant_columns=_CFB_SEASON_STAT_CONST,
+)
+
+DATASETS["cfb_receiving"] = DatasetSpec(
+    name="cfb_receiving",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/receiving/parquet/cfb_receiving_*.parquet",
+    schema=load_schema("cfb_receiving"),
+    join_keys=("player_id", "season"),
+    oracle_domain="cfb",
+    expected_constant_columns=_CFB_SEASON_STAT_CONST,
+)
+
+# cfb_percentiles schema has no "season" column (only "pctile" as a row-level
+# quantile key); the plan's ("season", "pctile") join_keys are adjusted to
+# ("pctile",) and the expected_constant_columns allowlist is empty.
+DATASETS["cfb_percentiles"] = DatasetSpec(
+    name="cfb_percentiles",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/percentiles/parquet/cfb_percentiles_*.parquet",
+    schema=load_schema("cfb_percentiles"),
+    join_keys=("pctile",),
+    oracle_domain="cfb",
+    expected_constant_columns=(),
+)
+
+# The passrate/rushrate/line_yards/opportunity_rate split cells are tautological
+# (pass-rate among pass plays == 1.0, etc.) — legitimately constant, not dead.
+_TEAM_SUMMARY_CONST = (
+    "season",
+    "division",
+    "passrate_off_pass",
+    "rushrate_off_pass",
+    "line_yards_off_pass",
+    "opportunity_rate_off_pass",
+    "passrate_off_pass_rank",
+    "rushrate_off_pass_rank",
+    "opportunity_rate_off_pass_rank",
+    "passrate_def_pass",
+    "rushrate_def_pass",
+    "line_yards_def_pass",
+    "opportunity_rate_def_pass",
+    "passrate_def_pass_rank",
+    "rushrate_def_pass_rank",
+    "opportunity_rate_def_pass_rank",
+    "passrate_off_rush",
+    "rushrate_off_rush",
+    "passrate_off_rush_rank",
+    "rushrate_off_rush_rank",
+    "passrate_def_rush",
+    "rushrate_def_rush",
+    "passrate_def_rush_rank",
+    "rushrate_def_rush_rank",
+)
+
+DATASETS["cfb_team_summaries"] = DatasetSpec(
+    name="cfb_team_summaries",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/team_summaries/parquet/cfb_team_summaries_*.parquet",
+    schema=load_schema("cfb_team_summaries"),
+    join_keys=("team_id", "season"),
+    oracle_domain="cfb",
+    expected_constant_columns=_TEAM_SUMMARY_CONST,
+)
+
+# The crosswalk grain is person x team (no season column; a transferred player
+# appears under several espn_team_ids), so (person_key, espn_team_id) is the key —
+# person_key alone collides on 2088 multi-team players. 3 genuinely-duplicate
+# person x team rows remain (a real crosswalk dedup gap for the cfb-data producer,
+# surfaced by the sweep uniqueness check). yahoo_* are an unwired source
+# (documented dead placeholders); fox_jersey is a real extraction gap (track a
+# fixes it) and is DELIBERATELY left un-allowlisted so the harness keeps flagging it.
+DATASETS["cfb_rosters_crosswalk"] = DatasetSpec(
+    name="cfb_rosters_crosswalk",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/crosswalk/parquet/cfb_rosters_crosswalk.parquet",
+    schema=load_schema("cfb_rosters_crosswalk"),
+    join_keys=("person_key", "espn_team_id"),
+    oracle_domain="cfb",
+    expected_constant_columns=("yahoo_athlete_id", "yahoo_position"),
+)
+
+DATASETS["cfb_rb_eval"] = DatasetSpec(
+    name="cfb_rb_eval",
+    domain="cfb",
+    parquet_glob="${SDV_VALIDATION_DATA_ROOT}/cfb/rb_eval/calibration.parquet",
+    schema=load_schema("cfb_rb_eval"),
+    oracle_domain="cfb",
 )
