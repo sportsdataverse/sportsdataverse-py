@@ -61,13 +61,18 @@ does not apply here.
   fresh "FT event" in new format (old format has no such marker, so any old
   make/miss counts).
 
-**Not ported (deferred to Phase 5b).** ``ParseTeamSubIn``/``ParseTeamSubOut``
+**Tuple overload (Task 5e.3 addition).** ``ParseTeamSubIn``/``ParseTeamSubOut``
 also carry a ``(Option[String], Option[String])``-tuple overload in the
-Scala source (matched directly against a raw ``(team, opponent)`` pair
-during play-by-play *construction*) -- that overload is consumed by
-``ExtractorUtils.build_partial_lineup_list`` (the ``PlayByPlayEvent`` ADT
-builder), which is explicitly Phase 5b per the plan, not 5a. Only the
-plain-string ``unapply(x: String)`` overload is ported here.
+Scala source (``EventUtils.scala:39-42,53-56``), matched directly against a
+raw ``(team, opponent)`` pair during play-by-play *construction*. Task 5a.2's
+original docstring guessed this was consumed by
+``ExtractorUtils.build_partial_lineup_list`` and deferred it to "Phase 5b" --
+that guess was wrong: ``build_partial_lineup_list`` (ported in Task 5b, see
+``mbb_ncaa_stints.py``) already receives fully-constructed ``SubInEvent``/
+``SubOutEvent`` objects, never raw ``(team, opponent)`` string pairs. The
+actual (and only) consumer is ``PlayByPlayParser.parse_game_event``
+(``PlayByPlayParser.scala:414-456``), ported in Task 5e.3 --
+:func:`parse_team_sub_in_pair`/:func:`parse_team_sub_out_pair` below.
 
 **License / provenance (Apache License, Version 2.0).** This module is a
 derivative work of ``EventUtils.scala`` from
@@ -116,6 +121,8 @@ __all__ = [
     "parse_game_time",
     "parse_team_sub_in",
     "parse_team_sub_out",
+    "parse_team_sub_in_pair",
+    "parse_team_sub_out_pair",
     "parse_any_play",
     "parse_jumpball_won_or_lost",
     "parse_jumpball_won",
@@ -245,6 +252,48 @@ def parse_team_sub_out(x: str) -> Optional[str]:
     m = _SUB_REGEX_OUT_NEW_FORMAT.fullmatch(x)
     if m is not None:
         return m.group(1)
+    return None
+
+
+def parse_team_sub_in_pair(team: Optional[str], opponent: Optional[str]) -> Optional[str]:
+    """Team substitution in, tuple overload (``ParseTeamSubIn.unapply(x:
+    (Option[String], Option[String]))``, ``EventUtils.scala:39-42``).
+
+    Matched directly against a raw ``(team_text, opponent_text)`` pair during
+    play-by-play event construction (``PlayByPlayParser.parse_game_event``,
+    Task 5e.3) -- see the module docstring's "Tuple overload" note.
+
+    Args:
+        team: The team-side event text, or ``None``.
+        opponent: The opponent-side event text, or ``None``.
+
+    Returns:
+        :func:`parse_team_sub_in`'s result on ``team``, but only if
+        ``opponent`` is ``None`` (the Scala match arm is
+        ``case (Some(player), None) => ...``; any other shape, including
+        both present or both absent, returns ``None`` here).
+    """
+    if team is not None and opponent is None:
+        return parse_team_sub_in(team)
+    return None
+
+
+def parse_team_sub_out_pair(team: Optional[str], opponent: Optional[str]) -> Optional[str]:
+    """Team substitution out, tuple overload (``ParseTeamSubOut.unapply(x:
+    (Option[String], Option[String]))``, ``EventUtils.scala:53-56``).
+
+    See :func:`parse_team_sub_in_pair` for the shared shape/rationale.
+
+    Args:
+        team: The team-side event text, or ``None``.
+        opponent: The opponent-side event text, or ``None``.
+
+    Returns:
+        :func:`parse_team_sub_out`'s result on ``team``, but only if
+        ``opponent`` is ``None``.
+    """
+    if team is not None and opponent is None:
+        return parse_team_sub_out(team)
     return None
 
 

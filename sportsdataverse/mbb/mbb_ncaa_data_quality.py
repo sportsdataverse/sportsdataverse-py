@@ -92,6 +92,8 @@ from sportsdataverse.mbb.mbb_ncaa_models import TeamId, Year
 __all__ = [
     "ParseError",
     "build_sub_error",
+    "enrich_sub_error",
+    "enrich_sub_errors",
     "combos",
     "fix_combos",
     "alias_combos",
@@ -173,6 +175,63 @@ def build_sub_error(*subids: str, error: str) -> ParseError:
             err.id  # '[team]'
     """
     return ParseError(location="", id="".join(_build_error_id(s) for s in subids), messages=[error])
+
+
+def enrich_sub_errors(location: str, base_id: str, errors: list[ParseError]) -> list[ParseError]:
+    """Adds top-level location information to a list of sub-errors generated
+    by a child parser (``ParseUtils.enrich_sub_errors``, ``ParseUtils.scala:87-89``).
+
+    Args:
+        location: The module in which the (now top-level) error occurred.
+        base_id: An id fragment prepended (bracket-wrapped, if non-empty) to
+            each error's existing ``id``.
+        errors: The child-parser errors to enrich (their ``location`` is
+            **replaced**, not merged -- matching the Scala's ``ParseError(location,
+            ..., error.messages)`` construction, which discards the child's
+            own ``location``).
+
+    Returns:
+        A new list of :class:`ParseError`, one per input error, each with
+        ``location`` set to ``location`` and ``id`` set to
+        ``build_error_id(base_id) + error.id``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_data_quality import build_sub_error, enrich_sub_errors
+
+            child_err = build_sub_error("game_time", error="Could not find time")
+            enrich_sub_errors("ncaa.parse_playbyplay", "", [child_err])
+    """
+    return [
+        ParseError(location=location, id=_build_error_id(base_id) + error.id, messages=error.messages)
+        for error in errors
+    ]
+
+
+def enrich_sub_error(location: str, base_id: str, error: ParseError) -> list[ParseError]:
+    """Adds top-level location information to a single sub-error, returning a
+    list for consistency (``ParseUtils.enrich_sub_error``, ``ParseUtils.scala:91-93``).
+
+    Args:
+        location: The module in which the (now top-level) error occurred.
+        base_id: An id fragment prepended (bracket-wrapped, if non-empty) to
+            ``error``'s existing ``id``.
+        error: The child-parser error to enrich.
+
+    Returns:
+        :func:`enrich_sub_errors` applied to a single-element ``[error]``
+        list.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_data_quality import build_sub_error, enrich_sub_error
+
+            child_err = build_sub_error("game_score", error="Could not find score")
+            enrich_sub_error("ncaa.parse_playbyplay", "", child_err)
+    """
+    return enrich_sub_errors(location, base_id, [error])
 
 
 def combos(first: str, last: str) -> list[str]:
