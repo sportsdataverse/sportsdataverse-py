@@ -14,6 +14,7 @@ split (:func:`as_of_ratings_split`).
 
 from __future__ import annotations
 
+import datetime
 from dataclasses import dataclass
 
 import numpy as np
@@ -103,6 +104,30 @@ def get_constants(league: str) -> LeagueConstants:
         return LEAGUE_CONSTANTS[league]
     except KeyError:
         raise ValueError(f"Unknown league {league!r}; expected one of {sorted(LEAGUE_CONSTANTS)}") from None
+
+
+def as_of_ratings_split(results: pl.DataFrame, cutoff_date: datetime.date) -> pl.DataFrame:
+    """Return only games strictly before ``cutoff_date`` (the leakage boundary).
+
+    Predictive backtests must rate a game using only games that finished before
+    it — this split enforces that as-of-date rule so no future information leaks
+    into a game's own prediction.
+
+    Args:
+        results: A frame with a ``date`` column of dtype ``pl.Date``.
+        cutoff_date: The date of the game being predicted; games on or after it
+            are dropped.
+
+    Returns:
+        The subset of ``results`` with ``date < cutoff_date``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
+            prior = as_of_ratings_split(results, some_game_date)
+    """
+    return results.filter(pl.col("date") < cutoff_date)
 
 
 def brier_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
