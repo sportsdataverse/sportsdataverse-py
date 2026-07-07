@@ -551,7 +551,18 @@ def shot_js_to_html(js: str) -> list[Tag]:
         cx = 0.01 * float(m.group(1)) * ShotMapDimensions.court_length_x_px
         cy = 0.01 * float(m.group(2)) * ShotMapDimensions.court_width_y_px
         title = m.group(6)
-        circles_html.append(f'<circle class="shot" cx="{cx}" cy="{cy}" r="5"><title>{title}<title/></circle>')
+        # DELIBERATE DIVERGENCE from the Scala literal (:278), which emits a
+        # malformed `<title>{title}<title/>` closing tag. JSoup's error
+        # recovery happens to rebuild the intended per-circle structure from
+        # that, but `<title>` is a rawtext element in HTML parsing and
+        # whether `<title/>` terminates it is libxml2-BUILD-DEPENDENT
+        # (Linux/macOS swallow every subsequent circle into the first title;
+        # Windows recovers) -- this broke CI cross-platform. The synthesized
+        # string is an internal intermediate (never oracle-asserted; the
+        # resulting locations/titles are), so we emit well-formed
+        # `</title>`, which parses identically everywhere and yields the
+        # same downstream values JSoup produced.
+        circles_html.append(f'<circle class="shot" cx="{cx}" cy="{cy}" r="5"><title>{title}</title></circle>')
     return _v1_shot_event_finder(parse_html("\n".join(circles_html)))
 
 
