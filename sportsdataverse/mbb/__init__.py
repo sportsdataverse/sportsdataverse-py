@@ -16,6 +16,7 @@ from sportsdataverse.mbb.mbb_ncaa_models import *
 from sportsdataverse.mbb.mbb_ncaa_names import *
 from sportsdataverse.mbb.mbb_ncaa_pbp_glue import *
 from sportsdataverse.mbb.mbb_ncaa_pbp_parser import *
+from sportsdataverse.mbb.mbb_strength_of_schedule import *
 from sportsdataverse.mbb.mbb_ncaa_possessions import *
 from sportsdataverse.mbb.mbb_ncaa_roster_parser import *
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import *

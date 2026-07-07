@@ -20,7 +20,9 @@ from sportsdataverse.mbb.mbb_prediction_constants import (
     brier_score,
     calibration_table,
     mae,
+    spearman_corr,
 )
+from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
 from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo, raw_game_efficiency
 
 FIX_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
@@ -149,6 +151,28 @@ def test_pregame_spread_mae_vs_closing_line(weekly_backtest, oracle_corpus):
     assert j.height >= 150, f"backtest/odds intersection too small: {j.height}"
     m = mae(j.get_column("exp_margin").to_numpy(), -j.get_column("close_spread_home").to_numpy())
     assert m <= 2.5, f"spread MAE vs close = {m:.3f}"
+
+
+def test_sos_spearman_vs_espn_bpi(oracle_corpus):
+    """Task 4.3 gate: Spearman(our SoS, ESPN BPI SoS) >= 0.9 on 2024.
+
+    Observed at build time: 0.9229 (n=362). BPI's ``sospast`` VALUE is
+    oriented smaller = harder, so the rank (negated: higher = harder) is the
+    orientation-comparable series.
+    """
+    results, box = oracle_corpus["results_2024"], oracle_corpus["team_box_2024"]
+    adj = adjust_efficiency(raw_game_efficiency(results, box)).with_columns(
+        pl.col("adj_em").rank(method="min", descending=True).over("season").cast(pl.Int64).alias("rank")
+    )
+    sos = strength_of_schedule(results, adj)
+    j = sos.join(
+        oracle_corpus["espn_bpi_2024"].select("team_id", pl.col("sos_rank").alias("bpi_sos_rank")),
+        on="team_id",
+        how="inner",
+    )
+    assert j.height >= 300, f"SoS/BPI intersection too small: {j.height}"
+    rho = spearman_corr(j.get_column("sos").to_numpy(), -j.get_column("bpi_sos_rank").to_numpy())
+    assert rho >= 0.9, f"SoS spearman vs BPI = {rho:.4f}"
 
 
 def test_in_game_wp_decile_calibration(oracle_corpus):
