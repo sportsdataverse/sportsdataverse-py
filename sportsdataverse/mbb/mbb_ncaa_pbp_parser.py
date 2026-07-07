@@ -170,7 +170,14 @@ from bs4.element import Tag
 
 from sportsdataverse.mbb.mbb_ncaa_data_quality import ParseError, build_sub_error, enrich_sub_error
 from sportsdataverse.mbb.mbb_ncaa_events import parse_game_time, parse_team_sub_in_pair, parse_team_sub_out_pair
-from sportsdataverse.mbb.mbb_ncaa_html import attr_regex_filter, jsoup_text, parse_html, select_matching, td_at
+from sportsdataverse.mbb.mbb_ncaa_html import (
+    attr_regex_filter,
+    current_ncaa_team_alts,
+    jsoup_text,
+    parse_html,
+    select_matching,
+    td_at,
+)
 from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import enrich_lineup, fix_possible_score_swap_bug
 from sportsdataverse.mbb.mbb_ncaa_models import LineupEvent, Score, TeamId, Year
 from sportsdataverse.mbb.mbb_ncaa_possessions import calculate_possessions
@@ -323,8 +330,14 @@ v0_builders = PbpBuilders(
 def _v1_team_finder(doc: BeautifulSoup) -> list[str]:
     """``table[align=center] > tbody a > img[alt]`` (``:103-106``) -- reads
     the ``alt`` attribute, not
-    :func:`~sportsdataverse.mbb.mbb_ncaa_html.jsoup_text`."""
-    return [str(el.get("alt", "")) for el in doc.select('table[align="center"] > tbody a > img[alt]')]
+    :func:`~sportsdataverse.mbb.mbb_ncaa_html.jsoup_text`.
+
+    Falls back to :func:`~sportsdataverse.mbb.mbb_ncaa_html.current_ncaa_team_alts`
+    for current (2026) markup (see that helper's drift note); the modern
+    play-by-play page's ``event_finder`` selector still matches, only this
+    team header drifted."""
+    ported = [str(el.get("alt", "")) for el in doc.select('table[align="center"] > tbody a > img[alt]')]
+    return ported or current_ncaa_team_alts(doc)
 
 
 def _v1_event_finder(doc: BeautifulSoup) -> list[Tag]:

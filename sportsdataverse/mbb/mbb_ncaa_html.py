@@ -375,3 +375,26 @@ def filter_matching_own(tags: list[Tag], regex: str) -> list[Tag]:
         if own_text_re.search(own_text):
             matches.append(el)
     return matches
+
+
+def current_ncaa_team_alts(doc: Tag) -> list[str]:
+    """The two team names from a *current* (2026) stats.ncaa.org game page.
+
+    Both team logos render as ``a.skipMask > img[alt]`` on the modern
+    play-by-play / box-score / individual-stats pages -- the ``alt`` is the
+    short team name (e.g. ``"Illinois"``), in ``[home_or_first, second]``
+    document order, deduped (the individual-stats page repeats each team).
+
+    This is the current-markup counterpart to the cbb-explorer ``:2018+``
+    ``team_finder`` selectors (``div.card-header img[alt]`` for the box,
+    ``table[align=center] > tbody a > img[alt]`` for the pbp), which no
+    longer match: NCAA's markup drifted since cbb-explorer's ~2020 capture.
+    The v1 ``team_finder``\\ s try their ported selector first, then fall
+    back here, so both the vendored-era and current pages resolve.
+    """
+    out: list[str] = []
+    for el in doc.select("a.skipMask img[alt]"):
+        alt = str(el.get("alt", "")).strip()
+        if alt and alt not in out:
+            out.append(alt)
+    return out

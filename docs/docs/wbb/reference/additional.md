@@ -538,6 +538,38 @@ frames_pd = espn_wbb_team_stats(
 frames_pd["Averages"].head()
 ```
 
+## Dataset loaders
+
+### `load_proxybonanza_pool(api_key: 'str', pkg: 'str', *, transport: 'Optional[PoolTransport]' = None) -> "'list[str]'"` {#load_proxybonanza_pool}
+
+Resolve a ProxyBonanza package into a list of `http://login:pass@ip:port` URLs.
+
+Graduated from `dev/ncaa_proxy.py`'s `load_proxy_pool` -- same
+endpoint shape, minus the `.Renviron` reader (creds are now explicit
+params, per the creds-hygiene directive).
+
+Endpoint: `GET https://api.proxybonanza.com/v1/userpackages/{pkg}.json`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `api_key` | `str` |  | ProxyBonanza API key. |
+| `pkg` | `str` |  | ProxyBonanza package id. |
+| `transport` | `Optional[PoolTransport]` | `None` | Injectable `(url, headers) -> (status, text)` callable for offline testing. Defaults to a curl_cffi GET. |
+
+**Returns**
+
+One `http://login:password@ip:port` URL per IP in the package.
+
+**Example**
+
+```python
+def fake(url, headers):
+    return 200, '{"data": {"login": "u", "password": "p", "ippacks": []}}'
+pool = load_proxybonanza_pool("key", "pkg", transport=fake)
+```
+
 ## Utilities & helpers
 
 ### `most_recent_wbb_season()` {#most_recent_wbb_season}
@@ -684,6 +716,23 @@ precedent.
 
 Which team is in possession (`RawGameEvent.Direction`, `:119-121`).
 
+### `FieldAverage(league_off: 'float', league_def: 'float', hca_off: 'float', hca_def: 'float') -> None` {#FieldAverage}
+
+League average + estimated HCA for one stat field (`ts:620-625`).
+
+`league_off`/`league_def` are the possession-weighted league means of
+the per-game raw rate; `hca_off`/`hca_def` are the residual-derived
+home-court advantages the solver converged on.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_off` | `float` |  |  |
+| `league_def` | `float` |  |  |
+| `hca_off` | `float` |  |  |
+| `hca_def` | `float` |  |  |
+
 ### `FieldGoalStats(attempts: 'ShotClockStats' = <factory>, made: 'ShotClockStats' = <factory>, ast: 'Optional[ShotClockStats]' = None) -> None` {#FieldGoalStats}
 
 Field-goal counting stats (`LineupEventStats.FieldGoalStats`,
@@ -760,6 +809,21 @@ Return a copy with `min` replaced (`:880`).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `new_min` | `float` |  |  |
+
+### `IterationResult(adj_values: ForwardRef('AdjValues'), hca_per_field: ForwardRef('HcaPerField'))` {#IterationResult}
+
+Return of `run_iterative_adjustment_with_hca` (`ts:314-317`).
+
+`adj_values` maps `team_name -> field -> {"off","def"}` (the converged
+strength-of-schedule adjustment); `hca_per_field` maps `field ->
+{"hca_off","hca_def"}`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `adj_values` | `ForwardRef('AdjValues')` |  |  |
+| `hca_per_field` | `ForwardRef('HcaPerField')` |  |  |
 
 ### `LineupBuildingState(curr: 'LineupEvent', tidy_ctx: "'TidyPlayerContext'", prev: 'list[LineupEvent]' = <factory>, old_format: 'Optional[bool]' = None) -> None` {#LineupBuildingState}
 
@@ -957,6 +1021,180 @@ The set of players on the floor, as an opaque id string
 ### `LocationType(*values)` {#LocationType}
 
 Game location (`Game.LocationType`, `Game.scala:36-38`).
+
+### `NcaaFetchConfig(cache_dir: 'Optional[Path]' = None, proxy_url: 'Optional[str]' = None, proxybonanza_key: 'Optional[str]' = None, proxybonanza_pkg: 'Optional[str]' = None, timeout: 'int' = 45, impersonate: 'str' = 'chrome', max_retries: 'int' = 2, transport: 'Optional[FetchTransport]' = None) -> None` {#NcaaFetchConfig}
+
+Runtime configuration for the stats.ncaa.org fetch layer.
+
+Exactly one proxy source should be configured: either a single explicit
+`proxy_url` (`http://login:password@ip:port`), or a ProxyBonanza pool
+via `proxybonanza_key` + `proxybonanza_pkg` (resolved lazily by
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `cache_dir` | `Optional[Path]` | `None` |  |
+| `proxy_url` | `Optional[str]` | `None` |  |
+| `proxybonanza_key` | `Optional[str]` | `None` |  |
+| `proxybonanza_pkg` | `Optional[str]` | `None` |  |
+| `timeout` | `int` | `45` |  |
+| `impersonate` | `str` | `'chrome'` |  |
+| `max_retries` | `int` | `2` |  |
+| `transport` | `Optional[FetchTransport]` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import get_config
+cfg = get_config()
+cfg.cache_dir     # ~/.sportsdataverse/ncaa_cache
+cfg.impersonate   # "chrome"
+
+# Configure a single proxy explicitly (rarely needed -- prefer ``update_config`` or the env vars)
+
+from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetchConfig
+cfg = NcaaFetchConfig(proxy_url="http://user:pass@1.2.3.4:8080")
+```
+
+### `NcaaFetcher(config: 'Optional[NcaaFetchConfig]' = None, *, proxy_pool: "Optional['list[str]']" = None) -> 'None'` {#NcaaFetcher}
+
+Cache-first stats.ncaa.org fetcher, proxy-bound per the binding directive.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `config` | `Optional[NcaaFetchConfig]` | `None` |  |
+| `proxy_pool` | `Optional['list[str]']` | `None` |  |
+
+**Example**
+
+```python
+# Scrape game-detail data (the **suggested** path -- browser transport clears the Akamai bm-verify wall; see :meth:`with_browser`)
+
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+    with NcaaFetcher.with_browser() as fetcher:
+        pbp = fetcher.fetch_game_pbp("1613299")               # raw PBP HTML
+        box = fetcher.fetch_game_individual_stats("1613299")  # raw box HTML
+
+# Un-challenged pages (landing / team) via the curl_cffi proxy path
+
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher, update_config
+    update_config(proxy_url="http://user:pass@1.2.3.4:8080")
+    fetcher = NcaaFetcher()
+    html = fetcher.fetch_team_schedule("391")  # cached after this call
+
+# Offline (injected transport + explicit pool, no network/env needed)
+
+    def fake(url, proxies, headers):
+        return 200, "<html>...</html>"
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetchConfig
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=fake)
+    fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"])
+```
+
+**Methods**
+
+#### `NcaaFetcher.fetch_game_box(contest_id: 'object', period: 'int' = 1, *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a game's box-score *landing* page for *period* (1-indexed).
+
+Note: on current (2026) stats.ncaa.org this page is the team-stats /
+game-leaders view -- the per-player box the box-score parser consumes
+split out into `fetch_game_individual_stats`. Kept for the
+team-stats surface and the legacy layout.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `contest_id` | `object` |  |  |
+| `period` | `int` | `1` |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_game_individual_stats(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a game's per-player box (the `individual_stats` tab).
+
+This is the page `~sportsdataverse.mbb.mbb_ncaa_boxscore_parser
+.get_box_lineup` parses on current markup (`format_version=1`): two
+`table.dataTable.small_font#competitor_*` per-team player tables.
+The server ignores `?period_no` here (returns the full-game box), so
+no period arg -- see `dev/phase5f-live-proof.md`.
+
+ponytail: the modern box split out of `box_score` into this tab; the
+legacy (pre-2018) layout has no separate individual-stats page, so
+`legacy=True` falls back to the legacy `box_score` path.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `contest_id` | `object` |  |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_game_pbp(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a game's play-by-play page.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `contest_id` | `object` |  |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_html(path: 'str', *, force: 'bool' = False) -> 'str'`
+
+Fetch *path* (bare path or full stats.ncaa.org URL), cache-first.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | e.g. `"contests/4690813/play_by_play"` or a full `https://stats.ncaa.org/...` URL. |
+| `force` | `bool` | `False` | Bypass the cache and re-fetch, overwriting the cache file. |
+
+**Returns**
+
+The response HTML, decoded as UTF-8.
+
+#### `NcaaFetcher.fetch_team_roster(team_id: 'object', year_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a team's roster page for *year_id*.
+
+ponytail: URL shape by analogy to the confirmed team-id scheme, not
+independently live-confirmed -- see module docstring; fix in Task
+5f.2 if the real path differs.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `object` |  |  |
+| `year_id` | `object` |  |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_team_schedule(team_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a team's game-by-game schedule page.
+
+Modern shape (`teams/{id}/game_by_game`) is confirmed by
+`dev/phase5-ncaa-proxy-proof.md`; the legacy shape is by analogy
+(see `fetch_team_roster`'s note).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `object` |  |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
 
 ### `NoSurnameMatch(box_name: 'str', exact_first_name: 'Optional[str]', near_first_name: 'Optional[str]', err: 'str') -> None` {#NoSurnameMatch}
 
@@ -1260,6 +1498,27 @@ The event string for the team NOT in possession, or `None`.
 
 `ev.team` if `dir` is `Direction.OPPONENT`, `ev.opponent` if `Direction.TEAM`, else `None`.
 
+### `PossessionSplits(home_off_poss: 'float', away_off_poss: 'float', neutral_off_poss: 'float', total_off_poss: 'float', home_def_poss: 'float', away_def_poss: 'float', neutral_def_poss: 'float', total_def_poss: 'float') -> None` {#PossessionSplits}
+
+Home/away/neutral possession totals for one team (`ts:143-152`).
+
+Off and def possessions are bucketed by the game's `location_type`
+(missing -> `"Neutral"`). The HCA residual step reads the off/def
+imbalance `(home - away) / total` off these totals.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_off_poss` | `float` |  |  |
+| `away_off_poss` | `float` |  |  |
+| `neutral_off_poss` | `float` |  |  |
+| `total_off_poss` | `float` |  |  |
+| `home_def_poss` | `float` |  |  |
+| `away_def_poss` | `float` |  |  |
+| `neutral_def_poss` | `float` |  |  |
+| `total_def_poss` | `float` |  |  |
+
 ### `RapmConfig(...)` {#RapmConfig}
 
 Port of `RapmConfig` (`RapmUtils.ts:175-179`).
@@ -1504,6 +1763,20 @@ field names are kept snake_case to match the Scala vals verbatim,
 letting the ported oracle tests reference e.g.
 `ShotMapDimensions.court_length_x_px` 1:1.
 
+### `StrengthAdjustedResult(averages: 'dict[str, FieldAverage]', teams: 'list[TeamStrengthAdjusted]') -> None` {#StrengthAdjustedResult}
+
+The compute output of `build_strength_adjusted_stats`.
+
+Mirrors `main()`'s `{ averages, teams }` object (`ts:656-662`) minus
+the `lastUpdated`/`gender`/`year` serialization wrapper.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `averages` | `dict[str, FieldAverage]` |  |  |
+| `teams` | `list[TeamStrengthAdjusted]` |  |  |
+
 ### `StrongSurnameMatch(box_name: 'str', score: 'int') -> None` {#StrongSurnameMatch}
 
 A surname fragment matched and the whole-name score cleared
@@ -1585,6 +1858,25 @@ A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
 |---|---|---|---|
 | `team` | `TeamId` |  | The team playing the season. |
 | `year` | `Year` |  | The year the season ends. |
+
+### `TeamStrengthAdjusted(team_name: 'str', conf: 'str', raw: 'FieldSideMap', adj: 'FieldSideMap', adj_hca: 'FieldSideMap') -> None` {#TeamStrengthAdjusted}
+
+One team's raw / adjusted / HCA-adjusted rates (`ts:642-648`).
+
+Each of `raw` / `adj` / `adj_hca` maps a stat field
+(`efg`/`3p`/`2pmid`/`2prim`) to a `{"off": float, "def": float}`
+dict. `adj` is the strength-of-schedule-adjusted value; `adj_hca` adds
+the home-court term (`off + hca_off`, `def - hca_def`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_name` | `str` |  |  |
+| `conf` | `str` |  |  |
+| `raw` | `FieldSideMap` |  |  |
+| `adj` | `FieldSideMap` |  |  |
+| `adj_hca` | `FieldSideMap` |  |  |
 
 ### `TidyPlayerContext(box_lineup: 'LineupEvent', all_players_map: 'dict[str, str]', alt_all_players_map: 'dict[str, list[str]]', resolution_cache: 'dict[str, str]' = <factory>) -> None` {#TidyPlayerContext}
 
@@ -2678,6 +2970,40 @@ see `PLAN-phase2.md`'s self-review notes.
 
 float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}`` -- keys kept TS-verbatim (see module docstring's naming-convention note).
 
+### `build_strength_adjusted_stats(teams: 'Sequence[TeamDetail]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'StrengthAdjustedResult'` {#build_strength_adjusted_stats}
+
+Run the full strength-adjustment compute over a team list.
+
+Ports the COMPUTE half of the CLI `main()` (`ts:594-662`): dedupe
+teams by name (first-wins, as `main` does across its tier files),
+compute possession splits + league averages, run
+`run_iterative_adjustment_with_hca`, then assemble each team's
+`raw` / `adj` / `adj_hca` field maps. The file/CLI glue
+(`fs`/`argv`/`dataLastUpdated`/serialization) is intentionally not
+ported -- pass an already-loaded `team_details` list.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `teams` | `Sequence[TeamDetail]` |  | The `team_details` team dicts (each `{team_name, conf, opponents: [...]}`). Duplicate `team_name`s keep the first occurrence. |
+| `max_iterations` | `int` | `100` | Solver iteration cap (default `MAX_ITERATIONS`). |
+| `tolerance` | `float` | `1e-06` | Solver convergence tolerance (default `TOLERANCE`). |
+
+**Returns**
+
+A `StrengthAdjustedResult` (`averages` per field + per-team `raw`/`adj`/`adj_hca`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import build_strength_adjusted_stats
+
+result = build_strength_adjusted_stats(team_details)
+print(result.averages["3p"].league_off)
+print(result.teams[0].adj["3p"])  # {"off": ..., "def": ...}
+```
+
 ### `build_sub_error(*subids: 'str', error: 'str') -> 'ParseError'` {#build_sub_error}
 
 Build a location-less `ParseError` from id fragments
@@ -2778,6 +3104,33 @@ from sportsdataverse.mbb.mbb_rapm import build_weak_prior_from_rapm
 
 weak_prior = build_weak_prior_from_rapm([5.0, 4.5], "off")
 print(weak_prior[0])  # {"off_adj_ppp": 5.0}
+```
+
+### `cached_path(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'Path'` {#cached_path}
+
+Return the on-disk cache file path for *path*, without touching it.
+
+Layout: `{cache_dir}/stats.ncaa.org/{dirs...}/{last}.html`, where the
+URL path's `/`-separated segments become nested directories and a
+query string is folded into the final filename as {safe_query}.html`
+(unsafe characters replaced with `). Two different query strings for
+the same base path therefore always produce two distinct cache files.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  |  |
+| `cache_dir` | `Optional[Path]` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import cached_path
+cached_path("contests/4690813/play_by_play")
+# .../stats.ncaa.org/contests/4690813/play_by_play.html
+cached_path("contests/4690813/box_score?period_no=2")
+# .../stats.ncaa.org/contests/4690813/box_score__period_no=2.html
 ```
 
 ### `calc_collinearity_diag(weight_matrix: 'NDArray[np.float64]', ctx: 'RapmPlayerContext') -> 'RapmPreProcDiagnostics'` {#calc_collinearity_diag}
@@ -3528,6 +3881,97 @@ complete_weighted_avg(acc)
 print(acc["off_ppp"]["value"])  # now a true weighted average
 ```
 
+### `compute_league_averages_from_per_game(teams: 'Sequence[TeamDetail]', fields: 'Sequence[str]' = ('efg', '3p', '2pmid', '2prim')) -> 'LeagueAverages'` {#compute_league_averages_from_per_game}
+
+Possession-weighted league means per field (`computeLeagueAveragesFromPerGame`, `ts:189-221`).
+
+For each field, the weighted mean of every team's per-game raw rate over
+all their games; only games with a non-`None` raw and a positive weight
+contribute. An empty accumulator yields `0`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `teams` | `Sequence[TeamDetail]` |  | All teams. |
+| `fields` | `Sequence[str]` | `('efg', '3p', '2pmid', '2prim')` | The stat fields to average (default `STRENGTH_ADJUSTED_FIELDS`). |
+
+**Returns**
+
+{"league_off": float, "league_def": float}}``.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import compute_league_averages_from_per_game
+
+teams = [{"team_name": "A", "opponents": [{"off_3p_made": 5, "off_3p_attempts": 10}]}]
+print(compute_league_averages_from_per_game(teams, ["3p"])["3p"]["league_off"])  # 0.5
+```
+
+### `compute_opponent_strengths(team: 'TeamDetail', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', adj_values: 'AdjValues') -> 'dict[str, SideValues]'` {#compute_opponent_strengths}
+
+Schedule-weighted opponent strength per field (`computeOpponentStrengths`, `ts:253-299`).
+
+**Cross-named on purpose:** `avg_opp_def` is weighted by the *offensive*
+game weights and reads each opponent's `def` adjustment; `avg_opp_off`
+is weighted by *defensive* weights and reads the opponent's `off`. Each
+opponent value is its current adjusted value, falling back to its raw
+per-game value when no adjustment exists yet. Games whose opponent is not
+in `team_by_name` (or whose off+def weights are both `<= 0`) are
+skipped.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `TeamDetail` |  | The team whose schedule is being summarized. |
+| `team_by_name` | `dict[str, TeamDetail]` |  | `{team_name: team_detail}` for opponent lookup. |
+| `fields` | `Sequence[str]` |  | The stat fields to compute. |
+| `adj_values` | `AdjValues` |  | Current `{team_name: field: {"off","def"}}` adjustments. |
+
+**Returns**
+
+{"avg_opp_def": float, "avg_opp_off": float}}``.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import compute_opponent_strengths
+
+team = {"team_name": "A", "opponents": [{"oppo_name": "B", "off_3p_attempts": 10}]}
+by_name = {"A": team, "B": {"team_name": "B"}}
+adj = {"B": {"3p": {"off": 0.5, "def": 0.3}}}
+print(compute_opponent_strengths(team, by_name, ["3p"], adj)["3p"]["avg_opp_def"])  # 0.3
+```
+
+### `compute_possession_splits(team: 'TeamDetail') -> 'PossessionSplits'` {#compute_possession_splits}
+
+Home/away/neutral possession totals for a team (`computePossessionSplits`, `ts:154-186`).
+
+Each opponent game's `off_poss`/`def_poss` (missing -> 0) is bucketed
+by `location_type` (missing or any non `"Home"`/`"Away"` value ->
+the neutral bucket).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `TeamDetail` |  | A `team_details` team dict. |
+
+**Returns**
+
+A `PossessionSplits`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import compute_possession_splits
+
+team = {"opponents": [{"off_poss": 70, "def_poss": 68, "location_type": "Home"}]}
+print(compute_possession_splits(team).home_off_poss)  # 70.0
+```
+
 ### `concurrent_event_handler(clumps: 'Iterable[ConcurrentClump]') -> 'list[ConcurrentClump]'` {#concurrent_event_handler}
 
 Batch a stream of singleton/boundary clumps into merged
@@ -4015,6 +4459,29 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import extract_player_from_ev
 pc = extract_player_from_ev(shot, pbp_event, tidy_ctx)
 ```
 
+### `field_keys(field: 'str') -> 'dict[str, str]'` {#field_keys}
+
+Off/def stat-key names for a field (`fieldKeys`, `ts:77-79`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `field` | `str` |  | A stat field (`"efg"` / `"3p"` / `"2pmid"` / `"2prim"`). |
+
+**Returns**
+
+f"off_{field}", "def": f"def_{field}"}``.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import field_keys
+
+keys = field_keys("3p")
+print(keys["off"], keys["def"])  # off_3p def_3p
+```
+
 ### `filter_matching_own(tags: 'list[Tag]', regex: 'str') -> 'list[Tag]'` {#filter_matching_own}
 
 JSoup `:matchesOwn(regex)` applied to an already-computed candidate
@@ -4329,6 +4796,48 @@ with open("tests/fixtures/ncaa/test_lineup.html", encoding="utf-8") as f:
 result = get_box_lineup("test_p1.html", html, TeamId("TeamA"), format_version=0)
 ```
 
+### `get_config() -> 'NcaaFetchConfig'` {#get_config}
+
+Return the live `NcaaFetchConfig` singleton.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import get_config
+cfg = get_config()
+print(cfg.cache_dir, cfg.timeout)
+```
+
+### `get_game_weight(opp: 'OpponentGame', field: 'str', side: 'str') -> 'float'` {#get_game_weight}
+
+Weight for one game/field/side (`getGameWeight`, `ts:119-140`).
+
+The field-specific shot volume (FGA for `efg`, 3PA for `3p`,
+`2pmid_attempts` / `2prim_attempts` for the mid/rim fields); when that
+is `0` (no shots of that type), **falls back to** `off_poss` /
+`def_poss` so the game still carries weight.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `opp` | `OpponentGame` |  | One opponent game dict. |
+| `field` | `str` |  | A stat field. |
+| `side` | `str` |  | `"off"` or `"def"`. |
+
+**Returns**
+
+The (non-negative) game weight.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import get_game_weight
+
+game = {"off_3p_attempts": 0, "off_poss": 70}
+print(get_game_weight(game, "3p", "off"))  # 70.0 (poss fallback)
+```
+
 ### `get_neutral_games(filename: 'str', in_html: 'str', format_version: 'int') -> 'Union[tuple[TeamId, set[str]], list[ParseError]]'` {#get_neutral_games}
 
 Extracts the set of neutral/away-marked game dates from a saved NCAA
@@ -4359,6 +4868,36 @@ result = get_neutral_games("test_schedule.html", html, format_version=0)
 if isinstance(result, list):
     raise RuntimeError(result)  # list[ParseError]
 team, neutral_dates = result
+```
+
+### `get_per_game_raw(opp: 'OpponentGame', field: 'str', side: 'str') -> 'Optional[float]'` {#get_per_game_raw}
+
+Per-game raw shooting rate from one opponent row (`getPerGameRaw`, `ts:82-116`).
+
+`efg` is `(2pmid_made + 2prim_made + 1.5 * 3p_made) / (2pmid_att +
+2prim_att + 3p_att)`; `3p` / `2pmid` / `2prim` are `made /
+attempts`. Every counter read is nullish (missing -> 0); the sole guard
+is on total attempts.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `opp` | `OpponentGame` |  | One opponent game dict. |
+| `field` | `str` |  | A stat field; an unknown field returns `None`. |
+| `side` | `str` |  | `"off"` or `"def"` (selects the `off_`/`def_` prefix). |
+
+**Returns**
+
+The rate as a float, or `None` when the relevant attempts total is `<= 0` (game skipped by the weighted means -- **not** a 0-rate).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import get_per_game_raw
+
+game = {"off_3p_made": 4, "off_3p_attempts": 10}
+print(get_per_game_raw(game, "3p", "off"))  # 0.4
 ```
 
 ### `get_sorted_pbp_events(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[list[PlayByPlayEvent], list[ParseError]]'` {#get_sorted_pbp_events}
@@ -4427,6 +4966,33 @@ from sportsdataverse.mbb.mbb_lineup_stats import get_stats_diff
 
 diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
 print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
+```
+
+### `get_team_raw_from_per_game(team: 'TeamDetail', field: 'str') -> 'SideValues'` {#get_team_raw_from_per_game}
+
+A team's field rate as the weighted mean of its per-game raws (`getTeamRawFromPerGame`, `ts:224-250`).
+
+Same accumulation as `compute_league_averages_from_per_game` but
+scoped to one team's games; empty -> `0`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `TeamDetail` |  | A `team_details` team dict. |
+| `field` | `str` |  | A stat field. |
+
+**Returns**
+
+float, "def": float}``.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import get_team_raw_from_per_game
+
+team = {"opponents": [{"off_3p_made": 4, "off_3p_attempts": 10}]}
+print(get_team_raw_from_per_game(team, "3p")["off"])  # 0.4
 ```
 
 ### `get_team_triples(filename: 'str', in_html: 'str', old_format: 'bool' = False) -> 'Union[list[tuple[TeamId, str, ConferenceId]], list[ParseError]]'` {#get_team_triples}
@@ -4729,6 +5295,17 @@ apparent Scala oversight).
 from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import inject_validated_players
 inject_validated_players(["Player One"], box_lineup, ([], []))
 ```
+
+### `is_cached(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'bool'` {#is_cached}
+
+Return whether *path* already has a cache file on disk.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  |  |
+| `cache_dir` | `Optional[Path]` | `None` |  |
 
 ### `is_end_of_game_fouling_vs_fastbreak(curr_clump: 'ConcurrentClump', event_parser: 'PossessionEvent') -> 'bool'` {#is_end_of_game_fouling_vs_fastbreak}
 
@@ -5288,6 +5865,39 @@ off_results, def_results = pick_ridge_regression(
 print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
 ```
 
+### `playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 30000, user_agent: 'Optional[str]' = None) -> "'_PlaywrightTransport'"` {#playwright_transport}
+
+Build the **suggested** stats.ncaa.org game-detail scraping transport.
+
+Drives a real Chromium via Playwright in Chrome's new-headless mode
+(`--headless=new`) to clear the Akamai `bm-verify` challenge that
+`curl_cffi` cannot, then serves raw server HTML for the 5a-5e parsers.
+Playwright is a **lazy optional import** (not a hard dependency); a clear
+`ImportError` fires on first use if it is missing.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `headless_new` | `bool` | `True` | Use `--headless=new` (real-GPU render, no window) -- the default and the proven-working mode. `False` runs old headless (`headless_shell`), which Akamai flags -- avoid. |
+| `challenge_wait_ms` | `int` | `8000` | Milliseconds to let the bm-verify sensor run after the first navigation. |
+| `nav_timeout_ms` | `int` | `30000` | Per-navigation timeout. |
+| `user_agent` | `Optional[str]` | `None` | Override the Chrome UA string. |
+
+**Returns**
+
+A stateful, callable `FetchTransport` reusing one browser for the session. Close it when done (it is a context manager, has `close()`, and registers an `atexit` safety net).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+with NcaaFetcher.with_browser() as fetcher:
+    pbp = fetcher.fetch_game_pbp("1613299")               # raw PBP HTML
+    box = fetcher.fetch_game_individual_stats("1613299")  # raw box HTML
+# -> feed to get_box_lineup / create_lineup_data (mbb_ncaa_*_parser)
+```
+
 ### `pos_class_to_score(pos_class: 'str') -> 'int'` {#pos_class_to_score}
 
 Ordinal "positional weight" for a position class, PG=1000..C=8000.
@@ -5463,6 +6073,18 @@ reorder_and_reverse(events)
 # [OtherTeamEvent(...), SubInEvent(...)]
 ```
 
+### `reset_config() -> 'NcaaFetchConfig'` {#reset_config}
+
+Reset the active config to its env-var-derived defaults.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import update_config, reset_config
+update_config(timeout=5)
+reset_config()
+```
+
 ### `right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'` {#right_kind_of_shot}
 
 Whether `pbp_event`'s shot type is compatible with `shot`'s
@@ -5492,6 +6114,61 @@ agreement.
 ```python
 from sportsdataverse.mbb.mbb_ncaa_pbp_glue import right_kind_of_shot
 right_kind_of_shot(shot, pbp_event, strict=True)
+```
+
+### `run_iterative_adjustment_with_hca(teams: 'Sequence[TeamDetail]', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', league_averages: 'LeagueAverages', poss_splits: 'dict[str, PossessionSplits]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'IterationResult'` {#run_iterative_adjustment_with_hca}
+
+KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`).
+
+Each iteration (Jacobi -- all teams read the *previous* iteration's
+adjustments, then commit together):
+
+1. Per team/field, adjust every game
+   `adj_game = raw_game * (league / (opp_adj +/- hca))` and take the
+   weighted mean; a field with no valid games keeps its current value.
+2. Re-estimate per-field HCA from home/away possession-imbalance residuals
+   `hca = sum((raw - pred) * |imbalance|) / sum(|imbalance|)` over teams
+   with `|imbalance| >= IMBALANCE_MIN`.
+
+Stops when the max per-team/field change drops below `tolerance` or after
+`max_iterations` sweeps (the HCA re-estimate still runs on the final
+sweep). The cross-guard on the per-game branch, the asymmetric residual
+prediction, and the cross-named opponent strengths are all preserved -- see
+the module docstring's landmine list.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `teams` | `Sequence[TeamDetail]` |  | The teams to solve over. |
+| `team_by_name` | `dict[str, TeamDetail]` |  | `{team_name: team_detail}` for opponent lookup. |
+| `fields` | `Sequence[str]` |  | The stat fields to solve. |
+| `league_averages` | `LeagueAverages` |  | Output of `compute_league_averages_from_per_game`. |
+| `poss_splits` | `dict[str, PossessionSplits]` |  | `{team_name:` `PossessionSplits` `}`. |
+| `max_iterations` | `int` | `100` | Iteration cap (default `MAX_ITERATIONS`; pin to `1` to inspect a single sweep). |
+| `tolerance` | `float` | `1e-06` | Convergence tolerance (default `TOLERANCE`). |
+
+**Returns**
+
+An `IterationResult` (`adj_values`, `hca_per_field`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_strength import (
+    STRENGTH_ADJUSTED_FIELDS,
+    compute_league_averages_from_per_game,
+    compute_possession_splits,
+    run_iterative_adjustment_with_hca,
+)
+
+by_name = {t["team_name"]: t for t in teams}
+league = compute_league_averages_from_per_game(teams)
+splits = {t["team_name"]: compute_possession_splits(t) for t in teams}
+result = run_iterative_adjustment_with_hca(
+    teams, by_name, STRENGTH_ADJUSTED_FIELDS, league, splits,
+)
+print(result.hca_per_field["3p"]["hca_off"])
 ```
 
 ### `score_to_tuple(s: 'str') -> 'tuple[int, int]'` {#score_to_tuple}
@@ -5939,6 +6616,21 @@ oriented as if shooting towards the left goal (`ShotEventParser
 ```python
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import transform_shot_location
 transform_shot_location(310.2, 235, False, False, True)
+```
+
+### `update_config(**kwargs: 'object') -> 'NcaaFetchConfig'` {#update_config}
+
+Update the active config in place.
+
+**Returns**
+
+The (mutated) global config object.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import update_config
+update_config(proxy_url="http://user:pass@1.2.3.4:8080")
 ```
 
 ### `using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'` {#using_roster_pos}

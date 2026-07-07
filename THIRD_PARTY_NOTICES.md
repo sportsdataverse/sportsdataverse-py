@@ -8,6 +8,7 @@
   - [cbb-on-off-analyzer (`LuckUtils.ts`)](#cbb-on-off-analyzer-luckutilsts)
   - [cbb-on-off-analyzer (`RapmUtils.ts`)](#cbb-on-off-analyzer-rapmutilsts)
   - [cbb-on-off-analyzer (`PositionUtils.ts`)](#cbb-on-off-analyzer-positionutilsts)
+  - [cbb-on-off-analyzer (`buildStrengthAdjustedStats.ts`)](#cbb-on-off-analyzer-buildstrengthadjustedstatsts)
   - [cbb-explorer (`EventUtils.scala` / `PossessionUtils.scala` / `StateUtils.scala` / `LineupEvent.scala` / `LineupEventStats.scala` / `Game.scala`)](#cbb-explorer-eventutilsscala--possessionutilsscala--stateutilsscala--lineupeventscala--lineupeventstatsscala--gamescala)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -188,6 +189,39 @@ that license's own attribution obligations.
   [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
   are test-only fixtures and are not shipped in the distributed wheel or
   sdist.
+- **Modifications:** Translated from TypeScript to Python, following this
+  repository's own conventions (typing, docstrings). No changes were made
+  to the original TypeScript source itself; the Python port is a faithful
+  (including bug-for-bug, where explicitly documented in the module
+  docstring) translation of the upstream logic, not a functional rewrite.
+
+## cbb-on-off-analyzer (`buildStrengthAdjustedStats.ts`)
+
+- **Project:** [Alex-At-Home/cbb-on-off-analyzer](https://github.com/Alex-At-Home/cbb-on-off-analyzer)
+  (the hoop-explorer.com single-page app).
+- **License:** Apache License, Version 2.0 -- full text at
+  <http://www.apache.org/licenses/LICENSE-2.0>, and vendored verbatim in the
+  upstream repository's `LICENSE` file.
+- **Copyright:** Copyright (c) Alex-At-Home
+  (<https://github.com/Alex-At-Home>) and contributors. Licensed under the
+  Apache License, Version 2.0.
+- **What was derived:** `src/bin/buildStrengthAdjustedStats.ts`'s numerical
+  engine and compute-assembly surface -- the `fieldKeys`, `getPerGameRaw`,
+  `getGameWeight`, `computePossessionSplits`,
+  `computeLeagueAveragesFromPerGame`, `getTeamRawFromPerGame`,
+  `computeOpponentStrengths`, and `runIterativeAdjustmentWithHCA` functions,
+  plus the compute half of `main()` (re-exposed as
+  `build_strength_adjusted_stats`) -- was ported line-for-line (including
+  documented bug-for-bug behavior, itemized in the module docstring) into
+  [`sportsdataverse/mbb/mbb_ncaa_strength.py`](sportsdataverse/mbb/mbb_ncaa_strength.py).
+  The CLI/file-I/O half of `main()` (`fs` reads, `process.argv` parsing,
+  serialization) was intentionally not ported -- see the module docstring
+  for the exact scope. [`sportsdataverse/wbb/wbb_ncaa_strength.py`](sportsdataverse/wbb/wbb_ncaa_strength.py)
+  re-exports the same functions and constants by reference (no separate copy
+  of the logic). The upstream file is an oracle-less CLI script (no jest
+  coverage); this port's tests are hand-derived from the TS on paper, with
+  the arithmetic documented inline for reviewer re-derivation -- no fixture
+  file is vendored for this entry.
 - **Modifications:** Translated from TypeScript to Python, following this
   repository's own conventions (typing, docstrings). No changes were made
   to the original TypeScript source itself; the Python port is a faithful
