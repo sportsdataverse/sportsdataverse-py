@@ -33,16 +33,50 @@ SNAPS = {
 INPUT_SOURCES = {
     UPSTREAM / "src/sample-data/sampleLineupStatsResponse.ts": "lineup_utils_inputs.json",
     UPSTREAM / "src/utils/stats/__tests__/LineupUtils.test.ts": "lineup_utils_inputs.json",
+    # RatingUtils.test.ts + its sample-data imports (Task 2.1). samplePlayerStatsResponse
+    # is the shared player-payload fixture also consumed by LuckUtils.test.ts (via property
+    # access, not a fresh const) -- it lives here rather than being duplicated into
+    # luck_utils_inputs.json; see the README cross-reference.
+    UPSTREAM / "src/sample-data/samplePlayerStatsResponse.ts": "rating_utils_inputs.json",
+    UPSTREAM / "src/sample-data/sampleOrtgDiagnostics.ts": "rating_utils_inputs.json",
+    UPSTREAM / "src/sample-data/sampleDrtgDiagnostics.ts": "rating_utils_inputs.json",
+    UPSTREAM / "src/sample-data/sampleOnBallDefenseStats.ts": "rating_utils_inputs.json",
+    UPSTREAM / "src/utils/stats/__tests__/RatingUtils.test.ts": "rating_utils_inputs.json",
+    # LuckUtils.test.ts + its sample-data imports (Task 2.1).
+    UPSTREAM / "src/sample-data/sampleTeamStatsResponse.ts": "luck_utils_inputs.json",
+    UPSTREAM / "src/sample-data/sampleOnOffLuckDiagnostics.ts": "luck_utils_inputs.json",
+    UPSTREAM / "src/utils/stats/__tests__/LuckUtils.test.ts": "luck_utils_inputs.json",
 }
 
 # `export const X = {...};` (sample-data modules) or bare `const X = {...};`
 # (inline test-file locals, e.g. `testIn` in LineupUtils.test.ts) -- both are
 # JSON5-parseable object/array literals once `undefined` is folded to `null`.
 # Non-literal consts (arrow functions, expressions referencing other
-# constants) fail json5.loads() and are silently skipped -- they aren't
-# vendorable input data.
+# constants, object-spread literals like `{...outputs}`) fail json5.loads()
+# and are silently skipped -- they aren't vendorable input data.
+#
+# Three upstream formatting quirks widen the match beyond a bare `= {...};`:
+#   - `export const X = // some comment\n[...]` (sampleOnBallDefenseStats.ts)
+#     -- an inline `//` comment between `=` and the literal's opening bracket.
+#   - `const X = {...} as SomeType;` (e.g. `samplePlayerDef` in
+#     LuckUtils.test.ts) -- a TS type-assertion cast that isn't literally
+#     `as const`. Matched generically (`as`, optionally `unknown as`, then
+#     any identifier) so it still captures `as const` too.
+#   - `export const X =\n{...}\n\n\nconst Y = ...` (samplePlayerStatsResponse.ts)
+#     -- ASI: the file relies on automatic semicolon insertion and never
+#     writes the trailing `;` at all. Terminate the match either at a literal
+#     `;` (the common case) or -- via a non-consuming lookahead, since there's
+#     nothing to consume -- at the point immediately preceding the next
+#     top-level `const`/`export const` declaration or end-of-file.
 CONST_RE = re.compile(
-    r"(?:export\s+)?const\s+(?P<name>\w+)(?:\s*:[^=]+)?\s*=\s*(?P<body>[\[{].*?[\]}])\s*(?:as\s+const)?\s*;",
+    r"(?:export\s+)?const\s+(?P<name>\w+)(?:\s*:[^=]+)?\s*=\s*"
+    r"(?://[^\n]*\n\s*)?"
+    r"(?P<body>[\[{].*?[\]}])"
+    r"(?:"
+    r"\s*(?:as\s+(?:unknown\s+as\s+)?\w+)?\s*;"
+    r"|(?=\s*(?:export\s+)?const\s+\w+\s*=)"
+    r"|(?=\s*\Z)"
+    r")",
     re.S,
 )
 
@@ -123,7 +157,8 @@ def main() -> None:
     for snap_name, out_name in SNAPS.items():
         parsed, n_total, n_failed = parse_snap(SNAP_DIR / snap_name)
         out = OUT_DIR / out_name
-        out.write_text(json.dumps(parsed, indent=1, sort_keys=True), encoding="utf-8")
+        with out.open("w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(parsed, indent=1, sort_keys=True) + "\n")
         rate = 100.0 * (n_total - n_failed) / n_total if n_total else 0.0
         print(f"{snap_name}: {len(parsed)} entries -> {out.name} ({n_total - n_failed}/{n_total} parsed, {rate:.1f}%)")
 
@@ -153,7 +188,8 @@ def main() -> None:
         totals[out_name] = (prev_total + n_total, prev_failed + n_failed)
     for out_name, entries in merged.items():
         out = OUT_DIR / out_name
-        out.write_text(json.dumps(entries, indent=1, sort_keys=True), encoding="utf-8")
+        with out.open("w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(entries, indent=1, sort_keys=True) + "\n")
         n_total, n_failed = totals[out_name]
         rate = 100.0 * (n_total - n_failed) / n_total if n_total else 0.0
         print(
