@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from sportsdataverse.mbb.mbb_espn_ext import *
+from sportsdataverse.mbb.mbb_bracketology import *
 from sportsdataverse.mbb.mbb_fox_ext import *
 from sportsdataverse.mbb.mbb_game_predict import *
 from sportsdataverse.mbb.mbb_game_rosters import *

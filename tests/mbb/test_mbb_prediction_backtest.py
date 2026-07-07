@@ -28,7 +28,13 @@ from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo
 FIX_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
 
 _CORE_FIXTURES = ("results_2024", "team_box_2024", "torvik_2024")
-_OPTIONAL_FIXTURES = ("espn_predictor_sample", "espn_odds_sample", "espn_bpi_2024", "pbp_sample_2024")
+_OPTIONAL_FIXTURES = (
+    "espn_predictor_sample",
+    "espn_odds_sample",
+    "espn_bpi_2024",
+    "pbp_sample_2024",
+    "ncaa_tourney_2024",
+)
 
 # A game enters the backtest only when both teams have this many prior games at
 # the as-of date (data sufficiency for the in-season engine, mirrors
@@ -173,6 +179,38 @@ def test_sos_spearman_vs_espn_bpi(oracle_corpus):
     assert j.height >= 300, f"SoS/BPI intersection too small: {j.height}"
     rho = spearman_corr(j.get_column("sos").to_numpy(), -j.get_column("bpi_sos_rank").to_numpy())
     assert rho >= 0.9, f"SoS spearman vs BPI = {rho:.4f}"
+
+
+def test_bracketology_seed_order_vs_committee(oracle_corpus):
+    """Task 5.3 gate: Spearman(resume_score order, actual seed) >= 0.9.
+
+    Oracle swap (documented): bracketmatrix.com's 2024 archive is unreachable
+    (self-signed TLS, no archive links), so the gate compares against the
+    ACTUAL 2024 committee seed list -- a strictly stronger reference than a
+    consensus of predictions. Resume is computed as of Selection Sunday
+    (games before 2024-03-19) so no tournament result leaks into it.
+    Observed at build time: 0.9382 (68/68 matched).
+    """
+    from sportsdataverse.mbb.mbb_bracketology import project_bracket
+
+    cutoff = datetime.date(2024, 3, 19)
+    results = oracle_corpus["results_2024"].filter(pl.col("date") < cutoff)
+    box = oracle_corpus["team_box_2024"].filter(pl.col("game_date") < cutoff)
+    ratings = adjust_efficiency(raw_game_efficiency(results, box)).with_columns(
+        pl.col("adj_em").rank(method="min", descending=True).over("season").cast(pl.Int64).alias("rank"),
+        ((pl.col("adj_em") - pl.col("adj_em").mean().over("season")) / pl.col("adj_em").std().over("season")).alias(
+            "adj_em_z"
+        ),
+    )
+    resume = strength_of_schedule(results, ratings).join(
+        ratings.select("season", "team_id", "adj_em_z"), on=["season", "team_id"], how="inner"
+    )
+    field = project_bracket(resume, auto_bids=set())
+    seeds = oracle_corpus["ncaa_tourney_2024"].group_by("team_id").agg(pl.col("seed").min())
+    j = field.join(seeds, on="team_id", how="inner")
+    assert j.height == 68, f"actual field teams matched: {j.height}"
+    rho = spearman_corr(-j.get_column("resume_score").to_numpy(), j.get_column("seed").to_numpy())
+    assert rho >= 0.9, f"resume-vs-seed spearman = {rho:.4f}"
 
 
 def test_in_game_wp_decile_calibration(oracle_corpus):

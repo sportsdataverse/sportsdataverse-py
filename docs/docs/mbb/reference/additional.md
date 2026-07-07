@@ -5292,6 +5292,39 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import matching_player
 matching_player(shot, pbp_event, tidy_ctx, code_match=False)
 ```
 
+### `mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_bracketology}
+
+Projected tournament field for a season from the released ESPN data.
+
+Builds ratings + résumé (optionally as of a date -- games on or after
+`as_of_date` are excluded), resolves conference auto-bids from the
+standings, and selects/seeds the 68-team field via
+`project_bracket`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season to project (e.g. `2024`). |
+| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date (Selection-Sunday style snapshots); `None` uses every completed game. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team -- see `project_bracket`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_bracketology
+field = mbb_bracketology(2024)
+
+# Pipeline next step (one line)
+
+field.filter(pl.col("bid") == True).sort("projected_seed")
+```
+
 ### `mbb_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_in_game_win_prob}
 
 Per-play home win probability from the bundled in-game logistic.
@@ -5823,6 +5856,30 @@ Expected combined points scored by both teams.
 ```python
 from sportsdataverse.mbb.mbb_game_predict import predict_total
 predict_total(110.0, 95.0, 105.0, 100.0, 68.0, 66.0)
+```
+
+### `project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'` {#project_bracket}
+
+Select and seed a tournament field from a per-team résumé frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
+| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid winners (see conference_auto_bids`); always in the field. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
+| `field_size` | `int` | `68` | Tournament field size (68). |
+
+**Returns**
+
+One row per input team: `season, team_id, resume_score, projected_seed` (1-16, capped for the First Four; null outside the field), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `bid` (exactly `field_size` true).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_bracketology import project_bracket
+field = project_bracket(resume, auto_bids)
 ```
 
 ### `raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'` {#raw_game_efficiency}

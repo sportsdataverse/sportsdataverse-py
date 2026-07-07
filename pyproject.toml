@@ -333,6 +333,7 @@ files = [
     "sportsdataverse/mbb/mbb_team_ratings.py",
     "sportsdataverse/mbb/mbb_game_predict.py",
     "sportsdataverse/mbb/mbb_strength_of_schedule.py",
+    "sportsdataverse/mbb/mbb_bracketology.py",
     "sportsdataverse/mbb/mbb_ncaa_models.py",
     "sportsdataverse/mbb/mbb_ncaa_events.py",
     "sportsdataverse/mbb/mbb_ncaa_possessions.py",

@@ -328,6 +328,7 @@ from sportsdataverse.mbb import load_mbb_standings as load_mbb_standings  # noqa
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import matching_player as matching_player  # noqa: F401
+from sportsdataverse.mbb import mbb_bracketology as mbb_bracketology  # noqa: F401
 from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
@@ -398,6 +399,7 @@ from sportsdataverse.mbb import pos_class_to_score as pos_class_to_score  # noqa
 from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum  # noqa: F401
 from sportsdataverse.mbb import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.mbb import predict_total as predict_total  # noqa: F401
+from sportsdataverse.mbb import project_bracket as project_bracket  # noqa: F401
 from sportsdataverse.mbb import raw_game_efficiency as raw_game_efficiency  # noqa: F401
 from sportsdataverse.mbb import regress_shot_quality as regress_shot_quality  # noqa: F401
 from sportsdataverse.mbb import remove_diacritics as remove_diacritics  # noqa: F401
@@ -733,6 +735,7 @@ __all__ = [
     "load_mbb_team_boxscore",
     "load_mbb_team_season_stats",
     "matching_player",
+    "mbb_bracketology",
     "mbb_in_game_win_prob",
     "mbb_pbp_disk",
     "mbb_predict_games",
@@ -803,6 +806,7 @@ __all__ = [
     "poss_calc_fragment_sum",
     "predict_margin",
     "predict_total",
+    "project_bracket",
     "raw_game_efficiency",
     "regress_shot_quality",
     "remove_diacritics",
