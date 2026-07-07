@@ -4898,6 +4898,96 @@ df_pd = build_nfl_player_stats([2023], summary_level="season",
 wk.filter(pl.col("attempts") >= 5).sort("passing_epa", descending=True).head()
 ```
 
+### `build_nfl_player_stats_def(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#build_nfl_player_stats_def}
+
+Build player-level defensive stats from play-by-play (nflfastR parity).
+
+A faithful polars port of nflfastR's deprecated
+`calculate_player_stats_def()` (`aggregate_game_stats_def.R`). Tackle,
+sack (half-sack = 0.5 weighting), pass-defense, interception, safety,
+fumble (own/opponent recovery), penalty, and touchdown sub-frames are each
+aggregated on `(season, week, team=defteam, player_id)` and full-outer
+joined together, then player metadata is joined from
+`sportsdataverse.nfl.load_nfl_players`.
+
+Unlike `build_nfl_player_stats`, this function takes a
+caller-supplied `pbp` frame directly rather than loading one -- matching
+the R function's own signature.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying the wide nflverse defensive columns (`solo_tackle_1_player_id`, `sack_player_id`, `half_sack_{1,2}_player_id`, `interception_player_id`, `pass_defense_{1,2}_player_id`, `fumbled_{1,2}_team` / `fumble_recovery_{1,2}_team`, etc. -- the same columns `sportsdataverse.nfl.load_nfl_pbp` serves). |
+| `weekly` | `bool` | `False` | If `True` return one row per (season, week, player); if `False` collapse to one row per `(player_id, team)` -- note this does NOT retain a `season` column even if `pbp` spans multiple seasons (see the module-level note above), matching the R source's own `group_by(player_id, team)` (no `season`). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with the `def_*` column set documented in the nflfastR-parity reference (weekly grain carries `season`/`week`/`season_type`; the season collapse replaces those with `games`).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_player_stats_def, load_nfl_pbp
+pbp = load_nfl_pbp([2023])
+wk = build_nfl_player_stats_def(pbp, weekly=True)
+print(wk.shape)
+
+# Season totals (one season's worth of ``pbp`` at a time)
+
+season = build_nfl_player_stats_def(pbp, weekly=False)
+
+# Pipeline next step (one line)
+
+wk.sort("def_sacks", descending=True).head()
+```
+
+### `build_nfl_player_stats_kicking(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#build_nfl_player_stats_kicking}
+
+Build player-level kicking stats from play-by-play (nflfastR parity).
+
+A faithful polars port of nflfastR's deprecated
+`calculate_player_stats_kicking()` (`aggregate_game_stats_kicking.R`).
+Field goals (made-distance buckets, `fg_long`, `fg_pct`, `;`-joined
+distance lists), extra points, and game-winning-FG attempts (last drive of
+the game, trailing by 2 or fewer points) are each aggregated on the kicker
+and full-outer joined together, then player metadata is joined from
+`sportsdataverse.nfl.load_nfl_players`.
+
+Unlike `build_nfl_team_stats`, this function takes a caller-supplied
+`pbp` frame directly rather than loading one -- matching the R
+function's own signature.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying `kicker_player_id` / `kicker_player_name`, `field_goal_attempt` / `field_goal_result` / `kick_distance`, `extra_point_attempt` / `extra_point_result`, `fixed_drive`, and `score_differential` (the same columns `sportsdataverse.nfl.load_nfl_pbp` serves). |
+| `weekly` | `bool` | `False` | If `True` return one row per (season, week, player) with a `gwfg_distance` list column; if `False` collapse to one row per `(player_id, team)` with a `games` column and a `;`-joined `gwfg_distance_list` string column in place of `gwfg_distance` (the R source's own deliberate column-name change based on the `weekly` flag). Note this does NOT retain a `season` column even if `pbp` spans multiple seasons (see the module-level note above `build_nfl_player_stats_def`). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with the `fg_*`/`pat_*`/`gwfg_*` column set documented in the nflfastR-parity reference.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_player_stats_kicking, load_nfl_pbp
+pbp = load_nfl_pbp([2023])
+wk = build_nfl_player_stats_kicking(pbp, weekly=True)
+print(wk.shape)
+
+# Season totals (one season's worth of ``pbp`` at a time)
+
+season = build_nfl_player_stats_kicking(pbp, weekly=False)
+
+# Pipeline next step (one line)
+
+wk.filter(pl.col("fg_att") >= 1).sort("fg_pct", descending=True).head()
+```
+
 ### `build_nfl_players(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_nfl_players}
 
 Build an SDV-native NFL players frame from ESPN's public athletes endpoint.
@@ -5269,6 +5359,85 @@ pbp_ep = calculate_expected_points(pbp)
 print(pbp_ep.select("ep").head())
 ```
 
+### `calculate_nfl_series_conversion_rates(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#calculate_nfl_series_conversion_rates}
+
+Compute per-team offense + defense series conversion rates.
+
+A faithful polars port of nflfastR's `calculate_series_conversion_rates`.
+Series where `down` is null (kickoffs, PAT/2pt attempts, non-plays, no
+`posteam`) and series ending in a `"QB kneel"` are excluded from the
+series count before rates are computed, matching the R source.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying `season`, `week`, `posteam`, `defteam`, `down`, `series`, `series_success`, and `series_result` (added by the `add_series_data` port). Rows must already be in play order within each series so the internal `first()`/`last()` series collapse is correct. |
+| `weekly` | `bool` | `False` | If `True`, group on `(season, team, week)`; if `False` (default), group on `(season, team)` -- collapsing every week into one season-level rate. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per team (per week when `weekly=True`), `off_n`/`def_n` (series count) plus the `off_*`/`def_*` rate columns documented in reference Sec 11. A team with offensive series but zero defensive series in a group (or vice versa -- effectively never happens in real data) carries nulls in the missing side rather than being dropped (full outer join).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import calculate_nfl_series_conversion_rates
+rates = calculate_nfl_series_conversion_rates(pbp)
+rates.filter(pl.col("team") == "KC").select("off_scr", "def_scr")
+
+# Weekly grain
+
+weekly = calculate_nfl_series_conversion_rates(pbp, weekly=True)
+
+# Pipeline next step (one line)
+
+rates.sort("off_scr", descending=True).head()
+```
+
+### `calculate_nfl_standings(games: 'pl.DataFrame', *, teams: 'pl.DataFrame | None' = None, tiebreaker_depth: 'int' = 3, playoff_seeds: 'int | None' = None, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#calculate_nfl_standings}
+
+Compute NFL division standings + conference playoff seeds.
+
+A reduced port of the tiebreaker ladder nflfastR delegates to the external
+`nflseedR` package (see the module docstring for the exact scope). Games
+are doubled into one row per team per game, regular-season win/loss/tie
+records are computed per team, and ties are broken win_pct -> head-to-head
+-> division record -> conference record, to the depth configured by
+`tiebreaker_depth`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | A `load_nfl_schedule`-shaped frame: `game_id`, `season`, `game_type`, `week`, `home_team`, `away_team`, `home_score`, `away_score`. Only `game_type == "REG"` rows with both scores present are used. |
+| `teams` | `DataFrame \| None` | `None` | A `load_nfl_teams`-shaped frame (`team_abbr`, `team_conf`, `team_division`). When `None` (default), calls `sportsdataverse.nfl.load_nfl_teams`. Must cover every team abbreviation appearing in `games` -- a team absent from `teams` gets null `conf`/`division` and is silently pooled into the `(season, None)` division/conference group rather than raising. |
+| `tiebreaker_depth` | `int` | `3` | `1` (win_pct only), `2` (adds head-to-head + division record), or `3` (default; adds conference record too). |
+| `playoff_seeds` | `int \| None` | `None` | Number of teams per conference that receive a non-null `seed`. When `None` (default), uses the 2020 playoff -format cutover: `6` for seasons <= 2019, `7` for 2020+. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per (season, team): `conf`, `division`, `div_rank`, `seed` (null past `playoff_seeds`), `team`, `games`, `wins`, `losses`, `ties`, `win_pct` (ties count as 0.5 win), `div_pct`, `conf_pct`. Sorted by `(season, division, div_rank, seed)`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import calculate_nfl_standings, load_nfl_schedule
+games = load_nfl_schedule(seasons=[2023])
+standings = calculate_nfl_standings(games)
+standings.filter(standings["div_rank"] == 1)
+
+# Injected teams frame (offline)
+
+standings = calculate_nfl_standings(games, teams=my_teams_df)
+
+# Pipeline next step (one line)
+
+standings.sort(["conf", "seed"]).select("team", "seed", "win_pct")
+```
+
 ### `calculate_win_probability(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_win_probability}
 
 Compute win probability for provided plays.
@@ -5491,6 +5660,45 @@ print(pbp.select("xyac_epa", "xyac_mean_yardage").head())
 # Pipeline next step (one line)
 
 pbp.filter(pl.col("xyac_epa").is_not_null()).select("xyac_epa", "xyac_fd").head()
+```
+
+### `clean_nfl_pbp(df: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#clean_nfl_pbp}
+
+Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port).
+
+See the module docstring for the full column set added, the
+compute-if-absent scope note on `pass`/`rush`, and the lookaround ->
+capture-group regex rewrites.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | An nflverse-shape (or ESPN/native) play-by-play `polars.DataFrame`. Required columns: `desc`, `epa`, `game_id`, `play_id`, `season`, `posteam`. See the module docstring for the full optional-column-with-default list. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+
+**Returns**
+
+The input frame with every §6 column added/overwritten (idempotent -- pre-existing values of those columns, except `pass`/`rush`, are dropped and recomputed). A zero-row input yields a zero-row frame carrying the full documented schema rather than raising.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp
+
+pbp = load_nfl_pbp([2023])
+cleaned = clean_nfl_pbp(pbp)
+print(cleaned.select("name", "id", "fantasy").head())
+
+# Pandas output
+
+cleaned_pd = clean_nfl_pbp(pbp, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+import polars as pl
+cleaned.filter(pl.col("play") == 1).group_by("passer").len()
 ```
 
 ### `clear_cache() -> 'None'` {#clear_cache}
@@ -7131,6 +7339,28 @@ wk1.select(["season", "week", "player_display_name", "team_abbr"]).head()
 
 tot = scrape_ngs_week("rushing", 2023, week=0)
 ```
+
+### `team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'` {#team_name_fn}
+
+Fold historical/relocated team codes onto their current abbreviation.
+
+Verbatim port of nflfastR's `team_name_fn` (a plain
+`stringr::str_replace_all` over a 10-entry named vector). Operates as a
+**substring** replace (not a full-value lookup) so it also fixes
+embedded codes like `"SD 49" -> "LAC 49"` on yard-line columns. The
+10 from-codes are disjoint from all of their to-values, so the order of
+the 10 sequential replacements does not matter (verified in
+`tests.nfl.test_nfl_clean`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `expr` | `Expr` |  | A `polars.Expr` over a Utf8 column (e.g. `pl.col("posteam")`). |
+
+**Returns**
+
+The same expression with every occurrence of the 10 historical codes replaced by their current-franchise code.
 
 ### `update_config(**kwargs: 'object') -> 'NflConfig'` {#update_config}
 

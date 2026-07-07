@@ -58,6 +58,19 @@ SHOOTING_BASELINE: float = 1.00
 THRESHOLD_MARGIN: float = 0.33
 _LISTED_BLEND_MIN: float = 50.0  # 50 minutes of listed position blended into the estimate
 
+#: Canonical per-player output schema shared by both granularity modes of :func:`nba_bpm`
+#: (``"game"`` mode additionally prefixes a ``game_id`` column).
+_BPM_SEASON_SCHEMA: Dict[str, type] = {
+    "player_id": pl.Int64,
+    "obpm": pl.Float64,
+    "dbpm": pl.Float64,
+    "bpm": pl.Float64,
+    "min": pl.Float64,
+    "gp": pl.Int64,
+}
+
+_VALID_BPM_GRANULARITY: Tuple[str, str] = ("season", "game")
+
 
 def _clamp(expr: pl.Expr, lo: float = 1.0, hi: float = 5.0) -> pl.Expr:
     return expr.clip(lo, hi)
@@ -320,49 +333,19 @@ def _team_adjust(raw: pl.DataFrame, team_margin: pl.DataFrame, ptm: pl.DataFrame
     )
 
 
-def nba_bpm(
+def _nba_bpm_one(
     player_logs: pl.DataFrame,
     team_logs: pl.DataFrame,
     positions: pl.DataFrame,
     *,
     team_adjust: bool = True,
-    return_as_pandas: bool = False,
 ) -> pl.DataFrame:
-    """Faithful BPM 2.0 per player over the given logs (a season).
+    """Season-mode BPM 2.0 core (single frame in, single frame out — no game looping).
 
-    Args:
-        player_logs: per-player-per-game box lines (``nba_box_logs``'s ``player``).
-        team_logs: per-team-per-game lines incl. ``plus_minus`` (``nba_box_logs``'s ``team``).
-        positions: listed positions (``nba_player_positions``): player_id, position_num.
-        team_adjust: apply the team adjustment (True) or return raw box-BPM (False).
-        return_as_pandas: return pandas instead of polars.
-
-    Returns:
-        Frame with ``player_id``, ``obpm``, ``dbpm``, ``bpm``, ``min``, ``gp``
-        (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min).
-
-    Example:
-        Season BPM (residential IP)::
-
-            from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
-            logs = nba_box_logs("2023-24"); pos = nba_player_positions("2023-24")
-            bpm = nba_bpm(logs["player"], logs["team"], pos)
-            print(bpm.sort("bpm", descending=True).head())
-
-        Raw (no team adjustment)::
-
-            bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
-
-        Pandas output::
-
-            bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
-
-        See Also:
-            * `Basketball-Reference BPM 2.0`_ — published coefficient table and methodology
-            * `hoopR`_ — R companion package
-
-        .. _Basketball-Reference BPM 2.0: https://www.basketball-reference.com/about/bpm2.html
-        .. _hoopR: https://hoopR.sportsdataverse.org
+    This is the exact pre-``granularity`` ``nba_bpm`` body, unchanged, so that
+    ``granularity="game"`` can call it once per game_id without duplicating any
+    of the position/role/team-adjustment logic. See :func:`nba_bpm` for the
+    public, documented entry point.
     """
     # box_features returns oreb/dreb; _raw_bpm expects orb/drb — rename at the boundary
     feats_raw = box_features(player_logs, team_logs)
@@ -372,7 +355,6 @@ def nba_bpm(
     positions_est = _estimate_position(shares, positions)
     roles = _estimate_role(shares)
 
-    # shooting-context: adjust per-100 pts toward the baseline given team shooting environment
     tl = (
         team_logs.group_by("team_id")
         .agg(
@@ -402,18 +384,110 @@ def nba_bpm(
     else:
         adj = raw.select("player_id", pl.col("raw_obpm").alias("obpm"), pl.col("raw_bpm").alias("bpm"))
 
-    out = (
+    return (
         adj.join(feats_raw.select(["player_id", "min", "gp"]), on="player_id")
         .with_columns((pl.col("bpm") - pl.col("obpm")).alias("dbpm"))
         .select(
-            pl.col("player_id").cast(pl.Int64),
-            pl.col("obpm").cast(pl.Float64),
-            pl.col("dbpm").cast(pl.Float64),
-            pl.col("bpm").cast(pl.Float64),
-            pl.col("min").cast(pl.Float64),
-            pl.col("gp").cast(pl.Int64),
+            pl.col("player_id").cast(_BPM_SEASON_SCHEMA["player_id"]),
+            pl.col("obpm").cast(_BPM_SEASON_SCHEMA["obpm"]),
+            pl.col("dbpm").cast(_BPM_SEASON_SCHEMA["dbpm"]),
+            pl.col("bpm").cast(_BPM_SEASON_SCHEMA["bpm"]),
+            pl.col("min").cast(_BPM_SEASON_SCHEMA["min"]),
+            pl.col("gp").cast(_BPM_SEASON_SCHEMA["gp"]),
         )
     )
+
+
+def nba_bpm(
+    player_logs: pl.DataFrame,
+    team_logs: pl.DataFrame,
+    positions: pl.DataFrame,
+    *,
+    team_adjust: bool = True,
+    granularity: str = "season",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame:
+    """Faithful BPM 2.0 per player, at season or single-game granularity.
+
+    Args:
+        player_logs: per-player-per-game box lines (``nba_box_logs``'s ``player``);
+            must carry ``game_id`` when ``granularity="game"``.
+        team_logs: per-team-per-game lines incl. ``plus_minus`` (``nba_box_logs``'s ``team``);
+            must carry ``game_id`` when ``granularity="game"``.
+        positions: listed positions (``nba_player_positions``): player_id, position_num.
+        team_adjust: apply the team adjustment (True) or return raw box-BPM (False).
+        granularity: ``"season"`` (default) aggregates every row in ``player_logs``/
+            ``team_logs`` into one row per player. ``"game"`` runs the exact same
+            pipeline independently per ``game_id`` (position/role are estimated
+            game-native, mirroring ``NbaBpmModel``'s existing fold-native design)
+            and returns one row per (game_id, player_id) with a leading ``game_id``
+            column; ``gp`` is always 1 in this mode.
+        return_as_pandas: return pandas instead of polars.
+
+    Returns:
+        ``"season"``: frame with ``player_id``, ``obpm``, ``dbpm``, ``bpm``, ``min``,
+        ``gp`` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min).
+        ``"game"``: the same columns prefixed with ``game_id`` (Utf8), one row
+        per (game_id, player_id). Empty (that schema) input -> zero-row frame
+        with the same schema; never raises on empty.
+
+    Raises:
+        ValueError: If ``granularity`` is not ``"season"``/``"game"``, or if
+            ``granularity="game"`` is requested but ``player_logs`` has no
+            ``game_id`` column.
+
+    Example:
+        Season BPM (residential IP)::
+
+            from sportsdataverse.nba import nba_bpm, nba_box_logs, nba_player_positions
+            logs = nba_box_logs("2023-24"); pos = nba_player_positions("2023-24")
+            bpm = nba_bpm(logs["player"], logs["team"], pos)
+            print(bpm.sort("bpm", descending=True).head())
+
+        Per-game BPM::
+
+            bpm_game = nba_bpm(logs["player"], logs["team"], pos, granularity="game")
+            print(bpm_game.filter(pl.col("game_id") == "0022300001").sort("bpm", descending=True))
+
+        Raw (no team adjustment)::
+
+            bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
+
+        Pandas output::
+
+            bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
+
+        See Also:
+            * `Basketball-Reference BPM 2.0`_ — published coefficient table and methodology
+            * `hoopR`_ — R companion package
+
+        .. _Basketball-Reference BPM 2.0: https://www.basketball-reference.com/about/bpm2.html
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    if granularity not in _VALID_BPM_GRANULARITY:
+        raise ValueError(f"granularity must be one of {_VALID_BPM_GRANULARITY}, got {granularity!r}")
+
+    if granularity == "season":
+        out = _nba_bpm_one(player_logs, team_logs, positions, team_adjust=team_adjust)
+        return out.to_pandas() if return_as_pandas else out
+
+    if "game_id" not in player_logs.columns:
+        raise ValueError("player_logs must carry a game_id column for granularity='game'")
+
+    game_ids = player_logs["game_id"].unique().to_list()
+    frames: list[pl.DataFrame] = []
+    for gid in game_ids:
+        pl_g = player_logs.filter(pl.col("game_id") == gid)
+        tl_g = team_logs.filter(pl.col("game_id") == gid)
+        if pl_g.is_empty() or tl_g.is_empty():
+            continue
+        scored = _nba_bpm_one(pl_g, tl_g, positions, team_adjust=team_adjust)
+        frames.append(scored.with_columns(pl.lit(gid).cast(pl.Utf8).alias("game_id")))
+
+    if not frames:
+        out = pl.DataFrame(schema={"game_id": pl.Utf8, **_BPM_SEASON_SCHEMA})
+    else:
+        out = pl.concat(frames, how="diagonal_relaxed").select("game_id", *_BPM_SEASON_SCHEMA.keys())
     return out.to_pandas() if return_as_pandas else out
 
 

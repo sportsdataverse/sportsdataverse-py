@@ -8,6 +8,7 @@ synthetic meta-oracle that proves the harness itself correct.
 
 from __future__ import annotations
 
+import datetime
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Protocol, Tuple, TypeAlias, Union
 
@@ -16,6 +17,7 @@ import polars as pl
 from scipy.sparse import csr_matrix
 from sklearn.linear_model import RidgeCV
 
+from .nba_oracle_data import normalize_player_name
 from .nba_rapm import DEFAULT_RAPM_ALPHAS, build_rapm_design
 
 _OFF: List[str] = [f"off_player_{i}" for i in range(1, 6)]
@@ -358,7 +360,9 @@ def retrodiction(
     if possessions.is_empty():
         return RetrodictionResult(float("nan"), float("nan"), float("nan"), float("nan"), 0)
 
-    games = possessions["game_id"].unique().to_list()
+    games = sorted(
+        possessions["game_id"].unique().to_list()
+    )  # sort: polars unique() order isn't guaranteed stable across calls
     rng = np.random.default_rng(seed)
     rng.shuffle(games)
     folds = np.array_split(np.array(games, dtype=object), min(k_folds, len(games)))
@@ -467,7 +471,9 @@ def reliability(model: AnyModel, possessions: pl.DataFrame, *, seed: int = 0) ->
     """
     if possessions.is_empty():
         return ReliabilityResult(float("nan"), float("nan"), 0)
-    games = possessions["game_id"].unique().to_list()
+    games = sorted(
+        possessions["game_id"].unique().to_list()
+    )  # sort: polars unique() order isn't guaranteed stable across calls
     rng = np.random.default_rng(seed)
     rng.shuffle(games)
     mid = len(games) // 2
@@ -632,7 +638,9 @@ def calibration(
     """
     if possessions.is_empty():
         return None
-    games = possessions["game_id"].unique().to_list()
+    games = sorted(
+        possessions["game_id"].unique().to_list()
+    )  # sort: polars unique() order isn't guaranteed stable across calls
     rng = np.random.default_rng(seed)
     rng.shuffle(games)
     mid = len(games) // 2
@@ -661,6 +669,143 @@ def calibration(
     return CalibrationResult(levels=list(levels), coverage=cover, n_players=len(shared))
 
 
+@dataclass(frozen=True)
+class ExternalValidityResult:
+    """Concurrent-validity correlation of model ratings against a published oracle metric.
+
+    Attributes:
+        corr: Pearson correlation of the model's rating column against the
+            oracle's value column, over matched rows. ``nan`` when fewer
+            than 3 rows matched.
+        n_matched: Number of rows successfully joined (ratings <-> oracle).
+        coverage_pct: ``100 * n_matched / len(ratings)`` -- how much of the
+            model's player population the oracle covers. ``0.0`` when
+            ``ratings`` is empty.
+        permutation_p95: 95th percentile of ``|corr|`` over ``n_permutations``
+            random shuffles of the oracle's matched value column -- a
+            self-computed null-correlation ceiling. The spec deliberately
+            avoids a hardcoded floor constant; compare ``corr`` against this
+            instead. ``nan`` when fewer than 3 rows matched.
+        join: The join strategy used (``"id"`` or ``"name"``).
+    """
+
+    corr: float
+    n_matched: int
+    coverage_pct: float
+    permutation_p95: float
+    join: str
+
+
+def external_validity(
+    ratings: pl.DataFrame,
+    oracle: pl.DataFrame,
+    *,
+    rating_col: str,
+    oracle_col: str,
+    join: str = "id",
+    ratings_id_col: str = "player_id",
+    oracle_id_col: str = "player_id",
+    ratings_name_col: str = "player_name",
+    oracle_name_col: str = "player_name",
+    n_permutations: int = 200,
+    seed: int = 0,
+) -> ExternalValidityResult:
+    """Oracle 5: correlate a model's ratings against a published external metric.
+
+    ``join="id"`` inner-joins on ``ratings_id_col``/``oracle_id_col`` (both
+    cast to Int64 defensively, per the project's join-key dtype discipline).
+    ``join="name"`` normalizes both name columns with
+    :func:`~sportsdataverse.nba.nba_oracle_data.normalize_player_name` and
+    inner-joins on the normalized key -- the DARKO-family case: no shared id,
+    a brittle display-name join whose ``coverage_pct`` is the signal to watch.
+
+    Args:
+        ratings: The model's own per-player ratings frame (from ``nba_rapm``,
+            ``nba_adj_rapm``, ``nba_spm``, ``nba_darko``, etc.).
+        oracle: A tidy oracle frame from one of the ``nba_oracle_data`` loaders.
+        rating_col: Column in ``ratings`` holding the model's rating value.
+        oracle_col: Column in ``oracle`` holding the published metric value.
+        join: ``"id"`` (default) or ``"name"``.
+        ratings_id_col: Player-id column name in ``ratings`` (``join="id"``).
+        oracle_id_col: Player-id column name in ``oracle`` (``join="id"``).
+        ratings_name_col: Player-name column name in ``ratings`` (``join="name"``).
+        oracle_name_col: Player-name column name in ``oracle`` (``join="name"``).
+        n_permutations: Number of random shuffles for the self-computed null ceiling.
+        seed: RNG seed for the permutation shuffle.
+
+    Returns:
+        ``ExternalValidityResult``. ``corr`` and ``permutation_p95`` are
+        ``nan`` when fewer than 3 rows matched; ``coverage_pct`` is ``0.0``
+        when ``ratings`` is empty.
+
+    Raises:
+        ValueError: If ``join`` is not ``"id"`` or ``"name"``.
+
+    Example:
+        Validate plain RAPM against Ryan Davis' published RAPM column::
+
+            import polars as pl
+            from sportsdataverse.nba.nba_oracle_data import load_rapm_ryan_davis
+            from sportsdataverse.nba.nba_model_validation import external_validity
+
+            oracle = load_rapm_ryan_davis(f"{oracle_dir}/rapm_ryan_davis.csv").filter(
+                pl.col("season") == "2022-23"
+            )
+            res = external_validity(ratings, oracle, rating_col="rapm", oracle_col="RAPM")
+            print(res.corr, res.coverage_pct)
+
+        A name-keyed family (DARKO)::
+
+            res = external_validity(
+                ratings, darko_oracle, rating_col="projected_rating", oracle_col="dpm",
+                join="name", ratings_name_col="player_name", oracle_name_col="player_name",
+            )
+    """
+    if join not in ("id", "name"):
+        raise ValueError(f"join must be 'id' or 'name', got {join!r}")
+    if ratings.is_empty():
+        return ExternalValidityResult(float("nan"), 0, 0.0, float("nan"), join)
+
+    if join == "id":
+        left = ratings.select(
+            pl.col(ratings_id_col).cast(pl.Int64).alias("_key"),
+            pl.col(rating_col).cast(pl.Float64).alias("_rating"),
+        )
+        right = oracle.select(
+            pl.col(oracle_id_col).cast(pl.Int64).alias("_key"),
+            pl.col(oracle_col).cast(pl.Float64).alias("_oracle"),
+        )
+    else:  # join == "name"
+        left = ratings.select(
+            pl.col(ratings_name_col).map_elements(normalize_player_name, return_dtype=pl.Utf8).alias("_key"),
+            pl.col(rating_col).cast(pl.Float64).alias("_rating"),
+        )
+        right = oracle.select(
+            pl.col(oracle_name_col).map_elements(normalize_player_name, return_dtype=pl.Utf8).alias("_key"),
+            pl.col(oracle_col).cast(pl.Float64).alias("_oracle"),
+        )
+
+    matched = left.join(right, on="_key", how="inner").drop_nulls(["_rating", "_oracle"])
+    n_matched = matched.height
+    coverage = 100.0 * n_matched / ratings.height
+
+    if n_matched < 3:
+        return ExternalValidityResult(float("nan"), n_matched, coverage, float("nan"), join)
+
+    a = matched["_rating"].to_numpy()
+    b = matched["_oracle"].to_numpy()
+    corr = float(np.corrcoef(a, b)[0, 1]) if np.std(a) > 0 and np.std(b) > 0 else 0.0
+
+    rng = np.random.default_rng(seed)
+    perm_corrs: np.ndarray = np.empty(n_permutations, dtype=np.float64)
+    for i in range(n_permutations):
+        shuffled = rng.permutation(b)
+        perm_corrs[i] = np.corrcoef(a, shuffled)[0, 1] if np.std(a) > 0 else 0.0
+    permutation_p95 = float(np.quantile(np.abs(perm_corrs), 0.95))
+
+    return ExternalValidityResult(corr, n_matched, coverage, permutation_p95, join)
+
+
 _TEAM_A, _TEAM_B = 100, 200
 
 
@@ -673,6 +818,7 @@ def _synthetic_possessions(
     noise_sd: float,
     seed: int,
     base_points: float = 1.0,
+    start_date: Optional[datetime.date] = None,
 ) -> pl.DataFrame:
     """Generate possessions from KNOWN player ratings (the meta-oracle ground truth).
 
@@ -690,10 +836,17 @@ def _synthetic_possessions(
         noise_sd: Standard deviation of Gaussian observation noise.
         seed: Integer seed for the ``np.random.default_rng`` generator.
         base_points: League-average points per possession baseline.
+        start_date: When given, attaches a ``game_date: pl.Date`` column, one
+            calendar day apart per game index (``SYN00000`` -> ``start_date``,
+            ``SYN00001`` -> ``start_date + 1 day``, ...) -- enables Oracle 6
+            (``walk_forward``) tests. ``None`` (default) omits the column
+            entirely, preserving byte-identical behavior for every existing
+            Oracle 1-4 test that doesn't pass it.
 
     Returns:
         A possession+lineup frame (``game_id``/``offense_team_id``/``points``/
         ``off_player_1..5``/``def_player_1..5``), ``2 * n_games * poss_per_game`` rows.
+        Includes a ``game_date`` column iff ``start_date`` is given.
     """
     rng = np.random.default_rng(seed)
     ids = sorted(o_ratings)
@@ -719,7 +872,169 @@ def _synthetic_possessions(
         "points": pl.Int64,
         **{c: pl.Int64 for c in _OFF + _DEF},
     }
-    return pl.DataFrame(rows, schema=schema)
+    df = pl.DataFrame(rows, schema=schema)
+    if start_date is not None:
+        game_dates = {f"SYN{g:05d}": start_date + datetime.timedelta(days=g) for g in range(n_games)}
+        df = df.with_columns(pl.col("game_id").replace_strict(game_dates, return_dtype=pl.Date).alias("game_date"))
+    return df
+
+
+@dataclass(frozen=True)
+class WalkForwardResult:
+    """Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
+
+    Attributes:
+        game_margin_rmse: RMSE of predicted vs actual per-(game, team) margins,
+            pooled across all checkpoints -- the model refit through each
+            checkpoint date, predicting the following ``horizon_days`` window.
+        game_margin_corr: Pearson correlation of the same pooled predictions.
+        carry_forward_rmse: RMSE using the PRIOR checkpoint's fit (no refit)
+            applied to the current window -- isolates whether refitting
+            through each checkpoint actually helps. ``nan`` when fewer than
+            2 checkpoints produce a valid window.
+        random_fold_rmse: Oracle 1's (``retrodiction``) pooled game-margin
+            RMSE on the same possessions -- the non-time-ordered baseline.
+        n_checkpoints: Number of checkpoint dates that produced a
+            non-degenerate (train, test) split.
+        n_test_games: Total distinct game_ids evaluated across all checkpoints.
+    """
+
+    game_margin_rmse: float
+    game_margin_corr: float
+    carry_forward_rmse: float
+    random_fold_rmse: float
+    n_checkpoints: int
+    n_test_games: int
+
+
+def _default_checkpoints(
+    possessions: pl.DataFrame, *, horizon_days: int, min_games_before_first: int
+) -> List[datetime.date]:
+    """Derive a checkpoint-date grid: every ``horizon_days`` starting at the
+    ``min_games_before_first``-th distinct game_date (spec default: ~game 15)."""
+    dates: List[datetime.date] = sorted(possessions.select("game_date").unique()["game_date"].to_list())
+    if len(dates) <= min_games_before_first:
+        return []
+    start, end = dates[min_games_before_first], dates[-1]
+    checkpoints: List[datetime.date] = []
+    d = start
+    while d <= end:
+        checkpoints.append(d)
+        d = d + datetime.timedelta(days=horizon_days)
+    return checkpoints
+
+
+def walk_forward(
+    model: AnyModel,
+    possessions: pl.DataFrame,
+    *,
+    checkpoint_dates: Optional[List[datetime.date]] = None,
+    horizon_days: int = 14,
+    min_games_before_first_checkpoint: int = 15,
+) -> WalkForwardResult:
+    """Oracle 6: time-ordered "predict tomorrow" retrodiction.
+
+    For each checkpoint date D: fit on games with ``game_date <= D``, predict
+    games with ``D < game_date <= D + horizon_days``, aggregate to
+    per-(game, team) margins -- reusing :func:`_fit_on` / :func:`_design_with_ids`
+    / :func:`predict_points` / :func:`_team_game_margins` (the same machinery
+    :func:`retrodiction` uses). ``carry_forward_rmse`` reapplies the PREVIOUS
+    checkpoint's fit (no refit) to the current window. ``random_fold_rmse`` is
+    :func:`retrodiction`'s pooled game-margin RMSE on the same possessions.
+
+    Args:
+        model: A harness model (``RapmModel``/``RatingsModel``/``PriorModel``).
+        possessions: A season possession+lineup frame with ``game_date`` (from
+            ``compile_nba_season``), ``game_id``, ``offense_team_id``,
+            ``points``, and the ten lineup columns.
+        checkpoint_dates: Explicit checkpoint grid; derived from
+            ``possessions`` via ``horizon_days``/``min_games_before_first_checkpoint``
+            when ``None`` (default).
+        horizon_days: Days-ahead prediction window per checkpoint (default 14).
+        min_games_before_first_checkpoint: Distinct-game-date index of the
+            first checkpoint when deriving the default grid (default 15,
+            "~game 15 of the season").
+
+    Returns:
+        ``WalkForwardResult``. All metrics ``nan`` and counts ``0`` when
+        ``possessions`` is empty, lacks a ``game_date`` column, or the
+        derived/given grid produces zero non-degenerate checkpoints.
+
+    Example:
+        Walk-forward a season with the default 14-day cadence::
+
+            from sportsdataverse.nba.nba_model_validation import RidgeRapmModel, walk_forward
+            res = walk_forward(RidgeRapmModel(), season_possessions)
+            print(res.game_margin_rmse, res.carry_forward_rmse, res.random_fold_rmse)
+    """
+    if possessions.is_empty() or "game_date" not in possessions.columns:
+        return WalkForwardResult(float("nan"), float("nan"), float("nan"), float("nan"), 0, 0)
+
+    dates = (
+        checkpoint_dates
+        if checkpoint_dates is not None
+        else _default_checkpoints(
+            possessions, horizon_days=horizon_days, min_games_before_first=min_games_before_first_checkpoint
+        )
+    )
+    if not dates:
+        return WalkForwardResult(float("nan"), float("nan"), float("nan"), float("nan"), 0, 0)
+
+    pred_m: List[np.ndarray] = []
+    act_m: List[np.ndarray] = []
+    cf_pred: List[np.ndarray] = []
+    cf_act: List[np.ndarray] = []
+    evaluated_games: set = set()
+    prior_fit: Optional[FitResult] = None
+    prior_pids: Optional[List[int]] = None
+
+    for D in dates:
+        train = possessions.filter(pl.col("game_date") <= D)
+        window_end = D + datetime.timedelta(days=horizon_days)
+        test = possessions.filter((pl.col("game_date") > D) & (pl.col("game_date") <= window_end))
+        if train.is_empty() or test.is_empty():
+            continue
+        fit, pids = _fit_on(model, train)
+        if not pids:
+            continue
+        test_valid = test.drop_nulls(subset=_OFF + _DEF)
+        if test_valid.is_empty():
+            prior_fit, prior_pids = fit, pids
+            continue
+
+        X_te, _ = _design_with_ids(test_valid, pids)
+        pp = predict_points(X_te, fit)
+        p_pred, p_act = _team_game_margins(test_valid, pp)
+        pred_m.append(p_pred)
+        act_m.append(p_act)
+        evaluated_games |= set(test_valid["game_id"].unique().to_list())
+
+        if prior_fit is not None and prior_pids is not None:
+            X_cf, _ = _design_with_ids(test_valid, prior_pids)
+            pp_cf = predict_points(X_cf, prior_fit)
+            cfp_pred, cfp_act = _team_game_margins(test_valid, pp_cf)
+            cf_pred.append(cfp_pred)
+            cf_act.append(cfp_act)
+
+        prior_fit, prior_pids = fit, pids
+
+    if not pred_m:
+        return WalkForwardResult(float("nan"), float("nan"), float("nan"), float("nan"), 0, 0)
+
+    P = np.concatenate(pred_m)
+    A = np.concatenate(act_m)
+    corr = float(np.corrcoef(P, A)[0, 1]) if P.size > 1 and np.std(P) > 0 else 0.0
+    carry_rmse = _rmse(np.concatenate(cf_pred), np.concatenate(cf_act)) if cf_pred else float("nan")
+    random_fold = retrodiction(model, possessions, k_folds=5, seed=0).game_margin_rmse
+
+    return WalkForwardResult(
+        game_margin_rmse=_rmse(P, A),
+        game_margin_corr=corr,
+        carry_forward_rmse=carry_rmse,
+        random_fold_rmse=random_fold,
+        n_checkpoints=len(pred_m),
+        n_test_games=len(evaluated_games),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -739,6 +1054,10 @@ class ValidationReport:
         cross_season: Result from Oracle 3, or ``None`` if not selected.
         calibration: Result from Oracle 4, or ``None`` if not selected or
             the model is a point estimator.
+        external: Result from Oracle 5 (``external_validity``), or ``None``
+            if not selected.
+        walk_forward: Result from Oracle 6 (``walk_forward``), or ``None``
+            if not selected.
 
     Example:
         ``ValidationReport`` is returned by ``validate_model``; access fields directly::
@@ -762,6 +1081,8 @@ class ValidationReport:
     reliability: Optional[ReliabilityResult] = None
     cross_season: Optional[CrossSeasonResult] = None
     calibration: Optional[CalibrationResult] = None
+    external: Optional[ExternalValidityResult] = None
+    walk_forward: Optional[WalkForwardResult] = None
 
 
 def validate_model(
@@ -771,6 +1092,13 @@ def validate_model(
     model_name: str = "model",
     oracles: Tuple[str, ...] = ("retrodiction", "reliability", "cross_season", "calibration"),
     seed: int = 0,
+    external_ratings: Optional[pl.DataFrame] = None,
+    external_oracle: Optional[pl.DataFrame] = None,
+    external_rating_col: str = "rating",
+    external_oracle_col: str = "oracle_value",
+    external_join: str = "id",
+    walk_forward_horizon_days: int = 14,
+    walk_forward_min_games: int = 15,
 ) -> ValidationReport:
     """Run the selected oracles and assemble a ``ValidationReport``.
 
@@ -784,12 +1112,28 @@ def validate_model(
             are concatenated into a single pooled frame for Oracles 1, 2, and 4.
         model_name: Label written into the returned report and markdown card.
         oracles: Tuple of oracle names to run.  Omit a name to skip that oracle
-            and leave its result field ``None``.
+            and leave its result field ``None``.  Accepts ``"external"`` and
+            ``"walk_forward"`` in addition to the four original names; the
+            default tuple is unchanged, so existing callers are unaffected.
         seed: RNG seed forwarded to each oracle for determinism.
+        external_ratings: The model's own ratings frame -- required when
+            ``"external"`` is in ``oracles``.
+        external_oracle: A loaded oracle frame (from ``nba_oracle_data``) --
+            required when ``"external"`` is in ``oracles``.
+        external_rating_col: Rating column name in ``external_ratings``.
+        external_oracle_col: Value column name in ``external_oracle``.
+        external_join: ``"id"`` or ``"name"``, forwarded to ``external_validity``.
+        walk_forward_horizon_days: Forwarded to ``walk_forward``.
+        walk_forward_min_games: Forwarded to ``walk_forward`` as
+            ``min_games_before_first_checkpoint``.
 
     Returns:
         A ``ValidationReport`` whose fields are populated for every selected oracle
         and ``None`` for every skipped oracle.
+
+    Raises:
+        ValueError: If ``"external"`` is in ``oracles`` but ``external_ratings``
+            or ``external_oracle`` is ``None``.
 
     Example:
         Run all four oracles on a single season::
@@ -815,6 +1159,26 @@ def validate_model(
     pooled = (
         pl.concat(season_frames, how="diagonal_relaxed") if season_frames else pl.DataFrame(schema={"game_id": pl.Utf8})
     )
+    external_result: Optional[ExternalValidityResult] = None
+    if "external" in oracles:
+        if external_ratings is None or external_oracle is None:
+            raise ValueError("oracles includes 'external' but external_ratings/external_oracle were not provided")
+        external_result = external_validity(
+            external_ratings,
+            external_oracle,
+            rating_col=external_rating_col,
+            oracle_col=external_oracle_col,
+            join=external_join,
+            seed=seed,
+        )
+    walk_forward_result: Optional[WalkForwardResult] = None
+    if "walk_forward" in oracles:
+        walk_forward_result = walk_forward(
+            model,
+            pooled,
+            horizon_days=walk_forward_horizon_days,
+            min_games_before_first_checkpoint=walk_forward_min_games,
+        )
     return ValidationReport(
         model_name=model_name,
         n_seasons=len(season_frames),
@@ -822,6 +1186,8 @@ def validate_model(
         reliability=reliability(model, pooled, seed=seed) if "reliability" in oracles else None,
         cross_season=cross_season(model, season_frames) if "cross_season" in oracles else None,
         calibration=calibration(model, pooled, seed=seed) if "calibration" in oracles else None,
+        external=external_result,
+        walk_forward=walk_forward_result,
     )
 
 
@@ -886,5 +1252,22 @@ def render_report(report: ValidationReport) -> str:
         "- n/a (point-estimate model — no posterior)"
         if cal is None
         else "- " + ", ".join(f"{int(lvl * 100)}%→{c:.2f}" for lvl, c in zip(cal.levels, cal.coverage))
+    )
+    ext = report.external
+    L.append("## External concurrent validity (Oracle 5)")
+    L.append(
+        f"- corr **{ext.corr:.3f}** (permutation p95 {ext.permutation_p95:.3f}); "
+        f"{ext.n_matched} matched ({ext.coverage_pct:.1f}% coverage, {ext.join}-join)"
+        if ext
+        else "- n/a"
+    )
+    wf = report.walk_forward
+    L.append("## Walk-forward retrodiction (Oracle 6)")
+    L.append(
+        f"- RMSE **{wf.game_margin_rmse:.3f}** (carry-forward {wf.carry_forward_rmse:.3f}, "
+        f"random-fold {wf.random_fold_rmse:.3f}); corr {wf.game_margin_corr:.3f}; "
+        f"{wf.n_checkpoints} checkpoints, {wf.n_test_games} test games"
+        if wf
+        else "- n/a"
     )
     return "\n".join(L) + "\n"
