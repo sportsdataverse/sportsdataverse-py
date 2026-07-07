@@ -5292,6 +5292,36 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import matching_player
 matching_player(shot, pbp_event, tidy_ctx, code_match=False)
 ```
 
+### `mbb_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_in_game_win_prob}
+
+Per-play home win probability from the bundled in-game logistic.
+
+Scores `in_game_features` through the committed artifact
+(`sportsdataverse/mbb/models`, trained on the season before the pregame
+gate season so the calibration backtest stays out-of-sample).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play for ONE game in the `load_mbb_pbp` schema (`start_game_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`). |
+| `pregame_home_prob` | `float` |  | Pregame home win probability (e.g. from `win_prob_from_margin`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per play: the five feature columns plus `home_win_prob`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
+wp = mbb_in_game_win_prob(pbp, 0.62)
+```
+
 ### `mbb_pbp_disk(game_id, path_to_json)` {#mbb_pbp_disk}
 
 _No description available._

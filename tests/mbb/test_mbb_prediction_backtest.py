@@ -14,14 +14,19 @@ import numpy as np
 import polars as pl
 import pytest
 
-from sportsdataverse.mbb.mbb_game_predict import mbb_predict_games
-from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split, brier_score, mae
+from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob, mbb_predict_games
+from sportsdataverse.mbb.mbb_prediction_constants import (
+    as_of_ratings_split,
+    brier_score,
+    calibration_table,
+    mae,
+)
 from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo, raw_game_efficiency
 
 FIX_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
 
 _CORE_FIXTURES = ("results_2024", "team_box_2024", "torvik_2024")
-_OPTIONAL_FIXTURES = ("espn_predictor_sample", "espn_odds_sample", "espn_bpi_2024")
+_OPTIONAL_FIXTURES = ("espn_predictor_sample", "espn_odds_sample", "espn_bpi_2024", "pbp_sample_2024")
 
 # A game enters the backtest only when both teams have this many prior games at
 # the as-of date (data sufficiency for the in-season engine, mirrors
@@ -144,6 +149,27 @@ def test_pregame_spread_mae_vs_closing_line(weekly_backtest, oracle_corpus):
     assert j.height >= 150, f"backtest/odds intersection too small: {j.height}"
     m = mae(j.get_column("exp_margin").to_numpy(), -j.get_column("close_spread_home").to_numpy())
     assert m <= 2.5, f"spread MAE vs close = {m:.3f}"
+
+
+def test_in_game_wp_decile_calibration(oracle_corpus):
+    """Task 3.4 gate: |mean_pred - mean_actual| <= 0.03 in every predicted decile.
+
+    Out-of-sample by construction: the bundled artifact is trained on 2023,
+    the sample is 2024 (every 25th play of all 4,326 eligible games -- a few
+    plays from every game beats every play from few games, because plays
+    within a game are correlated and per-decile power is driven by game
+    count). Observed at train time: max gap 0.0298 (57,887 plays).
+    """
+    sample = oracle_corpus["pbp_sample_2024"]
+    preds, obs = [], []
+    for (_gid,), sub in sample.group_by("game_id", maintain_order=True):
+        wp = mbb_in_game_win_prob(sub, float(sub["pregame_home_prob"][0]))
+        preds.append(wp.get_column("home_win_prob").to_numpy())
+        obs.append(sub.get_column("home_win").to_numpy())
+    p, y = np.concatenate(preds), np.concatenate(obs)
+    tbl = calibration_table(y, p, n_bins=10)
+    gaps = (tbl.get_column("mean_pred") - tbl.get_column("mean_actual")).abs()
+    assert float(gaps.max()) <= 0.03, str(tbl.with_columns(gaps.alias("gap")))
 
 
 def test_pregame_total_mae_vs_closing_line(weekly_backtest, oracle_corpus):

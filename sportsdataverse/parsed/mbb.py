@@ -328,6 +328,7 @@ from sportsdataverse.mbb import load_mbb_standings as load_mbb_standings  # noqa
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import matching_player as matching_player  # noqa: F401
+from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
@@ -730,6 +731,7 @@ __all__ = [
     "load_mbb_team_boxscore",
     "load_mbb_team_season_stats",
     "matching_player",
+    "mbb_in_game_win_prob",
     "mbb_pbp_disk",
     "mbb_predict_games",
     "mbb_team_ratings",
