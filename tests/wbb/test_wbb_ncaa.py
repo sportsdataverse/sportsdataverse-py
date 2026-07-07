@@ -127,3 +127,69 @@ def test_wbb_ncaa_possessions_all_matches_reexported_symbols():
 
     assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
     assert len(w.__all__) == 11
+
+
+def test_wbb_ncaa_fetch_shim_is_mbb_core():
+    from sportsdataverse.mbb import mbb_ncaa_fetch as m
+    from sportsdataverse.wbb import wbb_ncaa_fetch as w
+
+    assert w.NCAA_HOST is m.NCAA_HOST
+    assert w.NCAA_HOST_URL is m.NCAA_HOST_URL
+    assert w.NcaaFetchConfig is m.NcaaFetchConfig
+    assert w.NcaaFetcher is m.NcaaFetcher
+    assert w.get_config is m.get_config
+    assert w.update_config is m.update_config
+    assert w.reset_config is m.reset_config
+    assert w.load_proxybonanza_pool is m.load_proxybonanza_pool
+    assert w.cached_path is m.cached_path
+    assert w.is_cached is m.is_cached
+
+
+def test_wbb_ncaa_fetch_all_matches_reexported_symbols():
+    from sportsdataverse.wbb import wbb_ncaa_fetch as w
+
+    assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
+    assert len(w.__all__) == 10
+
+
+def test_wbb_ncaa_fetch_shares_config_singleton_with_mbb():
+    from sportsdataverse.mbb import mbb_ncaa_fetch as m
+    from sportsdataverse.wbb import wbb_ncaa_fetch as w
+
+    w.update_config(timeout=999)
+    try:
+        assert m.get_config().timeout == 999
+        assert m.get_config() is w.get_config()
+    finally:
+        w.reset_config()
+
+
+def test_wbb_ncaa_strength_shim_is_mbb_core():
+    from sportsdataverse.mbb import mbb_ncaa_strength as m
+    from sportsdataverse.wbb import wbb_ncaa_strength as w
+
+    assert w.STRENGTH_ADJUSTED_FIELDS is m.STRENGTH_ADJUSTED_FIELDS
+    assert w.MAX_ITERATIONS is m.MAX_ITERATIONS
+    assert w.TOLERANCE is m.TOLERANCE
+    assert w.IMBALANCE_MIN is m.IMBALANCE_MIN
+    assert w.PossessionSplits is m.PossessionSplits
+    assert w.FieldAverage is m.FieldAverage
+    assert w.TeamStrengthAdjusted is m.TeamStrengthAdjusted
+    assert w.StrengthAdjustedResult is m.StrengthAdjustedResult
+    assert w.IterationResult is m.IterationResult
+    assert w.field_keys is m.field_keys
+    assert w.get_per_game_raw is m.get_per_game_raw
+    assert w.get_game_weight is m.get_game_weight
+    assert w.compute_possession_splits is m.compute_possession_splits
+    assert w.compute_league_averages_from_per_game is m.compute_league_averages_from_per_game
+    assert w.get_team_raw_from_per_game is m.get_team_raw_from_per_game
+    assert w.compute_opponent_strengths is m.compute_opponent_strengths
+    assert w.run_iterative_adjustment_with_hca is m.run_iterative_adjustment_with_hca
+    assert w.build_strength_adjusted_stats is m.build_strength_adjusted_stats
+
+
+def test_wbb_ncaa_strength_all_matches_reexported_symbols():
+    from sportsdataverse.wbb import wbb_ncaa_strength as w
+
+    assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
+    assert len(w.__all__) == 18

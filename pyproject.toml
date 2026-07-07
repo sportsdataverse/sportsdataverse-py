@@ -366,6 +366,8 @@ files = [
     "sportsdataverse/wbb/wbb_ncaa_team_parsers.py",
     "sportsdataverse/wbb/wbb_ncaa_shot_parser.py",
     "sportsdataverse/wbb/wbb_ncaa_pbp_glue.py",
+    "sportsdataverse/wbb/wbb_ncaa_fetch.py",
+    "sportsdataverse/wbb/wbb_ncaa_strength.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",
