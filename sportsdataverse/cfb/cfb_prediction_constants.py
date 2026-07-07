@@ -2,9 +2,114 @@
 
 from __future__ import annotations
 
+import datetime
+from dataclasses import dataclass
+
 import numpy as np
 import polars as pl
 from scipy.stats import rankdata
+
+
+@dataclass
+class RatingsConfig:
+    """Tunable knobs for the CFB ratings engine (ridge regression + competitiveness filter).
+
+    Args:
+        ridge_lambda: L2 regularization strength for the ridge-regression rating fit.
+        min_competitive_wp: Lower win-probability bound a game must clear to count as
+            "competitive" (garbage-time / blowout filtering).
+        max_competitive_wp: Upper win-probability bound a game must clear to count as
+            "competitive".
+        division: NCAA division slug the ratings are scoped to (e.g. ``"fbs"``).
+    """
+
+    ridge_lambda: float = 325.0
+    min_competitive_wp: float = 0.1
+    max_competitive_wp: float = 0.9
+    division: str = "fbs"
+
+
+@dataclass
+class PredictConfig:
+    """Era-specific coefficients for the CFB game-outcome prediction model.
+
+    Args:
+        hfa: Home-field advantage, in points.
+        margin_sd: Standard deviation of the scoring-margin distribution used to
+            convert a predicted margin into a win probability.
+        avg_drives: Average number of offensive drives per team per game, used to
+            scale per-drive EPA into a full-game point margin.
+        points_per_epa: Conversion factor from total expected-points-added to points.
+        quality_win_threshold: Minimum rating differential for a win to count as a
+            "quality win" in résumé-style summaries.
+        bubble_adj_net: Net rating adjustment applied to bubble-team comparisons.
+    """
+
+    hfa: float
+    margin_sd: float
+    avg_drives: float
+    points_per_epa: float
+    quality_win_threshold: float
+    bubble_adj_net: float
+
+
+CFB_CONSTANTS: dict[str, PredictConfig] = {
+    # Seed values only -- Task 1.x fits these from real data and overwrites them.
+    "modern": PredictConfig(
+        hfa=2.5,
+        margin_sd=16.5,
+        avg_drives=12.0,
+        points_per_epa=1.0,
+        quality_win_threshold=0.0,
+        bubble_adj_net=0.0,
+    ),
+}
+
+
+def get_constants(era: str = "modern") -> PredictConfig:
+    """Look up the :class:`PredictConfig` for a given era.
+
+    Args:
+        era: Era key into :data:`CFB_CONSTANTS` (e.g. ``"modern"``).
+
+    Returns:
+        The :class:`PredictConfig` registered for ``era``.
+
+    Raises:
+        ValueError: If ``era`` is not a registered key.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_prediction_constants import get_constants
+            cfg = get_constants("modern")
+            cfg.hfa
+    """
+    try:
+        return CFB_CONSTANTS[era]
+    except KeyError:
+        valid = ", ".join(sorted(CFB_CONSTANTS))
+        raise ValueError(f"Unknown era {era!r}; valid eras are: {valid}") from None
+
+
+def as_of_ratings_split(results: pl.DataFrame, cutoff_date: datetime.date) -> pl.DataFrame:
+    """Filter a results frame to games strictly before a cutoff date (leakage boundary).
+
+    Args:
+        results: A ``polars.DataFrame`` with a ``date`` column.
+        cutoff_date: Games on or after this date are excluded.
+
+    Returns:
+        A ``polars.DataFrame`` containing only rows with ``date < cutoff_date``.
+
+    Example:
+        Quick start::
+
+            import datetime as dt
+            from sportsdataverse.cfb.cfb_prediction_constants import as_of_ratings_split
+            as_of_ratings_split(results, dt.date(2023, 9, 8))
+    """
+    return results.filter(pl.col("date") < cutoff_date)
 
 
 def brier_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
