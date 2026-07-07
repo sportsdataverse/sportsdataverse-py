@@ -157,9 +157,14 @@ from sportsdataverse.cfb import yahoo_cfb_teams as _raw_yahoo_cfb_teams
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
+from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # noqa: F401
+from sportsdataverse.cfb import cfb_games_from_schedule as cfb_games_from_schedule  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
 from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_simulations as cfb_simulations  # noqa: F401
+from sportsdataverse.cfb import cfb_standings as cfb_standings  # noqa: F401
 from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import download as download  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_calendar as espn_cfb_calendar  # noqa: F401
@@ -197,9 +202,14 @@ __all__ = [
     "CFBPlayProcess",
     "cfb_adjusted_epa",
     "cfb_adjusted_epa_by_game",
+    "cfb_compute_results",
+    "cfb_games_from_schedule",
     "cfb_odds_events_crosswalk",
+    "cfb_playoff_seeds",
     "cfb_rosters_crosswalk",
     "cfb_schedule_crosswalk",
+    "cfb_simulations",
+    "cfb_standings",
     "cfb_teams_crosswalk",
     "download",
     "espn_cfb_award",

@@ -9,6 +9,9 @@
     - [Capture metadata](#capture-metadata)
     - [Why these fixtures exist](#why-these-fixtures-exist)
     - [Measured counts (pinned as regression floors)](#measured-counts-pinned-as-regression-floors)
+  - [`boxv3_periods.json` — quarter-box grounding capture (Task 1)](#boxv3_periodsjson--quarter-box-grounding-capture-task-1)
+    - [Capture metadata](#capture-metadata-1)
+    - [Pinned params + verified oracle](#pinned-params--verified-oracle)
   - [Regeneration](#regeneration)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -39,6 +42,7 @@ subdirectory per captured game, keyed on the `stats.nba.com` `GameID`.
 | `enhanced_pbp_expected.parquet` | v3 payload (self-derived) | Enhanced play metadata + canonical `order_index` total order |
 | `cdn_playbyplay.json` | `cdn.nba.com` live-data feed | Structured-truth oracle for the v3->v2 adapter's secondary-player extraction (see below) |
 | `cdn_boxscore.json` | `cdn.nba.com` live-data feed | Companion box score for the same live-data feed (currently unused by the adapter tests, captured alongside `cdn_playbyplay.json` for completeness / future use) |
+| `boxv3_periods.json` | `stats.nba.com/stats/boxscoretraditionalv3` (per-period range query) | Quarter-box grounding capture (Task 1 of the quarter-box lineups plan); `{"1": {...}, "2": {...}, ...}` keyed on period number, one verbatim `boxscoretraditionalv3` envelope per period at its pinned opening `StartRange`/`EndRange` window (see below) |
 
 See `0022200001/README.md` for the detailed Phase 0 provenance of the first
 five files (capture method, the `LiveEnhancedPbp` oracle, the `order_index`
@@ -97,10 +101,57 @@ These per-field counts match `_EXPECTED_MATCH_RATES` in
 `tests/nba/test_nba_v3_v2_adapter.py` exactly (100% agreement on all three
 fields, all three fixtures — no roster name-collision misses observed).
 
+## `boxv3_periods.json` — quarter-box grounding capture (Task 1)
+
+### Capture metadata
+
+- **Capture date:** 2026-07-03
+- **Source:** `stats.nba.com/stats/boxscoretraditionalv3`, called once per
+  period via `sportsdataverse/nba/tools/capture_boxv3_periods.py`
+  (`SDV_PY_NBA_STATS_LIVE=1`, curl_cffi Chrome impersonation, ~2s throttle
+  between calls; residential IP required).
+- **Purpose:** grounds the quarter-box lineups plan's period-opening
+  on-court derivation (Task 2+) in a real, verified param shape before any
+  seeder/algorithm is built against a guess.
+
+### Pinned params + verified oracle
+
+Hypothesis (pbpstats convention, confirmed by reading pbpstats'
+`StartOfPeriod._get_period_boxscore_request_params` "rt2_start_window" mode
+directly): `RangeType=2`, `StartRange=period_start_tenths`,
+`EndRange=period_start_tenths + 10` (a 1-second opening window), where
+`period_start_tenths = ((period-1)*720 if period<=4 else 2880+(period-5)*300) * 10`.
+Pinned into `sportsdataverse/nba/nba_lineups.py` as `_QUARTER_BOX_RANGE_TYPE`
+and `_period_start_range(period)`.
+
+**Verified against all 3 fixture games:**
+
+- **Period 1 is the hard oracle and it holds exactly**: the range-box
+  candidates equal the boxscore starters 1:1 (5 per team, 0 extra/missing)
+  on every fixture game. Every player shows the `"0:00"` minutes sentinel
+  (the window is only 1/10s wide, so no meaningful clock time has accrued).
+- **Periods 2+ can return MORE than 5 raw candidates per team** (observed up
+  to 9) when a substitution happens at, or essentially at, the
+  period-opening tick — the endpoint has no way to disambiguate "about to
+  sub out" from "about to sub in" at an exact boundary tie. This was
+  verified NOT to be a window-width artifact: zero-width (`StartRange ==
+  EndRange`), the pinned 1-second window, and a widened 5-second window all
+  returned identical candidate sets for the affected period/team-sides.
+  pbpstats itself carries a whole substitution-order narrowing pass (plus a
+  `RangeType=1` fallback) for exactly this reason — narrowing the
+  period-2+ candidates down to exactly 5 is intentionally deferred to a
+  downstream task, not solved here. `tests/nba/test_nba_lineups.py`
+  encodes both findings: `test_period_start_range_period1_matches_boxscore_starters`
+  (hard, exact-5 oracle for period 1) and `test_boxv3_periods_fixture_shape`
+  (a `>=5` floor for every period, documenting the raw shape).
+
 ## Regeneration
 
 Re-capture with the same URLs (`Referer`/`Origin: https://www.nba.com`
 headers) and overwrite the files (stem-matched). The parser/adapter tests are
 payload-agnostic so a newer capture keeps working as long as the schema
 doesn't drift; if the measured assist/block/steal counts change, update
-`_EXPECTED_MATCH_RATES` (and the table above) to match.
+`_EXPECTED_MATCH_RATES` (and the table above) to match. Re-capture
+`boxv3_periods.json` with `sportsdataverse/nba/tools/capture_boxv3_periods.py`
+(same game IDs, `RangeType=2` window); if the period-1-matches-starters
+oracle stops holding, treat it as a real regression, not a stale fixture.

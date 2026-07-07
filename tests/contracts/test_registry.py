@@ -76,3 +76,29 @@ def test_cfb_data_r_lint_target_registered():
     t = LINT_TARGETS["cfb_data_r"]
     assert t.language == "r"
     assert t.path == "${SDV_VALIDATION_DATA_ROOT}/R"
+
+
+def test_expected_constant_columns_defaults_and_threads() -> None:
+    from tools.validation.findings import CheckContext
+    from tools.validation.registry import DatasetSpec
+
+    # default is empty
+    assert DatasetSpec(name="t", domain="cfb", parquet_glob="x", schema={}).expected_constant_columns == ()
+    assert CheckContext(domain="cfb", dataset="t", schema={}).expected_constant_columns == ()
+
+    # _resolve_spec threads the spec value into the ctx
+    from pathlib import Path
+
+    from tools.validation.registry import _resolve_spec
+
+    fixture = Path(__file__).parent / "fixtures" / "cfb_model_pbp_sample.parquet"
+    spec = DatasetSpec(
+        name="t",
+        domain="cfb",
+        parquet_glob=str(fixture),
+        schema={"game_id": "Int64", "id": "Int64", "wp_before": "Float64"},
+        oracle_domain="cfb",
+        expected_constant_columns=("season", "division"),
+    )
+    _frame, ctx = _resolve_spec(spec)
+    assert ctx.expected_constant_columns == ("season", "division")
