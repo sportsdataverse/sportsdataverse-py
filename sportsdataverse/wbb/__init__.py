@@ -11,6 +11,7 @@ from sportsdataverse.wbb.wbb_luck import *
 from sportsdataverse.wbb.wbb_ncaa_boxscore_parser import *
 from sportsdataverse.wbb.wbb_ncaa_data_quality import *
 from sportsdataverse.wbb.wbb_ncaa_events import *
+from sportsdataverse.wbb.wbb_ncaa_fetch import *
 from sportsdataverse.wbb.wbb_ncaa_html import *
 from sportsdataverse.wbb.wbb_ncaa_lineup_enrich import *
 from sportsdataverse.wbb.wbb_ncaa_models import *
@@ -22,6 +23,7 @@ from sportsdataverse.wbb.wbb_ncaa_roster_parser import *
 from sportsdataverse.wbb.wbb_ncaa_shot_parser import *
 from sportsdataverse.wbb.wbb_ncaa_stint_validation import *
 from sportsdataverse.wbb.wbb_ncaa_stints import *
+from sportsdataverse.wbb.wbb_ncaa_strength import *
 from sportsdataverse.wbb.wbb_ncaa_team_parsers import *
 from sportsdataverse.wbb.wbb_pbp import *
 from sportsdataverse.wbb.wbb_player_stats import *
