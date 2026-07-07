@@ -96,10 +96,18 @@ from sportsdataverse.nfl.ep_wp import (
     calculate_xpass,
     calculate_xyac,
 )
+from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp, team_name_fn
 from sportsdataverse.nfl.nfl_fourth_down import *
 from sportsdataverse.nfl.nfl_pbp import *
 from sportsdataverse.nfl.nfl_player_stats import *
-from sportsdataverse.nfl.nfl_stats import build_nfl_player_stats, build_nfl_team_stats
+from sportsdataverse.nfl.nfl_stats import (
+    build_nfl_player_stats,
+    build_nfl_player_stats_def,
+    build_nfl_player_stats_kicking,
+    build_nfl_team_stats,
+)
+from sportsdataverse.nfl.nfl_series import calculate_nfl_series_conversion_rates
+from sportsdataverse.nfl.nfl_standings_calc import calculate_nfl_standings
 from sportsdataverse.nfl.nfl_schedule import *
 from sportsdataverse.nfl.nfl_teams import *
 from sportsdataverse.nfl.utils_date import *
