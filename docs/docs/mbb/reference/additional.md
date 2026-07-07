@@ -732,6 +732,27 @@ strength-of-schedule adjustment); `hca_per_field` maps `field ->
 | `adj_values` | `ForwardRef('AdjValues')` |  |  |
 | `hca_per_field` | `ForwardRef('HcaPerField')` |  |  |
 
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', em_scale: 'float', avg_tempo: 'float', avg_efficiency: 'float', quad_thresholds: 'dict[str, dict[str, int]]', bubble_adj_em: 'float', in_game_wp_artifact: 'str') -> None` {#LeagueConstants}
+
+Per-league fitted constants for the prediction & tournament stack.
+
+Algorithms in the stack are league-agnostic; every men's/women's-specific
+number lives here so a WBB caller is a by-reference shim plus this table
+(the same pattern `wbb_rapm` / `wbb_ratings` already use).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `hfa` | `float` |  | Home-court advantage in points (fitted on the 2024 backtest). |
+| `margin_sd` | `float` |  | Std. dev. of the game-margin residual (fitted on the 2024 backtest; the Brier-minimizing sigma agrees to within 0.04). |
+| `em_scale` | `float` |  | Slope applied to the AdjEM difference when predicting a game margin. AdjEM is per-100-possessions, so a game margin scales by ~tempo/100 (~0.67); the fitted value is lower still because the as-of AdjEM estimate is noisy and the optimal predictive slope is attenuated (regression dilution). Fitted jointly with `hfa`. |
+| `avg_tempo` | `float` |  | League baseline possessions per game (adjusted-tempo anchor). |
+| `avg_efficiency` | `float` |  | League baseline points per 100 possessions. |
+| `quad_thresholds` | `dict[str, dict[str, int]]` |  | NET-style quadrant opponent-rank upper bounds, keyed by venue (`home` / `neutral` / `away`) then `q1` / `q2` / `q3` (Quad 4 is any opponent ranked worse than `q3`). |
+| `bubble_adj_em` | `float` |  | AdjEM of a bubble-quality team on THIS engine's scale (mean of engine ranks 40-50 on the fit season) -- the WAB baseline. |
+| `in_game_wp_artifact` | `str` |  | Filename of the bundled in-game-WP coefficients under `sportsdataverse/mbb/models` (fitted + committed in Phase 3). |
+
 ### `LineupBuildingState(curr: 'LineupEvent', tidy_ctx: "'TidyPlayerContext'", prev: 'list[LineupEvent]' = <factory>, old_format: 'Optional[bool]' = None) -> None` {#LineupBuildingState}
 
 State for building raw lineup data across a fold over play-by-play
@@ -1887,6 +1908,42 @@ Enrich a lineup with play-by-play stats for both team and opponent
 
 A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` populated.
 
+### `adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_efficiency}
+
+Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
+
+KenPom-style fixed point: initialise `adj_o = raw_o` / `adj_d = raw_d`,
+then repeatedly recompute each team's rating from its games with the
+opponent's *current* adjusted rating and a home-court adjustment removed,
+until the largest change is below `tol`. Ratings are computed independently
+per season (a team's opponent pool is within-season).
+
+The per-game offensive update is
+`off_eff - (adj_d_opp - avg) - loc_o` where `loc_o` is `+hfa/2` at
+home, `-hfa/2` away, `0` neutral (defense is symmetric with the opposite
+sign); `avg` is the league mean efficiency and `hfa` comes from
+`~sportsdataverse.mbb.mbb_prediction_constants.get_constants`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_eff` | `DataFrame` |  | Output of `raw_game_efficiency`. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the HFA constant. |
+| `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
+| `tol` | `float` | `0.0001` | Convergence tolerance on the largest rating change. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
+ratings = adjust_efficiency(raw_game_efficiency(sched, box))
+```
+
 ### `adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'` {#adjust_off_rating_stats}
 
 Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place.
@@ -1924,6 +1981,36 @@ _, _, raw_o_rtg, _, o_diags = build_o_rtg(player, {}, {}, 100.0, True, False)
 maybe_raw = raw_o_rtg["value"] if raw_o_rtg else None
 adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
 print(o_diags["oRtg"], o_diags["adjORtgPlus"])
+```
+
+### `adjust_tempo(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_tempo}
+
+Opponent-adjusted tempo (possessions/40) per team-season.
+
+Same fixed point as `adjust_efficiency`, applied to game possessions
+under the additive model `poss = tempo_i + tempo_j - avg`: a team's tempo
+is recovered by removing its opponents' current adjusted tempo. `avg` is
+the league baseline tempo from
+`~sportsdataverse.mbb.mbb_prediction_constants.get_constants`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_eff` | `DataFrame` |  | Output of `raw_game_efficiency`. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the tempo baseline. |
+| `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
+| `tol` | `float` | `0.0001` | Convergence tolerance on the largest tempo change. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_tempo`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_ratings import adjust_tempo, raw_game_efficiency
+tempo = adjust_tempo(raw_game_efficiency(sched, box))
 ```
 
 ### `alias_combos(first: 'str', last: 'str', to_name: 'str') -> 'dict[str, str]'` {#alias_combos}
@@ -2073,6 +2160,32 @@ nudge = apply_weak_priors("off_adj_ppp", pct_by_player, ctx["prior_info"])
 adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
 ```
 
+### `as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+
+Return only games strictly before `cutoff_date` (the leakage boundary).
+
+Predictive backtests must rate a game using only games that finished before
+it — this split enforces that as-of-date rule so no future information leaks
+into a game's own prediction.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `DataFrame` |  | A frame with a `date` column of dtype `pl.Date`. |
+| `cutoff_date` | `date` |  | The date of the game being predicted; games on or after it are dropped. |
+
+**Returns**
+
+The subset of `results` with `date < cutoff_date`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
+prior = as_of_ratings_split(results, some_game_date)
+```
+
 ### `assign_to_right_lineup(state: 'PossState', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#assign_to_right_lineup}
 
 Assign a clump's possessions to the lineup(s) ending in it
@@ -2149,6 +2262,29 @@ A `StrongSurnameMatch` / `WeakSurnameMatch` / `NoSurnameMatch`, per the surname-
 from sportsdataverse.mbb.mbb_ncaa_names import box_aware_compare
 box_aware_compare("Tuitele, Peanut", "Tuitele, Peanut")
 # StrongSurnameMatch(box_name='Tuitele, Peanut', score=100)
+```
+
+### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
+
+Mean squared error between binary outcomes and predicted probabilities.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+
+**Returns**
+
+The Brier score (lower is better; 0.0 is perfect).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import brier_score
+brier_score(np.array([1, 0]), np.array([1.0, 0.0]))
 ```
 
 ### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
@@ -3602,6 +3738,32 @@ port reproduces every step in the same order.
 
 A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
 
+### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+
+Bin predicted probabilities and compare mean-predicted vs mean-actual.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+| `n_bins` | `int` | `10` | Number of equal-width probability bins. |
+
+**Returns**
+
+A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin, sorted ascending).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import calibration_table
+y = np.random.default_rng(0).integers(0, 2, 200)
+p = np.random.default_rng(1).random(200)
+calibration_table(y, p, n_bins=10)
+```
+
 ### `categorize_bad_lineups(lineup_events: 'list[LineupEvent]') -> 'dict[int, tuple[int, int]]'` {#categorize_bad_lineups}
 
 Aggregates bad lineup events for display, by clump-leader player count
@@ -4945,6 +5107,27 @@ cfg = get_config()
 print(cfg.cache_dir, cfg.timeout)
 ```
 
+### `get_constants(league: 'str') -> 'LeagueConstants'` {#get_constants}
+
+Return the `LeagueConstants` for a league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | Either `"mens"` or `"womens"`. |
+
+**Returns**
+
+The league's `LeagueConstants`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_prediction_constants import get_constants
+get_constants("mens").hfa
+```
+
 ### `get_game_weight(opp: 'OpponentGame', field: 'str', side: 'str') -> 'float'` {#get_game_weight}
 
 Weight for one game/field/side (`getGameWeight`, `ts:119-140`).
@@ -5236,6 +5419,30 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
     handle_common_sub_bug,
 )
 fixed, still = handle_common_sub_bug(clump, box_lineup, valid_codes)
+```
+
+### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
+
+Per-play in-game win-probability features from a `load_mbb_pbp` frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame with `start_game_seconds_remaining`, `home_score`, `away_score`, `team_id` (event team) and `home_team_id` (the `load_mbb_pbp` schema). |
+| `pregame_home_prob` | `float` |  | The pregame home win probability (e.g. from `win_prob_from_margin`), encoded as a constant logit column. Clipped to `[1e-6, 1 - 1e-6]` so a saturated CDF (exact 0/1) cannot crash the logit. |
+
+**Returns**
+
+One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import in_game_features
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
+feats = in_game_features(pbp, 0.62)
 ```
 
 ### `incorporate_height(height_in: 'float', confs: 'list[float]') -> 'list[float]'` {#incorporate_height}
@@ -5753,6 +5960,53 @@ report = lineup_to_team_report(
 )
 ```
 
+### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
+
+Binary cross-entropy (log loss) between outcomes and probabilities.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+| `eps` | `float` | `1e-15` | Clipping bound to keep the log finite at 0/1. |
+
+**Returns**
+
+The mean log loss (lower is better).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import log_loss_score
+log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
+```
+
+### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+
+Mean absolute error between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First array. |
+| `b` | `ndarray` |  | Second array (same length as `a`). |
+
+**Returns**
+
+The mean absolute error.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import mae
+mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
+```
+
 ### `matching_player(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext', code_match: 'bool') -> 'bool'` {#matching_player}
 
 Whether the player in `pbp_event` matches `shot`'s shooter
@@ -5779,6 +6033,101 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import matching_player
 matching_player(shot, pbp_event, tidy_ctx, code_match=False)
 ```
 
+### `mbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_bracket_sim}
+
+Single-elimination Monte Carlo over a bracket-ordered field.
+
+Rows of `seeded_field` are bracket slots: adjacent rows meet in round 1
+and winners of adjacent games meet next round (the standard fold). All
+games are neutral-site. Round columns are named from the END of a 64-team
+bracket (`champion` back to `reach_r32`); with a smaller field the
+early columns are 1.0 for everyone (trivially reached).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seeded_field` | `DataFrame` |  | Bracket-ordered rows with `team_id` (and typically `seed` for reference). |
+| `ratings` | `DataFrame` |  | One row per team: `team_id, adj_em`. |
+| `n_sims` | `int` | `10000` | Number of simulated brackets. |
+| `seed` | `int` | `0` | Seed for `numpy.random.default_rng`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per field team: `team_id, seed?, reach_r32, reach_s16, reach_e8, reach_f4, reach_final, champion` (probabilities).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_season_sim import mbb_bracket_sim
+odds = mbb_bracket_sim(field_64, ratings, n_sims=20000, seed=42)
+```
+
+### `mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_bracketology}
+
+Projected tournament field for a season from the released ESPN data.
+
+Builds ratings + résumé (optionally as of a date -- games on or after
+`as_of_date` are excluded), resolves conference auto-bids from the
+standings, and selects/seeds the 68-team field via
+`project_bracket`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season to project (e.g. `2024`). |
+| `as_of_date` | `date \| None` | `None` | Only use games strictly before this date (Selection-Sunday style snapshots); `None` uses every completed game. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team -- see `project_bracket`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_bracketology
+field = mbb_bracketology(2024)
+
+# Pipeline next step (one line)
+
+field.filter(pl.col("bid") == True).sort("projected_seed")
+```
+
+### `mbb_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_in_game_win_prob}
+
+Per-play home win probability from the bundled in-game logistic.
+
+Scores `in_game_features` through the committed artifact
+(`sportsdataverse/mbb/models`, trained on the season before the pregame
+gate season so the calibration backtest stays out-of-sample).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play for ONE game in the `load_mbb_pbp` schema (`start_game_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`). |
+| `pregame_home_prob` | `float` |  | Pregame home win probability (e.g. from `win_prob_from_margin`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per play: the five feature columns plus `home_win_prob`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import mbb_in_game_win_prob
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
+wp = mbb_in_game_win_prob(pbp, 0.62)
+```
+
 ### `mbb_pbp_disk(game_id, path_to_json)` {#mbb_pbp_disk}
 
 _No description available._
@@ -5789,6 +6138,119 @@ _No description available._
 |---|---|---|---|
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
+
+### `mbb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_predict_games}
+
+Vectorized pregame predictions for a schedule of games.
+
+Joins the ratings frame twice (home / away) and applies the closed-form
+`predict_margin` / `win_prob_from_margin` /
+`predict_total` math column-wise.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
+| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_o, adj_d, adj_em, adj_tempo` (the `mbb_team_ratings` output for one season / as-of date). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import mbb_predict_games
+from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
+preds = mbb_predict_games(games, mbb_team_ratings([2024]))
+```
+
+### `mbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_season_sim}
+
+Monte Carlo the remaining schedule: expected wins + title odds.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | One row per team: `season, team_id, adj_em` and optionally `conference` (enables `conf_title_prob`) and `current_wins` (added to the simulated remaining wins). |
+| `remaining_schedule` | `DataFrame` |  | Games to simulate: `home_team_id, away_team_id, neutral_site`. |
+| `n_sims` | `int` | `10000` | Number of simulated seasons. |
+| `seed` | `int` | `0` | Seed for `numpy.random.default_rng` (deterministic output). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team: `season, team_id, exp_wins` (mean simulated total wins), `playoff_prob` (share of sims finishing in the top 68 win totals -- a field-size proxy, ties broken by `adj_em`) and `conf_title_prob` (share of sims with the most wins among conference members; ties count for every tied team; null without a `conference` column).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_season_sim import mbb_season_sim
+odds = mbb_season_sim(ratings, remaining, n_sims=5000, seed=42)
+```
+
+### `mbb_strength_of_schedule(seasons: 'list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_strength_of_schedule}
+
+Season-level SoS / Quad / WAB résumé from the released ESPN data.
+
+Loads the schedule + team boxscores, builds the opponent-adjusted ratings,
+and applies `strength_of_schedule` per season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (season, team_id) -- see `strength_of_schedule`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_strength_of_schedule
+resume = mbb_strength_of_schedule([2024])
+
+# Pipeline next step (one line)
+
+resume.sort("wab", descending=True).head(20)
+```
+
+### `mbb_team_ratings(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mbb_team_ratings}
+
+Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season.
+
+Loads schedule + team boxscore for `seasons`, computes per-game efficiency,
+runs the opponent-adjustment fixed points, and adds a per-season dense
+`rank` (on `adj_em` descending) and `adj_em_z` (z-score of `adj_em`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season (e.g. `2024`) or list of seasons. |
+| `league` | `str` | `'mens'` | `"mens"` / `"womens"` -- selects the constants. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
+ratings = mbb_team_ratings(2024)
+ratings.sort("rank").head()
+```
 
 ### `misspellings(team: 'Optional[TeamId]') -> 'dict[str, str]'` {#misspellings}
 
@@ -6166,6 +6628,113 @@ frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
 frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
 poss_calc_fragment_sum(frag1, frag2)
 # PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
+```
+
+### `predict_margin(home_adj_em: 'float', away_adj_em: 'float', neutral: 'bool' = False, *, league: 'str' = 'mens') -> 'float'` {#predict_margin}
+
+Expected home-minus-away margin from two adjusted efficiency margins.
+
+The AdjEM difference is scaled by the league's fitted `em_scale` (AdjEM
+is per-100-possessions; a game margin scales by roughly tempo/100, further
+attenuated for as-of estimation noise) before the home-court advantage is
+added.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_em` | `float` |  | Home team's adjusted efficiency margin (points / 100 poss). |
+| `away_adj_em` | `float` |  | Away team's adjusted efficiency margin. |
+| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the fitted em_scale / HFA). |
+
+**Returns**
+
+Expected margin in points (positive favors the home team).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import predict_margin
+predict_margin(20.0, 10.0)
+```
+
+### `predict_total(home_adj_o: 'float', home_adj_d: 'float', away_adj_o: 'float', away_adj_d: 'float', home_tempo: 'float', away_tempo: 'float', *, league: 'str' = 'mens') -> 'float'` {#predict_total}
+
+Expected total points from adjusted efficiencies and tempos.
+
+Expected possessions are `home_tempo * away_tempo / avg_tempo`; each
+side's expected points per 100 possessions blend its offense with the
+opponent's defense (`0.5 * (off + opp_def)`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_o` | `float` |  | Home adjusted offensive efficiency (points / 100 poss). |
+| `home_adj_d` | `float` |  | Home adjusted defensive efficiency. |
+| `away_adj_o` | `float` |  | Away adjusted offensive efficiency. |
+| `away_adj_d` | `float` |  | Away adjusted defensive efficiency. |
+| `home_tempo` | `float` |  | Home adjusted tempo (possessions / game). |
+| `away_tempo` | `float` |  | Away adjusted tempo. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the tempo anchor). |
+
+**Returns**
+
+Expected combined points scored by both teams.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import predict_total
+predict_total(110.0, 95.0, 105.0, 100.0, 68.0, 66.0)
+```
+
+### `project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'` {#project_bracket}
+
+Select and seed a tournament field from a per-team résumé frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
+| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid winners (see conference_auto_bids`); always in the field. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
+| `field_size` | `int` | `68` | Tournament field size (68). |
+
+**Returns**
+
+One row per input team: `season, team_id, resume_score, projected_seed` (1-16, capped for the First Four; null outside the field), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `bid` (exactly `field_size` true).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_bracketology import project_bracket
+field = project_bracket(resume, auto_bids)
+```
+
+### `raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'` {#raw_game_efficiency}
+
+Per-team, per-game possessions + raw offensive/defensive efficiency.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | Frame with `game_id, season, date, home_team_id, away_team_id, neutral_site` (ids as strings or ints; cast to `Utf8` here). |
+| `team_box` | `DataFrame` |  | Per-team boxscore with `game_id, team_id, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted, team_score`. |
+
+**Returns**
+
+One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is_home, neutral_site, poss, off_eff, def_eff`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_mbb_team_boxscore
+from sportsdataverse.mbb.mbb_team_ratings import raw_game_efficiency
+eff = raw_game_efficiency(load_mbb_schedule([2024]), load_mbb_team_boxscore([2024]))
 ```
 
 ### `regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'` {#regress_shot_quality}
@@ -6607,6 +7176,32 @@ shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
 shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 ```
 
+### `simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'` {#simulate_game}
+
+Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_em` | `float` |  | Home team's adjusted efficiency margin. |
+| `away_em` | `float` |  | Away team's adjusted efficiency margin. |
+| `neutral` | `bool` |  | True for a neutral-site game. |
+| `rng` | `Generator` |  | A seeded `numpy.random.Generator` (caller owns determinism). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+True if the home team wins the sampled game.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_season_sim import simulate_game
+simulate_game(20.0, 5.0, False, np.random.default_rng(0))
+```
+
 ### `slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#slow_regression}
 
 Build the Tikhonov (ridge) regression solver matrix.
@@ -6640,6 +7235,29 @@ solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
 rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
 ```
 
+### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+
+Spearman rank correlation between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First array. |
+| `b` | `ndarray` |  | Second array (same length as `a`). |
+
+**Returns**
+
+The Spearman rank-correlation coefficient in `[-1, 1]`.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import spearman_corr
+spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([10.0, 20.0, 30.0]))
+```
+
 ### `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#start_time_from_period}
 
 The game-clock time (minutes elapsed) a period starts at
@@ -6667,6 +7285,29 @@ from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
 start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
 start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
 start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
+```
+
+### `strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'` {#strength_of_schedule}
+
+Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `DataFrame` |  | Completed games with `game_id, season, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
+| `ratings` | `DataFrame` |  | One row per team with `season, team_id, adj_em, rank` (the `mbb_team_ratings` output). Team-id dtype must match `results`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (quad thresholds, HFA, bubble EM). |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
+resume = strength_of_schedule(results, ratings)
 ```
 
 ### `sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'` {#sum_event_stats}
@@ -6997,4 +7638,26 @@ for lineup in three_lineups:
     weighted_avg(acc, lineup)
 # acc now holds weighted SUMS; complete_weighted_avg (not yet
 # ported) is required to turn these into rate-stat averages.
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'mens') -> 'float'` {#win_prob_from_margin}
+
+Home win probability from an expected margin (normal-CDF closed form).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | Expected home-minus-away margin in points. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the fitted margin sigma). |
+
+**Returns**
+
+Probability the home team wins, in `(0, 1)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import win_prob_from_margin
+win_prob_from_margin(5.0)
 ```
