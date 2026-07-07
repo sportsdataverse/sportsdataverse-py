@@ -12,8 +12,14 @@ so no network access is required.
 from __future__ import annotations
 
 import polars as pl
+import pytest
 
 from sportsdataverse.nfl import calculate_nfl_standings
+
+# calculate_nfl_standings is deprecated in favor of nfl_season_standings; the
+# behavior tests below still exercise the reduced ladder, so silence the
+# DeprecationWarning here (a dedicated test asserts it still fires).
+pytestmark = pytest.mark.filterwarnings("ignore::DeprecationWarning")
 
 
 def _teams() -> pl.DataFrame:
@@ -184,3 +190,9 @@ def test_standings_return_as_pandas() -> None:
     out = calculate_nfl_standings(_games(), teams=_teams(), return_as_pandas=True)
     assert isinstance(out, pd.DataFrame)
     assert out.shape[0] == 4
+
+
+@pytest.mark.filterwarnings("default::DeprecationWarning")
+def test_standings_emits_deprecation_pointing_to_season_standings() -> None:
+    with pytest.warns(DeprecationWarning, match="nfl_season_standings"):
+        calculate_nfl_standings(_games(), teams=_teams())
