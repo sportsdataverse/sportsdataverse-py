@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from sportsdataverse.mbb.mbb_espn_ext import *
+from sportsdataverse.mbb.mbb_bracketology import *
 from sportsdataverse.mbb.mbb_fox_ext import *
+from sportsdataverse.mbb.mbb_game_predict import *
 from sportsdataverse.mbb.mbb_game_rosters import *
 from sportsdataverse.mbb.mbb_lineup_stats import *
 from sportsdataverse.mbb.mbb_loaders import *
@@ -16,6 +18,9 @@ from sportsdataverse.mbb.mbb_ncaa_models import *
 from sportsdataverse.mbb.mbb_ncaa_names import *
 from sportsdataverse.mbb.mbb_ncaa_pbp_glue import *
 from sportsdataverse.mbb.mbb_ncaa_pbp_parser import *
+from sportsdataverse.mbb.mbb_prediction_constants import *
+from sportsdataverse.mbb.mbb_season_sim import *
+from sportsdataverse.mbb.mbb_strength_of_schedule import *
 from sportsdataverse.mbb.mbb_ncaa_possessions import *
 from sportsdataverse.mbb.mbb_ncaa_roster_parser import *
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import *
@@ -29,4 +34,5 @@ from sportsdataverse.mbb.mbb_positions import *
 from sportsdataverse.mbb.mbb_rapm import *
 from sportsdataverse.mbb.mbb_ratings import *
 from sportsdataverse.mbb.mbb_schedule import *
+from sportsdataverse.mbb.mbb_team_ratings import *
 from sportsdataverse.mbb.mbb_teams import *

@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)](#mbb--wbb--prediction--tournament-stack-ratings-%E2%86%92-pregame-%E2%86%92-in-game-wp-%E2%86%92-r%C3%A9sum%C3%A9-%E2%86%92-bracketology-%E2%86%92-monte-carlo)
   - [NBA — external concurrent validity + walk-forward retrodiction (WP3)](#nba--external-concurrent-validity--walk-forward-retrodiction-wp3)
   - [NBA — RAPM variants (WP2)](#nba--rapm-variants-wp2)
   - [NBA — through-date ratings panel, WAR, and single-game BPM (WP4)](#nba--through-date-ratings-panel-war-and-single-game-bpm-wp4)
@@ -158,6 +159,35 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)
+
+- feat(mbb): opponent-adjusted team ratings (`mbb_team_ratings`: AdjO/AdjD/AdjEM/AdjTempo
+  KenPom-style fixed points) oracle-gated vs barttorvik 2024 (Spearman 0.990, MAE 2.37).
+- feat(mbb): closed-form pregame predictions (`predict_margin` / `win_prob_from_margin` /
+  `predict_total` + vectorized `mbb_predict_games`) with backtest-fitted constants
+  (`em_scale`/HFA/sigma/tempo-anchor, joint least squares on a leakage-free as-of-date walk
+  of 2024); gates: Brier beats the ESPN BPI predictor (0.2006 vs 0.2031), spread MAE 1.95 /
+  total MAE 2.90 vs the closing line.
+- feat(mbb): in-game win probability (`in_game_features` + `mbb_in_game_win_prob`) from a
+  bundled shallow-xgboost artifact trained on 2023 pbp; out-of-sample 2024 decile
+  calibration max gap 0.0298 (gate ≤ 0.03).
+- feat(mbb): strength of schedule + NET-style Quad 1–4 résumé + Wins Above Bubble
+  (`mbb_strength_of_schedule`); SoS Spearman vs ESPN BPI SOS 0.923.
+- feat(mbb): bracketology (`mbb_bracketology` / `project_bracket` + conference auto-bids)
+  — committee-style résumé blend, 68-team field selection, seeds; seed-order Spearman vs
+  the actual 2024 committee 0.938.
+- feat(mbb): season + bracket Monte Carlo (`mbb_season_sim` / `mbb_bracket_sim` /
+  `simulate_game`, seeded + deterministic); neutral-site calibration slope 1.03 on 413
+  neutral games (includes the NCAA tournament).
+- feat(wbb): full women's parity — six thin shims (`wbb_team_ratings`, `wbb_predict_games`,
+  `wbb_in_game_win_prob`, `wbb_strength_of_schedule`, `wbb_bracketology`,
+  `wbb_season_sim`/`wbb_bracket_sim`) over the league-agnostic mbb cores with women's
+  fitted constants + a women's-trained WP artifact; every oracle gate re-run on WBB 2024
+  at the same thresholds (Torvik 0.995, SoS 0.985, seed-order 0.976, WP deciles 0.0224).
+- test(mbb,wbb): committed 2024 oracle corpora under `tests/fixtures/{mbb,wbb}_prediction/`
+  (results/team-box/barttorvik/ESPN BPI/predictor/odds samples/pbp WP samples/actual NCAA
+  tournament seeds) with provenance READMEs; all gates run offline in CI.
 
 ### NBA — external concurrent validity + walk-forward retrodiction (WP3)
 
