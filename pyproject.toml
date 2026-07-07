@@ -330,6 +330,7 @@ files = [
     "sportsdataverse/mbb/mbb_ncaa_data_quality.py",
     "sportsdataverse/mbb/mbb_ncaa_names.py",
     "sportsdataverse/mbb/mbb_ncaa_stints.py",
+    "sportsdataverse/mbb/mbb_ncaa_stint_validation.py",
     "sportsdataverse/mbb/mbb_ncaa_lineup_enrich.py",
     "sportsdataverse/wbb/wbb_lineup_stats.py",
     "sportsdataverse/wbb/wbb_ratings.py",
