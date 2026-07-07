@@ -978,26 +978,39 @@ Cache-first stats.ncaa.org fetcher, proxy-bound per the binding directive.
 **Example**
 
 ```python
-from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher, update_config
-update_config(proxy_url="http://user:pass@1.2.3.4:8080")
-fetcher = NcaaFetcher()
-html = fetcher.fetch_game_pbp("4690813")   # cached after this call
-html2 = fetcher.fetch_game_pbp("4690813")  # cache hit, no request
+# Scrape game-detail data (the **suggested** path -- browser transport clears the Akamai bm-verify wall; see :meth:`with_browser`)
+
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+    with NcaaFetcher.with_browser() as fetcher:
+        pbp = fetcher.fetch_game_pbp("1613299")               # raw PBP HTML
+        box = fetcher.fetch_game_individual_stats("1613299")  # raw box HTML
+
+# Un-challenged pages (landing / team) via the curl_cffi proxy path
+
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher, update_config
+    update_config(proxy_url="http://user:pass@1.2.3.4:8080")
+    fetcher = NcaaFetcher()
+    html = fetcher.fetch_team_schedule("391")  # cached after this call
 
 # Offline (injected transport + explicit pool, no network/env needed)
 
-def fake(url, proxies, headers):
-    return 200, "<html>...</html>"
-from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetchConfig
-cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=fake)
-fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"])
+    def fake(url, proxies, headers):
+        return 200, "<html>...</html>"
+    from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetchConfig
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=fake)
+    fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"])
 ```
 
 **Methods**
 
 #### `NcaaFetcher.fetch_game_box(contest_id: 'object', period: 'int' = 1, *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
 
-Fetch a game's box-score page for *period* (1-indexed).
+Fetch a game's box-score *landing* page for *period* (1-indexed).
+
+Note: on current (2026) stats.ncaa.org this page is the team-stats /
+game-leaders view -- the per-player box the box-score parser consumes
+split out into `fetch_game_individual_stats`. Kept for the
+team-stats surface and the legacy layout.
 
 **Parameters**
 
@@ -1005,6 +1018,28 @@ Fetch a game's box-score page for *period* (1-indexed).
 |---|---|---|---|
 | `contest_id` | `object` |  |  |
 | `period` | `int` | `1` |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_game_individual_stats(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a game's per-player box (the `individual_stats` tab).
+
+This is the page `~sportsdataverse.mbb.mbb_ncaa_boxscore_parser
+.get_box_lineup` parses on current markup (`format_version=1`): two
+`table.dataTable.small_font#competitor_*` per-team player tables.
+The server ignores `?period_no` here (returns the full-game box), so
+no period arg -- see `dev/phase5f-live-proof.md`.
+
+ponytail: the modern box split out of `box_score` into this tab; the
+legacy (pre-2018) layout has no separate individual-stats page, so
+`legacy=True` falls back to the legacy `box_score` path.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `contest_id` | `object` |  |  |
 | `legacy` | `bool` | `False` |  |
 | `force` | `bool` | `False` |  |
 
@@ -6035,6 +6070,39 @@ off_results, def_results = pick_ridge_regression(
     off_weights, def_weights, ctx, None, False
 )
 print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
+```
+
+### `playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 30000, user_agent: 'Optional[str]' = None) -> "'_PlaywrightTransport'"` {#playwright_transport}
+
+Build the **suggested** stats.ncaa.org game-detail scraping transport.
+
+Drives a real Chromium via Playwright in Chrome's new-headless mode
+(`--headless=new`) to clear the Akamai `bm-verify` challenge that
+`curl_cffi` cannot, then serves raw server HTML for the 5a-5e parsers.
+Playwright is a **lazy optional import** (not a hard dependency); a clear
+`ImportError` fires on first use if it is missing.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `headless_new` | `bool` | `True` | Use `--headless=new` (real-GPU render, no window) -- the default and the proven-working mode. `False` runs old headless (`headless_shell`), which Akamai flags -- avoid. |
+| `challenge_wait_ms` | `int` | `8000` | Milliseconds to let the bm-verify sensor run after the first navigation. |
+| `nav_timeout_ms` | `int` | `30000` | Per-navigation timeout. |
+| `user_agent` | `Optional[str]` | `None` | Override the Chrome UA string. |
+
+**Returns**
+
+A stateful, callable `FetchTransport` reusing one browser for the session. Close it when done (it is a context manager, has `close()`, and registers an `atexit` safety net).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
+with NcaaFetcher.with_browser() as fetcher:
+    pbp = fetcher.fetch_game_pbp("1613299")               # raw PBP HTML
+    box = fetcher.fetch_game_individual_stats("1613299")  # raw box HTML
+# -> feed to get_box_lineup / create_lineup_data (mbb_ncaa_*_parser)
 ```
 
 ### `pos_class_to_score(pos_class: 'str') -> 'int'` {#pos_class_to_score}

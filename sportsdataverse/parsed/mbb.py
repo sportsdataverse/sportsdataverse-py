@@ -406,6 +406,7 @@ from sportsdataverse.mbb import parse_two_pointer_made as parse_two_pointer_made
 from sportsdataverse.mbb import parse_two_pointer_missed as parse_two_pointer_missed  # noqa: F401
 from sportsdataverse.mbb import phase1_shot_event_enrichment as phase1_shot_event_enrichment  # noqa: F401
 from sportsdataverse.mbb import pick_ridge_regression as pick_ridge_regression  # noqa: F401
+from sportsdataverse.mbb import playwright_transport as playwright_transport  # noqa: F401
 from sportsdataverse.mbb import pos_class_to_score as pos_class_to_score  # noqa: F401
 from sportsdataverse.mbb import poss_calc_fragment_sum as poss_calc_fragment_sum  # noqa: F401
 from sportsdataverse.mbb import regress_shot_quality as regress_shot_quality  # noqa: F401
@@ -821,6 +822,7 @@ __all__ = [
     "parse_two_pointer_missed",
     "phase1_shot_event_enrichment",
     "pick_ridge_regression",
+    "playwright_transport",
     "pos_class_to_score",
     "poss_calc_fragment_sum",
     "regress_shot_quality",
