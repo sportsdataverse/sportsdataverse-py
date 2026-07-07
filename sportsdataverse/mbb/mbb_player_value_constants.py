@@ -31,6 +31,7 @@ from sportsdataverse.mbb.mbb_prediction_constants import spearman_corr as spearm
 __all__ = [
     "PLAYER_VALUE_CONSTANTS",
     "PlayerValueConstants",
+    "aggregate_player_seasons",
     "as_of_season_split",
     "bootstrap_ari",
     "get_player_value_constants",
@@ -224,6 +225,127 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
         (100.0 * pl.col("assists") / pl.col("minutes")).cast(pl.Float64).alias("ast_per100"),
     )
     return out.select(list(_FEATURE_SCHEMA))
+
+
+def _load_player_box(seasons: "list[int]", league: str) -> pl.DataFrame:
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore  # noqa: PLC0415
+
+        return load_wbb_player_boxscore(seasons)
+    from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore  # noqa: PLC0415
+
+    return load_mbb_player_boxscore(seasons)
+
+
+def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots  # noqa: PLC0415
+
+        return load_wbb_shots(seasons)
+    from sportsdataverse.mbb.mbb_loaders import load_mbb_shots  # noqa: PLC0415
+
+    return load_mbb_shots(seasons)
+
+
+_COUNT_COLS = (
+    "field_goals_made",
+    "field_goals_attempted",
+    "three_point_field_goals_made",
+    "three_point_field_goals_attempted",
+    "free_throws_made",
+    "free_throws_attempted",
+    "offensive_rebounds",
+    "defensive_rebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "points",
+)
+
+
+def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> pl.DataFrame:
+    """Canonical per-player-season counting frame from the boxscore release.
+
+    Sums the per-game player boxscores into one row per (player_id, season,
+    team_id) with the counting columns :func:`player_per100_features` expects.
+    Shot-location splits come from the shots release (2025+), classified by
+    ``type_text`` (layup/dunk/tip = rim, "three point" = three, other = mid);
+    for seasons without shots data, three-point attempts come from the box and
+    all remaining attempts fold into ``fga_mid``.
+
+    Args:
+        seasons: Seasons to aggregate.
+        league: ``"mens"`` or ``"womens"``.
+
+    Returns:
+        One row per (player_id, season, team_id): ``player_id:Utf8, season,
+        team_id:Utf8, player, minutes`` + the counting columns + ``fga_rim,
+        fga_mid, fga_three``. Empty input returns zero rows.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_player_value_constants import (
+                aggregate_player_seasons, player_per100_features,
+            )
+            feats = player_per100_features(aggregate_player_seasons([2025]))
+    """
+    box = _load_player_box(seasons, league)
+    if box.is_empty():
+        return pl.DataFrame()
+    agg = (
+        box.filter(pl.col("minutes").is_not_null() & (pl.col("minutes") > 0))
+        .group_by("athlete_id", "season", "team_id")
+        .agg(
+            pl.col("athlete_display_name").first().alias("player"),
+            pl.col("minutes").cast(pl.Float64).sum().alias("minutes"),
+            *[pl.col(c).cast(pl.Float64).sum() for c in _COUNT_COLS if c in box.columns],
+        )
+        .with_columns(
+            pl.col("athlete_id").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
+            pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
+            pl.col("season").cast(pl.Int64),
+        )
+        .drop("athlete_id")
+    )
+
+    try:
+        shots = _load_shots(seasons, league)
+    except Exception:  # noqa: BLE001 - shots release floors at 2025
+        shots = pl.DataFrame()
+    if shots.is_empty():
+        return agg.with_columns(
+            pl.lit(0.0).alias("fga_rim"),
+            (pl.col("field_goals_attempted") - pl.col("three_point_field_goals_attempted")).alias("fga_mid"),
+            pl.col("three_point_field_goals_attempted").alias("fga_three"),
+        )
+
+    cls = (
+        pl.when(pl.col("type_text").str.contains("(?i)layup|dunk|tip"))
+        .then(pl.lit("rim"))
+        .when(pl.col("type_text").str.contains("(?i)three point"))
+        .then(pl.lit("three"))
+        .otherwise(pl.lit("mid"))
+    )
+    shot_counts = (
+        shots.filter(pl.col("athlete_id_1").is_not_null())
+        .with_columns(
+            pl.col("athlete_id_1").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
+            pl.col("season").cast(pl.Int64),
+            cls.alias("_bucket"),
+        )
+        .group_by("player_id", "season")
+        .agg(
+            (pl.col("_bucket") == "rim").cast(pl.Int64).sum().cast(pl.Float64).alias("fga_rim"),
+            (pl.col("_bucket") == "mid").cast(pl.Int64).sum().cast(pl.Float64).alias("fga_mid"),
+            (pl.col("_bucket") == "three").cast(pl.Int64).sum().cast(pl.Float64).alias("fga_three"),
+        )
+    )
+    assert agg.schema["player_id"] == shot_counts.schema["player_id"] == pl.Utf8
+    return agg.join(shot_counts, on=["player_id", "season"], how="left").with_columns(
+        pl.col("fga_rim", "fga_mid", "fga_three").fill_null(0.0)
+    )
 
 
 def _design(X: np.ndarray) -> np.ndarray:

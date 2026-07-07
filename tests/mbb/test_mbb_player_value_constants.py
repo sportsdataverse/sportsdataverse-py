@@ -135,6 +135,89 @@ def test_bootstrap_ari_stable_blobs_near_one():
     assert score > 0.95
 
 
+def test_aggregate_player_seasons_sums_and_shot_shares(monkeypatch):
+    import sportsdataverse.mbb.mbb_player_value_constants as pvc
+
+    box = pl.DataFrame(
+        {
+            "athlete_id": [7, 7, 8],
+            "athlete_display_name": ["A Guard", "A Guard", "B Big"],
+            "season": [2025, 2025, 2025],
+            "team_id": [10, 10, 10],
+            "minutes": [30.0, 20.0, 25.0],
+            "field_goals_made": [5, 3, 4],
+            "field_goals_attempted": [10, 6, 8],
+            "three_point_field_goals_made": [2, 1, 0],
+            "three_point_field_goals_attempted": [5, 3, 0],
+            "free_throws_made": [2, 2, 2],
+            "free_throws_attempted": [4, 2, 4],
+            "offensive_rebounds": [1, 0, 4],
+            "defensive_rebounds": [3, 2, 6],
+            "assists": [6, 4, 1],
+            "steals": [2, 1, 0],
+            "blocks": [0, 0, 3],
+            "turnovers": [2, 1, 2],
+            "points": [14, 9, 10],
+        }
+    )
+    shots = pl.DataFrame(
+        {
+            "athlete_id_1": [7, 7, 7, 8, 8],
+            "season": [2025] * 5,
+            "type_text": ["Three Point Jumper", "Jumper", "Layup Shot", "Dunk Shot", "Tip Shot"],
+        }
+    )
+    monkeypatch.setattr(pvc, "_load_player_box", lambda seasons, league: box)
+    monkeypatch.setattr(pvc, "_load_shots", lambda seasons, league: shots)
+    out = pvc.aggregate_player_seasons([2025])
+    assert out.schema["player_id"] == pl.Utf8
+    a = out.filter(pl.col("player_id") == "7").row(0, named=True)
+    assert a["minutes"] == 50.0 and a["field_goals_attempted"] == 16.0 and a["points"] == 23.0
+    assert (a["fga_rim"], a["fga_mid"], a["fga_three"]) == (1.0, 1.0, 1.0)
+    b = out.filter(pl.col("player_id") == "8").row(0, named=True)
+    assert (b["fga_rim"], b["fga_mid"], b["fga_three"]) == (2.0, 0.0, 0.0)
+    # composes with the feature builder
+    feats = player_per100_features(out)
+    assert feats.height == 2
+
+
+def test_aggregate_player_seasons_no_shots_data(monkeypatch):
+    import sportsdataverse.mbb.mbb_player_value_constants as pvc
+
+    box = pl.DataFrame(
+        {
+            "athlete_id": [7],
+            "athlete_display_name": ["A Guard"],
+            "season": [2019],
+            "team_id": [10],
+            "minutes": [30.0],
+            "field_goals_made": [5],
+            "field_goals_attempted": [10],
+            "three_point_field_goals_made": [2],
+            "three_point_field_goals_attempted": [5],
+            "free_throws_made": [2],
+            "free_throws_attempted": [4],
+            "offensive_rebounds": [1],
+            "defensive_rebounds": [3],
+            "assists": [6],
+            "steals": [2],
+            "blocks": [0],
+            "turnovers": [2],
+            "points": [14],
+        }
+    )
+    monkeypatch.setattr(pvc, "_load_player_box", lambda seasons, league: box)
+
+    def _raise(seasons, league):
+        raise ValueError("season cannot be less than 2025")
+
+    monkeypatch.setattr(pvc, "_load_shots", _raise)
+    out = pvc.aggregate_player_seasons([2019])
+    r = out.row(0, named=True)
+    # three from the box; rim/mid unavailable -> two-point attempts fold into mid
+    assert r["fga_three"] == 5.0 and r["fga_rim"] == 0.0 and r["fga_mid"] == 5.0
+
+
 def test_artifact_save_load_roundtrip(tmp_path, monkeypatch):
     import sportsdataverse.mbb.mbb_player_value_constants as pvc
 
