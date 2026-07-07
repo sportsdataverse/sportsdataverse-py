@@ -589,6 +589,26 @@ Detailed assist info, split into given/received
 | `target` | `Optional[list[AssistEvent]]` | `None` | Players "I" assisted, if tracked. |
 | `source` | `Optional[list[AssistEvent]]` | `None` | Players who assisted "me", if tracked. |
 
+### `BadLineupClump(evs: 'list[LineupEvent]', next_good: 'Optional[LineupEvent]' = None) -> None` {#BadLineupClump}
+
+A run of consecutive bad :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.LineupEvent`\ s that were merged together, plus the first following
+good event (`LineupErrorAnalysisUtils.BadLineupClump`, `:223-226`).
+
+The Scala case class is `protected` (module-private), but this port
+exports it: the Task 5d.3 fixers and the (not-yet-ported) Task 5e
+orchestrator both consume `BadLineupClump` instances directly, so
+keeping it private here would just force every caller to reach past a
+leading underscore.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `evs` | `list[LineupEvent]` |  | The clumped lineup events, in chronological order. |
+| `next_good` | `Optional[LineupEvent]` | `None` | The first known-good lineup event following the clump, if any -- used by the Task 5d.3 fixers to reason about a player who should have subbed back in. |
+
 ### `ConcurrentClump(evs: 'list[RawGameEvent]' = <factory>, lineups: 'list[LineupEvent]' = <factory>) -> None` {#ConcurrentClump}
 
 A clump of concurrent raw events, together with the lineups that end
@@ -1302,6 +1322,14 @@ Precomputed box-score lookup tables + resolution cache for
 | `alt_all_players_map` | `dict[str, list[str]]` |  | Truncated player code (see truncate_code_1` / truncate_code_2`) -> the list of full names sharing that truncation -- used when the exact code doesn't match but a unique truncated one does. |
 | `resolution_cache` | `dict[str, str]` | `<factory>` | Memoizes prior `tidy_player` resolutions. See the module docstring's "Behavioral quirk" note -- this is read by the raw input name but written by the corrected name, faithfully reproducing the upstream asymmetry. |
 
+### `ValidationError(*values)` {#ValidationError}
+
+The 3 ways a lineup can be declared invalid, in Scala declaration
+
+(ordinal) order (`LineupErrorAnalysisUtils.ValidationError`, `:18-20`).
+Member order is load-bearing -- see the module docstring's "Return
+shape" note.
+
 ### `WeakSurnameMatch(box_name: 'str', score: 'int', info: 'str') -> None` {#WeakSurnameMatch}
 
 A surname fragment matched, but the whole-name score fell short of
@@ -1325,6 +1353,54 @@ CBB season, named by the year it ends (`Year`, `Year.scala`).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `value` | `int` |  | The ending year of the season. |
+
+### `add_missing_players(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#add_missing_players}
+
+Back-fills a clump whose lineups carry TOO FEW players
+
+(`LineupErrorAnalysisUtils.add_missing_players`, `:315-401`).
+
+Fires only when the clump's first event has `<= 4` on-floor players
+(`:324-325`: `players_in.size > 4` is a no-op). The candidate pool is
+every box-score player NOT already on the first event's floor
+(`:328`), **seeded** with a heuristic (`:352-357`): the `next_good`
+lineup's sub-outs minus anyone appearing anywhere in the clump -- a good
+lineup that opens by subbing out a player who was never actually on the
+floor is a strong signal that player belongs to this under-filled clump.
+
+Walking the clump chronologically (`:359-385`): a candidate who subs IN
+is dropped from the pool (they're accounted for), and any remaining
+candidate named in a team-side raw play (same `parse_any_play` ->
+`tidy_player` -> `build_player_code` chain as
+`find_missing_subs`) is collected into `players_to_add`. If
+anything was collected, it is appended to **every** event's `players`
+(raw list concat, no dedup -- `:388-391`, a verbatim port; an over-add
+that pushes an event past 5 players lands it in the still-to-fix bucket
+for the second `find_missing_subs` pass in
+`analyze_and_fix_clumps` to trim back). The augmented events are
+partitioned by `validate_lineup`. If nothing was collected, the
+original clump is returned unchanged.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `BadLineupClump` |  | The bad-lineup clump to attempt to repair. |
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (roster + name context). |
+| `valid_player_codes` | `set[str]` |  | Every player code on the box score / roster. |
+
+**Returns**
+
+`(fixed_lineups, still_to_fix)` -- the now-valid augmented events and a clump of the still-invalid ones (carrying the input's `next_good`); or `([], clump)` on a no-op / nothing-to-add outcome.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
+    add_missing_players,
+)
+fixed, still = add_missing_players(clump, box_lineup, valid_codes)
+```
 
 ### `add_stats_to_lineups(lineup: 'LineupEvent') -> 'LineupEvent'` {#add_stats_to_lineups}
 
@@ -1398,6 +1474,57 @@ target (`DataQualityIssues.alias_combos`, `DataQualityIssues.scala:351-356`).
 **Returns**
 
 A dict mapping each of the three name variants to `to_name`.
+
+### `analyze_and_fix_clumps(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#analyze_and_fix_clumps}
+
+Runs the full self-healing fixer pipeline over one bad-lineup clump
+
+(`LineupErrorAnalysisUtils.analyze_and_fix_clumps`, `:556-610`).
+
+The strict, order-dependent sequence (each stage threads
+`(fixed_so_far + newly_fixed, still_to_fix)`):
+
+1. `handle_common_sub_bug`,
+2. `find_missing_subs`,
+3. `add_missing_players`,
+4. `find_missing_subs` **again** -- the Scala's own comment
+   (`:587-588`) explains: "Try this again since add_missing_players can
+   go too far". Step 3 back-fills onto every event and can push some past
+   5 players; the second trim pass removes the over-add.
+
+Finally every accumulated `fixed` lineup gets a fresh `lineup_id` via
+`~sportsdataverse.mbb.mbb_ncaa_stints.build_lineup_id` (`:597-605`)
+-- the fixers changed the on-floor `players`, so the id computed during
+stint construction is stale. The Scala's `debug`-gated
+`analyze_unfixed_clumps` call (`:593-596`) is dropped (see the module
+docstring's "Debug-only" note); it only prints.
+
+The Scala wraps the whole pipeline in `Some(clump).map { ... }
+.getOrElse((Nil, clump))`, but `Some(_)` is never empty so the
+`getOrElse` is dead -- omitted here.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `BadLineupClump` |  | The bad-lineup clump to repair. |
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (roster + name context). |
+| `valid_player_codes` | `set[str]` |  | Every player code on the box score / roster. |
+
+**Returns**
+
+`(fixed_lineups, still_to_fix)` -- every repaired lineup (with a recomputed `lineup_id`) and whatever clump the pipeline could not fix.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
+    analyze_and_fix_clumps,
+)
+fixed, still = analyze_and_fix_clumps(clump, box_lineup, valid_codes)
+for lineup in fixed:
+    print(lineup.lineup_id.value)
+```
 
 ### `apply_relative_positional_overrides(results: 'list[dict[str, str]]', team_season: 'str', recurse_count: 'int' = 0) -> 'list[dict[str, str]]'` {#apply_relative_positional_overrides}
 
@@ -2825,6 +2952,106 @@ port reproduces every step in the same order.
 
 A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
 
+### `categorize_bad_lineups(lineup_events: 'list[LineupEvent]') -> 'dict[int, tuple[int, int]]'` {#categorize_bad_lineups}
+
+Aggregates bad lineup events for display, by clump-leader player count
+
+(`LineupErrorAnalysisUtils.categorize_bad_lineups`, `:617-633`,
+display-only -- the Scala doc comment says "can live without tests").
+
+Re-clumps `lineup_events` (each paired with `next_good=None` --
+`clump_bad_lineups`'s grouping predicate never inspects
+`next_good`, so this re-clumping is faithful to the Scala's own
+`lineup_events.map(e => (e, None))`), then groups the resulting clumps
+by `len(clump.evs[0].players)` (the FIRST event's player count -- `5`
+means a lineup with a bad *player*, not a bad *count*).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_events` | `list[LineupEvent]` |  | The bad lineup events to categorize, in chronological order. |
+
+**Returns**
+
+Player count -> `(num_clumps, total_possessions)`, where `total_possessions` sums `team_stats.num_possessions` across every event in every clump in that group.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stint_validation import categorize_bad_lineups
+categorize_bad_lineups([bad_ev])  # {5: (1, bad_ev.team_stats.num_possessions)}
+```
+
+### `clump_bad_lineups(lineup_events: 'list[tuple[LineupEvent, Optional[LineupEvent]]]') -> 'list[BadLineupClump]'` {#clump_bad_lineups}
+
+Groups consecutive bad lineup events into `BadLineupClump`\ s
+
+(`LineupErrorAnalysisUtils.clump_bad_lineups`, `:229-263`).
+
+The Scala original is a bespoke `foldLeft` (NOT the generic
+`Clumper` utility used elsewhere in the codebase) that prepends onto
+two nested lists -- the per-clump `evs` and the top-level clump list
+-- and reverses both at the end. This port walks the input once and
+appends directly (to the current clump's `evs`, or a new clump to the
+result list), which produces the identical chronological order as the
+Scala's prepend-then-double-reverse without needing an explicit reverse
+step: mirroring a "prepend to the front, reverse at the end" fold as a
+plain "append to the back" loop is behavior-preserving precisely because
+reversing a prepend-built list restores insertion order.
+
+The current clump extends to cover the next `(lineup, next_good)` pair
+iff ALL 5 conditions hold, compared against the clump's LAST-ADDED event
+(`last`, not its first event) (`:242-249`):
+
+1. `lineup.team == last.team`
+2. `lineup.opponent == last.opponent`
+3. `lineup.start_min == last.end_min` (no time gap)
+4. `len(lineup.players) == len(last.players)`
+5. `len(lineup.players_in) == len(lineup.players_out)` -- this checks
+   the INCOMING lineup's own in/out balance, not a comparison against
+   `last` (an unbalanced sub is a bad sign in isolation, per the
+   Scala's own comment at `:247`).
+
+`TeamSeasonId` (`lineup.team` / `.opponent`) is a plain (non-frozen)
+dataclass, so `==` is a field-wise value comparison out of the box --
+no `PlayerCodeId`-unhashability workaround is needed here, since this
+predicate only compares team identities and player-list lengths, never a
+set of `PlayerCodeId`.
+
+Each time a clump is extended, `next_good` is REPLACED with the
+incoming pair's own second element (`:251`) -- the final clump's
+`next_good` is always the LAST-extended event's `next`, discarding
+whatever `next_good` an earlier extension set.
+
+Starting a new clump uses the incoming pair's own `next` too (`:234`,
+`:253`) -- a fresh clump's `next_good` is never inherited from the
+clump before it.
+
+The Scala's third `foldLeft` case (`:255-259`, matching a head clump
+whose `evs` is empty) is dead code in practice -- every
+`BadLineupClump` this function ever constructs starts with exactly one
+event and is only ever appended to, so `evs` can never be empty. Omitted
+here with this comment in place of an unreachable branch.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_events` | `list[tuple[LineupEvent, Optional[LineupEvent]]]` |  | `(lineup_event, next_good_or_None)` pairs, in chronological order. |
+
+**Returns**
+
+The clumps, in chronological order, each with `evs` in chronological order.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stint_validation import clump_bad_lineups
+clumps = clump_bad_lineups([(bad_ev, good_ev)])
+clumps[0].evs  # [bad_ev]
+```
+
 ### `combos(first: 'str', last: 'str') -> 'list[str]'` {#combos}
 
 Generate the three name-string variants NCAA sources use for one
@@ -3182,6 +3409,75 @@ d2_d3 = espn_wbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
+### `find_missing_subs(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#find_missing_subs}
+
+Trims a clump whose lineups carry TOO MANY players by identifying the
+
+"ghost" player(s) a missing sub-out left behind
+(`LineupErrorAnalysisUtils.find_missing_subs`, `:406-514`).
+
+Fires only when the clump's first event has `>= 6` on-floor players
+(`:415-416`: `candidates.size < 6` is a no-op). `expected_size_diff`
+(`:419`) is `first_event_player_count - 5` -- the number of ghosts the
+trim should end up removing.
+
+**Phase 1 -- shrink the candidate pool** (`:437-478`). Starting from the
+first event's players, walk the clump chronologically. At each event a
+candidate is *confirmed present* (and dropped from the pool) if it subs
+out (`ev.players_out`, **skipped for the first event** -- `:445`,
+literal port of `clump.evs.headOption.contains(ev)` as value equality
+`ev == clump.evs[0]`; for a well-formed clump of distinct events this is
+exactly `index == 0`) or is named in one of the event's team-side raw
+plays (`parse_any_play` -> `~sportsdataverse.mbb.mbb_ncaa_names
+.tidy_player` -> `~sportsdataverse.mbb.mbb_ncaa_stints
+.build_player_code`, `:448-456`; unlike `validate_lineup` this
+does NOT skip the literal `"team"` token -- ported verbatim).
+`matching_index` is the **FIRST** event index at which the pool size
+first equals `expected_size_diff` (`:475`); once set it freezes -- all
+later events are skipped in phase 1 (`:439-441`).
+
+**Accept gate** (`:479-480`): the final pool must be non-empty and no
+larger than `expected_size_diff`. If `matching_index` never fired
+(the pool jumped past `expected_size_diff` in a single step, or never
+shrank to it), the gate still accepts iff the residual pool is a non-empty
+subset of size `<= expected_size_diff` -- in which case phase 3 routes
+**every** event through the "before match" branch (`index > None` is
+always false). On failure the **original** clump is returned unchanged.
+
+**Phase 3 -- rebuild the events** (`:482-503`, a `scanLeft` ported as
+a manual accumulate loop that drops the seed). For events at/before
+`matching_index` the ghost pool is simply removed from `players`
+(`filterNot`). For events strictly **after** `matching_index`
+(`index > matching_index` -- the matched event itself is "before")
+`players` is rebuilt from the previous *tidied* event via
+`~sportsdataverse.mbb.mbb_ncaa_stints.build_new_player_list` (the
+`scanLeft` threads the previously-emitted event; its seed is `None`,
+but the first event can never be an "after match" event, so the
+`getOrElse(ev)` fallback is only ever a formality -- ported faithfully
+all the same). The rebuilt events are partitioned by
+`validate_lineup`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `BadLineupClump` |  | The bad-lineup clump to attempt to repair. |
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (roster + name context). |
+| `valid_player_codes` | `set[str]` |  | Every player code on the box score / roster. |
+
+**Returns**
+
+`(fixed_lineups, still_to_fix)` -- the now-valid rebuilt events and a clump of the still-invalid ones (carrying the input's `next_good`); or `([], clump)` on a no-op / rejected fix.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
+    find_missing_subs,
+)
+fixed, still = find_missing_subs(clump, box_lineup, valid_codes)
+```
+
 ### `fix_combos(first: 'str', last: 'str', code_start: 'Optional[str]' = None) -> 'list[tuple[str, Optional[str]]]'` {#fix_combos}
 
 Pair each of `combos`' three name variants with a shared
@@ -3289,6 +3585,56 @@ from sportsdataverse.mbb.mbb_lineup_stats import get_stats_diff
 
 diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
 print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
+```
+
+### `handle_common_sub_bug(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#handle_common_sub_bug}
+
+Fixes the "2-in-1-out then a compensating 1-out" substitution bug
+
+(`LineupErrorAnalysisUtils.handle_common_sub_bug`, `:269-298`).
+
+Handles a **single-event** bad clump whose next known-good lineup carries
+a lone sub-out that the clump's event should have applied but didn't (e.g.
+`IN: X, Y, Z; OUT: A, B` in the bad event, then `OUT: C` in the good
+one). Fires only when all three guard conditions hold
+(`:275-278`):
+
+* the bad event has more players subbing IN than OUT
+  (`len(players_in) > len(players_out)`),
+* the good event has **no** sub-ins (`len(good.players_in) == 0` --
+  otherwise there's no way to tell which of its sub-outs to borrow), and
+* the good event has at least one sub-out (`len(good.players_out) > 0`).
+
+The fix (`:279-283`) removes the good event's sub-outs from the bad
+event's on-floor `players` (value-equality `not in` -- the Scala's
+`filterNot(good.players_out.toSet)`) and appends them to the bad
+event's `players_out` (order-preserving distinct` -- the Scala's
+`(bad.players_out ++ good.players_out).distinct`). The fix is **accepted
+only if** the result then passes `validate_lineup` (`:284-294`):
+on success the fixed event is returned as the sole `fixed` lineup and
+the still-to-fix clump is emptied; on failure the *fixed* event (not the
+original) is returned as the still-to-fix clump, keeping the same
+`next_good` so a later pass can try again.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `BadLineupClump` |  | The bad-lineup clump to attempt to repair. |
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (roster + name context). |
+| `valid_player_codes` | `set[str]` |  | Every player code on the box score / roster. |
+
+**Returns**
+
+`(fixed_lineups, still_to_fix)` -- `fixed_lineups` is `[fixed]` on an accepted fix else `[]`; `still_to_fix` is an empty clump on accept, the (unchanged) input clump on a guard miss, or the single-event *fixed*-but-still-invalid clump on a rejected fix.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
+    handle_common_sub_bug,
+)
+fixed, still = handle_common_sub_bug(clump, box_lineup, valid_codes)
 ```
 
 ### `incorporate_height(height_in: 'float', confs: 'list[float]') -> 'list[float]'` {#incorporate_height}
@@ -4267,6 +4613,32 @@ A `(position, info)` tuple. `info` is `None` when no correction/explanation appl
 ```python
 from sportsdataverse.mbb.mbb_positions import using_roster_pos
 using_roster_pos("G?", "C")
+```
+
+### `validate_lineup(lineup_event: 'LineupEvent', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'list[ValidationError]'` {#validate_lineup}
+
+Flags a lineup stint as internally inconsistent, via 3 independent
+
+checks (`LineupErrorAnalysisUtils.validate_lineup`, `:181-218`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_event` | `LineupEvent` |  | The lineup stint to validate. |
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (`players` is the full roster) -- used both to build the name-resolution context (see `~sportsdataverse.mbb.mbb_ncaa_names.build_tidy_player_context`) and, indirectly, as the source of `players_out` for jersey-number resolution inside `~sportsdataverse.mbb .mbb_ncaa_names.tidy_player`. |
+| `valid_player_codes` | `set[str]` |  | Every player code that's actually on the box score / roster for this team-season. |
+
+**Returns**
+
+The failing `ValidationError`\ s, in declaration order (see the module docstring's "Return shape" note) -- empty if `lineup_event` is clean. * `ValidationError.WRONG_NUMBER_OF_PLAYERS` -- `lineup_event` doesn't have exactly 5 players on the floor. * `ValidationError.UNKNOWN_PLAYERS` -- some player on the floor isn't in `valid_player_codes`. * `ValidationError.INACTIVE_PLAYERS` -- some player mentioned in `lineup_event`'s own (team-side) raw game events resolves to a code not in `valid_player_codes` (i.e. isn't on the floor, per the lineup being validated).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stint_validation import validate_lineup
+errors = validate_lineup(lineup_event, box_lineup, {"MiMitchell", "BbBob"})
+assert not errors  # a clean lineup returns []
 ```
 
 ### `wbb_pbp_disk(game_id, path_to_json)` {#wbb_pbp_disk}

@@ -236,11 +236,14 @@ that license's own attribution obligations.
     `tidy_player` fallback chain, `NameFixer`'s fuzzy single-candidate
     scoring, and `fuzzy_box_match`) was ported into
     [`sportsdataverse/mbb/mbb_ncaa_names.py`](sportsdataverse/mbb/mbb_ncaa_names.py).
-    The stint-**validation** half of the same Scala object
-    (`validate_lineup` / `clump_bad_lineups` / `analyze_and_fix_clumps` and
-    supporting types) is **not** part of this port yet -- it is deferred to
-    a later phase, once the stint builder itself has a validation
-    consumer.
+    The stint-**validation** half of the same Scala object --
+    `ValidationError` / `ALLOWED_ERRORS` / `validate_lineup`
+    (`LineupErrorAnalysisUtils.scala:18-26,181-218`), `BadLineupClump` /
+    `clump_bad_lineups` / `categorize_bad_lineups` (`:223-263,617-633`), and
+    the self-healing fixers `handle_common_sub_bug` / `find_missing_subs` /
+    `add_missing_players` / `analyze_and_fix_clumps`
+    (`:269-298,315-401,406-514,556-610`) -- was ported in Phase 5d into
+    [`sportsdataverse/mbb/mbb_ncaa_stint_validation.py`](sportsdataverse/mbb/mbb_ncaa_stint_validation.py).
   - `ExtractorUtils.scala`'s player-code generator, team-name parser, the
     play-by-play event ADT, event reordering, and the substitution-tracking
     stint builder itself were ported into
@@ -259,8 +262,9 @@ that license's own attribution obligations.
   [`sportsdataverse/wbb/wbb_ncaa_possessions.py`](sportsdataverse/wbb/wbb_ncaa_possessions.py),
   [`sportsdataverse/wbb/wbb_ncaa_data_quality.py`](sportsdataverse/wbb/wbb_ncaa_data_quality.py),
   [`sportsdataverse/wbb/wbb_ncaa_names.py`](sportsdataverse/wbb/wbb_ncaa_names.py),
-  [`sportsdataverse/wbb/wbb_ncaa_stints.py`](sportsdataverse/wbb/wbb_ncaa_stints.py), and
-  [`sportsdataverse/wbb/wbb_ncaa_lineup_enrich.py`](sportsdataverse/wbb/wbb_ncaa_lineup_enrich.py)
+  [`sportsdataverse/wbb/wbb_ncaa_stints.py`](sportsdataverse/wbb/wbb_ncaa_stints.py),
+  [`sportsdataverse/wbb/wbb_ncaa_lineup_enrich.py`](sportsdataverse/wbb/wbb_ncaa_lineup_enrich.py), and
+  [`sportsdataverse/wbb/wbb_ncaa_stint_validation.py`](sportsdataverse/wbb/wbb_ncaa_stint_validation.py)
   re-export the same types and functions by reference (no separate copy of
   the logic). Unlike the cbb-on-off-analyzer (TypeScript/jest) entries above,
   no fixture file is vendored for this port -- every `utest` oracle value
@@ -272,8 +276,19 @@ that license's own attribution obligations.
   `tests/mbb/test_mbb_ncaa_possessions.py`,
   `tests/mbb/test_mbb_ncaa_data_quality.py`,
   `tests/mbb/test_mbb_ncaa_names.py`, `tests/mbb/test_mbb_ncaa_stints.py`,
-  `tests/mbb/test_mbb_ncaa_lineup_enrich.py`), which are test-only and not
-  shipped in the distributed wheel or sdist.
+  `tests/mbb/test_mbb_ncaa_lineup_enrich.py`,
+  `tests/mbb/test_mbb_ncaa_stint_validation.py`), which are test-only and
+  not shipped in the distributed wheel or sdist. **`test_mbb_ncaa_stint_validation.py`
+  is only partly a transliteration.** Its `ValidationError`/`validate_lineup`
+  cases are transliterated inline literals from the upstream oracle
+  (`LineupErrorAnalysisUtilsTests.scala:55-120`), like the other test modules
+  above -- but its `BadLineupClump`/`clump_bad_lineups`/`categorize_bad_lineups`
+  and `handle_common_sub_bug`/`find_missing_subs`/`add_missing_players`/
+  `analyze_and_fix_clumps` cases are validated against hand-derived fixtures:
+  hand-built inputs with expected outputs hand-derived from the Scala
+  algorithm, because the upstream ships no tests for those functions (the
+  Scala's own doc comments read "TODO test"). Those cases are not
+  transliterations of an existing suite.
 - **Modifications:** Translated from Scala to Python, following this
   repository's own conventions (typing, docstrings, dataclasses in place of
   case classes). No changes were made to the original Scala source itself;

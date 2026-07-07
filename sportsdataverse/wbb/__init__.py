@@ -12,6 +12,7 @@ from sportsdataverse.wbb.wbb_ncaa_lineup_enrich import *
 from sportsdataverse.wbb.wbb_ncaa_models import *
 from sportsdataverse.wbb.wbb_ncaa_names import *
 from sportsdataverse.wbb.wbb_ncaa_possessions import *
+from sportsdataverse.wbb.wbb_ncaa_stint_validation import *
 from sportsdataverse.wbb.wbb_ncaa_stints import *
 from sportsdataverse.wbb.wbb_pbp import *
 from sportsdataverse.wbb.wbb_player_stats import *
