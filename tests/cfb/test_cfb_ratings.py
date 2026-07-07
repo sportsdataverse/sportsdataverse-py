@@ -14,9 +14,10 @@ import polars as pl
 # `cfb_adjusted_epa` *function*, shadowing the submodule of the same name, so
 # the required-columns tuple is imported by name (not via the shadowed
 # package attribute) here too.
-from sportsdataverse.cfb.cfb_ratings import efficiency_ratings, special_teams_ratings
+from sportsdataverse.cfb.cfb_ratings import efficiency_ratings, fei_ratings, special_teams_ratings
 
 _EXPECTED_COLUMNS = {"team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games"}
+_FEI_EXPECTED_COLUMNS = {"team_id", "fei_off", "fei_def", "fei_net"}
 
 # Real per-column dtypes for the 10 `cfb_adjusted_epa._REQUIRED_COLUMNS`.
 # Hardcoded rather than an all-Utf8 schema: `_prepare`'s filter compares
@@ -185,3 +186,75 @@ def test_special_teams_ratings_all_non_st_input_returns_zero_row_frame() -> None
     out = special_teams_ratings(_mini_plays())
     assert out.height == 0
     assert out.schema == {"team_id": pl.Utf8, "adj_st_epa": pl.Float64}
+
+
+def _mini_drives() -> pl.DataFrame:
+    """Two teams, one drive per game per team; A's drives sum to +2.0 EPA, B's to -2.0."""
+    rows = []
+    for i in range(20):
+        game_id = f"GD{i}"
+        for _play in range(2):
+            rows.append(
+                {
+                    "game_id": game_id,
+                    "drive_id": f"{game_id}-A",
+                    "pos_team": "A",
+                    "pos_team_id": "A",
+                    "def_pos_team_id": "B",
+                    "home": "A",
+                    "EPA": 0.05,
+                    "pass": 1,
+                    "rush": 0,
+                    "wp_before": 0.5,
+                    "neutral_site": False,
+                    "play_type": "Pass Reception",
+                }
+            )
+            rows.append(
+                {
+                    "game_id": game_id,
+                    "drive_id": f"{game_id}-B",
+                    "pos_team": "B",
+                    "pos_team_id": "B",
+                    "def_pos_team_id": "A",
+                    "home": "A",
+                    "EPA": -0.05,
+                    "pass": 0,
+                    "rush": 1,
+                    "wp_before": 0.5,
+                    "neutral_site": False,
+                    "play_type": "Rush",
+                }
+            )
+    return pl.DataFrame(rows)
+
+
+def test_fei_ratings_orders_teams_by_net() -> None:
+    out = fei_ratings(_mini_drives())
+    assert set(out.columns) == _FEI_EXPECTED_COLUMNS
+    assert out.schema["team_id"] == pl.Utf8
+    a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    b = out.filter(pl.col("team_id") == "B").row(0, named=True)
+    assert a["fei_net"] > b["fei_net"]
+
+
+def test_fei_ratings_reference_team_present_at_baseline() -> None:
+    # "A" sorts first among {"A", "B"} so the ridge drops it as the reference
+    # level on both offense and defense; fei_ratings must re-add it at the
+    # intercept (fei_net == 0), not silently omit it.
+    out = fei_ratings(_mini_drives())
+    assert set(out["team_id"].to_list()) == {"A", "B"}
+    a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    assert a["fei_net"] == 0.0
+
+
+def test_fei_ratings_empty_input_returns_documented_schema() -> None:
+    empty = pl.DataFrame(schema={**_REQUIRED_SCHEMA, "drive_id": pl.Utf8, "play_type": pl.Utf8})
+    out = fei_ratings(empty)
+    assert out.height == 0
+    assert out.schema == {
+        "team_id": pl.Utf8,
+        "fei_off": pl.Float64,
+        "fei_def": pl.Float64,
+        "fei_net": pl.Float64,
+    }
