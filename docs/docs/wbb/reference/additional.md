@@ -562,6 +562,260 @@ sched = espn_wbb_schedule(dates=season)
 
 ## Other
 
+### `AssistEvent(player_code: 'str', count: 'ShotClockStats' = <factory>) -> None` {#AssistEvent}
+
+One assist relationship's counts (`LineupEventStats.AssistEvent`,
+
+`LineupEventStats.scala:64-67`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_code` | `str` |  | The other player in the assist event (by code). |
+| `count` | `ShotClockStats` | `<factory>` | The assist counts, by shot-clock segment. |
+
+### `AssistInfo(counts: 'ShotClockStats' = <factory>, target: 'Optional[list[AssistEvent]]' = None, source: 'Optional[list[AssistEvent]]' = None) -> None` {#AssistInfo}
+
+Detailed assist info, split into given/received
+
+(`LineupEventStats.AssistInfo`, `LineupEventStats.scala:87-91`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `counts` | `ShotClockStats` | `<factory>` | Raw assist statistics. |
+| `target` | `Optional[list[AssistEvent]]` | `None` | Players "I" assisted, if tracked. |
+| `source` | `Optional[list[AssistEvent]]` | `None` | Players who assisted "me", if tracked. |
+
+### `ConcurrentClump(evs: 'list[RawGameEvent]' = <factory>, lineups: 'list[LineupEvent]' = <factory>) -> None` {#ConcurrentClump}
+
+A clump of concurrent raw events, together with the lineups that end
+
+in that clump (`Concurrency.ConcurrentClump`, `PossessionUtils.scala
+:64-69`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `evs` | `list[RawGameEvent]` | `<factory>` | The raw game events in this clump, in chronological order. |
+| `lineups` | `list[LineupEvent]` | `<factory>` | The lineups (if any) whose `end_min` falls in this clump. |
+
+### `Direction(*values)` {#Direction}
+
+Which team is in possession (`RawGameEvent.Direction`, `:119-121`).
+
+### `FieldGoalStats(attempts: 'ShotClockStats' = <factory>, made: 'ShotClockStats' = <factory>, ast: 'Optional[ShotClockStats]' = None) -> None` {#FieldGoalStats}
+
+Field-goal counting stats (`LineupEventStats.FieldGoalStats`,
+
+`LineupEventStats.scala:75-79`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `attempts` | `ShotClockStats` | `<factory>` | Shot attempts, successful or not. |
+| `made` | `ShotClockStats` | `<factory>` | Successful shot attempts. |
+| `ast` | `Optional[ShotClockStats]` | `None` | Successful shot attempts that were assisted, if tracked. |
+
+### `LineupEvent(date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None` {#LineupEvent}
+
+A portion of a game during which a given lineup was on the floor
+
+(`LineupEvent`, `LineupEvent.scala:41-58`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `date` | `datetime` |  | The date of the game. |
+| `location_type` | `LocationType` |  | Home/away/neutral (etc.) for this game. |
+| `start_min` | `float` |  | The point in the game at which the lineup entered. |
+| `end_min` | `float` |  | The point in the game at which the lineup changed. |
+| `duration_mins` | `float` |  | The duration of the lineup. |
+| `score_info` | `ScoreInfo` |  | The score differential context for this event. |
+| `team` | `TeamSeasonId` |  | The team under analysis. |
+| `opponent` | `TeamSeasonId` |  | The opposing team. |
+| `lineup_id` | `LineupId` |  | A string that defines the set of players on the floor. |
+| `players` | `list[PlayerCodeId]` |  | Mapping from player code to full identity, for this lineup. |
+| `players_in` | `list[PlayerCodeId]` |  | Players who subbed in for this event. |
+| `players_out` | `list[PlayerCodeId]` |  | Players who subbed out for this event. |
+| `raw_game_events` | `list[RawGameEvent]` |  | The raw NCAA event strings for both teams. |
+| `team_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (team side). |
+| `opponent_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (opponent side). |
+| `player_count_error` | `Optional[int]` | `None` | If the lineup is "impossible", the number of players actually seen (for analysis purposes). |
+
+### `LineupEventStats(num_events: 'int' = 0, num_possessions: 'int' = 0, fg: 'FieldGoalStats' = <factory>, fg_rim: 'FieldGoalStats' = <factory>, fg_mid: 'FieldGoalStats' = <factory>, fg_2p: 'FieldGoalStats' = <factory>, fg_3p: 'FieldGoalStats' = <factory>, ft: 'FieldGoalStats' = <factory>, orb: 'Optional[ShotClockStats]' = None, drb: 'Optional[ShotClockStats]' = None, to: 'ShotClockStats' = <factory>, stl: 'Optional[ShotClockStats]' = None, blk: 'Optional[ShotClockStats]' = None, assist: 'Optional[ShotClockStats]' = None, ast_rim: 'Optional[AssistInfo]' = None, ast_mid: 'Optional[AssistInfo]' = None, ast_3p: 'Optional[AssistInfo]' = None, foul: 'Optional[ShotClockStats]' = None, player_shot_info: 'Optional[PlayerShotInfo]' = None, pts: 'int' = 0, plus_minus: 'int' = 0) -> None` {#LineupEventStats}
+
+A lineup event's full counting-stat tree (`LineupEventStats`,
+
+`LineupEventStats.scala:7-38`).
+
+Only `num_events`/`num_possessions`/`pts`/`plus_minus` are
+exercised by Phase 5a -- see the module docstring's scope note.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `num_events` | `int` | `0` | Number of raw events folded into this lineup event. |
+| `num_possessions` | `int` | `0` | Number of possessions attributed to this lineup event. |
+| `fg` | `FieldGoalStats` | `<factory>` | Overall field-goal stats. |
+| `fg_rim` | `FieldGoalStats` | `<factory>` | Rim field-goal stats. |
+| `fg_mid` | `FieldGoalStats` | `<factory>` | Mid-range field-goal stats. |
+| `fg_2p` | `FieldGoalStats` | `<factory>` | 2pt field-goal stats. |
+| `fg_3p` | `FieldGoalStats` | `<factory>` | 3pt field-goal stats. |
+| `ft` | `FieldGoalStats` | `<factory>` | Free-throw stats. |
+| `orb` | `Optional[ShotClockStats]` | `None` | Offensive-rebound stats, if tracked. |
+| `drb` | `Optional[ShotClockStats]` | `None` | Defensive-rebound stats, if tracked. |
+| `to` | `ShotClockStats` | `<factory>` | Turnover stats. |
+| `stl` | `Optional[ShotClockStats]` | `None` | Steal stats, if tracked. |
+| `blk` | `Optional[ShotClockStats]` | `None` | Block stats, if tracked. |
+| `assist` | `Optional[ShotClockStats]` | `None` | Assist stats, if tracked. |
+| `ast_rim` | `Optional[AssistInfo]` | `None` | Rim-shot assist info, if tracked. |
+| `ast_mid` | `Optional[AssistInfo]` | `None` | Mid-range-shot assist info, if tracked. |
+| `ast_3p` | `Optional[AssistInfo]` | `None` | 3pt-shot assist info, if tracked. |
+| `foul` | `Optional[ShotClockStats]` | `None` | Foul stats, if tracked. |
+| `player_shot_info` | `Optional[PlayerShotInfo]` | `None` | Per-player shot-quality info, if tracked. |
+| `pts` | `int` | `0` | Points scored. |
+| `plus_minus` | `int` | `0` | Point differential while this lineup was on the floor. |
+
+### `LineupId(value: 'str') -> None` {#LineupId}
+
+The set of players on the floor, as an opaque id string
+
+(`LineupEvent.LineupId`, `LineupEvent.scala:172`, `AnyVal`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `value` | `str` |  | The opaque lineup identifier. |
+
+### `LocationType(*values)` {#LocationType}
+
+Game location (`Game.LocationType`, `Game.scala:36-38`).
+
+### `PlayerCodeId(code: 'str', id: 'PlayerId', ncaa_id: 'Optional[str]' = None) -> None` {#PlayerCodeId}
+
+A player's within-team-season code paired with their full identity
+
+(`LineupEvent.PlayerCodeId`, `LineupEvent.scala:185-189`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `code` | `str` |  | The player code, unique within the team/season only. |
+| `id` | `PlayerId` |  | The player's globally-unique identity. |
+| `ncaa_id` | `Optional[str]` | `None` | The player's NCAA-issued id, if known. |
+
+### `PlayerId(name: 'str') -> None` {#PlayerId}
+
+CBB player identifier (`PlayerId`, `PlayerId.scala`, `AnyVal`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | The unique player name. |
+
+### `PlayerShotInfo(unknown_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, early_3pa: 'Optional[tuple[int, int, int, int, int]]' = None, unast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, ast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None) -> None` {#PlayerShotInfo}
+
+Per-player shot-quality info, keyed by lineup slot
+
+(`LineupEventStats.PlayerShotInfo`, `LineupEventStats.scala:98-103`).
+Each tuple is a fixed-arity 5-slot (one per lineup spot), mirroring the
+Scala `PlayerTuple[Int] = Tuple5[Int, Int, Int, Int, Int]` alias.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `unknown_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | 3pt makes of unknown assist status, per slot. |
+| `early_3pa` | `Optional[tuple[int, int, int, int, int]]` | `None` | Early-shot-clock 3pt attempts, per slot. |
+| `unast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Unassisted 3pt makes, per slot. |
+| `ast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Assisted 3pt makes, per slot. |
+
+### `PossCalcFragment(shots_made_or_missed: 'int' = 0, liveball_orbs: 'int' = 0, actual_deadball_orbs: 'int' = 0, ft_events: 'int' = 0, ignored_and_ones: 'int' = 0, bad_fouls: 'int' = 0, offsetting_bad_fouls: 'int' = 0, turnovers: 'int' = 0) -> None` {#PossCalcFragment}
+
+Running stats needed to calculate possessions for one lineup event,
+
+one direction at a time (`PossessionUtils.PossCalcFragment`,
+`PossessionUtils.scala:124-144`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots_made_or_missed` | `int` | `0` | Count of shot attempts (made or missed). |
+| `liveball_orbs` | `int` | `0` | Count of live-ball offensive rebounds. |
+| `actual_deadball_orbs` | `int` | `0` | Count of dead-ball offensive rebounds. |
+| `ft_events` | `int` | `0` | Count of free-throw *sets* (capped-at-1 flag per set). |
+| `ignored_and_ones` | `int` | `0` | Count of and-one free throws ignored for possession purposes (capped-at-1 flag). |
+| `bad_fouls` | `int` | `0` | Count of technical/flagrant fouls counted against the defending side (capped-at-1 flag). |
+| `offsetting_bad_fouls` | `int` | `0` | Count of technical/flagrant fouls that offset (net zero) rather than counting against either side (capped-at-1 flag). |
+| `turnovers` | `int` | `0` | Count of turnovers. |
+
+### `PossState(team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', prev_clump: 'ConcurrentClump') -> None` {#PossState}
+
+Running state threaded through `calculate_possessions_by_event`
+
+(`PossessionUtils.PossState`, `PossessionUtils.scala:39-49`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_stats` | `PossCalcFragment` |  | Accumulated fragment for the team since the last lineup boundary. |
+| `opponent_stats` | `PossCalcFragment` |  | Accumulated fragment for the opponent since the last lineup boundary. |
+| `prev_clump` | `ConcurrentClump` |  | The previously-processed merged clump (used by `calculate_stats`'s and-one / deadball-rebound heuristics). |
+
+### `PossessionEvent(dir: 'Direction') -> None` {#PossessionEvent}
+
+Decomposes `RawGameEvent`\ s into attacking/defending sides
+
+(`RawGameEvent.PossessionEvent`, `LineupEvent.scala:126-149`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dir` | `Direction` |  | Which team (`Direction.TEAM` / `Direction.OPPONENT`) is currently in possession. |
+
+**Methods**
+
+#### `PossessionEvent.attacking_team(ev: 'RawGameEvent') -> 'Optional[str]'`
+
+The event string for the team in possession, or `None`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ev` | `RawGameEvent` |  | The raw game event to inspect. |
+
+**Returns**
+
+`ev.team` if `dir` is `Direction.TEAM`, `ev.opponent` if `Direction.OPPONENT`, else `None`.
+
+#### `PossessionEvent.defending_team(ev: 'RawGameEvent') -> 'Optional[str]'`
+
+The event string for the team NOT in possession, or `None`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ev` | `RawGameEvent` |  | The raw game event to inspect. |
+
+**Returns**
+
+`ev.team` if `dir` is `Direction.OPPONENT`, `ev.opponent` if `Direction.TEAM`, else `None`.
+
 ### `RapmConfig(...)` {#RapmConfig}
 
 Port of `RapmConfig` (`RapmUtils.ts:175-179`).
@@ -591,6 +845,85 @@ See the module docstring's "Task 3.5 notes" for why `soln_matrix` and
 `sd_rapm` are plain nested `list`s rather than `NDArray`s, and why
 `sd_rapm` exists at all (a Python-only addition beyond upstream's own
 return shape).
+
+### `RawGameEvent(min: 'float', team: 'Optional[str]' = None, opponent: 'Optional[str]' = None) -> None` {#RawGameEvent}
+
+A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`,
+
+`LineupEvent.scala:65-105`).
+
+Exactly one of `team` / `opponent` is populated per event -- the raw
+string is the literal `"date,time,event"` line from the NCAA website.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The game-clock minute (fractional) this event occurred at. |
+| `team` | `Optional[str]` | `None` | The raw event string, if this event belongs to the team under analysis. |
+| `opponent` | `Optional[str]` | `None` | The raw event string, if this event belongs to the opponent. |
+
+### `ScoreInfo(start: 'Score', end: 'Score', start_diff: 'int', end_diff: 'int') -> None` {#ScoreInfo}
+
+Score context at the start/end of a lineup event
+
+(`LineupEvent.ScoreInfo`, `LineupEvent.scala:153-158`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start` | `Score` |  | Score at the start of the event. |
+| `end` | `Score` |  | Score at the end of the event. |
+| `start_diff` | `int` |  | Score differential (team - opponent) at the start. |
+| `end_diff` | `int` |  | Score differential (team - opponent) at the end. |
+
+### `ShotClockStats(total: 'int' = 0, early: 'Optional[int]' = None, mid: 'Optional[int]' = None, late: 'Optional[int]' = None, orb: 'Optional[int]' = None) -> None` {#ShotClockStats}
+
+Counting stats broken down by shot-clock segment
+
+(`LineupEventStats.ShotClockStats`, `LineupEventStats.scala:51-57`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `total` | `int` | `0` | Count across the entire shot clock. |
+| `early` | `Optional[int]` | `None` | Count in the first 10s, if tracked. |
+| `mid` | `Optional[int]` | `None` | Count in the middle 10s, if tracked. |
+| `late` | `Optional[int]` | `None` | Count in the last 10s, if tracked. |
+| `orb` | `Optional[int]` | `None` | Count in the first 10s following an offensive rebound, if tracked (else folded into `mid`/`late` as normal). |
+
+### `TeamId(name: 'str') -> None` {#TeamId}
+
+CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | The unique team name. |
+
+### `TeamSeasonId(team: 'TeamId', year: 'Year') -> None` {#TeamSeasonId}
+
+A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `TeamId` |  | The team playing the season. |
+| `year` | `Year` |  | The year the season ends. |
+
+### `Year(value: 'int') -> None` {#Year}
+
+CBB season, named by the year it ends (`Year`, `Year.scala`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `value` | `int` |  | The ending year of the season. |
 
 ### `adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'` {#adjust_off_rating_stats}
 
@@ -708,6 +1041,33 @@ from sportsdataverse.mbb.mbb_rapm import apply_weak_priors
 nudge = apply_weak_priors("off_adj_ppp", pct_by_player, ctx["prior_info"])
 adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
 ```
+
+### `assign_to_right_lineup(state: 'PossState', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#assign_to_right_lineup}
+
+Assign a clump's possessions to the lineup(s) ending in it
+
+(`PossessionUtils.assign_to_right_lineup`, `PossessionUtils.scala
+:418-518`).
+
+Applies the running `state` total (accumulated since the last lineup
+boundary) to the *first* ending lineup only, then hands off to
+`lineup_balancer` (this clump's own fragment, split across
+candidates if there's more than one) and finally `lineup_fixer`
+(the negative-possession clamp).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `state` | `PossState` |  | The running possession state since the last lineup boundary. |
+| `team_stats` | `PossCalcFragment` |  | This clump's team-direction fragment. |
+| `opponent_stats` | `PossCalcFragment` |  | This clump's opponent-direction fragment. |
+| `clump` | `ConcurrentClump` |  | The merged clump ending one or more lineups. |
+| `prev_clump` | `ConcurrentClump` |  | The previous merged clump. |
+
+**Returns**
+
+The lineup(s) ending in this clump, enriched with possession counts. Empty if `clump.lineups` is empty (see the module docstring's landmine-index note -- unreachable via `calculate_possessions_by_event`).
 
 ### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
 
@@ -1562,6 +1922,49 @@ buckets[1]["rapmRemove"] = True  # divert into all_lineups instead
 team_info = calculate_aggregated_lineup_stats(buckets)
 ```
 
+### `calculate_possessions(lineup_events: 'Iterable[LineupEvent]') -> 'list[LineupEvent]'` {#calculate_possessions}
+
+Top-level entry point: calculate team/opponent possessions for a
+
+sequence of lineup events (`PossessionUtils.calculate_possessions`,
+`PossessionUtils.scala:371-379`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_events` | `Iterable[LineupEvent]` |  | The lineups to enrich, in chronological order. |
+
+**Returns**
+
+The lineups, each enriched with possession counts.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_possessions import calculate_possessions
+
+enriched = calculate_possessions(lineups)
+enriched[0].team_stats.num_possessions
+```
+
+### `calculate_possessions_by_event(raw_events_as_clumps: 'Iterable[ConcurrentClump]') -> 'list[LineupEvent]'` {#calculate_possessions_by_event}
+
+Drive the batch loop + per-clump scoring over an already-flattened
+
+clump stream (`PossessionUtils.calculate_possessions_by_event`,
+`PossessionUtils.scala:521-573`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `raw_events_as_clumps` | `Iterable[ConcurrentClump]` |  | The unbatched clump stream, e.g. from flat-mapping `lineup_as_raw_clumps` over several lineups. |
+
+**Returns**
+
+The lineups, each enriched with possession counts, in original order.
+
 ### `calculate_predicted_out(player_weight_matrix: 'NDArray[np.float64]', regressed_players: 'list[float]', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#calculate_predicted_out}
 
 Predict per-lineup outputs from fitted per-player RAPM values.
@@ -1709,6 +2112,29 @@ from sportsdataverse.mbb.mbb_rapm import calculate_sd_rapm
 sd_rapm = calculate_sd_rapm(param_errs, err_sq, num_lineups=3, num_players=2)
 ```
 
+### `calculate_stats(clump: 'ConcurrentClump', prev: 'ConcurrentClump', dir: 'Direction') -> 'PossCalcFragment'` {#calculate_stats}
+
+Calculate one direction's possession-fragment for one merged clump
+
+(`PossessionUtils.calculate_stats`, `PossessionUtils.scala:170-369`).
+
+See the upstream source's inline worked examples (and-one detection,
+technical/flagrant offsetting, the deadball-rebound heuristic) for the
+hand-annotated NCAA play-by-play snippets that motivate each step; this
+port reproduces every step in the same order.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `ConcurrentClump` |  | The merged clump to score. |
+| `prev` | `ConcurrentClump` |  | The previously-processed merged clump (feeds the and-one and deadball-rebound heuristics -- see below). |
+| `dir` | `Direction` |  | Which side (`Direction.TEAM`/`Direction.OPPONENT`) is "attacking" for this calculation. Named to match the Scala (shadows the `dir` builtin -- consistent with this port's existing precedent of naming params after their Scala originals, e.g. `RawGameEvent.for_team`'s `min`). |
+
+**Returns**
+
+A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
+
 ### `complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'` {#complete_weighted_avg}
 
 Finish a `weighted_avg` accumulator into true weighted averages.
@@ -1752,6 +2178,52 @@ for lineup in lineups:
 complete_weighted_avg(acc)
 print(acc["off_ppp"]["value"])  # now a true weighted average
 ```
+
+### `concurrent_event_handler(clumps: 'Iterable[ConcurrentClump]') -> 'list[ConcurrentClump]'` {#concurrent_event_handler}
+
+Batch a stream of singleton/boundary clumps into merged
+
+concurrent-event clumps (`Concurrency.concurrent_event_handler` +
+`StateUtils.foldLeft`'s clumping machinery, `PossessionUtils.scala
+:71-111` -- see the module docstring for the full batching-predicate
+breakdown and the post-game-break singleton port trap).
+
+# ponytail: manual accumulate-and-flush loop replacing the generic
+# Clumper/StateUtils.foldLeft abstraction -- this is the ONE clumper
+# instantiation in the port, so a reusable abstraction buys nothing.
+# Lift this back into a small clumper type if a second concurrent-event
+# family needs the same batching later.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clumps` | `Iterable[ConcurrentClump]` |  | An ordered stream of `ConcurrentClump`\ s, each either a singleton raw event (`evs=[ev]`) or a lineup-boundary marker (`evs=[]`, `lineups=[lineup]`), e.g. from `lineup_as_raw_clumps`. |
+
+**Returns**
+
+The merged clumps, each an in-order concatenation of one batch's `evs`/`lineups`.
+
+### `count_matching(evs: 'Iterable[RawGameEvent]', side: 'DirFn', *parsers: 'Parser') -> 'int'` {#count_matching}
+
+Count events on one side matching any of the given parsers.
+
+Ports the pervasive `clump.evs.collect { case side(ParseX(_)) => () }
+.size` idiom (and its multi-arm `case side(ParseX(_)) => ();
+case side(ParseY(_)) => ()` union form, when more than one parser is
+passed -- e.g. the and-one free-throw count, which matches *either* a
+made or a missed free throw on the same event).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `evs` | `Iterable[RawGameEvent]` |  | The events to scan. |
+| `side` | `DirFn` |  | `~sportsdataverse.mbb.mbb_ncaa_models.PossessionEvent .attacking_team` or `.defending_team`, selecting which raw string (if any) to test per event. |
+
+**Returns**
+
+The count of matching events.
 
 ### `espn_wbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wbb_teams}
 
@@ -1964,6 +2436,88 @@ inject_rapm_into_players(
     players, off_results, def_results, {}, ctx, None, ("old_value", "old_value"), "old_value"
 )
 ```
+
+### `is_gen2(ev: 'RawGameEvent') -> 'bool'` {#is_gen2}
+
+Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
+
+`EventUtils.scala:12-14`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ev` | `RawGameEvent` |  | The raw game event to inspect. |
+
+**Returns**
+
+`True` if `ev.info` contains a comma-space (`", "`), the gen2 format's field separator; `False` for the old/legacy format.
+
+### `lineup_as_raw_clumps(lineup: 'LineupEvent') -> 'Iterator[ConcurrentClump]'` {#lineup_as_raw_clumps}
+
+Turn one lineup's raw events into unprocessed singleton clumps, plus a
+
+trailing lineup-boundary marker (`Concurrency.lineup_as_raw_clumps`,
+`PossessionUtils.scala:114-120`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup event to expand. |
+
+**Returns**
+
+One `ConcurrentClump([ev])` per raw event (in order), then a final `ConcurrentClump([], [lineup])` boundary marker.
+
+### `lineup_balancer(lineups: 'list[LineupEvent]', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#lineup_balancer}
+
+Attribute this clump's possessions to the candidate lineup(s)
+
+(`PossessionUtils.assign_to_right_lineup.lineup_balancer`,
+`PossessionUtils.scala:429-471`).
+
+A single candidate just receives the whole clump's possessions. Multiple
+candidates (a lineup change landing mid-clump) are split via a greedy
+round-robin: for each direction, rank lineups by an "approximate" possession
+count computed from just that lineup's own raw events at the clump's
+minute, then hand out possessions one at a time to whichever lineup
+currently has the highest remaining approximate share.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `list[LineupEvent]` |  | The candidate lineups (already updated with any running state total from `assign_to_right_lineup`). |
+| `team_stats` | `PossCalcFragment` |  | This clump's team-direction fragment. |
+| `opponent_stats` | `PossCalcFragment` |  | This clump's opponent-direction fragment. |
+| `clump` | `ConcurrentClump` |  | The merged clump being assigned. |
+| `prev_clump` | `ConcurrentClump` |  | The previous merged clump (only used for the first candidate's approximate stats -- see below). |
+
+**Returns**
+
+New lineup copies with `num_possessions` incremented.
+
+### `lineup_fixer(lineups: 'list[LineupEvent]') -> 'list[LineupEvent]'` {#lineup_fixer}
+
+Clamp obviously-broken possession counts (``PossessionUtils
+
+.assign_to_right_lineup.lineup_fixer`, `PossessionUtils.scala:490-507`).
+
+For both `team_stats` and `opponent_stats` independently: a lineup
+that scored (`pts > 0``) but was attributed zero-or-fewer possessions
+is clamped to exactly 1 (you can't score on zero possessions); any
+still-negative possession count is clamped to 0.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `list[LineupEvent]` |  | The lineups to fix (already balanced). |
+
+**Returns**
+
+New lineup copies with clamped `num_possessions`.
 
 ### `lineup_to_team_report(lineup_report: 'LineupStatSet', inc_replacement: 'bool' = False, regress_diffs: 'float' = 0.0, rep_on_off_diag_mode: 'int' = 0) -> 'LineupStatSet'` {#lineup_to_team_report}
 
@@ -2197,6 +2751,42 @@ from sportsdataverse.mbb.mbb_positions import pos_class_to_score
 pos_class_to_score("WF")
 ```
 
+### `poss_calc_fragment_sum(a: 'PossCalcFragment', b: 'PossCalcFragment') -> 'PossCalcFragment'` {#poss_calc_fragment_sum}
+
+Field-wise add two `PossCalcFragment`\ s
+
+(`PossCalcFragment.sum`, `PossessionUtils.scala:146-153`).
+
+The Scala original uses `shapeless.Generic` to zip the two case
+classes' fields and sum pairwise; since every field is a plain `Int`,
+a plain `zip` over `dataclasses.astuple` reproduces the same
+behavior without the generic-programming machinery.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `PossCalcFragment` |  | The left-hand fragment. |
+| `b` | `PossCalcFragment` |  | The right-hand fragment. |
+
+**Returns**
+
+A new `PossCalcFragment` with each field summed.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import (
+    PossCalcFragment,
+    poss_calc_fragment_sum,
+)
+
+frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
+frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
+poss_calc_fragment_sum(frag1, frag2)
+# PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
+```
+
 ### `regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'` {#regress_shot_quality}
 
 Shrink a small-sample shot-quality stat toward its positional average.
@@ -2237,6 +2827,36 @@ regress_shot_quality(-15.5, 2, "misc_feature", player)
 regress_shot_quality(100, 3, "calc_rim_relative",
     {"total_off_fga": {"value": 25},
      "total_off_2prim_attempts": {"value": 8}})
+```
+
+### `score_to_tuple(s: 'str') -> 'tuple[int, int]'` {#score_to_tuple}
+
+Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
+
+`ExtractorUtils.scala:107-113`).
+
+Scala's `str match { case regex(s1, s2) => ... }` on a compiled
+`Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
+`Matcher.matches()`, not `find()`) -- ported here as
+`re.fullmatch`, not `re.match`/`re.search`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  | The raw score string, e.g. `"55-68"`. |
+
+**Returns**
+
+`(scored, allowed)` as a tuple of ints, or `(0, 0)` if `s` doesn't fully match `([0-9]+)-([0-9]+)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
+
+score_to_tuple("55-68")   # (55, 68)
+score_to_tuple("garbage")  # (0, 0)
 ```
 
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
