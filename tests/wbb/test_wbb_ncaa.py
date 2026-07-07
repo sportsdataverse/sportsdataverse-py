@@ -146,9 +146,13 @@ def test_wbb_ncaa_fetch_shim_is_mbb_core():
 
 
 def test_wbb_ncaa_fetch_all_matches_reexported_symbols():
+    from sportsdataverse.mbb import mbb_ncaa_fetch as m
     from sportsdataverse.wbb import wbb_ncaa_fetch as w
 
     assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
+    # drift guard: the shim must re-export mbb's full public surface (fails if
+    # a later mbb change adds a symbol the shim doesn't forward).
+    assert set(w.__all__) == set(m.__all__)
     assert len(w.__all__) == 10
 
 
@@ -189,7 +193,11 @@ def test_wbb_ncaa_strength_shim_is_mbb_core():
 
 
 def test_wbb_ncaa_strength_all_matches_reexported_symbols():
+    from sportsdataverse.mbb import mbb_ncaa_strength as m
     from sportsdataverse.wbb import wbb_ncaa_strength as w
 
     assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
+    # drift guard: the shim must re-export mbb's full public surface (fails if
+    # a later mbb change adds a symbol the shim doesn't forward).
+    assert set(w.__all__) == set(m.__all__)
     assert len(w.__all__) == 18
