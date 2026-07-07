@@ -49,6 +49,7 @@ requirements:
     - pyarrow >=14.0.0
     - pyjanitor >=0.23.1
     - pyreadr >=0.4.9
+    - rapidfuzz >=3.13.0
     - requests >=2.28.0
     - scipy >=1.10.0
     - tqdm >=4.50.0
