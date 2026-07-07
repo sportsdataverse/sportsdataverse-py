@@ -623,6 +623,63 @@ in that clump (`Concurrency.ConcurrentClump`, `PossessionUtils.scala
 | `evs` | `list[RawGameEvent]` | `<factory>` | The raw game events in this clump, in chronological order. |
 | `lineups` | `list[LineupEvent]` | `<factory>` | The lineups (if any) whose `end_min` falls in this clump. |
 
+### `ConferenceId(name: 'str') -> None` {#ConferenceId}
+
+CBB conference identifier (`ConferenceId`, ``models/ConferenceId
+
+.scala:7`, `AnyVal`). **Scope addition, Task 5e.4** -- the first model
+consumed by `mbb_ncaa_team_parsers.py` (`TeamIdParser.get_team_triples`
+/ `build_lineup_cli_array` / `build_available_team_list``). Appended
+here (not inserted among the 5a-reviewed classes above) to keep this an
+additive-only change, matching `RosterEntry`'s precedent.
+
+**`ConferenceId.is_high_major` (the companion object's other member,
+`models/ConferenceId.scala:11-16`) is NOT ported.** It has no call site
+anywhere in `TeamIdParser`/`TeamScheduleParser` (verified: the only
+other `ConferenceId` construction sites in the upstream tree are
+`kenpom/TeamParser.scala` and `BuildIngestPipeline.scala`, neither of
+which is in this port's scope, and neither calls `is_high_major`
+either) -- nothing in Phase 5e would exercise it. Noted here rather than
+silently dropped, matching this module's precedent for other
+unreferenced companion-object members (see the module docstring's
+`Year.until` / `Game.Score.by_winner` notes).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | The unique name of the conference. |
+
+### `CutdownShotEvent(loc: 'Optional[ShotLocation]', geo: 'Optional[ShotGeo]', dist: 'Optional[float]', pts: 'int', value: 'int', is_ast: 'Optional[bool]', is_trans: 'Optional[bool]', is_orb: 'Optional[bool]') -> None` {#CutdownShotEvent}
+
+A narrowed `ShotEvent`, keeping only the fields needed once a
+
+shot has been matched to a player/lineup event (`CutdownShotEvent`,
+`models/ncaa/ShotEvent.scala:31-40`). **Scope addition, Task 5e.5** --
+ported for shape fidelity even though **it is dead code in the ENTIRE
+upstream tree**: grepping shows it appears only in its own definition
+(`ShotEvent.scala`) and as the never-populated `shot_info:
+Option[CutdownShotEvent]` field on `PlayerEvent.scala` -- it is never
+constructed anywhere. (`PlayByPlayUtils.shot_value` is an UNRELATED
+`event_str -> int` point-value classifier that merely shares a similar
+name -- Task 5e.6 will NOT produce this type either.) Appended here (not
+inserted among the 5a-reviewed classes above) to keep this an
+additive-only change, matching `RosterEntry`/`ConferenceId`'s
+precedent.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `loc` | `Optional[ShotLocation]` |  | The shot's court location, in feet, if known. |
+| `geo` | `Optional[ShotGeo]` |  | The shot's synthetic lat/lon, if known. |
+| `dist` | `Optional[float]` |  | The shot's distance from the basket, in feet, if known. |
+| `pts` | `int` |  | The point value if made (`2`/`3`), else `0`. |
+| `value` | `int` |  | The shot's attempt value (`2`/`3`), regardless of make/miss. |
+| `is_ast` | `Optional[bool]` |  | Whether the shot was assisted, if known. |
+| `is_trans` | `Optional[bool]` |  | Whether the shot was in transition, if known. |
+| `is_orb` | `Optional[bool]` |  | Whether the shot followed an offensive rebound, if known. |
+
 ### `Direction(*values)` {#Direction}
 
 Which team is in possession (`RawGameEvent.Direction`, `:119-121`).
@@ -980,6 +1037,63 @@ A parse-time error (`ParseError`, `ParseError.scala:9`).
 | `id` | `str` |  | The module-specific id for which the error occurred. |
 | `messages` | `list[str]` |  | Human-readable description(s) of the error. |
 
+### `PbpBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', event_finder: 'Callable[[BeautifulSoup], list[Tag]]', event_time_finder: 'Callable[[Tag], Optional[str]]', event_score_finder: 'Callable[[Tag], Optional[str]]', game_event_finder: 'Callable[[Tag], Optional[str]]', event_team_finder: 'Callable[[Tag, bool], Optional[str]]', event_opponent_finder: 'Callable[[Tag, bool], Optional[str]]') -> None` {#PbpBuilders}
+
+One version-era's HTML finder functions (``PlayByPlayParser
+
+.base_builders`, `PlayByPlayParser.scala:37-51``).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_finder` | `Callable[[BeautifulSoup], list[str]]` |  |  |
+| `event_finder` | `Callable[[BeautifulSoup], list[Tag]]` |  |  |
+| `event_time_finder` | `Callable[[Tag], Optional[str]]` |  |  |
+| `event_score_finder` | `Callable[[Tag], Optional[str]]` |  |  |
+| `game_event_finder` | `Callable[[Tag], Optional[str]]` |  |  |
+| `event_team_finder` | `Callable[[Tag, bool], Optional[str]]` |  |  |
+| `event_opponent_finder` | `Callable[[Tag, bool], Optional[str]]` |  |  |
+
+### `PeekableIterator(iterable: 'Iterable[_T]') -> 'None'` {#PeekableIterator}
+
+A stateful iterator with one element of look-ahead, the Python
+
+stand-in for Scala's `scala.collection.Iterator`.
+
+Reproduces the three `Iterator` operations `find_pbp_clump` /
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `iterable` | `Iterable[_T]` |  | Any iterable to wrap. |
+
+**Methods**
+
+#### `PeekableIterator.find(pred: 'Callable[[_T], bool]') -> 'Optional[_T]'`
+
+First element satisfying `pred`, consuming up to and including
+
+it (or exhausting the iterator and returning `None`) -- Scala
+`Iterator.find`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pred` | `Callable[[_T], bool]` |  |  |
+
+#### `PeekableIterator.has_next() -> 'bool'`
+
+Whether another element is available, without consuming it
+
+(Scala `Iterator.hasNext`).
+
+#### `PeekableIterator.to_list() -> 'list[_T]'`
+
+Drain the remaining elements into a list (Scala `Iterator.toList`).
+
 ### `PlayerCodeId(code: 'str', id: 'PlayerId', ncaa_id: 'Optional[str]' = None) -> None` {#PlayerCodeId}
 
 A player's within-team-season code paired with their full identity
@@ -1193,6 +1307,50 @@ string is the literal `"date,time,event"` line from the NCAA website.
 | `team` | `Optional[str]` | `None` | The raw event string, if this event belongs to the team under analysis. |
 | `opponent` | `Optional[str]` | `None` | The raw event string, if this event belongs to the opponent. |
 
+### `RosterEntry(player_code_id: 'PlayerCodeId', number: 'str', pos: 'str', height: 'str', height_in: 'Optional[int]', year_class: 'str', gp: 'int', origin: 'Optional[str]', role: 'Optional[str]') -> None` {#RosterEntry}
+
+An entry in an NCAA team roster (`RosterEntry`, ``models/ncaa
+
+/RosterEntry.scala:11-21`). **Scope addition, Task 5e.1** -- the first
+model consumed by the HTML-parser layer (`mbb_ncaa_roster_parser.py``).
+Appended here (not inserted among the 5a-reviewed classes above) to keep
+this an additive-only change, matching `PlayerEvent`'s precedent.
+
+The trailing `role` field (present in the Scala case class shape but
+never populated by `RosterParser.parse_roster` -- every construction
+site there, both the real-player and coach__` branches, passes the
+literal `None` for it) is presumably set by a later phase's box-score
+parser (`BoxscoreParser`, out of this task's scope); it is carried
+here for shape fidelity even though Task 5e.1's only producer never
+populates it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_code_id` | `PlayerCodeId` |  | The player's code + full identity (the roster-row equivalent of a box-score/PbP player reference). |
+| `number` | `str` |  | The jersey number, as printed (may be non-numeric text). |
+| `pos` | `str` |  | The listed position. |
+| `height` | `str` |  | The listed height, in `"FT-IN"` text form (e.g. `"6-3"`). |
+| `height_in` | `Optional[int]` |  | `height` parsed to total inches, if it matched `height_regex`. |
+| `year_class` | `str` |  | The listed academic year (`"Fr"`/`"So"`/`"Jr"`/ `"Sr"`/etc.). |
+| `gp` | `int` |  | Games played. |
+| `origin` | `Optional[str]` |  | The player's hometown/prior-school text, if the source table has that column (v1 rosters only). |
+| `role` | `Optional[str]` |  | Reserved for a later phase; always `None` from `parse_roster` (see above). |
+
+### `ScheduleBuilders(team_name_finder: 'Callable[[BeautifulSoup], Optional[str]]', neutral_game_finder: 'Callable[[BeautifulSoup], list[str]]') -> None` {#ScheduleBuilders}
+
+One version-era's HTML finder functions (``TeamScheduleParser
+
+.base_builders`, `TeamScheduleParser.scala:36-39``).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_name_finder` | `Callable[[BeautifulSoup], Optional[str]]` |  |  |
+| `neutral_game_finder` | `Callable[[BeautifulSoup], list[str]]` |  |  |
+
 ### `ScoreInfo(start: 'Score', end: 'Score', start_diff: 'int', end_diff: 'int') -> None` {#ScoreInfo}
 
 Score context at the start/end of a lineup event
@@ -1223,6 +1381,128 @@ Counting stats broken down by shot-clock segment
 | `mid` | `Optional[int]` | `None` | Count in the middle 10s, if tracked. |
 | `late` | `Optional[int]` | `None` | Count in the last 10s, if tracked. |
 | `orb` | `Optional[int]` | `None` | Count in the first 10s following an offensive rebound, if tracked (else folded into `mid`/`late` as normal). |
+
+### `ShotEvent(player: 'Optional[PlayerCodeId]', date: 'datetime', location_type: 'LocationType', team: 'TeamSeasonId', opponent: 'TeamSeasonId', is_off: 'bool', lineup_id: 'Optional[LineupId]', players: 'list[PlayerCodeId]', score: 'Score', min: 'float', loc: 'ShotLocation', geo: 'ShotGeo', dist: 'float', pts: 'int', value: 'int', ast_by: 'Optional[PlayerCodeId]', is_ast: 'Optional[bool]', is_trans: 'Optional[bool]', raw_event: 'Optional[str]') -> None` {#ShotEvent}
+
+Info about one shot taken during a game, all distances in feet
+
+(`ShotEvent`, `models/ncaa/ShotEvent.scala:9-29`). **Scope addition,
+Task 5e.5** -- the model produced by
+`~sportsdataverse.mbb.mbb_ncaa_shot_parser.create_shot_event_data`.
+
+**Fields `mbb_ncaa_shot_parser.create_shot_event_data` (this task)
+actually populates:** `player` (best-effort -- tidy-resolved + coded
+for the team under analysis, name-coded only for the opponent),
+`date`/`location_type`/`team`/`opponent` (copied from the
+box-score lineup), `is_off`, `score` (re-oriented for home/away/
+neutral perspective), `min` (ascending game-clock time, after
+`phase1_shot_event_enrichment`), `loc`/`dist` (transformed court
+coordinates + Euclidean distance from the basket, after the
+self-correcting flip pass), `geo` (synthetic lat/lon), `raw_event`
+(the SVG `<title>` text, for debugging).
+
+**Fields left as placeholders for a LATER phase (Task 5e.6,
+`PlayByPlayUtils`/`ShotEnrichmentUtils`):** `lineup_id` (always
+`None` here -- "discard if bad lineup" per the Scala comment, filled in
+once the shot is matched against an actual on-floor lineup), `players`
+(always `[]` here -- filled in from the matched lineup), `pts`
+(**not the real point value** -- this task only sets it to `1`/`0`
+for made/missed, matching the Scala's own `// (enrich in final phase)`
+comment; the real 2pt/3pt value comes from `PlayByPlayUtils.shot_value`
+in Task 5e.6), `value` (always `0` here, same "final phase" note),
+`ast_by`/`is_ast`/`is_trans` (always `None` here -- assist/
+transition attribution needs the play-by-play cross-reference Task 5e.6
+builds).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player` | `Optional[PlayerCodeId]` |  | The shooting player's code + identity, if resolved (`None` is never actually produced by this task's parser, but the type allows for it per the Scala `Option`). |
+| `date` | `datetime` |  | The date of the game. |
+| `location_type` | `LocationType` |  | Home/away/neutral (etc.) for this game. |
+| `team` | `TeamSeasonId` |  | The team under analysis. |
+| `opponent` | `TeamSeasonId` |  | The opposing team. |
+| `is_off` | `bool` |  | Whether the team under analysis is the one shooting. |
+| `lineup_id` | `Optional[LineupId]` |  | The on-floor lineup id, if/when matched (see above). |
+| `players` | `list[PlayerCodeId]` |  | The on-floor lineup's players, if/when matched (see above). |
+| `score` | `Score` |  | The score at the time of the shot, team-oriented. |
+| `min` | `float` |  | The ascending game-clock time (minutes) of the shot. |
+| `loc` | `ShotLocation` |  | The shot's transformed court location, in feet. |
+| `geo` | `ShotGeo` |  | The shot's synthetic lat/lon. |
+| `dist` | `float` |  | The shot's distance from the basket, in feet. |
+| `pts` | `int` |  | Made(`1`)/missed(`0`) flag from this task -- NOT the real point value (see above). |
+| `value` | `int` |  | Always `0` from this task (see above). |
+| `ast_by` | `Optional[PlayerCodeId]` |  | The assisting player, if/when matched (see above). |
+| `is_ast` | `Optional[bool]` |  | Whether the shot was assisted, if/when matched (see above). |
+| `is_trans` | `Optional[bool]` |  | Whether the shot was in transition, if/when matched (see above). |
+| `raw_event` | `Optional[str]` |  | The raw SVG `<title>` text this shot was parsed from, for debugging (discarded before writing to disk upstream). |
+
+### `ShotEventBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', shot_event_finder: 'Callable[[BeautifulSoup], list[Tag]]', script_extractor: 'Callable[[BeautifulSoup], Optional[str]]', title_extractor: 'Callable[[Tag], Optional[str]]', event_period_finder: 'Callable[[Tag], Optional[int]]', event_time_finder: 'Callable[[Tag], Optional[float]]', event_player_finder: 'Callable[[Tag], Optional[str]]', shot_location_finder: 'Callable[[Tag], Optional[tuple[float, float]]]', event_score_finder: 'Callable[[Tag], Optional[Score]]', shot_result_finder: 'Callable[[Tag], Optional[bool]]', shot_taking_team_finder: 'Callable[[Tag], Optional[str]]') -> None` {#ShotEventBuilders}
+
+The HTML finder-function table (`ShotEventParser.base_builders`,
+
+`:37-50`). v1-only -- SVG shot maps did not exist in the v0 page
+format, so there is exactly one instance (`v1_builders`), unlike
+the v0/v1 pairs in every other 5e parser.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_finder` | `Callable[[BeautifulSoup], list[str]]` |  |  |
+| `shot_event_finder` | `Callable[[BeautifulSoup], list[Tag]]` |  |  |
+| `script_extractor` | `Callable[[BeautifulSoup], Optional[str]]` |  |  |
+| `title_extractor` | `Callable[[Tag], Optional[str]]` |  |  |
+| `event_period_finder` | `Callable[[Tag], Optional[int]]` |  |  |
+| `event_time_finder` | `Callable[[Tag], Optional[float]]` |  |  |
+| `event_player_finder` | `Callable[[Tag], Optional[str]]` |  |  |
+| `shot_location_finder` | `Callable[[Tag], Optional[tuple[float, float]]]` |  |  |
+| `event_score_finder` | `Callable[[Tag], Optional[Score]]` |  |  |
+| `shot_result_finder` | `Callable[[Tag], Optional[bool]]` |  |  |
+| `shot_taking_team_finder` | `Callable[[Tag], Optional[str]]` |  |  |
+
+### `ShotGeo(lat: 'float', lon: 'float') -> None` {#ShotGeo}
+
+A shot's synthetic lat/lon, for geo-aware visualization tooling
+
+(`ShotEvent.ShotGeo`, `models/ncaa/ShotEvent.scala:45`). **Scope
+addition, Task 5e.5** -- flattened per `ShotLocation`'s note.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lat` | `float` |  | Synthetic latitude (feet-to-meters converted, offset from an arbitrary base point -- not a real-world location). |
+| `lon` | `float` |  | Synthetic longitude, same convention as `lat`. |
+
+### `ShotLocation(x: 'float', y: 'float') -> None` {#ShotLocation}
+
+A shot's court-relative coordinates, in feet (`ShotEvent.ShotLocation`,
+
+`models/ncaa/ShotEvent.scala:48`). **Scope addition, Task 5e.5** --
+flattened out of the Scala `ShotEvent` companion object per this
+module's established nested-object-flattening precedent (see the module
+docstring's "Scala idiom decisions": `ScoreInfo`/`PlayerCodeId` were
+already flattened out of `LineupEvent`'s companion the same way).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `x` | `float` |  | Feet from the basket; positive is to the right of the basket (facing the goal), negative is to the left. |
+| `y` | `float` |  | Feet from the basket along the baseline-perpendicular axis. |
+
+### `ShotMapDimensions()` {#ShotMapDimensions}
+
+SVG shot-map pixel<->feet conversion constants, taken from the
+
+`svg#court` element (`ShotEventParser.ShotMapDimensions`,
+`:568-582`). A plain class (not a dataclass) used purely as a
+namespace, mirroring the Scala `object`'s "static singleton" role --
+field names are kept snake_case to match the Scala vals verbatim,
+letting the ported oracle tests reference e.g.
+`ShotMapDimensions.court_length_x_px` 1:1.
 
 ### `StrongSurnameMatch(box_name: 'str', score: 'int') -> None` {#StrongSurnameMatch}
 
@@ -1631,6 +1911,32 @@ candidates if there's more than one) and finally `lineup_fixer`
 
 The lineup(s) ending in this clump, enriched with possession counts. Empty if `clump.lineups` is empty (see the module docstring's landmine-index note -- unreachable via `calculate_possessions_by_event`).
 
+### `attr_regex_filter(tags: 'list[Tag]', attr: 'str', regex: 'str') -> 'list[Tag]'` {#attr_regex_filter}
+
+JSoup `[attr~=regex]`: candidates whose `attr` value matches
+
+`regex`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `tags` | `list[Tag]` |  | Candidate tags to filter (typically the result of an earlier `.select()`/`.find_all()` call). |
+| `attr` | `str` |  | The attribute name to test. |
+| `regex` | `str` |  | The pattern the attribute value must `re.search`-match. |
+
+**Returns**
+
+The subset of `tags` that have `attr` set and whose value matches `regex`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import attr_regex_filter, parse_html
+soup = parse_html('<div width="45%"></div><div width="10%"></div>')
+attr_regex_filter(soup.find_all("div"), "width", r"^\[?4?5")
+```
+
 ### `box_aware_compare(candidate_in: 'str', box_name_in: 'str') -> 'MatchResult'` {#box_aware_compare}
 
 Score how well a single play-by-play candidate name fits a single
@@ -1710,6 +2016,63 @@ from sportsdataverse.mbb.mbb_luck import build_3p_shot_info, build_adjusted_3p
 base_info = build_3p_shot_info(base_player)
 adj = build_adjusted_3p(base_player, base_info)
 print(adj["assisted3P"], adj["unassisted3P"])
+```
+
+### `build_available_team_list(in_by_year: 'dict[str, list[tuple[TeamId, str, ConferenceId]]]') -> 'dict[ConferenceId, Callable[[str], str]]'` {#build_available_team_list}
+
+Builds a per-conference team-index JSON fragment for
+
+`cbb-on-off-analyzer` (`TeamIdParser.build_available_team_list`,
+`TeamIdParser.scala:105-124`) -- the caller inserts the app-specific
+index key to get the final JSON string.
+
+See `build_lineup_cli_array`'s docstring for why this port doesn't
+attempt to reproduce Scala's hash-map iteration order (both the
+conference-level and, here, the team-level grouping) -- the upstream
+oracle covering this ordering is itself permanently disabled.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `in_by_year` | `dict[str, list[tuple[TeamId, str, ConferenceId]]]` |  | Season-key (e.g. `"2018/9"`) -> that season's `(team, ncaa_id, conference)` triples, e.g. from repeated `get_team_triples` calls. |
+
+**Returns**
+
+Conference -> a function `index_key -> JSON-fragment string`, one `' "team": [ ... ],'` block per team in that conference (each block listing every season that team appeared in, in encounter order).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_team_parsers import build_available_team_list
+from sportsdataverse.mbb.mbb_ncaa_models import ConferenceId, TeamId
+
+by_year = {"2018/9": [(TeamId("Kentucky"), "450591", ConferenceId("SEC"))]}
+build_available_team_list(by_year)[ConferenceId("SEC")]("test")
+```
+
+### `build_base_event(box_lineup: 'LineupEvent') -> 'ShotEvent'` {#build_base_event}
+
+Fills in the fields a shot event can borrow straight from the
+
+box-score lineup, leaving the shot-specific fields as overridable
+placeholders (`ShotEventParser.build_base_event`, `:379-410`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event. |
+
+**Returns**
+
+A `~sportsdataverse.mbb.mbb_ncaa_models.ShotEvent` with `date`/`location_type`/`team`/`opponent` populated and every other field at its Scala-literal placeholder default (`player=None`, `is_off=True`, `lineup_id=None`, `players=[]`, `score=Score(0, 0)`, `min=0.0`, `loc=ShotLocation(0.0, 0.0)`, `geo=ShotGeo(0.0, 0.0)`, `dist=0.0`, `pts=0`, `value=0`, `ast_by=None`, `is_ast=None`, `is_trans=None`, `raw_event=None`) -- every caller immediately overrides the placeholders it cares about via `dataclasses.replace`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import build_base_event
+base = build_base_event(box_lineup)
 ```
 
 ### `build_d_rtg(stat_set: 'LineupStatSet | None', avg_efficiency: 'float', calc_diags: 'bool', override_adjusted: 'bool') -> 'tuple[dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, DRtgDiagnostics | None]'` {#build_d_rtg}
@@ -1813,6 +2176,43 @@ from sportsdataverse.mbb.mbb_luck import (
 base_info = build_3p_shot_info(base_player)
 info = {**build_3p_shot_info(player), **build_adjusted_3p(base_player, base_info)}
 expected_makes = build_exp_3p(info)
+```
+
+### `build_lineup_cli_array(in_triples: 'list[tuple[TeamId, str, ConferenceId]]') -> 'dict[ConferenceId, str]'` {#build_lineup_cli_array}
+
+Builds the per-conference team array for `lineups-cli.sh` files
+
+(`TeamIdParser.build_lineup_cli_array`, `TeamIdParser.scala:94-100`).
+
+**Iteration-order note (upstream-DISABLED context).** Scala's
+`List.groupBy` returns an immutable `Map` whose iteration order is
+hash-bucket-dependent, not insertion order -- the disabled oracle's
+expected `Map.toList` ordering (`SEC` before `B1G`) reflects that
+JVM-specific hashing, not a documented contract. This port uses a plain
+`dict` (Python 3.7+ preserves insertion order), the natural pythonic
+choice; since the upstream test asserting a specific cross-conference
+order is itself permanently disabled (see the module docstring), there
+is no live oracle to match here regardless of dict vs hash-map ordering.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `in_triples` | `list[tuple[TeamId, str, ConferenceId]]` |  | `(team, ncaa_id, conference)` triples, e.g. from `get_team_triples`. |
+
+**Returns**
+
+Conference -> newline-joined `" 'ncaa_id::URL-encoded team name'"` lines, one per team in that conference (in encounter order).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_team_parsers import build_lineup_cli_array
+from sportsdataverse.mbb.mbb_ncaa_models import ConferenceId, TeamId
+
+triples = [(TeamId("Penn St."), "1", ConferenceId("B1G"))]
+build_lineup_cli_array(triples)[ConferenceId("B1G")]
+# "   '1::Penn+St.'"
 ```
 
 ### `build_lineup_id(players: 'list[PlayerCodeId]') -> 'LineupId'` {#build_lineup_id}
@@ -3225,6 +3625,70 @@ made or a missed free throw on the same event).
 
 The count of matching events.
 
+### `create_lineup_data(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[tuple[list[LineupEvent], list[LineupEvent]], list[ParseError]]'` {#create_lineup_data}
+
+Combines the different methods to build a set of lineup events
+
+(`PlayByPlayParser.create_lineup_data`, `:153-217`) -- the
+orchestrator that chains the ENTIRE Phase 5a-5d surface:
+
+1. `parse_game_events` -- HTML -> reversed
+   `~sportsdataverse.mbb.mbb_ncaa_stints.PlayByPlayEvent`\ s.
+2. `~sportsdataverse.mbb.mbb_ncaa_stints.build_partial_lineup_list`
+   -- events -> chronological lineup stints.
+3. `~sportsdataverse.mbb.mbb_ncaa_lineup_enrich.fix_possible_score_swap_bug`
+   -- undoes a rare NCAA score-transposition bug.
+4. `~sportsdataverse.mbb.mbb_ncaa_lineup_enrich.enrich_lineup`
+   (mapped over every stint) -- populates `pts`/`plus_minus`/stat
+   trees.
+5. `~sportsdataverse.mbb.mbb_ncaa_possessions.calculate_possessions`
+   -- per-stint possession counts.
+6. Zip each stint with its successor (`None` for the last), then
+   `~sportsdataverse.mbb.mbb_ncaa_stint_validation.validate_lineup`
+   partitions the `(stint, next)` pairs into good (empty error list)
+   and bad.
+7. `~sportsdataverse.mbb.mbb_ncaa_stint_validation.clump_bad_lineups`
+   groups consecutive bad stints, then
+   `~sportsdataverse.mbb.mbb_ncaa_stint_validation.analyze_and_fix_clumps`
+   tries to self-heal each clump.
+8. Concatenate: good stints + every clump's fixed stints -> `good`;
+   every clump's still-unfixed stints -> `bad`, each stamped with
+   `player_count_error=len(players)` as the VERY LAST step.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filename` | `str` |  | The source file name, used only for error reporting. |
+| `in_html` | `str` |  | The raw play-by-play-page HTML. |
+| `box_lineup` | `LineupEvent` |  | The team's validated box-score lineup (`~sportsdataverse.mbb.mbb_ncaa_boxscore_parser.get_box_lineup`'s result) -- supplies the full roster (for validation), the team/year (for parsing), and the trusted final score (for the swap-bug fix). |
+| `format_version` | `int` |  | `0` for the legacy layout, `1` for the 2018+ layout. |
+
+**Returns**
+
+`(good_lineups, bad_lineups)` on success, or a `list[ParseError]` if `parse_game_events` failed.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
+from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+from sportsdataverse.mbb.mbb_ncaa_pbp_parser import create_lineup_data
+
+with open("tests/fixtures/ncaa/test_lineup.html", encoding="utf-8") as f:
+    box_html = f.read()
+box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_version=0)
+
+with open("tests/fixtures/ncaa/test_play_by_play.html", encoding="utf-8") as f:
+    pbp_html = f.read()
+result = create_lineup_data("test.html", pbp_html, box_lineup, format_version=0)
+
+# Pipeline next step (one line)
+
+    good, bad = result
+    sum(ev.duration_mins for ev in good + bad)
+```
+
 ### `create_player_events(lineup_event_maybe_bad: 'LineupEvent', box_lineup: 'LineupEvent') -> 'list[PlayerEvent]'` {#create_player_events}
 
 Split a lineup event into one :class:`~sportsdataverse.mbb
@@ -3261,6 +3725,38 @@ player_events = create_player_events(lineup, box_lineup)
 player_events[0].player_stats.fg_3p.made.total
 ```
 
+### `create_shot_event_data(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent') -> 'Union[list[ShotEvent], list[ParseError]]'` {#create_shot_event_data}
+
+Parses a game page's SVG shot map into a list of :class:`~sportsdataverse
+
+.mbb.mbb_ncaa_models.ShotEvent` (`ShotEventParser.create_shot_event_data`,
+`:175-259`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filename` | `str` |  | The source file name, used only for error reporting. |
+| `in_html` | `str` |  | The raw game-page HTML (containing the SVG shot map, either baked in as `circle.shot` elements or built client-side via an `addShot(...)` JS call -- see `shot_js_to_html`). |
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (supplies `team`/ `year`/`location_type` and the tidy-name lookup context). |
+
+**Returns**
+
+Every shot found, sorted chronologically and court-geometry enriched, or a `list[ParseError]` if the HTML couldn't be parsed, the team names couldn't be matched, no shot events were found (even after the JS fallback), or any one circle failed to parse (the first such failure's error(s) only -- Scala's `.sequence` over `List[Either[...]]` is fail-fast, not accumulating).
+
+**Example**
+
+```python
+from pathlib import Path
+from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
+from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import create_shot_event_data
+
+box_html = Path("tests/fixtures/ncaa/test_lineup.html").read_text(encoding="utf-8")
+box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_version=1)
+shots = create_shot_event_data("test_p1.html", box_html, box_lineup)
+```
+
 ### `duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#duration_from_period}
 
 The game duration (minutes elapsed) once `period` has completed
@@ -3287,6 +3783,35 @@ duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
 duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
 ```
 
+### `enrich_and_reverse_game_events(in_events: 'list[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'` {#enrich_and_reverse_game_events}
+
+Inserts game-break events and turns descending per-row times into
+
+ascending game-clock minutes, returning the whole list latest-to-earliest
+(`PlayByPlayParser.enrich_and_reverse_game_events`, `:297-370`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `in_events` | `list[PlayByPlayEvent]` |  | The raw parsed events, earliest to latest, with each `.min` still a per-period DESCENDING clock reading. |
+
+**Returns**
+
+`in_events` with `~sportsdataverse.mbb.mbb_ncaa_stints .GameBreakEvent`\ s inserted at every period boundary, every `.min` converted to an ASCENDING whole-game reading, and a trailing (once reversed, LEADING) `~sportsdataverse.mbb .mbb_ncaa_stints.GameEndEvent` -- the whole list in LATEST-TO-EARLIEST order (the caller is expected to `reversed(...)` it back when chronological order is wanted, exactly like `get_sorted_pbp_events` does).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import Score
+from sportsdataverse.mbb.mbb_ncaa_pbp_parser import enrich_and_reverse_game_events
+from sportsdataverse.mbb.mbb_ncaa_stints import OtherTeamEvent
+
+events = [OtherTeamEvent(18.0, Score(1, 1), "tipoff")]
+reversed_enriched = enrich_and_reverse_game_events(events)
+reversed_enriched[0].__class__.__name__  # 'GameEndEvent'
+```
+
 ### `enrich_lineup(lineup: 'LineupEvent') -> 'LineupEvent'` {#enrich_lineup}
 
 Populate `pts`/`plus_minus` from the score delta, then run the
@@ -3310,6 +3835,55 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import enrich_lineup
 
 enriched = enrich_lineup(lineup)
 enriched.team_stats.pts
+```
+
+### `enrich_shot_events_with_pbp(sorted_shot_events: 'list[ShotEvent]', sorted_pbp_events: 'list[PlayByPlayEvent]', lineup_events: 'list[LineupEvent]', bad_lineup_events: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[ShotEvent]'` {#enrich_shot_events_with_pbp}
+
+Enrich each shot with its play-by-play event + on-floor lineup
+
+(`PlayByPlayUtils.enrich_shot_events_with_pbp`,
+`PlayByPlayUtils.scala:28-278`).
+
+Folds over the (time-sorted) shots, threading two iterators (play-by-play
+and lineup) and a small amount of carry-over state. For each shot it:
+
+1. gathers the play-by-play events at the shot's time (`find_pbp_clump`),
+   keeping only the ones on the shot's side (team if `is_off`);
+2. picks the matching shot event via a strict -> loose -> first-of-N
+   cascade (`right_kind_of_shot` then `matching_player`);
+3. locates the on-floor lineup (`find_lineup`), falling back to
+   `bad_lineup_events` if the good lineups yield nothing (a bad-lineup
+   match is used for `players` but its id is suppressed);
+4. attributes an assist (a same-time non-self assist event) and transition
+   flag (`"fastbreak"` in the event string), and fills in `lineup_id` /
+   `players` / `pts` / `value` / `ast_by` / `is_ast` / `is_trans`
+   -- exactly the fields Task 5e.5's parser left as placeholders.
+
+Shots with no matching play-by-play clump, no matching shot event, or no
+matching lineup are dropped (the Scala logs a `WARN` and discards; the
+logging is dropped per the module note, the discard preserved).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_shot_events` | `list[ShotEvent]` |  | Shots in ascending game-clock order. |
+| `sorted_pbp_events` | `list[PlayByPlayEvent]` |  | The full play-by-play event stream, ascending. |
+| `lineup_events` | `list[LineupEvent]` |  | The good (validation-passing) stint events. |
+| `bad_lineup_events` | `list[LineupEvent]` |  | The validation-flagged stint events, used only as a last resort (their ids are never attributed). |
+| `box_lineup` | `LineupEvent` |  | The roster lineup event (drives name resolution). |
+
+**Returns**
+
+The enriched, still-time-sorted list of shots (a subset of the input -- unmatchable shots are dropped).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import enrich_shot_events_with_pbp
+enriched = enrich_shot_events_with_pbp(
+    shots, pbp, good_lineups, bad_lineups, box_lineup
+)
 ```
 
 ### `enrich_stats(lineup: 'LineupEvent', event_parser: 'PossessionEvent', stats: 'LineupEventStats', player_filter_coder: 'Optional[PlayerFilterCoder]' = None, player_index: 'int' = -1) -> 'LineupEventStats'` {#enrich_stats}
@@ -3409,6 +3983,113 @@ d2_d3 = espn_wbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
+### `extract_player_from_ev(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext') -> 'Optional[PlayerCodeId]'` {#extract_player_from_ev}
+
+Resolve the player named in `pbp_event` to a
+
+`~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId`
+(`ShotEnrichmentUtils.extract_player_from_ev`,
+`PlayByPlayUtils.scala:613-635`).
+
+For a shot by the team under analysis (`shot.is_off`) the name is
+tidied against the box score before coding (so a mis-spelled play-by-play
+name resolves to the roster identity); for an opponent shot it is coded
+verbatim with no team context.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot` | `ShotEvent` |  | The shot being enriched (only `is_off` is read). |
+| `pbp_event` | `MiscGameEvent` |  | The play-by-play event naming the player. |
+| `tidy_ctx` | `TidyPlayerContext` |  | The name-resolution context for this game. |
+
+**Returns**
+
+The resolved `PlayerCodeId`, or `None` if the event string names no player (`~sportsdataverse.mbb.mbb_ncaa_events.parse_any_play` found nothing).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import extract_player_from_ev
+pc = extract_player_from_ev(shot, pbp_event, tidy_ctx)
+```
+
+### `filter_matching_own(tags: 'list[Tag]', regex: 'str') -> 'list[Tag]'` {#filter_matching_own}
+
+JSoup `:matchesOwn(regex)` applied to an already-computed candidate
+
+list, rather than a fresh `root.select(selector)` call (Task 5e.2
+addition; see the module docstring's note on composing this with
+`attr_regex_filter`).
+
+Same own-text-only semantics as `select_matching_own` -- JSoup's
+`Element.ownText()` walks only the element's direct `TextNode`
+children, not text nested inside child elements.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `tags` | `list[Tag]` |  | Candidate tags to filter (typically the result of an earlier `.select()`/`attr_regex_filter` call). |
+| `regex` | `str` |  | The pattern each candidate's own (whitespace-collapsed) text must `re.search`-match. |
+
+**Returns**
+
+The subset of `tags` whose own text contains a `regex` match, in the input list's order.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import attr_regex_filter, filter_matching_own, parse_html
+soup = parse_html('<td style="font-size:36px">92</td><td style="color:red">x</td>')
+candidates = attr_regex_filter(soup.find_all("td"), "style", r"font-size:36px")
+filter_matching_own(candidates, r"[0-9]+")  # [<td style="font-size:36px">92</td>]
+```
+
+### `find_lineup(shot: 'ShotEvent', curr_pbp: 'Optional[MiscGameEvent]', curr_lineups: 'list[LineupEvent]', lineup_it: "'PeekableIterator[LineupEvent]'") -> 'tuple[Optional[LineupEvent], list[LineupEvent]]'` {#find_lineup}
+
+Find the lineup (stint) event on the floor for `shot`
+
+(`ShotEnrichmentUtils.find_lineup`, `PlayByPlayUtils.scala:352-517`).
+
+A recursive state machine over three lists: `curr_lineup` (the current
+candidate), `fallback_lineups` (time-matching lineups whose raw events
+did not contain `curr_pbp` -- kept as fallbacks), and `stashed_lineups`
+(lineups pulled from the iterator but not yet stepped into, available for
+future shots). The branch cases (labelled 2.1-2.4 in the Scala):
+
+* **2.1** -- no time-matching lineup left: return the fallbacks.
+* **2.2** -- the next lineup starts *after* the shot: no match, stash it.
+* **2.3** -- strictly inside a lineup with no prior fallbacks: take it.
+* **2.4** -- shot is exactly at a lineup boundary (or we are already
+  choosing among multiple fallbacks): take this lineup iff its raw game
+  events contain `curr_pbp`'s event string (`curr_pbp is None` takes
+  it unconditionally); otherwise keep it as a fallback and recurse.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot` | `ShotEvent` |  | The shot to place (only `min` / `is_off` are read). |
+| `curr_pbp` | `Optional[MiscGameEvent]` |  | The already-matched play-by-play event for this shot, used to disambiguate boundary lineups; `None` disables that check. |
+| `curr_lineups` | `list[LineupEvent]` |  | Lineups pulled from the iterator on a previous call and still available (the current one first). |
+| `lineup_it` | `PeekableIterator[LineupEvent]` |  | The shared lineup iterator (consumed in place). |
+
+**Returns**
+
+`(matched_lineup_or_None, lineups_to_retry_next_time)` -- the second element always includes the matched lineup (so out-of-order shots sharing it still resolve) plus any leftover stash.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import (
+    PeekableIterator,
+    find_lineup,
+)
+matched, retry = find_lineup(shot, None, [lineup], PeekableIterator([]))
+```
+
 ### `find_missing_subs(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#find_missing_subs}
 
 Trims a clump whose lineups carry TOO MANY players by identifying the
@@ -3476,6 +4157,42 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
     find_missing_subs,
 )
 fixed, still = find_missing_subs(clump, box_lineup, valid_codes)
+```
+
+### `find_pbp_clump(shot_time: 'float', pbp_it: "'PeekableIterator[PlayByPlayEvent]'", curr_pbp_clump: 'list[MiscGameEvent]', maybe_next_pbp_event: 'Optional[MiscGameEvent]') -> 'tuple[list[MiscGameEvent], Optional[MiscGameEvent]]'` {#find_pbp_clump}
+
+Gather every play-by-play shot/assist event sharing `shot_time`
+
+(`ShotEnrichmentUtils.find_pbp_clump`, `PlayByPlayUtils.scala:556-608`).
+
+If `curr_pbp_clump` (carried over from the previous shot) already holds
+events at `shot_time` they are returned as-is; otherwise the iterator is
+walked forward, discarding earlier events, accumulating the equal-time
+ones, and stopping (returning it as `maybe_next_pbp_event`) at the first
+later event.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot_time` | `float` |  | The shot's game-clock minute to gather events for. |
+| `pbp_it` | `PeekableIterator[PlayByPlayEvent]` |  | The shared play-by-play iterator (consumed in place). |
+| `curr_pbp_clump` | `list[MiscGameEvent]` |  | Events left over from the previous shot's clump. |
+| `maybe_next_pbp_event` | `Optional[MiscGameEvent]` |  | The look-ahead event stashed by the previous call, if any. |
+
+**Returns**
+
+`(clump, maybe_next)` -- the equal-time events, plus the first strictly-later event (or `None` at end of stream).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import (
+    PeekableIterator,
+    find_pbp_clump,
+)
+clump, nxt = find_pbp_clump(5.0, PeekableIterator([]), [], None)
+# ([], None)
 ```
 
 ### `fix_combos(first: 'str', last: 'str', code_start: 'Optional[str]' = None) -> 'list[tuple[str, Optional[str]]]'` {#fix_combos}
@@ -3555,6 +4272,131 @@ fuzzy_box_match(
 # "Suitele, Sirena"
 ```
 
+### `get_ascending_time(event: 'ShotEvent', period: 'int', is_women_game: 'bool') -> 'float'` {#get_ascending_time}
+
+Converts the descending in-period clock time to an ascending
+
+game-elapsed time (`ShotEventParser.get_ascending_time`, `:531-537`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `event` | `ShotEvent` |  | The shot event (only `~sportsdataverse.mbb .mbb_ncaa_models.ShotEvent.min`, the raw descending clock minute, is read). |
+| `period` | `int` |  | The 1-indexed period the shot was taken in. |
+| `is_women_game` | `bool` |  | Whether to use women's-quarters (10min) or men's- halves (20min, then 5min OTs) period lengths. |
+
+**Returns**
+
+The ascending game-elapsed time, in minutes.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import get_ascending_time
+get_ascending_time(shot_with_min_4, period=1, is_women_game=False)  # 16.0
+```
+
+### `get_box_lineup(filename: 'str', in_html: 'str', team_id: 'TeamId', format_version: 'int', external_roster: 'tuple[list[str], list[RosterEntry]]' = ([], []), neutral_game_dates: 'AbstractSet[str]' = frozenset()) -> 'Union[LineupEvent, list[ParseError]]'` {#get_box_lineup}
+
+Gets the boxscore lineup from the HTML page (``BoxscoreParser
+
+.get_box_lineup`, `:122-222``).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filename` | `str` |  | The source file name -- used both for error reporting and to extract the period via `parse_period_from_filename` (e.g. `"test_p2.html"`). |
+| `in_html` | `str` |  | The raw box-score-page HTML. |
+| `team_id` | `TeamId` |  | The team this box score is being parsed for. |
+| `format_version` | `int` |  | `0` for the legacy layout, `1` for the 2018+ layout (see the module docstring's selector-translation notes). |
+| `external_roster` | `tuple[list[str], list[RosterEntry]]` | `([], [])` | `(other_players, roster_players)` -- either just names, or a full roster, to validate/fuzzy-correct box names against (see `inject_validated_players`). Also seeds `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent.players_out` on the interim lineup (`roster_players`, each's `code` replaced by its jersey `number`). |
+| `neutral_game_dates` | `AbstractSet[str]` | `frozenset()` | Date strings (the first whitespace-separated token of the raw date-cell text) known to be neutral-site games -- overrides the default home/away inference. |
+
+**Returns**
+
+A `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` whose `players` is the validated box-score lineup (natural HTML order -- see the module docstring's "not sorted" note), or a `list[ParseError]` if any parsing step failed.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
+from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+
+with open("tests/fixtures/ncaa/test_lineup.html", encoding="utf-8") as f:
+    html = f.read()
+result = get_box_lineup("test_p1.html", html, TeamId("TeamA"), format_version=0)
+```
+
+### `get_neutral_games(filename: 'str', in_html: 'str', format_version: 'int') -> 'Union[tuple[TeamId, set[str]], list[ParseError]]'` {#get_neutral_games}
+
+Extracts the set of neutral/away-marked game dates from a saved NCAA
+
+team-schedule page (`TeamScheduleParser.get_neutral_games`,
+`TeamScheduleParser.scala:63-94`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filename` | `str` |  | The source file name, used only for error reporting. |
+| `in_html` | `str` |  | The raw team-schedule-page HTML. |
+| `format_version` | `int` |  | `0` for the legacy `fieldset`/`legend` layout, `1` for the 2018+ `div.card-header`/`div.card-body` layout. |
+
+**Returns**
+
+`(team, neutral_game_dates)` -- the team parsed from the page's image `alt` attribute, and every `"MM/DD/YYYY"` date string found on an `"@Opponent"`-marked row -- or a single-element `list[ParseError]` if the HTML fails to parse, or the team name can't be located.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_team_parsers import get_neutral_games
+
+with open("tests/fixtures/ncaa/test_schedule.html", encoding="utf-8") as f:
+    html = f.read()
+result = get_neutral_games("test_schedule.html", html, format_version=0)
+if isinstance(result, list):
+    raise RuntimeError(result)  # list[ParseError]
+team, neutral_dates = result
+```
+
+### `get_sorted_pbp_events(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[list[PlayByPlayEvent], list[ParseError]]'` {#get_sorted_pbp_events}
+
+Handy util to return the play-by-play events in chronological order,
+
+used in a few other places (`PlayByPlayParser.get_sorted_pbp_events`,
+`:221-239`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filename` | `str` |  | The source file name, used only for error reporting. |
+| `in_html` | `str` |  | The raw play-by-play-page HTML. |
+| `box_lineup` | `LineupEvent` |  | The team's box-score lineup (supplies `team`/`year`). |
+| `format_version` | `int` |  | `0` for the legacy layout, `1` for the 2018+ layout. |
+
+**Returns**
+
+The play-by-play events in chronological (earliest-to-latest) order, or a `list[ParseError]` on failure. `enrich=True` is used internally to get the correct ascending timestamps, and its reversal is undone here (`.reverse`) to restore chronological order.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import get_box_lineup
+from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+from sportsdataverse.mbb.mbb_ncaa_pbp_parser import get_sorted_pbp_events
+
+with open("tests/fixtures/ncaa/test_lineup.html", encoding="utf-8") as f:
+    box_html = f.read()
+box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_version=0)
+
+with open("tests/fixtures/ncaa/test_play_by_play.html", encoding="utf-8") as f:
+    pbp_html = f.read()
+events = get_sorted_pbp_events("test.html", pbp_html, box_lineup, format_version=0)
+```
+
 ### `get_stats_diff(stat_set1: 'LineupStatSet', stat_set2: 'LineupStatSet', off_title: 'str', def_title: 'str | None' = None) -> 'LineupStatSet'` {#get_stats_diff}
 
 Straight (unweighted) field-by-field diff of two team stat sets.
@@ -3585,6 +4427,62 @@ from sportsdataverse.mbb.mbb_lineup_stats import get_stats_diff
 
 diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
 print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
+```
+
+### `get_team_triples(filename: 'str', in_html: 'str', old_format: 'bool' = False) -> 'Union[list[tuple[TeamId, str, ConferenceId]], list[ParseError]]'` {#get_team_triples}
+
+Extracts `(team, NCAA id, conference)` triples from a saved NCAA
+
+team-list/attendance page (`TeamIdParser.get_team_triples`,
+`TeamIdParser.scala:69-91`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filename` | `str` |  | The source file name, used only for error reporting. |
+| `in_html` | `str` |  | The raw team-list-page HTML. |
+| `old_format` | `bool` | `False` | `True` for pages where the team name and conference are in separate `<td>`s; `False` (default) for pages where the conference is embedded in the team-name cell as `"Team (Conf)"`. |
+
+**Returns**
+
+One `(TeamId, ncaa_id, ConferenceId)` triple per row that has both a resolvable id and name/conference (rows missing either are silently skipped, matching the Scala's `case _ => Nil`), or a single-element `list[ParseError]` if the HTML itself fails to parse.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_team_parsers import get_team_triples
+
+with open("tests/fixtures/ncaa/test_attendance_list.html", encoding="utf-8") as f:
+    html = f.read()
+result = get_team_triples("test_attendance_list.html", html, old_format=True)
+```
+
+### `get_unified_ncaa_id(filename: 'str', in_html: 'str') -> 'Union[Optional[str], list[ParseError]]'` {#get_unified_ncaa_id}
+
+Gets a player's lowest cross-season NCAA id from a saved player page
+
+(`RosterParser.get_unified_ncaa_id`, `RosterParser.scala:136-152`).
+
+Always uses the v1 selector table -- this bonus lookup only exists on
+2018+-era pages.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filename` | `str` |  | The source file name, used only for error reporting. |
+| `in_html` | `str` |  | The raw player-page HTML. |
+
+**Returns**
+
+The numerically-lowest NCAA id found, `None` if the page has no `tr[id^=player_season_]` rows, or a single-element `list[ParseError]` if the HTML couldn't be parsed at all.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_roster_parser import get_unified_ncaa_id
+get_unified_ncaa_id("player.html", player_page_html)
 ```
 
 ### `handle_common_sub_bug(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#handle_common_sub_bug}
@@ -3766,6 +4664,72 @@ inject_rapm_into_players(
 )
 ```
 
+### `inject_starting_lineup_into_box(sorted_pbp_events: 'list[PlayByPlayEvent]', box_lineup: 'LineupEvent', external_roster: 'tuple[list[str], list[RosterEntry]]', format_version: 'int') -> 'LineupEvent'` {#inject_starting_lineup_into_box}
+
+Infer the starting five and reorder the box-score roster so they lead
+
+(`PlayByPlayUtils.inject_starting_lineup_into_box`,
+`PlayByPlayUtils.scala:684-845`).
+
+The v1 (2018+) NCAA box score dropped the ordered list of starters, so we
+reconstruct it from the play-by-play sub sequencing. A player is a starter
+if, walking the events forward, they are seen *before* their first sub-in
+-- either subbed *out* (before ever being subbed in), or *named in a
+team-side play* that isn't concurrent with a sub. Anyone subbed *in* before
+ever being seen is excluded. The reconstruction stops once five starters
+are found.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_pbp_events` | `list[PlayByPlayEvent]` |  | The full play-by-play event stream, ascending time. |
+| `box_lineup` | `LineupEvent` |  | The box-score lineup event (its `players` is the full roster to reorder). |
+| `external_roster` | `tuple[list[str], list[RosterEntry]]` |  | Unused here -- carried for signature parity with the Scala (its pipeline caller passes it). See the module note. |
+| `format_version` | `int` |  | Unused here -- carried for signature parity. See the module note. |
+
+**Returns**
+
+A copy of `box_lineup` with `players` reordered so the inferred starters lead. If fewer than five starters could be inferred (a "40-trillion" player who was never subbed nor mentioned), the roster is ordered starters -> possible-starters -> definitely-not-starters as the best available guess.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import inject_starting_lineup_into_box
+fixed = inject_starting_lineup_into_box(pbp_events, box_lineup, ([], []), 1)
+```
+
+### `inject_validated_players(ordered_lineup_from_box: 'list[str]', box_minus_players: 'LineupEvent', external_roster: 'tuple[list[str], list[RosterEntry]]') -> 'list[str]'` {#inject_validated_players}
+
+Validates box players against the roster (if available) and any
+
+other available box scores (`BoxscoreParser.inject_validated_players`,
+`:233-279`).
+
+See the module docstring's "un-threaded `tidy_ctx`" note -- every
+fuzzy-resolution call inside the loop uses the SAME original context,
+never the updated one a call returns (ported verbatim, including this
+apparent Scala oversight).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ordered_lineup_from_box` | `list[str]` |  | The raw player-name strings scraped straight off the box-score page (already v0-normalized if the source was v1, by `get_box_lineup`'s caller). |
+| `box_minus_players` | `LineupEvent` |  | The in-progress `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` (used only for its `team` field, both to scope the fuzzy-match context and to key `~sportsdataverse.mbb.mbb_ncaa_data_quality.players_missing_from_boxscore`). |
+| `external_roster` | `tuple[list[str], list[RosterEntry]]` |  | `(other_players, roster_players)` -- extra known player names, and a full team roster (if available) to validate against / fuzzy-correct box names onto. |
+
+**Returns**
+
+`ordered_lineup_from_box` with any name not found in `roster_players` fuzzy-corrected onto the closest roster name (if a roster was supplied at all), followed by any roster/other/ known-missing players not already present in that corrected list (see the module docstring's "Extra-players Set ordering" note for this trailing group's order).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import inject_validated_players
+inject_validated_players(["Player One"], box_lineup, ([], []))
+```
+
 ### `is_end_of_game_fouling_vs_fastbreak(curr_clump: 'ConcurrentClump', event_parser: 'PossessionEvent') -> 'bool'` {#is_end_of_game_fouling_vs_fastbreak}
 
 Check for intentional fouling to prolong the game, specifically so it
@@ -3841,6 +4805,30 @@ predicate, tag = is_scramble(curr_clump, prev_clumps, event_parser, player_versi
 [predicate(ev) for ev in curr_clump.evs]
 ```
 
+### `is_team_shooting_left_to_start(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'tuple[bool, int]'` {#is_team_shooting_left_to_start}
+
+Infers which side of the SVG court the team under analysis shoots
+
+towards in the first period, from its own made/missed shot locations
+(`ShotEventParser.is_team_shooting_left_to_start`, `:540-555`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_very_raw_events` | `list[tuple[int, ShotEvent]]` |  | The chronologically-sorted (period, shot) pairs, pre-geometry-transform. |
+
+**Returns**
+
+`(team_shooting_left_in_first_period, first_period)` -- the first element of `sorted_very_raw_events`, if any, determines `first_period`; the majority side (by count) of the team's own (`is_off`) shots within that period determines the direction.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import is_team_shooting_left_to_start
+is_team_shooting_left_to_start([(1, shot_a), (1, shot_b)])
+```
+
 ### `is_transition(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent, bool], bool], str]'` {#is_transition}
 
 Figure out if the current clump is part of a transition offense
@@ -3876,6 +4864,61 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_transition
 
 predicate, tag = is_transition(curr_clump, prev_clumps, event_parser, player_version=False)
 [predicate(ev, is_scramble=False) for ev in curr_clump.evs]
+```
+
+### `is_women_game(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'bool'` {#is_women_game}
+
+Infers men's vs. women's game from timing evidence
+
+(`ShotEventParser.is_women_game`, `:558-566`). **Shot-parser-specific
+variant** -- distinct from the play-by-play parser's own
+`is_women_game` (Task 5e.3), which uses PbP event timing instead of
+shot timing; the plan's recon flags both as "its OWN is_women_game
+variant" per module.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_very_raw_events` | `list[tuple[int, ShotEvent]]` |  | The chronologically-sorted (period, shot) pairs. |
+
+**Returns**
+
+`True` if at least 4 periods were seen AND no shot was taken with more than 10 minutes showing on the (descending) clock in the very first event (women's quarters are 10 minutes; a shot at >10:00 remaining could only happen in a longer men's period).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import is_women_game
+is_women_game([(1, shot), (2, shot), (3, shot), (4, shot)])  # True
+```
+
+### `jsoup_text(el: 'Optional[Tag]') -> 'str'` {#jsoup_text}
+
+JSoup `Element.text()`: all descendant text, whitespace-collapsed.
+
+JSoup's `.text()` joins every text node under `el` (including
+descendants) and collapses runs of whitespace (spaces, tabs, newlines)
+into single spaces, trimming the ends. bs4's `.get_text()` does the
+joining but not the collapsing, so captured HTML's indentation/newlines
+would otherwise leak into every extracted value.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `el` | `Optional[Tag]` |  | The element to extract text from, or `None`. |
+
+**Returns**
+
+The whitespace-collapsed text, or `""` if `el` is `None`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import jsoup_text, parse_html
+soup = parse_html("<td>\n  Akin,\tDaniel  </td>")
+jsoup_text(soup.find("td"))  # "Akin, Daniel"
 ```
 
 ### `lineup_as_raw_clumps(lineup: 'LineupEvent') -> 'Iterator[ConcurrentClump]'` {#lineup_as_raw_clumps}
@@ -3996,6 +5039,32 @@ report = lineup_to_team_report(
 )
 ```
 
+### `matching_player(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext', code_match: 'bool') -> 'bool'` {#matching_player}
+
+Whether the player in `pbp_event` matches `shot`'s shooter
+
+(`ShotEnrichmentUtils.matching_player`, `PlayByPlayUtils.scala:638-652`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot` | `ShotEvent` |  | The shot being enriched. |
+| `pbp_event` | `MiscGameEvent` |  | The candidate play-by-play event. |
+| `tidy_ctx` | `TidyPlayerContext` |  | The name-resolution context. |
+| `code_match` | `bool` |  | If `True`, compare on player *code* only (looser -- lets a name that resolves to the wrong identity but the right code match); if `False`, require full `~sportsdataverse.mbb .mbb_ncaa_models.PlayerCodeId` equality. |
+
+**Returns**
+
+`True` if the resolved player matches `shot.player` under the selected comparison, else `False`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import matching_player
+matching_player(shot, pbp_event, tidy_ctx, code_match=False)
+```
+
 ### `misspellings(team: 'Optional[TeamId]') -> 'dict[str, str]'` {#misspellings}
 
 Team-scoped misspelling map, falling back to the generic map
@@ -4064,6 +5133,47 @@ order_lineup(
      {"code": "ErAyala", "id": "Ayala, Eric"}],
     players_by_id, "",
 )
+```
+
+### `phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'` {#phase1_shot_event_enrichment}
+
+The court-geometry enrichment pass: ascending time, coordinate
+
+transform + geo synthesis, and the self-correcting side-flip re-run
+(`ShotEventParser.phase1_shot_event_enrichment`, `:415-528`).
+
+For each shot: compute the ascending game time, decide (from
+`is_team_shooting_left_to_start` + which half the period falls in)
+whether the shot's side needs flipping, run `transform_shot_location`
+to get both the believed-correct and alternative (mirrored) locations,
+keep whichever is closer to the basket (a >1.2x distance advantage for
+the "alternative" wins, or ANY shot taken with <0.1 min left on the
+clock always keeps the original -- a half-court heave near the buzzer
+is plausible, so the tie-break favors trusting the raw geometry there),
+then synthesize a lat/lon.
+
+After all shots are processed, if any period had >=6 shots AND more than
+75% of them came back implausibly long-distance (>50ft), the whole pass
+re-runs ONCE with those periods' orientation flipped (the self-correcting
+part) -- `second_half_override` is `None` on the initial call and a
+non-`None` set on the one allowed retry, preventing infinite recursion.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_very_raw_events` | `list[tuple[int, ShotEvent]]` |  | The chronologically-sorted (period, shot) pairs from `parse_shot_html`, pre-geometry-transform. |
+| `second_half_override` | `Optional[set[int]]` | `None` | The set of periods whose `second_half_switch` orientation should be inverted (the self-correction re-run's input); `None` on the first call. |
+
+**Returns**
+
+The fully court-geometry-enriched shots, in the same order as `sorted_very_raw_events`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import phase1_shot_event_enrichment
+shots = phase1_shot_event_enrichment([(1, very_raw_shot)])
 ```
 
 ### `pick_ridge_regression(off_weights: 'NDArray[np.float64]', def_weights: 'NDArray[np.float64]', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', diag_mode: 'bool', agg_value_key: 'ValueKey' = 'value', lineup_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value')) -> 'tuple[RapmProcessingInputs, RapmProcessingInputs]'` {#pick_ridge_regression}
@@ -4353,6 +5463,37 @@ reorder_and_reverse(events)
 # [OtherTeamEvent(...), SubInEvent(...)]
 ```
 
+### `right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'` {#right_kind_of_shot}
+
+Whether `pbp_event`'s shot type is compatible with `shot`'s
+
+distance and make/miss (`ShotEnrichmentUtils.right_kind_of_shot`,
+`PlayByPlayUtils.scala:659-679`).
+
+The distance-in-the-data is approximate, so exact 2-vs-3 discrimination is
+impossible; this only rules out the *obvious* mismatches (a clearly-short
+shot matched to a 3, or vice versa) and always requires make/miss
+agreement.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot` | `ShotEvent` |  | The shot being enriched (`pts`/`dist` read). |
+| `pbp_event` | `MiscGameEvent` |  | The candidate play-by-play event. |
+| `strict` | `bool` |  | If `True`, also apply the distance gate; if `False`, only the make/miss agreement is required. |
+
+**Returns**
+
+`True` if the event could plausibly be this shot.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import right_kind_of_shot
+right_kind_of_shot(shot, pbp_event, strict=True)
+```
+
 ### `score_to_tuple(s: 'str') -> 'tuple[int, int]'` {#score_to_tuple}
 
 Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
@@ -4392,6 +5533,161 @@ _No description available._
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `event` |  |  |  |
+
+### `select_contains(root: 'Tag', selector: 'str', text: 'str') -> 'list[Tag]'` {#select_contains}
+
+JSoup `root.select(sel + ":contains(text)")`: candidates whose full
+
+text (own + every descendant's) case-insensitively CONTAINS `text` as
+a plain substring -- **not** a regex (Task 5e.2 addition; see the module
+docstring's "Critical divergence" note).
+
+JSoup's `:contains()` is documented case-insensitive substring
+containment; soupsieve's `:-soup-contains()` (the non-deprecated
+spelling of its `:contains()`) is case-SENSITIVE, with no
+case-insensitive variant of its own. Reproducing JSoup's actual
+semantics therefore needs this helper rather than `:-soup-contains()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `root` | `Tag` |  | The element to search within. |
+| `selector` | `str` |  | A plain (soupsieve-legal) CSS selector for the structural part of the match (everything before `:contains`). |
+| `text` | `str` |  | The plain substring each candidate's collapsed text must case-insensitively contain. |
+
+**Returns**
+
+Every `selector` match whose `jsoup_text` case-insensitively contains `text`, in document order.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import parse_html, select_contains
+soup = parse_html("<td>game date:</td><td>Location:</td>")
+select_contains(soup, "td", "Game Date:")  # [<td>game date:</td>]
+```
+
+### `select_matching(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'` {#select_matching}
+
+JSoup `root.select(sel + ":matches(regex)")`: candidates whose full
+
+text (own + every descendant's) matches `regex`.
+
+Soupsieve has no `:matches()` pseudo-class equivalent, so this runs the
+plain structural `selector` first, then filters by `re.search`
+over each candidate's `jsoup_text` (own text plus descendants',
+matching JSoup's `:matches()` semantics -- as opposed to
+`select_matching_own`'s own-text-only `:matchesOwn()`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `root` | `Tag` |  | The element to search within. |
+| `selector` | `str` |  | A plain (soupsieve-legal) CSS selector. |
+| `regex` | `str` |  | The pattern each candidate's collapsed text must `re.search`-match. |
+
+**Returns**
+
+Every `selector` match whose `jsoup_text` contains a `regex` match, in document order.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import parse_html, select_matching
+soup = parse_html("<div><p>Home Team</p><p>Away Team</p></div>")
+select_matching(soup, "p", r"^Home")  # [<p>Home Team</p>]
+```
+
+### `select_matching_own(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'` {#select_matching_own}
+
+JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose
+
+OWN text only (excluding descendant elements' text) matches `regex`.
+
+JSoup's `Element.ownText()` walks only the element's direct
+`TextNode` children, not text nested inside child elements -- the
+same distinction bs4 draws between a tag's direct
+`bs4.NavigableString` children and its full `.get_text()`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `root` | `Tag` |  | The element to search within. |
+| `selector` | `str` |  | A plain (soupsieve-legal) CSS selector. |
+| `regex` | `str` |  | The pattern each candidate's own (whitespace-collapsed) text must `re.search`-match. |
+
+**Returns**
+
+Every `selector` match whose own text contains a `regex` match, in document order.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import parse_html, select_matching_own
+soup = parse_html('<div class="card-header">Coach <b>Info</b></div>')
+select_matching_own(soup, "div.card-header", r"^Coach")
+# [<div class="card-header">Coach <b>Info</b></div>]
+```
+
+### `shot_js_to_html(js: 'str') -> 'list[Tag]'` {#shot_js_to_html}
+
+Converts client-side `addShot(...)` JS calls into parseable
+
+`circle.shot` HTML, for pages where the shot map is built on the fly
+rather than baked into the initial HTML (`ShotEventParser
+.shot_js_to_html`, `:266-283`). See the module docstring's "Scala
+idiom decision" note -- the Scala's `builders`/`browser` parameters
+are dropped here since the Scala body never actually uses them.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `js` | `str` |  | The concatenated `<script>` text containing one or more `addShot(x, y, ..., 'title', ...)` calls, one per line. |
+
+**Returns**
+
+The `circle.shot` elements reconstructed from every matching line (non-matching lines, e.g. the `addShot` function definition line itself, are silently skipped).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import shot_js_to_html
+js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
+circles = shot_js_to_html(js)
+```
+
+### `shot_value(event_str: 'str') -> 'int'` {#shot_value}
+
+Classify a play-by-play event string as a 3, a 2, or an assist
+
+(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
+
+Ported as an ordered first-match cascade, exactly mirroring the Scala
+`match` arm order (assist is tested first, so an assist string never
+falls through to a shot classifier).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `event_str` | `str` |  | The raw play-by-play event string. |
+
+**Returns**
+
+`0` for an assist, `3` for any 3-pointer (made or missed), `2` for any 2-pointer (made or missed), or `-1` for anything else (rebounds, turnovers, unparseable, ...).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import shot_value
+shot_value("18:28:00,0-0,Eric Ayala, 3pt jumpshot made")   # 3
+shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
+shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
+```
 
 ### `slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#slow_regression}
 
@@ -4511,6 +5807,36 @@ from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
 sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
 ```
 
+### `td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'` {#td_at}
+
+JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child.
+
+Soupsieve has no `:eq()` positional pseudo-class (unlike JSoup), so
+this is a plain 0-indexed lookup into `row.find_all("td")`, guarded
+against an out-of-range index (JSoup's `>?>` returns `None` rather
+than raising when the selector matches nothing).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `row` | `Tag` |  | The row (or other container) element to search. |
+| `n` | `int` |  | The 0-indexed `<td>` position. |
+
+**Returns**
+
+The `n`-th `<td>` descendant, or `None` if `row` has fewer than `n + 1` of them.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_html import parse_html, td_at
+soup = parse_html("<tr><td>A</td><td>B</td></tr>")
+row = soup.find("tr")
+td_at(row, 1).get_text()  # "B"
+td_at(row, 5)  # None
+```
+
 ### `test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'` {#test_positional_aware_filter}
 
 Check a positional-aware filter (from `build_positional_aware_filter`)
@@ -4587,6 +5913,34 @@ ctx = build_tidy_player_context(box_lineup)
 resolved_name, ctx = tidy_player("MITCHELL,M", ctx)
 ```
 
+### `transform_shot_location(x: 'float', y: 'float', second_half_switch: 'bool', team_shooting_left_in_first_period: 'bool', is_offensive: 'bool') -> 'tuple[float, float, float, float]'` {#transform_shot_location}
+
+Transforms a raw SVG pixel location into feet from the basket, always
+
+oriented as if shooting towards the left goal (`ShotEventParser
+.transform_shot_location`, `:588-620`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `x` | `float` |  | Raw SVG `cx` pixel coordinate. |
+| `y` | `float` |  | Raw SVG `cy` pixel coordinate. |
+| `second_half_switch` | `bool` |  | Whether this shot is in the "other" half of the game from `team_shooting_left_in_first_period` (each `False` factor below flips which side is treated as "left"). |
+| `team_shooting_left_in_first_period` | `bool` |  | Whether the team under analysis shot towards the left goal in the first period (see `is_team_shooting_left_to_start`). |
+| `is_offensive` | `bool` |  | Whether the team under analysis is shooting (an opponent shot flips the expected side again). |
+
+**Returns**
+
+`(x, y, alt_x, alt_y)` in feet -- the believed-correct location, then the alternative (mirror-image) location, both relative to the goal the shot is (believed to be) attacking.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import transform_shot_location
+transform_shot_location(310.2, 235, False, False, True)
+```
+
 ### `using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'` {#using_roster_pos}
 
 Reconcile a stats-derived position class against roster metadata.
@@ -4613,6 +5967,31 @@ A `(position, info)` tuple. `info` is `None` when no correction/explanation appl
 ```python
 from sportsdataverse.mbb.mbb_positions import using_roster_pos
 using_roster_pos("G?", "C")
+```
+
+### `validate_box_score(team: 'TeamId', lineup: 'list[str]') -> 'Union[list[PlayerCodeId], ParseError]'` {#validate_box_score}
+
+Checks there are no duplicates in the lineup (``BoxscoreParser
+
+.validate_box_score`, `:388-404``).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `TeamId` |  | The team the lineup belongs to (feeds `~sportsdataverse.mbb.mbb_ncaa_stints.build_player_code`'s team-scoped misspelling corrections). |
+| `lineup` | `list[str]` |  | The raw player-name strings, in whatever order they were assembled by `inject_validated_players`. |
+
+**Returns**
+
+`lineup`, mapped to `~sportsdataverse.mbb.mbb_ncaa_models.PlayerCodeId` (same order, no sort -- see the module docstring's "not sorted" note), or a `~sportsdataverse.mbb.mbb_ncaa_data_quality.ParseError` if two DIFFERENT names collide on the same player code.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import validate_box_score
+from sportsdataverse.mbb.mbb_ncaa_models import TeamId
+validate_box_score(TeamId("Team"), ["Player One", "Player Two"])
 ```
 
 ### `validate_lineup(lineup_event: 'LineupEvent', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'list[ValidationError]'` {#validate_lineup}
