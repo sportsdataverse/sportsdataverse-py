@@ -2,7 +2,11 @@
 
 import polars as pl
 
-import sportsdataverse.mbb.mbb_box_bpm as bpm
+import importlib
+
+# the package star-exports the function `mbb_box_bpm`, shadowing the
+# submodule attribute -- resolve the MODULE via importlib for monkeypatching
+bpm = importlib.import_module("sportsdataverse.mbb.mbb_box_bpm")
 
 
 def _fake_agg(seasons, league="mens"):

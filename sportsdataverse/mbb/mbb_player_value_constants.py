@@ -455,7 +455,7 @@ def kmeans_fit(
     best: "tuple[float, np.ndarray, np.ndarray] | None" = None
     for _ in range(n_init):
         centers = X[rng.choice(len(X), k, replace=False)].copy()
-        labels = np.zeros(len(X), dtype=np.int64)
+        labels: np.ndarray = np.zeros(len(X), dtype=np.int64)
         for _ in range(max_iter):
             d = ((X[:, None, :] - centers[None, :, :]) ** 2).sum(-1)
             labels = d.argmin(1)

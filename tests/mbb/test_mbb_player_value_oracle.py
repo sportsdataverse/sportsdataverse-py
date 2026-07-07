@@ -25,7 +25,10 @@ import numpy as np
 import polars as pl
 import pytest
 
-import sportsdataverse.mbb.mbb_box_bpm as bpm_mod
+import importlib
+
+# resolve the MODULE (the package star-export shadows the attr with the fn)
+bpm_mod = importlib.import_module("sportsdataverse.mbb.mbb_box_bpm")
 from sportsdataverse.mbb.mbb_player_value_constants import mae, spearman_corr
 
 _FIX = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_player_value"
