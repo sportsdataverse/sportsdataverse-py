@@ -335,6 +335,7 @@ files = [
     "tools/validation/checks/sweep.py",
     "tools/validation/checks/e2e.py",
     "tools/validation/checks/boundary_leakage.py",
+    "tools/validation/checks/constant_column.py",
     "tools/validation/checks/prep_published_parity.py",
     "tools/validation/lint/leakage_python.py",
     "tools/validation/lint/leakage_r.py",
