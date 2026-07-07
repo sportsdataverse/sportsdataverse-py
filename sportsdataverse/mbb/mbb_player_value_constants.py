@@ -262,7 +262,9 @@ def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
     for season in seasons:
         df = _loader([season])
         if not df.is_empty():
-            frames.append(df.select([c for c in ("athlete_id_1", "season", "type_text") if c in df.columns]))
+            frames.append(
+                df.select([c for c in ("athlete_id_1", "season", "type_text", "score_value") if c in df.columns])
+            )
     return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
 
 
@@ -288,9 +290,11 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
 
     Sums the per-game player boxscores into one row per (player_id, season,
     team_id) with the counting columns :func:`player_per100_features` expects.
-    Shot-location splits come from the shots release (2025+), classified by
-    ``type_text`` (layup/dunk/tip = rim, "three point" = three, other = mid);
-    for seasons without shots data, three-point attempts come from the box and
+    Shot-location splits come from the shots release (2025+): free throws
+    (``MadeFreeThrow``) are excluded, layup/dunk/tip = rim, and jump shots
+    split three vs mid by ``score_value`` (the release's ``type_text`` carries
+    no three-point marker; ``score_value`` is populated on misses too). For
+    seasons without shots data, three-point attempts come from the box and
     all remaining attempts fold into ``fga_mid``.
 
     Args:
@@ -348,12 +352,17 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
     cls = (
         pl.when(pl.col("type_text").str.contains("(?i)layup|dunk|tip"))
         .then(pl.lit("rim"))
-        .when(pl.col("type_text").str.contains("(?i)three point"))
+        .when(pl.col("score_value") == 3)
         .then(pl.lit("three"))
         .otherwise(pl.lit("mid"))
     )
     shot_counts = (
-        shots.filter(pl.col("athlete_id_1").is_not_null())
+        shots.filter(
+            pl.col("athlete_id_1").is_not_null()
+            # field-goal attempts only: drop free throws (and stray 0/1-value rows)
+            & (pl.col("type_text").str.contains("(?i)free throw") == False)  # noqa: E712
+            & (pl.col("score_value") >= 2)
+        )
         .with_columns(
             pl.col("athlete_id_1").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
             pl.col("season").cast(pl.Int64),

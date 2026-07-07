@@ -160,11 +160,24 @@ def test_aggregate_player_seasons_sums_and_shot_shares(monkeypatch):
             "points": [14, 9, 10],
         }
     )
+    # REAL 2025 release vocabulary: type_text is only
+    # JumpShot/LayUpShot/DunkShot/TipShot/MadeFreeThrow -- threes are
+    # distinguished by score_value (populated on misses too); free throws
+    # must NOT count as field-goal attempts.
     shots = pl.DataFrame(
         {
-            "athlete_id_1": [7, 7, 7, 8, 8],
-            "season": [2025] * 5,
-            "type_text": ["Three Point Jumper", "Jumper", "Layup Shot", "Dunk Shot", "Tip Shot"],
+            "athlete_id_1": [7, 7, 7, 7, 8, 8, 8],
+            "season": [2025] * 7,
+            "type_text": [
+                "JumpShot",
+                "JumpShot",
+                "LayUpShot",
+                "MadeFreeThrow",
+                "DunkShot",
+                "TipShot",
+                "MadeFreeThrow",
+            ],
+            "score_value": [3, 2, 2, 1, 2, 2, 1],
         }
     )
     monkeypatch.setattr(pvc, "_load_player_box", lambda seasons, league: box)
