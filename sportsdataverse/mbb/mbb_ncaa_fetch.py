@@ -48,6 +48,33 @@ same modern/legacy convention by analogy but are **not yet independently
 confirmed live** (stats.ncaa.org's exact roster path was not in any indexed
 source) -- Task 5f.2's live proof should confirm or correct them; this is
 fetch-layer plumbing, not a parser, so a wrong path is a one-line fix later.
+
+**Discovery scope & the bm-verify wall (proven live 2026-07-07, Task 5f.2/5f.3).**
+This fetcher's transport, proxy rotation, and cache-first behavior are proven
+live through the ProxyBonanza pool. What it can and cannot reach:
+
+* **Statically fetchable in-library** -- landing/index pages: ``/`` (~20 KB),
+  ``/team/{id}`` (~17 KB), ``/season_divisions`` (~10 KB). All return real,
+  un-challenged, server-rendered HTML through the proxy.
+* **Behind an Akamai BotManager ``bm-verify`` JS challenge** -- the
+  **game-detail** pages (``.../play_by_play``, ``.../box_score``). Each returns
+  a ~2.4 KB meta-refresh interstitial, not content. ``curl_cffi``'s Chrome
+  impersonation clears the TLS/JA3 gate (HTTP 200s, no IP block) but **cannot**
+  clear the JS proof-of-work gate: replaying the handed ``bm-verify`` token
+  returns 403, and waiting out the refresh only yields a fresh challenge.
+* **JS-rendered (no server-side data)** -- game-id **discovery** surfaces
+  (scoreboards, ``teams/{id}/game_by_game``); the team page carries no
+  server-rendered contest ids or schedule table, so ids cannot be scraped
+  statically.
+
+Therefore there are deliberately **no** ``discover_*`` / game-detail helpers
+that "just work" statically -- both discovering game ids and fetching the
+protected game-detail pages require a **JS-capable browser (Playwright /
+puppeteer)** and belong in a producer/scraper layer, **not** in
+``sportsdataverse``'s dependency set (Playwright is intentionally not a dep).
+The offline fixture oracle (Phases 5a-5e) remains the validated parse path; a
+browser layer feeds real HTML into those parsers when game-level data is
+needed. See ``dev/phase5f-live-proof.md`` for the full live characterization.
 """
 
 from __future__ import annotations
