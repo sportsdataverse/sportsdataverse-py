@@ -36,11 +36,16 @@ def predict_margin(
 ) -> float:
     """Expected home-minus-away margin from two adjusted efficiency margins.
 
+    The AdjEM difference is scaled by the league's fitted ``em_scale`` (AdjEM
+    is per-100-possessions; a game margin scales by roughly tempo/100, further
+    attenuated for as-of estimation noise) before the home-court advantage is
+    added.
+
     Args:
         home_adj_em: Home team's adjusted efficiency margin (points / 100 poss).
         away_adj_em: Away team's adjusted efficiency margin.
         neutral: True for a neutral-site game (no home-court advantage).
-        league: ``"mens"`` or ``"womens"`` (selects the fitted HFA).
+        league: ``"mens"`` or ``"womens"`` (selects the fitted em_scale / HFA).
 
     Returns:
         Expected margin in points (positive favors the home team).
@@ -51,8 +56,9 @@ def predict_margin(
             from sportsdataverse.mbb.mbb_game_predict import predict_margin
             predict_margin(20.0, 10.0)
     """
-    hfa = 0.0 if neutral else get_constants(league).hfa
-    return float(home_adj_em - away_adj_em + hfa)
+    c = get_constants(league)
+    hfa = 0.0 if neutral else c.hfa
+    return float(c.em_scale * (home_adj_em - away_adj_em) + hfa)
 
 
 def win_prob_from_margin(exp_margin: float, *, league: str = "mens") -> float:
@@ -200,7 +206,7 @@ def mbb_predict_games(
     hfa = pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(c.hfa)  # noqa: E712
     poss = pl.col("home_adj_tempo") * pl.col("away_adj_tempo") / c.avg_tempo
     out = out.with_columns(
-        (pl.col("home_adj_em") - pl.col("away_adj_em") + hfa).alias("exp_margin"),
+        (c.em_scale * (pl.col("home_adj_em") - pl.col("away_adj_em")) + hfa).alias("exp_margin"),
         (
             (0.5 * (pl.col("home_adj_o") + pl.col("away_adj_d")) + 0.5 * (pl.col("away_adj_o") + pl.col("home_adj_d")))
             * poss

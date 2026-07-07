@@ -39,12 +39,13 @@ def _games() -> pl.DataFrame:
 
 
 def test_predict_margin_neutral_has_no_hfa():
-    assert predict_margin(10.0, 5.0, neutral=True) == 5.0
+    c = get_constants("mens")
+    assert predict_margin(10.0, 5.0, neutral=True) == 5.0 * c.em_scale
 
 
 def test_predict_margin_home_adds_hfa():
     c = get_constants("mens")
-    assert predict_margin(10.0, 5.0, neutral=False) == 5.0 + c.hfa
+    assert predict_margin(10.0, 5.0, neutral=False) == 5.0 * c.em_scale + c.hfa
 
 
 def test_predict_margin_league_dispatch():

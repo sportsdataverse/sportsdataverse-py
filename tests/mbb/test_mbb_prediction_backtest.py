@@ -1,7 +1,8 @@
 """Backtest harness for the MBB prediction stack.
 
 Task 0.4: the as-of-date leakage split + the shared ``oracle_corpus`` fixture.
-Per-model backtest assertions are added by later phases (2, 3, 4, 6).
+Task 2.3: the pregame gates (win-prob Brier vs ESPN-BPI, spread/total MAE vs
+the closing line) over a weekly as-of walk of the 2024 season.
 """
 
 from __future__ import annotations
@@ -9,15 +10,23 @@ from __future__ import annotations
 import datetime
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 import pytest
 
-from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
+from sportsdataverse.mbb.mbb_game_predict import mbb_predict_games
+from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split, brier_score, mae
+from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo, raw_game_efficiency
 
 FIX_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
 
 _CORE_FIXTURES = ("results_2024", "team_box_2024", "torvik_2024")
 _OPTIONAL_FIXTURES = ("espn_predictor_sample", "espn_odds_sample", "espn_bpi_2024")
+
+# A game enters the backtest only when both teams have this many prior games at
+# the as-of date (data sufficiency for the in-season engine, mirrors
+# dev/mbb_prediction/fit_pregame.py).
+_MIN_PRIOR_GAMES = 8
 
 
 @pytest.fixture
@@ -62,3 +71,92 @@ def test_oracle_corpus_id_columns_are_utf8(oracle_corpus):
     for col in ("game_id", "home_team_id", "away_team_id"):
         assert results.schema[col] == pl.Utf8
     assert oracle_corpus["torvik_2024"].schema["team_id"] == pl.Utf8
+
+
+@pytest.fixture(scope="module")
+def weekly_backtest() -> pl.DataFrame:
+    """As-of pregame predictions for the 2024 season, weekly cutoffs.
+
+    Ratings for each game are built from games strictly before the Monday of
+    the game's week (cutoff <= game date, so the strictly-before rule holds).
+    One row per eligible game: the ``mbb_predict_games`` output columns plus
+    ``actual_margin`` / ``actual_total``.
+    """
+    results = pl.read_parquet(FIX_DIR / "results_2024.parquet").with_columns(
+        pl.col("date").dt.truncate("1w").alias("cutoff")
+    )
+    box = pl.read_parquet(FIX_DIR / "team_box_2024.parquet")
+    frames = []
+    for (cutoff,), week in results.group_by("cutoff", maintain_order=True):
+        prior = results.filter(pl.col("date") < cutoff)
+        if prior.height < 300:  # engine has nothing useful in the opening days
+            continue
+        eff = raw_game_efficiency(prior, box.filter(pl.col("game_date") < cutoff))
+        counts = eff.group_by("team_id").agg(pl.len().alias("n"))
+        ratings = (
+            adjust_efficiency(eff)
+            .join(adjust_tempo(eff), on=["season", "team_id"])
+            .select("team_id", "adj_o", "adj_d", "adj_em", "adj_tempo")
+        )
+        preds = mbb_predict_games(week.select("game_id", "home_team_id", "away_team_id", "neutral_site"), ratings)
+        frames.append(
+            preds.join(
+                week.select(
+                    "game_id",
+                    (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("actual_margin"),
+                    (pl.col("home_score") + pl.col("away_score")).cast(pl.Float64).alias("actual_total"),
+                ),
+                on="game_id",
+            )
+            .join(counts.rename({"team_id": "home_team_id", "n": "home_n"}), on="home_team_id", how="left")
+            .join(counts.rename({"team_id": "away_team_id", "n": "away_n"}), on="away_team_id", how="left")
+        )
+    return pl.concat(frames).filter(
+        (pl.col("home_n") >= _MIN_PRIOR_GAMES)
+        & (pl.col("away_n") >= _MIN_PRIOR_GAMES)
+        & pl.col("exp_margin").is_not_null()
+    )
+
+
+def test_pregame_brier_beats_espn_bpi(weekly_backtest, oracle_corpus):
+    """Task 2.3 gate: win-prob Brier <= ESPN-BPI predictor Brier + 0.01.
+
+    Observed at fit time (weekly walk): ours 0.2006 vs ESPN 0.2031 (n=218).
+    """
+    pred = oracle_corpus["espn_predictor_sample"]
+    j = weekly_backtest.join(pred.select("game_id", pl.col("home_win_prob").alias("espn_p")), on="game_id", how="inner")
+    assert j.height >= 150, f"backtest/predictor intersection too small: {j.height}"
+    y = (j.get_column("actual_margin").to_numpy() > 0).astype(float)
+    b_ours = brier_score(y, j.get_column("home_win_prob").to_numpy())
+    b_espn = brier_score(y, j.get_column("espn_p").to_numpy())
+    assert b_ours <= b_espn + 0.01, f"brier ours={b_ours:.5f} espn={b_espn:.5f}"
+
+
+def test_pregame_spread_mae_vs_closing_line(weekly_backtest, oracle_corpus):
+    """Task 2.3 gate: exp_margin within 2.5 points MAE of the closing spread.
+
+    Observed at fit time (weekly walk): 1.95 (n=218). ESPN quotes the home
+    spread with negative = home favored, so the comparable margin is its
+    negation.
+    """
+    odds = oracle_corpus["espn_odds_sample"]
+    j = weekly_backtest.join(odds, on="game_id", how="inner")
+    assert j.height >= 150, f"backtest/odds intersection too small: {j.height}"
+    m = mae(j.get_column("exp_margin").to_numpy(), -j.get_column("close_spread_home").to_numpy())
+    assert m <= 2.5, f"spread MAE vs close = {m:.3f}"
+
+
+def test_pregame_total_mae_vs_closing_line(weekly_backtest, oracle_corpus):
+    """Task 2.3 gate: exp_total within 3.5 points MAE of the closing total.
+
+    Observed at fit time (weekly walk, fitted avg_tempo anchor): 2.90 (n=218).
+    Also pins the calibration: mean(exp_total) within 2 points of the mean
+    closing total (the seeded anchor was +6.4 biased before the fit).
+    """
+    odds = oracle_corpus["espn_odds_sample"]
+    j = weekly_backtest.join(odds, on="game_id", how="inner")
+    exp_t = j.get_column("exp_total").to_numpy()
+    close_t = j.get_column("close_total").to_numpy()
+    m = mae(exp_t, close_t)
+    assert m <= 3.5, f"total MAE vs close = {m:.3f}"
+    assert abs(float(np.mean(exp_t)) - float(np.mean(close_t))) <= 2.0

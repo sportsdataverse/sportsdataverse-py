@@ -31,8 +31,14 @@ class LeagueConstants:
     (the same pattern ``wbb_rapm`` / ``wbb_ratings`` already use).
 
     Attributes:
-        hfa: Home-court advantage in points (seed; fitted in Phase 2).
-        margin_sd: Std. dev. of the game-margin residual (seed; fitted in Phase 2).
+        hfa: Home-court advantage in points (fitted on the 2024 backtest).
+        margin_sd: Std. dev. of the game-margin residual (fitted on the 2024
+            backtest; the Brier-minimizing sigma agrees to within 0.04).
+        em_scale: Slope applied to the AdjEM difference when predicting a game
+            margin. AdjEM is per-100-possessions, so a game margin scales by
+            ~tempo/100 (~0.67); the fitted value is lower still because the
+            as-of AdjEM estimate is noisy and the optimal predictive slope is
+            attenuated (regression dilution). Fitted jointly with ``hfa``.
         avg_tempo: League baseline possessions per game (adjusted-tempo anchor).
         avg_efficiency: League baseline points per 100 possessions.
         quad_thresholds: NET-style quadrant opponent-rank upper bounds, keyed by
@@ -44,6 +50,7 @@ class LeagueConstants:
 
     hfa: float
     margin_sd: float
+    em_scale: float
     avg_tempo: float
     avg_efficiency: float
     quad_thresholds: dict[str, dict[str, int]]
@@ -59,14 +66,17 @@ _NET_QUAD_THRESHOLDS: dict[str, dict[str, int]] = {
     "away": {"q1": 75, "q2": 135, "q3": 240},
 }
 
-# Seed values from published references so the module imports and the engine runs
-# before fitting. Phase 2 (sigma/HFA) and Phase 3 (in-game-WP) overwrite the fitted
-# fields in-code and re-commit; the quad thresholds are canonical NET definitions.
+# Men's hfa / margin_sd / em_scale were fitted on the 2024 as-of-date backtest
+# (``dev/mbb_prediction/fit_pregame.py``: joint least squares of actual margin on
+# em_diff + non-neutral indicator over 4,359 eligible games; residual std 11.224
+# vs Brier-minimizing 11.193). Women's values remain published-reference seeds
+# until the Phase-7 refit. Quad thresholds are canonical NET definitions.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "mens": LeagueConstants(
-        hfa=3.5,
-        margin_sd=11.0,
-        avg_tempo=67.0,
+        hfa=2.9281,
+        margin_sd=11.2196,
+        em_scale=0.5766,
+        avg_tempo=69.6255,
         avg_efficiency=104.0,
         quad_thresholds=_NET_QUAD_THRESHOLDS,
         in_game_wp_artifact="mbb_in_game_wp.json",
@@ -74,6 +84,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "womens": LeagueConstants(
         hfa=3.0,
         margin_sd=12.0,
+        em_scale=0.5794,
         avg_tempo=70.0,
         avg_efficiency=95.0,
         quad_thresholds=_NET_QUAD_THRESHOLDS,
