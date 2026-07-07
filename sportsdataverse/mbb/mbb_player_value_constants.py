@@ -228,23 +228,42 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
 
 
 def _load_player_box(seasons: "list[int]", league: str) -> pl.DataFrame:
+    """Per-season loads + needed-columns select (release schemas drift by year)."""
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore as _loader  # noqa: PLC0415
+    else:
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore as _loader  # noqa: PLC0415
 
-        return load_wbb_player_boxscore(seasons)
-    from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore  # noqa: PLC0415
-
-    return load_mbb_player_boxscore(seasons)
+    keep = [
+        "athlete_id",
+        "athlete_display_name",
+        "athlete_position_abbreviation",
+        "season",
+        "team_id",
+        "minutes",
+        *(_COUNT_COLS),
+    ]
+    frames = []
+    for season in seasons:
+        df = _loader([season])
+        if not df.is_empty():
+            frames.append(df.select([c for c in keep if c in df.columns]))
+    return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
 
 
 def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
+    """Per-season loads + needed-columns select (release schemas drift by year)."""
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots as _loader  # noqa: PLC0415
+    else:
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_shots as _loader  # noqa: PLC0415
 
-        return load_wbb_shots(seasons)
-    from sportsdataverse.mbb.mbb_loaders import load_mbb_shots  # noqa: PLC0415
-
-    return load_mbb_shots(seasons)
+    frames = []
+    for season in seasons:
+        df = _loader([season])
+        if not df.is_empty():
+            frames.append(df.select([c for c in ("athlete_id_1", "season", "type_text") if c in df.columns]))
+    return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
 
 
 _COUNT_COLS = (
@@ -299,6 +318,11 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
         .group_by("athlete_id", "season", "team_id")
         .agg(
             pl.col("athlete_display_name").first().alias("player"),
+            (
+                pl.col("athlete_position_abbreviation").drop_nulls().first()
+                if "athlete_position_abbreviation" in box.columns
+                else pl.lit(None, dtype=pl.Utf8)
+            ).alias("position"),
             pl.col("minutes").cast(pl.Float64).sum().alias("minutes"),
             *[pl.col(c).cast(pl.Float64).sum() for c in _COUNT_COLS if c in box.columns],
         )
