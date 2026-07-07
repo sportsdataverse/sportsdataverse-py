@@ -15,11 +15,27 @@ only free knob for probabilities.
 
 from __future__ import annotations
 
+
+from typing import Literal, overload
+
+import pandas as pd
+import polars as pl
 from scipy.stats import norm
 
 from sportsdataverse.cfb.cfb_prediction_constants import get_constants
 
-__all__ = ["predict_margin", "predict_total", "win_prob_from_margin"]
+__all__ = ["cfb_predict_games", "predict_margin", "predict_total", "win_prob_from_margin"]
+
+# Output column contract for :func:`cfb_predict_games`.
+_PREDICT_COLUMNS = [
+    "game_id",
+    "home_team_id",
+    "away_team_id",
+    "neutral_site",
+    "exp_margin",
+    "home_win_prob",
+    "exp_total",
+]
 
 # ponytail: league scoring level for predict_total, in EPA-per-drive-equivalent
 # units. adj_off/adj_def carry the ridge intercept (absolute EPA/play), so their
@@ -127,3 +143,99 @@ def predict_total(
     home_pts = scale * (home_adj_off + away_adj_def + _TOTAL_BASELINE)
     away_pts = scale * (away_adj_off + home_adj_def + _TOTAL_BASELINE)
     return home_pts + away_pts
+
+
+@overload
+def cfb_predict_games(
+    games: pl.DataFrame,
+    ratings: pl.DataFrame,
+    *,
+    era: str = ...,
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+@overload
+def cfb_predict_games(
+    games: pl.DataFrame,
+    ratings: pl.DataFrame,
+    *,
+    era: str = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+def cfb_predict_games(
+    games: pl.DataFrame,
+    ratings: pl.DataFrame,
+    *,
+    era: str = "modern",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Predict a whole schedule of games from a ratings frame (vectorized).
+
+    Applies the three closed-form predictors across every row of ``games`` in
+    one pass. ``ratings`` is joined twice -- once on ``home_team_id`` and once on
+    ``away_team_id`` -- so each game carries both teams' ``adj_net`` / ``adj_off_epa``
+    / ``adj_def_epa``.
+
+    Args:
+        games: Schedule frame with ``game_id``, ``home_team_id``, ``away_team_id``,
+            and ``neutral_site`` columns. The two team-id columns must share the
+            dtype of ``ratings["team_id"]`` (asserted before the join).
+        ratings: A :func:`cfb_ratings.cfb_ratings`-style frame with ``team_id``,
+            ``adj_net``, ``adj_off_epa``, and ``adj_def_epa``.
+        era: Era key into :data:`cfb_prediction_constants.CFB_CONSTANTS`.
+        return_as_pandas: If True, return a pandas DataFrame; otherwise polars.
+
+    Returns:
+        One row per game with ``game_id``, ``home_team_id``, ``away_team_id``,
+        ``neutral_site``, ``exp_margin``, ``home_win_prob``, ``exp_total``.
+
+    Raises:
+        AssertionError: If either team-id join key's dtype disagrees with
+            ``ratings["team_id"]``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_game_predict import cfb_predict_games
+            from sportsdataverse.cfb import cfb_ratings
+            from sportsdataverse.cfb.cfb_schedule import cfb_schedule  # schedule loader
+            ratings = cfb_ratings(2023)
+            preds = cfb_predict_games(schedule_2023, ratings)
+    """
+    key_dtype = ratings.schema["team_id"]
+    assert games.schema["home_team_id"] == key_dtype, (
+        f"home_team_id dtype {games.schema['home_team_id']} != ratings team_id {key_dtype}"
+    )
+    assert games.schema["away_team_id"] == key_dtype, (
+        f"away_team_id dtype {games.schema['away_team_id']} != ratings team_id {key_dtype}"
+    )
+
+    c = get_constants(era)
+    rate_cols = ratings.select("team_id", "adj_net", "adj_off_epa", "adj_def_epa")
+    home = rate_cols.rename({col: f"home_{col}" for col in rate_cols.columns if col != "team_id"})
+    away = rate_cols.rename({col: f"away_{col}" for col in rate_cols.columns if col != "team_id"})
+
+    scale = c.avg_drives * c.points_per_epa * 0.5
+    joined = games.join(home, left_on="home_team_id", right_on="team_id", how="left").join(
+        away, left_on="away_team_id", right_on="team_id", how="left"
+    )
+
+    with_margin = joined.with_columns(
+        exp_margin=(
+            pl.col("home_adj_net")
+            - pl.col("away_adj_net")
+            + pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(c.hfa)  # noqa: E712
+        ),
+        exp_total=scale
+        * (
+            pl.col("home_adj_off_epa")
+            + pl.col("away_adj_def_epa")
+            + pl.col("away_adj_off_epa")
+            + pl.col("home_adj_def_epa")
+            + 2 * _TOTAL_BASELINE
+        ),
+    )
+    win_prob = norm.cdf(with_margin["exp_margin"].to_numpy() / c.margin_sd)
+    out = with_margin.with_columns(home_win_prob=pl.Series("home_win_prob", win_prob, dtype=pl.Float64)).select(
+        _PREDICT_COLUMNS
+    )
+    return out.to_pandas() if return_as_pandas else out

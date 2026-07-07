@@ -8,9 +8,12 @@ from __future__ import annotations
 
 import math
 
+import polars as pl
+import pytest
 from scipy.stats import norm
 
 from sportsdataverse.cfb.cfb_game_predict import (
+    cfb_predict_games,
     predict_margin,
     predict_total,
     win_prob_from_margin,
@@ -18,6 +21,30 @@ from sportsdataverse.cfb.cfb_game_predict import (
 from sportsdataverse.cfb.cfb_prediction_constants import get_constants
 
 _C = get_constants("modern")
+
+
+def _ratings_frame() -> pl.DataFrame:
+    """Three teams with hand-picked adjusted ratings (team_id as Utf8)."""
+    return pl.DataFrame(
+        {
+            "team_id": ["1", "2", "3"],
+            "adj_net": [0.30, 0.10, -0.20],
+            "adj_off_epa": [0.20, 0.05, -0.10],
+            "adj_def_epa": [-0.10, 0.00, 0.15],
+        }
+    )
+
+
+def _schedule_frame() -> pl.DataFrame:
+    """Three games, the last on a neutral field (team_id keys as Utf8)."""
+    return pl.DataFrame(
+        {
+            "game_id": [101, 102, 103],
+            "home_team_id": ["1", "2", "1"],
+            "away_team_id": ["2", "3", "3"],
+            "neutral_site": [False, False, True],
+        }
+    )
 
 
 def test_predict_margin_neutral_carries_no_hfa() -> None:
@@ -66,3 +93,56 @@ def test_predict_total_is_finite_and_positive() -> None:
     t = predict_total(0.0, 0.0, 0.0, 0.0)
     assert math.isfinite(t)
     assert t > 0.0
+
+
+def test_cfb_predict_games_matches_scalars() -> None:
+    """Every vectorized row equals the scalar predictors on the same inputs."""
+    ratings = _ratings_frame()
+    games = _schedule_frame()
+    out = cfb_predict_games(games, ratings)
+
+    assert out.columns == [
+        "game_id",
+        "home_team_id",
+        "away_team_id",
+        "neutral_site",
+        "exp_margin",
+        "home_win_prob",
+        "exp_total",
+    ]
+    assert out.height == 3
+
+    by_team = {r["team_id"]: r for r in ratings.iter_rows(named=True)}
+    for row in out.iter_rows(named=True):
+        h, a = by_team[row["home_team_id"]], by_team[row["away_team_id"]]
+        neutral = row["neutral_site"]
+        exp_m = predict_margin(h["adj_net"], a["adj_net"], neutral=neutral)
+        exp_t = predict_total(h["adj_off_epa"], h["adj_def_epa"], a["adj_off_epa"], a["adj_def_epa"])
+        assert row["exp_margin"] == pytest.approx(exp_m)
+        assert row["home_win_prob"] == pytest.approx(win_prob_from_margin(exp_m))
+        assert row["exp_total"] == pytest.approx(exp_t)
+
+
+def test_cfb_predict_games_neutral_row_drops_hfa() -> None:
+    """The neutral game's margin is exactly the rating differential (no HFA)."""
+    out = cfb_predict_games(_schedule_frame(), _ratings_frame())
+    neutral = out.filter(pl.col("neutral_site") == True)  # noqa: E712
+    assert neutral.height == 1
+    # game 103: home team "1" (adj_net 0.30) vs away "3" (adj_net -0.20)
+    assert neutral["exp_margin"][0] == pytest.approx(0.30 - (-0.20))
+
+
+def test_cfb_predict_games_dtype_mismatch_raises() -> None:
+    """A join-key dtype mismatch trips the guard instead of silently missing."""
+    games = _schedule_frame().with_columns(pl.col("home_team_id").cast(pl.Int64))
+    with pytest.raises(AssertionError):
+        cfb_predict_games(games, _ratings_frame())
+
+
+def test_cfb_predict_games_return_as_pandas() -> None:
+    """``return_as_pandas=True`` yields a pandas frame with the same columns."""
+    import pandas as pd
+
+    out = cfb_predict_games(_schedule_frame(), _ratings_frame(), return_as_pandas=True)
+    assert isinstance(out, pd.DataFrame)
+    assert list(out.columns)[:4] == ["game_id", "home_team_id", "away_team_id", "neutral_site"]
