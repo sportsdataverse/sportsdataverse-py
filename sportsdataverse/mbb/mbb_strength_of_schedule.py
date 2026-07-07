@@ -224,10 +224,14 @@ def mbb_strength_of_schedule(
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
-    from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule  # noqa: PLC0415
-    from sportsdataverse.mbb.mbb_team_ratings import _normalize_schedule, mbb_team_ratings  # noqa: PLC0415
+    from sportsdataverse.mbb.mbb_team_ratings import (  # noqa: PLC0415
+        _league_loaders,
+        _normalize_schedule,
+        mbb_team_ratings,
+    )
 
-    results = _normalize_schedule(load_mbb_schedule(seasons)).filter(
+    load_schedule, _ = _league_loaders(league)
+    results = _normalize_schedule(load_schedule(seasons)).filter(
         pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
     )
     ratings = mbb_team_ratings(seasons, league=league)

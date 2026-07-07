@@ -201,22 +201,28 @@ def mbb_bracketology(
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
         * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
     """
-    from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_mbb_standings, load_mbb_team_boxscore  # noqa: PLC0415
     from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split  # noqa: PLC0415
     from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule  # noqa: PLC0415
     from sportsdataverse.mbb.mbb_team_ratings import (  # noqa: PLC0415
+        _league_loaders,
         _normalize_schedule,
         adjust_efficiency,
         raw_game_efficiency,
     )
 
-    results = _normalize_schedule(load_mbb_schedule([season])).filter(
+    load_schedule, load_team_box = _league_loaders(league)
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_standings as load_standings  # noqa: PLC0415
+    else:
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_standings as load_standings  # noqa: PLC0415
+
+    results = _normalize_schedule(load_schedule([season])).filter(
         pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null()
     )
     if as_of_date is not None:
         results = as_of_ratings_split(results, as_of_date)
-    eff = raw_game_efficiency(results, load_mbb_team_boxscore([season]))
-    ratings = adjust_efficiency(eff).with_columns(
+    eff = raw_game_efficiency(results, load_team_box([season]))
+    ratings = adjust_efficiency(eff, league=league).with_columns(
         pl.col("adj_em").rank(method="min", descending=True).over("season").cast(pl.Int64).alias("rank"),
         ((pl.col("adj_em") - pl.col("adj_em").mean().over("season")) / pl.col("adj_em").std().over("season")).alias(
             "adj_em_z"
@@ -225,6 +231,6 @@ def mbb_bracketology(
     resume = strength_of_schedule(results, ratings, league=league).join(
         ratings.select("season", "team_id", "adj_em_z"), on=["season", "team_id"], how="inner"
     )
-    auto = _conference_auto_bids(load_mbb_standings([season]))
+    auto = _conference_auto_bids(load_standings([season]))
     out = project_bracket(resume, auto, league=league)
     return out.to_pandas() if return_as_pandas else out

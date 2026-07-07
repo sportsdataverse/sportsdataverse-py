@@ -296,6 +296,15 @@ _RATINGS_SCHEMA = {
 }
 
 
+def _league_loaders(league: str):  # type: ignore[no-untyped-def]
+    """(schedule, team_box) loaders for a league -- the mens cores serve wbb too."""
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_schedule, load_wbb_team_boxscore  # noqa: PLC0415
+
+        return load_wbb_schedule, load_wbb_team_boxscore
+    return load_mbb_schedule, load_mbb_team_boxscore
+
+
 def _normalize_schedule(schedule: pl.DataFrame) -> pl.DataFrame:
     """Map ESPN ``load_mbb_schedule`` columns to the engine's canonical names.
 
@@ -343,8 +352,9 @@ def mbb_team_ratings(
             ratings.sort("rank").head()
     """
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
-    schedule = _normalize_schedule(load_mbb_schedule(seasons_list))
-    team_box = load_mbb_team_boxscore(seasons_list)
+    load_schedule, load_team_box = _league_loaders(league)
+    schedule = _normalize_schedule(load_schedule(seasons_list))
+    team_box = load_team_box(seasons_list)
     eff = raw_game_efficiency(schedule, team_box)
 
     if eff.height == 0:
