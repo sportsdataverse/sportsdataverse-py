@@ -145,6 +145,7 @@ from sportsdataverse.mbb import fox_mbb_team_roster as _raw_fox_mbb_team_roster
 from sportsdataverse.mbb import fox_mbb_team_stats as _raw_fox_mbb_team_stats
 from sportsdataverse.mbb import AssistEvent as AssistEvent  # noqa: F401
 from sportsdataverse.mbb import AssistInfo as AssistInfo  # noqa: F401
+from sportsdataverse.mbb import BadLineupClump as BadLineupClump  # noqa: F401
 from sportsdataverse.mbb import ConcurrentClump as ConcurrentClump  # noqa: F401
 from sportsdataverse.mbb import Direction as Direction  # noqa: F401
 from sportsdataverse.mbb import FieldGoalStats as FieldGoalStats  # noqa: F401
@@ -182,11 +183,14 @@ from sportsdataverse.mbb import SubOutEvent as SubOutEvent  # noqa: F401
 from sportsdataverse.mbb import TeamId as TeamId  # noqa: F401
 from sportsdataverse.mbb import TeamSeasonId as TeamSeasonId  # noqa: F401
 from sportsdataverse.mbb import TidyPlayerContext as TidyPlayerContext  # noqa: F401
+from sportsdataverse.mbb import ValidationError as ValidationError  # noqa: F401
 from sportsdataverse.mbb import WeakSurnameMatch as WeakSurnameMatch  # noqa: F401
 from sportsdataverse.mbb import Year as Year  # noqa: F401
+from sportsdataverse.mbb import add_missing_players as add_missing_players  # noqa: F401
 from sportsdataverse.mbb import add_stats_to_lineups as add_stats_to_lineups  # noqa: F401
 from sportsdataverse.mbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
 from sportsdataverse.mbb import alias_combos as alias_combos  # noqa: F401
+from sportsdataverse.mbb import analyze_and_fix_clumps as analyze_and_fix_clumps  # noqa: F401
 from sportsdataverse.mbb import apply_relative_positional_overrides as apply_relative_positional_overrides  # noqa: F401
 from sportsdataverse.mbb import apply_weak_priors as apply_weak_priors  # noqa: F401
 from sportsdataverse.mbb import assign_to_right_lineup as assign_to_right_lineup  # noqa: F401
@@ -227,6 +231,8 @@ from sportsdataverse.mbb import calculate_rapm as calculate_rapm  # noqa: F401
 from sportsdataverse.mbb import calculate_residual_error as calculate_residual_error  # noqa: F401
 from sportsdataverse.mbb import calculate_sd_rapm as calculate_sd_rapm  # noqa: F401
 from sportsdataverse.mbb import calculate_stats as calculate_stats  # noqa: F401
+from sportsdataverse.mbb import categorize_bad_lineups as categorize_bad_lineups  # noqa: F401
+from sportsdataverse.mbb import clump_bad_lineups as clump_bad_lineups  # noqa: F401
 from sportsdataverse.mbb import combos as combos  # noqa: F401
 from sportsdataverse.mbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
 from sportsdataverse.mbb import concurrent_event_handler as concurrent_event_handler  # noqa: F401
@@ -245,11 +251,13 @@ from sportsdataverse.mbb import espn_mbb_pbp as espn_mbb_pbp  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_player_stats as espn_mbb_player_stats  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_schedule as espn_mbb_schedule  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_teams as espn_mbb_teams  # noqa: F401
+from sportsdataverse.mbb import find_missing_subs as find_missing_subs  # noqa: F401
 from sportsdataverse.mbb import fix_combos as fix_combos  # noqa: F401
 from sportsdataverse.mbb import fix_possible_score_swap_bug as fix_possible_score_swap_bug  # noqa: F401
 from sportsdataverse.mbb import flatten_json_iterative as flatten_json_iterative  # noqa: F401
 from sportsdataverse.mbb import fuzzy_box_match as fuzzy_box_match  # noqa: F401
 from sportsdataverse.mbb import get_stats_diff as get_stats_diff  # noqa: F401
+from sportsdataverse.mbb import handle_common_sub_bug as handle_common_sub_bug  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_athlete_items as helper_mbb_athlete_items  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_game_data as helper_mbb_game_data  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_game_items as helper_mbb_game_items  # noqa: F401
@@ -341,11 +349,13 @@ from sportsdataverse.mbb import test_positional_aware_filter as test_positional_
 from sportsdataverse.mbb import tidy_player as tidy_player  # noqa: F401
 from sportsdataverse.mbb import underscore as underscore  # noqa: F401
 from sportsdataverse.mbb import using_roster_pos as using_roster_pos  # noqa: F401
+from sportsdataverse.mbb import validate_lineup as validate_lineup  # noqa: F401
 from sportsdataverse.mbb import weighted_avg as weighted_avg  # noqa: F401
 
 __all__ = [
     "AssistEvent",
     "AssistInfo",
+    "BadLineupClump",
     "ConcurrentClump",
     "Direction",
     "FieldGoalStats",
@@ -383,11 +393,14 @@ __all__ = [
     "TeamId",
     "TeamSeasonId",
     "TidyPlayerContext",
+    "ValidationError",
     "WeakSurnameMatch",
     "Year",
+    "add_missing_players",
     "add_stats_to_lineups",
     "adjust_off_rating_stats",
     "alias_combos",
+    "analyze_and_fix_clumps",
     "apply_relative_positional_overrides",
     "apply_weak_priors",
     "assign_to_right_lineup",
@@ -428,6 +441,8 @@ __all__ = [
     "calculate_residual_error",
     "calculate_sd_rapm",
     "calculate_stats",
+    "categorize_bad_lineups",
+    "clump_bad_lineups",
     "combos",
     "complete_weighted_avg",
     "concurrent_event_handler",
@@ -558,6 +573,7 @@ __all__ = [
     "espn_mbb_transactions",
     "espn_mbb_venue",
     "espn_mbb_venues",
+    "find_missing_subs",
     "fix_combos",
     "fix_possible_score_swap_bug",
     "flatten_json_iterative",
@@ -571,6 +587,7 @@ __all__ = [
     "fox_mbb_team_stats",
     "fuzzy_box_match",
     "get_stats_diff",
+    "handle_common_sub_bug",
     "helper_mbb_athlete_items",
     "helper_mbb_game_data",
     "helper_mbb_game_items",
@@ -662,6 +679,7 @@ __all__ = [
     "tidy_player",
     "underscore",
     "using_roster_pos",
+    "validate_lineup",
     "weighted_avg",
 ]
 
