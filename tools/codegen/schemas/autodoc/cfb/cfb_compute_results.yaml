@@ -1,0 +1,24 @@
+schema: cfb_compute_results
+kind: dataframe
+columns:
+- name: sim
+  type: integer
+  description: ''
+- name: week
+  type: integer
+  description: ''
+- name: game_type
+  type: character
+  description: ''
+- name: home_team
+  type: character
+  description: ''
+- name: away_team
+  type: character
+  description: ''
+- name: result
+  type: double
+  description: ''
+- name: neutral
+  type: integer
+  description: ''

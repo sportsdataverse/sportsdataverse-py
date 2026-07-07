@@ -293,6 +293,8 @@ files = [
     "sportsdataverse/cfb/cfb_adjusted_epa.py",
     "sportsdataverse/cfb/cfb_crosswalk.py",
     "sportsdataverse/cfb/cfb_fox_ext.py",
+    "sportsdataverse/cfb/cfb_simulations.py",
+    "sportsdataverse/cfb/cfb_standings.py",
     "sportsdataverse/cfb/cfb_yahoo_ext.py",
     "sportsdataverse/nfl/config.py",
     "sportsdataverse/nfl/model_vars.py",
