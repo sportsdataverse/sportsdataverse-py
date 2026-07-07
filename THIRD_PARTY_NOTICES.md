@@ -6,6 +6,7 @@
   - [cbb-on-off-analyzer (`LineupUtils.ts`)](#cbb-on-off-analyzer-lineuputilsts)
   - [cbb-on-off-analyzer (`RatingUtils.ts`)](#cbb-on-off-analyzer-ratingutilsts)
   - [cbb-on-off-analyzer (`LuckUtils.ts`)](#cbb-on-off-analyzer-luckutilsts)
+  - [cbb-on-off-analyzer (`RapmUtils.ts`)](#cbb-on-off-analyzer-rapmutilsts)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -118,6 +119,41 @@ that license's own attribution obligations.
   of NaN/Infinity propagation, and explicit `is not None` checks in place of
   JS's array/empty-object truthiness -- itemized in the module docstring),
   not a functional rewrite.
+
+## cbb-on-off-analyzer (`RapmUtils.ts`)
+
+- **Project:** [Alex-At-Home/cbb-on-off-analyzer](https://github.com/Alex-At-Home/cbb-on-off-analyzer)
+  (the hoop-explorer.com single-page app).
+- **License:** Apache License, Version 2.0 -- full text at
+  <http://www.apache.org/licenses/LICENSE-2.0>, and vendored verbatim in the
+  upstream repository's `LICENSE` file.
+- **Copyright:** Copyright (c) Alex-At-Home
+  (<https://github.com/Alex-At-Home>) and contributors. Licensed under the
+  Apache License, Version 2.0.
+- **What was derived:** `src/utils/stats/RapmUtils.ts`'s initialization
+  layer -- the `RapmPriorInfo`/`RapmPlayerContext`/`RapmConfig` types,
+  `defaultRapmConfig`, `buildPriors` (incl. the `getPriorBasis` closure), and
+  `buildPlayerContext` -- was ported line-for-line (including documented
+  bug-for-bug behavior) into
+  [`sportsdataverse/mbb/mbb_rapm.py`](sportsdataverse/mbb/mbb_rapm.py). The
+  module's remaining matrix-solve / ridge-regression / collinearity-
+  diagnostics surface (`calcPlayerWeights`, `calcLineupOutputs`,
+  `pickRidgeRegression`, `injectRapmIntoPlayers`, `calcCollinearityDiag`) was
+  ported incrementally into the same module across subsequent tasks; this
+  entry covers the module as a whole.
+  [`sportsdataverse/wbb/wbb_rapm.py`](sportsdataverse/wbb/wbb_rapm.py)
+  re-exports the same functions, `TypedDict` types, and constants by
+  reference (no separate copy of the logic). The jest snapshot fixtures and
+  their input literals used as an offline correctness oracle are vendored
+  under
+  [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
+  are test-only fixtures and are not shipped in the distributed wheel or
+  sdist.
+- **Modifications:** Translated from TypeScript to Python, following this
+  repository's own conventions (typing, docstrings). No changes were made
+  to the original TypeScript source itself; the Python port is a faithful
+  (including bug-for-bug, where explicitly documented in the module
+  docstring) translation of the upstream logic, not a functional rewrite.
 
 No modifications beyond the port itself are claimed against the upstream
 project, and no upstream `NOTICE` file exists to reproduce (the upstream

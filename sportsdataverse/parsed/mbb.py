@@ -143,8 +143,14 @@ from sportsdataverse.mbb import fox_mbb_standings as _raw_fox_mbb_standings
 from sportsdataverse.mbb import fox_mbb_team_gamelog as _raw_fox_mbb_team_gamelog
 from sportsdataverse.mbb import fox_mbb_team_roster as _raw_fox_mbb_team_roster
 from sportsdataverse.mbb import fox_mbb_team_stats as _raw_fox_mbb_team_stats
+from sportsdataverse.mbb import RapmConfig as RapmConfig  # noqa: F401
+from sportsdataverse.mbb import RapmPlayerContext as RapmPlayerContext  # noqa: F401
+from sportsdataverse.mbb import RapmPreProcDiagnostics as RapmPreProcDiagnostics  # noqa: F401
+from sportsdataverse.mbb import RapmPriorInfo as RapmPriorInfo  # noqa: F401
+from sportsdataverse.mbb import RapmProcessingInputs as RapmProcessingInputs  # noqa: F401
 from sportsdataverse.mbb import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
 from sportsdataverse.mbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
+from sportsdataverse.mbb import apply_weak_priors as apply_weak_priors  # noqa: F401
 from sportsdataverse.mbb import build_3p_shot_info as build_3p_shot_info  # noqa: F401
 from sportsdataverse.mbb import build_adjusted_3p as build_adjusted_3p  # noqa: F401
 from sportsdataverse.mbb import build_d_rtg as build_d_rtg  # noqa: F401
@@ -152,12 +158,23 @@ from sportsdataverse.mbb import build_efficiency_margins as build_efficiency_mar
 from sportsdataverse.mbb import build_exp_3p as build_exp_3p  # noqa: F401
 from sportsdataverse.mbb import build_net_points as build_net_points  # noqa: F401
 from sportsdataverse.mbb import build_o_rtg as build_o_rtg  # noqa: F401
+from sportsdataverse.mbb import build_player_context as build_player_context  # noqa: F401
+from sportsdataverse.mbb import build_priors as build_priors  # noqa: F401
 from sportsdataverse.mbb import build_productivity as build_productivity  # noqa: F401
+from sportsdataverse.mbb import build_weak_prior_from_rapm as build_weak_prior_from_rapm  # noqa: F401
+from sportsdataverse.mbb import calc_collinearity_diag as calc_collinearity_diag  # noqa: F401
 from sportsdataverse.mbb import calc_def_player_luck_adj as calc_def_player_luck_adj  # noqa: F401
 from sportsdataverse.mbb import calc_def_team_luck_adj as calc_def_team_luck_adj  # noqa: F401
+from sportsdataverse.mbb import calc_lineup_outputs as calc_lineup_outputs  # noqa: F401
 from sportsdataverse.mbb import calc_off_player_luck_adj as calc_off_player_luck_adj  # noqa: F401
 from sportsdataverse.mbb import calc_off_team_luck_adj as calc_off_team_luck_adj  # noqa: F401
+from sportsdataverse.mbb import calc_player_weights as calc_player_weights  # noqa: F401
+from sportsdataverse.mbb import calc_slow_pseudo_inverse as calc_slow_pseudo_inverse  # noqa: F401
 from sportsdataverse.mbb import calculate_aggregated_lineup_stats as calculate_aggregated_lineup_stats  # noqa: F401
+from sportsdataverse.mbb import calculate_predicted_out as calculate_predicted_out  # noqa: F401
+from sportsdataverse.mbb import calculate_rapm as calculate_rapm  # noqa: F401
+from sportsdataverse.mbb import calculate_residual_error as calculate_residual_error  # noqa: F401
+from sportsdataverse.mbb import calculate_sd_rapm as calculate_sd_rapm  # noqa: F401
 from sportsdataverse.mbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
 from sportsdataverse.mbb import download as download  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_calendar as espn_mbb_calendar  # noqa: F401
@@ -177,6 +194,7 @@ from sportsdataverse.mbb import helper_mbb_pickcenter as helper_mbb_pickcenter  
 from sportsdataverse.mbb import helper_mbb_roster_items as helper_mbb_roster_items  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_team_items as helper_mbb_team_items  # noqa: F401
 from sportsdataverse.mbb import inject_luck as inject_luck  # noqa: F401
+from sportsdataverse.mbb import inject_rapm_into_players as inject_rapm_into_players  # noqa: F401
 from sportsdataverse.mbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
 from sportsdataverse.mbb import load_mbb_game_rosters as load_mbb_game_rosters  # noqa: F401
 from sportsdataverse.mbb import load_mbb_officials as load_mbb_officials  # noqa: F401
@@ -192,13 +210,21 @@ from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_seas
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.mbb import pick_ridge_regression as pick_ridge_regression  # noqa: F401
 from sportsdataverse.mbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
+from sportsdataverse.mbb import slow_regression as slow_regression  # noqa: F401
 from sportsdataverse.mbb import underscore as underscore  # noqa: F401
 from sportsdataverse.mbb import weighted_avg as weighted_avg  # noqa: F401
 
 __all__ = [
+    "RapmConfig",
+    "RapmPlayerContext",
+    "RapmPreProcDiagnostics",
+    "RapmPriorInfo",
+    "RapmProcessingInputs",
     "SeasonNotFoundError",
     "adjust_off_rating_stats",
+    "apply_weak_priors",
     "build_3p_shot_info",
     "build_adjusted_3p",
     "build_d_rtg",
@@ -206,12 +232,23 @@ __all__ = [
     "build_exp_3p",
     "build_net_points",
     "build_o_rtg",
+    "build_player_context",
+    "build_priors",
     "build_productivity",
+    "build_weak_prior_from_rapm",
+    "calc_collinearity_diag",
     "calc_def_player_luck_adj",
     "calc_def_team_luck_adj",
+    "calc_lineup_outputs",
     "calc_off_player_luck_adj",
     "calc_off_team_luck_adj",
+    "calc_player_weights",
+    "calc_slow_pseudo_inverse",
     "calculate_aggregated_lineup_stats",
+    "calculate_predicted_out",
+    "calculate_rapm",
+    "calculate_residual_error",
+    "calculate_sd_rapm",
     "complete_weighted_avg",
     "download",
     "espn_mbb_award",
@@ -351,6 +388,7 @@ __all__ = [
     "helper_mbb_roster_items",
     "helper_mbb_team_items",
     "inject_luck",
+    "inject_rapm_into_players",
     "lineup_to_team_report",
     "load_mbb_game_rosters",
     "load_mbb_officials",
@@ -366,7 +404,9 @@ __all__ = [
     "mbb_pbp_disk",
     "most_recent_mbb_season",
     "normalize_team_roster_columns",
+    "pick_ridge_regression",
     "scoreboard_event_parsing",
+    "slow_regression",
     "underscore",
     "weighted_avg",
 ]

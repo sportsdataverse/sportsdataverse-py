@@ -64,6 +64,33 @@ def load_rating_inputs() -> dict:
     return load_fixture("rating_utils_inputs.json")
 
 
+def load_rapm_snap() -> dict:
+    """Load the vendored ``RapmUtils`` jest snapshot JSON (``rapm_utils_snap.json``).
+
+    Only 2 entries (both from the ``buildPlayerContext`` test's
+    ``[0.0, 0.2].forEach(threshold => ...)`` loop -- one ``toMatchSnapshot()``
+    call site executed twice). Every other ``RapmUtils.test.ts`` assertion is
+    an inline ``.toFixed``/``toEqual`` literal, not a snapshot lookup -- see
+    the classification map in ``tests/fixtures/hoop_explorer/README.md``.
+    """
+    return load_fixture("rapm_utils_snap.json")
+
+
+def load_rapm_inputs() -> dict:
+    """Load the vendored ``RapmUtils`` jest test-input JSON (``rapm_utils_inputs.json``).
+
+    Single top-level key, ``reducedFilteredLineups`` (the 31-row semi-synthetic
+    lineup array feeding ``semiRealRapmResults.testContext.filteredLineups``,
+    consumed by ``pickRidgeRegression`` / ``injectRapmIntoPlayers`` / the
+    pseudo-real ``calcCollinearityDiag`` test). ``semiRealRapmResults`` itself
+    (``testOffWeights`` / ``testDefWeights`` / ``testContext``) is NOT
+    vendorable (it embeds ``StatModels.emptyIndiv()`` calls, an object spread,
+    and an arrow-function closure) -- hand-transcribe it per the replay recipe
+    in ``tests/fixtures/hoop_explorer/README.md``.
+    """
+    return load_fixture("rapm_utils_inputs.json")
+
+
 def approx_tree(a: Any, b: Any, path: str = "") -> None:
     """Recursively assert numeric equality to 1e-9 rel, exact otherwise."""
     if isinstance(b, dict):
