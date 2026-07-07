@@ -35,6 +35,16 @@ def test_adj_net_tracks_fpi() -> None:
     assert r >= 0.90, r
 
 
+def test_adj_net_tracks_sp_plus_overall() -> None:
+    """Overall net EPA vs SP+ overall (observed 0.923) -- the net rating's second
+    published peer. For context, FPI and SP+ overall themselves only agree at
+    0.963, so adj_net sits near that oracle-vs-oracle ceiling with both.
+    """
+    e = efficiency_ratings(_PBP).join(_SP, on="team_id", how="inner")
+    r = spearman_corr(e["adj_net"].to_numpy(), e["sp_overall"].to_numpy())
+    assert r >= 0.90, r
+
+
 def test_adj_off_tracks_sp_plus_off() -> None:
     """Offensive EPA vs SP+ offense (observed 0.849).
 
