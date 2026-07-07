@@ -44,6 +44,8 @@ class LeagueConstants:
         quad_thresholds: NET-style quadrant opponent-rank upper bounds, keyed by
             venue (``home`` / ``neutral`` / ``away``) then ``q1`` / ``q2`` / ``q3``
             (Quad 4 is any opponent ranked worse than ``q3``).
+        bubble_adj_em: AdjEM of a bubble-quality team on THIS engine's scale
+            (mean of engine ranks 40-50 on the fit season) -- the WAB baseline.
         in_game_wp_artifact: Filename of the bundled in-game-WP coefficients under
             ``sportsdataverse/mbb/models`` (fitted + committed in Phase 3).
     """
@@ -54,6 +56,7 @@ class LeagueConstants:
     avg_tempo: float
     avg_efficiency: float
     quad_thresholds: dict[str, dict[str, int]]
+    bubble_adj_em: float
     in_game_wp_artifact: str
 
 
@@ -79,6 +82,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_tempo=69.6255,
         avg_efficiency=104.0,
         quad_thresholds=_NET_QUAD_THRESHOLDS,
+        bubble_adj_em=20.394,
         in_game_wp_artifact="mbb_in_game_wp.ubj",
     ),
     "womens": LeagueConstants(
@@ -88,6 +92,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_tempo=70.0,
         avg_efficiency=95.0,
         quad_thresholds=_NET_QUAD_THRESHOLDS,
+        bubble_adj_em=20.394,
         in_game_wp_artifact="wbb_in_game_wp.ubj",
     ),
 }
