@@ -30,13 +30,26 @@ def test_wbb_ncaa_models_shim_is_mbb_core():
     assert w.poss_calc_fragment_sum is m.poss_calc_fragment_sum
     assert w.score_to_tuple is m.score_to_tuple
     assert w.PlayerEvent is m.PlayerEvent
+    assert w.RosterEntry is m.RosterEntry
+    assert w.ConferenceId is m.ConferenceId
+    assert w.ShotLocation is m.ShotLocation
+    assert w.ShotGeo is m.ShotGeo
+    assert w.ShotEvent is m.ShotEvent
+    assert w.CutdownShotEvent is m.CutdownShotEvent
 
 
 def test_wbb_ncaa_models_all_matches_reexported_symbols():
     from sportsdataverse.wbb import wbb_ncaa_models as w
 
     assert set(w.__all__) == {name for name in w.__all__ if hasattr(w, name)}
-    assert len(w.__all__) == 23
+    assert len(w.__all__) == 29
+
+
+def test_wbb_ncaa_models_all_matches_mbb_all():
+    from sportsdataverse.mbb import mbb_ncaa_models as m
+    from sportsdataverse.wbb import wbb_ncaa_models as w
+
+    assert set(w.__all__) == set(m.__all__)
 
 
 def test_wbb_ncaa_events_shim_is_mbb_core():

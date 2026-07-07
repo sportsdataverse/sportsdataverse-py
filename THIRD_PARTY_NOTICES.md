@@ -289,6 +289,74 @@ that license's own attribution obligations.
   algorithm, because the upstream ships no tests for those functions (the
   Scala's own doc comments read "TODO test"). Those cases are not
   transliterations of an existing suite.
+  - **Phase 5e (HTML-parser layer + pbp/shot glue) additions.** The
+    JSoup-selector-translation helpers, and `RosterParser.scala` /
+    `BoxscoreParser.scala` / `PlayByPlayParser.scala` / `TeamIdParser.scala` /
+    `TeamScheduleParser.scala` / `ShotEventParser.scala` /
+    `PlayByPlayUtils.scala`, were ported into:
+    - [`sportsdataverse/mbb/mbb_ncaa_html.py`](sportsdataverse/mbb/mbb_ncaa_html.py)
+      (the shared JSoup->bs4 selector/text helper layer every parser below
+      reuses -- has no dedicated upstream Scala file of its own).
+    - [`sportsdataverse/mbb/mbb_ncaa_roster_parser.py`](sportsdataverse/mbb/mbb_ncaa_roster_parser.py)
+      (`RosterParser.scala`; also the port of `models/ncaa/RosterEntry.scala`,
+      appended to `mbb_ncaa_models.py`).
+    - [`sportsdataverse/mbb/mbb_ncaa_boxscore_parser.py`](sportsdataverse/mbb/mbb_ncaa_boxscore_parser.py)
+      (`BoxscoreParser.scala`; also closes the Phase 5b deferral of
+      `DataQualityIssues.scala`'s `players_missing_from_boxscore` table,
+      appended to `mbb_ncaa_data_quality.py`).
+    - [`sportsdataverse/mbb/mbb_ncaa_pbp_parser.py`](sportsdataverse/mbb/mbb_ncaa_pbp_parser.py)
+      (`PlayByPlayParser.scala`, including `create_lineup_data` -- the
+      orchestrator that chains the Phase 5a-5d surface end to end).
+    - [`sportsdataverse/mbb/mbb_ncaa_team_parsers.py`](sportsdataverse/mbb/mbb_ncaa_team_parsers.py)
+      (`TeamIdParser.scala` + `TeamScheduleParser.scala`; also the port of
+      `models/ConferenceId.scala`, appended to `mbb_ncaa_models.py`).
+    - [`sportsdataverse/mbb/mbb_ncaa_shot_parser.py`](sportsdataverse/mbb/mbb_ncaa_shot_parser.py)
+      (`ShotEventParser.scala`; also the port of `models/ncaa/ShotEvent.scala`
+      -- `ShotLocation` / `ShotGeo` / `ShotEvent` / `CutdownShotEvent` --
+      appended to `mbb_ncaa_models.py`).
+    - [`sportsdataverse/mbb/mbb_ncaa_pbp_glue.py`](sportsdataverse/mbb/mbb_ncaa_pbp_glue.py)
+      (`PlayByPlayUtils.scala`, including its `ShotEnrichmentUtils` companion
+      object, flattened to module level per this port's established
+      nested-object-flattening convention).
+
+    [`sportsdataverse/wbb/wbb_ncaa_html.py`](sportsdataverse/wbb/wbb_ncaa_html.py),
+    [`sportsdataverse/wbb/wbb_ncaa_roster_parser.py`](sportsdataverse/wbb/wbb_ncaa_roster_parser.py),
+    [`sportsdataverse/wbb/wbb_ncaa_boxscore_parser.py`](sportsdataverse/wbb/wbb_ncaa_boxscore_parser.py),
+    [`sportsdataverse/wbb/wbb_ncaa_pbp_parser.py`](sportsdataverse/wbb/wbb_ncaa_pbp_parser.py),
+    [`sportsdataverse/wbb/wbb_ncaa_team_parsers.py`](sportsdataverse/wbb/wbb_ncaa_team_parsers.py),
+    [`sportsdataverse/wbb/wbb_ncaa_shot_parser.py`](sportsdataverse/wbb/wbb_ncaa_shot_parser.py), and
+    [`sportsdataverse/wbb/wbb_ncaa_pbp_glue.py`](sportsdataverse/wbb/wbb_ncaa_pbp_glue.py)
+    re-export the same functions by reference (no separate copy of the
+    logic); the Phase 5e model additions
+    (`RosterEntry`/`ConferenceId`/`ShotLocation`/`ShotGeo`/`ShotEvent`/
+    `CutdownShotEvent`) are re-exported by the existing
+    `wbb_ncaa_models.py` shim.
+
+    **Unlike Phase 5a-5d above, Phase 5e's oracle is a mix of vendored
+    fixtures and inline literals -- both wordings apply, per module.** The 5
+    HTML pages `RosterParserTests.scala` / `BoxscoreParserTests.scala` /
+    `PlayByPlayParserTests.scala` / `TeamScheduleParserTests.scala` read from
+    disk (`sample_roster.html`, `test_lineup.html`, `test_play_by_play.html`,
+    `test_schedule.html`, `test_attendance_list.html`) are vendored
+    byte-exact from the upstream clone's `src/test/resources/ncaa/` under
+    [`tests/fixtures/ncaa/`](tests/fixtures/ncaa/) (see that directory's
+    `README.md` for per-file provenance) -- these are test-only fixtures and
+    are not shipped in the distributed wheel or sdist; `mbb_ncaa_roster_parser.py`,
+    `mbb_ncaa_boxscore_parser.py`, `mbb_ncaa_pbp_parser.py`, and
+    `mbb_ncaa_team_parsers.py`'s test modules
+    (`tests/mbb/test_mbb_ncaa_roster_parser.py`,
+    `tests/mbb/test_mbb_ncaa_boxscore_parser.py`,
+    `tests/mbb/test_mbb_ncaa_pbp_parser.py`,
+    `tests/mbb/test_mbb_ncaa_team_parsers.py`) read them as the end-to-end
+    oracle. `TeamIdParserTests.scala`'s own fixture test is ported but marked
+    skipped, mirroring its **upstream-disabled** state (disabled in the
+    Scala source since 04/2021) rather than "fixing" it. By contrast,
+    `ShotEventParserTests.scala` / `PlayByPlayUtilsTests.scala` (the Task
+    5e.5/5e.6 oracles) ship no fixture of their own -- every case is a short
+    inline literal, transliterated directly into
+    `tests/mbb/test_mbb_ncaa_shot_parser.py` /
+    `tests/mbb/test_mbb_ncaa_pbp_glue.py`, matching the inline-literal
+    wording used for Phase 5a-5d above.
 - **Modifications:** Translated from Scala to Python, following this
   repository's own conventions (typing, docstrings, dataclasses in place of
   case classes). No changes were made to the original Scala source itself;
