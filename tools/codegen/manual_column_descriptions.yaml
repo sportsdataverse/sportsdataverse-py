@@ -487,6 +487,91 @@ cat_skater_detail:
     tracking period.
   zone_time_details_offensive_zone_percentile: Percentile rank among all NHL skaters for percentage of ice time spent in the
     offensive zone.
+cfb_compute_results:
+  away_team: Team name of the away team in the simulated game (returned games frame).
+  game_type: Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship)
+    or POST (postseason/CFP).
+  home_team: Team name of the home team in the simulated game (returned games frame).
+  neutral: Neutral-site flag (1 = neutral site, 0 = true home game; only non-neutral games receive the ELO home bump).
+  result: Home-team margin of victory (home score minus away score) - real results are preserved and the target week's unplayed
+    games are filled from the ELO model.
+  sim: Simulation identifier the game row belongs to (1..n simulated seasons; ELO ratings never mix across simulations).
+  week: Week of the season the game is played in; only games matching the requested week_num are filled.
+cfb_games_from_schedule:
+  away_points: Away team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds
+    the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent.
+  away_team: Team name of the away team, passed through from the schedule frame.
+  game_type: Derived game classification - CONF_CHAMP when the schedule notes mention a (non-CFP, non-national) championship,
+    REG for regular-season rows, POST otherwise.
+  home_points: Home team's final score, passed through from the schedule frame; null when missing (unplayed game). Feeds
+    the SEC capped_scoring_margin official conference tiebreaker rung in cfb_standings - the rung is skipped when absent.
+  home_team: Team name of the home team, passed through from the schedule frame.
+  neutral: Neutral-site flag derived from the schedule's neutral_site column (1 = neutral site, 0 = home game).
+  result: Home-team margin (home_points minus away_points); null when either score is missing, marking the game as unplayed
+    for the simulation engine.
+  season: Season the game belongs to; consumed as the sim/season identifier by cfb_standings and cfb_simulations.
+  week: Week of the season the game is scheduled in, passed through from the schedule frame.
+cfb_playoff_seeds:
+  conf_champ: Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the
+    conference's rank-1 team; always false for independents.
+  conf_games: Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded).
+  conf_losses: Losses in conference regular-season games.
+  conf_pct: Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary
+    sort key for conference ranks.
+  conf_pd: Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung.
+  conf_rank: Rank within the conference from the tiebreaker cascade (1 = best); null for independents.
+  conf_ties: Ties in conference regular-season games.
+  conf_wins: Wins in conference regular-season games.
+  conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
+  games: Total games played across all game types (regular season, conference championship and postseason).
+  losses: Losses across all played games.
+  pd: Point differential (points for minus points against, via game margins) summed over all played games.
+  seed: College Football Playoff seed under the straight-seeding rule (1 = best); null for teams outside the field. The five
+    best-ordered conference champions are guaranteed inclusion.
+  sim: Season or simulation identifier the standings row belongs to.
+  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference
+    opponents' conference win pct across all conference games played; 0.0 for independents.
+  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference
+    opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins.
+  team: Team name (join key across the seedr engine frames).
+  ties: Ties across all played games.
+  win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.
+  wins: Wins across all played games (conference championship and postseason included).
+cfb_simulations:
+  conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
+  first_round_bye: Share of simulations in which the team earned a CFP first-round bye (seed 4 or better).
+  losses: Mean losses per simulated season (all game types through the conference championship).
+  made_playoff: Share of simulations in which the team made the College Football Playoff field.
+  team: Team name the simulated probabilities belong to (overall summary frame).
+  ties: Mean ties per simulated season.
+  win_pct: Mean overall win percentage across the simulated seasons.
+  wins: Mean wins per simulated season (all game types through the conference championship).
+  won_cfp: Share of simulations in which the team won the College Football Playoff national championship.
+  won_conf: Share of simulations in which the team won its conference (CONF_CHAMP game winner, or rank-1 fallback).
+cfb_standings:
+  conf_champ: Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the
+    conference's rank-1 team; always false for independents.
+  conf_games: Number of conference regular-season games played (both teams in the same conference; CONF_CHAMP games excluded).
+  conf_losses: Losses in conference regular-season games.
+  conf_pct: Conference win percentage - (conf_wins + 0.5 * conf_ties) / conf_games, 0.0 with no conference games; the primary
+    sort key for conference ranks.
+  conf_pd: Point differential summed over conference regular-season games only; the POINTS-depth tiebreaker rung.
+  conf_rank: Rank within the conference from the tiebreaker cascade (1 = best); null for independents.
+  conf_ties: Ties in conference regular-season games.
+  conf_wins: Wins in conference regular-season games.
+  conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
+  games: Total games played across all game types (regular season, conference championship and postseason).
+  losses: Losses across all played games.
+  pd: Point differential (points for minus points against, via game margins) summed over all played games.
+  sim: Season or simulation identifier the standings row belongs to.
+  sos: Strength of schedule, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of conference
+    opponents' conference win pct across all conference games played; 0.0 for independents.
+  sov: Strength of victory, conference-REG-scoped (unlike nflseedR's overall games-weighted version) - mean of defeated conference
+    opponents' conference win pct, one term per conference victory; 0.0 for independents or teams without conference wins.
+  team: Team name (join key across the seedr engine frames).
+  ties: Ties across all played games.
+  win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.
+  wins: Wins across all played games (conference championship and postseason included).
 club_schedule_season:
   club_current_season: Indicator for whether the game falls within the current season for the requesting club (1 = current
     season, 0 otherwise).
@@ -3096,6 +3181,26 @@ nfl_combine_profiles:
   verticalJump_designation: Designation label for the vertical jump measurement (e.g., official Combine or pro-day measurement).
   verticalJump_inches: Vertical jump height in inches recorded at the NFL Combine.
   weaknesses: Narrative description of the prospect's key weaknesses or areas needing development as identified by scouts.
+nfl_compute_results:
+  teams.sim: Simulated season identifier the team row belongs to, carried through from the input teams frame.
+  teams.team: Team abbreviation, carried through from the input teams frame.
+  teams.conf: Conference of the team (AFC or NFC), carried through from the input teams frame.
+  teams.division: Division of the team (e.g. "AFC East"), carried through from the input teams frame.
+  teams.elo: Dynamic ELO rating after applying the shifts from the simulated week's results; carried into the next
+    week's call so ratings evolve over the simulated season.
+  games.sim: Simulated season identifier the game row belongs to.
+  games.game_type: Game type of the row - REG for regular season or the playoff round (WC, DIV, CON, SB).
+  games.week: Week key used by the simulation engine - regular season week numbers as strings and postseason rounds
+    as WC/DIV/CON/SB.
+  games.away_team: Team abbreviation of the away team.
+  games.home_team: Team abbreviation of the home team.
+  games.away_rest: Days of rest for the away team before the game (feeds the ELO rest adjustment of 25 points per
+    extra week).
+  games.home_rest: Days of rest for the home team before the game.
+  games.location: Game site indicator - "Home" applies the +20 ELO home-field adjustment, "Neutral" (Super Bowl)
+    does not.
+  games.result: Home margin (home score minus away score). Rows of the simulated week that were missing are filled
+    from Normal(estimate, 13) rounded away from zero; all other rows pass through unchanged.
 nfl_draft_picks:
   draftNumberOverall: Overall pick number in the NFL Draft, counting sequentially from pick 1 across all rounds.
   draftPosition: Pick number within the draft round (e.g., the 3rd pick of round 2).
@@ -3675,6 +3780,110 @@ nfl_rosters:
   team_league: League identifier confirming the team belongs to the NFL.
   team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
   team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_season_standings:
+  season: Season identifier from the input games frame (named `sim` instead when the input used a `sim` column).
+  conf: Conference of the team (AFC or NFC).
+  division: Division of the team (e.g. "AFC East").
+  team: Team abbreviation.
+  games: Number of regular season games played.
+  wins: Regular season wins with ties counted as half a win.
+  true_wins: Regular season wins excluding ties (outright wins only).
+  losses: Regular season losses.
+  ties: Regular season ties.
+  pf: Points scored across regular season games (points for); present only when the input carries home_score and
+    away_score.
+  pa: Points allowed across regular season games (points against); present only when the input carries scores.
+  pd: Regular season point differential (pf minus pa); present only when the input carries scores.
+  win_pct: Regular season win percentage with ties counted as half a win.
+  div_pct: Win percentage in games against division opponents (0 when the team played no division games).
+  conf_pct: Win percentage in games against conference opponents (0 when the team played no conference games).
+  sov: Strength of victory - combined win percentage of all opponents the team defeated (0 for winless teams).
+  sos: Strength of schedule - combined win percentage of all opponents the team faced.
+  div_rank: Rank within the division (1-4) after applying the NFL division tiebreaking procedures.
+  div_tie_broken_by: Tiebreaker step that resolved the team's division rank (e.g. "Head-To-Head Win PCT (2)" or
+    "Coin Toss"); null when the rank needed no tiebreaker.
+  conf_rank: Conference rank, i.e. the playoff seed, after applying the NFL conference tiebreaking procedures; null
+    beyond `playoff_seeds` when that argument is set.
+  conf_tie_broken_by: Tiebreaker step that resolved the team's conference rank; null when the rank needed no
+    tiebreaker.
+  exit: Round of the team's final game - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner (returned with
+    ranks="DRAFT").
+  draft_rank: Draft pick position (1 = first overall pick) derived from postseason exit, win percentage, SOS and the
+    draft tiebreaking procedures (returned with ranks="DRAFT").
+  draft_tie_broken_by: Tiebreaker step that resolved the team's draft rank; null when the rank needed no tiebreaker.
+nfl_simulations:
+  standings.sim: Simulated season identifier (1 through `simulations`).
+  standings.conf: Conference of the team (AFC or NFC).
+  standings.division: Division of the team (e.g. "AFC East").
+  standings.team: Team abbreviation.
+  standings.games: Number of regular season games played in the simulated season.
+  standings.wins: Regular season wins in the simulated season with ties counted as half a win.
+  standings.true_wins: Regular season wins in the simulated season excluding ties.
+  standings.losses: Regular season losses in the simulated season.
+  standings.ties: Regular season ties in the simulated season.
+  standings.win_pct: Regular season win percentage in the simulated season with ties counted as half a win.
+  standings.div_pct: Win percentage against division opponents in the simulated season (0 when no division games).
+  standings.conf_pct: Win percentage against conference opponents in the simulated season (0 when no conference
+    games).
+  standings.sov: Strength of victory in the simulated season - combined win percentage of all defeated opponents.
+  standings.sos: Strength of schedule in the simulated season - combined win percentage of all opponents faced.
+  standings.div_rank: Division rank (1-4) in the simulated season after the NFL division tiebreakers.
+  standings.div_tie_broken_by: Tiebreaker step that resolved the division rank in this simulated season; null when
+    no tiebreaker was needed.
+  standings.conf_rank: Conference rank (playoff seed) in the simulated season after the NFL conference tiebreakers;
+    null beyond `playoff_seeds`.
+  standings.conf_tie_broken_by: Tiebreaker step that resolved the conference rank in this simulated season; null
+    when no tiebreaker was needed.
+  standings.exit: Round of the team's final game in the simulated season - REG, WC, DIV, CON, SB, or SB_WIN for the
+    Super Bowl winner.
+  standings.draft_rank: Draft pick position (1 = first overall) in the simulated season (present when
+    sim_include="DRAFT").
+  standings.draft_tie_broken_by: Tiebreaker step that resolved the draft rank in this simulated season; null when no
+    tiebreaker was needed.
+  games.sim: Simulated season identifier the game row belongs to.
+  games.game_type: Game type - REG for regular season or the playoff round (WC, DIV, CON, SB).
+  games.week: Week number of the game; simulated playoff rounds are numbered from the last regular season week (+1
+    for WC through +4 for SB).
+  games.away_team: Team abbreviation of the away team (simulated playoff matchups are filled by seed).
+  games.home_team: Team abbreviation of the home team (simulated playoff matchups are filled by seed).
+  games.away_rest: Days of rest for the away team before the game.
+  games.home_rest: Days of rest for the home team before the game (14 for the top seed's divisional round game).
+  games.location: Game site indicator - "Home" or "Neutral" (Super Bowl).
+  games.result: Home margin (home score minus away score); real where the input schedule had one, simulated
+    otherwise.
+  overall.conf: Conference of the team (AFC or NFC).
+  overall.division: Division of the team (e.g. "AFC East").
+  overall.team: Team abbreviation.
+  overall.wins: Mean regular season wins across all simulated seasons (ties counted as half a win).
+  overall.playoff: Share of simulated seasons in which the team made the playoffs (conference rank within
+    `playoff_seeds`).
+  overall.div1: Share of simulated seasons in which the team won its division.
+  overall.seed1: Share of simulated seasons in which the team earned the conference number one seed.
+  overall.won_conf: Share of simulated seasons in which the team won the conference championship; null when
+    sim_include="REG".
+  overall.won_sb: Share of simulated seasons in which the team won the Super Bowl; null when sim_include="REG".
+  overall.draft1: Share of simulated seasons in which the team held the first overall draft pick; null unless
+    sim_include="DRAFT".
+  overall.draft5: Share of simulated seasons in which the team held a top-five draft pick; null unless
+    sim_include="DRAFT".
+  team_wins.team: Team abbreviation.
+  team_wins.wins: Half-win line the over/under probabilities are evaluated against (0, 0.5, ... up to the number of
+    regular season games).
+  team_wins.over_prob: Probability across simulated seasons that the team's outright win total exceeds the line.
+  team_wins.under_prob: Probability across simulated seasons that the team's outright win total falls below the line
+    (exact pushes are the remainder).
+  game_summary.game_type: Game type of the matchup - REG for regular season or the playoff round (WC, DIV, CON, SB).
+  game_summary.week: Week number of the matchup.
+  game_summary.away_team: Team abbreviation of the away team in the matchup.
+  game_summary.home_team: Team abbreviation of the home team in the matchup.
+  game_summary.away_wins: Number of simulated seasons in which the away team won the matchup.
+  game_summary.home_wins: Number of simulated seasons in which the home team won the matchup.
+  game_summary.ties: Number of simulated seasons in which the matchup ended in a tie.
+  game_summary.result: Mean home margin of the matchup across the simulated seasons in which it was played.
+  game_summary.games_played: Number of simulated seasons in which this exact matchup occurred (playoff pairings only
+    arise in the simulations that produce them).
+  game_summary.away_percentage: Share of played simulations won by the away team, with ties counted as half a win.
+  game_summary.home_percentage: Share of played simulations won by the home team, with ties counted as half a win.
 nfl_standings:
   clinched_bye: Boolean flag indicating whether the team has clinched a first-round bye in the playoffs.
   clinched_division: Boolean flag indicating whether the team has clinched their division title.

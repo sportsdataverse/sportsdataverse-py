@@ -4282,11 +4282,19 @@ class NFLPlayProcess(object):
         (``xyac_epa``/``xyac_mean_yardage``/``xyac_median_yardage``/
         ``xyac_success``/``xyac_fd``) are *derived* by re-scoring expected points
         on each of 76 YAC outcomes — see
-        :func:`sportsdataverse.nfl.ep_wp.calculate_xyac`.  That derivation needs
-        ``air_epa`` and a clean per-play EP baseline, which the ESPN play frame
-        does not carry in nflverse form, so this in-pipeline ESPN path emits the
-        five columns as nulls for schema stability.  Run ``calculate_xyac`` on a
-        nflverse-format frame (or ``enrich_nfl_pbp``) to populate them.
+        :func:`sportsdataverse.nfl.ep_wp.calculate_xyac`.  The primary blocker
+        on the ESPN path is ``air_yards`` itself — a tracking/GSIS measure ESPN
+        never ships and that is not text-derivable (see
+        ``__add_description_features``) — plus the nflverse-named model inputs
+        (``yardline_100`` / ``ydstogo`` / ``down`` / ``receiver_player_name``
+        / the ``complete_pass``-family flags).  ``air_epa`` is no longer a
+        blocker in itself: on the nflverse path it is a real column
+        (``ep_wp._derive_air_yac_epa``), and ``calculate_xyac`` consumes it
+        verbatim when present or derives a catch-spot fallback when absent —
+        but without ``air_yards`` neither the family nor xYAC can score here,
+        so this in-pipeline ESPN path emits the five columns as nulls for
+        schema stability.  Run ``calculate_xyac`` on a nflverse-format frame
+        (or ``enrich_nfl_pbp``) to populate them.
         """
         return play_df.with_columns([pl.lit(None, dtype=pl.Float64).alias(c) for c in _XYAC_OUT_COLS])
 

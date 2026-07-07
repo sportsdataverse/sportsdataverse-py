@@ -68,6 +68,15 @@ skip_if_no_nba_stats_live = pytest.mark.skipif(
     ),
 )
 
+# Concurrent-validity tests correlate a computed metric (e.g. nba_la_rapm,
+# nba_decay_rapm) against a real published oracle (Ryan Davis RAPM CSVs). The
+# oracle files aren't bundled with the repo, so these tests skip cleanly
+# unless a contributor points SDV_PY_NBA_ORACLE_DIR at a local checkout.
+skip_if_no_nba_oracle = pytest.mark.skipif(
+    not os.environ.get("SDV_PY_NBA_ORACLE_DIR"),
+    reason="SDV_PY_NBA_ORACLE_DIR not set (Ryan Davis oracle CSVs unavailable)",
+)
+
 
 def _rscript_available() -> bool:
     try:

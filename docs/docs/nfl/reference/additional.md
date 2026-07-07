@@ -4898,6 +4898,96 @@ df_pd = build_nfl_player_stats([2023], summary_level="season",
 wk.filter(pl.col("attempts") >= 5).sort("passing_epa", descending=True).head()
 ```
 
+### `build_nfl_player_stats_def(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#build_nfl_player_stats_def}
+
+Build player-level defensive stats from play-by-play (nflfastR parity).
+
+A faithful polars port of nflfastR's deprecated
+`calculate_player_stats_def()` (`aggregate_game_stats_def.R`). Tackle,
+sack (half-sack = 0.5 weighting), pass-defense, interception, safety,
+fumble (own/opponent recovery), penalty, and touchdown sub-frames are each
+aggregated on `(season, week, team=defteam, player_id)` and full-outer
+joined together, then player metadata is joined from
+`sportsdataverse.nfl.load_nfl_players`.
+
+Unlike `build_nfl_player_stats`, this function takes a
+caller-supplied `pbp` frame directly rather than loading one -- matching
+the R function's own signature.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying the wide nflverse defensive columns (`solo_tackle_1_player_id`, `sack_player_id`, `half_sack_{1,2}_player_id`, `interception_player_id`, `pass_defense_{1,2}_player_id`, `fumbled_{1,2}_team` / `fumble_recovery_{1,2}_team`, etc. -- the same columns `sportsdataverse.nfl.load_nfl_pbp` serves). |
+| `weekly` | `bool` | `False` | If `True` return one row per (season, week, player); if `False` collapse to one row per `(player_id, team)` -- note this does NOT retain a `season` column even if `pbp` spans multiple seasons (see the module-level note above), matching the R source's own `group_by(player_id, team)` (no `season`). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with the `def_*` column set documented in the nflfastR-parity reference (weekly grain carries `season`/`week`/`season_type`; the season collapse replaces those with `games`).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_player_stats_def, load_nfl_pbp
+pbp = load_nfl_pbp([2023])
+wk = build_nfl_player_stats_def(pbp, weekly=True)
+print(wk.shape)
+
+# Season totals (one season's worth of ``pbp`` at a time)
+
+season = build_nfl_player_stats_def(pbp, weekly=False)
+
+# Pipeline next step (one line)
+
+wk.sort("def_sacks", descending=True).head()
+```
+
+### `build_nfl_player_stats_kicking(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#build_nfl_player_stats_kicking}
+
+Build player-level kicking stats from play-by-play (nflfastR parity).
+
+A faithful polars port of nflfastR's deprecated
+`calculate_player_stats_kicking()` (`aggregate_game_stats_kicking.R`).
+Field goals (made-distance buckets, `fg_long`, `fg_pct`, `;`-joined
+distance lists), extra points, and game-winning-FG attempts (last drive of
+the game, trailing by 2 or fewer points) are each aggregated on the kicker
+and full-outer joined together, then player metadata is joined from
+`sportsdataverse.nfl.load_nfl_players`.
+
+Unlike `build_nfl_team_stats`, this function takes a caller-supplied
+`pbp` frame directly rather than loading one -- matching the R
+function's own signature.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying `kicker_player_id` / `kicker_player_name`, `field_goal_attempt` / `field_goal_result` / `kick_distance`, `extra_point_attempt` / `extra_point_result`, `fixed_drive`, and `score_differential` (the same columns `sportsdataverse.nfl.load_nfl_pbp` serves). |
+| `weekly` | `bool` | `False` | If `True` return one row per (season, week, player) with a `gwfg_distance` list column; if `False` collapse to one row per `(player_id, team)` with a `games` column and a `;`-joined `gwfg_distance_list` string column in place of `gwfg_distance` (the R source's own deliberate column-name change based on the `weekly` flag). Note this does NOT retain a `season` column even if `pbp` spans multiple seasons (see the module-level note above `build_nfl_player_stats_def`). |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with the `fg_*`/`pat_*`/`gwfg_*` column set documented in the nflfastR-parity reference.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import build_nfl_player_stats_kicking, load_nfl_pbp
+pbp = load_nfl_pbp([2023])
+wk = build_nfl_player_stats_kicking(pbp, weekly=True)
+print(wk.shape)
+
+# Season totals (one season's worth of ``pbp`` at a time)
+
+season = build_nfl_player_stats_kicking(pbp, weekly=False)
+
+# Pipeline next step (one line)
+
+wk.filter(pl.col("fg_att") >= 1).sort("fg_pct", descending=True).head()
+```
+
 ### `build_nfl_players(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_nfl_players}
 
 Build an SDV-native NFL players frame from ESPN's public athletes endpoint.
@@ -5269,6 +5359,85 @@ pbp_ep = calculate_expected_points(pbp)
 print(pbp_ep.select("ep").head())
 ```
 
+### `calculate_nfl_series_conversion_rates(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#calculate_nfl_series_conversion_rates}
+
+Compute per-team offense + defense series conversion rates.
+
+A faithful polars port of nflfastR's `calculate_series_conversion_rates`.
+Series where `down` is null (kickoffs, PAT/2pt attempts, non-plays, no
+`posteam`) and series ending in a `"QB kneel"` are excluded from the
+series count before rates are computed, matching the R source.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying `season`, `week`, `posteam`, `defteam`, `down`, `series`, `series_success`, and `series_result` (added by the `add_series_data` port). Rows must already be in play order within each series so the internal `first()`/`last()` series collapse is correct. |
+| `weekly` | `bool` | `False` | If `True`, group on `(season, team, week)`; if `False` (default), group on `(season, team)` -- collapsing every week into one season-level rate. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per team (per week when `weekly=True`), `off_n`/`def_n` (series count) plus the `off_*`/`def_*` rate columns documented in reference Sec 11. A team with offensive series but zero defensive series in a group (or vice versa -- effectively never happens in real data) carries nulls in the missing side rather than being dropped (full outer join).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import calculate_nfl_series_conversion_rates
+rates = calculate_nfl_series_conversion_rates(pbp)
+rates.filter(pl.col("team") == "KC").select("off_scr", "def_scr")
+
+# Weekly grain
+
+weekly = calculate_nfl_series_conversion_rates(pbp, weekly=True)
+
+# Pipeline next step (one line)
+
+rates.sort("off_scr", descending=True).head()
+```
+
+### `calculate_nfl_standings(games: 'pl.DataFrame', *, teams: 'pl.DataFrame | None' = None, tiebreaker_depth: 'int' = 3, playoff_seeds: 'int | None' = None, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"` {#calculate_nfl_standings}
+
+Compute NFL division standings + conference playoff seeds.
+
+A reduced port of the tiebreaker ladder nflfastR delegates to the external
+`nflseedR` package (see the module docstring for the exact scope). Games
+are doubled into one row per team per game, regular-season win/loss/tie
+records are computed per team, and ties are broken win_pct -> head-to-head
+-> division record -> conference record, to the depth configured by
+`tiebreaker_depth`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | A `load_nfl_schedule`-shaped frame: `game_id`, `season`, `game_type`, `week`, `home_team`, `away_team`, `home_score`, `away_score`. Only `game_type == "REG"` rows with both scores present are used. |
+| `teams` | `DataFrame \| None` | `None` | A `load_nfl_teams`-shaped frame (`team_abbr`, `team_conf`, `team_division`). When `None` (default), calls `sportsdataverse.nfl.load_nfl_teams`. Must cover every team abbreviation appearing in `games` -- a team absent from `teams` gets null `conf`/`division` and is silently pooled into the `(season, None)` division/conference group rather than raising. |
+| `tiebreaker_depth` | `int` | `3` | `1` (win_pct only), `2` (adds head-to-head + division record), or `3` (default; adds conference record too). |
+| `playoff_seeds` | `int \| None` | `None` | Number of teams per conference that receive a non-null `seed`. When `None` (default), uses the 2020 playoff -format cutover: `6` for seasons <= 2019, `7` for 2020+. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per (season, team): `conf`, `division`, `div_rank`, `seed` (null past `playoff_seeds`), `team`, `games`, `wins`, `losses`, `ties`, `win_pct` (ties count as 0.5 win), `div_pct`, `conf_pct`. Sorted by `(season, division, div_rank, seed)`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import calculate_nfl_standings, load_nfl_schedule
+games = load_nfl_schedule(seasons=[2023])
+standings = calculate_nfl_standings(games)
+standings.filter(standings["div_rank"] == 1)
+
+# Injected teams frame (offline)
+
+standings = calculate_nfl_standings(games, teams=my_teams_df)
+
+# Pipeline next step (one line)
+
+standings.sort(["conf", "seed"]).select("team", "seed", "win_pct")
+```
+
 ### `calculate_win_probability(pbp_data: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#calculate_win_probability}
 
 Compute win probability for provided plays.
@@ -5491,6 +5660,45 @@ print(pbp.select("xyac_epa", "xyac_mean_yardage").head())
 # Pipeline next step (one line)
 
 pbp.filter(pl.col("xyac_epa").is_not_null()).select("xyac_epa", "xyac_fd").head()
+```
+
+### `clean_nfl_pbp(df: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#clean_nfl_pbp}
+
+Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port).
+
+See the module docstring for the full column set added, the
+compute-if-absent scope note on `pass`/`rush`, and the lookaround ->
+capture-group regex rewrites.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | An nflverse-shape (or ESPN/native) play-by-play `polars.DataFrame`. Required columns: `desc`, `epa`, `game_id`, `play_id`, `season`, `posteam`. See the module docstring for the full optional-column-with-default list. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+
+**Returns**
+
+The input frame with every §6 column added/overwritten (idempotent -- pre-existing values of those columns, except `pass`/`rush`, are dropped and recomputed). A zero-row input yields a zero-row frame carrying the full documented schema rather than raising.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_pbp
+from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp
+
+pbp = load_nfl_pbp([2023])
+cleaned = clean_nfl_pbp(pbp)
+print(cleaned.select("name", "id", "fantasy").head())
+
+# Pandas output
+
+cleaned_pd = clean_nfl_pbp(pbp, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+import polars as pl
+cleaned.filter(pl.col("play") == 1).group_by("passer").len()
 ```
 
 ### `clear_cache() -> 'None'` {#clear_cache}
@@ -5762,6 +5970,59 @@ print(out[["punt_wp"]].head())
 ### `nfl_clear_token_cache() -> 'None'` {#nfl_clear_token_cache}
 
 Drop the cached `api.nfl.com` token (forces a fresh mint on the next call).
+
+### `nfl_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'Union[str, int]', *, rng: 'Optional[np.random.Generator]' = None, elo: 'Optional[Mapping[str, float]]' = None, **kwargs: 'Any') -> 'Dict[str, pl.DataFrame]'` {#nfl_compute_results}
+
+Compute NFL game results for one week of a season simulation.
+
+Faithful port of `nflseedR_compute_results` (simulations_utils.R
+L183-290) — the 538-style dynamic ELO model initially coded by Lee
+Sharpe and rewritten by Sebastian Carl: home/away ELO difference plus
+rest (+25 per extra week), home field (+20), and a 1.2x postseason
+multiplier produce a win probability and a point spread `estimate`
+(`elo_diff / 25`); missing results for `week_num` are drawn from
+`Normal(estimate, 13)` and rounded away from zero. ELO ratings are
+updated from all of the week's results and carried to the next week
+via the returned `teams` frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `teams` | `DataFrame` |  | Teams frame with `sim` and `team` columns. An `elo` column is added on first call (from `elo` or random `Normal(1500, 150)` initial ratings shared across sims) and must be carried between calls. |
+| `games` | `DataFrame` |  | Games frame with `sim`, `week`, `game_type`, `location`, `home_team`/`away_team`, `home_rest`/ `away_rest`, and `result` columns. |
+| `week_num` | `Union[str, int]` |  | The week to simulate. Only rows with `week == week_num` and a missing `result` are filled. |
+| `rng` | `Optional[Generator]` | `None` | numpy random generator; a fresh one is created when `None`. |
+| `elo` | `Optional[Mapping[str, float]]` | `None` | Optional mapping of team abbreviation to initial ELO rating. |
+
+**Returns**
+
+teams, "games": games}`` with updated ELO ratings and filled results.
+
+| col_name | type | description |
+|---|---|---|
+| `teams.sim` | integer | Simulated season identifier the team row belongs to, carried through from the input teams frame. |
+| `teams.team` | character | Team abbreviation, carried through from the input teams frame. |
+| `teams.conf` | character | Conference of the team (AFC or NFC), carried through from the input teams frame. |
+| `teams.division` | character | Division of the team (e.g. "AFC East"), carried through from the input teams frame. |
+| `teams.elo` | double | Dynamic ELO rating after applying the shifts from the simulated week's results; carried into the next week's call so ratings evolve over the simulated season. |
+| `games.sim` | integer | Simulated season identifier the game row belongs to. |
+| `games.game_type` | character | Game type of the row - REG for regular season or the playoff round (WC, DIV, CON, SB). |
+| `games.week` | character | Week key used by the simulation engine - regular season week numbers as strings and postseason rounds as WC/DIV/CON/SB. |
+| `games.away_team` | character | Team abbreviation of the away team. |
+| `games.home_team` | character | Team abbreviation of the home team. |
+| `games.away_rest` | integer | Days of rest for the away team before the game (feeds the ELO rest adjustment of 25 points per extra week). |
+| `games.home_rest` | integer | Days of rest for the home team before the game. |
+| `games.location` | character | Game site indicator - "Home" applies the +20 ELO home-field adjustment, "Neutral" (Super Bowl) does not. |
+| `games.result` | integer | Home margin (home score minus away score). Rows of the simulated week that were missing are filled from Normal(estimate, 13) rounded away from zero; all other rows pass through unchanged. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_simulations import nfl_compute_results
+out = nfl_compute_results(teams, games, week_num="5")
+teams, games = out["teams"], out["games"]
+```
 
 ### `nfl_game_details(game_id: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_details}
 
@@ -6785,6 +7046,186 @@ print(xwalk.columns)
 pbp.join(nfl_players_crosswalk(), left_on="passer_player_id", right_on="gsis_id", how="left")
 ```
 
+### `nfl_season_standings(games: 'pl.DataFrame', *, ranks: 'str' = 'CONF', tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_season_standings}
+
+Compute NFL standings with the real NFL tiebreaking procedures.
+
+Faithful polars port of `nflseedR::nfl_standings()` (v2 engine,
+`R/standings.R` L82-155): initializes records, points, win
+percentages, SOV and SOS from a games frame, then resolves division
+ranks, conference ranks (playoff seeds) and draft order through the
+full NFL tiebreaker cascades.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | Games frame with one row per game. Required columns: `sim` or `season` (identifier), `game_type` (`'REG'`, `'WC'`, `'DIV'`, `'CON'`, `'SB'`), `week`, `away_team`, `home_team`, and `result` (home score minus away score; no missing values allowed). `away_score` / `home_score` are additionally required for `tiebreaker_depth='POINTS'` and enable the `pf`/`pa`/`pd` output columns. |
+| `ranks` | `str` | `'CONF'` | One of `'DIV'`, `'CONF'` (default), `'DRAFT'`, or `'NONE'` — which rank columns (and thus tiebreakers) to compute. `'DRAFT'` implies `'CONF'` implies `'DIV'`. |
+| `tiebreaker_depth` | `str` | `'SOS'` | One of `'SOS'` (default), `'PRE-SOV'`, `'POINTS'`, or `'RANDOM'`. Controls how deep the tiebreaker cascade goes before falling back to a coin toss. |
+| `playoff_seeds` | `Optional[int]` | `None` | If not `None`, only conference ranks up to this value are resolved with tiebreakers; deeper ranks are returned as null. Must be in 1-16. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a pandas DataFrame. |
+
+**Returns**
+
+A standings frame with one row per (sim/season, team) including records, `win_pct`/`div_pct`/`conf_pct`, `sov`, `sos`, and the requested `div_rank`/`conf_rank`/`draft_rank` columns plus `*_tie_broken_by` bookkeeping. `conf_rank` is the playoff seed.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season identifier from the input games frame (named `sim` instead when the input used a `sim` column). |
+| `conf` | character | Conference of the team (AFC or NFC). |
+| `division` | character | Division of the team (e.g. "AFC East"). |
+| `team` | character | Team abbreviation. |
+| `games` | integer | Number of regular season games played. |
+| `wins` | double | Regular season wins with ties counted as half a win. |
+| `true_wins` | integer | Regular season wins excluding ties (outright wins only). |
+| `losses` | integer | Regular season losses. |
+| `ties` | integer | Regular season ties. |
+| `pf` | integer | Points scored across regular season games (points for); present only when the input carries home_score and away_score. |
+| `pa` | integer | Points allowed across regular season games (points against); present only when the input carries scores. |
+| `pd` | integer | Regular season point differential (pf minus pa); present only when the input carries scores. |
+| `win_pct` | double | Regular season win percentage with ties counted as half a win. |
+| `div_pct` | double | Win percentage in games against division opponents (0 when the team played no division games). |
+| `conf_pct` | double | Win percentage in games against conference opponents (0 when the team played no conference games). |
+| `sov` | double | Strength of victory - combined win percentage of all opponents the team defeated (0 for winless teams). |
+| `sos` | double | Strength of schedule - combined win percentage of all opponents the team faced. |
+| `div_rank` | integer | Rank within the division (1-4) after applying the NFL division tiebreaking procedures. |
+| `div_tie_broken_by` | character | Tiebreaker step that resolved the team's division rank (e.g. "Head-To-Head Win PCT (2)" or "Coin Toss"); null when the rank needed no tiebreaker. |
+| `conf_rank` | integer | Conference rank, i.e. the playoff seed, after applying the NFL conference tiebreaking procedures; null beyond `playoff_seeds` when that argument is set. |
+| `conf_tie_broken_by` | character | Tiebreaker step that resolved the team's conference rank; null when the rank needed no tiebreaker. |
+| `exit` | character | Round of the team's final game - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner (returned with ranks="DRAFT"). |
+| `draft_rank` | integer | Draft pick position (1 = first overall pick) derived from postseason exit, win percentage, SOS and the draft tiebreaking procedures (returned with ranks="DRAFT"). |
+| `draft_tie_broken_by` | character | Tiebreaker step that resolved the team's draft rank; null when the rank needed no tiebreaker. |
+
+**Example**
+
+```python
+import sportsdataverse.nfl as nfl
+games = nfl.load_schedules([2024])
+standings = nfl.nfl_season_standings(games, ranks="DRAFT")
+print(standings.shape)
+
+# Playoff seeds only, pandas output
+
+df = nfl.nfl_season_standings(
+    games, ranks="CONF", playoff_seeds=7, return_as_pandas=True
+)
+
+# Pipeline next step (one line)
+
+standings.filter(pl.col("conf_rank") <= 7).sort("conf", "conf_rank")
+```
+
+### `nfl_simulations(games: 'pl.DataFrame', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 7, byes_per_conf: 'int' = 1, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'DRAFT', seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Dict[str, Union[pl.DataFrame, 'pd.DataFrame']]"` {#nfl_simulations}
+
+Simulate an NFL season from a schedule with (partially) missing results.
+
+Faithful port of `nflseedR::nfl_simulations()` +
+`simulate_chunk()` (simulations.R L140-409,
+simulations_simulate_chunks.R L1-284). Missing regular season results
+are filled week by week via `compute_results`; standings, division
+ranks and playoff seeds are then computed with the full NFL tiebreakers,
+the postseason is simulated round by round (with reseeding and
+`byes_per_conf` byes), and the draft order is derived. nflseedR's
+furrr chunking is replaced by one vectorized pass over all simulated
+seasons, so there is no `chunks` argument; reproducibility comes from
+`seed`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | Schedule frame for ONE season with columns `sim` or `season`, `game_type`, `week`, `away_team`, `home_team`, `away_rest`, `home_rest`, `location`, and `result` (home margin; missing = not yet played). |
+| `compute_results` | `Optional[ComputeResultsFn]` | `None` | Function filling results for one week, called as `compute_results(teams, games, week_num, rng=rng, **kwargs)` and returning `{"teams": ..., "games": ...}`. Defaults to `nfl_compute_results` (dynamic ELO + Normal(estimate, 13) margins). Must only fill results where `week == week_num` and `result` is missing, and must not produce postseason ties. |
+| `simulations` | `int` | `10000` | Number of seasons to simulate. |
+| `playoff_seeds` | `int` | `7` | Number of playoff seeds per conference. |
+| `byes_per_conf` | `int` | `1` | First-round byes per conference (drives the number of wildcard games). |
+| `tiebreaker_depth` | `str` | `'SOS'` | `'SOS'` (default), `'PRE-SOV'`, or `'RANDOM'` (`'POINTS'` is unavailable because simulated games carry margins, not scores). |
+| `sim_include` | `str` | `'DRAFT'` | `'REG'` (standings/seeds only), `'POST'` (+ postseason), or `'DRAFT'` (default; + draft order). |
+| `seed` | `Optional[int]` | `None` | Seed for the numpy RNG driving results and coin tosses. |
+| `return_as_pandas` | `bool` | `False` | If `True`, return pandas DataFrames. |
+
+**Returns**
+
+Dict of frames mirroring the nflseedR simulation list: `standings` (one row per sim x team), `games` (all simulated games), `overall` (per-team probabilities: wins, playoff, div1, seed1, won_conf, won_sb, draft1, draft5), `team_wins` (over/under probabilities vs. half-win lines), and `game_summary` (per-matchup home/away win rates).
+
+| col_name | type | description |
+|---|---|---|
+| `standings.sim` | integer | Simulated season identifier (1 through `simulations`). |
+| `standings.conf` | character | Conference of the team (AFC or NFC). |
+| `standings.division` | character | Division of the team (e.g. "AFC East"). |
+| `standings.team` | character | Team abbreviation. |
+| `standings.games` | integer | Number of regular season games played in the simulated season. |
+| `standings.wins` | double | Regular season wins in the simulated season with ties counted as half a win. |
+| `standings.true_wins` | integer | Regular season wins in the simulated season excluding ties. |
+| `standings.losses` | integer | Regular season losses in the simulated season. |
+| `standings.ties` | integer | Regular season ties in the simulated season. |
+| `standings.win_pct` | double | Regular season win percentage in the simulated season with ties counted as half a win. |
+| `standings.div_pct` | double | Win percentage against division opponents in the simulated season (0 when no division games). |
+| `standings.conf_pct` | double | Win percentage against conference opponents in the simulated season (0 when no conference games). |
+| `standings.sov` | double | Strength of victory in the simulated season - combined win percentage of all defeated opponents. |
+| `standings.sos` | double | Strength of schedule in the simulated season - combined win percentage of all opponents faced. |
+| `standings.div_rank` | integer | Division rank (1-4) in the simulated season after the NFL division tiebreakers. |
+| `standings.div_tie_broken_by` | character | Tiebreaker step that resolved the division rank in this simulated season; null when no tiebreaker was needed. |
+| `standings.conf_rank` | integer | Conference rank (playoff seed) in the simulated season after the NFL conference tiebreakers; null beyond `playoff_seeds`. |
+| `standings.conf_tie_broken_by` | character | Tiebreaker step that resolved the conference rank in this simulated season; null when no tiebreaker was needed. |
+| `standings.exit` | character | Round of the team's final game in the simulated season - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner. |
+| `standings.draft_rank` | integer | Draft pick position (1 = first overall) in the simulated season (present when sim_include="DRAFT"). |
+| `standings.draft_tie_broken_by` | character | Tiebreaker step that resolved the draft rank in this simulated season; null when no tiebreaker was needed. |
+| `games.sim` | integer | Simulated season identifier the game row belongs to. |
+| `games.game_type` | character | Game type - REG for regular season or the playoff round (WC, DIV, CON, SB). |
+| `games.week` | integer | Week number of the game; simulated playoff rounds are numbered from the last regular season week (+1 for WC through +4 for SB). |
+| `games.away_team` | character | Team abbreviation of the away team (simulated playoff matchups are filled by seed). |
+| `games.home_team` | character | Team abbreviation of the home team (simulated playoff matchups are filled by seed). |
+| `games.away_rest` | integer | Days of rest for the away team before the game. |
+| `games.home_rest` | integer | Days of rest for the home team before the game (14 for the top seed's divisional round game). |
+| `games.location` | character | Game site indicator - "Home" or "Neutral" (Super Bowl). |
+| `games.result` | integer | Home margin (home score minus away score); real where the input schedule had one, simulated otherwise. |
+| `overall.conf` | character | Conference of the team (AFC or NFC). |
+| `overall.division` | character | Division of the team (e.g. "AFC East"). |
+| `overall.team` | character | Team abbreviation. |
+| `overall.wins` | double | Mean regular season wins across all simulated seasons (ties counted as half a win). |
+| `overall.playoff` | double | Share of simulated seasons in which the team made the playoffs (conference rank within `playoff_seeds`). |
+| `overall.div1` | double | Share of simulated seasons in which the team won its division. |
+| `overall.seed1` | double | Share of simulated seasons in which the team earned the conference number one seed. |
+| `overall.won_conf` | double | Share of simulated seasons in which the team won the conference championship; null when sim_include="REG". |
+| `overall.won_sb` | double | Share of simulated seasons in which the team won the Super Bowl; null when sim_include="REG". |
+| `overall.draft1` | double | Share of simulated seasons in which the team held the first overall draft pick; null unless sim_include="DRAFT". |
+| `overall.draft5` | double | Share of simulated seasons in which the team held a top-five draft pick; null unless sim_include="DRAFT". |
+| `team_wins.team` | character | Team abbreviation. |
+| `team_wins.wins` | double | Half-win line the over/under probabilities are evaluated against (0, 0.5, ... up to the number of regular season games). |
+| `team_wins.over_prob` | double | Probability across simulated seasons that the team's outright win total exceeds the line. |
+| `team_wins.under_prob` | double | Probability across simulated seasons that the team's outright win total falls below the line (exact pushes are the remainder). |
+| `game_summary.game_type` | character | Game type of the matchup - REG for regular season or the playoff round (WC, DIV, CON, SB). |
+| `game_summary.week` | integer | Week number of the matchup. |
+| `game_summary.away_team` | character | Team abbreviation of the away team in the matchup. |
+| `game_summary.home_team` | character | Team abbreviation of the home team in the matchup. |
+| `game_summary.away_wins` | integer | Number of simulated seasons in which the away team won the matchup. |
+| `game_summary.home_wins` | integer | Number of simulated seasons in which the home team won the matchup. |
+| `game_summary.ties` | integer | Number of simulated seasons in which the matchup ended in a tie. |
+| `game_summary.result` | double | Mean home margin of the matchup across the simulated seasons in which it was played. |
+| `game_summary.games_played` | integer | Number of simulated seasons in which this exact matchup occurred (playoff pairings only arise in the simulations that produce them). |
+| `game_summary.away_percentage` | double | Share of played simulations won by the away team, with ties counted as half a win. |
+| `game_summary.home_percentage` | double | Share of played simulations won by the home team, with ties counted as half a win. |
+
+**Example**
+
+```python
+import sportsdataverse.nfl as nfl
+games = nfl.load_schedules([2024])
+sim = nfl.nfl_simulations(games, simulations=1000, seed=42)
+print(sim["overall"].head())
+
+# Custom initial ELO ratings
+
+sim = nfl.nfl_simulations(games, simulations=500, seed=1,
+                          elo={"KC": 1700, "BUF": 1650})
+
+# Pipeline next step (one line)
+
+sim["overall"].sort("won_sb", descending=True).head()
+```
+
 ### `nfl_token_gen(client_key: 'Optional[str]' = None, client_secret: 'Optional[str]' = None, force_refresh: 'bool' = False) -> 'str'` {#nfl_token_gen}
 
 Return a valid `api.nfl.com` bearer token, minting + caching as needed.
@@ -7131,6 +7572,28 @@ wk1.select(["season", "week", "player_display_name", "team_abbr"]).head()
 
 tot = scrape_ngs_week("rushing", 2023, week=0)
 ```
+
+### `team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'` {#team_name_fn}
+
+Fold historical/relocated team codes onto their current abbreviation.
+
+Verbatim port of nflfastR's `team_name_fn` (a plain
+`stringr::str_replace_all` over a 10-entry named vector). Operates as a
+**substring** replace (not a full-value lookup) so it also fixes
+embedded codes like `"SD 49" -> "LAC 49"` on yard-line columns. The
+10 from-codes are disjoint from all of their to-values, so the order of
+the 10 sequential replacements does not matter (verified in
+`tests.nfl.test_nfl_clean`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `expr` | `Expr` |  | A `polars.Expr` over a Utf8 column (e.g. `pl.col("posteam")`). |
+
+**Returns**
+
+The same expression with every occurrence of the 10 historical codes replaced by their current-franchise code.
 
 ### `update_config(**kwargs: 'object') -> 'NflConfig'` {#update_config}
 

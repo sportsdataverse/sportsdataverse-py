@@ -118,7 +118,7 @@ repos:
       # (.github/workflows/codegen.yml).
       - id: sdv-codegen
         name: codegen drift check (generated wrappers in sync with metadata)
-        entry: python tools/codegen/generate.py --check
+        entry: uv run python tools/codegen/generate.py --check
         language: system
         files: ^tools/codegen/(endpoints|schemas|templates)/.*$
         pass_filenames: false

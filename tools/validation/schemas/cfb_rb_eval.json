@@ -1,0 +1,5 @@
+{
+  "bin_pred_epa": "Float64",
+  "total_instances": "UInt32",
+  "bin_actual_epa": "Float64"
+}
