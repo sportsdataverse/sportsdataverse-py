@@ -189,8 +189,8 @@ def test_special_teams_ratings_orders_teams_and_fills_no_st_team() -> None:
     b = out.filter(pl.col("team_id") == "B").row(0, named=True)
     c = out.filter(pl.col("team_id") == "C").row(0, named=True)
     assert a["adj_st_epa"] > b["adj_st_epa"]
-    # C never appears on a special-teams play -> neutral fill (both sides land
-    # on the shared intercept, which cancels in the off-minus-def net).
+    # C never executes a special-teams play -> not in the offense-side ridge,
+    # so it falls back to the intercept, which the centering subtracts to 0.
     assert c["adj_st_epa"] == 0.0
 
 
@@ -198,6 +198,85 @@ def test_special_teams_ratings_all_non_st_input_returns_zero_row_frame() -> None
     out = special_teams_ratings(_mini_plays())
     assert out.height == 0
     assert out.schema == {"team_id": pl.Utf8, "adj_st_epa": pl.Float64}
+
+
+def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None:
+    """Special teams is owned by the executing ``pos_team``; a team that only
+    ever *defends* special teams (never punts/kicks/returns) earns no ST credit.
+    This pins the offense-side-only rating (an off-minus-def net would instead
+    give the defender a non-zero, noisy value)."""
+    rows = []
+    # A and B both execute special teams (>=2 executing teams keeps the ridge
+    # well-posed) -- against each other and against D. D ONLY defends ST.
+    for i in range(12):
+        rows.append(
+            {
+                "game_id": f"K{i}",
+                "week": 1,
+                "pos_team": "A",
+                "pos_team_id": "A",
+                "def_pos_team_id": "B",
+                "home": "A",
+                "EPA": 0.4,
+                "pass": 0,
+                "rush": 0,
+                "wp_before": 0.5,
+                "neutral_site": False,
+                "play_type": "Kickoff",
+            }
+        )
+        rows.append(
+            {
+                "game_id": f"K{i}",
+                "week": 1,
+                "pos_team": "B",
+                "pos_team_id": "B",
+                "def_pos_team_id": "A",
+                "home": "A",
+                "EPA": -0.2,
+                "pass": 0,
+                "rush": 0,
+                "wp_before": 0.5,
+                "neutral_site": False,
+                "play_type": "Punt",
+            }
+        )
+        rows.append(
+            {
+                "game_id": f"KD{i}",
+                "week": 1,
+                "pos_team": "A",
+                "pos_team_id": "A",
+                "def_pos_team_id": "D",
+                "home": "A",
+                "EPA": 0.4,
+                "pass": 0,
+                "rush": 0,
+                "wp_before": 0.5,
+                "neutral_site": False,
+                "play_type": "Kickoff",
+            }
+        )
+    for i in range(6):  # D appears on scrimmage snaps so it is in the roster
+        rows.append(
+            {
+                "game_id": f"D{i}",
+                "week": 1,
+                "pos_team": "D",
+                "pos_team_id": "D",
+                "def_pos_team_id": "A",
+                "home": "D",
+                "EPA": 0.1,
+                "pass": 1,
+                "rush": 0,
+                "wp_before": 0.5,
+                "neutral_site": False,
+                "play_type": "Pass Reception",
+            }
+        )
+    out = special_teams_ratings(pl.DataFrame(rows))
+    d = out.filter(pl.col("team_id") == "D").row(0, named=True)
+    assert d["adj_st_epa"] == 0.0  # D only defended ST -> zero credit (not off-minus-def)
 
 
 def _mini_drives() -> pl.DataFrame:

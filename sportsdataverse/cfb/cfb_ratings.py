@@ -185,12 +185,15 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
     Returns:
         A ``polars.DataFrame`` with one row per ``team_id`` appearing
         anywhere in ``plays`` (offense side), not just on special-teams
-        snaps: ``team_id`` (Utf8), ``adj_st_epa`` (Float64, offense-minus-
-        defense net special-teams value). Teams with no special-teams plays,
-        and the ridge's dropped reference team, get ``adj_st_epa == 0.0`` --
-        both sides fall back to the shared intercept, which cancels in the
-        net. Zero-row (correctly-typed) when ``plays`` has no special-teams
-        plays at all.
+        snaps: ``team_id`` (Utf8), ``adj_st_epa`` (Float64, the opponent-
+        adjusted **offense-side** special-teams EPA of the executing team,
+        centered on the league baseline). Unlike scrimmage EPA this is NOT an
+        offense-minus-defense net -- special teams is owned by the ``pos_team``
+        that punts / kicks / returns, and the ``def_pos_team`` side is
+        near-noise (see the implementation note). Teams with no special-teams
+        plays, and the ridge's dropped reference team, get ``adj_st_epa == 0.0``
+        (they fall back to the intercept, which the centering subtracts off).
+        Zero-row (correctly-typed) when ``plays`` has no special-teams plays.
 
     Raises:
         ImportError: If ``scikit-learn`` is not installed.
@@ -229,18 +232,22 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
     if st_clean.height == 0:
         return pl.DataFrame(schema=_ST_OUTPUT_SCHEMA)
 
-    offense, defense, intercept = _fit_opponent_ridge(st_clean, cfg.ridge_lambda)
+    offense, _defense, intercept = _fit_opponent_ridge(st_clean, cfg.ridge_lambda)
     assert offense.schema["team_id"] == pl.Utf8
-    assert defense.schema["team_id"] == pl.Utf8
 
+    # Special teams does NOT obey the offense-minus-defense symmetry of
+    # scrimmage EPA. The team executing the special-teams play (``pos_team``:
+    # the punt / field-goal / kick-return) owns the EPA and is what a
+    # published ST rating credits; the ``def_pos_team`` "ST defense"
+    # (coverage / block) is near-noise and does not opponent-separate, so
+    # subtracting it injects noise (agreement with SP+ special-teams drops
+    # 0.70 -> 0.58). The rating is therefore the opponent-adjusted OFFENSE-side
+    # coefficient only, centered on the baseline (``intercept``) so the ridge's
+    # dropped reference team and teams with no special-teams plays land at 0.0.
     out = (
         roster.join(offense.rename({"adjmodelOff": "off_st"}), on="team_id", how="left")
-        .join(defense.rename({"adjmodelDef": "def_st"}), on="team_id", how="left")
-        .with_columns(
-            pl.col("off_st").fill_null(intercept),
-            pl.col("def_st").fill_null(intercept),
-        )
-        .with_columns(adj_st_epa=pl.col("off_st") - pl.col("def_st"))
+        .with_columns(pl.col("off_st").fill_null(intercept))
+        .with_columns(adj_st_epa=pl.col("off_st") - intercept)
         .select("team_id", "adj_st_epa")
     )
     return out
