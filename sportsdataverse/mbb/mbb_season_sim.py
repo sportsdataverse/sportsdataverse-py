@@ -66,7 +66,7 @@ def _win_matrix(
 ) -> np.ndarray:
     """(n_sims, n_teams) win counts from independent Bernoulli(p_home) draws."""
     home_wins = rng.random((n_sims, len(p_home))) < p_home  # margin>0 <=> U < Phi(exp/sd)
-    wins = np.zeros((n_sims, n_teams), dtype=np.int64)
+    wins: np.ndarray = np.zeros((n_sims, n_teams), dtype=np.int64)
     for g in range(len(p_home)):
         wins[:, home_idx[g]] += home_wins[:, g]
         wins[:, away_idx[g]] += ~home_wins[:, g]
