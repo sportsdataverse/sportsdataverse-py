@@ -1,13 +1,41 @@
 """Tests for the closed-form pregame predictors (``mbb_game_predict``)."""
 
+import pandas as pd
+import polars as pl
+import pytest
 from scipy.stats import norm
 
 from sportsdataverse.mbb.mbb_game_predict import (
+    mbb_predict_games,
     predict_margin,
     predict_total,
     win_prob_from_margin,
 )
 from sportsdataverse.mbb.mbb_prediction_constants import get_constants
+
+
+def _ratings() -> pl.DataFrame:
+    return pl.DataFrame(
+        {
+            "season": [2024, 2024, 2024],
+            "team_id": ["1", "2", "3"],
+            "adj_o": [110.0, 100.0, 95.0],
+            "adj_d": [90.0, 100.0, 105.0],
+            "adj_em": [20.0, 0.0, -10.0],
+            "adj_tempo": [70.0, 65.0, 62.0],
+        }
+    )
+
+
+def _games() -> pl.DataFrame:
+    return pl.DataFrame(
+        {
+            "game_id": ["g1", "g2"],
+            "home_team_id": ["1", "3"],
+            "away_team_id": ["2", "2"],
+            "neutral_site": [False, True],
+        }
+    )
 
 
 def test_predict_margin_neutral_has_no_hfa():
@@ -54,3 +82,43 @@ def test_predict_total_higher_tempo_larger_total():
     c = get_constants("mens")
     args = (c.avg_efficiency, c.avg_efficiency, c.avg_efficiency, c.avg_efficiency)
     assert predict_total(*args, 72.0, 72.0) > predict_total(*args, 62.0, 62.0)
+
+
+def test_predict_games_matches_scalar_functions():
+    out = mbb_predict_games(_games(), _ratings())
+    assert out.columns == [
+        "game_id",
+        "home_team_id",
+        "away_team_id",
+        "exp_margin",
+        "home_win_prob",
+        "exp_total",
+    ]
+    g1 = out.row(0, named=True)
+    exp_margin = predict_margin(20.0, 0.0, neutral=False)
+    assert abs(g1["exp_margin"] - exp_margin) < 1e-9
+    assert abs(g1["home_win_prob"] - win_prob_from_margin(exp_margin)) < 1e-9
+    assert abs(g1["exp_total"] - predict_total(110.0, 90.0, 100.0, 100.0, 70.0, 65.0)) < 1e-9
+
+
+def test_predict_games_neutral_site_drops_hfa():
+    out = mbb_predict_games(_games(), _ratings())
+    g2 = out.row(1, named=True)
+    assert abs(g2["exp_margin"] - predict_margin(-10.0, 0.0, neutral=True)) < 1e-9
+
+
+def test_predict_games_missing_neutral_site_defaults_home():
+    out = mbb_predict_games(_games().drop("neutral_site"), _ratings())
+    assert abs(out.row(1, named=True)["exp_margin"] - predict_margin(-10.0, 0.0, neutral=False)) < 1e-9
+
+
+def test_predict_games_join_key_dtype_guard_raises():
+    bad = _ratings().with_columns(pl.col("team_id").cast(pl.Int64))
+    with pytest.raises(ValueError, match="dtype"):
+        mbb_predict_games(_games(), bad)
+
+
+def test_predict_games_return_as_pandas():
+    out = mbb_predict_games(_games(), _ratings(), return_as_pandas=True)
+    assert isinstance(out, pd.DataFrame)
+    assert len(out) == 2
