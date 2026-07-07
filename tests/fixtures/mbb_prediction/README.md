@@ -4,7 +4,7 @@
 
 - [MBB prediction-stack oracle corpus (season 2024)](#mbb-prediction-stack-oracle-corpus-season-2024)
   - [Oracle notes](#oracle-notes)
-  - [Not yet captured (added when their phase needs them)](#not-yet-captured-added-when-their-phase-needs-them)
+  - [ESPN per-game / per-team samples (captured 2026-07-07)](#espn-per-game--per-team-samples-captured-2026-07-07)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -25,6 +25,9 @@ fixtures and against the ratings engine never hit a dtype mismatch.
 | `results_2024.parquet` | 6243 | `load_mbb_schedule([2024])` (ESPN, via sportsdataverse-data) | Completed games only (`status_type_completed`), deduped on `game_id`. Cols: `game_id, season, date, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
 | `team_box_2024.parquet` | 12480 | `load_mbb_team_boxscore([2024])` (ESPN) | Per-team possession inputs for the ratings engine. Cols: `game_id, season, game_date, team_id, opp_team_id, team_home_away, team_score, opp_score, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted`. |
 | `torvik_2024.parquet` | 350 | barttorvik `https://barttorvik.com/2024_team_results.csv` | `adj_o`=adjoe, `adj_d`=adjde, `adj_em`=adjoe−adjde, `rank`. Keyed to ESPN `team_id` via a contracting normalizer + `St.`→`State`/`Saint` candidate keys + a small alias table (`dev/mbb_prediction/capture_oracle.py`). |
+| `espn_bpi_2024.parquet` | 362 | `espn_mbb_season_powerindex(2024, team_id=...)` (ESPN Core v2, one request per team) | End-of-season BPI per D1 team: `team_id, team, bpi, bpi_rank, bpi_offense, bpi_defense, sos, sos_rank, sor, sor_rank, wins, losses` (`sos`=BPI `sospast`, the SOS-to-date used by the Phase-4 gate). The season-level list endpoint is a fixed Top-25 leaderboard regardless of `limit`, hence per-team fetches. `team` name joined from the torvik fixture (null for the 12 torvik-unmatched). |
+| `espn_predictor_sample.parquet` | 313 | `espn_mbb_game_predictor(game_id)` (ESPN Core v2) | Pregame `home_win_prob` = home `gameProjection` / 100. Sampled every 20th completed game by date (stratified across the season); 0 of 313 sampled games missing predictor data. |
+| `espn_odds_sample.parquet` | 294 | `espn_mbb_game_odds(game_id)` (ESPN Core v2) | Closing `close_spread_home` (home point spread, negative = home favored) + `close_total` for the same sampled games (19 of 313 had no usable book). Book preference order: ESPN BET, DraftKings, Caesars, Betfair, MGM, Unibet, SugarHouse — first with an explicit close (`homeTeamOdds.close.pointSpread` + `close.total`), else the first with a stored line snapshot (top-level `spread`/`overUnder`). |
 
 ## Oracle notes
 
@@ -48,12 +51,15 @@ fixtures and against the ratings engine never hit a dtype mismatch.
   Torvik tempo column — adjusted tempo (Task 1.3) is validated against a
   synthetic construction, not this oracle.
 
-## Not yet captured (added when their phase needs them)
+## ESPN per-game / per-team samples (captured 2026-07-07)
 
-The ESPN per-game oracle samples used by later phases are **not** in this
-commit — they are a rate-limited per-game scrape (ESPN Core v2 403s under
-load) and only Phase 2/4 gates consume them:
+The three ESPN oracle fixtures are a rate-limited Core v2 scrape (~990
+sequential requests; ESPN Core v2 403s under aggressive rate — pace is
+env-tunable via `ESPN_CAPTURE_SLEEP`, sample size via
+`ESPN_GAME_SAMPLE_TARGET`). Regenerate with
+`uv run python dev/mbb_prediction/capture_oracle.py espn` (reads the
+committed base fixtures for the game/team universe). Consumers:
 
-- `espn_predictor_sample.parquet` — `espn_mbb_game_predictor` (Phase 2 win-prob).
-- `espn_odds_sample.parquet` — `espn_mbb_game_odds` (Phase 2 spread/total MAE).
-- `espn_bpi_2024.parquet` — `espn_mbb_season_powerindex` (Phase 4 SoS gate).
+- `espn_predictor_sample.parquet` — Phase 2 win-prob Brier gate vs ESPN BPI.
+- `espn_odds_sample.parquet` — Phase 2 spread/total MAE vs closing lines.
+- `espn_bpi_2024.parquet` — Phase 4 SoS Spearman gate (`sos` / `sos_rank`).
