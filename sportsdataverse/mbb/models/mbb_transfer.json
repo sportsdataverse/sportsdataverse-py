@@ -1,0 +1,21 @@
+{
+  "league": "mens",
+  "feature_cols": [
+    "pre_box_bpm"
+  ],
+  "coef": [
+    0.6483895732695879,
+    0.7092115150552311
+  ],
+  "lambda": 30.0,
+  "min_minutes": 150.0,
+  "train_to_seasons": [
+    2026
+  ],
+  "holdout": {
+    "n": 517,
+    "mae_proj": 2.1884953791732276,
+    "mae_pre_baseline": 2.366862676881041,
+    "spearman": 0.6478615464266132
+  }
+}
