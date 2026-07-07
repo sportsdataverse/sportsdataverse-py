@@ -299,6 +299,7 @@ from sportsdataverse.mbb import helper_mbb_pbp_features as helper_mbb_pbp_featur
 from sportsdataverse.mbb import helper_mbb_pickcenter as helper_mbb_pickcenter  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_roster_items as helper_mbb_roster_items  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_team_items as helper_mbb_team_items  # noqa: F401
+from sportsdataverse.mbb import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.mbb import incorporate_height as incorporate_height  # noqa: F401
 from sportsdataverse.mbb import inject_luck as inject_luck  # noqa: F401
 from sportsdataverse.mbb import inject_rapm_into_players as inject_rapm_into_players  # noqa: F401
@@ -700,6 +701,7 @@ __all__ = [
     "helper_mbb_pickcenter",
     "helper_mbb_roster_items",
     "helper_mbb_team_items",
+    "in_game_features",
     "incorporate_height",
     "inject_luck",
     "inject_rapm_into_players",

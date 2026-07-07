@@ -11,6 +11,7 @@ functions are league-agnostic (``league="mens"`` / ``"womens"``).
 
 from __future__ import annotations
 
+import math
 from typing import Literal, Union, overload
 
 import pandas as pd
@@ -20,11 +21,46 @@ from scipy.stats import norm
 from sportsdataverse.mbb.mbb_prediction_constants import get_constants
 
 __all__ = [
+    "in_game_features",
     "mbb_predict_games",
     "predict_margin",
     "predict_total",
     "win_prob_from_margin",
 ]
+
+
+def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFrame:
+    """Per-play in-game win-probability features from a ``load_mbb_pbp`` frame.
+
+    Args:
+        pbp: Play-by-play frame with ``start_game_seconds_remaining``,
+            ``home_score``, ``away_score``, ``team_id`` (event team) and
+            ``home_team_id`` (the ``load_mbb_pbp`` schema).
+        pregame_home_prob: The pregame home win probability (e.g. from
+            :func:`win_prob_from_margin`), encoded as a constant logit column.
+
+    Returns:
+        One row per input play: ``score_diff`` (home - away), ``sec_left``
+        (clipped at 0 -- overtime plays count as 0 seconds left),
+        ``sqrt_sec_left``, ``pregame_logit``, ``home_has_ball`` (``Int8``;
+        dead-ball / unknown-team plays are 0).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_game_predict import in_game_features
+            from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+            pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
+            feats = in_game_features(pbp, 0.62)
+    """
+    logit = math.log(pregame_home_prob / (1.0 - pregame_home_prob))
+    return pbp.select(
+        (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("score_diff"),
+        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).alias("sec_left"),
+        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).sqrt().alias("sqrt_sec_left"),
+        pl.lit(logit, dtype=pl.Float64).alias("pregame_logit"),
+        (pl.col("team_id") == pl.col("home_team_id")).fill_null(False).cast(pl.Int8).alias("home_has_ball"),
+    )
 
 
 def predict_margin(

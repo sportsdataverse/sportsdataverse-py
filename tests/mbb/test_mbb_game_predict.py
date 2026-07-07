@@ -1,11 +1,14 @@
 """Tests for the closed-form pregame predictors (``mbb_game_predict``)."""
 
+import math
+
 import pandas as pd
 import polars as pl
 import pytest
 from scipy.stats import norm
 
 from sportsdataverse.mbb.mbb_game_predict import (
+    in_game_features,
     mbb_predict_games,
     predict_margin,
     predict_total,
@@ -123,3 +126,36 @@ def test_predict_games_return_as_pandas():
     out = mbb_predict_games(_games(), _ratings(), return_as_pandas=True)
     assert isinstance(out, pd.DataFrame)
     assert len(out) == 2
+
+
+def _pbp() -> pl.DataFrame:
+    return pl.DataFrame(
+        {
+            "game_id": [401, 401, 401],
+            "start_game_seconds_remaining": [2400, 1200, 30],
+            "home_score": [0, 40, 70],
+            "away_score": [0, 35, 68],
+            "team_id": [10, 20, None],
+            "home_team_id": [10, 10, 10],
+        }
+    )
+
+
+def test_in_game_features_columns_and_values():
+    feats = in_game_features(_pbp(), 0.75)
+    assert feats.columns == ["score_diff", "sec_left", "sqrt_sec_left", "pregame_logit", "home_has_ball"]
+    assert feats["score_diff"].to_list() == [0.0, 5.0, 2.0]
+    assert feats["sec_left"].to_list() == [2400.0, 1200.0, 30.0]
+    assert feats["sqrt_sec_left"].to_list() == pytest.approx([math.sqrt(2400), math.sqrt(1200), math.sqrt(30)])
+    assert feats["pregame_logit"].to_list() == pytest.approx([math.log(0.75 / 0.25)] * 3)
+    # home had it, away had it, dead ball -> 0
+    assert feats["home_has_ball"].to_list() == [1, 0, 0]
+    assert feats.schema["home_has_ball"] == pl.Int8
+
+
+def test_in_game_features_sec_left_clipped_in_overtime():
+    ot = _pbp().with_columns(pl.Series("start_game_seconds_remaining", [2400, -60, -120]))
+    feats = in_game_features(ot, 0.5)
+    assert feats["sec_left"].to_list() == [2400.0, 0.0, 0.0]
+    assert feats["sqrt_sec_left"].to_list() == [math.sqrt(2400), 0.0, 0.0]
+    assert feats["pregame_logit"].to_list() == [0.0, 0.0, 0.0]
