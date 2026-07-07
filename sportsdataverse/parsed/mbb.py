@@ -328,10 +328,12 @@ from sportsdataverse.mbb import load_mbb_standings as load_mbb_standings  # noqa
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import matching_player as matching_player  # noqa: F401
+from sportsdataverse.mbb import mbb_bracket_sim as mbb_bracket_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_bracketology as mbb_bracketology  # noqa: F401
 from sportsdataverse.mbb import mbb_in_game_win_prob as mbb_in_game_win_prob  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
+from sportsdataverse.mbb import mbb_season_sim as mbb_season_sim  # noqa: F401
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
@@ -413,6 +415,7 @@ from sportsdataverse.mbb import select_matching as select_matching  # noqa: F401
 from sportsdataverse.mbb import select_matching_own as select_matching_own  # noqa: F401
 from sportsdataverse.mbb import shot_js_to_html as shot_js_to_html  # noqa: F401
 from sportsdataverse.mbb import shot_value as shot_value  # noqa: F401
+from sportsdataverse.mbb import simulate_game as simulate_game  # noqa: F401
 from sportsdataverse.mbb import slow_regression as slow_regression  # noqa: F401
 from sportsdataverse.mbb import start_time_from_period as start_time_from_period  # noqa: F401
 from sportsdataverse.mbb import strength_of_schedule as strength_of_schedule  # noqa: F401
@@ -735,10 +738,12 @@ __all__ = [
     "load_mbb_team_boxscore",
     "load_mbb_team_season_stats",
     "matching_player",
+    "mbb_bracket_sim",
     "mbb_bracketology",
     "mbb_in_game_win_prob",
     "mbb_pbp_disk",
     "mbb_predict_games",
+    "mbb_season_sim",
     "mbb_strength_of_schedule",
     "mbb_team_ratings",
     "misspellings",
@@ -820,6 +825,7 @@ __all__ = [
     "select_matching_own",
     "shot_js_to_html",
     "shot_value",
+    "simulate_game",
     "slow_regression",
     "start_time_from_period",
     "strength_of_schedule",

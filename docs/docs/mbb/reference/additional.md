@@ -5292,6 +5292,38 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import matching_player
 matching_player(shot, pbp_event, tidy_ctx, code_match=False)
 ```
 
+### `mbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_bracket_sim}
+
+Single-elimination Monte Carlo over a bracket-ordered field.
+
+Rows of `seeded_field` are bracket slots: adjacent rows meet in round 1
+and winners of adjacent games meet next round (the standard fold). All
+games are neutral-site. Round columns are named from the END of a 64-team
+bracket (`champion` back to `reach_r32`); with a smaller field the
+early columns are 1.0 for everyone (trivially reached).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seeded_field` | `DataFrame` |  | Bracket-ordered rows with `team_id` (and typically `seed` for reference). |
+| `ratings` | `DataFrame` |  | One row per team: `team_id, adj_em`. |
+| `n_sims` | `int` | `10000` | Number of simulated brackets. |
+| `seed` | `int` | `0` | Seed for `numpy.random.default_rng`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per field team: `team_id, seed?, reach_r32, reach_s16, reach_e8, reach_f4, reach_final, champion` (probabilities).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_season_sim import mbb_bracket_sim
+odds = mbb_bracket_sim(field_64, ratings, n_sims=20000, seed=42)
+```
+
 ### `mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_bracketology}
 
 Projected tournament field for a season from the released ESPN data.
@@ -5393,6 +5425,32 @@ One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_w
 from sportsdataverse.mbb.mbb_game_predict import mbb_predict_games
 from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
 preds = mbb_predict_games(games, mbb_team_ratings([2024]))
+```
+
+### `mbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_season_sim}
+
+Monte Carlo the remaining schedule: expected wins + title odds.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | One row per team: `season, team_id, adj_em` and optionally `conference` (enables `conf_title_prob`) and `current_wins` (added to the simulated remaining wins). |
+| `remaining_schedule` | `DataFrame` |  | Games to simulate: `home_team_id, away_team_id, neutral_site`. |
+| `n_sims` | `int` | `10000` | Number of simulated seasons. |
+| `seed` | `int` | `0` | Seed for `numpy.random.default_rng` (deterministic output). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team: `season, team_id, exp_wins` (mean simulated total wins), `playoff_prob` (share of sims finishing in the top 68 win totals -- a field-size proxy, ties broken by `adj_em`) and `conf_title_prob` (share of sims with the most wins among conference members; ties count for every tied team; null without a `conference` column).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_season_sim import mbb_season_sim
+odds = mbb_season_sim(ratings, remaining, n_sims=5000, seed=42)
 ```
 
 ### `mbb_strength_of_schedule(seasons: 'list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_strength_of_schedule}
@@ -6275,6 +6333,32 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import shot_value
 shot_value("18:28:00,0-0,Eric Ayala, 3pt jumpshot made")   # 3
 shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
 shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
+```
+
+### `simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'` {#simulate_game}
+
+Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_em` | `float` |  | Home team's adjusted efficiency margin. |
+| `away_em` | `float` |  | Away team's adjusted efficiency margin. |
+| `neutral` | `bool` |  | True for a neutral-site game. |
+| `rng` | `Generator` |  | A seeded `numpy.random.Generator` (caller owns determinism). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+True if the home team wins the sampled game.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_season_sim import simulate_game
+simulate_game(20.0, 5.0, False, np.random.default_rng(0))
 ```
 
 ### `slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#slow_regression}
