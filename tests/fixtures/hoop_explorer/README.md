@@ -5,6 +5,7 @@
 - [hoop-explorer oracle fixtures](#hoop-explorer-oracle-fixtures)
   - [`RapmUtils.test.ts` assertion classification map (Task 3.1)](#rapmutilstestts-assertion-classification-map-task-31)
     - [Note for Tasks 3.2-3.6: the `PlayerOnOffStats` build chain](#note-for-tasks-32-36-the-playeronoffstats-build-chain)
+  - [`PositionUtils.test.ts` assertion classification map (Task 4.1)](#positionutilstestts-assertion-classification-map-task-41)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -366,7 +367,17 @@ scope) are all genuinely non-literal (function calls / object spread /
 arrow functions / expressions referencing other consts), each documented
 as a replay recipe above; the one purely-literal const
 (`reducedFilteredLineups`) is real, load-bearing oracle data (see above),
-not incidental. No vendored entry in any input file fell back to a raw
+not incidental. `position_utils_inputs.json` (Task 4.1): 7/10 across its
+single source (`PositionUtils.test.ts`) — the 3 failures (`testCases` from
+`"buildPosition"` — backtick template-literal `diag` strings, not
+JSON5-legal; `player` from `"buildPosition"`'s per-case forEach — object
+spread; `expectedResultByBase` — bare identifiers as array elements) are
+all documented as replay recipes in that file's own bullet above; note the
+same-named-but-different `testCases`/`player` consts elsewhere in that one
+file (`"usingRosterPos"`'s `testCases`, `"regressShotQuality"`'s `player`)
+DO parse and are what actually landed in the JSON under those keys — see
+the bullet above for why this isn't a silent-overwrite data-loss case in
+practice. No vendored entry in any input file fell back to a raw
 string (`parse_sample_module` has no raw-string fallback at all — a failed
 parse is omitted, never silently mis-typed).
 
@@ -610,6 +621,103 @@ sampleLineupStatsResponse.responses[0].aggregations.lineups.buckets   (vendored,
                                   playersInfoByKey, {}, 100.0, "value", config)
 ```
 
+- `position_utils_inputs.json` (Task 4.1) — the *input* objects
+  `PositionUtils.test.ts` feeds into `PositionUtils.incorporateHeight` /
+  `.buildPositionConfidences` / `.buildPosition` / `.regressShotQuality` /
+  `.usingRosterPos` / `.orderLineup` / `.buildPositionalAwareFilter` /
+  `.testPositionalAwareFilter`. **No snapshot file exists for this suite at
+  all** (confirmed: no `PositionUtils.test.ts.snap` under
+  `__tests__/__snapshots__/`, and `grep -c toMatchSnapshot
+  PositionUtils.test.ts` = 0) — every oracle across all 9 `test()` blocks is
+  an inline `.toEqual`/`.toFixed(n)`/`.toBe` literal. It imports
+  `samplePlayerStatsResponse` and `sampleLineupStatsResponse`, **both already
+  vendored** (`rating_utils_inputs.json` / `lineup_utils_inputs.json`
+  respectively, from Tasks 2.1/0.2) — cross-reference those files, they are
+  NOT re-added here. 7 top-level keys, all genuinely-new inline consts from
+  the test file itself:
+  - `player` / `player2` — two literal `{stat_name: {value: N}}` dicts
+    declared in the `"regressShotQuality"` test (`:174`/`:196`), fed
+    directly to `PositionUtils.regressShotQuality(value, count, feature,
+    player)`.
+  - `testCases` — **only the `"usingRosterPos"` test's 10-row array**
+    survives vendoring under this name. `"buildPosition"` *also* declares a
+    `const testCases = [...]` (19 rows, `:56-142`) — same identifier, same
+    file — but that one **fails json5** (every row's `diag` field is an ES6
+    backtick template-literal string, e.g. `` diag: `(P[PG] >= 85%)` ``,
+    which JSON5 has no concept of), so it never reaches the merge step at
+    all; only `usingRosterPos`'s (plain double-quoted strings throughout)
+    parses successfully and lands in this key. **This is a name collision
+    trap, not a bug in the vendored data** — see the full classification map
+    below for the hand-transcribed `buildPosition` replay recipe. (The
+    `mbb_positions.py` module itself must not assume `testCases` in this
+    JSON means "the buildPosition cases" — it means the usingRosterPos ones.)
+  - `expectedResult` / `expectedResultFake` / `expectedResultUnsorted` —
+    three literal 5-entry `{code, id}` lineup-ordering arrays from the
+    `"orderLineup"` test (`:261`/`:268`/`:300`), the expected outputs of
+    `PositionUtils.orderLineup(...)` under three different `posClass`
+    scenarios / override states.
+  - `testLineup` — a literal 5-entry `{code, id}` array from the
+    `"testPositionalAwareFilter"` test (`:336`). Its content is
+    *coincidentally identical* to `expectedResult` (both are the same
+    Maryland 2019/20 five-player lineup, same order) — they are semantically
+    independent fixtures for two different tests, not a duplicate to dedupe.
+
+  **Not vendored — replay recipes (all in `PositionUtils.test.ts`):**
+  - `testCases` (`"buildPosition"`, `:56-142`, 19 rows) — hand-transcribe
+    verbatim from the TS (each row: `confs` 5-list, optional
+    `confsNoHeight` 5-list, `extra` dict of `off_*` scalar fields, optional
+    `roster: {pos: "..."}`, `pos`, `fallbackPos`, `diag` string, optional
+    `name`). This is the single most load-bearing oracle in the whole file
+    for Task 4.3's decision tree — see the classification map below for the
+    full transcription plus the two post-loop override/lookup assertions.
+  - `sampleTeamSeason1` / `sampleTeamSeason2` (`"buildPosition"`, `:54-55`)
+    — plain string consts (`"Men_Boston College_2019/20"` /
+    `"RandomLookup"`); the vendoring regex only matches `const X = {...}` /
+    `const X = [...]` bodies, so bare string consts are invisible to it
+    (never even attempted, not counted as a parse failure) — trivially
+    hardcode both literals in the Python test.
+  - `player` (`"buildPosition"`'s per-case forEach, `:148`) — a *different*,
+    non-literal `const player = { ...(_.mapValues(caseObj.extra, ...)),
+    roster: caseObj.roster }` (object spread over a lodash mapValues call)
+    that happens to share the name `player` with the vendored
+    `regressShotQuality` one above; it fails json5 on the spread syntax, so
+    the name collision never manifests as data loss here either — replay as
+    `{k: {"value": v} for k, v in case["extra"].items()} | {"roster":
+    case.get("roster")}` per test case.
+  - `confObj` / `confObjNoHeight` / `playerTooFewPos` (`"buildPosition"`,
+    per-case + post-loop) — lodash-chain expressions
+    (`_.fromPairs(_.zip(...))`, `_.chain(player).clone().merge(...)`), not
+    literals; replay as `dict(zip(TRAD_POS_LIST, case["confs"]))` /
+    `dict(zip(TRAD_POS_LIST, case["confsNoHeight"]))` (only when present) /
+    a shallow-merged copy of `player` with `off_team_poss` forced to
+    `{"value": 100}`.
+  - `playersById` (`"orderLineup"`, `:239-260`) — an arrow **function**
+    `(testCase: number) => {...}` parameterized by 0/1/2, not a data
+    literal at all (the vendoring regex requires the body to start with
+    `[`/`{` immediately after `=`; a function body starting with `(` is
+    never even attempted, so it doesn't show up as a parse failure either —
+    it's simply invisible to the regex). Hand-transcribe as a Python
+    function/dict-of-3 keyed by `test_case`: 5 players (`Wiggins, Aaron`,
+    `Cowan, Anthony`, `Morsell, Darryl`, `Ayala, Eric`, `Smith, Jalen`),
+    each with a fixed `posConfidences` 5-list (same across all 3 variants)
+    and a `posClass` string that varies by `test_case`.
+  - `expectedResultByBase` (`"orderLineup"`, `:275-277`) — `[expectedResult,
+    expectedResult, expectedResultFake]`, i.e. bare identifiers as array
+    elements, not JSON5-legal literals; replay as a 3-element Python list
+    referencing the already-vendored `expected_result` / `expected_result`
+    / `expected_result_fake` names directly.
+  - `switchMorsellWiggins` (`"orderLineup"`, `:291-292`) — `playersById(0)`
+    (a function call) with one field mutated in place afterward
+    (`["Wiggins, Aaron"].posClass = "WF"`); replay as
+    `players_by_id(0)` (from the `playersById` recipe above) with that one
+    key overridden.
+
+  Parse rate for this file: **7/10 consts parsed (70.0%)** — the 3 failures
+  are `testCases` (buildPosition's, backtick template literals),
+  `player` (buildPosition forEach's, object spread), and
+  `expectedResultByBase` (bare-identifier array elements), all documented
+  above as replay recipes; no entry fell back to a raw string.
+
 `playersInfoByKey` is a second, independent input built from
 `samplePlayerStatsResponse` (vendored, `rating_utils_inputs.json`) via the
 index-based `off_adj_rtg`/`def_adj_rtg` formula documented above — it is
@@ -629,3 +737,317 @@ instead consume the standalone `semiRealRapmResults.testContext` (hand-
 transcribed per the replay recipe above) and largely bypass this chain —
 except the pseudo-real `calcCollinearityDiag` test (item 7), which goes
 through the full chain again with a doubled-up `lineupReport`.
+
+## `PositionUtils.test.ts` assertion classification map (Task 4.1)
+
+`PositionUtils.test.ts` is 382 LOC and defines **9 `test()` blocks** inside
+`describe("PositionUtils")` (`:10`). **Confirmed: no snapshot file exists for
+this suite** — there is no `PositionUtils.test.ts.snap` under
+`__tests__/__snapshots__/` (that directory only has `DerivedStatsUtils`,
+`LineupUtils`, `LuckUtils`, `PlayTypeUtils`, `RapmUtils`, `RatingUtils`), and
+`grep -c toMatchSnapshot PositionUtils.test.ts` = 0. Every assertion in every
+test is an inline `.toEqual()` / `.toFixed(n)` string projection / `.toBe()`
+literal — there is nothing to look up via a `load_*_snap()` helper for this
+module; all oracles below must be hand-transcribed into the Python tests.
+
+A file-scope helper, `tidyObj` (`:12`): `_.mapValues(vo, (v: any) => (v.value
+|| v).toFixed(2))` — formats every value in a dict to a 2-decimal string,
+unwrapping a `{value: N}` wrapper if present via `v.value`, else formatting
+`v` directly. Python replay: `{k: f"{(v.get('value') if isinstance(v, dict)
+else v):.2f}" for k, v in vo.items()}` — but see the note under test 2 below
+for why the `|| v` fallback in `tidyObj` is not a JS-falsy landmine here
+(the values it's applied to are never wrapped, so `.value` is always
+`undefined`, never a falsy-but-valid `0`/`""`).
+
+1. **`PositionUtils - incorporateHeight`** (`:14-24`) — fully inline, no
+   const. Input is the call's own literal args: `height_in=81`,
+   `confs=[0.03, 0.19, 0.49, 0.09, 0.18]` (the tradPosList-ordered raw
+   confidence list, referencing the "Krutwig example" from a linked
+   hoop-explorer blog post). Oracle: `.map(n => n.toFixed(4))` → `["0.0055",
+   "0.0776", "0.4753", "0.1289", "0.3127"]` (4-decimal string projection).
+   The commented-out prior expectation (`heightDampening of 1`) is dead
+   code / historical note, not a second oracle — ignore it.
+
+2. **`PositionUtils - averageScoresByPos`** (`:25-27`) — no function call,
+   no input fixture at all. Reads the **module-level derived constant**
+   `PositionUtils.averageScoresByPos` directly (per the Phase-4 plan, this
+   is memoized from a lodash reduction over `positionFeatureWeights` ×
+   `positionFeatureAverages` at load time — Task 4.2 must port the
+   *derivation*, not hardcode the result, since this test is exactly the
+   checksum that catches a wrong derivation or a transcription slip in
+   either constant array). Oracle: `_.values(tidyObj(...))` → `["0.15",
+   "-0.03", "-0.11", "0.03", "0.42"]` (tradPosList order). Nothing to
+   vendor here; it's a pure post-4.2 regression check.
+
+3. **`PositionUtils - buildPositionConfidences`** (`:28-52`) — inputs are
+   `samplePlayerStatsResponse.responses[0].aggregations.tri_filter.buckets
+   .baseline.player.buckets[0]` and `[1]` — **already vendored in
+   `rating_utils_inputs.json`** (same property path documented there for
+   RatingUtils/LuckUtils reuse; do not re-vendor). Two calls:
+   - `buildPositionConfidences(buckets[0], undefined)` → full assertion
+     trio, all via `tidyObj` 2-decimal projection except the calculated
+     dict:
+     - `_.values(tidyObj(realConfidences))` → `["0.76", "0.24", "0.00",
+       "0.00", "0.00"]`
+     - `_.values(tidyObj(realDiags.scores))` → `["0.19", "0.07", "-0.33",
+       "-0.61", "-1.62"]`
+     - `tidyObj(realDiags.calculated)` → `{"calc_assist_per_fga": "0.41",
+       "calc_ast_tov": "2.13", "calc_ft_relative_inv": "0.58",
+       "calc_mid_relative": "0.59", "calc_rim_relative": "1.18",
+       "calc_three_relative": "1.03"}` (a `toEqual` deep-equality on the
+       whole 6-key dict, not per-key `.toFixed` — but each value is still a
+       `tidyObj`-formatted 2-decimal string).
+     - `_.keys(realConfidences) == PositionUtils.tradPosList` and
+       `_.keys(realDiags.scores) == PositionUtils.tradPosList` — **key
+       ORDER must match** `TRAD_POS_LIST` exactly (`["pos_pg", "pos_sg",
+       "pos_sf", "pos_pf", "pos_c"]`); Python replay needs the confidences
+       / scores dicts built in that exact insertion order (plain `dict` is
+       order-preserving in 3.7+, no `OrderedDict` needed, just build it in
+       the right sequence).
+   - `buildPositionConfidences(buckets[1], undefined)` → confidences only:
+     `["0.02", "0.39", "0.42", "0.18", "0.00"]`.
+
+4. **`PositionUtils - buildPosition`** (`:53-172`) — **the load-bearing
+   Task 4.3 oracle**, 19 hand-checked cases + 2 post-loop assertions.
+   `testCases` (`:56-142`) **fails to vendor** (backtick template-literal
+   `diag` strings aren't JSON5-legal — see the file-level bullet above) —
+   full verbatim transcription, one row per bullet (`confs` is always
+   tradPosList-ordered `[pg, sg, sf, pf, c]`; `extra` keys become
+   `{field: {value}}` player stats; `roster`/`confsNoHeight` are optional):
+   - PG: `confs=[.9,.1,0,0,0]`, `extra={assist:.10,3pr:.20,poss:1000,usage:.20}`
+     → `("PG", "(P[PG] >= 85%)")`, `name="Pure PG"`
+   - `confs=[.9,.1,0,0,0]`, `extra={assist:.05,3pr:.20,poss:1000,usage:.20}`
+     → `("WG", "(PG:)(P[PG] >= 85%) BUT (AST%[5.0] < 9%)")`
+   - s-PG: `confs=[.6,.4,0,0,0]`, `extra={assist:.10,...}` →
+     `("s-PG", "(P[PG] >= 50%)")`, `name="Scoring PG"`
+   - `confs=[.6,.4,0,0,0]`, `confsNoHeight=[.9,.1,0,0,0]`,
+     `extra={assist:.10,...}` → `("PG", "(P[PG] >= 85%) ('PG' vs 's-PG',
+     ignore height)")`, `name="Pure PG"` (the ONLY case with
+     `confsNoHeight` set — exercises the height-adjusted-vs-raw tie-break)
+   - `confs=[.6,.4,0,0,0]`, `extra={assist:.05,...}` → `("WG", "(pG:)(P[PG]
+     >= 50%) BUT (AST%[5.0] < 9%)")`
+   - CG: `confs=[.4,.3,.2,.1,0]`, `extra={assist:.10,...}` → `("CG", "(Max[P]
+     == PG)")`, `name="Combo Guard"`
+   - `confs=[.4,.3,.2,.1,0]`, `extra={assist:.05,...}` → `("WG", "(CG:)(Max[P]
+     == PG) BUT (AST%[5.0] < 9%)")`, `name="Wing Guard"`
+   - `confs=[.2,.6,.1,0,.1]`, `extra={assist:.10,...}` → `("CG", "(Max[P] ==
+     SG) AND (P[PG] >= P[SF] + P[PF] + P[C])")`
+   - `confs=[.2,.6,.1,0,.1]`, `extra={assist:.05,...}` → `("WG", "(CG:)(Max[P]
+     == SG) AND (P[PG] >= P[SF] + P[PF] + P[C]) BUT (AST%[5.0] < 9%)")`
+   - WG: `confs=[.1,.6,.1,.1,.1]`, `extra={assist:.10,...}` → `("WG", "(Max[P]
+     == SG) AND (P[PG] < P[SF] + P[PF] + P[C])")`
+   - `confs=[.2,.2,.3,.2,.1]`, `extra={assist:.10,...}` → `("WG", "(Max[P] ==
+     SF) AND (P[PG] + P[SG] >= P[PF] + P[C])")`
+   - WF: `confs=[.2,.1,.3,.2,.2]`, `extra={assist:.10,...}` → `("WF", "(Max[P]
+     == SF) AND (P[PG] + P[SG] < P[PF] + P[C])")`, `name="Wing Forward"`
+   - S-PF: `confs=[0,.1,.1,.6,.2]`, `extra={assist:.10,3pr:.25,...}` →
+     `("S-PF", "(Max[P] == PF) AND (P[PG] + P[SG] + P[SF] >= P[C])")`,
+     `name="Stretch PF"`
+   - `confs=[0,.1,.1,.6,.2]`, `extra={assist:.10,3pr:.15,...}` → `("PF/C",
+     "(S4:)(Max[P] == PF) AND (P[PG] + P[SG] + P[SF] >= P[C]) BUT 3PR%[15.0]
+     < 20%")` (same confs as S-PF above, only `3pr` dropped from .25 to .15
+     — the 3PR-rate gate is what flips S-PF → PF/C)
+   - PF/C: `confs=[0,0,.1,.9,0]`, `extra={assist:.10,3pr:.25,...}` →
+     `("PF/C", "(P[PF] >= 85%)")`, `name="Power Forward/Center"`
+   - `confs=[0,0,.05,.8,.15]`, `extra={assist:.10,3pr:.25,...}` → `("PF/C",
+     "(Max[P] == C) OR ((Max[P] == PF) AND (P[PG] + P[SG] + P[SF] <
+     P[C]))")`
+   - `confs=[0,0,0,.2,.8]`, `extra={assist:.10,3pr:.25,...}` → same pos +
+     same diag string as the row above
+   - C: `confs=[0,0,0,.1,.9]`, `extra={assist:.10,3pr:.25,...}` → `("C",
+     "(P[C] >= 85%)")`, `name="Center"`
+   - Roster-override plumbing check: `confs=[0,0,0,.1,.9]`,
+     `roster={pos:"G"}`, `extra={assist:.10,3pr:.25,...}` → `("WF",
+     "Roster info says 'G', stats say [C] - compromize at 'WF'. From stats:
+     (P[C] >= 85%)")`, `name="Wing Forward"`
+
+   Two module-local scalar consts feed every row's call, **not captured by
+   the vendoring regex at all** (body doesn't start with `[`/`{`, so it's
+   never even attempted — not a parse failure, just invisible to the regex):
+   `sampleTeamSeason1 = "Men_Boston College_2019/20"` (`:54`),
+   `sampleTeamSeason2 = "RandomLookup"` (`:55`).
+
+   Per-case replay (`:144-161`): `confObj = dict(zip(TRAD_POS_LIST,
+   case["confs"]))`; `confObjNoHeight` = same zip over `case["confsNoHeight"]`
+   when present, else `None`; `player = {field: {"value": v} for field, v in
+   case["extra"].items()} | ({"roster": case["roster"]} if "roster" in case
+   else {})` (a *different*, non-literal `const player` shadows the vendored
+   `regressShotQuality` one at this exact spot in the TS — see the
+   file-level bullet above for why it fails json5 independently and doesn't
+   silently clobber anything). Assert `build_position(conf_obj,
+   conf_obj_no_height, player, sample_team_season_1) == (case["pos"],
+   case["diag"])`. When `case["name"]` is present, also assert
+   `id_to_position[case["pos"]] == case["name"]`.
+
+   Too-few-possessions fallback (only for cases with **no** `roster` and
+   **no** `confsNoHeight` — 17 of the 19 rows, excluding the 4th "Pure PG"
+   row (has `confsNoHeight`) and the roster-override row (has `roster`)):
+   `player_too_few_pos` =
+   shallow copy of `player` with `off_team_poss` forced to `{"value": 100}`
+   (overriding the `1000` every `extra` dict sets); call
+   `build_position(conf_obj, None, player_too_few_pos, sample_team_season_2)`
+   → `(case["fallbackPos"], f"Too few used possessions [20.0]=[100]*[20.0]%
+   < [25.0]. Would have matched [{case['pos']}] from rule [{case['diag']}]")`
+   — the message string is **formatted per-case** from that same case's
+   `pos`/`diag` fields, not a fixed literal; replay must build it
+   dynamically per row, not hardcode 15 separate strings.
+
+   Post-loop (`:162-172`, 2 more standalone assertions, not part of the
+   `testCases` loop):
+   - Absolute-override check: `conf_obj` rebuilt from `testCases[0].confs`
+     (`[0.9, 0.1, 0, 0, 0]`); `player = {"key": "Popovic, Nik", "off_usage":
+     {"value": 1}, "off_team_poss": {"value": 200}, "off_assist": {"value":
+     0.10}}`; `build_position(conf_obj, None, player, sample_team_season_1)`
+     → `("PF/C", "Override from [PG] which matched rule [(P[PG] >=
+     85%)]")`. This exercises `PositionalManualFixes.absolutePositionFixes`
+     — Task 4.3 must port (or vendor) the specific `"Men_Boston
+     College_2019/20"` → `"Popovic, Nik"` → forced-`PF/C` row from that
+     386-LOC table (the full table need not all be ported; this one row
+     must be, or an equivalent must be sourced, for this assertion to pass).
+   - Lookup-table checks: `id_to_position["G?"] == "Unknown - probably
+     Guard"`, `id_to_position["F/C?"] == "Unknown - probably Forward/Center"`.
+
+5. **`PositionUtils - regressShotQuality`** (`:173-205`) — inputs `player`
+   / `player2`, **both vendored** (`position_utils_inputs.json` keys
+   `player`/`player2`). 8 direct calls, mixed exact-equality and
+   `.toFixed(2)` projection:
+   - `regress_shot_quality(-15.5, 2, "misc_feature", player) == -15.5`
+     (not a regressed feature — passthrough)
+   - `regress_shot_quality(-15.5, 2, "calc_mid_relative", player) == -15.5`
+     (regressed feature, but volume high enough to skip regression)
+   - `regress_shot_quality(0, 4, "calc_three_relative", player) == 0`
+   - `regress_shot_quality(10, 4, "calc_three_relative",
+     player).toFixed(2) == "0.77"` (post-player-taking-3s special case)
+   - `regress_shot_quality(0, 3, "calc_three_relative",
+     player).toFixed(2) == "1.03"`
+   - `regress_shot_quality(100, 3, "calc_rim_relative",
+     player).toFixed(2) == "53.92"` (low-volume regression)
+   - `regress_shot_quality(10, 4, "calc_three_relative",
+     player2).toFixed(2) == "0.50"` (`player2`: higher volume, 3PR under
+     the 25%-of-fga floor still regresses)
+   - `regress_shot_quality(-15.5, 2, "calc_mid_relative",
+     player2).toFixed(2) == "-12.26"`
+   - `regress_shot_quality(100, 3, "calc_rim_relative",
+     player2).toFixed(2) == "100.00"` (`player2`'s rim-attempt share is
+     over 25% of `total_off_fga`, so it does NOT regress — full value
+     passthrough)
+
+6. **`PositionUtils - usingRosterPos`** (`:207-225`) — input `testCases`
+   (the **vendored** 10-row version — this key belongs to THIS test, not
+   `"buildPosition"`; see the collision note above). Fields: `stats`
+   (position from stats), `roster` (roster-reported position), `expected`
+   (resolved position), `hasInfo` (whether a non-`None` info/explanation
+   string is returned). For each row: `expected_pos, info =
+   using_roster_pos(case["stats"], case["roster"])`; assert `expected_pos ==
+   case["expected"]` and `(info is not None) == case["hasInfo"]`. The jest
+   `+ f": {i}"` suffix on both sides of each comparison is purely a
+   jest-failure-readability trick (embeds the row index in the diff output)
+   — irrelevant to the Python port, just assert directly per row.
+
+7. **`PositionUtils - orderLineup`** (`:227-312`) — the most involved
+   fixture set in this file.
+   - `playerCodesAndIds` = `sampleLineupStatsResponse.responses[0]
+     .aggregations.lineups.buckets[0].players_array.hits.hits[0]._source
+     .players` — **already vendored** in `lineup_utils_inputs.json` (a
+     deeper property path into the same top-level object documented there;
+     do not re-vendor).
+   - `playersById` (`:239-260`) — an arrow **function**, invisible to the
+     vendoring regex (see the file-level bullet). 5 players (`Wiggins,
+     Aaron`, `Cowan, Anthony`, `Morsell, Darryl`, `Ayala, Eric`, `Smith,
+     Jalen`), each with a fixed `posConfidences` 5-list and a `posClass`
+     that varies by `test_case` (0/1/2):
+     - `test_case=0`: Wiggins=`WG`, Cowan=`s-PG`, Morsell=`WG`, Ayala=`CG`,
+       Smith=`PF/C` (distinct posClasses per player — "will basically just
+       use the posClass")
+     - `test_case=1`: all 5 players' `posClass="C"` (all-the-same —
+       "double check if works if all the same, ie uses only
+       posConfidences")
+     - `test_case=2`: Wiggins=`PF/C`, Cowan=`C`, Morsell=`CG`, Ayala=`WF`,
+       Smith=`s-PG` ("pick some stupid posClass and check that overrides
+       posConfidence")
+     `posConfidences` (tradPosList-ordered, NOT normalized to sum to 1 —
+     raw scores) are identical across all 3 `test_case` variants: Wiggins
+     `[10,20,50,10,0]`, Cowan `[60,40,10,0,0]`, Morsell `[10,40,50,30,10]`,
+     Ayala `[40,60,10,0,0]`, Smith `[0,0,0,50,50]`.
+   - `expectedResult` / `expectedResultFake` / `expectedResultUnsorted` —
+     **vendored** literal 5-entry `{code, id}` arrays.
+     `expectedResultByBase = [expectedResult, expectedResult,
+     expectedResultFake]` — **fails json5** (bare identifiers as array
+     elements); replay as the corresponding 3-element Python list built
+     from the three vendored names directly.
+   - Order-invariance sweep (`:280-288`): for `case_id` in `0,1,2`, 50
+     iterations of `_.shuffle(playerCodesAndIds)` each re-asserting
+     `order_lineup(shuffled, players_by_id(case_id), team_season="") ==
+     expected_result_by_base[case_id]`. The assertion is about
+     **shuffle-order invariance**, not a specific PRNG sequence — the
+     Python port does not need to reproduce lodash's `_.shuffle` algorithm
+     or seed; a handful of `random.shuffle` passes (doesn't need literally
+     50) suffices to exercise the same property.
+   - Override-rule checks (`:290-310`): `switch_morsell_wiggins =
+     players_by_id(0)` (function-call const, `:291`) with
+     `["Wiggins, Aaron"]["posClass"]` mutated to `"WF"` afterward (`:292`).
+     - `order_lineup(player_codes_and_ids, switch_morsell_wiggins,
+       "Men_Maryland_2019/20") == expected_result_by_base[0]` — i.e. **the
+       raw posClass tweak is overridden back to the original ordering** by
+       a `relativePositionFixes` rule keyed to `"Men_Maryland_2019/20"`.
+     - `order_lineup(player_codes_and_ids, switch_morsell_wiggins,
+       "NoOverrideRules/20") == expectedResultUnsorted` — a *different*
+       team-season string that has **no** matching `relativePositionFixes`
+       entry, so the raw (tweaked) posClass-driven ordering is left
+       unsorted/uncorrected — this pair of assertions is the crux oracle
+       for Task 4.4's `apply_relative_positional_overrides` recursion +
+       the `relativePositionFixes` data table: Task 4.3/4.4 must source (or
+       vendor) whichever `relativePositionFixes` row(s) key on
+       `"Men_Maryland_2019/20"` for this exact lineup / posClass
+       combination.
+
+8. **`PositionUtils - buildPositionalAwareFilter`** (`:313-334`) — no
+   consts at all; every call/expected pair is fully inline (filter strings
+   passed directly as literal args, expected `[parts, excludedParts,
+   hasPositions]` 3-tuples written inline). 5 cases, hardcode verbatim:
+   - `"test1,test3;test2"` → `([{filter:"test1,test3",pos:[]},
+     {filter:"test2",pos:[]}], [], False)` (comma binds tighter than
+     semicolon — `,` groups within one filter-slot, `;` separates slots)
+   - `"Test1,test2"` → `([{filter:"test1",pos:[]},
+     {filter:"test2",pos:[]}], [], False)` (filter names are lowercased)
+   - `"test1,-test2 ,tEst3"` → `([{filter:"test1",pos:[]},
+     {filter:"test3",pos:[]}], [{filter:"test2",pos:[]}], False)` (`-`
+     prefix routes to the excluded/negative list; whitespace trimmed;
+     case-folded)
+   - `"test1=pg / -test2=Pf+C / test3"` → `([{filter:"test1",pos:[0]},
+     {filter:"test3",pos:[]}], [{filter:"test2",pos:[3,4]}], True)` (`/`
+     is the slot separator here instead of `;`/`,`; `=pos` suffix maps a
+     named position token — `pg`→index 0, `Pf+C`→indices `[3,4]` — via
+     `positionClasses`/`nicknameToPosClass`-style lookup, case-insensitive,
+     `+`-joined compound tokens; presence of any `=pos` suffix anywhere
+     flips the 3rd return value to `True`)
+   - `"test1=1+2+3;-test2=SG+SF ;test3=4+5"` → `([{filter:"test1",
+     pos:[0,1,2]}, {filter:"test3",pos:[3,4]}], [{filter:"test2",
+     pos:[1,2]}], True)` (numeric 1-based position tokens `1+2+3`→indices
+     `[0,1,2]` (0-based) coexist with named tokens `SG+SF`→`[1,2]` in the
+     same filter string; `;` is the slot separator again here)
+
+9. **`PositionUtils - testPositionalAwareFilter`** (`:335-380`) — input
+   `testLineup`, **vendored** (content-identical to `expectedResult` but a
+   semantically independent fixture for this test — see the file-level
+   bullet). 7 direct `toBe(true/false)` calls (hardcode verbatim, all
+   trivial `{filter, pos}` literals) plus a `forEach` identity sweep
+   (`:372-379`) over all 5 `testLineup` entries: for each `{code, id}` at
+   `index`, asserts `test_positional_aware_filter(test_lineup, [{"filter":
+   code.lower(), "pos": [index]}], []) is True` (own code as a *positive*
+   filter matches) and `test_positional_aware_filter(test_lineup, [],
+   [{"filter": code.lower(), "pos": [index]}]) is False` (own code as a
+   *negative* filter excludes). The 7 upfront cases cover: empty
+   pos/neg → `True`; a positive-only match → `True`; a negative filter with
+   the wrong `pos` index → `True` (doesn't exclude); a negative filter with
+   the right `pos` index (among others) → `False` (excludes); a negative
+   filter matching on name alone (empty `pos`, i.e. `pos` unconstrained) →
+   `False`; multiple positive filters all needing to match → `True` when
+   all match, `False` when one is `"missing"`; multiple negative filters
+   where only one needs to match to exclude → `False`.
+
+**Acceptance check for this task**: all 9 `test()` blocks above have every
+input either vendored (`position_utils_inputs.json`) or documented as a
+reused cross-reference (`rating_utils_inputs.json` /
+`lineup_utils_inputs.json`) or a hand-transcription replay recipe (this
+section + the file-level bullet above) — none are left unaccounted for.

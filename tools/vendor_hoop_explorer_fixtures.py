@@ -58,6 +58,26 @@ INPUT_SOURCES = {
     # calls / object spread / arrow functions / expressions referencing other
     # consts) and are documented as replay recipes in the README instead.
     UPSTREAM / "src/utils/stats/__tests__/RapmUtils.test.ts": "rapm_utils_inputs.json",
+    # PositionUtils.test.ts (Task 4.1). No snapshot file exists for this suite --
+    # every oracle is an inline `.toEqual`/`.toFixed` literal. It imports
+    # samplePlayerStatsResponse + sampleLineupStatsResponse, BOTH already vendored
+    # (rating_utils_inputs.json / lineup_utils_inputs.json respectively) -- do not
+    # re-add those sample-data modules here, the collision assert would fire on
+    # their shared top-level consts. Only PositionUtils.test.ts's own inline
+    # object/array-literal consts (testCases, player, player2, expectedResult,
+    # expectedResultFake, expectedResultUnsorted, testLineup) are genuinely new;
+    # see the README for the full classification map. NOTE: the file declares
+    # `const testCases` TWICE (buildPosition + usingRosterPos) and `const player`
+    # TWICE (an unused spread literal inside buildPosition's forEach + the real
+    # one in regressShotQuality) -- both times only ONE of the two survives
+    # json5 (buildPosition's testCases fails on ES6 backtick template-literal
+    # `diag` strings, which JSON5 doesn't support; the forEach `player` fails on
+    # object spread), so the vendored JSON ends up with exactly one entry per
+    # name with no silent-overwrite ambiguity in practice -- but this is
+    # coincidental, not guaranteed, so don't assume last-match-wins is safe in
+    # general; the README documents buildPosition's testCases as a hand-
+    # transcription replay recipe instead.
+    UPSTREAM / "src/utils/stats/__tests__/PositionUtils.test.ts": "position_utils_inputs.json",
 }
 
 # `export const X = {...};` (sample-data modules) or bare `const X = {...};`

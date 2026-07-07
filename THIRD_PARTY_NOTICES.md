@@ -7,6 +7,8 @@
   - [cbb-on-off-analyzer (`RatingUtils.ts`)](#cbb-on-off-analyzer-ratingutilsts)
   - [cbb-on-off-analyzer (`LuckUtils.ts`)](#cbb-on-off-analyzer-luckutilsts)
   - [cbb-on-off-analyzer (`RapmUtils.ts`)](#cbb-on-off-analyzer-rapmutilsts)
+  - [cbb-on-off-analyzer (`PositionUtils.ts`)](#cbb-on-off-analyzer-positionutilsts)
+  - [cbb-explorer (`EventUtils.scala` / `PossessionUtils.scala` / `StateUtils.scala` / `LineupEvent.scala` / `LineupEventStats.scala` / `Game.scala`)](#cbb-explorer-eventutilsscala--possessionutilsscala--stateutilsscala--lineupeventscala--lineupeventstatsscala--gamescala)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -154,6 +156,97 @@ that license's own attribution obligations.
   to the original TypeScript source itself; the Python port is a faithful
   (including bug-for-bug, where explicitly documented in the module
   docstring) translation of the upstream logic, not a functional rewrite.
+
+## cbb-on-off-analyzer (`PositionUtils.ts`)
+
+- **Project:** [Alex-At-Home/cbb-on-off-analyzer](https://github.com/Alex-At-Home/cbb-on-off-analyzer)
+  (the hoop-explorer.com single-page app).
+- **License:** Apache License, Version 2.0 -- full text at
+  <http://www.apache.org/licenses/LICENSE-2.0>, and vendored verbatim in the
+  upstream repository's `LICENSE` file.
+- **Copyright:** Copyright (c) Alex-At-Home
+  (<https://github.com/Alex-At-Home>) and contributors. Licensed under the
+  Apache License, Version 2.0.
+- **What was derived:** `src/utils/stats/PositionUtils.ts`'s positional
+  classifier surface -- the LDA constant tables (`positionFeatureInit`,
+  `tradPosList`, `positionFeatureWeights`, `positionFeatureAverages`,
+  `heightMeanStds`), the memoized `averageScoresByPos` derivation,
+  `regressShotQuality`, `buildPositionConfidences`, `incorporateHeight`,
+  `buildPosition` (incl. `idToPosition`), `usingRosterPos`,
+  `posClassToScore`, `orderLineup` (incl. the private
+  `applyRelativePositionalOverrides` recursive helper),
+  `buildPositionalAwareFilter`, and `testPositionalAwareFilter` -- was ported
+  line-for-line (including documented bug-for-bug behavior) into
+  [`sportsdataverse/mbb/mbb_positions.py`](sportsdataverse/mbb/mbb_positions.py).
+  The tested subset of `src/utils/stats/PositionalManualFixes.ts`'s
+  `absolutePositionFixes` and `relativePositionFixes` data tables was ported
+  alongside it (see the module docstring for the exact deferred-rows
+  scope). [`sportsdataverse/wbb/wbb_positions.py`](sportsdataverse/wbb/wbb_positions.py)
+  re-exports the same functions and constants by reference (no separate copy
+  of the logic). The jest test fixtures and their input literals used as an
+  offline correctness oracle are vendored under
+  [`tests/fixtures/hoop_explorer/`](tests/fixtures/hoop_explorer/) -- these
+  are test-only fixtures and are not shipped in the distributed wheel or
+  sdist.
+- **Modifications:** Translated from TypeScript to Python, following this
+  repository's own conventions (typing, docstrings). No changes were made
+  to the original TypeScript source itself; the Python port is a faithful
+  (including bug-for-bug, where explicitly documented in the module
+  docstring) translation of the upstream logic, not a functional rewrite.
+
+## cbb-explorer (`EventUtils.scala` / `PossessionUtils.scala` / `StateUtils.scala` / `LineupEvent.scala` / `LineupEventStats.scala` / `Game.scala`)
+
+- **Project:** [Alex-At-Home/cbb-explorer](https://github.com/Alex-At-Home/cbb-explorer)
+  (the hoop-explorer.com NCAA play-by-play ingest engine, Scala 2.12, package
+  `org.piggottfamily.cbb_explorer`). This is a **distinct upstream repository**
+  from `cbb-on-off-analyzer` (the TypeScript single-page app covered by the
+  entries above) -- same author/org, separate codebase.
+- **License:** Apache License, Version 2.0 -- full text at
+  <http://www.apache.org/licenses/LICENSE-2.0>, and vendored verbatim in the
+  upstream repository's `LICENSE` file.
+- **Copyright:** Copyright (c) Alex-At-Home
+  (<https://github.com/Alex-At-Home>) and contributors. Licensed under the
+  Apache License, Version 2.0.
+- **What was derived:** the NCAA possession-core data-model and possession-
+  calculator layer was ported line-for-line (including documented
+  bug-for-bug behavior) into three modules:
+  - `LineupEvent.scala`'s `RawGameEvent` record and possession-accessor
+    companions, `Game.scala`'s `LocationType`, and `LineupEventStats.scala`'s
+    full nested stat-tree shape, plus the identity/value types and
+    `PossessionUtils.scala`'s `PossCalcFragment`/`poss_calc_fragment_sum`/
+    `score_to_tuple`, were ported into
+    [`sportsdataverse/mbb/mbb_ncaa_models.py`](sportsdataverse/mbb/mbb_ncaa_models.py).
+  - `EventUtils.scala`'s full PBP-line extractor surface (one `parse_x`
+    function per Scala `ParseX` object) was ported into
+    [`sportsdataverse/mbb/mbb_ncaa_events.py`](sportsdataverse/mbb/mbb_ncaa_events.py).
+  - `PossessionUtils.scala`'s concurrent-event batching, per-clump
+    possession-fragment algorithm (`calculate_stats`), and
+    lineup-assignment/balancing/clamping pass were ported into
+    [`sportsdataverse/mbb/mbb_ncaa_possessions.py`](sportsdataverse/mbb/mbb_ncaa_possessions.py).
+    `StateUtils.scala`'s generic `foldLeft` clumping machinery was **not**
+    ported as a reusable abstraction -- this port's single clumper
+    (`Concurrency.concurrent_event_handler`) is inlined as a direct loop
+    (see the module docstring for the rationale); the resulting behavior is
+    byte-for-byte verified against the upstream oracle regardless.
+  [`sportsdataverse/wbb/wbb_ncaa_models.py`](sportsdataverse/wbb/wbb_ncaa_models.py),
+  [`sportsdataverse/wbb/wbb_ncaa_events.py`](sportsdataverse/wbb/wbb_ncaa_events.py),
+  and
+  [`sportsdataverse/wbb/wbb_ncaa_possessions.py`](sportsdataverse/wbb/wbb_ncaa_possessions.py)
+  re-export the same types and functions by reference (no separate copy of
+  the logic). Unlike the cbb-on-off-analyzer (TypeScript/jest) entries above,
+  no fixture file is vendored for this port -- every `utest` oracle value
+  transliterated from `EventUtils.scala` / `PossessionUtils.scala` (and their
+  `*Tests.scala` twins) is a short inline literal reproduced directly in the
+  test modules (`tests/mbb/test_mbb_ncaa_models.py`,
+  `tests/mbb/test_mbb_ncaa_events.py`,
+  `tests/mbb/test_mbb_ncaa_possessions.py`), which are test-only and not
+  shipped in the distributed wheel or sdist.
+- **Modifications:** Translated from Scala to Python, following this
+  repository's own conventions (typing, docstrings, dataclasses in place of
+  case classes). No changes were made to the original Scala source itself;
+  the Python port is a faithful (including bug-for-bug, where explicitly
+  documented in the module docstrings) translation of the upstream logic,
+  not a functional rewrite.
 
 No modifications beyond the port itself are claimed against the upstream
 project, and no upstream `NOTICE` file exists to reproduce (the upstream

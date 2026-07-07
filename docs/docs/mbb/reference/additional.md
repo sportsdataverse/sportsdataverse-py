@@ -469,6 +469,250 @@ sched = espn_mbb_schedule(dates=season)
 
 ## Other
 
+### `AssistEvent(player_code: 'str', count: 'ShotClockStats' = <factory>) -> None` {#AssistEvent}
+
+One assist relationship's counts (`LineupEventStats.AssistEvent`,
+
+`LineupEventStats.scala:64-67`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_code` | `str` |  | The other player in the assist event (by code). |
+| `count` | `ShotClockStats` | `<factory>` | The assist counts, by shot-clock segment. |
+
+### `AssistInfo(counts: 'ShotClockStats' = <factory>, target: 'Optional[list[AssistEvent]]' = None, source: 'Optional[list[AssistEvent]]' = None) -> None` {#AssistInfo}
+
+Detailed assist info, split into given/received
+
+(`LineupEventStats.AssistInfo`, `LineupEventStats.scala:87-91`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `counts` | `ShotClockStats` | `<factory>` | Raw assist statistics. |
+| `target` | `Optional[list[AssistEvent]]` | `None` | Players "I" assisted, if tracked. |
+| `source` | `Optional[list[AssistEvent]]` | `None` | Players who assisted "me", if tracked. |
+
+### `ConcurrentClump(evs: 'list[RawGameEvent]' = <factory>, lineups: 'list[LineupEvent]' = <factory>) -> None` {#ConcurrentClump}
+
+A clump of concurrent raw events, together with the lineups that end
+
+in that clump (`Concurrency.ConcurrentClump`, `PossessionUtils.scala
+:64-69`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `evs` | `list[RawGameEvent]` | `<factory>` | The raw game events in this clump, in chronological order. |
+| `lineups` | `list[LineupEvent]` | `<factory>` | The lineups (if any) whose `end_min` falls in this clump. |
+
+### `Direction(*values)` {#Direction}
+
+Which team is in possession (`RawGameEvent.Direction`, `:119-121`).
+
+### `FieldGoalStats(attempts: 'ShotClockStats' = <factory>, made: 'ShotClockStats' = <factory>, ast: 'Optional[ShotClockStats]' = None) -> None` {#FieldGoalStats}
+
+Field-goal counting stats (`LineupEventStats.FieldGoalStats`,
+
+`LineupEventStats.scala:75-79`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `attempts` | `ShotClockStats` | `<factory>` | Shot attempts, successful or not. |
+| `made` | `ShotClockStats` | `<factory>` | Successful shot attempts. |
+| `ast` | `Optional[ShotClockStats]` | `None` | Successful shot attempts that were assisted, if tracked. |
+
+### `LineupEvent(date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None` {#LineupEvent}
+
+A portion of a game during which a given lineup was on the floor
+
+(`LineupEvent`, `LineupEvent.scala:41-58`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `date` | `datetime` |  | The date of the game. |
+| `location_type` | `LocationType` |  | Home/away/neutral (etc.) for this game. |
+| `start_min` | `float` |  | The point in the game at which the lineup entered. |
+| `end_min` | `float` |  | The point in the game at which the lineup changed. |
+| `duration_mins` | `float` |  | The duration of the lineup. |
+| `score_info` | `ScoreInfo` |  | The score differential context for this event. |
+| `team` | `TeamSeasonId` |  | The team under analysis. |
+| `opponent` | `TeamSeasonId` |  | The opposing team. |
+| `lineup_id` | `LineupId` |  | A string that defines the set of players on the floor. |
+| `players` | `list[PlayerCodeId]` |  | Mapping from player code to full identity, for this lineup. |
+| `players_in` | `list[PlayerCodeId]` |  | Players who subbed in for this event. |
+| `players_out` | `list[PlayerCodeId]` |  | Players who subbed out for this event. |
+| `raw_game_events` | `list[RawGameEvent]` |  | The raw NCAA event strings for both teams. |
+| `team_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (team side). |
+| `opponent_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (opponent side). |
+| `player_count_error` | `Optional[int]` | `None` | If the lineup is "impossible", the number of players actually seen (for analysis purposes). |
+
+### `LineupEventStats(num_events: 'int' = 0, num_possessions: 'int' = 0, fg: 'FieldGoalStats' = <factory>, fg_rim: 'FieldGoalStats' = <factory>, fg_mid: 'FieldGoalStats' = <factory>, fg_2p: 'FieldGoalStats' = <factory>, fg_3p: 'FieldGoalStats' = <factory>, ft: 'FieldGoalStats' = <factory>, orb: 'Optional[ShotClockStats]' = None, drb: 'Optional[ShotClockStats]' = None, to: 'ShotClockStats' = <factory>, stl: 'Optional[ShotClockStats]' = None, blk: 'Optional[ShotClockStats]' = None, assist: 'Optional[ShotClockStats]' = None, ast_rim: 'Optional[AssistInfo]' = None, ast_mid: 'Optional[AssistInfo]' = None, ast_3p: 'Optional[AssistInfo]' = None, foul: 'Optional[ShotClockStats]' = None, player_shot_info: 'Optional[PlayerShotInfo]' = None, pts: 'int' = 0, plus_minus: 'int' = 0) -> None` {#LineupEventStats}
+
+A lineup event's full counting-stat tree (`LineupEventStats`,
+
+`LineupEventStats.scala:7-38`).
+
+Only `num_events`/`num_possessions`/`pts`/`plus_minus` are
+exercised by Phase 5a -- see the module docstring's scope note.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `num_events` | `int` | `0` | Number of raw events folded into this lineup event. |
+| `num_possessions` | `int` | `0` | Number of possessions attributed to this lineup event. |
+| `fg` | `FieldGoalStats` | `<factory>` | Overall field-goal stats. |
+| `fg_rim` | `FieldGoalStats` | `<factory>` | Rim field-goal stats. |
+| `fg_mid` | `FieldGoalStats` | `<factory>` | Mid-range field-goal stats. |
+| `fg_2p` | `FieldGoalStats` | `<factory>` | 2pt field-goal stats. |
+| `fg_3p` | `FieldGoalStats` | `<factory>` | 3pt field-goal stats. |
+| `ft` | `FieldGoalStats` | `<factory>` | Free-throw stats. |
+| `orb` | `Optional[ShotClockStats]` | `None` | Offensive-rebound stats, if tracked. |
+| `drb` | `Optional[ShotClockStats]` | `None` | Defensive-rebound stats, if tracked. |
+| `to` | `ShotClockStats` | `<factory>` | Turnover stats. |
+| `stl` | `Optional[ShotClockStats]` | `None` | Steal stats, if tracked. |
+| `blk` | `Optional[ShotClockStats]` | `None` | Block stats, if tracked. |
+| `assist` | `Optional[ShotClockStats]` | `None` | Assist stats, if tracked. |
+| `ast_rim` | `Optional[AssistInfo]` | `None` | Rim-shot assist info, if tracked. |
+| `ast_mid` | `Optional[AssistInfo]` | `None` | Mid-range-shot assist info, if tracked. |
+| `ast_3p` | `Optional[AssistInfo]` | `None` | 3pt-shot assist info, if tracked. |
+| `foul` | `Optional[ShotClockStats]` | `None` | Foul stats, if tracked. |
+| `player_shot_info` | `Optional[PlayerShotInfo]` | `None` | Per-player shot-quality info, if tracked. |
+| `pts` | `int` | `0` | Points scored. |
+| `plus_minus` | `int` | `0` | Point differential while this lineup was on the floor. |
+
+### `LineupId(value: 'str') -> None` {#LineupId}
+
+The set of players on the floor, as an opaque id string
+
+(`LineupEvent.LineupId`, `LineupEvent.scala:172`, `AnyVal`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `value` | `str` |  | The opaque lineup identifier. |
+
+### `LocationType(*values)` {#LocationType}
+
+Game location (`Game.LocationType`, `Game.scala:36-38`).
+
+### `PlayerCodeId(code: 'str', id: 'PlayerId', ncaa_id: 'Optional[str]' = None) -> None` {#PlayerCodeId}
+
+A player's within-team-season code paired with their full identity
+
+(`LineupEvent.PlayerCodeId`, `LineupEvent.scala:185-189`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `code` | `str` |  | The player code, unique within the team/season only. |
+| `id` | `PlayerId` |  | The player's globally-unique identity. |
+| `ncaa_id` | `Optional[str]` | `None` | The player's NCAA-issued id, if known. |
+
+### `PlayerShotInfo(unknown_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, early_3pa: 'Optional[tuple[int, int, int, int, int]]' = None, unast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, ast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None) -> None` {#PlayerShotInfo}
+
+Per-player shot-quality info, keyed by lineup slot
+
+(`LineupEventStats.PlayerShotInfo`, `LineupEventStats.scala:98-103`).
+Each tuple is a fixed-arity 5-slot (one per lineup spot), mirroring the
+Scala `PlayerTuple[Int] = Tuple5[Int, Int, Int, Int, Int]` alias.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `unknown_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | 3pt makes of unknown assist status, per slot. |
+| `early_3pa` | `Optional[tuple[int, int, int, int, int]]` | `None` | Early-shot-clock 3pt attempts, per slot. |
+| `unast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Unassisted 3pt makes, per slot. |
+| `ast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Assisted 3pt makes, per slot. |
+
+### `PossCalcFragment(shots_made_or_missed: 'int' = 0, liveball_orbs: 'int' = 0, actual_deadball_orbs: 'int' = 0, ft_events: 'int' = 0, ignored_and_ones: 'int' = 0, bad_fouls: 'int' = 0, offsetting_bad_fouls: 'int' = 0, turnovers: 'int' = 0) -> None` {#PossCalcFragment}
+
+Running stats needed to calculate possessions for one lineup event,
+
+one direction at a time (`PossessionUtils.PossCalcFragment`,
+`PossessionUtils.scala:124-144`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots_made_or_missed` | `int` | `0` | Count of shot attempts (made or missed). |
+| `liveball_orbs` | `int` | `0` | Count of live-ball offensive rebounds. |
+| `actual_deadball_orbs` | `int` | `0` | Count of dead-ball offensive rebounds. |
+| `ft_events` | `int` | `0` | Count of free-throw *sets* (capped-at-1 flag per set). |
+| `ignored_and_ones` | `int` | `0` | Count of and-one free throws ignored for possession purposes (capped-at-1 flag). |
+| `bad_fouls` | `int` | `0` | Count of technical/flagrant fouls counted against the defending side (capped-at-1 flag). |
+| `offsetting_bad_fouls` | `int` | `0` | Count of technical/flagrant fouls that offset (net zero) rather than counting against either side (capped-at-1 flag). |
+| `turnovers` | `int` | `0` | Count of turnovers. |
+
+### `PossState(team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', prev_clump: 'ConcurrentClump') -> None` {#PossState}
+
+Running state threaded through `calculate_possessions_by_event`
+
+(`PossessionUtils.PossState`, `PossessionUtils.scala:39-49`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_stats` | `PossCalcFragment` |  | Accumulated fragment for the team since the last lineup boundary. |
+| `opponent_stats` | `PossCalcFragment` |  | Accumulated fragment for the opponent since the last lineup boundary. |
+| `prev_clump` | `ConcurrentClump` |  | The previously-processed merged clump (used by `calculate_stats`'s and-one / deadball-rebound heuristics). |
+
+### `PossessionEvent(dir: 'Direction') -> None` {#PossessionEvent}
+
+Decomposes `RawGameEvent`\ s into attacking/defending sides
+
+(`RawGameEvent.PossessionEvent`, `LineupEvent.scala:126-149`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dir` | `Direction` |  | Which team (`Direction.TEAM` / `Direction.OPPONENT`) is currently in possession. |
+
+**Methods**
+
+#### `PossessionEvent.attacking_team(ev: 'RawGameEvent') -> 'Optional[str]'`
+
+The event string for the team in possession, or `None`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ev` | `RawGameEvent` |  | The raw game event to inspect. |
+
+**Returns**
+
+`ev.team` if `dir` is `Direction.TEAM`, `ev.opponent` if `Direction.OPPONENT`, else `None`.
+
+#### `PossessionEvent.defending_team(ev: 'RawGameEvent') -> 'Optional[str]'`
+
+The event string for the team NOT in possession, or `None`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ev` | `RawGameEvent` |  | The raw game event to inspect. |
+
+**Returns**
+
+`ev.team` if `dir` is `Direction.OPPONENT`, `ev.opponent` if `Direction.TEAM`, else `None`.
+
 ### `RapmConfig(...)` {#RapmConfig}
 
 Port of `RapmConfig` (`RapmUtils.ts:175-179`).
@@ -498,6 +742,85 @@ See the module docstring's "Task 3.5 notes" for why `soln_matrix` and
 `sd_rapm` are plain nested `list`s rather than `NDArray`s, and why
 `sd_rapm` exists at all (a Python-only addition beyond upstream's own
 return shape).
+
+### `RawGameEvent(min: 'float', team: 'Optional[str]' = None, opponent: 'Optional[str]' = None) -> None` {#RawGameEvent}
+
+A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`,
+
+`LineupEvent.scala:65-105`).
+
+Exactly one of `team` / `opponent` is populated per event -- the raw
+string is the literal `"date,time,event"` line from the NCAA website.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `min` | `float` |  | The game-clock minute (fractional) this event occurred at. |
+| `team` | `Optional[str]` | `None` | The raw event string, if this event belongs to the team under analysis. |
+| `opponent` | `Optional[str]` | `None` | The raw event string, if this event belongs to the opponent. |
+
+### `ScoreInfo(start: 'Score', end: 'Score', start_diff: 'int', end_diff: 'int') -> None` {#ScoreInfo}
+
+Score context at the start/end of a lineup event
+
+(`LineupEvent.ScoreInfo`, `LineupEvent.scala:153-158`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start` | `Score` |  | Score at the start of the event. |
+| `end` | `Score` |  | Score at the end of the event. |
+| `start_diff` | `int` |  | Score differential (team - opponent) at the start. |
+| `end_diff` | `int` |  | Score differential (team - opponent) at the end. |
+
+### `ShotClockStats(total: 'int' = 0, early: 'Optional[int]' = None, mid: 'Optional[int]' = None, late: 'Optional[int]' = None, orb: 'Optional[int]' = None) -> None` {#ShotClockStats}
+
+Counting stats broken down by shot-clock segment
+
+(`LineupEventStats.ShotClockStats`, `LineupEventStats.scala:51-57`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `total` | `int` | `0` | Count across the entire shot clock. |
+| `early` | `Optional[int]` | `None` | Count in the first 10s, if tracked. |
+| `mid` | `Optional[int]` | `None` | Count in the middle 10s, if tracked. |
+| `late` | `Optional[int]` | `None` | Count in the last 10s, if tracked. |
+| `orb` | `Optional[int]` | `None` | Count in the first 10s following an offensive rebound, if tracked (else folded into `mid`/`late` as normal). |
+
+### `TeamId(name: 'str') -> None` {#TeamId}
+
+CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | The unique team name. |
+
+### `TeamSeasonId(team: 'TeamId', year: 'Year') -> None` {#TeamSeasonId}
+
+A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team` | `TeamId` |  | The team playing the season. |
+| `year` | `Year` |  | The year the season ends. |
+
+### `Year(value: 'int') -> None` {#Year}
+
+CBB season, named by the year it ends (`Year`, `Year.scala`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `value` | `int` |  | The ending year of the season. |
 
 ### `adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'` {#adjust_off_rating_stats}
 
@@ -538,6 +861,48 @@ adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
 print(o_diags["oRtg"], o_diags["adjORtgPlus"])
 ```
 
+### `apply_relative_positional_overrides(results: 'list[dict[str, str]]', team_season: 'str', recurse_count: 'int' = 0) -> 'list[dict[str, str]]'` {#apply_relative_positional_overrides}
+
+Recursively re-shuffle an ordered lineup per `RELATIVE_POSITION_FIXES`.
+
+Faithful port of the private `PositionUtils.applyRelativePositionalOverrides`
+(`PositionUtils.ts:657-693`). Finds the first rule (in table order) whose
+`key` slots all match the current `results` codes (a `None` key slot
+matches anything), applies that rule's `rule` slots (`None` = leave
+unchanged, `int` = 1-based back-reference into the *pre-rule* results,
+`dict` = literal replacement) to produce a new ordering, then recurses on
+the new ordering -- since one swap can expose a second rule to match (e.g.
+the Maryland 2019/20 Morsell/Wiggins swap can cascade into the Lindo/Smith
+swap). Recursion is bounded by `recurse_count < len(rules)` (ported
+verbatim from the TS bound), so it always terminates even if two rules
+somehow ping-ponged each other.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `list[dict[str, str]]` |  | The current 5-slot `{"code": ..., "id": ...}` ordering (PG/SG/SF/PF/C, index 0-4). |
+| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES`. A team/season absent from the table (or the recursion exhausting that team/season's rule count) returns `results` unchanged. |
+| `recurse_count` | `int` | `0` | Internal recursion depth counter -- callers should not pass this explicitly (mirrors the TS default parameter). |
+
+**Returns**
+
+The (possibly re-shuffled) 5-slot ordering.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import apply_relative_positional_overrides
+results = [
+    {"code": "AnCowan", "id": "Cowan, Anthony"},
+    {"code": "ErAyala", "id": "Ayala, Eric"},
+    {"code": "DaMorsell", "id": "Morsell, Darryl"},
+    {"code": "AaWiggins", "id": "Wiggins, Aaron"},
+    {"code": "JaSmith", "id": "Smith, Jalen"},
+]
+apply_relative_positional_overrides(results, "Men_Maryland_2019/20")
+```
+
 ### `apply_weak_priors(field: 'str', player_poss_pcts: 'list[float]', prior_info: 'RapmPriorInfo', debug_mode: 'bool' = False) -> 'Callable[[float, list[float]], list[float]]'` {#apply_weak_priors}
 
 Build a closure that nudges ridge-regressed RAPM back towards its weak prior.
@@ -573,6 +938,33 @@ from sportsdataverse.mbb.mbb_rapm import apply_weak_priors
 nudge = apply_weak_priors("off_adj_ppp", pct_by_player, ctx["prior_info"])
 adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
 ```
+
+### `assign_to_right_lineup(state: 'PossState', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#assign_to_right_lineup}
+
+Assign a clump's possessions to the lineup(s) ending in it
+
+(`PossessionUtils.assign_to_right_lineup`, `PossessionUtils.scala
+:418-518`).
+
+Applies the running `state` total (accumulated since the last lineup
+boundary) to the *first* ending lineup only, then hands off to
+`lineup_balancer` (this clump's own fragment, split across
+candidates if there's more than one) and finally `lineup_fixer`
+(the negative-possession clamp).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `state` | `PossState` |  | The running possession state since the last lineup boundary. |
+| `team_stats` | `PossCalcFragment` |  | This clump's team-direction fragment. |
+| `opponent_stats` | `PossCalcFragment` |  | This clump's opponent-direction fragment. |
+| `clump` | `ConcurrentClump` |  | The merged clump ending one or more lineups. |
+| `prev_clump` | `ConcurrentClump` |  | The previous merged clump. |
+
+**Returns**
+
+The lineup(s) ending in this clump, enriched with possession counts. Empty if `clump.lineups` is empty (see the module docstring's landmine-index note -- unreachable via `calculate_possessions_by_event`).
 
 ### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
 
@@ -856,6 +1248,118 @@ print(ctx["num_players"], ctx["team_info"]["off_poss"]["value"])
 
 off_lineups = ctx["filtered_lineups"]("off")
 def_lineups = ctx["filtered_lineups"]("def")
+```
+
+### `build_position(confs: 'dict[str, float]', confs_no_height: 'dict[str, float] | None', player: 'dict[str, Any]', team_season: 'str') -> 'tuple[str, str]'` {#build_position}
+
+Classify a player into a position label + diagnostic trace string.
+
+Faithful port of `PositionUtils.buildPosition` (`PositionUtils.ts:401-580`)
+-- the PG / s-PG / CG / WG / WF / S-PF / PF/C / C decision tree. A
+`ABSOLUTE_POSITION_FIXES` manual override short-circuits the whole
+tree (recursing once, with `team_season=""`, purely to compute the
+diagnostic "what would this have been" string); otherwise the function
+walks the confidence-threshold / assist-rate / 3PT-rate branch cascade,
+applies the "too few effective possessions" (< 25) fallback, and
+reconciles the result against roster metadata via `using_roster_pos`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `confs` | `dict[str, float]` |  | The 5-way positional confidence dict (`TRAD_POS_LIST` keys), typically the height-adjusted output of `build_position_confidences`. |
+| `confs_no_height` | `dict[str, float] \| None` |  | The pre-height-adjustment confidences, or `None` when the caller has no height data. When present, a PG <-> s-PG flip caused solely by the height adjustment is reverted (the `maybeIgnoreHeight` closure, `ts:433-457`). The check is `is not None` (JS object-truthiness: an empty dict is still a truthy JS object), NOT a Python-falsy `if confs_no_height`. |
+| `player` | `dict[str, Any]` |  | The player stat dict. Reads `key` (override lookup), `off_assist` / `off_3pr` / `off_usage` / `off_team_poss` (each `{"value": N}`-wrapped), and `roster` (a plain `{"pos": ..., "role": ...}` dict of un-wrapped strings). |
+| `team_season` | `str` |  | `"{sport}_{team}_{season}"` key into `ABSOLUTE_POSITION_FIXES`. Pass `""` to disable override lookup for a given call (the recursive diagnostic call inside the override branch does exactly this). |
+
+**Returns**
+
+A `(position, diagnostic)` tuple. `position` is one of `ID_TO_POSITION`'s keys; `diagnostic` is a human-readable trace of which rule fired, byte-identical to the TS's template strings (including `.toFixed(1)`-style percentage formatting).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import build_position, TRAD_POS_LIST
+confs = dict(zip(TRAD_POS_LIST, [0.9, 0.1, 0, 0, 0]))
+player = {"off_assist": {"value": 0.10}, "off_3pr": {"value": 0.20},
+          "off_team_poss": {"value": 1000}, "off_usage": {"value": 0.20}}
+build_position(confs, None, player, "Men_Boston College_2019/20")
+
+# A manual-override short-circuit
+
+build_position(confs, None, {"key": "Popovic, Nik",
+    "off_usage": {"value": 1}, "off_team_poss": {"value": 200},
+    "off_assist": {"value": 0.10}}, "Men_Boston College_2019/20")
+```
+
+### `build_position_confidences(player: 'dict[str, Any]', height_in: 'float | None' = None) -> 'tuple[dict[str, float], dict[str, Any]]'` {#build_position_confidences}
+
+Build the 5-way positional confidence vector for a player.
+
+Faithful port of `PositionUtils.buildPositionConfidences`
+(`PositionUtils.ts:263-338`). Derives the six `calc_*` ratios from the
+player's box-score fields, dot-products the resulting 17-feature vector
+against `POSITION_FEATURE_WEIGHTS` (each field regressed via
+`regress_shot_quality` and multiplied by its per-feature `scale`)
+plus the `POSITION_FEATURE_INIT` intercepts, applies a softmax over
+the five raw scores, and -- when `height_in` is supplied -- reweights the
+confidences via `incorporate_height`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player` | `dict[str, Any]` |  | The player stat dict (ES-aggregation bucket shape); each stat field is `{"value": N}`. Reads `total_off_assist`, `total_off_to`, `off_3p`, `off_efg`, `off_2pmid`, `off_2prim`, `total_off_fga`, `total_off_fta`, `total_off_ftm` (for the `calc_*` ratios) plus every non-`calc_` field in `POSITION_FEATURE_WEIGHTS`. |
+| `height_in` | `float \| None` | `None` | Optional player height in inches. When truthy, the returned confidences are height-adjusted; when `None` / `0`, the raw softmax confidences are returned. (JS `height_in ? ... : ...` falsy check, ts:324 -- a `0` height is treated as "no height".) |
+
+**Returns**
+
+A `(confidences, diagnostics)` tuple. `confidences` maps each `TRAD_POS_LIST` key (in order) to its final confidence. `diagnostics` carries `"scores"` (raw scores x `0.1`, keyed by position), `"confsNoHeight"` (the pre-height confidences, present only when `height_in` is truthy, else `None`), and `"calculated"` (the six derived `calc_*` ratios). The upstream diag object has exactly these three fields -- no UI-only fields are dropped.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import build_position_confidences
+confs, diags = build_position_confidences(player_bucket)
+print(confs["pos_pg"], diags["calculated"]["calc_ast_tov"])
+
+# Height-adjusted confidences
+
+confs_h, diags_h = build_position_confidences(player_bucket, 78.0)
+```
+
+### `build_positional_aware_filter(filter_str: 'str') -> 'tuple[list[dict[str, Any]], list[dict[str, Any]], bool]'` {#build_positional_aware_filter}
+
+Decompose a search-filter string into positionally-aware +ve/-ve fragments.
+
+Faithful port of `PositionUtils.buildPositionalAwareFilter`
+(`PositionUtils.ts:764-828`). Picks a fragment separator by scanning
+`[";", "/", ","]` in priority order for the first one present anywhere
+in `filter_str` (a fragment separator of `"!!!"` -- never itself
+present -- is the "no separator found" fallback, which leaves the whole
+string as a single fragment). Splits on that separator, trims whitespace,
+drops empty fragments and `[`-prefixed ones (reserved for aggregation-key
+filters elsewhere in the app), then routes each fragment to the positive
+or negative bucket by a leading `-`, and parses each fragment's optional
+`=<tokens>` position spec via decomp_positional_filter_fragment`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filter_str` | `str` |  | A raw filter string, e.g. `"test1=pg / -test2=Pf+C / test3"`. |
+
+**Returns**
+
+A `(positive_fragments, negative_fragments, has_position)` triple. Each fragment is `{"filter": <lowercased name>, "pos": [indices]}`. `has_position` is `True` iff any fragment (either side) carried at least one recognized position token.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import build_positional_aware_filter
+build_positional_aware_filter("test1=pg / -test2=Pf+C / test3")
 ```
 
 ### `build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'` {#build_priors}
@@ -1315,6 +1819,49 @@ buckets[1]["rapmRemove"] = True  # divert into all_lineups instead
 team_info = calculate_aggregated_lineup_stats(buckets)
 ```
 
+### `calculate_possessions(lineup_events: 'Iterable[LineupEvent]') -> 'list[LineupEvent]'` {#calculate_possessions}
+
+Top-level entry point: calculate team/opponent possessions for a
+
+sequence of lineup events (`PossessionUtils.calculate_possessions`,
+`PossessionUtils.scala:371-379`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_events` | `Iterable[LineupEvent]` |  | The lineups to enrich, in chronological order. |
+
+**Returns**
+
+The lineups, each enriched with possession counts.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_possessions import calculate_possessions
+
+enriched = calculate_possessions(lineups)
+enriched[0].team_stats.num_possessions
+```
+
+### `calculate_possessions_by_event(raw_events_as_clumps: 'Iterable[ConcurrentClump]') -> 'list[LineupEvent]'` {#calculate_possessions_by_event}
+
+Drive the batch loop + per-clump scoring over an already-flattened
+
+clump stream (`PossessionUtils.calculate_possessions_by_event`,
+`PossessionUtils.scala:521-573`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `raw_events_as_clumps` | `Iterable[ConcurrentClump]` |  | The unbatched clump stream, e.g. from flat-mapping `lineup_as_raw_clumps` over several lineups. |
+
+**Returns**
+
+The lineups, each enriched with possession counts, in original order.
+
 ### `calculate_predicted_out(player_weight_matrix: 'NDArray[np.float64]', regressed_players: 'list[float]', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#calculate_predicted_out}
 
 Predict per-lineup outputs from fitted per-player RAPM values.
@@ -1462,6 +2009,29 @@ from sportsdataverse.mbb.mbb_rapm import calculate_sd_rapm
 sd_rapm = calculate_sd_rapm(param_errs, err_sq, num_lineups=3, num_players=2)
 ```
 
+### `calculate_stats(clump: 'ConcurrentClump', prev: 'ConcurrentClump', dir: 'Direction') -> 'PossCalcFragment'` {#calculate_stats}
+
+Calculate one direction's possession-fragment for one merged clump
+
+(`PossessionUtils.calculate_stats`, `PossessionUtils.scala:170-369`).
+
+See the upstream source's inline worked examples (and-one detection,
+technical/flagrant offsetting, the deadball-rebound heuristic) for the
+hand-annotated NCAA play-by-play snippets that motivate each step; this
+port reproduces every step in the same order.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `ConcurrentClump` |  | The merged clump to score. |
+| `prev` | `ConcurrentClump` |  | The previously-processed merged clump (feeds the and-one and deadball-rebound heuristics -- see below). |
+| `dir` | `Direction` |  | Which side (`Direction.TEAM`/`Direction.OPPONENT`) is "attacking" for this calculation. Named to match the Scala (shadows the `dir` builtin -- consistent with this port's existing precedent of naming params after their Scala originals, e.g. `RawGameEvent.for_team`'s `min`). |
+
+**Returns**
+
+A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
+
 ### `complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'` {#complete_weighted_avg}
 
 Finish a `weighted_avg` accumulator into true weighted averages.
@@ -1505,6 +2075,52 @@ for lineup in lineups:
 complete_weighted_avg(acc)
 print(acc["off_ppp"]["value"])  # now a true weighted average
 ```
+
+### `concurrent_event_handler(clumps: 'Iterable[ConcurrentClump]') -> 'list[ConcurrentClump]'` {#concurrent_event_handler}
+
+Batch a stream of singleton/boundary clumps into merged
+
+concurrent-event clumps (`Concurrency.concurrent_event_handler` +
+`StateUtils.foldLeft`'s clumping machinery, `PossessionUtils.scala
+:71-111` -- see the module docstring for the full batching-predicate
+breakdown and the post-game-break singleton port trap).
+
+# ponytail: manual accumulate-and-flush loop replacing the generic
+# Clumper/StateUtils.foldLeft abstraction -- this is the ONE clumper
+# instantiation in the port, so a reusable abstraction buys nothing.
+# Lift this back into a small clumper type if a second concurrent-event
+# family needs the same batching later.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clumps` | `Iterable[ConcurrentClump]` |  | An ordered stream of `ConcurrentClump`\ s, each either a singleton raw event (`evs=[ev]`) or a lineup-boundary marker (`evs=[]`, `lineups=[lineup]`), e.g. from `lineup_as_raw_clumps`. |
+
+**Returns**
+
+The merged clumps, each an in-order concatenation of one batch's `evs`/`lineups`.
+
+### `count_matching(evs: 'Iterable[RawGameEvent]', side: 'DirFn', *parsers: 'Parser') -> 'int'` {#count_matching}
+
+Count events on one side matching any of the given parsers.
+
+Ports the pervasive `clump.evs.collect { case side(ParseX(_)) => () }
+.size` idiom (and its multi-arm `case side(ParseX(_)) => ();
+case side(ParseY(_)) => ()` union form, when more than one parser is
+passed -- e.g. the and-one free-throw count, which matches *either* a
+made or a missed free throw on the same event).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `evs` | `Iterable[RawGameEvent]` |  | The events to scan. |
+| `side` | `DirFn` |  | `~sportsdataverse.mbb.mbb_ncaa_models.PossessionEvent .attacking_team` or `.defending_team`, selecting which raw string (if any) to test per event. |
+
+**Returns**
+
+The count of matching events.
 
 ### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_teams}
 
@@ -1775,6 +2391,36 @@ diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
 print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
 ```
 
+### `incorporate_height(height_in: 'float', confs: 'list[float]') -> 'list[float]'` {#incorporate_height}
+
+Reweight positional confidences by height (Bayesian-ish height prior).
+
+Faithful port of `PositionUtils.incorporateHeight`
+(`PositionUtils.ts:346-368`; see `build_height_adj_probs` in the
+linked hoop-explorer blog post). For each position `i` it computes a
+height-plausibility mass `cdf(height + 1) - cdf(height - 1)` under
+`N(mean_i, sqrt2 * std_i)` (the `sqrt2` "height dampening" widens the
+variance so the effect is not too aggressive), multiplies it into the
+prior confidence, and renormalizes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `height_in` | `float` |  | Player height in inches. |
+| `confs` | `list[float]` |  | The five raw (pre-height) confidences, in `TRAD_POS_LIST` order. |
+
+**Returns**
+
+The five height-adjusted confidences, renormalized to sum to 1 (the `sum_product or 1` guard makes a degenerate all-zero product a no-op rather than a divide-by-zero -- see module landmine index item 1).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import incorporate_height
+incorporate_height(81, [0.03, 0.19, 0.49, 0.09, 0.18])
+```
+
 ### `inject_luck(mutable_stats: 'LineupStatSet', off_luck: 'OffLuckAdjustmentDiags | None', def_luck: 'DefLuckAdjustmentDiags | None') -> 'None'` {#inject_luck}
 
 Reversibly mutate a stat set in place with luck-adjustment deltas.
@@ -1874,6 +2520,88 @@ inject_rapm_into_players(
 )
 ```
 
+### `is_gen2(ev: 'RawGameEvent') -> 'bool'` {#is_gen2}
+
+Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
+
+`EventUtils.scala:12-14`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ev` | `RawGameEvent` |  | The raw game event to inspect. |
+
+**Returns**
+
+`True` if `ev.info` contains a comma-space (`", "`), the gen2 format's field separator; `False` for the old/legacy format.
+
+### `lineup_as_raw_clumps(lineup: 'LineupEvent') -> 'Iterator[ConcurrentClump]'` {#lineup_as_raw_clumps}
+
+Turn one lineup's raw events into unprocessed singleton clumps, plus a
+
+trailing lineup-boundary marker (`Concurrency.lineup_as_raw_clumps`,
+`PossessionUtils.scala:114-120`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup event to expand. |
+
+**Returns**
+
+One `ConcurrentClump([ev])` per raw event (in order), then a final `ConcurrentClump([], [lineup])` boundary marker.
+
+### `lineup_balancer(lineups: 'list[LineupEvent]', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#lineup_balancer}
+
+Attribute this clump's possessions to the candidate lineup(s)
+
+(`PossessionUtils.assign_to_right_lineup.lineup_balancer`,
+`PossessionUtils.scala:429-471`).
+
+A single candidate just receives the whole clump's possessions. Multiple
+candidates (a lineup change landing mid-clump) are split via a greedy
+round-robin: for each direction, rank lineups by an "approximate" possession
+count computed from just that lineup's own raw events at the clump's
+minute, then hand out possessions one at a time to whichever lineup
+currently has the highest remaining approximate share.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `list[LineupEvent]` |  | The candidate lineups (already updated with any running state total from `assign_to_right_lineup`). |
+| `team_stats` | `PossCalcFragment` |  | This clump's team-direction fragment. |
+| `opponent_stats` | `PossCalcFragment` |  | This clump's opponent-direction fragment. |
+| `clump` | `ConcurrentClump` |  | The merged clump being assigned. |
+| `prev_clump` | `ConcurrentClump` |  | The previous merged clump (only used for the first candidate's approximate stats -- see below). |
+
+**Returns**
+
+New lineup copies with `num_possessions` incremented.
+
+### `lineup_fixer(lineups: 'list[LineupEvent]') -> 'list[LineupEvent]'` {#lineup_fixer}
+
+Clamp obviously-broken possession counts (``PossessionUtils
+
+.assign_to_right_lineup.lineup_fixer`, `PossessionUtils.scala:490-507`).
+
+For both `team_stats` and `opponent_stats` independently: a lineup
+that scored (`pts > 0``) but was attributed zero-or-fewer possessions
+is clamped to exactly 1 (you can't score on zero possessions); any
+still-negative possession count is clamped to 0.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `list[LineupEvent]` |  | The lineups to fix (already balanced). |
+
+**Returns**
+
+New lineup copies with clamped `num_possessions`.
+
 ### `lineup_to_team_report(lineup_report: 'LineupStatSet', inc_replacement: 'bool' = False, regress_diffs: 'float' = 0.0, rep_on_off_diag_mode: 'int' = 0) -> 'LineupStatSet'` {#lineup_to_team_report}
 
 Build per-player on/off splits out of a team's lineups.
@@ -1936,6 +2664,47 @@ _No description available._
 |---|---|---|---|
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
+
+### `order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'` {#order_lineup}
+
+Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
+
+Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
+Greedily fits each player (in input order) to their best-scoring slot via
+fit_player` (dominated by `pos_class_to_score` on the
+player's `posClass`, tie-broken by their raw `posConfidences`),
+evicting and recursively re-fitting any player displaced along the way,
+then applies `apply_relative_positional_overrides` (keyed on
+`team_season`) as a final hand-tuned correction pass.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
+| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
+| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
+
+**Returns**
+
+A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import order_lineup
+players_by_id = {
+    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
+    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
+}
+order_lineup(
+    [{"code": "AnCowan", "id": "Cowan, Anthony"},
+     {"code": "ErAyala", "id": "Ayala, Eric"}],
+    players_by_id, "",
+)
+```
 
 ### `pick_ridge_regression(off_weights: 'NDArray[np.float64]', def_weights: 'NDArray[np.float64]', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', diag_mode: 'bool', agg_value_key: 'ValueKey' = 'value', lineup_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value')) -> 'tuple[RapmProcessingInputs, RapmProcessingInputs]'` {#pick_ridge_regression}
 
@@ -2049,6 +2818,141 @@ off_results, def_results = pick_ridge_regression(
 print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
 ```
 
+### `pos_class_to_score(pos_class: 'str') -> 'int'` {#pos_class_to_score}
+
+Ordinal "positional weight" for a position class, PG=1000..C=8000.
+
+Faithful port of `PositionUtils.posClassToScore` (`PositionUtils.ts:629-654`,
+a literal `switch`). Unmapped classes default to `4000` (the TS
+default-case comment notes "won't happen").
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pos_class` | `str` |  | A position-class code (e.g. `"PG"`, `"WF"`, `"C"`). |
+
+**Returns**
+
+The class's ordinal score.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import pos_class_to_score
+pos_class_to_score("WF")
+```
+
+### `poss_calc_fragment_sum(a: 'PossCalcFragment', b: 'PossCalcFragment') -> 'PossCalcFragment'` {#poss_calc_fragment_sum}
+
+Field-wise add two `PossCalcFragment`\ s
+
+(`PossCalcFragment.sum`, `PossessionUtils.scala:146-153`).
+
+The Scala original uses `shapeless.Generic` to zip the two case
+classes' fields and sum pairwise; since every field is a plain `Int`,
+a plain `zip` over `dataclasses.astuple` reproduces the same
+behavior without the generic-programming machinery.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `PossCalcFragment` |  | The left-hand fragment. |
+| `b` | `PossCalcFragment` |  | The right-hand fragment. |
+
+**Returns**
+
+A new `PossCalcFragment` with each field summed.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import (
+    PossCalcFragment,
+    poss_calc_fragment_sum,
+)
+
+frag1 = PossCalcFragment(1, 2, 3, 4, 5, 6, 7, 8)
+frag2 = PossCalcFragment(1, 3, 5, 7, 9, 11, 13, 15)
+poss_calc_fragment_sum(frag1, frag2)
+# PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
+```
+
+### `regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'` {#regress_shot_quality}
+
+Shrink a small-sample shot-quality stat toward its positional average.
+
+Faithful port of `PositionUtils.regressShotQuality`
+(`PositionUtils.ts:216-258`). Only the three relative shot-quality
+features (`calc_three_relative` / `calc_rim_relative` /
+`calc_mid_relative`) are regressed; any other `feat` passes `stat`
+through unchanged. A player is regressed toward the positional average
+whenever the relevant shot volume is below `max(0.25 * total_fga, 15)`
+(i.e. under 25% of their attempts come from that zone, floored at 15
+attempts). A `center` (`pos == 4`) who took 0-2 threes and made none is
+left at `0` to avoid widespread changes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stat` | `float` |  | The raw (unregressed) feature value. |
+| `pos` | `int` |  | Position index (`0=pg` ... `4=c`). |
+| `feat` | `str` |  | Feature field name (only the three relative shot-quality keys trigger regression; anything else is a passthrough). |
+| `player` | `dict[str, Any]` |  | The player stat dict; reads `total_off_fga` and the per-feature volume field (`total_off_{3p,2pmid,2prim}_attempts`), each shaped `{"value": N}`. |
+
+**Returns**
+
+The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import regress_shot_quality
+player = {"total_off_fga": {"value": 25},
+          "total_off_3p_attempts": {"value": 1}}
+regress_shot_quality(-15.5, 2, "misc_feature", player)
+
+# Low-volume shrink toward the positional average
+
+regress_shot_quality(100, 3, "calc_rim_relative",
+    {"total_off_fga": {"value": 25},
+     "total_off_2prim_attempts": {"value": 8}})
+```
+
+### `score_to_tuple(s: 'str') -> 'tuple[int, int]'` {#score_to_tuple}
+
+Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
+
+`ExtractorUtils.scala:107-113`).
+
+Scala's `str match { case regex(s1, s2) => ... }` on a compiled
+`Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
+`Matcher.matches()`, not `find()`) -- ported here as
+`re.fullmatch`, not `re.match`/`re.search`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  | The raw score string, e.g. `"55-68"`. |
+
+**Returns**
+
+`(scored, allowed)` as a tuple of ints, or `(0, 0)` if `s` doesn't fully match `([0-9]+)-([0-9]+)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
+
+score_to_tuple("55-68")   # (55, 68)
+score_to_tuple("garbage")  # (0, 0)
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -2090,6 +2994,70 @@ from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
 x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
 solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
 rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+```
+
+### `test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'` {#test_positional_aware_filter}
+
+Check a positional-aware filter (from `build_positional_aware_filter`)
+
+against a sorted (`order_lineup`-ordered) lineup array.
+
+Faithful port of `PositionUtils.testPositionalAwareFilter`
+(`PositionUtils.ts:831-858`). A fragment matches if any of its
+position-restricted slots (or, when `pos` is empty, any slot at all)
+has a `code`/`id` containing the fragment's filter text
+(case-insensitive substring match). Every positive fragment must match
+(vacuously true if there are none); no negative fragment may match
+(vacuously true if there are none).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_to_test` | `list[dict[str, str]]` |  | The ordered lineup, each a `{"id": ..., "code": ...}` dict (as returned by `order_lineup`). |
+| `pve_frags` | `list[dict[str, Any]]` |  | Positive-filter fragments (must ALL match). |
+| `nve_frags` | `list[dict[str, Any]]` |  | Negative-filter fragments (NONE may match). |
+
+**Returns**
+
+Whether the lineup satisfies both the positive and negative filters.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import test_positional_aware_filter
+lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
+test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
+```
+
+### `using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'` {#using_roster_pos}
+
+Reconcile a stats-derived position class against roster metadata.
+
+Faithful port of `PositionUtils.usingRosterPos` (`PositionUtils.ts:583-626`).
+When the classifier landed on an "unsure" bucket (`"G?"`/`"F/C?"`),
+roster info narrows it (a roster `"C"` always wins outright); otherwise
+an obviously-wrong stats classification is compromised toward the
+roster-implied side, gated by `pos_class_to_score` thresholds.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pos_class` | `str` |  | The stats-derived position class. |
+| `roster_pos` | `str \| None` |  | The roster-reported position (`"G"`/`"F"`/`"C"`), or `None`/`""` when unknown. `if (rosterPos)` (ts:587) is a plain JS truthiness check on a string -- `""` and `None` behave identically (both mean "no correction"), so `if not roster_pos` is the faithful Python mirror, not an `is None` landmine. |
+
+**Returns**
+
+A `(position, info)` tuple. `info` is `None` when no correction/explanation applies (matches the TS `undefined`), else a human-readable note on why the position was adjusted.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import using_roster_pos
+using_roster_pos("G?", "C")
 ```
 
 ### `weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'` {#weighted_avg}
