@@ -1189,6 +1189,51 @@ seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
 print(seeded.filter(pl.col("seed").is_not_null()))
 ```
 
+### `cfb_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_ratings}
+
+One row per team: the full CFB ratings spine (off/def/ST EPA + FEI).
+
+Public orchestrator over `efficiency_ratings`,
+`special_teams_ratings`, and `fei_ratings`. Loads play-by-play
++ schedule via `sportsdataverse.cfb.cfb_loaders.load_cfb_pbp` /
+`sportsdataverse.cfb.cfb_loaders.load_cfb_schedule`, joins the
+schedule's per-game date onto the plays, optionally applies the
+as-of-date leakage boundary
+(`sportsdataverse.cfb.cfb_prediction_constants.as_of_ratings_split`),
+then fits all three component ratings on the (optionally filtered) plays
+and reshapes them into one wide per-team table with dense ranks and a
+net-rating z-score.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season (e.g. `2023`) or a list of seasons to pool into one combined fit. |
+| `as_of_date` | `date \| None` | `None` | When given, the leakage boundary -- only plays from games with `date < as_of_date` are used to fit the ratings (mirrors what was knowable heading into that date). `None` (default) uses the full season(s), unfiltered. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs forwarded to all three component functions. Defaults to `RatingsConfig` when omitted. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -- the single passed season for the common single-season call; `null` for a pooled multi-season call, since no single season applies to every row), `team_id` (Utf8), `adj_off_epa`, `adj_def_epa` (Float64, from `efficiency_ratings`), `adj_st_epa` (Float64, from `special_teams_ratings`), `adj_net` (Float64 -- offense minus defense only; special teams is a separate column, not folded in), `fei_off`, `fei_def`, `fei_net` (Float64, from `fei_ratings`), `games` (Int64), `off_rank` (Int64, dense rank on `adj_off_epa` descending), `def_rank` (Int64, dense rank on `adj_def_epa` **ascending** -- fewer EPA allowed ranks better), `net_rank` (Int64, dense rank on `adj_net` descending), `net_z` (Float64, z-score of `adj_net`). Zero-row (correctly-typed) when the requested season(s) have no published pbp/schedule asset, or when `as_of_date` filters out every play.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import cfb_ratings
+ratings = cfb_ratings(2023)
+ratings.sort("net_rank").head()
+
+# As-of-date leakage boundary
+
+import datetime as dt
+week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
+
+# Pandas round-trip
+
+ratings_pd = cfb_ratings(2023, return_as_pandas=True)
+```
+
 ### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
 
 Build the ESPN x Fox x Yahoo player-id crosswalk for one team.
@@ -1449,6 +1494,41 @@ row = xwalk.filter(pl.col("espn_team_id") == 194)  # Ohio State
 espn_fox = cfb_teams_crosswalk(providers=("espn", "fox"))
 ```
 
+### `efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#efficiency_ratings}
+
+One row per team: opponent-adjusted offensive/defensive efficiency.
+
+Fits the offense/defense ridge from `cfb_adjusted_epa` on the
+competitive plays in `plays` (`min_competitive_wp <= wp_before <=
+max_competitive_wp`) and reshapes the result to one row per team,
+including the reference team the ridge's `model.matrix`-style
+parameterization drops (its rating is the fitted intercept, i.e. the
+league baseline).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._REQUIRED_COLUMNS` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before`). Callers pass an already as-of-date-filtered frame; this function is pure. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs. Only `ridge_lambda` is consulted here; defaults to `RatingsConfig` when omitted. |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64). Empty (zero-row, correctly-typed) when `plays` has no competitive plays.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import efficiency_ratings
+ratings = efficiency_ratings(pbp)
+ratings.sort("adj_net", descending=True).head()
+
+# Custom ridge penalty
+
+from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig
+ratings = efficiency_ratings(pbp, config=RatingsConfig(ridge_lambda=100.0))
+```
+
 ### `espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_teams}
 
 espn_cfb_teams - look up the college football teams
@@ -1497,6 +1577,44 @@ fcs.head()
 
 teams = espn_cfb_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
+```
+
+### `fei_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#fei_ratings}
+
+One row per team: opponent-adjusted per-drive efficiency (FEI-style).
+
+The Fremeau Efficiency Index rates teams on drive value above expectation
+given starting field position. The cfbfastR-schema `plays` frame this
+package works with carries no starting-field-position column, so this
+function uses the documented fallback: per-play EPA summed within each
+`(game_id, drive_id)` group stands in for drive value, and that
+aggregate is fit through the same opponent-adjustment ridge as
+`efficiency_ratings` / `special_teams_ratings` -- no forked
+solver. Offline validation against the Fremeau FEI oracle put this
+fallback's team ranking at Spearman 0.967.
+
+`cfb_adjusted_epa._prepare` filters to individual pass/rush plays and
+is not reused here (drive value should reflect every play on the drive,
+special-teams snaps included); the `hfa` treatment is reproduced
+directly, matching `special_teams_ratings`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._REQUIRED_COLUMNS` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before`) plus `drive_id`. Not pre-aggregated to drives -- this function does that grouping itself. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs. Only `ridge_lambda` is consulted here; defaults to `RatingsConfig` when omitted. |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id` appearing as `pos_team_id` on at least one drive: `team_id` (Utf8), `fei_off` / `fei_def` / `fei_net` (Float64). The ridge's dropped reference team is re-added at the shared intercept (`fei_net == 0.0`). Zero-row (correctly-typed) when `plays` has no rows with a non-null `EPA`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import fei_ratings
+fei = fei_ratings(pbp)
+fei.sort("fei_net", descending=True).head()
 ```
 
 ### `fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_boxscore}
@@ -2014,6 +2132,56 @@ The same event dict, mutated in place with `home`/`away` copies of the competito
 ```python
 from sportsdataverse.cfb import espn_cfb_schedule
 sched = espn_cfb_schedule(dates=2023, week=5)
+```
+
+### `special_teams_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#special_teams_ratings}
+
+One row per team: a per-unit special-teams EPA composite.
+
+Special teams was empirically found NOT to obey the offense-minus-defense
+symmetry `efficiency_ratings` / `fei_ratings` rely on, and not
+to benefit from opponent adjustment, when validated against the 2023 SP+
+special-teams oracle (`tests/fixtures/cfb_prediction/sp_plus_2023.parquet`
+`sp_special`):
+
+* The executing `pos_team` owns the EPA on a kickoff / punt / field
+  goal. The `def_pos_team` "coverage" side reflects the opposing
+  returner's skill, not the coverage team's, and is not recoverable from
+  EPA -- adding any coverage unit *lowers* SP+ agreement (0.77 -> 0.58),
+  so coverage/defense units are excluded entirely (see
+  ST_UNIT_PATTERNS`).
+* The opponent-adjustment ridge (`cfb_adjusted_epa._fit_opponent_ridge`)
+  *hurts* agreement (0.72 vs 0.77) -- special teams is only weakly
+  opponent-dependent, so this function does not fit a ridge at all.
+* Splitting the offense-side plays into per-phase units (field goal, punt,
+  kick return) and standardizing each separately, then summing the
+  z-scores, is what helps: it reached Spearman 0.768 against SP+, versus
+  0.703 for a single-unit offense-minus-intercept ridge fit.
+
+`adj_st_epa` is therefore the sum, over the three units in
+ST_UNIT_PATTERNS`, of each unit's z-scored per-team mean EPA. A
+team with no plays in a given unit contributes 0 for that unit (not a
+penalty). `config` is accepted for signature parity with
+`efficiency_ratings` / `fei_ratings` but is unused -- there is
+no ridge (and therefore no `ridge_lambda`) in this recipe.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying `game_id`, `pos_team_id`, `EPA`, and `play_type`. Not pre-filtered to special-teams plays -- this function does that filtering itself. |
+| `config` | `RatingsConfig \| None` | `None` | Unused (kept for signature parity across the three rating functions). See the note above. |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id` appearing anywhere in `plays`: `team_id` (Utf8), `adj_st_epa` (Float64, the sum of per-unit z-scored executing-team mean EPA). Teams with no special-teams plays get `adj_st_epa == 0.0`. Zero-row (correctly-typed) when `plays` has no special-teams plays.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import special_teams_ratings
+st = special_teams_ratings(pbp)
+st.sort("adj_st_epa", descending=True).head()
 ```
 
 ### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Dict[str, Any]'` {#yahoo_cfb_boxscore}
