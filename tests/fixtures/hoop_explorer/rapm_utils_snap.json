@@ -1,0 +1,463 @@
+{
+ "RapmUtils RapmUtils - buildPlayerContext 1": {
+  "avgEfficiency": 100,
+  "colToPlayer": [
+   "Wiggins, Aaron",
+   "Cowan, Anthony",
+   "Smith, Jalen",
+   "Morsell, Darryl",
+   "Ayala, Eric",
+   "Scott, Donta",
+   "Player, Other",
+   "Data, Dummy"
+  ],
+  "config": {
+   "fixedRegression": -1,
+   "priorMode": -1,
+   "removalPct": 0
+  },
+  "defLineupPoss": 944,
+  "numDefLineups": 5,
+  "numOffLineups": 5,
+  "numPlayers": 8,
+  "offLineupPoss": 959,
+  "playerToCol": {
+   "Ayala, Eric": 4,
+   "Cowan, Anthony": 1,
+   "Data, Dummy": 7,
+   "Morsell, Darryl": 3,
+   "Player, Other": 6,
+   "Scott, Donta": 5,
+   "Smith, Jalen": 2,
+   "Wiggins, Aaron": 0
+  },
+  "priorInfo": {
+   "basis": {
+    "def": 0,
+    "off": 0
+   },
+   "includeStrong": {},
+   "keyUsed": "value",
+   "noWeakPrior": false,
+   "playersStrong": [
+    {
+     "def_ftr": -0.0048993288590604145,
+     "def_orb": null,
+     "def_to": 0.0074496644295301995,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 4.5,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.0007262569832402338,
+     "def_orb": null,
+     "def_to": 0.006759776536312849,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 5,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    }
+   ],
+   "playersWeak": [
+    {
+     "def_adj_ppp": -4.5,
+     "off_adj_ppp": 4.5,
+     "off_adj_ppp_alt": -20.864782871120426,
+     "off_usage": 0.20864782871120427
+    },
+    {
+     "def_adj_ppp": -5,
+     "off_adj_ppp": 5,
+     "off_adj_ppp_alt": -25.0546350615718,
+     "off_usage": 0.250546350615718
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    }
+   ],
+   "strongWeight": -1,
+   "useRecursiveWeakPrior": false
+  },
+  "removedPlayers": {},
+  "unbiasWeight": 0
+ },
+ "RapmUtils RapmUtils - buildPlayerContext 2": {
+  "avgEfficiency": 100,
+  "colToPlayer": [
+   "Wiggins, Aaron",
+   "Cowan, Anthony",
+   "Smith, Jalen",
+   "Morsell, Darryl",
+   "Ayala, Eric",
+   "Scott, Donta"
+  ],
+  "config": {
+   "fixedRegression": -1,
+   "priorMode": -1,
+   "removalPct": 0.2
+  },
+  "defLineupPoss": 944,
+  "numDefLineups": 5,
+  "numOffLineups": 5,
+  "numPlayers": 6,
+  "offLineupPoss": 959,
+  "playerToCol": {
+   "Ayala, Eric": 4,
+   "Cowan, Anthony": 1,
+   "Morsell, Darryl": 3,
+   "Scott, Donta": 5,
+   "Smith, Jalen": 2,
+   "Wiggins, Aaron": 0
+  },
+  "priorInfo": {
+   "basis": {
+    "def": 0,
+    "off": 0
+   },
+   "includeStrong": {},
+   "keyUsed": "value",
+   "noWeakPrior": false,
+   "playersStrong": [
+    {
+     "def_ftr": -0.0048993288590604145,
+     "def_orb": null,
+     "def_to": 0.0074496644295301995,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 4.5,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.0007262569832402338,
+     "def_orb": null,
+     "def_to": 0.006759776536312849,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 5,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    },
+    {
+     "def_ftr": -0.05,
+     "def_orb": null,
+     "def_to": -0.01,
+     "off_2p": null,
+     "off_2pmid": null,
+     "off_2pmidr": null,
+     "off_2prim": null,
+     "off_2primr": null,
+     "off_3p": null,
+     "off_3pr": null,
+     "off_adj_ppp": 0,
+     "off_assist": null,
+     "off_efg": null,
+     "off_ftr": null,
+     "off_orb": null,
+     "off_to": null
+    }
+   ],
+   "playersWeak": [
+    {
+     "def_adj_ppp": -4.5,
+     "off_adj_ppp": 4.5,
+     "off_adj_ppp_alt": -20.864782871120426,
+     "off_usage": 0.20864782871120427
+    },
+    {
+     "def_adj_ppp": -5,
+     "off_adj_ppp": 5,
+     "off_adj_ppp_alt": -25.0546350615718,
+     "off_usage": 0.250546350615718
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    },
+    {
+     "def_adj_ppp": 0,
+     "off_adj_ppp": 0,
+     "off_adj_ppp_alt": 0,
+     "off_usage": 0
+    }
+   ],
+   "strongWeight": -1,
+   "useRecursiveWeakPrior": false
+  },
+  "removedPlayers": {
+   "Data, Dummy": [
+    0.05254860746190226,
+    0,
+    {
+     "def_poss": {
+      "value": 50
+     },
+     "doc_count": 0,
+     "key": "empty",
+     "off_poss": {
+      "value": 50
+     }
+    }
+   ],
+   "Player, Other": [
+    0.1576458223857068,
+    0,
+    {
+     "def_poss": {
+      "value": 150
+     },
+     "doc_count": 0,
+     "key": "empty",
+     "off_poss": {
+      "value": 150
+     }
+    }
+   ]
+  },
+  "unbiasWeight": 0
+ }
+}

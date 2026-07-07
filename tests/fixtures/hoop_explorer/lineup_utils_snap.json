@@ -1,0 +1,1874 @@
+{
+ "LineupUtils LineupUtils - calculateAggregatedLineupStats 1": {
+  "def_adj_ppp": {
+   "old_value": "85.948",
+   "override": "Test override",
+   "value": "85.948"
+  },
+  "def_poss": {
+   "value": "581.000"
+  },
+  "off_adj_ppp": {
+   "old_value": "122.338",
+   "override": "Test override",
+   "value": "122.338"
+  },
+  "off_poss": {
+   "value": "598.000"
+  }
+ },
+ "LineupUtils LineupUtils - gameGameInfo 1": [
+  {
+   "date": "2021-02-02",
+   "num_def_poss": 17,
+   "num_off_poss": 18,
+   "num_pts_against": 20,
+   "num_pts_for": 23,
+   "opponent": "H:Purdue"
+  },
+  {
+   "date": "2021-02-05",
+   "num_def_poss": 14,
+   "num_off_poss": 16,
+   "num_pts_against": 12,
+   "num_pts_for": 12,
+   "opponent": "A:Penn St."
+  },
+  {
+   "date": "2021-02-14",
+   "num_def_poss": 14,
+   "num_off_poss": 14,
+   "num_pts_against": 6,
+   "num_pts_for": 15,
+   "opponent": "H:Minnesota"
+  },
+  {
+   "date": "2021-02-16",
+   "num_def_poss": 14,
+   "num_off_poss": 15,
+   "num_pts_against": 10,
+   "num_pts_for": 14,
+   "opponent": "H:Nebraska"
+  },
+  {
+   "date": "2021-02-18",
+   "num_def_poss": 19,
+   "num_off_poss": 19,
+   "num_pts_against": 23,
+   "num_pts_for": 30,
+   "opponent": "H:Nebraska"
+  }
+ ],
+ "LineupUtils LineupUtils - gameGameInfo 2": {
+  "2021-02-02 H:Purdue": {
+   "date": "2021-02-02",
+   "num_def_poss": 0,
+   "num_off_poss": 0,
+   "num_pts_against": 0,
+   "num_pts_for": 0,
+   "opponent": "H:Purdue"
+  },
+  "2021-02-05 A:Penn St.": {
+   "date": "2021-02-05",
+   "num_def_poss": 0,
+   "num_off_poss": 0,
+   "num_pts_against": 0,
+   "num_pts_for": 0,
+   "opponent": "A:Penn St."
+  },
+  "2021-02-14 H:Minnesota": {
+   "date": "2021-02-14",
+   "num_def_poss": 0,
+   "num_off_poss": 0,
+   "num_pts_against": 0,
+   "num_pts_for": 0,
+   "opponent": "H:Minnesota"
+  },
+  "2021-02-16 H:Nebraska": {
+   "date": "2021-02-16",
+   "num_def_poss": 0,
+   "num_off_poss": 0,
+   "num_pts_against": 0,
+   "num_pts_for": 0,
+   "opponent": "H:Nebraska"
+  },
+  "2021-02-18 H:Nebraska": {
+   "date": "2021-02-18",
+   "num_def_poss": 0,
+   "num_off_poss": 0,
+   "num_pts_against": 0,
+   "num_pts_for": 0,
+   "opponent": "H:Nebraska"
+  }
+ },
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[-500] incOnOff=[false] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {}
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[-500] incOnOff=[true] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "-0.021"
+   },
+   "def_2primr": {
+    "value": "0.016"
+   },
+   "def_adj_opp": {
+    "value": "1.584"
+   },
+   "def_orb": {
+    "value": "-0.000"
+   },
+   "def_poss": {
+    "value": "477.529"
+   },
+   "def_ppp": {
+    "old_value": "6.313",
+    "override": "Test override",
+    "value": "6.313"
+   },
+   "duration_mins": {
+    "value": "79.905"
+   },
+   "key": "'r:On-Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "-1.014"
+   },
+   "off_ft": {
+    "value": "0.050"
+   },
+   "off_ftr": {
+    "value": "-0.079"
+   },
+   "off_orb": {
+    "value": "-0.020"
+   },
+   "off_poss": {
+    "value": "480.266"
+   },
+   "off_ppp": {
+    "old_value": "7.652",
+    "override": "Test override",
+    "value": "7.652"
+   },
+   "off_scramble_ppp": {
+    "value": "0.000"
+   },
+   "total_off_fga": {
+    "value": "404.075"
+   },
+   "total_off_pts": {
+    "value": "528.702"
+   },
+   "total_off_trans_poss": {
+    "value": "114.193"
+   }
+  }
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[false] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {}
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[false] 2": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {}
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[true] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "-0.022"
+   },
+   "def_2primr": {
+    "value": "0.016"
+   },
+   "def_adj_opp": {
+    "value": "1.658"
+   },
+   "def_orb": {
+    "value": "-0.000"
+   },
+   "def_poss": {
+    "value": "477.529"
+   },
+   "def_ppp": {
+    "old_value": "6.610",
+    "override": "Test override",
+    "value": "6.610"
+   },
+   "duration_mins": {
+    "value": "79.905"
+   },
+   "key": "'r:On-Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "-1.056"
+   },
+   "off_ft": {
+    "value": "0.050"
+   },
+   "off_ftr": {
+    "value": "-0.082"
+   },
+   "off_orb": {
+    "value": "-0.021"
+   },
+   "off_poss": {
+    "value": "480.266"
+   },
+   "off_ppp": {
+    "old_value": "7.966",
+    "override": "Test override",
+    "value": "7.966"
+   },
+   "off_scramble_ppp": {
+    "value": "0.000"
+   },
+   "total_off_fga": {
+    "value": "404.075"
+   },
+   "total_off_pts": {
+    "value": "528.702"
+   },
+   "total_off_trans_poss": {
+    "value": "114.193"
+   }
+  }
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[0] regressDiffs=[0] incOnOff=[true] 2": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "-0.022"
+   },
+   "def_2primr": {
+    "value": "0.016"
+   },
+   "def_adj_opp": {
+    "value": "1.658"
+   },
+   "def_orb": {
+    "value": "-0.000"
+   },
+   "def_poss": {
+    "value": "477.529"
+   },
+   "def_ppp": {
+    "old_value": "6.610",
+    "override": "Test override",
+    "value": "6.610"
+   },
+   "duration_mins": {
+    "value": "79.905"
+   },
+   "key": "'r:On-Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "-1.056"
+   },
+   "off_ft": {
+    "value": "0.050"
+   },
+   "off_ftr": {
+    "value": "-0.082"
+   },
+   "off_orb": {
+    "value": "-0.021"
+   },
+   "off_poss": {
+    "value": "480.266"
+   },
+   "off_ppp": {
+    "old_value": "7.966",
+    "override": "Test override",
+    "value": "7.966"
+   },
+   "off_scramble_ppp": {
+    "value": "0.000"
+   },
+   "total_off_fga": {
+    "value": "404.075"
+   },
+   "total_off_pts": {
+    "value": "528.702"
+   },
+   "total_off_trans_poss": {
+    "value": "114.193"
+   }
+  }
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[-500] incOnOff=[false] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {}
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[-500] incOnOff=[true] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "-0.021"
+   },
+   "def_2primr": {
+    "value": "0.016"
+   },
+   "def_adj_opp": {
+    "value": "1.584"
+   },
+   "def_orb": {
+    "value": "-0.000"
+   },
+   "def_poss": {
+    "value": "477.529"
+   },
+   "def_ppp": {
+    "old_value": "6.313",
+    "override": "Test override",
+    "value": "6.313"
+   },
+   "duration_mins": {
+    "value": "79.905"
+   },
+   "key": "'r:On-Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "-1.014"
+   },
+   "off_ft": {
+    "value": "0.050"
+   },
+   "off_ftr": {
+    "value": "-0.079"
+   },
+   "off_orb": {
+    "value": "-0.020"
+   },
+   "off_poss": {
+    "value": "480.266"
+   },
+   "off_ppp": {
+    "old_value": "7.652",
+    "override": "Test override",
+    "value": "7.652"
+   },
+   "off_scramble_ppp": {
+    "value": "0.000"
+   },
+   "total_off_fga": {
+    "value": "404.075"
+   },
+   "total_off_pts": {
+    "value": "528.702"
+   },
+   "total_off_trans_poss": {
+    "value": "114.193"
+   }
+  }
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[false] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {}
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[false] 2": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {}
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[true] 1": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "-0.022"
+   },
+   "def_2primr": {
+    "value": "0.016"
+   },
+   "def_adj_opp": {
+    "value": "1.658"
+   },
+   "def_orb": {
+    "value": "-0.000"
+   },
+   "def_poss": {
+    "value": "477.529"
+   },
+   "def_ppp": {
+    "old_value": "6.610",
+    "override": "Test override",
+    "value": "6.610"
+   },
+   "duration_mins": {
+    "value": "79.905"
+   },
+   "key": "'r:On-Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "-1.056"
+   },
+   "off_ft": {
+    "value": "0.050"
+   },
+   "off_ftr": {
+    "value": "-0.082"
+   },
+   "off_orb": {
+    "value": "-0.021"
+   },
+   "off_poss": {
+    "value": "480.266"
+   },
+   "off_ppp": {
+    "old_value": "7.966",
+    "override": "Test override",
+    "value": "7.966"
+   },
+   "off_scramble_ppp": {
+    "value": "0.000"
+   },
+   "total_off_fga": {
+    "value": "404.075"
+   },
+   "total_off_pts": {
+    "value": "528.702"
+   },
+   "total_off_trans_poss": {
+    "value": "114.193"
+   }
+  }
+ ],
+ "LineupUtils LineupUtils - lineupToTeamReport: diagMode=[10] regressDiffs=[0] incOnOff=[true] 2": [
+  {
+   "def_2prim": {
+    "value": "0.533"
+   },
+   "def_2primr": {
+    "value": "0.320"
+   },
+   "def_adj_opp": {
+    "value": "96.743"
+   },
+   "def_orb": {
+    "value": "0.261"
+   },
+   "def_poss": {
+    "value": "581.000"
+   },
+   "def_ppp": {
+    "old_value": "91.222",
+    "override": "Test override",
+    "value": "91.222"
+   },
+   "duration_mins": {
+    "value": "342.042"
+   },
+   "key": "'On' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "108.385"
+   },
+   "off_ft": {
+    "value": "0.764"
+   },
+   "off_ftr": {
+    "value": "0.446"
+   },
+   "off_orb": {
+    "value": "0.296"
+   },
+   "off_poss": {
+    "value": "598.000"
+   },
+   "off_ppp": {
+    "old_value": "115.552",
+    "override": "Test override",
+    "value": "115.552"
+   },
+   "off_scramble_ppp": {
+    "value": "113.458"
+   },
+   "total_off_fga": {
+    "value": "505.000"
+   },
+   "total_off_pts": {
+    "value": "691.000"
+   },
+   "total_off_trans_poss": {
+    "value": "137.855"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "0.554"
+   },
+   "def_2primr": {
+    "value": "0.308"
+   },
+   "def_adj_opp": {
+    "value": "94.879"
+   },
+   "def_orb": {
+    "value": "0.268"
+   },
+   "def_poss": {
+    "value": "213.000"
+   },
+   "def_ppp": {
+    "old_value": "84.038",
+    "override": "Test override",
+    "value": "84.038"
+   },
+   "duration_mins": {
+    "value": "131.068"
+   },
+   "key": "'Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "109.452"
+   },
+   "off_ft": {
+    "value": "0.713"
+   },
+   "off_ftr": {
+    "value": "0.500"
+   },
+   "off_orb": {
+    "value": "0.319"
+   },
+   "off_poss": {
+    "value": "211.000"
+   },
+   "off_ppp": {
+    "old_value": "107.109",
+    "override": "Test override",
+    "value": "107.109"
+   },
+   "off_scramble_ppp": {
+    "value": "137.757"
+   },
+   "total_off_fga": {
+    "value": "174.000"
+   },
+   "total_off_pts": {
+    "value": "226.000"
+   },
+   "total_off_trans_poss": {
+    "value": "54.259"
+   }
+  },
+  {
+   "def_2prim": {
+    "value": "-0.022"
+   },
+   "def_2primr": {
+    "value": "0.016"
+   },
+   "def_adj_opp": {
+    "value": "1.658"
+   },
+   "def_orb": {
+    "value": "-0.000"
+   },
+   "def_poss": {
+    "value": "477.529"
+   },
+   "def_ppp": {
+    "old_value": "6.610",
+    "override": "Test override",
+    "value": "6.610"
+   },
+   "duration_mins": {
+    "value": "79.905"
+   },
+   "key": "'r:On-Off' Ayala, Eric",
+   "off_adj_opp": {
+    "value": "-1.056"
+   },
+   "off_ft": {
+    "value": "0.050"
+   },
+   "off_ftr": {
+    "value": "-0.082"
+   },
+   "off_orb": {
+    "value": "-0.021"
+   },
+   "off_poss": {
+    "value": "480.266"
+   },
+   "off_ppp": {
+    "old_value": "7.966",
+    "override": "Test override",
+    "value": "7.966"
+   },
+   "off_scramble_ppp": {
+    "value": "0.000"
+   },
+   "total_off_fga": {
+    "value": "404.075"
+   },
+   "total_off_pts": {
+    "value": "528.702"
+   },
+   "total_off_trans_poss": {
+    "value": "114.193"
+   }
+  }
+ ]
+}

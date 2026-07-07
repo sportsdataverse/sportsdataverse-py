@@ -189,6 +189,7 @@ dev = [
     # tools/codegen/render_notebooks.py executes the example notebooks and renders
     # them to docs/docs/tutorials/ (run weekly in live-tests-cron). nbclient runs
     # them; nbconvert turns them into markdown. Build/CI-time only.
+    "json5>=0.15.0",
     "nbclient>=0.10",
     "nbconvert>=7.0",
     "nbformat>=5.0",
@@ -318,6 +319,8 @@ files = [
     "sportsdataverse/wnba/wnba_stats_parsers.py",
     "sportsdataverse/wnba/wnba_engine.py",
     "sportsdataverse/nbagl/nbagl_engine.py",
+    "sportsdataverse/mbb/mbb_lineup_stats.py",
+    "sportsdataverse/wbb/wbb_lineup_stats.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",

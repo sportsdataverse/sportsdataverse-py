@@ -133,6 +133,9 @@ from sportsdataverse.wbb import espn_wbb_transactions as _raw_espn_wbb_transacti
 from sportsdataverse.wbb import espn_wbb_venue as _raw_espn_wbb_venue
 from sportsdataverse.wbb import espn_wbb_venues as _raw_espn_wbb_venues
 from sportsdataverse.wbb import SeasonNotFoundError as SeasonNotFoundError  # noqa: F401
+from sportsdataverse.wbb import build_efficiency_margins as build_efficiency_margins  # noqa: F401
+from sportsdataverse.wbb import calculate_aggregated_lineup_stats as calculate_aggregated_lineup_stats  # noqa: F401
+from sportsdataverse.wbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
 from sportsdataverse.wbb import download as download  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_calendar as espn_wbb_calendar  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_game_officials as espn_wbb_game_officials  # noqa: F401
@@ -145,6 +148,7 @@ from sportsdataverse.wbb import espn_wbb_team_roster as espn_wbb_team_roster  # 
 from sportsdataverse.wbb import espn_wbb_team_stats as espn_wbb_team_stats  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_teams as espn_wbb_teams  # noqa: F401
 from sportsdataverse.wbb import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.wbb import get_stats_diff as get_stats_diff  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_athlete_items as helper_wbb_athlete_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_game_data as helper_wbb_game_data  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_game_items as helper_wbb_game_items  # noqa: F401
@@ -153,6 +157,7 @@ from sportsdataverse.wbb import helper_wbb_pbp_features as helper_wbb_pbp_featur
 from sportsdataverse.wbb import helper_wbb_pickcenter as helper_wbb_pickcenter  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_roster_items as helper_wbb_roster_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
 from sportsdataverse.wbb import load_wbb_game_rosters as load_wbb_game_rosters  # noqa: F401
 from sportsdataverse.wbb import load_wbb_officials as load_wbb_officials  # noqa: F401
 from sportsdataverse.wbb import load_wbb_pbp as load_wbb_pbp  # noqa: F401
@@ -169,9 +174,13 @@ from sportsdataverse.wbb import normalize_team_roster_columns as normalize_team_
 from sportsdataverse.wbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.wbb import underscore as underscore  # noqa: F401
 from sportsdataverse.wbb import wbb_pbp_disk as wbb_pbp_disk  # noqa: F401
+from sportsdataverse.wbb import weighted_avg as weighted_avg  # noqa: F401
 
 __all__ = [
     "SeasonNotFoundError",
+    "build_efficiency_margins",
+    "calculate_aggregated_lineup_stats",
+    "complete_weighted_avg",
     "download",
     "espn_wbb_award",
     "espn_wbb_awards",
@@ -293,6 +302,7 @@ __all__ = [
     "espn_wbb_venue",
     "espn_wbb_venues",
     "flatten_json_iterative",
+    "get_stats_diff",
     "helper_wbb_athlete_items",
     "helper_wbb_game_data",
     "helper_wbb_game_items",
@@ -301,6 +311,7 @@ __all__ = [
     "helper_wbb_pickcenter",
     "helper_wbb_roster_items",
     "helper_wbb_team_items",
+    "lineup_to_team_report",
     "load_wbb_game_rosters",
     "load_wbb_officials",
     "load_wbb_pbp",
@@ -317,6 +328,7 @@ __all__ = [
     "scoreboard_event_parsing",
     "underscore",
     "wbb_pbp_disk",
+    "weighted_avg",
 ]
 
 
