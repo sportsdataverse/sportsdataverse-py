@@ -30,7 +30,7 @@ import polars as pl
 from sportsdataverse.cfb.cfb_adjusted_epa import _REQUIRED_COLUMNS, _fit_opponent_ridge, _prepare
 from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig
 
-__all__ = ["efficiency_ratings"]
+__all__ = ["efficiency_ratings", "special_teams_ratings"]
 
 _OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "team_id": pl.Utf8,
@@ -39,6 +39,16 @@ _OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "adj_net": pl.Float64,
     "games": pl.Int64,
 }
+
+_ST_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "team_id": pl.Utf8,
+    "adj_st_epa": pl.Float64,
+}
+
+# Case-insensitive keyword match over the cfbfastR `play_type` vocabulary for
+# kickoffs/punts/field goals (returns, blocks, touchbacks, etc. all contain one
+# of these words) -- deliberately loose since `play_type` free text varies.
+_ST_PLAY_TYPE_PATTERN = "(?i)kickoff|punt|field goal"
 
 
 def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:
@@ -113,5 +123,90 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
         )
         .with_columns(adj_net=pl.col("adj_off_epa") - pl.col("adj_def_epa"))
         .select("team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games")
+    )
+    return out
+
+
+def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:
+    """One row per team: opponent-adjusted special-teams EPA.
+
+    ``cfb_adjusted_epa._prepare`` filters to pass/rush plays only, so it drops
+    every special-teams snap and cannot be reused here. Special-teams plays
+    (kickoffs, punts, field goals) are instead selected by a ``play_type``
+    keyword match, given the same competitive-play home-field-advantage
+    (``hfa``) treatment ``_prepare`` applies, and fit through the same
+    :func:`sportsdataverse.cfb.cfb_adjusted_epa._fit_opponent_ridge` ridge
+    solver -- no forked/duplicate ridge fit.
+
+    Args:
+        plays: A cfbfastR-schema play-by-play frame carrying every column in
+            ``cfb_adjusted_epa._REQUIRED_COLUMNS`` (``game_id``, ``pos_team``,
+            ``pos_team_id``, ``def_pos_team_id``, ``home``, ``neutral_site``,
+            ``EPA``, ``pass``, ``rush``, ``wp_before``) plus ``play_type``.
+            Not pre-filtered to special-teams plays -- this function does that
+            filtering itself.
+        config: Ratings tuning knobs. Only ``ridge_lambda`` is consulted here;
+            defaults to :class:`RatingsConfig` when omitted.
+
+    Returns:
+        A ``polars.DataFrame`` with one row per ``team_id`` appearing
+        anywhere in ``plays`` (offense side), not just on special-teams
+        snaps: ``team_id`` (Utf8), ``adj_st_epa`` (Float64, offense-minus-
+        defense net special-teams value). Teams with no special-teams plays,
+        and the ridge's dropped reference team, get ``adj_st_epa == 0.0`` --
+        both sides fall back to the shared intercept, which cancels in the
+        net. Zero-row (correctly-typed) when ``plays`` has no special-teams
+        plays at all.
+
+    Raises:
+        ImportError: If ``scikit-learn`` is not installed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_ratings import special_teams_ratings
+            st = special_teams_ratings(pbp)
+            st.sort("adj_st_epa", descending=True).head()
+
+    See Also:
+        * `cfbfastR`_ -- the R implementation ``cfb_adjusted_epa`` ports.
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
+    """
+    cfg = config or RatingsConfig()
+    roster = plays.select(pl.col("pos_team_id").cast(pl.Utf8).alias("team_id")).drop_nulls().unique()
+
+    st_clean = (
+        plays.filter(pl.col("play_type").cast(pl.Utf8).str.contains(_ST_PLAY_TYPE_PATTERN))
+        .filter(pl.col("EPA").is_not_null())
+        .with_columns(
+            pos_team_id=pl.col("pos_team_id").cast(pl.Utf8),
+            def_pos_team_id=pl.col("def_pos_team_id").cast(pl.Utf8),
+            game_id=pl.col("game_id").cast(pl.Utf8),
+        )
+        .with_columns(
+            hfa=pl.when(pl.col("neutral_site") == True)  # noqa: E712
+            .then(pl.lit(0))
+            .when(pl.col("pos_team") == pl.col("home"))
+            .then(pl.lit(1))
+            .otherwise(pl.lit(-1))
+        )
+    )
+    if st_clean.height == 0:
+        return pl.DataFrame(schema=_ST_OUTPUT_SCHEMA)
+
+    offense, defense, intercept = _fit_opponent_ridge(st_clean, cfg.ridge_lambda)
+    assert offense.schema["team_id"] == pl.Utf8
+    assert defense.schema["team_id"] == pl.Utf8
+
+    out = (
+        roster.join(offense.rename({"adjmodelOff": "off_st"}), on="team_id", how="left")
+        .join(defense.rename({"adjmodelDef": "def_st"}), on="team_id", how="left")
+        .with_columns(
+            pl.col("off_st").fill_null(intercept),
+            pl.col("def_st").fill_null(intercept),
+        )
+        .with_columns(adj_st_epa=pl.col("off_st") - pl.col("def_st"))
+        .select("team_id", "adj_st_epa")
     )
     return out

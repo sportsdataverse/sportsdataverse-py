@@ -14,7 +14,7 @@ import polars as pl
 # `cfb_adjusted_epa` *function*, shadowing the submodule of the same name, so
 # the required-columns tuple is imported by name (not via the shadowed
 # package attribute) here too.
-from sportsdataverse.cfb.cfb_ratings import efficiency_ratings
+from sportsdataverse.cfb.cfb_ratings import efficiency_ratings, special_teams_ratings
 
 _EXPECTED_COLUMNS = {"team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games"}
 
@@ -106,3 +106,82 @@ def test_efficiency_ratings_empty_input_returns_documented_schema() -> None:
         "adj_net": pl.Float64,
         "games": pl.Int64,
     }
+
+
+def _mini_plays_with_st() -> pl.DataFrame:
+    """``_mini_plays`` plus special-teams snaps (A better than B) and a no-ST team C."""
+    rows = _mini_plays().to_dicts()
+    for i in range(10):
+        rows.append(
+            {
+                "game_id": f"GST{i}",
+                "week": 1,
+                "pos_team": "A",
+                "pos_team_id": "A",
+                "def_pos_team_id": "B",
+                "home": "A",
+                "EPA": 0.5,
+                "pass": 0,
+                "rush": 0,
+                "wp_before": 0.5,
+                "neutral_site": False,
+                "play_type": "Kickoff",
+            }
+        )
+        rows.append(
+            {
+                "game_id": f"GST{i}",
+                "week": 1,
+                "pos_team": "B",
+                "pos_team_id": "B",
+                "def_pos_team_id": "A",
+                "home": "A",
+                "EPA": -0.5,
+                "pass": 0,
+                "rush": 0,
+                "wp_before": 0.5,
+                "neutral_site": False,
+                "play_type": "Punt",
+            }
+        )
+    # Team C: pass/rush snaps only -- never appears on a special-teams play.
+    for i in range(4):
+        rows.append(
+            {
+                "game_id": f"GC{i}",
+                "week": 1,
+                "pos_team": "C",
+                "pos_team_id": "C",
+                "def_pos_team_id": "A",
+                "home": "C",
+                "EPA": 0.2,
+                "pass": 1,
+                "rush": 0,
+                "wp_before": 0.5,
+                "neutral_site": False,
+                "play_type": "Pass Reception",
+            }
+        )
+    return pl.DataFrame(rows)
+
+
+def test_special_teams_ratings_orders_teams_and_fills_no_st_team() -> None:
+    out = special_teams_ratings(_mini_plays_with_st())
+    assert set(out.columns) == {"team_id", "adj_st_epa"}
+    assert out.schema["team_id"] == pl.Utf8
+    assert out.schema["adj_st_epa"] == pl.Float64
+    assert set(out["team_id"].to_list()) == {"A", "B", "C"}
+
+    a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    b = out.filter(pl.col("team_id") == "B").row(0, named=True)
+    c = out.filter(pl.col("team_id") == "C").row(0, named=True)
+    assert a["adj_st_epa"] > b["adj_st_epa"]
+    # C never appears on a special-teams play -> neutral fill (both sides land
+    # on the shared intercept, which cancels in the off-minus-def net).
+    assert c["adj_st_epa"] == 0.0
+
+
+def test_special_teams_ratings_all_non_st_input_returns_zero_row_frame() -> None:
+    out = special_teams_ratings(_mini_plays())
+    assert out.height == 0
+    assert out.schema == {"team_id": pl.Utf8, "adj_st_epa": pl.Float64}
