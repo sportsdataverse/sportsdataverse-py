@@ -84,6 +84,14 @@ _RATINGS_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
 # of these words) -- deliberately loose since `play_type` free text varies.
 _ST_PLAY_TYPE_PATTERN = "(?i)kickoff|punt|field goal"
 
+# Executing-team special-teams units (pos_team owns the play). Coverage/defense
+# units are deliberately excluded -- EPA does not isolate them (see docstring).
+_ST_UNIT_PATTERNS: tuple[tuple[str, str], ...] = (
+    ("fg", "(?i)field goal"),
+    ("punt", "(?i)punt"),
+    ("kick_return", "(?i)kickoff"),  # pos_team on a kickoff is the receiving/return team
+)
+
 
 def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:
     """One row per team: opponent-adjusted offensive/defensive efficiency.
@@ -162,41 +170,48 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
 
 
 def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:
-    """One row per team: opponent-adjusted special-teams EPA.
+    """One row per team: a per-unit special-teams EPA composite.
 
-    ``cfb_adjusted_epa._prepare`` filters to pass/rush plays only, so it drops
-    every special-teams snap and cannot be reused here. Special-teams plays
-    (kickoffs, punts, field goals) are instead selected by a ``play_type``
-    keyword match, given the same competitive-play home-field-advantage
-    (``hfa``) treatment ``_prepare`` applies, and fit through the same
-    :func:`sportsdataverse.cfb.cfb_adjusted_epa._fit_opponent_ridge` ridge
-    solver -- no forked/duplicate ridge fit.
+    Special teams was empirically found NOT to obey the offense-minus-defense
+    symmetry :func:`efficiency_ratings` / :func:`fei_ratings` rely on, and not
+    to benefit from opponent adjustment, when validated against the 2023 SP+
+    special-teams oracle (``tests/fixtures/cfb_prediction/sp_plus_2023.parquet``
+    ``sp_special``):
+
+    * The executing ``pos_team`` owns the EPA on a kickoff / punt / field
+      goal. The ``def_pos_team`` "coverage" side reflects the opposing
+      returner's skill, not the coverage team's, and is not recoverable from
+      EPA -- adding any coverage unit *lowers* SP+ agreement (0.77 -> 0.58),
+      so coverage/defense units are excluded entirely (see
+      :data:`_ST_UNIT_PATTERNS`).
+    * The opponent-adjustment ridge (:func:`cfb_adjusted_epa._fit_opponent_ridge`)
+      *hurts* agreement (0.72 vs 0.77) -- special teams is only weakly
+      opponent-dependent, so this function does not fit a ridge at all.
+    * Splitting the offense-side plays into per-phase units (field goal, punt,
+      kick return) and standardizing each separately, then summing the
+      z-scores, is what helps: it reached Spearman 0.768 against SP+, versus
+      0.703 for a single-unit offense-minus-intercept ridge fit.
+
+    ``adj_st_epa`` is therefore the sum, over the three units in
+    :data:`_ST_UNIT_PATTERNS`, of each unit's z-scored per-team mean EPA. A
+    team with no plays in a given unit contributes 0 for that unit (not a
+    penalty). ``config`` is accepted for signature parity with
+    :func:`efficiency_ratings` / :func:`fei_ratings` but is unused -- there is
+    no ridge (and therefore no ``ridge_lambda``) in this recipe.
 
     Args:
-        plays: A cfbfastR-schema play-by-play frame carrying every column in
-            ``cfb_adjusted_epa._REQUIRED_COLUMNS`` (``game_id``, ``pos_team``,
-            ``pos_team_id``, ``def_pos_team_id``, ``home``, ``neutral_site``,
-            ``EPA``, ``pass``, ``rush``, ``wp_before``) plus ``play_type``.
-            Not pre-filtered to special-teams plays -- this function does that
-            filtering itself.
-        config: Ratings tuning knobs. Only ``ridge_lambda`` is consulted here;
-            defaults to :class:`RatingsConfig` when omitted.
+        plays: A cfbfastR-schema play-by-play frame carrying ``game_id``,
+            ``pos_team_id``, ``EPA``, and ``play_type``. Not pre-filtered to
+            special-teams plays -- this function does that filtering itself.
+        config: Unused (kept for signature parity across the three rating
+            functions). See the note above.
 
     Returns:
         A ``polars.DataFrame`` with one row per ``team_id`` appearing
-        anywhere in ``plays`` (offense side), not just on special-teams
-        snaps: ``team_id`` (Utf8), ``adj_st_epa`` (Float64, the opponent-
-        adjusted **offense-side** special-teams EPA of the executing team,
-        centered on the league baseline). Unlike scrimmage EPA this is NOT an
-        offense-minus-defense net -- special teams is owned by the ``pos_team``
-        that punts / kicks / returns, and the ``def_pos_team`` side is
-        near-noise (see the implementation note). Teams with no special-teams
-        plays, and the ridge's dropped reference team, get ``adj_st_epa == 0.0``
-        (they fall back to the intercept, which the centering subtracts off).
-        Zero-row (correctly-typed) when ``plays`` has no special-teams plays.
-
-    Raises:
-        ImportError: If ``scikit-learn`` is not installed.
+        anywhere in ``plays``: ``team_id`` (Utf8), ``adj_st_epa`` (Float64,
+        the sum of per-unit z-scored executing-team mean EPA). Teams with no
+        special-teams plays get ``adj_st_epa == 0.0``. Zero-row
+        (correctly-typed) when ``plays`` has no special-teams plays.
 
     Example:
         Quick start::
@@ -206,51 +221,38 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
             st.sort("adj_st_epa", descending=True).head()
 
     See Also:
-        * `cfbfastR`_ -- the R implementation ``cfb_adjusted_epa`` ports.
+        * `cfbfastR`_ -- the R implementation this ratings spine parallels.
 
     .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
-    cfg = config or RatingsConfig()
     roster = plays.select(pl.col("pos_team_id").cast(pl.Utf8).alias("team_id")).drop_nulls().unique()
 
-    st_clean = (
+    any_st = (
         plays.filter(pl.col("play_type").cast(pl.Utf8).str.contains(_ST_PLAY_TYPE_PATTERN))
         .filter(pl.col("EPA").is_not_null())
-        .with_columns(
-            pos_team_id=pl.col("pos_team_id").cast(pl.Utf8),
-            def_pos_team_id=pl.col("def_pos_team_id").cast(pl.Utf8),
-            game_id=pl.col("game_id").cast(pl.Utf8),
-        )
-        .with_columns(
-            hfa=pl.when(pl.col("neutral_site") == True)  # noqa: E712
-            .then(pl.lit(0))
-            .when(pl.col("pos_team") == pl.col("home"))
-            .then(pl.lit(1))
-            .otherwise(pl.lit(-1))
-        )
+        .height
+        > 0
     )
-    if st_clean.height == 0:
+    if not any_st:
         return pl.DataFrame(schema=_ST_OUTPUT_SCHEMA)
 
-    offense, _defense, intercept = _fit_opponent_ridge(st_clean, cfg.ridge_lambda)
-    assert offense.schema["team_id"] == pl.Utf8
-
-    # Special teams does NOT obey the offense-minus-defense symmetry of
-    # scrimmage EPA. The team executing the special-teams play (``pos_team``:
-    # the punt / field-goal / kick-return) owns the EPA and is what a
-    # published ST rating credits; the ``def_pos_team`` "ST defense"
-    # (coverage / block) is near-noise and does not opponent-separate, so
-    # subtracting it injects noise (agreement with SP+ special-teams drops
-    # 0.70 -> 0.58). The rating is therefore the opponent-adjusted OFFENSE-side
-    # coefficient only, centered on the baseline (``intercept``) so the ridge's
-    # dropped reference team and teams with no special-teams plays land at 0.0.
-    out = (
-        roster.join(offense.rename({"adjmodelOff": "off_st"}), on="team_id", how="left")
-        .with_columns(pl.col("off_st").fill_null(intercept))
-        .with_columns(adj_st_epa=pl.col("off_st") - intercept)
-        .select("team_id", "adj_st_epa")
-    )
-    return out
+    st = roster.with_columns(pl.lit(0.0).alias("adj_st_epa"))
+    for _name, pat in _ST_UNIT_PATTERNS:
+        u = plays.filter(pl.col("play_type").cast(pl.Utf8).str.contains(pat)).filter(pl.col("EPA").is_not_null())
+        if u.height == 0:
+            continue
+        per = u.group_by(pl.col("pos_team_id").cast(pl.Utf8).alias("team_id")).agg(pl.col("EPA").mean().alias("m"))
+        std = per["m"].std()
+        if std is None or std == 0:
+            continue
+        mean = float(per["m"].mean() or 0.0)
+        per = per.with_columns(((pl.col("m") - mean) / float(std)).alias("z"))
+        st = (
+            st.join(per.select("team_id", "z"), on="team_id", how="left")
+            .with_columns((pl.col("adj_st_epa") + pl.col("z").fill_null(0.0)).alias("adj_st_epa"))
+            .drop("z")
+        )
+    return st.select("team_id", "adj_st_epa")
 
 
 def fei_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:

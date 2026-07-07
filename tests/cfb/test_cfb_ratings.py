@@ -24,6 +24,7 @@ import pytest
 # fully-qualified string key sidesteps attribute traversal entirely, so
 # `monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", ...)` below patches
 # the real submodule's namespace (the one `cfb_ratings()` actually reads from).
+from sportsdataverse.cfb.cfb_prediction_constants import spearman_corr
 from sportsdataverse.cfb.cfb_ratings import cfb_ratings, efficiency_ratings, fei_ratings, special_teams_ratings
 
 _cfb_ratings_mod = sys.modules["sportsdataverse.cfb.cfb_ratings"]
@@ -122,7 +123,12 @@ def test_efficiency_ratings_empty_input_returns_documented_schema() -> None:
 
 
 def _mini_plays_with_st() -> pl.DataFrame:
-    """``_mini_plays`` plus special-teams snaps (A better than B) and a no-ST team C."""
+    """``_mini_plays`` plus special-teams snaps (A better than B, same unit) and a no-ST team C.
+
+    A and B both execute the SAME unit (kickoff) -- under z-scoring, a lone
+    team in a unit has std 0 and contributes nothing, so competing teams must
+    share a unit to produce a meaningful ordering.
+    """
     rows = _mini_plays().to_dicts()
     for i in range(10):
         rows.append(
@@ -154,7 +160,7 @@ def _mini_plays_with_st() -> pl.DataFrame:
                 "rush": 0,
                 "wp_before": 0.5,
                 "neutral_site": False,
-                "play_type": "Punt",
+                "play_type": "Kickoff",
             }
         )
     # Team C: pass/rush snaps only -- never appears on a special-teams play.
@@ -189,8 +195,8 @@ def test_special_teams_ratings_orders_teams_and_fills_no_st_team() -> None:
     b = out.filter(pl.col("team_id") == "B").row(0, named=True)
     c = out.filter(pl.col("team_id") == "C").row(0, named=True)
     assert a["adj_st_epa"] > b["adj_st_epa"]
-    # C never executes a special-teams play -> not in the offense-side ridge,
-    # so it falls back to the intercept, which the centering subtracts to 0.
+    # C never executes a special-teams play -> no unit contributes a nonzero
+    # z-score, so its per-unit sum is 0.0.
     assert c["adj_st_epa"] == 0.0
 
 
@@ -198,6 +204,15 @@ def test_special_teams_ratings_all_non_st_input_returns_zero_row_frame() -> None
     out = special_teams_ratings(_mini_plays())
     assert out.height == 0
     assert out.schema == {"team_id": pl.Utf8, "adj_st_epa": pl.Float64}
+
+
+def test_special_teams_ratings_tracks_sp_plus_special() -> None:
+    pbp = pl.read_parquet("tests/fixtures/cfb_prediction/pbp_2023_sample.parquet")
+    sp = pl.read_parquet("tests/fixtures/cfb_prediction/sp_plus_2023.parquet")
+    st = special_teams_ratings(pbp)
+    j = st.join(sp, on="team_id", how="inner")
+    r = spearman_corr(j["adj_st_epa"].to_numpy(), j["sp_special"].to_numpy())
+    assert r >= 0.75, r  # fuller per-unit model (observed 0.768); do NOT lower this floor
 
 
 def test_special_teams_ratings_credits_executing_team_not_the_defender() -> None:
