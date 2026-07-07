@@ -56,8 +56,19 @@ def wbb_season_sim(
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Women's remaining-schedule Monte Carlo.
 
-    Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_season_sim`
-    with ``league="womens"`` -- see that function for the full contract.
+    Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_season_sim` with ``league="womens"``.
+
+    Args:
+        ratings: One row per team (``season, team_id, adj_em`` + optional
+            ``conference`` / ``current_wins``).
+        remaining_schedule: Games to simulate.
+        n_sims: Number of simulated seasons.
+        seed: RNG seed (deterministic output).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per team: ``season, team_id, exp_wins, playoff_prob,
+        conf_title_prob`` -- see the mbb core for the full contract.
 
     Example:
         Quick start::
@@ -82,8 +93,19 @@ def wbb_bracket_sim(
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Women's single-elimination bracket Monte Carlo.
 
-    Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_bracket_sim`
-    with ``league="womens"`` -- see that function for the full contract.
+    Delegates to :func:`sportsdataverse.mbb.mbb_season_sim.mbb_bracket_sim` with ``league="womens"``.
+
+    Args:
+        seeded_field: Bracket-ordered rows with ``team_id`` (adjacent rows
+            meet in round 1).
+        ratings: One row per team (``team_id, adj_em``).
+        n_sims: Number of simulated brackets.
+        seed: RNG seed (deterministic output).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per field team: ``team_id, seed?, reach_r32 .. champion``
+        probabilities -- see the mbb core for the full contract.
 
     Example:
         Quick start::

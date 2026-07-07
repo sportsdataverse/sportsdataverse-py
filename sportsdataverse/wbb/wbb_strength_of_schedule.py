@@ -40,9 +40,16 @@ def wbb_strength_of_schedule(
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Women's season-level SoS / Quad / WAB résumé.
 
-    Delegates to
-    :func:`sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule`
-    with ``league="womens"`` (WBB loaders + women's constants).
+    Delegates to :func:`sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule` with ``league="womens"`` (WBB loaders + women's constants).
+
+    Args:
+        seasons: Seasons to compute (e.g. ``[2024]``).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per (season, team_id): ``season, team_id, sos, sos_rank, wab,
+        quad1_w .. quad4_l, quality_wins`` -- see the mbb core for the full
+        contract.
 
     Example:
         Quick start::

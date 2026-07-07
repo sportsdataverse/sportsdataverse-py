@@ -668,6 +668,27 @@ Return a copy with `min` replaced (`:880`).
 |---|---|---|---|
 | `new_min` | `float` |  |  |
 
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', em_scale: 'float', avg_tempo: 'float', avg_efficiency: 'float', quad_thresholds: 'dict[str, dict[str, int]]', bubble_adj_em: 'float', in_game_wp_artifact: 'str') -> None` {#LeagueConstants}
+
+Per-league fitted constants for the prediction & tournament stack.
+
+Algorithms in the stack are league-agnostic; every men's/women's-specific
+number lives here so a WBB caller is a by-reference shim plus this table
+(the same pattern `wbb_rapm` / `wbb_ratings` already use).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `hfa` | `float` |  | Home-court advantage in points (fitted on the 2024 backtest). |
+| `margin_sd` | `float` |  | Std. dev. of the game-margin residual (fitted on the 2024 backtest; the Brier-minimizing sigma agrees to within 0.04). |
+| `em_scale` | `float` |  | Slope applied to the AdjEM difference when predicting a game margin. AdjEM is per-100-possessions, so a game margin scales by ~tempo/100 (~0.67); the fitted value is lower still because the as-of AdjEM estimate is noisy and the optimal predictive slope is attenuated (regression dilution). Fitted jointly with `hfa`. |
+| `avg_tempo` | `float` |  | League baseline possessions per game (adjusted-tempo anchor). |
+| `avg_efficiency` | `float` |  | League baseline points per 100 possessions. |
+| `quad_thresholds` | `dict[str, dict[str, int]]` |  | NET-style quadrant opponent-rank upper bounds, keyed by venue (`home` / `neutral` / `away`) then `q1` / `q2` / `q3` (Quad 4 is any opponent ranked worse than `q3`). |
+| `bubble_adj_em` | `float` |  | AdjEM of a bubble-quality team on THIS engine's scale (mean of engine ranks 40-50 on the fit season) -- the WAB baseline. |
+| `in_game_wp_artifact` | `str` |  | Filename of the bundled in-game-WP coefficients under `sportsdataverse/mbb/models` (fitted + committed in Phase 3). |
+
 ### `LineupBuildingState(curr: 'LineupEvent', tidy_ctx: "'TidyPlayerContext'", prev: 'list[LineupEvent]' = <factory>, old_format: 'Optional[bool]' = None) -> None` {#LineupBuildingState}
 
 State for building raw lineup data across a fold over play-by-play
@@ -1847,6 +1868,32 @@ nudge = apply_weak_priors("off_adj_ppp", pct_by_player, ctx["prior_info"])
 adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
 ```
 
+### `as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+
+Return only games strictly before `cutoff_date` (the leakage boundary).
+
+Predictive backtests must rate a game using only games that finished before
+it — this split enforces that as-of-date rule so no future information leaks
+into a game's own prediction.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `DataFrame` |  | A frame with a `date` column of dtype `pl.Date`. |
+| `cutoff_date` | `date` |  | The date of the game being predicted; games on or after it are dropped. |
+
+**Returns**
+
+The subset of `results` with `date < cutoff_date`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
+prior = as_of_ratings_split(results, some_game_date)
+```
+
 ### `assign_to_right_lineup(state: 'PossState', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#assign_to_right_lineup}
 
 Assign a clump's possessions to the lineup(s) ending in it
@@ -1923,6 +1970,29 @@ A `StrongSurnameMatch` / `WeakSurnameMatch` / `NoSurnameMatch`, per the surname-
 from sportsdataverse.mbb.mbb_ncaa_names import box_aware_compare
 box_aware_compare("Tuitele, Peanut", "Tuitele, Peanut")
 # StrongSurnameMatch(box_name='Tuitele, Peanut', score=100)
+```
+
+### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
+
+Mean squared error between binary outcomes and predicted probabilities.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+
+**Returns**
+
+The Brier score (lower is better; 0.0 is perfect).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import brier_score
+brier_score(np.array([1, 0]), np.array([1.0, 0.0]))
 ```
 
 ### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
@@ -3315,6 +3385,32 @@ port reproduces every step in the same order.
 
 A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
 
+### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+
+Bin predicted probabilities and compare mean-predicted vs mean-actual.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+| `n_bins` | `int` | `10` | Number of equal-width probability bins. |
+
+**Returns**
+
+A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin, sorted ascending).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import calibration_table
+y = np.random.default_rng(0).integers(0, 2, 200)
+p = np.random.default_rng(1).random(200)
+calibration_table(y, p, n_bins=10)
+```
+
 ### `categorize_bad_lineups(lineup_events: 'list[LineupEvent]') -> 'dict[int, tuple[int, int]]'` {#categorize_bad_lineups}
 
 Aggregates bad lineup events for display, by clump-leader player count
@@ -4532,6 +4628,27 @@ with open("tests/fixtures/ncaa/test_lineup.html", encoding="utf-8") as f:
 result = get_box_lineup("test_p1.html", html, TeamId("TeamA"), format_version=0)
 ```
 
+### `get_constants(league: 'str') -> 'LeagueConstants'` {#get_constants}
+
+Return the `LeagueConstants` for a league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | Either `"mens"` or `"womens"`. |
+
+**Returns**
+
+The league's `LeagueConstants`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_prediction_constants import get_constants
+get_constants("mens").hfa
+```
+
 ### `get_neutral_games(filename: 'str', in_html: 'str', format_version: 'int') -> 'Union[tuple[TeamId, set[str]], list[ParseError]]'` {#get_neutral_games}
 
 Extracts the set of neutral/away-marked game dates from a saved NCAA
@@ -5264,6 +5381,53 @@ report = lineup_to_team_report(
     inc_replacement=True,
     regress_diffs=-500,
 )
+```
+
+### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
+
+Binary cross-entropy (log loss) between outcomes and probabilities.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+| `eps` | `float` | `1e-15` | Clipping bound to keep the log finite at 0/1. |
+
+**Returns**
+
+The mean log loss (lower is better).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import log_loss_score
+log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
+```
+
+### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+
+Mean absolute error between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First array. |
+| `b` | `ndarray` |  | Second array (same length as `a`). |
+
+**Returns**
+
+The mean absolute error.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import mae
+mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
 ### `matching_player(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext', code_match: 'bool') -> 'bool'` {#matching_player}
@@ -6392,6 +6556,29 @@ from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
 x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
 solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
 rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+```
+
+### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+
+Spearman rank correlation between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First array. |
+| `b` | `ndarray` |  | Second array (same length as `a`). |
+
+**Returns**
+
+The Spearman rank-correlation coefficient in `[-1, 1]`.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_prediction_constants import spearman_corr
+spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([10.0, 20.0, 30.0]))
 ```
 
 ### `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#start_time_from_period}

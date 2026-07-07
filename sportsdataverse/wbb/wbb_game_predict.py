@@ -43,7 +43,17 @@ __all__ = [
 
 
 def predict_margin(home_adj_em: float, away_adj_em: float, neutral: bool = False) -> float:
-    """Women's expected margin -- :func:`mbb predict_margin <sportsdataverse.mbb.mbb_game_predict.predict_margin>` with ``league="womens"``.
+    """Women's expected margin.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_game_predict.predict_margin` with ``league="womens"``.
+
+    Args:
+        home_adj_em: Home team's adjusted efficiency margin.
+        away_adj_em: Away team's adjusted efficiency margin.
+        neutral: True for a neutral-site game.
+
+    Returns:
+        Expected margin in points (positive favors the home team).
 
     Example:
         Quick start::
@@ -55,7 +65,15 @@ def predict_margin(home_adj_em: float, away_adj_em: float, neutral: bool = False
 
 
 def win_prob_from_margin(exp_margin: float) -> float:
-    """Women's win prob -- :func:`mbb win_prob_from_margin <sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin>` with ``league="womens"``.
+    """Women's home win probability from an expected margin.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with ``league="womens"``.
+
+    Args:
+        exp_margin: Expected home-minus-away margin in points.
+
+    Returns:
+        Probability the home team wins, in ``(0, 1)``.
 
     Example:
         Quick start::
@@ -74,7 +92,20 @@ def predict_total(
     home_tempo: float,
     away_tempo: float,
 ) -> float:
-    """Women's expected total -- :func:`mbb predict_total <sportsdataverse.mbb.mbb_game_predict.predict_total>` with ``league="womens"``.
+    """Women's expected total points.
+
+    Delegates to :func:`sportsdataverse.mbb.mbb_game_predict.predict_total` with ``league="womens"``.
+
+    Args:
+        home_adj_o: Home adjusted offensive efficiency (points / 100 poss).
+        home_adj_d: Home adjusted defensive efficiency.
+        away_adj_o: Away adjusted offensive efficiency.
+        away_adj_d: Away adjusted defensive efficiency.
+        home_tempo: Home adjusted tempo (possessions / game).
+        away_tempo: Away adjusted tempo.
+
+    Returns:
+        Expected combined points scored by both teams.
 
     Example:
         Quick start::
@@ -93,9 +124,18 @@ def wbb_predict_games(
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Women's vectorized pregame predictions over a schedule.
 
-    Delegates to
-    :func:`sportsdataverse.mbb.mbb_game_predict.mbb_predict_games` with
-    ``league="womens"`` -- see that function for the full contract.
+    Delegates to :func:`sportsdataverse.mbb.mbb_game_predict.mbb_predict_games` with ``league="womens"``.
+
+    Args:
+        games: One row per game (``game_id, home_team_id, away_team_id`` and
+            optionally ``neutral_site``).
+        ratings: One row per team (the :func:`wbb_team_ratings` output).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per input game: ``game_id, home_team_id, away_team_id,
+        exp_margin, home_win_prob, exp_total`` -- see the mbb core for the
+        full contract.
 
     Example:
         Quick start::
@@ -116,9 +156,16 @@ def wbb_in_game_win_prob(
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Women's per-play in-game win probability (bundled ``wbb_in_game_wp.ubj``).
 
-    Delegates to
-    :func:`sportsdataverse.mbb.mbb_game_predict.mbb_in_game_win_prob` with
-    ``league="womens"`` -- see that function for the full contract.
+    Delegates to :func:`sportsdataverse.mbb.mbb_game_predict.mbb_in_game_win_prob` with ``league="womens"``.
+
+    Args:
+        pbp: One game's plays in the ``load_wbb_pbp`` schema.
+        pregame_home_prob: Pregame home win probability.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per play: the five feature columns plus ``home_win_prob`` --
+        see the mbb core for the full contract.
 
     Example:
         Quick start::

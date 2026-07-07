@@ -5607,15 +5607,21 @@ poss_calc_fragment_sum(frag1, frag2)
 
 ### `predict_margin(home_adj_em: 'float', away_adj_em: 'float', neutral: 'bool' = False) -> 'float'` {#predict_margin}
 
-Women's expected margin -- `mbb predict_margin <sportsdataverse.mbb.mbb_game_predict.predict_margin>` with `league="womens"`.
+Women's expected margin.
+
+Delegates to `sportsdataverse.mbb.mbb_game_predict.predict_margin` with `league="womens"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `home_adj_em` | `float` |  |  |
-| `away_adj_em` | `float` |  |  |
-| `neutral` | `bool` | `False` |  |
+| `home_adj_em` | `float` |  | Home team's adjusted efficiency margin. |
+| `away_adj_em` | `float` |  | Away team's adjusted efficiency margin. |
+| `neutral` | `bool` | `False` | True for a neutral-site game. |
+
+**Returns**
+
+Expected margin in points (positive favors the home team).
 
 **Example**
 
@@ -5626,18 +5632,24 @@ predict_margin(20.0, 10.0)
 
 ### `predict_total(home_adj_o: 'float', home_adj_d: 'float', away_adj_o: 'float', away_adj_d: 'float', home_tempo: 'float', away_tempo: 'float') -> 'float'` {#predict_total}
 
-Women's expected total -- `mbb predict_total <sportsdataverse.mbb.mbb_game_predict.predict_total>` with `league="womens"`.
+Women's expected total points.
+
+Delegates to `sportsdataverse.mbb.mbb_game_predict.predict_total` with `league="womens"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `home_adj_o` | `float` |  |  |
-| `home_adj_d` | `float` |  |  |
-| `away_adj_o` | `float` |  |  |
-| `away_adj_d` | `float` |  |  |
-| `home_tempo` | `float` |  |  |
-| `away_tempo` | `float` |  |  |
+| `home_adj_o` | `float` |  | Home adjusted offensive efficiency (points / 100 poss). |
+| `home_adj_d` | `float` |  | Home adjusted defensive efficiency. |
+| `away_adj_o` | `float` |  | Away adjusted offensive efficiency. |
+| `away_adj_d` | `float` |  | Away adjusted defensive efficiency. |
+| `home_tempo` | `float` |  | Home adjusted tempo (possessions / game). |
+| `away_tempo` | `float` |  | Away adjusted tempo. |
+
+**Returns**
+
+Expected combined points scored by both teams.
 
 **Example**
 
@@ -6433,18 +6445,21 @@ assert not errors  # a clean lineup returns []
 
 Women's single-elimination bracket Monte Carlo.
 
-Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_bracket_sim`
-with `league="womens"` -- see that function for the full contract.
+Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_bracket_sim` with `league="womens"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seeded_field` | `DataFrame` |  |  |
-| `ratings` | `DataFrame` |  |  |
-| `n_sims` | `int` | `10000` |  |
-| `seed` | `int` | `0` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seeded_field` | `DataFrame` |  | Bracket-ordered rows with `team_id` (adjacent rows meet in round 1). |
+| `ratings` | `DataFrame` |  | One row per team (`team_id, adj_em`). |
+| `n_sims` | `int` | `10000` | Number of simulated brackets. |
+| `seed` | `int` | `0` | RNG seed (deterministic output). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per field team: `team_id, seed?, reach_r32 .. champion` probabilities -- see the mbb core for the full contract.
 
 **Example**
 
@@ -6457,15 +6472,19 @@ odds = wbb_bracket_sim(field_64, ratings, n_sims=20000, seed=42)
 
 Women's projected tournament field for a season.
 
-Delegates to
+Delegates to `sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with `league="womens"` (WBB loaders + women's constants).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` |  |  |
-| `as_of_date` | `Union[date, None]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `int` |  | Season to project (e.g. `2024`). |
+| `as_of_date` | `Union[date, None]` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team: `season, team_id, resume_score, projected_seed, at_large_prob, auto_bid, bid` -- see the mbb core for the full contract.
 
 **Example**
 
@@ -6478,15 +6497,19 @@ field = wbb_bracketology(2024)
 
 Women's per-play in-game win probability (bundled `wbb_in_game_wp.ubj`).
 
-Delegates to
+Delegates to `sportsdataverse.mbb.mbb_game_predict.mbb_in_game_win_prob` with `league="womens"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  |  |
-| `pregame_home_prob` | `float` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `pbp` | `DataFrame` |  | One game's plays in the `load_wbb_pbp` schema. |
+| `pregame_home_prob` | `float` |  | Pregame home win probability. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per play: the five feature columns plus `home_win_prob` -- see the mbb core for the full contract.
 
 **Example**
 
@@ -6510,15 +6533,19 @@ _No description available._
 
 Women's vectorized pregame predictions over a schedule.
 
-Delegates to
+Delegates to `sportsdataverse.mbb.mbb_game_predict.mbb_predict_games` with `league="womens"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `games` | `DataFrame` |  |  |
-| `ratings` | `DataFrame` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `games` | `DataFrame` |  | One row per game (`game_id, home_team_id, away_team_id` and optionally `neutral_site`). |
+| `ratings` | `DataFrame` |  | One row per team (the `wbb_team_ratings` output). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total` -- see the mbb core for the full contract.
 
 **Example**
 
@@ -6531,18 +6558,21 @@ preds = wbb_predict_games(games, wbb_team_ratings(2024))
 
 Women's remaining-schedule Monte Carlo.
 
-Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_season_sim`
-with `league="womens"` -- see that function for the full contract.
+Delegates to `sportsdataverse.mbb.mbb_season_sim.mbb_season_sim` with `league="womens"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `ratings` | `DataFrame` |  |  |
-| `remaining_schedule` | `DataFrame` |  |  |
-| `n_sims` | `int` | `10000` |  |
-| `seed` | `int` | `0` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `ratings` | `DataFrame` |  | One row per team (`season, team_id, adj_em` + optional `conference` / `current_wins`). |
+| `remaining_schedule` | `DataFrame` |  | Games to simulate. |
+| `n_sims` | `int` | `10000` | Number of simulated seasons. |
+| `seed` | `int` | `0` | RNG seed (deterministic output). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team: `season, team_id, exp_wins, playoff_prob, conf_title_prob` -- see the mbb core for the full contract.
 
 **Example**
 
@@ -6555,14 +6585,18 @@ odds = wbb_season_sim(ratings, remaining, n_sims=5000, seed=42)
 
 Women's season-level SoS / Quad / WAB résumé.
 
-Delegates to
+Delegates to `sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule` with `league="womens"` (WBB loaders + women's constants).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins` -- see the mbb core for the full contract.
 
 **Example**
 
@@ -6644,13 +6678,19 @@ for lineup in three_lineups:
 
 ### `win_prob_from_margin(exp_margin: 'float') -> 'float'` {#win_prob_from_margin}
 
-Women's win prob -- `mbb win_prob_from_margin <sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin>` with `league="womens"`.
+Women's home win probability from an expected margin.
+
+Delegates to `sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with `league="womens"`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `exp_margin` | `float` |  |  |
+| `exp_margin` | `float` |  | Expected home-minus-away margin in points. |
+
+**Returns**
+
+Probability the home team wins, in `(0, 1)`.
 
 **Example**
 

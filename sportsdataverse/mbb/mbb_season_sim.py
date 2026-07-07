@@ -127,6 +127,10 @@ def mbb_season_sim(
         members; ties count for every tied team; null without a
         ``conference`` column).
 
+    Raises:
+        KeyError: If a scheduled team is missing from ``ratings`` -- every
+            ``home_team_id`` / ``away_team_id`` must have a ratings row.
+
     Example:
         Quick start::
 
@@ -240,6 +244,7 @@ def mbb_bracket_sim(
 
     Raises:
         ValueError: If the field size is not a power of two.
+        KeyError: If a field team is missing from ``ratings``.
 
     Example:
         Quick start::

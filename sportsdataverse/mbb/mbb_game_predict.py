@@ -132,6 +132,10 @@ def mbb_in_game_win_prob(
     Returns:
         One row per play: the five feature columns plus ``home_win_prob``.
 
+    Raises:
+        ImportError: If the bundled artifact is an xgboost tree (``.ubj``) and
+            ``xgboost`` is not installed (``pip install sportsdataverse[models]``).
+
     Example:
         Quick start::
 

@@ -39,9 +39,18 @@ def wbb_bracketology(
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Women's projected tournament field for a season.
 
-    Delegates to
-    :func:`sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with
-    ``league="womens"`` (WBB loaders + women's constants).
+    Delegates to :func:`sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with ``league="womens"`` (WBB loaders + women's constants).
+
+    Args:
+        season: Season to project (e.g. ``2024``).
+        as_of_date: Only use games strictly before this date; ``None`` uses
+            every completed game.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per team: ``season, team_id, resume_score, projected_seed,
+        at_large_prob, auto_bid, bid`` -- see the mbb core for the full
+        contract.
 
     Example:
         Quick start::
