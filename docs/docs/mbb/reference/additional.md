@@ -1335,7 +1335,7 @@ builds).
 | `is_trans` | `Optional[bool]` |  | Whether the shot was in transition, if/when matched (see above). |
 | `raw_event` | `Optional[str]` |  | The raw SVG `<title>` text this shot was parsed from, for debugging (discarded before writing to disk upstream). |
 
-### `ShotEventBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', shot_event_finder: 'Callable[[BeautifulSoup], list[Tag]]', script_extractor: 'Callable[[BeautifulSoup], Optional[str]]', title_extractor: 'Callable[[Tag], Optional[str]]', event_period_finder: 'Callable[[Tag], Optional[int]]', event_time_finder: 'Callable[[Tag], Optional[float]]', event_player_finder: 'Callable[[Tag], Optional[str]]', shot_location_finder: 'Callable[[Tag], Optional[tuple[float, float]]]', event_score_finder: 'Callable[[Tag], Optional[Score]]', shot_result_finder: 'Callable[[Tag], Optional[bool]]', shot_taking_team_finder: 'Callable[[Tag], Optional[str]]') -> None` {#ShotEventBuilders}
+### `ShotEventBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', shot_event_finder: 'Callable[[BeautifulSoup], list[Tag]]', script_extractor: 'Callable[[str], Optional[str]]', title_extractor: 'Callable[[Tag], Optional[str]]', event_period_finder: 'Callable[[Tag], Optional[int]]', event_time_finder: 'Callable[[Tag], Optional[float]]', event_player_finder: 'Callable[[Tag], Optional[str]]', shot_location_finder: 'Callable[[Tag], Optional[tuple[float, float]]]', event_score_finder: 'Callable[[Tag], Optional[Score]]', shot_result_finder: 'Callable[[Tag], Optional[bool]]', shot_taking_team_finder: 'Callable[[Tag], Optional[str]]') -> None` {#ShotEventBuilders}
 
 The HTML finder-function table (`ShotEventParser.base_builders`,
 
@@ -1349,7 +1349,7 @@ the v0/v1 pairs in every other 5e parser.
 |---|---|---|---|
 | `team_finder` | `Callable[[BeautifulSoup], list[str]]` |  |  |
 | `shot_event_finder` | `Callable[[BeautifulSoup], list[Tag]]` |  |  |
-| `script_extractor` | `Callable[[BeautifulSoup], Optional[str]]` |  |  |
+| `script_extractor` | `Callable[[str], Optional[str]]` |  |  |
 | `title_extractor` | `Callable[[Tag], Optional[str]]` |  |  |
 | `event_period_finder` | `Callable[[Tag], Optional[int]]` |  |  |
 | `event_time_finder` | `Callable[[Tag], Optional[float]]` |  |  |
