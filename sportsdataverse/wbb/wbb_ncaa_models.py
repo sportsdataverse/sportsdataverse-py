@@ -45,6 +45,7 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     LineupId,
     LocationType,
     PlayerCodeId,
+    PlayerEvent,
     PlayerId,
     PlayerShotInfo,
     PossCalcFragment,
@@ -83,4 +84,5 @@ __all__ = [
     "PossCalcFragment",
     "poss_calc_fragment_sum",
     "score_to_tuple",
+    "PlayerEvent",
 ]

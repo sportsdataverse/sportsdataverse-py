@@ -8,6 +8,7 @@ from sportsdataverse.mbb.mbb_loaders import *
 from sportsdataverse.mbb.mbb_luck import *
 from sportsdataverse.mbb.mbb_ncaa_data_quality import *
 from sportsdataverse.mbb.mbb_ncaa_events import *
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import *
 from sportsdataverse.mbb.mbb_ncaa_models import *
 from sportsdataverse.mbb.mbb_ncaa_names import *
 from sportsdataverse.mbb.mbb_ncaa_possessions import *

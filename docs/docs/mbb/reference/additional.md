@@ -881,6 +881,55 @@ A player's within-team-season code paired with their full identity
 | `id` | `PlayerId` |  | The player's globally-unique identity. |
 | `ncaa_id` | `Optional[str]` | `None` | The player's NCAA-issued id, if known. |
 
+### `PlayerEvent(player: 'PlayerCodeId', player_stats: 'LineupEventStats', date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None` {#PlayerEvent}
+
+A lineup event's stats, narrowed to one player (`PlayerEvent`,
+
+`models/ncaa/PlayerEvent.scala:48-70`). **Scope addition, Task 5c.4**
+-- deferred by 5a since only `~sportsdataverse.mbb
+.mbb_ncaa_lineup_enrich.create_player_events` (5c.4) returns it. Appended
+here (not inserted among the 5a-reviewed classes above) to keep this an
+additive-only change.
+
+Same field shape as `LineupEvent` with two fields prepended
+(`player`, `player_stats`) -- the Scala builds this via a
+`shapeless.LabelledGeneric` HList splice of `PlayerEvent`'s own
+`player`/`player_stats` onto every field of a `LineupEvent`
+instance; this port has no generic-programming machinery, so
+`~sportsdataverse.mbb.mbb_ncaa_lineup_enrich.create_player_events`
+constructs the dataclass directly instead.
+
+**`SingleEventMeta` / `event_meta` / `game_id` are NOT ported.**
+`PlayerEvent.scala`'s companion object nests a `SingleEventMeta` case
+class, but the two fields that would carry it (`event_meta`,
+`game_id`) are commented out in the Scala source itself
+(`PlayerEvent.scala:67-69`) -- never part of the live case class, and
+`create_player_events` never constructs a `SingleEventMeta`. Nothing
+to defer; there is no live field to port.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player` | `PlayerCodeId` |  | The player this narrowed event describes. |
+| `player_stats` | `LineupEventStats` |  | The player's own numerical stats for this lineup event. |
+| `date` | `datetime` |  | The date of the game. |
+| `location_type` | `LocationType` |  | Home/away/neutral (etc.) for this game. |
+| `start_min` | `float` |  | The point in the game at which the lineup entered. |
+| `end_min` | `float` |  | The point in the game at which the lineup changed. |
+| `duration_mins` | `float` |  | The duration of the lineup. |
+| `score_info` | `ScoreInfo` |  | The score differential context for this event. |
+| `team` | `TeamSeasonId` |  | The team under analysis. |
+| `opponent` | `TeamSeasonId` |  | The opposing team. |
+| `lineup_id` | `LineupId` |  | A string that defines the set of players on the floor. |
+| `players` | `list[PlayerCodeId]` |  | Mapping from player code to full identity, for this lineup. |
+| `players_in` | `list[PlayerCodeId]` |  | Players who subbed in for this event. |
+| `players_out` | `list[PlayerCodeId]` |  | Players who subbed out for this event. |
+| `raw_game_events` | `list[RawGameEvent]` |  | The raw NCAA event strings for both teams. |
+| `team_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (team side). |
+| `opponent_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (opponent side). |
+| `player_count_error` | `Optional[int]` | `None` | If the lineup is "impossible", the number of players actually seen (for analysis purposes). |
+
 ### `PlayerShotInfo(unknown_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, early_3pa: 'Optional[tuple[int, int, int, int, int]]' = None, unast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, ast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None) -> None` {#PlayerShotInfo}
 
 Per-player shot-quality info, keyed by lineup slot
@@ -1173,6 +1222,22 @@ CBB season, named by the year it ends (`Year`, `Year.scala`).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `value` | `int` |  | The ending year of the season. |
+
+### `add_stats_to_lineups(lineup: 'LineupEvent') -> 'LineupEvent'` {#add_stats_to_lineups}
+
+Enrich a lineup with play-by-play stats for both team and opponent
+
+(`add_stats_to_lineups`, `LineupUtils.scala:1441-1451`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup event to enrich (not mutated). |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` populated.
 
 ### `adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'` {#adjust_off_rating_stats}
 
@@ -2830,6 +2895,42 @@ made or a missed free throw on the same event).
 
 The count of matching events.
 
+### `create_player_events(lineup_event_maybe_bad: 'LineupEvent', box_lineup: 'LineupEvent') -> 'list[PlayerEvent]'` {#create_player_events}
+
+Split a lineup event into one :class:`~sportsdataverse.mbb
+
+.mbb_ncaa_models.PlayerEvent` per player on the floor
+(`create_player_events`, `LineupUtils.scala:1454-1529`).
+
+First re-tidies `lineup_event_maybe_bad`'s `players`/`players_in`/
+`players_out` against `box_lineup` (via player_tidier`),
+dropping any player who doesn't actually resolve to a box-score player --
+this recovers from "impossible" lineups. Then, for each surviving player
+(in lineup-slot order, 0-4), builds their own `enrich_stats` call
+with a per-player `player_filter_coder` + that player's slot index (the
+only caller in this module that ever passes a non-default
+`player_index`, wiring increment_player_3p_shot_info`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_event_maybe_bad` | `LineupEvent` |  | The lineup event to split (its player lists may reference names not actually in `box_lineup`). |
+| `box_lineup` | `LineupEvent` |  | The trusted box-score lineup for this game (name resolution + team-scoping context). |
+
+**Returns**
+
+One `~sportsdataverse.mbb.mbb_ncaa_models.PlayerEvent` per (tidied) player in `lineup_event_maybe_bad.players`, same order. Kept even if a player has zero matching raw events -- needed downstream for usage/possession math.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import create_player_events
+
+player_events = create_player_events(lineup, box_lineup)
+player_events[0].player_stats.fg_3p.made.total
+```
+
 ### `duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#duration_from_period}
 
 The game duration (minutes elapsed) once `period` has completed
@@ -2855,6 +2956,77 @@ from sportsdataverse.mbb.mbb_ncaa_stints import duration_from_period
 duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
 duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
 ```
+
+### `enrich_lineup(lineup: 'LineupEvent') -> 'LineupEvent'` {#enrich_lineup}
+
+Populate `pts`/`plus_minus` from the score delta, then run the
+
+full stat-tree enrichment (`enrich_lineup`, `LineupUtils.scala:29-46`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup event to enrich (not mutated -- see the module docstring's "Scala idiom decisions"). |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` fully populated.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import enrich_lineup
+
+enriched = enrich_lineup(lineup)
+enriched.team_stats.pts
+```
+
+### `enrich_stats(lineup: 'LineupEvent', event_parser: 'PossessionEvent', stats: 'LineupEventStats', player_filter_coder: 'Optional[PlayerFilterCoder]' = None, player_index: 'int' = -1) -> 'LineupEventStats'` {#enrich_stats}
+
+Fold a lineup's raw events into a counting-stat tree (``protected def
+
+enrich_stats`, `LineupUtils.scala:115-162``). Reuses the Task 5a.3
+concurrent-clump batching (`~sportsdataverse.mbb.mbb_ncaa_possessions
+.lineup_as_raw_clumps` + `~sportsdataverse.mbb.mbb_ncaa_possessions
+.concurrent_event_handler`) rather than duplicating it -- both were
+already public/exported from Task 5a.3.
+
+`stats` is deep-copied once up front (see the module docstring's
+"Scala idiom decisions"), so this function never mutates the caller's
+`stats` argument -- safe to call repeatedly against the same starting
+literal (e.g. a shared "empty stats" fixture).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup whose `raw_game_events` to fold over. |
+| `event_parser` | `PossessionEvent` |  | Selects which side (team/opponent) is "attacking". |
+| `stats` | `LineupEventStats` |  | The starting stat tree (not mutated -- see above). |
+| `player_filter_coder` | `Optional[PlayerFilterCoder]` | `None` | Optional `name -> (is_this_player, code)` predicate/coder, for per-player scoping (Task 5c.4). |
+| `player_index` | `int` | `-1` | Lineup-slot index for `~sportsdataverse.mbb .mbb_ncaa_models.PlayerShotInfo` tuples (Task 5c.4; `-1` for team-level calls, the only value exercised before then). |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every matching event folded in.
+
+### `ensure_ev_uniqueness(clump: 'ConcurrentClump') -> 'ConcurrentClump'` {#ensure_ev_uniqueness}
+
+Nudge each event's `min` by a tiny per-index delta so truly
+
+concurrent (identical-`min`) events within a clump don't collapse
+under `==` (`ensure_ev_uniqueness`, `LineupUtils.scala:105-111`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `ConcurrentClump` |  | The clump whose events to nudge. |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_possessions.ConcurrentClump` with each event's `min` incremented by `1e-6 * index`.
 
 ### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_teams}
 
@@ -2925,6 +3097,28 @@ player-code override (`DataQualityIssues.fix_combos`,
 **Returns**
 
 Three `(name_variant, code_start)` pairs.
+
+### `fix_possible_score_swap_bug(lineup: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[LineupEvent]'` {#fix_possible_score_swap_bug}
+
+Undo a rare NCAA data bug where the scores get transposed
+
+(`fix_possible_score_swap_bug`, `LineupUtils.scala:51-90`).
+
+If the last lineup's ending score is the exact transpose of the box
+score's ending score, every lineup's `score_info` is un-transposed and
+`pts`/`plus_minus` are swapped/negated between `team_stats` and
+`opponent_stats` -- nothing else in the stat trees changes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `list[LineupEvent]` |  | The lineups to (maybe) fix, in chronological order. |
+| `box_lineup` | `LineupEvent` |  | The trusted box-score lineup to compare the final score against. |
+
+**Returns**
+
+`lineup` unchanged if the scores aren't transposed (or `lineup` is empty); otherwise a new list with every entry's score/pts/ plus_minus corrected.
 
 ### `fox_mbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_boxscore}
 
@@ -3309,6 +3503,32 @@ inject_rapm_into_players(
 )
 ```
 
+### `is_end_of_game_fouling_vs_fastbreak(curr_clump: 'ConcurrentClump', event_parser: 'PossessionEvent') -> 'bool'` {#is_end_of_game_fouling_vs_fastbreak}
+
+Check for intentional fouling to prolong the game, specifically so it
+
+can be excluded from being counted as a fast break
+(`is_end_of_game_fouling_vs_fastbreak`, `LineupUtils.scala:603-656`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `curr_clump` | `ConcurrentClump` |  | The clump to classify. |
+| `event_parser` | `PossessionEvent` |  | Selects which side of each event is "attacking". |
+
+**Returns**
+
+`True` iff the FIRST attacking-side FT-made/FT-missed event in `curr_clump.evs` is both near the end of a period AND has the attacking team ahead by `(0, 10]` points; `False` if no such event exists.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_end_of_game_fouling_vs_fastbreak
+
+is_end_of_game_fouling_vs_fastbreak(curr_clump, event_parser)
+```
+
 ### `is_gen2(ev: 'RawGameEvent') -> 'bool'` {#is_gen2}
 
 Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
@@ -3324,6 +3544,76 @@ Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
 **Returns**
 
 `True` if `ev.info` contains a comma-space (`", "`), the gen2 format's field separator; `False` for the old/legacy format.
+
+### `is_scramble(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent], bool], str]'` {#is_scramble}
+
+Figure out if (each event of) the current clump is part of a
+
+"scramble scenario" following an ORB (`is_scramble`, `LineupUtils
+.scala:222-597`).
+
+Returns a `(predicate, debug_tag)` tuple -- **the tuple shape is
+load-bearing**: the oracle asserts the debug tag string directly
+(`"N/A"`/`"0a"`/`"1aa"`/`"1ab"`/`"1b"`/`"2aa"`/`"2ab"`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `curr_clump` | `ConcurrentClump` |  | The clump to classify. |
+| `prev_clumps` | `list[ConcurrentClump]` |  | Prior merged clumps, most-recent-first. |
+| `event_parser` | `PossessionEvent` |  | Selects which side of each event is "attacking". |
+| `player_version` | `bool` |  | Unused -- see the module docstring's `is_scramble` port notes (the Scala's debug-print gate this flag controls is permanently `false` regardless of its value). |
+
+**Returns**
+
+`(predicate, debug_tag)` where `predicate(ev)` reports whether `ev` is part of a scramble.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_scramble
+
+predicate, tag = is_scramble(curr_clump, prev_clumps, event_parser, player_version=False)
+[predicate(ev) for ev in curr_clump.evs]
+```
+
+### `is_transition(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent, bool], bool], str]'` {#is_transition}
+
+Figure out if the current clump is part of a transition offense
+
+following opponent offense (or a marked-fastbreak play) (`is_transition`,
+`LineupUtils.scala:668-927`).
+
+Returns a `(predicate, debug_tag)` tuple mirroring `is_scramble`
+-- the oracle asserts the debug tag directly (`"N/A"`/`"0a.X"`/
+`"1a.a"`/`"1a.b"`/`"1b.a"`/`"1b.b"`/`"1b.X"`/`"NOT"`).
+Unlike `is_scramble`'s predicate, this one takes a *second*
+argument -- `is_scramble` -- so **scramble always wins**: an event
+already classified as a scramble is never additionally tagged
+transition (`!is_scramble && is_transition_event`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `curr_clump` | `ConcurrentClump` |  | The clump to classify. |
+| `prev_clumps` | `list[ConcurrentClump]` |  | Prior merged clumps, most-recent-first. |
+| `event_parser` | `PossessionEvent` |  | Selects which side of each event is "attacking" (and, for this heuristic, "defending"). |
+| `player_version` | `bool` |  | Unused -- see `is_scramble`'s port notes in the module docstring (the Scala's debug-print gate this flag controls is permanently `false` regardless of its value). |
+
+**Returns**
+
+`(predicate, debug_tag)` where `predicate(ev, is_scramble)` reports whether `ev` is part of a transition play, given whether it was already classified as a scramble.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_transition
+
+predicate, tag = is_transition(curr_clump, prev_clumps, event_parser, player_version=False)
+[predicate(ev, is_scramble=False) for ev in curr_clump.evs]
+```
 
 ### `lineup_as_raw_clumps(lineup: 'LineupEvent') -> 'Iterator[ConcurrentClump]'` {#lineup_as_raw_clumps}
 
@@ -3911,6 +4201,62 @@ from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
 start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
 start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
 start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
+```
+
+### `sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'` {#sum_event_stats}
+
+Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.LineupEventStats` (`protected def sum_event_stats`, `LineupUtils.scala
+:1534-1622`, debug-only -- the Scala's own docstring says "just used for
+debug"). The Scala builds this via `shapeless.Generic` field-zipping;
+this port is an explicit field-by-field call since Python has no
+equivalent generic-programming machinery.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lhs` | `LineupEventStats` |  | The left-hand stat tree. |
+| `rhs` | `LineupEventStats` |  | The right-hand stat tree. |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every field summed (see the module's private sum_*` helpers for the `Optional`/nested-field summing rules).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_event_stats
+from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
+
+sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
+```
+
+### `sum_shot_infos(shot_infos: 'list[PlayerShotInfo]') -> 'Optional[PlayerShotInfo]'` {#sum_shot_infos}
+
+Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.PlayerShotInfo`\ s (`sum_shot_infos`, `LineupUtils.scala:1625-1655`,
+debug-only).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shot_infos` | `list[PlayerShotInfo]` |  | The list to combine, in order. |
+
+**Returns**
+
+`None` if `shot_infos` is empty; the single element if there's exactly one; otherwise a left-fold of pairwise field-wise sums (`reduceOption`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_shot_infos
+from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
+
+sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
 ```
 
 ### `test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'` {#test_positional_aware_filter}
