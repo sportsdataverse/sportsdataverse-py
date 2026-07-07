@@ -17,10 +17,16 @@ efficiency baselines) come from
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 import polars as pl
 
+from sportsdataverse.mbb.mbb_loaders import load_mbb_schedule, load_mbb_team_boxscore
 from sportsdataverse.mbb.mbb_prediction_constants import get_constants
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.DataFrame:
@@ -273,3 +279,97 @@ def adjust_tempo(
         for _key, sub in game_eff.group_by("season", maintain_order=True)
     ]
     return pl.concat(frames)
+
+
+_RATINGS_SCHEMA = {
+    "season": pl.Int64,
+    "team_id": pl.Utf8,
+    "adj_o": pl.Float64,
+    "adj_d": pl.Float64,
+    "adj_em": pl.Float64,
+    "adj_tempo": pl.Float64,
+    "raw_o": pl.Float64,
+    "raw_d": pl.Float64,
+    "games": pl.Int64,
+    "rank": pl.Int64,
+    "adj_em_z": pl.Float64,
+}
+
+
+def _normalize_schedule(schedule: pl.DataFrame) -> pl.DataFrame:
+    """Map ESPN ``load_mbb_schedule`` columns to the engine's canonical names.
+
+    ESPN ships ``home_id`` / ``away_id`` and both a string ``date`` (with time)
+    and a proper ``game_date``; the engine wants ``home_team_id`` /
+    ``away_team_id`` / ``date`` (a ``Date``). Frames already using the canonical
+    names (e.g. the committed fixtures) pass through unchanged.
+    """
+    out = schedule
+    if "home_id" in out.columns and "home_team_id" not in out.columns:
+        out = out.rename({"home_id": "home_team_id"})
+    if "away_id" in out.columns and "away_team_id" not in out.columns:
+        out = out.rename({"away_id": "away_team_id"})
+    if "game_date" in out.columns:
+        if "date" in out.columns:
+            out = out.drop("date")
+        out = out.rename({"game_date": "date"})
+    return out
+
+
+def mbb_team_ratings(
+    seasons: int | list[int], *, league: str = "mens", return_as_pandas: bool = False
+) -> pl.DataFrame | pd.DataFrame:
+    """Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season.
+
+    Loads schedule + team boxscore for ``seasons``, computes per-game efficiency,
+    runs the opponent-adjustment fixed points, and adds a per-season dense
+    ``rank`` (on ``adj_em`` descending) and ``adj_em_z`` (z-score of ``adj_em``).
+
+    Args:
+        seasons: A season (e.g. ``2024``) or list of seasons.
+        league: ``"mens"`` / ``"womens"`` -- selects the constants.
+        return_as_pandas: Return a pandas frame instead of polars.
+
+    Returns:
+        One row per (season, team_id) with columns ``season, team_id, adj_o,
+        adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z``. Empty
+        input returns that schema with zero rows.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
+            ratings = mbb_team_ratings(2024)
+            ratings.sort("rank").head()
+    """
+    seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    schedule = _normalize_schedule(load_mbb_schedule(seasons_list))
+    team_box = load_mbb_team_boxscore(seasons_list)
+    eff = raw_game_efficiency(schedule, team_box)
+
+    if eff.height == 0:
+        out = pl.DataFrame(schema=_RATINGS_SCHEMA)
+    else:
+        ratings = adjust_efficiency(eff, league=league)
+        tempo = adjust_tempo(eff, league=league)
+        out = (
+            ratings.join(tempo, on=["season", "team_id"], how="left")
+            .with_columns(
+                pl.col("adj_em").rank(method="dense", descending=True).over("season").cast(pl.Int64).alias("rank"),
+                (
+                    (pl.col("adj_em") - pl.col("adj_em").mean().over("season")) / pl.col("adj_em").std().over("season")
+                ).alias("adj_em_z"),
+            )
+            .select(list(_RATINGS_SCHEMA))
+            .sort(["season", "rank"])
+        )
+
+    return out.to_pandas() if return_as_pandas else out
+
+
+__all__ = [
+    "raw_game_efficiency",
+    "adjust_efficiency",
+    "adjust_tempo",
+    "mbb_team_ratings",
+]

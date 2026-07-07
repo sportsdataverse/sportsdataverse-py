@@ -27,4 +27,5 @@ from sportsdataverse.mbb.mbb_positions import *
 from sportsdataverse.mbb.mbb_rapm import *
 from sportsdataverse.mbb.mbb_ratings import *
 from sportsdataverse.mbb.mbb_schedule import *
+from sportsdataverse.mbb.mbb_team_ratings import *
 from sportsdataverse.mbb.mbb_teams import *

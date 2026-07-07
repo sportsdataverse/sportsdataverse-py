@@ -153,3 +153,110 @@ def test_adjust_tempo_pushes_fast_team_up():
     # FAST's observed game possessions all = 78+60-67 = 71; adjustment recovers ~78 > 71
     assert row["FAST"] > 71.0
     assert row["FAST"] == max(row.values())
+
+
+_RATINGS_COLUMNS = [
+    "season",
+    "team_id",
+    "adj_o",
+    "adj_d",
+    "adj_em",
+    "adj_tempo",
+    "raw_o",
+    "raw_d",
+    "games",
+    "rank",
+    "adj_em_z",
+]
+
+
+def test_mbb_team_ratings_public_schema(monkeypatch):
+    import pandas as pd
+
+    import importlib
+
+    # the module and its public function share the name `mbb_team_ratings`; the
+    # package `import *` rebinds the attribute to the function, so fetch the
+    # module object from sys.modules to monkeypatch its loader imports.
+    mod = importlib.import_module("sportsdataverse.mbb.mbb_team_ratings")
+
+    sched, box = _mini()
+    # add a second game so std/rank are well-defined over >1 team pairing
+    sched2 = pl.DataFrame(
+        {
+            "game_id": ["G2"],
+            "season": [2024],
+            "date": [datetime.date(2024, 1, 2)],
+            "home_team_id": ["B"],
+            "away_team_id": ["A"],
+            "neutral_site": [False],
+        }
+    )
+    box2 = pl.DataFrame(
+        {
+            "game_id": ["G2", "G2"],
+            "team_id": ["B", "A"],
+            "field_goals_attempted": [58.0, 60.0],
+            "offensive_rebounds": [9.0, 11.0],
+            "turnovers": [11.0, 12.0],
+            "free_throws_attempted": [17.0, 19.0],
+            "team_score": [68.0, 78.0],
+        }
+    )
+    full_sched = pl.concat([sched, sched2])
+    full_box = pl.concat([box, box2])
+    monkeypatch.setattr(mod, "load_mbb_schedule", lambda seasons: full_sched)
+    monkeypatch.setattr(mod, "load_mbb_team_boxscore", lambda seasons: full_box)
+
+    out = mod.mbb_team_ratings(2024)
+    assert out.columns == _RATINGS_COLUMNS
+    assert out.schema["team_id"] == pl.Utf8
+    assert out.schema["rank"] == pl.Int64
+    assert out.schema["adj_em_z"] == pl.Float64
+    assert set(out["rank"].to_list()) == {1, 2}
+
+    pdf = mod.mbb_team_ratings(2024, return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame)
+    assert list(pdf.columns) == _RATINGS_COLUMNS
+
+
+def test_mbb_team_ratings_empty_seasons(monkeypatch):
+    import importlib
+
+    # the module and its public function share the name `mbb_team_ratings`; the
+    # package `import *` rebinds the attribute to the function, so fetch the
+    # module object from sys.modules to monkeypatch its loader imports.
+    mod = importlib.import_module("sportsdataverse.mbb.mbb_team_ratings")
+
+    monkeypatch.setattr(
+        mod,
+        "load_mbb_schedule",
+        lambda seasons: pl.DataFrame(
+            schema={
+                "game_id": pl.Utf8,
+                "season": pl.Int64,
+                "date": pl.Date,
+                "home_team_id": pl.Utf8,
+                "away_team_id": pl.Utf8,
+                "neutral_site": pl.Boolean,
+            }
+        ),
+    )
+    monkeypatch.setattr(
+        mod,
+        "load_mbb_team_boxscore",
+        lambda seasons: pl.DataFrame(
+            schema={
+                "game_id": pl.Utf8,
+                "team_id": pl.Utf8,
+                "field_goals_attempted": pl.Float64,
+                "offensive_rebounds": pl.Float64,
+                "turnovers": pl.Float64,
+                "free_throws_attempted": pl.Float64,
+                "team_score": pl.Float64,
+            }
+        ),
+    )
+    out = mod.mbb_team_ratings([2024])
+    assert out.columns == _RATINGS_COLUMNS
+    assert out.height == 0
