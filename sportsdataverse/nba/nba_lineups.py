@@ -108,6 +108,149 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
+# Period-range boxscoretraditionalv3 params (quarter-box grounding, Task 1)
+# ---------------------------------------------------------------------------
+
+#: RangeType for period-opening on-court range-boxscores. Verified 2026-07 by
+#: reading pbpstats' own ``StartOfPeriod._get_period_boxscore_request_params``
+#: ("rt2_start_window" mode) and by a live capture against 3 real games
+#: (``0022300001``, ``0022200001``, ``0022100001``): ``RangeType=2`` with a
+#: window opening at the period's elapsed-time tick reproduces the boxscore
+#: starters exactly for period 1 on every fixture game.
+_QUARTER_BOX_RANGE_TYPE: str = "2"
+
+#: Window width (tenths of a second) added to a period's opening elapsed tick
+#: to form ``EndRange``. Matches pbpstats' own convention exactly
+#: (``EndRange = period_start_tenths + 10``, i.e. a 1-second opening window).
+_QUARTER_BOX_WINDOW_WIDTH_TENTHS: int = 10
+
+
+def _period_start_range(period: int) -> Tuple[str, str]:
+    """(StartRange, EndRange) tenths-of-a-second window at a period's opening tick.
+
+    Verified against a real ``boxscoretraditionalv3`` capture (Task 1, 3 fixture
+    games): this window's candidate roster equals the boxscore starters exactly
+    for **period 1** on every fixture game. For periods 2+, the raw candidate
+    list can exceed 5 players per team when a substitution happens at (or
+    essentially at) the period-opening tick -- the endpoint has no built-in way
+    to disambiguate "about to sub out" from "about to sub in" at an exact
+    boundary tie. pbpstats resolves this with a secondary substitution-order
+    narrowing pass (and a ``RangeType=1`` fallback); this function only pins
+    the verified request window -- narrowing is a downstream (Task 2) concern.
+
+    Args:
+        period: 1-indexed period number (5+ = overtime, 5 minutes each).
+
+    Returns:
+        ``(start_range, end_range)`` as decimal strings, in tenths of a second
+        elapsed since game start.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_lineups import _period_start_range
+            start, end = _period_start_range(1)
+            print(start, end)  # "0" "10"
+    """
+    elapsed_s = (period - 1) * 720 if period <= 4 else 2880 + (period - 5) * 300
+    t = elapsed_s * 10
+    return str(t), str(t + _QUARTER_BOX_WINDOW_WIDTH_TENTHS)
+
+
+#: Zero-duration ``minutes`` sentinels observed in ``boxscoretraditionalv3``
+#: player ``statistics`` (real capture, Task 1 Step 3): the plain ``"MM:SS"``
+#: forms actually emitted (``None``/``""`` for DNP, ``"0:00"``/``"00:00"`` for
+#: zero recorded time). The ISO-8601 ``PT..M..S`` forms are included
+#: defensively for parity with :func:`_parse_box_minutes`-style parsers
+#: elsewhere in this module family, even though this endpoint has not been
+#: observed to emit them.
+_MINUTES_ZERO = {None, "", "0:00", "00:00", "PT00M00.00S", "PT00M00S"}
+
+
+def _period_box_oncourt(period_box_payload: dict) -> Dict[int, List[int]]:
+    """team_id -> on-court person_ids from one period's range-boxscore.
+
+    A player showing the **zero-minutes sentinel** in the period-opening
+    ``_period_start_range`` window (a fixed 1-second range, see
+    :func:`_period_start_range`) is the on-court-at-period-start signal —
+    narrowing raw candidate lists that can run up to 9 per team (Task 1
+    finding) down toward the true on-court 5.
+
+    This polarity is the **opposite** of the naive reading of pbpstats'
+    period-starter boxscore fallback (``StartOfPeriod
+    ._get_starters_from_boxscore_request``, ``pbpstats/resources/enhanced_pbp
+    /start_of_period.py``), which sorts a *dynamic*, several-seconds-wide
+    range by *highest* recorded seconds. It was deliberately re-derived
+    empirically against this project's own fixed 1-second window rather than
+    assumed, because a real capture shows **two distinct data regimes**
+    across the fixtures — not a single boundary-tie artifact:
+
+    - **Quiet periods** (no substitution at the period-opening tick — every
+      fixture's period 1, plus several later periods on quieter fixtures):
+      the range-box candidate list is exactly the 5 on-court players per
+      team, and *every one of them* reads the zero-minutes sentinel (the
+      1-second window is too narrow for the endpoint to accrue a non-zero
+      ``"MM:SS"`` reading for anyone who was already on court). The
+      zero-filter here is exact — narrowing to precisely 5 reproduces the
+      true period-start lineup with no ambiguity.
+    - **Real-rotation periods** (a substitution lands at, or essentially at,
+      the period-opening tick): the raw candidate list balloons past 5 (up
+      to 9 observed) and splits into a **mixed** zero/non-zero pattern — some
+      candidates read the zero sentinel, others read a small non-zero value
+      (``"0:01"``, ``"0:09"``, etc.) depending on how much of the 1-second
+      window each candidate's stint overlapped. Empirically (see
+      ``tests/nba/test_nba_lineups.py::test_quarter_box_agreement_floors``
+      for the per-fixture counts) this split does **not** cleanly separate
+      the true on-court five from the players who just left or are about to
+      enter — the zero-reading group in these periods is smaller than 5
+      (as few as 0 observed). The zero-filter therefore *undercounts* rather
+      than misidentifying: it never produces a wrong set of exactly 5, it
+      just fails to reach 5 at all.
+    - Because this filter can only ever *positively confirm* players via the
+      zero-sentinel signal — never invent a false positive from an unrelated
+      bench player (who never appears in the raw candidate list at all) —
+      the caller's ``len(...) == 5`` gate is what makes this safe across both
+      regimes: a quiet period clears the gate with the correct 5, and a
+      real-rotation period reliably undercounts below 5 and the caller
+      correctly falls back to pbp seeding instead of trusting a partial or
+      ambiguous set.
+
+    Args:
+        period_box_payload: One period's raw range-boxscore payload (the same
+            ``boxscoretraditionalv3`` shape as :func:`_starters_from_boxscore_v3`,
+            captured at the window from :func:`_period_start_range`).
+
+    Returns:
+        ``{team_id: [person_id, ...]}``. A team can have 0, 5, or more than 5
+        entries depending on how many candidates cleared the zero-sentinel
+        filter — callers must check ``len(...) == 5`` before trusting the
+        result as an exact seed. Empty dict on malformed/empty input (never
+        raises).
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            from sportsdataverse.nba.nba_lineups import _period_box_oncourt
+            periods = json.loads(pathlib.Path("boxv3_periods.json").read_text())
+            on_court = _period_box_oncourt(periods["2"])
+            print({tid: len(ids) for tid, ids in on_court.items()})
+    """
+    bt = (period_box_payload or {}).get("boxScoreTraditional") or {}
+    out: Dict[int, List[int]] = {}
+    for side in ("homeTeam", "awayTeam"):
+        t = bt.get(side) or {}
+        tid = int(t.get("teamId") or 0)
+        on = [
+            int(p["personId"])
+            for p in (t.get("players") or [])
+            if (p.get("statistics") or {}).get("minutes") in _MINUTES_ZERO
+        ]
+        out[tid] = on
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Network fetchers (module-level so tests can monkeypatch them)
 # ---------------------------------------------------------------------------
 
@@ -1039,6 +1182,346 @@ def players_on_court_from_pbp(
             run = period_rows[i:j]
             # The first sub row snapshots the PRE-batch lineup; then apply all of
             # the run's subs so the remaining sub rows see the settled lineup.
+            out_rows.append(_snapshot_row(r, home5, away5))
+            _apply_tick_subs(run, name_map, home5, away5, home_team_id, away_team_id)
+            for r2 in run[1:]:
+                out_rows.append(_snapshot_row(r2, home5, away5))
+            i = j
+
+    df = pl.DataFrame(out_rows, schema=LINEUPS_SCHEMA)
+
+    # ffill/bfill each positional slot within game to patch unresolved-sub gaps
+    slot_cols = [f"home_player_{i}" for i in range(1, 6)] + [f"away_player_{i}" for i in range(1, 6)]
+    df = df.with_columns([pl.col(c).forward_fill().backward_fill().over("game_id") for c in slot_cols])
+
+    # Sort each team's 5 ascending per row (matches rotation producer convention)
+    df = (
+        df.with_columns(
+            [
+                pl.concat_list([f"home_player_{i}" for i in range(1, 6)]).list.sort().alias("_h"),
+                pl.concat_list([f"away_player_{i}" for i in range(1, 6)]).list.sort().alias("_a"),
+            ]
+        )
+        .with_columns(
+            [pl.col("_h").list.get(i - 1).alias(f"home_player_{i}") for i in range(1, 6)]
+            + [pl.col("_a").list.get(i - 1).alias(f"away_player_{i}") for i in range(1, 6)]
+        )
+        .drop(["_h", "_a"])
+    )
+
+    return df.select(list(LINEUPS_SCHEMA.keys()))
+
+
+def _name_map_from_period_boxes(period_boxscores: Dict[int, dict]) -> Dict[int, Dict[str, List[int]]]:
+    """Build a :func:`_boxscore_name_map`-shaped map from the UNION of every period's range-box.
+
+    :func:`_period_starters` / :func:`_apply_tick_subs` need a
+    ``{team_id: {familyname_lower: [person_id, ...]}}`` name map to resolve
+    ``SUB: X FOR Y`` descriptions. :func:`players_on_court_from_quarter_boxscores`
+    has no single full-game boxscore to draw that from — only the per-period
+    range payloads its caller supplies — so this merges every period's player
+    rows per team (deduped by ``personId``) into one synthetic boxscore and
+    delegates to :func:`_boxscore_name_map`. A player who appears in ANY
+    period's range-box is present in the resulting union, a superset
+    sufficient for name resolution across the whole game.
+
+    Args:
+        period_boxscores: ``{period: raw_boxscoretraditionalv3_range_payload}``,
+            the same dict passed to :func:`players_on_court_from_quarter_boxscores`.
+
+    Returns:
+        ``{team_id: {familyname_lower: [person_id, ...], "i. familyname": [person_id]}}``.
+        Empty dict on malformed/empty input (never raises).
+    """
+    merged: Dict[int, Dict[int, dict]] = {}
+    for payload in (period_boxscores or {}).values():
+        bt = (payload or {}).get("boxScoreTraditional") or {}
+        for side in ("homeTeam", "awayTeam"):
+            team = bt.get(side) or {}
+            tid = team.get("teamId")
+            if not tid:
+                continue
+            bucket = merged.setdefault(int(tid), {})
+            for p in team.get("players") or []:
+                pid = p.get("personId")
+                if pid:
+                    bucket[int(pid)] = p
+
+    synthetic_sides: Dict[str, dict] = {}
+    for key, (tid, players) in zip(("homeTeam", "awayTeam"), merged.items()):
+        synthetic_sides[key] = {"teamId": tid, "players": list(players.values())}
+    return _boxscore_name_map({"boxScoreTraditional": synthetic_sides})
+
+
+def _name_map_from_pbp_actors(rows: List[dict]) -> Dict[int, Dict[str, List[int]]]:
+    """Learn a ``{team_id: {name_lower: [person_id, ...]}}`` map from every row's own actor identity.
+
+    :func:`_name_map_from_period_boxes` only knows the players present at a
+    period's exact opening tick — a team's bench players who enter *and*
+    (in a blowout) never touch a period boundary are invisible to it. That
+    gap is common enough on a real fixture (a team with heavy bench rotation
+    can be missing 40%+ of its roster from the period-box union) that
+    leaving those players unresolvable corrupts :func:`_apply_tick_subs`
+    resolution for the remainder of the game once they enter.
+
+    Every ``enhanced_pbp`` row — not just substitutions — already carries the
+    acting player's own identity as a structured ``(person_id, player_name,
+    player_name_i)`` triple (``player_name_i`` is the NBA's own
+    ``"F. Familyname"`` initial-qualified form, matching
+    :func:`_boxscore_name_map`'s two-tier key convention exactly). Harvesting
+    that pair from EVERY row — shots, rebounds, fouls, turnovers, a
+    substitution's own outgoing half, etc. — covers any player who records
+    at least one action anywhere in the game, a much broader net than
+    either the period-box union or a substitutions-only harvest. The only
+    players still unresolvable afterward are those who record literally zero
+    actions of their own for the rest of the game after entering (true
+    stat-less garbage-time appearances) — the terminal ffill/bfill pass in
+    :func:`players_on_court_from_quarter_boxscores` absorbs that residual gap.
+
+    Args:
+        rows: Per-row pbp dicts (the same shape built inside
+            :func:`players_on_court_from_quarter_boxscores`) carrying
+            ``team_id``, ``person_id``, ``player_name``, ``player_name_i``.
+
+    Returns:
+        ``{team_id: {name_lower: [person_id, ...]}}``. Empty dict on
+        malformed/empty input (never raises).
+    """
+    out: Dict[int, Dict[str, List[int]]] = {}
+    for r in rows or []:
+        tid = int(r.get("team_id") or 0)
+        pid = r.get("person_id")
+        if not tid or not pid:
+            continue
+        pid = int(pid)
+        bucket = out.setdefault(tid, {})
+        for raw_name in (r.get("player_name"), r.get("player_name_i")):
+            name = (raw_name or "").strip().lower()
+            if not name:
+                continue
+            ids = bucket.setdefault(name, [])
+            if pid not in ids:
+                ids.append(pid)
+    return out
+
+
+def _merge_name_maps(
+    *maps: Dict[int, Dict[str, List[int]]],
+) -> Dict[int, Dict[str, List[int]]]:
+    """Union multiple ``{team_id: {name_lower: [person_id, ...]}}`` maps, deduping ids per key.
+
+    Args:
+        *maps: Any number of name-map dicts (e.g. from
+            :func:`_name_map_from_period_boxes` and
+            :func:`_name_map_from_pbp_actors`).
+
+    Returns:
+        A single merged ``{team_id: {name_lower: [person_id, ...]}}``.
+    """
+    merged: Dict[int, Dict[str, List[int]]] = {}
+    for m in maps:
+        for tid, names in (m or {}).items():
+            bucket = merged.setdefault(tid, {})
+            for name, ids in names.items():
+                lst = bucket.setdefault(name, [])
+                for pid in ids:
+                    if pid not in lst:
+                        lst.append(pid)
+    return merged
+
+
+def players_on_court_from_quarter_boxscores(
+    enhanced_pbp: pl.DataFrame,
+    period_boxscores: Dict[int, dict],
+    raw_box: Optional[dict] = None,
+    *,
+    home_team_id: int,
+    away_team_id: int,
+) -> pl.DataFrame:
+    """Reconstruct the 5-on-5 on-court lineup, seeding each period exactly where possible.
+
+    A structural sibling of :func:`players_on_court_from_pbp` — same
+    ``LINEUPS_SCHEMA`` output, same sub-batching walk / ffill-bfill / ascending
+    sort tail — whose only difference is *how each period is seeded*: when
+    that period's range-boxscore (:func:`_period_box_oncourt`) narrows to
+    exactly 5 on-court candidates for a team, the period is seeded EXACTLY
+    from it; otherwise it falls back to the same gamerotation-free
+    first-appearance inference :func:`players_on_court_from_pbp` uses
+    (:func:`_period_starters`, carrying the prior period's ending lineup as
+    the silent-starter fallback). See :func:`_period_box_oncourt` for the
+    narrowing recipe (empirically re-derived against pbpstats'
+    ``StartOfPeriod._get_starters_from_boxscore_request`` — see that
+    function's docstring for the concrete evidence behind its zero-sentinel
+    polarity).
+
+    Substitution name resolution merges up to three sources via
+    :func:`_merge_name_maps`: :func:`_name_map_from_period_boxes` (the union
+    of every period's range-box roster), :func:`_name_map_from_pbp_actors`
+    (every row's own actor identity — covers bench players who never touch a
+    period boundary but do record at least one action), and — when the
+    caller supplies it — :func:`_boxscore_name_map` over the full-game
+    ``raw_box`` payload, the SAME full-roster source
+    :func:`players_on_court_from_pbp` uses. That third source is what fixes
+    the one residual name-resolution gap the first two cannot cover: a
+    player who is subbed in and then records **zero** further pbp actions for
+    the rest of the game (so never appears in ``_name_map_from_pbp_actors``)
+    and never happens to be on court at an exact period-opening tick (so
+    never appears in ``_name_map_from_period_boxes``) is still present in the
+    full-game boxscore roster — which lists every player on both teams
+    regardless of playing time — and therefore still resolvable. Passing
+    ``raw_box`` is optional (``None`` preserves the pre-existing two-source
+    behavior) but strongly recommended: without it this producer's per-game
+    agreement with the gamerotation oracle can regress well below
+    :func:`players_on_court_from_pbp`'s own floor on a fixture with a
+    late, stat-less bench appearance (see
+    ``tests/nba/test_nba_lineups.py::test_quarter_box_agreement_floors``).
+
+    Args:
+        enhanced_pbp: Output of
+            :func:`~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`.
+            Must carry ``game_id``, ``action_number``, ``order_index``,
+            ``period``, ``team_id``, ``person_id``, ``player_name``,
+            ``player_name_i``, ``description``, ``is_substitution``.
+        period_boxscores: ``{period: raw_boxscoretraditionalv3_range_payload}``
+            — one entry per period, captured at that period's
+            :func:`_period_start_range` window. A missing period key falls
+            back to pbp seeding for that period only (never raises).
+        raw_box: Optional raw full-game ``boxscoretraditionalv3`` payload (the
+            same one :func:`players_on_court_from_pbp` and
+            :func:`boxscore_home_away` consume) — supplies the full-roster
+            name map described above. ``None`` (default) falls back to
+            resolving names from ``period_boxscores`` + pbp actors only.
+        home_team_id: Home team id (from :func:`boxscore_home_away`).
+        away_team_id: Away team id (from :func:`boxscore_home_away`).
+
+    Returns:
+        :class:`polars.DataFrame` conforming to ``LINEUPS_SCHEMA``. Empty
+        ``enhanced_pbp`` returns a zero-row frame (never raises).
+
+    Example:
+        Quick start::
+
+            import json, pathlib
+            from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+            from sportsdataverse.nba.nba_lineups import (
+                boxscore_home_away, players_on_court_from_quarter_boxscores,
+            )
+            box = json.loads(pathlib.Path("boxscoretraditionalv3.json").read_text())
+            pbp = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+            periods = json.loads(pathlib.Path("boxv3_periods.json").read_text())
+            period_boxscores = {int(k): v for k, v in periods.items()}
+            enh = enhanced_pbp_from_payload(pbp)
+            home, away = boxscore_home_away(box)
+            oc = players_on_court_from_quarter_boxscores(
+                enh, period_boxscores, box, home_team_id=home, away_team_id=away
+            )
+            print(oc.shape)
+
+        See Also:
+            * `pbpstats`_ -- reference implementation of the boxscore-range
+              period-starter narrowing this function mirrors
+            * `hoopR`_ -- R package providing equivalent lineup utilities
+            * `nba_api`_ -- reference Python client for stats.nba.com
+
+        .. _pbpstats: https://github.com/dblackrun/pbpstats
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    if enhanced_pbp is None or enhanced_pbp.is_empty():
+        return pl.DataFrame(schema=LINEUPS_SCHEMA)
+
+    sort_col = "order_index" if "order_index" in enhanced_pbp.columns else "action_number"
+    rows = (
+        enhanced_pbp.sort(sort_col)
+        .select(
+            [
+                "game_id",
+                "action_number",
+                "period",
+                "seconds_remaining",
+                "team_id",
+                "person_id",
+                "player_name",
+                "player_name_i",
+                "description",
+                "is_substitution",
+            ]
+        )
+        .to_dicts()
+    )
+
+    # Merge the period-box roster union with names learned from every row's
+    # own actor identity across the whole game — the latter covers bench
+    # players who never touch a period boundary (see
+    # _name_map_from_pbp_actors for why the period-box-only map alone is
+    # insufficient) — plus, when supplied, the full-game boxscore roster
+    # (_boxscore_name_map), which is the only source blind to neither a
+    # period-boundary appearance nor a recorded pbp action: it lists every
+    # rostered player regardless of playing time, closing the residual gap
+    # a stat-less late bench sub would otherwise leave unresolvable.
+    name_map = _merge_name_maps(
+        _name_map_from_period_boxes(period_boxscores),
+        _name_map_from_pbp_actors(rows),
+        _boxscore_name_map(raw_box) if raw_box else {},
+    )
+
+    periods: List[int] = sorted({int(r["period"]) for r in rows})
+    rows_by_period: Dict[int, List[dict]] = {p: [] for p in periods}
+    for r in rows:
+        rows_by_period[int(r["period"])].append(r)
+
+    def _seed_period(period: int, team_id: int, pbp_seed: List[Optional[int]]) -> List[Optional[int]]:
+        """Prefer the period's exact range-box seed; else fall back to *pbp_seed*."""
+        box = period_boxscores.get(period)
+        if box is not None:
+            on = _period_box_oncourt(box).get(team_id, [])
+            if len(on) == 5:
+                return list(on)  # exact seed
+        return pbp_seed  # quarter_box -> pbp fallback for this period
+
+    home5: List[Optional[int]] = [None] * 5
+    away5: List[Optional[int]] = [None] * 5
+    out_rows: List[dict] = []
+    for period in periods:
+        period_rows = rows_by_period[period]
+        # Compute the pbp-inference fallback for BOTH teams before reseeding —
+        # it carries the prior period's ending lineup (home5/away5 as they
+        # stood at the end of the previous iteration; [None] * 5 for period 1,
+        # which _period_starters treats as no carry) exactly like
+        # players_on_court_from_pbp's _period_starters call.
+        home_pbp_seed = _period_starters(period_rows, home_team_id, name_map, home5)
+        away_pbp_seed = _period_starters(period_rows, away_team_id, name_map, away5)
+        home5 = _seed_period(period, home_team_id, home_pbp_seed)
+        away5 = _seed_period(period, away_team_id, away_pbp_seed)
+
+        # Walk the period's rows in order — identical sub-batching convention
+        # to players_on_court_from_pbp (see that function's docstring / the
+        # module-level algorithm note for rationale): a substitution's own row
+        # snapshots the PRE-sub lineup, and a contiguous run of substitutions
+        # sharing one game-clock tick is applied together before any mid-run
+        # row is snapshotted.
+        i = 0
+        n = len(period_rows)
+        while i < n:
+            r = period_rows[i]
+            tid = int(r["team_id"] or 0)
+            pid = int(r["person_id"]) if r["person_id"] else None
+            team5: Optional[List[Optional[int]]] = (
+                home5 if tid == home_team_id else away5 if tid == away_team_id else None
+            )
+            is_sub = bool(r["is_substitution"]) and team5 is not None
+            if not is_sub:
+                if team5 is not None and pid:
+                    _backfill_five(team5, pid)  # first-appearance backfill for actors
+                out_rows.append(_snapshot_row(r, home5, away5))
+                i += 1
+                continue
+
+            key = _row_elapsed_key(r)
+            j = i
+            while j < n and bool(period_rows[j]["is_substitution"]) and _row_elapsed_key(period_rows[j]) == key:
+                j += 1
+            run = period_rows[i:j]
             out_rows.append(_snapshot_row(r, home5, away5))
             _apply_tick_subs(run, name_map, home5, away5, home_team_id, away_team_id)
             for r2 in run[1:]:

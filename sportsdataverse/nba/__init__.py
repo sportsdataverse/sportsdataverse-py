@@ -10,14 +10,19 @@ from sportsdataverse.nba.nba_schedule import *
 from sportsdataverse.nba.nba_teams import *
 from sportsdataverse.nba.nba_lineups import (  # noqa: F401
     players_on_court_from_pbp,
+    players_on_court_from_quarter_boxscores,
     players_on_court_from_rotation,
 )
 from sportsdataverse.nba.nba_season_compile import compile_nba_season  # noqa: F401
 from sportsdataverse.nba.nba_model_validation import (  # noqa: F401
+    ExternalValidityResult,
     RidgeRapmModel,
     ValidationReport,
-    validate_model,
+    WalkForwardResult,
+    external_validity,
     render_report,
+    validate_model,
+    walk_forward,
 )
 from sportsdataverse.nba.nba_box_logs import box_features, nba_box_logs  # noqa: F401
 from sportsdataverse.nba.nba_spm import (  # noqa: F401
@@ -38,8 +43,38 @@ from sportsdataverse.nba.nba_darko import (  # noqa: F401
     fit_aging_curve,
     nba_darko,
 )
+from sportsdataverse.nba.nba_oracle_data import (  # noqa: F401
+    load_darko_dpm,
+    load_dunks_threes_stats,
+    load_epm,
+    load_lebron_daily,
+    load_lebron_season,
+    load_rapm_ryan_davis,
+    normalize_player_name,
+)
 from sportsdataverse.nba.nba_v3_v2_adapter import nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba.nba_possessions import (  # noqa: F401
     build_possession_shooting,
     POSSESSION_SHOOTING_SCHEMA,
+)
+from sportsdataverse.nba.nba_rapm_variants import (  # noqa: F401
+    DECAY_RAPM_SCHEMA,
+    FOUR_FACTOR_SCHEMA,
+    LA_RAPM_SCHEMA,
+    decay_weights,
+    luck_adjusted_response,
+    nba_decay_rapm,
+    nba_four_factor_rapm,
+    nba_la_rapm,
+)
+from sportsdataverse.nba.nba_ratings_panel import (  # noqa: F401
+    RATINGS_PANEL_SCHEMA,
+    nba_ratings_panel,
+    ratings_as_of,
+)
+from sportsdataverse.nba.nba_war import (  # noqa: F401
+    WAR_SCHEMA,
+    calibrate_pts_per_win,
+    calibrate_replacement_level,
+    nba_war,
 )

@@ -3,9 +3,14 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NBA — external concurrent validity + walk-forward retrodiction (WP3)](#nba--external-concurrent-validity--walk-forward-retrodiction-wp3)
+  - [NBA — RAPM variants (WP2)](#nba--rapm-variants-wp2)
+  - [NBA — through-date ratings panel, WAR, and single-game BPM (WP4)](#nba--through-date-ratings-panel-war-and-single-game-bpm-wp4)
   - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
   - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
   - [NBA — possession event-detail columns, per-shooter shooting frame, `game_date`](#nba--possession-event-detail-columns-per-shooter-shooting-frame-game_date)
+  - [NBA — faithful possession boundaries (pbpstats parity)](#nba--faithful-possession-boundaries-pbpstats-parity)
+  - [NBA — quarter-box on-court lineup seeding + `lineup_source="quarter_box"`](#nba--quarter-box-on-court-lineup-seeding--lineup_sourcequarter_box)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
   - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
@@ -154,6 +159,29 @@
 
 ## Unreleased
 
+### NBA — external concurrent validity + walk-forward retrodiction (WP3)
+
+- feat(nba): model-zoo v2 WP3 — Oracle 5 external concurrent validity
+  (`external_validity`, five published-metric loaders in `nba_oracle_data.py`:
+  Ryan Davis RAPM, Dunks & Threes EPM, LEBRON season/daily, DARKO DPM,
+  Dunks & Threes ewins) and Oracle 6 walk-forward retrodiction
+  (`walk_forward`, time-ordered "predict tomorrow" with carry-forward and
+  random-fold baselines) in `nba_model_validation.py`.
+
+### NBA — RAPM variants (WP2)
+
+- feat(nba): RAPM variants (`nba_rapm_variants`) — luck-adjusted (`nba_la_rapm`),
+  four-factor (`nba_four_factor_rapm`), and time-decay (`nba_decay_rapm`) RAPM, all
+  reusing the plain-RAPM design matrix; concurrent-validity vs the Ryan Davis oracle
+  CSVs gated on `SDV_PY_NBA_ORACLE_DIR`.
+
+### NBA — through-date ratings panel, WAR, and single-game BPM (WP4)
+
+- feat(nba): through-date ratings panel (`nba_ratings_panel` + `ratings_as_of`
+  primitive, leakage-free by construction — works with any harness model),
+  WAR layer (`nba_war` + `calibrate_pts_per_win`/`calibrate_replacement_level`
+  calibration helpers), and `nba_bpm(granularity="game")` single-game BPM 2.0.
+
 ### NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)
 
 New `sportsdataverse/nba/nba_v3_v2_adapter.py` ports hoopR's `.v3_to_v2_format()` to Python:
@@ -201,6 +229,30 @@ Two new codegen-generated flat-API stems wrap the official stats API surface:
 - feat(nba): possession event-detail columns (`fg2a/fg2m/fg3a/fg3m/fta/ftm/oreb/tov`),
   per-shooter `build_possession_shooting` companion frame, and `game_date` on
   `compile_nba_season` output (possession cache `PIPELINE_VERSION` 1 -> 2).
+
+### NBA — faithful possession boundaries (pbpstats parity)
+
+- feat(nba): `_build_possession_groups` rewritten to pbpstats `stats_nba`
+  `is_possession_ending_event` semantics (and-1 + FT-trip exceptions, real-rebound
+  and no-turnover filtering, jump-ball logic); technical FTs are inline again with
+  team-filtered event detail (per-possession points identity preserved exactly).
+- feat(nba): possessions gain `dreb`, `number_in_period`, `possession_start_type`
+  (coarse vocabulary), `count_as_possession`; shooting frame gains `team_id`
+  (possession cache `PIPELINE_VERSION` 2 -> 3).
+- test(nba): pbpstats-live oracle gate — like-for-like possession counts +
+  boundary-by-boundary diff on the committed cdn fixtures (`SDV_PBPSTATS_ROOT`).
+
+### NBA — quarter-box on-court lineup seeding + `lineup_source="quarter_box"`
+
+- feat(nba): exact quarter-box on-court seeding — `players_on_court_from_quarter_boxscores`
+  and `lineup_source="quarter_box"` on `nba_possessions` (auto chain: rotation ->
+  quarter_box -> pbp), seeded from per-period `boxscoretraditionalv3` range payloads.
+- fix(nba): `players_on_court_from_quarter_boxscores` gains an optional `raw_box`
+  full-game-boxscore name-map source (mirrors `players_on_court_from_pbp`'s own
+  signature), closing a mid-period name-resolution gap that regressed one fixture
+  to 0.8817 gamerotation-agreement; with `raw_box` threaded through, quarter_box
+  now matches `players_on_court_from_pbp` exactly on all 3 fixture games
+  (0.9689 / 0.9686 / 0.9662).
 
 ## 0.0.71 Release: June 24, 2026
 
