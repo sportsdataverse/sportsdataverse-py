@@ -90,7 +90,6 @@ full accounting):
 
 from __future__ import annotations
 
-import copy
 from dataclasses import dataclass
 from typing import Any, NamedTuple, Optional, Sequence
 
@@ -691,8 +690,10 @@ def run_iterative_adjustment_with_hca(
     """
     adj_values: AdjValues = {}
     for t in teams:
+        # (freshly built per team from get_team_raw_from_per_game -> new dicts,
+        # never aliased; the TS ``_.cloneDeep`` is defensive and redundant here.)
         raw: FieldSideMap = {field: get_team_raw_from_per_game(t, field) for field in fields}
-        adj_values[t["team_name"]] = copy.deepcopy(raw)
+        adj_values[t["team_name"]] = raw
     hca_per_field: HcaPerField = {field: {"hca_off": 0.0, "hca_def": 0.0} for field in fields}
 
     for _iteration in range(max_iterations):
@@ -784,6 +785,8 @@ def run_iterative_adjustment_with_hca(
                 raw_off = team_raw["off"]
                 raw_def = team_raw["def"]
                 adj = adj_values[team["team_name"]]
+                # (recomputes ALL fields per (field, team) -> O(fields^2 * teams)
+                # per iteration; kept as-is for TS faithfulness, ts:458.)
                 s = compute_opponent_strengths(team, team_by_name, fields, adj_values)[field]
                 league = league_averages[field]
                 league_off = league["league_off"]

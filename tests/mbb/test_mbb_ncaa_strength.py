@@ -532,3 +532,152 @@ def test_build_strength_adjusted_stats_shape_and_convergence():
             assert team.adj_hca[field] == pytest.approx(team.adj[field], abs=ABS)
         # captured regression golden
         assert team.adj["2prim"] == pytest.approx(_GOLDEN_2PRIM[name], abs=1e-6)
+
+
+# --------------------------------------------------------------------------- #
+# nonzero HCA — pins the asymmetric residual prediction + the adj_hca +/- signs
+# --------------------------------------------------------------------------- #
+def test_solver_nonzero_hca_and_adj_hca_signs():
+    """A real home/away possession imbalance -> NONZERO hca, hand-derived, with
+    the `adj_hca` +/- signs pinned (``ts:427-496,638-639``).
+
+    Every other fixture is all-neutral or possession-balanced, so
+    `|imbalance| < IMBALANCE_MIN` and the residual accumulation is skipped
+    (hca == 0). This one forces a nonzero hca so the asymmetric prediction
+    (`pred_off *= avg_opp_def/league_def` vs `pred_def *= league_off/avg_opp_off`)
+    and the `adj_hca` signs execute against a nonzero expectation.
+
+    Fixture (rim-only, so efg mirrors 2prim; 3p/2pmid inert):
+      A plays B twice -- Home (off_poss=def_poss=100) and Away (=50) -- both
+        2prim off 6/10 def 4/10. The differing poss create A's imbalance; the
+        weight for the rate is the 2prim attempts (10), NOT poss.
+      B plays A twice, both Neutral (poss 75), 2prim off 5/10 def 5/10 -> B is
+        possession-balanced, |imbalance| == 0, contributes nothing to the hca.
+
+    league_off = (10*0.6 + 10*0.6 + 10*0.5 + 10*0.5)/40 = 22/40 = 0.55.
+    league_def = (10*0.4 + 10*0.4 + 10*0.5 + 10*0.5)/40 = 18/40 = 0.45.
+    raw: A {off 0.6, def 0.4}; B {off 0.5, def 0.5}. hca starts 0.
+
+    Iter 0 sweep (hca 0 -> the +/-HCA denom term is 0; both A games share opp B
+    and the same rate, so team adj == per-game adj):
+      A: denomOff = B.def = 0.5 -> adjOff = 0.6*(0.55/0.5) = 0.66;
+         denomDef = B.off = 0.5 -> adjDef = 0.4*(0.45/0.5) = 0.36.
+      B: denomOff = A.def = 0.4 -> adjOff = 0.5*(0.55/0.4) = 0.6875;
+         denomDef = A.off = 0.6 -> adjDef = 0.5*(0.45/0.6) = 0.375.
+      Commit: A {0.66, 0.36}, B {0.6875, 0.375}.
+
+    HCA residual (field 2prim), only A contributes:
+      imbalance_off = (100 - 50)/150 = 1/3;  imbalance_def = (100 - 50)/150 = 1/3.
+      opp strengths for A off committed adj B: avg_opp_def = B.def = 0.375,
+        avg_opp_off = B.off = 0.6875.
+      pred_off = adj.off * (avg_opp_def / league_def)   # asymmetric (NOT inverted)
+               = 0.66 * (0.375/0.45) = 0.66 * (5/6) = 0.55.
+      pred_def = adj.def * (league_off / avg_opp_off)   # asymmetric (INVERTED ratio)
+               = 0.36 * (0.55/0.6875) = 0.36 * 0.8 = 0.288.
+      Single contributing team -> hca = contrib = (raw - pred)/imbalance:
+      hca_off = (0.6 - 0.55)/(1/3) = 0.15;  hca_def = (0.4 - 0.288)/(1/3) = 0.336.
+
+    adj_hca signs (off + hca_off, def - hca_def):
+      A.off = 0.66 + 0.15 = 0.81;  A.def = 0.36 - 0.336 = 0.024.
+      B.off = 0.6875 + 0.15 = 0.8375;  B.def = 0.375 - 0.336 = 0.039.
+    """
+
+    def gm(oppo: str, loc: str, poss: int) -> dict:
+        return {
+            "oppo_name": oppo,
+            "location_type": loc,
+            "off_2prim_made": 6,
+            "off_2prim_attempts": 10,
+            "def_2prim_made": 4,
+            "def_2prim_attempts": 10,
+            "off_poss": poss,
+            "def_poss": poss,
+        }
+
+    def gm_b(poss: int) -> dict:
+        return {
+            "oppo_name": "A",
+            "location_type": "Neutral",
+            "off_2prim_made": 5,
+            "off_2prim_attempts": 10,
+            "def_2prim_made": 5,
+            "def_2prim_attempts": 10,
+            "off_poss": poss,
+            "def_poss": poss,
+        }
+
+    teams = [
+        {"team_name": "A", "conf": "X", "opponents": [gm("B", "Home", 100), gm("B", "Away", 50)]},
+        {"team_name": "B", "conf": "X", "opponents": [gm_b(75), gm_b(75)]},
+    ]
+    # max_iterations=1 so the whole state is the hand-derived single iteration.
+    result = build_strength_adjusted_stats(teams, max_iterations=1)
+    by = {t.team_name: t for t in result.teams}
+
+    assert result.averages["2prim"].league_off == pytest.approx(0.55, abs=ABS)
+    assert result.averages["2prim"].league_def == pytest.approx(0.45, abs=ABS)
+
+    # NONZERO hca (2prim and its mirror efg); 3p/2pmid stay 0.
+    for field in ("2prim", "efg"):
+        assert result.averages[field].hca_off == pytest.approx(0.15, abs=ABS)
+        assert result.averages[field].hca_def == pytest.approx(0.336, abs=ABS)
+    for field in ("3p", "2pmid"):
+        assert result.averages[field].hca_off == pytest.approx(0.0, abs=ABS)
+        assert result.averages[field].hca_def == pytest.approx(0.0, abs=ABS)
+
+    # per-game adj (single iteration)
+    assert by["A"].adj["2prim"] == pytest.approx({"off": 0.66, "def": 0.36}, abs=ABS)
+    assert by["B"].adj["2prim"] == pytest.approx({"off": 0.6875, "def": 0.375}, abs=ABS)
+
+    # adj_hca pins the signs: off + hca_off, def - hca_def
+    assert by["A"].adj_hca["2prim"] == pytest.approx({"off": 0.81, "def": 0.024}, abs=ABS)
+    assert by["B"].adj_hca["2prim"] == pytest.approx({"off": 0.8375, "def": 0.039}, abs=ABS)
+    # efg mirrors 2prim through the sign math too
+    assert by["A"].adj_hca["efg"] == pytest.approx({"off": 0.81, "def": 0.024}, abs=ABS)
+
+
+# --------------------------------------------------------------------------- #
+# cross-guard edge: off-only data (league_def == 0) leaves offense at raw
+# --------------------------------------------------------------------------- #
+def test_off_only_cross_guard_leaves_offense_raw():
+    """Off-only data (league_def == 0, league_off > 0) -> OFF adjustment does
+    NOT fire; offense stays raw (``ts:385`` cross-guard `league_def > 0`).
+
+    Fixture: both teams have only off_2prim shots, no def_ data anywhere, so
+    league_def == 0 while league_off == 0.5. Under the faithful OFF branch the
+    `league_def > 0` guard is False -> adj.off == raw.off.
+
+    PROVABLE-REDUNDANCY note (why this locks the edge but cannot isolate the
+    guard): with no def data anywhere, every opponent's def adjustment is 0, so
+    `denom_off == 0` too and the OFF branch is *also* blocked by `denom_off > 0`.
+    In general `denom_off > 0` implies `league_def > 0` (a nonzero opp def
+    requires a def game, which contributes to league_def), and `raw_off_g is not
+    None` implies `league_off > 0`. So the faithful guard (`league_def > 0`) and
+    the "intuitive" mis-guard (`league_off > 0`) reduce to the SAME condition on
+    every valid input -- they are output-identical, i.e. the cross-guard is a
+    provably redundant (harmless) extra condition, and NO fixture can make the
+    two versions diverge. This test therefore pins the observable off-only edge
+    behavior rather than isolating the guard.
+    """
+
+    def og(oppo: str, made: int) -> dict:
+        return {"oppo_name": oppo, "location_type": "Neutral", "off_2prim_made": made, "off_2prim_attempts": 10}
+
+    teams = [
+        {"team_name": "A", "conf": "X", "opponents": [og("B", 6), og("B", 6)]},
+        {"team_name": "B", "conf": "X", "opponents": [og("A", 4), og("A", 4)]},
+    ]
+    league = compute_league_averages_from_per_game(teams)
+    assert league["2prim"]["league_off"] == pytest.approx(0.5, abs=ABS)
+    assert league["2prim"]["league_def"] == 0.0  # zero def attempts league-wide
+
+    result = build_strength_adjusted_stats(teams)
+    by = {t.team_name: t for t in result.teams}
+    # raw off is the plain per-game rate; def has no data -> 0
+    assert by["A"].raw["2prim"] == pytest.approx({"off": 0.6, "def": 0.0}, abs=ABS)
+    assert by["B"].raw["2prim"] == pytest.approx({"off": 0.4, "def": 0.0}, abs=ABS)
+    # OFF stays raw (cross-guard + denom guard both block); def stays 0
+    assert by["A"].adj["2prim"] == pytest.approx(by["A"].raw["2prim"], abs=ABS)
+    assert by["B"].adj["2prim"] == pytest.approx(by["B"].raw["2prim"], abs=ABS)
+    assert result.averages["2prim"].hca_off == 0.0
+    assert result.averages["2prim"].hca_def == 0.0
