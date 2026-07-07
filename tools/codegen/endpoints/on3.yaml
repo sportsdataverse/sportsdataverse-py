@@ -1,0 +1,95 @@
+api: on3
+host: https://www.on3.com
+name_pattern: on3_{short}
+module: on3
+parser_module: cfb.on3_parsers
+getter_module: sportsdataverse.cfb.on3_runtime
+qualifier: ''
+passthrough_query: true
+runtime_imports:
+- _get
+endpoints:
+- short: player_rankings
+  returns_schema: native/on3/on3_player_rankings
+  summary: "On3 player rankings for a recruiting class year — On3's own ratings (rankingType=player)."
+  path: /rivals/rankings/player/{sport_slug}/{year}.json
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_slug
+    type: str
+    required: false
+    default: football
+    description: "On3 sport slug (e.g. football, basketball)."
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  parser: parse_on3_rankings
+  example_args:
+    year: 2026
+    sport_slug: football
+- short: industry_player_rankings
+  returns_schema: native/on3/on3_player_rankings
+  summary: "On3 Industry Comparison player rankings (consensus across On3/Rivals/247/ESPN; rankingType=industry-player)."
+  path: /rivals/rankings/industry-player/{sport_slug}/{year}.json
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_slug
+    type: str
+    required: false
+    default: football
+    description: "On3 sport slug (e.g. football, basketball)."
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  parser: parse_on3_rankings
+  example_args:
+    year: 2026
+    sport_slug: football
+- short: team_rankings
+  returns_schema: native/on3/on3_team_rankings
+  summary: "On3 team recruiting-class rankings for a class year (rankingType=team)."
+  path: /rivals/rankings/team/{sport_slug}/{year}.json
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_slug
+    type: str
+    required: false
+    default: football
+    description: "On3 sport slug (e.g. football, basketball)."
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  parser: parse_on3_team_rankings
+  example_args:
+    year: 2026
+    sport_slug: football
+- short: industry_team_rankings
+  returns_schema: native/on3/on3_team_rankings
+  summary: "On3 Industry Comparison team recruiting-class rankings (rankingType=industry-team)."
+  path: /rivals/rankings/industry-team/{sport_slug}/{year}.json
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_slug
+    type: str
+    required: false
+    default: football
+    description: "On3 sport slug (e.g. football, basketball)."
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  parser: parse_on3_team_rankings
+  example_args:
+    year: 2026
+    sport_slug: football

@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # COLLEGE_SOFTBALL — ESPN core API (v2)
 
-`sportsdataverse.college_softball` — 83 endpoints.
+`sportsdataverse.college_softball` — 86 endpoints.
 
 ## `espn_college_softball_league_root`
 
@@ -2167,6 +2167,81 @@ ESPN endpoint.
 
 ```python
 espn_college_softball_season_recruits(season=2024)
+```
+
+_Last validated n/a._
+
+## `espn_college_softball_recruiting_years`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_college_softball_recruiting_years()
+```
+
+_Last validated n/a._
+
+## `espn_college_softball_recruiting_players`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/{year}/athletes`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/2026/athletes](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/2026/athletes)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_college_softball_recruiting_players(year=2026)
+```
+
+_Last validated n/a._
+
+## `espn_college_softball_recruiting_rankings`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/{year}/rankings`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/2026/rankings](https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/2026/rankings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_college_softball_recruiting_rankings(year=2026)
 ```
 
 _Last validated n/a._

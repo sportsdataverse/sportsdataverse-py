@@ -1041,6 +1041,35 @@ endpoints:
   parser: parse_items
   example_args:
     season: 2024
+- short: recruiting_years
+  scope: ncaa
+  path: /{sport}/leagues/{league}/recruiting
+  parser: parse_items
+- short: recruiting_athletes
+  scope: ncaa
+  path: /{sport}/leagues/{league}/recruiting/{year}/athletes
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  extra_params:
+  - name: limit
+    query_key: limit
+    type: int
+    default: 100
+  parser: parse_items
+  example_args:
+    year: 2026
+- short: recruiting_rankings
+  scope: ncaa
+  path: /{sport}/leagues/{league}/recruiting/{year}/rankings
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  parser: parse_items
+  example_args:
+    year: 2026
 - short: season_week_rankings
   scope: ncaa
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/rankings
