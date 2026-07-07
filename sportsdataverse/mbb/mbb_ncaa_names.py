@@ -98,9 +98,13 @@ Copyright Alex-At-Home / org.piggottfamily). This is a source-language
 translation (Scala -> Python), not a copy; upstream file:
 ``src/main/scala/org/piggottfamily/cbb_explorer/utils/parsers/ncaa/LineupErrorAnalysisUtils.scala``
 (name-resolution half only; the ``ExtractorUtils.name_is_initials`` helper
-consumed by :func:`convert_from_initials` is also ported here as a private
-function, since this task's file scope does not include modifying
-``mbb_ncaa_stints.py``). See ``THIRD_PARTY_NOTICES.md`` for the full notice.
+consumed by :func:`convert_from_initials` is also ported here, since this
+task's file scope did not include modifying ``mbb_ncaa_stints.py``. **Task
+5e.1 promoted it from private (``_name_is_initials``) to public
+(:func:`name_is_initials`)** -- ``mbb_ncaa_roster_parser.py``'s
+``parse_roster`` needs the same initials-shorthand check to reject
+initials-only roster rows, making this module a second consumer). See
+``THIRD_PARTY_NOTICES.md`` for the full notice.
 
 Landmine index (reachable error sites, numbered across the module):
     1. ``_truncate_code_1`` / ``_truncate_code_2`` fall back to the input
@@ -151,6 +155,7 @@ __all__ = [
     "TidyPlayerContext",
     "build_tidy_player_context",
     "tidy_player",
+    "name_is_initials",
     "convert_from_initials",
     "convert_from_digits",
     "NoSurnameMatch",
@@ -199,12 +204,15 @@ def _truncate_code_2(code: str) -> str:
     return code if m is None else m.group(1) + m.group(2)
 
 
-def _name_is_initials(name: str) -> Optional[tuple[str, str]]:
+def name_is_initials(name: str) -> Optional[tuple[str, str]]:
     """Detect a 2-initial name shorthand, e.g. ``"A B"`` or ``"B, A"``
     (``ExtractorUtils.name_is_initials``, ``ExtractorUtils.scala:94-102``).
     Ported here (rather than into ``mbb_ncaa_stints.py``) since
-    :func:`convert_from_initials` is this task's only consumer and this
-    task's file scope is limited to creating this module.
+    :func:`convert_from_initials` was this module's original consumer;
+    promoted from private to public in Task 5e.1 for
+    ``mbb_ncaa_roster_parser.py``'s ``parse_roster`` (a second consumer,
+    which only needs ``.nonEmpty`` -- whether a match exists at all -- to
+    reject initials-only roster rows).
 
     Args:
         name: The candidate initials string.
@@ -310,7 +318,7 @@ def convert_from_initials(name: str, codes_to_names: dict[str, str]) -> Optional
             from sportsdataverse.mbb.mbb_ncaa_names import convert_from_initials
             convert_from_initials("A B", {"AoBo": "name1"})  # "name1"
     """
-    initials = _name_is_initials(name)
+    initials = name_is_initials(name)
     if initials is None:
         return None
     p1, p2 = initials

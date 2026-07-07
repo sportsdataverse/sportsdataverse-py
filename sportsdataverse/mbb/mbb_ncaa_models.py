@@ -149,6 +149,7 @@ __all__ = [
     "poss_calc_fragment_sum",
     "score_to_tuple",
     "PlayerEvent",
+    "RosterEntry",
 ]
 
 
@@ -798,3 +799,51 @@ class PlayerEvent:
     team_stats: LineupEventStats
     opponent_stats: LineupEventStats
     player_count_error: Optional[int] = None
+
+
+@dataclass
+class RosterEntry:
+    """An entry in an NCAA team roster (``RosterEntry``, ``models/ncaa
+    /RosterEntry.scala:11-21``). **Scope addition, Task 5e.1** -- the first
+    model consumed by the HTML-parser layer (``mbb_ncaa_roster_parser.py``).
+    Appended here (not inserted among the 5a-reviewed classes above) to keep
+    this an additive-only change, matching :class:`PlayerEvent`'s precedent.
+
+    The trailing ``role`` field (present in the Scala case class shape but
+    never populated by ``RosterParser.parse_roster`` -- every construction
+    site there, both the real-player and ``__coach__`` branches, passes the
+    literal ``None`` for it) is presumably set by a later phase's box-score
+    parser (``BoxscoreParser``, out of this task's scope); it is carried
+    here for shape fidelity even though Task 5e.1's only producer never
+    populates it.
+
+    Args:
+        player_code_id: The player's code + full identity (the roster-row
+            equivalent of a box-score/PbP player reference).
+        number: The jersey number, as printed (may be non-numeric text).
+        pos: The listed position.
+        height: The listed height, in ``"FT-IN"`` text form (e.g. ``"6-3"``).
+        height_in: :attr:`height` parsed to total inches, if it matched
+            :data:`height_regex`.
+        year_class: The listed academic year (``"Fr"``/``"So"``/``"Jr"``/
+            ``"Sr"``/etc.).
+        gp: Games played.
+        origin: The player's hometown/prior-school text, if the source
+            table has that column (v1 rosters only).
+        role: Reserved for a later phase; always ``None`` from
+            ``parse_roster`` (see above).
+    """
+
+    player_code_id: PlayerCodeId
+    number: str
+    pos: str
+    height: str
+    height_in: Optional[int]
+    year_class: str
+    gp: int
+    origin: Optional[str]
+    role: Optional[str]
+
+    #: Feet-hyphen-inches height matcher (``RosterEntry.height_regex``,
+    #: ``models/ncaa/RosterEntry.scala:24``).
+    height_regex: ClassVar[re.Pattern[str]] = re.compile(r"([0-9]+)[-]([0-9]+)")
