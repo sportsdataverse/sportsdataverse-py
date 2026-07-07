@@ -20,10 +20,17 @@ coinflip, so results are reproducible.
 The one piece of nflfastR-specific domain knowledge preserved verbatim here is
 the 2020 playoff-format cutover: seasons 1999-2019 default to
 ``playoff_seeds=6``, seasons >= 2020 default to ``playoff_seeds=7``.
+
+.. deprecated::
+    :func:`sportsdataverse.nfl.nfl_season_standings` (a faithful polars port of
+    the full ``nflseedR`` engine -- common games, strength of victory, strength
+    of schedule, draft order) supersedes this reduced ladder. ``calculate_nfl_standings``
+    remains for back-compat and emits a ``DeprecationWarning``.
 """
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING, Any, Literal, overload
 
 import polars as pl
@@ -313,7 +320,21 @@ def calculate_nfl_standings(
     .. _nflfastR: https://www.nflfastr.com
     .. _nflseedR: https://github.com/nflverse/nflseedR
     .. _nflreadpy: https://github.com/nflverse/nflreadpy
+
+    .. deprecated::
+        Prefer :func:`sportsdataverse.nfl.nfl_season_standings`, a faithful
+        polars port of the full ``nflseedR`` tiebreaker engine (common games,
+        strength of victory, strength of schedule, draft order) that this
+        bounded four-tier ladder only approximates. This function remains for
+        back-compat and emits a ``DeprecationWarning``.
     """
+    warnings.warn(
+        "calculate_nfl_standings is a reduced (four-tier) tiebreaker ladder; "
+        "prefer nfl_season_standings for the faithful full-nflseedR engine "
+        "(SOV/SOS/common-games/draft-order).",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     if tiebreaker_depth not in (1, 2, 3):
         raise ValueError(f"Invalid tiebreaker_depth {tiebreaker_depth!r}; expected 1, 2, or 3.")
 
