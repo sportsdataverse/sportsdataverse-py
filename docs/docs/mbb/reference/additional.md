@@ -445,6 +445,38 @@ season_pd = espn_mbb_schedule(dates=2024, return_as_pandas=True)
 season_pd.head()
 ```
 
+## Dataset loaders
+
+### `load_proxybonanza_pool(api_key: 'str', pkg: 'str', *, transport: 'Optional[PoolTransport]' = None) -> "'list[str]'"` {#load_proxybonanza_pool}
+
+Resolve a ProxyBonanza package into a list of `http://login:pass@ip:port` URLs.
+
+Graduated from `dev/ncaa_proxy.py`'s `load_proxy_pool` -- same
+endpoint shape, minus the `.Renviron` reader (creds are now explicit
+params, per the creds-hygiene directive).
+
+Endpoint: `GET https://api.proxybonanza.com/v1/userpackages/{pkg}.json`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `api_key` | `str` |  | ProxyBonanza API key. |
+| `pkg` | `str` |  | ProxyBonanza package id. |
+| `transport` | `Optional[PoolTransport]` | `None` | Injectable `(url, headers) -> (status, text)` callable for offline testing. Defaults to a curl_cffi GET. |
+
+**Returns**
+
+One `http://login:password@ip:port` URL per IP in the package.
+
+**Example**
+
+```python
+def fake(url, headers):
+    return 200, '{"data": {"login": "u", "password": "p", "ippacks": []}}'
+pool = load_proxybonanza_pool("key", "pkg", transport=fake)
+```
+
 ## Utilities & helpers
 
 ### `most_recent_mbb_season()` {#most_recent_mbb_season}
@@ -864,6 +896,145 @@ The set of players on the floor, as an opaque id string
 ### `LocationType(*values)` {#LocationType}
 
 Game location (`Game.LocationType`, `Game.scala:36-38`).
+
+### `NcaaFetchConfig(cache_dir: 'Optional[Path]' = None, proxy_url: 'Optional[str]' = None, proxybonanza_key: 'Optional[str]' = None, proxybonanza_pkg: 'Optional[str]' = None, timeout: 'int' = 45, impersonate: 'str' = 'chrome', max_retries: 'int' = 2, transport: 'Optional[FetchTransport]' = None) -> None` {#NcaaFetchConfig}
+
+Runtime configuration for the stats.ncaa.org fetch layer.
+
+Exactly one proxy source should be configured: either a single explicit
+`proxy_url` (`http://login:password@ip:port`), or a ProxyBonanza pool
+via `proxybonanza_key` + `proxybonanza_pkg` (resolved lazily by
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `cache_dir` | `Optional[Path]` | `None` |  |
+| `proxy_url` | `Optional[str]` | `None` |  |
+| `proxybonanza_key` | `Optional[str]` | `None` |  |
+| `proxybonanza_pkg` | `Optional[str]` | `None` |  |
+| `timeout` | `int` | `45` |  |
+| `impersonate` | `str` | `'chrome'` |  |
+| `max_retries` | `int` | `2` |  |
+| `transport` | `Optional[FetchTransport]` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import get_config
+cfg = get_config()
+cfg.cache_dir     # ~/.sportsdataverse/ncaa_cache
+cfg.impersonate   # "chrome"
+
+# Configure a single proxy explicitly (rarely needed -- prefer ``update_config`` or the env vars)
+
+from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetchConfig
+cfg = NcaaFetchConfig(proxy_url="http://user:pass@1.2.3.4:8080")
+```
+
+### `NcaaFetcher(config: 'Optional[NcaaFetchConfig]' = None, *, proxy_pool: "Optional['list[str]']" = None) -> 'None'` {#NcaaFetcher}
+
+Cache-first stats.ncaa.org fetcher, proxy-bound per the binding directive.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `config` | `Optional[NcaaFetchConfig]` | `None` |  |
+| `proxy_pool` | `Optional['list[str]']` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher, update_config
+update_config(proxy_url="http://user:pass@1.2.3.4:8080")
+fetcher = NcaaFetcher()
+html = fetcher.fetch_game_pbp("4690813")   # cached after this call
+html2 = fetcher.fetch_game_pbp("4690813")  # cache hit, no request
+
+# Offline (injected transport + explicit pool, no network/env needed)
+
+def fake(url, proxies, headers):
+    return 200, "<html>...</html>"
+from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetchConfig
+cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=fake)
+fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"])
+```
+
+**Methods**
+
+#### `NcaaFetcher.fetch_game_box(contest_id: 'object', period: 'int' = 1, *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a game's box-score page for *period* (1-indexed).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `contest_id` | `object` |  |  |
+| `period` | `int` | `1` |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_game_pbp(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a game's play-by-play page.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `contest_id` | `object` |  |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_html(path: 'str', *, force: 'bool' = False) -> 'str'`
+
+Fetch *path* (bare path or full stats.ncaa.org URL), cache-first.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  | e.g. `"contests/4690813/play_by_play"` or a full `https://stats.ncaa.org/...` URL. |
+| `force` | `bool` | `False` | Bypass the cache and re-fetch, overwriting the cache file. |
+
+**Returns**
+
+The response HTML, decoded as UTF-8.
+
+#### `NcaaFetcher.fetch_team_roster(team_id: 'object', year_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a team's roster page for *year_id*.
+
+ponytail: URL shape by analogy to the confirmed team-id scheme, not
+independently live-confirmed -- see module docstring; fix in Task
+5f.2 if the real path differs.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `object` |  |  |
+| `year_id` | `object` |  |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
+
+#### `NcaaFetcher.fetch_team_schedule(team_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+
+Fetch a team's game-by-game schedule page.
+
+Modern shape (`teams/{id}/game_by_game`) is confirmed by
+`dev/phase5-ncaa-proxy-proof.md`; the legacy shape is by analogy
+(see `fetch_team_roster`'s note).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `object` |  |  |
+| `legacy` | `bool` | `False` |  |
+| `force` | `bool` | `False` |  |
 
 ### `NoSurnameMatch(box_name: 'str', exact_first_name: 'Optional[str]', near_first_name: 'Optional[str]', err: 'str') -> None` {#NoSurnameMatch}
 
@@ -2677,6 +2848,33 @@ weak_prior = build_weak_prior_from_rapm([5.0, 4.5], "off")
 print(weak_prior[0])  # {"off_adj_ppp": 5.0}
 ```
 
+### `cached_path(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'Path'` {#cached_path}
+
+Return the on-disk cache file path for *path*, without touching it.
+
+Layout: `{cache_dir}/stats.ncaa.org/{dirs...}/{last}.html`, where the
+URL path's `/`-separated segments become nested directories and a
+query string is folded into the final filename as {safe_query}.html`
+(unsafe characters replaced with `). Two different query strings for
+the same base path therefore always produce two distinct cache files.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  |  |
+| `cache_dir` | `Optional[Path]` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import cached_path
+cached_path("contests/4690813/play_by_play")
+# .../stats.ncaa.org/contests/4690813/play_by_play.html
+cached_path("contests/4690813/box_score?period_no=2")
+# .../stats.ncaa.org/contests/4690813/box_score__period_no=2.html
+```
+
 ### `calc_collinearity_diag(weight_matrix: 'NDArray[np.float64]', ctx: 'RapmPlayerContext') -> 'RapmPreProcDiagnostics'` {#calc_collinearity_diag}
 
 Multi-collinearity diagnostic between the players in an off/def design matrix.
@@ -4466,6 +4664,18 @@ with open("tests/fixtures/ncaa/test_lineup.html", encoding="utf-8") as f:
 result = get_box_lineup("test_p1.html", html, TeamId("TeamA"), format_version=0)
 ```
 
+### `get_config() -> 'NcaaFetchConfig'` {#get_config}
+
+Return the live `NcaaFetchConfig` singleton.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import get_config
+cfg = get_config()
+print(cfg.cache_dir, cfg.timeout)
+```
+
 ### `get_neutral_games(filename: 'str', in_html: 'str', format_version: 'int') -> 'Union[tuple[TeamId, set[str]], list[ParseError]]'` {#get_neutral_games}
 
 Extracts the set of neutral/away-marked game dates from a saved NCAA
@@ -4866,6 +5076,17 @@ apparent Scala oversight).
 from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import inject_validated_players
 inject_validated_players(["Player One"], box_lineup, ([], []))
 ```
+
+### `is_cached(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'bool'` {#is_cached}
+
+Return whether *path* already has a cache file on disk.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` |  |  |
+| `cache_dir` | `Optional[Path]` | `None` |  |
 
 ### `is_end_of_game_fouling_vs_fastbreak(curr_clump: 'ConcurrentClump', event_parser: 'PossessionEvent') -> 'bool'` {#is_end_of_game_fouling_vs_fastbreak}
 
@@ -5704,6 +5925,18 @@ reorder_and_reverse(events)
 # [OtherTeamEvent(...), SubInEvent(...)]
 ```
 
+### `reset_config() -> 'NcaaFetchConfig'` {#reset_config}
+
+Reset the active config to its env-var-derived defaults.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import update_config, reset_config
+update_config(timeout=5)
+reset_config()
+```
+
 ### `right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'` {#right_kind_of_shot}
 
 Whether `pbp_event`'s shot type is compatible with `shot`'s
@@ -6180,6 +6413,21 @@ oriented as if shooting towards the left goal (`ShotEventParser
 ```python
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import transform_shot_location
 transform_shot_location(310.2, 235, False, False, True)
+```
+
+### `update_config(**kwargs: 'object') -> 'NcaaFetchConfig'` {#update_config}
+
+Update the active config in place.
+
+**Returns**
+
+The (mutated) global config object.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_fetch import update_config
+update_config(proxy_url="http://user:pass@1.2.3.4:8080")
 ```
 
 ### `using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'` {#using_roster_pos}

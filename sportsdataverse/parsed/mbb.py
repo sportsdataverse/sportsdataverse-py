@@ -159,6 +159,8 @@ from sportsdataverse.mbb import LineupEvent as LineupEvent  # noqa: F401
 from sportsdataverse.mbb import LineupEventStats as LineupEventStats  # noqa: F401
 from sportsdataverse.mbb import LineupId as LineupId  # noqa: F401
 from sportsdataverse.mbb import LocationType as LocationType  # noqa: F401
+from sportsdataverse.mbb import NcaaFetchConfig as NcaaFetchConfig  # noqa: F401
+from sportsdataverse.mbb import NcaaFetcher as NcaaFetcher  # noqa: F401
 from sportsdataverse.mbb import NoSurnameMatch as NoSurnameMatch  # noqa: F401
 from sportsdataverse.mbb import OtherOpponentEvent as OtherOpponentEvent  # noqa: F401
 from sportsdataverse.mbb import OtherTeamEvent as OtherTeamEvent  # noqa: F401
@@ -230,6 +232,7 @@ from sportsdataverse.mbb import build_productivity as build_productivity  # noqa
 from sportsdataverse.mbb import build_sub_error as build_sub_error  # noqa: F401
 from sportsdataverse.mbb import build_tidy_player_context as build_tidy_player_context  # noqa: F401
 from sportsdataverse.mbb import build_weak_prior_from_rapm as build_weak_prior_from_rapm  # noqa: F401
+from sportsdataverse.mbb import cached_path as cached_path  # noqa: F401
 from sportsdataverse.mbb import calc_collinearity_diag as calc_collinearity_diag  # noqa: F401
 from sportsdataverse.mbb import calc_def_player_luck_adj as calc_def_player_luck_adj  # noqa: F401
 from sportsdataverse.mbb import calc_def_team_luck_adj as calc_def_team_luck_adj  # noqa: F401
@@ -283,6 +286,7 @@ from sportsdataverse.mbb import flatten_json_iterative as flatten_json_iterative
 from sportsdataverse.mbb import fuzzy_box_match as fuzzy_box_match  # noqa: F401
 from sportsdataverse.mbb import get_ascending_time as get_ascending_time  # noqa: F401
 from sportsdataverse.mbb import get_box_lineup as get_box_lineup  # noqa: F401
+from sportsdataverse.mbb import get_config as get_config  # noqa: F401
 from sportsdataverse.mbb import get_neutral_games as get_neutral_games  # noqa: F401
 from sportsdataverse.mbb import get_sorted_pbp_events as get_sorted_pbp_events  # noqa: F401
 from sportsdataverse.mbb import get_stats_diff as get_stats_diff  # noqa: F401
@@ -302,6 +306,7 @@ from sportsdataverse.mbb import inject_luck as inject_luck  # noqa: F401
 from sportsdataverse.mbb import inject_rapm_into_players as inject_rapm_into_players  # noqa: F401
 from sportsdataverse.mbb import inject_starting_lineup_into_box as inject_starting_lineup_into_box  # noqa: F401
 from sportsdataverse.mbb import inject_validated_players as inject_validated_players  # noqa: F401
+from sportsdataverse.mbb import is_cached as is_cached  # noqa: F401
 from sportsdataverse.mbb import is_end_of_game_fouling_vs_fastbreak as is_end_of_game_fouling_vs_fastbreak  # noqa: F401
 from sportsdataverse.mbb import is_gen2 as is_gen2  # noqa: F401
 from sportsdataverse.mbb import is_scramble as is_scramble  # noqa: F401
@@ -324,6 +329,7 @@ from sportsdataverse.mbb import load_mbb_shots as load_mbb_shots  # noqa: F401
 from sportsdataverse.mbb import load_mbb_standings as load_mbb_standings  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_boxscore as load_mbb_team_boxscore  # noqa: F401
 from sportsdataverse.mbb import load_mbb_team_season_stats as load_mbb_team_season_stats  # noqa: F401
+from sportsdataverse.mbb import load_proxybonanza_pool as load_proxybonanza_pool  # noqa: F401
 from sportsdataverse.mbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
@@ -393,6 +399,7 @@ from sportsdataverse.mbb import regress_shot_quality as regress_shot_quality  # 
 from sportsdataverse.mbb import remove_diacritics as remove_diacritics  # noqa: F401
 from sportsdataverse.mbb import remove_html_encoding as remove_html_encoding  # noqa: F401
 from sportsdataverse.mbb import reorder_and_reverse as reorder_and_reverse  # noqa: F401
+from sportsdataverse.mbb import reset_config as reset_config  # noqa: F401
 from sportsdataverse.mbb import right_kind_of_shot as right_kind_of_shot  # noqa: F401
 from sportsdataverse.mbb import score_to_tuple as score_to_tuple  # noqa: F401
 from sportsdataverse.mbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
@@ -410,6 +417,7 @@ from sportsdataverse.mbb import test_positional_aware_filter as test_positional_
 from sportsdataverse.mbb import tidy_player as tidy_player  # noqa: F401
 from sportsdataverse.mbb import transform_shot_location as transform_shot_location  # noqa: F401
 from sportsdataverse.mbb import underscore as underscore  # noqa: F401
+from sportsdataverse.mbb import update_config as update_config  # noqa: F401
 from sportsdataverse.mbb import using_roster_pos as using_roster_pos  # noqa: F401
 from sportsdataverse.mbb import validate_box_score as validate_box_score  # noqa: F401
 from sportsdataverse.mbb import validate_lineup as validate_lineup  # noqa: F401
@@ -432,6 +440,8 @@ __all__ = [
     "LineupEventStats",
     "LineupId",
     "LocationType",
+    "NcaaFetchConfig",
+    "NcaaFetcher",
     "NoSurnameMatch",
     "OtherOpponentEvent",
     "OtherTeamEvent",
@@ -503,6 +513,7 @@ __all__ = [
     "build_sub_error",
     "build_tidy_player_context",
     "build_weak_prior_from_rapm",
+    "cached_path",
     "calc_collinearity_diag",
     "calc_def_player_luck_adj",
     "calc_def_team_luck_adj",
@@ -676,6 +687,7 @@ __all__ = [
     "fuzzy_box_match",
     "get_ascending_time",
     "get_box_lineup",
+    "get_config",
     "get_neutral_games",
     "get_sorted_pbp_events",
     "get_stats_diff",
@@ -695,6 +707,7 @@ __all__ = [
     "inject_rapm_into_players",
     "inject_starting_lineup_into_box",
     "inject_validated_players",
+    "is_cached",
     "is_end_of_game_fouling_vs_fastbreak",
     "is_gen2",
     "is_scramble",
@@ -717,6 +730,7 @@ __all__ = [
     "load_mbb_standings",
     "load_mbb_team_boxscore",
     "load_mbb_team_season_stats",
+    "load_proxybonanza_pool",
     "matching_player",
     "mbb_pbp_disk",
     "misspellings",
@@ -786,6 +800,7 @@ __all__ = [
     "remove_diacritics",
     "remove_html_encoding",
     "reorder_and_reverse",
+    "reset_config",
     "right_kind_of_shot",
     "score_to_tuple",
     "scoreboard_event_parsing",
@@ -803,6 +818,7 @@ __all__ = [
     "tidy_player",
     "transform_shot_location",
     "underscore",
+    "update_config",
     "using_roster_pos",
     "validate_box_score",
     "validate_lineup",
