@@ -9,6 +9,9 @@ Ported functions/types (Scala anchors in each docstring):
 
 * :func:`remove_diacritics` -- NFD-normalize + strip combining marks
   (``ExtractorUtils.scala:38-43``).
+* :func:`remove_html_encoding` -- undo ``&#39;``/``&quot;``/``&amp;`` literal
+  escapes (``ExtractorUtils.scala:25-33``), added in Task 5e.5 for
+  ``mbb_ncaa_shot_parser.py``'s SVG-title name extraction.
 * :func:`build_player_code` -- turn a box-score / play-by-play player name
   into a short unique-within-team code (``ExtractorUtils.scala:290-391``).
 * :func:`name_in_v0_box_format` -- flip a v1-box-format name to v0-box format
@@ -181,6 +184,7 @@ __all__ = [
     "PLAYER_CODE_MAX_LENGTH",
     "PLAYER_CODE_MAX_FRAGMENT_LENGTH",
     "remove_diacritics",
+    "remove_html_encoding",
     "build_player_code",
     "name_in_v0_box_format",
     "parse_team_name",
@@ -238,6 +242,40 @@ def remove_diacritics(fragment: str) -> str:
             print(remove_diacritics("Dorka Juhász"))  # "Dorka Juhasz"
     """
     return "".join(ch for ch in unicodedata.normalize("NFD", fragment) if not unicodedata.combining(ch))
+
+
+def remove_html_encoding(html_str: str) -> str:
+    """Undo a handful of literal HTML entity escapes (``ExtractorUtils
+    .remove_html_encoding``, ``ExtractorUtils.scala:25-33``). **Scope
+    addition, Task 5e.5** -- the first consumer is
+    ``mbb_ncaa_shot_parser.parse_shot_html`` (the ``player`` name / shooting
+    team name extracted from an SVG shot's ``<title>`` text).
+
+    In practice bs4/lxml already decode standard HTML entities (``&#39;``,
+    ``&quot;``, ``&amp;``) while parsing text nodes, so this is usually a
+    no-op by the time it runs on already-parsed text -- ported anyway for
+    exact behavioral parity with any double-escaped input the upstream
+    Scala guards against (JSoup has the same auto-decoding behavior, so the
+    Scala original is equally a defensive no-op in the common case).
+
+    Args:
+        html_str: Any string, typically already-parsed element text.
+
+    Returns:
+        ``html_str`` with ``&#39;``/``&quot;``/``&amp;`` replaced by their
+        literal characters, only if ``"&"`` appears at all (short-circuit
+        matching the Scala's ``if (html_str.indexOf("&") >= 0)`` guard).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_stints import remove_html_encoding
+            remove_html_encoding("De&#39;Shayne")  # "De'Shayne"
+            remove_html_encoding("Plain Name")  # "Plain Name" (unchanged)
+    """
+    if "&" in html_str:
+        return html_str.replace("&#39;", "'").replace("&quot;", '"').replace("&amp;", "&")
+    return html_str
 
 
 def _first_last(fragment: str) -> str:
