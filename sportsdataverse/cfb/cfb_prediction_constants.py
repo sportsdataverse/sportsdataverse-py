@@ -15,7 +15,15 @@ class RatingsConfig:
     """Tunable knobs for the CFB ratings engine (ridge regression + competitiveness filter).
 
     Args:
-        ridge_lambda: L2 regularization strength for the ridge-regression rating fit.
+        ridge_lambda: L2 regularization strength for the ridge-regression rating
+            fit. ``cfb_adjusted_epa._fit_opponent_ridge`` scales the sklearn
+            penalty as ``alpha = ridge_lambda * n_plays``, so ``ridge_lambda`` is
+            a per-observation penalty (scale-invariant in ``n``). The default
+            ``0.05`` is validated on a full FBS season (139k plays): it puts
+            ``adj_net`` at Spearman 0.928 vs ESPN FPI and ``fei_net`` at 0.967 vs
+            Fremeau FEI. (``cfb_adjusted_epa``'s own ``_RIDGE_LAMBDA=325`` default
+            is calibrated for far smaller per-call play counts and would crush
+            every team effect to ~0 at season scale -> ~0.76.)
         min_competitive_wp: Lower win-probability bound a game must clear to count as
             "competitive" (garbage-time / blowout filtering).
         max_competitive_wp: Upper win-probability bound a game must clear to count as
@@ -23,7 +31,7 @@ class RatingsConfig:
         division: NCAA division slug the ratings are scoped to (e.g. ``"fbs"``).
     """
 
-    ridge_lambda: float = 325.0
+    ridge_lambda: float = 0.05
     min_competitive_wp: float = 0.1
     max_competitive_wp: float = 0.9
     division: str = "fbs"
