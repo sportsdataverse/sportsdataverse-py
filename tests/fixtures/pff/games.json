@@ -1,0 +1,127 @@
+{
+  "games": [
+    {
+      "away_franchise_id": 18,
+      "away_team": {
+        "abbreviation": "MIN",
+        "city": "Minnesota",
+        "color_metadata": null,
+        "display_abbreviation": "MIN",
+        "franchise_id": 18,
+        "mid_abbreviation": null,
+        "nickname": "Vikings",
+        "slug": "minnesota-vikings"
+      },
+      "has_stats": true,
+      "home_franchise_id": 6,
+      "home_team": {
+        "abbreviation": "CHI",
+        "city": "Chicago",
+        "color_metadata": null,
+        "display_abbreviation": "CHI",
+        "franchise_id": 6,
+        "mid_abbreviation": null,
+        "nickname": "Bears",
+        "slug": "chicago-bears"
+      },
+      "id": 28433,
+      "league": {
+        "abbreviation": "NFL",
+        "id": 1,
+        "name": "NFL"
+      },
+      "league_id": 1,
+      "lock_status": "processed",
+      "score": {
+        "away_team": 27,
+        "home_team": 24
+      },
+      "season": 2025,
+      "stadium_id": 9,
+      "start": "2025-09-09T00:15:00Z",
+      "week": 1
+    },
+    {
+      "away_franchise_id": 1,
+      "away_team": {
+        "abbreviation": "ARZ",
+        "city": "Arizona",
+        "color_metadata": null,
+        "display_abbreviation": "ARZ",
+        "franchise_id": 1,
+        "mid_abbreviation": null,
+        "nickname": "Cardinals",
+        "slug": "arizona-cardinals"
+      },
+      "has_stats": true,
+      "home_franchise_id": 20,
+      "home_team": {
+        "abbreviation": "NO",
+        "city": "New Orleans",
+        "color_metadata": null,
+        "display_abbreviation": "NO",
+        "franchise_id": 20,
+        "mid_abbreviation": null,
+        "nickname": "Saints",
+        "slug": "new-orleans-saints"
+      },
+      "id": 28425,
+      "league": {
+        "abbreviation": "NFL",
+        "id": 1,
+        "name": "NFL"
+      },
+      "league_id": 1,
+      "lock_status": "processed",
+      "score": {
+        "away_team": 20,
+        "home_team": 13
+      },
+      "season": 2025,
+      "stadium_id": 32,
+      "start": "2025-09-07T17:00:00Z",
+      "week": 1
+    },
+    {
+      "away_franchise_id": 9,
+      "away_team": {
+        "abbreviation": "DAL",
+        "city": "Dallas",
+        "color_metadata": null,
+        "display_abbreviation": "DAL",
+        "franchise_id": 9,
+        "mid_abbreviation": null,
+        "nickname": "Cowboys",
+        "slug": "dallas-cowboys"
+      },
+      "has_stats": true,
+      "home_franchise_id": 24,
+      "home_team": {
+        "abbreviation": "PHI",
+        "city": "Philadelphia",
+        "color_metadata": null,
+        "display_abbreviation": "PHI",
+        "franchise_id": 24,
+        "mid_abbreviation": null,
+        "nickname": "Eagles",
+        "slug": "philadelphia-eagles"
+      },
+      "id": 28418,
+      "league": {
+        "abbreviation": "NFL",
+        "id": 1,
+        "name": "NFL"
+      },
+      "league_id": 1,
+      "lock_status": "processed",
+      "score": {
+        "away_team": 20,
+        "home_team": 24
+      },
+      "season": 2025,
+      "stadium_id": 37,
+      "start": "2025-09-05T00:20:00Z",
+      "week": 1
+    }
+  ]
+}
