@@ -9,13 +9,40 @@ shot_type, made, point_value, period, sec_left, source``).
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+import polars as pl
+
 from sportsdataverse.mbb.mbb_shot_quality_constants import get_constants, three_point_radius
 
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from sportsdataverse.mbb.mbb_ncaa_models import ShotEvent
+
 __all__ = [
+    "CANONICAL_SHOT_SCHEMA",
     "classify_point_value",
     "classify_zone_geometry",
     "classify_zone_type",
+    "shot_events_to_frame",
 ]
+
+# the one shot schema every downstream shot-quality model consumes
+CANONICAL_SHOT_SCHEMA: "dict[str, pl.DataType]" = {
+    "game_id": pl.Utf8,
+    "season": pl.Int64,
+    "team_id": pl.Utf8,
+    "shooter_id": pl.Utf8,
+    "shot_x": pl.Float64,
+    "shot_y": pl.Float64,
+    "dist_ft": pl.Float64,
+    "shot_zone": pl.Utf8,
+    "shot_type": pl.Utf8,
+    "made": pl.Boolean,
+    "point_value": pl.Int8,
+    "period": pl.Int64,
+    "sec_left": pl.Float64,
+    "source": pl.Utf8,
+}
 
 
 def classify_point_value(dist_ft: float, x: float, y: float, *, league: str, season: int) -> int:
@@ -99,8 +126,64 @@ def classify_zone_type(type_text: "str | None") -> "str | None":
     if type_text is None:
         return None
     t = type_text.lower()
-    if any(w in t for w in _RIM_WORDS):
-        return "rim"
     if "three" in t or "3pt" in t or "3-pt" in t:
         return "arc3"
-    return "jump"
+    if any(w in t for w in _RIM_WORDS):
+        return "rim"
+    if "jump" in t or "shot" in t:
+        return "jump"
+    return None
+
+
+def shot_events_to_frame(
+    events: list[ShotEvent],
+    *,
+    season: int,
+    league: str = "mens",
+) -> pl.DataFrame:
+    """Flatten NCAA HTML :class:`ShotEvent` objects to the canonical frame.
+
+    The NCAA SVG shot maps carry location + made/miss but no shot-type label
+    (``shot_type = "unknown"``); ``point_value``/``shot_zone`` come from the
+    geometry classifiers. The parser-phase ``pts`` field is the MADE flag
+    (1/0), not the point value.
+
+    Args:
+        events: Parsed shot events (``create_shot_event_data`` output).
+        season: Season-ending year the events belong to.
+        league: ``"mens"`` or ``"womens"``.
+
+    Returns:
+        The canonical shot frame (``CANONICAL_SHOT_SCHEMA``); empty input
+        returns the zero-row schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_shots_adapter import shot_events_to_frame
+            df = shot_events_to_frame(events, season=2025)
+    """
+    if not events:
+        return pl.DataFrame(schema=CANONICAL_SHOT_SCHEMA)
+    rows = []
+    for e in events:
+        x, y, dist = float(e.loc.x), float(e.loc.y), float(e.dist)
+        rows.append(
+            {
+                "game_id": None,
+                "season": season,
+                "team_id": str(e.team.team) if e.team is not None else None,
+                "shooter_id": str(e.player.code) if e.player is not None else None,
+                "shot_x": x,
+                "shot_y": y,
+                "dist_ft": dist,
+                "shot_zone": classify_zone_geometry(dist, x, y, league=league, season=season),
+                "shot_type": "unknown",
+                "made": e.pts == 1,
+                "point_value": classify_point_value(dist, x, y, league=league, season=season),
+                "period": None,
+                "sec_left": None,
+                "source": "ncaa",
+            }
+        )
+    return pl.DataFrame(rows, schema=CANONICAL_SHOT_SCHEMA)

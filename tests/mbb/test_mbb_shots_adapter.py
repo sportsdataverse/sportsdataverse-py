@@ -76,3 +76,59 @@ def test_zone_type_collapse():
     assert classify_zone_type("Three Point Jump Shot") == "arc3"
     assert classify_zone_type("JumpShot") == "jump"
     assert classify_zone_type(None) is None
+
+
+# ---------------------------------------------------------------------------
+# NCAA ShotEvent -> canonical frame
+# ---------------------------------------------------------------------------
+
+
+def test_shot_events_to_frame_schema_and_value():
+    import datetime as dt
+
+    import polars as pl
+
+    from sportsdataverse.mbb.mbb_ncaa_models import ShotEvent, ShotGeo, ShotLocation
+    from sportsdataverse.mbb.mbb_shots_adapter import shot_events_to_frame
+
+    def _evt(x, y, dist, pts):
+        return ShotEvent(
+            player=None,
+            date=dt.datetime(2024, 1, 1),
+            location_type=None,
+            team=None,
+            opponent=None,
+            is_off=True,
+            lineup_id=None,
+            players=[],
+            score=None,
+            min=5.0,
+            loc=ShotLocation(x, y),
+            geo=ShotGeo(0.0, 0.0),
+            dist=dist,
+            pts=pts,
+            value=0,
+            ast_by=None,
+            is_ast=None,
+            is_trans=None,
+            raw_event=None,
+        )
+
+    df = shot_events_to_frame([_evt(0.0, 2.0, 2.0, 1), _evt(0.0, 24.0, 24.0, 1)], season=2024, league="mens")
+    assert df.schema["team_id"] == pl.Utf8 and df.schema["point_value"] == pl.Int8
+    assert df["point_value"].to_list() == [2, 3]
+    assert df["shot_zone"].to_list() == ["rim", "abovebreak3"]
+    assert df["made"].to_list() == [True, True]
+    assert df["source"].unique().to_list() == ["ncaa"]
+    assert df["shot_type"].unique().to_list() == ["unknown"]
+
+
+def test_shot_events_to_frame_empty():
+    import polars as pl
+
+    from sportsdataverse.mbb.mbb_shots_adapter import CANONICAL_SHOT_SCHEMA, shot_events_to_frame
+
+    df = shot_events_to_frame([], season=2024, league="mens")
+    assert df.height == 0
+    assert dict(df.schema) == dict(CANONICAL_SHOT_SCHEMA)
+    assert df.schema["shooter_id"] == pl.Utf8
