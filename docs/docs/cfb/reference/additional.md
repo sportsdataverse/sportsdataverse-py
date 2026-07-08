@@ -1189,6 +1189,38 @@ seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
 print(seeded.filter(pl.col("seed").is_not_null()))
 ```
 
+### `cfb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_predict_games}
+
+Predict a whole schedule of games from a ratings frame (vectorized).
+
+Applies the three closed-form predictors across every row of `games` in
+one pass. `ratings` is joined twice -- once on `home_team_id` and once on
+`away_team_id` -- so each game carries both teams' `adj_net` / `adj_off_epa`
+/ `adj_def_epa`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | Schedule frame with `game_id`, `home_team_id`, `away_team_id`, and `neutral_site` columns. The two team-id columns must share the dtype of `ratings["team_id"]` (asserted before the join). |
+| `ratings` | `DataFrame` |  | A `cfb_ratings.cfb_ratings`-style frame with `team_id`, `adj_net`, `adj_off_epa`, and `adj_def_epa`. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per game with `game_id`, `home_team_id`, `away_team_id`, `neutral_site`, `exp_margin`, `home_win_prob`, `exp_total`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import cfb_predict_games
+from sportsdataverse.cfb import cfb_ratings
+from sportsdataverse.cfb.cfb_schedule import cfb_schedule  # schedule loader
+ratings = cfb_ratings(2023)
+preds = cfb_predict_games(schedule_2023, ratings)
+```
+
 ### `cfb_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_ratings}
 
 One row per team: the full CFB ratings spine (off/def/ST EPA + FEI).
@@ -2111,6 +2143,62 @@ Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 
 A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
 
+### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
+
+Expected home scoring margin from the two net ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_net` | `float` |  | Home team's opponent-adjusted net rating (`adj_net` from `cfb_ratings.efficiency_ratings`). |
+| `away_adj_net` | `float` |  | Away team's opponent-adjusted net rating. |
+| `neutral` | `bool` |  | Whether the game is at a neutral site (no home-field advantage). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `net_points_scale` and `hfa`. |
+
+**Returns**
+
+The expected margin (home minus away), in points: `net_points_scale * (home_adj_net - away_adj_net) + hfa` (HFA dropped on neutral fields). `net_points_scale` converts the EPA-per-play rating differential into points (fitted on the 2023 backtest).
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import predict_margin
+predict_margin(0.30, 0.10, neutral=False)
+```
+
+### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
+
+Expected combined point total from the four efficiency ratings.
+
+Fitted linear model `total_intercept + total_scale * (home_adj_off +
+away_adj_def + away_adj_off + home_adj_def)`. The four ratings are summed
+because each side's scoring rises with its own offense and with the opponent's
+EPA-*allowed* (`adj_def` is lower = better defense); `total_scale` and
+`total_intercept` are fitted on 2023 actual totals so the coarse EPA/play ->
+points scale and the league baseline are both data-derived.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_off` | `float` |  | Home offense adjusted EPA/play (`adj_off_epa`). |
+| `home_adj_def` | `float` |  | Home defense adjusted EPA/play allowed (`adj_def_epa`). |
+| `away_adj_off` | `float` |  | Away offense adjusted EPA/play. |
+| `away_adj_def` | `float` |  | Away defense adjusted EPA/play allowed. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `total_intercept` and `total_scale`. |
+
+**Returns**
+
+The expected combined total points.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import predict_total
+predict_total(0.20, -0.05, 0.10, 0.02)
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 Internal helper that flattens an ESPN scoreboard event dict into a shape
@@ -2182,6 +2270,28 @@ A `polars.DataFrame` with one row per `team_id` appearing anywhere in `plays`: `
 from sportsdataverse.cfb.cfb_ratings import special_teams_ratings
 st = special_teams_ratings(pbp)
 st.sort("adj_st_epa", descending=True).head()
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'` {#win_prob_from_margin}
+
+Home win probability from an expected margin via the Gaussian CDF.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | Expected home margin in points (e.g. from `predict_margin`). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying `margin_sd`. |
+
+**Returns**
+
+`Phi(exp_margin / margin_sd)` -- the probability the home team wins under a `Normal(exp_margin, margin_sd**2)` margin model. `0.5` at a zero expected margin.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import win_prob_from_margin
+win_prob_from_margin(7.0)
 ```
 
 ### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Dict[str, Any]'` {#yahoo_cfb_boxscore}

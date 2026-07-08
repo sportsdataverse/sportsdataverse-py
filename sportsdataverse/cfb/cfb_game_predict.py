@@ -3,9 +3,10 @@
 Turns the opponent-adjusted ratings from :mod:`cfb_ratings` into the three
 pregame numbers a betting/preview surface needs: expected margin, home win
 probability, and expected total points. Everything here is closed-form -- no
-model artifact, no fit at call time -- so the only tunable is the era config in
-:data:`cfb_prediction_constants.CFB_CONSTANTS` (``hfa`` and ``margin_sd`` are
-fitted on the 2023 backtest in Task 2.3).
+model artifact, no fit at call time -- so the only tunables are the era config in
+:data:`cfb_prediction_constants.CFB_CONSTANTS` (``net_points_scale``, ``hfa``,
+``margin_sd``, ``total_intercept`` and ``total_scale`` are all fitted on the 2023
+backtest by ``dev/cfb_prediction/fit_pregame.py``).
 
 The win-probability model treats a game's realized margin as
 ``Normal(exp_margin, margin_sd**2)``: ``P(home wins) = P(margin > 0) =
@@ -14,7 +15,6 @@ only free knob for probabilities.
 """
 
 from __future__ import annotations
-
 
 from typing import Literal, overload
 
@@ -188,6 +188,11 @@ def cfb_predict_games(
             from sportsdataverse.cfb.cfb_schedule import cfb_schedule  # schedule loader
             ratings = cfb_ratings(2023)
             preds = cfb_predict_games(schedule_2023, ratings)
+
+    See Also:
+        * `cfbfastR`_ -- the R companion whose ratings/prediction surface this mirrors.
+
+    .. _cfbfastR: https://cfbfastR.sportsdataverse.org
     """
     key_dtype = ratings.schema["team_id"]
     assert games.schema["home_team_id"] == key_dtype, (

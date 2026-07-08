@@ -294,6 +294,7 @@ files = [
     "sportsdataverse/cfb/cfb_adjusted_epa.py",
     "sportsdataverse/cfb/cfb_crosswalk.py",
     "sportsdataverse/cfb/cfb_fox_ext.py",
+    "sportsdataverse/cfb/cfb_game_predict.py",
     "sportsdataverse/cfb/cfb_prediction_constants.py",
     "sportsdataverse/cfb/cfb_ratings.py",
     "sportsdataverse/cfb/cfb_simulations.py",

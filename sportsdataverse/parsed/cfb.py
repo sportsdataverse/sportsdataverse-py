@@ -161,6 +161,7 @@ from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # no
 from sportsdataverse.cfb import cfb_games_from_schedule as cfb_games_from_schedule  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
+from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
 from sportsdataverse.cfb import cfb_ratings as cfb_ratings  # noqa: F401
 from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
@@ -198,9 +199,12 @@ from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.cfb import predict_margin as predict_margin  # noqa: F401
+from sportsdataverse.cfb import predict_total as predict_total  # noqa: F401
 from sportsdataverse.cfb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.cfb import special_teams_ratings as special_teams_ratings  # noqa: F401
 from sportsdataverse.cfb import underscore as underscore  # noqa: F401
+from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
 __all__ = [
     "CFBPlayProcess",
@@ -210,6 +214,7 @@ __all__ = [
     "cfb_games_from_schedule",
     "cfb_odds_events_crosswalk",
     "cfb_playoff_seeds",
+    "cfb_predict_games",
     "cfb_ratings",
     "cfb_rosters_crosswalk",
     "cfb_schedule_crosswalk",
@@ -371,9 +376,12 @@ __all__ = [
     "load_cfb_teams_crosswalk",
     "most_recent_cfb_season",
     "normalize_team_roster_columns",
+    "predict_margin",
+    "predict_total",
     "scoreboard_event_parsing",
     "special_teams_ratings",
     "underscore",
+    "win_prob_from_margin",
     "yahoo_cfb_boxscore",
     "yahoo_cfb_player_season_stats",
     "yahoo_cfb_player_season_stats_legacy",
