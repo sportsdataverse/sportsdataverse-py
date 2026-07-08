@@ -363,51 +363,51 @@ Facet report /defense/summary (By Position leaderboard; add franchiseId for By T
 | col_name | type | description |
 |---|---|---|
 | `targets` | numeric | The number of pass plays where the player was the targeted receiver. |
-| `interception_touchdowns` | numeric |  |
+| `interception_touchdowns` | numeric | Touchdowns scored on interception returns. |
 | `draft_season` | numeric |  |
-| `forced_fumbles` | numeric |  |
+| `forced_fumbles` | numeric | Forced fumbles. |
 | `missed_tackles` | numeric |  |
 | `catch_rate` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `tackles` | numeric | Team tackles. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `team_name` | character | Team abbreviation the player is credited to for the range. |
+| `tackles` | numeric | Total tackles. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `snap_counts_offball` | numeric |  |
 | `snap_counts_box` | numeric |  |
-| `sacks` | numeric | The Number of times sacked. |
+| `sacks` | numeric | Sacks credited. |
 | `snap_counts_pass_rush` | numeric |  |
-| `player_game_count` | numeric |  |
+| `player_game_count` | numeric | Games with at least one qualifying snap in the requested range. |
 | `eligible_season` | numeric |  |
 | `snap_counts_dl` | numeric |  |
 | `grades_tackle` | numeric |  |
 | `yards` | numeric | The number of receiving yards |
 | `receptions` | numeric | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `grades_coverage_defense` | numeric |  |
+| `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
 | `hurries` | numeric |  |
-| `interceptions` | numeric | The number of interceptions thrown. |
+| `interceptions` | numeric | Interceptions. |
 | `snap_counts_coverage` | numeric |  |
 | `snap_counts_dl_over_t` | numeric |  |
 | `snap_counts_dl_a_gap` | numeric |  |
 | `fumble_recoveries` | numeric |  |
-| `grades_run_defense` | numeric |  |
+| `grades_run_defense` | numeric | PFF run-defense grade (0-100). |
 | `snap_counts_corner` | numeric |  |
 | `hits` | numeric | Hits. |
 | `penalties` | numeric | Total number of penalties. |
 | `batted_passes` | numeric |  |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `stops` | numeric |  |
+| `stops` | numeric | Tackles that constitute an offensive failure ("stops"). |
 | `declined_penalties` | numeric |  |
-| `total_pressures` | numeric |  |
+| `total_pressures` | numeric | Total quarterback pressures (sacks + hits + hurries). |
 | `position` | character | Primary position as reported by NFL.com |
 | `fumble_recovery_touchdowns` | numeric |  |
 | `longest` | numeric |  |
 | `snap_counts_slot` | numeric |  |
 | `missed_tackle_rate` | numeric |  |
-| `grades_defense` | numeric |  |
+| `grades_defense` | numeric | PFF overall defense grade (0-100). |
 | `yards_per_reception` | numeric |  |
 | `grades_defense_penalty` | numeric |  |
 | `safeties` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
 | `snap_counts_defense` | numeric |  |
 | `yards_after_catch` | numeric | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
 | `snap_counts_dl_b_gap` | numeric |  |
@@ -415,9 +415,9 @@ Facet report /defense/summary (By Position leaderboard; add franchiseId for By T
 | `qb_rating_against` | numeric |  |
 | `snap_counts_run_defense` | numeric |  |
 | `tackles_for_loss` | numeric | Team tackles for a loss. |
-| `assists` | numeric | Total assists. |
+| `assists` | numeric | Assisted tackles. |
 | `grades_pass_rush_defense` | numeric |  |
-| `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
 | `snap_counts_fs` | numeric |  |
 | `touchdowns` | numeric |  |
 | `snap_counts_dl_outside_t` | numeric |  |
@@ -457,18 +457,18 @@ Facet report /offense/summary (By Position leaderboard; add franchiseId for By T
 | `declined_penalties` | numeric |  |
 | `draft_season` | numeric |  |
 | `eligible_season` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
 | `grades_hands_fumble` | numeric |  |
-| `grades_offense` | numeric |  |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
 | `grades_offense_penalty` | numeric |  |
-| `grades_pass` | numeric |  |
-| `grades_run` | numeric |  |
-| `grades_run_block` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `grades_run_block` | numeric | PFF run-blocking grade (0-100). |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `penalties` | numeric | Total number of penalties. |
 | `player` | character | Player name |
-| `player_game_count` | numeric |  |
-| `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_game_count` | numeric | Games with at least one qualifying snap in the requested range. |
+| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
 | `position` | character | Primary position as reported by NFL.com |
 | `snap_counts_pass` | numeric |  |
 | `snap_counts_pass_block` | numeric |  |
@@ -479,9 +479,9 @@ Facet report /offense/summary (By Position leaderboard; add franchiseId for By T
 | `snap_counts_total_pass` | numeric |  |
 | `snap_counts_total_run` | numeric |  |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `grades_pass_block` | numeric |  |
-| `grades_pass_route` | numeric |  |
+| `team_name` | character | Team abbreviation the player is credited to for the range. |
+| `grades_pass_block` | numeric | PFF pass-blocking grade (0-100). |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -2112,36 +2112,36 @@ Facet report /passing/summary (By Position leaderboard; add franchiseId for By T
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `grades_offense` | numeric |  |
-| `twp_rate` | numeric |  |
-| `btt_rate` | numeric |  |
-| `spikes` | numeric | Spikes |
-| `dropbacks` | numeric |  |
-| `thrown_aways` | numeric |  |
-| `draft_season` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `grades_pass` | numeric |  |
-| `hit_as_threw` | numeric |  |
-| `first_downs` | numeric | First downs earned by the team. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `sack_percent` | numeric |  |
-| `bats` | numeric |  |
-| `sacks` | numeric | The Number of times sacked. |
-| `player_game_count` | numeric |  |
-| `eligible_season` | numeric |  |
-| `completions` | numeric | The number of completed passes. |
-| `yards` | numeric | The number of receiving yards |
-| `accuracy_percent` | numeric |  |
-| `scrambles` | numeric |  |
-| `interceptions` | numeric | The number of interceptions thrown. |
-| `drop_rate` | numeric |  |
-| `grades_run` | numeric |  |
-| `qb_rating` | numeric |  |
-| `completion_percent` | numeric |  |
-| `penalties` | numeric | Total number of penalties. |
-| `attempts` | numeric | The number of pass attempts as defined by the NFL. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `declined_penalties` | numeric |  |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `twp_rate` | numeric | Turnover-worthy-play rate. |
+| `btt_rate` | numeric | Big-time-throw rate. |
+| `spikes` | numeric | Spike plays. |
+| `dropbacks` | numeric | Total quarterback dropbacks. |
+| `thrown_aways` | numeric | Throwaways. |
+| `draft_season` | numeric | Draft class (year) of the player. |
+| `team_name` | character | Team name/abbreviation the player is credited to for the range. |
+| `grades_pass` | numeric | PFF passing grade (0-100). |
+| `hit_as_threw` | numeric | Plays where the quarterback was hit as he threw. |
+| `first_downs` | numeric | Passing first downs. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `sack_percent` | numeric | Sack rate (sacks per dropback). |
+| `bats` | numeric | Passes batted at the line. |
+| `sacks` | numeric | Sacks taken. |
+| `player_game_count` | numeric | Games with at least one qualifying dropback in the requested range. |
+| `eligible_season` | numeric | First eligible season for the player. |
+| `completions` | numeric | Completions. |
+| `yards` | numeric | Passing yards. |
+| `accuracy_percent` | numeric | Charted accuracy percentage. |
+| `scrambles` | numeric | Scramble plays. |
+| `interceptions` | numeric | Interceptions thrown. |
+| `drop_rate` | numeric | Receiver drop rate on the quarterback's throws. |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `qb_rating` | numeric | NFL passer rating. |
+| `completion_percent` | numeric | Completion percentage. |
+| `penalties` | numeric | Penalties charged. |
+| `attempts` | numeric | Pass attempts. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `declined_penalties` | numeric | Declined penalties. |
 | `passing_snaps` | numeric |  |
 | `pressure_to_sack_rate` | numeric |  |
 | `ypa` | numeric |  |
@@ -2152,12 +2152,12 @@ Facet report /passing/summary (By Position leaderboard; add franchiseId for By T
 | `big_time_throws` | numeric |  |
 | `player` | character | Player name |
 | `positive_epa_percent` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
 | `avg_depth_of_target` | numeric |  |
 | `turnover_worthy_plays` | numeric |  |
 | `epa` | numeric | Expected points added (EPA) by the posteam for the given play. |
 | `aimed_passes` | numeric |  |
-| `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
 | `touchdowns` | numeric |  |
 | `def_gen_pressures` | numeric |  |
 
@@ -3096,31 +3096,31 @@ Facet report /receiving/summary (By Position leaderboard; add franchiseId for By
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `targets` | numeric | The number of pass plays where the player was the targeted receiver. |
+| `targets` | numeric | Times targeted. |
 | `grades_pass_block` | numeric |  |
-| `grades_offense` | numeric |  |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
 | `yards_after_catch_per_reception` | numeric |  |
-| `grades_pass_route` | numeric |  |
+| `grades_pass_route` | numeric | PFF receiving/route grade (0-100). |
 | `draft_season` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `yprr` | numeric |  |
+| `team_name` | character | Team abbreviation the player is credited to for the range. |
+| `yprr` | numeric | Yards per route run. |
 | `wide_snaps` | numeric |  |
 | `fumbles` | numeric |  |
 | `first_downs` | numeric | First downs earned by the team. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `inline_snaps` | numeric |  |
-| `contested_targets` | numeric |  |
-| `player_game_count` | numeric |  |
+| `contested_targets` | numeric | Contested targets. |
+| `player_game_count` | numeric | Games with at least one qualifying snap in the requested range. |
 | `eligible_season` | numeric |  |
 | `inline_rate` | numeric |  |
 | `contested_catch_rate` | numeric |  |
-| `yards` | numeric | The number of receiving yards |
-| `receptions` | numeric | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `yards` | numeric | Receiving yards. |
+| `receptions` | numeric | Receptions. |
 | `targeted_qb_rating` | numeric |  |
 | `interceptions` | numeric | The number of interceptions thrown. |
 | `caught_percent` | numeric |  |
 | `drop_rate` | numeric |  |
-| `grades_hands_drop` | numeric |  |
+| `grades_hands_drop` | numeric | PFF hands/drop grade (0-100). |
 | `slot_rate` | numeric |  |
 | `slot_snaps` | numeric |  |
 | `penalties` | numeric | Total number of penalties. |
@@ -3129,24 +3129,24 @@ Facet report /receiving/summary (By Position leaderboard; add franchiseId for By
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `declined_penalties` | numeric |  |
 | `route_rate` | numeric |  |
-| `drops` | numeric | Throws dropped |
+| `drops` | numeric | Dropped passes. |
 | `position` | character | Primary position as reported by NFL.com |
 | `grades_hands_fumble` | numeric |  |
 | `longest` | numeric |  |
 | `pass_blocks` | numeric |  |
-| `routes` | numeric |  |
+| `routes` | numeric | Routes run. |
 | `pass_plays` | numeric |  |
 | `yards_per_reception` | numeric |  |
 | `player` | character | Player name |
 | `positive_epa_percent` | numeric |  |
-| `franchise_id` | numeric | ESPN franchise identifier. |
-| `contested_receptions` | numeric |  |
-| `yards_after_catch` | numeric | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
+| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
+| `contested_receptions` | numeric | Contested catches made. |
+| `yards_after_catch` | numeric | Yards after the catch. |
 | `avg_depth_of_target` | numeric |  |
 | `epa` | numeric | Expected points added (EPA) by the posteam for the given play. |
 | `avoided_tackles` | numeric |  |
-| `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `touchdowns` | numeric |  |
+| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
+| `touchdowns` | numeric | Receiving touchdowns. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -3319,35 +3319,35 @@ Facet report /rushing/summary (By Position leaderboard; add franchiseId for By T
 |---|---|---|
 | `targets` | numeric | The number of pass plays where the player was the targeted receiver. |
 | `grades_pass_block` | numeric |  |
-| `grades_offense` | numeric |  |
-| `yards_after_contact` | numeric |  |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `yards_after_contact` | numeric | Yards after contact. |
 | `explosive` | numeric |  |
 | `grades_pass_route` | numeric |  |
 | `draft_season` | numeric |  |
 | `elu_rush_mtf` | numeric |  |
 | `breakaway_attempts` | numeric |  |
 | `designed_yards` | numeric |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team abbreviation the player is credited to for the range. |
 | `yprr` | numeric |  |
 | `breakaway_percent` | numeric |  |
-| `fumbles` | numeric |  |
-| `first_downs` | numeric | First downs earned by the team. |
-| `elusive_rating` | numeric |  |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `breakaway_yards` | numeric |  |
-| `player_game_count` | numeric |  |
+| `fumbles` | numeric | Fumbles. |
+| `first_downs` | numeric | Rushing first downs. |
+| `elusive_rating` | numeric | PFF elusive rating. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `breakaway_yards` | numeric | Breakaway (long-run) yards. |
+| `player_game_count` | numeric | Games with at least one qualifying snap in the requested range. |
 | `eligible_season` | numeric |  |
 | `total_touches` | numeric |  |
 | `scramble_yards` | numeric |  |
 | `yco_attempt` | numeric |  |
-| `yards` | numeric | The number of receiving yards |
+| `yards` | numeric | Rushing yards. |
 | `grades_run_block` | numeric |  |
 | `receptions` | numeric | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `zone_attempts` | numeric |  |
 | `scrambles` | numeric |  |
-| `grades_run` | numeric |  |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
 | `penalties` | numeric | Total number of penalties. |
-| `attempts` | numeric | The number of pass attempts as defined by the NFL. |
+| `attempts` | numeric | Rush attempts. |
 | `elu_yco` | numeric |  |
 | `elu_recv_mtf` | numeric |  |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
@@ -3359,14 +3359,14 @@ Facet report /rushing/summary (By Position leaderboard; add franchiseId for By T
 | `longest` | numeric |  |
 | `routes` | numeric |  |
 | `player` | character | Player name |
-| `franchise_id` | numeric | ESPN franchise identifier. |
+| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
 | `rec_yards` | numeric | Career receiving yards |
 | `gap_attempts` | numeric |  |
 | `run_plays` | numeric |  |
-| `avoided_tackles` | numeric |  |
+| `avoided_tackles` | numeric | Missed tackles forced. |
 | `grades_offense_penalty` | numeric |  |
-| `player_id` | numeric | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `touchdowns` | numeric |  |
+| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
+| `touchdowns` | numeric | Rushing touchdowns. |
 | `grades_pass` | numeric |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -4846,12 +4846,12 @@ Team overview table (By Team landing)
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `abbreviation` | character | Short abbreviation. |
-| `franchise_id` | numeric | ESPN franchise identifier. |
-| `grades_coverage_defense` | numeric |  |
-| `grades_defense` | numeric |  |
+| `abbreviation` | character | Team abbreviation. |
+| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
+| `grades_coverage_defense` | numeric | PFF team coverage grade (0-100). |
+| `grades_defense` | numeric | PFF team defense grade (0-100). |
 | `grades_misc_st` | numeric |  |
-| `grades_offense` | numeric |  |
+| `grades_offense` | numeric | PFF team offense grade (0-100). |
 | `grades_overall` | numeric |  |
 | `grades_pass` | numeric |  |
 | `grades_pass_block` | numeric |  |
@@ -4897,20 +4897,20 @@ Games list for league-season(-week)
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `away_franchise_id` | numeric |  |
-| `away_team` | list | String abbreviation for the away team. |
-| `has_stats` | logical |  |
-| `home_franchise_id` | numeric |  |
-| `home_team` | list | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
-| `id` | numeric | ID of the player in the 'name' column. |
+| `away_franchise_id` | numeric | PFF franchise id of the away team. |
+| `away_team` | list | Away team object (JSON-stringified in the tidy frame). |
+| `has_stats` | logical | Whether PFF has published stats for the game. |
+| `home_franchise_id` | numeric | PFF franchise id of the home team. |
+| `home_team` | list | Home team object (JSON-stringified in the tidy frame). |
+| `id` | numeric | PFF game id (integer join key). |
 | `league` | list | League slug. |
-| `league_id` | numeric | League identifier ('10' = WNBA). |
-| `lock_status` | character |  |
+| `league_id` | numeric | PFF league id (integer). |
+| `lock_status` | character | Data lock/publish status for the game. |
 | `score` | list | Final score string. |
-| `season` | numeric | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `stadium_id` | numeric | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `start` | character | Start. |
-| `week` | numeric | Season week. |
+| `season` | numeric | Season (starting year) of the game. |
+| `stadium_id` | numeric | PFF stadium id. |
+| `start` | character | Kickoff timestamp (ISO 8601 string). |
+| `week` | numeric | Week number of the game. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
