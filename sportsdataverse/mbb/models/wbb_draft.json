@@ -1,0 +1,76 @@
+{
+  "league": "womens",
+  "feature_cols": [
+    "box_bpm",
+    "box_obpm",
+    "box_dbpm",
+    "min",
+    "team_net",
+    "pos_score"
+  ],
+  "feature_mean": [
+    -0.2688703094289617,
+    -0.6823401308177127,
+    0.41346982138875077,
+    608.26612346361,
+    -0.3996973228300926,
+    0.19431017815218893
+  ],
+  "feature_sd": [
+    4.998502628783052,
+    4.219553970777756,
+    3.0736007256261337,
+    277.4838945275016,
+    21.02307958673937,
+    0.28631869991350345
+  ],
+  "archetype_labels": [
+    "role-playing wing",
+    "midrange big",
+    "play-finishing big",
+    "spot-up shooter",
+    "shot creator",
+    "lead guard",
+    "slashing guard",
+    "rim protector"
+  ],
+  "prob_coef": [
+    -7.805756841185521,
+    0.42157868505814,
+    0.4999949722857161,
+    -0.0008111126063450652,
+    1.1176456295613413,
+    1.2324685955609587,
+    -0.12871171399153028
+  ],
+  "pick_coef": [
+    4.306848656003272,
+    -0.16334636261734822,
+    -0.2528254812628829,
+    0.08144308997084056,
+    -0.18584874820039526,
+    -0.20766790972018334,
+    0.08249868619871625
+  ],
+  "pick_log_target": true,
+  "lambda_prob": 3.0,
+  "lambda_pick": 30.0,
+  "tier_edges": [
+    4.5,
+    13.5,
+    26.5
+  ],
+  "tier_labels": [
+    "lottery",
+    "first round",
+    "second round",
+    "third round"
+  ],
+  "bubble_rank": 120,
+  "median_composite": 94.0,
+  "min_minutes": 150.0,
+  "train_seasons": [
+    2025,
+    2026
+  ]
+}

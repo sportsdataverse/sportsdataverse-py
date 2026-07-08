@@ -142,6 +142,36 @@ def mbb_draft_projection(
     art = load_artifact(f"{get_player_value_constants(league).bundle_prefix}_draft")
     uni = bpm.filter(pl.col("min") >= float(art.get("min_minutes", 150.0)))
 
+    if "team_net" in art["feature_cols"] or "pos_score" in art["feature_cols"]:
+        # women's upside proxies: program strength + position (WNBA classes
+        # are senior-constant and roster height drops departed players)
+        from sportsdataverse.mbb.mbb_player_value_constants import aggregate_player_seasons  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings  # noqa: PLC0415
+
+        rat = mbb_team_ratings(seasons_list, league=league).filter(pl.col("games") >= 10)
+        net = rat.with_columns(
+            (
+                (pl.col("adj_o") - pl.col("adj_o").mean().over("season"))
+                - (pl.col("adj_d") - pl.col("adj_d").mean().over("season"))
+            ).alias("team_net")
+        ).select("season", "team_id", "team_net")
+        agg_pos = aggregate_player_seasons(seasons_list, league=league).select(
+            "player_id", "season", "team_id", "position"
+        )
+        uni = (
+            uni.join(net, on=["season", "team_id"], how="left")
+            .join(agg_pos, on=["player_id", "season", "team_id"], how="left")
+            .with_columns(
+                pl.col("team_net").fill_null(0.0),
+                pl.when(pl.col("position").fill_null("").str.contains("(?i)C"))
+                .then(1.0)
+                .when(pl.col("position").fill_null("").str.contains("(?i)F"))
+                .then(0.5)
+                .otherwise(0.0)
+                .alias("pos_score"),
+            )
+        )
+
     if {"is_fr", "is_so", "height_in"} & set(art["feature_cols"]):
         rc = _load_roster_class(seasons_list, league=league)
         assert uni.schema["player_id"] == rc.schema["player_id"] == pl.Utf8
