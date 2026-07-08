@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: nil_status
+  type: character
+- description: ''
+  name: valuation
+  type: integer
+- description: ''
+  name: valuation_change
+  type: integer
+- description: ''
+  name: date
+  type: character
+- description: ''
+  name: date_unix
+  type: integer
+kind: dataframe
+schema: people_valuation_growth

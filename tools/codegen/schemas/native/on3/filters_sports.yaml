@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: name
+  type: character
+kind: dataframe
+schema: filters_sports

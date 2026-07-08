@@ -226,6 +226,7 @@ def test_result_set_handles_array_envelope_scalar_and_single_object():
         ("composite_team_ranking_feed_fb_2026", {"composite_overall_rank", "five_stars"}),
         ("current_target_predictions_fb_2026", {"expert_name", "prediction", "player_name"}),
         ("tags_autocomplete", {"id", "name", "type"}),
+        ("positions_fb_2026", {"group", "group_key", "label", "value"}),
         ("transfer_portal_only_team_feed_fb_2026", {"name", "number_of_transfers", "transfer_points"}),
         ("sports_year_fb", {"value"}),
     ],
@@ -254,6 +255,7 @@ def test_all_unlocked_wrappers_exported():
     from sportsdataverse.cfb import (
         sports247_coaches,
         sports247_composite_team_ranking_feed,
+        sports247_positions,
         sports247_recruits,
         sports247_sport_years,
         sports247_tags_autocomplete,
@@ -273,5 +275,19 @@ def test_all_unlocked_wrappers_exported():
         sports247_target_predictions,
         sports247_sport_years,
         sports247_tags_autocomplete,
+        sports247_positions,
     ):
         assert callable(fn)
+
+
+def test_positions_wrapper_routes_through_generic_parser(monkeypatch):
+    import sportsdataverse.cfb.sports247 as s247
+
+    monkeypatch.setattr(s247, "_get", lambda *a, **k: _load("sports247_positions_fb_2026"))
+    df = s247.sports247_positions(sport_key=1)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+    assert {"group", "group_key", "label", "value"}.issubset(set(df.columns))
+
+    raw = s247.sports247_positions(sport_key=1, return_parsed=False)
+    assert isinstance(raw, list)

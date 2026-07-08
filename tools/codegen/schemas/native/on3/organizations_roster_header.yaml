@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: head_coach
+  type: character
+- description: ''
+  name: talent_rank
+  type: character
+- description: ''
+  name: prev_talent_rank
+  type: character
+- description: ''
+  name: conference_rank
+  type: character
+- description: ''
+  name: prev_conference_rank
+  type: character
+- description: ''
+  name: average_rating
+  type: character
+- description: ''
+  name: prev_average_rating
+  type: character
+- description: ''
+  name: average_nil_value
+  type: numeric
+- description: ''
+  name: total_nil_value
+  type: integer
+kind: dataframe
+schema: organizations_roster_header

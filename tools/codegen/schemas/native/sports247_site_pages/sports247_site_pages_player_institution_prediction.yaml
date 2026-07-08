@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: player_institution
+  type: integer
+- description: ''
+  name: institution
+  type: integer
+- description: ''
+  name: user
+  type: integer
+- description: ''
+  name: updated_on
+  type: character
+- description: ''
+  name: prediction_status
+  type: character
+- description: ''
+  name: days_correct
+  type: character
+- description: ''
+  name: premium
+  type: character
+- description: ''
+  name: score
+  type: character
+- description: ''
+  name: confidence
+  type: character
+- description: ''
+  name: parent
+  type: character
+- description: ''
+  name: is_zero_zone
+  type: character
+- description: ''
+  name: default_name
+  type: character
+kind: dataframe
+schema: sports247_site_pages_player_institution_prediction

@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: directions
+  type: list
+- description: ''
+  name: draft_season
+  type: numeric
+- description: ''
+  name: eligible_season
+  type: numeric
+- description: ''
+  name: franchise_id
+  type: numeric
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: player_id
+  type: numeric
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: total_attempts
+  type: numeric
+kind: dataframe
+schema: rushing_direction_stats

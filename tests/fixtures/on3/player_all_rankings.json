@@ -1,0 +1,65 @@
+[
+  {
+    "type": "Industry",
+    "link": null,
+    "rankingKey": 665,
+    "rankingYear": 2026,
+    "rankingType": "TransferPortal",
+    "rating": 98.08467741935485,
+    "sport": "Basketball",
+    "classYear": 2023,
+    "stateRank": null,
+    "stateAbbr": null,
+    "positionRank": 1,
+    "positionAbbr": "PF",
+    "overallRank": 3,
+    "stars": 4,
+    "fiveStarPlus": false,
+    "nearlyFiveStarPlus": false,
+    "change": {
+      "1": "Increase"
+    }
+  },
+  {
+    "type": "Consensus",
+    "link": null,
+    "rankingKey": 665,
+    "rankingYear": 2026,
+    "rankingType": "TransferPortal",
+    "rating": 98.08467741935485,
+    "sport": "Basketball",
+    "classYear": 2023,
+    "stateRank": null,
+    "stateAbbr": null,
+    "positionRank": 1,
+    "positionAbbr": "PF",
+    "overallRank": 3,
+    "stars": 4,
+    "fiveStarPlus": false,
+    "nearlyFiveStarPlus": false,
+    "change": {
+      "1": "Increase"
+    }
+  },
+  {
+    "type": "On3",
+    "link": null,
+    "rankingKey": 665,
+    "rankingYear": 2026,
+    "rankingType": "TransferPortal",
+    "rating": 97,
+    "sport": "Basketball",
+    "classYear": 2023,
+    "stateRank": null,
+    "stateAbbr": null,
+    "positionRank": 1,
+    "positionAbbr": "PF",
+    "overallRank": 5,
+    "stars": 4,
+    "fiveStarPlus": false,
+    "nearlyFiveStarPlus": false,
+    "change": {
+      "1": "Increase"
+    }
+  }
+]

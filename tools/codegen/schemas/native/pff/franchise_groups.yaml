@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: heirarchy
+  type: list
+- description: ''
+  name: id
+  type: numeric
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: slug
+  type: character
+kind: dataframe
+schema: franchise_groups

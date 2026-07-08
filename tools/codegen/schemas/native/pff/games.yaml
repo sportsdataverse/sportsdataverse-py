@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: away_franchise_id
+  type: numeric
+- description: ''
+  name: away_team
+  type: list
+- description: ''
+  name: has_stats
+  type: logical
+- description: ''
+  name: home_franchise_id
+  type: numeric
+- description: ''
+  name: home_team
+  type: list
+- description: ''
+  name: id
+  type: numeric
+- description: ''
+  name: league
+  type: list
+- description: ''
+  name: league_id
+  type: numeric
+- description: ''
+  name: lock_status
+  type: character
+- description: ''
+  name: score
+  type: list
+- description: ''
+  name: season
+  type: numeric
+- description: ''
+  name: stadium_id
+  type: numeric
+- description: ''
+  name: start
+  type: character
+- description: ''
+  name: week
+  type: numeric
+kind: dataframe
+schema: games

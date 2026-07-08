@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: abbreviation
+  type: character
+- description: ''
+  name: default_season
+  type: numeric
+- description: ''
+  name: default_week
+  type: numeric
+- description: ''
+  name: default_week_group
+  type: character
+- description: ''
+  name: id
+  type: numeric
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: seasons
+  type: list
+- description: ''
+  name: slug
+  type: character
+- description: ''
+  name: week_groups
+  type: list
+- description: ''
+  name: weeks
+  type: list
+kind: dataframe
+schema: leagues

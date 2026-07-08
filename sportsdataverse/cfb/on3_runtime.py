@@ -1,27 +1,40 @@
 """Runtime getter for the generated ``on3`` wrappers.
 
-On3 (on3.com — which also serves the Rivals rankings since the 2025 merger)
-publishes no public REST API: ``api.on3.com`` exists but its routes are
-undocumented and auth-gated. The stable public JSON surface is the site's
-**Next.js data route**::
+**Primary path — the On3 Recruit Database (RDB).** The generated wrappers hit
+the open, read-only, **auth-free** public gateway::
+
+    https://api.on3.com/public/rdb/v1/...   (and one /rdb/v2/... route)
+
+``_get`` is therefore a plain ``requests``-via-:func:`sportsdataverse.dl_utils.download`
+GET with a browser UA: no buildId, no JWT, no query derivation. ``url`` arrives
+already fully-built by the wrapper (``host`` + substituted ``path``); ``_get``
+drops ``None``-valued params and returns the parsed JSON body, which the RDB
+serves as either a ``dict`` (paged / single object) or a bare ``list``.
+
+**Fallback path — the legacy On3 rankings scrape (``_scrape_get``).** Before the
+RDB, the only public JSON surface was on3.com's Next.js data route::
 
     https://www.on3.com/_next/data/{buildId}/rivals/rankings/{rankingType}/{sport}/{year}.json
-        ?rankingType=...&sport=...&year=...
 
-Two On3-specific mechanics live here so the generated wrappers stay plain:
+That machinery (buildId discovery + stale-buildId retry) is retained under
+:func:`_scrape_get` and is used **only** by the 4 deprecated rankings shim
+wrappers in :mod:`sportsdataverse.cfb.on3_rankings`, which keep working for
+continuity. The RDB natives are the forward path.
+
+``_scrape_get`` mechanics (unchanged from the pre-retarget ``_get``):
 
 * **buildId discovery** — the ``{buildId}`` segment rotates on every On3
   deploy. It is scraped from the ``__NEXT_DATA__`` blob of the corresponding
   rankings HTML page and cached at module level for the process lifetime.
 * **stale-buildId retry** — a rotated buildId makes the data route return
   HTTP 404 (which :func:`sportsdataverse.dl_utils.download` surfaces as
-  :class:`~sportsdataverse.errors.NoESPNDataError`). ``_get`` treats that as
-  "re-discover the buildId and retry once", so a deploy mid-process degrades
+  :class:`~sportsdataverse.errors.NoESPNDataError`). ``_scrape_get`` treats that
+  as "re-discover the buildId and retry once", so a deploy mid-process degrades
   to one extra page fetch instead of an error.
 
 The data route also **requires** ``rankingType`` / ``sport`` / ``year`` as
-query parameters (it 404s without them); ``_get`` derives them from the
-resolved path so the generated wrapper signatures stay positional.
+query parameters (it 404s without them); ``_scrape_get`` derives them from the
+resolved path so the shim wrapper signatures stay positional.
 """
 
 from __future__ import annotations
@@ -81,7 +94,38 @@ def _discover_build_id(page_url: str, **kwargs: Any) -> Optional[str]:
     return _extract_build_id(getattr(resp, "text", "") or "")
 
 
-def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Dict:
+def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Any:
+    """GET an ``api.on3.com`` RDB route and return its parsed JSON (dict or list).
+
+    The RDB ``/public/`` gateway is read-only and auth-free — no buildId, no JWT.
+    ``url`` is already the full ``https://api.on3.com/public/rdb/v{1,2}/...`` route
+    built by the generated wrapper; ``params`` are query args (``None``-valued
+    dropped). The RDB serves both ``dict`` (paged / single object) and bare
+    ``list`` bodies, so the return type is ``Any``.
+
+    Args:
+        url: full RDB route URL built by the generated wrapper.
+        params: query parameters; ``None`` values are dropped.
+        **kwargs: forwarded to :func:`sportsdataverse.dl_utils.download`.
+
+    Returns:
+        The parsed JSON ``dict`` or ``list``; ``{}`` when the route is
+        unreachable (``NoESPNDataError``) or the body is not JSON.
+    """
+    headers = {**_headers(), **kwargs.pop("headers", {})}
+    query = {k: v for k, v in (params or {}).items() if v is not None}
+    try:
+        resp = download(url=url, params=query, headers=headers, **kwargs)
+    except NoESPNDataError:
+        return {}
+    try:
+        body = resp.json()
+    except ValueError:
+        return {}
+    return body if isinstance(body, (dict, list)) else {}
+
+
+def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Dict:
     """GET an on3.com Next.js data route and return its JSON body.
 
     ``url`` arrives from the generated wrapper as the *logical* route
