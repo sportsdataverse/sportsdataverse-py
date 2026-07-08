@@ -1,10 +1,20 @@
-"""Unit tests for the NFL ratings/market spine metric helpers (Task 0.2)."""
+"""Unit tests for the NFL ratings/market spine metric helpers (Tasks 0.2/0.3)."""
+
+import datetime as dt
 
 import numpy as np
+import polars as pl
+import pytest
 
 from sportsdataverse.nfl.nfl_prediction_constants import (
+    PredictConfig,
+    PropConfig,
+    RatingsConfig,
+    as_of_ratings_split,
     brier_score,
     calibration_table,
+    get_constants,
+    get_prop_constants,
     log_loss_score,
     mae,
     spearman_corr,
@@ -46,3 +56,29 @@ def test_calibration_table_shape():
 
 def test_mae_manual():
     assert abs(mae(np.array([1.0, 2.0]), np.array([1.5, 2.5])) - 0.5) < 1e-9
+
+
+def test_get_constants_and_unknown():
+    assert isinstance(get_constants("modern"), PredictConfig)
+    assert isinstance(get_prop_constants("modern"), PropConfig)
+    with pytest.raises(ValueError):
+        get_constants("nope")
+    with pytest.raises(ValueError):
+        get_prop_constants("nope")
+
+
+def test_ratings_config_defaults():
+    cfg = RatingsConfig()
+    assert cfg.ridge_lambda > 0
+    assert 0.0 <= cfg.min_competitive_wp < cfg.max_competitive_wp <= 1.0
+
+
+def test_as_of_split_excludes_same_day_and_later():
+    r = pl.DataFrame(
+        {
+            "game_id": ["a", "b", "c"],
+            "gameday": [dt.date(2023, 9, 7), dt.date(2023, 9, 14), dt.date(2023, 9, 21)],
+        }
+    )
+    out = as_of_ratings_split(r, dt.date(2023, 9, 14))
+    assert out["game_id"].to_list() == ["a"]
