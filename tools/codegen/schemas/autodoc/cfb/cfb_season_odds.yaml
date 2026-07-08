@@ -1,0 +1,24 @@
+schema: cfb_season_odds
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: exp_wins
+  type: double
+  description: ''
+- name: conf_title_prob
+  type: double
+  description: ''
+- name: playoff_prob
+  type: double
+  description: ''
+- name: first_round_bye_prob
+  type: double
+  description: ''
+- name: cfp_champ_prob
+  type: double
+  description: ''

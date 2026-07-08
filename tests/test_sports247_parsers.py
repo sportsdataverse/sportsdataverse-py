@@ -226,6 +226,8 @@ def test_result_set_handles_array_envelope_scalar_and_single_object():
         ("composite_team_ranking_feed_fb_2026", {"composite_overall_rank", "five_stars"}),
         ("current_target_predictions_fb_2026", {"expert_name", "prediction", "player_name"}),
         ("tags_autocomplete", {"id", "name", "type"}),
+        ("transfer_portal_only_team_feed_fb_2026", {"name", "number_of_transfers", "transfer_points"}),
+        ("sports_year_fb", {"value"}),
     ],
 )
 def test_new_endpoint_fixtures_flatten_with_expected_columns(stem, min_cols):
