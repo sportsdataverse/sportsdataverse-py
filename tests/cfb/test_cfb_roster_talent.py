@@ -61,3 +61,27 @@ def test_loader_empty_returns_documented_schema(monkeypatch) -> None:
     out = load_recruit_classes(2023)
     assert out.height == 0
     assert out.schema["team_id"] == pl.Utf8 and out.schema["stars"] == pl.Int64
+
+
+def test_blue_chip_window_rollup() -> None:
+    from sportsdataverse.cfb.cfb_roster_talent import blue_chip_ratio
+
+    # team A: 2020 class = 2 blue-chip of 4; 2021 class = 4 blue-chip of 4
+    rec = pl.DataFrame(
+        {
+            "season": [2020, 2020, 2020, 2020, 2021, 2021, 2021, 2021],
+            "team_id": ["A"] * 8,
+            "recruit_id": [f"r{i}" for i in range(8)],
+            "stars": [5, 4, 3, 3, 4, 4, 5, 4],
+            "grade": [95.0] * 8,
+            "position": ["QB"] * 8,
+        }
+    )
+    out = blue_chip_ratio(rec, window=4, division="fbs").sort("season")
+    # season 2020 window sees only the 2020 class: 2/4 = 0.5
+    row20 = out.filter(pl.col("season") == 2020).row(0, named=True)
+    assert row20["n_recruits"] == 4 and row20["n_blue_chip"] == 2
+    assert abs(row20["blue_chip_ratio"] - 0.5) < 1e-9
+    # season 2021 window sees 2020+2021: (2+4)/(4+4) = 0.75
+    row21 = out.filter(pl.col("season") == 2021).row(0, named=True)
+    assert abs(row21["blue_chip_ratio"] - 0.75) < 1e-9

@@ -14,9 +14,10 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.cfb.cfb_projection_constants import get_constants
 from sportsdataverse.cfb.sports247 import sports247_recruits
 
-__all__ = ["load_recruit_classes"]
+__all__ = ["blue_chip_ratio", "load_recruit_classes"]
 
 _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "season": pl.Int64,
@@ -58,6 +59,64 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
             pl.col("composite_rating").cast(pl.Float64).alias("grade"),
             pl.col("primary_position").cast(pl.Utf8).alias("position"),
         ).drop_nulls(["team_id"])  # recruits without a committed team don't count toward roster talent
+    )
+
+
+def blue_chip_ratio(recruits: pl.DataFrame, *, window: int = 4, division: str = "fbs") -> pl.DataFrame:
+    """Blue-chip ratio per team-season over a trailing window of recruiting classes.
+
+    Bud Elliott's blue-chip ratio: the share of a roster's recruits rated at or above
+    the division's blue-chip star floor (4+ stars for FBS). Each recruiting class
+    contributes to the ``window`` seasons it is roster-eligible for, so the season-S
+    ratio aggregates classes S-window+1 .. S.
+
+    Args:
+        recruits: Per-recruit frame from :func:`load_recruit_classes`
+            (``season``, ``team_id``, ``recruit_id``, ``stars``, ...).
+        window: Number of trailing recruiting classes eligible per season.
+        division: Division slug for :func:`get_constants` (blue-chip star floor).
+
+    Returns:
+        Per ``(season, team_id)``: ``blue_chip_ratio`` (Float64), ``n_recruits``
+        (Int64), ``n_blue_chip`` (Int64). Zero-row (typed) for empty input.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_roster_talent import blue_chip_ratio, load_recruit_classes
+            bcr = blue_chip_ratio(load_recruit_classes([2020, 2021, 2022, 2023]))
+            bcr.filter(pl.col("season") == 2023).sort("blue_chip_ratio", descending=True).head()
+
+    See Also:
+        * `recruitR`_ -- the R companion for CFB recruiting data.
+
+    .. _recruitR: https://github.com/sportsdataverse/recruitR
+    """
+    if recruits.height == 0:
+        return pl.DataFrame(
+            schema={
+                "season": pl.Int64,
+                "team_id": pl.Utf8,
+                "blue_chip_ratio": pl.Float64,
+                "n_recruits": pl.Int64,
+                "n_blue_chip": pl.Int64,
+            }
+        )
+    star_min = get_constants(division).blue_chip_star_min
+    per_class = recruits.group_by(["season", "team_id"]).agg(
+        pl.len().cast(pl.Int64).alias("n_recruits"),
+        (pl.col("stars") >= star_min).sum().cast(pl.Int64).alias("n_blue_chip"),
+    )
+    # replicate each class row to the `window` seasons it is eligible for, then
+    # re-aggregate per target season (no polars rolling over Int seasons)
+    frames = [per_class.with_columns((pl.col("season") + off).alias("target_season")) for off in range(window)]
+    return (
+        pl.concat(frames)
+        .group_by(["team_id", "target_season"])
+        .agg(pl.col("n_recruits").sum(), pl.col("n_blue_chip").sum())
+        .rename({"target_season": "season"})
+        .with_columns((pl.col("n_blue_chip") / pl.col("n_recruits")).alias("blue_chip_ratio"))
+        .select("season", "team_id", "blue_chip_ratio", "n_recruits", "n_blue_chip")
     )
 
 
