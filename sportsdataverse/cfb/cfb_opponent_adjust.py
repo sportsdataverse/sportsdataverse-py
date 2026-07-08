@@ -12,12 +12,14 @@ from __future__ import annotations
 import datetime
 from typing import Optional
 
+import numpy as np
 import polars as pl
 
 from sportsdataverse.cfb.cfb_advanced_constants import (
     EXPLOSIVE_EPA,
     GARBAGE_TIME_MARGIN,
     SUCCESS_COEF,
+    AdjustConfig,
 )
 
 __all__ = [
@@ -26,6 +28,7 @@ __all__ = [
     "add_success",
     "add_explosive",
     "build_play_long",
+    "opponent_adjust",
 ]
 
 #: real released load_cfb_pbp column name -> canonical substrate name.
@@ -278,4 +281,93 @@ def build_play_long(
         pl.col("havoc").cast(pl.Boolean),
         pl.col("pass").cast(pl.Boolean),
         pl.col("rush").cast(pl.Boolean),
+    )
+
+
+def opponent_adjust(
+    long: pl.DataFrame,
+    *,
+    value_col: str,
+    team_col: str = "team_id",
+    opp_col: str = "opp_team_id",
+    config: Optional[AdjustConfig] = None,
+) -> pl.DataFrame:
+    """Iterative opponent adjustment on a generic ``(team, opp, value)`` frame.
+
+    KenPom/GameOnPaper-style fixed point: each team's offensive level is its
+    mean value after removing the opponent-defense effect, and vice versa,
+    iterated to convergence. League-agnostic -- no CFB column names inside.
+
+    Args:
+        long: one row per observation with ``team_col``, ``opp_col`` and
+            ``value_col`` (boolean values are cast to float).
+        value_col: the value column to adjust.
+        team_col: offense/team id column (``Utf8``).
+        opp_col: opponent/defense id column (``Utf8``).
+        config: :class:`AdjustConfig` (shrink / max_iter / tol).
+
+    Returns:
+        One row per team: ``{team_col}, adj_off, adj_def, raw_off, raw_def,
+        plays``. ``adj_off`` = production adjusted for opponent defenses
+        faced; ``adj_def`` = production allowed adjusted for opponent
+        offenses faced (lower = better defense). Empty input returns a
+        zero-row frame with that schema.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.cfb.cfb_opponent_adjust import opponent_adjust
+            long = pl.DataFrame({"team_id": ["A", "B"], "opp_team_id": ["B", "A"],
+                                 "val": [0.6, 0.4]})
+            out = opponent_adjust(long, value_col="val")
+    """
+    cfg = config or AdjustConfig()
+    schema: dict[str, pl.DataType] = {
+        team_col: pl.Utf8(),
+        "adj_off": pl.Float64(),
+        "adj_def": pl.Float64(),
+        "raw_off": pl.Float64(),
+        "raw_def": pl.Float64(),
+        "plays": pl.Int64(),
+    }
+    if long.height == 0:
+        return pl.DataFrame(schema=schema)
+    v = long[value_col].cast(pl.Float64).fill_null(0.0).to_numpy()
+    teams = long[team_col].cast(pl.Utf8).to_numpy()
+    opps = long[opp_col].cast(pl.Utf8).to_numpy()
+    uniq = np.unique(np.concatenate([teams, opps]))
+    idx = {t: i for i, t in enumerate(uniq)}
+    ti: np.ndarray = np.fromiter((idx[t] for t in teams), dtype=int, count=len(teams))
+    oi: np.ndarray = np.fromiter((idx[o] for o in opps), dtype=int, count=len(opps))
+    n = len(uniq)
+    grand = float(np.nanmean(v))
+    # plays run by team / plays faced as defender
+    ct: np.ndarray = np.bincount(ti, minlength=n).astype(float)
+    co: np.ndarray = np.bincount(oi, minlength=n).astype(float)
+    raw_off = np.where(ct > 0, np.bincount(ti, weights=v, minlength=n) / np.maximum(ct, 1), grand)
+    raw_def = np.where(co > 0, np.bincount(oi, weights=v, minlength=n) / np.maximum(co, 1), grand)
+    off, dfn = raw_off.copy(), raw_def.copy()
+    for _ in range(cfg.max_iter):
+        new_off = np.bincount(ti, weights=v - (dfn[oi] - grand), minlength=n)
+        new_off = np.where(ct > 0, new_off / np.maximum(ct, 1), grand)
+        new_def = np.bincount(oi, weights=v - (off[ti] - grand), minlength=n)
+        new_def = np.where(co > 0, new_def / np.maximum(co, 1), grand)
+        if cfg.shrink > 0:
+            new_off = (ct * new_off + cfg.shrink * grand) / (ct + cfg.shrink)
+            new_def = (co * new_def + cfg.shrink * grand) / (co + cfg.shrink)
+        delta = max(float(np.abs(new_off - off).max()), float(np.abs(new_def - dfn).max()))
+        off, dfn = new_off, new_def
+        if delta < cfg.tol:
+            break
+    return pl.DataFrame(
+        {
+            team_col: uniq,
+            "adj_off": off,
+            "adj_def": dfn,
+            "raw_off": raw_off,
+            "raw_def": raw_def,
+            "plays": ct.astype("int64"),
+        },
+        schema=schema,
     )

@@ -126,3 +126,48 @@ def test_build_play_long_empty_input():
     assert long.height == 0
     assert long.schema["epa"] == pl.Float64
     assert long.schema["date"] == pl.Date
+
+
+def test_opponent_adjust_recovers_ordering():
+    import numpy as np
+
+    from sportsdataverse.cfb.cfb_opponent_adjust import opponent_adjust
+
+    rng = np.random.default_rng(0)
+    teams = ["A", "B", "C", "D"]
+    strength = {"A": 0.6, "B": 0.4, "C": 0.35, "D": 0.2}
+    rows = []
+    for t in teams:
+        for o in teams:
+            if t == o:
+                continue
+            for _ in range(50):
+                rows.append(
+                    {
+                        "team_id": t,
+                        "opp_team_id": o,
+                        "val": float(rng.random() < strength[t]),
+                    }
+                )
+    long = pl.DataFrame(rows)
+    out = opponent_adjust(long, value_col="val").sort("adj_off", descending=True)
+    assert out["team_id"].to_list()[0] == "A"
+    assert out["team_id"].to_list()[-1] == "D"
+    assert out.schema["team_id"] == pl.Utf8
+    assert out["plays"].sum() == long.height
+
+
+def test_opponent_adjust_empty_and_bool_cast():
+    from sportsdataverse.cfb.cfb_opponent_adjust import opponent_adjust
+
+    empty = opponent_adjust(pl.DataFrame(), value_col="val")
+    assert empty.height == 0 and empty.schema["adj_off"] == pl.Float64
+    long = pl.DataFrame(
+        {
+            "team_id": ["A", "B", "A", "B"],
+            "opp_team_id": ["B", "A", "B", "A"],
+            "val": [True, False, True, False],
+        }
+    )
+    out = opponent_adjust(long, value_col="val")
+    assert out.schema["adj_off"] == pl.Float64

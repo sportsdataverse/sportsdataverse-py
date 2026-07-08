@@ -292,6 +292,8 @@ files = [
     "sportsdataverse/_deprecation.py",
     "sportsdataverse/errors.py",
     "sportsdataverse/cfb/cfb_adjusted_epa.py",
+    "sportsdataverse/cfb/cfb_advanced_constants.py",
+    "sportsdataverse/cfb/cfb_opponent_adjust.py",
     "sportsdataverse/cfb/cfb_crosswalk.py",
     "sportsdataverse/cfb/cfb_fox_ext.py",
     "sportsdataverse/cfb/cfb_game_predict.py",
