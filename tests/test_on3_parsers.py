@@ -219,16 +219,20 @@ def test_get_returns_empty_dict_on_unknown_path(on3_runtime):
 
 
 def test_wrapper_routes_fixture_through_parser(monkeypatch):
-    import sportsdataverse.cfb.on3 as on3
+    # The 4 legacy rankings names now live in the deprecated on3_rankings shim
+    # (the generated `on3` stem retargeted to the RDB); routing is unchanged.
+    import sportsdataverse.cfb.on3_rankings as shim
 
     fixture = _load("on3_player_rankings")
-    monkeypatch.setattr(on3, "_get", lambda *args, **kwargs: fixture)
+    monkeypatch.setattr(shim, "_scrape_get", lambda *args, **kwargs: fixture)
 
-    raw = on3.on3_player_rankings(year=2026, return_parsed=False)
+    with pytest.warns(DeprecationWarning):
+        raw = shim.on3_player_rankings(year=2026, return_parsed=False)
     assert isinstance(raw, dict)
     assert "pageProps" in raw
 
-    df = on3.on3_player_rankings(year=2026)
+    with pytest.warns(DeprecationWarning):
+        df = shim.on3_player_rankings(year=2026)
     assert isinstance(df, pl.DataFrame)
     assert df.height == 3
     assert "person_name" in df.columns
