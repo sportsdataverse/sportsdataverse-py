@@ -23,6 +23,8 @@ __all__ = [
     "classify_point_value",
     "classify_zone_geometry",
     "classify_zone_type",
+    "espn_shots_to_canonical",
+    "fit_espn_court_scale",
     "shot_events_to_frame",
 ]
 
@@ -187,3 +189,155 @@ def shot_events_to_frame(
             }
         )
     return pl.DataFrame(rows, schema=CANONICAL_SHOT_SCHEMA)
+
+
+_COORD_SENTINEL = 1_000.0  # |coordinate| beyond this is int32-sentinel garbage
+_FALLBACK_FEET_PER_UNIT = 1.0  # raw grid is ~feet (court width 0-50)
+
+
+def fit_espn_court_scale(espn: pl.DataFrame, *, league: str, season: int) -> "tuple[float, float, float]":
+    """Fit the ESPN raw-coordinate court scale: ``(origin_x, origin_y, feet_per_unit)``.
+
+    The release's ``coordinate_{x,y}_raw`` grid is basket-anchored half-court
+    (width 0-50, rim cluster near ``(25, 2)``). Origin = median raw
+    coordinates of made rim-type shots; ``feet_per_unit`` = arc radius /
+    median unit-distance of made threes from that origin -- fitted, not
+    guessed, so a units change in the release shows up as a scale shift.
+
+    Args:
+        espn: ``load_mbb_shots``-shaped frame.
+        league: ``"mens"`` or ``"womens"``.
+        season: Season-ending year (selects the arc radius).
+
+    Returns:
+        ``(origin_x, origin_y, feet_per_unit)``; documented fallbacks
+        ``(25.0, 2.0, 1.0)`` when either calibration subset is empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_shots_adapter import fit_espn_court_scale
+            scale = fit_espn_court_scale(espn, league="mens", season=2025)
+    """
+    valid = espn.filter(
+        pl.col("coordinate_x_raw").is_not_null()
+        & pl.col("coordinate_y_raw").is_not_null()
+        & (pl.col("coordinate_x_raw").abs() < _COORD_SENTINEL)
+        & (pl.col("coordinate_y_raw").abs() < _COORD_SENTINEL)
+    )
+    rim = valid.filter(
+        pl.col("type_text").str.contains("(?i)dunk|layup|lay up|tip") & (pl.col("scoring_play") == True)  # noqa: E712
+    )
+    if rim.is_empty():
+        return (25.0, 2.0, _FALLBACK_FEET_PER_UNIT)
+    ox = float(rim.get_column("coordinate_x_raw").median())
+    oy = float(rim.get_column("coordinate_y_raw").median())
+    threes = valid.filter((pl.col("score_value") == 3) & (pl.col("scoring_play") == True))  # noqa: E712
+    if threes.is_empty():
+        return (ox, oy, _FALLBACK_FEET_PER_UNIT)
+    unit_dist = threes.select(
+        ((pl.col("coordinate_x_raw") - ox) ** 2 + (pl.col("coordinate_y_raw") - oy) ** 2).sqrt().alias("d")
+    ).get_column("d")
+    med = float(unit_dist.median())
+    if med <= 0:
+        return (ox, oy, _FALLBACK_FEET_PER_UNIT)
+    return (ox, oy, three_point_radius(league, season) / med)
+
+
+def espn_shots_to_canonical(
+    espn: pl.DataFrame,
+    *,
+    league: str,
+    season: int,
+    scale: "tuple[float, float, float] | None" = None,
+) -> pl.DataFrame:
+    """ESPN ``load_mbb_shots`` frame -> the canonical shot frame.
+
+    Field-goal attempts only (free throws and sentinel-coordinate rows are
+    dropped). ``point_value`` comes from ``score_value`` -- the release
+    populates it on misses too, and its ``type_text`` carries NO three-point
+    marker, so ``arc3`` is value-derived. Coordinates are re-based to the
+    fitted basket origin and scaled to feet.
+
+    Args:
+        espn: ``load_mbb_shots``-shaped frame.
+        league: ``"mens"`` or ``"womens"``.
+        season: Season-ending year.
+        scale: Optional pre-fitted ``(origin_x, origin_y, feet_per_unit)``;
+            fitted from ``espn`` when ``None``.
+
+    Returns:
+        The canonical shot frame (``CANONICAL_SHOT_SCHEMA``); empty input
+        returns the zero-row schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_loaders import load_mbb_shots
+            from sportsdataverse.mbb.mbb_shots_adapter import espn_shots_to_canonical
+            df = espn_shots_to_canonical(load_mbb_shots([2025]), league="mens", season=2025)
+    """
+    if espn.is_empty():
+        return pl.DataFrame(schema=CANONICAL_SHOT_SCHEMA)
+    fga = espn.filter(
+        (pl.col("type_text").str.contains("(?i)free throw") == False)  # noqa: E712
+        & pl.col("score_value").is_in([2, 3])
+        & pl.col("coordinate_x_raw").is_not_null()
+        & pl.col("coordinate_y_raw").is_not_null()
+        & (pl.col("coordinate_x_raw").abs() < _COORD_SENTINEL)
+        & (pl.col("coordinate_y_raw").abs() < _COORD_SENTINEL)
+    )
+    if fga.is_empty():
+        return pl.DataFrame(schema=CANONICAL_SHOT_SCHEMA)
+    ox, oy, fpu = scale if scale is not None else fit_espn_court_scale(espn, league=league, season=season)
+
+    c = get_constants(league)
+    out = fga.with_columns(
+        ((pl.col("coordinate_x_raw") - ox) * fpu).alias("shot_x"),
+        ((pl.col("coordinate_y_raw") - oy) * fpu).alias("shot_y"),
+    ).with_columns(((pl.col("shot_x") ** 2 + pl.col("shot_y") ** 2).sqrt()).alias("dist_ft"))
+    is_rim_type = pl.col("type_text").str.contains("(?i)dunk|layup|lay up|tip")
+    out = out.with_columns(
+        pl.when(pl.col("score_value") == 3)
+        .then(pl.lit("arc3"))
+        .when(is_rim_type)
+        .then(pl.lit("rim"))
+        .otherwise(pl.lit("jump"))
+        .alias("shot_type"),
+        # zone: value-confident threes split corner/above-break by geometry;
+        # twos by rim type then radial distance
+        pl.when(pl.col("score_value") == 3)
+        .then(
+            pl.when((pl.col("shot_x").abs() >= c.corner_x_ft) & (pl.col("shot_y").abs() <= c.corner_y_ft))
+            .then(pl.lit("corner3"))
+            .otherwise(pl.lit("abovebreak3"))
+        )
+        .when(is_rim_type | (pl.col("dist_ft") <= c.rim_radius_ft))
+        .then(pl.lit("rim"))
+        .when(pl.col("dist_ft") <= c.paint_radius_ft)
+        .then(pl.lit("paint"))
+        .otherwise(pl.lit("mid"))
+        .alias("shot_zone"),
+        (
+            pl.col("clock_display_value").str.extract(r"^(\d+):", 1).cast(pl.Float64) * 60
+            + pl.col("clock_display_value").str.extract(r":(\d+)", 1).cast(pl.Float64)
+        ).alias("sec_left"),
+    )
+    result = out.select(
+        pl.col("game_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
+        pl.col("season").cast(pl.Int64),
+        pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
+        pl.col("athlete_id_1").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("shooter_id"),
+        pl.col("shot_x").cast(pl.Float64),
+        pl.col("shot_y").cast(pl.Float64),
+        pl.col("dist_ft").cast(pl.Float64),
+        pl.col("shot_zone").cast(pl.Utf8),
+        pl.col("shot_type").cast(pl.Utf8),
+        pl.col("scoring_play").cast(pl.Boolean).alias("made"),
+        pl.col("score_value").cast(pl.Int8).alias("point_value"),
+        pl.col("period_number").cast(pl.Int64).alias("period"),
+        pl.col("sec_left").cast(pl.Float64),
+        pl.lit("espn").alias("source"),
+    )
+    assert dict(result.schema) == dict(CANONICAL_SHOT_SCHEMA)
+    return result

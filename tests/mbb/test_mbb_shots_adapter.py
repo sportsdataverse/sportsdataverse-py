@@ -132,3 +132,67 @@ def test_shot_events_to_frame_empty():
     assert df.height == 0
     assert dict(df.schema) == dict(CANONICAL_SHOT_SCHEMA)
     assert df.schema["shooter_id"] == pl.Utf8
+
+
+# ---------------------------------------------------------------------------
+# ESPN shots -> canonical frame (fitted court scale)
+# ---------------------------------------------------------------------------
+
+
+def _fake_espn():
+    import polars as pl
+
+    # basket-anchored half-court grid like the real release (raw coords):
+    # rim makes at (25, 2); three-point makes exactly 22.15 units away
+    return pl.DataFrame(
+        {
+            "game_id": [1, 1, 1, 1],
+            "season": [2025] * 4,
+            "period_number": [1, 1, 2, 2],
+            "clock_display_value": ["10:30", "5:00", "1:30", "0:45"],
+            "team_id": [10, 10, 11, 11],
+            "athlete_id_1": [7, 7, 8, 8],
+            "type_text": ["LayUpShot", "DunkShot", "JumpShot", "JumpShot"],
+            "scoring_play": [True, True, True, False],
+            "score_value": [2, 2, 3, 3],
+            "coordinate_x_raw": [25.0, 25.0, 25.0, 47.15],
+            "coordinate_y_raw": [2.0, 2.0, 24.15, 2.0],
+        }
+    )
+
+
+def test_fit_espn_court_scale_exact():
+    from sportsdataverse.mbb.mbb_shots_adapter import fit_espn_court_scale
+
+    ox, oy, fpu = fit_espn_court_scale(_fake_espn(), league="mens", season=2025)
+    assert ox == 25.0 and oy == 2.0
+    # made 3s sit exactly 22.15 units from the origin -> 1 foot per unit
+    assert abs(fpu - 1.0) < 1e-9
+
+
+def test_espn_shots_to_canonical():
+    import polars as pl
+
+    from sportsdataverse.mbb.mbb_shots_adapter import espn_shots_to_canonical
+
+    out = espn_shots_to_canonical(_fake_espn(), league="mens", season=2025)
+    assert out.schema["game_id"] == pl.Utf8
+    assert out.schema["shooter_id"] == pl.Utf8
+    assert out["source"].unique().to_list() == ["espn"]
+    assert out["point_value"].to_list() == [2, 2, 3, 3]
+    assert out["made"].to_list() == [True, True, True, False]
+    assert out["shot_type"].to_list() == ["rim", "rim", "arc3", "arc3"]
+    zones = out["shot_zone"].to_list()
+    assert zones[0] == "rim" and zones[1] == "rim"
+    assert zones[2] == "abovebreak3" and zones[3] == "corner3"
+    assert out["sec_left"].to_list() == [630.0, 300.0, 90.0, 45.0]
+
+
+def test_espn_shots_to_canonical_empty():
+    import polars as pl
+
+    from sportsdataverse.mbb.mbb_shots_adapter import CANONICAL_SHOT_SCHEMA, espn_shots_to_canonical
+
+    out = espn_shots_to_canonical(pl.DataFrame(), league="mens", season=2025)
+    assert out.height == 0
+    assert dict(out.schema) == dict(CANONICAL_SHOT_SCHEMA)
