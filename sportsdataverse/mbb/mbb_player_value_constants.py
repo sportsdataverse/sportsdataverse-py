@@ -25,6 +25,7 @@ import numpy as np
 import polars as pl
 from scipy.optimize import minimize
 
+from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.mbb.mbb_prediction_constants import mae as mae  # noqa: PLC0414 - re-export by reference
 from sportsdataverse.mbb.mbb_prediction_constants import spearman_corr as spearman_corr  # noqa: PLC0414
 
@@ -201,13 +202,16 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
     poss_used = fga + 0.44 * fta + pl.col("turnovers")
     shots = pl.col("fga_rim") + pl.col("fga_mid") + pl.col("fga_three")
     reb = pl.col("offensive_rebounds") + pl.col("defensive_rebounds")
+    # zero/null-minute rows would divide to inf/NaN; null the denominator instead.
+    # (aggregate_player_seasons pre-filters minutes>0, but this is a public builder.)
+    min_pos = pl.when(pl.col("minutes") > 0).then(pl.col("minutes"))
     out = season_stats.with_columns(
         pl.col("player_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
         pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
         pl.col("season").cast(pl.Int64),
     ).with_columns(
         pl.col("minutes").cast(pl.Float64).alias("min"),
-        (100.0 * poss_used / pl.col("minutes")).cast(pl.Float64).alias("usage"),
+        (100.0 * poss_used / min_pos).cast(pl.Float64).alias("usage"),
         _share(pl.col("points"), 2 * (fga + 0.44 * fta)).alias("ts_pct"),
         _share(pl.col("field_goals_made") + 0.5 * pl.col("three_point_field_goals_made"), fga).alias("efg_pct"),
         _share(pl.col("assists"), fga).alias("ast_pct"),
@@ -220,9 +224,9 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
         _share(pl.col("fga_rim"), shots).alias("rim_share"),
         _share(pl.col("fga_mid"), shots).alias("mid_share"),
         _share(pl.col("fga_three"), shots).alias("three_share"),
-        (100.0 * pl.col("points") / pl.col("minutes")).cast(pl.Float64).alias("pts_per100"),
-        (100.0 * reb / pl.col("minutes")).cast(pl.Float64).alias("reb_per100"),
-        (100.0 * pl.col("assists") / pl.col("minutes")).cast(pl.Float64).alias("ast_per100"),
+        (100.0 * pl.col("points") / min_pos).cast(pl.Float64).alias("pts_per100"),
+        (100.0 * reb / min_pos).cast(pl.Float64).alias("reb_per100"),
+        (100.0 * pl.col("assists") / min_pos).cast(pl.Float64).alias("ast_per100"),
     )
     return out.select(list(_FEATURE_SCHEMA))
 
@@ -262,7 +266,7 @@ def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
     for season in seasons:
         try:
             df = _loader([season])
-        except Exception:  # noqa: BLE001 - release floor varies by league (wbb: 2026)
+        except SeasonNotFoundError:  # season below this league's shots-release floor
             continue
         if not df.is_empty():
             frames.append(
@@ -341,10 +345,9 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
         .drop("athlete_id")
     )
 
-    try:
-        shots = _load_shots(seasons, league)
-    except Exception:  # noqa: BLE001 - shots release floors at 2025
-        shots = pl.DataFrame()
+    # _load_shots handles the per-season release floor internally (skips below-floor
+    # seasons); any other error propagates rather than silently degrading to box-only.
+    shots = _load_shots(seasons, league)
     if shots.is_empty():
         return agg.with_columns(
             pl.lit(0.0).alias("fga_rim"),
@@ -363,7 +366,8 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
         shots.filter(
             pl.col("athlete_id_1").is_not_null()
             # field-goal attempts only: drop free throws (and stray 0/1-value rows)
-            & (pl.col("type_text").str.contains("(?i)free throw") == False)  # noqa: E712
+            # release token is "MadeFreeThrow" (no space); \s* also matches "free throw"
+            & (pl.col("type_text").str.contains(r"(?i)free\s*throw") == False)  # noqa: E712
             & (pl.col("score_value") >= 2)
         )
         .with_columns(

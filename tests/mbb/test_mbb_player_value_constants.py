@@ -267,10 +267,9 @@ def test_aggregate_player_seasons_no_shots_data(monkeypatch):
     )
     monkeypatch.setattr(pvc, "_load_player_box", lambda seasons, league: box)
 
-    def _raise(seasons, league):
-        raise ValueError("season cannot be less than 2025")
-
-    monkeypatch.setattr(pvc, "_load_shots", _raise)
+    # _load_shots returns an empty frame for below-floor seasons (it swallows the
+    # per-season SeasonNotFoundError internally) -> box-only shot splits.
+    monkeypatch.setattr(pvc, "_load_shots", lambda seasons, league: pl.DataFrame())
     out = pvc.aggregate_player_seasons([2019])
     r = out.row(0, named=True)
     # three from the box; rim/mid unavailable -> two-point attempts fold into mid

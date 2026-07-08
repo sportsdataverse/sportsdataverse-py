@@ -100,6 +100,14 @@ def mbb_archetypes(
 
     art = load_artifact(f"{get_player_value_constants(league).bundle_prefix}_archetypes")
     feats = player_per100_features(agg)
+    # The bundled clusters were fit on a minute floor; scoring sub-floor rows would
+    # place low-sample players in archetypes the model never saw. Filter before scoring.
+    min_floor = float(art.get("min_minutes", 0.0))
+    if min_floor > 0:
+        feats = feats.filter(pl.col("min") >= min_floor)
+        if feats.is_empty():
+            out = pl.DataFrame(schema=_SCHEMA)
+            return out.to_pandas() if return_as_pandas else out
     if "pos_score" in art["feature_cols"]:
         feats = feats.join(
             agg.select("player_id", "season", "team_id", "position"),

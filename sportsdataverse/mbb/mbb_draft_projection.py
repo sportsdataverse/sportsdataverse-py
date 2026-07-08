@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import SeasonNotFoundError
 from sportsdataverse.mbb.mbb_archetypes import mbb_archetypes
 from sportsdataverse.mbb.mbb_box_bpm import mbb_box_bpm
 from sportsdataverse.mbb.mbb_player_value_constants import (
@@ -53,7 +54,7 @@ def _load_roster_class(seasons: "list[int]", league: str = "mens") -> pl.DataFra
     for s in seasons:
         try:
             df = loader([s])
-        except Exception:  # noqa: BLE001 - release floor varies by league
+        except SeasonNotFoundError:  # season below this league's roster-release floor
             continue
         if df.is_empty():
             continue
