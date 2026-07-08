@@ -15,6 +15,7 @@ from __future__ import annotations
 import datetime
 from typing import Literal, overload
 
+import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.stats import norm
@@ -32,6 +33,7 @@ _RESUME_SCHEMA: dict[str, pl.PolarsDataType] = {
     "sos_rank": pl.Int64,
     "quality_wins": pl.Int64,
     "game_control": pl.Float64,
+    "wab": pl.Float64,
 }
 _RESUME_COLUMNS = list(_RESUME_SCHEMA)
 
@@ -89,7 +91,23 @@ def _resume_core(
     # game_control = mean postgame win-expectancy Phi(team_margin / margin_sd); the same
     # Gaussian as win_prob_from_margin, computed vectorized over the played games.
     control = norm.cdf(rows["team_margin"].to_numpy() / config.margin_sd)
-    rows = rows.with_columns(pl.Series("_control", control, dtype=pl.Float64))
+
+    # WAB: expected wins of a bubble-quality team (bubble_adj_net) playing this schedule.
+    # Mirrors predict_margin/win_prob_from_margin, but the HFA is applied on the team's
+    # ACTUAL home/away side (hfa_sign in {+1, -1, 0}), so a team's road games correctly
+    # deny the bubble team home advantage (the design note's always-home form would
+    # over-credit away games). nan where the opponent is unrated -> excluded from WAB.
+    opp = rows["opp_adj_net"].to_numpy()
+    rated = ~np.isnan(opp)
+    bubble_margin = config.net_points_scale * (
+        (config.bubble_adj_net - opp) + rows["hfa_sign"].to_numpy() * 2.0 * config.hfa_epa
+    )
+    bubble_wp = norm.cdf(bubble_margin / config.margin_sd)
+    rows = rows.with_columns(
+        pl.Series("_control", control, dtype=pl.Float64),
+        pl.Series("_bubble_wp", bubble_wp, dtype=pl.Float64),
+        pl.Series("_rated", rated, dtype=pl.Boolean),
+    )
 
     agg = (
         rows.group_by("team_id")
@@ -100,6 +118,10 @@ def _resume_core(
             .cast(pl.Int64)
             .alias("quality_wins"),
             pl.col("_control").mean().alias("game_control"),
+            (
+                ((pl.col("team_won") == True) & (pl.col("_rated") == True)).sum().cast(pl.Float64)  # noqa: E712
+                - pl.col("_bubble_wp").filter(pl.col("_rated") == True).sum()  # noqa: E712
+            ).alias("wab"),
         )
         .with_columns(
             pl.lit(season_value).cast(pl.Int64).alias("season"),
@@ -134,7 +156,7 @@ def cfb_resume(
     era: str = "modern",
     return_as_pandas: bool = False,
 ) -> pl.DataFrame | pd.DataFrame:
-    """Rating-based résumé metrics: strength of schedule, quality wins, game control.
+    """Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble.
 
     For each team, joins every played opponent to its :func:`cfb_ratings.cfb_ratings`
     strength and rolls the games up into:
@@ -145,6 +167,9 @@ def cfb_resume(
       the era ``quality_win_threshold``.
     - ``game_control`` -- mean postgame win expectancy ``Phi(actual_margin /
       margin_sd)``, i.e. how *dominant* the results were, not just win/loss.
+    - ``wab`` -- wins above bubble: actual wins minus the expected wins of a
+      bubble-quality team (``bubble_adj_net``) playing the same schedule, using the
+      Phase-2 predictors with the HFA applied on the team's actual home/away side.
 
     Args:
         seasons: A single season or list of seasons.
@@ -156,7 +181,7 @@ def cfb_resume(
     Returns:
         One row per team: ``season``, ``team_id`` (Utf8), ``sos``, ``sos_rank``
         (Int64 dense rank, best = 1), ``quality_wins`` (Int64), ``game_control``
-        (Float64). Zero-row (typed) when no games are available.
+        (Float64), ``wab`` (Float64). Zero-row (typed) when no games are available.
 
     Example:
         Quick start::

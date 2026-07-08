@@ -87,7 +87,7 @@ def test_game_control_rises_with_blowout_margins(monkeypatch: pytest.MonkeyPatch
 def test_sos_rank_and_schema(monkeypatch: pytest.MonkeyPatch) -> None:
     """Output carries the documented columns + a dense SoS rank."""
     out = _run(monkeypatch)
-    assert out.columns == ["season", "team_id", "sos", "sos_rank", "quality_wins", "game_control"]
+    assert out.columns == ["season", "team_id", "sos", "sos_rank", "quality_wins", "game_control", "wab"]
     assert out.schema["team_id"] == pl.Utf8
     assert out["sos_rank"].min() == 1
 
@@ -120,3 +120,36 @@ def test_normalizes_real_loader_columns(monkeypatch: pytest.MonkeyPatch) -> None
     )
     out = _run(monkeypatch, ratings=ratings, schedule=real)
     assert out.filter(pl.col("team_id") == "100").row(0, named=True)["quality_wins"] == 2
+
+
+def test_wab_positive_when_beating_strong_schedule(monkeypatch: pytest.MonkeyPatch) -> None:
+    """T (bubble-average) went 3-1 beating strong A/B -- a bubble team wins fewer of
+    those games, so WAB > 0."""
+    out = _run(monkeypatch)
+    assert out.filter(pl.col("team_id") == "T").row(0, named=True)["wab"] > 0.0
+
+
+def test_wab_negative_when_losing_easy_schedule(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A team that loses to weak opponents underperforms the bubble baseline (which
+    would beat them), so WAB < 0."""
+    ratings = pl.DataFrame({"season": [2023] * 3, "team_id": ["L", "C", "D"], "adj_net": [0.0, -0.10, -0.30]})
+    schedule = pl.DataFrame(
+        {
+            "game_id": ["1", "2"],
+            "season": [2023, 2023],
+            "home_team_id": ["L", "L"],  # L hosts two weak teams
+            "away_team_id": ["C", "D"],
+            "home_score": [10, 14],  # and loses both
+            "away_score": [17, 21],
+            "neutral_site": [False, False],
+        }
+    )
+    out = _run(monkeypatch, ratings=ratings, schedule=schedule)
+    assert out.filter(pl.col("team_id") == "L").row(0, named=True)["wab"] < 0.0
+
+
+def test_wab_in_schema(monkeypatch: pytest.MonkeyPatch) -> None:
+    """WAB is the last résumé column."""
+    out = _run(monkeypatch)
+    assert out.columns[-1] == "wab"
+    assert out.schema["wab"] == pl.Float64
