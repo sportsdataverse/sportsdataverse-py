@@ -1,0 +1,21 @@
+schema: nfl_draft_projection
+kind: dataframe
+columns:
+- name: gsis_id
+  type: character
+  description: ''
+- name: target_class
+  type: integer
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: pred_car_av
+  type: double
+  description: ''
+- name: hit_prob
+  type: double
+  description: ''
+- name: outcome_rank
+  type: integer
+  description: ''
