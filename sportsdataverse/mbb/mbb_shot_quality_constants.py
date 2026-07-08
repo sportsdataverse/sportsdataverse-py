@@ -51,6 +51,9 @@ LEAGUE_CONSTANTS: "dict[str, ShotQualityConstants]" = {
     ),
     "womens": ShotQualityConstants(
         arc_radius_by_season={(2009, 2021): ARC_OLD_FT, (2022, 2100): ARC_NEW_FT},
+        # split-half fit on the 2026 wbb train fixture (dev/mbb_shot_quality/
+        # fit_talent_k.py, 2026-07-08): MSE 0.0105 at k vs 0.0163 unshrunk
+        shrink_k_talent=92.4,
     ),
 }
 
@@ -63,13 +66,14 @@ PUBLISHED_ZONE_BASELINES: "dict[str, dict[str, float]]" = {
 
 
 # OBSERVED national make rates, captured 2026-07-08 by summing every player
-# row of barttorvik.com getadvstats (2025; mens CSV / womens JSON endpoint):
-# mens n_att 2P=406,493 3P=260,289; womens 2P=431,538 3P=218,673. These are
-# the hard external calibration anchors for the shot-quality oracle gate
+# row of barttorvik.com getadvstats (mens CSV year=2025, n_att 2P=406,493
+# 3P=260,289; womens JSON year=2026 -- era-matched to the wbb shots-release
+# floor -- n_att 2P=435,079 3P=223,495). These are the hard external
+# calibration anchors for the shot-quality oracle gates
 # (PUBLISHED_ZONE_BASELINES above are literature ESTIMATES, sanity-band only).
 BART_NATIONAL_SPLITS: "dict[str, dict[str, float]]" = {
     "mens": {"fg2_pct": 0.5082, "fg3_pct": 0.3376},
-    "womens": {"fg2_pct": 0.4566, "fg3_pct": 0.3129},
+    "womens": {"fg2_pct": 0.4547, "fg3_pct": 0.3087},
 }
 
 
