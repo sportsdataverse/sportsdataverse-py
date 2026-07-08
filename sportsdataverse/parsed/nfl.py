@@ -264,6 +264,7 @@ from sportsdataverse.nfl import nfl_ngs_play_is_highlight as nfl_ngs_play_is_hig
 from sportsdataverse.nfl import nfl_ngs_statboard as nfl_ngs_statboard  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders as nfl_ngs_statboard_leaders  # noqa: F401
 from sportsdataverse.nfl import nfl_players_crosswalk as nfl_players_crosswalk  # noqa: F401
+from sportsdataverse.nfl import nfl_predict_games as nfl_predict_games  # noqa: F401
 from sportsdataverse.nfl import nfl_ratings as nfl_ratings  # noqa: F401
 from sportsdataverse.nfl import nfl_season_standings as nfl_season_standings  # noqa: F401
 from sportsdataverse.nfl import nfl_simulations as nfl_simulations  # noqa: F401
@@ -271,6 +272,8 @@ from sportsdataverse.nfl import nfl_token_gen as nfl_token_gen  # noqa: F401
 from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nfl import opponent_adjusted_ridge as opponent_adjusted_ridge  # noqa: F401
+from sportsdataverse.nfl import predict_margin as predict_margin  # noqa: F401
+from sportsdataverse.nfl import predict_total as predict_total  # noqa: F401
 from sportsdataverse.nfl import reset_config as reset_config  # noqa: F401
 from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nfl import scrape_ngs_season as scrape_ngs_season  # noqa: F401
@@ -280,6 +283,7 @@ from sportsdataverse.nfl import special_teams_ratings as special_teams_ratings  
 from sportsdataverse.nfl import team_name_fn as team_name_fn  # noqa: F401
 from sportsdataverse.nfl import underscore as underscore  # noqa: F401
 from sportsdataverse.nfl import update_config as update_config  # noqa: F401
+from sportsdataverse.nfl import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 
 __all__ = [
     "NFLPlayProcess",
@@ -516,6 +520,7 @@ __all__ = [
     "nfl_ngs_statboard",
     "nfl_ngs_statboard_leaders",
     "nfl_players_crosswalk",
+    "nfl_predict_games",
     "nfl_ratings",
     "nfl_rosters",
     "nfl_season_standings",
@@ -530,6 +535,8 @@ __all__ = [
     "nfl_weeks_by_date",
     "normalize_team_roster_columns",
     "opponent_adjusted_ridge",
+    "predict_margin",
+    "predict_total",
     "reset_config",
     "scoreboard_event_parsing",
     "scrape_ngs_season",
@@ -539,6 +546,7 @@ __all__ = [
     "team_name_fn",
     "underscore",
     "update_config",
+    "win_prob_from_margin",
 ]
 
 

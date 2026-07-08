@@ -7077,6 +7077,54 @@ print(xwalk.columns)
 pbp.join(nfl_players_crosswalk(), left_on="passer_player_id", right_on="gsis_id", how="left")
 ```
 
+### `nfl_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', odds: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nfl_predict_games}
+
+Vectorized pregame predictions (+ display-only market edge) per game.
+
+Joins `ratings` twice (home/away) onto the schedule and computes the
+three closed-form predictions. `odds` is **display-only**: it feeds
+`market_edge = exp_margin - close_spread_home` and never the
+predictions themselves (the binding non-market boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game: `game_id` (Utf8), `home_team_id` / `away_team_id` (Utf8 team abbreviations), `neutral_site` (Boolean). |
+| `ratings` | `DataFrame` |  | The `sportsdataverse.nfl.nfl_ratings.nfl_ratings` output (needs `team_id`, `adj_off_epa`, `adj_def_epa`, `adj_net`). |
+| `era` | `str` | `'modern'` | Constants era key. |
+| `odds` | `DataFrame \| None` | `None` | Optional market frame (`game_id`, `close_spread_home` -- the market's expected home margin, positive = home favored). Games absent from `odds` get a null `market_edge`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+
+**Returns**
+
+One row per input game: `game_id` / `home_team_id` / `away_team_id` (Utf8), `neutral_site` (Boolean), `exp_margin` / `home_win_prob` / `exp_total` / `market_edge` (Float64; `market_edge` null without odds). Zero-row, correctly-typed on empty input.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Game identifier carried through from the input schedule. |
+| `home_team_id` | character | Home team nflverse abbreviation (character; the ratings `team_id` join key). |
+| `away_team_id` | character | Away team nflverse abbreviation (character; the ratings `team_id` join key). |
+| `neutral_site` | logical | Whether the game is at a neutral site (home-field advantage is dropped when true). |
+| `exp_margin` | double | Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields). |
+| `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
+| `exp_total` | double | Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum). |
+| `market_edge` | double | Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ratings
+from sportsdataverse.nfl.nfl_market import nfl_predict_games
+ratings = nfl_ratings(2023)
+preds = nfl_predict_games(games, ratings)
+preds.sort("home_win_prob", descending=True).head()
+
+# With a market edge (display only)
+
+preds = nfl_predict_games(games, ratings, odds=odds)
+```
+
 ### `nfl_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nfl_ratings}
 
 One row per team: the native NFL ratings spine (off/def/ST EPA).
@@ -7456,6 +7504,65 @@ frame, intercept, hfa = opponent_adjusted_ridge(
 frame.sort("off_coef", descending=True).head()
 ```
 
+### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
+
+Expected home scoring margin from two net ratings.
+
+`points_per_net * (home_adj_net - away_adj_net)` plus the era HFA on
+non-neutral fields.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_net` | `float` |  | Home team's `adj_net` (EPA/play units). |
+| `away_adj_net` | `float` |  | Away team's `adj_net`. |
+| `neutral` | `bool` |  | True drops the home-field advantage. |
+| `era` | `str` | `'modern'` | Constants era key (default `"modern"`). |
+
+**Returns**
+
+Expected home margin in points (positive = home favored).
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_market import predict_margin
+predict_margin(0.10, -0.05, False)
+```
+
+### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
+
+Expected combined point total from the four efficiency components.
+
+`avg_total + total_scale * (home_adj_off + away_adj_def + away_adj_off +
+home_adj_def)`. The four ratings are **summed** because each side's
+scoring rises with its own offense and with the opponent's EPA-*allowed*
+(`adj_def` is lower = better defense) -- same semantics as the shipped
+CFB analog. (The plan text wrote this with a minus; that sign flips a
+good defense into raising the total, so the analog's sum is used.)
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_off` | `float` |  | Home `adj_off_epa`. |
+| `home_adj_def` | `float` |  | Home `adj_def_epa` (lower = better defense). |
+| `away_adj_off` | `float` |  | Away `adj_off_epa`. |
+| `away_adj_def` | `float` |  | Away `adj_def_epa`. |
+| `era` | `str` | `'modern'` | Constants era key. |
+
+**Returns**
+
+Expected combined total in points.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_market import predict_total
+predict_total(0.10, -0.02, 0.05, 0.01)
+```
+
 ### `reset_config() -> 'NflConfig'` {#reset_config}
 
 Reset the active config to its env-var-derived defaults.
@@ -7770,4 +7877,26 @@ update_config(cache_mode="off")
 # Point cache at a custom directory
 
 update_config(cache_dir="~/sdv-cache")
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'` {#win_prob_from_margin}
+
+Home win probability from an expected margin (Gaussian margin model).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | Expected home margin in points. |
+| `era` | `str` | `'modern'` | Constants era key (supplies `margin_sd`). |
+
+**Returns**
+
+`Phi(exp_margin / margin_sd)` in `[0, 1]`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_market import win_prob_from_margin
+win_prob_from_margin(3.0)
 ```

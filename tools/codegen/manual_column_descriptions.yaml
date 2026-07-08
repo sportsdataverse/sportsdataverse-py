@@ -3820,6 +3820,15 @@ nfl_rosters:
   team_league: League identifier confirming the team belongs to the NFL.
   team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
   team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_predict_games:
+  away_team_id: Away team nflverse abbreviation (character; the ratings `team_id` join key).
+  exp_margin: Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields).
+  exp_total: Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum).
+  game_id: Game identifier carried through from the input schedule.
+  home_team_id: Home team nflverse abbreviation (character; the ratings `team_id` join key).
+  home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
+  market_edge: Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied.
+  neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
 nfl_ratings:
   adj_def_epa: Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit.
   adj_net: Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in).
