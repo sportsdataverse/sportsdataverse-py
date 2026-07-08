@@ -135,9 +135,11 @@ LEAGUE_COURT: "dict[str, CourtGeometry]" = {
     "10": CourtGeometry(rim_radius_ft=4.0, corner3_loc_x_abs=200, three_point_radius_ft=22.13),
 }
 
-# Seeded; the Phase-3 fit (dev/nba_shot_value/fit_shrinkage_k.py) overwrites the
-# men's value and the Phase-5 women's fit sets ``"10"``.
-TALENT_SHRINKAGE_K: "dict[str, float]" = {"00": 100.0, "20": 100.0, "10": 60.0}
+# ``"00"`` fitted split-half on the 2022-23 fixture
+# (dev/nba_shot_value/fit_shrinkage_k.py, 2026-07-08): cross-half reliability
+# 0.699 raw → 0.707 shrunk. G-League reuses it; ``"10"`` is the Phase-5
+# women's fit (seeded until captured).
+TALENT_SHRINKAGE_K: "dict[str, float]" = {"00": 70.1, "20": 70.1, "10": 60.0}
 
 # stats.nba.com ``shot_zone_basic`` → canonical collapsed zone.
 ZONE_COLLAPSE: "dict[str, str]" = {
