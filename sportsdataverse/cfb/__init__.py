@@ -14,8 +14,11 @@ from sportsdataverse.cfb.cfb_play_participants import *
 from sportsdataverse.cfb.cfb_player_stats import *
 from sportsdataverse.cfb.cfb_ratings import *
 from sportsdataverse.cfb.cfb_game_predict import *
+from sportsdataverse.cfb.cfb_draft_projection import *
+from sportsdataverse.cfb.cfb_recruiting_projection import *
 from sportsdataverse.cfb.cfb_resume import *
 from sportsdataverse.cfb.cfb_returning_production import *
+from sportsdataverse.cfb.cfb_transfer_impact import *
 from sportsdataverse.cfb.cfb_roster_talent import *
 from sportsdataverse.cfb.cfb_season_odds import *
 from sportsdataverse.cfb.cfb_schedule import *

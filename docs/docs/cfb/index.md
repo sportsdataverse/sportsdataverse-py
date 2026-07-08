@@ -12,7 +12,7 @@ sidebar_label: CFB
 | [On3 Recruiting (on3.com)](reference/on3) | 4 | `https://www.on3.com` |
 | [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 11 | `https://ipa.247sports.com` |
 | [Dataset loaders](reference/loaders) | 6 | sportsdataverse raw data / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 61 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 66 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

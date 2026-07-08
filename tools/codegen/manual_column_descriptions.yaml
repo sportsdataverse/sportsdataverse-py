@@ -7680,3 +7680,29 @@ cfb_returning_production:
   def_returning: Fraction of prior-season defensive splash-event involvement (sacks, interceptions, pass breakups, forced fumbles) returning.
   overall_returning: Unit fractions combined with the fitted returning_prod_weights (offense-only per the 2018-2023 fit; see fit_returning_weights.py).
   n_returning: Count of prior-season contributors present on the current roster.
+cfb_recruiting_projection:
+  season: Target season being projected (equals the requested target_season).
+  team_id: ESPN team id as a string (integer-origin).
+  pred_wins: Ridge-projected season win total from preseason roster features.
+  pred_margin: Ridge-projected average scoring margin per game.
+  pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
+cfb_transfer_moves:
+  season: Destination season of the move (compares rosters S-1 to S).
+  team_id: School name key of the side this row describes (destination for "in", origin for "out").
+  player_id: ESPN athlete id as a string.
+  direction: Move side - "in" (arriving at team_id) or "out" (leaving team_id).
+  prior_team_id: School name key of the season S-1 team.
+  talent_points: Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated).
+cfb_transfer_impact:
+  season: Season the net transfer talent describes.
+  team_id: School name key from the rosters dataset.
+  net_transfer_talent: Incoming minus outgoing transfer talent points for the season.
+  pred_win_delta: Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate).
+load_draft_outcomes:
+  draft_year: NFL draft year of the pick.
+  college: College of the pick (PFR-style name, e.g. "Ohio St.").
+  player_id: ESPN college athlete id as a string (null for older drafts).
+  player_name: Player name as listed on the pick record.
+  round: Round of the NFL draft the player was selected in (1-7 in the modern format).
+  pick: Overall pick number.
+  position: Position drafted at (PFR abbreviation).

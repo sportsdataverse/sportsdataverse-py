@@ -618,6 +618,39 @@ import polars as pl
 osu = load_cfb_rosters_crosswalk().filter(pl.col("espn_team_id") == 194)
 ```
 
+### `load_draft_outcomes(years: 'int | list[int]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#load_draft_outcomes}
+
+NFL draft picks with the college of each pick, for the requested draft years.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `years` | `int \| list[int]` |  | A draft year or list of draft years. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per pick: `draft_year` (Int64), `college` (Utf8 PFR-style college name), `player_id` (Utf8 ESPN college athlete id; null for older drafts), `player_name` (Utf8), `round` / `pick` (Int64), `position` (Utf8). Zero-row (typed) when the source is unavailable.
+
+| col_name | type | description |
+|---|---|---|
+| `draft_year` | integer | NFL draft year of the pick. |
+| `college` | character | College of the pick (PFR-style name, e.g. "Ohio St."). |
+| `player_id` | character | ESPN college athlete id as a string (null for older drafts). |
+| `player_name` | character | Player name as listed on the pick record. |
+| `round` | integer | Round of the NFL draft the player was selected in (1-7 in the modern format). |
+| `pick` | integer | Overall pick number. |
+| `position` | character | Position drafted at (PFR abbreviation). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import load_draft_outcomes
+picks = load_draft_outcomes([2023, 2024])
+picks.group_by("college").len().sort("len", descending=True).head()
+```
+
 ### `load_recruit_classes(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#load_recruit_classes}
 
 Load recruiting classes as per-recruit rows from the 247 RDB feed.
@@ -1114,6 +1147,37 @@ out = cfb_compute_results(teams, games, 5, rng=rng)
 teams, games = out["teams"], out["games"]
 ```
 
+### `cfb_draft_projection(target_draft_year: 'int', *, division: 'str' = 'fbs', history_years: 'list[int] | None' = None, l2: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame]'` {#cfb_draft_projection}
+
+Project NFL-draft probability per player + expected picks per team.
+
+Fits an L2 logistic of `drafted` on `[recruit_stars, talent_points,
+career_production_z, class_year]` over draft years strictly before the
+target (the as-of boundary, enforced internally), then scores the target
+year's eligible players.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `target_draft_year` | `int` |  | Draft year to project. |
+| `division` | `str` | `'fbs'` | Division slug for constants lookups. |
+| `history_years` | `list[int] \| None` | `None` | Training draft years (default: the five before target). |
+| `l2` | `float` | `1.0` | Logistic L2 penalty. |
+| `return_as_pandas` | `bool` | `False` | If True, both frames return as pandas. |
+
+**Returns**
+
+..., "teams": ...}` — players: `draft_year` (Int64), `team_id` / `player_id` / `player_name` (Utf8), `draft_prob` (Float64); teams: `draft_year`, `team_id`, `proj_draft_picks`` (Float64, the sum of member draft probabilities). Zero-row (typed) frames when no data is available.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_draft_projection
+out = cfb_draft_projection(2024)
+out["teams"].sort("proj_draft_picks", descending=True).head(10)
+```
+
 ### `cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'` {#cfb_games_from_schedule}
 
 Map a `load_cfb_schedule()` frame into the seedr engine `games` schema.
@@ -1365,6 +1429,47 @@ week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
 # Pandas round-trip
 
 ratings_pd = cfb_ratings(2023, return_as_pandas=True)
+```
+
+### `cfb_recruiting_projection(target_season: 'int', *, division: 'str' = 'fbs', history_seasons: 'list[int] | None' = None, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_recruiting_projection}
+
+Project team wins / scoring margin for a season from preseason roster features.
+
+Fits a ridge regression of realized wins (and average scoring margin) on
+`[talent_composite, blue_chip_ratio, off_returning, def_returning,
+prior_wins]` over strictly-prior seasons, then predicts the target season
+from its preseason-known features. The as-of boundary is enforced
+internally: rows with `season >= target_season` never enter training even
+if `history_seasons` includes them.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `target_season` | `int` |  | Season to project. |
+| `division` | `str` | `'fbs'` | Division slug for constants lookups. |
+| `history_seasons` | `list[int] \| None` | `None` | Seasons to draw training rows from (default: the six seasons before `target_season`). |
+| `alpha` | `float` | `1.0` | Ridge L2 penalty. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Per team: `season` (Int64, = target), `team_id` (Utf8 ESPN id), `pred_wins`, `pred_margin` (Float64), `pred_net_epa` (Float64, currently null -- the adjusted-EPA target's hosted pbp source 404s). Zero-row (typed) when no history is available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Target season being projected (equals the requested target_season). |
+| `team_id` | character | ESPN team id as a string (integer-origin). |
+| `pred_wins` | double | Ridge-projected season win total from preseason roster features. |
+| `pred_margin` | double | Ridge-projected average scoring margin per game. |
+| `pred_net_epa` | double | Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_recruiting_projection
+proj = cfb_recruiting_projection(2024)
+proj.sort("pred_wins", descending=True).head(10)
 ```
 
 ### `cfb_resume(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_resume}
@@ -1796,6 +1901,75 @@ row = xwalk.filter(pl.col("espn_team_id") == 194)  # Ohio State
 # Pairwise — just ESPN vs Fox
 
 espn_fox = cfb_teams_crosswalk(providers=("espn", "fox"))
+```
+
+### `cfb_transfer_impact(target_season: 'int | list[int]', *, division: 'str' = 'fbs', alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_transfer_impact}
+
+Net transfer talent and its projected win-total impact per team-season.
+
+`pred_win_delta` comes from an on-demand ridge of realized win deltas on
+`net_transfer_talent` fitted over strictly-prior seasons (the as-of
+boundary is enforced internally per target season).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `target_season` | `int \| list[int]` |  | Season (or list) to score. |
+| `division` | `str` | `'fbs'` | Division slug for the star-points constants. |
+| `alpha` | `float` | `1.0` | Ridge L2 penalty. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Per (season, team_id): `net_transfer_talent` (Float64), `pred_win_delta` (Float64). Zero-row (typed) when no data.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the net transfer talent describes. |
+| `team_id` | character | School name key from the rosters dataset. |
+| `net_transfer_talent` | double | Incoming minus outgoing transfer talent points for the season. |
+| `pred_win_delta` | double | Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_transfer_impact
+imp = cfb_transfer_impact(2024)
+imp.sort("net_transfer_talent", descending=True).head(10)
+```
+
+### `cfb_transfer_moves(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_transfer_moves}
+
+Transfer moves inferred from year-over-year roster diffs.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | Destination season(s) to extract moves for (each compares S-1 -> S). |
+| `division` | `str` | `'fbs'` | Division slug for the star-points constants. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per move side: `season` (Int64, the destination season), `team_id` (Utf8), `player_id` (Utf8), `direction` ("in" | "out"), `prior_team_id` (Utf8, the season S-1 team), `talent_points` (Float64; the 0-star default when the player has no recruit rating). Zero-row (typed) when rosters are unavailable.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Destination season of the move (compares rosters S-1 to S). |
+| `team_id` | character | School name key of the side this row describes (destination for "in", origin for "out"). |
+| `player_id` | character | ESPN athlete id as a string. |
+| `direction` | character | Move side - "in" (arriving at team_id) or "out" (leaving team_id). |
+| `prior_team_id` | character | School name key of the season S-1 team. |
+| `talent_points` | double | Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_transfer_moves
+moves = cfb_transfer_moves(2024)
+moves.filter(pl.col("direction") == "in").group_by("team_id").len()
 ```
 
 ### `efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#efficiency_ratings}

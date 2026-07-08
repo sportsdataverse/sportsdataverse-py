@@ -1,0 +1,18 @@
+schema: cfb_recruiting_projection
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: pred_wins
+  type: double
+  description: ''
+- name: pred_margin
+  type: double
+  description: ''
+- name: pred_net_epa
+  type: double
+  description: ''

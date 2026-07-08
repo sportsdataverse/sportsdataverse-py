@@ -75,6 +75,12 @@ def test_returning_production_retention_gate(oracle_corpus: dict[str, pl.DataFra
     n=794): spearman(overall_returning, margin_delta) = 0.229 with the fitted
     unit weights (offense-only; see fit_returning_weights.py). Floor set one
     notch below at 0.20 -- never lower it to pass.
+
+    Disclosure (leakage-review finding): the unit weights were fitted on this
+    same 2018-2023 window, so this gate validates the weight choice in-sample.
+    Low impact -- the combination is a 1-dof clamp and the wins backtest
+    consumes off/def_returning as separate features -- but a held-out-era
+    re-fit is the clean upgrade when 2024+ results land.
     """
     from sportsdataverse.cfb.cfb_projection_constants import get_constants, spearman_corr
 
