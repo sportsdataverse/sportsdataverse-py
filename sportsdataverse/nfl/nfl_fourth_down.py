@@ -88,6 +88,7 @@ __all__ = [
     "get_fg_wp",
     "get_punt_wp",
     "get_2pt_wp",
+    "fg_make_probability",
     "FD_MODEL_AVAILABLE",
     "WP_MODEL_AVAILABLE",
     "TWO_PT_MODEL_AVAILABLE",
@@ -208,6 +209,38 @@ def _fg_make_prob(yardline_100: np.ndarray, fg_roof: np.ndarray, era: np.ndarray
     make_prob = np.where(yl >= 45, 0.0, make_prob)
     make_prob = np.where(yl >= 38, 0.9 * make_prob, make_prob)
     return make_prob
+
+
+def fg_make_probability(yardline_100: np.ndarray, fg_roof: np.ndarray, era: np.ndarray) -> Optional[np.ndarray]:
+    """Predict FG make probability from the bundled ``fg_model`` (public wrapper).
+
+    Thin supported alias over the private :func:`_fg_make_prob` so downstream
+    consumers (e.g. the kicker-rating spine) reuse the shipped model through a
+    public import instead of a private reach.
+
+    Args:
+        yardline_100: Kick spot (yards from the opponent end zone); the
+            attempt distance is ``yardline_100 + 18``.
+        fg_roof: 1.0 when ``roof == "outdoors"`` else 0.0, per kick.
+        era: ``(n, 5)`` one-hot era matrix (``era0``..``era4``, season cuts
+            2001/2005/2013/2017).
+
+    Returns:
+        Make probabilities (with nfl4th's long-kick clamps), or ``None``
+        when the bundled model is unavailable.
+
+    Example:
+        Quick start::
+
+            import numpy as np
+            from sportsdataverse.nfl.nfl_fourth_down import fg_make_probability
+            p = fg_make_probability(
+                np.array([30.0]), np.array([1.0]),
+                np.array([[0.0, 0.0, 0.0, 0.0, 1.0]]),
+            )
+            print(p)
+    """
+    return _fg_make_prob(yardline_100, fg_roof, era)
 
 
 @lru_cache(maxsize=1)

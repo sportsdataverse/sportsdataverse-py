@@ -210,13 +210,14 @@ STADIUM_ALTITUDE: Dict[str, float] = {
     "WAS": 0.0,
 }
 
-#: Environment FG make-prob logit slopes.  Seeded 0.0 at scaffold time;
-#: overwritten with the fitted values from ``dev/nfl_scheme/fit_env_fg_coef.py``
-#: (Task 3.2) — logistic fit of made ~ offset(logit(base)) + wind + (temp-60) + alt_kft.
+#: Environment FG make-prob logit slopes, fitted by
+#: ``dev/nfl_scheme/fit_env_fg_coef.py`` (run 2026-07-08): logistic fit of
+#: made ~ offset(logit(base_make_prob)) + wind + (temp-60) + altitude_kft on
+#: 2010-2023 attempts (n=14583, BFGS converged; wind hurts, warmth/altitude help).
 ENVIRONMENT_FG_COEF: Dict[str, float] = {
-    "wind": 0.0,
-    "temp": 0.0,
-    "altitude_kft": 0.0,
+    "wind": -0.0061029583316411775,
+    "temp": 0.003010867085771798,
+    "altitude_kft": 0.024133397756264757,
     "temp_baseline": 60.0,
 }
 
