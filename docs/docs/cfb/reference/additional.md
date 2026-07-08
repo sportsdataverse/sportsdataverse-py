@@ -1401,6 +1401,41 @@ all_three = full.filter(pl.col("matched_sources") == "espn+fox+yahoo")
 wk5 = cfb_schedule_crosswalk(2024, 5)
 ```
 
+### `cfb_season_odds(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, playoff_seeds: 'int' = 12, seed: 'int' = 0, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_season_odds}
+
+Ratings-driven season Monte Carlo: conference / playoff / championship odds.
+
+Thin wrapper over `cfb_simulations.cfb_simulations` -- it builds the ratings
+with `cfb_ratings.cfb_ratings`, converts the schedule to the engine format
+with `cfb_standings.cfb_games_from_schedule` (re-keyed on ESPN `team_id` so
+the ratings align), and feeds `make_ratings_compute_results` as the sampler.
+All season / standings / bracket machinery is reused; unplayed games are simulated,
+played games (before `as_of_date`) are kept.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season or list of seasons. |
+| `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings`; games are kept/simulated from the schedule as-is. `None` uses the full season. |
+| `n_sims` | `int` | `10000` | Number of simulated seasons. |
+| `playoff_seeds` | `int` | `12` | CFP field size. |
+| `seed` | `int` | `0` | RNG seed for reproducibility. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per team: `season`, `team_id` (Utf8), `exp_wins`, `conf_title_prob`, `playoff_prob`, `first_round_bye_prob`, `cfp_champ_prob` (Float64 probabilities in [0, 1]). Zero-row (typed) when no ratings/schedule are available.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_season_odds import cfb_season_odds
+odds = cfb_season_odds(2023, n_sims=2000)
+odds.sort("cfp_champ_prob", descending=True).head()
+```
+
 ### `cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'` {#cfb_simulations}
 
 Simulate college football seasons (nflseedR-style week loop).
@@ -2182,6 +2217,42 @@ Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 **Returns**
 
 A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
+
+### `make_ratings_compute_results(ratings: 'pl.DataFrame', *, era: 'str' = 'modern') -> 'ComputeResultsFn'` {#make_ratings_compute_results}
+
+Build a `cfb_simulations` `compute_results` closure from fixed ratings.
+
+The returned closure implements the engine's results contract -- `(teams, games,
+week_num, *, rng, **kwargs) -> {"teams", "games"}` -- filling every unplayed
+`week == week_num` game's `result` with a sampled home margin
+`round(Normal(exp_margin, margin_sd))`, where `exp_margin` is
+`cfb_game_predict.predict_margin` on the two teams' `adj_net` (home-field
+applied unless `neutral`). Unlike the default elo sampler the ratings are
+**fixed**, so `teams` passes through unchanged (no elo update). Postseason games
+(`game_type != "REG"`) re-break a sampled tie by win probability.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | A `cfb_ratings.cfb_ratings`-style frame with `team_id` and `adj_net`. Teams absent from it are treated as league-average (0.0). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+
+**Returns**
+
+A `compute_results` callable suitable for `cfb_simulations(..., compute_results=...)`.
+
+**Example**
+
+```python
+import numpy as np, polars as pl
+from sportsdataverse.cfb.cfb_season_odds import make_ratings_compute_results
+cr = make_ratings_compute_results(pl.DataFrame({"team_id": ["A", "B"], "adj_net": [0.3, -0.3]}))
+teams = pl.DataFrame({"sim": [1, 1], "team": ["A", "B"], "conference": ["X", "X"]})
+games = pl.DataFrame({"sim": [1], "week": [1], "home_team": ["A"], "away_team": ["B"],
+                      "neutral": [0], "result": [None]})
+cr(teams, games, 1, rng=np.random.default_rng(0))["games"]
+```
 
 ### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
 

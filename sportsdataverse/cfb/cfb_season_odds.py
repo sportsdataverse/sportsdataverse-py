@@ -10,14 +10,32 @@ public wrapper.
 
 from __future__ import annotations
 
+
+import datetime
+from typing import Literal, overload
+
 import numpy as np
+import pandas as pd
 import polars as pl
 from scipy.stats import norm
 
+from sportsdataverse.cfb.cfb_loaders import load_cfb_schedule
 from sportsdataverse.cfb.cfb_prediction_constants import get_constants
-from sportsdataverse.cfb.cfb_simulations import ComputeResultsFn
+from sportsdataverse.cfb.cfb_ratings import cfb_ratings
+from sportsdataverse.cfb.cfb_simulations import ComputeResultsFn, cfb_simulations
+from sportsdataverse.cfb.cfb_standings import cfb_games_from_schedule
 
-__all__ = ["make_ratings_compute_results"]
+__all__ = ["cfb_season_odds", "make_ratings_compute_results"]
+
+_ODDS_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "season": pl.Int64,
+    "team_id": pl.Utf8,
+    "exp_wins": pl.Float64,
+    "conf_title_prob": pl.Float64,
+    "playoff_prob": pl.Float64,
+    "first_round_bye_prob": pl.Float64,
+    "cfp_champ_prob": pl.Float64,
+}
 
 
 def make_ratings_compute_results(ratings: pl.DataFrame, *, era: str = "modern") -> ComputeResultsFn:
@@ -91,3 +109,123 @@ def make_ratings_compute_results(ratings: pl.DataFrame, *, era: str = "modern") 
         return {"teams": teams, "games": g.select(games.columns)}
 
     return compute_results
+
+
+@overload
+def cfb_season_odds(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = ...,
+    n_sims: int = ...,
+    playoff_seeds: int = ...,
+    seed: int = ...,
+    era: str = ...,
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+@overload
+def cfb_season_odds(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = ...,
+    n_sims: int = ...,
+    playoff_seeds: int = ...,
+    seed: int = ...,
+    era: str = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+def cfb_season_odds(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = None,
+    n_sims: int = 10000,
+    playoff_seeds: int = 12,
+    seed: int = 0,
+    era: str = "modern",
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Ratings-driven season Monte Carlo: conference / playoff / championship odds.
+
+    Thin wrapper over :func:`cfb_simulations.cfb_simulations` -- it builds the ratings
+    with :func:`cfb_ratings.cfb_ratings`, converts the schedule to the engine format
+    with :func:`cfb_standings.cfb_games_from_schedule` (re-keyed on ESPN ``team_id`` so
+    the ratings align), and feeds :func:`make_ratings_compute_results` as the sampler.
+    All season / standings / bracket machinery is reused; unplayed games are simulated,
+    played games (before ``as_of_date``) are kept.
+
+    Args:
+        seasons: A single season or list of seasons.
+        as_of_date: Leakage boundary forwarded to :func:`cfb_ratings.cfb_ratings`;
+            games are kept/simulated from the schedule as-is. ``None`` uses the full season.
+        n_sims: Number of simulated seasons.
+        playoff_seeds: CFP field size.
+        seed: RNG seed for reproducibility.
+        era: Era key into :data:`cfb_prediction_constants.CFB_CONSTANTS`.
+        return_as_pandas: If True, return a pandas DataFrame; otherwise polars.
+
+    Returns:
+        One row per team: ``season``, ``team_id`` (Utf8), ``exp_wins``,
+        ``conf_title_prob``, ``playoff_prob``, ``first_round_bye_prob``,
+        ``cfp_champ_prob`` (Float64 probabilities in [0, 1]). Zero-row (typed) when
+        no ratings/schedule are available.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_season_odds import cfb_season_odds
+            odds = cfb_season_odds(2023, n_sims=2000)
+            odds.sort("cfp_champ_prob", descending=True).head()
+
+    See Also:
+        * `nflseedR <https://nflseedr.com>`_ -- the simulation engine reused here.
+    """
+    season_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    ratings = cfb_ratings(seasons, as_of_date=as_of_date, era=era)
+    schedule = load_cfb_schedule(season_list)
+    if ratings.is_empty() or schedule.is_empty():
+        empty = pl.DataFrame(schema=_ODDS_SCHEMA)
+        return empty.to_pandas() if return_as_pandas else empty
+
+    # Re-key the engine on ESPN team_id (Utf8) so it aligns with ratings.team_id -- the
+    # schedule ships numeric home_id/away_id alongside the display names.
+    schedule = schedule.with_columns(
+        pl.col("home_id").cast(pl.Utf8).alias("home_team"),
+        pl.col("away_id").cast(pl.Utf8).alias("away_team"),
+    )
+    # Keep only the engine's core columns: cfb_games_from_schedule also emits
+    # home_points/away_points (SEC capped-scoring tiebreaker), but cfb_simulations
+    # concatenates generated conf-champ/bracket games that lack them -> width mismatch.
+    # The ratings sampler doesn't use that tiebreaker rung, so dropping them is safe.
+    games = cfb_games_from_schedule(schedule).select(
+        "season", "week", "game_type", "home_team", "away_team", "result", "neutral"
+    )
+    teams = (
+        schedule.select(team=pl.col("home_team"), conference=pl.col("home_conference"))
+        .vstack(schedule.select(team=pl.col("away_team"), conference=pl.col("away_conference")))
+        .drop_nulls("team")
+        .unique(subset=["team"], keep="first")
+    )
+    assert ratings.schema["team_id"] == teams.schema["team"] == pl.Utf8, (
+        f"ratings team_id {ratings.schema['team_id']} != engine team {teams.schema['team']}"
+    )
+
+    sim = cfb_simulations(
+        games,
+        teams,
+        compute_results=make_ratings_compute_results(ratings, era=era),
+        simulations=n_sims,
+        playoff_seeds=playoff_seeds,
+        seed=seed,
+    )
+    overall = sim["overall"]
+    assert isinstance(overall, pl.DataFrame)
+    season_value = season_list[0] if len(season_list) == 1 else None
+    out = overall.select(
+        pl.lit(season_value).cast(pl.Int64).alias("season"),
+        pl.col("team").alias("team_id"),
+        pl.col("wins").alias("exp_wins"),
+        pl.col("won_conf").alias("conf_title_prob"),
+        pl.col("made_playoff").alias("playoff_prob"),
+        pl.col("first_round_bye").alias("first_round_bye_prob"),
+        pl.col("won_cfp").alias("cfp_champ_prob"),
+    ).sort("cfp_champ_prob", "conf_title_prob", "exp_wins", descending=True)
+    return out.to_pandas() if return_as_pandas else out

@@ -166,6 +166,7 @@ from sportsdataverse.cfb import cfb_ratings as cfb_ratings  # noqa: F401
 from sportsdataverse.cfb import cfb_resume as cfb_resume  # noqa: F401
 from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_season_odds as cfb_season_odds  # noqa: F401
 from sportsdataverse.cfb import cfb_simulations as cfb_simulations  # noqa: F401
 from sportsdataverse.cfb import cfb_standings as cfb_standings  # noqa: F401
 from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
@@ -198,6 +199,7 @@ from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: 
 from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import make_ratings_compute_results as make_ratings_compute_results  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.cfb import predict_margin as predict_margin  # noqa: F401
@@ -220,6 +222,7 @@ __all__ = [
     "cfb_resume",
     "cfb_rosters_crosswalk",
     "cfb_schedule_crosswalk",
+    "cfb_season_odds",
     "cfb_simulations",
     "cfb_standings",
     "cfb_teams_crosswalk",
@@ -376,6 +379,7 @@ __all__ = [
     "load_cfb_schedule_crosswalk",
     "load_cfb_team_info",
     "load_cfb_teams_crosswalk",
+    "make_ratings_compute_results",
     "most_recent_cfb_season",
     "normalize_team_roster_columns",
     "predict_margin",
