@@ -25,6 +25,8 @@ from sportsdataverse.cfb.on3 import *
 from sportsdataverse.cfb.on3_parsers import *
 from sportsdataverse.cfb.sports247 import *
 from sportsdataverse.cfb.sports247_parsers import *
+from sportsdataverse.cfb.sports247_site_pages import *
+from sportsdataverse.cfb.sports247_site_pages_parsers import *
 
 # Cross-provider crosswalks depend on the provider modules above, so import last.
 from sportsdataverse.cfb.cfb_crosswalk import *

@@ -159,6 +159,73 @@ from sportsdataverse.cfb import sports247_composite_team_ranking_feed as _raw_sp
 from sportsdataverse.cfb import sports247_institution_rankings as _raw_sports247_institution_rankings
 from sportsdataverse.cfb import sports247_positions as _raw_sports247_positions
 from sportsdataverse.cfb import sports247_recruits as _raw_sports247_recruits
+from sportsdataverse.cfb import sports247_site_pages_coach as _raw_sports247_site_pages_coach
+from sportsdataverse.cfb import sports247_site_pages_coach_alma_mater as _raw_sports247_site_pages_coach_alma_mater
+from sportsdataverse.cfb import sports247_site_pages_coach_hometown as _raw_sports247_site_pages_coach_hometown
+from sportsdataverse.cfb import sports247_site_pages_coach_ranking as _raw_sports247_site_pages_coach_ranking
+from sportsdataverse.cfb import sports247_site_pages_coach_rankings as _raw_sports247_site_pages_coach_rankings
+from sportsdataverse.cfb import sports247_site_pages_event as _raw_sports247_site_pages_event
+from sportsdataverse.cfb import sports247_site_pages_institution as _raw_sports247_site_pages_institution
+from sportsdataverse.cfb import sports247_site_pages_institution_list as _raw_sports247_site_pages_institution_list
+from sportsdataverse.cfb import (
+    sports247_site_pages_institution_location as _raw_sports247_site_pages_institution_location,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_institution_timeline_events as _raw_sports247_site_pages_institution_timeline_events,
+)
+from sportsdataverse.cfb import sports247_site_pages_league_draft_picks as _raw_sports247_site_pages_league_draft_picks
+from sportsdataverse.cfb import (
+    sports247_site_pages_league_institutions as _raw_sports247_site_pages_league_institutions,
+)
+from sportsdataverse.cfb import sports247_site_pages_page_feeds as _raw_sports247_site_pages_page_feeds
+from sportsdataverse.cfb import sports247_site_pages_player as _raw_sports247_site_pages_player
+from sportsdataverse.cfb import (
+    sports247_site_pages_player_current_institution as _raw_sports247_site_pages_player_current_institution,
+)
+from sportsdataverse.cfb import sports247_site_pages_player_high_school as _raw_sports247_site_pages_player_high_school
+from sportsdataverse.cfb import sports247_site_pages_player_institution as _raw_sports247_site_pages_player_institution
+from sportsdataverse.cfb import (
+    sports247_site_pages_player_institution_evaluation as _raw_sports247_site_pages_player_institution_evaluation,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_player_primary_sport as _raw_sports247_site_pages_player_primary_sport,
+)
+from sportsdataverse.cfb import sports247_site_pages_player_search as _raw_sports247_site_pages_player_search
+from sportsdataverse.cfb import sports247_site_pages_playersport as _raw_sports247_site_pages_playersport
+from sportsdataverse.cfb import (
+    sports247_site_pages_playersport_institution as _raw_sports247_site_pages_playersport_institution,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_playersport_rank_history as _raw_sports247_site_pages_playersport_rank_history,
+)
+from sportsdataverse.cfb import sports247_site_pages_position_rankings as _raw_sports247_site_pages_position_rankings
+from sportsdataverse.cfb import sports247_site_pages_recruit_interest as _raw_sports247_site_pages_recruit_interest
+from sportsdataverse.cfb import (
+    sports247_site_pages_recruitment_final_choice as _raw_sports247_site_pages_recruitment_final_choice,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_recruitment_institution as _raw_sports247_site_pages_recruitment_institution,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_recruitment_interests as _raw_sports247_site_pages_recruitment_interests,
+)
+from sportsdataverse.cfb import sports247_site_pages_recruitment_offers as _raw_sports247_site_pages_recruitment_offers
+from sportsdataverse.cfb import (
+    sports247_site_pages_recruitment_player_sport as _raw_sports247_site_pages_recruitment_player_sport,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_season_current_expert_predictions as _raw_sports247_site_pages_season_current_expert_predictions,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_season_recruit_interest_events as _raw_sports247_site_pages_season_recruit_interest_events,
+)
+from sportsdataverse.cfb import (
+    sports247_site_pages_season_recruit_interests as _raw_sports247_site_pages_season_recruit_interests,
+)
+from sportsdataverse.cfb import sports247_site_pages_season_recruits as _raw_sports247_site_pages_season_recruits
+from sportsdataverse.cfb import (
+    sports247_site_pages_season_roster_embed as _raw_sports247_site_pages_season_roster_embed,
+)
 from sportsdataverse.cfb import sports247_sport_years as _raw_sports247_sport_years
 from sportsdataverse.cfb import sports247_tags_autocomplete as _raw_sports247_tags_autocomplete
 from sportsdataverse.cfb import sports247_target_predictions as _raw_sports247_target_predictions
@@ -225,6 +292,7 @@ from sportsdataverse.cfb import parse_on3_rankings as parse_on3_rankings  # noqa
 from sportsdataverse.cfb import parse_on3_team_rankings as parse_on3_team_rankings  # noqa: F401
 from sportsdataverse.cfb import parse_sports247_institution_rankings as parse_sports247_institution_rankings  # noqa: F401
 from sportsdataverse.cfb import parse_sports247_result_set as parse_sports247_result_set  # noqa: F401
+from sportsdataverse.cfb import parse_sports247_site_page as parse_sports247_site_page  # noqa: F401
 from sportsdataverse.cfb import parse_sports247_teams as parse_sports247_teams  # noqa: F401
 from sportsdataverse.cfb import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.cfb import predict_total as predict_total  # noqa: F401
@@ -417,6 +485,7 @@ __all__ = [
     "parse_on3_team_rankings",
     "parse_sports247_institution_rankings",
     "parse_sports247_result_set",
+    "parse_sports247_site_page",
     "parse_sports247_teams",
     "predict_margin",
     "predict_total",
@@ -427,6 +496,41 @@ __all__ = [
     "sports247_institution_rankings",
     "sports247_positions",
     "sports247_recruits",
+    "sports247_site_pages_coach",
+    "sports247_site_pages_coach_alma_mater",
+    "sports247_site_pages_coach_hometown",
+    "sports247_site_pages_coach_ranking",
+    "sports247_site_pages_coach_rankings",
+    "sports247_site_pages_event",
+    "sports247_site_pages_institution",
+    "sports247_site_pages_institution_list",
+    "sports247_site_pages_institution_location",
+    "sports247_site_pages_institution_timeline_events",
+    "sports247_site_pages_league_draft_picks",
+    "sports247_site_pages_league_institutions",
+    "sports247_site_pages_page_feeds",
+    "sports247_site_pages_player",
+    "sports247_site_pages_player_current_institution",
+    "sports247_site_pages_player_high_school",
+    "sports247_site_pages_player_institution",
+    "sports247_site_pages_player_institution_evaluation",
+    "sports247_site_pages_player_primary_sport",
+    "sports247_site_pages_player_search",
+    "sports247_site_pages_playersport",
+    "sports247_site_pages_playersport_institution",
+    "sports247_site_pages_playersport_rank_history",
+    "sports247_site_pages_position_rankings",
+    "sports247_site_pages_recruit_interest",
+    "sports247_site_pages_recruitment_final_choice",
+    "sports247_site_pages_recruitment_institution",
+    "sports247_site_pages_recruitment_interests",
+    "sports247_site_pages_recruitment_offers",
+    "sports247_site_pages_recruitment_player_sport",
+    "sports247_site_pages_season_current_expert_predictions",
+    "sports247_site_pages_season_recruit_interest_events",
+    "sports247_site_pages_season_recruit_interests",
+    "sports247_site_pages_season_recruits",
+    "sports247_site_pages_season_roster_embed",
     "sports247_sport_years",
     "sports247_tags_autocomplete",
     "sports247_target_predictions",
@@ -2348,6 +2452,496 @@ def sports247_recruits(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_sports247_recruits(*args, **kwargs)
+
+
+def sports247_site_pages_coach(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_coach``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_coach` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_coach` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_coach(*args, **kwargs)
+
+
+def sports247_site_pages_coach_alma_mater(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_coach_alma_mater``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_coach_alma_mater` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_coach_alma_mater` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_coach_alma_mater(*args, **kwargs)
+
+
+def sports247_site_pages_coach_hometown(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_coach_hometown``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_coach_hometown` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_coach_hometown` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_coach_hometown(*args, **kwargs)
+
+
+def sports247_site_pages_coach_ranking(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_coach_ranking``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_coach_ranking` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_coach_ranking` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_coach_ranking(*args, **kwargs)
+
+
+def sports247_site_pages_coach_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_coach_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_coach_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_coach_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_coach_rankings(*args, **kwargs)
+
+
+def sports247_site_pages_event(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_event``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_event` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_event` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_event(*args, **kwargs)
+
+
+def sports247_site_pages_institution(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_institution``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_institution` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_institution` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_institution(*args, **kwargs)
+
+
+def sports247_site_pages_institution_list(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_institution_list``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_institution_list` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_institution_list` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_institution_list(*args, **kwargs)
+
+
+def sports247_site_pages_institution_location(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_institution_location``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_institution_location` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_institution_location` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_institution_location(*args, **kwargs)
+
+
+def sports247_site_pages_institution_timeline_events(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_institution_timeline_events``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_institution_timeline_events` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_institution_timeline_events` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_institution_timeline_events(*args, **kwargs)
+
+
+def sports247_site_pages_league_draft_picks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_league_draft_picks``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_league_draft_picks` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_league_draft_picks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_league_draft_picks(*args, **kwargs)
+
+
+def sports247_site_pages_league_institutions(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_league_institutions``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_league_institutions` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_league_institutions` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_league_institutions(*args, **kwargs)
+
+
+def sports247_site_pages_page_feeds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_page_feeds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_page_feeds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_page_feeds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_page_feeds(*args, **kwargs)
+
+
+def sports247_site_pages_player(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_player``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_player` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_player` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_player(*args, **kwargs)
+
+
+def sports247_site_pages_player_current_institution(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_player_current_institution``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_player_current_institution` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_player_current_institution` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_player_current_institution(*args, **kwargs)
+
+
+def sports247_site_pages_player_high_school(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_player_high_school``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_player_high_school` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_player_high_school` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_player_high_school(*args, **kwargs)
+
+
+def sports247_site_pages_player_institution(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_player_institution``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_player_institution` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_player_institution` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_player_institution(*args, **kwargs)
+
+
+def sports247_site_pages_player_institution_evaluation(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_player_institution_evaluation``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_player_institution_evaluation` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_player_institution_evaluation` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_player_institution_evaluation(*args, **kwargs)
+
+
+def sports247_site_pages_player_primary_sport(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_player_primary_sport``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_player_primary_sport` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_player_primary_sport` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_player_primary_sport(*args, **kwargs)
+
+
+def sports247_site_pages_player_search(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_player_search``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_player_search` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_player_search` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_player_search(*args, **kwargs)
+
+
+def sports247_site_pages_playersport(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_playersport``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_playersport` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_playersport` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_playersport(*args, **kwargs)
+
+
+def sports247_site_pages_playersport_institution(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_playersport_institution``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_playersport_institution` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_playersport_institution` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_playersport_institution(*args, **kwargs)
+
+
+def sports247_site_pages_playersport_rank_history(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_playersport_rank_history``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_playersport_rank_history` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_playersport_rank_history` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_playersport_rank_history(*args, **kwargs)
+
+
+def sports247_site_pages_position_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_position_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_position_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_position_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_position_rankings(*args, **kwargs)
+
+
+def sports247_site_pages_recruit_interest(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_recruit_interest``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_recruit_interest` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_recruit_interest` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_recruit_interest(*args, **kwargs)
+
+
+def sports247_site_pages_recruitment_final_choice(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_recruitment_final_choice``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_final_choice` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_final_choice` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_recruitment_final_choice(*args, **kwargs)
+
+
+def sports247_site_pages_recruitment_institution(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_recruitment_institution``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_institution` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_institution` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_recruitment_institution(*args, **kwargs)
+
+
+def sports247_site_pages_recruitment_interests(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_recruitment_interests``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_interests` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_interests` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_recruitment_interests(*args, **kwargs)
+
+
+def sports247_site_pages_recruitment_offers(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_recruitment_offers``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_offers` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_offers` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_recruitment_offers(*args, **kwargs)
+
+
+def sports247_site_pages_recruitment_player_sport(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_recruitment_player_sport``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_player_sport` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_recruitment_player_sport` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_recruitment_player_sport(*args, **kwargs)
+
+
+def sports247_site_pages_season_current_expert_predictions(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_season_current_expert_predictions``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_season_current_expert_predictions` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_season_current_expert_predictions` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_season_current_expert_predictions(*args, **kwargs)
+
+
+def sports247_site_pages_season_recruit_interest_events(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_season_recruit_interest_events``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_season_recruit_interest_events` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_season_recruit_interest_events` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_season_recruit_interest_events(*args, **kwargs)
+
+
+def sports247_site_pages_season_recruit_interests(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_season_recruit_interests``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_season_recruit_interests` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_season_recruit_interests` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_season_recruit_interests(*args, **kwargs)
+
+
+def sports247_site_pages_season_recruits(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_season_recruits``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_season_recruits` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_season_recruits` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_season_recruits(*args, **kwargs)
+
+
+def sports247_site_pages_season_roster_embed(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_site_pages_season_roster_embed``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_site_pages_season_roster_embed` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_site_pages_season_roster_embed` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_site_pages_season_roster_embed(*args, **kwargs)
 
 
 def sports247_sport_years(*args, **kwargs):
