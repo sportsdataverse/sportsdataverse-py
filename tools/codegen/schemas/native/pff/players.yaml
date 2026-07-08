@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: college
+  type: character
+- description: ''
+  name: current_class
+  type: character
+- description: ''
+  name: current_eligible_year
+  type: numeric
+- description: ''
+  name: dob
+  type: character
+- description: ''
+  name: draft
+  type: list
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: height
+  type: numeric
+- description: ''
+  name: id
+  type: numeric
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: speed
+  type: numeric
+- description: ''
+  name: team
+  type: list
+- description: ''
+  name: weight
+  type: numeric
+kind: dataframe
+schema: players
