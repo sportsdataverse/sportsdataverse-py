@@ -80,10 +80,79 @@ def load_draft_outcomes(years: int | list[int], *, return_as_pandas: bool = Fals
     return out.to_pandas() if return_as_pandas else out
 
 
+def _season_production(season: int) -> pl.DataFrame:
+    """Per-player attributed production for one season (monkeypatchable seam).
+
+    Delegates to the returning-production extractor over the hosted play-level
+    player-stats parquet; the offline gate patches this to a committed fixture.
+    """
+    from sportsdataverse.cfb.cfb_returning_production import (
+        _load_player_stats,
+        _production_from_play_stats,
+    )
+
+    stats = _load_player_stats(season)
+    if stats.height == 0:
+        return pl.DataFrame(
+            schema={
+                "season": pl.Int64,
+                "team_id": pl.Utf8,
+                "player_id": pl.Utf8,
+                "player_name": pl.Utf8,
+                "unit": pl.Utf8,
+                "prod_weight": pl.Float64,
+                "position": pl.Utf8,
+            }
+        )
+    return _production_from_play_stats(stats, season)
+
+
+# a defensive splash event (sack/INT/PBU/FF) weighed against offensive yards --
+# crude but monotone; the z-score is computed within the draft-year pool anyway
+_SPLASH_EVENT_YARDS = 50.0
+
+
+def _career_production(years: list[int]) -> pl.DataFrame:
+    """Raw career production per (draft_year, case-folded player name).
+
+    For draft year Y, sums seasons Y-3..Y-1: offensive attributed yards plus
+    ``_SPLASH_EVENT_YARDS`` per defensive splash event. Name is the join key
+    (recruit ids and play-stats ids are different id spaces).
+    """
+    seasons = sorted({y - off for y in years for off in (1, 2, 3)})
+    per_season = [df for s in seasons if (df := _season_production(s)).height > 0]
+    empty = pl.DataFrame(schema={"draft_year": pl.Int64, "_name": pl.Utf8, "prod_raw": pl.Float64})
+    if not per_season:
+        return empty
+    prod = (
+        pl.concat(per_season)
+        .drop_nulls(["player_name"])
+        .with_columns(
+            pl.col("player_name").str.to_lowercase().str.strip_chars().alias("_name"),
+            pl.when(pl.col("unit") == "defense")
+            .then(pl.col("prod_weight") * _SPLASH_EVENT_YARDS)
+            .otherwise(pl.col("prod_weight"))
+            .alias("_w"),
+        )
+    )
+    frames = []
+    for y in years:
+        window = prod.filter(pl.col("season").is_in([y - 1, y - 2, y - 3]))
+        if window.height == 0:
+            continue
+        frames.append(
+            window.group_by("_name")
+            .agg(pl.col("_w").sum().alias("prod_raw"))
+            .with_columns(pl.lit(y, dtype=pl.Int64).alias("draft_year"))
+            .select("draft_year", "_name", "prod_raw")
+        )
+    return pl.concat(frames) if frames else empty
+
+
 def _player_feature_frame(years: list[int], division: str) -> pl.DataFrame:
     """Per player-draft-year features + drafted label for the given draft years.
 
-    Eligible pool for draft year Y = recruits from signing classes Y-5..Y-3
+    Eligible pool for draft year Y = recruits from signing classes Y-6..Y-3
     (draft-eligible windows). Features: ``recruit_stars``, ``talent_points``
     (star points), ``career_production_z`` (z-scored share of attributed
     production over the player's college seasons; 0 when the production source
@@ -96,7 +165,7 @@ def _player_feature_frame(years: list[int], division: str) -> pl.DataFrame:
     from sportsdataverse.cfb.cfb_roster_talent import load_recruit_classes
 
     consts = get_constants(division)
-    class_years = sorted({y - off for y in years for off in (3, 4, 5)})
+    class_years = sorted({y - off for y in years for off in (3, 4, 5, 6)})
     rec = load_recruit_classes(class_years, division=division)
     if isinstance(rec, pd.DataFrame):
         rec = pl.from_pandas(rec)
@@ -118,9 +187,10 @@ def _player_feature_frame(years: list[int], division: str) -> pl.DataFrame:
         pl.col("player_name").str.to_lowercase().str.strip_chars().alias("_name"),
         pl.lit(1).alias("drafted"),
     ).unique(subset=["draft_year", "_name"])
+    career = _career_production(years)
     frames: list[pl.DataFrame] = []
     for y in years:
-        pool = rec.filter(pl.col("season").is_in([y - 3, y - 4, y - 5]))
+        pool = rec.filter(pl.col("season").is_in([y - 3, y - 4, y - 5, y - 6]))
         if pool.height == 0:
             continue
         feats = pool.select(
@@ -132,10 +202,20 @@ def _player_feature_frame(years: list[int], division: str) -> pl.DataFrame:
             pl.col("stars")
             .replace_strict(consts.star_points, default=consts.star_points.get(0, 0.0), return_dtype=pl.Float64)
             .alias("talent_points"),
-            pl.lit(0.0).alias("career_production_z"),  # production source pending; see docstring
             (pl.lit(y, dtype=pl.Int64) - pl.col("season")).cast(pl.Float64).alias("class_year"),
             pl.col("player_name").str.to_lowercase().str.strip_chars().alias("_name"),
         )
+        feats = feats.join(
+            career.filter(pl.col("draft_year") == y).select("_name", "prod_raw"),
+            on="_name",
+            how="left",
+        ).with_columns(pl.col("prod_raw").fill_null(0.0).log1p().alias("_logprod"))
+        feats = feats.with_columns(
+            (
+                (pl.col("_logprod") - pl.col("_logprod").mean())
+                / pl.when(pl.col("_logprod").std() > 0).then(pl.col("_logprod").std()).otherwise(1.0)
+            ).alias("career_production_z")
+        ).drop("prod_raw", "_logprod")
         frames.append(
             feats.join(drafted_names, on=["draft_year", "_name"], how="left")
             .with_columns(pl.col("drafted").fill_null(0).cast(pl.Int64))

@@ -137,9 +137,13 @@ def _production_from_play_stats(stats: pl.DataFrame, season: int) -> pl.DataFram
     for id_col, yds_col in _OFFENSE_EVENTS:
         if id_col not in stats.columns or yds_col not in stats.columns:
             continue
+        name_col = id_col.removesuffix("_id")
         frames.append(
             stats.select(
                 pl.col(id_col).cast(pl.Int64).cast(pl.Utf8).alias("player_id"),
+                (pl.col(name_col).cast(pl.Utf8) if name_col in stats.columns else pl.lit(None, dtype=pl.Utf8)).alias(
+                    "player_name"
+                ),
                 pl.col("team").cast(pl.Utf8).alias("team"),
                 pl.col(yds_col).cast(pl.Float64).alias("prod_weight"),
                 pl.lit("offense").alias("unit"),
@@ -148,9 +152,13 @@ def _production_from_play_stats(stats: pl.DataFrame, season: int) -> pl.DataFram
     for id_col in _DEFENSE_EVENTS:
         if id_col not in stats.columns:
             continue
+        name_col = id_col.removesuffix("_id")
         frames.append(
             stats.select(
                 pl.col(id_col).cast(pl.Int64).cast(pl.Utf8).alias("player_id"),
+                (pl.col(name_col).cast(pl.Utf8) if name_col in stats.columns else pl.lit(None, dtype=pl.Utf8)).alias(
+                    "player_name"
+                ),
                 pl.col("opponent").cast(pl.Utf8).alias("team"),
                 pl.lit(1.0).alias("prod_weight"),
                 pl.lit("defense").alias("unit"),
@@ -170,7 +178,7 @@ def _production_from_play_stats(stats: pl.DataFrame, season: int) -> pl.DataFram
     events = pl.concat(frames)
     return (
         events.group_by(["team", "player_id", "unit"])
-        .agg(pl.col("prod_weight").sum())
+        .agg(pl.col("prod_weight").sum(), pl.col("player_name").drop_nulls().first())
         .with_columns(
             pl.lit(season, dtype=pl.Int64).alias("season"),
             pl.col("prod_weight").clip(lower_bound=0.0),
@@ -179,7 +187,7 @@ def _production_from_play_stats(stats: pl.DataFrame, season: int) -> pl.DataFram
             .alias("team_id"),  # normalized team name is this spine's cross-source key
             pl.lit(None, dtype=pl.Utf8).alias("position"),
         )
-        .select("season", "team_id", "player_id", "unit", "prod_weight", "position")
+        .select("season", "team_id", "player_id", "player_name", "unit", "prod_weight", "position")
     )
 
 

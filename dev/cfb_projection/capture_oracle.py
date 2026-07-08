@@ -111,6 +111,27 @@ def capture_recruits() -> None:
     print(f"recruits_2014_2023: {out.height} recruits; per-season: {per_season.to_dicts()}")
 
 
+def capture_player_production() -> None:
+    """Committed per-player season production 2016-2023 (draft-projection feature)."""
+    from sportsdataverse.cfb.cfb_returning_production import (
+        _load_player_stats,
+        _production_from_play_stats,
+    )
+
+    frames = []
+    for season in range(2016, 2024):
+        stats = _load_player_stats(season)
+        if stats.height == 0:
+            print(f"  {season}: no player_stats asset (skipped)")
+            continue
+        prod = _production_from_play_stats(stats, season)
+        frames.append(prod)
+        print(f"  {season}: {prod.height} player-unit rows")
+    out = pl.concat(frames)
+    out.write_parquet(_FIX / "player_production_2016_2023.parquet")
+    print(f"player_production_2016_2023: {out.height} rows")
+
+
 def capture_teams() -> None:
     """Committed team-identity map (school/mascot/espn id/classification) for offline joins."""
     from sportsdataverse.cfb.cfb_loaders import load_cfb_team_info
@@ -201,3 +222,5 @@ if __name__ == "__main__":
         capture_teams()
     if only in (None, "draft"):
         capture_draft()
+    if only in (None, "production"):
+        capture_player_production()
