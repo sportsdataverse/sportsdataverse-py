@@ -179,7 +179,8 @@ def cfb_season_odds(
         * `nflseedR <https://nflseedr.com>`_ -- the simulation engine reused here.
     """
     season_list = [seasons] if isinstance(seasons, int) else list(seasons)
-    ratings = cfb_ratings(seasons, as_of_date=as_of_date, era=era)
+    # cfb_ratings takes a RatingsConfig, not an era; era feeds the sampler/get_constants.
+    ratings = cfb_ratings(seasons, as_of_date=as_of_date)
     schedule = load_cfb_schedule(season_list)
     if ratings.is_empty() or schedule.is_empty():
         empty = pl.DataFrame(schema=_ODDS_SCHEMA)
