@@ -537,6 +537,46 @@ cfb_playoff_seeds:
   ties: Ties across all played games.
   win_pct: Overall win percentage - (wins + 0.5 * ties) / games, 0.0 when no games have been played.
   wins: Wins across all played games (conference championship and postseason included).
+cfb_predict_games:
+  away_team_id: Away team ESPN id (character; the ratings `team_id` join key).
+  exp_margin: Expected home scoring margin in points (net_points_scale * net rating differential + the ridge-native home-field advantage on non-neutral fields).
+  exp_total: Expected combined point total from the fitted efficiency + pace totals model.
+  game_id: Game identifier carried through from the input schedule.
+  home_team_id: Home team ESPN id (character; the ratings `team_id` join key).
+  home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
+  neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
+cfb_ratings:
+  adj_def_epa: Opponent-adjusted defensive EPA allowed per play (lower is better); ridge fit.
+  adj_net: Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in).
+  adj_off_epa: Opponent-adjusted offensive EPA per play (higher is better); ridge fit.
+  adj_st_epa: Special-teams rating - z-composite of per-unit field-goal/punt/kick-return EPA.
+  def_rank: Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better).
+  fei_def: Opponent-adjusted defensive drive efficiency (Fremeau-FEI style).
+  fei_net: Opponent-adjusted net drive efficiency (fei_off minus fei_def).
+  fei_off: Opponent-adjusted offensive drive efficiency (Fremeau-FEI style).
+  games: Number of games the team played in the fitted window.
+  net_rank: Dense rank on adj_net descending (best net rating = 1).
+  net_z: Z-score of adj_net across the FBS teams.
+  off_pace: Offensive scrimmage plays per game (the tempo input to the totals model).
+  off_rank: Dense rank on adj_off_epa descending (best offense = 1).
+  season: Season the ratings cover (null for a pooled multi-season fit).
+  team_id: Team ESPN id (character join key).
+cfb_resume:
+  game_control: Mean postgame win expectancy Phi(actual_margin / margin_sd) across played games - how dominant the results were, not just win/loss.
+  quality_wins: Count of wins over opponents with adj_net at or above the era quality-win threshold.
+  season: Season the résumé covers (null for a pooled multi-season fit).
+  sos: Rating-based strength of schedule - mean opponent adj_net over played games.
+  sos_rank: Dense rank on sos descending (toughest schedule = 1).
+  team_id: Team ESPN id (character join key).
+  wab: Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule.
+cfb_season_odds:
+  cfp_champ_prob: Share of simulations in which the team won the College Football Playoff national championship.
+  conf_title_prob: Share of simulations in which the team won its conference.
+  exp_wins: Mean wins per simulated season.
+  first_round_bye_prob: Share of simulations in which the team earned a CFP first-round bye.
+  playoff_prob: Share of simulations in which the team made the College Football Playoff field.
+  season: Season simulated (null for a pooled multi-season call).
+  team_id: Team ESPN id (character join key).
 cfb_simulations:
   conference: Conference the team belongs to; null or "FBS Independents" marks an independent.
   first_round_bye: Share of simulations in which the team earned a CFP first-round bye (seed 4 or better).

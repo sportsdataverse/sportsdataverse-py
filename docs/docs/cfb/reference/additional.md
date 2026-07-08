@@ -1213,6 +1213,16 @@ league average is the mean `off_pace` of the passed ratings frame.
 
 One row per game with `game_id`, `home_team_id`, `away_team_id`, `neutral_site`, `exp_margin`, `home_win_prob`, `exp_total`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game identifier carried through from the input schedule. |
+| `home_team_id` | character | Home team ESPN id (character; the ratings `team_id` join key). |
+| `away_team_id` | character | Away team ESPN id (character; the ratings `team_id` join key). |
+| `neutral_site` | logical | Whether the game is at a neutral site (home-field advantage is dropped when true). |
+| `exp_margin` | double | Expected home scoring margin in points (net_points_scale * net rating differential + the ridge-native home-field advantage on non-neutral fields). |
+| `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
+| `exp_total` | double | Expected combined point total from the fitted efficiency + pace totals model. |
+
 **Example**
 
 ```python
@@ -1250,6 +1260,24 @@ net-rating z-score.
 **Returns**
 
 A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -- the single passed season for the common single-season call; `null` for a pooled multi-season call, since no single season applies to every row), `team_id` (Utf8), `adj_off_epa`, `adj_def_epa` (Float64, from `efficiency_ratings`), `adj_st_epa` (Float64, from `special_teams_ratings`), `adj_net` (Float64 -- offense minus defense only; special teams is a separate column, not folded in), `fei_off`, `fei_def`, `fei_net` (Float64, from `fei_ratings`), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model uses), `off_rank` (Int64, dense rank on `adj_off_epa` descending), `def_rank` (Int64, dense rank on `adj_def_epa` **ascending** -- fewer EPA allowed ranks better), `net_rank` (Int64, dense rank on `adj_net` descending), `net_z` (Float64, z-score of `adj_net`). Zero-row (correctly-typed) when the requested season(s) have no published pbp/schedule asset, or when `as_of_date` filters out every play.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the ratings cover (null for a pooled multi-season fit). |
+| `team_id` | character | Team ESPN id (character join key). |
+| `adj_off_epa` | double | Opponent-adjusted offensive EPA per play (higher is better); ridge fit. |
+| `adj_def_epa` | double | Opponent-adjusted defensive EPA allowed per play (lower is better); ridge fit. |
+| `adj_st_epa` | double | Special-teams rating - z-composite of per-unit field-goal/punt/kick-return EPA. |
+| `adj_net` | double | Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in). |
+| `fei_off` | double | Opponent-adjusted offensive drive efficiency (Fremeau-FEI style). |
+| `fei_def` | double | Opponent-adjusted defensive drive efficiency (Fremeau-FEI style). |
+| `fei_net` | double | Opponent-adjusted net drive efficiency (fei_off minus fei_def). |
+| `games` | integer | Number of games the team played in the fitted window. |
+| `off_pace` | double | Offensive scrimmage plays per game (the tempo input to the totals model). |
+| `off_rank` | integer | Dense rank on adj_off_epa descending (best offense = 1). |
+| `def_rank` | integer | Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better). |
+| `net_rank` | integer | Dense rank on adj_net descending (best net rating = 1). |
+| `net_z` | double | Z-score of adj_net across the FBS teams. |
 
 **Example**
 
@@ -1297,6 +1325,16 @@ strength and rolls the games up into:
 **Returns**
 
 One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense rank, best = 1), `quality_wins` (Int64), `game_control` (Float64), `wab` (Float64). Zero-row (typed) when no games are available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the résumé covers (null for a pooled multi-season fit). |
+| `team_id` | character | Team ESPN id (character join key). |
+| `sos` | double | Rating-based strength of schedule - mean opponent adj_net over played games. |
+| `sos_rank` | integer | Dense rank on sos descending (toughest schedule = 1). |
+| `quality_wins` | integer | Count of wins over opponents with adj_net at or above the era quality-win threshold. |
+| `game_control` | double | Mean postgame win expectancy Phi(actual_margin / margin_sd) across played games - how dominant the results were, not just win/loss. |
+| `wab` | double | Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule. |
 
 **Example**
 
@@ -1427,6 +1465,16 @@ played games (before `as_of_date`) are kept.
 **Returns**
 
 One row per team: `season`, `team_id` (Utf8), `exp_wins`, `conf_title_prob`, `playoff_prob`, `first_round_bye_prob`, `cfp_champ_prob` (Float64 probabilities in [0, 1]). Zero-row (typed) when no ratings/schedule are available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season simulated (null for a pooled multi-season call). |
+| `team_id` | character | Team ESPN id (character join key). |
+| `exp_wins` | double | Mean wins per simulated season. |
+| `conf_title_prob` | double | Share of simulations in which the team won its conference. |
+| `playoff_prob` | double | Share of simulations in which the team made the College Football Playoff field. |
+| `first_round_bye_prob` | double | Share of simulations in which the team earned a CFP first-round bye. |
+| `cfp_champ_prob` | double | Share of simulations in which the team won the College Football Playoff national championship. |
 
 **Example**
 
