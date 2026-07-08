@@ -1,0 +1,26 @@
+{
+  "league": "nba",
+  "features": [
+    "height_wo_shoes",
+    "weight",
+    "wingspan",
+    "standing_reach",
+    "body_fat_pct",
+    "hand_length",
+    "hand_width",
+    "lane_agility",
+    "three_quarter_sprint",
+    "standing_vertical",
+    "max_vertical",
+    "spot_fifteen_corner_left_pct",
+    "offdrib_fifteen_top_pct",
+    "bmi",
+    "wingspan_diff"
+  ],
+  "value_coef": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+  "value_intercept": 0.0,
+  "prob_coef": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+  "prob_intercept": 0.0,
+  "feature_median": {},
+  "_placeholder": "zeros pending Task 1.3 fit_draft_model.py -- overwritten before the phase-1 oracle gate runs"
+}
