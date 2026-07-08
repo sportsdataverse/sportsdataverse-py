@@ -576,7 +576,7 @@ _Last validated n/a._
 |---|---|---|
 | `group` | character | Position group name (e.g. Quarterback, Running Back). |
 | `group_key` | integer | 247Sports position group key. |
-| `name` | character | Position name. |
+| `name` | character | Full position group name (e.g. Quarterback). |
 | `label` | character | Position abbreviation label (e.g. QB, RB). |
 | `value` | character | 247Sports position key (returned as a string). |
 

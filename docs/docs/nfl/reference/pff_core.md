@@ -369,7 +369,7 @@ Facet report /defense/summary (By Position leaderboard; add franchiseId for By T
 | `missed_tackles` | numeric |  |
 | `catch_rate` | numeric |  |
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `tackles` | numeric | Total tackles. |
+| `tackles` | numeric | Total tackles made by the defender. |
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `snap_counts_offball` | numeric |  |
 | `snap_counts_box` | numeric |  |
@@ -383,7 +383,7 @@ Facet report /defense/summary (By Position leaderboard; add franchiseId for By T
 | `receptions` | numeric | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `grades_coverage_defense` | numeric | PFF coverage grade (0-100). |
 | `hurries` | numeric |  |
-| `interceptions` | numeric | Interceptions. |
+| `interceptions` | numeric | Interceptions made in coverage. |
 | `snap_counts_coverage` | numeric |  |
 | `snap_counts_dl_over_t` | numeric |  |
 | `snap_counts_dl_a_gap` | numeric |  |
@@ -2115,9 +2115,9 @@ Facet report /passing/summary (By Position leaderboard; add franchiseId for By T
 | `grades_offense` | numeric | PFF overall offense grade (0-100). |
 | `twp_rate` | numeric | Turnover-worthy-play rate. |
 | `btt_rate` | numeric | Big-time-throw rate. |
-| `spikes` | numeric | Spike plays. |
+| `spikes` | numeric | Clock-stopping spike plays. |
 | `dropbacks` | numeric | Total quarterback dropbacks. |
-| `thrown_aways` | numeric | Throwaways. |
+| `thrown_aways` | numeric | Passes intentionally thrown away. |
 | `draft_season` | numeric | Draft class (year) of the player. |
 | `team_name` | character | Team name/abbreviation the player is credited to for the range. |
 | `grades_pass` | numeric | PFF passing grade (0-100). |
@@ -2126,11 +2126,11 @@ Facet report /passing/summary (By Position leaderboard; add franchiseId for By T
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `sack_percent` | numeric | Sack rate (sacks per dropback). |
 | `bats` | numeric | Passes batted at the line. |
-| `sacks` | numeric | Sacks taken. |
+| `sacks` | numeric | Times the passer was sacked. |
 | `player_game_count` | numeric | Games with at least one qualifying dropback in the requested range. |
 | `eligible_season` | numeric | First eligible season for the player. |
-| `completions` | numeric | Completions. |
-| `yards` | numeric | Passing yards. |
+| `completions` | numeric | Completed passes by the passer. |
+| `yards` | numeric | Total passing yards gained. |
 | `accuracy_percent` | numeric | Charted accuracy percentage. |
 | `scrambles` | numeric | Scramble plays. |
 | `interceptions` | numeric | Interceptions thrown. |
@@ -2139,7 +2139,7 @@ Facet report /passing/summary (By Position leaderboard; add franchiseId for By T
 | `qb_rating` | numeric | NFL passer rating. |
 | `completion_percent` | numeric | Completion percentage. |
 | `penalties` | numeric | Penalties charged. |
-| `attempts` | numeric | Pass attempts. |
+| `attempts` | numeric | Pass attempts thrown by the passer. |
 | `team` | character | Team abbreviation the player is credited to for the range. |
 | `declined_penalties` | numeric | Declined penalties. |
 | `passing_snaps` | numeric |  |
@@ -3115,7 +3115,7 @@ Facet report /receiving/summary (By Position leaderboard; add franchiseId for By
 | `inline_rate` | numeric |  |
 | `contested_catch_rate` | numeric |  |
 | `yards` | numeric | Receiving yards. |
-| `receptions` | numeric | Receptions. |
+| `receptions` | numeric | Passes caught by the receiver. |
 | `targeted_qb_rating` | numeric |  |
 | `interceptions` | numeric | The number of interceptions thrown. |
 | `caught_percent` | numeric |  |
@@ -3134,7 +3134,7 @@ Facet report /receiving/summary (By Position leaderboard; add franchiseId for By
 | `grades_hands_fumble` | numeric |  |
 | `longest` | numeric |  |
 | `pass_blocks` | numeric |  |
-| `routes` | numeric | Routes run. |
+| `routes` | numeric | Pass routes run by the receiver. |
 | `pass_plays` | numeric |  |
 | `yards_per_reception` | numeric |  |
 | `player` | character | Player name |
@@ -3330,7 +3330,7 @@ Facet report /rushing/summary (By Position leaderboard; add franchiseId for By T
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
 | `yprr` | numeric |  |
 | `breakaway_percent` | numeric |  |
-| `fumbles` | numeric | Fumbles. |
+| `fumbles` | numeric | Fumbles by the ball carrier. |
 | `first_downs` | numeric | Rushing first downs. |
 | `elusive_rating` | numeric | PFF elusive rating. |
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
@@ -3340,14 +3340,14 @@ Facet report /rushing/summary (By Position leaderboard; add franchiseId for By T
 | `total_touches` | numeric |  |
 | `scramble_yards` | numeric |  |
 | `yco_attempt` | numeric |  |
-| `yards` | numeric | Rushing yards. |
+| `yards` | numeric | Total rushing yards gained. |
 | `grades_run_block` | numeric |  |
 | `receptions` | numeric | The number of pass receptions. Lateral receptions officially don't count as reception. |
 | `zone_attempts` | numeric |  |
 | `scrambles` | numeric |  |
 | `grades_run` | numeric | PFF rushing grade (0-100). |
 | `penalties` | numeric | Total number of penalties. |
-| `attempts` | numeric | Rush attempts. |
+| `attempts` | numeric | Rushing attempts (carries) by the runner. |
 | `elu_yco` | numeric |  |
 | `elu_recv_mtf` | numeric |  |
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
@@ -4908,7 +4908,7 @@ Games list for league-season(-week)
 | `lock_status` | character | Data lock/publish status for the game. |
 | `score` | list | Final score string. |
 | `season` | numeric | Season (starting year) of the game. |
-| `stadium_id` | numeric | PFF stadium id. |
+| `stadium_id` | numeric | PFF stadium identifier for the game venue. |
 | `start` | character | Kickoff timestamp (ISO 8601 string). |
 | `week` | numeric | Week number of the game. |
 

@@ -6510,7 +6510,7 @@ sports247_positions:
   group: 'Position group name (e.g. Quarterback, Running Back).'
   group_key: '247Sports position group key.'
   label: 'Position abbreviation label (e.g. QB, RB).'
-  name: 'Position name.'
+  name: Full position group name (e.g. Quarterback).
   value: '247Sports position key (returned as a string).'
 sports247_recruits:
   cbs_key: 'Legacy CBS player key (0 when unmapped).'
@@ -7825,12 +7825,12 @@ passing_summary:
   grades_pass: PFF passing grade (0-100).
   grades_run: PFF rushing grade (0-100).
   dropbacks: Total quarterback dropbacks.
-  attempts: Pass attempts.
-  completions: Completions.
+  attempts: Pass attempts thrown by the passer.
+  completions: Completed passes by the passer.
   completion_percent: Completion percentage.
-  yards: Passing yards.
+  yards: Total passing yards gained.
   qb_rating: NFL passer rating.
-  sacks: Sacks taken.
+  sacks: Times the passer was sacked.
   sack_percent: Sack rate (sacks per dropback).
   twp_rate: Turnover-worthy-play rate.
   btt_rate: Big-time-throw rate.
@@ -7838,8 +7838,8 @@ passing_summary:
   drop_rate: Receiver drop rate on the quarterback's throws.
   first_downs: Passing first downs.
   scrambles: Scramble plays.
-  thrown_aways: Throwaways.
-  spikes: Spike plays.
+  thrown_aways: Passes intentionally thrown away.
+  spikes: Clock-stopping spike plays.
   bats: Passes batted at the line.
   hit_as_threw: Plays where the quarterback was hit as he threw.
   interceptions: Interceptions thrown.
@@ -7856,12 +7856,12 @@ defense_summary:
   grades_defense: PFF overall defense grade (0-100).
   grades_run_defense: PFF run-defense grade (0-100).
   grades_coverage_defense: PFF coverage grade (0-100).
-  tackles: Total tackles.
+  tackles: Total tackles made by the defender.
   assists: Assisted tackles.
   stops: Tackles that constitute an offensive failure ("stops").
   sacks: Sacks credited.
   total_pressures: Total quarterback pressures (sacks + hits + hurries).
-  interceptions: Interceptions.
+  interceptions: Interceptions made in coverage.
   forced_fumbles: Forced fumbles.
   interception_touchdowns: Touchdowns scored on interception returns.
 offense_summary:
@@ -7886,13 +7886,13 @@ receiving_summary:
   grades_pass_route: PFF receiving/route grade (0-100).
   grades_hands_drop: PFF hands/drop grade (0-100).
   targets: Times targeted.
-  receptions: Receptions.
+  receptions: Passes caught by the receiver.
   yards: Receiving yards.
   touchdowns: Receiving touchdowns.
   drops: Dropped passes.
   yards_after_catch: Yards after the catch.
   yprr: Yards per route run.
-  routes: Routes run.
+  routes: Pass routes run by the receiver.
   contested_receptions: Contested catches made.
   contested_targets: Contested targets.
 rushing_summary:
@@ -7903,15 +7903,15 @@ rushing_summary:
   player_game_count: Games with at least one qualifying snap in the requested range.
   grades_offense: PFF overall offense grade (0-100).
   grades_run: PFF rushing grade (0-100).
-  attempts: Rush attempts.
-  yards: Rushing yards.
+  attempts: Rushing attempts (carries) by the runner.
+  yards: Total rushing yards gained.
   touchdowns: Rushing touchdowns.
   yards_after_contact: Yards after contact.
   avoided_tackles: Missed tackles forced.
   elusive_rating: PFF elusive rating.
   breakaway_yards: Breakaway (long-run) yards.
   first_downs: Rushing first downs.
-  fumbles: Fumbles.
+  fumbles: Fumbles by the ball carrier.
 team_overview:
   franchise_id: PFF franchise (team) id (integer join key).
   abbreviation: Team abbreviation.
@@ -7927,7 +7927,7 @@ games:
   away_franchise_id: PFF franchise id of the away team.
   home_team: Home team object (JSON-stringified in the tidy frame).
   away_team: Away team object (JSON-stringified in the tidy frame).
-  stadium_id: PFF stadium id.
+  stadium_id: PFF stadium identifier for the game venue.
   start: Kickoff timestamp (ISO 8601 string).
   has_stats: Whether PFF has published stats for the game.
   lock_status: Data lock/publish status for the game.
