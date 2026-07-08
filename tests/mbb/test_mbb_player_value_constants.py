@@ -194,6 +194,52 @@ def test_aggregate_player_seasons_sums_and_shot_shares(monkeypatch):
     assert feats.height == 2
 
 
+def test_aggregate_player_seasons_mixed_shot_eras(monkeypatch):
+    """A season absent from the shots release keeps box-derived splits while
+    the covered season uses classified shots (wbb: shots floor at 2026)."""
+    import sportsdataverse.mbb.mbb_player_value_constants as pvc
+
+    box = pl.DataFrame(
+        {
+            "athlete_id": [7, 7],
+            "athlete_display_name": ["A Guard", "A Guard"],
+            "season": [2025, 2026],
+            "team_id": [10, 10],
+            "minutes": [30.0, 30.0],
+            "field_goals_made": [5, 5],
+            "field_goals_attempted": [10, 10],
+            "three_point_field_goals_made": [2, 2],
+            "three_point_field_goals_attempted": [4, 4],
+            "free_throws_made": [2, 2],
+            "free_throws_attempted": [2, 2],
+            "offensive_rebounds": [1, 1],
+            "defensive_rebounds": [3, 3],
+            "assists": [6, 6],
+            "steals": [2, 2],
+            "blocks": [0, 0],
+            "turnovers": [2, 2],
+            "points": [14, 14],
+        }
+    )
+    shots = pl.DataFrame(
+        {
+            "athlete_id_1": [7, 7],
+            "season": [2026, 2026],
+            "type_text": ["LayUpShot", "JumpShot"],
+            "score_value": [2, 3],
+        }
+    )
+    monkeypatch.setattr(pvc, "_load_player_box", lambda seasons, league: box)
+    monkeypatch.setattr(pvc, "_load_shots", lambda seasons, league: shots)
+    out = pvc.aggregate_player_seasons([2025, 2026])
+    a25 = out.filter(pl.col("season") == 2025).row(0, named=True)
+    a26 = out.filter(pl.col("season") == 2026).row(0, named=True)
+    # 2025 (uncovered): box fallback -- three = 3PA, mid = fga - 3pa, rim = 0
+    assert (a25["fga_rim"], a25["fga_mid"], a25["fga_three"]) == (0.0, 6.0, 4.0)
+    # 2026 (covered): classified shots
+    assert (a26["fga_rim"], a26["fga_mid"], a26["fga_three"]) == (1.0, 0.0, 1.0)
+
+
 def test_aggregate_player_seasons_no_shots_data(monkeypatch):
     import sportsdataverse.mbb.mbb_player_value_constants as pvc
 

@@ -30,6 +30,13 @@ release backfill widens the trainable era with no code change.
 | `archetype_labeled.parquet` | 11 | Hand-labeled role-certain 2025 player-seasons (e.g. Bandaogo=rim protector, Karaban=stretch forward, Sears/RJ Davis=shot creator, Broome/Kalkbrenner=play-finishing big); the archetype gate asserts each lands in its expected cluster. |
 | `rosters_2025_2026.parquet` | 25,494 | sportsdataverse-data `mbb_rosters` 2025+2026: display_name, position, class (`experience_display_value`), height parsed from `6' 5"` strings. Used to anchor archetype/recruit/transfer joins. |
 
+**Barttorvik team-name crosswalk:** 4,922/5,059 rows (97.3%) matched to an
+ESPN `team_id`; the 10 unmatched schools (American, Appalachian St., FIU,
+LIU, Penn, Queens, Seattle, Southeastern Louisiana, St. Thomas, TAMU-CC) are
+one-off name irregulars, not a systematic class, and are dropped by the
+gate's `team_id.is_not_null()` filter. `barttorvik_bpm_2026.parquet` is
+capture-only today (the gate pins 2025) -- reserved for the next re-fit.
+
 **RAPM validation (2026-07-07):** the 125-game residential NCAA scrape
 (UMBC hop-1 cluster, 2024-25) was driven through the shipped Phase 5a-5f
 parser stack (`get_box_lineup` -> `create_lineup_data`; 126 contests, 0 parse

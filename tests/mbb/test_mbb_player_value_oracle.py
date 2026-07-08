@@ -269,6 +269,7 @@ def test_transfer_gate_beats_baseline(bpm_all: pl.DataFrame) -> None:
         how="inner",
     )
     assert j.height >= 500, f"transfer cohort collapsed: n={j.height}"
+    assert art["feature_cols"][0] == "pre_box_bpm"  # the naive baseline below reads column 0
     X = j.select(art["feature_cols"]).to_numpy()
     y = j.get_column("post_box_bpm").to_numpy()
     ids = j.get_column("player_id").to_list()
@@ -352,16 +353,19 @@ def test_draft_gate_both_heads_beat_baseline(bpm_all: pl.DataFrame) -> None:
         pl.col("rank_nat").cast(pl.Float64).fill_null(float(art["bubble_rank"])).log().alias("log_rank"),
     )
     X = feats.select(art["feature_cols"]).to_numpy()
-    Z = (X - X.mean(0)) / np.maximum(X.std(0), 1e-9)
     y = feats.get_column("pick_overall").is_not_null().to_numpy().astype(int)
     picks = feats.get_column("pick_overall").to_numpy()
     seas = feats.get_column("season").to_numpy()
     Xb = feats.select("composite", "log_rank").to_numpy()
-    Zb = (Xb - Xb.mean(0)) / np.maximum(Xb.std(0), 1e-9)
     assert int(y.sum()) >= 80, f"drafted-label join collapsed: n={int(y.sum())}"
 
     for s in _SEASONS:
         tr, te = seas != s, seas == s
+        # standardize with TRAIN-fold moments only (no held-out leakage)
+        mu, sd = X[tr].mean(0), np.maximum(X[tr].std(0), 1e-9)
+        Z = (X - mu) / sd
+        mub, sdb = Xb[tr].mean(0), np.maximum(Xb[tr].std(0), 1e-9)
+        Zb = (Xb - mub) / sdb
         bh = logistic_fit(Z[tr], y[tr], float(art["lambda_prob"]))
         p = 1 / (1 + np.exp(-(np.hstack([np.ones((int(te.sum()), 1)), Z[te]]) @ bh)))
         auc = roc_auc(y[te], p)
@@ -377,3 +381,133 @@ def test_draft_gate_both_heads_beat_baseline(bpm_all: pl.DataFrame) -> None:
         r_b = spearman_corr(np.hstack([np.ones((int(dr_te.sum()), 1)), Zb[dr_te]]) @ bpb, picks[dr_te].astype(float))
         assert r >= GATE_DRAFT_PICK_SPEARMAN, f"draft pick spearman {r:.4f} < gate (held-out {s})"
         assert r > r_b, f"draft pick head does not beat recruit-rank baseline (held-out {s})"
+
+
+# ---------------------------------------------------------------------------
+# Shipped-artifact checks: (a) the committed coefficients reproduce from the
+# frozen fixture design (a corrupted/stale artifact refit cannot ship green),
+# and (b) the RUNTIMES execute their real bundled artifacts end-to-end
+# offline (a feature the loader fails to build cannot hide behind the
+# synthetic-artifact unit tests -- this is what would have caught the
+# height_in contract break).
+# ---------------------------------------------------------------------------
+
+rec_mod = importlib.import_module("sportsdataverse.mbb.mbb_recruiting_projection")
+draft_mod = importlib.import_module("sportsdataverse.mbb.mbb_draft_projection")
+
+
+def _recruiting_design(bpm_all: pl.DataFrame):
+    from sportsdataverse.mbb.mbb_player_value_constants import load_artifact
+
+    art = load_artifact("mbb_recruiting")
+    recruits = pl.read_parquet(_FIX / "recruits_2025_2026.parquet").filter(pl.col("composite").is_not_null())
+    recruits = recruits.with_columns(
+        pl.col("height_in").fill_null(pl.col("height_in").median().over("season")),
+        pl.col("rank_nat").cast(pl.Float64).fill_null(float(art["bubble_rank"])).log().alias("log_rank"),
+        pl.col("player").map_elements(_norm, return_dtype=pl.Utf8).alias("_pn"),
+    )
+    realized = bpm_all.filter(pl.col("min") >= float(art["min_minutes"])).with_columns(
+        pl.col("player").map_elements(_norm, return_dtype=pl.Utf8).alias("_pn")
+    )
+    j = recruits.join(
+        realized.select("_pn", "team_id", "season", "box_bpm"), on=["_pn", "team_id", "season"], how="inner"
+    )
+    unmatched = recruits.join(j.select("_pn", "season").unique(), on=["_pn", "season"], how="anti")
+    fb = unmatched.drop("team_id").join(
+        realized.select("_pn", "season", "box_bpm", "team_id").unique(subset=["_pn", "season"], keep="none"),
+        on=["_pn", "season"],
+        how="inner",
+    )
+    return art, pl.concat([j.select(fb.columns), fb], how="vertical_relaxed")
+
+
+def test_shipped_recruiting_coef_reproduces(bpm_all: pl.DataFrame) -> None:
+    from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
+
+    art, j = _recruiting_design(bpm_all)
+    b = ridge_fit(j.select(art["feature_cols"]).to_numpy(), j.get_column("box_bpm").to_numpy(), float(art["lambda"]))
+    assert np.allclose(b, np.asarray(art["coef"]), rtol=1e-3, atol=1e-3), (
+        f"shipped mbb_recruiting coef does not reproduce from the frozen fixtures: {b} vs {art['coef']}"
+    )
+
+
+def test_shipped_transfer_coef_reproduces(bpm_all: pl.DataFrame) -> None:
+    from sportsdataverse.mbb.mbb_player_value_constants import load_artifact, ridge_fit
+    from sportsdataverse.mbb.mbb_transfer_projection import transfer_cohort
+
+    art = load_artifact("mbb_transfer")
+    q = bpm_all.filter(pl.col("min") >= float(art["min_minutes"]))
+    cohort = transfer_cohort(q.select("player_id", "team_id", "season"))
+    j = cohort.join(
+        q.select(
+            "player_id",
+            pl.col("season").alias("from_season"),
+            pl.col("team_id").alias("from_team_id"),
+            pl.col("box_bpm").alias("pre_box_bpm"),
+        ),
+        on=["player_id", "from_season", "from_team_id"],
+        how="inner",
+    ).join(
+        q.select(
+            "player_id",
+            pl.col("season").alias("to_season"),
+            pl.col("team_id").alias("to_team_id"),
+            pl.col("box_bpm").alias("post_box_bpm"),
+        ),
+        on=["player_id", "to_season", "to_team_id"],
+        how="inner",
+    )
+    b = ridge_fit(
+        j.select(art["feature_cols"]).to_numpy(), j.get_column("post_box_bpm").to_numpy(), float(art["lambda"])
+    )
+    assert np.allclose(b, np.asarray(art["coef"]), rtol=1e-3, atol=1e-3), (
+        f"shipped mbb_transfer coef does not reproduce from the frozen fixtures: {b} vs {art['coef']}"
+    )
+
+
+def test_recruiting_runtime_scores_shipped_artifact(bpm_all: pl.DataFrame) -> None:
+    """End-to-end runtime x REAL bundled artifact, offline: the loader-built
+    feature frame must satisfy the artifact's feature_cols contract."""
+    fixture_recruits = pl.read_parquet(_FIX / "recruits_2025_2026.parquet").select(
+        "recruit_id", "player", "team_id", "season", "composite", "rank_nat", "height_in"
+    )
+    orig = (rec_mod._load_recruits, rec_mod.mbb_box_bpm)
+    rec_mod._load_recruits = lambda seasons, league="mens": fixture_recruits.filter(pl.col("season").is_in(seasons))  # type: ignore[assignment]
+    rec_mod.mbb_box_bpm = lambda seasons, league="mens": bpm_all  # type: ignore[assignment]
+    try:
+        out = rec_mod.mbb_recruiting_projection(2025)
+    finally:
+        rec_mod._load_recruits, rec_mod.mbb_box_bpm = orig
+    assert out.height > 300
+    exp = out.get_column("exp_box_bpm").to_numpy()
+    assert np.isfinite(exp).all()
+    graded = out.filter(pl.col("composite").is_not_null())
+    r = spearman_corr(graded.get_column("exp_box_bpm").to_numpy(), graded.get_column("composite").to_numpy())
+    assert r > 0.5, f"shipped recruiting artifact scores nonsense: corr(exp, composite)={r:.3f}"
+
+
+def test_draft_runtime_scores_shipped_artifact(bpm_all: pl.DataFrame, archetypes_2025: pl.DataFrame) -> None:
+    """End-to-end draft runtime x REAL bundled artifact, offline (incl. the
+    roster class/height join contract)."""
+    rosters = pl.read_parquet(_FIX / "rosters_2025_2026.parquet").select(
+        pl.col("player_id").cast(pl.Utf8), pl.col("season").cast(pl.Int64), "class", "height_in"
+    )
+    orig = (draft_mod.mbb_box_bpm, draft_mod.mbb_archetypes, draft_mod._load_roster_class)
+    draft_mod.mbb_box_bpm = lambda seasons, league="mens": bpm_all.filter(pl.col("season").is_in(seasons))  # type: ignore[assignment]
+    draft_mod.mbb_archetypes = lambda seasons, league="mens": archetypes_2025  # type: ignore[assignment]
+    draft_mod._load_roster_class = lambda seasons, league="mens": rosters.filter(pl.col("season").is_in(seasons))  # type: ignore[assignment]
+    try:
+        out = draft_mod.mbb_draft_projection(2025)
+    finally:
+        draft_mod.mbb_box_bpm, draft_mod.mbb_archetypes, draft_mod._load_roster_class = orig
+    assert out.height > 2000
+    prob = out.get_column("draft_prob").to_numpy()
+    pick = out.get_column("projected_pick").to_numpy()
+    assert np.isfinite(prob).all() and (prob >= 0).all() and (prob <= 1).all()
+    assert np.isfinite(pick).all() and (pick >= 1).all()
+    assert set(out.get_column("pro_tier").unique().to_list()) <= {
+        "lottery",
+        "first round",
+        "early second",
+        "late second",
+    }

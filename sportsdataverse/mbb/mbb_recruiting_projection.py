@@ -38,10 +38,6 @@ _SCHEMA = {
 }
 
 
-def _norm(s: str) -> str:
-    return re.sub(r"\s+", " ", re.sub(r"[^a-z ]", "", s.lower())).strip()
-
-
 def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
     """Resolve the season's recruiting class to a tidy frame (one HTTP call
     per recruit -- ESPN ships the class as a paginated ``$ref`` collection).
@@ -80,6 +76,7 @@ def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
                     "season": season,
                     "composite": composite,
                     "rank_nat": rank,
+                    "height_in": float(ath.get("height") or 0) or None,
                 }
             )
     if not rows:
@@ -158,19 +155,32 @@ def mbb_recruiting_projection(
     feats = recruits.with_columns(
         pl.col("composite").fill_null(pl.col("composite").median().over("season")).alias("composite"),
         pl.col("rank_nat").cast(pl.Float64).fill_null(bubble).log().alias("log_rank"),
+        pl.col("height_in").fill_null(pl.col("height_in").median().over("season")),
     )
     X = feats.select(art["feature_cols"]).to_numpy()
     coef = np.asarray(art["coef"], dtype=float)
     exp = np.hstack([np.ones((len(X), 1)), X]) @ coef
     scored = recruits.with_columns(
         pl.Series("exp_box_bpm", exp, dtype=pl.Float64),
-        pl.col("player").fill_null("").map_elements(_norm, return_dtype=pl.Utf8).alias("_pn"),
+        pl.col("player")
+        .fill_null("")
+        .str.to_lowercase()
+        .str.replace_all(r"[^a-z ]", "")
+        .str.replace_all(r"\s+", " ")
+        .str.strip_chars()
+        .alias("_pn"),
     )
 
     realized = mbb_box_bpm(seasons_list, league=league).filter(pl.col("min") >= float(art.get("min_minutes", 150.0)))
-    realized = realized.with_columns(pl.col("player").map_elements(_norm, return_dtype=pl.Utf8).alias("_pn")).select(
-        "_pn", "team_id", "season", pl.col("player_id").alias("_matched_id"), pl.col("box_bpm").alias("_realized")
-    )
+    realized = realized.with_columns(
+        pl.col("player")
+        .fill_null("")
+        .str.to_lowercase()
+        .str.replace_all(r"[^a-z ]", "")
+        .str.replace_all(r"\s+", " ")
+        .str.strip_chars()
+        .alias("_pn")
+    ).select("_pn", "team_id", "season", pl.col("player_id").alias("_matched_id"), pl.col("box_bpm").alias("_realized"))
     assert scored.schema["team_id"] == realized.schema["team_id"] == pl.Utf8
     out = (
         scored.join(realized, on=["_pn", "team_id", "season"], how="left")

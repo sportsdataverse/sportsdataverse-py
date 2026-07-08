@@ -1,21 +1,26 @@
 {
-  "league": "womens",
-  "feature_cols": [
-    "pre_box_bpm"
-  ],
-  "coef": [
-    1.1727165505444832,
-    0.7110292228457439
-  ],
-  "lambda": 30.0,
-  "min_minutes": 150.0,
-  "train_to_seasons": [
-    2026
-  ],
-  "holdout": {
-    "n": 331,
-    "mae_proj": 2.76419132793022,
-    "mae_pre_baseline": 3.152455358411046,
-    "spearman": 0.631328610238813
-  }
+ "league": "womens",
+ "feature_cols": [
+  "pre_box_bpm"
+ ],
+ "coef": [
+  1.1727165505444832,
+  0.7110292228457439
+ ],
+ "lambda": 30.0,
+ "min_minutes": 150.0,
+ "train_to_seasons": [
+  2026
+ ],
+ "holdout": {
+  "n": 331,
+  "mae_proj": 2.76419132793022,
+  "mae_pre_baseline": 3.152455358411046,
+  "spearman": 0.631328610238813
+ },
+ "provenance": {
+  "script": "dev/mbb_player_value/fit_transfer.py (gitignored dev/; see tests/fixtures READMEs)",
+  "fitted": "2026-07-07",
+  "inputs": "sportsdataverse-data releases + tests/fixtures/{m,w}bb_player_value fixtures"
+ }
 }

@@ -182,6 +182,9 @@ def test_wbb_recruiting_gate_loso_spearman(bpm_all: pl.DataFrame) -> None:
         pred = np.hstack([np.ones((int(te.sum()), 1)), X[te]]) @ b
         r = spearman_corr(pred, y[te])
         assert r >= GATE_RECRUITING_SPEARMAN, f"wbb recruiting held-out class {s}: spearman {r:.4f} < gate"
+    # the SHIPPED coefficients must reproduce from the frozen fixture design
+    b_full = ridge_fit(X, y, float(art["lambda"]))
+    assert np.allclose(b_full, np.asarray(art["coef"]), rtol=1e-3, atol=1e-3)
 
 
 def test_wbb_transfer_gate_beats_baseline(bpm_all: pl.DataFrame) -> None:
@@ -213,6 +216,7 @@ def test_wbb_transfer_gate_beats_baseline(bpm_all: pl.DataFrame) -> None:
         how="inner",
     )
     assert j.height >= 300, f"wbb transfer cohort collapsed: n={j.height}"
+    assert art["feature_cols"][0] == "pre_box_bpm"  # the naive baseline below reads column 0
     X = j.select(art["feature_cols"]).to_numpy()
     y = j.get_column("post_box_bpm").to_numpy()
     ids = j.get_column("player_id").to_list()
@@ -224,6 +228,9 @@ def test_wbb_transfer_gate_beats_baseline(bpm_all: pl.DataFrame) -> None:
     r = spearman_corr(pred, y[te])
     assert m_proj < m_base, f"wbb transfer proj MAE {m_proj:.3f} !< naive-pre baseline {m_base:.3f}"
     assert r >= GATE_TRANSFER_SPEARMAN, f"wbb transfer held-out spearman {r:.4f} < gate"
+    # the SHIPPED coefficients must reproduce from the frozen fixture design
+    b_full = ridge_fit(X, y, float(art["lambda"]))
+    assert np.allclose(b_full, np.asarray(art["coef"]), rtol=1e-3, atol=1e-3)
 
 
 def _draft_design(bpm_all: pl.DataFrame):
@@ -264,20 +271,21 @@ def _draft_design(bpm_all: pl.DataFrame):
         how="left",
     )
     X = uni.select(art["feature_cols"]).to_numpy()
-    Z = (X - X.mean(0)) / np.maximum(X.std(0), 1e-9)
     y = uni.get_column("pick_overall").is_not_null().to_numpy().astype(int)
     picks = uni.get_column("pick_overall").to_numpy()
     seas = uni.get_column("season").to_numpy()
-    return art, Z, y, picks, seas
+    return art, X, y, picks, seas
 
 
 def test_wbb_draft_prob_gate(bpm_all: pl.DataFrame) -> None:
     from sportsdataverse.mbb.mbb_player_value_constants import logistic_fit, roc_auc
 
-    art, Z, y, _picks, seas = _draft_design(bpm_all)
+    art, X, y, _picks, seas = _draft_design(bpm_all)
     assert int(y.sum()) >= 50, f"drafted-label join collapsed: n={int(y.sum())}"
     for s in _SEASONS:
         tr, te = seas != s, seas == s
+        # standardize with TRAIN-fold moments only (no held-out leakage)
+        Z = (X - X[tr].mean(0)) / np.maximum(X[tr].std(0), 1e-9)
         bh = logistic_fit(Z[tr], y[tr], float(art["lambda_prob"]))
         p = 1 / (1 + np.exp(-(np.hstack([np.ones((int(te.sum()), 1)), Z[te]]) @ bh)))
         auc = roc_auc(y[te], p)
@@ -296,13 +304,33 @@ def test_wbb_draft_prob_gate(bpm_all: pl.DataFrame) -> None:
 def test_wbb_draft_pick_gate_pooled(bpm_all: pl.DataFrame) -> None:
     from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
 
-    art, Z, y, picks, seas = _draft_design(bpm_all)
+    art, X, y, picks, seas = _draft_design(bpm_all)
     preds = np.zeros(len(y))
     for s in _SEASONS:
         tr, te = seas != s, seas == s
+        Z = (X - X[tr].mean(0)) / np.maximum(X[tr].std(0), 1e-9)
         dr_tr = (y == 1) & tr
         bp = ridge_fit(Z[dr_tr], np.log(picks[dr_tr].astype(float)), float(art["lambda_pick"]))
         preds[te] = np.hstack([np.ones((int(te.sum()), 1)), Z[te]]) @ bp
     drafted = y == 1
     r = spearman_corr(preds[drafted], picks[drafted].astype(float))
     assert r >= GATE_DRAFT_PICK_SPEARMAN, f"wbb pooled pick spearman {r:.4f} < gate"
+
+
+def test_wbb_draft_pick_data_floor(bpm_all: pl.DataFrame) -> None:
+    """Non-xfail regression floor for the pick head: the xfail'd 0.55 gate
+    carries no signal if the head collapses entirely, so assert a floor
+    below the observed worst fold (0.32) that total breakage would cross."""
+    from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
+
+    art, X, y, picks, seas = _draft_design(bpm_all)
+    preds = np.zeros(len(y))
+    for s in _SEASONS:
+        tr, te = seas != s, seas == s
+        Z = (X - X[tr].mean(0)) / np.maximum(X[tr].std(0), 1e-9)
+        dr_tr = (y == 1) & tr
+        bp = ridge_fit(Z[dr_tr], np.log(picks[dr_tr].astype(float)), float(art["lambda_pick"]))
+        preds[te] = np.hstack([np.ones((int(te.sum()), 1)), Z[te]]) @ bp
+    drafted = y == 1
+    r = spearman_corr(preds[drafted], picks[drafted].astype(float))
+    assert r >= 0.30, f"wbb pick head collapsed: pooled spearman {r:.4f} < 0.30 data floor"

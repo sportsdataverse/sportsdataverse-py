@@ -1,25 +1,30 @@
 {
-  "league": "womens",
-  "feature_cols": [
-    "composite",
-    "log_rank",
-    "height_in"
-  ],
-  "coef": [
-    -109.04201755872943,
-    0.8183094589967417,
-    -7.388223366429154e-12,
-    0.530051666256035
-  ],
-  "lambda": 10.0,
-  "bubble_rank": 120,
-  "min_minutes": 150.0,
-  "train_seasons": [
-    2025,
-    2026
-  ],
-  "loso_spearman": [
-    0.6860719195904509,
-    0.5119287756576413
-  ]
+ "league": "womens",
+ "feature_cols": [
+  "composite",
+  "log_rank",
+  "height_in"
+ ],
+ "coef": [
+  -109.04201755872943,
+  0.8183094589967417,
+  -7.388223366429154e-12,
+  0.530051666256035
+ ],
+ "lambda": 10.0,
+ "bubble_rank": 120,
+ "min_minutes": 150.0,
+ "train_seasons": [
+  2025,
+  2026
+ ],
+ "loso_spearman": [
+  0.6860719195904509,
+  0.5119287756576413
+ ],
+ "provenance": {
+  "script": "dev/mbb_player_value/fit_recruiting.py (gitignored dev/; see tests/fixtures READMEs)",
+  "fitted": "2026-07-07",
+  "inputs": "sportsdataverse-data releases + tests/fixtures/{m,w}bb_player_value fixtures"
+ }
 }

@@ -51,7 +51,10 @@ def _load_roster_class(seasons: "list[int]", league: str = "mens") -> pl.DataFra
 
     frames = []
     for s in seasons:
-        df = loader([s])
+        try:
+            df = loader([s])
+        except Exception:  # noqa: BLE001 - release floor varies by league
+            continue
         if df.is_empty():
             continue
         frames.append(
@@ -64,7 +67,11 @@ def _load_roster_class(seasons: "list[int]", league: str = "mens") -> pl.DataFra
                     else pl.lit(None, dtype=pl.Utf8).alias("class")
                 ),
                 (
-                    pl.col("height").cast(pl.Float64, strict=False).alias("height_in")
+                    # the release ships display-format heights (``6' 5"``)
+                    (
+                        pl.col("height").cast(pl.Utf8).str.extract(r"(\d+)'", 1).cast(pl.Float64) * 12
+                        + pl.col("height").cast(pl.Utf8).str.extract(r"'\s*(\d+)", 1).cast(pl.Float64)
+                    ).alias("height_in")
                     if "height" in df.columns
                     else pl.lit(None, dtype=pl.Float64).alias("height_in")
                 ),
@@ -74,7 +81,12 @@ def _load_roster_class(seasons: "list[int]", league: str = "mens") -> pl.DataFra
         return pl.DataFrame(
             schema={"player_id": pl.Utf8, "season": pl.Int64, "class": pl.Utf8, "height_in": pl.Float64}
         )
-    return pl.concat(frames, how="diagonal_relaxed").unique(subset=["player_id", "season"], keep="first")
+    out = pl.concat(frames, how="diagonal_relaxed").unique(subset=["player_id", "season"], keep="first")
+    # fail LOUDLY if the release height format drifts (a silent all-null parse
+    # would feed a constant-zero height into the draft heads -> train/serve skew)
+    if out.height > 0 and out.get_column("height_in").null_count() == out.height:
+        raise ValueError("rosters release height format changed: no heights parsed from the display strings")
+    return out
 
 
 @overload

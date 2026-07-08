@@ -6,10 +6,12 @@ import polars as pl
 
 rec = importlib.import_module("sportsdataverse.mbb.mbb_recruiting_projection")
 
+# mirrors the REAL artifact contract (feature_cols incl. height_in) so a
+# feature the loader fails to build cannot hide behind a synthetic artifact
 _FAKE_ART = {
     "league": "mens",
-    "feature_cols": ["composite", "log_rank"],
-    "coef": [0.0, 0.1, 0.0],  # exp = 0.1 * composite
+    "feature_cols": ["composite", "log_rank", "height_in"],
+    "coef": [0.0, 0.1, 0.0, 0.0],  # exp = 0.1 * composite
     "lambda": 10.0,
     "bubble_rank": 150,
     "min_minutes": 150.0,
@@ -26,6 +28,7 @@ def _fake_recruits(seasons, league="mens"):
             "season": [2025, 2025],
             "composite": [95.0, 75.0],
             "rank_nat": [1, 90],
+            "height_in": [79.0, None],  # null exercises the median imputation
         }
     )
 

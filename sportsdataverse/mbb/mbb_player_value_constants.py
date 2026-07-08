@@ -260,7 +260,10 @@ def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
 
     frames = []
     for season in seasons:
-        df = _loader([season])
+        try:
+            df = _loader([season])
+        except Exception:  # noqa: BLE001 - release floor varies by league (wbb: 2026)
+            continue
         if not df.is_empty():
             frames.append(
                 df.select([c for c in ("athlete_id_1", "season", "type_text", "score_value") if c in df.columns])
@@ -376,8 +379,19 @@ def aggregate_player_seasons(seasons: "list[int]", *, league: str = "mens") -> p
         )
     )
     assert agg.schema["player_id"] == shot_counts.schema["player_id"] == pl.Utf8
+    covered = shot_counts.get_column("season").unique().to_list()
     return agg.join(shot_counts, on=["player_id", "season"], how="left").with_columns(
-        pl.col("fga_rim", "fga_mid", "fga_three").fill_null(0.0)
+        # within a covered season a missing row = zero tracked attempts;
+        # an UNCOVERED season falls back to the box-derived splits
+        pl.when(pl.col("season").is_in(covered)).then(pl.col("fga_rim").fill_null(0.0)).otherwise(0.0).alias("fga_rim"),
+        pl.when(pl.col("season").is_in(covered))
+        .then(pl.col("fga_mid").fill_null(0.0))
+        .otherwise(pl.col("field_goals_attempted") - pl.col("three_point_field_goals_attempted"))
+        .alias("fga_mid"),
+        pl.when(pl.col("season").is_in(covered))
+        .then(pl.col("fga_three").fill_null(0.0))
+        .otherwise(pl.col("three_point_field_goals_attempted"))
+        .alias("fga_three"),
     )
 
 
