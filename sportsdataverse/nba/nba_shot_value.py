@@ -454,3 +454,192 @@ def zone_value_map(
         .sort("player_id", "zone")
     )
     return out.to_pandas() if return_as_pandas else out
+
+
+def _fetch_scored(
+    player_ids: "list[int]",
+    season: str,
+    league_id: str,
+) -> "tuple[pl.DataFrame, pl.DataFrame]":
+    """Fetch + concat per-shot frames and keep one LeagueAverages, scored.
+
+    ``game_id_nullable=None`` is REQUIRED: the wrapper's empty-string default
+    zero-pads to ``"0000000000"``, a nonexistent game filter that returns 0
+    shots. Returns ``(scored_shots, league_avgs)``.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_shotchartdetail  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets  # noqa: PLC0415
+
+    shot_frames, league_avgs = [], None
+    for pid in player_ids:
+        raw = nba_stats_shotchartdetail(
+            player_id=str(pid),
+            season_nullable=season,
+            league_id=league_id,
+            context_measure_simple="FGA",
+            game_id_nullable=None,
+            return_parsed=False,
+        )
+        parsed = parse_nba_stats_result_sets(raw)
+        if not isinstance(parsed, dict):
+            continue
+        sc = parsed.get("Shot_Chart_Detail")
+        if sc is not None and not sc.is_empty():
+            shot_frames.append(_pin_shot_ids(sc))
+        if league_avgs is None:
+            la = parsed.get("LeagueAverages")
+            if la is not None and not la.is_empty():
+                league_avgs = la
+    if not shot_frames or league_avgs is None:
+        return pl.DataFrame(), pl.DataFrame()
+    shots = pl.concat(shot_frames, how="vertical_relaxed")
+    return score_shot_xpoints(shots, league_avgs), league_avgs
+
+
+def _pin_shot_ids(sc: pl.DataFrame) -> pl.DataFrame:
+    out = sc
+    if "game_id" in out.columns:
+        out = out.with_columns(pl.col("game_id").cast(pl.Utf8))  # zero-padded: no int round-trip
+    for c in ("player_id", "team_id"):
+        if c in out.columns:
+            out = out.with_columns(pl.col(c).cast(pl.Int64, strict=False))
+    return out
+
+
+def nba_shot_value(
+    player_ids: "list[int]",
+    season: str,
+    *,
+    league_id: str = "00",
+    include_context: bool = False,
+    return_as_pandas: bool = False,
+) -> "dict[str, Union[pl.DataFrame, pd.DataFrame]]":
+    """One-call shot-value spine: fetch, score, and run all five models.
+
+    Fetches each player's ``shotchartdetail``, scores per-shot expected points
+    from the free ``LeagueAverages`` zone table, and returns the scored shots
+    plus shooter talent, selection quality, and zone-value maps (and the
+    defender/shot-clock context tables when ``include_context=True``).
+
+    Args:
+        player_ids: Player ids to fetch.
+        season: Season string, e.g. ``"2022-23"``.
+        league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League.
+        include_context: Also fetch + return the ``playerdashptshots``
+            defender/shot-clock context tables.
+        return_as_pandas: Return pandas frames instead of polars.
+
+    Returns:
+        ``{"shots", "talent", "selection", "zones"}`` (plus ``"context"`` when
+        requested). An empty fetch returns a dict of zero-row frames.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_shot_value
+            out = nba_shot_value([201939], "2022-23")
+            out["talent"].head()
+
+    See Also:
+        * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+    """
+    scored, league_avgs = _fetch_scored(player_ids, season, league_id)
+    out: "dict[str, pl.DataFrame]" = {
+        "shots": scored,
+        "talent": shooter_talent(scored, league_id=league_id),
+        "selection": shot_selection_quality(scored),
+        "zones": zone_value_map(scored),
+    }
+    if include_context:
+        from sportsdataverse.nba.nba_stats import nba_stats_playerdashptshots  # noqa: PLC0415
+        from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets  # noqa: PLC0415
+
+        rows = []
+        for pid in player_ids:
+            raw = nba_stats_playerdashptshots(
+                player_id=str(pid), season=season, league_id=league_id, return_parsed=False
+            )
+            parsed = parse_nba_stats_result_sets(raw)
+            if not isinstance(parsed, dict):
+                continue
+            for rs, col in (
+                ("ClosestDefenderShooting", "close_def_dist_range"),
+                ("ShotClockShooting", "shot_clock_range"),
+            ):
+                f = parsed.get(rs)
+                if f is not None and not f.is_empty() and col in f.columns:
+                    rows.append(
+                        f.select(
+                            pl.lit(rs).alias("result_set"),
+                            pl.col(col).alias("bucket"),
+                            pl.col("fga").cast(pl.Int64, strict=False),
+                            pl.col("fgm").cast(pl.Int64, strict=False),
+                        )
+                    )
+        stacked = pl.concat(rows, how="vertical_relaxed") if rows else pl.DataFrame()
+        ctx = make_prob_by_context(stacked)
+        out["context"] = pl.concat(
+            [
+                ctx["defender"].with_columns(pl.lit("defender").alias("kind")),
+                ctx["shot_clock"].with_columns(pl.lit("shot_clock").alias("kind")),
+            ],
+            how="vertical_relaxed",
+        )
+    if return_as_pandas:
+        return {k: v.to_pandas() for k, v in out.items()}
+    return out
+
+
+def nba_shot_value_lineups(
+    group_id: str,
+    season: str,
+    *,
+    team_id: int,
+    league_id: str = "00",
+    return_as_pandas: bool = False,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Scored per-shot frame for one 5-man lineup (``shotchartlineupdetail``).
+
+    Args:
+        group_id: The 5-man lineup group id (dash-joined player ids); kept
+            ``Utf8``.
+        season: Season string, e.g. ``"2022-23"``.
+        team_id: The lineup's team id.
+        league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        The lineup's shots scored by :func:`score_shot_xpoints` (with
+        ``xpoints``). Empty fetch returns the augmented zero-row schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_shot_value_lineups
+            df = nba_shot_value_lineups("201939-202691-...", "2022-23", team_id=1610612744)
+
+    See Also:
+        * `nba_api <https://github.com/swar/nba_api>`_ -- NBA/WNBA (Python)
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_shotchartlineupdetail  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets  # noqa: PLC0415
+
+    raw = nba_stats_shotchartlineupdetail(
+        group_id=str(group_id),
+        season=season,
+        team_id_nullable=str(team_id),
+        league_id=league_id,
+        context_measure_detailed="FGA",
+        return_parsed=False,
+    )
+    parsed = parse_nba_stats_result_sets(raw)
+    shots = parsed.get("ShotChartLineupDetail") if isinstance(parsed, dict) else parsed
+    league_avgs = parsed.get("LeagueAverages") if isinstance(parsed, dict) else pl.DataFrame()
+    if shots is None or shots.is_empty():
+        empty = pl.DataFrame(schema={"group_id": pl.Utf8, "shot_type": pl.Utf8, **_SCORED_EXTRA})
+        return empty.to_pandas() if return_as_pandas else empty
+    if "group_id" in shots.columns:
+        shots = shots.with_columns(pl.col("group_id").cast(pl.Utf8))
+    scored = score_shot_xpoints(shots, league_avgs if league_avgs is not None else pl.DataFrame())
+    return scored.to_pandas() if return_as_pandas else scored

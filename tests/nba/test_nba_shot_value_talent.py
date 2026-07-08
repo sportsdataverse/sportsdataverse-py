@@ -30,11 +30,14 @@ def test_talent_shrinks_toward_zero():
             "shot_made_flag": [1] * 80 + [0] * 20,
         }
     )
+    from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
+
     scored = score_shot_xpoints(shots, _rim_la())
     tal = shooter_talent(scored, league_id="00", min_attempts=50).row(0, named=True)
     assert abs(tal["raw_above_pct"] - 0.16) < 1e-9
-    # k=100 → talent = 0.16 * 100/200 = 0.08; shrunk toward 0, same sign, |talent| < |raw|
-    assert abs(tal["talent_pct"] - 0.08) < 1e-9
+    # talent = raw * n/(n+k) with the fitted k; shrunk toward 0, same sign, |talent| < |raw|
+    k = get_shrinkage_k("00")
+    assert abs(tal["talent_pct"] - 0.16 * 100 / (100 + k)) < 1e-9
     assert 0 < tal["talent_pct"] < tal["raw_above_pct"]
     # points above expected: 80*2 - 100*(0.64*2) = 160 - 128 = 32
     assert abs(tal["points_above_expected"] - 32.0) < 1e-9
