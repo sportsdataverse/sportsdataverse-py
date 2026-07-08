@@ -32,6 +32,9 @@ __all__ = ["nfl_player_props", "player_usage_efficiency"]
 _MATCHUP_SCALE = 1.0
 # Game script: expected margin (clipped at +/-14) tilts rush volume up and
 # pass volume down for the favored side by up to +/-10%.
+# ponytail: seeded heuristics like _MATCHUP_SCALE above -- promote both
+# game-script constants to fitted PropConfig fields if the backtest ever
+# shows the tilt mis-scaled.
 _GAME_SCRIPT_SCALE = 0.10
 _GAME_SCRIPT_CLIP = 14.0
 

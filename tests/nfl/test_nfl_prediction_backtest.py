@@ -3,6 +3,13 @@
 Offline -- committed 2023 fixtures only. The walk is leakage-safe: ratings for
 week W are fit on plays from weeks < W only.
 
+NOTE (in-sample disclosure): the era constants (``NFL_CONSTANTS`` /
+``PROP_CONSTANTS``) were fitted by the ``dev/nfl_prediction/fit_*.py`` scripts
+on this same 2023 fixture walk, so these floors are in-sample regression pins
+that lock the shipped behavior -- NOT out-of-sample performance claims. A
+held-out-season fixture (2022/2024) is the upgrade path if these numbers are
+ever quoted as backtest performance.
+
 Gate rule (binding): floors are set from the observed value at gate time and
 NEVER widened/lowered to make a red gate pass. Observed at fit time
 (ridge_lambda=25; constants from dev/nfl_prediction/fit_pregame.py, 2023
@@ -68,6 +75,20 @@ def test_win_prob_brier_tracks_espn_predictor(backtest):
     assert b_mine <= b_espn + BRIER_TOLERANCE
 
 
+def test_win_prob_quintile_calibration(backtest):
+    """Gate: home_win_prob quintile calibration max |gap| <= 0.06 (observed 0.0359).
+
+    Quintiles (not deciles) because the 208-game backtest leaves deciles too
+    sparse for a stable gap; bins with n < 30 are excluded from the max.
+    """
+    from sportsdataverse.nfl.nfl_prediction_constants import calibration_table
+
+    y = (backtest["margin"].to_numpy() > 0).astype(float)
+    tbl = calibration_table(y, backtest["home_win_prob"].to_numpy(), n_bins=5).filter(pl.col("n") >= 30)
+    assert tbl.height >= 2
+    assert float((tbl["mean_pred"] - tbl["mean_actual"]).abs().max()) <= 0.06
+
+
 def test_spread_mae_vs_closing_line(backtest):
     """Gate: mae(exp_margin, close_spread_home) <= 3.5 (observed 2.961)."""
     edge = backtest["market_edge"].to_numpy()  # exp_margin - close_spread_home
@@ -123,6 +144,7 @@ def props_backtest():
         usage = player_usage_efficiency(stats, as_of_week=w)
         proj = props_mod._project_week(usage, ratings, games, preds, era="modern")
         realized = stats.filter(pl.col("week") == w)
+        assert proj.schema["player_id"] == stats.schema["player_id"] == pl.Utf8
         prev = (
             stats.filter(pl.col("week") < w)
             .sort("week")
@@ -174,7 +196,9 @@ def test_prop_p_over_calibration_pseudo_lines(props_backtest):
     assert lined.height > 3000
     p_over = 1.0 - norm.cdf((lined["line"].to_numpy() - lined["proj_mean"].to_numpy()) / lined["proj_sd"].to_numpy())
     y = (lined["realized"].to_numpy() > lined["line"].to_numpy()).astype(float)
-    tbl = calibration_table(y, p_over, n_bins=10)
+    # Exclude sparse bins from the max (all deciles carry n>=135 today; the
+    # filter guards a future re-capture from a noisy near-empty decile).
+    tbl = calibration_table(y, p_over, n_bins=10).filter(pl.col("n") >= 30)
     max_gap = float((tbl["mean_pred"] - tbl["mean_actual"]).abs().max())
     assert max_gap <= PROP_CALIBRATION_CEILING
 

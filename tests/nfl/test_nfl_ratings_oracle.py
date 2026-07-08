@@ -60,6 +60,7 @@ def test_adj_off_tracks_raw_team_epa(oracle_corpus):
     """
     mine = ratings_from_fixture(oracle_corpus["pbp"])
     raw = oracle_corpus["team_stats"]
+    assert mine.schema["team_id"] == raw.schema["team_id"] == pl.Utf8
     j = mine.join(raw, on="team_id", how="inner")
     assert j.height == 32
     assert spearman_corr(j["adj_off_epa"].to_numpy(), j["off_epa_per_play"].to_numpy()) >= 0.90
