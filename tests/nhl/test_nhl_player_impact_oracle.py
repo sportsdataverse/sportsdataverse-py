@@ -19,16 +19,20 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from sportsdataverse.nhl.nhl_player_impact_constants import calibration_table
+from sportsdataverse.nhl.nhl_gsax import nhl_goalie_gsax
+from sportsdataverse.nhl.nhl_player_impact_constants import calibration_table, spearman_corr
 from sportsdataverse.nhl.nhl_xg import nhl_xg
 
 FIX = Path(__file__).parent.parent / "fixtures" / "nhl_player_impact"
 MODELS = FIX / "xg_models"
 
 
+def _pbp() -> pl.DataFrame:
+    return pl.read_parquet(FIX / "pbp_sample.parquet")
+
+
 def _scored() -> pl.DataFrame:
-    pbp = pl.read_parquet(FIX / "pbp_sample.parquet")
-    return nhl_xg(pbp, model_dir=MODELS)
+    return nhl_xg(_pbp(), model_dir=MODELS)
 
 
 # Observed on the 3-game fixture (228 5v5 shots, 11 goals): |sum(xg) - goals| / goals ==
@@ -57,12 +61,33 @@ def test_xg_calibration_reliability_is_monotone():
     assert (actual == sorted(actual)).all(), f"calibration table not monotone: {tbl}"
 
 
-def test_xg_moneypuck_concurrent_gate_skipped_when_oracle_blocked():
+# Observed on the 3-game fixture: league-wide sum(gsax) == 3.98 (a handful of goals --
+# a 3-game sample is far too small for Sigma(xg) to converge to Sigma(goals); the
+# league-wide-approx-0 property is a large-sample calibration claim, not an exact
+# per-sample identity). TOL is set from that observed magnitude, generous enough for a
+# tiny fixture without being vacuous (it would still catch a gross attribution bug --
+# e.g. double-counting every shot, which would roughly double this value).
+GSAX_SUM_TOL = 6.0
+
+
+def test_gsax_league_sum_near_zero_within_small_sample_tolerance():
+    gsax = nhl_goalie_gsax(_pbp(), pl.DataFrame(), model_dir=MODELS)
+    total = gsax["gsax"].sum()
+    assert abs(total) <= GSAX_SUM_TOL, f"league sum(gsax) off: {total:.2f} (tol={GSAX_SUM_TOL})"
+
+
+def test_gsax_moneypuck_concurrent_gate_skipped_when_oracle_blocked():
     mp = pl.read_parquet(FIX / "mp_gsax.parquet")
     if mp.height == 0:
         pytest.skip(
-            "MoneyPuck per-shot/per-player xG sample is data-blocked (scrape-gated) -- "
+            "MoneyPuck per-goalie GSAx sample is data-blocked (scrape-gated) -- "
             "see tests/fixtures/nhl_player_impact/README.md capture contract."
         )
-    # Concurrent-validity path (runs once a licensed MoneyPuck export is captured).
-    raise AssertionError("mp_gsax.parquet is non-empty but the concurrent xG gate is unimplemented")
+    mine = nhl_goalie_gsax(_pbp(), pl.DataFrame(), model_dir=MODELS)
+    joined = mine.join(mp, on="player_id", how="inner")
+    assert joined.height > 0, "no overlapping goalies between mine and MoneyPuck's sample"
+    # FLOOR to be set from the observed correlation once a licensed MoneyPuck export
+    # is captured -- see the fixture README capture contract.
+    FLOOR = 0.6
+    corr = spearman_corr(joined["gsax"].to_numpy(), joined["gsax_right"].to_numpy())
+    assert corr >= FLOOR, f"GSAx vs MoneyPuck concurrent validity below floor: {corr:.3f} < {FLOOR}"
