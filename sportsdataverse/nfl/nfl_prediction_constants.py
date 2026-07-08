@@ -29,7 +29,8 @@ class RatingsConfig:
 
     # Fitted by dev/nfl_prediction/fit_ridge_lambda.py: grid {25,50,100,200,400,800},
     # mean spearman(as-of adj_net diff, realized margin) over 2023 weeks 6-18.
-    ridge_lambda: float = 200.0
+    # Observed surface is nearly flat (0.3204-0.3297); argmax 25 -> 0.3297.
+    ridge_lambda: float = 25.0
     min_competitive_wp: float = 0.05
     max_competitive_wp: float = 0.95
 
