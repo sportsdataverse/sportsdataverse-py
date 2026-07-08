@@ -105,3 +105,53 @@ def test_assemble_empty_returns_schema():
     out = assemble_draft_features(pl.DataFrame(), pl.DataFrame())
     assert out.height == 0
     assert out.schema["gsis_id"] == pl.Utf8
+
+
+def _fixture_features():
+    from sportsdataverse.nfl.nfl_draft_model import MEASURABLES
+
+    feats = pl.read_parquet(FIX / "draft_matured.parquet")
+    for c in MEASURABLES:
+        feats = feats.with_columns(pl.col(c).is_null().cast(pl.Int8).alias(f"{c}_imputed"))
+        feats = feats.with_columns(
+            pl.col(c)
+            .fill_null(pl.col(c).median().over("position", "season"))
+            .fill_null(pl.col(c).median().over("position"))
+            .fill_null(pl.col(c).median())
+            .fill_null(0.0)
+        )
+    return feats
+
+
+def test_oracle_draft_model_vs_realized_and_pick():
+    """Draft-model oracle on matured holdout classes 2015-2019 (offline fixtures).
+
+    Train per class on classes <= class - 5 (maturity boundary); pool the five
+    holdout classes (n=1269). Observed 2026-07-08 with DEFAULT_LAM=100
+    (selected on inner classes 2008-2014, see
+    dev/nfl_projection/fit_draft_lambda.py): ours 0.5888 vs pick-only 0.5865;
+    hit calibration max decile gap 0.0757 (gate 0.10). Floors set from observed
+    values rounded down. Realized `car_av` is nflverse `w_av` (see fixture
+    README).
+    """
+    from sportsdataverse.nfl.nfl_draft_model import HIT_SEASONS_STARTED
+    from sportsdataverse.nfl.nfl_projection_constants import calibration_table, spearman_corr
+
+    feats = _fixture_features()
+    preds = []
+    for cls in [2015, 2016, 2017, 2018, 2019]:
+        p = project_draft_class(feats, cls)
+        realized = feats.filter(pl.col("season") == cls).select("gsis_id", "car_av", "pick", "seasons_started")
+        assert p.schema["gsis_id"] == realized.schema["gsis_id"]
+        preds.append(p.join(realized, on="gsis_id", how="inner"))
+    allp = pl.concat(preds)
+    assert allp.height >= 1200
+    ours = spearman_corr(allp["pred_car_av"].to_numpy(), allp["car_av"].to_numpy())
+    # lower pick = better, so negate for correlation direction
+    pick_only = abs(spearman_corr(-allp["pick"].to_numpy(), allp["car_av"].to_numpy()))
+    assert ours >= 0.58, f"spearman {ours:.4f} < floor 0.58"
+    assert ours >= pick_only - 1e-6, f"ours {ours:.4f} < pick-only {pick_only:.4f}"
+    hit = (allp["seasons_started"].fill_null(0.0) >= HIT_SEASONS_STARTED).cast(pl.Float64).to_numpy()
+    tbl = calibration_table(hit, allp["hit_prob"].to_numpy())
+    gap = float((tbl["mean_pred"] - tbl["mean_actual"]).abs().max())
+    assert gap <= 0.10, f"hit calibration max decile gap {gap:.4f} > 0.10\n{tbl}"

@@ -192,6 +192,12 @@ HIT_SEASONS_STARTED: float = 3.0
 # this many seasons before the target class
 MATURITY_YEARS: int = 5
 
+# Ridge strength selected on inner (pre-holdout) validation classes 2008-2014 by
+# dev/nfl_projection/fit_draft_lambda.py (2026-07-08): pooled inner Spearman is
+# monotone improving with a plateau from ~100 (0.5490 at 100 vs 0.5522 at 1000)
+# while logistic-calibration risk grows with lam; 100.0 is the plateau knee.
+DEFAULT_LAM: float = 100.0
+
 
 @overload
 def nfl_draft_projection(
@@ -206,7 +212,7 @@ def nfl_draft_projection(
 
 
 def nfl_draft_projection(
-    seasons: List[int], target_class: int, *, lam: float = 1.0, return_as_pandas: bool = False
+    seasons: List[int], target_class: int, *, lam: float = DEFAULT_LAM, return_as_pandas: bool = False
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Draft outcome projection for one draft class.
 
@@ -252,7 +258,7 @@ def nfl_draft_projection(
 
 
 def project_draft_class(
-    feats: pl.DataFrame, target_class: int, *, lam: float = 1.0, return_as_pandas: bool = False
+    feats: pl.DataFrame, target_class: int, *, lam: float = DEFAULT_LAM, return_as_pandas: bool = False
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Fit on matured classes and score one target class (offline core).
 
