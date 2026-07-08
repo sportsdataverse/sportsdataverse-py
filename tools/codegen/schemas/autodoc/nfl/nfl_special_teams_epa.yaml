@@ -1,0 +1,21 @@
+schema: nfl_special_teams_epa
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: unit
+  type: character
+  description: ''
+- name: plays
+  type: integer
+  description: ''
+- name: epa
+  type: double
+  description: ''
+- name: epa_per_play
+  type: double
+  description: ''

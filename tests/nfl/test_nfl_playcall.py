@@ -62,6 +62,13 @@ def test_null_safe_without_participation():
     assert out["n_rb"].null_count() == out.height
 
 
+def test_playcall_artifact_ships_in_package_data():
+    """The bundled classifier is covered by the nfl/models/* package-data glob."""
+    from importlib.resources import files
+
+    assert files("sportsdataverse.nfl.models").joinpath("nfl_playcall.ubj").is_file()
+
+
 def test_scorer_schema_and_pass_prob():
     from sportsdataverse.nfl.nfl_playcall import nfl_play_call_probabilities
 

@@ -1,0 +1,42 @@
+schema: nfl_play_call_probabilities
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: play_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: week
+  type: integer
+  description: ''
+- name: posteam
+  type: character
+  description: ''
+- name: p_inside_run
+  type: double
+  description: ''
+- name: p_outside_run
+  type: double
+  description: ''
+- name: p_short_pass
+  type: double
+  description: ''
+- name: p_deep_pass
+  type: double
+  description: ''
+- name: p_scramble
+  type: double
+  description: ''
+- name: p_pass
+  type: double
+  description: ''
+- name: pred_family
+  type: character
+  description: ''
+- name: pass_oe_model
+  type: double
+  description: ''

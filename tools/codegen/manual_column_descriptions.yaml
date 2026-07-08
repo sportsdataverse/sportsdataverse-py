@@ -7651,3 +7651,149 @@ win_probability:
     row.
   runners: A serialized representation of baserunner movement records for this play in the win-probability feed, capturing
     start/end base positions and event types.
+playcall_features:
+  game_id: nflverse game identifier (Utf8 join key).
+  play_id: nflverse play identifier within the game (Int64 join key).
+  season: Season of the play.
+  week: Week of the play.
+  posteam: Offense (possession) team abbreviation.
+  down: Down (1-4) at the snap.
+  ydstogo: Yards to go for a first down.
+  yardline_100: Yards from the opponent end zone at the snap.
+  score_differential: Offense score minus defense score at the snap.
+  half_seconds_remaining: Seconds remaining in the half.
+  game_seconds_remaining: Seconds remaining in the game.
+  wp: Start-of-play win probability for the offense.
+  shotgun: 1 when the offense lined up in shotgun.
+  no_huddle: 1 when the play was run without a huddle.
+  xpass: Shipped nflfastR-parity expected-dropback probability for the play.
+  n_rb: Running backs in the offensive personnel grouping (null without participation data).
+  n_te: Tight ends in the offensive personnel grouping (null without participation data).
+  n_wr: Wide receivers in the offensive personnel grouping (null without participation data).
+  has_participation: 1 when a participation row matched the play, else 0.
+  family: 5-class play-call label (inside_run, outside_run, short_pass, deep_pass, scramble).
+  is_pass: 1 when the play was a pass (including scrambles), else 0.
+nfl_play_call_probabilities:
+  game_id: nflverse game identifier (Utf8 join key).
+  play_id: nflverse play identifier within the game (Int64 join key).
+  season: Season of the play.
+  week: Week of the play.
+  posteam: Offense (possession) team abbreviation.
+  p_inside_run: Predicted probability of an inside run (guard/center gap or middle).
+  p_outside_run: Predicted probability of an outside run (end/tackle or off-middle).
+  p_short_pass: Predicted probability of a short pass.
+  p_deep_pass: Predicted probability of a deep pass.
+  p_scramble: Predicted probability of a QB scramble.
+  p_pass: Predicted pass probability (short + deep + scramble family sum).
+  pred_family: Argmax family among the five class probabilities.
+  pass_oe_model: Pass-rate over model expectation for the play, 100 * (is_pass - p_pass).
+nfl_play_call_tendencies:
+  season: Season of the aggregate.
+  posteam: Offense team abbreviation.
+  plays: Offensive run/pass plays scored.
+  mean_p_pass: Mean model pass probability across the team's plays.
+  pass_rate: Actual pass rate (scrambles count as passes).
+  proe: Pass rate over expected, 100 * (pass_rate - mean_p_pass).
+  share_inside_run: Share of plays labeled inside_run.
+  share_outside_run: Share of plays labeled outside_run.
+  share_short_pass: Share of plays labeled short_pass.
+  share_deep_pass: Share of plays labeled deep_pass.
+  share_scramble: Share of plays labeled scramble.
+team_game_pace:
+  game_id: nflverse game identifier (Utf8 join key).
+  season: Season of the game.
+  week: Week of the game.
+  posteam: Offense team abbreviation.
+  off_plays: Offensive plays in the game (kneels, spikes and no_plays excluded).
+  sec_per_play: Mean over the team's drives of elapsed game clock divided by drive plays.
+  neutral_plays: Offensive plays in neutral situations (wp in [0.2, 0.8], over 2 minutes left in the half).
+  neutral_sec_per_play: sec_per_play computed on neutral-situation plays only.
+  proe: Mean pass_oe over the team's dropbacks in the game (percentage points).
+  dropbacks: Dropbacks with a non-null pass_oe (the proe denominator).
+nfl_game_script:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  games: Games included in the aggregate.
+  off_plays_pg: Realized offensive plays per game.
+  sec_per_play: Season mean of the per-game sec_per_play.
+  neutral_sec_per_play: Season mean neutral-situation seconds per play (lower = faster).
+  proe: Season pass-rate over expected, dropback-weighted so it reconciles exactly with the pbp pass_oe aggregate.
+  exp_plays_pg: Expected plays per game from the fitted PACE_CONSTANTS OLS (own pace, opponent pace, market total).
+  plays_oe: Realized minus expected plays per game.
+  pace_rank: Rank of neutral pace within the season (1 = fastest).
+env_adjusted_make_prob:
+  base_make_prob: Shipped fg_model make probability (with nfl4th long-kick clamps applied).
+  exp_make_prob: Environment-adjusted make probability (logit shift for long-kick clamp correction, wind, temperature and altitude).
+nfl_kicker_rating:
+  season: Season of the rating.
+  kicker_player_id: nflverse kicker GSIS id (Utf8 join key).
+  kicker: Display name of the kicker (e.g. J.Tucker), from kicker_player_name.
+  team: Team of the kicker's most recent attempt in the window.
+  fg_att: Field-goal attempts.
+  fg_made: Field goals made.
+  exp_made: Sum of environment-adjusted make probabilities (expected makes).
+  fgoe: Field goals made over expected (fg_made - exp_made).
+  fgoe_per_att: FGOE per attempt.
+  fgoe_shrunk: Empirical-Bayes shrunk FGOE per attempt, fgoe_per_att * att / (att + K_fg).
+  rating: 100 +/- 15 z-score of fgoe_shrunk within the frame.
+nfl_special_teams_epa:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  unit: Special-teams unit (punt, punt_return, kickoff, kickoff_return, field_goal, extra_point).
+  plays: Plays credited to the unit.
+  epa: Total EPA credited to the unit (kicking team carries the play EPA signed to it; the return team carries its negation).
+  epa_per_play: EPA per play for the unit.
+nfl_punter_value:
+  season: Season of the aggregate.
+  punter_player_id: nflverse punter GSIS id (Utf8 join key).
+  punts: Punts with a recorded kick distance.
+  gross_avg: Mean gross punt distance (yards).
+  net_avg: Mean net distance, kick_distance - return_yards - 20 * touchback.
+  exp_net_avg: Mean expected net from the shipped punt landing distribution at each punt's line of scrimmage.
+  net_over_expected: net_avg minus exp_net_avg (yards of field position per punt over expectation).
+  epa: Total EPA on the punter's punt plays (kicking-team perspective).
+team_pressure_rates:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  dropbacks_off: Offensive dropbacks (qb_dropback plays).
+  pressures_allowed: Sacks plus QB hits allowed on the team's own dropbacks.
+  pressure_rate_allowed: pressures_allowed / dropbacks_off.
+  dropbacks_def: Opponent dropbacks faced on defense.
+  pressures_generated: Sacks plus QB hits generated against opponent dropbacks.
+  pressure_rate_generated: pressures_generated / dropbacks_def.
+pressure_pairs:
+  season: Season of the matchup aggregate.
+  off_team: Offense team abbreviation.
+  def_team: Defense team abbreviation.
+  dropbacks: Offense dropbacks in the matchup.
+  pressures: Sacks plus QB hits in the matchup.
+adjust_pressure_pairs:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  dropbacks_off: Offensive dropbacks (qb_dropback plays).
+  pressures_allowed: Sacks plus QB hits allowed on the team's own dropbacks.
+  pressure_rate_allowed: pressures_allowed / dropbacks_off (raw).
+  dropbacks_def: Opponent dropbacks faced on defense.
+  pressures_generated: Sacks plus QB hits generated against opponent dropbacks.
+  pressure_rate_generated: pressures_generated / dropbacks_def (raw).
+  adj_pressure_rate_allowed: Opponent-adjusted allowed pressure rate (mu + team offense effect from the additive fixed point).
+  adj_pressure_rate_generated: Opponent-adjusted generated pressure rate (mu + team defense effect from the additive fixed point).
+nfl_line_grades:
+  season: Season of the grade.
+  team: Team abbreviation.
+  dropbacks_off: Offensive dropbacks (qb_dropback plays).
+  pressures_allowed: Sacks plus QB hits allowed on the team's own dropbacks.
+  pressure_rate_allowed: pressures_allowed / dropbacks_off (raw).
+  dropbacks_def: Opponent dropbacks faced on defense.
+  pressures_generated: Sacks plus QB hits generated against opponent dropbacks.
+  pressure_rate_generated: pressures_generated / dropbacks_def (raw).
+  adj_pressure_rate_allowed: Opponent-adjusted allowed pressure rate (additive fixed point, league-mean-centered).
+  adj_pressure_rate_generated: Opponent-adjusted generated pressure rate (additive fixed point, league-mean-centered).
+  ol_pass_block_grade: OL pass-block grade, 50 + 15 * z * n/(n + K_pressure) on the inverted adjusted allowed rate.
+  dl_pass_rush_grade: DL pass-rush grade, 50 + 15 * z * n/(n + K_pressure) on the adjusted generated rate.
+  pfr_pressure_pct: PFR team pressures (prss summed, traded 2TM/3TM rows excluded) divided by pbp dropbacks faced.
+calibration_table:
+  bin_mid: Midpoint of the probability bin.
+  mean_pred: Mean predicted probability within the bin.
+  mean_actual: Mean observed outcome within the bin.
+  n: Observations in the bin.

@@ -147,6 +147,7 @@ from sportsdataverse.nfl import nfl_weeks as _raw_nfl_weeks
 from sportsdataverse.nfl import nfl_weeks_by_date as _raw_nfl_weeks_by_date
 from sportsdataverse.nfl import NFLPlayProcess as NFLPlayProcess  # noqa: F401
 from sportsdataverse.nfl import NflConfig as NflConfig  # noqa: F401
+from sportsdataverse.nfl import adjust_pressure_pairs as adjust_pressure_pairs  # noqa: F401
 from sportsdataverse.nfl import build_nfl_player_stats as build_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import build_nfl_player_stats_def as build_nfl_player_stats_def  # noqa: F401
 from sportsdataverse.nfl import build_nfl_player_stats_kicking as build_nfl_player_stats_kicking  # noqa: F401
@@ -167,11 +168,13 @@ from sportsdataverse.nfl import calculate_xyac as calculate_xyac  # noqa: F401
 from sportsdataverse.nfl import clean_nfl_pbp as clean_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import clear_cache as clear_cache  # noqa: F401
 from sportsdataverse.nfl import download as download  # noqa: F401
+from sportsdataverse.nfl import env_adjusted_make_prob as env_adjusted_make_prob  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_calendar as espn_nfl_calendar  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_game_rosters as espn_nfl_game_rosters  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_player_stats as espn_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_schedule as espn_nfl_schedule  # noqa: F401
 from sportsdataverse.nfl import espn_nfl_teams as espn_nfl_teams  # noqa: F401
+from sportsdataverse.nfl import fg_make_probability as fg_make_probability  # noqa: F401
 from sportsdataverse.nfl import get_2pt_wp as get_2pt_wp  # noqa: F401
 from sportsdataverse.nfl import get_4th_down_probs as get_4th_down_probs  # noqa: F401
 from sportsdataverse.nfl import get_config as get_config  # noqa: F401
@@ -251,7 +254,10 @@ from sportsdataverse.nfl import nfl_compute_results as nfl_compute_results  # no
 from sportsdataverse.nfl import nfl_game_details as nfl_game_details  # noqa: F401
 from sportsdataverse.nfl import nfl_game_pbp as nfl_game_pbp  # noqa: F401
 from sportsdataverse.nfl import nfl_game_schedule as nfl_game_schedule  # noqa: F401
+from sportsdataverse.nfl import nfl_game_script as nfl_game_script  # noqa: F401
 from sportsdataverse.nfl import nfl_headers_gen as nfl_headers_gen  # noqa: F401
+from sportsdataverse.nfl import nfl_kicker_rating as nfl_kicker_rating  # noqa: F401
+from sportsdataverse.nfl import nfl_line_grades as nfl_line_grades  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_gamecenter_overview as nfl_ngs_gamecenter_overview  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_leaders as nfl_ngs_leaders  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_league_schedule as nfl_ngs_league_schedule  # noqa: F401
@@ -262,24 +268,33 @@ from sportsdataverse.nfl import nfl_ngs_microsite_chart_players as nfl_ngs_micro
 from sportsdataverse.nfl import nfl_ngs_play_is_highlight as nfl_ngs_play_is_highlight  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard as nfl_ngs_statboard  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders as nfl_ngs_statboard_leaders  # noqa: F401
+from sportsdataverse.nfl import nfl_play_call_probabilities as nfl_play_call_probabilities  # noqa: F401
+from sportsdataverse.nfl import nfl_play_call_tendencies as nfl_play_call_tendencies  # noqa: F401
 from sportsdataverse.nfl import nfl_players_crosswalk as nfl_players_crosswalk  # noqa: F401
+from sportsdataverse.nfl import nfl_punter_value as nfl_punter_value  # noqa: F401
 from sportsdataverse.nfl import nfl_season_standings as nfl_season_standings  # noqa: F401
 from sportsdataverse.nfl import nfl_simulations as nfl_simulations  # noqa: F401
+from sportsdataverse.nfl import nfl_special_teams_epa as nfl_special_teams_epa  # noqa: F401
 from sportsdataverse.nfl import nfl_token_gen as nfl_token_gen  # noqa: F401
 from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.nfl import playcall_features as playcall_features  # noqa: F401
+from sportsdataverse.nfl import pressure_pairs as pressure_pairs  # noqa: F401
 from sportsdataverse.nfl import reset_config as reset_config  # noqa: F401
 from sportsdataverse.nfl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nfl import scrape_ngs_season as scrape_ngs_season  # noqa: F401
 from sportsdataverse.nfl import scrape_ngs_week as scrape_ngs_week  # noqa: F401
 from sportsdataverse.nfl import season_not_found_error as season_not_found_error  # noqa: F401
+from sportsdataverse.nfl import team_game_pace as team_game_pace  # noqa: F401
 from sportsdataverse.nfl import team_name_fn as team_name_fn  # noqa: F401
+from sportsdataverse.nfl import team_pressure_rates as team_pressure_rates  # noqa: F401
 from sportsdataverse.nfl import underscore as underscore  # noqa: F401
 from sportsdataverse.nfl import update_config as update_config  # noqa: F401
 
 __all__ = [
     "NFLPlayProcess",
     "NflConfig",
+    "adjust_pressure_pairs",
     "build_nfl_player_stats",
     "build_nfl_player_stats_def",
     "build_nfl_player_stats_kicking",
@@ -300,6 +315,7 @@ __all__ = [
     "clean_nfl_pbp",
     "clear_cache",
     "download",
+    "env_adjusted_make_prob",
     "espn_nfl_award",
     "espn_nfl_awards",
     "espn_nfl_calendar",
@@ -416,6 +432,7 @@ __all__ = [
     "espn_nfl_transactions",
     "espn_nfl_venue",
     "espn_nfl_venues",
+    "fg_make_probability",
     "get_2pt_wp",
     "get_4th_down_probs",
     "get_config",
@@ -497,9 +514,12 @@ __all__ = [
     "nfl_game_details",
     "nfl_game_pbp",
     "nfl_game_schedule",
+    "nfl_game_script",
     "nfl_game_summaries",
     "nfl_headers_gen",
     "nfl_injuries",
+    "nfl_kicker_rating",
+    "nfl_line_grades",
     "nfl_ngs_gamecenter_overview",
     "nfl_ngs_leaders",
     "nfl_ngs_league_schedule",
@@ -510,10 +530,14 @@ __all__ = [
     "nfl_ngs_play_is_highlight",
     "nfl_ngs_statboard",
     "nfl_ngs_statboard_leaders",
+    "nfl_play_call_probabilities",
+    "nfl_play_call_tendencies",
     "nfl_players_crosswalk",
+    "nfl_punter_value",
     "nfl_rosters",
     "nfl_season_standings",
     "nfl_simulations",
+    "nfl_special_teams_epa",
     "nfl_standings",
     "nfl_team",
     "nfl_teams_history",
@@ -523,12 +547,16 @@ __all__ = [
     "nfl_weeks",
     "nfl_weeks_by_date",
     "normalize_team_roster_columns",
+    "playcall_features",
+    "pressure_pairs",
     "reset_config",
     "scoreboard_event_parsing",
     "scrape_ngs_season",
     "scrape_ngs_week",
     "season_not_found_error",
+    "team_game_pace",
     "team_name_fn",
+    "team_pressure_rates",
     "underscore",
     "update_config",
 ]

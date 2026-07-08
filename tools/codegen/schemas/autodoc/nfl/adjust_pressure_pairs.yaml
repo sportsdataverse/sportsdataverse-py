@@ -1,0 +1,33 @@
+schema: adjust_pressure_pairs
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: dropbacks_off
+  type: integer
+  description: ''
+- name: pressures_allowed
+  type: integer
+  description: ''
+- name: pressure_rate_allowed
+  type: double
+  description: ''
+- name: dropbacks_def
+  type: integer
+  description: ''
+- name: pressures_generated
+  type: integer
+  description: ''
+- name: pressure_rate_generated
+  type: double
+  description: ''
+- name: adj_pressure_rate_allowed
+  type: double
+  description: ''
+- name: adj_pressure_rate_generated
+  type: double
+  description: ''
