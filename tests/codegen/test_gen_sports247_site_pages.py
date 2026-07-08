@@ -36,13 +36,15 @@ def test_generator_is_idempotent_and_emits_expected_stem():
     # 17 distinct returns-schemas emitted
     assert len(list(SCHEMA_DIR.glob("*.yaml"))) == 17
 
-    # spot-check schema shape + FK/string-numeric columns
-    inst = yaml.safe_load((SCHEMA_DIR / "institution.yaml").read_text(encoding="utf-8"))
+    # schema names are stem-prefixed so manual_column_descriptions keys never
+    # collide with another bucket's bare entity name (coach/player/event/...).
+    inst = yaml.safe_load((SCHEMA_DIR / "sports247_site_pages_institution.yaml").read_text(encoding="utf-8"))
+    assert inst["schema"] == "sports247_site_pages_institution"
     cols = {c["name"] for c in inst["columns"]}
     assert {"key", "location", "state", "latitude", "name"} <= cols
 
     # inlined Player object in Recruit flattens to player_* leaf columns
-    rec = yaml.safe_load((SCHEMA_DIR / "recruit.yaml").read_text(encoding="utf-8"))
+    rec = yaml.safe_load((SCHEMA_DIR / "sports247_site_pages_recruit.yaml").read_text(encoding="utf-8"))
     rec_cols = {c["name"] for c in rec["columns"]}
     assert {"key", "player_key", "player_full_name", "player_hometown_state"} <= rec_cols
 

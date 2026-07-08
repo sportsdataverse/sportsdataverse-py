@@ -3,31 +3,34 @@ columns:
   name: key
   type: integer
 - description: ''
-  name: player_institution
+  name: postal_code
+  type: character
+- description: ''
+  name: city
+  type: character
+- description: ''
+  name: state
   type: integer
 - description: ''
-  name: user
-  type: integer
-- description: ''
-  name: evaluated_date
+  name: latitude
   type: character
 - description: ''
-  name: comparison_player
-  type: integer
-- description: ''
-  name: projection
+  name: longitude
   type: character
 - description: ''
-  name: primary
+  name: county_tax_rate
   type: character
 - description: ''
-  name: scout_evaluation
+  name: city_tax_rate
   type: character
 - description: ''
-  name: event
+  name: special_tax_rate
+  type: character
+- description: ''
+  name: region_name
   type: character
 - description: ''
   name: default_name
   type: character
 kind: dataframe
-schema: player_institution_evaluation
+schema: sports247_site_pages_location

@@ -63,4 +63,4 @@ columns:
   name: telephone
   type: character
 kind: dataframe
-schema: institution
+schema: sports247_site_pages_institution

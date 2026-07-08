@@ -78,6 +78,17 @@ def _path_py_name(snake: str) -> str:
     return f"{snake}_slug" if snake in _RESERVED_SLUGS else snake
 
 
+# Returns-schema names are stem-prefixed (mirroring the sibling `sports247_teams`
+# convention) because manual_column_descriptions.yaml is keyed by the bare
+# ``schema:`` field across ALL stems — an un-prefixed entity name like ``coach`` /
+# ``player`` / ``event`` would collide with another bucket's block.
+_SCHEMA_PREFIX = "sports247_site_pages_"
+
+
+def _schema_name(ref: str | None, short: str) -> str:
+    return _SCHEMA_PREFIX + (underscore(ref) if ref else short)
+
+
 def _write_yaml(path: Path, obj: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as fh:
@@ -159,7 +170,7 @@ def _example_args(path: str, example_url: str | None, path_types: Dict[str, str]
 def _endpoint(path: str, op: Dict[str, Any], comps: Dict[str, Any]) -> Dict[str, Any]:
     short = _SHORT[path]
     ref = _response_ref(op)
-    schema = underscore(ref) if ref else short
+    schema = _schema_name(ref, short)
 
     path_params: List[Dict[str, Any]] = []
     extra_params: List[Dict[str, Any]] = []
@@ -211,7 +222,7 @@ def main() -> None:
         endpoints.append(_endpoint(path, op, comps))
         ref = _response_ref(op)
         if ref:
-            used_schemas[underscore(ref)] = ref
+            used_schemas[_schema_name(ref, _SHORT[path])] = ref
     endpoints.sort(key=lambda e: e["short"])
 
     doc = {

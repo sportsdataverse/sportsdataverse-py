@@ -3,19 +3,34 @@ columns:
   name: key
   type: integer
 - description: ''
-  name: ranking
-  type: integer
-- description: ''
-  name: sport
+  name: recruitment
   type: integer
 - description: ''
   name: player_sport
   type: integer
 - description: ''
-  name: committed_institution
+  name: recruit_state
   type: integer
 - description: ''
-  name: order
+  name: institution
+  type: integer
+- description: ''
+  name: lock_prediction
+  type: character
+- description: ''
+  name: recruits_interest
+  type: character
+- description: ''
+  name: primary_coach
+  type: integer
+- description: ''
+  name: secondary_coach
+  type: character
+- description: ''
+  name: keeper_coach
+  type: character
+- description: ''
+  name: institutions_interest
   type: character
 - description: ''
   name: position
@@ -27,61 +42,46 @@ columns:
   name: platoon
   type: integer
 - description: ''
-  name: state
+  name: offered
+  type: character
+- description: ''
+  name: gray_shirt
+  type: character
+- description: ''
+  name: walk_on
+  type: character
+- description: ''
+  name: official_visit
   type: integer
 - description: ''
-  name: region
+  name: second_official_visit
+  type: character
+- description: ''
+  name: soft_commit
+  type: character
+- description: ''
+  name: hard_commit
   type: integer
 - description: ''
-  name: institution
+  name: signing_date
   type: integer
 - description: ''
-  name: institution_group
-  type: character
-- description: ''
-  name: rating
-  type: character
-- description: ''
-  name: composite_strength
-  type: character
-- description: ''
-  name: composite_rating
-  type: character
-- description: ''
-  name: overall_rank
-  type: character
-- description: ''
-  name: composite_overall_rank
-  type: character
-- description: ''
-  name: group_rank
-  type: character
-- description: ''
-  name: composite_group_rank
-  type: character
-- description: ''
-  name: position_rank
-  type: character
-- description: ''
-  name: previous_player_sport_ranking
+  name: enrollment_date
   type: integer
 - description: ''
-  name: composite_position_rank
+  name: decommit
   type: character
 - description: ''
-  name: state_rank
+  name: offer
   type: character
 - description: ''
-  name: composite_state_rank
+  name: highest_recruit_interest_event
+  type: integer
+- description: ''
+  name: commit_status
   type: character
 - description: ''
   name: default_name
   type: character
-- description: ''
-  name: position_group_rank
-  type: character
-- description: ''
-  name: region_rank
-  type: character
 kind: dataframe
-schema: player_sport_ranking
+schema: sports247_site_pages_recruit_interest

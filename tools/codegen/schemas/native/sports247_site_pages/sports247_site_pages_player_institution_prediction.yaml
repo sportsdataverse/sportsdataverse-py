@@ -39,4 +39,4 @@ columns:
   name: default_name
   type: character
 kind: dataframe
-schema: player_institution_prediction
+schema: sports247_site_pages_player_institution_prediction

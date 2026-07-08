@@ -15,4 +15,4 @@ columns:
   name: author_affiliation
   type: character
 kind: dataframe
-schema: timeline_event
+schema: sports247_site_pages_timeline_event

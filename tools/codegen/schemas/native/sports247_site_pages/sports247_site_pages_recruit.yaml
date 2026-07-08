@@ -177,4 +177,4 @@ columns:
   name: player_primary_player_position_abbreviation
   type: character
 kind: dataframe
-schema: recruit
+schema: sports247_site_pages_recruit

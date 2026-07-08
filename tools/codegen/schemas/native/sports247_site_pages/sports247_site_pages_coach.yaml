@@ -3,55 +3,46 @@ columns:
   name: key
   type: integer
 - description: ''
-  name: pro_team
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: birthdate
+  type: character
+- description: ''
+  name: hometown
   type: integer
 - description: ''
-  name: pro_team_name
-  type: character
-- description: ''
-  name: year
-  type: character
-- description: ''
-  name: round
-  type: character
-- description: ''
-  name: pick
-  type: character
-- description: ''
-  name: overall_pick
-  type: character
-- description: ''
-  name: player
+  name: alma_mater
   type: integer
 - description: ''
-  name: player_first_name
+  name: cbs_key
   type: character
 - description: ''
-  name: player_last_name
+  name: twitter_contact
   type: character
 - description: ''
-  name: college_team
+  name: predictions_locked
+  type: character
+- description: ''
+  name: primary_coach_job
   type: integer
 - description: ''
-  name: college_team_name
-  type: character
-- description: ''
-  name: position_abbreviation
-  type: character
-- description: ''
-  name: traded_from_team
-  type: character
-- description: ''
-  name: pick_type
-  type: character
-- description: ''
-  name: league
+  name: default_asset
   type: integer
 - description: ''
-  name: mock
+  name: hero_asset
+  type: character
+- description: ''
+  name: quote_asset
   type: character
 - description: ''
   name: default_name
   type: character
 kind: dataframe
-schema: draft_pick
+schema: sports247_site_pages_coach

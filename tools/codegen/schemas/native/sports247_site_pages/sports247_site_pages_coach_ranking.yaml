@@ -117,4 +117,4 @@ columns:
   name: default_name
   type: character
 kind: dataframe
-schema: coach_ranking
+schema: sports247_site_pages_coach_ranking

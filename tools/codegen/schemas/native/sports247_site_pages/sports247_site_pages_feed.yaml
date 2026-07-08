@@ -15,4 +15,4 @@ columns:
   name: redirection_url
   type: character
 kind: dataframe
-schema: feed
+schema: sports247_site_pages_feed

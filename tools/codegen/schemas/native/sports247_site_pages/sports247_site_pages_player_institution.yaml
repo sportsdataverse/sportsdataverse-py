@@ -90,4 +90,4 @@ columns:
   name: start_date
   type: character
 kind: dataframe
-schema: player_institution
+schema: sports247_site_pages_player_institution

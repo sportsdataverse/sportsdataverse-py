@@ -111,4 +111,4 @@ columns:
   name: primary_player_position_abbreviation
   type: character
 kind: dataframe
-schema: player
+schema: sports247_site_pages_player
