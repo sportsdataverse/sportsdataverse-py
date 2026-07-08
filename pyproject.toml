@@ -320,6 +320,7 @@ files = [
     "sportsdataverse/cfb/sports247_runtime.py",
     "sportsdataverse/cfb/sports247_parsers.py",
     "sportsdataverse/cfb/sports247_site_pages_runtime.py",
+    "sportsdataverse/cfb/sports247_site_pages_parsers.py",
     "sportsdataverse/nba/nba_stats_runtime.py",
     "sportsdataverse/nba/nba_stats_parsers.py",
     "sportsdataverse/nba/nba_pbp_constants.py",
