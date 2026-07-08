@@ -6,10 +6,15 @@ from sportsdataverse.nfl.nfl_ratings import opponent_adjusted_ridge
 
 
 def _mini_plays():
+    # Home venue is balanced across teams: with a single fixed home team the
+    # UNPENALIZED home column is collinear with that team's offense indicator,
+    # and the ridge (which only penalises team coefficients) lets HFA absorb
+    # the whole signal -- team coefs shrink to ~0 and ordering is undefined.
     rows = []
-    for _ in range(60):
-        rows.append({"posteam": "A", "defteam": "B", "home_team": "A", "epa": 0.30})
-        rows.append({"posteam": "B", "defteam": "A", "home_team": "A", "epa": -0.30})
+    for _ in range(30):
+        for home in ("A", "B"):
+            rows.append({"posteam": "A", "defteam": "B", "home_team": home, "epa": 0.30})
+            rows.append({"posteam": "B", "defteam": "A", "home_team": home, "epa": -0.30})
     return pl.DataFrame(rows)
 
 
