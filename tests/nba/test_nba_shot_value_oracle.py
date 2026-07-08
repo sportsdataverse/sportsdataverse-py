@@ -52,9 +52,11 @@ def test_self_calibration_invariant(shot_value_corpus):
         .with_columns((pl.col("fgm") / pl.col("fga")).alias("fg_pct"))
     )
     scored = score_shot_xpoints(shots, own)
+    assert scored.height >= 40_000, f"corpus truncated (n={scored.height}) — gate would pass vacuously"
     assert scored.filter(pl.col("base_fg_pct").is_null()).height == 0, "unmatched zones after fallback"
     err = points_calibration_error(scored["xpoints"].to_numpy(), scored["actual_points"].to_numpy())
-    assert err <= 0.005, f"self-calibration {err:.5f} > 0.005 — a zone join dropped rows or a 2/3 value is wrong"
+    # ceiling tightened to 1e-3 (observed 7e-5) so a partial row-drop bites
+    assert err <= 1e-3, f"self-calibration {err:.5f} > 1e-3 — a zone join dropped rows or a 2/3 value is wrong"
 
 
 def test_value_assignment_integrity(shot_value_corpus):
@@ -72,6 +74,7 @@ def test_league_baseline_overperformance_bounded(shot_value_corpus):
     (these are above-average shooters; the model applies the baseline
     correctly, they simply beat it). Observed ratio 1.053."""
     scored = score_shot_xpoints(shot_value_corpus["shots"], shot_value_corpus["league_avgs"])
+    assert scored.height >= 40_000, f"corpus truncated (n={scored.height})"
     ratio = float(scored["actual_points"].sum() / scored["xpoints"].sum())
     assert 1.0 <= ratio <= 1.10, f"overperformance ratio {ratio:.4f} outside [1.0, 1.10]"
 
@@ -148,6 +151,7 @@ def test_shrunk_reliability_beats_raw(shot_value_corpus):
         )
 
     a = half(0).join(half(1), on="player_id", suffix="_b").filter((pl.col("n") >= 25) & (pl.col("n_b") >= 25))
+    assert a.height >= 30, f"only {a.height} paired shooters — split-half r is unstable"
     n1, r1, r2 = a["n"].to_numpy(), a["raw"].to_numpy(), a["raw_b"].to_numpy()
     k = get_shrinkage_k("00")
     shrunk = r1 * n1 / (n1 + k)
