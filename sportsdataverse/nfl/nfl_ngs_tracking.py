@@ -28,11 +28,17 @@ Blocked (needs snap tracking):
 
 from __future__ import annotations
 
-from typing import Callable, Optional
+from typing import Callable, List, Optional, Sequence, Union
 
+import numpy as np
+import pandas as pd
 import polars as pl
 
 from sportsdataverse.nfl.nfl_loaders import load_nfl_nextgen_stats
+from sportsdataverse.nfl.nfl_ngs_constants import (
+    MIN_RECEPTIONS,
+    empirical_bayes_shrink,
+)
 
 
 def _ngs_panel(
@@ -74,3 +80,140 @@ def _ngs_panel(
         else pl.col("player_gsis_id").cast(pl.Utf8),
         pl.col("season").cast(pl.Int64),
     )
+
+
+_YAC_SCHEMA = {
+    "season": pl.Int64,
+    "player_gsis_id": pl.Utf8,
+    "player_display_name": pl.Utf8,
+    "team_abbr": pl.Utf8,
+    "position": pl.Utf8,
+    "receptions": pl.Float64,
+    "avg_yac": pl.Float64,
+    "avg_expected_yac": pl.Float64,
+    "yac_oe_raw": pl.Float64,
+    "yac_oe_shrunk": pl.Float64,
+    "reliability": pl.Float64,
+    "yac_oe_rank": pl.Int64,
+}
+
+
+def _shrink_over_season(
+    panel: pl.DataFrame,
+    raw_col: str,
+    weight_col: str,
+    min_w: float,
+    out_raw: str,
+    out_shrunk: str,
+) -> pl.DataFrame:
+    """Apply empirical-Bayes shrinkage per season; prior fit on qualified rows.
+
+    The prior mean is the weight-averaged ``raw_col`` over rows with
+    ``weight_col >= min_w`` (falls back to the all-row weighted mean when no
+    row qualifies); ``tau2``/``sigma2`` come from
+    :func:`sportsdataverse.nfl.nfl_ngs_constants.empirical_bayes_shrink`.
+    """
+    frames = []
+    for (_season,), grp in panel.group_by("season", maintain_order=True):
+        x = grp[raw_col].to_numpy().astype(float)
+        n = grp[weight_col].to_numpy().astype(float)
+        qualified = n >= min_w
+        prior_mean = float(np.average(x[qualified], weights=n[qualified])) if qualified.any() else None
+        shrunk, rel = empirical_bayes_shrink(x, n, prior_mean=prior_mean)
+        frames.append(
+            grp.with_columns(
+                pl.Series(out_raw, x, dtype=pl.Float64),
+                pl.Series(out_shrunk, shrunk, dtype=pl.Float64),
+                pl.Series("reliability", rel, dtype=pl.Float64),
+            )
+        )
+    return pl.concat(frames) if frames else panel
+
+
+def _qualified_rank(shrunk_col: str, weight_col: str, min_w: float, out: str) -> pl.Expr:
+    """Dense descending rank of ``shrunk_col`` within season over qualified rows only.
+
+    Unqualified rows (``weight_col < min_w``) keep a null rank but are still
+    returned; nulls are excluded from the rank by construction.
+    """
+    masked = pl.when(pl.col(weight_col) >= min_w).then(pl.col(shrunk_col)).otherwise(None)
+    return masked.rank("dense", descending=True).over("season").cast(pl.Int64).alias(out)
+
+
+def _yac_oe_impl(
+    seasons: Union[int, Sequence[int]],
+    min_receptions: int,
+    _loader: Optional[Callable[..., pl.DataFrame]],
+) -> pl.DataFrame:
+    season_list: List[int] = [int(s) for s in seasons] if isinstance(seasons, (list, tuple, range)) else [int(seasons)]
+    panel = _ngs_panel(season_list, "receiving", level="season", _loader=_loader)
+    if panel.height == 0:
+        return pl.DataFrame(schema=_YAC_SCHEMA)
+    out = _shrink_over_season(
+        panel,
+        "avg_yac_above_expectation",
+        "receptions",
+        float(min_receptions),
+        "yac_oe_raw",
+        "yac_oe_shrunk",
+    )
+    out = (
+        out.rename({"player_position": "position"})
+        .with_columns(_qualified_rank("yac_oe_shrunk", "receptions", float(min_receptions), "yac_oe_rank"))
+        .select(list(_YAC_SCHEMA.keys()))
+    )
+    return out.cast(_YAC_SCHEMA)  # type: ignore[arg-type]
+
+
+def nfl_ngs_yac_oe(
+    seasons: Union[int, Sequence[int]],
+    *,
+    min_receptions: int = MIN_RECEPTIONS,
+    return_as_pandas: bool = False,
+    _loader: Optional[Callable[..., pl.DataFrame]] = None,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """YAC over expected per receiver-season, stabilised with EB shrinkage.
+
+    ``yac_oe_raw`` is the NGS-shipped ``avg_yac_above_expectation`` passed
+    through unchanged (per-reception yards after catch minus the NGS
+    tracking-model expectation). ``yac_oe_shrunk`` applies per-season
+    Efron-Morris empirical-Bayes shrinkage toward the reception-weighted
+    league mean, weighted by ``receptions``, so small-sample extremes are
+    pulled in. The shrinkage prior is fit at call time on rows with
+    ``receptions >= min_receptions`` — no bundled artifact.
+
+    Args:
+        seasons (Union[int, Sequence[int]]): Season(s) to compute, 2016+.
+        min_receptions (int): Qualification threshold for the prior fit and
+            for receiving a ``yac_oe_rank``. Defaults to
+            :data:`sportsdataverse.nfl.nfl_ngs_constants.MIN_RECEPTIONS`.
+        return_as_pandas (bool): If True, returns a pandas DataFrame.
+        _loader (Optional[Callable]): Injectable loader for offline tests.
+
+    Returns:
+        Union[pl.DataFrame, pd.DataFrame]: One row per
+        ``(season, player_gsis_id)`` with raw + shrunk YAC-OE,
+        ``reliability`` in [0, 1], and a dense descending
+        ``yac_oe_rank`` over qualified rows (null for unqualified rows).
+        Empty input returns a zero-row frame with the documented schema.
+
+    Example:
+        Top stabilised YAC-over-expected receivers::
+
+            from sportsdataverse.nfl import nfl_ngs_yac_oe
+            df = nfl_ngs_yac_oe([2023])
+            print(df.sort("yac_oe_rank").head())
+
+        Pandas output::
+
+            df_pd = nfl_ngs_yac_oe(2023, return_as_pandas=True)
+
+    See Also:
+        * `nflreadpy`_ -- source loader parity (``load_nextgen_stats``)
+        * `nflfastR`_ -- NFL play-by-play ecosystem (R)
+
+    .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    .. _nflfastR: https://www.nflfastr.com
+    """
+    out = _yac_oe_impl(seasons, min_receptions, _loader)
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
