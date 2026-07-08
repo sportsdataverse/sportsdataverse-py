@@ -22,8 +22,10 @@ PBP_COLS: dict[str, str] = {
     "week": "week",
     "wallclock": "wallclock",
     "period": "period",
-    "down": "down",
-    "distance": "distance",
+    # NB: the bare `down`/`distance` columns in the released pbp are
+    # near-all-null artifacts; the live per-play values are start.down/.distance.
+    "start.down": "down",
+    "start.distance": "distance",
     "statYardage": "yards_gained",
     "EPA": "epa",
     "pass": "pass",
