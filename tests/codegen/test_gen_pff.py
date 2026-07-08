@@ -4,13 +4,21 @@ These regenerate the endpoint YAML + returns-schemas from the committed OpenAPI 
 the flat-stem contract (normal stem, ``league`` as an extra_param, no ``league_shims``).
 """
 
+import os
 import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
+_SPEC = (
+    Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/sdv-internal-refs"))
+    / "pff"
+    / "pff-premium.openapi.yaml"
+)
+pytestmark = pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs pff spec not present (local-only source)")
 
 
 def test_gen_pff_emits_yaml_and_schemas():

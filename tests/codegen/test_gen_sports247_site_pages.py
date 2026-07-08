@@ -3,11 +3,21 @@
 from __future__ import annotations
 
 import importlib
+import os
 from pathlib import Path
 
+import pytest
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
+_SPEC = (
+    Path(os.environ.get("SDV_INTERNAL_REFS_REPO", "C:/Users/saiem/Documents/sdv-internal-refs"))
+    / "247sports"
+    / "site-pages.openapi.yaml"
+)
+pytestmark = pytest.mark.skipif(
+    not _SPEC.exists(), reason="sdv-internal-refs 247 site-pages spec not present (local-only source)"
+)
 ENDPOINTS = ROOT / "tools/codegen/endpoints/sports247_site_pages.yaml"
 SCHEMA_DIR = ROOT / "tools/codegen/schemas/native/sports247_site_pages"
 
