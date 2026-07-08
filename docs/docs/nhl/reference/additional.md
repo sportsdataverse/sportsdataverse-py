@@ -634,6 +634,46 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 nhl_scoreboard(date="2024-03-01")
 ```
 
+### `nhl_team_ratings(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_team_ratings}
+
+Opponent-adjusted, shrunk even-strength xG (+ goal) team ratings.
+
+Loads pbp + schedule for `seasons`, restricts to even strength, applies
+the as-of-date leakage split if requested, opponent-adjusts + shrinks both
+the xG rate (primary) and the realized-goal rate (concurrent sanity
+rating) via `adjust_rate_opponent`, and derives off/def/net ranks.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | an int or iterable of seasons. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- resolves HFA/avg/shrink_k via `sportsdataverse.nhl.nhl_prediction_constants.get_constants`. |
+| `as_of_date` | `date \| None` | `None` | if given, only games strictly before this date are used (the leakage boundary for a predictive backtest). |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per (season, team). Empty input seasons return a zero-row frame with the documented schema. |col_name |type | |:----------|:------| |season |Int64 | |team |String | |adj_xgf |Float64| |adj_xga |Float64| |adj_xg_net |Float64| |adj_gf |Float64| |adj_ga |Float64| |games |Int64 | |off_rank |Int64 | |def_rank |Int64 | |net_rank |Int64 | |net_z |Float64|
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_team_ratings import nhl_team_ratings
+
+ratings = nhl_team_ratings(2023)
+print(ratings.sort("net_rank").head())
+
+# As-of-date leakage-safe rating
+
+import datetime as dt
+ratings = nhl_team_ratings(2023, as_of_date=dt.date(2023, 1, 1))
+
+# Pipeline next step (one line)
+
+ratings.filter(pl.col("team") == "TOR")
+```
+
 ## Dataset loaders
 
 ### `load_nhl_games(return_as_pandas: 'bool' = False)` {#load_nhl_games}
@@ -794,6 +834,136 @@ year_to_season(1999)  # '1999-00'
 ```
 
 ## Other
+
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
+
+Fitted, league-specific constants for the NHL/PWHL prediction spine.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `hfa` | `float` |  | home-ice edge, expected-goals units. |
+| `margin_sd` | `float` |  | standard deviation of the final goal margin (deliberately WIDE for hockey). |
+| `avg_xgf` | `float` |  | league mean even-strength xG-for, per game. |
+| `avg_total_goals` | `float` |  | league mean total goals per game. |
+| `total_scale` | `float` |  | multiplier converting rating differential to total-goals deviation. |
+| `shrink_k` | `float` |  | games-played prior strength for rating shrinkage. |
+| `prop_kappa` | `dict` |  | empirical-Bayes shrinkage strength per player-prop stat family. |
+| `pos_priors` | `dict` |  | per-position (F/D) per-stat-family prior rates. |
+| `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
+| `min_season` | `int` |  | earliest season this league's prediction spine supports. |
+
+### `adjust_rate_opponent(game_rates: 'pl.DataFrame', *, for_col: 'str', against_col: 'str', hfa: 'float', avg: 'float', shrink_k: 'float', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_rate_opponent}
+
+Opponent-adjust a per-game for/against rate by iterative fixed-point, then shrink.
+
+League-agnostic: every constant (`hfa`, `avg`, `shrink_k`) is passed
+in -- no NHL/PWHL number is hard-coded here. This is the flagged T7.2
+"rate-iterative + shrinkage" shared-solver candidate (the hockey
+counterpart of the NFL/CFB per-play ridge); `for_col`/`against_col`
+are symmetric (offense sees opponent defense).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_rates` | `DataFrame` |  | one row per (team, opponent, game) with columns `season`, `team`, `opp_team`, `is_home`, `neutral_site`, and the two numeric rate columns named by `for_col`/`against_col`. |
+| `for_col` | `str` |  | name of the team's own-side rate column (e.g. `"xgf"`). |
+| `against_col` | `str` |  | name of the team's against-side rate column (e.g. `"xga"`). |
+| `hfa` | `float` |  | home-ice edge added to the home side / subtracted from the away side. |
+| `avg` | `float` |  | league mean rate to adjust and shrink toward. |
+| `shrink_k` | `float` |  | games-played prior strength for the post-convergence shrink. |
+| `max_iter` | `int` | `100` | maximum fixed-point iterations. |
+| `tol` | `float` | `0.0001` | convergence tolerance on the max absolute update. |
+
+**Returns**
+
+A polars DataFrame, one row per (season, team). |col_name |type | |:------------|:------| |season |Int64 | |team |String | |adj_for |Float64| |adj_against |Float64| |adj_net |Float64| |raw_for |Float64| |raw_against |Float64| |games |Int64 |
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_team_ratings import adjust_rate_opponent
+adjust_rate_opponent(
+    game_rates, for_col="xgf", against_col="xga",
+    hfa=0.2, avg=2.55, shrink_k=15.0,
+)
+```
+
+### `as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+
+Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | a polars DataFrame with a date column. |
+| `cutoff_date` | `date` |  | the game date being predicted; only strictly-earlier rows are kept. |
+| `date_col` | `str` | `'date'` | name of the date column (default `"date"`). |
+
+**Returns**
+
+The subset of `df` with `df[date_col] < cutoff_date`.
+
+**Example**
+
+```python
+import datetime as dt
+import polars as pl
+from sportsdataverse.nhl.nhl_prediction_constants import as_of_ratings_split
+df = pl.DataFrame({"date": [dt.date(2023, 1, 1), dt.date(2023, 1, 2)]})
+as_of_ratings_split(df, dt.date(2023, 1, 2))
+```
+
+### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
+
+Mean squared error between predicted probability and binary outcome.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
+
+**Returns**
+
+The Brier score (lower is better; 0.0 is a perfect forecast).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import brier_score
+brier_score(np.array([1, 0]), np.array([0.8, 0.2]))
+```
+
+### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+
+Bucket predicted probabilities into `n_bins` and compare to realized rate.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
+| `n_bins` | `int` | `10` | number of equal-width probability bins. |
+
+**Returns**
+
+A polars DataFrame with one row per non-empty bin. |col_name |type | |:-----------|:------| |bin_mid |Float64| |mean_pred |Float64| |mean_actual |Float64| |n |Int64 |
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import calibration_table
+rng = np.random.default_rng(0)
+calibration_table(rng.integers(0, 2, 200), rng.random(200))
+```
 
 ### `espn_nhl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_teams}
 
@@ -1032,6 +1202,74 @@ from sportsdataverse.nhl import fox_nhl_team_stats
 df = fox_nhl_team_stats("...")
 ```
 
+### `get_constants(league: 'str') -> 'LeagueConstants'` {#get_constants}
+
+Resolve the fitted-constants row for a league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"nhl"` or `"pwhl"`. |
+
+**Returns**
+
+The `LeagueConstants` row for `league`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_prediction_constants import get_constants
+get_constants("nhl").margin_sd
+```
+
+### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
+
+Binary log-loss (cross-entropy) between predicted probability and outcome.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
+| `eps` | `float` | `1e-15` | clipping floor/ceiling to avoid `log(0)`. |
+
+**Returns**
+
+The mean log-loss (lower is better).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import log_loss_score
+log_loss_score(np.array([1, 0]), np.array([0.8, 0.2]))
+```
+
+### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+
+Mean absolute error between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | first array (e.g. predicted values). |
+| `b` | `ndarray` |  | second array (e.g. observed values). |
+
+**Returns**
+
+The mean absolute difference `mean(|a - b|)`.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import mae
+mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -1041,3 +1279,54 @@ _No description available._
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `event` |  |  |  |
+
+### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+
+Spearman rank correlation between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | first array. |
+| `b` | `ndarray` |  | second array (same length as `a`). |
+
+**Returns**
+
+The Spearman rank correlation coefficient in [-1, 1].
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import spearman_corr
+spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([3.0, 1.0, 2.0]))
+```
+
+### `team_game_xg_rates(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, even_strength_only: 'bool' = True) -> 'pl.DataFrame'` {#team_game_xg_rates}
+
+Per-(game, team) even-strength xG-for/against + realized goals.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a play-by-play frame shaped like `load_nhl_pbp_full`/`load_nhl_pbp_lite` (needs `game_id`, `event_team_abbr`, `home_abbr`, `away_abbr`, `home_skaters`, `away_skaters`, `home_goalie_in`, `away_goalie_in`, `xg`). |
+| `schedule` | `DataFrame` |  | a schedule frame with `game_id`, `season`, `date`, `home_abbr`, `away_abbr`, `neutral_site`, `home_goals`, `away_goals`. |
+| `even_strength_only` | `bool` | `True` | restrict to `home_skaters == away_skaters == 5` with both goalies in net (filters out PP/PK/empty-net distortion). |
+
+**Returns**
+
+A polars DataFrame, one row per (game_id, team), both home and away. |col_name |type | |:------------|:------| |game_id |String | |season |Int64 | |date |Date | |team |String | |opp_team |String | |is_home |Boolean| |neutral_site |Boolean| |xgf |Float64| |xga |Float64| |gf |Int64 | |ga |Int64 |
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_team_ratings import team_game_xg_rates
+from sportsdataverse.nhl import load_nhl_pbp_full, load_nhl_schedules
+
+pbp = load_nhl_pbp_full([2023])
+sched = load_nhl_schedules([2023])
+rates = team_game_xg_rates(pbp, sched)
+print(rates.filter(pl.col("team") == "TOR").head())
+```

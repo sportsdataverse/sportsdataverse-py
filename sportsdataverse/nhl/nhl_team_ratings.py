@@ -40,7 +40,7 @@ See Also:
 from __future__ import annotations
 
 import datetime as _dt
-from typing import Union, overload
+from typing import Literal, Union, overload
 
 import numpy as np
 import pandas as pd
@@ -264,7 +264,7 @@ def adjust_rate_opponent(
     is_home = game_rates["is_home"].to_numpy()
     neutral = game_rates["neutral_site"].to_numpy()
     side = np.where(neutral, 0.0, np.where(is_home, hfa / 2.0, -hfa / 2.0))
-    games = np.bincount(ti, minlength=n).astype(float)
+    games: np.ndarray = np.bincount(ti, minlength=n).astype(float)
 
     adj_o = np.full(n, avg)
     adj_d = np.full(n, avg)
@@ -313,7 +313,7 @@ def nhl_team_ratings(
     *,
     league: str = ...,
     as_of_date: _dt.date | None = ...,
-    return_as_pandas: bool = False,
+    return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 
 
@@ -323,7 +323,7 @@ def nhl_team_ratings(
     *,
     league: str = ...,
     as_of_date: _dt.date | None = ...,
-    return_as_pandas: bool = True,
+    return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
 
