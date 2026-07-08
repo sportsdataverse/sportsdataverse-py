@@ -79,3 +79,28 @@ def test_ncaa_sample_scores_through_model():
     ncaa = pl.read_parquet(_FIX / "ncaa_shots_sample.parquet")
     scored = mbb_shot_quality(ncaa, league="mens")
     assert scored.get_column("xpoints").null_count() == 0
+
+
+def test_shot_selection_zero_sum_on_real_fixture():
+    """Phase-2 gate: attempt-weighted selection_value sums to ~0 across the
+    league, and the most rim-heavy high-volume team rates positive."""
+    from sportsdataverse.mbb.mbb_shot_selection import mbb_shot_selection
+
+    model = mbb_shot_quality_model(_train(), league="mens")
+    scored = mbb_shot_quality(_holdout(), model=model, league="mens").filter(pl.col("xpoints").is_not_null())
+    sel = mbb_shot_selection(scored, group="team_id")
+    total = float((sel.get_column("selection_value") * sel.get_column("n_shots")).sum())
+    assert abs(total) < 1e-6 * scored.height, f"selection value not zero-sum: {total}"
+    # the highest rim-share team with real volume should have positive value
+    rim_share = (
+        scored.group_by("team_id")
+        .agg(
+            (pl.col("shot_zone") == "rim").cast(pl.Float64).mean().alias("rim_share"),
+            pl.len().alias("n"),
+        )
+        .filter(pl.col("n") >= 200)
+        .sort("rim_share", descending=True)
+    )
+    top_rim_team = rim_share.row(0, named=True)["team_id"]
+    top_val = sel.filter(pl.col("team_id") == top_rim_team).row(0, named=True)["selection_value"]
+    assert top_val > 0, f"most rim-heavy team {top_rim_team} has selection_value {top_val:.4f}"
