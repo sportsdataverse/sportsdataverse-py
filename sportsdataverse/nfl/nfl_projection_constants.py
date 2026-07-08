@@ -54,6 +54,9 @@ class PositionConstants:
         base_availability (float): Position base availability rate in [0, 1].
         fp_calibration (tuple[float, float]): ``(intercept, slope)`` of the
             per-position fantasy-points calibration ``a + b * raw_proj_fp``.
+        aging_damping (float): Fitted weight in [0, 1] on the aging-curve
+            ratio (applied as ``1 + damping * (ratio - 1)``); 0 disables the
+            curve where its holdout signal is noise-dominated.
     """
 
     recency_weights: Tuple[float, ...] = (5.0, 4.0, 3.0)
@@ -62,22 +65,56 @@ class PositionConstants:
     aging_base_age: float = 26.0
     base_availability: float = 0.85
     fp_calibration: Tuple[float, float] = (0.0, 1.0)
+    aging_damping: float = 1.0
 
 
-# shrinkage_k fitted by dev/nfl_projection/fit_shrinkage.py (2026-07-08):
-# scipy.optimize.minimize_scalar (bounded 0.1-400) minimizing holdout
-# MAE(proj_ppg, realized_ppg) on the committed 2024 corpus, per position:
-#   QB 127.1 (MAE 6.8649), RB 14.2 (MAE 7.4399), WR 0.1 (MAE 9.8475),
-#   TE 0.1 (MAE 3.7088). WR/TE converge to the lower bound — regression toward
-# the volume-weighted position mean does not reduce holdout MAE there, so the
-# fitted k is effectively "no shrinkage" (kept > 0 for numerical stability).
+# recency_weights / aging_damping / shrinkage_k fitted jointly by
+# dev/nfl_projection/fit_shrinkage.py (2026-07-08): grid over weight/damping
+# candidates x scipy.optimize.minimize_scalar on k (bounded 0.01-400),
+# minimizing holdout MAE(proj_ppg, realized_ppg) on the committed 2024 corpus.
+# Fitted values (holdout MAE vs last-season carry-forward MAE):
+#   QB w=(3,1,0) d=0.5 k=219.26 -> 2.4289 (carry 3.8881)
+#   RB w=(1,0,0) d=0.0 k=0.78   -> 2.7579 (carry 2.8356)
+#   WR w=(5,3,1) d=1.0 k=37.15  -> 2.9505 (carry 3.3225)
+#   TE w=(5,4,3) d=0.0 k=11.69  -> 1.8417 (carry 2.1147)
+# RB/TE aging_damping=0: the 4-season delta-method curve for those groups is
+# noise-dominated on holdout, so the aging ratio is disabled (curve still fit +
+# exposed; the damping gates its application).
 # base_availability fitted by dev/nfl_projection/fit_availability.py (Task 4.2).
 # fp_calibration fitted by dev/nfl_projection/fit_fantasy_calibration.py (Task 2.2).
 POSITION_CONSTANTS: Dict[str, PositionConstants] = {
-    "QB": PositionConstants(shrinkage_k=127.1, min_volume=100.0, aging_base_age=27.0, base_availability=0.92),
-    "RB": PositionConstants(shrinkage_k=14.2, min_volume=60.0, aging_base_age=25.0, base_availability=0.80),
-    "WR": PositionConstants(shrinkage_k=0.1, min_volume=40.0, aging_base_age=26.0, base_availability=0.85),
-    "TE": PositionConstants(shrinkage_k=0.1, min_volume=30.0, aging_base_age=27.0, base_availability=0.83),
+    "QB": PositionConstants(
+        recency_weights=(3.0, 1.0, 0.0),
+        shrinkage_k=219.26,
+        min_volume=100.0,
+        aging_base_age=27.0,
+        base_availability=0.92,
+        aging_damping=0.5,
+    ),
+    "RB": PositionConstants(
+        recency_weights=(1.0, 0.0, 0.0),
+        shrinkage_k=0.78,
+        min_volume=60.0,
+        aging_base_age=25.0,
+        base_availability=0.80,
+        aging_damping=0.0,
+    ),
+    "WR": PositionConstants(
+        recency_weights=(5.0, 3.0, 1.0),
+        shrinkage_k=37.15,
+        min_volume=40.0,
+        aging_base_age=26.0,
+        base_availability=0.85,
+        aging_damping=1.0,
+    ),
+    "TE": PositionConstants(
+        recency_weights=(5.0, 4.0, 3.0),
+        shrinkage_k=11.69,
+        min_volume=30.0,
+        aging_base_age=27.0,
+        base_availability=0.83,
+        aging_damping=0.0,
+    ),
     "DEFAULT": PositionConstants(),
 }
 

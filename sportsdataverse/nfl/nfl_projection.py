@@ -9,12 +9,16 @@ weighted, chained and peak-normalized).
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Literal, Union, overload
+from typing import TYPE_CHECKING, Dict, List, Literal, Union, overload
 
 import polars as pl
 
 from sportsdataverse.nfl.nfl_loaders import load_nfl_player_stats, load_nfl_rosters
 from sportsdataverse.nfl.nfl_projection_constants import (
+    POSITION_CONSTANTS,
+    SCORING_HALF,
+    SCORING_PPR,
+    SCORING_STANDARD,
     PositionConstants,
     as_of_season_split,
     get_position_constants,
@@ -168,9 +172,12 @@ def aging_curve(season_rates: pl.DataFrame, *, position_group: str, rate_col: st
             curve = aging_curve(rates, position_group="RB")
     """
     consts = get_position_constants(position_group)
+    # Ages are bucketed to integer years: roster ages are continuous
+    # (birth-date-derived) floats, and per-unique-float transitions chained by
+    # cum_prod compound noise into a degenerate curve.
     df = season_rates.filter(
         (pl.col("position_group") == position_group) & (pl.col("volume") >= consts.min_volume)
-    ).select("player_id", "season", "age", "volume", pl.col(rate_col).alias("rate"))
+    ).select("player_id", "season", pl.col("age").floor().alias("age"), "volume", pl.col(rate_col).alias("rate"))
     # match season s (age a) to the same player's season s+1 (age a+1)
     nxt = df.select(
         "player_id",
@@ -248,9 +255,22 @@ def _marcel_blend(hist: pl.DataFrame, *, value_cols: List[str], consts: Position
     ).drop([f"_num_{c}" for c in value_cols] + ["_wsum", "_wv", "_wg"])
 
 
-def _aging_ratio(blend: pl.DataFrame, curve: pl.DataFrame, *, base_age: float, target_season: int) -> pl.DataFrame:
+def _aging_ratio(
+    blend: pl.DataFrame,
+    curve: pl.DataFrame,
+    *,
+    base_age: float,
+    target_season: int,
+    damping: float = 1.0,
+) -> pl.DataFrame:
     """Attach ``proj_age`` and the aging multiplier ratio ``aging_mult`` =
-    ``curve(proj_age) / curve(last_age)`` (nearest-age lookup; 1.0 fallback)."""
+    ``curve(proj_age) / curve(last_age)`` (nearest-age lookup; 1.0 fallback).
+
+    The raw ratio is damped by the fitted per-position ``aging_damping``
+    (``1 + damping * (ratio - 1)``) and clamped to ``[0.75, 1.15]`` — a
+    one-season aging effect outside that band is curve noise (thin transition
+    cells chained by ``cum_prod``), not signal.
+    """
     blend = blend.with_columns(
         pl.col("last_age").fill_null(base_age).alias("last_age"),
     ).with_columns(
@@ -269,13 +289,13 @@ def _aging_ratio(blend: pl.DataFrame, curve: pl.DataFrame, *, base_age: float, t
         .join_asof(cur.rename({"aging_mult": "_m_proj"}), left_on="proj_age", right_on="age", strategy="nearest")
         .drop("age")
     )
-    ratio = (
+    raw_ratio = (
         pl.when((pl.col("_m_cur") > 0) & pl.col("_m_proj").is_not_null())
         .then(pl.col("_m_proj") / pl.col("_m_cur"))
         .otherwise(1.0)
-        .alias("aging_mult")
     )
-    return blend.with_columns(ratio).drop("_m_cur", "_m_proj")
+    damped = (1.0 + damping * (raw_ratio - 1.0)).clip(0.75, 1.15).alias("aging_mult")
+    return blend.with_columns(damped).drop("_m_cur", "_m_proj")
 
 
 @overload
@@ -361,7 +381,13 @@ def nfl_player_projection(
             continue
         blend = _marcel_blend(sub, value_cols=rate_cols, consts=consts)
         curve = aging_curve(sub, position_group=pos)
-        blend = _aging_ratio(blend, curve, base_age=consts.aging_base_age, target_season=target_season)
+        blend = _aging_ratio(
+            blend,
+            curve,
+            base_age=consts.aging_base_age,
+            target_season=target_season,
+            damping=consts.aging_damping,
+        )
         proj_exprs = [
             (pl.col(f"_blend_{c}") * pl.col("aging_mult")).cast(pl.Float64).alias(f"proj_{c}") for c in rate_cols
         ]
@@ -374,4 +400,180 @@ def nfl_player_projection(
         result = pl.DataFrame(schema=out_schema)
     else:
         result = pl.concat(frames, how="vertical").sort("proj_ppg", descending=True)
+    return result.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else result
+
+
+def score_fantasy(stats: pl.DataFrame, scoring: Dict[str, float]) -> pl.Series:
+    """Score a frame of counting stats under a scoring-format dict.
+
+    Pure ``sum_k stats[k] * scoring[k]`` over the scoring keys present in
+    ``stats`` — reused by the fantasy projection (②) and its oracle.
+
+    Args:
+        stats (pl.DataFrame): Frame whose columns include some scoring keys.
+        scoring (Dict[str, float]): Points per unit for each stat (e.g.
+            ``SCORING_PPR``).
+
+    Returns:
+        pl.Series: Float64 fantasy points, one value per row (zeros when no
+        scoring column is present).
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.nfl.nfl_projection import score_fantasy
+            from sportsdataverse.nfl.nfl_projection_constants import SCORING_PPR
+            pts = score_fantasy(pl.DataFrame({"receiving_yards": [100.0], "receptions": [5.0]}), SCORING_PPR)
+    """
+    present = [k for k in scoring if k in stats.columns]
+    if not present:
+        return pl.Series("fantasy_points", [0.0] * stats.height, dtype=pl.Float64)
+    expr = pl.sum_horizontal([pl.col(k).fill_null(0.0) * scoring[k] for k in present]).cast(pl.Float64)
+    return stats.select(expr.alias("fantasy_points"))["fantasy_points"]
+
+
+_SCORING_BY_NAME: Dict[str, Dict[str, float]] = {
+    "ppr": SCORING_PPR,
+    "half": SCORING_HALF,
+    "standard": SCORING_STANDARD,
+}
+
+
+@overload
+def nfl_fantasy_projection(
+    seasons: List[int],
+    target_season: int,
+    *,
+    scoring: Union[Dict[str, float], str] = ...,
+    calibrate: bool = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+
+
+@overload
+def nfl_fantasy_projection(
+    seasons: List[int],
+    target_season: int,
+    *,
+    scoring: Union[Dict[str, float], str] = ...,
+    calibrate: bool = ...,
+    return_as_pandas: Literal[True],
+) -> "pd.DataFrame": ...
+
+
+def nfl_fantasy_projection(
+    seasons: List[int],
+    target_season: int,
+    *,
+    scoring: Union[Dict[str, float], str] = "ppr",
+    calibrate: bool = True,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Fantasy-points projection: deterministic scoring of the Marcel component
+    stats plus a fitted per-position linear calibration.
+
+    Scores :func:`nfl_player_projection`'s projected component *counting* stats
+    (rate x projected games) under the scoring format, then applies the fitted
+    ``fp_calibration`` ``(a, b)`` from ``POSITION_CONSTANTS``
+    (``calibrated = a + b * raw``). The FantasyPros consensus is used only as a
+    concurrent-validity oracle in the tests — never as an input.
+
+    Args:
+        seasons (List[int]): History seasons to load.
+        target_season (int): The season being projected.
+        scoring (Union[Dict[str, float], str]): ``"ppr"`` / ``"half"`` /
+            ``"standard"`` or a custom points-per-unit dict.
+        calibrate (bool): Apply the fitted per-position calibration.
+        return_as_pandas (bool): If True, returns a pandas dataframe.
+
+    Returns:
+        pl.DataFrame: ``player_id:Utf8, target_season:Int64,
+        position_group:Utf8, proj_fantasy_points:Float64,
+        proj_fantasy_points_per_game:Float64, position_rank:Int64``.
+
+    Raises:
+        ValueError: If ``scoring`` is a string other than ``"ppr"`` /
+            ``"half"`` / ``"standard"``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_projection import nfl_fantasy_projection
+            fp = nfl_fantasy_projection([2021, 2022, 2023], 2024)
+            fp.filter(pl.col("position_group") == "WR").head()
+
+        Custom scoring::
+
+            fp_std = nfl_fantasy_projection([2021, 2022, 2023], 2024, scoring="standard")
+
+    See Also:
+        * `nflverse`_ -- full data ecosystem (R + Python)
+
+    .. _nflverse: https://nflverse.nflverse.com
+    """
+    if isinstance(scoring, str):
+        if scoring not in _SCORING_BY_NAME:
+            raise ValueError(f"scoring must be one of {sorted(_SCORING_BY_NAME)} or a dict, got {scoring!r}")
+        scoring_map = _SCORING_BY_NAME[scoring]
+    else:
+        scoring_map = scoring
+    proj = nfl_player_projection(seasons, target_season)
+    counting = proj.select(
+        "player_id",
+        "target_season",
+        "position_group",
+        pl.col("proj_games"),
+        *[
+            (pl.col(f"proj_{k}_rate") * pl.col("proj_games")).alias(k)
+            for k in scoring_map
+            if f"proj_{k}_rate" in proj.columns
+        ],
+    )
+    fp = score_fantasy(counting, scoring_map)
+    out = counting.select("player_id", "target_season", "position_group", "proj_games").with_columns(
+        fp.alias("_raw_fp")
+    )
+    if calibrate:
+        cal = pl.DataFrame(
+            {
+                "position_group": list(POSITION_CONSTANTS.keys()),
+                "_cal_a": [c.fp_calibration[0] for c in POSITION_CONSTANTS.values()],
+                "_cal_b": [c.fp_calibration[1] for c in POSITION_CONSTANTS.values()],
+            }
+        )
+        default = POSITION_CONSTANTS["DEFAULT"]
+        out = out.join(cal, on="position_group", how="left").with_columns(
+            pl.col("_cal_a").fill_null(default.fp_calibration[0]),
+            pl.col("_cal_b").fill_null(default.fp_calibration[1]),
+        )
+        out = out.with_columns((pl.col("_cal_a") + pl.col("_cal_b") * pl.col("_raw_fp")).alias("_fp")).drop(
+            "_cal_a", "_cal_b"
+        )
+    else:
+        out = out.with_columns(pl.col("_raw_fp").alias("_fp"))
+    result = (
+        out.with_columns(
+            pl.col("_fp").cast(pl.Float64).alias("proj_fantasy_points"),
+            (pl.col("_fp") / pl.max_horizontal(pl.col("proj_games"), pl.lit(1e-9)))
+            .cast(pl.Float64)
+            .alias("proj_fantasy_points_per_game"),
+        )
+        .with_columns(
+            pl.col("proj_fantasy_points")
+            .rank(method="dense", descending=True)
+            .over("position_group")
+            .cast(pl.Int64)
+            .alias("position_rank")
+        )
+        .select(
+            "player_id",
+            "target_season",
+            "position_group",
+            "proj_fantasy_points",
+            "proj_fantasy_points_per_game",
+            "position_rank",
+        )
+        .sort("position_group", "position_rank")
+    )
     return result.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else result

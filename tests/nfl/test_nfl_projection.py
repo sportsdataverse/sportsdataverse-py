@@ -168,6 +168,59 @@ def test_marcel_projection_pandas_flag(monkeypatch):
     assert isinstance(out, pd.DataFrame)
 
 
+def test_score_fantasy_ppr_hand_computable():
+    from sportsdataverse.nfl.nfl_projection import score_fantasy
+    from sportsdataverse.nfl.nfl_projection_constants import SCORING_PPR
+
+    stats = pl.DataFrame({"receiving_yards": [100.0], "receptions": [5.0]})
+    s = score_fantasy(stats, SCORING_PPR)
+    assert abs(s[0] - 15.0) < 1e-9  # 100*0.1 + 5*1.0
+
+
+def test_fantasy_projection_scores_and_ranks(monkeypatch):
+    from sportsdataverse.nfl.nfl_projection import nfl_fantasy_projection
+
+    _patch_loaders(monkeypatch, _synth_history())
+    out = nfl_fantasy_projection([2021, 2022, 2023], 2024, calibrate=False)
+    assert {
+        "player_id",
+        "target_season",
+        "position_group",
+        "proj_fantasy_points",
+        "proj_fantasy_points_per_game",
+        "position_rank",
+    } <= set(out.columns)
+    wrs = out.filter(pl.col("position_group") == "WR").sort("position_rank")
+    # P1 (higher projected production) ranks 1 within WR
+    assert wrs.row(0, named=True)["player_id"] == "P1"
+    assert wrs.row(0, named=True)["position_rank"] == 1
+    r = wrs.row(0, named=True)
+    assert abs(r["proj_fantasy_points"] - r["proj_fantasy_points_per_game"] * 1.0) < 1e-9  # proj_games == 1
+
+
+def test_fantasy_projection_calibration_applied(monkeypatch):
+    import dataclasses
+
+    from sportsdataverse.nfl import nfl_projection_constants as cm
+    from sportsdataverse.nfl.nfl_projection import nfl_fantasy_projection
+
+    _patch_loaders(monkeypatch, _synth_history())
+    old = cm.POSITION_CONSTANTS["WR"]
+    try:
+        cm.POSITION_CONSTANTS["WR"] = dataclasses.replace(old, fp_calibration=(2.0, 0.5))
+        raw = nfl_fantasy_projection([2021, 2022, 2023], 2024, calibrate=False)
+        cal = nfl_fantasy_projection([2021, 2022, 2023], 2024, calibrate=True)
+        r = raw.filter(pl.col("player_id") == "P1")["proj_fantasy_points"][0]
+        c = cal.filter(pl.col("player_id") == "P1")["proj_fantasy_points"][0]
+        assert abs(c - (2.0 + 0.5 * r)) < 1e-9
+        # identity calibration leaves the projection unchanged
+        cm.POSITION_CONSTANTS["WR"] = dataclasses.replace(old, fp_calibration=(0.0, 1.0))
+        ident = nfl_fantasy_projection([2021, 2022, 2023], 2024, calibrate=True)
+        assert abs(ident.filter(pl.col("player_id") == "P1")["proj_fantasy_points"][0] - r) < 1e-9
+    finally:
+        cm.POSITION_CONSTANTS["WR"] = old
+
+
 def test_marcel_projection_leakage_boundary(monkeypatch):
     """A season == target_season row in the input must NOT influence the projection."""
     from sportsdataverse.nfl.nfl_projection import nfl_player_projection
