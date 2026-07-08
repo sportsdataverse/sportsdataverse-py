@@ -59,6 +59,17 @@ PUBLISHED_ZONE_BASELINES: "dict[str, dict[str, float]]" = {
 }
 
 
+# OBSERVED national make rates, captured 2026-07-08 by summing every player
+# row of barttorvik.com getadvstats (2025; mens CSV / womens JSON endpoint):
+# mens n_att 2P=406,493 3P=260,289; womens 2P=431,538 3P=218,673. These are
+# the hard external calibration anchors for the shot-quality oracle gate
+# (PUBLISHED_ZONE_BASELINES above are literature ESTIMATES, sanity-band only).
+BART_NATIONAL_SPLITS: "dict[str, dict[str, float]]" = {
+    "mens": {"fg2_pct": 0.5082, "fg3_pct": 0.3376},
+    "womens": {"fg2_pct": 0.4566, "fg3_pct": 0.3129},
+}
+
+
 def get_constants(league: str) -> ShotQualityConstants:
     """League constants bundle for the shot-quality spine.
 
