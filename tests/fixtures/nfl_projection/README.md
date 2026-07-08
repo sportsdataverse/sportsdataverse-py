@@ -20,6 +20,7 @@ counting stats are `Float64`. Regular season only (`season_type == "REG"`).
 | `realized_2024.parquet` | `load_nfl_player_stats()` | 2024 | same schema — the holdout target |
 | `rosters_2020_2023.parquet` | `load_nfl_rosters()` | 2020-2023 | `player_id` = `gsis_id`; `age` derived from `birth_date` at season start (Sep 1); unique per (player_id, season) |
 | `snap_counts_2020_2023.parquet` | `load_nfl_snap_counts()` | 2020-2023 | `pfr_player_id` crosswalked to gsis `player_id` via `load_nfl_ff_playerids()` (inner join) |
+| `snap_counts_2024.parquet` | `load_nfl_snap_counts([2024])` | 2024 | same crosswalk — the availability holdout target (realized games = distinct weeks with `offense_snaps > 0`) |
 | `ff_rankings_2024.parquet` | `load_nfl_ff_rankings(kind="all")` | preseason 2024 | FantasyPros `redraft-overall` ECR, latest pre-kickoff scrape (2024-08-30), fp id crosswalked to gsis via `load_nfl_ff_playerids()`; `ecr` = min across duplicate id matches |
 | `draft_matured.parquet` | `load_nfl_draft_picks()` + `load_nfl_combine()` | draft classes 2000-2019 | combine measurables left-joined on `pfr_id`; `ht` parsed `"6-2"` → inches. **`car_av` is sourced from nflverse `w_av`** (PFR weighted career AV) — the upstream `car_av` column is an all-null Boolean; null `w_av` on a drafted player = never accrued AV → filled `0.0` |
 | `draft_holdout.parquet` | same | classes 2015-2019 | the oracle-gate slice (matured outcomes); draft-model training must use classes `≤ target_class − 5` |
