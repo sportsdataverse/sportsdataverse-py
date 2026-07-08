@@ -194,8 +194,8 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
       goal. The ``def_pos_team`` "coverage" side reflects the opposing
       returner's skill, not the coverage team's, and is not recoverable from
       EPA -- adding any coverage unit *lowers* SP+ agreement (0.77 -> 0.58),
-      so coverage/defense units are excluded entirely (see
-      :data:`_ST_UNIT_PATTERNS`).
+      so coverage/defense units are excluded entirely (see the module's
+      special-teams unit patterns).
     * The opponent-adjustment ridge (:func:`cfb_adjusted_epa._fit_opponent_ridge`)
       *hurts* agreement (0.72 vs 0.77) -- special teams is only weakly
       opponent-dependent, so this function does not fit a ridge at all.
@@ -204,8 +204,8 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
       z-scores, is what helps: it reached Spearman 0.768 against SP+, versus
       0.703 for a single-unit offense-minus-intercept ridge fit.
 
-    ``adj_st_epa`` is therefore the sum, over the three units in
-    :data:`_ST_UNIT_PATTERNS`, of each unit's z-scored per-team mean EPA. A
+    ``adj_st_epa`` is therefore the sum, over the three special-teams units
+    (field goal, punt, kick return), of each unit's z-scored per-team mean EPA. A
     team with no plays in a given unit contributes 0 for that unit (not a
     penalty). ``config`` is accepted for signature parity with
     :func:`efficiency_ratings` / :func:`fei_ratings` but is unused -- there is

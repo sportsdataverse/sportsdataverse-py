@@ -1454,7 +1454,7 @@ played games (before `as_of_date`) are kept.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A single season or list of seasons. |
+| `seasons` | `int \| list[int]` |  | A single season (an `int`, or a one-element list). Multiple seasons raise `ValueError` -- the simulation engine is single-season. |
 | `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings`; games are kept/simulated from the schedule as-is. `None` uses the full season. |
 | `n_sims` | `int` | `10000` | Number of simulated seasons. |
 | `playoff_seeds` | `int` | `12` | CFP field size. |
@@ -2399,8 +2399,8 @@ special-teams oracle (`tests/fixtures/cfb_prediction/sp_plus_2023.parquet`
   goal. The `def_pos_team` "coverage" side reflects the opposing
   returner's skill, not the coverage team's, and is not recoverable from
   EPA -- adding any coverage unit *lowers* SP+ agreement (0.77 -> 0.58),
-  so coverage/defense units are excluded entirely (see
-  ST_UNIT_PATTERNS`).
+  so coverage/defense units are excluded entirely (see the module's
+  special-teams unit patterns).
 * The opponent-adjustment ridge (`cfb_adjusted_epa._fit_opponent_ridge`)
   *hurts* agreement (0.72 vs 0.77) -- special teams is only weakly
   opponent-dependent, so this function does not fit a ridge at all.
@@ -2409,8 +2409,8 @@ special-teams oracle (`tests/fixtures/cfb_prediction/sp_plus_2023.parquet`
   z-scores, is what helps: it reached Spearman 0.768 against SP+, versus
   0.703 for a single-unit offense-minus-intercept ridge fit.
 
-`adj_st_epa` is therefore the sum, over the three units in
-ST_UNIT_PATTERNS`, of each unit's z-scored per-team mean EPA. A
+`adj_st_epa` is therefore the sum, over the three special-teams units
+(field goal, punt, kick return), of each unit's z-scored per-team mean EPA. A
 team with no plays in a given unit contributes 0 for that unit (not a
 penalty). `config` is accepted for signature parity with
 `efficiency_ratings` / `fei_ratings` but is unused -- there is

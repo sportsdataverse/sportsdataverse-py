@@ -195,3 +195,10 @@ def test_season_odds_return_as_pandas(monkeypatch: pytest.MonkeyPatch) -> None:
     out = cfb_season_odds(2023, n_sims=100, playoff_seeds=4, seed=0, return_as_pandas=True)
     assert isinstance(out, pd.DataFrame)
     assert list(out.columns)[:2] == ["season", "team_id"]
+
+
+def test_season_odds_rejects_multiple_seasons() -> None:
+    """Multiple seasons raise ValueError -- the cfb_simulations engine is
+    single-season and would otherwise mix weeks across seasons."""
+    with pytest.raises(ValueError, match="one season at a time"):
+        cfb_season_odds([2022, 2023])

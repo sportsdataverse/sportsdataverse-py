@@ -153,7 +153,8 @@ def cfb_season_odds(
     played games (before ``as_of_date``) are kept.
 
     Args:
-        seasons: A single season or list of seasons.
+        seasons: A single season (an ``int``, or a one-element list). Multiple
+            seasons raise ``ValueError`` -- the simulation engine is single-season.
         as_of_date: Leakage boundary forwarded to :func:`cfb_ratings.cfb_ratings`;
             games are kept/simulated from the schedule as-is. ``None`` uses the full season.
         n_sims: Number of simulated seasons.
@@ -179,6 +180,15 @@ def cfb_season_odds(
         * `nflseedR <https://nflseedr.com>`_ -- the simulation engine reused here.
     """
     season_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    # Single-season only: the reused cfb_simulations engine runs one week-loop over all
+    # games, so multiple seasons would be mixed into one simulated season (and the output
+    # `season` column would be null). Fail fast instead of returning wrong results.
+    if len(season_list) != 1:
+        raise ValueError(
+            "cfb_season_odds simulates one season at a time (the cfb_simulations engine "
+            f"mixes weeks across seasons); got {len(season_list)} seasons ({season_list}). "
+            "Call it once per season."
+        )
     # cfb_ratings takes a RatingsConfig, not an era; era feeds the sampler/get_constants.
     ratings = cfb_ratings(seasons, as_of_date=as_of_date)
     schedule = load_cfb_schedule(season_list)
