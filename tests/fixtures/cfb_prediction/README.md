@@ -27,6 +27,16 @@ oracle + backtest tests; no network needed once committed.
 | `espn_predictor_sample.parquet` | ~50 | `espn_cfb_game_predictor` / `_game_probabilities` over a completed-game sample | `game_id, home_team_id, away_team_id, home_win_prob, predicted_margin` |
 | `espn_odds_sample.parquet` | ~84 | `espn_cfb_game_odds` over the same sample | `game_id, close_spread_home, close_total` |
 
+**ESPN predictor/odds sample provenance & gaps:** both are a down-selection of
+*completed* 2023 FBS games (weeks 1–14) — the subset ESPN published a
+predictor/closing-line for. The backtest gate joins them on `game_id` and, after
+restricting to games whose *both* teams have as-of ratings (weeks ≥ 5, drops
+FBS-vs-FCS), retains ~30 predictor games and ~30/28 odds games. Three
+`close_total` values are `null` and are `drop_nulls`'d by the total-MAE gate.
+`close_spread_home` is the sportsbook **home** spread (negative = home favored);
+the market-implied home margin is `-close_spread_home` (corr with ESPN
+`predicted_margin` = −0.95).
+
 ## Polarity notes (for the Task 1.5 gate)
 
 - **SP+ `sp_def` and FEI `fei_def` are captured with the source's native

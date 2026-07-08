@@ -42,9 +42,12 @@ class PredictConfig:
     """Era-specific coefficients for the CFB game-outcome prediction model.
 
     ``net_points_scale``, ``hfa``, ``margin_sd``, ``total_intercept`` and
-    ``total_scale`` are **fitted on the 2023 backtest** by
-    ``dev/cfb_prediction/fit_pregame.py`` (leakage-free, week-by-week as-of
-    ratings) -- see :mod:`sportsdataverse.cfb.cfb_game_predict`. ``adj_net`` from
+    ``total_scale`` are **fitted (in-sample) on the 2023 backtest** by
+    ``dev/cfb_prediction/fit_pregame.py``. The ratings that feed the fit use a
+    leakage-free week-by-week as-of boundary, but these five coefficients are fit
+    on the same 2023 games the backtest gate then scores -- so the gate is an
+    in-sample regression guard, not an out-of-sample generalization result (a 2024
+    holdout is a documented follow-up). See :mod:`sportsdataverse.cfb.cfb_game_predict`. ``adj_net`` from
     the ratings engine is on an EPA-per-play scale, so ``net_points_scale`` is the
     fitted EPA/play -> points conversion (without it the rating differential is
     negligible next to a points-scale HFA and the model is near-constant).

@@ -1,9 +1,16 @@
-"""2023 pregame backtest gate (T2.1 Task 2.3).
+"""2023 pregame in-sample regression gate (T2.1 Task 2.3).
 
-Leakage-free by construction: each game's prediction uses ratings fit on plays
+**Scope -- read this before treating the numbers as a generalization claim.**
+The *ratings* are leakage-free: each game's prediction uses ratings fit on plays
 from *strictly prior* weeks (``week < game_week``), never the game's own week or
-later. Predictions run through the public :func:`cfb_predict_games` with the
-fitted ``CFB_CONSTANTS["modern"]`` coefficients.
+later. But the five ``CFB_CONSTANTS["modern"]`` coefficients (``net_points_scale``,
+``hfa``, ``margin_sd``, ``total_intercept``, ``total_scale``) are OLS-fit on the
+*same* 2023 games this gate then scores, so the reported metrics are **in-sample**.
+This is a coarse regression guard (did a change break the model?), not an
+out-of-sample validation. It is defensible for a closed-form 5-DOF model, and the
+spread/total gates additionally measure distance to an *independent* oracle (the
+closing market line, not the OLS's own fit target) -- but a real generalization
+check needs a 2024 holdout (documented follow-up, not yet captured).
 
 Floors are the values observed at gate time by
 ``dev/cfb_prediction/fit_pregame.py`` (Brier 0.147 vs FPI 0.144; spread MAE 4.51;
@@ -105,3 +112,22 @@ def test_total_mae_within_floor() -> None:
     j = _PREDS.join(odds, on="game_id", how="inner")
     assert j.height >= _MIN_GAMES, j.height
     assert mae(j["exp_total"].to_numpy(), j["close_total"].to_numpy()) <= _TOTAL_FLOOR
+
+
+def test_win_prob_discriminates_favorites_from_dogs() -> None:
+    """Coarse calibration guard: home favorites actually win more than home dogs.
+
+    Brier alone can hide systematic over/under-confidence, so complement it with a
+    discrimination check. At this sample size (~30) a 10-bucket calibration table is
+    too sparse, so split at 0.5 and require the favorite bucket's *empirical* home
+    win-rate to clear the underdog bucket's by a wide margin (observed 0.88 vs 0.15).
+    """
+    j = _with_actual(_PREDS)
+    dogs = j.filter(pl.col("home_win_prob") < 0.5)
+    favs = j.filter(pl.col("home_win_prob") >= 0.5)
+    assert dogs.height >= 5 and favs.height >= 5, (dogs.height, favs.height)
+    dog_rate = dogs["y"].mean()
+    fav_rate = favs["y"].mean()
+    # Both buckets bracket a coin flip, with a comfortable discrimination gap.
+    assert dog_rate < 0.5 < fav_rate, (dog_rate, fav_rate)
+    assert fav_rate - dog_rate >= 0.30, (dog_rate, fav_rate)
