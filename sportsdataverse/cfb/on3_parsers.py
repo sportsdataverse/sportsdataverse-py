@@ -42,6 +42,12 @@ def _rows_to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
     """
     if not rows:
         return pl.DataFrame()
+    # a bare scalar array (e.g. filters/status -> list of strings) has no keys to
+    # flatten: surface it as a single `value` column; mixed lists wrap scalars the
+    # same way so json_normalize only ever sees dicts
+    if not any(isinstance(r, dict) for r in rows):
+        return pl.DataFrame({"value": [str(r) for r in rows]})
+    rows = [r if isinstance(r, dict) else {"value": r} for r in rows]
     df = pd.json_normalize(rows, sep="_")
     seen: Dict[str, int] = {}
     cols: List[str] = []

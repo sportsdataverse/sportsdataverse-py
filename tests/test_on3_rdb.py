@@ -204,3 +204,14 @@ def test_on3_team_ranking_team_rankings_live():
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0
     assert "overall_rank" in df.columns
+
+
+def test_parse_on3_rdb_scalar_array():
+    # filters/status serves a bare array of strings -> single `value` column
+    from sportsdataverse.cfb.on3_parsers import parse_on3_rdb
+
+    df = parse_on3_rdb(["Committed", "Decommitted", "Signed"])
+    assert df.height == 3 and df.columns == ["value"]
+    # mixed scalar/dict rows: scalars wrap as {"value": ...}
+    mixed = parse_on3_rdb([{"name": "x"}, "loose"])
+    assert mixed.height == 2 and "value" in mixed.columns
