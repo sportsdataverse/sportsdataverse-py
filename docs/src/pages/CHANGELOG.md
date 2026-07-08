@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)](#cfb--recruiting--roster-projection-spine-talent-composite-%E2%86%92-returning-production-%E2%86%92-wins-projection-%E2%86%92-transfer-impact-%E2%86%92-draft-projection)
   - [NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)](#nba--wnba--g-league--shot-value-spine-xpoints-%E2%86%92-context-make-prob-%E2%86%92-talent-%E2%86%92-selection-%E2%86%92-zone-maps)
   - [MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)](#mbb--wbb--shot-quality-spine-xpoints-%E2%86%92-shot-selection-%E2%86%92-shooter-talent)
   - [MBB / WBB — player-value & projection spine (box-BPM → archetypes → recruiting → transfer → draft)](#mbb--wbb--player-value--projection-spine-box-bpm-%E2%86%92-archetypes-%E2%86%92-recruiting-%E2%86%92-transfer-%E2%86%92-draft)
@@ -163,6 +164,40 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)
+
+- feat(cfb): `load_recruit_classes` — per-recruit signing classes from the 247
+  RDB feed (signed institution with committed fallback; stars, composite
+  grade, position, player name; ids `Utf8`).
+- feat(cfb): `blue_chip_ratio` + `cfb_roster_talent` — Bud Elliott blue-chip
+  ratio over a trailing 4-class window and a 247-style class-recency-weighted
+  team talent composite (optional `composite_247` snapshot override).
+  Oracle-gated vs the 2023 247 Team Talent snapshot (Spearman 0.896, 196/196
+  teams name-matched) + a percentile champion blue-chip invariant.
+- feat(cfb): `cfb_returning_production` — Connelly-style returning production
+  (offense = attributed yardage; defense = splash events) from the hosted
+  per-play player-stats parquet + rosters; unit weights fitted on FBS
+  2018-2023 (offense-only; retention gate Spearman 0.229).
+- feat(cfb): `cfb_recruiting_projection` — on-demand ridge projecting wins /
+  scoring margin from preseason features (talent, blue-chip ratio, returning
+  production, prior wins) with the as-of season boundary enforced internally.
+  Backtest 2019-2023: pooled wins MAE 2.19, beating prior-year (2.46) and
+  league-mean (2.34) baselines.
+- feat(cfb): `cfb_transfer_moves` + `cfb_transfer_impact` — transfer-portal
+  moves from roster year-over-year diffs (name-matched recruit talent points)
+  and a net-talent win-delta ridge. The predictive gate is a documented
+  strict-xfail: net transfer talent shows no team-level win-delta signal on
+  2018-2023 data (escalation: position-specific values + PFF NCAA grades).
+- feat(cfb): `load_draft_outcomes` + `cfb_draft_projection` — NFL draft labels
+  from the nflverse picks dataset (the ESPN season-draft endpoint 404s) and an
+  as-of logistic draft-probability model (stars, talent points, career
+  production, class year) with per-team expected-picks roll-up. Holdout AUC
+  0.78-0.82 (2022-2024 drafts); team draft-capital Spearman 0.62 observed.
+- Committed oracle fixtures under `tests/fixtures/cfb_projection/` (results,
+  247 talent + 39.6k recruits 2014-2023, returning production, team map,
+  nflverse draft picks, per-player production, net transfer talent) with
+  provenance README.
 
 ### NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)
 
