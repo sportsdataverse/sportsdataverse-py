@@ -64,14 +64,20 @@ class PositionConstants:
     fp_calibration: Tuple[float, float] = (0.0, 1.0)
 
 
-# Seed values; shrinkage_k / base_availability / fp_calibration are overwritten
-# by the fitting tasks (dev/nfl_projection/fit_shrinkage.py,
-# fit_availability.py, fit_fantasy_calibration.py).
+# shrinkage_k fitted by dev/nfl_projection/fit_shrinkage.py (2026-07-08):
+# scipy.optimize.minimize_scalar (bounded 0.1-400) minimizing holdout
+# MAE(proj_ppg, realized_ppg) on the committed 2024 corpus, per position:
+#   QB 127.1 (MAE 6.8649), RB 14.2 (MAE 7.4399), WR 0.1 (MAE 9.8475),
+#   TE 0.1 (MAE 3.7088). WR/TE converge to the lower bound — regression toward
+# the volume-weighted position mean does not reduce holdout MAE there, so the
+# fitted k is effectively "no shrinkage" (kept > 0 for numerical stability).
+# base_availability fitted by dev/nfl_projection/fit_availability.py (Task 4.2).
+# fp_calibration fitted by dev/nfl_projection/fit_fantasy_calibration.py (Task 2.2).
 POSITION_CONSTANTS: Dict[str, PositionConstants] = {
-    "QB": PositionConstants(shrinkage_k=6.0, min_volume=100.0, aging_base_age=27.0, base_availability=0.92),
-    "RB": PositionConstants(shrinkage_k=10.0, min_volume=60.0, aging_base_age=25.0, base_availability=0.80),
-    "WR": PositionConstants(shrinkage_k=8.0, min_volume=40.0, aging_base_age=26.0, base_availability=0.85),
-    "TE": PositionConstants(shrinkage_k=8.0, min_volume=30.0, aging_base_age=27.0, base_availability=0.83),
+    "QB": PositionConstants(shrinkage_k=127.1, min_volume=100.0, aging_base_age=27.0, base_availability=0.92),
+    "RB": PositionConstants(shrinkage_k=14.2, min_volume=60.0, aging_base_age=25.0, base_availability=0.80),
+    "WR": PositionConstants(shrinkage_k=0.1, min_volume=40.0, aging_base_age=26.0, base_availability=0.85),
+    "TE": PositionConstants(shrinkage_k=0.1, min_volume=30.0, aging_base_age=27.0, base_availability=0.83),
     "DEFAULT": PositionConstants(),
 }
 

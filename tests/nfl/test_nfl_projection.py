@@ -88,3 +88,94 @@ def test_season_rates_empty_input_keeps_schema():
         assert col in out.columns
     assert out.schema["player_id"] == pl.Utf8
     assert out.schema["season"] == pl.Int64
+
+
+def _synth_history(with_target_season_row=False):
+    """3 WRs x seasons 2021-2023, constant per-player rates (flat aging curve)."""
+    rows = []
+    ppg = {"P1": 20.0, "P2": 10.0, "P3": 10.0}
+    for pid, base in ppg.items():
+        for i, season in enumerate([2021, 2022, 2023]):
+            rows.append(
+                {
+                    "player_id": pid,
+                    "season": season,
+                    "week": 1,
+                    "position_group": "WR",
+                    "recent_team": "A",
+                    "targets": 50.0,
+                    "receptions": 5.0,
+                    "receiving_yards": base * 10,
+                    "receiving_tds": 0.0,
+                    "fantasy_points_ppr": base,
+                }
+            )
+    if with_target_season_row:
+        rows.append(
+            {
+                "player_id": "P1",
+                "season": 2024,
+                "week": 1,
+                "position_group": "WR",
+                "recent_team": "A",
+                "targets": 50.0,
+                "receptions": 5.0,
+                "receiving_yards": 9999.0,
+                "receiving_tds": 99.0,
+                "fantasy_points_ppr": 999.0,
+            }
+        )
+    return pl.DataFrame(rows)
+
+
+def _synth_rosters():
+    rows = []
+    for pid, birth in [("P1", 1997), ("P2", 1996), ("P3", 1995)]:
+        for season in [2021, 2022, 2023, 2024]:
+            rows.append({"player_id": pid, "season": season, "position": "WR", "age": float(season - birth)})
+    return pl.DataFrame(rows)
+
+
+def _patch_loaders(monkeypatch, weekly):
+    import sportsdataverse.nfl.nfl_projection as mod
+
+    monkeypatch.setattr(mod, "load_nfl_player_stats", lambda *a, **k: weekly)
+    monkeypatch.setattr(mod, "load_nfl_rosters", lambda *a, **k: _synth_rosters())
+
+
+def test_marcel_projection_regresses_toward_position_mean(monkeypatch):
+    from sportsdataverse.nfl.nfl_projection import nfl_player_projection
+
+    _patch_loaders(monkeypatch, _synth_history())
+    out = nfl_player_projection([2021, 2022, 2023], 2024)
+    assert out.schema["player_id"] == pl.Utf8
+    assert out.schema["target_season"] == pl.Int64
+    r = out.filter(pl.col("player_id") == "P1").row(0, named=True)
+    # P1 raw weighted mean ppg = 20; volume-weighted position mean = 40/3.
+    pos_mean = 40.0 / 3.0
+    assert pos_mean < r["proj_ppg"] < 20.0  # regression happened
+    assert r["reliability"] > 0
+    assert r["target_season"] == 2024
+
+
+def test_marcel_projection_pandas_flag(monkeypatch):
+    import pandas as pd
+
+    from sportsdataverse.nfl.nfl_projection import nfl_player_projection
+
+    _patch_loaders(monkeypatch, _synth_history())
+    out = nfl_player_projection([2021, 2022, 2023], 2024, return_as_pandas=True)
+    assert isinstance(out, pd.DataFrame)
+
+
+def test_marcel_projection_leakage_boundary(monkeypatch):
+    """A season == target_season row in the input must NOT influence the projection."""
+    from sportsdataverse.nfl.nfl_projection import nfl_player_projection
+
+    _patch_loaders(monkeypatch, _synth_history(with_target_season_row=False))
+    clean = nfl_player_projection([2021, 2022, 2023, 2024], 2024)
+    _patch_loaders(monkeypatch, _synth_history(with_target_season_row=True))
+    poisoned = nfl_player_projection([2021, 2022, 2023, 2024], 2024)
+    a = clean.filter(pl.col("player_id") == "P1")["proj_ppg"][0]
+    b = poisoned.filter(pl.col("player_id") == "P1")["proj_ppg"][0]
+    assert abs(a - b) < 1e-12
