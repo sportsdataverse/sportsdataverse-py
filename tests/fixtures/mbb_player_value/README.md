@@ -25,6 +25,8 @@ release backfill widens the trainable era with no code change.
 | `draft_2025_2026.parquet` | 119 | NBA Core v2 draft rounds + athlete $refs, 2025 + 2026 drafts: `pick`, `round`, athlete name/college. |
 | `player_seasons_2025.parquet` | 9,805 | Output of `aggregate_player_seasons([2025])` (boxscore + shots releases) frozen so the oracle gates run offline; regenerate after any aggregation change. |
 | `team_ratings_2025.parquet` | 700 | Output of `mbb_team_ratings([2025])`, frozen for the same reason. |
+| `player_seasons_2026.parquet` | 9,990 | Same as the 2025 aggregate, season 2026 -- powers the phase 3-5 gates (LOSO folds need both seasons). |
+| `team_ratings_2026.parquet` | 727 | `mbb_team_ratings([2026])`, frozen. |
 | `archetype_labeled.parquet` | 11 | Hand-labeled role-certain 2025 player-seasons (e.g. Bandaogo=rim protector, Karaban=stretch forward, Sears/RJ Davis=shot creator, Broome/Kalkbrenner=play-finishing big); the archetype gate asserts each lands in its expected cluster. |
 | `rosters_2025_2026.parquet` | 25,494 | sportsdataverse-data `mbb_rosters` 2025+2026: display_name, position, class (`experience_display_value`), height parsed from `6' 5"` strings. Used to anchor archetype/recruit/transfer joins. |
 
