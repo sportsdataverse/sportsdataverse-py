@@ -57,3 +57,19 @@ from sportsdataverse.nhl.nhl_teams import *
 from sportsdataverse.nhl.nhl_espn_ext import *
 from sportsdataverse.nhl.nhl_fox_ext import *
 from sportsdataverse.nhl.nhl_player_stats import *
+from sportsdataverse.nhl.nhl_prediction_constants import (
+    LEAGUE_CONSTANTS,
+    LeagueConstants,
+    as_of_ratings_split,
+    brier_score,
+    calibration_table,
+    get_constants,
+    log_loss_score,
+    mae,
+    spearman_corr,
+)
+from sportsdataverse.nhl.nhl_team_ratings import (
+    adjust_rate_opponent,
+    nhl_team_ratings,
+    team_game_xg_rates,
+)
