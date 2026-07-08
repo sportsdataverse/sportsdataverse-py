@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: postal_code
+  type: character
+- description: ''
+  name: city
+  type: character
+- description: ''
+  name: state
+  type: integer
+- description: ''
+  name: latitude
+  type: character
+- description: ''
+  name: longitude
+  type: character
+- description: ''
+  name: county_tax_rate
+  type: character
+- description: ''
+  name: city_tax_rate
+  type: character
+- description: ''
+  name: special_tax_rate
+  type: character
+- description: ''
+  name: region_name
+  type: character
+- description: ''
+  name: default_name
+  type: character
+kind: dataframe
+schema: location

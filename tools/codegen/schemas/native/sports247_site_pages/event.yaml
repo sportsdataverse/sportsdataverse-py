@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: event_group
+  type: integer
+- description: ''
+  name: event_type
+  type: integer
+- description: ''
+  name: event_date
+  type: character
+- description: ''
+  name: default_asset
+  type: integer
+- description: ''
+  name: primary_color
+  type: character
+- description: ''
+  name: year
+  type: integer
+- description: ''
+  name: default_name
+  type: character
+kind: dataframe
+schema: event

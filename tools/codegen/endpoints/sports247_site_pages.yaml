@@ -1,0 +1,411 @@
+api: sports247_site_pages
+endpoints:
+- parser: parse_sports247_site_page
+  path: /Coach/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/coach
+  short: coach
+  summary: Coach identity detail.
+- example_args:
+    key: 1504
+  parser: parse_sports247_site_page
+  path: /Coach/{key}/AlmaMater.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/institution
+  short: coach_alma_mater
+  summary: Coach alma-mater Institution.
+- example_args:
+    key: 1504
+  parser: parse_sports247_site_page
+  path: /Coach/{key}/Hometown.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/location
+  short: coach_hometown
+  summary: Coach hometown Location.
+- parser: parse_sports247_site_page
+  path: /CoachRanking/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/coach_ranking
+  short: coach_ranking
+  summary: Single CoachRanking row.
+- example_args:
+    key: 1531
+  parser: parse_sports247_site_page
+  path: /Coach/{key}/CoachRankings.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/coach_ranking
+  short: coach_rankings
+  summary: Coach's recruiting-ranking history (one row per Ranking snapshot).
+- parser: parse_sports247_site_page
+  path: /Event/{slug}.json
+  path_params:
+  - name: slug
+    required: true
+    type: str
+  returns_schema: native/sports247_site_pages/event
+  short: event
+  summary: Recruiting event detail (camp/combine/regional).
+- parser: parse_sports247_site_page
+  path: /Institution/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/institution
+  short: institution
+  summary: Institution (school/team) detail.
+- extra_params:
+  - name: items
+    query_key: items
+    type: int
+  parser: parse_sports247_site_page
+  path: /Institution.json
+  returns_schema: native/sports247_site_pages/institution
+  short: institution_list
+  summary: Institution directory (paginated list).
+- example_args:
+    key: 24099
+  parser: parse_sports247_site_page
+  path: /Institution/{key}/Location.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/location
+  short: institution_location
+  summary: Institution location (city/state/coords/tax).
+- example_args:
+    key: 24099
+    school_slug: florida
+  parser: parse_sports247_site_page
+  path: /college/{school_slug}/Institution/{key}/TimelineEvents.json
+  path_params:
+  - name: school_slug
+    required: true
+    type: str
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/timeline_event
+  short: institution_timeline_events
+  summary: Institution recruiting timeline (site-authored event blurbs).
+- example_args:
+    league: NFL
+  extra_params:
+  - name: year
+    query_key: year
+    type: int
+  - name: round
+    query_key: round
+    type: int
+  parser: parse_sports247_site_page
+  path: /League/{league}/DraftPicks/ConfigureEmbed/.json
+  path_params:
+  - name: league
+    required: true
+    type: str
+  returns_schema: native/sports247_site_pages/draft_pick
+  short: league_draft_picks
+  summary: Pro-draft picks embed for a league/year/round.
+- example_args:
+    league_id: 6
+  extra_params:
+  - name: items
+    query_key: items
+    type: int
+  parser: parse_sports247_site_page
+  path: /League/{league_id}/Institutions.json
+  path_params:
+  - name: league_id
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/institution
+  short: league_institutions
+  summary: Institutions belonging to a league.
+- example_args:
+    page_id: 100134
+  parser: parse_sports247_site_page
+  path: /Page/{page_id}/Feeds.json
+  path_params:
+  - name: page_id
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/feed
+  short: page_feeds
+  summary: News/headline feed items for a site Page.
+- parser: parse_sports247_site_page
+  path: /Player/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player
+  short: player
+  summary: Player detail (identity + primary-sport rating/ranks).
+- example_args:
+    key: 46083769
+  parser: parse_sports247_site_page
+  path: /Player/{key}/CurrentPlayerInstitution.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_institution
+  short: player_current_institution
+  summary: Player's current PlayerInstitution (committed/enrolled school).
+- example_args:
+    key: 46051367
+  parser: parse_sports247_site_page
+  path: /Player/{key}/PlayerHighSchool.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_institution
+  short: player_high_school
+  summary: Player's high-school PlayerInstitution row.
+- parser: parse_sports247_site_page
+  path: /PlayerInstitution/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_institution
+  short: player_institution
+  summary: Player-at-institution association detail.
+- parser: parse_sports247_site_page
+  path: /PlayerInstitutionEvaluation/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_institution_evaluation
+  short: player_institution_evaluation
+  summary: Scout evaluation of a player-institution fit.
+- example_args:
+    key: 46051367
+  parser: parse_sports247_site_page
+  path: /Player/{key}/PrimaryPlayerSport.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_sport
+  short: player_primary_sport
+  summary: Player's primary PlayerSport (rating/class/positions).
+- extra_params:
+  - name: first_name
+    query_key: FirstName
+    type: str
+  - name: last_name
+    query_key: LastName
+    type: str
+  parser: parse_sports247_site_page
+  path: /Player.json
+  returns_schema: native/sports247_site_pages/player
+  short: player_search
+  summary: Player name search.
+- parser: parse_sports247_site_page
+  path: /playersport/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_sport
+  short: playersport
+  summary: PlayerSport detail (note lowercase route segment).
+- example_args:
+    key: 279200
+  parser: parse_sports247_site_page
+  path: /PlayerSport/{key}/PlayerInstitution.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_institution
+  short: playersport_institution
+  summary: PlayerInstitution linked to a PlayerSport.
+- example_args:
+    key: 250563
+  parser: parse_sports247_site_page
+  path: /PlayerSport/{key}/RecruitRankHistory.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_sport_ranking
+  short: playersport_rank_history
+  summary: Ranking history for a PlayerSport (one row per Ranking snapshot).
+- example_args:
+    key: 14
+  parser: parse_sports247_site_page
+  path: /Position/{key}/playersportrankings.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_sport_ranking
+  short: position_rankings
+  summary: Player-sport rankings for a position.
+- parser: parse_sports247_site_page
+  path: /RecruitInterest/{key}.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/recruit_interest
+  short: recruit_interest
+  summary: Single recruit-interest (school<->recruit link) detail.
+- example_args:
+    key: 114978
+  parser: parse_sports247_site_page
+  path: /Recruitment/{key}/FinalChoice.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_sport
+  short: recruitment_final_choice
+  summary: Final-choice PlayerSport/commit for a recruitment.
+- example_args:
+    key: 114978
+  parser: parse_sports247_site_page
+  path: /Recruitment/{key}/Institution.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/institution
+  short: recruitment_institution
+  summary: Committed institution for a recruitment.
+- example_args:
+    key: 114978
+  parser: parse_sports247_site_page
+  path: /Recruitment/{key}/Interests.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/institution
+  short: recruitment_interests
+  summary: All institutions the recruit has interest links with.
+- example_args:
+    key: 114978
+  parser: parse_sports247_site_page
+  path: /Recruitment/{key}/Offers.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/institution
+  short: recruitment_offers
+  summary: Institutions that have offered the recruit.
+- example_args:
+    key: 114978
+  parser: parse_sports247_site_page
+  path: /Recruitment/{key}/PlayerSport.json
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/sports247_site_pages/player_sport
+  short: recruitment_player_sport
+  summary: PlayerSport underlying a recruitment.
+- example_args:
+    season: 2026-Football
+  parser: parse_sports247_site_page
+  path: /Season/{season}/CurrentExpertPredictions.json
+  path_params:
+  - description: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/sports247_site_pages/player_institution_prediction
+  short: season_current_expert_predictions
+  summary: Current expert 'crystal ball' predictions for a season.
+- example_args:
+    season: 2026-Football
+  parser: parse_sports247_site_page
+  path: /Season/{season}/RecruitInterestEvents.json
+  path_params:
+  - description: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/sports247_site_pages/recruit_interest_event
+  short: season_recruit_interest_events
+  summary: Recruit-interest timeline events for a season (offers/visits/commits).
+- example_args:
+    season: 2026-Football
+  parser: parse_sports247_site_page
+  path: /Season/{season}/RecruitInterests.json
+  path_params:
+  - description: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/sports247_site_pages/recruit_interest
+  short: season_recruit_interests
+  summary: All recruit interests for a season (paginated).
+- example_args:
+    season: 2026-Football
+  extra_params:
+  - name: items
+    query_key: Items
+    type: int
+  - name: page
+    query_key: Page
+    type: int
+  - name: player_full_name
+    query_key: Player.FullName
+    type: str
+  - name: institution
+    query_key: Institution
+    type: int
+  parser: parse_sports247_site_page
+  path: /Season/{season}/Recruits.json
+  path_params:
+  - description: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/sports247_site_pages/recruit
+  short: season_recruits
+  summary: Recruit class rankings for a season (rich per-recruit rows with inlined
+    Player).
+- example_args:
+    season: 2020-Football
+  parser: parse_sports247_site_page
+  path: /Season/{season}/Roster/Embed.json
+  path_params:
+  - description: Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/sports247_site_pages/player_sport
+  short: season_roster_embed
+  summary: Signed-class roster embed (PlayerSport rows). Accuracy can lag.
+getter_module: sportsdataverse.cfb.sports247_site_pages_runtime
+host: https://247sports.com
+module: sports247_site_pages
+name_pattern: sports247_site_pages_{short}
+parser_module: cfb.sports247_site_pages_parsers
+passthrough_query: true
+qualifier: ''
+runtime_imports:
+- _get

@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: institution
+  type: integer
+- description: ''
+  name: recruitment
+  type: integer
+- description: ''
+  name: recruit_interest
+  type: integer
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: date
+  type: character
+- description: ''
+  name: default_name
+  type: character
+kind: dataframe
+schema: recruit_interest_event

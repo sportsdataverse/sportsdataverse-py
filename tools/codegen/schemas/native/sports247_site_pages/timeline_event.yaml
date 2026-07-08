@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: body
+  type: character
+- description: ''
+  name: date
+  type: character
+- description: ''
+  name: author_first_name
+  type: character
+- description: ''
+  name: author_last_name
+  type: character
+- description: ''
+  name: author_affiliation
+  type: character
+kind: dataframe
+schema: timeline_event
