@@ -56,6 +56,12 @@ def test_pff_registered_in_flat_apis():
     assert "native/pff" in x._DEFERRED_BUCKETS
 
 
+def test_pff_descriptions_seeded():
+    m = yaml.safe_load((ROOT / "tools/codegen/manual_column_descriptions.yaml").read_text(encoding="utf-8"))
+    assert "grades_offense" in m.get("passing_summary", {})
+    assert m["passing_summary"]["player_id"]  # non-empty
+
+
 def test_gen_pff_idempotent():
     subprocess.run([sys.executable, "tools/codegen/gen_pff.py"], cwd=ROOT, check=True)
     first = (ROOT / "tools/codegen/endpoints/pff.yaml").read_text(encoding="utf-8")
