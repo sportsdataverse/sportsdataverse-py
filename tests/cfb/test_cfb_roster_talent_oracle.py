@@ -17,7 +17,9 @@ import pathlib
 import polars as pl
 import pytest
 
-import sportsdataverse.cfb.cfb_roster_talent as _mod
+import importlib
+
+_mod = importlib.import_module("sportsdataverse.cfb.cfb_roster_talent")
 from sportsdataverse.cfb.cfb_projection_constants import spearman_corr
 from sportsdataverse.cfb.cfb_roster_talent import blue_chip_ratio, cfb_roster_talent
 

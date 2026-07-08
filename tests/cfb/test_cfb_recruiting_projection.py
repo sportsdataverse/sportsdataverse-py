@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import polars as pl
 
-import sportsdataverse.cfb.cfb_recruiting_projection as _mod
+import importlib
+
+_mod = importlib.import_module("sportsdataverse.cfb.cfb_recruiting_projection")
 from sportsdataverse.cfb.cfb_recruiting_projection import (
     _build_projection_matrix,
     cfb_recruiting_projection,

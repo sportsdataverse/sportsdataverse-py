@@ -23,6 +23,8 @@ def _fake_recruit_page(*, year: int, page: int | None = None, **kwargs: object) 
     return pl.DataFrame(
         {
             "key": [46112955, 46133902, 46128573],  # 247 recruit key (Int64)
+            "first_name": ["Dante", "Karmello", "Rem"],
+            "last_name": ["Moore", "English", "Uncommitted"],
             "composite_star_rating": [4.0, 5.0, 3.0],
             "composite_rating": [94.5, 98.1, 84.2],
             "primary_position": ["QB", "WR", "OT"],
@@ -37,7 +39,7 @@ def test_loader_normalizes_to_per_recruit_contract(monkeypatch) -> None:
     monkeypatch.setattr(_mod, "sports247_recruits", _fake_recruit_page)
     out = load_recruit_classes(2023, division="fbs")
 
-    assert out.columns == ["season", "team_id", "team", "recruit_id", "stars", "grade", "position"]
+    assert out.columns == ["season", "team_id", "team", "recruit_id", "player_name", "stars", "grade", "position"]
     assert out.height == 2  # the uncommitted recruit (null team) is dropped
     assert out.schema["team_id"] == pl.Utf8
     assert out.schema["recruit_id"] == pl.Utf8
@@ -46,6 +48,7 @@ def test_loader_normalizes_to_per_recruit_contract(monkeypatch) -> None:
     # float team key -> clean integer string, never "71.0"
     assert out["team_id"].unique().to_list() == ["71"]
     assert out["recruit_id"].to_list() == ["46112955", "46133902"]
+    assert out["player_name"].to_list() == ["Dante Moore", "Karmello English"]
     assert out["season"].unique().to_list() == [2023]
 
 

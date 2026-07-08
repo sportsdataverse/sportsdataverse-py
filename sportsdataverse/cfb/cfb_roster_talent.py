@@ -24,6 +24,7 @@ _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "team_id": pl.Utf8,
     "team": pl.Utf8,
     "recruit_id": pl.Utf8,
+    "player_name": pl.Utf8,
     "stars": pl.Int64,
     "grade": pl.Float64,
     "position": pl.Utf8,
@@ -73,6 +74,15 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
             team_key.cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
             team_name.cast(pl.Utf8).alias("team"),
             _int_id("key").alias("recruit_id"),
+            (
+                pl.col("first_name").cast(pl.Utf8).fill_null("")
+                + pl.lit(" ")
+                + pl.col("last_name").cast(pl.Utf8).fill_null("")
+            )
+            .str.strip_chars()
+            .alias("player_name")
+            if {"first_name", "last_name"} <= set(raw.columns)
+            else pl.lit(None, dtype=pl.Utf8).alias("player_name"),
             pl.col("composite_star_rating").cast(pl.Int64).alias("stars"),
             pl.col("composite_rating").cast(pl.Float64).alias("grade"),
             pl.col("primary_position").cast(pl.Utf8).alias("position"),

@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import polars as pl
 
-import sportsdataverse.cfb.cfb_transfer_impact as _mod
+import importlib
+
+_mod = importlib.import_module("sportsdataverse.cfb.cfb_transfer_impact")
 from sportsdataverse.cfb.cfb_transfer_impact import cfb_transfer_impact, cfb_transfer_moves
 
 
