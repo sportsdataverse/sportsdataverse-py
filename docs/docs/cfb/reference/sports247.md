@@ -5,7 +5,7 @@ sidebar_position: 11
 ---
 # CFB — 247Sports Recruit Database (ipa.247sports.com)
 
-`sportsdataverse.cfb` — 11 endpoints.
+`sportsdataverse.cfb` — 12 endpoints.
 
 ## `sports247_teams`
 
@@ -551,6 +551,41 @@ _Last validated n/a._
 
 ```python
 sports247_tags_autocomplete(default_name='smith')
+```
+
+_Last validated n/a._
+
+## `sports247_positions`
+
+247Sports position lookup for a sport (position group, abbreviation, and key).
+
+**Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/positions/`
+
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/positions/?sportKey=1](https://ipa.247sports.com/rdb/v1/positions/?sportKey=1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `sportKey` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
+| `year` | `year` |  |  | `Y` | year query parameter. |
+| `rankingKey` | `ranking_key` |  |  | `Y` | rankingKey query parameter. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Position group name (e.g. Quarterback, Running Back). |
+| `group_key` | integer | 247Sports position group key. |
+| `name` | character | Position name. |
+| `label` | character | Position abbreviation label (e.g. QB, RB). |
+| `value` | character | 247Sports position key (returned as a string). |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+sports247_positions(sport_key=1)
 ```
 
 _Last validated n/a._

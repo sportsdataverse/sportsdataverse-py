@@ -6454,6 +6454,12 @@ sports247_institution_rankings:
   three_stars: 'Count of 247Sports three-star commits.'
   transfer_number: 'Number of incoming transfers counted in the class.'
   transfer_points: 'Transfer-portal points contributed to the class rating.'
+sports247_positions:
+  group: 'Position group name (e.g. Quarterback, Running Back).'
+  group_key: '247Sports position group key.'
+  label: 'Position abbreviation label (e.g. QB, RB).'
+  name: 'Position name.'
+  value: '247Sports position key (returned as a string).'
 sports247_recruits:
   cbs_key: 'Legacy CBS player key (0 when unmapped).'
   committed_institution_abbreviation: 'Abbreviation of the program the recruit is committed to.'

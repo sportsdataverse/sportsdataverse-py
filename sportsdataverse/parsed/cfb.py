@@ -157,6 +157,7 @@ from sportsdataverse.cfb import on3_team_rankings as _raw_on3_team_rankings
 from sportsdataverse.cfb import sports247_coaches as _raw_sports247_coaches
 from sportsdataverse.cfb import sports247_composite_team_ranking_feed as _raw_sports247_composite_team_ranking_feed
 from sportsdataverse.cfb import sports247_institution_rankings as _raw_sports247_institution_rankings
+from sportsdataverse.cfb import sports247_positions as _raw_sports247_positions
 from sportsdataverse.cfb import sports247_recruits as _raw_sports247_recruits
 from sportsdataverse.cfb import sports247_sport_years as _raw_sports247_sport_years
 from sportsdataverse.cfb import sports247_tags_autocomplete as _raw_sports247_tags_autocomplete
@@ -424,6 +425,7 @@ __all__ = [
     "sports247_coaches",
     "sports247_composite_team_ranking_feed",
     "sports247_institution_rankings",
+    "sports247_positions",
     "sports247_recruits",
     "sports247_sport_years",
     "sports247_tags_autocomplete",
@@ -2318,6 +2320,20 @@ def sports247_institution_rankings(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_sports247_institution_rankings(*args, **kwargs)
+
+
+def sports247_positions(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.sports247_positions``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.sports247_positions` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.sports247_positions` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sports247_positions(*args, **kwargs)
 
 
 def sports247_recruits(*args, **kwargs):
