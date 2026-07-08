@@ -68,11 +68,16 @@ def season_usage_shares(weekly: pl.DataFrame) -> pl.DataFrame:
         return pl.DataFrame(schema=_USAGE_SCHEMA)
     air = pl.col("receiving_air_yards").fill_null(0.0) if "receiving_air_yards" in weekly.columns else pl.lit(0.0)
     games_expr = pl.col("week").n_unique() if "week" in weekly.columns else pl.len()
-    pos_expr = (
-        pl.col("position_group").drop_nulls().first()
-        if "position_group" in weekly.columns
-        else pl.lit(None, dtype=pl.Utf8)
-    )
+    # deterministic: latest-week non-null designation (bare .first() on an
+    # unordered group is nondeterministic under parallel group_by)
+    if "position_group" in weekly.columns:
+        pos_expr = (
+            pl.col("position_group").sort_by("week").drop_nulls().last()
+            if "week" in weekly.columns
+            else pl.col("position_group").drop_nulls().sort().last()
+        )
+    else:
+        pos_expr = pl.lit(None, dtype=pl.Utf8)
     agg = (
         weekly.with_columns(
             pl.col("player_id").cast(pl.Utf8),
@@ -189,7 +194,7 @@ def nfl_usage_projection(
 
     # most recent team per player (max season, tiebreak: most targets)
     last_team = (
-        hist.sort("season", "targets", descending=[True, True])
+        hist.sort("season", "targets", "team", descending=[True, True, False])
         .group_by("player_id", maintain_order=True)
         .agg(pl.col("team").first().alias("proj_team"))
     )

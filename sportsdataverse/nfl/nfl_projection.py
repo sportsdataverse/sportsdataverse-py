@@ -107,8 +107,15 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
         pl.col("season").cast(pl.Int64),
     )
     games_expr = pl.col("week").n_unique() if "week" in wk.columns else pl.len()
+    # sort_by(week).last() = the most recent week's designation; a bare
+    # .first() on an unordered group is nondeterministic under parallel group_by
+    pos_expr = (
+        pl.col("position_group").sort_by("week").drop_nulls().last()
+        if "week" in wk.columns
+        else pl.col("position_group").drop_nulls().sort().last()
+    )
     agg = wk.group_by("player_id", "season").agg(
-        pl.col("position_group").drop_nulls().first().alias("position_group"),
+        pos_expr.alias("position_group"),
         games_expr.cast(pl.Int64).alias("games"),
         *[pl.col(c).sum().alias(c) for c in stats],
         _col_or_zero("fantasy_points_ppr", wk.columns).sum().alias("_fp_ppr"),
@@ -220,8 +227,11 @@ def _marcel_blend(hist: pl.DataFrame, *, value_cols: List[str], consts: Position
     ``last_age``.
     """
     weights = consts.recency_weights
+    # dense rank: rows sharing a season (mid-season trades -> one row per team)
+    # share the same recency weight; ordinal rank would tie-break on
+    # nondeterministic group_by row order
     ranked = hist.with_columns(
-        pl.col("season").rank(method="ordinal", descending=True).over("player_id").cast(pl.Int64).alias("_r")
+        pl.col("season").rank(method="dense", descending=True).over("player_id").cast(pl.Int64).alias("_r")
     ).filter(pl.col("_r") <= len(weights))
     wmap = {i + 1: float(w) for i, w in enumerate(weights)}
     ranked = ranked.with_columns(pl.col("_r").replace_strict(wmap, default=0.0, return_dtype=pl.Float64).alias("_w"))
