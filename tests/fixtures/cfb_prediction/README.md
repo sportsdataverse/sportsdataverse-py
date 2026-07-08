@@ -27,6 +27,7 @@ oracle + backtest tests; no network needed once committed.
 | `fei_2023.parquet` | 133 | **bcftoys.com** — `https://bcftoys.com/2023-fei` (Brian Fremeau FEI), 9 chunked HTML tables concatenated. Team names → `team_id` via `load_cfb_team_info`. | `team_id, team, fei, fei_off, fei_def` |
 | `espn_predictor_sample.parquet` | ~50 | `espn_cfb_game_predictor` / `_game_probabilities` over a completed-game sample | `game_id, home_team_id, away_team_id, home_win_prob, predicted_margin` |
 | `espn_odds_sample.parquet` | ~84 | `espn_cfb_game_odds` over the same sample | `game_id, close_spread_home, close_total` |
+| `team_conference_2023.parquet` | 133 | **ESPN FPI fitt v3** `team.group` (same powerindex payload as `fpi_resume`). Divisions (`isConference=False`, e.g. `Big Ten - East`) resolve to their `parent` conference. Feeds the season-Monte-Carlo calibration gate (`cfb_simulations` groups standings by conference). | `team_id, conference` |
 
 **ESPN predictor/odds sample provenance & gaps:** both are a down-selection of
 *completed* 2023 FBS games (weeks 1–14) — the subset ESPN published a
