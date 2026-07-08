@@ -67,6 +67,16 @@ _SHORT: Dict[str, str] = {
 _PY_TYPE = {"integer": "int", "number": "float", "string": "str", "boolean": "bool"}
 _R_TYPE = {"integer": "integer", "number": "numeric", "string": "character", "boolean": "logical"}
 
+# The flat-API renderer reserves ``{sport}`` / ``{league}`` path tokens for the
+# ESPN-style league-slug substitution (generate.py::_sub_slugs), which would blank
+# a path param literally named ``league``/``sport``. Bump such PATH-param names so
+# the emitted ``{token}`` never collides with a reserved slug.
+_RESERVED_SLUGS = {"sport", "league"}
+
+
+def _path_py_name(snake: str) -> str:
+    return f"{snake}_slug" if snake in _RESERVED_SLUGS else snake
+
 
 def _write_yaml(path: Path, obj: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -141,7 +151,7 @@ def _example_args(path: str, example_url: str | None, path_types: Dict[str, str]
     args: Dict[str, Any] = {}
     for tmpl, val in zip(tmpl_segs, ex_segs):
         if tmpl.startswith("{") and tmpl.endswith("}"):
-            snake = underscore(tmpl[1:-1])
+            snake = _path_py_name(underscore(tmpl[1:-1]))
             args[snake] = int(val) if path_types.get(snake) == "int" and val.isdigit() else val
     return args
 
@@ -158,8 +168,9 @@ def _endpoint(path: str, op: Dict[str, Any], comps: Dict[str, Any]) -> Dict[str,
     for p in op.get("parameters", []):
         pname = p["name"]
         ptype = _PY_TYPE.get(p.get("schema", {}).get("type"), "str")
-        snake = underscore(pname.replace(".", "_"))
+        base_snake = underscore(pname.replace(".", "_"))
         if p.get("in") == "path":
+            snake = _path_py_name(base_snake)
             emitted_path = emitted_path.replace(f"{{{pname}}}", f"{{{snake}}}")
             path_types[snake] = ptype
             entry: Dict[str, Any] = {"name": snake, "type": ptype, "required": bool(p.get("required"))}
@@ -167,7 +178,7 @@ def _endpoint(path: str, op: Dict[str, Any], comps: Dict[str, Any]) -> Dict[str,
                 entry["description"] = "Season path segment in `{year}-{Sport}` form, e.g. `2026-Football`."
             path_params.append(entry)
         else:
-            extra_params.append({"name": snake, "query_key": pname, "type": ptype})
+            extra_params.append({"name": base_snake, "query_key": pname, "type": ptype})
 
     entry = {
         "short": short,

@@ -126,3 +126,27 @@ def test_returns_pandas_when_asked():
     from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page
 
     assert isinstance(parse_sports247_site_page(_load("institution"), return_as_pandas=True), pd.DataFrame)
+
+
+# ===========================================================================
+# Generated wrapper wiring
+# ===========================================================================
+
+
+def test_wrappers_route_fixtures_through_parser(monkeypatch):
+    import sportsdataverse.cfb.sports247_site_pages as sp
+
+    monkeypatch.setattr(sp, "_get", lambda *a, **k: _load("institution"))
+    df = sp.sports247_site_pages_institution(key=24099)
+    assert isinstance(df, pl.DataFrame) and "location" in df.columns
+    assert isinstance(sp.sports247_site_pages_institution(key=24099, return_parsed=False), dict)
+
+
+def test_wrappers_exported_from_cfb_package():
+    from sportsdataverse.cfb import (
+        sports247_site_pages_institution,
+        sports247_site_pages_season_recruits,
+    )
+
+    assert callable(sports247_site_pages_institution)
+    assert callable(sports247_site_pages_season_recruits)

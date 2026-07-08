@@ -105,7 +105,7 @@ endpoints:
   short: institution_timeline_events
   summary: Institution recruiting timeline (site-authored event blurbs).
 - example_args:
-    league: NFL
+    league_slug: NFL
   extra_params:
   - name: year
     query_key: year
@@ -114,9 +114,9 @@ endpoints:
     query_key: round
     type: int
   parser: parse_sports247_site_page
-  path: /League/{league}/DraftPicks/ConfigureEmbed/.json
+  path: /League/{league_slug}/DraftPicks/ConfigureEmbed/.json
   path_params:
-  - name: league
+  - name: league_slug
     required: true
     type: str
   returns_schema: native/sports247_site_pages/draft_pick
