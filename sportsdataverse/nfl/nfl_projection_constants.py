@@ -81,7 +81,14 @@ class PositionConstants:
 # noise-dominated on holdout, so the aging ratio is disabled (curve still fit +
 # exposed; the damping gates its application).
 # base_availability fitted by dev/nfl_projection/fit_availability.py (Task 4.2).
-# fp_calibration fitted by dev/nfl_projection/fit_fantasy_calibration.py (Task 2.2).
+# fp_calibration fitted by dev/nfl_projection/fit_fantasy_calibration.py
+# (2026-07-08): numpy.polyfit deg-1 of realized season fantasy points on raw
+# projected fantasy points, pooled over as-of folds target=2022 (hist 2020-21)
+# and target=2023 (hist 2020-22), players with >= 8 realized games:
+#   QB (137.2506, 0.4032) n=66; RB (56.0273, 0.5716) n=150;
+#   WR (10.7973, 0.8766) n=244; TE (23.0885, 0.7252) n=122.
+# The calibration is a per-position monotone (linear) level correction — it
+# fixes systematic totals bias; rank metrics (Spearman gates) are unaffected.
 POSITION_CONSTANTS: Dict[str, PositionConstants] = {
     "QB": PositionConstants(
         recency_weights=(3.0, 1.0, 0.0),
@@ -90,6 +97,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         aging_base_age=27.0,
         base_availability=0.92,
         aging_damping=0.5,
+        fp_calibration=(137.2506, 0.4032),
     ),
     "RB": PositionConstants(
         recency_weights=(1.0, 0.0, 0.0),
@@ -98,6 +106,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         aging_base_age=25.0,
         base_availability=0.80,
         aging_damping=0.0,
+        fp_calibration=(56.0273, 0.5716),
     ),
     "WR": PositionConstants(
         recency_weights=(5.0, 3.0, 1.0),
@@ -106,6 +115,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         aging_base_age=26.0,
         base_availability=0.85,
         aging_damping=1.0,
+        fp_calibration=(10.7973, 0.8766),
     ),
     "TE": PositionConstants(
         recency_weights=(5.0, 4.0, 3.0),
@@ -114,6 +124,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         aging_base_age=27.0,
         base_availability=0.83,
         aging_damping=0.0,
+        fp_calibration=(23.0885, 0.7252),
     ),
     "DEFAULT": PositionConstants(),
 }
