@@ -3907,6 +3907,82 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import categorize_bad_lineups
 categorize_bad_lineups([bad_ev])  # {5: (1, bad_ev.team_stats.num_possessions)}
 ```
 
+### `classify_point_value(dist_ft: 'float', x: 'float', y: 'float', *, league: 'str', season: 'int') -> 'int'` {#classify_point_value}
+
+2 or 3 from basket-relative geometry (arc radius + corner band).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dist_ft` | `float` |  | Euclidean distance from the basket, feet. |
+| `x` | `float` |  | Lateral offset from the basket, feet (baseline direction). |
+| `y` | `float` |  | Distance up-court from the basket, feet. |
+| `league` | `str` |  | `"mens"` or `"womens"`. |
+| `season` | `int` |  | Season-ending year (selects the arc era). |
+
+**Returns**
+
+`3` at/beyond the arc or in the corner band, else `2`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shots_adapter import classify_point_value
+classify_point_value(24.0, 0.0, 24.0, league="mens", season=2020)
+```
+
+### `classify_zone_geometry(dist_ft: 'float', x: 'float', y: 'float', *, league: 'str', season: 'int') -> 'str'` {#classify_zone_geometry}
+
+Shot zone from geometry: `rim | paint | mid | corner3 | abovebreak3`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dist_ft` | `float` |  | Euclidean distance from the basket, feet. |
+| `x` | `float` |  | Lateral offset from the basket, feet. |
+| `y` | `float` |  | Distance up-court from the basket, feet. |
+| `league` | `str` |  | `"mens"` or `"womens"`. |
+| `season` | `int` |  | Season-ending year (selects the arc era). |
+
+**Returns**
+
+One of `rim`, `paint`, `mid`, `corner3`, `abovebreak3`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shots_adapter import classify_zone_geometry
+classify_zone_geometry(2.0, 0.0, 2.0, league="mens", season=2020)
+```
+
+### `classify_zone_type(type_text: "'str | None'") -> "'str | None'"` {#classify_zone_type}
+
+Collapse a source shot-type label to `rim | arc3 | jump`.
+
+Note: the 2025+ ESPN shots release carries NO three-point marker in
+`type_text` (vocabulary is JumpShot/LayUpShot/DunkShot/TipShot), so
+`arc3` typically comes from geometry/score_value there; the branch
+exists for sources that do label threes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `type_text` | `str \| None` |  | Source label (e.g. `"DunkShot"`); `None` passes through. |
+
+**Returns**
+
+`rim`, `arc3`, `jump`, or `None` for null input.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shots_adapter import classify_zone_type
+classify_zone_type("DunkShot")
+```
+
 ### `clump_bad_lineups(lineup_events: 'list[tuple[LineupEvent, Optional[LineupEvent]]]') -> 'list[BadLineupClump]'` {#clump_bad_lineups}
 
 Groups consecutive bad lineup events into `BadLineupClump`\ s
@@ -4652,6 +4728,37 @@ d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
+### `espn_shots_to_canonical(espn: 'pl.DataFrame', *, league: 'str', season: 'int', scale: "'tuple[float, float, float] | None'" = None) -> 'pl.DataFrame'` {#espn_shots_to_canonical}
+
+ESPN `load_mbb_shots` frame -> the canonical shot frame.
+
+Field-goal attempts only (free throws and sentinel-coordinate rows are
+dropped). `point_value` comes from `score_value` -- the release
+populates it on misses too, and its `type_text` carries NO three-point
+marker, so `arc3` is value-derived. Coordinates are re-based to the
+fitted basket origin and scaled to feet.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `espn` | `DataFrame` |  | `load_mbb_shots`-shaped frame. |
+| `league` | `str` |  | `"mens"` or `"womens"`. |
+| `season` | `int` |  | Season-ending year. |
+| `scale` | `tuple[float, float, float] \| None` | `None` | Optional pre-fitted `(origin_x, origin_y, feet_per_unit)`; fitted from `espn` when `None`. |
+
+**Returns**
+
+The canonical shot frame (`CANONICAL_SHOT_SCHEMA`); empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_loaders import load_mbb_shots
+from sportsdataverse.mbb.mbb_shots_adapter import espn_shots_to_canonical
+df = espn_shots_to_canonical(load_mbb_shots([2025]), league="mens", season=2025)
+```
+
 ### `extract_player_from_ev(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext') -> 'Optional[PlayerCodeId]'` {#extract_player_from_ev}
 
 Resolve the player named in `pbp_event` to a
@@ -4885,6 +4992,57 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import (
 )
 clump, nxt = find_pbp_clump(5.0, PeekableIterator([]), [], None)
 # ([], None)
+```
+
+### `fit_espn_court_scale(espn: 'pl.DataFrame', *, league: 'str', season: 'int') -> "'tuple[float, float, float]'"` {#fit_espn_court_scale}
+
+Fit the ESPN raw-coordinate court scale: `(origin_x, origin_y, feet_per_unit)`.
+
+The release's `coordinate_{x,y}_raw` grid is basket-anchored half-court
+(width 0-50, rim cluster near `(25, 2)`). Origin = median raw
+coordinates of made rim-type shots; `feet_per_unit` = arc radius /
+median unit-distance of made threes from that origin -- fitted, not
+guessed, so a units change in the release shows up as a scale shift.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `espn` | `DataFrame` |  | `load_mbb_shots`-shaped frame. |
+| `league` | `str` |  | `"mens"` or `"womens"`. |
+| `season` | `int` |  | Season-ending year (selects the arc radius). |
+
+**Returns**
+
+`(origin_x, origin_y, feet_per_unit)`; documented fallbacks `(25.0, 2.0, 1.0)` when either calibration subset is empty.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shots_adapter import fit_espn_court_scale
+scale = fit_espn_court_scale(espn, league="mens", season=2025)
+```
+
+### `fit_shrinkage_k(scored: 'pl.DataFrame', *, seed: 'int' = 0) -> 'float'` {#fit_shrinkage_k}
+
+Fit the talent shrinkage `k` split-half (see module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | `mbb_shot_quality` output. |
+| `seed` | `int` | `0` | Split seed (deterministic fit). |
+
+**Returns**
+
+The `k` in `[1, 5000]` minimizing `talent_split_mse`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shooter_talent import fit_shrinkage_k
+k = fit_shrinkage_k(scored)
 ```
 
 ### `fix_combos(first: 'str', last: 'str', code_start: 'Optional[str]' = None) -> 'list[tuple[str, Optional[str]]]'` {#fix_combos}
@@ -6505,6 +6663,157 @@ from sportsdataverse.mbb.mbb_season_sim import mbb_season_sim
 odds = mbb_season_sim(ratings, remaining, n_sims=5000, seed=42)
 ```
 
+### `mbb_shooter_talent(scored: 'pl.DataFrame', *, league: 'str' = 'mens', k: "'float | None'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shooter_talent}
+
+Per-shooter EB-regressed make% over expected + points over expected.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | `mbb_shot_quality` output (needs `shooter_id, made, point_value, xmake, xpoints`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (default `k` source). |
+| `k` | `float \| None` | `None` | Shrinkage pseudo-shots; `None` uses `get_constants(league).shrink_k_talent` (fitted split-half). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per shooter: `shooter_id:Utf8, n_shots, make_rate, xmake_mean, oe_pct, oe_pct_regressed, points_over_expected, poe_per_100`. Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality, mbb_shooter_talent
+talent = mbb_shooter_talent(mbb_shot_quality(mbb_shot_data(2025)))
+
+# Pipeline next step (one line)
+
+talent.filter(pl.col("n_shots") >= 200).sort("oe_pct_regressed", descending=True).head(15)
+```
+
+### `mbb_shot_data(seasons: "'int | list[int]'", *, source: 'str' = 'espn', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#mbb_shot_data}
+
+Season(s) of shots in the canonical frame (the spine's data entry point).
+
+`source="espn"` loads the sportsdataverse-data shots release
+(`load_mbb_shots` / `load_wbb_shots`) and canonicalizes it. The NCAA
+HTML path is per-game, not per-season -- parse with
+`create_shot_event_data` and flatten via `shot_events_to_frame`
+instead (`source="ncaa"` raises with that pointer).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season (e.g. `2025`) or list of seasons. |
+| `source` | `str` | `'espn'` | `"espn"` (the only batch source). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The canonical shot frame; seasons the release doesn't cover are skipped, and no coverage at all returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_shot_data
+shots = mbb_shot_data(2025)
+
+# Pipeline next step (one line)
+
+shots.group_by("shot_zone").agg(pl.col("made").mean()).sort("shot_zone")
+```
+
+### `mbb_shot_quality(shots: 'pl.DataFrame', *, model: "'pl.DataFrame | None'" = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shot_quality}
+
+Score each shot with `xmake` / `xpoints` from the cell table.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots` | `DataFrame` |  | Canonical shot frame. |
+| `model` | `DataFrame \| None` | `None` | A `mbb_shot_quality_model` table. When `None` it is built from `shots` itself -- convenient, but leakage-safe evaluation should pass a model fit on PRIOR data. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`shots`'s columns plus `xmake:Float64, xpoints:Float64` (null for cells absent from the model). Empty input returns the input schema plus the two columns, zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality
+scored = mbb_shot_quality(mbb_shot_data(2025))
+
+# Pipeline next step (one line)
+
+scored.group_by("team_id").agg(pl.col("xpoints").sum()).sort("xpoints", descending=True)
+```
+
+### `mbb_shot_quality_model(shots: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shot_quality_model}
+
+Empirical-Bayes `zone x type` make-rate / xPoints table.
+
+Each cell's raw make rate is shrunk toward its PARENT-ZONE mean by
+`n / (n + k)` with `k = get_constants(league).shrink_k_zone`
+pseudo-attempts, so sparse cells (e.g. tip-ins in the mid zone) borrow
+strength from their zone; `xpoints = make_rate_shrunk * point_value`
+(the cell's modal point value).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots` | `DataFrame` |  | Canonical shot frame (needs `shot_zone, shot_type, made, point_value`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the shrinkage `k`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `(shot_zone, shot_type)`: `shot_zone, shot_type, n, make_rate_raw, make_rate_shrunk, point_value, xpoints`. Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality_model
+model = mbb_shot_quality_model(mbb_shot_data(2025))
+
+# Pipeline next step (one line)
+
+model.sort("xpoints", descending=True).head(5)
+```
+
+### `mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shot_selection}
+
+Per shooter/team expected points per attempt vs the league-average mix.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | `mbb_shot_quality` output (needs `xpoints, point_value, made` + the group column). |
+| `group` | `str` | `'shooter_id'` | `"shooter_id"` or `"team_id"`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (interface parity; the math is league-free). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per group: `{group}:Utf8, n_shots:Int64, xppp, actual_ppp, selection_value, selection_value_total` (all value columns Float64). The attempt-weighted `selection_value` sums to zero across the league. Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_shot_data, mbb_shot_quality, mbb_shot_selection
+sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
+
+# Pipeline next step (one line)
+
+sel.sort("selection_value", descending=True).head(10)
+```
+
 ### `mbb_strength_of_schedule(seasons: 'list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_strength_of_schedule}
 
 Season-level SoS / Quad / WAB résumé from the released ESPN data.
@@ -7597,6 +7906,34 @@ select_matching_own(soup, "div.card-header", r"^Coach")
 # [<div class="card-header">Coach <b>Info</b></div>]
 ```
 
+### `shot_events_to_frame(events: 'list[ShotEvent]', *, season: 'int', league: 'str' = 'mens') -> 'pl.DataFrame'` {#shot_events_to_frame}
+
+Flatten NCAA HTML `ShotEvent` objects to the canonical frame.
+
+The NCAA SVG shot maps carry location + made/miss but no shot-type label
+(`shot_type = "unknown"`); `point_value`/`shot_zone` come from the
+geometry classifiers. The parser-phase `pts` field is the MADE flag
+(1/0), not the point value.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `events` | `list[ShotEvent]` |  | Parsed shot events (`create_shot_event_data` output). |
+| `season` | `int` |  | Season-ending year the events belong to. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+The canonical shot frame (`CANONICAL_SHOT_SCHEMA`); empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shots_adapter import shot_events_to_frame
+df = shot_events_to_frame(events, season=2025)
+```
+
 ### `shot_js_to_html(js: 'str') -> 'list[Tag]'` {#shot_js_to_html}
 
 Converts client-side `addShot(...)` JS calls into parseable
@@ -7842,6 +8179,29 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_shot_infos
 from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
 
 sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
+```
+
+### `talent_split_mse(scored: 'pl.DataFrame', *, k: 'float', seed: 'int' = 0) -> 'float'` {#talent_split_mse}
+
+Weighted MSE of the k-regressed first half predicting the raw second half.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | `mbb_shot_quality` output. |
+| `k` | `float` |  | Shrinkage pseudo-shots to evaluate. |
+| `seed` | `int` | `0` | Split seed. |
+
+**Returns**
+
+`sum(n_h2 * (oe_h1 * n_h1/(n_h1+k) - oe_h2)^2) / sum(n_h2)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shooter_talent import talent_split_mse
+talent_split_mse(scored, k=200.0)
 ```
 
 ### `td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'` {#td_at}
