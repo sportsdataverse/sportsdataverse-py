@@ -3820,6 +3820,19 @@ nfl_rosters:
   team_league: League identifier confirming the team belongs to the NFL.
   team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
   team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_player_props:
+  game_id: Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB").
+  line: Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available.
+  opp_team_id: Opponent team nflverse abbreviation (drives the matchup multiplier).
+  p_over: Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line.
+  player_id: nflverse GSIS player identifier (character join key).
+  position: Player position (QB, RB, WR, TE) selecting the projected stat family.
+  proj_mean: Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script.
+  proj_sd: Residual standard deviation for the stat family (fitted on the 2023 as-of backtest).
+  season: Season the projection belongs to.
+  stat: Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE).
+  team_id: Player's team nflverse abbreviation as of the projection week.
+  week: Week of the projected game; only weeks strictly before it feed the projection.
 nfl_predict_games:
   away_team_id: Away team nflverse abbreviation (character; the ratings `team_id` join key).
   exp_margin: Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields).

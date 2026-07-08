@@ -7044,6 +7044,65 @@ bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
 bd["category"].unique().to_list()
 ```
 
+### `nfl_player_props(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', lines: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nfl_player_props}
+
+Empirical-Bayes player-prop projections, leakage-safe per week.
+
+For every game in the requested season(s) (or, with `as_of_date`, every
+game on/after that date), projects each rostered QB/RB/WR/TE's stat-family
+mean as `usage x efficiency x matchup x game-script`:
+
+- usage + efficiency from `player_usage_efficiency` built **as-of
+  that game's week** (weeks strictly before it),
+- the matchup multiplier from the opponent's `adj_def_epa` in
+  `sportsdataverse.nfl.nfl_ratings.nfl_ratings` (as-of the week's
+  first game date),
+- game script from the **native** expected margin
+  (`sportsdataverse.nfl.nfl_market.nfl_predict_games`) -- the
+  market line is never read (binding non-market boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | Season (e.g. `2023`) or list of seasons. |
+| `as_of_date` | `date \| None` | `None` | When given, only games with `gameday >= as_of_date` are projected (history before each game's week still feeds the projections). `None` projects every week of the season(s). |
+| `era` | `str` | `'modern'` | Constants era key. |
+| `lines` | `DataFrame \| None` | `None` | Optional market lines to score `p_over` against -- columns `game_id` / `player_id` / `stat` (Utf8) + `line` (Float64), e.g. built from `espn_nfl_game_propbets` (ESPN only serves propbets for upcoming games). `None` leaves `line` / `p_over` null. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+
+**Returns**
+
+One row per (player-game, stat): `season` / `week` (Int64), `game_id` / `player_id` / `position` / `team_id` / `opp_team_id` / `stat` (Utf8), `proj_mean` / `proj_sd` / `line` / `p_over` (Float64; `p_over = 1 - Phi((line - proj_mean) / proj_sd)` when a line is joined, else null). Stats are `passing_yards` (QB), `rushing_yards` (RB), `receiving_yards` (WR/TE). Zero-row, correctly-typed when there is nothing to project.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the projection belongs to. |
+| `week` | integer | Week of the projected game; only weeks strictly before it feed the projection. |
+| `game_id` | character | Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB"). |
+| `player_id` | character | nflverse GSIS player identifier (character join key). |
+| `position` | character | Player position (QB, RB, WR, TE) selecting the projected stat family. |
+| `team_id` | character | Player's team nflverse abbreviation as of the projection week. |
+| `opp_team_id` | character | Opponent team nflverse abbreviation (drives the matchup multiplier). |
+| `stat` | character | Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE). |
+| `proj_mean` | double | Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script. |
+| `proj_sd` | double | Residual standard deviation for the stat family (fitted on the 2023 as-of backtest). |
+| `line` | double | Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available. |
+| `p_over` | double | Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_player_props
+props = nfl_player_props(2023)
+props.filter(props["stat"] == "passing_yards").head()
+
+# Upcoming-only, as-of a date
+
+import datetime as dt
+props = nfl_player_props(2024, as_of_date=dt.date(2024, 11, 1))
+```
+
 ### `nfl_players_crosswalk(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_players_crosswalk}
 
 Pure-consumer ID crosswalk sliced from `load_nfl_players`.
@@ -7502,6 +7561,39 @@ frame, intercept, hfa = opponent_adjusted_ridge(
     home_col="home_team", resp_col="epa", lam=200.0,
 )
 frame.sort("off_coef", descending=True).head()
+```
+
+### `player_usage_efficiency(player_stats: 'pl.DataFrame', *, as_of_week: 'int', era: 'str' = 'modern') -> 'pl.DataFrame'` {#player_usage_efficiency}
+
+Per-player as-of usage + efficiency with empirical-Bayes shrinkage.
+
+Aggregates one season of week-level player stats over weeks strictly
+before `as_of_week` (the leakage boundary), then shrinks every usage
+(per-game attempts / carries / targets) and efficiency (yards + TDs per
+opportunity) stat toward its position prior:
+`(n * player_value + kappa * prior) / (n + kappa)` with `n` = games
+played and `kappa` the stat family's fitted shrinkage.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_stats` | `DataFrame` |  | One season of `load_nfl_player_stats()` rows (columns `player_id`, `position`, `recent_team`, `week`, `attempts`, `passing_yards`, `passing_tds`, `carries`, `rushing_yards`, `rushing_tds`, `targets`, `receiving_yards`, `receiving_tds`). |
+| `as_of_week` | `int` |  | Only weeks `< as_of_week` are used. |
+| `era` | `str` | `'modern'` | Constants era key (supplies kappas + position priors). |
+
+**Returns**
+
+One row per `player_id` (Utf8) whose position has a prior table: `position` / `team_id` (Utf8, latest team), `games` (Int64), `exp_attempts` / `exp_carries` / `exp_targets` (Float64, shrunk per-game usage), `ypa` / `ypc` / `ypt` / `pass_td_rate` / `rush_td_rate` / `rec_td_rate` (Float64, shrunk per-opportunity efficiency). Zero-row, correctly-typed on empty input.
+
+**Example**
+
+```python
+import polars as pl
+import sportsdataverse.nfl as nfl
+stats = nfl.load_nfl_player_stats().filter(pl.col("season") == 2023)
+usage = nfl.player_usage_efficiency(stats, as_of_week=10)
+usage.sort("exp_attempts", descending=True).head()
 ```
 
 ### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
