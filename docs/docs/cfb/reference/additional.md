@@ -1189,6 +1189,161 @@ seeded = cfb_playoff_seeds(st, rankings=ranks_df, playoff_seeds=12)
 print(seeded.filter(pl.col("seed").is_not_null()))
 ```
 
+### `cfb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_predict_games}
+
+Predict a whole schedule of games from a ratings frame (vectorized).
+
+Applies the three closed-form predictors across every row of `games` in
+one pass. `ratings` is joined twice -- once on `home_team_id` and once on
+`away_team_id` -- so each game carries both teams' `adj_net` / `adj_off_epa`
+/ `adj_def_epa` / `off_pace`. The totals model's `game_pace` factor is
+computed here as `home_off_pace * away_off_pace / league_avg_pace`, where the
+league average is the mean `off_pace` of the passed ratings frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | Schedule frame with `game_id`, `home_team_id`, `away_team_id`, and `neutral_site` columns. The two team-id columns must share the dtype of `ratings["team_id"]` (asserted before the join). |
+| `ratings` | `DataFrame` |  | A `cfb_ratings.cfb_ratings`-style frame with `team_id`, `adj_net`, `adj_off_epa`, `adj_def_epa`, and `off_pace`. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per game with `game_id`, `home_team_id`, `away_team_id`, `neutral_site`, `exp_margin`, `home_win_prob`, `exp_total`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Game identifier carried through from the input schedule. |
+| `home_team_id` | character | Home team ESPN id (character; the ratings `team_id` join key). |
+| `away_team_id` | character | Away team ESPN id (character; the ratings `team_id` join key). |
+| `neutral_site` | logical | Whether the game is at a neutral site (home-field advantage is dropped when true). |
+| `exp_margin` | double | Expected home scoring margin in points (net_points_scale * net rating differential + the ridge-native home-field advantage on non-neutral fields). |
+| `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
+| `exp_total` | double | Expected combined point total from the fitted efficiency + pace totals model. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import cfb_predict_games
+from sportsdataverse.cfb import cfb_ratings
+from sportsdataverse.cfb.cfb_schedule import cfb_schedule  # schedule loader
+ratings = cfb_ratings(2023)
+preds = cfb_predict_games(schedule_2023, ratings)
+```
+
+### `cfb_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_ratings}
+
+One row per team: the full CFB ratings spine (off/def/ST EPA + FEI).
+
+Public orchestrator over `efficiency_ratings`,
+`special_teams_ratings`, and `fei_ratings`. Loads play-by-play
++ schedule via `sportsdataverse.cfb.cfb_loaders.load_cfb_pbp` /
+`sportsdataverse.cfb.cfb_loaders.load_cfb_schedule`, joins the
+schedule's per-game date onto the plays, optionally applies the
+as-of-date leakage boundary
+(`sportsdataverse.cfb.cfb_prediction_constants.as_of_ratings_split`),
+then fits all three component ratings on the (optionally filtered) plays
+and reshapes them into one wide per-team table with dense ranks and a
+net-rating z-score.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season (e.g. `2023`) or a list of seasons to pool into one combined fit. |
+| `as_of_date` | `date \| None` | `None` | When given, the leakage boundary -- only plays from games with `date < as_of_date` are used to fit the ratings (mirrors what was knowable heading into that date). `None` (default) uses the full season(s), unfiltered. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs forwarded to all three component functions. Defaults to `RatingsConfig` when omitted. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -- the single passed season for the common single-season call; `null` for a pooled multi-season call, since no single season applies to every row), `team_id` (Utf8), `adj_off_epa`, `adj_def_epa` (Float64, from `efficiency_ratings`), `adj_st_epa` (Float64, from `special_teams_ratings`), `adj_net` (Float64 -- offense minus defense only; special teams is a separate column, not folded in), `fei_off`, `fei_def`, `fei_net` (Float64, from `fei_ratings`), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model uses), `off_rank` (Int64, dense rank on `adj_off_epa` descending), `def_rank` (Int64, dense rank on `adj_def_epa` **ascending** -- fewer EPA allowed ranks better), `net_rank` (Int64, dense rank on `adj_net` descending), `net_z` (Float64, z-score of `adj_net`). Zero-row (correctly-typed) when the requested season(s) have no published pbp/schedule asset, or when `as_of_date` filters out every play.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the ratings cover (null for a pooled multi-season fit). |
+| `team_id` | character | Team ESPN id (character join key). |
+| `adj_off_epa` | double | Opponent-adjusted offensive EPA per play (higher is better); ridge fit. |
+| `adj_def_epa` | double | Opponent-adjusted defensive EPA allowed per play (lower is better); ridge fit. |
+| `adj_st_epa` | double | Special-teams rating - z-composite of per-unit field-goal/punt/kick-return EPA. |
+| `adj_net` | double | Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in). |
+| `fei_off` | double | Opponent-adjusted offensive drive efficiency (Fremeau-FEI style). |
+| `fei_def` | double | Opponent-adjusted defensive drive efficiency (Fremeau-FEI style). |
+| `fei_net` | double | Opponent-adjusted net drive efficiency (fei_off minus fei_def). |
+| `games` | integer | Number of games the team played in the fitted window. |
+| `off_pace` | double | Offensive scrimmage plays per game (the tempo input to the totals model). |
+| `off_rank` | integer | Dense rank on adj_off_epa descending (best offense = 1). |
+| `def_rank` | integer | Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better). |
+| `net_rank` | integer | Dense rank on adj_net descending (best net rating = 1). |
+| `net_z` | double | Z-score of adj_net across the FBS teams. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import cfb_ratings
+ratings = cfb_ratings(2023)
+ratings.sort("net_rank").head()
+
+# As-of-date leakage boundary
+
+import datetime as dt
+week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
+
+# Pandas round-trip
+
+ratings_pd = cfb_ratings(2023, return_as_pandas=True)
+```
+
+### `cfb_resume(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_resume}
+
+Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble.
+
+For each team, joins every played opponent to its `cfb_ratings.cfb_ratings`
+strength and rolls the games up into:
+
+- `sos` -- mean opponent `adj_net` over played games (rating-based strength
+  of schedule; complements the record-based SOV/SOS in `cfb_standings`).
+- `quality_wins` -- count of wins over opponents with `adj_net` at or above
+  the era `quality_win_threshold`.
+- `game_control` -- mean postgame win expectancy `Phi(actual_margin /
+  margin_sd)`, i.e. how *dominant* the results were, not just win/loss.
+- `wab` -- wins above bubble: actual wins minus the expected wins of a
+  bubble-quality team (`bubble_adj_net`) playing the same schedule, using the
+  Phase-2 predictors with the HFA applied on the team's actual home/away side.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season or list of seasons. |
+| `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings` (ratings use only games before this date). `None` uses the full season. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense rank, best = 1), `quality_wins` (Int64), `game_control` (Float64), `wab` (Float64). Zero-row (typed) when no games are available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the résumé covers (null for a pooled multi-season fit). |
+| `team_id` | character | Team ESPN id (character join key). |
+| `sos` | double | Rating-based strength of schedule - mean opponent adj_net over played games. |
+| `sos_rank` | integer | Dense rank on sos descending (toughest schedule = 1). |
+| `quality_wins` | integer | Count of wins over opponents with adj_net at or above the era quality-win threshold. |
+| `game_control` | double | Mean postgame win expectancy Phi(actual_margin / margin_sd) across played games - how dominant the results were, not just win/loss. |
+| `wab` | double | Wins above bubble - actual wins minus a bubble-quality team's expected wins over the same schedule. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_resume import cfb_resume
+resume = cfb_resume(2023)
+resume.sort("sos_rank").head()
+```
+
 ### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
 
 Build the ESPN x Fox x Yahoo player-id crosswalk for one team.
@@ -1282,6 +1437,51 @@ all_three = full.filter(pl.col("matched_sources") == "espn+fox+yahoo")
 # Or just one week
 
 wk5 = cfb_schedule_crosswalk(2024, 5)
+```
+
+### `cfb_season_odds(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, n_sims: 'int' = 10000, playoff_seeds: 'int' = 12, seed: 'int' = 0, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_season_odds}
+
+Ratings-driven season Monte Carlo: conference / playoff / championship odds.
+
+Thin wrapper over `cfb_simulations.cfb_simulations` -- it builds the ratings
+with `cfb_ratings.cfb_ratings`, converts the schedule to the engine format
+with `cfb_standings.cfb_games_from_schedule` (re-keyed on ESPN `team_id` so
+the ratings align), and feeds `make_ratings_compute_results` as the sampler.
+All season / standings / bracket machinery is reused; unplayed games are simulated,
+played games (before `as_of_date`) are kept.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season (an `int`, or a one-element list). Multiple seasons raise `ValueError` -- the simulation engine is single-season. |
+| `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings`; games are kept/simulated from the schedule as-is. `None` uses the full season. |
+| `n_sims` | `int` | `10000` | Number of simulated seasons. |
+| `playoff_seeds` | `int` | `12` | CFP field size. |
+| `seed` | `int` | `0` | RNG seed for reproducibility. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per team: `season`, `team_id` (Utf8), `exp_wins`, `conf_title_prob`, `playoff_prob`, `first_round_bye_prob`, `cfp_champ_prob` (Float64 probabilities in [0, 1]). Zero-row (typed) when no ratings/schedule are available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season simulated (null for a pooled multi-season call). |
+| `team_id` | character | Team ESPN id (character join key). |
+| `exp_wins` | double | Mean wins per simulated season. |
+| `conf_title_prob` | double | Share of simulations in which the team won its conference. |
+| `playoff_prob` | double | Share of simulations in which the team made the College Football Playoff field. |
+| `first_round_bye_prob` | double | Share of simulations in which the team earned a CFP first-round bye. |
+| `cfp_champ_prob` | double | Share of simulations in which the team won the College Football Playoff national championship. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_season_odds import cfb_season_odds
+odds = cfb_season_odds(2023, n_sims=2000)
+odds.sort("cfp_champ_prob", descending=True).head()
 ```
 
 ### `cfb_simulations(games: 'FrameLike', teams: 'FrameLike', compute_results: 'Optional[ComputeResultsFn]' = None, *, simulations: 'int' = 10000, playoff_seeds: 'int' = 12, tiebreaker_depth: 'str' = 'SOS', sim_include: 'str' = 'POST', rankings: 'Optional[FrameLike]' = None, seed: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Dict[str, Union[pl.DataFrame, Any]]'` {#cfb_simulations}
@@ -1449,6 +1649,41 @@ row = xwalk.filter(pl.col("espn_team_id") == 194)  # Ohio State
 espn_fox = cfb_teams_crosswalk(providers=("espn", "fox"))
 ```
 
+### `efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#efficiency_ratings}
+
+One row per team: opponent-adjusted offensive/defensive efficiency.
+
+Fits the offense/defense ridge from `cfb_adjusted_epa` on the
+competitive plays in `plays` (`min_competitive_wp <= wp_before <=
+max_competitive_wp`) and reshapes the result to one row per team,
+including the reference team the ridge's `model.matrix`-style
+parameterization drops (its rating is the fitted intercept, i.e. the
+league baseline).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._REQUIRED_COLUMNS` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before`). Callers pass an already as-of-date-filtered frame; this function is pure. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs. Only `ridge_lambda` is consulted here; defaults to `RatingsConfig` when omitted. |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when `plays` has no competitive plays.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import efficiency_ratings
+ratings = efficiency_ratings(pbp)
+ratings.sort("adj_net", descending=True).head()
+
+# Custom ridge penalty
+
+from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig
+ratings = efficiency_ratings(pbp, config=RatingsConfig(ridge_lambda=100.0))
+```
+
 ### `espn_cfb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_cfb_teams}
 
 espn_cfb_teams - look up the college football teams
@@ -1497,6 +1732,44 @@ fcs.head()
 
 teams = espn_cfb_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
+```
+
+### `fei_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#fei_ratings}
+
+One row per team: opponent-adjusted per-drive efficiency (FEI-style).
+
+The Fremeau Efficiency Index rates teams on drive value above expectation
+given starting field position. The cfbfastR-schema `plays` frame this
+package works with carries no starting-field-position column, so this
+function uses the documented fallback: per-play EPA summed within each
+`(game_id, drive_id)` group stands in for drive value, and that
+aggregate is fit through the same opponent-adjustment ridge as
+`efficiency_ratings` / `special_teams_ratings` -- no forked
+solver. Offline validation against the Fremeau FEI oracle put this
+fallback's team ranking at Spearman 0.967.
+
+`cfb_adjusted_epa._prepare` filters to individual pass/rush plays and
+is not reused here (drive value should reflect every play on the drive,
+special-teams snaps included); the `hfa` treatment is reproduced
+directly, matching `special_teams_ratings`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying every column in `cfb_adjusted_epa._REQUIRED_COLUMNS` (`game_id`, `pos_team`, `pos_team_id`, `def_pos_team_id`, `home`, `neutral_site`, `EPA`, `pass`, `rush`, `wp_before`) plus `drive_id`. Not pre-aggregated to drives -- this function does that grouping itself. |
+| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs. Only `ridge_lambda` is consulted here; defaults to `RatingsConfig` when omitted. |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id` appearing as `pos_team_id` on at least one drive: `team_id` (Utf8), `fei_off` / `fei_def` / `fei_net` (Float64). The ridge's dropped reference team is re-added at the shared intercept (`fei_net == 0.0`). Zero-row (correctly-typed) when `plays` has no rows with a non-null `EPA`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import fei_ratings
+fei = fei_ratings(pbp)
+fei.sort("fei_net", descending=True).head()
 ```
 
 ### `fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_boxscore}
@@ -1993,6 +2266,102 @@ Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 
 A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
 
+### `make_ratings_compute_results(ratings: 'pl.DataFrame', *, era: 'str' = 'modern') -> 'ComputeResultsFn'` {#make_ratings_compute_results}
+
+Build a `cfb_simulations` `compute_results` closure from fixed ratings.
+
+The returned closure implements the engine's results contract -- `(teams, games,
+week_num, *, rng, **kwargs) -> {"teams", "games"}` -- filling every unplayed
+`week == week_num` game's `result` with a sampled home margin
+`round(Normal(exp_margin, margin_sd))`, where `exp_margin` is
+`cfb_game_predict.predict_margin` on the two teams' `adj_net` (home-field
+applied unless `neutral`). Unlike the default elo sampler the ratings are
+**fixed**, so `teams` passes through unchanged (no elo update). Postseason games
+(`game_type != "REG"`) re-break a sampled tie by win probability.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ratings` | `DataFrame` |  | A `cfb_ratings.cfb_ratings`-style frame with `team_id` and `adj_net`. Teams absent from it are treated as league-average (0.0). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+
+**Returns**
+
+A `compute_results` callable suitable for `cfb_simulations(..., compute_results=...)`.
+
+**Example**
+
+```python
+import numpy as np, polars as pl
+from sportsdataverse.cfb.cfb_season_odds import make_ratings_compute_results
+cr = make_ratings_compute_results(pl.DataFrame({"team_id": ["A", "B"], "adj_net": [0.3, -0.3]}))
+teams = pl.DataFrame({"sim": [1, 1], "team": ["A", "B"], "conference": ["X", "X"]})
+games = pl.DataFrame({"sim": [1], "week": [1], "home_team": ["A"], "away_team": ["B"],
+                      "neutral": [0], "result": [None]})
+cr(teams, games, 1, rng=np.random.default_rng(0))["games"]
+```
+
+### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
+
+Expected home scoring margin from the two net ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_net` | `float` |  | Home team's opponent-adjusted net rating (`adj_net` from `cfb_ratings.efficiency_ratings`). |
+| `away_adj_net` | `float` |  | Away team's opponent-adjusted net rating. |
+| `neutral` | `bool` |  | Whether the game is at a neutral site (no home-field advantage). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `net_points_scale` and `hfa_epa`. |
+
+**Returns**
+
+The expected margin (home minus away), in points: `net_points_scale * (home_adj_net - away_adj_net + 2 * hfa_epa)` on a home field, or without the `2 * hfa_epa` term on a neutral one. `net_points_scale` converts the EPA-per-play rating differential into points; the HFA is the ratings ridge's native home coefficient applied component-wise (home_off +hfa_epa, home_def -hfa_epa => net +2*hfa_epa), an EPA-scale additive that lands in the margin (~1.27 pt) and leaves totals untouched. See `predict_total`.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import predict_margin
+predict_margin(0.30, 0.10, neutral=False)
+```
+
+### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', game_pace: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
+
+Expected combined point total from the four efficiency ratings + tempo.
+
+Fitted linear model `total_intercept + total_scale * sum4 + total_pace_scale *
+game_pace`, where `sum4 = home_adj_off + away_adj_def + away_adj_off +
+home_adj_def`. The four ratings are summed because each side's scoring rises
+with its own offense and with the opponent's EPA-*allowed* (`adj_def` is
+lower = better defense). `game_pace` (the matchup's expected scrimmage plays,
+`home_off_pace * away_off_pace / league_avg_pace`) enters because a total is a
+*sum* -- tempo scales both sides' points the same way, so it compounds into the
+total (whereas in the margin, a differential, pace cancels). All three
+coefficients are fitted on 2023 actual totals.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_off` | `float` |  | Home offense adjusted EPA/play (`adj_off_epa`). |
+| `home_adj_def` | `float` |  | Home defense adjusted EPA/play allowed (`adj_def_epa`). |
+| `away_adj_off` | `float` |  | Away offense adjusted EPA/play. |
+| `away_adj_def` | `float` |  | Away defense adjusted EPA/play allowed. |
+| `game_pace` | `float` |  | Expected scrimmage plays for the matchup, i.e. `home_off_pace * away_off_pace / league_avg_pace` from the ratings' `off_pace` column (`cfb_predict_games` computes this for you). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `total_intercept` / `total_scale` / `total_pace_scale`. |
+
+**Returns**
+
+The expected combined total points.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import predict_total
+predict_total(0.20, -0.05, 0.10, 0.02, game_pace=66.0)
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 Internal helper that flattens an ESPN scoreboard event dict into a shape
@@ -2014,6 +2383,78 @@ The same event dict, mutated in place with `home`/`away` copies of the competito
 ```python
 from sportsdataverse.cfb import espn_cfb_schedule
 sched = espn_cfb_schedule(dates=2023, week=5)
+```
+
+### `special_teams_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#special_teams_ratings}
+
+One row per team: a per-unit special-teams EPA composite.
+
+Special teams was empirically found NOT to obey the offense-minus-defense
+symmetry `efficiency_ratings` / `fei_ratings` rely on, and not
+to benefit from opponent adjustment, when validated against the 2023 SP+
+special-teams oracle (`tests/fixtures/cfb_prediction/sp_plus_2023.parquet`
+`sp_special`):
+
+* The executing `pos_team` owns the EPA on a kickoff / punt / field
+  goal. The `def_pos_team` "coverage" side reflects the opposing
+  returner's skill, not the coverage team's, and is not recoverable from
+  EPA -- adding any coverage unit *lowers* SP+ agreement (0.77 -> 0.58),
+  so coverage/defense units are excluded entirely (see the module's
+  special-teams unit patterns).
+* The opponent-adjustment ridge (`cfb_adjusted_epa._fit_opponent_ridge`)
+  *hurts* agreement (0.72 vs 0.77) -- special teams is only weakly
+  opponent-dependent, so this function does not fit a ridge at all.
+* Splitting the offense-side plays into per-phase units (field goal, punt,
+  kick return) and standardizing each separately, then summing the
+  z-scores, is what helps: it reached Spearman 0.768 against SP+, versus
+  0.703 for a single-unit offense-minus-intercept ridge fit.
+
+`adj_st_epa` is therefore the sum, over the three special-teams units
+(field goal, punt, kick return), of each unit's z-scored per-team mean EPA. A
+team with no plays in a given unit contributes 0 for that unit (not a
+penalty). `config` is accepted for signature parity with
+`efficiency_ratings` / `fei_ratings` but is unused -- there is
+no ridge (and therefore no `ridge_lambda`) in this recipe.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | A cfbfastR-schema play-by-play frame carrying `game_id`, `pos_team_id`, `EPA`, and `play_type`. Not pre-filtered to special-teams plays -- this function does that filtering itself. |
+| `config` | `RatingsConfig \| None` | `None` | Unused (kept for signature parity across the three rating functions). See the note above. |
+
+**Returns**
+
+A `polars.DataFrame` with one row per `team_id` appearing anywhere in `plays`: `team_id` (Utf8), `adj_st_epa` (Float64, the sum of per-unit z-scored executing-team mean EPA). Teams with no special-teams plays get `adj_st_epa == 0.0`. Zero-row (correctly-typed) when `plays` has no special-teams plays.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_ratings import special_teams_ratings
+st = special_teams_ratings(pbp)
+st.sort("adj_st_epa", descending=True).head()
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'` {#win_prob_from_margin}
+
+Home win probability from an expected margin via the Gaussian CDF.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | Expected home margin in points (e.g. from `predict_margin`). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying `margin_sd`. |
+
+**Returns**
+
+`Phi(exp_margin / margin_sd)` -- the probability the home team wins under a `Normal(exp_margin, margin_sd**2)` margin model. `0.5` at a zero expected margin.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_game_predict import win_prob_from_margin
+win_prob_from_margin(7.0)
 ```
 
 ### `yahoo_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Dict[str, Any]'` {#yahoo_cfb_boxscore}

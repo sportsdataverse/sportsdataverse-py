@@ -12,6 +12,10 @@ from sportsdataverse.cfb.cfb_two_point import *
 from sportsdataverse.cfb.cfb_pbp_fox import *
 from sportsdataverse.cfb.cfb_play_participants import *
 from sportsdataverse.cfb.cfb_player_stats import *
+from sportsdataverse.cfb.cfb_ratings import *
+from sportsdataverse.cfb.cfb_game_predict import *
+from sportsdataverse.cfb.cfb_resume import *
+from sportsdataverse.cfb.cfb_season_odds import *
 from sportsdataverse.cfb.cfb_schedule import *
 from sportsdataverse.cfb.cfb_simulations import *
 from sportsdataverse.cfb.cfb_standings import *

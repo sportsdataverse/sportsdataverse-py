@@ -1,0 +1,24 @@
+schema: cfb_predict_games
+kind: dataframe
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: home_team_id
+  type: character
+  description: ''
+- name: away_team_id
+  type: character
+  description: ''
+- name: neutral_site
+  type: logical
+  description: ''
+- name: exp_margin
+  type: double
+  description: ''
+- name: home_win_prob
+  type: double
+  description: ''
+- name: exp_total
+  type: double
+  description: ''

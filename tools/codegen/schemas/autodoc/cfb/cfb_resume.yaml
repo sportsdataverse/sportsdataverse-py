@@ -1,0 +1,24 @@
+schema: cfb_resume
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: sos
+  type: double
+  description: ''
+- name: sos_rank
+  type: integer
+  description: ''
+- name: quality_wins
+  type: integer
+  description: ''
+- name: game_control
+  type: double
+  description: ''
+- name: wab
+  type: double
+  description: ''
