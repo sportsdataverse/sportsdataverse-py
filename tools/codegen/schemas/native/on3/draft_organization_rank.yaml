@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: five_stars
+  type: integer
+- description: ''
+  name: four_stars
+  type: integer
+- description: ''
+  name: three_stars
+  type: integer
+- description: ''
+  name: total
+  type: integer
+- description: ''
+  name: percent_drafted
+  type: numeric
+- description: ''
+  name: draft_rate
+  type: numeric
+kind: dataframe
+schema: draft_organization_rank

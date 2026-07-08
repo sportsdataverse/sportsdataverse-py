@@ -2302,6 +2302,110 @@ games = pl.DataFrame({"sim": [1], "week": [1], "home_team": ["A"], "away_team": 
 cr(teams, games, 1, rng=np.random.default_rng(0))["games"]
 ```
 
+### `on3_industry_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_industry_player_rankings}
+
+On3 Industry Comparison player rankings (**deprecated** next/data` scrape).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Union[int, str]` |  | recruiting class year (e.g. `2026`). |
+| `sport_slug` | `str` | `'football'` | On3 sport slug (default `"football"`). |
+| `page` | `Any` | `None` | 1-based page number, or `None` for the first page. |
+| `return_parsed` | `bool` | `True` | return a tidy frame (default); `False` returns the raw dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per recruit (consensus On3/Rivals/247/ESPN). Zero-row frame on empty.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import on3_players_industry_comparision  # forward RDB native
+df = on3_players_industry_comparision(sport_key=1, year=2026)
+print(df.shape)
+```
+
+### `on3_industry_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_industry_team_rankings}
+
+On3 Industry Comparison team rankings (**deprecated** next/data` scrape).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Union[int, str]` |  | recruiting class year (e.g. `2026`). |
+| `sport_slug` | `str` | `'football'` | On3 sport slug (default `"football"`). |
+| `page` | `Any` | `None` | 1-based page number, or `None` for the first page. |
+| `return_parsed` | `bool` | `True` | return a tidy frame (default); `False` returns the raw dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team class (consensus ratings). Zero-row frame on empty payload.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import on3_team_ranking_consensus_team_rankings  # forward RDB native
+df = on3_team_ranking_consensus_team_rankings(sport_slug="football", year=2025)
+print(df.shape)
+```
+
+### `on3_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_player_rankings}
+
+On3 player rankings for a class year (**deprecated** next/data` scrape).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Union[int, str]` |  | recruiting class year (e.g. `2026`). |
+| `sport_slug` | `str` | `'football'` | On3 sport slug (default `"football"`). |
+| `page` | `Any` | `None` | 1-based page number, or `None` for the first page. |
+| `return_parsed` | `bool` | `True` | return a tidy frame (default); `False` returns the raw dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per ranked recruit (On3 ratings). Zero-row frame on empty payload.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import on3_person_sport_rankings  # forward RDB native
+df = on3_person_sport_rankings(sport_key=1, year=2026)
+print(df.shape)
+```
+
+### `on3_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'` {#on3_team_rankings}
+
+On3 team recruiting-class rankings (**deprecated** next/data` scrape).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `year` | `Union[int, str]` |  | recruiting class year (e.g. `2026`). |
+| `sport_slug` | `str` | `'football'` | On3 sport slug (default `"football"`). |
+| `page` | `Any` | `None` | 1-based page number, or `None` for the first page. |
+| `return_parsed` | `bool` | `True` | return a tidy frame (default); `False` returns the raw dict. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team class (On3 ratings). Zero-row frame on empty payload.
+
+**Example**
+
+```python
+from sportsdataverse.cfb import on3_team_ranking_team_rankings  # forward RDB native
+df = on3_team_ranking_team_rankings(sport_slug="football", year=2025)
+print(df.shape)
+```
+
 ### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
 
 Expected home scoring margin from the two net ratings.

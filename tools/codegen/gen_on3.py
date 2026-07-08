@@ -37,6 +37,12 @@ HOST_V2 = "https://api.on3.com/public/rdb/v2"
 # Legacy scrape schemas backing the demoted rankings shim -- never deleted/regenerated.
 _PRESERVE = {"on3_player_rankings", "on3_team_rankings"}
 
+# RDB shorts that would collide with a *deprecated* ``on3_rankings`` shim public
+# name -- renamed so the shim keeps the exact legacy name (continuity) and the RDB
+# native (``/player/{personKey}/rankings``, a player's current ranking) stays
+# reachable under a distinct, stable name.
+_SHORT_OVERRIDES = {"player_rankings": "player_person_rankings"}
+
 # JSON-schema type -> R-style returns-schema type (mirrors gen_nba_stats._DTYPE).
 _DTYPE = {
     "integer": "integer",
@@ -101,7 +107,7 @@ def _short_from_path(path: str) -> str:
         short = f"{short}_{suffix}" if short else suffix
     if is_v2:
         short += "_v2"
-    return short
+    return _SHORT_OVERRIDES.get(short, short)
 
 
 def _usable(op: dict) -> bool:

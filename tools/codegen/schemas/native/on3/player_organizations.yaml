@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: organizations
+  type: character
+- description: ''
+  name: draft
+  type: character
+kind: dataframe
+schema: player_organizations

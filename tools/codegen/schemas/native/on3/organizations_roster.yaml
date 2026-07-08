@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: pso_key
+  type: integer
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: rating
+  type: character
+- description: ''
+  name: roster_rating
+  type: character
+- description: ''
+  name: status
+  type: character
+- description: ''
+  name: nil_value
+  type: character
+- description: ''
+  name: rpm
+  type: character
+- description: ''
+  name: industry_comparison
+  type: character
+kind: dataframe
+schema: organizations_roster

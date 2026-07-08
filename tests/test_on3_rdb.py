@@ -10,6 +10,8 @@ from pathlib import Path
 import polars as pl
 import pytest
 
+from tests.conftest import skip_if_no_live
+
 FIXTURES = Path(__file__).parent / "fixtures" / "on3"
 
 
@@ -139,3 +141,66 @@ def test_parse_on3_rdb_pandas():
     pdf = parse_on3_rdb(_load("player_profile"), return_as_pandas=True)
     assert isinstance(pdf, pd.DataFrame)
     assert len(pdf) == 1
+
+
+# ===========================================================================
+# Generated RDB wrapper wiring
+# ===========================================================================
+
+
+def test_wrapper_routes_through_parse_on3_rdb(monkeypatch):
+    import sportsdataverse.cfb.on3 as on3
+
+    fixture = _load("team_ranking_team_rankings")
+    monkeypatch.setattr(on3, "_get", lambda *a, **k: fixture)
+
+    df = on3.on3_team_ranking_team_rankings(sport_slug="football", year=2025)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+    assert "overall_rank" in df.columns
+
+    raw = on3.on3_team_ranking_team_rankings(sport_slug="football", year=2025, return_parsed=False)
+    assert isinstance(raw, (dict, list))
+
+
+def test_player_person_rankings_wrapper_reachable():
+    # The RDB /player/{personKey}/rankings native is renamed to avoid colliding
+    # with the deprecated on3_player_rankings shim; it must stay importable.
+    from sportsdataverse.cfb import on3_player_person_rankings
+
+    assert callable(on3_player_person_rankings)
+
+
+# ===========================================================================
+# Live smoke tests (standard SDV_PY_LIVE_TESTS gate -- RDB is auth-free and
+# does NOT JA3-block, so it is NOT on the separate SDV_PY_NBA_STATS_LIVE gate)
+# ===========================================================================
+
+
+@skip_if_no_live
+def test_on3_filters_status_live():
+    from sportsdataverse.cfb import on3_filters_status
+
+    df = on3_filters_status()
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+
+
+@skip_if_no_live
+def test_on3_commits_latest_live():
+    from sportsdataverse.cfb import on3_commits_latest
+
+    df = on3_commits_latest(sport_key=1)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+    assert "name" in df.columns
+
+
+@skip_if_no_live
+def test_on3_team_ranking_team_rankings_live():
+    from sportsdataverse.cfb import on3_team_ranking_team_rankings
+
+    df = on3_team_ranking_team_rankings(sport_slug="football", year=2025)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height > 0
+    assert "overall_rank" in df.columns

@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: overall_rank
+  type: integer
+- description: ''
+  name: conference_rank
+  type: integer
+- description: ''
+  name: in_state_count
+  type: numeric
+- description: ''
+  name: average_distance
+  type: numeric
+- description: ''
+  name: blue_chips
+  type: numeric
+- description: ''
+  name: social_nil_values
+  type: numeric
+- description: ''
+  name: score
+  type: numeric
+- description: ''
+  name: total_commits
+  type: integer
+kind: dataframe
+schema: team_ranking_bluechips_team_rankings

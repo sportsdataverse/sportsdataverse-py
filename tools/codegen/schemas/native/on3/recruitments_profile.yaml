@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: rating
+  type: character
+- description: ''
+  name: class_year
+  type: integer
+- description: ''
+  name: committed_status
+  type: character
+- description: ''
+  name: high_school
+  type: character
+- description: ''
+  name: high_school_org
+  type: character
+- description: ''
+  name: home_town
+  type: character
+kind: dataframe
+schema: recruitments_profile
