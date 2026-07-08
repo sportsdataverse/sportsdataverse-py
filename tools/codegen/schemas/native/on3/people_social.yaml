@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: handle
+  type: character
+- description: ''
+  name: handshake
+  type: logical
+kind: dataframe
+schema: people_social

@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: five_stars
+  type: integer
+- description: ''
+  name: four_stars
+  type: integer
+- description: ''
+  name: three_stars
+  type: integer
+- description: ''
+  name: zero_stars
+  type: integer
+- description: ''
+  name: total
+  type: integer
+kind: dataframe
+schema: organizations_draft_count_by_stars

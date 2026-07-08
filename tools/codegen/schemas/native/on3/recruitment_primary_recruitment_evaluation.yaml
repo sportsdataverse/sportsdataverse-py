@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: recruitment_key
+  type: integer
+- description: ''
+  name: author_key
+  type: integer
+- description: ''
+  name: author_name
+  type: character
+- description: ''
+  name: author_title
+  type: character
+- description: ''
+  name: title
+  type: character
+- description: ''
+  name: premium
+  type: logical
+- description: ''
+  name: body
+  type: character
+- description: ''
+  name: primary
+  type: logical
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: date_updated_unix
+  type: integer
+- description: ''
+  name: date_added
+  type: character
+- description: ''
+  name: date_updated
+  type: character
+kind: dataframe
+schema: recruitment_primary_recruitment_evaluation

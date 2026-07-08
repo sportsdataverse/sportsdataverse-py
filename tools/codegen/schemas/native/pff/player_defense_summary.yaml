@@ -1,0 +1,4 @@
+columns: []
+kind: dataframe
+note: player_detail
+schema: PlayerDetailEnvelope

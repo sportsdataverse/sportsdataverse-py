@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: measurement_key
+  type: integer
+- description: ''
+  name: measurement_name
+  type: character
+- description: ''
+  name: current_person_measurement
+  type: numeric
+- description: ''
+  name: current_measurement_verified
+  type: logical
+- description: ''
+  name: top300_difference
+  type: numeric
+- description: ''
+  name: top300_average
+  type: numeric
+- description: ''
+  name: combine_drafted_average
+  type: numeric
+- description: ''
+  name: combine_drafted_difference
+  type: numeric
+- description: ''
+  name: sort
+  type: character
+- description: ''
+  name: measurement_record
+  type: character
+kind: dataframe
+schema: people_measurements_averages

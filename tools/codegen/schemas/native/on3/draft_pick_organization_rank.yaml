@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: first_round
+  type: integer
+- description: ''
+  name: second_round
+  type: integer
+- description: ''
+  name: third_round
+  type: integer
+- description: ''
+  name: fourth_through_seventh_round
+  type: integer
+- description: ''
+  name: total
+  type: integer
+kind: dataframe
+schema: draft_pick_organization_rank
