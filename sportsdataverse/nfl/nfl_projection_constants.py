@@ -80,7 +80,18 @@ class PositionConstants:
 # RB/TE aging_damping=0: the 4-season delta-method curve for those groups is
 # noise-dominated on holdout, so the aging ratio is disabled (curve still fit +
 # exposed; the damping gates its application).
-# base_availability fitted by dev/nfl_projection/fit_availability.py (Task 4.2).
+# base_availability fitted by dev/nfl_projection/fit_availability.py
+# (2026-07-08): all-player mean availability_rate per position over the
+# committed 2021-2023 snap corpus (population-consistent EB prior; minimizes
+# holdout games MAE 4.0192): QB 0.4746 (n=252), RB 0.5976 (n=496),
+# WR 0.6397 (n=737), TE 0.6883 (n=414). FINDING: the plan's "RB < QB" sanity
+# expectation is INVERTED in this data at every conditioning tried (all-player
+# AND per-team-primary QB 0.8407 < RB 0.9081); the snap-count crosswalk was
+# investigated per plan and verified clean (star QBs exact vs weekly stats,
+# 0/247 QB seasons missing, 84% within-1-game agreement) — QB is a
+# winner-take-all position, so snap-derived availability folds benching/depth
+# churn into QB unavailability. The EB prior strength lives in
+# nfl_availability.EB_PRIOR_SEASONS (fitted 0.485).
 # fp_calibration fitted by dev/nfl_projection/fit_fantasy_calibration.py
 # (2026-07-08): numpy.polyfit deg-1 of realized season fantasy points on raw
 # projected fantasy points, pooled over as-of folds target=2022 (hist 2020-21)
@@ -95,7 +106,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         shrinkage_k=219.26,
         min_volume=100.0,
         aging_base_age=27.0,
-        base_availability=0.92,
+        base_availability=0.4746,
         aging_damping=0.5,
         fp_calibration=(137.2506, 0.4032),
     ),
@@ -104,7 +115,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         shrinkage_k=0.78,
         min_volume=60.0,
         aging_base_age=25.0,
-        base_availability=0.80,
+        base_availability=0.5976,
         aging_damping=0.0,
         fp_calibration=(56.0273, 0.5716),
     ),
@@ -113,7 +124,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         shrinkage_k=37.15,
         min_volume=40.0,
         aging_base_age=26.0,
-        base_availability=0.85,
+        base_availability=0.6397,
         aging_damping=1.0,
         fp_calibration=(10.7973, 0.8766),
     ),
@@ -122,7 +133,7 @@ POSITION_CONSTANTS: Dict[str, PositionConstants] = {
         shrinkage_k=11.69,
         min_volume=30.0,
         aging_base_age=27.0,
-        base_availability=0.83,
+        base_availability=0.6883,
         aging_damping=0.0,
         fp_calibration=(23.0885, 0.7252),
     ),

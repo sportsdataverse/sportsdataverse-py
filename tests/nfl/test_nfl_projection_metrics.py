@@ -58,8 +58,19 @@ def test_scoring_formats():
     assert SCORING_STANDARD["receptions"] == 0.0
 
 
-def test_position_constants_availability_order():
-    assert get_position_constants("QB").base_availability > get_position_constants("RB").base_availability
+def test_position_constants_availability_fitted_range():
+    """Fitted all-player base availability rates are population means in a sane band.
+
+    NOTE: the original seed assertion (QB base > RB base) is INVERTED in the
+    fitted 2021-2023 snap data (QB 0.4746 < RB 0.5976) at every conditioning
+    tried; the crosswalk was investigated and verified clean. QB is a
+    winner-take-all position, so snap-derived availability folds benching /
+    depth churn into QB unavailability. See the POSITION_CONSTANTS comment and
+    dev/nfl_projection/fit_availability.py.
+    """
+    for pos in ["QB", "RB", "WR", "TE"]:
+        base = get_position_constants(pos).base_availability
+        assert 0.4 < base < 0.8
 
 
 def test_position_constants_unknown_returns_default():
