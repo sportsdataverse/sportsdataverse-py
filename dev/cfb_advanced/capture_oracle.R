@@ -55,3 +55,17 @@ sp_out <- sp |>
 stopifnot(nrow(sp_out) > 100)
 write_parquet(sp_out, file.path(out_dir, "sp_plus_2021.parquet"))
 cat("sp_plus_2021 rows:", nrow(sp_out), "\n")
+
+# per-team game counts (for the tempo plays/GAME oracle -- the released pbp
+# is missing games for some teams, so totals are not comparable)
+gi <- cfbd_game_info(season, season_type = "both")
+gc <- rbind(
+  data.frame(team = gi$home_team, id = as.character(gi$home_id)),
+  data.frame(team = gi$away_team, id = as.character(gi$away_id))
+) |>
+  count(team, id, name = "games") |>
+  inner_join(teams, by = c("team" = "school")) |>
+  transmute(season = as.integer(season), team_id, games = as.integer(games))
+stopifnot(nrow(gc) > 100)
+write_parquet(gc, file.path(out_dir, "cfbd_games_2021.parquet"))
+cat("cfbd_games_2021 rows:", nrow(gc), "\n")

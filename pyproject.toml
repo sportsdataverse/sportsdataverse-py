@@ -305,6 +305,7 @@ files = [
     "sportsdataverse/cfb/cfb_season_odds.py",
     "sportsdataverse/cfb/cfb_simulations.py",
     "sportsdataverse/cfb/cfb_standings.py",
+    "sportsdataverse/cfb/cfb_tempo.py",
     "sportsdataverse/cfb/cfb_yahoo_ext.py",
     "sportsdataverse/nfl/config.py",
     "sportsdataverse/nfl/model_vars.py",

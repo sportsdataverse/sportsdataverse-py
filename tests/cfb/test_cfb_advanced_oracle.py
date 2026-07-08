@@ -135,3 +135,36 @@ def test_field_position_avg_start_vs_cfbd():
     oracle = 100.0 - j["avg_start_yardline_right"].to_numpy()
     assert spearman_corr(mine, oracle) >= 0.85
     assert mae(mine, oracle) <= 1.0
+
+
+def test_tempo_plays_per_game_vs_cfbd():
+    """cfb_adjusted_tempo raw plays/game vs CFBD (2021, plan target 0.85).
+
+    Observed 2021: Spearman 0.9015 vs CFBD off_plays / CFBD games -- target
+    met. The CFBD games denominator comes from cfbd_game_info (fixture
+    cfbd_games_2021.parquet): the released pbp is MISSING games for some
+    teams (9-15 per team vs a true 12-14), so season TOTALS are not
+    comparable (totals Spearman caps at 0.834); per-game rates are.
+    Adjusted pace has no public oracle; per the plan it is validated as a
+    monotone re-ordering of raw pace (observed Spearman 0.9479, floor 0.90).
+    """
+    import sportsdataverse.cfb.cfb_tempo as tempo
+
+    pbp = pl.read_parquet(f"{FIX}/pbp_slice_2021.parquet")
+    orig = tempo.load_cfb_pbp
+    tempo.load_cfb_pbp = lambda s, **k: pbp
+    try:
+        out = tempo.cfb_adjusted_tempo([2021])
+    finally:
+        tempo.load_cfb_pbp = orig
+    cfbd = pl.read_parquet(f"{FIX}/cfbd_advanced_2021.parquet")
+    games = pl.read_parquet(f"{FIX}/cfbd_games_2021.parquet")
+    assert out.schema["team_id"] == cfbd.schema["team_id"] == games.schema["team_id"]
+    j = (
+        out.join(cfbd.select(["team_id", "off_plays"]), on="team_id", how="inner")
+        .join(games.select(["team_id", "games"]).rename({"games": "cfbd_games"}), on="team_id", how="inner")
+        .with_columns(cfbd_ppg=pl.col("off_plays") / pl.col("cfbd_games"))
+    )
+    assert j.height == 130
+    assert spearman_corr(j["raw_plays_game"].to_numpy(), j["cfbd_ppg"].to_numpy()) >= 0.85
+    assert spearman_corr(j["adj_plays_game"].to_numpy(), j["raw_plays_game"].to_numpy()) >= 0.90

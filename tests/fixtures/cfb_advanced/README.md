@@ -24,6 +24,7 @@ Captured **2026-07-08**, season **2021**.
 |---|---|---|---|
 | `cfbd_advanced_2021.parquet` | 130 | `cfbfastR::cfbd_stats_season_advanced(2021, excl_garbage_time = TRUE)` joined to `cfbd_team_info(year = 2021)` for `team_id` | `avg_start_yardline` = CFBD `off_field_pos_avg_start`, yards **from own goal** (higher = better start). Includes `off_plays`/`def_plays` for the tempo gate. |
 | `sp_plus_2021.parquet` | 130 | `cfbfastR::cfbd_ratings_sp(2021)` joined to `cfbd_team_info` | `sp_offense_rank`/`sp_defense_rank` from CFBD `offense_ranking`/`defense_ranking`. |
+| `cfbd_games_2021.parquet` | 130 | `cfbfastR::cfbd_game_info(2021, season_type = "both")` home+away stacked, counted per team, joined to `cfbd_team_info` | per-team game counts - the tempo plays/game oracle denominator (the released pbp is missing games for some teams, 9-15 per team, so season totals are not comparable). |
 | `fp_reference.parquet` | 5 | hand-authored published EP-by-field-position anchors (net next-score EP, yardline from own goal): own-1 ≈ −0.5, own-25 ≈ 1.4, midfield ≈ 2.8, opp-25 ≈ 4.1, opp-5 ≈ 5.6 | Connelly/GameOnPaper-style reference values. |
 | `pbp_slice_2021.parquet` | 137,046 | full 2021 season from the local `cfbfastR-dev/cfbfastR-data` checkout (same asset `load_cfb_pbp([2021])` serves), down-selected to 26 model columns and renamed to canonical names (see `dev/cfb_advanced/capture_oracle.py::PBP_COLS`) | zstd-compressed (~2.3 MB). |
 
