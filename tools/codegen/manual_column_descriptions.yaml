@@ -7651,3 +7651,108 @@ win_probability:
     row.
   runners: A serialized representation of baserunner movement records for this play in the win-probability feed, capturing
     start/end base positions and event types.
+
+sports247_site_pages_coach:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_coach_ranking:
+  composite_rating: Composite class rating for the coach's haul.
+  conference_rank: Rank within conference.
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  overall_rank: Overall national coach-recruiting rank.
+  ranking: FK -> the Ranking snapshot this row belongs to.
+sports247_site_pages_draft_pick:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  mock: Whether this is a mock-draft projection vs an actual pick.
+  overall_pick: Overall selection number in the draft.
+  pick: Pick number within the round.
+  position_abbreviation: Player's position at draft.
+  round: Draft round number (1-based) the pick belongs to.
+sports247_site_pages_event:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_institution:
+  default_name: Server-rendered display label for the entity.
+  group: Institution group (division/level) bitmask code.
+  key: Primary key of this entity (the id used in its `.json` route).
+  location: FK -> Location (`/Institution/{Location}/Location.json`).
+  rankable: Whether the institution participates in class rankings.
+  site: FK -> team Site (network site key).
+  state: FK -> State entity.
+  type: Institution type code (college / pro / high school).
+sports247_site_pages_location:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_player:
+  cbs_key: Cross-reference key into the CBS Sports id space.
+  current_player_institution: FK -> PlayerInstitution (current school).
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  national_rank: Overall national rank in the recruit's class.
+  position_rank: Rank within position for the class.
+  primary_player_sport: FK -> PlayerSport (`/PlayerSport/{id}.json`).
+  rating: 247Sports numeric rating (0-1 scale) for the primary sport.
+  star_rating: Star tier (2-5) derived from the rating.
+  state_rank: Rank within home state for the class.
+sports247_site_pages_player_institution:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_player_institution_evaluation:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_player_institution_prediction:
+  confidence: Expert confidence 1-10.
+  default_name: Server-rendered display label for the entity.
+  institution: FK -> predicted destination Institution.
+  key: Primary key of this entity (the id used in its `.json` route).
+  prediction_status: Crystal-ball prediction status code.
+  score: Expert accuracy score at time of prediction.
+sports247_site_pages_player_sport:
+  class_year: Recruiting class year.
+  composite_rating: 247Sports Composite rating (industry blend).
+  composite_strength: Composite strength points (team-ranking weight).
+  default_name: Server-rendered display label for the entity.
+  espn_grade: ESPN source grade (industry composite input).
+  key: Primary key of this entity (the id used in its `.json` route).
+  rating: 247Sports rating string (0-1).
+  recruitment: FK -> Recruitment aggregate for this player-sport.
+  rivals_grade: Rivals source grade (industry composite input).
+  star_rating: Star tier (2-5).
+sports247_site_pages_player_sport_ranking:
+  committed_institution: FK -> committed Institution (null if uncommitted).
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  overall_rank: Overall national rank in the snapshot.
+  position_rank: Rank within position.
+  ranking: FK -> Ranking snapshot.
+  state_rank: Rank within home state.
+sports247_site_pages_recruit:
+  committed_institution: FK -> committed Institution.
+  composite_strength: Composite strength points contributed to team ranking.
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  player_cbs_key: Cross-reference key into the CBS Sports id space.
+  player_current_player_institution: FK -> PlayerInstitution (current school).
+  player_default_name: Server-rendered display label for the entity.
+  player_key: Primary key of this entity (the id used in its `.json` route).
+  player_national_rank: Overall national rank in the recruit's class.
+  player_position_rank: Rank within position for the class.
+  player_primary_player_sport: FK -> PlayerSport (`/PlayerSport/{id}.json`).
+  player_rating: 247Sports numeric rating (0-1 scale) for the primary sport.
+  player_star_rating: Star tier (2-5) derived from the rating.
+  player_state_rank: Rank within home state for the class.
+  recruit_interest_count: Number of tracked school interests.
+  recruit_interests_url: Site URL to the recruit's interest timeline.
+sports247_site_pages_recruit_interest:
+  commit_status: Commitment status label (e.g. Committed, Signed).
+  default_name: Server-rendered display label for the entity.
+  hard_commit: FK -> the RecruitInterestEvent marking a hard commit.
+  institution: FK -> the interested/interesting Institution.
+  key: Primary key of this entity (the id used in its `.json` route).
+  offered: Whether the school has extended an offer.
+  recruitment: FK -> parent Recruitment.
+sports247_site_pages_recruit_interest_event:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).

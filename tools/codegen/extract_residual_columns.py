@@ -51,7 +51,12 @@ def _bucket_of(path: str) -> str:
 # surface faster than descriptions are authored, so these buckets are exempted
 # from the residual ratchet and surfaced via deferred_columns() instead. Authoring
 # a column here (manual dict or R dict) still removes it from the deferred count.
-_DEFERRED_BUCKETS = {"native/nba_stats", "native/wnba_stats"}
+# native/sports247_site_pages: the 247sports.com front-end page-model surface (17
+# entity schemas, 372 columns). The semantically load-bearing columns (ids, FKs,
+# ratings, ranks, status/commit fields — 89 columns) are authored from the OpenAPI
+# `description:` fields; the plain long tail (names, dates, assets, tax rates) is a
+# tracked follow-up, mirroring the nba_stats/wnba_stats decision above.
+_DEFERRED_BUCKETS = {"native/nba_stats", "native/wnba_stats", "native/sports247_site_pages"}
 
 
 def iter_schema_columns() -> list[dict]:
