@@ -45,6 +45,9 @@ class ShotQualityConstants:
 LEAGUE_CONSTANTS: "dict[str, ShotQualityConstants]" = {
     "mens": ShotQualityConstants(
         arc_radius_by_season={(2009, 2019): ARC_OLD_FT, (2020, 2100): ARC_NEW_FT},
+        # split-half fit on the 2025 train fixture (dev/mbb_shot_quality/
+        # fit_talent_k.py, 2026-07-08): MSE 0.0187 at k vs 0.0337 unshrunk
+        shrink_k_talent=233.2,
     ),
     "womens": ShotQualityConstants(
         arc_radius_by_season={(2009, 2021): ARC_OLD_FT, (2022, 2100): ARC_NEW_FT},

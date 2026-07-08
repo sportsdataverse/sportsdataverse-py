@@ -40,6 +40,7 @@ from sportsdataverse.mbb.mbb_ratings import *
 from sportsdataverse.mbb.mbb_recruiting_projection import *
 from sportsdataverse.mbb.mbb_schedule import *
 from sportsdataverse.mbb.mbb_transfer_projection import *
+from sportsdataverse.mbb.mbb_shooter_talent import *
 from sportsdataverse.mbb.mbb_shot_quality import *
 from sportsdataverse.mbb.mbb_shot_selection import *
 from sportsdataverse.mbb.mbb_shots_adapter import *

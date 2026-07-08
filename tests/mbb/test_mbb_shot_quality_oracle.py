@@ -104,3 +104,17 @@ def test_shot_selection_zero_sum_on_real_fixture():
     top_rim_team = rim_share.row(0, named=True)["team_id"]
     top_val = sel.filter(pl.col("team_id") == top_rim_team).row(0, named=True)["selection_value"]
     assert top_val > 0, f"most rim-heavy team {top_rim_team} has selection_value {top_val:.4f}"
+
+
+def test_shooter_talent_split_half_reliability_gate():
+    """Phase-3 gate: the fitted k's regressed first half predicts the raw
+    second half better than the unshrunk first half does (real 2025 fixture;
+    fitted k=233.2, split MSE 0.0187 vs 0.0337 unshrunk)."""
+    from sportsdataverse.mbb.mbb_shot_quality_constants import get_constants
+    from sportsdataverse.mbb.mbb_shooter_talent import talent_split_mse
+
+    model = mbb_shot_quality_model(_train(), league="mens")
+    scored = mbb_shot_quality(_train(), model=model, league="mens")
+    k = get_constants("mens").shrink_k_talent
+    assert k > 0, "mens shrink_k_talent not fitted"
+    assert talent_split_mse(scored, k=k, seed=0) < talent_split_mse(scored, k=1e-9, seed=0)
