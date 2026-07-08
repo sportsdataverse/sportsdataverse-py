@@ -118,10 +118,13 @@ def test_oracle_availability_vs_realized_2024():
 
     Population: "recent regulars" — players with >= 8 available games in the
     most recent visible season (as-of-clean; the composition-relevant
-    population). Observed 2026-07-08 with EB_PRIOR_SEASONS=0.2 +
-    AVAIL_RECAL=(0.1838, 0.7146) (both fit on 2022/2023 as-of folds, see
-    dev/nfl_projection/fit_availability.py): games MAE 3.5422 (floor 3.6),
-    max decile calibration gap 0.0458 (gate 0.05).
+    population). Observed 2026-07-08 with EB_PRIOR_SEASONS=0.1 (selected by
+    leave-one-fold-out games MAE on the 2022/2023 as-of folds) +
+    AVAIL_RECAL=(0.2040, 0.6821) (polyfit pooled over both folds; the 2024
+    holdout was never touched during selection — see
+    dev/nfl_projection/fit_availability.py): single out-of-sample 2024 run
+    gives games MAE 3.5436 (floor 3.6), max decile calibration gap 0.0494
+    (gate 0.05).
 
     FINDING (plan Task 4.2 base-order sanity check): "RB base < QB base" is
     INVERTED in 2021-2023 snap data at every conditioning tried; crosswalk

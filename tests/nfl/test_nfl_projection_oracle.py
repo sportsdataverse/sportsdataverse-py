@@ -1,21 +1,28 @@
 """Oracle gates for the NFL projection spine vs realized 2024 (offline fixtures).
 
 Floors are set from observed values at gate time (rounded down) per the
-"never lower the gate to pass" rule. Observed 2026-07-08 with the fitted
-POSITION_CONSTANTS (see dev/nfl_projection/fit_shrinkage.py):
+"never lower the gate to pass" rule. The POSITION_CONSTANTS were fit on AS-OF
+FOLDS ONLY (targets 2022 + 2023 inside the train corpus; the 2024 holdout was
+never touched during fitting — oracle-gate-review finding #1 remediation), and
+2024 was then evaluated ONCE, out-of-sample (2026-07-08, see
+dev/nfl_projection/fit_shrinkage.py):
 
-    pos  spearman  mae_proj  mae_carry
-    QB   0.6686    2.4289    3.8881
-    RB   0.7564    2.7579    2.8356
-    WR   0.6485    2.9505    3.3225
-    TE   0.7842    1.8417    2.1147
+    pos  spearman  mae_proj  mae_carry  beats_carry
+    QB   0.6146    2.4949    3.8881     yes
+    RB   0.7240    2.9397    2.8356     NO (xfail below)
+    WR   0.6599    3.0176    3.3225     yes
+    TE   0.7285    2.0338    2.1147     yes
+
+RB is the one position whose fold-fit Marcel blend loses to single-season
+carry-forward out-of-sample — an earlier constants fit that "beat" carry for
+RB had been tuned on the 2024 holdout itself and was discarded as circular.
 
 Debug notes (recorded per plan Task 1.4 step 2): the first implementation
 failed the gate badly (QB spearman 0.15, MAE 2-3x carry) because roster ages
 are continuous floats — per-unique-age delta transitions chained by cum_prod
 compounded noise into a degenerate curve. Fixes: integer age bucketing in
-aging_curve, a damped+clamped aging ratio (fitted per-position aging_damping;
-RB/TE fit to 0), and per-position fitted recency weights + shrinkage k.
+aging_curve, a damped+clamped aging ratio (fitted per-position aging_damping),
+and per-position fold-fit recency weights + shrinkage k.
 """
 
 from pathlib import Path
@@ -28,12 +35,12 @@ from sportsdataverse.nfl.nfl_projection_constants import mae, spearman_corr
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_projection"
 
-SPEARMAN_FLOORS = {"QB": 0.65, "RB": 0.74, "WR": 0.63, "TE": 0.77}
-MAE_FLOORS = {"QB": 2.5, "RB": 2.8, "WR": 3.0, "TE": 1.9}
+SPEARMAN_FLOORS = {"QB": 0.61, "RB": 0.72, "WR": 0.65, "TE": 0.72}
+MAE_FLOORS = {"QB": 2.5, "RB": 3.0, "WR": 3.1, "TE": 2.1}
 
 
 @pytest.fixture(scope="module")
-def joined(module_monkeypatch=None):
+def joined():
     weekly = pl.read_parquet(FIX / "player_stats_2020_2023.parquet")
     rosters = pl.read_parquet(FIX / "rosters_2020_2023.parquet")
     realized = (
@@ -61,20 +68,21 @@ def joined(module_monkeypatch=None):
 
 
 @pytest.mark.xfail(
-    strict=False,
+    strict=True,  # an XPASS must force re-evaluation of the gate, not pass silently
     reason=(
         "Concurrent-validity gate vs FantasyPros preseason consensus is RED and the "
-        "assert is intentionally NOT weakened. Observed 2026-07-08 (calibrated fantasy "
-        "projection, players with ECR + >=8 realized games): QB ours 0.5104 vs consensus "
-        "0.6674 (n=33); RB 0.7123 vs 0.7875 (n=78); WR 0.6511 vs 0.7143 (n=110); TE "
-        "0.7056 vs 0.7489 (n=59). Hypotheses tried: (1) per-position refit of "
-        "recency/damping/k on holdout ppg MAE; (2) direct fold-fit (2022+2023 as-of "
-        "folds) maximizing totals Spearman — best 2024 result QB 0.5471 / RB 0.7221 / "
-        "WR 0.6108 / TE 0.6997, all still below consensus; (3) alternative scores "
-        "(per-game, ppg-only, ppg*volume, volume-only) — none reach consensus. The "
-        "Aug-30 ECR embeds offseason information (rookies, depth charts, trades) that "
-        "a trailing-stats Marcel cannot see; clearing this gate needs offseason "
-        "features (draft capital, depth-chart priors), the documented escalation."
+        "assert is intentionally NOT weakened. Observed 2026-07-08 with the fold-fit "
+        "constants (calibrated fantasy projection, players with ECR + >=8 realized "
+        "games): QB ours 0.4375 vs consensus 0.6674 (n=33); RB 0.7131 vs 0.7875 "
+        "(n=78); WR 0.6606 vs 0.7143 (n=110); TE 0.6438 vs 0.7489 (n=59). Hypotheses "
+        "tried: (1) per-position refit of recency/damping/k; (2) direct fold-fit "
+        "(2022+2023 as-of folds) maximizing totals Spearman — best 2024 result QB "
+        "0.5471 / RB 0.7221 / WR 0.6108 / TE 0.6997, all still below consensus; (3) "
+        "alternative scores (per-game, ppg-only, ppg*volume, volume-only) — none reach "
+        "consensus. The Aug-30 ECR embeds offseason information (rookies, depth "
+        "charts, trades) that a trailing-stats Marcel cannot see; clearing this gate "
+        "needs offseason features (draft capital, depth-chart priors), the documented "
+        "escalation."
     ),
 )
 @pytest.mark.parametrize("pos", ["QB", "RB", "WR", "TE"])
@@ -110,8 +118,34 @@ def test_projection_oracle_spearman_and_mae(joined, pos):
     assert sub.height >= 30, f"{pos}: oracle join too thin ({sub.height} rows)"
     s = spearman_corr(sub["proj_ppg"].to_numpy(), sub["realized_ppg"].to_numpy())
     m = mae(sub["proj_ppg"].to_numpy(), sub["realized_ppg"].to_numpy())
-    m_carry = mae(sub["last_ppg"].to_numpy(), sub["realized_ppg"].to_numpy())
     assert s >= SPEARMAN_FLOORS[pos], f"{pos}: spearman {s:.4f} < floor {SPEARMAN_FLOORS[pos]}"
     assert m <= MAE_FLOORS[pos], f"{pos}: MAE {m:.4f} > floor {MAE_FLOORS[pos]}"
-    # beats naive last-season carry-forward
+
+
+@pytest.mark.parametrize(
+    "pos",
+    [
+        "QB",
+        pytest.param(
+            "RB",
+            marks=pytest.mark.xfail(
+                strict=True,
+                reason=(
+                    "RB carry-forward gate is RED out-of-sample and the assert is intentionally "
+                    "NOT weakened: fold-fit RB Marcel MAE 2.9397 vs carry 2.8356 on 2024 (single "
+                    "OOS evaluation). The only constants that beat carry for RB were tuned on the "
+                    "2024 holdout itself (circular; discarded per oracle-gate review). Single-"
+                    "season carry-forward is a genuinely strong RB baseline; escalation lever is "
+                    "the documented GBT variant / usage-based volume features."
+                ),
+            ),
+        ),
+        "WR",
+        "TE",
+    ],
+)
+def test_projection_beats_carry_forward(joined, pos):
+    sub = joined.filter((pl.col("position_group") == pos) & pl.col("last_ppg").is_not_null())
+    m = mae(sub["proj_ppg"].to_numpy(), sub["realized_ppg"].to_numpy())
+    m_carry = mae(sub["last_ppg"].to_numpy(), sub["realized_ppg"].to_numpy())
     assert m <= m_carry, f"{pos}: MAE {m:.4f} worse than carry-forward {m_carry:.4f}"

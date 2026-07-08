@@ -66,7 +66,12 @@ def _three_wr_weekly():
 
 
 def test_usage_projection_renormalizes_within_team(monkeypatch):
-    import sportsdataverse.nfl.nfl_usage_projection as mod
+    import importlib
+
+    # importlib (not `import ... as mod`): the package attribute
+    # `sportsdataverse.nfl.nfl_usage_projection` is shadowed by the same-named
+    # public function exported in __init__ (repo precedent: nfl_season_standings)
+    mod = importlib.import_module("sportsdataverse.nfl.nfl_usage_projection")
 
     weekly = _three_wr_weekly()
     assert weekly.schema["player_id"] == pl.Utf8  # join-key dtype guard
@@ -82,7 +87,12 @@ def test_usage_projection_renormalizes_within_team(monkeypatch):
 
 
 def test_usage_projection_leakage(monkeypatch):
-    import sportsdataverse.nfl.nfl_usage_projection as mod
+    import importlib
+
+    # importlib (not `import ... as mod`): the package attribute
+    # `sportsdataverse.nfl.nfl_usage_projection` is shadowed by the same-named
+    # public function exported in __init__ (repo precedent: nfl_season_standings)
+    mod = importlib.import_module("sportsdataverse.nfl.nfl_usage_projection")
 
     poisoned = pl.concat(
         [
@@ -114,13 +124,21 @@ def test_usage_projection_leakage(monkeypatch):
 def test_oracle_usage_shares_vs_realized_2024():
     """Usage-share oracle vs realized 2024 (offline fixtures).
 
-    Floors from observed values 2026-07-08 (rounded down):
-    RB spearman 0.7092, WR 0.6258, TE 0.7836; target-share MAE
-    RB 0.0340, WR 0.0710, TE 0.0527. Team share sums are exactly 1.0.
+    Floors from observed values 2026-07-08 with the FOLD-FIT constants (the
+    2024 holdout was not touched during fitting; single out-of-sample run):
+    RB spearman 0.7263, WR 0.6476, TE 0.7368; target-share MAE RB 0.0277,
+    WR 0.0632, TE 0.0476. Team share sums are exactly 1.0. Realized shares are
+    aggregated to one row per player (max-targets stint) before the join so
+    mid-season trades cannot duplicate players.
     """
     from pathlib import Path
 
-    import sportsdataverse.nfl.nfl_usage_projection as mod
+    import importlib
+
+    # importlib (not `import ... as mod`): the package attribute
+    # `sportsdataverse.nfl.nfl_usage_projection` is shadowed by the same-named
+    # public function exported in __init__ (repo precedent: nfl_season_standings)
+    mod = importlib.import_module("sportsdataverse.nfl.nfl_usage_projection")
     from sportsdataverse.nfl.nfl_projection_constants import mae, spearman_corr
 
     fix = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_projection"
@@ -132,11 +150,19 @@ def test_oracle_usage_shares_vs_realized_2024():
         usage = mod.nfl_usage_projection([2020, 2021, 2022, 2023], 2024)
     finally:
         mod.load_nfl_player_stats = orig
-    real = season_usage_shares(realized_w).filter(pl.col("games") >= 8)
+    real = (
+        season_usage_shares(realized_w)
+        .filter(pl.col("games") >= 8)
+        # one row per player: mid-season trades yield one row per team — keep
+        # the max-targets stint so the join cannot duplicate players
+        .sort("targets", "team", descending=[True, False])
+        .group_by("player_id", maintain_order=True)
+        .agg(pl.col("target_share").first().alias("real_ts"))
+    )
     assert usage.schema["player_id"] == real.schema["player_id"]
-    j = usage.join(real.select("player_id", pl.col("target_share").alias("real_ts")), on="player_id", how="inner")
-    floors = {"RB": 0.70, "WR": 0.61, "TE": 0.77}
-    mae_floors = {"RB": 0.04, "WR": 0.08, "TE": 0.06}
+    j = usage.join(real, on="player_id", how="inner")
+    floors = {"RB": 0.72, "WR": 0.64, "TE": 0.73}
+    mae_floors = {"RB": 0.03, "WR": 0.07, "TE": 0.05}
     for pos, floor in floors.items():
         s = j.filter(pl.col("position_group") == pos)
         assert s.height >= 30

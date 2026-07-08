@@ -18,17 +18,19 @@ from sportsdataverse.nfl.nfl_projection_constants import as_of_season_split, get
 if TYPE_CHECKING:  # pragma: no cover
     import pandas as pd
 
-# Fitted by dev/nfl_projection/fit_availability.py (2026-07-08):
-# EB_PRIOR_SEASONS = prior strength in pseudo-seasons; AVAIL_RECAL = (a, b) of
-# the linear recalibration applied to the raw EB rate, fit by numpy.polyfit on
-# as-of folds (targets 2022 + 2023, snap-count history only, players with >= 8
-# available games in the most recent visible season). At k=0.2 the fold-fit
-# recal (0.1838, 0.7146) gives 2024 holdout games MAE 3.5422 and max decile
-# calibration gap 0.0458 (<= 0.05 gate) on that population. See the
-# POSITION_CONSTANTS comment for the fitted base rates + the QB/RB base-order
-# finding (crosswalk verified; QB availability folds benching churn).
-EB_PRIOR_SEASONS: float = 0.2
-AVAIL_RECAL: tuple = (0.1838, 0.7146)
+# Fitted by dev/nfl_projection/fit_availability.py (2026-07-08, fold-only
+# revision after the oracle-gate review): EB_PRIOR_SEASONS selected by
+# leave-one-fold-out games MAE on as-of folds (targets 2022 + 2023, snap-count
+# history only, "recent regulars" population = players with >= 8 available
+# games in the most recent visible season): k grid 0.1-1.5, LOFO MAE monotone
+# in k, minimum at k=0.1 (3.7030). AVAIL_RECAL = (a, b) linear recalibration of
+# the raw EB rate, numpy.polyfit pooled over both folds at the selected k.
+# The 2024 holdout was NOT touched during selection; single out-of-sample 2024
+# evaluation: games MAE 3.5436, max decile calibration gap 0.0494 (gate 0.05).
+# See the POSITION_CONSTANTS comment for the fitted base rates + the QB/RB
+# base-order finding (crosswalk verified; QB availability folds benching churn).
+EB_PRIOR_SEASONS: float = 0.1
+AVAIL_RECAL: tuple = (0.2040, 0.6821)
 
 _SEASON_SCHEMA: dict = {
     "player_id": pl.Utf8,

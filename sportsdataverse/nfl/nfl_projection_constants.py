@@ -69,17 +69,20 @@ class PositionConstants:
 
 
 # recency_weights / aging_damping / shrinkage_k fitted jointly by
-# dev/nfl_projection/fit_shrinkage.py (2026-07-08): grid over weight/damping
-# candidates x scipy.optimize.minimize_scalar on k (bounded 0.01-400),
-# minimizing holdout MAE(proj_ppg, realized_ppg) on the committed 2024 corpus.
-# Fitted values (holdout MAE vs last-season carry-forward MAE):
-#   QB w=(3,1,0) d=0.5 k=219.26 -> 2.4289 (carry 3.8881)
-#   RB w=(1,0,0) d=0.0 k=0.78   -> 2.7579 (carry 2.8356)
-#   WR w=(5,3,1) d=1.0 k=37.15  -> 2.9505 (carry 3.3225)
-#   TE w=(5,4,3) d=0.0 k=11.69  -> 1.8417 (carry 2.1147)
-# RB/TE aging_damping=0: the 4-season delta-method curve for those groups is
-# noise-dominated on holdout, so the aging ratio is disabled (curve still fit +
-# exposed; the damping gates its application).
+# dev/nfl_projection/fit_shrinkage.py (2026-07-08, fold-based revision after the
+# oracle-gate review): grid over weight/damping candidates x
+# scipy.optimize.minimize_scalar on k (bounded 0.01-400), minimizing POOLED
+# AS-OF FOLD MAE(proj_ppg, realized_ppg) on fold targets 2022 (hist 2020-21)
+# and 2023 (hist 2020-22) — the 2024 holdout was NOT touched during fitting.
+# Single out-of-sample 2024 evaluation (MAE vs last-season carry-forward MAE):
+#   QB w=(3,1,0) d=0.0 k=338.99 -> spearman 0.6146, MAE 2.4949 (carry 3.8881)
+#   RB w=(3,1,0) d=0.0 k=2.02   -> spearman 0.7240, MAE 2.9397 (carry 2.8356; RED)
+#   WR w=(3,1,0) d=1.0 k=3.26   -> spearman 0.6599, MAE 3.0176 (carry 3.3225)
+#   TE w=(1,0,0) d=0.0 k=0.78   -> spearman 0.7285, MAE 2.0338 (carry 2.1147)
+# RB is the one position whose Marcel blend does NOT beat single-season
+# carry-forward out-of-sample (documented xfail in the oracle gate).
+# aging_damping=0 where the 4-season delta-method curve is noise-dominated on
+# the folds (curve still fit + exposed; the damping gates its application).
 # base_availability fitted by dev/nfl_projection/fit_availability.py
 # (2026-07-08): all-player mean availability_rate per position over the
 # committed 2021-2023 snap corpus (population-consistent EB prior; minimizes
@@ -96,46 +99,47 @@ class PositionConstants:
 # (2026-07-08): numpy.polyfit deg-1 of realized season fantasy points on raw
 # projected fantasy points, pooled over as-of folds target=2022 (hist 2020-21)
 # and target=2023 (hist 2020-22), players with >= 8 realized games:
-#   QB (137.2506, 0.4032) n=66; RB (56.0273, 0.5716) n=150;
-#   WR (10.7973, 0.8766) n=244; TE (23.0885, 0.7252) n=122.
+#   QB (138.9270, 0.3833) n=66; RB (50.0169, 0.6174) n=150;
+#   WR (20.2288, 0.8215) n=244; TE (26.0575, 0.6898) n=122 (refit after the
+#   fold-based Marcel-constant revision).
 # The calibration is a per-position monotone (linear) level correction — it
 # fixes systematic totals bias; rank metrics (Spearman gates) are unaffected.
 POSITION_CONSTANTS: Dict[str, PositionConstants] = {
     "QB": PositionConstants(
         recency_weights=(3.0, 1.0, 0.0),
-        shrinkage_k=219.26,
+        shrinkage_k=338.99,
         min_volume=100.0,
         aging_base_age=27.0,
         base_availability=0.4746,
-        aging_damping=0.5,
-        fp_calibration=(137.2506, 0.4032),
+        aging_damping=0.0,
+        fp_calibration=(138.9270, 0.3833),
     ),
     "RB": PositionConstants(
-        recency_weights=(1.0, 0.0, 0.0),
-        shrinkage_k=0.78,
+        recency_weights=(3.0, 1.0, 0.0),
+        shrinkage_k=2.02,
         min_volume=60.0,
         aging_base_age=25.0,
         base_availability=0.5976,
         aging_damping=0.0,
-        fp_calibration=(56.0273, 0.5716),
+        fp_calibration=(50.0169, 0.6174),
     ),
     "WR": PositionConstants(
-        recency_weights=(5.0, 3.0, 1.0),
-        shrinkage_k=37.15,
+        recency_weights=(3.0, 1.0, 0.0),
+        shrinkage_k=3.26,
         min_volume=40.0,
         aging_base_age=26.0,
         base_availability=0.6397,
         aging_damping=1.0,
-        fp_calibration=(10.7973, 0.8766),
+        fp_calibration=(20.2288, 0.8215),
     ),
     "TE": PositionConstants(
-        recency_weights=(5.0, 4.0, 3.0),
-        shrinkage_k=11.69,
+        recency_weights=(1.0, 0.0, 0.0),
+        shrinkage_k=0.78,
         min_volume=30.0,
         aging_base_age=27.0,
         base_availability=0.6883,
         aging_damping=0.0,
-        fp_calibration=(23.0885, 0.7252),
+        fp_calibration=(26.0575, 0.6898),
     ),
     "DEFAULT": PositionConstants(),
 }

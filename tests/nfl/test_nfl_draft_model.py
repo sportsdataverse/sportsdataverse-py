@@ -90,7 +90,7 @@ def test_projection_excludes_target_class_from_training():
     assert np.allclose(a["pred_car_av"].to_numpy(), b["pred_car_av"].to_numpy())
 
 
-def test_assemble_imputes_missing_measurables():
+def test_assemble_flags_missing_and_project_imputes_train_only():
     combine, draft = _synth_loader_frames()
     combine = combine.with_columns(
         pl.when(pl.col("pfr_id") == "PFR1").then(None).otherwise(pl.col("forty")).alias("forty")
@@ -98,7 +98,11 @@ def test_assemble_imputes_missing_measurables():
     feats = assemble_draft_features(combine, draft)
     r = feats.filter(pl.col("gsis_id") == "00-0000001").row(0, named=True)
     assert r["forty_imputed"] == 1
-    assert r["forty"] is not None  # imputed to position-season median
+    assert r["forty"] is None  # values stay null; imputation is train-only inside project_draft_class
+    # projection still runs cleanly with the null present in a training row
+    out = project_draft_class(feats, 2020, lam=1.0)
+    assert out.height > 0
+    assert out["pred_car_av"].is_not_null().all()
 
 
 def test_assemble_empty_returns_schema():
@@ -113,35 +117,31 @@ def _fixture_features():
     feats = pl.read_parquet(FIX / "draft_matured.parquet")
     for c in MEASURABLES:
         feats = feats.with_columns(pl.col(c).is_null().cast(pl.Int8).alias(f"{c}_imputed"))
-        feats = feats.with_columns(
-            pl.col(c)
-            .fill_null(pl.col(c).median().over("position", "season"))
-            .fill_null(pl.col(c).median().over("position"))
-            .fill_null(pl.col(c).median())
-            .fill_null(0.0)
-        )
-    return feats
+    return feats  # values stay null; project_draft_class imputes with train-only medians
 
 
 def test_oracle_draft_model_vs_realized_and_pick():
     """Draft-model oracle on matured holdout classes 2015-2019 (offline fixtures).
 
-    Train per class on classes <= class - 5 (maturity boundary); pool the five
-    holdout classes (n=1269). Observed 2026-07-08 with DEFAULT_LAM=100
-    (selected on inner classes 2008-2014, see
-    dev/nfl_projection/fit_draft_lambda.py): ours 0.5888 vs pick-only 0.5865;
-    hit calibration max decile gap 0.0757 (gate 0.10). Floors set from observed
+    Train per class on classes <= class - 5 (maturity boundary), with
+    TRAIN-ONLY median imputation of missing measurables (oracle-gate-review
+    finding #4); pool the five holdout classes (n=1269). Observed 2026-07-08
+    with DEFAULT_LAM=100 (selected on inner classes 2008-2014, see
+    dev/nfl_projection/fit_draft_lambda.py): ours 0.5872 vs pick-only 0.5865;
+    hit calibration max decile gap 0.0797 (gate 0.10). Floors set from observed
     values rounded down. Realized `car_av` is nflverse `w_av` (see fixture
-    README).
+    README); labels are career-to-capture-date AV, the conventional maturity
+    design.
     """
     from sportsdataverse.nfl.nfl_draft_model import HIT_SEASONS_STARTED
     from sportsdataverse.nfl.nfl_projection_constants import calibration_table, spearman_corr
 
     feats = _fixture_features()
+    holdout = pl.read_parquet(FIX / "draft_holdout.parquet")  # matured realized outcomes, classes 2015-2019
     preds = []
     for cls in [2015, 2016, 2017, 2018, 2019]:
         p = project_draft_class(feats, cls)
-        realized = feats.filter(pl.col("season") == cls).select("gsis_id", "car_av", "pick", "seasons_started")
+        realized = holdout.filter(pl.col("season") == cls).select("gsis_id", "car_av", "pick", "seasons_started")
         assert p.schema["gsis_id"] == realized.schema["gsis_id"]
         preds.append(p.join(realized, on="gsis_id", how="inner"))
     allp = pl.concat(preds)

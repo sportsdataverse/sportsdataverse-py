@@ -110,18 +110,24 @@ def assemble_draft_features(combine: pl.DataFrame, draft: pl.DataFrame) -> pl.Da
         feats = dr.join(cb, left_on="pfr_player_id", right_on="pfr_id", how="left").drop("pfr_player_id")
     else:
         feats = dr.drop("pfr_player_id").with_columns(*[pl.lit(None, dtype=pl.Float64).alias(c) for c in MEASURABLES])
-    # impute to the position-season median, then the position median, then the
-    # global median; retain flags
+    # flag missing measurables; the VALUES stay null here — imputation happens
+    # inside project_draft_class with TRAIN-ONLY medians so a target class can
+    # never leak its own (or later classes') medians into the walk
     for c in MEASURABLES:
         feats = feats.with_columns(pl.col(c).is_null().cast(pl.Int8).alias(f"{c}_imputed"))
-        feats = feats.with_columns(
-            pl.col(c)
-            .fill_null(pl.col(c).median().over("position", "season"))
-            .fill_null(pl.col(c).median().over("position"))
-            .fill_null(pl.col(c).median())
-            .fill_null(0.0)
-        )
     return feats.select(list(_FEATURE_SCHEMA.keys()))
+
+
+def _impute_with_train_medians(train: pl.DataFrame, pred: pl.DataFrame) -> Tuple[pl.DataFrame, pl.DataFrame]:
+    """Fill missing measurables with TRAIN-only position medians (global-median
+    then 0.0 fallbacks), applied to both the train and prediction slices."""
+    for c in MEASURABLES:
+        med = train.group_by("position").agg(pl.col(c).median().alias(f"_med_{c}"))
+        gmed = train[c].median()
+        fill = pl.col(c).fill_null(pl.col(f"_med_{c}")).fill_null(gmed).fill_null(0.0)
+        train = train.join(med, on="position", how="left").with_columns(fill).drop(f"_med_{c}")
+        pred = pred.join(med, on="position", how="left").with_columns(fill).drop(f"_med_{c}")
+    return train, pred
 
 
 def _ridge_fit(X: np.ndarray, y: np.ndarray, lam: float) -> np.ndarray:
@@ -254,7 +260,7 @@ def nfl_draft_projection(
     if "season" in draft.columns and seasons:
         draft = draft.filter(pl.col("season").is_in(list(seasons) + [target_class]))
     feats = assemble_draft_features(combine, draft)
-    return project_draft_class(feats, target_class, lam=lam, return_as_pandas=return_as_pandas)  # type: ignore[return-value]
+    return project_draft_class(feats, target_class, lam=lam, return_as_pandas=return_as_pandas)
 
 
 def project_draft_class(
@@ -286,6 +292,7 @@ def project_draft_class(
     if train.height == 0 or pred.height == 0:
         result = pl.DataFrame(schema=_PROJ_SCHEMA)
         return result.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else result
+    train, pred = _impute_with_train_medians(train, pred)
     positions = sorted([p for p in train["position"].unique().to_list() if p is not None])
     X_train, stats = _design(train, positions)
     X_pred, _ = _design(pred, positions, stats=stats)
