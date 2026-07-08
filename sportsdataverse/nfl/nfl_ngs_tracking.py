@@ -38,7 +38,10 @@ from sportsdataverse.nfl.nfl_loaders import load_nfl_nextgen_stats
 from sportsdataverse.nfl.nfl_ngs_constants import (
     MIN_ATTEMPTS,
     MIN_RECEPTIONS,
+    MIN_TARGETS,
+    RECEIVER_POSITIONS,
     empirical_bayes_shrink,
+    expected_separation_ridge,
     weekly_sigma2,
 )
 
@@ -108,6 +111,7 @@ def _shrink_over_season(
     out_raw: str,
     out_shrunk: str,
     weekly: Optional[pl.DataFrame] = None,
+    weekly_raw_col: Optional[str] = None,
 ) -> pl.DataFrame:
     """Apply empirical-Bayes shrinkage per season; prior fit on qualified rows.
 
@@ -128,7 +132,11 @@ def _shrink_over_season(
         prior_mean = float(np.average(x[qualified], weights=n[qualified])) if qualified.any() else None
         sigma2 = None
         if weekly is not None and weekly.height > 0:
-            sigma2 = weekly_sigma2(weekly.filter(pl.col("season") == _season), raw_col, weight_col)
+            sigma2 = weekly_sigma2(
+                weekly.filter(pl.col("season") == _season),
+                weekly_raw_col or raw_col,
+                weight_col,
+            )
         shrunk, rel = empirical_bayes_shrink(x, n, prior_mean=prior_mean, sigma2=sigma2)
         frames.append(
             grp.with_columns(
@@ -342,4 +350,136 @@ def nfl_ngs_ryoe(
     .. _nflfastR: https://www.nflfastr.com
     """
     out = _ryoe_impl(seasons, min_attempts, _loader)
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+_SEP_SCHEMA = {
+    "season": pl.Int64,
+    "player_gsis_id": pl.Utf8,
+    "player_display_name": pl.Utf8,
+    "team_abbr": pl.Utf8,
+    "position": pl.Utf8,
+    "targets": pl.Float64,
+    "avg_cushion": pl.Float64,
+    "avg_separation": pl.Float64,
+    "avg_intended_air_yards": pl.Float64,
+    "expected_separation": pl.Float64,
+    "sep_oe_raw": pl.Float64,
+    "sep_oe_shrunk": pl.Float64,
+    "reliability": pl.Float64,
+    "sep_oe_rank": pl.Int64,
+}
+
+_SEP_FEATURE_COLS = ("avg_cushion", "avg_intended_air_yards")
+
+
+def _sep_design_matrix(grp: pl.DataFrame) -> np.ndarray:
+    """Numeric features + one-hot position (RECEIVER_POSITIONS, else other)."""
+    numeric = np.column_stack([grp[c].to_numpy().astype(float) for c in _SEP_FEATURE_COLS])
+    pos = grp["position"].to_numpy()
+    onehot = np.column_stack(
+        [(pos == p).astype(float) for p in RECEIVER_POSITIONS] + [(~np.isin(pos, RECEIVER_POSITIONS)).astype(float)]
+    )
+    return np.column_stack([numeric, onehot])
+
+
+def _separation_oe_impl(
+    seasons: Union[int, Sequence[int]],
+    min_targets: int,
+    _loader: Optional[Callable[..., pl.DataFrame]],
+) -> pl.DataFrame:
+    season_list = _season_list(seasons)
+    panel = _ngs_panel(season_list, "receiving", level="season", _loader=_loader)
+    if panel.height == 0:
+        return pl.DataFrame(schema=_SEP_SCHEMA)
+    panel = panel.rename({"player_position": "position"}).drop_nulls(["avg_separation", "targets", *_SEP_FEATURE_COLS])
+    if panel.height == 0:
+        return pl.DataFrame(schema=_SEP_SCHEMA)
+    weekly = _ngs_panel(season_list, "receiving", level="week", _loader=_loader)
+    frames = []
+    for (_season,), grp in panel.group_by("season", maintain_order=True):
+        y = grp["avg_separation"].to_numpy().astype(float)
+        w = grp["targets"].to_numpy().astype(float)
+        expected, _beta = expected_separation_ridge(y, _sep_design_matrix(grp), w)
+        frames.append(
+            grp.with_columns(
+                pl.Series("expected_separation", expected, dtype=pl.Float64),
+                pl.Series("sep_oe_raw", y - expected, dtype=pl.Float64),
+            )
+        )
+    out = pl.concat(frames)
+    # weekly avg_separation variation identifies sigma2 for the residual
+    # (the smooth expectation contributes ~nothing to within-player variance)
+    out = _shrink_over_season(
+        out,
+        "sep_oe_raw",
+        "targets",
+        float(min_targets),
+        "sep_oe_raw",
+        "sep_oe_shrunk",
+        weekly=weekly,
+        weekly_raw_col="avg_separation",
+    )
+    out = out.with_columns(_qualified_rank("sep_oe_shrunk", "targets", float(min_targets), "sep_oe_rank")).select(
+        list(_SEP_SCHEMA.keys())
+    )
+    return out.cast(_SEP_SCHEMA)
+
+
+def nfl_ngs_separation_oe(
+    seasons: Union[int, Sequence[int]],
+    *,
+    min_targets: int = MIN_TARGETS,
+    return_as_pandas: bool = False,
+    _loader: Optional[Callable[..., pl.DataFrame]] = None,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Separation over a built context expectation, per receiver-season.
+
+    Unlike YAC-OE and RYOE, NGS ships no expected-separation field, so this
+    model BUILDS one: a per-season weighted ridge
+    (:func:`sportsdataverse.nfl.nfl_ngs_constants.expected_separation_ridge`)
+    of ``avg_separation`` on ``avg_cushion``, ``avg_intended_air_yards`` and
+    a position one-hot, weighted by ``targets``. ``sep_oe_raw`` is the
+    residual — a CONTEXT residual (role/scheme proxies), not a
+    tracking-model expectation; treat it as descriptive, not causal.
+    ``sep_oe_shrunk`` applies the same per-season empirical-Bayes shrinkage
+    as the sibling models, weighted by ``targets``. All parameters are fit
+    from the requested seasons at call time — no bundled artifact.
+
+    Args:
+        seasons (Union[int, Sequence[int]]): Season(s) to compute, 2016+.
+        min_targets (int): Qualification threshold for the shrinkage prior
+            and for receiving a ``sep_oe_rank``. Defaults to
+            :data:`sportsdataverse.nfl.nfl_ngs_constants.MIN_TARGETS`.
+        return_as_pandas (bool): If True, returns a pandas DataFrame.
+        _loader (Optional[Callable]): Injectable loader for offline tests.
+
+    Returns:
+        Union[pl.DataFrame, pd.DataFrame]: One row per
+        ``(season, player_gsis_id)`` with the built ``expected_separation``,
+        raw + shrunk separation-over-expected, ``reliability`` in [0, 1],
+        and a dense descending ``sep_oe_rank`` over qualified rows. Rows
+        with null separation/cushion/air-yards inputs are dropped before
+        the fit. Empty input returns a zero-row frame with the documented
+        schema.
+
+    Example:
+        Separation over expected, 2023::
+
+            from sportsdataverse.nfl import nfl_ngs_separation_oe
+            df = nfl_ngs_separation_oe([2023])
+            print(df.sort("sep_oe_rank").head())
+
+        Pandas output::
+
+            df_pd = nfl_ngs_separation_oe(2023, return_as_pandas=True)
+
+    See Also:
+        * `nflreadpy`_ -- source loader parity (``load_nextgen_stats``)
+        * `nflfastR`_ -- NFL play-by-play ecosystem (R)
+
+    .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    .. _nflfastR: https://www.nflfastr.com
+    """
+    out = _separation_oe_impl(seasons, min_targets, _loader)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
