@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: measurement_type_key
+  type: integer
+- description: ''
+  name: measurement_type
+  type: character
+- description: ''
+  name: value
+  type: numeric
+- description: ''
+  name: is_verified
+  type: logical
+kind: dataframe
+schema: people_combine_measurements

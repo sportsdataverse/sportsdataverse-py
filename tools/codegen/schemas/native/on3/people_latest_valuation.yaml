@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: nil_status
+  type: character
+- description: ''
+  name: valuation
+  type: integer
+- description: ''
+  name: valuation_change
+  type: integer
+- description: ''
+  name: followers
+  type: integer
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: last_updated
+  type: integer
+- description: ''
+  name: social_valuations
+  type: character
+- description: ''
+  name: group_rank
+  type: integer
+- description: ''
+  name: group_name
+  type: character
+kind: dataframe
+schema: people_latest_valuation

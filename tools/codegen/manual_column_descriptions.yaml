@@ -4185,6 +4185,58 @@ ohl_standings:
   goals_diff: Net goal differential for the team (goals for minus goals against) displayed as a signed string.
   past_10: Team record over the most recent ten games, formatted as a W-L or W-OTL-L string.
   percentage: Team points percentage expressed as a string, calculated as points earned divided by maximum possible points.
+commits_latest:
+  athlete_verified: Whether On3 has verified the recruit's athletic identity.
+  class_year: Recruiting class (graduation) year of the recruit.
+  commit_status: Nested commitment status (committed organization, dates, flags) for the recruit.
+  default_asset: Nested primary media asset (headshot) object for the recruit.
+  default_asset_url: URL of the recruit's primary headshot image.
+  early_enrollee: Whether the recruit early-enrolled at their college.
+  early_signee: Whether the recruit signed during the early signing period.
+  height: Recruit height (formatted string, e.g. "6-2").
+  high_school_name: Name of the recruit's high school.
+  home_town_name: Recruit's hometown (city, state).
+  key: On3 person key (stable athlete identifier) for the recruit.
+  name: Full name of the recruit.
+  nil_status: Nested NIL (name/image/likeness) status object for the recruit.
+  nil_value: On3 NIL valuation for the recruit (US dollars).
+  position_abbreviation: Abbreviated primary position of the recruit.
+  predictions: List of recruiting-prediction entries (RPM picks) for the recruit.
+  prospect_verified: Whether On3 has verified the recruit as a prospect.
+  rating: On3 rating for the recruit.
+  recruitment_key: On3 recruitment key for the recruit's active recruitment.
+  roster_rating: On3 roster (transfer-portal-adjusted) rating for the recruit.
+  slug: URL slug for the recruit's On3 profile.
+  sport: Nested sport object (key/name/slug) the ranking pertains to.
+  weight: Recruit weight in pounds.
+players_industry_comparision:
+  nil_value: On3 NIL valuation for the player (US dollars).
+  person: Nested person object (identity, school, position, status) for the player.
+  ratings: List of per-service rating entries (On3, Rivals, 247, ESPN) composing the industry comparison.
+team_ranking_team_rankings:
+  applied_average_consensus_rating: Average consensus rating applied to the class after deductions.
+  applied_average_rating: Average On3 rating applied to the class after deductions.
+  applied_commits: Number of commits counted toward the applied class rating.
+  applied_total_consensus_rating: Total consensus rating applied to the class after deductions.
+  applied_total_rating: Total On3 rating applied to the class after deductions.
+  average_nil_value: Average On3 NIL valuation across the class's commits (US dollars).
+  commits: Number of commits in the recruiting class.
+  conference_consensus_rank: Rank of the class within its conference by consensus score.
+  conference_rank: Rank of the class within its conference by On3 score.
+  consensus_five_stars: Count of consensus five-star commits in the class.
+  consensus_four_stars: Count of consensus four-star commits in the class.
+  consensus_three_stars: Count of consensus three-star commits in the class.
+  deductions: Rating deductions applied to the class (e.g. for roster limits).
+  deductions_description: Human-readable explanation of any applied deductions.
+  dispay_consensus_score: Display consensus score for the class (On3 sic spelling of "display").
+  dispay_on3_score: Display On3 score for the class (On3 sic spelling of "display").
+  five_stars: Count of On3 five-star commits in the class.
+  four_stars: Count of On3 four-star commits in the class.
+  key: On3 organization-ranking key for the class row.
+  organization: Nested organization object (school identity, logo, colors) for the class.
+  overall_consensus_rank: National rank of the class by consensus score.
+  overall_rank: National rank of the class by On3 score.
+  three_stars: Count of On3 three-star commits in the class.
 on3_player_rankings:
   college_team_abbreviation: 'Abbreviation of the college program.'
   college_team_asset_alt_text: 'Accessibility alt text of the college program''s logo asset (usually null).'
@@ -6488,6 +6540,12 @@ sports247_institution_rankings:
   three_stars: 'Count of 247Sports three-star commits.'
   transfer_number: 'Number of incoming transfers counted in the class.'
   transfer_points: 'Transfer-portal points contributed to the class rating.'
+sports247_positions:
+  group: 'Position group name (e.g. Quarterback, Running Back).'
+  group_key: '247Sports position group key.'
+  label: 'Position abbreviation label (e.g. QB, RB).'
+  name: Full position group name (e.g. Quarterback).
+  value: '247Sports position key (returned as a string).'
 sports247_recruits:
   cbs_key: 'Legacy CBS player key (0 when unmapped).'
   committed_institution_abbreviation: 'Abbreviation of the program the recruit is committed to.'
@@ -7685,3 +7743,225 @@ win_probability:
     row.
   runners: A serialized representation of baserunner movement records for this play in the win-probability feed, capturing
     start/end base positions and event types.
+
+sports247_site_pages_coach:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_coach_ranking:
+  composite_rating: Composite class rating for the coach's haul.
+  conference_rank: Rank within conference.
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  overall_rank: Overall national coach-recruiting rank.
+  ranking: FK -> the Ranking snapshot this row belongs to.
+sports247_site_pages_draft_pick:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  mock: Whether this is a mock-draft projection vs an actual pick.
+  overall_pick: Overall selection number in the draft.
+  pick: Pick number within the round.
+  position_abbreviation: Player's position at draft.
+  round: Draft round number (1-based) the pick belongs to.
+sports247_site_pages_event:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_institution:
+  default_name: Server-rendered display label for the entity.
+  group: Institution group (division/level) bitmask code.
+  key: Primary key of this entity (the id used in its `.json` route).
+  location: FK -> Location (`/Institution/{Location}/Location.json`).
+  rankable: Whether the institution participates in class rankings.
+  site: FK -> team Site (network site key).
+  state: FK -> State entity.
+  type: Institution type code (college / pro / high school).
+sports247_site_pages_location:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_player:
+  cbs_key: Cross-reference key into the CBS Sports id space.
+  current_player_institution: FK -> PlayerInstitution (current school).
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  national_rank: Overall national rank in the recruit's class.
+  position_rank: Rank within position for the class.
+  primary_player_sport: FK -> PlayerSport (`/PlayerSport/{id}.json`).
+  rating: 247Sports numeric rating (0-1 scale) for the primary sport.
+  star_rating: Star tier (2-5) derived from the rating.
+  state_rank: Rank within home state for the class.
+sports247_site_pages_player_institution:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_player_institution_evaluation:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+sports247_site_pages_player_institution_prediction:
+  confidence: Expert confidence 1-10.
+  default_name: Server-rendered display label for the entity.
+  institution: FK -> predicted destination Institution.
+  key: Primary key of this entity (the id used in its `.json` route).
+  prediction_status: Crystal-ball prediction status code.
+  score: Expert accuracy score at time of prediction.
+sports247_site_pages_player_sport:
+  class_year: Recruiting class year.
+  composite_rating: 247Sports Composite rating (industry blend).
+  composite_strength: Composite strength points (team-ranking weight).
+  default_name: Server-rendered display label for the entity.
+  espn_grade: ESPN source grade (industry composite input).
+  key: Primary key of this entity (the id used in its `.json` route).
+  rating: 247Sports rating string (0-1).
+  recruitment: FK -> Recruitment aggregate for this player-sport.
+  rivals_grade: Rivals source grade (industry composite input).
+  star_rating: Star tier (2-5).
+sports247_site_pages_player_sport_ranking:
+  committed_institution: FK -> committed Institution (null if uncommitted).
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  overall_rank: Overall national rank in the snapshot.
+  position_rank: Rank within position.
+  ranking: FK -> Ranking snapshot.
+  state_rank: Rank within home state.
+sports247_site_pages_recruit:
+  committed_institution: FK -> committed Institution.
+  composite_strength: Composite strength points contributed to team ranking.
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+  player_cbs_key: Cross-reference key into the CBS Sports id space.
+  player_current_player_institution: FK -> PlayerInstitution (current school).
+  player_default_name: Server-rendered display label for the entity.
+  player_key: Primary key of this entity (the id used in its `.json` route).
+  player_national_rank: Overall national rank in the recruit's class.
+  player_position_rank: Rank within position for the class.
+  player_primary_player_sport: FK -> PlayerSport (`/PlayerSport/{id}.json`).
+  player_rating: 247Sports numeric rating (0-1 scale) for the primary sport.
+  player_star_rating: Star tier (2-5) derived from the rating.
+  player_state_rank: Rank within home state for the class.
+  recruit_interest_count: Number of tracked school interests.
+  recruit_interests_url: Site URL to the recruit's interest timeline.
+sports247_site_pages_recruit_interest:
+  commit_status: Commitment status label (e.g. Committed, Signed).
+  default_name: Server-rendered display label for the entity.
+  hard_commit: FK -> the RecruitInterestEvent marking a hard commit.
+  institution: FK -> the interested/interesting Institution.
+  key: Primary key of this entity (the id used in its `.json` route).
+  offered: Whether the school has extended an offer.
+  recruitment: FK -> parent Recruitment.
+sports247_site_pages_recruit_interest_event:
+  default_name: Server-rendered display label for the entity.
+  key: Primary key of this entity (the id used in its `.json` route).
+passing_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team name/abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying dropback in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass: PFF passing grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  dropbacks: Total quarterback dropbacks.
+  attempts: Pass attempts thrown by the passer.
+  completions: Completed passes by the passer.
+  completion_percent: Completion percentage.
+  yards: Total passing yards gained.
+  qb_rating: NFL passer rating.
+  sacks: Times the passer was sacked.
+  sack_percent: Sack rate (sacks per dropback).
+  twp_rate: Turnover-worthy-play rate.
+  btt_rate: Big-time-throw rate.
+  accuracy_percent: Charted accuracy percentage.
+  drop_rate: Receiver drop rate on the quarterback's throws.
+  first_downs: Passing first downs.
+  scrambles: Scramble plays.
+  thrown_aways: Passes intentionally thrown away.
+  spikes: Clock-stopping spike plays.
+  bats: Passes batted at the line.
+  hit_as_threw: Plays where the quarterback was hit as he threw.
+  interceptions: Interceptions thrown.
+  penalties: Penalties charged.
+  declined_penalties: Declined penalties.
+  draft_season: Draft class (year) of the player.
+  eligible_season: First eligible season for the player.
+defense_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_defense: PFF overall defense grade (0-100).
+  grades_run_defense: PFF run-defense grade (0-100).
+  grades_coverage_defense: PFF coverage grade (0-100).
+  tackles: Total tackles made by the defender.
+  assists: Assisted tackles.
+  stops: Tackles that constitute an offensive failure ("stops").
+  sacks: Sacks credited.
+  total_pressures: Total quarterback pressures (sacks + hits + hurries).
+  interceptions: Interceptions made in coverage.
+  forced_fumbles: Forced fumbles.
+  interception_touchdowns: Touchdowns scored on interception returns.
+offense_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass: PFF passing grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  grades_pass_block: PFF pass-blocking grade (0-100).
+  grades_run_block: PFF run-blocking grade (0-100).
+  grades_pass_route: PFF receiving/route grade (0-100).
+receiving_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass_route: PFF receiving/route grade (0-100).
+  grades_hands_drop: PFF hands/drop grade (0-100).
+  targets: Times targeted.
+  receptions: Passes caught by the receiver.
+  yards: Receiving yards.
+  touchdowns: Receiving touchdowns.
+  drops: Dropped passes.
+  yards_after_catch: Yards after the catch.
+  yprr: Yards per route run.
+  routes: Pass routes run by the receiver.
+  contested_receptions: Contested catches made.
+  contested_targets: Contested targets.
+rushing_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  attempts: Rushing attempts (carries) by the runner.
+  yards: Total rushing yards gained.
+  touchdowns: Rushing touchdowns.
+  yards_after_contact: Yards after contact.
+  avoided_tackles: Missed tackles forced.
+  elusive_rating: PFF elusive rating.
+  breakaway_yards: Breakaway (long-run) yards.
+  first_downs: Rushing first downs.
+  fumbles: Fumbles by the ball carrier.
+team_overview:
+  franchise_id: PFF franchise (team) id (integer join key).
+  abbreviation: Team abbreviation.
+  grades_offense: PFF team offense grade (0-100).
+  grades_defense: PFF team defense grade (0-100).
+  grades_coverage_defense: PFF team coverage grade (0-100).
+games:
+  id: PFF game id (integer join key).
+  season: Season (starting year) of the game.
+  week: Week number of the game.
+  league_id: PFF league id (integer).
+  home_franchise_id: PFF franchise id of the home team.
+  away_franchise_id: PFF franchise id of the away team.
+  home_team: Home team object (JSON-stringified in the tidy frame).
+  away_team: Away team object (JSON-stringified in the tidy frame).
+  stadium_id: PFF stadium identifier for the game venue.
+  start: Kickoff timestamp (ISO 8601 string).
+  has_stats: Whether PFF has published stats for the game.
+  lock_status: Data lock/publish status for the game.

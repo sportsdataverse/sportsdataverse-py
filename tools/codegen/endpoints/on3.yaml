@@ -1,95 +1,1101 @@
 api: on3
-host: https://www.on3.com
-name_pattern: on3_{short}
-module: on3
-parser_module: cfb.on3_parsers
+endpoints:
+- example_args:
+    person_key: 89617
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /coaches/{person_key}/history
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/coaches_history
+  short: coaches_history
+  summary: GET /rdb/v1/coaches/{personKey}/history
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /coaches/{person_key}/profile
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/coaches_profile
+  short: coaches_profile
+  summary: GET /rdb/v1/coaches/{personKey}/profile
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: organization_key
+    query_key: organizationKey
+    type: int
+  - name: query
+    query_key: query
+    type: str
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /collective-groups
+  returns_schema: native/on3/collective_groups
+  short: collective_groups
+  summary: GET /rdb/v1/collective-groups
+- example_args:
+    key: 1
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /collective-groups/{key}/deals
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/on3/collective_groups_deals
+  short: collective_groups_deals
+  summary: GET /rdb/v1/collective-groups/{key}/deals
+- example_args:
+    key: 1
+  parser: parse_on3_rdb
+  path: /collective-groups/{key}
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/on3/collective_groups_key
+  short: collective_groups_key
+  summary: GET /rdb/v1/collective-groups/{key}
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /commits/latest
+  returns_schema: native/on3/commits_latest
+  short: commits_latest
+  summary: GET /rdb/v1/commits/latest
+- example_args:
+    org_key: 1867
+  parser: parse_on3_rdb
+  path: /commits/organizations/{org_key}/latest-commits
+  path_params:
+  - name: org_key
+    required: true
+    type: int
+  returns_schema: native/on3/commits_organizations_latest_commits
+  short: commits_organizations_latest_commits
+  summary: GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
+- example_args:
+    org_key: 1867
+  parser: parse_on3_rdb
+  path: /commits/organizations/{org_key}
+  path_params:
+  - name: org_key
+    required: true
+    type: int
+  returns_schema: native/on3/commits_organizations_org_key
+  short: commits_organizations_org_key
+  summary: GET /rdb/v1/commits/organizations/{orgKey}
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /draft-organization-rank
+  returns_schema: native/on3/draft_organization_rank
+  short: draft_organization_rank
+  summary: GET /rdb/v1/draft-organization-rank
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /draft-pick-organization-rank
+  returns_schema: native/on3/draft_pick_organization_rank
+  short: draft_pick_organization_rank
+  summary: GET /rdb/v1/draft-pick-organization-rank
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: round
+    query_key: round
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  parser: parse_on3_rdb
+  path: /drafts
+  returns_schema: native/on3/drafts
+  short: drafts
+  summary: GET /rdb/v1/drafts
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: year_span
+    query_key: yearSpan
+    type: int
+  parser: parse_on3_rdb
+  path: /drafts-by-stars
+  returns_schema: native/on3/drafts_by_stars
+  short: drafts_by_stars
+  summary: GET /rdb/v1/drafts-by-stars
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  parser: parse_on3_rdb
+  path: /drafts-by-stars-summary
+  returns_schema: native/on3/drafts_by_stars_summary
+  short: drafts_by_stars_summary
+  summary: GET /rdb/v1/drafts-by-stars-summary
+- example_args:
+    org_key: 1867
+  extra_params:
+  - name: year
+    query_key: year
+    type: int
+  parser: parse_on3_rdb
+  path: /drafts/{org_key}/players
+  path_params:
+  - name: org_key
+    required: true
+    type: int
+  returns_schema: native/on3/drafts_players
+  short: drafts_players
+  summary: GET /rdb/v1/drafts/{orgKey}/players
+- extra_params:
+  - name: year
+    query_key: year
+    type: int
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  parser: parse_on3_rdb
+  path: /filters/conferences
+  returns_schema: native/on3/filters_conferences
+  short: filters_conferences
+  summary: GET /rdb/v1/filters/conferences
+- extra_params:
+  - name: year
+    query_key: year
+    type: int
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  parser: parse_on3_rdb
+  path: /filters/draft-rounds
+  returns_schema: native/on3/filters_draft_rounds
+  short: filters_draft_rounds
+  summary: GET /rdb/v1/filters/draft-rounds
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: position_type
+    query_key: positionType
+    type: str
+  parser: parse_on3_rdb
+  path: /filters/positions
+  returns_schema: native/on3/filters_positions
+  short: filters_positions
+  summary: GET /rdb/v1/filters/positions
+- parser: parse_on3_rdb
+  path: /filters/sports
+  returns_schema: native/on3/filters_sports
+  short: filters_sports
+  summary: GET /rdb/v1/filters/sports
+- parser: parse_on3_rdb
+  path: /filters/status
+  returns_schema: native/on3/filters_status
+  short: filters_status
+  summary: GET /rdb/v1/filters/status
+- extra_params:
+  - name: group_by
+    query_key: groupBy
+    type: bool
+  - name: year
+    query_key: year
+    type: int
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  parser: parse_on3_rdb
+  path: /filters/teams
+  returns_schema: native/on3/filters_teams
+  short: filters_teams
+  summary: GET /rdb/v1/filters/teams
+- parser: parse_on3_rdb
+  path: /filters/years
+  returns_schema: native/on3/filters_years
+  short: filters_years
+  summary: GET /rdb/v1/filters/years
+- extra_params:
+  - name: year
+    query_key: year
+    type: int
+  parser: parse_on3_rdb
+  path: /nil-100
+  returns_schema: native/on3/nil_100
+  short: nil_100
+  summary: GET /rdb/v1/nil-100
+- extra_params:
+  - name: year
+    query_key: year
+    type: int
+  - name: org_key
+    query_key: orgKey
+    type: int
+  - name: limit
+    query_key: limit
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  host: https://api.on3.com/public/rdb/v2
+  parser: parse_on3_rdb
+  path: /nil-100
+  returns_schema: native/on3/nil_100_v2
+  short: nil_100_v2
+  summary: GET /rdb/v2/nil-100
+- extra_params:
+  - name: state_key
+    query_key: stateKey
+    type: int
+  parser: parse_on3_rdb
+  path: /nil-compliances/state
+  returns_schema: native/on3/nil_compliances_state
+  short: nil_compliances_state
+  summary: GET /rdb/v1/nil-compliances/state
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: gender
+    query_key: gender
+    type: str
+  - name: year
+    query_key: year
+    type: int
+  - name: org_type
+    query_key: orgType
+    type: str
+  - name: position_abbr
+    query_key: positionAbbr
+    type: str
+  - name: state_abbr
+    query_key: stateAbbr
+    type: str
+  parser: parse_on3_rdb
+  path: /nil-rankings
+  returns_schema: native/on3/nil_rankings
+  short: nil_rankings
+  summary: GET /rdb/v1/nil-rankings
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/draft-class-by-state
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_draft_class_by_state
+  short: organizations_draft_class_by_state
+  summary: GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/draft-class-by-year
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_draft_class_by_year
+  short: organizations_draft_class_by_year
+  summary: GET /rdb/v1/organizations/{organizationKey}/draft-class-by-year
+- example_args:
+    organization_key: 1867
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/draft-count-by-stars
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_draft_count_by_stars
+  short: organizations_draft_count_by_stars
+  summary: GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/draft-count-by-year
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_draft_count_by_year
+  short: organizations_draft_count_by_year
+  summary: GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: year
+    query_key: year
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/draft-ranking-summary
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_draft_ranking_summary
+  short: organizations_draft_ranking_summary
+  summary: GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/drafted-players
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_drafted_players
+  short: organizations_drafted_players
+  summary: GET /rdb/v1/organizations/{organizationKey}/drafted-players
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: year
+    query_key: year
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/drafts-by-stars-summary
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_drafts_by_stars_summary
+  short: organizations_drafts_by_stars_summary
+  summary: GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/roster
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_roster
+  short: organizations_roster
+  summary: GET /rdb/v1/organizations/{organizationKey}/roster
+- example_args:
+    organization_key: 1867
+  extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  parser: parse_on3_rdb
+  path: /organizations/{organization_key}/roster-header
+  path_params:
+  - name: organization_key
+    required: true
+    type: int
+  returns_schema: native/on3/organizations_roster_header
+  short: organizations_roster_header
+  summary: GET /rdb/v1/organizations/{organizationKey}/roster-header
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /people/{person_key}/combine-measurements
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_combine_measurements
+  short: people_combine_measurements
+  summary: GET /rdb/v1/people/{personKey}/combine-measurements
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /people/{person_key}/latest-valuation
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_latest_valuation
+  short: people_latest_valuation
+  summary: GET /rdb/v1/people/{personKey}/latest-valuation
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /people/{person_key}/measurements
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_measurements
+  short: people_measurements
+  summary: GET /rdb/v1/people/{personKey}/measurements
+- example_args:
+    person_key: 89617
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /people/{person_key}/measurements/averages
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_measurements_averages
+  short: people_measurements_averages
+  summary: GET /rdb/v1/people/{personKey}/measurements/averages
+- example_args:
+    person_key: 89617
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /people/{person_key}/person-connections
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_person_connections
+  short: people_person_connections
+  summary: GET /rdb/v1/people/{personKey}/person-connections
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /people/{person_key}/social
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_social
+  short: people_social
+  summary: GET /rdb/v1/people/{personKey}/social
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /people/{person_key}/social-post-summary
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_social_post_summary
+  short: people_social_post_summary
+  summary: GET /rdb/v1/people/{personKey}/social-post-summary
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /people/{person_key}/track-and-field-measurements
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_track_and_field_measurements
+  short: people_track_and_field_measurements
+  summary: GET /rdb/v1/people/{personKey}/track-and-field-measurements
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /people/{person_key}/valuation-growth
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/people_valuation_growth
+  short: people_valuation_growth
+  summary: GET /rdb/v1/people/{personKey}/valuation-growth
+- example_args:
+    connection_key: 89617
+  parser: parse_on3_rdb
+  path: /person-connections/{connection_key}
+  path_params:
+  - name: connection_key
+    required: true
+    type: int
+  returns_schema: native/on3/person_connections_connection_key
+  short: person_connections_connection_key
+  summary: GET /rdb/v1/person-connections/{connectionKey}
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /person/{person_key}/primary-recruitment-evaluation
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/person_primary_recruitment_evaluation
+  short: person_primary_recruitment_evaluation
+  summary: GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /person/{person_key}/recruitment-evaluations
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/person_recruitment_evaluations
+  short: person_recruitment_evaluations
+  summary: GET /rdb/v1/person/{personKey}/recruitment-evaluations
+- example_args:
+    ps_key: 89617
+  parser: parse_on3_rdb
+  path: /person-sport/{ps_key}/profile-recruit
+  path_params:
+  - name: ps_key
+    required: true
+    type: int
+  returns_schema: native/on3/person_sport_profile_recruit
+  short: person_sport_profile_recruit
+  summary: GET /rdb/v1/person-sport/{psKey}/profile-recruit
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /person-sport-rankings
+  returns_schema: native/on3/person_sport_rankings
+  short: person_sport_rankings
+  summary: GET /rdb/v1/person-sport-rankings
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{person_key}/all-rankings
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_all_rankings
+  short: player_all_rankings
+  summary: GET /rdb/v1/player/{personKey}/all-rankings
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{person_key}/database-updates
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_database_updates
+  short: player_database_updates
+  summary: GET /rdb/v1/player/{personKey}/database-updates
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{person_key}/images
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_images
+  short: player_images
+  summary: GET /rdb/v1/player/{personKey}/images
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{person_key}/organizations
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_organizations
+  short: player_organizations
+  summary: GET /rdb/v1/player/{personKey}/organizations
+- example_args:
+    org_key: 1867
+    player_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{player_key}/organizations/{org_key}
+  path_params:
+  - name: player_key
+    required: true
+    type: int
+  - name: org_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_organizations_org_key
+  short: player_organizations_org_key
+  summary: GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{person_key}/rankings
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_person_rankings
+  short: player_person_rankings
+  summary: GET /rdb/v1/player/{personKey}/rankings
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{person_key}/profile
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_profile
+  short: player_profile
+  summary: GET /rdb/v1/player/{personKey}/profile
+- example_args:
+    player_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{player_key}/team-targets
+  path_params:
+  - name: player_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_team_targets
+  short: player_team_targets
+  summary: GET /rdb/v1/player/{playerKey}/team-targets
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /player/verified
+  returns_schema: native/on3/player_verified
+  short: player_verified
+  summary: GET /rdb/v1/player/verified
+- example_args:
+    person_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{person_key}/videos
+  path_params:
+  - name: person_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_videos
+  short: player_videos
+  summary: GET /rdb/v1/player/{personKey}/videos
+- example_args:
+    player_key: 89617
+  parser: parse_on3_rdb
+  path: /player/{player_key}/visit-center
+  path_params:
+  - name: player_key
+    required: true
+    type: int
+  returns_schema: native/on3/player_visit_center
+  short: player_visit_center
+  summary: GET /rdb/v1/player/{playerKey}/visit-center
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: state_abbr
+    query_key: stateAbbr
+    type: str
+  - name: position_abbr
+    query_key: positionAbbr
+    type: str
+  - name: page
+    query_key: page
+    type: int
+  - name: sort_by_industry
+    query_key: sortByIndustry
+    type: str
+  parser: parse_on3_rdb
+  path: /players/industry-comparision
+  returns_schema: native/on3/players_industry_comparision
+  short: players_industry_comparision
+  summary: GET /rdb/v1/players/industry-comparision
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /players/industry-comparision-list
+  returns_schema: native/on3/players_industry_comparision_list
+  short: players_industry_comparision_list
+  summary: GET /rdb/v1/players/industry-comparision-list
+- example_args:
+    user_key: 89617
+  extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /predictions/{user_key}
+  path_params:
+  - name: user_key
+    required: true
+    type: int
+  returns_schema: native/on3/predictions_user_key
+  short: predictions_user_key
+  summary: Expert prediction accuracy + feed (see PredictionAccuracies)
+- extra_params:
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /quotes
+  returns_schema: native/on3/quotes
+  short: quotes
+  summary: GET /rdb/v1/quotes
+- example_args:
+    key: 1
+  parser: parse_on3_rdb
+  path: /quotes/{key}
+  path_params:
+  - name: key
+    required: true
+    type: int
+  returns_schema: native/on3/quotes_key
+  short: quotes_key
+  summary: GET /rdb/v1/quotes/{key}
+- example_args:
+    recruitment_key: 270036
+  parser: parse_on3_rdb
+  path: /recruitment/{recruitment_key}/primary-recruitment-evaluation
+  path_params:
+  - name: recruitment_key
+    required: true
+    type: int
+  returns_schema: native/on3/recruitment_primary_recruitment_evaluation
+  short: recruitment_primary_recruitment_evaluation
+  summary: GET /rdb/v1/recruitment/{recruitmentKey}/primary-recruitment-evaluation
+- example_args:
+    recruitment_key: 270036
+  parser: parse_on3_rdb
+  path: /recruitment/{recruitment_key}/recruitment-evaluations
+  path_params:
+  - name: recruitment_key
+    required: true
+    type: int
+  returns_schema: native/on3/recruitment_recruitment_evaluations
+  short: recruitment_recruitment_evaluations
+  summary: GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
+- extra_params:
+  - name: org_key
+    query_key: orgKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /recruitments/latest-rpm-picks
+  returns_schema: native/on3/recruitments_latest_rpm_picks
+  short: recruitments_latest_rpm_picks
+  summary: Latest RPM (prediction) picks feed — paged {list,pagination}
+- example_args:
+    rec_key: 270036
+  parser: parse_on3_rdb
+  path: /recruitments/{rec_key}/profile
+  path_params:
+  - name: rec_key
+    required: true
+    type: int
+  returns_schema: native/on3/recruitments_profile
+  short: recruitments_profile
+  summary: GET /rdb/v1/recruitments/{recKey}/profile
+- example_args:
+    rec_key: 270036
+  parser: parse_on3_rdb
+  path: /recruitments/{rec_key}/rpm-picks
+  path_params:
+  - name: rec_key
+    required: true
+    type: int
+  returns_schema: native/on3/recruitments_rpm_picks
+  short: recruitments_rpm_picks
+  summary: GET /rdb/v1/recruitments/{recKey}/rpm-picks
+- example_args:
+    rec_key: 270036
+  parser: parse_on3_rdb
+  path: /recruitments/{rec_key}/rpm-summary
+  path_params:
+  - name: rec_key
+    required: true
+    type: int
+  returns_schema: native/on3/recruitments_rpm_summary
+  short: recruitments_rpm_summary
+  summary: GET /rdb/v1/recruitments/{recKey}/rpm-summary
+- extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: page
+    query_key: page
+    type: int
+  - name: page_size
+    query_key: pageSize
+    type: int
+  parser: parse_on3_rdb
+  path: /team-ranking
+  returns_schema: native/on3/team_ranking
+  short: team_ranking
+  summary: GET /rdb/v1/team-ranking
+- example_args:
+    sport_slug: football
+    year: 2025
+  parser: parse_on3_rdb
+  path: /team-ranking/{sport_slug}-{year}/bluechips-team-rankings
+  path_params:
+  - name: sport_slug
+    required: true
+    type: str
+  - name: year
+    required: true
+    type: int
+  returns_schema: native/on3/team_ranking_bluechips_team_rankings
+  short: team_ranking_bluechips_team_rankings
+  summary: GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
+- example_args:
+    sport_slug: football
+    year: 2025
+  parser: parse_on3_rdb
+  path: /team-ranking/{sport_slug}-{year}/consensus-team-rankings
+  path_params:
+  - name: sport_slug
+    required: true
+    type: str
+  - name: year
+    required: true
+    type: int
+  returns_schema: native/on3/team_ranking_consensus_team_rankings
+  short: team_ranking_consensus_team_rankings
+  summary: GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
+- example_args:
+    org_key: 1867
+  parser: parse_on3_rdb
+  path: /team-ranking/organizations/{org_key}/summary
+  path_params:
+  - name: org_key
+    required: true
+    type: int
+  returns_schema: native/on3/team_ranking_organizations_summary
+  short: team_ranking_organizations_summary
+  summary: GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
+- example_args:
+    sport_slug: football
+    year: 2025
+  parser: parse_on3_rdb
+  path: /team-ranking/{sport_slug}-{year}/team-rankings
+  path_params:
+  - name: sport_slug
+    required: true
+    type: str
+  - name: year
+    required: true
+    type: int
+  returns_schema: native/on3/team_ranking_team_rankings
+  short: team_ranking_team_rankings
+  summary: GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
+- extra_params:
+  - name: org_key
+    query_key: orgKey
+    type: int
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: position_abbr
+    query_key: positionAbbr
+    type: str
+  - name: status
+    query_key: status
+    type: str
+  - name: page
+    query_key: page
+    type: int
+  - name: cutoff
+    query_key: cutoff
+    type: int
+  - name: order_by
+    query_key: orderBy
+    type: str
+  parser: parse_on3_rdb
+  path: /transfers/best-available
+  returns_schema: native/on3/transfers_best_available
+  short: transfers_best_available
+  summary: GET /rdb/v1/transfers/best-available
+- extra_params:
+  - name: org_key
+    query_key: orgKey
+    type: int
+  - name: sport_key
+    query_key: sportKey
+    type: int
+  - name: year
+    query_key: year
+    type: int
+  - name: position_abbr
+    query_key: positionAbbr
+    type: str
+  - name: status
+    query_key: status
+    type: str
+  - name: page
+    query_key: page
+    type: int
+  parser: parse_on3_rdb
+  path: /transfers/latest
+  returns_schema: native/on3/transfers_latest
+  short: transfers_latest
+  summary: GET /rdb/v1/transfers/latest
+- example_args:
+    video_key: 1
+  parser: parse_on3_rdb
+  path: /videos/{video_key}
+  path_params:
+  - name: video_key
+    required: true
+    type: int
+  returns_schema: native/on3/videos_video_key
+  short: videos_video_key
+  summary: GET /rdb/v1/videos/{videoKey}
 getter_module: sportsdataverse.cfb.on3_runtime
-qualifier: ''
+host: https://api.on3.com/public/rdb/v1
+module: on3
+name_pattern: on3_{short}
+parser_module: cfb.on3_parsers
 passthrough_query: true
+qualifier: ''
 runtime_imports:
 - _get
-endpoints:
-- short: player_rankings
-  returns_schema: native/on3/on3_player_rankings
-  summary: "On3 player rankings for a recruiting class year — On3's own ratings (rankingType=player)."
-  path: /rivals/rankings/player/{sport_slug}/{year}.json
-  path_params:
-  - name: year
-    type: int|str
-    required: true
-  - name: sport_slug
-    type: str
-    required: false
-    default: football
-    description: "On3 sport slug (e.g. football, basketball)."
-  extra_params:
-  - name: page
-    query_key: page
-    type: int
-  parser: parse_on3_rankings
-  example_args:
-    year: 2026
-    sport_slug: football
-- short: industry_player_rankings
-  returns_schema: native/on3/on3_player_rankings
-  summary: "On3 Industry Comparison player rankings (consensus across On3/Rivals/247/ESPN; rankingType=industry-player)."
-  path: /rivals/rankings/industry-player/{sport_slug}/{year}.json
-  path_params:
-  - name: year
-    type: int|str
-    required: true
-  - name: sport_slug
-    type: str
-    required: false
-    default: football
-    description: "On3 sport slug (e.g. football, basketball)."
-  extra_params:
-  - name: page
-    query_key: page
-    type: int
-  parser: parse_on3_rankings
-  example_args:
-    year: 2026
-    sport_slug: football
-- short: team_rankings
-  returns_schema: native/on3/on3_team_rankings
-  summary: "On3 team recruiting-class rankings for a class year (rankingType=team)."
-  path: /rivals/rankings/team/{sport_slug}/{year}.json
-  path_params:
-  - name: year
-    type: int|str
-    required: true
-  - name: sport_slug
-    type: str
-    required: false
-    default: football
-    description: "On3 sport slug (e.g. football, basketball)."
-  extra_params:
-  - name: page
-    query_key: page
-    type: int
-  parser: parse_on3_team_rankings
-  example_args:
-    year: 2026
-    sport_slug: football
-- short: industry_team_rankings
-  returns_schema: native/on3/on3_team_rankings
-  summary: "On3 Industry Comparison team recruiting-class rankings (rankingType=industry-team)."
-  path: /rivals/rankings/industry-team/{sport_slug}/{year}.json
-  path_params:
-  - name: year
-    type: int|str
-    required: true
-  - name: sport_slug
-    type: str
-    required: false
-    default: football
-    description: "On3 sport slug (e.g. football, basketball)."
-  extra_params:
-  - name: page
-    query_key: page
-    type: int
-  parser: parse_on3_team_rankings
-  example_args:
-    year: 2026
-    sport_slug: football

@@ -261,3 +261,22 @@ endpoints:
   parser: parse_sports247_result_set
   example_args:
     default_name: smith
+- short: positions
+  returns_schema: native/sports247/sports247_positions
+  summary: "247Sports position lookup for a sport (position group, abbreviation, and key)."
+  path: /rdb/v1/positions/
+  extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  - name: year
+    query_key: year
+    type: int
+  - name: ranking_key
+    query_key: rankingKey
+    type: int
+  parser: parse_sports247_result_set
+  example_args:
+    sport_key: 1

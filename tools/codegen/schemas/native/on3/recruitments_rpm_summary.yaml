@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: predictions
+  type: character
+- description: ''
+  name: locked
+  type: logical
+kind: dataframe
+schema: recruitments_rpm_summary

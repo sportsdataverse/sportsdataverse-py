@@ -68,6 +68,32 @@ skip_if_no_nba_stats_live = pytest.mark.skipif(
     ),
 )
 
+# premium.pff.com is paywalled (a PFF+ session cookie) and best exercised from a
+# residential IP; like the nba-stats gate, NO CI workflow sets this — it runs
+# only when a contributor explicitly enables it.
+PFF_LIVE: bool = os.environ.get("SDV_PY_PFF_LIVE") == "1"
+
+skip_if_no_pff_live = pytest.mark.skipif(
+    not PFF_LIVE,
+    reason=(
+        "PFF Premium is paywalled (needs a PFF+ session); set SDV_PY_PFF_LIVE=1 "
+        "to run these live tests from a residential IP"
+    ),
+)
+
+# ipa/www.247sports.com sit behind a Fastly edge that may hang (not fail fast) on
+# datacenter/CI IPs the way stats.nba.com does; both 247 tracks (RDB + site-pages)
+# share this ONE gate, which NO CI workflow sets.
+SPORTS247_LIVE: bool = os.environ.get("SDV_PY_247_LIVE") == "1"
+
+skip_if_no_247_live = pytest.mark.skipif(
+    not SPORTS247_LIVE,
+    reason=(
+        "ipa/www.247sports.com may hang on datacenter/CI IPs; set SDV_PY_247_LIVE=1 "
+        "to run these live tests from a residential IP"
+    ),
+)
+
 # Concurrent-validity tests correlate a computed metric (e.g. nba_la_rapm,
 # nba_decay_rapm) against a real published oracle (Ryan Davis RAPM CSVs). The
 # oracle files aren't bundled with the repo, so these tests skip cleanly
