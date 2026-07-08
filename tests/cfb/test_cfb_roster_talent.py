@@ -85,3 +85,51 @@ def test_blue_chip_window_rollup() -> None:
     # season 2021 window sees 2020+2021: (2+4)/(4+4) = 0.75
     row21 = out.filter(pl.col("season") == 2021).row(0, named=True)
     assert abs(row21["blue_chip_ratio"] - 0.75) < 1e-9
+
+
+def _two_class_recruits() -> pl.DataFrame:
+    # team A: 2020 class stars [5, 4] -> 170 pts; 2021 class [4] -> 70 pts
+    # team B: 2021 class [3] -> 45 pts
+    return pl.DataFrame(
+        {
+            "season": [2020, 2020, 2021, 2021],
+            "team_id": ["A", "A", "A", "B"],
+            "team": ["Team A", "Team A", "Team A", "Team B"],
+            "recruit_id": ["r1", "r2", "r3", "r4"],
+            "stars": [5, 4, 4, 3],
+            "grade": [98.0, 92.0, 91.0, 85.0],
+            "position": ["QB", "EDGE", "WR", "OT"],
+        }
+    )
+
+
+def test_talent_composite_weighted_sum_and_rank(monkeypatch) -> None:
+    from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent
+
+    monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: _two_class_recruits())
+    out = cfb_roster_talent(2021, division="fbs")
+    # weights (1.0, 0.9, ...): A = 1.0*70 (2021 class) + 0.9*170 (2020 class) = 223
+    row_a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    assert abs(row_a["talent_composite"] - 223.0) < 1e-9
+    row_b = out.filter(pl.col("team_id") == "B").row(0, named=True)
+    assert abs(row_b["talent_composite"] - 45.0) < 1e-9
+    # dense rank desc within season + blue_chip_ratio joined in
+    assert row_a["talent_rank"] == 1 and row_b["talent_rank"] == 2
+    assert abs(row_a["blue_chip_ratio"] - 1.0) < 1e-9  # 3/3 blue chips
+    assert row_a["n_recruits"] == 3
+    assert out.schema["team_id"] == pl.Utf8
+
+
+def test_talent_composite_247_override(monkeypatch) -> None:
+    from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent
+
+    monkeypatch.setattr(_mod, "load_recruit_classes", lambda *a, **k: _two_class_recruits())
+    ora = pl.DataFrame(
+        {"season": [2021], "team_id": ["A"], "talent_247": [999.5]},
+        schema={"season": pl.Int64, "team_id": pl.Utf8, "talent_247": pl.Float64},
+    )
+    out = cfb_roster_talent(2021, division="fbs", composite_247=ora)
+    row_a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    assert abs(row_a["talent_composite"] - 999.5) < 1e-9  # 247 overrides
+    row_b = out.filter(pl.col("team_id") == "B").row(0, named=True)
+    assert abs(row_b["talent_composite"] - 45.0) < 1e-9  # ESPN-derived fallback

@@ -17,7 +17,7 @@ import polars as pl
 from sportsdataverse.cfb.cfb_projection_constants import get_constants
 from sportsdataverse.cfb.sports247 import sports247_recruits
 
-__all__ = ["blue_chip_ratio", "load_recruit_classes"]
+__all__ = ["blue_chip_ratio", "cfb_roster_talent", "load_recruit_classes"]
 
 _RECRUIT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "season": pl.Int64,
@@ -118,6 +118,127 @@ def blue_chip_ratio(recruits: pl.DataFrame, *, window: int = 4, division: str = 
         .with_columns((pl.col("n_blue_chip") / pl.col("n_recruits")).alias("blue_chip_ratio"))
         .select("season", "team_id", "blue_chip_ratio", "n_recruits", "n_blue_chip")
     )
+
+
+def cfb_roster_talent(
+    seasons: int | list[int],
+    *,
+    division: str = "fbs",
+    composite_247: pl.DataFrame | None = None,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """Team-talent composite per team-season (247 Team Talent Composite style).
+
+    Talent is the class-recency-weighted sum of per-recruit star points over the
+    trailing eligible recruiting classes (window = the length of the division's
+    ``class_recency_weights``). When a 247 team-talent snapshot is supplied via
+    ``composite_247``, its value overrides the derived composite for matched
+    team-seasons (the derived value remains the fallback).
+
+    Args:
+        seasons: Target season or list of seasons to rate.
+        division: Division slug for :func:`get_constants` (star points, weights).
+        composite_247: Optional frame with ``season`` (Int64), ``team_id`` (Utf8),
+            ``talent_247`` (Float64). Join-key dtypes are asserted.
+        return_as_pandas: If True, return a pandas DataFrame; otherwise polars.
+
+    Returns:
+        Per ``(season, team_id)``: ``team`` (Utf8), ``talent_composite`` (Float64),
+        ``talent_rank`` (Int64 dense rank desc within season), ``blue_chip_ratio``
+        (Float64), ``n_recruits`` (Int64). Zero-row (typed) when no recruits load.
+
+    Raises:
+        ValueError: If ``composite_247`` is supplied without the documented schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent
+            tal = cfb_roster_talent(2023)
+            tal.sort("talent_rank").head(10)
+
+    See Also:
+        * `247Sports Team Talent Composite`_ -- methodology reference.
+        * `recruitR`_ -- the R companion for CFB recruiting data.
+
+    .. _247Sports Team Talent Composite: https://247sports.com/season/2023-football/collegeteamtalentcomposite/
+    .. _recruitR: https://github.com/sportsdataverse/recruitR
+    """
+    out_schema: dict[str, pl.PolarsDataType] = {
+        "season": pl.Int64,
+        "team_id": pl.Utf8,
+        "team": pl.Utf8,
+        "talent_composite": pl.Float64,
+        "talent_rank": pl.Int64,
+        "blue_chip_ratio": pl.Float64,
+        "n_recruits": pl.Int64,
+    }
+    consts = get_constants(division)
+    weights = consts.class_recency_weights
+    window = len(weights)
+    season_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    class_years = list(range(min(season_list) - window + 1, max(season_list) + 1))
+    recruits = load_recruit_classes(class_years, division=division)
+    if isinstance(recruits, pd.DataFrame):  # defensive; loader defaults to polars
+        recruits = pl.from_pandas(recruits)
+    if recruits.height == 0:
+        empty = pl.DataFrame(schema=out_schema)
+        return empty.to_pandas() if return_as_pandas else empty
+    pointed = recruits.with_columns(
+        pl.col("stars").replace_strict(consts.star_points, default=0.0, return_dtype=pl.Float64).alias("star_points")
+    )
+    per_class = pointed.group_by(["season", "team_id"]).agg(
+        pl.col("star_points").sum().alias("class_points"),
+        pl.col("team").drop_nulls().first().alias("team"),
+    )
+    weighted = pl.concat(
+        [
+            per_class.with_columns(
+                (pl.col("season") + age).alias("target_season"),
+                (pl.col("class_points") * weights[age]).alias("weighted_points"),
+            )
+            for age in range(window)
+        ]
+    )
+    talent = (
+        weighted.filter(pl.col("target_season").is_in(season_list))
+        .group_by(["target_season", "team_id"])
+        .agg(
+            pl.col("weighted_points").sum().alias("talent_composite"),
+            pl.col("team").drop_nulls().first().alias("team"),
+        )
+        .rename({"target_season": "season"})
+    )
+    bcr = blue_chip_ratio(recruits, window=window, division=division)
+    assert talent.schema["team_id"] == bcr.schema["team_id"]
+    talent = talent.join(
+        bcr.select("season", "team_id", "blue_chip_ratio", "n_recruits"),
+        on=["season", "team_id"],
+        how="left",
+    )
+    if composite_247 is not None:
+        required = {"season", "team_id", "talent_247"}
+        if not required <= set(composite_247.columns):
+            raise ValueError(f"composite_247 must carry columns {sorted(required)}")
+        assert talent.schema["team_id"] == composite_247.schema["team_id"]
+        assert talent.schema["season"] == composite_247.schema["season"]
+        talent = (
+            talent.join(
+                composite_247.select("season", "team_id", "talent_247"),
+                on=["season", "team_id"],
+                how="left",
+            )
+            .with_columns(pl.coalesce(pl.col("talent_247"), pl.col("talent_composite")).alias("talent_composite"))
+            .drop("talent_247")
+        )
+    out = (
+        talent.with_columns(
+            pl.col("talent_composite").rank("dense", descending=True).over("season").cast(pl.Int64).alias("talent_rank")
+        )
+        .select(*out_schema)
+        .sort("season", "talent_rank")
+    )
+    return out.to_pandas() if return_as_pandas else out
 
 
 def load_recruit_classes(
