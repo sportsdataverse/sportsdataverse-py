@@ -38,7 +38,14 @@ def _int_id(col: str) -> pl.Expr:
 
 
 def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
-    """Map one 247-RDB recruit page to the per-recruit contract; drop uncommitted recruits."""
+    """Map one 247-RDB recruit page to the per-recruit contract.
+
+    Uses the SIGNED institution (signing-day truth — what recruiting-class metrics
+    like the blue-chip ratio count) with the committed institution as fallback;
+    the RDB's ``committed_institution`` / ``current_institution`` drift with
+    decommits and later transfers and systematically undercount signing classes.
+    Recruits with neither (never signed/committed) are dropped.
+    """
     required = {
         "key",
         "committed_institution_team_key",
@@ -49,16 +56,27 @@ def _normalize_recruit_page(raw: pl.DataFrame, season: int) -> pl.DataFrame:
     }
     if raw.height == 0 or not required <= set(raw.columns):
         return pl.DataFrame(schema=_RECRUIT_SCHEMA)
+    has_signed = {"signed_institution_team_key", "signed_institution_full_name"} <= set(raw.columns)
+    team_key = (
+        pl.coalesce(pl.col("signed_institution_team_key"), pl.col("committed_institution_team_key"))
+        if has_signed
+        else pl.col("committed_institution_team_key")
+    )
+    team_name = (
+        pl.coalesce(pl.col("signed_institution_full_name"), pl.col("committed_institution_full_name"))
+        if has_signed
+        else pl.col("committed_institution_full_name")
+    )
     return (
         raw.select(
             pl.lit(season, dtype=pl.Int64).alias("season"),
-            _int_id("committed_institution_team_key").alias("team_id"),
-            pl.col("committed_institution_full_name").cast(pl.Utf8).alias("team"),
+            team_key.cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
+            team_name.cast(pl.Utf8).alias("team"),
             _int_id("key").alias("recruit_id"),
             pl.col("composite_star_rating").cast(pl.Int64).alias("stars"),
             pl.col("composite_rating").cast(pl.Float64).alias("grade"),
             pl.col("primary_position").cast(pl.Utf8).alias("position"),
-        ).drop_nulls(["team_id"])  # recruits without a committed team don't count toward roster talent
+        ).drop_nulls(["team_id"])  # recruits without a signed/committed team don't count toward roster talent
     )
 
 

@@ -133,3 +133,28 @@ def test_talent_composite_247_override(monkeypatch) -> None:
     assert abs(row_a["talent_composite"] - 999.5) < 1e-9  # 247 overrides
     row_b = out.filter(pl.col("team_id") == "B").row(0, named=True)
     assert abs(row_b["talent_composite"] - 45.0) < 1e-9  # ESPN-derived fallback
+
+
+def test_loader_prefers_signed_institution_over_committed(monkeypatch) -> None:
+    # r1 signed with team 71 but its committed_* drifted to 99 (decommit/transfer);
+    # r2 never signed (signed_* null) -> falls back to committed 71.
+    def _page(**kwargs):
+        if kwargs.get("page", 1) > 1:
+            return pl.DataFrame(schema={"key": pl.Int64})
+        return pl.DataFrame(
+            {
+                "key": [1, 2],
+                "committed_institution_team_key": [99.0, 71.0],
+                "committed_institution_full_name": ["Wrong U", "Michigan Wolverines"],
+                "signed_institution_team_key": [71.0, None],
+                "signed_institution_full_name": ["Michigan Wolverines", None],
+                "composite_star_rating": [4, 3],
+                "composite_rating": [95.0, 88.0],
+                "primary_position": ["QB", "WR"],
+            }
+        )
+
+    monkeypatch.setattr(_mod, "sports247_recruits", _page)
+    out = load_recruit_classes(2023)
+    assert out["team_id"].unique().to_list() == ["71"]
+    assert out["team"].unique().to_list() == ["Michigan Wolverines"]
