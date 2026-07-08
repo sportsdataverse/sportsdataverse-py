@@ -1,5 +1,8 @@
 """Unit tests for the NFL opponent-adjusted EPA ratings engine (Phase 1)."""
 
+import datetime as dt
+import importlib
+
 import polars as pl
 
 from sportsdataverse.nfl.nfl_ratings import (
@@ -8,6 +11,101 @@ from sportsdataverse.nfl.nfl_ratings import (
     opponent_adjusted_ridge,
     special_teams_ratings,
 )
+
+
+RATINGS_SCHEMA_COLS = [
+    "season",
+    "team_id",
+    "adj_off_epa",
+    "adj_def_epa",
+    "adj_st_epa",
+    "adj_net",
+    "games",
+    "off_rank",
+    "def_rank",
+    "net_rank",
+    "net_z",
+]
+
+
+def _fake_pbp():
+    """Two games a week apart, plus market columns that must NOT reach the ridge."""
+    rows = []
+    for g, home in (("2023_01_B_A", "A"), ("2023_02_A_B", "B")):
+        for _ in range(30):
+            for pos, deff, e in (("A", "B", 0.30), ("B", "A", -0.30)):
+                rows.append(
+                    {
+                        "game_id": g,
+                        "season": 2023,
+                        "week": int(g.split("_")[1]),
+                        "posteam": pos,
+                        "defteam": deff,
+                        "home_team": home,
+                        "epa": e,
+                        "wp": 0.5,
+                        "special": 0,
+                        "qb_kneel": 0,
+                        "qb_spike": 0,
+                        "play_type": "pass",
+                        "vegas_wp": 0.9,
+                        "spread_line": -7.0,
+                    }
+                )
+    return pl.DataFrame(rows)
+
+
+def _fake_schedule():
+    return pl.DataFrame(
+        {
+            "game_id": ["2023_01_B_A", "2023_02_A_B"],
+            "gameday": [dt.date(2023, 9, 10), dt.date(2023, 9, 17)],
+        }
+    )
+
+
+def test_nfl_ratings_schema_asof_and_nonmarket(monkeypatch):
+    mod = importlib.import_module("sportsdataverse.nfl.nfl_ratings")
+    monkeypatch.setattr(mod, "load_nfl_pbp", lambda seasons, **kw: _fake_pbp())
+    monkeypatch.setattr(mod, "load_nfl_schedule", lambda seasons, **kw: _fake_schedule())
+
+    seen: list[pl.DataFrame] = []
+    real_eff = mod.efficiency_ratings
+
+    def spy_eff(plays, **kw):
+        seen.append(plays)
+        return real_eff(plays, **kw)
+
+    monkeypatch.setattr(mod, "efficiency_ratings", spy_eff)
+
+    full = mod.nfl_ratings(2023)
+    assert full.columns == RATINGS_SCHEMA_COLS
+    assert full.schema["team_id"] == pl.Utf8
+    assert full.schema["season"] == pl.Int64
+    assert full.filter(pl.col("team_id") == "A").row(0, named=True)["games"] == 2
+
+    # Non-market boundary: the frame the ridge sees carries no market column.
+    assert seen, "efficiency_ratings was not called"
+    for frame in seen:
+        assert "vegas_wp" not in frame.columns
+        assert "spread_line" not in frame.columns
+
+    # as_of_date leakage boundary: week-2 game (9/17) dropped -> 1 game each.
+    week2 = mod.nfl_ratings(2023, as_of_date=dt.date(2023, 9, 17))
+    assert week2.filter(pl.col("team_id") == "A").row(0, named=True)["games"] == 1
+
+    pdf = mod.nfl_ratings(2023, return_as_pandas=True)
+    assert not isinstance(pdf, pl.DataFrame)
+    assert list(pdf.columns) == RATINGS_SCHEMA_COLS
+
+
+def test_nfl_ratings_empty_seasons(monkeypatch):
+    mod = importlib.import_module("sportsdataverse.nfl.nfl_ratings")
+    monkeypatch.setattr(mod, "load_nfl_pbp", lambda seasons, **kw: _fake_pbp().head(0))
+    monkeypatch.setattr(mod, "load_nfl_schedule", lambda seasons, **kw: _fake_schedule().head(0))
+    out = mod.nfl_ratings(1999)
+    assert out.height == 0
+    assert out.columns == RATINGS_SCHEMA_COLS
 
 
 def test_add_ranks_orders_and_flips_defense():

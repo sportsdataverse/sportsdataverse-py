@@ -17,10 +17,17 @@ uses the naive ``wp``.
 
 from __future__ import annotations
 
+import datetime
+from typing import Literal, overload
+
 import numpy as np
+import pandas as pd
 import polars as pl
 
-from sportsdataverse.nfl.nfl_prediction_constants import RatingsConfig
+from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp, load_nfl_schedule
+from sportsdataverse.nfl.nfl_prediction_constants import RatingsConfig, as_of_ratings_split
+
+__all__ = ["efficiency_ratings", "nfl_ratings", "opponent_adjusted_ridge", "special_teams_ratings"]
 
 
 _RIDGE_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
@@ -263,3 +270,146 @@ def _add_ranks(df: pl.DataFrame) -> pl.DataFrame:
         return out.with_columns(net_z=pl.lit(0.0).cast(pl.Float64))
     mean_net = float(out["adj_net"].mean() or 0.0)
     return out.with_columns(net_z=(pl.col("adj_net") - mean_net) / float(std_val))
+
+
+# Down-select applied to the loaded pbp BEFORE the ridge so no market column
+# (spread_line / total_line / vegas_wp) can leak into the rating fit -- the
+# binding non-market boundary of this spine.
+_RIDGE_INPUT_COLUMNS: tuple[str, ...] = (
+    "game_id",
+    "posteam",
+    "defteam",
+    "home_team",
+    "epa",
+    "wp",
+    "special",
+    "qb_kneel",
+    "qb_spike",
+    "play_type",
+)
+
+_RATINGS_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "season": pl.Int64,
+    "team_id": pl.Utf8,
+    "adj_off_epa": pl.Float64,
+    "adj_def_epa": pl.Float64,
+    "adj_st_epa": pl.Float64,
+    "adj_net": pl.Float64,
+    "games": pl.Int64,
+    "off_rank": pl.Int64,
+    "def_rank": pl.Int64,
+    "net_rank": pl.Int64,
+    "net_z": pl.Float64,
+}
+
+
+@overload
+def nfl_ratings(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = ...,
+    config: RatingsConfig | None = ...,
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+@overload
+def nfl_ratings(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = ...,
+    config: RatingsConfig | None = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+def nfl_ratings(
+    seasons: int | list[int],
+    *,
+    as_of_date: datetime.date | None = None,
+    config: RatingsConfig | None = None,
+    return_as_pandas: bool = False,
+) -> pl.DataFrame | pd.DataFrame:
+    """One row per team: the native NFL ratings spine (off/def/ST EPA).
+
+    Public orchestrator over :func:`efficiency_ratings` +
+    :func:`special_teams_ratings`. Loads play-by-play + schedule via
+    ``load_nfl_pbp`` / ``load_nfl_schedule``, joins each game's ``gameday``
+    onto the plays, optionally applies the as-of-date leakage boundary
+    (only plays from games with ``gameday < as_of_date`` are used), then
+    fits both components and reshapes into one wide per-team table with
+    dense ranks and a net z-score.
+
+    The loaded pbp is down-selected to the ridge columns *before* any fit so
+    no market column (``spread_line`` / ``vegas_wp``) can leak into the
+    ratings (the binding non-market boundary).
+
+    Args:
+        seasons: A single season (e.g. ``2023``) or a list of seasons pooled
+            into one combined fit.
+        as_of_date: When given, only plays from games strictly before this
+            date are used (mirrors what was knowable heading into that date).
+            ``None`` (default) uses the full season(s).
+        config: Tuning knobs forwarded to both component fits; defaults to
+            :class:`RatingsConfig`.
+        return_as_pandas: If True, returns a pandas DataFrame.
+
+    Returns:
+        A DataFrame with one row per ``team_id``: ``season`` (Int64 -- the
+        single passed season, ``null`` for a pooled multi-season call),
+        ``team_id`` (Utf8), ``adj_off_epa`` / ``adj_def_epa`` / ``adj_st_epa``
+        / ``adj_net`` (Float64; ``adj_net`` is offense minus defense --
+        special teams stays a separate column), ``games`` (Int64),
+        ``off_rank`` / ``def_rank`` / ``net_rank`` (Int64; ``def_rank``
+        ascends -- fewer EPA allowed ranks better), ``net_z`` (Float64).
+        Zero-row, correctly-typed when the seasons have no data or
+        ``as_of_date`` filters out every play.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl import nfl_ratings
+            ratings = nfl_ratings(2023)
+            ratings.sort("net_rank").head()
+
+        As-of-date leakage boundary::
+
+            import datetime as dt
+            week6 = nfl_ratings(2023, as_of_date=dt.date(2023, 10, 12))
+
+    See Also:
+        * `nflfastR`_ -- the R package whose EPA model feeds these ratings.
+
+    .. _nflfastR: https://www.nflfastr.com
+    """
+    cfg = config or RatingsConfig()
+    season_list: list[int] = [seasons] if isinstance(seasons, int) else list(seasons)
+
+    plays = load_nfl_pbp(season_list)
+    schedule = load_nfl_schedule(season_list)
+    if plays.is_empty() or schedule.is_empty():
+        empty = pl.DataFrame(schema=_RATINGS_OUTPUT_SCHEMA)
+        return empty.to_pandas() if return_as_pandas else empty
+
+    plays = plays.select(_RIDGE_INPUT_COLUMNS).with_columns(pl.col("game_id").cast(pl.Utf8))
+    schedule = schedule.with_columns(pl.col("game_id").cast(pl.Utf8))
+    assert plays.schema["game_id"] == schedule.schema["game_id"]
+
+    dated = plays.join(schedule.select("game_id", pl.col("gameday").cast(pl.Date)), on="game_id", how="left")
+    if as_of_date is not None:
+        dated = as_of_ratings_split(dated, as_of_date)
+
+    eff = efficiency_ratings(dated, config=cfg)
+    if eff.height == 0:
+        empty = pl.DataFrame(schema=_RATINGS_OUTPUT_SCHEMA)
+        return empty.to_pandas() if return_as_pandas else empty
+    st = special_teams_ratings(dated, config=cfg)
+    assert eff.schema["team_id"] == st.schema["team_id"]
+
+    season_value: int | None = season_list[0] if len(season_list) == 1 else None
+    out = (
+        eff.join(st, on="team_id", how="left")
+        .with_columns(
+            pl.col("adj_st_epa").fill_null(0.0),
+            pl.lit(season_value).cast(pl.Int64).alias("season"),
+        )
+        .pipe(_add_ranks)
+        .select(*_RATINGS_OUTPUT_SCHEMA.keys())
+    )
+    return out.to_pandas() if return_as_pandas else out
