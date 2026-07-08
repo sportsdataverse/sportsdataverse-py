@@ -104,3 +104,34 @@ def test_adjusted_ranks_vs_sp_plus(joined):
     _, js = joined
     assert spearman_corr(js["off_epa_rank"].to_numpy(), js["sp_offense_rank"].to_numpy()) >= 0.80
     assert spearman_corr(js["def_epa_rank"].to_numpy(), js["sp_defense_rank"].to_numpy()) >= 0.80
+
+
+def test_field_position_avg_start_vs_cfbd():
+    """cfb_field_position avg_start_yardline vs CFBD (2021, plan target 0.85).
+
+    Observed 2021: Spearman 0.8974, MAE 0.67 yards (means 29.30 vs 29.04) --
+    target met. Orientation note: the captured CFBD off_field_pos_avg_start
+    is 100-oriented (yards TO the goal), so the oracle compares against
+    ``100 - cfbd``. Drive starts come from the drive-level
+    drive.start.yardLine + homeTeamId conversion -- per-play
+    start.yardsToEndzone and the within-drive index are unreliable in some
+    released games (junk clock, flipped orientation), which capped this
+    correlation at ~0.19 before the drive-level fix.
+    """
+    import sportsdataverse.cfb.cfb_field_position as fp
+
+    pbp = pl.read_parquet(f"{FIX}/pbp_slice_2021.parquet")
+    orig = fp.load_cfb_pbp
+    fp.load_cfb_pbp = lambda s, **k: pbp
+    try:
+        out = fp.cfb_field_position([2021])
+    finally:
+        fp.load_cfb_pbp = orig
+    cfbd = pl.read_parquet(f"{FIX}/cfbd_advanced_2021.parquet")
+    assert out.schema["team_id"] == cfbd.schema["team_id"]
+    j = out.join(cfbd.select(["team_id", "avg_start_yardline"]), on="team_id", how="inner")
+    assert j.height == 130
+    mine = j["avg_start_yardline"].to_numpy()
+    oracle = 100.0 - j["avg_start_yardline_right"].to_numpy()
+    assert spearman_corr(mine, oracle) >= 0.85
+    assert mae(mine, oracle) <= 1.0

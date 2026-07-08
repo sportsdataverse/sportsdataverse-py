@@ -41,6 +41,8 @@ PBP_COLS: dict[str, str] = {
     "type.text": "play_type",
     "drive.id": "drive_id",
     "drive.result": "drive_result",
+    "drive.start.yardLine": "drive_start_yardline_raw",
+    "homeTeamId": "home_team_id",
     "start.yardsToEndzone": "yards_to_goal",
     "start.TimeSecsRem": "start_time_secs_rem",
     "end.TimeSecsRem": "end_time_secs_rem",
