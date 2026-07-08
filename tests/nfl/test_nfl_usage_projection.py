@@ -111,6 +111,44 @@ def test_usage_projection_leakage(monkeypatch):
     assert abs(a - b) < 1e-12
 
 
+def test_oracle_usage_shares_vs_realized_2024():
+    """Usage-share oracle vs realized 2024 (offline fixtures).
+
+    Floors from observed values 2026-07-08 (rounded down):
+    RB spearman 0.7092, WR 0.6258, TE 0.7836; target-share MAE
+    RB 0.0340, WR 0.0710, TE 0.0527. Team share sums are exactly 1.0.
+    """
+    from pathlib import Path
+
+    import sportsdataverse.nfl.nfl_usage_projection as mod
+    from sportsdataverse.nfl.nfl_projection_constants import mae, spearman_corr
+
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "nfl_projection"
+    weekly = pl.read_parquet(fix / "player_stats_2020_2023.parquet")
+    realized_w = pl.read_parquet(fix / "realized_2024.parquet")
+    orig = mod.load_nfl_player_stats
+    mod.load_nfl_player_stats = lambda *a, **k: weekly
+    try:
+        usage = mod.nfl_usage_projection([2020, 2021, 2022, 2023], 2024)
+    finally:
+        mod.load_nfl_player_stats = orig
+    real = season_usage_shares(realized_w).filter(pl.col("games") >= 8)
+    assert usage.schema["player_id"] == real.schema["player_id"]
+    j = usage.join(real.select("player_id", pl.col("target_share").alias("real_ts")), on="player_id", how="inner")
+    floors = {"RB": 0.70, "WR": 0.61, "TE": 0.77}
+    mae_floors = {"RB": 0.04, "WR": 0.08, "TE": 0.06}
+    for pos, floor in floors.items():
+        s = j.filter(pl.col("position_group") == pos)
+        assert s.height >= 30
+        sp = spearman_corr(s["proj_target_share"].to_numpy(), s["real_ts"].to_numpy())
+        m = mae(s["proj_target_share"].to_numpy(), s["real_ts"].to_numpy())
+        assert sp >= floor, f"{pos}: share spearman {sp:.4f} < {floor}"
+        assert m <= mae_floors[pos], f"{pos}: share MAE {m:.4f} > {mae_floors[pos]}"
+    sums = usage.group_by("proj_team").agg(pl.col("proj_target_share").sum(), pl.col("proj_air_yards_share").sum())
+    assert (sums["proj_target_share"] - 1.0).abs().max() < 1e-6
+    assert (sums["proj_air_yards_share"] - 1.0).abs().max() < 1e-6
+
+
 def test_season_usage_shares_empty_schema():
     out = season_usage_shares(_mini_weekly().head(0))
     assert out.height == 0
