@@ -1,9 +1,13 @@
 """Fit ENVIRONMENT_FG_COEF (Task 3.2; network required).
 
-Logistic fit of field_goal_made on [wind, temp-60, altitude_kft] with the
-shipped fg_model's logit(base_make_prob) as a fixed offset (coefficient 1).
-scipy.optimize only (no sklearn).  Paste the printed dict into
-nfl_scheme_constants.ENVIRONMENT_FG_COEF.
+Logistic fit of field_goal_made on [long_kick, wind, temp-60, altitude_kft]
+with the shipped fg_model's logit(base_make_prob) as a fixed offset
+(coefficient 1).  The long_kick indicator (yardline_100 >= 38, the boundary
+of nfl4th's 0.9 decision clamp) corrects the clamp's selection-bias
+over-shrink on attempted 56+ yard kicks (teams only attempt those with a
+strong leg / good conditions), which otherwise leaves the low-probability
+calibration deciles under-predicted.  scipy.optimize only (no sklearn).
+Paste the printed dict into nfl_scheme_constants.ENVIRONMENT_FG_COEF.
 """
 
 import numpy as np
@@ -42,20 +46,22 @@ def main() -> None:
     temp_raw = df["temp"].fill_null(TEMP_BASELINE).to_numpy().astype(float)
     temp = np.where(indoor, TEMP_BASELINE, temp_raw) - TEMP_BASELINE
     alt = df["home_team"].replace_strict(STADIUM_ALTITUDE, default=0.0, return_dtype=pl.Float64).to_numpy() / 1000.0
-    w = np.column_stack([wind, temp, alt])
+    long_kick = (df["yardline_100"].to_numpy().astype(float) >= 38.0).astype(float)
+    w = np.column_stack([long_kick, wind, temp, alt])
 
     def nll(theta: np.ndarray) -> float:
         p = np.clip(expit(offset + w @ theta), 1e-9, 1 - 1e-9)
         return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
-    res = minimize(nll, x0=np.zeros(3), method="BFGS")
+    res = minimize(nll, x0=np.zeros(4), method="BFGS")
     print("n attempts:", df.height, "converged:", res.success)
-    print("nll null:", nll(np.zeros(3)), "nll fit:", float(res.fun))
+    print("nll null:", nll(np.zeros(4)), "nll fit:", float(res.fun))
     print(
         {
-            "wind": float(res.x[0]),
-            "temp": float(res.x[1]),
-            "altitude_kft": float(res.x[2]),
+            "long_kick": float(res.x[0]),
+            "wind": float(res.x[1]),
+            "temp": float(res.x[2]),
+            "altitude_kft": float(res.x[3]),
             "temp_baseline": TEMP_BASELINE,
         }
     )

@@ -26,6 +26,7 @@ the "beat shipped xpass" oracle compares against this package's own model.
 |---|---|---|---|
 | `pbp_2021_2023_slice.parquet` | `load_nfl_pbp` + `calculate_xpass`, 42-column subset | 2021–2023 | 149021 x 42 |
 | `fg_attempts_2019_2023.parquet` | same pipeline, `play_type == "field_goal"` | 2019–2023 | 5321 x 42 |
+| `fg_attempts_2014_2023.parquet` | same pipeline (calibration corpus — 10 seasons so each exp_make_prob decile holds ~1048 attempts and the binomial noise floor sits below the 0.03 calibration gate) | 2014–2023 | 10481 x 42 |
 | `participation_2021_2023.parquet` | `load_nfl_pbp_participation` (per-season + `diagonal_relaxed` concat — the multi-season loader call crashes on a cross-season schema drift, width 20 vs 26) | 2021–2023 | 147032 x 7 |
 | `pfr_advstats_2023.parquet` | `load_nfl_pfr_advstats([2023], stat_type="def", summary_level="season")` | 2023 | 926 x 30 |
 

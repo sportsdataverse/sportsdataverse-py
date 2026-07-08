@@ -212,12 +212,16 @@ STADIUM_ALTITUDE: Dict[str, float] = {
 
 #: Environment FG make-prob logit slopes, fitted by
 #: ``dev/nfl_scheme/fit_env_fg_coef.py`` (run 2026-07-08): logistic fit of
-#: made ~ offset(logit(base_make_prob)) + wind + (temp-60) + altitude_kft on
-#: 2010-2023 attempts (n=14583, BFGS converged; wind hurts, warmth/altitude help).
+#: made ~ offset(logit(base_make_prob)) + long_kick + wind + (temp-60) +
+#: altitude_kft on 2010-2023 attempts (n=14583, BFGS converged; wind hurts,
+#: warmth/altitude help).  ``long_kick`` (yardline_100 >= 38, the nfl4th 0.9
+#: decision-clamp boundary) corrects the clamp's selection-bias over-shrink
+#: on attempted 56+ yard kicks.
 ENVIRONMENT_FG_COEF: Dict[str, float] = {
-    "wind": -0.0061029583316411775,
-    "temp": 0.003010867085771798,
-    "altitude_kft": 0.024133397756264757,
+    "long_kick": 0.325299,
+    "wind": -0.007021,
+    "temp": 0.002773,
+    "altitude_kft": 0.018805,
     "temp_baseline": 60.0,
 }
 
@@ -234,11 +238,14 @@ PACE_CONSTANTS: Dict[str, float] = {
     "total_mean": 44.62997658079625,
 }
 
-#: Empirical-Bayes shrinkage pseudo-counts.  Seeds; overwritten with the
-#: split-half fits from ``dev/nfl_scheme/fit_eb_priors.py`` (Tasks 3.3 / 5.2).
+#: Empirical-Bayes shrinkage pseudo-counts, fitted by
+#: ``dev/nfl_scheme/fit_eb_priors.py`` (run 2026-07-08) on the committed
+#: fixtures: K_fg via kicker-season split-half MSE (n=170, attempts scale);
+#: K_pressure via 2021->2022 / 2022->2023 season-to-season MSE (dropback
+#: scale).  Kicker-season FGOE is noisy, hence the heavy K_fg.
 EB_PRIOR: Dict[str, float] = {
-    "K_fg": 15.0,
-    "K_pressure": 8.0,
+    "K_fg": 137.0,
+    "K_pressure": 1000.0,
 }
 
 #: Bundled play-call classifier artifact filename (Phase 1).

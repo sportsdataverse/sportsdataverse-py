@@ -112,7 +112,17 @@ def env_adjusted_make_prob(pbp: pl.DataFrame) -> pl.DataFrame:
         df["home_team"].replace_strict(STADIUM_ALTITUDE, default=0.0, return_dtype=pl.Float64).to_numpy().astype(float)
         / 1000.0
     )
-    z = logit(base) + coef["wind"] * wind + coef["temp"] * temp + coef["altitude_kft"] * alt_kft
+    # long_kick corrects the nfl4th decision clamp's selection-bias over-shrink
+    # on attempted 56+ yard kicks (see fit_env_fg_coef.py); .get keeps older /
+    # test-injected coefficient tables working.
+    long_kick = (df["yardline_100"].to_numpy().astype(float) >= 38.0).astype(float)
+    z = (
+        logit(base)
+        + coef.get("long_kick", 0.0) * long_kick
+        + coef["wind"] * wind
+        + coef["temp"] * temp
+        + coef["altitude_kft"] * alt_kft
+    )
     return df.with_columns(
         pl.Series("base_make_prob", base, dtype=pl.Float64),
         pl.Series("exp_make_prob", expit(z).astype(float), dtype=pl.Float64),
