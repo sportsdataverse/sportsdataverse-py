@@ -463,6 +463,98 @@ espn_wnba_teams.cache_clear()  # cached at function-level
 teams_pd = espn_wnba_teams(return_as_pandas=True)
 ```
 
+### `make_prob_by_context(ptshots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#make_prob_by_context}
+
+Marginal FG% tables by defender distance and by shot clock.
+
+The public API exposes defender-distance and shot-clock only as aggregate
+bucket tables (`playerdashptshots`), not per-shot fields, so this
+aggregates `Σfgm/Σfga` across players within each bucket.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ptshots` | `DataFrame` |  | The stacked `playerdashptshots` fixture — one frame with a `result_set` tag (`ClosestDefenderShooting` / `ShotClockShooting`) plus `bucket, fga, fgm`. |
+| `return_as_pandas` | `bool` | `False` | Return pandas DataFrames instead of polars. |
+
+**Returns**
+
+frame, "shot_clock": frame}` each with rows per `bucket` (`bucket, fga, fgm, fg_pct``). Missing result sets return the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import make_prob_by_context
+tables = make_prob_by_context(ptshots)
+tables["defender"].sort("fg_pct")
+```
+
+### `make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#make_prob_joint}
+
+Independence-combined defender x shot-clock make probability.
+
+Combines the two marginal FG% tables under a conditional-independence
+assumption via odds multipliers: `odds(p) = p/(1-p)`;
+`odds_joint = odds_overall * (odds_def/odds_overall) *
+(odds_clock/odds_overall)`; `joint = odds_joint/(1+odds_joint)`. This
+assumes defender distance and shot-clock effects are independent given the
+league baseline — a simplification (a late clock correlates with tighter
+defense), documented here so callers weigh it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `defender` | `DataFrame` |  | The `"defender"` marginal table from `make_prob_by_context` (`bucket, fg_pct`). |
+| `shot_clock` | `DataFrame` |  | The `"shot_clock"` marginal table (`bucket, fg_pct`). |
+| `overall_fg_pct` | `float` |  | The league overall FG% baseline. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `(close_def_dist_range, shot_clock_range)`: `close_def_dist_range:Utf8, shot_clock_range:Utf8, joint_fg_pct:Float64`. Empty inputs return the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import make_prob_by_context, make_prob_joint
+t = make_prob_by_context(ptshots)
+joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
+```
+
+### `score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#score_shot_xpoints}
+
+Score each shot with expected points from the league-average baseline.
+
+Joins the per-shot frame to the zone baseline (falling back to the
+within-`shot_zone_range` mean when a zone triple is unmatched) and adds
+`shot_value` (3 for a `3PT` shot else 2), `xpoints = base_fg_pct *
+shot_value`, and `actual_points = shot_made_flag * shot_value`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type` + the three zone keys + `shot_made_flag`). |
+| `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`. Empty input returns the augmented schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
+scored = score_shot_xpoints(shots, league_avgs)
+
+# Pipeline next step (one line)
+
+scored.group_by("player_id").agg(pl.col("xpoints").sum())
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -472,6 +564,73 @@ _No description available._
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `event` |  |  |  |
+
+### `shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#shooter_talent}
+
+Regressed shooter true-talent: make%-above-expected, shrunk to the mean.
+
+Aggregates `score_shot_xpoints` output per shooter and regresses the
+raw over-expected rate toward zero by `n/(n+k)` (`k =
+get_shrinkage_k(league_id)`, fitted split-half). **As-of leakage
+boundary:** to score a shooter's talent for shots after date *D*, pass
+only that shooter's shots before *D* -- this function does not enforce the
+cut itself.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_made_flag`, `base_fg_pct`, `xpoints`, `actual_points`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
+| `min_attempts` | `int` | `50` | Drop shooters with fewer attempts (unstable estimate). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`. Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shooter_talent
+talent = shooter_talent(score_shot_xpoints(shots, league_avgs))
+
+# Pipeline next step (one line)
+
+talent.sort("talent_pct", descending=True).head(15)
+```
+
+### `shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#shot_selection_quality}
+
+Player shot-selection quality: mean expected value vs the league mean.
+
+`xev_per_shot` is a player's mean `xpoints` (the value of the LOOKS
+they take, independent of makes); `selection_quality` is that minus the
+league-wide mean `xpoints` over the same frame -- a rim-and-three diet
+scores positive, a mid-range diet negative.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `xpoints`). |
+| `min_attempts` | `int` | `50` | Drop players with fewer attempts. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `player_id`: `player_id:Int64, n_att:Int64, xev_per_shot:Float64, league_xev_per_shot:Float64, selection_quality:Float64`. Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shot_selection_quality
+sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
+
+# Pipeline next step (one line)
+
+sel.sort("selection_quality", descending=True).head(15)
+```
 
 ### `wnba_enhanced_pbp(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_enhanced_pbp}
 
@@ -649,4 +808,34 @@ import polars as pl
 game_ids = pl.read_parquet("wnba_schedule.parquet")["game_id"].to_list()
 rapm = wnba_rapm_from_games(game_ids)
 print(rapm.sort("rapm", descending=True).head(10))
+```
+
+### `zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#zone_value_map}
+
+Per-player per-zone value map: points and expected points per shot.
+
+Collapses `shot_zone_basic` to a canonical zone via `ZONE_COLLAPSE`
+(the two corner-3 zones merge) and aggregates realized vs expected points
+per shot in each zone.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_zone_basic`, `shot_made_flag`, `actual_points`, `xpoints`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `(player_id, zone)`: `player_id:Int64, zone:Utf8, att:Int64, makes:Int64, pts:Float64, pps:Float64, xpps:Float64, pps_above_expected:Float64` (`pps` = points per shot, `xpps` = expected). Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, zone_value_map
+zmap = zone_value_map(score_shot_xpoints(shots, league_avgs))
+
+# Pipeline next step (one line)
+
+zmap.filter(pl.col("zone") == "corner_3").sort("pps_above_expected", descending=True)
 ```
