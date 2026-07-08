@@ -20,10 +20,21 @@ from __future__ import annotations
 import numpy as np
 import polars as pl
 
+from sportsdataverse.nfl.nfl_prediction_constants import RatingsConfig
+
+
 _RIDGE_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "team_id": pl.Utf8,
     "off_coef": pl.Float64,
     "def_coef": pl.Float64,
+}
+
+_EFFICIENCY_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "team_id": pl.Utf8,
+    "adj_off_epa": pl.Float64,
+    "adj_def_epa": pl.Float64,
+    "adj_net": pl.Float64,
+    "games": pl.Int64,
 }
 
 
@@ -106,3 +117,69 @@ def opponent_adjusted_ridge(
         }
     )
     return frame, float(beta[2 * n_t]), float(beta[2 * n_t + 1])
+
+
+def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:
+    """One row per team: opponent-adjusted offense/defense EPA per play.
+
+    Filters ``plays`` to competitive non-special-teams scrimmage plays
+    (``special != 1``, ``qb_kneel != 1``, ``qb_spike != 1``,
+    ``min_competitive_wp <= wp <= max_competitive_wp``, non-null
+    ``epa``/``posteam``/``defteam``) and fits
+    :func:`opponent_adjusted_ridge` on ``epa``. Callers pass an already
+    as-of-date-filtered frame (the public ``nfl_ratings`` entry point does
+    the date filter) -- this function is pure.
+
+    Args:
+        plays: An ``load_nfl_pbp``-schema frame carrying ``game_id``,
+            ``posteam``, ``defteam``, ``home_team``, ``epa``, ``wp``,
+            ``special``, ``qb_kneel``, ``qb_spike``.
+        config: Tuning knobs (``ridge_lambda`` + the competitive-``wp``
+            window); defaults to :class:`RatingsConfig`.
+
+    Returns:
+        pl.DataFrame: One row per ``team_id`` (Utf8) with ``adj_off_epa`` /
+        ``adj_def_epa`` / ``adj_net`` (Float64, ``adj_net = adj_off_epa -
+        adj_def_epa``) and ``games`` (Int64). Zero-row, correctly-typed on
+        empty/fully-filtered input.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_ratings import efficiency_ratings
+            ratings = efficiency_ratings(pbp)
+            ratings.sort("adj_net", descending=True).head()
+    """
+    cfg = config or RatingsConfig()
+    clean = plays.filter(
+        (pl.col("epa").is_not_null())
+        & (pl.col("posteam").is_not_null())
+        & (pl.col("defteam").is_not_null())
+        & (pl.col("special") != 1)
+        & (pl.col("qb_kneel") != 1)
+        & (pl.col("qb_spike") != 1)
+        & (pl.col("wp") >= cfg.min_competitive_wp)
+        & (pl.col("wp") <= cfg.max_competitive_wp)
+    )
+    if clean.height == 0:
+        return pl.DataFrame(schema=_EFFICIENCY_OUTPUT_SCHEMA)
+
+    frame, _intercept, _home = opponent_adjusted_ridge(
+        clean,
+        off_col="posteam",
+        def_col="defteam",
+        home_col="home_team",
+        resp_col="epa",
+        lam=cfg.ridge_lambda,
+    )
+    games = clean.group_by(pl.col("posteam").cast(pl.Utf8).alias("team_id")).agg(
+        pl.col("game_id").n_unique().cast(pl.Int64).alias("games")
+    )
+    assert frame.schema["team_id"] == games.schema["team_id"]
+    return (
+        frame.join(games, on="team_id", how="left")
+        .with_columns(pl.col("games").fill_null(0))
+        .rename({"off_coef": "adj_off_epa", "def_coef": "adj_def_epa"})
+        .with_columns(adj_net=pl.col("adj_off_epa") - pl.col("adj_def_epa"))
+        .select("team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games")
+    )
