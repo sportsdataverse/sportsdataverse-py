@@ -87,11 +87,18 @@ per row). `{prefix}{report}`: `facet{report}` (By Position; `+franchiseId` By Te
   `pff_player_passing_summary`, `pff_teams_overview`, `pff_leagues`). Each league
   module exposes the same names with `league` pre-bound.
 
-**Codegen change:** add a per-league-shim emission mode to the flat-API generator
-(a `league_shims:` block in `pff.yaml` mapping league slug → target module) so the
-core + 4 shims + 4 docs groupings are generated, not hand-maintained. Precedent:
-ESPN `make_league_module`. Falls back to the standard single-module path for the
-other three stems.
+**No codegen change (simpler than a shim-mode).** The core is a *normal* generated
+flat stem (module `pff_core`, prefix `nfl`, `league` as an `extra_param`). The 4
+public league modules are **one-line hand-written shims** over a small runtime helper
+`make_pff_league_module(globals(), "<slug>")` — a **self-contained** helper
+(installs league-bound `functools.partial` + `functools.update_wrapper` wrappers
+preserving `__name__`/`__qualname__`/`__doc__`). Patterned after the *now-retired*
+ESPN `make_league_module` factory and the live wnba/wbb shim precedent — it does
+NOT import an ESPN factory (`_common_espn.py` is now just host constants + `_get`).
+This matches the wnba/wbb + ESPN precedent, keeps the shared `generate.py`
+untouched, and removes any foundation dependency for the other three tracks. Docs:
+the core reference generates under `nfl`; the 4 shims get short hand-written stub
+pages pointing at it.
 
 **Parsers** (`nfl/pff_parsers.py`): `parse_pff_report` (facet envelope
 `{key: [rows]}` → tidy frame; matrix reports `{defenders,receivers,versus}` handled
