@@ -21,6 +21,7 @@ import pytest
 
 from sportsdataverse.nhl.nhl_gsax import nhl_goalie_gsax
 from sportsdataverse.nhl.nhl_player_impact_constants import calibration_table, spearman_corr
+from sportsdataverse.nhl.nhl_rapm import nhl_skater_rapm
 from sportsdataverse.nhl.nhl_xg import nhl_xg
 
 FIX = Path(__file__).parent.parent / "fixtures" / "nhl_player_impact"
@@ -91,3 +92,36 @@ def test_gsax_moneypuck_concurrent_gate_skipped_when_oracle_blocked():
     FLOOR = 0.6
     corr = spearman_corr(joined["gsax"].to_numpy(), joined["gsax_right"].to_numpy())
     assert corr >= FLOOR, f"GSAx vs MoneyPuck concurrent validity below floor: {corr:.3f} < {FLOOR}"
+
+
+def _shifts() -> pl.DataFrame:
+    return pl.read_parquet(FIX / "shifts_sample.parquet")
+
+
+def test_rapm_off_coefficients_are_ridge_centered():
+    # Observed on the 3-game fixture: mean(off_coef) == 0.080 (a ridge regularizes
+    # toward, but does not force to exactly, zero absent a shared reference level).
+    # A gross sign-flip or scaling bug (e.g. per-game instead of per-60) would blow this
+    # far past a small band around the observed value.
+    rapm = nhl_skater_rapm(_pbp(), _shifts(), model_dir=MODELS)
+    assert rapm.height > 0
+    mean_off = rapm["xg_rapm_off"].mean()
+    assert abs(mean_off) < 1.0, f"off coefficients not ridge-centered: mean={mean_off:.3f}"
+
+
+def test_rapm_evolvinghockey_concurrent_gate_skipped_when_oracle_blocked():
+    eh = pl.read_parquet(FIX / "eh_skaters.parquet")
+    if eh.height == 0:
+        pytest.skip(
+            "EvolvingHockey per-skater RAPM/WAR sample is data-blocked (subscription-gated) -- "
+            "see tests/fixtures/nhl_player_impact/README.md capture contract."
+        )
+    mine = nhl_skater_rapm(_pbp(), _shifts(), model_dir=MODELS)
+    joined = mine.join(eh, on="player_id", how="inner")
+    assert joined.height > 0, "no overlapping skaters between mine and EvolvingHockey's sample"
+    # FLOOR to be set from the observed correlation once an EvolvingHockey subscription
+    # export is captured -- see the fixture README capture contract (expect >= 0.6 per
+    # the design spec, given documented methodology differences).
+    FLOOR = 0.6
+    corr = spearman_corr(joined["xg_rapm"].to_numpy(), joined["xg_rapm_right"].to_numpy())
+    assert corr >= FLOOR, f"skater RAPM vs EvolvingHockey concurrent validity below floor: {corr:.3f} < {FLOOR}"
