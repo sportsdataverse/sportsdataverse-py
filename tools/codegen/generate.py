@@ -1468,6 +1468,7 @@ FLAT_APIS = [
     ("wnba_stats", "wnba"),
     ("on3", "cfb"),
     ("sports247", "cfb"),
+    ("sports247_site_pages", "cfb"),
 ]
 
 
@@ -1959,6 +1960,7 @@ _FLAT_API_DOC = {
     "wnba_stats": "WNBA Stats API (stats.wnba.com)",
     "on3": "On3 Recruiting (on3.com)",
     "sports247": "247Sports Recruit Database (ipa.247sports.com)",
+    "sports247_site_pages": "247Sports Site Pages (247sports.com)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
