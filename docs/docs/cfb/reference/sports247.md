@@ -56,7 +56,7 @@ _Last validated n/a._
 |---|---|:---:|:---:|:---:|---|
 | `year` | `year` |  | `Y` |  | year path parameter. |
 | `sport_key` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
-| `pagesize` | `pagesize` |  |  | `Y` | pagesize query parameter. |
+| `pagesize` | `page_size` |  |  | `Y` | pagesize query parameter. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `useComposite` | `use_composite` |  |  | `Y` | useComposite query parameter. |
 | `conferenceAbbreviation` | `conference_abbreviation` |  |  | `Y` | conferenceAbbreviation query parameter. |
@@ -122,7 +122,7 @@ _Last validated n/a._
 |---|---|:---:|:---:|:---:|---|
 | `sportKey` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
 | `year` | `year` |  |  | `Y` | year query parameter. |
-| `pagesize` | `pagesize` |  |  | `Y` | pagesize query parameter. |
+| `pagesize` | `page_size` |  |  | `Y` | pagesize query parameter. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `positionAbbreviation` | `position_abbreviation` |  |  | `Y` | positionAbbreviation query parameter. |
 | `stateAbbreviation` | `state_abbreviation` |  |  | `Y` | stateAbbreviation query parameter. |
@@ -188,7 +188,7 @@ _Last validated n/a._
 |---|---|:---:|:---:|:---:|---|
 | `sportKey` | `sport_key` |  |  | `Y` | 247Sports sport key (1 = football, 2 = basketball). |
 | `year` | `year` |  |  | `Y` | year query parameter. |
-| `pagesize` | `pagesize` |  |  | `Y` | pagesize query parameter. |
+| `pagesize` | `page_size` |  |  | `Y` | pagesize query parameter. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 
 ### Returns

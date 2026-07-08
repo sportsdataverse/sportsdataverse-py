@@ -40,7 +40,7 @@ endpoints:
     default: 1
     description: "247Sports sport key (1 = football, 2 = basketball)."
   extra_params:
-  - name: pagesize
+  - name: page_size
     query_key: pagesize
     type: int
     default: 50
@@ -74,7 +74,7 @@ endpoints:
     query_key: year
     type: int
     default: 2026
-  - name: pagesize
+  - name: page_size
     query_key: pagesize
     type: int
     default: 50
@@ -105,7 +105,7 @@ endpoints:
     query_key: year
     type: int
     default: 2026
-  - name: pagesize
+  - name: page_size
     query_key: pagesize
     type: int
     default: 50

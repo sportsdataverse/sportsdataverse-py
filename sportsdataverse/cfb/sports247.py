@@ -78,7 +78,7 @@ def sports247_teams(
 def sports247_institution_rankings(
     year: Union[int, str],
     sport_key: int = 1,
-    pagesize: Optional[int] = 50,
+    page_size: Optional[int] = 50,
     page: Optional[int] = None,
     use_composite: Optional[str] = None,
     conference_abbreviation: Optional[str] = None,
@@ -96,7 +96,7 @@ def sports247_institution_rankings(
     Args:
         year: year path parameter.
         sport_key: sport_key path parameter.
-        pagesize: pagesize query parameter.
+        page_size: pagesize query parameter.
         page: page query parameter.
         use_composite: useComposite query parameter.
         conference_abbreviation: conferenceAbbreviation query parameter.
@@ -115,7 +115,7 @@ def sports247_institution_rankings(
     raw = _get(
         f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/institutionrankings/",
         params={
-            "pagesize": pagesize,
+            "pagesize": page_size,
             "page": page,
             "useComposite": use_composite,
             "conferenceAbbreviation": conference_abbreviation,
@@ -131,7 +131,7 @@ def sports247_institution_rankings(
 def sports247_recruits(
     sport_key: Optional[int] = 1,
     year: Optional[int] = 2026,
-    pagesize: Optional[int] = 50,
+    page_size: Optional[int] = 50,
     page: Optional[int] = None,
     position_abbreviation: Optional[str] = None,
     state_abbreviation: Optional[str] = None,
@@ -148,7 +148,7 @@ def sports247_recruits(
     Args:
         sport_key: sportKey query parameter.
         year: year query parameter.
-        pagesize: pagesize query parameter.
+        page_size: pagesize query parameter.
         page: page query parameter.
         position_abbreviation: positionAbbreviation query parameter.
         state_abbreviation: stateAbbreviation query parameter.
@@ -168,7 +168,7 @@ def sports247_recruits(
         params={
             "sportKey": sport_key,
             "year": year,
-            "pagesize": pagesize,
+            "pagesize": page_size,
             "page": page,
             "positionAbbreviation": position_abbreviation,
             "stateAbbreviation": state_abbreviation,
@@ -183,7 +183,7 @@ def sports247_recruits(
 def sports247_transfers(
     sport_key: Optional[int] = 1,
     year: Optional[int] = 2026,
-    pagesize: Optional[int] = 50,
+    page_size: Optional[int] = 50,
     page: Optional[int] = None,
     *,
     return_parsed: bool = True,
@@ -198,7 +198,7 @@ def sports247_transfers(
     Args:
         sport_key: sportKey query parameter.
         year: year query parameter.
-        pagesize: pagesize query parameter.
+        page_size: pagesize query parameter.
         page: page query parameter.
         return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -216,7 +216,7 @@ def sports247_transfers(
         params={
             "sportKey": sport_key,
             "year": year,
-            "pagesize": pagesize,
+            "pagesize": page_size,
             "page": page,
             **{_k: _v for _k, _v in kwargs.items() if _v is not None},
         },
