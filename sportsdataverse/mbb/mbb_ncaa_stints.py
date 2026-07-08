@@ -112,7 +112,7 @@ Attribution: derived from `cbb-explorer
 Copyright Alex-At-Home / org.piggottfamily). This is a source-language
 translation (Scala -> Python), not a copy; upstream file:
 ``src/main/scala/org/piggottfamily/cbb_explorer/utils/parsers/ncaa/ExtractorUtils.scala``.
-See ``THIRD_PARTY_NOTICES.md`` for the full notice.
+See ``NOTICE`` for the full notice.
 
 Landmine index (reachable error sites, numbered across the module):
     1. ``build_player_code`` indexes ``fragment[0]`` inside its transform

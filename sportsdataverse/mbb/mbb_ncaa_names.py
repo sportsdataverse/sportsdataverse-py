@@ -104,7 +104,7 @@ task's file scope did not include modifying ``mbb_ncaa_stints.py``. **Task
 (:func:`name_is_initials`)** -- ``mbb_ncaa_roster_parser.py``'s
 ``parse_roster`` needs the same initials-shorthand check to reject
 initials-only roster rows, making this module a second consumer). See
-``THIRD_PARTY_NOTICES.md`` for the full notice.
+``NOTICE`` for the full notice.
 
 Landmine index (reachable error sites, numbered across the module):
     1. ``_truncate_code_1`` / ``_truncate_code_2`` fall back to the input

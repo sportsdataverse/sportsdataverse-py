@@ -143,21 +143,7 @@ Ported here as a plain ``int``-returning function rather than a
 ``Union[int, ParseError]``, documenting the dead error branch instead of
 inventing an unreachable one.
 
-**License / provenance (Apache License, Version 2.0).** This module is a
-derivative work of ``BoxscoreParser.scala`` from
-`Alex-At-Home/cbb-explorer <https://github.com/Alex-At-Home/cbb-explorer>`_
-(package ``org.piggottfamily.cbb_explorer``), which is licensed under the
-Apache License, Version 2.0 (the upstream repo's ``LICENSE`` file; full text
-at `<http://www.apache.org/licenses/LICENSE-2.0>`_). Per Apache-2.0 Section
-4's redistribution-of-derivative-works obligations, sportsdataverse-py
-(itself MIT-licensed) retains the upstream copyright notice for this
-derivative::
-
-    Copyright (c) Alex-At-Home (https://github.com/Alex-At-Home) and
-    contributors. Licensed under the Apache License, Version 2.0.
-
-See ``THIRD_PARTY_NOTICES.md`` at the repository root for the full
-third-party attribution entry.
+Apache-2.0 third-party port — see the ``NOTICE`` file at the repository root for the upstream copyright and full attribution.
 
 **Either convention.** Scala's ``Either[ParseError, X]`` / ``Either[List[
 ParseError], X]`` both become plain ``X | ParseError`` / ``X | list[

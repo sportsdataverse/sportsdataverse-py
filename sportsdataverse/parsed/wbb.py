@@ -84,6 +84,9 @@ from sportsdataverse.wbb import espn_wbb_players_index as _raw_espn_wbb_players_
 from sportsdataverse.wbb import espn_wbb_position as _raw_espn_wbb_position
 from sportsdataverse.wbb import espn_wbb_positions as _raw_espn_wbb_positions
 from sportsdataverse.wbb import espn_wbb_rankings as _raw_espn_wbb_rankings
+from sportsdataverse.wbb import espn_wbb_recruiting_players as _raw_espn_wbb_recruiting_players
+from sportsdataverse.wbb import espn_wbb_recruiting_rankings as _raw_espn_wbb_recruiting_rankings
+from sportsdataverse.wbb import espn_wbb_recruiting_years as _raw_espn_wbb_recruiting_years
 from sportsdataverse.wbb import espn_wbb_scoreboard as _raw_espn_wbb_scoreboard
 from sportsdataverse.wbb import espn_wbb_season_awards as _raw_espn_wbb_season_awards
 from sportsdataverse.wbb import espn_wbb_season_coaches as _raw_espn_wbb_season_coaches
@@ -163,6 +166,7 @@ from sportsdataverse.wbb import PlayerCodeId as PlayerCodeId  # noqa: F401
 from sportsdataverse.wbb import PlayerEvent as PlayerEvent  # noqa: F401
 from sportsdataverse.wbb import PlayerId as PlayerId  # noqa: F401
 from sportsdataverse.wbb import PlayerShotInfo as PlayerShotInfo  # noqa: F401
+from sportsdataverse.wbb import PlayerValueConstants as PlayerValueConstants  # noqa: F401
 from sportsdataverse.wbb import PossCalcFragment as PossCalcFragment  # noqa: F401
 from sportsdataverse.wbb import PossState as PossState  # noqa: F401
 from sportsdataverse.wbb import PossessionEvent as PossessionEvent  # noqa: F401
@@ -184,6 +188,7 @@ from sportsdataverse.wbb import ShotEventBuilders as ShotEventBuilders  # noqa: 
 from sportsdataverse.wbb import ShotGeo as ShotGeo  # noqa: F401
 from sportsdataverse.wbb import ShotLocation as ShotLocation  # noqa: F401
 from sportsdataverse.wbb import ShotMapDimensions as ShotMapDimensions  # noqa: F401
+from sportsdataverse.wbb import ShotQualityConstants as ShotQualityConstants  # noqa: F401
 from sportsdataverse.wbb import StrengthAdjustedResult as StrengthAdjustedResult  # noqa: F401
 from sportsdataverse.wbb import StrongSurnameMatch as StrongSurnameMatch  # noqa: F401
 from sportsdataverse.wbb import SubInEvent as SubInEvent  # noqa: F401
@@ -200,13 +205,16 @@ from sportsdataverse.wbb import add_stats_to_lineups as add_stats_to_lineups  # 
 from sportsdataverse.wbb import adjust_efficiency as adjust_efficiency  # noqa: F401
 from sportsdataverse.wbb import adjust_off_rating_stats as adjust_off_rating_stats  # noqa: F401
 from sportsdataverse.wbb import adjust_tempo as adjust_tempo  # noqa: F401
+from sportsdataverse.wbb import aggregate_player_seasons as aggregate_player_seasons  # noqa: F401
 from sportsdataverse.wbb import alias_combos as alias_combos  # noqa: F401
 from sportsdataverse.wbb import analyze_and_fix_clumps as analyze_and_fix_clumps  # noqa: F401
 from sportsdataverse.wbb import apply_relative_positional_overrides as apply_relative_positional_overrides  # noqa: F401
 from sportsdataverse.wbb import apply_weak_priors as apply_weak_priors  # noqa: F401
 from sportsdataverse.wbb import as_of_ratings_split as as_of_ratings_split  # noqa: F401
+from sportsdataverse.wbb import as_of_season_split as as_of_season_split  # noqa: F401
 from sportsdataverse.wbb import assign_to_right_lineup as assign_to_right_lineup  # noqa: F401
 from sportsdataverse.wbb import attr_regex_filter as attr_regex_filter  # noqa: F401
+from sportsdataverse.wbb import bootstrap_ari as bootstrap_ari  # noqa: F401
 from sportsdataverse.wbb import box_aware_compare as box_aware_compare  # noqa: F401
 from sportsdataverse.wbb import brier_score as brier_score  # noqa: F401
 from sportsdataverse.wbb import build_3p_shot_info as build_3p_shot_info  # noqa: F401
@@ -252,6 +260,9 @@ from sportsdataverse.wbb import calculate_sd_rapm as calculate_sd_rapm  # noqa: 
 from sportsdataverse.wbb import calculate_stats as calculate_stats  # noqa: F401
 from sportsdataverse.wbb import calibration_table as calibration_table  # noqa: F401
 from sportsdataverse.wbb import categorize_bad_lineups as categorize_bad_lineups  # noqa: F401
+from sportsdataverse.wbb import classify_point_value as classify_point_value  # noqa: F401
+from sportsdataverse.wbb import classify_zone_geometry as classify_zone_geometry  # noqa: F401
+from sportsdataverse.wbb import classify_zone_type as classify_zone_type  # noqa: F401
 from sportsdataverse.wbb import clump_bad_lineups as clump_bad_lineups  # noqa: F401
 from sportsdataverse.wbb import combos as combos  # noqa: F401
 from sportsdataverse.wbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
@@ -272,6 +283,7 @@ from sportsdataverse.wbb import enrich_lineup as enrich_lineup  # noqa: F401
 from sportsdataverse.wbb import enrich_shot_events_with_pbp as enrich_shot_events_with_pbp  # noqa: F401
 from sportsdataverse.wbb import enrich_stats as enrich_stats  # noqa: F401
 from sportsdataverse.wbb import ensure_ev_uniqueness as ensure_ev_uniqueness  # noqa: F401
+from sportsdataverse.wbb import espn_shots_to_canonical as espn_shots_to_canonical  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_calendar as espn_wbb_calendar  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_game_officials as espn_wbb_game_officials  # noqa: F401
 from sportsdataverse.wbb import espn_wbb_game_rosters as espn_wbb_game_rosters  # noqa: F401
@@ -288,6 +300,8 @@ from sportsdataverse.wbb import filter_matching_own as filter_matching_own  # no
 from sportsdataverse.wbb import find_lineup as find_lineup  # noqa: F401
 from sportsdataverse.wbb import find_missing_subs as find_missing_subs  # noqa: F401
 from sportsdataverse.wbb import find_pbp_clump as find_pbp_clump  # noqa: F401
+from sportsdataverse.wbb import fit_espn_court_scale as fit_espn_court_scale  # noqa: F401
+from sportsdataverse.wbb import fit_shrinkage_k as fit_shrinkage_k  # noqa: F401
 from sportsdataverse.wbb import fix_combos as fix_combos  # noqa: F401
 from sportsdataverse.wbb import fix_possible_score_swap_bug as fix_possible_score_swap_bug  # noqa: F401
 from sportsdataverse.wbb import flatten_json_iterative as flatten_json_iterative  # noqa: F401
@@ -299,6 +313,7 @@ from sportsdataverse.wbb import get_constants as get_constants  # noqa: F401
 from sportsdataverse.wbb import get_game_weight as get_game_weight  # noqa: F401
 from sportsdataverse.wbb import get_neutral_games as get_neutral_games  # noqa: F401
 from sportsdataverse.wbb import get_per_game_raw as get_per_game_raw  # noqa: F401
+from sportsdataverse.wbb import get_player_value_constants as get_player_value_constants  # noqa: F401
 from sportsdataverse.wbb import get_sorted_pbp_events as get_sorted_pbp_events  # noqa: F401
 from sportsdataverse.wbb import get_stats_diff as get_stats_diff  # noqa: F401
 from sportsdataverse.wbb import get_team_raw_from_per_game as get_team_raw_from_per_game  # noqa: F401
@@ -327,10 +342,12 @@ from sportsdataverse.wbb import is_team_shooting_left_to_start as is_team_shooti
 from sportsdataverse.wbb import is_transition as is_transition  # noqa: F401
 from sportsdataverse.wbb import is_women_game as is_women_game  # noqa: F401
 from sportsdataverse.wbb import jsoup_text as jsoup_text  # noqa: F401
+from sportsdataverse.wbb import kmeans_fit as kmeans_fit  # noqa: F401
 from sportsdataverse.wbb import lineup_as_raw_clumps as lineup_as_raw_clumps  # noqa: F401
 from sportsdataverse.wbb import lineup_balancer as lineup_balancer  # noqa: F401
 from sportsdataverse.wbb import lineup_fixer as lineup_fixer  # noqa: F401
 from sportsdataverse.wbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
+from sportsdataverse.wbb import load_artifact as load_artifact  # noqa: F401
 from sportsdataverse.wbb import load_proxybonanza_pool as load_proxybonanza_pool  # noqa: F401
 from sportsdataverse.wbb import load_wbb_game_rosters as load_wbb_game_rosters  # noqa: F401
 from sportsdataverse.wbb import load_wbb_officials as load_wbb_officials  # noqa: F401
@@ -344,6 +361,7 @@ from sportsdataverse.wbb import load_wbb_standings as load_wbb_standings  # noqa
 from sportsdataverse.wbb import load_wbb_team_boxscore as load_wbb_team_boxscore  # noqa: F401
 from sportsdataverse.wbb import load_wbb_team_season_stats as load_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import log_loss_score as log_loss_score  # noqa: F401
+from sportsdataverse.wbb import logistic_fit as logistic_fit  # noqa: F401
 from sportsdataverse.wbb import mae as mae  # noqa: F401
 from sportsdataverse.wbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.wbb import misspellings as misspellings  # noqa: F401
@@ -403,6 +421,7 @@ from sportsdataverse.wbb import parse_two_pointer_made as parse_two_pointer_made
 from sportsdataverse.wbb import parse_two_pointer_missed as parse_two_pointer_missed  # noqa: F401
 from sportsdataverse.wbb import phase1_shot_event_enrichment as phase1_shot_event_enrichment  # noqa: F401
 from sportsdataverse.wbb import pick_ridge_regression as pick_ridge_regression  # noqa: F401
+from sportsdataverse.wbb import player_per100_features as player_per100_features  # noqa: F401
 from sportsdataverse.wbb import playwright_transport as playwright_transport  # noqa: F401
 from sportsdataverse.wbb import pos_class_to_score as pos_class_to_score  # noqa: F401
 from sportsdataverse.wbb import poss_calc_fragment_sum as poss_calc_fragment_sum  # noqa: F401
@@ -414,13 +433,18 @@ from sportsdataverse.wbb import regress_shot_quality as regress_shot_quality  # 
 from sportsdataverse.wbb import remove_diacritics as remove_diacritics  # noqa: F401
 from sportsdataverse.wbb import reorder_and_reverse as reorder_and_reverse  # noqa: F401
 from sportsdataverse.wbb import reset_config as reset_config  # noqa: F401
+from sportsdataverse.wbb import ridge_cv_lambda as ridge_cv_lambda  # noqa: F401
+from sportsdataverse.wbb import ridge_fit as ridge_fit  # noqa: F401
 from sportsdataverse.wbb import right_kind_of_shot as right_kind_of_shot  # noqa: F401
+from sportsdataverse.wbb import roc_auc as roc_auc  # noqa: F401
 from sportsdataverse.wbb import run_iterative_adjustment_with_hca as run_iterative_adjustment_with_hca  # noqa: F401
+from sportsdataverse.wbb import save_artifact as save_artifact  # noqa: F401
 from sportsdataverse.wbb import score_to_tuple as score_to_tuple  # noqa: F401
 from sportsdataverse.wbb import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.wbb import select_contains as select_contains  # noqa: F401
 from sportsdataverse.wbb import select_matching as select_matching  # noqa: F401
 from sportsdataverse.wbb import select_matching_own as select_matching_own  # noqa: F401
+from sportsdataverse.wbb import shot_events_to_frame as shot_events_to_frame  # noqa: F401
 from sportsdataverse.wbb import shot_js_to_html as shot_js_to_html  # noqa: F401
 from sportsdataverse.wbb import shot_value as shot_value  # noqa: F401
 from sportsdataverse.wbb import simulate_game as simulate_game  # noqa: F401
@@ -430,9 +454,12 @@ from sportsdataverse.wbb import start_time_from_period as start_time_from_period
 from sportsdataverse.wbb import strength_of_schedule as strength_of_schedule  # noqa: F401
 from sportsdataverse.wbb import sum_event_stats as sum_event_stats  # noqa: F401
 from sportsdataverse.wbb import sum_shot_infos as sum_shot_infos  # noqa: F401
+from sportsdataverse.wbb import talent_split_mse as talent_split_mse  # noqa: F401
 from sportsdataverse.wbb import td_at as td_at  # noqa: F401
 from sportsdataverse.wbb import test_positional_aware_filter as test_positional_aware_filter  # noqa: F401
+from sportsdataverse.wbb import three_point_radius as three_point_radius  # noqa: F401
 from sportsdataverse.wbb import tidy_player as tidy_player  # noqa: F401
+from sportsdataverse.wbb import transfer_cohort as transfer_cohort  # noqa: F401
 from sportsdataverse.wbb import transform_shot_location as transform_shot_location  # noqa: F401
 from sportsdataverse.wbb import underscore as underscore  # noqa: F401
 from sportsdataverse.wbb import update_config as update_config  # noqa: F401
@@ -482,6 +509,7 @@ __all__ = [
     "PlayerEvent",
     "PlayerId",
     "PlayerShotInfo",
+    "PlayerValueConstants",
     "PossCalcFragment",
     "PossState",
     "PossessionEvent",
@@ -503,6 +531,7 @@ __all__ = [
     "ShotGeo",
     "ShotLocation",
     "ShotMapDimensions",
+    "ShotQualityConstants",
     "StrengthAdjustedResult",
     "StrongSurnameMatch",
     "SubInEvent",
@@ -519,13 +548,16 @@ __all__ = [
     "adjust_efficiency",
     "adjust_off_rating_stats",
     "adjust_tempo",
+    "aggregate_player_seasons",
     "alias_combos",
     "analyze_and_fix_clumps",
     "apply_relative_positional_overrides",
     "apply_weak_priors",
     "as_of_ratings_split",
+    "as_of_season_split",
     "assign_to_right_lineup",
     "attr_regex_filter",
+    "bootstrap_ari",
     "box_aware_compare",
     "brier_score",
     "build_3p_shot_info",
@@ -571,6 +603,9 @@ __all__ = [
     "calculate_stats",
     "calibration_table",
     "categorize_bad_lineups",
+    "classify_point_value",
+    "classify_zone_geometry",
+    "classify_zone_type",
     "clump_bad_lineups",
     "combos",
     "complete_weighted_avg",
@@ -591,6 +626,7 @@ __all__ = [
     "enrich_shot_events_with_pbp",
     "enrich_stats",
     "ensure_ev_uniqueness",
+    "espn_shots_to_canonical",
     "espn_wbb_award",
     "espn_wbb_awards",
     "espn_wbb_calendar",
@@ -657,6 +693,9 @@ __all__ = [
     "espn_wbb_position",
     "espn_wbb_positions",
     "espn_wbb_rankings",
+    "espn_wbb_recruiting_players",
+    "espn_wbb_recruiting_rankings",
+    "espn_wbb_recruiting_years",
     "espn_wbb_schedule",
     "espn_wbb_scoreboard",
     "espn_wbb_season_awards",
@@ -716,6 +755,8 @@ __all__ = [
     "find_lineup",
     "find_missing_subs",
     "find_pbp_clump",
+    "fit_espn_court_scale",
+    "fit_shrinkage_k",
     "fix_combos",
     "fix_possible_score_swap_bug",
     "flatten_json_iterative",
@@ -727,6 +768,7 @@ __all__ = [
     "get_game_weight",
     "get_neutral_games",
     "get_per_game_raw",
+    "get_player_value_constants",
     "get_sorted_pbp_events",
     "get_stats_diff",
     "get_team_raw_from_per_game",
@@ -755,10 +797,12 @@ __all__ = [
     "is_transition",
     "is_women_game",
     "jsoup_text",
+    "kmeans_fit",
     "lineup_as_raw_clumps",
     "lineup_balancer",
     "lineup_fixer",
     "lineup_to_team_report",
+    "load_artifact",
     "load_proxybonanza_pool",
     "load_wbb_game_rosters",
     "load_wbb_officials",
@@ -772,6 +816,7 @@ __all__ = [
     "load_wbb_team_boxscore",
     "load_wbb_team_season_stats",
     "log_loss_score",
+    "logistic_fit",
     "mae",
     "matching_player",
     "misspellings",
@@ -831,6 +876,7 @@ __all__ = [
     "parse_two_pointer_missed",
     "phase1_shot_event_enrichment",
     "pick_ridge_regression",
+    "player_per100_features",
     "playwright_transport",
     "pos_class_to_score",
     "poss_calc_fragment_sum",
@@ -842,13 +888,18 @@ __all__ = [
     "remove_diacritics",
     "reorder_and_reverse",
     "reset_config",
+    "ridge_cv_lambda",
+    "ridge_fit",
     "right_kind_of_shot",
+    "roc_auc",
     "run_iterative_adjustment_with_hca",
+    "save_artifact",
     "score_to_tuple",
     "scoreboard_event_parsing",
     "select_contains",
     "select_matching",
     "select_matching_own",
+    "shot_events_to_frame",
     "shot_js_to_html",
     "shot_value",
     "simulate_game",
@@ -858,9 +909,12 @@ __all__ = [
     "strength_of_schedule",
     "sum_event_stats",
     "sum_shot_infos",
+    "talent_split_mse",
     "td_at",
     "test_positional_aware_filter",
+    "three_point_radius",
     "tidy_player",
+    "transfer_cohort",
     "transform_shot_location",
     "underscore",
     "update_config",
@@ -1732,6 +1786,48 @@ def espn_wbb_rankings(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wbb_rankings(*args, **kwargs)
+
+
+def espn_wbb_recruiting_players(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_recruiting_players``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_recruiting_players` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_recruiting_players` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_recruiting_players(*args, **kwargs)
+
+
+def espn_wbb_recruiting_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_recruiting_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_recruiting_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_recruiting_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_recruiting_rankings(*args, **kwargs)
+
+
+def espn_wbb_recruiting_years(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_recruiting_years``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_recruiting_years` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_recruiting_years` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_recruiting_years(*args, **kwargs)
 
 
 def espn_wbb_scoreboard(*args, **kwargs):

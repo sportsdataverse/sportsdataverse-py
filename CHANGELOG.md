@@ -3,6 +3,9 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)](#mbb--wbb--shot-quality-spine-xpoints-%E2%86%92-shot-selection-%E2%86%92-shooter-talent)
+  - [MBB / WBB — player-value & projection spine (box-BPM → archetypes → recruiting → transfer → draft)](#mbb--wbb--player-value--projection-spine-box-bpm-%E2%86%92-archetypes-%E2%86%92-recruiting-%E2%86%92-transfer-%E2%86%92-draft)
+  - [Recruiting — ESPN NCAA recruiting family + On3 rankings](#recruiting--espn-ncaa-recruiting-family--on3-rankings)
   - [MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)](#mbb--wbb--prediction--tournament-stack-ratings-%E2%86%92-pregame-%E2%86%92-in-game-wp-%E2%86%92-r%C3%A9sum%C3%A9-%E2%86%92-bracketology-%E2%86%92-monte-carlo)
   - [NBA — external concurrent validity + walk-forward retrodiction (WP3)](#nba--external-concurrent-validity--walk-forward-retrodiction-wp3)
   - [NBA — RAPM variants (WP2)](#nba--rapm-variants-wp2)
@@ -159,6 +162,89 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)
+
+- feat(mbb): canonical shot frame + dual-source adapter (`mbb_shot_data`,
+  `espn_shots_to_canonical`, `shot_events_to_frame`, geometry classifiers) —
+  normalizes the ESPN shots release (basket-anchored `coordinate_*_raw`
+  half-court grid, court scale FITTED from rim-make origins + made-three
+  distances, int32-sentinel rows dropped) and the NCAA HTML shot charts
+  (`create_shot_event_data` output; source axes swapped to the canonical
+  lateral/up-court orientation) into one schema with pinned `Utf8` ids.
+- feat(mbb): `mbb_shot_quality_model` + `mbb_shot_quality` — compute-on-demand
+  empirical-Bayes `zone × type` make-rate/xPoints table (cells shrunk toward
+  the parent-zone mean) and the per-shot `xmake`/`xpoints` scorer. No bundled
+  artifact. Oracle-gated offline: temporal train/holdout calibration
+  (Σ xpoints / Σ actual ≈ 1.00, per-zone bands ≤ 0.03) and blended 2P/3P
+  within ±0.02 of observed Barttorvik national aggregates.
+- feat(mbb): `mbb_shot_selection` — per shooter/team expected points per
+  attempt vs a league-average shot mix (`selection_value`, attempt-weighted
+  zero-sum by construction).
+- feat(mbb): `mbb_shooter_talent` + `fit_shrinkage_k` — per-shooter
+  make%-over-expected regressed by a split-half-fitted `k` (mens 233.2,
+  womens 92.4); reliability gated on splits the fit never saw.
+- feat(wbb): by-reference shims for all of the above
+  (`wbb_shot_data` / `wbb_shot_quality*` / `wbb_shot_selection` /
+  `wbb_shooter_talent`) with era-matched women's gates (season 2026 — the
+  `wbb_shots` release floor).
+
+### MBB / WBB — player-value & projection spine (box-BPM → archetypes → recruiting → transfer → draft)
+
+- feat(mbb): `mbb_box_bpm` — team-constrained box Plus/Minus from a
+  game-level minutes-weighted fit (lineup-free APM identification); bundled
+  ridge artifact; oracle-gated vs Barttorvik BPM (Spearman 0.88 mens / 0.91
+  womens) plus an independent 125-game NCAA stint-RAPM validation at ~95% of
+  the grain's noise ceiling.
+- feat(mbb): `mbb_archetypes` — bundled KMeans role clusters (k=6 mens, k=8
+  womens incl. women-specific "midrange big" / "slashing guard"), gated on
+  bootstrap ARI ≥ 0.70 + hand-labeled role-certain players.
+- feat(mbb): `mbb_recruiting_projection` — expected freshman box-BPM from
+  pre-arrival composite/rank/height (as-of safe); LOSO-gated ≥ 0.45 per
+  held-out class.
+- feat(mbb): `mbb_transfer_projection` + `transfer_cohort` — post-transfer
+  box-BPM projection over the boxscore-discontinuity cohort (the roster
+  release under-reports moves ~70×); beats the naive post=pre baseline.
+- feat(mbb): `mbb_draft_projection` — dual-head draft probability
+  (AUC 0.97+) + log-pick projection with tier bucketing; WNBA pick head's
+  data floor documented as an xfail at the unlowered gate.
+- feat(wbb): by-reference shims + women's artifacts for all five models.
+
+### Recruiting — ESPN NCAA recruiting family + On3 rankings
+
+- feat(espn): Core v2 `recruiting` family — `espn_{league}_recruiting_years` /
+  `espn_{league}_recruiting_players` / `espn_{league}_recruiting_rankings` across the 7
+  NCAA-scope leagues (cfb, mbb, wbb, college baseball/softball, m/w college hockey).
+  `recruiting/{year}/athletes` ships inline athlete objects that flatten to a 33-column
+  recruit frame (identity, grades, recruiting class); all three shorts route through
+  `parse_items` via the `return_parsed` shim. Live-captured MBB fixtures + offline tests.
+- feat(cfb): On3 recruiting rankings stem (`on3_player_rankings`,
+  `on3_industry_player_rankings`, `on3_team_rankings`, `on3_industry_team_rankings`)
+  over on3.com's Next.js data routes — the only public JSON surface; industry =
+  On3/Rivals/247Sports/ESPN consensus, including NIL valuations and commitment /
+  transfer status. `on3_runtime._get` auto-discovers the rotating Next.js `buildId`
+  from the rankings page and refreshes it once on the stale-buildId 404 (an unchanged
+  buildId is treated as an authoritative miss). Returns-schemas `native/on3/*` with all
+  224 column descriptions authored; trimmed real-capture fixtures + offline runtime,
+  parser, and wiring tests.
+- feat(cfb): 247Sports Recruit Database stem (11 wrappers) over
+  `ipa.247sports.com/rdb/v1/` — `sports247_recruits` (individual recruit rankings:
+  247 + industry-composite ratings/stars/ranks, commit status), `sports247_transfers`
+  (transfer portal), `sports247_coaches`, `sports247_target_predictions` (expert
+  "crystal ball"), `sports247_institution_rankings` / `sports247_teams` /
+  `sports247_composite_team_ranking_feed` / `sports247_transfer_portal_team_feed` /
+  `sports247_transfer_portal_player_feed` / `sports247_sport_years` /
+  `sports247_tags_autocomplete`. One generic `parse_sports247_result_set` covers
+  every payload shape (bare array / `{players|results|rankings|list: [...]}` envelope
+  / scalar array / single object). The Fastly edge fingerprint-blocks plain
+  `requests`, so the runtime uses lazy-optional `curl_cffi` Chrome impersonation with
+  an injectable transport (the `nba_stats` pattern) and normalizes slash-less paths
+  (the RDB 301s them). Most routes need an `Authorization: Bearer` **guest JWT** —
+  `GET https://247sports.com/` mints one with no login (~12 h TTL); the runtime
+  mints/caches/refreshes it automatically (re-mints once on a 401/403). The ~14
+  remaining routes stay 403 even with the guest token (logged-in/premium) and are not
+  wrapped. Returns-schemas `native/sports247/*` with all 211 column descriptions
+  authored; real-capture fixtures + offline parser/runtime/wiring tests.
 
 ### MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)
 

@@ -1001,3 +1001,80 @@ def test_return_parsed_shim_dispatches_through_new_parser_for_team_roster():
         assert df_explicit.height >= 10
     finally:
         ce._get = real_get
+
+
+# ===========================================================================
+# Core v2 recruiting family (recruiting_years / recruiting_athletes /
+# recruiting_rankings) — 0.0.73
+# ===========================================================================
+
+
+def test_endpoint_parsers_registry_includes_recruiting_family():
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parse_items
+
+    for short in ("recruiting_years", "recruiting_athletes", "recruiting_rankings"):
+        assert ENDPOINT_PARSERS.get(short) is parse_items, f"{short} not registered to parse_items"
+
+
+def test_recruiting_years_fixture_parses_to_ref_frame():
+    """Core v2 ``recruiting`` (year index) is a $ref-only paginated list."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    df = parse_items(_load("recruiting_years_mbb"))
+    assert df.height > 0
+    assert "$ref" in df.columns
+
+
+def test_recruiting_athletes_fixture_flattens_inline_athletes():
+    """Core v2 ``recruiting/{year}/athletes`` ships INLINE athlete objects
+    (unlike most Core v2 lists, which are $ref-only) — the flattened frame
+    carries athlete identity + recruiting grade columns."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    df = parse_items(_load("recruiting_athletes_mbb_2026"))
+    assert df.height > 0
+    for col in ("athlete_id", "athlete_full_name", "grade", "recruiting_class"):
+        assert col in df.columns, f"missing flattened column {col}"
+
+
+def test_recruiting_wrappers_route_through_parse_items():
+    """The generated basketball wrappers accept the shim kwargs and dispatch
+    the fixture payload through parse_items. Patch the module-level ``_get``
+    binding (imported by name from _codegen_runtime) so no network happens."""
+    import polars as pl
+
+    import sportsdataverse.mbb.mbb_espn_ext as ext
+
+    fixture = _load("recruiting_athletes_mbb_2026")
+    real_get = ext._get
+    ext._get = lambda *args, **kwargs: fixture
+    try:
+        raw = ext.espn_mbb_recruiting_players(year=2026, return_parsed=False)
+        assert isinstance(raw, dict)
+        assert "items" in raw
+
+        df = ext.espn_mbb_recruiting_players(year=2026)
+        assert isinstance(df, pl.DataFrame)
+        assert df.height > 0
+        assert "athlete_full_name" in df.columns
+    finally:
+        ext._get = real_get
+
+
+def test_recruiting_rankings_fixture_parses_to_ref_frame():
+    """Core v2 ``recruiting/{year}/rankings`` lists ranking sets as $ref items."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    df = parse_items(_load("recruiting_rankings_mbb_2026"))
+    assert df.height > 0
+    assert "$ref" in df.columns
+
+
+def test_recruiting_athletes_pandas_opt_in():
+    import pandas as pd
+
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    pdf = parse_items(_load("recruiting_athletes_mbb_2026"), return_as_pandas=True)
+    assert isinstance(pdf, pd.DataFrame)
+    assert len(pdf) > 0

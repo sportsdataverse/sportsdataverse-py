@@ -1,0 +1,30 @@
+{
+ "league": "mens",
+ "feature_cols": [
+  "composite",
+  "log_rank",
+  "height_in"
+ ],
+ "coef": [
+  -44.59432893225552,
+  0.17587516492231836,
+  -0.6432609702054561,
+  0.45162109344107126
+ ],
+ "lambda": 10.0,
+ "bubble_rank": 150,
+ "min_minutes": 150.0,
+ "train_seasons": [
+  2025,
+  2026
+ ],
+ "loso_spearman": [
+  0.5863192500449701,
+  0.5390473119923592
+ ],
+ "provenance": {
+  "script": "dev/mbb_player_value/fit_recruiting.py (gitignored dev/; see tests/fixtures READMEs)",
+  "fitted": "2026-07-07",
+  "inputs": "sportsdataverse-data releases + tests/fixtures/{m,w}bb_player_value fixtures"
+ }
+}

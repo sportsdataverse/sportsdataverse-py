@@ -35,23 +35,7 @@ multi-collinearity diagnostic :func:`calc_collinearity_diag`
 private helper ``calcPlayerCorrelations``, ``RapmUtils.ts:1584-1621``) --
 see "Task 3.6 notes" below.
 
-**License / provenance (Apache License, Version 2.0).** This module is a
-derivative work of ``RapmUtils.ts`` from
-`Alex-At-Home/cbb-on-off-analyzer <https://github.com/Alex-At-Home/cbb-on-off-analyzer>`_
-(the hoop-explorer.com SPA), which is licensed under the Apache License,
-Version 2.0 (the upstream repo's ``LICENSE`` file; full text at
-`<http://www.apache.org/licenses/LICENSE-2.0>`_). Per Apache-2.0 Section 4's
-redistribution-of-derivative-works obligations, sportsdataverse-py (itself
-MIT-licensed) retains the upstream copyright notice for this derivative::
-
-    Copyright (c) Alex-At-Home (https://github.com/Alex-At-Home) and
-    contributors. Licensed under the Apache License, Version 2.0.
-
-See ``THIRD_PARTY_NOTICES.md`` at the repository root for the full
-third-party attribution entry (upstream URL, license, and exactly what was
-derived), and ``tests/fixtures/hoop_explorer/README.md`` for the vendored
-jest-oracle fixture provenance (same upstream repo, same commit, test-only --
-not shipped in the distributed wheel).
+Apache-2.0 third-party port — see the ``NOTICE`` file at the repository root for the upstream copyright and full attribution.
 
 **Structural TypedDict field names are snake_cased (contrast with
 ``mbb_ratings``'s diagnostics-dict convention).** ``RapmPriorInfo`` /

@@ -144,6 +144,9 @@ __all__ = [
     "espn_wbb_league_notes",
     "espn_wbb_talentpicks",
     "espn_wbb_season_recruits",
+    "espn_wbb_recruiting_years",
+    "espn_wbb_recruiting_players",
+    "espn_wbb_recruiting_rankings",
     "espn_wbb_season_week_rankings",
 ]
 
@@ -4497,6 +4500,119 @@ def espn_wbb_season_recruits(
         params={
             "limit": limit,
         },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wbb_recruiting_years(
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='womens-college-basketball'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/recruiting``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting
+
+    Args:
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_wbb_recruiting_years()
+    """
+    raw = _get(
+        "https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting",
+        params={},
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wbb_recruiting_players(
+    year: Union[int, str],
+    limit: Optional[int] = 100,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='womens-college-basketball'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/recruiting/{year}/athletes``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/2026/athletes
+
+    Args:
+        year: year path parameter.
+        limit: limit query parameter.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_wbb_recruiting_players(year=2026)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/{year}/athletes",
+        params={
+            "limit": limit,
+        },
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_items(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def espn_wbb_recruiting_rankings(
+    year: Union[int, str],
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Dict:
+    """
+
+    Bound to sport='basketball', league='womens-college-basketball'.
+
+    Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/recruiting/{year}/rankings``
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/2026/rankings
+
+    Args:
+        year: year path parameter.
+        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            espn_wbb_recruiting_rankings(year=2026)
+    """
+    raw = _get(
+        f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/recruiting/{year}/rankings",
+        params={},
         **kwargs,
     )
     if return_parsed:

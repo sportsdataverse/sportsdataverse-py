@@ -24,7 +24,7 @@ drift out of sync.
 ``PlayByPlayUtils.scala`` is upstream-licensed under Apache License, Version
 2.0; see the full attribution (copyright notice, upstream URL, what was
 derived) in the ``sportsdataverse.mbb.mbb_ncaa_pbp_glue`` module docstring
-and in ``THIRD_PARTY_NOTICES.md`` at the repository root.
+and in ``NOTICE`` at the repository root.
 
 Example:
     Quick start::

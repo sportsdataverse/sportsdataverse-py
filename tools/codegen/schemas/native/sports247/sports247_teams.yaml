@@ -1,0 +1,24 @@
+schema: sports247_teams
+kind: dataframe
+columns:
+- name: name
+  type: character
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: institution_key
+  type: integer
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: conference_abbreviation
+  type: character
+  description: ''
+- name: sport
+  type: character
+  description: ''
+- name: type
+  type: character
+  description: ''
