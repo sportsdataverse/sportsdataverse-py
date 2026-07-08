@@ -41,13 +41,14 @@ RUSH_COLS = [
 ]
 
 
-def _slice(stat_type: str, cols: list, out: str) -> None:
+def _slice(stat_type: str, cols: list, out: str, weekly: bool = False) -> None:
     df = load_nfl_nextgen_stats(seasons=[2022, 2023], stat_type=stat_type)
     missing = [c for c in cols if c not in df.columns]
     if missing:
         print(f"MISSING upstream columns for {stat_type}: {missing}")
+    week_filter = pl.col("week") > 0 if weekly else pl.col("week") == 0
     df = (
-        df.filter(pl.col("week") == 0)  # season-level rows only
+        df.filter(week_filter)
         .select([c for c in cols if c in df.columns])
         .with_columns(
             pl.col("player_gsis_id").cast(pl.Utf8),
@@ -61,3 +62,18 @@ def _slice(stat_type: str, cols: list, out: str) -> None:
 if __name__ == "__main__":
     _slice("receiving", REC_COLS, "tests/fixtures/nfl_ngs/ngs_receiving_2022_2023.parquet")
     _slice("rushing", RUSH_COLS, "tests/fixtures/nfl_ngs/ngs_rushing_2022_2023.parquet")
+    # Weekly rows: identify sigma2 (within-player sampling variance) for the
+    # EB prior — the season-only panel's 1/n spread is too narrow to identify
+    # the tau2/sigma2 OLS on rushing (all qualified rushers have similar n).
+    _slice(
+        "receiving",
+        REC_COLS,
+        "tests/fixtures/nfl_ngs/ngs_receiving_weekly_2022_2023.parquet",
+        weekly=True,
+    )
+    _slice(
+        "rushing",
+        RUSH_COLS,
+        "tests/fixtures/nfl_ngs/ngs_rushing_weekly_2022_2023.parquet",
+        weekly=True,
+    )
