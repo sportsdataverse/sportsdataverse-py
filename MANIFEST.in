@@ -1,6 +1,7 @@
 include README.md
 include CHANGELOG.md
 include LICENSE
+include NOTICE
 include pyproject.toml
 
 # Bundled XGBoost models / pickled artifacts shipped under sportsdataverse/.

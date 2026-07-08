@@ -15,24 +15,7 @@ mutate-in-place ``injectLuck`` -- plus a scoped port of the
 anywhere in this codebase (grep-confirmed at the start of this task). See
 "Deferred beyond this task" below for what's still out of scope.
 
-**License / provenance (Apache License, Version 2.0).** This module is a
-derivative work of ``LuckUtils.ts`` (and, for the ``injectLuck`` application
-glue, ``OverrideUtils.ts``'s ``overrideMutableVal`` primitive) from
-`Alex-At-Home/cbb-on-off-analyzer <https://github.com/Alex-At-Home/cbb-on-off-analyzer>`_
-(the hoop-explorer.com SPA), which is licensed under the Apache License,
-Version 2.0 (the upstream repo's ``LICENSE`` file; full text at
-`<http://www.apache.org/licenses/LICENSE-2.0>`_). Per Apache-2.0 Section 4's
-redistribution-of-derivative-works obligations, sportsdataverse-py (itself
-MIT-licensed) retains the upstream copyright notice for this derivative::
-
-    Copyright (c) Alex-At-Home (https://github.com/Alex-At-Home) and
-    contributors. Licensed under the Apache License, Version 2.0.
-
-See ``THIRD_PARTY_NOTICES.md`` at the repository root for the full
-third-party attribution entry (upstream URL, license, and exactly what was
-derived), and ``tests/fixtures/hoop_explorer/README.md`` for the vendored
-jest-oracle fixture provenance (same upstream repo, same commit, test-only --
-not shipped in the distributed wheel).
+Apache-2.0 third-party port — see the ``NOTICE`` file at the repository root for the upstream copyright and full attribution.
 
 **Single-sourcing correction (brief vs. actual code -- TS/actual-code
 governs).** The task brief instructed moving a canonical

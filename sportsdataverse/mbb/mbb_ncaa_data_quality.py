@@ -44,25 +44,7 @@ alongside the ``BoxscoreParser`` port that consumes it
 this module is dict/list construction, string concatenation, or
 ``str.upper``/``str.lower`` -- no division site exists to enumerate.
 
-**License / provenance (Apache License, Version 2.0).** This module is a
-derivative work of ``DataQualityIssues.scala``, ``ParseError.scala``, and
-``ParseUtils.scala`` (``build_sub_error``/``build_error``/``build_errors``/
-``build_error_id`` only -- the ``shapeless``-based ``sequence_kv_results``
-accumulation machinery in the same file is out of scope) from
-`Alex-At-Home/cbb-explorer <https://github.com/Alex-At-Home/cbb-explorer>`_
-(package ``org.piggottfamily.cbb_explorer``), which is licensed under the
-Apache License, Version 2.0 (the upstream repo's ``LICENSE`` file; full text
-at `<http://www.apache.org/licenses/LICENSE-2.0>`_). Per Apache-2.0 Section
-4's redistribution-of-derivative-works obligations, sportsdataverse-py
-(itself MIT-licensed) retains the upstream copyright notice for this
-derivative::
-
-    Copyright (c) Alex-At-Home (https://github.com/Alex-At-Home) and
-    contributors. Licensed under the Apache License, Version 2.0.
-
-See ``THIRD_PARTY_NOTICES.md`` at the repository root for the full
-third-party attribution entry (Task 5b.6 extends the ``cbb-explorer``
-entry there with these newly-derived files).
+Apache-2.0 third-party port — see the ``NOTICE`` file at the repository root for the upstream copyright and full attribution.
 
 Example::
 
