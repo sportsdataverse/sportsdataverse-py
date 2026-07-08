@@ -13,6 +13,8 @@ from typing import List
 
 import polars as pl
 
+from sportsdataverse.nfl.nfl_projection_constants import get_position_constants
+
 # Counting stats aggregated to season level (all Float64 in the fixtures).
 _COUNTING_STATS: List[str] = [
     "completions",
@@ -129,3 +131,66 @@ def season_player_rates(weekly: pl.DataFrame, rosters: pl.DataFrame) -> pl.DataF
 
     ordered = ["player_id", "season", "position_group", "age", "games", "volume", "ppg"] + [f"{c}_rate" for c in stats]
     return agg.select(ordered)
+
+
+def aging_curve(season_rates: pl.DataFrame, *, position_group: str, rate_col: str = "ppg") -> pl.DataFrame:
+    """Delta-method aging curve for a position group, peak-normalized to 1.0.
+
+    Pairs each player's season with the same player's next season, computes the
+    playing-time-weighted mean transition multiplier ``rate_next / rate`` per
+    starting age, chains the transitions into a level curve (``cum_prod``), and
+    normalizes so the peak age has multiplier 1.0. Only paired consecutive
+    seasons contribute (the standard survivorship mitigation).
+
+    Args:
+        season_rates (pl.DataFrame): Output of :func:`season_player_rates`
+            (needs ``player_id, season, position_group, age, volume`` +
+            ``rate_col``).
+        position_group (str): Position group to fit (``"QB"``/``"RB"``/...).
+        rate_col (str): Rate column the curve is fit on.
+
+    Returns:
+        pl.DataFrame: ``age:Float64, aging_mult:Float64`` sorted by age. Empty
+        input returns a zero-row frame with that schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_projection import aging_curve, season_player_rates
+            curve = aging_curve(rates, position_group="RB")
+    """
+    consts = get_position_constants(position_group)
+    df = season_rates.filter(
+        (pl.col("position_group") == position_group) & (pl.col("volume") >= consts.min_volume)
+    ).select("player_id", "season", "age", "volume", pl.col(rate_col).alias("rate"))
+    # match season s (age a) to the same player's season s+1 (age a+1)
+    nxt = df.select(
+        "player_id",
+        (pl.col("season") - 1).alias("season"),
+        pl.col("rate").alias("rate_next"),
+        pl.col("volume").alias("volume_next"),
+    )
+    paired = (
+        df.join(nxt, on=["player_id", "season"], how="inner")
+        .filter(pl.col("rate") > 0)
+        .with_columns(
+            (pl.col("rate_next") / pl.col("rate")).alias("delta"),
+            pl.min_horizontal("volume", "volume_next").alias("w"),
+        )
+    )
+    trans = (
+        paired.group_by("age")
+        .agg(((pl.col("delta") * pl.col("w")).sum() / pl.col("w").sum()).alias("mult_step"))
+        .sort("age")
+    )
+    if trans.height == 0:
+        return pl.DataFrame(schema={"age": pl.Float64, "aging_mult": pl.Float64})
+    # chain transitions into a level curve anchored at the youngest age, then peak-normalize
+    curve = trans.with_columns(pl.col("mult_step").cum_prod().alias("level"))
+    curve = curve.with_columns((pl.col("age") + 1.0).alias("age")).select("age", "level")
+    anchor = pl.DataFrame({"age": [float(trans["age"][0])], "level": [1.0]})
+    curve = pl.concat([anchor.with_columns(pl.col("age").cast(pl.Float64)), curve], how="vertical").sort("age")
+    peak = curve["level"].max()
+    return curve.with_columns((pl.col("level") / peak).cast(pl.Float64).alias("aging_mult")).select(
+        pl.col("age").cast(pl.Float64), "aging_mult"
+    )

@@ -36,6 +36,51 @@ def test_season_rates_aggregate():
     assert abs(r["age"] - 25.0) < 1e-9
 
 
+def test_aging_curve_peaks_at_one():
+    from sportsdataverse.nfl.nfl_projection import aging_curve
+
+    rows = []
+    # two players, rate ~ -(age-27)^2 shape, high volume so weights equal
+    for pid in ["A", "B"]:
+        for age, season in zip([24, 25, 26, 27, 28], [2019, 2020, 2021, 2022, 2023]):
+            rate = 100.0 - (age - 27) ** 2
+            rows.append(
+                {
+                    "player_id": pid,
+                    "season": season,
+                    "position_group": "RB",
+                    "age": float(age),
+                    "volume": 200.0,
+                    "ppg": float(rate),
+                }
+            )
+    df = pl.DataFrame(rows)
+    curve = aging_curve(df, position_group="RB")
+    assert abs(curve["aging_mult"].max() - 1.0) < 1e-9
+    peak_age = curve.filter(pl.col("aging_mult") == curve["aging_mult"].max())["age"][0]
+    assert peak_age == 27.0
+
+
+def test_aging_curve_empty_returns_schema():
+    from sportsdataverse.nfl.nfl_projection import aging_curve
+
+    out = aging_curve(
+        pl.DataFrame(
+            schema={
+                "player_id": pl.Utf8,
+                "season": pl.Int64,
+                "position_group": pl.Utf8,
+                "age": pl.Float64,
+                "volume": pl.Float64,
+                "ppg": pl.Float64,
+            }
+        ),
+        position_group="RB",
+    )
+    assert out.height == 0
+    assert out.columns == ["age", "aging_mult"]
+
+
 def test_season_rates_empty_input_keeps_schema():
     out = season_player_rates(_mini_weekly().head(0), _mini_rosters().head(0))
     assert out.height == 0
