@@ -163,6 +163,7 @@ from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_cro
 from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
 from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
 from sportsdataverse.cfb import cfb_ratings as cfb_ratings  # noqa: F401
+from sportsdataverse.cfb import cfb_resume as cfb_resume  # noqa: F401
 from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_simulations as cfb_simulations  # noqa: F401
@@ -216,6 +217,7 @@ __all__ = [
     "cfb_playoff_seeds",
     "cfb_predict_games",
     "cfb_ratings",
+    "cfb_resume",
     "cfb_rosters_crosswalk",
     "cfb_schedule_crosswalk",
     "cfb_simulations",

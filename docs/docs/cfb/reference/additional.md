@@ -1268,6 +1268,44 @@ week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
 ratings_pd = cfb_ratings(2023, return_as_pandas=True)
 ```
 
+### `cfb_resume(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_resume}
+
+Rating-based résumé metrics: SoS, quality wins, game control, wins-above-bubble.
+
+For each team, joins every played opponent to its `cfb_ratings.cfb_ratings`
+strength and rolls the games up into:
+
+- `sos` -- mean opponent `adj_net` over played games (rating-based strength
+  of schedule; complements the record-based SOV/SOS in `cfb_standings`).
+- `quality_wins` -- count of wins over opponents with `adj_net` at or above
+  the era `quality_win_threshold`.
+- `game_control` -- mean postgame win expectancy `Phi(actual_margin /
+  margin_sd)`, i.e. how *dominant* the results were, not just win/loss.
+- `wab` -- wins above bubble: actual wins minus the expected wins of a
+  bubble-quality team (`bubble_adj_net`) playing the same schedule, using the
+  Phase-2 predictors with the HFA applied on the team's actual home/away side.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season or list of seasons. |
+| `as_of_date` | `date \| None` | `None` | Leakage boundary forwarded to `cfb_ratings.cfb_ratings` (ratings use only games before this date). `None` uses the full season. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense rank, best = 1), `quality_wins` (Int64), `game_control` (Float64), `wab` (Float64). Zero-row (typed) when no games are available.
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_resume import cfb_resume
+resume = cfb_resume(2023)
+resume.sort("sos_rank").head()
+```
+
 ### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}
 
 Build the ESPN x Fox x Yahoo player-id crosswalk for one team.
