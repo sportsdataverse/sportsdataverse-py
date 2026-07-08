@@ -140,13 +140,19 @@ def _qualified_rank(shrunk_col: str, weight_col: str, min_w: float, out: str) ->
     return masked.rank("dense", descending=True).over("season").cast(pl.Int64).alias(out)
 
 
+def _season_list(seasons: Union[int, Sequence[int]]) -> List[int]:
+    """Normalise ``seasons`` to a list of ints."""
+    if isinstance(seasons, int):
+        return [seasons]
+    return [int(s) for s in seasons]
+
+
 def _yac_oe_impl(
     seasons: Union[int, Sequence[int]],
     min_receptions: int,
     _loader: Optional[Callable[..., pl.DataFrame]],
 ) -> pl.DataFrame:
-    season_list: List[int] = [int(s) for s in seasons] if isinstance(seasons, (list, tuple, range)) else [int(seasons)]
-    panel = _ngs_panel(season_list, "receiving", level="season", _loader=_loader)
+    panel = _ngs_panel(_season_list(seasons), "receiving", level="season", _loader=_loader)
     if panel.height == 0:
         return pl.DataFrame(schema=_YAC_SCHEMA)
     out = _shrink_over_season(
@@ -162,7 +168,7 @@ def _yac_oe_impl(
         .with_columns(_qualified_rank("yac_oe_shrunk", "receptions", float(min_receptions), "yac_oe_rank"))
         .select(list(_YAC_SCHEMA.keys()))
     )
-    return out.cast(_YAC_SCHEMA)  # type: ignore[arg-type]
+    return out.cast(_YAC_SCHEMA)
 
 
 def nfl_ngs_yac_oe(
