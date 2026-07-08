@@ -338,6 +338,8 @@ files = [
     "sportsdataverse/wnba/wnba_shot_value.py",
     "sportsdataverse/nba/nba_tracking.py",
     "sportsdataverse/nba/nba_rapm.py",
+    "sportsdataverse/nba/nba_prediction_constants.py",
+    "sportsdataverse/nba/nba_team_ratings.py",
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
     "sportsdataverse/wnba/wnba_engine.py",
