@@ -231,7 +231,7 @@ def nfl_play_call_probabilities(
     probs = booster.predict(DMatrix(x, feature_names=PLAYCALL_FEATURE_ORDER))
     probs = np.asarray(probs, dtype=np.float64)
 
-    out = feat.select(_KEY_COLS, pl.col("is_pass"))
+    out = feat.select(*_KEY_COLS, "is_pass")
     out = out.with_columns([pl.Series(_PROB_COLS[i], probs[:, i]) for i in range(len(FAMILIES))]).with_columns(
         (pl.col("p_short_pass") + pl.col("p_deep_pass") + pl.col("p_scramble")).alias("p_pass"),
     )

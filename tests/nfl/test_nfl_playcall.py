@@ -62,6 +62,50 @@ def test_null_safe_without_participation():
     assert out["n_rb"].null_count() == out.height
 
 
+def test_scorer_schema_and_pass_prob():
+    from sportsdataverse.nfl.nfl_playcall import nfl_play_call_probabilities
+
+    out = nfl_play_call_probabilities(_mini_pbp())
+    assert {"p_pass", "pred_family", "pass_oe_model"}.issubset(out.columns)
+    assert out.height == 5
+    assert ((out["p_pass"] >= 0) & (out["p_pass"] <= 1)).all()
+    # family probs sum to ~1
+    import numpy as np
+
+    fam_sum = (
+        out["p_inside_run"] + out["p_outside_run"] + out["p_short_pass"] + out["p_deep_pass"] + out["p_scramble"]
+    ).to_numpy()
+    assert np.allclose(fam_sum, 1.0, atol=1e-5)
+
+
+def test_empty_returns_zero_row_schema():
+    from sportsdataverse.nfl.nfl_playcall import nfl_play_call_probabilities
+
+    out = nfl_play_call_probabilities(_mini_pbp().head(0))
+    assert out.height == 0
+    assert "p_pass" in out.columns
+
+
+def test_scorer_pandas():
+    import pandas as pd
+
+    from sportsdataverse.nfl.nfl_playcall import nfl_play_call_probabilities
+
+    out = nfl_play_call_probabilities(_mini_pbp(), return_as_pandas=True)
+    assert isinstance(out, pd.DataFrame)
+
+
+def test_tendencies_shape():
+    from sportsdataverse.nfl.nfl_playcall import nfl_play_call_tendencies
+
+    t = nfl_play_call_tendencies(_mini_pbp())
+    assert t.height == 1
+    row = t.row(0, named=True)
+    assert row["posteam"] == "A"
+    assert abs(row["pass_rate"] - 0.6) < 1e-9
+    assert abs(row["proe"] - 100.0 * (row["pass_rate"] - row["mean_p_pass"])) < 1e-9
+
+
 def test_participation_join():
     part = pl.DataFrame(
         {
