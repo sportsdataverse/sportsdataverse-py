@@ -384,3 +384,73 @@ def test_draft_projection_team_spearman_plan_stretch(monkeypatch) -> None:
     tp = _team_projection_vs_realized(proj, draft, teams_k, rec_names, 2024)
     rho = spearman_corr(tp["proj_draft_picks"].to_numpy(), tp["realized_picks"].to_numpy().astype(float))
     assert rho >= 0.75
+
+
+_NET_TRANSFER = _FIX / "net_transfer_2018_2023.parquet"
+
+
+@pytest.mark.skipif(not _NET_TRANSFER.exists(), reason="net-transfer fixture not captured")
+def test_transfer_extraction_sanity() -> None:
+    """Phase-4 extraction sanity: the roster-diff transfer fixture is well-formed.
+
+    Volume grows through the portal era (2021+ NCAA one-time-transfer rule) and
+    known portal-heavy programs surface at the extremes -- the EXTRACTION is
+    validated; the predictive gate on win deltas is the strict xfail below.
+    """
+    net = pl.read_parquet(_NET_TRANSFER)
+    assert net.schema["net_transfer_talent"] == pl.Float64
+    by_season = {r["season"]: r["len"] for r in net.group_by("season").len().to_dicts()}
+    assert by_season[2023] > by_season[2018], f"portal-era volume did not grow: {by_season}"
+    assert net.height >= 1000
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="plan presumed corr(net_transfer_talent, win_delta) >= FLOOR; observed "
+    "spearman -0.05 (2018-2023) and ~0.00 (portal era, rated movers only) after "
+    "debugging (rated-only filter, era restriction, quartile direction, attribution "
+    "checks) -- roster-diff net talent does not predict win deltas at team level. "
+    "Escalation: QB-specific transfer values + PFF NCAA player grades (now on main) "
+    "as the talent proxy.",
+)
+@pytest.mark.skipif(not _NET_TRANSFER.exists(), reason="net-transfer fixture not captured")
+def test_transfer_impact_win_delta_plan_gate(oracle_corpus: dict[str, pl.DataFrame]) -> None:
+    """Strict xfail: flips to XPASS when net transfer talent gains real predictive signal."""
+    from sportsdataverse.cfb.cfb_crosswalk import _norm_team
+    from sportsdataverse.cfb.cfb_projection_constants import spearman_corr
+
+    net = pl.read_parquet(_NET_TRANSFER)
+    teams = pl.read_parquet(_FIX / "teams_2023.parquet")
+    res = oracle_corpus["results"]
+    tk = teams.with_columns(pl.col("school").map_elements(_norm_team, return_dtype=pl.Utf8).alias("k")).select(
+        "k", pl.col("team_id").alias("eid"), "classification"
+    )
+    netk = (
+        net.with_columns(pl.col("team_id").map_elements(_norm_team, return_dtype=pl.Utf8).alias("k"))
+        .join(tk, on="k", how="inner")
+        .filter(pl.col("classification") == "fbs")
+    )
+    home = res.select(
+        "season",
+        pl.col("home_team_id").alias("eid"),
+        (pl.col("home_score") > pl.col("away_score")).cast(pl.Int64).alias("w"),
+    )
+    away = res.select(
+        "season",
+        pl.col("away_team_id").alias("eid"),
+        (pl.col("away_score") > pl.col("home_score")).cast(pl.Int64).alias("w"),
+    )
+    wins = pl.concat([home, away]).group_by("season", "eid").agg(pl.col("w").sum().alias("wins"), pl.len().alias("g"))
+    delta = (
+        wins.join(
+            wins.with_columns((pl.col("season") + 1).alias("season")).rename({"wins": "pw", "g": "pg"}),
+            on=["season", "eid"],
+            how="inner",
+        )
+        .filter((pl.col("g") >= 6) & (pl.col("pg") >= 6))
+        .with_columns((pl.col("wins") - pl.col("pw")).cast(pl.Float64).alias("win_delta"))
+    )
+    j = netk.join(delta, on=["season", "eid"], how="inner")
+    assert j.height >= 700
+    rho = spearman_corr(j["net_transfer_talent"].to_numpy(), j["win_delta"].to_numpy())
+    assert rho >= 0.20

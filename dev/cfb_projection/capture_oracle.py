@@ -132,6 +132,28 @@ def capture_player_production() -> None:
     print(f"player_production_2016_2023: {out.height} rows")
 
 
+def capture_transfers() -> None:
+    """Committed net-transfer-talent per team-season 2018-2023 (Task 4.3 gate).
+
+    Rosters download live (hosted parquet); the recruit-star lookup reads the
+    committed recruit fixture so the capture is deterministic.
+    """
+    import importlib
+
+    tal_mod = importlib.import_module("sportsdataverse.cfb.cfb_roster_talent")
+    imp_mod = importlib.import_module("sportsdataverse.cfb.cfb_transfer_impact")
+    recruits = pl.read_parquet(_FIX / "recruits_2014_2023.parquet")
+    imp_mod.load_recruit_classes = lambda seasons, **k: recruits.filter(  # type: ignore[attr-defined]
+        pl.col("season").is_in([seasons] if isinstance(seasons, int) else list(seasons))
+    )
+    tal_mod.load_recruit_classes = lambda seasons, **k: recruits.filter(  # type: ignore[attr-defined]
+        pl.col("season").is_in([seasons] if isinstance(seasons, int) else list(seasons))
+    )
+    net = imp_mod._net_transfer_talent(list(range(2018, 2024)), "fbs")
+    net.write_parquet(_FIX / "net_transfer_2018_2023.parquet")
+    print(f"net_transfer_2018_2023: {net.height} team-seasons")
+
+
 def capture_teams() -> None:
     """Committed team-identity map (school/mascot/espn id/classification) for offline joins."""
     from sportsdataverse.cfb.cfb_loaders import load_cfb_team_info
@@ -224,3 +246,5 @@ if __name__ == "__main__":
         capture_draft()
     if only in (None, "production"):
         capture_player_production()
+    if only in (None, "transfers"):
+        capture_transfers()

@@ -50,33 +50,46 @@ def _load_roster_keys(seasons: list[int]) -> pl.DataFrame:
                 pl.lit(season, dtype=pl.Int64).alias("season"),
                 pl.col("team").cast(pl.Utf8).alias("team_id"),  # school name is the stable roster key
                 pl.col("athlete_id").cast(pl.Utf8).alias("player_id"),
-            ).drop_nulls()
+                (
+                    pl.col("first_name").cast(pl.Utf8).fill_null("")
+                    + " "
+                    + pl.col("last_name").cast(pl.Utf8).fill_null("")
+                )
+                .str.strip_chars()
+                .alias("player_name"),
+            ).drop_nulls(["season", "team_id", "player_id"])
         )
     if not frames:
-        return pl.DataFrame(schema={"season": pl.Int64, "team_id": pl.Utf8, "player_id": pl.Utf8})
+        return pl.DataFrame(
+            schema={"season": pl.Int64, "team_id": pl.Utf8, "player_id": pl.Utf8, "player_name": pl.Utf8}
+        )
     return pl.concat(frames).unique(subset=["season", "team_id", "player_id"])
 
 
 def _talent_points_lookup(seasons: list[int], division: str) -> pl.DataFrame:
-    """player_id -> recruit-star talent points (247 recruit key space).
+    """Case-folded player name -> recruit-star talent points.
 
-    Roster athlete ids (ESPN) and 247 recruit keys are different id spaces; the
-    lookup therefore matches nothing unless the caller supplies a compatible
-    frame. It exists as a monkeypatchable seam -- the production path falls
-    back to the 0-star default points for unmatched players.
+    Roster athlete ids (ESPN) and 247 recruit keys are different id spaces, so
+    the lookup keys on the normalized player name; unmatched movers fall back
+    to the 0-star default points.
     """
     rec = load_recruit_classes(seasons, division=division)
     if isinstance(rec, pd.DataFrame):
         rec = pl.from_pandas(rec)
     consts = get_constants(division)
     if rec.height == 0:
-        return pl.DataFrame(schema={"player_id": pl.Utf8, "talent_points": pl.Float64})
-    return rec.select(
-        pl.col("recruit_id").alias("player_id"),
-        pl.col("stars")
-        .replace_strict(consts.star_points, default=consts.star_points.get(0, 0.0), return_dtype=pl.Float64)
-        .alias("talent_points"),
-    ).unique(subset=["player_id"])
+        return pl.DataFrame(schema={"_name": pl.Utf8, "talent_points": pl.Float64})
+    return (
+        rec.drop_nulls(["player_name"])
+        .select(
+            pl.col("player_name").str.to_lowercase().str.strip_chars().alias("_name"),
+            pl.col("stars")
+            .replace_strict(consts.star_points, default=consts.star_points.get(0, 0.0), return_dtype=pl.Float64)
+            .alias("talent_points"),
+        )
+        .group_by("_name")
+        .agg(pl.col("talent_points").max())
+    )
 
 
 def cfb_transfer_moves(
@@ -122,8 +135,11 @@ def cfb_transfer_moves(
     consts = get_constants(division)
     default_points = consts.star_points.get(0, 0.0)
     talent = _talent_points_lookup(list(range(min(season_list) - 5, max(season_list) + 1)), division)
-    moved = joined.join(talent, on="player_id", how="left").with_columns(
-        pl.col("talent_points").fill_null(default_points)
+    moved = (
+        joined.with_columns(pl.col("player_name").str.to_lowercase().str.strip_chars().alias("_name"))
+        .join(talent, on="_name", how="left")
+        .with_columns(pl.col("talent_points").fill_null(default_points))
+        .drop("_name")
     )
     incoming = moved.select(
         "season", "team_id", "player_id", pl.lit("in").alias("direction"), "prior_team_id", "talent_points"

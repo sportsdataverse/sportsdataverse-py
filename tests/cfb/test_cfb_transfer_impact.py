@@ -16,6 +16,7 @@ def _rosters(season: int, rows: list[tuple[str, str]]) -> pl.DataFrame:
             "season": [season] * len(rows),
             "team_id": [t for t, _ in rows],
             "player_id": [p for _, p in rows],
+            "player_name": [f"Name {p}" for _, p in rows],
         }
     )
 
@@ -35,7 +36,7 @@ def test_transfer_moves_paired_in_out(monkeypatch) -> None:
     monkeypatch.setattr(
         _mod,
         "_talent_points_lookup",
-        lambda seasons, division: pl.DataFrame(schema={"player_id": pl.Utf8, "talent_points": pl.Float64}),
+        lambda seasons, division: pl.DataFrame(schema={"_name": pl.Utf8, "talent_points": pl.Float64}),
     )
     moves = cfb_transfer_moves(2023)
     assert isinstance(moves, pl.DataFrame)
