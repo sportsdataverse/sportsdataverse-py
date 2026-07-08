@@ -60,3 +60,4 @@ from sportsdataverse.nhl.nhl_player_stats import *
 from sportsdataverse.nhl.nhl_player_impact_constants import *
 from sportsdataverse.nhl.nhl_xg import *
 from sportsdataverse.nhl.nhl_gsax import *
+from sportsdataverse.nhl.nhl_rapm import *

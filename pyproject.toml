@@ -455,4 +455,5 @@ files = [
     "sportsdataverse/nhl/nhl_player_impact_constants.py",
     "sportsdataverse/nhl/nhl_xg.py",
     "sportsdataverse/nhl/nhl_gsax.py",
+    "sportsdataverse/nhl/nhl_rapm.py",
 ]
