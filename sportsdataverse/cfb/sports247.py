@@ -7,7 +7,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse.cfb.sports247_runtime import _get
-from sportsdataverse.cfb.sports247_parsers import parse_sports247_institution_rankings, parse_sports247_teams
+from sportsdataverse.cfb.sports247_parsers import (
+    parse_sports247_institution_rankings,
+    parse_sports247_result_set,
+    parse_sports247_teams,
+)
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -16,6 +20,15 @@ if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers
 __all__ = [
     "sports247_teams",
     "sports247_institution_rankings",
+    "sports247_recruits",
+    "sports247_transfers",
+    "sports247_coaches",
+    "sports247_transfer_portal_player_feed",
+    "sports247_composite_team_ranking_feed",
+    "sports247_transfer_portal_team_feed",
+    "sports247_target_predictions",
+    "sports247_sport_years",
+    "sports247_tags_autocomplete",
 ]
 
 
@@ -112,4 +125,390 @@ def sports247_institution_rankings(
     )
     if return_parsed:
         return parse_sports247_institution_rankings(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_recruits(
+    sport_key: Optional[int] = 1,
+    year: Optional[int] = 2026,
+    pagesize: Optional[int] = 50,
+    page: Optional[int] = None,
+    position_abbreviation: Optional[str] = None,
+    state_abbreviation: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports individual recruit rankings for a sport and class year (247 + industry-composite ratings, stars, commit status; paginated).
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/recruits/``
+    Example URL: https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026
+
+    Args:
+        sport_key: sportKey query parameter.
+        year: year query parameter.
+        pagesize: pagesize query parameter.
+        page: page query parameter.
+        position_abbreviation: positionAbbreviation query parameter.
+        state_abbreviation: stateAbbreviation query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_recruits(year=2026, sport_key=1)
+    """
+    raw = _get(
+        "https://ipa.247sports.com/rdb/v1/recruits/",
+        params={
+            "sportKey": sport_key,
+            "year": year,
+            "pagesize": pagesize,
+            "page": page,
+            "positionAbbreviation": position_abbreviation,
+            "stateAbbreviation": state_abbreviation,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_transfers(
+    sport_key: Optional[int] = 1,
+    year: Optional[int] = 2026,
+    pagesize: Optional[int] = 50,
+    page: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports transfer-portal player entries for a sport and year (paginated).
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/transfers/``
+    Example URL: https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026
+
+    Args:
+        sport_key: sportKey query parameter.
+        year: year query parameter.
+        pagesize: pagesize query parameter.
+        page: page query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_transfers(year=2026, sport_key=1)
+    """
+    raw = _get(
+        "https://ipa.247sports.com/rdb/v1/transfers/",
+        params={
+            "sportKey": sport_key,
+            "year": year,
+            "pagesize": pagesize,
+            "page": page,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_coaches(
+    sport_key: Optional[int] = 1,
+    year: Optional[int] = 2026,
+    page_size: Optional[int] = 50,
+    page: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports coach recruiting rankings for a sport and year (paginated).
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/coaches/``
+    Example URL: https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026
+
+    Args:
+        sport_key: sportKey query parameter.
+        year: year query parameter.
+        page_size: pageSize query parameter.
+        page: page query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_coaches(year=2026, sport_key=1)
+    """
+    raw = _get(
+        "https://ipa.247sports.com/rdb/v1/coaches/",
+        params={
+            "sportKey": sport_key,
+            "year": year,
+            "pageSize": page_size,
+            "page": page,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_transfer_portal_player_feed(
+    year: Union[int, str],
+    sport_key: int = 1,
+    page_size: Optional[int] = 50,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports transfer-portal player ranking feed for a sport and class year.
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalPlayerfeed/``
+    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/
+
+    Args:
+        year: year path parameter.
+        sport_key: sport_key path parameter.
+        page_size: pageSize query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_transfer_portal_player_feed(year=2026, sport_key=1)
+    """
+    raw = _get(
+        f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalPlayerfeed/",
+        params={
+            "pageSize": page_size,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_composite_team_ranking_feed(
+    year: Union[int, str],
+    sport_key: int = 1,
+    page_size: Optional[int] = 50,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports composite team recruiting-class ranking feed for a sport and class year.
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/compositeTeamRankingFeed/``
+    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/
+
+    Args:
+        year: year path parameter.
+        sport_key: sport_key path parameter.
+        page_size: pageSize query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_composite_team_ranking_feed(year=2026, sport_key=1)
+    """
+    raw = _get(
+        f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/compositeTeamRankingFeed/",
+        params={
+            "pageSize": page_size,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_transfer_portal_team_feed(
+    year: Union[int, str],
+    sport_key: int = 1,
+    page_size: Optional[int] = 50,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports transfer-portal team ranking feed for a sport and class year.
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalOnlyTeamFeed/``
+    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/
+
+    Args:
+        year: year path parameter.
+        sport_key: sport_key path parameter.
+        page_size: pageSize query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_transfer_portal_team_feed(year=2026, sport_key=1)
+    """
+    raw = _get(
+        f"https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalOnlyTeamFeed/",
+        params={
+            "pageSize": page_size,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_target_predictions(
+    site_key: Union[int, str],
+    year: Union[int, str],
+    sport_key: int = 1,
+    page_size: Optional[int] = 50,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports current expert target predictions ("crystal ball") for a site, class year, and sport.
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/sites/{site_key}/years/{year}/sports/{sport_key}/currentTargetPredictions/``
+    Example URL: https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/
+
+    Args:
+        site_key: site_key path parameter.
+        year: year path parameter.
+        sport_key: sport_key path parameter.
+        page_size: pageSize query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_target_predictions(site_key=1, year=2026, sport_key=1)
+    """
+    raw = _get(
+        f"https://ipa.247sports.com/rdb/v1/sites/{site_key}/years/{year}/sports/{sport_key}/currentTargetPredictions/",
+        params={
+            "pageSize": page_size,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_sport_years(
+    sport_key: int = 1,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Class years for which the 247Sports RDB has data for a given sport.
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/sports/{sport_key}/year/``
+    Example URL: https://ipa.247sports.com/rdb/v1/sports/1/year/
+
+    Args:
+        sport_key: sport_key path parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_sport_years(sport_key=1)
+    """
+    raw = _get(
+        f"https://ipa.247sports.com/rdb/v1/sports/{sport_key}/year/",
+        params={
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_tags_autocomplete(
+    default_name: Optional[str] = None,
+    items: Optional[int] = 10,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports taggable-entity autocomplete (players / teams / institutions) by name prefix.
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/tags/autocomplete/``
+    Example URL: https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith
+
+    Args:
+        default_name: defaultName query parameter.
+        items: items query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_tags_autocomplete(default_name='smith')
+    """
+    raw = _get(
+        "https://ipa.247sports.com/rdb/v1/tags/autocomplete/",
+        params={
+            "defaultName": default_name,
+            "items": items,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
     return raw

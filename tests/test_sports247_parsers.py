@@ -77,8 +77,62 @@ def test_parsers_return_pandas_when_asked():
 
 
 # ===========================================================================
-# Runtime (transport-injectable _get)
+# Runtime (transport-injectable _get + guest-JWT bearer)
 # ===========================================================================
+
+
+@pytest.fixture(autouse=True)
+def _stub_jwt(monkeypatch):
+    """Keep _get fully offline: stub the guest-JWT mint (never hit the network)
+    and reset the module-level token cache before each test."""
+    import sportsdataverse.cfb.sports247_runtime as rt
+
+    monkeypatch.setattr(rt, "_mint_guest_jwt", lambda: "stub-jwt")
+    monkeypatch.setattr(rt, "_jwt", None)
+    yield
+
+
+def test_get_attaches_bearer_and_mints_once():
+    import sportsdataverse.cfb.sports247_runtime as rt
+
+    seen = {}
+
+    def fake(url, params, headers, proxy_url):
+        seen["auth"] = headers.get("Authorization")
+        return 200, '{"players": []}'
+
+    rt._get("https://ipa.247sports.com/rdb/v1/recruits/", transport=fake)
+    assert seen["auth"] == "Bearer stub-jwt"
+
+
+def test_get_refreshes_jwt_once_on_401(monkeypatch):
+    import sportsdataverse.cfb.sports247_runtime as rt
+
+    tokens = iter(["expired", "fresh"])
+    monkeypatch.setattr(rt, "_mint_guest_jwt", lambda: next(tokens))
+    monkeypatch.setattr(rt, "_jwt", None)
+    seen = []
+
+    def fake(url, params, headers, proxy_url):
+        seen.append(headers.get("Authorization"))
+        return (401, "") if len(seen) == 1 else (200, '{"players": [{"key": 1}]}')
+
+    out = rt._get("https://ipa.247sports.com/rdb/v1/recruits/", transport=fake)
+    assert out == {"players": [{"key": 1}]}
+    assert seen == ["Bearer expired", "Bearer fresh"]  # re-minted after the 401
+
+
+def test_get_can_disable_auth():
+    import sportsdataverse.cfb.sports247_runtime as rt
+
+    seen = {}
+
+    def fake(url, params, headers, proxy_url):
+        seen["auth"] = headers.get("Authorization")
+        return 200, "[]"
+
+    rt._get("https://ipa.247sports.com/rdb/v1/teams/", transport=fake, auth=False)
+    assert seen["auth"] is None
 
 
 def test_get_appends_trailing_slash_and_strips_none_params():
@@ -136,3 +190,86 @@ def test_wrappers_exported_from_cfb_package():
 
     assert callable(sports247_teams)
     assert callable(sports247_institution_rankings)
+
+
+# ===========================================================================
+# Generic result-set parser + JWT-unlocked endpoints
+# ===========================================================================
+
+
+def test_result_set_handles_array_envelope_scalar_and_single_object():
+    from sportsdataverse.cfb.sports247_parsers import parse_sports247_result_set
+
+    # bare array
+    assert parse_sports247_result_set([{"a": 1}, {"a": 2}]).height == 2
+    # enveloped list (each envelope key)
+    assert parse_sports247_result_set({"players": [{"k": 1}]}).height == 1
+    assert parse_sports247_result_set({"results": [{"k": 1}, {"k": 2}]}).height == 2
+    assert parse_sports247_result_set({"rankings": [{"k": 1}]}).height == 1
+    # scalar array -> single 'value' column
+    df = parse_sports247_result_set([2025, 2026])
+    assert df.height == 2 and df.columns == ["value"]
+    # single flat object -> one row
+    assert parse_sports247_result_set({"abbreviation": "FL", "bettingUrl": None}).height == 1
+    # empty / malformed
+    for bad in (None, {}, {"pagination": {}}, "x", 3):
+        assert parse_sports247_result_set(bad).height == 0
+
+
+@pytest.mark.parametrize(
+    ("stem", "min_cols"),
+    [
+        ("recruits_fb_2026", {"composite_rating", "composite_national_rank", "committed_institution_name"}),
+        ("transfers_fb_2026", {"player_first_name", "player_transfer_source_institution"}),
+        ("coaches_fb_2026", {"first_name", "overall_rank"}),
+        ("transfer_portal_player_feed_fb_2026", {"full_name", "target_institution", "group_rank"}),
+        ("composite_team_ranking_feed_fb_2026", {"composite_overall_rank", "five_stars"}),
+        ("current_target_predictions_fb_2026", {"expert_name", "prediction", "player_name"}),
+        ("tags_autocomplete", {"id", "name", "type"}),
+    ],
+)
+def test_new_endpoint_fixtures_flatten_with_expected_columns(stem, min_cols):
+    from sportsdataverse.cfb.sports247_parsers import parse_sports247_result_set
+
+    df = parse_sports247_result_set(_load(f"sports247_{stem}"))
+    assert df.height > 0
+    assert min_cols.issubset(set(df.columns)), f"{stem} missing {min_cols - set(df.columns)}"
+
+
+def test_new_wrappers_route_through_generic_parser(monkeypatch):
+    import sportsdataverse.cfb.sports247 as s247
+
+    monkeypatch.setattr(s247, "_get", lambda *a, **k: _load("sports247_recruits_fb_2026"))
+    df = s247.sports247_recruits(year=2026)
+    assert isinstance(df, pl.DataFrame)
+    assert "composite_rating" in df.columns
+
+    raw = s247.sports247_recruits(year=2026, return_parsed=False)
+    assert isinstance(raw, dict) and "players" in raw
+
+
+def test_all_unlocked_wrappers_exported():
+    from sportsdataverse.cfb import (
+        sports247_coaches,
+        sports247_composite_team_ranking_feed,
+        sports247_recruits,
+        sports247_sport_years,
+        sports247_tags_autocomplete,
+        sports247_target_predictions,
+        sports247_transfer_portal_player_feed,
+        sports247_transfer_portal_team_feed,
+        sports247_transfers,
+    )
+
+    for fn in (
+        sports247_recruits,
+        sports247_transfers,
+        sports247_coaches,
+        sports247_transfer_portal_player_feed,
+        sports247_composite_team_ranking_feed,
+        sports247_transfer_portal_team_feed,
+        sports247_target_predictions,
+        sports247_sport_years,
+        sports247_tags_autocomplete,
+    ):
+        assert callable(fn)

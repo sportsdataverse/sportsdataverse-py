@@ -178,18 +178,24 @@
   buildId is treated as an authoritative miss). Returns-schemas `native/on3/*` with all
   224 column descriptions authored; trimmed real-capture fixtures + offline runtime,
   parser, and wiring tests.
-- feat(cfb): 247Sports Recruit Database stem (`sports247_teams`,
-  `sports247_institution_rankings`) over the RDB's two **public** endpoints at
-  `ipa.247sports.com/rdb/v1/` — the college team directory (teamId /
-  institutionKey / conference; `sport_key` 1 = football, 2 = basketball) and the
-  team recruiting-class rankings (247 rank/rating + industry composite, star
-  counts, commits, transfer points). The Fastly edge fingerprint-blocks plain
-  `requests`, so the runtime uses lazy-optional `curl_cffi` Chrome impersonation
-  with an injectable transport (same pattern as `nba_stats`); slash-less paths
-  are normalized (the RDB 301s them). The remaining ~23 `/rdb/v1/*` routes are
-  bearer-gated (internal CBSi) and intentionally unwrapped. Returns-schemas
-  `native/sports247/*` with all 39 column descriptions authored; real-capture
-  fixtures + offline parser/runtime/wiring tests.
+- feat(cfb): 247Sports Recruit Database stem (11 wrappers) over
+  `ipa.247sports.com/rdb/v1/` — `sports247_recruits` (individual recruit rankings:
+  247 + industry-composite ratings/stars/ranks, commit status), `sports247_transfers`
+  (transfer portal), `sports247_coaches`, `sports247_target_predictions` (expert
+  "crystal ball"), `sports247_institution_rankings` / `sports247_teams` /
+  `sports247_composite_team_ranking_feed` / `sports247_transfer_portal_team_feed` /
+  `sports247_transfer_portal_player_feed` / `sports247_sport_years` /
+  `sports247_tags_autocomplete`. One generic `parse_sports247_result_set` covers
+  every payload shape (bare array / `{players|results|rankings|list: [...]}` envelope
+  / scalar array / single object). The Fastly edge fingerprint-blocks plain
+  `requests`, so the runtime uses lazy-optional `curl_cffi` Chrome impersonation with
+  an injectable transport (the `nba_stats` pattern) and normalizes slash-less paths
+  (the RDB 301s them). Most routes need an `Authorization: Bearer` **guest JWT** —
+  `GET https://247sports.com/` mints one with no login (~12 h TTL); the runtime
+  mints/caches/refreshes it automatically (re-mints once on a 401/403). The ~14
+  remaining routes stay 403 even with the guest token (logged-in/premium) and are not
+  wrapped. Returns-schemas `native/sports247/*` with all 211 column descriptions
+  authored; real-capture fixtures + offline parser/runtime/wiring tests.
 
 ### MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)
 

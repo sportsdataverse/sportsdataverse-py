@@ -1,0 +1,129 @@
+{
+ "pagination": {
+  "currentPage": 1,
+  "itemsPerPage": 5,
+  "count": 5961,
+  "pageCount": 1193
+ },
+ "players": [
+  {
+   "key": 46151084,
+   "cbs_Key": 0,
+   "firstName": "Aiden",
+   "lastName": "Gibson",
+   "profileUrl": "/player/Aiden-Gibson-46151084",
+   "defaultAssetUrl": "/Uploads/Assets/685/835/13835685.jpg",
+   "homeTown": {
+    "city": "Woodruff",
+    "state": "SC"
+   },
+   "primaryPosition": "RB",
+   "compositeRating": 91.0,
+   "compositeStarRating": 4,
+   "compositeNationalRank": 269,
+   "compositePositionRank": 20,
+   "compositeStateRank": 5,
+   "committedInstitution": {
+    "institutionKey": 24035,
+    "teamKey": 57,
+    "cbsKey": 785,
+    "name": "Rutgers",
+    "abbreviation": "RUTG",
+    "fullName": "Rutgers Scarlet Knights"
+   },
+   "signedInstitution": null,
+   "currentInstitution": {
+    "institutionKey": 20016,
+    "teamKey": null,
+    "cbsKey": null,
+    "name": "Woodruff",
+    "abbreviation": null,
+    "fullName": "Woodruff"
+   }
+  },
+  {
+   "key": 46149128,
+   "cbs_Key": 50052855,
+   "firstName": "Kamden",
+   "lastName": "Jennings",
+   "profileUrl": "/player/Kamden-Jennings-46149128",
+   "defaultAssetUrl": "/Uploads/Assets/941/403/12403941.jpeg",
+   "homeTown": {
+    "city": "Alpharetta",
+    "state": "GA"
+   },
+   "primaryPosition": "CB",
+   "compositeRating": 87.8888888888889,
+   "compositeStarRating": 3,
+   "compositeNationalRank": 783,
+   "compositePositionRank": 67,
+   "compositeStateRank": 78,
+   "committedInstitution": {
+    "institutionKey": 24144,
+    "teamKey": 273,
+    "cbsKey": 639,
+    "name": "James Madison",
+    "abbreviation": "JM",
+    "fullName": "James Madison Dukes"
+   },
+   "signedInstitution": {
+    "institutionKey": 24144,
+    "teamKey": 273,
+    "cbsKey": 639,
+    "name": "James Madison",
+    "abbreviation": "JM",
+    "fullName": "James Madison Dukes"
+   },
+   "currentInstitution": {
+    "institutionKey": 24144,
+    "teamKey": 273,
+    "cbsKey": 639,
+    "name": "James Madison",
+    "abbreviation": "JM",
+    "fullName": "James Madison Dukes"
+   }
+  },
+  {
+   "key": 46149848,
+   "cbs_Key": 50050464,
+   "firstName": "Qwantavius",
+   "lastName": "Wiggins",
+   "profileUrl": "/player/Qwantavius-Wiggins-46149848",
+   "defaultAssetUrl": "/Uploads/Assets/86/701/12701086.jpg",
+   "homeTown": {
+    "city": "Fairburn",
+    "state": "GA"
+   },
+   "primaryPosition": "RB",
+   "compositeRating": 89.1111111111111,
+   "compositeStarRating": 4,
+   "compositeNationalRank": 471,
+   "compositePositionRank": 30,
+   "compositeStateRank": 47,
+   "committedInstitution": {
+    "institutionKey": 24332,
+    "teamKey": 288,
+    "cbsKey": 1748174,
+    "name": "Georgia State",
+    "abbreviation": "GSU",
+    "fullName": "Georgia State Panthers"
+   },
+   "signedInstitution": {
+    "institutionKey": 24332,
+    "teamKey": 288,
+    "cbsKey": 1748174,
+    "name": "Georgia State",
+    "abbreviation": "GSU",
+    "fullName": "Georgia State Panthers"
+   },
+   "currentInstitution": {
+    "institutionKey": 24332,
+    "teamKey": 288,
+    "cbsKey": 1748174,
+    "name": "Georgia State",
+    "abbreviation": "GSU",
+    "fullName": "Georgia State Panthers"
+   }
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "pagination": {
+  "currentPage": 1,
+  "itemsPerPage": 5,
+  "count": 4029,
+  "pageCount": 806
+ },
+ "results": [
+  {
+   "key": 3,
+   "cbsKey": 26901522,
+   "firstName": "Nick",
+   "lastName": "Saban",
+   "profileUrl": "/coach/Nick-Saban-3",
+   "defaultAssetUrl": "/Uploads/Assets/567/949/7949567.jpg",
+   "compositeRating": null,
+   "currentJob": null,
+   "averageCompositeRating": null,
+   "overallRank": null,
+   "divisionRank": null,
+   "conferenceRank": null
+  },
+  {
+   "key": 4,
+   "cbsKey": 26908221,
+   "firstName": "Steve",
+   "lastName": "Spurrier",
+   "profileUrl": "/coach/Steve-Spurrier-4",
+   "defaultAssetUrl": "/Uploads/Assets/1/161/1161001.jpg",
+   "compositeRating": null,
+   "currentJob": null,
+   "averageCompositeRating": null,
+   "overallRank": null,
+   "divisionRank": null,
+   "conferenceRank": null
+  },
+  {
+   "key": 5,
+   "cbsKey": 26908222,
+   "firstName": "Shane",
+   "lastName": "Beamer",
+   "profileUrl": "/coach/Shane-Beamer-5",
+   "defaultAssetUrl": "/Uploads/Assets/393/693/9693393.jpg",
+   "compositeRating": null,
+   "currentJob": {
+    "institutionKey": 24105,
+    "teamKey": 182,
+    "cbsKey": 816,
+    "name": "South Carolina",
+    "abbreviation": "SCAR",
+    "fullName": "South Carolina Gamecocks"
+   },
+   "averageCompositeRating": null,
+   "overallRank": null,
+   "divisionRank": null,
+   "conferenceRank": null
+  }
+ ]
+}
