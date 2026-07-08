@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import pandas as pd
 import polars as pl
 
 from sportsdataverse.mbb.mbb_shot_quality_constants import get_constants, three_point_radius
@@ -25,6 +26,7 @@ __all__ = [
     "classify_zone_type",
     "espn_shots_to_canonical",
     "fit_espn_court_scale",
+    "mbb_shot_data",
     "shot_events_to_frame",
 ]
 
@@ -170,11 +172,13 @@ def shot_events_to_frame(
     rows = []
     for e in events:
         x, y, dist = float(e.loc.x), float(e.loc.y), float(e.dist)
+        # e.team is the team UNDER ANALYSIS; the shooter's team follows is_off
+        shooting = e.team if e.is_off else e.opponent
         rows.append(
             {
                 "game_id": None,
                 "season": season,
-                "team_id": str(e.team.team) if e.team is not None else None,
+                "team_id": str(shooting.team.name) if shooting is not None else None,
                 "shooter_id": str(e.player.code) if e.player is not None else None,
                 "shot_x": x,
                 "shot_y": y,
@@ -341,3 +345,69 @@ def espn_shots_to_canonical(
     )
     assert dict(result.schema) == dict(CANONICAL_SHOT_SCHEMA)
     return result
+
+
+def mbb_shot_data(
+    seasons: "int | list[int]",
+    *,
+    source: str = "espn",
+    league: str = "mens",
+    return_as_pandas: bool = False,
+) -> "pl.DataFrame | pd.DataFrame":
+    """Season(s) of shots in the canonical frame (the spine's data entry point).
+
+    ``source="espn"`` loads the sportsdataverse-data shots release
+    (``load_mbb_shots`` / ``load_wbb_shots``) and canonicalizes it. The NCAA
+    HTML path is per-game, not per-season -- parse with
+    ``create_shot_event_data`` and flatten via :func:`shot_events_to_frame`
+    instead (``source="ncaa"`` raises with that pointer).
+
+    Args:
+        seasons: A season (e.g. ``2025``) or list of seasons.
+        source: ``"espn"`` (the only batch source).
+        league: ``"mens"`` or ``"womens"``.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        The canonical shot frame; seasons the release doesn't cover are
+        skipped, and no coverage at all returns the zero-row schema.
+
+    Raises:
+        ValueError: ``source`` is not ``"espn"``.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb import mbb_shot_data
+            shots = mbb_shot_data(2025)
+
+        Pipeline next step (one line)::
+
+            shots.group_by("shot_zone").agg(pl.col("made").mean()).sort("shot_zone")
+
+    See Also:
+        * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
+        * `wehoop <https://wehoop.sportsdataverse.org>`_ -- women's basketball (R)
+    """
+    if source != "espn":
+        raise ValueError(
+            f"source {source!r} is not batch-loadable; for NCAA HTML games parse with "
+            "create_shot_event_data and flatten via shot_events_to_frame"
+        )
+    if league == "womens":
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots as _loader  # noqa: PLC0415
+    else:
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_shots as _loader  # noqa: PLC0415
+
+    seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
+    frames = []
+    for s in seasons_list:
+        try:
+            raw = _loader([s])
+        except Exception:  # noqa: BLE001 - release floor varies by league (wbb: 2026)
+            continue
+        if raw.is_empty():
+            continue
+        frames.append(espn_shots_to_canonical(raw, league=league, season=s))
+    out = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=CANONICAL_SHOT_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out

@@ -116,6 +116,15 @@ def test_shot_events_to_frame_schema_and_value():
 
     df = shot_events_to_frame([_evt(0.0, 2.0, 2.0, 1), _evt(0.0, 24.0, 24.0, 1)], season=2024, league="mens")
     assert df.schema["team_id"] == pl.Utf8 and df.schema["point_value"] == pl.Int8
+    # defensive shots (is_off=False) attribute to the OPPONENT
+    from sportsdataverse.mbb.mbb_ncaa_models import TeamId, TeamSeasonId, Year
+
+    e = _evt(0.0, 2.0, 2.0, 1)
+    e.team = TeamSeasonId(TeamId("A"), Year(2024))
+    e.opponent = TeamSeasonId(TeamId("B"), Year(2024))
+    e.is_off = False
+    d2 = shot_events_to_frame([e], season=2024)
+    assert d2["team_id"].to_list() == ["B"]
     assert df["point_value"].to_list() == [2, 3]
     assert df["shot_zone"].to_list() == ["rim", "abovebreak3"]
     assert df["made"].to_list() == [True, True]
@@ -196,3 +205,39 @@ def test_espn_shots_to_canonical_empty():
     out = espn_shots_to_canonical(pl.DataFrame(), league="mens", season=2025)
     assert out.height == 0
     assert dict(out.schema) == dict(CANONICAL_SHOT_SCHEMA)
+
+
+def test_mbb_shot_data_espn_source(monkeypatch):
+
+    import sportsdataverse.mbb.mbb_shots_adapter as ad
+
+    monkeypatch.setattr("sportsdataverse.mbb.mbb_loaders.load_mbb_shots", lambda seasons: _fake_espn())
+    out = ad.mbb_shot_data(2025)
+    assert out.height == 4
+    assert out["source"].unique().to_list() == ["espn"]
+    assert dict(out.schema) == dict(ad.CANONICAL_SHOT_SCHEMA)
+
+
+def test_mbb_shot_data_bad_source():
+    import pytest
+
+    from sportsdataverse.mbb.mbb_shots_adapter import mbb_shot_data
+
+    with pytest.raises(ValueError):
+        mbb_shot_data(2025, source="ncaa")
+
+
+def test_committed_fixtures_round_trip():
+    from pathlib import Path
+
+    import polars as pl
+
+    from sportsdataverse.mbb.mbb_shots_adapter import CANONICAL_SHOT_SCHEMA
+
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_shot_quality"
+    for name in ("espn_shots_2025_train.parquet", "espn_shots_2025_holdout.parquet", "ncaa_shots_sample.parquet"):
+        df = pl.read_parquet(fix / name)
+        assert df.height > 0, name
+        assert dict(df.schema) == dict(CANONICAL_SHOT_SCHEMA), name
+        assert set(df["point_value"].unique().to_list()) <= {2, 3}, name
+        assert set(df["shot_zone"].unique().to_list()) <= {"rim", "paint", "mid", "corner3", "abovebreak3"}, name
