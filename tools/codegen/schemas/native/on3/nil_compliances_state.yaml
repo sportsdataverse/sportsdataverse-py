@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: organization_type
+  type: character
+- description: ''
+  name: state_key
+  type: integer
+- description: ''
+  name: state
+  type: character
+- description: ''
+  name: monetization_allowed
+  type: logical
+- description: ''
+  name: governing_rule_label
+  type: character
+- description: ''
+  name: governing_rule_url
+  type: character
+- description: ''
+  name: current_rules
+  type: character
+kind: dataframe
+schema: nil_compliances_state

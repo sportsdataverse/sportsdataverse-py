@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: text
+  type: character
+- description: ''
+  name: replacement_text
+  type: character
+- description: ''
+  name: link
+  type: character
+- description: ''
+  name: date_added
+  type: integer
+- description: ''
+  name: date_occurred
+  type: integer
+- description: ''
+  name: object_key
+  type: integer
+- description: ''
+  name: sport_key
+  type: integer
+- description: ''
+  name: person_key
+  type: integer
+- description: ''
+  name: organization_key
+  type: integer
+kind: dataframe
+schema: player_database_updates

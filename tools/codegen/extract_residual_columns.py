@@ -56,7 +56,15 @@ def _bucket_of(path: str) -> str:
 # ratings, ranks, status/commit fields — 89 columns) are authored from the OpenAPI
 # `description:` fields; the plain long tail (names, dates, assets, tax rates) is a
 # tracked follow-up, mirroring the nba_stats/wnba_stats decision above.
-_DEFERRED_BUCKETS = {"native/nba_stats", "native/wnba_stats", "native/sports247_site_pages"}
+# native/on3 + native/pff: the On3 RDB and PFF Premium column tails are likewise
+# authored as pilots with the remainder deferred (see those tracks' plans).
+_DEFERRED_BUCKETS = {
+    "native/nba_stats",
+    "native/wnba_stats",
+    "native/sports247_site_pages",
+    "native/on3",
+    "native/pff",
+}
 
 
 def iter_schema_columns() -> list[dict]:

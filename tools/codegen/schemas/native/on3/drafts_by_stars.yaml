@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: state
+  type: character
+- description: ''
+  name: blue_chip_percent
+  type: numeric
+- description: ''
+  name: population_percent
+  type: numeric
+- description: ''
+  name: talent_ratio
+  type: numeric
+- description: ''
+  name: five_stars
+  type: integer
+- description: ''
+  name: four_stars
+  type: integer
+- description: ''
+  name: three_stars
+  type: integer
+- description: ''
+  name: zero_stars
+  type: integer
+- description: ''
+  name: total
+  type: integer
+kind: dataframe
+schema: drafts_by_stars

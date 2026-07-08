@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: person_key
+  type: integer
+- description: ''
+  name: connected_person_key
+  type: integer
+- description: ''
+  name: sport_key
+  type: integer
+- description: ''
+  name: description
+  type: character
+- description: ''
+  name: connected_person_sport
+  type: character
+kind: dataframe
+schema: person_connections_connection_key

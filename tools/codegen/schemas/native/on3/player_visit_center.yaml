@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: sport
+  type: character
+- description: ''
+  name: year
+  type: integer
+- description: ''
+  name: total_visits
+  type: integer
+- description: ''
+  name: visits
+  type: character
+kind: dataframe
+schema: player_visit_center

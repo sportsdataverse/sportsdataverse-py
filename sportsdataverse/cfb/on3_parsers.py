@@ -25,6 +25,7 @@ from sportsdataverse.dl_utils import underscore
 
 __all__ = [
     "parse_on3_rankings",
+    "parse_on3_rdb",
     "parse_on3_team_rankings",
 ]
 
@@ -138,4 +139,59 @@ def parse_on3_team_rankings(
     .. _recruitR: https://github.com/sportsdataverse/recruitR
     """
     df = _rows_to_frame(_list_at(raw, "teamData"))
+    return df.to_pandas() if return_as_pandas else df
+
+
+def parse_on3_rdb(
+    raw: Union[Dict[str, Any], List[Any], None],
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Parse an On3 Recruit Database (RDB) payload into a tidy frame.
+
+    The RDB serves every endpoint in one of three envelope shapes, all handled
+    here:
+
+    * **paged** -- ``{"relatedModel": ..., "pagination": {...}, "list": [...]}``:
+      rows are ``raw["list"]``.
+    * **single object** -- a bare ``dict`` without a ``list`` key (e.g. a player
+      profile / latest valuation): the one object becomes a single row.
+    * **bare array** -- a top-level ``list`` (e.g. ``all-rankings``,
+      ``filters/status``): rows are the list itself.
+
+    Args:
+        raw: an RDB JSON body (dict or list) as returned by
+            :func:`sportsdataverse.cfb.on3_runtime._get`.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per record with snake-cased, ``json_normalize``-flattened
+        columns (list/dict-valued cells stringified). A zero-row frame when the
+        payload is ``None`` / empty / malformed — callers can chain without a
+        null-check.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.cfb import on3_commits_latest
+            df = on3_commits_latest(sport_key=1)
+            print(df.shape)
+
+        Pipeline next step (one line)::
+
+            df.filter(pl.col("commit_status_committed") == True).head()
+
+    See Also:
+        * `recruitR`_ -- college recruiting data in R (CFBD-backed).
+
+    .. _recruitR: https://github.com/sportsdataverse/recruitR
+    """
+    if isinstance(raw, list):
+        rows: List[Any] = raw
+    elif isinstance(raw, dict):
+        listed = raw.get("list")
+        rows = listed if isinstance(listed, list) else ([raw] if raw else [])
+    else:
+        rows = []
+    df = _rows_to_frame(rows)
     return df.to_pandas() if return_as_pandas else df

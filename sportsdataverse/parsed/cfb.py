@@ -150,10 +150,100 @@ from sportsdataverse.cfb import fox_cfb_team_gamelog as _raw_fox_cfb_team_gamelo
 from sportsdataverse.cfb import fox_cfb_team_roster as _raw_fox_cfb_team_roster
 from sportsdataverse.cfb import fox_cfb_team_stats as _raw_fox_cfb_team_stats
 from sportsdataverse.cfb import fox_cfb_teams as _raw_fox_cfb_teams
+from sportsdataverse.cfb import on3_coaches_history as _raw_on3_coaches_history
+from sportsdataverse.cfb import on3_coaches_profile as _raw_on3_coaches_profile
+from sportsdataverse.cfb import on3_collective_groups as _raw_on3_collective_groups
+from sportsdataverse.cfb import on3_collective_groups_deals as _raw_on3_collective_groups_deals
+from sportsdataverse.cfb import on3_collective_groups_key as _raw_on3_collective_groups_key
+from sportsdataverse.cfb import on3_commits_latest as _raw_on3_commits_latest
+from sportsdataverse.cfb import (
+    on3_commits_organizations_latest_commits as _raw_on3_commits_organizations_latest_commits,
+)
+from sportsdataverse.cfb import on3_commits_organizations_org_key as _raw_on3_commits_organizations_org_key
+from sportsdataverse.cfb import on3_draft_organization_rank as _raw_on3_draft_organization_rank
+from sportsdataverse.cfb import on3_draft_pick_organization_rank as _raw_on3_draft_pick_organization_rank
+from sportsdataverse.cfb import on3_drafts as _raw_on3_drafts
+from sportsdataverse.cfb import on3_drafts_by_stars as _raw_on3_drafts_by_stars
+from sportsdataverse.cfb import on3_drafts_by_stars_summary as _raw_on3_drafts_by_stars_summary
+from sportsdataverse.cfb import on3_drafts_players as _raw_on3_drafts_players
+from sportsdataverse.cfb import on3_filters_conferences as _raw_on3_filters_conferences
+from sportsdataverse.cfb import on3_filters_draft_rounds as _raw_on3_filters_draft_rounds
+from sportsdataverse.cfb import on3_filters_positions as _raw_on3_filters_positions
+from sportsdataverse.cfb import on3_filters_sports as _raw_on3_filters_sports
+from sportsdataverse.cfb import on3_filters_status as _raw_on3_filters_status
+from sportsdataverse.cfb import on3_filters_teams as _raw_on3_filters_teams
+from sportsdataverse.cfb import on3_filters_years as _raw_on3_filters_years
 from sportsdataverse.cfb import on3_industry_player_rankings as _raw_on3_industry_player_rankings
 from sportsdataverse.cfb import on3_industry_team_rankings as _raw_on3_industry_team_rankings
+from sportsdataverse.cfb import on3_nil_100 as _raw_on3_nil_100
+from sportsdataverse.cfb import on3_nil_100_v2 as _raw_on3_nil_100_v2
+from sportsdataverse.cfb import on3_nil_compliances_state as _raw_on3_nil_compliances_state
+from sportsdataverse.cfb import on3_nil_rankings as _raw_on3_nil_rankings
+from sportsdataverse.cfb import on3_organizations_draft_class_by_state as _raw_on3_organizations_draft_class_by_state
+from sportsdataverse.cfb import on3_organizations_draft_class_by_year as _raw_on3_organizations_draft_class_by_year
+from sportsdataverse.cfb import on3_organizations_draft_count_by_stars as _raw_on3_organizations_draft_count_by_stars
+from sportsdataverse.cfb import on3_organizations_draft_count_by_year as _raw_on3_organizations_draft_count_by_year
+from sportsdataverse.cfb import on3_organizations_draft_ranking_summary as _raw_on3_organizations_draft_ranking_summary
+from sportsdataverse.cfb import on3_organizations_drafted_players as _raw_on3_organizations_drafted_players
+from sportsdataverse.cfb import (
+    on3_organizations_drafts_by_stars_summary as _raw_on3_organizations_drafts_by_stars_summary,
+)
+from sportsdataverse.cfb import on3_organizations_roster as _raw_on3_organizations_roster
+from sportsdataverse.cfb import on3_organizations_roster_header as _raw_on3_organizations_roster_header
+from sportsdataverse.cfb import on3_people_combine_measurements as _raw_on3_people_combine_measurements
+from sportsdataverse.cfb import on3_people_latest_valuation as _raw_on3_people_latest_valuation
+from sportsdataverse.cfb import on3_people_measurements as _raw_on3_people_measurements
+from sportsdataverse.cfb import on3_people_measurements_averages as _raw_on3_people_measurements_averages
+from sportsdataverse.cfb import on3_people_person_connections as _raw_on3_people_person_connections
+from sportsdataverse.cfb import on3_people_social as _raw_on3_people_social
+from sportsdataverse.cfb import on3_people_social_post_summary as _raw_on3_people_social_post_summary
+from sportsdataverse.cfb import on3_people_track_and_field_measurements as _raw_on3_people_track_and_field_measurements
+from sportsdataverse.cfb import on3_people_valuation_growth as _raw_on3_people_valuation_growth
+from sportsdataverse.cfb import on3_person_connections_connection_key as _raw_on3_person_connections_connection_key
+from sportsdataverse.cfb import (
+    on3_person_primary_recruitment_evaluation as _raw_on3_person_primary_recruitment_evaluation,
+)
+from sportsdataverse.cfb import on3_person_recruitment_evaluations as _raw_on3_person_recruitment_evaluations
+from sportsdataverse.cfb import on3_person_sport_profile_recruit as _raw_on3_person_sport_profile_recruit
+from sportsdataverse.cfb import on3_person_sport_rankings as _raw_on3_person_sport_rankings
+from sportsdataverse.cfb import on3_player_all_rankings as _raw_on3_player_all_rankings
+from sportsdataverse.cfb import on3_player_database_updates as _raw_on3_player_database_updates
+from sportsdataverse.cfb import on3_player_images as _raw_on3_player_images
+from sportsdataverse.cfb import on3_player_organizations as _raw_on3_player_organizations
+from sportsdataverse.cfb import on3_player_organizations_org_key as _raw_on3_player_organizations_org_key
+from sportsdataverse.cfb import on3_player_person_rankings as _raw_on3_player_person_rankings
+from sportsdataverse.cfb import on3_player_profile as _raw_on3_player_profile
 from sportsdataverse.cfb import on3_player_rankings as _raw_on3_player_rankings
+from sportsdataverse.cfb import on3_player_team_targets as _raw_on3_player_team_targets
+from sportsdataverse.cfb import on3_player_verified as _raw_on3_player_verified
+from sportsdataverse.cfb import on3_player_videos as _raw_on3_player_videos
+from sportsdataverse.cfb import on3_player_visit_center as _raw_on3_player_visit_center
+from sportsdataverse.cfb import on3_players_industry_comparision as _raw_on3_players_industry_comparision
+from sportsdataverse.cfb import on3_players_industry_comparision_list as _raw_on3_players_industry_comparision_list
+from sportsdataverse.cfb import on3_predictions_user_key as _raw_on3_predictions_user_key
+from sportsdataverse.cfb import on3_quotes as _raw_on3_quotes
+from sportsdataverse.cfb import on3_quotes_key as _raw_on3_quotes_key
+from sportsdataverse.cfb import (
+    on3_recruitment_primary_recruitment_evaluation as _raw_on3_recruitment_primary_recruitment_evaluation,
+)
+from sportsdataverse.cfb import on3_recruitment_recruitment_evaluations as _raw_on3_recruitment_recruitment_evaluations
+from sportsdataverse.cfb import on3_recruitments_latest_rpm_picks as _raw_on3_recruitments_latest_rpm_picks
+from sportsdataverse.cfb import on3_recruitments_profile as _raw_on3_recruitments_profile
+from sportsdataverse.cfb import on3_recruitments_rpm_picks as _raw_on3_recruitments_rpm_picks
+from sportsdataverse.cfb import on3_recruitments_rpm_summary as _raw_on3_recruitments_rpm_summary
+from sportsdataverse.cfb import on3_team_ranking as _raw_on3_team_ranking
+from sportsdataverse.cfb import (
+    on3_team_ranking_bluechips_team_rankings as _raw_on3_team_ranking_bluechips_team_rankings,
+)
+from sportsdataverse.cfb import (
+    on3_team_ranking_consensus_team_rankings as _raw_on3_team_ranking_consensus_team_rankings,
+)
+from sportsdataverse.cfb import on3_team_ranking_organizations_summary as _raw_on3_team_ranking_organizations_summary
+from sportsdataverse.cfb import on3_team_ranking_team_rankings as _raw_on3_team_ranking_team_rankings
 from sportsdataverse.cfb import on3_team_rankings as _raw_on3_team_rankings
+from sportsdataverse.cfb import on3_transfers_best_available as _raw_on3_transfers_best_available
+from sportsdataverse.cfb import on3_transfers_latest as _raw_on3_transfers_latest
+from sportsdataverse.cfb import on3_videos_video_key as _raw_on3_videos_video_key
 from sportsdataverse.cfb import sports247_coaches as _raw_sports247_coaches
 from sportsdataverse.cfb import sports247_composite_team_ranking_feed as _raw_sports247_composite_team_ranking_feed
 from sportsdataverse.cfb import sports247_institution_rankings as _raw_sports247_institution_rankings
@@ -289,6 +379,7 @@ from sportsdataverse.cfb import make_ratings_compute_results as make_ratings_com
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.cfb import parse_on3_rankings as parse_on3_rankings  # noqa: F401
+from sportsdataverse.cfb import parse_on3_rdb as parse_on3_rdb  # noqa: F401
 from sportsdataverse.cfb import parse_on3_team_rankings as parse_on3_team_rankings  # noqa: F401
 from sportsdataverse.cfb import parse_sports247_institution_rankings as parse_sports247_institution_rankings  # noqa: F401
 from sportsdataverse.cfb import parse_sports247_result_set as parse_sports247_result_set  # noqa: F401
@@ -477,11 +568,90 @@ __all__ = [
     "make_ratings_compute_results",
     "most_recent_cfb_season",
     "normalize_team_roster_columns",
+    "on3_coaches_history",
+    "on3_coaches_profile",
+    "on3_collective_groups",
+    "on3_collective_groups_deals",
+    "on3_collective_groups_key",
+    "on3_commits_latest",
+    "on3_commits_organizations_latest_commits",
+    "on3_commits_organizations_org_key",
+    "on3_draft_organization_rank",
+    "on3_draft_pick_organization_rank",
+    "on3_drafts",
+    "on3_drafts_by_stars",
+    "on3_drafts_by_stars_summary",
+    "on3_drafts_players",
+    "on3_filters_conferences",
+    "on3_filters_draft_rounds",
+    "on3_filters_positions",
+    "on3_filters_sports",
+    "on3_filters_status",
+    "on3_filters_teams",
+    "on3_filters_years",
     "on3_industry_player_rankings",
     "on3_industry_team_rankings",
+    "on3_nil_100",
+    "on3_nil_100_v2",
+    "on3_nil_compliances_state",
+    "on3_nil_rankings",
+    "on3_organizations_draft_class_by_state",
+    "on3_organizations_draft_class_by_year",
+    "on3_organizations_draft_count_by_stars",
+    "on3_organizations_draft_count_by_year",
+    "on3_organizations_draft_ranking_summary",
+    "on3_organizations_drafted_players",
+    "on3_organizations_drafts_by_stars_summary",
+    "on3_organizations_roster",
+    "on3_organizations_roster_header",
+    "on3_people_combine_measurements",
+    "on3_people_latest_valuation",
+    "on3_people_measurements",
+    "on3_people_measurements_averages",
+    "on3_people_person_connections",
+    "on3_people_social",
+    "on3_people_social_post_summary",
+    "on3_people_track_and_field_measurements",
+    "on3_people_valuation_growth",
+    "on3_person_connections_connection_key",
+    "on3_person_primary_recruitment_evaluation",
+    "on3_person_recruitment_evaluations",
+    "on3_person_sport_profile_recruit",
+    "on3_person_sport_rankings",
+    "on3_player_all_rankings",
+    "on3_player_database_updates",
+    "on3_player_images",
+    "on3_player_organizations",
+    "on3_player_organizations_org_key",
+    "on3_player_person_rankings",
+    "on3_player_profile",
     "on3_player_rankings",
+    "on3_player_team_targets",
+    "on3_player_verified",
+    "on3_player_videos",
+    "on3_player_visit_center",
+    "on3_players_industry_comparision",
+    "on3_players_industry_comparision_list",
+    "on3_predictions_user_key",
+    "on3_quotes",
+    "on3_quotes_key",
+    "on3_recruitment_primary_recruitment_evaluation",
+    "on3_recruitment_recruitment_evaluations",
+    "on3_recruitments_latest_rpm_picks",
+    "on3_recruitments_profile",
+    "on3_recruitments_rpm_picks",
+    "on3_recruitments_rpm_summary",
+    "on3_team_ranking",
+    "on3_team_ranking_bluechips_team_rankings",
+    "on3_team_ranking_consensus_team_rankings",
+    "on3_team_ranking_organizations_summary",
+    "on3_team_ranking_team_rankings",
     "on3_team_rankings",
+    "on3_transfers_best_available",
+    "on3_transfers_latest",
+    "on3_videos_video_key",
     "parse_on3_rankings",
+    "parse_on3_rdb",
     "parse_on3_team_rankings",
     "parse_sports247_institution_rankings",
     "parse_sports247_result_set",
@@ -2328,6 +2498,300 @@ def fox_cfb_teams(*args, **kwargs):
     return _raw_fox_cfb_teams(*args, **kwargs)
 
 
+def on3_coaches_history(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_coaches_history``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_coaches_history` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_coaches_history` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_coaches_history(*args, **kwargs)
+
+
+def on3_coaches_profile(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_coaches_profile``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_coaches_profile` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_coaches_profile` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_coaches_profile(*args, **kwargs)
+
+
+def on3_collective_groups(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_collective_groups``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_collective_groups` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_collective_groups` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_collective_groups(*args, **kwargs)
+
+
+def on3_collective_groups_deals(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_collective_groups_deals``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_collective_groups_deals` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_collective_groups_deals` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_collective_groups_deals(*args, **kwargs)
+
+
+def on3_collective_groups_key(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_collective_groups_key``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_collective_groups_key` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_collective_groups_key` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_collective_groups_key(*args, **kwargs)
+
+
+def on3_commits_latest(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_commits_latest``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_commits_latest` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_commits_latest` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_commits_latest(*args, **kwargs)
+
+
+def on3_commits_organizations_latest_commits(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_commits_organizations_latest_commits``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_commits_organizations_latest_commits` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_commits_organizations_latest_commits` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_commits_organizations_latest_commits(*args, **kwargs)
+
+
+def on3_commits_organizations_org_key(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_commits_organizations_org_key``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_commits_organizations_org_key` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_commits_organizations_org_key` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_commits_organizations_org_key(*args, **kwargs)
+
+
+def on3_draft_organization_rank(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_draft_organization_rank``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_draft_organization_rank` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_draft_organization_rank` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_draft_organization_rank(*args, **kwargs)
+
+
+def on3_draft_pick_organization_rank(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_draft_pick_organization_rank``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_draft_pick_organization_rank` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_draft_pick_organization_rank` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_draft_pick_organization_rank(*args, **kwargs)
+
+
+def on3_drafts(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_drafts``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_drafts` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_drafts` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_drafts(*args, **kwargs)
+
+
+def on3_drafts_by_stars(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_drafts_by_stars``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_drafts_by_stars` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_drafts_by_stars` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_drafts_by_stars(*args, **kwargs)
+
+
+def on3_drafts_by_stars_summary(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_drafts_by_stars_summary``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_drafts_by_stars_summary` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_drafts_by_stars_summary` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_drafts_by_stars_summary(*args, **kwargs)
+
+
+def on3_drafts_players(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_drafts_players``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_drafts_players` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_drafts_players` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_drafts_players(*args, **kwargs)
+
+
+def on3_filters_conferences(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_filters_conferences``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_filters_conferences` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_filters_conferences` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_filters_conferences(*args, **kwargs)
+
+
+def on3_filters_draft_rounds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_filters_draft_rounds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_filters_draft_rounds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_filters_draft_rounds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_filters_draft_rounds(*args, **kwargs)
+
+
+def on3_filters_positions(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_filters_positions``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_filters_positions` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_filters_positions` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_filters_positions(*args, **kwargs)
+
+
+def on3_filters_sports(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_filters_sports``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_filters_sports` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_filters_sports` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_filters_sports(*args, **kwargs)
+
+
+def on3_filters_status(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_filters_status``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_filters_status` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_filters_status` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_filters_status(*args, **kwargs)
+
+
+def on3_filters_teams(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_filters_teams``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_filters_teams` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_filters_teams` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_filters_teams(*args, **kwargs)
+
+
+def on3_filters_years(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_filters_years``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_filters_years` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_filters_years` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_filters_years(*args, **kwargs)
+
+
 def on3_industry_player_rankings(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_industry_player_rankings``).
 
@@ -2356,6 +2820,482 @@ def on3_industry_team_rankings(*args, **kwargs):
     return _raw_on3_industry_team_rankings(*args, **kwargs)
 
 
+def on3_nil_100(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_nil_100``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_nil_100` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_nil_100` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_nil_100(*args, **kwargs)
+
+
+def on3_nil_100_v2(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_nil_100_v2``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_nil_100_v2` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_nil_100_v2` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_nil_100_v2(*args, **kwargs)
+
+
+def on3_nil_compliances_state(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_nil_compliances_state``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_nil_compliances_state` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_nil_compliances_state` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_nil_compliances_state(*args, **kwargs)
+
+
+def on3_nil_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_nil_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_nil_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_nil_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_nil_rankings(*args, **kwargs)
+
+
+def on3_organizations_draft_class_by_state(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_draft_class_by_state``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_draft_class_by_state` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_draft_class_by_state` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_draft_class_by_state(*args, **kwargs)
+
+
+def on3_organizations_draft_class_by_year(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_draft_class_by_year``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_draft_class_by_year` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_draft_class_by_year` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_draft_class_by_year(*args, **kwargs)
+
+
+def on3_organizations_draft_count_by_stars(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_draft_count_by_stars``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_draft_count_by_stars` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_draft_count_by_stars` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_draft_count_by_stars(*args, **kwargs)
+
+
+def on3_organizations_draft_count_by_year(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_draft_count_by_year``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_draft_count_by_year` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_draft_count_by_year` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_draft_count_by_year(*args, **kwargs)
+
+
+def on3_organizations_draft_ranking_summary(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_draft_ranking_summary``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_draft_ranking_summary` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_draft_ranking_summary` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_draft_ranking_summary(*args, **kwargs)
+
+
+def on3_organizations_drafted_players(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_drafted_players``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_drafted_players` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_drafted_players` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_drafted_players(*args, **kwargs)
+
+
+def on3_organizations_drafts_by_stars_summary(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_drafts_by_stars_summary``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_drafts_by_stars_summary` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_drafts_by_stars_summary` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_drafts_by_stars_summary(*args, **kwargs)
+
+
+def on3_organizations_roster(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_roster``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_roster` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_roster` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_roster(*args, **kwargs)
+
+
+def on3_organizations_roster_header(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_organizations_roster_header``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_organizations_roster_header` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_organizations_roster_header` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_organizations_roster_header(*args, **kwargs)
+
+
+def on3_people_combine_measurements(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_combine_measurements``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_combine_measurements` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_combine_measurements` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_combine_measurements(*args, **kwargs)
+
+
+def on3_people_latest_valuation(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_latest_valuation``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_latest_valuation` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_latest_valuation` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_latest_valuation(*args, **kwargs)
+
+
+def on3_people_measurements(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_measurements``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_measurements` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_measurements` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_measurements(*args, **kwargs)
+
+
+def on3_people_measurements_averages(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_measurements_averages``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_measurements_averages` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_measurements_averages` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_measurements_averages(*args, **kwargs)
+
+
+def on3_people_person_connections(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_person_connections``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_person_connections` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_person_connections` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_person_connections(*args, **kwargs)
+
+
+def on3_people_social(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_social``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_social` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_social` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_social(*args, **kwargs)
+
+
+def on3_people_social_post_summary(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_social_post_summary``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_social_post_summary` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_social_post_summary` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_social_post_summary(*args, **kwargs)
+
+
+def on3_people_track_and_field_measurements(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_track_and_field_measurements``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_track_and_field_measurements` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_track_and_field_measurements` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_track_and_field_measurements(*args, **kwargs)
+
+
+def on3_people_valuation_growth(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_people_valuation_growth``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_people_valuation_growth` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_people_valuation_growth` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_people_valuation_growth(*args, **kwargs)
+
+
+def on3_person_connections_connection_key(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_person_connections_connection_key``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_person_connections_connection_key` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_person_connections_connection_key` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_person_connections_connection_key(*args, **kwargs)
+
+
+def on3_person_primary_recruitment_evaluation(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_person_primary_recruitment_evaluation``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_person_primary_recruitment_evaluation` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_person_primary_recruitment_evaluation` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_person_primary_recruitment_evaluation(*args, **kwargs)
+
+
+def on3_person_recruitment_evaluations(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_person_recruitment_evaluations``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_person_recruitment_evaluations` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_person_recruitment_evaluations` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_person_recruitment_evaluations(*args, **kwargs)
+
+
+def on3_person_sport_profile_recruit(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_person_sport_profile_recruit``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_person_sport_profile_recruit` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_person_sport_profile_recruit` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_person_sport_profile_recruit(*args, **kwargs)
+
+
+def on3_person_sport_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_person_sport_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_person_sport_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_person_sport_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_person_sport_rankings(*args, **kwargs)
+
+
+def on3_player_all_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_all_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_all_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_all_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_all_rankings(*args, **kwargs)
+
+
+def on3_player_database_updates(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_database_updates``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_database_updates` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_database_updates` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_database_updates(*args, **kwargs)
+
+
+def on3_player_images(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_images``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_images` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_images` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_images(*args, **kwargs)
+
+
+def on3_player_organizations(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_organizations``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_organizations` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_organizations` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_organizations(*args, **kwargs)
+
+
+def on3_player_organizations_org_key(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_organizations_org_key``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_organizations_org_key` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_organizations_org_key` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_organizations_org_key(*args, **kwargs)
+
+
+def on3_player_person_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_person_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_person_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_person_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_person_rankings(*args, **kwargs)
+
+
+def on3_player_profile(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_profile``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_profile` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_profile` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_profile(*args, **kwargs)
+
+
 def on3_player_rankings(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_rankings``).
 
@@ -2370,6 +3310,286 @@ def on3_player_rankings(*args, **kwargs):
     return _raw_on3_player_rankings(*args, **kwargs)
 
 
+def on3_player_team_targets(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_team_targets``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_team_targets` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_team_targets` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_team_targets(*args, **kwargs)
+
+
+def on3_player_verified(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_verified``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_verified` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_verified` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_verified(*args, **kwargs)
+
+
+def on3_player_videos(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_videos``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_videos` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_videos` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_videos(*args, **kwargs)
+
+
+def on3_player_visit_center(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_player_visit_center``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_player_visit_center` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_player_visit_center` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_player_visit_center(*args, **kwargs)
+
+
+def on3_players_industry_comparision(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_players_industry_comparision``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_players_industry_comparision` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_players_industry_comparision` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_players_industry_comparision(*args, **kwargs)
+
+
+def on3_players_industry_comparision_list(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_players_industry_comparision_list``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_players_industry_comparision_list` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_players_industry_comparision_list` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_players_industry_comparision_list(*args, **kwargs)
+
+
+def on3_predictions_user_key(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_predictions_user_key``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_predictions_user_key` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_predictions_user_key` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_predictions_user_key(*args, **kwargs)
+
+
+def on3_quotes(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_quotes``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_quotes` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_quotes` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_quotes(*args, **kwargs)
+
+
+def on3_quotes_key(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_quotes_key``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_quotes_key` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_quotes_key` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_quotes_key(*args, **kwargs)
+
+
+def on3_recruitment_primary_recruitment_evaluation(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_recruitment_primary_recruitment_evaluation``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_recruitment_primary_recruitment_evaluation` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_recruitment_primary_recruitment_evaluation` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_recruitment_primary_recruitment_evaluation(*args, **kwargs)
+
+
+def on3_recruitment_recruitment_evaluations(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_recruitment_recruitment_evaluations``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_recruitment_recruitment_evaluations` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_recruitment_recruitment_evaluations` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_recruitment_recruitment_evaluations(*args, **kwargs)
+
+
+def on3_recruitments_latest_rpm_picks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_recruitments_latest_rpm_picks``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_recruitments_latest_rpm_picks` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_recruitments_latest_rpm_picks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_recruitments_latest_rpm_picks(*args, **kwargs)
+
+
+def on3_recruitments_profile(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_recruitments_profile``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_recruitments_profile` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_recruitments_profile` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_recruitments_profile(*args, **kwargs)
+
+
+def on3_recruitments_rpm_picks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_recruitments_rpm_picks``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_recruitments_rpm_picks` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_recruitments_rpm_picks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_recruitments_rpm_picks(*args, **kwargs)
+
+
+def on3_recruitments_rpm_summary(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_recruitments_rpm_summary``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_recruitments_rpm_summary` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_recruitments_rpm_summary` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_recruitments_rpm_summary(*args, **kwargs)
+
+
+def on3_team_ranking(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_team_ranking``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_team_ranking` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_team_ranking` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_team_ranking(*args, **kwargs)
+
+
+def on3_team_ranking_bluechips_team_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_team_ranking_bluechips_team_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_team_ranking_bluechips_team_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_team_ranking_bluechips_team_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_team_ranking_bluechips_team_rankings(*args, **kwargs)
+
+
+def on3_team_ranking_consensus_team_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_team_ranking_consensus_team_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_team_ranking_consensus_team_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_team_ranking_consensus_team_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_team_ranking_consensus_team_rankings(*args, **kwargs)
+
+
+def on3_team_ranking_organizations_summary(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_team_ranking_organizations_summary``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_team_ranking_organizations_summary` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_team_ranking_organizations_summary` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_team_ranking_organizations_summary(*args, **kwargs)
+
+
+def on3_team_ranking_team_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_team_ranking_team_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_team_ranking_team_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_team_ranking_team_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_team_ranking_team_rankings(*args, **kwargs)
+
+
 def on3_team_rankings(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_team_rankings``).
 
@@ -2382,6 +3602,48 @@ def on3_team_rankings(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_on3_team_rankings(*args, **kwargs)
+
+
+def on3_transfers_best_available(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_transfers_best_available``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_transfers_best_available` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_transfers_best_available` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_transfers_best_available(*args, **kwargs)
+
+
+def on3_transfers_latest(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_transfers_latest``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_transfers_latest` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_transfers_latest` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_transfers_latest(*args, **kwargs)
+
+
+def on3_videos_video_key(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``cfb.on3_videos_video_key``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.cfb.on3_videos_video_key` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.cfb.on3_videos_video_key` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_on3_videos_video_key(*args, **kwargs)
 
 
 def sports247_coaches(*args, **kwargs):

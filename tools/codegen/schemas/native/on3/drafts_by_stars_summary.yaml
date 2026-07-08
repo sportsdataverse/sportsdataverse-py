@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: five_stars
+  type: character
+- description: ''
+  name: four_stars
+  type: character
+- description: ''
+  name: three_stars
+  type: character
+- description: ''
+  name: zero_stars
+  type: character
+- description: ''
+  name: total_drafted
+  type: integer
+- description: ''
+  name: total_recruited
+  type: integer
+kind: dataframe
+schema: drafts_by_stars_summary

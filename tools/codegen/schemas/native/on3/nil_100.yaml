@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: person
+  type: character
+- description: ''
+  name: valuation
+  type: character
+kind: dataframe
+schema: nil_100
