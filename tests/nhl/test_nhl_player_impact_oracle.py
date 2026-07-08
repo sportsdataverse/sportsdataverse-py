@@ -31,13 +31,13 @@ def _scored() -> pl.DataFrame:
     return nhl_xg(pbp, model_dir=MODELS)
 
 
-# Observed on the 3-game fixture (281 5v5 shots, 12 goals): |sum(xg) - goals| / goals ==
-# 0.294. TOL is set a bit above that observed ratio to allow small re-scoring jitter
+# Observed on the 3-game fixture (228 5v5 shots, 11 goals): |sum(xg) - goals| / goals ==
+# 0.178. TOL is set a bit above that observed ratio to allow small re-scoring jitter
 # (e.g. a booster/xgboost version bump) without masking a real feature-mapping bug --
 # NOT widened to paper over a mismatch. If this fails, check the feature-prep column
 # mapping (era one-hots, x_fixed sign, strength-state routing) against fastRhockey
 # before touching TOL.
-XG_5V5_TOL = 0.35
+XG_5V5_TOL = 0.30
 
 
 def test_xg_calibration_5v5_sum_matches_goals_within_tol():

@@ -396,13 +396,24 @@ def nhl_xg(
             continue
         dm = xgb.DMatrix(_matrix(sub, feats), feature_names=list(feats))
         preds = booster.predict(dm)
-        parts.append(sub.select("event_id").with_columns(xg=pl.Series(preds, dtype=pl.Float64)))
+        parts.append(sub.select("game_id", "event_id").with_columns(xg=pl.Series(preds, dtype=pl.Float64)))
 
-    xg_results = pl.concat(parts) if parts else pl.DataFrame(schema={"event_id": pl.Int64, "xg": pl.Float64})
-    assert pbp.schema["event_id"] == xg_results.schema["event_id"], (
-        f"event_id dtype mismatch: pbp={pbp.schema['event_id']} vs xg_results={xg_results.schema['event_id']}"
+    xg_results = (
+        pl.concat(parts)
+        if parts
+        else pl.DataFrame(schema={"game_id": pl.Int64, "event_id": pl.Int64, "xg": pl.Float64})
     )
-    out = pbp.join(xg_results, on="event_id", how="left")
+    # event_id is scoped PER-GAME (not globally unique) -- the join key must be the
+    # composite (game_id, event_id), or rows from different games sharing an event_id
+    # fan out into duplicate joined rows.
+    for key in ("game_id", "event_id"):
+        assert pbp.schema[key] == xg_results.schema[key], (
+            f"{key} dtype mismatch: pbp={pbp.schema[key]} vs xg_results={xg_results.schema[key]}"
+        )
+    # `load_nhl_pbp_full` may already carry its own (producer-side) `xg` passthrough
+    # column -- drop it before joining so our computed `xg` isn't shadowed/suffixed.
+    pbp_base = pbp.drop("xg") if "xg" in pbp.columns else pbp
+    out = pbp_base.join(xg_results, on=["game_id", "event_id"], how="left")
     if "secondary_type" in out.columns:
         out = out.with_columns(
             xg=pl.when(pl.col("secondary_type") == "Penalty Shot").then(models["ps"]).otherwise(pl.col("xg")),
