@@ -29,6 +29,7 @@ _PACE_SCHEMA: dict = {
     "neutral_plays": pl.Int64,
     "neutral_sec_per_play": pl.Float64,
     "proe": pl.Float64,
+    "dropbacks": pl.Int64,
 }
 
 _GAME_SCRIPT_SCHEMA: dict = {
@@ -102,6 +103,11 @@ def team_game_pace(pbp: pl.DataFrame) -> pl.DataFrame:
     base = df.group_by("game_id", "season", "week", "posteam").agg(
         pl.len().cast(pl.Int64).alias("off_plays"),
         pl.col("pass_oe").filter(pl.col("qb_dropback") == 1).mean().alias("proe"),
+        pl.col("pass_oe")
+        .filter((pl.col("qb_dropback") == 1) & pl.col("pass_oe").is_not_null())
+        .len()
+        .cast(pl.Int64)
+        .alias("dropbacks"),
     )
     spp = _drive_sec_per_play(df)
     nspp = _drive_sec_per_play(neutral).rename({"sec_per_play": "neutral_sec_per_play"})
@@ -149,7 +155,7 @@ def _game_script_from(pbp: pl.DataFrame, schedule: Optional[pl.DataFrame] = None
             pl.col("off_plays").mean().alias("off_plays_pg"),
             pl.col("sec_per_play").mean().alias("sec_per_play"),
             pl.col("neutral_sec_per_play").mean().alias("neutral_sec_per_play"),
-            ((pl.col("proe") * pl.col("off_plays")).sum() / pl.col("off_plays").sum()).alias("proe"),
+            ((pl.col("proe") * pl.col("dropbacks")).sum() / pl.col("dropbacks").sum()).alias("proe"),
             pl.col("opp_neutral_sec_per_play").mean().alias("opp_neutral_sec_per_play"),
             pl.col("total_line").mean().alias("total_line_avg"),
         )
@@ -158,7 +164,7 @@ def _game_script_from(pbp: pl.DataFrame, schedule: Optional[pl.DataFrame] = None
                 c["intercept"]
                 + c["b_pace"] * pl.col("neutral_sec_per_play")
                 + c["b_opp_pace"] * pl.col("opp_neutral_sec_per_play")
-                + c["b_total"] * pl.col("total_line_avg").fill_null(0.0)
+                + c["b_total"] * pl.col("total_line_avg").fill_null(c["total_mean"])
             ).alias("exp_plays_pg")
         )
         .with_columns((pl.col("off_plays_pg") - pl.col("exp_plays_pg")).alias("plays_oe"))

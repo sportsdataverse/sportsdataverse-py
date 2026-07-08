@@ -221,13 +221,16 @@ ENVIRONMENT_FG_COEF: Dict[str, float] = {
 }
 
 #: Expected-plays OLS coefficients (realized offensive plays per team-game ~
-#: [1, neutral_sec_per_play, opp_neutral_sec_per_play, total_line]).  Seeded at
-#: scaffold time; overwritten by ``dev/nfl_scheme/fit_pace_constants.py`` (Task 2.2).
+#: [1, neutral_sec_per_play, opp_neutral_sec_per_play, total_line]).  Fitted by
+#: ``dev/nfl_scheme/fit_pace_constants.py`` on the committed 2021-2023 fixture
+#: (n=1708 team-games, fit MAE 6.56 plays; run 2026-07-08).
 PACE_CONSTANTS: Dict[str, float] = {
-    "intercept": 63.0,
-    "b_pace": 0.0,
-    "b_opp_pace": 0.0,
-    "b_total": 0.0,
+    "intercept": 85.09875718303789,
+    "b_pace": -0.056933557444005356,
+    "b_opp_pace": -0.6513146521982163,
+    "b_total": 0.1483926186149089,
+    # fit-sample mean total_line (fill for games with no market total)
+    "total_mean": 44.62997658079625,
 }
 
 #: Empirical-Bayes shrinkage pseudo-counts.  Seeds; overwritten with the
