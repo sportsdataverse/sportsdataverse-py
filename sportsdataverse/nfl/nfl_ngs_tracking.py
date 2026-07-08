@@ -36,8 +36,10 @@ import polars as pl
 
 from sportsdataverse.nfl.nfl_loaders import load_nfl_nextgen_stats
 from sportsdataverse.nfl.nfl_ngs_constants import (
+    MIN_ATTEMPTS,
     MIN_RECEPTIONS,
     empirical_bayes_shrink,
+    weekly_sigma2,
 )
 
 
@@ -105,13 +107,18 @@ def _shrink_over_season(
     min_w: float,
     out_raw: str,
     out_shrunk: str,
+    weekly: Optional[pl.DataFrame] = None,
 ) -> pl.DataFrame:
     """Apply empirical-Bayes shrinkage per season; prior fit on qualified rows.
 
     The prior mean is the weight-averaged ``raw_col`` over rows with
     ``weight_col >= min_w`` (falls back to the all-row weighted mean when no
-    row qualifies); ``tau2``/``sigma2`` come from
-    :func:`sportsdataverse.nfl.nfl_ngs_constants.empirical_bayes_shrink`.
+    row qualifies). When ``weekly`` rows are available, the sampling variance
+    ``sigma2`` is identified per season from within-player across-week
+    variation (:func:`sportsdataverse.nfl.nfl_ngs_constants.weekly_sigma2`) —
+    the season-panel OLS is weakly identified when all players carry similar
+    sample sizes (observed on the rushing panel: tau2 floored, reliability
+    collapsed to ~0).
     """
     frames = []
     for (_season,), grp in panel.group_by("season", maintain_order=True):
@@ -119,7 +126,10 @@ def _shrink_over_season(
         n = grp[weight_col].to_numpy().astype(float)
         qualified = n >= min_w
         prior_mean = float(np.average(x[qualified], weights=n[qualified])) if qualified.any() else None
-        shrunk, rel = empirical_bayes_shrink(x, n, prior_mean=prior_mean)
+        sigma2 = None
+        if weekly is not None and weekly.height > 0:
+            sigma2 = weekly_sigma2(weekly.filter(pl.col("season") == _season), raw_col, weight_col)
+        shrunk, rel = empirical_bayes_shrink(x, n, prior_mean=prior_mean, sigma2=sigma2)
         frames.append(
             grp.with_columns(
                 pl.Series(out_raw, x, dtype=pl.Float64),
@@ -152,9 +162,11 @@ def _yac_oe_impl(
     min_receptions: int,
     _loader: Optional[Callable[..., pl.DataFrame]],
 ) -> pl.DataFrame:
-    panel = _ngs_panel(_season_list(seasons), "receiving", level="season", _loader=_loader)
+    season_list = _season_list(seasons)
+    panel = _ngs_panel(season_list, "receiving", level="season", _loader=_loader)
     if panel.height == 0:
         return pl.DataFrame(schema=_YAC_SCHEMA)
+    weekly = _ngs_panel(season_list, "receiving", level="week", _loader=_loader)
     out = _shrink_over_season(
         panel,
         "avg_yac_above_expectation",
@@ -162,6 +174,7 @@ def _yac_oe_impl(
         float(min_receptions),
         "yac_oe_raw",
         "yac_oe_shrunk",
+        weekly=weekly,
     )
     out = (
         out.rename({"player_position": "position"})
@@ -222,4 +235,111 @@ def nfl_ngs_yac_oe(
     .. _nflfastR: https://www.nflfastr.com
     """
     out = _yac_oe_impl(seasons, min_receptions, _loader)
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+_RYOE_SCHEMA = {
+    "season": pl.Int64,
+    "player_gsis_id": pl.Utf8,
+    "player_display_name": pl.Utf8,
+    "team_abbr": pl.Utf8,
+    "position": pl.Utf8,
+    "rush_attempts": pl.Float64,
+    "rush_yards": pl.Float64,
+    "expected_rush_yards": pl.Float64,
+    "ryoe_total": pl.Float64,
+    "ryoe_per_att_raw": pl.Float64,
+    "ryoe_per_att_shrunk": pl.Float64,
+    "pct_stacked_box": pl.Float64,
+    "reliability": pl.Float64,
+    "ryoe_rank": pl.Int64,
+}
+
+
+def _ryoe_impl(
+    seasons: Union[int, Sequence[int]],
+    min_attempts: int,
+    _loader: Optional[Callable[..., pl.DataFrame]],
+) -> pl.DataFrame:
+    season_list = _season_list(seasons)
+    panel = _ngs_panel(season_list, "rushing", level="season", _loader=_loader)
+    if panel.height == 0:
+        return pl.DataFrame(schema=_RYOE_SCHEMA)
+    weekly = _ngs_panel(season_list, "rushing", level="week", _loader=_loader)
+    out = _shrink_over_season(
+        panel,
+        "rush_yards_over_expected_per_att",
+        "rush_attempts",
+        float(min_attempts),
+        "ryoe_per_att_raw",
+        "ryoe_per_att_shrunk",
+        weekly=weekly,
+    )
+    out = (
+        out.rename(
+            {
+                "player_position": "position",
+                "rush_yards_over_expected": "ryoe_total",
+                "percent_attempts_gte_eight_defenders": "pct_stacked_box",
+            }
+        )
+        .with_columns(_qualified_rank("ryoe_per_att_shrunk", "rush_attempts", float(min_attempts), "ryoe_rank"))
+        .select(list(_RYOE_SCHEMA.keys()))
+    )
+    return out.cast(_RYOE_SCHEMA)
+
+
+def nfl_ngs_ryoe(
+    seasons: Union[int, Sequence[int]],
+    *,
+    min_attempts: int = MIN_ATTEMPTS,
+    return_as_pandas: bool = False,
+    _loader: Optional[Callable[..., pl.DataFrame]] = None,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Rush yards over expected per rusher-season, stabilised with EB shrinkage.
+
+    ``ryoe_per_att_raw`` is the NGS-shipped
+    ``rush_yards_over_expected_per_att`` passed through unchanged (the NGS
+    tracking-model residual); ``ryoe_total`` is the season total
+    ``rush_yards_over_expected``. ``ryoe_per_att_shrunk`` applies per-season
+    Efron-Morris empirical-Bayes shrinkage toward the attempt-weighted league
+    mean, weighted by ``rush_attempts``. ``pct_stacked_box``
+    (``percent_attempts_gte_eight_defenders``) is reported as a context
+    covariate — v1 does not adjust on it. The prior is fit at call time on
+    rows with ``rush_attempts >= min_attempts`` — no bundled artifact.
+
+    Args:
+        seasons (Union[int, Sequence[int]]): Season(s) to compute, 2016+.
+        min_attempts (int): Qualification threshold for the prior fit and for
+            receiving a ``ryoe_rank``. Defaults to
+            :data:`sportsdataverse.nfl.nfl_ngs_constants.MIN_ATTEMPTS`.
+        return_as_pandas (bool): If True, returns a pandas DataFrame.
+        _loader (Optional[Callable]): Injectable loader for offline tests.
+
+    Returns:
+        Union[pl.DataFrame, pd.DataFrame]: One row per
+        ``(season, player_gsis_id)`` with raw + shrunk RYOE/attempt,
+        ``reliability`` in [0, 1], and a dense descending ``ryoe_rank`` over
+        qualified rows (null for unqualified rows). Empty input returns a
+        zero-row frame with the documented schema.
+
+    Example:
+        Stabilised RYOE leaders::
+
+            from sportsdataverse.nfl import nfl_ngs_ryoe
+            df = nfl_ngs_ryoe([2023])
+            print(df.sort("ryoe_rank").head())
+
+        Pandas output::
+
+            df_pd = nfl_ngs_ryoe(2023, return_as_pandas=True)
+
+    See Also:
+        * `nflreadpy`_ -- source loader parity (``load_nextgen_stats``)
+        * `nflfastR`_ -- NFL play-by-play ecosystem (R)
+
+    .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    .. _nflfastR: https://www.nflfastr.com
+    """
+    out = _ryoe_impl(seasons, min_attempts, _loader)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

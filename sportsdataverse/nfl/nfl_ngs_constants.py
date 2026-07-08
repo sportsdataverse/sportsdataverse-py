@@ -23,13 +23,23 @@ MIN_ATTEMPTS: int = 20
 
 
 def empirical_bayes_shrink(
-    x: np.ndarray, n: np.ndarray, *, prior_mean: Optional[float] = None
+    x: np.ndarray,
+    n: np.ndarray,
+    *,
+    prior_mean: Optional[float] = None,
+    sigma2: Optional[float] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Efron-Morris empirical-Bayes shrinkage of per-unit averages.
 
     Model ``x_i = theta_i + e_i`` with ``e_i ~ (0, sigma2/n_i)`` and
-    ``theta_i ~ (mu, tau2)``. ``tau2`` (intercept) and ``sigma2`` (slope)
-    are moment-estimated by OLS of ``(x_i - mu)**2`` on ``1/n_i``.
+    ``theta_i ~ (mu, tau2)``. When ``sigma2`` is supplied (preferred —
+    identify it from weekly rows via :func:`weekly_sigma2`), ``tau2`` is
+    moment-estimated as ``mean((x_i - mu)**2 - sigma2/n_i)`` floored at a
+    tiny positive value. Otherwise both ``tau2`` (intercept) and ``sigma2``
+    (slope) come from OLS of ``(x_i - mu)**2`` on ``1/n_i`` — beware: that
+    OLS is weakly identified when the spread of ``1/n_i`` is narrow (e.g.
+    a season panel of only qualified rushers) and can floor ``tau2``,
+    collapsing reliability to ~0.
 
     Args:
         x (np.ndarray): Per-unit observed averages (e.g. YAC over expected
@@ -38,6 +48,8 @@ def empirical_bayes_shrink(
             ``n <= 0`` get zero reliability and shrink fully to the prior.
         prior_mean (Optional[float]): Override for the prior mean ``mu``.
             Defaults to the size-weighted mean of ``x``.
+        sigma2 (Optional[float]): Known within-unit sampling variance (per
+            single trial). When given, only ``tau2`` is estimated.
 
     Returns:
         Tuple[np.ndarray, np.ndarray]: ``(shrunk, reliability)`` where
@@ -63,7 +75,10 @@ def empirical_bayes_shrink(
     inv_n = 1.0 / n
     d2 = (x - mu) ** 2
     ok = np.isfinite(inv_n) & np.isfinite(d2)
-    if ok.sum() >= 2 and np.ptp(inv_n[ok]) > 0:
+    if sigma2 is not None and ok.any():
+        sigma2 = float(sigma2)
+        tau2 = max(float(np.mean(d2[ok] - sigma2 * inv_n[ok])), 1e-12)
+    elif ok.sum() >= 2 and np.ptp(inv_n[ok]) > 0:
         design = np.column_stack([np.ones(int(ok.sum())), inv_n[ok]])
         coef, *_ = np.linalg.lstsq(design, d2[ok], rcond=None)
         tau2 = max(float(coef[0]), 1e-12)
@@ -73,6 +88,53 @@ def empirical_bayes_shrink(
     reliability = tau2 / (tau2 + sigma2 * np.nan_to_num(inv_n, nan=np.inf))
     shrunk = mu + reliability * (np.nan_to_num(x, nan=mu) - mu)
     return shrunk, reliability
+
+
+def weekly_sigma2(
+    weekly: pl.DataFrame,
+    raw_col: str,
+    weight_col: str,
+    *,
+    key: str = "player_gsis_id",
+) -> Optional[float]:
+    """Pooled within-unit sampling variance from weekly rows.
+
+    For unit ``i`` in week ``w`` the model is ``x_iw ~ (theta_i,
+    sigma2 / n_iw)``; since ``theta_i`` is constant within a unit-season,
+    the weight-scaled squared deviations from the unit's weighted mean
+    identify ``sigma2`` directly: ``sigma2_hat = sum_i sum_w n_iw *
+    (x_iw - xbar_i)**2 / sum_i (W_i - 1)`` over units with 2+ weeks.
+    This is the preferred identification for
+    :func:`empirical_bayes_shrink` — the season-panel OLS fallback is
+    weakly identified when all units have similar ``n``.
+
+    Args:
+        weekly (pl.DataFrame): Weekly rows for ONE season (caller filters).
+        raw_col (str): Weekly per-trial average column (e.g.
+            ``rush_yards_over_expected_per_att``).
+        weight_col (str): Weekly trial count column (e.g. ``rush_attempts``).
+        key (str): Unit id column. Defaults to ``player_gsis_id``.
+
+    Returns:
+        Optional[float]: Pooled ``sigma2``, or ``None`` when the input has
+        no usable rows (caller should fall back to the OLS path).
+    """
+    if weekly.height == 0 or raw_col not in weekly.columns or weight_col not in weekly.columns:
+        return None
+    df = weekly.drop_nulls([raw_col, weight_col]).filter(pl.col(weight_col) > 0)
+    ss = 0.0
+    dof = 0
+    for (_unit,), grp in df.group_by(key):
+        if grp.height < 2:
+            continue
+        x = grp[raw_col].to_numpy().astype(float)
+        n = grp[weight_col].to_numpy().astype(float)
+        xbar = float(np.sum(n * x) / n.sum())
+        ss += float(np.sum(n * (x - xbar) ** 2))
+        dof += grp.height - 1
+    if dof <= 0:
+        return None
+    return ss / dof
 
 
 def expected_separation_ridge(

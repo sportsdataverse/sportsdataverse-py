@@ -75,3 +75,34 @@ def test_next_season_stability_too_few_rows_is_nan():
     cur = pl.DataFrame({"player_gsis_id": ["a", "b"], "v": [1.0, 2.0]})
     nxt = pl.DataFrame({"player_gsis_id": ["a"], "v2": [2.0]})
     assert np.isnan(next_season_stability(cur, nxt, "player_gsis_id", "v", "v2"))
+
+
+def test_shrink_with_known_sigma2_exact():
+    # d2 = [1, 1], sigma2/n = 0.5 -> tau2 = mean(1 - 0.5) = 0.5 -> rel = 0.5
+    x = np.array([2.0, 0.0])
+    n = np.array([10.0, 10.0])
+    shrunk, rel = empirical_bayes_shrink(x, n, prior_mean=1.0, sigma2=5.0)
+    assert np.allclose(rel, [0.5, 0.5])
+    assert np.allclose(shrunk, [1.5, 0.5])
+
+
+def test_weekly_sigma2_pooled_exact():
+    from sportsdataverse.nfl.nfl_ngs_constants import weekly_sigma2
+
+    weekly = pl.DataFrame(
+        {
+            "player_gsis_id": ["a", "a", "b", "b"],
+            "v": [1.0, 3.0, 0.0, 4.0],
+            "n": [1.0, 1.0, 3.0, 1.0],
+        }
+    )
+    # a: xbar=2, ss=2, dof=1; b: xbar=1, ss=3*1+1*9=12, dof=1 -> 14/2 = 7
+    assert abs(weekly_sigma2(weekly, "v", "n") - 7.0) < 1e-9
+
+
+def test_weekly_sigma2_unidentified_returns_none():
+    from sportsdataverse.nfl.nfl_ngs_constants import weekly_sigma2
+
+    single = pl.DataFrame({"player_gsis_id": ["a", "b"], "v": [1.0, 2.0], "n": [5.0, 5.0]})
+    assert weekly_sigma2(single, "v", "n") is None
+    assert weekly_sigma2(pl.DataFrame(), "v", "n") is None
