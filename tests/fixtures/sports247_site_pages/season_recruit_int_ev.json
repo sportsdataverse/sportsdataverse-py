@@ -1,0 +1,47 @@
+[
+  {
+    "Key": 401664,
+    "Institution": 24051,
+    "Recruitment": 152863,
+    "RecruitInterest": 842517,
+    "Type": "HardCommit",
+    "Date": "5/27/2024 7:03:00 PM",
+    "DefaultName": "401664"
+  },
+  {
+    "Key": 456277,
+    "Institution": 24051,
+    "Recruitment": 152863,
+    "RecruitInterest": 842517,
+    "Type": "OfficialVisit",
+    "Date": "6/12/2025 6:54:00 PM",
+    "DefaultName": "456277"
+  },
+  {
+    "Key": 481597,
+    "Institution": 24051,
+    "Recruitment": 152863,
+    "RecruitInterest": 842517,
+    "Type": "Signed",
+    "Date": "12/3/2025 3:31:00 PM",
+    "DefaultName": "481597"
+  },
+  {
+    "Key": 494627,
+    "Institution": 24051,
+    "Recruitment": 152863,
+    "RecruitInterest": 842517,
+    "Type": "Enrolled",
+    "Date": "1/15/2026 12:00:00 AM",
+    "DefaultName": "494627"
+  },
+  {
+    "Key": 439039,
+    "Institution": 24096,
+    "Recruitment": 152863,
+    "RecruitInterest": 962698,
+    "Type": "Offer",
+    "Date": "2/19/2025 9:09:00 PM",
+    "DefaultName": "439039"
+  }
+]

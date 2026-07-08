@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: nat_total_drafted
+  type: integer
+- description: ''
+  name: total_drafted
+  type: integer
+- description: ''
+  name: draft_rank
+  type: integer
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: overall_star_summary
+  type: character
+- description: ''
+  name: five_star_summary
+  type: character
+- description: ''
+  name: four_star_summary
+  type: character
+- description: ''
+  name: three_star_summary
+  type: character
+kind: dataframe
+schema: organizations_drafts_by_stars_summary

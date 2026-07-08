@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: state
+  type: character
+- description: ''
+  name: count
+  type: integer
+kind: dataframe
+schema: organizations_draft_class_by_state

@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: start_pso_key
+  type: integer
+- description: ''
+  name: latest_pso_key
+  type: integer
+- description: ''
+  name: start_year
+  type: integer
+- description: ''
+  name: latest_year
+  type: integer
+- description: ''
+  name: fired
+  type: logical
+- description: ''
+  name: promoted
+  type: logical
+- description: ''
+  name: resigned
+  type: logical
+- description: ''
+  name: end_of_team
+  type: logical
+- description: ''
+  name: deceased
+  type: logical
+- description: ''
+  name: is_present
+  type: logical
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: position
+  type: character
+kind: dataframe
+schema: coaches_history

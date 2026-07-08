@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: uid
+  type: character
+- description: ''
+  name: update_date
+  type: character
+- description: ''
+  name: title_text
+  type: character
+- description: ''
+  name: main_text
+  type: character
+- description: ''
+  name: redirection_url
+  type: character
+kind: dataframe
+schema: sports247_site_pages_feed

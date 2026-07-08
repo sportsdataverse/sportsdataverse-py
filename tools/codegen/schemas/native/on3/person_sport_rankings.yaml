@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: ratings
+  type: character
+- description: ''
+  name: person
+  type: character
+- description: ''
+  name: nil_value
+  type: integer
+kind: dataframe
+schema: person_sport_rankings

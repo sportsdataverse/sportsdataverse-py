@@ -1,0 +1,42 @@
+{
+  "players": [
+    {
+      "college": "Texas Tech Red Raiders",
+      "current_class": null,
+      "current_eligible_year": 2017,
+      "dob": "1995-09-17",
+      "draft": {
+        "round": 1,
+        "season": 2017,
+        "selection": 10,
+        "team": {
+          "abbreviation": "KC",
+          "city": "Kansas City",
+          "id": 16,
+          "nickname": "Chiefs",
+          "primary_color": "#e31837",
+          "secondary_color": "#ffb81c",
+          "slug": "kansas-city-chiefs"
+        },
+        "type": "AD"
+      },
+      "first_name": "Patrick",
+      "height": 602,
+      "id": 11765,
+      "jersey_number": "15",
+      "last_name": "Mahomes",
+      "position": "QB",
+      "speed": 4.8,
+      "team": {
+        "abbreviation": "KC",
+        "city": "Kansas City",
+        "id": 16,
+        "nickname": "Chiefs",
+        "primary_color": "#e31837",
+        "secondary_color": "#ffb81c",
+        "slug": "kansas-city-chiefs"
+      },
+      "weight": 225
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: connection
+  type: character
+- description: ''
+  name: connected_player
+  type: character
+- description: ''
+  name: connected_roster_rating
+  type: character
+- description: ''
+  name: connected_rating
+  type: character
+- description: ''
+  name: connected_college_organization
+  type: character
+- description: ''
+  name: connected_draft
+  type: character
+kind: dataframe
+schema: people_person_connections

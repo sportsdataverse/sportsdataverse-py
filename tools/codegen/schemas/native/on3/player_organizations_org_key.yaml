@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: organization
+  type: character
+- description: ''
+  name: rating
+  type: character
+- description: ''
+  name: position_abbr
+  type: character
+- description: ''
+  name: exp_min
+  type: integer
+- description: ''
+  name: exp_max
+  type: integer
+- description: ''
+  name: year
+  type: character
+- description: ''
+  name: age
+  type: integer
+kind: dataframe
+schema: player_organizations_org_key
