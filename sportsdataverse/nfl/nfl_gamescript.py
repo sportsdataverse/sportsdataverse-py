@@ -92,7 +92,7 @@ def team_game_pace(pbp: pl.DataFrame) -> pl.DataFrame:
     df = pbp.filter(
         pl.col("posteam").is_not_null()
         & pl.col("play_type").is_not_null()
-        & ~pl.col("play_type").is_in(_EXCLUDED_PLAY_TYPES)
+        & (pl.col("play_type").is_in(_EXCLUDED_PLAY_TYPES) == False)  # noqa: E712
     )
     if df.height == 0:
         return pl.DataFrame(schema=_PACE_SCHEMA)

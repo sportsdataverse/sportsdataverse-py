@@ -286,7 +286,7 @@ def nfl_line_grades(
     grades = _line_grades_from(adjust_pressure_pairs(pressure_pairs(pbp)))
     pfr = load_nfl_pfr_advstats(season_list, stat_type="def", summary_level="season")
     pfr_team = (
-        pfr.filter(~pl.col("tm").str.contains("TM"))
+        pfr.filter(pl.col("tm").str.contains("TM") == False)  # noqa: E712
         .group_by(pl.col("season").cast(pl.Int64), pl.col("tm").cast(pl.Utf8).alias("team"))
         .agg(pl.col("prss").sum().alias("pfr_pressures"))
     )

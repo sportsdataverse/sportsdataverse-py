@@ -115,7 +115,7 @@ def env_adjusted_make_prob(pbp: pl.DataFrame) -> pl.DataFrame:
     # long_kick corrects the nfl4th decision clamp's selection-bias over-shrink
     # on attempted 56+ yard kicks (see fit_env_fg_coef.py); .get keeps older /
     # test-injected coefficient tables working.
-    long_kick = (df["yardline_100"].to_numpy().astype(float) >= 38.0).astype(float)
+    long_kick = (df["yardline_100"].to_numpy().astype(float) >= coef.get("long_kick_yardline", 38.0)).astype(float)
     z = (
         logit(base)
         + coef.get("long_kick", 0.0) * long_kick

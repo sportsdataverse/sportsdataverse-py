@@ -91,14 +91,19 @@ def test_proe_reconciles_with_pass_oe(oracle_pbp):
 
 
 def test_expected_plays_mae_floor(oracle_pbp):
-    """Gate: team-season expected-plays MAE vs realized <= 2.5 plays/game.
+    """Gate: HELD-OUT 2023 team-season expected-plays MAE <= 2.0 plays/game.
 
-    Floor from the observed value at gate time (2.19 on the 2021-2023
-    fixture, PACE_CONSTANTS fit 2026-07-08); never raised to pass.
+    PACE_CONSTANTS are fit on the 2021-2022 fixture seasons only
+    (dev/nfl_scheme/fit_pace_constants.py), so 2023 is out-of-sample; the
+    market total_line path is exercised via the committed schedule fixture.
+    Floor from the observed value at gate time (1.77, 2026-07-08); never
+    raised to pass.
     """
     from sportsdataverse.nfl.nfl_gamescript import _game_script_from
     from sportsdataverse.nfl.nfl_scheme_constants import mae
 
-    gs = _game_script_from(oracle_pbp)
+    sched = pl.read_parquet(FIXTURES / "schedule_2021_2023.parquet")
+    gs = _game_script_from(oracle_pbp.filter(pl.col("season") == 2023), sched)
+    assert gs.height == 32
     got = mae(gs["exp_plays_pg"].to_numpy(), gs["off_plays_pg"].to_numpy())
-    assert got <= 2.5, f"expected-plays MAE {got}"
+    assert got <= 2.0, f"held-out expected-plays MAE {got}"

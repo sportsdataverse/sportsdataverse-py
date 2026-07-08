@@ -151,11 +151,15 @@ def test_unit_epa_sums_to_team_st_epa(oracle_pbp):
 
 
 def test_punter_noe_spearman_and_elite_unit(oracle_pbp):
-    """Gates: punter net_over_expected tracks realized net (Spearman >= 0.90);
-    a known-elite 2023 punt unit ranks top-quartile in punt-unit EPA.
+    """Gates: punter net_over_expected is a stable skill signal — season-to-season
+    rank stability (Spearman >= 0.35 per transition, punters with 20+ punts both
+    years) — and a known-elite 2023 punt unit ranks top-quartile in punt-unit EPA.
 
-    Observed at gate time (2026-07-08 fixture): Spearman 0.9746 across the 33
-    2023 punters with 20+ punts (floor 0.90 set from observed, never lowered).
+    Observed at gate time (2026-07-08 fixture): NOE year-over-year Spearman
+    0.6205 (2021->2022, n=26) and 0.5549 (2022->2023, n=26); floor 0.35 set
+    below observed, never raised to pass.  (A same-season NOE-vs-net_avg
+    correlation is near-tautological — NOE = net_avg - exp_net_avg with a
+    nearly constant exp_net_avg — so stability is the meaningful gate.)
     Elite-unit anchor: JAX — Logan Cooke, 2023 AP first-team All-Pro punter —
     observed punt-unit EPA rank 1 of 32; assert top-quartile (<= 8).
     """
@@ -164,13 +168,19 @@ def test_punter_noe_spearman_and_elite_unit(oracle_pbp):
 
     punt_data = _load_punt_data()
     assert punt_data is not None
-    d23 = oracle_pbp.filter(pl.col("season") == 2023)
-    pv = _punter_value_from(d23, punt_data).filter(pl.col("punts") >= 20)
-    assert pv.height >= 25
-    rho = spearman_corr(pv["net_over_expected"].to_numpy(), pv["net_avg"].to_numpy())
-    assert rho >= 0.90, f"punter NOE-vs-net Spearman {rho}"
+    pv = _punter_value_from(oracle_pbp, punt_data).filter(pl.col("punts") >= 20)
+    for year in (2021, 2022):
+        a = pv.filter(pl.col("season") == year).select("punter_player_id", "net_over_expected")
+        b = pv.filter(pl.col("season") == year + 1).select(
+            "punter_player_id", pl.col("net_over_expected").alias("noe_next")
+        )
+        assert a.schema["punter_player_id"] == b.schema["punter_player_id"]
+        j = a.join(b, on="punter_player_id", how="inner")
+        assert j.height >= 20
+        rho = spearman_corr(j["net_over_expected"].to_numpy(), j["noe_next"].to_numpy())
+        assert rho >= 0.35, f"punter NOE stability {year}->{year + 1} Spearman {rho}"
 
-    st = _special_teams_epa_from_pbp(d23)
+    st = _special_teams_epa_from_pbp(oracle_pbp.filter(pl.col("season") == 2023))
     punt_units = st.filter(pl.col("unit") == "punt").sort("epa", descending=True)
     rank = punt_units["team"].to_list().index("JAX") + 1
     assert rank <= 8, f"JAX punt unit rank {rank}"

@@ -36,6 +36,7 @@ def test_playcall_beats_shipped_xpass(oracle_pbp, oracle_participation):
     scored = nfl_play_call_probabilities(df, oracle_participation)
     assert isinstance(scored, pl.DataFrame)
     assert df.schema["play_id"] == scored.schema["play_id"]
+    assert df.schema["game_id"] == scored.schema["game_id"]
     j = df.join(scored.select("game_id", "play_id", "p_pass"), on=["game_id", "play_id"])
     j = j.filter(
         pl.col("xpass").is_not_null() & pl.col("p_pass").is_not_null() & ((pl.col("pass") == 1) | (pl.col("rush") == 1))
@@ -61,5 +62,6 @@ def test_playcall_family_top1_accuracy(oracle_pbp, oracle_participation):
     scored = nfl_play_call_probabilities(df, oracle_participation)
     feat = playcall_features(df, oracle_participation).select("game_id", "play_id", "family")
     j = scored.join(feat, on=["game_id", "play_id"])
+    assert j.height > 60000
     acc = (j["pred_family"] == j["family"]).mean()
     assert acc >= 0.50, f"family top-1 accuracy {acc}"

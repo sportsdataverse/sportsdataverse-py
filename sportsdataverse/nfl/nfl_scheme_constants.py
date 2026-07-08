@@ -213,29 +213,33 @@ STADIUM_ALTITUDE: Dict[str, float] = {
 #: Environment FG make-prob logit slopes, fitted by
 #: ``dev/nfl_scheme/fit_env_fg_coef.py`` (run 2026-07-08): logistic fit of
 #: made ~ offset(logit(base_make_prob)) + long_kick + wind + (temp-60) +
-#: altitude_kft on 2010-2023 attempts (n=14583, BFGS converged; wind hurts,
-#: warmth/altitude help).  ``long_kick`` (yardline_100 >= 38, the nfl4th 0.9
-#: decision-clamp boundary) corrects the clamp's selection-bias over-shrink
-#: on attempted 56+ yard kicks.
+#: altitude_kft on **2010-2018** attempts (n=9277, BFGS converged; wind
+#: hurts, warmth/altitude help), so the committed 2019-2023 fixture stays a
+#: held-out calibration oracle.  ``long_kick`` (yardline_100 >=
+#: ``long_kick_yardline`` = 38, the nfl4th 0.9 decision-clamp boundary)
+#: corrects the clamp's selection-bias over-shrink on attempted 56+ yard
+#: kicks.
 ENVIRONMENT_FG_COEF: Dict[str, float] = {
-    "long_kick": 0.325299,
-    "wind": -0.007021,
-    "temp": 0.002773,
-    "altitude_kft": 0.018805,
+    "long_kick": 0.5289668026388715,
+    "long_kick_yardline": 38.0,
+    "wind": -0.004379389467948603,
+    "temp": 0.0038511560058912134,
+    "altitude_kft": 0.0144462611511537,
     "temp_baseline": 60.0,
 }
 
 #: Expected-plays OLS coefficients (realized offensive plays per team-game ~
 #: [1, neutral_sec_per_play, opp_neutral_sec_per_play, total_line]).  Fitted by
-#: ``dev/nfl_scheme/fit_pace_constants.py`` on the committed 2021-2023 fixture
-#: (n=1708 team-games, fit MAE 6.56 plays; run 2026-07-08).
+#: ``dev/nfl_scheme/fit_pace_constants.py`` on the committed **2021-2022**
+#: fixture seasons only (n=1138 team-games, fit MAE 6.49 plays; run
+#: 2026-07-08) so the 2023 fixture season stays a held-out oracle.
 PACE_CONSTANTS: Dict[str, float] = {
-    "intercept": 85.09875718303789,
-    "b_pace": -0.056933557444005356,
-    "b_opp_pace": -0.6513146521982163,
-    "b_total": 0.1483926186149089,
+    "intercept": 82.16077593723342,
+    "b_pace": -0.08976988259325122,
+    "b_opp_pace": -0.6516476564315957,
+    "b_total": 0.2286917893104252,
     # fit-sample mean total_line (fill for games with no market total)
-    "total_mean": 44.62997658079625,
+    "total_mean": 45.383128295254835,
 }
 
 #: Empirical-Bayes shrinkage pseudo-counts, fitted by

@@ -26,7 +26,7 @@ def grades_2023() -> pl.DataFrame:
 def pfr_team_2023() -> pl.DataFrame:
     pfr = pl.read_parquet(FIXTURES / "pfr_advstats_2023.parquet")
     return (
-        pfr.filter(~pl.col("tm").str.contains("TM"))
+        pfr.filter(pl.col("tm").str.contains("TM") == False)  # noqa: E712
         .group_by(pl.col("tm").alias("team"))
         .agg(pl.col("prss").sum().alias("pfr_pressures"))
     )

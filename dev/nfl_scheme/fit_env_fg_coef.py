@@ -20,8 +20,9 @@ from sportsdataverse.nfl.nfl_fourth_down import fg_make_probability
 from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp
 from sportsdataverse.nfl.nfl_scheme_constants import STADIUM_ALTITUDE
 
-SEASONS = list(range(2010, 2024))
+SEASONS = list(range(2010, 2019))  # fit window; 2019-2023 fixture stays the held-out calibration oracle
 TEMP_BASELINE = 60.0
+LONG_KICK_YARDLINE = 38.0  # nfl4th 0.9 decision-clamp boundary; mirrored in ENVIRONMENT_FG_COEF
 
 
 def main() -> None:
@@ -46,7 +47,7 @@ def main() -> None:
     temp_raw = df["temp"].fill_null(TEMP_BASELINE).to_numpy().astype(float)
     temp = np.where(indoor, TEMP_BASELINE, temp_raw) - TEMP_BASELINE
     alt = df["home_team"].replace_strict(STADIUM_ALTITUDE, default=0.0, return_dtype=pl.Float64).to_numpy() / 1000.0
-    long_kick = (df["yardline_100"].to_numpy().astype(float) >= 38.0).astype(float)
+    long_kick = (df["yardline_100"].to_numpy().astype(float) >= LONG_KICK_YARDLINE).astype(float)
     w = np.column_stack([long_kick, wind, temp, alt])
 
     def nll(theta: np.ndarray) -> float:
@@ -59,6 +60,7 @@ def main() -> None:
     print(
         {
             "long_kick": float(res.x[0]),
+            "long_kick_yardline": LONG_KICK_YARDLINE,
             "wind": float(res.x[1]),
             "temp": float(res.x[2]),
             "altitude_kft": float(res.x[3]),
