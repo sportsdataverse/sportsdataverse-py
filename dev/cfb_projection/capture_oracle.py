@@ -85,7 +85,7 @@ def capture_recruits() -> None:
 
     page_size = 200
     frames: list[pl.DataFrame] = []
-    for season in range(2020, 2024):
+    for season in range(2014, 2024):
         page = 1
         while True:
             for attempt in range(4):
@@ -106,9 +106,48 @@ def capture_recruits() -> None:
             page += 1
             time.sleep(1.5)
     out = pl.concat(frames)
-    out.write_parquet(_FIX / "recruits_2020_2023.parquet")
+    out.write_parquet(_FIX / "recruits_2014_2023.parquet")
     per_season = out.group_by("season").len().sort("season")
-    print(f"recruits_2020_2023: {out.height} recruits; per-season: {per_season.to_dicts()}")
+    print(f"recruits_2014_2023: {out.height} recruits; per-season: {per_season.to_dicts()}")
+
+
+def capture_teams() -> None:
+    """Committed team-identity map (school/mascot/espn id/classification) for offline joins."""
+    from sportsdataverse.cfb.cfb_loaders import load_cfb_team_info
+
+    ti = load_cfb_team_info(2023)
+    assert isinstance(ti, pl.DataFrame)
+    out = ti.select(
+        pl.col("team_id").cast(pl.Int64).cast(pl.Utf8),
+        pl.col("school").cast(pl.Utf8),
+        pl.col("mascot").cast(pl.Utf8),
+        pl.col("classification").cast(pl.Utf8),
+    )
+    out.write_parquet(_FIX / "teams_2023.parquet")
+    print(f"teams_2023: {out.height} teams")
+
+
+def capture_draft() -> None:
+    """Committed NFL draft picks 2017-2024 with college names (Phase-5 labels)."""
+    from sportsdataverse.nfl import load_nfl_draft_picks
+
+    df = load_nfl_draft_picks()
+    assert isinstance(df, pl.DataFrame)
+    out = (
+        df.filter((pl.col("season") >= 2017) & (pl.col("season") <= 2024))
+        .select(
+            pl.col("season").cast(pl.Int64).alias("draft_year"),
+            pl.col("round").cast(pl.Int64),
+            pl.col("pick").cast(pl.Int64),
+            pl.col("pfr_player_name").cast(pl.Utf8).alias("player_name"),
+            pl.col("college").cast(pl.Utf8),
+            pl.col("cfb_player_id").cast(pl.Utf8),
+            pl.col("position").cast(pl.Utf8),
+        )
+        .sort("draft_year", "pick")
+    )
+    out.write_parquet(_FIX / "draft_2017_2024.parquet")
+    print(f"draft_2017_2024: {out.height} picks, {out['draft_year'].n_unique()} drafts")
 
 
 def capture_returning() -> None:
@@ -158,3 +197,7 @@ if __name__ == "__main__":
         capture_recruits()
     if only in (None, "returning"):
         capture_returning()
+    if only in (None, "teams"):
+        capture_teams()
+    if only in (None, "draft"):
+        capture_draft()

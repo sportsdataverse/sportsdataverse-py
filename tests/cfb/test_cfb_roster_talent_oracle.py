@@ -24,7 +24,7 @@ from sportsdataverse.cfb.cfb_projection_constants import spearman_corr
 from sportsdataverse.cfb.cfb_roster_talent import blue_chip_ratio, cfb_roster_talent
 
 _FIX = pathlib.Path(__file__).parent.parent / "fixtures" / "cfb_projection"
-_RECRUITS = _FIX / "recruits_2020_2023.parquet"
+_RECRUITS = _FIX / "recruits_2014_2023.parquet"
 _TALENT = _FIX / "talent_247_2023.parquet"
 
 pytestmark = pytest.mark.skipif(

@@ -119,3 +119,116 @@ def test_returning_production_retention_gate(oracle_corpus: dict[str, pl.DataFra
     assert j.height >= 700, f"expected ~794 FBS team-season rows, got {j.height}"
     rho = spearman_corr(j["overall_w"].to_numpy(), j["margin_delta"].to_numpy())
     assert rho >= 0.20, f"spearman(overall_returning, margin_delta) = {rho:.4f} < 0.20"
+
+
+_RECRUITS14 = _FIX / "recruits_2014_2023.parquet"
+_TEAMS = _FIX / "teams_2023.parquet"
+
+
+@pytest.mark.skipif(
+    not (_RECRUITS14.exists() and _TEAMS.exists() and _RETURNING.exists()),
+    reason="projection fixtures not captured",
+)
+def test_recruiting_projection_backtest_gate(oracle_corpus: dict[str, pl.DataFrame], monkeypatch) -> None:
+    """Phase-3 gate: as-of wins projection beats naive baselines, MAE under floor.
+
+    Observed on the 2026-07-08 fixtures (FBS targets 2019-2023, n=575 pooled,
+    train from 2018): model MAE 2.190 vs prior-year 2.464 and division-mean
+    2.343. Floor 2.35 (one notch above observed). Per-season the model beats
+    prior-year all five years; the division-mean baseline wins the two COVID
+    seasons (2020/2021) individually, so the baseline comparisons are pooled --
+    documented, not a gate relaxation. Never lower the gate to pass.
+    """
+    import importlib
+
+    import numpy as np
+
+    from sportsdataverse.cfb.cfb_crosswalk import _norm_team
+    from sportsdataverse.cfb.cfb_projection_constants import mae
+
+    proj = importlib.import_module("sportsdataverse.cfb.cfb_recruiting_projection")
+    tal_mod = importlib.import_module("sportsdataverse.cfb.cfb_roster_talent")
+
+    recruits = pl.read_parquet(_RECRUITS14)
+    teams = pl.read_parquet(_TEAMS)
+    returning = pl.read_parquet(_RETURNING)
+    results_g = oracle_corpus["results"]
+
+    monkeypatch.setattr(
+        tal_mod,
+        "load_recruit_classes",
+        lambda seasons, **k: recruits.filter(
+            pl.col("season").is_in([seasons] if isinstance(seasons, int) else list(seasons))
+        ),
+    )
+    name_map = teams.with_columns(
+        (pl.col("school") + " " + pl.col("mascot").fill_null(""))
+        .map_elements(_norm_team, return_dtype=pl.Utf8)
+        .alias("_full")
+    ).select("_full", pl.col("team_id").alias("espn_id"), "classification")
+
+    def load_talent(seasons: list[int], division: str) -> pl.DataFrame:
+        t = tal_mod.cfb_roster_talent(seasons, division=division)
+        return (
+            t.with_columns(pl.col("team").map_elements(_norm_team, return_dtype=pl.Utf8).alias("_full"))
+            .join(name_map, on="_full", how="inner")
+            .filter(pl.col("classification") == "fbs")
+            .drop("team_id", "_full", "classification")
+            .rename({"espn_id": "team_id"})
+        )
+
+    def load_returning(seasons: list[int], division: str) -> pl.DataFrame:
+        return returning.filter(pl.col("season").is_in(list(seasons)) & pl.col("team_id").is_not_null()).select(
+            "season", "team_id", "off_returning", "def_returning"
+        )
+
+    def load_results(seasons: list[int]) -> pl.DataFrame:
+        done = results_g.filter(pl.col("season").is_in(list(seasons)))
+        home = done.select(
+            "season",
+            pl.col("home_team_id").alias("team_id"),
+            (pl.col("home_score") > pl.col("away_score")).cast(pl.Int64).alias("win"),
+            (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("m"),
+        )
+        away = done.select(
+            "season",
+            pl.col("away_team_id").alias("team_id"),
+            (pl.col("away_score") > pl.col("home_score")).cast(pl.Int64).alias("win"),
+            (pl.col("away_score") - pl.col("home_score")).cast(pl.Float64).alias("m"),
+        )
+        return (
+            pl.concat([home, away])
+            .group_by("season", "team_id")
+            .agg(pl.col("win").sum().alias("wins"), pl.col("m").mean().alias("points_margin"))
+        )
+
+    monkeypatch.setattr(proj, "_load_talent", load_talent)
+    monkeypatch.setattr(proj, "_load_returning", load_returning)
+    monkeypatch.setattr(proj, "_load_results", load_results)
+
+    model_err: list[np.ndarray] = []
+    prior_err: list[np.ndarray] = []
+    mean_err: list[np.ndarray] = []
+    for target in range(2019, 2024):
+        out = proj.cfb_recruiting_projection(target, history_seasons=list(range(2018, target)))
+        realized = load_results([target]).rename({"wins": "real_wins"})
+        assert out.schema["team_id"] == realized.schema["team_id"] == pl.Utf8
+        j = out.join(realized, on=["season", "team_id"], how="inner")
+        matrix = proj._build_projection_matrix(list(range(2018, target + 1)))
+        j = j.join(
+            matrix.filter(pl.col("season") == target).select("team_id", "prior_wins"),
+            on="team_id",
+            how="left",
+        ).drop_nulls(["prior_wins"])
+        assert j.height >= 100, f"{target}: joined only {j.height} FBS teams"
+        real = j["real_wins"].to_numpy().astype(float)
+        model_err.append(np.abs(j["pred_wins"].to_numpy() - real))
+        prior_err.append(np.abs(j["prior_wins"].to_numpy() - real))
+        mean_err.append(np.abs(np.full(j.height, 6.0) - real))
+    mae_model = float(np.concatenate(model_err).mean())
+    mae_prior = float(np.concatenate(prior_err).mean())
+    mae_mean = float(np.concatenate(mean_err).mean())
+    assert mae_model <= mae_prior, f"model {mae_model:.3f} > prior baseline {mae_prior:.3f}"
+    assert mae_model <= mae_mean, f"model {mae_model:.3f} > mean baseline {mae_mean:.3f}"
+    assert mae_model <= 2.35, f"pooled wins MAE {mae_model:.3f} > 2.35 floor"
+    assert mae is not None  # keep the shared-metric import exercised

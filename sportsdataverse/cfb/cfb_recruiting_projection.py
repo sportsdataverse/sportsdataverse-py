@@ -126,7 +126,9 @@ def _build_projection_matrix(seasons: list[int], *, division: str = "fbs") -> pl
     """Feature + target matrix per (season, team_id); target columns null when unplayed."""
     talent = _load_talent(seasons, division)
     returning = _load_returning(seasons, division)
-    results = _load_results(seasons)
+    # min(seasons)-1 backs the earliest season's prior_wins lag — without it the
+    # earliest training season silently drops out of the fit (null prior_wins)
+    results = _load_results(sorted({*seasons, min(seasons) - 1}))
     if talent.height == 0:
         return pl.DataFrame(
             schema={
