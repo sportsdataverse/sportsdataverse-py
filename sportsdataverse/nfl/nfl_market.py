@@ -72,9 +72,12 @@ def predict_total(
 ) -> float:
     """Expected combined point total from the four efficiency components.
 
-    ``avg_total + total_scale * ((home_adj_off - away_adj_def) +
-    (away_adj_off - home_adj_def))`` -- each offense measured against the
-    defense it faces.
+    ``avg_total + total_scale * (home_adj_off + away_adj_def + away_adj_off +
+    home_adj_def)``. The four ratings are **summed** because each side's
+    scoring rises with its own offense and with the opponent's EPA-*allowed*
+    (``adj_def`` is lower = better defense) -- same semantics as the shipped
+    CFB analog. (The plan text wrote this with a minus; that sign flips a
+    good defense into raising the total, so the analog's sum is used.)
 
     Args:
         home_adj_off: Home ``adj_off_epa``.
@@ -93,5 +96,5 @@ def predict_total(
             predict_total(0.10, -0.02, 0.05, 0.01)
     """
     cfg = get_constants(era)
-    matchup_sum = (home_adj_off - away_adj_def) + (away_adj_off - home_adj_def)
+    matchup_sum = home_adj_off + away_adj_def + away_adj_off + home_adj_def
     return cfg.avg_total + cfg.total_scale * matchup_sum
