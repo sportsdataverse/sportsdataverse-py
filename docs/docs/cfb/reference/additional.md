@@ -618,6 +618,40 @@ import polars as pl
 osu = load_cfb_rosters_crosswalk().filter(pl.col("espn_team_id") == 194)
 ```
 
+### `load_recruit_classes(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#load_recruit_classes}
+
+Load recruiting classes as per-recruit rows from the 247 RDB feed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single recruiting-class year or a list of them. |
+| `division` | `str` | `'fbs'` | Division slug (reserved for constant lookups downstream; the feed itself is queried for all of college football). |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+One row per committed recruit: `season` (Int64), `team_id` (Utf8 — the 247 committed-team key), `team` (Utf8 full name — the downstream name-join key, since the 247 recruit-team key differs from the 247 talent-composite key), `recruit_id` (Utf8), `stars` (Int64), `grade` (Float64 247 composite rating), `position` (Utf8). Zero-row (typed) when no data is available.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Recruiting-class year the recruit signed in. |
+| `team_id` | character | 247Sports signed-institution team key as a string (falls back to the committed institution when unsigned). |
+| `team` | character | Signed-institution full name (falls back to committed) - the downstream name-join key. |
+| `recruit_id` | character | 247Sports recruit key as a string (integer-origin). |
+| `stars` | integer | 247 composite star rating (1-5; null for unrated recruits). |
+| `grade` | double | 247 composite rating on the 0-100 scale. |
+| `position` | character | Primary position abbreviation from the 247 recruit record. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_roster_talent import load_recruit_classes
+rec = load_recruit_classes([2022, 2023])
+rec.group_by("team").len().sort("len", descending=True).head()
+```
+
 ## Utilities & helpers
 
 ### `CFBPlayProcess(gameId=0, raw=False, path_to_json='/', return_keys=None, odds_override=None, game_roster=None, participants=None, join_participants=True, **kwargs)` {#CFBPlayProcess}
@@ -937,6 +971,43 @@ sched = load_cfb_schedule(seasons=[most_recent_cfb_season()])
 ```
 
 ## Other
+
+### `blue_chip_ratio(recruits: 'pl.DataFrame', *, window: 'int' = 4, division: 'str' = 'fbs') -> 'pl.DataFrame'` {#blue_chip_ratio}
+
+Blue-chip ratio per team-season over a trailing window of recruiting classes.
+
+Bud Elliott's blue-chip ratio: the share of a roster's recruits rated at or above
+the division's blue-chip star floor (4+ stars for FBS). Each recruiting class
+contributes to the `window` seasons it is roster-eligible for, so the season-S
+ratio aggregates classes S-window+1 .. S.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `recruits` | `DataFrame` |  | Per-recruit frame from `load_recruit_classes` (`season`, `team_id`, `recruit_id`, `stars`, ...). |
+| `window` | `int` | `4` | Number of trailing recruiting classes eligible per season. |
+| `division` | `str` | `'fbs'` | Division slug for `get_constants` (blue-chip star floor). |
+
+**Returns**
+
+Per `(season, team_id)`: `blue_chip_ratio` (Float64), `n_recruits` (Int64), `n_blue_chip` (Int64). Zero-row (typed) for empty input.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Roster season the trailing-window ratio describes (each class counts toward its eligible seasons). |
+| `team_id` | character | 247Sports committed/signed-institution team key as a string (integer-origin; not an ESPN id). |
+| `blue_chip_ratio` | double | Share of the trailing four signing classes rated 4+ stars (Bud Elliott's blue-chip ratio). |
+| `n_recruits` | integer | Total signees across the trailing recruiting-class window. |
+| `n_blue_chip` | integer | Signees at or above the division's blue-chip star floor across the window. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_roster_talent import blue_chip_ratio, load_recruit_classes
+bcr = blue_chip_ratio(load_recruit_classes([2020, 2021, 2022, 2023]))
+bcr.filter(pl.col("season") == 2023).sort("blue_chip_ratio", descending=True).head()
+```
 
 ### `cfb_adjusted_epa(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float' = 325.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_adjusted_epa}
 
@@ -1342,6 +1413,84 @@ One row per team: `season`, `team_id` (Utf8), `sos`, `sos_rank` (Int64 dense ran
 from sportsdataverse.cfb.cfb_resume import cfb_resume
 resume = cfb_resume(2023)
 resume.sort("sos_rank").head()
+```
+
+### `cfb_returning_production(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_returning_production}
+
+Returning production per team-season (offense / defense / overall).
+
+For each requested season S, computes the fraction of season S-1 unit
+production attributable to players on the season-S roster (Bill Connelly's
+returning-production concept; unit weights from `get_constants`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | Target season or list of seasons (production is drawn from S-1). |
+| `division` | `str` | `'fbs'` | Division slug for constants lookups. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Per `(season, team)`: `off_returning`, `def_returning`, `overall_returning` (Float64 fractions in [0, 1]), `n_returning` (Int64 count of returning contributors). `team` is the normalized team-name key (crosswalk `norm_key`). Zero-row (typed) when the hosted data is unavailable.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the returning fractions describe (production drawn from the prior season). |
+| `team` | character | Normalized school-name key (play-by-play team names are school-only; not an ESPN id). |
+| `off_returning` | double | Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster. |
+| `def_returning` | double | Fraction of prior-season defensive splash-event involvement (sacks, interceptions, pass breakups, forced fumbles) returning. |
+| `overall_returning` | double | Unit fractions combined with the fitted returning_prod_weights (offense-only per the 2018-2023 fit; see fit_returning_weights.py). |
+| `n_returning` | integer | Count of prior-season contributors present on the current roster. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_returning_production
+rp = cfb_returning_production(2023)
+rp.sort("overall_returning", descending=True).head(10)
+```
+
+### `cfb_roster_talent(seasons: 'int | list[int]', *, division: 'str' = 'fbs', composite_247: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_roster_talent}
+
+Team-talent composite per team-season (247 Team Talent Composite style).
+
+Talent is the class-recency-weighted sum of per-recruit star points over the
+trailing eligible recruiting classes (window = the length of the division's
+`class_recency_weights`). When a 247 team-talent snapshot is supplied via
+`composite_247`, its value overrides the derived composite for matched
+team-seasons (the derived value remains the fallback).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | Target season or list of seasons to rate. |
+| `division` | `str` | `'fbs'` | Division slug for `get_constants` (star points, weights). |
+| `composite_247` | `DataFrame \| None` | `None` | Optional frame with `season` (Int64), `team_id` (Utf8), `talent_247` (Float64). Join-key dtypes are asserted. |
+| `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Per `(season, team_id)`: `team` (Utf8), `talent_composite` (Float64), `talent_rank` (Int64 dense rank desc within season), `blue_chip_ratio` (Float64), `n_recruits` (Int64). Zero-row (typed) when no recruits load.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the talent composite describes (trailing eligible classes aggregated). |
+| `team_id` | character | 247Sports signed-institution team key as a string (integer-origin; joins to the recruit feed, not ESPN). |
+| `team` | character | 247Sports full team name - the cross-source name-join key (the recruit-feed and talent-feed id spaces differ). |
+| `talent_composite` | double | Class-recency-weighted sum of per-recruit star points (247 Team Talent Composite style); the 247 snapshot value when composite_247 is supplied. |
+| `talent_rank` | integer | Dense rank on talent_composite descending within season (best = 1). |
+| `blue_chip_ratio` | double | Share of the trailing four signing classes rated 4+ stars. |
+| `n_recruits` | integer | Total signees across the trailing recruiting-class window. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_roster_talent import cfb_roster_talent
+tal = cfb_roster_talent(2023)
+tal.sort("talent_rank").head(10)
 ```
 
 ### `cfb_rosters_crosswalk(espn_team_id: 'Union[int, str]', fox_team_id: 'Union[int, str]', *, season: 'Optional[int]' = None, providers: 'Optional[Sequence[str]]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'DataFrameT'` {#cfb_rosters_crosswalk}

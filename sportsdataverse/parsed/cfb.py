@@ -173,6 +173,7 @@ from sportsdataverse.cfb import yahoo_cfb_team_season_stats as _raw_yahoo_cfb_te
 from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy as _raw_yahoo_cfb_team_season_stats_legacy
 from sportsdataverse.cfb import yahoo_cfb_teams as _raw_yahoo_cfb_teams
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
+from sportsdataverse.cfb import blue_chip_ratio as blue_chip_ratio  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
 from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # noqa: F401
@@ -182,6 +183,8 @@ from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: 
 from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
 from sportsdataverse.cfb import cfb_ratings as cfb_ratings  # noqa: F401
 from sportsdataverse.cfb import cfb_resume as cfb_resume  # noqa: F401
+from sportsdataverse.cfb import cfb_returning_production as cfb_returning_production  # noqa: F401
+from sportsdataverse.cfb import cfb_roster_talent as cfb_roster_talent  # noqa: F401
 from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_season_odds as cfb_season_odds  # noqa: F401
@@ -217,6 +220,7 @@ from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: 
 from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import load_recruit_classes as load_recruit_classes  # noqa: F401
 from sportsdataverse.cfb import make_ratings_compute_results as make_ratings_compute_results  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
@@ -234,6 +238,7 @@ from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # 
 
 __all__ = [
     "CFBPlayProcess",
+    "blue_chip_ratio",
     "cfb_adjusted_epa",
     "cfb_adjusted_epa_by_game",
     "cfb_compute_results",
@@ -243,6 +248,8 @@ __all__ = [
     "cfb_predict_games",
     "cfb_ratings",
     "cfb_resume",
+    "cfb_returning_production",
+    "cfb_roster_talent",
     "cfb_rosters_crosswalk",
     "cfb_schedule_crosswalk",
     "cfb_season_odds",
@@ -405,6 +412,7 @@ __all__ = [
     "load_cfb_schedule_crosswalk",
     "load_cfb_team_info",
     "load_cfb_teams_crosswalk",
+    "load_recruit_classes",
     "make_ratings_compute_results",
     "most_recent_cfb_season",
     "normalize_team_roster_columns",

@@ -1,0 +1,21 @@
+schema: cfb_returning_production
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: off_returning
+  type: double
+  description: ''
+- name: def_returning
+  type: double
+  description: ''
+- name: overall_returning
+  type: double
+  description: ''
+- name: n_returning
+  type: integer
+  description: ''

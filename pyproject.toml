@@ -298,6 +298,8 @@ files = [
     "sportsdataverse/cfb/cfb_prediction_constants.py",
     "sportsdataverse/cfb/cfb_projection_constants.py",
     "sportsdataverse/cfb/cfb_ratings.py",
+    "sportsdataverse/cfb/cfb_returning_production.py",
+    "sportsdataverse/cfb/cfb_roster_talent.py",
     "sportsdataverse/cfb/cfb_resume.py",
     "sportsdataverse/cfb/cfb_season_odds.py",
     "sportsdataverse/cfb/cfb_simulations.py",
