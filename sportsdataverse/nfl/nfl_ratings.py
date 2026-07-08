@@ -243,3 +243,23 @@ def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None =
         .with_columns(pl.col("off_coef").fill_null(0.0).alias("adj_st_epa"))
         .select("team_id", "adj_st_epa")
     )
+
+
+def _add_ranks(df: pl.DataFrame) -> pl.DataFrame:
+    """Append dense ranks + a net z-score to a ratings frame.
+
+    Adds ``off_rank`` (dense on ``adj_off_epa`` descending), ``def_rank``
+    (dense on ``adj_def_epa`` **ascending** -- lower allowed EPA is better),
+    ``net_rank`` (dense on ``adj_net`` descending), and ``net_z`` (z-score of
+    ``adj_net``; 0.0 when the standard deviation is zero). Pure frame->frame.
+    """
+    out = df.with_columns(
+        off_rank=pl.col("adj_off_epa").rank(method="dense", descending=True).cast(pl.Int64),
+        def_rank=pl.col("adj_def_epa").rank(method="dense", descending=False).cast(pl.Int64),
+        net_rank=pl.col("adj_net").rank(method="dense", descending=True).cast(pl.Int64),
+    )
+    std_val = out["adj_net"].std()
+    if not std_val:
+        return out.with_columns(net_z=pl.lit(0.0).cast(pl.Float64))
+    mean_net = float(out["adj_net"].mean() or 0.0)
+    return out.with_columns(net_z=(pl.col("adj_net") - mean_net) / float(std_val))

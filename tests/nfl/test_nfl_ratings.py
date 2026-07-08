@@ -3,10 +3,30 @@
 import polars as pl
 
 from sportsdataverse.nfl.nfl_ratings import (
+    _add_ranks,
     efficiency_ratings,
     opponent_adjusted_ridge,
     special_teams_ratings,
 )
+
+
+def test_add_ranks_orders_and_flips_defense():
+    df = pl.DataFrame(
+        {
+            "team_id": ["A", "B", "C"],
+            "adj_off_epa": [0.20, 0.00, -0.10],
+            "adj_def_epa": [-0.10, 0.00, 0.15],  # A allows least -> best defense
+            "adj_net": [0.30, 0.00, -0.25],
+        }
+    )
+    out = _add_ranks(df)
+    assert out.filter(pl.col("team_id") == "A").row(0, named=True)["net_rank"] == 1
+    assert out.filter(pl.col("team_id") == "C").row(0, named=True)["net_rank"] == 3
+    # Lower allowed EPA is BETTER defense -> def_rank ascending on adj_def_epa.
+    assert out.filter(pl.col("team_id") == "A").row(0, named=True)["def_rank"] == 1
+    assert out.schema["off_rank"] == pl.Int64
+    assert out.schema["net_z"] == pl.Float64
+    assert abs(float(out["net_z"].mean())) < 1e-9
 
 
 def test_special_teams_ratings_strong_unit_positive_and_absent_zero():
