@@ -67,13 +67,16 @@ class PropConfig:
 
 
 NFL_CONSTANTS: Dict[str, PredictConfig] = {
-    # Seed values (published references); overwritten by dev/nfl_prediction/fit_pregame.py.
+    # Fitted by dev/nfl_prediction/fit_pregame.py on the 2023 as-of backtest
+    # (weeks 5-18, 208 games, committed fixtures): OLS margin ~ points_per_net
+    # * net_diff + hfa * (1 - neutral); margin_sd = residual std; OLS total ~
+    # avg_total + total_scale * matchup_sum.
     "modern": PredictConfig(
-        hfa=1.8,
-        margin_sd=13.5,
-        points_per_net=65.0,
-        avg_total=43.0,
-        total_scale=120.0,
+        hfa=3.1221,
+        margin_sd=13.0233,
+        points_per_net=23.3595,
+        avg_total=43.2027,
+        total_scale=4.6833,
     ),
 }
 
