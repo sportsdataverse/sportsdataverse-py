@@ -1,0 +1,24 @@
+schema: sports247_transfer_portal_team_feed
+kind: dataframe
+columns:
+- name: name
+  type: character
+  description: ''
+- name: key
+  type: integer
+  description: ''
+- name: logo
+  type: character
+  description: ''
+- name: alternate_logo
+  type: character
+  description: ''
+- name: position
+  type: integer
+  description: ''
+- name: number_of_transfers
+  type: integer
+  description: ''
+- name: transfer_points
+  type: double
+  description: ''

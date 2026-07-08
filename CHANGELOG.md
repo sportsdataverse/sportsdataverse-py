@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Recruiting — ESPN NCAA recruiting family + On3 rankings](#recruiting--espn-ncaa-recruiting-family--on3-rankings)
   - [MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)](#mbb--wbb--prediction--tournament-stack-ratings-%E2%86%92-pregame-%E2%86%92-in-game-wp-%E2%86%92-r%C3%A9sum%C3%A9-%E2%86%92-bracketology-%E2%86%92-monte-carlo)
   - [NBA — external concurrent validity + walk-forward retrodiction (WP3)](#nba--external-concurrent-validity--walk-forward-retrodiction-wp3)
   - [NBA — RAPM variants (WP2)](#nba--rapm-variants-wp2)
@@ -159,6 +160,42 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Recruiting — ESPN NCAA recruiting family + On3 rankings
+
+- feat(espn): Core v2 `recruiting` family — `espn_{league}_recruiting_years` /
+  `espn_{league}_recruiting_players` / `espn_{league}_recruiting_rankings` across the 7
+  NCAA-scope leagues (cfb, mbb, wbb, college baseball/softball, m/w college hockey).
+  `recruiting/{year}/athletes` ships inline athlete objects that flatten to a 33-column
+  recruit frame (identity, grades, recruiting class); all three shorts route through
+  `parse_items` via the `return_parsed` shim. Live-captured MBB fixtures + offline tests.
+- feat(cfb): On3 recruiting rankings stem (`on3_player_rankings`,
+  `on3_industry_player_rankings`, `on3_team_rankings`, `on3_industry_team_rankings`)
+  over on3.com's Next.js data routes — the only public JSON surface; industry =
+  On3/Rivals/247Sports/ESPN consensus, including NIL valuations and commitment /
+  transfer status. `on3_runtime._get` auto-discovers the rotating Next.js `buildId`
+  from the rankings page and refreshes it once on the stale-buildId 404 (an unchanged
+  buildId is treated as an authoritative miss). Returns-schemas `native/on3/*` with all
+  224 column descriptions authored; trimmed real-capture fixtures + offline runtime,
+  parser, and wiring tests.
+- feat(cfb): 247Sports Recruit Database stem (11 wrappers) over
+  `ipa.247sports.com/rdb/v1/` — `sports247_recruits` (individual recruit rankings:
+  247 + industry-composite ratings/stars/ranks, commit status), `sports247_transfers`
+  (transfer portal), `sports247_coaches`, `sports247_target_predictions` (expert
+  "crystal ball"), `sports247_institution_rankings` / `sports247_teams` /
+  `sports247_composite_team_ranking_feed` / `sports247_transfer_portal_team_feed` /
+  `sports247_transfer_portal_player_feed` / `sports247_sport_years` /
+  `sports247_tags_autocomplete`. One generic `parse_sports247_result_set` covers
+  every payload shape (bare array / `{players|results|rankings|list: [...]}` envelope
+  / scalar array / single object). The Fastly edge fingerprint-blocks plain
+  `requests`, so the runtime uses lazy-optional `curl_cffi` Chrome impersonation with
+  an injectable transport (the `nba_stats` pattern) and normalizes slash-less paths
+  (the RDB 301s them). Most routes need an `Authorization: Bearer` **guest JWT** —
+  `GET https://247sports.com/` mints one with no login (~12 h TTL); the runtime
+  mints/caches/refreshes it automatically (re-mints once on a 401/403). The ~14
+  remaining routes stay 403 even with the guest token (logged-in/premium) and are not
+  wrapped. Returns-schemas `native/sports247/*` with all 211 column descriptions
+  authored; real-capture fixtures + offline parser/runtime/wiring tests.
 
 ### MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)
 

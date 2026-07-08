@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # WCH — ESPN core API (v2)
 
-`sportsdataverse.wch` — 83 endpoints.
+`sportsdataverse.wch` — 86 endpoints.
 
 ## `espn_wch_league_root`
 
@@ -2167,6 +2167,81 @@ ESPN endpoint.
 
 ```python
 espn_wch_season_recruits(season=2024)
+```
+
+_Last validated n/a._
+
+## `espn_wch_recruiting_years`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_wch_recruiting_years()
+```
+
+_Last validated n/a._
+
+## `espn_wch_recruiting_players`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting/{year}/athletes`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting/2026/athletes](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting/2026/athletes)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_wch_recruiting_players(year=2026)
+```
+
+_Last validated n/a._
+
+## `espn_wch_recruiting_rankings`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting/{year}/rankings`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting/2026/rankings](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/recruiting/2026/rankings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_wch_recruiting_rankings(year=2026)
 ```
 
 _Last validated n/a._

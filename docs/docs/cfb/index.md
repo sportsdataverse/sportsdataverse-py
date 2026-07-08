@@ -8,7 +8,9 @@ sidebar_label: CFB
 |---|---:|---|
 | [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 85 | `https://sports.core.api.espn.com/v2/sports` |
+| [ESPN core API (v2)](reference/core) | 88 | `https://sports.core.api.espn.com/v2/sports` |
+| [On3 Recruiting (on3.com)](reference/on3) | 4 | `https://www.on3.com` |
+| [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 11 | `https://ipa.247sports.com` |
 | [Dataset loaders](reference/loaders) | 6 | sportsdataverse raw data / sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 46 | hand-written wrappers, loaders & helpers |
 

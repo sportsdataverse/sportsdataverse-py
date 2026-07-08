@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [ESPN universal-endpoint fixture payloads](#espn-universal-endpoint-fixture-payloads)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # ESPN universal-endpoint fixture payloads
 
 Captured 2026-05-23 from `site.api.espn.com` and `sports.core.api.espn.com`
@@ -12,6 +20,9 @@ against the NBA league. Used by `tests/test_espn_universal_parsers.py`.
 | `venues_core_nba.json`       | Core v2 `venues?limit=5`                       | 5 `$ref`-only items |
 | `events_core_nba.json`       | Core v2 `events?limit=3`                       | 1 `$ref` item (off-season) |
 | `athlete_statslog_lbj.json`  | Core v2 `athletes/1966/statisticslog`          | LeBron, 23 `entries` |
+| `recruiting_years_mbb.json`  | Core v2 MBB `recruiting` (captured 2026-07-07) | 23 `$ref`-only year items |
+| `recruiting_athletes_mbb_2026.json` | Core v2 MBB `recruiting/2026/athletes?limit=5` (captured 2026-07-07) | 5 INLINE athlete objects (not $ref-only) |
+| `recruiting_rankings_mbb_2026.json` | Core v2 MBB `recruiting/2026/rankings` (captured 2026-07-07) | 1 `$ref` ranking-set item ("ESPN Class Rankings") |
 | `summary_nba.json`           | Site v2 `summary?event=401585607`              | 2024 NBA Finals G5 BOS@DAL; ~700KB, 19 top-level sections |
 | `summary_mlb.json`           | Site v2 `summary?event=401701044`              | 2024 World Series G5 LAD@NYY; ~1.8MB, 22 top-level sections |
 | `summary_nfl.json`           | Site v2 `summary?event=401671889`              | Super Bowl LIX KC@PHI; ~950KB, 19 sections (uses drives.previous[]) |

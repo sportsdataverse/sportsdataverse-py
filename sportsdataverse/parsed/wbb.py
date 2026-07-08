@@ -84,6 +84,9 @@ from sportsdataverse.wbb import espn_wbb_players_index as _raw_espn_wbb_players_
 from sportsdataverse.wbb import espn_wbb_position as _raw_espn_wbb_position
 from sportsdataverse.wbb import espn_wbb_positions as _raw_espn_wbb_positions
 from sportsdataverse.wbb import espn_wbb_rankings as _raw_espn_wbb_rankings
+from sportsdataverse.wbb import espn_wbb_recruiting_players as _raw_espn_wbb_recruiting_players
+from sportsdataverse.wbb import espn_wbb_recruiting_rankings as _raw_espn_wbb_recruiting_rankings
+from sportsdataverse.wbb import espn_wbb_recruiting_years as _raw_espn_wbb_recruiting_years
 from sportsdataverse.wbb import espn_wbb_scoreboard as _raw_espn_wbb_scoreboard
 from sportsdataverse.wbb import espn_wbb_season_awards as _raw_espn_wbb_season_awards
 from sportsdataverse.wbb import espn_wbb_season_coaches as _raw_espn_wbb_season_coaches
@@ -657,6 +660,9 @@ __all__ = [
     "espn_wbb_position",
     "espn_wbb_positions",
     "espn_wbb_rankings",
+    "espn_wbb_recruiting_players",
+    "espn_wbb_recruiting_rankings",
+    "espn_wbb_recruiting_years",
     "espn_wbb_schedule",
     "espn_wbb_scoreboard",
     "espn_wbb_season_awards",
@@ -1732,6 +1738,48 @@ def espn_wbb_rankings(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wbb_rankings(*args, **kwargs)
+
+
+def espn_wbb_recruiting_players(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_recruiting_players``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_recruiting_players` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_recruiting_players` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_recruiting_players(*args, **kwargs)
+
+
+def espn_wbb_recruiting_rankings(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_recruiting_rankings``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_recruiting_rankings` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_recruiting_rankings` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_recruiting_rankings(*args, **kwargs)
+
+
+def espn_wbb_recruiting_years(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_recruiting_years``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_recruiting_years` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_recruiting_years` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_recruiting_years(*args, **kwargs)
 
 
 def espn_wbb_scoreboard(*args, **kwargs):

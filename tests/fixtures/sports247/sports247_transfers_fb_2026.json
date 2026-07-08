@@ -1,0 +1,196 @@
+{
+ "lastUpdated": "2026-06-24T05:00:00Z",
+ "pagination": {
+  "count": 8393,
+  "offset": 0,
+  "limit": 5,
+  "itemsPerPage": 5,
+  "currentPage": 1,
+  "pageCount": 1679
+ },
+ "players": [
+  {
+   "player": {
+    "key": 46168470,
+    "firstName": "Jordan",
+    "lastName": "Rogers",
+    "avatar": "https://s3media.247sports.com/Uploads/Assets/369/51/14051369.jpg",
+    "transferDate": "2026-06-24T05:00:00Z",
+    "transferRating": null,
+    "highSchoolRating": null,
+    "rating": null,
+    "starRating": null,
+    "transferRank": null,
+    "highSchoolRank": null,
+    "rank": null,
+    "rankTrend": null,
+    "institutionStatus": "HS",
+    "position": "S",
+    "positionKey": 25,
+    "eligibility": {
+     "type": "Immediate",
+     "years": null
+    },
+    "stateRank": null,
+    "status": "Committed",
+    "statusDate": "2026-06-24T05:00:00Z",
+    "transfer": {
+     "source": {
+      "institution": "Pittsburg State",
+      "institutionKey": 24424,
+      "logo": "https://s3media.247sports.com/Uploads/Assets/170/907/11907170.png",
+      "defaultAsset": "https://s3media.247sports.com/Uploads/Assets/170/907/11907170.png",
+      "alternateAsset": "https://s3media.247sports.com/Uploads/Assets/170/907/11907170.png",
+      "lightAsset": "https://s3media.247sports.com/Uploads/Assets/170/907/11907170.png",
+      "institutionRootPath": null
+     },
+     "destination": [
+      {
+       "percentage": 0,
+       "transferred": true,
+       "institution": "Texas Tech",
+       "institutionKey": 24030,
+       "logo": "https://s3media.247sports.com/Uploads/Assets/33/543/12543033.png",
+       "defaultAsset": "https://s3media.247sports.com/Uploads/Assets/33/543/12543033.png",
+       "alternateAsset": "https://s3media.247sports.com/Uploads/Assets/33/543/12543033.png",
+       "lightAsset": "https://s3media.247sports.com/Uploads/Assets/33/543/12543033.png",
+       "institutionRootPath": "https://247sports.com/college/texas-tech"
+      }
+     ]
+    },
+    "positionGroupKey": 7,
+    "positionGroupName": "Defensive Back",
+    "positionRank": null,
+    "lastUpdateDate": "2026-06-27T01:24:12Z",
+    "transferCommitDateTime": "2026-06-24T05:00:00Z",
+    "weight": 188,
+    "height": "5-10",
+    "playerProfileUrl": "https://247sports.com/player/jordan-rogers-46168470/college-361913",
+    "startDate": "2021-06-01T05:00:00Z",
+    "endDate": "2026-05-01T05:00:00Z"
+   }
+  },
+  {
+   "player": {
+    "key": 46114610,
+    "firstName": "Dean",
+    "lastName": "Miller",
+    "avatar": "https://s3media.247sports.com/Uploads/Assets/937/193/13193937.jpg",
+    "transferDate": "2026-06-22T11:59:00Z",
+    "transferRating": 0.86,
+    "highSchoolRating": 0.85,
+    "rating": 0.86,
+    "starRating": 3,
+    "transferRank": 938,
+    "highSchoolRank": 1423,
+    "rank": 938,
+    "rankTrend": 0,
+    "institutionStatus": "T",
+    "position": "Edge",
+    "positionKey": 60,
+    "eligibility": {
+     "type": "Immediate",
+     "years": 1
+    },
+    "stateRank": 13,
+    "status": "Committed",
+    "statusDate": "2026-06-22T11:59:00Z",
+    "transfer": {
+     "source": {
+      "institution": "Kansas",
+      "institutionKey": 24022,
+      "logo": "https://s3media.247sports.com/Uploads/Assets/993/542/12542993.png",
+      "defaultAsset": "https://s3media.247sports.com/Uploads/Assets/993/542/12542993.png",
+      "alternateAsset": "https://s3media.247sports.com/Uploads/Assets/993/542/12542993.png",
+      "lightAsset": "https://s3media.247sports.com/Uploads/Assets/993/542/12542993.png",
+      "institutionRootPath": "https://247sports.com/college/kansas"
+     },
+     "destination": [
+      {
+       "percentage": 0,
+       "transferred": true,
+       "institution": "UCF",
+       "institutionKey": 24060,
+       "logo": "https://s3media.247sports.com/Uploads/Assets/854/188/13188854.png",
+       "defaultAsset": "https://s3media.247sports.com/Uploads/Assets/854/188/13188854.png",
+       "alternateAsset": "https://s3media.247sports.com/Uploads/Assets/854/188/13188854.png",
+       "lightAsset": "https://s3media.247sports.com/Uploads/Assets/854/188/13188854.png",
+       "institutionRootPath": "https://247sports.com/college/central-florida"
+      }
+     ]
+    },
+    "positionGroupKey": 5,
+    "positionGroupName": "Defensive Line",
+    "positionRank": 102,
+    "lastUpdateDate": "2026-06-27T01:24:12Z",
+    "transferCommitDateTime": "2026-06-22T11:59:00Z",
+    "weight": 220,
+    "height": "6-5",
+    "playerProfileUrl": "https://247sports.com/player/dean-miller-46114610/college-283766",
+    "startDate": "2022-07-01T15:28:00Z",
+    "endDate": "2026-01-01T06:00:00Z"
+   }
+  },
+  {
+   "player": {
+    "key": 46168173,
+    "firstName": "TJ",
+    "lastName": "Laurent",
+    "avatar": "https://s3media.247sports.com/Uploads/Assets/865/21/14021865.jpg",
+    "transferDate": "2026-06-18T23:32:00Z",
+    "transferRating": null,
+    "highSchoolRating": null,
+    "rating": null,
+    "starRating": null,
+    "transferRank": null,
+    "highSchoolRank": null,
+    "rank": null,
+    "rankTrend": null,
+    "institutionStatus": "HS",
+    "position": "Edge",
+    "positionKey": 60,
+    "eligibility": {
+     "type": "Immediate",
+     "years": null
+    },
+    "stateRank": null,
+    "status": "Committed",
+    "statusDate": "2026-06-18T23:32:00Z",
+    "transfer": {
+     "source": {
+      "institution": "MidAmerica Nazarene",
+      "institutionKey": 24593,
+      "logo": "https://s3media.247sports.com/Uploads/Assets/389/41/14041389.png",
+      "defaultAsset": "https://s3media.247sports.com/Uploads/Assets/389/41/14041389.png",
+      "alternateAsset": "https://s3media.247sports.com/Uploads/Assets/389/41/14041389.png",
+      "lightAsset": "https://s3media.247sports.com/Uploads/Assets/389/41/14041389.png",
+      "institutionRootPath": null
+     },
+     "destination": [
+      {
+       "percentage": 0,
+       "transferred": true,
+       "institution": "UTSA",
+       "institutionKey": 24391,
+       "logo": "https://s3media.247sports.com/Uploads/Assets/324/544/12544324.png",
+       "defaultAsset": "https://s3media.247sports.com/Uploads/Assets/324/544/12544324.png",
+       "alternateAsset": "https://s3media.247sports.com/Uploads/Assets/324/544/12544324.png",
+       "lightAsset": "https://s3media.247sports.com/Uploads/Assets/324/544/12544324.png",
+       "institutionRootPath": "https://247sports.com/college/utsa"
+      }
+     ]
+    },
+    "positionGroupKey": 5,
+    "positionGroupName": "Defensive Line",
+    "positionRank": null,
+    "lastUpdateDate": "2026-06-27T01:24:12Z",
+    "transferCommitDateTime": "2026-06-18T23:32:00Z",
+    "weight": 260,
+    "height": "6-4",
+    "playerProfileUrl": "https://247sports.com/player/tj-laurent-46168173/college-361476",
+    "startDate": "2024-06-01T05:00:00Z",
+    "endDate": "2026-05-01T05:00:00Z"
+   }
+  }
+ ]
+}
