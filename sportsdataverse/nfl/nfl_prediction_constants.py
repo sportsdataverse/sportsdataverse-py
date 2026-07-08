@@ -56,14 +56,17 @@ class PropConfig:
     """Empirical-Bayes prop-projection constants (model 3), one row per era.
 
     ``shrink_*`` are the EB kappas per stat family; ``pos_priors`` maps
-    position -> stat -> league prior. Seeds are league per-game averages;
-    fitted values come from ``dev/nfl_prediction/fit_props.py``.
+    position -> stat -> league prior; ``proj_sds`` maps projected stat ->
+    residual standard deviation (used for ``p_over``). Seeds are league
+    per-game averages; fitted values come from
+    ``dev/nfl_prediction/fit_props.py``.
     """
 
     shrink_pass: float
     shrink_rush: float
     shrink_rec: float
     pos_priors: Dict[str, Dict[str, float]] = field(default_factory=dict)
+    proj_sds: Dict[str, float] = field(default_factory=dict)
 
 
 NFL_CONSTANTS: Dict[str, PredictConfig] = {
@@ -132,6 +135,7 @@ PROP_CONSTANTS: Dict[str, PropConfig] = {
                 "rec_td_rate": 0.05,
             },
         },
+        proj_sds={"passing_yards": 70.0, "rushing_yards": 30.0, "receiving_yards": 25.0},
     ),
 }
 

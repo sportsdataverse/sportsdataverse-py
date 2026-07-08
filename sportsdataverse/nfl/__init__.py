@@ -100,6 +100,7 @@ from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp, team_name_fn
 from sportsdataverse.nfl.nfl_fourth_down import *
 from sportsdataverse.nfl.nfl_market import *
 from sportsdataverse.nfl.nfl_pbp import *
+from sportsdataverse.nfl.nfl_player_props import *
 from sportsdataverse.nfl.nfl_player_stats import *
 from sportsdataverse.nfl.nfl_ratings import *
 from sportsdataverse.nfl.nfl_stats import (
