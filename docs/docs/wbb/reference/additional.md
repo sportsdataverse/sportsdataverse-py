@@ -540,6 +540,27 @@ frames_pd["Averages"].head()
 
 ## Dataset loaders
 
+### `load_artifact(name: 'str') -> 'dict'` {#load_artifact}
+
+Read a bundled player-value artifact (`mbb/models/<name>.json`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | Artifact stem, e.g. `"mbb_box_bpm"`. |
+
+**Returns**
+
+The parsed JSON dict.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_value_constants import load_artifact
+art = load_artifact("mbb_box_bpm")
+```
+
 ### `load_proxybonanza_pool(api_key: 'str', pkg: 'str', *, transport: 'Optional[PoolTransport]' = None) -> "'list[str]'"` {#load_proxybonanza_pool}
 
 Resolve a ProxyBonanza package into a list of `http://login:pass@ip:port` URLs.
@@ -1443,6 +1464,18 @@ Scala `PlayerTuple[Int] = Tuple5[Int, Int, Int, Int, Int]` alias.
 | `unast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Unassisted 3pt makes, per slot. |
 | `ast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Assisted 3pt makes, per slot. |
 
+### `PlayerValueConstants(pace_baseline: 'float', bubble_recruit_rank: 'int', bundle_prefix: 'str') -> None` {#PlayerValueConstants}
+
+Per-league constants for the player-value spine.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pace_baseline` | `float` |  | League baseline possessions per game (per-100 scaling). |
+| `bubble_recruit_rank` | `int` |  | National recruit rank of a "bubble" high-major rotation player (recruiting-model reference point). |
+| `bundle_prefix` | `str` |  | Artifact filename prefix under `mbb/models` (`"mbb"` / `"wbb"`). |
+
 ### `PossCalcFragment(shots_made_or_missed: 'int' = 0, liveball_orbs: 'int' = 0, actual_deadball_orbs: 'int' = 0, ft_events: 'int' = 0, ignored_and_ones: 'int' = 0, bad_fouls: 'int' = 0, offsetting_bad_fouls: 'int' = 0, turnovers: 'int' = 0) -> None` {#PossCalcFragment}
 
 Running stats needed to calculate possessions for one lineup event,
@@ -2116,6 +2149,39 @@ from sportsdataverse.mbb.mbb_team_ratings import adjust_tempo, raw_game_efficien
 tempo = adjust_tempo(raw_game_efficiency(sched, box))
 ```
 
+### `aggregate_player_seasons(seasons: "'list[int]'", *, league: 'str' = 'mens') -> 'pl.DataFrame'` {#aggregate_player_seasons}
+
+Canonical per-player-season counting frame from the boxscore release.
+
+Sums the per-game player boxscores into one row per (player_id, season,
+team_id) with the counting columns `player_per100_features` expects.
+Shot-location splits come from the shots release (2025+): free throws
+(`MadeFreeThrow`) are excluded, layup/dunk/tip = rim, and jump shots
+split three vs mid by `score_value` (the release's `type_text` carries
+no three-point marker; `score_value` is populated on misses too). For
+seasons without shots data, three-point attempts come from the box and
+all remaining attempts fold into `fga_mid`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list[int]` |  | Seasons to aggregate. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, minutes` + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_value_constants import (
+    aggregate_player_seasons, player_per100_features,
+)
+feats = player_per100_features(aggregate_player_seasons([2025]))
+```
+
 ### `alias_combos(first: 'str', last: 'str', to_name: 'str') -> 'dict[str, str]'` {#alias_combos}
 
 Pair each of `combos`' three name variants with a shared alias
@@ -2289,6 +2355,28 @@ from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
 prior = as_of_ratings_split(results, some_game_date)
 ```
 
+### `as_of_season_split(df: 'pl.DataFrame', target_season: 'int') -> 'pl.DataFrame'` {#as_of_season_split}
+
+Rows strictly before `target_season` -- the leakage boundary.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | Frame with an integer `season` column. |
+| `target_season` | `int` |  | The season being predicted; its rows (and later) drop. |
+
+**Returns**
+
+The subset with `season < target_season`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_value_constants import as_of_season_split
+prior = as_of_season_split(df, 2026)
+```
+
 ### `assign_to_right_lineup(state: 'PossState', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#assign_to_right_lineup}
 
 Assign a clump's possessions to the lineup(s) ending in it
@@ -2340,6 +2428,30 @@ The subset of `tags` that have `attr` set and whose value matches `regex`.
 from sportsdataverse.mbb.mbb_ncaa_html import attr_regex_filter, parse_html
 soup = parse_html('<div width="45%"></div><div width="10%"></div>')
 attr_regex_filter(soup.find_all("div"), "width", r"^\[?4?5")
+```
+
+### `bootstrap_ari(fit_fn: "'Callable[[np.ndarray], tuple[np.ndarray, np.ndarray]]'", X: 'np.ndarray', n_boot: 'int' = 20, seed: 'int' = 0) -> 'float'` {#bootstrap_ari}
+
+Cluster stability: mean ARI between the full fit and bootstrap refits.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fit_fn` | `Callable[[ndarray], tuple[ndarray, ndarray]]` |  | `X -> (centers, labels)` (e.g. a seeded `kmeans_fit` partial). |
+| `X` | `ndarray` |  | Feature matrix. |
+| `n_boot` | `int` | `20` | Bootstrap resamples. |
+| `seed` | `int` | `0` | RNG seed. |
+
+**Returns**
+
+Mean adjusted Rand index of the resample fits' assignments (of the FULL sample, via nearest refit center) vs the full-fit labels.
+
+**Example**
+
+```python
+from functools import partial
+score = bootstrap_ari(lambda Z: kmeans_fit(Z, 8, seed=0), Z, n_boot=20, seed=0)
 ```
 
 ### `box_aware_compare(candidate_in: 'str', box_name_in: 'str') -> 'MatchResult'` {#box_aware_compare}
@@ -5083,6 +5195,27 @@ game = {"off_3p_made": 4, "off_3p_attempts": 10}
 print(get_per_game_raw(game, "3p", "off"))  # 0.4
 ```
 
+### `get_player_value_constants(league: 'str') -> 'PlayerValueConstants'` {#get_player_value_constants}
+
+Return the `PlayerValueConstants` for a league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"mens"` or `"womens"`. |
+
+**Returns**
+
+The league's `PlayerValueConstants`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_value_constants import get_player_value_constants
+get_player_value_constants("mens").bundle_prefix
+```
+
 ### `get_sorted_pbp_events(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[list[PlayByPlayEvent], list[ParseError]]'` {#get_sorted_pbp_events}
 
 Handy util to return the play-by-play events in chronological order,
@@ -5705,6 +5838,30 @@ soup = parse_html("<td>\n  Akin,\tDaniel  </td>")
 jsoup_text(soup.find("td"))  # "Akin, Daniel"
 ```
 
+### `kmeans_fit(X: 'np.ndarray', k: 'int', seed: 'int', n_init: 'int' = 10, max_iter: 'int' = 100) -> "'tuple[np.ndarray, np.ndarray]'"` {#kmeans_fit}
+
+Seeded Lloyd's KMeans, best-of-`n_init` by inertia.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `ndarray` |  | Feature matrix `(n, d)` (standardize first). |
+| `k` | `int` |  | Number of clusters. |
+| `seed` | `int` |  | RNG seed (deterministic output). |
+| `n_init` | `int` | `10` | Independent restarts. |
+| `max_iter` | `int` | `100` | Lloyd iterations per restart. |
+
+**Returns**
+
+`(centers[k, d], labels[n])`.
+
+**Example**
+
+```python
+centers, labels = kmeans_fit(Z, k=8, seed=0)
+```
+
 ### `lineup_as_raw_clumps(lineup: 'LineupEvent') -> 'Iterator[ConcurrentClump]'` {#lineup_as_raw_clumps}
 
 Turn one lineup's raw events into unprocessed singleton clumps, plus a
@@ -5845,6 +6002,28 @@ The mean log loss (lower is better).
 import numpy as np
 from sportsdataverse.mbb.mbb_prediction_constants import log_loss_score
 log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
+```
+
+### `logistic_fit(X: 'np.ndarray', y: 'np.ndarray', lam: 'float' = 1.0) -> 'np.ndarray'` {#logistic_fit}
+
+L2-penalized logistic regression via L-BFGS (intercept unpenalized).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `ndarray` |  | Feature matrix `(n, d)`. |
+| `y` | `ndarray` |  | Binary outcomes (0/1). |
+| `lam` | `float` | `1.0` | L2 penalty on the non-intercept coefficients. |
+
+**Returns**
+
+Coefficient vector of length `d + 1` (intercept first).
+
+**Example**
+
+```python
+coef = logistic_fit(X, drafted, lam=1.0)
 ```
 
 ### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
@@ -6117,6 +6296,27 @@ off_results, def_results = pick_ridge_regression(
     off_weights, def_weights, ctx, None, False
 )
 print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
+```
+
+### `player_per100_features(season_stats: 'pl.DataFrame') -> 'pl.DataFrame'` {#player_per100_features}
+
+Per-100 / rate features for every (player_id, season).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season_stats` | `DataFrame` |  | One row per player-season with the canonical counting columns (`minutes, field_goals_made, field_goals_attempted, three_point_field_goals_made, free_throws_attempted, turnovers, points, fga_rim, fga_mid, fga_three, offensive_rebounds, defensive_rebounds, assists, blocks, steals`) -- built from the player-boxscore aggregation (see the Phase-0 fitters). |
+
+**Returns**
+
+One row per (player_id, season): ids as `Utf8` plus the 17 rate / per-100 features. Empty input returns the schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_value_constants import player_per100_features
+feats = player_per100_features(season_stats)
 ```
 
 ### `playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 30000, user_agent: 'Optional[str]' = None) -> "'_PlaywrightTransport'"` {#playwright_transport}
@@ -6439,6 +6639,53 @@ update_config(timeout=5)
 reset_config()
 ```
 
+### `ridge_cv_lambda(X: 'np.ndarray', y: 'np.ndarray', groups: 'np.ndarray', lams: "'list[float]'") -> 'float'` {#ridge_cv_lambda}
+
+Pick lambda by leave-one-group-out CV (groups = seasons/classes).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `ndarray` |  | Feature matrix. |
+| `y` | `ndarray` |  | Targets. |
+| `groups` | `ndarray` |  | Group label per row (e.g. season); each held out once. |
+| `lams` | `list[float]` |  | Candidate penalties. |
+
+**Returns**
+
+The candidate with the lowest mean held-out MSE.
+
+**Example**
+
+```python
+lam = ridge_cv_lambda(X, y, seasons, [0.1, 1, 10, 100])
+```
+
+### `ridge_fit(X: 'np.ndarray', y: 'np.ndarray', lam: 'float') -> 'np.ndarray'` {#ridge_fit}
+
+Closed-form ridge with an unpenalized intercept (coefficient 0).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `ndarray` |  | Feature matrix `(n, d)`. |
+| `y` | `ndarray` |  | Targets `(n,)`. |
+| `lam` | `float` |  | L2 penalty on the non-intercept coefficients. |
+
+**Returns**
+
+Coefficient vector of length `d + 1` (intercept first).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
+beta = ridge_fit(np.random.rand(50, 3), np.random.rand(50), lam=1.0)
+```
+
 ### `right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'` {#right_kind_of_shot}
 
 Whether `pbp_event`'s shot type is compatible with `shot`'s
@@ -6468,6 +6715,29 @@ agreement.
 ```python
 from sportsdataverse.mbb.mbb_ncaa_pbp_glue import right_kind_of_shot
 right_kind_of_shot(shot, pbp_event, strict=True)
+```
+
+### `roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'` {#roc_auc}
+
+Area under the ROC curve via the rank-sum (Mann-Whitney) identity.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Binary outcomes (0/1). |
+| `score` | `ndarray` |  | Predicted scores (any monotone scale). |
+
+**Returns**
+
+AUC in `[0, 1]`; `nan` when only one class is present.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
+roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
 ```
 
 ### `run_iterative_adjustment_with_hca(teams: 'Sequence[TeamDetail]', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', league_averages: 'LeagueAverages', poss_splits: 'dict[str, PossessionSplits]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'IterationResult'` {#run_iterative_adjustment_with_hca}
@@ -6523,6 +6793,23 @@ result = run_iterative_adjustment_with_hca(
     teams, by_name, STRENGTH_ADJUSTED_FIELDS, league, splits,
 )
 print(result.hca_per_field["3p"]["hca_off"])
+```
+
+### `save_artifact(name: 'str', obj: 'dict') -> 'None'` {#save_artifact}
+
+Write a bundled artifact (dev/fitter use -- writes into the source tree).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | Artifact stem, e.g. `"mbb_box_bpm"`. |
+| `obj` | `dict` |  | JSON-serializable artifact payload. |
+
+**Example**
+
+```python
+save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
 ```
 
 ### `score_to_tuple(s: 'str') -> 'tuple[int, int]'` {#score_to_tuple}
@@ -7009,6 +7296,30 @@ ordered fallback chain (`LineupErrorAnalysisUtils.tidy_player`,
 from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context, tidy_player
 ctx = build_tidy_player_context(box_lineup)
 resolved_name, ctx = tidy_player("MITCHELL,M", ctx)
+```
+
+### `transfer_cohort(rosters: 'pl.DataFrame') -> 'pl.DataFrame'` {#transfer_cohort}
+
+One row per transfer: same `player_id`, different `team_id` in
+
+consecutive seasons.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rosters` | `DataFrame` |  | Frame with `player_id`, `team_id`, `season` (extra columns ignored; one row per player-season-team). |
+
+**Returns**
+
+Utf8, from_team_id:Utf8, to_team_id:Utf8, from_season:Int64, to_season:Int64`` -- a player transferring twice appears twice.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import mbb_box_bpm, transfer_cohort
+bpm = mbb_box_bpm([2025, 2026]).filter(pl.col("min") >= 150)
+moves = transfer_cohort(bpm.select("player_id", "team_id", "season"))
 ```
 
 ### `transform_shot_location(x: 'float', y: 'float', second_half_switch: 'bool', team_shooting_left_in_first_period: 'bool', is_offensive: 'bool') -> 'tuple[float, float, float, float]'` {#transform_shot_location}
