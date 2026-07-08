@@ -25,12 +25,25 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import polars as pl
 import scipy.sparse as sp
 from scipy.sparse.linalg import cg
 from scipy.stats import rankdata
+
+__all__ = [
+    "ImpactConfig",
+    "LEAGUE_CONSTANTS",
+    "get_constants",
+    "booster_cache_dir",
+    "NHL_TEAM_FULLNAME_TO_ABBR",
+    "team_fullname_to_abbr",
+    "spearman_corr",
+    "calibration_table",
+    "weighted_ridge",
+]
 
 
 @dataclass(frozen=True)
@@ -278,7 +291,7 @@ def calibration_table(y_true: np.ndarray, p_pred: np.ndarray, n_bins: int = 10) 
     )
 
 
-def weighted_ridge(X, y: np.ndarray, w: np.ndarray, lam: float) -> np.ndarray:
+def weighted_ridge(X: Any, y: np.ndarray, w: np.ndarray, lam: float) -> np.ndarray:
     """Solve the weighted ridge normal equations ``(X'WX + lam*I)^-1 X'Wy``.
 
     Dense path (``numpy.linalg.solve``) for small/dense ``X``; conjugate-gradient

@@ -35,6 +35,19 @@ cbb-explorer  —  https://github.com/Alex-At-Home/cbb-explorer
   from sportsdataverse/wbb/wbb_ncaa_*.py.
 
 -------------------------------------------------------------------------------
+fastRhockey  —  https://fastRhockey.sportsdataverse.org
+  Copyright (c) SportsDataverse and contributors. Licensed under Apache-2.0.
+
+  The NHL expected-goals (xG) feature-preparation + booster-scoring pipeline
+  (``helper_nhl_prepare_xg_data`` / ``helper_nhl_calculate_xg``) was ported into
+  sportsdataverse/nhl/nhl_xg.py, reusing the published ``nhl_xg_models``
+  boosters verbatim (no retrain). The player-impact spine's RAPM / GSAx /
+  GAR-WAR modules (nhl_rapm.py, nhl_gsax.py, nhl_unit_ratings.py,
+  nhl_special_teams.py, nhl_war.py) follow published methodology
+  (EvolvingHockey, MoneyPuck) rather than ported source code and carry no
+  license obligation beyond the docstring citations.
+
+-------------------------------------------------------------------------------
 Each port is a faithful translation of the upstream logic; documented
 divergences are noted in the respective module docstrings. Test-only oracle
 fixtures vendored byte-exact from the upstream repositories live under
