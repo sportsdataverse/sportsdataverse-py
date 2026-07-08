@@ -134,7 +134,7 @@ def test_get_discovers_build_id_and_hits_data_route(on3_runtime, monkeypatch):
         return _Resp(text='"buildId":"bid-one"')
 
     monkeypatch.setattr(on3_runtime, "download", fake_download)
-    out = on3_runtime._get("https://www.on3.com/rivals/rankings/player/football/2026.json", params={"page": 2})
+    out = on3_runtime._scrape_get("https://www.on3.com/rivals/rankings/player/football/2026.json", params={"page": 2})
     assert out == {"pageProps": {"ok": True}}
     page_call, data_call = calls
     assert page_call[0] == "https://www.on3.com/db/rankings/player/football/2026/"
@@ -160,7 +160,7 @@ def test_get_refreshes_build_id_after_deploy_rotation(on3_runtime, monkeypatch):
         return _Resp(text='"buildId":"fresh-bid"')
 
     monkeypatch.setattr(on3_runtime, "download", fake_download)
-    out = on3_runtime._get("https://www.on3.com/rivals/rankings/team/football/2026.json")
+    out = on3_runtime._scrape_get("https://www.on3.com/rivals/rankings/team/football/2026.json")
     assert out == {"pageProps": {"fresh": True}}
     assert on3_runtime._build_id == "fresh-bid"
     assert state["page_fetches"] == 1
@@ -182,7 +182,7 @@ def test_get_treats_unchanged_build_id_404_as_no_data(on3_runtime, monkeypatch):
         return _Resp(text='"buildId":"same-bid"')
 
     monkeypatch.setattr(on3_runtime, "download", fake_download)
-    assert on3_runtime._get("https://www.on3.com/rivals/rankings/player/football/2031.json") == {}
+    assert on3_runtime._scrape_get("https://www.on3.com/rivals/rankings/player/football/2031.json") == {}
     assert calls == {"data": 1, "page": 1}
 
 
@@ -197,7 +197,7 @@ def test_get_merges_caller_headers_and_derived_params_win(on3_runtime, monkeypat
         return _Resp(text='"buildId":"b1"')
 
     monkeypatch.setattr(on3_runtime, "download", fake_download)
-    on3_runtime._get(
+    on3_runtime._scrape_get(
         "https://www.on3.com/rivals/rankings/player/football/2026.json",
         params={"rankingType": "team", "page": 3},
         headers={"X-Test": "1"},
@@ -210,7 +210,7 @@ def test_get_merges_caller_headers_and_derived_params_win(on3_runtime, monkeypat
 
 
 def test_get_returns_empty_dict_on_unknown_path(on3_runtime):
-    assert on3_runtime._get("https://www.on3.com/some/other/route.json") == {}
+    assert on3_runtime._scrape_get("https://www.on3.com/some/other/route.json") == {}
 
 
 # ===========================================================================
