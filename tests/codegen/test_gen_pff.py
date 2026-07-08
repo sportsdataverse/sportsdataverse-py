@@ -47,6 +47,15 @@ def test_gen_pff_emits_yaml_and_schemas():
     assert (ROOT / "tools/codegen/schemas/native/pff/passing_summary.yaml").exists()
 
 
+def test_pff_registered_in_flat_apis():
+    import tools.codegen.extract_residual_columns as x
+    import tools.codegen.generate as g
+
+    assert ("pff", "nfl") in g.FLAT_APIS
+    assert "premium.pff.com" in g._FLAT_API_DOC["pff"]
+    assert "native/pff" in x._DEFERRED_BUCKETS
+
+
 def test_gen_pff_idempotent():
     subprocess.run([sys.executable, "tools/codegen/gen_pff.py"], cwd=ROOT, check=True)
     first = (ROOT / "tools/codegen/endpoints/pff.yaml").read_text(encoding="utf-8")

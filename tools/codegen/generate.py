@@ -1468,6 +1468,7 @@ FLAT_APIS = [
     ("wnba_stats", "wnba"),
     ("on3", "cfb"),
     ("sports247", "cfb"),
+    ("pff", "nfl"),
 ]
 
 
@@ -1959,6 +1960,10 @@ _FLAT_API_DOC = {
     "wnba_stats": "WNBA Stats API (stats.wnba.com)",
     "on3": "On3 Recruiting (on3.com)",
     "sports247": "247Sports Recruit Database (ipa.247sports.com)",
+    # keyed twice: "pff" matches the FLAT_APIS stem; "pff_core" matches the rendered
+    # module name the docs renderer looks up (api.module).
+    "pff": "PFF Premium Stats (premium.pff.com)",
+    "pff_core": "PFF Premium Stats (premium.pff.com)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
