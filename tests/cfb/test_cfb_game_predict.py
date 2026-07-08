@@ -24,13 +24,14 @@ _C = get_constants("modern")
 
 
 def _ratings_frame() -> pl.DataFrame:
-    """Three teams with hand-picked adjusted ratings (team_id as Utf8)."""
+    """Three teams with hand-picked adjusted ratings + pace (team_id as Utf8)."""
     return pl.DataFrame(
         {
             "team_id": ["1", "2", "3"],
             "adj_net": [0.30, 0.10, -0.20],
             "adj_off_epa": [0.20, 0.05, -0.10],
             "adj_def_epa": [-0.10, 0.00, 0.15],
+            "off_pace": [70.0, 66.0, 60.0],
         }
     )
 
@@ -53,8 +54,8 @@ def test_predict_margin_neutral_carries_no_hfa() -> None:
 
 
 def test_predict_margin_home_adds_hfa() -> None:
-    """A home game adds the era HFA to the scaled rating differential."""
-    expected = _C.net_points_scale * (0.30 - 0.10) + _C.hfa
+    """A home game adds the ridge-native HFA (net += 2*hfa_epa) inside the scale."""
+    expected = _C.net_points_scale * ((0.30 - 0.10) + 2.0 * _C.hfa_epa)
     assert predict_margin(0.30, 0.10, neutral=False) == expected
 
 
@@ -65,10 +66,11 @@ def test_win_prob_equal_strength_neutral_is_half() -> None:
 
 
 def test_win_prob_symmetric_home_beats_half() -> None:
-    """Equal teams, home field -> win prob = Phi(hfa/sigma) > 0.5."""
+    """Equal teams, home field -> win prob = Phi(net_scale*2*hfa_epa / sigma) > 0.5."""
     m = predict_margin(0.20, 0.20, neutral=False)
     p = win_prob_from_margin(m)
-    assert p == float(norm.cdf(_C.hfa / _C.margin_sd))
+    hfa_pts = _C.net_points_scale * 2.0 * _C.hfa_epa
+    assert p == float(norm.cdf(hfa_pts / _C.margin_sd))
     assert p > 0.5
 
 
@@ -84,16 +86,23 @@ def test_predict_total_offense_beats_defense() -> None:
     ``adj_def_epa`` (fewer EPA allowed). The offensive matchup must yield a
     larger expected total than the defensive one.
     """
-    off_heavy = predict_total(0.30, 0.05, 0.30, 0.05)  # both offenses elite, defenses meh
-    def_heavy = predict_total(-0.05, -0.30, -0.05, -0.30)  # both defenses elite, offenses meh
+    off_heavy = predict_total(0.30, 0.05, 0.30, 0.05, game_pace=66.0)  # offenses elite
+    def_heavy = predict_total(-0.05, -0.30, -0.05, -0.30, game_pace=66.0)  # defenses elite
     assert off_heavy > def_heavy
 
 
 def test_predict_total_is_finite_and_positive() -> None:
     """A league-average matchup produces a sane, positive total."""
-    t = predict_total(0.0, 0.0, 0.0, 0.0)
+    t = predict_total(0.0, 0.0, 0.0, 0.0, game_pace=66.0)
     assert math.isfinite(t)
     assert t > 0.0
+
+
+def test_predict_total_rises_with_pace() -> None:
+    """A faster game (more expected plays) yields a higher total, ratings equal."""
+    slow = predict_total(0.1, 0.0, 0.1, 0.0, game_pace=55.0)
+    fast = predict_total(0.1, 0.0, 0.1, 0.0, game_pace=80.0)
+    assert fast > slow
 
 
 def test_cfb_predict_games_matches_scalars() -> None:
@@ -114,11 +123,15 @@ def test_cfb_predict_games_matches_scalars() -> None:
     assert out.height == 3
 
     by_team = {r["team_id"]: r for r in ratings.iter_rows(named=True)}
+    league_avg = ratings["off_pace"].mean()  # cfb_predict_games derives the pace factor from this
     for row in out.iter_rows(named=True):
         h, a = by_team[row["home_team_id"]], by_team[row["away_team_id"]]
         neutral = row["neutral_site"]
+        game_pace = h["off_pace"] * a["off_pace"] / league_avg
         exp_m = predict_margin(h["adj_net"], a["adj_net"], neutral=neutral)
-        exp_t = predict_total(h["adj_off_epa"], h["adj_def_epa"], a["adj_off_epa"], a["adj_def_epa"])
+        exp_t = predict_total(
+            h["adj_off_epa"], h["adj_def_epa"], a["adj_off_epa"], a["adj_def_epa"], game_pace=game_pace
+        )
         assert row["exp_margin"] == pytest.approx(exp_m)
         assert row["home_win_prob"] == pytest.approx(win_prob_from_margin(exp_m))
         assert row["exp_total"] == pytest.approx(exp_t)

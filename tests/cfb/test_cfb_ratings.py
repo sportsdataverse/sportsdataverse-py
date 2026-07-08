@@ -29,7 +29,7 @@ from sportsdataverse.cfb.cfb_ratings import cfb_ratings, efficiency_ratings, fei
 
 _cfb_ratings_mod = sys.modules["sportsdataverse.cfb.cfb_ratings"]
 
-_EXPECTED_COLUMNS = {"team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games"}
+_EXPECTED_COLUMNS = {"team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games", "off_pace"}
 _FEI_EXPECTED_COLUMNS = {"team_id", "fei_off", "fei_def", "fei_net"}
 
 # Real per-column dtypes for the 10 `cfb_adjusted_epa._REQUIRED_COLUMNS`.
@@ -119,6 +119,7 @@ def test_efficiency_ratings_empty_input_returns_documented_schema() -> None:
         "adj_def_epa": pl.Float64,
         "adj_net": pl.Float64,
         "games": pl.Int64,
+        "off_pace": pl.Float64,
     }
 
 
@@ -386,6 +387,7 @@ _RATINGS_COLUMNS = [
     "fei_def",
     "fei_net",
     "games",
+    "off_pace",
     "off_rank",
     "def_rank",
     "net_rank",
@@ -403,6 +405,7 @@ _RATINGS_SCHEMA: dict[str, pl.PolarsDataType] = {
     "fei_def": pl.Float64,
     "fei_net": pl.Float64,
     "games": pl.Int64,
+    "off_pace": pl.Float64,
     "off_rank": pl.Int64,
     "def_rank": pl.Int64,
     "net_rank": pl.Int64,

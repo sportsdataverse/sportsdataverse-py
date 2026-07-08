@@ -46,6 +46,7 @@ _OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "adj_def_epa": pl.Float64,
     "adj_net": pl.Float64,
     "games": pl.Int64,
+    "off_pace": pl.Float64,
 }
 
 _ST_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
@@ -73,6 +74,7 @@ _RATINGS_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "fei_def": pl.Float64,
     "fei_net": pl.Float64,
     "games": pl.Int64,
+    "off_pace": pl.Float64,
     "off_rank": pl.Int64,
     "def_rank": pl.Int64,
     "net_rank": pl.Int64,
@@ -115,8 +117,9 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
     Returns:
         A ``polars.DataFrame`` with one row per ``team_id``: ``team_id``
         (Utf8), ``adj_off_epa`` / ``adj_def_epa`` / ``adj_net`` (Float64),
-        ``games`` (Int64). Empty (zero-row, correctly-typed) when ``plays``
-        has no competitive plays.
+        ``games`` (Int64), ``off_pace`` (Float64 -- scrimmage plays per game,
+        the tempo input the totals model consumes). Empty (zero-row,
+        correctly-typed) when ``plays`` has no competitive plays.
 
     Raises:
         KeyError: If ``plays`` is missing a required column.
@@ -146,9 +149,17 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
 
     offense, defense, intercept = _fit_opponent_ridge(clean, cfg.ridge_lambda)
 
+    # `off_pace` = scrimmage plays per game (the pace/tempo the totals model uses):
+    # `base` is already filtered to pass|rush plays by `_prepare`, so play count / games
+    # is the offensive tempo. Computed on all teams (the ridge's reference team included).
     games = (
         base.group_by("pos_team_id")
-        .agg(pl.col("game_id").n_unique().cast(pl.Int64).alias("games"))
+        .agg(
+            pl.col("game_id").n_unique().cast(pl.Int64).alias("games"),
+            pl.len().alias("_plays"),
+        )
+        .with_columns(off_pace=(pl.col("_plays") / pl.col("games")).cast(pl.Float64))
+        .drop("_plays")
         .rename({"pos_team_id": "team_id"})
     )
     assert games.schema["team_id"] == pl.Utf8
@@ -162,9 +173,10 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
             pl.col("adj_off_epa").fill_null(intercept),
             pl.col("adj_def_epa").fill_null(intercept),
             pl.col("games").fill_null(0),
+            pl.col("off_pace").fill_null(0.0),
         )
         .with_columns(adj_net=pl.col("adj_off_epa") - pl.col("adj_def_epa"))
-        .select("team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games")
+        .select("team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games", "off_pace")
     )
     return out
 
@@ -409,7 +421,9 @@ def cfb_ratings(
         :func:`special_teams_ratings`), ``adj_net`` (Float64 -- offense minus
         defense only; special teams is a separate column, not folded in),
         ``fei_off``, ``fei_def``, ``fei_net`` (Float64, from
-        :func:`fei_ratings`), ``games`` (Int64), ``off_rank`` (Int64, dense
+        :func:`fei_ratings`), ``games`` (Int64), ``off_pace`` (Float64 --
+        scrimmage plays per game, the tempo input the totals model uses),
+        ``off_rank`` (Int64, dense
         rank on ``adj_off_epa`` descending), ``def_rank`` (Int64, dense rank
         on ``adj_def_epa`` **ascending** -- fewer EPA allowed ranks better),
         ``net_rank`` (Int64, dense rank on ``adj_net`` descending), ``net_z``
@@ -509,6 +523,7 @@ def cfb_ratings(
         "fei_def",
         "fei_net",
         "games",
+        "off_pace",
         "off_rank",
         "def_rank",
         "net_rank",

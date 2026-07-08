@@ -3,18 +3,19 @@
 **Scope -- read this before treating the numbers as a generalization claim.**
 The *ratings* are leakage-free: each game's prediction uses ratings fit on plays
 from *strictly prior* weeks (``week < game_week``), never the game's own week or
-later. But the five ``CFB_CONSTANTS["modern"]`` coefficients (``net_points_scale``,
-``hfa``, ``margin_sd``, ``total_intercept``, ``total_scale``) are OLS-fit on the
-*same* 2023 games this gate then scores, so the reported metrics are **in-sample**.
+later. The ``CFB_CONSTANTS["modern"]`` coefficients (``net_points_scale``,
+``margin_sd``, ``total_intercept``, ``total_scale``, ``total_pace_scale`` OLS-fit;
+``hfa_epa`` the ratings ridge's own home coefficient) come from the *same* 2023
+games this gate then scores, so the reported metrics are **in-sample**.
 This is a coarse regression guard (did a change break the model?), not an
-out-of-sample validation. It is defensible for a closed-form 5-DOF model, and the
+out-of-sample validation. It is defensible for a closed-form low-DOF model, and the
 spread/total gates additionally measure distance to an *independent* oracle (the
 closing market line, not the OLS's own fit target) -- but a real generalization
 check needs a 2024 holdout (documented follow-up, not yet captured).
 
 Floors are the values observed at gate time by
-``dev/cfb_prediction/fit_pregame.py`` (Brier 0.147 vs FPI 0.144; spread MAE 4.51;
-total MAE 5.14), set just loose enough to guard against regression per the
+``dev/cfb_prediction/fit_pregame.py`` (Brier 0.152 vs FPI 0.144; spread MAE 4.06
+with the ridge-native HFA; pace-aware total MAE 4.81), set just loose enough to guard against regression per the
 binding "never lower a gate to make it pass -- debug the model" rule. This test
 does ~10 week-by-week ridge fits, so it runs ~15-20s -- it is a phase gate, not a
 unit test, but it is fully offline (committed fixtures, no network).
@@ -38,8 +39,8 @@ _ODDS = pl.read_parquet(_FIX / "espn_odds_sample.parquet")
 
 _BURN_IN_WEEK = 5  # weeks 1-4 are the as-of burn-in (ratings too thin)
 _MIN_GAMES = 25  # match-rate floor: sample must retain enough games to be meaningful
-_SPREAD_FLOOR = 5.0  # observed 4.51 vs the closing line
-_TOTAL_FLOOR = 6.0  # observed 5.14 vs the closing total
+_SPREAD_FLOOR = 4.25  # observed 4.06 vs the closing line (ridge-native HFA)
+_TOTAL_FLOOR = 5.25  # observed 4.81 vs the closing total (pace-aware totals model)
 
 
 def _asof_predictions() -> pl.DataFrame:

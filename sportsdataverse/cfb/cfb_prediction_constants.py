@@ -41,10 +41,11 @@ class RatingsConfig:
 class PredictConfig:
     """Era-specific coefficients for the CFB game-outcome prediction model.
 
-    ``net_points_scale``, ``hfa``, ``margin_sd``, ``total_intercept`` and
-    ``total_scale`` are **fitted (in-sample) on the 2023 backtest** by
-    ``dev/cfb_prediction/fit_pregame.py``. The ratings that feed the fit use a
-    leakage-free week-by-week as-of boundary, but these five coefficients are fit
+    ``net_points_scale``, ``margin_sd``, ``total_intercept``, ``total_scale`` and
+    ``total_pace_scale`` are **fitted (in-sample) on the 2023 backtest** by
+    ``dev/cfb_prediction/fit_pregame.py``; ``hfa_epa`` is the ratings ridge's own
+    home-field coefficient (also 2023). The ratings that feed the fit use a
+    leakage-free week-by-week as-of boundary, but these coefficients are fit
     on the same 2023 games the backtest gate then scores -- so the gate is an
     in-sample regression guard, not an out-of-sample generalization result (a 2024
     holdout is a documented follow-up). See :mod:`sportsdataverse.cfb.cfb_game_predict`. ``adj_net`` from
@@ -53,13 +54,24 @@ class PredictConfig:
     negligible next to a points-scale HFA and the model is near-constant).
 
     Args:
-        hfa: Home-field advantage, in points (fitted).
+        hfa_epa: Home-field advantage on the EPA-per-play scale -- the ratings
+            ridge's native home coefficient (~0.0185). Applied component-wise
+            (home_off += hfa_epa, home_def -= hfa_epa), so the home team's net
+            rating gains ``2 * hfa_epa`` and the margin picks up
+            ``net_points_scale * 2 * hfa_epa`` (~1.27 pt) while the *total* is
+            unchanged (the offense/defense shifts cancel in the sum). This
+            EPA-scale form is why an additive constant works where a multiplicative
+            tilt cannot -- the ratings are per-play deviations near zero.
         margin_sd: Standard deviation of the margin residuals, used to convert a
             predicted margin into a win probability via the Gaussian CDF (fitted).
         net_points_scale: Points per unit of net adjusted-EPA/play differential --
             the fitted slope mapping ``home_adj_net - away_adj_net`` to points.
         total_intercept: Fitted baseline point total (intercept of the totals fit).
         total_scale: Fitted slope on the summed four efficiency ratings for totals.
+        total_pace_scale: Fitted slope on ``game_pace`` (``home_off_pace *
+            away_off_pace / league_avg_pace``) for totals -- tempo scales a total
+            (a sum) directly, unlike the margin (a differential, where pace
+            cancels). Cuts total MAE ~6% vs the efficiency-only totals fit.
         avg_drives: Average number of offensive drives per team per game (reserved
             for the season Monte Carlo in Phase 4).
         points_per_epa: Conversion factor from expected-points-added to points
@@ -70,11 +82,12 @@ class PredictConfig:
             (Phase 3).
     """
 
-    hfa: float
+    hfa_epa: float
     margin_sd: float
     net_points_scale: float
     total_intercept: float
     total_scale: float
+    total_pace_scale: float
     avg_drives: float
     points_per_epa: float
     quality_win_threshold: float
@@ -82,14 +95,16 @@ class PredictConfig:
 
 
 CFB_CONSTANTS: dict[str, PredictConfig] = {
-    # net_points_scale / hfa / margin_sd / total_* fitted on the 2023 backtest by
-    # dev/cfb_prediction/fit_pregame.py (see that script for the exact procedure).
+    # net_points_scale / margin_sd / total_* fitted on the 2023 backtest by
+    # dev/cfb_prediction/fit_pregame.py; hfa_epa is the ratings ridge's own home
+    # coefficient (see that script for the exact procedure).
     "modern": PredictConfig(
-        hfa=3.1369,
-        margin_sd=17.1184,
-        net_points_scale=33.6318,
-        total_intercept=51.7496,
-        total_scale=21.4705,
+        hfa_epa=0.01848,
+        margin_sd=17.1315,
+        net_points_scale=34.4870,
+        total_intercept=23.6397,
+        total_scale=18.9786,
+        total_pace_scale=0.4287,
         avg_drives=12.0,
         points_per_epa=1.0,
         quality_win_threshold=0.0,
@@ -115,7 +130,7 @@ def get_constants(era: str = "modern") -> PredictConfig:
 
             from sportsdataverse.cfb.cfb_prediction_constants import get_constants
             cfg = get_constants("modern")
-            cfg.hfa
+            cfg.hfa_epa
     """
     try:
         return CFB_CONSTANTS[era]

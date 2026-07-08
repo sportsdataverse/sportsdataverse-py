@@ -1196,14 +1196,16 @@ Predict a whole schedule of games from a ratings frame (vectorized).
 Applies the three closed-form predictors across every row of `games` in
 one pass. `ratings` is joined twice -- once on `home_team_id` and once on
 `away_team_id` -- so each game carries both teams' `adj_net` / `adj_off_epa`
-/ `adj_def_epa`.
+/ `adj_def_epa` / `off_pace`. The totals model's `game_pace` factor is
+computed here as `home_off_pace * away_off_pace / league_avg_pace`, where the
+league average is the mean `off_pace` of the passed ratings frame.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `games` | `DataFrame` |  | Schedule frame with `game_id`, `home_team_id`, `away_team_id`, and `neutral_site` columns. The two team-id columns must share the dtype of `ratings["team_id"]` (asserted before the join). |
-| `ratings` | `DataFrame` |  | A `cfb_ratings.cfb_ratings`-style frame with `team_id`, `adj_net`, `adj_off_epa`, and `adj_def_epa`. |
+| `ratings` | `DataFrame` |  | A `cfb_ratings.cfb_ratings`-style frame with `team_id`, `adj_net`, `adj_off_epa`, `adj_def_epa`, and `off_pace`. |
 | `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS`. |
 | `return_as_pandas` | `bool` | `False` | If True, return a pandas DataFrame; otherwise polars. |
 
@@ -1247,7 +1249,7 @@ net-rating z-score.
 
 **Returns**
 
-A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -- the single passed season for the common single-season call; `null` for a pooled multi-season call, since no single season applies to every row), `team_id` (Utf8), `adj_off_epa`, `adj_def_epa` (Float64, from `efficiency_ratings`), `adj_st_epa` (Float64, from `special_teams_ratings`), `adj_net` (Float64 -- offense minus defense only; special teams is a separate column, not folded in), `fei_off`, `fei_def`, `fei_net` (Float64, from `fei_ratings`), `games` (Int64), `off_rank` (Int64, dense rank on `adj_off_epa` descending), `def_rank` (Int64, dense rank on `adj_def_epa` **ascending** -- fewer EPA allowed ranks better), `net_rank` (Int64, dense rank on `adj_net` descending), `net_z` (Float64, z-score of `adj_net`). Zero-row (correctly-typed) when the requested season(s) have no published pbp/schedule asset, or when `as_of_date` filters out every play.
+A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -- the single passed season for the common single-season call; `null` for a pooled multi-season call, since no single season applies to every row), `team_id` (Utf8), `adj_off_epa`, `adj_def_epa` (Float64, from `efficiency_ratings`), `adj_st_epa` (Float64, from `special_teams_ratings`), `adj_net` (Float64 -- offense minus defense only; special teams is a separate column, not folded in), `fei_off`, `fei_def`, `fei_net` (Float64, from `fei_ratings`), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model uses), `off_rank` (Int64, dense rank on `adj_off_epa` descending), `def_rank` (Int64, dense rank on `adj_def_epa` **ascending** -- fewer EPA allowed ranks better), `net_rank` (Int64, dense rank on `adj_net` descending), `net_z` (Float64, z-score of `adj_net`). Zero-row (correctly-typed) when the requested season(s) have no published pbp/schedule asset, or when `as_of_date` filters out every play.
 
 **Example**
 
@@ -1546,7 +1548,7 @@ league baseline).
 
 **Returns**
 
-A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64). Empty (zero-row, correctly-typed) when `plays` has no competitive plays.
+A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when `plays` has no competitive plays.
 
 **Example**
 
@@ -2154,11 +2156,11 @@ Expected home scoring margin from the two net ratings.
 | `home_adj_net` | `float` |  | Home team's opponent-adjusted net rating (`adj_net` from `cfb_ratings.efficiency_ratings`). |
 | `away_adj_net` | `float` |  | Away team's opponent-adjusted net rating. |
 | `neutral` | `bool` |  | Whether the game is at a neutral site (no home-field advantage). |
-| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `net_points_scale` and `hfa`. |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `net_points_scale` and `hfa_epa`. |
 
 **Returns**
 
-The expected margin (home minus away), in points: `net_points_scale * (home_adj_net - away_adj_net) + hfa` (HFA dropped on neutral fields). `net_points_scale` converts the EPA-per-play rating differential into points (fitted on the 2023 backtest).
+The expected margin (home minus away), in points: `net_points_scale * (home_adj_net - away_adj_net + 2 * hfa_epa)` on a home field, or without the `2 * hfa_epa` term on a neutral one. `net_points_scale` converts the EPA-per-play rating differential into points; the HFA is the ratings ridge's native home coefficient applied component-wise (home_off +hfa_epa, home_def -hfa_epa => net +2*hfa_epa), an EPA-scale additive that lands in the margin (~1.27 pt) and leaves totals untouched. See `predict_total`.
 
 **Example**
 
@@ -2167,16 +2169,19 @@ from sportsdataverse.cfb.cfb_game_predict import predict_margin
 predict_margin(0.30, 0.10, neutral=False)
 ```
 
-### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
+### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', game_pace: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
 
-Expected combined point total from the four efficiency ratings.
+Expected combined point total from the four efficiency ratings + tempo.
 
-Fitted linear model `total_intercept + total_scale * (home_adj_off +
-away_adj_def + away_adj_off + home_adj_def)`. The four ratings are summed
-because each side's scoring rises with its own offense and with the opponent's
-EPA-*allowed* (`adj_def` is lower = better defense); `total_scale` and
-`total_intercept` are fitted on 2023 actual totals so the coarse EPA/play ->
-points scale and the league baseline are both data-derived.
+Fitted linear model `total_intercept + total_scale * sum4 + total_pace_scale *
+game_pace`, where `sum4 = home_adj_off + away_adj_def + away_adj_off +
+home_adj_def`. The four ratings are summed because each side's scoring rises
+with its own offense and with the opponent's EPA-*allowed* (`adj_def` is
+lower = better defense). `game_pace` (the matchup's expected scrimmage plays,
+`home_off_pace * away_off_pace / league_avg_pace`) enters because a total is a
+*sum* -- tempo scales both sides' points the same way, so it compounds into the
+total (whereas in the margin, a differential, pace cancels). All three
+coefficients are fitted on 2023 actual totals.
 
 **Parameters**
 
@@ -2186,7 +2191,8 @@ points scale and the league baseline are both data-derived.
 | `home_adj_def` | `float` |  | Home defense adjusted EPA/play allowed (`adj_def_epa`). |
 | `away_adj_off` | `float` |  | Away offense adjusted EPA/play. |
 | `away_adj_def` | `float` |  | Away defense adjusted EPA/play allowed. |
-| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `total_intercept` and `total_scale`. |
+| `game_pace` | `float` |  | Expected scrimmage plays for the matchup, i.e. `home_off_pace * away_off_pace / league_avg_pace` from the ratings' `off_pace` column (`cfb_predict_games` computes this for you). |
+| `era` | `str` | `'modern'` | Era key into `cfb_prediction_constants.CFB_CONSTANTS` supplying the fitted `total_intercept` / `total_scale` / `total_pace_scale`. |
 
 **Returns**
 
@@ -2196,7 +2202,7 @@ The expected combined total points.
 
 ```python
 from sportsdataverse.cfb.cfb_game_predict import predict_total
-predict_total(0.20, -0.05, 0.10, 0.02)
+predict_total(0.20, -0.05, 0.10, 0.02, game_pace=66.0)
 ```
 
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
