@@ -114,7 +114,9 @@ def test_shot_events_to_frame_schema_and_value():
             raw_event=None,
         )
 
-    df = shot_events_to_frame([_evt(0.0, 2.0, 2.0, 1), _evt(0.0, 24.0, 24.0, 1)], season=2024, league="mens")
+    # ShotLocation is (x = up-court, y = lateral): a 2-ft shot at the rim
+    # and a straight-on 24-footer (up-court 24, lateral 0)
+    df = shot_events_to_frame([_evt(2.0, 0.0, 2.0, 1), _evt(24.0, 0.0, 24.0, 1)], season=2024, league="mens")
     assert df.schema["team_id"] == pl.Utf8 and df.schema["point_value"] == pl.Int8
     # defensive shots (is_off=False) attribute to the OPPONENT
     from sportsdataverse.mbb.mbb_ncaa_models import TeamId, TeamSeasonId, Year
@@ -241,3 +243,21 @@ def test_committed_fixtures_round_trip():
         assert dict(df.schema) == dict(CANONICAL_SHOT_SCHEMA), name
         assert set(df["point_value"].unique().to_list()) <= {2, 3}, name
         assert set(df["shot_zone"].unique().to_list()) <= {"rim", "paint", "mid", "corner3", "abovebreak3"}, name
+
+
+def test_ncaa_sample_orientation_pinned():
+    """Canonical shot_x is LATERAL (symmetric), shot_y is up-court -- the
+    NCAA source frame is the opposite and must be swapped at ingestion;
+    every corner-3 must sit wide of the corner band."""
+    from pathlib import Path
+
+    import polars as pl
+
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_shot_quality"
+    s = pl.read_parquet(fix / "ncaa_shots_sample.parquet")
+    corner = s.filter(pl.col("shot_zone") == "corner3")
+    assert corner.height > 0
+    assert corner.filter(pl.col("shot_x").abs() < 21.0).height == 0
+    # lateral axis symmetric, up-court axis one-sided
+    assert float(s.get_column("shot_x").min()) < -5.0 < 5.0 < float(s.get_column("shot_x").max())
+    assert float(s.get_column("shot_y").quantile(0.05)) > -3.0

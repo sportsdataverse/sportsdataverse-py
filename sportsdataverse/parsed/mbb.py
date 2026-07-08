@@ -269,6 +269,9 @@ from sportsdataverse.mbb import calculate_sd_rapm as calculate_sd_rapm  # noqa: 
 from sportsdataverse.mbb import calculate_stats as calculate_stats  # noqa: F401
 from sportsdataverse.mbb import calibration_table as calibration_table  # noqa: F401
 from sportsdataverse.mbb import categorize_bad_lineups as categorize_bad_lineups  # noqa: F401
+from sportsdataverse.mbb import classify_point_value as classify_point_value  # noqa: F401
+from sportsdataverse.mbb import classify_zone_geometry as classify_zone_geometry  # noqa: F401
+from sportsdataverse.mbb import classify_zone_type as classify_zone_type  # noqa: F401
 from sportsdataverse.mbb import clump_bad_lineups as clump_bad_lineups  # noqa: F401
 from sportsdataverse.mbb import combos as combos  # noqa: F401
 from sportsdataverse.mbb import complete_weighted_avg as complete_weighted_avg  # noqa: F401
@@ -297,12 +300,15 @@ from sportsdataverse.mbb import espn_mbb_pbp as espn_mbb_pbp  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_player_stats as espn_mbb_player_stats  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_schedule as espn_mbb_schedule  # noqa: F401
 from sportsdataverse.mbb import espn_mbb_teams as espn_mbb_teams  # noqa: F401
+from sportsdataverse.mbb import espn_shots_to_canonical as espn_shots_to_canonical  # noqa: F401
 from sportsdataverse.mbb import extract_player_from_ev as extract_player_from_ev  # noqa: F401
 from sportsdataverse.mbb import field_keys as field_keys  # noqa: F401
 from sportsdataverse.mbb import filter_matching_own as filter_matching_own  # noqa: F401
 from sportsdataverse.mbb import find_lineup as find_lineup  # noqa: F401
 from sportsdataverse.mbb import find_missing_subs as find_missing_subs  # noqa: F401
 from sportsdataverse.mbb import find_pbp_clump as find_pbp_clump  # noqa: F401
+from sportsdataverse.mbb import fit_espn_court_scale as fit_espn_court_scale  # noqa: F401
+from sportsdataverse.mbb import fit_shrinkage_k as fit_shrinkage_k  # noqa: F401
 from sportsdataverse.mbb import fix_combos as fix_combos  # noqa: F401
 from sportsdataverse.mbb import fix_possible_score_swap_bug as fix_possible_score_swap_bug  # noqa: F401
 from sportsdataverse.mbb import flatten_json_iterative as flatten_json_iterative  # noqa: F401
@@ -375,6 +381,11 @@ from sportsdataverse.mbb import mbb_pbp_disk as mbb_pbp_disk  # noqa: F401
 from sportsdataverse.mbb import mbb_predict_games as mbb_predict_games  # noqa: F401
 from sportsdataverse.mbb import mbb_recruiting_projection as mbb_recruiting_projection  # noqa: F401
 from sportsdataverse.mbb import mbb_season_sim as mbb_season_sim  # noqa: F401
+from sportsdataverse.mbb import mbb_shooter_talent as mbb_shooter_talent  # noqa: F401
+from sportsdataverse.mbb import mbb_shot_data as mbb_shot_data  # noqa: F401
+from sportsdataverse.mbb import mbb_shot_quality as mbb_shot_quality  # noqa: F401
+from sportsdataverse.mbb import mbb_shot_quality_model as mbb_shot_quality_model  # noqa: F401
+from sportsdataverse.mbb import mbb_shot_selection as mbb_shot_selection  # noqa: F401
 from sportsdataverse.mbb import mbb_strength_of_schedule as mbb_strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import mbb_team_ratings as mbb_team_ratings  # noqa: F401
 from sportsdataverse.mbb import mbb_transfer_projection as mbb_transfer_projection  # noqa: F401
@@ -464,6 +475,7 @@ from sportsdataverse.mbb import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.mbb import select_contains as select_contains  # noqa: F401
 from sportsdataverse.mbb import select_matching as select_matching  # noqa: F401
 from sportsdataverse.mbb import select_matching_own as select_matching_own  # noqa: F401
+from sportsdataverse.mbb import shot_events_to_frame as shot_events_to_frame  # noqa: F401
 from sportsdataverse.mbb import shot_js_to_html as shot_js_to_html  # noqa: F401
 from sportsdataverse.mbb import shot_value as shot_value  # noqa: F401
 from sportsdataverse.mbb import simulate_game as simulate_game  # noqa: F401
@@ -473,6 +485,7 @@ from sportsdataverse.mbb import start_time_from_period as start_time_from_period
 from sportsdataverse.mbb import strength_of_schedule as strength_of_schedule  # noqa: F401
 from sportsdataverse.mbb import sum_event_stats as sum_event_stats  # noqa: F401
 from sportsdataverse.mbb import sum_shot_infos as sum_shot_infos  # noqa: F401
+from sportsdataverse.mbb import talent_split_mse as talent_split_mse  # noqa: F401
 from sportsdataverse.mbb import td_at as td_at  # noqa: F401
 from sportsdataverse.mbb import test_positional_aware_filter as test_positional_aware_filter  # noqa: F401
 from sportsdataverse.mbb import tidy_player as tidy_player  # noqa: F401
@@ -610,6 +623,9 @@ __all__ = [
     "calculate_stats",
     "calibration_table",
     "categorize_bad_lineups",
+    "classify_point_value",
+    "classify_zone_geometry",
+    "classify_zone_type",
     "clump_bad_lineups",
     "combos",
     "complete_weighted_avg",
@@ -753,12 +769,15 @@ __all__ = [
     "espn_mbb_transactions",
     "espn_mbb_venue",
     "espn_mbb_venues",
+    "espn_shots_to_canonical",
     "extract_player_from_ev",
     "field_keys",
     "filter_matching_own",
     "find_lineup",
     "find_missing_subs",
     "find_pbp_clump",
+    "fit_espn_court_scale",
+    "fit_shrinkage_k",
     "fix_combos",
     "fix_possible_score_swap_bug",
     "flatten_json_iterative",
@@ -839,6 +858,11 @@ __all__ = [
     "mbb_predict_games",
     "mbb_recruiting_projection",
     "mbb_season_sim",
+    "mbb_shooter_talent",
+    "mbb_shot_data",
+    "mbb_shot_quality",
+    "mbb_shot_quality_model",
+    "mbb_shot_selection",
     "mbb_strength_of_schedule",
     "mbb_team_ratings",
     "mbb_transfer_projection",
@@ -928,6 +952,7 @@ __all__ = [
     "select_contains",
     "select_matching",
     "select_matching_own",
+    "shot_events_to_frame",
     "shot_js_to_html",
     "shot_value",
     "simulate_game",
@@ -937,6 +962,7 @@ __all__ = [
     "strength_of_schedule",
     "sum_event_stats",
     "sum_shot_infos",
+    "talent_split_mse",
     "td_at",
     "test_positional_aware_filter",
     "tidy_player",

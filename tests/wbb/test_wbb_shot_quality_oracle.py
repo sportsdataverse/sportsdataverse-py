@@ -36,6 +36,10 @@ def _holdout() -> pl.DataFrame:
     return pl.read_parquet(_FIX / "espn_shots_2026_holdout.parquet")
 
 
+def test_wbb_train_holdout_games_disjoint():
+    assert set(_train()["game_id"].to_list()).isdisjoint(_holdout()["game_id"].to_list())
+
+
 def test_wbb_holdout_calibration_gate():
     model = mbb_shot_quality_model(_train(), league="womens")
     scored = mbb_shot_quality(_holdout(), model=model, league="womens").filter(pl.col("xpoints").is_not_null())
@@ -43,6 +47,11 @@ def test_wbb_holdout_calibration_gate():
     actual = scored.select((pl.col("made").cast(pl.Float64) * pl.col("point_value").cast(pl.Float64)).sum()).item()
     ratio = scored.get_column("xpoints").sum() / actual
     assert CAL_LO <= ratio <= CAL_HI, f"wbb holdout calibration {ratio:.4f} outside [{CAL_LO}, {CAL_HI}]"
+    # per-zone band (observed max 0.0118, abovebreak3) -- derived ceiling 0.03
+    per_zone = scored.group_by("shot_zone").agg(
+        (pl.col("xmake").mean() - pl.col("made").cast(pl.Float64).mean()).abs().alias("gap")
+    )
+    assert float(per_zone.get_column("gap").max()) <= 0.03
 
 
 def test_wbb_external_bart_anchors():
@@ -69,7 +78,9 @@ def test_wbb_shooter_talent_split_half_reliability_gate():
     scored = mbb_shot_quality(_train(), model=model, league="womens")
     k = get_constants("womens").shrink_k_talent
     assert k > 0, "womens shrink_k_talent not fitted"
-    assert talent_split_mse(scored, k=k, seed=0) < talent_split_mse(scored, k=1e-9, seed=0)
+    # off-fit-seed evaluation (k fitted at seed=0)
+    for seed in (1, 2):
+        assert talent_split_mse(scored, k=k, seed=seed) < talent_split_mse(scored, k=1e-9, seed=seed)
 
 
 def test_wbb_shot_selection_zero_sum():
@@ -80,3 +91,13 @@ def test_wbb_shot_selection_zero_sum():
     sel = mbb_shot_selection(scored, group="team_id")
     total = float((sel.get_column("selection_value") * sel.get_column("n_shots")).sum())
     assert abs(total) < 1e-6 * scored.height
+    # structural half (mirrors the mens gate): the most rim-heavy high-volume
+    # team rates positive
+    rim_share = (
+        scored.group_by("team_id")
+        .agg((pl.col("shot_zone") == "rim").cast(pl.Float64).mean().alias("rim_share"), pl.len().alias("n"))
+        .filter(pl.col("n") >= 200)
+        .sort("rim_share", descending=True)
+    )
+    top_team = rim_share.row(0, named=True)["team_id"]
+    assert sel.filter(pl.col("team_id") == top_team).row(0, named=True)["selection_value"] > 0

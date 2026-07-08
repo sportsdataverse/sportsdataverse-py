@@ -171,7 +171,10 @@ def shot_events_to_frame(
         return pl.DataFrame(schema=CANONICAL_SHOT_SCHEMA)
     rows = []
     for e in events:
-        x, y, dist = float(e.loc.x), float(e.loc.y), float(e.dist)
+        # the NCAA ShotLocation frame is (x = up-court, y = lateral) -- the
+        # OPPOSITE of the canonical schema (shot_x = lateral, shot_y =
+        # up-court, matching the ESPN width axis); swap at ingestion
+        x, y, dist = float(e.loc.y), float(e.loc.x), float(e.dist)
         # e.team is the team UNDER ANALYSIS; the shooter's team follows is_off
         shooting = e.team if e.is_off else e.opponent
         rows.append(

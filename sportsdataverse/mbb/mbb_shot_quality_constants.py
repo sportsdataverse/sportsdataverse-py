@@ -28,7 +28,8 @@ class ShotQualityConstants:
         corner_x_ft: ``|x|`` at/beyond this (with a small ``y``) = corner 3.
         corner_y_ft: Baseline band height for the corner-3 test.
         shrink_k_zone: Empirical-Bayes cell-toward-zone-mean shrinkage
-            (pseudo-attempts; refined by the Phase-1 fit).
+            (pseudo-attempts; hand-chosen default -- at the fixture cell
+            sizes, n per zone x type cell >> k, so its effect is negligible).
         shrink_k_talent: Shooter-talent shrinkage (fitted in Phase 3; 0.0
             until fit).
     """

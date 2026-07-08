@@ -154,6 +154,7 @@ def talent_split_mse(scored: pl.DataFrame, *, k: float, seed: int = 0) -> float:
     h2 = _half_oe(halves.filter(pl.col("_half") == 1))
     assert h1.schema["shooter_id"] == h2.schema["shooter_id"]
     j = h1.join(h2, on="shooter_id", how="inner", suffix="_h2")
+    assert j.height > 0, "split-half join produced no shooters"
     pred = j.get_column("oe").to_numpy() * j.get_column("n").to_numpy() / (j.get_column("n").to_numpy() + k)
     err = pred - j.get_column("oe_h2").to_numpy()
     w = j.get_column("n_h2").to_numpy().astype(float)

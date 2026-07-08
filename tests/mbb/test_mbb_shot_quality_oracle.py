@@ -37,6 +37,12 @@ def _holdout() -> pl.DataFrame:
     return pl.read_parquet(_FIX / "espn_shots_2025_holdout.parquet")
 
 
+def test_train_holdout_games_disjoint():
+    """The temporal split's leakage boundary, asserted on the COMMITTED
+    fixtures (the split itself happens in the gitignored capture script)."""
+    assert set(_train()["game_id"].to_list()).isdisjoint(_holdout()["game_id"].to_list())
+
+
 def test_holdout_calibration_gate():
     model = mbb_shot_quality_model(_train(), league="mens")
     scored = mbb_shot_quality(_holdout(), model=model, league="mens")
@@ -46,6 +52,14 @@ def test_holdout_calibration_gate():
     expected = scored.get_column("xpoints").sum()
     ratio = expected / actual
     assert CAL_LO <= ratio <= CAL_HI, f"holdout xpoints calibration {ratio:.4f} outside [{CAL_LO}, {CAL_HI}]"
+    # per-zone calibration: aggregate calibration can hide compensating zone
+    # errors; observed max holdout |xmake - actual| = 0.0193 (mid) -- derived
+    # ceiling 0.03, never loosen
+    per_zone = scored.group_by("shot_zone").agg(
+        (pl.col("xmake").mean() - pl.col("made").cast(pl.Float64).mean()).abs().alias("gap")
+    )
+    worst = float(per_zone.get_column("gap").max())
+    assert worst <= 0.03, f"per-zone holdout miscalibration {worst:.4f} > 0.03"
 
 
 def test_external_bart_anchors():
@@ -117,4 +131,7 @@ def test_shooter_talent_split_half_reliability_gate():
     scored = mbb_shot_quality(_train(), model=model, league="mens")
     k = get_constants("mens").shrink_k_talent
     assert k > 0, "mens shrink_k_talent not fitted"
-    assert talent_split_mse(scored, k=k, seed=0) < talent_split_mse(scored, k=1e-9, seed=0)
+    # evaluate on splits the fit never saw (k was fitted at seed=0): observed
+    # seed-1/2 MSE 0.0176/0.0184 vs 0.0320/0.0340 unshrunk
+    for seed in (1, 2):
+        assert talent_split_mse(scored, k=k, seed=seed) < talent_split_mse(scored, k=1e-9, seed=seed)

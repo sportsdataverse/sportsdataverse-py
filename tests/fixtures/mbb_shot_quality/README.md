@@ -31,4 +31,9 @@ Notes:
   corner3 .365, abovebreak3 .339) sit near the published Hoop-Math/Torvik
   baselines in `mbb_shot_quality_constants.PUBLISHED_ZONE_BASELINES`.
 
+As-of note: the ESPN court SCALE (origin + feet-per-unit) is fitted on the
+full season before the temporal split -- a deliberate, documented exemption:
+it is a units calibration from robust medians, not an outcome model, and
+per-side refits agree to <1%.
+
 Re-capture: `uv run python dev/mbb_shot_quality/capture_shots.py`.
