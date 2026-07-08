@@ -23,13 +23,20 @@ the host is ``ipa.``, not ``api.``). Three mechanics live here:
   it), and re-mints once on a 401/403 (expiry). The mint step is patchable
   (``_mint_guest_jwt``) so tests never hit the network.
 
-The guest token unlocks 11 of the 25 RDB GET routes (``teams``,
+The guest token unlocks 12 of the 25 RDB GET routes (``teams``,
 ``institutionrankings``, ``recruits``, ``transfers``, ``coaches``, the three
 ranking feeds, ``currentTargetPredictions``, ``sports/{k}/year``,
-``tags/autocomplete``). The remaining ~14 (``biggestMovers``,
-``archivedPlayerRankings``, ``playerSportRankings``, ``unrankedRecruits``, ...)
-stay 403 even with the guest token — they need a logged-in/premium session and
-are not wrapped.
+``tags/autocomplete``, ``positions``). The remaining 13 GET routes are
+**bearer-only** (a logged-in/premium session; the guest token still 403s) and
+are deliberately **not wrapped**: ``playerSportRankings``,
+``transferPlayerSportRankings``, ``unrankedRecruits``,
+``rankings/{rankingKey}/biggestMovers``,
+``rankings/{rankingKey}/archivedPlayerRankings``,
+``rankings/{rankingKey}/playerSportsUnderSpecialEvaluation``,
+``transferrankings/{rankingKey}/unrankedtransfers``, ``rankings`` (the
+non-feed criteria query), ``sports``, ``year`` (global class-year list),
+``institutionGroups``, and the two ``tags/.../photos`` routes. (Probe-confirmed
+2026-07-08 under the guest JWT.)
 """
 
 from __future__ import annotations
