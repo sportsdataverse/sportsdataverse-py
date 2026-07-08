@@ -1,0 +1,29 @@
+[
+ {
+  "name": "LSU",
+  "key": 24102,
+  "logo": "https://s3media.247sports.com/Uploads/Assets/869/32/8032869.png",
+  "alternateLogo": "https://s3media.247sports.com/Uploads/Assets/499/617/12617499.png",
+  "position": 1,
+  "numberOfTransfers": 41,
+  "transferPoints": 85.797127003733
+ },
+ {
+  "name": "Ole Miss",
+  "key": 24103,
+  "logo": "https://s3media.247sports.com/Uploads/Assets/425/456/8456425.png",
+  "alternateLogo": "https://s3media.247sports.com/Uploads/Assets/425/456/8456425.png",
+  "position": 2,
+  "numberOfTransfers": 29,
+  "transferPoints": 64.802121650777
+ },
+ {
+  "name": "Texas",
+  "key": 24028,
+  "logo": "https://s3media.247sports.com/Uploads/Assets/487/456/8456487.png",
+  "alternateLogo": "https://s3media.247sports.com/Uploads/Assets/780/616/12616780.png",
+  "position": 3,
+  "numberOfTransfers": 22,
+  "transferPoints": 63.970893378084
+ }
+]

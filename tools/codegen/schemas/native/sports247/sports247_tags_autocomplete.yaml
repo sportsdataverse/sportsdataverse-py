@@ -1,0 +1,15 @@
+schema: sports247_tags_autocomplete
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: type
+  type: character
+  description: ''
+- name: annotation
+  type: character
+  description: ''

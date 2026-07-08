@@ -1,0 +1,6 @@
+schema: sports247_sport_years
+kind: dataframe
+columns:
+- name: value
+  type: integer
+  description: ''

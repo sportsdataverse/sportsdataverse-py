@@ -1,0 +1,263 @@
+api: sports247
+host: https://ipa.247sports.com
+name_pattern: sports247_{short}
+module: sports247
+parser_module: cfb.sports247_parsers
+getter_module: sportsdataverse.cfb.sports247_runtime
+qualifier: ''
+passthrough_query: true
+runtime_imports:
+- _get
+endpoints:
+- short: teams
+  returns_schema: native/sports247/sports247_teams
+  summary: "247Sports RDB college team directory (teamId / institutionKey / conference) for a sport."
+  path: /rdb/v1/teams/
+  extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  - name: year
+    query_key: year
+    type: int
+  - name: institution_type
+    query_key: institutionType
+    type: str
+  parser: parse_sports247_teams
+- short: institution_rankings
+  returns_schema: native/sports247/sports247_institution_rankings
+  summary: "247Sports team recruiting-class rankings (247 rank/rating + industry composite) for a sport and class year."
+  path: /rdb/v1/rankings/{sport_key}/{year}/institutionrankings/
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_key
+    type: int
+    required: false
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  extra_params:
+  - name: page_size
+    query_key: pagesize
+    type: int
+    default: 50
+  - name: page
+    query_key: page
+    type: int
+  - name: use_composite
+    query_key: useComposite
+    type: str
+  - name: conference_abbreviation
+    query_key: conferenceAbbreviation
+    type: str
+  - name: institution_key
+    query_key: institutionKey
+    type: int
+  parser: parse_sports247_institution_rankings
+  example_args:
+    year: 2026
+    sport_key: 1
+- short: recruits
+  returns_schema: native/sports247/sports247_recruits
+  summary: "247Sports individual recruit rankings for a sport and class year (247 + industry-composite ratings, stars, commit status; paginated)."
+  path: /rdb/v1/recruits/
+  extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  - name: year
+    query_key: year
+    type: int
+    default: 2026
+  - name: page_size
+    query_key: pagesize
+    type: int
+    default: 50
+  - name: page
+    query_key: page
+    type: int
+  - name: position_abbreviation
+    query_key: positionAbbreviation
+    type: str
+  - name: state_abbreviation
+    query_key: stateAbbreviation
+    type: str
+  parser: parse_sports247_result_set
+  example_args:
+    year: 2026
+    sport_key: 1
+- short: transfers
+  returns_schema: native/sports247/sports247_transfers
+  summary: "247Sports transfer-portal player entries for a sport and year (paginated)."
+  path: /rdb/v1/transfers/
+  extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  - name: year
+    query_key: year
+    type: int
+    default: 2026
+  - name: page_size
+    query_key: pagesize
+    type: int
+    default: 50
+  - name: page
+    query_key: page
+    type: int
+  parser: parse_sports247_result_set
+  example_args:
+    year: 2026
+    sport_key: 1
+- short: coaches
+  returns_schema: native/sports247/sports247_coaches
+  summary: "247Sports coach recruiting rankings for a sport and year (paginated)."
+  path: /rdb/v1/coaches/
+  extra_params:
+  - name: sport_key
+    query_key: sportKey
+    type: int
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  - name: year
+    query_key: year
+    type: int
+    default: 2026
+  - name: page_size
+    query_key: pageSize
+    type: int
+    default: 50
+  - name: page
+    query_key: page
+    type: int
+  parser: parse_sports247_result_set
+  example_args:
+    year: 2026
+    sport_key: 1
+- short: transfer_portal_player_feed
+  returns_schema: native/sports247/sports247_transfer_portal_player_feed
+  summary: "247Sports transfer-portal player ranking feed for a sport and class year."
+  path: /rdb/v1/rankings/{sport_key}/{year}/transferPortalPlayerfeed/
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_key
+    type: int
+    required: false
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  extra_params:
+  - name: page_size
+    query_key: pageSize
+    type: int
+    default: 50
+  parser: parse_sports247_result_set
+  example_args:
+    year: 2026
+    sport_key: 1
+- short: composite_team_ranking_feed
+  returns_schema: native/sports247/sports247_composite_team_ranking_feed
+  summary: "247Sports composite team recruiting-class ranking feed for a sport and class year."
+  path: /rdb/v1/rankings/{sport_key}/{year}/compositeTeamRankingFeed/
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_key
+    type: int
+    required: false
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  extra_params:
+  - name: page_size
+    query_key: pageSize
+    type: int
+    default: 50
+  parser: parse_sports247_result_set
+  example_args:
+    year: 2026
+    sport_key: 1
+- short: transfer_portal_team_feed
+  returns_schema: native/sports247/sports247_transfer_portal_team_feed
+  summary: "247Sports transfer-portal team ranking feed for a sport and class year."
+  path: /rdb/v1/rankings/{sport_key}/{year}/transferPortalOnlyTeamFeed/
+  path_params:
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_key
+    type: int
+    required: false
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  extra_params:
+  - name: page_size
+    query_key: pageSize
+    type: int
+    default: 50
+  parser: parse_sports247_result_set
+  example_args:
+    year: 2026
+    sport_key: 1
+- short: target_predictions
+  returns_schema: native/sports247/sports247_target_predictions
+  summary: "247Sports current expert target predictions (\"crystal ball\") for a site, class year, and sport."
+  path: /rdb/v1/sites/{site_key}/years/{year}/sports/{sport_key}/currentTargetPredictions/
+  path_params:
+  - name: site_key
+    type: int|str
+    required: true
+  - name: year
+    type: int|str
+    required: true
+  - name: sport_key
+    type: int
+    required: false
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  extra_params:
+  - name: page_size
+    query_key: pageSize
+    type: int
+    default: 50
+  parser: parse_sports247_result_set
+  example_args:
+    site_key: 1
+    year: 2026
+    sport_key: 1
+- short: sport_years
+  returns_schema: native/sports247/sports247_sport_years
+  summary: "Class years for which the 247Sports RDB has data for a given sport."
+  path: /rdb/v1/sports/{sport_key}/year/
+  path_params:
+  - name: sport_key
+    type: int
+    required: false
+    default: 1
+    description: "247Sports sport key (1 = football, 2 = basketball)."
+  parser: parse_sports247_result_set
+  example_args:
+    sport_key: 1
+- short: tags_autocomplete
+  returns_schema: native/sports247/sports247_tags_autocomplete
+  summary: "247Sports taggable-entity autocomplete (players / teams / institutions) by name prefix."
+  path: /rdb/v1/tags/autocomplete/
+  extra_params:
+  - name: default_name
+    query_key: defaultName
+    type: str
+  - name: items
+    query_key: items
+    type: int
+    default: 10
+  parser: parse_sports247_result_set
+  example_args:
+    default_name: smith

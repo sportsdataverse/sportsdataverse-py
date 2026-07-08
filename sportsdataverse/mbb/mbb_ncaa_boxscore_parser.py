@@ -196,6 +196,7 @@ from bs4.element import Tag
 from sportsdataverse.mbb.mbb_ncaa_data_quality import ParseError, build_sub_error, players_missing_from_boxscore
 from sportsdataverse.mbb.mbb_ncaa_html import (
     attr_regex_filter,
+    current_ncaa_team_alts,
     filter_matching_own,
     jsoup_text,
     parse_html,
@@ -317,8 +318,13 @@ _BUILDERS_V0 = _BoxscoreBuilders(
 
 def _v1_team_finder(doc: BeautifulSoup) -> list[str]:
     """``div.card-header img[alt]`` -> the ``alt`` attribute, not
-    :func:`~sportsdataverse.mbb.mbb_ncaa_html.jsoup_text` (``:82-85``)."""
-    return [str(el.get("alt", "")) for el in doc.select("div.card-header img[alt]")]
+    :func:`~sportsdataverse.mbb.mbb_ncaa_html.jsoup_text` (``:82-85``).
+
+    Falls back to :func:`~sportsdataverse.mbb.mbb_ncaa_html.current_ncaa_team_alts`
+    for current (2026) markup, which no longer wraps the team logos in a
+    ``div.card-header`` (see that helper's drift note)."""
+    ported = [str(el.get("alt", "")) for el in doc.select("div.card-header img[alt]")]
+    return ported or current_ncaa_team_alts(doc)
 
 
 def _v1_score_finder(doc: BeautifulSoup) -> list[str]:

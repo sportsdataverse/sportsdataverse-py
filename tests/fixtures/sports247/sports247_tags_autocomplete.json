@@ -1,0 +1,20 @@
+[
+ {
+  "id": "in_20857",
+  "name": "A Maceo Smith (Dallas, TX)",
+  "type": "PublicHighSchool",
+  "annotation": null
+ },
+ {
+  "id": "co_1765",
+  "name": "Aaron Smith (UALB Great Danes)",
+  "type": "Coach",
+  "annotation": "coach:ncaaf:26909755"
+ },
+ {
+  "id": "co_2857",
+  "name": "Ahmad Smith (CHST Buccaneers)",
+  "type": "Coach",
+  "annotation": "coach:ncaaf:26907665"
+ }
+]

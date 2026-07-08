@@ -5,7 +5,7 @@ sidebar_position: 22
 ---
 # MBB — ESPN core API (v2)
 
-`sportsdataverse.mbb` — 83 endpoints.
+`sportsdataverse.mbb` — 86 endpoints.
 
 ## `espn_mbb_league_root`
 
@@ -2163,6 +2163,81 @@ ESPN endpoint.
 
 ```python
 espn_mbb_season_recruits(season=2024)
+```
+
+_Last validated n/a._
+
+## `espn_mbb_recruiting_years`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_mbb_recruiting_years()
+```
+
+_Last validated n/a._
+
+## `espn_mbb_recruiting_players`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/{year}/athletes`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/athletes](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/athletes)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_mbb_recruiting_players(year=2026)
+```
+
+_Last validated n/a._
+
+## `espn_mbb_recruiting_rankings`
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/{year}/rankings`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/rankings](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/rankings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `year` | `year` |  | `Y` |  | year path parameter. |
+
+### Returns
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example
+
+```python
+espn_mbb_recruiting_rankings(year=2026)
 ```
 
 _Last validated n/a._

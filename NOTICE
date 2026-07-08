@@ -14,13 +14,14 @@ cbb-on-off-analyzer  —  https://github.com/Alex-At-Home/cbb-on-off-analyzer
   Copyright (c) Alex-At-Home and contributors. Licensed under Apache-2.0.
 
   The TypeScript stats utilities LineupUtils.ts, RatingUtils.ts, LuckUtils.ts,
-  RapmUtils.ts, and PositionUtils.ts (with helpers from OverrideUtils.ts and
-  PositionalManualFixes.ts) were ported into:
+  RapmUtils.ts, PositionUtils.ts, and buildStrengthAdjustedStats.ts (with
+  helpers from OverrideUtils.ts and PositionalManualFixes.ts) were ported into:
       sportsdataverse/mbb/mbb_lineup_stats.py
       sportsdataverse/mbb/mbb_ratings.py
       sportsdataverse/mbb/mbb_luck.py
       sportsdataverse/mbb/mbb_rapm.py
       sportsdataverse/mbb/mbb_positions.py
+      sportsdataverse/mbb/mbb_ncaa_strength.py
   and re-exported by reference from the parallel sportsdataverse/wbb/ modules.
 
 -------------------------------------------------------------------------------
