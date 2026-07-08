@@ -11,6 +11,7 @@ sidebar_label: WBB
 | [ESPN core API (v2)](reference/core) | 85 | `https://sports.core.api.espn.com/v2/sports` |
 | [Dataset loaders](reference/loaders) | 11 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 252 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 248 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
