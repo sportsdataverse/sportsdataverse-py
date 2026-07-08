@@ -34,7 +34,10 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.nfl.nfl_loaders import load_nfl_nextgen_stats
+from sportsdataverse.nfl.nfl_loaders import (
+    load_nfl_nextgen_stats,
+    load_nfl_pbp_participation,
+)
 from sportsdataverse.nfl.nfl_ngs_constants import (
     MIN_ATTEMPTS,
     MIN_RECEPTIONS,
@@ -482,4 +485,109 @@ def nfl_ngs_separation_oe(
     .. _nflfastR: https://www.nflfastr.com
     """
     out = _separation_oe_impl(seasons, min_targets, _loader)
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+_COVERAGE_TYPES = tuple(f"COVER_{i}" for i in range(7))
+
+_MAN_ZONE_SCHEMA = {
+    "season": pl.Int64,
+    "defteam": pl.Utf8,
+    "plays": pl.Int64,
+    "man_rate": pl.Float64,
+    "zone_rate": pl.Float64,
+    **{f"cover_{i}_rate": pl.Float64 for i in range(7)},
+}
+
+
+def nfl_ngs_man_zone_rates(
+    seasons: Union[int, Sequence[int]],
+    *,
+    return_as_pandas: bool = False,
+    _loader: Optional[Callable[..., pl.DataFrame]] = None,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Descriptive man/zone coverage rates from NGS-charted labels — NOT a trained classifier.
+
+    This is a group-by of the ``defense_man_zone_type`` /
+    ``defense_coverage_type`` labels that ship in
+    :func:`sportsdataverse.nfl.load_nfl_pbp_participation` for charted
+    seasons (2016-2023). A *trained* coverage classifier is data-blocked —
+    see the module docstring's "Blocked (needs snap tracking)" section.
+    Unlabelled plays are dropped before rates are computed; ``2_MAN`` and
+    ``PREVENT`` calls stay in the ``plays`` denominator but have no
+    dedicated rate column, so the ``cover_*_rate`` columns sum to slightly
+    under 1 while ``man_rate + zone_rate == 1`` exactly.
+
+    Args:
+        seasons (Union[int, Sequence[int]]): Season(s), charted 2016-2023.
+            Seasons are loaded one at a time and concatenated
+            ``diagonal_relaxed`` (the participation feed drifts schema
+            across seasons).
+        return_as_pandas (bool): If True, returns a pandas DataFrame.
+        _loader (Optional[Callable]): Injectable loader for offline tests.
+
+    Returns:
+        Union[pl.DataFrame, pd.DataFrame]: One row per ``(season, defteam)``
+        with ``plays`` (labelled plays only), ``man_rate``, ``zone_rate``
+        and ``cover_0_rate`` ... ``cover_6_rate``. Un-charted seasons (all
+        labels null, e.g. 2024+) return a zero-row frame with the
+        documented schema.
+
+    Example:
+        League man/zone tendencies, 2022::
+
+            from sportsdataverse.nfl import nfl_ngs_man_zone_rates
+            df = nfl_ngs_man_zone_rates([2022])
+            print(df.sort("man_rate", descending=True).head())
+
+    See Also:
+        * `nflreadpy`_ -- participation loader parity
+        * `nflfastR`_ -- NFL play-by-play ecosystem (R)
+
+    .. _nflreadpy: https://github.com/nflverse/nflreadpy
+    .. _nflfastR: https://www.nflfastr.com
+    """
+    loader = _loader or load_nfl_pbp_participation
+    frames = []
+    for season in _season_list(seasons):
+        # load per season: the participation feed's schema drifts across
+        # seasons and the loader crashes on a multi-season list
+        df = loader([season])
+        if not isinstance(df, pl.DataFrame):
+            df = pl.from_pandas(df)
+        if df.height > 0:
+            frames.append(df)
+    if not frames:
+        return _man_zone_empty(return_as_pandas)
+    part = pl.concat(frames, how="diagonal_relaxed")
+    required = {"nflverse_game_id", "possession_team", "defense_man_zone_type"}
+    if not required.issubset(part.columns):
+        return _man_zone_empty(return_as_pandas)
+    part = part.drop_nulls(["defense_man_zone_type", "possession_team"])
+    if part.height == 0:
+        return _man_zone_empty(return_as_pandas)
+    id_parts = pl.col("nflverse_game_id").str.split("_")
+    part = part.with_columns(
+        id_parts.list.get(0).cast(pl.Int64).alias("season"),
+        pl.when(pl.col("possession_team") == id_parts.list.get(2))
+        .then(id_parts.list.get(3))
+        .otherwise(id_parts.list.get(2))
+        .alias("defteam"),
+        pl.col("defense_man_zone_type").str.to_uppercase().str.contains("MAN").alias("_is_man"),
+    )
+    out = part.group_by("season", "defteam").agg(
+        pl.len().cast(pl.Int64).alias("plays"),
+        (pl.col("_is_man") == True).mean().alias("man_rate"),  # noqa: E712
+        (pl.col("_is_man") == False).mean().alias("zone_rate"),  # noqa: E712
+        *[
+            (pl.col("defense_coverage_type") == cov).fill_null(False).mean().alias(f"cover_{i}_rate")
+            for i, cov in enumerate(_COVERAGE_TYPES)
+        ],
+    )
+    out = out.sort("season", "defteam").select(list(_MAN_ZONE_SCHEMA.keys())).cast(_MAN_ZONE_SCHEMA)
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def _man_zone_empty(return_as_pandas: bool) -> Union[pl.DataFrame, pd.DataFrame]:
+    out = pl.DataFrame(schema=_MAN_ZONE_SCHEMA)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
