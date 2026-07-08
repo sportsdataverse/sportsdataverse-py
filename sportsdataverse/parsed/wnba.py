@@ -174,15 +174,21 @@ from sportsdataverse.wnba import load_wnba_stats_standings as load_wnba_stats_st
 from sportsdataverse.wnba import load_wnba_stats_team_season_stats as load_wnba_stats_team_season_stats  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_boxscore as load_wnba_team_boxscore  # noqa: F401
 from sportsdataverse.wnba import load_wnba_team_season_stats as load_wnba_team_season_stats  # noqa: F401
+from sportsdataverse.wnba import make_prob_by_context as make_prob_by_context  # noqa: F401
+from sportsdataverse.wnba import make_prob_joint as make_prob_joint  # noqa: F401
 from sportsdataverse.wnba import most_recent_wnba_season as most_recent_wnba_season  # noqa: F401
 from sportsdataverse.wnba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.wnba import score_shot_xpoints as score_shot_xpoints  # noqa: F401
 from sportsdataverse.wnba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
+from sportsdataverse.wnba import shooter_talent as shooter_talent  # noqa: F401
+from sportsdataverse.wnba import shot_selection_quality as shot_selection_quality  # noqa: F401
 from sportsdataverse.wnba import underscore as underscore  # noqa: F401
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
+from sportsdataverse.wnba import zone_value_map as zone_value_map  # noqa: F401
 
 __all__ = [
     "download",
@@ -336,15 +342,21 @@ __all__ = [
     "load_wnba_stats_team_season_stats",
     "load_wnba_team_boxscore",
     "load_wnba_team_season_stats",
+    "make_prob_by_context",
+    "make_prob_joint",
     "most_recent_wnba_season",
     "normalize_team_roster_columns",
+    "score_shot_xpoints",
     "scoreboard_event_parsing",
+    "shooter_talent",
+    "shot_selection_quality",
     "underscore",
     "wnba_enhanced_pbp",
     "wnba_on_court",
     "wnba_pbp_disk",
     "wnba_possessions",
     "wnba_rapm_from_games",
+    "zone_value_map",
 ]
 
 
