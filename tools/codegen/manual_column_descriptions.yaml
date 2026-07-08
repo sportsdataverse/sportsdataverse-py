@@ -7814,3 +7814,120 @@ sports247_site_pages_recruit_interest:
 sports247_site_pages_recruit_interest_event:
   default_name: Server-rendered display label for the entity.
   key: Primary key of this entity (the id used in its `.json` route).
+passing_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team: Team abbreviation the player is credited to for the range.
+  team_name: Team name/abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying dropback in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass: PFF passing grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  dropbacks: Total quarterback dropbacks.
+  attempts: Pass attempts.
+  completions: Completions.
+  completion_percent: Completion percentage.
+  yards: Passing yards.
+  qb_rating: NFL passer rating.
+  sacks: Sacks taken.
+  sack_percent: Sack rate (sacks per dropback).
+  twp_rate: Turnover-worthy-play rate.
+  btt_rate: Big-time-throw rate.
+  accuracy_percent: Charted accuracy percentage.
+  drop_rate: Receiver drop rate on the quarterback's throws.
+  first_downs: Passing first downs.
+  scrambles: Scramble plays.
+  thrown_aways: Throwaways.
+  spikes: Spike plays.
+  bats: Passes batted at the line.
+  hit_as_threw: Plays where the quarterback was hit as he threw.
+  interceptions: Interceptions thrown.
+  penalties: Penalties charged.
+  declined_penalties: Declined penalties.
+  draft_season: Draft class (year) of the player.
+  eligible_season: First eligible season for the player.
+defense_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_defense: PFF overall defense grade (0-100).
+  grades_run_defense: PFF run-defense grade (0-100).
+  grades_coverage_defense: PFF coverage grade (0-100).
+  tackles: Total tackles.
+  assists: Assisted tackles.
+  stops: Tackles that constitute an offensive failure ("stops").
+  sacks: Sacks credited.
+  total_pressures: Total quarterback pressures (sacks + hits + hurries).
+  interceptions: Interceptions.
+  forced_fumbles: Forced fumbles.
+  interception_touchdowns: Touchdowns scored on interception returns.
+offense_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass: PFF passing grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  grades_pass_block: PFF pass-blocking grade (0-100).
+  grades_run_block: PFF run-blocking grade (0-100).
+  grades_pass_route: PFF receiving/route grade (0-100).
+receiving_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass_route: PFF receiving/route grade (0-100).
+  grades_hands_drop: PFF hands/drop grade (0-100).
+  targets: Times targeted.
+  receptions: Receptions.
+  yards: Receiving yards.
+  touchdowns: Receiving touchdowns.
+  drops: Dropped passes.
+  yards_after_catch: Yards after the catch.
+  yprr: Yards per route run.
+  routes: Routes run.
+  contested_receptions: Contested catches made.
+  contested_targets: Contested targets.
+rushing_summary:
+  player_id: PFF player id (integer; matches the /players id and every player_id join key).
+  franchise_id: PFF franchise (team) id (integer join key).
+  jersey_number: Jersey number (string; zero-padded, e.g. "09").
+  team_name: Team abbreviation the player is credited to for the range.
+  player_game_count: Games with at least one qualifying snap in the requested range.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  attempts: Rush attempts.
+  yards: Rushing yards.
+  touchdowns: Rushing touchdowns.
+  yards_after_contact: Yards after contact.
+  avoided_tackles: Missed tackles forced.
+  elusive_rating: PFF elusive rating.
+  breakaway_yards: Breakaway (long-run) yards.
+  first_downs: Rushing first downs.
+  fumbles: Fumbles.
+team_overview:
+  franchise_id: PFF franchise (team) id (integer join key).
+  abbreviation: Team abbreviation.
+  grades_offense: PFF team offense grade (0-100).
+  grades_defense: PFF team defense grade (0-100).
+  grades_coverage_defense: PFF team coverage grade (0-100).
+games:
+  id: PFF game id (integer join key).
+  season: Season (starting year) of the game.
+  week: Week number of the game.
+  league_id: PFF league id (integer).
+  home_franchise_id: PFF franchise id of the home team.
+  away_franchise_id: PFF franchise id of the away team.
+  home_team: Home team object (JSON-stringified in the tidy frame).
+  away_team: Away team object (JSON-stringified in the tidy frame).
+  stadium_id: PFF stadium id.
+  start: Kickoff timestamp (ISO 8601 string).
+  has_stats: Whether PFF has published stats for the game.
+  lock_status: Data lock/publish status for the game.
