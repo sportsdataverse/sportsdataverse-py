@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)](#nba--wnba--g-league--shot-value-spine-xpoints-%E2%86%92-context-make-prob-%E2%86%92-talent-%E2%86%92-selection-%E2%86%92-zone-maps)
   - [MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)](#mbb--wbb--shot-quality-spine-xpoints-%E2%86%92-shot-selection-%E2%86%92-shooter-talent)
   - [MBB / WBB — player-value & projection spine (box-BPM → archetypes → recruiting → transfer → draft)](#mbb--wbb--player-value--projection-spine-box-bpm-%E2%86%92-archetypes-%E2%86%92-recruiting-%E2%86%92-transfer-%E2%86%92-draft)
   - [Recruiting — ESPN NCAA recruiting family + On3 rankings](#recruiting--espn-ncaa-recruiting-family--on3-rankings)
@@ -162,6 +163,31 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)
+
+- feat(nba): `score_shot_xpoints` + `xpoints_baseline` — per-shot expected
+  points from the `LeagueAverages` zone-FG% table that
+  `nba_stats_shotchartdetail` returns for free (no bundled artifact,
+  compute-on-demand). Asserts the three zone join keys share dtype before
+  joining; `game_id` stays `Utf8` (zero-padded), `player_id`/`team_id`
+  `Int64`.
+- feat(nba): `make_prob_by_context` + `make_prob_joint` — FG% by defender
+  distance and shot clock (aggregate `playerdashptshots` buckets, the only
+  form the public API exposes) plus an independence-combined joint via odds
+  multipliers.
+- feat(nba): `shooter_talent` — regressed make%-above-expected per shooter
+  (split-half-fitted shrinkage `k`; NBA/G-League 70.1).
+- feat(nba): `shot_selection_quality` (player expected value per shot vs the
+  league) + `zone_value_map` (per-player per-zone points / expected points).
+- feat(nba): `nba_shot_value` orchestrator (fetch → score → all five models,
+  `include_context=`) + `nba_shot_value_lineups` (`shotchartlineupdetail`
+  variant). One league-agnostic core switched by `league_id` (`"00"` NBA,
+  `"10"` WNBA, `"20"` G-League); court geometry + shrinkage constants keyed
+  by league.
+- feat(wnba): `wnba_shot_value` by-reference shim (`league_id="10"`) + the
+  five model functions re-exported; G-League is `nba_shot_value(...,
+  league_id="20")`.
 
 ### MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)
 
