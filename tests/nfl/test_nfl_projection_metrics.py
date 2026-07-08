@@ -4,9 +4,12 @@ import numpy as np
 import polars as pl
 
 from sportsdataverse.nfl.nfl_projection_constants import (
+    SCORING_PPR,
+    SCORING_STANDARD,
     as_of_season_split,
     brier_score,
     calibration_table,
+    get_position_constants,
     log_loss_score,
     mae,
     spearman_corr,
@@ -48,3 +51,17 @@ def test_as_of_split_excludes_target_and_future():
     df = pl.DataFrame({"season": [2021, 2022, 2023, 2024], "x": [1, 2, 3, 4]})
     out = as_of_season_split(df, 2023)
     assert out["season"].to_list() == [2021, 2022]  # 2023 and 2024 excluded
+
+
+def test_scoring_formats():
+    assert SCORING_PPR["receptions"] == 1.0
+    assert SCORING_STANDARD["receptions"] == 0.0
+
+
+def test_position_constants_availability_order():
+    assert get_position_constants("QB").base_availability > get_position_constants("RB").base_availability
+
+
+def test_position_constants_unknown_returns_default():
+    default = get_position_constants("LS")  # fringe position group -> DEFAULT bucket, no raise
+    assert default.recency_weights == (5.0, 4.0, 3.0)

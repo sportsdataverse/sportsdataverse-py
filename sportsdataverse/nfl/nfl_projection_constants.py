@@ -9,9 +9,108 @@ convention.
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+from typing import Dict, Tuple
+
 import numpy as np
 import polars as pl
 from scipy.stats import rankdata
+
+# ---------------------------------------------------------------------------
+# Scoring formats
+# ---------------------------------------------------------------------------
+
+SCORING_PPR: Dict[str, float] = {
+    "passing_yards": 0.04,
+    "passing_tds": 4.0,
+    "interceptions": -2.0,
+    "rushing_yards": 0.1,
+    "rushing_tds": 6.0,
+    "receptions": 1.0,
+    "receiving_yards": 0.1,
+    "receiving_tds": 6.0,
+    "fumbles_lost": -2.0,
+}
+SCORING_HALF: Dict[str, float] = {**SCORING_PPR, "receptions": 0.5}
+SCORING_STANDARD: Dict[str, float] = {**SCORING_PPR, "receptions": 0.0}
+
+
+# ---------------------------------------------------------------------------
+# Per-position fitted constants
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class PositionConstants:
+    """Fitted per-position-group constants for the projection spine.
+
+    Attributes:
+        recency_weights (tuple[float, ...]): Marcel recency weights, most
+            recent season first.
+        shrinkage_k (float): Regression-to-position-mean constant; shrink
+            weight is ``k / (k + reliability)``.
+        min_volume (float): Minimum season volume for aging-curve pairs.
+        aging_base_age (float): Reference (peak) age for the position.
+        base_availability (float): Position base availability rate in [0, 1].
+        fp_calibration (tuple[float, float]): ``(intercept, slope)`` of the
+            per-position fantasy-points calibration ``a + b * raw_proj_fp``.
+    """
+
+    recency_weights: Tuple[float, ...] = (5.0, 4.0, 3.0)
+    shrinkage_k: float = 8.0
+    min_volume: float = 40.0
+    aging_base_age: float = 26.0
+    base_availability: float = 0.85
+    fp_calibration: Tuple[float, float] = (0.0, 1.0)
+
+
+# Seed values; shrinkage_k / base_availability / fp_calibration are overwritten
+# by the fitting tasks (dev/nfl_projection/fit_shrinkage.py,
+# fit_availability.py, fit_fantasy_calibration.py).
+POSITION_CONSTANTS: Dict[str, PositionConstants] = {
+    "QB": PositionConstants(shrinkage_k=6.0, min_volume=100.0, aging_base_age=27.0, base_availability=0.92),
+    "RB": PositionConstants(shrinkage_k=10.0, min_volume=60.0, aging_base_age=25.0, base_availability=0.80),
+    "WR": PositionConstants(shrinkage_k=8.0, min_volume=40.0, aging_base_age=26.0, base_availability=0.85),
+    "TE": PositionConstants(shrinkage_k=8.0, min_volume=30.0, aging_base_age=27.0, base_availability=0.83),
+    "DEFAULT": PositionConstants(),
+}
+
+
+def get_position_constants(pos_group: str) -> PositionConstants:
+    """Look up the fitted constants for a position group.
+
+    Unknown / fringe position groups (nflverse ships ``LS``, ``SPEC``, ``OL``,
+    etc.) resolve to the documented ``DEFAULT`` bucket rather than raising.
+
+    Args:
+        pos_group (str): Position group key (``"QB"``, ``"RB"``, ``"WR"``,
+            ``"TE"``, or anything else for the default bucket).
+
+    Returns:
+        PositionConstants: The per-position constants record.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_projection_constants import get_position_constants
+            get_position_constants("RB").shrinkage_k
+    """
+    return POSITION_CONSTANTS.get(pos_group, POSITION_CONSTANTS["DEFAULT"])
+
+
+@dataclass(frozen=True)
+class ProjectionConfig:
+    """Projection-spine configuration knobs.
+
+    Attributes:
+        team_games (int): Regular-season team games (17 from 2021).
+        min_realized_games (int): Realized-games floor for oracle joins.
+        scoring (dict[str, float]): Default scoring format (PPR).
+    """
+
+    team_games: int = 17
+    min_realized_games: int = 8
+    scoring: Dict[str, float] = field(default_factory=lambda: dict(SCORING_PPR))
 
 
 def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
