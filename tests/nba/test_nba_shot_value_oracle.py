@@ -33,6 +33,7 @@ ZONE_BANDS = {
     "Mid-Range": (0.36, 0.44),
     "Left Corner 3": (0.36, 0.42),
     "Right Corner 3": (0.36, 0.42),
+    "Above the Break 3": (0.35, 0.38),
 }
 
 

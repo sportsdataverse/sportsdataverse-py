@@ -810,6 +810,39 @@ rapm = wnba_rapm_from_games(game_ids)
 print(rapm.sort("rapm", descending=True).head(10))
 ```
 
+### `wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#wnba_shot_value}
+
+WNBA one-call shot-value spine (`league_id="10"`).
+
+Thin wrapper binding `sportsdataverse.nba.nba_shot_value.nba_shot_value`
+to the women's league; fetches each player's `shotchartdetail`, scores
+per-shot expected points from the free `LeagueAverages` zone table, and
+returns the scored shots plus shooter talent, selection quality, and
+zone-value maps (and the defender/shot-clock context tables when
+`include_context=True`). Women's court geometry + shrinkage constant are
+keyed `"10"` in `nba_shot_value_constants`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_ids` | `list[int]` |  | Player ids to fetch. |
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `include_context` | `bool` | `False` | Also fetch + return the `playerdashptshots` defender/shot-clock context tables. |
+| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
+
+**Returns**
+
+`{"shots", "talent", "selection", "zones"}` (plus `"context"` when requested). An empty fetch returns a dict of zero-row frames.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_shot_value
+out = wnba_shot_value([1628886], "2024")
+out["talent"].head()
+```
+
 ### `zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#zone_value_map}
 
 Per-player per-zone value map: points and expected points per shot.

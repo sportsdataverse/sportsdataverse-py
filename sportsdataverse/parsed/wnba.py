@@ -188,6 +188,7 @@ from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
+from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
 from sportsdataverse.wnba import zone_value_map as zone_value_map  # noqa: F401
 
 __all__ = [
@@ -356,6 +357,7 @@ __all__ = [
     "wnba_pbp_disk",
     "wnba_possessions",
     "wnba_rapm_from_games",
+    "wnba_shot_value",
     "zone_value_map",
 ]
 

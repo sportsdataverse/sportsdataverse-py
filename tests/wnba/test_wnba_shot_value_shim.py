@@ -1,6 +1,6 @@
 """WNBA shot-value shim is the nba core bound to league_id=10; G-League verified."""
 
-import functools
+import importlib
 
 from sportsdataverse.nba.nba_shot_value import (
     make_prob_by_context as nba_make_prob_by_context,
@@ -19,10 +19,26 @@ from sportsdataverse.wnba.wnba_shot_value import (
 )
 
 
-def test_wnba_shot_value_binds_league_10():
-    assert isinstance(wnba_shot_value, functools.partial)
-    assert wnba_shot_value.func is nba_shot_value
-    assert wnba_shot_value.keywords == {"league_id": "10"}
+def test_wnba_shot_value_binds_league_10(monkeypatch):
+    # thin wrapper: delegates to the nba core with league_id="10" (offline spy)
+    seen = {}
+
+    def _spy(player_ids, season, *, league_id="00", **kw):
+        seen.update(player_ids=player_ids, season=season, league_id=league_id, **kw)
+        return {}
+
+    # __init__ star-export rebinds `wnba_shot_value` on the package, shadowing the
+    # submodule attr — resolve the real module via importlib to patch its import.
+    wnba_mod = importlib.import_module("sportsdataverse.wnba.wnba_shot_value")
+    monkeypatch.setattr(wnba_mod, "nba_shot_value", _spy)
+    wnba_shot_value([1628886], "2024", include_context=True)
+    assert seen == {
+        "player_ids": [1628886],
+        "season": "2024",
+        "league_id": "10",
+        "include_context": True,
+        "return_as_pandas": False,
+    }
 
 
 def test_model_functions_reexported_by_reference():
