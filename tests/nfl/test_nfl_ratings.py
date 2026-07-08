@@ -2,7 +2,75 @@
 
 import polars as pl
 
-from sportsdataverse.nfl.nfl_ratings import efficiency_ratings, opponent_adjusted_ridge
+from sportsdataverse.nfl.nfl_ratings import (
+    efficiency_ratings,
+    opponent_adjusted_ridge,
+    special_teams_ratings,
+)
+
+
+def test_special_teams_ratings_strong_unit_positive_and_absent_zero():
+    rows = []
+    # A's ST unit is strong (+0.2 EPA/play) vs B; C never appears on an ST play
+    # but is on the scrimmage roster and must get the documented 0.0 fill.
+    for g, home in (("g1", "A"), ("g2", "B")):
+        for _ in range(20):
+            rows.append(
+                {
+                    "game_id": g,
+                    "posteam": "A",
+                    "defteam": "B",
+                    "home_team": home,
+                    "epa": 0.20,
+                    "wp": 0.5,
+                    "special": 1,
+                    "qb_kneel": 0,
+                    "qb_spike": 0,
+                    "play_type": "kickoff",
+                }
+            )
+            rows.append(
+                {
+                    "game_id": g,
+                    "posteam": "B",
+                    "defteam": "A",
+                    "home_team": home,
+                    "epa": -0.20,
+                    "wp": 0.5,
+                    "special": 1,
+                    "qb_kneel": 0,
+                    "qb_spike": 0,
+                    "play_type": "kickoff",
+                }
+            )
+            rows.append(
+                {
+                    "game_id": g,
+                    "posteam": "C",
+                    "defteam": "A",
+                    "home_team": home,
+                    "epa": 0.0,
+                    "wp": 0.5,
+                    "special": 0,
+                    "qb_kneel": 0,
+                    "qb_spike": 0,
+                    "play_type": "pass",
+                }
+            )
+    out = special_teams_ratings(pl.DataFrame(rows))
+    assert out.schema == {"team_id": pl.Utf8, "adj_st_epa": pl.Float64}
+    a = out.filter(pl.col("team_id") == "A").row(0, named=True)
+    b = out.filter(pl.col("team_id") == "B").row(0, named=True)
+    c = out.filter(pl.col("team_id") == "C").row(0, named=True)
+    assert a["adj_st_epa"] > 0.0
+    assert a["adj_st_epa"] > b["adj_st_epa"]
+    assert c["adj_st_epa"] == 0.0
+
+
+def test_special_teams_ratings_empty_input():
+    out = special_teams_ratings(_competitive_plays().head(0))
+    assert out.height == 0
+    assert out.schema == {"team_id": pl.Utf8, "adj_st_epa": pl.Float64}
 
 
 def _competitive_plays(extra_rows=None):

@@ -37,6 +37,11 @@ _EFFICIENCY_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "games": pl.Int64,
 }
 
+_ST_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "team_id": pl.Utf8,
+    "adj_st_epa": pl.Float64,
+}
+
 
 def opponent_adjusted_ridge(
     plays: pl.DataFrame,
@@ -182,4 +187,59 @@ def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = No
         .rename({"off_coef": "adj_off_epa", "def_coef": "adj_def_epa"})
         .with_columns(adj_net=pl.col("adj_off_epa") - pl.col("adj_def_epa"))
         .select("team_id", "adj_off_epa", "adj_def_epa", "adj_net", "games")
+    )
+
+
+def special_teams_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:
+    """One row per team: opponent-adjusted special-teams EPA per play.
+
+    Reuses :func:`opponent_adjusted_ridge` (no forked solver) restricted to
+    ``special == 1`` plays with ``resp_col="epa"``; ``adj_st_epa`` is the
+    ``off_coef`` (the special-teams unit acting as "offense" on the play).
+    Teams appearing anywhere in ``plays`` but on no special-teams play get
+    the documented neutral fill ``adj_st_epa = 0.0``.
+
+    Args:
+        plays: An ``load_nfl_pbp``-schema frame carrying ``posteam``,
+            ``defteam``, ``home_team``, ``epa``, ``special``. Not
+            pre-filtered -- this function selects the ST plays itself.
+        config: Tuning knobs (only ``ridge_lambda`` is consulted); defaults
+            to :class:`RatingsConfig`.
+
+    Returns:
+        pl.DataFrame: One row per ``team_id`` (Utf8) with ``adj_st_epa``
+        (Float64). Zero-row, correctly-typed when ``plays`` is empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nfl.nfl_ratings import special_teams_ratings
+            st = special_teams_ratings(pbp)
+            st.sort("adj_st_epa", descending=True).head()
+    """
+    cfg = config or RatingsConfig()
+    if plays.height == 0:
+        return pl.DataFrame(schema=_ST_OUTPUT_SCHEMA)
+    roster = plays.select(pl.col("posteam").cast(pl.Utf8).alias("team_id")).drop_nulls().unique()
+    st_plays = plays.filter(
+        (pl.col("special") == 1)
+        & (pl.col("epa").is_not_null())
+        & (pl.col("posteam").is_not_null())
+        & (pl.col("defteam").is_not_null())
+    )
+    if st_plays.height == 0:
+        return roster.with_columns(pl.lit(0.0).alias("adj_st_epa")).select("team_id", "adj_st_epa")
+    frame, _intercept, _home = opponent_adjusted_ridge(
+        st_plays,
+        off_col="posteam",
+        def_col="defteam",
+        home_col="home_team",
+        resp_col="epa",
+        lam=cfg.ridge_lambda,
+    )
+    assert roster.schema["team_id"] == frame.schema["team_id"]
+    return (
+        roster.join(frame.select("team_id", "off_coef"), on="team_id", how="left")
+        .with_columns(pl.col("off_coef").fill_null(0.0).alias("adj_st_epa"))
+        .select("team_id", "adj_st_epa")
     )
