@@ -1,0 +1,7 @@
+{
+  "league": "nba",
+  "features": ["age", "prior_gp_pct", "career_gp_pct", "age_sq", "bmi"],
+  "coef": [0.0, 2.0, 1.0, 0.0, 0.0],
+  "intercept": 1.0,
+  "_placeholder": "seed weights pending Task 3.1 fit_availability.py -- overwritten before the phase-3 oracle gate runs"
+}
