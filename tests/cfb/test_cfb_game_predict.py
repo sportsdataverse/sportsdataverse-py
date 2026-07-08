@@ -48,13 +48,14 @@ def _schedule_frame() -> pl.DataFrame:
 
 
 def test_predict_margin_neutral_carries_no_hfa() -> None:
-    """On a neutral field the margin is exactly the rating differential."""
-    assert predict_margin(0.30, 0.10, neutral=True) == 0.30 - 0.10
+    """On a neutral field the margin is the scaled rating differential, no HFA."""
+    assert predict_margin(0.30, 0.10, neutral=True) == _C.net_points_scale * (0.30 - 0.10)
 
 
 def test_predict_margin_home_adds_hfa() -> None:
-    """A home game adds the era HFA to the rating differential."""
-    assert predict_margin(0.30, 0.10, neutral=False) == (0.30 - 0.10) + _C.hfa
+    """A home game adds the era HFA to the scaled rating differential."""
+    expected = _C.net_points_scale * (0.30 - 0.10) + _C.hfa
+    assert predict_margin(0.30, 0.10, neutral=False) == expected
 
 
 def test_win_prob_equal_strength_neutral_is_half() -> None:
@@ -128,8 +129,8 @@ def test_cfb_predict_games_neutral_row_drops_hfa() -> None:
     out = cfb_predict_games(_schedule_frame(), _ratings_frame())
     neutral = out.filter(pl.col("neutral_site") == True)  # noqa: E712
     assert neutral.height == 1
-    # game 103: home team "1" (adj_net 0.30) vs away "3" (adj_net -0.20)
-    assert neutral["exp_margin"][0] == pytest.approx(0.30 - (-0.20))
+    # game 103: home team "1" (adj_net 0.30) vs away "3" (adj_net -0.20), no HFA
+    assert neutral["exp_margin"][0] == pytest.approx(_C.net_points_scale * (0.30 - (-0.20)))
 
 
 def test_cfb_predict_games_dtype_mismatch_raises() -> None:

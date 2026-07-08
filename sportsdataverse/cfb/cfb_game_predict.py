@@ -37,13 +37,6 @@ _PREDICT_COLUMNS = [
     "exp_total",
 ]
 
-# ponytail: league scoring level for predict_total, in EPA-per-drive-equivalent
-# units. adj_off/adj_def carry the ridge intercept (absolute EPA/play), so their
-# difference for an average matchup is ~0; this offset lifts an average game to a
-# realistic ~55-point total. It is a seeded scale, not a fitted one -- Task 2.3's
-# total gate can promote it to a fitted PredictConfig field if the MAE demands it.
-_TOTAL_BASELINE = 4.5
-
 
 def predict_margin(
     home_adj_net: float,
@@ -60,11 +53,13 @@ def predict_margin(
         away_adj_net: Away team's opponent-adjusted net rating.
         neutral: Whether the game is at a neutral site (no home-field advantage).
         era: Era key into :data:`cfb_prediction_constants.CFB_CONSTANTS` supplying
-            the home-field advantage.
+            the fitted ``net_points_scale`` and ``hfa``.
 
     Returns:
-        The expected margin (home minus away), in points: the rating differential
-        plus the era HFA on non-neutral fields.
+        The expected margin (home minus away), in points:
+        ``net_points_scale * (home_adj_net - away_adj_net) + hfa`` (HFA dropped on
+        neutral fields). ``net_points_scale`` converts the EPA-per-play rating
+        differential into points (fitted on the 2023 backtest).
 
     Example:
         Quick start::
@@ -72,8 +67,9 @@ def predict_margin(
             from sportsdataverse.cfb.cfb_game_predict import predict_margin
             predict_margin(0.30, 0.10, neutral=False)
     """
-    hfa = 0.0 if neutral else get_constants(era).hfa
-    return home_adj_net - away_adj_net + hfa
+    c = get_constants(era)
+    hfa = 0.0 if neutral else c.hfa
+    return c.net_points_scale * (home_adj_net - away_adj_net) + hfa
 
 
 def win_prob_from_margin(exp_margin: float, *, era: str = "modern") -> float:
@@ -108,18 +104,12 @@ def predict_total(
 ) -> float:
     """Expected combined point total from the four efficiency ratings.
 
-    Each side's expected points come from its own offense against the opponent's
-    defense: ``avg_drives * points_per_epa * 0.5 * (own_adj_off + opp_adj_def +
-    baseline)``. Both ``adj_off`` and ``adj_def`` are absolute EPA/play carrying
-    the ridge intercept, and ``adj_def`` is *EPA allowed* (lower = better defense),
-    so summing own offense with the opponent's EPA-allowed is the correct matchup:
-    a strong opposing defense (very negative ``adj_def``) *lowers* this side's
-    expected points. :data:`_TOTAL_BASELINE` sets the league scoring level.
-
-    (This sums ``opp_adj_def`` rather than subtracting it as the design note
-    sketched -- the shipped :func:`cfb_ratings.efficiency_ratings` emits
-    ``adj_def_epa`` as EPA-allowed/lower-is-better, so subtraction would invert
-    the defensive effect.)
+    Fitted linear model ``total_intercept + total_scale * (home_adj_off +
+    away_adj_def + away_adj_off + home_adj_def)``. The four ratings are summed
+    because each side's scoring rises with its own offense and with the opponent's
+    EPA-*allowed* (``adj_def`` is lower = better defense); ``total_scale`` and
+    ``total_intercept`` are fitted on 2023 actual totals so the coarse EPA/play ->
+    points scale and the league baseline are both data-derived.
 
     Args:
         home_adj_off: Home offense adjusted EPA/play (``adj_off_epa``).
@@ -127,10 +117,10 @@ def predict_total(
         away_adj_off: Away offense adjusted EPA/play.
         away_adj_def: Away defense adjusted EPA/play allowed.
         era: Era key into :data:`cfb_prediction_constants.CFB_CONSTANTS` supplying
-            ``avg_drives`` and ``points_per_epa``.
+            the fitted ``total_intercept`` and ``total_scale``.
 
     Returns:
-        The expected combined total points (home side + away side).
+        The expected combined total points.
 
     Example:
         Quick start::
@@ -139,10 +129,8 @@ def predict_total(
             predict_total(0.20, -0.05, 0.10, 0.02)
     """
     c = get_constants(era)
-    scale = c.avg_drives * c.points_per_epa * 0.5
-    home_pts = scale * (home_adj_off + away_adj_def + _TOTAL_BASELINE)
-    away_pts = scale * (away_adj_off + home_adj_def + _TOTAL_BASELINE)
-    return home_pts + away_pts
+    sum4 = home_adj_off + away_adj_def + away_adj_off + home_adj_def
+    return c.total_intercept + c.total_scale * sum4
 
 
 @overload
@@ -214,24 +202,22 @@ def cfb_predict_games(
     home = rate_cols.rename({col: f"home_{col}" for col in rate_cols.columns if col != "team_id"})
     away = rate_cols.rename({col: f"away_{col}" for col in rate_cols.columns if col != "team_id"})
 
-    scale = c.avg_drives * c.points_per_epa * 0.5
     joined = games.join(home, left_on="home_team_id", right_on="team_id", how="left").join(
         away, left_on="away_team_id", right_on="team_id", how="left"
     )
 
     with_margin = joined.with_columns(
         exp_margin=(
-            pl.col("home_adj_net")
-            - pl.col("away_adj_net")
+            c.net_points_scale * (pl.col("home_adj_net") - pl.col("away_adj_net"))
             + pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(c.hfa)  # noqa: E712
         ),
-        exp_total=scale
+        exp_total=c.total_intercept
+        + c.total_scale
         * (
             pl.col("home_adj_off_epa")
             + pl.col("away_adj_def_epa")
             + pl.col("away_adj_off_epa")
             + pl.col("home_adj_def_epa")
-            + 2 * _TOTAL_BASELINE
         ),
     )
     win_prob = norm.cdf(with_margin["exp_margin"].to_numpy() / c.margin_sd)

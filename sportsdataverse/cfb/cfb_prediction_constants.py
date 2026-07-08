@@ -41,20 +41,37 @@ class RatingsConfig:
 class PredictConfig:
     """Era-specific coefficients for the CFB game-outcome prediction model.
 
+    ``net_points_scale``, ``hfa``, ``margin_sd``, ``total_intercept`` and
+    ``total_scale`` are **fitted on the 2023 backtest** by
+    ``dev/cfb_prediction/fit_pregame.py`` (leakage-free, week-by-week as-of
+    ratings) -- see :mod:`sportsdataverse.cfb.cfb_game_predict`. ``adj_net`` from
+    the ratings engine is on an EPA-per-play scale, so ``net_points_scale`` is the
+    fitted EPA/play -> points conversion (without it the rating differential is
+    negligible next to a points-scale HFA and the model is near-constant).
+
     Args:
-        hfa: Home-field advantage, in points.
-        margin_sd: Standard deviation of the scoring-margin distribution used to
-            convert a predicted margin into a win probability.
-        avg_drives: Average number of offensive drives per team per game, used to
-            scale per-drive EPA into a full-game point margin.
-        points_per_epa: Conversion factor from total expected-points-added to points.
+        hfa: Home-field advantage, in points (fitted).
+        margin_sd: Standard deviation of the margin residuals, used to convert a
+            predicted margin into a win probability via the Gaussian CDF (fitted).
+        net_points_scale: Points per unit of net adjusted-EPA/play differential --
+            the fitted slope mapping ``home_adj_net - away_adj_net`` to points.
+        total_intercept: Fitted baseline point total (intercept of the totals fit).
+        total_scale: Fitted slope on the summed four efficiency ratings for totals.
+        avg_drives: Average number of offensive drives per team per game (reserved
+            for the season Monte Carlo in Phase 4).
+        points_per_epa: Conversion factor from expected-points-added to points
+            (reserved for Phase 4).
         quality_win_threshold: Minimum rating differential for a win to count as a
-            "quality win" in résumé-style summaries.
-        bubble_adj_net: Net rating adjustment applied to bubble-team comparisons.
+            "quality win" in résumé-style summaries (Phase 3).
+        bubble_adj_net: Net rating adjustment applied to bubble-team comparisons
+            (Phase 3).
     """
 
     hfa: float
     margin_sd: float
+    net_points_scale: float
+    total_intercept: float
+    total_scale: float
     avg_drives: float
     points_per_epa: float
     quality_win_threshold: float
@@ -62,10 +79,14 @@ class PredictConfig:
 
 
 CFB_CONSTANTS: dict[str, PredictConfig] = {
-    # Seed values only -- Task 1.x fits these from real data and overwrites them.
+    # net_points_scale / hfa / margin_sd / total_* fitted on the 2023 backtest by
+    # dev/cfb_prediction/fit_pregame.py (see that script for the exact procedure).
     "modern": PredictConfig(
-        hfa=2.5,
-        margin_sd=16.5,
+        hfa=3.1369,
+        margin_sd=17.1184,
+        net_points_scale=33.6318,
+        total_intercept=51.7496,
+        total_scale=21.4705,
         avg_drives=12.0,
         points_per_epa=1.0,
         quality_win_threshold=0.0,
