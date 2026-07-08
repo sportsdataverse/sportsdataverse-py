@@ -1830,7 +1830,7 @@ Per-league rule + fitted constants for the shot-quality spine.
 | `rim_radius_ft` | `float` | `4.0` | Radius of the `rim` zone. |
 | `corner_x_ft` | `float` | `21.0` | `\|x\|` at/beyond this (with a small `y`) = corner 3. |
 | `corner_y_ft` | `float` | `9.0` | Baseline band height for the corner-3 test. |
-| `shrink_k_zone` | `float` | `100.0` | Empirical-Bayes cell-toward-zone-mean shrinkage (pseudo-attempts; refined by the Phase-1 fit). |
+| `shrink_k_zone` | `float` | `100.0` | Empirical-Bayes cell-toward-zone-mean shrinkage (pseudo-attempts; hand-chosen default -- at the fixture cell sizes, n per zone x type cell >> k, so its effect is negligible). |
 | `shrink_k_talent` | `float` | `0.0` | Shooter-talent shrinkage (fitted in Phase 3; 0.0 until fit). |
 
 ### `StrengthAdjustedResult(averages: 'dict[str, FieldAverage]', teams: 'list[TeamStrengthAdjusted]') -> None` {#StrengthAdjustedResult}
