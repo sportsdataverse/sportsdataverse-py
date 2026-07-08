@@ -55,7 +55,11 @@ DIVISION_CONSTANTS: dict[str, ProjectionConstants] = {
         blue_chip_star_min=4,
         star_points={5: 100.0, 4: 70.0, 3: 45.0, 2: 25.0, 1: 10.0, 0: 20.0},
         class_recency_weights=(1.0, 0.9, 0.75, 0.55),
-        returning_prod_weights={"offense": 1.0, "defense": 1.0},
+        # Fitted by dev/cfb_projection/fit_returning_weights.py on FBS 2018-2023
+        # (n=794 team-seasons): std-coefs off=+2.52, def=-0.86 margin-pts/SD --
+        # the splash-event defensive measure carries no positive signal, so the
+        # overall combination weights offense only (defense clamped at 0).
+        returning_prod_weights={"offense": 1.0, "defense": 0.0},
         bluechip_title_base_rate=0.50,
         avg_wins=6.0,
     ),

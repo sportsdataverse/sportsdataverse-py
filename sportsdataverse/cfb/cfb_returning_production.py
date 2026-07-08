@@ -85,8 +85,10 @@ def _returning_from_frames(
     j = prev.join(curr_keys, on=["season", "team_id", "player_id"], how="left").with_columns(
         pl.col("returning").fill_null(False)
     )
-    unit_w = pl.when(pl.col("unit") == "offense").then(pl.lit(w["offense"])).otherwise(pl.lit(w["defense"]))
-    j = j.with_columns((pl.col("prod_weight") * unit_w).alias("wp"))
+    # unit weights deliberately do NOT scale prod_weight here: a constant factor
+    # cancels inside the per-unit ret/tot fraction (and a 0 weight would 0/0 it);
+    # they only shape how units combine into overall_returning below
+    j = j.with_columns(pl.col("prod_weight").alias("wp"))
     agg = (
         j.group_by(["season", "team_id", "unit"])
         .agg(
@@ -104,9 +106,16 @@ def _returning_from_frames(
             else wide.with_columns(pl.lit(None, dtype=pl.Float64).alias(out_col))
         )
     n = agg.group_by(["season", "team_id"]).agg(pl.col("n_returning").sum())
+    w_off, w_def = w["offense"], w["defense"]
+    if w_def == 0.0:
+        overall = pl.col("off_returning")
+    elif w_off == 0.0:
+        overall = pl.col("def_returning")
+    else:
+        overall = (pl.col("off_returning") * w_off + pl.col("def_returning") * w_def) / (w_off + w_def)
     return (
         wide.join(n, on=["season", "team_id"], how="left")
-        .with_columns(((pl.col("off_returning") + pl.col("def_returning")) / 2.0).alias("overall_returning"))
+        .with_columns(overall.alias("overall_returning"))
         .select("season", "team_id", "off_returning", "def_returning", "overall_returning", "n_returning")
     )
 

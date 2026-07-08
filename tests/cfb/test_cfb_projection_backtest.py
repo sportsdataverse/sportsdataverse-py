@@ -62,3 +62,60 @@ def test_talent_ranks_are_dense_from_one(oracle_corpus: dict[str, pl.DataFrame])
     assert (talent["talent_rank"] > 0).all()
     top = talent.sort("talent_rank").row(0, named=True)
     assert top["talent_247"] == talent["talent_247"].max()  # rank 1 has the highest rating
+
+
+_RETURNING = _FIX / "returning_2017_2023.parquet"
+
+
+@pytest.mark.skipif(not _RETURNING.exists(), reason="returning-production fixture not captured")
+def test_returning_production_retention_gate(oracle_corpus: dict[str, pl.DataFrame]) -> None:
+    """Phase-2 gate: returning production predicts YoY scoring-margin change.
+
+    Observed on the 2026-07-08 capture (FBS 2018-2023, >=6 games both seasons,
+    n=794): spearman(overall_returning, margin_delta) = 0.229 with the fitted
+    unit weights (offense-only; see fit_returning_weights.py). Floor set one
+    notch below at 0.20 -- never lower it to pass.
+    """
+    from sportsdataverse.cfb.cfb_projection_constants import get_constants, spearman_corr
+
+    rp = pl.read_parquet(_RETURNING)
+    res = oracle_corpus["results"]
+    home = res.select(
+        pl.col("season"),
+        pl.col("home_team_id").alias("team_id"),
+        (pl.col("home_score") - pl.col("away_score")).alias("m"),
+    )
+    away = res.select(
+        pl.col("season"),
+        pl.col("away_team_id").alias("team_id"),
+        (pl.col("away_score") - pl.col("home_score")).alias("m"),
+    )
+    margins = (
+        pl.concat([home, away])
+        .group_by("season", "team_id")
+        .agg(pl.col("m").mean().alias("avg_margin"), pl.len().alias("g"))
+    )
+    delta = (
+        margins.join(
+            margins.with_columns((pl.col("season") + 1).alias("season")).rename(
+                {"avg_margin": "prior_margin", "g": "prior_g"}
+            ),
+            on=["season", "team_id"],
+            how="inner",
+        )
+        .filter((pl.col("g") >= 6) & (pl.col("prior_g") >= 6))
+        .with_columns((pl.col("avg_margin") - pl.col("prior_margin")).alias("margin_delta"))
+    )
+    # recombine overall from the unit columns with the CURRENT fitted weights so the
+    # committed fixture stays valid across weight refits
+    w = get_constants("fbs").returning_prod_weights
+    fbs = rp.filter(pl.col("classification") == "fbs").drop_nulls(["team_id", "off_returning", "def_returning"])
+    denom = w["offense"] + w["defense"]
+    fbs = fbs.with_columns(
+        ((pl.col("off_returning") * w["offense"] + pl.col("def_returning") * w["defense"]) / denom).alias("overall_w")
+    )
+    assert fbs.schema["team_id"] == delta.schema["team_id"] == pl.Utf8
+    j = fbs.join(delta, on=["season", "team_id"], how="inner")
+    assert j.height >= 700, f"expected ~794 FBS team-season rows, got {j.height}"
+    rho = spearman_corr(j["overall_w"].to_numpy(), j["margin_delta"].to_numpy())
+    assert rho >= 0.20, f"spearman(overall_returning, margin_delta) = {rho:.4f} < 0.20"
