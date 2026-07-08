@@ -1,0 +1,18 @@
+schema: sports247_positions
+kind: dataframe
+columns:
+- name: group
+  type: character
+  description: ''
+- name: group_key
+  type: integer
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: label
+  type: character
+  description: ''
+- name: value
+  type: character
+  description: ''

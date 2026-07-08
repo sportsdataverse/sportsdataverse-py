@@ -76,6 +76,7 @@ _GUEST_USABLE: Tuple[str, ...] = (
     "target_predictions",
     "sport_years",
     "tags_autocomplete",
+    "positions",
 )
 
 _OVERRIDES: Dict[str, Dict[str, Any]] = {
@@ -267,6 +268,23 @@ _OVERRIDES: Dict[str, Dict[str, Any]] = {
         ],
         "parser": "parse_sports247_result_set",
         "example_args": {"default_name": "smith"},
+    },
+    "positions": {
+        "summary": "247Sports position lookup for a sport (position group, abbreviation, and key).",
+        "path": "/rdb/v1/positions/",
+        "extra_params": [
+            {
+                "name": "sport_key",
+                "query_key": "sportKey",
+                "type": "int",
+                "default": 1,
+                "description": "247Sports sport key (1 = football, 2 = basketball).",
+            },
+            {"name": "year", "query_key": "year", "type": "int"},
+            {"name": "ranking_key", "query_key": "rankingKey", "type": "int"},
+        ],
+        "parser": "parse_sports247_result_set",
+        "example_args": {"sport_key": 1},
     },
 }
 
@@ -505,6 +523,13 @@ _SCHEMA_COLUMNS: Dict[str, List[Tuple[str, str]]] = {
         ("name", "character"),
         ("type", "character"),
         ("annotation", "character"),
+    ],
+    "positions": [
+        ("group", "character"),
+        ("group_key", "integer"),
+        ("name", "character"),
+        ("label", "character"),
+        ("value", "character"),
     ],
 }
 

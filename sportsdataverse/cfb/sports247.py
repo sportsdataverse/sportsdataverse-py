@@ -29,6 +29,7 @@ __all__ = [
     "sports247_target_predictions",
     "sports247_sport_years",
     "sports247_tags_autocomplete",
+    "sports247_positions",
 ]
 
 
@@ -506,6 +507,49 @@ def sports247_tags_autocomplete(
         params={
             "defaultName": default_name,
             "items": items,
+            **{_k: _v for _k, _v in kwargs.items() if _v is not None},
+        },
+    )
+    if return_parsed:
+        return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def sports247_positions(
+    sport_key: Optional[int] = 1,
+    year: Optional[int] = None,
+    ranking_key: Optional[int] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """247Sports position lookup for a sport (position group, abbreviation, and key).
+
+    Endpoint: ``GET https://ipa.247sports.com/rdb/v1/positions/``
+    Example URL: https://ipa.247sports.com/rdb/v1/positions/?sportKey=1
+
+    Args:
+        sport_key: sportKey query parameter.
+        year: year query parameter.
+        ranking_key: rankingKey query parameter.
+        return_parsed: parse the payload through parse_sports247_result_set -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Example:
+        Quick start::
+
+            sports247_positions(sport_key=1)
+    """
+    raw = _get(
+        "https://ipa.247sports.com/rdb/v1/positions/",
+        params={
+            "sportKey": sport_key,
+            "year": year,
+            "rankingKey": ranking_key,
             **{_k: _v for _k, _v in kwargs.items() if _v is not None},
         },
     )
