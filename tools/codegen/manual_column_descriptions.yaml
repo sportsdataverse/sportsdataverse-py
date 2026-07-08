@@ -3820,6 +3820,18 @@ nfl_rosters:
   team_league: League identifier confirming the team belongs to the NFL.
   team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
   team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_ratings:
+  adj_def_epa: Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit.
+  adj_net: Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in).
+  adj_off_epa: Opponent-adjusted offensive EPA per play (higher is better); competitive-play ridge fit.
+  adj_st_epa: Opponent-adjusted special-teams EPA per play (ridge on special==1 plays; 0.0 for teams with no special-teams plays in the window).
+  def_rank: Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better).
+  games: Number of games the team played in the fitted window.
+  net_rank: Dense rank on adj_net descending (best net rating = 1).
+  net_z: Z-score of adj_net across the 32 teams.
+  off_rank: Dense rank on adj_off_epa descending (best offense = 1).
+  season: Season the ratings cover (null for a pooled multi-season fit).
+  team_id: nflverse team abbreviation (character join key, e.g. "KC").
 nfl_season_standings:
   season: Season identifier from the input games frame (named `sim` instead when the input used a `sim` column).
   conf: Conference of the team (AFC or NFC).

@@ -5730,6 +5730,37 @@ update_config(cache_mode="filesystem")
 clear_cache()  # wipe disk + memory together
 ```
 
+### `efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#efficiency_ratings}
+
+One row per team: opponent-adjusted offense/defense EPA per play.
+
+Filters `plays` to competitive non-special-teams scrimmage plays
+(`special != 1`, `qb_kneel != 1`, `qb_spike != 1`,
+`min_competitive_wp <= wp <= max_competitive_wp`, non-null
+`epa`/`posteam`/`defteam`) and fits
+`opponent_adjusted_ridge` on `epa`. Callers pass an already
+as-of-date-filtered frame (the public `nfl_ratings` entry point does
+the date filter) -- this function is pure.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | An `load_nfl_pbp`-schema frame carrying `game_id`, `posteam`, `defteam`, `home_team`, `epa`, `wp`, `special`, `qb_kneel`, `qb_spike`. |
+| `config` | `RatingsConfig \| None` | `None` | Tuning knobs (`ridge_lambda` + the competitive-`wp` window); defaults to `RatingsConfig`. |
+
+**Returns**
+
+One row per `team_id` (Utf8) with `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64, `adj_net = adj_off_epa - adj_def_epa`) and `games` (Int64). Zero-row, correctly-typed on empty/fully-filtered input.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_ratings import efficiency_ratings
+ratings = efficiency_ratings(pbp)
+ratings.sort("adj_net", descending=True).head()
+```
+
 ### `espn_nfl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nfl_teams}
 
 espn_nfl_teams - look up NFL teams
@@ -7046,6 +7077,62 @@ print(xwalk.columns)
 pbp.join(nfl_players_crosswalk(), left_on="passer_player_id", right_on="gsis_id", how="left")
 ```
 
+### `nfl_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nfl_ratings}
+
+One row per team: the native NFL ratings spine (off/def/ST EPA).
+
+Public orchestrator over `efficiency_ratings` +
+`special_teams_ratings`. Loads play-by-play + schedule via
+`load_nfl_pbp` / `load_nfl_schedule`, joins each game's `gameday`
+onto the plays, optionally applies the as-of-date leakage boundary
+(only plays from games with `gameday < as_of_date` are used), then
+fits both components and reshapes into one wide per-team table with
+dense ranks and a net z-score.
+
+The loaded pbp is down-selected to the ridge columns *before* any fit so
+no market column (`spread_line` / `vegas_wp`) can leak into the
+ratings (the binding non-market boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season (e.g. `2023`) or a list of seasons pooled into one combined fit. |
+| `as_of_date` | `date \| None` | `None` | When given, only plays from games strictly before this date are used (mirrors what was knowable heading into that date). `None` (default) uses the full season(s). |
+| `config` | `RatingsConfig \| None` | `None` | Tuning knobs forwarded to both component fits; defaults to `RatingsConfig`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+
+**Returns**
+
+A DataFrame with one row per `team_id`: `season` (Int64 -- the single passed season, `null` for a pooled multi-season call), `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_st_epa` / `adj_net` (Float64; `adj_net` is offense minus defense -- special teams stays a separate column), `games` (Int64), `off_rank` / `def_rank` / `net_rank` (Int64; `def_rank` ascends -- fewer EPA allowed ranks better), `net_z` (Float64). Zero-row, correctly-typed when the seasons have no data or `as_of_date` filters out every play.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the ratings cover (null for a pooled multi-season fit). |
+| `team_id` | character | nflverse team abbreviation (character join key, e.g. "KC"). |
+| `adj_off_epa` | double | Opponent-adjusted offensive EPA per play (higher is better); competitive-play ridge fit. |
+| `adj_def_epa` | double | Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit. |
+| `adj_st_epa` | double | Opponent-adjusted special-teams EPA per play (ridge on special==1 plays; 0.0 for teams with no special-teams plays in the window). |
+| `adj_net` | double | Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in). |
+| `games` | integer | Number of games the team played in the fitted window. |
+| `off_rank` | integer | Dense rank on adj_off_epa descending (best offense = 1). |
+| `def_rank` | integer | Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better). |
+| `net_rank` | integer | Dense rank on adj_net descending (best net rating = 1). |
+| `net_z` | double | Z-score of adj_net across the 32 teams. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ratings
+ratings = nfl_ratings(2023)
+ratings.sort("net_rank").head()
+
+# As-of-date leakage boundary
+
+import datetime as dt
+week6 = nfl_ratings(2023, as_of_date=dt.date(2023, 10, 12))
+```
+
 ### `nfl_season_standings(games: 'pl.DataFrame', *, ranks: 'str' = 'CONF', tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_season_standings}
 
 Compute NFL standings with the real NFL tiebreaking procedures.
@@ -7331,6 +7418,44 @@ sched = nfl_week_games(season=2024, season_type="REG", week=1)
 sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
 ```
 
+### `opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False) -> 'tuple[pl.DataFrame, float, float]'` {#opponent_adjusted_ridge}
+
+Ridge-regress `resp_col` on offense + defense team indicators + HFA.
+
+League-agnostic (column names are arguments) so this is the single solver
+a T7.2 refactor can lift into common_ratings` to back both CFB and
+NFL. Builds the offense/defense-indicator + intercept + home design and
+solves the ridge normal equations `beta = (X'X + lam*R)^-1 X'y`. Only
+team coefficients are penalised; the intercept (and, unless
+`penalize_home`, the home term) is free.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | One row per play. Rows with a null `off_col` / `def_col` / `resp_col` must be filtered by the caller. |
+| `off_col` | `str` |  | Column naming the offense (possession) team. |
+| `def_col` | `str` |  | Column naming the defense team. |
+| `home_col` | `str` |  | Column naming the home team (HFA indicator is `off_col == home_col`). |
+| `resp_col` | `str` |  | Numeric response column (e.g. `epa`). |
+| `lam` | `float` |  | Ridge penalty applied to the team coefficients. |
+| `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
+
+**Returns**
+
+A `(frame, intercept, home_coef)` tuple: `frame` has one row per team (`team_id` Utf8, `off_coef` / `def_coef` Float64); `intercept` is the league baseline; `home_coef` the fitted HFA in response units. Zero-row frame + `(0.0, 0.0)` on empty input.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_ratings import opponent_adjusted_ridge
+frame, intercept, hfa = opponent_adjusted_ridge(
+    plays, off_col="posteam", def_col="defteam",
+    home_col="home_team", resp_col="epa", lam=200.0,
+)
+frame.sort("off_coef", descending=True).head()
+```
+
 ### `reset_config() -> 'NflConfig'` {#reset_config}
 
 Reset the active config to its env-var-derived defaults.
@@ -7571,6 +7696,35 @@ wk1.select(["season", "week", "player_display_name", "team_abbr"]).head()
 # Season-aggregate row (week 0)
 
 tot = scrape_ngs_week("rushing", 2023, week=0)
+```
+
+### `special_teams_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#special_teams_ratings}
+
+One row per team: opponent-adjusted special-teams EPA per play.
+
+Reuses `opponent_adjusted_ridge` (no forked solver) restricted to
+`special == 1` plays with `resp_col="epa"`; `adj_st_epa` is the
+`off_coef` (the special-teams unit acting as "offense" on the play).
+Teams appearing anywhere in `plays` but on no special-teams play get
+the documented neutral fill `adj_st_epa = 0.0`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | An `load_nfl_pbp`-schema frame carrying `posteam`, `defteam`, `home_team`, `epa`, `special`. Not pre-filtered -- this function selects the ST plays itself. |
+| `config` | `RatingsConfig \| None` | `None` | Tuning knobs (only `ridge_lambda` is consulted); defaults to `RatingsConfig`. |
+
+**Returns**
+
+One row per `team_id` (Utf8) with `adj_st_epa` (Float64). Zero-row, correctly-typed when `plays` is empty.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_ratings import special_teams_ratings
+st = special_teams_ratings(pbp)
+st.sort("adj_st_epa", descending=True).head()
 ```
 
 ### `team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'` {#team_name_fn}
