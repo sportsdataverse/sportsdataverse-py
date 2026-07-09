@@ -155,7 +155,10 @@ def test_matchup_drapm_internal_concurrent_validity(playtype_corpus):
             pl.col("partial_poss").sum().alias("tot"),
         )
     )
-    jr = drapm.rename({"player_id": "def_player_id"}).join(raw, on="def_player_id").filter(pl.col("tot") >= 500)
+    drapm_d = drapm.rename({"player_id": "def_player_id"})
+    assert drapm_d.schema["def_player_id"] == raw.schema["def_player_id"]  # join-key dtype guard
+    jr = drapm_d.join(raw, on="def_player_id").filter(pl.col("tot") >= 500)
+    assert jr.height >= 200  # non-vacuous sample floor (observed 251); a shrunken re-capture can't pass empty
     rho = spearman_corr(jr["matchup_drapm"].to_numpy(), jr["raw_pa100"].to_numpy())
     assert rho <= DRAPM_INTERNAL_VALIDITY_FLOOR  # observed -0.733
     assert rho > -0.98  # offense-FE adjustment is non-trivial (not a raw passthrough)
@@ -180,5 +183,6 @@ def test_matchup_drapm_vs_shipped_rapm_DEFERRED(playtype_corpus):
     rapm = playtype_corpus["rapm"].select("player_id", "d_rapm")
     assert drapm.schema["player_id"] == rapm.schema["player_id"] == pl.Int64
     j = drapm.join(rapm, on="player_id", how="inner").filter(pl.col("matchup_poss") >= 200)
+    assert j.height >= 200  # non-vacuous sample floor (in place for when this is un-skipped)
     rho = spearman_corr(j["matchup_drapm"].to_numpy(), j["d_rapm"].to_numpy())
     assert rho >= 0.3  # DRAPM_SPEARMAN_FLOOR -- see skip reason for why this can't run yet
