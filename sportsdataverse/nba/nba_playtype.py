@@ -210,7 +210,7 @@ def adjust_playtype_efficiency(
     return pl.concat(out_frames, how="vertical_relaxed").sort("team_id", "play_type")
 
 
-def _fetch_synergy_team(league_id: str, season: str, grouping: str) -> pl.DataFrame:
+def _fetch_synergy(league_id: str, season: str, grouping: str, entity: str = "T") -> pl.DataFrame:
     from sportsdataverse.nba.nba_stats import nba_stats_synergyplaytypes
 
     frames = []
@@ -219,7 +219,7 @@ def _fetch_synergy_team(league_id: str, season: str, grouping: str) -> pl.DataFr
             league_id=league_id,
             season=season,
             play_type_nullable=pt,
-            player_or_team_abbreviation="T",
+            player_or_team_abbreviation=entity,
             type_grouping_nullable=grouping,
         )
         if isinstance(df, pl.DataFrame) and not df.is_empty():
@@ -229,6 +229,14 @@ def _fetch_synergy_team(league_id: str, season: str, grouping: str) -> pl.DataFr
     return pl.concat(frames, how="diagonal_relaxed").rename(
         {"poss_pct": "freq", "tov_poss_pct": "turnover_freq", "ft_poss_pct": "ft_freq"}, strict=False
     )
+
+
+def _fetch_synergy_team(league_id: str, season: str, grouping: str) -> pl.DataFrame:
+    return _fetch_synergy(league_id, season, grouping, entity="T")
+
+
+def _fetch_synergy_player(league_id: str, season: str, grouping: str = "Offensive") -> pl.DataFrame:
+    return _fetch_synergy(league_id, season, grouping, entity="P")
 
 
 def _fetch_schedule(league_id: str, season: str) -> pl.DataFrame:
