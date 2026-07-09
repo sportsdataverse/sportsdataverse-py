@@ -3871,6 +3871,40 @@ nfl_rosters:
   team_league: League identifier confirming the team belongs to the NFL.
   team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
   team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_player_props:
+  game_id: Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB").
+  line: Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available.
+  opp_team_id: Opponent team nflverse abbreviation (drives the matchup multiplier).
+  p_over: Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line.
+  player_id: nflverse GSIS player identifier (character join key).
+  position: Player position (QB, RB, WR, TE) selecting the projected stat family.
+  proj_mean: Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script.
+  proj_sd: Residual standard deviation for the stat family (fitted on the 2023 as-of backtest).
+  season: Season the projection belongs to.
+  stat: Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE).
+  team_id: Player's team nflverse abbreviation as of the projection week.
+  week: Week of the projected game; only weeks strictly before it feed the projection.
+nfl_predict_games:
+  away_team_id: Away team nflverse abbreviation (character; the ratings `team_id` join key).
+  exp_margin: Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields).
+  exp_total: Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum).
+  game_id: Game identifier carried through from the input schedule.
+  home_team_id: Home team nflverse abbreviation (character; the ratings `team_id` join key).
+  home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
+  market_edge: Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied.
+  neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
+nfl_ratings:
+  adj_def_epa: Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit.
+  adj_net: Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in).
+  adj_off_epa: Opponent-adjusted offensive EPA per play (higher is better); competitive-play ridge fit.
+  adj_st_epa: Opponent-adjusted special-teams EPA per play (ridge on special==1 plays; 0.0 for teams with no special-teams plays in the window).
+  def_rank: Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better).
+  games: Number of games the team played in the fitted window.
+  net_rank: Dense rank on adj_net descending (best net rating = 1).
+  net_z: Z-score of adj_net across the 32 teams.
+  off_rank: Dense rank on adj_off_epa descending (best offense = 1).
+  season: Season the ratings cover (null for a pooled multi-season fit).
+  team_id: nflverse team abbreviation (character join key, e.g. "KC").
 nfl_season_standings:
   season: Season identifier from the input games frame (named `sim` instead when the input used a `sim` column).
   conf: Conference of the team (AFC or NFC).
@@ -7770,6 +7804,61 @@ win_probability:
     row.
   runners: A serialized representation of baserunner movement records for this play in the win-probability feed, capturing
     start/end base positions and event types.
+blue_chip_ratio:
+  season: Roster season the trailing-window ratio describes (each class counts toward its eligible seasons).
+  team_id: 247Sports committed/signed-institution team key as a string (integer-origin; not an ESPN id).
+  blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars (Bud Elliott's blue-chip ratio).
+  n_recruits: Total signees across the trailing recruiting-class window.
+  n_blue_chip: Signees at or above the division's blue-chip star floor across the window.
+cfb_roster_talent:
+  season: Season the talent composite describes (trailing eligible classes aggregated).
+  team_id: 247Sports signed-institution team key as a string (integer-origin; joins to the recruit feed, not ESPN).
+  team: 247Sports full team name - the cross-source name-join key (the recruit-feed and talent-feed id spaces differ).
+  talent_composite: Class-recency-weighted sum of per-recruit star points (247 Team Talent Composite style); the 247 snapshot value when composite_247 is supplied.
+  talent_rank: Dense rank on talent_composite descending within season (best = 1).
+  blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars.
+  n_recruits: Total signees across the trailing recruiting-class window.
+load_recruit_classes:
+  season: Recruiting-class year the recruit signed in.
+  team_id: 247Sports signed-institution team key as a string (falls back to the committed institution when unsigned).
+  team: Signed-institution full name (falls back to committed) - the downstream name-join key.
+  recruit_id: 247Sports recruit key as a string (integer-origin).
+  stars: 247 composite star rating (1-5; null for unrated recruits).
+  grade: 247 composite rating on the 0-100 scale.
+  position: Primary position abbreviation from the 247 recruit record.
+cfb_returning_production:
+  season: Season the returning fractions describe (production drawn from the prior season).
+  team: Normalized school-name key (play-by-play team names are school-only; not an ESPN id).
+  off_returning: Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster.
+  def_returning: Fraction of prior-season defensive splash-event involvement (sacks, interceptions, pass breakups, forced fumbles) returning.
+  overall_returning: Unit fractions combined with the fitted returning_prod_weights (offense-only per the 2018-2023 fit; see fit_returning_weights.py).
+  n_returning: Count of prior-season contributors present on the current roster.
+cfb_recruiting_projection:
+  season: Target season being projected (equals the requested target_season).
+  team_id: ESPN team id as a string (integer-origin).
+  pred_wins: Ridge-projected season win total from preseason roster features.
+  pred_margin: Ridge-projected average scoring margin per game.
+  pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
+cfb_transfer_moves:
+  season: Destination season of the move (compares rosters S-1 to S).
+  team_id: School name key of the side this row describes (destination for "in", origin for "out").
+  player_id: ESPN athlete id as a string.
+  direction: Move side - "in" (arriving at team_id) or "out" (leaving team_id).
+  prior_team_id: School name key of the season S-1 team.
+  talent_points: Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated).
+cfb_transfer_impact:
+  season: Season the net transfer talent describes.
+  team_id: School name key from the rosters dataset.
+  net_transfer_talent: Incoming minus outgoing transfer talent points for the season.
+  pred_win_delta: Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate).
+load_draft_outcomes:
+  draft_year: NFL draft year of the pick.
+  college: College of the pick (PFR-style name, e.g. "Ohio St.").
+  player_id: ESPN college athlete id as a string (null for older drafts).
+  player_name: Player name as listed on the pick record.
+  round: Round of the NFL draft the player was selected in (1-7 in the modern format).
+  pick: Overall pick number.
+  position: Position drafted at (PFR abbreviation).
 
 sports247_site_pages_coach:
   default_name: Server-rendered display label for the entity.

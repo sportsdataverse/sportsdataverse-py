@@ -5645,41 +5645,35 @@ update_config(cache_mode="filesystem")
 clear_cache()  # wipe disk + memory together
 ```
 
-### `compose_counting_projection(rate_proj: 'pl.DataFrame', avail_proj: 'pl.DataFrame', *, rate_col: 'str' = 'proj_rate', volume_col: 'str' = 'proj_volume') -> 'pl.DataFrame'` {#compose_counting_projection}
+### `efficiency_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#efficiency_ratings}
 
-Compose skill and availability into a counting projection.
+One row per team: opponent-adjusted offense/defense EPA per play.
 
-The **only** place skill (rate x volume) and availability meet:
-`proj_counting = rate * volume * proj_availability`, joined on
-`player_id` (dtype-asserted).
+Filters `plays` to competitive non-special-teams scrimmage plays
+(`special != 1`, `qb_kneel != 1`, `qb_spike != 1`,
+`min_competitive_wp <= wp <= max_competitive_wp`, non-null
+`epa`/`posteam`/`defteam`) and fits
+`opponent_adjusted_ridge` on `epa`. Callers pass an already
+as-of-date-filtered frame (the public `nfl_ratings` entry point does
+the date filter) -- this function is pure.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `rate_proj` | `pl.DataFrame` |  | Skill projection carrying `player_id` + `rate_col` + `volume_col`. |
-| `avail_proj` | `pl.DataFrame` |  | Availability projection carrying `player_id` + `proj_availability`. |
-| `rate_col` | `str` | `'proj_rate'` | Rate column name in `rate_proj`. |
-| `volume_col` | `str` | `'proj_volume'` | Volume column name in `rate_proj`. |
+| `plays` | `DataFrame` |  | An `load_nfl_pbp`-schema frame carrying `game_id`, `posteam`, `defteam`, `home_team`, `epa`, `wp`, `special`, `qb_kneel`, `qb_spike`. |
+| `config` | `RatingsConfig \| None` | `None` | Tuning knobs (`ridge_lambda` + the competitive-`wp` window); defaults to `RatingsConfig`. |
 
 **Returns**
 
-`rate_proj` columns plus `proj_availability` and `proj_counting:Float64`.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key; asserted Utf8 on both sides of the join). |
-| `proj_rate` | double | Projected per-opportunity rate carried through from the skill projection (rate_col). |
-| `proj_volume` | double | Projected opportunity volume carried through from the skill projection (volume_col). |
-| `proj_availability` | double | Projected availability rate in [0, 1] from nfl_availability_projection. |
-| `proj_counting` | double | Composed counting projection - proj_rate x proj_volume x proj_availability (the only place skill and availability meet). |
+One row per `team_id` (Utf8) with `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64, `adj_net = adj_off_epa - adj_def_epa`) and `games` (Int64). Zero-row, correctly-typed on empty/fully-filtered input.
 
 **Example**
 
 ```python
-import polars as pl
-from sportsdataverse.nfl.nfl_availability import compose_counting_projection
-out = compose_counting_projection(rate_frame, avail_frame)
+from sportsdataverse.nfl.nfl_ratings import efficiency_ratings
+ratings = efficiency_ratings(pbp)
+ratings.sort("adj_net", descending=True).head()
 ```
 
 ### `espn_nfl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nfl_teams}
@@ -5919,42 +5913,6 @@ out = get_punt_wp(fourth)
 print(out[["punt_wp"]].head())
 ```
 
-### `nfl_availability_projection(seasons: 'List[int]', target_season: 'int', *, team_games: 'int' = 17, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_availability_projection}
-
-Empirical-Bayes availability projection: expected fraction of team games.
-
-Shrinks each player's historical availability toward the fitted position
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  | History seasons to load snap counts/rosters for. |
-| `target_season` | `int` |  | The season being projected. |
-| `team_games` | `int` | `17` | Regular-season team games. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
-
-**Returns**
-
-`player_id:Utf8, target_season:Int64, position:Utf8, proj_availability:Float64, proj_games:Float64, proj_games_missed:Float64`. Empty history returns a zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key). |
-| `target_season` | integer | The season being projected (features use strictly earlier seasons only). |
-| `position` | character | Roster position from the most recent visible season. |
-| `proj_availability` | double | Projected availability rate in [0, 1] - empirical-Bayes shrinkage of historical snap-based availability toward the fitted position base rate, then the fold-fit linear recalibration. |
-| `proj_games` | double | Expected games available - proj_availability x team_games (17). |
-| `proj_games_missed` | double | Expected games missed - team_games minus proj_games. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl.nfl_availability import nfl_availability_projection
-avail = nfl_availability_projection([2021, 2022, 2023], 2024)
-avail.sort("proj_games").head()
-```
-
 ### `nfl_clear_token_cache() -> 'None'` {#nfl_clear_token_cache}
 
 Drop the cached `api.nfl.com` token (forces a fresh mint on the next call).
@@ -6010,93 +5968,6 @@ teams, "games": games}`` with updated ELO ratings and filled results.
 from sportsdataverse.nfl.nfl_simulations import nfl_compute_results
 out = nfl_compute_results(teams, games, week_num="5")
 teams, games = out["teams"], out["games"]
-```
-
-### `nfl_draft_projection(seasons: 'List[int]', target_class: 'int', *, lam: 'float' = 100.0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_draft_projection}
-
-Draft outcome projection for one draft class.
-
-Trains the closed-form ridge (expected `car_av`) and the IRLS logistic
-(`hit_prob` = P(`seasons_started >= 3`)) on **matured** classes
-(`season <= target_class - 5`) and scores the `target_class`
-prospects. Features: standardized combine measurables (+ imputation
-flags), draft `round`/`pick`/`log(pick)`, position one-hots.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  | Draft classes to load (training classes beyond the maturity boundary are filtered out automatically). |
-| `target_class` | `int` |  | The draft class to score. |
-| `lam` | `float` | `100.0` | Ridge regularization strength. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
-
-**Returns**
-
-One row per `target_class` prospect: `gsis_id:Utf8, target_class:Int64, position:Utf8, pred_car_av:Float64, hit_prob:Float64, outcome_rank:Int64` (dense rank, best first). Empty training or prediction slice returns a zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `gsis_id` | character | nflverse gsis player id of the drafted prospect (character join key). |
-| `target_class` | integer | The draft class scored (training uses matured classes <= target_class - 5). |
-| `position` | character | Draft position group of the prospect. |
-| `pred_car_av` | double | Predicted career value - closed-form ridge on standardized combine measurables + round/pick/log(pick) + position one-hots; the label is nflverse w_av (PFR weighted career Approximate Value). |
-| `hit_prob` | double | P(multi-year starter) - ridge-regularized IRLS logistic on the same features, hit := seasons_started >= 3. |
-| `outcome_rank` | integer | Dense rank of pred_car_av within the class (best prospect = 1). |
-
-**Example**
-
-```python
-from sportsdataverse.nfl.nfl_draft_model import nfl_draft_projection
-proj = nfl_draft_projection(list(range(2000, 2020)), 2019)
-proj.sort("outcome_rank").head()
-```
-
-### `nfl_fantasy_projection(seasons: 'List[int]', target_season: 'int', *, scoring: 'Union[Dict[str, float], str]' = 'ppr', calibrate: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_fantasy_projection}
-
-Fantasy-points projection: deterministic scoring of the Marcel component
-
-stats plus a fitted per-position linear calibration.
-
-Scores `nfl_player_projection`'s projected component *counting* stats
-(rate x projected games) under the scoring format, then applies the fitted
-`fp_calibration` `(a, b)` from `POSITION_CONSTANTS`
-(`calibrated = a + b * raw`). The FantasyPros consensus is used only as a
-concurrent-validity oracle in the tests — never as an input.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  | History seasons to load. |
-| `target_season` | `int` |  | The season being projected. |
-| `scoring` | `Union[Dict[str, float], str]` | `'ppr'` | `"ppr"` / `"half"` / `"standard"` or a custom points-per-unit dict. |
-| `calibrate` | `bool` | `True` | Apply the fitted per-position calibration. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
-
-**Returns**
-
-`player_id:Utf8, target_season:Int64, position_group:Utf8, proj_fantasy_points:Float64, proj_fantasy_points_per_game:Float64, position_rank:Int64`.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key). |
-| `target_season` | integer | The season being projected (features use strictly earlier seasons only). |
-| `position_group` | character | nflverse offensive position group (QB/RB/WR/TE plus fringe groups). |
-| `proj_fantasy_points` | double | Projected season fantasy points - the Marcel component rates x projected games scored under the scoring format, with the fitted per-position linear calibration applied by default. |
-| `proj_fantasy_points_per_game` | double | Projected fantasy points per game (proj_fantasy_points / projected games). |
-| `position_rank` | integer | Dense rank of proj_fantasy_points within the position group (best = 1). |
-
-**Example**
-
-```python
-from sportsdataverse.nfl.nfl_projection import nfl_fantasy_projection
-fp = nfl_fantasy_projection([2021, 2022, 2023], 2024)
-fp.filter(pl.col("position_group") == "WR").head()
-
-# Custom scoring
-
-fp_std = nfl_fantasy_projection([2021, 2022, 2023], 2024, scoring="standard")
 ```
 
 ### `nfl_game_details(game_id: 'Optional[str]' = None, headers: 'Optional[Dict[str, str]]' = None, raw: 'bool' = False) -> 'Dict'` {#nfl_game_details}
@@ -7088,66 +6959,63 @@ bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
 bd["category"].unique().to_list()
 ```
 
-### `nfl_player_projection(seasons: 'List[int]', target_season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_player_projection}
+### `nfl_player_props(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, era: 'str' = 'modern', lines: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nfl_player_props}
 
-Marcel-style next-season player projection with delta-method aging.
+Empirical-Bayes player-prop projections, leakage-safe per week.
 
-Loads weekly player stats + rosters, aggregates to season rates, and for
-every player visible in seasons **strictly before** `target_season`
-(the as-of-date leakage boundary) produces a recency-weighted rate blend
-regressed toward the volume-weighted position mean by
-`k / (k + reliability)`, scaled by the position aging-curve ratio
-`aging_mult(proj_age) / aging_mult(current_age)`. The aging curve is fit
-only on the same pre-target history.
+For every game in the requested season(s) (or, with `as_of_date`, every
+game on/after that date), projects each rostered QB/RB/WR/TE's stat-family
+mean as `usage x efficiency x matchup x game-script`:
+
+- usage + efficiency from `player_usage_efficiency` built **as-of
+  that game's week** (weeks strictly before it),
+- the matchup multiplier from the opponent's `adj_def_epa` in
+  `sportsdataverse.nfl.nfl_ratings.nfl_ratings` (as-of the week's
+  first game date),
+- game script from the **native** expected margin
+  (`sportsdataverse.nfl.nfl_market.nfl_predict_games`) -- the
+  market line is never read (binding non-market boundary).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `List[int]` |  | History seasons to load (seasons `>= target_season` are discarded by the leakage split). |
-| `target_season` | `int` |  | The season being projected. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
+| `seasons` | `int \| list[int]` |  | Season (e.g. `2023`) or list of seasons. |
+| `as_of_date` | `date \| None` | `None` | When given, only games with `gameday >= as_of_date` are projected (history before each game's week still feeds the projections). `None` projects every week of the season(s). |
+| `era` | `str` | `'modern'` | Constants era key. |
+| `lines` | `DataFrame \| None` | `None` | Optional market lines to score `p_over` against -- columns `game_id` / `player_id` / `stat` (Utf8) + `line` (Float64), e.g. built from `espn_nfl_game_propbets` (ESPN only serves propbets for upcoming games). `None` leaves `line` / `p_over` null. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
 
 **Returns**
 
-One row per projected player: `player_id:Utf8, target_season:Int64, position_group:Utf8, proj_age:Float64, proj_ppg:Float64, proj_volume:Float64, proj_games:Float64, aging_mult:Float64, reliability:Float64` plus `proj_<stat>_rate` component-rate columns. Empty history returns a zero-row frame.
+One row per (player-game, stat): `season` / `week` (Int64), `game_id` / `player_id` / `position` / `team_id` / `opp_team_id` / `stat` (Utf8), `proj_mean` / `proj_sd` / `line` / `p_over` (Float64; `p_over = 1 - Phi((line - proj_mean) / proj_sd)` when a line is joined, else null). Stats are `passing_yards` (QB), `rushing_yards` (RB), `receiving_yards` (WR/TE). Zero-row, correctly-typed when there is nothing to project.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key). |
-| `target_season` | integer | The season being projected (features use strictly earlier seasons only - the as-of-date leakage boundary). |
-| `position_group` | character | nflverse offensive position group (QB/RB/WR/TE plus fringe groups). |
-| `proj_age` | double | Projected age at the target season (age at last visible season + season gap). |
-| `proj_ppg` | double | Projected PPR fantasy points per game - recency-weighted rate blend regressed toward the volume-weighted position mean by k/(k + reliability), scaled by the damped aging-curve ratio. |
-| `proj_volume` | double | Projected position-specific opportunity volume (QB = pass attempts, RB = carries + targets, WR/TE = targets). |
-| `proj_games` | double | Recency-weighted mean of historical games played. |
-| `aging_mult` | double | Applied aging multiplier - the damped, clamped ratio aging_curve(proj_age) / aging_curve(current_age). |
-| `reliability` | double | Recency-weighted volume sum - the shrinkage evidence weight. |
-| `proj_completions_rate` | double | Projected per-game pass completions (Marcel blend x aging ratio). |
-| `proj_attempts_rate` | double | Projected per-game pass attempts (Marcel blend x aging ratio). |
-| `proj_passing_yards_rate` | double | Projected per-game passing yards (Marcel blend x aging ratio). |
-| `proj_passing_tds_rate` | double | Projected per-game passing touchdowns (Marcel blend x aging ratio). |
-| `proj_interceptions_rate` | double | Projected per-game interceptions thrown (Marcel blend x aging ratio). |
-| `proj_carries_rate` | double | Projected per-game rush attempts (Marcel blend x aging ratio). |
-| `proj_rushing_yards_rate` | double | Projected per-game rushing yards (Marcel blend x aging ratio). |
-| `proj_rushing_tds_rate` | double | Projected per-game rushing touchdowns (Marcel blend x aging ratio). |
-| `proj_receptions_rate` | double | Projected per-game receptions (Marcel blend x aging ratio). |
-| `proj_targets_rate` | double | Projected per-game targets (Marcel blend x aging ratio). |
-| `proj_receiving_yards_rate` | double | Projected per-game receiving yards (Marcel blend x aging ratio). |
-| `proj_receiving_tds_rate` | double | Projected per-game receiving touchdowns (Marcel blend x aging ratio). |
-| `proj_receiving_air_yards_rate` | double | Projected per-game receiving air yards (Marcel blend x aging ratio). |
-| `proj_fumbles_lost_rate` | double | Projected per-game fumbles lost (Marcel blend x aging ratio). |
+| `season` | integer | Season the projection belongs to. |
+| `week` | integer | Week of the projected game; only weeks strictly before it feed the projection. |
+| `game_id` | character | Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB"). |
+| `player_id` | character | nflverse GSIS player identifier (character join key). |
+| `position` | character | Player position (QB, RB, WR, TE) selecting the projected stat family. |
+| `team_id` | character | Player's team nflverse abbreviation as of the projection week. |
+| `opp_team_id` | character | Opponent team nflverse abbreviation (drives the matchup multiplier). |
+| `stat` | character | Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE). |
+| `proj_mean` | double | Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script. |
+| `proj_sd` | double | Residual standard deviation for the stat family (fitted on the 2023 as-of backtest). |
+| `line` | double | Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available. |
+| `p_over` | double | Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line. |
 
 **Example**
 
 ```python
-from sportsdataverse.nfl.nfl_projection import nfl_player_projection
-proj = nfl_player_projection([2021, 2022, 2023], 2024)
-proj.sort("proj_ppg", descending=True).head()
+from sportsdataverse.nfl import nfl_player_props
+props = nfl_player_props(2023)
+props.filter(props["stat"] == "passing_yards").head()
 
-# Pandas round-trip
+# Upcoming-only, as-of a date
 
-proj_pd = nfl_player_projection([2021, 2022, 2023], 2024, return_as_pandas=True)
+import datetime as dt
+props = nfl_player_props(2024, as_of_date=dt.date(2024, 11, 1))
 ```
 
 ### `nfl_players_crosswalk(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_players_crosswalk}
@@ -7181,6 +7049,110 @@ print(xwalk.columns)
 # Join nflverse IDs onto a PBP frame (one line)
 
 pbp.join(nfl_players_crosswalk(), left_on="passer_player_id", right_on="gsis_id", how="left")
+```
+
+### `nfl_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', odds: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nfl_predict_games}
+
+Vectorized pregame predictions (+ display-only market edge) per game.
+
+Joins `ratings` twice (home/away) onto the schedule and computes the
+three closed-form predictions. `odds` is **display-only**: it feeds
+`market_edge = exp_margin - close_spread_home` and never the
+predictions themselves (the binding non-market boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game: `game_id` (Utf8), `home_team_id` / `away_team_id` (Utf8 team abbreviations), `neutral_site` (Boolean). |
+| `ratings` | `DataFrame` |  | The `sportsdataverse.nfl.nfl_ratings.nfl_ratings` output (needs `team_id`, `adj_off_epa`, `adj_def_epa`, `adj_net`). |
+| `era` | `str` | `'modern'` | Constants era key. |
+| `odds` | `DataFrame \| None` | `None` | Optional market frame (`game_id`, `close_spread_home` -- the market's expected home margin, positive = home favored). Games absent from `odds` get a null `market_edge`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+
+**Returns**
+
+One row per input game: `game_id` / `home_team_id` / `away_team_id` (Utf8), `neutral_site` (Boolean), `exp_margin` / `home_win_prob` / `exp_total` / `market_edge` (Float64; `market_edge` null without odds). Zero-row, correctly-typed on empty input.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Game identifier carried through from the input schedule. |
+| `home_team_id` | character | Home team nflverse abbreviation (character; the ratings `team_id` join key). |
+| `away_team_id` | character | Away team nflverse abbreviation (character; the ratings `team_id` join key). |
+| `neutral_site` | logical | Whether the game is at a neutral site (home-field advantage is dropped when true). |
+| `exp_margin` | double | Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields). |
+| `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
+| `exp_total` | double | Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum). |
+| `market_edge` | double | Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ratings
+from sportsdataverse.nfl.nfl_market import nfl_predict_games
+ratings = nfl_ratings(2023)
+preds = nfl_predict_games(games, ratings)
+preds.sort("home_win_prob", descending=True).head()
+
+# With a market edge (display only)
+
+preds = nfl_predict_games(games, ratings, odds=odds)
+```
+
+### `nfl_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nfl_ratings}
+
+One row per team: the native NFL ratings spine (off/def/ST EPA).
+
+Public orchestrator over `efficiency_ratings` +
+`special_teams_ratings`. Loads play-by-play + schedule via
+`load_nfl_pbp` / `load_nfl_schedule`, joins each game's `gameday`
+onto the plays, optionally applies the as-of-date leakage boundary
+(only plays from games with `gameday < as_of_date` are used), then
+fits both components and reshapes into one wide per-team table with
+dense ranks and a net z-score.
+
+The loaded pbp is down-selected to the ridge columns *before* any fit so
+no market column (`spread_line` / `vegas_wp`) can leak into the
+ratings (the binding non-market boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A single season (e.g. `2023`) or a list of seasons pooled into one combined fit. |
+| `as_of_date` | `date \| None` | `None` | When given, only plays from games strictly before this date are used (mirrors what was knowable heading into that date). `None` (default) uses the full season(s). |
+| `config` | `RatingsConfig \| None` | `None` | Tuning knobs forwarded to both component fits; defaults to `RatingsConfig`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+
+**Returns**
+
+A DataFrame with one row per `team_id`: `season` (Int64 -- the single passed season, `null` for a pooled multi-season call), `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_st_epa` / `adj_net` (Float64; `adj_net` is offense minus defense -- special teams stays a separate column), `games` (Int64), `off_rank` / `def_rank` / `net_rank` (Int64; `def_rank` ascends -- fewer EPA allowed ranks better), `net_z` (Float64). Zero-row, correctly-typed when the seasons have no data or `as_of_date` filters out every play.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the ratings cover (null for a pooled multi-season fit). |
+| `team_id` | character | nflverse team abbreviation (character join key, e.g. "KC"). |
+| `adj_off_epa` | double | Opponent-adjusted offensive EPA per play (higher is better); competitive-play ridge fit. |
+| `adj_def_epa` | double | Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit. |
+| `adj_st_epa` | double | Opponent-adjusted special-teams EPA per play (ridge on special==1 plays; 0.0 for teams with no special-teams plays in the window). |
+| `adj_net` | double | Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in). |
+| `games` | integer | Number of games the team played in the fitted window. |
+| `off_rank` | integer | Dense rank on adj_off_epa descending (best offense = 1). |
+| `def_rank` | integer | Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better). |
+| `net_rank` | integer | Dense rank on adj_net descending (best net rating = 1). |
+| `net_z` | double | Z-score of adj_net across the 32 teams. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ratings
+ratings = nfl_ratings(2023)
+ratings.sort("net_rank").head()
+
+# As-of-date leakage boundary
+
+import datetime as dt
+week6 = nfl_ratings(2023, as_of_date=dt.date(2023, 10, 12))
 ```
 
 ### `nfl_season_standings(games: 'pl.DataFrame', *, ranks: 'str' = 'CONF', tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_season_standings}
@@ -7402,50 +7374,6 @@ assert nfl_token_gen() == token        # served from cache
 assert isinstance(token, str) and token.startswith("ey")
 ```
 
-### `nfl_usage_projection(seasons: 'List[int]', target_season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_usage_projection}
-
-Project next-season target share, air-yards share, and WOPR.
-
-Projects each player's shares via the shared Marcel blend
-(`sportsdataverse.nfl.nfl_projection._marcel_blend` — the same
-recency/shrinkage engine as the rate projection), assigns each player to
-their most recent team, **renormalizes shares within each projected team to
-sum to 1.0** (the share invariant), and converts shares to volumes with a
-team-level carry-forward of pass attempts (team targets) and air yards.
-As-of-date clean: only seasons strictly before `target_season` are used.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  | History seasons to load. |
-| `target_season` | `int` |  | The season being projected. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
-
-**Returns**
-
-`player_id:Utf8, target_season:Int64, position_group:Utf8, proj_team:Utf8, proj_target_share:Float64, proj_air_yards_share:Float64, proj_wopr:Float64, proj_targets:Float64, proj_air_yards:Float64`. Empty history returns a zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | character | nflverse gsis player id (character join key). |
-| `target_season` | integer | The season being projected (features use strictly earlier seasons only). |
-| `position_group` | character | nflverse offensive position group. |
-| `proj_team` | character | Most recent team (max season, tiebreak most targets) - the renormalization group. |
-| `proj_target_share` | double | Projected share of team targets - Marcel share blend renormalized to sum to 1.0 within proj_team. |
-| `proj_air_yards_share` | double | Projected share of team air yards, renormalized within proj_team. |
-| `proj_wopr` | double | Projected weighted opportunity rating - 1.5 x proj_target_share + 0.7 x proj_air_yards_share. |
-| `proj_targets` | double | Projected targets - proj_target_share x team pass-target carry-forward. |
-| `proj_air_yards` | double | Projected receiving air yards - proj_air_yards_share x team air-yards carry-forward. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl.nfl_usage_projection import nfl_usage_projection
-usage = nfl_usage_projection([2021, 2022, 2023], 2024)
-usage.sort("proj_wopr", descending=True).head()
-```
-
 ### `nfl_week_games(season: 'int' = 2024, season_type: 'str' = 'REG', week: 'int' = 1, headers: 'Optional[Dict[str, str]]' = None, return_as_pandas: 'bool' = False)` {#nfl_week_games}
 
 Parsed `api.nfl.com` week schedule -- one row per game (polars/pandas frame).
@@ -7510,6 +7438,136 @@ A polars (or pandas) `DataFrame`, one row per game.
 from sportsdataverse.nfl import nfl_week_games
 sched = nfl_week_games(season=2024, season_type="REG", week=1)
 sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
+```
+
+### `opponent_adjusted_ridge(plays: 'pl.DataFrame', *, off_col: 'str', def_col: 'str', home_col: 'str', resp_col: 'str', lam: 'float', penalize_home: 'bool' = False) -> 'tuple[pl.DataFrame, float, float]'` {#opponent_adjusted_ridge}
+
+Ridge-regress `resp_col` on offense + defense team indicators + HFA.
+
+League-agnostic (column names are arguments) so this is the single solver
+a T7.2 refactor can lift into common_ratings` to back both CFB and
+NFL. Builds the offense/defense-indicator + intercept + home design and
+solves the ridge normal equations `beta = (X'X + lam*R)^-1 X'y`. Only
+team coefficients are penalised; the intercept (and, unless
+`penalize_home`, the home term) is free.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | One row per play. Rows with a null `off_col` / `def_col` / `resp_col` must be filtered by the caller. |
+| `off_col` | `str` |  | Column naming the offense (possession) team. |
+| `def_col` | `str` |  | Column naming the defense team. |
+| `home_col` | `str` |  | Column naming the home team (HFA indicator is `off_col == home_col`). |
+| `resp_col` | `str` |  | Numeric response column (e.g. `epa`). |
+| `lam` | `float` |  | Ridge penalty applied to the team coefficients. |
+| `penalize_home` | `bool` | `False` | Also penalise the home-field coefficient (default False). |
+
+**Returns**
+
+A `(frame, intercept, home_coef)` tuple: `frame` has one row per team (`team_id` Utf8, `off_coef` / `def_coef` Float64); `intercept` is the league baseline; `home_coef` the fitted HFA in response units. Zero-row frame + `(0.0, 0.0)` on empty input.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_ratings import opponent_adjusted_ridge
+frame, intercept, hfa = opponent_adjusted_ridge(
+    plays, off_col="posteam", def_col="defteam",
+    home_col="home_team", resp_col="epa", lam=200.0,
+)
+frame.sort("off_coef", descending=True).head()
+```
+
+### `player_usage_efficiency(player_stats: 'pl.DataFrame', *, as_of_week: 'int', era: 'str' = 'modern') -> 'pl.DataFrame'` {#player_usage_efficiency}
+
+Per-player as-of usage + efficiency with empirical-Bayes shrinkage.
+
+Aggregates one season of week-level player stats over weeks strictly
+before `as_of_week` (the leakage boundary), then shrinks every usage
+(per-game attempts / carries / targets) and efficiency (yards + TDs per
+opportunity) stat toward its position prior:
+`(n * player_value + kappa * prior) / (n + kappa)` with `n` = games
+played and `kappa` the stat family's fitted shrinkage.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_stats` | `DataFrame` |  | One season of `load_nfl_player_stats()` rows (columns `player_id`, `position`, `recent_team`, `week`, `attempts`, `passing_yards`, `passing_tds`, `carries`, `rushing_yards`, `rushing_tds`, `targets`, `receiving_yards`, `receiving_tds`). |
+| `as_of_week` | `int` |  | Only weeks `< as_of_week` are used. |
+| `era` | `str` | `'modern'` | Constants era key (supplies kappas + position priors). |
+
+**Returns**
+
+One row per `player_id` (Utf8) whose position has a prior table: `position` / `team_id` (Utf8, latest team), `games` (Int64), `exp_attempts` / `exp_carries` / `exp_targets` (Float64, shrunk per-game usage), `ypa` / `ypc` / `ypt` / `pass_td_rate` / `rush_td_rate` / `rec_td_rate` (Float64, shrunk per-opportunity efficiency). Zero-row, correctly-typed on empty input.
+
+**Example**
+
+```python
+import polars as pl
+import sportsdataverse.nfl as nfl
+stats = nfl.load_nfl_player_stats().filter(pl.col("season") == 2023)
+usage = nfl.player_usage_efficiency(stats, as_of_week=10)
+usage.sort("exp_attempts", descending=True).head()
+```
+
+### `predict_margin(home_adj_net: 'float', away_adj_net: 'float', neutral: 'bool', *, era: 'str' = 'modern') -> 'float'` {#predict_margin}
+
+Expected home scoring margin from two net ratings.
+
+`points_per_net * (home_adj_net - away_adj_net)` plus the era HFA on
+non-neutral fields.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_net` | `float` |  | Home team's `adj_net` (EPA/play units). |
+| `away_adj_net` | `float` |  | Away team's `adj_net`. |
+| `neutral` | `bool` |  | True drops the home-field advantage. |
+| `era` | `str` | `'modern'` | Constants era key (default `"modern"`). |
+
+**Returns**
+
+Expected home margin in points (positive = home favored).
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_market import predict_margin
+predict_margin(0.10, -0.05, False)
+```
+
+### `predict_total(home_adj_off: 'float', home_adj_def: 'float', away_adj_off: 'float', away_adj_def: 'float', *, era: 'str' = 'modern') -> 'float'` {#predict_total}
+
+Expected combined point total from the four efficiency components.
+
+`avg_total + total_scale * (home_adj_off + away_adj_def + away_adj_off +
+home_adj_def)`. The four ratings are **summed** because each side's
+scoring rises with its own offense and with the opponent's EPA-*allowed*
+(`adj_def` is lower = better defense) -- same semantics as the shipped
+CFB analog. (The plan text wrote this with a minus; that sign flips a
+good defense into raising the total, so the analog's sum is used.)
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_adj_off` | `float` |  | Home `adj_off_epa`. |
+| `home_adj_def` | `float` |  | Home `adj_def_epa` (lower = better defense). |
+| `away_adj_off` | `float` |  | Away `adj_off_epa`. |
+| `away_adj_def` | `float` |  | Away `adj_def_epa`. |
+| `era` | `str` | `'modern'` | Constants era key. |
+
+**Returns**
+
+Expected combined total in points.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_market import predict_total
+predict_total(0.10, -0.02, 0.05, 0.01)
 ```
 
 ### `reset_config() -> 'NflConfig'` {#reset_config}
@@ -7754,6 +7812,35 @@ wk1.select(["season", "week", "player_display_name", "team_abbr"]).head()
 tot = scrape_ngs_week("rushing", 2023, week=0)
 ```
 
+### `special_teams_ratings(plays: 'pl.DataFrame', *, config: 'RatingsConfig | None' = None) -> 'pl.DataFrame'` {#special_teams_ratings}
+
+One row per team: opponent-adjusted special-teams EPA per play.
+
+Reuses `opponent_adjusted_ridge` (no forked solver) restricted to
+`special == 1` plays with `resp_col="epa"`; `adj_st_epa` is the
+`off_coef` (the special-teams unit acting as "offense" on the play).
+Teams appearing anywhere in `plays` but on no special-teams play get
+the documented neutral fill `adj_st_epa = 0.0`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame` |  | An `load_nfl_pbp`-schema frame carrying `posteam`, `defteam`, `home_team`, `epa`, `special`. Not pre-filtered -- this function selects the ST plays itself. |
+| `config` | `RatingsConfig \| None` | `None` | Tuning knobs (only `ridge_lambda` is consulted); defaults to `RatingsConfig`. |
+
+**Returns**
+
+One row per `team_id` (Utf8) with `adj_st_epa` (Float64). Zero-row, correctly-typed when `plays` is empty.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_ratings import special_teams_ratings
+st = special_teams_ratings(pbp)
+st.sort("adj_st_epa", descending=True).head()
+```
+
 ### `team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'` {#team_name_fn}
 
 Fold historical/relocated team codes onto their current abbreviation.
@@ -7797,4 +7884,26 @@ update_config(cache_mode="off")
 # Point cache at a custom directory
 
 update_config(cache_dir="~/sdv-cache")
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, era: 'str' = 'modern') -> 'float'` {#win_prob_from_margin}
+
+Home win probability from an expected margin (Gaussian margin model).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | Expected home margin in points. |
+| `era` | `str` | `'modern'` | Constants era key (supplies `margin_sd`). |
+
+**Returns**
+
+`Phi(exp_margin / margin_sd)` in `[0, 1]`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_market import win_prob_from_margin
+win_prob_from_margin(3.0)
 ```
