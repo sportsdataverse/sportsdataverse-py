@@ -53,6 +53,48 @@ def test_even_strength_xg_rates():
     assert out.schema["team"] == pl.Utf8 and out.schema["game_id"] == pl.Utf8
 
 
+def test_gf_ga_derived_from_pbp_goal_events_not_schedule_scores():
+    # load_nhl_schedule(s) was found at grounding to ship a placeholder
+    # constant home_score/away_score for seasons <= 2023 (e.g. every 2022-23
+    # game reporting "2-3"). Deliberately mismatch the schedule's home_goals/
+    # away_goals against the pbp's real GOAL events to lock in that gf/ga
+    # come from the pbp, never from the (unreliable) schedule columns.
+    pbp = pl.DataFrame(
+        {
+            "game_id": [1, 1, 1, 1],
+            "season": [2023, 2023, 2023, 2023],
+            "event_team_abbr": ["TOR", "TOR", "BOS", "BOS"],
+            "home_abbr": ["TOR"] * 4,
+            "away_abbr": ["BOS"] * 4,
+            "home_skaters": [5, 5, 5, 5],
+            "away_skaters": [5, 5, 5, 5],
+            "home_goalie_in": [1, 1, 1, 1],
+            "away_goalie_in": [1, 1, 1, 1],
+            "xg": [0.30, 0.10, 0.20, 0.05],
+            "event_type": ["GOAL", "SHOT", "SHOT", "SHOT"],  # TOR scores exactly 1 real goal
+        }
+    )
+    sched = pl.DataFrame(
+        {
+            "game_id": [1],
+            "season": [2023],
+            "date": [dt.date(2023, 1, 1)],
+            "home_abbr": ["TOR"],
+            "away_abbr": ["BOS"],
+            "neutral_site": [False],
+            "home_goals": [2],  # deliberately wrong/placeholder-style schedule score
+            "away_goals": [3],
+        }
+    )
+    out = team_game_xg_rates(pbp, sched)
+    tor = out.filter(pl.col("team") == "TOR").row(0, named=True)
+    bos = out.filter(pl.col("team") == "BOS").row(0, named=True)
+    assert tor["gf"] == 1  # from the pbp GOAL event, not the schedule's "2"
+    assert tor["ga"] == 0
+    assert bos["gf"] == 0
+    assert bos["ga"] == 1
+
+
 def test_even_strength_filter_drops_power_play():
     pbp, sched = _mini()
     # Add a 5-on-4 power-play shot that must be excluded from even-strength totals.

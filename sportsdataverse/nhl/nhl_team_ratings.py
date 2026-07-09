@@ -97,7 +97,10 @@ def team_game_xg_rates(pbp: pl.DataFrame, schedule: pl.DataFrame, *, even_streng
             (needs ``game_id``, ``event_team_abbr``, ``home_abbr``, ``away_abbr``,
             ``home_skaters``, ``away_skaters``, ``home_goalie_in``, ``away_goalie_in``, ``xg``).
         schedule: a schedule frame with ``game_id``, ``season``, ``date``,
-            ``home_abbr``, ``away_abbr``, ``neutral_site``, ``home_goals``, ``away_goals``.
+            ``home_abbr``, ``away_abbr``, ``neutral_site`` (``home_goals``/``away_goals``
+            are accepted but ignored -- realized ``gf``/``ga`` are derived from the
+            pbp's own GOAL events, never from schedule scores; see the module note
+            on the ``load_nhl_schedule(s)`` placeholder-score bug for seasons <= 2023).
         even_strength_only: restrict to ``home_skaters == away_skaters == 5``
             with both goalies in net (filters out PP/PK/empty-net distortion).
 
@@ -159,17 +162,22 @@ def team_game_xg_rates(pbp: pl.DataFrame, schedule: pl.DataFrame, *, even_streng
         pl.col("home_abbr"),
         pl.col("away_abbr"),
         pl.col("neutral_site").cast(pl.Boolean),
-        pl.col("home_goals").cast(pl.Int64),
-        pl.col("away_goals").cast(pl.Int64),
     )
 
     per_team_xg = per_team_xg.with_columns(pl.col("game_id").cast(pl.Int64).cast(pl.Utf8))
     per_team_goals = per_team_goals.with_columns(pl.col("game_id").cast(pl.Int64).cast(pl.Utf8))
 
+    # NOTE: realized goals (gf/ga) are derived from the pbp's own GOAL events,
+    # never from the schedule loader's home_score/away_score -- those columns
+    # were found at grounding to be a placeholder constant (e.g. every 2022-23
+    # game reporting the same "2-3" score) for load_nhl_schedule(s) seasons
+    # <= 2023 (fixed from 2024 onward). Deriving from pbp sidesteps that
+    # upstream data bug entirely and is also what the ``xgf``/``xga`` sum
+    # already does, so both stats share one ground-truth source.
     rows = []
-    for is_home, team_col, opp_col, goals_col, opp_goals_col in (
-        (True, "home_abbr", "away_abbr", "home_goals", "away_goals"),
-        (False, "away_abbr", "home_abbr", "away_goals", "home_goals"),
+    for is_home, team_col, opp_col in (
+        (True, "home_abbr", "away_abbr"),
+        (False, "away_abbr", "home_abbr"),
     ):
         side = sched.select(
             "game_id",
@@ -179,17 +187,20 @@ def team_game_xg_rates(pbp: pl.DataFrame, schedule: pl.DataFrame, *, even_streng
             pl.col(team_col).alias("team"),
             pl.col(opp_col).alias("opp_team"),
             pl.lit(is_home).alias("is_home"),
-            pl.col(goals_col).alias("gf"),
-            pl.col(opp_goals_col).alias("ga"),
         )
         side = side.join(per_team_xg, on=["game_id", "team"], how="left")
         opp_xg = per_team_xg.rename({"team": "opp_team", "xgf": "xga"})
         side = side.join(opp_xg, on=["game_id", "opp_team"], how="left")
+        side = side.join(per_team_goals, on=["game_id", "team"], how="left")
+        opp_goals = per_team_goals.rename({"team": "opp_team", "gf": "ga"})
+        side = side.join(opp_goals, on=["game_id", "opp_team"], how="left")
         rows.append(side)
 
     out = pl.concat(rows, how="vertical_relaxed").with_columns(
         pl.col("xgf").fill_null(0.0),
         pl.col("xga").fill_null(0.0),
+        pl.col("gf").fill_null(0).cast(pl.Int64),
+        pl.col("ga").fill_null(0).cast(pl.Int64),
     )
     return out.select(
         "game_id", "season", "date", "team", "opp_team", "is_home", "neutral_site", "xgf", "xga", "gf", "ga"
