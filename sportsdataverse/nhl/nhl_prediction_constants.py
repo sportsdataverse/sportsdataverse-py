@@ -229,15 +229,28 @@ class LeagueConstants:
 
 
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
-    # Seeds from published NHL references (MoneyPuck-scale xG rates + ~2.2 goal
-    # final-margin SD). Task 2.3 (dev/nhl_prediction/fit_pregame.py) overwrites
-    # hfa/margin_sd/total_scale; Task 4.2 (fit_props.py) overwrites prop_kappa/pos_priors.
+    # hfa/margin_sd/total_scale fitted 2026-07-08 by dev/nhl_prediction/fit_pregame.py
+    # against the 2023 as-of-date backtest (1174 evaluated games, dates[20:] onward),
+    # confirmed converged on a second pass (residual on top of the fitted seed shrank
+    # to ~0.0003):
+    #   hfa = 0.1630 (0.20 seed + -0.0373 residual on pass 1, ~0 residual on pass 2).
+    #   margin_sd = 0.9085, fit by minimising Brier of Phi(exp_margin/margin_sd)
+    #     directly -- NOTE this is NOT the real-world NHL goal-margin SD (that
+    #     diagnostic residual comes out ~2.58 goals); margin_sd here operates on
+    #     exp_margin's own compressed, shrunk-rating scale, which is much smaller
+    #     than a real goal margin. Using the real-world ~2.2 seed value here would
+    #     have been a scale mismatch, not a faithful sigma for this closed form.
+    #   total_scale = 1.9105, the OLS slope of realized total goals on exp_total
+    #     (shrinkage compresses exp_total's spread well below the real variance);
+    #     applied in nhl_market.predict_total as
+    #     avg_total_goals + total_scale * (raw_total - avg_total_goals).
+    # avg_xgf/avg_total_goals remain published-reference seeds (not walked/fit).
     "nhl": LeagueConstants(
-        hfa=0.20,
-        margin_sd=2.20,
+        hfa=0.1630,
+        margin_sd=0.9085,
         avg_xgf=2.55,
         avg_total_goals=6.05,
-        total_scale=1.0,
+        total_scale=1.9105,
         shrink_k=15.0,
         prop_kappa={"shots": 6.0, "points": 8.0},
         pos_priors={"shots": {"F": 2.2, "D": 1.4}, "points": {"F": 0.55, "D": 0.30}},

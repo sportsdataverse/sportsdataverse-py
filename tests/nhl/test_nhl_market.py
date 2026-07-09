@@ -55,7 +55,23 @@ def test_predict_total_higher_for_high_xgf_teams():
     assert high > low
 
 
-def test_predict_total_matches_expected_goals_sum():
+def test_predict_total_applies_total_scale_variance_correction():
+    from sportsdataverse.nhl.nhl_prediction_constants import get_constants
+
+    const = get_constants("nhl")
+    eg_home, eg_away = expected_goals(2.8, 2.2, 2.5, 2.4, False, league="nhl")
+    raw_total = eg_home + eg_away
+    expected = const.avg_total_goals + const.total_scale * (raw_total - const.avg_total_goals)
+    total = predict_total(2.8, 2.2, 2.5, 2.4, False, league="nhl")
+    assert abs(total - expected) < 1e-9
+
+
+def test_predict_total_identity_when_total_scale_is_one(monkeypatch):
+    import sportsdataverse.nhl.nhl_prediction_constants as const_mod
+    from dataclasses import replace
+
+    identity_constants = replace(const_mod.LEAGUE_CONSTANTS["nhl"], total_scale=1.0)
+    monkeypatch.setitem(const_mod.LEAGUE_CONSTANTS, "nhl", identity_constants)
     eg_home, eg_away = expected_goals(2.8, 2.2, 2.5, 2.4, False, league="nhl")
     total = predict_total(2.8, 2.2, 2.5, 2.4, False, league="nhl")
     assert abs(total - (eg_home + eg_away)) < 1e-9

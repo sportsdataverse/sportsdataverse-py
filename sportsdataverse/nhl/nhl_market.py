@@ -150,7 +150,14 @@ def predict_total(
     *,
     league: str = "nhl",
 ) -> float:
-    """Expected total goals (``eg_home + eg_away``).
+    """Expected total goals, variance-corrected by the fitted ``total_scale``.
+
+    The raw ``eg_home + eg_away`` sum is built from opponent-adjusted,
+    **shrunk** ratings, which systematically compress the total's spread
+    below the real-world variance (confirmed at fitting time: the OLS slope
+    of realized total on the raw sum is ~1.91, not 1.0). ``total_scale``
+    corrects for that: the raw total's deviation from the league-average
+    total is stretched by ``total_scale`` before adding back the league mean.
 
     Args:
         adj_xgf_home: home team's opponent-adjusted xG-for rate.
@@ -158,10 +165,10 @@ def predict_total(
         adj_xgf_away: away team's opponent-adjusted xG-for rate.
         adj_xga_away: away team's opponent-adjusted xG-against rate.
         neutral: whether the game is at a neutral site.
-        league: resolves ``hfa`` via :func:`get_constants`.
+        league: resolves ``hfa``/``avg_total_goals``/``total_scale`` via :func:`get_constants`.
 
     Returns:
-        The expected combined goal total for the game.
+        The variance-corrected expected combined goal total for the game.
 
     Example:
         Quick start::
@@ -170,7 +177,9 @@ def predict_total(
             predict_total(2.8, 2.2, 2.5, 2.4, False)
     """
     eg_home, eg_away = expected_goals(adj_xgf_home, adj_xga_home, adj_xgf_away, adj_xga_away, neutral, league=league)
-    return eg_home + eg_away
+    const = get_constants(league)
+    raw_total = eg_home + eg_away
+    return const.avg_total_goals + const.total_scale * (raw_total - const.avg_total_goals)
 
 
 @overload
@@ -264,7 +273,9 @@ def nhl_predict_games(
     eg_home = 0.5 * (pl.col("h_adj_xgf") + pl.col("a_adj_xga")) + side
     eg_away = 0.5 * (pl.col("a_adj_xgf") + pl.col("h_adj_xga")) - side
     exp_margin = eg_home - eg_away
-    exp_total = eg_home + eg_away
+    raw_total = eg_home + eg_away
+    # total_scale variance-corrects the shrinkage-compressed raw sum -- see predict_total.
+    exp_total = const.avg_total_goals + const.total_scale * (raw_total - const.avg_total_goals)
 
     out = joined.with_columns(
         exp_margin.alias("exp_margin"),
