@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
   - [CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)](#cfb--recruiting--roster-projection-spine-talent-composite-%E2%86%92-returning-production-%E2%86%92-wins-projection-%E2%86%92-transfer-impact-%E2%86%92-draft-projection)
   - [NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)](#nba--wnba--g-league--shot-value-spine-xpoints-%E2%86%92-context-make-prob-%E2%86%92-talent-%E2%86%92-selection-%E2%86%92-zone-maps)
   - [MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)](#mbb--wbb--shot-quality-spine-xpoints-%E2%86%92-shot-selection-%E2%86%92-shooter-talent)
@@ -164,6 +165,29 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)
+
+- feat(nfl): `nfl_playcall` — run/pass + play-family classifier (bundled
+  `nfl_playcall.ubj`, trained 2016-2021) that beats the shipped `xpass_model`
+  on held-out 2022-23 (log-loss 0.498 vs 0.518, AUC 0.822 vs 0.798) with
+  PROE reconciling to pbp `pass_oe` exactly; team tendency profiles included.
+- feat(nfl): `nfl_gamescript` — expected plays / pace / game-script curves
+  (held-out 2023 expected-plays MAE 1.77).
+- feat(nfl): `nfl_kicker_rating` — environment-adjusted FG make probability +
+  empirical-Bayes FGOE (held-out 2019-23 decile calibration gap 0.038; the
+  systematic bias traced to nfl4th's long-kick decision clamp and corrected
+  with a fitted term).
+- feat(nfl): `nfl_special_teams` — per-unit ST EPA decomposition (sums
+  reconcile to team ST EPA exactly) + punter net-over-expected (YoY stability
+  0.62/0.55).
+- feat(nfl): `nfl_line_grades` — OL/DL pressure-based grades from pbp +
+  PFR advstats (pbp-vs-PFR pressures Spearman 0.794).
+- feat(nfl): `nfl_scheme_constants` — shared metrics/constants + as-of split.
+- Committed fixture corpus + fitting scripts under `tests/fixtures/` and
+  `dev/nfl_scheme/`; known upstream issue flagged:
+  `load_nfl_pbp_participation` crashes on multi-season loads (cross-season
+  schema drift) — work around per-season with `how="diagonal_relaxed"`.
 
 ### CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)
 
