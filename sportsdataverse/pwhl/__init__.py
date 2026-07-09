@@ -25,3 +25,6 @@ from sportsdataverse.pwhl.pwhl_prediction_constants import (
 # bare name here would silently shadow nhl's version at the top-level
 # sportsdataverse namespace. Access it as
 # sportsdataverse.pwhl.pwhl_prediction_constants.get_constants() instead.
+from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
+from sportsdataverse.pwhl.pwhl_market import pwhl_in_game_win_prob, pwhl_predict_games
+from sportsdataverse.pwhl.pwhl_player_props import pwhl_game_total, pwhl_player_props

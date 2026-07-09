@@ -6,6 +6,7 @@
   - [Files](#files)
   - [Deliberately not committed](#deliberately-not-committed)
   - [Known gaps / adaptations (binding: gates set from what's actually observable)](#known-gaps--adaptations-binding-gates-set-from-whats-actually-observable)
+  - [PWHL oracle gate — DEFERRED (capture contract)](#pwhl-oracle-gate--deferred-capture-contract)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -117,3 +118,39 @@ to stay comparable with MoneyPuck's `regular` folder.
    calibration instead uses each stat family's own realized-value median
    (+0.5 to avoid integer ties) as a synthetic fixed line -- documented as a
    substitute, not a fabricated market line.
+
+## PWHL oracle gate — DEFERRED (capture contract)
+
+Per the design spec (Sec 9-7), the PWHL prediction spine ships as
+by-reference shims over the NHL core with a women's-league constants row
+(`LEAGUE_CONSTANTS["pwhl"]`), but its **oracle gate is explicitly deferred**
+— not silently skipped, not faked. Why, and what unblocks it:
+
+- **Blocker (confirmed live at grounding):** `load_pwhl_pbp` carries a
+  *categorical* `shot_quality` column (quality tags, not a number), **not**
+  the numeric `xg` (Float64) that model ①'s rating engine consumes, and it
+  lacks the even-strength state columns the NHL engine filters on
+  (`home_skaters`/`away_skaters`/`home_goalie_in`/`away_goalie_in`). So a
+  real PWHL AdjXG rating cannot be computed from what sdv-py loads today.
+- **What ships now:** the four PWHL modules (`pwhl_prediction_constants`,
+  `pwhl_team_ratings`, `pwhl_market`, `pwhl_player_props`) + women's-league
+  constants, all wiring-tested (`tests/pwhl/test_pwhl_prediction_shims.py`,
+  `test_pwhl_prediction_model_shims.py`): each shim resolves to the right
+  NHL core function, defaults `league="pwhl"`, and round-trips a
+  correctly-shaped frame. No PWHL constant is fitted/guessed — the seeded
+  women's-league row (wider `margin_sd`, stronger `shrink_k`) is a
+  documented placeholder awaiting the fit below.
+- **Capture contract to close the gate (when PWHL xG lands):**
+  1. Add a numeric `xg` column + the four even-strength state columns to the
+     `pwhl_pbp` release (or a sibling `pwhl_pbp_full`), matching the NHL
+     `load_nhl_pbp_full` schema the engine reads.
+  2. Capture a PWHL oracle corpus in a Task-0.1-style addendum
+     (`tests/fixtures/pwhl_prediction/`): a public women's-hockey xG oracle
+     (or raw team xG as the concurrent check), a `results_<season>.parquet`
+     with pbp-derived goals, and a `team_xg_<season>.parquet`.
+  3. Fit `LEAGUE_CONSTANTS["pwhl"]` (`hfa`/`margin_sd`/`total_scale` via a
+     PWHL `fit_pregame.py`; `prop_kappa`/`pos_priors` via `fit_props.py` on
+     `load_pwhl_skater_boxscores`) and replace the seeded placeholders.
+  4. Re-run the Phase-1/2/4 oracle gates with `league="pwhl"` against the
+     PWHL fixtures, floors set from observed values (expected lower than NHL
+     for the shorter history — the sport, not a defect).
