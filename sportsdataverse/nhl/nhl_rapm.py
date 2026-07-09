@@ -271,6 +271,7 @@ def nhl_skater_rapm(
     league: str = "nhl",
     lam: float | None = None,
     as_of: int | None = None,
+    strength_states: list[str] | None = None,
     return_as_pandas: bool = False,
     _stints: pl.DataFrame | None = None,
 ) -> "pl.DataFrame | pd.DataFrame":
@@ -291,6 +292,11 @@ def nhl_skater_rapm(
         lam: an explicit ridge penalty; ``None`` selects via k-fold CV over
             ``LEAGUE_CONSTANTS[league].rapm_lambda_grid``.
         as_of: forwarded to ``build_stints`` -- the leakage-boundary cutoff.
+        strength_states: restrict the design matrix to these ``strength_state`` values
+            (e.g. ``["5v5"]`` for an even-strength-only fit, as used by
+            ``nhl_skater_war``'s ``ev_off``/``ev_def`` components so they don't overlap
+            with ``nhl_special_teams_value``'s PP/PK components). ``None`` (default)
+            uses every strength state, matching the general-purpose all-situations RAPM.
         return_as_pandas: return a pandas DataFrame instead of polars.
         _stints: internal test hook -- inject a pre-built stints frame, bypassing
             ``pbp``/``shifts``/scoring (not part of the public contract).
@@ -323,6 +329,9 @@ def nhl_skater_rapm(
             return pl.DataFrame(schema=_RAPM_SCHEMA)
         scored = nhl_xg(pbp, model_dir=model_dir, league=league)
         stints = build_stints(shifts, scored, as_of=as_of)
+
+    if strength_states is not None and stints.height > 0:
+        stints = stints.filter(pl.col("strength_state").is_in(strength_states))
 
     if stints.height == 0:
         return pl.DataFrame(schema=_RAPM_SCHEMA)

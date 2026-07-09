@@ -63,3 +63,4 @@ from sportsdataverse.nhl.nhl_gsax import *
 from sportsdataverse.nhl.nhl_rapm import *
 from sportsdataverse.nhl.nhl_unit_ratings import *
 from sportsdataverse.nhl.nhl_special_teams import *
+from sportsdataverse.nhl.nhl_war import *
