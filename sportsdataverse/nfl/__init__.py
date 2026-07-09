@@ -117,6 +117,20 @@ from sportsdataverse.nfl.utils_date import *
 from sportsdataverse.nfl.utils_date import get_current_nfl_season as get_current_season
 from sportsdataverse.nfl.utils_date import get_current_nfl_week as get_current_week
 from sportsdataverse.nfl.nfl_build import build_nfl_season
+from sportsdataverse.nfl.nfl_playcall import (
+    nfl_play_call_probabilities,
+    nfl_play_call_tendencies,
+    playcall_features,
+)
+from sportsdataverse.nfl.nfl_gamescript import nfl_game_script, team_game_pace
+from sportsdataverse.nfl.nfl_kicker_rating import env_adjusted_make_prob, nfl_kicker_rating
+from sportsdataverse.nfl.nfl_line_grades import (
+    adjust_pressure_pairs,
+    nfl_line_grades,
+    pressure_pairs,
+    team_pressure_rates,
+)
+from sportsdataverse.nfl.nfl_special_teams import nfl_punter_value, nfl_special_teams_epa
 from sportsdataverse.nfl.nfl_players import build_nfl_players, nfl_players_crosswalk
 from sportsdataverse.nfl.nfl_roster_builder import build_nfl_rosters
 from sportsdataverse.nfl.nfl_season_standings import nfl_season_standings
