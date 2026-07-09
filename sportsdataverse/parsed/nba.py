@@ -140,10 +140,12 @@ from sportsdataverse.nba import fox_nba_standings as _raw_fox_nba_standings
 from sportsdataverse.nba import fox_nba_team_gamelog as _raw_fox_nba_team_gamelog
 from sportsdataverse.nba import fox_nba_team_roster as _raw_fox_nba_team_roster
 from sportsdataverse.nba import fox_nba_team_stats as _raw_fox_nba_team_stats
+from sportsdataverse.nba import nba_stats_leaguedashptstats as _raw_nba_stats_leaguedashptstats
 from sportsdataverse.nba import AdjRapmModel as AdjRapmModel  # noqa: F401
 from sportsdataverse.nba import AgingCurve as AgingCurve  # noqa: F401
 from sportsdataverse.nba import ExternalValidityResult as ExternalValidityResult  # noqa: F401
 from sportsdataverse.nba import ForecastResult as ForecastResult  # noqa: F401
+from sportsdataverse.nba import MeasureSpec as MeasureSpec  # noqa: F401
 from sportsdataverse.nba import NbaBpmModel as NbaBpmModel  # noqa: F401
 from sportsdataverse.nba import NbaSpmModel as NbaSpmModel  # noqa: F401
 from sportsdataverse.nba import RidgeRapmModel as RidgeRapmModel  # noqa: F401
@@ -213,10 +215,17 @@ from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: 
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
 from sportsdataverse.nba import nba_shot_value_lineups as nba_shot_value_lineups  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
+from sportsdataverse.nba import nba_tracking_drive_value as nba_tracking_drive_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_pass_value as nba_tracking_pass_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_reb_oe as nba_tracking_reb_oe  # noqa: F401
+from sportsdataverse.nba import nba_tracking_rim_protect_value as nba_tracking_rim_protect_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_shot_diet_value as nba_tracking_shot_diet_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_touch_value as nba_tracking_touch_value  # noqa: F401
 from sportsdataverse.nba import nba_v3_to_v2_pbp as nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_quarter_boxscores as players_on_court_from_quarter_boxscores  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_rotation as players_on_court_from_rotation  # noqa: F401
@@ -239,6 +248,7 @@ __all__ = [
     "AgingCurve",
     "ExternalValidityResult",
     "ForecastResult",
+    "MeasureSpec",
     "NbaBpmModel",
     "NbaSpmModel",
     "RidgeRapmModel",
@@ -425,10 +435,18 @@ __all__ = [
     "nba_shot_value",
     "nba_shot_value_lineups",
     "nba_spm",
+    "nba_stats_leaguedashptstats",
+    "nba_tracking_drive_value",
+    "nba_tracking_pass_value",
+    "nba_tracking_reb_oe",
+    "nba_tracking_rim_protect_value",
+    "nba_tracking_shot_diet_value",
+    "nba_tracking_touch_value",
     "nba_v3_to_v2_pbp",
     "nba_war",
     "normalize_player_name",
     "normalize_team_roster_columns",
+    "parse_nba_stats_result_sets",
     "players_on_court_from_pbp",
     "players_on_court_from_quarter_boxscores",
     "players_on_court_from_rotation",
@@ -2084,3 +2102,17 @@ def fox_nba_team_stats(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_nba_team_stats(*args, **kwargs)
+
+
+def nba_stats_leaguedashptstats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.nba_stats_leaguedashptstats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.nba_stats_leaguedashptstats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.nba_stats_leaguedashptstats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nba_stats_leaguedashptstats(*args, **kwargs)
