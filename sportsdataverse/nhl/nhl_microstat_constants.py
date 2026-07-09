@@ -85,8 +85,15 @@ class LeagueConstants:
 # fit is concrete code, never an invented final number.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "nhl": LeagueConstants(
-        pp_goal_value=0.18,
-        major_penalty_value=0.40,
+        # Fit from tests/fixtures/nhl_microstat/pbp_2024_slice.parquet via
+        # dev/nhl_microstat/fit_pp_goal_value.py (Task 2.2): (PP goals for -
+        # SH goals against) per minor penalty, on 363 minors / 84 PP goals /
+        # 27 SH goals. major_penalty_value is a time-exposure-scaled estimate
+        # (2.5x, a major runs the full 5:00 vs. a minor's 2:00) -- the
+        # captured major-penalty sample (27) is too thin to fit a standalone
+        # goals-during-majors ratio.
+        pp_goal_value=0.157,
+        major_penalty_value=0.393,
         zone_entry_value_controlled=0.06,
         zone_entry_value_dump=0.03,
         zone_exit_value=0.02,
