@@ -68,9 +68,99 @@ MEASURE_SPECS: dict[str, MeasureSpec] = {
 }
 
 # Utf8 player_ids of consensus-elite players per category for the 2023-24 gate.
-# Frozen in Task 0.3 from public consensus; the rank-sanity oracle asserts each
-# appears in the model's top-K. NEVER edit to make a gate pass -- debug the model.
-ELITE_ORACLE: dict[str, dict[str, list[str]]] = {"2023-24": {}}
+# Frozen in Task 0.3 from public consensus (cross-checked against the raw
+# leaders -- reb_chances / ast / drive_pts / catch_shoot_pts / points /
+# def_rim_fga -- in the committed fixtures); the rank-sanity oracle asserts
+# each appears in the model's top-K. NEVER edit to make a gate pass -- debug
+# the model.
+ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
+    "2023-24": {
+        # Elite rebounders: Sabonis, Gobert, A. Davis, Jokic, Nurkic, J. Allen,
+        # Giannis, Vucevic, Capela, Wembanyama.
+        "reb": [
+            "1627734",
+            "203497",
+            "203076",
+            "203999",
+            "203994",
+            "1628386",
+            "203507",
+            "202696",
+            "203991",
+            "1641705",
+        ],
+        # Elite passers: Haliburton, Jokic, Doncic, Sabonis, Harden, VanVleet,
+        # Trae Young, LeBron, Brunson, Dejounte Murray.
+        "ast": [
+            "1630169",
+            "203999",
+            "1629029",
+            "1627734",
+            "201935",
+            "1627832",
+            "1629027",
+            "2544",
+            "1628973",
+            "1627749",
+        ],
+        # Elite drivers: SGA, Brunson, Doncic, Zion, A. Edwards, DeRozan,
+        # De'Aaron Fox, Giannis, Dejounte Murray, Maxey.
+        "drive": [
+            "1628983",
+            "1628973",
+            "1629029",
+            "1629627",
+            "1630162",
+            "201942",
+            "1628368",
+            "203507",
+            "1627749",
+            "1630178",
+        ],
+        # Elite catch-and-shoot shooters: DiVincenzo, Klay Thompson, MPJ,
+        # Bogdanovic, Curry, Beasley, Hauser, Bridges, Markkanen, Hield.
+        "shot": [
+            "1628978",
+            "202691",
+            "1629008",
+            "203992",
+            "201939",
+            "1627736",
+            "1630573",
+            "1628969",
+            "1628374",
+            "1627741",
+        ],
+        # Elite high-usage-efficient scorers: Jokic, Giannis, SGA, Doncic,
+        # Curry, Durant, Tatum, DeRozan, A. Davis, Booker.
+        "touch": [
+            "203999",
+            "203507",
+            "1628983",
+            "1629029",
+            "201939",
+            "201142",
+            "1628369",
+            "201942",
+            "203076",
+            "1626164",
+        ],
+        # Elite rim protectors: Gobert, Holmgren, Turner, Wembanyama, J. Allen,
+        # B. Lopez, Nurkic, A. Davis, Claxton, Gafford.
+        "rim": [
+            "203497",
+            "1631096",
+            "1626167",
+            "1641705",
+            "1628386",
+            "201572",
+            "203994",
+            "203076",
+            "1629651",
+            "1629655",
+        ],
+    }
+}
 
 
 def residual_sums_to_zero(df: pl.DataFrame, oe_col: str, group_cols: list[str], tol: float = 1e-6) -> bool:

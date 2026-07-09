@@ -5,7 +5,13 @@ from __future__ import annotations
 import polars as pl
 
 from sportsdataverse.nba.nba_tracking_value import _attach_role_bucket, _over_expected, _pin_ids, _season_str
-from sportsdataverse.nba.nba_tracking_value_constants import LEAGUE_IDS, MEASURE_SPECS, residual_sums_to_zero, top_k_ids
+from sportsdataverse.nba.nba_tracking_value_constants import (
+    ELITE_ORACLE,
+    LEAGUE_IDS,
+    MEASURE_SPECS,
+    residual_sums_to_zero,
+    top_k_ids,
+)
 
 
 def test_league_ids():
@@ -64,6 +70,16 @@ def test_attach_role_bucket_missing_positions_falls_back_to_all():
     df = pl.DataFrame({"player_id": ["1"], "reb": [1.0]})
     out = _attach_role_bucket(df, 2024, positions=None)
     assert out["position_bucket"].to_list() == ["all"]
+
+
+def test_elite_oracle_allowlists_are_frozen_utf8_ids():
+    categories = {"reb", "ast", "drive", "shot", "touch", "rim"}
+    season = ELITE_ORACLE["2023-24"]
+    assert set(season) == categories
+    for cat in categories:
+        ids = season[cat]
+        assert len(ids) >= 8
+        assert all(isinstance(i, str) for i in ids)
 
 
 def test_attach_role_bucket_joins_and_fills_missing_with_all():
