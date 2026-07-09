@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NFL — ratings & market spine (power ratings → win prob → spread/total → player props)](#nfl--ratings--market-spine-power-ratings-%E2%86%92-win-prob-%E2%86%92-spreadtotal-%E2%86%92-player-props)
   - [CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)](#cfb--recruiting--roster-projection-spine-talent-composite-%E2%86%92-returning-production-%E2%86%92-wins-projection-%E2%86%92-transfer-impact-%E2%86%92-draft-projection)
   - [NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)](#nba--wnba--g-league--shot-value-spine-xpoints-%E2%86%92-context-make-prob-%E2%86%92-talent-%E2%86%92-selection-%E2%86%92-zone-maps)
   - [MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)](#mbb--wbb--shot-quality-spine-xpoints-%E2%86%92-shot-selection-%E2%86%92-shooter-talent)
@@ -164,6 +165,26 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NFL — ratings & market spine (power ratings → win prob → spread/total → player props)
+
+- feat(nfl): `nfl_ratings` — opponent-adjusted ridge team ratings
+  (offense/defense/net EPA per play + HFA) from `load_nfl_pbp`, validated vs
+  ESPN FPI (Spearman 0.890) and raw team EPA (0.965, 32/32 matched).
+- feat(nfl): `nfl_market` — pregame win probability (Brier 0.232, quintile
+  calibration gap 0.036), spread and total projections (MAE 2.96 / 3.24 vs
+  closing lines over 208 as-of games, weeks 5-18), fitted constants
+  (points-per-net 23.36, HFA 3.12, margin sd 13.02) from committed fitting
+  scripts.
+- feat(nfl): `nfl_player_props` — empirical-Bayes player projection
+  distributions for passing/rushing/receiving yards with over-probabilities
+  (MAE 70.5/21.1/21.4 vs realized; p_over calibrated against lagged
+  pseudo-lines — ESPN purges historical propbets, documented in-test).
+- feat(nfl): `nfl_prediction_constants` — shared metrics (Brier, log-loss,
+  Spearman, calibration tables), league constants, and the as-of season/week
+  split helper the backtests enforce.
+- Committed fixture corpus under `tests/fixtures/nfl_prediction/` with
+  provenance README.
 
 ### CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)
 
