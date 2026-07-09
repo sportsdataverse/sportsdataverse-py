@@ -1,0 +1,24 @@
+schema: load_recruit_classes
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: recruit_id
+  type: character
+  description: ''
+- name: stars
+  type: integer
+  description: ''
+- name: grade
+  type: double
+  description: ''
+- name: position
+  type: character
+  description: ''

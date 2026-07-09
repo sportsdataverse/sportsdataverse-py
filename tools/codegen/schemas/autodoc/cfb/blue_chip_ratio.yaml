@@ -1,0 +1,18 @@
+schema: blue_chip_ratio
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: blue_chip_ratio
+  type: double
+  description: ''
+- name: n_recruits
+  type: integer
+  description: ''
+- name: n_blue_chip
+  type: integer
+  description: ''

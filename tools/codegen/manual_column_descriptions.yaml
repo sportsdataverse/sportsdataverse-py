@@ -7743,6 +7743,61 @@ win_probability:
     row.
   runners: A serialized representation of baserunner movement records for this play in the win-probability feed, capturing
     start/end base positions and event types.
+blue_chip_ratio:
+  season: Roster season the trailing-window ratio describes (each class counts toward its eligible seasons).
+  team_id: 247Sports committed/signed-institution team key as a string (integer-origin; not an ESPN id).
+  blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars (Bud Elliott's blue-chip ratio).
+  n_recruits: Total signees across the trailing recruiting-class window.
+  n_blue_chip: Signees at or above the division's blue-chip star floor across the window.
+cfb_roster_talent:
+  season: Season the talent composite describes (trailing eligible classes aggregated).
+  team_id: 247Sports signed-institution team key as a string (integer-origin; joins to the recruit feed, not ESPN).
+  team: 247Sports full team name - the cross-source name-join key (the recruit-feed and talent-feed id spaces differ).
+  talent_composite: Class-recency-weighted sum of per-recruit star points (247 Team Talent Composite style); the 247 snapshot value when composite_247 is supplied.
+  talent_rank: Dense rank on talent_composite descending within season (best = 1).
+  blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars.
+  n_recruits: Total signees across the trailing recruiting-class window.
+load_recruit_classes:
+  season: Recruiting-class year the recruit signed in.
+  team_id: 247Sports signed-institution team key as a string (falls back to the committed institution when unsigned).
+  team: Signed-institution full name (falls back to committed) - the downstream name-join key.
+  recruit_id: 247Sports recruit key as a string (integer-origin).
+  stars: 247 composite star rating (1-5; null for unrated recruits).
+  grade: 247 composite rating on the 0-100 scale.
+  position: Primary position abbreviation from the 247 recruit record.
+cfb_returning_production:
+  season: Season the returning fractions describe (production drawn from the prior season).
+  team: Normalized school-name key (play-by-play team names are school-only; not an ESPN id).
+  off_returning: Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster.
+  def_returning: Fraction of prior-season defensive splash-event involvement (sacks, interceptions, pass breakups, forced fumbles) returning.
+  overall_returning: Unit fractions combined with the fitted returning_prod_weights (offense-only per the 2018-2023 fit; see fit_returning_weights.py).
+  n_returning: Count of prior-season contributors present on the current roster.
+cfb_recruiting_projection:
+  season: Target season being projected (equals the requested target_season).
+  team_id: ESPN team id as a string (integer-origin).
+  pred_wins: Ridge-projected season win total from preseason roster features.
+  pred_margin: Ridge-projected average scoring margin per game.
+  pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
+cfb_transfer_moves:
+  season: Destination season of the move (compares rosters S-1 to S).
+  team_id: School name key of the side this row describes (destination for "in", origin for "out").
+  player_id: ESPN athlete id as a string.
+  direction: Move side - "in" (arriving at team_id) or "out" (leaving team_id).
+  prior_team_id: School name key of the season S-1 team.
+  talent_points: Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated).
+cfb_transfer_impact:
+  season: Season the net transfer talent describes.
+  team_id: School name key from the rosters dataset.
+  net_transfer_talent: Incoming minus outgoing transfer talent points for the season.
+  pred_win_delta: Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate).
+load_draft_outcomes:
+  draft_year: NFL draft year of the pick.
+  college: College of the pick (PFR-style name, e.g. "Ohio St.").
+  player_id: ESPN college athlete id as a string (null for older drafts).
+  player_name: Player name as listed on the pick record.
+  round: Round of the NFL draft the player was selected in (1-7 in the modern format).
+  pick: Overall pick number.
+  position: Position drafted at (PFR abbreviation).
 
 sports247_site_pages_coach:
   default_name: Server-rendered display label for the entity.
