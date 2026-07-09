@@ -43,8 +43,14 @@ def nba_foul_drawing(
 
     ``lg_ft_rate_t`` = poss-weighted league mean of ``ft_freq`` for play type
     ``t`` (``Σ_players(ft_freq_t·poss_t) / Σ_players(poss_t)``).
-    ``expected_fta = Σ_t poss_t · lg_ft_rate_t``;
+    ``expected_fta = scale · Σ_t poss_t · lg_ft_rate_t``;
     ``foul_draw_skill = 100·(fta − expected_fta)/poss``.
+
+    ``ft_freq`` (Synergy's ``ft_poss_pct``) counts FT-drawing *trips*, not
+    individual free-throw attempts (a shooting foul is typically a 2-shot
+    trip) -- ``scale = Σ actual fta / Σ raw trip-based estimate`` is derived
+    from the fetched season itself (never hard-coded) so the trip-to-attempt
+    conversion self-normalizes and ``Σ expected_fta ≡ Σ fta`` holds exactly.
 
     Args:
         season: Season string, e.g. ``"2023-24"``.
@@ -118,9 +124,18 @@ def nba_foul_drawing(
     b = base.select(pl.col("player_id").cast(pl.Int64), pl.col("fta").cast(pl.Float64), pl.col("poss").cast(pl.Float64))
     assert b.schema["player_id"] == expected.schema["player_id"]  # join-key dtype guard
 
-    out = b.join(expected, on="player_id", how="left").with_columns(
-        pl.col("expected_fta").fill_null(0.0),
-        (100.0 * (pl.col("fta") - pl.col("expected_fta").fill_null(0.0)) / pl.col("poss")).alias("foul_draw_skill"),
+    joined = b.join(expected, on="player_id", how="left").with_columns(pl.col("expected_fta").fill_null(0.0))
+    # Synergy's ft_freq counts FT-drawing *trips*, not individual FTA (a shooting foul is
+    # commonly a 2-shot trip); self-normalize the trip-based raw estimate to real FTA units
+    # via a data-derived scale (Sigma actual / Sigma raw) rather than a hard-coded
+    # attempts-per-trip constant -- this is what makes calibration hold by construction.
+    raw_total = float(joined["expected_fta"].sum())
+    actual_total = float(joined["fta"].sum())
+    scale = actual_total / raw_total if raw_total > 0 else 1.0
+    out = joined.with_columns(
+        (pl.col("expected_fta") * scale).alias("expected_fta"),
+    ).with_columns(
+        (100.0 * (pl.col("fta") - pl.col("expected_fta")) / pl.col("poss")).alias("foul_draw_skill"),
     )
 
     if advanced is not None and not advanced.is_empty() and "pfd" in advanced.columns:

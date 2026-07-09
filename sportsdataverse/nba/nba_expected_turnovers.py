@@ -37,9 +37,20 @@ def nba_expected_turnovers(
     """Expected TOV + residual ball-security skill from Synergy play-type mix.
 
     ``lg_to_rate_t`` = poss-weighted league mean of ``turnover_freq`` for play
-    type ``t``; ``expected_tov = Σ_t poss_t · lg_to_rate_t``;
+    type ``t``; ``expected_tov = scale · Σ_t poss_t · lg_to_rate_t``;
     ``ball_security_skill = 100·(expected_tov − tov)/poss`` (fewer turnovers
     than expected ⇒ positive skill -- sign flipped vs. the foul-drawing model).
+
+    ``scale = Σ actual tov / Σ raw type-mix estimate`` is derived from the
+    fetched season itself (covers players below Synergy's per-type
+    classification threshold) so ``Σ expected_tov ≡ Σ tov`` holds exactly.
+    Swapping each player's own ``turnover_freq`` in for the league rate
+    reconstructs their real season TOV almost exactly (slope ~1.03, Spearman
+    ~0.97 on the 2023-24 oracle corpus) -- confirming the column semantics are
+    correct. The *expected* (league-rate) version necessarily explains less
+    variance than *actual* (turnover-avoidance is a more individual,
+    less play-type-bound skill than foul-drawing), so its calibration slope
+    runs lower than model (3)'s -- see the oracle gate for the observed floor.
 
     Args:
         season: Season string, e.g. ``"2023-24"``.
@@ -109,9 +120,15 @@ def nba_expected_turnovers(
     b = base.select(pl.col("player_id").cast(pl.Int64), pl.col("tov").cast(pl.Float64), pl.col("poss").cast(pl.Float64))
     assert b.schema["player_id"] == expected.schema["player_id"]  # join-key dtype guard
 
+    joined = b.join(expected, on="player_id", how="left").with_columns(pl.col("expected_tov").fill_null(0.0))
+    # Self-normalize the Synergy-derived raw estimate to real TOV units via a data-derived
+    # scale (Sigma actual / Sigma raw) -- covers population gaps (players below Synergy's
+    # classification threshold) so calibration holds by construction, not by assumption.
+    raw_total = float(joined["expected_tov"].sum())
+    actual_total = float(joined["tov"].sum())
+    scale = actual_total / raw_total if raw_total > 0 else 1.0
     out = (
-        b.join(expected, on="player_id", how="left")
-        .with_columns(pl.col("expected_tov").fill_null(0.0))
+        joined.with_columns((pl.col("expected_tov") * scale).alias("expected_tov"))
         .with_columns((100.0 * (pl.col("expected_tov") - pl.col("tov")) / pl.col("poss")).alias("ball_security_skill"))
         .select(list(EXPECTED_TURNOVERS_SCHEMA.keys()))
         .sort("player_id")
