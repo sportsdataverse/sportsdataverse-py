@@ -2071,6 +2071,37 @@ stub = lambda **kw: pl.DataFrame({"person_id": [1], "position": ["PG"]})
 pos = nba_player_positions("2023-24", fetch=stub)
 ```
 
+### `nba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_player_props}
+
+Per-player expected prop lines + team pace projection for a matchup.
+
+Loads the season's player box logs + team ratings, computes per-minute
+`player_rates`, and projects each player's line onto their mean
+minutes and the matchup's pace factor (`exp_poss / avg_pace`). Only the
+two teams in the matchup are returned.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | End year of the season (e.g. `2024`). |
+| `game_id` | `str` |  | The game id (passed through for the caller's join; not used to filter historical rates). |
+| `home_team_id` | `str` |  | Home team id. |
+| `away_team_id` | `str` |  | Away team id. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import nba_player_props
+props = nba_player_props(2024, "401585828", "2", "6")
+```
+
 ### `nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_predict_games}
 
 Vectorized pregame predictions for a schedule of games.
@@ -2436,6 +2467,30 @@ assert normalize_player_name("Nikola Jokić") == normalize_player_name("Nikola J
 assert normalize_player_name("Gary Trent Jr.") == normalize_player_name("Gary Trent")
 ```
 
+### `player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'` {#player_rates}
+
+Per-player per-minute rate stats from box logs.
+
+Rows with null minutes (DNPs) are dropped. Rate = total stat / total
+minutes across the player's games; `minutes_pg` is the mean minutes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_logs` | `DataFrame` |  | Per-player-per-game frame with `player_id, team_id, minutes, pts, reb, ast, fg3m`. |
+
+**Returns**
+
+One row per player: `player_id, team_id, games, minutes_pg, pts_per_min, reb_per_min, ast_per_min, fg3m_per_min`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import player_rates
+rates = player_rates(box_logs)
+```
+
 ### `players_on_court_from_pbp(enhanced_pbp: 'pl.DataFrame', raw_box: 'dict', *, home_team_id: 'int', away_team_id: 'int') -> 'pl.DataFrame'` {#players_on_court_from_pbp}
 
 Reconstruct the 5-on-5 on-court lineup from pbp subs + boxscore starters.
@@ -2652,6 +2707,84 @@ Expected combined points scored by both teams.
 ```python
 from sportsdataverse.nba.nba_game_predict import predict_total
 predict_total(118.0, 108.0, 110.0, 112.0, 100.0, 98.0)
+```
+
+### `prob_over(exp_value: 'float', line: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'float'` {#prob_over}
+
+Probability a stat finishes strictly above `line`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_value` | `float` |  | Projected mean of the stat. |
+| `line` | `float` |  | The prop line. |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `league_id` | `str` | `'00'` | Accepted for parity. |
+
+**Returns**
+
+`P(stat > line)` in `[0, 1]`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import prob_over
+prob_over(24.0, 22.5, "pts")
+```
+
+### `project_player_line(rate_row: 'dict[str, Any]', exp_minutes: 'float', pace_factor: 'float' = 1.0) -> 'dict[str, float]'` {#project_player_line}
+
+Project a player's expected counting line from per-minute rates.
+
+`exp_stat = rate_per_min * exp_minutes * pace_factor` -- counting stats
+scale with both projected minutes and pace.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rate_row` | `dict[str, Any]` |  | One row of `player_rates` (as a dict). |
+| `exp_minutes` | `float` |  | Projected minutes for the game. |
+| `pace_factor` | `float` | `1.0` | Pace multiplier (`exp_poss / avg_pace`); `1.0` for a league-average-pace matchup. |
+
+**Returns**
+
+`{"exp_pts", "exp_reb", "exp_ast", "exp_fg3m"}`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import player_rates, project_player_line
+r = player_rates(box_logs).row(0, named=True)
+line = project_player_line(r, exp_minutes=32.0, pace_factor=1.02)
+```
+
+### `prop_distribution(exp_value: 'float', stat: 'str', *, league_id: 'str' = '00') -> 'tuple[str, dict[str, float]]'` {#prop_distribution}
+
+Distribution family + parameters for a projected stat mean.
+
+Points -> Normal `(mu, sd)` with `sd = a + b*sqrt(mu)`; counts
+(reb/ast/fg3m) -> Negative-Binomial `(r, p)` matching mean `mu` and
+variance `dispersion*mu` (Poisson if dispersion <= 1).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_value` | `float` |  | Projected mean of the stat. |
+| `stat` | `str` |  | One of `"pts"`, `"reb"`, `"ast"`, `"fg3m"`. |
+| `league_id` | `str` | `'00'` | Accepted for parity (dispersion is currently league-shared). |
+
+**Returns**
+
+`(family, params)` where family is `"normal"`, `"nbinom"` or `"poisson"`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import prop_distribution
+fam, par = prop_distribution(24.0, "pts")
 ```
 
 ### `ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'` {#ratings_as_of}
@@ -2890,6 +3023,30 @@ factor `k_i = τ² / (τ² + σ²_i)` and `clutch_skill_shrunk = k_i · delta_i`
 ```python
 from sportsdataverse.nba.nba_clutch import clutch_delta, shrink_clutch
 skill = shrink_clutch(clutch_delta(clutch_frame, baseline_frame))
+```
+
+### `team_pace_projection(home_team_id: 'str', away_team_id: 'str', ratings: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'float'` {#team_pace_projection}
+
+Expected possessions for a matchup (Phase-3 `expected_possessions`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_team_id` | `str` |  | Home team id (matched against `ratings['team_id']`). |
+| `away_team_id` | `str` |  | Away team id. |
+| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_pace`. |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
+
+**Returns**
+
+Expected possessions for the game.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_player_props import team_pace_projection
+poss = team_pace_projection("1", "2", ratings)
 ```
 
 ### `train_spm(box_features: 'pl.DataFrame', rapm_target: 'pl.DataFrame', *, feature_names: 'Optional[List[str]]' = None, alpha: 'float' = 100.0) -> 'SpmCoefficients'` {#train_spm}

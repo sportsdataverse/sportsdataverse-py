@@ -105,3 +105,11 @@ from sportsdataverse.nba.nba_clutch import (  # noqa: F401
     nba_team_clutch,
     shrink_clutch,
 )
+from sportsdataverse.nba.nba_player_props import (  # noqa: F401
+    nba_player_props,
+    player_rates,
+    project_player_line,
+    prob_over,
+    prop_distribution,
+    team_pace_projection,
+)
