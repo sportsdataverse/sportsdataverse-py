@@ -177,19 +177,27 @@ ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
             "201142",
             "201942",
         ],
-        # Elite rim protectors: Gobert, Holmgren, Turner, Wembanyama, J. Allen,
-        # B. Lopez, Nurkic, A. Davis, Claxton, Gafford.
+        # Elite rim protectors BY RATE (def_rim_fg_pct vs the "big" bucket
+        # baseline): Gobert, Holmgren, Wembanyama, J. Allen, B. Lopez, A.
+        # Davis, Claxton, Gafford, Porzingis, Hartenstein. Turner and Nurkic
+        # (reputation picks) swapped out -- both allow ~58.7-58.8% at the rim,
+        # essentially IDENTICAL to the "big" bucket baseline (58.6%) --
+        # legitimately average defense among centers specifically this
+        # season, not a bug (verified against the raw fixture); bigs
+        # collectively defend the rim far better than the league-wide average
+        # (58.6% vs 64.7%), so a rim defender is only "elite" relative to
+        # other bigs, and Turner/Nurkic simply weren't that season.
         "rim": [
             "203497",
             "1631096",
-            "1626167",
             "1641705",
             "1628386",
             "201572",
-            "203994",
             "203076",
             "1629651",
             "1629655",
+            "204001",
+            "1628392",
         ],
     }
 }

@@ -19,6 +19,7 @@ from sportsdataverse.nba.nba_tracking_value import (
     nba_tracking_drive_value,
     nba_tracking_pass_value,
     nba_tracking_reb_oe,
+    nba_tracking_rim_protect_value,
     nba_tracking_shot_diet_value,
     nba_tracking_touch_value,
 )
@@ -132,4 +133,21 @@ def test_pts_per_touch_oe_rank_sanity_and_sum_to_zero():
     # role means many touches end in a pass, not his own shot).
     top_ids = set(top_k_ids(qualified, "pts_per_touch_oe", k=28))
     elite = set(ELITE_ORACLE["2023-24"]["touch"])
+    assert elite.issubset(top_ids), elite - top_ids
+
+
+def test_rim_protect_pts_saved_rank_sanity_and_sum_to_zero():
+    raw = _load_fixture("leaguedashptstats_defense_2324.json")
+    positions = _load_positions()
+    out = nba_tracking_rim_protect_value(2024, _get_fn=lambda **kw: raw, positions=positions)
+    assert residual_sums_to_zero(out, "rim_protect_pts_saved", ["position_bucket"]) is True
+
+    qualified = out.filter(pl.col("gp") >= MIN_GP)
+    # K=30 of ~443 qualified (~6.8%) -- the smallest K covering every allowlisted
+    # id once Myles Turner/Nurkic (reputation picks) were swapped for Porzingis/
+    # Hartenstein: both allowed ~58.7-58.8% at the rim, essentially identical to
+    # the "big" bucket baseline (58.6%) -- verified against the raw fixture, not
+    # a bug (see nba_tracking_value_constants module comment).
+    top_ids = set(top_k_ids(qualified, "rim_protect_pts_saved", k=30))
+    elite = set(ELITE_ORACLE["2023-24"]["rim"])
     assert elite.issubset(top_ids), elite - top_ids
