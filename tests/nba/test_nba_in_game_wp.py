@@ -3,7 +3,7 @@
 Gate scope note: the plan's gate (b) "MAE vs native winprobabilitypbp" is
 UNOBTAINABLE -- that stats.nba.com endpoint is dead (HTTP 500; hoopR's own
 nba_winprobabilitypbp() is deprecate_stop()-ed). This model is gated ONLY on
-gate (a): per-time-bucket realized-outcome calibration. See the fixtures
+gate (a): per-probability-decile realized-outcome calibration. See the fixtures
 README + SDD ledger for the retirement record.
 
 Gate rule (binding): never lower a gate to make it pass -- debug the model.
@@ -122,3 +122,14 @@ def test_in_game_wp_calibration_gate_2024() -> None:
     # unobtainable (dead endpoint); this realized-outcome calibration is the only gate.
     assert max_gap <= 0.05, f"in-game WP calibration max bucket gap {max_gap:.3f} above 0.05 floor"
     assert 0.85 <= slope <= 1.15, f"in-game WP calibration slope {slope:.3f} outside [0.85, 1.15]"
+
+
+def test_gleague_in_game_missing_artifact_friendly_error() -> None:
+    """G-League ('20') ships no in-game artifact -> a friendly FileNotFoundError, not a raw one."""
+    import pytest
+
+    from sportsdataverse.nba.nba_game_predict import _load_in_game_artifact
+
+    _load_in_game_artifact.cache_clear()
+    with pytest.raises(FileNotFoundError, match="param-only"):
+        _load_in_game_artifact("20")

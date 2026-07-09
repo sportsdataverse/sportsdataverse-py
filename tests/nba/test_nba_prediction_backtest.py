@@ -103,17 +103,28 @@ def test_pregame_trio_vs_espn_predictor_and_closing_line(monkeypatch, oracle_cor
     assert brier_mine <= brier_espn + 0.06, (
         f"model Brier {brier_mine:.3f} exceeds ESPN-predictor Brier {brier_espn:.3f} + 0.06 tolerance"
     )
+    # Calibration-in-the-large: mean predicted home-win prob must track the realized
+    # home-win rate (a per-decile table is too noisy at n~52; this catches gross bias).
+    # Observed at gate time: mean(p_mine) vs mean(y) within ~0.05.
+    assert abs(float(p_mine.mean()) - float(y.mean())) <= 0.10, (
+        f"pregame win-prob miscalibrated in the large: mean_pred {p_mine.mean():.3f} vs mean_actual {y.mean():.3f}"
+    )
 
     joined_odds = preds.join(odds, on="game_id", how="inner")
-    if joined_odds.height >= 10:
-        # ESPN's close_spread_home is a bookmaker SPREAD (negative = home favored);
-        # exp_margin is a MARGIN (positive = home favored) -- opposite sign convention,
-        # confirmed against the raw ESPN payload (e.g. "GS -2.5" -> home_team_odds
-        # close.pointSpread.value == -2.5 for a home-favored game). Negate to compare.
-        mae_spread = mae(joined_odds["exp_margin"].to_numpy(), -joined_odds["close_spread_home"].to_numpy())
-        mae_total = mae(joined_odds["exp_total"].to_numpy(), joined_odds["close_total"].to_numpy())
-        # Observed at gate time (2026-07-08, 49-game odds sample overlapping the
-        # resolved-prediction set): mae_spread=3.52, mae_total=6.53. Floors below are
-        # rounded up from those observed values; do not lower.
-        assert mae_spread <= 4.5, f"spread MAE {mae_spread:.3f} above 4.5-point floor"
-        assert mae_total <= 8.0, f"total MAE {mae_total:.3f} above 8.0-point floor"
+    # Hard floor on the comparison-set size: the market-accuracy asserts below are the
+    # ONLY spread/total gate, so a shrunken odds join must fail loudly, not silently skip
+    # (observed overlap is 49). Do NOT wrap the MAE asserts in an `if height >= N` guard.
+    assert joined_odds.height >= 10, (
+        f"odds comparison set shrank to {joined_odds.height} (< 10) -- market gate would be vacuous"
+    )
+    # ESPN's close_spread_home is a bookmaker SPREAD (negative = home favored);
+    # exp_margin is a MARGIN (positive = home favored) -- opposite sign convention,
+    # confirmed against the raw ESPN payload (e.g. "GS -2.5" -> home_team_odds
+    # close.pointSpread.value == -2.5 for a home-favored game). Negate to compare.
+    mae_spread = mae(joined_odds["exp_margin"].to_numpy(), -joined_odds["close_spread_home"].to_numpy())
+    mae_total = mae(joined_odds["exp_total"].to_numpy(), joined_odds["close_total"].to_numpy())
+    # Observed at gate time (2026-07-08, 49-game odds sample overlapping the
+    # resolved-prediction set): mae_spread=3.52, mae_total=6.53. Floors below are
+    # rounded up from those observed values; do not lower.
+    assert mae_spread <= 4.5, f"spread MAE {mae_spread:.3f} above 4.5-point floor"
+    assert mae_total <= 8.0, f"total MAE {mae_total:.3f} above 8.0-point floor"

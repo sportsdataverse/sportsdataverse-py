@@ -270,7 +270,7 @@ def nba_predict_games(
 # correctly-formed request; hoopR's own nba_winprobabilitypbp() is
 # lifecycle::deprecate_stop()-ed as of 3.0.0, replaced by nba_playbyplayv3()).
 # So gate (b) "MAE vs native winprobabilitypbp" is unobtainable; this model is
-# gated ONLY on gate (a) -- per-time-bucket realized-outcome calibration. See
+# gated ONLY on gate (a) -- per-probability-decile realized-outcome calibration. See
 # tests/fixtures/nba_prediction/README.md + the SDD ledger for the retirement note.
 
 _IN_GAME_FEATURES = ["score_diff", "sqrt_sec_left", "pregame_logit", "home_has_ball"]
@@ -324,6 +324,12 @@ def _load_in_game_artifact(league_id: str = "00") -> dict[str, Any]:
     """
     name = get_constants(league_id).in_game_wp_artifact
     path = files("sportsdataverse.nba") / "models" / name
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"no bundled in-game-WP artifact {name!r} for league_id={league_id!r}. "
+            "Only NBA ('00') and WNBA ('10') ship a trained artifact; G-League ('20') is "
+            "param-only / unfixtured (no ESPN G-League data source to fit or gate it)."
+        )
     if name.endswith(".json"):
         return {"kind": "logistic", **json.loads(path.read_text(encoding="utf-8"))[league_id]}
     try:
