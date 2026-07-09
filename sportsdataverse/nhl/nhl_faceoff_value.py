@@ -24,7 +24,7 @@ See Also:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import overload
+from typing import Literal, overload
 
 import pandas as pd
 import polars as pl
@@ -250,9 +250,11 @@ def _taker_perspective_rows(faceoffs: pl.DataFrame) -> pl.DataFrame:
 
 
 @overload
-def nhl_faceoff_value(pbp: pl.DataFrame, *, league: str = ..., return_as_pandas: bool = False) -> pl.DataFrame: ...
+def nhl_faceoff_value(
+    pbp: pl.DataFrame, *, league: str = ..., return_as_pandas: Literal[False] = ...
+) -> pl.DataFrame: ...
 @overload
-def nhl_faceoff_value(pbp: pl.DataFrame, *, league: str = ..., return_as_pandas: bool) -> pd.DataFrame: ...
+def nhl_faceoff_value(pbp: pl.DataFrame, *, league: str = ..., return_as_pandas: Literal[True]) -> pd.DataFrame: ...
 def nhl_faceoff_value(
     pbp: pl.DataFrame,
     *,

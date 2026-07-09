@@ -458,4 +458,6 @@ files = [
     "sportsdataverse/nfl/nfl_clean.py",
     "sportsdataverse/nfl/nfl_series.py",
     "sportsdataverse/nfl/nfl_standings_calc.py",
+    "sportsdataverse/nhl/nhl_microstat_constants.py",
+    "sportsdataverse/nhl/nhl_faceoff_value.py",
 ]
