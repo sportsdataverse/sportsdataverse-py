@@ -24,19 +24,34 @@ __all__ = ["build_aging_deltas", "nba_aging_curve", "nba_career_trajectory"]
 
 
 def build_aging_deltas(season_values: pl.DataFrame, *, min_minutes: float = 500.0) -> pl.DataFrame:
-    """Chain within-player consecutive-age value deltas into a level curve.
+    """Chain within-player consecutive-age value deltas into a bounded ratio curve.
 
     Keeps only within-player age-to-age+1 pairs (no cross-player leak),
-    computes a minutes-weighted mean delta per age, chains the deltas into a
-    level curve starting from the lowest observed age, and normalizes so the
-    curve peaks at ``1.0``.
+    computes a minutes-weighted mean delta per age, and chains the deltas
+    into a level curve starting from the lowest observed age.
+
+    **Normalization (load-bearing):** every consumer of this curve
+    (:func:`nba_career_trajectory`, :func:`sportsdataverse.nba.nba_rookie_projection.nba_rookie_projection`)
+    treats ``rel_value`` as a **multiplicative ratio** -- ``value /
+    rel_value(age)`` and ``rel_value(a) / rel_value(b)`` -- so the published
+    curve must stay strictly positive and bounded near the conventional
+    aging-curve range (peak ``1.0``, tails well above ``0``). The raw
+    chained level curve (cumulative sum of deltas in the input value's own
+    units) has no such bound -- for a box-score value scale whose replacement
+    level sits well below zero, the naive "peak = 1.0" shift alone leaves
+    ages far from peak deeply *negative*, which silently flips the sign of
+    every downstream ratio. Min-max normalizing to ``[floor_frac, 1.0]``
+    (default floor ``0.4``, i.e. the trough age is never worth less than 40%
+    of peak) keeps the curve's *shape* (rise, peak, decline; unimodal) while
+    making every value usable as a ratio.
 
     Args:
         season_values: Per ``(player_id, age, season_value, minutes)`` rows.
         min_minutes: Minimum minutes for a season to count toward a delta pair.
 
     Returns:
-        Frame ``age:Int64, rel_value:Float64, n_pairs:Int64``.
+        Frame ``age:Int64, rel_value:Float64, n_pairs:Int64``, with
+        ``rel_value`` in ``[floor_frac, 1.0]``.
 
     Example:
         Quick start::
@@ -75,8 +90,16 @@ def build_aging_deltas(season_values: pl.DataFrame, *, min_minutes: float = 500.
     deltas = per_age["delta"].to_list()
     level = np.concatenate([[0.0], np.cumsum(deltas)])
     curve_ages = ages + [ages[-1] + 1]
-    rel = np.asarray(level)
-    rel = rel - rel.max() + 1.0
+    floor_frac = 0.4
+    level_arr = np.asarray(level)
+    level_range = level_arr.max() - level_arr.min()
+    if level_range <= 0:
+        rel = np.ones_like(level_arr)
+    else:
+        # min-max to [0, 1], then rescale into [floor_frac, 1.0] so every
+        # age stays a strictly positive, ratio-usable multiplier.
+        unit = (level_arr - level_arr.min()) / level_range
+        rel = floor_frac + (1.0 - floor_frac) * unit
     n_pairs = per_age["n_pairs"].to_list() + [per_age["n_pairs"][-1]]
     return pl.DataFrame({"age": curve_ages, "rel_value": rel, "n_pairs": n_pairs}).cast(
         {"age": pl.Int64, "n_pairs": pl.Int64}

@@ -45,8 +45,12 @@ exactly this future extension).
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import polars as pl
 
+from sportsdataverse.nba.nba_aging_curve import nba_aging_curve
 from sportsdataverse.nba.nba_draft_constants import (
     COMBINE_FEATURES,
     as_of_class_split,
@@ -54,6 +58,7 @@ from sportsdataverse.nba.nba_draft_constants import (
     spearman_corr,
 )
 from sportsdataverse.nba.nba_draft_model import _load_artifact
+from sportsdataverse.nba.nba_draft_model import _score as _score_draft
 
 FIXTURE_DIR = "tests/fixtures/nba_draft"
 CUTOFF_YEAR = 2015
@@ -144,3 +149,91 @@ def test_draft_holdout_vs_slot_baseline_diagnostic() -> None:
     joined = pred.join(real, on="player_id", how="inner")
     s_model = spearman_corr(joined["proj_career_value"].to_numpy(), joined["career_value"].to_numpy())
     assert s_model > -0.1, f"model Spearman {s_model:.3f} regressed below noise -- debug before shipping"
+
+
+def test_rookie_projection_holdout_ranks_realized_value() -> None:
+    """Phase 4 oracle gate: rookie/sophomore projection (④) holdout backtest.
+
+    **Debugging record (critical bug found and fixed):** the first fit of
+    the composed rookie projection produced a **negative** holdout Spearman
+    (-0.21), even though the underlying draft model (①) alone has a weak
+    *positive* correlation (0.111) with realized rookie value on the same
+    holdout. Root cause: `nba_aging_curve.build_aging_deltas` chained raw
+    box-value-per-100 deltas (an unbounded, often-negative scale -- the box
+    formula's intercept alone is -134) and only shifted the curve so the
+    *peak* equals 1.0, leaving every non-peak age's `rel_value` deeply
+    *negative* (e.g. -14 to -18 at age 19). Every consumer
+    (`nba_career_trajectory`, `nba_rookie_projection`) treats `rel_value` as
+    a **multiplicative ratio** (`value / rel_value(age)`,
+    `rel_value(a)/rel_value(b)`) -- multiplying a positive `proj_career_value`
+    by a *negative* rookie-age ratio silently flipped the sign of every
+    projection. Fixed by min-max normalizing the chained curve to
+    `[floor_frac=0.4, 1.0]` in both `build_aging_deltas` and
+    `dev/nba_draft/fit_aging_curve.py`'s quadratic smoother, so every age's
+    ratio stays strictly positive. After the fix, holdout Spearman is
+    **+0.098** -- positive again and close to the underlying draft model's
+    own 0.111 (the small per-tier residual correction, now correctly small
+    in magnitude relative to the composed term, no longer dominates or
+    reorders). It does not beat the draft-slot-average baseline (0.389,
+    n=177) -- consistent with Phase 1's finding that combine-only measurements
+    underperform realized draft slot; the same diagnostic-not-hard-gate
+    treatment applies here. `proj_avail_pct` is asserted present and
+    structurally separate from the value columns (schema check), never
+    folded into the value rank.
+    """
+    combine = pl.read_parquet(f"{FIXTURE_DIR}/combine_2016_2019.parquet")
+    rookie = pl.read_parquet(f"{FIXTURE_DIR}/rookie_values.parquet")
+    outcomes = pl.read_parquet(f"{FIXTURE_DIR}/draft_outcomes.parquet")
+
+    combine = combine.with_columns(
+        [pl.col(c).cast(pl.Float64, strict=False) for c in RAW_NUMERIC_COLS if c in combine.columns]
+    )
+    combine = combine.with_columns(
+        (pl.col("weight") / (pl.col("height_wo_shoes") ** 2) * 703.0).alias("bmi"),
+        (pl.col("wingspan") - pl.col("height_wo_shoes")).alias("wingspan_diff"),
+    )
+
+    art = _load_artifact("nba")
+    scored = _score_draft(combine, art)
+    _, holdout_scored = as_of_class_split(scored, cutoff_year=CUTOFF_YEAR)
+
+    curve = nba_aging_curve().select("age", "rel_value")
+    rel_rookie = float(curve.filter(pl.col("age") == 19)["rel_value"][0])
+
+    rr_art = json.loads(Path("sportsdataverse/nba/models/nba_rookie_projection.json").read_text())
+    rookie_fraction = rr_art["rookie_fraction"]
+    residual = rr_art["residual"]
+
+    composed = holdout_scored.with_columns(
+        (pl.col("proj_career_value") * rookie_fraction * rel_rookie).alias("composed")
+    )
+    residual_expr = pl.lit(0.0)
+    for tier, val in residual.items():
+        residual_expr = pl.when(pl.col("pro_tier") == tier).then(pl.lit(val)).otherwise(residual_expr)
+    composed = composed.with_columns((pl.col("composed") + residual_expr).alias("proj_rookie_value"))
+    composed = composed.join(rookie.select("player_id", "rookie_value"), on="player_id", how="left").with_columns(
+        pl.col("rookie_value").fill_null(0.0)
+    )
+
+    s = spearman_corr(composed["proj_rookie_value"].to_numpy(), composed["rookie_value"].to_numpy())
+    assert s >= 0.05, f"rookie-projection holdout Spearman {s:.3f} < 0.05 -- debug the aging-curve ratio, do NOT lower"
+
+    # diagnostic (non-blocking, see docstring): draft-slot-average baseline
+    sub = composed.join(outcomes.select("player_id", "draft_number"), on="player_id", how="left").filter(
+        pl.col("draft_number").is_not_null()
+    )
+    sub = sub.with_columns((pl.col("draft_number") / 10).floor().alias("bucket"))
+    bucket_means = sub.group_by("bucket").agg(pl.col("rookie_value").mean().alias("bucket_mean"))
+    sub2 = sub.join(bucket_means, on="bucket")
+    s_baseline = spearman_corr(sub2["bucket_mean"].to_numpy(), sub2["rookie_value"].to_numpy())
+    assert s_baseline > 0.2, f"slot-average baseline Spearman {s_baseline:.3f} -- unexpectedly weak, re-check capture"
+
+
+def test_rookie_projection_schema_separates_availability() -> None:
+    """`proj_avail_pct` must be a separate column, never folded into value."""
+    import importlib
+
+    mod = importlib.import_module("sportsdataverse.nba.nba_rookie_projection")
+    assert set(["proj_rookie_value", "proj_soph_value", "proj_avail_pct", "proj_rookie_min"]).issubset(
+        set(mod._SCHEMA.keys())
+    )
