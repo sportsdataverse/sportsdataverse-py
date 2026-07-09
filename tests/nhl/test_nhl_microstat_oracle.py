@@ -42,6 +42,10 @@ CALIBRATION_MIN_CELL_N = 50
 # season; the floor is conservative relative to the observed value.
 SPLIT_HALF_MIN_ATTEMPTS = 10
 SPLIT_HALF_FLOOR = 0.15
+# Observed eligible comparison set: 194 players with >=10 attempts in both
+# halves. Floor conservative below observed so a partial-fixture shrink to a
+# handful of correlated players can't pass the stability gate on thin evidence.
+SPLIT_HALF_MIN_PLAYERS = 150
 
 
 def test_faceoff_calibration_and_stability(oracle_pbp: pl.DataFrame) -> None:
@@ -75,6 +79,11 @@ def test_faceoff_calibration_and_stability(oracle_pbp: pl.DataFrame) -> None:
     eligible = attempt_counts.filter(pl.col("n_attempts") >= SPLIT_HALF_MIN_ATTEMPTS)["player_id"]
     filtered = half_taker.filter(pl.col("player_id").is_in(eligible.implode()))
 
+    n_players = filtered["player_id"].n_unique()
+    assert n_players >= SPLIT_HALF_MIN_PLAYERS, (
+        f"faceoff stability comparison set only {n_players} players (floor {SPLIT_HALF_MIN_PLAYERS}) "
+        "-- too few to trust the Spearman; fixture may have shrunk"
+    )
     stability = split_half_stability(filtered, id_col="player_id", half_col="half", num_col="won", den_col="one")
     assert stability >= SPLIT_HALF_FLOOR, (
         f"faceoff split-half stability {stability:.4f} below floor {SPLIT_HALF_FLOOR} "
@@ -109,6 +118,10 @@ CONSERVATION_TOL = 1e-6
 # Floor conservative below the observed 0.069.
 PENALTY_MIN_GAMES_PER_HALF = 2
 PENALTY_STABILITY_FLOOR = 0.03
+# Observed eligible comparison set: 488 players with >=2 games each half.
+# Floor conservative below observed (guards against a shrunken fixture passing
+# the rate-stability gate on a handful of correlated players).
+PENALTY_MIN_PLAYERS = 400
 
 
 def test_penalty_conservation_and_stability(oracle_pbp: pl.DataFrame) -> None:
@@ -131,6 +144,7 @@ def test_penalty_conservation_and_stability(oracle_pbp: pl.DataFrame) -> None:
     pen = extract_penalties(oracle_pbp)
     games = oracle_pbp.select("game_id").unique().sort("game_id").with_row_index("g")
     half_of = games.with_columns((pl.col("g") % 2).alias("half")).select("game_id", "half")
+    assert half_of.schema["game_id"] == oracle_pbp.schema["game_id"], "game_id dtype drift on half join"
 
     # Games played per (player, half) -- the independent denominator.
     gp = (
@@ -145,6 +159,9 @@ def test_penalty_conservation_and_stability(oracle_pbp: pl.DataFrame) -> None:
         .agg(pl.len().alias("halves"))
         .filter(pl.col("halves") == 2)["player_id"]
     )
+    assert eligible.len() >= PENALTY_MIN_PLAYERS, (
+        f"penalty stability comparison set only {eligible.len()} players (floor {PENALTY_MIN_PLAYERS})"
+    )
 
     # Penalty involvement (drawn OR taken) count per (player, game, half).
     involve = pl.concat(
@@ -154,6 +171,7 @@ def test_penalty_conservation_and_stability(oracle_pbp: pl.DataFrame) -> None:
         ],
         how="vertical_relaxed",
     ).filter(pl.col("player_id").is_not_null())
+    assert eligible.dtype == involve.schema["player_id"], "player_id dtype drift on eligible filter"
     involve = involve.join(half_of, on="game_id").filter(pl.col("player_id").is_in(eligible.implode()))
 
     # per-(player,half) rate = total involvement / games played that half.
@@ -189,6 +207,8 @@ ASSIST_UNBIAS_FLOOR = 0.05
 # independent games-played denominator (see games_appeared / the penalty gate).
 ASSIST_STABILITY_MIN_GAMES = 2
 ASSIST_STABILITY_FLOOR = 0.15
+# Observed eligible comparison set: 389 players with >=2 games each half.
+ASSIST_MIN_PLAYERS = 300
 
 # NOTE (underpowered leg -- capture contract, NOT a faked assert): the plan's
 # primary-rate-stability > secondary-rate-stability finding needs deep
@@ -222,6 +242,7 @@ def test_expected_assist_unbiasedness_and_stability(oracle_pbp: pl.DataFrame) ->
     goals = extract_goals_with_assists(oracle_pbp, xg_model=fit_shot_xg(oracle_pbp))
     games = oracle_pbp.select("game_id").unique().sort("game_id").with_row_index("g")
     half_of = games.with_columns((pl.col("g") % 2).alias("half")).select("game_id", "half")
+    assert half_of.schema["game_id"] == oracle_pbp.schema["game_id"], "game_id dtype drift on half join"
     gp = (
         games_appeared(oracle_pbp)
         .join(half_of, on="game_id")
@@ -233,6 +254,9 @@ def test_expected_assist_unbiasedness_and_stability(oracle_pbp: pl.DataFrame) ->
         .group_by("player_id")
         .agg(pl.len().alias("halves"))
         .filter(pl.col("halves") == 2)["player_id"]
+    )
+    assert eligible.len() >= ASSIST_MIN_PLAYERS, (
+        f"assist stability comparison set only {eligible.len()} players (floor {ASSIST_MIN_PLAYERS})"
     )
     involve = pl.concat(
         [
@@ -263,6 +287,8 @@ def test_expected_assist_unbiasedness_and_stability(oracle_pbp: pl.DataFrame) ->
 # below observed.
 ZONE_MIN_GAMES_PER_HALF = 2
 ZONE_ENTRY_STABILITY_FLOOR = 0.15
+# Observed eligible comparison set: 476 players with >=2 games each half.
+ZONE_MIN_PLAYERS = 400
 
 
 def test_zone_entry_rate_stability(oracle_pbp: pl.DataFrame) -> None:
@@ -272,6 +298,7 @@ def test_zone_entry_rate_stability(oracle_pbp: pl.DataFrame) -> None:
 
     games = oracle_pbp.select("game_id").unique().sort("game_id").with_row_index("g")
     half_of = games.with_columns((pl.col("g") % 2).alias("half")).select("game_id", "half")
+    assert half_of.schema["game_id"] == oracle_pbp.schema["game_id"], "game_id dtype drift on half join"
     gp = (
         games_appeared(oracle_pbp)
         .join(half_of, on="game_id")
@@ -283,6 +310,9 @@ def test_zone_entry_rate_stability(oracle_pbp: pl.DataFrame) -> None:
         .group_by("player_id")
         .agg(pl.len().alias("halves"))
         .filter(pl.col("halves") == 2)["player_id"]
+    )
+    assert eligible.len() >= ZONE_MIN_PLAYERS, (
+        f"zone-entry stability comparison set only {eligible.len()} players (floor {ZONE_MIN_PLAYERS})"
     )
     ev = entries.join(half_of, on="game_id").filter(pl.col("player_id").is_in(eligible.implode()))
     rate_frame = ev.group_by(["player_id", "half"]).agg(pl.len().alias("cnt")).join(gp, on=["player_id", "half"])

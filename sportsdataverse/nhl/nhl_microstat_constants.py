@@ -102,6 +102,12 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         zone_entry_value_controlled=0.108,
         zone_entry_value_dump=0.053,
         zone_exit_value=0.007,
+        # NOT fit -- deliberate equal-weight (unweighted-z) composite: each EDGE
+        # component contributes its raw league-wide z-score equally. The EDGE
+        # concurrent oracle (component rank-corr >= 0.5 in test_edge_value_concurrent)
+        # guards against a z-score sign / weight regression. Escalate to fitted
+        # PCA first-component loadings only if that gate demands it (see
+        # nhl_edge_value docstring).
         edge_component_weights={
             "top_speed": 1.0,
             "distance_km": 1.0,
@@ -327,6 +333,9 @@ _XG_GOAL_TYPES = {"goal"}
 _XG_SHOT_TYPES = {"goal", "shot-on-goal", "missed-shot", "blocked-shot"}
 _XG_SHOT_TYPE_CATEGORIES = ("wrist", "slap", "snap", "backhand", "tip-in", "wrap-around", "deflected")
 _XG_MIN_SHOTS = 200
+# Rink goal-line x-coordinate in feet (NHL/PWHL-invariant): the net sits at
+# x = +/-89 on the api-web coordinate system; shot distance/angle are measured
+# to (sign(x_coord)*89, 0).
 _NET_X = 89.0
 
 

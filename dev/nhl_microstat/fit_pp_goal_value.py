@@ -64,7 +64,7 @@ def main() -> None:
 
     # Major penalties (5:00, full duration regardless of PP goals) run 2.5x
     # the PP-time exposure of a minor (2:00, ends early on a PP goal). With
-    # only `majors` captured goals in this 40-game slice, a direct
+    # only `majors` captured major penalties in this 120-game slice, a direct
     # goals-during-majors ratio would be too noisy to fit standalone -- scale
     # pp_goal_value by the time-exposure ratio instead (documented estimate,
     # not a direct fit; revisit with a larger corpus if `majors` grows).
