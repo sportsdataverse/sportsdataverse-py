@@ -14,7 +14,13 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nhl.nhl_market import expected_goals, predict_total, win_prob_from_margin
-from sportsdataverse.nhl.nhl_prediction_constants import as_of_ratings_split, brier_score, get_constants, mae
+from sportsdataverse.nhl.nhl_prediction_constants import (
+    as_of_ratings_split,
+    brier_score,
+    calibration_table,
+    get_constants,
+    mae,
+)
 from sportsdataverse.nhl.nhl_team_ratings import adjust_rate_opponent
 
 FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "nhl_prediction"
@@ -72,18 +78,33 @@ def test_documented_empty_oracles_have_expected_schema(oracle_corpus):
 # gate is adapted to a naive p=0.5 baseline (the only oracle actually available).
 # MAE floors are against the real ESPN closing puck-line/total sample.
 #
-# Observed at gate-authoring time (2026-07-08), 1174 as-of-evaluated games
-# (dates[20:] onward, so every team has $\geq$ a handful of games before its
-# first as-of rating):
-#   naive Brier (p=0.5)              = 0.2500
-#   model Brier                      = 0.2350
-#   MAE(exp_margin, closing puck line), n=12 matched games = 1.7722
-#   MAE(exp_total, closing total),   n=12 matched games    = 1.3591
+# Observed at gate-authoring time (2026-07-08; margin-sign + calibration fixes
+# re-derived 2026-07-08 fresh run), 1174 as-of-evaluated games (dates[20:]
+# onward, so every team has >= a handful of games before its first as-of rating):
+#   naive Brier (p=0.5)                                     = 0.2500
+#   model Brier                                             = 0.2350
+#   pregame WP calibration max |mean_pred-mean_actual|,
+#       adequately-sampled buckets (n>=30)                  = 0.0882
+#   favorite-side agreement vs ESPN puck line, n=12         = 10/12 (0.833)
+#   MAE(exp_total, closing total), n=12 matched games       = 1.3591
 # Floors below are these values rounded to the safe side; never loosen without
 # a fresh observed run + a comment explaining why (binding gate rule).
+#
+# NOTE on the spread gate: `exp_margin` is positive-when-home-favored, but ESPN
+# `close_puck_line_home` is negative-when-home-favored, so a raw MAE compares
+# opposite sign conventions AND an NHL puck line is a near-constant +-1.5 (the
+# moneyline, not the line, carries the real favorite) -- a margin MAE against it
+# is near-meaningless. Replaced with a favorite-side AGREEMENT check (stronger):
+# does sign(exp_margin) agree with the market's favored side (home favored iff
+# close_puck_line_home < 0)? Floor from the observed 10/12.
 NAIVE_BRIER = 0.25
 MODEL_BRIER_FLOOR = 0.245  # must beat the naive p=0.5 baseline with margin
-MARGIN_MAE_FLOOR = 1.85
+# small-sample buckets (n<30) are excluded: at ~1174 total games the extreme
+# deciles hold n=7-8 and are pure sampling noise, not miscalibration.
+PREGAME_WP_CALIBRATION_FLOOR = 0.10  # observed 0.0882 on n>=30 buckets
+MIN_CALIBRATION_BUCKET_N = 30
+FAVORITE_AGREEMENT_FLOOR = 0.80  # observed 10/12 = 0.833
+MATCHED_ODDS_MIN = 12  # documented matched-odds count; a silent join drop must fail
 TOTAL_MAE_FLOOR = 1.45
 
 
@@ -137,14 +158,41 @@ def test_pregame_win_prob_beats_naive_baseline(pregame_backtest):
     assert model_brier < naive_brier
 
 
-def test_pregame_margin_and_total_mae_vs_espn_odds(pregame_backtest, oracle_corpus):
+def test_pregame_win_prob_calibration(pregame_backtest):
+    # Mirror the in-game calibration gate: bucket by predicted decile, compare
+    # mean_pred vs realized rate. Restrict to adequately-sampled buckets (n>=30)
+    # -- with ~1174 total games the extreme deciles hold single-digit n and are
+    # sampling noise, not miscalibration (documented in the floor comment).
+    cal = calibration_table(
+        pregame_backtest["home_win"].to_numpy(), pregame_backtest["home_win_prob"].to_numpy(), n_bins=10
+    )
+    cal = cal.filter(pl.col("n") >= MIN_CALIBRATION_BUCKET_N)
+    assert cal.height >= 4  # enough populated buckets to be a real calibration check
+    dev = (cal["mean_pred"] - cal["mean_actual"]).abs()
+    assert dev.max() <= PREGAME_WP_CALIBRATION_FLOOR, (
+        f"pregame WP max per-bucket deviation {dev.max():.4f} above floor {PREGAME_WP_CALIBRATION_FLOOR}"
+    )
+
+
+def test_pregame_favorite_agreement_and_total_mae_vs_espn_odds(pregame_backtest, oracle_corpus):
     odds = oracle_corpus["espn_odds"]
     assert pregame_backtest.schema["game_id"] == odds.schema["game_id"]
     m = pregame_backtest.join(odds, on="game_id", how="inner")
-    assert m.height > 0
-    margin_err = mae(m["exp_margin"].to_numpy(), m["close_puck_line_home"].to_numpy())
+    # A silent join degradation (dtype drift, id-format change) must fail, not pass
+    # vacuously -- assert the documented matched count, not just > 0.
+    assert m.height >= MATCHED_ODDS_MIN, f"matched odds {m.height} < documented {MATCHED_ODDS_MIN}"
+
+    # Favorite-side agreement: home is model-favored iff exp_margin > 0, and
+    # market-favored iff close_puck_line_home < 0 (ESPN sign convention).
+    mm = m.filter(pl.col("close_puck_line_home").is_not_null())
+    assert mm.height >= MATCHED_ODDS_MIN
+    agree = ((mm["exp_margin"] > 0) == (mm["close_puck_line_home"] < 0)).sum()
+    agreement_rate = agree / mm.height
+    assert agreement_rate >= FAVORITE_AGREEMENT_FLOOR, (
+        f"favorite-side agreement {agree}/{mm.height} = {agreement_rate:.3f} below floor {FAVORITE_AGREEMENT_FLOOR}"
+    )
+
     total_err = mae(m["exp_total"].to_numpy(), m["close_total"].to_numpy())
-    assert margin_err <= MARGIN_MAE_FLOOR, f"margin MAE {margin_err:.4f} above floor {MARGIN_MAE_FLOOR}"
     assert total_err <= TOTAL_MAE_FLOOR, f"total MAE {total_err:.4f} above floor {TOTAL_MAE_FLOOR}"
 
 
@@ -187,13 +235,17 @@ def test_in_game_wp_calibration_pulled_goalie_subset():
     assert dev <= PULLED_GOALIE_CALIBRATION_FLOOR, f"pulled-goalie deviation {dev:.4f} above floor"
 
 
-# --- Task 4.2: player-props backtest gate (2024 season, real as-of scoring) -------
+# --- Task 4.2: player-props backtest gate (2024 season) ---------------------------
 #
 # Built by dev/nhl_prediction/build_player_props_backtest_fixture.py:
 # nhl_player_props(2024, stats=("shots","points")) is joined back to the
-# realized load_nhl_skater_boxscores values for the SAME player-game (an
-# as-of comparison since every projection in that output only used strictly
-# prior games -- see nhl_player_props's own leakage-safe construction).
+# realized load_nhl_skater_boxscores values for the SAME player-game.
+# Leakage scope (see nhl_player_props's module docstring): the per-player USAGE
+# rate IS strictly as-of (expanding mean over strictly-prior games), but the
+# opponent matchup / game-script MULTIPLIERS read a single FULL-SEASON ratings
+# snapshot here (as_of_date=None) -- a documented second-order approximation on
+# the dominant usage term, NOT a per-projected-game as-of rating. So this gate
+# validates the projection's realized accuracy, not a fully-leakproof forecast.
 # 2024 is used (not 2023) because load_nhl_skater_boxscores only publishes
 # seasons >= 2024 -- documented in the fixtures README.
 #

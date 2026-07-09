@@ -131,7 +131,7 @@ Most-recent PWHL season as an end-year integer (max `season_yr`).
 
 ## Other
 
-### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
 
 Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
@@ -147,6 +147,7 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 | `shrink_k` | `float` |  | games-played prior strength for rating shrinkage. |
 | `prop_kappa` | `dict` |  | empirical-Bayes shrinkage strength per player-prop stat family. |
 | `pos_priors` | `dict` |  | per-position (F/D) per-stat-family prior rates. |
+| `prop_team_volume_slope` | `float` |  | game-script tilt on a player-prop projection (favored team -> fewer late shots-for). SEEDED PLACEHOLDER (~0.04), not yet fitted -- a future prop-fit task should estimate it from the realized shots-vs-exp_margin slope, mirroring how fit_props.py fits prop_kappa/pos_priors. |
 | `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
 | `min_season` | `int` |  | earliest season this league's prediction spine supports. |
 

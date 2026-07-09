@@ -211,6 +211,11 @@ class LeagueConstants:
         shrink_k: games-played prior strength for rating shrinkage.
         prop_kappa: empirical-Bayes shrinkage strength per player-prop stat family.
         pos_priors: per-position (F/D) per-stat-family prior rates.
+        prop_team_volume_slope: game-script tilt on a player-prop projection
+            (favored team -> fewer late shots-for). SEEDED PLACEHOLDER (~0.04),
+            not yet fitted -- a future prop-fit task should estimate it from the
+            realized shots-vs-exp_margin slope, mirroring how fit_props.py fits
+            prop_kappa/pos_priors.
         in_game_wp_artifact: filename of the bundled in-game win-probability model
             under ``sportsdataverse/nhl/models/``.
         min_season: earliest season this league's prediction spine supports.
@@ -224,6 +229,7 @@ class LeagueConstants:
     shrink_k: float
     prop_kappa: dict
     pos_priors: dict
+    prop_team_volume_slope: float
     in_game_wp_artifact: str
     min_season: int
 
@@ -264,6 +270,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         shrink_k=15.0,
         prop_kappa={"shots": 2.7498, "points": 4.8837},
         pos_priors={"shots": {"F": 1.5746, "D": 1.1910}, "points": {"F": 0.4125, "D": 0.2858}},
+        prop_team_volume_slope=0.04,  # SEEDED placeholder -- not yet fitted (see dataclass doc)
         in_game_wp_artifact="nhl_in_game_wp.json",
         min_season=2010,
     ),
@@ -279,6 +286,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         shrink_k=25.0,
         prop_kappa={"shots": 8.0, "points": 10.0},
         pos_priors={"shots": {"F": 2.0, "D": 1.2}, "points": {"F": 0.50, "D": 0.28}},
+        prop_team_volume_slope=0.04,  # SEEDED placeholder -- fitted when PWHL data lands
         in_game_wp_artifact="pwhl_in_game_wp.json",
         min_season=2024,
     ),

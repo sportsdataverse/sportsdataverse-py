@@ -1,15 +1,26 @@
 """NHL/PWHL player-prop projections (shots on goal, points) + game total re-export.
 
 Model (3) of the T5.3 prediction spine: empirical-Bayes usage x matchup x
-game-script projections, per player-game, **as-of** (only prior games feed a
-projection -- the leakage boundary). Usage and efficiency are combined into a
-single EB-shrunk per-game rate per stat family (a documented simplification:
-the shipped skater-boxscore surface doesn't cleanly separate shot-attempt
-opportunity from per-shot conversion the way a full possession-tracking feed
-would, so one EB-shrunk rate captures both). The matchup multiplier comes
-from the opponent's model-① `adj_xga` (as-of); the team-volume/game-script
-tilt comes from model-②'s **native** `exp_margin` (favored teams protect
-leads -> fewer late shots for; trailing teams push -> more), never the
+game-script projections, per player-game. Usage and efficiency are combined
+into a single EB-shrunk per-game rate per stat family (a documented
+simplification: the shipped skater-boxscore surface doesn't cleanly separate
+shot-attempt opportunity from per-shot conversion the way a full
+possession-tracking feed would, so one EB-shrunk rate captures both).
+
+**Leakage scope (read carefully):** the per-player usage rate IS strictly
+as-of -- each projected row uses only that player's *strictly prior* games in
+the season (a per-player expanding mean, leakage-safe by construction for
+every row in one pass). BUT the opponent matchup multiplier (from model-①
+`adj_xga`) and the team game-script tilt (from model-②'s native `exp_margin`)
+read a **single team-ratings snapshot**, not per-projected-game ratings: when
+``as_of_date`` is given, ratings are computed as-of that one cutoff (so the
+last game before it is clean; earlier games see a mildly forward-looking
+snapshot); when ``as_of_date`` is ``None`` (the whole-season backtest mode),
+ratings are **full-season** -- a documented approximation, not a per-game
+as-of, since the opponent-strength adjustment is a second-order (~1.0±small)
+multiplier on the dominant strictly-prior usage term. Fully per-projected-game
+ratings are deferred (a per-date rating snapshot recompute is heavy at fixture
+scale). The game-script tilt uses model-②'s **native** `exp_margin`, never the
 market line -- keeping model ③ market-free like ①②.
 
 ``nhl_game_total`` is a thin re-export of ②'s expected-goals helper (DRY --
@@ -60,8 +71,6 @@ _PROPS_SCHEMA: dict[str, pl.PolarsDataType] = {
 }
 
 _STAT_COLUMN = {"shots": "shots_on_goal", "points": "points"}
-
-_TEAM_VOLUME_SLOPE = 0.04  # small documented tilt: favored teams protect leads (fewer shots).
 
 
 def _eb_shrink(n: np.ndarray, rate: np.ndarray, prior: float, kappa: float) -> np.ndarray:
@@ -140,21 +149,30 @@ def nhl_player_props(
     stats: tuple[str, ...] = ("shots", "points"),
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Empirical-Bayes shots/points player-prop projections, as-of each game.
+    """Empirical-Bayes shots/points player-prop projections.
 
     For every player-game in ``load_nhl_skater_boxscores``, projects that
-    game's shots-on-goal / points using only the player's **strictly prior**
-    games in the same season(s) (the leakage boundary), EB-shrunk toward a
-    position prior, adjusted by the opponent's as-of matchup (model ①
-    ``adj_xga``) and the team's own as-of game-script (model ② native
-    ``exp_margin`` -- never the market line).
+    game's shots-on-goal / points from the player's **strictly prior** games
+    (leakage-safe per row by construction), EB-shrunk toward a position prior,
+    then adjusted by an opponent matchup multiplier (model ① ``adj_xga``) and a
+    team game-script tilt (model ② native ``exp_margin`` -- never the market
+    line). **See the module docstring's leakage-scope note:** the per-player
+    rate is strictly as-of, but the matchup/game-script ratings are a single
+    snapshot (as-of ``as_of_date`` if given, else full-season), not
+    per-projected-game ratings.
 
     Args:
         seasons: an int or iterable of seasons (``load_nhl_skater_boxscores``
             only publishes seasons >= 2024).
-        league: resolves ``prop_kappa``/``pos_priors`` via :func:`get_constants`.
+        league: resolves ``prop_kappa``/``pos_priors``/``prop_team_volume_slope``
+            via :func:`get_constants`.
         as_of_date: if given, only games strictly before this date are
-            projected (in addition to the per-player as-of-prior-games rule).
+            projected AND the matchup/game-script ratings snapshot is computed
+            as-of this cutoff. NOTE: the per-player usage rate is strictly-prior
+            regardless of this arg (it never needed a cutoff); this arg tightens
+            *which* games are projected and the *single* ratings snapshot, but
+            does not make the ratings per-projected-game as-of (a documented
+            approximation -- see the module docstring).
         stats: which stat families to project (``"shots"``, ``"points"``).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
@@ -213,8 +231,17 @@ def nhl_player_props(
     box = box.join(opp, left_on=["game_id", "team_abbrev"], right_on=["game_id", "team"], how="left")
     box = box.rename({"team_abbrev": "team"})
 
-    ratings = nhl_team_ratings(seasons, league=league)
+    # Thread as_of_date into the ratings snapshot too (not only the box filter),
+    # so the public param genuinely tightens the matchup/game-script ratings and
+    # cannot be misread as leakage-safe while ratings stay full-season. This is a
+    # single snapshot as-of the cutoff (or full-season when None), NOT
+    # per-projected-game ratings -- see the module docstring's leakage-scope note.
+    ratings = nhl_team_ratings(seasons, league=league, as_of_date=as_of_date)
     avg_xga = float(ratings["adj_xga"].mean()) if ratings.height else const.avg_xgf
+    team_volume_slope = const.prop_team_volume_slope
+    # Pre-index ratings once (team -> row) so the per-player-game loop is a dict
+    # lookup, not two full-frame .filter() scans per row.
+    ratings_by_team = {r["team"]: r for r in ratings.iter_rows(named=True)}
 
     rows = []
     for stat in stats:
@@ -238,17 +265,17 @@ def nhl_player_props(
             opp_teams = sub["opp_team"].to_list()
             seasons_list = sub["season"].to_list()
             for i in range(len(values)):
-                opp_row = ratings.filter((pl.col("team") == opp_teams[i]))
-                team_row = ratings.filter((pl.col("team") == teams[i]))
-                opp_adj_xga = float(opp_row["adj_xga"][0]) if opp_row.height else avg_xga
+                opp_row = ratings_by_team.get(opp_teams[i])
+                team_row = ratings_by_team.get(teams[i])
+                opp_adj_xga = float(opp_row["adj_xga"]) if opp_row is not None else avg_xga
                 matchup_multiplier = opp_adj_xga / avg_xga if avg_xga else 1.0
 
                 team_volume_factor = 1.0
-                if team_row.height and opp_row.height:
-                    home_xgf, home_xga = float(team_row["adj_xgf"][0]), float(team_row["adj_xga"][0])
-                    away_xgf, away_xga = float(opp_row["adj_xgf"][0]), float(opp_row["adj_xga"][0])
+                if team_row is not None and opp_row is not None:
+                    home_xgf, home_xga = float(team_row["adj_xgf"]), float(team_row["adj_xga"])
+                    away_xgf, away_xga = float(opp_row["adj_xgf"]), float(opp_row["adj_xga"])
                     exp_margin = 0.5 * (home_xgf + away_xga) - 0.5 * (away_xgf + home_xga)
-                    team_volume_factor = 1.0 - _TEAM_VOLUME_SLOPE * exp_margin
+                    team_volume_factor = 1.0 - team_volume_slope * exp_margin
 
                 proj_mean = shrunk[i] * matchup_multiplier * team_volume_factor
                 rows.append(

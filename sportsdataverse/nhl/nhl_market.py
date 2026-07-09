@@ -274,7 +274,7 @@ def nhl_predict_games(
     )
     joined = games.join(home_ratings, on="home_team", how="left").join(away_ratings, on="away_team", how="left")
 
-    side = pl.when(pl.col("neutral_site")).then(0.0).otherwise(const.hfa / 2.0)
+    side = pl.when(pl.col("neutral_site") == True).then(0.0).otherwise(const.hfa / 2.0)  # noqa: E712
     eg_home = 0.5 * (pl.col("h_adj_xgf") + pl.col("a_adj_xga")) + side
     eg_away = 0.5 * (pl.col("a_adj_xgf") + pl.col("h_adj_xga")) - side
     exp_margin = eg_home - eg_away
@@ -282,14 +282,10 @@ def nhl_predict_games(
     # total_scale variance-corrects the shrinkage-compressed raw sum -- see predict_total.
     exp_total = const.avg_total_goals + const.total_scale * (raw_total - const.avg_total_goals)
 
-    out = joined.with_columns(
-        exp_margin.alias("exp_margin"),
-        exp_total.alias("exp_total"),
-    ).with_columns(
-        pl.col("exp_margin")
-        .map_elements(lambda m: win_prob_from_margin(m, league=league), return_dtype=pl.Float64)
-        .alias("home_win_prob"),
-    )
+    out = joined.with_columns(exp_margin.alias("exp_margin"), exp_total.alias("exp_total"))
+    # Vectorized win prob: win_prob_from_margin is just norm.cdf(m/sigma), which
+    # scipy computes over the whole column at once -- no per-row UDF.
+    out = out.with_columns(pl.Series("home_win_prob", norm.cdf(out["exp_margin"].to_numpy() / const.margin_sd)))
 
     if odds is not None and not odds.is_empty():
         assert out.schema["game_id"] == odds.schema["game_id"], (

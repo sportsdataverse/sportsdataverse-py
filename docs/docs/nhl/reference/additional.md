@@ -498,22 +498,25 @@ _No description available._
 
 ### `nhl_player_props(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, stats: 'tuple[str, ...]' = ('shots', 'points'), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_player_props}
 
-Empirical-Bayes shots/points player-prop projections, as-of each game.
+Empirical-Bayes shots/points player-prop projections.
 
 For every player-game in `load_nhl_skater_boxscores`, projects that
-game's shots-on-goal / points using only the player's **strictly prior**
-games in the same season(s) (the leakage boundary), EB-shrunk toward a
-position prior, adjusted by the opponent's as-of matchup (model ①
-`adj_xga`) and the team's own as-of game-script (model ② native
-`exp_margin` -- never the market line).
+game's shots-on-goal / points from the player's **strictly prior** games
+(leakage-safe per row by construction), EB-shrunk toward a position prior,
+then adjusted by an opponent matchup multiplier (model ① `adj_xga`) and a
+team game-script tilt (model ② native `exp_margin` -- never the market
+line). **See the module docstring's leakage-scope note:** the per-player
+rate is strictly as-of, but the matchup/game-script ratings are a single
+snapshot (as-of `as_of_date` if given, else full-season), not
+per-projected-game ratings.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `seasons` | `Union[int, list[int]]` |  | an int or iterable of seasons (`load_nhl_skater_boxscores` only publishes seasons >= 2024). |
-| `league` | `str` | `'nhl'` | resolves `prop_kappa`/`pos_priors` via `get_constants`. |
-| `as_of_date` | `date \| None` | `None` | if given, only games strictly before this date are projected (in addition to the per-player as-of-prior-games rule). |
+| `league` | `str` | `'nhl'` | resolves `prop_kappa`/`pos_priors`/`prop_team_volume_slope` via `get_constants`. |
+| `as_of_date` | `date \| None` | `None` | if given, only games strictly before this date are projected AND the matchup/game-script ratings snapshot is computed as-of this cutoff. NOTE: the per-player usage rate is strictly-prior regardless of this arg (it never needed a cutoff); this arg tightens *which* games are projected and the *single* ratings snapshot, but does not make the ratings per-projected-game as-of (a documented approximation -- see the module docstring). |
 | `stats` | `tuple[str, ...]` | `('shots', 'points')` | which stat families to project (`"shots"`, `"points"`). |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
 
@@ -961,7 +964,7 @@ year_to_season(1999)  # '1999-00'
 
 ## Other
 
-### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
 
 Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
@@ -977,6 +980,7 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 | `shrink_k` | `float` |  | games-played prior strength for rating shrinkage. |
 | `prop_kappa` | `dict` |  | empirical-Bayes shrinkage strength per player-prop stat family. |
 | `pos_priors` | `dict` |  | per-position (F/D) per-stat-family prior rates. |
+| `prop_team_volume_slope` | `float` |  | game-script tilt on a player-prop projection (favored team -> fewer late shots-for). SEEDED PLACEHOLDER (~0.04), not yet fitted -- a future prop-fit task should estimate it from the realized shots-vs-exp_margin slope, mirroring how fit_props.py fits prop_kappa/pos_priors. |
 | `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
 | `min_season` | `int` |  | earliest season this league's prediction spine supports. |
 

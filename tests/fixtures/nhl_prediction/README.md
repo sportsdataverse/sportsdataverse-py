@@ -118,6 +118,28 @@ to stay comparable with MoneyPuck's `regular` folder.
    calibration instead uses each stat family's own realized-value median
    (+0.5 to avoid integer ties) as a synthetic fixed line -- documented as a
    substitute, not a fabricated market line.
+10. **Player-props matchup/game-script ratings are a single snapshot, not
+    per-projected-game as-of.** The per-player USAGE rate in `nhl_player_props`
+    IS strictly as-of (an expanding mean over strictly-prior games, leakage-safe
+    per row). But the opponent matchup multiplier (model-① `adj_xga`) and the
+    game-script tilt (model-② `exp_margin`) read ONE team-ratings snapshot:
+    as-of `as_of_date` when given, else **full-season** (the backtest fixture
+    path). So `player_props_mae_2024.parquet` / `..._p_over_calibration_2024`
+    were built with full-season opponent ratings — a documented second-order
+    approximation on the dominant strictly-prior usage term, NOT a
+    fully-leakproof forecast. Fully per-projected-game ratings (a per-date
+    snapshot recompute) are deferred as too heavy at fixture scale; the public
+    `as_of_date` arg tightens the single snapshot but does not make the
+    multipliers per-game as-of (its real scope is documented in the
+    `nhl_player_props` docstring so it can't be misread as full leakage safety).
+11. **Pregame spread gate is a favorite-side agreement check, not a margin MAE.**
+    `exp_margin` is positive-when-home-favored; ESPN `close_puck_line_home` is
+    negative-when-home-favored, AND an NHL puck line is a near-constant ±1.5
+    (the moneyline carries the real favorite). A raw margin MAE would compare
+    opposite sign conventions against a near-constant — near-meaningless. The
+    gate instead checks whether `sign(exp_margin)` agrees with the market's
+    favored side (home favored iff `close_puck_line_home < 0`); observed 10/12,
+    floor 0.80. The total-goals MAE (both positive totals) is kept as-is.
 
 ## PWHL oracle gate — DEFERRED (capture contract)
 
