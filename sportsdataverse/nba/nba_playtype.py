@@ -152,7 +152,7 @@ def adjust_playtype_efficiency(
     sched = schedule.filter(pl.col("team_id").is_in(team_ids) & pl.col("opp_team_id").is_in(team_ids))
     team_idx_arr = np.array([idx[t] for t in sched["team_id"].to_list()], dtype=np.int64)
     opp_idx_arr = np.array([idx[t] for t in sched["opp_team_id"].to_list()], dtype=np.int64)
-    counts = np.bincount(team_idx_arr, minlength=T).astype(np.float64)
+    counts: np.ndarray = np.bincount(team_idx_arr, minlength=T).astype(np.float64)
     counts[counts == 0] = np.nan  # avoid div-by-zero; result is NaN for unscheduled teams (edge case)
 
     out_frames: list[pl.DataFrame] = []
@@ -176,7 +176,7 @@ def adjust_playtype_efficiency(
         adj_def = raw_def_ppp.copy()
 
         def _recenter(vals: np.ndarray, weights: np.ndarray, target: float) -> np.ndarray:
-            wsum = weights.sum()
+            wsum: float = weights.sum()
             if wsum <= 0:
                 return vals
             cur = float((vals * weights).sum() / wsum)
