@@ -2,8 +2,9 @@
 
 Projects ``avail_pct``, a strictly separate availability channel: it is
 never folded into a value/skill projection. Consumes prior-season GP%, career
-GP% history, and age from ``nba_stats_playercareerstats``, and applies a
-bundled logistic artifact fit offline in ``dev/nba_draft/fit_availability.py``.
+GP% history, and age from the bulk ``nba_stats_leaguedashplayerstats`` (GP +
+age per player-season), and applies a bundled logistic artifact fit offline
+in ``dev/nba_draft/fit_availability.py``.
 """
 
 from __future__ import annotations
@@ -28,7 +29,9 @@ _FEATURE_COLS = ["age", "prior_gp_pct", "career_gp_pct", "age_sq", "bmi"]
 _SCHEMA = {"player_id": pl.Utf8, "season": pl.Int64, "avail_pct": pl.Float64}
 
 
-def availability_features(career: pl.DataFrame, *, league: str = "nba") -> pl.DataFrame:
+def availability_features(
+    career: pl.DataFrame, *, league: str = "nba", median_ref: "dict[str, float] | None" = None
+) -> pl.DataFrame:
     """Build per-(player_id, season) availability features from career GP history.
 
     Args:
@@ -36,6 +39,12 @@ def availability_features(career: pl.DataFrame, *, league: str = "nba") -> pl.Da
             age:Float64 (or Int64), gp:Int64``. Optionally ``bmi:Float64``.
         league: League key -- selects the full-season game count for the GP%
             denominator via :func:`sportsdataverse.nba.nba_draft_constants.get_constants`.
+        median_ref: Optional ``{"gp_pct": float, "bmi": float}`` imputation
+            scalars. When the FIT script splits into train/holdout it must
+            pass **train-derived** medians here so the holdout distribution
+            never leaks into the imputed values baked across the split. When
+            ``None`` (the runtime-inference path, where every row passed IS a
+            row being scored) the medians are computed from ``career`` itself.
 
     Returns:
         Frame ``player_id, season, age, prior_gp_pct, career_gp_pct, age_sq,
@@ -93,15 +102,20 @@ def availability_features(career: pl.DataFrame, *, league: str = "nba") -> pl.Da
         .alias("career_gp_pct"),
         (pl.col("age") ** 2).alias("age_sq"),
     )
-    league_median_gp = df["_gp_pct"].median() or 0.75
+    ref = median_ref or {}
+    league_median_gp = ref.get("gp_pct") if "gp_pct" in ref else (df["_gp_pct"].median() or 0.75)
     df = df.with_columns(
         pl.col("prior_gp_pct").fill_null(league_median_gp),
         pl.col("career_gp_pct").fill_null(league_median_gp),
     )
     if "bmi" not in df.columns:
         df = df.with_columns(pl.lit(None).cast(pl.Float64).alias("bmi"))
-    bmi_median = df["bmi"].median()
-    df = df.with_columns(pl.col("bmi").fill_null(bmi_median if bmi_median is not None else 24.0))
+    if "bmi" in ref:
+        bmi_fill = ref["bmi"]
+    else:
+        bmi_median = df["bmi"].median()
+        bmi_fill = bmi_median if bmi_median is not None else 24.0
+    df = df.with_columns(pl.col("bmi").fill_null(bmi_fill))
     return df.select("player_id", "season", "age", "prior_gp_pct", "career_gp_pct", "age_sq", "bmi")
 
 
@@ -193,13 +207,19 @@ def nba_availability(
             bulk = nba_stats_leaguedashplayerstats(season=season_str)
         if bulk.is_empty():
             continue
+        # leaguedashplayerstats is a per-player-season aggregate (one row per
+        # player), but guard against a duplicated player_id anyway so a
+        # traded/duplicated row can't double-count a player's GP within a
+        # season the way the playercareerstats TOT rows did in the offline
+        # corpus (that dedup lived only in the fixture; this is the runtime
+        # equivalent). keep="first" is a first-writer-wins reduction.
         frames.append(
             bulk.select(
                 pl.col("player_id").cast(pl.Int64).cast(pl.Utf8),
                 pl.lit(start_year).cast(pl.Int64).alias("season"),
                 pl.col("age").cast(pl.Float64),
                 pl.col("gp").cast(pl.Int64),
-            )
+            ).unique(subset=["player_id"], keep="first")
         )
     career = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     if career.is_empty():

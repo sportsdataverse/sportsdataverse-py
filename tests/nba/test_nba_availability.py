@@ -91,6 +91,16 @@ def test_availability_holdout_beats_baseline_and_calibrates() -> None:
     baseline on held-out seasons (2017+) -- the actual gate requirement --
     so the floor below is calibrated from the observed holdout MAE (0.2515),
     not an aspirational number.
+
+    **Leakage fix (post-review):** the null-fill imputation median was
+    previously computed over the full 2000-2025 frame before the split. Fixed
+    to a TRAIN-only median passed via ``availability_features(median_ref=...)``
+    (features stay full-frame because the within-player prior-season lookback
+    needs each player's whole time series; only the impute scalar is
+    train-derived). The leak was negligible here -- post-fix holdout MAE is
+    unchanged at 0.2515 (the train median 0.756 is essentially the same as the
+    full-frame median, and only first-observed-season rows are ever imputed) --
+    so the 0.27 floor and the beats-baseline assertion are unchanged.
     """
     season_stats = pl.read_parquet(f"{FIXTURE_DIR}/season_stats_raw.parquet")
     career = season_stats.with_columns(
@@ -98,7 +108,12 @@ def test_availability_holdout_beats_baseline_and_calibrates() -> None:
         pl.col("player_age").alias("age"),
     ).filter(pl.col("season") >= 2000)
 
-    feats = availability_features(career)
+    # Impute with TRAIN-season medians only (mirrors the leak-free fit script);
+    # features are built on the full frame because the within-player prior-
+    # season lookback needs each player's whole time series.
+    train_raw = career.filter(pl.col("season") <= 2016)
+    gp_median = float((train_raw["gp"].cast(pl.Float64) / 82.0).clip(0.0, 1.0).median() or 0.75)
+    feats = availability_features(career, median_ref={"gp_pct": gp_median, "bmi": 24.0})
     labeled = feats.with_columns((career["gp"].cast(pl.Float64) / 82.0).clip(0.0, 1.0).alias("realized_gp_pct"))
     _, holdout = as_of_class_split(labeled, cutoff_year=2016, year_col="season")
 
@@ -136,3 +151,29 @@ def test_availability_gleague_bridge_empty_frame_no_crash(monkeypatch: pytest.Mo
     out = mod.nba_availability(2019, gleague_bridge=True)
     assert list(out.schema.keys()) == ["player_id", "season", "avail_pct"]
     assert out.height == 2
+
+
+def test_availability_features_median_ref_uses_passed_scalar() -> None:
+    """median_ref overrides the frame-computed impute median (leak-free fit path)."""
+    # single-season players -> every prior_gp_pct/career_gp_pct is null (no
+    # prior season), so they all get the impute scalar.
+    career = pl.DataFrame({"player_id": ["1", "2"], "season": [2019, 2019], "age": [24, 30], "gp": [82, 41]})
+    feats = availability_features(career, median_ref={"gp_pct": 0.33, "bmi": 24.0})
+    assert feats["prior_gp_pct"].to_list() == [0.33, 0.33]
+    assert feats["career_gp_pct"].to_list() == [0.33, 0.33]
+    # without median_ref it falls back to the frame median (here (1.0+0.5)/2=0.75)
+    feats_frame = availability_features(career)
+    assert feats_frame["prior_gp_pct"][0] != 0.33
+
+
+def test_availability_runtime_dedups_duplicate_player_id(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A duplicated player_id in the bulk season frame is collapsed, not summed."""
+    mod = importlib.import_module("sportsdataverse.nba.nba_availability")
+    # two rows for player 1 in the same season (the TOT-row hazard) + one clean row
+    dupe = pl.DataFrame({"player_id": [1, 1, 2], "age": [24, 24, 30], "gp": [70, 12, 60]})
+
+    monkeypatch.setattr(mod, "nba_stats_leaguedashplayerstats", lambda season, league_id=None: dupe)
+    out = mod.nba_availability(2019)
+    # one row per player (player 1 deduped to a single row), not doubled
+    assert out.height == 2
+    assert sorted(out["player_id"].to_list()) == ["1", "2"]

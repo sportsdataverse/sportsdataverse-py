@@ -41,6 +41,29 @@ gates, since requiring a combine-only model to beat the slot-only baseline
 is -- on this evidence -- not an achievable bar without folding in
 production/college-prior features (the `college_prior` hook exists for
 exactly this future extension).
+
+**Leakage fix (post-review):** an earlier revision computed the combine
+`feature_median` imputation values over the FULL frame *before* the
+as-of-class split. Combine columns are 56-92% null, so this leaked the
+holdout-class distribution into every train row's imputed value. Fixed:
+`dev/nba_draft/fit_draft_model.py` now computes the median on `train` only
+and bundles it in the artifact; `_load_scored_holdout` below imputes the
+holdout with that stored TRAIN median (mirroring `nba_draft_model._score`).
+The leak was mild -- post-fix observed holdout Spearman **0.1488** (was
+0.147) and AUC **0.578** (was 0.575), both slightly HIGHER than the leaked
+values -- so the floors (0.10, 0.55) still hold with margin and were not
+changed.
+
+**Label-construction overlap (transparency, not a leak in the predictive
+sense):** the box-value LABEL formula (`career_value`) is anchored in
+`dev/nba_draft/fit_box_value.py` on the 2016-17..2019-20 `nba_bpm` overlap
+seasons -- which coincide with the draft-model's 2016-2019 HOLDOUT classes.
+This is a label-*definition* choice, not a feature leak: the label's box
+coefficients are frozen from an nba_bpm regression and then applied to all
+eras identically, so no holdout OUTCOME leaks into the train FEATURES. It is
+called out here for full transparency because the anchor-era and holdout-era
+overlap; a future revision could anchor the box formula on a pre-2016 BPM
+proxy to remove the coincidence entirely.
 """
 
 from __future__ import annotations
@@ -96,12 +119,15 @@ def _load_scored_holdout() -> tuple[pl.DataFrame, pl.DataFrame]:
         (pl.col("weight") / (pl.col("height_wo_shoes") ** 2) * 703.0).alias("bmi"),
         (pl.col("wingspan") - pl.col("height_wo_shoes")).alias("wingspan_diff"),
     )
-    feature_median = {c: float(df[c].drop_nulls().median() or 0.0) for c in COMBINE_FEATURES}
-    df = df.with_columns([pl.col(c).fill_null(feature_median[c]) for c in COMBINE_FEATURES])
-
-    _, holdout = as_of_class_split(df, cutoff_year=CUTOFF_YEAR)
-
     art = _load_artifact("nba")
+
+    # Impute holdout nulls with the artifact's TRAIN-derived median (never a
+    # median recomputed over the full frame -- that leaks the holdout
+    # distribution back into the split). Mirrors nba_draft_model._score.
+    art_median = art["feature_median"]
+    _, holdout = as_of_class_split(df, cutoff_year=CUTOFF_YEAR)
+    holdout = holdout.with_columns([pl.col(c).fill_null(art_median.get(c, 0.0)) for c in COMBINE_FEATURES])
+
     import numpy as np
 
     mu = np.asarray(art["feature_mean"], dtype=float)
@@ -122,9 +148,10 @@ def _load_scored_holdout() -> tuple[pl.DataFrame, pl.DataFrame]:
 def test_draft_holdout_ranks_realized_value() -> None:
     pred, real = _load_scored_holdout()
     s = spearman_corr(pred["proj_career_value"].to_numpy(), real["career_value"].to_numpy())
-    # floor calibrated from the observed 0.147 (see module docstring debugging
-    # record) -- a small margin below the observed value, not an aspirational
-    # number. Do NOT lower further without re-running the debugging steps above.
+    # floor calibrated from the leak-free observed 0.149 (see module docstring
+    # debugging record) -- a margin below the observed value, not an
+    # aspirational number. Do NOT lower further without re-running the debugging
+    # steps above.
     assert s >= 0.10, f"draft-value holdout Spearman {s:.3f} < 0.10 -- debug features/leakage, do NOT lower gate"
 
     a = auc(real["drafted"].cast(pl.Int64).to_numpy(), pred["draft_prob"].to_numpy())
@@ -135,7 +162,7 @@ def test_draft_holdout_vs_slot_baseline_diagnostic() -> None:
     """Documented, non-blocking diagnostic (see module docstring).
 
     Combine-only measurements do not beat the slot-only baseline on this
-    corpus (observed: model Spearman 0.147 vs slot-baseline Spearman 0.474,
+    corpus (observed: model Spearman 0.149 vs slot-baseline Spearman 0.474,
     n=177 holdout prospects with a known draft slot). This assertion checks
     the diagnostic stays in the same ballpark run-to-run (an order-of-magnitude
     regression check), not that the model beats the baseline -- beating it is
@@ -170,10 +197,12 @@ def test_rookie_projection_holdout_ranks_realized_value() -> None:
     projection. Fixed by min-max normalizing the chained curve to
     `[floor_frac=0.4, 1.0]` in both `build_aging_deltas` and
     `dev/nba_draft/fit_aging_curve.py`'s quadratic smoother, so every age's
-    ratio stays strictly positive. After the fix, holdout Spearman is
-    **+0.098** -- positive again and close to the underlying draft model's
-    own 0.111 (the small per-tier residual correction, now correctly small
-    in magnitude relative to the composed term, no longer dominates or
+    ratio stays strictly positive. After that fix (and the later
+    train-only-median leak fix to the draft artifact this composition
+    reuses, which nudged the numbers up), holdout Spearman is **+0.130** --
+    positive and close to the underlying draft model's own value on this
+    holdout (the small per-tier residual correction, now correctly small in
+    magnitude relative to the composed term, no longer dominates or
     reorders). It does not beat the draft-slot-average baseline (0.389,
     n=177) -- consistent with Phase 1's finding that combine-only measurements
     underperform realized draft slot; the same diagnostic-not-hard-gate

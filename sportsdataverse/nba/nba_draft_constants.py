@@ -256,7 +256,12 @@ class LeagueConstants:
         replacement: Replacement-level ``box_value_per100`` (VORP convention).
         box_value_coef: ``[intercept, *BOX_VALUE_FEATURES coefficients]`` (9 floats),
             fit vs the shipped ``nba_bpm`` (see ``dev/nba_draft/fit_box_value.py``).
-        peak_age: Approximate aging-curve peak age for this league.
+        peak_age: Aging-curve peak age for this league. Mirrors the fitted
+            ``{prefix}_aging_curve.json`` artifact's ``peak_age`` (nba/wnba
+            = 29, from ``dev/nba_draft/fit_aging_curve.py``); gleague has no
+            fitted curve yet so its value is a seeded placeholder. Informational
+            only -- the runtime reads ``peak_age`` from the loaded artifact,
+            not this field.
         games_full_season: Games in a full regular season (82 NBA/WNBA-scaled
             below; WNBA plays a shorter season).
         artifact_prefix: Bundled-artifact filename prefix under
@@ -289,7 +294,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
             -1.9082,
             0.5861,
         ],
-        peak_age=27.0,
+        peak_age=29.0,
         games_full_season=82,
         artifact_prefix="nba",
     ),
@@ -306,7 +311,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
             -1.9082,
             0.5861,
         ],
-        peak_age=27.0,
+        peak_age=29.0,
         games_full_season=40,
         artifact_prefix="wnba",
     ),

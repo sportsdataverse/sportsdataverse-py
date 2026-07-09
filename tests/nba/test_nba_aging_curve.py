@@ -83,6 +83,11 @@ def test_aging_curve_matches_published() -> None:
     peak = cur.filter(pl.col("rel_value") == pl.col("rel_value").max())["age"][0]
     assert 25 <= peak <= 29, f"peak_age {peak} outside [25,29] -- debug delta chaining, do NOT widen further"
     j = cur.join(pub, on="age", how="inner")
+    # load-bearing overlap invariant: the Spearman below is only meaningful if
+    # the curve and the published fixture actually overlap on enough ages. A
+    # schema/age-range drift that collapsed the join to a handful of rows would
+    # otherwise make the correlation trivially pass on noise.
+    assert j.height >= 15, f"aging-curve/published age overlap {j.height} < 15 -- fixture or curve age range drifted"
     s = spearman_corr(j["rel_value"].to_numpy(), j["rel_value_right"].to_numpy())
     assert s >= 0.75, f"aging-curve corr vs published {s:.3f} < 0.75"
     # unimodal: differences change sign exactly once

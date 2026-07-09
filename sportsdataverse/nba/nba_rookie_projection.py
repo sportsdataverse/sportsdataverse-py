@@ -33,6 +33,14 @@ _SCHEMA = {
 }
 
 _ROOKIE_AGE = 19.0
+# ponytail: SEEDED PLACEHOLDER, not a fitted constant. These per-tier expected
+# rookie minutes-per-game are hand-set order-of-magnitude values (unlike
+# rookie_fraction/residual, which are fit in dev/nba_draft/fit_rookie_residual.py
+# and bundled in nba_rookie_projection.json). They only scale proj_rookie_min
+# (a reported convenience column), never proj_rookie_value/proj_soph_value, so
+# they do not affect any oracle gate. Replace with a fitted mpg-by-tier table
+# (mean realized rookie MPG per pro_tier on the training classes) in
+# fit_rookie_residual.py when proj_rookie_min gets its own gate.
 _EXPECTED_MPG = {"lottery": 28.0, "first_round": 20.0, "second_round": 12.0, "undrafted": 6.0}
 
 
