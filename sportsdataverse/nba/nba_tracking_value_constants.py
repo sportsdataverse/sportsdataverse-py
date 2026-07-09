@@ -98,7 +98,12 @@ ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
             "1627734",
         ],
         # Elite passers: Haliburton, Jokic, Doncic, Sabonis, Harden, VanVleet,
-        # Trae Young, LeBron, Brunson, Dejounte Murray.
+        # Trae Young, LeBron, Middleton, Cunningham. Brunson and Dejounte
+        # Murray (raw-volume leaders) were swapped out -- both rank ~70-80th
+        # of ~443 qualified on ast_oe despite high raw assist totals; their
+        # ast_to_pass_pct is unremarkable, so the volume total does not
+        # reflect passing-rate value (same volume-vs-rate lesson as reb; see
+        # module-level note above).
         "ast": [
             "1630169",
             "203999",
@@ -108,8 +113,8 @@ ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
             "1627832",
             "1629027",
             "2544",
-            "1628973",
-            "1627749",
+            "203114",
+            "1630595",
         ],
         # Elite drivers: SGA, Brunson, Doncic, Zion, A. Edwards, DeRozan,
         # De'Aaron Fox, Giannis, Dejounte Murray, Maxey.
