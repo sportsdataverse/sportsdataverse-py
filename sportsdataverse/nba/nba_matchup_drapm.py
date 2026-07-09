@@ -114,9 +114,14 @@ def nba_matchup_drapm(
     reusing the shipped RAPM ridge machinery on the
     :func:`build_matchup_drapm_design` two-way-FE design.
 
-    **Sign convention:** ``matchup_drapm = -100 * beta_defender`` (centered),
-    so higher is better defense (fewer points allowed), matching the
-    :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` ``d_rapm`` convention.
+    **Sign + scale:** the design target ``y`` is already points-allowed *per 100*
+    matchup possessions (``100 * player_pts / partial_poss``), so the defender
+    coefficient is already on the per-100 scale -- ``matchup_drapm =
+    -(beta_defender - mean_beta_defender)`` (centered, NO extra ×100, unlike
+    :func:`~sportsdataverse.nba.nba_rapm.nba_rapm` whose ``y`` is per-*possession*
+    and needs the ×100). Sign is negated so higher = better defense (fewer points
+    allowed), matching the ``d_rapm`` convention. Typical magnitudes are a few to
+    low-double-digit points per 100 vs the league defender average.
 
     Args:
         season: Season string, e.g. ``"2023-24"``.
@@ -172,7 +177,9 @@ def nba_matchup_drapm(
     model = RidgeCV(alphas=cfg.ridge_alphas, fit_intercept=True)
     model.fit(X, y, sample_weight=w)
     beta_def = model.coef_[: len(def_ids)]
-    drapm = -100.0 * (beta_def - beta_def.mean())
+    # y is already per-100 (100*player_pts/partial_poss), so beta_def is per-100 too --
+    # center and negate (higher = better D), NO extra ×100 (that was a double-scale bug).
+    drapm = -(beta_def - beta_def.mean())
 
     # matchup_poss per defender: sum of partial_poss over rows involving that defender
     poss_by_def = np.asarray(X[:, : len(def_ids)].T.dot(w)).ravel()
