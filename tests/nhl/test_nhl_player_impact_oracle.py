@@ -143,3 +143,46 @@ def test_unit_ratings_internal_gate_summed_rapm_tracks_on_ice_xg_diff():
     assert units.height > 0
     corr = spearman_corr(units["summed_rapm"].to_numpy(), (units["on_ice_xgf"] - units["on_ice_xga"]).to_numpy())
     assert corr >= UNIT_RATINGS_FLOOR, f"unit-ratings internal gate below floor: {corr:.3f} < {UNIT_RATINGS_FLOOR}"
+
+
+# Observed on the 3-game fixture: reconstructed league PP xGF rate == 10.18 per 60
+# (ratio 1.64x the seeded LEAGUE_CONSTANTS["nhl"].league_xg_rate_pp=6.2). A 3-game
+# sample's PP rate legitimately runs hot/cold vs. a full-season-fit constant -- this is
+# a soft sanity check that the strength-state filter + rate math are right (order of
+# magnitude), not a tight fit to this specific tiny sample. BAND is a x3 multiplicative
+# window around the constant, generous enough for small-sample noise while still
+# catching a real unit/sign bug (e.g. a per-game instead of per-60 scaling error, which
+# would be off by ~16-27x for a 3-game, ~90-shift sample).
+PP_RATE_RATIO_BAND = (1.0 / 3.0, 3.0)
+
+
+def test_special_teams_pp_rate_reconciles_with_league_constant_order_of_magnitude():
+    from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
+    from sportsdataverse.nhl.nhl_rapm import build_stints
+
+    scored = _scored()
+    stints = build_stints(_shifts(), scored)
+
+    def _counts(s: str | None) -> tuple[int, int] | None:
+        if not s or "v" not in s:
+            return None
+        a, b = s.split("v", 1)
+        try:
+            return int(a), int(b)
+        except ValueError:
+            return None
+
+    pp_xgf, pp_duration = 0.0, 0.0
+    for rec in stints.to_dicts():
+        c = _counts(rec.get("strength_state"))
+        if c is None or c[0] == c[1]:
+            continue
+        pp_xgf += float((rec["xgf_home"] if c[0] > c[1] else rec["xgf_away"]) or 0.0)
+        pp_duration += rec["duration"]
+
+    assert pp_duration > 0, "no PP stints found on the fixture"
+    observed_rate = pp_xgf * 3600.0 / pp_duration
+    ratio = observed_rate / get_constants("nhl").league_xg_rate_pp
+    assert PP_RATE_RATIO_BAND[0] <= ratio <= PP_RATE_RATIO_BAND[1], (
+        f"PP rate reconciliation off: observed={observed_rate:.2f}/60 ratio={ratio:.2f} outside {PP_RATE_RATIO_BAND}"
+    )
