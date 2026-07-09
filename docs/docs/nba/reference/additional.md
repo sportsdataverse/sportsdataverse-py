@@ -617,7 +617,7 @@ Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out 
 | `baseline_rmse` | `float` |  |  |
 | `n_forecasts` | `int` |  |  |
 
-### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', in_game_wp_artifact: 'str' = 'nba_in_game_wp.json') -> None` {#LeagueConstants}
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', in_game_wp_artifact: 'str' = 'nba_in_game_wp.ubj') -> None` {#LeagueConstants}
 
 Per-`league_id` fitted constants for the NBA prediction & market stack.
 
@@ -630,7 +630,7 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 | `avg_pace` | `float` |  | League baseline possessions per team per game (adjusted- pace anchor for `~sportsdataverse.nba.nba_team_ratings.adjust_pace`). |
 | `avg_off_rtg` | `float` |  | League baseline points per 100 possessions. |
 | `game_minutes` | `int` |  | Regulation game length in minutes (NBA/G-League 48, WNBA 40) -- structurally different, not a fitted number. |
-| `in_game_wp_artifact` | `str` | `'nba_in_game_wp.json'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
+| `in_game_wp_artifact` | `str` | `'nba_in_game_wp.ubj'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
 
 ### `NbaBpmModel(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True) -> 'None'` {#NbaBpmModel}
 
@@ -1555,6 +1555,30 @@ from sportsdataverse.nba.nba_shot_value_constants import get_shrinkage_k
 get_shrinkage_k("00")
 ```
 
+### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
+
+Per-play in-game win-probability features from a `load_nba_pbp` frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame with `start_game_seconds_remaining`, `home_score`, `away_score`, `team_id` (event team) and `home_team_id` (the `load_nba_pbp` schema). |
+| `pregame_home_prob` | `float` |  | The pregame home win probability (e.g. from `win_prob_from_margin`), encoded as a constant logit column. Clipped to `[1e-6, 1 - 1e-6]` so a saturated CDF (exact 0/1) cannot crash the logit. |
+
+**Returns**
+
+One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import in_game_features
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+feats = in_game_features(pbp, 0.62)
+```
+
 ### `luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'` {#luck_adjusted_response}
 
 Attach a per-possession `la_points` expected-points response.
@@ -1867,6 +1891,43 @@ Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns pe
 from sportsdataverse.nba.nba_rapm_variants import nba_four_factor_rapm
 ff = nba_four_factor_rapm(season_poss)
 print(ff.sort("efg__off", descending=True).head())
+```
+
+### `nba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_in_game_win_prob}
+
+Per-play home win probability from the bundled in-game model.
+
+Scores `in_game_features` through the committed artifact
+(`sportsdataverse/nba/models/nba_in_game_wp.ubj` for NBA -- a shallow
+xgboost booster, trained on 2022-23 so the 2023-24 calibration backtest
+stays out-of-sample; escalated from a plain logistic that failed the
+per-bucket calibration gate).
+
+Gate note: the plan's concurrent oracle (stats.nba.com
+`winprobabilitypbp` HOME_PCT) is a dead endpoint, so this model is
+validated ONLY on realized-outcome calibration, not against a native WP
+feed. See the fixtures README + SDD ledger.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play for ONE game in the `load_nba_pbp` schema (`start_game_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`). |
+| `pregame_home_prob` | `float` |  | Pregame home win probability (e.g. from `win_prob_from_margin`). |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (selects the bundled artifact). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per play: the five feature columns plus `home_win_prob`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import nba_in_game_win_prob
+from sportsdataverse.nba.nba_loaders import load_nba_pbp
+pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+wp = nba_in_game_win_prob(pbp, 0.62)
 ```
 
 ### `nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_la_rapm}

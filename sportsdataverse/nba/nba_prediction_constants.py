@@ -70,7 +70,7 @@ class LeagueConstants:
     avg_pace: float
     avg_off_rtg: float
     game_minutes: int
-    in_game_wp_artifact: str = "nba_in_game_wp.json"
+    in_game_wp_artifact: str = "nba_in_game_wp.ubj"
 
 
 # NBA hfa/margin_sd are FITTED (dev/nba_prediction/fit_pregame.py, 2026-07-08):
@@ -88,7 +88,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_pace=99.5,
         avg_off_rtg=114.0,
         game_minutes=48,
-        in_game_wp_artifact="nba_in_game_wp.json",
+        in_game_wp_artifact="nba_in_game_wp.ubj",
     ),
     "10": LeagueConstants(
         hfa=2.5,
@@ -96,7 +96,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_pace=82.0,
         avg_off_rtg=101.0,
         game_minutes=40,
-        in_game_wp_artifact="nba_in_game_wp.json",
+        in_game_wp_artifact="wnba_in_game_wp.ubj",
     ),
     "20": LeagueConstants(
         hfa=2.5,
@@ -104,7 +104,7 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_pace=101.0,
         avg_off_rtg=110.0,
         game_minutes=48,
-        in_game_wp_artifact="nba_in_game_wp.json",
+        in_game_wp_artifact="nbagl_in_game_wp.ubj",
     ),
 }
 

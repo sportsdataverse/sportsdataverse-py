@@ -19,8 +19,13 @@ closed-form co-product of the spread model, not a separate trained model
 
 from __future__ import annotations
 
-from typing import Literal, Union, overload
+import json
+import math
+from functools import lru_cache
+from importlib.resources import files
+from typing import Any, Literal, Union, overload
 
+import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.stats import norm
@@ -29,6 +34,8 @@ from sportsdataverse.nba.nba_prediction_constants import get_constants
 
 __all__ = [
     "expected_possessions",
+    "in_game_features",
+    "nba_in_game_win_prob",
     "nba_predict_games",
     "predict_margin",
     "predict_total",
@@ -254,3 +261,155 @@ def nba_predict_games(
     )
     result = out.select("game_id", "home_team_id", "away_team_id", "exp_margin", "home_win_prob", "exp_total")
     return result.to_pandas() if return_as_pandas else result
+
+
+# --- Model ④: native in-game win probability (trained logistic + bundled artifact) ---
+#
+# NOTE (gate scope): the plan's concurrent oracle was the stats.nba.com
+# ``winprobabilitypbp`` HOME_PCT feed. That endpoint is DEAD (HTTP 500 on every
+# correctly-formed request; hoopR's own nba_winprobabilitypbp() is
+# lifecycle::deprecate_stop()-ed as of 3.0.0, replaced by nba_playbyplayv3()).
+# So gate (b) "MAE vs native winprobabilitypbp" is unobtainable; this model is
+# gated ONLY on gate (a) -- per-time-bucket realized-outcome calibration. See
+# tests/fixtures/nba_prediction/README.md + the SDD ledger for the retirement note.
+
+_IN_GAME_FEATURES = ["score_diff", "sqrt_sec_left", "pregame_logit", "home_has_ball"]
+
+
+def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFrame:
+    """Per-play in-game win-probability features from a ``load_nba_pbp`` frame.
+
+    Args:
+        pbp: Play-by-play frame with ``start_game_seconds_remaining``,
+            ``home_score``, ``away_score``, ``team_id`` (event team) and
+            ``home_team_id`` (the ``load_nba_pbp`` schema).
+        pregame_home_prob: The pregame home win probability (e.g. from
+            :func:`win_prob_from_margin`), encoded as a constant logit column.
+            Clipped to ``[1e-6, 1 - 1e-6]`` so a saturated CDF (exact 0/1)
+            cannot crash the logit.
+
+    Returns:
+        One row per input play: ``score_diff`` (home - away), ``sec_left``
+        (clipped at 0 -- overtime plays count as 0 seconds left),
+        ``sqrt_sec_left``, ``pregame_logit``, ``home_has_ball`` (``Int8``;
+        dead-ball / unknown-team plays are 0).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_predict import in_game_features
+            from sportsdataverse.nba.nba_loaders import load_nba_pbp
+            pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+            feats = in_game_features(pbp, 0.62)
+    """
+    p = min(max(pregame_home_prob, 1e-6), 1.0 - 1e-6)  # norm.cdf saturates to exact 0/1 for extreme margins
+    logit = math.log(p / (1.0 - p))
+    return pbp.select(
+        (pl.col("home_score") - pl.col("away_score")).cast(pl.Float64).alias("score_diff"),
+        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).alias("sec_left"),
+        pl.col("start_game_seconds_remaining").cast(pl.Float64).clip(lower_bound=0.0).sqrt().alias("sqrt_sec_left"),
+        pl.lit(logit, dtype=pl.Float64).alias("pregame_logit"),
+        (pl.col("team_id") == pl.col("home_team_id")).fill_null(False).cast(pl.Int8).alias("home_has_ball"),
+    )
+
+
+@lru_cache(maxsize=None)
+def _load_in_game_artifact(league_id: str = "00") -> dict[str, Any]:
+    """Bundled per-``league_id`` in-game-WP artifact (no first-use download).
+
+    Detects the model kind by the ``in_game_wp_artifact`` extension in
+    LEAGUE_CONSTANTS: ``.ubj`` -> an xgboost booster (the shipped NBA model,
+    escalated from the plain logistic which failed the calibration gate);
+    ``.json`` -> a plain logistic coefficient block keyed by ``league_id``.
+    """
+    name = get_constants(league_id).in_game_wp_artifact
+    path = files("sportsdataverse.nba") / "models" / name
+    if name.endswith(".json"):
+        return {"kind": "logistic", **json.loads(path.read_text(encoding="utf-8"))[league_id]}
+    try:
+        import xgboost as xgb  # noqa: PLC0415 -- optional dep, only the tree artifact needs it
+    except ImportError as exc:  # pragma: no cover - exercised only when xgboost is absent
+        raise ImportError(
+            "nba_in_game_win_prob needs xgboost for the bundled tree artifact; "
+            "install via 'pip install sportsdataverse[models]' or 'pip install xgboost'"
+        ) from exc
+    booster = xgb.Booster()
+    booster.load_model(bytearray(path.read_bytes()))
+    return {"kind": "xgboost", "booster": booster, "features": booster.feature_names}
+
+
+@overload
+def nba_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league_id: str = "00",
+    return_as_pandas: Literal[False] = False,
+) -> pl.DataFrame: ...
+
+
+@overload
+def nba_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league_id: str = "00",
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+
+
+def nba_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league_id: str = "00",
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Per-play home win probability from the bundled in-game model.
+
+    Scores :func:`in_game_features` through the committed artifact
+    (``sportsdataverse/nba/models/nba_in_game_wp.ubj`` for NBA -- a shallow
+    xgboost booster, trained on 2022-23 so the 2023-24 calibration backtest
+    stays out-of-sample; escalated from a plain logistic that failed the
+    per-bucket calibration gate).
+
+    Gate note: the plan's concurrent oracle (stats.nba.com
+    ``winprobabilitypbp`` HOME_PCT) is a dead endpoint, so this model is
+    validated ONLY on realized-outcome calibration, not against a native WP
+    feed. See the fixtures README + SDD ledger.
+
+    Args:
+        pbp: Play-by-play for ONE game in the ``load_nba_pbp`` schema
+            (``start_game_seconds_remaining``, ``home_score``, ``away_score``,
+            ``team_id``, ``home_team_id``).
+        pregame_home_prob: Pregame home win probability (e.g. from
+            :func:`win_prob_from_margin`).
+        league_id: ``"00"`` NBA / ``"10"`` WNBA / ``"20"`` G-League (selects
+            the bundled artifact).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per play: the five feature columns plus ``home_win_prob``.
+
+    Raises:
+        ImportError: If the bundled artifact is an xgboost ``.ubj`` and
+            ``xgboost`` is not installed.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba.nba_game_predict import nba_in_game_win_prob
+            from sportsdataverse.nba.nba_loaders import load_nba_pbp
+            pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
+            wp = nba_in_game_win_prob(pbp, 0.62)
+    """
+    art = _load_in_game_artifact(league_id)
+    feats = in_game_features(pbp, pregame_home_prob)
+    X = feats.select(art["features"]).to_numpy()
+    if art["kind"] == "xgboost":
+        p = art["booster"].inplace_predict(X)
+    else:
+        z = X @ np.asarray(art["coef"], dtype=float) + float(art["intercept"])
+        p = 1.0 / (1.0 + np.exp(-z))
+    out = feats.with_columns(pl.Series("home_win_prob", p).cast(pl.Float64))
+    return out.to_pandas() if return_as_pandas else out

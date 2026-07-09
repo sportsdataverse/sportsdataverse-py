@@ -182,6 +182,7 @@ from sportsdataverse.nba import helper_nba_pbp_features as helper_nba_pbp_featur
 from sportsdataverse.nba import helper_nba_pickcenter as helper_nba_pickcenter  # noqa: F401
 from sportsdataverse.nba import helper_nba_roster_items as helper_nba_roster_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_items as helper_nba_team_items  # noqa: F401
+from sportsdataverse.nba import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.nba import load_darko_dpm as load_darko_dpm  # noqa: F401
 from sportsdataverse.nba import load_dunks_threes_stats as load_dunks_threes_stats  # noqa: F401
 from sportsdataverse.nba import load_epm as load_epm  # noqa: F401
@@ -211,6 +212,7 @@ from sportsdataverse.nba import nba_bpm as nba_bpm  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
+from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
 from sportsdataverse.nba import nba_la_rapm as nba_la_rapm  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
@@ -406,6 +408,7 @@ __all__ = [
     "helper_nba_pickcenter",
     "helper_nba_roster_items",
     "helper_nba_team_items",
+    "in_game_features",
     "load_darko_dpm",
     "load_dunks_threes_stats",
     "load_epm",
@@ -435,6 +438,7 @@ __all__ = [
     "nba_darko",
     "nba_decay_rapm",
     "nba_four_factor_rapm",
+    "nba_in_game_win_prob",
     "nba_la_rapm",
     "nba_pbp_disk",
     "nba_player_ages",

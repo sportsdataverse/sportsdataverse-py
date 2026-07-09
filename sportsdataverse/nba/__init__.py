@@ -93,6 +93,8 @@ from sportsdataverse.nba.nba_team_ratings import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_game_predict import (  # noqa: F401
     expected_possessions,
+    in_game_features,
+    nba_in_game_win_prob,
     nba_predict_games,
     predict_margin,
     predict_total,
