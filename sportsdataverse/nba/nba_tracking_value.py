@@ -293,6 +293,7 @@ def _expected_from_difficulty(df: pl.DataFrame, spec: MeasureSpec, group_cols: "
         contribution = pl.col(denom_col).cast(pl.Float64) * pl.col(rate_alias)
         total_expected = contribution if total_expected is None else (total_expected + contribution)
 
+    assert total_expected is not None  # extra_denoms non-empty (checked above) -> loop ran >=1 time
     df = df.with_columns(total_expected.alias(exp_col))
     df = df.with_columns((pl.col(spec.actual).cast(pl.Float64) - pl.col(exp_col)).alias(oe_col))
     return df.drop(rate_cols)
