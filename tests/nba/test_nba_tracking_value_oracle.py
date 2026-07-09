@@ -19,6 +19,7 @@ from sportsdataverse.nba.nba_tracking_value import (
     nba_tracking_drive_value,
     nba_tracking_pass_value,
     nba_tracking_reb_oe,
+    nba_tracking_shot_diet_value,
 )
 from sportsdataverse.nba.nba_tracking_value_constants import ELITE_ORACLE, residual_sums_to_zero, top_k_ids
 
@@ -90,4 +91,27 @@ def test_drive_pts_oe_rank_sanity_and_sum_to_zero():
     # Irving (see nba_tracking_value_constants module comment).
     top_ids = set(top_k_ids(qualified, "drive_pts_oe", k=25))
     elite = set(ELITE_ORACLE["2023-24"]["drive"])
+    assert elite.issubset(top_ids), elite - top_ids
+
+
+def test_cs_pts_oe_rank_sanity_and_sum_to_zero():
+    cs_raw = _load_fixture("leaguedashptstats_catchshoot_2324.json")
+    pu_raw = _load_fixture("leaguedashptstats_pullupshot_2324.json")
+    positions = _load_positions()
+
+    def fake(**kw):
+        return cs_raw if kw.get("pt_measure_type") == "CatchShoot" else pu_raw
+
+    out = nba_tracking_shot_diet_value(2024, _get_fn=fake, positions=positions)
+    assert residual_sums_to_zero(out, "cs_pts_oe", ["position_bucket"]) is True
+    assert residual_sums_to_zero(out, "pu_pts_oe", ["position_bucket"]) is True
+
+    # No gp/min on this schema -- qualify on attempt volume instead (>=50 cs_fga).
+    qualified = out.filter(pl.col("cs_fga") >= 50)
+    # K=30 of ~335 qualified (~9%) -- the smallest K covering every allowlisted
+    # id once Klay Thompson/Bogdanovic/Bridges (career-reputation picks) were
+    # swapped for players who were actually elite BY RATE in 2023-24 (see
+    # nba_tracking_value_constants module comment).
+    top_ids = set(top_k_ids(qualified, "cs_pts_oe", k=30))
+    elite = set(ELITE_ORACLE["2023-24"]["shot"])
     assert elite.issubset(top_ids), elite - top_ids

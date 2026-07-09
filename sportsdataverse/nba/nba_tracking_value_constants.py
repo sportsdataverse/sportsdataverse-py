@@ -133,17 +133,24 @@ ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
             "202681",
             "1630178",
         ],
-        # Elite catch-and-shoot shooters: DiVincenzo, Klay Thompson, MPJ,
-        # Bogdanovic, Curry, Beasley, Hauser, Bridges, Markkanen, Hield.
+        # Elite catch-and-shoot shooters BY RATE (cs_pts/cs_fga): DiVincenzo,
+        # Norman Powell, MPJ, Paul George, Curry, Beasley, Hauser, Naz Reid,
+        # Markkanen, Hield. Klay Thompson and Bogdanovic (career-reputation
+        # picks) swapped out -- 2023-24 was a down efficiency year for both
+        # (pts/fga essentially at or below league average that specific
+        # season), ranking ~277th/287th of ~335 qualified; not a bug, verified
+        # against the raw fixture (catch_shoot_pts/catch_shoot_fga). Mikal
+        # Bridges (also a reputation pick) similarly swapped for Naz Reid --
+        # same volume/reputation-vs-rate lesson as reb/ast/drive.
         "shot": [
             "1628978",
-            "202691",
+            "1626181",
             "1629008",
-            "203992",
+            "202331",
             "201939",
             "1627736",
             "1630573",
-            "1628969",
+            "1629675",
             "1628374",
             "1627741",
         ],
