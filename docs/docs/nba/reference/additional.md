@@ -632,6 +632,20 @@ Per-`league_id` fitted constants for the NBA prediction & market stack.
 | `game_minutes` | `int` |  | Regulation game length in minutes (NBA/G-League 48, WNBA 40) -- structurally different, not a fitted number. |
 | `in_game_wp_artifact` | `str` | `'nba_in_game_wp.ubj'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
 
+### `MeasureSpec(measure: 'str', actual: 'str', denom: 'str', out_prefix: 'str', extra_denoms: 'dict[str, tuple[str, str]]' = <factory>) -> None` {#MeasureSpec}
+
+Per-model column map for a `leaguedashptstats` measure.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `measure` | `str` |  | `pt_measure_type` sent to `nba_stats_leaguedashptstats`. |
+| `actual` | `str` |  | Realized-outcome column (snake_case). |
+| `denom` | `str` |  | Opportunity column (snake_case). |
+| `out_prefix` | `str` |  | Output-column prefix, e.g. `"reb"` -> `reb_oe`. |
+| `extra_denoms` | `dict[str, tuple[str, str]]` | `<factory>` | Difficulty buckets: `label -> (actual_col, denom_col)`. |
+
 ### `NbaBpmModel(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True) -> 'None'` {#NbaBpmModel}
 
 A `RatingsModel` scoring a fold via faithful BPM 2.0.
@@ -1754,6 +1768,63 @@ ratings = nba_adj_rapm(possessions, spm_prior_dict)
 print(ratings.sort("adj_rapm", descending=True).head())
 ```
 
+### `nba_aging_curve(*, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_aging_curve}
+
+Load the bundled per-age value-multiplier curve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `age:Int64, rel_value:Float64, peak_age:Float64` (`peak_age` repeated on every row for convenient filtering/joining).
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_aging_curve
+curve = nba_aging_curve()
+print(curve.sort("rel_value", descending=True).head(1))
+
+# Pipeline next step (one line)
+
+curve.filter(pl.col("age").is_between(24, 30))
+```
+
+### `nba_availability(seasons: "'int | list[int]'", *, league: 'str' = 'nba', gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_availability}
+
+Project games-available % for a season (or seasons) from career GP history.
+
+`avail_pct` is **availability, not skill** -- it is the only output of
+this function and is never combined into a value/rating column by this
+module (`sportsdataverse.nba.nba_rookie_projection.nba_rookie_projection`
+reports it as a separate column too).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season (start year, e.g. `2019`) or list of seasons. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `gleague_bridge` | `bool` | `False` | When `True` (and `league != "gleague"`), also pulls each season's G-League (`league_id="20"`) bulk GP as a development-outcome bridge feature before scoring. Best-effort: gracefully absent (never raises) when the G-League bulk call returns no rows for a season; the returned schema is unaffected either way since the bridge column isn't part of the bundled artifact's scored features. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, season:Int64, avail_pct:Float64` (clipped to `[0, 1]`). Empty `seasons` -> zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_availability
+proj = nba_availability(2019)
+print(proj.sort("avail_pct").head())
+```
+
 ### `nba_box_logs(season: 'str', *, league_id: 'str' = '00', season_type: 'str' = 'Regular Season', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Dict[str, pl.DataFrame]'` {#nba_box_logs}
 
 Fetch per-player and per-team game logs for a season (bulk, one call each).
@@ -1818,6 +1889,31 @@ bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
 # Pandas output
 
 bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
+```
+
+### `nba_career_trajectory(player_values: 'pl.DataFrame', *, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_career_trajectory}
+
+Age-adjust player-season values with the bundled aging curve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_values` | `DataFrame` |  | Frame `player_id, age:Int64, value:Float64`. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_values` plus `age_adjusted_value` (`value / rel_value(age)`, peak-centered) and `proj_next_value` (`value * rel_value(age+1) / rel_value(age)`). Ages outside the bundled curve's range fall back to `rel_value = 1.0` (no adjustment). Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nba_career_trajectory
+player_values = pl.DataFrame({"player_id": ["1"], "age": [24], "value": [10.0]})
+nba_career_trajectory(player_values)
 ```
 
 ### `nba_darko(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_darko}
@@ -1888,6 +1984,46 @@ print(df.sort("decay_rapm", descending=True).head())
 # Plain-RAPM-equivalent (no decay)
 
 df = nba_decay_rapm(season_poss)  # asof=None
+```
+
+### `nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_draft_model}
+
+Project prospect career value + draft probability from combine measurements.
+
+Loads the draft-combine wrappers for `draft_year` (or each year in the
+list), builds the shared combine-feature vector
+(`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
+and applies the bundled ridge (`proj_career_value`) / logistic
+(`draft_prob`) heads fit in `dev/nba_draft/fit_draft_model.py`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"` -- selects the bundled artifact and the combine-wrapper family. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8` carrying the college-side MBB/WBB player-value spine's `projected_pick` / `box_bpm` / `archetype` (model ⑤, see design doc §3.5). When present and the bundled artifact has matching feature columns, it is left-joined as an extra feature block. This function **never** imports `sportsdataverse.mbb` -- callers pass the frame in. |
+| `gleague_bridge` | `bool` | `False` | When `True`, left-joins G-League (`league_id="20"`) bulk production (`gleague_pts`/`gleague_gp`/`gleague_min`) for the draft year's season as extra, forward-looking feature columns. Not part of any bundled artifact's scored features today (joining it never changes `proj_career_value`/`draft_prob`); gracefully absent when the G-League bulk call returns no rows -- never raises. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8` — one row per prospect with combine measurements for that class. `projected_pick` is a contiguous 1..N rank within each draft year. Empty/malformed input returns the zero-row schema, never raises.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_draft_model
+board = nba_draft_model(2019)
+print(board.sort("proj_career_value", descending=True).head())
+
+# With a college-side prior
+
+board = nba_draft_model(2019, college_prior=mbb_prior_df)
+
+# Pipeline next step (one line)
+
+board.filter(pl.col("pro_tier") == "lottery")
 ```
 
 ### `nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_four_factor_rapm}
@@ -2173,6 +2309,44 @@ print(panel.filter(pl.col("player_id") == 201939).sort("date"))
 panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
 ```
 
+### `nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_rookie_projection}
+
+Project rookie/sophomore value by composing draft x aging x availability.
+
+Composition (no re-derived features -- each term is the verbatim public
+output of ①②③):
+
+- `base = nba_draft_model(...).proj_career_value * rookie_fraction`
+  (`rookie_fraction` from the bundled residual artifact -- the share of
+  career value realized in a single rookie season).
+- `proj_rookie_value = base * rel_value(rookie_age) / rel_value(peak_age)
+  + residual[pro_tier]`; `proj_soph_value` uses `rookie_age + 1`.
+- `proj_avail_pct` from `sportsdataverse.nba.nba_availability.nba_availability`
+  at rookie age -- reported separately, **never** multiplied into the
+  value columns (availability is availability, not skill).
+- `proj_rookie_min = games_full_season * proj_avail_pct * expected_mpg(pro_tier)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional college-side prior frame, forwarded verbatim to `sportsdataverse.nba.nba_draft_model.nba_draft_model`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_rookie_projection
+board = nba_rookie_projection(2019)
+print(board.sort("proj_rookie_value", descending=True).head())
+```
+
 ### `nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#nba_shot_value}
 
 One-call shot-value spine: fetch, score, and run all five models.
@@ -2332,6 +2506,247 @@ ratings = nba_team_ratings(2024, as_of_date=dt.date(2024, 1, 15))
 # WNBA / G-League via ``league_id``
 
 wnba_ratings = nba_team_ratings(2024, league_id="10")
+```
+
+### `nba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_drive_value}
+
+Drive value over expected + rim-pressure, per player-season.
+
+Fetches the `Drives` `leaguedashptstats` measure and computes
+`drive_pts_oe = drive_pts - drives * bucket_pts_per_drive`. `rim_pressure`
+is the z-score of `drive_fta / drives` within the player's role bucket
+(a proxy for foul-drawing pressure independent of scoring efficiency).
+`drive_ast`/`drive_tov` are passed through unchanged.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_drive_value
+df = nba_tracking_drive_value(2024)
+print(df.sort("drive_pts_oe", descending=True).head())
+```
+
+### `nba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_pass_value}
+
+Expected-assists / passer value: `ast_oe` per player-season.
+
+Fetches the `Passing` `leaguedashptstats` measure (one call) and computes
+`ast_oe = ast - passes * bucket_assist_rate`. When
+`fetch_potential_assists=True`, also fetches `nba_stats_playerdashptpass`
+for the top-`max_players` passers (capped, optional -- never a hard
+dependency) and recomputes the residual against the richer
+`potential_assists` denominator for that subset; `max_players=0`
+(default) makes exactly one request total. `ast_pts_created` is passed
+through directly from the Passing measure (it is already computed there;
+not re-derived).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `fetch_potential_assists` | `bool` | `False` | Enrich the top passers with `playerdashptpass` potential-assist counts. |
+| `max_players` | `int` | `0` | Cap on per-player enrichment fetches; `0` disables enrichment regardless of `fetch_potential_assists`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+| `_pass_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptpass`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_pass_value
+df = nba_tracking_pass_value(2024)
+print(df.sort("ast_oe", descending=True).head())
+
+# With potential-assist enrichment for the top 50 passers
+
+df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
+```
+
+### `nba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_reb_oe}
+
+Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season.
+
+Fetches the `Rebounding` `leaguedashptstats` measure, attaches a
+`guard`/`wing`/`big` role bucket, and computes
+`reb_oe = reb - reb_chances * bucket_rate` (contest-difficulty-adjusted
+when the endpoint carries separate contested/uncontested CHANCE columns;
+the live `stats.nba.com` payload currently does not, so this degrades
+gracefully to the plain rate -- see the fixtures README for the finding).
+OREB/DREB residuals are computed identically against their own chance
+columns. Baselines are recomputed from the same season slice on every
+call -- there is no fitted constant or bundled artifact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season (`int` ending-year or `"YYYY-YY"` string) or a list of seasons to concatenate. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within `guard`/`wing`/`big` buckets (default). `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame (see attach_role_bucket`); mostly for injecting a fixture in tests. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats` returning the raw payload dict directly -- offline testing hook. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64, reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64, reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_reb_oe
+df = nba_tracking_reb_oe(2024)
+print(df.sort("reb_oe", descending=True).head())
+
+# League-wide baseline (no position split)
+
+df_all = nba_tracking_reb_oe(2024, by_position=False)
+
+# Pandas output
+
+df_pd = nba_tracking_reb_oe(2024, return_as_pandas=True)
+```
+
+### `nba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_rim_protect_value}
+
+Rim-protection / shot-defend points-saved over expected, per player-season.
+
+Fetches the `Defense` `leaguedashptstats` measure -- which on the live
+`stats.nba.com` payload exposes only rim-band defended shooting
+(`def_rim_fgm`/`def_rim_fga`/`def_rim_fg_pct`, no separate overall
+figure -- see the fixtures README) -- and computes
+`rim_protect_pts_saved = (normal_fg_pct - d_fg_pct) * d_fga * 2` where
+`normal_fg_pct` is the bucket-mean defended rate (there is no
+shooters'-own-average column on this endpoint, so the bucket mean is the
+baseline; this is the same attempts-weighted construction as every other
+model, just sign-flipped so a defender who holds shooters BELOW the
+bucket mean gets a positive points-saved value).
+
+`source="shotdefend"` swaps in the `Less-Than-6-Ft` band from
+`nba_stats_playerdashptshotdefend` for the top-`max_players` defenders
+by attempt volume (capped, optional -- never a hard dependency);
+`max_players=0` (default) uses the leaguedash figures for everyone.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `source` | `str` | `'leaguedash'` | `"leaguedash"` (default) or `"shotdefend"`. |
+| `max_players` | `int` | `0` | Cap on per-player `shotdefend` enrichment fetches; ignored unless `source="shotdefend"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+| `_defend_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptshotdefend`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_rim_protect_value
+df = nba_tracking_rim_protect_value(2024)
+print(df.sort("rim_protect_pts_saved", descending=True).head())
+```
+
+### `nba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_shot_diet_value}
+
+Catch-&-shoot vs pull-up points-over-expected, per player-season.
+
+Fetches `CatchShoot` and `PullUpShot` (two calls), scores each with the
+shared engine, joins on `player_id` (dtype-asserted `Utf8` both sides
+first), and computes `shot_diet_delta = (cs_pts_oe / cs_fga) -
+(pu_pts_oe / pu_fga)` (null-safe on zero attempts) -- positive means the
+player's efficiency edge comes from catch-&-shoot, negative from
+off-the-dribble.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to each fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute each measure's baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`, dispatched by the `pt_measure_type` kwarg for each of the two calls. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, cs_fga:Float64, cs_pts:Float64, cs_pts_oe:Float64, pu_fga:Float64, pu_pts:Float64, pu_pts_oe:Float64, shot_diet_delta:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_shot_diet_value
+df = nba_tracking_shot_diet_value(2024)
+print(df.sort("cs_pts_oe", descending=True).head())
+```
+
+### `nba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_tracking_touch_value}
+
+Touch / possession-time value over expected, per player-season.
+
+Fetches the `Possessions` `leaguedashptstats` measure and computes
+`pts_per_touch_oe = pts - touches * bucket_pts_per_touch`.
+`time_of_poss_eff` is the z-score of `pts / time_of_poss` within the
+player's role bucket -- scoring economy per second of possession,
+independent of touch volume.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, touches:Float64, pts:Float64, touch_baseline_rate:Float64, touch_expected:Float64, pts_per_touch_oe:Float64, time_of_poss:Float64, time_of_poss_eff:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_tracking_touch_value
+df = nba_tracking_touch_value(2024)
+print(df.sort("pts_per_touch_oe", descending=True).head())
 ```
 
 ### `nba_v3_to_v2_pbp(pbp_v3: 'dict', box_v3: 'dict', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_v3_to_v2_pbp}

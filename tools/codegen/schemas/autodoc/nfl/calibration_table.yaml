@@ -1,0 +1,15 @@
+schema: calibration_table
+kind: dataframe
+columns:
+- name: bin_mid
+  type: double
+  description: ''
+- name: mean_pred
+  type: double
+  description: ''
+- name: mean_actual
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

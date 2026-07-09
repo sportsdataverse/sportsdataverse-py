@@ -7,6 +7,7 @@ from sportsdataverse.nba.nba_loaders import *
 from sportsdataverse.nba.nba_pbp import *
 from sportsdataverse.nba.nba_player_stats import *
 from sportsdataverse.nba.nba_shot_value import *
+from sportsdataverse.nba.nba_tracking_value import *
 from sportsdataverse.nba.nba_schedule import *
 from sportsdataverse.nba.nba_teams import *
 from sportsdataverse.nba.nba_lineups import (  # noqa: F401
@@ -113,3 +114,7 @@ from sportsdataverse.nba.nba_player_props import (  # noqa: F401
     prop_distribution,
     team_pace_projection,
 )
+from sportsdataverse.nba.nba_draft_model import nba_draft_model  # noqa: F401
+from sportsdataverse.nba.nba_aging_curve import nba_aging_curve, nba_career_trajectory  # noqa: F401
+from sportsdataverse.nba.nba_availability import nba_availability  # noqa: F401
+from sportsdataverse.nba.nba_rookie_projection import nba_rookie_projection  # noqa: F401

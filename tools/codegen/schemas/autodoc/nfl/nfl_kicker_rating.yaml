@@ -1,0 +1,36 @@
+schema: nfl_kicker_rating
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: kicker_player_id
+  type: character
+  description: ''
+- name: kicker
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: fg_att
+  type: integer
+  description: ''
+- name: fg_made
+  type: integer
+  description: ''
+- name: exp_made
+  type: double
+  description: ''
+- name: fgoe
+  type: double
+  description: ''
+- name: fgoe_per_att
+  type: double
+  description: ''
+- name: fgoe_shrunk
+  type: double
+  description: ''
+- name: rating
+  type: double
+  description: ''
