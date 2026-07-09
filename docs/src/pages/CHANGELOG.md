@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NFL — projection & draft spine (player projections → usage shares → availability → draft model)](#nfl--projection--draft-spine-player-projections-%E2%86%92-usage-shares-%E2%86%92-availability-%E2%86%92-draft-model)
   - [NFL — ratings & market spine (power ratings → win prob → spread/total → player props)](#nfl--ratings--market-spine-power-ratings-%E2%86%92-win-prob-%E2%86%92-spreadtotal-%E2%86%92-player-props)
   - [CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)](#cfb--recruiting--roster-projection-spine-talent-composite-%E2%86%92-returning-production-%E2%86%92-wins-projection-%E2%86%92-transfer-impact-%E2%86%92-draft-projection)
   - [NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)](#nba--wnba--g-league--shot-value-spine-xpoints-%E2%86%92-context-make-prob-%E2%86%92-talent-%E2%86%92-selection-%E2%86%92-zone-maps)
@@ -165,6 +166,26 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NFL — projection & draft spine (player projections → usage shares → availability → draft model)
+
+- feat(nfl): `nfl_projection` — next-season player stat projections with
+  integer-age aging curves and fitted per-position damping (holdout-2024
+  Spearman QB/RB/WR/TE 0.61/0.72/0.66/0.73; beats naive carry-forward for
+  QB/WR/TE, RB shortfall shipped as a documented strict xfail).
+- feat(nfl): `nfl_usage_projection` — team-internal target/carry share
+  projections that sum to 1.0 by construction (share Spearman RB/WR/TE
+  0.73/0.65/0.74 on the 2024 holdout).
+- feat(nfl): `nfl_availability` — expected games played from historical
+  availability (MAE 3.54, decile calibration gap 0.049).
+- feat(nfl): `nfl_draft_model` — combine + college-production draft-position
+  model (Spearman 0.587 vs realized draft slots, n=1269; hit-rate calibration
+  gap 0.08) with `w_av` career labels (`car_av` upstream is all-null).
+- feat(nfl): `nfl_projection_constants` — shared metrics, league constants,
+  and the as-of split the backtests enforce; constants fitted on 2022/2023
+  as-of folds only (single-evaluation 2024 holdout).
+- Committed fixture corpus under `tests/fixtures/nfl_projection/` with
+  provenance README.
 
 ### NFL — ratings & market spine (power ratings → win prob → spread/total → player props)
 

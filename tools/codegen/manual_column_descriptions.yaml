@@ -728,6 +728,12 @@ commonplayerinfo:
   season_exp: NBA or WNBA Stats value for season exp in the commonplayerinfo result set.
 commonplayoffseries:
   game_num: NBA or WNBA Stats value for game number in the commonplayoffseries result set.
+compose_counting_projection:
+  player_id: nflverse gsis player id (character join key; asserted Utf8 on both sides of the join).
+  proj_availability: Projected availability rate in [0, 1] from nfl_availability_projection.
+  proj_counting: Composed counting projection - proj_rate x proj_volume x proj_availability (the only place skill and availability meet).
+  proj_rate: Projected per-opportunity rate carried through from the skill projection (rate_col).
+  proj_volume: Projected opportunity volume carried through from the skill projection (volume_col).
 consecutive_100pt_seasons:
   consecutive100_point_seasons: Number of consecutive NHL regular seasons in which the player reached 100 or more points.
   streak_end_season: The last season of the consecutive 100-point streak, encoded as an eight-digit season ID.
@@ -3172,6 +3178,13 @@ news:
   premium: Whether the article is premium/paywalled.
   published: Publish timestamp (ISO 8601).
   type: Article type (Story, Media, HeadlineNews, etc.).
+nfl_availability_projection:
+  player_id: nflverse gsis player id (character join key).
+  position: Roster position from the most recent visible season.
+  proj_availability: Projected availability rate in [0, 1] - empirical-Bayes shrinkage of historical snap-based availability toward the fitted position base rate, then the fold-fit linear recalibration.
+  proj_games: Expected games available - proj_availability x team_games (17).
+  proj_games_missed: Expected games missed - team_games minus proj_games.
+  target_season: The season being projected (features use strictly earlier seasons only).
 nfl_combine_profiles:
   armLength: Arm length of the prospect measured at the NFL Combine, expressed in inches.
   athleticismScore: Composite athleticism score assigned to the prospect based on Combine athletic drills.
@@ -3251,6 +3264,20 @@ nfl_draft_picks:
   tradeNote: Text note describing any trade involving this pick, if applicable.
   tweetSent: Indicates whether an announcement tweet was sent for this draft pick selection.
   tweetsSent: Indicates whether all scheduled announcement tweets for this pick have been sent.
+nfl_draft_projection:
+  gsis_id: nflverse gsis player id of the drafted prospect (character join key).
+  hit_prob: P(multi-year starter) - ridge-regularized IRLS logistic on the same features, hit := seasons_started >= 3.
+  outcome_rank: Dense rank of pred_car_av within the class (best prospect = 1).
+  position: Draft position group of the prospect.
+  pred_car_av: Predicted career value - closed-form ridge on standardized combine measurables + round/pick/log(pick) + position one-hots; the label is nflverse w_av (PFR weighted career Approximate Value).
+  target_class: The draft class scored (training uses matured classes <= target_class - 5).
+nfl_fantasy_projection:
+  player_id: nflverse gsis player id (character join key).
+  position_group: nflverse offensive position group (QB/RB/WR/TE plus fringe groups).
+  position_rank: Dense rank of proj_fantasy_points within the position group (best = 1).
+  proj_fantasy_points: Projected season fantasy points - the Marcel component rates x projected games scored under the scoring format, with the fitted per-position linear calibration applied by default.
+  proj_fantasy_points_per_game: Projected fantasy points per game (proj_fantasy_points / projected games).
+  target_season: The season being projected (features use strictly earlier seasons only).
 nfl_game_pbp:
   clockTime: Game clock time at the start of the play, formatted as MM:SS within the quarter.
   driveNetYards: Net yards gained on the current drive up to and including this play.
@@ -3809,6 +3836,30 @@ nfl_ngs_statboard_leaders:
   rushYardsOverExpectedPerAtt: Average rushing yards over expected per attempt (RYOE/attempt), from NFL Next Gen Stats.
   seasonType: Phase of the season for this record (e.g., 'REG' for regular season, 'POST' for playoffs).
   teamId: NFL Shield team identifier for the team associated with this leader statistic.
+nfl_player_projection:
+  aging_mult: Applied aging multiplier - the damped, clamped ratio aging_curve(proj_age) / aging_curve(current_age).
+  player_id: nflverse gsis player id (character join key).
+  position_group: nflverse offensive position group (QB/RB/WR/TE plus fringe groups).
+  proj_age: Projected age at the target season (age at last visible season + season gap).
+  proj_attempts_rate: Projected per-game pass attempts (Marcel blend x aging ratio).
+  proj_carries_rate: Projected per-game rush attempts (Marcel blend x aging ratio).
+  proj_completions_rate: Projected per-game pass completions (Marcel blend x aging ratio).
+  proj_fumbles_lost_rate: Projected per-game fumbles lost (Marcel blend x aging ratio).
+  proj_games: Recency-weighted mean of historical games played.
+  proj_interceptions_rate: Projected per-game interceptions thrown (Marcel blend x aging ratio).
+  proj_passing_tds_rate: Projected per-game passing touchdowns (Marcel blend x aging ratio).
+  proj_passing_yards_rate: Projected per-game passing yards (Marcel blend x aging ratio).
+  proj_ppg: Projected PPR fantasy points per game - recency-weighted rate blend regressed toward the volume-weighted position mean by k/(k + reliability), scaled by the damped aging-curve ratio.
+  proj_receiving_air_yards_rate: Projected per-game receiving air yards (Marcel blend x aging ratio).
+  proj_receiving_tds_rate: Projected per-game receiving touchdowns (Marcel blend x aging ratio).
+  proj_receiving_yards_rate: Projected per-game receiving yards (Marcel blend x aging ratio).
+  proj_receptions_rate: Projected per-game receptions (Marcel blend x aging ratio).
+  proj_rushing_tds_rate: Projected per-game rushing touchdowns (Marcel blend x aging ratio).
+  proj_rushing_yards_rate: Projected per-game rushing yards (Marcel blend x aging ratio).
+  proj_targets_rate: Projected per-game targets (Marcel blend x aging ratio).
+  proj_volume: Projected position-specific opportunity volume (QB = pass attempts, RB = carries + targets, WR/TE = targets).
+  reliability: Recency-weighted volume sum - the shrinkage evidence weight.
+  target_season: The season being projected (features use strictly earlier seasons only - the as-of-date leakage boundary).
 nfl_rosters:
   persons: Number of players (persons) listed on the team's roster entry for this record.
   seasonType: Type of NFL season the roster entry applies to (e.g., 'Regular Season', 'Preseason', 'Postseason').
@@ -4026,6 +4077,16 @@ nfl_teams_history:
   teamType: Classification of the team type (e.g., 'NFL', 'AFL') indicating the league affiliation during this historical
     period.
   venues: List or serialized representation of venue(s) used by the team during this historical period.
+nfl_usage_projection:
+  player_id: nflverse gsis player id (character join key).
+  position_group: nflverse offensive position group.
+  proj_air_yards: Projected receiving air yards - proj_air_yards_share x team air-yards carry-forward.
+  proj_air_yards_share: Projected share of team air yards, renormalized within proj_team.
+  proj_target_share: Projected share of team targets - Marcel share blend renormalized to sum to 1.0 within proj_team.
+  proj_targets: Projected targets - proj_target_share x team pass-target carry-forward.
+  proj_team: Most recent team (max season, tiebreak most targets) - the renormalization group.
+  proj_wopr: Projected weighted opportunity rating - 1.5 x proj_target_share + 0.7 x proj_air_yards_share.
+  target_season: The season being projected (features use strictly earlier seasons only).
 nfl_week_games:
   awayTeam_currentLogo: URL for the away team's current primary logo image as served by the NFL Shield API.
   awayTeam_fullName: Full name of the away team (e.g., 'Kansas City Chiefs').
