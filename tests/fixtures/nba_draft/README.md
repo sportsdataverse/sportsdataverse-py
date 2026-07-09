@@ -16,13 +16,30 @@ python dev/nba_draft/capture_corpus.py`. All `player_id` columns are `Utf8`
 from a float, per the id/join-key discipline). `draft_year`/`season` are
 `Int64`.
 
+**Corpus expansion (2026-07-08, same day):** the initial capture covered only
+combine classes 2016-2019 (~250 prospects). The Task-1.4 draft-model backtest
+on that corpus produced a holdout Spearman of essentially zero (and a Phase-2
+aging curve too noisy to interpret) -- exhaustively debugged (see
+`tests/nba/test_nba_draft_backtest.py`'s module docstring) and traced to
+genuine small-sample size, not a bug. `dev/nba_draft/capture_corpus_expand.py`
+(scratch, gitignored like all of `dev/`) pulled combine classes back to 2000
+(20 classes total, 1328 prospects) and their full season-stats histories
+(7378 player-season rows) -- realizing the design doc's original intent that
+the all-era career-value label span decades, not just the 2016+ v3-pbp
+overlap. `combine_2016_2019.parquet` / `draft_outcomes.parquet` /
+`season_stats_raw.parquet` below reflect the expanded corpus (filename kept
+for git-history continuity even though it now spans 2000-2019).
+`nba_bpm_overlap.parquet` / `aging_published.parquet` were NOT re-captured
+(BPM only exists 2016+ anyway; the published-curve fixture is a hand
+citation, not a live capture).
+
 ## Files
 
-- **`combine_2016_2019.parquet`** (266 rows) -- combine anthro + drills + spot
-  shooting + non-stationary shooting for the 2016-2019 draft-combine classes,
-  joined on `player_id`. Source: `nba_stats_draftcombineplayeranthro` /
+- **`combine_2016_2019.parquet`** (1328 rows, 20 classes 2000-2019) -- combine
+  anthro + drills + spot shooting + non-stationary shooting, joined on
+  `player_id`. Source: `nba_stats_draftcombineplayeranthro` /
   `draftcombinedrillresults` / `draftcombinespotshooting` /
-  `draftcombinenonstationaryshooting` (`season_year="2016".."2019"`).
+  `draftcombinenonstationaryshooting` (`season_year="2000".."2019"`).
   `draft_year` here is the **combine class year** (the year the player
   attended the combine), which for a handful of players differs from the
   year they were actually drafted (players who returned to school / withdrew
@@ -35,14 +52,13 @@ from a float, per the id/join-key discipline). `draft_year`/`season` are
   sweep), confirming design-doc decision #2: draft outcome comes from
   `commonplayerinfo`, not a drafthistory endpoint.
 
-- **`draft_outcomes.parquet`** (226 rows) -- `nba_stats_commonplayerinfo`
+- **`draft_outcomes.parquet`** (899 rows) -- `nba_stats_commonplayerinfo`
   (`CommonPlayerInfo` result set) per combine player_id: `draft_year`,
   `draft_round`, `draft_number`, `drafted` (`draft_number` present and > 0).
-  22 of the 248 combine players returned no `CommonPlayerInfo` (likely
-  players who never signed an NBA contract / no person_id record) and are
-  absent here, not zero-filled.
+  A player is absent here (not zero-filled) when `CommonPlayerInfo` returned
+  no row (no `person_id` record -- e.g. never signed an NBA contract).
 
-- **`season_stats_raw.parquet`** (1372 rows) -- `nba_stats_playercareerstats`
+- **`season_stats_raw.parquet`** (7378 rows) -- `nba_stats_playercareerstats`
   (`SeasonTotalsRegularSeason` result set) per combine player_id, one row per
   `(player_id, season_id)`. This is the raw box-total corpus consumed by
   `dev/nba_draft/fit_box_value.py` to derive per-100 rates and, after fitting
@@ -53,17 +69,18 @@ from a float, per the id/join-key discipline). `draft_year`/`season` are
   `nba_box_logs` + `nba_player_positions` for the 2016-17..2019-20 seasons
   (full-league box logs, filtered post-hoc to the combine-player id set).
   Columns: `player_id, season:Int64 (season start year), bpm, minutes`. This
-  is the box-value formula's scale anchor (never the primary label).
+  is the box-value formula's scale anchor (never the primary label). Not
+  re-captured for the expanded corpus -- BPM only exists 2016+ (v3 pbp).
 
-- **`career_values.parquet`** (211 rows) -- `player_id, career_value:Float64,
+- **`career_values.parquet`** (847 rows) -- `player_id, career_value:Float64,
   seasons_played:Int64, total_minutes:Float64`. Materialized by
   `dev/nba_draft/fit_box_value.py` (Task 0.3) from `season_stats_raw.parquet`
   using the fitted `box_value_coef`/`replacement` (all-era: every season a
-  combine player played, not just the 2016+ overlap). 15 combine players with
+  combine player played, not just the 2016+ overlap). Combine players with
   no career games (undrafted / never played) are absent, not zero-filled --
   callers `fill_null`/`coalesce` to 0 on join for those.
 
-- **`rookie_values.parquet`** (266 rows) -- `player_id, draft_year,
+- **`rookie_values.parquet`** (1328 rows) -- `player_id, draft_year,
   rookie_value:Float64, soph_value:Float64, rookie_min:Float64`. First/second
   season-index rows (by `season`) per player from the same fitted-coefficient
   pipeline; `0.0` where a player never played a rookie/soph NBA season.
