@@ -772,3 +772,166 @@ def nba_tracking_drive_value(
 
     out = _finalize_schema(out, _DRIVE_OE_SCHEMA)
     return out.to_pandas() if return_as_pandas else out
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 -- catch-&-shoot vs pull-up efficiency
+# ---------------------------------------------------------------------------
+
+_SHOT_DIET_SCHEMA: "dict[str, pl.DataType]" = {
+    "season": pl.Int64,
+    "player_id": pl.Utf8,
+    "player_name": pl.Utf8,
+    "team_id": pl.Utf8,
+    "position_bucket": pl.Utf8,
+    "cs_fga": pl.Float64,
+    "cs_pts": pl.Float64,
+    "cs_pts_oe": pl.Float64,
+    "pu_fga": pl.Float64,
+    "pu_pts": pl.Float64,
+    "pu_pts_oe": pl.Float64,
+    "shot_diet_delta": pl.Float64,
+    "league_id": pl.Utf8,
+}
+
+
+def _fetch_and_score(
+    season_list: "list",
+    spec_key: str,
+    *,
+    league_id: str,
+    per_mode: str,
+    by_position: bool,
+    positions: Optional[pl.DataFrame],
+    _get_fn: Optional[Callable[..., dict]],
+) -> pl.DataFrame:
+    """Fetch one measure across *season_list*, attach role bucket, score OE."""
+    spec = MEASURE_SPECS[spec_key]
+    frames = []
+    for season in season_list:
+        fetched = _fetch_leaguedash_tracking(
+            season, spec.measure, league_id=league_id, per_mode=per_mode, _get_fn=_get_fn
+        )
+        if fetched.height == 0:
+            continue
+        frames.append(fetched.with_columns(pl.lit(_season_label(season)).alias("season")))
+    if not frames:
+        return pl.DataFrame()
+    df = pl.concat(frames, how="diagonal_relaxed")
+    if by_position:
+        df = _attach_role_bucket(df, season_list[0], league_id=league_id, positions=positions)
+    else:
+        df = df.with_columns(pl.lit("all").alias("position_bucket"))
+    group_cols = ["position_bucket"] if by_position else []
+    out = _over_expected(df, actual=spec.actual, denom=spec.denom, group_cols=group_cols, out_prefix=spec.out_prefix)
+    # Rename the source actual/denom columns to the short documented output
+    # names (e.g. catch_shoot_pts -> cs_pts) -- MEASURE_SPECS.actual/denom are
+    # the real leaguedashptstats column names, not the short output prefix.
+    rename_map = {spec.denom: f"{spec.out_prefix}_fga", spec.actual: f"{spec.out_prefix}_pts"}
+    rename_map = {k: v for k, v in rename_map.items() if k in out.columns and k != v}
+    return out.rename(rename_map) if rename_map else out
+
+
+def nba_tracking_shot_diet_value(
+    seasons: "int | str | list",
+    *,
+    league_id: str = "00",
+    per_mode: str = "Totals",
+    by_position: bool = True,
+    positions: Optional[pl.DataFrame] = None,
+    return_as_pandas: bool = False,
+    _get_fn: Optional[Callable[..., dict]] = None,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Catch-&-shoot vs pull-up points-over-expected, per player-season.
+
+    Fetches ``CatchShoot`` and ``PullUpShot`` (two calls), scores each with the
+    shared engine, joins on ``player_id`` (dtype-asserted ``Utf8`` both sides
+    first), and computes ``shot_diet_delta = (cs_pts_oe / cs_fga) -
+    (pu_pts_oe / pu_fga)`` (null-safe on zero attempts) -- positive means the
+    player's efficiency edge comes from catch-&-shoot, negative from
+    off-the-dribble.
+
+    Args:
+        seasons: A single season or list of seasons.
+        league_id: ``"00"`` NBA (default), ``"10"`` WNBA, ``"20"`` G-League.
+        per_mode: ``per_mode_simple`` passed to each fetch (default ``"Totals"``).
+        by_position: Compute each measure's baseline within role buckets
+            (default); ``False`` forces one league-wide bucket.
+        positions: Optional pre-fetched positions frame.
+        return_as_pandas: Return a :class:`pandas.DataFrame` instead of polars.
+        _get_fn: Injectable replacement for ``nba_stats_leaguedashptstats``,
+            dispatched by the ``pt_measure_type`` kwarg for each of the two calls.
+
+    Returns:
+        One row per player-season:
+        ``season, player_id, player_name, team_id, position_bucket, cs_fga,
+        cs_pts, cs_pts_oe, pu_fga, pu_pts, pu_pts_oe, shot_diet_delta,
+        league_id``. Empty/malformed input returns a zero-row frame with this schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_tracking_shot_diet_value
+            df = nba_tracking_shot_diet_value(2024)
+            print(df.sort("cs_pts_oe", descending=True).head())
+
+        See Also:
+            * `nba_api`_ -- Python NBA/WNBA stats API client
+
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    season_list = _as_season_list(seasons)
+
+    cs = _fetch_and_score(
+        season_list,
+        "cs",
+        league_id=league_id,
+        per_mode=per_mode,
+        by_position=by_position,
+        positions=positions,
+        _get_fn=_get_fn,
+    )
+    pu = _fetch_and_score(
+        season_list,
+        "pu",
+        league_id=league_id,
+        per_mode=per_mode,
+        by_position=by_position,
+        positions=positions,
+        _get_fn=_get_fn,
+    )
+
+    if cs.height == 0 and pu.height == 0:
+        out = pl.DataFrame(schema=_SHOT_DIET_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    if "cs_oe" in cs.columns:
+        cs = cs.rename({"cs_oe": "cs_pts_oe"})
+    if "pu_oe" in pu.columns:
+        pu = pu.rename({"pu_oe": "pu_pts_oe"})
+
+    identity_cols = ["season", "player_id", "player_name", "team_id", "position_bucket"]
+    if cs.height > 0 and pu.height > 0:
+        assert cs.schema["player_id"] == pu.schema["player_id"], "player_id dtype mismatch before cs/pu join"
+        join_keys = [c for c in identity_cols if c in cs.columns and c in pu.columns]
+        pu_extra = pu.select([*join_keys, "pu_fga", "pu_pts", "pu_pts_oe"])
+        out = cs.join(pu_extra, on=join_keys, how="full", coalesce=True)
+    elif cs.height > 0:
+        out = cs
+    else:
+        out = pu
+
+    for col in ("cs_fga", "cs_pts", "cs_pts_oe", "pu_fga", "pu_pts", "pu_pts_oe"):
+        if col not in out.columns:
+            out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias(col))
+
+    out = out.with_columns(
+        pl.when((pl.col("cs_fga") > 0) & (pl.col("pu_fga") > 0))
+        .then((pl.col("cs_pts_oe") / pl.col("cs_fga")) - (pl.col("pu_pts_oe") / pl.col("pu_fga")))
+        .otherwise(None)
+        .alias("shot_diet_delta")
+    )
+    out = out.with_columns(pl.lit(league_id).alias("league_id"))
+
+    out = _finalize_schema(out, _SHOT_DIET_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out
