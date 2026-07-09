@@ -44,23 +44,27 @@ class MeasureSpec:
     extra_denoms: dict[str, tuple[str, str]] = field(default_factory=dict)
 
 
+# Column names below are confirmed against a real 2023-24 capture
+# (tests/fixtures/nba_stats/tracking/, see its README) -- NOT the design doc's
+# guesses. Two corrections from the original design:
+#   * assists live on the "Passing" pt_measure_type, not "Possessions"
+#     ("Possessions" carries no ast/passes columns at all).
+#   * "Defense" only exposes rim-band defended shooting (``def_rim_*``); there
+#     is no separate overall ``d_fga``/``d_fg_pct``, so the rim model reads
+#     directly off ``def_rim_*`` -- it is already rim-only, no extra filtering
+#     needed.
+# reb's contest/uncontest CHANCE columns (as opposed to made-rebound counts)
+# do not exist on this endpoint either -- extra_denoms is intentionally empty
+# and the model degrades to the plain (actual, denom) rate (see
+# _expected_from_difficulty in nba_tracking_value.py).
 MEASURE_SPECS: dict[str, MeasureSpec] = {
-    "reb": MeasureSpec(
-        "Rebounding",
-        "reb",
-        "reb_chances",
-        "reb",
-        {
-            "contested": ("reb_contest", "reb_contest_chances"),
-            "uncontested": ("reb_uncontest", "reb_uncontest_chances"),
-        },
-    ),
-    "ast": MeasureSpec("Possessions", "ast", "passes", "ast"),
+    "reb": MeasureSpec("Rebounding", "reb", "reb_chances", "reb", {}),
+    "ast": MeasureSpec("Passing", "ast", "passes_made", "ast"),
     "drive": MeasureSpec("Drives", "drive_pts", "drives", "drive"),
     "cs": MeasureSpec("CatchShoot", "catch_shoot_pts", "catch_shoot_fga", "cs"),
     "pu": MeasureSpec("PullUpShot", "pull_up_pts", "pull_up_fga", "pu"),
-    "touch": MeasureSpec("Possessions", "pts", "touches", "touch"),
-    "rim": MeasureSpec("Defense", "d_fgm", "d_fga", "rim"),
+    "touch": MeasureSpec("Possessions", "points", "touches", "touch"),
+    "rim": MeasureSpec("Defense", "def_rim_fgm", "def_rim_fga", "rim"),
 }
 
 # Utf8 player_ids of consensus-elite players per category for the 2023-24 gate.
