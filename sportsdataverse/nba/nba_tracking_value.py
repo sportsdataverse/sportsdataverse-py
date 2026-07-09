@@ -935,3 +935,112 @@ def nba_tracking_shot_diet_value(
 
     out = _finalize_schema(out, _SHOT_DIET_SCHEMA)
     return out.to_pandas() if return_as_pandas else out
+
+
+# ---------------------------------------------------------------------------
+# Phase 5 -- touch / possession-time value
+# ---------------------------------------------------------------------------
+
+_TOUCH_OE_SCHEMA: "dict[str, pl.DataType]" = {
+    "season": pl.Int64,
+    "player_id": pl.Utf8,
+    "player_name": pl.Utf8,
+    "team_id": pl.Utf8,
+    "position_bucket": pl.Utf8,
+    "gp": pl.Int64,
+    "min": pl.Float64,
+    "touches": pl.Float64,
+    "pts": pl.Float64,
+    "touch_baseline_rate": pl.Float64,
+    "touch_expected": pl.Float64,
+    "pts_per_touch_oe": pl.Float64,
+    "time_of_poss": pl.Float64,
+    "time_of_poss_eff": pl.Float64,
+    "league_id": pl.Utf8,
+}
+
+
+def nba_tracking_touch_value(
+    seasons: "int | str | list",
+    *,
+    league_id: str = "00",
+    per_mode: str = "Totals",
+    by_position: bool = True,
+    positions: Optional[pl.DataFrame] = None,
+    return_as_pandas: bool = False,
+    _get_fn: Optional[Callable[..., dict]] = None,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Touch / possession-time value over expected, per player-season.
+
+    Fetches the ``Possessions`` ``leaguedashptstats`` measure and computes
+    ``pts_per_touch_oe = pts - touches * bucket_pts_per_touch``.
+    ``time_of_poss_eff`` is the z-score of ``pts / time_of_poss`` within the
+    player's role bucket -- scoring economy per second of possession,
+    independent of touch volume.
+
+    Args:
+        seasons: A single season or list of seasons.
+        league_id: ``"00"`` NBA (default), ``"10"`` WNBA, ``"20"`` G-League.
+        per_mode: ``per_mode_simple`` passed to the fetch (default ``"Totals"``).
+        by_position: Compute the baseline within role buckets (default);
+            ``False`` forces one league-wide bucket.
+        positions: Optional pre-fetched positions frame.
+        return_as_pandas: Return a :class:`pandas.DataFrame` instead of polars.
+        _get_fn: Injectable replacement for ``nba_stats_leaguedashptstats``.
+
+    Returns:
+        One row per player-season:
+        ``season, player_id, player_name, team_id, position_bucket, gp, min,
+        touches, pts, touch_baseline_rate, touch_expected, pts_per_touch_oe,
+        time_of_poss, time_of_poss_eff, league_id``. Empty/malformed input
+        returns a zero-row frame with this schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_tracking_touch_value
+            df = nba_tracking_touch_value(2024)
+            print(df.sort("pts_per_touch_oe", descending=True).head())
+
+        See Also:
+            * `nba_api`_ -- Python NBA/WNBA stats API client
+
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    season_list = _as_season_list(seasons)
+    spec = MEASURE_SPECS["touch"]
+
+    frames = []
+    for season in season_list:
+        fetched = _fetch_leaguedash_tracking(
+            season, spec.measure, league_id=league_id, per_mode=per_mode, _get_fn=_get_fn
+        )
+        if fetched.height == 0:
+            continue
+        if spec.actual in fetched.columns and "pts" not in fetched.columns:
+            fetched = fetched.rename({spec.actual: "pts"})
+        frames.append(fetched.with_columns(pl.lit(_season_label(season)).alias("season")))
+
+    if not frames:
+        out = pl.DataFrame(schema=_TOUCH_OE_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    df = pl.concat(frames, how="diagonal_relaxed")
+
+    if by_position:
+        df = _attach_role_bucket(df, season_list[0], league_id=league_id, positions=positions)
+        group_cols: "list[str]" = ["position_bucket"]
+    else:
+        df = df.with_columns(pl.lit("all").alias("position_bucket"))
+        group_cols = []
+
+    out = _over_expected(df, actual="pts", denom=spec.denom, group_cols=group_cols, out_prefix="touch")
+    out = out.rename({"touch_oe": "pts_per_touch_oe"})
+    if "time_of_poss" in out.columns:
+        out = _zscore_within(out, "pts", "time_of_poss", group_cols, "time_of_poss_eff")
+    else:
+        out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias("time_of_poss_eff"))
+    out = out.with_columns(pl.lit(league_id).alias("league_id"))
+
+    out = _finalize_schema(out, _TOUCH_OE_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out
