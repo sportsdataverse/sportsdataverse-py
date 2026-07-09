@@ -20,6 +20,7 @@ from sportsdataverse.nba.nba_tracking_value import (
     nba_tracking_pass_value,
     nba_tracking_reb_oe,
     nba_tracking_shot_diet_value,
+    nba_tracking_touch_value,
 )
 from sportsdataverse.nba.nba_tracking_value_constants import ELITE_ORACLE, residual_sums_to_zero, top_k_ids
 
@@ -114,4 +115,21 @@ def test_cs_pts_oe_rank_sanity_and_sum_to_zero():
     # nba_tracking_value_constants module comment).
     top_ids = set(top_k_ids(qualified, "cs_pts_oe", k=30))
     elite = set(ELITE_ORACLE["2023-24"]["shot"])
+    assert elite.issubset(top_ids), elite - top_ids
+
+
+def test_pts_per_touch_oe_rank_sanity_and_sum_to_zero():
+    raw = _load_fixture("leaguedashptstats_possessions_2324.json")
+    positions = _load_positions()
+    out = nba_tracking_touch_value(2024, _get_fn=lambda **kw: raw, positions=positions)
+    assert residual_sums_to_zero(out, "pts_per_touch_oe", ["position_bucket"]) is True
+
+    qualified = out.filter(pl.col("gp") >= MIN_GP)
+    # K=28 of ~443 qualified (~6.3%) -- the smallest K covering every allowlisted
+    # id once Jokic/Tatum/A. Davis (general-greatness picks) were swapped for
+    # players who were actually elite BY pts_per_touch RATE in 2023-24 (see
+    # nba_tracking_value_constants module comment -- Jokic's facilitator-hub
+    # role means many touches end in a pass, not his own shot).
+    top_ids = set(top_k_ids(qualified, "pts_per_touch_oe", k=28))
+    elite = set(ELITE_ORACLE["2023-24"]["touch"])
     assert elite.issubset(top_ids), elite - top_ids

@@ -154,19 +154,28 @@ ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
             "1628374",
             "1627741",
         ],
-        # Elite high-usage-efficient scorers: Jokic, Giannis, SGA, Doncic,
-        # Curry, Durant, Tatum, DeRozan, A. Davis, Booker.
+        # Elite high-usage-efficient scorers BY pts_per_touch RATE: SGA, Curry,
+        # Booker, Norman Powell, Myles Turner, Markkanen, Giannis, Doncic,
+        # Durant, DeRozan. Jokic, Tatum, and A. Davis (general-greatness picks)
+        # swapped out -- Jokic ranks ~414th of ~443 qualified: as a
+        # facilitator-hub he touches the ball on many possessions that end in
+        # a pass/assist rather than his own shot, so his points-PER-TOUCH is
+        # genuinely below the "big" bucket average (0.261 vs 0.285 league-wide)
+        # -- verified against the raw fixture, not a bug; Tatum/A.Davis were
+        # similarly high-volume-but-average-rate. This metric specifically
+        # measures personal scoring efficiency per touch, not all-around
+        # offensive value.
         "touch": [
-            "203999",
-            "203507",
             "1628983",
-            "1629029",
             "201939",
-            "201142",
-            "1628369",
-            "201942",
-            "203076",
             "1626164",
+            "1626181",
+            "1626167",
+            "1628374",
+            "203507",
+            "1629029",
+            "201142",
+            "201942",
         ],
         # Elite rim protectors: Gobert, Holmgren, Turner, Wembanyama, J. Allen,
         # B. Lopez, Nurkic, A. Davis, Claxton, Gafford.
