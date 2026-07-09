@@ -1500,6 +1500,26 @@ def load_nfl_trades(return_as_pandas=False) -> pl.DataFrame:
     )
 
 
+def _read_csv_retry(url: str, *, attempts: int = 4, **kwargs) -> pl.DataFrame:
+    """``pl.read_csv`` with exponential backoff on transient upstream errors.
+
+    The DynastyProcess raw-GitHub CSVs rate-limit CI runners (the parallel
+    test matrix triggers HTTP 429); a short backoff clears it. Non-transient
+    errors and the final attempt re-raise unchanged.
+    """
+    import time
+    import urllib.error
+
+    for attempt in range(attempts):
+        try:
+            return pl.read_csv(url, **kwargs)
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (429, 500, 502, 503, 504) or attempt == attempts - 1:
+                raise
+            time.sleep(2.0 * 2**attempt)
+    raise AssertionError("unreachable")
+
+
 @cached_loader
 def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
     """Load fantasy football player IDs from DynastyProcess.com
@@ -1533,9 +1553,11 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
         .. _nflverse: https://nflverse.nflverse.com
     """
     return (
-        pl.read_csv(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""]).to_pandas(use_pyarrow_extension_array=True)
+        _read_csv_retry(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""]).to_pandas(
+            use_pyarrow_extension_array=True
+        )
         if return_as_pandas
-        else pl.read_csv(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""])
+        else _read_csv_retry(NFL_FF_PLAYERIDS_URL, null_values=["NA", "NULL", ""])
     )
 
 
@@ -1599,9 +1621,9 @@ def load_nfl_ff_rankings(
         raise ValueError("type/kind must be one of 'draft', 'week', 'all'")
 
     if effective == "draft":
-        data = pl.read_csv(NFL_FF_RANKINGS_DRAFT_URL, null_values=["NA", "NULL", ""])
+        data = _read_csv_retry(NFL_FF_RANKINGS_DRAFT_URL, null_values=["NA", "NULL", ""])
     elif effective == "week":
-        data = pl.read_csv(NFL_FF_RANKINGS_WEEK_URL, null_values=["NA", "NULL", ""])
+        data = _read_csv_retry(NFL_FF_RANKINGS_WEEK_URL, null_values=["NA", "NULL", ""])
     else:  # all
         data = pl.read_parquet(NFL_FF_RANKINGS_ALL_URL, use_pyarrow=True, columns=None)
 
