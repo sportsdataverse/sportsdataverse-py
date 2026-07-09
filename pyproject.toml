@@ -210,7 +210,7 @@ exclude = ["tests*", "docs*", "examples*", "archive*"]
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
 # package ships inline type information.
-sportsdataverse = ["cfb/models/*", "mbb/models/*", "nfl/models/*", "nba/models/*", "py.typed"]
+sportsdataverse = ["cfb/models/*", "mbb/models/*", "nba/models/*", "nfl/models/*", "py.typed"]
 
 
 [tool.isort]
@@ -362,6 +362,15 @@ files = [
     "sportsdataverse/wnba/wnba_tracking_value.py",
     "sportsdataverse/nba/nba_tracking.py",
     "sportsdataverse/nba/nba_rapm.py",
+    "sportsdataverse/nba/nba_prediction_constants.py",
+    "sportsdataverse/nba/nba_team_ratings.py",
+    "sportsdataverse/nba/nba_game_predict.py",
+    "sportsdataverse/nba/nba_clutch.py",
+    "sportsdataverse/nba/nba_player_props.py",
+    "sportsdataverse/wnba/wnba_team_ratings.py",
+    "sportsdataverse/wnba/wnba_game_predict.py",
+    "sportsdataverse/wnba/wnba_clutch.py",
+    "sportsdataverse/wnba/wnba_player_props.py",
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
     "sportsdataverse/wnba/wnba_engine.py",

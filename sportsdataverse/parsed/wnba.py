@@ -188,18 +188,26 @@ from sportsdataverse.wnba import wnba_availability as wnba_availability  # noqa:
 from sportsdataverse.wnba import wnba_career_trajectory as wnba_career_trajectory  # noqa: F401
 from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F401
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
+from sportsdataverse.wnba import wnba_in_game_win_prob as wnba_in_game_win_prob  # noqa: F401
 from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
+from sportsdataverse.wnba import wnba_player_props as wnba_player_props  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
+from sportsdataverse.wnba import wnba_predict_games as wnba_predict_games  # noqa: F401
+from sportsdataverse.wnba import wnba_predict_margin as wnba_predict_margin  # noqa: F401
+from sportsdataverse.wnba import wnba_predict_total as wnba_predict_total  # noqa: F401
 from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
 from sportsdataverse.wnba import wnba_rookie_projection as wnba_rookie_projection  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
+from sportsdataverse.wnba import wnba_team_clutch as wnba_team_clutch  # noqa: F401
+from sportsdataverse.wnba import wnba_team_ratings as wnba_team_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_pass_value as wnba_tracking_pass_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_reb_oe as wnba_tracking_reb_oe  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_rim_protect_value as wnba_tracking_rim_protect_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_shot_diet_value as wnba_tracking_shot_diet_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_touch_value as wnba_tracking_touch_value  # noqa: F401
+from sportsdataverse.wnba import wnba_win_prob_from_margin as wnba_win_prob_from_margin  # noqa: F401
 from sportsdataverse.wnba import zone_value_map as zone_value_map  # noqa: F401
 
 __all__ = [
@@ -368,18 +376,26 @@ __all__ = [
     "wnba_career_trajectory",
     "wnba_draft_model",
     "wnba_enhanced_pbp",
+    "wnba_in_game_win_prob",
     "wnba_on_court",
     "wnba_pbp_disk",
+    "wnba_player_props",
     "wnba_possessions",
+    "wnba_predict_games",
+    "wnba_predict_margin",
+    "wnba_predict_total",
     "wnba_rapm_from_games",
     "wnba_rookie_projection",
     "wnba_shot_value",
+    "wnba_team_clutch",
+    "wnba_team_ratings",
     "wnba_tracking_drive_value",
     "wnba_tracking_pass_value",
     "wnba_tracking_reb_oe",
     "wnba_tracking_rim_protect_value",
     "wnba_tracking_shot_diet_value",
     "wnba_tracking_touch_value",
+    "wnba_win_prob_from_margin",
     "zone_value_map",
 ]
 
