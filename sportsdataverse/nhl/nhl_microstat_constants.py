@@ -114,19 +114,28 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         # entry_window_s, normalized to the O-zone value.
         faceoff_zone_weights={"O": 1.0, "N": 1.03, "D": 0.06},
     ),
+    # PWHL constants are SEEDED-PLACEHOLDER (== the NHL fitted values), NOT fit:
+    # this spine ships the PWHL shim + constants but not PWHL pbp ingestion (a
+    # deferred upstream item -- there is no PWHL pbp wrapper in sdv-py yet, per
+    # the design's non-goals). Capture contract to fit these: obtain a PWHL pbp
+    # slice on the Task-0.1 contract (e.g. via the fastRhockey PWHL feed) and
+    # re-run dev/nhl_microstat/fit_{faceoff_zone_weights,pp_goal_value,zone_entry_value}.py
+    # with league="pwhl", then replace these seeds. Using the NHL fits as the
+    # seed is the best available estimate (labeled, not an ungrounded magic
+    # number) until that corpus exists. EDGE has no PWHL feed -> zero-row.
     "pwhl": LeagueConstants(
-        pp_goal_value=0.16,
-        major_penalty_value=0.38,
-        zone_entry_value_controlled=0.055,
-        zone_entry_value_dump=0.028,
-        zone_exit_value=0.02,
+        pp_goal_value=0.144,
+        major_penalty_value=0.359,
+        zone_entry_value_controlled=0.108,
+        zone_entry_value_dump=0.053,
+        zone_exit_value=0.007,
         edge_component_weights={
             "top_speed": 1.0,
             "distance_km": 1.0,
             "speed_bursts_20": 1.0,
             "oz_time_pct": 1.0,
         },
-        faceoff_zone_weights={"O": 1.0, "D": 0.6, "N": 0.4},
+        faceoff_zone_weights={"O": 1.0, "N": 1.03, "D": 0.06},
     ),
 }
 
