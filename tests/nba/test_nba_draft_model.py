@@ -84,3 +84,29 @@ def test_bundled_nba_draft_value_artifact_loads() -> None:
     art = _load_artifact("nba")
     assert "features" in art and "value_coef" in art and "prob_coef" in art
     assert len(art["features"]) == len(art["value_coef"]) == len(art["prob_coef"])
+
+
+def test_draft_model_gleague_bridge_empty_frame_no_crash(
+    synthetic_combine: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """gleague_bridge=True with an empty G-League frame -> full schema, no crash.
+
+    Uses ``importlib.import_module`` (not ``import ... as``) -- this package's
+    convention of a module named identically to its public function
+    (``nba_draft_model.py``'s ``nba_draft_model``) means the package
+    ``__init__.py``'s ``from .nba_draft_model import nba_draft_model``
+    overwrites the *package attribute* ``sportsdataverse.nba.nba_draft_model``
+    with the function; a plain ``import sportsdataverse.nba.nba_draft_model
+    as mod`` statement resolves through that shadowed attribute and silently
+    binds ``mod`` to the function instead of the module.
+    """
+    mod = importlib.import_module("sportsdataverse.nba.nba_draft_model")
+
+    monkeypatch.setattr(
+        mod,
+        "nba_stats_leaguedashplayerstats",
+        lambda season, league_id=None: pl.DataFrame(),
+    )
+    out = mod.nba_draft_model(2019, gleague_bridge=True)
+    assert out.height == 3
+    assert list(out.schema.keys()) == list(mod._SCHEMA.keys())

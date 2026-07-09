@@ -113,18 +113,30 @@ def _load_artifact(league: str) -> dict:
 
 @overload
 def nba_availability(
-    seasons: "int | list[int]", *, league: str = "nba", return_as_pandas: Literal[False] = False
+    seasons: "int | list[int]",
+    *,
+    league: str = "nba",
+    gleague_bridge: bool = False,
+    return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
 
 @overload
 def nba_availability(
-    seasons: "int | list[int]", *, league: str = "nba", return_as_pandas: Literal[True]
+    seasons: "int | list[int]",
+    *,
+    league: str = "nba",
+    gleague_bridge: bool = False,
+    return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
 
 def nba_availability(
-    seasons: "int | list[int]", *, league: str = "nba", return_as_pandas: bool = False
+    seasons: "int | list[int]",
+    *,
+    league: str = "nba",
+    gleague_bridge: bool = False,
+    return_as_pandas: bool = False,
 ) -> "pl.DataFrame | pd.DataFrame":
     """Project games-available % for a season (or seasons) from career GP history.
 
@@ -136,6 +148,13 @@ def nba_availability(
     Args:
         seasons: A season (start year, e.g. ``2019``) or list of seasons.
         league: ``"nba"``, ``"wnba"``, or ``"gleague"``.
+        gleague_bridge: When ``True`` (and ``league != "gleague"``), also
+            pulls each season's G-League (``league_id="20"``) bulk GP as a
+            development-outcome bridge feature before scoring. Best-effort:
+            gracefully absent (never raises) when the G-League bulk call
+            returns no rows for a season; the returned schema is unaffected
+            either way since the bridge column isn't part of the bundled
+            artifact's scored features.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -186,6 +205,28 @@ def nba_availability(
     if career.is_empty():
         out = pl.DataFrame(schema=_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
+
+    if gleague_bridge and league != "gleague":
+        bridge_frames = []
+        for start_year in range(earliest, latest + 1):
+            season_str = f"{start_year}-{str(start_year + 1)[-2:]}"
+            try:
+                gbulk = nba_stats_leaguedashplayerstats(season=season_str, league_id="20")
+            except Exception:  # pragma: no cover - defensive, matches "never raises"
+                continue
+            if gbulk.is_empty() or "player_id" not in gbulk.columns or "gp" not in gbulk.columns:
+                continue
+            bridge_frames.append(
+                gbulk.select(
+                    pl.col("player_id").cast(pl.Int64).cast(pl.Utf8),
+                    pl.lit(start_year).cast(pl.Int64).alias("season"),
+                    pl.col("gp").cast(pl.Int64).alias("gleague_gp"),
+                )
+            )
+        bridge = pl.concat(bridge_frames, how="diagonal_relaxed") if bridge_frames else pl.DataFrame()
+        if not bridge.is_empty():
+            assert career.schema["player_id"] == bridge.schema["player_id"]
+            career = career.join(bridge, on=["player_id", "season"], how="left")
 
     feats = availability_features(career, league=league)
     scored = score_availability(feats, league=league)

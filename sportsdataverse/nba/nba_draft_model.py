@@ -23,6 +23,7 @@ from sportsdataverse.nba.nba_stats import (
     nba_stats_draftcombinenonstationaryshooting,
     nba_stats_draftcombineplayeranthro,
     nba_stats_draftcombinespotshooting,
+    nba_stats_leaguedashplayerstats,
 )
 
 __all__ = ["nba_draft_model"]
@@ -80,6 +81,37 @@ def _fetch_combine(draft_years: list[int], league: str) -> pl.DataFrame:
     return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
 
 
+def _fetch_gleague_bridge(draft_years: list[int]) -> pl.DataFrame:
+    """G-League (``league_id="20"``) production bridge feature, by draft year.
+
+    Best-effort: a season with no G-League bulk rows (or an API miss)
+    contributes nothing -- the caller left-joins and fills nulls, it never
+    raises. Not part of any bundled artifact's ``features`` list today, so
+    joining it never changes ``proj_career_value``/``draft_prob`` -- it is a
+    forward-looking bridge column for a future artifact revision.
+    """
+    frames = []
+    for year in draft_years:
+        season_str = f"{year}-{str(year + 1)[-2:]}"
+        try:
+            bulk = nba_stats_leaguedashplayerstats(season=season_str, league_id="20")
+        except Exception:  # pragma: no cover - defensive, matches "never raises"
+            continue
+        if bulk.is_empty() or "player_id" not in bulk.columns:
+            continue
+        cols = [c for c in ("pts", "gp", "min") if c in bulk.columns]
+        if not cols:
+            continue
+        frames.append(
+            bulk.select(
+                pl.col("player_id").cast(pl.Int64).cast(pl.Utf8),
+                pl.lit(year).cast(pl.Int64).alias("draft_year"),
+                *[pl.col(c).cast(pl.Float64).alias(f"gleague_{c}") for c in cols],
+            )
+        )
+    return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+
+
 def _score(feats: pl.DataFrame, art: dict) -> pl.DataFrame:
     cols = art["features"]
     for col in cols:
@@ -123,6 +155,7 @@ def nba_draft_model(
     *,
     league: str = "nba",
     college_prior: "Optional[pl.DataFrame]" = None,
+    gleague_bridge: bool = False,
     return_as_pandas: Literal[False] = False,
 ) -> pl.DataFrame: ...
 
@@ -133,6 +166,7 @@ def nba_draft_model(
     *,
     league: str = "nba",
     college_prior: "Optional[pl.DataFrame]" = None,
+    gleague_bridge: bool = False,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -142,6 +176,7 @@ def nba_draft_model(
     *,
     league: str = "nba",
     college_prior: "Optional[pl.DataFrame]" = None,
+    gleague_bridge: bool = False,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
     """Project prospect career value + draft probability from combine measurements.
@@ -162,6 +197,13 @@ def nba_draft_model(
             present and the bundled artifact has matching feature columns, it
             is left-joined as an extra feature block. This function **never**
             imports ``sportsdataverse.mbb`` -- callers pass the frame in.
+        gleague_bridge: When ``True``, left-joins G-League (``league_id="20"``)
+            bulk production (``gleague_pts``/``gleague_gp``/``gleague_min``)
+            for the draft year's season as extra, forward-looking feature
+            columns. Not part of any bundled artifact's scored features today
+            (joining it never changes ``proj_career_value``/``draft_prob``);
+            gracefully absent when the G-League bulk call returns no rows --
+            never raises.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -204,6 +246,12 @@ def nba_draft_model(
     if college_prior is not None and not college_prior.is_empty():
         assert feats.schema["player_id"] == college_prior.schema.get("player_id", pl.Utf8)
         feats = feats.join(college_prior, on="player_id", how="left")
+
+    if gleague_bridge:
+        bridge = _fetch_gleague_bridge(years)
+        if not bridge.is_empty():
+            assert feats.schema["player_id"] == bridge.schema["player_id"]
+            feats = feats.join(bridge, on=["player_id", "draft_year"], how="left")
 
     art = _load_artifact(league)
     out = _score(feats, art)

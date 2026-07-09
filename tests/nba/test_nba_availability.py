@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import importlib
+
 import polars as pl
+import pytest
 
 from sportsdataverse.nba.nba_availability import (
     _FEATURE_COLS,
@@ -109,3 +112,27 @@ def test_availability_holdout_beats_baseline_and_calibrates() -> None:
     assert model_mae < baseline_mae, (
         f"model MAE {model_mae:.4f} must beat the career-mean baseline MAE {baseline_mae:.4f}"
     )
+
+
+def test_availability_gleague_bridge_empty_frame_no_crash(monkeypatch: pytest.MonkeyPatch) -> None:
+    """gleague_bridge=True with an empty G-League frame -> full schema, no crash.
+
+    Fully offline: the NBA-league bulk call is faked with a small synthetic
+    frame (avoids a live network dependency), the G-League bulk call is
+    faked to return empty (the actual thing under test). Uses
+    ``importlib.import_module`` (not ``import ... as``) -- see the same
+    module/function name-shadowing note in test_nba_draft_model.py.
+    """
+    mod = importlib.import_module("sportsdataverse.nba.nba_availability")
+
+    synthetic_bulk = pl.DataFrame({"player_id": [1, 2], "age": [24, 30], "gp": [70, 60]})
+
+    def _fake(season: str, league_id: str | None = None) -> pl.DataFrame:
+        if league_id == "20":
+            return pl.DataFrame()
+        return synthetic_bulk
+
+    monkeypatch.setattr(mod, "nba_stats_leaguedashplayerstats", _fake)
+    out = mod.nba_availability(2019, gleague_bridge=True)
+    assert list(out.schema.keys()) == ["player_id", "season", "avail_pct"]
+    assert out.height == 2
