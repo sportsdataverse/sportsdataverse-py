@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: body
+  type: character
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: person_key
+  type: integer
+- description: ''
+  name: person
+  type: character
+- description: ''
+  name: date_added
+  type: character
+- description: ''
+  name: date_updated
+  type: character
+kind: dataframe
+schema: quotes

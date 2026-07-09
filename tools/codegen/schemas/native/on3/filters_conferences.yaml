@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: key
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: abbreviation
+  type: character
+kind: dataframe
+schema: filters_conferences

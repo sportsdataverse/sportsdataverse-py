@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: conference_key
+  type: integer
+- description: ''
+  name: conference_abbr
+  type: character
+- description: ''
+  name: teams
+  type: character
+kind: dataframe
+schema: filters_teams

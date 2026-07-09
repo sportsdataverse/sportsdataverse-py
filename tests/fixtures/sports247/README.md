@@ -33,6 +33,7 @@ mints a guest `JWT` cookie with no login, passed as `Authorization: Bearer`):
 | `sports247_current_target_predictions_fb_2026.json` | `/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/` | bare array — "crystal ball" |
 | `sports247_sports_year_fb.json` | `/rdb/v1/sports/1/year/` | bare array of scalar years |
 | `sports247_tags_autocomplete.json` | `/rdb/v1/tags/autocomplete/?defaultName=smith` | bare array |
+| `sports247_positions_fb_2026.json` | `/rdb/v1/positions/?sportKey=1&year=2026` | bare array (16 rows) — position lookup (`group`, `groupKey`, `name`, `label`, `value`); probe-confirmed guest-usable 2026-07-08 |
 
 Provenance notes:
 
@@ -45,9 +46,11 @@ Provenance notes:
   sets a `JWT` cookie (no login; ~12 h TTL, `sub`/`iss` `247sports.com`,
   `fastly: true`); pass it as `Authorization: Bearer <jwt>`. The runtime
   (`sportsdataverse/cfb/sports247_runtime.py`) mints/caches/refreshes it
-  automatically. The remaining ~14 `/rdb/v1/*` routes (`biggestMovers`,
-  `archivedPlayerRankings`, `playerSportRankings`, `unrankedRecruits`, ...) stay
-  403 even with the guest token — they need a logged-in/premium session.
+  automatically. The remaining 13 `/rdb/v1/*` GET routes (`biggestMovers`,
+  `archivedPlayerRankings`, `playerSportRankings`, `unrankedRecruits`,
+  `rankings`, `sports`, `year`, `institutionGroups`, the `tags/.../photos`
+  pair, ...) stay 403 even with the guest token — they need a
+  logged-in/premium session.
 - `sportKey`: 1 = football, 2 = basketball.
 
 To refresh, re-capture the same URLs and re-trim enveloped payloads to 3 rows.

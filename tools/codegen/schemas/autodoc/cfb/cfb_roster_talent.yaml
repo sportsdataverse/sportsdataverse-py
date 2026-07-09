@@ -1,0 +1,24 @@
+schema: cfb_roster_talent
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: talent_composite
+  type: double
+  description: ''
+- name: talent_rank
+  type: integer
+  description: ''
+- name: blue_chip_ratio
+  type: double
+  description: ''
+- name: n_recruits
+  type: integer
+  description: ''

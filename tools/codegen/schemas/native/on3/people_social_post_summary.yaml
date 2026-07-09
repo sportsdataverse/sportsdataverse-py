@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: social_type
+  type: character
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: followers
+  type: integer
+kind: dataframe
+schema: people_social_post_summary

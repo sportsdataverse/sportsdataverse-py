@@ -1,0 +1,114 @@
+[
+  {
+    "group": "Quarterback",
+    "groupKey": 1,
+    "name": "Quarterback",
+    "label": "QB",
+    "value": "57"
+  },
+  {
+    "group": "Running Back",
+    "groupKey": 2,
+    "name": "Running Back",
+    "label": "RB",
+    "value": "12"
+  },
+  {
+    "group": "Receiver",
+    "groupKey": 3,
+    "name": "Wide Receiver",
+    "label": "WR",
+    "value": "14"
+  },
+  {
+    "group": "Tight End",
+    "groupKey": 19,
+    "name": "Tight End",
+    "label": "TE",
+    "value": "68"
+  },
+  {
+    "group": "Offensive Line",
+    "groupKey": 4,
+    "name": "Offensive Tackle",
+    "label": "OT",
+    "value": "16"
+  },
+  {
+    "group": "Offensive Line",
+    "groupKey": 4,
+    "name": "Interior Offensive Lineman",
+    "label": "IOL",
+    "value": "58"
+  },
+  {
+    "group": "Defensive Line",
+    "groupKey": 5,
+    "name": "Edge",
+    "label": "Edge",
+    "value": "60"
+  },
+  {
+    "group": "Defensive Line",
+    "groupKey": 5,
+    "name": "Defensive Lineman",
+    "label": "DL",
+    "value": "61"
+  },
+  {
+    "group": "Linebacker",
+    "groupKey": 6,
+    "name": "Linebacker",
+    "label": "LB",
+    "value": "59"
+  },
+  {
+    "group": "Defensive Back",
+    "groupKey": 7,
+    "name": "Cornerback",
+    "label": "CB",
+    "value": "24"
+  },
+  {
+    "group": "Defensive Back",
+    "groupKey": 7,
+    "name": "Safety",
+    "label": "S",
+    "value": "25"
+  },
+  {
+    "group": "Special Teams",
+    "groupKey": 8,
+    "name": "Athlete",
+    "label": "ATH",
+    "value": "26"
+  },
+  {
+    "group": "Special Teams",
+    "groupKey": 8,
+    "name": "Kicker",
+    "label": "K",
+    "value": "27"
+  },
+  {
+    "group": "Special Teams",
+    "groupKey": 8,
+    "name": "Punter",
+    "label": "P",
+    "value": "37"
+  },
+  {
+    "group": "Special Teams",
+    "groupKey": 8,
+    "name": "Long Snapper",
+    "label": "LS",
+    "value": "38"
+  },
+  {
+    "group": "Special Teams",
+    "groupKey": 8,
+    "name": "Returner",
+    "label": "RET",
+    "value": "53"
+  }
+]

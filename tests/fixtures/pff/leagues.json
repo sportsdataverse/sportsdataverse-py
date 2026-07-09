@@ -1,0 +1,1130 @@
+{
+  "leagues": [
+    {
+      "abbreviation": "NFL",
+      "default_season": 2025,
+      "default_week": 32,
+      "default_week_group": "REGPO",
+      "id": 1,
+      "name": "Pro Football",
+      "seasons": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2009,
+        2008,
+        2007,
+        2006,
+        2004,
+        2003,
+        2002,
+        2001,
+        1998,
+        1996,
+        1994
+      ],
+      "slug": "nfl",
+      "week_groups": [
+        {
+          "default": false,
+          "label": "Preseason",
+          "value": "PRE",
+          "weeks": [
+            -1,
+            -2,
+            -3,
+            -4,
+            -5
+          ]
+        },
+        {
+          "default": false,
+          "label": "Regular",
+          "value": "REG",
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        {
+          "default": false,
+          "label": "Postseason",
+          "value": "PO",
+          "weeks": [
+            28,
+            29,
+            30,
+            32
+          ]
+        },
+        {
+          "default": true,
+          "label": "Reg + Post",
+          "value": "REGPO",
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            28,
+            29,
+            30,
+            32
+          ]
+        }
+      ],
+      "weeks": [
+        {
+          "abbreviation": "HF",
+          "all_star": false,
+          "display_order": 1,
+          "id": -1,
+          "name": "Hall of Fame",
+          "post_season": false,
+          "pre_season": true,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "P1",
+          "all_star": false,
+          "display_order": 2,
+          "id": -2,
+          "name": "Preseason Week 1",
+          "post_season": false,
+          "pre_season": true,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "P2",
+          "all_star": false,
+          "display_order": 3,
+          "id": -3,
+          "name": "Preseason Week 2",
+          "post_season": false,
+          "pre_season": true,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "P3",
+          "all_star": false,
+          "display_order": 4,
+          "id": -4,
+          "name": "Preseason Week 3",
+          "post_season": false,
+          "pre_season": true,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "P4",
+          "all_star": false,
+          "display_order": 5,
+          "id": -5,
+          "name": "Preseason Week 4",
+          "post_season": false,
+          "pre_season": true,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "1",
+          "all_star": false,
+          "display_order": 6,
+          "id": 1,
+          "name": "Week 1",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "2",
+          "all_star": false,
+          "display_order": 7,
+          "id": 2,
+          "name": "Week 2",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "3",
+          "all_star": false,
+          "display_order": 8,
+          "id": 3,
+          "name": "Week 3",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "4",
+          "all_star": false,
+          "display_order": 9,
+          "id": 4,
+          "name": "Week 4",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "5",
+          "all_star": false,
+          "display_order": 10,
+          "id": 5,
+          "name": "Week 5",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "6",
+          "all_star": false,
+          "display_order": 11,
+          "id": 6,
+          "name": "Week 6",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "7",
+          "all_star": false,
+          "display_order": 12,
+          "id": 7,
+          "name": "Week 7",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "8",
+          "all_star": false,
+          "display_order": 13,
+          "id": 8,
+          "name": "Week 8",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "9",
+          "all_star": false,
+          "display_order": 14,
+          "id": 9,
+          "name": "Week 9",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "10",
+          "all_star": false,
+          "display_order": 15,
+          "id": 10,
+          "name": "Week 10",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "11",
+          "all_star": false,
+          "display_order": 16,
+          "id": 11,
+          "name": "Week 11",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "12",
+          "all_star": false,
+          "display_order": 17,
+          "id": 12,
+          "name": "Week 12",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "13",
+          "all_star": false,
+          "display_order": 18,
+          "id": 13,
+          "name": "Week 13",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "14",
+          "all_star": false,
+          "display_order": 19,
+          "id": 14,
+          "name": "Week 14",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "15",
+          "all_star": false,
+          "display_order": 20,
+          "id": 15,
+          "name": "Week 15",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "16",
+          "all_star": false,
+          "display_order": 21,
+          "id": 16,
+          "name": "Week 16",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "17",
+          "all_star": false,
+          "display_order": 22,
+          "id": 17,
+          "name": "Week 17",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "18",
+          "all_star": false,
+          "display_order": 23,
+          "id": 18,
+          "name": "Week 18",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "WC",
+          "all_star": false,
+          "display_order": 24,
+          "id": 28,
+          "name": "Wild Card Round",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "DP",
+          "all_star": false,
+          "display_order": 25,
+          "id": 29,
+          "name": "Divisional Round",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "CC",
+          "all_star": false,
+          "display_order": 26,
+          "id": 30,
+          "name": "Conf Championship",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "SB",
+          "all_star": false,
+          "display_order": 28,
+          "id": 32,
+          "name": "Super Bowl",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        }
+      ]
+    },
+    {
+      "abbreviation": "NCAA",
+      "default_season": 2025,
+      "default_week": 21,
+      "default_week_group": "AS",
+      "id": 2,
+      "name": "College Football",
+      "seasons": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010,
+        2008
+      ],
+      "slug": "ncaa",
+      "week_groups": [
+        {
+          "default": false,
+          "label": "Regular",
+          "value": "REG",
+          "weeks": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "default": false,
+          "label": "Postseason",
+          "value": "PO",
+          "weeks": [
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "default": true,
+          "label": "Reg + Post",
+          "value": "REGPO",
+          "weeks": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "default": false,
+          "label": "All-Star",
+          "value": "AS",
+          "weeks": [
+            30,
+            21
+          ]
+        }
+      ],
+      "weeks": [
+        {
+          "abbreviation": "0",
+          "all_star": false,
+          "display_order": 1,
+          "id": 0,
+          "name": "Week 0",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "1",
+          "all_star": false,
+          "display_order": 2,
+          "id": 1,
+          "name": "Week 1",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "2",
+          "all_star": false,
+          "display_order": 3,
+          "id": 2,
+          "name": "Week 2",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "3",
+          "all_star": false,
+          "display_order": 4,
+          "id": 3,
+          "name": "Week 3",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "4",
+          "all_star": false,
+          "display_order": 5,
+          "id": 4,
+          "name": "Week 4",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "5",
+          "all_star": false,
+          "display_order": 6,
+          "id": 5,
+          "name": "Week 5",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "6",
+          "all_star": false,
+          "display_order": 7,
+          "id": 6,
+          "name": "Week 6",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "7",
+          "all_star": false,
+          "display_order": 8,
+          "id": 7,
+          "name": "Week 7",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "8",
+          "all_star": false,
+          "display_order": 9,
+          "id": 8,
+          "name": "Week 8",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "9",
+          "all_star": false,
+          "display_order": 10,
+          "id": 9,
+          "name": "Week 9",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "10",
+          "all_star": false,
+          "display_order": 11,
+          "id": 10,
+          "name": "Week 10",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "11",
+          "all_star": false,
+          "display_order": 12,
+          "id": 11,
+          "name": "Week 11",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "12",
+          "all_star": false,
+          "display_order": 13,
+          "id": 12,
+          "name": "Week 12",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "13",
+          "all_star": false,
+          "display_order": 14,
+          "id": 13,
+          "name": "Week 13",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "14",
+          "all_star": false,
+          "display_order": 15,
+          "id": 14,
+          "name": "Week 14",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "15",
+          "all_star": false,
+          "display_order": 16,
+          "id": 15,
+          "name": "Week 15",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "16",
+          "all_star": false,
+          "display_order": 17,
+          "id": 16,
+          "name": "Week 16",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "CC",
+          "all_star": false,
+          "display_order": 18,
+          "id": 17,
+          "name": "Conf Championship",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "BG",
+          "all_star": false,
+          "display_order": 19,
+          "id": 18,
+          "name": "Bowl Games",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "PO",
+          "all_star": false,
+          "display_order": 20,
+          "id": 19,
+          "name": "Playoffs",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "CH",
+          "all_star": false,
+          "display_order": 21,
+          "id": 20,
+          "name": "Championship",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "ASP",
+          "all_star": true,
+          "display_order": 22,
+          "id": 30,
+          "name": "All-Star Practice",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "ASG",
+          "all_star": true,
+          "display_order": 23,
+          "id": 21,
+          "name": "All-Star Games",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": false
+        }
+      ]
+    },
+    {
+      "abbreviation": "AAF",
+      "default_season": 2019,
+      "default_week": 8,
+      "default_week_group": "REGPO",
+      "id": 4,
+      "name": "Alliance of American Football",
+      "seasons": [
+        2019
+      ],
+      "slug": "aaf",
+      "week_groups": [
+        {
+          "default": false,
+          "label": "Preseason",
+          "value": "PRE",
+          "weeks": [
+            -1
+          ]
+        },
+        {
+          "default": false,
+          "label": "Regular",
+          "value": "REG",
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "default": false,
+          "label": "Postseason",
+          "value": "PO",
+          "weeks": [
+            11,
+            12
+          ]
+        },
+        {
+          "default": true,
+          "label": "Reg + Post",
+          "value": "REGPO",
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "weeks": [
+        {
+          "abbreviation": "P1",
+          "all_star": false,
+          "display_order": 1,
+          "id": -1,
+          "name": "Practice Games",
+          "post_season": false,
+          "pre_season": true,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "1",
+          "all_star": false,
+          "display_order": 2,
+          "id": 1,
+          "name": "Week 1",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "2",
+          "all_star": false,
+          "display_order": 3,
+          "id": 2,
+          "name": "Week 2",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "3",
+          "all_star": false,
+          "display_order": 4,
+          "id": 3,
+          "name": "Week 3",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "4",
+          "all_star": false,
+          "display_order": 5,
+          "id": 4,
+          "name": "Week 4",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "5",
+          "all_star": false,
+          "display_order": 6,
+          "id": 5,
+          "name": "Week 5",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "6",
+          "all_star": false,
+          "display_order": 7,
+          "id": 6,
+          "name": "Week 6",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "7",
+          "all_star": false,
+          "display_order": 8,
+          "id": 7,
+          "name": "Week 7",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "8",
+          "all_star": false,
+          "display_order": 9,
+          "id": 8,
+          "name": "Week 8",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "9",
+          "all_star": false,
+          "display_order": 10,
+          "id": 9,
+          "name": "Week 9",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "10",
+          "all_star": false,
+          "display_order": 11,
+          "id": 10,
+          "name": "Week 10",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "SF",
+          "all_star": false,
+          "display_order": 12,
+          "id": 11,
+          "name": "Semi Final",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "CH",
+          "all_star": false,
+          "display_order": 13,
+          "id": 12,
+          "name": "Championship",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        }
+      ]
+    },
+    {
+      "abbreviation": "UFL",
+      "default_season": 2026,
+      "default_week": 12,
+      "default_week_group": "REGPO",
+      "id": 6,
+      "name": "UFL",
+      "seasons": [
+        2026,
+        2025,
+        2024,
+        2023,
+        2022,
+        2020
+      ],
+      "slug": "ufl",
+      "week_groups": [
+        {
+          "default": false,
+          "label": "Preseason",
+          "value": "PRE",
+          "weeks": [
+            -1
+          ]
+        },
+        {
+          "default": false,
+          "label": "Regular",
+          "value": "REG",
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "default": false,
+          "label": "Postseason",
+          "value": "PO",
+          "weeks": [
+            11,
+            12
+          ]
+        },
+        {
+          "default": true,
+          "label": "Reg + Post",
+          "value": "REGPO",
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ],
+      "weeks": [
+        {
+          "abbreviation": "P1",
+          "all_star": false,
+          "display_order": 1,
+          "id": -1,
+          "name": "Practice Games",
+          "post_season": false,
+          "pre_season": true,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "1",
+          "all_star": false,
+          "display_order": 2,
+          "id": 1,
+          "name": "Week 1",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "2",
+          "all_star": false,
+          "display_order": 3,
+          "id": 2,
+          "name": "Week 2",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "3",
+          "all_star": false,
+          "display_order": 4,
+          "id": 3,
+          "name": "Week 3",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "4",
+          "all_star": false,
+          "display_order": 5,
+          "id": 4,
+          "name": "Week 4",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "5",
+          "all_star": false,
+          "display_order": 6,
+          "id": 5,
+          "name": "Week 5",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "6",
+          "all_star": false,
+          "display_order": 7,
+          "id": 6,
+          "name": "Week 6",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "7",
+          "all_star": false,
+          "display_order": 8,
+          "id": 7,
+          "name": "Week 7",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "8",
+          "all_star": false,
+          "display_order": 9,
+          "id": 8,
+          "name": "Week 8",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "9",
+          "all_star": false,
+          "display_order": 10,
+          "id": 9,
+          "name": "Week 9",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "10",
+          "all_star": false,
+          "display_order": 11,
+          "id": 10,
+          "name": "Week 10",
+          "post_season": false,
+          "pre_season": false,
+          "regular_season": true
+        },
+        {
+          "abbreviation": "SF",
+          "all_star": false,
+          "display_order": 12,
+          "id": 11,
+          "name": "Semi Final",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        },
+        {
+          "abbreviation": "CH",
+          "all_star": false,
+          "display_order": 13,
+          "id": 12,
+          "name": "Championship",
+          "post_season": true,
+          "pre_season": false,
+          "regular_season": false
+        }
+      ]
+    }
+  ]
+}
