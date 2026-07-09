@@ -3820,6 +3820,40 @@ nfl_rosters:
   team_league: League identifier confirming the team belongs to the NFL.
   team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
   team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_player_props:
+  game_id: Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB").
+  line: Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available.
+  opp_team_id: Opponent team nflverse abbreviation (drives the matchup multiplier).
+  p_over: Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line.
+  player_id: nflverse GSIS player identifier (character join key).
+  position: Player position (QB, RB, WR, TE) selecting the projected stat family.
+  proj_mean: Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script.
+  proj_sd: Residual standard deviation for the stat family (fitted on the 2023 as-of backtest).
+  season: Season the projection belongs to.
+  stat: Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE).
+  team_id: Player's team nflverse abbreviation as of the projection week.
+  week: Week of the projected game; only weeks strictly before it feed the projection.
+nfl_predict_games:
+  away_team_id: Away team nflverse abbreviation (character; the ratings `team_id` join key).
+  exp_margin: Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields).
+  exp_total: Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum).
+  game_id: Game identifier carried through from the input schedule.
+  home_team_id: Home team nflverse abbreviation (character; the ratings `team_id` join key).
+  home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
+  market_edge: Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied.
+  neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
+nfl_ratings:
+  adj_def_epa: Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit.
+  adj_net: Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in).
+  adj_off_epa: Opponent-adjusted offensive EPA per play (higher is better); competitive-play ridge fit.
+  adj_st_epa: Opponent-adjusted special-teams EPA per play (ridge on special==1 plays; 0.0 for teams with no special-teams plays in the window).
+  def_rank: Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better).
+  games: Number of games the team played in the fitted window.
+  net_rank: Dense rank on adj_net descending (best net rating = 1).
+  net_z: Z-score of adj_net across the 32 teams.
+  off_rank: Dense rank on adj_off_epa descending (best offense = 1).
+  season: Season the ratings cover (null for a pooled multi-season fit).
+  team_id: nflverse team abbreviation (character join key, e.g. "KC").
 nfl_season_standings:
   season: Season identifier from the input games frame (named `sim` instead when the input used a `sim` column).
   conf: Conference of the team (AFC or NFC).

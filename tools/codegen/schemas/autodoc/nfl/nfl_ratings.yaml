@@ -1,0 +1,36 @@
+schema: nfl_ratings
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: adj_off_epa
+  type: double
+  description: ''
+- name: adj_def_epa
+  type: double
+  description: ''
+- name: adj_st_epa
+  type: double
+  description: ''
+- name: adj_net
+  type: double
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: off_rank
+  type: integer
+  description: ''
+- name: def_rank
+  type: integer
+  description: ''
+- name: net_rank
+  type: integer
+  description: ''
+- name: net_z
+  type: double
+  description: ''
