@@ -1550,6 +1550,63 @@ ratings = nba_adj_rapm(possessions, spm_prior_dict)
 print(ratings.sort("adj_rapm", descending=True).head())
 ```
 
+### `nba_aging_curve(*, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_aging_curve}
+
+Load the bundled per-age value-multiplier curve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `age:Int64, rel_value:Float64, peak_age:Float64` (`peak_age` repeated on every row for convenient filtering/joining).
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_aging_curve
+curve = nba_aging_curve()
+print(curve.sort("rel_value", descending=True).head(1))
+
+# Pipeline next step (one line)
+
+curve.filter(pl.col("age").is_between(24, 30))
+```
+
+### `nba_availability(seasons: "'int | list[int]'", *, league: 'str' = 'nba', gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_availability}
+
+Project games-available % for a season (or seasons) from career GP history.
+
+`avail_pct` is **availability, not skill** -- it is the only output of
+this function and is never combined into a value/rating column by this
+module (`sportsdataverse.nba.nba_rookie_projection.nba_rookie_projection`
+reports it as a separate column too).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season (start year, e.g. `2019`) or list of seasons. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `gleague_bridge` | `bool` | `False` | When `True` (and `league != "gleague"`), also pulls each season's G-League (`league_id="20"`) bulk GP as a development-outcome bridge feature before scoring. Best-effort: gracefully absent (never raises) when the G-League bulk call returns no rows for a season; the returned schema is unaffected either way since the bridge column isn't part of the bundled artifact's scored features. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, season:Int64, avail_pct:Float64` (clipped to `[0, 1]`). Empty `seasons` -> zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_availability
+proj = nba_availability(2019)
+print(proj.sort("avail_pct").head())
+```
+
 ### `nba_box_logs(season: 'str', *, league_id: 'str' = '00', season_type: 'str' = 'Regular Season', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Dict[str, pl.DataFrame]'` {#nba_box_logs}
 
 Fetch per-player and per-team game logs for a season (bulk, one call each).
@@ -1614,6 +1671,31 @@ bpm_raw = nba_bpm(logs["player"], logs["team"], pos, team_adjust=False)
 # Pandas output
 
 bpm_pd = nba_bpm(logs["player"], logs["team"], pos, return_as_pandas=True)
+```
+
+### `nba_career_trajectory(player_values: 'pl.DataFrame', *, league: 'str' = 'nba', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_career_trajectory}
+
+Age-adjust player-season values with the bundled aging curve.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_values` | `DataFrame` |  | Frame `player_id, age:Int64, value:Float64`. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_values` plus `age_adjusted_value` (`value / rel_value(age)`, peak-centered) and `proj_next_value` (`value * rel_value(age+1) / rel_value(age)`). Ages outside the bundled curve's range fall back to `rel_value = 1.0` (no adjustment). Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba import nba_career_trajectory
+player_values = pl.DataFrame({"player_id": ["1"], "age": [24], "value": [10.0]})
+nba_career_trajectory(player_values)
 ```
 
 ### `nba_darko(panel: 'pl.DataFrame', ages: 'pl.DataFrame', *, aging_curve: "'AgingCurve | None'" = None, process_var: "'float | None'" = None, obs_base: "'float | None'" = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_darko}
@@ -1684,6 +1766,46 @@ print(df.sort("decay_rapm", descending=True).head())
 # Plain-RAPM-equivalent (no decay)
 
 df = nba_decay_rapm(season_poss)  # asof=None
+```
+
+### `nba_draft_model(draft_year: "'Union[int, list[int]]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, gleague_bridge: 'bool' = False, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#nba_draft_model}
+
+Project prospect career value + draft probability from combine measurements.
+
+Loads the draft-combine wrappers for `draft_year` (or each year in the
+list), builds the shared combine-feature vector
+(`sportsdataverse.nba.nba_draft_constants.build_combine_features`),
+and applies the bundled ridge (`proj_career_value`) / logistic
+(`draft_prob`) heads fit in `dev/nba_draft/fit_draft_model.py`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `Union[int, list[int]]` |  | A draft year (e.g. `2019`) or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"` -- selects the bundled artifact and the combine-wrapper family. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional frame keyed on `player_id:Utf8` carrying the college-side MBB/WBB player-value spine's `projected_pick` / `box_bpm` / `archetype` (model ⑤, see design doc §3.5). When present and the bundled artifact has matching feature columns, it is left-joined as an extra feature block. This function **never** imports `sportsdataverse.mbb` -- callers pass the frame in. |
+| `gleague_bridge` | `bool` | `False` | When `True`, left-joins G-League (`league_id="20"`) bulk production (`gleague_pts`/`gleague_gp`/`gleague_min`) for the draft year's season as extra, forward-looking feature columns. Not part of any bundled artifact's scored features today (joining it never changes `proj_career_value`/`draft_prob`); gracefully absent when the G-League bulk call returns no rows -- never raises. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8` — one row per prospect with combine measurements for that class. `projected_pick` is a contiguous 1..N rank within each draft year. Empty/malformed input returns the zero-row schema, never raises.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_draft_model
+board = nba_draft_model(2019)
+print(board.sort("proj_career_value", descending=True).head())
+
+# With a college-side prior
+
+board = nba_draft_model(2019, college_prior=mbb_prior_df)
+
+# Pipeline next step (one line)
+
+board.filter(pl.col("pro_tier") == "lottery")
 ```
 
 ### `nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_four_factor_rapm}
@@ -1870,6 +1992,44 @@ print(panel.filter(pl.col("player_id") == 201939).sort("date"))
 # Every game day, no explicit grid
 
 panel = nba_ratings_panel(RidgeRapmModel(), season_poss)
+```
+
+### `nba_rookie_projection(draft_year: "'int | list[int]'", *, league: 'str' = 'nba', college_prior: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nba_rookie_projection}
+
+Project rookie/sophomore value by composing draft x aging x availability.
+
+Composition (no re-derived features -- each term is the verbatim public
+output of ①②③):
+
+- `base = nba_draft_model(...).proj_career_value * rookie_fraction`
+  (`rookie_fraction` from the bundled residual artifact -- the share of
+  career value realized in a single rookie season).
+- `proj_rookie_value = base * rel_value(rookie_age) / rel_value(peak_age)
+  + residual[pro_tier]`; `proj_soph_value` uses `rookie_age + 1`.
+- `proj_avail_pct` from `sportsdataverse.nba.nba_availability.nba_availability`
+  at rookie age -- reported separately, **never** multiplied into the
+  value columns (availability is availability, not skill).
+- `proj_rookie_min = games_full_season * proj_avail_pct * expected_mpg(pro_tier)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
+| `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
+| `college_prior` | `Optional[DataFrame]` | `None` | Optional college-side prior frame, forwarded verbatim to `sportsdataverse.nba.nba_draft_model.nba_draft_model`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_rookie_projection
+board = nba_rookie_projection(2019)
+print(board.sort("proj_rookie_value", descending=True).head())
 ```
 
 ### `nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#nba_shot_value}
