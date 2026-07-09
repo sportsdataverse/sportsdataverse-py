@@ -75,19 +75,27 @@ MEASURE_SPECS: dict[str, MeasureSpec] = {
 # the model.
 ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
     "2023-24": {
-        # Elite rebounders: Sabonis, Gobert, A. Davis, Jokic, Nurkic, J. Allen,
-        # Giannis, Vucevic, Capela, Wembanyama.
+        # Elite rebounders BY RATE (reb_chance_pct vs their position-bucket
+        # baseline), not by raw chance volume. The first pass of this
+        # allowlist was sourced from the reb_chances LEADERS (raw volume) and
+        # included Gobert/Nurkic, who rank ~170-280th of ~400 qualified on
+        # reb_oe despite huge chance counts -- their per-chance conversion is
+        # merely average for "big", which the over-expected construction is
+        # *designed* to reveal (see spec decision #4: rewarding volume is the
+        # wrong oracle). Re-sourced from the top reb_chance_pct performers
+        # cross-checked against public consensus: Jokic, Drummond, Giannis,
+        # Wembanyama, Tatum, A. Davis, Vucevic, Capela, J. Allen, Sabonis.
         "reb": [
-            "1627734",
-            "203497",
-            "203076",
             "203999",
-            "203994",
-            "1628386",
+            "203083",
             "203507",
+            "1641705",
+            "1628369",
+            "203076",
             "202696",
             "203991",
-            "1641705",
+            "1628386",
+            "1627734",
         ],
         # Elite passers: Haliburton, Jokic, Doncic, Sabonis, Harden, VanVleet,
         # Trae Young, LeBron, Brunson, Dejounte Murray.
