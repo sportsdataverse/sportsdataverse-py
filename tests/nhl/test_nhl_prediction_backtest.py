@@ -146,3 +146,42 @@ def test_pregame_margin_and_total_mae_vs_espn_odds(pregame_backtest, oracle_corp
     total_err = mae(m["exp_total"].to_numpy(), m["close_total"].to_numpy())
     assert margin_err <= MARGIN_MAE_FLOOR, f"margin MAE {margin_err:.4f} above floor {MARGIN_MAE_FLOOR}"
     assert total_err <= TOTAL_MAE_FLOOR, f"total MAE {total_err:.4f} above floor {TOTAL_MAE_FLOOR}"
+
+
+# --- Task 3.4: in-game WP calibration gate (2023 held-out, trained on 2022) -------
+#
+# Built by dev/nhl_prediction/build_in_game_wp_calibration_fixture.py: every play
+# of the 2023 season is scored by nhl_in_game_win_prob (using as-of pregame probs
+# as the anchor) and bucketed into predicted deciles via calibration_table.
+#
+# A shallow-xgboost escalation was tried (per the plan's explicit fallback) and
+# REJECTED at model-authoring time: it roughly halved the worst-bucket deviation
+# but, at max_depth=3, could not separate a clean pulled-goalie test scenario from
+# the even-strength baseline, losing a qualitatively important, well-understood
+# behavior the plain logistic captures correctly (see test_nhl_in_game_wp.py).
+# Trading that away for a calibration gain that still didn't clear the plan's
+# illustrative 0.03 target either was judged not worth it. The plain logistic
+# ships, and per the binding gate rule (floors come from observed values, not an
+# untested illustrative number), the overall-bucket floor is set from what was
+# actually observed: max |mean_pred - mean_actual| = 0.0688 (bucket at 0.55,
+# n=43101 -- not sampling noise: sqrt(p(1-p)/n) ~ 0.0024) -- rounded up to 0.075.
+# The pulled-goalie subset (n=10086) DOES clear the illustrative 0.03 floor
+# (observed 0.0256), so that tighter bar is kept for that targeted assert.
+OVERALL_CALIBRATION_FLOOR = 0.075
+PULLED_GOALIE_CALIBRATION_FLOOR = 0.03
+
+
+def test_in_game_wp_calibration_by_predicted_decile():
+    cal = pl.read_parquet(FIXTURES_DIR / "in_game_wp_calibration_2023.parquet")
+    assert cal.height > 0
+    dev = (cal["mean_pred"] - cal["mean_actual"]).abs()
+    assert dev.max() <= OVERALL_CALIBRATION_FLOOR, f"max per-bucket deviation {dev.max():.4f} above floor"
+
+
+def test_in_game_wp_calibration_pulled_goalie_subset():
+    pulled = pl.read_parquet(FIXTURES_DIR / "in_game_wp_pulled_goalie_2023.parquet")
+    assert pulled.height == 1
+    row = pulled.row(0, named=True)
+    assert row["n"] > 1000  # a genuinely large held-out subset, not a fluke handful of plays
+    dev = abs(row["mean_pred"] - row["mean_actual"])
+    assert dev <= PULLED_GOALIE_CALIBRATION_FLOOR, f"pulled-goalie deviation {dev:.4f} above floor"

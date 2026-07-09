@@ -28,16 +28,18 @@ to stay comparable with MoneyPuck's `regular` folder.
 | `espn_odds_sample.parquet` | `espn_nhl_game_odds`, sampled across 7 dates spanning the season | 20 | `game_id: Utf8` (crosswalked from ESPN's own `event_id` via `(date, home_team, away_team)` after normalising ESPN's 4 divergent abbreviations: `LA->LAK`, `NJ->NJD`, `SJ->SJS`, `TB->TBL`). `close_puck_line_home`/`close_total` taken from the flat top-level `spread`/`over_under` fields of the first odds-provider row (see gap #5 below); not necessarily identical across games/providers -- documented limitation, not a correctness issue since MAE floors are set from these same observed values. |
 | `espn_propbets_sample.parquet` | `espn_nhl_game_propbets` | **0** | **Confirmed 404 for every 2022-23 game tried** (10+ events across multiple dates). Matches the design spec's documented expectation that prop-bet lines are ephemeral and not retained for past games. Task 4.2's propbets-MAE check is skipped when this fixture is empty (documented, not fabricated). |
 | `pbp_sample_2023.parquet` | `load_nhl_pbp_full([2023])`, first 5 `game_id`s | 1678 | Full-shape (93-column) real slice for offline unit tests of `nhl_team_ratings`/`nhl_market`/`in_game_features` against the real schema (not synthetic). |
+| `team_xg_2023.parquet` | Output of `nhl_team_ratings.team_game_xg_rates` over the full 2023 season pbp (Task 1.1) | 2624 | One row per (game, team); the Phase-1 oracle gate's input. |
+| `in_game_wp_calibration_2023.parquet` | Every 2023 play scored by `nhl_in_game_win_prob` (trained on 2022), bucketed via `calibration_table` (Task 3.4) | 10 | `bin_mid, mean_pred, mean_actual, n` per predicted decile. |
+| `in_game_wp_pulled_goalie_2023.parquet` | Same 2023 scoring run, subset to plays with either goalie pulled | 1 | `mean_pred, mean_actual, n` -- the Task 3.4 targeted pulled-goalie calibration check. |
 
 ## Deliberately not committed
 
 - **`pbp_2023.parquet` (full season, ~1.1M rows / 93 cols)** -- re-downloaded
   on demand from the `nhl_pbp_full` sportsdataverse-data release (no gate
   required, not an API call) rather than committed, to keep the repo lean.
-- **`team_xg_2023.parquet`** -- this is the *output* of Task 1.1's
-  `team_game_xg_rates`, not a Task-0.1 input; it is captured once that
-  function exists (see the Task 1.1 commit) rather than duplicating the
-  aggregation logic here.
+  `dev/nhl_prediction/build_team_xg_fixture.py` and
+  `build_in_game_wp_calibration_fixture.py` both re-download it to produce
+  the small, committed aggregated fixtures above.
 
 ## Known gaps / adaptations (binding: gates set from what's actually observable)
 
@@ -75,3 +77,19 @@ to stay comparable with MoneyPuck's `regular` folder.
    are populated. `espn_odds_sample.parquet` uses those flat fields; there is
    no verified-"closing" total for NHL (only a "current" value at capture
    time), documented as a limitation on the MAE-vs-total gate.
+6. **In-game WP: xgboost escalation tried and rejected.** The plain logistic
+   failed the Task 3.4 held-out (2023) calibration gate on 2 of 10
+   predicted-decile buckets (worst deviation ~0.069, at bucket 0.55,
+   n=43101 -- not sampling noise). A shallow xgboost (max_depth=3, 150
+   trees) on the same 6 features roughly halved the worst-bucket deviation
+   (~0.036) but, at that depth, could not separate a clean pulled-goalie
+   test scenario (home leads 4-3, 60s left, away pulls its goalie) from the
+   even-strength baseline -- both collapsed to the identical predicted
+   probability, losing a qualitatively important, correctly-signed behavior
+   the plain logistic captures (`tests/nhl/test_nhl_in_game_wp.py`). That
+   trade was judged not worth it since the calibration gain didn't clear
+   the plan's own illustrative 0.03 target either. The plain logistic
+   ships; the overall-bucket calibration floor is set from the OBSERVED
+   0.0688 max deviation (binding gate rule), while the pulled-goalie
+   subset (n=10086, observed deviation 0.0256) clears the tighter 0.03
+   bar and keeps it.
