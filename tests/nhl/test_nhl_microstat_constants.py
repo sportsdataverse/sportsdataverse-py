@@ -88,3 +88,33 @@ def test_fit_shot_xg_empty_and_small_fallback() -> None:
     preds = m_small.predict(small)
     assert preds.len() == 3
     assert preds.n_unique() == 1  # constant fallback rate
+
+
+def test_fit_shot_xg_predict_null_shot_type_no_crash() -> None:
+    # blocked-shot events carry a null shot_type in real captures; predict()
+    # must not propagate that into a NaN feature matrix (regression test for
+    # a bug found fitting faceoff-zone weights on the real corpus, Task 1.4).
+    rng = np.random.default_rng(1)
+    n = 300
+    x = rng.uniform(30, 89, n)
+    y = rng.uniform(-40, 40, n)
+    pbp = pl.DataFrame(
+        {
+            "type_desc_key": ["goal"] * (n // 2) + ["shot-on-goal"] * (n - n // 2),
+            "x_coord": x,
+            "y_coord": y,
+            "shot_type": ["wrist"] * n,
+        }
+    )
+    model = fit_shot_xg(pbp)
+    blocked = pl.DataFrame(
+        {
+            "type_desc_key": ["blocked-shot"] * 5,
+            "x_coord": [60.0, 55.0, 70.0, 65.0, 80.0],
+            "y_coord": [5.0, -5.0, 10.0, 0.0, -10.0],
+            "shot_type": [None] * 5,
+        }
+    )
+    preds = model.predict(blocked)
+    assert preds.len() == 5
+    assert not preds.is_nan().any()
