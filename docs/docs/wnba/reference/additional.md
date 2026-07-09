@@ -672,6 +672,19 @@ subs = df.filter(df["is_substitution"] == True)  # noqa: E712
 print(subs.select(["period", "seconds_remaining", "person_id"]))
 ```
 
+### `wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_in_game_win_prob}
+
+WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  |  |
+| `pregame_home_prob` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
 ### `wnba_on_court(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_on_court}
 
 Return the rotation-keyed on-court player frame for a WNBA game.
@@ -726,6 +739,21 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_player_props}
+
+WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `game_id` | `str` |  |  |
+| `home_team_id` | `str` |  |  |
+| `away_team_id` | `str` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
 ### `wnba_possessions(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_possessions}
 
 Return the possession-level lineup stint matrix for a WNBA game.
@@ -767,6 +795,50 @@ print(type(poss_pd))
 total = int(poss["points"].sum())
 print(f"Total points scored: {total}")
 ```
+
+### `wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_predict_games}
+
+WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  |  |
+| `ratings` | `DataFrame` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'` {#wnba_predict_margin}
+
+WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_net` | `float` |  |  |
+| `away_net` | `float` |  |  |
+| `home_pace` | `float` |  |  |
+| `away_pace` | `float` |  |  |
+| `neutral` | `bool` | `False` |  |
+| `league_id` | `str` | `'00'` |  |
+
+### `wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#wnba_predict_total}
+
+WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_off` | `float` |  |  |
+| `home_def` | `float` |  |  |
+| `away_off` | `float` |  |  |
+| `away_def` | `float` |  |  |
+| `home_pace` | `float` |  |  |
+| `away_pace` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
 
 ### `wnba_rapm_from_games(game_ids: 'Sequence[str]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_rapm_from_games}
 
@@ -842,6 +914,42 @@ from sportsdataverse.wnba import wnba_shot_value
 out = wnba_shot_value([1628886], "2024")
 out["talent"].head()
 ```
+
+### `wnba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_team_clutch}
+
+WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_team_ratings}
+
+WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `as_of_date` | `Union[date, None]` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'` {#wnba_win_prob_from_margin}
+
+WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
 
 ### `zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#zone_value_map}
 

@@ -29,3 +29,13 @@ from sportsdataverse.wnba.wnba_engine import (  # noqa: F401
     wnba_rapm_from_games,
 )
 from sportsdataverse.wnba.wnba_shot_value import *
+from sportsdataverse.wnba.wnba_team_ratings import wnba_team_ratings  # noqa: F401
+from sportsdataverse.wnba.wnba_game_predict import (  # noqa: F401
+    wnba_in_game_win_prob,
+    wnba_predict_games,
+    wnba_predict_margin,
+    wnba_predict_total,
+    wnba_win_prob_from_margin,
+)
+from sportsdataverse.wnba.wnba_clutch import wnba_team_clutch  # noqa: F401
+from sportsdataverse.wnba.wnba_player_props import wnba_player_props  # noqa: F401

@@ -132,14 +132,19 @@ def shrink_clutch(delta: pl.DataFrame, *, league_id: str = "00") -> pl.DataFrame
     return delta.with_columns(pl.Series("clutch_skill_shrunk", k * d).cast(pl.Float64))
 
 
-def _load_clutch(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
-    """Live clutch net rating (monkeypatched to fixtures in tests)."""
-    from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamclutch  # noqa: PLC0415
+def _season_str(season: int, league_id: str) -> str:
+    """stats-API season string: WNBA (league_id=10) uses the plain year; NBA uses 'YYYY-YY'."""
+    return str(season) if league_id == "10" else f"{season - 1}-{str(season)[2:]}"
 
-    season_str = f"{season - 1}-{str(season)[2:]}"
-    raw = nba_stats_leaguedashteamclutch(
-        season=season_str, measure_type_detailed_defense="Advanced", league_id=league_id
-    )
+
+def _load_clutch(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
+    """Live clutch net rating (monkeypatched to fixtures in tests); WNBA via league_id=10."""
+    if league_id == "10":
+        from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashteamclutch as _clutch  # noqa: PLC0415
+    else:
+        from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamclutch as _clutch  # noqa: PLC0415
+
+    raw = _clutch(season=_season_str(season, league_id), measure_type_detailed_defense="Advanced", league_id=league_id)
     if isinstance(raw, dict):
         raw = next(iter(raw.values()))
     return raw.select(
@@ -151,13 +156,13 @@ def _load_clutch(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cov
 
 
 def _load_full_game_net(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
-    """Live full-game net rating baseline (monkeypatched to fixtures in tests)."""
-    from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamstats  # noqa: PLC0415
+    """Live full-game net rating baseline (monkeypatched to fixtures in tests); WNBA via league_id=10."""
+    if league_id == "10":
+        from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashteamstats as _stats  # noqa: PLC0415
+    else:
+        from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamstats as _stats  # noqa: PLC0415
 
-    season_str = f"{season - 1}-{str(season)[2:]}"
-    raw = nba_stats_leaguedashteamstats(
-        season=season_str, measure_type_detailed_defense="Advanced", league_id=league_id
-    )
+    raw = _stats(season=_season_str(season, league_id), measure_type_detailed_defense="Advanced", league_id=league_id)
     if isinstance(raw, dict):
         raw = next(iter(raw.values()))
     return raw.select(

@@ -73,14 +73,18 @@ class LeagueConstants:
     in_game_wp_artifact: str = "nba_in_game_wp.ubj"
 
 
-# NBA hfa/margin_sd are FITTED (dev/nba_prediction/fit_pregame.py, 2026-07-08):
-# as-of-date team ratings computed for every 3rd unique game date >= a 150-game
-# warmup (1162 of 1320 2023-24 games), hfa = mean(actual_margin - possession-scaled
-# AdjNet diff) over non-neutral games, margin_sd = std of the residual around that
-# fitted hfa (0 for neutral games). WNBA/G-League avg_pace/avg_off_rtg/game_minutes
-# are seed values from published league norms (Task 0.3) pending the Phase-6
-# per-league_id refit; game_minutes is structural, not fitted (WNBA plays 40-minute
-# games; NBA/G-League play 48).
+# hfa/margin_sd are FITTED per league on their own as-of-date backtest
+# (dev/nba_prediction/fit_pregame.py, 2026-07-08): hfa = mean(actual_margin -
+# possession-scaled AdjNet diff) over non-neutral games, margin_sd = std of the residual
+# around that fitted hfa (0 for neutral games).
+#   NBA  ("00"): 1162 of 1320 2023-24 games -> hfa 2.184, margin_sd 14.504.
+#   WNBA ("10"): 220 of 264 2024 games      -> hfa 1.184, margin_sd 10.944 (lower HFA +
+#                variance than NBA, as expected).
+# G-League ("20") has no committed fixture (ESPN has no G-League schedule/box loader and
+# there is no gleague loader surface); its hfa/margin_sd remain seed values from league
+# norms -- the algorithms accept league_id="20" and would fit identically given a data
+# source. avg_pace/avg_off_rtg are league-norm anchors; game_minutes is structural (WNBA
+# plays 40-minute games, NBA/G-League play 48), not fitted.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "00": LeagueConstants(
         hfa=2.184,
@@ -91,9 +95,9 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         in_game_wp_artifact="nba_in_game_wp.ubj",
     ),
     "10": LeagueConstants(
-        hfa=2.5,
-        margin_sd=12.0,
-        avg_pace=82.0,
+        hfa=1.184,
+        margin_sd=10.944,
+        avg_pace=95.0,
         avg_off_rtg=101.0,
         game_minutes=40,
         in_game_wp_artifact="wnba_in_game_wp.ubj",

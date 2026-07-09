@@ -333,6 +333,25 @@ _RATINGS_SCHEMA = {
 }
 
 
+def _league_loaders(league_id: str):  # type: ignore[no-untyped-def]
+    """(schedule, team_box) loaders for a ``league_id``.
+
+    ``"00"`` NBA / ``"20"`` G-League use the module-level ``load_nba_*`` (so
+    monkeypatching ``mod.load_nba_schedule`` in tests still works, and G-League
+    rides the same ESPN NBA loader surface); ``"10"`` WNBA uses the ``wnba``
+    loaders. Algorithms stay league-agnostic -- only the constants + data
+    source differ by ``league_id``.
+    """
+    if league_id == "10":
+        from sportsdataverse.wnba.wnba_loaders import (  # noqa: PLC0415
+            load_wnba_schedule,
+            load_wnba_team_boxscore,
+        )
+
+        return load_wnba_schedule, load_wnba_team_boxscore
+    return load_nba_schedule, load_nba_team_boxscore
+
+
 def _normalize_schedule(schedule: pl.DataFrame) -> pl.DataFrame:
     """Map ESPN ``load_nba_schedule`` columns to the engine's canonical names.
 
@@ -420,8 +439,9 @@ def nba_team_ratings(
             wnba_ratings = nba_team_ratings(2024, league_id="10")
     """
     seasons_list = [seasons] if isinstance(seasons, int) else list(seasons)
-    schedule = _normalize_schedule(load_nba_schedule(seasons_list))
-    team_box = load_nba_team_boxscore(seasons_list)
+    load_schedule, load_team_box = _league_loaders(league_id)
+    schedule = _normalize_schedule(load_schedule(seasons_list))
+    team_box = load_team_box(seasons_list)
     if as_of_date is not None:
         schedule = as_of_ratings_split(schedule, as_of_date)
     eff = raw_game_efficiency(schedule, team_box)

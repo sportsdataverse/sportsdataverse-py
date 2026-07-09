@@ -220,10 +220,15 @@ def team_pace_projection(
 
 
 def _load_player_logs(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
-    """Live player box logs (monkeypatched to fixtures in tests)."""
-    from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore  # noqa: PLC0415
+    """Live player box logs (monkeypatched to fixtures in tests); WNBA via league_id=10."""
+    if league_id == "10":
+        from sportsdataverse.wnba.wnba_loaders import load_wnba_player_boxscore  # noqa: PLC0415
 
-    box = load_nba_player_boxscore([season])
+        box = load_wnba_player_boxscore([season])
+    else:
+        from sportsdataverse.nba.nba_loaders import load_nba_player_boxscore  # noqa: PLC0415
+
+        box = load_nba_player_boxscore([season])
     return box.select(
         pl.col("athlete_id").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("player_id"),
         pl.col("team_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
