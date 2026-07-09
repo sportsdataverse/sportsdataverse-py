@@ -1,0 +1,18 @@
+schema: pressure_pairs
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: off_team
+  type: character
+  description: ''
+- name: def_team
+  type: character
+  description: ''
+- name: dropbacks
+  type: integer
+  description: ''
+- name: pressures
+  type: integer
+  description: ''

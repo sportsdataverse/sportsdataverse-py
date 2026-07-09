@@ -1,0 +1,21 @@
+schema: cfb_transfer_moves
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: direction
+  type: character
+  description: ''
+- name: prior_team_id
+  type: character
+  description: ''
+- name: talent_points
+  type: double
+  description: ''

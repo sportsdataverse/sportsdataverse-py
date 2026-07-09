@@ -1,0 +1,30 @@
+schema: nfl_usage_projection
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: target_season
+  type: integer
+  description: ''
+- name: position_group
+  type: character
+  description: ''
+- name: proj_team
+  type: character
+  description: ''
+- name: proj_target_share
+  type: double
+  description: ''
+- name: proj_air_yards_share
+  type: double
+  description: ''
+- name: proj_wopr
+  type: double
+  description: ''
+- name: proj_targets
+  type: double
+  description: ''
+- name: proj_air_yards
+  type: double
+  description: ''

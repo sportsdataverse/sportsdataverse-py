@@ -1,0 +1,12 @@
+{
+  "league": "wnba",
+  "features": ["overall_pick", "round_number"],
+  "value_coef": [0.0, 0.0],
+  "value_intercept": 0.0,
+  "prob_coef": [0.0, 0.0],
+  "prob_intercept": 0.0,
+  "feature_median": {"overall_pick": 18.0, "round_number": 2.0},
+  "feature_mean": [18.0, 2.0],
+  "feature_sd": [10.0, 1.0],
+  "_placeholder": "seed weights pending Task 5.1 fit_draft_model.py --league wnba -- overwritten before the wnba parity gate runs"
+}

@@ -11,7 +11,7 @@ sidebar_label: NBA
 | [ESPN core API (v2)](reference/core) | 81 | `https://sports.core.api.espn.com/v2/sports` |
 | [NBA Stats API (stats.nba.com)](reference/nba_stats) | 112 | `https://stats.nba.com` |
 | [Dataset loaders](reference/loaders) | 13 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 77 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 112 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

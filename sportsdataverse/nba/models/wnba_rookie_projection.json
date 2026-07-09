@@ -1,0 +1,11 @@
+{
+  "league": "wnba",
+  "rookie_fraction": 0.1,
+  "residual": {
+    "lottery": 0.0,
+    "first_round": 0.0,
+    "second_round": 0.0,
+    "undrafted": 0.0
+  },
+  "_placeholder": "seed weights pending Task 4.1 fit_rookie_residual.py -- overwritten before the phase-4 oracle gate runs"
+}
