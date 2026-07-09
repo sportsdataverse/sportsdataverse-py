@@ -459,4 +459,5 @@ files = [
     "sportsdataverse/nhl/nhl_unit_ratings.py",
     "sportsdataverse/nhl/nhl_special_teams.py",
     "sportsdataverse/nhl/nhl_war.py",
+    "sportsdataverse/pwhl/pwhl_player_impact.py",
 ]
