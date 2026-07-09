@@ -13,15 +13,22 @@ implementation, nothing ported.
 
 from __future__ import annotations
 
-from typing import Callable, Optional
+from typing import TYPE_CHECKING, Callable, Optional, Union
 
 import polars as pl
 
 from sportsdataverse.nba.nba_player_positions import nba_player_positions
 from sportsdataverse.nba.nba_stats import nba_stats_leaguedashptstats
 from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets
+from sportsdataverse.nba.nba_tracking_value_constants import MEASURE_SPECS, MeasureSpec
 
-__all__ = ["_season_str", "_pin_ids", "_fetch_leaguedash_tracking", "_attach_role_bucket", "_over_expected"]
+if TYPE_CHECKING:
+    import pandas as pd
+
+# No __all__: matches the sibling nba_shot_value.py convention -- `import *`
+# picks up the public (non-underscore) function names by Python's default
+# rule; tests import the private `_`-prefixed helpers directly from this
+# submodule rather than via a star-import.
 
 
 def _season_str(season: "int | str") -> str:
@@ -211,3 +218,216 @@ def _over_expected(
     return out.with_columns((pl.col(denom).cast(pl.Float64) * pl.col(rate_col)).alias(exp_col)).with_columns(
         (pl.col(actual).cast(pl.Float64) - pl.col(exp_col)).alias(oe_col)
     )
+
+
+# ---------------------------------------------------------------------------
+# Shared multi-season / schema helpers used by every public model function
+# ---------------------------------------------------------------------------
+
+
+def _season_label(season: "int | str") -> int:
+    """Return the ``Int64`` season-ending-year label for output rows (``"2023-24" -> 2024``)."""
+    if isinstance(season, int):
+        return season
+    return int(season.split("-")[0]) + 1
+
+
+def _as_season_list(seasons: "int | str | list") -> list:
+    """Normalize the public ``seasons`` argument to a list."""
+    if isinstance(seasons, (list, tuple)):
+        return list(seasons)
+    return [seasons]
+
+
+def _finalize_schema(df: pl.DataFrame, schema: "dict[str, pl.DataType]") -> pl.DataFrame:
+    """Add any missing documented columns as typed nulls, then select+cast to *schema*."""
+    for col, dtype in schema.items():
+        if col not in df.columns:
+            df = df.with_columns(pl.lit(None, dtype=dtype).alias(col))
+    return df.select([pl.col(c).cast(t) for c, t in schema.items()])
+
+
+def _expected_from_difficulty(df: pl.DataFrame, spec: MeasureSpec, group_cols: "list[str]") -> pl.DataFrame:
+    """Recompute ``{prefix}_expected``/``{prefix}_oe`` as a sum of per-difficulty-bucket
+    ``denom * bucket_rate`` contributions (e.g. contested vs uncontested rebound chances).
+
+    When ``spec.extra_denoms`` is empty, or any of its (actual, denom) column pairs are
+    missing from *df*, this is a no-op: the plain single-rate ``_over_expected`` result
+    already on *df* stands (the documented graceful degradation).
+
+    Args:
+        df: Frame already carrying the plain ``_over_expected`` output for *spec*.
+        spec: The measure spec whose ``extra_denoms`` difficulty buckets to apply.
+        group_cols: Baseline-scope columns (e.g. ``["position_bucket"]``).
+
+    Returns:
+        *df* with ``{spec.out_prefix}_expected``/``_oe`` replaced by the
+        difficulty-weighted values, or unchanged when the difficulty columns
+        are unavailable.
+    """
+    if not spec.extra_denoms:
+        return df
+    for actual_col, denom_col in spec.extra_denoms.values():
+        if actual_col not in df.columns or denom_col not in df.columns:
+            return df
+
+    exp_col, oe_col = f"{spec.out_prefix}_expected", f"{spec.out_prefix}_oe"
+    gb = group_cols or []
+    total_expected: "Optional[pl.Expr]" = None
+    rate_cols: list[str] = []
+    for actual_col, denom_col in spec.extra_denoms.values():
+        rate_alias = f"__rate_{actual_col}"
+        rate_cols.append(rate_alias)
+        rate_expr = (
+            pl.when(pl.col(denom_col).sum() > 0)
+            .then(pl.col(actual_col).sum() / pl.col(denom_col).sum())
+            .otherwise(None)
+            .alias(rate_alias)
+        )
+        if gb:
+            rate = df.group_by(gb).agg(rate_expr)
+            df = df.join(rate, on=gb, how="left")
+        else:
+            rate = df.select(rate_expr)
+            df = df.join(rate, how="cross")
+        contribution = pl.col(denom_col).cast(pl.Float64) * pl.col(rate_alias)
+        total_expected = contribution if total_expected is None else (total_expected + contribution)
+
+    df = df.with_columns(total_expected.alias(exp_col))
+    df = df.with_columns((pl.col(spec.actual).cast(pl.Float64) - pl.col(exp_col)).alias(oe_col))
+    return df.drop(rate_cols)
+
+
+# ---------------------------------------------------------------------------
+# Phase 1 -- rebounding-over-expected
+# ---------------------------------------------------------------------------
+
+_REB_OE_SCHEMA: "dict[str, pl.DataType]" = {
+    "season": pl.Int64,
+    "player_id": pl.Utf8,
+    "player_name": pl.Utf8,
+    "team_id": pl.Utf8,
+    "position_bucket": pl.Utf8,
+    "gp": pl.Int64,
+    "min": pl.Float64,
+    "reb": pl.Float64,
+    "reb_chances": pl.Float64,
+    "reb_baseline_rate": pl.Float64,
+    "reb_expected": pl.Float64,
+    "reb_oe": pl.Float64,
+    "reb_oe_per_36": pl.Float64,
+    "oreb_oe": pl.Float64,
+    "dreb_oe": pl.Float64,
+    "league_id": pl.Utf8,
+}
+
+
+def nba_tracking_reb_oe(
+    seasons: "int | str | list",
+    *,
+    league_id: str = "00",
+    per_mode: str = "Totals",
+    by_position: bool = True,
+    positions: Optional[pl.DataFrame] = None,
+    return_as_pandas: bool = False,
+    _get_fn: Optional[Callable[..., dict]] = None,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Rebounding-over-expected: ``reb_oe`` plus OREB/DREB splits, per player-season.
+
+    Fetches the ``Rebounding`` ``leaguedashptstats`` measure, attaches a
+    ``guard``/``wing``/``big`` role bucket, and computes
+    ``reb_oe = reb - reb_chances * bucket_rate`` (contest-difficulty-adjusted
+    when the endpoint carries separate contested/uncontested CHANCE columns;
+    the live ``stats.nba.com`` payload currently does not, so this degrades
+    gracefully to the plain rate -- see the fixtures README for the finding).
+    OREB/DREB residuals are computed identically against their own chance
+    columns. Baselines are recomputed from the same season slice on every
+    call -- there is no fitted constant or bundled artifact.
+
+    Args:
+        seasons: A single season (``int`` ending-year or ``"YYYY-YY"`` string)
+            or a list of seasons to concatenate.
+        league_id: ``"00"`` NBA (default), ``"10"`` WNBA, ``"20"`` G-League.
+        per_mode: ``per_mode_simple`` passed to the fetch (default ``"Totals"``).
+        by_position: Compute the baseline within ``guard``/``wing``/``big``
+            buckets (default). ``False`` forces one league-wide bucket.
+        positions: Optional pre-fetched positions frame (see
+            :func:`_attach_role_bucket`); mostly for injecting a fixture in tests.
+        return_as_pandas: Return a :class:`pandas.DataFrame` instead of polars.
+        _get_fn: Injectable replacement for ``nba_stats_leaguedashptstats``
+            returning the raw payload dict directly -- offline testing hook.
+
+    Returns:
+        One row per player-season:
+        ``season, player_id, player_name, team_id, position_bucket, gp, min,
+        reb, reb_chances, reb_baseline_rate, reb_expected, reb_oe,
+        reb_oe_per_36, oreb_oe, dreb_oe, league_id``.
+        Empty/malformed input returns a zero-row frame with this schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_tracking_reb_oe
+            df = nba_tracking_reb_oe(2024)
+            print(df.sort("reb_oe", descending=True).head())
+
+        League-wide baseline (no position split)::
+
+            df_all = nba_tracking_reb_oe(2024, by_position=False)
+
+        Pandas output::
+
+            df_pd = nba_tracking_reb_oe(2024, return_as_pandas=True)
+
+        See Also:
+            * `nba_api`_ -- Python NBA/WNBA stats API client
+            * `hoopR`_ -- R companion package for NBA/MBB data
+
+        .. _nba_api: https://github.com/swar/nba_api
+        .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    season_list = _as_season_list(seasons)
+    spec = MEASURE_SPECS["reb"]
+
+    frames = []
+    for season in season_list:
+        fetched = _fetch_leaguedash_tracking(
+            season, spec.measure, league_id=league_id, per_mode=per_mode, _get_fn=_get_fn
+        )
+        if fetched.height == 0:
+            continue
+        frames.append(fetched.with_columns(pl.lit(_season_label(season)).alias("season")))
+
+    if not frames:
+        out = pl.DataFrame(schema=_REB_OE_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    df = pl.concat(frames, how="diagonal_relaxed")
+
+    if by_position:
+        df = _attach_role_bucket(df, season_list[0], league_id=league_id, positions=positions)
+        group_cols: "list[str]" = ["position_bucket"]
+    else:
+        df = df.with_columns(pl.lit("all").alias("position_bucket"))
+        group_cols = []
+
+    out = _over_expected(df, actual=spec.actual, denom=spec.denom, group_cols=group_cols, out_prefix=spec.out_prefix)
+    out = _expected_from_difficulty(out, spec, group_cols)
+
+    for sub in ("oreb", "dreb"):
+        denom_sub = f"{sub}_chances"
+        if sub in out.columns and denom_sub in out.columns:
+            out = _over_expected(out, actual=sub, denom=denom_sub, group_cols=group_cols, out_prefix=sub)
+        else:
+            out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias(f"{sub}_oe"))
+
+    out = out.with_columns(
+        pl.when(pl.col("min") > 0)
+        .then(pl.col("reb_oe") / (pl.col("min") / 36.0))
+        .otherwise(None)
+        .alias("reb_oe_per_36")
+    )
+    out = out.with_columns(pl.lit(league_id).alias("league_id"))
+
+    out = _finalize_schema(out, _REB_OE_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out
