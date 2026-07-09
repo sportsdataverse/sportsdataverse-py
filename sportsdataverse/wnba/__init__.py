@@ -29,3 +29,4 @@ from sportsdataverse.wnba.wnba_engine import (  # noqa: F401
     wnba_rapm_from_games,
 )
 from sportsdataverse.wnba.wnba_shot_value import *
+from sportsdataverse.wnba.wnba_playtype_impact import *
