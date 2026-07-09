@@ -1856,9 +1856,14 @@ Fits `points_allowed_per_100 ~ defender_FE + offense_FE` via
 reusing the shipped RAPM ridge machinery on the
 `build_matchup_drapm_design` two-way-FE design.
 
-**Sign convention:** `matchup_drapm = -100 * beta_defender` (centered),
-so higher is better defense (fewer points allowed), matching the
-`~sportsdataverse.nba.nba_rapm.nba_rapm` `d_rapm` convention.
+**Sign + scale:** the design target `y` is already points-allowed *per 100*
+matchup possessions (`100 * player_pts / partial_poss`), so the defender
+coefficient is already on the per-100 scale -- `matchup_drapm =
+-(beta_defender - mean_beta_defender)` (centered, NO extra ×100, unlike
+`~sportsdataverse.nba.nba_rapm.nba_rapm` whose `y` is per-*possession*
+and needs the ×100). Sign is negated so higher = better defense (fewer points
+allowed), matching the `d_rapm` convention. Typical magnitudes are a few to
+low-double-digit points per 100 vs the league defender average.
 
 **Parameters**
 
