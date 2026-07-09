@@ -462,4 +462,5 @@ files = [
     "sportsdataverse/nhl/nhl_faceoff_value.py",
     "sportsdataverse/nhl/nhl_penalty_value.py",
     "sportsdataverse/nhl/nhl_expected_assists.py",
+    "sportsdataverse/nhl/nhl_zone_transitions.py",
 ]

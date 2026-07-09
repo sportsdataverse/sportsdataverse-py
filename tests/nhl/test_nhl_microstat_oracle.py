@@ -15,6 +15,7 @@ from sportsdataverse.nhl.nhl_expected_assists import extract_goals_with_assists,
 from sportsdataverse.nhl.nhl_faceoff_value import extract_faceoffs, _taker_perspective_rows, fit_faceoff_context
 from sportsdataverse.nhl.nhl_microstat_constants import fit_shot_xg, rel_error, split_half_stability
 from sportsdataverse.nhl.nhl_penalty_value import extract_penalties, nhl_penalty_value
+from sportsdataverse.nhl.nhl_zone_transitions import infer_zone_transitions
 
 from tests.nhl.conftest import games_appeared
 
@@ -245,4 +246,47 @@ def test_expected_assist_unbiasedness_and_stability(oracle_pbp: pl.DataFrame) ->
     assert stability >= ASSIST_STABILITY_FLOOR, (
         f"assist-involvement per-game split-half stability {stability:.4f} below floor "
         f"{ASSIST_STABILITY_FLOOR} -- check the assist credit mapping before lowering"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 -- zone-entry / zone-exit value (model 1, constrained 🟡)
+# ---------------------------------------------------------------------------
+
+# The controlled/dump LABEL is a pbp heuristic (no manual-tag feed), so its
+# per-player rate is noisy (~0 / slightly negative split-half at this
+# exposure). Entry *rates* are stable regardless -- that's the point of
+# gating rates not labels (per the plan). Observed all-entry per-game rate
+# split-half Spearman on players with >=2 games each half (476 players):
+# ~0.28 (uses the independent games-played denominator). Floor conservative
+# below observed.
+ZONE_MIN_GAMES_PER_HALF = 2
+ZONE_ENTRY_STABILITY_FLOOR = 0.15
+
+
+def test_zone_entry_rate_stability(oracle_pbp: pl.DataFrame) -> None:
+    tr = infer_zone_transitions(oracle_pbp)
+    entries = tr.filter(pl.col("transition_type") == "entry").select("player_id", "game_id")
+    assert entries.height > 500, "zone-entry corpus unexpectedly small"
+
+    games = oracle_pbp.select("game_id").unique().sort("game_id").with_row_index("g")
+    half_of = games.with_columns((pl.col("g") % 2).alias("half")).select("game_id", "half")
+    gp = (
+        games_appeared(oracle_pbp)
+        .join(half_of, on="game_id")
+        .group_by(["player_id", "half"])
+        .agg(pl.col("game_id").n_unique().alias("gp"))
+    )
+    eligible = (
+        gp.filter(pl.col("gp") >= ZONE_MIN_GAMES_PER_HALF)
+        .group_by("player_id")
+        .agg(pl.len().alias("halves"))
+        .filter(pl.col("halves") == 2)["player_id"]
+    )
+    ev = entries.join(half_of, on="game_id").filter(pl.col("player_id").is_in(eligible.implode()))
+    rate_frame = ev.group_by(["player_id", "half"]).agg(pl.len().alias("cnt")).join(gp, on=["player_id", "half"])
+    stability = split_half_stability(rate_frame, id_col="player_id", half_col="half", num_col="cnt", den_col="gp")
+    assert stability >= ZONE_ENTRY_STABILITY_FLOOR, (
+        f"zone-entry per-game split-half stability {stability:.4f} below floor "
+        f"{ZONE_ENTRY_STABILITY_FLOOR} -- debug the entry inference before lowering"
     )
