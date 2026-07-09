@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import os
 import sys
+import time
 
 import polars as pl
 
@@ -31,12 +32,31 @@ from sportsdataverse.nhl.nhl_edge import (  # noqa: E402
 
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "tests", "fixtures", "nhl_microstat")
 
-# 40 completed 2023-24 regular-season games (game_id = 2023020001..2023020040).
-GAME_IDS = [2023020001 + i for i in range(40)]
+# 120 completed 2023-24 regular-season games (game_id = 2023020001..2023020120).
+# Bumped from an initial 40-game slice: penalty/assist events are sparse
+# enough per-player that a 40-game sample hit a "zero-sum" split-half
+# artifact (players filtered to a narrow total-count band get spuriously
+# anti-correlated halves purely because their two half-counts must sum to
+# a similar small total) -- see dev/nhl_microstat notes in Task 2.2. More
+# games widens the per-player total-count range enough for real skill
+# signal to show through that artifact. A first attempt at 200 games with no
+# request pacing silently degraded to near-empty data (api-web's _get()
+# swallows a 429/timeout into `{}` with no exception -- see REQUEST_SLEEP_S).
+GAME_IDS = [2023020001 + i for i in range(120)]
 
 # A handful of games whose rosters seed the EDGE skater sample.
 EDGE_ROSTER_GAME_IDS = [2023020001, 2023020010, 2023020020]
 EDGE_SEASON = 2024  # -> "20232024"
+
+# api-web's shared `_get()` returns `{}` on ANY failure (timeout, 429, 5xx)
+# with no exception raised -- a rate-limit trip is invisible unless we check
+# for and retry an empty result ourselves. Small inter-request delay keeps
+# the sequential request rate polite; MIN_EXPECTED_PLAYS flags a
+# suspiciously-empty pbp payload (a real completed game has ~250-400 plays)
+# for one retry after a short backoff instead of silently accepting it.
+REQUEST_SLEEP_S = 0.2
+RETRY_BACKOFF_S = 2.0
+MIN_EXPECTED_PLAYS = 100
 
 PBP_RENAME = {
     "details_event_owner_team_id": "event_owner_team_id",
@@ -97,7 +117,11 @@ PBP_CONTRACT = [
 
 def _capture_game_pbp(game_id: int) -> pl.DataFrame:
     df = nhl_web_pbp(game_id)
+    if df.height < MIN_EXPECTED_PLAYS:
+        time.sleep(RETRY_BACKOFF_S)
+        df = nhl_web_pbp(game_id)
     if df.height == 0:
+        print(f"WARNING: game {game_id} returned 0 plays after retry (likely rate-limited/blocked)")
         return pl.DataFrame(schema={c: pl.Utf8 for c in PBP_CONTRACT})
     box = nhl_boxscore(game_id, return_parsed=False)
     home_team_id = str((box or {}).get("homeTeam", {}).get("id", ""))
@@ -171,19 +195,23 @@ def main() -> None:
             frames.append(_capture_game_pbp(gid))
         except Exception as exc:  # noqa: BLE001 -- best-effort capture, skip a bad game
             print(f"skip game {gid}: {exc}")
+        time.sleep(REQUEST_SLEEP_S)
     pbp = pl.concat(frames, how="vertical_relaxed")
     pbp_path = os.path.join(FIXTURES_DIR, "pbp_2024_slice.parquet")
     pbp.write_parquet(pbp_path)
     print(f"wrote {pbp_path}: {pbp.height} rows across {len(GAME_IDS)} games")
 
     skater_ids = _edge_roster_ids()
+    print(f"seeded {len(skater_ids)} EDGE skater ids from rosters")
     rows = []
     for pid in skater_ids:
         try:
             row = _capture_edge_skater(pid)
         except Exception as exc:  # noqa: BLE001
             print(f"skip skater {pid}: {exc}")
+            time.sleep(REQUEST_SLEEP_S)
             continue
+        time.sleep(REQUEST_SLEEP_S)
         if row is not None:
             rows.append(row)
     edge = (

@@ -21,8 +21,13 @@ suite once these files exist.
   parsed via `parse_nhl_web_pbp`, plus `nhl_boxscore` for `home_team_id`.
 - **Capture date:** 2026-07-08.
 - **Season:** 2023-24 regular season (`season=2023`).
-- **Games:** 40 consecutive regular-season games, `game_id` 2023020001-2023020040.
-- **Row count:** 13,180 plays.
+- **Games:** 120 consecutive regular-season games, `game_id` 2023020001-2023020120.
+  (Bumped from an initial 40-game slice: penalty/assist microstats are rare
+  enough per player that 40 games left the rate-stability oracles
+  underpowered. 120 consecutive games is still an early-season window, so
+  per-player exposure is ~6 games -- the penalty stability gate is
+  correctly-signed but weak; see `test_nhl_microstat_oracle.py`.)
+- **Row count:** 38,082 plays (7,016 faceoffs, 1,135 penalties, 754 goals).
 - **IDs:** `game_id`, `event_owner_team_id`, `home_team_id`, and every
   `*_player_id` column are `Utf8` (cast from the raw integer via
   `cast(Float64, strict=False).cast(Int64, strict=False).cast(Utf8)` --
