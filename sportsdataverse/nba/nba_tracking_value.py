@@ -1044,3 +1044,203 @@ def nba_tracking_touch_value(
 
     out = _finalize_schema(out, _TOUCH_OE_SCHEMA)
     return out.to_pandas() if return_as_pandas else out
+
+
+# ---------------------------------------------------------------------------
+# Phase 6 -- rim-protection / shot-defend value
+# ---------------------------------------------------------------------------
+
+_RIM_PROTECT_SCHEMA: "dict[str, pl.DataType]" = {
+    "season": pl.Int64,
+    "player_id": pl.Utf8,
+    "player_name": pl.Utf8,
+    "team_id": pl.Utf8,
+    "position_bucket": pl.Utf8,
+    "gp": pl.Int64,
+    "min": pl.Float64,
+    "d_fga": pl.Float64,
+    "d_fgm": pl.Float64,
+    "d_fg_pct": pl.Float64,
+    "normal_fg_pct": pl.Float64,
+    "rim_protect_pts_saved": pl.Float64,
+    "rim_protect_pts_saved_per_36": pl.Float64,
+    "source": pl.Utf8,
+    "league_id": pl.Utf8,
+}
+
+
+def _enrich_shotdefend_rim_band(
+    df: pl.DataFrame,
+    season: "int | str",
+    *,
+    league_id: str,
+    max_players: int,
+    _defend_get_fn: Optional[Callable[..., dict]] = None,
+) -> pl.DataFrame:
+    """Replace ``d_fga``/``d_fgm``/``d_fg_pct`` with the Less-Than-6-Ft band from
+    ``nba_stats_playerdashptshotdefend`` for the top-*max_players* by ``d_fga``.
+
+    Args:
+        df: Frame carrying ``player_id`` (``Utf8``) and ``d_fga``.
+        season: Season passed to the per-player fetch.
+        league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League.
+        max_players: Cap on the number of per-player fetches.
+        _defend_get_fn: Injectable replacement for ``nba_stats_playerdashptshotdefend``
+            returning the raw payload dict directly.
+
+    Returns:
+        *df* restricted to the players successfully enriched, with
+        ``d_fga``/``d_fgm``/``d_fg_pct`` replaced by the rim-band figures.
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_playerdashptshotdefend  # noqa: PLC0415
+
+    fetch = _defend_get_fn if _defend_get_fn is not None else nba_stats_playerdashptshotdefend
+    top_ids = df.sort("d_fga", descending=True).head(max_players)["player_id"].to_list()
+
+    rows: list[dict] = []
+    for pid in top_ids:
+        raw = fetch(player_id=pid, season=_season_str(season), league_id=league_id, return_parsed=False)
+        parsed = parse_nba_stats_result_sets(raw)
+        frame = parsed if isinstance(parsed, pl.DataFrame) else None
+        if frame is None and isinstance(parsed, dict):
+            for candidate in parsed.values():
+                if isinstance(candidate, pl.DataFrame) and "less_than6_ft_fga" in candidate.columns:
+                    frame = candidate
+                    break
+        if frame is None or frame.height == 0 or "less_than6_ft_fga" not in frame.columns:
+            continue
+        rows.append(
+            {
+                "player_id": pid,
+                "d_fga": float(frame["less_than6_ft_fga"].sum()),
+                "d_fgm": float(frame["less_than6_ft_fgm"].sum()) if "less_than6_ft_fgm" in frame.columns else None,
+                "d_fg_pct": float(frame["less_than6_ft_fg_pct"].to_list()[0])
+                if "less_than6_ft_fg_pct" in frame.columns
+                else None,
+            }
+        )
+
+    if not rows:
+        return df.head(0)
+    enriched = pl.DataFrame(rows).with_columns(pl.col("player_id").cast(pl.Utf8))
+    return df.drop(["d_fga", "d_fgm", "d_fg_pct"]).join(enriched, on="player_id", how="inner")
+
+
+def nba_tracking_rim_protect_value(
+    seasons: "int | str | list",
+    *,
+    league_id: str = "00",
+    per_mode: str = "Totals",
+    by_position: bool = True,
+    positions: Optional[pl.DataFrame] = None,
+    source: str = "leaguedash",
+    max_players: int = 0,
+    return_as_pandas: bool = False,
+    _get_fn: Optional[Callable[..., dict]] = None,
+    _defend_get_fn: Optional[Callable[..., dict]] = None,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Rim-protection / shot-defend points-saved over expected, per player-season.
+
+    Fetches the ``Defense`` ``leaguedashptstats`` measure -- which on the live
+    ``stats.nba.com`` payload exposes only rim-band defended shooting
+    (``def_rim_fgm``/``def_rim_fga``/``def_rim_fg_pct``, no separate overall
+    figure -- see the fixtures README) -- and computes
+    ``rim_protect_pts_saved = (normal_fg_pct - d_fg_pct) * d_fga * 2`` where
+    ``normal_fg_pct`` is the bucket-mean defended rate (there is no
+    shooters'-own-average column on this endpoint, so the bucket mean is the
+    baseline; this is the same attempts-weighted construction as every other
+    model, just sign-flipped so a defender who holds shooters BELOW the
+    bucket mean gets a positive points-saved value).
+
+    ``source="shotdefend"`` swaps in the ``Less-Than-6-Ft`` band from
+    ``nba_stats_playerdashptshotdefend`` for the top-``max_players`` defenders
+    by attempt volume (capped, optional -- never a hard dependency);
+    ``max_players=0`` (default) uses the leaguedash figures for everyone.
+
+    Args:
+        seasons: A single season or list of seasons.
+        league_id: ``"00"`` NBA (default), ``"10"`` WNBA, ``"20"`` G-League.
+        per_mode: ``per_mode_simple`` passed to the fetch (default ``"Totals"``).
+        by_position: Compute the baseline within role buckets (default);
+            ``False`` forces one league-wide bucket.
+        positions: Optional pre-fetched positions frame.
+        source: ``"leaguedash"`` (default) or ``"shotdefend"``.
+        max_players: Cap on per-player ``shotdefend`` enrichment fetches;
+            ignored unless ``source="shotdefend"``.
+        return_as_pandas: Return a :class:`pandas.DataFrame` instead of polars.
+        _get_fn: Injectable replacement for ``nba_stats_leaguedashptstats``.
+        _defend_get_fn: Injectable replacement for ``nba_stats_playerdashptshotdefend``.
+
+    Returns:
+        One row per player-season:
+        ``season, player_id, player_name, team_id, position_bucket, gp, min,
+        d_fga, d_fgm, d_fg_pct, normal_fg_pct, rim_protect_pts_saved,
+        rim_protect_pts_saved_per_36, source, league_id``. Empty/malformed
+        input returns a zero-row frame with this schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_tracking_rim_protect_value
+            df = nba_tracking_rim_protect_value(2024)
+            print(df.sort("rim_protect_pts_saved", descending=True).head())
+
+        See Also:
+            * `nba_api`_ -- Python NBA/WNBA stats API client
+
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    season_list = _as_season_list(seasons)
+    spec = MEASURE_SPECS["rim"]
+
+    frames = []
+    for season in season_list:
+        fetched = _fetch_leaguedash_tracking(
+            season, spec.measure, league_id=league_id, per_mode=per_mode, _get_fn=_get_fn
+        )
+        if fetched.height == 0:
+            continue
+        rename_map = {spec.denom: "d_fga", spec.actual: "d_fgm"}
+        if "def_rim_fg_pct" in fetched.columns:
+            rename_map["def_rim_fg_pct"] = "d_fg_pct"
+        rename_map = {k: v for k, v in rename_map.items() if k in fetched.columns and k != v}
+        if rename_map:
+            fetched = fetched.rename(rename_map)
+        frames.append(fetched.with_columns(pl.lit(_season_label(season)).alias("season")))
+
+    if not frames:
+        out = pl.DataFrame(schema=_RIM_PROTECT_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    df = pl.concat(frames, how="diagonal_relaxed")
+
+    if by_position:
+        df = _attach_role_bucket(df, season_list[0], league_id=league_id, positions=positions)
+        group_cols: "list[str]" = ["position_bucket"]
+    else:
+        df = df.with_columns(pl.lit("all").alias("position_bucket"))
+        group_cols = []
+
+    if source == "shotdefend" and max_players > 0:
+        df = _enrich_shotdefend_rim_band(
+            df, season_list[0], league_id=league_id, max_players=max_players, _defend_get_fn=_defend_get_fn
+        )
+        used_source = "shotdefend"
+    else:
+        used_source = "leaguedash"
+
+    out = _over_expected(df, actual="d_fgm", denom="d_fga", group_cols=group_cols, out_prefix="rim")
+    out = out.rename({"rim_baseline_rate": "normal_fg_pct"})
+    out = out.with_columns((-(pl.col("rim_oe")) * 2.0).alias("rim_protect_pts_saved")).drop(
+        [c for c in ("rim_oe", "rim_expected") if c in out.columns]
+    )
+    out = out.with_columns(
+        pl.when(pl.col("min") > 0)
+        .then(pl.col("rim_protect_pts_saved") / (pl.col("min") / 36.0))
+        .otherwise(None)
+        .alias("rim_protect_pts_saved_per_36")
+    )
+    out = out.with_columns(pl.lit(used_source).alias("source"), pl.lit(league_id).alias("league_id"))
+
+    out = _finalize_schema(out, _RIM_PROTECT_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out
