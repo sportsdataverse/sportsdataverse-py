@@ -1,9 +1,10 @@
 """Internal-oracle gates for the NHL microstat value spine (T5.2).
 
 Every model ends with a gate asserting agreement with an internal oracle on
-the committed `tests/fixtures/nhl_microstat/` corpus -- never lower a floor
-to pass; debug the model. Floors below are set from the observed value at
-gate time (rounded down/conservative), per the plan's Global Constraints.
+the committed `tests/fixtures/nhl_microstat/` corpus (120-game 2023-24 slice)
+-- never lower a floor to pass; debug the model. Floors below are set from the
+observed value at gate time (rounded down/conservative), per the plan's Global
+Constraints.
 """
 
 from __future__ import annotations
@@ -12,54 +13,60 @@ import polars as pl
 
 from sportsdataverse.nhl.nhl_faceoff_value import extract_faceoffs, _taker_perspective_rows, fit_faceoff_context
 from sportsdataverse.nhl.nhl_microstat_constants import split_half_stability
+from sportsdataverse.nhl.nhl_penalty_value import extract_penalties, nhl_penalty_value
+
+from tests.nhl.conftest import games_appeared
 
 # ---------------------------------------------------------------------------
 # Phase 1 -- faceoff-win value (model 4)
 # ---------------------------------------------------------------------------
 
-# Observed on the committed 2023-24 slice (40 games, 2373 faceoffs) after
-# fixing the loser-row strength-state flip bug (Task 1.2): max |mean_pred -
-# mean_actual| across calibration buckets with n>=20 is ~0.058. Floor set
-# conservatively above that observed value -- if this regresses, debug the
-# context logistic / zone-strength flip logic, do not raise the tolerance
-# further without re-deriving from a fresh observed run.
-CALIBRATION_ABS_DIFF_FLOOR = 0.10
-CALIBRATION_MIN_BUCKET_N = 20
+# The context logistic emits only ~18 distinct predicted values (one per
+# zone x strength x is_home cell), so the honest calibration test groups BY
+# that context cell -- ranking into deciles/rounded buckets splits a
+# homogeneous prediction against heterogeneous actuals and is meaningless.
+# Observed on the 120-game slice: max |mean_pred - mean_actual| across cells
+# with n>=50 is ~0.021 (the four tiny special-teams cells at n~30 carry
+# genuine sampling variance up to ~0.10, so they're excluded by the n floor).
+# Floor conservative above the observed 0.021 -- if this regresses, debug the
+# zone/strength encoding, do not raise the tolerance.
+CALIBRATION_ABS_DIFF_FLOOR = 0.03
+CALIBRATION_MIN_CELL_N = 50
 
-# Observed split-half Spearman on players with >=10 total faceoffs (144 of
-# 283 players; ~10/half): ~0.20. This is a *within-a-40-game-slice* number --
-# thin per-player samples (median 10 total draws) genuinely damp the
-# correlation vs. a full-season sample; the floor is conservative relative
-# to that observed value, not an aspirational full-season number.
+# Observed split-half Spearman on players with >=10 total faceoff attempts
+# (194 players, ~ odd/even by event index): ~0.21. Thin per-player exposure
+# in a 120-consecutive-game (early-season) slice damps this vs. a full
+# season; the floor is conservative relative to the observed value.
 SPLIT_HALF_MIN_ATTEMPTS = 10
 SPLIT_HALF_FLOOR = 0.15
 
 
 def test_faceoff_calibration_and_stability(oracle_pbp: pl.DataFrame) -> None:
     fo = extract_faceoffs(oracle_pbp)
-    assert fo.height > 0
+    assert fo.height > 1000, "faceoff corpus unexpectedly small"
 
     model = fit_faceoff_context(fo)
     taker = _taker_perspective_rows(fo)
     expected = model.predict(taker)
-    taker = taker.with_columns(expected.alias("expected_win"), expected.round(4).alias("_bucket"))
+    taker = taker.with_columns(expected.alias("expected_win"))
 
-    calibration = taker.group_by("_bucket").agg(
+    # Calibration by real context cell (see CALIBRATION_* docstring above).
+    calibration = taker.group_by(["zone_code", "strength_state", "is_home"]).agg(
         pl.col("expected_win").mean().alias("mean_pred"),
         pl.col("won").mean().alias("mean_actual"),
         pl.len().alias("n"),
     )
-    big_buckets = calibration.filter(pl.col("n") >= CALIBRATION_MIN_BUCKET_N)
-    assert big_buckets.height > 0
-    max_diff = (big_buckets["mean_pred"] - big_buckets["mean_actual"]).abs().max()
+    big_cells = calibration.filter(pl.col("n") >= CALIBRATION_MIN_CELL_N)
+    assert big_cells.height >= 10, "too few populated context cells to gate calibration"
+    max_diff = (big_cells["mean_pred"] - big_cells["mean_actual"]).abs().max()
     assert max_diff is not None and max_diff <= CALIBRATION_ABS_DIFF_FLOOR, (
         f"faceoff context-logistic calibration off by {max_diff:.4f} "
         f"(floor {CALIBRATION_ABS_DIFF_FLOOR}) -- debug the zone/strength "
-        "flip logic before touching this floor"
+        "encoding before touching this floor"
     )
 
     # Split-half player win% stability, restricted to players with enough
-    # attempts to be non-degenerate (see SPLIT_HALF_MIN_ATTEMPTS docstring above).
+    # attempts to be non-degenerate (see SPLIT_HALF_MIN_ATTEMPTS docstring).
     half_taker = taker.with_columns((pl.arange(0, pl.len()) % 2).alias("half"), pl.lit(1).alias("one"))
     attempt_counts = half_taker.group_by("player_id").agg(pl.len().alias("n_attempts"))
     eligible = attempt_counts.filter(pl.col("n_attempts") >= SPLIT_HALF_MIN_ATTEMPTS)["player_id"]
@@ -69,4 +76,96 @@ def test_faceoff_calibration_and_stability(oracle_pbp: pl.DataFrame) -> None:
     assert stability >= SPLIT_HALF_FLOOR, (
         f"faceoff split-half stability {stability:.4f} below floor {SPLIT_HALF_FLOOR} "
         "-- debug before lowering this floor"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Phase 2 -- penalty drawn/taken value (model 5)
+# ---------------------------------------------------------------------------
+
+# Conservation is exact for penalties that have BOTH an identified committer
+# and an identified drawer -- that penalty's taken side (one player) exactly
+# offsets its drawn side (another). Team/bench penalties (too-many-men,
+# delay-of-game puck-over-glass, bench minors) carry a committer but no
+# individual drawer (or vice versa: ~87 null-drawer, ~23 null-committer in
+# the corpus), so they legitimately break GLOBAL conservation. The gate
+# therefore restricts to the both-ids subset, where the net sums to 0 within
+# float epsilon.
+CONSERVATION_TOL = 1e-6
+
+# Penalty involvement (drawn+taken) is a rare event: at ~9.5 penalties/game
+# split among ~40 skaters, per-player counts over a 120-consecutive-game
+# (early-season) slice are Poisson-noise-dominated (~3 games/player each
+# half). The correct, non-degenerate metric is a per-GAME rate with an
+# INDEPENDENT games-played denominator (raw odd/even half counts filtered on
+# their total are spuriously anti-correlated -- conditioning on the sum; see
+# tests.nhl.conftest.games_appeared). Observed odd/even-game per-game
+# involvement-rate split-half Spearman on players with >=2 games each half
+# (488 players): ~0.069 -- a genuinely underpowered but correctly-signed
+# signal; conservation is the hard exact oracle, this is the directional one.
+# Floor conservative below the observed 0.069.
+PENALTY_MIN_GAMES_PER_HALF = 2
+PENALTY_STABILITY_FLOOR = 0.03
+
+
+def test_penalty_conservation_and_stability(oracle_pbp: pl.DataFrame) -> None:
+    out = nhl_penalty_value(oracle_pbp)
+    assert out.height > 100, "penalty player table unexpectedly small"
+
+    # Conservation on the both-ids subset (see CONSERVATION_TOL docstring):
+    # team/bench penalties with a missing counterpart break global conservation.
+    both_ids = oracle_pbp.filter(
+        (pl.col("type_desc_key") == "penalty")
+        & pl.col("drawn_player_id").is_not_null()
+        & pl.col("committed_player_id").is_not_null()
+    )
+    total = nhl_penalty_value(both_ids)["net_penalty_value"].sum()
+    assert abs(total) < CONSERVATION_TOL, (
+        f"penalty net value should conserve to 0 on the both-ids subset, got {total} "
+        "-- check the drawn/committed id mapping (a common flip)"
+    )
+
+    pen = extract_penalties(oracle_pbp)
+    games = oracle_pbp.select("game_id").unique().sort("game_id").with_row_index("g")
+    half_of = games.with_columns((pl.col("g") % 2).alias("half")).select("game_id", "half")
+
+    # Games played per (player, half) -- the independent denominator.
+    gp = (
+        games_appeared(oracle_pbp)
+        .join(half_of, on="game_id")
+        .group_by(["player_id", "half"])
+        .agg(pl.col("game_id").n_unique().alias("gp"))
+    )
+    eligible = (
+        gp.filter(pl.col("gp") >= PENALTY_MIN_GAMES_PER_HALF)
+        .group_by("player_id")
+        .agg(pl.len().alias("halves"))
+        .filter(pl.col("halves") == 2)["player_id"]
+    )
+
+    # Penalty involvement (drawn OR taken) count per (player, game, half).
+    involve = pl.concat(
+        [
+            pen.select(pl.col("drawn_player_id").alias("player_id"), "game_id"),
+            pen.select(pl.col("committed_player_id").alias("player_id"), "game_id"),
+        ],
+        how="vertical_relaxed",
+    ).filter(pl.col("player_id").is_not_null())
+    involve = involve.join(half_of, on="game_id").filter(pl.col("player_id").is_in(eligible.implode()))
+
+    # per-(player,half) rate = total involvement / games played that half.
+    rate_frame = (
+        involve.group_by(["player_id", "half"])
+        .agg(pl.len().alias("involve_count"))
+        .join(gp, on=["player_id", "half"])
+        .with_columns(pl.lit(1.0).alias("one_game"))
+    )
+    # split_half_stability computes sum(num)/sum(den) per (id,half); feed one
+    # row per (player,half) with num=involve_count, den=gp -> per-game rate.
+    stability = split_half_stability(
+        rate_frame, id_col="player_id", half_col="half", num_col="involve_count", den_col="gp"
+    )
+    assert stability >= PENALTY_STABILITY_FLOOR, (
+        f"penalty involvement per-game split-half stability {stability:.4f} below floor "
+        f"{PENALTY_STABILITY_FLOOR} -- check the drawn/committed id mapping before lowering"
     )
