@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixes](#fixes)
   - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
   - [NFL — projection & draft spine (player projections → usage shares → availability → draft model)](#nfl--projection--draft-spine-player-projections-%E2%86%92-usage-shares-%E2%86%92-availability-%E2%86%92-draft-model)
   - [NFL — ratings & market spine (power ratings → win prob → spread/total → player props)](#nfl--ratings--market-spine-power-ratings-%E2%86%92-win-prob-%E2%86%92-spreadtotal-%E2%86%92-player-props)
@@ -167,6 +168,13 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixes
+
+- fix(nfl): the DynastyProcess CSV loaders (`load_nfl_ff_playerids`,
+  `load_nfl_ff_rankings`) retry with exponential backoff on transient
+  upstream errors (HTTP 429/5xx) instead of failing on the first hit — the
+  raw-GitHub host rate-limits parallel CI runners.
 
 ### NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)
 
