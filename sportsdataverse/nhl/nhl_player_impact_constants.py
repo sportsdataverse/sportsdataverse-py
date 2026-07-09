@@ -86,12 +86,15 @@ class ImpactConfig:
     xg_booster_league: str = "nhl"
 
 
-# Seed values. `goals_per_win` for the NHL is overwritten by the concrete fit in
-# `dev/nhl_player_impact/fit_goals_per_win.py` (Task 6.2); the seed (~6.0) matches the
-# widely-published NHL rule-of-thumb (Perry/EvolvingHockey, MoneyPuck) pending that fit.
+# `goals_per_win` for the NHL is the fitted output of
+# `dev/nhl_player_impact/fit_goals_per_win.py` (Task 6.2): OLS `wins = a + b*goal_diff`
+# over every team's full 2024-25 regular season (31 teams, `load_nhl_schedule(2025)`),
+# `goals_per_win = 1/b = 6.596` -- run 2026-07-08, consistent with the widely-published
+# NHL rule-of-thumb range (~6-6.5, Perry/EvolvingHockey, MoneyPuck). Every other NHL
+# constant below remains a documented seed pending its own fitting task.
 LEAGUE_CONSTANTS: dict[str, ImpactConfig] = {
     "nhl": ImpactConfig(
-        goals_per_win=6.0,
+        goals_per_win=6.596,
         replacement_ev_off=1.9,
         replacement_ev_def=2.6,
         league_xg_rate_ev=2.5,

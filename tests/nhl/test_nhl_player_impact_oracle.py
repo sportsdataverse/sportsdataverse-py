@@ -186,3 +186,37 @@ def test_special_teams_pp_rate_reconciles_with_league_constant_order_of_magnitud
     assert PP_RATE_RATIO_BAND[0] <= ratio <= PP_RATE_RATIO_BAND[1], (
         f"PP rate reconciliation off: observed={observed_rate:.2f}/60 ratio={ratio:.2f} outside {PP_RATE_RATIO_BAND}"
     )
+
+
+def test_war_runs_on_real_fixture_and_is_bounded():
+    from sportsdataverse.nhl.nhl_war import nhl_skater_war
+
+    war = nhl_skater_war(_pbp(), _shifts(), model_dir=MODELS)
+    assert war.height > 0
+    # A real construction-invariant sanity bound (not a calibration claim): no single
+    # skater's WAR over a 3-game sample should be wildly outsized (catches, e.g., the
+    # unsigned-underflow class of bug fixed in nhl_war.py -- a wrap-around would blow
+    # this by many orders of magnitude).
+    assert war["war"].abs().max() < 50.0
+
+    # NOTE: the plan's "team Sigma(war) approx team wins-above-replacement" gate is a
+    # season-scale check (a 3-game sample has no meaningful win total to compare
+    # against) -- tracked as a follow-up once a full-season fixture/build is available,
+    # not faked here.
+
+
+def test_war_evolvinghockey_concurrent_gate_skipped_when_oracle_blocked():
+    from sportsdataverse.nhl.nhl_war import nhl_skater_war
+
+    eh = pl.read_parquet(FIX / "eh_skaters.parquet")
+    if eh.height == 0:
+        pytest.skip(
+            "EvolvingHockey per-skater WAR sample is data-blocked (subscription-gated) -- "
+            "see tests/fixtures/nhl_player_impact/README.md capture contract."
+        )
+    mine = nhl_skater_war(_pbp(), _shifts(), model_dir=MODELS)
+    joined = mine.join(eh, on="player_id", how="inner")
+    assert joined.height > 0, "no overlapping skaters between mine and EvolvingHockey's sample"
+    FLOOR = 0.6
+    corr = spearman_corr(joined["war"].to_numpy(), joined["war_right"].to_numpy())
+    assert corr >= FLOOR, f"WAR vs EvolvingHockey concurrent validity below floor: {corr:.3f} < {FLOOR}"
