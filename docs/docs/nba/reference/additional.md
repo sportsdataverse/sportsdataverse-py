@@ -2026,6 +2026,102 @@ board = nba_draft_model(2019, college_prior=mbb_prior_df)
 board.filter(pl.col("pro_tier") == "lottery")
 ```
 
+### `nba_expected_turnovers(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_expected_turnovers}
+
+Expected TOV + residual ball-security skill from Synergy play-type mix.
+
+`lg_to_rate_t` = poss-weighted league mean of `turnover_freq` for play
+type `t`; `expected_tov = scale · Σ_t poss_t · lg_to_rate_t`;
+`ball_security_skill = 100·(expected_tov − tov)/poss` (fewer turnovers
+than expected ⇒ positive skill -- sign flipped vs. the foul-drawing model).
+
+`scale = Σ actual tov / Σ raw type-mix estimate` is derived from the
+fetched season itself (covers players below Synergy's per-type
+classification threshold) so `Σ expected_tov ≡ Σ tov` holds exactly.
+Swapping each player's own `turnover_freq` in for the league rate
+reconstructs their real season TOV almost exactly (slope ~1.03, Spearman
+~0.97 on the 2023-24 oracle corpus) -- confirming the column semantics are
+correct. The *expected* (league-rate) version necessarily explains less
+variance than *actual* (turnover-avoidance is a more individual,
+less play-type-bound skill than foul-drawing), so its calibration slope
+runs lower than model (3)'s -- see the oracle gate for the observed floor.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base` measure) frame: `player_id`, `tov`, `poss` (bypasses the live fetch). |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix: `player_id`, `play_type`, `poss`, `turnover_freq`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player: `player_id` (Int64), `poss`/`tov`/ `expected_tov`/`ball_security_skill` (Float64). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_expected_turnovers
+t = nba_expected_turnovers("2023-24")
+print(t.sort("ball_security_skill", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+t = nba_expected_turnovers("2023-24", base=base_df, player_mix=mix_df)
+
+# Pipeline next step
+
+t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
+```
+
+### `nba_foul_drawing(season: 'str', *, league_id: 'str' = '00', base: 'Optional[pl.DataFrame]' = None, advanced: 'Optional[pl.DataFrame]' = None, player_mix: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_foul_drawing}
+
+Expected FTA + residual foul-drawing skill from Synergy play-type mix.
+
+`lg_ft_rate_t` = poss-weighted league mean of `ft_freq` for play type
+`t` (`Σ_players(ft_freq_t·poss_t) / Σ_players(poss_t)`).
+`expected_fta = scale · Σ_t poss_t · lg_ft_rate_t`;
+`foul_draw_skill = 100·(fta − expected_fta)/poss`.
+
+`ft_freq` (Synergy's `ft_poss_pct`) counts FT-drawing *trips*, not
+individual free-throw attempts (a shooting foul is typically a 2-shot
+trip) -- `scale = Σ actual fta / Σ raw trip-based estimate` is derived
+from the fetched season itself (never hard-coded) so the trip-to-attempt
+conversion self-normalizes and `Σ expected_fta ≡ Σ fta` holds exactly.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base` measure) frame: `player_id`, `fta`, `poss` (bypasses the live fetch). |
+| `advanced` | `Optional[DataFrame]` | `None` | Injected `Advanced`-measure frame with `player_id`, `pfd` (personal fouls drawn); optional -- `pfd` is `null` when omitted (`fta` is the always-present proxy). |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix: `player_id`, `play_type`, `poss`, `ft_freq`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per player: `player_id` (Int64), `poss`/`fta`/ `expected_fta`/`foul_draw_skill` (Float64), `pfd` (Float64, null when *advanced* has no data for that player or is omitted). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_foul_drawing
+f = nba_foul_drawing("2023-24")
+print(f.sort("foul_draw_skill", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+f = nba_foul_drawing("2023-24", base=base_df, player_mix=mix_df)
+
+# Pipeline next step
+
+f.filter(pl.col("poss") >= 200).sort("foul_draw_skill", descending=True)
+```
+
 ### `nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_four_factor_rapm}
 
 Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
@@ -2126,6 +2222,54 @@ print(df.sort("la_rapm", descending=True).head())
 # Planted-truth shooter rates (e.g. for testing)
 
 df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
+```
+
+### `nba_matchup_drapm(season: 'str', *, league_id: 'str' = '00', matchups: 'Optional[pl.DataFrame]' = None, config: 'Optional[PlaytypeConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_matchup_drapm}
+
+Matchup-based defensive RAPM (offense-quality-controlled).
+
+Fits `points_allowed_per_100 ~ defender_FE + offense_FE` via
+`~sklearn.linear_model.RidgeCV` (weighted by matchup possessions),
+reusing the shipped RAPM ridge machinery on the
+`build_matchup_drapm_design` two-way-FE design.
+
+**Sign + scale:** the design target `y` is already points-allowed *per 100*
+matchup possessions (`100 * player_pts / partial_poss`), so the defender
+coefficient is already on the per-100 scale -- `matchup_drapm =
+-(beta_defender - mean_beta_defender)` (centered, NO extra ×100, unlike
+`~sportsdataverse.nba.nba_rapm.nba_rapm` whose `y` is per-*possession*
+and needs the ×100). Sign is negated so higher = better defense (fewer points
+allowed), matching the `d_rapm` convention. Typical magnitudes are a few to
+low-double-digit points per 100 vs the league defender average.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame (bypasses the live fetch -- used for tests / oracle fixtures). |
+| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig`; defaults to a fresh instance (`ridge_alphas` = the shared RAPM grid, `min_matchup_poss` = 25.0 inclusion floor). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per defender: `player_id` (Int64), `matchup_drapm` (Float64, points-allowed-per-100 estimate, higher = better defense), `matchup_poss` (Float64, total matchup possessions guarded). Returns a zero-row frame with this schema when the upstream fetch/injection is empty or no row survives the `min_matchup_poss` floor (sparse-coverage leagues never raise).
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_matchup_drapm
+d = nba_matchup_drapm("2023-24")
+print(d.sort("matchup_drapm", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+d = nba_matchup_drapm("2023-24", matchups=matchups_df)
+
+# Pipeline next step
+
+d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
 ```
 
 ### `nba_pbp_disk(game_id, path_to_json)` {#nba_pbp_disk}
@@ -2236,6 +2380,46 @@ One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_e
 ```python
 from sportsdataverse.nba.nba_player_props import nba_player_props
 props = nba_player_props(2024, "401585828", "2", "6")
+```
+
+### `nba_playtype_ratings(season: 'str', *, league_id: 'str' = '00', off_team: 'Optional[pl.DataFrame]' = None, def_team: 'Optional[pl.DataFrame]' = None, schedule: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_playtype_ratings}
+
+Season play-type-adjusted offensive/defensive team ratings.
+
+Fetches (or uses injected) Synergy offensive/defensive team frames plus the
+league schedule, computes raw per-type efficiency
+(`raw_playtype_efficiency`), opponent-adjusts it
+(`adjust_playtype_efficiency`), then rolls up to one row per team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
+| `off_team` | `Optional[DataFrame]` | `None` | Injected Synergy offensive team frame (bypasses the live fetch -- used for tests / oracle fixtures). |
+| `def_team` | `Optional[DataFrame]` | `None` | Injected Synergy defensive team frame. |
+| `schedule` | `Optional[DataFrame]` | `None` | Injected `team_id`/`opp_team_id` schedule frame. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team: `team_id` (Int64), `adj_off`/`adj_def`/`adj_net` (Float64) roll-ups, plus per-type wide columns `adj_off_ppp_<playtype>`/`adj_def_ppp_<playtype>`/`off_freq_<playtype>` (Float64) for each play type present in the data. `adj_off = Σ_t off_freq_t · adj_off_ppp_t · 100` (symmetric for `adj_def` off `def_freq_t`); `adj_net = adj_off - adj_def`. Returns a zero-row frame with the base roll-up schema when the upstream fetch is empty (sparse-coverage leagues never raise).
+
+**Example**
+
+```python
+from sportsdataverse.nba import nba_playtype_ratings
+r = nba_playtype_ratings("2023-24")
+print(r.sort("adj_off", descending=True).head(10))
+
+# Injected offline (oracle / test) path
+
+r = nba_playtype_ratings("2023-24", off_team=off_df, def_team=def_df, schedule=sched_df)
+
+# Pipeline next step
+
+r.filter(pl.col("adj_net") > 0).sort("adj_net", descending=True)
 ```
 
 ### `nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_predict_games}

@@ -80,6 +80,10 @@ from sportsdataverse.nba.nba_war import (  # noqa: F401
     calibrate_replacement_level,
     nba_war,
 )
+from sportsdataverse.nba.nba_playtype import nba_playtype_ratings  # noqa: F401
+from sportsdataverse.nba.nba_matchup_drapm import nba_matchup_drapm  # noqa: F401
+from sportsdataverse.nba.nba_foul_drawing import nba_foul_drawing  # noqa: F401
+from sportsdataverse.nba.nba_expected_turnovers import nba_expected_turnovers  # noqa: F401
 from sportsdataverse.nba.nba_prediction_constants import (  # noqa: F401
     LEAGUE_CONSTANTS,
     LeagueConstants,

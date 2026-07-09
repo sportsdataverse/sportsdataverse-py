@@ -218,13 +218,17 @@ from sportsdataverse.nba import nba_career_trajectory as nba_career_trajectory  
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
 from sportsdataverse.nba import nba_draft_model as nba_draft_model  # noqa: F401
+from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers  # noqa: F401
+from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
 from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
 from sportsdataverse.nba import nba_la_rapm as nba_la_rapm  # noqa: F401
+from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
 from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
+from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
 from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
 from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
 from sportsdataverse.nba import nba_rookie_projection as nba_rookie_projection  # noqa: F401
@@ -466,13 +470,17 @@ __all__ = [
     "nba_darko",
     "nba_decay_rapm",
     "nba_draft_model",
+    "nba_expected_turnovers",
+    "nba_foul_drawing",
     "nba_four_factor_rapm",
     "nba_in_game_win_prob",
     "nba_la_rapm",
+    "nba_matchup_drapm",
     "nba_pbp_disk",
     "nba_player_ages",
     "nba_player_positions",
     "nba_player_props",
+    "nba_playtype_ratings",
     "nba_predict_games",
     "nba_ratings_panel",
     "nba_rookie_projection",

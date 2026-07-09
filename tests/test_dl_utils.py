@@ -94,6 +94,15 @@ class TestDownload:
         # one of the retries succeed and the test fails with "DID NOT
         # RAISE".
         #
+        # A fresh `requests.Session()` (not `download()`'s default shared
+        # module-level session) is required here too: the two preceding
+        # tests in this class already hit this same host through the
+        # shared session, so a keep-alive connection is warm by the time
+        # this test runs. Reusing it lets the request complete inside the
+        # 1ms budget on a fast CI network (observed on windows-latest),
+        # so the deadline never actually gets exercised. A cold session
+        # forces a real DNS+TCP(+TLS) handshake within the deadline.
+        #
         # Accept either Timeout or ConnectionError: at a 1ms deadline the
         # kernel can surface ENETUNREACH / ECONNRESET before requests has
         # a chance to raise its own Timeout, depending on which stage of
@@ -103,7 +112,7 @@ class TestDownload:
         url = "https://jsonplaceholder.typicode.com/posts"
         timeout = 0.001
         with pytest.raises((requests.exceptions.Timeout, requests.exceptions.ConnectionError)):
-            download(url, timeout=timeout, num_retries=0)
+            download(url, timeout=timeout, num_retries=0, session=requests.Session())
 
     # Tests that the function handles an invalid URL
     def test_download_invalid_url(self):
