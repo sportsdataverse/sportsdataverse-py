@@ -227,7 +227,13 @@ def nfl_predict_games(
         )
     )
     win_prob = norm.cdf(out["exp_margin"].to_numpy() / cfg.margin_sd)
-    out = out.with_columns(pl.Series("home_win_prob", win_prob).cast(pl.Float64))
+    out = out.with_columns(pl.Series("home_win_prob", win_prob).cast(pl.Float64)).with_columns(
+        # a team missing from ratings leaves exp_margin null; numpy turns that into
+        # NaN through norm.cdf -- surface it as a proper polars null instead
+        home_win_prob=pl.when(pl.col("exp_margin").is_null())
+        .then(pl.lit(None, dtype=pl.Float64))
+        .otherwise(pl.col("home_win_prob"))
+    )
 
     if odds is not None:
         odds_frame = odds.select(

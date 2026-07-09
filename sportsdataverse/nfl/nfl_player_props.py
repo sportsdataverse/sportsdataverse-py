@@ -383,8 +383,11 @@ def nfl_player_props(
         out = out.with_columns(line=pl.lit(None).cast(pl.Float64))
     p_over = 1.0 - norm.cdf((out["line"].to_numpy() - out["proj_mean"].to_numpy()) / out["proj_sd"].to_numpy())
     out = out.with_columns(pl.Series("p_over", p_over).cast(pl.Float64)).with_columns(
-        # A missing line must yield a NULL p_over (not NaN from the numpy path).
-        p_over=pl.when(pl.col("line").is_null()).then(pl.lit(None, dtype=pl.Float64)).otherwise(pl.col("p_over"))
+        # A missing line OR missing projection inputs must yield a NULL p_over
+        # (not NaN from the numpy path -- norm.cdf(NaN) slips past is_null()).
+        p_over=pl.when(pl.col("line").is_null() | pl.col("proj_mean").is_null() | pl.col("proj_sd").is_null())
+        .then(pl.lit(None, dtype=pl.Float64))
+        .otherwise(pl.col("p_over"))
     )
     out = out.select(*_PROPS_OUTPUT_SCHEMA.keys())
     return out.to_pandas() if return_as_pandas else out

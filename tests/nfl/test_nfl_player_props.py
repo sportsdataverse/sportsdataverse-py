@@ -229,3 +229,26 @@ def test_props_line_join_and_pandas(monkeypatch):
     pdf = mod.nfl_player_props(2023, return_as_pandas=True)
     assert not isinstance(pdf, pl.DataFrame)
     assert list(pdf.columns) == PROPS_COLS
+
+
+def test_props_null_projection_yields_null_p_over_not_nan(monkeypatch):
+    import math
+
+    mod = _assembly_fixtures(monkeypatch)
+    # drop CHI/SF from ratings: wr2/rb2's game loses its script -> proj_mean null;
+    # a supplied line must then yield a NULL p_over, never NaN through norm.cdf
+    ratings = pl.DataFrame(
+        {
+            "team_id": ["KC", "LV"],
+            "adj_off_epa": [0.10, -0.05],
+            "adj_def_epa": [0.00, 0.10],
+            "adj_net": [0.10, -0.15],
+        }
+    )
+    monkeypatch.setattr(mod, "nfl_ratings", lambda seasons, **kw: ratings)
+    lines = pl.DataFrame({"game_id": ["g2"], "player_id": ["wr2"], "stat": ["receiving_yards"], "line": [60.5]})
+    out = mod.nfl_player_props(2023, lines=lines)
+    wr2 = out.filter((pl.col("player_id") == "wr2") & (pl.col("stat") == "receiving_yards")).row(0, named=True)
+    assert wr2["line"] == 60.5
+    assert wr2["p_over"] is None or not math.isnan(wr2["p_over"])
+    assert wr2["p_over"] is None  # null, not NaN

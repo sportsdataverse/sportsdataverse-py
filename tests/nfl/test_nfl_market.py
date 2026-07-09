@@ -98,3 +98,20 @@ def test_total_rises_with_offense_falls_with_defense():
     cfg = get_constants("modern")
     assert abs(league_avg - cfg.avg_total) < 1e-12
     assert strong_off > league_avg > strong_def
+
+
+def test_predict_games_missing_team_yields_null_not_nan():
+    # a team absent from ratings must surface as null win prob, not NaN
+    # (numpy converts null exp_margin to NaN through norm.cdf)
+    games = pl.DataFrame(
+        {
+            "game_id": ["g9"],
+            "home_team_id": ["A"],
+            "away_team_id": ["ZZ"],  # not in ratings
+            "neutral_site": [False],
+        }
+    )
+    out = nfl_predict_games(games, _ratings())
+    row = out.row(0, named=True)
+    assert row["exp_margin"] is None
+    assert row["home_win_prob"] is None  # null, not NaN
