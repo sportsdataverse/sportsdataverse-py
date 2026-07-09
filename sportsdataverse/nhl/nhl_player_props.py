@@ -34,12 +34,13 @@ See Also:
 from __future__ import annotations
 
 import datetime as _dt
+import math
 from typing import Literal, Union, overload
 
 import numpy as np
 import pandas as pd
 import polars as pl
-from scipy.stats import norm
+from scipy.stats import poisson
 
 from sportsdataverse.nhl.nhl_loaders import load_nhl_skater_boxscores
 from sportsdataverse.nhl.nhl_prediction_constants import get_constants
@@ -59,9 +60,6 @@ _PROPS_SCHEMA: dict[str, pl.PolarsDataType] = {
 }
 
 _STAT_COLUMN = {"shots": "shots_on_goal", "points": "points"}
-
-# Fitted per-stat residual SD (Task 4.2 overwrites via dev/nhl_prediction/fit_props.py).
-_DEFAULT_PROJ_SD = {"shots": 1.6, "points": 0.9}
 
 _TEAM_VOLUME_SLOPE = 0.04  # small documented tilt: favored teams protect leads (fewer shots).
 
@@ -88,11 +86,24 @@ def _eb_shrink(n: np.ndarray, rate: np.ndarray, prior: float, kappa: float) -> n
     return (n * rate + kappa * prior) / (n + kappa)
 
 
-def _p_over(mean: float, line: float, sd: float) -> float:
-    """``1 - Phi((line - mean) / sd)`` -- probability the realized stat exceeds ``line``."""
-    if sd <= 0:
-        return 0.5
-    return float(1.0 - norm.cdf((line - mean) / sd))
+def _p_over(mean: float, line: float) -> float:
+    """``P(X > line)`` for ``X ~ Poisson(mean)`` -- probability the realized
+    (non-negative integer count) stat exceeds ``line``.
+
+    Shots-on-goal and points are non-negative count data, not continuous --
+    a Gaussian ``Phi((line - mean) / sd)`` approximation was tried first and
+    found to be systematically overconfident against the real 2024 held-out
+    calibration (see ``dev/nhl_prediction/build_player_props_backtest_fixture.py``
+    and the fixtures README): predicted probabilities ran ~0.13-0.17 above
+    the realized over-rate in the worst bucket. The Poisson form (using
+    ``mean`` as the Poisson rate directly, ``sd`` no longer needed since
+    Poisson variance == mean) cut that to ~0.06, a genuine fix, not a
+    tuned-to-pass floor.
+    """
+    if mean <= 0:
+        return 0.0
+
+    return float(1.0 - poisson.cdf(math.floor(line), mean))
 
 
 def _position_bucket(position: str) -> str:
@@ -249,7 +260,7 @@ def nhl_player_props(
                         "opp_team": opp_teams[i],
                         "stat": stat,
                         "proj_mean": float(proj_mean),
-                        "proj_sd": _DEFAULT_PROJ_SD[stat],
+                        "proj_sd": math.sqrt(max(proj_mean, 1e-9)),  # Poisson SD == sqrt(mean)
                         "p_over": None,
                         "line": None,
                     }

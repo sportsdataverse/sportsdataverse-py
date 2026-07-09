@@ -34,13 +34,22 @@ def test_eb_shrink_low_n_pulls_toward_prior():
     assert abs(out[0] - 2.0) < abs(high_n[0] - 2.0)
 
 
-def test_p_over_at_line_equal_to_mean_is_half():
-    assert abs(_p_over(mean=3.0, line=3.0, sd=1.5) - 0.5) < 1e-9
+def test_p_over_is_poisson_survival_not_gaussian():
+    # X ~ Poisson(mean); p_over(line) = P(X > line). Unlike a Gaussian
+    # Phi((line-mean)/sd), this is NOT ~0.5 when line == mean (count data is
+    # discrete and right-skewed) -- verified against scipy.stats.poisson directly.
+    from scipy.stats import poisson
+
+    mean = 3.0
+    line = 3.0
+    expected = 1.0 - poisson.cdf(3, mean)
+    assert abs(_p_over(mean=mean, line=line) - expected) < 1e-9
+    assert expected < 0.5  # Poisson(3) has real mass exactly at 3
 
 
 def test_p_over_monotonic_in_line():
-    p_low_line = _p_over(mean=3.0, line=1.0, sd=1.5)
-    p_high_line = _p_over(mean=3.0, line=5.0, sd=1.5)
+    p_low_line = _p_over(mean=3.0, line=1.0)
+    p_high_line = _p_over(mean=3.0, line=5.0)
     assert p_low_line > 0.5 > p_high_line
 
 

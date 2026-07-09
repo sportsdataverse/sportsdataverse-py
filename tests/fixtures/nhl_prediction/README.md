@@ -31,6 +31,8 @@ to stay comparable with MoneyPuck's `regular` folder.
 | `team_xg_2023.parquet` | Output of `nhl_team_ratings.team_game_xg_rates` over the full 2023 season pbp (Task 1.1) | 2624 | One row per (game, team); the Phase-1 oracle gate's input. |
 | `in_game_wp_calibration_2023.parquet` | Every 2023 play scored by `nhl_in_game_win_prob` (trained on 2022), bucketed via `calibration_table` (Task 3.4) | 10 | `bin_mid, mean_pred, mean_actual, n` per predicted decile. |
 | `in_game_wp_pulled_goalie_2023.parquet` | Same 2023 scoring run, subset to plays with either goalie pulled | 1 | `mean_pred, mean_actual, n` -- the Task 3.4 targeted pulled-goalie calibration check. |
+| `player_props_mae_2024.parquet` | `nhl_player_props(2024)` joined back to realized `load_nhl_skater_boxscores` values for the same player-game (Task 4.2) | 2 | `stat, mae, n` -- MAE(proj_mean, realized) per stat family. Season **2024**, not 2023 (see gap #7 below). |
+| `player_props_p_over_calibration_2024.parquet` | Same 2024 backtest, `p_over` bucketed via `calibration_table` against a synthetic fixed line (the stat's own realized median + 0.5) | 19 | `stat, bin_mid, mean_pred, mean_actual, n`. |
 
 ## Deliberately not committed
 
@@ -93,3 +95,25 @@ to stay comparable with MoneyPuck's `regular` folder.
    0.0688 max deviation (binding gate rule), while the pulled-goalie
    subset (n=10086, observed deviation 0.0256) clears the tighter 0.03
    bar and keeps it.
+7. **Player props use season 2024, not 2023.** `load_nhl_skater_boxscores`
+   only publishes seasons >= 2024 (season 2024 == the 2023-24 season, per
+   sdv-py's convention -- confirmed the source `season` column reports
+   `20232024`), so Phase 4's fit (`dev/nhl_prediction/fit_props.py`) and
+   backtest use 2024 while ratings/market (Phases 1-3) stay on the 2023
+   corpus. `nhl_player_props` itself is season-parameterized, so this is a
+   validation-corpus choice, not a code limitation.
+8. **Player props: Gaussian `p_over` tried and rejected in favor of Poisson.**
+   Shots-on-goal and points are non-negative integer counts, not continuous.
+   A first pass used `Phi((line-mean)/sd)`; held-out (2024) calibration
+   showed it systematically overconfident (worst-bucket deviation ~0.17).
+   Switching `_p_over` to a Poisson survival function (`1 - Poisson.cdf(...)`,
+   using `proj_mean` as the rate directly) cut the worst deviation to 0.0599
+   -- a genuine, verified model fix (not a tuned floor). `proj_sd` in the
+   output schema is now `sqrt(proj_mean)` (the Poisson SD) for informational
+   consistency, though `p_over` itself no longer uses it.
+9. **No propbets-vs-projection MAE check.** ESPN propbets lines are
+   confirmed unavailable for every NHL game tried (gap #2 above), so there
+   is no real market line to compare `proj_mean` against. `p_over`
+   calibration instead uses each stat family's own realized-value median
+   (+0.5 to avoid integer ties) as a synthetic fixed line -- documented as a
+   substitute, not a fabricated market line.

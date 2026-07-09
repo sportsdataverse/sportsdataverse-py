@@ -245,6 +245,16 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     #     applied in nhl_market.predict_total as
     #     avg_total_goals + total_scale * (raw_total - avg_total_goals).
     # avg_xgf/avg_total_goals remain published-reference seeds (not walked/fit).
+    #
+    # prop_kappa/pos_priors fitted 2026-07-08 by dev/nhl_prediction/fit_props.py
+    # against season 2024 skater boxscores (load_nhl_skater_boxscores only
+    # publishes seasons >= 2024 -- season 2024 == the 2023-24 season; Phase 4
+    # therefore uses 2024 while ratings/market Phases 1-3 stay on 2023, see the
+    # fixtures README). Method-of-moments EB kappa (within-player Poisson
+    # variance / between-player variance), computed separately per position
+    # then averaged (unweighted) into the single per-stat kappa this table
+    # carries: shots F kappa=2.10/D kappa=3.40 -> 2.75; points F kappa=3.91/D
+    # kappa=5.86 -> 4.88. pos_priors are the raw per-position mean rates.
     "nhl": LeagueConstants(
         hfa=0.1630,
         margin_sd=0.9085,
@@ -252,8 +262,8 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         avg_total_goals=6.05,
         total_scale=1.9105,
         shrink_k=15.0,
-        prop_kappa={"shots": 6.0, "points": 8.0},
-        pos_priors={"shots": {"F": 2.2, "D": 1.4}, "points": {"F": 0.55, "D": 0.30}},
+        prop_kappa={"shots": 2.7498, "points": 4.8837},
+        pos_priors={"shots": {"F": 1.5746, "D": 1.1910}, "points": {"F": 0.4125, "D": 0.2858}},
         in_game_wp_artifact="nhl_in_game_wp.json",
         min_season=2010,
     ),

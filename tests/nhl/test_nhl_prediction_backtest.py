@@ -185,3 +185,82 @@ def test_in_game_wp_calibration_pulled_goalie_subset():
     assert row["n"] > 1000  # a genuinely large held-out subset, not a fluke handful of plays
     dev = abs(row["mean_pred"] - row["mean_actual"])
     assert dev <= PULLED_GOALIE_CALIBRATION_FLOOR, f"pulled-goalie deviation {dev:.4f} above floor"
+
+
+# --- Task 4.2: player-props backtest gate (2024 season, real as-of scoring) -------
+#
+# Built by dev/nhl_prediction/build_player_props_backtest_fixture.py:
+# nhl_player_props(2024, stats=("shots","points")) is joined back to the
+# realized load_nhl_skater_boxscores values for the SAME player-game (an
+# as-of comparison since every projection in that output only used strictly
+# prior games -- see nhl_player_props's own leakage-safe construction).
+# 2024 is used (not 2023) because load_nhl_skater_boxscores only publishes
+# seasons >= 2024 -- documented in the fixtures README.
+#
+# ESPN propbets lines are confirmed unavailable for every NHL game tried
+# (see the fixtures README), so the plan's "MAE vs propbets_line where
+# available" check has no matching player and is skipped (documented, not
+# fabricated); p_over calibration instead uses a synthetic fixed line (the
+# stat's own realized median + 0.5, avoiding integer ties) as a substitute.
+#
+# Observed at gate-authoring time (2026-07-08), n=50389 matched player-games
+# per stat:
+#   MAE(proj_mean, realized shots)  = 1.0676
+#   MAE(proj_mean, realized points) = 0.5308
+#   max |mean_pred - mean_actual| (p_over calibration, either stat) = 0.0599
+# A Gaussian p_over (Phi((line-mean)/sd)) was tried first and found
+# systematically overconfident (worst-bucket deviation ~0.17); switching to
+# a Poisson survival function (count data is non-negative and right-skewed,
+# not Gaussian) cut that to 0.0599 -- a genuine model fix, not a tuned floor.
+SHOTS_MAE_FLOOR = 1.10
+POINTS_MAE_FLOOR = 0.55
+PROPS_CALIBRATION_FLOOR = 0.065
+
+
+def test_player_props_shots_mae():
+    mae_df = pl.read_parquet(FIXTURES_DIR / "player_props_mae_2024.parquet")
+    row = mae_df.filter(pl.col("stat") == "shots").row(0, named=True)
+    assert row["n"] > 10000
+    assert row["mae"] <= SHOTS_MAE_FLOOR, f"shots MAE {row['mae']:.4f} above floor {SHOTS_MAE_FLOOR}"
+
+
+def test_player_props_points_mae():
+    mae_df = pl.read_parquet(FIXTURES_DIR / "player_props_mae_2024.parquet")
+    row = mae_df.filter(pl.col("stat") == "points").row(0, named=True)
+    assert row["n"] > 10000
+    assert row["mae"] <= POINTS_MAE_FLOOR, f"points MAE {row['mae']:.4f} above floor {POINTS_MAE_FLOOR}"
+
+
+def test_player_props_p_over_calibration():
+    cal = pl.read_parquet(FIXTURES_DIR / "player_props_p_over_calibration_2024.parquet")
+    assert cal.height > 0
+    dev = (cal["mean_pred"] - cal["mean_actual"]).abs()
+    assert dev.max() <= PROPS_CALIBRATION_FLOOR, f"max p_over calibration deviation {dev.max():.4f} above floor"
+
+
+def test_nhl_game_total_matches_nhl_predict_games_exp_total():
+    # DRY guard (Task 4.2 interface): nhl_game_total is a thin re-export of
+    # nhl_predict_games's exp_total for the same input -- one implementation.
+    from sportsdataverse.nhl.nhl_market import nhl_predict_games
+    from sportsdataverse.nhl.nhl_player_props import nhl_game_total
+
+    games = pl.DataFrame(
+        {
+            "game_id": ["1", "2"],
+            "home_team": ["TOR", "BOS"],
+            "away_team": ["BOS", "TOR"],
+            "neutral_site": [False, False],
+        }
+    )
+    ratings = pl.DataFrame(
+        {
+            "team": ["TOR", "BOS"],
+            "adj_xgf": [2.9, 2.6],
+            "adj_xga": [2.3, 2.4],
+        }
+    )
+    predict_out = nhl_predict_games(games, ratings)
+    total_out = nhl_game_total(games, ratings)
+    assert total_out.columns == ["game_id", "exp_total"]
+    merged = predict_out.join(total_out, on="game_id", suffix="_re")
+    assert (merged["exp_total"] - merged["exp_total_re"]).abs().max() < 1e-9
