@@ -34,9 +34,13 @@ See Also:
 
 from __future__ import annotations
 
+import json
 import math
+from functools import lru_cache
+from importlib.resources import files as _resource_files
 from typing import Literal, Optional, Union, overload
 
+import numpy as np
 import pandas as pd
 import polars as pl
 from scipy.stats import norm
@@ -374,3 +378,87 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
 def _log_odds(p: float) -> float:
     """``log(p / (1 - p))`` -- the logit transform used to anchor the in-game model."""
     return math.log(p / (1 - p))
+
+
+@lru_cache(maxsize=8)
+def _load_in_game_wp_artifact(filename: str) -> dict:
+    """Load the bundled in-game-WP logistic coefficients (cached, no first-use download).
+
+    Resolves ``sportsdataverse/nhl/models/<filename>`` via
+    :func:`importlib.resources.files` (never ``pkg_resources``), mirroring
+    the ``cfb/models`` / ``nfl/models`` resource-loading convention already
+    used elsewhere in the package.
+    """
+    path = _resource_files("sportsdataverse").joinpath(f"nhl/models/{filename}")
+    with path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@overload
+def nhl_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league: str = ...,
+    return_as_pandas: Literal[False] = ...,
+) -> pl.DataFrame: ...
+
+
+@overload
+def nhl_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league: str = ...,
+    return_as_pandas: Literal[True],
+) -> pd.DataFrame: ...
+
+
+def nhl_in_game_win_prob(
+    pbp: pl.DataFrame,
+    pregame_home_prob: float,
+    *,
+    league: str = "nhl",
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Per-play live home win probability from the bundled in-game logistic.
+
+    Builds :func:`in_game_features` from ``pbp``, scores them with the
+    committed logistic (``sportsdataverse/nhl/models/<league>_in_game_wp.json``
+    -- no first-use download; the coefficients are trained offline by
+    ``dev/nhl_prediction/train_in_game_wp.py`` and committed), and returns
+    ``sigmoid(coef . features + intercept)``.
+
+    Args:
+        pbp: a play-by-play frame shaped like ``load_nhl_pbp_full``.
+        pregame_home_prob: the model (2) pregame home win probability anchor.
+        league: resolves the bundled artifact filename via :func:`get_constants`.
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame, one row per play, with a single
+        ``home_win_prob: Float64`` column.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nhl.nhl_market import nhl_in_game_win_prob, win_prob_from_margin
+
+            pregame_p = win_prob_from_margin(0.3)
+            wp = nhl_in_game_win_prob(pbp, pregame_home_prob=pregame_p)
+            print(wp.tail())
+    """
+    if pbp.is_empty():
+        out = pl.DataFrame(schema={"home_win_prob": pl.Float64})
+        return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+    artifact_name = get_constants(league).in_game_wp_artifact
+    artifact = _load_in_game_wp_artifact(artifact_name)
+    feats = in_game_features(pbp, pregame_home_prob=pregame_home_prob)
+    X = feats.select(artifact["features"]).to_numpy().astype(float)
+    coef = np.asarray(artifact["coef"], dtype=float)
+    logits = X @ coef + float(artifact["intercept"])
+    probs = 1.0 / (1.0 + np.exp(-logits))
+
+    out = pl.DataFrame({"home_win_prob": probs})
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
