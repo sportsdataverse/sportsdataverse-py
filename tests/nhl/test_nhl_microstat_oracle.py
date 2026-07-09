@@ -11,9 +11,10 @@ from __future__ import annotations
 
 import polars as pl
 
+from sportsdataverse.nhl.nhl_edge_value import nhl_edge_skating_value
 from sportsdataverse.nhl.nhl_expected_assists import extract_goals_with_assists, nhl_expected_assists
 from sportsdataverse.nhl.nhl_faceoff_value import extract_faceoffs, _taker_perspective_rows, fit_faceoff_context
-from sportsdataverse.nhl.nhl_microstat_constants import fit_shot_xg, rel_error, split_half_stability
+from sportsdataverse.nhl.nhl_microstat_constants import fit_shot_xg, rel_error, spearman_corr, split_half_stability
 from sportsdataverse.nhl.nhl_penalty_value import extract_penalties, nhl_penalty_value
 from sportsdataverse.nhl.nhl_zone_transitions import infer_zone_transitions
 
@@ -290,3 +291,35 @@ def test_zone_entry_rate_stability(oracle_pbp: pl.DataFrame) -> None:
         f"zone-entry per-game split-half stability {stability:.4f} below floor "
         f"{ZONE_ENTRY_STABILITY_FLOOR} -- debug the entry inference before lowering"
     )
+
+
+# ---------------------------------------------------------------------------
+# Phase 5 -- EDGE skating value (model 2, NHL-only)
+# ---------------------------------------------------------------------------
+
+# Concurrent oracle: the z-composite must rank-correlate with each raw EDGE
+# component (the raw aggregates ARE the oracle). 0.5 is the plan's fixed floor
+# -- a below-0.5 correlation means a z-score sign or weight bug; do NOT lower
+# it. Observed on the 108-skater fixture: top_speed 0.62, distance_km 0.72,
+# speed_bursts_20 0.76, oz_time_pct 0.52.
+EDGE_COMPONENT_CORR_FLOOR = 0.5
+
+# Face-validity (known-burner set in the top decile) is intentionally NOT
+# gated here: it requires a curated name->EDGE-player_id burner list, which
+# cannot be verified offline without fabricating ids. The component
+# rank-correlation above is the falsifiable concurrent oracle; a curated
+# burner snapshot is the documented extension (drop a name-keyed CSV and add
+# the top-decile membership assertion).
+
+
+def test_edge_value_concurrent(oracle_edge_skaters: pl.DataFrame) -> None:
+    out = nhl_edge_skating_value(season=2024, detail_frames=oracle_edge_skaters)
+    assert out.height >= 40, "EDGE skater sample unexpectedly small"
+
+    sv = out["skating_value"].to_numpy()
+    for comp in ("top_speed", "distance_km", "speed_bursts_20", "oz_time_pct"):
+        corr = spearman_corr(sv, out[comp].to_numpy())
+        assert corr >= EDGE_COMPONENT_CORR_FLOOR, (
+            f"EDGE skating_value vs {comp} rank-corr {corr:.4f} below floor "
+            f"{EDGE_COMPONENT_CORR_FLOOR} -- check the z-score sign/weights"
+        )
