@@ -131,6 +131,146 @@ Most-recent PWHL season as an end-year integer (max `season_yr`).
 
 ## Other
 
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
+
+Fitted, league-specific constants for the NHL/PWHL prediction spine.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `hfa` | `float` |  | home-ice edge, expected-goals units. |
+| `margin_sd` | `float` |  | standard deviation of the final goal margin (deliberately WIDE for hockey). |
+| `avg_xgf` | `float` |  | league mean even-strength xG-for, per game. |
+| `avg_total_goals` | `float` |  | league mean total goals per game. |
+| `total_scale` | `float` |  | multiplier converting rating differential to total-goals deviation. |
+| `shrink_k` | `float` |  | games-played prior strength for rating shrinkage. |
+| `prop_kappa` | `dict` |  | empirical-Bayes shrinkage strength per player-prop stat family. |
+| `pos_priors` | `dict` |  | per-position (F/D) per-stat-family prior rates. |
+| `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
+| `min_season` | `int` |  | earliest season this league's prediction spine supports. |
+
+### `as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+
+Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | a polars DataFrame with a date column. |
+| `cutoff_date` | `date` |  | the game date being predicted; only strictly-earlier rows are kept. |
+| `date_col` | `str` | `'date'` | name of the date column (default `"date"`). |
+
+**Returns**
+
+The subset of `df` with `df[date_col] < cutoff_date`.
+
+**Example**
+
+```python
+import datetime as dt
+import polars as pl
+from sportsdataverse.nhl.nhl_prediction_constants import as_of_ratings_split
+df = pl.DataFrame({"date": [dt.date(2023, 1, 1), dt.date(2023, 1, 2)]})
+as_of_ratings_split(df, dt.date(2023, 1, 2))
+```
+
+### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
+
+Mean squared error between predicted probability and binary outcome.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
+
+**Returns**
+
+The Brier score (lower is better; 0.0 is a perfect forecast).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import brier_score
+brier_score(np.array([1, 0]), np.array([0.8, 0.2]))
+```
+
+### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+
+Bucket predicted probabilities into `n_bins` and compare to realized rate.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
+| `n_bins` | `int` | `10` | number of equal-width probability bins. |
+
+**Returns**
+
+A polars DataFrame with one row per non-empty bin. |col_name |type | |:-----------|:------| |bin_mid |Float64| |mean_pred |Float64| |mean_actual |Float64| |n |Int64 |
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import calibration_table
+rng = np.random.default_rng(0)
+calibration_table(rng.integers(0, 2, 200), rng.random(200))
+```
+
+### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
+
+Binary log-loss (cross-entropy) between predicted probability and outcome.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
+| `eps` | `float` | `1e-15` | clipping floor/ceiling to avoid `log(0)`. |
+
+**Returns**
+
+The mean log-loss (lower is better).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import log_loss_score
+log_loss_score(np.array([1, 0]), np.array([0.8, 0.2]))
+```
+
+### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+
+Mean absolute error between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | first array (e.g. predicted values). |
+| `b` | `ndarray` |  | second array (e.g. observed values). |
+
+**Returns**
+
+The mean absolute difference `mean(|a - b|)`.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import mae
+mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
+```
+
 ### `pwhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pwhl_game_corsi}
 
 Player-level on-ice Corsi and Fenwick for a single PWHL game.
@@ -820,3 +960,26 @@ PWHL roster transactions.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` |  |
+
+### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+
+Spearman rank correlation between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | first array. |
+| `b` | `ndarray` |  | second array (same length as `a`). |
+
+**Returns**
+
+The Spearman rank correlation coefficient in [-1, 1].
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_prediction_constants import spearman_corr
+spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([3.0, 1.0, 2.0]))
+```
