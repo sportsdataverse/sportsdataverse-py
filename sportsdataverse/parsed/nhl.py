@@ -314,9 +314,13 @@ from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore
 from sportsdataverse.nhl import load_nhl_team_boxscores as load_nhl_team_boxscores  # noqa: F401
 from sportsdataverse.nhl import load_nhl_three_stars as load_nhl_three_stars  # noqa: F401
 from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season  # noqa: F401
+from sportsdataverse.nhl import nhl_edge_skating_value as nhl_edge_skating_value  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_distance_detail as nhl_edge_team_skating_distance_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_speed_detail as nhl_edge_team_skating_speed_detail  # noqa: F401
+from sportsdataverse.nhl import nhl_expected_assists as nhl_expected_assists  # noqa: F401
+from sportsdataverse.nhl import nhl_faceoff_value as nhl_faceoff_value  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
+from sportsdataverse.nhl import nhl_penalty_value as nhl_penalty_value  # noqa: F401
 from sportsdataverse.nhl import nhl_records_coach_milestone_wins as nhl_records_coach_milestone_wins  # noqa: F401
 from sportsdataverse.nhl import nhl_records_comeback_wins as nhl_records_comeback_wins  # noqa: F401
 from sportsdataverse.nhl import nhl_records_consecutive_goal_seasons as nhl_records_consecutive_goal_seasons  # noqa: F401
@@ -327,6 +331,7 @@ from sportsdataverse.nhl import nhl_stats_rest_component_season as nhl_stats_res
 from sportsdataverse.nhl import nhl_stats_rest_config as nhl_stats_rest_config  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_content_module as nhl_stats_rest_content_module  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_ping as nhl_stats_rest_ping  # noqa: F401
+from sportsdataverse.nhl import nhl_zone_transitions as nhl_zone_transitions  # noqa: F401
 from sportsdataverse.nhl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nhl import parse_edge_detail as parse_edge_detail  # noqa: F401
 from sportsdataverse.nhl import parse_edge_hardest_shots as parse_edge_hardest_shots  # noqa: F401
@@ -561,6 +566,7 @@ __all__ = [
     "nhl_edge_skater_speed_top_10",
     "nhl_edge_skater_zone_time",
     "nhl_edge_skater_zone_time_top_10",
+    "nhl_edge_skating_value",
     "nhl_edge_team_detail",
     "nhl_edge_team_landing",
     "nhl_edge_team_shot_location_detail",
@@ -572,9 +578,12 @@ __all__ = [
     "nhl_edge_team_skating_speed_top_10",
     "nhl_edge_team_zone_time_details",
     "nhl_edge_team_zone_time_top_10",
+    "nhl_expected_assists",
+    "nhl_faceoff_value",
     "nhl_goalie_leaders",
     "nhl_landing",
     "nhl_pbp_disk",
+    "nhl_penalty_value",
     "nhl_player_game_log",
     "nhl_player_landing",
     "nhl_player_spotlight",
@@ -661,6 +670,7 @@ __all__ = [
     "nhl_stats_rest_team_report",
     "nhl_web_pbp",
     "nhl_web_schedule",
+    "nhl_zone_transitions",
     "normalize_team_roster_columns",
     "parse_edge_detail",
     "parse_edge_hardest_shots",
