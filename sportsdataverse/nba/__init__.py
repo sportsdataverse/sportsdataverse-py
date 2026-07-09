@@ -100,3 +100,8 @@ from sportsdataverse.nba.nba_game_predict import (  # noqa: F401
     predict_total,
     win_prob_from_margin,
 )
+from sportsdataverse.nba.nba_clutch import (  # noqa: F401
+    clutch_delta,
+    nba_team_clutch,
+    shrink_clutch,
+)

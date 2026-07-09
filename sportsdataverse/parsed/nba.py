@@ -158,6 +158,7 @@ from sportsdataverse.nba import box_features as box_features  # noqa: F401
 from sportsdataverse.nba import build_possession_shooting as build_possession_shooting  # noqa: F401
 from sportsdataverse.nba import calibrate_pts_per_win as calibrate_pts_per_win  # noqa: F401
 from sportsdataverse.nba import calibrate_replacement_level as calibrate_replacement_level  # noqa: F401
+from sportsdataverse.nba import clutch_delta as clutch_delta  # noqa: F401
 from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
 from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accuracy  # noqa: F401
 from sportsdataverse.nba import decay_weights as decay_weights  # noqa: F401
@@ -222,6 +223,7 @@ from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: 
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
 from sportsdataverse.nba import nba_shot_value_lineups as nba_shot_value_lineups  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
+from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
 from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
 from sportsdataverse.nba import nba_v3_to_v2_pbp as nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
@@ -239,6 +241,7 @@ from sportsdataverse.nba import score_shot_xpoints as score_shot_xpoints  # noqa
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.nba import shot_selection_quality as shot_selection_quality  # noqa: F401
+from sportsdataverse.nba import shrink_clutch as shrink_clutch  # noqa: F401
 from sportsdataverse.nba import train_spm as train_spm  # noqa: F401
 from sportsdataverse.nba import underscore as underscore  # noqa: F401
 from sportsdataverse.nba import validate_model as validate_model  # noqa: F401
@@ -267,6 +270,7 @@ __all__ = [
     "build_possession_shooting",
     "calibrate_pts_per_win",
     "calibrate_replacement_level",
+    "clutch_delta",
     "compile_nba_season",
     "darko_forecast_accuracy",
     "decay_weights",
@@ -448,6 +452,7 @@ __all__ = [
     "nba_shot_value",
     "nba_shot_value_lineups",
     "nba_spm",
+    "nba_team_clutch",
     "nba_team_ratings",
     "nba_v3_to_v2_pbp",
     "nba_war",
@@ -465,6 +470,7 @@ __all__ = [
     "scoreboard_event_parsing",
     "shooter_talent",
     "shot_selection_quality",
+    "shrink_clutch",
     "train_spm",
     "underscore",
     "validate_model",

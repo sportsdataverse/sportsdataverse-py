@@ -341,6 +341,7 @@ files = [
     "sportsdataverse/nba/nba_prediction_constants.py",
     "sportsdataverse/nba/nba_team_ratings.py",
     "sportsdataverse/nba/nba_game_predict.py",
+    "sportsdataverse/nba/nba_clutch.py",
     "sportsdataverse/wnba/wnba_stats_runtime.py",
     "sportsdataverse/wnba/wnba_stats_parsers.py",
     "sportsdataverse/wnba/wnba_engine.py",

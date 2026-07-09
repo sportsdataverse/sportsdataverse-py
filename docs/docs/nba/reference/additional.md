@@ -1057,6 +1057,32 @@ repl = calibrate_replacement_level(
 )
 ```
 
+### `clutch_delta(clutch: 'pl.DataFrame', ratings: 'pl.DataFrame') -> 'pl.DataFrame'` {#clutch_delta}
+
+Clutch net-rating delta vs a full-game baseline, per (season, team_id).
+
+`clutch_delta = clutch_net_rating - adj_net_rtg`. Joins `clutch` to the
+baseline `ratings` frame on `(season, team_id)` (asserting dtype
+agreement first).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clutch` | `DataFrame` |  | Frame with `season, team_id, clutch_net_rating, clutch_poss`. |
+| `ratings` | `DataFrame` |  | Full-game baseline with `season, team_id, adj_net_rtg` (the stats full-game net, or any per-team baseline). |
+
+**Returns**
+
+One row per matched (season, team_id): `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_poss`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_clutch import clutch_delta
+d = clutch_delta(clutch_frame, baseline_frame)
+```
+
 ### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
 
 Compile a full season's possession stint matrix (cached + resumable + throttled).
@@ -2208,6 +2234,34 @@ print(ratings.sort("spm", descending=True).head())
 ratings.filter(pl.col("min") >= 500).sort("spm", descending=True)
 ```
 
+### `nba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_team_clutch}
+
+Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team.
+
+Loads the season's clutch net rating (`nba_stats_leaguedashteamclutch`)
+and full-game net baseline (`nba_stats_leaguedashteamstats`), computes
+`clutch_delta`, and applies `shrink_clutch`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | End year of the season (e.g. `2024` for 2023-24). |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_clutch import nba_team_clutch
+skill = nba_team_clutch(2024)
+skill.sort("clutch_skill_shrunk", descending=True).head()
+```
+
 ### `nba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_team_ratings}
 
 Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware.
@@ -2809,6 +2863,33 @@ sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
 # Pipeline next step (one line)
 
 sel.sort("selection_quality", descending=True).head(15)
+```
+
+### `shrink_clutch(delta: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'pl.DataFrame'` {#shrink_clutch}
+
+Empirical-Bayes / James-Stein shrinkage of `clutch_delta` toward zero.
+
+Per-team sampling variance is `σ²_i = scale / clutch_poss` (small samples
+shrink harder); the between-team signal variance `τ²` is the observed
+variance of `clutch_delta` net of mean sampling variance; the shrink
+factor `k_i = τ² / (τ² + σ²_i)` and `clutch_skill_shrunk = k_i · delta_i`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `delta` | `DataFrame` |  | Output of `clutch_delta` (needs `clutch_delta` + `clutch_poss`). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` (accepted for parity; the scale is currently league-shared). |
+
+**Returns**
+
+`delta` with an added `clutch_skill_shrunk` column. Empty input returns the input schema plus that column.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_clutch import clutch_delta, shrink_clutch
+skill = shrink_clutch(clutch_delta(clutch_frame, baseline_frame))
 ```
 
 ### `train_spm(box_features: 'pl.DataFrame', rapm_target: 'pl.DataFrame', *, feature_names: 'Optional[List[str]]' = None, alpha: 'float' = 100.0) -> 'SpmCoefficients'` {#train_spm}
