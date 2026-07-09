@@ -21,7 +21,11 @@ import polars as pl
 import scipy.sparse as sp
 
 from sportsdataverse.nhl.nhl_gsax import _attribute_goalie  # noqa: F401  (re-export convenience)
-from sportsdataverse.nhl.nhl_player_impact_constants import get_constants, team_fullname_to_abbr, weighted_ridge
+from sportsdataverse.nhl.nhl_player_impact_constants import (
+    NHL_TEAM_FULLNAME_TO_ABBR,
+    get_constants,
+    weighted_ridge,
+)
 from sportsdataverse.nhl.nhl_xg import nhl_xg
 
 if TYPE_CHECKING:
@@ -85,8 +89,11 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             before that game's cutoff.
 
     Returns:
-        polars.DataFrame: one row per interval, schema documented in the module's
-        ``_STINTS_SCHEMA``. Empty/malformed ``shifts`` returns a zero-row frame.
+        polars.DataFrame: one row per interval -- ``game_id:Int64, period:Int64,
+        start_s:Int64, end_s:Int64, duration:Int64, home_ids:List(Int64),
+        away_ids:List(Int64), home_goalie:Int64, away_goalie:Int64,
+        strength_state:Utf8, xgf_home:Float64, xgf_away:Float64``. Empty/malformed
+        ``shifts`` returns a zero-row frame with this schema.
 
     Example:
         Quick start::
@@ -102,6 +109,17 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     if shifts.height == 0:
         return pl.DataFrame(schema=_STINTS_SCHEMA)
 
+    if as_of is not None:
+        # Truncate the xG source *before* any per-interval aggregation. Filtering only
+        # on the emitted `start_s < as_of` at the end is NOT sufficient: a stint that
+        # straddles the cutoff (start_s < as_of <= end_s, which happens whenever as_of
+        # doesn't land exactly on an existing shift-chart boundary) would otherwise keep
+        # its full xgf_home/xgf_away sum, silently leaking post-cutoff xG into a
+        # retained pre-cutoff interval. Dropping post-cutoff events here first means
+        # every interval's xG sum reflects only games_seconds < as_of, regardless of
+        # where its end_s falls.
+        scored = scored.filter(pl.col("game_seconds") < as_of) if scored.height > 0 else scored
+
     game_teams = (
         scored.filter(pl.col("home_abbr").is_not_null())
         .group_by("game_id")
@@ -109,8 +127,10 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     )
     game_teams_map = {row["game_id"]: (row["home_abbr"], row["away_abbr"]) for row in game_teams.to_dicts()}
 
+    # Vectorized dict lookup (replace) over the static crosswalk -- avoids a per-row
+    # Python UDF call for what is otherwise a pure static-dict remap.
     shifts_work = shifts.with_columns(
-        team_abbr=pl.col("event_team").map_elements(team_fullname_to_abbr, return_dtype=pl.Utf8)
+        team_abbr=pl.col("event_team").replace(NHL_TEAM_FULLNAME_TO_ABBR, default=None)
     ).sort("game_id", "game_seconds")
 
     rows: list[dict] = []

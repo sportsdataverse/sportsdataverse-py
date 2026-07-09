@@ -70,6 +70,19 @@ def test_build_stints_as_of_truncates_later_intervals():
     assert stints["start_s"].max() < 200
 
 
+def test_build_stints_as_of_prevents_leak_when_cutoff_falls_mid_stint():
+    # as_of=225 falls strictly INSIDE the 3rd interval [200, 251) (it doesn't land on
+    # an existing shift-chart boundary). The xG event at game_seconds=250 is >= as_of
+    # and must NOT be counted in any retained interval -- regression test for a real
+    # leakage bug where the as_of filter was only applied to the emitted `start_s`,
+    # not to the xG aggregation window itself, letting future xG leak into a retained
+    # pre-cutoff interval whenever the cutoff didn't align with a boundary.
+    stints = build_stints(_synthetic_shifts(), _synthetic_scored(), as_of=225)
+    assert stints.height > 0
+    total_xgf_home = sum(s or 0.0 for s in stints["xgf_home"].to_list())
+    assert total_xgf_home == 0.0, f"post-cutoff xG (0.7 @ t=250) leaked into a retained interval: {total_xgf_home}"
+
+
 def test_build_stints_empty_shifts_returns_zero_row_frame():
     out = build_stints(pl.DataFrame(), _synthetic_scored())
     assert out.height == 0

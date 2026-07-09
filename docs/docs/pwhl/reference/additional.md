@@ -573,6 +573,71 @@ All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
+### `pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_skater_rapm}
+
+② PWHL skater xG RAPM -- shim over `nhl_skater_rapm` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring); returns a documented
+empty frame + `cli_warn` rather than fitting a degenerate ridge when `shifts` is
+too thin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  |  |
+| `shifts` | `DataFrame` |  |  |
+| `model_dir` | `str \| None` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_rapm
+rapm = pwhl_skater_rapm(pbp, shifts)
+```
+
+### `pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_skater_war}
+
+③ PWHL GAR/WAR composite -- shim over `nhl_skater_war` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  |  |
+| `shifts` | `DataFrame` |  |  |
+| `model_dir` | `str \| None` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_war
+war = pwhl_skater_war(pbp, shifts)
+```
+
+### `pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_special_teams_value}
+
+⑥ PWHL special-teams value -- shim over `nhl_special_teams_value` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  |  |
+| `shifts` | `DataFrame` |  |  |
+| `model_dir` | `str \| None` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_special_teams_value
+st = pwhl_special_teams_value(pbp, shifts)
+```
+
 ### `pwhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_standings}
 
 PWHL standings — one row per team.
@@ -820,3 +885,24 @@ PWHL roster transactions.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` |  |
+
+### `pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_unit_ratings}
+
+⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  |  |
+| `shifts` | `DataFrame` |  |  |
+| `model_dir` | `str \| None` | `None` |  |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_unit_ratings
+units = pwhl_unit_ratings(pbp, shifts)
+```

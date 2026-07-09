@@ -55,17 +55,51 @@ _MIN_PWHL_SHIFTS_ROWS = 10
 
 #: ① native xG scoring, borrowing the NHL's published boosters (Decision D6).
 pwhl_xg = functools.partial(nhl_xg, league="pwhl")
-pwhl_xg.__doc__ = (
-    "PWHL shim over :func:`sportsdataverse.nhl.nhl_xg.nhl_xg` with ``league='pwhl'``. "
-    "See the module docstring's borrowed-booster caveat."
-)
+pwhl_xg.__doc__ = """PWHL shim over :func:`sportsdataverse.nhl.nhl_xg.nhl_xg` with ``league='pwhl'``.
+
+Scores PWHL shots with the NHL's published ``nhl_xg_models`` boosters (the PWHL has no
+PWHL-trained xG model -- see the module docstring's borrowed-booster caveat).
+
+Args:
+    pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full`` (same column
+        contract -- ``x``, ``x_fixed``, ``strength_state``, ``home_skaters``/
+        ``away_skaters``, ``game_seconds``, ``event_id``, ``secondary_type``,
+        ``event_team_abbr``, ``home_abbr``/``away_abbr``, ``season``, ``empty_net``).
+    model_dir: booster directory; ``None`` downloads-and-caches on first use.
+    return_as_pandas: return a pandas DataFrame instead of polars.
+
+Returns:
+    Same schema as :func:`nhl_xg`: the input frame with ``xg:Float64``,
+    ``distance_to_net:Float64``, ``shot_angle:Float64``, ``shot_danger:Utf8`` appended.
+
+Example:
+    Quick start::
+
+        from sportsdataverse.pwhl.pwhl_player_impact import pwhl_xg
+        scored = pwhl_xg(pwhl_pbp, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+"""
 
 #: ④ goalie GSAx, closed-form off the borrowed-booster xG.
 pwhl_goalie_gsax = functools.partial(nhl_goalie_gsax, league="pwhl")
-pwhl_goalie_gsax.__doc__ = (
-    "PWHL shim over :func:`sportsdataverse.nhl.nhl_gsax.nhl_goalie_gsax` with "
-    "``league='pwhl'``. See the module docstring's borrowed-booster caveat."
-)
+pwhl_goalie_gsax.__doc__ = """PWHL shim over :func:`sportsdataverse.nhl.nhl_gsax.nhl_goalie_gsax` with ``league='pwhl'``.
+
+Args:
+    pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
+    shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts`` (currently unused --
+        see :func:`nhl_goalie_gsax`'s TOI-proxy note).
+    model_dir: booster directory passed through to the borrowed NHL xG boosters.
+    return_as_pandas: return a pandas DataFrame instead of polars.
+
+Returns:
+    Same schema as :func:`nhl_goalie_gsax`: ``player_id:Int64, goalie:Utf8, shots:Int64,
+    xga:Float64, ga:Int64, gsax:Float64, gsax_per_60:Float64``.
+
+Example:
+    Quick start::
+
+        from sportsdataverse.pwhl.pwhl_player_impact import pwhl_goalie_gsax
+        gsax = pwhl_goalie_gsax(pwhl_pbp, pwhl_shifts)
+"""
 
 
 def _insufficient_pwhl_shifts(shifts: pl.DataFrame, *, fn_name: str) -> bool:
@@ -89,6 +123,19 @@ def pwhl_skater_rapm(
     empty frame + ``cli_warn`` rather than fitting a degenerate ridge when ``shifts`` is
     too thin.
 
+    Args:
+        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
+        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        **kwargs: forwarded to :func:`nhl_skater_rapm` (e.g. ``lam``, ``as_of``,
+            ``strength_states``, ``return_as_pandas``).
+
+    Returns:
+        Same schema as :func:`nhl_skater_rapm`: ``player_id:Int64,
+        xg_rapm_off:Float64, xg_rapm_def:Float64, xg_rapm:Float64,
+        toi_minutes:Float64``. A zero-row frame with this schema (+ a ``cli_warn``) when
+        PWHL shift coverage is insufficient.
+
     Example:
         Quick start::
 
@@ -106,6 +153,20 @@ def pwhl_unit_ratings(
     """⑤ PWHL line/pair ratings -- shim over :func:`nhl_unit_ratings` with ``league='pwhl'``.
 
     Guards on PWHL shift-chart coverage (see the module docstring).
+
+    Args:
+        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
+        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        **kwargs: forwarded to :func:`nhl_unit_ratings` (e.g. ``unit_type``,
+            ``min_toi``, ``return_as_pandas``).
+
+    Returns:
+        Same schema as :func:`nhl_unit_ratings`: ``team:Utf8, unit_ids:Utf8,
+        unit_players:Utf8, toi_minutes:Float64, on_ice_xgf:Float64, on_ice_xga:Float64,
+        on_ice_xgf_pct:Float64, summed_rapm:Float64, unit_value:Float64``. A zero-row
+        frame with this schema (+ a ``cli_warn``) when PWHL shift coverage is
+        insufficient.
 
     Example:
         Quick start::
@@ -125,6 +186,19 @@ def pwhl_special_teams_value(
 
     Guards on PWHL shift-chart coverage (see the module docstring).
 
+    Args:
+        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
+        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        **kwargs: forwarded to :func:`nhl_special_teams_value` (e.g.
+            ``return_as_pandas``).
+
+    Returns:
+        Same schema as :func:`nhl_special_teams_value`: ``player_id:Int64,
+        pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64,
+        pk_value:Float64``. A zero-row frame with this schema (+ a ``cli_warn``) when
+        PWHL shift coverage is insufficient.
+
     Example:
         Quick start::
 
@@ -142,6 +216,18 @@ def pwhl_skater_war(
     """③ PWHL GAR/WAR composite -- shim over :func:`nhl_skater_war` with ``league='pwhl'``.
 
     Guards on PWHL shift-chart coverage (see the module docstring).
+
+    Args:
+        pbp: a PWHL play-by-play frame shaped like ``load_nhl_pbp_full``.
+        shifts: a PWHL shift-chart frame shaped like ``load_nhl_shifts``.
+        model_dir: booster directory passed through to the borrowed NHL xG boosters.
+        **kwargs: forwarded to :func:`nhl_skater_war` (e.g. ``return_as_pandas``).
+
+    Returns:
+        Same schema as :func:`nhl_skater_war`: ``player_id:Int64, ev_off:Float64,
+        ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64,
+        gar:Float64, war:Float64``. A zero-row frame with this schema (+ a
+        ``cli_warn``) when PWHL shift coverage is insufficient.
 
     Example:
         Quick start::
