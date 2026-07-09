@@ -94,9 +94,14 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         # too thin to fit a standalone goals-during-majors ratio.
         pp_goal_value=0.144,
         major_penalty_value=0.359,
-        zone_entry_value_controlled=0.06,
-        zone_entry_value_dump=0.03,
-        zone_exit_value=0.02,
+        # Fit from the 120-game slice via dev/nhl_microstat/fit_zone_entry_value.py
+        # (Task 4.2): mean xG the entering/exiting team generates within
+        # entry_window_s after a controlled vs dump entry (controlled ~2x dump)
+        # / after an exit. Heuristic controlled/dump labels (see
+        # nhl_zone_transitions 🟡), so these are approximate values.
+        zone_entry_value_controlled=0.108,
+        zone_entry_value_dump=0.053,
+        zone_exit_value=0.007,
         edge_component_weights={
             "top_speed": 1.0,
             "distance_km": 1.0,
