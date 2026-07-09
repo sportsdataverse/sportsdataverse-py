@@ -57,3 +57,15 @@ from sportsdataverse.nhl.nhl_teams import *
 from sportsdataverse.nhl.nhl_espn_ext import *
 from sportsdataverse.nhl.nhl_fox_ext import *
 from sportsdataverse.nhl.nhl_player_stats import *
+from sportsdataverse.nhl.nhl_edge_value import nhl_edge_skating_value
+from sportsdataverse.nhl.nhl_expected_assists import nhl_expected_assists
+from sportsdataverse.nhl.nhl_faceoff_value import nhl_faceoff_value
+from sportsdataverse.nhl.nhl_penalty_value import nhl_penalty_value
+from sportsdataverse.nhl.nhl_zone_transitions import nhl_zone_transitions
+from sportsdataverse.nhl.pwhl_microstat import (
+    pwhl_edge_skating_value,
+    pwhl_expected_assists,
+    pwhl_faceoff_value,
+    pwhl_penalty_value,
+    pwhl_zone_transitions,
+)
