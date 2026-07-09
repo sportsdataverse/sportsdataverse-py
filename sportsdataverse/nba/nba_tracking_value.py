@@ -617,3 +617,158 @@ def nba_tracking_pass_value(
 
     out = _finalize_schema(out, _AST_OE_SCHEMA)
     return out.to_pandas() if return_as_pandas else out
+
+
+def _zscore_within(df: pl.DataFrame, num: str, denom: str, group_cols: "list[str]", out_col: str) -> pl.DataFrame:
+    """Add ``out_col`` = z-score of ``num/denom`` within each ``group_cols`` bucket.
+
+    Null-safe: rows with ``denom <= 0`` or a zero-variance bucket get a null
+    z-score rather than a division error.
+
+    Args:
+        df: Input frame carrying *num* and *denom*.
+        num: Numerator column.
+        denom: Denominator column.
+        group_cols: Baseline-scope columns (e.g. ``["position_bucket"]``); empty
+            computes one league-wide z-score.
+        out_col: Name of the output z-score column.
+
+    Returns:
+        *df* with *out_col* added.
+    """
+    ratio_col = "__zscore_ratio"
+    df = df.with_columns(
+        pl.when(pl.col(denom) > 0).then(pl.col(num).cast(pl.Float64) / pl.col(denom)).otherwise(None).alias(ratio_col)
+    )
+    gb = group_cols or []
+    mean_expr = pl.col(ratio_col).mean().alias("__zscore_mean")
+    std_expr = pl.col(ratio_col).std().alias("__zscore_std")
+    if gb:
+        stats = df.group_by(gb).agg(mean_expr, std_expr)
+        df = df.join(stats, on=gb, how="left")
+    else:
+        stats = df.select(mean_expr, std_expr)
+        df = df.join(stats, how="cross")
+    df = df.with_columns(
+        pl.when(pl.col("__zscore_std") > 0)
+        .then((pl.col(ratio_col) - pl.col("__zscore_mean")) / pl.col("__zscore_std"))
+        .otherwise(None)
+        .alias(out_col)
+    )
+    return df.drop([ratio_col, "__zscore_mean", "__zscore_std"])
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 -- drive value & rim-pressure
+# ---------------------------------------------------------------------------
+
+_DRIVE_OE_SCHEMA: "dict[str, pl.DataType]" = {
+    "season": pl.Int64,
+    "player_id": pl.Utf8,
+    "player_name": pl.Utf8,
+    "team_id": pl.Utf8,
+    "position_bucket": pl.Utf8,
+    "gp": pl.Int64,
+    "min": pl.Float64,
+    "drives": pl.Float64,
+    "drive_pts": pl.Float64,
+    "drive_baseline_rate": pl.Float64,
+    "drive_expected": pl.Float64,
+    "drive_pts_oe": pl.Float64,
+    "drive_pts_oe_per_36": pl.Float64,
+    "drive_fta": pl.Float64,
+    "rim_pressure": pl.Float64,
+    "drive_ast": pl.Float64,
+    "drive_tov": pl.Float64,
+    "league_id": pl.Utf8,
+}
+
+
+def nba_tracking_drive_value(
+    seasons: "int | str | list",
+    *,
+    league_id: str = "00",
+    per_mode: str = "Totals",
+    by_position: bool = True,
+    positions: Optional[pl.DataFrame] = None,
+    return_as_pandas: bool = False,
+    _get_fn: Optional[Callable[..., dict]] = None,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Drive value over expected + rim-pressure, per player-season.
+
+    Fetches the ``Drives`` ``leaguedashptstats`` measure and computes
+    ``drive_pts_oe = drive_pts - drives * bucket_pts_per_drive``. ``rim_pressure``
+    is the z-score of ``drive_fta / drives`` within the player's role bucket
+    (a proxy for foul-drawing pressure independent of scoring efficiency).
+    ``drive_ast``/``drive_tov`` are passed through unchanged.
+
+    Args:
+        seasons: A single season or list of seasons.
+        league_id: ``"00"`` NBA (default), ``"10"`` WNBA, ``"20"`` G-League.
+        per_mode: ``per_mode_simple`` passed to the fetch (default ``"Totals"``).
+        by_position: Compute the baseline within role buckets (default);
+            ``False`` forces one league-wide bucket.
+        positions: Optional pre-fetched positions frame.
+        return_as_pandas: Return a :class:`pandas.DataFrame` instead of polars.
+        _get_fn: Injectable replacement for ``nba_stats_leaguedashptstats``.
+
+    Returns:
+        One row per player-season:
+        ``season, player_id, player_name, team_id, position_bucket, gp, min,
+        drives, drive_pts, drive_baseline_rate, drive_expected, drive_pts_oe,
+        drive_pts_oe_per_36, drive_fta, rim_pressure, drive_ast, drive_tov,
+        league_id``. Empty/malformed input returns a zero-row frame with this schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_tracking_drive_value
+            df = nba_tracking_drive_value(2024)
+            print(df.sort("drive_pts_oe", descending=True).head())
+
+        See Also:
+            * `nba_api`_ -- Python NBA/WNBA stats API client
+
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    season_list = _as_season_list(seasons)
+    spec = MEASURE_SPECS["drive"]
+
+    frames = []
+    for season in season_list:
+        fetched = _fetch_leaguedash_tracking(
+            season, spec.measure, league_id=league_id, per_mode=per_mode, _get_fn=_get_fn
+        )
+        if fetched.height == 0:
+            continue
+        frames.append(fetched.with_columns(pl.lit(_season_label(season)).alias("season")))
+
+    if not frames:
+        out = pl.DataFrame(schema=_DRIVE_OE_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    df = pl.concat(frames, how="diagonal_relaxed")
+
+    if by_position:
+        df = _attach_role_bucket(df, season_list[0], league_id=league_id, positions=positions)
+        group_cols: "list[str]" = ["position_bucket"]
+    else:
+        df = df.with_columns(pl.lit("all").alias("position_bucket"))
+        group_cols = []
+
+    out = _over_expected(df, actual=spec.actual, denom=spec.denom, group_cols=group_cols, out_prefix="drive")
+    out = out.rename({"drive_oe": "drive_pts_oe"})
+    out = out.with_columns(
+        pl.when(pl.col("min") > 0)
+        .then(pl.col("drive_pts_oe") / (pl.col("min") / 36.0))
+        .otherwise(None)
+        .alias("drive_pts_oe_per_36")
+    )
+    if "drive_fta" in out.columns:
+        out = _zscore_within(out, "drive_fta", "drives", group_cols, "rim_pressure")
+    else:
+        out = out.with_columns(pl.lit(None, dtype=pl.Float64).alias("rim_pressure"))
+    out = out.with_columns(pl.lit(league_id).alias("league_id"))
+
+    out = _finalize_schema(out, _DRIVE_OE_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out
