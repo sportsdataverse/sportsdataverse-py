@@ -34,6 +34,7 @@ See Also:
 
 from __future__ import annotations
 
+import math
 from typing import Literal, Optional, Union, overload
 
 import pandas as pd
@@ -304,3 +305,70 @@ def nhl_predict_games(
 def _empty_predictions(return_as_pandas: bool) -> Union[pl.DataFrame, pd.DataFrame]:
     out = pl.DataFrame(schema=_PREDICT_SCHEMA)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+_IN_GAME_FEATURES_SCHEMA: dict[str, pl.PolarsDataType] = {
+    "score_diff": pl.Int32,
+    "sec_remaining": pl.Float64,
+    "sqrt_sec_remaining": pl.Float64,
+    "strength_diff": pl.Int32,
+    "home_goalie_pulled": pl.Int8,
+    "away_goalie_pulled": pl.Int8,
+    "pregame_logit": pl.Float64,
+}
+
+
+def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFrame:
+    """Per-play in-game win-probability features from game state.
+
+    Reads the ``load_nhl_pbp_full`` schema (``home_score``/``away_score``,
+    ``game_seconds_remaining``, ``home_skaters``/``away_skaters``,
+    ``home_goalie_in``/``away_goalie_in``). A live feed can populate the same
+    five features via a documented column map from
+    :func:`sportsdataverse.nhl.nhl_api_web_parsers.parse_nhl_web_pbp`
+    (``homeScore``/``awayScore``/``timeRemaining``/``situationCode``).
+
+    Args:
+        pbp: a play-by-play frame shaped like ``load_nhl_pbp_full``.
+        pregame_home_prob: the model (2) pregame home win probability
+            (e.g. from :func:`win_prob_from_margin`), converted to a logit
+            and carried as a constant per-play anchor feature.
+
+    Returns:
+        A polars DataFrame, one row per play.
+
+        |col_name           |type   |
+        |:-------------------|:------|
+        |score_diff          |Int32  |
+        |sec_remaining       |Float64|
+        |sqrt_sec_remaining  |Float64|
+        |strength_diff       |Int32  |
+        |home_goalie_pulled  |Int8   |
+        |away_goalie_pulled  |Int8   |
+        |pregame_logit       |Float64|
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nhl.nhl_market import in_game_features, win_prob_from_margin
+            pregame_p = win_prob_from_margin(0.3)
+            feats = in_game_features(pbp, pregame_home_prob=pregame_p)
+    """
+    if pbp.is_empty():
+        return pl.DataFrame(schema=_IN_GAME_FEATURES_SCHEMA)
+
+    logit = _log_odds(pregame_home_prob)
+    return pbp.select(
+        (pl.col("home_score") - pl.col("away_score")).cast(pl.Int32).alias("score_diff"),
+        pl.col("game_seconds_remaining").cast(pl.Float64).alias("sec_remaining"),
+        pl.col("game_seconds_remaining").cast(pl.Float64).sqrt().alias("sqrt_sec_remaining"),
+        (pl.col("home_skaters") - pl.col("away_skaters")).cast(pl.Int32).alias("strength_diff"),
+        (pl.col("home_goalie_in") == 0).cast(pl.Int8).alias("home_goalie_pulled"),
+        (pl.col("away_goalie_in") == 0).cast(pl.Int8).alias("away_goalie_pulled"),
+        pl.lit(logit).alias("pregame_logit"),
+    )
+
+
+def _log_odds(p: float) -> float:
+    """``log(p / (1 - p))`` -- the logit transform used to anchor the in-game model."""
+    return math.log(p / (1 - p))
