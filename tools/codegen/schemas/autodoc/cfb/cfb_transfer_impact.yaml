@@ -1,0 +1,15 @@
+schema: cfb_transfer_impact
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: net_transfer_talent
+  type: double
+  description: ''
+- name: pred_win_delta
+  type: double
+  description: ''

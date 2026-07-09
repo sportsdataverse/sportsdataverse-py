@@ -194,6 +194,12 @@ from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F
 from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
 from sportsdataverse.wnba import wnba_rookie_projection as wnba_rookie_projection  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
+from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
+from sportsdataverse.wnba import wnba_tracking_pass_value as wnba_tracking_pass_value  # noqa: F401
+from sportsdataverse.wnba import wnba_tracking_reb_oe as wnba_tracking_reb_oe  # noqa: F401
+from sportsdataverse.wnba import wnba_tracking_rim_protect_value as wnba_tracking_rim_protect_value  # noqa: F401
+from sportsdataverse.wnba import wnba_tracking_shot_diet_value as wnba_tracking_shot_diet_value  # noqa: F401
+from sportsdataverse.wnba import wnba_tracking_touch_value as wnba_tracking_touch_value  # noqa: F401
 from sportsdataverse.wnba import zone_value_map as zone_value_map  # noqa: F401
 
 __all__ = [
@@ -368,6 +374,12 @@ __all__ = [
     "wnba_rapm_from_games",
     "wnba_rookie_projection",
     "wnba_shot_value",
+    "wnba_tracking_drive_value",
+    "wnba_tracking_pass_value",
+    "wnba_tracking_reb_oe",
+    "wnba_tracking_rim_protect_value",
+    "wnba_tracking_shot_diet_value",
+    "wnba_tracking_touch_value",
     "zone_value_map",
 ]
 

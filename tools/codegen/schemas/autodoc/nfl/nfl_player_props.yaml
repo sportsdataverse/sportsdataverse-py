@@ -1,0 +1,39 @@
+schema: nfl_player_props
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: week
+  type: integer
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: opp_team_id
+  type: character
+  description: ''
+- name: stat
+  type: character
+  description: ''
+- name: proj_mean
+  type: double
+  description: ''
+- name: proj_sd
+  type: double
+  description: ''
+- name: line
+  type: double
+  description: ''
+- name: p_over
+  type: double
+  description: ''

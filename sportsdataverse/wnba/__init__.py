@@ -33,3 +33,4 @@ from sportsdataverse.wnba.wnba_aging_curve import wnba_aging_curve, wnba_career_
 from sportsdataverse.wnba.wnba_availability import wnba_availability  # noqa: F401
 from sportsdataverse.wnba.wnba_draft_model import wnba_draft_model  # noqa: F401
 from sportsdataverse.wnba.wnba_rookie_projection import wnba_rookie_projection  # noqa: F401
+from sportsdataverse.wnba.wnba_tracking_value import *

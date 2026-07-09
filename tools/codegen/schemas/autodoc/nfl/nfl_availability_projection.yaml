@@ -1,0 +1,21 @@
+schema: nfl_availability_projection
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: target_season
+  type: integer
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: proj_availability
+  type: double
+  description: ''
+- name: proj_games
+  type: double
+  description: ''
+- name: proj_games_missed
+  type: double
+  description: ''
