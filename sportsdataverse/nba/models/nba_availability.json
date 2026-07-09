@@ -1,7 +1,19 @@
 {
   "league": "nba",
-  "features": ["age", "prior_gp_pct", "career_gp_pct", "age_sq", "bmi"],
-  "coef": [0.0, 2.0, 1.0, 0.0, 0.0],
-  "intercept": 1.0,
-  "_placeholder": "seed weights pending Task 3.1 fit_availability.py -- overwritten before the phase-3 oracle gate runs"
+  "features": [
+    "age",
+    "prior_gp_pct",
+    "career_gp_pct",
+    "age_sq",
+    "bmi"
+  ],
+  "coef": [
+    0.13518176830122366,
+    -0.28250133088855267,
+    0.4373736200813378,
+    -0.002453857528325353,
+    -0.05280911752487343
+  ],
+  "intercept": -0.0022012864493160646,
+  "cutoff_season": 2016
 }

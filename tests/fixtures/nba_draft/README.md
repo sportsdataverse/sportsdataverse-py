@@ -58,12 +58,27 @@ citation, not a live capture).
   A player is absent here (not zero-filled) when `CommonPlayerInfo` returned
   no row (no `person_id` record -- e.g. never signed an NBA contract).
 
-- **`season_stats_raw.parquet`** (7378 rows) -- `nba_stats_playercareerstats`
-  (`SeasonTotalsRegularSeason` result set) per combine player_id, one row per
-  `(player_id, season_id)`. This is the raw box-total corpus consumed by
-  `dev/nba_draft/fit_box_value.py` to derive per-100 rates and, after fitting
+- **`season_stats_raw.parquet`** (5773 rows, deduplicated -- see below) --
+  `nba_stats_playercareerstats` (`SeasonTotalsRegularSeason` result set) per
+  combine player_id, one row per `(player_id, season_id)`. This is the raw
+  box-total corpus consumed by `dev/nba_draft/fit_box_value.py` to derive
+  per-100 rates and, after fitting
   `box_value_coef`, to materialize `career_values.parquet` +
   `rookie_values.parquet` below.
+
+  **Deduplication (2026-07-08):** the raw capture had 772/7378 rows that were
+  mid-season-trade duplicates -- `nba_stats_playercareerstats` emits one row
+  per team a traded player suited up for in a season *plus* a `team_id=0`
+  "TOT" (total) aggregate row for the same `(player_id, season_id)`. Every
+  downstream fit (`career_value_from_seasons`, the aging curve's per-season
+  deltas, availability's GP%) was silently double/triple-counting those
+  players' box totals and minutes by summing across the duplicate rows.
+  Fixed by keeping only the `team_id=0` TOT row when one exists for a
+  `(player_id, season_id)` group (else the single row), bringing the corpus
+  to 5773 rows. 13 further rows carried a malformed `player_id` ("199", an
+  upstream id-join glitch) with season labels back to 1987-88 -- excluded via
+  `dev/nba_draft/fit_availability.py`'s `MIN_SEASON=2000` filter, not by
+  further deduplication.
 
 - **`nba_bpm_overlap.parquet`** (418 rows) -- the shipped `nba_bpm` scored via
   `nba_box_logs` + `nba_player_positions` for the 2016-17..2019-20 seasons
@@ -103,7 +118,8 @@ tov100, ts_pct, usg`) and `replacement` in `nba_draft_constants.py`'s
 `LEAGUE_CONSTANTS["nba"]` are the printed output of
 `dev/nba_draft/fit_box_value.py` (ridge-fit vs `nba_bpm_overlap.parquet`,
 lambda chosen by 5-fold CV, `MIN_MINUTES=300`). In-sample
-Spearman(fit, nba_bpm) = 0.93 on the 278-row anchor. WNBA/G-League constants
+Spearman(fit, nba_bpm) = 0.94 on the 256-row anchor (re-fit after the
+trade-duplicate dedup above). WNBA/G-League constants
 are seeded from the NBA fit pending the Phase 5 women's re-fit on
 `wnba_stats` data (documented in `wnba_draft_constants.py`).
 

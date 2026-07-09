@@ -74,11 +74,18 @@ def availability_features(career: pl.DataFrame, *, league: str = "nba") -> pl.Da
         (pl.col("gp").cast(pl.Float64) / full_season).clip(0.0, 1.0).alias("_gp_pct"),
         pl.col("age").cast(pl.Float64),
     )
-    df = df.with_columns(
-        pl.col("_gp_pct").shift(1).over("player_id").alias("prior_gp_pct"),
-        pl.col("_gp_pct").shift(1).over("player_id").cum_sum().over("player_id").alias("_cum_prior_sum"),
-        pl.int_range(0, pl.len()).over("player_id").alias("_season_idx"),
-    )
+    # `prior_gp_pct` must be the *immediately preceding season* -- a
+    # row-position `.shift(1)` silently jumps across multi-season gaps
+    # (injury years, overseas stints, retirement-and-return) instead of
+    # nulling out, which corrupts the feature for any player with a gap in
+    # their captured career. Join on `season - 1` instead (the same
+    # gap-safe pattern `nba_aging_curve.build_aging_deltas` already uses).
+    prior = df.select("player_id", (pl.col("season") + 1).alias("season"), pl.col("_gp_pct").alias("prior_gp_pct"))
+    df = df.join(prior, on=["player_id", "season"], how="left")
+    df = df.with_columns(pl.int_range(0, pl.len()).over("player_id").alias("_season_idx"))
+    # career_gp_pct = mean GP% over all STRICTLY PRIOR *observed* seasons
+    # (position-based cumulative average is fine here -- gaps in calendar
+    # time don't invalidate an average of the seasons actually observed).
     df = df.with_columns(
         pl.when(pl.col("_season_idx") > 0)
         .then(pl.col("_gp_pct").shift(1).over("player_id").cum_sum().over("player_id") / pl.col("_season_idx"))
