@@ -7,6 +7,7 @@ debug the model. Floors are set from the observed value at gate time
 
 from __future__ import annotations
 
+import importlib
 from pathlib import Path
 
 import polars as pl
@@ -22,7 +23,10 @@ def test_adj_net_vs_net_rating_and_bpi_2024(monkeypatch) -> None:
     team_box = pl.read_parquet(FIXTURE_DIR / "team_box_2024.parquet")
     oracle = pl.read_parquet(FIXTURE_DIR / "team_ratings_oracle_2024.parquet")
 
-    import sportsdataverse.nba.nba_team_ratings as mod
+    # sportsdataverse.nba.__init__ imports the nba_team_ratings FUNCTION under the same
+    # name as this module, shadowing `sportsdataverse.nba.nba_team_ratings` (the module)
+    # via attribute lookup on `import ... as mod`; importlib.import_module bypasses that.
+    mod = importlib.import_module("sportsdataverse.nba.nba_team_ratings")
 
     monkeypatch.setattr(mod, "load_nba_schedule", lambda seasons: results)
     monkeypatch.setattr(mod, "load_nba_team_boxscore", lambda seasons: team_box)

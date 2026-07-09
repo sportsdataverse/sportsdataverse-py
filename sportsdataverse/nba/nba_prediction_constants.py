@@ -73,14 +73,18 @@ class LeagueConstants:
     in_game_wp_artifact: str = "nba_in_game_wp.json"
 
 
-# Seed values documented in the Phase-0 design (published references / league
-# norms) so the engine imports and runs before the Phase-2/3/5 fitters
-# overwrite hfa/margin_sd/in-game-WP-beta/prop-dispersion with values fitted
-# on the committed 2023-24 (NBA) backtest -- see dev/nba_prediction/fit_*.py.
+# NBA hfa/margin_sd are FITTED (dev/nba_prediction/fit_pregame.py, 2026-07-08):
+# as-of-date team ratings computed for every 3rd unique game date >= a 150-game
+# warmup (1162 of 1320 2023-24 games), hfa = mean(actual_margin - possession-scaled
+# AdjNet diff) over non-neutral games, margin_sd = std of the residual around that
+# fitted hfa (0 for neutral games). WNBA/G-League avg_pace/avg_off_rtg/game_minutes
+# are seed values from published league norms (Task 0.3) pending the Phase-6
+# per-league_id refit; game_minutes is structural, not fitted (WNBA plays 40-minute
+# games; NBA/G-League play 48).
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "00": LeagueConstants(
-        hfa=2.8,
-        margin_sd=13.0,
+        hfa=2.184,
+        margin_sd=14.504,
         avg_pace=99.5,
         avg_off_rtg=114.0,
         game_minutes=48,

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import importlib
 
 import polars as pl
 import pytest
@@ -197,7 +198,11 @@ def test_nba_team_ratings_public_entry_point(monkeypatch: pytest.MonkeyPatch) ->
         ]
     )
 
-    import sportsdataverse.nba.nba_team_ratings as mod
+    # sportsdataverse.nba.__init__ imports the nba_team_ratings FUNCTION under the same
+    # name as this module, which shadows `sportsdataverse.nba.nba_team_ratings` (the
+    # module) via attribute lookup on `import ... as mod`. importlib.import_module
+    # bypasses that and returns the real module from sys.modules.
+    mod = importlib.import_module("sportsdataverse.nba.nba_team_ratings")
 
     monkeypatch.setattr(mod, "load_nba_schedule", lambda seasons: sched2)
     monkeypatch.setattr(mod, "load_nba_team_boxscore", lambda seasons: box2)

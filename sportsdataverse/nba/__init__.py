@@ -79,3 +79,22 @@ from sportsdataverse.nba.nba_war import (  # noqa: F401
     calibrate_replacement_level,
     nba_war,
 )
+from sportsdataverse.nba.nba_prediction_constants import (  # noqa: F401
+    LEAGUE_CONSTANTS,
+    LeagueConstants,
+    as_of_ratings_split,
+    get_constants,
+)
+from sportsdataverse.nba.nba_team_ratings import (  # noqa: F401
+    adjust_efficiency,
+    adjust_pace,
+    nba_team_ratings,
+    raw_game_efficiency,
+)
+from sportsdataverse.nba.nba_game_predict import (  # noqa: F401
+    expected_possessions,
+    nba_predict_games,
+    predict_margin,
+    predict_total,
+    win_prob_from_margin,
+)
