@@ -156,7 +156,12 @@ def _attach_role_bucket(
 
     if "position_bucket" not in positions.columns and "position_num" in positions.columns:
         positions = positions.with_columns(
-            pl.col("position_num").map_elements(_position_num_to_bucket, return_dtype=pl.Utf8).alias("position_bucket")
+            pl.when(pl.col("position_num") < 2.5)
+            .then(pl.lit("guard"))
+            .when(pl.col("position_num") < 3.75)
+            .then(pl.lit("wing"))
+            .otherwise(pl.lit("big"))
+            .alias("position_bucket")
         )
 
     positions = _pin_ids(positions)
@@ -360,9 +365,11 @@ def nba_tracking_reb_oe(
 
     Returns:
         One row per player-season:
-        ``season, player_id, player_name, team_id, position_bucket, gp, min,
-        reb, reb_chances, reb_baseline_rate, reb_expected, reb_oe,
-        reb_oe_per_36, oreb_oe, dreb_oe, league_id``.
+        ``season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8,
+        position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64,
+        reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64,
+        reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64,
+        league_id:Utf8``.
         Empty/malformed input returns a zero-row frame with this schema.
 
     Example:
@@ -551,9 +558,11 @@ def nba_tracking_pass_value(
 
     Returns:
         One row per player-season:
-        ``season, player_id, player_name, team_id, position_bucket, gp, min,
-        ast, passes, ast_baseline_rate, ast_expected, ast_oe, ast_oe_per_36,
-        ast_pts_created, league_id``. Empty/malformed input returns a
+        ``season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8,
+        position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64,
+        passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64,
+        ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64,
+        league_id:Utf8``. Empty/malformed input returns a
         zero-row frame with this schema.
 
     Example:
@@ -715,10 +724,12 @@ def nba_tracking_drive_value(
 
     Returns:
         One row per player-season:
-        ``season, player_id, player_name, team_id, position_bucket, gp, min,
-        drives, drive_pts, drive_baseline_rate, drive_expected, drive_pts_oe,
-        drive_pts_oe_per_36, drive_fta, rim_pressure, drive_ast, drive_tov,
-        league_id``. Empty/malformed input returns a zero-row frame with this schema.
+        ``season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8,
+        position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64,
+        drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64,
+        drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64,
+        rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64,
+        league_id:Utf8``. Empty/malformed input returns a zero-row frame with this schema.
 
     Example:
         Quick start::
@@ -865,9 +876,11 @@ def nba_tracking_shot_diet_value(
 
     Returns:
         One row per player-season:
-        ``season, player_id, player_name, team_id, position_bucket, cs_fga,
-        cs_pts, cs_pts_oe, pu_fga, pu_pts, pu_pts_oe, shot_diet_delta,
-        league_id``. Empty/malformed input returns a zero-row frame with this schema.
+        ``season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8,
+        position_bucket:Utf8, cs_fga:Float64, cs_pts:Float64,
+        cs_pts_oe:Float64, pu_fga:Float64, pu_pts:Float64, pu_pts_oe:Float64,
+        shot_diet_delta:Float64, league_id:Utf8``.
+        Empty/malformed input returns a zero-row frame with this schema.
 
     Example:
         Quick start::
@@ -991,9 +1004,11 @@ def nba_tracking_touch_value(
 
     Returns:
         One row per player-season:
-        ``season, player_id, player_name, team_id, position_bucket, gp, min,
-        touches, pts, touch_baseline_rate, touch_expected, pts_per_touch_oe,
-        time_of_poss, time_of_poss_eff, league_id``. Empty/malformed input
+        ``season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8,
+        position_bucket:Utf8, gp:Int64, min:Float64, touches:Float64,
+        pts:Float64, touch_baseline_rate:Float64, touch_expected:Float64,
+        pts_per_touch_oe:Float64, time_of_poss:Float64,
+        time_of_poss_eff:Float64, league_id:Utf8``. Empty/malformed input
         returns a zero-row frame with this schema.
 
     Example:
@@ -1174,9 +1189,11 @@ def nba_tracking_rim_protect_value(
 
     Returns:
         One row per player-season:
-        ``season, player_id, player_name, team_id, position_bucket, gp, min,
-        d_fga, d_fgm, d_fg_pct, normal_fg_pct, rim_protect_pts_saved,
-        rim_protect_pts_saved_per_36, source, league_id``. Empty/malformed
+        ``season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8,
+        position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64,
+        d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64,
+        rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64,
+        source:Utf8, league_id:Utf8``. Empty/malformed
         input returns a zero-row frame with this schema.
 
     Example:
