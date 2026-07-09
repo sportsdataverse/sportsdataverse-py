@@ -183,11 +183,16 @@ from sportsdataverse.wnba import scoreboard_event_parsing as scoreboard_event_pa
 from sportsdataverse.wnba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.wnba import shot_selection_quality as shot_selection_quality  # noqa: F401
 from sportsdataverse.wnba import underscore as underscore  # noqa: F401
+from sportsdataverse.wnba import wnba_aging_curve as wnba_aging_curve  # noqa: F401
+from sportsdataverse.wnba import wnba_availability as wnba_availability  # noqa: F401
+from sportsdataverse.wnba import wnba_career_trajectory as wnba_career_trajectory  # noqa: F401
+from sportsdataverse.wnba import wnba_draft_model as wnba_draft_model  # noqa: F401
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
 from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
+from sportsdataverse.wnba import wnba_rookie_projection as wnba_rookie_projection  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_drive_value as wnba_tracking_drive_value  # noqa: F401
 from sportsdataverse.wnba import wnba_tracking_pass_value as wnba_tracking_pass_value  # noqa: F401
@@ -358,11 +363,16 @@ __all__ = [
     "shooter_talent",
     "shot_selection_quality",
     "underscore",
+    "wnba_aging_curve",
+    "wnba_availability",
+    "wnba_career_trajectory",
+    "wnba_draft_model",
     "wnba_enhanced_pbp",
     "wnba_on_court",
     "wnba_pbp_disk",
     "wnba_possessions",
     "wnba_rapm_from_games",
+    "wnba_rookie_projection",
     "wnba_shot_value",
     "wnba_tracking_drive_value",
     "wnba_tracking_pass_value",

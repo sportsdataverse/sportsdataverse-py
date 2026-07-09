@@ -29,4 +29,8 @@ from sportsdataverse.wnba.wnba_engine import (  # noqa: F401
     wnba_rapm_from_games,
 )
 from sportsdataverse.wnba.wnba_shot_value import *
+from sportsdataverse.wnba.wnba_aging_curve import wnba_aging_curve, wnba_career_trajectory  # noqa: F401
+from sportsdataverse.wnba.wnba_availability import wnba_availability  # noqa: F401
+from sportsdataverse.wnba.wnba_draft_model import wnba_draft_model  # noqa: F401
+from sportsdataverse.wnba.wnba_rookie_projection import wnba_rookie_projection  # noqa: F401
 from sportsdataverse.wnba.wnba_tracking_value import *

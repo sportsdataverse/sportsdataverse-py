@@ -632,6 +632,105 @@ sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
 sel.sort("selection_quality", descending=True).head(15)
 ```
 
+### `wnba_aging_curve(*, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_aging_curve}
+
+WNBA aging curve -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_aging_curve.nba_aging_curve` for the
+full contract; this is a by-reference re-export, same algorithm, women's
+bundled artifact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+Frame `age:Int64, rel_value:Float64, peak_age:Float64`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_aging_curve
+curve = wnba_aging_curve()
+```
+
+### `wnba_availability(seasons: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_availability}
+
+WNBA availability -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_availability.nba_availability` for the
+full contract; `avail_pct` is availability, not skill.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season (start year) or list of seasons. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, season:Int64, avail_pct:Float64`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_availability
+proj = wnba_availability(2023)
+```
+
+### `wnba_career_trajectory(player_values: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_career_trajectory}
+
+WNBA career trajectory -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_aging_curve.nba_career_trajectory` for
+the full contract.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_values` | `DataFrame` |  | Frame `player_id, age:Int64, value:Float64`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_values` plus `age_adjusted_value` and `proj_next_value`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.wnba import wnba_career_trajectory
+player_values = pl.DataFrame({"player_id": ["1"], "age": [26], "value": [10.0]})
+wnba_career_trajectory(player_values)
+```
+
+### `wnba_draft_model(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_draft_model}
+
+Project WNBA prospect career value + draft probability from draft slot.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year (e.g. `2023`) or list of years. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8`. Empty input returns the zero-row schema, never raises.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_draft_model
+board = wnba_draft_model(2023)
+```
+
 ### `wnba_enhanced_pbp(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_enhanced_pbp}
 
 Return a normalised enhanced play-by-play frame for a WNBA game.
@@ -808,6 +907,28 @@ import polars as pl
 game_ids = pl.read_parquet("wnba_schedule.parquet")["game_id"].to_list()
 rapm = wnba_rapm_from_games(game_ids)
 print(rapm.sort("rapm", descending=True).head(10))
+```
+
+### `wnba_rookie_projection(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_rookie_projection}
+
+WNBA rookie/sophomore projection -- composes the WNBA draft/aging/availability pieces.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_rookie_projection
+board = wnba_rookie_projection(2023)
 ```
 
 ### `wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#wnba_shot_value}
