@@ -59,6 +59,7 @@ def test_reb_oe_rank_sanity_and_sum_to_zero():
     assert residual_sums_to_zero(out, "reb_oe", ["position_bucket"]) is True
 
     qualified = out.filter(pl.col("gp") >= MIN_GP)
+    assert qualified.height >= 300  # floor vs a truncated re-capture (observed ~403) -> no vacuous top-K pass
     # K=35 of ~403 qualified (~8.7%) -- the smallest K covering every allowlisted
     # id once the allowlist was re-sourced by RATE (see nba_tracking_value_constants
     # module comment); do not raise K to cover a differently-sourced allowlist.
@@ -74,8 +75,10 @@ def test_ast_oe_rank_sanity_and_sum_to_zero():
     assert residual_sums_to_zero(out, "ast_oe", ["position_bucket"]) is True
 
     qualified = out.filter(pl.col("gp") >= MIN_GP)
+    assert qualified.height >= 400  # floor vs a truncated re-capture (observed ~443) -> no vacuous top-K pass
     # K=20 of ~443 qualified (~4.5%) -- the smallest K covering every allowlisted
-    # id once the allowlist was re-sourced by ast_to_pass_pct RATE.
+    # id once the allowlist was re-sourced by ast_to_pass_pct RATE; do not raise
+    # K to cover a differently-sourced allowlist.
     top_ids = set(top_k_ids(qualified, "ast_oe", k=20))
     elite = set(ELITE_ORACLE["2023-24"]["ast"])
     assert elite.issubset(top_ids), elite - top_ids
@@ -88,9 +91,11 @@ def test_drive_pts_oe_rank_sanity_and_sum_to_zero():
     assert residual_sums_to_zero(out, "drive_pts_oe", ["position_bucket"]) is True
 
     qualified = out.filter(pl.col("gp") >= MIN_GP)
+    assert qualified.height >= 400  # floor vs a truncated re-capture (observed ~443) -> no vacuous top-K pass
     # K=25 of ~443 qualified (~5.6%) -- the smallest K covering every allowlisted
     # id once Dejounte Murray (raw drive-volume leader) was swapped for Kyrie
-    # Irving (see nba_tracking_value_constants module comment).
+    # Irving (see nba_tracking_value_constants module comment); do not raise K
+    # to cover a differently-sourced allowlist.
     top_ids = set(top_k_ids(qualified, "drive_pts_oe", k=25))
     elite = set(ELITE_ORACLE["2023-24"]["drive"])
     assert elite.issubset(top_ids), elite - top_ids
@@ -110,10 +115,12 @@ def test_cs_pts_oe_rank_sanity_and_sum_to_zero():
 
     # No gp/min on this schema -- qualify on attempt volume instead (>=50 cs_fga).
     qualified = out.filter(pl.col("cs_fga") >= 50)
+    assert qualified.height >= 300  # floor vs a truncated re-capture (observed ~335) -> no vacuous top-K pass
     # K=30 of ~335 qualified (~9%) -- the smallest K covering every allowlisted
     # id once Klay Thompson/Bogdanovic/Bridges (career-reputation picks) were
     # swapped for players who were actually elite BY RATE in 2023-24 (see
-    # nba_tracking_value_constants module comment).
+    # nba_tracking_value_constants module comment); do not raise K to cover a
+    # differently-sourced allowlist.
     top_ids = set(top_k_ids(qualified, "cs_pts_oe", k=30))
     elite = set(ELITE_ORACLE["2023-24"]["shot"])
     assert elite.issubset(top_ids), elite - top_ids
@@ -126,11 +133,13 @@ def test_pts_per_touch_oe_rank_sanity_and_sum_to_zero():
     assert residual_sums_to_zero(out, "pts_per_touch_oe", ["position_bucket"]) is True
 
     qualified = out.filter(pl.col("gp") >= MIN_GP)
+    assert qualified.height >= 400  # floor vs a truncated re-capture (observed ~443) -> no vacuous top-K pass
     # K=28 of ~443 qualified (~6.3%) -- the smallest K covering every allowlisted
     # id once Jokic/Tatum/A. Davis (general-greatness picks) were swapped for
     # players who were actually elite BY pts_per_touch RATE in 2023-24 (see
     # nba_tracking_value_constants module comment -- Jokic's facilitator-hub
-    # role means many touches end in a pass, not his own shot).
+    # role means many touches end in a pass, not his own shot); do not raise K
+    # to cover a differently-sourced allowlist.
     top_ids = set(top_k_ids(qualified, "pts_per_touch_oe", k=28))
     elite = set(ELITE_ORACLE["2023-24"]["touch"])
     assert elite.issubset(top_ids), elite - top_ids
@@ -143,11 +152,13 @@ def test_rim_protect_pts_saved_rank_sanity_and_sum_to_zero():
     assert residual_sums_to_zero(out, "rim_protect_pts_saved", ["position_bucket"]) is True
 
     qualified = out.filter(pl.col("gp") >= MIN_GP)
+    assert qualified.height >= 400  # floor vs a truncated re-capture (observed ~443) -> no vacuous top-K pass
     # K=30 of ~443 qualified (~6.8%) -- the smallest K covering every allowlisted
     # id once Myles Turner/Nurkic (reputation picks) were swapped for Porzingis/
     # Hartenstein: both allowed ~58.7-58.8% at the rim, essentially identical to
     # the "big" bucket baseline (58.6%) -- verified against the raw fixture, not
-    # a bug (see nba_tracking_value_constants module comment).
+    # a bug (see nba_tracking_value_constants module comment); do not raise K to
+    # cover a differently-sourced allowlist.
     top_ids = set(top_k_ids(qualified, "rim_protect_pts_saved", k=30))
     elite = set(ELITE_ORACLE["2023-24"]["rim"])
     assert elite.issubset(top_ids), elite - top_ids

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import polars as pl
+import pytest
 
 from sportsdataverse.nba.nba_tracking_value import _attach_role_bucket, _over_expected, _pin_ids, _season_str
 from sportsdataverse.nba.nba_tracking_value_constants import (
@@ -89,3 +90,13 @@ def test_attach_role_bucket_joins_and_fills_missing_with_all():
     rows = {r["player_id"]: r["position_bucket"] for r in out.iter_rows(named=True)}
     assert rows["1"] == "guard"
     assert rows["2"] == "all"
+
+
+def test_attach_role_bucket_non_overlapping_id_space_trips_match_floor():
+    # dtype AGREES (both Utf8) but the id spaces are disjoint -> every row would
+    # silently fill "all", collapsing the by-position baseline. At league scale
+    # (>=50 rows) the match-rate floor must catch this.
+    df = pl.DataFrame({"player_id": [str(i) for i in range(100)], "reb": [1.0] * 100})
+    positions = pl.DataFrame({"player_id": [str(i) for i in range(1000, 1100)], "position_bucket": ["guard"] * 100})
+    with pytest.raises(AssertionError, match="id-space mismatch"):
+        _attach_role_bucket(df, 2024, positions=positions)

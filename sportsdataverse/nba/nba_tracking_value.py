@@ -167,7 +167,21 @@ def _attach_role_bucket(
     positions = _pin_ids(positions)
     assert df.schema["player_id"] == positions.schema["player_id"], "player_id dtype mismatch before role join"
     out = df.join(positions.select("player_id", "position_bucket"), on="player_id", how="left")
-    return out.with_columns(pl.col("position_bucket").fill_null("all"))
+    out = out.with_columns(pl.col("position_bucket").fill_null("all"))
+    # Match-rate floor: dtype can AGREE yet the id spaces not overlap (e.g. ESPN
+    # vs stats.nba ids), which the left join would silently fill "all" for every
+    # row -- collapsing the by-position baseline into one league-wide bucket with
+    # no error. Only enforce at league scale: a real positions load matches ~100%
+    # there, so a near-zero rate is unambiguously an id-space bug; small frames
+    # legitimately partial-match (documented "missing players -> all" contract).
+    # ponytail: size gate over an opt-out flag -- the bug only manifests at scale.
+    if out.height >= 50:
+        matched = out.filter(pl.col("position_bucket") != "all").height
+        assert matched / out.height >= 0.9, (
+            f"position id-space mismatch: only {matched}/{out.height} rows matched "
+            "(dtype agrees but ids do not overlap -- by-position baseline would collapse)"
+        )
+    return out
 
 
 def _over_expected(
