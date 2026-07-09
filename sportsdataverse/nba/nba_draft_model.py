@@ -50,7 +50,7 @@ def _load_artifact(league: str) -> dict:
     """
     prefix = get_constants(league).artifact_prefix
     path = resources.files("sportsdataverse.nba") / "models" / f"{prefix}_draft_value.json"
-    text = path.read_text(encoding="utf-8")  # type: ignore[attr-defined]
+    text = path.read_text(encoding="utf-8")
     return dict(json.loads(text))
 
 
@@ -87,8 +87,12 @@ def _score(feats: pl.DataFrame, art: dict) -> pl.DataFrame:
             feats = feats.with_columns(pl.lit(None).cast(pl.Float64).alias(col))
     median = art.get("feature_median", {})
     X = feats.select([pl.col(c).fill_null(median.get(c, 0.0)) for c in cols]).to_numpy()
-    value = float(art["value_intercept"]) + X @ np.asarray(art["value_coef"], dtype=float)
-    logit = float(art["prob_intercept"]) + X @ np.asarray(art["prob_coef"], dtype=float)
+    mu = np.asarray(art.get("feature_mean", [0.0] * len(cols)), dtype=float)
+    sd = np.asarray(art.get("feature_sd", [1.0] * len(cols)), dtype=float)
+    sd = np.where(sd == 0.0, 1.0, sd)
+    Z = (X - mu) / sd
+    value = float(art["value_intercept"]) + Z @ np.asarray(art["value_coef"], dtype=float)
+    logit = float(art["prob_intercept"]) + Z @ np.asarray(art["prob_coef"], dtype=float)
     prob = 1.0 / (1.0 + np.exp(-logit))
     out = feats.select("player_id", "draft_year").with_columns(
         pl.Series("proj_career_value", value, dtype=pl.Float64),

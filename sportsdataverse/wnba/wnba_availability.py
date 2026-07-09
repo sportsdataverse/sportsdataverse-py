@@ -38,7 +38,7 @@ def wnba_availability(seasons: "int | list[int]", *, return_as_pandas: bool = Fa
             from sportsdataverse.wnba import wnba_availability
             proj = wnba_availability(2023)
     """
-    return nba_availability(seasons, league="wnba", return_as_pandas=return_as_pandas)  # type: ignore[call-overload,no-any-return]
+    return nba_availability(seasons, league="wnba", return_as_pandas=return_as_pandas)  # type: ignore[call-overload]
 
 
 wnba_availability.__wrapped_core__ = partial(nba_availability, league="wnba")  # type: ignore[attr-defined]

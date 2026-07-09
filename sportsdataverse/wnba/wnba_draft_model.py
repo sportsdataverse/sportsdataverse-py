@@ -46,7 +46,7 @@ FEATURES = ["overall_pick", "round_number"]
 def _load_artifact() -> dict:
     prefix = get_constants("wnba").artifact_prefix
     path = resources.files("sportsdataverse.nba") / "models" / f"{prefix}_draft_value.json"
-    return dict(json.loads(path.read_text(encoding="utf-8")))  # type: ignore[attr-defined]
+    return dict(json.loads(path.read_text(encoding="utf-8")))
 
 
 @overload

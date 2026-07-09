@@ -39,7 +39,7 @@ _EXPECTED_MPG = {"lottery": 28.0, "first_round": 20.0, "second_round": 12.0, "un
 def _load_residual_artifact(league: str) -> dict:
     prefix = get_constants(league).artifact_prefix
     path = resources.files("sportsdataverse.nba") / "models" / f"{prefix}_rookie_projection.json"
-    return dict(json.loads(path.read_text(encoding="utf-8")))  # type: ignore[attr-defined]
+    return dict(json.loads(path.read_text(encoding="utf-8")))
 
 
 def _rel(curve: pl.DataFrame, age: float) -> float:

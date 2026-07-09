@@ -101,7 +101,7 @@ def availability_features(career: pl.DataFrame, *, league: str = "nba") -> pl.Da
 def _load_artifact(league: str) -> dict:
     prefix = get_constants(league).artifact_prefix
     path = resources.files("sportsdataverse.nba") / "models" / f"{prefix}_availability.json"
-    return dict(json.loads(path.read_text(encoding="utf-8")))  # type: ignore[attr-defined]
+    return dict(json.loads(path.read_text(encoding="utf-8")))
 
 
 @overload
@@ -155,7 +155,16 @@ def nba_availability(
     frames = []
     for start_year in range(earliest, latest + 1):
         season_str = f"{start_year}-{str(start_year + 1)[-2:]}"
-        bulk = nba_stats_leaguedashplayerstats(season=season_str)
+        if league == "wnba":
+            # WNBA plays a single-year season label (no cross-year split);
+            # wnba_stats mirrors the nba_stats parameter shape on its own host.
+            from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashplayerstats  # noqa: PLC0415
+
+            bulk = wnba_stats_leaguedashplayerstats(season=str(start_year))
+        elif league == "gleague":
+            bulk = nba_stats_leaguedashplayerstats(season=season_str, league_id="20")
+        else:
+            bulk = nba_stats_leaguedashplayerstats(season=season_str)
         if bulk.is_empty():
             continue
         frames.append(

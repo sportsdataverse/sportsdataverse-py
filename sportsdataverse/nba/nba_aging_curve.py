@@ -86,7 +86,7 @@ def build_aging_deltas(season_values: pl.DataFrame, *, min_minutes: float = 500.
 def _load_curve_artifact(league: str) -> dict:
     prefix = get_constants(league).artifact_prefix
     path = resources.files("sportsdataverse.nba") / "models" / f"{prefix}_aging_curve.json"
-    return dict(json.loads(path.read_text(encoding="utf-8")))  # type: ignore[attr-defined]
+    return dict(json.loads(path.read_text(encoding="utf-8")))
 
 
 @overload

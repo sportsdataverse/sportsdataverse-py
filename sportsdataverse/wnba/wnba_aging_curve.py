@@ -34,7 +34,7 @@ def wnba_aging_curve(*, return_as_pandas: bool = False) -> "pl.DataFrame | pd.Da
             from sportsdataverse.wnba import wnba_aging_curve
             curve = wnba_aging_curve()
     """
-    return nba_aging_curve(league="wnba", return_as_pandas=return_as_pandas)  # type: ignore[call-overload,no-any-return]
+    return nba_aging_curve(league="wnba", return_as_pandas=return_as_pandas)  # type: ignore[call-overload]
 
 
 def wnba_career_trajectory(
@@ -60,7 +60,7 @@ def wnba_career_trajectory(
             player_values = pl.DataFrame({"player_id": ["1"], "age": [26], "value": [10.0]})
             wnba_career_trajectory(player_values)
     """
-    return nba_career_trajectory(player_values, league="wnba", return_as_pandas=return_as_pandas)  # type: ignore[call-overload,no-any-return]
+    return nba_career_trajectory(player_values, league="wnba", return_as_pandas=return_as_pandas)  # type: ignore[call-overload]
 
 
 wnba_aging_curve.__wrapped_core__ = partial(nba_aging_curve, league="wnba")  # type: ignore[attr-defined]
