@@ -127,10 +127,11 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     )
     game_teams_map = {row["game_id"]: (row["home_abbr"], row["away_abbr"]) for row in game_teams.to_dicts()}
 
-    # Vectorized dict lookup (replace) over the static crosswalk -- avoids a per-row
-    # Python UDF call for what is otherwise a pure static-dict remap.
+    # Vectorized dict lookup over the static crosswalk -- avoids a per-row Python UDF
+    # call for what is otherwise a pure static-dict remap. (replace_strict, not replace:
+    # the `default=` kwarg moved off .replace at polars 1.0.)
     shifts_work = shifts.with_columns(
-        team_abbr=pl.col("event_team").replace(NHL_TEAM_FULLNAME_TO_ABBR, default=None)
+        team_abbr=pl.col("event_team").replace_strict(NHL_TEAM_FULLNAME_TO_ABBR, default=None)
     ).sort("game_id", "game_seconds")
 
     rows: list[dict] = []

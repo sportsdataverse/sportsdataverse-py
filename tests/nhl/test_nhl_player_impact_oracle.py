@@ -85,8 +85,10 @@ def test_gsax_moneypuck_concurrent_gate_skipped_when_oracle_blocked():
             "see tests/fixtures/nhl_player_impact/README.md capture contract."
         )
     mine = nhl_goalie_gsax(_pbp(), pl.DataFrame(), model_dir=MODELS)
+    assert mine.schema["player_id"] == mp.schema["player_id"]
     joined = mine.join(mp, on="player_id", how="inner")
-    assert joined.height > 0, "no overlapping goalies between mine and MoneyPuck's sample"
+    # >=5, not >0: a 1-player overlap makes spearman_corr(n=1) nan -> a vacuous pass.
+    assert joined.height >= 5, "too few overlapping goalies for a meaningful correlation"
     # FLOOR to be set from the observed correlation once a licensed MoneyPuck export
     # is captured -- see the fixture README capture contract.
     FLOOR = 0.6
@@ -117,8 +119,10 @@ def test_rapm_evolvinghockey_concurrent_gate_skipped_when_oracle_blocked():
             "see tests/fixtures/nhl_player_impact/README.md capture contract."
         )
     mine = nhl_skater_rapm(_pbp(), _shifts(), model_dir=MODELS)
+    assert mine.schema["player_id"] == eh.schema["player_id"]
     joined = mine.join(eh, on="player_id", how="inner")
-    assert joined.height > 0, "no overlapping skaters between mine and EvolvingHockey's sample"
+    # >=5, not >0: a 1-player overlap makes spearman_corr(n=1) nan -> a vacuous pass.
+    assert joined.height >= 5, "too few overlapping skaters for a meaningful correlation"
     # FLOOR to be set from the observed correlation once an EvolvingHockey subscription
     # export is captured -- see the fixture README capture contract (expect >= 0.6 per
     # the design spec, given documented methodology differences).
@@ -215,8 +219,10 @@ def test_war_evolvinghockey_concurrent_gate_skipped_when_oracle_blocked():
             "see tests/fixtures/nhl_player_impact/README.md capture contract."
         )
     mine = nhl_skater_war(_pbp(), _shifts(), model_dir=MODELS)
+    assert mine.schema["player_id"] == eh.schema["player_id"]
     joined = mine.join(eh, on="player_id", how="inner")
-    assert joined.height > 0, "no overlapping skaters between mine and EvolvingHockey's sample"
+    # >=5, not >0: a 1-player overlap makes spearman_corr(n=1) nan -> a vacuous pass.
+    assert joined.height >= 5, "too few overlapping skaters for a meaningful correlation"
     FLOOR = 0.6
     corr = spearman_corr(joined["war"].to_numpy(), joined["war_right"].to_numpy())
     assert corr >= FLOOR, f"WAR vs EvolvingHockey concurrent validity below floor: {corr:.3f} < {FLOOR}"

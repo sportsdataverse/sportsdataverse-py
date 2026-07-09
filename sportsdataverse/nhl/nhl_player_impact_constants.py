@@ -88,10 +88,14 @@ class ImpactConfig:
 
 # `goals_per_win` for the NHL is the fitted output of
 # `dev/nhl_player_impact/fit_goals_per_win.py` (Task 6.2): OLS `wins = a + b*goal_diff`
-# over every team's full 2024-25 regular season (31 teams, `load_nhl_schedule(2025)`),
-# `goals_per_win = 1/b = 6.596` -- run 2026-07-08, consistent with the widely-published
-# NHL rule-of-thumb range (~6-6.5, Perry/EvolvingHockey, MoneyPuck). Every other NHL
-# constant below remains a documented seed pending its own fitting task.
+# over every team's full 2024-25 regular season, `goals_per_win = 1/b = 6.596` -- run
+# 2026-07-08, consistent with the widely-published NHL rule-of-thumb range (~6-6.5,
+# Perry/EvolvingHockey, MoneyPuck). NOTE: the fit groups by `load_nhl_schedule`'s
+# team NAME, which is the LOCATION ("New York", "Los Angeles"), so the Rangers and
+# Islanders collapse into one "New York" row -> 31 rows for 32 teams. Benign for a
+# goals-per-win slope (both NY teams' goal-diff/wins just sum into one point) and it
+# doesn't move 6.596; not worth an id-keyed rewrite of a one-shot dev fit. Every other
+# NHL constant below remains a documented seed pending its own fitting task.
 LEAGUE_CONSTANTS: dict[str, ImpactConfig] = {
     "nhl": ImpactConfig(
         goals_per_win=6.596,

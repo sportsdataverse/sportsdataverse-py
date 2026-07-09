@@ -2,9 +2,12 @@
 
 For every unblocked shot on goal, ``gsax = xga - ga`` where ``xga = sum(xg)`` (expected
 goals against) and ``ga = count(goals)`` (actual goals against), attributed to the
-defending team's on-ice goalie. League-wide ``sum(gsax) == 0`` by construction (the
-internal calibration gate in ``test_nhl_player_impact_oracle.py`` -- a real check,
-because an attribution bug that double-counts or drops shots breaks it).
+defending team's on-ice goalie. League-wide ``sum(gsax) ~= 0`` at large sample: the
+algebraic identity is ``sum(gsax) == sum(xga) - sum(goals)``, which is exactly zero
+only under perfect league-wide xG calibration (``sum(xg) == goals``), so the gate in
+``test_nhl_player_impact_oracle.py`` treats it as approximate within a documented
+tolerance -- still a real check, because an attribution bug that double-counts or drops
+shots pushes it far past that band.
 
 Follows the published GSAx methodology (EvolvingHockey, MoneyPuck); no license
 obligation (see ``NOTICE``).
@@ -165,9 +168,10 @@ def nhl_goalie_gsax(
 
     Returns:
         polars.DataFrame: ``player_id:Int64, goalie:Utf8, shots:Int64, xga:Float64,
-        ga:Int64, gsax:Float64, gsax_per_60:Float64``. League-wide ``sum(gsax)`` is
-        exactly ``0`` by construction. Empty/malformed input returns a zero-row frame
-        with this schema -- never raises.
+        ga:Int64, gsax:Float64, gsax_per_60:Float64``. League-wide ``sum(gsax) ==
+        sum(xga) - sum(goals)``, which is ``~= 0`` at large sample and exactly zero only
+        under perfect league-wide xG calibration. Empty/malformed input returns a
+        zero-row frame with this schema -- never raises.
 
     Example:
         Quick start::
