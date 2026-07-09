@@ -91,7 +91,8 @@ def _pin_ids(df: pl.DataFrame) -> pl.DataFrame:
 
 def main() -> None:
     if (OUT / "pbp_2021_2023_slice.parquet").exists():
-        print("pbp fixtures already captured; skipping to participation/pfr", flush=True)
+        print("pbp fixtures already captured; skipping to schedule/participation/pfr", flush=True)
+        _capture_schedule()
         _capture_participation_and_pfr()
         _report()
         return
@@ -108,8 +109,23 @@ def main() -> None:
     fg = pbp.filter(pl.col("play_type") == "field_goal").select(keep)
     fg.write_parquet(OUT / "fg_attempts_2019_2023.parquet")
 
+    _capture_schedule()
     _capture_participation_and_pfr()
     _report()
+
+
+def _capture_schedule() -> None:
+    """Market totals per game for the expected-plays gate (README line item)."""
+    from sportsdataverse.nfl import load_nfl_schedule
+
+    sched = load_nfl_schedule([2021, 2022, 2023])
+    out = sched.select(
+        pl.col("game_id").cast(pl.Utf8),
+        pl.col("season").cast(pl.Int64),
+        pl.col("total_line").cast(pl.Float64),
+    ).drop_nulls(["game_id"])
+    out.write_parquet(OUT / "schedule_2021_2023.parquet")
+    print(f"schedule_2021_2023: {out.height} games", flush=True)
 
 
 def _capture_participation_and_pfr() -> None:

@@ -5845,7 +5845,7 @@ teams = espn_nfl_teams()
 
 Predict FG make probability from the bundled `fg_model` (public wrapper).
 
-Thin supported alias over the private fg_make_prob` so downstream
+Thin supported alias over the private underscore-prefixed helper so downstream
 consumers (e.g. the kicker-rating spine) reuse the shipped model through a
 public import instead of a private reach.
 

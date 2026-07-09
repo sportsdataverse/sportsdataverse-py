@@ -156,6 +156,10 @@ def _punter_value_from(pbp: pl.DataFrame, punt_data: pl.DataFrame) -> pl.DataFra
             - _TOUCHBACK_YARDS * pl.col("touchback").fill_null(0.0)
         ).alias("net"),
     )
+    # the shipped punt table only covers yardline_100 ~31..99; punts outside it get
+    # a null exp_net, which .mean() would skip in exp_net_avg while net_avg kept the
+    # row -- restrict BOTH aggregates to the supported punt set so NOE is unbiased
+    punts = punts.filter(pl.col("exp_net").is_not_null())
     return (
         punts.group_by("season", "punter_player_id")
         .agg(
