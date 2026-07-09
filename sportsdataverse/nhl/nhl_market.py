@@ -363,8 +363,10 @@ def in_game_features(pbp: pl.DataFrame, pregame_home_prob: float) -> pl.DataFram
         pl.col("game_seconds_remaining").cast(pl.Float64).alias("sec_remaining"),
         pl.col("game_seconds_remaining").cast(pl.Float64).sqrt().alias("sqrt_sec_remaining"),
         (pl.col("home_skaters") - pl.col("away_skaters")).cast(pl.Int32).alias("strength_diff"),
-        (pl.col("home_goalie_in") == 0).cast(pl.Int8).alias("home_goalie_pulled"),
-        (pl.col("away_goalie_in") == 0).cast(pl.Int8).alias("away_goalie_pulled"),
+        # Null goalie_in (a small pbp coverage gap, not a real empty-net state)
+        # defaults to "goalie in net" (1) so it never masquerades as a pull.
+        (pl.col("home_goalie_in").fill_null(1) == 0).cast(pl.Int8).alias("home_goalie_pulled"),
+        (pl.col("away_goalie_in").fill_null(1) == 0).cast(pl.Int8).alias("away_goalie_pulled"),
         pl.lit(logit).alias("pregame_logit"),
     )
 
