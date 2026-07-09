@@ -617,6 +617,21 @@ Forecast-accuracy metrics: predicted-vs-actual next-season rating over held-out 
 | `baseline_rmse` | `float` |  |  |
 | `n_forecasts` | `int` |  |  |
 
+### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_pace: 'float', avg_off_rtg: 'float', game_minutes: 'int', in_game_wp_artifact: 'str' = 'nba_in_game_wp.json') -> None` {#LeagueConstants}
+
+Per-`league_id` fitted constants for the NBA prediction & market stack.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `hfa` | `float` |  | Home-court advantage in points (fitted on the as-of-date backtest for the league; see `dev/nba_prediction/fit_pregame.py`). |
+| `margin_sd` | `float` |  | Std. dev. of the game-margin residual (fitted jointly with `hfa`; the Brier-minimizing sigma agrees to within a documented tolerance). |
+| `avg_pace` | `float` |  | League baseline possessions per team per game (adjusted- pace anchor for `~sportsdataverse.nba.nba_team_ratings.adjust_pace`). |
+| `avg_off_rtg` | `float` |  | League baseline points per 100 possessions. |
+| `game_minutes` | `int` |  | Regulation game length in minutes (NBA/G-League 48, WNBA 40) -- structurally different, not a fitted number. |
+| `in_game_wp_artifact` | `str` | `'nba_in_game_wp.json'` | Filename of the bundled in-game-WP coefficients under `sportsdataverse/nba/models` (committed in Phase 3). |
+
 ### `NbaBpmModel(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', positions: 'pl.DataFrame', *, team_adjust: 'bool' = True) -> 'None'` {#NbaBpmModel}
 
 A `RatingsModel` scoring a fold via faithful BPM 2.0.
@@ -817,6 +832,101 @@ Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
 | `random_fold_rmse` | `float` |  | Oracle 1's (`retrodiction`) pooled game-margin RMSE on the same possessions -- the non-time-ordered baseline. |
 | `n_checkpoints` | `int` |  | Number of checkpoint dates that produced a non-degenerate (train, test) split. |
 | `n_test_games` | `int` |  | Total distinct game_ids evaluated across all checkpoints. |
+
+### `adjust_efficiency(game_eff: 'pl.DataFrame', *, league_id: 'str' = '00', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_efficiency}
+
+Iterative opponent-adjusted rating -> AdjOffRtg / AdjDefRtg / AdjNet per team-season.
+
+KenPom-style fixed point: initialize `adj_off = raw_off` /
+`adj_def = raw_def`, then repeatedly recompute each team's rating from
+its games with the opponent's *current* adjusted rating and a
+home-court adjustment removed, until the largest change is below `tol`.
+Ratings are computed independently per season.
+
+The per-game offensive update is
+`off_rtg - (adj_def_opp - avg) - loc_o` where `loc_o` is `+hfa/2` at
+home, `-hfa/2` away, `0` neutral (defense is symmetric with the
+opposite sign); `avg` is the league baseline off rating and `hfa`
+comes from `~sportsdataverse.nba.nba_prediction_constants.get_constants`.
+
+*(T7.2-shared algorithm)* -- identical fixed point to the MBB
+`mbb_team_ratings.adjust_efficiency` / CFB ratings cores.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_eff` | `DataFrame` |  | Output of `raw_game_efficiency`. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League -- selects the HFA + baseline off-rating constants. |
+| `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
+| `tol` | `float` | `0.0001` | Convergence tolerance on the largest rating change. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, raw_off_rtg, raw_def_rtg, games`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_team_ratings import adjust_efficiency, raw_game_efficiency
+ratings = adjust_efficiency(raw_game_efficiency(sched, box))
+```
+
+### `adjust_pace(game_eff: 'pl.DataFrame', *, league_id: 'str' = '00', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_pace}
+
+Opponent-adjusted pace (possessions/game) per team-season.
+
+Same fixed point as `adjust_efficiency`, applied to game
+possessions under the additive model `poss = pace_i + pace_j - avg`: a
+team's pace is recovered by removing its opponents' current adjusted
+pace. `avg` is the league baseline pace from
+`~sportsdataverse.nba.nba_prediction_constants.get_constants`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_eff` | `DataFrame` |  | Output of `raw_game_efficiency`. |
+| `league_id` | `str` | `'00'` | `"00"` / `"10"` / `"20"` -- selects the pace baseline. |
+| `max_iter` | `int` | `100` | Maximum fixed-point iterations. |
+| `tol` | `float` | `0.0001` | Convergence tolerance on the largest pace change. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_pace, raw_pace`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_team_ratings import adjust_pace, raw_game_efficiency
+pace = adjust_pace(raw_game_efficiency(sched, box))
+```
+
+### `as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+
+Return only games strictly before `cutoff_date` (the leakage boundary).
+
+Predictive backtests must rate a game using only games that finished
+before it -- this split enforces that as-of-date rule so no future
+information leaks into a game's own prediction.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `DataFrame` |  | A frame with a `date` column of dtype `pl.Date`. |
+| `cutoff_date` | `date` |  | The date of the game being predicted; games on or after it are dropped. |
+
+**Returns**
+
+The subset of `results` with `date < cutoff_date`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split
+prior = as_of_ratings_split(results, some_game_date)
+```
 
 ### `box_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', *, game_ids: 'Optional[List[str]]' = None) -> 'pl.DataFrame'` {#box_features}
 
@@ -1114,6 +1224,29 @@ teams = espn_nba_teams()
 abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
+### `expected_possessions(home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#expected_possessions}
+
+Expected possessions for a matchup (Pythagorean-tempo blend).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_pace` | `float` |  | Home team's adjusted pace (possessions/game). |
+| `away_pace` | `float` |  | Away team's adjusted pace. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League -- selects the league's baseline pace. |
+
+**Returns**
+
+Expected possessions for the matchup.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import expected_possessions
+expected_possessions(100.0, 98.0)
+```
+
 ### `external_validity(ratings: 'pl.DataFrame', oracle: 'pl.DataFrame', *, rating_col: 'str', oracle_col: 'str', join: 'str' = 'id', ratings_id_col: 'str' = 'player_id', oracle_id_col: 'str' = 'player_id', ratings_name_col: 'str' = 'player_name', oracle_name_col: 'str' = 'player_name', n_permutations: 'int' = 200, seed: 'int' = 0) -> 'ExternalValidityResult'` {#external_validity}
 
 Oracle 5: correlate a model's ratings against a published external metric.
@@ -1378,6 +1511,27 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 ```python
 from sportsdataverse.nba import fox_nba_team_stats
 df = fox_nba_team_stats("...")
+```
+
+### `get_constants(league_id: 'str') -> 'LeagueConstants'` {#get_constants}
+
+Return the `LeagueConstants` for a `league_id`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league_id` | `str` |  | stats.nba.com league id -- `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
+
+**Returns**
+
+The league's `LeagueConstants`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_prediction_constants import get_constants
+get_constants("00").hfa
 ```
 
 ### `get_shrinkage_k(league_id: 'str') -> 'float'` {#get_shrinkage_k}
@@ -1830,6 +1984,35 @@ stub = lambda **kw: pl.DataFrame({"person_id": [1], "position": ["PG"]})
 pos = nba_player_positions("2023-24", fetch=stub)
 ```
 
+### `nba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_predict_games}
+
+Vectorized pregame predictions for a schedule of games.
+
+Joins the ratings frame twice (home/away) and applies the closed-form
+`predict_margin` / `win_prob_from_margin` / `predict_total`
+math column-wise.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | One row per game with `game_id`, `home_team_id`, `away_team_id` and optionally `neutral_site` (missing column means every game is a true home game). Team-id dtypes must match `ratings['team_id']` exactly. |
+| `ratings` | `DataFrame` |  | One row per team with `team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace` (the `~sportsdataverse.nba.nba_team_ratings.nba_team_ratings` output for one season/as-of date). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import nba_predict_games
+from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
+preds = nba_predict_games(games, nba_team_ratings(2024))
+```
+
 ### `nba_ratings_panel(model: 'AnyModel', possessions: 'pl.DataFrame', dates: 'Optional[Sequence[datetime.date]]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_ratings_panel}
 
 Player-ratings-through-date long panel: one row per (player_id, date).
@@ -1962,6 +2145,47 @@ print(ratings.sort("spm", descending=True).head())
 # Pipeline next step
 
 ratings.filter(pl.col("min") >= 500).sort("spm", descending=True)
+```
+
+### `nba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nba_team_ratings}
+
+Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware.
+
+Loads schedule + team box score for `seasons`, optionally filters to
+games strictly before `as_of_date` (the leakage boundary, via
+`~sportsdataverse.nba.nba_prediction_constants.as_of_ratings_split`),
+computes per-game efficiency, runs the opponent-adjustment fixed points,
+and adds a per-season dense `rank` (on `adj_net_rtg` descending) and
+`adj_net_z` (z-score of `adj_net_rtg`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | A season (e.g. `2024`) or list of seasons. |
+| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
+| `as_of_date` | `Union[date, None]` | `None` | If given, only games with `date < as_of_date` are used (predictive/backtest usage); `None` computes full-season descriptive ratings. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
+ratings = nba_team_ratings(2024)
+ratings.sort("rank").head()
+
+# As-of-date (leakage-safe) ratings for a backtest
+
+import datetime as dt
+ratings = nba_team_ratings(2024, as_of_date=dt.date(2024, 1, 15))
+
+# WNBA / G-League via ``league_id``
+
+wnba_ratings = nba_team_ratings(2024, league_id="10")
 ```
 
 ### `nba_v3_to_v2_pbp(pbp_v3: 'dict', box_v3: 'dict', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_v3_to_v2_pbp}
@@ -2254,6 +2478,67 @@ df = players_on_court_from_rotation(
 print(df.shape)
 ```
 
+### `predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'` {#predict_margin}
+
+Expected home-minus-away margin from two adjusted net ratings.
+
+The AdjNet difference (points/100 possessions) is scaled by the
+matchup's `expected_possessions` before the home-court advantage
+is added.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_net` | `float` |  | Home team's adjusted net rating (`adj_net_rtg`). |
+| `away_net` | `float` |  | Away team's adjusted net rating. |
+| `home_pace` | `float` |  | Home team's adjusted pace. |
+| `away_pace` | `float` |  | Away team's adjusted pace. |
+| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` -- selects the fitted HFA. |
+
+**Returns**
+
+Expected margin in points (positive favors the home team).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import predict_margin
+predict_margin(10.0, -2.0, home_pace=100.0, away_pace=98.0, neutral=False)
+```
+
+### `predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#predict_total}
+
+Expected total points from adjusted ratings and paces.
+
+Expected possessions come from `expected_possessions`; each side's
+expected points per 100 possessions blend its offense with the
+opponent's defense (`0.5 * (off + opp_def)`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_off` | `float` |  | Home adjusted offensive rating (points/100 poss). |
+| `home_def` | `float` |  | Home adjusted defensive rating. |
+| `away_off` | `float` |  | Away adjusted offensive rating. |
+| `away_def` | `float` |  | Away adjusted defensive rating. |
+| `home_pace` | `float` |  | Home team's adjusted pace. |
+| `away_pace` | `float` |  | Away team's adjusted pace. |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` -- selects the pace anchor. |
+
+**Returns**
+
+Expected combined points scored by both teams.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import predict_total
+predict_total(118.0, 108.0, 110.0, 112.0, 100.0, 98.0)
+```
+
 ### `ratings_as_of(model: 'AnyModel', possessions: 'pl.DataFrame', asof: 'datetime.date') -> 'RatingsFit'` {#ratings_as_of}
 
 Fit `model` on every possession dated on or before `asof` and return ratings.
@@ -2287,6 +2572,29 @@ from sportsdataverse.nba.nba_ratings_panel import ratings_as_of
 
 rf = ratings_as_of(RidgeRapmModel(), season_poss, datetime.date(2023, 12, 1))
 print(rf.o_ratings[201939])   # per-100 offensive rating through Dec 1
+```
+
+### `raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'` {#raw_game_efficiency}
+
+Per-team, per-game possessions + raw offensive/defensive rating.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `schedule` | `DataFrame` |  | Frame with `game_id, season, date, home_team_id, away_team_id, neutral_site` (ids cast to `Utf8` here). |
+| `team_box` | `DataFrame` |  | Per-team box score with `game_id, team_id, field_goals_attempted, offensive_rebounds, turnovers, free_throws_attempted, team_score`. |
+
+**Returns**
+
+One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is_home, neutral_site, poss, off_rtg, def_rtg`. Empty input returns that schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
+from sportsdataverse.nba.nba_team_ratings import raw_game_efficiency
+eff = raw_game_efficiency(load_nba_schedule([2024]), load_nba_team_boxscore([2024]))
 ```
 
 ### `render_report(report: 'ValidationReport') -> 'str'` {#render_report}
@@ -2556,6 +2864,28 @@ checkpoint's fit (no refit) to the current window. `random_fold_rmse` is
 from sportsdataverse.nba.nba_model_validation import RidgeRapmModel, walk_forward
 res = walk_forward(RidgeRapmModel(), season_possessions)
 print(res.game_margin_rmse, res.carry_forward_rmse, res.random_fold_rmse)
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'` {#win_prob_from_margin}
+
+Home win probability from an expected margin (normal-CDF closed form).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | Expected home-minus-away margin in points. |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` -- selects the fitted margin sigma. |
+
+**Returns**
+
+Probability the home team wins, in `(0, 1)`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import win_prob_from_margin
+win_prob_from_margin(5.0)
 ```
 
 ### `xpoints_baseline(league_avgs: 'pl.DataFrame') -> 'pl.DataFrame'` {#xpoints_baseline}
