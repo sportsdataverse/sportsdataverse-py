@@ -431,3 +431,189 @@ def nba_tracking_reb_oe(
 
     out = _finalize_schema(out, _REB_OE_SCHEMA)
     return out.to_pandas() if return_as_pandas else out
+
+
+# ---------------------------------------------------------------------------
+# Phase 2 -- expected assists / passer value
+# ---------------------------------------------------------------------------
+
+_AST_OE_SCHEMA: "dict[str, pl.DataType]" = {
+    "season": pl.Int64,
+    "player_id": pl.Utf8,
+    "player_name": pl.Utf8,
+    "team_id": pl.Utf8,
+    "position_bucket": pl.Utf8,
+    "gp": pl.Int64,
+    "min": pl.Float64,
+    "ast": pl.Float64,
+    "passes": pl.Float64,
+    "ast_baseline_rate": pl.Float64,
+    "ast_expected": pl.Float64,
+    "ast_oe": pl.Float64,
+    "ast_oe_per_36": pl.Float64,
+    "ast_pts_created": pl.Float64,
+    "league_id": pl.Utf8,
+}
+
+
+def _enrich_potential_assists(
+    df: pl.DataFrame,
+    season: "int | str",
+    *,
+    league_id: str,
+    max_players: int,
+    _pass_get_fn: Optional[Callable[..., dict]] = None,
+) -> pl.DataFrame:
+    """Left-join a ``potential_assists`` column onto the top-*max_players* passers.
+
+    Fetches ``nba_stats_playerdashptpass`` one player at a time (capped at
+    *max_players*, ranked by the ``passes`` column already on *df*) and sums
+    each response's ``POTENTIAL_AST`` column across its per-teammate rows.
+    Never a hard dependency -- players outside the fetched set (or any player
+    whose fetch fails/returns no rows) simply keep a null ``potential_assists``.
+
+    Args:
+        df: Frame carrying ``player_id`` (``Utf8``) and ``passes``.
+        season: Season passed to the per-player fetch.
+        league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League.
+        max_players: Cap on the number of per-player fetches.
+        _pass_get_fn: Injectable replacement for ``nba_stats_playerdashptpass``
+            returning the raw payload dict directly.
+
+    Returns:
+        *df* with an added ``potential_assists`` column (``null`` where unresolved).
+    """
+    from sportsdataverse.nba.nba_stats import nba_stats_playerdashptpass  # noqa: PLC0415
+
+    fetch = _pass_get_fn if _pass_get_fn is not None else nba_stats_playerdashptpass
+    top_ids = df.sort("passes", descending=True).head(max_players)["player_id"].to_list()
+
+    rows: list[dict] = []
+    for pid in top_ids:
+        raw = fetch(player_id=pid, season=_season_str(season), league_id=league_id, return_parsed=False)
+        parsed = parse_nba_stats_result_sets(raw)
+        frame = parsed if isinstance(parsed, pl.DataFrame) else None
+        if frame is None and isinstance(parsed, dict):
+            for candidate in parsed.values():
+                if isinstance(candidate, pl.DataFrame) and "potential_ast" in candidate.columns:
+                    frame = candidate
+                    break
+        if frame is None or frame.height == 0 or "potential_ast" not in frame.columns:
+            continue
+        rows.append({"player_id": pid, "potential_assists": float(frame["potential_ast"].sum())})
+
+    if not rows:
+        return df.with_columns(pl.lit(None, dtype=pl.Float64).alias("potential_assists"))
+    enriched = pl.DataFrame(rows).with_columns(pl.col("player_id").cast(pl.Utf8))
+    return df.join(enriched, on="player_id", how="left")
+
+
+def nba_tracking_pass_value(
+    seasons: "int | str | list",
+    *,
+    league_id: str = "00",
+    per_mode: str = "Totals",
+    by_position: bool = True,
+    positions: Optional[pl.DataFrame] = None,
+    fetch_potential_assists: bool = False,
+    max_players: int = 0,
+    return_as_pandas: bool = False,
+    _get_fn: Optional[Callable[..., dict]] = None,
+    _pass_get_fn: Optional[Callable[..., dict]] = None,
+) -> "Union[pl.DataFrame, pd.DataFrame]":
+    """Expected-assists / passer value: ``ast_oe`` per player-season.
+
+    Fetches the ``Passing`` ``leaguedashptstats`` measure (one call) and computes
+    ``ast_oe = ast - passes * bucket_assist_rate``. When
+    ``fetch_potential_assists=True``, also fetches ``nba_stats_playerdashptpass``
+    for the top-``max_players`` passers (capped, optional -- never a hard
+    dependency) and recomputes the residual against the richer
+    ``potential_assists`` denominator for that subset; ``max_players=0``
+    (default) makes exactly one request total. ``ast_pts_created`` is passed
+    through directly from the Passing measure (it is already computed there;
+    not re-derived).
+
+    Args:
+        seasons: A single season or list of seasons.
+        league_id: ``"00"`` NBA (default), ``"10"`` WNBA, ``"20"`` G-League.
+        per_mode: ``per_mode_simple`` passed to the fetch (default ``"Totals"``).
+        by_position: Compute the baseline within role buckets (default);
+            ``False`` forces one league-wide bucket.
+        positions: Optional pre-fetched positions frame.
+        fetch_potential_assists: Enrich the top passers with
+            ``playerdashptpass`` potential-assist counts.
+        max_players: Cap on per-player enrichment fetches; ``0`` disables
+            enrichment regardless of ``fetch_potential_assists``.
+        return_as_pandas: Return a :class:`pandas.DataFrame` instead of polars.
+        _get_fn: Injectable replacement for ``nba_stats_leaguedashptstats``.
+        _pass_get_fn: Injectable replacement for ``nba_stats_playerdashptpass``.
+
+    Returns:
+        One row per player-season:
+        ``season, player_id, player_name, team_id, position_bucket, gp, min,
+        ast, passes, ast_baseline_rate, ast_expected, ast_oe, ast_oe_per_36,
+        ast_pts_created, league_id``. Empty/malformed input returns a
+        zero-row frame with this schema.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.nba import nba_tracking_pass_value
+            df = nba_tracking_pass_value(2024)
+            print(df.sort("ast_oe", descending=True).head())
+
+        With potential-assist enrichment for the top 50 passers::
+
+            df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
+
+        See Also:
+            * `nba_api`_ -- Python NBA/WNBA stats API client
+
+        .. _nba_api: https://github.com/swar/nba_api
+    """
+    season_list = _as_season_list(seasons)
+    spec = MEASURE_SPECS["ast"]
+
+    frames = []
+    for season in season_list:
+        fetched = _fetch_leaguedash_tracking(
+            season, spec.measure, league_id=league_id, per_mode=per_mode, _get_fn=_get_fn
+        )
+        if fetched.height == 0:
+            continue
+        if spec.denom in fetched.columns and "passes" not in fetched.columns:
+            fetched = fetched.rename({spec.denom: "passes"})
+        frames.append(fetched.with_columns(pl.lit(_season_label(season)).alias("season")))
+
+    if not frames:
+        out = pl.DataFrame(schema=_AST_OE_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    df = pl.concat(frames, how="diagonal_relaxed")
+
+    if by_position:
+        df = _attach_role_bucket(df, season_list[0], league_id=league_id, positions=positions)
+        group_cols: "list[str]" = ["position_bucket"]
+    else:
+        df = df.with_columns(pl.lit("all").alias("position_bucket"))
+        group_cols = []
+
+    denom_col = "passes"
+    if fetch_potential_assists and max_players > 0 and "passes" in df.columns:
+        df = _enrich_potential_assists(
+            df, season_list[0], league_id=league_id, max_players=max_players, _pass_get_fn=_pass_get_fn
+        )
+        if "potential_assists" in df.columns:
+            denom_col = "potential_assists"
+
+    out = _over_expected(df, actual="ast", denom=denom_col, group_cols=group_cols, out_prefix="ast")
+    out = out.with_columns(
+        pl.when(pl.col("min") > 0)
+        .then(pl.col("ast_oe") / (pl.col("min") / 36.0))
+        .otherwise(None)
+        .alias("ast_oe_per_36")
+    )
+    out = out.with_columns(pl.lit(league_id).alias("league_id"))
+
+    out = _finalize_schema(out, _AST_OE_SCHEMA)
+    return out.to_pandas() if return_as_pandas else out
