@@ -125,3 +125,21 @@ def test_rapm_evolvinghockey_concurrent_gate_skipped_when_oracle_blocked():
     FLOOR = 0.6
     corr = spearman_corr(joined["xg_rapm"].to_numpy(), joined["xg_rapm_right"].to_numpy())
     assert corr >= FLOOR, f"skater RAPM vs EvolvingHockey concurrent validity below floor: {corr:.3f} < {FLOOR}"
+
+
+# Observed on the 3-game fixture (3087 on-ice combinations, min_toi=0): Spearman(summed
+# member RAPM, observed on-ice xGF-xGA) == 0.235. This is real signal (positive,
+# non-trivial) but modest -- the combinatorial "every co-occurring size-3/2 subset counts
+# as its own unit" construction (see nhl_unit_ratings' data-availability caveat) smooths
+# a lot of variance across heavily overlapping units on a 3-game sample. FLOOR is set a
+# bit below the observed value, not invented -- debug (not widen) if this regresses.
+UNIT_RATINGS_FLOOR = 0.15
+
+
+def test_unit_ratings_internal_gate_summed_rapm_tracks_on_ice_xg_diff():
+    from sportsdataverse.nhl.nhl_unit_ratings import nhl_unit_ratings
+
+    units = nhl_unit_ratings(_pbp(), _shifts(), model_dir=MODELS, min_toi=0.0)
+    assert units.height > 0
+    corr = spearman_corr(units["summed_rapm"].to_numpy(), (units["on_ice_xgf"] - units["on_ice_xga"]).to_numpy())
+    assert corr >= UNIT_RATINGS_FLOOR, f"unit-ratings internal gate below floor: {corr:.3f} < {UNIT_RATINGS_FLOOR}"
