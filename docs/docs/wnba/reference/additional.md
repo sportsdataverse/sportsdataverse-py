@@ -672,6 +672,94 @@ subs = df.filter(df["is_substitution"] == True)  # noqa: E712
 print(subs.select(["period", "seconds_remaining", "person_id"]))
 ```
 
+### `wnba_expected_turnovers(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_expected_turnovers}
+
+WNBA expected turnovers / ball-security skill (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_expected_turnovers.nba_expected_turnovers`
+to the women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base`) frame. |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_expected_turnovers.nba_expected_turnovers`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_expected_turnovers
+t = wnba_expected_turnovers("2024")
+print(t.sort("ball_security_skill", descending=True).head())
+```
+
+### `wnba_foul_drawing(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, advanced: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_foul_drawing}
+
+WNBA foul-drawing / FT-generation (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_foul_drawing.nba_foul_drawing` to the
+women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base`) frame. |
+| `advanced` | `Optional[DataFrame]` | `None` | Injected `Advanced`-measure frame. |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_foul_drawing.nba_foul_drawing`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_foul_drawing
+f = wnba_foul_drawing("2024")
+print(f.sort("foul_draw_skill", descending=True).head())
+```
+
+### `wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_matchup_drapm}
+
+WNBA matchup defensive RAPM (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm` to the
+women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame. |
+| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig` override. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_matchup_drapm
+d = wnba_matchup_drapm("2024")
+print(d.sort("matchup_drapm", descending=True).head())
+```
+
 ### `wnba_on_court(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_on_court}
 
 Return the rotation-keyed on-court player frame for a WNBA game.
@@ -725,6 +813,37 @@ _No description available._
 |---|---|---|---|
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
+
+### `wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_playtype_ratings}
+
+WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_playtype.nba_playtype_ratings` to the
+women's league. Synergy coverage is sparse for the WNBA; an empty upstream
+fetch degrades to a zero-row frame (never raises).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `off_team` | `Optional[DataFrame]` | `None` | Injected Synergy offensive team frame (bypasses the live fetch). |
+| `def_team` | `Optional[DataFrame]` | `None` | Injected Synergy defensive team frame. |
+| `schedule` | `Optional[DataFrame]` | `None` | Injected `team_id`/`opp_team_id` schedule frame. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_playtype.nba_playtype_ratings`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_playtype_ratings
+r = wnba_playtype_ratings("2024")
+print(r.sort("adj_off", descending=True).head())
+```
 
 ### `wnba_possessions(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_possessions}
 

@@ -184,8 +184,12 @@ from sportsdataverse.wnba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.wnba import shot_selection_quality as shot_selection_quality  # noqa: F401
 from sportsdataverse.wnba import underscore as underscore  # noqa: F401
 from sportsdataverse.wnba import wnba_enhanced_pbp as wnba_enhanced_pbp  # noqa: F401
+from sportsdataverse.wnba import wnba_expected_turnovers as wnba_expected_turnovers  # noqa: F401
+from sportsdataverse.wnba import wnba_foul_drawing as wnba_foul_drawing  # noqa: F401
+from sportsdataverse.wnba import wnba_matchup_drapm as wnba_matchup_drapm  # noqa: F401
 from sportsdataverse.wnba import wnba_on_court as wnba_on_court  # noqa: F401
 from sportsdataverse.wnba import wnba_pbp_disk as wnba_pbp_disk  # noqa: F401
+from sportsdataverse.wnba import wnba_playtype_ratings as wnba_playtype_ratings  # noqa: F401
 from sportsdataverse.wnba import wnba_possessions as wnba_possessions  # noqa: F401
 from sportsdataverse.wnba import wnba_rapm_from_games as wnba_rapm_from_games  # noqa: F401
 from sportsdataverse.wnba import wnba_shot_value as wnba_shot_value  # noqa: F401
@@ -353,8 +357,12 @@ __all__ = [
     "shot_selection_quality",
     "underscore",
     "wnba_enhanced_pbp",
+    "wnba_expected_turnovers",
+    "wnba_foul_drawing",
+    "wnba_matchup_drapm",
     "wnba_on_court",
     "wnba_pbp_disk",
+    "wnba_playtype_ratings",
     "wnba_possessions",
     "wnba_rapm_from_games",
     "wnba_shot_value",

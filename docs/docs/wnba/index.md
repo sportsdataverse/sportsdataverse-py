@@ -11,7 +11,7 @@ sidebar_label: WNBA
 | [ESPN core API (v2)](reference/core) | 80 | `https://sports.core.api.espn.com/v2/sports` |
 | [WNBA Stats API (stats.wnba.com)](reference/wnba_stats) | 95 | `https://stats.wnba.com` |
 | [Dataset loaders](reference/loaders) | 25 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 19 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 23 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
