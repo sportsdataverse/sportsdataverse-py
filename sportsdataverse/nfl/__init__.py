@@ -98,8 +98,11 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp, team_name_fn
 from sportsdataverse.nfl.nfl_fourth_down import *
+from sportsdataverse.nfl.nfl_market import *
 from sportsdataverse.nfl.nfl_pbp import *
+from sportsdataverse.nfl.nfl_player_props import *
 from sportsdataverse.nfl.nfl_player_stats import *
+from sportsdataverse.nfl.nfl_ratings import *
 from sportsdataverse.nfl.nfl_stats import (
     build_nfl_player_stats,
     build_nfl_player_stats_def,
@@ -132,3 +135,10 @@ from sportsdataverse.nfl.nfl_players import build_nfl_players, nfl_players_cross
 from sportsdataverse.nfl.nfl_roster_builder import build_nfl_rosters
 from sportsdataverse.nfl.nfl_season_standings import nfl_season_standings
 from sportsdataverse.nfl.nfl_simulations import nfl_compute_results, nfl_simulations
+from sportsdataverse.nfl.nfl_projection import nfl_fantasy_projection, nfl_player_projection
+from sportsdataverse.nfl.nfl_usage_projection import nfl_usage_projection
+from sportsdataverse.nfl.nfl_availability import (
+    compose_counting_projection,
+    nfl_availability_projection,
+)
+from sportsdataverse.nfl.nfl_draft_model import nfl_draft_projection

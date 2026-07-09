@@ -1,0 +1,18 @@
+schema: compose_counting_projection
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: proj_rate
+  type: double
+  description: ''
+- name: proj_volume
+  type: double
+  description: ''
+- name: proj_availability
+  type: double
+  description: ''
+- name: proj_counting
+  type: double
+  description: ''

@@ -4,6 +4,8 @@
 
 - [Unreleased](#unreleased)
   - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
+  - [NFL — projection & draft spine (player projections → usage shares → availability → draft model)](#nfl--projection--draft-spine-player-projections-%E2%86%92-usage-shares-%E2%86%92-availability-%E2%86%92-draft-model)
+  - [NFL — ratings & market spine (power ratings → win prob → spread/total → player props)](#nfl--ratings--market-spine-power-ratings-%E2%86%92-win-prob-%E2%86%92-spreadtotal-%E2%86%92-player-props)
   - [CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)](#cfb--recruiting--roster-projection-spine-talent-composite-%E2%86%92-returning-production-%E2%86%92-wins-projection-%E2%86%92-transfer-impact-%E2%86%92-draft-projection)
   - [NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)](#nba--wnba--g-league--shot-value-spine-xpoints-%E2%86%92-context-make-prob-%E2%86%92-talent-%E2%86%92-selection-%E2%86%92-zone-maps)
   - [MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)](#mbb--wbb--shot-quality-spine-xpoints-%E2%86%92-shot-selection-%E2%86%92-shooter-talent)
@@ -188,6 +190,46 @@
   `dev/nfl_scheme/`; known upstream issue flagged:
   `load_nfl_pbp_participation` crashes on multi-season loads (cross-season
   schema drift) — work around per-season with `how="diagonal_relaxed"`.
+
+### NFL — projection & draft spine (player projections → usage shares → availability → draft model)
+
+- feat(nfl): `nfl_projection` — next-season player stat projections with
+  integer-age aging curves and fitted per-position damping (holdout-2024
+  Spearman QB/RB/WR/TE 0.61/0.72/0.66/0.73; beats naive carry-forward for
+  QB/WR/TE, RB shortfall shipped as a documented strict xfail).
+- feat(nfl): `nfl_usage_projection` — team-internal target/carry share
+  projections that sum to 1.0 by construction (share Spearman RB/WR/TE
+  0.73/0.65/0.74 on the 2024 holdout).
+- feat(nfl): `nfl_availability` — expected games played from historical
+  availability (MAE 3.54, decile calibration gap 0.049).
+- feat(nfl): `nfl_draft_model` — combine + college-production draft-position
+  model (Spearman 0.587 vs realized draft slots, n=1269; hit-rate calibration
+  gap 0.08) with `w_av` career labels (`car_av` upstream is all-null).
+- feat(nfl): `nfl_projection_constants` — shared metrics, league constants,
+  and the as-of split the backtests enforce; constants fitted on 2022/2023
+  as-of folds only (single-evaluation 2024 holdout).
+- Committed fixture corpus under `tests/fixtures/nfl_projection/` with
+  provenance README.
+
+### NFL — ratings & market spine (power ratings → win prob → spread/total → player props)
+
+- feat(nfl): `nfl_ratings` — opponent-adjusted ridge team ratings
+  (offense/defense/net EPA per play + HFA) from `load_nfl_pbp`, validated vs
+  ESPN FPI (Spearman 0.890) and raw team EPA (0.965, 32/32 matched).
+- feat(nfl): `nfl_market` — pregame win probability (Brier 0.232, quintile
+  calibration gap 0.036), spread and total projections (MAE 2.96 / 3.24 vs
+  closing lines over 208 as-of games, weeks 5-18), fitted constants
+  (points-per-net 23.36, HFA 3.12, margin sd 13.02) from committed fitting
+  scripts.
+- feat(nfl): `nfl_player_props` — empirical-Bayes player projection
+  distributions for passing/rushing/receiving yards with over-probabilities
+  (MAE 70.5/21.1/21.4 vs realized; p_over calibrated against lagged
+  pseudo-lines — ESPN purges historical propbets, documented in-test).
+- feat(nfl): `nfl_prediction_constants` — shared metrics (Brier, log-loss,
+  Spearman, calibration tables), league constants, and the as-of season/week
+  split helper the backtests enforce.
+- Committed fixture corpus under `tests/fixtures/nfl_prediction/` with
+  provenance README.
 
 ### CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)
 
