@@ -52,6 +52,16 @@ def test_matchup_drapm_pandas_and_empty():
     pdf = nba_matchup_drapm("2023-24", matchups=_synthetic_matchups(), return_as_pandas=True)
     assert type(pdf).__name__ == "DataFrame" and hasattr(pdf, "iloc")
 
+
+def test_matchup_drapm_sparse_league_fetch_path_degrades(monkeypatch):
+    """Sparse-coverage league (e.g. G-League): the live fetch itself returns empty."""
+    from sportsdataverse.nba import nba_stats
+
+    monkeypatch.setattr(nba_stats, "nba_stats_leagueseasonmatchups", lambda **kw: pl.DataFrame())
+    out = nba_matchup_drapm("2023-24", league_id="20")
+    assert out.height == 0
+    assert set(out.columns) == {"player_id", "matchup_drapm", "matchup_poss"}
+
     empty = nba_matchup_drapm("2023-24", matchups=pl.DataFrame())
     assert empty.height == 0
     assert set(empty.columns) == {"player_id", "matchup_drapm", "matchup_poss"}

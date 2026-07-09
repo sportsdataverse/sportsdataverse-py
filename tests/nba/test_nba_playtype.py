@@ -93,3 +93,14 @@ def test_playtype_ratings_pandas_and_empty():
     empty = nba_playtype_ratings("2023-24", off_team=pl.DataFrame(), def_team=pl.DataFrame(), schedule=pl.DataFrame())
     assert empty.height == 0
     assert "adj_off" in empty.columns
+
+
+def test_playtype_ratings_sparse_league_fetch_path_degrades(monkeypatch):
+    """Sparse-coverage league (e.g. G-League): the live fetch itself returns empty."""
+    from sportsdataverse.nba import nba_stats
+
+    monkeypatch.setattr(nba_stats, "nba_stats_synergyplaytypes", lambda **kw: pl.DataFrame())
+    monkeypatch.setattr(nba_stats, "nba_stats_leaguegamelog", lambda **kw: pl.DataFrame())
+    out = nba_playtype_ratings("2023-24", league_id="20")
+    assert out.height == 0
+    assert "adj_off" in out.columns
