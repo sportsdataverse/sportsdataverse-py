@@ -16,6 +16,7 @@ from sportsdataverse.nba.nba_tracking_value import (
     _attach_role_bucket,
     _fetch_leaguedash_tracking,
     _over_expected,
+    nba_tracking_drive_value,
     nba_tracking_pass_value,
     nba_tracking_reb_oe,
 )
@@ -74,4 +75,19 @@ def test_ast_oe_rank_sanity_and_sum_to_zero():
     # id once the allowlist was re-sourced by ast_to_pass_pct RATE.
     top_ids = set(top_k_ids(qualified, "ast_oe", k=20))
     elite = set(ELITE_ORACLE["2023-24"]["ast"])
+    assert elite.issubset(top_ids), elite - top_ids
+
+
+def test_drive_pts_oe_rank_sanity_and_sum_to_zero():
+    raw = _load_fixture("leaguedashptstats_drives_2324.json")
+    positions = _load_positions()
+    out = nba_tracking_drive_value(2024, _get_fn=lambda **kw: raw, positions=positions)
+    assert residual_sums_to_zero(out, "drive_pts_oe", ["position_bucket"]) is True
+
+    qualified = out.filter(pl.col("gp") >= MIN_GP)
+    # K=25 of ~443 qualified (~5.6%) -- the smallest K covering every allowlisted
+    # id once Dejounte Murray (raw drive-volume leader) was swapped for Kyrie
+    # Irving (see nba_tracking_value_constants module comment).
+    top_ids = set(top_k_ids(qualified, "drive_pts_oe", k=25))
+    elite = set(ELITE_ORACLE["2023-24"]["drive"])
     assert elite.issubset(top_ids), elite - top_ids

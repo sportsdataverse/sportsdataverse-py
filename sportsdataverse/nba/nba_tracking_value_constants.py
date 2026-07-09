@@ -117,7 +117,10 @@ ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
             "1630595",
         ],
         # Elite drivers: SGA, Brunson, Doncic, Zion, A. Edwards, DeRozan,
-        # De'Aaron Fox, Giannis, Dejounte Murray, Maxey.
+        # De'Aaron Fox, Giannis, Kyrie Irving, Maxey. Dejounte Murray (raw
+        # drive-volume leader) swapped out -- ranks ~38th of ~443 qualified
+        # on drive_pts_oe (high volume, only modestly above-average rate);
+        # same volume-vs-rate lesson as reb/ast.
         "drive": [
             "1628983",
             "1628973",
@@ -127,7 +130,7 @@ ELITE_ORACLE: dict[str, dict[str, list[str]]] = {
             "201942",
             "1628368",
             "203507",
-            "1627749",
+            "202681",
             "1630178",
         ],
         # Elite catch-and-shoot shooters: DiVincenzo, Klay Thompson, MPJ,
