@@ -461,4 +461,5 @@ files = [
     "sportsdataverse/nhl/nhl_microstat_constants.py",
     "sportsdataverse/nhl/nhl_faceoff_value.py",
     "sportsdataverse/nhl/nhl_penalty_value.py",
+    "sportsdataverse/nhl/nhl_expected_assists.py",
 ]
