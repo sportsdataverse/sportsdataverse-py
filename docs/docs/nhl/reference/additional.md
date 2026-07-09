@@ -446,7 +446,7 @@ rest of the player-impact spine but is not currently required for TOI.
 
 **Returns**
 
-`player_id:Int64, goalie:Utf8, shots:Int64, xga:Float64, ga:Int64, gsax:Float64, gsax_per_60:Float64`. League-wide `sum(gsax)` is exactly `0` by construction. Empty/malformed input returns a zero-row frame with this schema -- never raises.
+`player_id:Int64, goalie:Utf8, shots:Int64, xga:Float64, ga:Int64, gsax:Float64, gsax_per_60:Float64`. League-wide `sum(gsax) == sum(xga) - sum(goals)`, which is `~= 0` at large sample and exactly zero only under perfect league-wide xG calibration. Empty/malformed input returns a zero-row frame with this schema -- never raises.
 
 **Example**
 
@@ -1145,7 +1145,7 @@ events' `home_goalie_id`/`away_goalie_id` (the modal value in the interval).
 
 **Returns**
 
-one row per interval, schema documented in the module's STINTS_SCHEMA`. Empty/malformed `shifts` returns a zero-row frame.
+one row per interval -- `game_id:Int64, period:Int64, start_s:Int64, end_s:Int64, duration:Int64, home_ids:List(Int64), away_ids:List(Int64), home_goalie:Int64, away_goalie:Int64, strength_state:Utf8, xgf_home:Float64, xgf_away:Float64`. Empty/malformed `shifts` returns a zero-row frame with this schema.
 
 **Example**
 
