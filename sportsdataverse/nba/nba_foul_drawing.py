@@ -42,8 +42,8 @@ def nba_foul_drawing(
     """Expected FTA + residual foul-drawing skill from Synergy play-type mix.
 
     ``lg_ft_rate_t`` = poss-weighted league mean of ``ft_freq`` for play type
-    ``t`` (``Σ_players(ft_freq_t·off_poss_t) / Σ_players(off_poss_t)``).
-    ``expected_fta = Σ_t off_poss_t · lg_ft_rate_t``;
+    ``t`` (``Σ_players(ft_freq_t·poss_t) / Σ_players(poss_t)``).
+    ``expected_fta = Σ_t poss_t · lg_ft_rate_t``;
     ``foul_draw_skill = 100·(fta − expected_fta)/poss``.
 
     Args:
@@ -55,7 +55,7 @@ def nba_foul_drawing(
             ``pfd`` (personal fouls drawn); optional -- ``pfd`` is ``null``
             when omitted (``fta`` is the always-present proxy).
         player_mix: Injected Synergy player-level offensive mix: ``player_id``,
-            ``play_type``, ``off_poss``, ``ft_freq``.
+            ``play_type``, ``poss``, ``ft_freq``.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -102,15 +102,15 @@ def nba_foul_drawing(
     mix = player_mix.select(
         pl.col("player_id").cast(pl.Int64),
         pl.col("play_type"),
-        pl.col("off_poss").cast(pl.Float64),
+        pl.col("poss").cast(pl.Float64),
         pl.col("ft_freq").cast(pl.Float64),
     )
     lg_rate = mix.group_by("play_type").agg(
-        ((pl.col("ft_freq") * pl.col("off_poss")).sum() / pl.col("off_poss").sum()).alias("lg_ft_rate")
+        ((pl.col("ft_freq") * pl.col("poss")).sum() / pl.col("poss").sum()).alias("lg_ft_rate")
     )
     expected = (
         mix.join(lg_rate, on="play_type", how="left")
-        .with_columns((pl.col("off_poss") * pl.col("lg_ft_rate")).alias("component"))
+        .with_columns((pl.col("poss") * pl.col("lg_ft_rate")).alias("component"))
         .group_by("player_id")
         .agg(pl.col("component").sum().alias("expected_fta"))
     )

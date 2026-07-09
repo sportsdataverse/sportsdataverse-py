@@ -10,7 +10,7 @@ def _mix_and_base():
         {
             "player_id": [1, 1, 2, 2],
             "play_type": ["Isolation", "Drives", "Isolation", "Drives"],
-            "off_poss": [100.0, 100.0, 100.0, 100.0],
+            "poss": [100.0, 100.0, 100.0, 100.0],
             "ft_freq": [0.30, 0.30, 0.05, 0.05],  # A draws more given identical mix
         }
     )

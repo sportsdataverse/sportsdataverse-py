@@ -37,7 +37,7 @@ def nba_expected_turnovers(
     """Expected TOV + residual ball-security skill from Synergy play-type mix.
 
     ``lg_to_rate_t`` = poss-weighted league mean of ``turnover_freq`` for play
-    type ``t``; ``expected_tov = Σ_t off_poss_t · lg_to_rate_t``;
+    type ``t``; ``expected_tov = Σ_t poss_t · lg_to_rate_t``;
     ``ball_security_skill = 100·(expected_tov − tov)/poss`` (fewer turnovers
     than expected ⇒ positive skill -- sign flipped vs. the foul-drawing model).
 
@@ -47,7 +47,7 @@ def nba_expected_turnovers(
         base: Injected ``nba_stats_leaguedashplayerstats`` (``Base`` measure)
             frame: ``player_id``, ``tov``, ``poss`` (bypasses the live fetch).
         player_mix: Injected Synergy player-level offensive mix: ``player_id``,
-            ``play_type``, ``off_poss``, ``turnover_freq``.
+            ``play_type``, ``poss``, ``turnover_freq``.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -93,15 +93,15 @@ def nba_expected_turnovers(
     mix = player_mix.select(
         pl.col("player_id").cast(pl.Int64),
         pl.col("play_type"),
-        pl.col("off_poss").cast(pl.Float64),
+        pl.col("poss").cast(pl.Float64),
         pl.col("turnover_freq").cast(pl.Float64),
     )
     lg_rate = mix.group_by("play_type").agg(
-        ((pl.col("turnover_freq") * pl.col("off_poss")).sum() / pl.col("off_poss").sum()).alias("lg_to_rate")
+        ((pl.col("turnover_freq") * pl.col("poss")).sum() / pl.col("poss").sum()).alias("lg_to_rate")
     )
     expected = (
         mix.join(lg_rate, on="play_type", how="left")
-        .with_columns((pl.col("off_poss") * pl.col("lg_to_rate")).alias("component"))
+        .with_columns((pl.col("poss") * pl.col("lg_to_rate")).alias("component"))
         .group_by("player_id")
         .agg(pl.col("component").sum().alias("expected_tov"))
     )
