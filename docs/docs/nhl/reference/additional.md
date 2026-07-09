@@ -423,6 +423,68 @@ espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 
 ## NHL native
 
+### `nhl_game_total(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_game_total}
+
+Per-game expected total goals -- a thin re-export of model ②'s expected-goals helper.
+
+Satisfies the "props + total" grouping of model ③ (the brief's player-prop
+surface) without a second implementation of the goals math: this calls
+the exact same `sportsdataverse.nhl.nhl_market.predict_total` that
+`sportsdataverse.nhl.nhl_market.nhl_predict_games` uses internally.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | a schedule-shaped frame with `game_id`, `home_team`, `away_team`, `neutral_site`. |
+| `ratings` | `DataFrame` |  | the output of `sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings`. |
+| `league` | `str` | `'nhl'` | resolves HFA/sigma/total_scale via `get_constants`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with `game_id`, `exp_total`. |col_name |type | |:---------|:------| |game_id |String | |exp_total |Float64|
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_props import nhl_game_total
+nhl_game_total(games, ratings)
+```
+
+### `nhl_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_in_game_win_prob}
+
+Per-play live home win probability from the bundled in-game logistic.
+
+Builds `in_game_features` from `pbp`, scores them with the
+committed logistic (`sportsdataverse/nhl/models/<league>_in_game_wp.json`
+-- no first-use download; the coefficients are trained offline by
+`dev/nhl_prediction/train_in_game_wp.py` and committed), and returns
+`sigmoid(coef . features + intercept)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a play-by-play frame shaped like `load_nhl_pbp_full`. |
+| `pregame_home_prob` | `float` |  | the model (2) pregame home win probability anchor. |
+| `league` | `str` | `'nhl'` | resolves the bundled artifact filename via `get_constants`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per play, with a single `home_win_prob: Float64` column.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_market import nhl_in_game_win_prob, win_prob_from_margin
+
+pregame_p = win_prob_from_margin(0.3)
+wp = nhl_in_game_win_prob(pbp, pregame_home_prob=pregame_p)
+print(wp.tail())
+```
+
 ### `nhl_pbp_disk(game_id, path_to_json)` {#nhl_pbp_disk}
 
 _No description available._
@@ -433,6 +495,44 @@ _No description available._
 |---|---|---|---|
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
+
+### `nhl_player_props(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, stats: 'tuple[str, ...]' = ('shots', 'points'), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_player_props}
+
+Empirical-Bayes shots/points player-prop projections, as-of each game.
+
+For every player-game in `load_nhl_skater_boxscores`, projects that
+game's shots-on-goal / points using only the player's **strictly prior**
+games in the same season(s) (the leakage boundary), EB-shrunk toward a
+position prior, adjusted by the opponent's as-of matchup (model ①
+`adj_xga`) and the team's own as-of game-script (model ② native
+`exp_margin` -- never the market line).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | an int or iterable of seasons (`load_nhl_skater_boxscores` only publishes seasons >= 2024). |
+| `league` | `str` | `'nhl'` | resolves `prop_kappa`/`pos_priors` via `get_constants`. |
+| `as_of_date` | `date \| None` | `None` | if given, only games strictly before this date are projected (in addition to the per-player as-of-prior-games rule). |
+| `stats` | `tuple[str, ...]` | `('shots', 'points')` | which stat families to project (`"shots"`, `"points"`). |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per (player, game, stat). Empty/malformed input returns a zero-row frame with the documented schema. |col_name |type | |:---------|:------| |season |Int64 | |game_id |String | |player_id |String | |team |String | |opp_team |String | |stat |String | |proj_mean |Float64| |proj_sd |Float64| |p_over |Float64| |line |Float64|
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_props import nhl_player_props
+
+props = nhl_player_props(2024, stats=("shots",))
+print(props.sort("proj_mean", descending=True).head())
+
+# Pipeline next step (one line)
+
+props.filter(pl.col("player_id") == "8478402")
+```
 
 ### `nhl_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', odds: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_predict_games}
 
@@ -1273,6 +1373,36 @@ The `LeagueConstants` row for `league`.
 ```python
 from sportsdataverse.nhl.nhl_prediction_constants import get_constants
 get_constants("nhl").margin_sd
+```
+
+### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
+
+Per-play in-game win-probability features from game state.
+
+Reads the `load_nhl_pbp_full` schema (`home_score`/`away_score`,
+`game_seconds_remaining`, `home_skaters`/`away_skaters`,
+`home_goalie_in`/`away_goalie_in`). A live feed can populate the same
+five features via a documented column map from
+`sportsdataverse.nhl.nhl_api_web_parsers.parse_nhl_web_pbp`
+(`homeScore`/`awayScore`/`timeRemaining`/`situationCode`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a play-by-play frame shaped like `load_nhl_pbp_full`. |
+| `pregame_home_prob` | `float` |  | the model (2) pregame home win probability (e.g. from `win_prob_from_margin`), converted to a logit and carried as a constant per-play anchor feature. |
+
+**Returns**
+
+A polars DataFrame, one row per play. |col_name |type | |:-------------------|:------| |score_diff |Int32 | |sec_remaining |Float64| |sqrt_sec_remaining |Float64| |strength_diff |Int32 | |home_goalie_pulled |Int8 | |away_goalie_pulled |Int8 | |pregame_logit |Float64|
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_market import in_game_features, win_prob_from_margin
+pregame_p = win_prob_from_margin(0.3)
+feats = in_game_features(pbp, pregame_home_prob=pregame_p)
 ```
 
 ### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}

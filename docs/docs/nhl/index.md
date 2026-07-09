@@ -14,7 +14,7 @@ sidebar_label: NHL
 | [NHL Stats REST API](reference/nhl_stats_rest) | 21 | `https://api.nhle.com/stats/rest` |
 | [NHL Records API](reference/nhl_records) | 44 | `https://records.nhl.com/site/api` |
 | [Dataset loaders](reference/loaders) | 23 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 45 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 49 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

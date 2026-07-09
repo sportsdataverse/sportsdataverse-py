@@ -291,6 +291,7 @@ from sportsdataverse.nhl import helper_nhl_pbp_features as helper_nhl_pbp_featur
 from sportsdataverse.nhl import helper_nhl_pickcenter as helper_nhl_pickcenter  # noqa: F401
 from sportsdataverse.nhl import helper_nhl_roster_items as helper_nhl_roster_items  # noqa: F401
 from sportsdataverse.nhl import helper_nhl_team_items as helper_nhl_team_items  # noqa: F401
+from sportsdataverse.nhl import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.nhl import key_check as key_check  # noqa: F401
 from sportsdataverse.nhl import load_nhl_game_info as load_nhl_game_info  # noqa: F401
 from sportsdataverse.nhl import load_nhl_game_rosters as load_nhl_game_rosters  # noqa: F401
@@ -325,7 +326,10 @@ from sportsdataverse.nhl import mae as mae  # noqa: F401
 from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_distance_detail as nhl_edge_team_skating_distance_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_speed_detail as nhl_edge_team_skating_speed_detail  # noqa: F401
+from sportsdataverse.nhl import nhl_game_total as nhl_game_total  # noqa: F401
+from sportsdataverse.nhl import nhl_in_game_win_prob as nhl_in_game_win_prob  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
+from sportsdataverse.nhl import nhl_player_props as nhl_player_props  # noqa: F401
 from sportsdataverse.nhl import nhl_predict_games as nhl_predict_games  # noqa: F401
 from sportsdataverse.nhl import nhl_records_coach_milestone_wins as nhl_records_coach_milestone_wins  # noqa: F401
 from sportsdataverse.nhl import nhl_records_comeback_wins as nhl_records_comeback_wins  # noqa: F401
@@ -519,6 +523,7 @@ __all__ = [
     "helper_nhl_pickcenter",
     "helper_nhl_roster_items",
     "helper_nhl_team_items",
+    "in_game_features",
     "key_check",
     "load_nhl_game_info",
     "load_nhl_game_rosters",
@@ -597,11 +602,14 @@ __all__ = [
     "nhl_edge_team_skating_speed_top_10",
     "nhl_edge_team_zone_time_details",
     "nhl_edge_team_zone_time_top_10",
+    "nhl_game_total",
     "nhl_goalie_leaders",
+    "nhl_in_game_win_prob",
     "nhl_landing",
     "nhl_pbp_disk",
     "nhl_player_game_log",
     "nhl_player_landing",
+    "nhl_player_props",
     "nhl_player_spotlight",
     "nhl_playoff_series",
     "nhl_predict_games",
