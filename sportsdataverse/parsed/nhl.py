@@ -280,6 +280,7 @@ from sportsdataverse.nhl import espn_nhl_pbp as espn_nhl_pbp  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_player_stats as espn_nhl_player_stats  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_schedule as espn_nhl_schedule  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_teams as espn_nhl_teams  # noqa: F401
+from sportsdataverse.nhl import expected_goals as expected_goals  # noqa: F401
 from sportsdataverse.nhl import flatten_json_iterative as flatten_json_iterative  # noqa: F401
 from sportsdataverse.nhl import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nhl import helper_nhl_athlete_items as helper_nhl_athlete_items  # noqa: F401
@@ -325,6 +326,7 @@ from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season
 from sportsdataverse.nhl import nhl_edge_team_skating_distance_detail as nhl_edge_team_skating_distance_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_speed_detail as nhl_edge_team_skating_speed_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
+from sportsdataverse.nhl import nhl_predict_games as nhl_predict_games  # noqa: F401
 from sportsdataverse.nhl import nhl_records_coach_milestone_wins as nhl_records_coach_milestone_wins  # noqa: F401
 from sportsdataverse.nhl import nhl_records_comeback_wins as nhl_records_comeback_wins  # noqa: F401
 from sportsdataverse.nhl import nhl_records_consecutive_goal_seasons as nhl_records_consecutive_goal_seasons  # noqa: F401
@@ -367,10 +369,13 @@ from sportsdataverse.nhl import parser_for_edge as parser_for_edge  # noqa: F401
 from sportsdataverse.nhl import parser_for_nhl_api_web as parser_for_nhl_api_web  # noqa: F401
 from sportsdataverse.nhl import parser_for_nhl_records as parser_for_nhl_records  # noqa: F401
 from sportsdataverse.nhl import parser_for_nhl_stats_rest as parser_for_nhl_stats_rest  # noqa: F401
+from sportsdataverse.nhl import predict_margin as predict_margin  # noqa: F401
+from sportsdataverse.nhl import predict_total as predict_total  # noqa: F401
 from sportsdataverse.nhl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nhl import spearman_corr as spearman_corr  # noqa: F401
 from sportsdataverse.nhl import team_game_xg_rates as team_game_xg_rates  # noqa: F401
 from sportsdataverse.nhl import underscore as underscore  # noqa: F401
+from sportsdataverse.nhl import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 from sportsdataverse.nhl import year_to_season as year_to_season  # noqa: F401
 
 __all__ = [
@@ -495,6 +500,7 @@ __all__ = [
     "espn_nhl_transactions",
     "espn_nhl_venue",
     "espn_nhl_venues",
+    "expected_goals",
     "flatten_json_iterative",
     "fox_nhl_boxscore",
     "fox_nhl_league_leaders",
@@ -598,6 +604,7 @@ __all__ = [
     "nhl_player_landing",
     "nhl_player_spotlight",
     "nhl_playoff_series",
+    "nhl_predict_games",
     "nhl_records_all_time_record_vs_franchise",
     "nhl_records_allstar_coach_career",
     "nhl_records_allstar_goalie_career",
@@ -712,10 +719,13 @@ __all__ = [
     "parser_for_nhl_api_web",
     "parser_for_nhl_records",
     "parser_for_nhl_stats_rest",
+    "predict_margin",
+    "predict_total",
     "scoreboard_event_parsing",
     "spearman_corr",
     "team_game_xg_rates",
     "underscore",
+    "win_prob_from_margin",
     "year_to_season",
 ]
 

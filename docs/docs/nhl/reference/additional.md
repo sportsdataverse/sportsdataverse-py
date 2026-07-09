@@ -434,6 +434,32 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `nhl_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', odds: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_predict_games}
+
+Vectorized pregame margin/win-prob/total (+ market edge) over a schedule.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | a schedule-shaped frame with `game_id`, `home_team`, `away_team`, `neutral_site` (`home_team`/`away_team` must share `nhl_team_ratings`'s `team` dtype -- asserted below). |
+| `ratings` | `DataFrame` |  | the output of `sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings` (`team`, `adj_xgf`, `adj_xga`). |
+| `league` | `str` | `'nhl'` | resolves HFA/sigma via `get_constants`. |
+| `odds` | `Optional[DataFrame]` | `None` | optional frame with `game_id`, `close_puck_line_home`; when supplied, `market_edge = exp_margin - close_puck_line_home`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per game. |col_name |type | |:-------------|:------| |game_id |String | |home_team |String | |away_team |String | |neutral_site |Boolean| |exp_margin |Float64| |home_win_prob |Float64| |exp_total |Float64| |market_edge |Float64|
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_market import nhl_predict_games
+preds = nhl_predict_games(games, ratings)
+print(preds.sort("home_win_prob", descending=True).head())
+```
+
 ### `nhl_records_coach_milestone_wins(wins: 'int', playoffs: 'bool' = False, **filters) -> 'Dict'` {#nhl_records_coach_milestone_wins}
 
 Coaches who reached a wins milestone in fewest games.
@@ -1016,6 +1042,32 @@ teams_pd = espn_nhl_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```
 
+### `expected_goals(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'tuple[float, float]'` {#expected_goals}
+
+Per-team expected goals, blending own offense with opponent defense.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `adj_xgf_home` | `float` |  | home team's opponent-adjusted xG-for rate. |
+| `adj_xga_home` | `float` |  | home team's opponent-adjusted xG-against rate. |
+| `adj_xgf_away` | `float` |  | away team's opponent-adjusted xG-for rate. |
+| `adj_xga_away` | `float` |  | away team's opponent-adjusted xG-against rate. |
+| `neutral` | `bool` |  | whether the game is at a neutral site (drops HFA). |
+| `league` | `str` | `'nhl'` | resolves `hfa` via `get_constants`. |
+
+**Returns**
+
+A `(eg_home, eg_away)` tuple of expected goals.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_market import expected_goals
+expected_goals(2.8, 2.2, 2.5, 2.4, False)
+```
+
 ### `fox_nhl_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_boxscore}
 
 NHL boxscore (long: one row per player-stat).
@@ -1270,6 +1322,65 @@ from sportsdataverse.nhl.nhl_prediction_constants import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
+### `predict_margin(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'float'` {#predict_margin}
+
+Expected home-minus-away goal margin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `adj_xgf_home` | `float` |  | home team's opponent-adjusted xG-for rate. |
+| `adj_xga_home` | `float` |  | home team's opponent-adjusted xG-against rate. |
+| `adj_xgf_away` | `float` |  | away team's opponent-adjusted xG-for rate. |
+| `adj_xga_away` | `float` |  | away team's opponent-adjusted xG-against rate. |
+| `neutral` | `bool` |  | whether the game is at a neutral site. |
+| `league` | `str` | `'nhl'` | resolves `hfa` via `get_constants`. |
+
+**Returns**
+
+`eg_home - eg_away`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_market import predict_margin
+predict_margin(2.8, 2.2, 2.5, 2.4, False)
+```
+
+### `predict_total(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'float'` {#predict_total}
+
+Expected total goals, variance-corrected by the fitted `total_scale`.
+
+The raw `eg_home + eg_away` sum is built from opponent-adjusted,
+**shrunk** ratings, which systematically compress the total's spread
+below the real-world variance (confirmed at fitting time: the OLS slope
+of realized total on the raw sum is ~1.91, not 1.0). `total_scale`
+corrects for that: the raw total's deviation from the league-average
+total is stretched by `total_scale` before adding back the league mean.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `adj_xgf_home` | `float` |  | home team's opponent-adjusted xG-for rate. |
+| `adj_xga_home` | `float` |  | home team's opponent-adjusted xG-against rate. |
+| `adj_xgf_away` | `float` |  | away team's opponent-adjusted xG-for rate. |
+| `adj_xga_away` | `float` |  | away team's opponent-adjusted xG-against rate. |
+| `neutral` | `bool` |  | whether the game is at a neutral site. |
+| `league` | `str` | `'nhl'` | resolves `hfa`/`avg_total_goals`/`total_scale` via `get_constants`. |
+
+**Returns**
+
+The variance-corrected expected combined goal total for the game.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_market import predict_total
+predict_total(2.8, 2.2, 2.5, 2.4, False)
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -1312,7 +1423,7 @@ Per-(game, team) even-strength xG-for/against + realized goals.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | a play-by-play frame shaped like `load_nhl_pbp_full`/`load_nhl_pbp_lite` (needs `game_id`, `event_team_abbr`, `home_abbr`, `away_abbr`, `home_skaters`, `away_skaters`, `home_goalie_in`, `away_goalie_in`, `xg`). |
-| `schedule` | `DataFrame` |  | a schedule frame with `game_id`, `season`, `date`, `home_abbr`, `away_abbr`, `neutral_site`, `home_goals`, `away_goals`. |
+| `schedule` | `DataFrame` |  | a schedule frame with `game_id`, `season`, `date`, `home_abbr`, `away_abbr`, `neutral_site` (`home_goals`/`away_goals` are accepted but ignored -- realized `gf`/`ga` are derived from the pbp's own GOAL events, never from schedule scores; see the module note on the `load_nhl_schedule(s)` placeholder-score bug for seasons <= 2023). |
 | `even_strength_only` | `bool` | `True` | restrict to `home_skaters == away_skaters == 5` with both goalies in net (filters out PP/PK/empty-net distortion). |
 
 **Returns**
@@ -1329,4 +1440,26 @@ pbp = load_nhl_pbp_full([2023])
 sched = load_nhl_schedules([2023])
 rates = team_game_xg_rates(pbp, sched)
 print(rates.filter(pl.col("team") == "TOR").head())
+```
+
+### `win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'nhl') -> 'float'` {#win_prob_from_margin}
+
+Convert an expected goal margin to a home win probability via Phi(margin/sigma).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  | expected home-minus-away goal margin. |
+| `league` | `str` | `'nhl'` | resolves `margin_sd` via `get_constants`. |
+
+**Returns**
+
+`P(home win)` in (0, 1).
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_market import win_prob_from_margin
+win_prob_from_margin(0.35)
 ```

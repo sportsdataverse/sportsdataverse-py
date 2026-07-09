@@ -344,6 +344,7 @@ files = [
     "sportsdataverse/nbagl/nbagl_engine.py",
     "sportsdataverse/nhl/nhl_prediction_constants.py",
     "sportsdataverse/nhl/nhl_team_ratings.py",
+    "sportsdataverse/nhl/nhl_market.py",
     "sportsdataverse/mbb/mbb_lineup_stats.py",
     "sportsdataverse/mbb/mbb_ratings.py",
     "sportsdataverse/mbb/mbb_luck.py",

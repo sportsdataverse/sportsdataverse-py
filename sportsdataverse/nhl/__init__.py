@@ -73,3 +73,10 @@ from sportsdataverse.nhl.nhl_team_ratings import (
     nhl_team_ratings,
     team_game_xg_rates,
 )
+from sportsdataverse.nhl.nhl_market import (
+    expected_goals,
+    nhl_predict_games,
+    predict_margin,
+    predict_total,
+    win_prob_from_margin,
+)
