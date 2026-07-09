@@ -77,7 +77,7 @@ from sportsdataverse.nfl import (  # Canonical names — these continue to work.
     load_teams,
     load_trades,
 )
-from tests.conftest import skip_if_no_live
+from tests.conftest import skip_if_no_live, skip_on_transient_network_error
 
 # ---------------------------------------------------------------------------
 # Identity checks — every alias is its canonical function
@@ -287,8 +287,12 @@ def test_load_nfl_ff_rankings_kind_wins_when_both_supplied():
 def test_load_nfl_ff_rankings_kind_returns_same_data_as_type():
     """Live check: ``kind="draft"`` returns the same dataframe shape as
     ``type="draft"``."""
-    df_type = load_nfl_ff_rankings(type="draft")
-    df_kind = load_nfl_ff_rankings(kind="draft")
+    try:
+        df_type = load_nfl_ff_rankings(type="draft")
+        df_kind = load_nfl_ff_rankings(kind="draft")
+    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+        skip_on_transient_network_error(exc)
+        raise
     assert isinstance(df_type, pl.DataFrame)
     assert isinstance(df_kind, pl.DataFrame)
     assert df_type.shape == df_kind.shape
@@ -299,8 +303,12 @@ def test_load_nfl_ff_rankings_kind_returns_same_data_as_type():
 def test_load_nfl_ff_rankings_alias_returns_same_data():
     """Live check: the ``load_ff_rankings`` alias returns the same dataframe
     as the canonical ``load_nfl_ff_rankings``."""
-    df_alias = load_ff_rankings(kind="draft")
-    df_canonical = load_nfl_ff_rankings(kind="draft")
+    try:
+        df_alias = load_ff_rankings(kind="draft")
+        df_canonical = load_nfl_ff_rankings(kind="draft")
+    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+        skip_on_transient_network_error(exc)
+        raise
     assert df_alias.shape == df_canonical.shape
     assert df_alias.columns == df_canonical.columns
 
