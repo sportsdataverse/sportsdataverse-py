@@ -19,14 +19,16 @@ borderline-probability deciles (n=100-145 there); quadrupling the window to
 real, mostly-noise-driven improvement, but the *direction* of the residual
 gap is consistent (the 7-feature quadratic logistic over-predicts in the
 0.35-0.55 range and under-predicts above 0.65), not further noise. Two
-additional feature sets (added interaction terms, then quartic terms) were
-tried and only marginally reduced it (0.118, then 0.063) while one caused
-numeric overflow -- consistent with the published literature on
-called-strike modeling (Mills 2014 and the framing literature): pure pitch
-location does not fully explain umpire call probability, so a residual
-calibration gap in this range is a property of a location-only model on
-real data, not a fixable defect. FLOOR_CAL_GAP is set from the observed
-result on the committed (7-feature, plan-specified) model + corpus.
+richer feature sets were tried on the same holdout: adding interaction terms
+made it WORSE (0.118 vs the shipped model's 0.075), and quartic terms did
+edge it down to 0.063 but were numerically unstable (exp overflow in the
+logit) -- not worth shipping for a 0.012 gain. This matches the published
+literature on called-strike modeling (Mills 2014 and the framing
+literature): pure pitch location does not fully explain umpire call
+probability, so a residual calibration gap in this range is a property of a
+location-only model on real data, not a fixable defect. FLOOR_CAL_GAP is set
+from the observed result on the committed (7-feature, plan-specified) model +
+corpus.
 """
 
 import polars as pl
@@ -40,7 +42,10 @@ FLOOR_CAL_GAP = 0.08
 
 def test_umpire_zone_calibration_and_sanity():
     pitches = pl.read_parquet(f"{FIXTURE_DIR}/savant_called_pitches.parquet")
-    assert pitches.height > 0
+    # Min-size guard (matches the RE24/WE/prop gates' discipline): the 0.08
+    # calibration floor is only meaningful at the committed corpus size
+    # (~53.7k pitches); a shrunken fixture would pass the gate vacuously on noise.
+    assert pitches.height >= 40000, f"only {pitches.height} pitches -- corpus regression"
 
     shuffled = pitches.sample(fraction=1.0, shuffle=True, seed=0)
     split = int(shuffled.height * 0.7)

@@ -1,12 +1,15 @@
 """RE24 oracle gate: sportsdataverse RE24 vs the published Tango/*The Book* table.
 
-Corpus: tests/fixtures/mlb_game_state/pbp_corpus.parquet (2000-04-03..2000-06-30,
-inside the 1999-2002 span the committed re24_tango_book.parquet covers -- see
-tests/fixtures/mlb_game_state/README.md for full provenance).
+Corpus: tests/fixtures/mlb_game_state/pbp_corpus.parquet (April-June of each
+season 1999-2002, stratified across the whole span the committed
+re24_tango_book.parquet covers -- see tests/fixtures/mlb_game_state/README.md
+for full provenance + the capture-window rationale).
 
 Gate (never lower to pass -- debug the model / widen the corpus instead):
-  - per-state |re_mine - re_tango| <= 0.05 runs
-  - bases-empty/0-out anchor in [0.45, 0.58]
+  - per-state |re_mine - re_tango| <= 0.05 runs (observed max 0.048 -- only
+    ~0.002 headroom; a drift to 0.051 is a genuine signal to re-derive from a
+    fresh capture, not to widen the tolerance)
+  - bases-empty/0-out anchor in [0.45, 0.58] (observed 0.562)
   - strict monotonicity: RE non-increasing in outs within a base_state
 """
 

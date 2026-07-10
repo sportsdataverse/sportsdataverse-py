@@ -109,7 +109,14 @@ def pbp_base_out_states(pbp: pl.DataFrame) -> pl.DataFrame:
         # Score carries across half-inning boundaries -- shift over the WHOLE
         # game, not the half-inning group (unlike bases/outs, which reset).
         (total - total.shift(1, fill_value=0).over("game_id")).alias("runs_on_play"),
-        (pl.col("result_home_score") - pl.col("result_away_score")).alias("score_diff"),
+        # score_diff is START-OF-PA (pre-play): the statsapi result_*_score are
+        # POST-play, so shift them one PA back over the game (0-0 before the
+        # first PA). Keeps the "before the play" contract literal -- the WE
+        # table keys on all-pre-play features, and the sibling spines read it.
+        (
+            pl.col("result_home_score").shift(1, fill_value=0).over("game_id")
+            - pl.col("result_away_score").shift(1, fill_value=0).over("game_id")
+        ).alias("score_diff"),
     )
     df = df.with_columns(
         (

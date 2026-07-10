@@ -11,10 +11,21 @@ not a model bug -- see tests/fixtures/mlb_game_state/README.md.
 
 Gate (never lower to pass -- debug the model):
   - corr(home_win_exp, statsapi home_team_win_probability) >= 0.95
+    (observed 0.974); see the START-OF-PA alignment note below
   - per-game |sum(home_wpa) - (+-0.5)| <= 0.02 (WPA-sum identity), over the
     games with recorded play-by-play (statsapi ships a handful of historical
     games -- verified live, not a capture artifact -- with an empty
     ``allPlays`` array; see the join-count floor below)
+
+START-OF-PA alignment: ``home_win_exp`` is P(home win | state BEFORE the play)
+-- genuinely pre-play (``pbp_base_out_states`` shifts the statsapi post-play
+score back one PA so score_diff is start-of-PA, matching base/outs). statsapi's
+``homeTeamWinProbability`` at ``atBatIndex=i`` is instead measured AFTER at-bat i
+resolves (verified on this fixture: at idx=1 the WP had already dropped to 42.4
+once the away run scored, while the correct pre-play score there is 0-0). So the
+semantically-aligned comparison is statsapi[i] vs our state[i+1] -- the
+end-of-PA_i state equals the start-of-PA_{i+1} state. Same-index gives 0.941
+(a pure timing offset, not a model error); the aligned join gives 0.974.
 """
 
 import polars as pl
@@ -35,8 +46,11 @@ def test_we_matches_statsapi_concurrent_validity():
     one = we.filter(pl.col("game_id") == WE_GAME_ID)
     assert one.height > 0, f"game {WE_GAME_ID} missing from pbp_corpus -- capture regression"
 
-    assert one.schema["at_bat_index"] == oracle.schema["at_bat_index"]
-    j = one.join(oracle, on="at_bat_index", how="inner")
+    # statsapi WP is post-play; our home_win_exp is start-of-PA. Align them by
+    # comparing statsapi[i] to our state[i+1] (post-play_i == pre-play_{i+1}).
+    aligned = one.with_columns((pl.col("at_bat_index") - 1).alias("at_bat_index"))
+    assert aligned.schema["at_bat_index"] == oracle.schema["at_bat_index"]
+    j = aligned.join(oracle, on="at_bat_index", how="inner")
     assert j.height >= 60, f"joined only {j.height} plays (expected >= 60 for a full 9-inning game)"
 
     corr = spearman_corr(
