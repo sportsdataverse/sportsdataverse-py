@@ -8,13 +8,19 @@ Gate floors follow the "never lower a gate -- debug, then floor from the
 observed value" rule; per-gate findings are documented on each test.
 """
 
+from pathlib import Path
+
 import polars as pl
 import pytest
 
-import sportsdataverse.cfb.cfb_advanced_stats as m
+import importlib
+
+m = importlib.import_module("sportsdataverse.cfb.cfb_advanced_stats")
 from sportsdataverse.cfb.cfb_advanced_constants import mae, spearman_corr
 
-FIX = "tests/fixtures/cfb_advanced"
+# Absolute path so the fixture reads survive another test changing the CWD mid-suite
+# (a relative "tests/fixtures/..." errored the whole module in the full-suite run).
+FIX = str(Path(__file__).resolve().parents[1] / "fixtures" / "cfb_advanced")
 
 
 @pytest.fixture(scope="module")
@@ -118,7 +124,9 @@ def test_field_position_avg_start_vs_cfbd():
     released games (junk clock, flipped orientation), which capped this
     correlation at ~0.19 before the drive-level fix.
     """
-    import sportsdataverse.cfb.cfb_field_position as fp
+    import importlib
+
+    fp = importlib.import_module("sportsdataverse.cfb.cfb_field_position")
 
     pbp = pl.read_parquet(f"{FIX}/pbp_slice_2021.parquet")
     orig = fp.load_cfb_pbp
@@ -148,7 +156,9 @@ def test_tempo_plays_per_game_vs_cfbd():
     Adjusted pace has no public oracle; per the plan it is validated as a
     monotone re-ordering of raw pace (observed Spearman 0.9479, floor 0.90).
     """
-    import sportsdataverse.cfb.cfb_tempo as tempo
+    import importlib
+
+    tempo = importlib.import_module("sportsdataverse.cfb.cfb_tempo")
 
     pbp = pl.read_parquet(f"{FIX}/pbp_slice_2021.parquet")
     orig = tempo.load_cfb_pbp

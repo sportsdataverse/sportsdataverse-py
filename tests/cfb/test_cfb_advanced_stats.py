@@ -4,7 +4,9 @@ import datetime
 
 import polars as pl
 
-import sportsdataverse.cfb.cfb_advanced_stats as m
+import importlib
+
+m = importlib.import_module("sportsdataverse.cfb.cfb_advanced_stats")
 
 
 def _long() -> pl.DataFrame:

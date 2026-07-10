@@ -2,7 +2,9 @@
 
 import polars as pl
 
-import sportsdataverse.cfb.cfb_tempo as m
+import importlib
+
+m = importlib.import_module("sportsdataverse.cfb.cfb_tempo")
 
 
 def _synthetic_pbp() -> pl.DataFrame:

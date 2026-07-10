@@ -3,7 +3,9 @@
 import numpy as np
 import polars as pl
 
-import sportsdataverse.cfb.cfb_field_position as m
+import importlib
+
+m = importlib.import_module("sportsdataverse.cfb.cfb_field_position")
 from sportsdataverse.cfb.cfb_field_position import (
     fit_field_position_ep,
     load_fp_curve,
