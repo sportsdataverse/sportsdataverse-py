@@ -2,6 +2,7 @@
 
 import numpy as np
 import polars as pl
+import pytest
 
 from sportsdataverse.nfl.nfl_ngs_constants import (
     empirical_bayes_shrink,
@@ -71,10 +72,15 @@ def test_next_season_stability_perfect():
     assert abs(next_season_stability(cur, nxt, "player_gsis_id", "v", "v2") - 1.0) < 1e-9
 
 
-def test_next_season_stability_too_few_rows_is_nan():
+def test_next_season_stability_too_few_rows_raises():
+    """Below the ``min_n`` overlap floor the join is a hard error, not a silent
+    NaN — a shrunken / re-captured fixture must not let a stability gate pass on
+    a handful of players (oracle-gate-reviewer hardening). Default ``min_n=3``;
+    here the overlap is a single player ("a"), so it asserts."""
     cur = pl.DataFrame({"player_gsis_id": ["a", "b"], "v": [1.0, 2.0]})
     nxt = pl.DataFrame({"player_gsis_id": ["a"], "v2": [2.0]})
-    assert np.isnan(next_season_stability(cur, nxt, "player_gsis_id", "v", "v2"))
+    with pytest.raises(AssertionError):
+        next_season_stability(cur, nxt, "player_gsis_id", "v", "v2")
 
 
 def test_shrink_with_known_sigma2_exact():
