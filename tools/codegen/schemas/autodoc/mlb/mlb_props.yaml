@@ -1,0 +1,24 @@
+schema: mlb_props
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: home_team_id
+  type: character
+  description: ''
+- name: away_team_id
+  type: character
+  description: ''
+- name: exp_runs_home
+  type: double
+  description: ''
+- name: exp_runs_away
+  type: double
+  description: ''
+- name: exp_strikeouts_home
+  type: double
+  description: ''
+- name: exp_strikeouts_away
+  type: double
+  description: ''

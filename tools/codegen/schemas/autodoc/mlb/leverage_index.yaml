@@ -1,0 +1,21 @@
+schema: leverage_index
+kind: dataframe
+columns:
+- name: inning_capped
+  type: integer
+  description: ''
+- name: half
+  type: character
+  description: ''
+- name: base_state
+  type: character
+  description: ''
+- name: outs_start
+  type: integer
+  description: ''
+- name: score_diff_bucket
+  type: integer
+  description: ''
+- name: leverage_index
+  type: double
+  description: ''
