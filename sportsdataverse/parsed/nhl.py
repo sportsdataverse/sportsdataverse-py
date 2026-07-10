@@ -269,12 +269,18 @@ from sportsdataverse.nhl import nhl_stats_rest_team_by_id as _raw_nhl_stats_rest
 from sportsdataverse.nhl import nhl_stats_rest_team_report as _raw_nhl_stats_rest_team_report
 from sportsdataverse.nhl import nhl_web_pbp as _raw_nhl_web_pbp
 from sportsdataverse.nhl import nhl_web_schedule as _raw_nhl_web_schedule
+from sportsdataverse.nhl import ImpactConfig as ImpactConfig  # noqa: F401
 from sportsdataverse.nhl import LeagueConstants as LeagueConstants  # noqa: F401
+from sportsdataverse.nhl import add_shot_geometry as add_shot_geometry  # noqa: F401
 from sportsdataverse.nhl import adjust_rate_opponent as adjust_rate_opponent  # noqa: F401
 from sportsdataverse.nhl import as_of_ratings_split as as_of_ratings_split  # noqa: F401
+from sportsdataverse.nhl import booster_cache_dir as booster_cache_dir  # noqa: F401
 from sportsdataverse.nhl import brier_score as brier_score  # noqa: F401
+from sportsdataverse.nhl import build_design as build_design  # noqa: F401
+from sportsdataverse.nhl import build_stints as build_stints  # noqa: F401
 from sportsdataverse.nhl import calibration_table as calibration_table  # noqa: F401
 from sportsdataverse.nhl import download as download  # noqa: F401
+from sportsdataverse.nhl import ensure_xg_models as ensure_xg_models  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_game_rosters as espn_nhl_game_rosters  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_pbp as espn_nhl_pbp  # noqa: F401
 from sportsdataverse.nhl import espn_nhl_player_stats as espn_nhl_player_stats  # noqa: F401
@@ -321,12 +327,14 @@ from sportsdataverse.nhl import load_nhl_team_box as load_nhl_team_box  # noqa: 
 from sportsdataverse.nhl import load_nhl_team_boxscore as load_nhl_team_boxscore  # noqa: F401
 from sportsdataverse.nhl import load_nhl_team_boxscores as load_nhl_team_boxscores  # noqa: F401
 from sportsdataverse.nhl import load_nhl_three_stars as load_nhl_three_stars  # noqa: F401
+from sportsdataverse.nhl import load_xg_models as load_xg_models  # noqa: F401
 from sportsdataverse.nhl import log_loss_score as log_loss_score  # noqa: F401
 from sportsdataverse.nhl import mae as mae  # noqa: F401
 from sportsdataverse.nhl import most_recent_nhl_season as most_recent_nhl_season  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_distance_detail as nhl_edge_team_skating_distance_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_edge_team_skating_speed_detail as nhl_edge_team_skating_speed_detail  # noqa: F401
 from sportsdataverse.nhl import nhl_game_total as nhl_game_total  # noqa: F401
+from sportsdataverse.nhl import nhl_goalie_gsax as nhl_goalie_gsax  # noqa: F401
 from sportsdataverse.nhl import nhl_in_game_win_prob as nhl_in_game_win_prob  # noqa: F401
 from sportsdataverse.nhl import nhl_pbp_disk as nhl_pbp_disk  # noqa: F401
 from sportsdataverse.nhl import nhl_player_props as nhl_player_props  # noqa: F401
@@ -337,11 +345,16 @@ from sportsdataverse.nhl import nhl_records_consecutive_goal_seasons as nhl_reco
 from sportsdataverse.nhl import nhl_records_fastest_goals as nhl_records_fastest_goals  # noqa: F401
 from sportsdataverse.nhl import nhl_records_fastest_goals_both_teams as nhl_records_fastest_goals_both_teams  # noqa: F401
 from sportsdataverse.nhl import nhl_records_games_played_streak_skaters as nhl_records_games_played_streak_skaters  # noqa: F401
+from sportsdataverse.nhl import nhl_skater_rapm as nhl_skater_rapm  # noqa: F401
+from sportsdataverse.nhl import nhl_skater_war as nhl_skater_war  # noqa: F401
+from sportsdataverse.nhl import nhl_special_teams_value as nhl_special_teams_value  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_component_season as nhl_stats_rest_component_season  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_config as nhl_stats_rest_config  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_content_module as nhl_stats_rest_content_module  # noqa: F401
 from sportsdataverse.nhl import nhl_stats_rest_ping as nhl_stats_rest_ping  # noqa: F401
 from sportsdataverse.nhl import nhl_team_ratings as nhl_team_ratings  # noqa: F401
+from sportsdataverse.nhl import nhl_unit_ratings as nhl_unit_ratings  # noqa: F401
+from sportsdataverse.nhl import nhl_xg as nhl_xg  # noqa: F401
 from sportsdataverse.nhl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nhl import parse_edge_detail as parse_edge_detail  # noqa: F401
 from sportsdataverse.nhl import parse_edge_hardest_shots as parse_edge_hardest_shots  # noqa: F401
@@ -375,20 +388,29 @@ from sportsdataverse.nhl import parser_for_nhl_records as parser_for_nhl_records
 from sportsdataverse.nhl import parser_for_nhl_stats_rest as parser_for_nhl_stats_rest  # noqa: F401
 from sportsdataverse.nhl import predict_margin as predict_margin  # noqa: F401
 from sportsdataverse.nhl import predict_total as predict_total  # noqa: F401
+from sportsdataverse.nhl import prepare_xg_features as prepare_xg_features  # noqa: F401
 from sportsdataverse.nhl import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nhl import spearman_corr as spearman_corr  # noqa: F401
+from sportsdataverse.nhl import team_fullname_to_abbr as team_fullname_to_abbr  # noqa: F401
 from sportsdataverse.nhl import team_game_xg_rates as team_game_xg_rates  # noqa: F401
 from sportsdataverse.nhl import underscore as underscore  # noqa: F401
+from sportsdataverse.nhl import weighted_ridge as weighted_ridge  # noqa: F401
 from sportsdataverse.nhl import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 from sportsdataverse.nhl import year_to_season as year_to_season  # noqa: F401
 
 __all__ = [
+    "ImpactConfig",
     "LeagueConstants",
+    "add_shot_geometry",
     "adjust_rate_opponent",
     "as_of_ratings_split",
+    "booster_cache_dir",
     "brier_score",
+    "build_design",
+    "build_stints",
     "calibration_table",
     "download",
+    "ensure_xg_models",
     "espn_nhl_award",
     "espn_nhl_awards",
     "espn_nhl_calendar",
@@ -553,6 +575,7 @@ __all__ = [
     "load_nhl_team_boxscore",
     "load_nhl_team_boxscores",
     "load_nhl_three_stars",
+    "load_xg_models",
     "log_loss_score",
     "mae",
     "most_recent_nhl_season",
@@ -603,6 +626,7 @@ __all__ = [
     "nhl_edge_team_zone_time_details",
     "nhl_edge_team_zone_time_top_10",
     "nhl_game_total",
+    "nhl_goalie_gsax",
     "nhl_goalie_leaders",
     "nhl_in_game_win_prob",
     "nhl_landing",
@@ -670,6 +694,9 @@ __all__ = [
     "nhl_score",
     "nhl_scoreboard",
     "nhl_skater_leaders",
+    "nhl_skater_rapm",
+    "nhl_skater_war",
+    "nhl_special_teams_value",
     "nhl_standings",
     "nhl_standings_season",
     "nhl_stats_rest_component_season",
@@ -694,8 +721,10 @@ __all__ = [
     "nhl_stats_rest_team_by_id",
     "nhl_stats_rest_team_report",
     "nhl_team_ratings",
+    "nhl_unit_ratings",
     "nhl_web_pbp",
     "nhl_web_schedule",
+    "nhl_xg",
     "normalize_team_roster_columns",
     "parse_edge_detail",
     "parse_edge_hardest_shots",
@@ -729,10 +758,13 @@ __all__ = [
     "parser_for_nhl_stats_rest",
     "predict_margin",
     "predict_total",
+    "prepare_xg_features",
     "scoreboard_event_parsing",
     "spearman_corr",
+    "team_fullname_to_abbr",
     "team_game_xg_rates",
     "underscore",
+    "weighted_ridge",
     "win_prob_from_margin",
     "year_to_season",
 ]

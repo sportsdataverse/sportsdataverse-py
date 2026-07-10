@@ -57,6 +57,13 @@ from sportsdataverse.nhl.nhl_teams import *
 from sportsdataverse.nhl.nhl_espn_ext import *
 from sportsdataverse.nhl.nhl_fox_ext import *
 from sportsdataverse.nhl.nhl_player_stats import *
+from sportsdataverse.nhl.nhl_player_impact_constants import *
+from sportsdataverse.nhl.nhl_xg import *
+from sportsdataverse.nhl.nhl_gsax import *
+from sportsdataverse.nhl.nhl_rapm import *
+from sportsdataverse.nhl.nhl_unit_ratings import *
+from sportsdataverse.nhl.nhl_special_teams import *
+from sportsdataverse.nhl.nhl_war import *
 from sportsdataverse.nhl.nhl_prediction_constants import (
     LEAGUE_CONSTANTS,
     LeagueConstants,

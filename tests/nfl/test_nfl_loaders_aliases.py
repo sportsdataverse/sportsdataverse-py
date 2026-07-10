@@ -365,3 +365,40 @@ def test_nflreadpy_style_import_block_compiles():
     assert len(callables) == 25
     for fn in callables:
         assert callable(fn)
+
+
+def test_read_csv_retry_backs_off_transient_429(monkeypatch):
+    import urllib.error
+
+    from sportsdataverse.nfl import nfl_loaders
+
+    calls = {"n": 0}
+
+    def flaky_read_csv(url, **kwargs):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise urllib.error.HTTPError(url, 429, "Too Many Requests", None, None)
+        return pl.DataFrame({"ok": [1]})
+
+    sleeps: list = []
+    monkeypatch.setattr(nfl_loaders.pl, "read_csv", flaky_read_csv)
+    monkeypatch.setattr("time.sleep", lambda s: sleeps.append(s))
+    out = nfl_loaders._read_csv_retry("https://example.com/x.csv")
+    assert out["ok"].to_list() == [1]
+    assert calls["n"] == 3 and len(sleeps) == 2
+    assert sleeps == [2.0, 4.0]  # exponential backoff
+
+
+def test_read_csv_retry_reraises_non_transient(monkeypatch):
+    import urllib.error
+
+    import pytest as _pytest
+
+    from sportsdataverse.nfl import nfl_loaders
+
+    def notfound(url, **kwargs):
+        raise urllib.error.HTTPError(url, 404, "Not Found", None, None)
+
+    monkeypatch.setattr(nfl_loaders.pl, "read_csv", notfound)
+    with _pytest.raises(urllib.error.HTTPError):
+        nfl_loaders._read_csv_retry("https://example.com/x.csv")

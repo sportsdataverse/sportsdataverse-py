@@ -1,0 +1,24 @@
+schema: load_draft_outcomes
+kind: dataframe
+columns:
+- name: draft_year
+  type: integer
+  description: ''
+- name: college
+  type: character
+  description: ''
+- name: player_id
+  type: character
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: round
+  type: integer
+  description: ''
+- name: pick
+  type: integer
+  description: ''
+- name: position
+  type: character
+  description: ''
