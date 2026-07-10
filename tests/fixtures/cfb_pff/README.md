@@ -4,6 +4,7 @@
 
 - [CFB PFF-grade oracle fixtures](#cfb-pff-grade-oracle-fixtures)
   - [Provenance](#provenance)
+  - [Full NCAA facet surface verified](#full-ncaa-facet-surface-verified)
   - [Auth (how this was captured)](#auth-how-this-was-captured)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -30,6 +31,18 @@ FBS, and **name-bridged to the ESPN `team_id`** via `load_cfb_team_info` +
 | `pff_overall` | Float64 | PFF `grades_overall` |
 | `pff_offense` | Float64 | PFF `grades_offense` |
 | `pff_defense` | Float64 | PFF `grades_defense` (higher = better) |
+
+## Full NCAA facet surface verified
+
+Beyond `teams/overview`, the player-grade facets
+(`/api/v1/facet/{offense,defense,passing,rushing,receiving}/summary?league=ncaa`)
+all return real NCAA data through the same session and parse cleanly via
+`parse_pff_report` (a trimmed passing/summary sample is committed at
+`tests/fixtures/pff/ncaa_facet_passing_summary.json`). The payloads are large
+(offense ~7 MB, defense ~14 MB), so capture them **one endpoint at a time with a
+short delay** — firing several rapid large fetches back-to-back outruns the ~60 s
+`__session` window and the later ones fail (that, not any endpoint issue, is why
+an initial batched grab dropped the facets).
 
 ## Auth (how this was captured)
 
