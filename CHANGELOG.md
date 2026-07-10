@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Fixes](#fixes)
+  - [NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)](#nfl--ngs-over-expected-tracking-spine-yac-oe-%E2%86%92-ryoe-%E2%86%92-separation-oe-%E2%86%92-manzone-rates)
   - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
   - [NFL — projection & draft spine (player projections → usage shares → availability → draft model)](#nfl--projection--draft-spine-player-projections-%E2%86%92-usage-shares-%E2%86%92-availability-%E2%86%92-draft-model)
   - [NFL — ratings & market spine (power ratings → win prob → spread/total → player props)](#nfl--ratings--market-spine-power-ratings-%E2%86%92-win-prob-%E2%86%92-spreadtotal-%E2%86%92-player-props)
@@ -175,6 +176,30 @@
   `load_nfl_ff_rankings`) retry with exponential backoff on transient
   upstream errors (HTTP 429/5xx) instead of failing on the first hit — the
   raw-GitHub host rate-limits parallel CI runners.
+
+### NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)
+
+- feat(nfl): `nfl_ngs_yac_oe` — receiving YAC-over-expected with
+  empirical-Bayes shrinkage (weekly-σ² estimator); shrunk estimates are more
+  next-season-stable than raw (stability oracle: corr(shrunk₂₀₂₂, raw₂₀₂₃) ≥
+  corr(raw, raw), n=80).
+- feat(nfl): `nfl_ngs_ryoe` — rushing yards-over-expected per attempt with the
+  same shrinkage machinery. The 2022→2023 RYOE stability gate is a documented
+  strict xfail: the base year-over-year signal on that transition is
+  statistically zero (raw→raw corr 0.045, n=33), so no estimator can beat it —
+  escalation noted in the test.
+- feat(nfl): `nfl_ngs_separation_oe` — expected-separation ridge (cushion +
+  air-yards + alignment one-hots, intercept unpenalized) with a positive
+  cushion coefficient by construction; the separation-OE stability gate is a
+  strict xfail on the underpowered 2022→2023 transition.
+- feat(nfl): `nfl_ngs_man_zone_rates` — per-defender man/zone coverage snap
+  rates from the NGS tracking panel.
+- feat(nfl): `nfl_ngs_constants` — shared empirical-Bayes shrinkage,
+  weekly-σ² identification, expected-separation ridge, and the dtype-guarded
+  `next_season_stability` join (asserts a `min_n` overlap floor so a shrunken
+  fixture cannot let a stability gate pass on a handful of players).
+- Committed NGS panel fixtures + fitting scripts under `tests/fixtures/` and
+  `dev/nfl_ngs/`.
 
 ### NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)
 
