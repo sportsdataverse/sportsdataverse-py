@@ -1,0 +1,9 @@
+schema: fit_field_position_ep
+kind: dataframe
+columns:
+- name: yardline_own
+  type: integer
+  description: ''
+- name: ep
+  type: double
+  description: ''

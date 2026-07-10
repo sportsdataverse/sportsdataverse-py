@@ -487,6 +487,48 @@ cat_skater_detail:
     tracking period.
   zone_time_details_offensive_zone_percentile: Percentile rank among all NHL skaters for percentage of ice time spent in the
     offensive zone.
+cfb_adjusted_tempo:
+  adj_plays_game: Opponent-adjusted situation-neutral plays per game (iterative solver; higher = faster).
+  adj_sec_play: Opponent-adjusted seconds elapsed per situation-neutral play (lower = faster).
+  games: Games with situation-neutral offensive snaps in the loaded seasons.
+  pace_rank: Dense rank on adj_plays_game descending (fastest adjusted pace = 1).
+  raw_plays_game: Situation-neutral scrimmage plays per game (garbage time and kneels/spikes excluded).
+  raw_sec_play: Mean seconds elapsed per situation-neutral play (season total seconds over total plays).
+  season: Season the pace covers.
+  team_id: Team ESPN id (character join key).
+cfb_advanced_stats:
+  adj_def_epa_play: Opponent-adjusted EPA allowed per play (lower is better).
+  adj_def_explosive_rate: Opponent-adjusted explosive-play rate allowed.
+  adj_def_havoc: Opponent-adjusted havoc rate created by the defense.
+  adj_def_success_rate: Opponent-adjusted success rate allowed.
+  adj_off_epa_play: Opponent-adjusted offensive EPA per play (higher is better).
+  adj_off_explosive_rate: Opponent-adjusted offensive explosive-play rate.
+  adj_off_havoc_allowed: Opponent-adjusted havoc rate the offense allows.
+  adj_off_success_rate: Opponent-adjusted offensive success rate.
+  def_epa_play: Raw EPA allowed per play on the garbage-filtered substrate.
+  def_epa_rank: Dense rank on adj_def_epa_play ascending (fewest EPA allowed = 1).
+  def_explosive_rate: Share of plays faced that were explosive (pass EPA >= 2.4, rush EPA >= 1.8).
+  def_havoc: Share of plays faced with a havoc event (TFL, pass breakup, interception, forced fumble).
+  def_iso_ppp: Mean EPA allowed on successful plays faced (isoPPP against).
+  def_success_rate: Success rate allowed (Connelly 50/70/100 yardage rule).
+  off_epa_play: Raw offensive EPA per play on the garbage-filtered substrate.
+  off_epa_rank: Dense rank on adj_off_epa_play descending (best offense = 1).
+  off_epa_success_rate: Share of offensive plays with EPA > 0 (EPA-based success rate).
+  off_explosive_rate: Share of offensive plays that were explosive (pass EPA >= 2.4, rush EPA >= 1.8).
+  off_havoc_allowed: Share of offensive plays on which the defense recorded a havoc event.
+  off_iso_ppp: Mean EPA on successful offensive plays (Connelly isoPPP explosiveness).
+  off_success_rate: Offensive success rate (yards gained >= 50/70/100 percent of distance by down).
+  plays: Situation-neutral offensive plays in the aggregate.
+  season: Season the stats cover.
+  team_id: Team ESPN id (character join key).
+cfb_field_position:
+  avg_start_yardline: Mean drive-start yard line from the team's own goal (higher = better field position).
+  drives: Offensive drives counted (garbage-time drives excluded by default).
+  fp_ep: Mean bundled expected points of the team's drive starts.
+  fp_margin: Own fp_ep minus the mean drive-start EP of opponents' drives faced.
+  points_per_drive: Mean realized offensive points per drive (TD=7, FG=3).
+  season: Season the field-position stats cover.
+  team_id: Team ESPN id (character join key).
 cfb_compute_results:
   away_team: Team name of the away team in the simulated game (returned games frame).
   game_type: Game classification in the seedr engine schema - REG (regular season), CONF_CHAMP (conference championship)
@@ -2537,6 +2579,12 @@ leaguestandingsv3:
   vssouthwest: NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set.
   vswest: NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set.
   winpct: Winning percentage for the team or split represented by this row.
+fit_field_position_ep:
+  ep: Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing).
+  yardline_own: Starting yard line from the offense's own goal (1-99).
+load_fp_curve:
+  ep: Bundled expected points for a drive starting at this yard line (2018-2021 fit).
+  yardline_own: Starting yard line from the offense's own goal (1-99).
 load_cfb_betting_lines:
   abbr: Selection/side this odds row applies to — a team abbreviation for spread and moneyline markets, or 'over'/'under'
     for total markets (the data is long-format, one row per book per selection per market_type).

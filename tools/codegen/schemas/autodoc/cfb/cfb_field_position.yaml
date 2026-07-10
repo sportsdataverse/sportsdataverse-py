@@ -1,0 +1,24 @@
+schema: cfb_field_position
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: drives
+  type: integer
+  description: ''
+- name: avg_start_yardline
+  type: double
+  description: ''
+- name: fp_ep
+  type: double
+  description: ''
+- name: fp_margin
+  type: double
+  description: ''
+- name: points_per_drive
+  type: double
+  description: ''
