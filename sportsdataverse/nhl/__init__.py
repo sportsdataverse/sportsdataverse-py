@@ -64,3 +64,32 @@ from sportsdataverse.nhl.nhl_rapm import *
 from sportsdataverse.nhl.nhl_unit_ratings import *
 from sportsdataverse.nhl.nhl_special_teams import *
 from sportsdataverse.nhl.nhl_war import *
+from sportsdataverse.nhl.nhl_prediction_constants import (
+    LEAGUE_CONSTANTS,
+    LeagueConstants,
+    as_of_ratings_split,
+    brier_score,
+    calibration_table,
+    get_constants,
+    log_loss_score,
+    mae,
+    spearman_corr,
+)
+from sportsdataverse.nhl.nhl_team_ratings import (
+    adjust_rate_opponent,
+    nhl_team_ratings,
+    team_game_xg_rates,
+)
+from sportsdataverse.nhl.nhl_market import (
+    expected_goals,
+    in_game_features,
+    nhl_in_game_win_prob,
+    nhl_predict_games,
+    predict_margin,
+    predict_total,
+    win_prob_from_margin,
+)
+from sportsdataverse.nhl.nhl_player_props import (
+    nhl_game_total,
+    nhl_player_props,
+)

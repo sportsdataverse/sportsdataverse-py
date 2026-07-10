@@ -42,6 +42,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 
 import pytest
 
@@ -51,6 +52,24 @@ skip_if_no_live = pytest.mark.skipif(
     not LIVE,
     reason="Set SDV_PY_LIVE_TESTS=1 to run tests that hit live external APIs",
 )
+
+
+def skip_on_transient_network_error(exc: BaseException) -> None:
+    """Skip (never fail) a live test hit by a transient upstream problem.
+
+    CI runs the OS matrix (macos/ubuntu/windows) in parallel, so a shared
+    upstream (e.g. raw.githubusercontent.com for the DynastyProcess CSV/parquet
+    loaders) can rate-limit concurrent requests with HTTP 429 even though the
+    endpoint is otherwise healthy. That's an upstream-availability flake, not a
+    regression in this repo's code, so it should ``skip`` the same way the
+    ESPN "incomplete data" gap does above -- never silently pass with fake
+    data, and never assert on it either. Anything else re-raises.
+    """
+    transient_status = isinstance(exc, HTTPError) and exc.code in (429, 502, 503, 504)
+    if transient_status or isinstance(exc, (URLError, ConnectionError, TimeoutError)):
+        pytest.skip(f"Live upstream fetch failed transiently: {exc}")
+    raise exc
+
 
 # stats.nba.com / stats.wnba.com hang on datacenter / cloud IPs: the TLS/JA3
 # fingerprint block compounds with IP reputation, so even with curl_cffi browser

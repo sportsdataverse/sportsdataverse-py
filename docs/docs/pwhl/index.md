@@ -7,7 +7,7 @@ sidebar_label: PWHL
 | Reference | Functions | Base URL |
 |---|---:|---|
 | [Dataset loaders](reference/loaders) | 15 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 31 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 43 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
