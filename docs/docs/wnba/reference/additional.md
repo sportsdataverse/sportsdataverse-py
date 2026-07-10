@@ -632,6 +632,105 @@ sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
 sel.sort("selection_quality", descending=True).head(15)
 ```
 
+### `wnba_aging_curve(*, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_aging_curve}
+
+WNBA aging curve -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_aging_curve.nba_aging_curve` for the
+full contract; this is a by-reference re-export, same algorithm, women's
+bundled artifact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+Frame `age:Int64, rel_value:Float64, peak_age:Float64`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_aging_curve
+curve = wnba_aging_curve()
+```
+
+### `wnba_availability(seasons: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_availability}
+
+WNBA availability -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_availability.nba_availability` for the
+full contract; `avail_pct` is availability, not skill.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| list[int]` |  | A season (start year) or list of seasons. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, season:Int64, avail_pct:Float64`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_availability
+proj = wnba_availability(2023)
+```
+
+### `wnba_career_trajectory(player_values: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_career_trajectory}
+
+WNBA career trajectory -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_aging_curve.nba_career_trajectory` for
+the full contract.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_values` | `DataFrame` |  | Frame `player_id, age:Int64, value:Float64`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_values` plus `age_adjusted_value` and `proj_next_value`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.wnba import wnba_career_trajectory
+player_values = pl.DataFrame({"player_id": ["1"], "age": [26], "value": [10.0]})
+wnba_career_trajectory(player_values)
+```
+
+### `wnba_draft_model(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_draft_model}
+
+Project WNBA prospect career value + draft probability from draft slot.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year (e.g. `2023`) or list of years. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8`. Empty input returns the zero-row schema, never raises.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_draft_model
+board = wnba_draft_model(2023)
+```
+
 ### `wnba_enhanced_pbp(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_enhanced_pbp}
 
 Return a normalised enhanced play-by-play frame for a WNBA game.
@@ -670,6 +769,107 @@ print(type(df_pd))
 
 subs = df.filter(df["is_substitution"] == True)  # noqa: E712
 print(subs.select(["period", "seconds_remaining", "person_id"]))
+```
+
+### `wnba_expected_turnovers(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_expected_turnovers}
+
+WNBA expected turnovers / ball-security skill (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_expected_turnovers.nba_expected_turnovers`
+to the women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base`) frame. |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_expected_turnovers.nba_expected_turnovers`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_expected_turnovers
+t = wnba_expected_turnovers("2024")
+print(t.sort("ball_security_skill", descending=True).head())
+```
+
+### `wnba_foul_drawing(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, advanced: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_foul_drawing}
+
+WNBA foul-drawing / FT-generation (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_foul_drawing.nba_foul_drawing` to the
+women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `base` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leaguedashplayerstats` (`Base`) frame. |
+| `advanced` | `Optional[DataFrame]` | `None` | Injected `Advanced`-measure frame. |
+| `player_mix` | `Optional[DataFrame]` | `None` | Injected Synergy player-level offensive mix. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_foul_drawing.nba_foul_drawing`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_foul_drawing
+f = wnba_foul_drawing("2024")
+print(f.sort("foul_draw_skill", descending=True).head())
+```
+
+### `wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_in_game_win_prob}
+
+WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  |  |
+| `pregame_home_prob` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_matchup_drapm}
+
+WNBA matchup defensive RAPM (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm` to the
+women's league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame. |
+| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig` override. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_matchup_drapm.nba_matchup_drapm`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_matchup_drapm
+d = wnba_matchup_drapm("2024")
+print(d.sort("matchup_drapm", descending=True).head())
 ```
 
 ### `wnba_on_court(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_on_court}
@@ -726,6 +926,52 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_player_props}
+
+WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `game_id` | `str` |  |  |
+| `home_team_id` | `str` |  |  |
+| `away_team_id` | `str` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_playtype_ratings}
+
+WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`).
+
+Thin wrapper binding
+`sportsdataverse.nba.nba_playtype.nba_playtype_ratings` to the
+women's league. Synergy coverage is sparse for the WNBA; an empty upstream
+fetch degrades to a zero-row frame (never raises).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `str` |  | Season string, e.g. `"2024"`. |
+| `off_team` | `Optional[DataFrame]` | `None` | Injected Synergy offensive team frame (bypasses the live fetch). |
+| `def_team` | `Optional[DataFrame]` | `None` | Injected Synergy defensive team frame. |
+| `schedule` | `Optional[DataFrame]` | `None` | Injected `team_id`/`opp_team_id` schedule frame. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Same schema as `sportsdataverse.nba.nba_playtype.nba_playtype_ratings`.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_playtype_ratings
+r = wnba_playtype_ratings("2024")
+print(r.sort("adj_off", descending=True).head())
+```
+
 ### `wnba_possessions(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_possessions}
 
 Return the possession-level lineup stint matrix for a WNBA game.
@@ -767,6 +1013,50 @@ print(type(poss_pd))
 total = int(poss["points"].sum())
 print(f"Total points scored: {total}")
 ```
+
+### `wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_predict_games}
+
+WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  |  |
+| `ratings` | `DataFrame` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'` {#wnba_predict_margin}
+
+WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_net` | `float` |  |  |
+| `away_net` | `float` |  |  |
+| `home_pace` | `float` |  |  |
+| `away_pace` | `float` |  |  |
+| `neutral` | `bool` | `False` |  |
+| `league_id` | `str` | `'00'` |  |
+
+### `wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#wnba_predict_total}
+
+WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_off` | `float` |  |  |
+| `home_def` | `float` |  |  |
+| `away_off` | `float` |  |  |
+| `away_def` | `float` |  |  |
+| `home_pace` | `float` |  |  |
+| `away_pace` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
 
 ### `wnba_rapm_from_games(game_ids: 'Sequence[str]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_rapm_from_games}
 
@@ -810,6 +1100,28 @@ rapm = wnba_rapm_from_games(game_ids)
 print(rapm.sort("rapm", descending=True).head(10))
 ```
 
+### `wnba_rookie_projection(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_rookie_projection}
+
+WNBA rookie/sophomore projection -- composes the WNBA draft/aging/availability pieces.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_rookie_projection
+board = wnba_rookie_projection(2023)
+```
+
 ### `wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#wnba_shot_value}
 
 WNBA one-call shot-value spine (`league_id="10"`).
@@ -842,6 +1154,241 @@ from sportsdataverse.wnba import wnba_shot_value
 out = wnba_shot_value([1628886], "2024")
 out["talent"].head()
 ```
+
+### `wnba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_team_clutch}
+
+WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_team_ratings}
+
+WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `as_of_date` | `Union[date, None]` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### `wnba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_drive_value}
+
+WNBA drive value + rim-pressure (`league_id="10"` by-reference shim).
+
+See `sportsdataverse.nba.nba_tracking_value.nba_tracking_drive_value`
+for the full recipe.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_tracking_drive_value
+df = wnba_tracking_drive_value(2024)
+print(df.sort("drive_pts_oe", descending=True).head())
+```
+
+### `wnba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_pass_value}
+
+WNBA expected-assists / passer value (`league_id="10"` by-reference shim).
+
+See `sportsdataverse.nba.nba_tracking_value.nba_tracking_pass_value`
+for the full recipe (Passing-measure proxy + optional `playerdashptpass`
+enrichment).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `fetch_potential_assists` | `bool` | `False` | Enrich the top passers with `playerdashptpass` potential-assist counts. |
+| `max_players` | `int` | `0` | Cap on per-player enrichment fetches; `0` disables enrichment regardless of `fetch_potential_assists`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+| `_pass_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptpass`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_tracking_pass_value
+df = wnba_tracking_pass_value(2024)
+print(df.sort("ast_oe", descending=True).head())
+```
+
+### `wnba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_reb_oe}
+
+WNBA rebounding-over-expected (`league_id="10"` by-reference shim).
+
+See `sportsdataverse.nba.nba_tracking_value.nba_tracking_reb_oe`
+for the full recipe (contest-difficulty-adjusted expected rebounds,
+role-bucket baseline).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64, reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64, reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_tracking_reb_oe
+df = wnba_tracking_reb_oe(2024)
+print(df.sort("reb_oe", descending=True).head())
+```
+
+### `wnba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_rim_protect_value}
+
+WNBA rim-protection / shot-defend points-saved (`league_id="10"`
+
+by-reference shim).
+
+See `sportsdataverse.nba.nba_tracking_value.nba_tracking_rim_protect_value`
+for the full recipe (bucket-mean defended-rate baseline; optional
+`playerdashptshotdefend` rim-band enrichment).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `source` | `str` | `'leaguedash'` | `"leaguedash"` (default) or `"shotdefend"`. |
+| `max_players` | `int` | `0` | Cap on per-player `shotdefend` enrichment fetches; ignored unless `source="shotdefend"`. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+| `_defend_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptshotdefend`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_tracking_rim_protect_value
+df = wnba_tracking_rim_protect_value(2024)
+print(df.sort("rim_protect_pts_saved", descending=True).head())
+```
+
+### `wnba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_shot_diet_value}
+
+WNBA catch-&-shoot vs pull-up points-over-expected (`league_id="10"`
+
+by-reference shim).
+
+See `sportsdataverse.nba.nba_tracking_value.nba_tracking_shot_diet_value`
+for the full recipe.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to each fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute each measure's baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, cs_fga:Float64, cs_pts:Float64, cs_pts_oe:Float64, pu_fga:Float64, pu_pts:Float64, pu_pts_oe:Float64, shot_diet_delta:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_tracking_shot_diet_value
+df = wnba_tracking_shot_diet_value(2024)
+print(df.sort("cs_pts_oe", descending=True).head())
+```
+
+### `wnba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_touch_value}
+
+WNBA touch / possession-time value (`league_id="10"` by-reference shim).
+
+See `sportsdataverse.nba.nba_tracking_value.nba_tracking_touch_value`
+for the full recipe.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
+| `league_id` | `str` | `'10'` | Defaults to `"10"` (WNBA); pass `"20"` here for G-League. |
+| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
+| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
+| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
+
+**Returns**
+
+One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, touches:Float64, pts:Float64, touch_baseline_rate:Float64, touch_expected:Float64, pts_per_touch_oe:Float64, time_of_poss:Float64, time_of_poss_eff:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_tracking_touch_value
+df = wnba_tracking_touch_value(2024)
+print(df.sort("pts_per_touch_oe", descending=True).head())
+```
+
+### `wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'` {#wnba_win_prob_from_margin}
+
+WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
 
 ### `zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#zone_value_map}
 

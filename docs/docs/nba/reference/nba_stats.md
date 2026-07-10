@@ -2715,36 +2715,36 @@ GET /stats/leaguedashptstats
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `College` | `college_nullable` |  |  | `Y` |  |
-| `Conference` | `conference_nullable` |  |  | `Y` |  |
-| `Country` | `country_nullable` |  |  | `Y` |  |
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `Division` | `division_simple_nullable` |  |  | `Y` |  |
-| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
-| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
-| `GameScope` | `game_scope_simple_nullable` |  |  | `Y` |  |
-| `Height` | `height_nullable` |  |  | `Y` |  |
-| `LastNGames` | `last_n_games` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `Month` | `month` |  |  | `Y` |  |
-| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `PORound` | `po_round_nullable` |  |  | `Y` |  |
-| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
-| `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
-| `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
-| `PtMeasureType` | `pt_measure_type` |  |  | `Y` |  |
+| `College` | `college_nullable` |  |  | `Y` | College query parameter. |
+| `Conference` | `conference_nullable` |  |  | `Y` | Conference query parameter. |
+| `Country` | `country_nullable` |  |  | `Y` | Country query parameter. |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` | DateFrom query parameter. |
+| `DateTo` | `date_to_nullable` |  |  | `Y` | DateTo query parameter. |
+| `Division` | `division_simple_nullable` |  |  | `Y` | Division query parameter. |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` | DraftPick query parameter. |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` | DraftYear query parameter. |
+| `GameScope` | `game_scope_simple_nullable` |  |  | `Y` | GameScope query parameter. |
+| `Height` | `height_nullable` |  |  | `Y` | Height query parameter. |
+| `LastNGames` | `last_n_games` |  |  | `Y` | LastNGames query parameter. |
+| `LeagueID` | `league_id` |  |  | `Y` | LeagueID query parameter. |
+| `Location` | `location_nullable` |  |  | `Y` | Location query parameter. |
+| `Month` | `month` |  |  | `Y` | Month query parameter. |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` | OpponentTeamID query parameter. |
+| `Outcome` | `outcome_nullable` |  |  | `Y` | Outcome query parameter. |
+| `PORound` | `po_round_nullable` |  |  | `Y` | PORound query parameter. |
+| `PerMode` | `per_mode_simple` |  |  | `Y` | PerMode query parameter. |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` | PlayerExperience query parameter. |
+| `PlayerOrTeam` | `player_or_team` |  |  | `Y` | PlayerOrTeam query parameter. |
+| `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` | PlayerPosition query parameter. |
+| `PtMeasureType` | `pt_measure_type` |  |  | `Y` | PtMeasureType query parameter. |
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
-| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-| `Weight` | `weight_nullable` |  |  | `Y` |  |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` | SeasonSegment query parameter. |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | SeasonType query parameter. |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` | StarterBench query parameter. |
+| `TeamID` | `team_id_nullable` |  |  | `Y` | TeamID query parameter. |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` | VsConference query parameter. |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` | VsDivision query parameter. |
+| `Weight` | `weight_nullable` |  |  | `Y` | Weight query parameter. |
 
 ### Returns
 

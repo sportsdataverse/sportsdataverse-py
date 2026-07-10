@@ -28,7 +28,7 @@ from sportsdataverse.nfl.utils_date import (
     get_current_nfl_week,
     most_recent_nfl_season,
 )
-from tests.conftest import skip_if_no_live
+from tests.conftest import skip_if_no_live, skip_on_transient_network_error
 
 
 @skip_if_no_live
@@ -57,7 +57,11 @@ def test_load_nfl_trades():
 
 @skip_if_no_live
 def test_load_nfl_ff_playerids():
-    df = load_nfl_ff_playerids()
+    try:
+        df = load_nfl_ff_playerids()
+    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+        skip_on_transient_network_error(exc)
+        raise
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0
     assert df.width > 0
@@ -65,7 +69,11 @@ def test_load_nfl_ff_playerids():
 
 @skip_if_no_live
 def test_load_nfl_ff_rankings_draft():
-    df = load_nfl_ff_rankings(type="draft")
+    try:
+        df = load_nfl_ff_rankings(type="draft")
+    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+        skip_on_transient_network_error(exc)
+        raise
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0
     assert df.width > 0

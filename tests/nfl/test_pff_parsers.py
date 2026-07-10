@@ -150,3 +150,29 @@ def test_cfb_shim_binds_ncaa(monkeypatch):
 
     cfbpff.pff_facet_passing_summary(transport=fake)
     assert seen["league"] == "ncaa"  # cfb shim pre-bound league=ncaa
+
+
+def test_ncaa_teams_overview_real_capture():
+    """Real premium.pff.com NCAA teams/overview (league=ncaa, 2023) — validates the
+    ported PFF surface against real college data, not just the NFL fixtures."""
+    df = parse_pff_report(_load("ncaa_teams_overview"))
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 12
+    for c in ("name", "franchise_id", "grades_overall", "grades_offense", "grades_defense"):
+        assert c in df.columns, c
+    assert df.schema["grades_overall"] == pl.Float64
+    # every row is a real graded team (0-100 scale)
+    assert df["grades_overall"].is_between(0.0, 100.0).all()
+
+
+def test_ncaa_facet_passing_summary_player_grades():
+    """Real premium.pff.com NCAA passing/summary facet (player grades, league=ncaa
+    2023) — validates the PFF PLAYER-grade surface on real college data (not just
+    the team-level teams/overview), the second half of the NCAA parser check."""
+    df = parse_pff_report(_load("ncaa_facet_passing_summary"))
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 15
+    for c in ("player", "player_id", "grades_pass", "franchise_id", "position"):
+        assert c in df.columns, c
+    assert df.schema["player_id"] in (pl.Int64, pl.Int32)
+    assert df["grades_pass"].is_between(0.0, 100.0).all()
