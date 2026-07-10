@@ -12,6 +12,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.nfl.nfl_ngs_constants import next_season_stability
+from tests.conftest import skip_if_no_live
 from sportsdataverse.nfl.nfl_ngs_tracking import (
     nfl_ngs_ryoe,
     nfl_ngs_separation_oe,
@@ -76,8 +77,8 @@ def test_yac_stability_shrunk_beats_raw():
     ld = _fixture_loader("receiving")
     cur = nfl_ngs_yac_oe([2022], _loader=ld)
     nxt = nfl_ngs_yac_oe([2023], _loader=ld).select("player_gsis_id", pl.col("yac_oe_raw").alias("raw_next"))
-    s_shrunk = next_season_stability(cur, nxt, "player_gsis_id", "yac_oe_shrunk", "raw_next")
-    s_raw = next_season_stability(cur, nxt, "player_gsis_id", "yac_oe_raw", "raw_next")
+    s_shrunk = next_season_stability(cur, nxt, "player_gsis_id", "yac_oe_shrunk", "raw_next", min_n=80)
+    s_raw = next_season_stability(cur, nxt, "player_gsis_id", "yac_oe_raw", "raw_next", min_n=80)
     # never lower this gate to pass — debug the shrinkage prior fit instead
     assert s_shrunk >= s_raw - 1e-6
 
@@ -144,8 +145,8 @@ def test_ryoe_stability_shrunk_beats_raw():
     ld = _fixture_loader("rushing")
     cur = nfl_ngs_ryoe([2022], _loader=ld)
     nxt = nfl_ngs_ryoe([2023], _loader=ld).select("player_gsis_id", pl.col("ryoe_per_att_raw").alias("raw_next"))
-    s_shrunk = next_season_stability(cur, nxt, "player_gsis_id", "ryoe_per_att_shrunk", "raw_next")
-    s_raw = next_season_stability(cur, nxt, "player_gsis_id", "ryoe_per_att_raw", "raw_next")
+    s_shrunk = next_season_stability(cur, nxt, "player_gsis_id", "ryoe_per_att_shrunk", "raw_next", min_n=30)
+    s_raw = next_season_stability(cur, nxt, "player_gsis_id", "ryoe_per_att_raw", "raw_next", min_n=30)
     assert s_shrunk >= s_raw - 1e-6
 
 
@@ -208,6 +209,24 @@ def test_sep_stability_shrunk_beats_raw():
     ld = _fixture_loader("receiving")
     cur = nfl_ngs_separation_oe([2022], _loader=ld)
     nxt = nfl_ngs_separation_oe([2023], _loader=ld).select("player_gsis_id", pl.col("sep_oe_raw").alias("raw_next"))
-    s_shrunk = next_season_stability(cur, nxt, "player_gsis_id", "sep_oe_shrunk", "raw_next")
-    s_raw = next_season_stability(cur, nxt, "player_gsis_id", "sep_oe_raw", "raw_next")
+    s_shrunk = next_season_stability(cur, nxt, "player_gsis_id", "sep_oe_shrunk", "raw_next", min_n=80)
+    s_raw = next_season_stability(cur, nxt, "player_gsis_id", "sep_oe_raw", "raw_next", min_n=80)
     assert s_shrunk >= s_raw - 1e-6
+
+
+@skip_if_no_live
+def test_live_smoke_all_models():
+    """Live smoke: real loader, non-zero height, documented schema."""
+    from sportsdataverse.nfl.nfl_ngs_tracking import (
+        _RYOE_SCHEMA,
+        _SEP_SCHEMA,
+        _YAC_SCHEMA,
+        nfl_ngs_separation_oe,
+    )
+
+    yac = nfl_ngs_yac_oe([2023])
+    ryoe = nfl_ngs_ryoe([2023])
+    sep = nfl_ngs_separation_oe([2023])
+    assert yac.height > 0 and dict(yac.schema) == _YAC_SCHEMA
+    assert ryoe.height > 0 and dict(ryoe.schema) == _RYOE_SCHEMA
+    assert sep.height > 0 and dict(sep.schema) == _SEP_SCHEMA

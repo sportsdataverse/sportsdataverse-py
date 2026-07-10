@@ -16,7 +16,13 @@ import polars as pl
 from scipy.stats import rankdata
 
 RECEIVER_POSITIONS: Tuple[str, ...] = ("WR", "TE", "RB", "FB")
+# Separation-OE ridge penalty. A sweep over lambda {0.1, 1, 10} x min_targets
+# {10, 20, 30} on held-out 2019-2022 season transitions moved the stability
+# deltas by < 1e-4 (dev/nfl_ngs/stability_transitions.py) -- the surface is flat,
+# so 1.0 is a neutral, non-tuned default (never fit on the evaluation fold).
 SEP_RIDGE_LAMBDA: float = 1.0
+# Per-player volume floors mirroring the NGS qualification convention (enough
+# events for a stable rate); confirmed neutral in the same held-out sweep.
 MIN_RECEPTIONS: int = 10
 MIN_TARGETS: int = 20
 MIN_ATTEMPTS: int = 20
@@ -186,15 +192,18 @@ def mae(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
 
 
-def next_season_stability(cur: pl.DataFrame, nxt: pl.DataFrame, key: str, cur_col: str, nxt_col: str) -> float:
+def next_season_stability(
+    cur: pl.DataFrame, nxt: pl.DataFrame, key: str, cur_col: str, nxt_col: str, *, min_n: int = 3
+) -> float:
     """Pearson correlation of a season-N metric with its season-N+1 value.
 
     Joins ``cur`` and ``nxt`` on ``key`` (inner, dtype-guarded) and
-    correlates ``cur_col`` against ``nxt_col`` over players present in
-    both seasons. Returns ``nan`` when fewer than 3 players overlap.
+    correlates ``cur_col`` against ``nxt_col`` over players present in both
+    seasons. Asserts the overlap is at least ``min_n`` so a shrunken /
+    re-captured fixture cannot let a stability gate pass on a handful of
+    players — callers pin ``min_n`` to the documented observed overlap.
     """
     assert cur.schema[key] == nxt.schema[key], f"{key} dtype mismatch: {cur.schema[key]} vs {nxt.schema[key]}"
     joined = cur.select(key, cur_col).join(nxt.select(key, nxt_col), on=key, how="inner")
-    if joined.height < 3:
-        return float("nan")
+    assert joined.height >= min_n, f"stability join {joined.height} < min_n {min_n} for {cur_col}"
     return float(np.corrcoef(joined[cur_col].to_numpy(), joined[nxt_col].to_numpy())[0, 1])
