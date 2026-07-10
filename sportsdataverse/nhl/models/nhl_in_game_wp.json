@@ -1,0 +1,23 @@
+{
+  "league": "nhl",
+  "features": [
+    "score_diff",
+    "sqrt_sec_remaining",
+    "strength_diff",
+    "home_goalie_pulled",
+    "away_goalie_pulled",
+    "pregame_logit"
+  ],
+  "coef": [
+    1.042130316412326,
+    0.0014866552789498143,
+    0.06518108741052372,
+    -0.8939874720604023,
+    0.8958003608423908,
+    1.1601370588844129
+  ],
+  "intercept": -0.24076458008409035,
+  "trained_season": 2022,
+  "trained_date": "2026-07-08",
+  "n_plays": 364298
+}

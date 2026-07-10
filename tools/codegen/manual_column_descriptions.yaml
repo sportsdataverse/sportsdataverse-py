@@ -728,6 +728,12 @@ commonplayerinfo:
   season_exp: NBA or WNBA Stats value for season exp in the commonplayerinfo result set.
 commonplayoffseries:
   game_num: NBA or WNBA Stats value for game number in the commonplayoffseries result set.
+compose_counting_projection:
+  player_id: nflverse gsis player id (character join key; asserted Utf8 on both sides of the join).
+  proj_availability: Projected availability rate in [0, 1] from nfl_availability_projection.
+  proj_counting: Composed counting projection - proj_rate x proj_volume x proj_availability (the only place skill and availability meet).
+  proj_rate: Projected per-opportunity rate carried through from the skill projection (rate_col).
+  proj_volume: Projected opportunity volume carried through from the skill projection (volume_col).
 consecutive_100pt_seasons:
   consecutive100_point_seasons: Number of consecutive NHL regular seasons in which the player reached 100 or more points.
   streak_end_season: The last season of the consecutive 100-point streak, encoded as an eight-digit season ID.
@@ -3172,6 +3178,13 @@ news:
   premium: Whether the article is premium/paywalled.
   published: Publish timestamp (ISO 8601).
   type: Article type (Story, Media, HeadlineNews, etc.).
+nfl_availability_projection:
+  player_id: nflverse gsis player id (character join key).
+  position: Roster position from the most recent visible season.
+  proj_availability: Projected availability rate in [0, 1] - empirical-Bayes shrinkage of historical snap-based availability toward the fitted position base rate, then the fold-fit linear recalibration.
+  proj_games: Expected games available - proj_availability x team_games (17).
+  proj_games_missed: Expected games missed - team_games minus proj_games.
+  target_season: The season being projected (features use strictly earlier seasons only).
 nfl_combine_profiles:
   armLength: Arm length of the prospect measured at the NFL Combine, expressed in inches.
   athleticismScore: Composite athleticism score assigned to the prospect based on Combine athletic drills.
@@ -3251,6 +3264,20 @@ nfl_draft_picks:
   tradeNote: Text note describing any trade involving this pick, if applicable.
   tweetSent: Indicates whether an announcement tweet was sent for this draft pick selection.
   tweetsSent: Indicates whether all scheduled announcement tweets for this pick have been sent.
+nfl_draft_projection:
+  gsis_id: nflverse gsis player id of the drafted prospect (character join key).
+  hit_prob: P(multi-year starter) - ridge-regularized IRLS logistic on the same features, hit := seasons_started >= 3.
+  outcome_rank: Dense rank of pred_car_av within the class (best prospect = 1).
+  position: Draft position group of the prospect.
+  pred_car_av: Predicted career value - closed-form ridge on standardized combine measurables + round/pick/log(pick) + position one-hots; the label is nflverse w_av (PFR weighted career Approximate Value).
+  target_class: The draft class scored (training uses matured classes <= target_class - 5).
+nfl_fantasy_projection:
+  player_id: nflverse gsis player id (character join key).
+  position_group: nflverse offensive position group (QB/RB/WR/TE plus fringe groups).
+  position_rank: Dense rank of proj_fantasy_points within the position group (best = 1).
+  proj_fantasy_points: Projected season fantasy points - the Marcel component rates x projected games scored under the scoring format, with the fitted per-position linear calibration applied by default.
+  proj_fantasy_points_per_game: Projected fantasy points per game (proj_fantasy_points / projected games).
+  target_season: The season being projected (features use strictly earlier seasons only).
 nfl_game_pbp:
   clockTime: Game clock time at the start of the play, formatted as MM:SS within the quarter.
   driveNetYards: Net yards gained on the current drive up to and including this play.
@@ -3865,6 +3892,30 @@ nfl_ngs_yac_oe:
   yac_oe_shrunk: yac_oe_raw after per-season empirical-Bayes shrinkage toward the reception-weighted league mean (sampling variance identified from weekly rows).
   reliability: Shrinkage reliability tau2 / (tau2 + sigma2 / receptions) in [0, 1]; the fraction of the raw deviation retained.
   yac_oe_rank: Dense descending rank of yac_oe_shrunk within season over qualified rows; null when receptions < min_receptions.
+nfl_player_projection:
+  aging_mult: Applied aging multiplier - the damped, clamped ratio aging_curve(proj_age) / aging_curve(current_age).
+  player_id: nflverse gsis player id (character join key).
+  position_group: nflverse offensive position group (QB/RB/WR/TE plus fringe groups).
+  proj_age: Projected age at the target season (age at last visible season + season gap).
+  proj_attempts_rate: Projected per-game pass attempts (Marcel blend x aging ratio).
+  proj_carries_rate: Projected per-game rush attempts (Marcel blend x aging ratio).
+  proj_completions_rate: Projected per-game pass completions (Marcel blend x aging ratio).
+  proj_fumbles_lost_rate: Projected per-game fumbles lost (Marcel blend x aging ratio).
+  proj_games: Recency-weighted mean of historical games played.
+  proj_interceptions_rate: Projected per-game interceptions thrown (Marcel blend x aging ratio).
+  proj_passing_tds_rate: Projected per-game passing touchdowns (Marcel blend x aging ratio).
+  proj_passing_yards_rate: Projected per-game passing yards (Marcel blend x aging ratio).
+  proj_ppg: Projected PPR fantasy points per game - recency-weighted rate blend regressed toward the volume-weighted position mean by k/(k + reliability), scaled by the damped aging-curve ratio.
+  proj_receiving_air_yards_rate: Projected per-game receiving air yards (Marcel blend x aging ratio).
+  proj_receiving_tds_rate: Projected per-game receiving touchdowns (Marcel blend x aging ratio).
+  proj_receiving_yards_rate: Projected per-game receiving yards (Marcel blend x aging ratio).
+  proj_receptions_rate: Projected per-game receptions (Marcel blend x aging ratio).
+  proj_rushing_tds_rate: Projected per-game rushing touchdowns (Marcel blend x aging ratio).
+  proj_rushing_yards_rate: Projected per-game rushing yards (Marcel blend x aging ratio).
+  proj_targets_rate: Projected per-game targets (Marcel blend x aging ratio).
+  proj_volume: Projected position-specific opportunity volume (QB = pass attempts, RB = carries + targets, WR/TE = targets).
+  reliability: Recency-weighted volume sum - the shrinkage evidence weight.
+  target_season: The season being projected (features use strictly earlier seasons only - the as-of-date leakage boundary).
 nfl_rosters:
   persons: Number of players (persons) listed on the team's roster entry for this record.
   seasonType: Type of NFL season the roster entry applies to (e.g., 'Regular Season', 'Preseason', 'Postseason').
@@ -3876,6 +3927,40 @@ nfl_rosters:
   team_league: League identifier confirming the team belongs to the NFL.
   team_nickName: Nickname or mascot name of the team (e.g., 'Chiefs', 'Patriots').
   team_venues: Name(s) or identifier(s) of the stadium or venues where the team plays home games.
+nfl_player_props:
+  game_id: Game identifier from the schedule (nflverse id, e.g. "2023_06_DET_TB").
+  line: Market prop line joined from the caller-supplied lines frame (e.g. espn_nfl_game_propbets); null when no line is available.
+  opp_team_id: Opponent team nflverse abbreviation (drives the matchup multiplier).
+  p_over: Probability the player exceeds `line`, 1 - Phi((line - proj_mean) / proj_sd); null without a line.
+  player_id: nflverse GSIS player identifier (character join key).
+  position: Player position (QB, RB, WR, TE) selecting the projected stat family.
+  proj_mean: Projected stat mean - EB-shrunk usage x efficiency x opponent matchup x game-script.
+  proj_sd: Residual standard deviation for the stat family (fitted on the 2023 as-of backtest).
+  season: Season the projection belongs to.
+  stat: Projected stat name (passing_yards for QB, rushing_yards for RB, receiving_yards for WR/TE).
+  team_id: Player's team nflverse abbreviation as of the projection week.
+  week: Week of the projected game; only weeks strictly before it feed the projection.
+nfl_predict_games:
+  away_team_id: Away team nflverse abbreviation (character; the ratings `team_id` join key).
+  exp_margin: Expected home scoring margin in points (points_per_net * net rating differential + the fitted home-field advantage on non-neutral fields).
+  exp_total: Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum).
+  game_id: Game identifier carried through from the input schedule.
+  home_team_id: Home team nflverse abbreviation (character; the ratings `team_id` join key).
+  home_win_prob: Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model.
+  market_edge: Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied.
+  neutral_site: Whether the game is at a neutral site (home-field advantage is dropped when true).
+nfl_ratings:
+  adj_def_epa: Opponent-adjusted defensive EPA allowed per play (lower is better); competitive-play ridge fit.
+  adj_net: Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in).
+  adj_off_epa: Opponent-adjusted offensive EPA per play (higher is better); competitive-play ridge fit.
+  adj_st_epa: Opponent-adjusted special-teams EPA per play (ridge on special==1 plays; 0.0 for teams with no special-teams plays in the window).
+  def_rank: Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better).
+  games: Number of games the team played in the fitted window.
+  net_rank: Dense rank on adj_net descending (best net rating = 1).
+  net_z: Z-score of adj_net across the 32 teams.
+  off_rank: Dense rank on adj_off_epa descending (best offense = 1).
+  season: Season the ratings cover (null for a pooled multi-season fit).
+  team_id: nflverse team abbreviation (character join key, e.g. "KC").
 nfl_season_standings:
   season: Season identifier from the input games frame (named `sim` instead when the input used a `sim` column).
   conf: Conference of the team (AFC or NFC).
@@ -4048,6 +4133,16 @@ nfl_teams_history:
   teamType: Classification of the team type (e.g., 'NFL', 'AFL') indicating the league affiliation during this historical
     period.
   venues: List or serialized representation of venue(s) used by the team during this historical period.
+nfl_usage_projection:
+  player_id: nflverse gsis player id (character join key).
+  position_group: nflverse offensive position group.
+  proj_air_yards: Projected receiving air yards - proj_air_yards_share x team air-yards carry-forward.
+  proj_air_yards_share: Projected share of team air yards, renormalized within proj_team.
+  proj_target_share: Projected share of team targets - Marcel share blend renormalized to sum to 1.0 within proj_team.
+  proj_targets: Projected targets - proj_target_share x team pass-target carry-forward.
+  proj_team: Most recent team (max season, tiebreak most targets) - the renormalization group.
+  proj_wopr: Projected weighted opportunity rating - 1.5 x proj_target_share + 0.7 x proj_air_yards_share.
+  target_season: The season being projected (features use strictly earlier seasons only).
 nfl_week_games:
   awayTeam_currentLogo: URL for the away team's current primary logo image as served by the NFL Shield API.
   awayTeam_fullName: Full name of the away team (e.g., 'Kansas City Chiefs').
@@ -7765,6 +7860,207 @@ win_probability:
     row.
   runners: A serialized representation of baserunner movement records for this play in the win-probability feed, capturing
     start/end base positions and event types.
+playcall_features:
+  game_id: nflverse game identifier (Utf8 join key).
+  play_id: nflverse play identifier within the game (Int64 join key).
+  season: Season of the play.
+  week: Week of the play.
+  posteam: Offense (possession) team abbreviation.
+  down: Down (1-4) at the snap.
+  ydstogo: Yards to go for a first down.
+  yardline_100: Yards from the opponent end zone at the snap.
+  score_differential: Offense score minus defense score at the snap.
+  half_seconds_remaining: Seconds remaining in the half.
+  game_seconds_remaining: Seconds remaining in the game.
+  wp: Start-of-play win probability for the offense.
+  shotgun: 1 when the offense lined up in shotgun.
+  no_huddle: 1 when the play was run without a huddle.
+  xpass: Shipped nflfastR-parity expected-dropback probability for the play.
+  n_rb: Running backs in the offensive personnel grouping (null without participation data).
+  n_te: Tight ends in the offensive personnel grouping (null without participation data).
+  n_wr: Wide receivers in the offensive personnel grouping (null without participation data).
+  has_participation: 1 when a participation row matched the play, else 0.
+  family: 5-class play-call label (inside_run, outside_run, short_pass, deep_pass, scramble).
+  is_pass: 1 when the play was a pass (including scrambles), else 0.
+nfl_play_call_probabilities:
+  game_id: nflverse game identifier (Utf8 join key).
+  play_id: nflverse play identifier within the game (Int64 join key).
+  season: Season of the play.
+  week: Week of the play.
+  posteam: Offense (possession) team abbreviation.
+  p_inside_run: Predicted probability of an inside run (guard/center gap or middle).
+  p_outside_run: Predicted probability of an outside run (end/tackle or off-middle).
+  p_short_pass: Predicted probability of a short pass.
+  p_deep_pass: Predicted probability of a deep pass.
+  p_scramble: Predicted probability of a QB scramble.
+  p_pass: Predicted pass probability (short + deep + scramble family sum).
+  pred_family: Argmax family among the five class probabilities.
+  pass_oe_model: Pass-rate over model expectation for the play, 100 * (is_pass - p_pass).
+nfl_play_call_tendencies:
+  season: Season of the aggregate.
+  posteam: Offense team abbreviation.
+  plays: Offensive run/pass plays scored.
+  mean_p_pass: Mean model pass probability across the team's plays.
+  pass_rate: Actual pass rate (scrambles count as passes).
+  proe: Pass rate over expected, 100 * (pass_rate - mean_p_pass).
+  share_inside_run: Share of plays labeled inside_run.
+  share_outside_run: Share of plays labeled outside_run.
+  share_short_pass: Share of plays labeled short_pass.
+  share_deep_pass: Share of plays labeled deep_pass.
+  share_scramble: Share of plays labeled scramble.
+team_game_pace:
+  game_id: nflverse game identifier (Utf8 join key).
+  season: Season of the game.
+  week: Week of the game.
+  posteam: Offense team abbreviation.
+  off_plays: Offensive plays in the game (kneels, spikes and no_plays excluded).
+  sec_per_play: Mean over the team's drives of elapsed game clock divided by drive plays.
+  neutral_plays: Offensive plays in neutral situations (wp in [0.2, 0.8], over 2 minutes left in the half).
+  neutral_sec_per_play: sec_per_play computed on neutral-situation plays only.
+  proe: Mean pass_oe over the team's dropbacks in the game (percentage points).
+  dropbacks: Dropbacks with a non-null pass_oe (the proe denominator).
+nfl_game_script:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  games: Games included in the aggregate.
+  off_plays_pg: Realized offensive plays per game.
+  sec_per_play: Season mean of the per-game sec_per_play.
+  neutral_sec_per_play: Season mean neutral-situation seconds per play (lower = faster).
+  proe: Season pass-rate over expected, dropback-weighted so it reconciles exactly with the pbp pass_oe aggregate.
+  exp_plays_pg: Expected plays per game from the fitted PACE_CONSTANTS OLS (own pace, opponent pace, market total).
+  plays_oe: Realized minus expected plays per game.
+  pace_rank: Rank of neutral pace within the season (1 = fastest).
+env_adjusted_make_prob:
+  base_make_prob: Shipped fg_model make probability (with nfl4th long-kick clamps applied).
+  exp_make_prob: Environment-adjusted make probability (logit shift for long-kick clamp correction, wind, temperature and altitude).
+nfl_kicker_rating:
+  season: Season of the rating.
+  kicker_player_id: nflverse kicker GSIS id (Utf8 join key).
+  kicker: Display name of the kicker (e.g. J.Tucker), from kicker_player_name.
+  team: Team of the kicker's most recent attempt in the window.
+  fg_att: Field-goal attempts.
+  fg_made: Field goals made.
+  exp_made: Sum of environment-adjusted make probabilities (expected makes).
+  fgoe: Field goals made over expected (fg_made - exp_made).
+  fgoe_per_att: FGOE per attempt.
+  fgoe_shrunk: Empirical-Bayes shrunk FGOE per attempt, fgoe_per_att * att / (att + K_fg).
+  rating: 100 +/- 15 z-score of fgoe_shrunk within the frame.
+nfl_special_teams_epa:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  unit: Special-teams unit (punt, punt_return, kickoff, kickoff_return, field_goal, extra_point).
+  plays: Plays credited to the unit.
+  epa: Total EPA credited to the unit (kicking team carries the play EPA signed to it; the return team carries its negation).
+  epa_per_play: EPA per play for the unit.
+nfl_punter_value:
+  season: Season of the aggregate.
+  punter_player_id: nflverse punter GSIS id (Utf8 join key).
+  punts: Punts with a recorded kick distance.
+  gross_avg: Mean gross punt distance (yards).
+  net_avg: Mean net distance, kick_distance - return_yards - 20 * touchback.
+  exp_net_avg: Mean expected net from the shipped punt landing distribution at each punt's line of scrimmage.
+  net_over_expected: net_avg minus exp_net_avg (yards of field position per punt over expectation).
+  epa: Total EPA on the punter's punt plays (kicking-team perspective).
+team_pressure_rates:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  dropbacks_off: Offensive dropbacks (qb_dropback plays).
+  pressures_allowed: Sacks plus QB hits allowed on the team's own dropbacks.
+  pressure_rate_allowed: pressures_allowed / dropbacks_off.
+  dropbacks_def: Opponent dropbacks faced on defense.
+  pressures_generated: Sacks plus QB hits generated against opponent dropbacks.
+  pressure_rate_generated: pressures_generated / dropbacks_def.
+pressure_pairs:
+  season: Season of the matchup aggregate.
+  off_team: Offense team abbreviation.
+  def_team: Defense team abbreviation.
+  dropbacks: Offense dropbacks in the matchup.
+  pressures: Sacks plus QB hits in the matchup.
+adjust_pressure_pairs:
+  season: Season of the aggregate.
+  team: Team abbreviation.
+  dropbacks_off: Offensive dropbacks (qb_dropback plays).
+  pressures_allowed: Sacks plus QB hits allowed on the team's own dropbacks.
+  pressure_rate_allowed: pressures_allowed / dropbacks_off (raw).
+  dropbacks_def: Opponent dropbacks faced on defense.
+  pressures_generated: Sacks plus QB hits generated against opponent dropbacks.
+  pressure_rate_generated: pressures_generated / dropbacks_def (raw).
+  adj_pressure_rate_allowed: Opponent-adjusted allowed pressure rate (mu + team offense effect from the additive fixed point).
+  adj_pressure_rate_generated: Opponent-adjusted generated pressure rate (mu + team defense effect from the additive fixed point).
+nfl_line_grades:
+  season: Season of the grade.
+  team: Team abbreviation.
+  dropbacks_off: Offensive dropbacks (qb_dropback plays).
+  pressures_allowed: Sacks plus QB hits allowed on the team's own dropbacks.
+  pressure_rate_allowed: pressures_allowed / dropbacks_off (raw).
+  dropbacks_def: Opponent dropbacks faced on defense.
+  pressures_generated: Sacks plus QB hits generated against opponent dropbacks.
+  pressure_rate_generated: pressures_generated / dropbacks_def (raw).
+  adj_pressure_rate_allowed: Opponent-adjusted allowed pressure rate (additive fixed point, league-mean-centered).
+  adj_pressure_rate_generated: Opponent-adjusted generated pressure rate (additive fixed point, league-mean-centered).
+  ol_pass_block_grade: OL pass-block grade, 50 + 15 * z * n/(n + K_pressure) on the inverted adjusted allowed rate.
+  dl_pass_rush_grade: DL pass-rush grade, 50 + 15 * z * n/(n + K_pressure) on the adjusted generated rate.
+  pfr_pressure_pct: PFR team pressures (prss summed, traded 2TM/3TM rows excluded) divided by pbp dropbacks faced.
+calibration_table:
+  bin_mid: Midpoint of the probability bin.
+  mean_pred: Mean predicted probability within the bin.
+  mean_actual: Mean observed outcome within the bin.
+  n: Observations in the bin.
+blue_chip_ratio:
+  season: Roster season the trailing-window ratio describes (each class counts toward its eligible seasons).
+  team_id: 247Sports committed/signed-institution team key as a string (integer-origin; not an ESPN id).
+  blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars (Bud Elliott's blue-chip ratio).
+  n_recruits: Total signees across the trailing recruiting-class window.
+  n_blue_chip: Signees at or above the division's blue-chip star floor across the window.
+cfb_roster_talent:
+  season: Season the talent composite describes (trailing eligible classes aggregated).
+  team_id: 247Sports signed-institution team key as a string (integer-origin; joins to the recruit feed, not ESPN).
+  team: 247Sports full team name - the cross-source name-join key (the recruit-feed and talent-feed id spaces differ).
+  talent_composite: Class-recency-weighted sum of per-recruit star points (247 Team Talent Composite style); the 247 snapshot value when composite_247 is supplied.
+  talent_rank: Dense rank on talent_composite descending within season (best = 1).
+  blue_chip_ratio: Share of the trailing four signing classes rated 4+ stars.
+  n_recruits: Total signees across the trailing recruiting-class window.
+load_recruit_classes:
+  season: Recruiting-class year the recruit signed in.
+  team_id: 247Sports signed-institution team key as a string (falls back to the committed institution when unsigned).
+  team: Signed-institution full name (falls back to committed) - the downstream name-join key.
+  recruit_id: 247Sports recruit key as a string (integer-origin).
+  stars: 247 composite star rating (1-5; null for unrated recruits).
+  grade: 247 composite rating on the 0-100 scale.
+  position: Primary position abbreviation from the 247 recruit record.
+cfb_returning_production:
+  season: Season the returning fractions describe (production drawn from the prior season).
+  team: Normalized school-name key (play-by-play team names are school-only; not an ESPN id).
+  off_returning: Fraction of prior-season attributed offensive yardage (passing + rushing + receiving) returning on the current roster.
+  def_returning: Fraction of prior-season defensive splash-event involvement (sacks, interceptions, pass breakups, forced fumbles) returning.
+  overall_returning: Unit fractions combined with the fitted returning_prod_weights (offense-only per the 2018-2023 fit; see fit_returning_weights.py).
+  n_returning: Count of prior-season contributors present on the current roster.
+cfb_recruiting_projection:
+  season: Target season being projected (equals the requested target_season).
+  team_id: ESPN team id as a string (integer-origin).
+  pred_wins: Ridge-projected season win total from preseason roster features.
+  pred_margin: Ridge-projected average scoring margin per game.
+  pred_net_epa: Reserved adjusted-EPA projection - currently null (the hosted pbp source 404s).
+cfb_transfer_moves:
+  season: Destination season of the move (compares rosters S-1 to S).
+  team_id: School name key of the side this row describes (destination for "in", origin for "out").
+  player_id: ESPN athlete id as a string.
+  direction: Move side - "in" (arriving at team_id) or "out" (leaving team_id).
+  prior_team_id: School name key of the season S-1 team.
+  talent_points: Recruit-star talent points (name-matched to the 247 recruit record; 0-star default when unrated).
+cfb_transfer_impact:
+  season: Season the net transfer talent describes.
+  team_id: School name key from the rosters dataset.
+  net_transfer_talent: Incoming minus outgoing transfer talent points for the season.
+  pred_win_delta: Ridge-projected win-total change from net transfer talent (as-of fit; weak observed validity - see the strict-xfail gate).
+load_draft_outcomes:
+  draft_year: NFL draft year of the pick.
+  college: College of the pick (PFR-style name, e.g. "Ohio St.").
+  player_id: ESPN college athlete id as a string (null for older drafts).
+  player_name: Player name as listed on the pick record.
+  round: Round of the NFL draft the player was selected in (1-7 in the modern format).
+  pick: Overall pick number.
+  position: Position drafted at (PFR abbreviation).
 
 sports247_site_pages_coach:
   default_name: Server-rendered display label for the entity.

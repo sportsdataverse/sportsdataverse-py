@@ -1,0 +1,36 @@
+schema: nfl_play_call_tendencies
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: posteam
+  type: character
+  description: ''
+- name: plays
+  type: integer
+  description: ''
+- name: mean_p_pass
+  type: double
+  description: ''
+- name: pass_rate
+  type: double
+  description: ''
+- name: proe
+  type: double
+  description: ''
+- name: share_inside_run
+  type: double
+  description: ''
+- name: share_outside_run
+  type: double
+  description: ''
+- name: share_short_pass
+  type: double
+  description: ''
+- name: share_deep_pass
+  type: double
+  description: ''
+- name: share_scramble
+  type: double
+  description: ''

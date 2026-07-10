@@ -331,21 +331,28 @@ from sportsdataverse.cfb import yahoo_cfb_team_season_stats as _raw_yahoo_cfb_te
 from sportsdataverse.cfb import yahoo_cfb_team_season_stats_legacy as _raw_yahoo_cfb_team_season_stats_legacy
 from sportsdataverse.cfb import yahoo_cfb_teams as _raw_yahoo_cfb_teams
 from sportsdataverse.cfb import CFBPlayProcess as CFBPlayProcess  # noqa: F401
+from sportsdataverse.cfb import blue_chip_ratio as blue_chip_ratio  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa as cfb_adjusted_epa  # noqa: F401
 from sportsdataverse.cfb import cfb_adjusted_epa_by_game as cfb_adjusted_epa_by_game  # noqa: F401
 from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # noqa: F401
+from sportsdataverse.cfb import cfb_draft_projection as cfb_draft_projection  # noqa: F401
 from sportsdataverse.cfb import cfb_games_from_schedule as cfb_games_from_schedule  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
 from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
 from sportsdataverse.cfb import cfb_ratings as cfb_ratings  # noqa: F401
+from sportsdataverse.cfb import cfb_recruiting_projection as cfb_recruiting_projection  # noqa: F401
 from sportsdataverse.cfb import cfb_resume as cfb_resume  # noqa: F401
+from sportsdataverse.cfb import cfb_returning_production as cfb_returning_production  # noqa: F401
+from sportsdataverse.cfb import cfb_roster_talent as cfb_roster_talent  # noqa: F401
 from sportsdataverse.cfb import cfb_rosters_crosswalk as cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_schedule_crosswalk as cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_season_odds as cfb_season_odds  # noqa: F401
 from sportsdataverse.cfb import cfb_simulations as cfb_simulations  # noqa: F401
 from sportsdataverse.cfb import cfb_standings as cfb_standings  # noqa: F401
 from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_transfer_impact as cfb_transfer_impact  # noqa: F401
+from sportsdataverse.cfb import cfb_transfer_moves as cfb_transfer_moves  # noqa: F401
 from sportsdataverse.cfb import download as download  # noqa: F401
 from sportsdataverse.cfb import efficiency_ratings as efficiency_ratings  # noqa: F401
 from sportsdataverse.cfb import espn_cfb_calendar as espn_cfb_calendar  # noqa: F401
@@ -375,6 +382,8 @@ from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: 
 from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import load_draft_outcomes as load_draft_outcomes  # noqa: F401
+from sportsdataverse.cfb import load_recruit_classes as load_recruit_classes  # noqa: F401
 from sportsdataverse.cfb import make_ratings_compute_results as make_ratings_compute_results  # noqa: F401
 from sportsdataverse.cfb import most_recent_cfb_season as most_recent_cfb_season  # noqa: F401
 from sportsdataverse.cfb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
@@ -394,21 +403,28 @@ from sportsdataverse.cfb import win_prob_from_margin as win_prob_from_margin  # 
 
 __all__ = [
     "CFBPlayProcess",
+    "blue_chip_ratio",
     "cfb_adjusted_epa",
     "cfb_adjusted_epa_by_game",
     "cfb_compute_results",
+    "cfb_draft_projection",
     "cfb_games_from_schedule",
     "cfb_odds_events_crosswalk",
     "cfb_playoff_seeds",
     "cfb_predict_games",
     "cfb_ratings",
+    "cfb_recruiting_projection",
     "cfb_resume",
+    "cfb_returning_production",
+    "cfb_roster_talent",
     "cfb_rosters_crosswalk",
     "cfb_schedule_crosswalk",
     "cfb_season_odds",
     "cfb_simulations",
     "cfb_standings",
     "cfb_teams_crosswalk",
+    "cfb_transfer_impact",
+    "cfb_transfer_moves",
     "download",
     "efficiency_ratings",
     "espn_cfb_award",
@@ -565,6 +581,8 @@ __all__ = [
     "load_cfb_schedule_crosswalk",
     "load_cfb_team_info",
     "load_cfb_teams_crosswalk",
+    "load_draft_outcomes",
+    "load_recruit_classes",
     "make_ratings_compute_results",
     "most_recent_cfb_season",
     "normalize_team_roster_columns",

@@ -1,0 +1,21 @@
+schema: nfl_fantasy_projection
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: target_season
+  type: integer
+  description: ''
+- name: position_group
+  type: character
+  description: ''
+- name: proj_fantasy_points
+  type: double
+  description: ''
+- name: proj_fantasy_points_per_game
+  type: double
+  description: ''
+- name: position_rank
+  type: integer
+  description: ''
