@@ -1,0 +1,27 @@
+schema: nfl_punter_value
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: punter_player_id
+  type: character
+  description: ''
+- name: punts
+  type: integer
+  description: ''
+- name: gross_avg
+  type: double
+  description: ''
+- name: net_avg
+  type: double
+  description: ''
+- name: exp_net_avg
+  type: double
+  description: ''
+- name: net_over_expected
+  type: double
+  description: ''
+- name: epa
+  type: double
+  description: ''

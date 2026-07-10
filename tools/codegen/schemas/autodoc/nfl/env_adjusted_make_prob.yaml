@@ -1,0 +1,9 @@
+schema: env_adjusted_make_prob
+kind: dataframe
+columns:
+- name: base_make_prob
+  type: double
+  description: ''
+- name: exp_make_prob
+  type: double
+  description: ''
