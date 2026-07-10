@@ -423,6 +423,107 @@ espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 
 ## NHL native
 
+### `nhl_edge_skating_value(*, season: 'int', league: 'str' = 'nhl', detail_frames: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_edge_skating_value}
+
+Per-skater EDGE z-composite skating value.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season end-year (e.g. `2024` for 2023-24). |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"`. PWHL short-circuits to a zero-row frame (no EDGE feed) BEFORE any network access. |
+| `detail_frames` | `DataFrame \| None` | `None` | Pre-parsed EDGE aggregate (one row per skater with the COMPONENTS` columns) for offline use. When `None` on the NHL path, the live per-skater `nhl_edge_skater_*_detail` fetch would run -- not implemented offline; supply `detail_frames`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_bursts_20`, `oz_time_pct`, `skating_value`, `skating_value_rank` (1 = fastest composite). PWHL (or empty/absent input) returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_edge_value import nhl_edge_skating_value
+
+out = nhl_edge_skating_value(season=2024, detail_frames=edge_df)
+```
+
+### `nhl_expected_assists(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', xg_model: 'ShotXGModel | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_expected_assists}
+
+Per-player expected primary/secondary assists from xG-weighted goal credit.
+
+Each goal credits its `assist1` player its **relative danger**
+`goal_xg / mean_goal_xg` as x_primary (and `assist2` likewise as
+x_secondary). Normalizing to the league-mean goal xG is what makes the
+total credit **unbiased** -- `Sum(x_primary + x_secondary) ~= Sum(actual
+assists)` -- while still rewarding a playmaker who sets up high-danger
+goals (relative danger > 1) over one who feeds tap-ins (< 1). Crediting
+raw `goal_xg` (~0.1-0.2) instead would put expected assists on the xG
+scale, an order of magnitude below the assist count, and could never be
+unbiased against actual assists.
+`assists_above_expected = (primary + secondary) - (x_primary + x_secondary)`
+(positive = the player's assisted goals were lower-danger than average, so
+they out-assisted their shot quality); `primary_share = primary /
+(primary + secondary)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Parsed pbp frame (Task-0.1 contract). |
+| `league` | `str` | `'nhl'` | League key (unused today -- assist credit is league-agnostic; kept for signature parity with the other microstat models and the PWHL shim). |
+| `xg_model` | `ShotXGModel \| None` | `None` | A fitted `~sportsdataverse.nhl.nhl_microstat_constants.ShotXGModel`; fit on `pbp` when `None`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Per-player frame: `player_id`, `primary_assists`, `secondary_assists`, `x_primary_assists`, `x_secondary_assists`, `assists_above_expected`, `primary_share`. Zero-row input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_expected_assists import nhl_expected_assists
+
+out = nhl_expected_assists(pbp)
+
+# PWHL
+
+out_pwhl = nhl_expected_assists(pwhl_pbp, league="pwhl")
+```
+
+### `nhl_faceoff_value(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_faceoff_value}
+
+Per-player context-adjusted faceoff-win value.
+
+Fits `fit_faceoff_context` on the taker-perspective expansion of
+every faceoff in `pbp`, then aggregates each player's win rate above
+the context expectation and a zone-weighted `faceoff_value` using
+`get_constants(league).faceoff_zone_weights`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Parsed pbp frame (Task-0.1 contract). |
+| `league` | `str` | `'nhl'` | League key for `~sportsdataverse.nhl.nhl_microstat_constants.get_constants` (`"nhl"` or `"pwhl"`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Per-player frame: `player_id`, `faceoffs_taken`, `faceoffs_won`, `fo_win_pct`, `fo_win_pct_above_exp`, `faceoff_value`. Zero-row input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_faceoff_value import nhl_faceoff_value
+
+out = nhl_faceoff_value(pbp)
+
+# PWHL
+
+out_pwhl = nhl_faceoff_value(pwhl_pbp, league="pwhl")
+```
+
 ### `nhl_game_total(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_game_total}
 
 Per-game expected total goals -- a thin re-export of model ②'s expected-goals helper.
@@ -534,6 +635,41 @@ _No description available._
 |---|---|---|---|
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
+
+### `nhl_penalty_value(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_penalty_value}
+
+Per-player net penalty drawn/taken value.
+
+Tallies each player's penalties drawn (`player_id == drawn_player_id`)
+and taken (`player_id == committed_player_id`), split minor/major, and
+converts the net into expected goals:
+`net_penalty_value = (minors_drawn - minors_taken) * pp_goal_value +
+(majors_drawn - majors_taken) * major_penalty_value` using
+`get_constants(league)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Parsed pbp frame (Task-0.1 contract). |
+| `league` | `str` | `'nhl'` | League key for `~sportsdataverse.nhl.nhl_microstat_constants.get_constants`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Per-player frame: `player_id`, `penalties_drawn`, `penalties_taken`, `minors_drawn`, `minors_taken`, `majors_drawn`, `majors_taken`, `net_penalties`, `net_penalty_value`. League-wide `net_penalty_value` sums to (approximately) zero by construction -- every penalty taken by one player is drawn by another. Zero-row input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_penalty_value import nhl_penalty_value
+
+out = nhl_penalty_value(pbp)
+
+# PWHL
+
+out_pwhl = nhl_penalty_value(pwhl_pbp, league="pwhl")
+```
 
 ### `nhl_player_props(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, stats: 'tuple[str, ...]' = ('shots', 'points'), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_player_props}
 
@@ -1008,6 +1144,39 @@ print(scored.filter(pl.col("xg").is_not_null()).height)
 # Pandas round-trip
 
 scored_pd = nhl_xg(pbp, return_as_pandas=True)
+```
+
+### `nhl_zone_transitions(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', tags: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_zone_transitions}
+
+Per-player controlled/dump entry & exit rates + xG-weighted values.
+
+`entry_value = controlled_entries * zone_entry_value_controlled +
+dump_entries * zone_entry_value_dump`; `exit_value = exits *
+zone_exit_value` -- all from `get_constants(league)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Parsed pbp frame (Task-0.1 contract). |
+| `league` | `str` | `'nhl'` | League key for the value constants. |
+| `tags` | `DataFrame \| None` | `None` | Optional ground-truth controlled/dump override (see `infer_zone_transitions`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Per-player frame: `player_id`, `controlled_entries`, `dump_entries`, `exits`, `controlled_entry_rate`, `entry_value`, `exit_value`. Zero-row input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_zone_transitions import nhl_zone_transitions
+
+out = nhl_zone_transitions(pbp)
+
+# PWHL
+
+out_pwhl = nhl_zone_transitions(pwhl_pbp, league="pwhl")
 ```
 
 ## Dataset loaders
