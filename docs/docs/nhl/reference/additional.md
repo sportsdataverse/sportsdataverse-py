@@ -423,6 +423,45 @@ espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 
 ## NHL native
 
+### `nhl_goalie_gsax(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_goalie_gsax}
+
+Per-goalie goals-saved-above-expected (GSAx) for the games in `pbp`.
+
+Scores every unblocked shot via `nhl_xg`, attributes each shot to the defending
+goalie (attribute_goalie`), and aggregates `xga = sum(xg)`, `ga =
+count(goals)`, `gsax = xga - ga`. `gsax_per_60` uses an on-ice-seconds proxy
+derived from the pbp event span each goalie is credited on (see
+toi_seconds_by_goalie`) -- `shifts` is accepted for interface parity with the
+rest of the player-impact spine but is not currently required for TOI.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame (or an already `nhl_xg`-scored one -- re-scoring is idempotent since the prior `xg` column is dropped first). |
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame (currently unused; accepted for interface parity -- see the module docstring). |
+| `model_dir` | `str \| None` | `None` | passed through to `nhl_xg` (booster directory). |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_id:Int64, goalie:Utf8, shots:Int64, xga:Float64, ga:Int64, gsax:Float64, gsax_per_60:Float64`. League-wide `sum(gsax) == sum(xga) - sum(goals)`, which is `~= 0` at large sample and exactly zero only under perfect league-wide xG calibration. Empty/malformed input returns a zero-row frame with this schema -- never raises.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_gsax import nhl_goalie_gsax
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+gsax = nhl_goalie_gsax(pbp, pl.DataFrame(), model_dir="tests/fixtures/nhl_player_impact/xg_models")
+print(gsax.sort("gsax", descending=True))
+
+# Pipeline next step
+
+gsax.filter(pl.col("shots") >= 10).sort("gsax_per_60", descending=True).head()
+```
+
 ### `nhl_pbp_disk(game_id, path_to_json)` {#nhl_pbp_disk}
 
 _No description available._
@@ -634,6 +673,174 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 nhl_scoreboard(date="2024-03-01")
 ```
 
+### `nhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', lam: 'float | None' = None, as_of: 'int | None' = None, strength_states: 'list[str] | None' = None, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_skater_rapm}
+
+Per-skater xG-based Regularized Adjusted Plus-Minus (RAPM), per 60 minutes.
+
+Builds shift stints (`build_stints`), the sparse off/def design matrix
+(`build_design`), and solves the weighted ridge (`weighted_ridge`). Offensive
+rating is the `off_<player>` coefficient; defensive rating is the **negated**
+`def_<player>` coefficient (suppressing xG-against is positive value) --
+`xg_rapm = xg_rapm_off + xg_rapm_def`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects the ridge lambda-grid via `LEAGUE_CONSTANTS` when `lam` is not given. |
+| `lam` | `float \| None` | `None` | an explicit ridge penalty; `None` selects via k-fold CV over `LEAGUE_CONSTANTS[league].rapm_lambda_grid`. |
+| `as_of` | `int \| None` | `None` | forwarded to `build_stints` -- the leakage-boundary cutoff. |
+| `strength_states` | `list[str] \| None` | `None` | restrict the design matrix to these `strength_state` values (e.g. `["5v5"]` for an even-strength-only fit, as used by `nhl_skater_war`'s `ev_off`/`ev_def` components so they don't overlap with `nhl_special_teams_value`'s PP/PK components). `None` (default) uses every strength state, matching the general-purpose all-situations RAPM. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame, bypassing `pbp`/`shifts`/scoring (not part of the public contract). |
+
+**Returns**
+
+`player_id:Int64, xg_rapm_off:Float64, xg_rapm_def:Float64, xg_rapm:Float64, toi_minutes:Float64`. Empty input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_rapm import nhl_skater_rapm
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
+rapm = nhl_skater_rapm(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+print(rapm.sort("xg_rapm", descending=True).head(10))
+```
+
+### `nhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_skater_war}
+
+Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`/`nhl_skater_rapm`/ `nhl_special_teams_value`. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. `ev_off`/`ev_def` are `(5v5-only RAPM rate - replacement level) * EV TOI/60`; `gar` sums every component; `war = gar / goals_per_win`. Empty input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_war import nhl_skater_war
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
+war = nhl_skater_war(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+print(war.sort("war", descending=True).head(10))
+```
+
+### `nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_special_teams_value}
+
+Per-skater power-play/penalty-kill value (goals) above/below league baseline.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects `league_xg_rate_pp`/pk` via `LEAGUE_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
+
+**Returns**
+
+`player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. Empty input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_special_teams import nhl_special_teams_value
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
+st = nhl_special_teams_value(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+print(st.sort("pp_value", descending=True).head(10))
+```
+
+### `nhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', unit_type: 'str' = 'forward_line', min_toi: 'float' = 20.0, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None, _rapm: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_unit_ratings}
+
+Per on-ice skater combination: observed xGF/xGA + shrinkage-blended summed RAPM.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`/`nhl_skater_rapm`. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"`. |
+| `unit_type` | `str` | `'forward_line'` | `"forward_line"` (3-skater combinations) or `"defense_pair"` (2-skater combinations) -- see the module's data-availability caveat. |
+| `min_toi` | `float` | `20.0` | minimum minutes-together for a unit to be reported. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
+| `_rapm` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built skater-RAPM frame (paired with stints`; both must be given together to bypass real computation). |
+
+**Returns**
+
+`team:Utf8, unit_ids:Utf8 (sorted "id-id-id"), unit_players:Utf8, toi_minutes:Float64, on_ice_xgf:Float64, on_ice_xga:Float64, on_ice_xgf_pct:Float64, summed_rapm:Float64, unit_value:Float64`. Empty input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_unit_ratings import nhl_unit_ratings
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
+units = nhl_unit_ratings(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+print(units.sort("unit_value", descending=True).head(10))
+```
+
+### `nhl_xg(pbp: 'pl.DataFrame', *, model_dir: 'str | Path | None' = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_xg}
+
+Score every unblocked shot in `pbp` with the published `nhl_xg_models` boosters.
+
+Ports fastRhockey's `helper_nhl_calculate_xg` -- routes 5v5 shots to the 5v5
+booster and every other strength state to the special-teams booster, overrides
+penalty shots with the constant `xg_model_ps`, then left-joins `xg` back onto
+`pbp` by `event_id`. Attaches the danger/distance/angle expansion
+(`add_shot_geometry`) after scoring.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
+| `model_dir` | `str \| Path \| None` | `None` | booster directory; `None` downloads-and-caches on first use (see `ensure_xg_models`). Offline callers should pass the committed fixture dir. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects the danger-zone geometry bands (the PWHL borrows the NHL boosters themselves; see `xg_booster_league`). |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`pbp` with `xg:Float64`, `distance_to_net:Float64`, `shot_angle:Float64`, `shot_danger:Utf8` appended (null/absent for non-shot rows). Empty/malformed input returns the input frame with a null `xg` column -- never raises.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_xg import nhl_xg
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+scored = nhl_xg(pbp, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+print(scored.filter(pl.col("xg").is_not_null()).height)
+
+# Pandas round-trip
+
+scored_pd = nhl_xg(pbp, return_as_pandas=True)
+```
+
 ## Dataset loaders
 
 ### `load_nhl_games(return_as_pandas: 'bool' = False)` {#load_nhl_games}
@@ -744,6 +951,27 @@ Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+### `load_xg_models(model_dir: 'str | Path | None' = None) -> 'dict'` {#load_xg_models}
+
+Load the two published boosters (+ embedded feature names) and the penalty-shot constant.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model_dir` | `str \| Path \| None` | `None` | `None` downloads the canonical `nhl_xg_models` release on first use and caches under `booster_cache_dir()`; pass a dir to use local models (the offline test suite always passes the committed fixture dir). |
+
+**Returns**
+
+dict with keys `m5v5`/`mst` (`xgboost.Booster`), `feats_5v5`/`feats_st` (embedded feature-name lists), and `ps` (penalty-shot constant probability).
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_xg import load_xg_models
+models = load_xg_models("tests/fixtures/nhl_player_impact/xg_models")
+```
+
 ## Utilities & helpers
 
 ### `most_recent_nhl_season()` {#most_recent_nhl_season}
@@ -794,6 +1022,193 @@ year_to_season(1999)  # '1999-00'
 ```
 
 ## Other
+
+### `ImpactConfig(goals_per_win: 'float', replacement_ev_off: 'float', replacement_ev_def: 'float', league_xg_rate_ev: 'float', league_xg_rate_pp: 'float', league_xg_rate_pk: 'float', rapm_lambda_grid: 'list[float]' = <factory>, penalty_goal_weight: 'float' = 0.18, faceoff_goal_weight: 'float' = 0.02, rink_x_goal_line: 'float' = 89.0, danger_high: 'dict' = <factory>, danger_medium: 'dict' = <factory>, xg_booster_league: 'str' = 'nhl') -> None` {#ImpactConfig}
+
+League-specific constants consumed by every player-impact engine function.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `goals_per_win` | `float` |  | goals-per-win denominator for GAR->WAR (Task 6.2 fits the NHL value from team wins vs goal differential; seeded here until fit). |
+| `replacement_ev_off` | `float` |  | EV offense replacement-level rate (xG/60), subtracted before summing GAR. |
+| `replacement_ev_def` | `float` |  | EV defense replacement-level rate (xGA/60 suppressed). |
+| `league_xg_rate_ev` | `float` |  | league-average even-strength xG rate (per 60), used as the RAPM intercept sanity check. |
+| `league_xg_rate_pp` | `float` |  | league-average power-play xGF rate (per 60). |
+| `league_xg_rate_pk` | `float` |  | league-average penalty-kill xGA rate (per 60). |
+| `rapm_lambda_grid` | `list[float]` | `<factory>` | candidate ridge penalties for the skater RAPM CV. |
+| `penalty_goal_weight` | `float` | `0.18` | goals-per-(penalty drawn - taken) conversion. |
+| `faceoff_goal_weight` | `float` | `0.02` | goals-per-(faceoff win - 0.5) conversion. |
+| `rink_x_goal_line` | `float` | `89.0` | absolute rink x-coordinate of the goal line (feet), used by the shot-geometry expansion. |
+| `danger_high` | `dict` | `<factory>` | `{"max_distance": float, "max_angle": float}` band for "high" danger. |
+| `danger_medium` | `dict` | `<factory>` | same shape, wider band for "medium" danger; outside both -> "low". |
+| `xg_booster_league` | `str` | `'nhl'` | which league's published boosters back this league's `nhl_xg` scoring (the PWHL borrows the NHL boosters -- a documented approximation). |
+
+### `add_shot_geometry(df: 'pl.DataFrame', *, league: 'str' = 'nhl') -> 'pl.DataFrame'` {#add_shot_geometry}
+
+Attach `distance_to_net` / `shot_angle` / `shot_danger` (descriptive output only).
+
+Distance/angle are computed off `x_fixed`/`y` against the rink goal-line
+x-coordinate in `LEAGUE_CONSTANTS[league].rink_x_goal_line`; `shot_danger` buckets
+into `high`/`medium`/`low` using the `danger_high`/`danger_medium`
+distance+angle bands from the same config. These are output columns only -- never
+fed back into the boosters (Decision D2; a new feature would force a retrain).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | any frame carrying `x_fixed` and `y` columns. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects the danger-zone bands. |
+
+**Returns**
+
+`df` with `distance_to_net:Float64`, `shot_angle:Float64`, `shot_danger:Utf8` appended.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_xg import add_shot_geometry
+out = add_shot_geometry(pl.DataFrame({"x_fixed": [80], "y": [0]}))
+```
+
+### `booster_cache_dir(override: 'str | Path | None' = None) -> 'Path'` {#booster_cache_dir}
+
+Resolve the local cache directory for the downloaded `nhl_xg_models` boosters.
+
+Precedence: explicit `override` argument > `NHL_XG_MODEL_DIR` env var >
+`~/.cache/nhl_xg_models`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `override` | `str \| Path \| None` | `None` | an explicit directory (e.g. a committed test-fixture dir); wins over the env var when given. |
+
+**Returns**
+
+The resolved `pathlib.Path` (not created here -- `ensure_xg_models` creates it on first download).
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_impact_constants import booster_cache_dir
+d = booster_cache_dir()
+```
+
+### `build_design(stints: 'pl.DataFrame') -> "tuple['sp.csr_matrix', np.ndarray, np.ndarray, list[int]]"` {#build_design}
+
+Build the sparse RAPM design matrix -- two rows per stint (one per attacking team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stints` | `DataFrame` |  | a `build_stints`-shaped frame. |
+
+**Returns**
+
+`(X, y, w, player_index)` where `X` is a `scipy.sparse.csr_matrix` with columns `off_<player>` (all on-ice attackers), `def_<player>` (all on-ice defenders), then a trailing home-ice indicator and intercept column; `y` is the attacking team's xGF per 60; `w` is stint duration (seconds); `player_index` maps each `off_`/`def_` column pair's position to a `player_id` (so column `j` is `off_<player_index[j]>` and column `j + n_players` is `def_<player_index[j]>`).
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_rapm import build_design
+X, y, w, player_index = build_design(stints)
+```
+
+### `build_stints(shifts: 'pl.DataFrame', scored: 'pl.DataFrame', *, as_of: 'int | None' = None) -> 'pl.DataFrame'` {#build_stints}
+
+Fold `load_nhl_shifts` CHANGE events into contiguous constant-personnel intervals.
+
+Per game: resolves each shift row's full team name (`event_team`) to home/away via
+`team_fullname_to_abbr` + the game's `home_abbr`/`away_abbr` (from `scored`),
+then folds `ids_on`/`ids_off` deltas chronologically into a running on-ice set per
+side. A new interval begins at every distinct `game_seconds` boundary; the final
+interval is closed at the last `scored` event's `game_seconds` + 1 for that game
+(there is no explicit "end of game" CHANGE row in the shift-chart feed).
+
+Known simplification: shift-chart id lists do not distinguish position, so
+`home_ids`/`away_ids` may include the on-ice goalie's id alongside skaters;
+`home_goalie`/`away_goalie` are instead sourced from the overlapping `scored`
+events' `home_goalie_id`/`away_goalie_id` (the modal value in the interval).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `scored` | `DataFrame` |  | an `nhl_xg`-scored frame (for the game's `home_abbr`/`away_abbr` and each interval's on-ice xG-for and goalie). |
+| `as_of` | `int \| None` | `None` | an optional per-game `game_seconds` cutoff -- intervals starting at or after `as_of` are dropped. This is the leakage boundary for any forward-looking use: features for a game/date must use only stints strictly before that game's cutoff. |
+
+**Returns**
+
+one row per interval -- `game_id:Int64, period:Int64, start_s:Int64, end_s:Int64, duration:Int64, home_ids:List(Int64), away_ids:List(Int64), home_goalie:Int64, away_goalie:Int64, strength_state:Utf8, xgf_home:Float64, xgf_away:Float64`. Empty/malformed `shifts` returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_xg import nhl_xg
+from sportsdataverse.nhl.nhl_rapm import build_stints
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
+scored = nhl_xg(pbp, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+stints = build_stints(shifts, scored)
+```
+
+### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+
+Bucket predicted probabilities into `n_bins` and compare to the realized rate.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | binary outcomes (0/1), e.g. `event_type == "GOAL"`. |
+| `p_pred` | `ndarray` |  | predicted probabilities, e.g. per-shot `xg`. |
+| `n_bins` | `int` | `10` | number of equal-width probability bins. |
+
+**Returns**
+
+`bin_mid:Float64, mean_pred:Float64, mean_actual:Float64, n:Int64` -- reliability tracks the diagonal (`mean_actual` monotone in `bin_mid`) when the model is well-calibrated.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_player_impact_constants import calibration_table
+tbl = calibration_table(np.array([0, 1, 1, 0]), np.array([0.1, 0.8, 0.6, 0.2]))
+```
+
+### `ensure_xg_models(model_dir: 'str | Path | None' = None) -> 'Path'` {#ensure_xg_models}
+
+Return a dir holding the 3 published booster files, downloading any missing ones.
+
+Mirrors the fastRhockey/nflverse download-on-demand + cache pattern -- the documented
+exception to "no first-use download" (the boosters are a large, already-published,
+already-validated artifact; see Decision D1 in the design spec). An explicit
+`model_dir` whose files already exist (e.g. the committed offline test fixtures)
+never touches the network.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model_dir` | `str \| Path \| None` | `None` | directory to check/populate; `None` resolves via `booster_cache_dir()` (env `NHL_XG_MODEL_DIR` override, else `~/.cache/nhl_xg_models`). |
+
+**Returns**
+
+The resolved directory containing all 3 booster files.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_xg import ensure_xg_models
+d = ensure_xg_models()  # downloads on first use, cached after
+```
 
 ### `espn_nhl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_teams}
 
@@ -1032,6 +1447,52 @@ from sportsdataverse.nhl import fox_nhl_team_stats
 df = fox_nhl_team_stats("...")
 ```
 
+### `get_constants(league: 'str') -> 'ImpactConfig'` {#get_constants}
+
+Return the `ImpactConfig` for `league`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"nhl"` or `"pwhl"`. |
+
+**Returns**
+
+The league's `ImpactConfig`.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_impact_constants import get_constants
+cfg = get_constants("pwhl")
+print(cfg.xg_booster_league)  # "nhl" -- the borrowed-booster caveat
+```
+
+### `prepare_xg_features(pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#prepare_xg_features}
+
+Port of `helper_nhl_prepare_xg_data` -- one row per unblocked shot, model features.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame (`x`, `x_fixed`, `strength_state`, `home_skaters`/`away_skaters`, `game_seconds`, `event_id`, `secondary_type`, `event_team_abbr`, `home_abbr`/`away_abbr`, `season`, `empty_net` -- see `load_nhl_pbp_full`'s returns table). |
+
+**Returns**
+
+one row per unblocked shot (`SHOT`/`MISSED_SHOT`/`GOAL`) carrying every era one-hot, shot-type one-hot, last-event one-hot, and the derived `rebound`/`rush`/`cross_ice_event`/`total_skaters_on`/ `event_team_advantage`/`empty_net` columns the boosters expect. Empty/ malformed input returns a zero-row frame (never raises).
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_xg import prepare_xg_features
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+feat = prepare_xg_features(pbp)
+print(feat.shape)
+```
+
 ### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
 
 _No description available._
@@ -1041,3 +1502,78 @@ _No description available._
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `event` |  |  |  |
+
+### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+
+Spearman rank correlation between two 1-D arrays (no scipy.stats.spearmanr dep).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | first sample. |
+| `b` | `ndarray` |  | second sample, same length as `a`. |
+
+**Returns**
+
+The Pearson correlation of the rank-transformed samples.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_player_impact_constants import spearman_corr
+spearman_corr(np.array([1, 2, 3]), np.array([3, 6, 9]))  # 1.0
+```
+
+### `team_fullname_to_abbr(name: 'str') -> 'str | None'` {#team_fullname_to_abbr}
+
+Map an NHL full team display name to its abbreviation, or `None` if unknown.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | a full team display name as it appears in `load_nhl_shifts`'s `event_team` column (e.g. `"Buffalo Sabres"`). |
+
+**Returns**
+
+The team abbreviation matching `load_nhl_pbp_full`'s `event_team_abbr` / `home_abbr` / `away_abbr` convention, or `None` for an unmapped name.
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_player_impact_constants import team_fullname_to_abbr
+team_fullname_to_abbr("Buffalo Sabres")  # "BUF"
+```
+
+### `weighted_ridge(X: 'Any', y: 'np.ndarray', w: 'np.ndarray', lam: 'float') -> 'np.ndarray'` {#weighted_ridge}
+
+Solve the weighted ridge normal equations `(X'WX + lam*I)^-1 X'Wy`.
+
+Dense path (`numpy.linalg.solve`) for small/dense `X`; conjugate-gradient
+(`scipy.sparse.linalg.cg`) for `scipy.sparse` `X` (the skater-RAPM design
+matrix, ~thousands of columns).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `X` | `Any` |  | design matrix, dense `numpy.ndarray` or any `scipy.sparse` matrix. |
+| `y` | `ndarray` |  | response vector. |
+| `w` | `ndarray` |  | nonnegative observation weights (e.g. stint duration in seconds). |
+| `lam` | `float` |  | ridge penalty. |
+
+**Returns**
+
+The fitted coefficient vector.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.nhl.nhl_player_impact_constants import weighted_ridge
+X = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+y = np.array([2.0, -1.0, 1.0])
+beta = weighted_ridge(X, y, np.ones(3), lam=1e-6)
+```

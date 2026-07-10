@@ -501,4 +501,12 @@ files = [
     "sportsdataverse/wnba/wnba_availability.py",
     "sportsdataverse/wnba/wnba_draft_model.py",
     "sportsdataverse/wnba/wnba_rookie_projection.py",
+    "sportsdataverse/nhl/nhl_player_impact_constants.py",
+    "sportsdataverse/nhl/nhl_xg.py",
+    "sportsdataverse/nhl/nhl_gsax.py",
+    "sportsdataverse/nhl/nhl_rapm.py",
+    "sportsdataverse/nhl/nhl_unit_ratings.py",
+    "sportsdataverse/nhl/nhl_special_teams.py",
+    "sportsdataverse/nhl/nhl_war.py",
+    "sportsdataverse/pwhl/pwhl_player_impact.py",
 ]

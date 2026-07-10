@@ -573,6 +573,83 @@ All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
+### `pwhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_skater_rapm}
+
+② PWHL skater xG RAPM -- shim over `nhl_skater_rapm` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring); returns a documented
+empty frame + `cli_warn` rather than fitting a degenerate ridge when `shifts` is
+too thin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+
+**Returns**
+
+Same schema as `nhl_skater_rapm`: `player_id:Int64, xg_rapm_off:Float64, xg_rapm_def:Float64, xg_rapm:Float64, toi_minutes:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_rapm
+rapm = pwhl_skater_rapm(pbp, shifts)
+```
+
+### `pwhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_skater_war}
+
+③ PWHL GAR/WAR composite -- shim over `nhl_skater_war` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+
+**Returns**
+
+Same schema as `nhl_skater_war`: `player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_skater_war
+war = pwhl_skater_war(pbp, shifts)
+```
+
+### `pwhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_special_teams_value}
+
+⑥ PWHL special-teams value -- shim over `nhl_special_teams_value` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+
+**Returns**
+
+Same schema as `nhl_special_teams_value`: `player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_special_teams_value
+st = pwhl_special_teams_value(pbp, shifts)
+```
+
 ### `pwhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#pwhl_standings}
 
 PWHL standings — one row per team.
@@ -820,3 +897,28 @@ PWHL roster transactions.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `return_as_pandas` | `bool` | `False` |  |
+
+### `pwhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, **kwargs: 'Any') -> "'pl.DataFrame | pd.DataFrame'"` {#pwhl_unit_ratings}
+
+⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`.
+
+Guards on PWHL shift-chart coverage (see the module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a PWHL play-by-play frame shaped like `load_nhl_pbp_full`. |
+| `shifts` | `DataFrame` |  | a PWHL shift-chart frame shaped like `load_nhl_shifts`. |
+| `model_dir` | `str \| None` | `None` | booster directory passed through to the borrowed NHL xG boosters. |
+
+**Returns**
+
+Same schema as `nhl_unit_ratings`: `team:Utf8, unit_ids:Utf8, unit_players:Utf8, toi_minutes:Float64, on_ice_xgf:Float64, on_ice_xga:Float64, on_ice_xgf_pct:Float64, summed_rapm:Float64, unit_value:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_impact import pwhl_unit_ratings
+units = pwhl_unit_ratings(pbp, shifts)
+```
