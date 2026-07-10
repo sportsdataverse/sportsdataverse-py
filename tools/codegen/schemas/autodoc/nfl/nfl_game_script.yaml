@@ -1,0 +1,33 @@
+schema: nfl_game_script
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: off_plays_pg
+  type: double
+  description: ''
+- name: sec_per_play
+  type: double
+  description: ''
+- name: neutral_sec_per_play
+  type: double
+  description: ''
+- name: proe
+  type: double
+  description: ''
+- name: exp_plays_pg
+  type: double
+  description: ''
+- name: plays_oe
+  type: double
+  description: ''
+- name: pace_rank
+  type: integer
+  description: ''

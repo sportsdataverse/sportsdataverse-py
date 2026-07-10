@@ -12,7 +12,7 @@ sidebar_label: NFL
 | [NFL.com API](reference/nfl_api) | 11 | `https://api.nfl.com` |
 | [PFF Premium Stats (premium.pff.com)](reference/pff_core) | 46 | `https://premium.pff.com` |
 | [Dataset loaders](reference/loaders) | 8 | nflverse data releases |
-| [Additional functions](reference/additional) | 113 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 143 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

@@ -1,0 +1,10 @@
+{
+  "league": "nba",
+  "rookie_fraction": 0.0396391046121466,
+  "residual": {
+    "first_round": 2.80966300035998,
+    "lottery": 3.01793187233726,
+    "second_round": 0.9775905375478956,
+    "undrafted": 0.4356485365471166
+  }
+}

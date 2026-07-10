@@ -140,20 +140,27 @@ from sportsdataverse.nba import fox_nba_standings as _raw_fox_nba_standings
 from sportsdataverse.nba import fox_nba_team_gamelog as _raw_fox_nba_team_gamelog
 from sportsdataverse.nba import fox_nba_team_roster as _raw_fox_nba_team_roster
 from sportsdataverse.nba import fox_nba_team_stats as _raw_fox_nba_team_stats
+from sportsdataverse.nba import nba_stats_leaguedashptstats as _raw_nba_stats_leaguedashptstats
 from sportsdataverse.nba import AdjRapmModel as AdjRapmModel  # noqa: F401
 from sportsdataverse.nba import AgingCurve as AgingCurve  # noqa: F401
 from sportsdataverse.nba import ExternalValidityResult as ExternalValidityResult  # noqa: F401
 from sportsdataverse.nba import ForecastResult as ForecastResult  # noqa: F401
+from sportsdataverse.nba import LeagueConstants as LeagueConstants  # noqa: F401
+from sportsdataverse.nba import MeasureSpec as MeasureSpec  # noqa: F401
 from sportsdataverse.nba import NbaBpmModel as NbaBpmModel  # noqa: F401
 from sportsdataverse.nba import NbaSpmModel as NbaSpmModel  # noqa: F401
 from sportsdataverse.nba import RidgeRapmModel as RidgeRapmModel  # noqa: F401
 from sportsdataverse.nba import SpmCoefficients as SpmCoefficients  # noqa: F401
 from sportsdataverse.nba import ValidationReport as ValidationReport  # noqa: F401
 from sportsdataverse.nba import WalkForwardResult as WalkForwardResult  # noqa: F401
+from sportsdataverse.nba import adjust_efficiency as adjust_efficiency  # noqa: F401
+from sportsdataverse.nba import adjust_pace as adjust_pace  # noqa: F401
+from sportsdataverse.nba import as_of_ratings_split as as_of_ratings_split  # noqa: F401
 from sportsdataverse.nba import box_features as box_features  # noqa: F401
 from sportsdataverse.nba import build_possession_shooting as build_possession_shooting  # noqa: F401
 from sportsdataverse.nba import calibrate_pts_per_win as calibrate_pts_per_win  # noqa: F401
 from sportsdataverse.nba import calibrate_replacement_level as calibrate_replacement_level  # noqa: F401
+from sportsdataverse.nba import clutch_delta as clutch_delta  # noqa: F401
 from sportsdataverse.nba import compile_nba_season as compile_nba_season  # noqa: F401
 from sportsdataverse.nba import darko_forecast_accuracy as darko_forecast_accuracy  # noqa: F401
 from sportsdataverse.nba import decay_weights as decay_weights  # noqa: F401
@@ -164,9 +171,11 @@ from sportsdataverse.nba import espn_nba_pbp as espn_nba_pbp  # noqa: F401
 from sportsdataverse.nba import espn_nba_player_stats as espn_nba_player_stats  # noqa: F401
 from sportsdataverse.nba import espn_nba_schedule as espn_nba_schedule  # noqa: F401
 from sportsdataverse.nba import espn_nba_teams as espn_nba_teams  # noqa: F401
+from sportsdataverse.nba import expected_possessions as expected_possessions  # noqa: F401
 from sportsdataverse.nba import external_validity as external_validity  # noqa: F401
 from sportsdataverse.nba import fit_aging_curve as fit_aging_curve  # noqa: F401
 from sportsdataverse.nba import flatten_json_iterative as flatten_json_iterative  # noqa: F401
+from sportsdataverse.nba import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nba import get_shrinkage_k as get_shrinkage_k  # noqa: F401
 from sportsdataverse.nba import helper_nba_athlete_items as helper_nba_athlete_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_game_data as helper_nba_game_data  # noqa: F401
@@ -176,6 +185,7 @@ from sportsdataverse.nba import helper_nba_pbp_features as helper_nba_pbp_featur
 from sportsdataverse.nba import helper_nba_pickcenter as helper_nba_pickcenter  # noqa: F401
 from sportsdataverse.nba import helper_nba_roster_items as helper_nba_roster_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_items as helper_nba_team_items  # noqa: F401
+from sportsdataverse.nba import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.nba import load_darko_dpm as load_darko_dpm  # noqa: F401
 from sportsdataverse.nba import load_dunks_threes_stats as load_dunks_threes_stats  # noqa: F401
 from sportsdataverse.nba import load_epm as load_epm  # noqa: F401
@@ -200,36 +210,67 @@ from sportsdataverse.nba import make_prob_by_context as make_prob_by_context  # 
 from sportsdataverse.nba import make_prob_joint as make_prob_joint  # noqa: F401
 from sportsdataverse.nba import most_recent_nba_season as most_recent_nba_season  # noqa: F401
 from sportsdataverse.nba import nba_adj_rapm as nba_adj_rapm  # noqa: F401
+from sportsdataverse.nba import nba_aging_curve as nba_aging_curve  # noqa: F401
+from sportsdataverse.nba import nba_availability as nba_availability  # noqa: F401
 from sportsdataverse.nba import nba_box_logs as nba_box_logs  # noqa: F401
 from sportsdataverse.nba import nba_bpm as nba_bpm  # noqa: F401
+from sportsdataverse.nba import nba_career_trajectory as nba_career_trajectory  # noqa: F401
 from sportsdataverse.nba import nba_darko as nba_darko  # noqa: F401
 from sportsdataverse.nba import nba_decay_rapm as nba_decay_rapm  # noqa: F401
+from sportsdataverse.nba import nba_draft_model as nba_draft_model  # noqa: F401
+from sportsdataverse.nba import nba_expected_turnovers as nba_expected_turnovers  # noqa: F401
+from sportsdataverse.nba import nba_foul_drawing as nba_foul_drawing  # noqa: F401
 from sportsdataverse.nba import nba_four_factor_rapm as nba_four_factor_rapm  # noqa: F401
+from sportsdataverse.nba import nba_in_game_win_prob as nba_in_game_win_prob  # noqa: F401
 from sportsdataverse.nba import nba_la_rapm as nba_la_rapm  # noqa: F401
+from sportsdataverse.nba import nba_matchup_drapm as nba_matchup_drapm  # noqa: F401
 from sportsdataverse.nba import nba_pbp_disk as nba_pbp_disk  # noqa: F401
 from sportsdataverse.nba import nba_player_ages as nba_player_ages  # noqa: F401
 from sportsdataverse.nba import nba_player_positions as nba_player_positions  # noqa: F401
+from sportsdataverse.nba import nba_player_props as nba_player_props  # noqa: F401
+from sportsdataverse.nba import nba_playtype_ratings as nba_playtype_ratings  # noqa: F401
+from sportsdataverse.nba import nba_predict_games as nba_predict_games  # noqa: F401
 from sportsdataverse.nba import nba_ratings_panel as nba_ratings_panel  # noqa: F401
+from sportsdataverse.nba import nba_rookie_projection as nba_rookie_projection  # noqa: F401
 from sportsdataverse.nba import nba_shot_value as nba_shot_value  # noqa: F401
 from sportsdataverse.nba import nba_shot_value_lineups as nba_shot_value_lineups  # noqa: F401
 from sportsdataverse.nba import nba_spm as nba_spm  # noqa: F401
+from sportsdataverse.nba import nba_team_clutch as nba_team_clutch  # noqa: F401
+from sportsdataverse.nba import nba_team_ratings as nba_team_ratings  # noqa: F401
+from sportsdataverse.nba import nba_tracking_drive_value as nba_tracking_drive_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_pass_value as nba_tracking_pass_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_reb_oe as nba_tracking_reb_oe  # noqa: F401
+from sportsdataverse.nba import nba_tracking_rim_protect_value as nba_tracking_rim_protect_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_shot_diet_value as nba_tracking_shot_diet_value  # noqa: F401
+from sportsdataverse.nba import nba_tracking_touch_value as nba_tracking_touch_value  # noqa: F401
 from sportsdataverse.nba import nba_v3_to_v2_pbp as nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
+from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
+from sportsdataverse.nba import player_rates as player_rates  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_quarter_boxscores as players_on_court_from_quarter_boxscores  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_rotation as players_on_court_from_rotation  # noqa: F401
+from sportsdataverse.nba import predict_margin as predict_margin  # noqa: F401
+from sportsdataverse.nba import predict_total as predict_total  # noqa: F401
+from sportsdataverse.nba import prob_over as prob_over  # noqa: F401
+from sportsdataverse.nba import project_player_line as project_player_line  # noqa: F401
+from sportsdataverse.nba import prop_distribution as prop_distribution  # noqa: F401
 from sportsdataverse.nba import ratings_as_of as ratings_as_of  # noqa: F401
+from sportsdataverse.nba import raw_game_efficiency as raw_game_efficiency  # noqa: F401
 from sportsdataverse.nba import render_report as render_report  # noqa: F401
 from sportsdataverse.nba import score_shot_xpoints as score_shot_xpoints  # noqa: F401
 from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_parsing  # noqa: F401
 from sportsdataverse.nba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.nba import shot_selection_quality as shot_selection_quality  # noqa: F401
+from sportsdataverse.nba import shrink_clutch as shrink_clutch  # noqa: F401
+from sportsdataverse.nba import team_pace_projection as team_pace_projection  # noqa: F401
 from sportsdataverse.nba import train_spm as train_spm  # noqa: F401
 from sportsdataverse.nba import underscore as underscore  # noqa: F401
 from sportsdataverse.nba import validate_model as validate_model  # noqa: F401
 from sportsdataverse.nba import walk_forward as walk_forward  # noqa: F401
+from sportsdataverse.nba import win_prob_from_margin as win_prob_from_margin  # noqa: F401
 from sportsdataverse.nba import xpoints_baseline as xpoints_baseline  # noqa: F401
 from sportsdataverse.nba import year_to_season as year_to_season  # noqa: F401
 from sportsdataverse.nba import zone_value_map as zone_value_map  # noqa: F401
@@ -239,16 +280,22 @@ __all__ = [
     "AgingCurve",
     "ExternalValidityResult",
     "ForecastResult",
+    "LeagueConstants",
+    "MeasureSpec",
     "NbaBpmModel",
     "NbaSpmModel",
     "RidgeRapmModel",
     "SpmCoefficients",
     "ValidationReport",
     "WalkForwardResult",
+    "adjust_efficiency",
+    "adjust_pace",
+    "as_of_ratings_split",
     "box_features",
     "build_possession_shooting",
     "calibrate_pts_per_win",
     "calibrate_replacement_level",
+    "clutch_delta",
     "compile_nba_season",
     "darko_forecast_accuracy",
     "decay_weights",
@@ -368,6 +415,7 @@ __all__ = [
     "espn_nba_transactions",
     "espn_nba_venue",
     "espn_nba_venues",
+    "expected_possessions",
     "external_validity",
     "fit_aging_curve",
     "flatten_json_iterative",
@@ -379,6 +427,7 @@ __all__ = [
     "fox_nba_team_gamelog",
     "fox_nba_team_roster",
     "fox_nba_team_stats",
+    "get_constants",
     "get_shrinkage_k",
     "helper_nba_athlete_items",
     "helper_nba_game_data",
@@ -388,6 +437,7 @@ __all__ = [
     "helper_nba_pickcenter",
     "helper_nba_roster_items",
     "helper_nba_team_items",
+    "in_game_features",
     "load_darko_dpm",
     "load_dunks_threes_stats",
     "load_epm",
@@ -412,36 +462,68 @@ __all__ = [
     "make_prob_joint",
     "most_recent_nba_season",
     "nba_adj_rapm",
+    "nba_aging_curve",
+    "nba_availability",
     "nba_box_logs",
     "nba_bpm",
+    "nba_career_trajectory",
     "nba_darko",
     "nba_decay_rapm",
+    "nba_draft_model",
+    "nba_expected_turnovers",
+    "nba_foul_drawing",
     "nba_four_factor_rapm",
+    "nba_in_game_win_prob",
     "nba_la_rapm",
+    "nba_matchup_drapm",
     "nba_pbp_disk",
     "nba_player_ages",
     "nba_player_positions",
+    "nba_player_props",
+    "nba_playtype_ratings",
+    "nba_predict_games",
     "nba_ratings_panel",
+    "nba_rookie_projection",
     "nba_shot_value",
     "nba_shot_value_lineups",
     "nba_spm",
+    "nba_stats_leaguedashptstats",
+    "nba_team_clutch",
+    "nba_team_ratings",
+    "nba_tracking_drive_value",
+    "nba_tracking_pass_value",
+    "nba_tracking_reb_oe",
+    "nba_tracking_rim_protect_value",
+    "nba_tracking_shot_diet_value",
+    "nba_tracking_touch_value",
     "nba_v3_to_v2_pbp",
     "nba_war",
     "normalize_player_name",
     "normalize_team_roster_columns",
+    "parse_nba_stats_result_sets",
+    "player_rates",
     "players_on_court_from_pbp",
     "players_on_court_from_quarter_boxscores",
     "players_on_court_from_rotation",
+    "predict_margin",
+    "predict_total",
+    "prob_over",
+    "project_player_line",
+    "prop_distribution",
     "ratings_as_of",
+    "raw_game_efficiency",
     "render_report",
     "score_shot_xpoints",
     "scoreboard_event_parsing",
     "shooter_talent",
     "shot_selection_quality",
+    "shrink_clutch",
+    "team_pace_projection",
     "train_spm",
     "underscore",
     "validate_model",
     "walk_forward",
+    "win_prob_from_margin",
     "xpoints_baseline",
     "year_to_season",
     "zone_value_map",
@@ -2084,3 +2166,17 @@ def fox_nba_team_stats(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_fox_nba_team_stats(*args, **kwargs)
+
+
+def nba_stats_leaguedashptstats(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nba.nba_stats_leaguedashptstats``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nba.nba_stats_leaguedashptstats` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nba.nba_stats_leaguedashptstats` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_nba_stats_leaguedashptstats(*args, **kwargs)
