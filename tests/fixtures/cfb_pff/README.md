@@ -18,12 +18,19 @@ external-validity oracle (`tests/cfb/test_cfb_ratings_pff_oracle.py`).
 
 Captured 2026-07-10 from **`premium.pff.com/api/v1/teams/overview?league=ncaa&season=2023`**
 (PFF Premium Stats 2.0, the surface wrapped by `pff_teams_overview(league="ncaa")`).
-The 479-team payload was parsed with the shipped `parse_pff_report`, filtered to
-FBS, and **name-bridged to the ESPN `team_id`** via `load_cfb_team_info` +
-`cfb_crosswalk._norm_team` on the school+mascot key (PFF ships the full team name
-"Abilene Christian Wildcats"; ESPN `school` is school-only, so the bridge keys on
-`school + " " + mascot`). 132 FBS teams matched. Rebuild:
-`dev/pff_oracle/build_fixture.py`.
+The full 479-team payload is committed here as `teams_overview_ncaa_2023.json`
+(the tracked rebuild input); `build_fixture.py` parses it with the shipped
+`parse_pff_report`, filters to FBS, and **name-bridges to the ESPN `team_id`** via
+`load_cfb_team_info` + `cfb_crosswalk._norm_team` on the school+mascot key (PFF
+ships the full team name "Abilene Christian Wildcats"; ESPN `school` is school-only,
+so the bridge keys on `school + " " + mascot`). **132 FBS teams match** — the
+`pff_team_grades_2023.parquet` row count and the number the oracle test pins.
+
+**Reproduce from tracked inputs** (no network, no PFF session needed — the raw
+payload is committed): `uv run python dev/pff_oracle/build_fixture.py`. The
+separate `tests/fixtures/pff/ncaa_teams_overview.json` (12 teams) and
+`ncaa_facet_passing_summary.json` (15 players) are trimmed *parser* fixtures for
+`test_pff_parsers.py`, not the oracle rebuild source.
 
 | col | type | source |
 |---|---|---|

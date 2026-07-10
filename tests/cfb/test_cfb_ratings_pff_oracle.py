@@ -19,24 +19,28 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
-import pytest
 
 from sportsdataverse.cfb.cfb_prediction_constants import spearman_corr
 from sportsdataverse.cfb.cfb_ratings import efficiency_ratings
 
+# Fixtures are committed artifacts read unconditionally at import (matching the
+# sibling FPI/SP+ oracle) — a missing fixture is a hard error, never a silent skip.
 _FIX = Path(__file__).resolve().parents[1] / "fixtures"
-_PBP = _FIX / "cfb_prediction" / "pbp_2023_sample.parquet"
-_PFF = _FIX / "cfb_pff" / "pff_team_grades_2023.parquet"
+_PBP = pl.read_parquet(_FIX / "cfb_prediction" / "pbp_2023_sample.parquet")
+_PFF = pl.read_parquet(_FIX / "cfb_pff" / "pff_team_grades_2023.parquet")
 
-pytestmark = pytest.mark.skipif(not (_PBP.exists() and _PFF.exists()), reason="cfb_pff / pbp fixtures not present")
+# Documented join cardinality (see tests/fixtures/cfb_pff/README.md): the 2023 PFF
+# grades name-bridge to 132 ESPN FBS ids, all present in the pbp ratings sample.
+_EXPECTED_JOIN = 132
 
 
 def _joined() -> pl.DataFrame:
-    ratings = efficiency_ratings(pl.read_parquet(_PBP))
-    pff = pl.read_parquet(_PFF)
-    assert ratings.schema["team_id"] == pff.schema["team_id"] == pl.Utf8
-    j = ratings.join(pff, on="team_id", how="inner")
-    assert j.height >= 100, f"PFF oracle join matched only {j.height} FBS teams"
+    ratings = efficiency_ratings(_PBP)
+    assert ratings.schema["team_id"] == _PFF.schema["team_id"] == pl.Utf8
+    j = ratings.join(_PFF, on="team_id", how="inner")
+    # pin the cardinality so silent id loss (a bad re-capture / bridge regression)
+    # can't let the oracle pass on a shrunken, non-representative team set
+    assert j.height == _EXPECTED_JOIN, f"PFF oracle join matched {j.height}, expected {_EXPECTED_JOIN}"
     return j
 
 

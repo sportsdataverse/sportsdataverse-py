@@ -18,7 +18,9 @@ from sportsdataverse.cfb.cfb_prediction_constants import spearman_corr
 
 HERE = pathlib.Path(__file__).parent
 FIX = HERE.parent.parent / "tests" / "fixtures" / "cfb_pff"
-raw = json.load(open(HERE / "teams_overview_ncaa_2023.json"))
+SRC = FIX / "teams_overview_ncaa_2023.json"  # tracked rebuild input (committed alongside the parquet)
+with open(SRC, encoding="utf-8") as _f:
+    raw = json.load(_f)
 pff = (
     parse_pff_report(raw)
     .select(
