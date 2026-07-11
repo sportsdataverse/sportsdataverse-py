@@ -51,9 +51,12 @@ STUFF_LEAGUE_SD_RV: float = 0.022242603823542595
 #: above: computed from ``dev/mlb_pitching/fit_command_plus.py``'s trained
 #: (unchanged) booster re-scored over the held-out
 #: ``pitcher_holdout_season_2024.parquet`` population (38,803 pitches after
-#: dropna), not the workhorse-selected training corpus.
-COMMAND_LEAGUE_MEAN_RV: float = 0.0009336690418422222
-COMMAND_LEAGUE_SD_RV: float = 0.044063836336135864
+#: dropna), not the workhorse-selected training corpus. Retrained once after
+#: the fixed-categorical-encoding fix (see ``_CATEGORICAL_CODE_MAPS`` in
+#: ``mlb_command_plus.py``) -- the model's ``pitch_type``/``stand``/
+#: ``p_throws`` codes must be identical between train time and score time.
+COMMAND_LEAGUE_MEAN_RV: float = -0.0009078294970095158
+COMMAND_LEAGUE_SD_RV: float = 0.0403415784239769
 
 
 def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:

@@ -49,6 +49,61 @@ COMMAND_FEATURES: List[str] = [
 #: numeric-encoded categorical features appended after one-hot/ordinal mapping.
 _CATEGORICAL_RAW: List[str] = ["stand", "p_throws", "pitch_type"]
 
+#: FIXED ordinal codes for each categorical column -- deliberately NOT derived
+#: from ``.cast(Categorical).to_physical()`` on whatever data happens to be
+#: passed in. That per-call approach assigns codes by first-occurrence order
+#: in the *current* frame, so the same pitch type gets a DIFFERENT integer
+#: code depending on what other data is in the frame -- silently corrupting
+#: the model whenever training data and scoring data don't share an identical
+#: row order (i.e. always, in practice: caught via a real held-out-population
+#: oracle-gate flake during this build). These fixed maps guarantee the same
+#: string always encodes to the same number at train time AND score time.
+#: Unmapped values fall back to a shared "other" code (``len(mapping)``).
+_STAND_CODES: dict = {"L": 0, "R": 1}
+_P_THROWS_CODES: dict = {"L": 0, "R": 1}
+#: Canonical Statcast ``pitch_type`` abbreviations (fastballs, breaking,
+#: offspeed, and the rare/legacy codes Savant occasionally ships).
+_PITCH_TYPE_CODES: dict = {
+    "FF": 0,
+    "SI": 1,
+    "FC": 2,
+    "FS": 3,
+    "FO": 4,
+    "SL": 5,
+    "ST": 6,
+    "SV": 7,
+    "CU": 8,
+    "KC": 9,
+    "CS": 10,
+    "CH": 11,
+    "KN": 12,
+    "SC": 13,
+    "EP": 14,
+    "PO": 15,
+    "FA": 16,
+    "UN": 17,
+}
+_CATEGORICAL_CODE_MAPS: dict = {"stand": _STAND_CODES, "p_throws": _P_THROWS_CODES, "pitch_type": _PITCH_TYPE_CODES}
+
+
+def _fixed_ordinal_expr(col: str, mapping: dict) -> pl.Expr:
+    """Build a ``pl.when/then`` chain mapping ``col``'s known values to fixed codes.
+
+    Args:
+        col: Column name.
+        mapping: ``{raw_value: code}``. Values not present in ``mapping`` map
+            to ``len(mapping)`` (a shared "other" code).
+
+    Returns:
+        A polars expression aliased ``f"{col}_code"``, dtype ``Float64``.
+    """
+    fallback = float(len(mapping))
+    expr = pl.lit(fallback)
+    for value, code in mapping.items():
+        expr = pl.when(pl.col(col) == value).then(pl.lit(float(code))).otherwise(expr)
+    return expr.alias(f"{col}_code")
+
+
 _EMPTY_SCHEMA: dict = {
     "pitcher": pl.Int64,
     "pitch_type": pl.Utf8,
@@ -63,11 +118,18 @@ _EMPTY_SCHEMA_PITCHER_LEVEL: dict = {
 
 
 def _encode_categoricals(df: pl.DataFrame) -> pl.DataFrame:
-    """Ordinal-encode ``stand``/``p_throws``/``pitch_type`` for the booster (stable hash-based codes)."""
+    """Ordinal-encode ``stand``/``p_throws``/``pitch_type`` using the FIXED code maps.
+
+    Unlike ``.cast(Categorical).to_physical()`` (which assigns codes by
+    first-occurrence order within whatever frame is passed in -- different
+    between the training corpus and any scoring call), this uses the shared
+    ``_CATEGORICAL_CODE_MAPS`` so a given raw value always encodes to the same
+    number, train time or score time, regardless of what else is in the frame.
+    """
     exprs = []
     for col in _CATEGORICAL_RAW:
         if col in df.columns:
-            exprs.append(pl.col(col).cast(pl.Categorical).to_physical().cast(pl.Float64).alias(f"{col}_code"))
+            exprs.append(_fixed_ordinal_expr(col, _CATEGORICAL_CODE_MAPS[col]))
     return df.with_columns(exprs) if exprs else df
 
 
