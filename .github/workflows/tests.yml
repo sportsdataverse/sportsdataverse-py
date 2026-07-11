@@ -60,16 +60,6 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
-      # pyreadr 0.5.6+ stops shipping a cp39 manylinux wheel, so on the
-      # 3.9 leg uv falls back to building from sdist. The build needs
-      # libbz2-dev + liblzma-dev system headers, which Ubuntu 24.04
-      # runners no longer pre-install. Run on every Linux leg so a
-      # future cp313/cp314 wheel drop doesn't break CI silently.
-      - name: Install Linux build deps for pyreadr sdist fallback
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libbz2-dev liblzma-dev
       # xgboost on macOS dynamically links against libomp.dylib and
       # apple-clang doesn't ship OpenMP. The macos-15 runner image
       # stopped pre-installing libomp via Homebrew, so xgboost.core

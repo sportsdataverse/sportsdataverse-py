@@ -1789,29 +1789,3 @@ def load_nfl_espn_qbr(
         season_ints = [int(s) for s in seasons]
         data = data.filter(pl.col("season").is_in(season_ints))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
-
-
-## Currently removed due to unsupported features of pyreadr's method.
-## there is a list-column of nested tibbles within the data
-## that is not supported by pyreadr
-# def load_nfl_player_contracts_detail() -> pl.DataFrame:
-#     """Load NFL Player contracts detail information
-
-#     Example:
-#         `nfl_df = sportsdataverse.nfl.load_nfl_player_contracts_detail()`
-
-#     Args:
-
-#     Returns:
-#         pl.DataFrame: Polars dataframe containing player contracts detail data available.
-#     """
-#     data = pd.DataFrame()
-#     with tempfile.TemporaryDirectory() as tempdirname:
-#         df = read_r(
-#             download_file(NFL_OTC_PLAYER_DETAILS_URL,
-#                 "{}/otc_player_details.rds".format(tempdirname)))[None]
-#         df = pd.DataFrame(df)
-#         data = pd.concat([data, df], ignore_index=True)
-#     #Give each row a unique index
-#     data.reset_index(drop=True, inplace=True)
-#     return df

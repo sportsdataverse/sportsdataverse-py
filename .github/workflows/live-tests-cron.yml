@@ -45,13 +45,6 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - name: Set up Python 3.13.2
         run: uv python install 3.13.2
-      # Same system-deps gating as tests.yml — pyreadr sdist needs
-      # libbz2 + liblzma; xgboost on macOS needs libomp (not relevant
-      # here since this leg is ubuntu-only).
-      - name: Install Linux build deps for pyreadr sdist fallback
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libbz2-dev liblzma-dev
       - name: Install project + extras + dep groups
         run: uv sync --all-extras --all-groups --frozen --python 3.13.2
       - name: Run live tests
