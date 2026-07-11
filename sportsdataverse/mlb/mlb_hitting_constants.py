@@ -17,7 +17,7 @@ Methodology references (cited, not copied):
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 import numpy as np
 import polars as pl
@@ -269,7 +269,7 @@ def calibration_table(y_true: "np.ndarray[Any, Any]", p_pred: "np.ndarray[Any, A
 def pull_statcast_season(
     season: int,
     *,
-    puller: Callable[..., pl.DataFrame] = mlb_statcast_search,
+    puller: Optional[Callable[..., pl.DataFrame]] = None,
     player_type: str = "batter",
 ) -> pl.DataFrame:
     """Whole-season Statcast pull via the shipped date-chunked search (shared with T6.1).
@@ -292,4 +292,5 @@ def pull_statcast_season(
 
             season_pitches = pull_statcast_season(2024)
     """
+    puller = puller or mlb_statcast_search
     return puller(f"{season}-01-01", f"{season}-12-01", player_type=player_type)

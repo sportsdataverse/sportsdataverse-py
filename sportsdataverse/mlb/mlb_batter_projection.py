@@ -246,7 +246,11 @@ def mlb_batter_projection(
         return empty
 
     history = history.with_columns(pl.col("batter").cast(pl.Int64))
-    curve = aging_curve(history)
+    # Route the aging input through the as-of split too (marcel_projection
+    # already does): otherwise a caller-supplied panel that includes
+    # season >= target_season would leak target-season year-over-year deltas
+    # into the age adjustment.
+    curve = aging_curve(as_of_seasons_split(history, target_season))
     proj = marcel_projection(history, target_season, curve)
     result = proj.select("batter", "age", "proj_xwoba", "proj_pa").cast(_PROJECTION_SCHEMA).sort("batter")
 

@@ -96,6 +96,32 @@ def test_mlb_batter_projection_schema_and_pandas() -> None:
     assert isinstance(pdf, pd.DataFrame)
 
 
+def test_mlb_batter_projection_wrapper_aging_path_excludes_target_season() -> None:
+    # Panel of players aged 25->26->27 across 2021-2023; the wrapper builds the
+    # aging curve internally, so a target-season (2024) row must NOT leak its
+    # year-over-year delta into the age adjustment.
+    rows = []
+    for pid in range(20):
+        for season, age, x in [(2021, 25, 0.310), (2022, 26, 0.315), (2023, 27, 0.320)]:
+            rows.append({"batter": pid, "season": season, "age": age, "xwoba": x, "pa": 500})
+    history = pl.DataFrame(rows)
+    base = mlb_batter_projection(2024, history=history)
+
+    # inject an extreme 2024 (age 28) row per player; if the wrapper leaked, the
+    # age-28 aging delta (hence every age-28 projection) would move.
+    leak = pl.concat(
+        [
+            history,
+            pl.DataFrame([{"batter": pid, "season": 2024, "age": 28, "xwoba": 0.900, "pa": 999} for pid in range(20)]),
+        ]
+    )
+    leaked = mlb_batter_projection(2024, history=leak)
+
+    j = base.join(leaked, on="batter", suffix="_leak")
+    assert j.height == base.height
+    assert (j["proj_xwoba"] - j["proj_xwoba_leak"]).abs().max() < 1e-9
+
+
 def test_mlb_batter_projection_empty_history_returns_documented_schema() -> None:
     empty_history = pl.DataFrame(
         schema={"batter": pl.Int64, "season": pl.Int64, "age": pl.Int64, "xwoba": pl.Float64, "pa": pl.Int64}
