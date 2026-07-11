@@ -1,0 +1,18 @@
+schema: mlb_umpire_bias
+kind: dataframe
+columns:
+- name: umpire_id
+  type: character
+  description: ''
+- name: n_called
+  type: integer
+  description: ''
+- name: obs_strike_rate
+  type: double
+  description: ''
+- name: exp_strike_rate
+  type: double
+  description: ''
+- name: bias
+  type: double
+  description: ''

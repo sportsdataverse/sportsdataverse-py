@@ -8275,3 +8275,73 @@ games:
   start: Kickoff timestamp (ISO 8601 string).
   has_stats: Whether PFF has published stats for the game.
   lock_status: Data lock/publish status for the game.
+mlb_run_expectancy_matrix:
+  base_state: 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third.
+  outs: Outs at the start of the base-out state (0-2).
+  re: Empirical mean runs scored from this state through the end of the half-inning (RE24).
+  n: Number of plate appearances observed starting in this base-out state.
+mlb_win_expectancy:
+  game_id: Game identifier (statsapi gamePk, stringified).
+  at_bat_index: Game-global sequential plate-appearance index.
+  half: Half-inning ("top" or "bottom") -- which side is on offense.
+  home_win_exp: Empirical P(home team wins | base-out-score-inning state before the play).
+mlb_win_probability_added:
+  game_id: Game identifier (statsapi gamePk, stringified).
+  at_bat_index: Game-global sequential plate-appearance index.
+  wpa: Win-probability added on this play, from the requested perspective.
+build_we_table:
+  inning_capped: Inning number, capped at 9 (extra innings pooled with the 9th).
+  half: Half-inning ("top" or "bottom").
+  base_state: 3-char base occupancy code.
+  outs_start: Outs before the play (0-2).
+  score_diff_bucket: home minus away score, clipped to [-6, 6].
+  home_win_exp: Laplace-smoothed empirical P(home team wins | state bucket).
+  n: Plate appearances observed in this state bucket.
+leverage_index:
+  inning_capped: Inning number, capped at 9 (extra innings pooled with the 9th).
+  half: Half-inning ("top" or "bottom").
+  base_state: 3-char base occupancy code.
+  outs_start: Outs before the play (0-2).
+  score_diff_bucket: home minus away score, clipped to [-6, 6].
+  leverage_index: Mean absolute win-probability swing from this state, normalized to a 1.0 league average.
+mlb_umpire_called_strike_prob:
+  called_strike_prob: P(called strike | pitch location) from the standardized zone-coordinate logistic.
+mlb_umpire_bias:
+  umpire_id: Umpire identifier (statsapi people id, stringified).
+  n_called: Called pitches (strike or ball) observed for this umpire.
+  obs_strike_rate: Realized called-strike rate for this umpire.
+  exp_strike_rate: Mean model-predicted called-strike probability for this umpire's pitches.
+  bias: obs_strike_rate minus exp_strike_rate (positive = strike-generous).
+mlb_pythagenpat_table:
+  season: Season.
+  team_id: Team identifier (statsapi team id, stringified).
+  runs_scored: Total runs scored across the covered games.
+  runs_allowed: Total runs allowed across the covered games.
+  games: Games played.
+  win_pct: Realized win percentage.
+  pythag_win_pct: Pythagenpat expected win percentage (exponent 0.287).
+mlb_team_elo:
+  game_id: Game identifier (statsapi gamePk, stringified).
+  date: Game date.
+  home_team_id: Home team identifier.
+  away_team_id: Away team identifier.
+  home_rating: Home team's Elo rating before this game (as-of-date).
+  away_rating: Away team's Elo rating before this game (as-of-date).
+  home_win_prob_elo: Elo-implied P(home team wins) before this game.
+  home_rating_post: Home team's Elo rating after this game.
+  away_rating_post: Away team's Elo rating after this game.
+mlb_team_projection:
+  season: Season.
+  team_id: Team identifier (statsapi team id, stringified).
+  win_pct: Realized win percentage.
+  pythag_win_pct: Pythagenpat expected win percentage.
+  rating: Final (as of the last observed game) Elo rating.
+  exp_margin: Elo-implied expected run margin vs a league-average opponent.
+mlb_props:
+  game_id: Game identifier.
+  home_team_id: Home team identifier.
+  away_team_id: Away team identifier.
+  exp_runs_home: Expected home-team runs (log5-style rate blend).
+  exp_runs_away: Expected away-team runs (log5-style rate blend).
+  exp_strikeouts_home: Expected home-pitcher strikeouts (null when the ratings input lacks k9/k_rate).
+  exp_strikeouts_away: Expected away-pitcher strikeouts (null when the ratings input lacks k9/k_rate).

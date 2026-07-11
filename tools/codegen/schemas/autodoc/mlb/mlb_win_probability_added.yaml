@@ -1,0 +1,12 @@
+schema: mlb_win_probability_added
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: at_bat_index
+  type: integer
+  description: ''
+- name: wpa
+  type: double
+  description: ''

@@ -18,6 +18,8 @@ from sportsdataverse.mlb.mlb_game_rosters import *
 from sportsdataverse.mlb.mlb_loaders import *
 from sportsdataverse.mlb.mlb_pbp import *
 from sportsdataverse.mlb.mlb_player_stats import *
+from sportsdataverse.mlb.mlb_prop_projection import mlb_prop_strikeouts, mlb_prop_team_runs, mlb_props, prop_over_prob
+from sportsdataverse.mlb.mlb_run_expectancy import mlb_run_expectancy_matrix, pbp_base_out_states, run_value
 from sportsdataverse.mlb.mlb_schedule import *
 from sportsdataverse.mlb.mlb_statcast import *
 from sportsdataverse.mlb.mlb_statcast_extra import (
@@ -34,7 +36,20 @@ from sportsdataverse.mlb.mlb_statcast_parsers import (
     parse_mlb_statcast_schedule,
     parse_mlb_statcast_search,
 )
+from sportsdataverse.mlb.mlb_team_projection import (
+    mlb_pythagenpat,
+    mlb_pythagenpat_table,
+    mlb_team_elo,
+    mlb_team_projection,
+)
 from sportsdataverse.mlb.mlb_teams import *
+from sportsdataverse.mlb.mlb_umpire_zone import fit_zone_model, mlb_umpire_bias, mlb_umpire_called_strike_prob
+from sportsdataverse.mlb.mlb_win_expectancy import (
+    build_we_table,
+    leverage_index,
+    mlb_win_expectancy,
+    mlb_win_probability_added,
+)
 
 # Re-export MLB Stats API wrappers that share a name with a submodule
 # (mlb_schedule, mlb_teams). The submodule imports above set the package

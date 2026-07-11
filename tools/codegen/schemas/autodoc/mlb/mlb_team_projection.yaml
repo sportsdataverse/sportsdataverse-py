@@ -1,0 +1,21 @@
+schema: mlb_team_projection
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: win_pct
+  type: double
+  description: ''
+- name: pythag_win_pct
+  type: double
+  description: ''
+- name: rating
+  type: double
+  description: ''
+- name: exp_margin
+  type: double
+  description: ''

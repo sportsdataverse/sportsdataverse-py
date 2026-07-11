@@ -1,0 +1,6 @@
+schema: mlb_umpire_called_strike_prob
+kind: dataframe
+columns:
+- name: called_strike_prob
+  type: double
+  description: ''
