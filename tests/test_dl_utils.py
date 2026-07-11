@@ -15,11 +15,24 @@ class TestRetryDelay:
     """Offline tests for the retry backoff helper (no network)."""
 
     def test_exponential_backoff_capped(self):
-        # base=0.5: 0.5, 1, 2, 4, then capped at 4.
-        assert _retry_delay(None, 0) == 0.5
-        assert _retry_delay(None, 1) == 1.0
-        assert _retry_delay(None, 3) == 4.0
-        assert _retry_delay(None, 10) == 4.0  # capped
+        # base=0.5: 0.5, 1, 2, 4, then capped at 4. jitter=False for the exact curve.
+        assert _retry_delay(None, 0, jitter=False) == 0.5
+        assert _retry_delay(None, 1, jitter=False) == 1.0
+        assert _retry_delay(None, 3, jitter=False) == 4.0
+        assert _retry_delay(None, 10, jitter=False) == 4.0  # capped
+
+    def test_jitter_stays_within_half_to_full(self):
+        # Default jitter spreads the exponential fallback over 50-100% of the
+        # computed delay, so a thundering herd de-syncs. 50 draws stay in-band
+        # and at least one differs from the deterministic value.
+        vals = [_retry_delay(None, 3) for _ in range(50)]  # base curve = 4.0
+        assert all(2.0 <= v <= 4.0 for v in vals)
+        assert any(v != 4.0 for v in vals)
+
+    def test_jitter_never_touches_retry_after(self):
+        # The server-dictated Retry-After path is exact even with jitter on.
+        resp = types.SimpleNamespace(headers={"Retry-After": "7"})
+        assert all(_retry_delay(resp, 0) == 7.0 for _ in range(20))
 
     def test_honors_numeric_retry_after_header(self):
         resp = types.SimpleNamespace(headers={"Retry-After": "7"})
@@ -55,7 +68,7 @@ class TestRetryDelay:
 
     def test_bad_retry_after_falls_back_to_backoff(self):
         resp = types.SimpleNamespace(headers={"Retry-After": "soon"})
-        assert _retry_delay(resp, 2) == 2.0  # unparseable -> exponential
+        assert _retry_delay(resp, 2, jitter=False) == 2.0  # unparseable -> exponential
 
 
 class TestDownload:
@@ -137,3 +150,133 @@ class TestDownload:
         with pytest.raises(NoESPNDataError):
             download("https://sports.core.api.espn.com/v2/_no_such_/roster", num_retries=15)
         assert calls["n"] == 1  # not 16
+
+    def test_download_retries_transient_status_then_succeeds(self, monkeypatch):
+        """A 503/429 comes back as a normal Response (requests doesn't raise on
+        it) — download must retry the transient status and return the eventual
+        200. Offline: session.get is stubbed and time.sleep is a no-op."""
+        import sportsdataverse.cache as _cache
+
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+        monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+        seq = [503, 503, 200]
+        calls = {"n": 0}
+
+        def fake_get(self, url, **kwargs):
+            code = seq[calls["n"]]
+            calls["n"] += 1
+            return types.SimpleNamespace(status_code=code, url=url, reason="x", headers={}, json=lambda: {})
+
+        monkeypatch.setattr(requests.Session, "get", fake_get)
+        resp = download("https://site.api.espn.com/x", num_retries=5)
+        assert resp.status_code == 200
+        assert calls["n"] == 3  # 503, 503, 200
+
+    def test_download_returns_last_response_when_retry_budget_exhausted(self, monkeypatch):
+        """A persistent 429 must NOT raise — once the budget is spent, return the
+        429 Response so callers can key on ``.status_code`` (backward-compatible
+        with the pre-retry behavior of returning whatever came back)."""
+        import sportsdataverse.cache as _cache
+
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+        monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+        calls = {"n": 0}
+
+        def fake_get(self, url, **kwargs):
+            calls["n"] += 1
+            return types.SimpleNamespace(
+                status_code=429, url=url, reason="Too Many Requests", headers={}, json=lambda: {}
+            )
+
+        monkeypatch.setattr(requests.Session, "get", fake_get)
+        resp = download("https://site.api.espn.com/y", num_retries=2)
+        assert resp.status_code == 429
+        assert calls["n"] == 3  # 1 initial + 2 retries
+
+    def test_download_interleaved_conn_error_then_status_returns_response(self, monkeypatch):
+        """A connection error on an early attempt sets ``last_exc``; if the FINAL
+        attempt is a retryable status, the loop must still RETURN that response
+        rather than fall through to ``raise last_exc`` and surface the stale
+        connection exception. Regression for the interleaved conn-error + status
+        retry path (status_budget == attempts-1)."""
+        import sportsdataverse.cache as _cache
+
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+        monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+        seq = ["boom", 503, 503]  # conn error, then persistent 503
+        calls = {"n": 0}
+
+        def fake_get(self, url, **kwargs):
+            item = seq[calls["n"]]
+            calls["n"] += 1
+            if item == "boom":
+                raise requests.exceptions.ConnectionError("boom")
+            return types.SimpleNamespace(status_code=item, url=url, reason="x", headers={}, json=lambda: {})
+
+        monkeypatch.setattr(requests.Session, "get", fake_get)
+        resp = download("https://site.api.espn.com/w", num_retries=2)
+        assert resp.status_code == 503  # returned, NOT raised as the stale ConnectionError
+        assert calls["n"] == 3
+
+    def test_download_does_not_retry_non_retryable_status(self, monkeypatch):
+        """A 401 (not in the retry set) is a definitive answer — one attempt, no
+        retry, even with a large budget."""
+        import sportsdataverse.cache as _cache
+
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+        calls = {"n": 0}
+
+        def fake_get(self, url, **kwargs):
+            calls["n"] += 1
+            return types.SimpleNamespace(status_code=401, url=url, reason="Unauthorized", headers={}, json=lambda: {})
+
+        monkeypatch.setattr(requests.Session, "get", fake_get)
+        resp = download("https://site.api.espn.com/z", num_retries=5)
+        assert resp.status_code == 401
+        assert calls["n"] == 1
+
+    def test_download_status_retries_capped_below_num_retries(self, monkeypatch):
+        """A persistent 429 with a large connection budget (num_retries=15) is
+        capped at _MAX_STATUS_RETRIES (4) status retries — 5 requests total, not
+        16 — so we don't hammer a host already signalling back-off."""
+        import sportsdataverse.cache as _cache
+
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+        monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+        calls = {"n": 0}
+
+        def fake_get(self, url, **kwargs):
+            calls["n"] += 1
+            return types.SimpleNamespace(
+                status_code=429, url=url, reason="Too Many Requests", headers={}, json=lambda: {}
+            )
+
+        monkeypatch.setattr(requests.Session, "get", fake_get)
+        resp = download("https://site.api.espn.com/capped", num_retries=15)
+        assert resp.status_code == 429
+        assert calls["n"] == 5  # 1 initial + 4 capped status retries
+
+    def test_download_does_not_cache_non_2xx(self, monkeypatch):
+        """A retryable status returned after the budget is spent must NOT be
+        written to the cache; a 2xx still is."""
+        import sportsdataverse.cache as _cache
+
+        writes = []
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "memory")
+        monkeypatch.setattr(_cache, "cache_get", lambda *a, **k: None)
+        monkeypatch.setattr(_cache, "cache_set", lambda url, params, body, ttl=None: writes.append(url))
+        monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+
+        def _resp(code):
+            def fake_get(self, url, **kwargs):
+                return types.SimpleNamespace(status_code=code, url=url, reason="x", headers={}, json=lambda: {})
+
+            return fake_get
+
+        monkeypatch.setattr(requests.Session, "get", _resp(503))
+        download("https://site.api.espn.com/nocache", num_retries=1)
+        assert writes == []  # 503 body never cached
+
+        monkeypatch.setattr(requests.Session, "get", _resp(200))
+        download("https://site.api.espn.com/docache", num_retries=1)
+        assert writes == ["https://site.api.espn.com/docache"]  # 200 cached

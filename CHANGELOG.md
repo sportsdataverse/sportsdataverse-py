@@ -177,6 +177,16 @@
   `load_nfl_ff_rankings`) retry with exponential backoff on transient
   upstream errors (HTTP 429/5xx) instead of failing on the first hit — the
   raw-GitHub host rate-limits parallel CI runners.
+- fix(dl_utils): `download()` now retries **transient status codes**
+  (403/408/429/500/502/503/504) with the same `Retry-After`-aware backoff it
+  already used for connection failures — previously a 429/403/5xx came back as
+  a normal `Response` and was returned without a retry (the root cause the
+  DynastyProcess loader-level retry worked around). The retryable set is
+  configurable via the new `retry_statuses=` param; when the budget is spent
+  the last response is returned unchanged (callers still key on
+  `.status_code`), and non-2xx responses are no longer cached. 403 is retried
+  by default because ESPN's Core v2 API returns it under load — `download()`
+  is the ESPN/nflverse gateway and does not serve the auth'd endpoints.
 
 ### CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)
 
