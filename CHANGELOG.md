@@ -212,8 +212,8 @@
   air-yards + alignment one-hots, intercept unpenalized) with a positive
   cushion coefficient by construction; the separation-OE stability gate is a
   strict xfail on the underpowered 2022→2023 transition.
-- feat(nfl): `nfl_ngs_man_zone_rates` — per-defender man/zone coverage snap
-  rates from the NGS tracking panel.
+- feat(nfl): `nfl_ngs_man_zone_rates` — team-level man/zone coverage snap
+  rates (one row per season/defteam) from the NGS tracking panel.
 - feat(nfl): `nfl_ngs_constants` — shared empirical-Bayes shrinkage,
   weekly-σ² identification, expected-separation ridge, and the dtype-guarded
   `next_season_stability` join (asserts a `min_n` overlap floor so a shrunken

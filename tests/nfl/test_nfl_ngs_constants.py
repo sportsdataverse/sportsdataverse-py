@@ -83,6 +83,18 @@ def test_next_season_stability_too_few_rows_raises():
         next_season_stability(cur, nxt, "player_gsis_id", "v", "v2")
 
 
+def test_shrink_nonpositive_n_shrinks_to_prior_not_nan():
+    """n<=0 rows carry no data; in the degenerate panel (sigma2==0) the naive
+    0*inf product is NaN, which would poison the shrunk estimate. Those rows
+    must shrink fully to the prior (reliability 0), never NaN."""
+    x = np.array([5.0, -3.0])
+    n = np.array([0.0, -1.0])  # both non-positive -> zero reliability
+    shrunk, rel = empirical_bayes_shrink(x, n, prior_mean=1.0)
+    assert np.all(rel == 0.0)
+    assert not np.any(np.isnan(shrunk))
+    assert np.allclose(shrunk, [1.0, 1.0])  # fully shrunk to prior mean
+
+
 def test_shrink_with_known_sigma2_exact():
     # d2 = [1, 1], sigma2/n = 0.5 -> tau2 = mean(1 - 0.5) = 0.5 -> rel = 0.5
     x = np.array([2.0, 0.0])

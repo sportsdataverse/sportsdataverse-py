@@ -1087,7 +1087,7 @@ Score pitches with the bundled Command+/Location+ (②) run-value model.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `pitch_type` | character | Statcast pitch-type abbreviation. |
 | `location_rv_hat` | double | Predicted per-pitch run value from the bundled Command+/Location+ xgboost model (location + count/handedness/pitch-type features only). |
 | `command_plus` | double | Plus-scale Command+/Location+ score, 100 = league average, higher = better. |
@@ -1282,9 +1282,9 @@ Composite pitcher injury-risk index from leakage-safe trailing trends.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `game_pk` | integer | Game identifier. |
-| `game_date` | date | Game date. |
+| `game_date` | date | Calendar date of the game (YYYY-MM-DD). |
 | `injury_risk_index` | double | Equal-weighted composite of standardized adverse trailing features (higher = more risk). |
 
 **Example**
@@ -1366,7 +1366,7 @@ Per-pitcher Gaussian-mixture pitch reclassification.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `pitch_type` | character | Savant-reported pitch-type abbreviation. |
 | `pitch_type_reclass` | character | Reclassified pitch-type label from the per-pitcher GMM clustering (may differ from pitch_type). |
 | `reclass_confidence` | double | Max posterior cluster responsibility (1.0 for low-volume pitchers passed through unchanged). |
@@ -1399,8 +1399,8 @@ Combined xERA + SIERA-like estimator (model ③).
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
-| `season` | integer | Season year. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `season` | integer | MLB season (4-digit start year). |
 | `x_woba` | double | Mean estimated_woba_using_speedangle allowed on batted balls. |
 | `x_era` | double | Parametric xERA converted from x_woba via the season's league baselines. |
 | `k_pct` | double | Strikeout rate (strikeouts / batters faced). |
@@ -1434,7 +1434,7 @@ Per-pitch release/plate distance from the previous pitch + tunnel ratio.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `game_pk` | integer | Game identifier. |
 | `at_bat_number` | integer | Game-level plate-appearance sequence number. |
 | `pitch_number` | integer | Pitch sequence number within the plate appearance. |
@@ -1590,11 +1590,11 @@ one row per (season, team). | Column | Type | Description | |---|---|---| | seas
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season. |
+| `season` | integer | MLB season (4-digit start year). |
 | `team_id` | character | Team identifier (statsapi team id, stringified). |
 | `runs_scored` | integer | Total runs scored across the covered games. |
 | `runs_allowed` | integer | Total runs allowed across the covered games. |
-| `games` | integer | Games played. |
+| `games` | integer | Count of games played in the season. |
 | `win_pct` | double | Realized win percentage. |
 | `pythag_win_pct` | double | Pythagenpat expected win percentage (exponent 0.287). |
 
@@ -2592,7 +2592,7 @@ Score pitches with the bundled Stuff+ (①) run-value model.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `pitch_type` | character | Statcast pitch-type abbreviation. |
 | `stuff_rv_hat` | double | Predicted per-pitch run value from the bundled Stuff+ xgboost model (physics + fastball-relative features only). |
 | `stuff_plus` | double | Plus-scale Stuff+ score, 100 = league average, higher = better (sign-inverted from stuff_rv_hat). |
@@ -2694,7 +2694,7 @@ one row per game, in date order. | Column | Type | Description | |---|---|---| |
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Game identifier (statsapi gamePk, stringified). |
-| `date` | date | Game date. |
+| `date` | date | Calendar date of the game (YYYY-MM-DD). |
 | `home_team_id` | character | Home team identifier. |
 | `away_team_id` | character | Away team identifier. |
 | `home_rating` | double | Home team's Elo rating before this game (as-of-date). |
@@ -2749,7 +2749,7 @@ one row per (season, team). | Column | Type | Description | |---|---|---| | seas
 
 | col_name | type | description |
 |---|---|---|
-| `season` | integer | Season. |
+| `season` | integer | MLB season (4-digit start year). |
 | `team_id` | character | Team identifier (statsapi team id, stringified). |
 | `win_pct` | double | Realized win percentage. |
 | `pythag_win_pct` | double | Pythagenpat expected win percentage. |
@@ -2816,7 +2816,7 @@ Per-pitch fitted times-through-order fatigue adjustment.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `game_pk` | integer | Game identifier. |
 | `at_bat_number` | integer | Game-level plate-appearance sequence number. |
 | `pitch_number` | integer | Pitch sequence number within the plate appearance. |
@@ -3078,9 +3078,9 @@ Per `(pitcher, game_pk, game_date)`: `fb_velo` (this game's mean fastball `relea
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `game_pk` | integer | Game identifier. |
-| `game_date` | date | Game date. |
+| `game_date` | date | Calendar date of the game (YYYY-MM-DD). |
 | `fb_velo` | double | Mean fastball release speed for this appearance. |
 | `velo_trend` | double | OLS slope of fb_velo over the trailing prior appearances (leakage-safe). |
 | `velo_drop` | double | Trailing-baseline mean fb_velo minus this appearance's fb_velo. |
@@ -3233,7 +3233,7 @@ ERA; use `x_era` (oracle-gated vs Savant's xERA) for a fitted number.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
 | `season` | integer | Season year (carried through for join convenience with x_era). |
 | `k_pct` | double | Strikeout rate (strikeouts / batters faced). |
 | `bb_pct` | double | Walk rate (walks + HBP / batters faced). |
@@ -3320,8 +3320,8 @@ Parametric xERA from Statcast expected wOBA allowed.
 
 | col_name | type | description |
 |---|---|---|
-| `pitcher` | integer | MLBAM pitcher id. |
-| `season` | integer | Season year. |
+| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
+| `season` | integer | MLB season (4-digit start year). |
 | `x_woba` | double | Mean estimated_woba_using_speedangle allowed on batted balls. |
 | `x_era` | double | Parametric xERA converted from x_woba via the season's league baselines. |
 

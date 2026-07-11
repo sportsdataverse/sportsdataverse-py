@@ -560,7 +560,10 @@ def nfl_ngs_man_zone_rates(
     if not frames:
         return _man_zone_empty(return_as_pandas)
     part = pl.concat(frames, how="diagonal_relaxed")
-    required = {"nflverse_game_id", "possession_team", "defense_man_zone_type"}
+    # defense_coverage_type is a sibling NGS charting label used unconditionally
+    # in the cover_*_rate aggregation below; require it too so a payload missing
+    # it returns the documented-empty frame instead of raising ColumnNotFound.
+    required = {"nflverse_game_id", "possession_team", "defense_man_zone_type", "defense_coverage_type"}
     if not required.issubset(part.columns):
         return _man_zone_empty(return_as_pandas)
     part = part.drop_nulls(["defense_man_zone_type", "possession_team"])
