@@ -80,23 +80,46 @@ def test_adj_net_ordering_with_fitted_baseline() -> None:
     assert out["team_id"].to_list() == ["A", "B", "C"]
 
 
-def test_neutral_site_zeroes_home_edge() -> None:
+def _venue_slate(neutral: bool) -> pl.DataFrame:
+    """A multi-game, venue-asymmetric slate where hfa genuinely moves the fit.
+
+    (A single balanced game is degenerate -- the fixed point returns the raw
+    values regardless of hfa, so it can't distinguish neutral-zeroing from a
+    no-op. This slate has unbalanced venues + a venue-flipped rematch, so the
+    hfa term actually bites when ``neutral`` is False -- see the teeth check in
+    ``test_neutral_site_zeroes_home_edge``.)
+    """
     rows = [
-        ("A", "B", 105.0, 103.0, True, True),
-        ("B", "A", 103.0, 105.0, False, True),
+        ("A", "B", 110.0, 95.0, True, neutral),
+        ("B", "A", 95.0, 110.0, False, neutral),
+        ("A", "C", 108.0, 90.0, True, neutral),
+        ("C", "A", 90.0, 108.0, False, neutral),
+        ("B", "C", 102.0, 98.0, True, neutral),
+        ("C", "B", 98.0, 102.0, False, neutral),
+        ("A", "B", 112.0, 96.0, False, neutral),  # rematch, venues flipped
+        ("B", "A", 96.0, 112.0, True, neutral),
     ]
-    game_eff = pl.DataFrame(
-        rows, schema=["team_id", "opp_team_id", "off", "def", "is_home", "neutral_site"], orient="row"
-    )
-    out = iterative_opponent_adjust(
-        game_eff,
+    return pl.DataFrame(rows, schema=["team_id", "opp_team_id", "off", "def", "is_home", "neutral_site"], orient="row")
+
+
+def test_neutral_site_zeroes_home_edge() -> None:
+    """On an all-neutral slate the hfa must drop out entirely: the fixed point
+    with a large hfa must be identical to the one with hfa=0 -- while the same
+    slate marked non-neutral must NOT (proving the equality has teeth)."""
+    kw = dict(
         team_col="team_id",
         opp_col="opp_team_id",
         off_col="off",
         def_col="def",
         home_col="is_home",
         neutral_col="neutral_site",
-        hfa=10.0,  # a large hfa would visibly bias a non-neutral game; here it must not.
-        baseline=104.0,
+        baseline=100.0,
     )
-    assert out.height == 2
+    # Teeth: on a real (non-neutral) slate a large hfa changes the fit.
+    assert not iterative_opponent_adjust(_venue_slate(False), hfa=10.0, **kw).equals(
+        iterative_opponent_adjust(_venue_slate(False), hfa=0.0, **kw)
+    )
+    # Property: on an all-neutral slate the hfa is zeroed out -> hfa=10 == hfa=0.
+    assert iterative_opponent_adjust(_venue_slate(True), hfa=10.0, **kw).equals(
+        iterative_opponent_adjust(_venue_slate(True), hfa=0.0, **kw)
+    )
