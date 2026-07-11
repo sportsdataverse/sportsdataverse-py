@@ -1,0 +1,39 @@
+schema: nfl_ngs_man_zone_rates
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: defteam
+  type: character
+  description: ''
+- name: plays
+  type: integer
+  description: ''
+- name: man_rate
+  type: double
+  description: ''
+- name: zone_rate
+  type: double
+  description: ''
+- name: cover_0_rate
+  type: double
+  description: ''
+- name: cover_1_rate
+  type: double
+  description: ''
+- name: cover_2_rate
+  type: double
+  description: ''
+- name: cover_3_rate
+  type: double
+  description: ''
+- name: cover_4_rate
+  type: double
+  description: ''
+- name: cover_5_rate
+  type: double
+  description: ''
+- name: cover_6_rate
+  type: double
+  description: ''

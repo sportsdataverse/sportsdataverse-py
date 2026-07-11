@@ -3644,6 +3644,19 @@ nfl_ngs_league_teams:
   teamType: Classification of the team type within the NFL system (e.g., 'NFL' for active franchises).
   ticketPhoneNumber: Phone number for ticket sales inquiries for this team.
   yearFound: Year the franchise was founded.
+nfl_ngs_man_zone_rates:
+  season: NFL season (YYYY), derived from the nflverse game id.
+  defteam: Defensive team abbreviation (the non-possession team of the game).
+  plays: Number of charted (labelled) defensive plays in the denominator; unlabelled plays are dropped.
+  man_rate: Share of labelled plays charted as man coverage. man_rate + zone_rate == 1 exactly.
+  zone_rate: Share of labelled plays charted as zone coverage.
+  cover_0_rate: Share of labelled plays charted as COVER_0. 2_MAN and PREVENT calls stay in the denominator without a dedicated column, so the cover_*_rate columns sum to slightly under 1.
+  cover_1_rate: Share of labelled plays charted as COVER_1.
+  cover_2_rate: Share of labelled plays charted as COVER_2.
+  cover_3_rate: Share of labelled plays charted as COVER_3.
+  cover_4_rate: Share of labelled plays charted as COVER_4.
+  cover_5_rate: Share of labelled plays charted as COVER_5.
+  cover_6_rate: Share of labelled plays charted as COVER_6.
 nfl_ngs_microsite_chart:
   completionPercentage: Completion percentage for the quarterback featured on the NGS microsite chart.
   esbId: Elias Sports Bureau identifier for the player featured on the NGS microsite chart.
@@ -3718,6 +3731,36 @@ nfl_ngs_play_is_highlight:
   highlight_teamId: NFL Shield team identifier for the team featured in the highlight clip.
   highlight_week: Week number within the season during which the highlighted play occurred.
   isHighlight: Boolean flag indicating whether this play record has been designated as a highlight by the NFL Shield API.
+nfl_ngs_ryoe:
+  season: NFL season (YYYY).
+  player_gsis_id: Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8.
+  player_display_name: Player display name as shipped by NGS.
+  team_abbr: Team abbreviation.
+  position: Player position (from NGS player_position).
+  rush_attempts: Season rush attempts — the shrinkage weight.
+  rush_yards: Season rushing yards.
+  expected_rush_yards: NGS tracking-model expected rushing yards for the season.
+  ryoe_total: Season rush yards over expected (NGS rush_yards_over_expected, passed through).
+  ryoe_per_att_raw: NGS rush_yards_over_expected_per_att passed through unchanged — the tracking-model residual per attempt.
+  ryoe_per_att_shrunk: ryoe_per_att_raw after per-season empirical-Bayes shrinkage toward the attempt-weighted league mean (sampling variance identified from weekly rows).
+  pct_stacked_box: Percent of attempts against 8+ defenders in the box (NGS percent_attempts_gte_eight_defenders) — reported as a context covariate, not adjusted on.
+  reliability: Shrinkage reliability tau2 / (tau2 + sigma2 / rush_attempts) in [0, 1]; the fraction of the raw deviation retained.
+  ryoe_rank: Dense descending rank of ryoe_per_att_shrunk within season over qualified rows; null when rush_attempts < min_attempts.
+nfl_ngs_separation_oe:
+  season: NFL season (YYYY).
+  player_gsis_id: Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8.
+  player_display_name: Player display name as shipped by NGS.
+  team_abbr: Team abbreviation.
+  position: Player position (from NGS player_position); one-hot feature in the expectation ridge.
+  targets: Season target count — the ridge weight and the shrinkage weight.
+  avg_cushion: Average defender cushion at snap, yards (ridge feature).
+  avg_separation: Average separation from the nearest defender at catch/incompletion, yards.
+  avg_intended_air_yards: Average intended air yards on targets (ridge feature).
+  expected_separation: Built per-season weighted-ridge expectation of avg_separation from cushion, intended air yards and position — a CONTEXT expectation, not a tracking model.
+  sep_oe_raw: avg_separation minus expected_separation (context residual).
+  sep_oe_shrunk: sep_oe_raw after per-season empirical-Bayes shrinkage toward the target-weighted league mean (sampling variance identified from weekly rows).
+  reliability: Shrinkage reliability tau2 / (tau2 + sigma2 / targets) in [0, 1]; the fraction of the raw deviation retained.
+  sep_oe_rank: Dense descending rank of sep_oe_shrunk within season over qualified rows; null when targets < min_targets.
 nfl_ngs_statboard:
   avgAirDistance: Average air distance in yards on all pass attempts, measuring how far the ball travels through the air regardless
     of direction.
@@ -3884,6 +3927,19 @@ nfl_ngs_statboard_leaders:
   rushYardsOverExpectedPerAtt: Average rushing yards over expected per attempt (RYOE/attempt), from NFL Next Gen Stats.
   seasonType: Phase of the season for this record (e.g., 'REG' for regular season, 'POST' for playoffs).
   teamId: NFL Shield team identifier for the team associated with this leader statistic.
+nfl_ngs_yac_oe:
+  season: NFL season (YYYY).
+  player_gsis_id: Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8.
+  player_display_name: Player display name as shipped by NGS.
+  team_abbr: Team abbreviation.
+  position: Player position (from NGS player_position).
+  receptions: Season reception count — the shrinkage weight.
+  avg_yac: Average yards after catch per reception.
+  avg_expected_yac: NGS tracking-model expected YAC per reception.
+  yac_oe_raw: NGS avg_yac_above_expectation passed through unchanged — per-reception YAC minus the tracking-model expectation.
+  yac_oe_shrunk: yac_oe_raw after per-season empirical-Bayes shrinkage toward the reception-weighted league mean (sampling variance identified from weekly rows).
+  reliability: Shrinkage reliability tau2 / (tau2 + sigma2 / receptions) in [0, 1]; the fraction of the raw deviation retained.
+  yac_oe_rank: Dense descending rank of yac_oe_shrunk within season over qualified rows; null when receptions < min_receptions.
 nfl_player_projection:
   aging_mult: Applied aging multiplier - the damped, clamped ratio aging_curve(proj_age) / aging_curve(current_age).
   player_id: nflverse gsis player id (character join key).
@@ -8345,3 +8401,101 @@ mlb_props:
   exp_runs_away: Expected away-team runs (log5-style rate blend).
   exp_strikeouts_home: Expected home-pitcher strikeouts (null when the ratings input lacks k9/k_rate).
   exp_strikeouts_away: Expected away-pitcher strikeouts (null when the ratings input lacks k9/k_rate).
+pitch_features:
+  velo_z: Release speed standardized (z-score) within pitcher.
+  spin_z: Release spin rate standardized (z-score) within pitcher.
+  pfx_x_z: Horizontal movement (pfx_x) standardized (z-score) within pitcher.
+  pfx_z_z: Vertical movement (pfx_z) standardized (z-score) within pitcher.
+  release_pos_x_z: Horizontal release position standardized (z-score) within pitcher.
+  release_pos_z_z: Vertical release position standardized (z-score) within pitcher.
+  extension_z: Release extension standardized (z-score) within pitcher.
+  run_value: Savant per-pitch delta_run_exp, passed through unchanged as the spine's single run-value label.
+  plate_x_abs: Absolute horizontal plate location (distance from the center of the zone).
+  plate_z_norm: Vertical plate location normalized to the batter's own strike zone, 0 = bottom, 1 = top.
+  in_zone: 1 if the pitch crossed the strike zone (normalized location + horizontal bound), else 0.
+  dist_from_heart: Euclidean distance from the normalized zone center (0, 0.5) -- lower is more hittable.
+add_sequence_features:
+  prev_pitch_type: Pitch type of the previous pitch in the same plate appearance (null on the first pitch).
+  prev_release_pos_x: Horizontal release position of the previous pitch in the same plate appearance.
+  prev_release_pos_z: Vertical release position of the previous pitch in the same plate appearance.
+  prev_plate_x: Horizontal plate location of the previous pitch in the same plate appearance.
+  prev_plate_z: Vertical plate location of the previous pitch in the same plate appearance.
+  cum_pitches_game: Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch).
+  batter_faced_index: Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced).
+  times_through_order: Times through the batting order, min(3, (batter_faced_index-1)//9 + 1).
+mlb_stuff_plus:
+  pitcher: MLBAM pitcher id.
+  pitch_type: Statcast pitch-type abbreviation.
+  stuff_rv_hat: Predicted per-pitch run value from the bundled Stuff+ xgboost model (physics + fastball-relative features only).
+  stuff_plus: Plus-scale Stuff+ score, 100 = league average, higher = better (sign-inverted from stuff_rv_hat).
+mlb_command_plus:
+  pitcher: MLBAM pitcher id.
+  pitch_type: Statcast pitch-type abbreviation.
+  location_rv_hat: Predicted per-pitch run value from the bundled Command+/Location+ xgboost model (location + count/handedness/pitch-type features only).
+  command_plus: Plus-scale Command+/Location+ score, 100 = league average, higher = better.
+mlb_pitch_era:
+  pitcher: MLBAM pitcher id.
+  season: Season year.
+  x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
+  x_era: Parametric xERA converted from x_woba via the season's league baselines.
+  k_pct: Strikeout rate (strikeouts / batters faced).
+  bb_pct: Walk rate (walks + HBP / batters faced).
+  gb_pct: Ground-ball rate among batted balls.
+  siera_like: SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.
+x_era:
+  pitcher: MLBAM pitcher id.
+  season: Season year.
+  x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
+  x_era: Parametric xERA converted from x_woba via the season's league baselines.
+siera_like:
+  pitcher: MLBAM pitcher id.
+  season: Season year (carried through for join convenience with x_era).
+  k_pct: Strikeout rate (strikeouts / batters faced).
+  bb_pct: Walk rate (walks + HBP / batters faced).
+  gb_pct: Ground-ball rate among batted balls.
+  siera_like: SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.
+mlb_times_through_order:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  at_bat_number: Game-level plate-appearance sequence number.
+  pitch_number: Pitch sequence number within the plate appearance.
+  times_through_order: Times through the batting order (1-3).
+  fatigue_rv_adj: Fitted per-TTO run-value marginal (mlb_pitching_constants.tto_penalty) for this pitch's TTO level.
+tto_penalty_table:
+  times_through_order: Times through the batting order (1-3).
+  mean_run_value: Mean observed run value for pitches at this TTO level.
+  penalty_vs_first: mean_run_value minus the TTO=1 mean run value.
+  n: Number of pitches observed at this TTO level.
+mlb_pitch_classify:
+  pitcher: MLBAM pitcher id.
+  pitch_type: Savant-reported pitch-type abbreviation.
+  pitch_type_reclass: Reclassified pitch-type label from the per-pitcher GMM clustering (may differ from pitch_type).
+  reclass_confidence: Max posterior cluster responsibility (1.0 for low-volume pitchers passed through unchanged).
+mlb_pitch_tunneling:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  at_bat_number: Game-level plate-appearance sequence number.
+  pitch_number: Pitch sequence number within the plate appearance.
+  release_dist: Euclidean distance between this pitch's release point and the previous pitch's release point.
+  plate_dist: Euclidean distance between this pitch's plate location and the previous pitch's plate location.
+  tunnel_ratio: plate_dist / max(release_dist, eps) -- higher means better tunneling (similar release, different result).
+mlb_sequence_run_value:
+  prev_pitch_type: Pitch type of the preceding pitch in the sequence.
+  pitch_type: Pitch type of the current pitch.
+  mean_run_value: Mean run value of the current pitch, grouped by the ordered (prev_pitch_type, pitch_type) pair.
+  n: Number of pitches observed for this ordered pair.
+pitcher_appearance_trends:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  game_date: Game date.
+  fb_velo: Mean fastball release speed for this appearance.
+  velo_trend: OLS slope of fb_velo over the trailing prior appearances (leakage-safe).
+  velo_drop: Trailing-baseline mean fb_velo minus this appearance's fb_velo.
+  pitches_game: Pitches thrown in this appearance.
+  trailing_workload: Mean pitches_game over the trailing prior appearances (leakage-safe).
+  days_rest: Days since the pitcher's previous appearance.
+mlb_injury_risk:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  game_date: Game date.
+  injury_risk_index: Equal-weighted composite of standardized adverse trailing features (higher = more risk).

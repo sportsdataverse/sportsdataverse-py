@@ -1,0 +1,45 @@
+schema: nfl_ngs_ryoe
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: player_gsis_id
+  type: character
+  description: ''
+- name: player_display_name
+  type: character
+  description: ''
+- name: team_abbr
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: rush_attempts
+  type: double
+  description: ''
+- name: rush_yards
+  type: double
+  description: ''
+- name: expected_rush_yards
+  type: double
+  description: ''
+- name: ryoe_total
+  type: double
+  description: ''
+- name: ryoe_per_att_raw
+  type: double
+  description: ''
+- name: ryoe_per_att_shrunk
+  type: double
+  description: ''
+- name: pct_stacked_box
+  type: double
+  description: ''
+- name: reliability
+  type: double
+  description: ''
+- name: ryoe_rank
+  type: integer
+  description: ''

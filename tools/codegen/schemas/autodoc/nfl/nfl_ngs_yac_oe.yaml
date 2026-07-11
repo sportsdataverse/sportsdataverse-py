@@ -1,0 +1,39 @@
+schema: nfl_ngs_yac_oe
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: player_gsis_id
+  type: character
+  description: ''
+- name: player_display_name
+  type: character
+  description: ''
+- name: team_abbr
+  type: character
+  description: ''
+- name: position
+  type: character
+  description: ''
+- name: receptions
+  type: double
+  description: ''
+- name: avg_yac
+  type: double
+  description: ''
+- name: avg_expected_yac
+  type: double
+  description: ''
+- name: yac_oe_raw
+  type: double
+  description: ''
+- name: yac_oe_shrunk
+  type: double
+  description: ''
+- name: reliability
+  type: double
+  description: ''
+- name: yac_oe_rank
+  type: integer
+  description: ''
