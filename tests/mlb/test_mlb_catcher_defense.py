@@ -54,8 +54,9 @@ def test_blocking_empty_input_returns_schema():
 
 
 def _throwing_inputs():
-    # catcher 9: fast pop time (1.90), throws out 3/4 attempts.
-    # catcher 8: slow pop time (2.20), throws out 1/4 attempts.
+    # catcher 9 throws out 3/4 attempts; catcher 8 throws out 1/4 -- with a
+    # catcher-independent (here: single-pool) expected CS rate, the better
+    # thrower must score higher regardless of pop time.
     outcome = (["caught"] * 3 + ["success"] * 1) + (["caught"] * 1 + ["success"] * 3)
     catcher_id = (["9"] * 4) + (["8"] * 4)
     sb_attempts = pl.DataFrame({"catcher_id": catcher_id, "outcome": outcome})
@@ -63,12 +64,9 @@ def _throwing_inputs():
     return sb_attempts, poptime
 
 
-def test_throwing_runs_fast_pop_catcher_higher():
+def test_throwing_runs_better_thrower_higher():
     sb_attempts, poptime = _throwing_inputs()
-    # Coarse pop_bin_width so both catchers share one bin -- the "expected"
-    # CS rate reflects the shared pool, not each catcher's own rate alone
-    # (a catcher alone in a bin is otherwise self-referential: 0 by construction).
-    out = mlb_catcher_throwing(sb_attempts, poptime, pop_bin_width=3.0)
+    out = mlb_catcher_throwing(sb_attempts, poptime)
     assert out.schema["catcher_id"] == pl.Utf8
     assert set(out.columns) == {"catcher_id", "attempts", "cs_above_expected", "throwing_runs"}
     c9 = out.filter(pl.col("catcher_id") == "9").row(0, named=True)
@@ -78,8 +76,7 @@ def test_throwing_runs_fast_pop_catcher_higher():
 
 
 def test_throwing_dtype_guard_and_empty():
-    sb_attempts, poptime = _throwing_inputs()
-    assert sb_attempts.schema["catcher_id"] == poptime.schema["catcher_id"]
+    _, poptime = _throwing_inputs()
     out = mlb_catcher_throwing(pl.DataFrame(schema={"catcher_id": pl.Utf8}), poptime)
     assert out.height == 0
     assert set(out.columns) == {"catcher_id", "attempts", "cs_above_expected", "throwing_runs"}

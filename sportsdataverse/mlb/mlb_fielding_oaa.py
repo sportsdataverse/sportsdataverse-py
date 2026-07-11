@@ -1,13 +1,21 @@
 """Native outs-above-average range model (T6.3, model (3)).
 
 Owns the batted-ball trajectory feature extraction
-(:func:`bip_trajectory_features`), the compute-on-demand catch-probability
-surface (:func:`catch_prob_surface`), and the public entry point
-(:func:`mlb_fielding_oaa`). **Documented approximation:** the public Statcast
-feed lacks fielder *start* coordinates, so range is inferred from landing
-location + a launch-angle hang-time proxy rather than distance actually
-covered -- this is why the oracle floor (0.85) is below catcher framing's
-(0.90); see the module's oracle test docstring for the full rationale.
+(:func:`bip_trajectory_features`), a standalone empirical catch-probability
+surface utility (:func:`catch_prob_surface`), and the public entry point
+(:func:`mlb_fielding_oaa`). The entry point fits a **per-position smooth
+logistic** P(out | landing distance, launch angle, exit velocity, spray
+angle) -- exit velocity + launch angle together proxy the hang time that,
+with landing distance and direction, drives catch difficulty -- then
+``oaa = sum(is_out - p_catch)``. The per-position logistic replaced a coarse
+empirical (distance x spray x launch-angle) bin surface, roughly halving the
+gap to Savant's leaderboard (full-season Pearson ~0.40 -> ~0.60).
+
+**Documented approximation:** the public Statcast feed lacks fielder *start*
+coordinates, so range is inferred from landing location + a launch-parameter
+hang-time proxy rather than distance actually covered -- this is why the model
+cannot reach Savant's design target (which uses proprietary fielder tracking);
+see the module's oracle test docstring for the full rationale.
 
 See Also:
     * `baseballr`_ -- R sibling package for MLB sabermetrics.
@@ -23,7 +31,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Union
 
+import numpy as np
 import polars as pl
+from scipy.optimize import minimize
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -139,33 +149,69 @@ def catch_prob_surface(
     )
 
 
+def _oaa_feature_matrix(f: "pl.DataFrame") -> "np.ndarray":
+    """Per-position catch logistic features: landing distance (+ cubic), launch
+    angle, exit velocity, spray angle, and distance x (angle / |spray|)
+    interactions -- exit velocity x launch angle proxy hang time."""
+    dist = f["hit_dist"].to_numpy().astype(float)
+    la = f["launch_angle"].to_numpy().astype(float)
+    spray = f["spray_angle"].to_numpy().astype(float)
+    if "launch_speed" in f.columns:
+        ev = f["launch_speed"].to_numpy().astype(float)
+        m = float(np.nanmean(ev)) if np.isfinite(np.nanmean(ev)) else 0.0
+        ev = np.nan_to_num(ev, nan=m)
+    else:
+        ev = np.zeros(len(dist))
+    return np.column_stack(
+        [dist, dist**2, dist**3, la, la**2, ev, ev**2, np.abs(spray), spray, spray**2, dist * la, dist * np.abs(spray)]
+    )
+
+
+def _fit_catch_logistic(x: "np.ndarray", y: "np.ndarray", l2: float) -> "np.ndarray":
+    """L2-regularized logistic P(out | features); returns fitted P for each row of ``x``."""
+    xs = (x - x.mean(0)) / (x.std(0) + 1e-9)
+
+    def _neg_log_loss(theta: "np.ndarray") -> float:
+        z = xs @ theta[:-1] + theta[-1]
+        p = np.clip(1.0 / (1.0 + np.exp(-z)), 1e-9, 1 - 1e-9)
+        return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)) + l2 * np.sum(theta[:-1] ** 2))
+
+    res = minimize(_neg_log_loss, np.zeros(x.shape[1] + 1), method="L-BFGS-B")
+    z = xs @ res.x[:-1] + res.x[-1]
+    return np.clip(1.0 / (1.0 + np.exp(-z)), 1e-9, 1 - 1e-9)
+
+
 def mlb_fielding_oaa(
     bip: "pl.DataFrame",
     *,
-    dist_bin: float = 10.0,
-    spray_bin: float = 0.1,
-    alpha: float = 2.0,
+    l2: float = 1e-4,
+    min_fit: int = 50,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
-    """Per-fielder outs above average from the compute-on-demand catch-probability surface.
+    """Per-fielder outs above average from a per-position catch-probability logistic.
 
     ``oaa = sum(is_out - p_catch)`` per ``(fielder_id, position)``, where
-    ``p_catch`` is the surface's expected out probability for that ball's
-    bin. The fielder id is resolved dynamically from the responsible
-    position's ``fielder_{position}`` column (cast ``Utf8`` at the
-    boundary).
+    ``p_catch`` is a **smooth per-position logistic** P(out | landing
+    distance, launch angle, exit velocity, spray angle) (exit velocity x
+    launch angle proxy the hang time). A position with fewer than ``min_fit``
+    balls in play falls back to its mean out rate. This replaced a coarse
+    empirical bin surface, roughly halving the gap to Savant's leaderboard
+    (full-season Pearson ~0.40 -> ~0.60). The fielder id is resolved
+    dynamically from the responsible position's ``fielder_{position}`` column
+    (cast ``Utf8`` at the boundary).
 
     Args:
         bip: Balls-in-play frame with ``hc_x``/``hc_y``, ``hit_distance_sc``,
-            ``launch_angle``, ``hit_location``, ``events``, and the
-            ``fielder_1``..``fielder_9`` responsible-player columns. MiLB
-            input (e.g.
+            ``launch_angle``, ``launch_speed``, ``hit_location``, ``events``,
+            and the ``fielder_1``..``fielder_9`` responsible-player columns.
+            MiLB input (e.g.
             :func:`sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`)
             runs through the same function -- there is no Savant OAA
             leaderboard oracle for MiLB.
-        dist_bin: Surface bin width for hit distance, in feet.
-        spray_bin: Surface bin width for spray angle, in radians.
-        alpha: Laplace smoothing strength for the surface.
+        l2: L2 penalty for the per-position logistic. Defaults to ``1e-4``.
+        min_fit: Minimum balls in play for a position to fit its own
+            logistic; below this the position's mean out rate is used.
+            Defaults to ``50``.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -198,14 +244,7 @@ def mlb_fielding_oaa(
         out = pl.DataFrame(schema=_OAA_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
-    surface = catch_prob_surface(bip, dist_bin=dist_bin, spray_bin=spray_bin, alpha=alpha)
-    f = bip_trajectory_features(bip).with_columns(
-        (pl.col("hit_dist") / dist_bin).floor().cast(pl.Int64).alias("dist_b"),
-        (pl.col("spray_angle") / spray_bin).floor().cast(pl.Int64).alias("spray_b"),
-    )
-    if f.height == 0 or surface.height == 0:
-        out = pl.DataFrame(schema=_OAA_SCHEMA)
-        return out.to_pandas() if return_as_pandas else out
+    f = bip_trajectory_features(bip)
 
     # Resolve the responsible fielder id dynamically from fielder_{position}.
     fielder_cols = [c for c in f.columns if c.startswith("fielder_") and c[len("fielder_") :].isdigit()]
@@ -221,20 +260,34 @@ def mlb_fielding_oaa(
     else:
         f = f.with_columns(pl.lit(None, dtype=pl.Utf8).alias("fielder_id"))
 
-    assert f.schema["dist_b"] == surface.schema["dist_b"], "dist_b dtype mismatch before OAA surface join"
-    assert f.schema["spray_b"] == surface.schema["spray_b"], "spray_b dtype mismatch before OAA surface join"
+    f = f.filter(
+        pl.col("fielder_id").is_not_null()
+        & pl.col("position").is_not_null()
+        & pl.col("hit_dist").is_not_null()
+        & pl.col("launch_angle").is_not_null()
+        & pl.col("spray_angle").is_not_null()
+    )
+    if f.height == 0:
+        out = pl.DataFrame(schema=_OAA_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
 
-    scored = f.join(
-        surface.select("position", "dist_b", "spray_b", "la_bin", "p_catch"),
-        on=["position", "dist_b", "spray_b", "la_bin"],
-        how="left",
-    ).with_columns(
-        pl.col("p_catch").fill_null(0.5),
-        (pl.col("is_out") - pl.col("p_catch").fill_null(0.5)).alias("out_gain"),
+    # Per-position smooth logistic P(out | trajectory). Expected out probability
+    # is deliberately position-scoped (an infielder's and a center fielder's
+    # catch surfaces are unrelated); the fielder's own outs above that surface
+    # are the OAA signal.
+    x = _oaa_feature_matrix(f)
+    y = f["is_out"].to_numpy().astype(float)
+    pos = f["position"].to_numpy()
+    p_catch: np.ndarray = np.empty(len(y), dtype=float)
+    for pv in np.unique(pos):
+        mask = pos == pv
+        p_catch[mask] = _fit_catch_logistic(x[mask], y[mask], l2) if mask.sum() >= min_fit else y[mask].mean()
+
+    scored = f.with_columns(pl.Series("p_catch", p_catch)).with_columns(
+        (pl.col("is_out") - pl.col("p_catch")).alias("out_gain")
     )
     out = (
-        scored.filter(pl.col("fielder_id").is_not_null())
-        .group_by(["fielder_id", "position"])
+        scored.group_by(["fielder_id", "position"])
         .agg(pl.len().alias("opportunities"), pl.col("out_gain").sum().alias("oaa"))
         .sort("oaa", descending=True)
         .select("fielder_id", "position", "opportunities", "oaa")

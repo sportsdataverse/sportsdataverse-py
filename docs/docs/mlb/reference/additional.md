@@ -996,30 +996,34 @@ blocking = mlb_catcher_blocking(pitches)
 blocking.filter(pl.col("block_opps") >= 50).sort("blocking_runs", descending=True)
 ```
 
-### `mlb_catcher_framing(pitches: "'pl.DataFrame'", *, x_bin: 'float' = 0.1, z_bin: 'float' = 0.1, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_framing}
+### `mlb_catcher_framing(pitches: "'pl.DataFrame'", *, shadow_lo: 'float' = 0.1, shadow_hi: 'float' = 0.9, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_framing}
 
-Per-catcher framing runs from the called-strike probability grid.
+Per-catcher framing runs from a smooth called-strike logistic (Savant method).
 
-For every take, `framing_run = (actual_strike - expected_strike) *
-strike_run_value(count)` where `expected_strike` is the grid lookup
-for that pitch's `(stand, px_bin, pz_bin)` and `strike_run_value`
-is the count's defensive run value from
+A logistic P(called strike | zone location) is fit on all takes (the T6.4
+zone model, `sportsdataverse.mlb.mlb_umpire_zone.mlb_umpire_called_strike_prob`);
+then, over **shadow-zone** takes only -- those with `shadow_lo <=
+P_strike <= shadow_hi`, i.e. near the rulebook edge where receiving
+actually moves the call -- `framing_run = (actual_strike - P_strike) *
+strike_run_value(count)`. `strike_run_value` is the count's defensive
+run value from
 `sportsdataverse.mlb.mlb_run_values.count_strike_run_value`. Summed
-per catcher (Savant's `fielder_2`, cast `Utf8` at the boundary).
+per catcher (Savant's `fielder_2`, cast `Utf8` at the boundary). The
+`takes` column counts *all* takes handled (workload), while the runs sum
+only over the frameable shadow-zone subset.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pitches` | `DataFrame` |  | Pitch-level frame with the take columns (`plate_x`/`plate_z`/`sz_top`/`sz_bot`/`stand`/ `description`/`balls`/`strikes`/`delta_run_exp`/ `fielder_2`). MiLB feeds (e.g. `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`) run through the same function -- there is simply no Savant leaderboard oracle to gate MiLB output against. |
-| `x_bin` | `float` | `0.1` | Grid bin width for `plate_x`. Defaults to `0.1`. |
-| `z_bin` | `float` | `0.1` | Grid bin width for zone-normalized height. Defaults to `0.1`. |
-| `alpha` | `float` | `1.0` | Laplace smoothing strength for the grid. Defaults to `1.0`. |
+| `shadow_lo` | `float` | `0.1` | Lower P(strike) bound of the frameable shadow zone. Defaults to `0.1`. |
+| `shadow_hi` | `float` | `0.9` | Upper P(strike) bound of the frameable shadow zone. Defaults to `0.9`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant `fielder_2`) | | takes | Int64 | Called-strike + ball takes caught | | framing_runs | Float64 | Sum of (actual - expected strike) x count run-value | | strikes_gained | Float64 | Sum of (actual - expected strike), run-value-free |
+one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant `fielder_2`) | | takes | Int64 | Called-strike + ball takes caught (all, workload) | | framing_runs | Float64 | Sum over shadow-zone takes of (actual - P_strike) x count run-value | | strikes_gained | Float64 | Sum over shadow-zone takes of (actual - P_strike), run-value-free |
 
 **Example**
 
@@ -1029,44 +1033,52 @@ framing = mlb_catcher_framing(pitches)
 
 # Useful parameter combination
 
-framing_pd = mlb_catcher_framing(pitches, alpha=2.0, return_as_pandas=True)
+framing_pd = mlb_catcher_framing(pitches, shadow_lo=0.15, shadow_hi=0.85, return_as_pandas=True)
 
 # Pipeline next step (one line)
 
 framing.filter(pl.col("takes") >= 500).sort("framing_runs", descending=True)
 ```
 
-### `mlb_catcher_throwing(sb_attempts: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, pop_col: 'str' = 'pop_2b_sba', pop_bin_width: 'float' = 0.05, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_throwing}
+### `mlb_catcher_throwing(sb_attempts: "'pl.DataFrame'", poptime: "'Optional[pl.DataFrame]'" = None, *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_throwing}
 
-Per-catcher caught-stealing (throwing) value from a pop-time model.
+Per-catcher caught-stealing (throwing) value = caught-stealing above average.
 
-Expected caught-stealing probability is a monotone empirical function of
-catcher pop time (binned); `throwing_runs = cs_above_expected *
-|RUN_VALUES["cs"] - RUN_VALUES["sb"]|` (the documented fallback
-constants -- see `sportsdataverse.mlb.mlb_stolen_base` for why a
-real-capture attempt's `delta_run_exp` cannot isolate the steal's own
-run value from the bundled primary batter outcome it is narrated
-alongside).
+Mirrors Savant's `catcher_stealing_runs` leaderboard: `throwing_runs =
+cs_above_expected * |RUN_VALUES["cs"] - RUN_VALUES["sb"]|` where
+`cs_above_expected` sums `(caught - expected CS rate)` over the
+catcher's attempts. **The expected CS rate is catcher-INDEPENDENT** -- the
+empirical league CS rate for the attempt's *difficulty* stratum (the
+attempted `base`, since a steal of 3rd is caught far more often than a
+steal of 2nd), NOT a function of the catcher's own pop time. The catcher's
+arm/pop time/exchange is the *skill* that produces caught-stealings above
+that baseline; the **prior implementation conditioned the expectation on
+the catcher's own binned pop time, which cancelled exactly the signal
+Savant measures** (it correlated ~0 / slightly negative with the
+leaderboard -- the fixed model correlates positively).
+
+Run value uses the documented `RUN_VALUES` fallback constants (see
+`sportsdataverse.mlb.mlb_stolen_base` for why a real-capture
+attempt's `delta_run_exp` cannot isolate the steal's own run value from
+the bundled primary batter outcome it is narrated alongside).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `sb_attempts` | `DataFrame` |  | One row per stolen-base attempt (see `sportsdataverse.mlb.mlb_stolen_base.sb_attempts_from_pitches`), with `catcher_id` (Utf8) and `outcome` (`"success"` \\| `"caught"`). MiLB feeds run through the same function -- there is no Savant throwing leaderboard oracle for MiLB. |
-| `poptime` | `DataFrame` |  | A `sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_poptime` frame with `catcher_id` (Utf8) and the pop-time column named by `pop_col`. |
-| `pop_col` | `str` | `'pop_2b_sba'` | Name of the pop-time column in `poptime`. Defaults to `"pop_2b_sba"` (pop time to second on stolen-base attempts). |
-| `pop_bin_width` | `float` | `0.05` | Bin width (seconds) for the pop-time bucket. Defaults to `0.05`. |
+| `sb_attempts` | `DataFrame` |  | One row per stolen-base attempt (see `sportsdataverse.mlb.mlb_stolen_base.sb_attempts_from_pitches`), with `catcher_id` (Utf8), `outcome` (`"success"` \\| `"caught"`) and (for the difficulty baseline) `base`. MiLB feeds run through the same function -- there is no Savant throwing leaderboard oracle for MiLB. |
+| `poptime` | `Optional[DataFrame]` | `None` | Accepted for call-site compatibility and **not used** -- pop time is the catcher's own skill (the mechanism producing above-average CS), so it must never enter the *expected* CS model. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id | | attempts | Int64 | Stolen-base attempts caught behind the plate | | cs_above_expected | Float64 | Sum of (caught - expected CS rate) | | throwing_runs | Float64 | cs_above_expected x \|RUN_VALUES["cs"] - RUN_VALUES["sb"]\| |
+one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id | | attempts | Int64 | Stolen-base attempts caught behind the plate | | cs_above_expected | Float64 | Sum of (caught - per-base league CS rate) | | throwing_runs | Float64 | cs_above_expected x \|RUN_VALUES["cs"] - RUN_VALUES["sb"]\| |
 
 **Example**
 
 ```python
 from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_throwing
-throwing = mlb_catcher_throwing(sb_attempts, poptime)
+throwing = mlb_catcher_throwing(sb_attempts)
 ```
 
 ### `mlb_command_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_command_plus}
@@ -1228,24 +1240,27 @@ print(df.shape)
 df.sort("xwoba", descending=True).head()
 ```
 
-### `mlb_fielding_oaa(bip: "'pl.DataFrame'", *, dist_bin: 'float' = 10.0, spray_bin: 'float' = 0.1, alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_fielding_oaa}
+### `mlb_fielding_oaa(bip: "'pl.DataFrame'", *, l2: 'float' = 0.0001, min_fit: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_fielding_oaa}
 
-Per-fielder outs above average from the compute-on-demand catch-probability surface.
+Per-fielder outs above average from a per-position catch-probability logistic.
 
 `oaa = sum(is_out - p_catch)` per `(fielder_id, position)`, where
-`p_catch` is the surface's expected out probability for that ball's
-bin. The fielder id is resolved dynamically from the responsible
-position's `fielder_{position}` column (cast `Utf8` at the
-boundary).
+`p_catch` is a **smooth per-position logistic** P(out | landing
+distance, launch angle, exit velocity, spray angle) (exit velocity x
+launch angle proxy the hang time). A position with fewer than `min_fit`
+balls in play falls back to its mean out rate. This replaced a coarse
+empirical bin surface, roughly halving the gap to Savant's leaderboard
+(full-season Pearson ~0.40 -> ~0.60). The fielder id is resolved
+dynamically from the responsible position's `fielder_{position}` column
+(cast `Utf8` at the boundary).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `bip` | `DataFrame` |  | Balls-in-play frame with `hc_x`/`hc_y`, `hit_distance_sc`, `launch_angle`, `hit_location`, `events`, and the `fielder_1`..`fielder_9` responsible-player columns. MiLB input (e.g. `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`) runs through the same function -- there is no Savant OAA leaderboard oracle for MiLB. |
-| `dist_bin` | `float` | `10.0` | Surface bin width for hit distance, in feet. |
-| `spray_bin` | `float` | `0.1` | Surface bin width for spray angle, in radians. |
-| `alpha` | `float` | `2.0` | Laplace smoothing strength for the surface. |
+| `bip` | `DataFrame` |  | Balls-in-play frame with `hc_x`/`hc_y`, `hit_distance_sc`, `launch_angle`, `launch_speed`, `hit_location`, `events`, and the `fielder_1`..`fielder_9` responsible-player columns. MiLB input (e.g. `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`) runs through the same function -- there is no Savant OAA leaderboard oracle for MiLB. |
+| `l2` | `float` | `0.0001` | L2 penalty for the per-position logistic. Defaults to `1e-4`. |
+| `min_fit` | `int` | `50` | Minimum balls in play for a position to fit its own logistic; below this the position's mean out rate is used. Defaults to `50`. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**

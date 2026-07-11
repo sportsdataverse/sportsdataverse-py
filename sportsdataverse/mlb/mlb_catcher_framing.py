@@ -1,9 +1,19 @@
 """Catcher framing runs (T6.3, model (1)) -- a compute-on-demand
-called-strike probability grid + per-catcher framing runs.
+called-strike probability model + per-catcher framing runs.
 
-Owns :func:`called_strike_prob_grid` (the fitted surface) and
-:func:`mlb_catcher_framing` (the public entry point). Both are pure
-functions over an already-loaded pitch-level Statcast frame -- see
+Owns :func:`called_strike_prob_grid` (a standalone empirical grid utility)
+and :func:`mlb_catcher_framing` (the public entry point). The framing entry
+point follows Savant's method: a **smooth logistic** P(called strike | zone
+location) is fit on takes (reusing the T6.4 zone logistic in
+:mod:`sportsdataverse.mlb.mlb_umpire_zone`), then framing runs sum
+``(called_strike - P_strike) * count_run_value`` over **shadow-zone** takes
+only (``shadow_lo <= P_strike <= shadow_hi``) -- the near-edge pitches where
+receiving actually moves the call. Restricting to the shadow zone and
+smoothing the edge with a logistic both raise the concurrent correlation with
+Savant's leaderboard over a coarse all-takes grid; conditioning the *location*
+model on count or handedness was measured to hurt, so it is not done (the
+count dependence enters only through the run-value weight). All functions are
+pure over an already-loaded pitch-level Statcast frame -- see
 :mod:`sportsdataverse.mlb.mlb_run_values` for the shared run-value engine
 and the wire-touching loader.
 
@@ -23,11 +33,13 @@ from typing import TYPE_CHECKING, Union
 import polars as pl
 
 from sportsdataverse.mlb.mlb_run_values import count_strike_run_value
+from sportsdataverse.mlb.mlb_umpire_zone import mlb_umpire_called_strike_prob
 
 if TYPE_CHECKING:
     import pandas as pd
 
 _TAKES = ["called_strike", "ball"]
+_ZONE_COLS = ["plate_x", "plate_z", "sz_top", "sz_bot"]
 
 _GRID_SCHEMA = {
     "stand": pl.Utf8,
@@ -109,19 +121,23 @@ def called_strike_prob_grid(
 def mlb_catcher_framing(
     pitches: "pl.DataFrame",
     *,
-    x_bin: float = 0.1,
-    z_bin: float = 0.1,
-    alpha: float = 1.0,
+    shadow_lo: float = 0.1,
+    shadow_hi: float = 0.9,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
-    """Per-catcher framing runs from the called-strike probability grid.
+    """Per-catcher framing runs from a smooth called-strike logistic (Savant method).
 
-    For every take, ``framing_run = (actual_strike - expected_strike) *
-    strike_run_value(count)`` where ``expected_strike`` is the grid lookup
-    for that pitch's ``(stand, px_bin, pz_bin)`` and ``strike_run_value``
-    is the count's defensive run value from
+    A logistic P(called strike | zone location) is fit on all takes (the T6.4
+    zone model, :func:`sportsdataverse.mlb.mlb_umpire_zone.mlb_umpire_called_strike_prob`);
+    then, over **shadow-zone** takes only -- those with ``shadow_lo <=
+    P_strike <= shadow_hi``, i.e. near the rulebook edge where receiving
+    actually moves the call -- ``framing_run = (actual_strike - P_strike) *
+    strike_run_value(count)``. ``strike_run_value`` is the count's defensive
+    run value from
     :func:`sportsdataverse.mlb.mlb_run_values.count_strike_run_value`. Summed
-    per catcher (Savant's ``fielder_2``, cast ``Utf8`` at the boundary).
+    per catcher (Savant's ``fielder_2``, cast ``Utf8`` at the boundary). The
+    ``takes`` column counts *all* takes handled (workload), while the runs sum
+    only over the frameable shadow-zone subset.
 
     Args:
         pitches: Pitch-level frame with the take columns
@@ -131,9 +147,10 @@ def mlb_catcher_framing(
             :func:`sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`)
             run through the same function -- there is simply no Savant
             leaderboard oracle to gate MiLB output against.
-        x_bin: Grid bin width for ``plate_x``. Defaults to ``0.1``.
-        z_bin: Grid bin width for zone-normalized height. Defaults to ``0.1``.
-        alpha: Laplace smoothing strength for the grid. Defaults to ``1.0``.
+        shadow_lo: Lower P(strike) bound of the frameable shadow zone.
+            Defaults to ``0.1``.
+        shadow_hi: Upper P(strike) bound of the frameable shadow zone.
+            Defaults to ``0.9``.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -142,9 +159,9 @@ def mlb_catcher_framing(
         | Column | Type | Description |
         |---|---|---|
         | catcher_id | Utf8 | Catcher MLBAM id (Savant ``fielder_2``) |
-        | takes | Int64 | Called-strike + ball takes caught |
-        | framing_runs | Float64 | Sum of (actual - expected strike) x count run-value |
-        | strikes_gained | Float64 | Sum of (actual - expected strike), run-value-free |
+        | takes | Int64 | Called-strike + ball takes caught (all, workload) |
+        | framing_runs | Float64 | Sum over shadow-zone takes of (actual - P_strike) x count run-value |
+        | strikes_gained | Float64 | Sum over shadow-zone takes of (actual - P_strike), run-value-free |
 
     Example:
         Quick start::
@@ -154,7 +171,7 @@ def mlb_catcher_framing(
 
         Useful parameter combination::
 
-            framing_pd = mlb_catcher_framing(pitches, alpha=2.0, return_as_pandas=True)
+            framing_pd = mlb_catcher_framing(pitches, shadow_lo=0.15, shadow_hi=0.85, return_as_pandas=True)
 
         Pipeline next step (one line)::
 
@@ -170,30 +187,36 @@ def mlb_catcher_framing(
         out = pl.DataFrame(schema=_FRAMING_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
-    grid = called_strike_prob_grid(pitches, x_bin=x_bin, z_bin=z_bin, alpha=alpha)
-    rv = count_strike_run_value(pitches)
-    takes = _prep_takes(pitches, x_bin=x_bin, z_bin=z_bin).with_columns(
+    takes = pitches.filter(
+        pl.col("description").is_in(_TAKES) & pl.all_horizontal([pl.col(c).is_not_null() for c in _ZONE_COLS])
+    ).with_columns(
+        (pl.col("description") == "called_strike").cast(pl.Int64).alias("is_strike"),
         pl.col("fielder_2").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("catcher_id"),
         pl.col("balls").cast(pl.Int64),
         pl.col("strikes").cast(pl.Int64),
     )
-    if takes.height == 0 or grid.height == 0:
+    if takes.height == 0:
         out = pl.DataFrame(schema=_FRAMING_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
 
-    assert takes.schema["px_bin"] == grid.schema["px_bin"], "px_bin dtype mismatch before framing join"
-    assert takes.schema["pz_bin"] == grid.schema["pz_bin"], "pz_bin dtype mismatch before framing join"
-
+    # Smooth P(called strike | zone location) from the T6.4 logistic, fit on
+    # these takes (all of which are called pitches) and scored back onto them.
+    p_strike = mlb_umpire_called_strike_prob(takes)["called_strike_prob"]
+    rv = count_strike_run_value(pitches)
     scored = (
-        takes.join(grid.select("stand", "px_bin", "pz_bin", "p_strike"), on=["stand", "px_bin", "pz_bin"], how="left")
+        takes.with_columns(p_strike.alias("p_strike"))
         .join(rv, on=["balls", "strikes"], how="left")
+        .with_columns(pl.col("strike_run_value").fill_null(0.0))
+        .with_columns(((pl.col("p_strike") >= shadow_lo) & (pl.col("p_strike") <= shadow_hi)).alias("in_shadow"))
         .with_columns(
-            pl.col("p_strike").fill_null(0.5),
-            pl.col("strike_run_value").fill_null(0.0),
-        )
-        .with_columns(
-            ((pl.col("is_strike") - pl.col("p_strike")) * pl.col("strike_run_value")).alias("framing_run"),
-            (pl.col("is_strike") - pl.col("p_strike")).alias("strike_gain"),
+            pl.when(pl.col("in_shadow"))
+            .then((pl.col("is_strike") - pl.col("p_strike")) * pl.col("strike_run_value"))
+            .otherwise(0.0)
+            .alias("framing_run"),
+            pl.when(pl.col("in_shadow"))
+            .then(pl.col("is_strike") - pl.col("p_strike"))
+            .otherwise(0.0)
+            .alias("strike_gain"),
         )
     )
     out = (
