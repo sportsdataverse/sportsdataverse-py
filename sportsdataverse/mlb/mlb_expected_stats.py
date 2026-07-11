@@ -9,7 +9,7 @@ never as a model input.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, Literal, Union, overload
+from typing import TYPE_CHECKING, Callable, Literal, Optional, Union, overload
 
 import polars as pl
 
@@ -181,7 +181,7 @@ def mlb_expected_stats(
     start_dt: str,
     end_dt: str,
     *,
-    puller: Callable[..., pl.DataFrame] = ...,
+    puller: Optional[Callable[..., pl.DataFrame]] = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 @overload
@@ -189,14 +189,14 @@ def mlb_expected_stats(
     start_dt: str,
     end_dt: str,
     *,
-    puller: Callable[..., pl.DataFrame] = ...,
+    puller: Optional[Callable[..., pl.DataFrame]] = ...,
     return_as_pandas: Literal[True],
 ) -> "pd.DataFrame": ...
 def mlb_expected_stats(
     start_dt: str,
     end_dt: str,
     *,
-    puller: Callable[..., pl.DataFrame] = mlb_statcast_search,
+    puller: Optional[Callable[..., pl.DataFrame]] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Per player-season xwOBA/xBA/xSLG from an on-the-fly EV x LA empirical grid.
@@ -241,6 +241,7 @@ def mlb_expected_stats(
 
         .. _baseballr: https://baseballr.sportsdataverse.org
     """
+    puller = puller or mlb_statcast_search
     pitches = puller(start_dt, end_dt, player_type="batter")
     if pitches is None or pitches.height == 0:
         empty = pl.DataFrame(schema=_EXPECTED_STATS_SCHEMA)

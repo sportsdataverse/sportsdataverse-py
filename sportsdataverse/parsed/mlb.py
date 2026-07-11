@@ -285,8 +285,11 @@ from sportsdataverse.mlb import load_mlb_rosters as load_mlb_rosters  # noqa: F4
 from sportsdataverse.mlb import load_mlb_schedule as load_mlb_schedule  # noqa: F401
 from sportsdataverse.mlb import load_mlb_team_boxscore as load_mlb_team_boxscore  # noqa: F401
 from sportsdataverse.mlb import mlb_attendance as mlb_attendance  # noqa: F401
+from sportsdataverse.mlb import mlb_batter_projection as mlb_batter_projection  # noqa: F401
 from sportsdataverse.mlb import mlb_divisions as mlb_divisions  # noqa: F401
 from sportsdataverse.mlb import mlb_draft_prospects as mlb_draft_prospects  # noqa: F401
+from sportsdataverse.mlb import mlb_expected_home_runs as mlb_expected_home_runs  # noqa: F401
+from sportsdataverse.mlb import mlb_expected_stats as mlb_expected_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_pbp_diff as mlb_pbp_diff  # noqa: F401
 from sportsdataverse.mlb import mlb_pbp_live as mlb_pbp_live  # noqa: F401
 from sportsdataverse.mlb import mlb_person_stats as mlb_person_stats  # noqa: F401
@@ -306,6 +309,7 @@ from sportsdataverse.mlb import mlb_statcast_search_wbc as mlb_statcast_search_w
 from sportsdataverse.mlb import mlb_stats as mlb_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_stats_leaders as mlb_stats_leaders  # noqa: F401
 from sportsdataverse.mlb import mlb_stats_streaks as mlb_stats_streaks  # noqa: F401
+from sportsdataverse.mlb import mlb_swing_decision as mlb_swing_decision  # noqa: F401
 from sportsdataverse.mlb import mlb_team_elo as mlb_team_elo  # noqa: F401
 from sportsdataverse.mlb import mlb_team_leaders as mlb_team_leaders  # noqa: F401
 from sportsdataverse.mlb import mlb_team_projection as mlb_team_projection  # noqa: F401
@@ -474,6 +478,7 @@ __all__ = [
     "mlb_attendance",
     "mlb_award_recipients",
     "mlb_awards",
+    "mlb_batter_projection",
     "mlb_boxscore",
     "mlb_conference",
     "mlb_conferences",
@@ -482,6 +487,8 @@ __all__ = [
     "mlb_draft",
     "mlb_draft_latest",
     "mlb_draft_prospects",
+    "mlb_expected_home_runs",
+    "mlb_expected_stats",
     "mlb_free_agents",
     "mlb_game_changes",
     "mlb_game_color",
@@ -575,6 +582,7 @@ __all__ = [
     "mlb_stats_leaders",
     "mlb_stats_metrics",
     "mlb_stats_streaks",
+    "mlb_swing_decision",
     "mlb_team",
     "mlb_team_affiliates",
     "mlb_team_alumni",

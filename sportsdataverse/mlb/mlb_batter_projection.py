@@ -23,9 +23,13 @@ _PROJECTION_SCHEMA = {"batter": pl.Int64, "age": pl.Int64, "proj_xwoba": pl.Floa
 
 _AGING_CURVE_SCHEMA = {"age": pl.Int64, "delta": pl.Float64, "curve": pl.Float64}
 
-#: Fitted defaults for the Marcel regression (dev/mlb_hitting/fit_marcel.py
-#: backtest, 2021-2023 -> 2024 xwOBA OOS sweep): 1200 phantom league-average
-#: PAs and the 2021-2023 committed-history league mean.
+#: Marcel regression strength (phantom league-average PAs). 1200 is a
+#: literature-typical starting point (comparable to published Marcel
+#: implementations' single-metric regression constants); ``dev/mlb_hitting/
+#: fit_marcel.py`` runs the real 2021-2024 full-season OOS backtest sweep
+#: that should confirm or replace this value -- see that script's output for
+#: the fitted number and observed MAE vs the naive last-season baseline
+#: before treating this default as final.
 DEFAULT_REGRESSION_PA = 1200.0
 DEFAULT_WEIGHTS: Tuple[float, float, float] = (5.0, 4.0, 3.0)
 

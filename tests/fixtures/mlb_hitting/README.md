@@ -74,11 +74,14 @@ two-step ordering note).
   coarsest combination clearing the `>= 0.95` gate on both stats
   simultaneously (0.9522 / 0.9546). See `GridConfig`'s docstring in
   `mlb_hitting_constants.py` for the full rationale.
-- **`REGRESSION_PA` / `league_xwoba` for Marcel are fitted via
-  `dev/mlb_hitting/fit_marcel.py`** (a real 2021-2024 full-season backtest,
-  not invented) -- see that script's module docstring and
-  `mlb_batter_projection.py`'s `DEFAULT_REGRESSION_PA` for the chosen value
-  and observed OOS error vs the naive last-season baseline.
+- **`DEFAULT_REGRESSION_PA` for Marcel is a literature-typical starting
+  value (1200 phantom PAs), pending confirmation by
+  `dev/mlb_hitting/fit_marcel.py`'s real 2021-2024 full-season OOS backtest
+  sweep (kicked off live; a genuinely long-running job -- 4 full-season
+  pulls -- that had not finished at capture time). Re-run that script and
+  update `mlb_batter_projection.py`'s `DEFAULT_REGRESSION_PA` docstring +
+  value once the sweep completes, per the "fitted constants cite a
+  committed script" rule.
 
 ## `batter` / `player_id` dtype note
 

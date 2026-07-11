@@ -177,7 +177,7 @@ def mlb_expected_home_runs(
     start_dt: str,
     end_dt: str,
     *,
-    puller: Callable[..., pl.DataFrame] = ...,
+    puller: Optional[Callable[..., pl.DataFrame]] = ...,
     park_factors: Optional[pl.DataFrame] = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
@@ -186,7 +186,7 @@ def mlb_expected_home_runs(
     start_dt: str,
     end_dt: str,
     *,
-    puller: Callable[..., pl.DataFrame] = ...,
+    puller: Optional[Callable[..., pl.DataFrame]] = ...,
     park_factors: Optional[pl.DataFrame] = ...,
     return_as_pandas: Literal[True],
 ) -> "pd.DataFrame": ...
@@ -194,7 +194,7 @@ def mlb_expected_home_runs(
     start_dt: str,
     end_dt: str,
     *,
-    puller: Callable[..., pl.DataFrame] = mlb_statcast_search,
+    puller: Optional[Callable[..., pl.DataFrame]] = None,
     park_factors: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
@@ -239,6 +239,7 @@ def mlb_expected_home_runs(
 
         .. _baseballr: https://baseballr.sportsdataverse.org
     """
+    puller = puller or mlb_statcast_search
     pitches = puller(start_dt, end_dt, player_type="batter")
     if pitches is None or pitches.height == 0:
         empty = pl.DataFrame(schema=_EXPECTED_HR_SCHEMA)
