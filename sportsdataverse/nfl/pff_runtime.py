@@ -32,14 +32,14 @@ from __future__ import annotations
 import json
 import os
 import time
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, Optional
 
 from sportsdataverse.dl_utils import download
 
 __all__ = ["_get", "pff_login"]
 
-Transport = Callable[[str, dict, dict, dict], tuple]
-Refresher = Callable[[str], Dict[str, str]]
+Transport = Callable[[str, dict, dict, dict], tuple[int, str]]
+Refresher = Callable[[str], dict[str, str]]
 
 _COOKIE_ENV = ("SDV_PY_PFF_PREMIUM_KEY", "SDV_PY_PFF_SESSION", "SDV_PY_PFF_COOKIES")
 
@@ -48,9 +48,10 @@ _STORAGE_STATE_ENV = "SDV_PY_PFF_STORAGE_STATE"
 _STORAGE_STATE_TTL_ENV = "SDV_PY_PFF_STORAGE_STATE_TTL"
 _DEFAULT_STORAGE_STATE_TTL = 300.0  # seconds; reuse a refreshed cookie set within this window
 _PFF_COOKIE_NAMES = ("_premium_key", "__session")
-# in-process cache: path -> (cookies, monotonic_expiry). Bounds browser launches to
-# one per TTL rather than one per request.
-_storage_state_cache: Dict[str, Tuple[Dict[str, str], float]] = {}
+# in-process cache: abspath(storage_state) -> (cookies, monotonic_expiry). Bounds browser
+# launches to one per TTL rather than one per request; capped (realistic cardinality is ~1).
+_STORAGE_STATE_CACHE_MAX = 8
+_storage_state_cache: dict[str, tuple[dict[str, str], float]] = {}
 
 
 def _pff_headers() -> Dict[str, str]:
@@ -183,14 +184,17 @@ def _cookies_from_storage_state(
     Returns:
         A cookie ``dict`` (empty when the refresh yields nothing).
     """
+    key = os.path.abspath(path)  # dedup logically-identical paths (cwd-relative vs absolute)
     now = _clock()
-    cached = _storage_state_cache.get(path)
+    cached = _storage_state_cache.get(key)
     if cached is not None and now < cached[1]:
         return dict(cached[0])
     refresh = refresher or _playwright_refresh
-    cookies = refresh(path) or {}
+    cookies = refresh(key) or {}
     if cookies:
-        _storage_state_cache[path] = (dict(cookies), now + _storage_state_ttl())
+        if key not in _storage_state_cache and len(_storage_state_cache) >= _STORAGE_STATE_CACHE_MAX:
+            _storage_state_cache.pop(next(iter(_storage_state_cache)))  # FIFO-evict the oldest
+        _storage_state_cache[key] = (dict(cookies), now + _storage_state_ttl())
     return cookies
 
 

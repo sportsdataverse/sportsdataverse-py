@@ -93,6 +93,16 @@ def test_no_auth_at_all_raises_runtimeerror():
         pff_runtime._resolve_cookies(None)
 
 
+def test_storage_state_cache_is_bounded():
+    # Many distinct (live, non-expired) storage_state paths must not grow the cache
+    # without bound -- it FIFO-evicts past the cap.
+    for i in range(pff_runtime._STORAGE_STATE_CACHE_MAX + 5):
+        pff_runtime._cookies_from_storage_state(
+            f"s{i}.json", refresher=lambda _p: {"_premium_key": "PK"}, _clock=lambda: 0.0
+        )
+    assert len(pff_runtime._storage_state_cache) <= pff_runtime._STORAGE_STATE_CACHE_MAX
+
+
 def test_missing_playwright_raises_clear_importerror(monkeypatch):
     # Force `from playwright.sync_api import sync_playwright` to raise ImportError,
     # regardless of whether playwright is installed in the test env.
