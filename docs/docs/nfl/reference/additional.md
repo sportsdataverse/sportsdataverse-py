@@ -6949,6 +6949,55 @@ teams = nfl_ngs_league_teams()
 teams.select(["teamId", "abbr", "fullName", "conferenceAbbr"]).head()
 ```
 
+### `nfl_ngs_man_zone_rates(seasons: 'Union[int, Sequence[int]]', *, return_as_pandas: 'bool' = False, _loader: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nfl_ngs_man_zone_rates}
+
+Descriptive man/zone coverage rates from NGS-charted labels — NOT a trained classifier.
+
+This is a group-by of the `defense_man_zone_type` /
+`defense_coverage_type` labels that ship in
+`sportsdataverse.nfl.load_nfl_pbp_participation` for charted
+seasons (2016-2023). A *trained* coverage classifier is data-blocked —
+see the module docstring's "Blocked (needs snap tracking)" section.
+Unlabelled plays are dropped before rates are computed; `2_MAN` and
+`PREVENT` calls stay in the `plays` denominator but have no
+dedicated rate column, so the `cover_*_rate` columns sum to slightly
+under 1 while `man_rate + zone_rate == 1` exactly.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, Sequence[int]]` |  | Season(s), charted 2016-2023. Seasons are loaded one at a time and concatenated `diagonal_relaxed` (the participation feed drifts schema across seasons). |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+| `_loader` | `Optional[Callable]` | `None` | Injectable loader for offline tests. |
+
+**Returns**
+
+One row per `(season, defteam)` with `plays` (labelled plays only), `man_rate`, `zone_rate` and `cover_0_rate` ... `cover_6_rate`. Un-charted seasons (all labels null, e.g. 2024+) return a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | NFL season (YYYY), derived from the nflverse game id. |
+| `defteam` | character | Defensive team abbreviation (the non-possession team of the game). |
+| `plays` | integer | Number of charted (labelled) defensive plays in the denominator; unlabelled plays are dropped. |
+| `man_rate` | double | Share of labelled plays charted as man coverage. man_rate + zone_rate == 1 exactly. |
+| `zone_rate` | double | Share of labelled plays charted as zone coverage. |
+| `cover_0_rate` | double | Share of labelled plays charted as COVER_0. 2_MAN and PREVENT calls stay in the denominator without a dedicated column, so the cover_*_rate columns sum to slightly under 1. |
+| `cover_1_rate` | double | Share of labelled plays charted as COVER_1. |
+| `cover_2_rate` | double | Share of labelled plays charted as COVER_2. |
+| `cover_3_rate` | double | Share of labelled plays charted as COVER_3. |
+| `cover_4_rate` | double | Share of labelled plays charted as COVER_4. |
+| `cover_5_rate` | double | Share of labelled plays charted as COVER_5. |
+| `cover_6_rate` | double | Share of labelled plays charted as COVER_6. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ngs_man_zone_rates
+df = nfl_ngs_man_zone_rates([2022])
+print(df.sort("man_rate", descending=True).head())
+```
+
 ### `nfl_ngs_microsite_chart(season: 'int' = 2024, season_type: 'str' = 'REG', week=None, chart_type=None, team_id=None, limit: 'int' = 100, offset: 'int' = 0, return_as_pandas: 'bool' = False)` {#nfl_ngs_microsite_chart}
 
 NGS microsite chart catalogue -- one row per rendered player chart image.
@@ -7132,6 +7181,119 @@ lead = nfl_ngs_leaders(category="speed", season=2024, season_type="REG")
 gid, pid = lead["play_gameId"][0], lead["play_playId"][0]
 hl = nfl_ngs_play_is_highlight(game_id=gid, play_id=pid)
 hl.select(["gameId", "playId", "isHighlight"]).head()
+```
+
+### `nfl_ngs_ryoe(seasons: 'Union[int, Sequence[int]]', *, min_attempts: 'int' = 20, return_as_pandas: 'bool' = False, _loader: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nfl_ngs_ryoe}
+
+Rush yards over expected per rusher-season, stabilised with EB shrinkage.
+
+`ryoe_per_att_raw` is the NGS-shipped
+`rush_yards_over_expected_per_att` passed through unchanged (the NGS
+tracking-model residual); `ryoe_total` is the season total
+`rush_yards_over_expected`. `ryoe_per_att_shrunk` applies per-season
+Efron-Morris empirical-Bayes shrinkage toward the attempt-weighted league
+mean, weighted by `rush_attempts`. `pct_stacked_box`
+(`percent_attempts_gte_eight_defenders`) is reported as a context
+covariate — v1 does not adjust on it. The prior is fit at call time on
+rows with `rush_attempts >= min_attempts` — no bundled artifact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, Sequence[int]]` |  | Season(s) to compute, 2016+. |
+| `min_attempts` | `int` | `20` | Qualification threshold for the prior fit and for receiving a `ryoe_rank`. Defaults to `sportsdataverse.nfl.nfl_ngs_constants.MIN_ATTEMPTS`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+| `_loader` | `Optional[Callable]` | `None` | Injectable loader for offline tests. |
+
+**Returns**
+
+One row per `(season, player_gsis_id)` with raw + shrunk RYOE/attempt, `reliability` in [0, 1], and a dense descending `ryoe_rank` over qualified rows (null for unqualified rows). Empty input returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | NFL season (YYYY). |
+| `player_gsis_id` | character | Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8. |
+| `player_display_name` | character | Player display name as shipped by NGS. |
+| `team_abbr` | character | Team abbreviation. |
+| `position` | character | Player position (from NGS player_position). |
+| `rush_attempts` | double | Season rush attempts — the shrinkage weight. |
+| `rush_yards` | double | Season rushing yards. |
+| `expected_rush_yards` | double | NGS tracking-model expected rushing yards for the season. |
+| `ryoe_total` | double | Season rush yards over expected (NGS rush_yards_over_expected, passed through). |
+| `ryoe_per_att_raw` | double | NGS rush_yards_over_expected_per_att passed through unchanged — the tracking-model residual per attempt. |
+| `ryoe_per_att_shrunk` | double | ryoe_per_att_raw after per-season empirical-Bayes shrinkage toward the attempt-weighted league mean (sampling variance identified from weekly rows). |
+| `pct_stacked_box` | double | Percent of attempts against 8+ defenders in the box (NGS percent_attempts_gte_eight_defenders) — reported as a context covariate, not adjusted on. |
+| `reliability` | double | Shrinkage reliability tau2 / (tau2 + sigma2 / rush_attempts) in [0, 1]; the fraction of the raw deviation retained. |
+| `ryoe_rank` | integer | Dense descending rank of ryoe_per_att_shrunk within season over qualified rows; null when rush_attempts < min_attempts. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ngs_ryoe
+df = nfl_ngs_ryoe([2023])
+print(df.sort("ryoe_rank").head())
+
+# Pandas output
+
+df_pd = nfl_ngs_ryoe(2023, return_as_pandas=True)
+```
+
+### `nfl_ngs_separation_oe(seasons: 'Union[int, Sequence[int]]', *, min_targets: 'int' = 20, return_as_pandas: 'bool' = False, _loader: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nfl_ngs_separation_oe}
+
+Separation over a built context expectation, per receiver-season.
+
+Unlike YAC-OE and RYOE, NGS ships no expected-separation field, so this
+model BUILDS one: a per-season weighted ridge
+(`sportsdataverse.nfl.nfl_ngs_constants.expected_separation_ridge`)
+of `avg_separation` on `avg_cushion`, `avg_intended_air_yards` and
+a position one-hot, weighted by `targets`. `sep_oe_raw` is the
+residual — a CONTEXT residual (role/scheme proxies), not a
+tracking-model expectation; treat it as descriptive, not causal.
+`sep_oe_shrunk` applies the same per-season empirical-Bayes shrinkage
+as the sibling models, weighted by `targets`. All parameters are fit
+from the requested seasons at call time — no bundled artifact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, Sequence[int]]` |  | Season(s) to compute, 2016+. |
+| `min_targets` | `int` | `20` | Qualification threshold for the shrinkage prior and for receiving a `sep_oe_rank`. Defaults to `sportsdataverse.nfl.nfl_ngs_constants.MIN_TARGETS`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+| `_loader` | `Optional[Callable]` | `None` | Injectable loader for offline tests. |
+
+**Returns**
+
+One row per `(season, player_gsis_id)` with the built `expected_separation`, raw + shrunk separation-over-expected, `reliability` in [0, 1], and a dense descending `sep_oe_rank` over qualified rows. Rows with null separation/cushion/air-yards inputs are dropped before the fit. Empty input returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | NFL season (YYYY). |
+| `player_gsis_id` | character | Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8. |
+| `player_display_name` | character | Player display name as shipped by NGS. |
+| `team_abbr` | character | Team abbreviation. |
+| `position` | character | Player position (from NGS player_position); one-hot feature in the expectation ridge. |
+| `targets` | double | Season target count — the ridge weight and the shrinkage weight. |
+| `avg_cushion` | double | Average defender cushion at snap, yards (ridge feature). |
+| `avg_separation` | double | Average separation from the nearest defender at catch/incompletion, yards. |
+| `avg_intended_air_yards` | double | Average intended air yards on targets (ridge feature). |
+| `expected_separation` | double | Built per-season weighted-ridge expectation of avg_separation from cushion, intended air yards and position — a CONTEXT expectation, not a tracking model. |
+| `sep_oe_raw` | double | avg_separation minus expected_separation (context residual). |
+| `sep_oe_shrunk` | double | sep_oe_raw after per-season empirical-Bayes shrinkage toward the target-weighted league mean (sampling variance identified from weekly rows). |
+| `reliability` | double | Shrinkage reliability tau2 / (tau2 + sigma2 / targets) in [0, 1]; the fraction of the raw deviation retained. |
+| `sep_oe_rank` | integer | Dense descending rank of sep_oe_shrunk within season over qualified rows; null when targets < min_targets. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ngs_separation_oe
+df = nfl_ngs_separation_oe([2023])
+print(df.sort("sep_oe_rank").head())
+
+# Pandas output
+
+df_pd = nfl_ngs_separation_oe(2023, return_as_pandas=True)
 ```
 
 ### `nfl_ngs_statboard(stat_type: 'str' = 'passing', season: 'int' = 2024, season_type: 'str' = 'REG', week: 'Optional[int]' = None, return_as_pandas: 'bool' = False)` {#nfl_ngs_statboard}
@@ -7363,6 +7525,58 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders
 bd = nfl_ngs_statboard_leaders(season=2024, season_type="REG")
 bd["category"].unique().to_list()
+```
+
+### `nfl_ngs_yac_oe(seasons: 'Union[int, Sequence[int]]', *, min_receptions: 'int' = 10, return_as_pandas: 'bool' = False, _loader: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nfl_ngs_yac_oe}
+
+YAC over expected per receiver-season, stabilised with EB shrinkage.
+
+`yac_oe_raw` is the NGS-shipped `avg_yac_above_expectation` passed
+through unchanged (per-reception yards after catch minus the NGS
+tracking-model expectation). `yac_oe_shrunk` applies per-season
+Efron-Morris empirical-Bayes shrinkage toward the reception-weighted
+league mean, weighted by `receptions`, so small-sample extremes are
+pulled in. The shrinkage prior is fit at call time on rows with
+`receptions >= min_receptions` — no bundled artifact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, Sequence[int]]` |  | Season(s) to compute, 2016+. |
+| `min_receptions` | `int` | `10` | Qualification threshold for the prior fit and for receiving a `yac_oe_rank`. Defaults to `sportsdataverse.nfl.nfl_ngs_constants.MIN_RECEPTIONS`. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame. |
+| `_loader` | `Optional[Callable]` | `None` | Injectable loader for offline tests. |
+
+**Returns**
+
+One row per `(season, player_gsis_id)` with raw + shrunk YAC-OE, `reliability` in [0, 1], and a dense descending `yac_oe_rank` over qualified rows (null for unqualified rows). Empty input returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | NFL season (YYYY). |
+| `player_gsis_id` | character | Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8. |
+| `player_display_name` | character | Player display name as shipped by NGS. |
+| `team_abbr` | character | Team abbreviation. |
+| `position` | character | Player position (from NGS player_position). |
+| `receptions` | double | Season reception count — the shrinkage weight. |
+| `avg_yac` | double | Average yards after catch per reception. |
+| `avg_expected_yac` | double | NGS tracking-model expected YAC per reception. |
+| `yac_oe_raw` | double | NGS avg_yac_above_expectation passed through unchanged — per-reception YAC minus the tracking-model expectation. |
+| `yac_oe_shrunk` | double | yac_oe_raw after per-season empirical-Bayes shrinkage toward the reception-weighted league mean (sampling variance identified from weekly rows). |
+| `reliability` | double | Shrinkage reliability tau2 / (tau2 + sigma2 / receptions) in [0, 1]; the fraction of the raw deviation retained. |
+| `yac_oe_rank` | integer | Dense descending rank of yac_oe_shrunk within season over qualified rows; null when receptions < min_receptions. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import nfl_ngs_yac_oe
+df = nfl_ngs_yac_oe([2023])
+print(df.sort("yac_oe_rank").head())
+
+# Pandas output
+
+df_pd = nfl_ngs_yac_oe(2023, return_as_pandas=True)
 ```
 
 ### `nfl_play_call_probabilities(pbp: 'pl.DataFrame', participation: 'Optional[pl.DataFrame]' = None, *, models_dir: 'Optional[str]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#nfl_play_call_probabilities}

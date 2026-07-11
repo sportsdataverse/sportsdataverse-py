@@ -3644,6 +3644,19 @@ nfl_ngs_league_teams:
   teamType: Classification of the team type within the NFL system (e.g., 'NFL' for active franchises).
   ticketPhoneNumber: Phone number for ticket sales inquiries for this team.
   yearFound: Year the franchise was founded.
+nfl_ngs_man_zone_rates:
+  season: NFL season (YYYY), derived from the nflverse game id.
+  defteam: Defensive team abbreviation (the non-possession team of the game).
+  plays: Number of charted (labelled) defensive plays in the denominator; unlabelled plays are dropped.
+  man_rate: Share of labelled plays charted as man coverage. man_rate + zone_rate == 1 exactly.
+  zone_rate: Share of labelled plays charted as zone coverage.
+  cover_0_rate: Share of labelled plays charted as COVER_0. 2_MAN and PREVENT calls stay in the denominator without a dedicated column, so the cover_*_rate columns sum to slightly under 1.
+  cover_1_rate: Share of labelled plays charted as COVER_1.
+  cover_2_rate: Share of labelled plays charted as COVER_2.
+  cover_3_rate: Share of labelled plays charted as COVER_3.
+  cover_4_rate: Share of labelled plays charted as COVER_4.
+  cover_5_rate: Share of labelled plays charted as COVER_5.
+  cover_6_rate: Share of labelled plays charted as COVER_6.
 nfl_ngs_microsite_chart:
   completionPercentage: Completion percentage for the quarterback featured on the NGS microsite chart.
   esbId: Elias Sports Bureau identifier for the player featured on the NGS microsite chart.
@@ -3718,6 +3731,36 @@ nfl_ngs_play_is_highlight:
   highlight_teamId: NFL Shield team identifier for the team featured in the highlight clip.
   highlight_week: Week number within the season during which the highlighted play occurred.
   isHighlight: Boolean flag indicating whether this play record has been designated as a highlight by the NFL Shield API.
+nfl_ngs_ryoe:
+  season: NFL season (YYYY).
+  player_gsis_id: Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8.
+  player_display_name: Player display name as shipped by NGS.
+  team_abbr: Team abbreviation.
+  position: Player position (from NGS player_position).
+  rush_attempts: Season rush attempts — the shrinkage weight.
+  rush_yards: Season rushing yards.
+  expected_rush_yards: NGS tracking-model expected rushing yards for the season.
+  ryoe_total: Season rush yards over expected (NGS rush_yards_over_expected, passed through).
+  ryoe_per_att_raw: NGS rush_yards_over_expected_per_att passed through unchanged — the tracking-model residual per attempt.
+  ryoe_per_att_shrunk: ryoe_per_att_raw after per-season empirical-Bayes shrinkage toward the attempt-weighted league mean (sampling variance identified from weekly rows).
+  pct_stacked_box: Percent of attempts against 8+ defenders in the box (NGS percent_attempts_gte_eight_defenders) — reported as a context covariate, not adjusted on.
+  reliability: Shrinkage reliability tau2 / (tau2 + sigma2 / rush_attempts) in [0, 1]; the fraction of the raw deviation retained.
+  ryoe_rank: Dense descending rank of ryoe_per_att_shrunk within season over qualified rows; null when rush_attempts < min_attempts.
+nfl_ngs_separation_oe:
+  season: NFL season (YYYY).
+  player_gsis_id: Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8.
+  player_display_name: Player display name as shipped by NGS.
+  team_abbr: Team abbreviation.
+  position: Player position (from NGS player_position); one-hot feature in the expectation ridge.
+  targets: Season target count — the ridge weight and the shrinkage weight.
+  avg_cushion: Average defender cushion at snap, yards (ridge feature).
+  avg_separation: Average separation from the nearest defender at catch/incompletion, yards.
+  avg_intended_air_yards: Average intended air yards on targets (ridge feature).
+  expected_separation: Built per-season weighted-ridge expectation of avg_separation from cushion, intended air yards and position — a CONTEXT expectation, not a tracking model.
+  sep_oe_raw: avg_separation minus expected_separation (context residual).
+  sep_oe_shrunk: sep_oe_raw after per-season empirical-Bayes shrinkage toward the target-weighted league mean (sampling variance identified from weekly rows).
+  reliability: Shrinkage reliability tau2 / (tau2 + sigma2 / targets) in [0, 1]; the fraction of the raw deviation retained.
+  sep_oe_rank: Dense descending rank of sep_oe_shrunk within season over qualified rows; null when targets < min_targets.
 nfl_ngs_statboard:
   avgAirDistance: Average air distance in yards on all pass attempts, measuring how far the ball travels through the air regardless
     of direction.
@@ -3884,6 +3927,19 @@ nfl_ngs_statboard_leaders:
   rushYardsOverExpectedPerAtt: Average rushing yards over expected per attempt (RYOE/attempt), from NFL Next Gen Stats.
   seasonType: Phase of the season for this record (e.g., 'REG' for regular season, 'POST' for playoffs).
   teamId: NFL Shield team identifier for the team associated with this leader statistic.
+nfl_ngs_yac_oe:
+  season: NFL season (YYYY).
+  player_gsis_id: Player GSIS identifier (nflverse id, e.g. "00-0036223"), pinned Utf8.
+  player_display_name: Player display name as shipped by NGS.
+  team_abbr: Team abbreviation.
+  position: Player position (from NGS player_position).
+  receptions: Season reception count — the shrinkage weight.
+  avg_yac: Average yards after catch per reception.
+  avg_expected_yac: NGS tracking-model expected YAC per reception.
+  yac_oe_raw: NGS avg_yac_above_expectation passed through unchanged — per-reception YAC minus the tracking-model expectation.
+  yac_oe_shrunk: yac_oe_raw after per-season empirical-Bayes shrinkage toward the reception-weighted league mean (sampling variance identified from weekly rows).
+  reliability: Shrinkage reliability tau2 / (tau2 + sigma2 / receptions) in [0, 1]; the fraction of the raw deviation retained.
+  yac_oe_rank: Dense descending rank of yac_oe_shrunk within season over qualified rows; null when receptions < min_receptions.
 nfl_player_projection:
   aging_mult: Applied aging multiplier - the damped, clamped ratio aging_curve(proj_age) / aging_curve(current_age).
   player_id: nflverse gsis player id (character join key).
