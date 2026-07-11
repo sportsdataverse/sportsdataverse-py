@@ -322,6 +322,8 @@ files = [
     "sportsdataverse/nfl/nfl_gamescript.py",
     "sportsdataverse/nfl/nfl_kicker_rating.py",
     "sportsdataverse/nfl/nfl_line_grades.py",
+    "sportsdataverse/nfl/nfl_ngs_constants.py",
+    "sportsdataverse/nfl/nfl_ngs_tracking.py",
     "sportsdataverse/nfl/nfl_playcall.py",
     "sportsdataverse/nfl/nfl_projection.py",
     "sportsdataverse/nfl/nfl_projection_constants.py",
