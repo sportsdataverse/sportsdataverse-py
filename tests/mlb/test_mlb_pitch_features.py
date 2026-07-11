@@ -150,3 +150,14 @@ def test_add_sequence_features_empty():
     empty = add_sequence_features(pitch_features(pl.DataFrame()))
     assert empty.height == 0
     assert "times_through_order" in empty.columns
+
+
+def test_real_fixture_shape_gate():
+    """Task 1.3 gate: real Savant fixture (2024-06-15, ~4,145 pitches) must survive
+    the full substrate with no exception, matching row count, and sane null rates."""
+    fixture = pl.read_parquet("tests/fixtures/mlb_pitching/pitches_2024-06-15.parquet")
+    out = add_sequence_features(pitch_features(fixture))
+    assert out.height == fixture.height
+    assert out.filter(pl.col("plate_z_norm").is_null()).height / out.height < 0.05
+    assert set(out["times_through_order"].unique().to_list()) <= {1, 2, 3}
+    assert out.filter(pl.col("run_value").is_not_null()).height / out.height > 0.9
