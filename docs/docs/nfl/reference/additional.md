@@ -6127,7 +6127,7 @@ via the returned `teams` frame.
 
 **Returns**
 
-teams, "games": games}`` with updated ELO ratings and filled results.
+`{"teams": teams, "games": games}` with updated ELO ratings and filled results.
 
 | col_name | type | description |
 |---|---|---|

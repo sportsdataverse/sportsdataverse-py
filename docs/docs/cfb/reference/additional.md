@@ -657,7 +657,7 @@ Load the bundled EP-by-yardline curve (no network, no first-use download).
 
 **Returns**
 
-Int64 (1..99), ep: Float64``.
+`yardline_own: Int64 (1..99), ep: Float64`.
 
 | col_name | type | description |
 |---|---|---|
@@ -1260,7 +1260,7 @@ simplification).
 
 **Returns**
 
-..., "games": ...}`` — updated frames, mirroring nflseedR's returned list.
+`{"teams": ..., "games": ...}` — updated frames, mirroring nflseedR's returned list.
 
 | col_name | type | description |
 |---|---|---|
@@ -1301,7 +1301,7 @@ year's eligible players.
 
 **Returns**
 
-..., "teams": ...}` — players: `draft_year` (Int64), `team_id` / `player_id` / `player_name` (Utf8), `draft_prob` (Float64); teams: `draft_year`, `team_id`, `proj_draft_picks`` (Float64, the sum of member draft probabilities). Zero-row (typed) frames when no data is available.
+`{"players": ..., "teams": ...}` — players: `draft_year` (Int64), `team_id` / `player_id` / `player_name` (Utf8), `draft_prob` (Float64); teams: `draft_year`, `team_id`, `proj_draft_picks` (Float64, the sum of member draft probabilities). Zero-row (typed) frames when no data is available.
 
 **Example**
 
@@ -2294,7 +2294,7 @@ interpolated onto the full 1..99 grid.
 
 **Returns**
 
-Int64 (1..99), ep: Float64`` -- monotone non-decreasing. Empty input returns a zero-row frame.
+`yardline_own: Int64 (1..99), ep: Float64` -- monotone non-decreasing. Empty input returns a zero-row frame.
 
 | col_name | type | description |
 |---|---|---|

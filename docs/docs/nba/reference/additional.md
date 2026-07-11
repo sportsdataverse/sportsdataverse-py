@@ -1685,7 +1685,7 @@ aggregates `Σfgm/Σfga` across players within each bucket.
 
 **Returns**
 
-frame, "shot_clock": frame}` each with rows per `bucket` (`bucket, fga, fgm, fg_pct``). Missing result sets return the zero-row schema.
+`{"defender": frame, "shot_clock": frame}` each with rows per `bucket` (`bucket, fga, fgm, fg_pct`). Missing result sets return the zero-row schema.
 
 **Example**
 
@@ -1840,7 +1840,7 @@ Fetch per-player and per-team game logs for a season (bulk, one call each).
 
 **Returns**
 
-<per-player-game logs>, "team": <per-team-game logs>}`` as snake-cased polars frames.
+`{"player": <per-player-game logs>, "team": <per-team-game logs>}` as snake-cased polars frames.
 
 **Example**
 
@@ -1867,7 +1867,7 @@ Faithful BPM 2.0 per player, at season or single-game granularity.
 
 **Returns**
 
-frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min). `"game"`: the same columns prefixed with `game_id` (Utf8), one row per (game_id, player_id). Empty (that schema) input -> zero-row frame with the same schema; never raises on empty.
+`"season"`: frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min). `"game"`: the same columns prefixed with `game_id` (Utf8), one row per (game_id, player_id). Empty (that schema) input -> zero-row frame with the same schema; never raises on empty.
 
 **Example**
 

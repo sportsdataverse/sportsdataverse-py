@@ -480,7 +480,7 @@ aggregates `Σfgm/Σfga` across players within each bucket.
 
 **Returns**
 
-frame, "shot_clock": frame}` each with rows per `bucket` (`bucket, fga, fgm, fg_pct``). Missing result sets return the zero-row schema.
+`{"defender": frame, "shot_clock": frame}` each with rows per `bucket` (`bucket, fga, fgm, fg_pct`). Missing result sets return the zero-row schema.
 
 **Example**
 

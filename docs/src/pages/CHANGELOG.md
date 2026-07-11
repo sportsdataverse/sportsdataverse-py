@@ -177,6 +177,15 @@
   `load_nfl_ff_rankings`) retry with exponential backoff on transient
   upstream errors (HTTP 429/5xx) instead of failing on the first hit — the
   raw-GitHub host rate-limits parallel CI runners.
+- fix(codegen): reference-doc **Returns** prose no longer mangles docstrings
+  whose return description is an inline `col: dtype, ...` code span.
+  `docstring_parser` splits a Google-style `Returns:` body on the first colon,
+  so a colon *inside* the span was mistaken for the type/description separator —
+  dropping the leading column/key and leaving a stray unbalanced backtick. The
+  renderer now recombines the mis-split fragment (only when the parsed type
+  contains a backtick, so legit Google types like `pl.DataFrame` are untouched),
+  fixing ~15 rendered Returns across the cfb/mbb/wbb/nba/nfl/mlb/wnba reference
+  pages.
 - fix(dl_utils): `download()` now retries **transient status codes**
   (403/408/429/500/502/503/504) with the same `Retry-After`-aware backoff it
   already used for connection failures — previously a 429/403/5xx came back as

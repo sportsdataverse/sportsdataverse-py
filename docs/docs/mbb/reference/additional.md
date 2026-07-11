@@ -3113,7 +3113,7 @@ see `PLAN-phase2.md`'s self-review notes.
 
 **Returns**
 
-float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}`` -- keys kept TS-verbatim (see module docstring's naming-convention note).
+`{"Adj_ORtg": float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}` -- keys kept TS-verbatim (see module docstring's naming-convention note).
 
 ### `build_strength_adjusted_stats(teams: 'Sequence[TeamDetail]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'StrengthAdjustedResult'` {#build_strength_adjusted_stats}
 
@@ -4145,7 +4145,7 @@ contribute. An empty accumulator yields `0`.
 
 **Returns**
 
-{"league_off": float, "league_def": float}}``.
+`{field: {"league_off": float, "league_def": float}}`.
 
 **Example**
 
@@ -4179,7 +4179,7 @@ skipped.
 
 **Returns**
 
-{"avg_opp_def": float, "avg_opp_off": float}}``.
+`{field: {"avg_opp_def": float, "avg_opp_off": float}}`.
 
 **Example**
 
@@ -4803,7 +4803,7 @@ Off/def stat-key names for a field (`fieldKeys`, `ts:77-79`).
 
 **Returns**
 
-f"off_{field}", "def": f"def_{field}"}``.
+`{"off": f"off_{field}", "def": f"def_{field}"}`.
 
 **Example**
 
@@ -5595,7 +5595,7 @@ scoped to one team's games; empty -> `0`.
 
 **Returns**
 
-float, "def": float}``.
+`{"off": float, "def": float}`.
 
 **Example**
 
@@ -6255,7 +6255,7 @@ input list) is deleted as a side effect while building the roster --
 
 **Returns**
 
-{code: id}, "players": [...], "error_code": ...}`. Each entry in `players` is `{"playerId", "playerCode", "teammates", "on", "off", "replacement"}` -- `on`/`off` are finished `LineupStatSet` averages (or, for a player who's always ON, an all-zero `off`); `replacement` is `None` unless `inc_replacement=True``.
+`{"playerMap": {code: id}, "players": [...], "error_code": ...}`. Each entry in `players` is `{"playerId", "playerCode", "teammates", "on", "off", "replacement"}` -- `on`/`off` are finished `LineupStatSet` averages (or, for a player who's always ON, an all-zero `off`); `replacement` is `None` unless `inc_replacement=True`.
 
 **Example**
 
@@ -8324,7 +8324,7 @@ consecutive seasons.
 
 **Returns**
 
-Utf8, from_team_id:Utf8, to_team_id:Utf8, from_season:Int64, to_season:Int64`` -- a player transferring twice appears twice.
+`player_id: Utf8, from_team_id:Utf8, to_team_id:Utf8, from_season:Int64, to_season:Int64` -- a player transferring twice appears twice.
 
 **Example**
 

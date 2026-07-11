@@ -2445,6 +2445,28 @@ def _normalize_rst(text: str) -> str:
     return out
 
 
+def _returns_prose(ds_returns) -> str:
+    """Reconstruct Returns prose from a ``docstring_parser`` DocstringReturns.
+
+    ``docstring_parser`` splits a Google-style ``Returns:`` body on the first
+    colon into ``(type_name, description)``. When the body is an inline code
+    span like ``col: dtype, ...``, the colon INSIDE the span is mistaken for
+    the type/description separator — leaving ``type_name`` a dangling ``col``
+    fragment (with an unbalanced backtick) and ``description`` the remainder,
+    which :func:`_normalize_rst` then cannot pair (emitting a stray trailing
+    ``\\`\\``). Legit Google return types (``pl.DataFrame``, ``dict[str, X]``)
+    never contain a backtick, so recombine ONLY in that mis-split case, then
+    normalise reST -> markdown. Empty / ``None`` input yields ``""``.
+    """
+    if ds_returns is None or not getattr(ds_returns, "description", None):
+        return ""
+    desc = ds_returns.description
+    tname = (getattr(ds_returns, "type_name", None) or "").strip()
+    if "`" in tname:
+        desc = f"{tname}: {desc}"
+    return _normalize_rst(" ".join(desc.split()))
+
+
 def _clean_long(text: str) -> str:
     """Defensive truncation of a docstring's long-description prose.
 
@@ -2832,7 +2854,7 @@ def _doc_view(obj) -> dict:
     long = _clean_long(ds_long or "")
     returns = ""
     if ds_returns is not None and ds_returns.description:
-        returns = _normalize_rst(" ".join(ds_returns.description.split()))
+        returns = _returns_prose(ds_returns)
     elif fb["returns"]:
         returns = fb["returns"]
     raw_example = ds_examples[0].description if ds_examples and ds_examples[0].description else ""
