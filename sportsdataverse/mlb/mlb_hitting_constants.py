@@ -30,19 +30,29 @@ from sportsdataverse.mlb.mlb_statcast_extra import mlb_statcast_search
 class GridConfig:
     """EV x LA x spray binning configuration for the hitting-spine grids.
 
-    These are the *seeded* starting widths; Task 1.4's sweep
-    (``dev/mlb_hitting/fit_grid.py``) confirms or revises them against the
-    Savant concurrent-validity oracle and records the chosen values here.
+    ``ev_width=6.0``, ``la_width=5.0``, ``min_n=10`` are FITTED, not seeded --
+    ``dev/mlb_hitting/fit_grid.py`` swept EV width in {2,3,4,5,6,7,8},
+    LA width in {2,3,4,5,6,7}, and ``min_n`` in {5,8,10,12,15,20,25} against
+    the per-batted-ball Savant concurrent-validity oracle
+    (``estimated_woba_using_speedangle`` / ``estimated_ba_using_speedangle``)
+    on the committed ``statcast_sample_2024.parquet``. The seeded 2mph/2deg/
+    min_n=25 combination only reached Spearman 0.805 (woba) / 0.838 (ba) --
+    too many batted balls fell into cells with < 25 samples over a 3-week
+    window, diluting the prediction to the launch-angle-marginal fallback.
+    ``(6.0, 5.0, 10)`` was the coarsest/lowest-min_n combination that cleared
+    the ``>= 0.95`` gate on both stats simultaneously: Spearman 0.9522 (woba,
+    MAE 0.0757) / 0.9546 (ba, MAE 0.0599). See the sweep script for the full
+    grid search output.
     """
 
-    ev_width: float = 2.0
+    ev_width: float = 6.0
     ev_min: float = 20.0
     ev_max: float = 120.0
-    la_width: float = 2.0
+    la_width: float = 5.0
     la_min: float = -90.0
     la_max: float = 90.0
     spray_width: float = 5.0
-    min_n: int = 25
+    min_n: int = 10
 
 
 GRID = GridConfig()
@@ -67,6 +77,44 @@ SWING_DESCRIPTIONS: set[str] = {
 }
 #: ``description`` values that count as a take decision (Task 2.1).
 TAKE_DESCRIPTIONS: set[str] = {"ball", "called_strike", "blocked_ball", "hit_by_pitch", "pitchout"}
+
+#: Static Statcast team-abbreviation -> MLBAM ``team_id`` crosswalk (identity
+#: reference data, not a fitted constant -- confirmed against the captured
+#: ``park_factors_2024.parquet`` fixture's ``main_team_id`` column). Needed
+#: because Savant's park-factors leaderboard keys on the numeric MLBAM team
+#: id, not the ``home_team`` abbreviation ``mlb_statcast_search`` ships.
+MLB_TEAM_ID_BY_ABBREV: dict[str, int] = {
+    "LAA": 108,
+    "AZ": 109,
+    "BAL": 110,
+    "BOS": 111,
+    "CHC": 112,
+    "CIN": 113,
+    "CLE": 114,
+    "COL": 115,
+    "DET": 116,
+    "HOU": 117,
+    "KC": 118,
+    "LAD": 119,
+    "WSH": 120,
+    "NYM": 121,
+    "ATH": 133,
+    "PIT": 134,
+    "SD": 135,
+    "SEA": 136,
+    "SF": 137,
+    "STL": 138,
+    "TB": 139,
+    "TEX": 140,
+    "TOR": 141,
+    "MIN": 142,
+    "PHI": 143,
+    "ATL": 144,
+    "CWS": 145,
+    "MIA": 146,
+    "NYY": 147,
+    "MIL": 158,
+}
 
 
 def spray_angle(hc_x: pl.Expr, hc_y: pl.Expr, stand: pl.Expr) -> pl.Expr:
