@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING, Literal, Union, overload
 import numpy as np
 import polars as pl
 
+from sportsdataverse._common.ratings import iterative_opponent_adjust
 from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
 from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split, get_constants
 
@@ -158,48 +159,39 @@ _ADJ_SCHEMA = {
 def _adjust_one_season(
     sub: pl.DataFrame, season: int, hfa: float, avg: float, max_iter: int, tol: float
 ) -> pl.DataFrame:
-    """Fixed-point opponent adjustment for one season's game-efficiency rows."""
-    teams = sub["team_id"].unique(maintain_order=True).to_list()
-    index = {t: i for i, t in enumerate(teams)}
-    n = len(teams)
-    ti = np.array([index[t] for t in sub["team_id"].to_list()], dtype=np.int64)
-    oi = np.array([index[t] for t in sub["opp_team_id"].to_list()], dtype=np.int64)
-    off = sub["off_rtg"].to_numpy().astype(float)
-    dfn = sub["def_rtg"].to_numpy().astype(float)
-    is_home = sub["is_home"].to_numpy()
-    neutral = sub["neutral_site"].to_numpy()
+    """Fixed-point opponent adjustment for one season's game-efficiency rows.
 
-    half = hfa / 2.0
-    loc_o = np.where(neutral, 0.0, np.where(is_home, half, -half))
-    loc_d = np.where(neutral, 0.0, np.where(is_home, -half, half))
-
-    counts: np.ndarray = np.bincount(ti, minlength=n).astype(float)
-    raw_o = np.bincount(ti, weights=off, minlength=n) / counts
-    raw_d = np.bincount(ti, weights=dfn, minlength=n) / counts
-
-    adj_o, adj_d = raw_o.copy(), raw_d.copy()
-    for _ in range(max_iter):
-        contrib_o = off - (adj_d[oi] - avg) - loc_o
-        contrib_d = dfn - (adj_o[oi] - avg) - loc_d
-        new_o = np.bincount(ti, weights=contrib_o, minlength=n) / counts
-        new_d = np.bincount(ti, weights=contrib_d, minlength=n) / counts
-        delta = max(float(np.abs(new_o - adj_o).max()), float(np.abs(new_d - adj_d).max()))
-        adj_o, adj_d = new_o, new_d
-        if delta < tol:
-            break
-
-    return pl.DataFrame(
-        {
-            "season": [season] * n,
-            "team_id": teams,
-            "adj_off_rtg": adj_o,
-            "adj_def_rtg": adj_d,
-            "adj_net_rtg": adj_o - adj_d,
-            "raw_off_rtg": raw_o,
-            "raw_def_rtg": raw_d,
-            "games": counts.astype(np.int64),
-        },
-        schema=_ADJ_SCHEMA,
+    Thin wrapper (T7.2): the fixed-point core moved verbatim to
+    :func:`sportsdataverse._common.ratings.iterative_opponent_adjust`
+    (``baseline=avg`` reproduces this module's fitted-constant average, as
+    opposed to MBB's data-derived mean); only the column rename to this
+    module's public names stays local.
+    """
+    core = iterative_opponent_adjust(
+        sub,
+        team_col="team_id",
+        opp_col="opp_team_id",
+        off_col="off_rtg",
+        def_col="def_rtg",
+        home_col="is_home",
+        neutral_col="neutral_site",
+        hfa=hfa,
+        baseline=avg,
+        max_iter=max_iter,
+        tol=tol,
+    )
+    return (
+        core.rename(
+            {
+                "adj_off": "adj_off_rtg",
+                "adj_def": "adj_def_rtg",
+                "adj_net": "adj_net_rtg",
+                "raw_off": "raw_off_rtg",
+                "raw_def": "raw_def_rtg",
+            }
+        )
+        .with_columns(pl.lit(season, dtype=pl.Int64).alias("season"))
+        .select("season", "team_id", "adj_off_rtg", "adj_def_rtg", "adj_net_rtg", "raw_off_rtg", "raw_def_rtg", "games")
     )
 
 

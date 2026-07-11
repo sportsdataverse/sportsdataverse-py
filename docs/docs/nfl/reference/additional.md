@@ -8334,12 +8334,14 @@ sched.select(["id", "homeTeam_fullName", "awayTeam_fullName"]).head()
 
 Ridge-regress `resp_col` on offense + defense team indicators + HFA.
 
-League-agnostic (column names are arguments) so this is the single solver
-a T7.2 refactor can lift into common_ratings` to back both CFB and
-NFL. Builds the offense/defense-indicator + intercept + home design and
-solves the ridge normal equations `beta = (X'X + lam*R)^-1 X'y`. Only
-team coefficients are penalised; the intercept (and, unless
-`penalize_home`, the home term) is free.
+League-agnostic (column names are arguments): builds the full
+offense/defense-indicator + intercept + home design and solves the
+ridge normal equations `beta = (X'X + lam*R)^-1 X'y`. Only team
+coefficients are penalised; the intercept (and, unless
+`penalize_home`, the home term) is free. Moved verbatim (T7.2) from
+`sportsdataverse.nfl.nfl_ratings` -- NFL is currently the sole
+adopter of this exact dense-design encoding (CFB's ridge is the
+genuinely different `dropped_level_ridge`).
 
 **Parameters**
 
