@@ -1,4 +1,5 @@
 import ast
+import types
 
 from tools.codegen import generate, render
 
@@ -28,3 +29,31 @@ def test_generated_modules_are_valid_python_with_all_and_defs():
         assert "__all__" in src
         for fn in funcs:
             assert f'"{fn}"' in src, f"{fn} missing from __all__ in {name}"
+
+
+def test_returns_prose_recombines_colon_split_code_span():
+    """docstring_parser splits a Returns body on the first colon; when that
+    colon is INSIDE an inline code span (``col: dtype, ...``) it mis-splits,
+    leaving type_name a dangling ``col`` fragment. The renderer must recombine
+    so no unbalanced reST literal (a stray ``) survives. Regression for the
+    load_fp_curve / mbb / wbb mangled Returns fragments."""
+    ds = types.SimpleNamespace(
+        type_name="``yardline_own",
+        description="Int64 (1..99), ep: Float64`` -- monotone non-decreasing.",
+    )
+    out = generate._returns_prose(ds)
+    assert "``" not in out  # no unbalanced reST double-backtick literal survives
+    assert "`yardline_own: Int64 (1..99), ep: Float64`" in out
+    assert "monotone non-decreasing" in out  # descriptive tail preserved
+
+
+def test_returns_prose_leaves_plain_type_split_untouched():
+    """A legit Google ``type: description`` (no backtick in the type) keeps the
+    prior behavior — description only, no spurious recombination."""
+    ds = types.SimpleNamespace(type_name="pl.DataFrame", description="A tidy frame.")
+    assert generate._returns_prose(ds) == "A tidy frame."
+
+
+def test_returns_prose_empty_inputs_yield_empty_string():
+    assert generate._returns_prose(None) == ""
+    assert generate._returns_prose(types.SimpleNamespace(type_name=None, description="")) == ""

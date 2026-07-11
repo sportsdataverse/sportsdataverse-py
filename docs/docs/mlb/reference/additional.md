@@ -1083,7 +1083,7 @@ Score pitches with the bundled Command+/Location+ (②) run-value model.
 
 **Returns**
 
-`pitcher`, `pitch_type`, `location_rv_hat`, `command_plus`. `level="pitcher"`: `pitcher`, `location_rv_hat`, `command_plus` (per-pitcher mean). Empty input returns a zero-row frame with the documented schema.
+`level="pitch"`: `pitcher`, `pitch_type`, `location_rv_hat`, `command_plus`. `level="pitcher"`: `pitcher`, `location_rv_hat`, `command_plus` (per-pitcher mean). Empty input returns a zero-row frame with the documented schema.
 
 | col_name | type | description |
 |---|---|---|
