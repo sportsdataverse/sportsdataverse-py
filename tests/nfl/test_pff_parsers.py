@@ -32,9 +32,9 @@ def test_pff_get_injected_transport():
 
 
 def test_pff_get_requires_cookies(monkeypatch):
-    for k in ("SDV_PY_PFF_PREMIUM_KEY", "SDV_PY_PFF_SESSION", "SDV_PY_PFF_COOKIES"):
+    for k in ("SDV_PY_PFF_PREMIUM_KEY", "SDV_PY_PFF_SESSION", "SDV_PY_PFF_COOKIES", "SDV_PY_PFF_STORAGE_STATE"):
         monkeypatch.delenv(k, raising=False)
-    with pytest.raises(RuntimeError, match="log in and supply cookies"):
+    with pytest.raises(RuntimeError, match="paywalled"):
         pff_runtime._get("https://premium.pff.com/api/v1/leagues", {})
 
 

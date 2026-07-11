@@ -105,6 +105,12 @@ models = [
     "scikit-learn>=1.0.0",
     "xgboost>=2.0.0",
 ]
+pff = [
+    # Optional headless-browser auth for PFF Premium: point SDV_PY_PFF_STORAGE_STATE
+    # at a saved Playwright storage_state JSON and pff_runtime auto-refreshes the
+    # short-lived Clerk session cookies. Also needs `playwright install chromium`.
+    "playwright>=1.40",
+]
 all = [
     # Mirrors `tests + models`. Kept explicit (rather than referencing the other
     # groups) because PEP 621 does not have a "union of groups" mechanism that
@@ -133,6 +139,7 @@ all = [
     "attrs>=20.3.0",
     "scikit-learn>=1.0.0",
     "xgboost>=2.0.0",
+    "playwright>=1.40",
 ]
 
 

@@ -173,6 +173,18 @@
 
 ### Fixes
 
+- feat(nfl): PFF Premium auth can now **auto-refresh from a saved Playwright
+  `storage_state`**. Point `SDV_PY_PFF_STORAGE_STATE` at a `storage_state` JSON
+  captured once from a headed login and `pff_runtime` replays it headlessly so
+  Clerk re-mints the short-lived `__session` cookie, extracting fresh
+  `_premium_key` + `__session` and caching them in-process for
+  `SDV_PY_PFF_STORAGE_STATE_TTL` seconds (default 300 — one browser launch per
+  window, not per request). It slots in as auth tier 3 (explicit `cookies=` >
+  `SDV_PY_PFF_*` env cookies > storage_state), so existing callers are
+  unaffected. Needs the new optional `playwright` extra
+  (`pip install sportsdataverse[pff]` then `playwright install chromium`); a
+  missing install raises a clear `ImportError`. The browser refresh is injectable
+  (`refresher=`) so the wiring is fully offline-testable.
 - fix(nfl): the DynastyProcess CSV loaders (`load_nfl_ff_playerids`,
   `load_nfl_ff_rankings`) retry with exponential backoff on transient
   upstream errors (HTTP 429/5xx) instead of failing on the first hit — the
