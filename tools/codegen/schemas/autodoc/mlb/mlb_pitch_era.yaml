@@ -1,0 +1,27 @@
+schema: mlb_pitch_era
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: x_woba
+  type: double
+  description: ''
+- name: x_era
+  type: double
+  description: ''
+- name: k_pct
+  type: double
+  description: ''
+- name: bb_pct
+  type: double
+  description: ''
+- name: gb_pct
+  type: double
+  description: ''
+- name: siera_like
+  type: double
+  description: ''

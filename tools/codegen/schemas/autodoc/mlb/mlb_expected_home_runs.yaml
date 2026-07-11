@@ -1,0 +1,21 @@
+schema: mlb_expected_home_runs
+kind: dataframe
+columns:
+- name: batter
+  type: integer
+  description: MLBAM batter id (join key into Savant's home-runs leaderboard as `player_id`).
+- name: season
+  type: integer
+  description: Four-digit season year derived from `game_year`/`game_date`.
+- name: hr
+  type: integer
+  description: Realized home runs in the pulled window.
+- name: xhr_neutral
+  type: double
+  description: Park-neutral expected home runs from the EV x LA x spray probability grid.
+- name: xhr_park_adj
+  type: double
+  description: Park-adjusted expected home runs (xhr_neutral cell probabilities scaled by each batted ball's home-park HR factor / 100).
+- name: hr_above_expected
+  type: double
+  description: hr minus xhr_neutral -- positive means the batter over-performed the park-neutral HR model.

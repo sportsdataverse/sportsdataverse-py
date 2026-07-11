@@ -1,0 +1,24 @@
+schema: mlb_pitch_tunneling
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: game_pk
+  type: integer
+  description: ''
+- name: at_bat_number
+  type: integer
+  description: ''
+- name: pitch_number
+  type: integer
+  description: ''
+- name: release_dist
+  type: double
+  description: ''
+- name: plate_dist
+  type: double
+  description: ''
+- name: tunnel_ratio
+  type: double
+  description: ''

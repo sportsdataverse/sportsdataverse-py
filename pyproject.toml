@@ -210,7 +210,7 @@ exclude = ["tests*", "docs*", "examples*", "archive*"]
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
 # package ships inline type information.
-sportsdataverse = ["cfb/models/*", "mbb/models/*", "nba/models/*", "nfl/models/*", "nhl/models/*", "py.typed"]
+sportsdataverse = ["cfb/models/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nhl/models/*", "py.typed"]
 
 
 [tool.isort]
@@ -322,6 +322,8 @@ files = [
     "sportsdataverse/nfl/nfl_gamescript.py",
     "sportsdataverse/nfl/nfl_kicker_rating.py",
     "sportsdataverse/nfl/nfl_line_grades.py",
+    "sportsdataverse/nfl/nfl_ngs_constants.py",
+    "sportsdataverse/nfl/nfl_ngs_tracking.py",
     "sportsdataverse/nfl/nfl_playcall.py",
     "sportsdataverse/nfl/nfl_projection.py",
     "sportsdataverse/nfl/nfl_projection_constants.py",
@@ -350,6 +352,20 @@ files = [
     "sportsdataverse/mlb/mlb_umpire_zone.py",
     "sportsdataverse/mlb/mlb_team_projection.py",
     "sportsdataverse/mlb/mlb_prop_projection.py",
+    "sportsdataverse/mlb/mlb_pitching_constants.py",
+    "sportsdataverse/mlb/mlb_pitch_features.py",
+    "sportsdataverse/mlb/mlb_stuff_plus.py",
+    "sportsdataverse/mlb/mlb_command_plus.py",
+    "sportsdataverse/mlb/mlb_pitch_era.py",
+    "sportsdataverse/mlb/mlb_pitch_fatigue.py",
+    "sportsdataverse/mlb/mlb_pitch_classify.py",
+    "sportsdataverse/mlb/mlb_pitch_sequencing.py",
+    "sportsdataverse/mlb/mlb_pitch_injury.py",
+    "sportsdataverse/mlb/mlb_hitting_constants.py",
+    "sportsdataverse/mlb/mlb_expected_stats.py",
+    "sportsdataverse/mlb/mlb_swing_decision.py",
+    "sportsdataverse/mlb/mlb_expected_home_runs.py",
+    "sportsdataverse/mlb/mlb_batter_projection.py",
     "sportsdataverse/mlb/mlb_run_values.py",
     "sportsdataverse/mlb/mlb_catcher_framing.py",
     "sportsdataverse/mlb/mlb_catcher_defense.py",

@@ -1,0 +1,24 @@
+schema: mlb_expected_stats
+kind: dataframe
+columns:
+- name: batter
+  type: integer
+  description: MLBAM batter id (join key into Savant's expected-stats leaderboard as `player_id`).
+- name: season
+  type: integer
+  description: Four-digit season year derived from `game_year`/`game_date`.
+- name: pa
+  type: integer
+  description: Plate appearances in the pulled window.
+- name: ab
+  type: integer
+  description: At-bats (PA minus walks, HBP, and sacrifices) in the pulled window.
+- name: xwoba
+  type: double
+  description: Expected wOBA from the EV x LA empirical grid (contact) plus realized non-contact outcome value, divided by wOBA denominator.
+- name: xba
+  type: double
+  description: Expected batting average from the EV x LA empirical grid's hit-indicator cell means.
+- name: xslg
+  type: double
+  description: Expected slugging percentage from the EV x LA empirical grid's total-bases cell means.

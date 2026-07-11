@@ -375,6 +375,50 @@ The most recent MLB season year (e.g. `2024`).
 
 ## Other
 
+### `add_sequence_features(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#add_sequence_features}
+
+Add within-game sequence, times-through-order, and workload features.
+
+Consumes the output of `pitch_features`. Within each plate
+appearance (`game_pk`, `pitcher`, `at_bat_number`, sorted by
+`pitch_number`), adds `prev_pitch_type`/`prev_release_pos_x`/
+`prev_release_pos_z`/`prev_plate_x`/`prev_plate_z` via
+`shift(1)`. Within each game (`game_pk`, `pitcher`, sorted by
+`at_bat_number` then `pitch_number`), adds `cum_pitches_game`
+(running pitch count), `batter_faced_index` (distinct-`at_bat_number`
+rank), and `times_through_order` (`min(3, (batter_faced_index-1)//9+1)`).
+Every lag/rank is `.over(...)` scoped to avoid cross-game leakage.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `feats` | `DataFrame` |  | Output of `pitch_features`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`feats` plus the sequence/TTO/workload columns described above. Empty input returns a zero-row frame carrying the full schema.
+
+| col_name | type | description |
+|---|---|---|
+| `prev_pitch_type` | character | Pitch type of the previous pitch in the same plate appearance (null on the first pitch). |
+| `prev_release_pos_x` | double | Horizontal release position of the previous pitch in the same plate appearance. |
+| `prev_release_pos_z` | double | Vertical release position of the previous pitch in the same plate appearance. |
+| `prev_plate_x` | double | Horizontal plate location of the previous pitch in the same plate appearance. |
+| `prev_plate_z` | double | Vertical plate location of the previous pitch in the same plate appearance. |
+| `cum_pitches_game` | integer | Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch). |
+| `batter_faced_index` | integer | Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced). |
+| `times_through_order` | integer | Times through the batting order, min(3, (batter_faced_index-1)//9 + 1). |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features, add_sequence_features
+feats = add_sequence_features(pitch_features(raw))
+print(feats.select("times_through_order", "cum_pitches_game").tail())
+```
+
 ### `advancement_opportunities(events: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#advancement_opportunities}
 
 Extract first-to-third / second-to-home / tag-up opportunities and outcomes.
@@ -874,6 +918,48 @@ from sportsdataverse.mlb.mlb_baserunning import mlb_baserunning_value
 baserunning = mlb_baserunning_value(pitches, sprint_speed)
 ```
 
+### `mlb_batter_projection(target_season: 'int', *, history: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_batter_projection}
+
+Next-season xwOBA projection (Marcel + delta-method aging) for every batter.
+
+If `history` is `None`, builds player-season xwOBA history via
+`sportsdataverse.mlb.mlb_expected_stats.mlb_expected_stats` across
+the three seasons before `target_season` (ages must already be present
+on a supplied `history` frame -- this convenience path is intended for
+callers who already maintain an age-joined roster history).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `target_season` | `int` |  | The season being projected. |
+| `history` | `Optional[DataFrame]` | `None` | Pre-built player-season history (`batter`, `season`, `age`, `xwoba`, `pa`). If `None`, uses `mlb_expected_stats` over `target_season - 3 .. target_season - 1`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `batter`: `age`, `proj_xwoba`, `proj_pa`. Empty history returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id. |
+| `age` | integer | Batter's projected age in target_season (last known age plus one). |
+| `proj_xwoba` | double | Marcel-style weighted, PA-regressed, aging-curve-adjusted xwOBA projection for target_season. |
+| `proj_pa` | double | Sum of plate appearances across the weighted lookback seasons used to build the projection. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_batter_projection import mlb_batter_projection
+
+proj = mlb_batter_projection(2024, history=player_season_history)
+print(proj.shape)
+
+# Pipeline next step (one line)
+
+proj.sort("proj_xwoba", descending=True).head()
+```
+
 ### `mlb_catcher_blocking(pitches: "'pl.DataFrame'", *, dirt_bin_width: 'float' = 0.2, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_blocking}
 
 Per-catcher blocking runs from a dirt-pitch block-probability model.
@@ -983,6 +1069,43 @@ from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_throwing
 throwing = mlb_catcher_throwing(sb_attempts, poptime)
 ```
 
+### `mlb_command_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_command_plus}
+
+Score pitches with the bundled Command+/Location+ (②) run-value model.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.pitch_features` (needs `plate_x_abs`, `plate_z_norm`, `in_zone`, `dist_from_heart`, `balls`, `strikes`, `stand`, `p_throws`, `pitch_type`). |
+| `level` | `str` | `'pitch'` | `"pitch"` (default) for per-pitch output, or `"pitcher"` for a per-pitcher mean. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `pitch_type`, `location_rv_hat`, `command_plus`. `level="pitcher"`: `pitcher`, `location_rv_hat`, `command_plus` (per-pitcher mean). Empty input returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `pitch_type` | character | Statcast pitch-type abbreviation. |
+| `location_rv_hat` | double | Predicted per-pitch run value from the bundled Command+/Location+ xgboost model (location + count/handedness/pitch-type features only). |
+| `command_plus` | double | Plus-scale Command+/Location+ score, 100 = league average, higher = better. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features
+from sportsdataverse.mlb.mlb_command_plus import mlb_command_plus
+feats = pitch_features(raw_pitches)
+out = mlb_command_plus(feats)
+print(out.select("pitcher", "command_plus").head())
+
+# Pipeline next step
+
+out.group_by("pitcher").agg(pl.col("command_plus").mean()).sort("command_plus", descending=True)
+```
+
 ### `mlb_divisions(sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, division_id: 'Optional[int]' = None, **kwargs) -> 'Dict'` {#mlb_divisions}
 
 GET /api/v1/divisions — list divisions.
@@ -1006,6 +1129,104 @@ GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
 | `year` | `Union[int, str]` |  |  |
 | `scouting_report` | `Optional[bool]` | `None` |  |
 | `limit` | `int` | `100` |  |
+
+### `mlb_expected_home_runs(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, park_factors: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_expected_home_runs}
+
+Per player-season park-neutral xHR, park-adjusted xHR, and HR-above-expected.
+
+Pulls batted balls via `puller(start_dt, end_dt, player_type="batter")`,
+builds the EV x LA x spray HR-probability grid from the pull's own batted
+balls (season-agnostic algorithm, per-pull empirical constants), predicts
+each ball's HR probability with the EV x LA-marginal fallback, park-adjusts
+via `hr_factor` (index 100 = neutral, joined on the Statcast
+`home_team` abbreviation -> MLBAM team id), then aggregates per batter.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  | Pull start date, `YYYY-MM-DD`. |
+| `end_dt` | `str` |  | Pull end date, `YYYY-MM-DD`. |
+| `puller` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable Statcast search callable -- defaults to `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search`. |
+| `park_factors` | `Optional[DataFrame]` | `None` | Pre-fetched park-factors frame (`team_id`, `hr_factor`); if `None`, fetched via `sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_park_factors`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (`batter`, `season`): `hr`, `xhr_neutral`, `xhr_park_adj`, `hr_above_expected` (`hr - xhr_neutral`). Empty pull returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id (join key into Savant's home-runs leaderboard as `player_id`). |
+| `season` | integer | Four-digit season year derived from `game_year`/`game_date`. |
+| `hr` | integer | Realized home runs in the pulled window. |
+| `xhr_neutral` | double | Park-neutral expected home runs from the EV x LA x spray probability grid. |
+| `xhr_park_adj` | double | Park-adjusted expected home runs (xhr_neutral cell probabilities scaled by each batted ball's home-park HR factor / 100). |
+| `hr_above_expected` | double | hr minus xhr_neutral -- positive means the batter over-performed the park-neutral HR model. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_expected_home_runs import mlb_expected_home_runs
+
+df = mlb_expected_home_runs("2024-06-01", "2024-06-21")
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("hr_above_expected", descending=True).head()
+```
+
+### `mlb_expected_stats(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_expected_stats}
+
+Per player-season xwOBA/xBA/xSLG from an on-the-fly EV x LA empirical grid.
+
+Pulls pitches via `puller(start_dt, end_dt, player_type="batter")`, builds
+the outcome grid from the pull's own batted balls (season-agnostic
+algorithm, per-pull empirical constants -- see `CLAUDE.md`), predicts
+contact `woba`/`ba`/`slg` per batted ball with the launch-angle-
+marginal fallback, then aggregates:
+
+* `xwoba = (sum(predicted_woba over balls in play) + sum(woba_value over
+  non-batted-ball PA outcomes)) / sum(woba_denom)`
+* `xba = sum(predicted_ba over balls in play) / ab`
+* `xslg = sum(predicted_tb over balls in play) / ab`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  | Pull start date, `YYYY-MM-DD`. |
+| `end_dt` | `str` |  | Pull end date, `YYYY-MM-DD`. |
+| `puller` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable Statcast search callable -- defaults to `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (`batter`, `season`): `pa`, `ab`, `xwoba`, `xba`, `xslg`. Empty pull returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id (join key into Savant's expected-stats leaderboard as `player_id`). |
+| `season` | integer | Four-digit season year derived from `game_year`/`game_date`. |
+| `pa` | integer | Plate appearances in the pulled window. |
+| `ab` | integer | At-bats (PA minus walks, HBP, and sacrifices) in the pulled window. |
+| `xwoba` | double | Expected wOBA from the EV x LA empirical grid (contact) plus realized non-contact outcome value, divided by wOBA denominator. |
+| `xba` | double | Expected batting average from the EV x LA empirical grid's hit-indicator cell means. |
+| `xslg` | double | Expected slugging percentage from the EV x LA empirical grid's total-bases cell means. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_expected_stats import mlb_expected_stats
+
+df = mlb_expected_stats("2024-06-01", "2024-06-21")
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("xwoba", descending=True).head()
+```
 
 ### `mlb_fielding_oaa(bip: "'pl.DataFrame'", *, dist_bin: 'float' = 10.0, spray_bin: 'float' = 0.1, alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_fielding_oaa}
 
@@ -1040,6 +1261,38 @@ oaa = mlb_fielding_oaa(bip)
 # Pipeline next step (one line)
 
 oaa.filter(pl.col("opportunities") >= 100).sort("oaa", descending=True)
+```
+
+### `mlb_injury_risk(pitches: 'pl.DataFrame', *, as_of_date: 'Optional[dt.date]' = None, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_injury_risk}
+
+Composite pitcher injury-risk index from leakage-safe trailing trends.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Raw pitch frame (from `sportsdataverse.mlb.mlb_statcast_search`). |
+| `as_of_date` | `Optional[date]` | `None` | When given, restricts input to `game_date < as_of_date` via `sportsdataverse.mlb.mlb_pitching_constants.as_of_split` before computing trends (an additional leakage boundary on top of the per-appearance trailing-window logic). |
+| `window` | `int` | `5` | Trailing-window size passed to `pitcher_appearance_trends`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `game_pk`, `game_date`, `injury_risk_index` — equal-weighted sum of standardized adverse features (`-velo_trend`, `-velo_drop`, `trailing_workload`, `-days_rest`; higher = more risk). Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `game_pk` | integer | Game identifier. |
+| `game_date` | date | Game date. |
+| `injury_risk_index` | double | Equal-weighted composite of standardized adverse trailing features (higher = more risk). |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_injury import mlb_injury_risk
+out = mlb_injury_risk(raw_pitches)
+print(out.sort("injury_risk_index", descending=True).head())
 ```
 
 ### `mlb_pbp_diff(game_pk: 'int', start_timecode: 'str', end_timecode: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_pbp_diff}
@@ -1093,6 +1346,111 @@ GET /api/v1/people/{personId}/stats — player aggregate stats.
 | `sport_ids` | `Optional[Union[int, List[int]]]` | `None` |  |
 | `game_type` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
+
+### `mlb_pitch_classify(pitches: 'pl.DataFrame', *, max_components: 'int' = 6, seed: 'int' = 0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_pitch_classify}
+
+Per-pitcher Gaussian-mixture pitch reclassification.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.pitch_features` (needs `velo_z`, `spin_z`, `pfx_x_z`, `pfx_z_z`). |
+| `max_components` | `int` | `6` | Cap on GMM components considered per pitcher (BIC picks the best `1..min(max_components, n_pitch_types)`). |
+| `seed` | `int` | `0` | Random seed for reproducible cluster labels. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `pitch_type`, `pitch_type_reclass`, `reclass_confidence` (max posterior cluster responsibility). Pitchers with fewer than `MIN_PITCHES_FOR_CLUSTERING` pitches pass through the Savant label unchanged with `reclass_confidence = 1.0`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `pitch_type` | character | Savant-reported pitch-type abbreviation. |
+| `pitch_type_reclass` | character | Reclassified pitch-type label from the per-pitcher GMM clustering (may differ from pitch_type). |
+| `reclass_confidence` | double | Max posterior cluster responsibility (1.0 for low-volume pitchers passed through unchanged). |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features
+from sportsdataverse.mlb.mlb_pitch_classify import mlb_pitch_classify
+feats = pitch_features(raw_pitches)
+out = mlb_pitch_classify(feats, seed=0)
+print(out.filter(out["pitch_type"] != out["pitch_type_reclass"]).head())
+```
+
+### `mlb_pitch_era(pitches: 'pl.DataFrame', seasons: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_pitch_era}
+
+Combined xERA + SIERA-like estimator (model ③).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Raw pitch frame (from `sportsdataverse.mlb.mlb_statcast_search`). |
+| `seasons` | `int` |  | Season year. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `season`, `x_woba`, `x_era`, `k_pct`, `bb_pct`, `gb_pct`, `siera_like`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `season` | integer | Season year. |
+| `x_woba` | double | Mean estimated_woba_using_speedangle allowed on batted balls. |
+| `x_era` | double | Parametric xERA converted from x_woba via the season's league baselines. |
+| `k_pct` | double | Strikeout rate (strikeouts / batters faced). |
+| `bb_pct` | double | Walk rate (walks + HBP / batters faced). |
+| `gb_pct` | double | Ground-ball rate among batted balls. |
+| `siera_like` | double | SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_era import mlb_pitch_era
+out = mlb_pitch_era(raw_pitches, 2024)
+print(out.select("pitcher", "x_era", "siera_like").head())
+```
+
+### `mlb_pitch_tunneling(pitches: 'pl.DataFrame', *, eps: 'float' = 0.01, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_pitch_tunneling}
+
+Per-pitch release/plate distance from the previous pitch + tunnel ratio.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.add_sequence_features` (needs `release_pos_x`/`release_pos_z`, `prev_release_pos_x`/ `prev_release_pos_z`, `plate_x`/`plate_z`, `prev_plate_x`/`prev_plate_z`). |
+| `eps` | `float` | `0.01` | Minimum `release_dist` denominator (avoids divide-by-zero). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `game_pk`, `at_bat_number`, `pitch_number`, `release_dist`, `plate_dist`, `tunnel_ratio`. First pitch of a plate appearance (no previous pitch) has null geometry. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `game_pk` | integer | Game identifier. |
+| `at_bat_number` | integer | Game-level plate-appearance sequence number. |
+| `pitch_number` | integer | Pitch sequence number within the plate appearance. |
+| `release_dist` | double | Euclidean distance between this pitch's release point and the previous pitch's release point. |
+| `plate_dist` | double | Euclidean distance between this pitch's plate location and the previous pitch's plate location. |
+| `tunnel_ratio` | double | plate_dist / max(release_dist, eps) -- higher means better tunneling (similar release, different result). |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features, add_sequence_features
+from sportsdataverse.mlb.mlb_pitch_sequencing import mlb_pitch_tunneling
+feats = add_sequence_features(pitch_features(raw_pitches))
+out = mlb_pitch_tunneling(feats)
+print(out.select("tunnel_ratio").describe())
+```
 
 ### `mlb_prop_strikeouts(team_k9: 'float', opp_k_rate: 'float', lg_k_rate: 'float', *, innings: 'float' = 9.0) -> 'float'` {#mlb_prop_strikeouts}
 
@@ -1322,6 +1680,36 @@ GET /api/v1/seasons — list of seasons for a sport.
 | `sport_id` | `int` | `1` |  |
 | `season` | `Optional[Union[int, str]]` | `None` |  |
 | `all_seasons` | `bool` | `False` |  |
+
+### `mlb_sequence_run_value(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_sequence_run_value}
+
+Mean run value grouped by the ordered `(prev_pitch_type, pitch_type)` sequence.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.add_sequence_features` (needs `prev_pitch_type`, `pitch_type`, `run_value` / `delta_run_exp`). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`prev_pitch_type`, `pitch_type`, `mean_run_value`, `n` — one row per observed ordered pair (rows with a null `prev_pitch_type`, i.e. the first pitch of a PA, are dropped). Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `prev_pitch_type` | character | Pitch type of the preceding pitch in the sequence. |
+| `pitch_type` | character | Pitch type of the current pitch. |
+| `mean_run_value` | double | Mean run value of the current pitch, grouped by the ordered (prev_pitch_type, pitch_type) pair. |
+| `n` | integer | Number of pitches observed for this ordered pair. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_sequencing import mlb_sequence_run_value
+out = mlb_sequence_run_value(feats)
+print(out.sort("mean_run_value").head())
+```
 
 ### `mlb_standings(league_id: 'Union[int, str, List[int]]' = '103,104', season: 'Optional[Union[int, str]]' = None, date: 'Optional[str]' = None, standings_types: 'Optional[str]' = None, hydrate: 'Optional[str]' = None, fields: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_standings}
 
@@ -2186,6 +2574,99 @@ from sportsdataverse.mlb.mlb_stolen_base import mlb_stolen_base_value
 sb_value = mlb_stolen_base_value(sb_attempts, sprint_speed, poptime)
 ```
 
+### `mlb_stuff_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_stuff_plus}
+
+Score pitches with the bundled Stuff+ (①) run-value model.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.pitch_features` (needs `velo_z`, `spin_z`, `pfx_x_z`, `pfx_z_z`, `release_pos_x_z`, `release_pos_z_z`, `extension_z`). |
+| `level` | `str` | `'pitch'` | `"pitch"` (default) for per-pitch output, or `"arsenal"` for a per `(pitcher, pitch_type)` mean. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `pitch_type`, `stuff_rv_hat`, `stuff_plus` — one row per pitch (`level="pitch"`) or per pitcher-pitchtype (`level="arsenal"`). Empty input returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `pitch_type` | character | Statcast pitch-type abbreviation. |
+| `stuff_rv_hat` | double | Predicted per-pitch run value from the bundled Stuff+ xgboost model (physics + fastball-relative features only). |
+| `stuff_plus` | double | Plus-scale Stuff+ score, 100 = league average, higher = better (sign-inverted from stuff_rv_hat). |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features
+from sportsdataverse.mlb.mlb_stuff_plus import mlb_stuff_plus
+feats = pitch_features(raw_pitches)
+out = mlb_stuff_plus(feats, level="arsenal")
+print(out.sort("stuff_plus", descending=True).head())
+
+# Pipeline next step
+
+out.filter(pl.col("pitch_type") == "FF").sort("stuff_plus", descending=True)
+```
+
+### `mlb_swing_decision(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_swing_decision}
+
+Per player-season swing/take run value + selective-aggression (SEAGER analog).
+
+Pulls pitches via `puller(start_dt, end_dt, player_type="batter")`,
+builds the RV(swing)/RV(take) zone x count surfaces (and the league
+swing-rate table) from the pull itself, then per batter:
+
+* `swing_take_runs` = sum of the **actual** per-pitch `delta_run_exp`
+  credited to the batter's swing/take decisions (matching Savant's
+  swing/take run-value definition -- the run value of what actually
+  happened on each pitch, not a league-average lookup).
+* `selective_agg` = sum of `rv_chosen - rv_neutral`, where
+  `rv_neutral = swing_rate * rv_swing + (1 - swing_rate) * rv_take` uses
+  the **league** swing rate for that zone x count cell -- positive means
+  the batter swings at hittable pitches and takes bad ones more than a
+  league-average decision-maker would.
+* `chase_rate` = swings / pitches seen in the waste/chase zones
+  (`zone in {11,12,13,14}`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  | Pull start date, `YYYY-MM-DD`. |
+| `end_dt` | `str` |  | Pull end date, `YYYY-MM-DD`. |
+| `puller` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable Statcast search callable -- defaults to `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (`batter`, `season`): `pitches`, `swing_take_runs`, `selective_agg`, `chase_rate`, `n_swings`. Empty pull returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id (join key into Savant's swing/take leaderboard as `player_id`). |
+| `season` | integer | Four-digit season year derived from `game_year`/`game_date`. |
+| `pitches` | integer | Total pitches seen with a non-null zone/decision in the pulled window. |
+| `swing_take_runs` | double | Sum of the run value of the batter's actual swing/take decisions (delta_run_exp of the chosen decision at that zone x count). |
+| `selective_agg` | double | SEAGER-analog selective-aggression score -- sum of (chosen run value minus the league-neutral-rate run value) per pitch. |
+| `chase_rate` | double | Share of pitches in the waste/chase attack zones (11-14) that the batter swung at. |
+| `n_swings` | integer | Count of pitches the batter swung at. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_swing_decision import mlb_swing_decision
+
+df = mlb_swing_decision("2024-06-01", "2024-06-21")
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("selective_agg", descending=True).head()
+```
+
 ### `mlb_team_elo(results: 'pl.DataFrame', *, k: 'float' = 4.0, hfa: 'float' = 24.0, init: 'float' = 1500.0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_team_elo}
 
 As-of-date iterative Elo run-differential rating.
@@ -2316,6 +2797,41 @@ GET /api/v1/teams — list teams. `sport_id=1` = MLB.
 | `all_star_statuses` | `Optional[str]` | `None` |  |
 | `hydrate` | `Optional[str]` | `None` |  |
 | `fields` | `Optional[str]` | `None` |  |
+
+### `mlb_times_through_order(pitches: 'pl.DataFrame', *, season: 'int' = 2024, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_times_through_order}
+
+Per-pitch fitted times-through-order fatigue adjustment.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.add_sequence_features` (needs `times_through_order`). |
+| `season` | `int` | `2024` | Season year, selects the fitted `tto_penalty` coefficients via `sportsdataverse.mlb.mlb_pitching_constants.get_baselines`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `game_pk`, `at_bat_number`, `pitch_number`, `times_through_order`, `fatigue_rv_adj` (the fitted marginal penalty for that TTO level). Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `game_pk` | integer | Game identifier. |
+| `at_bat_number` | integer | Game-level plate-appearance sequence number. |
+| `pitch_number` | integer | Pitch sequence number within the plate appearance. |
+| `times_through_order` | integer | Times through the batting order (1-3). |
+| `fatigue_rv_adj` | double | Fitted per-TTO run-value marginal (mlb_pitching_constants.tto_penalty) for this pitch's TTO level. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features, add_sequence_features
+from sportsdataverse.mlb.mlb_pitch_fatigue import mlb_times_through_order
+feats = add_sequence_features(pitch_features(raw_pitches))
+out = mlb_times_through_order(feats, season=2024)
+print(out.select("times_through_order", "fatigue_rv_adj").unique())
+```
 
 ### `mlb_umpire_bias(pitches: 'pl.DataFrame', *, model: 'Optional[Dict[str, Any]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_umpire_bias}
 
@@ -2494,6 +3010,92 @@ from sportsdataverse.mlb.mlb_run_values import pearson_corr
 r = pearson_corr(mine["framing_runs"].to_numpy(), sav["runs_extra_strikes"].to_numpy())
 ```
 
+### `pitch_features(pitches: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pitch_features}
+
+Build the per-pitch feature substrate every pitching model consumes.
+
+Standardizes physics (velocity/spin/movement/release/extension) within
+`pitcher`, derives strike-zone-relative location features, pins id
+columns to `Int64`, and passes Savant's per-pitch `delta_run_exp`
+through unchanged as `run_value` (the single run-value label used by
+Stuff+/Command+/TTO/tunneling).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Raw Savant pitch frame (e.g. from `sportsdataverse.mlb.mlb_statcast_search`), one row per pitch, carrying `pitcher`, `release_speed`, `release_spin_rate`, `pfx_x`, `pfx_z`, `release_pos_x`, `release_pos_z`, `release_extension`, `plate_x`, `plate_z`, `sz_top`, `sz_bot`, `delta_run_exp`. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+One row per pitch with the input columns plus `velo_z`, `spin_z`, `pfx_x_z`, `pfx_z_z`, `release_pos_x_z`, `release_pos_z_z`, `extension_z` (standardized within `pitcher`), `plate_z_norm`, `plate_x_abs`, `in_zone`, `dist_from_heart`, and `run_value`. Empty/malformed input returns a zero-row frame carrying the added schema.
+
+| col_name | type | description |
+|---|---|---|
+| `velo_z` | double | Release speed standardized (z-score) within pitcher. |
+| `spin_z` | double | Release spin rate standardized (z-score) within pitcher. |
+| `pfx_x_z` | double | Horizontal movement (pfx_x) standardized (z-score) within pitcher. |
+| `pfx_z_z` | double | Vertical movement (pfx_z) standardized (z-score) within pitcher. |
+| `release_pos_x_z` | double | Horizontal release position standardized (z-score) within pitcher. |
+| `release_pos_z_z` | double | Vertical release position standardized (z-score) within pitcher. |
+| `extension_z` | double | Release extension standardized (z-score) within pitcher. |
+| `run_value` | double | Savant per-pitch delta_run_exp, passed through unchanged as the spine's single run-value label. |
+| `plate_x_abs` | double | Absolute horizontal plate location (distance from the center of the zone). |
+| `plate_z_norm` | double | Vertical plate location normalized to the batter's own strike zone, 0 = bottom, 1 = top. |
+| `in_zone` | integer | 1 if the pitch crossed the strike zone (normalized location + horizontal bound), else 0. |
+| `dist_from_heart` | double | Euclidean distance from the normalized zone center (0, 0.5) -- lower is more hittable. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb import mlb_statcast_search
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features
+raw = mlb_statcast_search("2024-06-15", "2024-06-15", player_type="pitcher")
+feats = pitch_features(raw)
+print(feats.select("pitch_type", "in_zone", "run_value").head())
+
+# Pipeline next step
+
+feats.filter(pl.col("in_zone") == 1).group_by("pitch_type").agg(pl.col("run_value").mean())
+```
+
+### `pitcher_appearance_trends(pitches: 'pl.DataFrame', *, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#pitcher_appearance_trends}
+
+Leakage-safe per-appearance trailing velocity/workload trends.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Raw (or feature-substrate) pitch frame carrying `pitcher`, `game_pk`, `game_date`, `pitch_type`, `release_speed`. |
+| `window` | `int` | `5` | Number of trailing PRIOR appearances used for the rolling statistics (never includes the current appearance). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+Per `(pitcher, game_pk, game_date)`: `fb_velo` (this game's mean fastball `release_speed`), `velo_trend` (OLS slope of `fb_velo` over the trailing `window` prior appearances), `velo_drop` (trailing-baseline mean minus this game's `fb_velo`), `pitches_game`, `trailing_workload` (mean `pitches_game` over the trailing window), `days_rest`. The first appearance for a pitcher has null trailing stats (no prior data). Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `game_pk` | integer | Game identifier. |
+| `game_date` | date | Game date. |
+| `fb_velo` | double | Mean fastball release speed for this appearance. |
+| `velo_trend` | double | OLS slope of fb_velo over the trailing prior appearances (leakage-safe). |
+| `velo_drop` | double | Trailing-baseline mean fb_velo minus this appearance's fb_velo. |
+| `pitches_game` | integer | Pitches thrown in this appearance. |
+| `trailing_workload` | double | Mean pitches_game over the trailing prior appearances (leakage-safe). |
+| `days_rest` | double | Days since the pitcher's previous appearance. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_injury import pitcher_appearance_trends
+out = pitcher_appearance_trends(raw_pitches, window=5)
+print(out.select("game_date", "velo_drop", "days_rest").tail())
+```
+
 ### `predict_sb_success(upcoming: "'pl.DataFrame'", history: "'pl.DataFrame'", cutoff_date: 'Any', *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#predict_sb_success}
 
 As-of-date predictive P(success): the surface is fit on history strictly before `cutoff_date`.
@@ -2607,6 +3209,45 @@ from sportsdataverse.mlb.mlb_stolen_base import sb_success_surface
 surface = sb_success_surface(sb_attempts, sprint_speed, poptime)
 ```
 
+### `siera_like(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#siera_like}
+
+SIERA-like ERA estimator from K%/BB%/GB% (**experimental / provisional**).
+
+Evaluates the published SIERA functional form with
+`mlb_pitching_constants.siera_coef`, which are **SEEDED literature
+placeholders** (not yet OLS-fitted — the Task-4.2 next-season-ERA fit has
+not landed). Treat the output as directionally indicative, not a calibrated
+ERA; use `x_era` (oracle-gated vs Savant's xERA) for a fitted number.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Raw pitch frame carrying `pitcher`, `events`, and (optionally) `bb_type`. |
+| `season` | `int` |  | Season year (unused in the formula itself, carried through for join convenience with `x_era`). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `season`, `k_pct`, `bb_pct`, `gb_pct`, `siera_like`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `season` | integer | Season year (carried through for join convenience with x_era). |
+| `k_pct` | double | Strikeout rate (strikeouts / batters faced). |
+| `bb_pct` | double | Walk rate (walks + HBP / batters faced). |
+| `gb_pct` | double | Ground-ball rate among batted balls. |
+| `siera_like` | double | SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_era import siera_like
+out = siera_like(raw_pitches, 2024)
+print(out.sort("siera_like").head())
+```
+
 ### `spearman_corr(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'` {#spearman_corr}
 
 Spearman rank correlation between two 1-D arrays.
@@ -2627,4 +3268,67 @@ Spearman's rho (Pearson correlation of the ranks).
 ```python
 from sportsdataverse.mlb.mlb_run_values import spearman_corr
 rho = spearman_corr(mine["oaa"].to_numpy(), sav["outs_above_average"].to_numpy())
+```
+
+### `tto_penalty_table(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#tto_penalty_table}
+
+Observed mean run value by times-through-order, with the penalty vs TTO=1.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `feats` | `DataFrame` |  | Output of `sportsdataverse.mlb.mlb_pitch_features.add_sequence_features` (needs `times_through_order` and `run_value`). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`times_through_order`, `mean_run_value`, `penalty_vs_first` (`mean_run_value` minus the TTO=1 mean run value), `n`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `times_through_order` | integer | Times through the batting order (1-3). |
+| `mean_run_value` | double | Mean observed run value for pitches at this TTO level. |
+| `penalty_vs_first` | double | mean_run_value minus the TTO=1 mean run value. |
+| `n` | integer | Number of pitches observed at this TTO level. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_features import pitch_features, add_sequence_features
+from sportsdataverse.mlb.mlb_pitch_fatigue import tto_penalty_table
+feats = add_sequence_features(pitch_features(raw_pitches))
+out = tto_penalty_table(feats)
+print(out.sort("times_through_order"))
+```
+
+### `x_era(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#x_era}
+
+Parametric xERA from Statcast expected wOBA allowed.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Raw (or feature-substrate) pitch frame carrying `pitcher` and `estimated_woba_using_speedangle`. |
+| `season` | `int` |  | Season year (selects the league baseline via `sportsdataverse.mlb.mlb_pitching_constants.get_baselines`). |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+`pitcher`, `season`, `x_woba`, `x_era`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `pitcher` | integer | MLBAM pitcher id. |
+| `season` | integer | Season year. |
+| `x_woba` | double | Mean estimated_woba_using_speedangle allowed on batted balls. |
+| `x_era` | double | Parametric xERA converted from x_woba via the season's league baselines. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_pitch_era import x_era
+out = x_era(raw_pitches, 2024)
+print(out.sort("x_era").head())
 ```

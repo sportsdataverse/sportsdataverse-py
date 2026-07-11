@@ -268,11 +268,15 @@ from sportsdataverse.nfl import nfl_ngs_leaders as nfl_ngs_leaders  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_league_schedule as nfl_ngs_league_schedule  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_league_schedule_current as nfl_ngs_league_schedule_current  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_league_teams as nfl_ngs_league_teams  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_man_zone_rates as nfl_ngs_man_zone_rates  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_microsite_chart as nfl_ngs_microsite_chart  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_microsite_chart_players as nfl_ngs_microsite_chart_players  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_play_is_highlight as nfl_ngs_play_is_highlight  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_ryoe as nfl_ngs_ryoe  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_separation_oe as nfl_ngs_separation_oe  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard as nfl_ngs_statboard  # noqa: F401
 from sportsdataverse.nfl import nfl_ngs_statboard_leaders as nfl_ngs_statboard_leaders  # noqa: F401
+from sportsdataverse.nfl import nfl_ngs_yac_oe as nfl_ngs_yac_oe  # noqa: F401
 from sportsdataverse.nfl import nfl_play_call_probabilities as nfl_play_call_probabilities  # noqa: F401
 from sportsdataverse.nfl import nfl_play_call_tendencies as nfl_play_call_tendencies  # noqa: F401
 from sportsdataverse.nfl import nfl_player_projection as nfl_player_projection  # noqa: F401
@@ -546,11 +550,15 @@ __all__ = [
     "nfl_ngs_league_schedule",
     "nfl_ngs_league_schedule_current",
     "nfl_ngs_league_teams",
+    "nfl_ngs_man_zone_rates",
     "nfl_ngs_microsite_chart",
     "nfl_ngs_microsite_chart_players",
     "nfl_ngs_play_is_highlight",
+    "nfl_ngs_ryoe",
+    "nfl_ngs_separation_oe",
     "nfl_ngs_statboard",
     "nfl_ngs_statboard_leaders",
+    "nfl_ngs_yac_oe",
     "nfl_play_call_probabilities",
     "nfl_play_call_tendencies",
     "nfl_player_projection",

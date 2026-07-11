@@ -13,14 +13,24 @@ from sportsdataverse.mlb.mlb_api_parsers import (
     parser_for_mlb_api,
 )
 from sportsdataverse.mlb.mlb_baserunning import advancement_opportunities, mlb_baserunning_value
+from sportsdataverse.mlb.mlb_batter_projection import mlb_batter_projection
 from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_blocking, mlb_catcher_throwing
 from sportsdataverse.mlb.mlb_catcher_framing import called_strike_prob_grid, mlb_catcher_framing
 from sportsdataverse.mlb.mlb_espn_ext import *
+from sportsdataverse.mlb.mlb_expected_home_runs import mlb_expected_home_runs
+from sportsdataverse.mlb.mlb_expected_stats import mlb_expected_stats
 from sportsdataverse.mlb.mlb_fielding_oaa import bip_trajectory_features, catch_prob_surface, mlb_fielding_oaa
 from sportsdataverse.mlb.mlb_fox_ext import *
 from sportsdataverse.mlb.mlb_game_rosters import *
 from sportsdataverse.mlb.mlb_loaders import *
 from sportsdataverse.mlb.mlb_pbp import *
+from sportsdataverse.mlb.mlb_command_plus import mlb_command_plus
+from sportsdataverse.mlb.mlb_pitch_classify import mlb_pitch_classify
+from sportsdataverse.mlb.mlb_pitch_era import mlb_pitch_era, siera_like, x_era
+from sportsdataverse.mlb.mlb_pitch_fatigue import mlb_times_through_order, tto_penalty_table
+from sportsdataverse.mlb.mlb_pitch_features import add_sequence_features, pitch_features
+from sportsdataverse.mlb.mlb_pitch_injury import mlb_injury_risk, pitcher_appearance_trends
+from sportsdataverse.mlb.mlb_pitch_sequencing import mlb_pitch_tunneling, mlb_sequence_run_value
 from sportsdataverse.mlb.mlb_player_stats import *
 from sportsdataverse.mlb.mlb_prop_projection import mlb_prop_strikeouts, mlb_prop_team_runs, mlb_props, prop_over_prob
 from sportsdataverse.mlb.mlb_run_expectancy import mlb_run_expectancy_matrix, pbp_base_out_states, run_value
@@ -55,6 +65,8 @@ from sportsdataverse.mlb.mlb_stolen_base import (
     sb_attempts_from_pitches,
     sb_success_surface,
 )
+from sportsdataverse.mlb.mlb_stuff_plus import mlb_stuff_plus
+from sportsdataverse.mlb.mlb_swing_decision import mlb_swing_decision
 from sportsdataverse.mlb.mlb_team_projection import (
     mlb_pythagenpat,
     mlb_pythagenpat_table,

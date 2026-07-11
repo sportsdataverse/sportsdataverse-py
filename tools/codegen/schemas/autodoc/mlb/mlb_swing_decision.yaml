@@ -1,0 +1,24 @@
+schema: mlb_swing_decision
+kind: dataframe
+columns:
+- name: batter
+  type: integer
+  description: MLBAM batter id (join key into Savant's swing/take leaderboard as `player_id`).
+- name: season
+  type: integer
+  description: Four-digit season year derived from `game_year`/`game_date`.
+- name: pitches
+  type: integer
+  description: Total pitches seen with a non-null zone/decision in the pulled window.
+- name: swing_take_runs
+  type: double
+  description: Sum of the run value of the batter's actual swing/take decisions (delta_run_exp of the chosen decision at that zone x count).
+- name: selective_agg
+  type: double
+  description: SEAGER-analog selective-aggression score -- sum of (chosen run value minus the league-neutral-rate run value) per pitch.
+- name: chase_rate
+  type: double
+  description: Share of pitches in the waste/chase attack zones (11-14) that the batter swung at.
+- name: n_swings
+  type: integer
+  description: Count of pitches the batter swung at.

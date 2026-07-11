@@ -1,0 +1,30 @@
+schema: pitcher_appearance_trends
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: game_pk
+  type: integer
+  description: ''
+- name: game_date
+  type: date
+  description: ''
+- name: fb_velo
+  type: double
+  description: ''
+- name: velo_trend
+  type: double
+  description: ''
+- name: velo_drop
+  type: double
+  description: ''
+- name: pitches_game
+  type: integer
+  description: ''
+- name: trailing_workload
+  type: double
+  description: ''
+- name: days_rest
+  type: double
+  description: ''
