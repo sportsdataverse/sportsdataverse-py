@@ -270,7 +270,13 @@ from sportsdataverse.mlb import mlb_venue as _raw_mlb_venue
 from sportsdataverse.mlb import mlb_venues as _raw_mlb_venues
 from sportsdataverse.mlb import mlb_win_probability as _raw_mlb_win_probability
 from sportsdataverse.mlb import add_sequence_features as add_sequence_features  # noqa: F401
+from sportsdataverse.mlb import advancement_opportunities as advancement_opportunities  # noqa: F401
+from sportsdataverse.mlb import as_of_split as as_of_split  # noqa: F401
+from sportsdataverse.mlb import bip_trajectory_features as bip_trajectory_features  # noqa: F401
 from sportsdataverse.mlb import build_we_table as build_we_table  # noqa: F401
+from sportsdataverse.mlb import called_strike_prob_grid as called_strike_prob_grid  # noqa: F401
+from sportsdataverse.mlb import catch_prob_surface as catch_prob_surface  # noqa: F401
+from sportsdataverse.mlb import count_strike_run_value as count_strike_run_value  # noqa: F401
 from sportsdataverse.mlb import download as download  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_calendar as espn_mlb_calendar  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_game_rosters as espn_mlb_game_rosters  # noqa: F401
@@ -278,6 +284,7 @@ from sportsdataverse.mlb import espn_mlb_pbp as espn_mlb_pbp  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_player_stats as espn_mlb_player_stats  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_schedule as espn_mlb_schedule  # noqa: F401
 from sportsdataverse.mlb import espn_mlb_teams as espn_mlb_teams  # noqa: F401
+from sportsdataverse.mlb import event_run_value as event_run_value  # noqa: F401
 from sportsdataverse.mlb import fit_zone_model as fit_zone_model  # noqa: F401
 from sportsdataverse.mlb import leverage_index as leverage_index  # noqa: F401
 from sportsdataverse.mlb import load_mlb_pbp as load_mlb_pbp  # noqa: F401
@@ -285,13 +292,19 @@ from sportsdataverse.mlb import load_mlb_player_boxscore as load_mlb_player_boxs
 from sportsdataverse.mlb import load_mlb_rosters as load_mlb_rosters  # noqa: F401
 from sportsdataverse.mlb import load_mlb_schedule as load_mlb_schedule  # noqa: F401
 from sportsdataverse.mlb import load_mlb_team_boxscore as load_mlb_team_boxscore  # noqa: F401
+from sportsdataverse.mlb import mae as mae  # noqa: F401
 from sportsdataverse.mlb import mlb_attendance as mlb_attendance  # noqa: F401
+from sportsdataverse.mlb import mlb_baserunning_value as mlb_baserunning_value  # noqa: F401
 from sportsdataverse.mlb import mlb_batter_projection as mlb_batter_projection  # noqa: F401
+from sportsdataverse.mlb import mlb_catcher_blocking as mlb_catcher_blocking  # noqa: F401
+from sportsdataverse.mlb import mlb_catcher_framing as mlb_catcher_framing  # noqa: F401
+from sportsdataverse.mlb import mlb_catcher_throwing as mlb_catcher_throwing  # noqa: F401
 from sportsdataverse.mlb import mlb_command_plus as mlb_command_plus  # noqa: F401
 from sportsdataverse.mlb import mlb_divisions as mlb_divisions  # noqa: F401
 from sportsdataverse.mlb import mlb_draft_prospects as mlb_draft_prospects  # noqa: F401
 from sportsdataverse.mlb import mlb_expected_home_runs as mlb_expected_home_runs  # noqa: F401
 from sportsdataverse.mlb import mlb_expected_stats as mlb_expected_stats  # noqa: F401
+from sportsdataverse.mlb import mlb_fielding_oaa as mlb_fielding_oaa  # noqa: F401
 from sportsdataverse.mlb import mlb_injury_risk as mlb_injury_risk  # noqa: F401
 from sportsdataverse.mlb import mlb_pbp_diff as mlb_pbp_diff  # noqa: F401
 from sportsdataverse.mlb import mlb_pbp_live as mlb_pbp_live  # noqa: F401
@@ -316,6 +329,7 @@ from sportsdataverse.mlb import mlb_statcast_search_wbc as mlb_statcast_search_w
 from sportsdataverse.mlb import mlb_stats as mlb_stats  # noqa: F401
 from sportsdataverse.mlb import mlb_stats_leaders as mlb_stats_leaders  # noqa: F401
 from sportsdataverse.mlb import mlb_stats_streaks as mlb_stats_streaks  # noqa: F401
+from sportsdataverse.mlb import mlb_stolen_base_value as mlb_stolen_base_value  # noqa: F401
 from sportsdataverse.mlb import mlb_stuff_plus as mlb_stuff_plus  # noqa: F401
 from sportsdataverse.mlb import mlb_swing_decision as mlb_swing_decision  # noqa: F401
 from sportsdataverse.mlb import mlb_team_elo as mlb_team_elo  # noqa: F401
@@ -343,18 +357,29 @@ from sportsdataverse.mlb import parse_mlb_statcast_schedule as parse_mlb_statcas
 from sportsdataverse.mlb import parse_mlb_statcast_search as parse_mlb_statcast_search  # noqa: F401
 from sportsdataverse.mlb import parser_for_mlb_api as parser_for_mlb_api  # noqa: F401
 from sportsdataverse.mlb import pbp_base_out_states as pbp_base_out_states  # noqa: F401
+from sportsdataverse.mlb import pearson_corr as pearson_corr  # noqa: F401
 from sportsdataverse.mlb import pitch_features as pitch_features  # noqa: F401
 from sportsdataverse.mlb import pitcher_appearance_trends as pitcher_appearance_trends  # noqa: F401
+from sportsdataverse.mlb import predict_sb_success as predict_sb_success  # noqa: F401
 from sportsdataverse.mlb import prop_over_prob as prop_over_prob  # noqa: F401
 from sportsdataverse.mlb import run_value as run_value  # noqa: F401
+from sportsdataverse.mlb import sb_attempts_from_pitches as sb_attempts_from_pitches  # noqa: F401
+from sportsdataverse.mlb import sb_success_surface as sb_success_surface  # noqa: F401
 from sportsdataverse.mlb import siera_like as siera_like  # noqa: F401
+from sportsdataverse.mlb import spearman_corr as spearman_corr  # noqa: F401
 from sportsdataverse.mlb import tto_penalty_table as tto_penalty_table  # noqa: F401
 from sportsdataverse.mlb import underscore as underscore  # noqa: F401
 from sportsdataverse.mlb import x_era as x_era  # noqa: F401
 
 __all__ = [
     "add_sequence_features",
+    "advancement_opportunities",
+    "as_of_split",
+    "bip_trajectory_features",
     "build_we_table",
+    "called_strike_prob_grid",
+    "catch_prob_surface",
+    "count_strike_run_value",
     "download",
     "espn_mlb_award",
     "espn_mlb_awards",
@@ -472,6 +497,7 @@ __all__ = [
     "espn_mlb_transactions",
     "espn_mlb_venue",
     "espn_mlb_venues",
+    "event_run_value",
     "fit_zone_model",
     "fox_mlb_league_leaders",
     "fox_mlb_odds",
@@ -485,6 +511,7 @@ __all__ = [
     "load_mlb_rosters",
     "load_mlb_schedule",
     "load_mlb_team_boxscore",
+    "mae",
     "mlb_all_star_ballot",
     "mlb_all_star_final_vote",
     "mlb_all_star_write_ins",
@@ -493,8 +520,12 @@ __all__ = [
     "mlb_attendance",
     "mlb_award_recipients",
     "mlb_awards",
+    "mlb_baserunning_value",
     "mlb_batter_projection",
     "mlb_boxscore",
+    "mlb_catcher_blocking",
+    "mlb_catcher_framing",
+    "mlb_catcher_throwing",
     "mlb_command_plus",
     "mlb_conference",
     "mlb_conferences",
@@ -505,6 +536,7 @@ __all__ = [
     "mlb_draft_prospects",
     "mlb_expected_home_runs",
     "mlb_expected_stats",
+    "mlb_fielding_oaa",
     "mlb_free_agents",
     "mlb_game_changes",
     "mlb_game_color",
@@ -603,6 +635,7 @@ __all__ = [
     "mlb_stats_leaders",
     "mlb_stats_metrics",
     "mlb_stats_streaks",
+    "mlb_stolen_base_value",
     "mlb_stuff_plus",
     "mlb_swing_decision",
     "mlb_team",
@@ -645,11 +678,16 @@ __all__ = [
     "parse_mlb_statcast_search",
     "parser_for_mlb_api",
     "pbp_base_out_states",
+    "pearson_corr",
     "pitch_features",
     "pitcher_appearance_trends",
+    "predict_sb_success",
     "prop_over_prob",
     "run_value",
+    "sb_attempts_from_pitches",
+    "sb_success_surface",
     "siera_like",
+    "spearman_corr",
     "tto_penalty_table",
     "underscore",
     "x_era",
