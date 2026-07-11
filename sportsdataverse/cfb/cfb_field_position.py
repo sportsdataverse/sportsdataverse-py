@@ -142,8 +142,9 @@ def fit_field_position_ep(
     """Fit the monotone EP-by-starting-yardline curve from a drives frame.
 
     Groups drives by starting yard line (from own goal), takes the mean
-    next-score points, and applies play-count-weighted isotonic regression
-    (non-decreasing), interpolated onto the full 1..99 grid.
+    next-score points, and applies sample-count-weighted isotonic regression
+    (weight = number of drives at each starting yard line, non-decreasing),
+    interpolated onto the full 1..99 grid.
 
     Args:
         drives: one row per drive.
@@ -229,7 +230,9 @@ def cfb_field_position(
     ``avg_start_yardline`` (yards from own goal, higher = better),
     ``fp_ep`` (mean drive-start EP), ``fp_margin`` (own ``fp_ep`` minus the
     mean drive-start EP of opponents' drives faced), and
-    ``points_per_drive`` (mean realized offensive points: TD=7, FG=3).
+    ``points_per_drive`` (mean realized offensive points: TD=7, FG=3;
+    non-offensive negative results such as safeties and defensive return
+    TDs are floored to 0 before averaging).
 
     Args:
         seasons: season or list of seasons (hosted pbp covers 2002-2021).

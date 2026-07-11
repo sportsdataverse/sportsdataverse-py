@@ -505,13 +505,13 @@ cfb_advanced_stats:
   adj_off_explosive_rate: Opponent-adjusted offensive explosive-play rate.
   adj_off_havoc_allowed: Opponent-adjusted havoc rate the offense allows.
   adj_off_success_rate: Opponent-adjusted offensive success rate.
-  def_epa_play: Raw EPA allowed per play on the garbage-filtered substrate.
+  def_epa_play: Raw EPA allowed per play on the garbage-filtered substrate (garbage time excluded by default; pass exclude_garbage=False to keep it).
   def_epa_rank: Dense rank on adj_def_epa_play ascending (fewest EPA allowed = 1).
   def_explosive_rate: Share of plays faced that were explosive (pass EPA >= 2.4, rush EPA >= 1.8).
   def_havoc: Share of plays faced with a havoc event (TFL, pass breakup, interception, forced fumble).
   def_iso_ppp: Mean EPA allowed on successful plays faced (isoPPP against).
   def_success_rate: Success rate allowed (Connelly 50/70/100 yardage rule).
-  off_epa_play: Raw offensive EPA per play on the garbage-filtered substrate.
+  off_epa_play: Raw offensive EPA per play on the garbage-filtered substrate (garbage time excluded by default; pass exclude_garbage=False to keep it).
   off_epa_rank: Dense rank on adj_off_epa_play descending (best offense = 1).
   off_epa_success_rate: Share of offensive plays with EPA > 0 (EPA-based success rate).
   off_explosive_rate: Share of offensive plays that were explosive (pass EPA >= 2.4, rush EPA >= 1.8).
@@ -8369,16 +8369,16 @@ mlb_umpire_bias:
   exp_strike_rate: Mean model-predicted called-strike probability for this umpire's pitches.
   bias: obs_strike_rate minus exp_strike_rate (positive = strike-generous).
 mlb_pythagenpat_table:
-  season: Season.
+  season: MLB season (4-digit start year).
   team_id: Team identifier (statsapi team id, stringified).
   runs_scored: Total runs scored across the covered games.
   runs_allowed: Total runs allowed across the covered games.
-  games: Games played.
+  games: Count of games played in the season.
   win_pct: Realized win percentage.
   pythag_win_pct: Pythagenpat expected win percentage (exponent 0.287).
 mlb_team_elo:
   game_id: Game identifier (statsapi gamePk, stringified).
-  date: Game date.
+  date: Calendar date of the game (YYYY-MM-DD).
   home_team_id: Home team identifier.
   away_team_id: Away team identifier.
   home_rating: Home team's Elo rating before this game (as-of-date).
@@ -8387,7 +8387,7 @@ mlb_team_elo:
   home_rating_post: Home team's Elo rating after this game.
   away_rating_post: Away team's Elo rating after this game.
 mlb_team_projection:
-  season: Season.
+  season: MLB season (4-digit start year).
   team_id: Team identifier (statsapi team id, stringified).
   win_pct: Realized win percentage.
   pythag_win_pct: Pythagenpat expected win percentage.
@@ -8424,18 +8424,18 @@ add_sequence_features:
   batter_faced_index: Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced).
   times_through_order: Times through the batting order, min(3, (batter_faced_index-1)//9 + 1).
 mlb_stuff_plus:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   pitch_type: Statcast pitch-type abbreviation.
   stuff_rv_hat: Predicted per-pitch run value from the bundled Stuff+ xgboost model (physics + fastball-relative features only).
   stuff_plus: Plus-scale Stuff+ score, 100 = league average, higher = better (sign-inverted from stuff_rv_hat).
 mlb_command_plus:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   pitch_type: Statcast pitch-type abbreviation.
   location_rv_hat: Predicted per-pitch run value from the bundled Command+/Location+ xgboost model (location + count/handedness/pitch-type features only).
   command_plus: Plus-scale Command+/Location+ score, 100 = league average, higher = better.
 mlb_pitch_era:
-  pitcher: MLBAM pitcher id.
-  season: Season year.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
+  season: MLB season (4-digit start year).
   x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
   x_era: Parametric xERA converted from x_woba via the season's league baselines.
   k_pct: Strikeout rate (strikeouts / batters faced).
@@ -8443,19 +8443,19 @@ mlb_pitch_era:
   gb_pct: Ground-ball rate among batted balls.
   siera_like: SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.
 x_era:
-  pitcher: MLBAM pitcher id.
-  season: Season year.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
+  season: MLB season (4-digit start year).
   x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
   x_era: Parametric xERA converted from x_woba via the season's league baselines.
 siera_like:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   season: Season year (carried through for join convenience with x_era).
   k_pct: Strikeout rate (strikeouts / batters faced).
   bb_pct: Walk rate (walks + HBP / batters faced).
   gb_pct: Ground-ball rate among batted balls.
   siera_like: SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.
 mlb_times_through_order:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   game_pk: Game identifier.
   at_bat_number: Game-level plate-appearance sequence number.
   pitch_number: Pitch sequence number within the plate appearance.
@@ -8467,12 +8467,12 @@ tto_penalty_table:
   penalty_vs_first: mean_run_value minus the TTO=1 mean run value.
   n: Number of pitches observed at this TTO level.
 mlb_pitch_classify:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   pitch_type: Savant-reported pitch-type abbreviation.
   pitch_type_reclass: Reclassified pitch-type label from the per-pitcher GMM clustering (may differ from pitch_type).
   reclass_confidence: Max posterior cluster responsibility (1.0 for low-volume pitchers passed through unchanged).
 mlb_pitch_tunneling:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   game_pk: Game identifier.
   at_bat_number: Game-level plate-appearance sequence number.
   pitch_number: Pitch sequence number within the plate appearance.
@@ -8485,9 +8485,9 @@ mlb_sequence_run_value:
   mean_run_value: Mean run value of the current pitch, grouped by the ordered (prev_pitch_type, pitch_type) pair.
   n: Number of pitches observed for this ordered pair.
 pitcher_appearance_trends:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   game_pk: Game identifier.
-  game_date: Game date.
+  game_date: Calendar date of the game (YYYY-MM-DD).
   fb_velo: Mean fastball release speed for this appearance.
   velo_trend: OLS slope of fb_velo over the trailing prior appearances (leakage-safe).
   velo_drop: Trailing-baseline mean fb_velo minus this appearance's fb_velo.
@@ -8495,7 +8495,7 @@ pitcher_appearance_trends:
   trailing_workload: Mean pitches_game over the trailing prior appearances (leakage-safe).
   days_rest: Days since the pitcher's previous appearance.
 mlb_injury_risk:
-  pitcher: MLBAM pitcher id.
+  pitcher: MLB Advanced Media (MLBAM) id for the pitcher.
   game_pk: Game identifier.
-  game_date: Game date.
+  game_date: Calendar date of the game (YYYY-MM-DD).
   injury_risk_index: Equal-weighted composite of standardized adverse trailing features (higher = more risk).

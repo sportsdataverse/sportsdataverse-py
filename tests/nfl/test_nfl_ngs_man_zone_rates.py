@@ -66,3 +66,22 @@ def test_uncharted_season_returns_schema_frame():
     out = nfl_ngs_man_zone_rates([2024], _loader=_all_null)
     assert out.height == 0
     assert dict(out.schema) == _MAN_ZONE_SCHEMA
+
+
+def test_missing_coverage_type_returns_empty_not_raise():
+    """man/zone labels present but no defense_coverage_type column -> documented
+    empty frame, not a ColumnNotFound (the cover_*_rate agg uses it always)."""
+
+    def _no_coverage(seasons, return_as_pandas=False):
+        return pl.DataFrame(
+            {
+                "nflverse_game_id": ["2023_01_BUF_KC"] * 2,
+                "play_id": [1, 2],
+                "possession_team": ["BUF", "BUF"],
+                "defense_man_zone_type": ["MAN_COVERAGE", "ZONE_COVERAGE"],
+            }
+        )
+
+    out = nfl_ngs_man_zone_rates([2023], _loader=_no_coverage)
+    assert out.height == 0
+    assert dict(out.schema) == _MAN_ZONE_SCHEMA

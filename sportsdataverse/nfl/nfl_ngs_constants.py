@@ -91,7 +91,13 @@ def empirical_bayes_shrink(
         sigma2 = max(float(coef[1]), 0.0)
     else:  # degenerate panel: no reliable split -> shrink nothing
         tau2, sigma2 = 1.0, 0.0
-    reliability = tau2 / (tau2 + sigma2 * np.nan_to_num(inv_n, nan=np.inf))
+    # n<=0 rows carry no data -> inv_n is +inf. When sigma2==0 (degenerate
+    # panel, or an OLS slope floored to 0) the product 0*inf is an expected
+    # NaN that would poison the shrunk estimate; silence that invalid-op and
+    # force those rows to reliability 0 so they shrink fully to the prior.
+    with np.errstate(invalid="ignore"):
+        reliability = tau2 / (tau2 + sigma2 * np.nan_to_num(inv_n, nan=np.inf))
+    reliability = np.nan_to_num(reliability, nan=0.0)
     shrunk = mu + reliability * (np.nan_to_num(x, nan=mu) - mu)
     return shrunk, reliability
 

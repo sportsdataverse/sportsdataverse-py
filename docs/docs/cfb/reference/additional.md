@@ -1202,8 +1202,8 @@ One row per (season, team_id) with the raw columns (and `adj_*` plus `off_epa_ra
 | `plays` | integer | Situation-neutral offensive plays in the aggregate. |
 | `off_success_rate` | double | Offensive success rate (yards gained >= 50/70/100 percent of distance by down). |
 | `def_success_rate` | double | Success rate allowed (Connelly 50/70/100 yardage rule). |
-| `off_epa_play` | double | Raw offensive EPA per play on the garbage-filtered substrate. |
-| `def_epa_play` | double | Raw EPA allowed per play on the garbage-filtered substrate. |
+| `off_epa_play` | double | Raw offensive EPA per play on the garbage-filtered substrate (garbage time excluded by default; pass exclude_garbage=False to keep it). |
+| `def_epa_play` | double | Raw EPA allowed per play on the garbage-filtered substrate (garbage time excluded by default; pass exclude_garbage=False to keep it). |
 | `off_iso_ppp` | double | Mean EPA on successful offensive plays (Connelly isoPPP explosiveness). |
 | `def_iso_ppp` | double | Mean EPA allowed on successful plays faced (isoPPP against). |
 | `off_explosive_rate` | double | Share of offensive plays that were explosive (pass EPA >= 2.4, rush EPA >= 1.8). |
@@ -1320,7 +1320,9 @@ yard line with the bundled EP curve, and aggregates per (season, team):
 `avg_start_yardline` (yards from own goal, higher = better),
 `fp_ep` (mean drive-start EP), `fp_margin` (own `fp_ep` minus the
 mean drive-start EP of opponents' drives faced), and
-`points_per_drive` (mean realized offensive points: TD=7, FG=3).
+`points_per_drive` (mean realized offensive points: TD=7, FG=3;
+non-offensive negative results such as safeties and defensive return
+TDs are floored to 0 before averaging).
 
 **Parameters**
 
@@ -2278,8 +2280,9 @@ fei.sort("fei_net", descending=True).head()
 Fit the monotone EP-by-starting-yardline curve from a drives frame.
 
 Groups drives by starting yard line (from own goal), takes the mean
-next-score points, and applies play-count-weighted isotonic regression
-(non-decreasing), interpolated onto the full 1..99 grid.
+next-score points, and applies sample-count-weighted isotonic regression
+(weight = number of drives at each starting yard line, non-decreasing),
+interpolated onto the full 1..99 grid.
 
 **Parameters**
 
