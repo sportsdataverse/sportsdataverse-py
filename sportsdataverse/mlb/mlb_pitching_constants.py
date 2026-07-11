@@ -31,10 +31,11 @@ COMMAND_PLUS_ARTIFACT = "mlb_command_plus.ubj"
 #: to this many "+"-scale points (sign inverted: negative run value is good).
 PLUS_SCALE: float = 10.0
 
-#: Task 2.2 fitting output (``dev/mlb_pitching/fit_stuff_plus.py``) — seeded
-#: until the corpus fit lands; centers ``stuff_plus`` at 100 by construction.
-STUFF_LEAGUE_MEAN_RV: float = 0.0
-STUFF_LEAGUE_SD_RV: float = 0.1
+#: Task 2.2 fitting output (``dev/mlb_pitching/fit_stuff_plus.py``, 2023 season,
+#: 30-pitcher real corpus, 71,012 pitches after dropna) — centers ``stuff_plus``
+#: at 100 by construction.
+STUFF_LEAGUE_MEAN_RV: float = -0.00139173015486449
+STUFF_LEAGUE_SD_RV: float = 0.022356726229190826
 
 #: Task 3.1 fitting output (``dev/mlb_pitching/fit_command_plus.py``) — seeded
 #: the same way as the Stuff+ pair above.
