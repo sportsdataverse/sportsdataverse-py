@@ -13,6 +13,7 @@ from sportsdataverse.mlb.mlb_api_parsers import (
     parser_for_mlb_api,
 )
 from sportsdataverse.mlb.mlb_espn_ext import *
+from sportsdataverse.mlb.mlb_expected_stats import mlb_expected_stats
 from sportsdataverse.mlb.mlb_fox_ext import *
 from sportsdataverse.mlb.mlb_game_rosters import *
 from sportsdataverse.mlb.mlb_loaders import *
