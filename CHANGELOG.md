@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Fixes](#fixes)
+  - [Dependencies](#dependencies)
   - [CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)](#cfb--advanced-efficiency-spine-opponent-adjusted-efficiencyexplosivenesshavoc-%E2%86%92-field-position-%E2%86%92-adjusted-tempo)
   - [NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)](#nfl--ngs-over-expected-tracking-spine-yac-oe-%E2%86%92-ryoe-%E2%86%92-separation-oe-%E2%86%92-manzone-rates)
   - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
@@ -208,6 +209,14 @@
   `.status_code`), and non-2xx responses are no longer cached. 403 is retried
   by default because ESPN's Core v2 API returns it under load — `download()`
   is the ESPN/nflverse gateway and does not serve the auth'd endpoints.
+
+### Dependencies
+
+- chore(deps): dropped the unused `pyreadr` dependency (runtime deps + the
+  `models`/`all` extras and the conda recipe). It had no live imports — its
+  only reference was a long-commented `.rds` contracts loader — and its
+  removal also drops the `libbz2`/`liblzma` system-header requirement that
+  pyreadr's sdist build imposed on Python 3.9 Linux installs.
 
 ### CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)
 

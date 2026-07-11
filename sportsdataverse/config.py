@@ -81,7 +81,6 @@ NFL_WEEKLY_ROSTER_URL = NFLVERSEGITHUB + "weekly_rosters/roster_weekly_{season}.
 NFL_SNAP_COUNTS_URL = NFLVERSEGITHUB + "snap_counts/snap_counts_{season}.parquet"
 NFL_PBP_PARTICIPATION_URL = NFLVERSEGITHUB + "pbp_participation/pbp_participation_{season}.parquet"
 NFL_CONTRACTS_URL = f"{NFLVERSEGITHUB}contracts/historical_contracts.parquet"
-NFL_OTC_PLAYER_DETAILS_URL = f"{NFLVERSEGITHUB}contracts/otc_player_details.rds"
 NFL_DRAFT_PICKS_URL = f"{NFLVERSEGITHUB}draft_picks/draft_picks.parquet"
 NFL_COMBINE_URL = f"{NFLVERSEGITHUB}combine/combine.parquet"
 NFL_INJURIES_URL = NFLVERSEGITHUB + "injuries/injuries_{season}.parquet"
