@@ -47,10 +47,13 @@ PLUS_SCALE: float = 10.0
 STUFF_LEAGUE_MEAN_RV: float = 0.0008117794641293585
 STUFF_LEAGUE_SD_RV: float = 0.022242603823542595
 
-#: Task 3.1 fitting output (``dev/mlb_pitching/fit_command_plus.py``) — seeded
-#: the same way as the Stuff+ pair above.
-COMMAND_LEAGUE_MEAN_RV: float = 0.0
-COMMAND_LEAGUE_SD_RV: float = 0.1
+#: Same centering-reference reasoning as ``STUFF_LEAGUE_MEAN_RV``/``_SD_RV``
+#: above: computed from ``dev/mlb_pitching/fit_command_plus.py``'s trained
+#: (unchanged) booster re-scored over the held-out
+#: ``pitcher_holdout_season_2024.parquet`` population (38,803 pitches after
+#: dropna), not the workhorse-selected training corpus.
+COMMAND_LEAGUE_MEAN_RV: float = 0.0009336690418422222
+COMMAND_LEAGUE_SD_RV: float = 0.044063836336135864
 
 
 def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
