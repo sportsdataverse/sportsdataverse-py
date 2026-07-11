@@ -208,9 +208,25 @@ class PitchingConstants:
     tto_penalty: List[float]
 
 
-#: Seeded from published league references (2024 MLB context); Tasks 4.2 / 5.2
-#: overwrite ``siera_coef`` / ``tto_penalty`` with fitted numbers from their
-#: committed ``dev/mlb_pitching/fit_*.py`` scripts.
+#: Task 5.2 fitting output (``dev/mlb_pitching/fit_fatigue.py``, OLS on the
+#: real ``pitcher_season_pitches_2023_sample.parquet`` fixture, 13,996 pitches
+#: after dropna): ``run_value ~ C(times_through_order) + cum_pitches_game +
+#: velo_drop_from_start``, TTO=1 reference. Monotone increasing as designed
+#: (fatigue -> more offense-favorable run value at higher TTO). This is the
+#: workload/velocity-CONTROLLED marginal effect of TTO, so it is larger in
+#: magnitude than :func:`sportsdataverse.mlb.mlb_pitch_fatigue.tto_penalty_table`'s
+#: raw, unconditional per-TTO mean-run-value gap (0.0029 / 0.0045 on the same
+#: fixture) -- TTO and cumulative pitch count are correlated, so the
+#: unconditional gap partly reflects workload, not pure "seeing the pitcher a
+#: third time" familiarity. The Task 5.2 gate (in
+#: ``tests/mlb/test_mlb_pitch_fatigue.py``) validates the raw table's
+#: monotonicity/magnitude directly against its own observed values, per the
+#: plan's Task 5.1/5.2 split.
+TTO_PENALTY_FITTED: List[float] = [0.0, 0.024451416002495174, 0.0436238547119437]
+
+#: Seeded from published league references (2024 MLB context) for
+#: ``siera_coef`` (Task 4.2 has not yet overwritten it with a fitted OLS);
+#: ``tto_penalty`` uses the Task 5.2 fitted value above.
 LEAGUE_BASELINES: Dict[int, PitchingConstants] = {
     2021: PitchingConstants(
         league_woba=0.312,
@@ -218,7 +234,7 @@ LEAGUE_BASELINES: Dict[int, PitchingConstants] = {
         league_era=4.26,
         pa_per_9=38.0,
         siera_coef=[6.0, -12.0, 8.0, -3.0, 2.0, 1.0],
-        tto_penalty=[0.0, 0.005, 0.010],
+        tto_penalty=TTO_PENALTY_FITTED,
     ),
     2022: PitchingConstants(
         league_woba=0.309,
@@ -226,7 +242,7 @@ LEAGUE_BASELINES: Dict[int, PitchingConstants] = {
         league_era=3.96,
         pa_per_9=38.0,
         siera_coef=[6.0, -12.0, 8.0, -3.0, 2.0, 1.0],
-        tto_penalty=[0.0, 0.005, 0.010],
+        tto_penalty=TTO_PENALTY_FITTED,
     ),
     2023: PitchingConstants(
         league_woba=0.318,
@@ -234,7 +250,7 @@ LEAGUE_BASELINES: Dict[int, PitchingConstants] = {
         league_era=4.33,
         pa_per_9=38.0,
         siera_coef=[6.0, -12.0, 8.0, -3.0, 2.0, 1.0],
-        tto_penalty=[0.0, 0.005, 0.010],
+        tto_penalty=TTO_PENALTY_FITTED,
     ),
     2024: PitchingConstants(
         league_woba=0.310,
@@ -242,7 +258,7 @@ LEAGUE_BASELINES: Dict[int, PitchingConstants] = {
         league_era=4.15,
         pa_per_9=38.0,
         siera_coef=[6.0, -12.0, 8.0, -3.0, 2.0, 1.0],
-        tto_penalty=[0.0, 0.005, 0.010],
+        tto_penalty=TTO_PENALTY_FITTED,
     ),
 }
 
