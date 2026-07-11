@@ -8,7 +8,7 @@ xHR is used only as a concurrent-validity oracle, never as a model input.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, Optional, Union, overload
+from typing import TYPE_CHECKING, Callable, Literal, Optional, Union, overload
 
 import polars as pl
 
@@ -177,7 +177,7 @@ def mlb_expected_home_runs(
     start_dt: str,
     end_dt: str,
     *,
-    puller: "object" = ...,
+    puller: Callable[..., pl.DataFrame] = ...,
     park_factors: Optional[pl.DataFrame] = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
@@ -186,7 +186,7 @@ def mlb_expected_home_runs(
     start_dt: str,
     end_dt: str,
     *,
-    puller: "object" = ...,
+    puller: Callable[..., pl.DataFrame] = ...,
     park_factors: Optional[pl.DataFrame] = ...,
     return_as_pandas: Literal[True],
 ) -> "pd.DataFrame": ...
@@ -194,7 +194,7 @@ def mlb_expected_home_runs(
     start_dt: str,
     end_dt: str,
     *,
-    puller: "object" = mlb_statcast_search,
+    puller: Callable[..., pl.DataFrame] = mlb_statcast_search,
     park_factors: Optional[pl.DataFrame] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
