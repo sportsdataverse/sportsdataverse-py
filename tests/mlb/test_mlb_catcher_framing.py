@@ -37,12 +37,15 @@ def test_grid_empty_input():
 
 
 def _two_catchers_frame():
-    # catcher 1: gets called strikes on pitches clearly out of the zone (below bottom) -> positive framing.
-    # catcher 2: gets balls called on pitches clearly in the heart of the zone -> negative framing.
+    # Both catchers receive takes at the SAME borderline edge location, so the
+    # fitted logistic P(strike) there is ~0.5 (in the shadow band). Catcher 1
+    # gets those pitches called strikes (positive framing); catcher 2 gets them
+    # called balls (negative framing). Same location -> same expected P, so the
+    # only difference is the call, isolating the framing signal.
     n = 30
     rows = {
-        "plate_x": [0.0] * n * 2,
-        "plate_z": [1.0] * n + [2.5] * n,  # catcher1: low pitch; catcher2: middle-zone pitch
+        "plate_x": [0.8] * n * 2,  # near the horizontal edge
+        "plate_z": [2.5] * n * 2,  # z_norm = (2.5-1.5)/(3.5-1.5) = 0.5
         "sz_top": [3.5] * n * 2,
         "sz_bot": [1.5] * n * 2,
         "stand": ["R"] * n * 2,
@@ -52,9 +55,6 @@ def _two_catchers_frame():
         "delta_run_exp": ([-0.05] * n) + ([0.05] * n),
         "fielder_2": ([1] * n) + ([2] * n),
     }
-    # Add baseline takes so the grid has genuine non-degenerate probabilities
-    # for both bins (otherwise Laplace(1) on n=30 pure-strike / pure-ball bins
-    # still yields a real but extreme p_strike -- fine for the ordering test).
     return pl.DataFrame(rows)
 
 

@@ -4,20 +4,23 @@ Corpus: tests/fixtures/mlb_fielding/pitches_2024-06.parquet (one month) vs
 lb_catcher_blocking_2024.parquet / lb_catcher_throwing_2024.parquet
 (FULL-SEASON leaderboards -- see tests/fixtures/mlb_fielding/README.md).
 
-**Known blocker (documented, not silently passed over):** SB/CS attempts in
-this feed are narrated only as a `des`-text clause on a *different* batter's
-plate appearance (see `mlb_stolen_base.py`'s module docstring) -- a real
-month yields only 54 total attempts (39 stolen, 15 caught) league-wide,
-because `des` itself is populated on ~30k of 116k pitches and the
-narrated-attempt rate within that is low. `mlb_catcher_throwing`'s observed
-Pearson at this scope is ~-0.08 on n=29 catchers, and `mlb_catcher_blocking`'s
-is ~0.07 on n=48 -- both statistically indistinguishable from zero at these
-sample sizes (SE(r) at n~30-50 is ~0.15-0.19). Per the "never lower the gate
-to pass" rule, this test does NOT assert an arbitrary magnitude floor
-rounded from noise -- it asserts the pipeline wires together correctly on
-real data and leaves the numeric gate as a tracked follow-up requiring a
-season-scale (or multi-season) capture to accumulate enough attempts per
-catcher for a meaningful correlation read.
+**Throwing model bug fixed (0.0.x):** ``mlb_catcher_throwing`` previously
+computed expected caught-stealing by binning the catcher's OWN pop time, which
+cancels exactly the pop-time skill Savant credits -- it correlated ~-0.01 with
+the leaderboard full-season. Expected CS is now the catcher-INDEPENDENT
+per-base league CS rate, so a catcher's caught-stealings above that baseline
+(driven by their arm) survive as signal. That moved the full-season Pearson to
+~+0.073 (see ``test_mlb_fielding_oracle_live.py``).
+
+**Known DATA ceiling (documented, not silently passed over):** SB/CS attempts
+in this feed are narrated only as a `des`-text clause on a *different* batter's
+plate appearance (see `mlb_stolen_base.py`'s module docstring); the `events`
+column carries none. Only ~401 of ~1773 real season attempts are recoverable,
+so per-catcher samples stay thin and the full-season throwing correlation is
+data-capped at ~0.073 (n=52). Per the "never lower the gate to pass" rule,
+these OFFLINE month tests do NOT assert an arbitrary magnitude floor rounded
+from noise -- they assert the pipelines wire together correctly on real data;
+the numeric full-season floors live in the ``@skip_if_no_live`` gate.
 """
 
 import polars as pl

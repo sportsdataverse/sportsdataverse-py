@@ -2,22 +2,22 @@
 
 Corpus: tests/fixtures/mlb_fielding/pitches_2024-06.parquet (one month, 116k
 pitches) vs lb_catcher_framing_2024.parquet (a FULL-SEASON leaderboard --
-see tests/fixtures/mlb_fielding/README.md). This is a genuine month-vs-season
-scope mismatch (the design's Task 1.3 plan anticipated needing to widen past
-a single day; a full-season pitch-level re-capture was attempted for this
-task and did not complete within the session's time budget -- see the
-progress ledger). The floor below is set from what a real, if
-scope-limited, capture actually shows, not invented:
+see tests/fixtures/mlb_fielding/README.md). This is a month-vs-season scope
+mismatch; the like-for-like FULL-SEASON gate lives in
+``test_mlb_fielding_oracle_live.py`` (``@skip_if_no_live``).
 
 Gate (never lower to pass -- debug the model instead): Pearson >= 0.50
-(observed 0.556 at min_takes>=500, rounded down to the nearest 0.05). This
-is well below the design's target 0.90 for a season-scale, date-matched
-capture -- the gap here is diagnosed as the month-vs-season mismatch (a
-higher floor at a wider min_takes threshold, 0.437->0.556 as min_takes rises
-from 0 to 500, is the expected direction for a real signal buried in
-small-sample noise, not the flat/negative pattern a genuine model bug would
-show). Follow-up: re-run `dev/mlb_fielding/capture_oracle.py` widened to the
-full 2024 season and raise this floor to the design's 0.90 target.
+(observed 0.547 at min_takes>=500). ``mlb_catcher_framing`` now follows
+Savant's method -- a smooth logistic P(called strike | zone location) with
+framing runs summed over SHADOW-ZONE takes only -- replacing the old coarse
+empirical grid. Measured like-for-like on the FULL 2024 season that raised the
+correlation from **0.435 to 0.468** (n=44 -- see the live gate); on this one
+month the two models are within noise (grid 0.556, logistic 0.547, n~33), so
+the floor is held at 0.50 rather than raised. The full-season 0.47 is the
+honest ceiling, NOT the design's 0.90: the public per-pitch feed lacks the
+pitch movement / release-point / receiving-path signals Savant's framing model
+uses, and Spearman ~= Pearson (~0.45) confirms the cap is feature poverty,
+not outliers.
 
 Real Savant column names (differ from the plan's assumed names): the
 leaderboard's id column is `id` (not `player_id`), and the framing-runs

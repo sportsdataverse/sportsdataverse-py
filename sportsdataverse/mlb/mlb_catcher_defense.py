@@ -35,7 +35,7 @@ See Also:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import polars as pl
 
@@ -170,35 +170,40 @@ def mlb_catcher_blocking(
 
 def mlb_catcher_throwing(
     sb_attempts: "pl.DataFrame",
-    poptime: "pl.DataFrame",
+    poptime: "Optional[pl.DataFrame]" = None,
     *,
-    pop_col: str = "pop_2b_sba",
-    pop_bin_width: float = 0.05,
     return_as_pandas: bool = False,
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
-    """Per-catcher caught-stealing (throwing) value from a pop-time model.
+    """Per-catcher caught-stealing (throwing) value = caught-stealing above average.
 
-    Expected caught-stealing probability is a monotone empirical function of
-    catcher pop time (binned); ``throwing_runs = cs_above_expected *
-    |RUN_VALUES["cs"] - RUN_VALUES["sb"]|`` (the documented fallback
-    constants -- see :mod:`sportsdataverse.mlb.mlb_stolen_base` for why a
-    real-capture attempt's ``delta_run_exp`` cannot isolate the steal's own
-    run value from the bundled primary batter outcome it is narrated
-    alongside).
+    Mirrors Savant's ``catcher_stealing_runs`` leaderboard: ``throwing_runs =
+    cs_above_expected * |RUN_VALUES["cs"] - RUN_VALUES["sb"]|`` where
+    ``cs_above_expected`` sums ``(caught - expected CS rate)`` over the
+    catcher's attempts. **The expected CS rate is catcher-INDEPENDENT** -- the
+    empirical league CS rate for the attempt's *difficulty* stratum (the
+    attempted ``base``, since a steal of 3rd is caught far more often than a
+    steal of 2nd), NOT a function of the catcher's own pop time. The catcher's
+    arm/pop time/exchange is the *skill* that produces caught-stealings above
+    that baseline; the **prior implementation conditioned the expectation on
+    the catcher's own binned pop time, which cancelled exactly the signal
+    Savant measures** (it correlated ~0 / slightly negative with the
+    leaderboard -- the fixed model correlates positively).
+
+    Run value uses the documented :data:`RUN_VALUES` fallback constants (see
+    :mod:`sportsdataverse.mlb.mlb_stolen_base` for why a real-capture
+    attempt's ``delta_run_exp`` cannot isolate the steal's own run value from
+    the bundled primary batter outcome it is narrated alongside).
 
     Args:
         sb_attempts: One row per stolen-base attempt (see
             :func:`sportsdataverse.mlb.mlb_stolen_base.sb_attempts_from_pitches`),
-            with ``catcher_id`` (Utf8) and ``outcome`` (``"success"`` \\|
-            ``"caught"``). MiLB feeds run through the same function -- there
-            is no Savant throwing leaderboard oracle for MiLB.
-        poptime: A :func:`sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_poptime`
-            frame with ``catcher_id`` (Utf8) and the pop-time column named
-            by ``pop_col``.
-        pop_col: Name of the pop-time column in ``poptime``. Defaults to
-            ``"pop_2b_sba"`` (pop time to second on stolen-base attempts).
-        pop_bin_width: Bin width (seconds) for the pop-time bucket. Defaults
-            to ``0.05``.
+            with ``catcher_id`` (Utf8), ``outcome`` (``"success"`` \\|
+            ``"caught"``) and (for the difficulty baseline) ``base``. MiLB
+            feeds run through the same function -- there is no Savant throwing
+            leaderboard oracle for MiLB.
+        poptime: Accepted for call-site compatibility and **not used** -- pop
+            time is the catcher's own skill (the mechanism producing
+            above-average CS), so it must never enter the *expected* CS model.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -208,14 +213,14 @@ def mlb_catcher_throwing(
         |---|---|---|
         | catcher_id | Utf8 | Catcher MLBAM id |
         | attempts | Int64 | Stolen-base attempts caught behind the plate |
-        | cs_above_expected | Float64 | Sum of (caught - expected CS rate) |
+        | cs_above_expected | Float64 | Sum of (caught - per-base league CS rate) |
         | throwing_runs | Float64 | cs_above_expected x \\|RUN_VALUES["cs"] - RUN_VALUES["sb"]\\| |
 
     Example:
         Quick start::
 
             from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_throwing
-            throwing = mlb_catcher_throwing(sb_attempts, poptime)
+            throwing = mlb_catcher_throwing(sb_attempts)
 
     See Also:
         * `baseballr`_ -- R sibling package for MLB sabermetrics.
@@ -223,6 +228,7 @@ def mlb_catcher_throwing(
 
         .. _baseballr: https://baseballr.sportsdataverse.org
     """
+    del poptime  # retained in the signature for call-site compatibility only.
     if sb_attempts.height == 0:
         out = pl.DataFrame(schema=_THROWING_SCHEMA)
         return out.to_pandas() if return_as_pandas else out
@@ -231,18 +237,22 @@ def mlb_catcher_throwing(
         pl.col("catcher_id").cast(pl.Utf8),
         (pl.col("outcome") == "caught").cast(pl.Int64).alias("is_cs"),
     )
-    pop = poptime.with_columns(pl.col("catcher_id").cast(pl.Utf8))
-    assert att.schema["catcher_id"] == pop.schema["catcher_id"], "catcher_id dtype mismatch before pop-time join"
 
-    joined = att.join(pop.select("catcher_id", pop_col), on="catcher_id", how="left")
-    joined = joined.with_columns((pl.col(pop_col) / pop_bin_width).floor().cast(pl.Int64).alias("pop_bin"))
-
-    rate = joined.group_by("pop_bin").agg(pl.col("is_cs").mean().alias("expected_cs_prob"))
+    # Expected CS rate is the empirical league rate WITHIN the attempt's
+    # difficulty stratum (attempted base) -- deliberately catcher-independent,
+    # so a catcher's above-baseline caught-stealings (driven by their arm)
+    # survive as signal. Finer strata (e.g. runner sprint speed) are avoided:
+    # with the des-narrated attempt sample they grow sparse enough that a
+    # catcher's own attempt dominates its stratum mean, re-introducing the
+    # self-cancellation this fix removed.
     rv = abs(RUN_VALUES["cs"] - RUN_VALUES["sb"])
-
-    scored = joined.join(rate, on="pop_bin", how="left").with_columns(
-        (pl.col("is_cs") - pl.col("expected_cs_prob").fill_null(0.5)).alias("cs_gain")
-    )
+    league_cs = att["is_cs"].mean()
+    if "base" in att.columns:
+        rate = att.group_by("base").agg(pl.col("is_cs").mean().alias("expected_cs_prob"))
+        scored = att.join(rate, on="base", how="left")
+    else:
+        scored = att.with_columns(pl.lit(league_cs).alias("expected_cs_prob"))
+    scored = scored.with_columns((pl.col("is_cs") - pl.col("expected_cs_prob").fill_null(league_cs)).alias("cs_gain"))
     out = (
         scored.group_by("catcher_id")
         .agg(pl.len().alias("attempts"), pl.col("cs_gain").sum().alias("cs_above_expected"))

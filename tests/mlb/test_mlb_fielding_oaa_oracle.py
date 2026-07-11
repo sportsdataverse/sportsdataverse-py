@@ -2,19 +2,22 @@
 
 Corpus: tests/fixtures/mlb_fielding/bip_2024.parquet (one month, 20,623 BIP)
 vs lb_oaa_2024.parquet (a FULL-SEASON leaderboard -- see
-tests/fixtures/mlb_fielding/README.md). Same month-vs-season scope caveat as
-the framing oracle (see that test's docstring); a full-season BIP re-capture
-was attempted for this task and did not complete within the session's time
-budget.
+tests/fixtures/mlb_fielding/README.md). This is a month-vs-season scope
+mismatch; the like-for-like FULL-SEASON gate lives in
+``test_mlb_fielding_oracle_live.py`` (``@skip_if_no_live``).
 
-Gate (never lower to pass -- debug the model instead): Pearson >= 0.25
-(observed 0.289 with no minimum-opportunity filter, rounded down to the
-nearest 0.05). This is well below the design's target 0.85 for a
-season-scale capture -- diagnosed as the month-vs-season/small-sample gap,
-not a model defect: the surface's own internal decile calibration (below)
-is well-behaved on held-out data, which a genuinely broken catch-probability
-model would not produce. Follow-up: widen `bip_2024.parquet` to the full
-2024 season and raise this floor to 0.85.
+Gate (never lower to pass -- debug the model instead): Pearson >= 0.30
+(observed 0.304 with no minimum-opportunity filter). ``mlb_fielding_oaa`` now
+fits a **per-position smooth logistic** P(out | distance, launch angle, exit
+velocity, spray) instead of the old coarse empirical bin surface; that raised
+the month-fixture correlation from 0.289 to 0.304 and, measured like-for-like
+on the FULL 2024 season, from **0.404 to 0.605** (n=272 -- see the live gate).
+The remaining gap to a perfect match is feature poverty, not a model defect:
+the public Statcast feed has no fielder *start* coordinates, so range is
+inferred from landing location + a launch-parameter hang-time proxy rather
+than distance actually covered -- the model cannot reach Savant's proprietary
+tracking accuracy. The surface's own internal decile calibration (below)
+stays well-behaved on held-out data.
 
 Cross-check (secondary, no hard gate): `lb_catch_probability_2024` is a
 per-player 1-5 "star" difficulty breakdown, not a bucket-rate table
@@ -55,7 +58,7 @@ def test_oaa_matches_savant_month_vs_season():
     assert j.height >= 50, f"join produced only {j.height} fielders -- capture too sparse to gate"
 
     r = pearson_corr(j["oaa"].to_numpy(), j["outs_above_average"].to_numpy())
-    assert r >= 0.25, f"OAA corr {r:.3f} < 0.25 -- debug out-events/hit_location mapping, do NOT lower the gate"
+    assert r >= 0.30, f"OAA corr {r:.3f} < 0.30 -- debug the catch-probability logistic, do NOT lower the gate"
 
 
 def test_catch_prob_surface_internal_calibration():
