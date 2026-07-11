@@ -1,0 +1,15 @@
+schema: mlb_pitch_classify
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: pitch_type
+  type: character
+  description: ''
+- name: pitch_type_reclass
+  type: character
+  description: ''
+- name: reclass_confidence
+  type: double
+  description: ''

@@ -1,0 +1,15 @@
+schema: mlb_injury_risk
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: game_pk
+  type: integer
+  description: ''
+- name: game_date
+  type: date
+  description: ''
+- name: injury_risk_index
+  type: double
+  description: ''

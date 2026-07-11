@@ -1,0 +1,15 @@
+schema: mlb_command_plus
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: pitch_type
+  type: character
+  description: ''
+- name: location_rv_hat
+  type: double
+  description: ''
+- name: command_plus
+  type: double
+  description: ''

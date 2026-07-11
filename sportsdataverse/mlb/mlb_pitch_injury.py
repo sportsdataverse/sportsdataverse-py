@@ -62,7 +62,7 @@ def _ols_slope(y: np.ndarray) -> float:
     n = len(y)
     if n < 2:
         return float("nan")
-    x = np.arange(n, dtype=float)
+    x: np.ndarray = np.arange(n, dtype=float)
     x_mean, y_mean = x.mean(), y.mean()
     denom = ((x - x_mean) ** 2).sum()
     if denom == 0:

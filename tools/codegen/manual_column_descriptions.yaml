@@ -8345,3 +8345,101 @@ mlb_props:
   exp_runs_away: Expected away-team runs (log5-style rate blend).
   exp_strikeouts_home: Expected home-pitcher strikeouts (null when the ratings input lacks k9/k_rate).
   exp_strikeouts_away: Expected away-pitcher strikeouts (null when the ratings input lacks k9/k_rate).
+pitch_features:
+  velo_z: Release speed standardized (z-score) within pitcher.
+  spin_z: Release spin rate standardized (z-score) within pitcher.
+  pfx_x_z: Horizontal movement (pfx_x) standardized (z-score) within pitcher.
+  pfx_z_z: Vertical movement (pfx_z) standardized (z-score) within pitcher.
+  release_pos_x_z: Horizontal release position standardized (z-score) within pitcher.
+  release_pos_z_z: Vertical release position standardized (z-score) within pitcher.
+  extension_z: Release extension standardized (z-score) within pitcher.
+  run_value: Savant per-pitch delta_run_exp, passed through unchanged as the spine's single run-value label.
+  plate_x_abs: Absolute horizontal plate location (distance from the center of the zone).
+  plate_z_norm: Vertical plate location normalized to the batter's own strike zone, 0 = bottom, 1 = top.
+  in_zone: 1 if the pitch crossed the strike zone (normalized location + horizontal bound), else 0.
+  dist_from_heart: Euclidean distance from the normalized zone center (0, 0.5) -- lower is more hittable.
+add_sequence_features:
+  prev_pitch_type: Pitch type of the previous pitch in the same plate appearance (null on the first pitch).
+  prev_release_pos_x: Horizontal release position of the previous pitch in the same plate appearance.
+  prev_release_pos_z: Vertical release position of the previous pitch in the same plate appearance.
+  prev_plate_x: Horizontal plate location of the previous pitch in the same plate appearance.
+  prev_plate_z: Vertical plate location of the previous pitch in the same plate appearance.
+  cum_pitches_game: Running count of pitches thrown by this pitcher so far in this game (inclusive of the current pitch).
+  batter_faced_index: Dense rank of this plate appearance's at_bat_number within the game (1 = first batter faced).
+  times_through_order: Times through the batting order, min(3, (batter_faced_index-1)//9 + 1).
+mlb_stuff_plus:
+  pitcher: MLBAM pitcher id.
+  pitch_type: Statcast pitch-type abbreviation.
+  stuff_rv_hat: Predicted per-pitch run value from the bundled Stuff+ xgboost model (physics + fastball-relative features only).
+  stuff_plus: Plus-scale Stuff+ score, 100 = league average, higher = better (sign-inverted from stuff_rv_hat).
+mlb_command_plus:
+  pitcher: MLBAM pitcher id.
+  pitch_type: Statcast pitch-type abbreviation.
+  location_rv_hat: Predicted per-pitch run value from the bundled Command+/Location+ xgboost model (location + count/handedness/pitch-type features only).
+  command_plus: Plus-scale Command+/Location+ score, 100 = league average, higher = better.
+mlb_pitch_era:
+  pitcher: MLBAM pitcher id.
+  season: Season year.
+  x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
+  x_era: Parametric xERA converted from x_woba via the season's league baselines.
+  k_pct: Strikeout rate (strikeouts / batters faced).
+  bb_pct: Walk rate (walks + HBP / batters faced).
+  gb_pct: Ground-ball rate among batted balls.
+  siera_like: SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.
+x_era:
+  pitcher: MLBAM pitcher id.
+  season: Season year.
+  x_woba: Mean estimated_woba_using_speedangle allowed on batted balls.
+  x_era: Parametric xERA converted from x_woba via the season's league baselines.
+siera_like:
+  pitcher: MLBAM pitcher id.
+  season: Season year (carried through for join convenience with x_era).
+  k_pct: Strikeout rate (strikeouts / batters faced).
+  bb_pct: Walk rate (walks + HBP / batters faced).
+  gb_pct: Ground-ball rate among batted balls.
+  siera_like: SIERA-like ERA estimate from the fitted K%/BB%/GB% OLS coefficients.
+mlb_times_through_order:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  at_bat_number: Game-level plate-appearance sequence number.
+  pitch_number: Pitch sequence number within the plate appearance.
+  times_through_order: Times through the batting order (1-3).
+  fatigue_rv_adj: Fitted per-TTO run-value marginal (mlb_pitching_constants.tto_penalty) for this pitch's TTO level.
+tto_penalty_table:
+  times_through_order: Times through the batting order (1-3).
+  mean_run_value: Mean observed run value for pitches at this TTO level.
+  penalty_vs_first: mean_run_value minus the TTO=1 mean run value.
+  n: Number of pitches observed at this TTO level.
+mlb_pitch_classify:
+  pitcher: MLBAM pitcher id.
+  pitch_type: Savant-reported pitch-type abbreviation.
+  pitch_type_reclass: Reclassified pitch-type label from the per-pitcher GMM clustering (may differ from pitch_type).
+  reclass_confidence: Max posterior cluster responsibility (1.0 for low-volume pitchers passed through unchanged).
+mlb_pitch_tunneling:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  at_bat_number: Game-level plate-appearance sequence number.
+  pitch_number: Pitch sequence number within the plate appearance.
+  release_dist: Euclidean distance between this pitch's release point and the previous pitch's release point.
+  plate_dist: Euclidean distance between this pitch's plate location and the previous pitch's plate location.
+  tunnel_ratio: plate_dist / max(release_dist, eps) -- higher means better tunneling (similar release, different result).
+mlb_sequence_run_value:
+  prev_pitch_type: Pitch type of the preceding pitch in the sequence.
+  pitch_type: Pitch type of the current pitch.
+  mean_run_value: Mean run value of the current pitch, grouped by the ordered (prev_pitch_type, pitch_type) pair.
+  n: Number of pitches observed for this ordered pair.
+pitcher_appearance_trends:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  game_date: Game date.
+  fb_velo: Mean fastball release speed for this appearance.
+  velo_trend: OLS slope of fb_velo over the trailing prior appearances (leakage-safe).
+  velo_drop: Trailing-baseline mean fb_velo minus this appearance's fb_velo.
+  pitches_game: Pitches thrown in this appearance.
+  trailing_workload: Mean pitches_game over the trailing prior appearances (leakage-safe).
+  days_rest: Days since the pitcher's previous appearance.
+mlb_injury_risk:
+  pitcher: MLBAM pitcher id.
+  game_pk: Game identifier.
+  game_date: Game date.
+  injury_risk_index: Equal-weighted composite of standardized adverse trailing features (higher = more risk).

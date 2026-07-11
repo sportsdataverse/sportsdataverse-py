@@ -1,0 +1,21 @@
+schema: siera_like
+kind: dataframe
+columns:
+- name: pitcher
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: k_pct
+  type: double
+  description: ''
+- name: bb_pct
+  type: double
+  description: ''
+- name: gb_pct
+  type: double
+  description: ''
+- name: siera_like
+  type: double
+  description: ''
