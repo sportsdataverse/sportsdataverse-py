@@ -18,6 +18,7 @@ from sportsdataverse.mlb.mlb_game_rosters import *
 from sportsdataverse.mlb.mlb_loaders import *
 from sportsdataverse.mlb.mlb_pbp import *
 from sportsdataverse.mlb.mlb_command_plus import mlb_command_plus
+from sportsdataverse.mlb.mlb_pitch_classify import mlb_pitch_classify
 from sportsdataverse.mlb.mlb_pitch_era import mlb_pitch_era, siera_like, x_era
 from sportsdataverse.mlb.mlb_pitch_fatigue import mlb_times_through_order, tto_penalty_table
 from sportsdataverse.mlb.mlb_pitch_features import add_sequence_features, pitch_features
