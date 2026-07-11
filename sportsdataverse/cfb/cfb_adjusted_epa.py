@@ -31,7 +31,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal, overload
 
-import numpy as np
 import polars as pl
 
 if TYPE_CHECKING:
@@ -96,45 +95,15 @@ def _fit_opponent_ridge(clean: pl.DataFrame, ridge_lambda: float) -> tuple[pl.Da
     ``offense``/``defense`` carry one row per *non-reference* team (``model.matrix``
     drops the first factor level); ``intercept`` is the league baseline used as the
     fallback strength for not-yet-seen teams in the walk-forward variant.
+
+    Thin wrapper (T7.2): the pure ridge solve moved verbatim to
+    :func:`sportsdataverse._common.ratings.dropped_level_ridge`; this name
+    stays so existing internal imports (``cfb_ratings.py``,
+    ``cfb_adjusted_epa`` call sites) keep working unchanged.
     """
-    try:
-        from sklearn.linear_model import Ridge
-    except ImportError as exc:  # pragma: no cover - optional dep guidance
-        raise ImportError(
-            "cfb_adjusted_epa requires scikit-learn. Install it with "
-            "`pip install sportsdataverse[models]` (or `pip install scikit-learn`)."
-        ) from exc
+    from sportsdataverse._common.ratings import dropped_level_ridge
 
-    off_ids = sorted(clean["pos_team_id"].drop_nulls().unique().to_list())
-    def_ids = sorted(clean["def_pos_team_id"].drop_nulls().unique().to_list())
-    off_dummy, def_dummy = off_ids[1:], def_ids[1:]
-
-    pos = clean["pos_team_id"].to_numpy()
-    dfn = clean["def_pos_team_id"].to_numpy()
-    feats = [clean["hfa"].cast(pl.Float64).to_numpy().reshape(-1, 1)]
-    feats += [(pos == t).astype(float).reshape(-1, 1) for t in off_dummy]
-    feats += [(dfn == t).astype(float).reshape(-1, 1) for t in def_dummy]
-    x_mat = np.hstack(feats)
-    y = clean["EPA"].cast(pl.Float64).to_numpy()
-
-    # glmnet (1/2n)RSS + lambda/2||b||^2 with internal standardization vs sklearn
-    # RSS + alpha||b||^2: standardize X and scale alpha by n. Coefficients won't
-    # byte-match glmnet, but the relative team strengths correlate closely.
-    mu, sd = x_mat.mean(axis=0), x_mat.std(axis=0)
-    sd[sd == 0] = 1.0
-    model = Ridge(alpha=ridge_lambda * len(y), fit_intercept=True)
-    model.fit((x_mat - mu) / sd, y)
-    coef_std = model.coef_ / sd
-    intercept = float(model.intercept_ - (coef_std * mu).sum())
-    names = ["hfa"] + [f"pos_team_id{t}" for t in off_dummy] + [f"def_pos_team_id{t}" for t in def_dummy]
-    coef = dict(zip(names, coef_std))
-    offense = pl.DataFrame(
-        {"team_id": off_dummy, "adjmodelOff": [coef[f"pos_team_id{t}"] + intercept for t in off_dummy]}
-    )
-    defense = pl.DataFrame(
-        {"team_id": def_dummy, "adjmodelDef": [coef[f"def_pos_team_id{t}"] + intercept for t in def_dummy]}
-    )
-    return offense, defense, intercept
+    return dropped_level_ridge(clean, ridge_lambda)
 
 
 def _adjust_games(
