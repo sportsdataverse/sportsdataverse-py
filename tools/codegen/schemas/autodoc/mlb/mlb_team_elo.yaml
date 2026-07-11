@@ -1,0 +1,30 @@
+schema: mlb_team_elo
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: date
+  type: date
+  description: ''
+- name: home_team_id
+  type: character
+  description: ''
+- name: away_team_id
+  type: character
+  description: ''
+- name: home_rating
+  type: double
+  description: ''
+- name: away_rating
+  type: double
+  description: ''
+- name: home_win_prob_elo
+  type: double
+  description: ''
+- name: home_rating_post
+  type: double
+  description: ''
+- name: away_rating_post
+  type: double
+  description: ''

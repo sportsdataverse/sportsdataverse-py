@@ -1,0 +1,15 @@
+schema: mlb_win_expectancy
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: at_bat_index
+  type: integer
+  description: ''
+- name: half
+  type: character
+  description: ''
+- name: home_win_exp
+  type: double
+  description: ''

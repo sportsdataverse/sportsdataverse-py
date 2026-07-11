@@ -1,0 +1,24 @@
+schema: build_we_table
+kind: dataframe
+columns:
+- name: inning_capped
+  type: integer
+  description: ''
+- name: half
+  type: character
+  description: ''
+- name: base_state
+  type: character
+  description: ''
+- name: outs_start
+  type: integer
+  description: ''
+- name: score_diff_bucket
+  type: integer
+  description: ''
+- name: home_win_exp
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

@@ -1,0 +1,27 @@
+schema: cfb_adjusted_tempo
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: games
+  type: integer
+  description: ''
+- name: raw_plays_game
+  type: double
+  description: ''
+- name: adj_plays_game
+  type: double
+  description: ''
+- name: raw_sec_play
+  type: double
+  description: ''
+- name: adj_sec_play
+  type: double
+  description: ''
+- name: pace_rank
+  type: integer
+  description: ''

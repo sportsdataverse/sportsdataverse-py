@@ -1,0 +1,9 @@
+schema: load_fp_curve
+kind: dataframe
+columns:
+- name: yardline_own
+  type: integer
+  description: ''
+- name: ep
+  type: double
+  description: ''

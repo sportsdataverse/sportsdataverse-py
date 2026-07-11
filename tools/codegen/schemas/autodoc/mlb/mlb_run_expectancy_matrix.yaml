@@ -1,0 +1,15 @@
+schema: mlb_run_expectancy_matrix
+kind: dataframe
+columns:
+- name: base_state
+  type: character
+  description: ''
+- name: outs
+  type: integer
+  description: ''
+- name: re
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

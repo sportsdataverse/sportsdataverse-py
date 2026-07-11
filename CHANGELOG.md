@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Fixes](#fixes)
+  - [CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)](#cfb--advanced-efficiency-spine-opponent-adjusted-efficiencyexplosivenesshavoc-%E2%86%92-field-position-%E2%86%92-adjusted-tempo)
   - [NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)](#nfl--ngs-over-expected-tracking-spine-yac-oe-%E2%86%92-ryoe-%E2%86%92-separation-oe-%E2%86%92-manzone-rates)
   - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
   - [NFL — projection & draft spine (player projections → usage shares → availability → draft model)](#nfl--projection--draft-spine-player-projections-%E2%86%92-usage-shares-%E2%86%92-availability-%E2%86%92-draft-model)
@@ -176,6 +177,25 @@
   `load_nfl_ff_rankings`) retry with exponential backoff on transient
   upstream errors (HTTP 429/5xx) instead of failing on the first hit — the
   raw-GitHub host rate-limits parallel CI runners.
+
+### CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)
+
+- feat(cfb): `cfb_advanced_stats` — Connelly-style opponent-adjusted
+  offense/defense efficiency, explosiveness (isoPPP), success rate, EPA/play,
+  and havoc from `load_cfb_pbp` with garbage-time filtering. Validated on 2021
+  vs CFBD advanced stats + SP+: success-rate Spearman 0.954/0.959 (off/def),
+  opponent-adjusted EPA ranks vs SP+ component ranks 0.866/0.843.
+- feat(cfb): `cfb_field_position` — team drive-start field-position value model
+  on a bundled EP-by-yardline curve (`fit_field_position_ep` / `load_fp_curve`);
+  avg-start vs CFBD 2021 Spearman 0.897, MAE 0.67 yards.
+- feat(cfb): `cfb_adjusted_tempo` — opponent-adjusted, situation-neutral pace
+  (raw plays/game vs CFBD 2021 Spearman 0.902; adjusted pace validated as a
+  monotone re-ordering of raw, Spearman 0.948).
+- feat(cfb): `cfb_advanced_constants` — shared success/explosive/garbage-time
+  flags + metric helpers and the iterative opponent-adjustment solver.
+- Committed 2021 CFBD advanced + SP+ oracle corpus under
+  `tests/fixtures/cfb_advanced/` with provenance README (hosted pbp covers
+  2002-2021; 2022+ is a producer-backfill gap).
 
 ### NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)
 

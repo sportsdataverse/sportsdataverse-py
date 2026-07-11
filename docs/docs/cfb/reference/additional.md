@@ -651,6 +651,26 @@ picks = load_draft_outcomes([2023, 2024])
 picks.group_by("college").len().sort("len", descending=True).head()
 ```
 
+### `load_fp_curve() -> 'pl.DataFrame'` {#load_fp_curve}
+
+Load the bundled EP-by-yardline curve (no network, no first-use download).
+
+**Returns**
+
+Int64 (1..99), ep: Float64``.
+
+| col_name | type | description |
+|---|---|---|
+| `yardline_own` | integer | Starting yard line from the offense's own goal (1-99). |
+| `ep` | double | Bundled expected points for a drive starting at this yard line (2018-2021 fit). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_field_position import load_fp_curve
+curve = load_fp_curve()
+```
+
 ### `load_recruit_classes(seasons: 'int | list[int]', *, division: 'str' = 'fbs', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#load_recruit_classes}
 
 Load recruiting classes as per-recruit rows from the 247 RDB feed.
@@ -1105,6 +1125,119 @@ tg = cfb.cfb_adjusted_epa_by_game(pbp)
 tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 ```
 
+### `cfb_adjusted_tempo(seasons: 'Union[int, list[int]]', *, exclude_garbage: 'bool' = True, config: 'Optional[AdjustConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#cfb_adjusted_tempo}
+
+Team-season situation-neutral, opponent-adjusted tempo / pace.
+
+Counts scrimmage plays per team-game (garbage time and kneels/spikes
+dropped) and per-play elapsed seconds, then opponent-adjusts both with
+the iterative solver on the per-game values (a fast team facing slow
+defenses gets `adj_plays_game > raw_plays_game`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | season or list of seasons (hosted pbp covers 2002-2021). |
+| `exclude_garbage` | `bool` | `True` | drop Connelly garbage-time plays. |
+| `config` | `Optional[AdjustConfig]` | `None` | `AdjustConfig` for the solver. |
+| `return_as_pandas` | `bool` | `False` | return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per (season, team_id): `games, raw_plays_game, adj_plays_game, raw_sec_play, adj_sec_play, pace_rank` (rank 1 = fastest adjusted pace). Zero-row frame with the documented schema on empty input.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the pace covers. |
+| `team_id` | character | Team ESPN id (character join key). |
+| `games` | integer | Games with situation-neutral offensive snaps in the loaded seasons. |
+| `raw_plays_game` | double | Situation-neutral scrimmage plays per game (garbage time and kneels/spikes excluded). |
+| `adj_plays_game` | double | Opponent-adjusted situation-neutral plays per game (iterative solver; higher = faster). |
+| `raw_sec_play` | double | Mean seconds elapsed per situation-neutral play (season total seconds over total plays). |
+| `adj_sec_play` | double | Opponent-adjusted seconds elapsed per situation-neutral play (lower = faster). |
+| `pace_rank` | integer | Dense rank on adj_plays_game descending (fastest adjusted pace = 1). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_adjusted_tempo
+df = cfb_adjusted_tempo([2021])
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("pace_rank").head()
+```
+
+### `cfb_advanced_stats(seasons: 'Union[int, list[int]]', *, adjust: 'bool' = True, exclude_garbage: 'bool' = True, as_of_date: 'Optional[datetime.date]' = None, config: 'Optional[AdjustConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#cfb_advanced_stats}
+
+Team-season CFB advanced stats: efficiency, explosiveness, havoc.
+
+Loads play-by-play via `load_cfb_pbp`, builds the garbage-filtered
+per-play long frame, aggregates raw per-team offense/defense success
+rate, EPA/play, isoPPP (mean EPA on successful plays), explosive rate
+and havoc, and (default) opponent-adjusts each metric with the
+iterative solver.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | season or list of seasons (hosted pbp covers 2002-2021). |
+| `adjust` | `bool` | `True` | add `adj_*` opponent-adjusted columns + EPA ranks. |
+| `exclude_garbage` | `bool` | `True` | drop Connelly garbage-time plays. |
+| `as_of_date` | `Optional[date]` | `None` | leakage boundary -- only plays strictly before this date contribute. |
+| `config` | `Optional[AdjustConfig]` | `None` | `AdjustConfig` for the solver. |
+| `return_as_pandas` | `bool` | `False` | return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per (season, team_id) with the raw columns (and `adj_*` plus `off_epa_rank`/`def_epa_rank` when `adjust=True`). Empty input returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the stats cover. |
+| `team_id` | character | Team ESPN id (character join key). |
+| `plays` | integer | Situation-neutral offensive plays in the aggregate. |
+| `off_success_rate` | double | Offensive success rate (yards gained >= 50/70/100 percent of distance by down). |
+| `def_success_rate` | double | Success rate allowed (Connelly 50/70/100 yardage rule). |
+| `off_epa_play` | double | Raw offensive EPA per play on the garbage-filtered substrate. |
+| `def_epa_play` | double | Raw EPA allowed per play on the garbage-filtered substrate. |
+| `off_iso_ppp` | double | Mean EPA on successful offensive plays (Connelly isoPPP explosiveness). |
+| `def_iso_ppp` | double | Mean EPA allowed on successful plays faced (isoPPP against). |
+| `off_explosive_rate` | double | Share of offensive plays that were explosive (pass EPA >= 2.4, rush EPA >= 1.8). |
+| `def_explosive_rate` | double | Share of plays faced that were explosive (pass EPA >= 2.4, rush EPA >= 1.8). |
+| `def_havoc` | double | Share of plays faced with a havoc event (TFL, pass breakup, interception, forced fumble). |
+| `off_havoc_allowed` | double | Share of offensive plays on which the defense recorded a havoc event. |
+| `off_epa_success_rate` | double | Share of offensive plays with EPA > 0 (EPA-based success rate). |
+| `adj_off_epa_play` | double | Opponent-adjusted offensive EPA per play (higher is better). |
+| `adj_off_success_rate` | double | Opponent-adjusted offensive success rate. |
+| `adj_off_explosive_rate` | double | Opponent-adjusted offensive explosive-play rate. |
+| `adj_def_epa_play` | double | Opponent-adjusted EPA allowed per play (lower is better). |
+| `adj_def_success_rate` | double | Opponent-adjusted success rate allowed. |
+| `adj_def_explosive_rate` | double | Opponent-adjusted explosive-play rate allowed. |
+| `adj_def_havoc` | double | Opponent-adjusted havoc rate created by the defense. |
+| `adj_off_havoc_allowed` | double | Opponent-adjusted havoc rate the offense allows. |
+| `off_epa_rank` | integer | Dense rank on adj_off_epa_play descending (best offense = 1). |
+| `def_epa_rank` | integer | Dense rank on adj_def_epa_play ascending (fewest EPA allowed = 1). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_advanced_stats
+df = cfb_advanced_stats([2021])
+print(df.shape)
+
+# Raw only, garbage time kept
+
+df_raw = cfb_advanced_stats(2021, adjust=False, exclude_garbage=False)
+
+# Pipeline next step (one line)
+
+df.sort("adj_off_epa_play", descending=True).head()
+```
+
 ### `cfb_compute_results(teams: 'pl.DataFrame', games: 'pl.DataFrame', week_num: 'int', *, rng: 'Optional[np.random.Generator]' = None, elo: 'Optional[Dict[str, float]]' = None, **kwargs: 'Any') -> 'Dict[str, pl.DataFrame]'` {#cfb_compute_results}
 
 Default results generator — nflseedR's dynamic ELO model for CFB.
@@ -1176,6 +1309,51 @@ year's eligible players.
 from sportsdataverse.cfb import cfb_draft_projection
 out = cfb_draft_projection(2024)
 out["teams"].sort("proj_draft_picks", descending=True).head(10)
+```
+
+### `cfb_field_position(seasons: 'Union[int, list[int]]', *, exclude_garbage: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#cfb_field_position}
+
+Team-season field-position value: avg start, drive EP, margin, pts/drive.
+
+Derives one row per drive from `load_cfb_pbp`, values each starting
+yard line with the bundled EP curve, and aggregates per (season, team):
+`avg_start_yardline` (yards from own goal, higher = better),
+`fp_ep` (mean drive-start EP), `fp_margin` (own `fp_ep` minus the
+mean drive-start EP of opponents' drives faced), and
+`points_per_drive` (mean realized offensive points: TD=7, FG=3).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  | season or list of seasons (hosted pbp covers 2002-2021). |
+| `exclude_garbage` | `bool` | `True` | drop drives that start in Connelly garbage time. |
+| `return_as_pandas` | `bool` | `False` | return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per (season, team_id); zero-row frame with the documented schema on empty input.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the field-position stats cover. |
+| `team_id` | character | Team ESPN id (character join key). |
+| `drives` | integer | Offensive drives counted (garbage-time drives excluded by default). |
+| `avg_start_yardline` | double | Mean drive-start yard line from the team's own goal (higher = better field position). |
+| `fp_ep` | double | Mean bundled expected points of the team's drive starts. |
+| `fp_margin` | double | Own fp_ep minus the mean drive-start EP of opponents' drives faced. |
+| `points_per_drive` | double | Mean realized offensive points per drive (TD=7, FG=3). |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import cfb_field_position
+df = cfb_field_position([2021])
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("fp_margin", descending=True).head()
 ```
 
 ### `cfb_games_from_schedule(schedule: 'FrameLike', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, Any]'` {#cfb_games_from_schedule}
@@ -2093,6 +2271,39 @@ A `polars.DataFrame` with one row per `team_id` appearing as `pos_team_id` on at
 from sportsdataverse.cfb.cfb_ratings import fei_ratings
 fei = fei_ratings(pbp)
 fei.sort("fei_net", descending=True).head()
+```
+
+### `fit_field_position_ep(drives: 'pl.DataFrame', *, start_col: 'str' = 'drive_start_yardline', pts_col: 'str' = 'drive_next_score_pts') -> 'pl.DataFrame'` {#fit_field_position_ep}
+
+Fit the monotone EP-by-starting-yardline curve from a drives frame.
+
+Groups drives by starting yard line (from own goal), takes the mean
+next-score points, and applies play-count-weighted isotonic regression
+(non-decreasing), interpolated onto the full 1..99 grid.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `drives` | `DataFrame` |  | one row per drive. |
+| `start_col` | `str` | `'drive_start_yardline'` | starting yard line from own goal (1..99). |
+| `pts_col` | `str` | `'drive_next_score_pts'` | net next-score points for the drive's offense. |
+
+**Returns**
+
+Int64 (1..99), ep: Float64`` -- monotone non-decreasing. Empty input returns a zero-row frame.
+
+| col_name | type | description |
+|---|---|---|
+| `yardline_own` | integer | Starting yard line from the offense's own goal (1-99). |
+| `ep` | double | Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing). |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb.cfb_field_position import fit_field_position_ep
+curve = fit_field_position_ep(drives_frame)
 ```
 
 ### `fox_cfb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_cfb_boxscore}
