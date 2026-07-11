@@ -11,7 +11,7 @@ sidebar_label: MLB
 | [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
 | [MLB Stats API](reference/mlb_api) | 64 | `https://statsapi.mlb.com` |
 | [MLB Statcast (Baseball Savant)](reference/mlb_statcast) | 39 | `https://baseballsavant.mlb.com` |
-| [Additional functions](reference/additional) | 52 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 71 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 

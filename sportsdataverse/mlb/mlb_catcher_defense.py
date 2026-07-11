@@ -108,7 +108,10 @@ def mlb_catcher_blocking(
     Args:
         pitches: Pitch-level frame with ``plate_z``/``sz_top``/``sz_bot``,
             ``fielder_2``, ``des`` (or ``events`` as a fallback), and (if
-            present) ``on_1b``/``on_2b``/``on_3b``.
+            present) ``on_1b``/``on_2b``/``on_3b``. MiLB feeds (e.g.
+            :func:`sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`)
+            run through the same function -- there is no Savant blocking
+            leaderboard oracle for MiLB.
         dirt_bin_width: Bin width for the below-zone depth bucket. Defaults
             to ``0.2`` (zone-normalized units).
         return_as_pandas: Return a pandas DataFrame instead of polars.
@@ -187,7 +190,8 @@ def mlb_catcher_throwing(
         sb_attempts: One row per stolen-base attempt (see
             :func:`sportsdataverse.mlb.mlb_stolen_base.sb_attempts_from_pitches`),
             with ``catcher_id`` (Utf8) and ``outcome`` (``"success"`` \\|
-            ``"caught"``).
+            ``"caught"``). MiLB feeds run through the same function -- there
+            is no Savant throwing leaderboard oracle for MiLB.
         poptime: A :func:`sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_poptime`
             frame with ``catcher_id`` (Utf8) and the pop-time column named
             by ``pop_col``.

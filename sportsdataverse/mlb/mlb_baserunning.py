@@ -159,7 +159,9 @@ def mlb_baserunning_value(
 
     Args:
         events: Pitch-level frame passed to
-            :func:`advancement_opportunities`.
+            :func:`advancement_opportunities`. MiLB feeds run through the
+            same function -- there is no Savant baserunning leaderboard
+            oracle for MiLB.
         sprint_speed: A
             :func:`sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_sprint_speed`
             frame with ``runner_id`` (Utf8) and ``sprint_speed``.

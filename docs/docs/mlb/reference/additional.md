@@ -375,6 +375,85 @@ The most recent MLB season year (e.g. `2024`).
 
 ## Other
 
+### `advancement_opportunities(events: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#advancement_opportunities}
+
+Extract first-to-third / second-to-home / tag-up opportunities and outcomes.
+
+One plate-appearance row (the terminal, non-null-`events` pitch of
+each `(game_pk, at_bat_number)`) is matched against the *next*
+plate appearance's pre-play occupancy (`on_1b`/`on_2b`/`on_3b`,
+shifted within `game_pk`) to read the post-play base state.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `events` | `DataFrame` |  | Pitch-level frame (a `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search` output) with `game_pk`, `at_bat_number`, `on_1b`, `on_2b`, `on_3b`, `events`. |
+
+**Returns**
+
+one row per detected opportunity. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | MLBAM id of the runner facing the advancement decision | | opp_type | Utf8 | `first_to_third` \| `second_to_home` \| `tag_up` | | took_extra | Int8 | 1 if the runner advanced the extra base, else 0 |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_baserunning import advancement_opportunities
+opps = advancement_opportunities(pitches)
+```
+
+### `as_of_split(events: "'pl.DataFrame'", cutoff_date: 'Any', *, date_col: 'str' = 'game_date') -> "'pl.DataFrame'"` {#as_of_split}
+
+Leakage boundary: rows strictly before `cutoff_date` only.
+
+The predictive path of the stolen-base (and, where predictive,
+baserunning) model must derive runner/catcher features only from data
+known **before** the event being scored -- this helper is the one place
+that boundary is enforced, so every predictive caller shares it.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `events` | `DataFrame` |  | Any frame carrying a date column. |
+| `cutoff_date` | `Any` |  | Exclusive upper bound (rows with `date_col < cutoff_date` are kept). |
+| `date_col` | `str` | `'game_date'` | Name of the date column. Defaults to `"game_date"`. |
+
+**Returns**
+
+the filtered frame (unchanged if empty or missing `date_col`).
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_values import as_of_split
+history = as_of_split(events, cutoff_date=dt.date(2024, 6, 15))
+```
+
+### `bip_trajectory_features(bip: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#bip_trajectory_features}
+
+Add spray angle / hit distance / launch-angle bin / out label / position.
+
+`spray_angle = atan2(hc_x - 125.42, 198.27 - hc_y)` (Savant's standard
+`hc_x`/`hc_y` transform, home plate at the origin, positive = toward
+first base).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `bip` | `DataFrame` |  | Balls-in-play frame (`hc_x`, `hc_y`, `hit_distance_sc`, `launch_angle`, `events`, `hit_location`). |
+
+**Returns**
+
+`bip` with added `spray_angle` (Float64), `hit_dist` (Float64), `la_bin` (Int64), `is_out` (Int8), `position` (Int64).
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_fielding_oaa import bip_trajectory_features
+feats = bip_trajectory_features(bip)
+```
+
 ### `build_we_table(states: 'pl.DataFrame', results: 'pl.DataFrame', *, laplace: 'float' = 1.0) -> 'pl.DataFrame'` {#build_we_table}
 
 Empirical, Laplace-smoothed home win-expectancy table.
@@ -408,6 +487,89 @@ from sportsdataverse.mlb.mlb_run_expectancy import pbp_base_out_states
 from sportsdataverse.mlb.mlb_win_expectancy import build_we_table
 states = pbp_base_out_states(pbp)
 table = build_we_table(states, results)
+```
+
+### `called_strike_prob_grid(pitches: "'pl.DataFrame'", *, x_bin: 'float' = 0.1, z_bin: 'float' = 0.1, alpha: 'float' = 1.0) -> "'pl.DataFrame'"` {#called_strike_prob_grid}
+
+Empirical called-strike-probability grid over `(stand, plate_x, pz_norm)`.
+
+Pitch height is normalized within the batter's strike zone
+(`pz_norm = (plate_z - sz_bot) / (sz_top - sz_bot)`) so the grid is
+zone-relative and comparable across batters; `plate_x` is kept raw
+(feet from the plate's center). Rate per bin is Laplace-smoothed:
+`(strikes + alpha) / (n + 2 * alpha)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Pitch-level takes frame (`plate_x`, `plate_z`, `sz_top`, `sz_bot`, `stand`, `description`). |
+| `x_bin` | `float` | `0.1` | Bin width for `plate_x`, in feet. Defaults to `0.1`. |
+| `z_bin` | `float` | `0.1` | Bin width for zone-normalized height. Defaults to `0.1`. |
+| `alpha` | `float` | `1.0` | Laplace smoothing strength. Defaults to `1.0`. |
+
+**Returns**
+
+one row per observed `(stand, px_bin, pz_bin)`. | Column | Type | Description | |---|---|---| | stand | Utf8 | Batter handedness (`L`/`R`) | | px_bin | Int64 | Horizontal plate-location bin index | | pz_bin | Int64 | Zone-normalized vertical bin index | | p_strike | Float64 | Laplace-smoothed empirical called-strike probability | | n | Int64 | Takes observed in this bin |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_catcher_framing import called_strike_prob_grid
+grid = called_strike_prob_grid(pitches, alpha=1.0)
+```
+
+### `catch_prob_surface(bip: "'pl.DataFrame'", *, dist_bin: 'float' = 10.0, spray_bin: 'float' = 0.1, alpha: 'float' = 2.0) -> "'pl.DataFrame'"` {#catch_prob_surface}
+
+Empirical catch-probability surface over `(position, distance, spray, launch angle)`.
+
+Rate per bin is Laplace-smoothed: `(outs + alpha) / (n + 2 * alpha)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `bip` | `DataFrame` |  | Balls-in-play frame (see `bip_trajectory_features`). |
+| `dist_bin` | `float` | `10.0` | Bin width for hit distance, in feet. Defaults to `10.0`. |
+| `spray_bin` | `float` | `0.1` | Bin width for spray angle, in radians. Defaults to `0.1`. |
+| `alpha` | `float` | `2.0` | Laplace smoothing strength. Defaults to `2.0`. |
+
+**Returns**
+
+one row per observed `(position, dist_b, spray_b, la_bin)`. | Column | Type | Description | |---|---|---| | position | Int64 | Responsible fielder position (Savant `hit_location`, 1-9) | | dist_b | Int64 | Hit-distance bin index | | spray_b | Int64 | Spray-angle bin index | | la_bin | Int64 | Launch-angle bin index (hang-time proxy) | | p_catch | Float64 | Laplace-smoothed empirical out (catch) probability | | n | Int64 | Balls in play observed in this bin |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_fielding_oaa import catch_prob_surface
+surface = catch_prob_surface(bip, alpha=2.0)
+```
+
+### `count_strike_run_value(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#count_strike_run_value}
+
+Ball-to-strike run-expectancy delta per count, from `delta_run_exp`.
+
+`strike_run_value` is positive = runs **saved by the defense** per
+stolen strike, since a called strike carries negative `delta_run_exp`
+for the batting team relative to a ball in the same count:
+`strike_run_value = -(E[delta_run_exp | called_strike, count] -
+E[delta_run_exp | ball, count])`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Pitch-level frame with `balls`, `strikes`, `description`, and `delta_run_exp` columns (a `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search` frame). Rows other than `called_strike`/`ball` are ignored. |
+
+**Returns**
+
+one row per observed count. | Column | Type | Description | |---|---|---| | balls | Int64 | Ball count (0-3) entering the pitch | | strikes | Int64 | Strike count (0-2) entering the pitch | | strike_run_value | Float64 | Runs saved by the defense per called strike vs. a ball in this count |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_values import count_strike_run_value
+rv = count_strike_run_value(pitches)
 ```
 
 ### `espn_mlb_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mlb_teams}
@@ -459,6 +621,28 @@ teams.filter(pl.col("team_id") == "19").to_dicts()
 espn_mlb_teams.cache_clear()
 teams_pd = espn_mlb_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
+```
+
+### `event_run_value(pitches: "'pl.DataFrame'", events: "'List[str]'") -> 'float'` {#event_run_value}
+
+Empirical run value of an event set, from mean `delta_run_exp`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Pitch-level frame with an `events` column and `delta_run_exp`. |
+| `events` | `List[str]` |  | Statcast `events` values to average over (e.g. `["stolen_base_2b"]`). |
+
+**Returns**
+
+Mean `delta_run_exp` over rows whose `events` is in `events`. `0.0` if the frame is empty, lacks `delta_run_exp`, or no rows match.
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_values import event_run_value
+rv_sb = event_run_value(pitches, ["stolen_base_2b", "stolen_base_3b"])
 ```
 
 ### `fit_zone_model(pitches: 'pl.DataFrame') -> 'Dict[str, Any]'` {#fit_zone_model}
@@ -626,6 +810,28 @@ from sportsdataverse.mlb import fox_mlb_team_stats
 df = fox_mlb_team_stats("...")
 ```
 
+### `mae(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'` {#mae}
+
+Mean absolute error between two 1-D arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | Predicted / modeled array. |
+| `b` | `ndarray` |  | Reference / observed array, same length as `a`. |
+
+**Returns**
+
+`mean(abs(a - b))`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_values import mae
+gap = mae(deciles["mean_pred"].to_numpy(), deciles["mean_actual"].to_numpy())
+```
+
 ### `mlb_attendance(team_id: 'Optional[int]' = None, league_id: 'Optional[Union[int, str]]' = None, season: 'Optional[Union[int, str]]' = None, league_list_id: 'Optional[str]' = None, game_type: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_attendance}
 
 GET /api/v1/attendance — game attendance figures.
@@ -639,6 +845,143 @@ GET /api/v1/attendance — game attendance figures.
 | `season` | `Optional[Union[int, str]]` | `None` |  |
 | `league_list_id` | `Optional[str]` | `None` |  |
 | `game_type` | `Optional[str]` | `None` |  |
+
+### `mlb_baserunning_value(events: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", *, speed_bin: 'float' = 1.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_baserunning_value}
+
+Per-runner baserunning runs from extra-bases-taken above expected.
+
+Expected extra-base probability is an empirical rate by `(opp_type,
+speed_bin)`; `baserunning_runs = extra_bases_above_expected *
+RUN_VALUES["extra_base"]`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `events` | `DataFrame` |  | Pitch-level frame passed to `advancement_opportunities`. MiLB feeds run through the same function -- there is no Savant baserunning leaderboard oracle for MiLB. |
+| `sprint_speed` | `DataFrame` |  | A `sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_sprint_speed` frame with `runner_id` (Utf8) and `sprint_speed`. |
+| `speed_bin` | `float` | `1.0` | Bin width (ft/sec) for the sprint-speed bucket. Defaults to `1.0`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+one row per runner. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | Runner MLBAM id | | opportunities | Int64 | Advancement opportunities faced | | extra_bases_above_expected | Float64 | Sum of (took_extra - expected rate) | | baserunning_runs | Float64 | extra_bases_above_expected x RUN_VALUES["extra_base"] |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_baserunning import mlb_baserunning_value
+baserunning = mlb_baserunning_value(pitches, sprint_speed)
+```
+
+### `mlb_catcher_blocking(pitches: "'pl.DataFrame'", *, dirt_bin_width: 'float' = 0.2, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_blocking}
+
+Per-catcher blocking runs from a dirt-pitch block-probability model.
+
+A block opportunity is a pitch below the strike zone (`pz_norm < 0`)
+with a runner on base, or a pitch whose `des` narrates a wild
+pitch/passed ball (see module docstring for why `des`, not
+`events`). Expected block probability is the empirical block rate
+within the pitch's dirt-depth bin; `blocking_runs =
+blocks_above_expected * RUN_VALUES["wp_pb"]` (the documented fallback
+constant -- the narrating row's `delta_run_exp` bundles the primary
+batter outcome with the WP/PB and cannot isolate the latter's value).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Pitch-level frame with `plate_z`/`sz_top`/`sz_bot`, `fielder_2`, `des` (or `events` as a fallback), and (if present) `on_1b`/`on_2b`/`on_3b`. MiLB feeds (e.g. `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`) run through the same function -- there is no Savant blocking leaderboard oracle for MiLB. |
+| `dirt_bin_width` | `float` | `0.2` | Bin width for the below-zone depth bucket. Defaults to `0.2` (zone-normalized units). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant `fielder_2`) | | block_opps | Int64 | Dirt-pitch block opportunities faced | | blocks_above_expected | Float64 | Sum of (blocked - expected block rate) | | blocking_runs | Float64 | blocks_above_expected x RUN_VALUES["wp_pb"] |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_blocking
+blocking = mlb_catcher_blocking(pitches)
+
+# Pipeline next step (one line)
+
+blocking.filter(pl.col("block_opps") >= 50).sort("blocking_runs", descending=True)
+```
+
+### `mlb_catcher_framing(pitches: "'pl.DataFrame'", *, x_bin: 'float' = 0.1, z_bin: 'float' = 0.1, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_framing}
+
+Per-catcher framing runs from the called-strike probability grid.
+
+For every take, `framing_run = (actual_strike - expected_strike) *
+strike_run_value(count)` where `expected_strike` is the grid lookup
+for that pitch's `(stand, px_bin, pz_bin)` and `strike_run_value`
+is the count's defensive run value from
+`sportsdataverse.mlb.mlb_run_values.count_strike_run_value`. Summed
+per catcher (Savant's `fielder_2`, cast `Utf8` at the boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | Pitch-level frame with the take columns (`plate_x`/`plate_z`/`sz_top`/`sz_bot`/`stand`/ `description`/`balls`/`strikes`/`delta_run_exp`/ `fielder_2`). MiLB feeds (e.g. `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`) run through the same function -- there is simply no Savant leaderboard oracle to gate MiLB output against. |
+| `x_bin` | `float` | `0.1` | Grid bin width for `plate_x`. Defaults to `0.1`. |
+| `z_bin` | `float` | `0.1` | Grid bin width for zone-normalized height. Defaults to `0.1`. |
+| `alpha` | `float` | `1.0` | Laplace smoothing strength for the grid. Defaults to `1.0`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id (Savant `fielder_2`) | | takes | Int64 | Called-strike + ball takes caught | | framing_runs | Float64 | Sum of (actual - expected strike) x count run-value | | strikes_gained | Float64 | Sum of (actual - expected strike), run-value-free |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_catcher_framing import mlb_catcher_framing
+framing = mlb_catcher_framing(pitches)
+
+# Useful parameter combination
+
+framing_pd = mlb_catcher_framing(pitches, alpha=2.0, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+framing.filter(pl.col("takes") >= 500).sort("framing_runs", descending=True)
+```
+
+### `mlb_catcher_throwing(sb_attempts: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, pop_col: 'str' = 'pop_2b_sba', pop_bin_width: 'float' = 0.05, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_catcher_throwing}
+
+Per-catcher caught-stealing (throwing) value from a pop-time model.
+
+Expected caught-stealing probability is a monotone empirical function of
+catcher pop time (binned); `throwing_runs = cs_above_expected *
+|RUN_VALUES["cs"] - RUN_VALUES["sb"]|` (the documented fallback
+constants -- see `sportsdataverse.mlb.mlb_stolen_base` for why a
+real-capture attempt's `delta_run_exp` cannot isolate the steal's own
+run value from the bundled primary batter outcome it is narrated
+alongside).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sb_attempts` | `DataFrame` |  | One row per stolen-base attempt (see `sportsdataverse.mlb.mlb_stolen_base.sb_attempts_from_pitches`), with `catcher_id` (Utf8) and `outcome` (`"success"` \\| `"caught"`). MiLB feeds run through the same function -- there is no Savant throwing leaderboard oracle for MiLB. |
+| `poptime` | `DataFrame` |  | A `sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_poptime` frame with `catcher_id` (Utf8) and the pop-time column named by `pop_col`. |
+| `pop_col` | `str` | `'pop_2b_sba'` | Name of the pop-time column in `poptime`. Defaults to `"pop_2b_sba"` (pop time to second on stolen-base attempts). |
+| `pop_bin_width` | `float` | `0.05` | Bin width (seconds) for the pop-time bucket. Defaults to `0.05`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+one row per catcher. | Column | Type | Description | |---|---|---| | catcher_id | Utf8 | Catcher MLBAM id | | attempts | Int64 | Stolen-base attempts caught behind the plate | | cs_above_expected | Float64 | Sum of (caught - expected CS rate) | | throwing_runs | Float64 | cs_above_expected x \|RUN_VALUES["cs"] - RUN_VALUES["sb"]\| |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_throwing
+throwing = mlb_catcher_throwing(sb_attempts, poptime)
+```
 
 ### `mlb_divisions(sport_id: 'int' = 1, league_id: 'Optional[Union[int, str]]' = None, division_id: 'Optional[int]' = None, **kwargs) -> 'Dict'` {#mlb_divisions}
 
@@ -663,6 +1006,41 @@ GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
 | `year` | `Union[int, str]` |  |  |
 | `scouting_report` | `Optional[bool]` | `None` |  |
 | `limit` | `int` | `100` |  |
+
+### `mlb_fielding_oaa(bip: "'pl.DataFrame'", *, dist_bin: 'float' = 10.0, spray_bin: 'float' = 0.1, alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_fielding_oaa}
+
+Per-fielder outs above average from the compute-on-demand catch-probability surface.
+
+`oaa = sum(is_out - p_catch)` per `(fielder_id, position)`, where
+`p_catch` is the surface's expected out probability for that ball's
+bin. The fielder id is resolved dynamically from the responsible
+position's `fielder_{position}` column (cast `Utf8` at the
+boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `bip` | `DataFrame` |  | Balls-in-play frame with `hc_x`/`hc_y`, `hit_distance_sc`, `launch_angle`, `hit_location`, `events`, and the `fielder_1`..`fielder_9` responsible-player columns. MiLB input (e.g. `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search_minors`) runs through the same function -- there is no Savant OAA leaderboard oracle for MiLB. |
+| `dist_bin` | `float` | `10.0` | Surface bin width for hit distance, in feet. |
+| `spray_bin` | `float` | `0.1` | Surface bin width for spray angle, in radians. |
+| `alpha` | `float` | `2.0` | Laplace smoothing strength for the surface. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+one row per `(fielder_id, position)`. | Column | Type | Description | |---|---|---| | fielder_id | Utf8 | Responsible fielder's MLBAM id | | position | Int64 | Position (Savant `hit_location`, 1-9) | | opportunities | Int64 | Balls in play charged to this fielder | | oaa | Float64 | Sum of (out - expected catch probability) |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_fielding_oaa import mlb_fielding_oaa
+oaa = mlb_fielding_oaa(bip)
+
+# Pipeline next step (one line)
+
+oaa.filter(pl.col("opportunities") >= 100).sort("oaa", descending=True)
+```
 
 ### `mlb_pbp_diff(game_pk: 'int', start_timecode: 'str', end_timecode: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_pbp_diff}
 
@@ -1773,6 +2151,41 @@ GET /api/v1/stats/streaks — active or historical streaks.
 | `active_streak` | `Optional[bool]` | `None` |  |
 | `sport_id` | `int` | `1` |  |
 
+### `mlb_stolen_base_value(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_stolen_base_value}
+
+Per-runner stolen-base run value: realized-vs-expected run contribution.
+
+`sb_run_value = sum(p_success * RUN_VALUES["sb"] + (1 - p_success) *
+RUN_VALUES["cs"])` per attempt -- the documented fallback constants
+(see module docstring for why, not
+`sportsdataverse.mlb.mlb_run_values.event_run_value` on these
+bundled-`des` rows), weighted by the surface's modeled success
+probability for that attempt's bin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sb_attempts` | `DataFrame` |  | One row per attempt (see `sb_attempts_from_pitches`). MiLB feeds run through the same function -- there is no Savant basestealing leaderboard oracle for MiLB. |
+| `sprint_speed` | `DataFrame` |  | Sprint-speed leaderboard frame (`runner_id`, `sprint_speed`). |
+| `poptime` | `DataFrame` |  | Pop-time leaderboard frame (`catcher_id`, `pop_col`). |
+| `speed_bin` | `float` | `0.5` | Sprint-speed bin width. Defaults to `0.5`. |
+| `pop_bin` | `float` | `0.05` | Pop-time bin width. Defaults to `0.05`. |
+| `pop_col` | `str` | `'pop_2b_sba'` | Pop-time column name in `poptime`. Defaults to `"pop_2b_sba"`. |
+| `alpha` | `float` | `2.0` | Laplace smoothing strength for the surface. Defaults to `2.0`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+one row per runner. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | Runner MLBAM id | | attempts | Int64 | Stolen-base attempts | | p_success_mean | Float64 | Mean modeled success probability across attempts | | sb_run_value | Float64 | Sum of realized-vs-expected run contribution |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_stolen_base import mlb_stolen_base_value
+sb_value = mlb_stolen_base_value(sb_attempts, sprint_speed, poptime)
+```
+
 ### `mlb_team_elo(results: 'pl.DataFrame', *, k: 'float' = 4.0, hfa: 'float' = 24.0, init: 'float' = 1500.0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_team_elo}
 
 As-of-date iterative Elo run-differential rating.
@@ -2059,6 +2472,61 @@ from sportsdataverse.mlb.mlb_run_expectancy import pbp_base_out_states
 states = pbp_base_out_states(pbp)
 ```
 
+### `pearson_corr(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'` {#pearson_corr}
+
+Pearson correlation coefficient between two 1-D arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First sample array. |
+| `b` | `ndarray` |  | Second sample array, same length as `a`. |
+
+**Returns**
+
+Pearson's r. `nan` if either input has zero variance.
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_values import pearson_corr
+r = pearson_corr(mine["framing_runs"].to_numpy(), sav["runs_extra_strikes"].to_numpy())
+```
+
+### `predict_sb_success(upcoming: "'pl.DataFrame'", history: "'pl.DataFrame'", cutoff_date: 'Any', *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#predict_sb_success}
+
+As-of-date predictive P(success): the surface is fit on history strictly before `cutoff_date`.
+
+The leakage boundary: `sportsdataverse.mlb.mlb_run_values.as_of_split`
+drops every `history` row with `game_date >= cutoff_date` before the
+success-rate grid is built, so `upcoming` attempts are scored only
+against what was knowable at that date.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `upcoming` | `DataFrame` |  | Attempts to score, each carrying `runner_id`, `base`, `sprint_speed`, and the `pop_col` pop-time column. |
+| `history` | `DataFrame` |  | Prior attempts with `game_date`, `outcome`, `sprint_speed`, and `pop_col` -- used to fit the surface via `as_of_split`. |
+| `cutoff_date` | `Any` |  | Exclusive upper bound on `history["game_date"]`. |
+| `speed_bin` | `float` | `0.5` | Sprint-speed bin width. Defaults to `0.5`. |
+| `pop_bin` | `float` | `0.05` | Pop-time bin width. Defaults to `0.05`. |
+| `pop_col` | `str` | `'pop_2b_sba'` | Pop-time column name. Defaults to `"pop_2b_sba"`. |
+| `alpha` | `float` | `2.0` | Laplace smoothing strength. Defaults to `2.0`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+one row per scored attempt. | Column | Type | Description | |---|---|---| | runner_id | Utf8 | Runner MLBAM id | | base | Utf8 | Attempted base | | p_success | Float64 | Modeled success probability, as-of `cutoff_date` |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_stolen_base import predict_sb_success
+preds = predict_sb_success(upcoming, history, cutoff_date=dt.date(2024, 6, 15))
+```
+
 ### `prop_over_prob(line: 'float', expected: 'float') -> 'float'` {#prop_over_prob}
 
 P(realized count > line) under a Poisson(expected) model.
@@ -2081,4 +2549,82 @@ P(over), in `[0, 1]`.
 ```python
 from sportsdataverse.mlb.mlb_prop_projection import prop_over_prob
 prop_over_prob(3.5, 4.5)
+```
+
+### `sb_attempts_from_pitches(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"` {#sb_attempts_from_pitches}
+
+Extract stolen-base / caught-stealing attempts from pitch-level Statcast rows.
+
+Detects attempts via a `des` regex (see module docstring for why --
+the `events` column does not carry these in the flat per-pitch search)
+and reads the attempting runner off the pre-play occupancy column
+implied by the attempted base (2B attempt -> `on_1b`, 3B -> `on_2b`,
+home -> `on_3b`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pitches` | `DataFrame` |  | A `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search` frame with `des`, `fielder_2`, `on_1b`/`on_2b`/`on_3b`, and (if present) `game_date`. |
+
+**Returns**
+
+one row per attempt. | Column | Type | Description | |---|---|---| | game_date | Date | Game date (if present in the input) | | runner_id | Utf8 | Attempting runner's MLBAM id | | catcher_id | Utf8 | Catcher MLBAM id (Savant `fielder_2`) | | base | Utf8 | `2B` \| `3B` \| `HOME` | | outcome | Utf8 | `success` \| `caught` |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_stolen_base import sb_attempts_from_pitches
+sb_attempts = sb_attempts_from_pitches(pitches)
+```
+
+### `sb_success_surface(sb_attempts: "'pl.DataFrame'", sprint_speed: "'pl.DataFrame'", poptime: "'pl.DataFrame'", *, speed_bin: 'float' = 0.5, pop_bin: 'float' = 0.05, pop_col: 'str' = 'pop_2b_sba', alpha: 'float' = 2.0) -> "'pl.DataFrame'"` {#sb_success_surface}
+
+Empirical P(stolen-base success) surface over `(sprint speed, pop time, base)`.
+
+Rate per bin is Laplace-smoothed: `(successes + alpha) / (n + 2 * alpha)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sb_attempts` | `DataFrame` |  | One row per attempt (`runner_id`, `catcher_id`, `base`, `outcome`). |
+| `sprint_speed` | `DataFrame` |  | A `sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_sprint_speed` frame with `runner_id` (Utf8) and `sprint_speed`. |
+| `poptime` | `DataFrame` |  | A `sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_poptime` frame with `catcher_id` (Utf8) and the pop-time column named by `pop_col`. |
+| `speed_bin` | `float` | `0.5` | Bin width (ft/sec) for sprint speed. Defaults to `0.5`. |
+| `pop_bin` | `float` | `0.05` | Bin width (seconds) for pop time. Defaults to `0.05`. |
+| `pop_col` | `str` | `'pop_2b_sba'` | Name of the pop-time column in `poptime`. Defaults to `"pop_2b_sba"`. |
+| `alpha` | `float` | `2.0` | Laplace smoothing strength. Defaults to `2.0`. |
+
+**Returns**
+
+one row per observed `(speed_b, pop_b, base)`. | Column | Type | Description | |---|---|---| | speed_b | Int64 | Sprint-speed bin index | | pop_b | Int64 | Pop-time bin index | | base | Utf8 | Attempted base | | p_success | Float64 | Laplace-smoothed empirical success probability | | n | Int64 | Attempts observed in this bin |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_stolen_base import sb_success_surface
+surface = sb_success_surface(sb_attempts, sprint_speed, poptime)
+```
+
+### `spearman_corr(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'` {#spearman_corr}
+
+Spearman rank correlation between two 1-D arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First sample array. |
+| `b` | `ndarray` |  | Second sample array, same length as `a`. |
+
+**Returns**
+
+Spearman's rho (Pearson correlation of the ranks).
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_values import spearman_corr
+rho = spearman_corr(mine["oaa"].to_numpy(), sav["outs_above_average"].to_numpy())
 ```

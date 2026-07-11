@@ -42,7 +42,7 @@ See Also:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Union
 
 import polars as pl
 
@@ -242,6 +242,8 @@ def mlb_stolen_base_value(
 
     Args:
         sb_attempts: One row per attempt (see :func:`sb_attempts_from_pitches`).
+            MiLB feeds run through the same function -- there is no Savant
+            basestealing leaderboard oracle for MiLB.
         sprint_speed: Sprint-speed leaderboard frame (``runner_id``, ``sprint_speed``).
         poptime: Pop-time leaderboard frame (``catcher_id``, ``pop_col``).
         speed_bin: Sprint-speed bin width. Defaults to ``0.5``.
@@ -313,7 +315,7 @@ def mlb_stolen_base_value(
 def predict_sb_success(
     upcoming: "pl.DataFrame",
     history: "pl.DataFrame",
-    cutoff_date,
+    cutoff_date: Any,
     *,
     speed_bin: float = 0.5,
     pop_bin: float = 0.05,
