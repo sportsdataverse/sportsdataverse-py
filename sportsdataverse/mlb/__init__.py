@@ -12,6 +12,7 @@ from sportsdataverse.mlb.mlb_api_parsers import (
     parse_mlb_api_teams,
     parser_for_mlb_api,
 )
+from sportsdataverse.mlb.mlb_batter_projection import mlb_batter_projection
 from sportsdataverse.mlb.mlb_espn_ext import *
 from sportsdataverse.mlb.mlb_expected_home_runs import mlb_expected_home_runs
 from sportsdataverse.mlb.mlb_expected_stats import mlb_expected_stats
