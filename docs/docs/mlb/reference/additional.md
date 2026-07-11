@@ -684,6 +684,48 @@ GET /api/v1/attendance — game attendance figures.
 | `league_list_id` | `Optional[str]` | `None` |  |
 | `game_type` | `Optional[str]` | `None` |  |
 
+### `mlb_batter_projection(target_season: 'int', *, history: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_batter_projection}
+
+Next-season xwOBA projection (Marcel + delta-method aging) for every batter.
+
+If `history` is `None`, builds player-season xwOBA history via
+`sportsdataverse.mlb.mlb_expected_stats.mlb_expected_stats` across
+the three seasons before `target_season` (ages must already be present
+on a supplied `history` frame -- this convenience path is intended for
+callers who already maintain an age-joined roster history).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `target_season` | `int` |  | The season being projected. |
+| `history` | `Optional[DataFrame]` | `None` | Pre-built player-season history (`batter`, `season`, `age`, `xwoba`, `pa`). If `None`, uses `mlb_expected_stats` over `target_season - 3 .. target_season - 1`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `batter`: `age`, `proj_xwoba`, `proj_pa`. Empty history returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id. |
+| `age` | integer | Batter's projected age in target_season (last known age plus one). |
+| `proj_xwoba` | double | Marcel-style weighted, PA-regressed, aging-curve-adjusted xwOBA projection for target_season. |
+| `proj_pa` | double | Sum of plate appearances across the weighted lookback seasons used to build the projection. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_batter_projection import mlb_batter_projection
+
+proj = mlb_batter_projection(2024, history=player_season_history)
+print(proj.shape)
+
+# Pipeline next step (one line)
+
+proj.sort("proj_xwoba", descending=True).head()
+```
+
 ### `mlb_command_plus(pitches: 'pl.DataFrame', *, level: 'str' = 'pitch', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_command_plus}
 
 Score pitches with the bundled Command+/Location+ (②) run-value model.
@@ -744,6 +786,104 @@ GET /api/v1/draft/prospects/{year} — draft prospect list for a year.
 | `year` | `Union[int, str]` |  |  |
 | `scouting_report` | `Optional[bool]` | `None` |  |
 | `limit` | `int` | `100` |  |
+
+### `mlb_expected_home_runs(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, park_factors: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_expected_home_runs}
+
+Per player-season park-neutral xHR, park-adjusted xHR, and HR-above-expected.
+
+Pulls batted balls via `puller(start_dt, end_dt, player_type="batter")`,
+builds the EV x LA x spray HR-probability grid from the pull's own batted
+balls (season-agnostic algorithm, per-pull empirical constants), predicts
+each ball's HR probability with the EV x LA-marginal fallback, park-adjusts
+via `hr_factor` (index 100 = neutral, joined on the Statcast
+`home_team` abbreviation -> MLBAM team id), then aggregates per batter.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  | Pull start date, `YYYY-MM-DD`. |
+| `end_dt` | `str` |  | Pull end date, `YYYY-MM-DD`. |
+| `puller` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable Statcast search callable -- defaults to `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search`. |
+| `park_factors` | `Optional[DataFrame]` | `None` | Pre-fetched park-factors frame (`team_id`, `hr_factor`); if `None`, fetched via `sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_park_factors`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (`batter`, `season`): `hr`, `xhr_neutral`, `xhr_park_adj`, `hr_above_expected` (`hr - xhr_neutral`). Empty pull returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id (join key into Savant's home-runs leaderboard as `player_id`). |
+| `season` | integer | Four-digit season year derived from `game_year`/`game_date`. |
+| `hr` | integer | Realized home runs in the pulled window. |
+| `xhr_neutral` | double | Park-neutral expected home runs from the EV x LA x spray probability grid. |
+| `xhr_park_adj` | double | Park-adjusted expected home runs (xhr_neutral cell probabilities scaled by each batted ball's home-park HR factor / 100). |
+| `hr_above_expected` | double | hr minus xhr_neutral -- positive means the batter over-performed the park-neutral HR model. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_expected_home_runs import mlb_expected_home_runs
+
+df = mlb_expected_home_runs("2024-06-01", "2024-06-21")
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("hr_above_expected", descending=True).head()
+```
+
+### `mlb_expected_stats(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_expected_stats}
+
+Per player-season xwOBA/xBA/xSLG from an on-the-fly EV x LA empirical grid.
+
+Pulls pitches via `puller(start_dt, end_dt, player_type="batter")`, builds
+the outcome grid from the pull's own batted balls (season-agnostic
+algorithm, per-pull empirical constants -- see `CLAUDE.md`), predicts
+contact `woba`/`ba`/`slg` per batted ball with the launch-angle-
+marginal fallback, then aggregates:
+
+* `xwoba = (sum(predicted_woba over balls in play) + sum(woba_value over
+  non-batted-ball PA outcomes)) / sum(woba_denom)`
+* `xba = sum(predicted_ba over balls in play) / ab`
+* `xslg = sum(predicted_tb over balls in play) / ab`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  | Pull start date, `YYYY-MM-DD`. |
+| `end_dt` | `str` |  | Pull end date, `YYYY-MM-DD`. |
+| `puller` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable Statcast search callable -- defaults to `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (`batter`, `season`): `pa`, `ab`, `xwoba`, `xba`, `xslg`. Empty pull returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id (join key into Savant's expected-stats leaderboard as `player_id`). |
+| `season` | integer | Four-digit season year derived from `game_year`/`game_date`. |
+| `pa` | integer | Plate appearances in the pulled window. |
+| `ab` | integer | At-bats (PA minus walks, HBP, and sacrifices) in the pulled window. |
+| `xwoba` | double | Expected wOBA from the EV x LA empirical grid (contact) plus realized non-contact outcome value, divided by wOBA denominator. |
+| `xba` | double | Expected batting average from the EV x LA empirical grid's hit-indicator cell means. |
+| `xslg` | double | Expected slugging percentage from the EV x LA empirical grid's total-bases cell means. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_expected_stats import mlb_expected_stats
+
+df = mlb_expected_stats("2024-06-01", "2024-06-21")
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("xwoba", descending=True).head()
+```
 
 ### `mlb_injury_risk(pitches: 'pl.DataFrame', *, as_of_date: 'Optional[dt.date]' = None, window: 'int' = 5, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mlb_injury_risk}
 
@@ -2056,6 +2196,62 @@ print(out.sort("stuff_plus", descending=True).head())
 # Pipeline next step
 
 out.filter(pl.col("pitch_type") == "FF").sort("stuff_plus", descending=True)
+```
+
+### `mlb_swing_decision(start_dt: 'str', end_dt: 'str', *, puller: 'Optional[Callable[..., pl.DataFrame]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_swing_decision}
+
+Per player-season swing/take run value + selective-aggression (SEAGER analog).
+
+Pulls pitches via `puller(start_dt, end_dt, player_type="batter")`,
+builds the RV(swing)/RV(take) zone x count surfaces (and the league
+swing-rate table) from the pull itself, then per batter:
+
+* `swing_take_runs` = sum of the **actual** per-pitch `delta_run_exp`
+  credited to the batter's swing/take decisions (matching Savant's
+  swing/take run-value definition -- the run value of what actually
+  happened on each pitch, not a league-average lookup).
+* `selective_agg` = sum of `rv_chosen - rv_neutral`, where
+  `rv_neutral = swing_rate * rv_swing + (1 - swing_rate) * rv_take` uses
+  the **league** swing rate for that zone x count cell -- positive means
+  the batter swings at hittable pitches and takes bad ones more than a
+  league-average decision-maker would.
+* `chase_rate` = swings / pitches seen in the waste/chase zones
+  (`zone in {11,12,13,14}`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `start_dt` | `str` |  | Pull start date, `YYYY-MM-DD`. |
+| `end_dt` | `str` |  | Pull end date, `YYYY-MM-DD`. |
+| `puller` | `Optional[Callable[..., DataFrame]]` | `None` | Injectable Statcast search callable -- defaults to `sportsdataverse.mlb.mlb_statcast_extra.mlb_statcast_search`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (`batter`, `season`): `pitches`, `swing_take_runs`, `selective_agg`, `chase_rate`, `n_swings`. Empty pull returns a zero-row frame with the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `batter` | integer | MLBAM batter id (join key into Savant's swing/take leaderboard as `player_id`). |
+| `season` | integer | Four-digit season year derived from `game_year`/`game_date`. |
+| `pitches` | integer | Total pitches seen with a non-null zone/decision in the pulled window. |
+| `swing_take_runs` | double | Sum of the run value of the batter's actual swing/take decisions (delta_run_exp of the chosen decision at that zone x count). |
+| `selective_agg` | double | SEAGER-analog selective-aggression score -- sum of (chosen run value minus the league-neutral-rate run value) per pitch. |
+| `chase_rate` | double | Share of pitches in the waste/chase attack zones (11-14) that the batter swung at. |
+| `n_swings` | integer | Count of pitches the batter swung at. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_swing_decision import mlb_swing_decision
+
+df = mlb_swing_decision("2024-06-01", "2024-06-21")
+print(df.shape)
+
+# Pipeline next step (one line)
+
+df.sort("selective_agg", descending=True).head()
 ```
 
 ### `mlb_team_elo(results: 'pl.DataFrame', *, k: 'float' = 4.0, hfa: 'float' = 24.0, init: 'float' = 1500.0, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mlb_team_elo}

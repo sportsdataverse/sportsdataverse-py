@@ -12,7 +12,10 @@ from sportsdataverse.mlb.mlb_api_parsers import (
     parse_mlb_api_teams,
     parser_for_mlb_api,
 )
+from sportsdataverse.mlb.mlb_batter_projection import mlb_batter_projection
 from sportsdataverse.mlb.mlb_espn_ext import *
+from sportsdataverse.mlb.mlb_expected_home_runs import mlb_expected_home_runs
+from sportsdataverse.mlb.mlb_expected_stats import mlb_expected_stats
 from sportsdataverse.mlb.mlb_fox_ext import *
 from sportsdataverse.mlb.mlb_game_rosters import *
 from sportsdataverse.mlb.mlb_loaders import *
@@ -44,6 +47,7 @@ from sportsdataverse.mlb.mlb_statcast_parsers import (
     parse_mlb_statcast_search,
 )
 from sportsdataverse.mlb.mlb_stuff_plus import mlb_stuff_plus
+from sportsdataverse.mlb.mlb_swing_decision import mlb_swing_decision
 from sportsdataverse.mlb.mlb_team_projection import (
     mlb_pythagenpat,
     mlb_pythagenpat_table,

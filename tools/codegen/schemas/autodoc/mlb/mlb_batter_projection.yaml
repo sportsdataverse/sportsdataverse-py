@@ -1,0 +1,15 @@
+schema: mlb_batter_projection
+kind: dataframe
+columns:
+- name: batter
+  type: integer
+  description: MLBAM batter id.
+- name: age
+  type: integer
+  description: Batter's projected age in target_season (last known age plus one).
+- name: proj_xwoba
+  type: double
+  description: Marcel-style weighted, PA-regressed, aging-curve-adjusted xwOBA projection for target_season.
+- name: proj_pa
+  type: double
+  description: Sum of plate appearances across the weighted lookback seasons used to build the projection.
