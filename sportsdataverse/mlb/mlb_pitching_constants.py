@@ -31,11 +31,21 @@ COMMAND_PLUS_ARTIFACT = "mlb_command_plus.ubj"
 #: to this many "+"-scale points (sign inverted: negative run value is good).
 PLUS_SCALE: float = 10.0
 
-#: Task 2.2 fitting output (``dev/mlb_pitching/fit_stuff_plus.py``, 2023 season,
-#: 30-pitcher real corpus, 71,012 pitches after dropna) — centers ``stuff_plus``
-#: at 100 by construction.
-STUFF_LEAGUE_MEAN_RV: float = -0.00139173015486449
-STUFF_LEAGUE_SD_RV: float = 0.022356726229190826
+#: Centering reference for ``stuff_plus``. The model is TRAINED on
+#: ``dev/mlb_pitching/fit_stuff_plus.py``'s 2023-season, 30-pitcher corpus, but
+#: that corpus is itself workhorse-selected (top-N by pitch volume in one
+#: probe week) and is NOT representative of the general league -- centering
+#: the "+"-scale to the training set's own mean run-value shifted a genuinely
+#: held-out 2024 population's average to ~97.6, outside the ±0.5 calibration
+#: target. These constants are instead the mean/sd of ``stuff_rv_hat`` scored
+#: over ``tests/fixtures/mlb_pitching/pitcher_holdout_season_2024.parquet``
+#: (15 real, NON-training pitchers, full 2024 season, 38,699 pitches after
+#: dropna) -- a broader, out-of-training reference population. See
+#: ``dev/mlb_pitching/recalibrate_stuff_plus.py`` for the recomputation.
+#: Spearman-based oracle legs are unaffected by this choice (rank correlation
+#: is invariant to any linear recentering with ``sd_rv > 0``).
+STUFF_LEAGUE_MEAN_RV: float = 0.0008117794641293585
+STUFF_LEAGUE_SD_RV: float = 0.022242603823542595
 
 #: Task 3.1 fitting output (``dev/mlb_pitching/fit_command_plus.py``) — seeded
 #: the same way as the Stuff+ pair above.

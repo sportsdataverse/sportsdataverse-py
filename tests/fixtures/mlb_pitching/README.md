@@ -7,6 +7,7 @@
   - [`savant_pitch_arsenal_stats_2024.parquet`](#savant_pitch_arsenal_stats_2024parquet)
   - [`savant_expected_stats_2024.parquet`](#savant_expected_stats_2024parquet)
   - [`pitcher_season_pitches_2023_sample.parquet`](#pitcher_season_pitches_2023_sampleparquet)
+  - [`pitcher_holdout_season_2024.parquet`](#pitcher_holdout_season_2024parquet)
   - [Deferred (not captured): `stuff_plus_leaderboard_sample_2024.parquet`](#deferred-not-captured-stuff_plus_leaderboard_sample_2024parquet)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -54,6 +55,26 @@ wrappers), captured **2026-07-10**, ids pinned `Int64` at capture time. No synth
 - Rows: 14,120 pitches across the full 2023 season for those 5 pitchers.
 - Used by Phase 4 (SIERA-like OLS fit input via a season-prior pull), Phase 5 (TTO/fatigue fit),
   and Phase 8 (injury-risk trailing-window features + leakage tests).
+
+## `pitcher_holdout_season_2024.parquet`
+
+- Source: `mlb_statcast_search("2024-03-28", "2024-10-01", player_type="pitcher",
+  pitchers_lookup=[<15 real ids>])`.
+- Pitcher ids discovered from a live one-week probe (2024-08-01..08-07, top-by-volume),
+  **explicitly excluded against the Stuff+/Command+ training corpus's 30 pitcher ids**
+  (2023-06-01..06-07 probe) — a genuine out-of-training population, not merely a different date
+  range. See `dev/mlb_pitching/capture_holdout.py` (gitignored) for the exact exclusion set.
+- Rows: 38,874 pitches, full 2024 season, 15 held-out pitchers.
+- **Why it exists**: the single-day (`pitches_2024-06-15`) and 2023-season-sample fixtures were
+  each too small/overlapping for a stable oracle check — the day fixture has only a handful of
+  pitches per pitcher-arsenal (noisy within-pitcher standardization), and the 2023 sample's 5
+  pitchers are a subset of the Stuff+/Command+ training corpus (not a fair generalization test).
+  This fixture is the primary oracle-gate population for Phases 2-4 (Stuff+, Command+, xERA).
+  It is also the source of `STUFF_LEAGUE_MEAN_RV`/`STUFF_LEAGUE_SD_RV`'s "+"-scale centering
+  (see `mlb_pitching_constants.py` and `dev/mlb_pitching/recalibrate_stuff_plus.py` — centering on
+  the training corpus's own, workhorse-selection-biased mean shifted this population's average
+  `stuff_plus` to ~97.6, outside the ±0.5 target; centering on this broader out-of-training
+  population is the more defensible choice for a "league average" reference).
 
 ## Deferred (not captured): `stuff_plus_leaderboard_sample_2024.parquet`
 
