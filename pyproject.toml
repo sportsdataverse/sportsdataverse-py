@@ -290,6 +290,8 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
     "sportsdataverse/_deprecation.py",
+    "sportsdataverse/_common/__init__.py",
+    "sportsdataverse/_common/ratings.py",
     "sportsdataverse/errors.py",
     "sportsdataverse/cfb/cfb_adjusted_epa.py",
     "sportsdataverse/cfb/cfb_advanced_constants.py",
