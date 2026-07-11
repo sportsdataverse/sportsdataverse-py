@@ -120,9 +120,10 @@ def test_swing_take_concurrent_validity_partial_sample() -> None:
     a = joined["swing_take_runs"].to_numpy()
     b = joined["runs_all"].to_numpy()
     # partial 3-week sample vs full-season leaderboard total -- see module docstring.
-    # FLOOR: observed spearman ~0.227 on the committed sample; the real >= 0.90
+    # FLOOR: observed spearman ~0.498 on the committed sample (swing_take_runs =
+    # sum of actual per-pitch delta_run_exp, matching Savant); the real >= 0.90
     # design-doc gate is validated like-for-like by the live full-season test below.
-    assert spearman_corr(a, b) >= 0.15
+    assert spearman_corr(a, b) >= 0.40
 
 
 # ---------------------------------------------------------------------------

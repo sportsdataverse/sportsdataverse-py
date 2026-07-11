@@ -56,15 +56,29 @@ two-step ordering note).
   Spearman >= 0.95 as designed. But `statcast_sample_2024.parquet` is a
   3-week partial-season sample, while the leaderboards are full-season
   totals -- joining a partial-sample player-season total against a
-  full-season leaderboard total is comparing different windows, and the
-  correlation is genuinely noisier than a like-for-like comparison (confirmed:
-  the swing/take zone-sanity directional check still passes; rate-normalizing
-  the comparison does not materially change the correlation -- this is
-  small-sample noise in the aggregate, not a bug in the per-pitch math).
-  `tests/mlb/test_mlb_hitting_oracle.py` documents the OBSERVED partial-vs-full
-  correlation per test (expected-stats ~0.47, swing/take ~0.23, xHR ~0.69) and
-  floors each accordingly; the real design-doc `>= 0.90` threshold is validated
-  like-for-like by `@skip_if_no_live` full-season tests in the same file.
+  full-season leaderboard total is a genuinely noisier, window-mismatched
+  comparison. `tests/mlb/test_mlb_hitting_oracle.py` documents the OBSERVED
+  partial-vs-full correlation per test (expected-stats ~0.47, swing/take ~0.50,
+  xHR ~0.69) and floors each accordingly; the real design-doc `>= 0.90`
+  threshold is validated like-for-like by `@skip_if_no_live` full-season tests
+  in the same file (which pull a full 2024 season and compare against the
+  committed full-season leaderboard -- the capture contract for those live
+  gates is: leaderboard join key `player_id == batter` both `Int64`, match-rate
+  floor `>= 200` batters, and the model output column vs the leaderboard
+  column named in each test).
+- **Swing/take `swing_take_runs` was a REAL BUG, now fixed (not small-sample
+  noise).** The first implementation set `swing_take_runs = sum(rv_chosen)` --
+  the league-average run value of the batter's decision looked up from the
+  zone x count surface. That averages away the batter's own outcome signal and
+  scored only 0.227 on the committed sample AND 0.298 on a live full-season
+  pull (i.e. it failed the `>= 0.90` gate like-for-like, proving it was a
+  model defect, not a window artifact). Savant's swing/take run value is the
+  ACTUAL per-pitch `delta_run_exp` credited to each swing/take decision,
+  summed. Switching to `sum(delta_run_exp over decision pitches)` doubled the
+  partial-sample correlation to ~0.498 and is Savant's own formulation. The
+  live full-season `>= 0.90` gate must be RE-CONFIRMED with the corrected model
+  on a residential IP -- the 0.298 recorded earlier was the pre-fix code.
+  Provenance: `dev/mlb_hitting/fit_swing_take.py`.
 - **The EV x LA grid bin widths were fitted, not seeded.** The plan's seeded
   `ev_width=2.0, la_width=2.0, min_n=25` only reached per-batted-ball Spearman
   0.805 (woba) / 0.838 (ba) on the 3-week sample -- too many batted balls fell

@@ -166,8 +166,10 @@ def mlb_swing_decision(
     builds the RV(swing)/RV(take) zone x count surfaces (and the league
     swing-rate table) from the pull itself, then per batter:
 
-    * ``swing_take_runs`` = sum of ``rv_chosen`` (the RV of the decision the
-      batter actually made) over all their pitches.
+    * ``swing_take_runs`` = sum of the **actual** per-pitch ``delta_run_exp``
+      credited to the batter's swing/take decisions (matching Savant's
+      swing/take run-value definition -- the run value of what actually
+      happened on each pitch, not a league-average lookup).
     * ``selective_agg`` = sum of ``rv_chosen - rv_neutral``, where
       ``rv_neutral = swing_rate * rv_swing + (1 - swing_rate) * rv_take`` uses
       the **league** swing rate for that zone x count cell -- positive means
@@ -241,6 +243,12 @@ def mlb_swing_decision(
         ).alias("rv_neutral")
     )
     scored = scored.with_columns(
+        # swing_take_runs credits each decision the pitch's ACTUAL run value
+        # (delta_run_exp), matching Savant's swing/take methodology. Using the
+        # surface-average rv_chosen here instead averages away the batter's own
+        # outcome signal and tanks the concurrent-validity correlation (0.30 vs
+        # ~0.90 full-season -- see dev/mlb_hitting/fit_swing_take.py).
+        pl.when(pl.col("decision").is_not_null()).then(pl.col("delta_run_exp")).otherwise(None).alias("_decision_rv"),
         (pl.col("rv_chosen") - pl.col("rv_neutral")).alias("_agg_term"),
         (pl.col("decision") == "swing").alias("_is_swing"),
         (pl.col("zone").cast(pl.Int64).is_in(list(_CHASE_ZONES)) & (pl.col("decision") == "swing")).alias(
@@ -253,7 +261,7 @@ def mlb_swing_decision(
         scored.group_by("batter", "season")
         .agg(
             pl.len().alias("pitches"),
-            pl.col("rv_chosen").fill_null(0.0).sum().alias("swing_take_runs"),
+            pl.col("_decision_rv").fill_null(0.0).sum().alias("swing_take_runs"),
             pl.col("_agg_term").fill_null(0.0).sum().alias("selective_agg"),
             pl.col("_is_swing").fill_null(False).sum().alias("n_swings"),
             pl.col("_is_chase_swing").fill_null(False).sum().alias("_chase_swings"),

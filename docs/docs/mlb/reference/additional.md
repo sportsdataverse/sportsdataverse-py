@@ -1921,8 +1921,10 @@ Pulls pitches via `puller(start_dt, end_dt, player_type="batter")`,
 builds the RV(swing)/RV(take) zone x count surfaces (and the league
 swing-rate table) from the pull itself, then per batter:
 
-* `swing_take_runs` = sum of `rv_chosen` (the RV of the decision the
-  batter actually made) over all their pitches.
+* `swing_take_runs` = sum of the **actual** per-pitch `delta_run_exp`
+  credited to the batter's swing/take decisions (matching Savant's
+  swing/take run-value definition -- the run value of what actually
+  happened on each pitch, not a league-average lookup).
 * `selective_agg` = sum of `rv_chosen - rv_neutral`, where
   `rv_neutral = swing_rate * rv_swing + (1 - swing_rate) * rv_take` uses
   the **league** swing rate for that zone x count cell -- positive means
