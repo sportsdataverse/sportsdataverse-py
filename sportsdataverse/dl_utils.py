@@ -240,7 +240,13 @@ def download(
             # return the response unchanged so callers can key on `.status_code`.
             status = getattr(response, "status_code", None)
             retryable = status in retry_statuses
-            if retryable and status_retries < status_budget:
+            # `attempt < attempts - 1` is load-bearing, not redundant with the
+            # budget: when status_budget == attempts-1 (small num_retries) a
+            # status retry could otherwise `continue` on the FINAL iteration,
+            # exhausting the loop into the post-loop `raise last_exc` — which
+            # would raise a STALE connection exception from an earlier attempt
+            # instead of returning this response. Never retry on the last attempt.
+            if retryable and status_retries < status_budget and attempt < attempts - 1:
                 status_retries += 1
                 logger.warning(
                     "retryable status %s - %s for url (%s) [status retry %d/%d]",

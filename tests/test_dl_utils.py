@@ -193,6 +193,31 @@ class TestDownload:
         assert resp.status_code == 429
         assert calls["n"] == 3  # 1 initial + 2 retries
 
+    def test_download_interleaved_conn_error_then_status_returns_response(self, monkeypatch):
+        """A connection error on an early attempt sets ``last_exc``; if the FINAL
+        attempt is a retryable status, the loop must still RETURN that response
+        rather than fall through to ``raise last_exc`` and surface the stale
+        connection exception. Regression for the interleaved conn-error + status
+        retry path (status_budget == attempts-1)."""
+        import sportsdataverse.cache as _cache
+
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+        monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+        seq = ["boom", 503, 503]  # conn error, then persistent 503
+        calls = {"n": 0}
+
+        def fake_get(self, url, **kwargs):
+            item = seq[calls["n"]]
+            calls["n"] += 1
+            if item == "boom":
+                raise requests.exceptions.ConnectionError("boom")
+            return types.SimpleNamespace(status_code=item, url=url, reason="x", headers={}, json=lambda: {})
+
+        monkeypatch.setattr(requests.Session, "get", fake_get)
+        resp = download("https://site.api.espn.com/w", num_retries=2)
+        assert resp.status_code == 503  # returned, NOT raised as the stale ConnectionError
+        assert calls["n"] == 3
+
     def test_download_does_not_retry_non_retryable_status(self, monkeypatch):
         """A 401 (not in the retry set) is a definitive answer — one attempt, no
         retry, even with a large budget."""
