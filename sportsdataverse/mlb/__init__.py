@@ -37,6 +37,7 @@ from sportsdataverse.mlb.mlb_statcast_parsers import (
     parse_mlb_statcast_schedule,
     parse_mlb_statcast_search,
 )
+from sportsdataverse.mlb.mlb_swing_decision import mlb_swing_decision
 from sportsdataverse.mlb.mlb_team_projection import (
     mlb_pythagenpat,
     mlb_pythagenpat_table,
