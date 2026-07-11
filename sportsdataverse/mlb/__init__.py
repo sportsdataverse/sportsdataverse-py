@@ -22,6 +22,7 @@ from sportsdataverse.mlb.mlb_pitch_classify import mlb_pitch_classify
 from sportsdataverse.mlb.mlb_pitch_era import mlb_pitch_era, siera_like, x_era
 from sportsdataverse.mlb.mlb_pitch_fatigue import mlb_times_through_order, tto_penalty_table
 from sportsdataverse.mlb.mlb_pitch_features import add_sequence_features, pitch_features
+from sportsdataverse.mlb.mlb_pitch_injury import mlb_injury_risk, pitcher_appearance_trends
 from sportsdataverse.mlb.mlb_pitch_sequencing import mlb_pitch_tunneling, mlb_sequence_run_value
 from sportsdataverse.mlb.mlb_player_stats import *
 from sportsdataverse.mlb.mlb_prop_projection import mlb_prop_strikeouts, mlb_prop_team_runs, mlb_props, prop_over_prob
