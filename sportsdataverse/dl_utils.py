@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import random
 import re
 import time
 from datetime import datetime, timezone
@@ -34,6 +35,22 @@ for _scheme in ("https://", "http://"):
 # rate-limit windows while bounding worst-case latency.
 _MAX_RETRY_AFTER = 120.0
 
+# Transient HTTP status codes worth retrying. 429 (rate limit) + 408 (request
+# timeout) + the 5xx server-error family are universally transient. 403 is
+# included because ESPN's Core v2 API returns it *under load* (not an auth
+# failure): ``download`` is the ESPN / nflverse gateway and does NOT serve the
+# auth'd endpoints — ``nfl_api`` (bearer), ``nba_stats`` / ``wnba_stats``
+# (curl_cffi runtime), and PFF (Clerk cookies) each have their own ``_get`` —
+# so a 403 seen here is far more likely rate-limiting than a permanent
+# forbidden. Retrying a genuine 403 only costs bounded backoff latency.
+_RETRYABLE_STATUS = frozenset({403, 408, 429, 500, 502, 503, 504})
+
+# Status retries reuse the loop but get their OWN small cap so a genuinely
+# permanent 403/forbidden can't spin the full ``num_retries`` (16 requests /
+# ~51s) before returning — and so we don't hammer a host already signalling
+# "back off." Connection-exception retries still use the full ``num_retries``.
+_MAX_STATUS_RETRIES = 4
+
 
 def _parse_retry_after(value: str) -> float | None:
     """Parse a ``Retry-After`` value into seconds, or ``None`` if unparseable.
@@ -65,6 +82,7 @@ def _retry_delay(
     base: float = 0.5,
     cap: float = 4.0,
     max_retry_after: float = _MAX_RETRY_AFTER,
+    jitter: bool = True,
 ) -> float:
     """Seconds to wait before the next retry.
 
@@ -74,7 +92,10 @@ def _retry_delay(
     outsized value can't park the request in ``time.sleep`` indefinitely. When
     the header is absent or unparseable, falls back to capped exponential
     backoff (gentler than a fixed sleep on quick-recovery transients, politer
-    than hammering on persistent ones).
+    than hammering on persistent ones). ``jitter`` (default on) spreads the
+    exponential fallback over 50-100% of the computed delay so concurrent
+    workers don't re-hit a recovering host in lockstep (a thundering herd); the
+    server-dictated ``Retry-After`` path is left exact.
     """
     headers = getattr(response, "headers", None)
     retry_after = headers.get("Retry-After") if headers else None
@@ -82,7 +103,10 @@ def _retry_delay(
         secs = _parse_retry_after(retry_after)
         if secs is not None:
             return min(max_retry_after, secs)
-    return min(cap, base * (2**attempt))
+    delay = min(cap, base * (2**attempt))
+    if jitter:
+        delay *= 0.5 + random.random() * 0.5
+    return delay
 
 
 def download(
@@ -95,6 +119,7 @@ def download(
     session=None,
     logger=None,
     cache_ttl=None,
+    retry_statuses=_RETRYABLE_STATUS,
 ):
     """Download a URL with retries and ESPN-aware error handling.
 
@@ -120,9 +145,16 @@ def download(
             when you need isolation (separate cookies / auth / proxy lifecycle).
         logger: Optional ``logging.Logger``. Defaults to the package
             logger ``"sdv.dl_utils"``.
+        retry_statuses: Iterable of HTTP status codes to retry (with the same
+            ``Retry-After``-aware backoff as connection failures). Defaults to
+            :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
+            narrower set (e.g. ``{429, 503}``) for an auth'd endpoint where a
+            403 is a real forbidden rather than ESPN-under-load.
 
     Returns:
-        The final ``requests.Response``.
+        The final ``requests.Response``. When the retry budget is exhausted on
+        a retryable status the last response is returned unchanged (callers key
+        on ``.status_code``); a connection-level failure re-raises instead.
 
     Example:
         Quick start::
@@ -193,15 +225,47 @@ def download(
     # retry budget is exhausted instead of silently returning a stale or
     # unbound `response`.
     attempts = max(int(num_retries), 0) + 1
+    status_budget = min(attempts - 1, _MAX_STATUS_RETRIES)
     response = None
     last_exc: Exception | None = None
+    status_retries = 0
     for attempt in range(attempts):
         try:
             response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
             response = no_espn_data(response)
-            # Persist successful responses to the cache. Catches any
-            # body-parse error so a cache write never breaks the call.
-            if get_cache_mode() != "off":
+            # Transient status codes (rate-limit / server errors) come back as a
+            # normal Response — `requests` does not raise on them. Retry with the
+            # same Retry-After-aware backoff the connection-exception path uses,
+            # capped at `status_budget` (see `_MAX_STATUS_RETRIES`); once spent,
+            # return the response unchanged so callers can key on `.status_code`.
+            status = getattr(response, "status_code", None)
+            retryable = status in retry_statuses
+            if retryable and status_retries < status_budget:
+                status_retries += 1
+                logger.warning(
+                    "retryable status %s - %s for url (%s) [status retry %d/%d]",
+                    status,
+                    getattr(response, "reason", "?"),
+                    getattr(response, "url", url),
+                    status_retries,
+                    status_budget,
+                )
+                time.sleep(_retry_delay(response, attempt))
+                continue
+            if retryable:
+                # Budget spent: surface a terminal line so a persistent
+                # 429/403/5xx isn't invisible in logs after the last retry.
+                logger.warning(
+                    "retryable status %s persisted after %d retr%s; returning to caller for url (%s)",
+                    status,
+                    status_retries,
+                    "y" if status_retries == 1 else "ies",
+                    getattr(response, "url", url),
+                )
+            # Persist only successful (2xx) responses to the cache — never cache a
+            # 429/5xx body. Catches any body-parse error so a cache write never
+            # breaks the call.
+            if get_cache_mode() != "off" and status is not None and 200 <= status < 300:
                 try:
                     cache_set(url, _cache_params, response.json(), ttl=cache_ttl)
                 except Exception:  # noqa: BLE001
