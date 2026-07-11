@@ -39,7 +39,9 @@ def main() -> None:
     have = [c for c in feature_names if c in df.columns]
     df = df.drop_nulls(subset=have + ["run_value"])
     print("corpus rows after dropna:", df.height)
-    x = df.select(have).to_numpy()
+    # named pandas frame -> booster records feature_names -> predict-time
+    # column-alignment validation (see fit_stuff_plus.py for the rationale).
+    x = df.select(have).to_pandas()
     y = df["run_value"].to_numpy()
     model = xgb.XGBRegressor(n_estimators=400, max_depth=4, learning_rate=0.05, subsample=0.8, n_jobs=-1)
     model.fit(x, y)

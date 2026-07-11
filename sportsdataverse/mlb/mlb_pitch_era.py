@@ -6,10 +6,15 @@ Two ERA-scale estimators, both compute-on-demand (no bundled artifact):
   ``x_era = league_era + ((x_woba - league_woba) / woba_scale) * pa_per_9``,
   with per-season league baselines from
   :func:`sportsdataverse.mlb.mlb_pitching_constants.get_baselines`.
-- :func:`siera_like` — the published SIERA functional form
+- :func:`siera_like` (**experimental / provisional**) — the published SIERA
+  functional form
   ``b0 + b1*k_pct + b2*bb_pct + b3*gb_pct + b4*gb_pct**2 + b5*(k_pct*gb_pct)``
-  with OLS-fitted coefficients from ``mlb_pitching_constants.siera_coef``
-  (see ``dev/mlb_pitching/fit_era_siera.py``).
+  evaluated with ``mlb_pitching_constants.siera_coef``. Those coefficients are
+  currently **SEEDED literature placeholders**, identical across seasons — the
+  Task-4.2 OLS re-fit against next-season ERA has not landed, so ``siera_like``
+  should be read as directionally indicative (higher K% lowers it, etc.), not a
+  calibrated ERA estimate. ``x_era`` is the validated ERA estimator (oracle-gated
+  vs Savant's xERA); prefer it when you need a fitted number.
 
 Follows the published SIERA methodology (cited as a reference; no code
 copied, so no license obligation).
@@ -130,7 +135,13 @@ def x_era(pitches: pl.DataFrame, season: int, *, return_as_pandas: bool = False)
 def siera_like(
     pitches: pl.DataFrame, season: int, *, return_as_pandas: bool = False
 ) -> "Union[pl.DataFrame, pd.DataFrame]":
-    """SIERA-like ERA estimator from K%/BB%/GB% (fitted OLS coefficients).
+    """SIERA-like ERA estimator from K%/BB%/GB% (**experimental / provisional**).
+
+    Evaluates the published SIERA functional form with
+    ``mlb_pitching_constants.siera_coef``, which are **SEEDED literature
+    placeholders** (not yet OLS-fitted — the Task-4.2 next-season-ERA fit has
+    not landed). Treat the output as directionally indicative, not a calibrated
+    ERA; use :func:`x_era` (oracle-gated vs Savant's xERA) for a fitted number.
 
     Args:
         pitches: Raw pitch frame carrying ``pitcher``, ``events``, and

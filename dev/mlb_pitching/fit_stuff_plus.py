@@ -49,7 +49,10 @@ def load_corpus() -> pl.DataFrame:
 def main() -> None:
     df = load_corpus().drop_nulls(subset=STUFF_FEATURES + ["run_value"])
     print("corpus rows after dropna:", df.height)
-    x = df.select(STUFF_FEATURES).to_numpy()
+    # fit on a NAMED pandas frame so the booster records feature_names and
+    # xgboost validates train/score column alignment at predict time (not the
+    # silent positional-only alignment feature_names=None gives).
+    x = df.select(STUFF_FEATURES).to_pandas()
     y = df["run_value"].to_numpy()
     model = xgb.XGBRegressor(n_estimators=400, max_depth=4, learning_rate=0.05, subsample=0.8, n_jobs=-1)
     model.fit(x, y)

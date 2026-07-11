@@ -2491,7 +2491,13 @@ prop_over_prob(3.5, 4.5)
 
 ### `siera_like(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#siera_like}
 
-SIERA-like ERA estimator from K%/BB%/GB% (fitted OLS coefficients).
+SIERA-like ERA estimator from K%/BB%/GB% (**experimental / provisional**).
+
+Evaluates the published SIERA functional form with
+`mlb_pitching_constants.siera_coef`, which are **SEEDED literature
+placeholders** (not yet OLS-fitted — the Task-4.2 next-season-ERA fit has
+not landed). Treat the output as directionally indicative, not a calibrated
+ERA; use `x_era` (oracle-gated vs Savant's xERA) for a fitted number.
 
 **Parameters**
 

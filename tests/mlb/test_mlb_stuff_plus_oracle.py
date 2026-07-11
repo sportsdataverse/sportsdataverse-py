@@ -51,11 +51,16 @@ from sportsdataverse.mlb.mlb_stuff_plus import mlb_stuff_plus
 
 FIX = "tests/fixtures/mlb_pitching"
 
-#: Observed Spearman(stuff_plus, -run_value) on the held-out 2024 population's
-#: *qualified* arsenals (>= MIN_ARSENAL_PITCHES pitches) vs the full-season
-#: 2024 Savant arsenal run-value leaderboard, joined on (pitcher, pitch_type):
-#: 0.124. Floor rounded down to a documented margin below the observed value.
-FLOOR_RV = 0.10
+#: Observed Spearman(stuff_plus, -run_value_per_100) on the held-out 2024
+#: population's *qualified* arsenals (>= MIN_ARSENAL_PITCHES pitches) vs the
+#: full-season 2024 Savant arsenal leaderboard, joined on (pitcher, pitch_type):
+#: 0.228. The join uses Savant's RATE metric ``run_value_per_100`` (run value
+#: per 100 pitches), not the raw counting ``run_value`` -- the counting stat
+#: carries a usage/volume dimension orthogonal to pitch quality that
+#: mechanically dilutes the rank correlation (observed 0.124 on the counting
+#: stat vs 0.228 on the rate). Floor rounded down to a documented margin below
+#: the observed rate-metric value.
+FLOOR_RV = 0.20
 
 #: Minimum pitches for an arsenal cell to count toward the calibration/Spearman
 #: checks below -- mirrors how published Stuff+/pitch-arsenal leaderboards
@@ -105,8 +110,10 @@ def test_stuff_plus_spearman_vs_savant_arsenal_run_value():
     savant = pl.read_parquet(f"{FIX}/savant_pitch_arsenal_stats_2024.parquet")
     assert mine.schema["pitcher"] == savant.schema["pitcher"]
 
-    joined = mine.join(savant.select("pitcher", "pitch_type", "run_value"), on=["pitcher", "pitch_type"], how="inner")
-    assert joined.height >= 20  # observed: 37 rows on the qualified holdout population
+    joined = mine.join(
+        savant.select("pitcher", "pitch_type", "run_value_per_100"), on=["pitcher", "pitch_type"], how="inner"
+    )
+    assert joined.height >= 20  # observed: 42 rows on the qualified holdout population
 
-    corr = spearman_corr(joined["stuff_plus"].to_numpy(), (-joined["run_value"]).to_numpy())
+    corr = spearman_corr(joined["stuff_plus"].to_numpy(), (-joined["run_value_per_100"]).to_numpy())
     assert corr >= FLOOR_RV
