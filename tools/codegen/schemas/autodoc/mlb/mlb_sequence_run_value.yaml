@@ -1,0 +1,15 @@
+schema: mlb_sequence_run_value
+kind: dataframe
+columns:
+- name: prev_pitch_type
+  type: character
+  description: ''
+- name: pitch_type
+  type: character
+  description: ''
+- name: mean_run_value
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

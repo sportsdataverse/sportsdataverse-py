@@ -1,0 +1,15 @@
+schema: tto_penalty_table
+kind: dataframe
+columns:
+- name: times_through_order
+  type: integer
+  description: ''
+- name: mean_run_value
+  type: double
+  description: ''
+- name: penalty_vs_first
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

@@ -1,0 +1,39 @@
+schema: pitch_features
+kind: dataframe
+columns:
+- name: velo_z
+  type: double
+  description: ''
+- name: spin_z
+  type: double
+  description: ''
+- name: pfx_x_z
+  type: double
+  description: ''
+- name: pfx_z_z
+  type: double
+  description: ''
+- name: release_pos_x_z
+  type: double
+  description: ''
+- name: release_pos_z_z
+  type: double
+  description: ''
+- name: extension_z
+  type: double
+  description: ''
+- name: run_value
+  type: double
+  description: ''
+- name: plate_x_abs
+  type: double
+  description: ''
+- name: plate_z_norm
+  type: double
+  description: ''
+- name: in_zone
+  type: integer
+  description: ''
+- name: dist_from_heart
+  type: double
+  description: ''
