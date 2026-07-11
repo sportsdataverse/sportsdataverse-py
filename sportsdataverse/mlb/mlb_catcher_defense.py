@@ -5,6 +5,24 @@ Owns :func:`mlb_catcher_blocking` (dirt-pitch block model) and
 pure functions over already-loaded frames -- see
 :mod:`sportsdataverse.mlb.mlb_run_values` for the shared run-value engine.
 
+**Real-capture finding (documented deviation from a literal ``events``-column
+read):** a real 2024-06 capture confirms Baseball Savant's per-pitch
+``mlb_statcast_search`` ``events`` column carries **zero**
+``wild_pitch``/``passed_ball`` values across 116k pitches (a genuine month
+of MLB should have >100). Those events are narrated only as a trailing
+clause in the terminal pitch's free-text ``des`` field (e.g. *"Mark Vientos
+walks. Starling Marte to 3rd. Wild pitch by pitcher MacKenzie Gore."*),
+attached to whichever batter's plate appearance the pitch belongs to -- not
+tagged as their own ``events`` value. :func:`mlb_catcher_blocking` therefore
+detects a WP/PB via a ``des`` regex, not the ``events`` column (``events``
+stays a fallback when ``des`` is absent, e.g. older feeds). Because that
+``des`` row's ``delta_run_exp`` bundles the *primary* batter outcome (the
+walk) together with the WP/PB, it cannot isolate the WP/PB's own run value --
+so ``blocking_runs``/``throwing_runs`` use the documented
+:data:`sportsdataverse.mlb.mlb_run_values.RUN_VALUES` fallback constants
+rather than :func:`sportsdataverse.mlb.mlb_run_values.event_run_value` on
+these bundled rows.
+
 See Also:
     * `baseballr`_ -- R sibling package for MLB sabermetrics.
     * Baseball Savant catcher blocking / catcher throwing leaderboards --
@@ -21,12 +39,13 @@ from typing import TYPE_CHECKING, Union
 
 import polars as pl
 
-from sportsdataverse.mlb.mlb_run_values import event_run_value
+from sportsdataverse.mlb.mlb_run_values import RUN_VALUES
 
 if TYPE_CHECKING:
     import pandas as pd
 
 _WP_PB_EVENTS = ["wild_pitch", "passed_ball"]
+_WP_PB_DES_PATTERN = r"(?i)wild pitch|passed ball"
 
 _BLOCKING_SCHEMA = {
     "catcher_id": pl.Utf8,
@@ -49,7 +68,11 @@ def _block_opportunities(pitches: "pl.DataFrame", *, dirt_bin_width: float) -> "
     df = pitches.with_columns(
         ((pl.col("plate_z") - pl.col("sz_bot")) / (pl.col("sz_top") - pl.col("sz_bot"))).alias("pz_norm")
     )
-    if "events" in df.columns:
+    if "des" in df.columns:
+        # Real capture: WP/PB show up only as a narrated clause in `des`,
+        # never as their own `events` value (see module docstring).
+        is_wp_pb = pl.col("des").str.contains(_WP_PB_DES_PATTERN).fill_null(False)
+    elif "events" in df.columns:
         # is_in(...) on a null events value returns null in polars -- most
         # pitches don't terminate a PA and so carry a null events, which
         # must read as "not a WP/PB" (False), never propagate as null.
@@ -74,15 +97,18 @@ def mlb_catcher_blocking(
     """Per-catcher blocking runs from a dirt-pitch block-probability model.
 
     A block opportunity is a pitch below the strike zone (``pz_norm < 0``)
-    with a runner on base, or a pitch flagged ``wild_pitch``/``passed_ball``.
-    Expected block probability is the empirical block rate within the
-    pitch's dirt-depth bin; ``blocking_runs = blocks_above_expected *
-    |event_run_value(pitches, ["wild_pitch", "passed_ball"])|``.
+    with a runner on base, or a pitch whose ``des`` narrates a wild
+    pitch/passed ball (see module docstring for why ``des``, not
+    ``events``). Expected block probability is the empirical block rate
+    within the pitch's dirt-depth bin; ``blocking_runs =
+    blocks_above_expected * RUN_VALUES["wp_pb"]`` (the documented fallback
+    constant -- the narrating row's ``delta_run_exp`` bundles the primary
+    batter outcome with the WP/PB and cannot isolate the latter's value).
 
     Args:
         pitches: Pitch-level frame with ``plate_z``/``sz_top``/``sz_bot``,
-            ``events``, ``fielder_2``, ``delta_run_exp``, and (if present)
-            ``on_1b``/``on_2b``/``on_3b``.
+            ``fielder_2``, ``des`` (or ``events`` as a fallback), and (if
+            present) ``on_1b``/``on_2b``/``on_3b``.
         dirt_bin_width: Bin width for the below-zone depth bucket. Defaults
             to ``0.2`` (zone-normalized units).
         return_as_pandas: Return a pandas DataFrame instead of polars.
@@ -95,7 +121,7 @@ def mlb_catcher_blocking(
         | catcher_id | Utf8 | Catcher MLBAM id (Savant ``fielder_2``) |
         | block_opps | Int64 | Dirt-pitch block opportunities faced |
         | blocks_above_expected | Float64 | Sum of (blocked - expected block rate) |
-        | blocking_runs | Float64 | blocks_above_expected x \\|WP/PB run value\\| |
+        | blocking_runs | Float64 | blocks_above_expected x RUN_VALUES["wp_pb"] |
 
     Example:
         Quick start::
@@ -123,7 +149,7 @@ def mlb_catcher_blocking(
         return out.to_pandas() if return_as_pandas else out
 
     rate = opps.group_by("dirt_bin").agg(pl.col("is_blocked").mean().alias("expected_block_prob"))
-    rv = abs(event_run_value(pitches, _WP_PB_EVENTS))
+    rv = RUN_VALUES["wp_pb"]
     scored = (
         opps.join(rate, on="dirt_bin", how="left")
         .with_columns(pl.col("fielder_2").cast(pl.Int64, strict=False).cast(pl.Utf8).alias("catcher_id"))
@@ -151,14 +177,17 @@ def mlb_catcher_throwing(
 
     Expected caught-stealing probability is a monotone empirical function of
     catcher pop time (binned); ``throwing_runs = cs_above_expected *
-    |RV(caught_stealing) - RV(stolen_base)|`` where both run values come from
-    :func:`sportsdataverse.mlb.mlb_run_values.event_run_value` on
-    ``sb_attempts``.
+    |RUN_VALUES["cs"] - RUN_VALUES["sb"]|`` (the documented fallback
+    constants -- see :mod:`sportsdataverse.mlb.mlb_stolen_base` for why a
+    real-capture attempt's ``delta_run_exp`` cannot isolate the steal's own
+    run value from the bundled primary batter outcome it is narrated
+    alongside).
 
     Args:
-        sb_attempts: One row per stolen-base attempt, with ``catcher_id``
-            (Utf8), ``events`` (``stolen_base_*`` / ``caught_stealing_*``),
-            and ``delta_run_exp``.
+        sb_attempts: One row per stolen-base attempt (see
+            :func:`sportsdataverse.mlb.mlb_stolen_base.sb_attempts_from_pitches`),
+            with ``catcher_id`` (Utf8) and ``outcome`` (``"success"`` \\|
+            ``"caught"``).
         poptime: A :func:`sportsdataverse.mlb.mlb_statcast.mlb_statcast_leaderboard_poptime`
             frame with ``catcher_id`` (Utf8) and the pop-time column named
             by ``pop_col``.
@@ -176,7 +205,7 @@ def mlb_catcher_throwing(
         | catcher_id | Utf8 | Catcher MLBAM id |
         | attempts | Int64 | Stolen-base attempts caught behind the plate |
         | cs_above_expected | Float64 | Sum of (caught - expected CS rate) |
-        | throwing_runs | Float64 | cs_above_expected x \\|RV(CS) - RV(SB)\\| |
+        | throwing_runs | Float64 | cs_above_expected x \\|RUN_VALUES["cs"] - RUN_VALUES["sb"]\\| |
 
     Example:
         Quick start::
@@ -196,7 +225,7 @@ def mlb_catcher_throwing(
 
     att = sb_attempts.with_columns(
         pl.col("catcher_id").cast(pl.Utf8),
-        pl.col("events").str.starts_with("caught_stealing").cast(pl.Int64).alias("is_cs"),
+        (pl.col("outcome") == "caught").cast(pl.Int64).alias("is_cs"),
     )
     pop = poptime.with_columns(pl.col("catcher_id").cast(pl.Utf8))
     assert att.schema["catcher_id"] == pop.schema["catcher_id"], "catcher_id dtype mismatch before pop-time join"
@@ -205,11 +234,7 @@ def mlb_catcher_throwing(
     joined = joined.with_columns((pl.col(pop_col) / pop_bin_width).floor().cast(pl.Int64).alias("pop_bin"))
 
     rate = joined.group_by("pop_bin").agg(pl.col("is_cs").mean().alias("expected_cs_prob"))
-
-    all_events = sb_attempts["events"].unique().to_list()
-    cs_events = [e for e in all_events if e.startswith("caught_stealing")]
-    sb_events = [e for e in all_events if e.startswith("stolen_base")]
-    rv = abs(event_run_value(sb_attempts, cs_events) - event_run_value(sb_attempts, sb_events))
+    rv = abs(RUN_VALUES["cs"] - RUN_VALUES["sb"])
 
     scored = joined.join(rate, on="pop_bin", how="left").with_columns(
         (pl.col("is_cs") - pl.col("expected_cs_prob").fill_null(0.5)).alias("cs_gain")

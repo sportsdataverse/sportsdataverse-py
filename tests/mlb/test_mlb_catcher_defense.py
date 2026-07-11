@@ -3,26 +3,28 @@ import polars as pl
 from sportsdataverse.mlb.mlb_catcher_defense import mlb_catcher_blocking, mlb_catcher_throwing
 
 
-def _blocking_frame():
+def _blocking_frame(*, use_des: bool = True):
     # 10 dirt pitches for catcher 1, all blocked (no WP/PB charged).
     # 10 dirt pitches for catcher 2, 5 blocked + 5 wild-pitches.
     n = 10
     plate_z = [1.0] * (n * 2)
-    events = [None] * n + [None] * 5 + ["wild_pitch"] * 5
-    dre = [0.0] * n + [0.0] * 5 + [-0.25] * 5
     fielder_2 = [1] * n + [2] * n
     on_1b = [123] * (n * 2)
-    return pl.DataFrame(
-        {
-            "plate_z": plate_z,
-            "sz_top": [3.5] * (n * 2),
-            "sz_bot": [1.5] * (n * 2),
-            "events": events,
-            "delta_run_exp": dre,
-            "fielder_2": fielder_2,
-            "on_1b": on_1b,
-        }
-    )
+    data = {
+        "plate_z": plate_z,
+        "sz_top": [3.5] * (n * 2),
+        "sz_bot": [1.5] * (n * 2),
+        "fielder_2": fielder_2,
+        "on_1b": on_1b,
+    }
+    if use_des:
+        # Real-capture shape: WP is narrated in `des`, never a clean `events` value.
+        des = [None] * n + [None] * 5 + ["Someone strikes out swinging. Wild pitch by pitcher X."] * 5
+        data["des"] = des
+    else:
+        events = [None] * n + [None] * 5 + ["wild_pitch"] * 5
+        data["events"] = events
+    return pl.DataFrame(data)
 
 
 def test_blocking_runs_catcher_ordering_and_schema():
@@ -37,6 +39,14 @@ def test_blocking_runs_catcher_ordering_and_schema():
     assert c1["blocking_runs"] > c2["blocking_runs"]
 
 
+def test_blocking_runs_events_fallback_when_no_des():
+    # Older feeds without `des` fall back to the `events` column.
+    out = mlb_catcher_blocking(_blocking_frame(use_des=False))
+    c1 = out.filter(pl.col("catcher_id") == "1").row(0, named=True)
+    c2 = out.filter(pl.col("catcher_id") == "2").row(0, named=True)
+    assert c1["blocking_runs"] > c2["blocking_runs"]
+
+
 def test_blocking_empty_input_returns_schema():
     out = mlb_catcher_blocking(pl.DataFrame(schema={"plate_z": pl.Float64}))
     assert out.height == 0
@@ -46,12 +56,9 @@ def test_blocking_empty_input_returns_schema():
 def _throwing_inputs():
     # catcher 9: fast pop time (1.90), throws out 3/4 attempts.
     # catcher 8: slow pop time (2.20), throws out 1/4 attempts.
-    events = (["caught_stealing_2b"] * 3 + ["stolen_base_2b"] * 1) + (
-        ["caught_stealing_2b"] * 1 + ["stolen_base_2b"] * 3
-    )
-    dre = ([-0.45] * 3 + [0.2] * 1) + ([-0.45] * 1 + [0.2] * 3)
+    outcome = (["caught"] * 3 + ["success"] * 1) + (["caught"] * 1 + ["success"] * 3)
     catcher_id = (["9"] * 4) + (["8"] * 4)
-    sb_attempts = pl.DataFrame({"catcher_id": catcher_id, "events": events, "delta_run_exp": dre})
+    sb_attempts = pl.DataFrame({"catcher_id": catcher_id, "outcome": outcome})
     poptime = pl.DataFrame({"catcher_id": ["9", "8"], "pop_2b_sba": [1.90, 2.20]})
     return sb_attempts, poptime
 
