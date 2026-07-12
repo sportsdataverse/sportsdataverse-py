@@ -791,14 +791,6 @@ loaders:
   min_season: 2026
   example_args:
     seasons: 2026
-- fn: load_wnba_stats_lineups
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_lineups/lineups_{season}.parquet
-  tag: wnba_stats_lineups
-  min_season: 2026
-  example_args:
-    seasons: 2026
 - fn: load_wnba_stats_officials
   league: wnba
   base: sdv_releases
@@ -823,14 +815,6 @@ loaders:
   min_season: 2025
   example_args:
     seasons: 2025
-- fn: load_wnba_stats_player_season_stats
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_player_season_stats/player_season_stats_{season}.parquet
-  tag: wnba_stats_player_season_stats
-  min_season: 2026
-  example_args:
-    seasons: 2026
 - fn: load_wnba_stats_rosters
   league: wnba
   base: sdv_releases
@@ -852,22 +836,6 @@ loaders:
   base: sdv_releases
   url: wnba_stats_shots/shots_{season}.parquet
   tag: wnba_stats_shots
-  min_season: 2026
-  example_args:
-    seasons: 2026
-- fn: load_wnba_stats_standings
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_standings/standings_{season}.parquet
-  tag: wnba_stats_standings
-  min_season: 2026
-  example_args:
-    seasons: 2026
-- fn: load_wnba_stats_team_season_stats
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_team_season_stats/team_season_stats_{season}.parquet
-  tag: wnba_stats_team_season_stats
   min_season: 2026
   example_args:
     seasons: 2026
