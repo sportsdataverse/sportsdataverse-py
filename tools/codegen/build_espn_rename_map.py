@@ -174,9 +174,13 @@ def main() -> int:
         md.insert(3, f"| {prefix} | {g} | {e} | {rn} | {rv} | {k} |")
 
     out = ROOT / "docs" / "superpowers" / "specs" / "espn-r-naming-worksheet.md"
-    out.write_text("\n".join(md) + "\n", encoding="utf-8")
+    out.write_text("\n".join(md) + "\n", encoding="utf-8", newline="\n")
     ymap = ROOT / "tools" / "codegen" / "espn_rename_map.suggested.yaml"
-    ymap.write_text(yaml.safe_dump({"rename": dict(sorted(suggested.items()))}, sort_keys=False, width=100), "utf-8")
+    ymap.write_text(
+        yaml.safe_dump({"rename": dict(sorted(suggested.items()))}, sort_keys=False, width=100),
+        "utf-8",
+        newline="\n",
+    )
     print("totals (league: gen/exact/rename/review/keep):")
     for prefix, t in totals.items():
         print(f"  {prefix}: {t}")
