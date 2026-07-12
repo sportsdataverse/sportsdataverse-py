@@ -9,10 +9,11 @@ release. NOT the same lineage as ``wbb_pbp.helper_wbb_pbp`` (the interactive
 ``espn_wbb_pbp`` pipeline) -- this is the release-parity producer.
 
 The R-released parquet is the parity oracle: dtypes and column order mirror it
-exactly (R integer == Int32; play ``id`` is R numeric == Float64). The four
-``coordinate_*`` columns the creation script appends as season-level NA
-fallback when a season ships no coordinates are added here per-game (identical
-union outcome, no season-level special case needed).
+exactly (R integer == Int32), with ONE deliberate dtype improvement -- the play
+``id`` is emitted Int64, not R's precision-losing Float64 (see ``_INT64_COLS``).
+The four ``coordinate_*`` columns the creation script appends as season-level
+NA fallback when a season ships no coordinates are added here per-game
+(identical union outcome, no season-level special case needed).
 
 Documented deviations from R (both on compat paths current payloads skip):
 the R away-first ``id_vars`` branch plucks the DARK logo for ``homeTeamLogo``
@@ -69,7 +70,6 @@ _INT32_COLS: tuple[str, ...] = (
     "points_attempted",
 )
 _FLOAT64_COLS: tuple[str, ...] = (
-    "id",
     "game_spread",
     "home_team_spread",
     "coordinate_x_raw",
@@ -77,6 +77,11 @@ _FLOAT64_COLS: tuple[str, ...] = (
     "coordinate_x",
     "coordinate_y",
 )
+# DELIBERATE divergence from the R releases: R/jsonlite has no int64, so the
+# published `id` is Float64 and LOSES PRECISION above 2^53 -- adjacent play ids
+# (~4e17) round to the same double and collide. The stored payload carries the
+# id as a true integer, so the Python producer emits Int64 and keeps it exact.
+_INT64_COLS: tuple[str, ...] = ("id",)
 
 _COORD_COLS: tuple[str, ...] = (
     "coordinate_x_raw",
@@ -258,8 +263,9 @@ def helper_wbb_play_by_play(final: dict) -> pl.DataFrame:
     if not has_coords:
         df = df.with_columns([pl.lit(None, dtype=pl.Float64).alias(c) for c in _COORD_COLS])
 
-    # Released dtype contract.
+    # Released dtype contract (except `id` -- see _INT64_COLS).
     return df.with_columns(
         [pl.col(c).cast(pl.Int32, strict=False) for c in _INT32_COLS if c in df.columns]
+        + [pl.col(c).cast(pl.Int64, strict=False) for c in _INT64_COLS if c in df.columns]
         + [pl.col(c).cast(pl.Float64, strict=False) for c in _FLOAT64_COLS if c in df.columns]
     )
