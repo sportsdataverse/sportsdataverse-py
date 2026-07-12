@@ -67,6 +67,8 @@ def test_wnba_draft_holdout_ranks_realized_value() -> None:
     """
     pred, real = _load_scored_draft_holdout()
     joined = pred.join(real, on="player_id", how="inner")
+    # oracle-join-hygiene: a shrunken join must not pass vacuously (observed n=271).
+    assert joined.height >= 250, f"draft-gate join shrank to {joined.height} rows (<250) -- fixture/join drifted"
     s = spearman_corr(joined["proj_career_value"].to_numpy(), joined["career_value"].to_numpy())
     assert s >= 0.15, f"WNBA draft-value holdout Spearman {s:.3f} < 0.15 -- debug features/leakage, do NOT lower gate"
 
@@ -130,6 +132,10 @@ def test_wnba_availability_holdout_beats_baseline() -> None:
     ).filter(pl.col("season") >= 1997)
 
     train_raw = career.filter(pl.col("season") <= AVAIL_CUTOFF_SEASON)
+    # 40.0: the modern WNBA regular-season game count. Intentional flat approximation -- WNBA
+    # seasons were 28-34 games pre-2003 (28 in '97-'98, 32 in '99-2002), so GP% for those early
+    # rows is slightly understated. Left flat because it matches the fit script's denominator
+    # exactly and the holdout is 2019-2025 (all 36-40-game seasons, unaffected).
     gp_median = float((train_raw["gp"].cast(pl.Float64) / 40.0).clip(0.0, 1.0).median() or 0.75)
     feats = availability_features(career, league="wnba", median_ref={"gp_pct": gp_median, "bmi": 24.0})
     labeled = feats.with_columns((career["gp"].cast(pl.Float64) / 40.0).clip(0.0, 1.0).alias("realized_gp_pct"))
@@ -137,6 +143,8 @@ def test_wnba_availability_holdout_beats_baseline() -> None:
 
     scored = score_availability(holdout.select("player_id", "season", *_FEATURE_COLS), league="wnba")
     joined = scored.join(holdout.select("player_id", "season", "realized_gp_pct"), on=["player_id", "season"])
+    # oracle-join-hygiene: a shrunken join must not pass vacuously (observed n=1126).
+    assert joined.height >= 1000, f"availability-gate join shrank to {joined.height} rows (<1000) -- fixture drifted"
 
     model_mae = mae(joined["avail_pct"].to_numpy(), joined["realized_gp_pct"].to_numpy())
     baseline_mae = mae(holdout["career_gp_pct"].to_numpy(), holdout["realized_gp_pct"].to_numpy())
@@ -151,8 +159,12 @@ def test_wnba_rookie_projection_holdout_ranks_realized_value() -> None:
     """Phase 5 oracle gate -- WNBA rookie/sophomore projection holdout backtest.
 
     Same 2019-2025 holdout classes as the draft-value gate (n=259). Observed holdout
-    Spearman(``proj_rookie_value``, realized ``rookie_value``): **0.130** (deterministic).
-    Floor set with margin below that, not an aspirational number.
+    Spearman(``proj_rookie_value``, realized ``rookie_value``): **0.127** (deterministic; with
+    the train-only ``rookie_fraction`` -- see fit_rookie_residual.py). Floor set with margin
+    below that, not an aspirational number. The 0.11 floor sits close to the noise threshold for
+    n=259 -- a deliberate consequence of the small WNBA rookie corpus (a shorter, shallower
+    league than the NBA), not a weak model; it is the honest achievable bar on the data
+    available, kept just below the observed 0.127.
     """
     draft_history = pl.read_parquet(f"{FIXTURE_DIR}/draft_history.parquet").select(
         "player_id", "draft_year", "overall_pick", "round_number"
@@ -185,9 +197,11 @@ def test_wnba_rookie_projection_holdout_ranks_realized_value() -> None:
     composed = composed.join(rookie.select("player_id", "rookie_value"), on="player_id", how="left").with_columns(
         pl.col("rookie_value").fill_null(0.0)
     )
+    # oracle-join-hygiene: a shrunken holdout must not pass vacuously (observed n=259).
+    assert composed.height >= 250, f"rookie-gate holdout shrank to {composed.height} rows (<250) -- fixture drifted"
 
     s = spearman_corr(composed["proj_rookie_value"].to_numpy(), composed["rookie_value"].to_numpy())
-    assert s >= 0.10, f"WNBA rookie-projection holdout Spearman {s:.3f} < 0.10 -- debug the aging-curve ratio"
+    assert s >= 0.11, f"WNBA rookie-projection holdout Spearman {s:.3f} < 0.11 -- debug the aging-curve ratio"
 
 
 def test_wnba_rookie_projection_schema_separates_availability() -> None:

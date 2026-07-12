@@ -77,6 +77,10 @@ def main() -> None:
     )
     rates = rates.with_columns(box_value_per100(rates, league="wnba").alias("season_value"))
 
+    # Population-level fit: build_aging_deltas chains within-player age-to-age+1 deltas over ALL
+    # observed players/ages (standard for a delta-method curve). This is a population aging
+    # pattern, not a per-draft-class predictor, so fitting it on the full corpus (and applying it
+    # to every class downstream) is not an as-of-class leak.
     season_values = rates.select("player_id", "age", "season_value", "minutes")
     curve = build_aging_deltas(season_values, min_minutes=MIN_MINUTES)
     print(f"raw curve rows: {curve.height}")

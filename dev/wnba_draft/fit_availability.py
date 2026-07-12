@@ -48,6 +48,10 @@ def main() -> None:
     ).filter(pl.col("season") >= MIN_SEASON)
 
     train_raw = career.filter(pl.col("season") <= CUTOFF_SEASON)
+    # 40.0: modern WNBA regular-season game count. Intentional flat approximation -- WNBA seasons
+    # were 28-34 games pre-2003 (28 in '97-'98, 32 in '99-2002), so GP% for those early train
+    # rows is slightly understated. Left flat because the availability model's LEAGUE_CONSTANTS
+    # games_full_season is likewise 40 and the holdout (2019-2025) is all 36-40-game seasons.
     gp_median = float((train_raw["gp"].cast(pl.Float64) / 40.0).clip(0.0, 1.0).median() or 0.75)
     median_ref = {"gp_pct": gp_median, "bmi": 24.0}
 

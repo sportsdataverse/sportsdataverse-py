@@ -89,7 +89,13 @@ def main() -> None:
     draft_history = (
         pl.read_parquet(f"{FIXTURE_DIR}/draft_history.parquet")
         .select("player_id", "draft_year")
-        .unique(subset=["player_id"], keep="first")  # defensive: guard a hypothetical re-entry/dispersal dup
+        # defensive: collapse the 6 re-entry/dispersal-draft players that appear in >1 class.
+        # maintain_order=True keeps the first-encountered (file-order) row deterministically --
+        # same thread-stable-survivor discipline as the season_stats dedup above. NOT pre-sorted
+        # by draft_year on purpose: a pre-sort would change WHICH class survives for a re-entered
+        # player (their draft_year only labels the fixture; the split key is the full-history
+        # scored frame, so this choice is cosmetic -- but keep it stable, don't silently reorder).
+        .unique(subset=["player_id"], keep="first", maintain_order=True)
     )
     rookie = ordered.filter(pl.col("_season_idx") == 0).select(
         "player_id", pl.col("_season_vorp").alias("rookie_value"), pl.col("minutes").alias("rookie_min")

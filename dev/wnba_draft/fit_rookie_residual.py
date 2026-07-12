@@ -49,12 +49,21 @@ def main() -> None:
     )
     train_scored, _ = as_of_class_split(scored, cutoff_year=CUTOFF_YEAR)
 
+    # nba_aging_curve is a POPULATION-level fit (fit over all observed ages in
+    # dev/wnba_draft/fit_aging_curve.py, standard for a delta-method curve) -- not a per-draft-
+    # class predictor, so using it here for every holdout class is not an as-of leak.
     curve = nba_aging_curve(league="wnba").select("age", "rel_value")
     rel_rookie = float(curve.filter(pl.col("age") == int(ROOKIE_AGE))["rel_value"][0])
     rel_peak = 1.0
-    rookie_fraction_candidates = career.join(
-        rookie.select("player_id", "rookie_value"), on="player_id", how="inner"
-    ).filter(pl.col("career_value") > 0)
+    # Strict as-of hygiene: derive rookie_fraction on TRAIN classes (<=CUTOFF_YEAR) only, never
+    # the full corpus. It's a rank-neutral global scalar (doesn't reorder the gate), but a
+    # holdout-inclusive median is still an as-of-boundary smell -- restrict it to train_scored's
+    # player_ids to keep every fitted quantity train-derived.
+    rookie_fraction_candidates = (
+        career.join(rookie.select("player_id", "rookie_value"), on="player_id", how="inner")
+        .join(train_scored.select("player_id"), on="player_id", how="inner")
+        .filter(pl.col("career_value") > 0)
+    )
     rookie_fraction = float(
         (rookie_fraction_candidates["rookie_value"] / rookie_fraction_candidates["career_value"]).median()
     )

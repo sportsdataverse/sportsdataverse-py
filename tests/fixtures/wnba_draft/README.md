@@ -67,7 +67,7 @@ without the fix gave holdout MAE 0.1847, 0.1890, 0.1913 across 3 runs on the sam
 | `wnba_aging_curve.json` | `fit_aging_curve.py` | all 24 observed ages (20-43) | peak_age 29, unimodal, genuinely different curve from `nba_aging_curve.json` |
 | `wnba_draft_value.json` | `fit_draft_model.py` | train 1997-2018 (942), holdout 2019-2025 (271 scored) | holdout Spearman 0.228 vs realized `career_value`; `draft_prob` is a documented constant (~0.99), NOT a fitted classifier -- no undrafted/invitee negative class exists in this corpus |
 | `wnba_availability.json` | `fit_availability.py` | train seasons \<=2018 (2713 rows), holdout 2019-2025 (1126 rows) | holdout MAE 0.2315 vs career-mean baseline 0.2485 |
-| `wnba_rookie_projection.json` | `fit_rookie_residual.py` | train 1997-2018 classes | holdout Spearman 0.130 vs realized `rookie_value` (composed with the draft-value + aging-curve artifacts above) |
+| `wnba_rookie_projection.json` | `fit_rookie_residual.py` | train 1997-2018 classes (incl. train-only `rookie_fraction`) | holdout Spearman 0.127 vs realized `rookie_value` (composed with the draft-value + aging-curve artifacts above) |
 
 See `tests/wnba/test_wnba_draft_backtest.py` for the oracle gates that pin these numbers down
 (floors set with margin below/above the observed values, never lowered to pass).

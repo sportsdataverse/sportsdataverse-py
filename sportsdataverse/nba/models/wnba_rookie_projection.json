@@ -1,10 +1,10 @@
 {
   "league": "wnba",
-  "rookie_fraction": 0.08338337345148553,
+  "rookie_fraction": 0.07488776435339317,
   "residual": {
-    "first_round": -2.1700797126098084,
-    "lottery": 3.1251745618664004,
-    "second_round": -1.3388444618390374,
-    "undrafted": 0.20195677380438556
+    "first_round": -1.9155488352553915,
+    "lottery": 3.4268012222916764,
+    "second_round": -1.2409091473421487,
+    "undrafted": 0.1257974189629032
   }
 }
