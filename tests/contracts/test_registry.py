@@ -1,3 +1,6 @@
+import polars as pl
+import pytest
+
 from tools.validation.registry import DatasetSpec, load_thresholds
 
 
@@ -102,3 +105,24 @@ def test_expected_constant_columns_defaults_and_threads() -> None:
     )
     _frame, ctx = _resolve_spec(spec)
     assert ctx.expected_constant_columns == ("season", "division")
+
+
+def test_read_parquet_glob_heals_null_vs_string_dtype_divergence(tmp_path) -> None:
+    # A sparse column all-null in one season's file (polars -> Null dtype) but
+    # String in another. pl.read_parquet's strict multi-file concat rejects this
+    # (SchemaError: incoming String != target Null); _read_parquet_glob must heal
+    # it by supertyping to String. This is the nfl_model_pbp validation crash.
+    from tools.validation.registry import _read_parquet_glob
+
+    pl.DataFrame({"game_id": [1], "sparse": [None]}).write_parquet(tmp_path / "s2020.parquet")
+    pl.DataFrame({"game_id": [2], "sparse": ["x"]}).write_parquet(tmp_path / "s2021.parquet")
+    glob = str(tmp_path / "s*.parquet")
+
+    # Strict read raises — proves the fixture reproduces the crash the fix targets.
+    with pytest.raises(pl.exceptions.SchemaError):
+        pl.read_parquet(glob)
+
+    frame = _read_parquet_glob(glob)
+    assert frame.height == 2
+    assert frame.schema["sparse"] == pl.String
+    assert set(frame["game_id"].to_list()) == {1, 2}
