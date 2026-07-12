@@ -1,21 +1,33 @@
-"""PWHL categorical-shot_quality xG proxy + best-effort power ratings (T5.3).
+"""PWHL xG models (coordinate + categorical proxy) + best-effort power ratings (T5.3/T5.3b).
 
 **First-of-its-kind, best-effort.** ``load_pwhl_pbp`` -- the actual
-HockeyTech-derived PWHL play-by-play sdv-py ships -- carries a categorical
-``shot_quality`` column (``"Quality on net"`` / ``"Non quality on net"`` /
-``"Quality goal"`` / ``"Non quality goal"``), not a numeric ``xg`` like the
-NHL api-web contract the rest of the T5.2/T5.3 spine assumes. This module is
-a **separate, additive** path (it does not touch
+HockeyTech-derived PWHL play-by-play sdv-py ships -- does not carry a numeric
+``xg`` column like the NHL api-web contract the rest of the T5.2/T5.3 spine
+assumes, but it DOES carry real shot coordinates (``x_coord``/``y_coord``,
+feet-scale with the nets at ``x = +/-89`` -- the fastRhockey
+``hockeytech_analytics.R`` convention) at ~100% coverage on shot rows, plus a
+categorical ``shot_quality`` label (``"Quality on net"`` /
+``"Non quality on net"`` / ``"Quality goal"`` / ``"Non quality goal"``).
+This module is a **separate, additive** path (it does not touch
 :mod:`sportsdataverse.pwhl.pwhl_team_ratings` /
 :mod:`sportsdataverse.pwhl.pwhl_market`, whose deferred NHL-contract shims
 remain unchanged and still correctly report empty until an NHL-shaped PWHL
 pbp adapter exists) that:
 
-1. Fits an **empirical goal-rate weight per shot-quality tier** from real
-   realized goals (:func:`fit_shot_quality_xg`) -- the xG proxy IS the
-   observed scoring rate for that tier, exactly analogous to how
-   :func:`sportsdataverse.nhl.nhl_microstat_constants.fit_shot_xg` fits
-   on-demand, no bundled artifact.
+1. Fits an xG model on-demand from real shot rows -- no bundled artifact --
+   by either of two methods (``xg_method=``):
+
+   - ``"coords"`` (T5.3b, **default**): a real distance/angle logistic xG
+     (:func:`fit_pwhl_coord_xg`) whose geometry comes from the shared
+     HockeyTech analytics core
+     (:func:`sportsdataverse.hockeytech._analytics.add_shot_distance_angle`;
+     coordinate frames documented in
+     ``docs/superpowers/specs/2026-06-09-hockeytech-multi-league-scraper-analytics-design.md``)
+     -- no distance/angle math is re-implemented here.
+   - ``"quality"`` (T5.3, the original proxy): an **empirical goal-rate
+     weight per shot-quality tier** (:func:`fit_shot_quality_xg`) -- the xG
+     proxy IS the observed scoring rate for that tier. Kept working unchanged
+     for API stability.
 2. Builds a ``team_game_xg_rates``-shaped per-(game, team) frame
    (:func:`pwhl_team_game_xg_rates`) from PWHL's own columns (``event``,
    ``team_id``, ``power_play`` for an even-strength approximation --
@@ -33,23 +45,32 @@ pbp adapter exists) that:
 
 - ``shot_quality`` tautologically encodes outcome for two of its four values
   (``"Quality goal"`` / ``"Non quality goal"`` ARE goals by construction), so
-  the proxy is really a 2-tier ("quality" vs "non_quality") empirical
-  goal-rate, not an independent predictive xG model -- it cannot separate
-  shot quality from shot outcome the way a coordinate-based model can.
-- The even-strength filter uses ``power_play != 1`` (best-effort: PWHL's
-  ``power_play``/``short_handed``/``empty_net`` tagging covers well under
-  half of shot rows in the captured seasons, so this excludes only the
-  confidently-tagged power-play shots rather than requiring full coverage).
+  the quality proxy is really a 2-tier ("quality" vs "non_quality") empirical
+  goal-rate, not an independent predictive xG model. The ``"coords"`` method
+  has no such tautology -- distance/angle are measured pre-outcome.
+- The even-strength filter uses ``power_play != 1``. The loader's
+  ``power_play`` tags are already the PP-window back-fill the fastRhockey
+  producer applies (the same logic as
+  :func:`sportsdataverse.hockeytech._analytics.backfill_power_play`):
+  a null tag means "not inside a derived PP window", not missing data.
+  Re-running the Python back-fill per game re-derives the tags nearly
+  identically (2025: 938 producer PP tags vs 921 re-derived on 5,671 shot
+  rows, plus 146 SH tags the ``!= 1`` filter ignores), so the producer tags
+  are used as-is.
 - Game dates are read from ``load_pwhl_game_info``'s ``game_date_iso``, NOT
   ``load_pwhl_schedules``'s ``game_date`` (a year-less "Wed, May 8" string
   with no reliable chronological parse) -- see :func:`pwhl_team_game_xg_rates`.
 - No external PWHL oracle exists (first-of-its-kind); the gate is a
-  HELD-OUT realized-outcome backtest (``margin_sd`` fit on 2025, scored on a
-  held-out 2026, tier weights fit on strictly-prior seasons). The honest
-  result: held-out Brier 0.2449 vs naive 0.2500 -- directionally correct but
-  WITHIN sampling noise, so the gate is calibration + no-worse-than-naive,
-  NOT a beats-naive magnitude claim (needs more seasons). See
-  ``tests/pwhl/test_pwhl_xg_proxy_oracle.py`` +
+  HELD-OUT realized-outcome backtest (``margin_sd`` fit per method on 2025,
+  scored on a held-out 2026, xG models fit on strictly-prior seasons). The
+  honest held-out 2026 result (n=107, 2026-07-12): coords Brier 0.2444 vs
+  quality 0.2449 vs naive 0.2500; paired coords-minus-quality per-game Brier
+  diff -0.0005 (paired SE 0.0006). Coords gates best on every measured axis
+  (it also carries real shot-level signal: in-sample AUC 0.6745 vs a 0.0835
+  base rate on 10,593 shots) and is therefore the DEFAULT, but the edge over
+  naive is still WITHIN sampling noise (~1 SE), so the gate is calibration +
+  no-worse-than-naive, NOT a beats-naive magnitude claim (needs more
+  seasons). See ``tests/pwhl/test_pwhl_xg_proxy_oracle.py`` +
   ``tests/fixtures/pwhl_prediction/README.md``.
 
 Example:
@@ -72,15 +93,21 @@ from __future__ import annotations
 
 import datetime as _dt
 from dataclasses import dataclass
-from typing import Literal, Union, overload
+from typing import TYPE_CHECKING, Literal, Union, overload
 
 import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _as_season_list
 
+if TYPE_CHECKING:
+    from sklearn.linear_model import LogisticRegression
+
 _QUALITY_TIERS = ("quality", "non_quality")
 _MIN_SHOTS_PER_TIER = 30
+# Mirrors nhl_microstat_constants._XG_MIN_SHOTS: below this the coord fit
+# falls back to a constant-rate model instead of a logistic.
+_MIN_COORD_SHOTS = 200
 
 GAME_RATES_SCHEMA: dict[str, pl.PolarsDataType] = {
     "game_id": pl.Utf8,
@@ -145,6 +172,7 @@ def _pbp_shots_before(pbp: pl.DataFrame, game_info: pl.DataFrame, cutoff: _dt.da
     fit in a predictive (as-of) rating.
     """
     cols = ["game_id", "event", "shot_quality", "goal"]
+    cols += [c for c in ("x_coord", "y_coord") if c in pbp.columns]  # coords method fit inputs
     dated = pbp.with_columns(pl.col("game_id").cast(pl.Int64)).join(_game_dates(game_info), on="game_id", how="left")
     return dated.filter(pl.col("date").is_not_null() & (pl.col("date") < cutoff)).select(cols)
 
@@ -230,24 +258,170 @@ def fit_shot_quality_xg(pbp: pl.DataFrame) -> ShotQualityXGModel:
     return ShotQualityXGModel(weights=weights, fallback_rate=overall_rate)
 
 
+def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
+    """``shot_distance``/``shot_angle`` for a shot frame -- always HockeyTech's geometry.
+
+    Reuses the columns when the frame already carries them (an
+    :func:`sportsdataverse.hockeytech._analytics.enrich_pbp` output), else
+    derives them via the shared
+    :func:`sportsdataverse.hockeytech._analytics.add_shot_distance_angle`
+    (a ``load_pwhl_pbp`` frame, whose ``x_coord``/``y_coord`` are already the
+    standard rink-feet frame -- see the HockeyTech design spec,
+    ``docs/superpowers/specs/2026-06-09-hockeytech-multi-league-scraper-analytics-design.md``).
+    No geometry is computed in this module.
+    """
+    if {"shot_distance", "shot_angle"}.issubset(frame.columns):
+        return frame
+    from sportsdataverse.hockeytech._analytics import add_shot_distance_angle
+
+    f = frame if "event" in frame.columns else frame.with_columns(pl.lit("shot").alias("event"))
+    return add_shot_distance_angle(f)
+
+
+@dataclass(frozen=True)
+class PwhlCoordXGModel:
+    """A fitted (or fallback constant-rate) PWHL coordinate xG model.
+
+    Args:
+        model: Fitted :class:`sklearn.linear_model.LogisticRegression` on
+            ``[shot_distance, shot_angle]``, or ``None`` when the fallback
+            constant-rate path was used (insufficient shots to fit).
+        fallback_rate: Constant goal rate returned by :meth:`predict` when
+            ``model`` is ``None``, and for rows whose coordinates are null.
+    """
+
+    model: LogisticRegression | None
+    fallback_rate: float
+
+    def predict(self, shots: pl.DataFrame) -> pl.Series:
+        """Predict shot xG for each row of ``shots``.
+
+        Args:
+            shots: Frame with ``x_coord``/``y_coord`` (rink-feet) or
+                pre-computed ``shot_distance``/``shot_angle`` columns.
+
+        Returns:
+            A ``pl.Series`` named ``"xg"`` of per-row goal probability. Rows
+            with null geometry (null coordinates) get ``fallback_rate``.
+
+        Example:
+            Quick start::
+
+                model.predict(shots_df)
+        """
+        import numpy as np
+
+        if shots.height == 0:
+            return pl.Series("xg", [], dtype=pl.Float64)
+        if self.model is None:
+            return pl.Series("xg", [self.fallback_rate] * shots.height, dtype=pl.Float64)
+        feat = _shot_geometry(shots)
+        dist, angle = feat["shot_distance"], feat["shot_angle"]
+        x = np.column_stack([dist.fill_null(0.0).to_numpy(), angle.fill_null(0.0).to_numpy()])
+        proba = self.model.predict_proba(x)[:, 1]
+        out = np.where(dist.is_null().to_numpy(), self.fallback_rate, proba)
+        return pl.Series("xg", out, dtype=pl.Float64)
+
+
+def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
+    """Fit a real distance/angle logistic xG on PWHL shot coordinates on demand.
+
+    Filters to ``load_pwhl_pbp``'s ``event == "shot"`` rows (the complete
+    on-net shot log; ``goal`` is the outcome flag), derives
+    ``shot_distance``/``shot_angle`` via the shared HockeyTech analytics core
+    (:func:`sportsdataverse.hockeytech._analytics.add_shot_distance_angle`;
+    coordinate frames documented in the design spec,
+    ``docs/superpowers/specs/2026-06-09-hockeytech-multi-league-scraper-analytics-design.md``),
+    and fits a :class:`~sklearn.linear_model.LogisticRegression` with the
+    goal indicator as the label -- the same fit-at-call-time recipe as
+    :func:`sportsdataverse.nhl.nhl_microstat_constants.fit_shot_xg`, with the
+    geometry sourced from the HockeyTech core instead of the NHL api-web one.
+    PWHL pbp has no ``shot_type`` column, so the model is distance/angle
+    only. Rows with null coordinates are excluded from the fit (~100%
+    coverage in the captured seasons, so this drops almost nothing). Fewer
+    than :data:`_MIN_COORD_SHOTS` qualifying shots -- or a frame with no
+    coordinate columns at all -- falls back to a constant-rate model at the
+    observed goal rate (never a silent all-zero xG), mirroring the NHL
+    fitter's contract. No bundled artifact, no first-use download.
+
+    Args:
+        pbp: A frame shaped like ``load_pwhl_pbp`` output (needs ``event``,
+            ``goal``, ``x_coord``, ``y_coord``), or an ``enrich_pbp`` output
+            already carrying ``shot_distance``/``shot_angle``.
+
+    Returns:
+        A fitted :class:`PwhlCoordXGModel`.
+
+    Raises:
+        ValueError: If a non-empty ``pbp`` has no ``goal`` column (no label
+            to fit or fall back on).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl.pwhl_loaders import load_pwhl_pbp
+            from sportsdataverse.pwhl.pwhl_xg_proxy import fit_pwhl_coord_xg
+
+            model = fit_pwhl_coord_xg(load_pwhl_pbp(2025))
+
+    See Also:
+        * `fastRhockey`_ -- R source of the HockeyTech coordinate transform.
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
+    """
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+
+    if pbp.height == 0:
+        return PwhlCoordXGModel(model=None, fallback_rate=0.0)
+    if "goal" not in pbp.columns:
+        raise ValueError("fit_pwhl_coord_xg requires a 'goal' column (load_pwhl_pbp shape)")
+    shots = pbp.filter(pl.col("event") == "shot") if "event" in pbp.columns else pbp
+    if not {"x_coord", "y_coord"}.issubset(pbp.columns):
+        # No coordinate columns at all: an honest constant-rate model at the
+        # observed goal rate -- never a silent all-zero xG.
+        rate = float(shots["goal"].cast(pl.Float64).mean() or 0.0) if shots.height else 0.0
+        return PwhlCoordXGModel(model=None, fallback_rate=rate)
+    shots = shots.filter(pl.col("x_coord").is_not_null() & pl.col("y_coord").is_not_null())
+    if shots.height < _MIN_COORD_SHOTS:
+        goal_rate = float(shots["goal"].cast(pl.Float64).mean() or 0.0) if shots.height else 0.0
+        return PwhlCoordXGModel(model=None, fallback_rate=goal_rate)
+
+    feat = _shot_geometry(shots)
+    x = np.column_stack([feat["shot_distance"].to_numpy(), feat["shot_angle"].to_numpy()])
+    y = feat["goal"].cast(pl.Int64).to_numpy()
+    if len(np.unique(y)) < 2:
+        return PwhlCoordXGModel(model=None, fallback_rate=float(y.mean()))
+
+    clf = LogisticRegression(max_iter=1000)
+    clf.fit(x, y)
+    return PwhlCoordXGModel(model=clf, fallback_rate=float(y.mean()))
+
+
+def _fit_xg(pbp: pl.DataFrame, xg_method: str) -> Union[ShotQualityXGModel, PwhlCoordXGModel]:
+    """Dispatch the on-demand xG fit for ``xg_method`` (validated by callers)."""
+    return fit_shot_quality_xg(pbp) if xg_method == "quality" else fit_pwhl_coord_xg(pbp)
+
+
 def pwhl_team_game_xg_rates(
     pbp: pl.DataFrame,
     schedule: pl.DataFrame,
     *,
     game_info: pl.DataFrame | None = None,
-    xg_model: ShotQualityXGModel | None = None,
+    xg_model: Union[ShotQualityXGModel, PwhlCoordXGModel, None] = None,
+    xg_method: Literal["coords", "quality"] = "coords",
     even_strength_only: bool = True,
 ) -> pl.DataFrame:
-    """Per-(game, team) xG-proxy-for/against + realized goals from PWHL pbp.
+    """Per-(game, team) xG-for/against + realized goals from PWHL pbp.
 
     The PWHL-native counterpart to
     :func:`sportsdataverse.nhl.nhl_team_ratings.team_game_xg_rates`: built for
-    ``load_pwhl_pbp``'s HockeyTech shape (no ``xg``, no skater-count/
-    goalie-in columns) rather than the NHL api-web contract. ``team``/
-    ``opp_team`` are resolved to schedule's clean team-name strings (pbp's
-    own ``home_team``/``away_team`` carry a ``"PWHL "`` prefix that schedule's
-    do not -- resolved via ``team_id``, never by name-matching across the two
-    frames).
+    ``load_pwhl_pbp``'s HockeyTech shape (no pre-computed ``xg``, no
+    skater-count/goalie-in columns) rather than the NHL api-web contract.
+    ``team``/``opp_team`` are resolved to schedule's clean team-name strings
+    (pbp's own ``home_team``/``away_team`` carry a ``"PWHL "`` prefix that
+    schedule's do not -- resolved via ``team_id``, never by name-matching
+    across the two frames).
 
     Args:
         pbp: A frame shaped like ``load_pwhl_pbp(season)`` output for ONE
@@ -259,10 +433,23 @@ def pwhl_team_game_xg_rates(
             for its ``game_date_iso`` (schedule's own ``game_date`` has no
             year and cannot be reliably parsed). Without it, ``date`` is null
             and ``as_of_ratings_split`` filtering cannot be applied.
-        xg_model: A fitted :class:`ShotQualityXGModel`; fit on ``pbp`` when
-            ``None``.
+        xg_model: A fitted model (:class:`ShotQualityXGModel` or the NHL
+            :class:`PwhlCoordXGModel`
+            -- both expose ``predict``); fit on ``pbp`` per ``xg_method``
+            when ``None``.
+        xg_method: ``"coords"`` (default; real distance/angle logistic via
+            :func:`fit_pwhl_coord_xg` -- gates best on the held-out 2026
+            backtest) or ``"quality"`` (the T5.3 categorical shot-quality
+            proxy, kept working unchanged). Only selects the internal fit
+            when ``xg_model`` is ``None``; an explicit ``xg_model`` is used
+            as-is regardless of method. Shot rows with null coordinates
+            contribute :class:`PwhlCoordXGModel`'s fallback rate (handled
+            inside its ``predict``, not here).
         even_strength_only: Best-effort filter excluding shots with
             ``power_play == 1`` (see the module docstring's coverage caveat).
+
+    Raises:
+        ValueError: If ``xg_method`` is not ``"coords"`` or ``"quality"``.
 
     Returns:
         One row per (game, team), both home and away.
@@ -294,10 +481,12 @@ def pwhl_team_game_xg_rates(
             info = load_pwhl_game_info(2025)
             rates = pwhl_team_game_xg_rates(pbp, sched, game_info=info)
     """
+    if xg_method not in ("coords", "quality"):
+        raise ValueError(f"xg_method must be 'coords' or 'quality', got {xg_method!r}")
     if pbp.is_empty() or schedule.is_empty():
         return pl.DataFrame(schema=GAME_RATES_SCHEMA)
 
-    model = xg_model if xg_model is not None else fit_shot_quality_xg(pbp)
+    model = xg_model if xg_model is not None else _fit_xg(pbp, xg_method)
     shots = pbp.filter(pl.col("event") == "shot")
     if even_strength_only and "power_play" in shots.columns:
         # Best-effort even-strength filter (see module docstring): exclude only
@@ -308,6 +497,9 @@ def pwhl_team_game_xg_rates(
     if shots.height == 0:
         return pl.DataFrame(schema=GAME_RATES_SCHEMA)
 
+    # Null-coord shot rows need no special-casing here: PwhlCoordXGModel.predict
+    # already substitutes its fallback_rate (the unconditional goal rate) for
+    # rows with null geometry, and realized goals (gf/ga) count every row.
     shots = shots.with_columns(
         model.predict(shots).alias("xg"),
         pl.col("goal").cast(pl.Int64).alias("_goal_i"),
@@ -372,7 +564,8 @@ def pwhl_ratings_from_proxy(
     seasons: Union[int, list[int]],
     *,
     as_of_date: _dt.date | None = ...,
-    xg_model: ShotQualityXGModel | None = ...,
+    xg_model: Union[ShotQualityXGModel, PwhlCoordXGModel, None] = ...,
+    xg_method: Literal["coords", "quality"] = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 @overload
@@ -380,22 +573,24 @@ def pwhl_ratings_from_proxy(
     seasons: Union[int, list[int]],
     *,
     as_of_date: _dt.date | None = ...,
-    xg_model: ShotQualityXGModel | None = ...,
+    xg_model: Union[ShotQualityXGModel, PwhlCoordXGModel, None] = ...,
+    xg_method: Literal["coords", "quality"] = ...,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 def pwhl_ratings_from_proxy(
     seasons: Union[int, list[int]],
     *,
     as_of_date: _dt.date | None = None,
-    xg_model: ShotQualityXGModel | None = None,
+    xg_model: Union[ShotQualityXGModel, PwhlCoordXGModel, None] = None,
+    xg_method: Literal["coords", "quality"] = "coords",
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Best-effort PWHL power ratings from the categorical-shot_quality xG proxy.
+    """Best-effort PWHL power ratings from an on-demand-fit xG model.
 
     Loads pbp/schedule/game_info per season (seasons are loaded and processed
     individually -- ``load_pwhl_pbp`` carries a different column count
     season-to-season, so they cannot be concatenated raw), fits (or reuses)
-    the shot-quality xG proxy, builds each season's
+    the ``xg_method`` xG model, builds each season's
     :func:`pwhl_team_game_xg_rates`, concatenates, applies the as-of-date
     leakage split if requested, then opponent-adjusts + shrinks via the
     already-shared :func:`sportsdataverse.nhl.nhl_team_ratings.adjust_rate_opponent`
@@ -403,20 +598,28 @@ def pwhl_ratings_from_proxy(
     core uses.
 
     **Leakage boundary:** when ``as_of_date`` is set this is a *predictive*
-    rating, so the tier weights are fit on shots from games strictly BEFORE the
+    rating, so the xG model is fit on shots from games strictly BEFORE the
     cutoff only (never the games being rated). Without a cutoff (a descriptive
-    full-season rating) the weights are fit per-season on that season's full
+    full-season rating) the model is fit per-season on that season's full
     pbp -- there is no future to leak from.
 
     Args:
         seasons: An int or iterable of PWHL season end-years (``>= 2024``).
         as_of_date: If given, only games strictly before this date are used --
-            for BOTH the rating games AND the tier-weight fit (the leakage
+            for BOTH the rating games AND the xG-model fit (the leakage
             boundary for a predictive backtest).
-        xg_model: A pre-fit :class:`ShotQualityXGModel`; when supplied it is
-            used as-is (the caller owns its leakage boundary). When ``None``,
-            weights are fit internally, leak-safe per the ``as_of_date`` note.
+        xg_model: A pre-fit model (:class:`ShotQualityXGModel` or the NHL
+            :class:`PwhlCoordXGModel`);
+            when supplied it is used as-is (the caller owns its leakage
+            boundary). When ``None``, the model is fit internally, leak-safe
+            per the ``as_of_date`` note.
+        xg_method: ``"coords"`` (default; :func:`fit_pwhl_coord_xg`) or
+            ``"quality"`` (:func:`fit_shot_quality_xg`) -- see
+            :func:`pwhl_team_game_xg_rates`.
         return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Raises:
+        ValueError: If ``xg_method`` is not ``"coords"`` or ``"quality"``.
 
     Returns:
         A polars (or pandas) DataFrame, one row per (season, team). Same
@@ -455,6 +658,8 @@ def pwhl_ratings_from_proxy(
     from sportsdataverse.nhl.nhl_team_ratings import adjust_rate_opponent
     from sportsdataverse.pwhl.pwhl_loaders import load_pwhl_game_info, load_pwhl_pbp, load_pwhl_schedules
 
+    if xg_method not in ("coords", "quality"):
+        raise ValueError(f"xg_method must be 'coords' or 'quality', got {xg_method!r}")
     const = get_constants("pwhl")
     loaded = []
     for season in _as_season_list(seasons):
@@ -467,20 +672,20 @@ def pwhl_ratings_from_proxy(
         return _empty_ratings(return_as_pandas)
 
     # Leakage boundary (MERGE-BLOCKER fix): with an as-of cutoff this is a
-    # PREDICTIVE rating, so the tier weights must not peek at the games being
-    # rated -- fit them on shots from games strictly BEFORE the cutoff only
+    # PREDICTIVE rating, so the xG model must not peek at the games being
+    # rated -- fit it on shots from games strictly BEFORE the cutoff only
     # (pooled across the requested seasons). Without a cutoff (a descriptive
     # full-season rating) the per-season full-pbp fit is fine, no boundary to
     # respect. An explicit xg_model always wins.
     fit_model = xg_model
     if fit_model is None and as_of_date is not None:
         pre = [_pbp_shots_before(pbp, info, as_of_date) for pbp, _sched, info in loaded]
-        fit_model = fit_shot_quality_xg(pl.concat(pre, how="vertical_relaxed"))
+        fit_model = _fit_xg(pl.concat(pre, how="vertical_relaxed"), xg_method)
 
     all_rates = []
     for pbp, sched, info in loaded:
-        model = fit_model if fit_model is not None else fit_shot_quality_xg(pbp)
-        rates = pwhl_team_game_xg_rates(pbp, sched, game_info=info, xg_model=model)
+        model = fit_model if fit_model is not None else _fit_xg(pbp, xg_method)
+        rates = pwhl_team_game_xg_rates(pbp, sched, game_info=info, xg_model=model, xg_method=xg_method)
         if not rates.is_empty():
             all_rates.append(rates)
 

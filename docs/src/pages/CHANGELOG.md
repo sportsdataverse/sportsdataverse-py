@@ -5,6 +5,7 @@
 - [Unreleased](#unreleased)
   - [Fixes](#fixes)
   - [Dependencies](#dependencies)
+  - [PWHL — coordinate-based xG (T5.3b): xg_method default flips quality → coords](#pwhl--coordinate-based-xg-t53b-xg_method-default-flips-quality-%E2%86%92-coords)
   - [CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)](#cfb--advanced-efficiency-spine-opponent-adjusted-efficiencyexplosivenesshavoc-%E2%86%92-field-position-%E2%86%92-adjusted-tempo)
   - [NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)](#nfl--ngs-over-expected-tracking-spine-yac-oe-%E2%86%92-ryoe-%E2%86%92-separation-oe-%E2%86%92-manzone-rates)
   - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
@@ -222,6 +223,19 @@
   only reference was a long-commented `.rds` contracts loader — and its
   removal also drops the `libbz2`/`liblzma` system-header requirement that
   pyreadr's sdist build imposed on Python 3.9 Linux installs.
+
+### PWHL — coordinate-based xG (T5.3b): xg_method default flips quality → coords
+
+- feat(pwhl)!: `pwhl_team_game_xg_rates` / `pwhl_ratings_from_proxy` gain an
+  `xg_method` parameter ("coords" | "quality") and the DEFAULT is the new
+  coordinate distance/angle logistic xG (`fit_pwhl_coord_xg`, geometry from
+  `hockeytech._analytics.add_shot_distance_angle`) — **output values change
+  for existing callers** that relied on the implicit categorical
+  shot-quality proxy; pass `xg_method="quality"` to keep the old behavior.
+  `LEAGUE_CONSTANTS["pwhl"].margin_sd` re-fit 1.21 → 1.19 (coords-paired,
+  2025-only). Held-out 2026 (n=107): coords Brier 0.2444 vs quality 0.2449
+  vs naive 0.2500 (within noise; gates stay no-worse-than-naive +
+  calibration).
 
 ### CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)
 

@@ -5,10 +5,10 @@ bases:
 loaders:
 - fn: load_cfb_pbp
   league: cfb
-  base: raw_data
-  url: cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet
-  tag: cfbfastR-data
-  min_season: 2003
+  base: sdv_releases
+  url: espn_cfb_pbp/play_by_play_{season}.parquet
+  tag: espn_cfb_pbp
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_cfb_rosters
@@ -49,6 +49,152 @@ loaders:
   url: cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet
   tag: cfb_crosswalk
   min_season: 2014
+  example_args:
+    seasons: 2024
+# --- ESPN per-game / per-season datasets from the cfb-data python dual-write
+# (backfilled gap-free 2004-2025; play_participants 2014+, power_index 2015+). ---
+- fn: load_cfb_team_box
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_team_box/team_box_{season}.parquet
+  tag: espn_cfb_team_box
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_player_box
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_player_box/player_box_{season}.parquet
+  tag: espn_cfb_player_box
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_drives
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_drives/drives_{season}.parquet
+  tag: espn_cfb_drives
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_play_participants
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_play_participants/play_participants_{season}.parquet
+  tag: espn_cfb_play_participants
+  min_season: 2014
+  example_args:
+    seasons: 2024
+- fn: load_cfb_game_rosters
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_game_rosters/game_rosters_{season}.parquet
+  tag: espn_cfb_game_rosters
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_linescores
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_linescores/linescores_{season}.parquet
+  tag: espn_cfb_linescores
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_betting
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_betting/betting_{season}.parquet
+  tag: espn_cfb_betting
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_power_index
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_power_index/power_index_{season}.parquet
+  tag: espn_cfb_power_index
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_team
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_team/adv_team_{season}.parquet
+  tag: espn_cfb_adv_team
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_passing
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_passing/adv_passing_{season}.parquet
+  tag: espn_cfb_adv_passing
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_rushing
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_rushing/adv_rushing_{season}.parquet
+  tag: espn_cfb_adv_rushing
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_receiving
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_receiving/adv_receiving_{season}.parquet
+  tag: espn_cfb_adv_receiving
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_defensive
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_defensive/adv_defensive_{season}.parquet
+  tag: espn_cfb_adv_defensive
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_defensive_players
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_defensive_players/adv_defensive_players_{season}.parquet
+  tag: espn_cfb_adv_defensive_players
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_drives
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_drives/adv_drives_{season}.parquet
+  tag: espn_cfb_adv_drives
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_situational
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_situational/adv_situational_{season}.parquet
+  tag: espn_cfb_adv_situational
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_specialists
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_specialists/adv_specialists_{season}.parquet
+  tag: espn_cfb_adv_specialists
+  min_season: 2004
+  example_args:
+    seasons: 2024
+- fn: load_cfb_adv_turnover
+  league: cfb
+  base: sdv_releases
+  url: espn_cfb_adv_turnover/adv_turnover_{season}.parquet
+  tag: espn_cfb_adv_turnover
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_mbb_pbp
@@ -791,14 +937,6 @@ loaders:
   min_season: 2026
   example_args:
     seasons: 2026
-- fn: load_wnba_stats_lineups
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_lineups/lineups_{season}.parquet
-  tag: wnba_stats_lineups
-  min_season: 2026
-  example_args:
-    seasons: 2026
 - fn: load_wnba_stats_officials
   league: wnba
   base: sdv_releases
@@ -823,14 +961,6 @@ loaders:
   min_season: 2025
   example_args:
     seasons: 2025
-- fn: load_wnba_stats_player_season_stats
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_player_season_stats/player_season_stats_{season}.parquet
-  tag: wnba_stats_player_season_stats
-  min_season: 2026
-  example_args:
-    seasons: 2026
 - fn: load_wnba_stats_rosters
   league: wnba
   base: sdv_releases
@@ -852,22 +982,6 @@ loaders:
   base: sdv_releases
   url: wnba_stats_shots/shots_{season}.parquet
   tag: wnba_stats_shots
-  min_season: 2026
-  example_args:
-    seasons: 2026
-- fn: load_wnba_stats_standings
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_standings/standings_{season}.parquet
-  tag: wnba_stats_standings
-  min_season: 2026
-  example_args:
-    seasons: 2026
-- fn: load_wnba_stats_team_season_stats
-  league: wnba
-  base: sdv_releases
-  url: wnba_stats_team_season_stats/team_season_stats_{season}.parquet
-  tag: wnba_stats_team_season_stats
   min_season: 2026
   example_args:
     seasons: 2026

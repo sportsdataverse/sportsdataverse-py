@@ -5,6 +5,7 @@ from sportsdataverse.wnba.wnba_espn_ext import *
 from sportsdataverse.wnba.wnba_game_officials import *
 from sportsdataverse.wnba.wnba_game_rosters import *
 from sportsdataverse.wnba.wnba_loaders import *
+from sportsdataverse.wnba.wnba_loaders_extra import *
 from sportsdataverse.wnba.wnba_pbp import *
 from sportsdataverse.wnba.wnba_player_stats import *
 from sportsdataverse.wnba.wnba_schedule import *
