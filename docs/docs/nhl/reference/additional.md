@@ -423,9 +423,9 @@ espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 
 ## NHL native
 
-### `nhl_edge_skating_value(*, season: 'int', league: 'str' = 'nhl', detail_frames: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_edge_skating_value}
+### `nhl_edge_skating_value(*, season: 'int', league: 'str' = 'nhl', detail_frames: 'pl.DataFrame | None' = None, method: "Literal['zscore', 'percentile']" = 'zscore', include_zone_balance: 'bool' = False, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_edge_skating_value}
 
-Per-skater EDGE z-composite skating value.
+Per-skater EDGE skating-value composite (z-score or percentile blend).
 
 **Parameters**
 
@@ -434,11 +434,13 @@ Per-skater EDGE z-composite skating value.
 | `season` | `int` |  | Season end-year (e.g. `2024` for 2023-24). |
 | `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"`. PWHL short-circuits to a zero-row frame (no EDGE feed) BEFORE any network access. |
 | `detail_frames` | `DataFrame \| None` | `None` | Pre-parsed EDGE aggregate (one row per skater with the COMPONENTS` columns) for offline use. When `None` on the NHL path, the live per-skater `nhl_edge_skater_*_detail` fetch would run -- not implemented offline; supply `detail_frames`. |
+| `method` | `Literal['zscore', 'percentile']` | `'zscore'` | `"zscore"` (default, original composite) or `"percentile"` -- see the module docstring's flesh-out note. |
+| `include_zone_balance` | `bool` | `False` | add the derived `oz_dz_time_balance` component when `dz_time_pct` is present in `detail_frames` (default `False` -- preserves the original 4-component output). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_bursts_20`, `oz_time_pct`, `skating_value`, `skating_value_rank` (1 = fastest composite). PWHL (or empty/absent input) returns a zero-row frame with this schema.
+Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_bursts_20`, `oz_time_pct`, `skating_value`, `skating_value_rank` (1 = fastest composite), plus `oz_dz_time_balance` when `include_zone_balance=True` and derivable. PWHL (or empty/absent input) returns a zero-row frame with the base schema.
 
 **Example**
 
@@ -446,6 +448,12 @@ Per-skater frame: `player_id`, `season`, `top_speed`, `distance_km`, `speed_burs
 from sportsdataverse.nhl.nhl_edge_value import nhl_edge_skating_value
 
 out = nhl_edge_skating_value(season=2024, detail_frames=edge_df)
+
+# Percentile composite + zone-balance component
+
+out = nhl_edge_skating_value(
+    season=2024, detail_frames=edge_df, method="percentile", include_zone_balance=True
+)
 ```
 
 ### `nhl_expected_assists(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', xg_model: 'ShotXGModel | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_expected_assists}

@@ -412,7 +412,9 @@ def schema_from_parser(parser_name: str, payload: dict, description: str = "") -
 
 
 def write_yaml(obj, path: Path) -> None:
-    Path(path).write_text(yaml.safe_dump(obj, sort_keys=False, width=120, allow_unicode=True), encoding="utf-8")
+    Path(path).write_text(
+        yaml.safe_dump(obj, sort_keys=False, width=120, allow_unicode=True), encoding="utf-8", newline="\n"
+    )
 
 
 def main() -> int:

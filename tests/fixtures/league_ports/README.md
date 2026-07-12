@@ -6,7 +6,14 @@
   - [Schema / dtype notes](#schema--dtype-notes)
   - [Train / holdout split (leakage boundary)](#train--holdout-split-leakage-boundary)
   - [Regenerate-together invariant](#regenerate-together-invariant)
-- [Spring football (UFL / XFL) + NFL-parity fixtures](#spring-football-ufl--xfl--nfl-parity-fixtures)
+  - [Spring football (UFL / XFL) + NFL-parity fixtures](#spring-football-ufl--xfl--nfl-parity-fixtures)
+  - [College baseball / softball fixtures (T7.3, model 5)](#college-baseball--softball-fixtures-t73-model-5)
+    - [Feasibility finding: full base-out reconstruction, not the reduced fallback](#feasibility-finding-full-base-out-reconstruction-not-the-reduced-fallback)
+    - [Known limitation: single-game sample size](#known-limitation-single-game-sample-size)
+  - [NCAA hockey (MCH/WCH) fixtures — Phase 4 (T7.3)](#ncaa-hockey-mchwch-fixtures--phase-4-t73)
+    - [Phase-0 feasibility finding: no xG/RAPM/GSAx port](#phase-0-feasibility-finding-no-xgrapmgsax-port)
+    - [WCH coverage caveat](#wch-coverage-caveat)
+    - [External sanity: 2025 NCAA tournament field overlap (MCH)](#external-sanity-2025-ncaa-tournament-field-overlap-mch)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -64,7 +71,7 @@ let the holdout silently overlap the training matches (leakage). If the Cricshee
 corpus is refreshed, re-run the fit script once and commit all four artifacts
 plus the refreshed `FORMAT_TABLE` constants together.
 
-# Spring football (UFL / XFL) + NFL-parity fixtures
+## Spring football (UFL / XFL) + NFL-parity fixtures
 
 Oracle/contract fixtures for the T7.3 spring-football EP/WP port
 (`sportsdataverse/football/spring_football_ep_wp.py`). Captured
@@ -91,3 +98,116 @@ the NFL slice additionally needs the local nfl-data checkout at
 floors 442/445) were observed on THIS committed corpus — regenerating the
 fixtures means re-observing and re-documenting those numbers, never
 loosening them.
+
+## College baseball / softball fixtures (T7.3, model 5)
+
+Real single-game ESPN Core v2 `.../plays` captures, one per league. Captured
+**2026-07-12**. Feed
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_state` /
+`college_baseball_re24` / `college_baseball_wpa` (by-reference shims in
+`sportsdataverse/baseball/college_{baseball,softball}/college_*_re.py`).
+
+| file | game_id | PAs | final score | notes |
+|---|---|---|---|---|
+| `college_baseball_game_plays.json` | 401874444 | 71 | away 3, home 4 | 9-inning game; used by the real-fixture correctness + oracle-gate tests. |
+| `college_softball_game_plays.json` | 401873598 | 59 | away 4, home 5 | 7-inning game (regulation confirmed: max `period.number` observed == 7). |
+| `college_baseball_summary.json` | 401874444 | — | — | Site v2 summary capture for the same game; not currently consumed by the RE24/WPA port (state reconstruction only needs `game_plays`). |
+| `college_softball_summary.json` | 401873598 | — | — | Same, softball. |
+
+### Feasibility finding: full base-out reconstruction, not the reduced fallback
+
+Both `game_plays` payloads carry `items[].type.text == "Play Result"` rows
+with `participants[].type` in `{pitcher, batter, onFirst, onSecond, onThird}`
+(post-play base occupancy), cumulative `outs`, cumulative `awayScore`/
+`homeScore`, and `atBatId`/`team.$ref` grouping keys — enough to reconstruct
+the full 24-state base-out substrate per PA (see
+`sportsdataverse/baseball/college_run_expectancy.py` module docstring for the
+exact extraction contract, including the multi-row-per-`atBatId` gotcha).
+This is a **better outcome than the Phase 0 plan's fallback contingency**
+(an inning-score-only reduced state), so `college_baseball_state` needs no
+`reduced=True` flag.
+
+### Known limitation: single-game sample size
+
+Each fixture is **one game** (71 / 59 PAs) — enough to prove the
+reconstruction is correct end to end (schema, no nulls, monotone outs,
+`runs_after` tops out at the real final score — see
+`tests/baseball/test_college_run_expectancy.py`), but **not** enough to
+support a statistically meaningful RE24 matrix or a directional
+college-vs-MLB run-environment comparison (the bases-empty/0-out anchor cell
+has only ~14-18 observations per game). The oracle gate
+(`tests/baseball/test_college_run_expectancy_oracle.py`) documents this and
+gates on what a 1-game sample can support — hard non-increasing monotonicity
+with a tie-count ratchet, strict `RE(___,0) > RE(___,1) > RE(___,2)` on the
+fully-observed bases-empty column, an anchor band derived from the fitted
+matrix's own observed value (0.75x–1.3x), and the exact run_value round-trip
+identity `sum(run_value) == total_runs − n_halves × anchor` — rather than a
+point comparison. All floors and the observed values they derive from are
+tabulated in that test module's docstring; never lower them. No published
+college RE24 snapshot exists to cross-check against either — capturing a
+multi-game college corpus is a documented follow-up, not done here.
+
+Capture script: `dev/league_ports/capture_college_baseball_softball.py`
+(force-added despite the gitignored `dev/` convention — it is the fixtures'
+provenance).
+
+## NCAA hockey (MCH/WCH) fixtures — Phase 4 (T7.3)
+
+Captured **2026-07-12** via `dev/league_ports/capture_ncaa_hockey_fixtures.py`,
+`dev/league_ports/scan_ncaa_hockey_dates.py`, and
+`dev/league_ports/capture_wch_and_scoreboards.py` against real ESPN endpoints
+(`espn_mch_*` / `espn_wch_*`).
+
+| file | content | source event(s) |
+|---|---|---|
+| `mch_summary.json`, `mch_game_plays.json` | 12 plays (Goal + Penalty only) | mch national championship, event `401717648` |
+| `mch_game_plays_empty_sample.json` | `count: 0, items: []` — Core v2 plays can be empty even for a *completed* game | mch regular-season event `401711791` |
+| `wch_summary.json`, `wch_game_plays.json` | 12 plays (Goal + Penalty only) | wch Frozen Four game, event `401762970` |
+| `mch_scoreboard_sample.json` | 194 completed games, 64 distinct D-I teams, full-season date sweep (Oct 2024–Mar 2025) | mch 2024-25 regular season + tournament |
+| `wch_scoreboard_sample.json` | 7 completed games, 8 distinct teams | wch 2025 NCAA Tournament bracket only (see coverage caveat below) |
+
+### Phase-0 feasibility finding: no xG/RAPM/GSAx port
+
+`sportsdataverse/hockey/college_hockey_constants.py` has the full writeup.
+Summary: ESPN's college-hockey `summary`/`game_plays` payloads carry **only
+`Goal` and `Penalty` play types** — no shot-attempt events, no `x`/`y`
+coordinates, no structured strength-state field, and there is no shift-chart
+endpoint anywhere in the `espn_mch_*`/`espn_wch_*` wrapper surface. This holds
+for a zero-play regular-season game *and* a 12-play national-championship
+game (the richest capture found), for both leagues. Since there is no shot
+corpus at all, the NHL xG port (`nhl_xg`) has nothing to refit against, and
+RAPM/GSAx additionally require shift-level on-ice personnel and
+shots-against that ESPN does not expose. **This phase is scoped down to an
+opponent-adjusted goal-margin rating** (`sportsdataverse/hockey/
+college_hockey_ratings.py`, reusing `_common/ratings.py`'s
+`iterative_opponent_adjust` unchanged) instead of a stub or a forced xG fit.
+
+### WCH coverage caveat
+
+A 24-date sampled sweep of ESPN's WCH scoreboard (Oct 2024–Apr 2025;
+`dev/league_ports/scan_ncaa_hockey_dates.py` +
+`capture_wch_and_scoreboards.py`) found **zero** completed games outside the
+March 2025 NCAA Tournament window — the 7-game / 8-team bracket in
+`wch_scoreboard_sample.json` is everything ESPN returned. A single-elimination
+bracket is too structurally sparse (no repeat matchups, no non-tournament
+teams) for a meaningful opponent-adjusted rating, so the WCH ratings oracle
+test (`tests/hockey/test_college_hockey_ratings.py::
+test_wch_ratings_smoke_only_insufficient_season_coverage`) is a schema +
+convergence smoke test only — it does **not** assert a correlation floor, per
+the "never fabricate a passing gate on an inadequate sample" discipline. MCH,
+by contrast, has full-season coverage (194 games) and carries the real
+internal-consistency gate (Spearman(adj_net, win_pct) ≥ 0.6, observed ≈ 0.672).
+
+### External sanity: 2025 NCAA tournament field overlap (MCH)
+
+Reachable: fetched the real 16-team 2025 NCAA D-I men's tournament bracket
+(Wikipedia, "2025 NCAA Division I men's ice hockey tournament") and compared
+it against `adj_net`'s top-16 MCH teams from the same committed
+`mch_scoreboard_sample.json`. **12/16 overlap (75%)** — the 4 misses on each
+side are plausible (the selection committee weighs RPI/conference-tournament
+results/at-large rules that a pure adjusted-goal-margin rating doesn't model;
+our extra 4 — North Dakota, Dartmouth, Omaha, St. Thomas — were all
+legitimately strong regular-season teams that missed the committee's cut).
+The real bracket field is hardcoded as a historical fact (with citation) in
+`test_mch_ratings_external_sanity_tournament_overlap` — no live network call
+in the test suite, per the offline-fixture-test rule.

@@ -84,7 +84,7 @@ def main() -> None:
         "#   python tools/codegen/build_r_exports.py\n"
     )
     yaml_str = yaml.dump(out, allow_unicode=True, default_flow_style=False, sort_keys=True, width=120)
-    OUTPUT.write_text(header + yaml_str, encoding="utf-8")
+    OUTPUT.write_text(header + yaml_str, encoding="utf-8", newline="\n")
     print(f"\nWrote {OUTPUT}")
 
 

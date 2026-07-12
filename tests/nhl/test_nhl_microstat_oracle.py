@@ -210,20 +210,42 @@ ASSIST_STABILITY_FLOOR = 0.15
 # Observed eligible comparison set: 389 players with >=2 games each half.
 ASSIST_MIN_PLAYERS = 300
 
-# NOTE (underpowered leg -- capture contract, NOT a faked assert): the plan's
-# primary-rate-stability > secondary-rate-stability finding needs deep
-# per-player exposure. Splitting ~1236 assists into primary (~754) and
-# secondary (~482) tiers AND then into two game-halves leaves a handful of
-# events per player per tier -- pure Poisson noise (both tiers' per-game
-# rate stability land near 0 / slightly negative in a 120-consecutive-game
-# early-season slice, ~3-6 games/player). Demonstrating primary > secondary
-# requires a corpus with >=~40 games/player (a full single season, or a
-# team-concentrated multi-season slice), where each tier carries enough
-# per-player events to rank-stabilize. Until such a corpus is captured
-# (extend dev/nhl_microstat/capture_corpus.py to a full-season or fixed-team
-# schedule and re-commit pbp_2024_slice.parquet), this ordering is left
-# ungated rather than asserted on noise. The unbiasedness + combined-assist
-# stability legs below ARE demonstrable here and gate the model's correctness.
+# NOTE (underpowered leg -- ACTUALLY ATTEMPTED, not a faked assert): the
+# plan's primary-rate-stability > secondary-rate-stability finding needs deep
+# per-player exposure. T5.2 flesh-out re-ran the comparison on the full
+# 120-game corpus with dev/nhl_microstat/check_assist_ordering.py (a recon
+# script, not production logic -- committed for reproducibility) using the SAME
+# games_appeared-denominator machinery as the gate below, at two exposure
+# floors:
+#   min_games_per_half=2: n_both_halves primary=107 / secondary=71,
+#     stability primary=-0.1634, secondary=-0.0956  (WRONG direction)
+#   min_games_per_half=3: n_both_halves primary=69  / secondary=45,
+#     stability primary=+0.0168, secondary=+0.1417  (WRONG direction)
+# Both attempts land near zero AND with the sign reversed from the plan's
+# expectation -- not merely "underpowered" but actively noise-dominated at
+# this corpus's per-player exposure (n_both_halves in the dozens, not the
+# hundreds the combined-assist gate below needs). Splitting ~1236 assists
+# into primary (~754) and secondary (~482) tiers AND then into two
+# game-halves leaves too few events per player per tier to rank-stabilize.
+# Demonstrating primary > secondary requires a corpus with >=~40 games/player
+# (a full single season, or a team-concentrated multi-season slice). Until
+# such a corpus is captured (extend dev/nhl_microstat/capture_corpus.py to a
+# full-season or fixed-team schedule and re-commit pbp_2024_slice.parquet),
+# this PER-PLAYER ordering is left ungated rather than asserted on noise.
+#
+# A DIFFERENT, genuinely powered claim (population-level, no per-player
+# exposure needed) substitutes as the honest ordering-adjacent internal
+# check below: goals credited a secondary assist (a fully-connected,
+# 2-passer sequence) carry higher mean relative danger than goals with only
+# a primary assist. This uses the full 754-goal corpus directly (n=150 vs
+# n=543), not a per-player split, so it is NOT thinned by exposure. The
+# unbiasedness + combined-assist stability legs below ARE demonstrable here
+# and gate the model's correctness; SECONDARY_DANGER_MARGIN below is this
+# session's addition.
+# Observed: only-primary goals n=150, mean_goal_xg=0.1046; with-secondary
+# goals n=543, mean_goal_xg=0.1170 (diff ~0.0124). Floor conservative below
+# observed.
+SECONDARY_DANGER_MARGIN = 0.005
 
 
 def test_expected_assist_unbiasedness_and_stability(oracle_pbp: pl.DataFrame) -> None:
@@ -274,6 +296,30 @@ def test_expected_assist_unbiasedness_and_stability(oracle_pbp: pl.DataFrame) ->
     )
 
 
+def test_secondary_assist_goals_carry_higher_relative_danger(oracle_pbp: pl.DataFrame) -> None:
+    """Population-level substitute for the underpowered per-player ordering (see NOTE above).
+
+    Goals with a credited secondary assist (both helpers touched the puck on
+    a fully-connected sequence) should carry higher mean relative danger
+    (goal_xg / mean_goal_xg) than goals with only a primary assist. Powered
+    by the full goal corpus (n=150 vs n=543), not thinned by per-player
+    exposure.
+    """
+    goals = extract_goals_with_assists(oracle_pbp, xg_model=fit_shot_xg(oracle_pbp))
+    only_primary = goals.filter(pl.col("assist1_player_id").is_not_null() & pl.col("assist2_player_id").is_null())
+    with_secondary = goals.filter(pl.col("assist2_player_id").is_not_null())
+    assert only_primary.height > 50 and with_secondary.height > 50, "goal-assist subsets unexpectedly small"
+
+    mean_only_primary = only_primary["goal_xg"].mean()
+    mean_with_secondary = with_secondary["goal_xg"].mean()
+    assert mean_only_primary is not None and mean_with_secondary is not None
+    diff = mean_with_secondary - mean_only_primary
+    assert diff >= SECONDARY_DANGER_MARGIN, (
+        f"with-secondary-assist mean relative danger {mean_with_secondary:.4f} exceeds only-primary's "
+        f"{mean_only_primary:.4f} by only {diff:.4f} (floor {SECONDARY_DANGER_MARGIN}) -- debug before lowering"
+    )
+
+
 # ---------------------------------------------------------------------------
 # Phase 4 -- zone-entry / zone-exit value (model 1, constrained 🟡)
 # ---------------------------------------------------------------------------
@@ -289,6 +335,72 @@ ZONE_MIN_GAMES_PER_HALF = 2
 ZONE_ENTRY_STABILITY_FLOOR = 0.15
 # Observed eligible comparison set: 476 players with >=2 games each half.
 ZONE_MIN_PLAYERS = 400
+
+
+# ---------------------------------------------------------------------------
+# Phase 4b -- zone-entry LABEL directional sanity (T5.2 flesh-out)
+# ---------------------------------------------------------------------------
+# The controlled/dump label was fleshed out to be event-sequence-aware: the
+# entering team must win the very next possession event in the WHOLE-GAME
+# event order (not just any later same-team event, which could follow an
+# intervening opponent touch) within controlled_window_s. This directional
+# check validates the improved label carries real hockey signal (not just a
+# relabeled coin flip): entries the label calls "controlled" should precede a
+# same-team shot attempt (within POST_ENTRY_SHOT_WINDOW_S) far more often
+# than entries called "dump" -- a controlled carry-in flows into pressure;
+# a dump-in is a contested loose puck. Note the label and this check share a
+# possession-event vocabulary (a same-team FACEOFF/takeaway win also counts
+# as "controlled", not only a shot), so the two are not perfectly circular --
+# rate_controlled is empirically < 1.0, confirming real discrimination.
+# Observed on the 120-game corpus: n_controlled=887 (rate 0.9797),
+# n_dump=2957 (rate 0.7704), diff=0.2093. Floor conservative below observed.
+POST_ENTRY_SHOT_WINDOW_S = 5.0
+ENTRY_LABEL_DIRECTIONAL_MARGIN = 0.15
+ENTRY_LABEL_MIN_ENTRIES = 500
+
+
+def _post_entry_secs_expr() -> pl.Expr:
+    parts = pl.col("time_in_period").str.split(":")
+    return parts.list.get(0).cast(pl.Int64) * 60 + parts.list.get(1).cast(pl.Int64)
+
+
+def test_zone_entry_label_directional_sanity(oracle_pbp: pl.DataFrame) -> None:
+    pbp = oracle_pbp.with_columns(_post_entry_secs_expr().alias("_secs"))
+    tr = infer_zone_transitions(pbp)
+    entries = tr.filter(pl.col("transition_type") == "entry").join(
+        pbp.select(pl.col("game_id").cast(pl.Utf8), "event_idx", "period", "_secs"),
+        on=["game_id", "event_idx"],
+        how="left",
+    )
+    assert entries.height > ENTRY_LABEL_MIN_ENTRIES, "zone-entry corpus unexpectedly small for the label sanity check"
+
+    shots = pbp.filter(pl.col("type_desc_key").is_in(["goal", "shot-on-goal", "missed-shot", "blocked-shot"])).select(
+        pl.col("game_id").cast(pl.Utf8),
+        "period",
+        pl.col("_secs").alias("shot_secs"),
+        pl.col("event_owner_team_id").cast(pl.Utf8).alias("shot_team"),
+    )
+    joined = entries.join(shots, on=["game_id", "period"], how="left")
+    joined = joined.with_columns(
+        (
+            (pl.col("shot_secs") >= pl.col("_secs"))
+            & (pl.col("shot_secs") <= pl.col("_secs") + POST_ENTRY_SHOT_WINDOW_S)
+            & (pl.col("shot_team") == pl.col("team_id"))
+        ).alias("_shot_follows")
+    )
+    per_entry = joined.group_by(["game_id", "event_idx", "controlled"]).agg(
+        pl.col("_shot_follows").any().alias("shot_follows")
+    )
+
+    rate_controlled = per_entry.filter(pl.col("controlled") == True)["shot_follows"].mean()  # noqa: E712
+    rate_dump = per_entry.filter(pl.col("controlled") == False)["shot_follows"].mean()  # noqa: E712
+    assert rate_controlled is not None and rate_dump is not None, "empty controlled/dump split"
+    diff = rate_controlled - rate_dump
+    assert diff >= ENTRY_LABEL_DIRECTIONAL_MARGIN, (
+        f"controlled-entry shot-follow rate {rate_controlled:.4f} exceeds dump's {rate_dump:.4f} by only "
+        f"{diff:.4f} (floor {ENTRY_LABEL_DIRECTIONAL_MARGIN}) -- debug the event-sequence controlled heuristic "
+        "before lowering this floor"
+    )
 
 
 def test_zone_entry_rate_stability(oracle_pbp: pl.DataFrame) -> None:
@@ -353,3 +465,63 @@ def test_edge_value_concurrent(oracle_edge_skaters: pl.DataFrame) -> None:
             f"EDGE skating_value vs {comp} rank-corr {corr:.4f} below floor "
             f"{EDGE_COMPONENT_CORR_FLOOR} -- check the z-score sign/weights"
         )
+
+
+# T5.2 flesh-out: the percentile-composite alternative (same 4 components,
+# rank-percentile blend instead of z-score) must clear the SAME concurrent
+# floor as the original z-composite -- it's an outlier-robustness alternative,
+# not a different signal. Observed on the 108-skater fixture: top_speed 0.66,
+# distance_km 0.69, speed_bursts_20 0.79, oz_time_pct 0.51 -- all comfortably
+# above the shared floor. NOTE: `include_zone_balance=True` is deliberately
+# NOT given a floor-gate here -- adding oz_dz_time_balance measurably shifts
+# weight toward zone-time and away from raw speed (observed: top_speed corr
+# drops to ~0.49, just under EDGE_COMPONENT_CORR_FLOOR), a real and expected
+# trade-off documented in the module docstring's "ceiling" note, not a bug to
+# paper over with a lowered floor.
+def test_edge_value_percentile_method_concurrent(oracle_edge_skaters: pl.DataFrame) -> None:
+    out = nhl_edge_skating_value(season=2024, detail_frames=oracle_edge_skaters, method="percentile")
+    assert out.height >= 40, "EDGE skater sample unexpectedly small"
+
+    sv = out["skating_value"].to_numpy()
+    for comp in ("top_speed", "distance_km", "speed_bursts_20", "oz_time_pct"):
+        corr = spearman_corr(sv, out[comp].to_numpy())
+        assert corr >= EDGE_COMPONENT_CORR_FLOOR, (
+            f"EDGE percentile-composite skating_value vs {comp} rank-corr {corr:.4f} below floor "
+            f"{EDGE_COMPONENT_CORR_FLOOR} -- check the percentile-rank blend"
+        )
+
+
+# T5.2 flesh-out: joint face-validity (magnitude, not just marginal rank-corr).
+# Being top-decile in the composite should mean jointly high in BOTH raw
+# top_speed AND distance_km (not just correlated with each on average) --
+# i.e. a top-decile player's WORSE of the two component percentiles should
+# still be solidly elevated, not "high in one, mediocre in the other."
+# Observed on the 108-skater fixture, top-decile (n=11): mean joint_min_pctile
+# 0.744, min 0.636. Floors conservative below observed.
+JOINT_FACE_VALIDITY_MEAN_FLOOR = 0.60
+JOINT_FACE_VALIDITY_MIN_FLOOR = 0.50
+
+
+def test_edge_value_joint_face_validity(oracle_edge_skaters: pl.DataFrame) -> None:
+    out = nhl_edge_skating_value(season=2024, detail_frames=oracle_edge_skaters)
+    n = out.height
+    decile_n = max(1, round(n * 0.1))
+    top_decile = out.sort("skating_value", descending=True).head(decile_n)
+
+    pctile = out.select(
+        "player_id",
+        ((pl.col("top_speed").rank(method="average") - 1) / (n - 1)).alias("top_speed_pctile"),
+        ((pl.col("distance_km").rank(method="average") - 1) / (n - 1)).alias("distance_km_pctile"),
+    )
+    joined = top_decile.join(pctile, on="player_id", how="left")
+    assert joined.height == decile_n, "join dropped top-decile rows -- player_id dtype mismatch?"
+    joint_min = joined.select(pl.min_horizontal("top_speed_pctile", "distance_km_pctile").alias("m"))["m"]
+
+    assert joint_min.mean() >= JOINT_FACE_VALIDITY_MEAN_FLOOR, (
+        f"top-decile joint_min_pctile mean {joint_min.mean():.4f} below floor {JOINT_FACE_VALIDITY_MEAN_FLOOR} "
+        "-- composite may be dominated by a single component rather than jointly fast+far skaters"
+    )
+    assert joint_min.min() >= JOINT_FACE_VALIDITY_MIN_FLOOR, (
+        f"top-decile joint_min_pctile min {joint_min.min():.4f} below floor {JOINT_FACE_VALIDITY_MIN_FLOOR} "
+        "-- at least one top-decile player is high in only one raw component"
+    )

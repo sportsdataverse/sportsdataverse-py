@@ -8360,6 +8360,29 @@ leverage_index:
   outs_start: Outs before the play (0-2).
   score_diff_bucket: home minus away score, clipped to [-6, 6].
   leverage_index: Mean absolute win-probability swing from this state, normalized to a 1.0 league average.
+college_baseball_state:
+  game_id: ESPN event id.
+  inning: Inning number.
+  half: Half-inning ("top" or "bottom").
+  base_state: 3-char base occupancy code before the PA ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third.
+  outs: Outs before the PA (0-2).
+  runs_before: Cumulative (both teams) runs scored before the PA.
+  runs_after: Cumulative (both teams) runs scored after the PA.
+  batting_team_id: ESPN team id of the batting team.
+  play_seq: Game-global sequential plate-appearance order.
+  score_diff: home minus away cumulative score before the PA.
+college_baseball_re24:
+  base_state: 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third.
+  outs: Outs at the start of the base-out state (0-2).
+  run_expectancy: Empirical mean runs scored from this state through the end of the half-inning (RE24).
+  n: Number of plate appearances observed starting in this base-out state.
+college_baseball_wpa:
+  game_id: ESPN event id.
+  play_seq: Game-global sequential plate-appearance order.
+  re_before: RE24 of the base-out state before the PA.
+  re_after: RE24 of the base-out state after the PA.
+  run_value: re_after minus re_before, plus runs scored on the play.
+  wpa: Home-perspective win-probability added.
 mlb_umpire_called_strike_prob:
   called_strike_prob: P(called strike | pitch location) from the standardized zone-coordinate logistic.
 mlb_umpire_bias:

@@ -231,7 +231,7 @@ def _usable_ops(spec: dict) -> List[Tuple[str, dict]]:
 
 def _write_yaml(path: Path, obj: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as fh:
+    with path.open("w", encoding="utf-8", newline="\n") as fh:
         yaml.safe_dump(obj, fh, sort_keys=True, default_flow_style=False, allow_unicode=True)
 
 

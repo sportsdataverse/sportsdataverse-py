@@ -1,0 +1,21 @@
+schema: college_baseball_wpa
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: play_seq
+  type: integer
+  description: ''
+- name: re_before
+  type: double
+  description: ''
+- name: re_after
+  type: double
+  description: ''
+- name: run_value
+  type: double
+  description: ''
+- name: wpa
+  type: double
+  description: ''

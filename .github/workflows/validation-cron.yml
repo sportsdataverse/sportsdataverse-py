@@ -312,6 +312,79 @@ jobs:
             }
 
       # -----------------------------------------------------------------------
+      # Ingest one platform run per validated dataset (exemplar CI run-ingest;
+      # payload contract: sdv-web frontend/SETUP-platform.md). Each of the six
+      # harness checks maps to one gate: observed = ERROR-finding count for
+      # that check, threshold 0, comparison lte. Skips a dataset whose release
+      # download was unavailable (an empty findings file would read as a
+      # perfect run), skips entirely when the org secret is absent (forks),
+      # and never fails the cron on ingest errors.
+      # -----------------------------------------------------------------------
+      - name: Ingest runs to platform
+        if: always()
+        env:
+          PLATFORM_INGEST_TOKEN: ${{ secrets.PLATFORM_INGEST_TOKEN }}
+          CFB_AVAILABLE: ${{ steps.dl_cfb.outputs.available }}
+          NFL_AVAILABLE: ${{ steps.dl_nfl.outputs.available }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          GIT_REPO: ${{ github.repository }}
+          GIT_BRANCH: ${{ github.ref_name }}
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          if [ -z "${PLATFORM_INGEST_TOKEN}" ]; then
+            echo "::notice::PLATFORM_INGEST_TOKEN not set — skipping platform run ingest"
+            exit 0
+          fi
+          url="${SDV_PLATFORM_URL:-https://www.sportsdataverse.org}/api/platform/runs"
+          today=$(date -u +%F)
+          for spec in "cfb_model_pbp cfb ${CFB_AVAILABLE}" "nfl_model_pbp nfl ${NFL_AVAILABLE}"; do
+            set -- $spec
+            ds="$1"; sport="$2"; available="${3:-false}"
+            if [ "$available" != "true" ]; then
+              echo "::notice::${ds} — dataset skipped this run; not ingesting"
+              continue
+            fi
+            payload=$(jq -n \
+              --arg model_id "$ds" --arg sport "$sport" \
+              --arg run_name "validation-cron ${today}" \
+              --arg run_url "${RUN_URL}" \
+              --arg repo "${GIT_REPO}" --arg branch "${GIT_BRANCH}" --arg sha "${GIT_SHA}" \
+              --slurpfile findings "findings_${ds}.json" '
+                ($findings[0] // []) as $f
+                | ([$f[] | select(.severity == "error")] | length) as $err
+                | (["schema_contract", "extraction", "numeric_parity", "sweep",
+                    "boundary_leakage", "constant_column"] + [$f[].check] | unique) as $checks
+                | {
+                    model_id: $model_id,
+                    sport: $sport,
+                    run_name: $run_name,
+                    status: (if $err > 0 then "failed" else "completed" end),
+                    metrics: {
+                      findings_total: ($f | length),
+                      findings_error: $err,
+                      findings_warn: ([$f[] | select(.severity == "warn")] | length)
+                    },
+                    gates: [ $checks[] as $c
+                      | ([$f[] | select(.check == $c and .severity == "error")] | length) as $n
+                      | { name: $c, threshold: 0, observed: $n,
+                          comparison: "lte", passed: ($n == 0) } ],
+                    artifacts: [ { name: "GitHub Actions run", url: $run_url } ],
+                    git: { repo: $repo, branch: $branch, sha: $sha },
+                    tags: ["validation-cron"]
+                  }') || { echo "::warning::${ds} — could not build ingest payload"; continue; }
+            code=$(curl -sS -o resp_ingest.txt -w '%{http_code}' -X POST "$url" \
+              --connect-timeout 10 --max-time 30 \
+              -H "Authorization: Bearer ${PLATFORM_INGEST_TOKEN}" \
+              -H "Content-Type: application/json" \
+              --data "$payload" || echo 000)
+            if [ "$code" -ge 200 ] && [ "$code" -lt 300 ]; then
+              echo "::notice::${ds} — platform run ingested (HTTP ${code})"
+            else
+              echo "::warning::${ds} — platform run ingest failed (HTTP ${code}): $(head -c 300 resp_ingest.txt 2>/dev/null)"
+            fi
+          done
+
+      # -----------------------------------------------------------------------
       # Upload findings JSON for inspection (always — even on skip)
       # -----------------------------------------------------------------------
       - name: Upload findings artifacts

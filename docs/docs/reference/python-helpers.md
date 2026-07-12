@@ -18,6 +18,144 @@ Returns a dict with `mode`, `entries`, and `disk_bytes` (only
 populated when mode=filesystem). Cheap — doesn't read the cached
 bodies, just counts + sizes.
 
+### `college_baseball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_baseball_re24}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_re24` fixed to `league="college_baseball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_baseball.college_baseball_re import college_baseball_state, college_baseball_re24
+state = college_baseball_state(raw)
+matrix = college_baseball_re24(state=state)
+```
+
+### `college_baseball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'` {#college_baseball_state}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_state` fixed to `league="college_baseball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `Dict[str, Any]` |  | Raw payload from `espn_college_baseball_game_plays(event_id, return_parsed=False)`. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_baseball.college_baseball_re import college_baseball_state
+state = college_baseball_state(raw)
+```
+
+### `college_baseball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_baseball_wpa}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_wpa` fixed to `league="college_baseball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `results` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_baseball.college_baseball_re import college_baseball_wpa
+wpa = college_baseball_wpa(state=state, results=results)
+```
+
+### `college_softball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_softball_re24}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_re24` fixed to `league="college_softball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_softball.college_softball_re import college_softball_state, college_softball_re24
+state = college_softball_state(raw)
+matrix = college_softball_re24(state=state)
+```
+
+### `college_softball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'` {#college_softball_state}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_state` fixed to `league="college_softball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `Dict[str, Any]` |  | Raw payload from `espn_college_softball_game_plays(event_id, return_parsed=False)`. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_softball.college_softball_re import college_softball_state
+state = college_softball_state(raw)
+```
+
+### `college_softball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_softball_wpa}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_wpa` fixed to `league="college_softball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `results` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_softball.college_softball_re import college_softball_wpa
+wpa = college_softball_wpa(state=state, results=results)
+```
+
 ### `cricket_expected_runs(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_expected_runs}
 
 Expected remaining runs + run rate from a win-probability-scored state frame.
@@ -133,6 +271,33 @@ wpa.select("wpa_batting", "wpa_bowling").head()
 
 Return the current cache mode.
 
+### `mch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mch_ratings}
+
+MCH opponent-adjusted goal-margin ratings over a set of scoreboard dates.
+
+Fetches `espn_mch_scoreboard` for each date in `dates`, concatenates
+the completed games, and adjusts with
+`sportsdataverse.hockey.college_hockey_ratings.college_hockey_ratings`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dates` | `list[str]` |  | `YYYYMMDD` date strings to fetch (ESPN has no single "whole season" scoreboard endpoint; the caller supplies the date sweep -- see `dev/league_ports/capture_wch_and_scoreboards.py` for the sweep used to build the committed oracle fixture). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
+
+**Example**
+
+```python
+from sportsdataverse.hockey.mch import mch_ratings
+ratings = mch_ratings(["20250118", "20250201"])
+ratings.sort("adj_net", descending=True).head()
+```
+
 ### `set_cache_mode(mode: 'str') -> 'None'` {#set_cache_mode}
 
 Switch the global cache mode.
@@ -153,66 +318,28 @@ Override the default TTL for endpoints not matched by the tier rules.
 |---|---|---|---|
 | `ttl` | `Optional[Union[timedelta, int]]` |  | A `timedelta`, an integer (interpreted as seconds), or `None` to reset to the built-in `DEFAULT_TTL` (`MODERATE` = 1 hour). |
 
-### `ufl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ufl_pbp}
+### `wch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#wch_ratings}
 
-Enriched UFL play-by-play (EP/EPA/WP/WPA/CP/CPOE).
+WCH opponent-adjusted goal-margin ratings over a set of scoreboard dates.
 
-Same shared spring-football core as `~sportsdataverse.football.xfl.xfl_pbp`
-(see `sportsdataverse.football.spring_football_ep_wp`).
-
-**Capture finding:** ESPN publishes no play-by-play for UFL games as of
-this port -- verified empty (`summary.drives` AND the Core v2
-`.../plays` endpoint) across every completed 2024 + 2025 UFL game. This
-function returns a zero-row (contract-shaped) frame on today's real data
--- not a stub -- and will pick up real rows automatically once ESPN
-backfills UFL play-by-play. See
-`tests/fixtures/league_ports/FEASIBILITY.md`.
+See the module docstring's coverage caveat -- ESPN's WCH scoreboard
+coverage observed during this port was tournament-only.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `Union[str, int]` |  | ESPN UFL event id. |
-| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+| `dates` | `list[str]` |  | `YYYYMMDD` date strings to fetch. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**
 
-One row per play with `ep`/`epa`/`wp`/`wpa`/`cp`/`cpoe` and the other `enrich_nfl_pbp` output columns. Zero rows today for every UFL game (see capture finding above).
+One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
 
 **Example**
 
 ```python
-from sportsdataverse.football.ufl import ufl_pbp
-
-df = ufl_pbp("401638299")
-print(df.height)  # 0 today -- see the capture-finding note above
-```
-
-### `xfl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#xfl_pbp}
-
-Enriched XFL play-by-play (EP/EPA/WP/WPA/CP/CPOE).
-
-Fetches the ESPN game summary, unrolls its drives into an nflverse-shape
-frame, and scores it with the same parity-validated NFL EP/WP pipeline
-used league-wide (see
-`sportsdataverse.football.spring_football_ep_wp`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_id` | `Union[str, int]` |  | ESPN XFL event id. |
-| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
-
-**Returns**
-
-One row per play with `ep`/`epa`/`wp`/`wpa`/`cp`/`cpoe` and the other `enrich_nfl_pbp` output columns. Zero rows for a game ESPN has no play-by-play for.
-
-**Example**
-
-```python
-from sportsdataverse.football.xfl import xfl_pbp
-
-df = xfl_pbp("401517780")
-print(df.select("play_id", "epa", "wp").head())
+from sportsdataverse.hockey.wch import wch_ratings
+ratings = wch_ratings(["20250315", "20250321", "20250322", "20250323"])
+ratings.sort("adj_net", descending=True).head()
 ```
