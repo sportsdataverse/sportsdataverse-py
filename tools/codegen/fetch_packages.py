@@ -29,7 +29,7 @@ def fetch() -> list[dict]:
         }
         for p in items
     ]
-    DEST.write_text(json.dumps(pkgs, indent=2) + "\n", encoding="utf-8")
+    DEST.write_text(json.dumps(pkgs, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {len(pkgs)} packages -> {DEST}")
     return pkgs
 

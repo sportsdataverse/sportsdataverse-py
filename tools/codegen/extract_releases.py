@@ -84,7 +84,7 @@ def build_manifest() -> dict:
 
 def write_manifest(path: Path) -> dict:
     doc = build_manifest()
-    path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100, allow_unicode=True), encoding="utf-8")
+    path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100, allow_unicode=True), encoding="utf-8", newline="\n")
     return doc
 
 
