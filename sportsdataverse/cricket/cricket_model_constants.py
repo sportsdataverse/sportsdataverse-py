@@ -96,14 +96,17 @@ class FormatConstants:
         name: Canonical format slug (``"t20"`` / ``"odi"``).
         balls_total: Legal balls in a full innings (``120`` T20, ``300`` ODI).
         max_wickets: Wickets that end an innings (``10``).
-        par_score: Fitted mean first-innings total for the format (a fair
-            "setting" benchmark). Seeded, then overwritten by the Phase-2 fit.
-        sigma_set: Fitted std of the first-innings ("setting") projection
-            residual — the spread of ``proj_final`` around ``par_score``.
-        sigma_chase: Fitted std of the second-innings ("chase") projection
-            residual — the spread of ``proj_final`` around the target.
+        par_score: Fitted mean first-innings total for the format (the
+            "setting" benchmark that centres the setting win-prob).
+        sigma_set: Fitted probit scale for the first-innings ("setting") raw
+            win-prob ``Phi((proj_final - par_score) / sigma_set)``.
+        sigma_chase: Fitted probit scale for the second-innings ("chase") raw
+            win-prob ``Phi((proj_final - target) / sigma_chase)``.
         resource_surface_path: Bundled resource-surface parquet resource name
             (loaded via ``importlib.resources`` from ``cricket.models``).
+        calibration_path: Bundled isotonic-calibration lookup parquet resource
+            name that recalibrates the parametric raw win-prob to the empirical
+            win rate (per ``(fmt, phase)``).
     """
 
     name: str
@@ -113,28 +116,29 @@ class FormatConstants:
     sigma_set: float
     sigma_chase: float
     resource_surface_path: str = "cricket_resource_surface.parquet"
+    calibration_path: str = "cricket_winprob_calibration.parquet"
 
 
-# NOTE: par_score / sigma_* below are SEEDS. The Phase-2 fitting script
-# (dev/league_ports/fit_cricket_resource_surface.py) overwrites them with values
-# fitted on the real Cricsheet corpus; see that script's printout and the
-# committed constants block. balls_total / max_wickets are rule-fixed, not seeds.
+# par_score / sigma_* are FITTED on the real Cricsheet corpus (male T20I + ODI,
+# 2002-2026) by dev/league_ports/fit_cricket_resource_surface.py. Re-running that
+# script rewrites both this block and the bundled parquet artifacts; keep them in
+# sync. balls_total / max_wickets are rule-fixed, not fitted.
 FORMAT_TABLE: dict[str, FormatConstants] = {
     "t20": FormatConstants(
         name="t20",
         balls_total=120,
         max_wickets=10,
-        par_score=160.0,  # seed — overwritten by fit
-        sigma_set=18.0,  # seed — overwritten by fit
-        sigma_chase=18.0,  # seed — overwritten by fit
+        par_score=149.2,
+        sigma_set=43.0,
+        sigma_chase=34.0,
     ),
     "odi": FormatConstants(
         name="odi",
         balls_total=300,
         max_wickets=10,
-        par_score=250.0,  # seed — overwritten by fit
-        sigma_set=40.0,  # seed — overwritten by fit
-        sigma_chase=40.0,  # seed — overwritten by fit
+        par_score=248.7,
+        sigma_set=71.0,
+        sigma_chase=58.0,
     ),
 }
 
