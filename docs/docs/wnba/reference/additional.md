@@ -390,6 +390,105 @@ frames_pd = espn_wnba_team_stats(team_id=17, season=2024, return_as_pandas=True)
 frames_pd["Misc"].head()
 ```
 
+## Dataset loaders
+
+### `load_wnba_stats_lineups(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_lineups}
+
+Load season-level WNBA 5-man lineup statistics (deprecated).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  | an int or iterable of seasons. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per lineup-season-measure_type, stacked from the `wnba_stats_leaguedash` cube's `lineups_{base, advanced}` assets filtered to `group_quantity == 5` — matching the old `wnba_stats_lineups` tag's 5-man-only, Base+Advanced-only coverage. Call the cube's `lineups_*` assets directly (unfiltered) for 2/3/4-man lineups or the other 4 measure types.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import load_wnba_stats_lineups
+df = load_wnba_stats_lineups(seasons=2026)
+print(df.shape)
+```
+
+### `load_wnba_stats_player_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_player_season_stats}
+
+Load season-level WNBA player statistics (deprecated).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  | an int or iterable of seasons. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per player-season-measure_type, stacked from the `wnba_stats_leaguedash` cube's `player_stats_*` assets (`Base`/`Advanced`/`Misc`/`Scoring`/`Usage`/`Defense` — matches the old `wnba_stats_player_season_stats` tag's coverage; player-level `Opponent`/`Four Factors` are empty upstream and were never populated by either version).
+
+**Example**
+
+```python
+from sportsdataverse.wnba import load_wnba_stats_player_season_stats
+df = load_wnba_stats_player_season_stats(seasons=2026)
+print(df.shape)
+
+# Pipeline next step (Advanced-only rows)
+
+import polars as pl
+adv = df.filter(pl.col("measure_type") == "Advanced")
+```
+
+### `load_wnba_stats_standings(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_standings}
+
+Load season-level WNBA standings (deprecated).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  | an int or iterable of seasons. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per team-season, read from the `wnba_stats_leaguedash` cube's `standings` asset -- the same underlying `leaguestandingsv3` endpoint/params as the old `wnba_stats_standings` tag, so this is close to a pure passthrough.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import load_wnba_stats_standings
+df = load_wnba_stats_standings(seasons=2026)
+print(df.shape)
+```
+
+### `load_wnba_stats_team_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_team_season_stats}
+
+Load season-level WNBA team statistics (deprecated).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` |  |  | an int or iterable of seasons. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame, one row per team-season-measure_type, stacked from the `wnba_stats_leaguedash` cube's `team_stats_*` assets (`Base`/`Advanced`/`Misc`/`Scoring`/`Defense`/ `Opponent` — matches the old `wnba_stats_team_season_stats` tag's coverage; team-level `Usage`/`Four Factors` are empty upstream).
+
+**Example**
+
+```python
+from sportsdataverse.wnba import load_wnba_stats_team_season_stats
+df = load_wnba_stats_team_season_stats(seasons=2026)
+print(df.shape)
+```
+
 ## Utilities & helpers
 
 ### `most_recent_wnba_season()` {#most_recent_wnba_season}
