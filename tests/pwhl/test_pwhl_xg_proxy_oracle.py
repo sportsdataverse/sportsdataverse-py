@@ -352,3 +352,72 @@ def test_pwhl_heldout_coords_calibration(backtest: pl.DataFrame) -> None:
     assert dev.max() <= CALIBRATION_FLOOR, (
         f"held-out coords calibration max per-bucket deviation {dev.max():.4f} above floor {CALIBRATION_FLOOR}"
     )
+
+
+# ---------------------------------------------------------------------------
+# T5 Phase 3: feature expansion (rebound + strength dummies) is additive and
+# backward-compatible. The 6-feature model activates only when the pbp carries
+# the R4 strength/clock columns; a legacy frame falls back to distance/angle.
+# ---------------------------------------------------------------------------
+
+_FULL_FEATURES = (
+    "shot_distance",
+    "shot_angle",
+    "rebound",
+    "is_home",
+    "is_pp",
+    "is_sh",
+    "empty_net_for",
+    "is_wrist",
+    "is_snap",
+    "is_slap",
+    "is_backhand",
+    "is_tip",
+)
+
+
+def _synth_strength_pbp(n: int = 300) -> pl.DataFrame:
+    """Deterministic shot log carrying the R4 strength + clock + shot-type columns."""
+    return pl.DataFrame(
+        {
+            "event": ["shot"] * n,
+            "event_type": [["Wrist", "Snap", "Slap", "Backhand", "Tip", "Default"][i % 6] for i in range(n)],
+            "goal": [1 if i % 7 == 0 else 0 for i in range(n)],  # ~14%, two classes
+            "x_coord": [40.0 + (i % 50) for i in range(n)],  # varying distance 40..89 ft
+            "y_coord": [0.0] * n,
+            "game_id": [str(1000 + i // 30) for i in range(n)],  # ~10 games
+            "sec_from_start": [float((i % 30) * 40) for i in range(n)],
+            "team_id": ["5" if i % 2 else "6" for i in range(n)],
+            "home_team_id": ["5"] * n,
+            "away_team_id": ["6"] * n,
+            "skaters_home": [5] * n,
+            "skaters_away": [5 if i % 3 else 4 for i in range(n)],  # some home power plays
+        }
+    )
+
+
+def test_coord_xg_uses_strength_features_when_present() -> None:
+    from sportsdataverse.pwhl.pwhl_xg_proxy import fit_pwhl_coord_xg
+
+    m = fit_pwhl_coord_xg(_synth_strength_pbp())
+    assert m.model is not None
+    assert m.features == _FULL_FEATURES, f"expected full-feature model, got {m.features}"
+    p = m.predict(_synth_strength_pbp())
+    assert len(p) == 300
+    assert p.min() >= 0.0 and p.max() <= 1.0
+
+
+def test_coord_xg_falls_back_to_two_features_without_strength_cols() -> None:
+    from sportsdataverse.pwhl.pwhl_xg_proxy import fit_pwhl_coord_xg
+
+    n = 300
+    legacy = pl.DataFrame(
+        {
+            "event": ["shot"] * n,
+            "goal": [1 if i % 7 == 0 else 0 for i in range(n)],
+            "x_coord": [40.0 + (i % 50) for i in range(n)],
+            "y_coord": [0.0] * n,
+        }
+    )
+    m = fit_pwhl_coord_xg(legacy)
+    assert m.features == ("shot_distance", "shot_angle"), f"legacy frame must stay 2-feature, got {m.features}"

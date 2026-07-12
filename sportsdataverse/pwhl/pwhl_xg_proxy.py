@@ -93,7 +93,7 @@ from __future__ import annotations
 
 import datetime as _dt
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, Union, overload
+from typing import TYPE_CHECKING, Any, Literal, Union, overload
 
 import pandas as pd
 import polars as pl
@@ -278,27 +278,104 @@ def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
     return add_shot_distance_angle(f)
 
 
+_XG_BASE_FEATURES = ("shot_distance", "shot_angle")
+
+
+def _build_xg_features(
+    shots: pl.DataFrame, want: tuple[str, ...] | None = None
+) -> tuple[Any, tuple[str, ...], pl.DataFrame]:
+    """Build the xG feature matrix (row-order preserved) + the feature names used.
+
+    Always includes ``shot_distance`` / ``shot_angle``. When the source columns
+    are present it ALSO adds (T5 Phase 3, LOSO-validated to lift PP/SH AUC):
+
+    - ``rebound`` -- shot within 3s of the prior shot in the game (needs
+      ``game_id`` + ``sec_from_start``).
+    - ``is_home`` / ``is_pp`` / ``is_sh`` -- shooter-relative home flag and
+      power-play/short-handed dummies (needs ``team_id`` + ``home_team_id`` +
+      ``skaters_home`` / ``skaters_away``, i.e. the R4 strength columns).
+
+    A frame that lacks those columns (e.g. the legacy xG fixture, or a pre-R4
+    pbp) degrades to the 2-feature distance/angle model unchanged. At predict
+    time pass ``want`` (the fitted feature tuple) so columns line up; any column
+    the frame lacks is filled with 0 (neutral). Returns ``(matrix, names, f)``
+    where ``f`` retains null ``shot_distance`` for the caller's null-geometry mask.
+    """
+    import numpy as np
+
+    f = _shot_geometry(shots).with_row_index("_ri")
+    avail = list(_XG_BASE_FEATURES)
+    if {"game_id", "sec_from_start"}.issubset(f.columns):
+        f = (
+            f.sort(["game_id", "sec_from_start"])
+            .with_columns(
+                rebound=(pl.col("sec_from_start") - pl.col("sec_from_start").shift(1).over("game_id"))
+                .is_between(0, 3)
+                .fill_null(False)
+                .cast(pl.Int64)
+            )
+            .sort("_ri")
+        )
+        avail.append("rebound")
+    if {"team_id", "home_team_id", "skaters_home", "skaters_away"}.issubset(f.columns):
+        home = pl.col("team_id") == pl.col("home_team_id")
+        sk_for = pl.when(home).then(pl.col("skaters_home")).otherwise(pl.col("skaters_away"))
+        sk_opp = pl.when(home).then(pl.col("skaters_away")).otherwise(pl.col("skaters_home"))
+        f = f.with_columns(
+            is_home=home.cast(pl.Int64),
+            is_pp=(sk_for > sk_opp).fill_null(False).cast(pl.Int64),
+            is_sh=(sk_for < sk_opp).fill_null(False).cast(pl.Int64),
+            # defending team shows >=6 skaters => their goalie is pulled => the
+            # shooter faces an empty net (the booster's `empty_net`; PWHL's SH gap).
+            empty_net_for=(sk_opp >= 6).fill_null(False).cast(pl.Int64),
+        )
+        avail += ["is_home", "is_pp", "is_sh", "empty_net_for"]
+    if "event_type" in f.columns:
+        # Shot type -- PWHL's `event_type` on shot rows IS the shot type
+        # (Wrist/Snap/Slap/Backhand/Tip; "Default" => all zero). The NHL booster's
+        # shot-type one-hots, derived for free from the feed (T5 Phase 4). Self-
+        # contained (no prior-event context), so safe on the shots-only predict path.
+        et = pl.col("event_type")
+        f = f.with_columns(
+            is_wrist=(et == "Wrist").cast(pl.Int64),
+            is_snap=(et == "Snap").cast(pl.Int64),
+            is_slap=(et == "Slap").cast(pl.Int64),
+            is_backhand=(et == "Backhand").cast(pl.Int64),
+            is_tip=(et == "Tip").cast(pl.Int64),
+        )
+        avail += ["is_wrist", "is_snap", "is_slap", "is_backhand", "is_tip"]
+    feats = list(want) if want is not None else avail
+    mats = [(f[c].cast(pl.Float64).fill_null(0.0).to_numpy() if c in f.columns else np.zeros(f.height)) for c in feats]
+    return np.column_stack(mats), tuple(feats), f
+
+
 @dataclass(frozen=True)
 class PwhlCoordXGModel:
     """A fitted (or fallback constant-rate) PWHL coordinate xG model.
 
     Args:
         model: Fitted :class:`sklearn.linear_model.LogisticRegression` on
-            ``[shot_distance, shot_angle]``, or ``None`` when the fallback
-            constant-rate path was used (insufficient shots to fit).
+            :attr:`features`, or ``None`` when the fallback constant-rate path
+            was used (insufficient shots to fit).
         fallback_rate: Constant goal rate returned by :meth:`predict` when
             ``model`` is ``None``, and for rows whose coordinates are null.
+        features: The feature names the model was fit on -- ``shot_distance`` /
+            ``shot_angle`` plus, when the source pbp carried the R4 strength +
+            clock columns, ``rebound`` / ``is_home`` / ``is_pp`` / ``is_sh``
+            (T5 Phase 3). :meth:`predict` rebuilds exactly these.
     """
 
     model: LogisticRegression | None
     fallback_rate: float
+    features: tuple[str, ...] = _XG_BASE_FEATURES
 
     def predict(self, shots: pl.DataFrame) -> pl.Series:
         """Predict shot xG for each row of ``shots``.
 
         Args:
             shots: Frame with ``x_coord``/``y_coord`` (rink-feet) or
-                pre-computed ``shot_distance``/``shot_angle`` columns.
+                pre-computed ``shot_distance``/``shot_angle`` columns (plus the
+                R4 strength/clock columns when :attr:`features` includes them).
 
         Returns:
             A ``pl.Series`` named ``"xg"`` of per-row goal probability. Rows
@@ -315,11 +392,10 @@ class PwhlCoordXGModel:
             return pl.Series("xg", [], dtype=pl.Float64)
         if self.model is None:
             return pl.Series("xg", [self.fallback_rate] * shots.height, dtype=pl.Float64)
-        feat = _shot_geometry(shots)
-        dist, angle = feat["shot_distance"], feat["shot_angle"]
-        x = np.column_stack([dist.fill_null(0.0).to_numpy(), angle.fill_null(0.0).to_numpy()])
+        x, _, f = _build_xg_features(shots, want=self.features)
         proba = self.model.predict_proba(x)[:, 1]
-        out = np.where(dist.is_null().to_numpy(), self.fallback_rate, proba)
+        null_geo = f["shot_distance"].is_null().to_numpy()
+        out = np.where(null_geo, self.fallback_rate, proba)
         return pl.Series("xg", out, dtype=pl.Float64)
 
 
@@ -336,8 +412,14 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
     goal indicator as the label -- the same fit-at-call-time recipe as
     :func:`sportsdataverse.nhl.nhl_microstat_constants.fit_shot_xg`, with the
     geometry sourced from the HockeyTech core instead of the NHL api-web one.
-    PWHL pbp has no ``shot_type`` column, so the model is distance/angle
-    only. Rows with null coordinates are excluded from the fit (~100%
+    PWHL pbp has no ``shot_type`` column. When the frame carries the R4
+    strength + clock columns the fit ALSO uses ``rebound`` / ``is_home`` /
+    ``is_pp`` / ``is_sh`` / ``empty_net_for`` (T5 Phase 3, LOSO-validated to lift
+    PP/SH AUC; ``empty_net_for`` = defending team shows >=6 skaters => goalie
+    pulled => shooter faces an empty net); a legacy frame without them degrades to
+    distance/angle only (see :func:`_build_xg_features`; the fitted set is on
+    :attr:`PwhlCoordXGModel.features`). Rows with null coordinates are excluded
+    from the fit (~100%
     coverage in the captured seasons, so this drops almost nothing). Fewer
     than :data:`_MIN_COORD_SHOTS` qualifying shots -- or a frame with no
     coordinate columns at all -- falls back to a constant-rate model at the
@@ -387,15 +469,14 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
         goal_rate = float(shots["goal"].cast(pl.Float64).mean() or 0.0) if shots.height else 0.0
         return PwhlCoordXGModel(model=None, fallback_rate=goal_rate)
 
-    feat = _shot_geometry(shots)
-    x = np.column_stack([feat["shot_distance"].to_numpy(), feat["shot_angle"].to_numpy()])
-    y = feat["goal"].cast(pl.Int64).to_numpy()
+    x, feats, _ = _build_xg_features(shots)
+    y = shots["goal"].cast(pl.Int64).to_numpy()
     if len(np.unique(y)) < 2:
-        return PwhlCoordXGModel(model=None, fallback_rate=float(y.mean()))
+        return PwhlCoordXGModel(model=None, fallback_rate=float(y.mean()), features=feats)
 
     clf = LogisticRegression(max_iter=1000)
     clf.fit(x, y)
-    return PwhlCoordXGModel(model=clf, fallback_rate=float(y.mean()))
+    return PwhlCoordXGModel(model=clf, fallback_rate=float(y.mean()), features=feats)
 
 
 def _fit_xg(pbp: pl.DataFrame, xg_method: str) -> Union[ShotQualityXGModel, PwhlCoordXGModel]:
