@@ -174,6 +174,11 @@
 
 ### Fixes
 
+- fix(codegen): all codegen/capture writers now emit LF explicitly
+  (`newline="\n"`), matching `generate.py`'s convention. On Windows the
+  text-mode default translated `\n` to CRLF, so every codegen-test run (which
+  re-runs the pff / 247 site-pages generators) left ~65 endpoint + schema
+  YAMLs dirty with line-ending-only churn against the LF-normalized index.
 - feat(nfl): PFF Premium auth can now **auto-refresh from a saved Playwright
   `storage_state`**. Point `SDV_PY_PFF_STORAGE_STATE` at a `storage_state` JSON
   captured once from a headed login and `pff_runtime` replays it headlessly so

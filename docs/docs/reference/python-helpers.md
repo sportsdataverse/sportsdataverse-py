@@ -271,6 +271,33 @@ wpa.select("wpa_batting", "wpa_bowling").head()
 
 Return the current cache mode.
 
+### `mch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mch_ratings}
+
+MCH opponent-adjusted goal-margin ratings over a set of scoreboard dates.
+
+Fetches `espn_mch_scoreboard` for each date in `dates`, concatenates
+the completed games, and adjusts with
+`sportsdataverse.hockey.college_hockey_ratings.college_hockey_ratings`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dates` | `list[str]` |  | `YYYYMMDD` date strings to fetch (ESPN has no single "whole season" scoreboard endpoint; the caller supplies the date sweep -- see `dev/league_ports/capture_wch_and_scoreboards.py` for the sweep used to build the committed oracle fixture). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
+
+**Example**
+
+```python
+from sportsdataverse.hockey.mch import mch_ratings
+ratings = mch_ratings(["20250118", "20250201"])
+ratings.sort("adj_net", descending=True).head()
+```
+
 ### `set_cache_mode(mode: 'str') -> 'None'` {#set_cache_mode}
 
 Switch the global cache mode.
@@ -290,3 +317,29 @@ Override the default TTL for endpoints not matched by the tier rules.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `ttl` | `Optional[Union[timedelta, int]]` |  | A `timedelta`, an integer (interpreted as seconds), or `None` to reset to the built-in `DEFAULT_TTL` (`MODERATE` = 1 hour). |
+
+### `wch_ratings(dates: 'list[str]', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#wch_ratings}
+
+WCH opponent-adjusted goal-margin ratings over a set of scoreboard dates.
+
+See the module docstring's coverage caveat -- ESPN's WCH scoreboard
+coverage observed during this port was tournament-only.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dates` | `list[str]` |  | `YYYYMMDD` date strings to fetch. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+
+**Returns**
+
+One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
+
+**Example**
+
+```python
+from sportsdataverse.hockey.wch import wch_ratings
+ratings = wch_ratings(["20250315", "20250321", "20250322", "20250323"])
+ratings.sort("adj_net", descending=True).head()
+```
