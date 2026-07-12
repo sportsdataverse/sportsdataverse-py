@@ -26,6 +26,8 @@ from sportsdataverse.wbb.wbb_ncaa_stints import *
 from sportsdataverse.wbb.wbb_ncaa_strength import *
 from sportsdataverse.wbb.wbb_ncaa_team_parsers import *
 from sportsdataverse.wbb.wbb_pbp import *
+from sportsdataverse.wbb.wbb_play_by_play import *
+from sportsdataverse.wbb.wbb_player_box import *
 from sportsdataverse.wbb.wbb_player_stats import *
 from sportsdataverse.wbb.wbb_positions import *
 from sportsdataverse.wbb.wbb_prediction_constants import *
@@ -43,6 +45,7 @@ from sportsdataverse.wbb.wbb_shot_selection import *
 from sportsdataverse.wbb.wbb_shots_adapter import *
 from sportsdataverse.wbb.wbb_ratings import *
 from sportsdataverse.wbb.wbb_schedule import *
+from sportsdataverse.wbb.wbb_season_producers import *
 from sportsdataverse.wbb.wbb_season_sim import *
 from sportsdataverse.wbb.wbb_standings import *
 from sportsdataverse.wbb.wbb_strength_of_schedule import *

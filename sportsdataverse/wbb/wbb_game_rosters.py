@@ -206,3 +206,168 @@ def helper_wbb_athlete_items(teams_rosters, **kwargs):
     )
     game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
     return game_athletes
+
+
+# --- release producer (wehoop-wbb-data parity) --------------------------------
+
+
+def _rel_chr(x: object) -> str | None:
+    """R ``safe_chr``: NULL/empty -> NA; else first element as character."""
+    if x is None:
+        return None
+    if isinstance(x, list):
+        return str(x[0]) if x else None
+    return str(x)
+
+
+def _rel_int(x: object) -> int | None:
+    """R ``safe_int``: NULL/empty -> NA; else first element as.integer."""
+    if isinstance(x, list):
+        x = x[0] if x else None
+    if x is None:
+        return None
+    try:
+        return int(x)
+    except (TypeError, ValueError):
+        try:
+            return int(float(x))
+        except (TypeError, ValueError):
+            return None
+
+
+def _rel_bool(x: object) -> bool | None:
+    """R ``as.logical(x %||% NA)``."""
+    if x is None:
+        return None
+    return bool(x)
+
+
+_GAME_ROSTER_COLS = (
+    "season",
+    "game_id",
+    "team_id",
+    "team_slug",
+    "team_abbreviation",
+    "team_display_name",
+    "home_away",
+    "athlete_id",
+    "athlete_uid",
+    "athlete_guid",
+    "athlete_display_name",
+    "athlete_short_name",
+    "athlete_first_name",
+    "athlete_last_name",
+    "athlete_jersey",
+    "athlete_position",
+    "athlete_headshot",
+    "starter",
+    "did_not_play",
+    "active",
+    "ejected",
+    "reason",
+)
+
+
+def helper_wbb_game_rosters(payload: dict, *, season: int, game_id: int | str) -> pl.DataFrame:
+    """Parse one game's rosters sidecar into the released game-rosters frame.
+
+    Faithful polars port of the script-local ``parse_one_game`` /
+    ``parse_one_athlete`` in ``wehoop-wbb-data/R/espn_wbb_08_game_rosters_creation.R``
+    (no wehoop helper exists for this dataset). The stored sidecar is a
+    summary-shaped payload, so the roster source falls through to
+    ``boxscore.players`` and athletes to ``statistics[0].athletes``. The
+    R-released parquet is the parity oracle (``game_id`` stays String; ids
+    Int32).
+
+    Args:
+        payload: One game's ``wbb/game_rosters/json/{game_id}.json`` as a dict.
+        season: Season year the game belongs to.
+        game_id: The ESPN game id (kept as character, matching R).
+
+    Returns:
+        pl.DataFrame: One row per rostered athlete, deduped. Empty
+        (zero-column) frame when no rosters are present.
+
+    Example:
+        Quick start::
+
+            import json
+            from sportsdataverse.wbb import helper_wbb_game_rosters
+            payload = json.load(open("401804834.json", encoding="utf-8"))
+            df = helper_wbb_game_rosters(payload, season=2026, game_id=401804834)
+            print(df.shape)
+
+    See Also:
+        * `wehoop`_ -- the R data-repo producer this ports.
+
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    rosters = payload.get("rosters") or payload.get("teams") or (payload.get("boxscore") or {}).get("players") or []
+    if not rosters:
+        return pl.DataFrame()
+    rows: list[dict] = []
+    for team_block in rosters:
+        team = team_block.get("team") or {}
+        athletes = team_block.get("roster") or team_block.get("athletes") or []
+        if not athletes:
+            stats = team_block.get("statistics")
+            if isinstance(stats, list) and stats and isinstance(stats[0], dict):
+                athletes = stats[0].get("athletes") or []
+        if not athletes:
+            continue
+        for entry in athletes:
+            ath = entry.get("athlete") or entry
+            position = (
+                (entry.get("position") or {}).get("abbreviation") if isinstance(entry.get("position"), dict) else None
+            )
+            if position is None:
+                pos = ath.get("position") or {}
+                position = pos.get("abbreviation") or pos.get("name") if isinstance(pos, dict) else None
+            headshot = ath.get("headshot")
+            if isinstance(headshot, dict):
+                headshot = headshot.get("href")
+            rows.append(
+                {
+                    "season": int(season),
+                    "game_id": str(game_id),
+                    "team_id": _rel_int(team.get("id") if team else team_block.get("id")),
+                    "team_slug": _rel_chr((team or team_block).get("slug")),
+                    "team_abbreviation": _rel_chr((team or team_block).get("abbreviation")),
+                    "team_display_name": _rel_chr((team or team_block).get("displayName")),
+                    "home_away": _rel_chr(team_block.get("homeAway")),
+                    "athlete_id": _rel_int(ath.get("id")),
+                    "athlete_uid": _rel_chr(ath.get("uid")),
+                    "athlete_guid": _rel_chr(ath.get("guid")),
+                    "athlete_display_name": _rel_chr(ath.get("displayName")),
+                    "athlete_short_name": _rel_chr(ath.get("shortName")),
+                    "athlete_first_name": _rel_chr(ath.get("firstName")),
+                    "athlete_last_name": _rel_chr(ath.get("lastName")),
+                    "athlete_jersey": _rel_chr(
+                        entry.get("jersey") if entry.get("jersey") is not None else ath.get("jersey")
+                    ),
+                    "athlete_position": _rel_chr(position),
+                    "athlete_headshot": _rel_chr(headshot),
+                    "starter": _rel_bool(entry.get("starter") if "starter" in entry else ath.get("starter")),
+                    "did_not_play": _rel_bool(
+                        entry.get("didNotPlay") if "didNotPlay" in entry else ath.get("didNotPlay")
+                    ),
+                    "active": _rel_bool(entry.get("active") if "active" in entry else ath.get("active")),
+                    "ejected": _rel_bool(entry.get("ejected") if "ejected" in entry else ath.get("ejected")),
+                    "reason": _rel_chr(entry.get("reason") if entry.get("reason") is not None else ath.get("reason")),
+                }
+            )
+    if not rows:
+        return pl.DataFrame()
+    df = pl.DataFrame({c: [r.get(c) for r in rows] for c in _GAME_ROSTER_COLS}, strict=False)
+    int_cols = ("season", "team_id", "athlete_id")
+    bool_cols = ("starter", "did_not_play", "active", "ejected")
+    # Every remaining column is R character -- pin Utf8 so an all-null column
+    # (e.g. home_away on summary-shaped sidecars) can't infer as Null dtype.
+    str_cols = [c for c in _GAME_ROSTER_COLS if c not in int_cols and c not in bool_cols]
+    df = df.with_columns(
+        [pl.col(c).cast(pl.Int32, strict=False) for c in int_cols]
+        + [pl.col(c).cast(pl.Boolean) for c in bool_cols]
+        + [pl.col(c).cast(pl.Utf8) for c in str_cols]
+    )
+    # R: season-level distinct() -- per-game unique yields the identical set.
+    return df.unique(maintain_order=True, keep="first")

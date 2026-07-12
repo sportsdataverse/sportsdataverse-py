@@ -290,3 +290,130 @@ def most_recent_wbb_season():
         return datetime.datetime.now().year + 1
     else:
         return datetime.datetime.now().year
+
+
+# R: dplyr::across(any_of(...), as.integer) in espn_wbb_0{1,2,3}_*_creation.R.
+_SCHED_INT32_COLS = (
+    "id",
+    "game_id",
+    "type_id",
+    "status_type_id",
+    "home_id",
+    "home_venue_id",
+    "home_conference_id",
+    "home_score",
+    "away_id",
+    "away_venue_id",
+    "away_conference_id",
+    "away_score",
+    "season",
+    "season_type",
+    "groups_id",
+    "tournament_id",
+    "venue_id",
+)
+
+# Left numeric by R (not in the as.integer list) but Int64 in the raw parquet.
+_SCHED_FLOAT64_COLS = (
+    "attendance",
+    "status_period",
+    "format_regulation_periods",
+    "home_current_rank",
+    "away_current_rank",
+)
+
+
+def helper_wbb_schedule(
+    sched: pl.DataFrame,
+    *,
+    pbp_game_ids: list[int],
+    team_box_game_ids: list[int],
+    player_box_game_ids: list[int],
+) -> pl.DataFrame:
+    """Reshape the raw WBB season schedule into the released schedule frame.
+
+    Faithful polars port of the schedule blocks in the wehoop-wbb-data
+    creation scripts (``espn_wbb_01_pbp_creation.R`` adds casts +
+    ``game_date_time``/``game_date`` + the ``PBP`` flag; ``02`` stamps
+    ``team_box``; ``03`` stamps ``player_box`` and uploads). Column order and
+    dtypes mirror the released ``wbb_schedule_{season}.parquet``.
+
+    Args:
+        sched: The raw ``wehoop-wbb-raw`` season schedule frame
+            (``wbb/schedules/parquet/wbb_schedule_{season}.parquet``).
+        pbp_game_ids: Game ids present in the compiled play_by_play dataset.
+        team_box_game_ids: Game ids present in the compiled team_box dataset.
+        player_box_game_ids: Game ids present in the compiled player_box dataset.
+
+    Returns:
+        pl.DataFrame: One row per game, deduped, sorted by ``date`` descending.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.wbb import helper_wbb_schedule
+            raw = pl.read_parquet("wbb_schedule_2025.parquet")
+            df = helper_wbb_schedule(
+                raw, pbp_game_ids=[], team_box_game_ids=[], player_box_game_ids=[]
+            )
+            print(df.shape)
+
+    See Also:
+        * `wehoop`_ -- the R producer this ports; retained as the parity oracle.
+
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    df = sched.drop([c for c in ("__index_level_0__",) if c in sched.columns])
+    # Float64 intermediate keeps R as.integer semantics ("59.0" -> 59, not null).
+    df = df.with_columns(
+        [pl.col(c).cast(pl.Float64, strict=False).cast(pl.Int32) for c in _SCHED_INT32_COLS if c in df.columns]
+    )
+    if "status_display_clock" in df.columns:
+        df = df.with_columns(pl.col("status_display_clock").cast(pl.Utf8))
+    # R read these as numeric from the scraper's rds (the raw parquet has
+    # Int64); released dtype is Float64.
+    df = df.with_columns([pl.col(c).cast(pl.Float64, strict=False) for c in _SCHED_FLOAT64_COLS if c in df.columns])
+    # The raw scraper's rds writer stringifies nested list columns as numpy
+    # object-array reprs (dict-per-line, Python None/float literals); the raw
+    # PARQUET keeps them nested. Released dtype is String -- mirror the repr.
+    list_cols = [c for c, dt in df.schema.items() if isinstance(dt, pl.List)]
+    if list_cols:
+        import numpy as np
+
+        def _np_repr(v: object) -> str | None:
+            if v is None:
+                return None
+            # Explicit 1-D object array (nested equal-length lists would
+            # otherwise build 2-D) + pinned print options so a numpy upgrade
+            # or a caller's set_printoptions can't change the released strings.
+            arr = np.empty(len(v), dtype=object)  # type: ignore[arg-type]
+            arr[:] = v  # type: ignore[call-overload]
+            return np.array2string(arr, max_line_width=75, threshold=1000, edgeitems=3)
+
+        # to_list() (not map_elements) so List(Struct) entries surface as
+        # dicts -- the repr must keep the field names.
+        df = df.with_columns(
+            [pl.Series(c, [_np_repr(v) for v in df.get_column(c).to_list()], dtype=pl.Utf8) for c in list_cols]
+        )
+    # R: ymd_hm(substr(date, 1, nchar - 1)) parsed UTC -> America/New_York;
+    # game_date is the New York date of the kickoff instant.
+    df = df.with_columns(
+        pl.col("date")
+        .str.replace(r"Z$", "")
+        .str.strptime(pl.Datetime("us"), "%Y-%m-%dT%H:%M", strict=False)
+        .dt.replace_time_zone("UTC")
+        .dt.convert_time_zone("America/New_York")
+        .alias("game_date_time")
+    )
+    df = df.with_columns(pl.col("game_date_time").dt.date().alias("game_date"))
+    # R: ifelse(game_id %in% ids, TRUE, FALSE) -- NA game_id folds to FALSE.
+    df = df.with_columns(
+        pl.col("game_id").is_in(pbp_game_ids).fill_null(False).alias("PBP"),
+        pl.col("game_id").is_in(team_box_game_ids).fill_null(False).alias("team_box"),
+        pl.col("game_id").is_in(player_box_game_ids).fill_null(False).alias("player_box"),
+    )
+    # R: distinct() then arrange(desc(date)) -- both stable, NA last.
+    return df.unique(maintain_order=True, keep="first").sort(
+        "date", descending=True, nulls_last=True, maintain_order=True
+    )
