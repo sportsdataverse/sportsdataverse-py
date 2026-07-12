@@ -37,7 +37,7 @@ def build_wbb_season_wp(season: int, *, return_as_pandas: Literal[True]) -> "pd.
 
 
 def build_wbb_season_wp(season: int, *, return_as_pandas: bool = False) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Per-play home win probability for a full WBB season (the WP release table).
+    """A WBB season's play-by-play with win-probability columns joined in.
 
     Delegates to :func:`sportsdataverse.mbb.mbb_win_prob.build_mbb_season_wp`
     with ``league="womens"`` (WBB loaders + women's constants).
@@ -48,9 +48,8 @@ def build_wbb_season_wp(season: int, *, return_as_pandas: bool = False) -> Union
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per play: ``season, game_id, game_play_number, game_date,
-        home_team_name, away_team_name, home_score, away_score,
-        pregame_home_prob, home_win_prob`` -- see the mbb core for the contract.
+        The season's ``load_wbb_pbp`` frame with ``pregame_home_prob`` +
+        ``home_win_prob`` appended -- see the mbb core for the contract.
 
     Example:
         Quick start::

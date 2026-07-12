@@ -1,11 +1,13 @@
-"""Season win-probability compile helper -- the per-play home-WP release.
+"""Season win-probability enrichment -- pbp-dataset WP columns (in place).
 
 The in-game win-probability model already exists and is oracle-gated
 (:func:`sportsdataverse.mbb.mbb_game_predict.mbb_in_game_win_prob`, prediction
-stack T1.0). This module *productionizes* it into a per-play release: for every
-game in a season it computes a leakage-free pregame anchor, scores every play
-through the bundled artifact, and attaches display metadata (ids, team names,
-running scores, play sequence).
+stack T1.0). This module *productionizes* it by **enriching the pbp dataset in
+place**: for every game in a season it computes a leakage-free pregame anchor,
+scores every play through the bundled artifact, and appends two columns
+(``pregame_home_prob``, ``home_win_prob``) to the ``load_mbb_pbp`` frame --
+every original column is preserved, so the output overwrites the season's
+``play_by_play_<season>.parquet`` release asset with WP joined in.
 
 Two pure cores + a loader wrapper (mirrors ``mbb_team_ratings`` /
 ``mbb_bracketology``):
@@ -16,10 +18,10 @@ Two pure cores + a loader wrapper (mirrors ``mbb_team_ratings`` /
   leakage-free as-of split the pregame gate is validated on
   (``test_mbb_prediction_backtest``); it is bucketed to week granularity so the
   fixed point runs ~25x/season instead of once per game.
-* :func:`_compile_season_wp` -- the identity transform: score each game's plays
-  and hstack the metadata. Because the ``home_win_prob`` column is
-  ``mbb_in_game_win_prob``'s output unchanged, the compile helper inherits the
-  model's decile calibration (gated in ``test_mbb_prediction_backtest``).
+* :func:`_compile_season_wp` -- appends the two WP columns to the pbp frame.
+  Because ``home_win_prob`` is ``mbb_in_game_win_prob``'s output unchanged, the
+  enrichment inherits the model's decile calibration (gated in
+  ``test_mbb_prediction_backtest``).
 * :func:`build_mbb_season_wp` -- loads pbp/schedule/team-box for a season and
   runs the two cores. WBB is the ``league="womens"`` shim in ``wbb_win_prob``.
 """
@@ -49,20 +51,10 @@ if TYPE_CHECKING:
 
 __all__ = ["build_mbb_season_wp"]
 
-# Output contract (one row per play). Ids are Utf8 join keys; scores/sequence
-# are widened to Int64 so the schema is stable across the Int32 releases.
-_WP_SCHEMA: dict[str, pl.DataType] = {
-    "season": pl.Int64,
-    "game_id": pl.Utf8,
-    "game_play_number": pl.Int64,
-    "game_date": pl.Date,
-    "home_team_name": pl.Utf8,
-    "away_team_name": pl.Utf8,
-    "home_score": pl.Int64,
-    "away_score": pl.Int64,
-    "pregame_home_prob": pl.Float64,
-    "home_win_prob": pl.Float64,
-}
+# The two Float64 columns appended to the pbp frame. The release enriches the
+# pbp dataset *in place*, so the output is the full ``load_mbb_pbp`` frame (all
+# columns, original dtypes) with exactly these two columns added.
+_WP_COLS: tuple[str, str] = ("pregame_home_prob", "home_win_prob")
 
 _PREGAME_SCHEMA: dict[str, pl.DataType] = {"game_id": pl.Utf8, "pregame_home_prob": pl.Float64}
 
@@ -128,22 +120,25 @@ def _pregame_probs(schedule: pl.DataFrame, team_box: pl.DataFrame, *, league: st
 def _compile_season_wp(
     pbp: pl.DataFrame, schedule: pl.DataFrame, team_box: pl.DataFrame, *, league: str = "mens"
 ) -> pl.DataFrame:
-    """Score every play in a season's pbp and attach display metadata.
+    """Append ``pregame_home_prob`` + ``home_win_prob`` to a season's pbp.
+
+    The release enriches the pbp dataset **in place**, so every input column is
+    preserved (names + dtypes) and exactly the two WP columns are added.
 
     Args:
-        pbp: ``load_mbb_pbp`` frame (``game_id, season, game_play_number,
-            game_date, home_team_name, away_team_name, home_score, away_score,
-            start_game_seconds_remaining, team_id, home_team_id``).
+        pbp: ``load_mbb_pbp`` frame (needs ``game_id, game_play_number,
+            start_game_seconds_remaining, home_score, away_score, team_id,
+            home_team_id``; all other columns pass through untouched).
         schedule: ``_normalize_schedule``'d schedule for the same season.
         team_box: Per-team boxscore for the same season.
         league: ``"mens"`` or ``"womens"``.
 
     Returns:
-        One row per play (:data:`_WP_SCHEMA`), sorted by ``game_id`` then
-        ``game_play_number``. Empty pbp returns the zero-row schema.
+        The pbp frame with :data:`_WP_COLS` appended (both ``Float64``), sorted
+        by ``game_id`` then ``game_play_number``. Empty pbp returns unchanged.
     """
     if pbp.height == 0:
-        return pl.DataFrame(schema=_WP_SCHEMA)
+        return pbp
 
     pregame = _pregame_probs(schedule, team_box, league=league)
     pmap = dict(zip(pregame.get_column("game_id").to_list(), pregame.get_column("pregame_home_prob").to_list()))
@@ -159,22 +154,13 @@ def _compile_season_wp(
         p0 = pmap.get(str(gid), fallback)
         wp = mbb_in_game_win_prob(sub, p0, league=league)  # row-aligned with sub
         frames.append(
-            sub.select(
-                pl.col("season").cast(pl.Int64),
-                pl.col("game_id").cast(pl.Utf8),
-                pl.col("game_play_number").cast(pl.Int64),
-                pl.col("game_date").cast(pl.Date),
-                pl.col("home_team_name").cast(pl.Utf8),
-                pl.col("away_team_name").cast(pl.Utf8),
-                pl.col("home_score").cast(pl.Int64),
-                pl.col("away_score").cast(pl.Int64),
-            ).with_columns(
+            sub.with_columns(
                 pl.lit(p0, dtype=pl.Float64).alias("pregame_home_prob"),
-                wp.get_column("home_win_prob"),
+                wp.get_column("home_win_prob").cast(pl.Float64),
             )
         )
 
-    return pl.concat(frames).select(list(_WP_SCHEMA)).sort(["game_id", "game_play_number"])
+    return pl.concat(frames).sort(["game_id", "game_play_number"])
 
 
 def _load_league_frames(season: int, league: str) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
@@ -200,11 +186,14 @@ def build_mbb_season_wp(season: int, *, league: str = "mens", return_as_pandas: 
 def build_mbb_season_wp(
     season: int, *, league: str = "mens", return_as_pandas: bool = False
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
-    """Per-play home win probability for a full season (the WP release table).
+    """A season's play-by-play with win-probability columns joined in.
 
     Loads the season's play-by-play, schedule, and team boxscores, builds a
-    leakage-free weekly as-of pregame anchor per game, and scores every play
-    through the bundled in-game win-probability artifact.
+    leakage-free weekly as-of pregame anchor per game, scores every play through
+    the bundled in-game win-probability artifact, and returns the full
+    ``load_mbb_pbp`` frame with ``pregame_home_prob`` + ``home_win_prob``
+    appended -- the enrich-in-place shape that overwrites the season's
+    ``play_by_play_<season>.parquet`` release asset.
 
     Args:
         season: Season year (e.g. ``2024``); bounded by ``load_mbb_pbp`` release
@@ -213,16 +202,16 @@ def build_mbb_season_wp(
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per play (:data:`_WP_SCHEMA`): ``season, game_id,
-        game_play_number, game_date, home_team_name, away_team_name,
-        home_score, away_score, pregame_home_prob, home_win_prob``.
+        The season's ``load_mbb_pbp`` frame (every column preserved) with the two
+        :data:`_WP_COLS` appended (both ``Float64``), sorted by ``game_id`` then
+        ``game_play_number``.
 
     Example:
         Quick start::
 
             from sportsdataverse.mbb import build_mbb_season_wp
             wp = build_mbb_season_wp(2024)
-            wp.filter(pl.col("game_id") == "401638643").sort("game_play_number")
+            wp.select("game_id", "game_play_number", "home_win_prob").head()
 
     See Also:
         * `hoopR <https://hoopR.sportsdataverse.org>`_ -- men's basketball (R)
