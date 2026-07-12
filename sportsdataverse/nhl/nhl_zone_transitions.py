@@ -5,15 +5,29 @@
 possession contested) -- that distinction is a manually-tagged microstat
 (AllThreeZones / Corey Sznajder). This module ships a **pbp-derived
 approximation**: an entry is inferred when a team's puck-owning event's
-``zone_code`` flips ``N``/``D`` -> ``O`` (an exit is the inverse ``D`` -> ``N``),
-and ``controlled`` is heuristically the entries whose owning team registers
-another possession event within ``controlled_window_s`` seconds (else dump).
+``zone_code`` flips ``N``/``D`` -> ``O`` (an exit is the inverse ``D`` -> ``N``).
+
+``controlled`` is an **event-sequence-aware heuristic** (fleshed out from the
+original "any same-team event within window" rule): the entering team must
+win the **very next possession event in the whole-game event order** (not
+just any later same-team event, which could follow an intervening opponent
+touch) AND that event must land within ``controlled_window_s`` seconds. This
+is a strictly more conservative "uninterrupted possession retention" signal
+-- a same-team event 3 seconds later that was preceded by an opponent
+giveaway/faceoff no longer counts as controlled, because the opponent
+touched the puck in between. ``seconds_to_next`` is, correspondingly, the
+time to that very-next possession event (any team), not to the entering
+team's own next event.
 
 **Unblock path:** pass a ground-truth tag feed via ``tags=`` (columns
 ``game_id``, ``event_idx``, ``controlled``) -- e.g. an AllThreeZones season
 CSV joined on game+event -- and the heuristic ``controlled`` is overridden by
 the tagged truth with no API change. The entry *rate* is a stable signal even
-when the controlled/dump label is noisy, which is what the oracle gates.
+when the controlled/dump label is noisy, which is what the oracle gates; the
+label itself is validated with a directional sanity check (controlled
+entries should precede a same-team shot attempt at a higher rate than dump
+entries -- see ``test_zone_entry_label_directional_sanity`` in
+``tests/nhl/test_nhl_microstat_oracle.py``).
 
 Example:
     Quick start::
@@ -106,8 +120,9 @@ def infer_zone_transitions(
     Returns:
         One row per detected transition: ``game_id``, ``event_idx``,
         ``player_id``, ``team_id``, ``transition_type`` (``"entry"``/``"exit"``),
-        ``controlled`` (Boolean), ``seconds_to_next`` (Float64). Zero-row input
-        returns a zero-row frame with this schema.
+        ``controlled`` (Boolean), ``seconds_to_next`` (Float64 -- time to the
+        very next possession event in the whole-game order, any team). Zero-row
+        input returns a zero-row frame with this schema.
 
     Example:
         Quick start::
@@ -130,12 +145,17 @@ def infer_zone_transitions(
     if poss.height == 0:
         return pl.DataFrame(schema=TRANSITION_SCHEMA)
 
-    # Sort per game by event order; prior zone + next event time are computed
-    # per (game, team) so no cross-game / cross-team leak.
+    # Sort per game by event order; prior zone is computed per (game, team) so
+    # entry/exit detection never leaks across games or teams. The controlled
+    # signal, by contrast, needs the WHOLE-GAME event order (any team) -- see
+    # the module docstring's "event-sequence-aware" note: possession retention
+    # means the entering team wins the very next possession event overall, not
+    # just some later event of its own with an opponent touch in between.
     poss = poss.sort(["_game", "event_idx"])
     poss = poss.with_columns(
         pl.col("zone_code").shift(1).over(["_game", "_team"]).alias("_prev_zone"),
-        pl.col("_secs").shift(-1).over(["_game", "_team"]).alias("_next_secs"),
+        pl.col("_team").shift(-1).over("_game").alias("_next_event_team"),
+        pl.col("_secs").shift(-1).over("_game").alias("_next_event_secs"),
     )
     poss = poss.with_columns(
         pl.when((pl.col("_prev_zone").is_in(["N", "D"])) & (pl.col("zone_code") == "O"))
@@ -144,14 +164,18 @@ def infer_zone_transitions(
         .then(pl.lit("exit"))
         .otherwise(pl.lit(None, dtype=pl.Utf8))
         .alias("transition_type"),
-        (pl.col("_next_secs") - pl.col("_secs")).cast(pl.Float64).alias("seconds_to_next"),
+        (pl.col("_next_event_secs") - pl.col("_secs")).cast(pl.Float64).alias("seconds_to_next"),
     )
     transitions = poss.filter(pl.col("transition_type").is_not_null())
     if transitions.height == 0:
         return pl.DataFrame(schema=TRANSITION_SCHEMA)
 
     transitions = transitions.with_columns(
-        (pl.col("seconds_to_next").is_not_null() & (pl.col("seconds_to_next") <= window)).alias("controlled")
+        (
+            pl.col("seconds_to_next").is_not_null()
+            & (pl.col("seconds_to_next") <= window)
+            & (pl.col("_next_event_team") == pl.col("_team"))
+        ).alias("controlled")
     )
 
     out = transitions.select(

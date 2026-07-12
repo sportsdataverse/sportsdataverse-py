@@ -155,11 +155,28 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         min_season=2010,
     ),
     # PWHL: shorter league history + higher game-to-game variance -> stronger
-    # shrinkage prior and wider margin SD. Fitted once PWHL xG-bearing pbp
-    # lands in sdv-py (deferred per design spec Sec 9-7); shim ships now.
+    # shrinkage prior. hfa/avg_xgf/avg_total_goals/total_scale/prop_* remain
+    # SEEDED placeholders (deferred per design spec Sec 9-7 -- the NHL-contract
+    # pbp shape this row's consumers were built for has no PWHL adapter yet).
+    #
+    # margin_sd IS fit (T5.3 flesh-out, 2026-07-11), as a byproduct of building
+    # the categorical-shot_quality xG-proxy backtest (see
+    # sportsdataverse.pwhl.pwhl_xg_proxy + dev/pwhl_prediction/): fit by
+    # minimising Brier of Phi(exp_margin/margin_sd) directly on 244 as-of-
+    # evaluated PWHL games (3 seasons, dates[10:] per season) -- the same
+    # method the NHL margin_sd comment above describes. The seeded 2.35 was a
+    # real-world-goal-margin-scale guess; the proxy's exp_margin values are
+    # heavily shrink-compressed (shrink_k=25 against ~10-20 games/team/season)
+    # to a std of ~0.065, so the correctly-scaled sigma is far smaller: fit
+    # value 0.83 (grid search dev/pwhl_prediction/fit_pwhl_margin_sd.py,
+    # step 0.02) drops Brier from the naive-baseline-beating-but-barely 0.2464
+    # (old seed) to 0.2438 vs naive 0.2500. This is a genuine but modest
+    # improvement, not a claim of strong predictive power -- see
+    # tests/pwhl/test_pwhl_xg_proxy_oracle.py for the honest floor + the
+    # documented thin-sample limitation.
     "pwhl": LeagueConstants(
         hfa=0.15,
-        margin_sd=2.35,
+        margin_sd=0.83,
         avg_xgf=2.30,
         avg_total_goals=5.20,
         total_scale=1.0,

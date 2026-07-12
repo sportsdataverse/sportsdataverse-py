@@ -95,24 +95,34 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         pp_goal_value=0.144,
         major_penalty_value=0.359,
         # Fit from the 120-game slice via dev/nhl_microstat/fit_zone_entry_value.py
-        # (Task 4.2): mean xG the entering/exiting team generates within
-        # entry_window_s after a controlled vs dump entry (controlled ~2x dump)
-        # / after an exit. Heuristic controlled/dump labels (see
-        # nhl_zone_transitions 🟡), so these are approximate values.
-        zone_entry_value_controlled=0.108,
-        zone_entry_value_dump=0.053,
-        zone_exit_value=0.007,
+        # (Task 4.2, re-fit after the T5.2 flesh-out of the event-sequence-aware
+        # controlled/dump heuristic -- see nhl_zone_transitions module docstring):
+        # mean xG the entering/exiting team generates within entry_window_s
+        # after a controlled vs dump entry (controlled ~2x dump) / after an
+        # exit. Heuristic controlled/dump labels (see nhl_zone_transitions
+        # 🟡), so these remain approximate values; the re-fit barely moved
+        # (0.108->0.1085 / 0.053->0.0544 / 0.007->0.0070), confirming the label
+        # flesh-out changed WHICH events are called controlled at the margin
+        # without disturbing the aggregate value split.
+        zone_entry_value_controlled=0.1085,
+        zone_entry_value_dump=0.0544,
+        zone_exit_value=0.0070,
         # NOT fit -- deliberate equal-weight (unweighted-z) composite: each EDGE
         # component contributes its raw league-wide z-score equally. The EDGE
         # concurrent oracle (component rank-corr >= 0.5 in test_edge_value_concurrent)
         # guards against a z-score sign / weight regression. Escalate to fitted
         # PCA first-component loadings only if that gate demands it (see
-        # nhl_edge_value docstring).
+        # nhl_edge_value docstring). ``oz_dz_time_balance`` (T5.2 flesh-out) is
+        # equal-weighted the same way, but only contributes when a caller opts
+        # in via ``include_zone_balance=True`` -- ``_edge_zcomposite`` derives
+        # the column itself, so this weight is dormant (never looked up) unless
+        # that flag is set.
         edge_component_weights={
             "top_speed": 1.0,
             "distance_km": 1.0,
             "speed_bursts_20": 1.0,
             "oz_time_pct": 1.0,
+            "oz_dz_time_balance": 1.0,
         },
         # Fit from tests/fixtures/nhl_microstat/pbp_2024_slice.parquet via
         # dev/nhl_microstat/fit_faceoff_zone_weights.py (Task 1.4): mean
@@ -121,25 +131,31 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         faceoff_zone_weights={"O": 1.0, "N": 1.03, "D": 0.06},
     ),
     # PWHL constants are SEEDED-PLACEHOLDER (== the NHL fitted values), NOT fit:
-    # this spine ships the PWHL shim + constants but not PWHL pbp ingestion (a
-    # deferred upstream item -- there is no PWHL pbp wrapper in sdv-py yet, per
-    # the design's non-goals). Capture contract to fit these: obtain a PWHL pbp
-    # slice on the Task-0.1 contract (e.g. via the fastRhockey PWHL feed) and
-    # re-run dev/nhl_microstat/fit_{faceoff_zone_weights,pp_goal_value,zone_entry_value}.py
+    # this spine's models (faceoff/penalty/assist/zone-transition/EDGE) need
+    # pbp on the Task-0.1 NHL api-web contract (type_desc_key/zone_code/
+    # time_in_period/event_owner_team_id) -- there is no adapter converting
+    # sportsdataverse's actual `load_pwhl_pbp` (a differently-shaped HockeyTech
+    # feed with event/shot_quality/team_id/time_of_period columns, used by the
+    # separate T5.3 `pwhl_xg_proxy` prediction spine) into that contract yet.
+    # Capture contract to fit these for real: obtain a PWHL pbp slice on the
+    # Task-0.1 contract (e.g. via the fastRhockey PWHL feed, or a future
+    # load_pwhl_pbp -> NHL-contract adapter) and re-run
+    # dev/nhl_microstat/fit_{faceoff_zone_weights,pp_goal_value,zone_entry_value}.py
     # with league="pwhl", then replace these seeds. Using the NHL fits as the
     # seed is the best available estimate (labeled, not an ungrounded magic
     # number) until that corpus exists. EDGE has no PWHL feed -> zero-row.
     "pwhl": LeagueConstants(
         pp_goal_value=0.144,
         major_penalty_value=0.359,
-        zone_entry_value_controlled=0.108,
-        zone_entry_value_dump=0.053,
-        zone_exit_value=0.007,
+        zone_entry_value_controlled=0.1085,
+        zone_entry_value_dump=0.0544,
+        zone_exit_value=0.0070,
         edge_component_weights={
             "top_speed": 1.0,
             "distance_km": 1.0,
             "speed_bursts_20": 1.0,
             "oz_time_pct": 1.0,
+            "oz_dz_time_balance": 1.0,
         },
         faceoff_zone_weights={"O": 1.0, "N": 1.03, "D": 0.06},
     ),
