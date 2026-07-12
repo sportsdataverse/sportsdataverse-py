@@ -21,7 +21,8 @@ rlang 1.2.0 | captured 2026-07-12 on Windows.
 
 | File | Produced by | Notes |
 |---|---|---|
-| `parity_frame.csv` / `.csv.gz` / `.parquet` | `sportsdataverse_save()` (upload.R L100-188) | character `season` + double `week` coerced to integer (Int32 in parquet); `sportsdataverse_type` / `sportsdataverse_timestamp` in parquet file metadata |
+| `parity_frame.rds` / `.csv` / `.csv.gz` / `.parquet` | `sportsdataverse_save()` (upload.R L100-188) | character `season` + double `week` coerced to integer (Int32 in parquet); `sportsdataverse_type` / `sportsdataverse_timestamp` in parquet file metadata and as rds frame attributes |
+| `rds_golden.rds` | `saveRDS(compress = FALSE, version = 2)` of the save()-coerced frame with a FIXED bare-epoch POSIXct timestamp attribute | CI byte-oracle for `sportsdataverse/_rds.py` — the Python writer must reproduce these bytes exactly, minus the 14-byte serialization header |
 | `timestamp.txt` / `timestamp.json` | `create_timestamp_file()` (upload.R L46-59) | values are capture-time-dependent; tests assert shape/keys only |
 | `package_function.txt` / `.json` | `create_package_function()` (upload.R L62-80) | input: `"sportsdataverse::load_parity_frame()"` |
 | `assets_raw.json` | `gh release view espn_cfb_pbp -R sportsdataverse/sportsdataverse-data --json assets` (gh 2.31.0) | raw payload replayed into both R and Python parsers; tag chosen because it carries timestamp assets (exercises the filter) |

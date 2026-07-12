@@ -47,12 +47,35 @@ sportsdataverse_save(
   release_tag = "test-tag",
   pkg_function = "sportsdataverse::load_parity_frame()",
   .token = "unused",
-  file_types = c("csv", "csv.gz", "parquet")
+  file_types = c("rds", "csv", "csv.gz", "parquet")
 )
 
-for (f in paste0("parity_frame.", c("csv", "csv.gz", "parquet"))) {
+for (f in paste0("parity_frame.", c("rds", "csv", "csv.gz", "parquet"))) {
   stopifnot(file.copy(file.path(tempdir(), f), file.path(out_dir, f), overwrite = TRUE))
 }
+
+# ---- 1b. rds byte-golden oracle ----------------------------------------------
+# The exact frame sportsdataverse_save() serializes (post season/week
+# coercion), with a FIXED timestamp attribute and no compression, so the
+# Python writer (sportsdataverse/_rds.py) can be byte-compared in CI without
+# an R installation. The serialization header (14 bytes: "X\n" + 3 version
+# ints) is skipped in the comparison, so R version drift here is harmless.
+golden_df <- test_df
+golden_df$season <- as.integer(golden_df$season)
+golden_df$week <- as.integer(golden_df$week)
+attr(golden_df, "sportsdataverse_type") <- "Parity fixture frame"
+# bare-epoch POSIXct (no tzone attr), like Sys.time() in the real save();
+# epoch = 2026-07-12 14:00:00 UTC
+attr(golden_df, "sportsdataverse_timestamp") <- structure(
+  as.numeric(as.POSIXct("2026-07-12 14:00:00", tz = "UTC")),
+  class = c("POSIXct", "POSIXt")
+)
+saveRDS(
+  golden_df,
+  file.path(out_dir, "rds_golden.rds"),
+  compress = FALSE,
+  version = 2
+)
 
 # ---- 2. timestamp + package_function sidecar files --------------------------
 ts_files <- create_timestamp_file()

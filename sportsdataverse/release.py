@@ -1,17 +1,19 @@
 """Release-management helpers for ``sportsdataverse/sportsdataverse-data``.
 
 Python port of the ``sportsdataversedata`` R package (v0.0.11): save tidy
-frames to csv / csv.gz / parquet and upload them (plus timestamp /
+frames to rds / csv / csv.gz / parquet and upload them (plus timestamp /
 package-function sidecar files) to a GitHub release via the ``gh`` CLI, and
-inspect existing releases.
+inspect existing releases. ``rds`` files are written natively (pure-Python
+serializer in ``sportsdataverse._rds``, byte-validated against R's own
+``saveRDS`` output) including the ``sportsdataverse_type`` /
+``sportsdataverse_timestamp`` frame attributes R attaches.
 
 Deliberate divergences from the R package (documented in
 ``tests/release/test_release_parity.py``):
 
 * uploads run one ``gh release upload`` invocation per file — the multi-file
   form silently drops large assets;
-* ``rds`` / ``qs`` file types are R-only serialization formats and raise
-  ``ValueError`` here (Python default is ``("csv", "parquet")``);
+* the ``qs`` file type is R-only and raises ``ValueError``;
 * ``size_string`` values are not right-justified across the frame (R's
   vector ``format()`` artifact);
 * there is no ``.token`` argument — authentication is whatever the ``gh``
@@ -43,10 +45,12 @@ from typing import Any, Iterable, Optional, Union
 
 import polars as pl
 
+from sportsdataverse._rds import write_rds
+
 DEFAULT_REPO = "sportsdataverse/sportsdataverse-data"
 
-_VALID_FILE_TYPES = ("csv", "csv.gz", "parquet")
-_R_ONLY_FILE_TYPES = ("rds", "qs")
+_VALID_FILE_TYPES = ("rds", "csv", "csv.gz", "parquet")
+_R_ONLY_FILE_TYPES = ("qs",)
 
 # regex ported verbatim from gh_cli.R .cli_parse_json (crayon::strip_style)
 _ANSI_RE = re.compile("(?:(?:\x1b\\[)|\x9b)(?:(?:[0-9]{1,3})?(?:(?:;[0-9]{0,3})*)?[A-M|f-m])|\x1b[A-M]")
@@ -394,26 +398,29 @@ def sportsdataverse_save(
     release_tag: str,
     pkg_function: str,
     *,
-    file_types: Iterable[str] = ("csv", "parquet"),
+    file_types: Iterable[str] = ("rds", "csv", "parquet"),
     repo: str = DEFAULT_REPO,
 ) -> list[Path]:
     """Save a frame in release formats and upload it (upload.R L100-188).
 
     Coerces ``season`` / ``week`` columns to integer (Int32, matching R
     ``as.integer``), stamps ``sportsdataverse_type`` and
-    ``sportsdataverse_timestamp`` into the parquet file metadata, writes the
-    requested formats to a temp directory, and uploads them together with the
-    timestamp / package-function sidecars.
+    ``sportsdataverse_timestamp`` into the parquet file metadata and as R
+    attributes on the rds frame, writes the requested formats to a temp
+    directory, and uploads them together with the timestamp /
+    package-function sidecars.
 
     Args:
         data_frame: polars (or pandas) DataFrame to save.
         file_name: Asset file name, without extension.
-        sportsdataverse_type: Dataset description stored in parquet metadata.
+        sportsdataverse_type: Dataset description stored in parquet metadata
+            and as an rds frame attribute.
         release_tag: Release tag to upload to.
         pkg_function: Related package function name (sidecar metadata).
-        file_types: Subset of ``("csv", "csv.gz", "parquet")``. The R-only
-            ``rds`` / ``qs`` serializations raise ``ValueError`` — write those
-            from R via ``sportsdataversedata``.
+        file_types: Subset of ``("rds", "csv", "csv.gz", "parquet")``; the
+            default matches the R package. The R-only ``qs`` serialization
+            raises ``ValueError`` — write that from R via
+            ``sportsdataversedata``.
         repo: Target repository. Defaults to ``sportsdataverse/sportsdataverse-data``.
 
     Returns:
@@ -445,8 +452,8 @@ def sportsdataverse_save(
         r_only = [ft for ft in unknown if ft in _R_ONLY_FILE_TYPES]
         if r_only:
             raise ValueError(
-                f"file_types {r_only} are R-only serialization formats "
-                f"(rds/qs) — use the sportsdataversedata R package for those. "
+                f"file_types {r_only} are R-only serialization formats — "
+                f"use the sportsdataversedata R package for those. "
                 f"Valid values: {_VALID_FILE_TYPES}"
             )
         raise ValueError(f"Unknown file_types {unknown}; valid: {_VALID_FILE_TYPES}")
@@ -469,13 +476,26 @@ def sportsdataverse_save(
                     stacklevel=2,
                 )
 
+    stamped_at = datetime.now()
     metadata = {
         "sportsdataverse_type": sportsdataverse_type,
-        "sportsdataverse_timestamp": str(datetime.now()),
+        "sportsdataverse_timestamp": str(stamped_at),
     }
 
     temp_dir = Path(tempfile.mkdtemp(prefix="sdv_release_"))
     written: list[Path] = []
+    if "rds" in requested:
+        path = temp_dir / f"{file_name}.rds"
+        # attribute parity with R: attr(df, "sportsdataverse_type"/"..._timestamp")
+        write_rds(
+            df,
+            path,
+            attributes={
+                "sportsdataverse_type": sportsdataverse_type,
+                "sportsdataverse_timestamp": stamped_at,
+            },
+        )
+        written.append(path)
     if "csv" in requested:
         path = temp_dir / f"{file_name}.csv"
         df.write_csv(path)

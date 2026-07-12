@@ -59,7 +59,7 @@ play_by_play_2022.rds,31621991,9,2023-05-04T22:22:31Z,https://github.com/sportsd
 play_by_play_2023.csv.gz,69905133,0,2026-07-12T06:19:25Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2023.csv.gz, 69.91 MB
 play_by_play_2023.parquet,48562271,0,2026-07-12T06:18:47Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2023.parquet, 48.56 MB
 play_by_play_2024.csv.gz,79504647,4,2026-06-24T16:46:57Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2024.csv.gz, 79.50 MB
-play_by_play_2024.parquet,83423672,25,2026-06-24T16:46:48Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2024.parquet, 83.42 MB
+play_by_play_2024.parquet,83423672,26,2026-06-24T16:46:48Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2024.parquet, 83.42 MB
 play_by_play_2024.rds,57913587,0,2026-06-24T16:46:52Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2024.rds, 57.91 MB
 play_by_play_2025.csv.gz,82376165,0,2026-07-12T06:20:59Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2025.csv.gz, 82.38 MB
-play_by_play_2025.parquet,56118322,0,2026-07-12T06:20:02Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2025.parquet, 56.12 MB
+play_by_play_2025.parquet,56118322,1,2026-07-12T06:20:02Z,https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2025.parquet, 56.12 MB

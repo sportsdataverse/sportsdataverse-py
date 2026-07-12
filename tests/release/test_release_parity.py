@@ -33,6 +33,7 @@ from __future__ import annotations
 import gzip
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 import polars as pl
@@ -40,6 +41,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from sportsdataverse import release
+from sportsdataverse._rds import write_rds
 
 FIXTURE_DIR = Path(__file__).parent.parent / "fixtures" / "release"
 
@@ -85,7 +87,7 @@ def saved_files(gh_recorder, tmp_path) -> list[Path]:
         sportsdataverse_type="Parity fixture frame",
         release_tag="test-tag",
         pkg_function=PKG_FUNCTION,
-        file_types=("csv", "csv.gz", "parquet"),
+        file_types=("rds", "csv", "csv.gz", "parquet"),
     )
 
 
@@ -133,15 +135,62 @@ def test_save_parquet_metadata(saved_files):
 
 
 def test_save_rejects_r_only_file_types(gh_recorder):
-    with pytest.raises(ValueError, match="rds"):
+    with pytest.raises(ValueError, match="qs"):
         release.sportsdataverse_save(
             r_parity_frame(),
             file_name="x",
             sportsdataverse_type="t",
             release_tag="tag",
             pkg_function="f()",
-            file_types=("rds",),
+            file_types=("qs",),
         )
+
+
+# ---------------------------------------------------------------------------
+# rds writing (sportsdataverse/_rds.py vs R saveRDS)
+# ---------------------------------------------------------------------------
+
+
+def test_save_writes_gzipped_rds(saved_files):
+    rds = _by_suffix(saved_files, ".rds")
+    header = rds.read_bytes()[:2]
+    assert header == b"\x1f\x8b"  # gzip magic, like saveRDS(compress = TRUE)
+
+
+def test_rds_byte_golden():
+    """The Python writer reproduces R's saveRDS bytes exactly.
+
+    ``rds_golden.rds`` is the save()-coerced parity frame serialized by R
+    4.5.3 with a fixed timestamp attribute and ``compress = FALSE``. The
+    14-byte serialization header ("X\\n" + 3 version ints) is skipped so an
+    R upgrade at fixture-regeneration time can't break the comparison.
+    """
+    coerced = r_parity_frame().with_columns(
+        pl.col("season").str.strip_chars().cast(pl.Float64).cast(pl.Int32),
+        pl.col("week").cast(pl.Int32),
+    )
+    out = FIXTURE_DIR.parent / "release" / "_py_golden_check.rds"
+    try:
+        write_rds(
+            coerced,
+            out,
+            attributes={
+                "sportsdataverse_type": "Parity fixture frame",
+                "sportsdataverse_timestamp": datetime(2026, 7, 12, 14, 0, 0, tzinfo=timezone.utc),
+            },
+            compress=False,
+        )
+        got = out.read_bytes()
+    finally:
+        out.unlink(missing_ok=True)
+    expected = (FIXTURE_DIR / "rds_golden.rds").read_bytes()
+    assert got[14:] == expected[14:]
+
+
+def test_rds_rejects_nested_columns(tmp_path):
+    nested = pl.DataFrame({"plays": [[1, 2], [3]]})
+    with pytest.raises(ValueError, match="nested"):
+        write_rds(nested, tmp_path / "x.rds")
 
 
 # ---------------------------------------------------------------------------
