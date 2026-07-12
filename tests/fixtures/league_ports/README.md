@@ -100,8 +100,9 @@ college_hockey_ratings.py`, reusing `_common/ratings.py`'s
 
 ### WCH coverage caveat
 
-A full 2024-25-season date sweep of ESPN's WCH scoreboard (weekly Fri/Sat/
-weekday dates, Oct 2024–Feb 2025) found **zero** completed games outside the
+A 24-date sampled sweep of ESPN's WCH scoreboard (Oct 2024–Apr 2025;
+`dev/league_ports/scan_ncaa_hockey_dates.py` +
+`capture_wch_and_scoreboards.py`) found **zero** completed games outside the
 March 2025 NCAA Tournament window — the 7-game / 8-team bracket in
 `wch_scoreboard_sample.json` is everything ESPN returned. A single-elimination
 bracket is too structurally sparse (no repeat matchups, no non-tournament

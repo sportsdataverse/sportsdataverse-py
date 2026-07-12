@@ -54,9 +54,10 @@ COLLEGE_HOCKEY_CONSTANTS: dict[str, CollegeHockeyConstants] = {
         has_shot_coordinates=False,
         has_shift_data=False,
         has_full_pbp=False,
-        # Empirically estimated (home_goals - away_goals) over the 191 non-neutral
-        # games in the captured 2024-25 MCH sample (dev/league_ports/
-        # capture_wch_and_scoreboards.py); not a published league constant.
+        # Empirically estimated: mean (home_goals - away_goals) = 0.3194 over the
+        # 191 non-neutral games in the captured 2024-25 MCH sample. Reproduce
+        # offline with dev/league_ports/fit_mch_hfa.py (reads the committed
+        # fixture); not a published league constant.
         hfa_goals=0.32,
     ),
     "wch": CollegeHockeyConstants(

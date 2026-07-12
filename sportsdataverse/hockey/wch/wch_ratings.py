@@ -3,11 +3,11 @@
 Fixes ``league="wch"`` on the league-agnostic
 :mod:`sportsdataverse.hockey.college_hockey_ratings` core.
 
-**Coverage caveat:** a full 2024-25-season date sweep of ESPN's WCH
-scoreboard (``dev/league_ports/capture_wch_and_scoreboards.py``) found
-completed games on only 7 dates, all inside the March 2025 NCAA Tournament
-bracket (8 teams). ESPN does not appear to populate WCH regular-season
-scoreboards for that season in this environment, so ``wch_ratings`` over a
+**Coverage caveat:** a 24-date sampled sweep of ESPN's WCH scoreboard
+(Oct 2024--Apr 2025; ``dev/league_ports/scan_ncaa_hockey_dates.py`` +
+``capture_wch_and_scoreboards.py``) found completed games only inside the
+March 2025 NCAA Tournament bracket (7 games, 8 teams). ESPN did not populate
+WCH regular-season scoreboards on any sampled date, so ``wch_ratings`` over a
 regular-season date range may return few or no games -- callers should not
 assume the same season coverage as :func:`sportsdataverse.hockey.mch.mch_ratings.mch_ratings`.
 """

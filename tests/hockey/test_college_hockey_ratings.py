@@ -184,10 +184,11 @@ def test_mch_ratings_internal_consistency_oracle_gate():
     wp = _win_pct(games)
     joined = ratings.join(wp, on="team_id", how="inner")
     assert joined.schema["team_id"] == wp.schema["team_id"] == pl.Utf8
+    assert joined.height >= 60  # observed 64/64 teams joined; the gate must not go vacuous
     corr = _spearman(joined["adj_net"].to_numpy(), joined["win_pct"].to_numpy())
-    # Observed on the committed sample: ~0.672. Floor set below the observed
-    # value (never raised to force a pass) -- a genuine regression in the
-    # fixed-point wiring would drop this well below 0.6.
+    # Floor derived from the observed value on the committed sample (~0.672);
+    # never lower the gate to pass. A genuine regression in the fixed-point
+    # wiring would drop this well below 0.6.
     assert corr >= 0.6, f"adj_net vs win_pct Spearman {corr:.3f} below internal-consistency floor"
 
 
@@ -221,15 +222,17 @@ def test_mch_ratings_external_sanity_tournament_overlap():
     events = _load("mch_scoreboard_sample.json")
     ratings = college_hockey_ratings(events, league="mch").sort("adj_net", descending=True)
 
-    id_to_name: dict[str, str] = {}
+    id_to_school: dict[str, str] = {}
     for ev in events:
         for c in ev["competitions"][0]["competitors"]:
-            id_to_name[str(c["team"]["id"])] = c["team"].get("displayName", "")
+            id_to_school[str(c["team"]["id"])] = c["team"].get("location", "")
 
-    top16_names = {id_to_name.get(tid, "") for tid in ratings["team_id"].to_list()[:16]}
-    # UConn's ESPN displayName is "UConn Huskies"; normalize both sides on the
-    # short school name via substring containment.
-    matched = sum(1 for school in _2025_MCH_TOURNAMENT_FIELD if any(school in name for name in top16_names))
+    top16_schools = {id_to_school.get(tid, "") for tid in ratings["team_id"].to_list()[:16]}
+    # ESPN's `team.location` is the exact short school name ("Minnesota" vs
+    # "Minnesota State" vs "St. Thomas - Minnesota"; "UConn") so match on
+    # equality -- substring containment let "Minnesota" false-match sibling
+    # schools, which made that slice of the gate unable to fail.
+    matched = len(_2025_MCH_TOURNAMENT_FIELD & top16_schools)
     overlap = matched / len(_2025_MCH_TOURNAMENT_FIELD)
     # Observed on the committed sample: 12/16 = 0.75. Floor set below the
     # observed value -- a pure adjusted-goal-margin rating won't replicate the
