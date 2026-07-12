@@ -918,28 +918,25 @@ pace = adjust_pace(raw_game_efficiency(sched, box))
 
 ### `as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'` {#as_of_ratings_split}
 
-Return only games strictly before `cutoff_date` (the leakage boundary).
-
-Predictive backtests must rate a game using only games that finished
-before it -- this split enforces that as-of-date rule so no future
-information leaks into a game's own prediction.
+Filter a results frame to games strictly before a cutoff date (leakage boundary).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `results` | `DataFrame` |  | A frame with a `date` column of dtype `pl.Date`. |
-| `cutoff_date` | `date` |  | The date of the game being predicted; games on or after it are dropped. |
+| `results` | `DataFrame` |  | A `polars.DataFrame` with a `date` column. |
+| `cutoff_date` | `date` |  | Games on or after this date are excluded. |
 
 **Returns**
 
-The subset of `results` with `date < cutoff_date`.
+A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split
-prior = as_of_ratings_split(results, some_game_date)
+import datetime as dt
+from sportsdataverse._common.metrics import as_of_ratings_split
+as_of_ratings_split(results, dt.date(2023, 9, 8))
 ```
 
 ### `box_features(player_logs: 'pl.DataFrame', team_logs: 'pl.DataFrame', *, game_ids: 'Optional[List[str]]' = None) -> 'pl.DataFrame'` {#box_features}

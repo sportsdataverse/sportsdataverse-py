@@ -1,11 +1,10 @@
 {
   "league": "wnba",
-  "rookie_fraction": 0.1,
+  "rookie_fraction": 0.07488776435339317,
   "residual": {
-    "lottery": 0.0,
-    "first_round": 0.0,
-    "second_round": 0.0,
-    "undrafted": 0.0
-  },
-  "_placeholder": "seed weights pending Task 4.1 fit_rookie_residual.py -- overwritten before the phase-4 oracle gate runs"
+    "first_round": -1.9155488352553915,
+    "lottery": 3.4268012222916764,
+    "second_round": -1.2409091473421487,
+    "undrafted": 0.1257974189629032
+  }
 }
