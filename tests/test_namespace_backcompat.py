@@ -50,7 +50,31 @@ def test_moved_map_matches_grouped_leagues():
 
     cfg = spec.load_leagues(Path("tools/codegen/endpoints/leagues.yaml"))
     grouped = {lg.prefix: f"{lg.group}.{lg.prefix}" for lg in cfg.leagues if lg.group}
-    hand_moved = {"ahl": "hockey.ahl", "ohl": "hockey.ohl", "qmjhl": "hockey.qmjhl", "whl": "hockey.whl"}
+    # Hand-wired HockeyTech leagues (not ESPN codegen leagues) live under hockey.*.
+    hand_moved = {
+        lg: f"hockey.{lg}"
+        for lg in (
+            "ahl",
+            "ohl",
+            "qmjhl",
+            "whl",
+            "echl",
+            "sphl",
+            "chl",
+            "ushl",
+            "bchl",
+            "ajhl",
+            "sjhl",
+            "ojhl",
+            "cchl",
+            "gojhl",
+            "mhl",
+            "nojhl",
+            "vijhl",
+            "kijhl",
+            "mjhl",
+        )
+    }
     expected = {**grouped, **hand_moved}
     assert sportsdataverse._MOVED == expected, (
         f"_MOVED drifted from grouped leagues.yaml: "

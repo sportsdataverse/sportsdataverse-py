@@ -24,6 +24,7 @@
     - [CFB — rule-era models + decision surfaces (0.0.68)](#cfb--rule-era-models--decision-surfaces-0068)
     - [MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)](#mlb--statcast-baseball-savant-comprehensive-surface-0064)
     - [NBA / WNBA — stats.nba.com / stats.wnba.com stats API (0.0.72+)](#nba--wnba--statsnbacom--statswnbacom-stats-api-0072)
+    - [Hockey — HockeyTech multi-league (PWHL + 19 minor/junior) (0.0.72+)](#hockey--hockeytech-multi-league-pwhl--19-minorjunior-0072)
     - [HTTP / retry layer](#http--retry-layer)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
@@ -653,6 +654,63 @@ wdf = wnba_stats.wnba_stats_leaguedashplayerstats()                    # WNBA
 ```
 
 See Also: [`nba_api`](https://github.com/swar/nba_api), [`hoopR`](https://hoopR.sportsdataverse.org), [`wehoop`](https://wehoop.sportsdataverse.org).
+
+### Hockey — HockeyTech multi-league (PWHL + 19 minor/junior) (0.0.72+)
+
+The HockeyTech/LeagueStat feed (one query-dispatched endpoint behind the PWHL
+and ~20 minor/junior league sites) is wired as **one shared core + N
+registry-driven league families**:
+
+- `sportsdataverse/hockeytech/` — the core: `_client.py` (JSONP-stripping HTTP
+  chokepoint `hockeytech_api`), `_leagues.py` (the `LEAGUES` registry +
+  `resolve_season_id`), `_family.py` (`build_family(league)` mints the 13 public
+  callables), `_parsers.py`, `_analytics.py`.
+- **The registry is the whole surface.** `build_family("echl")` returns
+  `echl_schedule`, `echl_pbp`, `echl_standings`, `echl_teams`,
+  `echl_team_roster`, `echl_player_stats`, `echl_leaders`, `echl_game_summary`,
+  `echl_game_shifts`, `echl_player_toi`, `echl_game_corsi`, `echl_season_id`,
+  `most_recent_echl_season`. Adding a league is a `LEAGUES` entry + a 4-line
+  `sportsdataverse/hockey/<lg>/__init__.py` (calls `build_family`) + 3 wiring
+  lines (`hockey/__init__.py` import, top-level `__init__.py` wildcard, and the
+  `_MOVED` back-compat entry). **No new parser code** — see below.
+- **20 leagues wired (all live-verified 2026-07-12):** `pwhl` (flagship, top-level
+  `sportsdataverse.pwhl` with a richer surface), `ahl`, `ohl`, `whl`, `qmjhl`, and
+  the 15 promoted 2026-07-12 — `echl`, `sphl`, `chl`, `ushl`, `bchl`, `ajhl`,
+  `sjhl`, `ojhl`, `cchl`, `gojhl`, `mhl`, `nojhl`, `vijhl`, `kijhl`, `mjhl`.
+
+```python
+import sportsdataverse as sdv
+sdv.echl_schedule(season=2026)             # flat namespace, one row per game
+sdv.ushl_standings(season=2025)            # one row per team
+from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
+```
+
+- **One parser fits every league.** `seasons` and `scorebar` row schemas are
+  byte-identical across all 20 (verified sweep); that uniformity is why one
+  `_parsers.py` drives every family and why the offline league-family tests reuse
+  the committed `pwhl_*` fixtures for all leagues.
+- **`league_id` = the standings query param**, not the scorebar row field (they
+  disagree — a scorebar row's `league_id` is a different namespace). Every
+  single-league client uses `league_id=1`; the CHL-cluster majors keep curated
+  ids (ahl=4, whl=7, qmjhl=6).
+- **`pbp_style`** is the coordinate-canvas dialect (`hockeytech_a` ≈ 850×400 /
+  `hockeytech_b` ≈ 600×300). New leagues default to `_b`; flip to `_a` only after
+  a `gameCenterPlayByPlay` coordinate-range probe shows the big canvas. Classify
+  by observed range, **not** pro/junior tier (ECHL is pro but small-canvas).
+- **Per-league PBP caveats:** `ushl` gamecenter ships goals/penalties/goalie
+  changes only (no coordinates); `mjhl`'s public key has no gamecenter access
+  (`<lg>_pbp`/`<lg>_game_summary` return empty — graceful, not an error).
+- **Keys are per-league and public** (shipped in each site's JS); no shared master
+  key. They rotate by *addition* — old generations keep working. Override any
+  league's key with env `SDV_<LEAGUE>_API_KEY` (wins for every view). PWHL's
+  `gameCenterPlayByPlay` historically needed a distinct key (`_PBP_KEY_OVERRIDES`).
+- **Envelope gotchas** live in `_client._strip_jsonp`: `modulekit` →
+  `{"SiteKit":…}`, `gc` → `{"GC":…}` and selects the view with **`tab=` not
+  `view=`**, `statviewfeed` → bare-paren JSONP. Errors are HTTP 200 with an
+  error-in-body sentinel — check bodies, not status.
+- Full API reference + the live/dead + schema accounting: `sdv-internal-refs/
+  hockeytech/` (`README.md`, `SCHEMAS.md`, `ACCOUNTING.md`, `hockeytech.openapi.yaml`
+  mirrored to `sdv-swagger/`).
 
 ### HTTP / retry layer
 

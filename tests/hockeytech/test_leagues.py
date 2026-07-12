@@ -1,10 +1,44 @@
 from __future__ import annotations
 
 
-def test_leagues_registry_has_five_hockeytech_leagues():
+def test_leagues_registry_has_all_verified_hockeytech_leagues():
     from sportsdataverse.hockeytech import LEAGUES
 
-    assert set(LEAGUES) == {"pwhl", "ahl", "ohl", "whl", "qmjhl"}
+    assert set(LEAGUES) == {
+        "pwhl",
+        "ahl",
+        "ohl",
+        "whl",
+        "qmjhl",
+        "echl",
+        "sphl",
+        "chl",
+        "ushl",
+        "bchl",
+        "ajhl",
+        "sjhl",
+        "ojhl",
+        "cchl",
+        "gojhl",
+        "mhl",
+        "nojhl",
+        "vijhl",
+        "kijhl",
+        "mjhl",
+    }
+
+
+def test_new_leagues_use_single_league_client_defaults():
+    from sportsdataverse.hockeytech import LEAGUES
+
+    # The 15 leagues promoted 2026-07-12 are single-league clients: league_id=1,
+    # site_id=0, small-canvas pbp dialect (standings-verified live).
+    for lg in ("echl", "sphl", "chl", "ushl", "bchl", "cchl", "kijhl", "mjhl"):
+        cfg = LEAGUES[lg]
+        assert cfg.league_id == 1
+        assert cfg.site_id == 0
+        assert cfg.pbp_style == "hockeytech_b"
+        assert "lscluster.hockeytech.com" in cfg.base_url
 
 
 def test_pwhl_config_matches_known_values():

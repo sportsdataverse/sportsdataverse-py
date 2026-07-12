@@ -83,6 +83,21 @@ from sportsdataverse.baseball.college_baseball import *  # noqa: F401,F403,E402
 from sportsdataverse.baseball.college_softball import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.mch import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.wch import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.echl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.sphl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.chl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.ushl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.bchl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.ajhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.sjhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.ojhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.cchl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.gojhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.mhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.nojhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.vijhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.kijhl import *  # noqa: F401,F403,E402
+from sportsdataverse.hockey.mjhl import *  # noqa: F401,F403,E402
 
 # Top-level QoL helpers (0.0.51+).
 #   * find_team / find_athlete / find_event — name-to-ID resolvers
@@ -144,6 +159,21 @@ _MOVED = {
     "ohl": "hockey.ohl",
     "qmjhl": "hockey.qmjhl",
     "whl": "hockey.whl",
+    "echl": "hockey.echl",
+    "sphl": "hockey.sphl",
+    "chl": "hockey.chl",
+    "ushl": "hockey.ushl",
+    "bchl": "hockey.bchl",
+    "ajhl": "hockey.ajhl",
+    "sjhl": "hockey.sjhl",
+    "ojhl": "hockey.ojhl",
+    "cchl": "hockey.cchl",
+    "gojhl": "hockey.gojhl",
+    "mhl": "hockey.mhl",
+    "nojhl": "hockey.nojhl",
+    "vijhl": "hockey.vijhl",
+    "kijhl": "hockey.kijhl",
+    "mjhl": "hockey.mjhl",
     "ufl": "football.ufl",
     "xfl": "football.xfl",
     "cfl": "football.cfl",

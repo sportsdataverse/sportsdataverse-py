@@ -1603,12 +1603,41 @@ def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     return "\n".join(lines)
 
 
+# The hand-written HockeyTech junior/minor league modules under
+# ``sportsdataverse.hockey.*`` (PWHL is separate — it lives at the top level with a
+# richer loader surface). SINGLE SOURCE OF TRUTH: every codegen list that enumerates
+# these leagues references this, so promoting a league (a hockeytech/_leagues.py entry
+# + a hockey/<lg>/ module) only needs it added HERE — no per-list drift.
+_HOCKEYTECH_MODULE_LEAGUES = [
+    "ahl",
+    "ohl",
+    "whl",
+    "qmjhl",
+    "echl",
+    "sphl",
+    "chl",
+    "ushl",
+    "bchl",
+    "ajhl",
+    "sjhl",
+    "ojhl",
+    "cchl",
+    "gojhl",
+    "mhl",
+    "nojhl",
+    "vijhl",
+    "kijhl",
+    "mjhl",
+]
+
+
 def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
     """Build group → sorted-members mapping from the prefix→group dict.
 
-    Includes HockeyTech hand-written modules (ahl/ohl/whl/qmjhl) under hockey.
+    Includes the hand-written HockeyTech modules (``_HOCKEYTECH_MODULE_LEAGUES``)
+    under hockey.
     """
-    _HOCKEYTECH = ["ahl", "ohl", "qmjhl", "whl"]
+    _HOCKEYTECH = _HOCKEYTECH_MODULE_LEAGUES
     result: dict[str, list[str]] = {}
     for prefix, group in groups_map.items():
         if not group:
@@ -1742,22 +1771,14 @@ _COVERAGE_LEAGUES = [
     "mlb",
     "nhl",
     "pwhl",
-    "ahl",
-    "ohl",
-    "whl",
-    "qmjhl",
+    *_HOCKEYTECH_MODULE_LEAGUES,  # ahl/ohl/whl/qmjhl + the promoted junior/minor leagues
     "odds",
 ]
 
 # Mapping from doc/coverage prefix to actual Python module path for leagues
 # whose module moved under a sport-group container (Task 5+).
 # All other leagues default to f"sportsdataverse.{prefix}".
-_LEAGUE_MODULE: dict[str, str] = {
-    "ahl": "hockey.ahl",
-    "ohl": "hockey.ohl",
-    "whl": "hockey.whl",
-    "qmjhl": "hockey.qmjhl",
-}
+_LEAGUE_MODULE: dict[str, str] = {lg: f"hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES}
 
 _COVERAGE_ALLOWLIST_FILE = ROOT / "tools" / "codegen" / "coverage_allowlist.yaml"
 
@@ -3127,7 +3148,7 @@ def _doc_leagues() -> list[str]:
     prefixes = [lg.prefix for lg in cfg.leagues]
     extra = sorted({ld.league for ld in rel.loaders} - set(prefixes))
     # HockeyTech junior leagues have hand-written modules but no ESPN/loader entries.
-    _HOCKEYTECH_EXTRA = ["ahl", "ohl", "whl", "qmjhl"]
+    _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
     _NONLEAGUE_EXTRA = ["odds"]
