@@ -1,0 +1,15 @@
+schema: college_baseball_re24
+kind: dataframe
+columns:
+- name: base_state
+  type: character
+  description: ''
+- name: outs
+  type: integer
+  description: ''
+- name: run_expectancy
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

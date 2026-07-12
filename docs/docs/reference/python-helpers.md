@@ -18,6 +18,144 @@ Returns a dict with `mode`, `entries`, and `disk_bytes` (only
 populated when mode=filesystem). Cheap — doesn't read the cached
 bodies, just counts + sizes.
 
+### `college_baseball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_baseball_re24}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_re24` fixed to `league="college_baseball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_baseball.college_baseball_re import college_baseball_state, college_baseball_re24
+state = college_baseball_state(raw)
+matrix = college_baseball_re24(state=state)
+```
+
+### `college_baseball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'` {#college_baseball_state}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_state` fixed to `league="college_baseball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `Dict[str, Any]` |  | Raw payload from `espn_college_baseball_game_plays(event_id, return_parsed=False)`. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_baseball.college_baseball_re import college_baseball_state
+state = college_baseball_state(raw)
+```
+
+### `college_baseball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_baseball_wpa}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_wpa` fixed to `league="college_baseball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `results` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_baseball.college_baseball_re import college_baseball_wpa
+wpa = college_baseball_wpa(state=state, results=results)
+```
+
+### `college_softball_re24(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_softball_re24}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_re24` fixed to `league="college_softball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_softball.college_softball_re import college_softball_state, college_softball_re24
+state = college_softball_state(raw)
+matrix = college_softball_re24(state=state)
+```
+
+### `college_softball_state(plays: 'Dict[str, Any]') -> 'pl.DataFrame'` {#college_softball_state}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_state` fixed to `league="college_softball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `Dict[str, Any]` |  | Raw payload from `espn_college_softball_game_plays(event_id, return_parsed=False)`. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_softball.college_softball_re import college_softball_state
+state = college_softball_state(raw)
+```
+
+### `college_softball_wpa(seasons: 'Union[int, List[int], None]' = None, *, state: 'Optional[pl.DataFrame]' = None, results: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#college_softball_wpa}
+
+`sportsdataverse.baseball.college_run_expectancy.college_baseball_wpa` fixed to `league="college_softball"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int], None]` | `None` | See the core function. |
+| `state` | `Optional[DataFrame]` | `None` | See the core function. |
+| `results` | `Optional[DataFrame]` | `None` | See the core function. |
+| `return_as_pandas` | `bool` | `False` | Return `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+see the core function's Returns table.
+
+**Example**
+
+```python
+from sportsdataverse.baseball.college_softball.college_softball_re import college_softball_wpa
+wpa = college_softball_wpa(state=state, results=results)
+```
+
 ### `cricket_expected_runs(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_expected_runs}
 
 Expected remaining runs + run rate from a win-probability-scored state frame.
