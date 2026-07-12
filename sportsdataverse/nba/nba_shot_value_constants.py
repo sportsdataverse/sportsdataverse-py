@@ -13,6 +13,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
+from sportsdataverse._common.metrics import (
+    mae as mae,
+)
 
 
 def points_calibration_error(exp_points: np.ndarray, actual_points: np.ndarray) -> float:
@@ -57,25 +60,6 @@ def split_half_reliability(first_half: np.ndarray, second_half: np.ndarray) -> f
     if a.size < 2:
         return float("nan")
     return float(np.corrcoef(a, b)[0, 1])
-
-
-def mae(a: np.ndarray, b: np.ndarray) -> float:
-    """Mean absolute error between two aligned arrays.
-
-    Args:
-        a: First array.
-        b: Second array.
-
-    Returns:
-        ``mean(|a − b|)``.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.nba.nba_shot_value_constants import mae
-            mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
-    """
-    return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
 
 
 def pps(points: np.ndarray, attempts: np.ndarray) -> float:

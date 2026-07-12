@@ -11,9 +11,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 import numpy as np
-from scipy.stats import rankdata
 
 from sportsdataverse.nba.nba_rapm import DEFAULT_RAPM_ALPHAS
+from sportsdataverse._common.metrics import (
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 #: Synergy's canonical 11 play types (``play_type_nullable`` values), pinned from a
 #: live ``nba_stats_synergyplaytypes`` capture (2023-24 season) -- note ``PRRollMan``
@@ -53,47 +56,6 @@ class PlaytypeConfig:
     ft_points_per_trip: float = 1.53
     min_matchup_poss: float = 25.0
     ridge_alphas: np.ndarray = field(default_factory=lambda: np.asarray(DEFAULT_RAPM_ALPHAS))
-
-
-def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
-    """Spearman rank correlation between two equal-length arrays.
-
-    Args:
-        a: First array.
-        b: Second array, same length as *a*.
-
-    Returns:
-        The Pearson correlation of the rank-transformed arrays.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nba.nba_playtype_constants import spearman_corr
-            spearman_corr(np.array([1, 2, 3]), np.array([10, 20, 30]))
-    """
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
-def mae(a: np.ndarray, b: np.ndarray) -> float:
-    """Mean absolute error between two equal-length arrays.
-
-    Args:
-        a: First array.
-        b: Second array, same length as *a*.
-
-    Returns:
-        ``mean(abs(a - b))``.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nba.nba_playtype_constants import mae
-            mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
-    """
-    return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
 
 
 def sum_consistency_residual(parts: np.ndarray, whole: np.ndarray) -> float:

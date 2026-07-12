@@ -16,53 +16,16 @@ from typing import Dict
 import numpy as np
 import polars as pl
 from scipy.stats import rankdata
+from sportsdataverse._common.metrics import (
+    brier_score as brier_score,
+    log_loss_score as log_loss_score,
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 # --------------------------------------------------------------------------- #
 # validation metrics (numpy-only, no sklearn)
 # --------------------------------------------------------------------------- #
-
-
-def brier_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
-    """Mean squared error between binary outcomes and predicted probabilities.
-
-    Args:
-        y_true: Binary outcome array (0/1).
-        p_pred: Predicted probability array, same length.
-
-    Returns:
-        The Brier score (lower is better).
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nfl.nfl_scheme_constants import brier_score
-            brier_score(np.array([1, 0]), np.array([0.75, 0.25]))
-    """
-    return float(np.mean((np.asarray(p_pred, dtype=float) - np.asarray(y_true, dtype=float)) ** 2))
-
-
-def log_loss_score(y_true: np.ndarray, p_pred: np.ndarray, eps: float = 1e-15) -> float:
-    """Binary cross-entropy of predicted probabilities against outcomes.
-
-    Args:
-        y_true: Binary outcome array (0/1).
-        p_pred: Predicted probability array, same length.
-        eps: Probability clip to avoid log(0).
-
-    Returns:
-        Mean negative log-likelihood (lower is better).
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nfl.nfl_scheme_constants import log_loss_score
-            log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
-    """
-    y = np.asarray(y_true, dtype=float)
-    p = np.clip(np.asarray(p_pred, dtype=float), eps, 1.0 - eps)
-    return float(-np.mean(y * np.log(p) + (1.0 - y) * np.log(1.0 - p)))
 
 
 def auc_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
@@ -89,47 +52,6 @@ def auc_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
         return float("nan")
     ranks = rankdata(np.asarray(p_pred, dtype=float))
     return float((ranks[y == 1].sum() - n_pos * (n_pos + 1) / 2.0) / (n_pos * n_neg))
-
-
-def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
-    """Spearman rank correlation between two arrays.
-
-    Args:
-        a: First array.
-        b: Second array, same length.
-
-    Returns:
-        Rank correlation in [-1, 1].
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nfl.nfl_scheme_constants import spearman_corr
-            spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([2.0, 4.0, 6.0]))
-    """
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
-def mae(a: np.ndarray, b: np.ndarray) -> float:
-    """Mean absolute error between two arrays.
-
-    Args:
-        a: First array.
-        b: Second array, same length.
-
-    Returns:
-        Mean of ``|a - b|``.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nfl.nfl_scheme_constants import mae
-            mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
-    """
-    return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
 
 
 def calibration_table(y_true: np.ndarray, p_pred: np.ndarray, n_bins: int = 10) -> pl.DataFrame:

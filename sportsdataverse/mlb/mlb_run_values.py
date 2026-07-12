@@ -31,9 +31,12 @@ from typing import Any, List, Union
 
 import numpy as np
 import polars as pl
-from scipy.stats import rankdata
 
 from sportsdataverse.mlb.mlb_statcast_extra import mlb_statcast_search
+from sportsdataverse._common.metrics import (
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 #: Documented linear-weight fallback (used only when ``delta_run_exp`` is
 #: absent from the feed -- pre-2015 seasons / MiLB). Values follow Tango,
@@ -67,48 +70,6 @@ def pearson_corr(a: "np.ndarray", b: "np.ndarray") -> float:
     arr_a = np.asarray(a, dtype=float)
     arr_b = np.asarray(b, dtype=float)
     return float(np.corrcoef(arr_a, arr_b)[0, 1])
-
-
-def spearman_corr(a: "np.ndarray", b: "np.ndarray") -> float:
-    """Spearman rank correlation between two 1-D arrays.
-
-    Args:
-        a: First sample array.
-        b: Second sample array, same length as ``a``.
-
-    Returns:
-        float: Spearman's rho (Pearson correlation of the ranks).
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.mlb.mlb_run_values import spearman_corr
-            rho = spearman_corr(mine["oaa"].to_numpy(), sav["outs_above_average"].to_numpy())
-    """
-    arr_a = np.asarray(a, dtype=float)
-    arr_b = np.asarray(b, dtype=float)
-    return float(np.corrcoef(rankdata(arr_a), rankdata(arr_b))[0, 1])
-
-
-def mae(a: "np.ndarray", b: "np.ndarray") -> float:
-    """Mean absolute error between two 1-D arrays.
-
-    Args:
-        a: Predicted / modeled array.
-        b: Reference / observed array, same length as ``a``.
-
-    Returns:
-        float: ``mean(abs(a - b))``.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.mlb.mlb_run_values import mae
-            gap = mae(deciles["mean_pred"].to_numpy(), deciles["mean_actual"].to_numpy())
-    """
-    arr_a = np.asarray(a, dtype=float)
-    arr_b = np.asarray(b, dtype=float)
-    return float(np.mean(np.abs(arr_a - arr_b)))
 
 
 _COUNT_RV_SCHEMA = {"balls": pl.Int64, "strikes": pl.Int64, "strike_run_value": pl.Float64}
