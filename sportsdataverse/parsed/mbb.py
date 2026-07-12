@@ -235,6 +235,7 @@ from sportsdataverse.mbb import build_efficiency_margins as build_efficiency_mar
 from sportsdataverse.mbb import build_exp_3p as build_exp_3p  # noqa: F401
 from sportsdataverse.mbb import build_lineup_cli_array as build_lineup_cli_array  # noqa: F401
 from sportsdataverse.mbb import build_lineup_id as build_lineup_id  # noqa: F401
+from sportsdataverse.mbb import build_mbb_season_wp as build_mbb_season_wp  # noqa: F401
 from sportsdataverse.mbb import build_net_points as build_net_points  # noqa: F401
 from sportsdataverse.mbb import build_new_player_list as build_new_player_list  # noqa: F401
 from sportsdataverse.mbb import build_o_rtg as build_o_rtg  # noqa: F401
@@ -589,6 +590,7 @@ __all__ = [
     "build_exp_3p",
     "build_lineup_cli_array",
     "build_lineup_id",
+    "build_mbb_season_wp",
     "build_net_points",
     "build_new_player_list",
     "build_o_rtg",

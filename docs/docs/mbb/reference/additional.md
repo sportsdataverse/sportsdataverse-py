@@ -2674,6 +2674,37 @@ build_lineup_id([PlayerCodeId("BbBob", PlayerId("Bob")), PlayerCodeId("AaAl", Pl
 # LineupId("AaAl_BbBob")
 ```
 
+### `build_mbb_season_wp(season: 'int', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_mbb_season_wp}
+
+A season's play-by-play with win-probability columns joined in.
+
+Loads the season's play-by-play, schedule, and team boxscores, builds a
+leakage-free weekly as-of pregame anchor per game, scores every play through
+the bundled in-game win-probability artifact, and returns the full
+`load_mbb_pbp` frame with `pregame_home_prob` + `home_win_prob`
+appended -- the enrich-in-place shape that overwrites the season's
+`play_by_play_<season>.parquet` release asset.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season year (e.g. `2024`); bounded by `load_mbb_pbp` release availability (`>= 2002`). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the loaders + constants). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The season's `load_mbb_pbp` frame (every column preserved) with the two WP_COLS` appended (both `Float64`), sorted by `game_id` then `game_play_number`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb import build_mbb_season_wp
+wp = build_mbb_season_wp(2024)
+wp.select("game_id", "game_play_number", "home_win_prob").head()
+```
+
 ### `build_net_points(player_rapm_and_poss_pct: 'LineupStatSet', ortg: 'ORtgDiagnostics', drtg: 'DRtgDiagnostics', avg_eff: 'float', scale_type: "Literal['T%', 'P%', '/G']", num_games: 'float' = 1, missing_game_adjustment: 'float' = 1) -> 'NetPoints'` {#build_net_points}
 
 Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown.

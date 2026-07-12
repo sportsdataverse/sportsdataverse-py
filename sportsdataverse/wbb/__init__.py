@@ -50,3 +50,4 @@ from sportsdataverse.wbb.wbb_team_ratings import *
 from sportsdataverse.wbb.wbb_team_roster import *
 from sportsdataverse.wbb.wbb_team_stats import *
 from sportsdataverse.wbb.wbb_teams import *
+from sportsdataverse.wbb.wbb_win_prob import *
