@@ -567,4 +567,8 @@ files = [
     "sportsdataverse/cricket/cricket_model_constants.py",
     "sportsdataverse/cricket/cricket_win_prob.py",
     "sportsdataverse/cricket/cricket_wpa.py",
+    "sportsdataverse/baseball/college_baseball_constants.py",
+    "sportsdataverse/baseball/college_run_expectancy.py",
+    "sportsdataverse/baseball/college_baseball/college_baseball_re.py",
+    "sportsdataverse/baseball/college_softball/college_softball_re.py",
 ]
