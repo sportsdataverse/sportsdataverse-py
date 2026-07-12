@@ -162,6 +162,15 @@ def test_nan_pregame_anchor_coerced_to_fallback(monkeypatch):
     assert out.get_column("home_win_prob").is_nan().sum() == 0
 
 
+def test_empty_team_box_falls_back_without_crashing():
+    """A season with pbp but no boxscores (empty team_box) must not crash."""
+    out = _compile_season_wp(_pbp(), _schedule(), pl.DataFrame())
+    fallback = win_prob_from_margin(predict_margin(0.0, 0.0, neutral=False), league="mens")
+    assert out.height == _pbp().height
+    assert out.get_column("pregame_home_prob").unique().to_list() == [fallback]
+    assert out.get_column("home_win_prob").is_nan().sum() == 0
+
+
 def test_empty_pbp_returns_unchanged():
     empty = pl.DataFrame()
     out = _compile_season_wp(empty, _schedule(), _team_box())

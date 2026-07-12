@@ -76,6 +76,12 @@ def _pregame_probs(schedule: pl.DataFrame, team_box: pl.DataFrame, *, league: st
         ``game_id`` (Utf8) + ``pregame_home_prob`` (Float64). Games without an
         as-of rating are absent (the caller supplies the fallback anchor).
     """
+    # Some historical seasons publish pbp but no schedule/boxscore (an empty,
+    # column-less frame). Without games or boxscores no rating is possible, so
+    # short-circuit -> every game takes the fallback anchor downstream.
+    if schedule.is_empty() or team_box.is_empty() or "game_date" not in team_box.columns:
+        return pl.DataFrame(schema=_PREGAME_SCHEMA)
+
     results = schedule.filter(pl.col("home_score").is_not_null() & pl.col("away_score").is_not_null())
     if results.height == 0:
         return pl.DataFrame(schema=_PREGAME_SCHEMA)
