@@ -249,6 +249,34 @@ def test_run_value_reexport_matches_manual():
     assert abs(run_value("___", 0, "1__", 0, 0, m) - 0.38) < 1e-9
 
 
+def test_run_value_accepts_fitted_college_matrix():
+    # The exported run_value must work against THIS module's own fitted
+    # matrix (column "run_expectancy"), not just an MLB-shaped frame
+    # (column "re") -- the interop footgun the raw re-export shipped with.
+    with open("tests/fixtures/league_ports/college_baseball_game_plays.json") as f:
+        raw = json.load(f)
+    state = college_baseball_state(raw, league="college_baseball")
+    matrix = college_baseball_re24(league="college_baseball", state=state)
+    re0 = matrix.filter((pl.col("base_state") == "___") & (pl.col("outs") == 0))["run_expectancy"][0]
+    re1 = matrix.filter((pl.col("base_state") == "___") & (pl.col("outs") == 1))["run_expectancy"][0]
+    assert abs(run_value("___", 0, "___", 1, 0, matrix) - (re1 - re0)) < 1e-9
+
+
+def test_base_encoding_second_and_third_distinct():
+    # A pre_2 <-> pre_3 encoding swap would slip through every other test:
+    # put a runner on ONLY second, then ONLY third, and exact-assert "_2_"
+    # and "__3" as the next PA's pre-play state.
+    payload = _payload(
+        [
+            _play_result(4001, 1, inning=1, half="Top", outs=0, away=0, home=0, on_second=True),
+            _play_result(4002, 1, inning=1, half="Top", outs=0, away=0, home=0, on_third=True),
+            _play_result(4003, 1, inning=1, half="Top", outs=1, away=0, home=0),
+        ]
+    )
+    rows = college_baseball_state(payload, league="college_baseball").sort("play_seq").to_dicts()
+    assert [r["base_state"] for r in rows] == ["___", "_2_", "__3"]
+
+
 def test_college_baseball_wpa_telescopes_to_terminal_outcome():
     with open("tests/fixtures/league_ports/college_baseball_game_plays.json") as f:
         raw = json.load(f)
@@ -258,11 +286,11 @@ def test_college_baseball_wpa_telescopes_to_terminal_outcome():
 
     assert wpa.height == state.height
     assert wpa["wpa"].null_count() == 0
-    # Single-perspective (home) WPA telescopes to (final_home_win_exp - 0.5):
-    # home won here, so the full-game sum (including the synthetic terminal
-    # anchor folded into the diff of the LAST real play) is bounded by 0.5 --
-    # NOT +-1, which would be the two-perspective (home + away) total.
-    assert abs(wpa["wpa"].sum()) <= 0.5 + 1e-6
+    # Single-perspective (home) WPA telescopes EXACTLY to
+    # final_home_win_exp - 0.5: the synthetic terminal anchor's wpa (the
+    # jump to the actual 1.0/0.0 outcome) is folded into the last real PA's
+    # wpa, and home won here, so the game sum is exactly +0.5.
+    assert abs(wpa["wpa"].sum() - 0.5) < 1e-9
 
 
 def test_college_baseball_wpa_empty_inputs_return_typed_empty_frame():

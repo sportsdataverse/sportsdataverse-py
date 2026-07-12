@@ -37,14 +37,12 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.baseball.college_baseball_constants import get_college_baseball_constants
-from sportsdataverse.mlb.mlb_run_expectancy import run_value as _mlb_run_value  # noqa: F401 -- re-exported below
+from sportsdataverse.mlb.mlb_run_expectancy import run_value as _mlb_run_value
 from sportsdataverse.mlb.mlb_win_expectancy import (
     _lookup_we,  # deliberate cross-module reuse of the sparse-cell fallback lookup -- see module docstring
     build_we_table,
     mlb_win_probability_added,
 )
-
-run_value = _mlb_run_value  # noqa: F401 -- the exported run-value denominator; reused verbatim, not re-implemented
 
 _STATE_SCHEMA = {
     "game_id": pl.Utf8,
@@ -77,11 +75,52 @@ def _extract_game_id(raw: Dict[str, Any]) -> Optional[str]:
     return m.group(1) if m else None
 
 
+def run_value(
+    before_state: str,
+    before_outs: int,
+    after_state: str,
+    after_outs: int,
+    runs_on_play: int,
+    matrix: pl.DataFrame,
+) -> float:
+    """Run value of a single event: ``re[after] - re[before] + runs_on_play``.
+
+    Delegates to :func:`sportsdataverse.mlb.mlb_run_expectancy.run_value`
+    (the RE24 math is reused, not re-implemented); the only added behavior
+    is renaming this module's ``run_expectancy`` matrix column to the MLB
+    function's expected ``re`` so a fitted :func:`college_baseball_re24`
+    output works directly.
+
+    Args:
+        before_state: 3-char base occupancy before the event.
+        before_outs: Outs before the event (0-2); ``>= 3`` treated as 0 RE.
+        after_state: 3-char base occupancy after the event.
+        after_outs: Outs after the event; ``>= 3`` (inning over) treated as 0 RE.
+        runs_on_play: Runs scored on the event.
+        matrix: A :func:`college_baseball_re24` output (or any frame with
+            ``base_state``/``outs`` and ``run_expectancy`` or ``re`` columns).
+
+    Returns:
+        float: the run value of the event.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.baseball.college_run_expectancy import college_baseball_re24, run_value
+            matrix = college_baseball_re24(league="college_baseball", state=state)
+            rv = run_value("___", 0, "1__", 0, 0, matrix)
+    """
+    if "run_expectancy" in matrix.columns:
+        matrix = matrix.rename({"run_expectancy": "re"})
+    return _mlb_run_value(before_state, before_outs, after_state, after_outs, runs_on_play, matrix)
+
+
 def college_baseball_state(plays: Dict[str, Any], *, league: str) -> pl.DataFrame:
     """Reconstruct pre-play base-out state from an ESPN college game_plays payload.
 
-    Within each ``(game_id, inning, half)`` half-inning, ordered by the
-    payload's own play order: ``base_state``/``outs`` before PA *i* are the
+    Within each ``(game_id, inning, half)`` half-inning, ordered by numeric
+    ``atBatId`` (assumed monotone in true game order, as observed in the
+    ESPN captures): ``base_state``/``outs`` before PA *i* are the
     post-occupancy / out-count of PA *i-1* (empty/0 outs at the half's first
     PA). ``runs_before``/``runs_after`` are the game's cumulative (both
     teams) run total immediately before/after the PA -- the score carries
@@ -296,7 +335,8 @@ def college_baseball_wpa(
 
     Reuses the T6.4 machinery by reference: :func:`college_baseball_re24` for
     ``re_before``/``re_after``/``run_value`` (``re_after - re_before +
-    runs_on_play``, via :func:`sportsdataverse.mlb.mlb_run_expectancy.run_value`),
+    runs_on_play`` -- the same formula as :func:`run_value`, computed inline
+    (vectorized) over the frame rather than per-event),
     and :func:`sportsdataverse.mlb.mlb_win_expectancy.build_we_table` /
     ``mlb_win_probability_added`` for ``wpa`` -- the empirical win-expectancy
     bucketing, sparse-cell logistic fallback, and per-play diff are the exact
@@ -399,7 +439,18 @@ def college_baseball_wpa(
         ],
         how="vertical",
     )
-    wpa = mlb_win_probability_added(we_full)
+    wpa = mlb_win_probability_added(we_full).sort(["game_id", "at_bat_index"])
+    # The synthetic terminal row (at_bat_index = last real PA + 1) carries
+    # the final jump to the actual 1.0/0.0 outcome; fold its wpa into the
+    # last real PA before the play_seq join below (which only spans real
+    # PAs) so the game WPA sum genuinely telescopes to final_outcome - 0.5.
+    terminal_idx = pl.col("at_bat_index").max().over("game_id")
+    wpa = wpa.with_columns(
+        pl.when(pl.col("at_bat_index") == terminal_idx - 1)
+        .then(pl.col("wpa") + pl.col("wpa").shift(-1, fill_value=0.0).over("game_id"))
+        .otherwise(pl.col("wpa"))
+        .alias("wpa")
+    ).filter(pl.col("at_bat_index") != terminal_idx)
 
     result = out.join(wpa.rename({"at_bat_index": "play_seq"}), on=["game_id", "play_seq"], how="left").select(
         "game_id", "play_seq", "re_before", "re_after", "run_value", "wpa"

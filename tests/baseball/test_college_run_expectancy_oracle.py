@@ -199,6 +199,11 @@ def test_run_value_round_trip_identity(league):
     runs scored minus the anchor RE (each half starts ___/0-out and ends at
     RE 0), so over the game sum(run_value) == total_runs - n_halves * anchor.
 
+    Scope: this gate guards the runs-telescoping arithmetic and the
+    half-boundary -> 0-RE convention (re_after of a half's last PA), NOT the
+    bases/outs reconstruction -- a base-encoding swap passes it untouched;
+    that is what gates (a)/(b) and the TDD encoding tests are for.
+
     Gate (d): the state<->results oracle join asserts join-key dtype
     equality and height >= observed N before anything else."""
     state, matrix, spec = _fitted(league)
@@ -210,7 +215,7 @@ def test_run_value_round_trip_identity(league):
     assert wpa["run_value"].null_count() == 0
     assert wpa["wpa"].null_count() == 0
 
-    n_halves = state.select("inning", "half").unique().height
+    n_halves = state.select("game_id", "inning", "half").unique().height
     assert n_halves >= spec["n_halves"]
     total_runs = state["runs_after"].max()
     assert total_runs == spec["total_runs"]
