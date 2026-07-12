@@ -564,4 +564,5 @@ files = [
     "sportsdataverse/nhl/nhl_zone_transitions.py",
     "sportsdataverse/nhl/nhl_edge_value.py",
     "sportsdataverse/nhl/pwhl_microstat.py",
+    "sportsdataverse/cricket/cricket_model_constants.py",
 ]
