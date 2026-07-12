@@ -441,7 +441,7 @@ def main() -> None:
     )
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(header + yaml_str, encoding="utf-8")
+    OUTPUT.write_text(header + yaml_str, encoding="utf-8", newline="\n")
     print(f"\nWrote {OUTPUT}")
 
 
