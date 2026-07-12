@@ -240,6 +240,7 @@ from sportsdataverse.wbb import build_productivity as build_productivity  # noqa
 from sportsdataverse.wbb import build_strength_adjusted_stats as build_strength_adjusted_stats  # noqa: F401
 from sportsdataverse.wbb import build_sub_error as build_sub_error  # noqa: F401
 from sportsdataverse.wbb import build_tidy_player_context as build_tidy_player_context  # noqa: F401
+from sportsdataverse.wbb import build_wbb_season_wp as build_wbb_season_wp  # noqa: F401
 from sportsdataverse.wbb import build_weak_prior_from_rapm as build_weak_prior_from_rapm  # noqa: F401
 from sportsdataverse.wbb import cached_path as cached_path  # noqa: F401
 from sportsdataverse.wbb import calc_collinearity_diag as calc_collinearity_diag  # noqa: F401
@@ -583,6 +584,7 @@ __all__ = [
     "build_strength_adjusted_stats",
     "build_sub_error",
     "build_tidy_player_context",
+    "build_wbb_season_wp",
     "build_weak_prior_from_rapm",
     "cached_path",
     "calc_collinearity_diag",

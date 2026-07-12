@@ -3329,6 +3329,31 @@ from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context
 ctx = build_tidy_player_context(box_lineup)
 ```
 
+### `build_wbb_season_wp(season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_wbb_season_wp}
+
+Per-play home win probability for a full WBB season (the WP release table).
+
+Delegates to `sportsdataverse.mbb.mbb_win_prob.build_mbb_season_wp`
+with `league="womens"` (WBB loaders + women's constants).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season year (e.g. `2024`); bounded by `load_wbb_pbp` release availability. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per play: `season, game_id, game_play_number, game_date, home_team_name, away_team_name, home_score, away_score, pregame_home_prob, home_win_prob` -- see the mbb core for the contract.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import build_wbb_season_wp
+wp = build_wbb_season_wp(2024)
+```
+
 ### `build_weak_prior_from_rapm(rapm_results: 'list[float]', off_or_def: 'str') -> 'list[dict[str, float]]'` {#build_weak_prior_from_rapm}
 
 Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts.
