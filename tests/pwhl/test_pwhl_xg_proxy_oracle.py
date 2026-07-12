@@ -360,14 +360,28 @@ def test_pwhl_heldout_coords_calibration(backtest: pl.DataFrame) -> None:
 # the R4 strength/clock columns; a legacy frame falls back to distance/angle.
 # ---------------------------------------------------------------------------
 
-_FULL_FEATURES = ("shot_distance", "shot_angle", "rebound", "is_home", "is_pp", "is_sh", "empty_net_for")
+_FULL_FEATURES = (
+    "shot_distance",
+    "shot_angle",
+    "rebound",
+    "is_home",
+    "is_pp",
+    "is_sh",
+    "empty_net_for",
+    "is_wrist",
+    "is_snap",
+    "is_slap",
+    "is_backhand",
+    "is_tip",
+)
 
 
 def _synth_strength_pbp(n: int = 300) -> pl.DataFrame:
-    """Deterministic shot log carrying the R4 strength + clock columns."""
+    """Deterministic shot log carrying the R4 strength + clock + shot-type columns."""
     return pl.DataFrame(
         {
             "event": ["shot"] * n,
+            "event_type": [["Wrist", "Snap", "Slap", "Backhand", "Tip", "Default"][i % 6] for i in range(n)],
             "goal": [1 if i % 7 == 0 else 0 for i in range(n)],  # ~14%, two classes
             "x_coord": [40.0 + (i % 50) for i in range(n)],  # varying distance 40..89 ft
             "y_coord": [0.0] * n,
@@ -387,7 +401,7 @@ def test_coord_xg_uses_strength_features_when_present() -> None:
 
     m = fit_pwhl_coord_xg(_synth_strength_pbp())
     assert m.model is not None
-    assert m.features == _FULL_FEATURES, f"expected 6-feature model, got {m.features}"
+    assert m.features == _FULL_FEATURES, f"expected full-feature model, got {m.features}"
     p = m.predict(_synth_strength_pbp())
     assert len(p) == 300
     assert p.min() >= 0.0 and p.max() <= 1.0

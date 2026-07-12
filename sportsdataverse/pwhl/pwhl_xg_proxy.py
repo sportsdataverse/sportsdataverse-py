@@ -330,6 +330,20 @@ def _build_xg_features(
             empty_net_for=(sk_opp >= 6).fill_null(False).cast(pl.Int64),
         )
         avail += ["is_home", "is_pp", "is_sh", "empty_net_for"]
+    if "event_type" in f.columns:
+        # Shot type -- PWHL's `event_type` on shot rows IS the shot type
+        # (Wrist/Snap/Slap/Backhand/Tip; "Default" => all zero). The NHL booster's
+        # shot-type one-hots, derived for free from the feed (T5 Phase 4). Self-
+        # contained (no prior-event context), so safe on the shots-only predict path.
+        et = pl.col("event_type")
+        f = f.with_columns(
+            is_wrist=(et == "Wrist").cast(pl.Int64),
+            is_snap=(et == "Snap").cast(pl.Int64),
+            is_slap=(et == "Slap").cast(pl.Int64),
+            is_backhand=(et == "Backhand").cast(pl.Int64),
+            is_tip=(et == "Tip").cast(pl.Int64),
+        )
+        avail += ["is_wrist", "is_snap", "is_slap", "is_backhand", "is_tip"]
     feats = list(want) if want is not None else avail
     mats = [(f[c].cast(pl.Float64).fill_null(0.0).to_numpy() if c in f.columns else np.zeros(f.height)) for c in feats]
     return np.column_stack(mats), tuple(feats), f
