@@ -181,15 +181,23 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
                     xgf_home = float(home_events["xg"].sum() or 0.0)
                 if away_events.height > 0:
                     xgf_away = float(away_events["xg"].sum() or 0.0)
+                # .mode() returns ALL tied-most-frequent values in an unspecified
+                # order, so a bare .mode()[0] is nondeterministic when a window has two
+                # equally-common goalies / strength states (e.g. a line change or
+                # goalie pull mid-interval). Sort first and take the smallest as a
+                # stable tiebreak: without this, ~9/1241 stints' strength_state flip
+                # run-to-run (e.g. "5v4" vs "5v6"), which flips which stints survive a
+                # strength_states=["5v5"] filter and makes the whole RAPM/WAR fit
+                # nonreproducible.
                 if "home_goalie_id" in window.columns:
                     hg = window["home_goalie_id"].drop_nulls()
-                    home_goalie = int(hg.mode()[0]) if hg.len() > 0 else None
+                    home_goalie = int(hg.mode().sort()[0]) if hg.len() > 0 else None
                 if "away_goalie_id" in window.columns:
                     ag = window["away_goalie_id"].drop_nulls()
-                    away_goalie = int(ag.mode()[0]) if ag.len() > 0 else None
+                    away_goalie = int(ag.mode().sort()[0]) if ag.len() > 0 else None
                 if "strength_state" in window.columns:
                     ss = window["strength_state"].drop_nulls()
-                    strength_state = str(ss.mode()[0]) if ss.len() > 0 else None
+                    strength_state = str(ss.mode().sort()[0]) if ss.len() > 0 else None
             rows.append(
                 {
                     "game_id": gid,

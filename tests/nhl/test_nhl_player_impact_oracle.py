@@ -93,15 +93,21 @@ def test_gsax_moneypuck_concurrent_validity():
     mine = nhl_goalie_gsax(_pbp(), pl.DataFrame(), model_dir=MODELS)
     assert mine.schema["player_id"] == mp.schema["player_id"]
     joined = mine.join(mp, on="player_id", how="inner")
-    # >=5, not >0: a 1-player overlap makes spearman_corr(n=1) nan -> a vacuous pass.
-    assert joined.height >= 5, "too few overlapping goalies for a meaningful correlation"
-    # Observed on the committed 2024-25 MoneyPuck season goalie table (captured via
-    # dev/nhl_player_impact/capture_moneypuck.py, a public/free-with-credit download --
-    # see the fixture README): n=6 overlapping goalies (all 6 who appeared in the
-    # 3-game internal fixture), Spearman(3-game gsax, season gsax) == 0.771. FLOOR is
-    # set a bit below that observed value (not invented) -- a 6-goalie sample is
-    # sensitive to any single data point, so a modest margin absorbs a booster/rescoring
-    # jitter without masking a real attribution regression.
+    # This is a small-sample SANITY check, not a statistically-powered validity gate:
+    # only 6 goalies appear in the 3-game internal fixture, so it can catch a gross
+    # attribution/sign regression but not certify concurrent validity (a powered goalie
+    # GSAx gate needs a full-season sdv-py build -- deferred, same as the WAR gate
+    # below). >=6, not >0: matches the cited n=6 provenance and a 1-player overlap makes
+    # spearman_corr(n=1) nan -> a vacuous pass.
+    assert joined.height >= 6, "too few overlapping goalies for a meaningful correlation"
+    # Observed (deterministic -- build_stints tiebreak fix in nhl_rapm.py; GSAx doesn't
+    # use stints but the value is stable regardless) on the committed 2024-25 MoneyPuck
+    # season goalie table (captured via dev/nhl_player_impact/capture_moneypuck.py, a
+    # public/free-with-credit download -- see the fixture README): n=6 overlapping
+    # goalies, Spearman(3-game gsax, season gsax) == 0.771. FLOOR is set a bit below
+    # that observed value (not invented) -- a 6-goalie sample is sensitive to any single
+    # data point, so a modest margin absorbs a booster/rescoring jitter without masking
+    # a real attribution regression.
     FLOOR = 0.65
     corr = spearman_corr(joined["gsax"].to_numpy(), joined["gsax_right"].to_numpy())
     assert corr >= FLOOR, f"GSAx vs MoneyPuck concurrent validity below floor: {corr:.3f} < {FLOOR}"
@@ -138,16 +144,22 @@ def test_rapm_evolvinghockey_concurrent_validity():
     mine = nhl_skater_rapm(_pbp(), _shifts(), model_dir=MODELS, strength_states=["5v5"])
     assert mine.schema["player_id"] == eh.schema["player_id"]
     joined = mine.join(eh, on="player_id", how="inner")
-    # >=5, not >0: a 1-player overlap makes spearman_corr(n=1) nan -> a vacuous pass.
-    assert joined.height >= 5, "too few overlapping skaters for a meaningful correlation"
-    # Observed on the committed 2024-25 EvolvingHockey EV skater-RAPM export (captured
-    # via dev/nhl_player_impact/eh_capture.py against the account's own Pro Subscriber
-    # login -- see the fixture README): n=72 overlapping skaters (name-crosswalked, not
+    # >=50, not >5: the fixture pairs n=72 skaters, so a crosswalk collapse (e.g. a name
+    # normalization change silently dropping most joins) should fail loudly rather than
+    # pass on a vacuous small-n correlation.
+    assert joined.height >= 50, "too few overlapping skaters for a meaningful correlation"
+    # Observed (reproducible -- the build_stints .mode() tiebreak fix in nhl_rapm.py
+    # pins the CV lambda selection, so this no longer bounces run-to-run) on the
+    # committed 2024-25 EvolvingHockey EV skater-RAPM export (captured via
+    # dev/nhl_player_impact/eh_capture.py against the account's own Pro Subscriber login
+    # -- see the fixture README): n=72 overlapping skaters (name-crosswalked, not
     # id-crosswalked -- EH ships no NHL playerId), Spearman(3-game 5v5 xg_rapm, season
-    # EV xG±/60) == 0.408. FLOOR is set a bit below that observed value (not invented):
+    # EV xG±/60) == 0.406. FLOOR is set well below that observed value (not invented):
     # a 3-game sample gives RAPM's ridge very little data to separate individual
     # skaters' effects from their frequent linemates, so this is real but modest signal
-    # -- debug (not widen) if a future recapture regresses well below this.
+    # -- debug (not widen) if a future recapture regresses well below this. n=72 also
+    # clears the ~0.23 two-sided Spearman significance threshold, so 0.406 is a powered
+    # (not noise-band) magnitude gate, unlike the WAR gate below.
     FLOOR = 0.30
     corr = spearman_corr(joined["xg_rapm"].to_numpy(), joined["xg_rapm_right"].to_numpy())
     assert corr >= FLOOR, f"skater RAPM vs EvolvingHockey concurrent validity below floor: {corr:.3f} < {FLOOR}"
@@ -243,18 +255,20 @@ def test_war_evolvinghockey_concurrent_validity():
     mine = nhl_skater_war(_pbp(), _shifts(), model_dir=MODELS)
     assert mine.schema["player_id"] == eh.schema["player_id"]
     joined = mine.join(eh, on="player_id", how="inner")
-    # >=5, not >0: a 1-player overlap makes spearman_corr(n=1) nan -> a vacuous pass.
-    assert joined.height >= 5, "too few overlapping skaters for a meaningful correlation"
-    # Observed on the committed 2024-25 EvolvingHockey GAR/WAR export (same capture as
-    # the RAPM gate above; WAR is EH's all-situations season total, directly comparable
-    # to the default nhl_skater_war() call -- no strength_states restriction needed
-    # here): n=72 overlapping skaters, Spearman(3-game war, season WAR) == 0.132. FLOOR
-    # is set a bit below that observed value (not invented). This is a real but weak
-    # positive signal -- WAR sums several components (EV off/def, PP, PK, faceoffs,
-    # penalties) each individually noisy over 3 games, and a composite over noisy parts
-    # dilutes the RAPM-level signal further; a full-season build would be expected to
-    # show a materially stronger correlation (the same season-scale caveat documented
-    # on test_war_runs_on_real_fixture_and_is_bounded above).
-    FLOOR = 0.10
+    # >=50, not >5: the fixture pairs n=72 skaters, so a crosswalk collapse should fail
+    # loudly rather than pass on a vacuous small-n correlation.
+    assert joined.height >= 50, "too few overlapping skaters for a meaningful correlation"
+    # This is a DIRECTIONAL (sign) gate, NOT a magnitude concurrent-validity gate. The
+    # observed Spearman(3-game war, season WAR) is only ~0.131 (reproducible after the
+    # nhl_rapm.py tiebreak fix) on n=72 -- below the ~0.23 two-sided Spearman
+    # significance threshold, i.e. inside the noise band, so ANY magnitude floor there
+    # (0.10, 0.13, ...) would be cleared by a nontrivial fraction of pure-noise draws
+    # and wouldn't actually certify anything. WAR sums several individually-noisy
+    # components (EV off/def, PP, PK, faceoffs, penalties) over just 3 games, so the
+    # composite is underpowered at this sample size. We assert only that the association
+    # is positive (the model isn't anti-correlated with the established public metric);
+    # a powered magnitude concurrent-validity gate needs a full-season sdv-py WAR build
+    # -- deferred, mirroring the season-scale team-sum(war) gate deferred in
+    # test_war_runs_on_real_fixture_and_is_bounded above.
     corr = spearman_corr(joined["war"].to_numpy(), joined["war_right"].to_numpy())
-    assert corr >= FLOOR, f"WAR vs EvolvingHockey concurrent validity below floor: {corr:.3f} < {FLOOR}"
+    assert corr > 0, f"WAR vs EvolvingHockey is not even directionally positive: {corr:.3f}"

@@ -123,6 +123,11 @@ def build() -> pl.DataFrame:
     )
     assert out.schema == pl.Schema(_EH_SKATERS_SCHEMA), out.schema
     assert out["player_id"].n_unique() == out.height, "duplicate player_id after crosswalk join"
+    # Anchored on the observed 72-skater match. If a future capture's name crosswalk
+    # shrinks the join (e.g. an EH name-format change or a normalization regression), the
+    # oracle gates' >=50 guards would still pass on a diminished sample -- fail the BUILD
+    # loudly here instead so the fixture never silently ships a degraded overlap.
+    assert out.height >= 60, f"EH crosswalk match collapsed to {out.height} (<60) -- investigate name join"
     return out
 
 

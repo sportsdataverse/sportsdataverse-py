@@ -90,11 +90,30 @@ concurrent-validity assertions against these real fixtures (`test_gsax_moneypuck
 concurrent_validity`, `test_rapm_evolvinghockey_concurrent_validity`,
 `test_war_evolvinghockey_concurrent_validity` in `test_nhl_player_impact_oracle.py`) --
 each `pytest.skip`s (rather than fakes a pass) only if a fixture ever reverts to zero
-rows. Observed correlations (documented in each gate, floors set a bit below, never
-invented): GSAx vs MoneyPuck Spearman 0.771 (n=6 goalies); skater RAPM (5v5) vs EH EV
-Spearman 0.408 (n=72); WAR vs EH WAR Spearman 0.132 (n=72, a real but modest signal --
-a 3-game sample gives RAPM's ridge and the multi-component WAR composite little data to
-separate individual skaters from their frequent linemates).
+rows. Observed correlations (documented in each gate, magnitude floors set a bit below,
+never invented; reproducible after the `build_stints` `.mode()` tiebreak fix in
+`nhl_rapm.py` -- see below):
+
+- **GSAx vs MoneyPuck**: Spearman **0.771** (n=6 goalies). A small-sample **sanity**
+  check (only 6 goalies in the 3-game fixture), gated at floor 0.65 -- catches a gross
+  attribution/sign regression, not a powered validity certification.
+- **skater RAPM (5v5) vs EH EV**: Spearman **0.406** (n=72), gated at floor 0.30. n=72
+  clears the Spearman significance threshold, so this is a powered magnitude gate.
+- **WAR vs EH WAR**: Spearman **0.132** (n=72). This is inside the noise band at n=72
+  (below the ~0.23 two-sided significance threshold), so its gate is a **directional
+  (sign) check** (`corr > 0`), NOT a magnitude floor -- WAR sums several individually-
+  noisy components over just 3 games, and a powered magnitude concurrent-validity gate
+  needs a full-season sdv-py WAR build (deferred, mirroring the season-scale
+  team-Σ`war` gate already deferred in `test_war_runs_on_real_fixture_and_is_bounded`).
+
+**Reproducibility**: the RAPM/WAR fit is deterministic. An earlier version bounced
+run-to-run (RAPM ρ 0.407-0.434, WAR ρ 0.122-0.157) because `build_stints` picked a
+window's modal `strength_state`/goalie via a bare `.mode()[0]`, which returns tied-most-
+frequent values in an unspecified order -- ~9/1241 stints' `strength_state` flipped
+(e.g. `5v4`↔`5v6`) between runs, flipping which stints survive the `strength_states=
+["5v5"]` filter and thus which λ the CV selects. Fixed at the source with a deterministic
+`.mode().sort()[0]` tiebreak (`nhl_rapm.py`), so the observed correlations above are now
+stable across runs.
 
 Refresh procedure: re-run `dev/nhl_player_impact/capture_moneypuck.py` (no auth) and/or
 `dev/nhl_player_impact/eh_capture.py` + `build_eh_fixture.py` (needs the account's own
