@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import glob as _glob
 import json
 import os
 from dataclasses import dataclass, field
@@ -109,6 +110,36 @@ def load_schema(name: str) -> dict[str, str]:
     return json.loads(path.read_text())
 
 
+def _read_parquet_glob(glob_expanded: str) -> pl.DataFrame:
+    """Read a (possibly multi-file) parquet glob into one frame.
+
+    ``pl.read_parquet`` concatenates a multi-file glob with a *strict* vertical
+    concat that rejects per-file dtype divergence: a sparse column that is
+    all-null in one season's file (polars writes it as ``Null`` dtype) but
+    ``String`` in another raises ``SchemaError``. Fall back to a relaxed concat
+    that supertypes the diverging columns (``Null`` + ``String`` -> ``String``).
+
+    ``vertical_relaxed`` still errors if the column *sets* differ across files,
+    so the ``schema_contract`` check keeps its teeth — this only heals dtype
+    divergence, it does not paper over a genuinely missing/extra column.
+
+    Args:
+        glob_expanded: A parquet path or glob (env vars already expanded).
+
+    Returns:
+        The concatenated frame.
+
+    Raises:
+        FileNotFoundError: If the glob matches no files (propagated from the
+            strict read, before the relaxed fallback is reached).
+    """
+    try:
+        return pl.read_parquet(glob_expanded)
+    except pl.exceptions.SchemaError:
+        paths = sorted(_glob.glob(glob_expanded))
+        return pl.concat((pl.read_parquet(p) for p in paths), how="vertical_relaxed")
+
+
 def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.DataFrame, CheckContext]:
     """Resolve a DatasetSpec to its frame and check context.
 
@@ -126,7 +157,7 @@ def _resolve_spec(spec: DatasetSpec, release: str | None = None) -> tuple[pl.Dat
         FileNotFoundError: If the resolved parquet glob matches no files.
     """
     glob_expanded = os.path.expandvars(spec.parquet_glob)
-    frame = pl.read_parquet(glob_expanded)
+    frame = _read_parquet_glob(glob_expanded)
     ctx = CheckContext(
         domain=spec.domain,
         dataset=spec.name,
