@@ -10,8 +10,8 @@ sidebar_label: WNBA
 | [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
 | [ESPN core API (v2)](reference/core) | 80 | `https://sports.core.api.espn.com/v2/sports` |
 | [WNBA Stats API (stats.wnba.com)](reference/wnba_stats) | 95 | `https://stats.wnba.com` |
-| [Dataset loaders](reference/loaders) | 25 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 42 | hand-written wrappers, loaders & helpers |
+| [Dataset loaders](reference/loaders) | 21 | sportsdataverse-data releases |
+| [Additional functions](reference/additional) | 46 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -100,11 +100,11 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wnba_stats_coaches`](reference/loaders#load_wnba_stats_coaches) | [`load_wnba_stats_coaches`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_coaches.html) |
 | [`load_wnba_stats_draft`](reference/loaders#load_wnba_stats_draft) | [`load_wnba_stats_draft`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_draft.html) |
 | [`load_wnba_stats_game_rosters`](reference/loaders#load_wnba_stats_game_rosters) | [`load_wnba_stats_game_rosters`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_game_rosters.html) |
-| [`load_wnba_stats_lineups`](reference/loaders#load_wnba_stats_lineups) | [`load_wnba_stats_lineups`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_lineups.html) |
+| [`load_wnba_stats_lineups`](reference/additional#load_wnba_stats_lineups) | [`load_wnba_stats_lineups`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_lineups.html) |
 | [`load_wnba_stats_officials`](reference/loaders#load_wnba_stats_officials) | [`load_wnba_stats_officials`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_officials.html) |
 | [`load_wnba_stats_pbp`](reference/loaders#load_wnba_stats_pbp) | [`load_wnba_stats_pbp`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_pbp.html) |
 | [`load_wnba_stats_player_game_logs`](reference/loaders#load_wnba_stats_player_game_logs) | [`load_wnba_stats_player_game_logs`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_player_game_logs.html) |
 | [`load_wnba_stats_rosters`](reference/loaders#load_wnba_stats_rosters) | [`load_wnba_stats_rosters`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_rosters.html) |
 | [`load_wnba_stats_shots`](reference/loaders#load_wnba_stats_shots) | [`load_wnba_stats_shots`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_shots.html) |
-| [`load_wnba_stats_standings`](reference/loaders#load_wnba_stats_standings) | [`load_wnba_stats_standings`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_standings.html) |
+| [`load_wnba_stats_standings`](reference/additional#load_wnba_stats_standings) | [`load_wnba_stats_standings`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_standings.html) |
 | [`most_recent_wnba_season`](reference/additional#most_recent_wnba_season) | [`most_recent_wnba_season`](https://wehoop.sportsdataverse.org/reference/most_recent_wnba_season.html) |

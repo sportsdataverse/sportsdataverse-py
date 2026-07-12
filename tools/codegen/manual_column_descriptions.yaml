@@ -8361,8 +8361,8 @@ leverage_index:
   score_diff_bucket: home minus away score, clipped to [-6, 6].
   leverage_index: Mean absolute win-probability swing from this state, normalized to a 1.0 league average.
 college_baseball_state:
-  game_id: ESPN event id.
-  inning: Inning number.
+  game_id: ESPN event id for the game (join key to the schedule).
+  inning: Inning number of the plate appearance (1-based).
   half: Half-inning ("top" or "bottom").
   base_state: 3-char base occupancy code before the PA ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third.
   outs: Outs before the PA (0-2).
@@ -8377,7 +8377,7 @@ college_baseball_re24:
   run_expectancy: Empirical mean runs scored from this state through the end of the half-inning (RE24).
   n: Number of plate appearances observed starting in this base-out state.
 college_baseball_wpa:
-  game_id: ESPN event id.
+  game_id: ESPN event id for the game (join key to the schedule).
   play_seq: Game-global sequential plate-appearance order.
   re_before: RE24 of the base-out state before the PA.
   re_after: RE24 of the base-out state after the PA.
