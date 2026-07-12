@@ -116,10 +116,17 @@ jobs:
           # If the CLI crashed (non-zero exit), inject a run_error sentinel so
           # the aggregation step surfaces this as an ERROR finding rather than
           # treating a missing/truncated findings file as a clean zero-finding run.
+          # Build with jq so the log tail (a Python traceback with embedded
+          # quotes/newlines) is escaped into valid JSON — a printf-interpolated
+          # sentinel is malformed and gets silently swallowed by the aggregation
+          # step's JSON.parse AND the platform-ingest jq.
           if [ "${exit_code}" -ne 0 ]; then
             log_tail=$(tail -c 500 validate_cfb.log 2>/dev/null || true)
-            printf '[{"check":"run_error","severity":"error","message":"cfb_model_pbp validation CLI exited %s: %s"}]\n' \
-              "${exit_code}" "${log_tail}" > findings_cfb_model_pbp.json
+            jq -n --arg code "${exit_code}" --arg log "${log_tail}" \
+              '[{check: "run_error", severity: "error", domain: "cfb",
+                 dataset: "cfb_model_pbp", needs_judgment: false,
+                 message: ("cfb_model_pbp validation CLI exited " + $code + ": " + $log)}]' \
+              > findings_cfb_model_pbp.json
           fi
 
       - name: Skip cfb_model_pbp (no data)
@@ -172,10 +179,17 @@ jobs:
           # If the CLI crashed (non-zero exit), inject a run_error sentinel so
           # the aggregation step surfaces this as an ERROR finding rather than
           # treating a missing/truncated findings file as a clean zero-finding run.
+          # Build with jq so the log tail (a Python traceback with embedded
+          # quotes/newlines) is escaped into valid JSON — a printf-interpolated
+          # sentinel is malformed and gets silently swallowed by the aggregation
+          # step's JSON.parse AND the platform-ingest jq.
           if [ "${exit_code}" -ne 0 ]; then
             log_tail=$(tail -c 500 validate_nfl.log 2>/dev/null || true)
-            printf '[{"check":"run_error","severity":"error","message":"nfl_model_pbp validation CLI exited %s: %s"}]\n' \
-              "${exit_code}" "${log_tail}" > findings_nfl_model_pbp.json
+            jq -n --arg code "${exit_code}" --arg log "${log_tail}" \
+              '[{check: "run_error", severity: "error", domain: "nfl",
+                 dataset: "nfl_model_pbp", needs_judgment: false,
+                 message: ("nfl_model_pbp validation CLI exited " + $code + ": " + $log)}]' \
+              > findings_nfl_model_pbp.json
           fi
 
       - name: Skip nfl_model_pbp (no data)
