@@ -53,6 +53,9 @@ requirements:
     - scipy >=1.10.0
     - tqdm >=4.50.0
     - xgboost >=2.0.0
+    # pyproject's `tzdata; sys_platform == 'win32'` is intentionally omitted:
+    # noarch recipes can't carry platform selectors, and conda's python
+    # package already depends on tzdata on every platform.
 
 test:
   imports:

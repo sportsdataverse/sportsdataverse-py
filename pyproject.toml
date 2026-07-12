@@ -72,6 +72,9 @@ dependencies = [
     "scikit-learn>=1.0.0",
     "xgboost>=2.0.0",
     "rapidfuzz>=3.13.0",
+    # IANA tz database for zoneinfo on Windows (release.py Toronto timestamps);
+    # Linux/macOS use the system database. pandas pins the same marker.
+    "tzdata; sys_platform == 'win32'",
 ]
 
 
