@@ -1,0 +1,4 @@
+season,week,game_id,team,epa,home,note
+2023,1,401547401,Green Bay,0.123456789,TRUE,plain
+2024,2,401547402,"St. Louis, MO",-1.5,FALSE,
+2025,18,401547403,"The ""Team""",,,trailing space
