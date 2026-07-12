@@ -146,6 +146,22 @@ def test_opening_week_game_uses_fallback_anchor():
     assert abs(p1 - fallback) < 1e-9, "opening-week game has no prior -> HFA-only fallback anchor"
 
 
+def test_nan_pregame_anchor_coerced_to_fallback(monkeypatch):
+    """A degenerate NaN as-of rating must never publish a NaN pregame_home_prob."""
+    monkeypatch.setattr(
+        "sportsdataverse.mbb.mbb_win_prob._pregame_probs",
+        lambda schedule, team_box, *, league="mens": pl.DataFrame(
+            {"game_id": ["3"], "pregame_home_prob": [float("nan")]}
+        ),
+    )
+    out = _compile_season_wp(_pbp(), _schedule(), _team_box())
+    fallback = win_prob_from_margin(predict_margin(0.0, 0.0, neutral=False), league="mens")
+    p3 = out.filter(pl.col("game_id") == 3).get_column("pregame_home_prob")[0]
+    assert p3 == fallback
+    assert out.get_column("pregame_home_prob").is_nan().sum() == 0
+    assert out.get_column("home_win_prob").is_nan().sum() == 0
+
+
 def test_empty_pbp_returns_unchanged():
     empty = pl.DataFrame()
     out = _compile_season_wp(empty, _schedule(), _team_box())

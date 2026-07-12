@@ -28,6 +28,7 @@ Two pure cores + a loader wrapper (mirrors ``mbb_team_ratings`` /
 
 from __future__ import annotations
 
+import math
 from typing import TYPE_CHECKING, Literal, Union, overload
 
 import polars as pl
@@ -114,7 +115,13 @@ def _pregame_probs(schedule: pl.DataFrame, team_box: pl.DataFrame, *, league: st
 
     if not frames:
         return pl.DataFrame(schema=_PREGAME_SCHEMA)
-    return pl.concat(frames).filter(pl.col("pregame_home_prob").is_not_null())
+    # A degenerate early-season week can make the ratings fixed point emit a NaN
+    # adj_em -> NaN margin -> NaN prob. NaN is NOT null in polars, so is_not_null
+    # alone lets it through; drop non-finite too so those games take the fallback
+    # anchor instead of publishing a NaN pregame_home_prob.
+    return pl.concat(frames).filter(
+        pl.col("pregame_home_prob").is_not_null() & pl.col("pregame_home_prob").is_not_nan()
+    )
 
 
 def _compile_season_wp(
@@ -152,6 +159,8 @@ def _compile_season_wp(
     frames: list[pl.DataFrame] = []
     for (gid,), sub in pbp.group_by("game_id", maintain_order=True):
         p0 = pmap.get(str(gid), fallback)
+        if not math.isfinite(p0):  # never publish a non-finite anchor (belt-and-suspenders vs _pregame_probs)
+            p0 = fallback
         wp = mbb_in_game_win_prob(sub, p0, league=league)  # row-aligned with sub
         frames.append(
             sub.with_columns(
