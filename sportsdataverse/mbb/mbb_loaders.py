@@ -118,8 +118,8 @@ def load_mbb_pbp(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -213,8 +213,8 @@ def load_mbb_player_boxscore(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_player_boxscore: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -329,8 +329,8 @@ def load_mbb_schedule(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_schedule: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -423,8 +423,8 @@ def load_mbb_team_boxscore(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_team_boxscore: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -478,8 +478,8 @@ def load_mbb_shots(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_shots: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -542,8 +542,8 @@ def load_mbb_standings(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_standings: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -597,8 +597,8 @@ def load_mbb_player_season_stats(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_player_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -673,8 +673,8 @@ def load_mbb_rosters(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -720,8 +720,8 @@ def load_mbb_officials(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_officials: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -782,8 +782,8 @@ def load_mbb_game_rosters(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_game_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
@@ -838,7 +838,7 @@ def load_mbb_team_season_stats(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_mbb_team_season_stats: no data for season(s) {missing} (skipped)".format(missing=missing))
-    # diagonal: per-season release schemas can drift (columns added/dropped over
-    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
