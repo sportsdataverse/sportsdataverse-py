@@ -566,4 +566,5 @@ files = [
     "sportsdataverse/nhl/pwhl_microstat.py",
     "sportsdataverse/cricket/cricket_model_constants.py",
     "sportsdataverse/cricket/cricket_win_prob.py",
+    "sportsdataverse/cricket/cricket_wpa.py",
 ]

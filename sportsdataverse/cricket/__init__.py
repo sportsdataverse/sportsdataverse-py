@@ -5,3 +5,7 @@ from sportsdataverse.cricket.cricket_win_prob import (  # noqa: F401
     cricket_match_state,
     cricket_win_probability,
 )
+from sportsdataverse.cricket.cricket_wpa import (  # noqa: F401
+    cricket_expected_runs,
+    cricket_wpa,
+)

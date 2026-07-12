@@ -54,11 +54,13 @@ CORPUS = ROOT / "dev/cricket/.cache/deliveries_all.parquet"
 SURFACE_OUT = ROOT / "sportsdataverse/cricket/models/cricket_resource_surface.parquet"
 CALIB_OUT = ROOT / "sportsdataverse/cricket/models/cricket_winprob_calibration.parquet"
 HOLDOUT_OUT = ROOT / "tests/fixtures/league_ports/cricket_holdout.parquet"
+WPA_HOLDOUT_OUT = ROOT / "tests/fixtures/league_ports/cricket_wpa_holdout.parquet"
 
 OVER_LIMIT = {"t20": 20, "odi": 50}
 HOLDOUT_FRACTION = 0.15
 HOLDOUT_SEED = 7
 CALIB_GRID = 101  # points in the [0,1] calibration lookup per (fmt, phase)
+WPA_HOLDOUT_MATCHES = 200  # committed WPA-reconciliation fixture size (per-over + terminal states)
 
 
 # --------------------------------------------------------------------------- #
@@ -176,6 +178,30 @@ def _holdout_states(states: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _wpa_holdout_states(states: pl.DataFrame, match_ids: list[str]) -> pl.DataFrame:
+    """Per-over PLUS terminal (last legal ball per innings) states for WPA reconciliation.
+
+    Includes ``innings_final_runs`` (for E[runs] calibration) and the terminal
+    ball of each innings so the win-prob trajectory reaches the pinned outcome.
+    """
+    hold = states.filter(pl.col("match_id").is_in(match_ids)).filter(
+        (pl.col("legal_balls") % 6 == 0) | (pl.col("legal_balls") == pl.col("innings_final_balls"))
+    )
+    return hold.select(
+        event_id=pl.col("match_id"),
+        innings_number=pl.col("innings_number"),
+        batting_team_id=pl.col("batting_team"),
+        runs=pl.col("runs"),
+        wickets=pl.col("wickets"),
+        balls_bowled=pl.col("legal_balls"),
+        balls_total=pl.col("balls_total"),
+        target=pl.col("target"),
+        fmt=pl.col("fmt"),
+        chasing_won=pl.col("batting_team_won"),
+        innings_final_runs=pl.col("innings_final_runs"),
+    )
+
+
 def main() -> None:
     df = pl.read_parquet(CORPUS).filter(pl.col("batting_team_won").is_not_null())
 
@@ -259,6 +285,9 @@ def main() -> None:
     HOLDOUT_OUT.parent.mkdir(parents=True, exist_ok=True)
     hold_fixture = _holdout_states(test_df)
     hold_fixture.write_parquet(HOLDOUT_OUT)
+    wpa_ids = sorted(test_df["match_id"].unique().to_list())[:WPA_HOLDOUT_MATCHES]
+    wpa_fixture = _wpa_holdout_states(test_df, wpa_ids)
+    wpa_fixture.write_parquet(WPA_HOLDOUT_OUT)
 
     # report
     print("=== fitted cricket format constants (paste into FORMAT_TABLE) ===")
@@ -271,6 +300,7 @@ def main() -> None:
     print(f"\nwrote {SURFACE_OUT}")
     print(f"wrote {CALIB_OUT}")
     print(f"wrote {HOLDOUT_OUT} ({hold_fixture.height} states, {hold_fixture['event_id'].n_unique()} matches)")
+    print(f"wrote {WPA_HOLDOUT_OUT} ({wpa_fixture.height} states, {wpa_fixture['event_id'].n_unique()} matches)")
     print("\n=== HOLDOUT gate metrics (calibrated win_prob) ===")
     print(f"  train_matches={train_df['match_id'].n_unique()} holdout_matches={test_df['match_id'].n_unique()}")
     print(f"  Brier={brier:.4f}  (no-skill 0.5 = 0.2500)")

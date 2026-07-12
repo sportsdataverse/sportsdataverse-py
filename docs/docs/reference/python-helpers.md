@@ -18,6 +18,32 @@ Returns a dict with `mode`, `entries`, and `disk_bytes` (only
 populated when mode=filesystem). Cheap — doesn't read the cached
 bodies, just counts + sizes.
 
+### `cricket_expected_runs(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_expected_runs}
+
+Expected remaining runs + run rate from a win-probability-scored state frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `state_wp` | `DataFrame` |  | Output of `~sportsdataverse.cricket.cricket_win_prob.cricket_win_probability` (must carry `proj_final`, `runs`, `overs_left`). |
+| `return_as_pandas` | `bool` | `False` | When True, return a `pandas.DataFrame`. |
+
+**Returns**
+
+The input rows plus `exp_runs_remaining:Float64` (`proj_final - runs`, floored at 0) and `exp_run_rate:Float64` (per remaining over; null when no overs remain). A zero-row input returns the schema with both columns appended (all null).
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cricket.cricket_win_prob import cricket_win_probability
+from sportsdataverse.cricket.cricket_wpa import cricket_expected_runs
+scored = cricket_win_probability(state)
+er = cricket_expected_runs(scored)
+er.select("exp_runs_remaining", "exp_run_rate").head()
+```
+
 ### `cricket_match_state(summary: 'dict', *, fmt: 'str', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_match_state}
 
 Extract over-level match state from an ESPN cricket summary/scoreboard payload.
@@ -71,6 +97,36 @@ st = pl.DataFrame([{ "event_id": "M1", "innings_number": 2,
     "batting_team_id": "A", "runs": 120, "wickets": 3,
     "balls_bowled": 90, "balls_total": 120, "target": 160, "fmt": "t20"}])
 cricket_win_probability(st).select("win_prob").item()
+```
+
+### `cricket_wpa(state_wp: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cricket_wpa}
+
+Batting/bowling win-probability added per over/wicket transition.
+
+`wpa_batting` is the change in the batting team's win probability since the
+previous state within the same innings; `wpa_bowling` is its negation (the
+bowling side gains exactly what the batting side loses). The lead is taken
+`.over(["event_id", "innings_number"])` so no change leaks across matches or
+innings, and the first state of each innings has `wpa_batting = 0`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `state_wp` | `DataFrame` |  | Output of `~sportsdataverse.cricket.cricket_win_prob.cricket_win_probability` (must carry `event_id`, `innings_number`, `balls_bowled`, `win_prob`). |
+| `return_as_pandas` | `bool` | `False` | When True, return a `pandas.DataFrame`. |
+
+**Returns**
+
+The input rows (sorted by `event_id, innings_number, balls_bowled`) plus `win_prob_before:Float64`, `wpa_batting:Float64` and `wpa_bowling:Float64`. A zero-row input returns the schema with those columns appended (all null).
+
+**Example**
+
+```python
+from sportsdataverse.cricket.cricket_win_prob import cricket_win_probability
+from sportsdataverse.cricket.cricket_wpa import cricket_wpa
+wpa = cricket_wpa(cricket_win_probability(state))
+wpa.select("wpa_batting", "wpa_bowling").head()
 ```
 
 ### `get_cache_mode() -> 'str'` {#get_cache_mode}
