@@ -360,7 +360,7 @@ def test_pwhl_heldout_coords_calibration(backtest: pl.DataFrame) -> None:
 # the R4 strength/clock columns; a legacy frame falls back to distance/angle.
 # ---------------------------------------------------------------------------
 
-_FULL_FEATURES = ("shot_distance", "shot_angle", "rebound", "is_home", "is_pp", "is_sh")
+_FULL_FEATURES = ("shot_distance", "shot_angle", "rebound", "is_home", "is_pp", "is_sh", "empty_net_for")
 
 
 def _synth_strength_pbp(n: int = 300) -> pl.DataFrame:

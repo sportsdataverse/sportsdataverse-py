@@ -325,8 +325,11 @@ def _build_xg_features(
             is_home=home.cast(pl.Int64),
             is_pp=(sk_for > sk_opp).fill_null(False).cast(pl.Int64),
             is_sh=(sk_for < sk_opp).fill_null(False).cast(pl.Int64),
+            # defending team shows >=6 skaters => their goalie is pulled => the
+            # shooter faces an empty net (the booster's `empty_net`; PWHL's SH gap).
+            empty_net_for=(sk_opp >= 6).fill_null(False).cast(pl.Int64),
         )
-        avail += ["is_home", "is_pp", "is_sh"]
+        avail += ["is_home", "is_pp", "is_sh", "empty_net_for"]
     feats = list(want) if want is not None else avail
     mats = [(f[c].cast(pl.Float64).fill_null(0.0).to_numpy() if c in f.columns else np.zeros(f.height)) for c in feats]
     return np.column_stack(mats), tuple(feats), f
@@ -397,8 +400,9 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
     geometry sourced from the HockeyTech core instead of the NHL api-web one.
     PWHL pbp has no ``shot_type`` column. When the frame carries the R4
     strength + clock columns the fit ALSO uses ``rebound`` / ``is_home`` /
-    ``is_pp`` / ``is_sh`` (T5 Phase 3, LOSO-validated to lift PP/SH AUC ~+0.02
-    with calibration held); a legacy frame without them degrades to
+    ``is_pp`` / ``is_sh`` / ``empty_net_for`` (T5 Phase 3, LOSO-validated to lift
+    PP/SH AUC; ``empty_net_for`` = defending team shows >=6 skaters => goalie
+    pulled => shooter faces an empty net); a legacy frame without them degrades to
     distance/angle only (see :func:`_build_xg_features`; the fitted set is on
     :attr:`PwhlCoordXGModel.features`). Rows with null coordinates are excluded
     from the fit (~100%
