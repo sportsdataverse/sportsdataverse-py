@@ -6,7 +6,7 @@ sidebar_label: PWHL
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [Dataset loaders](reference/loaders) | 15 | sportsdataverse-data releases |
+| [Dataset loaders](reference/loaders) | 19 | sportsdataverse-data releases |
 | [Additional functions](reference/additional) | 43 | hand-written wrappers, loaders & helpers |
 
 ## Examples
@@ -22,6 +22,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 
 | `sportsdataverse.pwhl` (Python) | `fastRhockey` (R) |
 |---|---|
+| [`load_phf_pbp`](reference/loaders#load_phf_pbp) | [`load_phf_pbp`](https://fastRhockey.sportsdataverse.org/reference/load_phf_pbp.html) |
 | [`load_pwhl_game_info`](reference/loaders#load_pwhl_game_info) | [`load_pwhl_game_info`](https://fastRhockey.sportsdataverse.org/reference/load_pwhl_game_info.html) |
 | [`load_pwhl_game_rosters`](reference/loaders#load_pwhl_game_rosters) | [`load_pwhl_game_rosters`](https://fastRhockey.sportsdataverse.org/reference/load_pwhl_game_rosters.html) |
 | [`load_pwhl_goalie_box`](reference/additional#load_pwhl_goalie_box) | [`load_pwhl_goalie_box`](https://fastRhockey.sportsdataverse.org/reference/load_pwhl_goalie_box.html) |

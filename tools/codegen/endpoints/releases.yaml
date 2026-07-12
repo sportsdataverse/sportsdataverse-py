@@ -611,6 +611,42 @@ loaders:
   min_season: 2024
   example_args:
     seasons: 2024
+# PHF (Premier Hockey Federation) lives in the pwhl module: the frozen
+# predecessor women's pro hockey league (ceased operations June 2023).
+# Seasons 2016-2023; pbp has no 2017-2019 assets (never published upstream) --
+# the loaders' 404-safe skip-with-warning covers those seasons.
+- fn: load_phf_pbp
+  league: pwhl
+  base: sdv_releases
+  url: phf_pbp/play_by_play_{season}.parquet
+  tag: phf_pbp
+  min_season: 2016
+  example_args:
+    seasons: 2023
+- fn: load_phf_player_boxscores
+  league: pwhl
+  base: sdv_releases
+  url: phf_player_boxscores/player_box_{season}.parquet
+  tag: phf_player_boxscores
+  min_season: 2016
+  example_args:
+    seasons: 2023
+- fn: load_phf_schedules
+  league: pwhl
+  base: sdv_releases
+  url: phf_schedules/phf_schedule_{season}.parquet
+  tag: phf_schedules
+  min_season: 2016
+  example_args:
+    seasons: 2023
+- fn: load_phf_team_boxscores
+  league: pwhl
+  base: sdv_releases
+  url: phf_team_boxscores/team_box_{season}.parquet
+  tag: phf_team_boxscores
+  min_season: 2016
+  example_args:
+    seasons: 2023
 - fn: load_pwhl_game_info
   league: pwhl
   base: sdv_releases
