@@ -20,9 +20,13 @@ from __future__ import annotations
 import time
 from typing import Any, List
 
-import numpy as np
 import polars as pl
-from scipy.stats import rankdata
+from sportsdataverse._common.metrics import (
+    brier_score as brier_score,
+    calibration_table as calibration_table,
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 #: Smyth-Patriot "pythagenpat" run-environment-adaptive exponent (Task 4.1).
 PYTHAGENPAT_EXPONENT: float = 0.287
@@ -47,99 +51,6 @@ _PBP_SCHEMA = {
     "matchup_post_on_second_id": pl.Utf8,
     "matchup_post_on_third_id": pl.Utf8,
 }
-
-
-def mae(a: "np.ndarray", b: "np.ndarray") -> float:
-    """Mean absolute error between two same-length arrays.
-
-    Args:
-        a: First array (e.g. predictions).
-        b: Second array (e.g. observed values).
-
-    Returns:
-        The mean of ``|a - b|`` as a plain Python ``float``.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.mlb.mlb_game_state_constants import mae
-            mae([1.0, 2.0], [1.5, 2.5])
-    """
-    return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
-
-
-def spearman_corr(a: "np.ndarray", b: "np.ndarray") -> float:
-    """Spearman rank correlation between two same-length arrays.
-
-    Args:
-        a: First array.
-        b: Second array.
-
-    Returns:
-        The Pearson correlation of the rank-transformed arrays, as a
-        plain Python ``float``.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.mlb.mlb_game_state_constants import spearman_corr
-            spearman_corr([1, 2, 3], [9, 8, 10])
-    """
-    return float(np.corrcoef(rankdata(a), rankdata(b))[0, 1])
-
-
-def brier_score(y_true: "np.ndarray", p_pred: "np.ndarray") -> float:
-    """Brier score (mean squared error of a probability forecast).
-
-    Args:
-        y_true: Binary outcomes (0/1).
-        p_pred: Predicted probabilities in ``[0, 1]``.
-
-    Returns:
-        The mean of ``(p_pred - y_true) ** 2`` as a plain Python ``float``.
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.mlb.mlb_game_state_constants import brier_score
-            brier_score([1, 0], [0.75, 0.25])
-    """
-    return float(np.mean((np.asarray(p_pred, dtype=float) - np.asarray(y_true, dtype=float)) ** 2))
-
-
-def calibration_table(y_true: "np.ndarray", p_pred: "np.ndarray", n_bins: int = 10) -> pl.DataFrame:
-    """Bucket predicted probabilities into deciles and compare to realized rate.
-
-    Args:
-        y_true: Binary outcomes (0/1).
-        p_pred: Predicted probabilities in ``[0, 1]``.
-        n_bins: Number of equal-width probability buckets (default 10).
-
-    Returns:
-        pl.DataFrame: one row per non-empty bucket.
-
-        | Column | Type | Description |
-        |---|---|---|
-        | bin_mid | Float64 | Bucket midpoint probability |
-        | mean_pred | Float64 | Mean predicted probability in the bucket |
-        | mean_actual | Float64 | Realized outcome rate in the bucket |
-        | n | UInt32 | Row count in the bucket |
-
-    Example:
-        Quick start::
-
-            from sportsdataverse.mlb.mlb_game_state_constants import calibration_table
-            calibration_table([1, 0, 1, 1], [0.8, 0.2, 0.6, 0.9])
-    """
-    df = pl.DataFrame({"y": np.asarray(y_true, dtype=float), "p": np.asarray(p_pred, dtype=float)})
-    df = df.with_columns((pl.col("p").clip(0.0, 0.9999) * n_bins).floor().cast(pl.Int64).alias("bin"))
-    return (
-        df.group_by("bin")
-        .agg(pl.col("p").mean().alias("mean_pred"), pl.col("y").mean().alias("mean_actual"), pl.len().alias("n"))
-        .sort("bin")
-        .with_columns(((pl.col("bin") + 0.5) / n_bins).alias("bin_mid"))
-        .select("bin_mid", "mean_pred", "mean_actual", "n")
-    )
 
 
 def collect_statsapi_pbp(game_pks: List[int], *, sleep: float = 0.0) -> pl.DataFrame:

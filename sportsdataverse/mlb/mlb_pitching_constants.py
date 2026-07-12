@@ -21,7 +21,11 @@ from typing import Dict, List
 
 import numpy as np
 import polars as pl
-from scipy.stats import rankdata
+from sportsdataverse._common.metrics import (
+    calibration_table as calibration_table,
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 # --- bundled-artifact paths (Phase 2 / Phase 3 write these .ubj files) ---
 STUFF_PLUS_ARTIFACT = "mlb_stuff_plus.ubj"
@@ -59,27 +63,6 @@ COMMAND_LEAGUE_MEAN_RV: float = -0.0009078294970095158
 COMMAND_LEAGUE_SD_RV: float = 0.0403415784239769
 
 
-def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
-    """Spearman rank correlation between two equal-length arrays.
-
-    Args:
-        a: First array.
-        b: Second array (same length as ``a``).
-
-    Returns:
-        float: The Spearman rank correlation coefficient in ``[-1, 1]``.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.mlb.mlb_pitching_constants import spearman_corr
-            spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([10.0, 20.0, 30.0]))
-    """
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
 def rmse(a: np.ndarray, b: np.ndarray) -> float:
     """Root-mean-squared error between two equal-length arrays.
 
@@ -100,59 +83,6 @@ def rmse(a: np.ndarray, b: np.ndarray) -> float:
     a = np.asarray(a, dtype=float)
     b = np.asarray(b, dtype=float)
     return float(np.sqrt(np.mean((a - b) ** 2)))
-
-
-def mae(a: np.ndarray, b: np.ndarray) -> float:
-    """Mean absolute error between two equal-length arrays.
-
-    Args:
-        a: Predicted (or first) array.
-        b: Actual (or second) array (same length as ``a``).
-
-    Returns:
-        float: The MAE.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.mlb.mlb_pitching_constants import mae
-            mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
-    """
-    a = np.asarray(a, dtype=float)
-    b = np.asarray(b, dtype=float)
-    return float(np.mean(np.abs(a - b)))
-
-
-def calibration_table(y_true: np.ndarray, p_pred: np.ndarray, n_bins: int = 10) -> pl.DataFrame:
-    """Bin predicted probabilities and compare to observed outcome rate per bin.
-
-    Args:
-        y_true: Binary (0/1) outcome array.
-        p_pred: Predicted probability array (same length as ``y_true``).
-        n_bins: Number of equal-width probability bins (default 10).
-
-    Returns:
-        polars.DataFrame: Columns ``bin_mid``, ``mean_pred``, ``mean_actual``,
-        ``n`` — one row per non-empty bin (at most ``n_bins`` rows).
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.mlb.mlb_pitching_constants import calibration_table
-            rng = np.random.default_rng(0)
-            calibration_table(rng.integers(0, 2, 200), rng.random(200), n_bins=10)
-    """
-    df = pl.DataFrame({"y": np.asarray(y_true, dtype=float), "p": np.asarray(p_pred, dtype=float)})
-    df = df.with_columns((pl.col("p").clip(0.0, 0.9999) * n_bins).floor().cast(pl.Int64).alias("bin"))
-    return (
-        df.group_by("bin")
-        .agg(pl.col("p").mean().alias("mean_pred"), pl.col("y").mean().alias("mean_actual"), pl.len().alias("n"))
-        .sort("bin")
-        .with_columns(((pl.col("bin") + 0.5) / n_bins).alias("bin_mid"))
-        .select("bin_mid", "mean_pred", "mean_actual", "n")
-    )
 
 
 def as_of_split(pitches: pl.DataFrame, cutoff_date: dt.date, *, date_col: str = "game_date") -> pl.DataFrame:

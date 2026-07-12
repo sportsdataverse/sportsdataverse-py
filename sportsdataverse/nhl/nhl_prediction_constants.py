@@ -45,134 +45,14 @@ from __future__ import annotations
 import datetime as _dt
 from dataclasses import dataclass
 
-import numpy as np
 import polars as pl
-from scipy.stats import rankdata
-
-
-def brier_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
-    """Mean squared error between predicted probability and binary outcome.
-
-    Args:
-        y_true: binary outcomes (0/1).
-        p_pred: predicted probabilities in [0, 1].
-
-    Returns:
-        The Brier score (lower is better; 0.0 is a perfect forecast).
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nhl.nhl_prediction_constants import brier_score
-            brier_score(np.array([1, 0]), np.array([0.8, 0.2]))
-    """
-    return float(np.mean((np.asarray(p_pred, dtype=float) - np.asarray(y_true, dtype=float)) ** 2))
-
-
-def log_loss_score(y_true: np.ndarray, p_pred: np.ndarray, eps: float = 1e-15) -> float:
-    """Binary log-loss (cross-entropy) between predicted probability and outcome.
-
-    Args:
-        y_true: binary outcomes (0/1).
-        p_pred: predicted probabilities in [0, 1].
-        eps: clipping floor/ceiling to avoid ``log(0)``.
-
-    Returns:
-        The mean log-loss (lower is better).
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nhl.nhl_prediction_constants import log_loss_score
-            log_loss_score(np.array([1, 0]), np.array([0.8, 0.2]))
-    """
-    p = np.clip(np.asarray(p_pred, dtype=float), eps, 1 - eps)
-    y = np.asarray(y_true, dtype=float)
-    return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
-
-
-def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
-    """Spearman rank correlation between two arrays.
-
-    Args:
-        a: first array.
-        b: second array (same length as ``a``).
-
-    Returns:
-        The Spearman rank correlation coefficient in [-1, 1].
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nhl.nhl_prediction_constants import spearman_corr
-            spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([3.0, 1.0, 2.0]))
-    """
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
-def mae(a: np.ndarray, b: np.ndarray) -> float:
-    """Mean absolute error between two arrays.
-
-    Args:
-        a: first array (e.g. predicted values).
-        b: second array (e.g. observed values).
-
-    Returns:
-        The mean absolute difference ``mean(|a - b|)``.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nhl.nhl_prediction_constants import mae
-            mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
-    """
-    return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
-
-
-def calibration_table(y_true: np.ndarray, p_pred: np.ndarray, n_bins: int = 10) -> pl.DataFrame:
-    """Bucket predicted probabilities into ``n_bins`` and compare to realized rate.
-
-    Args:
-        y_true: binary outcomes (0/1).
-        p_pred: predicted probabilities in [0, 1].
-        n_bins: number of equal-width probability bins.
-
-    Returns:
-        A polars DataFrame with one row per non-empty bin.
-
-        |col_name    |type   |
-        |:-----------|:------|
-        |bin_mid     |Float64|
-        |mean_pred   |Float64|
-        |mean_actual |Float64|
-        |n           |Int64  |
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nhl.nhl_prediction_constants import calibration_table
-            rng = np.random.default_rng(0)
-            calibration_table(rng.integers(0, 2, 200), rng.random(200))
-    """
-    df = pl.DataFrame({"y": np.asarray(y_true, dtype=float), "p": np.asarray(p_pred, dtype=float)})
-    df = df.with_columns((pl.col("p").clip(0.0, 0.9999) * n_bins).floor().cast(pl.Int64).alias("bin"))
-    return (
-        df.group_by("bin")
-        .agg(
-            pl.col("p").mean().alias("mean_pred"),
-            pl.col("y").mean().alias("mean_actual"),
-            pl.len().alias("n"),
-        )
-        .sort("bin")
-        .with_columns(((pl.col("bin") + 0.5) / n_bins).alias("bin_mid"))
-        .select("bin_mid", "mean_pred", "mean_actual", "n")
-    )
+from sportsdataverse._common.metrics import (
+    brier_score as brier_score,
+    calibration_table as calibration_table,
+    log_loss_score as log_loss_score,
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 
 def as_of_ratings_split(df: pl.DataFrame, cutoff_date: _dt.date, *, date_col: str = "date") -> pl.DataFrame:
