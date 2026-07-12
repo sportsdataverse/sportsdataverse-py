@@ -28,6 +28,10 @@ repos:
     rev: v4.0.1
     hooks:
       - id: trailing-whitespace
+        # Captured fixtures are byte-faithful oracles (e.g. the R-written
+        # release parity CSV carries a semantically-load-bearing trailing
+        # space); rewriting them corrupts golden-master tests.
+        exclude: ^tests/fixtures/
       - id: check-merge-conflict
       - id: check-ast
         # Deliberately-malformed lint fixture (tests the unparseable-file path).
@@ -39,6 +43,8 @@ repos:
         exclude: ^recipe/meta\.yaml$
       - id: check-symlinks
       - id: end-of-file-fixer
+        # Same rationale as trailing-whitespace: don't rewrite captured fixtures.
+        exclude: ^tests/fixtures/
         # - id: check-vcs-permalinks
       - id: requirements-txt-fixer
       - id: check-added-large-files
