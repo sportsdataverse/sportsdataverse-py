@@ -328,6 +328,7 @@ from sportsdataverse.wbb import helper_wbb_pbp as helper_wbb_pbp  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_pbp_features as helper_wbb_pbp_features  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_pickcenter as helper_wbb_pickcenter  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_roster_items as helper_wbb_roster_items  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_team_box as helper_wbb_team_box  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
 from sportsdataverse.wbb import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.wbb import incorporate_height as incorporate_height  # noqa: F401
@@ -784,6 +785,7 @@ __all__ = [
     "helper_wbb_pbp_features",
     "helper_wbb_pickcenter",
     "helper_wbb_roster_items",
+    "helper_wbb_team_box",
     "helper_wbb_team_items",
     "in_game_features",
     "incorporate_height",

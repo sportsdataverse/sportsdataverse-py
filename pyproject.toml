@@ -458,6 +458,7 @@ files = [
     "sportsdataverse/mbb/mbb_win_prob.py",
     "sportsdataverse/mbb/mbb_season_sim.py",
     "sportsdataverse/wbb/wbb_prediction_constants.py",
+    "sportsdataverse/wbb/wbb_team_box.py",
     "sportsdataverse/wbb/wbb_team_ratings.py",
     "sportsdataverse/wbb/wbb_game_predict.py",
     "sportsdataverse/wbb/wbb_strength_of_schedule.py",
