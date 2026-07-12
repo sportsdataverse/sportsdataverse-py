@@ -152,3 +152,67 @@ Override the default TTL for endpoints not matched by the tier rules.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `ttl` | `Optional[Union[timedelta, int]]` |  | A `timedelta`, an integer (interpreted as seconds), or `None` to reset to the built-in `DEFAULT_TTL` (`MODERATE` = 1 hour). |
+
+### `ufl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ufl_pbp}
+
+Enriched UFL play-by-play (EP/EPA/WP/WPA/CP/CPOE).
+
+Same shared spring-football core as `~sportsdataverse.football.xfl.xfl_pbp`
+(see `sportsdataverse.football.spring_football_ep_wp`).
+
+**Capture finding:** ESPN publishes no play-by-play for UFL games as of
+this port -- verified empty (`summary.drives` AND the Core v2
+`.../plays` endpoint) across every completed 2024 + 2025 UFL game. This
+function returns a zero-row (contract-shaped) frame on today's real data
+-- not a stub -- and will pick up real rows automatically once ESPN
+backfills UFL play-by-play. See
+`tests/fixtures/league_ports/FEASIBILITY.md`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[str, int]` |  | ESPN UFL event id. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+One row per play with `ep`/`epa`/`wp`/`wpa`/`cp`/`cpoe` and the other `enrich_nfl_pbp` output columns. Zero rows today for every UFL game (see capture finding above).
+
+**Example**
+
+```python
+from sportsdataverse.football.ufl import ufl_pbp
+
+df = ufl_pbp("401638299")
+print(df.height)  # 0 today -- see the capture-finding note above
+```
+
+### `xfl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#xfl_pbp}
+
+Enriched XFL play-by-play (EP/EPA/WP/WPA/CP/CPOE).
+
+Fetches the ESPN game summary, unrolls its drives into an nflverse-shape
+frame, and scores it with the same parity-validated NFL EP/WP pipeline
+used league-wide (see
+`sportsdataverse.football.spring_football_ep_wp`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `Union[str, int]` |  | ESPN XFL event id. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+One row per play with `ep`/`epa`/`wp`/`wpa`/`cp`/`cpoe` and the other `enrich_nfl_pbp` output columns. Zero rows for a game ESPN has no play-by-play for.
+
+**Example**
+
+```python
+from sportsdataverse.football.xfl import xfl_pbp
+
+df = xfl_pbp("401517780")
+print(df.select("play_id", "epa", "wp").head())
+```
