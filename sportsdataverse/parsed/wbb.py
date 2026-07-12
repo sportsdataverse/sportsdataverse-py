@@ -219,6 +219,7 @@ from sportsdataverse.wbb import box_aware_compare as box_aware_compare  # noqa: 
 from sportsdataverse.wbb import brier_score as brier_score  # noqa: F401
 from sportsdataverse.wbb import build_3p_shot_info as build_3p_shot_info  # noqa: F401
 from sportsdataverse.wbb import build_adjusted_3p as build_adjusted_3p  # noqa: F401
+from sportsdataverse.wbb import build_athlete_identity_lookup as build_athlete_identity_lookup  # noqa: F401
 from sportsdataverse.wbb import build_available_team_list as build_available_team_list  # noqa: F401
 from sportsdataverse.wbb import build_base_event as build_base_event  # noqa: F401
 from sportsdataverse.wbb import build_d_rtg as build_d_rtg  # noqa: F401
@@ -324,11 +325,21 @@ from sportsdataverse.wbb import handle_common_sub_bug as handle_common_sub_bug  
 from sportsdataverse.wbb import helper_wbb_athlete_items as helper_wbb_athlete_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_game_data as helper_wbb_game_data  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_game_items as helper_wbb_game_items  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_game_rosters as helper_wbb_game_rosters  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_officials as helper_wbb_officials  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_pbp as helper_wbb_pbp  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_pbp_features as helper_wbb_pbp_features  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_pickcenter as helper_wbb_pickcenter  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_play_by_play as helper_wbb_play_by_play  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_player_box as helper_wbb_player_box  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_player_season_stats as helper_wbb_player_season_stats  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_roster_items as helper_wbb_roster_items  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_rosters as helper_wbb_rosters  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_schedule as helper_wbb_schedule  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_standings as helper_wbb_standings  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_team_box as helper_wbb_team_box  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_team_items as helper_wbb_team_items  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_team_season_stats as helper_wbb_team_season_stats  # noqa: F401
 from sportsdataverse.wbb import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.wbb import incorporate_height as incorporate_height  # noqa: F401
 from sportsdataverse.wbb import inject_luck as inject_luck  # noqa: F401
@@ -563,6 +574,7 @@ __all__ = [
     "brier_score",
     "build_3p_shot_info",
     "build_adjusted_3p",
+    "build_athlete_identity_lookup",
     "build_available_team_list",
     "build_base_event",
     "build_d_rtg",
@@ -780,11 +792,21 @@ __all__ = [
     "helper_wbb_athlete_items",
     "helper_wbb_game_data",
     "helper_wbb_game_items",
+    "helper_wbb_game_rosters",
+    "helper_wbb_officials",
     "helper_wbb_pbp",
     "helper_wbb_pbp_features",
     "helper_wbb_pickcenter",
+    "helper_wbb_play_by_play",
+    "helper_wbb_player_box",
+    "helper_wbb_player_season_stats",
     "helper_wbb_roster_items",
+    "helper_wbb_rosters",
+    "helper_wbb_schedule",
+    "helper_wbb_standings",
+    "helper_wbb_team_box",
     "helper_wbb_team_items",
+    "helper_wbb_team_season_stats",
     "in_game_features",
     "incorporate_height",
     "inject_luck",

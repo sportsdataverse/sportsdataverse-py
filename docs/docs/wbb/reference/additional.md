@@ -2571,6 +2571,20 @@ adj = build_adjusted_3p(base_player, base_info)
 print(adj["assisted3P"], adj["unassisted3P"])
 ```
 
+### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
+
+R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rosters` | `dict[int \| str, dict]` |  | Mapping of team_id -> that team's raw roster payload (`wbb/team_rosters/json/{season}/{team_id}.json`). NOTE: R walks `raw$athletes` directly here (no position-bucket unwrap, unlike the rosters dataset itself). |
+
+**Returns**
+
+athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
+
 ### `build_available_team_list(in_by_year: 'dict[str, list[tuple[TeamId, str, ConferenceId]]]') -> 'dict[ConferenceId, Callable[[str], str]]'` {#build_available_team_list}
 
 Builds a per-conference team-index JSON fragment for

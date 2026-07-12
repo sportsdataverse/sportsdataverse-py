@@ -287,3 +287,99 @@ def _opt_int(value: Any) -> int | None:
             except ValueError:
                 return None
     return None
+
+
+# --- release producer (wehoop-wbb-data parity) --------------------------------
+
+_OFFICIAL_COLS = (
+    "season",
+    "game_id",
+    "official_id",
+    "official_uid",
+    "official_full_name",
+    "official_display_name",
+    "official_first_name",
+    "official_last_name",
+    "official_order",
+    "position_name",
+    "position_display_name",
+)
+
+
+def helper_wbb_officials(payload: dict, *, season: int, game_id: int | str) -> pl.DataFrame:
+    """Parse one game's officials sidecar into the released officials frame.
+
+    Faithful polars port of the script-local ``parse_one_game`` /
+    ``parse_one_official`` in ``wehoop-wbb-data/R/espn_wbb_09_officials_creation.R``
+    (no wehoop helper exists for this dataset). The stored sidecar is the ESPN
+    Core v2 paginated page, so the officials source falls through to
+    ``items``. The R-released parquet is the parity oracle (``game_id`` stays
+    String; ids Int32).
+
+    Args:
+        payload: One game's ``wbb/officials/json/{game_id}.json`` as a dict.
+        season: Season year the game belongs to.
+        game_id: The ESPN game id (kept as character, matching R).
+
+    Returns:
+        pl.DataFrame: One row per official, deduped. Empty (zero-column)
+        frame when no officials are present.
+
+    Example:
+        Quick start::
+
+            import json
+            from sportsdataverse.wbb import helper_wbb_officials
+            payload = json.load(open("401804834.json", encoding="utf-8"))
+            df = helper_wbb_officials(payload, season=2026, game_id=401804834)
+            print(df.shape)
+
+    See Also:
+        * `wehoop`_ -- the R data-repo producer this ports.
+
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    from sportsdataverse.wbb.wbb_game_rosters import _rel_chr, _rel_int
+
+    officials = (
+        payload.get("officials") or payload.get("items") or (payload.get("gameInfo") or {}).get("officials") or []
+    )
+    if not officials:
+        return pl.DataFrame()
+    rows: list[dict] = []
+    for o in officials:
+        position = o.get("position")
+        pos_name = _rel_chr(position.get("name") if isinstance(position, dict) else position)
+        pos_display = _rel_chr(position.get("displayName") if isinstance(position, dict) else None)
+        rows.append(
+            {
+                "season": int(season),
+                "game_id": str(game_id),
+                "official_id": _rel_int(o.get("id")),
+                "official_uid": _rel_chr(o.get("uid")),
+                "official_full_name": _rel_chr(
+                    o.get("fullName") if o.get("fullName") is not None else o.get("displayName")
+                ),
+                "official_display_name": _rel_chr(o.get("displayName")),
+                "official_first_name": _rel_chr(o.get("firstName")),
+                "official_last_name": _rel_chr(o.get("lastName")),
+                "official_order": _rel_int(o.get("order")),
+                "position_name": pos_name,
+                "position_display_name": pos_display,
+            }
+        )
+    df = pl.DataFrame({c: [r.get(c) for r in rows] for c in _OFFICIAL_COLS}, strict=False)
+    df = df.with_columns(
+        [pl.col(c).cast(pl.Int32, strict=False) for c in ("season", "official_id", "official_order")]
+        + [
+            pl.col(c).cast(pl.Utf8)
+            for c in (
+                "official_uid",
+                "official_first_name",
+                "official_last_name",
+                "position_display_name",
+            )
+        ]
+    )
+    # R: season-level distinct() -- per-game unique yields the identical set.
+    return df.unique(maintain_order=True, keep="first")
