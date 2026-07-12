@@ -72,6 +72,9 @@ dependencies = [
     "scikit-learn>=1.0.0",
     "xgboost>=2.0.0",
     "rapidfuzz>=3.13.0",
+    # IANA tz database for zoneinfo on Windows (release.py Toronto timestamps);
+    # Linux/macOS use the system database. pandas pins the same marker.
+    "tzdata; sys_platform == 'win32'",
 ]
 
 
@@ -294,6 +297,8 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
     "sportsdataverse/_deprecation.py",
+    "sportsdataverse/_rds.py",
+    "sportsdataverse/release.py",
     "sportsdataverse/_common/__init__.py",
     "sportsdataverse/_common/metrics.py",
     "sportsdataverse/_common/ratings.py",
