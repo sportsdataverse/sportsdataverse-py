@@ -339,9 +339,10 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
     PWHL pbp has no ``shot_type`` column, so the model is distance/angle
     only. Rows with null coordinates are excluded from the fit (~100%
     coverage in the captured seasons, so this drops almost nothing). Fewer
-    than :data:`_MIN_COORD_SHOTS` qualifying shots falls back to a
-    constant-rate model, mirroring the NHL fitter's contract. No bundled
-    artifact, no first-use download.
+    than :data:`_MIN_COORD_SHOTS` qualifying shots -- or a frame with no
+    coordinate columns at all -- falls back to a constant-rate model at the
+    observed goal rate (never a silent all-zero xG), mirroring the NHL
+    fitter's contract. No bundled artifact, no first-use download.
 
     Args:
         pbp: A frame shaped like ``load_pwhl_pbp`` output (needs ``event``,
@@ -350,6 +351,10 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
 
     Returns:
         A fitted :class:`PwhlCoordXGModel`.
+
+    Raises:
+        ValueError: If a non-empty ``pbp`` has no ``goal`` column (no label
+            to fit or fall back on).
 
     Example:
         Quick start::
@@ -367,10 +372,17 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
     import numpy as np
     from sklearn.linear_model import LogisticRegression
 
-    required = {"event", "goal", "x_coord", "y_coord"}
-    if pbp.height == 0 or not required.issubset(pbp.columns):
+    if pbp.height == 0:
         return PwhlCoordXGModel(model=None, fallback_rate=0.0)
-    shots = pbp.filter((pl.col("event") == "shot") & pl.col("x_coord").is_not_null() & pl.col("y_coord").is_not_null())
+    if "goal" not in pbp.columns:
+        raise ValueError("fit_pwhl_coord_xg requires a 'goal' column (load_pwhl_pbp shape)")
+    shots = pbp.filter(pl.col("event") == "shot") if "event" in pbp.columns else pbp
+    if not {"x_coord", "y_coord"}.issubset(pbp.columns):
+        # No coordinate columns at all: an honest constant-rate model at the
+        # observed goal rate -- never a silent all-zero xG.
+        rate = float(shots["goal"].cast(pl.Float64).mean() or 0.0) if shots.height else 0.0
+        return PwhlCoordXGModel(model=None, fallback_rate=rate)
+    shots = shots.filter(pl.col("x_coord").is_not_null() & pl.col("y_coord").is_not_null())
     if shots.height < _MIN_COORD_SHOTS:
         goal_rate = float(shots["goal"].cast(pl.Float64).mean() or 0.0) if shots.height else 0.0
         return PwhlCoordXGModel(model=None, fallback_rate=goal_rate)
@@ -428,9 +440,11 @@ def pwhl_team_game_xg_rates(
         xg_method: ``"coords"`` (default; real distance/angle logistic via
             :func:`fit_pwhl_coord_xg` -- gates best on the held-out 2026
             backtest) or ``"quality"`` (the T5.3 categorical shot-quality
-            proxy, kept working unchanged). In the coords path, shot rows
-            with null coordinates contribute the model's fallback rate (the
-            unconditional goal rate) instead of a coordinate prediction.
+            proxy, kept working unchanged). Only selects the internal fit
+            when ``xg_model`` is ``None``; an explicit ``xg_model`` is used
+            as-is regardless of method. Shot rows with null coordinates
+            contribute :class:`PwhlCoordXGModel`'s fallback rate (handled
+            inside its ``predict``, not here).
         even_strength_only: Best-effort filter excluding shots with
             ``power_play == 1`` (see the module docstring's coverage caveat).
 
@@ -483,24 +497,15 @@ def pwhl_team_game_xg_rates(
     if shots.height == 0:
         return pl.DataFrame(schema=GAME_RATES_SCHEMA)
 
+    # Null-coord shot rows need no special-casing here: PwhlCoordXGModel.predict
+    # already substitutes its fallback_rate (the unconditional goal rate) for
+    # rows with null geometry, and realized goals (gf/ga) count every row.
     shots = shots.with_columns(
         model.predict(shots).alias("xg"),
         pl.col("goal").cast(pl.Int64).alias("_goal_i"),
         pl.col("game_id").cast(pl.Int64),
         pl.col("team_id").cast(pl.Int64),
     )
-    if xg_method == "coords":
-        # A null-coord shot row (rare -- ~100% coverage) cannot be scored by
-        # geometry honestly (PwhlCoordXGModel.predict already emits the fallback
-        # point-blank (distance 0). Give it the model's fallback rate (the
-        # unconditional goal rate) instead; realized goals (gf/ga) are
-        # unaffected -- the row still counts.
-        shots = shots.with_columns(
-            pl.when(pl.col("x_coord").is_null() | pl.col("y_coord").is_null())
-            .then(pl.lit(model.fallback_rate, dtype=pl.Float64))
-            .otherwise(pl.col("xg"))
-            .alias("xg")
-        )
     per_team = shots.group_by(["game_id", "team_id"]).agg(
         pl.col("xg").sum().alias("xgf"), pl.col("_goal_i").sum().alias("gf")
     )

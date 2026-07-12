@@ -43,6 +43,18 @@ def pwhl_predict_games(games: Any, ratings: Any, *, league: str = "pwhl", **kwar
     Delegates to :func:`sportsdataverse.nhl.nhl_market.nhl_predict_games` with
     ``league="pwhl"`` defaulted.
 
+    Note:
+        The shipped ``LEAGUE_CONSTANTS["pwhl"].margin_sd`` (1.19) is the
+        coords-paired 2025 fit (T5.3b); this method-blind runtime path uses
+        it for quality-method ratings too (a ~1e-3 win-probability effect).
+        To reproduce the documented 1.21 quality-paired backtest exactly,
+        swap the constants row via ``dataclasses.replace``::
+
+            import dataclasses
+            from sportsdataverse.nhl import nhl_prediction_constants as npc
+            npc.LEAGUE_CONSTANTS["pwhl"] = dataclasses.replace(
+                npc.get_constants("pwhl"), margin_sd=1.21)
+
     Args:
         games: a schedule-shaped frame (``game_id``, ``home_team``, ``away_team``, ``neutral_site``).
         ratings: a :func:`pwhl_team_ratings`-shaped frame.

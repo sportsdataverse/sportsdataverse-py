@@ -221,12 +221,36 @@ def test_team_game_xg_rates_coords_wiring_and_null_coord_fallback() -> None:
     assert scored[0] > scored[1]
 
 
-def test_team_game_xg_rates_quality_path_unchanged_by_default() -> None:
-    # Omitting xg_method must keep the categorical-proxy behavior working
-    # (API stability): tier weights fit internally, all 5 shots contribute.
+def test_team_game_xg_rates_quality_path_unchanged_when_requested() -> None:
+    # xg_method="quality" must keep the T5.3 categorical-proxy behavior
+    # working (API stability): tier weights fit internally, all 5 shots
+    # contribute. (The DEFAULT method is coords since T5.3b.)
     rates = pwhl_team_game_xg_rates(_mini_pbp(), _mini_sched(), xg_method="quality")
     assert rates.height == 2
     assert rates["xgf"].sum() == pytest.approx(1.0)  # empirical rates sum to total goals
+
+
+def test_team_game_xg_rates_explicit_quality_model_default_method_coordless_frame() -> None:
+    # T5.3-era calling pattern regression: an explicit ShotQualityXGModel with
+    # xg_method omitted (now defaulting to coords) on a frame WITHOUT
+    # coordinate columns must keep working -- the method only selects the
+    # internal fit, and no coords-path code may reference x_coord/y_coord.
+    pbp = _mini_pbp().drop("x_coord", "y_coord")
+    model = fit_shot_quality_xg(pbp)
+    rates = pwhl_team_game_xg_rates(pbp, _mini_sched(), xg_model=model)
+    assert rates.height == 2
+    assert rates["xgf"].sum() == pytest.approx(1.0)
+
+
+def test_fit_pwhl_coord_xg_coordless_frame_falls_back_to_goal_rate() -> None:
+    # A frame with no coordinate columns fits nothing but must NOT emit a
+    # silent all-zero xG: constant-rate model at the observed goal rate.
+    pbp = _mini_pbp().drop("x_coord", "y_coord")
+    model = fit_pwhl_coord_xg(pbp)
+    assert model.model is None
+    assert model.fallback_rate == pytest.approx(0.2)  # 1 goal / 5 shots
+    with pytest.raises(ValueError, match="goal"):
+        fit_pwhl_coord_xg(pbp.drop("goal"))
 
 
 def test_team_game_xg_rates_rejects_unknown_method() -> None:
