@@ -20,6 +20,7 @@ __all__ = [
     "load_phf_team_boxscores",
     "load_pwhl_game_info",
     "load_pwhl_game_rosters",
+    "load_pwhl_shifts",
     "load_pwhl_goalie_boxscores",
     "load_pwhl_officials",
     "load_pwhl_pbp",
@@ -511,6 +512,60 @@ def load_pwhl_game_rosters(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_game_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_pwhl_shifts(seasons, return_as_pandas: bool = False):
+    """Load pwhl_shifts (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_shifts
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2024).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name         |type   |
+        |:----------------|:------|
+        |game_id          |Int32  |
+        |player_id        |Int32  |
+        |first_name       |String |
+        |last_name        |String |
+        |jersey_number    |Int32  |
+        |home             |Int32  |
+        |period           |Int32  |
+        |start_time       |String |
+        |end_time         |String |
+        |length           |String |
+        |start_s          |Int32  |
+        |end_s            |Int32  |
+        |goal_on_shift    |Int32  |
+        |penalty_on_shift |Int32  |
+
+    Example:
+        Quick start::
+
+            load_pwhl_shifts(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2024:
+            raise SeasonNotFoundError("season cannot be less than 2024")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_shifts/shifts_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_pwhl_shifts: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

@@ -5565,6 +5565,35 @@ load_pwhl_officials:
   type: Int32
 - name: official_role
   type: String
+load_pwhl_shifts:
+- name: game_id
+  type: Int32
+- name: player_id
+  type: Int32
+- name: first_name
+  type: String
+- name: last_name
+  type: String
+- name: jersey_number
+  type: Int32
+- name: home
+  type: Int32
+- name: period
+  type: Int32
+- name: start_time
+  type: String
+- name: end_time
+  type: String
+- name: length
+  type: String
+- name: start_s
+  type: Int32
+- name: end_s
+  type: Int32
+- name: goal_on_shift
+  type: Int32
+- name: penalty_on_shift
+  type: Int32
 load_pwhl_pbp:
 - name: game_id
   type: Int32
