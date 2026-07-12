@@ -49,6 +49,60 @@ def _load_artifact() -> dict:
     return dict(json.loads(path.read_text(encoding="utf-8")))
 
 
+def _score(feats: pl.DataFrame, art: dict) -> pl.DataFrame:
+    """Apply the bundled draft-slot artifact to a pre-built feature frame (no network).
+
+    Factored out of :func:`wnba_draft_model` so offline fit/backtest scripts
+    (``dev/wnba_draft/fit_rookie_residual.py``, ``tests/wnba/test_wnba_draft_backtest.py``)
+    can score a committed fixture through the exact same math the runtime uses, without
+    re-fetching ``wnba_stats_drafthistory`` over the network.
+
+    Args:
+        feats: Frame carrying ``player_id``, ``draft_year``, and the artifact's
+            ``features`` columns (``overall_pick``, ``round_number``).
+        art: Parsed ``wnba_draft_value.json`` artifact dict.
+
+    Returns:
+        Frame ``player_id, draft_year, proj_career_value, draft_prob, projected_pick,
+        pro_tier`` -- same shape as :func:`wnba_draft_model`.
+    """
+    cols = art["features"]
+    median = art.get("feature_median", {})
+    for col in cols:
+        if col not in feats.columns:
+            feats = feats.with_columns(pl.lit(None).cast(pl.Float64).alias(col))
+    X = feats.select([pl.col(c).fill_null(median.get(c, 0.0)) for c in cols]).to_numpy()
+    mu = np.asarray(art.get("feature_mean", [0.0] * len(cols)), dtype=float)
+    sd = np.asarray(art.get("feature_sd", [1.0] * len(cols)), dtype=float)
+    sd = np.where(sd == 0.0, 1.0, sd)
+    Z = (X - mu) / sd
+    value = float(art["value_intercept"]) + Z @ np.asarray(art["value_coef"], dtype=float)
+    logit = float(art["prob_intercept"]) + Z @ np.asarray(art["prob_coef"], dtype=float)
+    prob = 1.0 / (1.0 + np.exp(-logit))
+
+    out = feats.select("player_id", "draft_year").with_columns(
+        pl.Series("proj_career_value", value, dtype=pl.Float64),
+        pl.Series("draft_prob", prob, dtype=pl.Float64),
+    )
+    out = out.with_columns(
+        pl.col("proj_career_value")
+        .rank(method="ordinal", descending=True)
+        .over("draft_year")
+        .cast(pl.Int64)
+        .alias("projected_pick")
+    )
+    return out.with_columns(
+        pl.when(pl.col("projected_pick") <= 4)
+        .then(pl.lit("lottery"))
+        .when(pl.col("projected_pick") <= 12)
+        .then(pl.lit("first_round"))
+        .when(pl.col("projected_pick") <= 36)
+        .then(pl.lit("second_round"))
+        .otherwise(pl.lit("undrafted"))
+        .alias("pro_tier")
+    )
+
+
 @overload
 def wnba_draft_model(draft_year: "int | list[int]", *, return_as_pandas: Literal[False] = False) -> pl.DataFrame: ...
 
@@ -100,39 +154,5 @@ def wnba_draft_model(draft_year: "int | list[int]", *, return_as_pandas: bool = 
         return out.to_pandas() if return_as_pandas else out
 
     art = _load_artifact()
-    cols = art["features"]
-    median = art.get("feature_median", {})
-    for col in cols:
-        if col not in feats.columns:
-            feats = feats.with_columns(pl.lit(median.get(col, 0.0)).alias(col))
-    X = feats.select([pl.col(c).fill_null(median.get(c, 0.0)) for c in cols]).to_numpy()
-    mu = np.asarray(art.get("feature_mean", [0.0] * len(cols)), dtype=float)
-    sd = np.asarray(art.get("feature_sd", [1.0] * len(cols)), dtype=float)
-    sd = np.where(sd == 0.0, 1.0, sd)
-    Z = (X - mu) / sd
-    value = float(art["value_intercept"]) + Z @ np.asarray(art["value_coef"], dtype=float)
-    logit = float(art["prob_intercept"]) + Z @ np.asarray(art["prob_coef"], dtype=float)
-    prob = 1.0 / (1.0 + np.exp(-logit))
-
-    out = feats.select("player_id", "draft_year").with_columns(
-        pl.Series("proj_career_value", value, dtype=pl.Float64),
-        pl.Series("draft_prob", prob, dtype=pl.Float64),
-    )
-    out = out.with_columns(
-        pl.col("proj_career_value")
-        .rank(method="ordinal", descending=True)
-        .over("draft_year")
-        .cast(pl.Int64)
-        .alias("projected_pick")
-    )
-    out = out.with_columns(
-        pl.when(pl.col("projected_pick") <= 4)
-        .then(pl.lit("lottery"))
-        .when(pl.col("projected_pick") <= 12)
-        .then(pl.lit("first_round"))
-        .when(pl.col("projected_pick") <= 36)
-        .then(pl.lit("second_round"))
-        .otherwise(pl.lit("undrafted"))
-        .alias("pro_tier")
-    )
+    out = _score(feats, art)
     return out.to_pandas() if return_as_pandas else out

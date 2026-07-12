@@ -278,8 +278,19 @@ class LeagueConstants:
 # NBA box_value_coef/replacement are fit in dev/nba_draft/fit_box_value.py
 # against the shipped nba_bpm (2016-17..2019-20 overlap, combine-class
 # players) -- see that script's printed diagnostics for provenance.
-# WNBA/G-League seed from the NBA fit until Phase 5 re-fits them on
-# wnba_stats data (documented reduced-combine caveat in wnba_draft_constants.py).
+#
+# WNBA: as of the Phase 5 re-fit (dev/wnba_draft/), the four bundled JSON
+# artifacts (wnba_draft_value / wnba_aging_curve / wnba_availability /
+# wnba_rookie_projection.json) are genuinely fit on real WNBA data captured
+# from stats.wnba.com. box_value_coef/replacement themselves remain the
+# NBA-fit values by deliberate, documented choice -- there is no wnba_bpm (or
+# any other independent advanced-metric anchor) to ridge-regress WNBA box
+# rates against, so re-fitting those two numbers specifically is not
+# achievable with data available today (see dev/wnba_draft/fit_box_value.py's
+# module docstring). This is a permanent caveat, not a "pending" TODO.
+#
+# G-League still seeds from the NBA fit outright (no re-fit attempted yet)
+# pending its own anchor.
 LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "nba": LeagueConstants(
         replacement=-22.6616,
