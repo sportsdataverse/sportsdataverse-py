@@ -117,6 +117,32 @@ def test_build_on_ice_separates_home_and_away():
     assert out["on_ice_away"][0] == "21"
 
 
+def test_build_on_ice_line_change_boundary_no_double_count():
+    """Regression: at a line change the outgoing shift's end_s equals the incoming
+    shift's start_s equals the event time_s. The end boundary is EXCLUSIVE, so only
+    the incoming line is on ice -- a closed interval double-counted both lines and
+    produced impossible ~10-skater strength states (2026-07-12 fix)."""
+    from sportsdataverse.hockeytech._analytics import build_on_ice
+
+    # event at time_s=1000; player 1 (outgoing) [1200..1000] ends exactly at 1000,
+    # player 2 (incoming) [1000..800] starts exactly at 1000. Only player 2 is on ice.
+    pbp = pl.DataFrame({"event": ["faceoff"], "period_of_game": [1], "time_s": [1000], "team_id": [10]})
+    shifts = pl.DataFrame(
+        {
+            "player_id": [1, 2],
+            "home": [1, 1],
+            "period": [1, 1],
+            "start_s": [1200, 1000],
+            "end_s": [1000, 800],
+        }
+    )
+    out = build_on_ice(pbp, shifts)
+    assert out["on_ice_home"][0] == "2", (
+        f"line-change instant must belong only to the incoming shift, got "
+        f"{out['on_ice_home'][0]!r} (closed-interval double-count regressed)"
+    )
+
+
 def test_build_on_ice_empty_inputs():
     from sportsdataverse.hockeytech._analytics import build_on_ice
 
@@ -189,6 +215,52 @@ def test_build_on_ice_real_data_multi_player_split():
     away_counts = shots["on_ice_away"].map_elements(lambda s: len(s.split(",")), return_dtype=pl.Int64)
     assert home_counts.mean() >= 5, f"Mean home players per shot too low: {home_counts.mean()}"
     assert away_counts.mean() >= 5, f"Mean away players per shot too low: {away_counts.mean()}"
+
+
+def test_add_strength_state_even_pp_and_pulled_goalie():
+    from sportsdataverse.hockeytech._analytics import add_strength_state
+
+    pbp = pl.DataFrame(
+        {
+            "event": ["shot", "shot", "shot", "shot"],
+            "on_ice_home": ["1,2,3,4,5,99", "1,2,3,4,5,99", "1,2,3,4,5,6", None],
+            "on_ice_away": ["6,7,8,9,10,88", "6,7,8,9,88", "7,8,9,10,11,88", "6,7,8,9,10,88"],
+        }
+    )
+    out = add_strength_state(pbp, goalie_ids={"99", "88"})
+    assert out["strength_state"][0] == "5v5"  # even strength (goalies 99/88 stripped)
+    assert out["skaters_home"][0] == 5 and out["skaters_away"][0] == 5
+    assert out["strength_state_valid"][0] is True
+    assert out["strength_state"][1] == "5v4"  # home power play
+    assert out["strength_state"][2] == "6v5"  # home pulled goalie -> 6 skaters
+    assert out["strength_state_valid"][2] is True  # a pulled goalie is a valid 6-skater state
+    assert out["strength_state"][3] is None  # null on-ice
+
+
+def test_add_strength_state_flags_impossible_counts():
+    from sportsdataverse.hockeytech._analytics import add_strength_state
+
+    # 7 non-goalie skaters on ice = HockeyTech shift-boundary noise -> invalid
+    pbp = pl.DataFrame({"on_ice_home": ["1,2,3,4,5,6,7,99"], "on_ice_away": ["10,11,12,13,14,88"]})
+    out = add_strength_state(pbp, goalie_ids={"99", "88"})
+    assert out["skaters_home"][0] == 7
+    assert out["strength_state_valid"][0] is False
+
+
+def test_add_strength_state_without_goalie_ids_assumes_one_goalie():
+    from sportsdataverse.hockeytech._analytics import add_strength_state
+
+    pbp = pl.DataFrame({"on_ice_home": ["1,2,3,4,5,99"], "on_ice_away": ["6,7,8,9,10,88"]})
+    out = add_strength_state(pbp)  # no goalie_ids -> assume 1 goalie/side
+    assert out["skaters_home"][0] == 5 and out["skaters_away"][0] == 5
+
+
+def test_add_strength_state_empty_frame():
+    from sportsdataverse.hockeytech._analytics import add_strength_state
+
+    out = add_strength_state(pl.DataFrame({"on_ice_home": [], "on_ice_away": []}), goalie_ids={"1"})
+    assert out.height == 0
+    assert {"strength_state", "skaters_home", "strength_state_valid"}.issubset(out.columns)
 
 
 def test_corsi_fenwick_team_counts_and_flag():

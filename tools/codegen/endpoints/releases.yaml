@@ -809,6 +809,14 @@ loaders:
   min_season: 2024
   example_args:
     seasons: 2024
+- fn: load_pwhl_shifts
+  league: pwhl
+  base: sdv_releases
+  url: pwhl_shifts/shifts_{season}.parquet
+  tag: pwhl_shifts
+  min_season: 2024
+  example_args:
+    seasons: 2025
 - fn: load_pwhl_goalie_boxscores
   league: pwhl
   base: sdv_releases

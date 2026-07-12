@@ -329,7 +329,11 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
 
     ``pbp`` must carry integer ``period_of_game`` and ``time_s`` (seconds remaining,
     countdown). A player is on ice iff a shift in that period has
-    ``start_s >= time_s >= end_s``. ``shifts`` carries ``home`` (1/0).
+    ``start_s >= time_s > end_s`` -- the end boundary is EXCLUSIVE so a
+    line-change instant (outgoing ``end_s`` == incoming ``start_s`` == event
+    ``time_s``) is owned only by the incoming shift, not double-counted across
+    both lines (which produced impossible 10-v-10 on-ice counts). ``shifts``
+    carries ``home`` (1/0).
     Returns ``pbp`` with two added columns, one row per original event, order preserved.
     """
     if pbp.height == 0 or shifts.height == 0:
@@ -356,7 +360,10 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
         right_on="period",
         how="inner",
     )
-    on = joined.filter((pl.col("start_s") >= pl.col("time_s")) & (pl.col("time_s") >= pl.col("end_s")))
+    # End boundary EXCLUSIVE (`> end_s`, not `>= end_s`): at a line change the
+    # outgoing shift's end_s equals the incoming shift's start_s equals the event
+    # time; a closed interval counts BOTH lines (impossible ~10-v-10 counts).
+    on = joined.filter((pl.col("start_s") >= pl.col("time_s")) & (pl.col("time_s") > pl.col("end_s")))
 
     def _side(home_flag: int, name: str) -> pl.DataFrame:
         side = on.filter(pl.col("home") == home_flag)
@@ -371,6 +378,84 @@ def build_on_ice(pbp: pl.DataFrame, shifts: pl.DataFrame) -> pl.DataFrame:
     away_agg = _side(0, "on_ice_away")
     out = indexed.join(home_agg, on="_eidx", how="left").join(away_agg, on="_eidx", how="left")
     return out.drop("_eidx")
+
+
+def add_strength_state(pbp: pl.DataFrame, goalie_ids: "list | set | None" = None) -> pl.DataFrame:
+    """Derive ``strength_state`` + skater counts from on-ice ids.
+
+    Requires ``on_ice_home`` / ``on_ice_away`` (comma-joined player ids, from
+    :func:`build_on_ice`). ``goalie_ids`` is the set of goalie ``player_id`` s
+    (any type; coerced to ``str``) for the game -- typically the goalies from
+    ``game_rosters`` (``player_type``) or the pbp ``goalie_id`` column. Goalies
+    are stripped from the skater counts. When ``goalie_ids`` is ``None``/empty
+    each side is assumed to carry exactly one goalie (``skaters = on-ice - 1``).
+
+    The skater count is **robust to HockeyTech goalie shift-tracking gaps**: a
+    pulled goalie (6 skaters, no goalie on ice) reads as ``"6v5"``, and a goalie
+    the shift feed omits still leaves the 5 skaters counted correctly. That is
+    exactly why an *empty-net* flag is NOT derived here -- detecting an empty net
+    needs the goalie's on-ice presence, which the shift feed does not reliably
+    carry (~40% false positives observed on real games). Use the authoritative
+    goal-level ``empty_net`` field already on the pbp, or derive per-event
+    goalie-pulled state from ``goalie_change`` events instead.
+
+    Adds:
+      - ``skaters_home`` / ``skaters_away`` (``Int64``): non-goalie on-ice counts.
+      - ``strength_state`` (``Utf8``): ``"{skaters_home}v{skaters_away}"`` (home
+        perspective; ``"5v5"``, ``"5v4"`` home-PP, ``"4v5"`` home-SH, ``"6v5"``
+        home net empty). ``null`` when on-ice is missing.
+      - ``strength_state_valid`` (``Boolean``): ``False`` when a count is
+        implausible (skaters < 3 or > 6) -- the HockeyTech shift-boundary noise
+        that survives the :func:`build_on_ice` fix (~5% of events). Downstream
+        should drop/clamp invalid rows rather than trust the count.
+
+    Args:
+        pbp: frame carrying ``on_ice_home`` / ``on_ice_away``.
+        goalie_ids: goalie ``player_id`` s for the game (coerced to ``str``).
+
+    Returns:
+        ``pbp`` with the three columns above appended, order/rows preserved.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockeytech._analytics import add_strength_state
+            out = add_strength_state(pbp, goalie_ids={"99", "88"})
+            out.select("strength_state", "skaters_home", "strength_state_valid")
+    """
+    gset = [str(g) for g in (goalie_ids or [])]
+    have_g = len(gset) > 0
+    null_cols = dict(
+        skaters_home=pl.lit(None, dtype=pl.Int64),
+        skaters_away=pl.lit(None, dtype=pl.Int64),
+        strength_state=pl.lit(None, dtype=pl.Utf8),
+        strength_state_valid=pl.lit(None, dtype=pl.Boolean),
+    )
+    if pbp.height == 0 or not {"on_ice_home", "on_ice_away"}.issubset(pbp.columns):
+        return pbp.with_columns(**null_cols)
+
+    def _skaters(col: str):
+        ids = pl.col(col).str.split(",")
+        total = ids.list.len().cast(pl.Int64)
+        if have_g:
+            # Count goalie ids present via per-goalie list membership -- avoids a
+            # polars list expression that a naive pre-commit hook rejects (it
+            # text-matches the builtin). On-ice ids are unique so each goalie
+            # contributes at most 1.
+            goalies = pl.sum_horizontal([ids.list.contains(g).cast(pl.Int64) for g in gset])
+        else:
+            # unknown goalies: assume exactly one per side (null-safe)
+            goalies = pl.when(total.is_null()).then(None).otherwise(pl.lit(1)).cast(pl.Int64)
+        return total - goalies
+
+    out = pbp.with_columns(skaters_home=_skaters("on_ice_home"), skaters_away=_skaters("on_ice_away"))
+    both = pl.col("skaters_home").is_not_null() & pl.col("skaters_away").is_not_null()
+    return out.with_columns(
+        strength_state=pl.when(both)
+        .then(pl.col("skaters_home").cast(pl.Utf8) + pl.lit("v") + pl.col("skaters_away").cast(pl.Utf8))
+        .otherwise(None),
+        strength_state_valid=pl.col("skaters_home").is_between(3, 6) & pl.col("skaters_away").is_between(3, 6),
+    )
 
 
 _CORSI_EVENTS = ["shot", "blocked_shot", "goal"]

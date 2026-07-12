@@ -20,6 +20,7 @@ flowchart LR
 | `load_phf_team_boxscores` | [phf_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_team_boxscores) | — |
 | `load_pwhl_game_info` | [pwhl_game_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_game_info) | — |
 | `load_pwhl_game_rosters` | [pwhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_game_rosters) | — |
+| `load_pwhl_shifts` | [pwhl_shifts](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_shifts) | — |
 | `load_pwhl_goalie_boxscores` | [pwhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_goalie_boxscores) | — |
 | `load_pwhl_officials` | [pwhl_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_officials) | — |
 | `load_pwhl_pbp` | [pwhl_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_pbp) | — |
@@ -345,6 +346,32 @@ Release: [pwhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-
 
 ```python
 load_pwhl_game_rosters(seasons=2024)
+```
+
+## `load_pwhl_shifts`
+
+Release: [pwhl_shifts](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_shifts) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_shifts/shifts_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `game_id` | Int32 |
+| `player_id` | Int32 |
+| `first_name` | String |
+| `last_name` | String |
+| `jersey_number` | Int32 |
+| `home` | Int32 |
+| `period` | Int32 |
+| `start_time` | String |
+| `end_time` | String |
+| `length` | String |
+| `start_s` | Int32 |
+| `end_s` | Int32 |
+| `goal_on_shift` | Int32 |
+| `penalty_on_shift` | Int32 |
+
+```python
+load_pwhl_shifts(seasons=2025)
 ```
 
 ## `load_pwhl_goalie_boxscores`
