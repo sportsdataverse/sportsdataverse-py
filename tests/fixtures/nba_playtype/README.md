@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [NBA play-type/impact oracle corpus (T3.5)](#nba-play-typeimpact-oracle-corpus-t35)
-  - [Model (2) deferred external oracle](#model-2-deferred-external-oracle)
+  - [Model (2) construct-gap finding (resolved, not deferred)](#model-2-construct-gap-finding-resolved-not-deferred)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -28,36 +28,49 @@ All ids (`team_id`, `player_id`, `off_player_id`, `def_player_id`) are `Int64`.
 | `leaguedash_base_2024.parquet` | `nba_stats_leaguedashplayerstats` | `measure_type_detailed_defense="Base"` | 572 | `poss` column joined in from the `Advanced` measure (Base doesn't ship `poss`); `pfd` IS present on Base |
 | `leaguedash_adv_2024.parquet` | `nba_stats_leaguedashplayerstats` | `measure_type_detailed_defense="Advanced"` | 572 | `pfd` joined in from Base (Advanced doesn't ship it) so both `pfd`-consuming call sites can read from either fixture |
 | `gamelog_2024.parquet` | `nba_stats_leaguegamelog` | `player_or_team_abbreviation="T"` | 2460 (1230 games x 2 teams) | `opp_team_id` derived by self-joining on `game_id` and keeping the non-self row |
-| `rapm_2024.parquet` | `nba_rapm` (shipped model, not a live wrapper) | fit over possessions from **126 games sampled across the whole season** (via `dev/nba_playtype/capture_more_rapm.py` direct + `capture_rapm_proxy.py` through the ProxyBonanza pool, both resumable per-game checkpoints) | 493 players, 24,869 possessions | **Sampled, NOT full-season** -- see the "Model (2) deferred external oracle" note below |
+| `rapm_2024.parquet` | `nba_rapm` (shipped model, not a live wrapper) | fit over possessions from the **FULL 2023-24 season, all 1230 games** (via `dev/nba_playtype/close_drapm_oracle.py` through the ProxyBonanza pool, `lineup_source="pbp"`, resumable per-game checkpoint) | 572 players, 242,619 possessions | **Full-season, maximum possible sample** -- see the "Model (2) construct-gap finding" note below |
 
-## Model (2) deferred external oracle
+## Model (2) construct-gap finding (resolved, not deferred)
 
-`rapm_2024.parquet` exists for the **deferred** stint-RAPM cross-validation of
-`nba_matchup_drapm` (`test_matchup_drapm_vs_shipped_rapm_DEFERRED`, marked
-`@pytest.mark.skip`). It is a 126-game / ~25k-possession sample (mean ~250
-def-poss/player). At that volume stint `d_rapm` is still ridge-shrunk noise at
-the player level, and the Spearman-vs-`matchup_drapm` trajectory is **flat**
-(~-0.03 at both 107 and 126 games -- adding games did not move it). A valid
-stint-RAPM oracle needs a **full-season (~1230-game / ~90k-possession)**
-snapshot; capturing that game-by-game was infeasible here (stats.nba.com
-throttles per-game pbp on the direct residential IP, and even through the
-ProxyBonanza pool a subset of exit IPs hang). Separately, matchup DRAPM
-(on-ball) and stint DRAPM (team/help defense) are only weakly correlated in
-principle.
+`rapm_2024.parquet` was originally a 126-game / ~25k-possession SAMPLE built
+to external-cross-validate `nba_matchup_drapm` against shipped stint RAPM
+(the test was marked `@pytest.mark.skip`, deferred pending a bigger capture).
+That deferral is now **resolved, permanently**: the fixture was rebuilt from
+the full 1230-game / 242,619-possession season (the maximum sample this
+comparison can ever have), captured via the ProxyBonanza pool with
+`lineup_source="pbp"` (~1.3s/game -- the shipped default `"auto"` measured
+~50-55s/game due to its rotation -> quarter_box -> pbp fallback chain, which
+would have made a full-season capture a multi-hour job; `"pbp"` needs only
+the two unconditional network calls and has ~96.7% on-court agreement with
+`"auto"` per the `nba_possessions` docstring).
 
-**Capture contract to close the deferral:** fetch a full-season possessions
-snapshot (all ~1230 `0022300xxx` game ids from `gamelog_2024.parquet`) via the
-resumable proxy checkpoint, refit `nba_rapm`, overwrite `rapm_2024.parquet`,
-set `DRAPM_SPEARMAN_FLOOR` from the **observed** value (spec target >=0.3),
-and remove the `@pytest.mark.skip`.
+The Spearman(`matchup_drapm`, stint `d_rapm`) trajectory as the sample grew:
+-0.018 (100g) / -0.002 (150g) / +0.041 (200g) / +0.039 (300g) / +0.063 (400g)
+/ +0.089 (500g) / +0.091 (650g) / +0.111 (800g) / +0.111 (1000g) / **+0.115
+(1230g, full season)**. It clearly **plateaus from ~800 games on** (the
+800->1000 step, +200 games, moved rho by only -0.0003) -- this is not
+ridge-shrinkage noise still settling, it is the actual full-season
+relationship, measured at the maximum achievable power.
 
-Model (2) is **not ungated** in the meantime: it ships gated on its INTERNAL
-concurrent-validity (`test_matchup_drapm_internal_concurrent_validity`) --
-`matchup_drapm` rank-agrees with each defender's raw points-allowed-per-100 at
-Spearman **-0.733** (floor -0.5, n=251), plus ridge-centering (mean~0),
-magnitude sanity (max ~11.6, guards the fixed double-scale bug), non-trivial
-offense-FE adjustment (|rho|<1), and the synthetic dominant-defender recovery
-unit test.
+**Conclusion: matchup-DRAPM (on-ball defense) and stint-DRAPM (team/help
+defense) are related but distinct constructs.** The relationship is
+weak-but-real and positive (on-ball defense contributes to, but does not
+dominate, team defensive value) but falls well short of a shared-construct
+correlation. Strict external cross-validation against stint RAPM does not
+apply to model (2) as a validation route -- no larger capture will change
+this conclusion, since this snapshot already is the full season.
+
+Model (2) ships gated on its INTERNAL concurrent-validity
+(`test_matchup_drapm_internal_concurrent_validity`) -- `matchup_drapm`
+rank-agrees with each defender's raw points-allowed-per-100 at Spearman
+**-0.733** (floor -0.5, n=251), plus ridge-centering (mean~0), magnitude
+sanity (max ~11.6, guards the fixed double-scale bug), non-trivial offense-FE
+adjustment (|rho|<1), and the synthetic dominant-defender recovery unit test.
+The construct-gap finding itself is locked in by
+`test_matchup_drapm_vs_stint_rapm_construct_gap` (a real, passing assertion
+that the correlation stays in the observed weak-positive band -- a sign-flip
+or a sudden jump to a strong correlation would fail it, which is the point:
+either would contradict this finding and deserve a fresh look).
 
 Endpoint param names pinned by live capture (Task 0.1 Step 1):
 `nba_stats_synergyplaytypes(league_id, season, play_type_nullable,
