@@ -423,7 +423,9 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped over
+    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -479,7 +481,9 @@ def load_cfb_rosters(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped over
+    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -548,7 +552,9 @@ def load_cfb_schedule(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_schedule: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped over
+    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -614,7 +620,9 @@ def load_cfb_team_info(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_team_info: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped over
+    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -663,7 +671,9 @@ def load_cfb_teams_crosswalk(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_teams_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped over
+    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -712,5 +722,7 @@ def load_cfb_schedule_crosswalk(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_schedule_crosswalk: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped over
+    # the years, e.g. the frozen PHF assets) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

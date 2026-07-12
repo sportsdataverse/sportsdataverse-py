@@ -854,26 +854,27 @@ from sportsdataverse.mlb import fox_mlb_team_stats
 df = fox_mlb_team_stats("...")
 ```
 
-### `mae(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'` {#mae}
+### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
 
-Mean absolute error between two 1-D arrays.
+Mean absolute error between two arrays.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `a` | `ndarray` |  | Predicted / modeled array. |
-| `b` | `ndarray` |  | Reference / observed array, same length as `a`. |
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
 
 **Returns**
 
-`mean(abs(a - b))`.
+The mean absolute error.
 
 **Example**
 
 ```python
-from sportsdataverse.mlb.mlb_run_values import mae
-gap = mae(deciles["mean_pred"].to_numpy(), deciles["mean_actual"].to_numpy())
+import numpy as np
+from sportsdataverse._common.metrics import mae
+mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
 ### `mlb_attendance(team_id: 'Optional[int]' = None, league_id: 'Optional[Union[int, str]]' = None, season: 'Optional[Union[int, str]]' = None, league_list_id: 'Optional[str]' = None, game_type: 'Optional[str]' = None, **kwargs) -> 'Dict'` {#mlb_attendance}
@@ -3263,26 +3264,27 @@ out = siera_like(raw_pitches, 2024)
 print(out.sort("siera_like").head())
 ```
 
-### `spearman_corr(a: "'np.ndarray'", b: "'np.ndarray'") -> 'float'` {#spearman_corr}
+### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
 
-Spearman rank correlation between two 1-D arrays.
+Spearman rank correlation between two arrays.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `a` | `ndarray` |  | First sample array. |
-| `b` | `ndarray` |  | Second sample array, same length as `a`. |
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
 
 **Returns**
 
-Spearman's rho (Pearson correlation of the ranks).
+The Spearman rank correlation coefficient.
 
 **Example**
 
 ```python
-from sportsdataverse.mlb.mlb_run_values import spearman_corr
-rho = spearman_corr(mine["oaa"].to_numpy(), sav["outs_above_average"].to_numpy())
+import numpy as np
+from sportsdataverse._common.metrics import spearman_corr
+spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 
 ### `tto_penalty_table(feats: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#tto_penalty_table}

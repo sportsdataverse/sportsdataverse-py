@@ -1521,25 +1521,25 @@ d = booster_cache_dir()
 
 ### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
 
-Mean squared error between predicted probability and binary outcome.
+Mean squared error between predicted probabilities and binary outcomes.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `y_true` | `ndarray` |  | binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
 
 **Returns**
 
-The Brier score (lower is better; 0.0 is a perfect forecast).
+The Brier score (0.0 is a perfect forecast).
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.nhl.nhl_prediction_constants import brier_score
-brier_score(np.array([1, 0]), np.array([0.8, 0.2]))
+from sportsdataverse._common.metrics import brier_score
+brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
 ### `build_design(stints: 'pl.DataFrame') -> "tuple['sp.csr_matrix', np.ndarray, np.ndarray, list[int]]"` {#build_design}
@@ -1605,27 +1605,26 @@ stints = build_stints(shifts, scored)
 
 ### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
 
-Bucket predicted probabilities into `n_bins` and compare to realized rate.
+Bucket predicted probabilities into bins and compare to actual outcome rates.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `y_true` | `ndarray` |  | binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
-| `n_bins` | `int` | `10` | number of equal-width probability bins. |
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
+| `n_bins` | `int` | `10` | Number of equal-width probability bins. |
 
 **Returns**
 
-A polars DataFrame with one row per non-empty bin. |col_name |type | |:-----------|:------| |bin_mid |Float64| |mean_pred |Float64| |mean_actual |Float64| |n |Int64 |
+A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.nhl.nhl_prediction_constants import calibration_table
-rng = np.random.default_rng(0)
-calibration_table(rng.integers(0, 2, 200), rng.random(200))
+from sportsdataverse._common.metrics import calibration_table
+calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 ```
 
 ### `ensure_xg_models(model_dir: 'str | Path | None' = None) -> 'Path'` {#ensure_xg_models}
@@ -1971,26 +1970,26 @@ feats = in_game_features(pbp, pregame_home_prob=pregame_p)
 
 ### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
 
-Binary log-loss (cross-entropy) between predicted probability and outcome.
+Binary cross-entropy loss between predicted probabilities and outcomes.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `y_true` | `ndarray` |  | binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | predicted probabilities in [0, 1]. |
-| `eps` | `float` | `1e-15` | clipping floor/ceiling to avoid `log(0)`. |
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
+| `eps` | `float` | `1e-15` | Clipping bound to avoid `log(0)`. |
 
 **Returns**
 
-The mean log-loss (lower is better).
+The mean log loss.
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.nhl.nhl_prediction_constants import log_loss_score
-log_loss_score(np.array([1, 0]), np.array([0.8, 0.2]))
+from sportsdataverse._common.metrics import log_loss_score
+log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
 ### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
@@ -2001,18 +2000,18 @@ Mean absolute error between two arrays.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `a` | `ndarray` |  | first array (e.g. predicted values). |
-| `b` | `ndarray` |  | second array (e.g. observed values). |
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
 
 **Returns**
 
-The mean absolute difference `mean(|a - b|)`.
+The mean absolute error.
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.nhl.nhl_prediction_constants import mae
+from sportsdataverse._common.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
@@ -2117,19 +2116,19 @@ Spearman rank correlation between two arrays.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `a` | `ndarray` |  | first array. |
-| `b` | `ndarray` |  | second array (same length as `a`). |
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
 
 **Returns**
 
-The Spearman rank correlation coefficient in [-1, 1].
+The Spearman rank correlation coefficient.
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.nhl.nhl_prediction_constants import spearman_corr
-spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([3.0, 1.0, 2.0]))
+from sportsdataverse._common.metrics import spearman_corr
+spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 
 ### `team_fullname_to_abbr(name: 'str') -> 'str | None'` {#team_fullname_to_abbr}
