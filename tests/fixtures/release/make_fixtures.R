@@ -16,7 +16,12 @@
 
 library(data.table) # gh_cli.R relies on `@import data.table` in the pkg namespace
 
-r_pkg_dir <- "c:/Users/saiem/Documents/GitHub-Data/sdv-dev/sportsdataverse-data"
+# sportsdataverse-data checkout: sibling of the sdv-py repo root by default,
+# overridable for other layouts (e.g. running from a git worktree)
+r_pkg_dir <- Sys.getenv(
+  "SDV_R_PKG_DIR",
+  file.path(dirname(getwd()), "sportsdataverse-data")
+)
 out_dir <- "tests/fixtures/release"
 
 source(file.path(r_pkg_dir, "R", "upload.R"))

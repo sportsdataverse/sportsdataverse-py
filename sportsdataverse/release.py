@@ -30,7 +30,6 @@ vars the R package reads (``SPORTSDATAVERSE.UPLOAD.INSIST`` /
 
 from __future__ import annotations
 
-import gzip
 import json
 import os
 import re
@@ -41,7 +40,8 @@ import time
 import warnings
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Optional, Union
+from collections.abc import Iterable
+from typing import Any
 
 import polars as pl
 
@@ -84,18 +84,29 @@ def _gh_env() -> dict[str, str]:
     return env
 
 
+# generous ceiling: multi-hundred-MB release assets legitimately upload for
+# minutes; the timeout only guards against an indefinite network stall
+_GH_TIMEOUT_SECONDS = 600.0
+
+
 def _invoke_gh(args: list[str]) -> str:
     """Run ``gh <args>`` and return stdout; raise on any failure.
 
     The single subprocess chokepoint — tests monkeypatch this to run offline.
     """
     gh_cli_available()
-    proc = subprocess.run(
-        ["gh", *args],
-        capture_output=True,
-        text=True,
-        env=_gh_env(),
-    )
+    try:
+        proc = subprocess.run(
+            ["gh", *args],
+            capture_output=True,
+            text=True,
+            timeout=_GH_TIMEOUT_SECONDS,
+            env=_gh_env(),
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"The GitHub CLI timed out after {_GH_TIMEOUT_SECONDS:.0f}s for 'gh {' '.join(args)}'"
+        ) from exc
     if proc.returncode != 0:
         raise RuntimeError(
             f"The GitHub CLI errored (exit {proc.returncode}) for 'gh {' '.join(args)}': {proc.stderr.strip()}"
@@ -155,7 +166,7 @@ def _size_string(size: int) -> str:
 
 
 def gh_cli_release_upload(
-    files: Iterable[Union[str, Path]],
+    files: Iterable[str | Path],
     tag: str,
     *,
     repo: str = DEFAULT_REPO,
@@ -323,9 +334,9 @@ def _create_package_function(temp_dir: Path, pkg_function: str) -> list[Path]:
 
 
 def sportsdataverse_upload(
-    files: Iterable[Union[str, Path]],
+    files: Iterable[str | Path],
     tag: str,
-    pkg_function: Optional[str] = None,
+    pkg_function: str | None = None,
     *,
     repo: str = DEFAULT_REPO,
     overwrite: bool = True,
@@ -344,7 +355,9 @@ def sportsdataverse_upload(
         pkg_function: Related package function name, uploaded as
             ``package_function.txt`` / ``.json`` sidecars when given.
         repo: Target repository. Defaults to ``sportsdataverse/sportsdataverse-data``.
-        overwrite: Pass ``--clobber`` so existing assets are replaced.
+        overwrite: Pass ``--clobber`` so existing assets are replaced. Retry
+            attempts always clobber regardless — a failed attempt may have
+            landed some files already, and re-uploading them must succeed.
 
     Returns:
         True when files were uploaded, False when none existed.
@@ -368,19 +381,26 @@ def sportsdataverse_upload(
     pause_min = float(os.environ.get("SPORTSDATAVERSE.UPLOAD.PAUSE_MIN", "1"))
     max_times = int(float(os.environ.get("SPORTSDATAVERSE.UPLOAD.MAX_TIMES", "20"))) if insist else 1
 
-    def _upload_once() -> bool:
+    def _upload_once(force_clobber: bool) -> bool:
         temp_dir = Path(tempfile.mkdtemp(prefix="sdv_release_"))
         try:
             sidecars = _create_timestamp_file(temp_dir)
             if pkg_function is not None:
                 sidecars += _create_package_function(temp_dir, pkg_function)
-            return gh_cli_release_upload([*files, *sidecars], tag=tag, repo=repo, overwrite=overwrite)
+            return gh_cli_release_upload(
+                [*files, *sidecars],
+                tag=tag,
+                repo=repo,
+                # retries re-upload files a failed earlier attempt may have
+                # already landed; without --clobber those would fail forever
+                overwrite=overwrite or force_clobber,
+            )
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)
 
     for attempt in range(1, max_times + 1):
         try:
-            return _upload_once()
+            return _upload_once(force_clobber=attempt > 1)
         except Exception:
             if attempt == max_times:
                 raise
@@ -502,8 +522,7 @@ def sportsdataverse_save(
         written.append(path)
     if "csv.gz" in requested:
         path = temp_dir / f"{file_name}.csv.gz"
-        with gzip.open(path, "wb") as f:
-            df.write_csv(f)
+        df.write_csv(path, compression="gzip")
         written.append(path)
     if "parquet" in requested:
         path = temp_dir / f"{file_name}.parquet"

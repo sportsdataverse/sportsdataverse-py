@@ -157,7 +157,7 @@ def test_save_writes_gzipped_rds(saved_files):
     assert header == b"\x1f\x8b"  # gzip magic, like saveRDS(compress = TRUE)
 
 
-def test_rds_byte_golden():
+def test_rds_byte_golden(tmp_path):
     """The Python writer reproduces R's saveRDS bytes exactly.
 
     ``rds_golden.rds`` is the save()-coerced parity frame serialized by R
@@ -169,20 +169,17 @@ def test_rds_byte_golden():
         pl.col("season").str.strip_chars().cast(pl.Float64).cast(pl.Int32),
         pl.col("week").cast(pl.Int32),
     )
-    out = FIXTURE_DIR.parent / "release" / "_py_golden_check.rds"
-    try:
-        write_rds(
-            coerced,
-            out,
-            attributes={
-                "sportsdataverse_type": "Parity fixture frame",
-                "sportsdataverse_timestamp": datetime(2026, 7, 12, 14, 0, 0, tzinfo=timezone.utc),
-            },
-            compress=False,
-        )
-        got = out.read_bytes()
-    finally:
-        out.unlink(missing_ok=True)
+    out = tmp_path / "py_golden_check.rds"
+    write_rds(
+        coerced,
+        out,
+        attributes={
+            "sportsdataverse_type": "Parity fixture frame",
+            "sportsdataverse_timestamp": datetime(2026, 7, 12, 14, 0, 0, tzinfo=timezone.utc),
+        },
+        compress=False,
+    )
+    got = out.read_bytes()
     expected = (FIXTURE_DIR / "rds_golden.rds").read_bytes()
     assert got[14:] == expected[14:]
 

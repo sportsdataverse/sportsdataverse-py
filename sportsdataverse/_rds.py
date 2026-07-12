@@ -23,7 +23,8 @@ import struct
 from datetime import datetime, timezone
 from functools import partial
 from pathlib import Path
-from typing import Callable, Iterable, List, Mapping, Optional, Tuple, Union
+from collections.abc import Callable, Iterable, Mapping
+from typing import Union
 
 import numpy as np
 import polars as pl
@@ -55,6 +56,7 @@ _INT32_MAX = 2**31 - 1
 _R_VERSION = (4 << 16) | (5 << 8) | 3
 _R_MIN_VERSION = (2 << 16) | (3 << 8) | 0
 
+# runtime-evaluated alias: `str | datetime` needs py3.10+, floor is 3.9
 _AttrValue = Union[str, datetime]
 _ColumnWriter = Callable[[], None]
 
@@ -63,7 +65,7 @@ class _RdsWriter:
     """Accumulates the XDR byte stream for one serialized R object."""
 
     def __init__(self) -> None:
-        self._chunks: List[bytes] = []
+        self._chunks: list[bytes] = []
         # R's serializer refs repeated symbols instead of re-serializing them
         # (serialize.c HashAdd/OutRefIndex); 1-based, first-appearance order
         self._sym_refs: dict[str, int] = {}
@@ -103,7 +105,7 @@ class _RdsWriter:
 
     # -- atomic vectors ------------------------------------------------------
 
-    def charsxp(self, value: Optional[str]) -> None:
+    def charsxp(self, value: str | None) -> None:
         if value is None:
             # NA_STRING is a CHARSXP with length -1 and no encoding bits
             self._flags(_CHARSXP)
@@ -117,10 +119,10 @@ class _RdsWriter:
 
     def strsxp(
         self,
-        values: Iterable[Optional[str]],
+        values: Iterable[str | None],
         *,
         length: int,
-        attributes: Optional[List[Tuple[str, _ColumnWriter]]] = None,
+        attributes: list[tuple[str, _ColumnWriter]] | None = None,
         is_object: bool = False,
     ) -> None:
         self._flags(_STRSXP, is_object=is_object, has_attr=bool(attributes))
@@ -136,7 +138,7 @@ class _RdsWriter:
         *,
         length: int,
         sexp_type: int = _INTSXP,
-        attributes: Optional[List[Tuple[str, _ColumnWriter]]] = None,
+        attributes: list[tuple[str, _ColumnWriter]] | None = None,
         is_object: bool = False,
     ) -> None:
         self._flags(sexp_type, is_object=is_object, has_attr=bool(attributes))
@@ -150,7 +152,7 @@ class _RdsWriter:
         values: np.ndarray,
         null_mask: np.ndarray,
         *,
-        attributes: Optional[List[Tuple[str, _ColumnWriter]]] = None,
+        attributes: list[tuple[str, _ColumnWriter]] | None = None,
         is_object: bool = False,
     ) -> None:
         self._flags(_REALSXP, is_object=is_object, has_attr=bool(attributes))
@@ -179,7 +181,7 @@ class _RdsWriter:
         self._flags(_SYMSXP)
         self.charsxp(name)
 
-    def attr_pairlist(self, attributes: List[Tuple[str, _ColumnWriter]]) -> None:
+    def attr_pairlist(self, attributes: list[tuple[str, _ColumnWriter]]) -> None:
         """LISTSXP chain of (tag symbol, value); terminated by NILVALUE."""
         for name, write_value in attributes:
             self._flags(_LISTSXP, has_tag=True)
@@ -190,7 +192,7 @@ class _RdsWriter:
     def scalar_string(self, value: str) -> None:
         self.strsxp([value], length=1)
 
-    def class_attr(self, classes: List[str]) -> Tuple[str, _ColumnWriter]:
+    def class_attr(self, classes: list[str]) -> tuple[str, _ColumnWriter]:
         return ("class", lambda: self.strsxp(list(classes), length=len(classes)))
 
     def posixct_scalar(self, value: datetime) -> None:
@@ -279,9 +281,9 @@ def _column_writer(writer: _RdsWriter, series: pl.Series) -> _ColumnWriter:
 
 def write_rds(
     df: pl.DataFrame,
-    path: Union[str, Path],
+    path: str | Path,
     *,
-    attributes: Optional[Mapping[str, _AttrValue]] = None,
+    attributes: Mapping[str, _AttrValue] | None = None,
     compress: bool = True,
 ) -> None:
     """Write ``df`` as an R data.frame in RDS (version 2) format.
@@ -314,7 +316,7 @@ def write_rds(
     # data.frame that went through `$<-` column assignment (as in
     # sportsdataverse_save's season/week coercion): names, row.names, class.
     # Readers accept any order; the byte-golden fixture pins this one.
-    frame_attributes: List[Tuple[str, _ColumnWriter]] = [
+    frame_attributes: list[tuple[str, _ColumnWriter]] = [
         ("names", lambda: writer.strsxp(list(df.columns), length=df.width)),
         (
             "row.names",
