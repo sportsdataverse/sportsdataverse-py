@@ -1,0 +1,2468 @@
+{
+  "boxscore": {
+    "teams": [
+      {
+        "team": {
+          "id": "125957",
+          "uid": "s:20~l:37~t:125957",
+          "slug": "michigan-panthers",
+          "location": "Michigan",
+          "name": "Panthers",
+          "abbreviation": "MIC",
+          "displayName": "Michigan Panthers",
+          "shortDisplayName": "Panthers",
+          "color": "691c32",
+          "alternateColor": "f4f4f4"
+        },
+        "statistics": [],
+        "displayOrder": 1,
+        "homeAway": "away"
+      },
+      {
+        "team": {
+          "id": "126073",
+          "uid": "s:20~l:37~t:126073",
+          "slug": "birmingham-stallions",
+          "location": "Birmingham",
+          "name": "Stallions",
+          "abbreviation": "BIR",
+          "displayName": "Birmingham Stallions",
+          "shortDisplayName": "Stallions",
+          "color": "a32035",
+          "alternateColor": "c6b784",
+          "logo": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default.png"
+        },
+        "statistics": [],
+        "displayOrder": 2,
+        "homeAway": "home"
+      }
+    ],
+    "players": [
+      {
+        "team": {
+          "id": "125957",
+          "uid": "s:20~l:37~t:125957",
+          "slug": "michigan-panthers",
+          "location": "Michigan",
+          "name": "Panthers",
+          "abbreviation": "MIC",
+          "displayName": "Michigan Panthers",
+          "shortDisplayName": "Panthers",
+          "color": "691c32",
+          "alternateColor": "f4f4f4"
+        },
+        "statistics": [
+          {
+            "name": "passing",
+            "keys": [
+              "completions/passingAttempts",
+              "passingYards",
+              "yardsPerPassAttempt",
+              "passingTouchdowns",
+              "interceptions",
+              "adjQBR"
+            ],
+            "text": "Michigan Passing",
+            "labels": [
+              "C/ATT",
+              "YDS",
+              "AVG",
+              "TD",
+              "INT"
+            ],
+            "descriptions": [
+              "Completions/Attempts",
+              "Yards",
+              "Yards Per Pass Attempt",
+              "Touchdowns",
+              "Interceptions"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "rushing",
+            "keys": [
+              "rushingAttempts",
+              "rushingYards",
+              "yardsPerRushAttempt",
+              "rushingTouchdowns",
+              "longRushing"
+            ],
+            "text": "Michigan Rushing",
+            "labels": [
+              "CAR",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG"
+            ],
+            "descriptions": [
+              "Rushing Attempts",
+              "Yards",
+              "Yards Per Rushing Attempt",
+              "Touchdowns",
+              "Longest Run"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "receiving",
+            "keys": [
+              "receptions",
+              "receivingYards",
+              "yardsPerReception",
+              "receivingTouchdowns",
+              "longReception",
+              "receivingTargets"
+            ],
+            "text": "Michigan Receiving",
+            "labels": [
+              "REC",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG",
+              "TGTS"
+            ],
+            "descriptions": [
+              "Receptions",
+              "Yards",
+              "Yards Per Reception",
+              "Touchdowns",
+              "Longest Reception",
+              "Receiving Targets"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "fumbles",
+            "keys": [
+              "fumbles",
+              "fumblesLost",
+              "fumblesRecovered"
+            ],
+            "text": "Michigan Fumbles",
+            "labels": [
+              "FUM",
+              "LOST",
+              "REC"
+            ],
+            "descriptions": [
+              "Fumbles",
+              "Fumbles Lost",
+              "Fumbles Recovered"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "defensive",
+            "keys": [
+              "totalTackles",
+              "soloTackles",
+              "sacks",
+              "tacklesForLoss",
+              "passesDefended",
+              "hurries",
+              "defensiveTouchdowns"
+            ],
+            "text": "Michigan Defense",
+            "labels": [
+              "TOT",
+              "SOLO",
+              "SACKS",
+              "TFL",
+              "PD",
+              "QB HUR",
+              "TD"
+            ],
+            "descriptions": [
+              "Tackles",
+              "Solo Tackles",
+              "Sacks",
+              "Tackles For Loss",
+              "Passes Defended",
+              "Quarterback Hurries",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "interceptions",
+            "keys": [
+              "interceptions",
+              "interceptionYards",
+              "interceptionTouchdowns"
+            ],
+            "text": "Michigan Interceptions",
+            "labels": [
+              "INT",
+              "YDS",
+              "TD"
+            ],
+            "descriptions": [
+              "Interceptions",
+              "Yards",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "kickReturns",
+            "keys": [
+              "kickReturns",
+              "kickReturnYards",
+              "yardsPerKickReturn",
+              "longKickReturn",
+              "kickReturnTouchdowns"
+            ],
+            "text": "Michigan Kick Returns",
+            "labels": [
+              "NO",
+              "YDS",
+              "AVG",
+              "LONG",
+              "TD"
+            ],
+            "descriptions": [
+              "Kick Returns",
+              "Yards",
+              "Yards Per Kick Return",
+              "Longest Kick Return",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "puntReturns",
+            "keys": [
+              "puntReturns",
+              "puntReturnYards",
+              "yardsPerPuntReturn",
+              "longPuntReturn",
+              "puntReturnTouchdowns"
+            ],
+            "text": "Michigan Punt Returns",
+            "labels": [
+              "NO",
+              "YDS",
+              "AVG",
+              "LONG",
+              "TD"
+            ],
+            "descriptions": [
+              "Punt Returns",
+              "Yards",
+              "Yards Per Punt Return",
+              "Longest Punt Return",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "kicking",
+            "keys": [
+              "fieldGoalsMade/fieldGoalAttempts",
+              "fieldGoalPct",
+              "longFieldGoalMade",
+              "extraPointsMade/extraPointAttempts",
+              "totalKickingPoints"
+            ],
+            "text": "Michigan Kicking",
+            "labels": [
+              "FG",
+              "PCT",
+              "LONG",
+              "XP",
+              "PTS"
+            ],
+            "descriptions": [
+              "Field Goals Made/Attempts",
+              "Field Goal Percentage",
+              "Longest Field Goal Made",
+              "Extra Points Made/Attempts",
+              "Kicking Points"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "punting",
+            "keys": [
+              "punts",
+              "puntYards",
+              "grossAvgPuntYards",
+              "touchbacks",
+              "puntsInside20",
+              "longPunt"
+            ],
+            "text": "Michigan Punting",
+            "labels": [
+              "NO",
+              "YDS",
+              "AVG",
+              "TB",
+              "In 20",
+              "LONG"
+            ],
+            "descriptions": [
+              "Punts",
+              "Yards",
+              "Average Punt Yards",
+              "Touchbacks",
+              "Punts Inside 20",
+              "Longest Punt"
+            ],
+            "athletes": [],
+            "totals": []
+          }
+        ],
+        "displayOrder": 1
+      },
+      {
+        "team": {
+          "id": "126073",
+          "uid": "s:20~l:37~t:126073",
+          "slug": "birmingham-stallions",
+          "location": "Birmingham",
+          "name": "Stallions",
+          "abbreviation": "BIR",
+          "displayName": "Birmingham Stallions",
+          "shortDisplayName": "Stallions",
+          "color": "a32035",
+          "alternateColor": "c6b784",
+          "logo": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default.png"
+        },
+        "statistics": [
+          {
+            "name": "passing",
+            "keys": [
+              "completions/passingAttempts",
+              "passingYards",
+              "yardsPerPassAttempt",
+              "passingTouchdowns",
+              "interceptions",
+              "adjQBR"
+            ],
+            "text": "Birmingham Passing",
+            "labels": [
+              "C/ATT",
+              "YDS",
+              "AVG",
+              "TD",
+              "INT"
+            ],
+            "descriptions": [
+              "Completions/Attempts",
+              "Yards",
+              "Yards Per Pass Attempt",
+              "Touchdowns",
+              "Interceptions"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "rushing",
+            "keys": [
+              "rushingAttempts",
+              "rushingYards",
+              "yardsPerRushAttempt",
+              "rushingTouchdowns",
+              "longRushing"
+            ],
+            "text": "Birmingham Rushing",
+            "labels": [
+              "CAR",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG"
+            ],
+            "descriptions": [
+              "Rushing Attempts",
+              "Yards",
+              "Yards Per Rushing Attempt",
+              "Touchdowns",
+              "Longest Run"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "receiving",
+            "keys": [
+              "receptions",
+              "receivingYards",
+              "yardsPerReception",
+              "receivingTouchdowns",
+              "longReception",
+              "receivingTargets"
+            ],
+            "text": "Birmingham Receiving",
+            "labels": [
+              "REC",
+              "YDS",
+              "AVG",
+              "TD",
+              "LONG",
+              "TGTS"
+            ],
+            "descriptions": [
+              "Receptions",
+              "Yards",
+              "Yards Per Reception",
+              "Touchdowns",
+              "Longest Reception",
+              "Receiving Targets"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "fumbles",
+            "keys": [
+              "fumbles",
+              "fumblesLost",
+              "fumblesRecovered"
+            ],
+            "text": "Birmingham Fumbles",
+            "labels": [
+              "FUM",
+              "LOST",
+              "REC"
+            ],
+            "descriptions": [
+              "Fumbles",
+              "Fumbles Lost",
+              "Fumbles Recovered"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "defensive",
+            "keys": [
+              "totalTackles",
+              "soloTackles",
+              "sacks",
+              "tacklesForLoss",
+              "passesDefended",
+              "hurries",
+              "defensiveTouchdowns"
+            ],
+            "text": "Birmingham Defense",
+            "labels": [
+              "TOT",
+              "SOLO",
+              "SACKS",
+              "TFL",
+              "PD",
+              "QB HUR",
+              "TD"
+            ],
+            "descriptions": [
+              "Tackles",
+              "Solo Tackles",
+              "Sacks",
+              "Tackles For Loss",
+              "Passes Defended",
+              "Quarterback Hurries",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "interceptions",
+            "keys": [
+              "interceptions",
+              "interceptionYards",
+              "interceptionTouchdowns"
+            ],
+            "text": "Birmingham Interceptions",
+            "labels": [
+              "INT",
+              "YDS",
+              "TD"
+            ],
+            "descriptions": [
+              "Interceptions",
+              "Yards",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "kickReturns",
+            "keys": [
+              "kickReturns",
+              "kickReturnYards",
+              "yardsPerKickReturn",
+              "longKickReturn",
+              "kickReturnTouchdowns"
+            ],
+            "text": "Birmingham Kick Returns",
+            "labels": [
+              "NO",
+              "YDS",
+              "AVG",
+              "LONG",
+              "TD"
+            ],
+            "descriptions": [
+              "Kick Returns",
+              "Yards",
+              "Yards Per Kick Return",
+              "Longest Kick Return",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "puntReturns",
+            "keys": [
+              "puntReturns",
+              "puntReturnYards",
+              "yardsPerPuntReturn",
+              "longPuntReturn",
+              "puntReturnTouchdowns"
+            ],
+            "text": "Birmingham Punt Returns",
+            "labels": [
+              "NO",
+              "YDS",
+              "AVG",
+              "LONG",
+              "TD"
+            ],
+            "descriptions": [
+              "Punt Returns",
+              "Yards",
+              "Yards Per Punt Return",
+              "Longest Punt Return",
+              "Touchdowns"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "kicking",
+            "keys": [
+              "fieldGoalsMade/fieldGoalAttempts",
+              "fieldGoalPct",
+              "longFieldGoalMade",
+              "extraPointsMade/extraPointAttempts",
+              "totalKickingPoints"
+            ],
+            "text": "Birmingham Kicking",
+            "labels": [
+              "FG",
+              "PCT",
+              "LONG",
+              "XP",
+              "PTS"
+            ],
+            "descriptions": [
+              "Field Goals Made/Attempts",
+              "Field Goal Percentage",
+              "Longest Field Goal Made",
+              "Extra Points Made/Attempts",
+              "Kicking Points"
+            ],
+            "athletes": [],
+            "totals": []
+          },
+          {
+            "name": "punting",
+            "keys": [
+              "punts",
+              "puntYards",
+              "grossAvgPuntYards",
+              "touchbacks",
+              "puntsInside20",
+              "longPunt"
+            ],
+            "text": "Birmingham Punting",
+            "labels": [
+              "NO",
+              "YDS",
+              "AVG",
+              "TB",
+              "In 20",
+              "LONG"
+            ],
+            "descriptions": [
+              "Punts",
+              "Yards",
+              "Average Punt Yards",
+              "Touchbacks",
+              "Punts Inside 20",
+              "Longest Punt"
+            ],
+            "athletes": [],
+            "totals": []
+          }
+        ],
+        "displayOrder": 2
+      }
+    ]
+  },
+  "format": {
+    "regulation": {
+      "periods": 4,
+      "displayName": "Quarter",
+      "slug": "quarter",
+      "clock": 900.0
+    }
+  },
+  "gameInfo": {
+    "venue": {
+      "id": "7221",
+      "guid": "75e3107c-62ec-3742-805a-4e4118e61d29",
+      "fullName": "Protective Stadium",
+      "address": {
+        "city": "Birmingham",
+        "state": "AL",
+        "zipCode": "35203",
+        "country": "USA"
+      },
+      "grass": true
+    },
+    "attendance": 0
+  },
+  "leaders": [
+    {
+      "team": {
+        "id": "126073",
+        "uid": "s:20~l:37~t:126073",
+        "displayName": "Birmingham Stallions",
+        "abbreviation": "BIR",
+        "logo": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default.png",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2026-05-21T19:26Z"
+          },
+          {
+            "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default-dark.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2026-05-21T19:26Z"
+          }
+        ]
+      },
+      "leaders": []
+    },
+    {
+      "team": {
+        "id": "125957",
+        "uid": "s:20~l:37~t:125957",
+        "displayName": "Michigan Panthers",
+        "abbreviation": "MIC",
+        "logos": []
+      },
+      "leaders": []
+    }
+  ],
+  "broadcasts": [
+    {
+      "type": {
+        "id": "4",
+        "shortName": "Streaming",
+        "longName": "Streaming",
+        "slug": "streaming"
+      },
+      "station": "ESPN+",
+      "market": {
+        "id": "1",
+        "type": "National"
+      },
+      "media": {
+        "callLetters": "ESPN+",
+        "name": "ESPN+",
+        "shortName": "ESPN+"
+      },
+      "lang": "en",
+      "region": "us",
+      "isNational": true
+    }
+  ],
+  "pickcenter": [],
+  "odds": [],
+  "againstTheSpread": [
+    {
+      "team": {
+        "id": "125957",
+        "uid": "s:20~l:37~t:125957",
+        "displayName": "Michigan Panthers",
+        "abbreviation": "MIC",
+        "logos": []
+      },
+      "records": []
+    },
+    {
+      "team": {
+        "id": "126073",
+        "uid": "s:20~l:37~t:126073",
+        "displayName": "Birmingham Stallions",
+        "abbreviation": "BIR",
+        "logo": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default.png",
+        "logos": [
+          {
+            "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "default"
+            ],
+            "lastUpdated": "2026-05-21T19:26Z"
+          },
+          {
+            "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default-dark.png",
+            "width": 500,
+            "height": 500,
+            "alt": "",
+            "rel": [
+              "full",
+              "dark"
+            ],
+            "lastUpdated": "2026-05-21T19:26Z"
+          }
+        ]
+      },
+      "records": []
+    }
+  ],
+  "news": {
+    "header": "UFL News",
+    "link": {
+      "language": "en",
+      "rel": [
+        "index",
+        "desktop",
+        "league"
+      ],
+      "href": "https://www.espn.com/ufl/",
+      "text": "All UFL News",
+      "shortText": "All News",
+      "isExternal": false,
+      "isPremium": false
+    },
+    "articles": [
+      {
+        "id": 49043051,
+        "nowId": "1-49043051",
+        "contentKey": "49043051-1-6-1",
+        "dataSourceIdentifier": "0dee93025b982",
+        "type": "Story",
+        "headline": "Challenges remain, but UFL touting positives of 2026 season",
+        "description": "The UFL faces old challenges but has shown growth in ratings, fan interest and expansion plans.",
+        "lastModified": "2026-06-13T10:00:13Z",
+        "published": "2026-06-13T10:00:13Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "121448acf2c53",
+            "id": 49043683,
+            "type": "header",
+            "name": "UFL celebration [608x342]",
+            "caption": "The Louisville Kings and coach Chris Redman will face the DC Defenders in the United Bowl on Saturday.",
+            "alt": "UFL celebration",
+            "credit": "Photo by Rick Ulreich/Icon Sportswire",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2026/0612/r1672074_608x342_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "D.C. Defenders vs. Orlando Storm: Game Highlights",
+            "caption": "D.C. Defenders vs. Orlando Storm: Game Highlights",
+            "height": 324,
+            "width": 576,
+            "url": "https://a.espncdn.com/media/motion/wsc/2026/0607/894d3cc2-179f-408c-8f22-ca09aa07f45a/894d3cc2-179f-408c-8f22-ca09aa07f45a.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 9572,
+            "type": "league",
+            "uid": "s:20~l:28",
+            "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+            "description": "NFL",
+            "sportId": 28,
+            "leagueId": 28,
+            "league": {
+              "id": 28,
+              "description": "NFL",
+              "abbreviation": "NFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nfl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nfl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 648933,
+            "type": "league",
+            "uid": "s:20~l:37",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595",
+            "description": "UFL",
+            "sportId": 37,
+            "leagueId": 37,
+            "league": {
+              "id": 37,
+              "description": "UFL",
+              "abbreviation": "UFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 667185,
+            "type": "team",
+            "uid": "s:20~l:37~t:126073",
+            "guid": "0cb8d58b-b73f-3823-a695-454e4e40304b",
+            "description": "Birmingham Stallions",
+            "sportId": 37,
+            "teamId": 126073,
+            "team": {
+              "id": 126073,
+              "description": "Birmingham Stallions",
+              "abbreviation": "BHAM",
+              "shortDisplayName": "Stallions"
+            }
+          },
+          {
+            "id": 752956,
+            "type": "team",
+            "uid": "s:20~l:37~t:132261",
+            "guid": "220a2d62-fa10-307f-8251-5d8c60d72501",
+            "description": "Columbus Aviators",
+            "sportId": 37,
+            "teamId": 132261,
+            "team": {
+              "id": 132261,
+              "description": "Columbus Aviators",
+              "abbreviation": "CLB",
+              "shortDisplayName": "Aviators"
+            }
+          },
+          {
+            "id": 420733,
+            "type": "team",
+            "uid": "s:20~l:37~t:112647",
+            "guid": "75b95e05-b1d5-35ab-a06f-abb3901a77dc",
+            "description": "Dallas Renegades",
+            "sportId": 37,
+            "teamId": 112647,
+            "team": {
+              "id": 112647,
+              "description": "Dallas Renegades",
+              "abbreviation": "DAL",
+              "shortDisplayName": "Renegades"
+            }
+          },
+          {
+            "id": 420734,
+            "type": "team",
+            "uid": "s:20~l:37~t:112646",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124",
+            "description": "DC Defenders",
+            "sportId": 37,
+            "teamId": 112646,
+            "team": {
+              "id": 112646,
+              "description": "DC Defenders",
+              "abbreviation": "DC",
+              "shortDisplayName": "Defenders"
+            }
+          },
+          {
+            "id": 667186,
+            "type": "team",
+            "uid": "s:20~l:37~t:126075",
+            "guid": "6381f392-8ff3-3be9-af92-3beeaa1361ef",
+            "description": "Houston Gamblers",
+            "sportId": 37,
+            "teamId": 126075,
+            "team": {
+              "id": 126075,
+              "description": "Houston Gamblers",
+              "abbreviation": "HOU",
+              "shortDisplayName": "Gamblers"
+            }
+          },
+          {
+            "id": 752957,
+            "type": "team",
+            "uid": "s:20~l:37~t:132262",
+            "guid": "579753f1-3af1-30e3-ab27-6555ceb4cc76",
+            "description": "Louisville Kings",
+            "sportId": 37,
+            "teamId": 132262,
+            "team": {
+              "id": 132262,
+              "description": "Louisville Kings",
+              "abbreviation": "LOU",
+              "shortDisplayName": "Kings"
+            }
+          },
+          {
+            "id": 752958,
+            "type": "team",
+            "uid": "s:20~l:37~t:132263",
+            "guid": "db5418ff-eb95-3bd2-adca-33305757a5eb",
+            "description": "Orlando Storm",
+            "sportId": 37,
+            "teamId": 132263,
+            "team": {
+              "id": 132263,
+              "description": "Orlando Storm",
+              "abbreviation": "ORL",
+              "shortDisplayName": "Storm"
+            }
+          },
+          {
+            "id": 420740,
+            "type": "team",
+            "uid": "s:20~l:37~t:112651",
+            "guid": "e23de40c-98de-336d-aaa0-732532465fab",
+            "description": "St. Louis Battlehawks",
+            "sportId": 37,
+            "teamId": 112651,
+            "team": {
+              "id": 112651,
+              "description": "St. Louis Battlehawks",
+              "abbreviation": "STL",
+              "shortDisplayName": "Battlehawks"
+            }
+          },
+          {
+            "id": 698426,
+            "type": "contributor",
+            "guid": "5241557e-e83a-3754-aace-665eca5b4994",
+            "description": "Kevin Seifert",
+            "slug": "kevin-seifert",
+            "contributor": {
+              "id": 1300,
+              "description": "Kevin Seifert"
+            }
+          },
+          {
+            "type": "guid",
+            "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+          },
+          {
+            "type": "guid",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595"
+          },
+          {
+            "type": "guid",
+            "guid": "0cb8d58b-b73f-3823-a695-454e4e40304b"
+          },
+          {
+            "type": "guid",
+            "guid": "220a2d62-fa10-307f-8251-5d8c60d72501"
+          },
+          {
+            "type": "guid",
+            "guid": "75b95e05-b1d5-35ab-a06f-abb3901a77dc"
+          },
+          {
+            "type": "guid",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124"
+          },
+          {
+            "type": "guid",
+            "guid": "6381f392-8ff3-3be9-af92-3beeaa1361ef"
+          },
+          {
+            "type": "guid",
+            "guid": "579753f1-3af1-30e3-ab27-6555ceb4cc76"
+          },
+          {
+            "type": "guid",
+            "guid": "db5418ff-eb95-3bd2-adca-33305757a5eb"
+          },
+          {
+            "type": "guid",
+            "guid": "e23de40c-98de-336d-aaa0-732532465fab"
+          },
+          {
+            "type": "guid",
+            "guid": "5241557e-e83a-3754-aace-665eca5b4994"
+          }
+        ],
+        "premium": false,
+        "links": {
+          "web": {
+            "href": "https://www.espn.com/nfl/story/_/id/49043051/ufl-2026-united-bowl-spring-football-season-dc-defenders-louisville-kings"
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/nfl/story?storyId=49043051"
+          },
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/49043051"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=49043051"
+            }
+          }
+        },
+        "byline": "Kevin Seifert"
+      },
+      {
+        "id": 49002139,
+        "nowId": "1-49002139",
+        "contentKey": "49002139-1-6-1",
+        "dataSourceIdentifier": "610922f091674",
+        "type": "Story",
+        "headline": "Andre Mintze takes PTO to unretire for DC Defenders' UFL playoff run",
+        "description": "During Sunday's UFL playoffs semifinal, Mintze was asked about his \"two-week sabbatical from his real job.\" Mintze's response? \"Allegedly.\"",
+        "lastModified": "2026-06-09T12:41:32Z",
+        "published": "2026-06-09T12:41:32Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "0d6d3257925a1",
+            "id": 49002092,
+            "type": "header",
+            "name": "andre mintze [608x342]",
+            "caption": "Andre Mintze of the DC Defenders looks at an iPad during the game against the St. Louis Battlehawks at The Dome at America's Center on June 8, 2025 in St Louis, Missouri.",
+            "credit": "Scott Rovak/UFL/Getty Images",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2026/0608/r1669899_2_608x342_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "D.C. Defenders vs. Orlando Storm: Game Highlights",
+            "caption": "D.C. Defenders vs. Orlando Storm: Game Highlights",
+            "height": 324,
+            "width": 576,
+            "url": "https://a.espncdn.com/media/motion/wsc/2026/0607/894d3cc2-179f-408c-8f22-ca09aa07f45a/894d3cc2-179f-408c-8f22-ca09aa07f45a.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 648933,
+            "type": "league",
+            "uid": "s:20~l:37",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595",
+            "description": "UFL",
+            "sportId": 37,
+            "leagueId": 37,
+            "league": {
+              "id": 37,
+              "description": "UFL",
+              "abbreviation": "UFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 420734,
+            "type": "team",
+            "uid": "s:20~l:37~t:112646",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124",
+            "description": "DC Defenders",
+            "sportId": 37,
+            "teamId": 112646,
+            "team": {
+              "id": 112646,
+              "description": "DC Defenders",
+              "abbreviation": "DC",
+              "shortDisplayName": "Defenders"
+            }
+          },
+          {
+            "type": "guid",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595"
+          },
+          {
+            "type": "guid",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124"
+          }
+        ],
+        "premium": false,
+        "links": {
+          "web": {
+            "href": "https://www.espn.com/united-football-league/story/_/id/49002139/ufl-dc-defenders-andre-mintze-pto-unretire"
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=49002139"
+          },
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/49002139"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=49002139"
+            }
+          }
+        },
+        "byline": "J.J. Post"
+      },
+      {
+        "id": 48950697,
+        "nowId": "1-48950697",
+        "contentKey": "48950697-1-6-1",
+        "dataSourceIdentifier": "18221633fa96d",
+        "type": "Story",
+        "headline": "How to watch 2026 UFL playoffs on ESPN",
+        "description": "It's time for the 2026 UFL playoffs! Here's how to catch the action on the ESPN App.",
+        "lastModified": "2026-06-04T01:37:13Z",
+        "published": "2026-06-04T01:37:13Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "71d538a118cd5",
+            "id": 48950909,
+            "type": "header",
+            "name": "UFL football [608x342] - Copy",
+            "credit": "David Buono/Icon Sportswire",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2026/0408/r1640609_608x342_16-9.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 648933,
+            "type": "league",
+            "uid": "s:20~l:37",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595",
+            "description": "UFL",
+            "sportId": 37,
+            "leagueId": 37,
+            "league": {
+              "id": 37,
+              "description": "UFL",
+              "abbreviation": "UFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 752885,
+            "type": "topic",
+            "guid": "fd2f775f-ddb4-33b0-a911-d9ce683ae401",
+            "description": "seo h2w",
+            "sportId": 0,
+            "topicId": 4264
+          },
+          {
+            "type": "guid",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595"
+          },
+          {
+            "type": "guid",
+            "guid": "fd2f775f-ddb4-33b0-a911-d9ce683ae401"
+          }
+        ],
+        "premium": false,
+        "links": {
+          "web": {
+            "href": "https://www.espn.com/united-football-league/story/_/id/48950697/how-watch-2026-ufl-playoffs-espn"
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=48950697"
+          },
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/48950697"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=48950697"
+            }
+          }
+        },
+        "byline": "Keith Jenkins"
+      },
+      {
+        "id": 48882412,
+        "nowId": "1-48882412",
+        "contentKey": "48882412-1-6-1",
+        "dataSourceIdentifier": "e4b20b67e4bda",
+        "type": "Story",
+        "headline": "Final UFL Power Rankings 2026: How all eight teams stacked up",
+        "description": "The final UFL Power Rankings feature familiar teams at the top and include each team's season grade.",
+        "lastModified": "2026-05-27T10:00:05Z",
+        "published": "2026-05-27T10:00:05Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "5b12f296c4a88",
+            "id": 48883691,
+            "type": "header",
+            "name": "UFL: Orlando Storm's Jack Plummer [608x342]",
+            "caption": "Have Jack Plummer, left, and the Orlando Storm supplanted the DC Defenders as the UFL's best?",
+            "alt": "UFL: Orlando Storm's Jack Plummer",
+            "credit": "Photo by Julio Aguilar/UFL/Getty Images",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2026/0526/r1664052_608x342_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "Chris Rowland rushes 62 yards to the house for a Orlando TD",
+            "caption": "Chris Rowland rushes 62 yards to the house for a Orlando TD",
+            "height": 324,
+            "width": 576,
+            "url": "https://a.espncdn.com/media/motion/wsc/2026/0523/00d6a5ee-21d2-41b2-809c-7c8d630f9637/00d6a5ee-21d2-41b2-809c-7c8d630f9637.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 648933,
+            "type": "league",
+            "uid": "s:20~l:37",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595",
+            "description": "UFL",
+            "sportId": 37,
+            "leagueId": 37,
+            "league": {
+              "id": 37,
+              "description": "UFL",
+              "abbreviation": "UFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 9572,
+            "type": "league",
+            "uid": "s:20~l:28",
+            "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+            "description": "NFL",
+            "sportId": 28,
+            "leagueId": 28,
+            "league": {
+              "id": 28,
+              "description": "NFL",
+              "abbreviation": "NFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nfl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nfl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 667185,
+            "type": "team",
+            "uid": "s:20~l:37~t:126073",
+            "guid": "0cb8d58b-b73f-3823-a695-454e4e40304b",
+            "description": "Birmingham Stallions",
+            "sportId": 37,
+            "teamId": 126073,
+            "team": {
+              "id": 126073,
+              "description": "Birmingham Stallions",
+              "abbreviation": "BHAM",
+              "shortDisplayName": "Stallions"
+            }
+          },
+          {
+            "id": 752956,
+            "type": "team",
+            "uid": "s:20~l:37~t:132261",
+            "guid": "220a2d62-fa10-307f-8251-5d8c60d72501",
+            "description": "Columbus Aviators",
+            "sportId": 37,
+            "teamId": 132261,
+            "team": {
+              "id": 132261,
+              "description": "Columbus Aviators",
+              "abbreviation": "CLB",
+              "shortDisplayName": "Aviators"
+            }
+          },
+          {
+            "id": 420733,
+            "type": "team",
+            "uid": "s:20~l:37~t:112647",
+            "guid": "75b95e05-b1d5-35ab-a06f-abb3901a77dc",
+            "description": "Dallas Renegades",
+            "sportId": 37,
+            "teamId": 112647,
+            "team": {
+              "id": 112647,
+              "description": "Dallas Renegades",
+              "abbreviation": "DAL",
+              "shortDisplayName": "Renegades"
+            }
+          },
+          {
+            "id": 420734,
+            "type": "team",
+            "uid": "s:20~l:37~t:112646",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124",
+            "description": "DC Defenders",
+            "sportId": 37,
+            "teamId": 112646,
+            "team": {
+              "id": 112646,
+              "description": "DC Defenders",
+              "abbreviation": "DC",
+              "shortDisplayName": "Defenders"
+            }
+          },
+          {
+            "id": 667186,
+            "type": "team",
+            "uid": "s:20~l:37~t:126075",
+            "guid": "6381f392-8ff3-3be9-af92-3beeaa1361ef",
+            "description": "Houston Gamblers",
+            "sportId": 37,
+            "teamId": 126075,
+            "team": {
+              "id": 126075,
+              "description": "Houston Gamblers",
+              "abbreviation": "HOU",
+              "shortDisplayName": "Gamblers"
+            }
+          },
+          {
+            "id": 752957,
+            "type": "team",
+            "uid": "s:20~l:37~t:132262",
+            "guid": "579753f1-3af1-30e3-ab27-6555ceb4cc76",
+            "description": "Louisville Kings",
+            "sportId": 37,
+            "teamId": 132262,
+            "team": {
+              "id": 132262,
+              "description": "Louisville Kings",
+              "abbreviation": "LOU",
+              "shortDisplayName": "Kings"
+            }
+          },
+          {
+            "id": 752958,
+            "type": "team",
+            "uid": "s:20~l:37~t:132263",
+            "guid": "db5418ff-eb95-3bd2-adca-33305757a5eb",
+            "description": "Orlando Storm",
+            "sportId": 37,
+            "teamId": 132263,
+            "team": {
+              "id": 132263,
+              "description": "Orlando Storm",
+              "abbreviation": "ORL",
+              "shortDisplayName": "Storm"
+            }
+          },
+          {
+            "id": 420740,
+            "type": "team",
+            "uid": "s:20~l:37~t:112651",
+            "guid": "e23de40c-98de-336d-aaa0-732532465fab",
+            "description": "St. Louis Battlehawks",
+            "sportId": 37,
+            "teamId": 112651,
+            "team": {
+              "id": 112651,
+              "description": "St. Louis Battlehawks",
+              "abbreviation": "STL",
+              "shortDisplayName": "Battlehawks"
+            }
+          },
+          {
+            "id": 700960,
+            "type": "contributor",
+            "guid": "25bb9200-a9cf-3eb3-9b41-fab0d8773fad",
+            "description": "Matt Willis",
+            "slug": "matt-willis",
+            "contributor": {
+              "id": 1334,
+              "description": "Matt Willis"
+            }
+          },
+          {
+            "type": "guid",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595"
+          },
+          {
+            "type": "guid",
+            "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+          },
+          {
+            "type": "guid",
+            "guid": "0cb8d58b-b73f-3823-a695-454e4e40304b"
+          },
+          {
+            "type": "guid",
+            "guid": "220a2d62-fa10-307f-8251-5d8c60d72501"
+          },
+          {
+            "type": "guid",
+            "guid": "75b95e05-b1d5-35ab-a06f-abb3901a77dc"
+          },
+          {
+            "type": "guid",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124"
+          },
+          {
+            "type": "guid",
+            "guid": "6381f392-8ff3-3be9-af92-3beeaa1361ef"
+          },
+          {
+            "type": "guid",
+            "guid": "579753f1-3af1-30e3-ab27-6555ceb4cc76"
+          },
+          {
+            "type": "guid",
+            "guid": "db5418ff-eb95-3bd2-adca-33305757a5eb"
+          },
+          {
+            "type": "guid",
+            "guid": "e23de40c-98de-336d-aaa0-732532465fab"
+          },
+          {
+            "type": "guid",
+            "guid": "25bb9200-a9cf-3eb3-9b41-fab0d8773fad"
+          }
+        ],
+        "premium": false,
+        "links": {
+          "web": {
+            "href": "https://www.espn.com/united-football-league/story/_/id/48882412/ufl-final-season-2026-power-rankings-playoffs"
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=48882412"
+          },
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/48882412"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=48882412"
+            }
+          }
+        },
+        "byline": "Matt Willis"
+      },
+      {
+        "id": 48844680,
+        "nowId": "1-48844680",
+        "contentKey": "48844680-1-6-1",
+        "dataSourceIdentifier": "c4af294b3c220",
+        "type": "Story",
+        "headline": "UFL fans can see 50 Cent for 50 cents at the United Bowl",
+        "description": "Rapper 50 Cent will headline the United Bowl's halftime show June 13 at Audi Field in Washington, D.C.",
+        "lastModified": "2026-05-22T17:28:23Z",
+        "published": "2026-05-22T17:28:23Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "f18a045c703a8",
+            "id": 48844672,
+            "type": "header",
+            "name": "Rapper Curtis \"50 Cent\" Jackson performs at the start of his \"Final Lap Tour\" [1296x729] - Copy",
+            "caption": "50 Cent will headline the United Bowl's halftime show.",
+            "credit": "Markus Scholz/picture alliance via Getty Images",
+            "height": 729,
+            "width": 1296,
+            "url": "https://a.espncdn.com/photo/2023/1010/r1236521_1296x729_16-9.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 648933,
+            "type": "league",
+            "uid": "s:20~l:37",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595",
+            "description": "UFL",
+            "sportId": 37,
+            "leagueId": 37,
+            "league": {
+              "id": 37,
+              "description": "UFL",
+              "abbreviation": "UFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "guid",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595"
+          }
+        ],
+        "premium": false,
+        "links": {
+          "web": {
+            "href": "https://www.espn.com/united-football-league/story/_/id/48844680/50-cent-ufl-united-football-league-united-bowl"
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/wireless/story?storyId=48844680"
+          },
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/48844680"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=48844680"
+            }
+          }
+        },
+        "byline": "ESPN.com"
+      },
+      {
+        "id": 48778323,
+        "nowId": "1-48778323",
+        "contentKey": "48778323-1-6-1",
+        "dataSourceIdentifier": "b89567e3be811",
+        "type": "Story",
+        "headline": "UFL: In-game ref interviews strengthening transparency",
+        "description": "The UFL believes in-game discussions can help focus postgame conversations on the competition rather than calls.",
+        "lastModified": "2026-05-16T13:22:45Z",
+        "published": "2026-05-16T13:22:45Z",
+        "images": [
+          {
+            "dataSourceIdentifier": "35b5846929e2d",
+            "id": 48780038,
+            "type": "header",
+            "name": "UFL Ref [608x342]",
+            "caption": "UFL refs have been part of a new innovation. Will it catch on in the NFL?",
+            "alt": "UFL Ref",
+            "credit": "Photo by Jeffrey Brown/Icon Sportswire",
+            "height": 342,
+            "width": 608,
+            "url": "https://a.espncdn.com/photo/2026/0515/r1658709_608x342_16-9.jpg"
+          },
+          {
+            "type": "Media",
+            "name": "Dallas Renegades vs. Birmingham Stallions: Game Highlights",
+            "caption": "Dallas Renegades vs. Birmingham Stallions: Game Highlights",
+            "height": 324,
+            "width": 576,
+            "url": "https://a.espncdn.com/media/motion/wsc/2026/0510/20d9ce30-bdfb-42f6-ae83-d58018aa80b5/20d9ce30-bdfb-42f6-ae83-d58018aa80b5.jpg"
+          }
+        ],
+        "categories": [
+          {
+            "id": 9572,
+            "type": "league",
+            "uid": "s:20~l:28",
+            "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+            "description": "NFL",
+            "sportId": 28,
+            "leagueId": 28,
+            "league": {
+              "id": 28,
+              "description": "NFL",
+              "abbreviation": "NFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nfl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/nfl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 648933,
+            "type": "league",
+            "uid": "s:20~l:37",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595",
+            "description": "UFL",
+            "sportId": 37,
+            "leagueId": 37,
+            "league": {
+              "id": 37,
+              "description": "UFL",
+              "abbreviation": "UFL",
+              "links": {
+                "web": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                },
+                "mobile": {
+                  "leagues": {
+                    "href": "https://www.espn.com/ufl/"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 667185,
+            "type": "team",
+            "uid": "s:20~l:37~t:126073",
+            "guid": "0cb8d58b-b73f-3823-a695-454e4e40304b",
+            "description": "Birmingham Stallions",
+            "sportId": 37,
+            "teamId": 126073,
+            "team": {
+              "id": 126073,
+              "description": "Birmingham Stallions",
+              "abbreviation": "BHAM",
+              "shortDisplayName": "Stallions"
+            }
+          },
+          {
+            "id": 752956,
+            "type": "team",
+            "uid": "s:20~l:37~t:132261",
+            "guid": "220a2d62-fa10-307f-8251-5d8c60d72501",
+            "description": "Columbus Aviators",
+            "sportId": 37,
+            "teamId": 132261,
+            "team": {
+              "id": 132261,
+              "description": "Columbus Aviators",
+              "abbreviation": "CLB",
+              "shortDisplayName": "Aviators"
+            }
+          },
+          {
+            "id": 420733,
+            "type": "team",
+            "uid": "s:20~l:37~t:112647",
+            "guid": "75b95e05-b1d5-35ab-a06f-abb3901a77dc",
+            "description": "Dallas Renegades",
+            "sportId": 37,
+            "teamId": 112647,
+            "team": {
+              "id": 112647,
+              "description": "Dallas Renegades",
+              "abbreviation": "DAL",
+              "shortDisplayName": "Renegades"
+            }
+          },
+          {
+            "id": 420734,
+            "type": "team",
+            "uid": "s:20~l:37~t:112646",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124",
+            "description": "DC Defenders",
+            "sportId": 37,
+            "teamId": 112646,
+            "team": {
+              "id": 112646,
+              "description": "DC Defenders",
+              "abbreviation": "DC",
+              "shortDisplayName": "Defenders"
+            }
+          },
+          {
+            "id": 667186,
+            "type": "team",
+            "uid": "s:20~l:37~t:126075",
+            "guid": "6381f392-8ff3-3be9-af92-3beeaa1361ef",
+            "description": "Houston Gamblers",
+            "sportId": 37,
+            "teamId": 126075,
+            "team": {
+              "id": 126075,
+              "description": "Houston Gamblers",
+              "abbreviation": "HOU",
+              "shortDisplayName": "Gamblers"
+            }
+          },
+          {
+            "id": 667187,
+            "type": "team",
+            "guid": "6ef91443-a4da-3682-bcff-d4ca3a57d4fe",
+            "description": "Memphis Showboats",
+            "sportId": 0,
+            "teamId": 0,
+            "team": {
+              "id": 0,
+              "description": "Memphis Showboats",
+              "abbreviation": "Memphis",
+              "shortDisplayName": "Memphis"
+            }
+          },
+          {
+            "id": 667184,
+            "type": "team",
+            "guid": "728f7061-5395-3a6a-a675-1c839ab6fd68",
+            "description": "Michigan Panthers",
+            "sportId": 0,
+            "teamId": 0,
+            "team": {
+              "id": 0,
+              "description": "Michigan Panthers",
+              "abbreviation": "Michigan",
+              "shortDisplayName": "Michigan"
+            }
+          },
+          {
+            "id": 569629,
+            "type": "team",
+            "guid": "260e9c75-7426-34f9-920c-ae234d8d2407",
+            "description": "San Antonio Brahmas",
+            "sportId": 0,
+            "teamId": 0,
+            "team": {
+              "id": 0,
+              "description": "San Antonio Brahmas",
+              "abbreviation": "SanAntonio",
+              "shortDisplayName": "SanAntonio"
+            }
+          },
+          {
+            "id": 752957,
+            "type": "team",
+            "uid": "s:20~l:37~t:132262",
+            "guid": "579753f1-3af1-30e3-ab27-6555ceb4cc76",
+            "description": "Louisville Kings",
+            "sportId": 37,
+            "teamId": 132262,
+            "team": {
+              "id": 132262,
+              "description": "Louisville Kings",
+              "abbreviation": "LOU",
+              "shortDisplayName": "Kings"
+            }
+          },
+          {
+            "id": 752958,
+            "type": "team",
+            "uid": "s:20~l:37~t:132263",
+            "guid": "db5418ff-eb95-3bd2-adca-33305757a5eb",
+            "description": "Orlando Storm",
+            "sportId": 37,
+            "teamId": 132263,
+            "team": {
+              "id": 132263,
+              "description": "Orlando Storm",
+              "abbreviation": "ORL",
+              "shortDisplayName": "Storm"
+            }
+          },
+          {
+            "id": 420740,
+            "type": "team",
+            "uid": "s:20~l:37~t:112651",
+            "guid": "e23de40c-98de-336d-aaa0-732532465fab",
+            "description": "St. Louis Battlehawks",
+            "sportId": 37,
+            "teamId": 112651,
+            "team": {
+              "id": 112651,
+              "description": "St. Louis Battlehawks",
+              "abbreviation": "STL",
+              "shortDisplayName": "Battlehawks"
+            }
+          },
+          {
+            "id": 698426,
+            "type": "contributor",
+            "guid": "5241557e-e83a-3754-aace-665eca5b4994",
+            "description": "Kevin Seifert",
+            "slug": "kevin-seifert",
+            "contributor": {
+              "id": 1300,
+              "description": "Kevin Seifert"
+            }
+          },
+          {
+            "type": "guid",
+            "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4"
+          },
+          {
+            "type": "guid",
+            "guid": "d6e52740-078b-31f0-84b2-c9962c5ce595"
+          },
+          {
+            "type": "guid",
+            "guid": "0cb8d58b-b73f-3823-a695-454e4e40304b"
+          },
+          {
+            "type": "guid",
+            "guid": "220a2d62-fa10-307f-8251-5d8c60d72501"
+          },
+          {
+            "type": "guid",
+            "guid": "75b95e05-b1d5-35ab-a06f-abb3901a77dc"
+          },
+          {
+            "type": "guid",
+            "guid": "48f48fbd-8277-3d4f-898a-34d05d873124"
+          },
+          {
+            "type": "guid",
+            "guid": "6381f392-8ff3-3be9-af92-3beeaa1361ef"
+          },
+          {
+            "type": "guid",
+            "guid": "6ef91443-a4da-3682-bcff-d4ca3a57d4fe"
+          },
+          {
+            "type": "guid",
+            "guid": "728f7061-5395-3a6a-a675-1c839ab6fd68"
+          },
+          {
+            "type": "guid",
+            "guid": "260e9c75-7426-34f9-920c-ae234d8d2407"
+          },
+          {
+            "type": "guid",
+            "guid": "579753f1-3af1-30e3-ab27-6555ceb4cc76"
+          },
+          {
+            "type": "guid",
+            "guid": "db5418ff-eb95-3bd2-adca-33305757a5eb"
+          },
+          {
+            "type": "guid",
+            "guid": "e23de40c-98de-336d-aaa0-732532465fab"
+          },
+          {
+            "type": "guid",
+            "guid": "5241557e-e83a-3754-aace-665eca5b4994"
+          }
+        ],
+        "premium": false,
+        "links": {
+          "web": {
+            "href": "https://www.espn.com/nfl/story/_/id/48778323/ufl-game-referee-interviews-strengthening-transparency"
+          },
+          "mobile": {
+            "href": "http://m.espn.go.com/nfl/story?storyId=48778323"
+          },
+          "api": {
+            "self": {
+              "href": "https://content.core.api.espn.com/v1/sports/news/48778323"
+            }
+          },
+          "app": {
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showStory?uid=48778323"
+            }
+          }
+        },
+        "byline": "Kevin Seifert"
+      }
+    ]
+  },
+  "header": {
+    "id": "401638335",
+    "uid": "s:20~l:37~e:401638335",
+    "season": {
+      "year": 2024,
+      "current": false,
+      "type": 2
+    },
+    "timeValid": true,
+    "competitions": [
+      {
+        "id": "401638335",
+        "uid": "s:20~l:37~e:401638335~c:401638335",
+        "date": "2024-06-01T18:00Z",
+        "dateValid": false,
+        "neutralSite": false,
+        "conferenceCompetition": false,
+        "boxscoreAvailable": true,
+        "commentaryAvailable": false,
+        "liveAvailable": false,
+        "onWatchESPN": true,
+        "recent": false,
+        "wallclockAvailable": false,
+        "boxscoreSource": "full",
+        "playByPlaySource": "none",
+        "competitors": [
+          {
+            "id": "126073",
+            "uid": "s:20~l:37~t:126073",
+            "order": 0,
+            "homeAway": "home",
+            "winner": true,
+            "team": {
+              "id": "126073",
+              "guid": "0cb8d58b-b73f-3823-a695-454e4e40304b",
+              "uid": "s:20~l:37~t:126073",
+              "location": "Birmingham",
+              "name": "Stallions",
+              "abbreviation": "BIR",
+              "displayName": "Birmingham Stallions",
+              "color": "a32035",
+              "alternateColor": "c6b784",
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default.png",
+                  "width": 500,
+                  "height": 500,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "default"
+                  ],
+                  "lastUpdated": "2026-05-21T19:26Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/default-dark.png",
+                  "width": 500,
+                  "height": 500,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "dark"
+                  ],
+                  "lastUpdated": "2026-05-21T19:26Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/primary_logo_on_white_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_white_color"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/primary_logo_on_black_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_black_color"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/primary_logo_on_primary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_primary_color"
+                  ],
+                  "lastUpdated": "2026-05-21T19:26Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/primary_logo_on_secondary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_secondary_color"
+                  ],
+                  "lastUpdated": "2026-05-21T19:26Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/primary_logo_black.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_black"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/primary_logo_white.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_white"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/secondary_logo_on_white_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_white_color"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/secondary_logo_on_black_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_black_color"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/secondary_logo_on_primary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_primary_color"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/secondary_logo_on_secondary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_secondary_color"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/secondary_logo_black.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_black"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/0cb8d58b-b73f-3823-a695-454e4e40304b/logos/secondary_logo_white.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_white"
+                  ],
+                  "lastUpdated": "2026-02-13T16:29Z"
+                }
+              ],
+              "links": []
+            },
+            "score": "20",
+            "linescores": [
+              {
+                "displayValue": "6"
+              },
+              {
+                "displayValue": "0"
+              },
+              {
+                "displayValue": "7"
+              },
+              {
+                "displayValue": "7"
+              }
+            ],
+            "record": [
+              {
+                "type": "total",
+                "summary": "9-1",
+                "displayValue": "9-1"
+              }
+            ],
+            "possession": false
+          },
+          {
+            "id": "125957",
+            "uid": "s:20~l:37~t:125957",
+            "order": 1,
+            "homeAway": "away",
+            "winner": false,
+            "team": {
+              "id": "125957",
+              "guid": "728f7061-5395-3a6a-a675-1c839ab6fd68",
+              "uid": "s:20~l:37~t:125957",
+              "location": "Michigan",
+              "name": "Panthers",
+              "abbreviation": "MIC",
+              "displayName": "Michigan Panthers",
+              "color": "691c32",
+              "alternateColor": "f4f4f4",
+              "logos": [
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/primary_logo_on_white_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_white_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/primary_logo_on_black_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_black_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/primary_logo_on_primary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_primary_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/primary_logo_on_secondary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "primary_logo_on_secondary_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/secondary_logo_on_white_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_white_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/secondary_logo_on_black_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_black_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/secondary_logo_on_primary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_primary_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                },
+                {
+                  "href": "https://a.espncdn.com/guid/728f7061-5395-3a6a-a675-1c839ab6fd68/logos/secondary_logo_on_secondary_color.png",
+                  "width": 4096,
+                  "height": 4096,
+                  "alt": "",
+                  "rel": [
+                    "full",
+                    "secondary_logo_on_secondary_color"
+                  ],
+                  "lastUpdated": "2025-01-15T15:19Z"
+                }
+              ],
+              "links": []
+            },
+            "score": "19",
+            "linescores": [
+              {
+                "displayValue": "3"
+              },
+              {
+                "displayValue": "13"
+              },
+              {
+                "displayValue": "0"
+              },
+              {
+                "displayValue": "3"
+              }
+            ],
+            "record": [
+              {
+                "type": "total",
+                "summary": "7-3",
+                "displayValue": "7-3"
+              }
+            ],
+            "possession": false
+          }
+        ],
+        "status": {
+          "type": {
+            "id": "3",
+            "name": "STATUS_FINAL",
+            "state": "post",
+            "completed": true,
+            "description": "Final",
+            "detail": "Final",
+            "shortDetail": "Final"
+          }
+        },
+        "broadcasts": [
+          {
+            "type": {
+              "id": "1",
+              "shortName": "TV"
+            },
+            "market": {
+              "id": "1",
+              "type": "National"
+            },
+            "media": {
+              "shortName": "ESPN"
+            },
+            "lang": "en",
+            "region": "us",
+            "isNational": true
+          },
+          {
+            "type": {
+              "id": "4",
+              "shortName": "Streaming"
+            },
+            "market": {
+              "id": "1",
+              "type": "National"
+            },
+            "media": {
+              "shortName": "ESPN+"
+            },
+            "lang": "en",
+            "region": "us",
+            "isNational": true
+          }
+        ],
+        "boxscoreMinutes": true
+      }
+    ],
+    "week": 10,
+    "league": {
+      "id": "37",
+      "uid": "s:20~l:37",
+      "name": "United Football League",
+      "abbreviation": "UFL",
+      "slug": "ufl",
+      "isTournament": false,
+      "links": [
+        {
+          "rel": [
+            "index",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/ufl/",
+          "text": "Index"
+        },
+        {
+          "rel": [
+            "index",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:37",
+          "text": "Index"
+        },
+        {
+          "rel": [
+            "standings",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/ufl/standings",
+          "text": "Standings"
+        },
+        {
+          "rel": [
+            "standings",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:37&section=standings",
+          "text": "Standings"
+        },
+        {
+          "rel": [
+            "rankings",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:37&section=rankings",
+          "text": "Rankings"
+        },
+        {
+          "rel": [
+            "scores",
+            "desktop",
+            "league"
+          ],
+          "href": "https://www.espn.com/ufl/scoreboard",
+          "text": "Scores"
+        },
+        {
+          "rel": [
+            "scores",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:37&section=scores",
+          "text": "Scores"
+        },
+        {
+          "rel": [
+            "stats",
+            "sportscenter",
+            "app",
+            "league"
+          ],
+          "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:37&section=stats",
+          "text": "Stats"
+        }
+      ],
+      "logos": [
+        {
+          "href": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/ufl.png",
+          "rel": [
+            "full",
+            "default"
+          ]
+        },
+        {
+          "href": "https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500-dark/ufl.png",
+          "rel": [
+            "full",
+            "dark"
+          ]
+        }
+      ]
+    }
+  },
+  "winprobability": [],
+  "videos": [],
+  "wallclockAvailable": false,
+  "meta": {
+    "gameSwitcherEnabled": false,
+    "gameState": "post"
+  },
+  "standings": {
+    "fullViewLink": {
+      "text": "Full Standings",
+      "href": "https://www.espn.com/ufl/standings"
+    },
+    "groups": []
+  }
+}
