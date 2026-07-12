@@ -247,6 +247,11 @@ def build_spring_football_pbp(summary: dict, *, league: str) -> pl.DataFrame:
         period.alias("qtr"),
         _col_or("start_distance", pl.Int64).cast(pl.Int64, strict=False).alias("ydstogo"),
         _col_or("start_yards_to_endzone", pl.Int64).cast(pl.Int64, strict=False).alias("yardline_100"),
+        # ponytail: OT clock is zeroed (game/half_seconds_remaining = 0 in
+        # period 5+), which diverges from nflfastR's carry-the-quarter-clock
+        # OT convention. Untestable today -- no captured spring-football OT
+        # game exists in the corpus. Upgrade path: when an OT fixture lands,
+        # mirror nflfastR (game_seconds_remaining = OT clock, half = "OT").
         pl.when(period <= 4)
         .then(clock_secs + quarters_left * 900)
         .otherwise(0)
@@ -293,7 +298,12 @@ def build_spring_football_pbp(summary: dict, *, league: str) -> pl.DataFrame:
         .cast(pl.Int64)
         .alias("defteam_score"),
         (pl.col("posteam") == pl.col("home_team")).fill_null(False).cast(pl.Int8).alias("home"),
-        (pl.col("posteam") == pl.lit(half2_receiver, dtype=pl.Utf8))
+        # Mirrors nfl/ep_wp._add_wp_aux's nflfastR convention exactly: 1 only
+        # when the play is in the FIRST half AND the posteam is the team that
+        # receives the 2nd-half kickoff. The `qtr <= 2` clamp is load-bearing
+        # -- the WP models were trained with receive_2h_ko == 0 for every
+        # 2nd-half play, and _add_wp_aux never overrides an existing column.
+        ((pl.col("qtr") <= 2) & (pl.col("posteam") == pl.lit(half2_receiver, dtype=pl.Utf8)))
         .fill_null(False)
         .cast(pl.Int8)
         .alias("receive_2h_ko"),

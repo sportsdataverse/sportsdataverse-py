@@ -33,9 +33,13 @@ observed top-level keys: `againstTheSpread`, `boxscore`, `broadcasts`,
 
 `ufl_summary.json` is therefore a REAL no-play-by-play capture, kept
 deliberately — `build_spring_football_pbp(..., league="ufl")` returning a
-zero-row contract frame is the honest output on today's real data, and
-`test_ufl_calibration_gate_is_a_documented_park_not_a_skip` pins the finding
-so it goes loud (not silently skipped) the day ESPN backfills UFL pbp.
+zero-row contract frame is the honest output on today's real data.
+`test_ufl_calibration_gate_is_a_documented_park_not_a_skip` pins the
+COMMITTED capture's state (a frozen fixture can never observe an upstream
+backfill); the live canary `test_live_ufl_upstream_state_canary`
+(`@skip_if_no_live`, run by the weekly cron) is what detects a backfill —
+it fails only when ESPN starts publishing real UFL drives/plays or real
+probabilities data.
 
 ## Finding 2 — the ESPN win-probability oracle does not exist for UFL/XFL
 
@@ -47,10 +51,15 @@ league: <ufl|xfl>, competition: <event_id>", "code": 400}}
 ```
 
 Verified live 2026-07-12 on `401638335` (ufl) and `401517780` / `401517747`
-(xfl). There is no oracle payload to capture, so gate (b) in
+(xfl). The Core v2 pregame predictor was probed the same day and is ALSO
+unsupported — `espn_{ufl,xfl}_game_predictor(event_id, return_parsed=False)`
+returns `{"error": {"message": "Predictor is not supported for sport:
+football, league: <ufl|xfl>", "code": 400}}` (probed on `401638335` /
+`401517780`). So neither a per-play nor a pregame ESPN win-probability
+oracle exists for these leagues; gate (b) in
 `tests/football/test_spring_football_parity.py` substitutes a
-realized-game-outcome Brier vs the naive 0.5-constant baseline (floors from
-observed values, documented in that file).
+realized-game-outcome Brier vs the naive 0.5-constant baseline (ceiling and
+row floors from observed values, documented in that file).
 
 ## Finding 3 — XFL 2023 summaries DO carry full play-by-play
 

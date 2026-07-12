@@ -27,12 +27,14 @@ from pathlib import Path
 
 import numpy as np
 import polars as pl
+import pytest
 
 from polars.testing import assert_frame_equal
 
 from sportsdataverse._common.metrics import brier_score
 from sportsdataverse.football.spring_football_ep_wp import build_spring_football_pbp, enrich_spring_football_pbp
 from sportsdataverse.nfl.ep_wp import enrich_nfl_pbp
+from tests.conftest import skip_if_no_live
 
 FIXTURE_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "league_ports"
 
@@ -47,14 +49,21 @@ _NFL_PARITY_FIXTURE = "nfl_parity_2023_game.parquet"
 # Observed on the committed corpus above, 2026-07-12 (see this file's module
 # docstring for why the oracle is a realized-outcome Brier, not the
 # (unsupported, HTTP-400) ESPN probabilities endpoint):
-#   model Brier = 0.086862 on N = 442 valid wp rows; mean EPA = -0.3526 on
+#   model Brier = 0.088645 on N = 442 valid wp rows; mean EPA = -0.3526 on
 #   n = 445 non-null EPA rows. The naive baseline is exact (0.5-constant
 #   Brier is always 0.25). The Brier ceiling is observed + ~0.02 (mirroring
 #   the contract's "oracle + 0.02" margin); the row floors are the observed
-#   counts. NEVER relax any of these to pass -- a regression here means
-#   debug the model/build pipeline, not loosen the assert.
+#   counts. Re-observation note: the initial capture observed 0.086862 WITH
+#   the receive_2h_ko model-input bug (missing nflfastR's qtr<=2 clamp);
+#   fixing the input moved the observed Brier to 0.088645 (the buggy H2
+#   feature coincidentally flattered this 3-game corpus). That is a bug fix
+#   changing the observed value, not a loosened gate -- the ceiling stays
+#   observed + ~0.02 = 0.11. NEVER relax any of these to pass -- a
+#   regression here means debug the model/build pipeline, not the assert.
+# Corpus caveat: N = 442 plays from 3 correlated games is too small for a
+# per-decile calibration table -- revisit (add one) at ~10 captured games.
 _NAIVE_BRIER = 0.25
-_WP_BRIER_FLOOR = 0.11
+_WP_BRIER_CEILING = 0.11
 _EPA_MEAN_TOLERANCE = 0.5
 _MIN_VALID_WP_ROWS = 442
 _MIN_EPA_ROWS = 445
@@ -99,6 +108,9 @@ def test_nfl_parity_on_real_nfl_fixture():
     # both the direct `enrich_nfl_pbp` call and the spring-football port
     # path. Guards against the port path ever mutating the frame (e.g. a
     # future league-constants thread-through) in a way that breaks parity.
+    # Note: the xYAC model is download-on-demand (~34MB) -- a cache-cold run
+    # touches the network here, but both sides degrade identically when it
+    # is unavailable, so the parity assert holds either way.
     nfl = pl.read_parquet(FIXTURE_DIR / _NFL_PARITY_FIXTURE)
     assert nfl.height >= 168  # observed: 168 plays in 2023_01_ARI_WAS
     assert nfl.schema["game_id"] == pl.Utf8
@@ -157,7 +169,7 @@ def test_xfl_wp_beats_naive_baseline_on_realized_outcome():
     model_brier = brier_score(y, p)
     naive_brier = brier_score(y, np.full_like(p, 0.5))
     assert abs(naive_brier - _NAIVE_BRIER) < 1e-9  # sanity: naive baseline is exactly 0.25
-    assert model_brier <= _WP_BRIER_FLOOR, f"model Brier {model_brier:.4f} regressed past the observed floor"
+    assert model_brier <= _WP_BRIER_CEILING, f"model Brier {model_brier:.4f} regressed past the observed ceiling"
     assert model_brier < naive_brier
 
 
@@ -176,7 +188,45 @@ def test_xfl_season_wide_epa_near_zero():
 
 
 def test_ufl_calibration_gate_is_a_documented_park_not_a_skip():
-    # UFL has zero real captured plays (FEASIBILITY.md) -- assert that fact
-    # stays true and stays loud rather than silently skipping the league.
+    # Pins the COMMITTED capture's state (zero UFL plays, FEASIBILITY.md).
+    # A frozen fixture can never observe an upstream backfill -- the live
+    # canary below is what detects one.
     out = build_spring_football_pbp(_load_fixture("ufl_summary.json"), league="ufl")
     assert out.height == 0
+
+
+@skip_if_no_live
+def test_live_ufl_upstream_state_canary():
+    """Weekly-cron canary (SDV_PY_LIVE_TESTS=1): detects the UFL backfill.
+
+    FAILS only when ESPN starts publishing real UFL play-by-play or real
+    win-probability data -- the signal to recapture fixtures, re-observe the
+    gate values, and adopt the real oracle (FEASIBILITY.md). Written to be
+    resilient to upstream flakiness: any fetch error / non-data outcome
+    means "still unsupported" and passes or skips.
+    """
+    from sportsdataverse.football.ufl import espn_ufl_game_probabilities, espn_ufl_summary
+
+    # (a) a completed UFL game still carries no drives/plays.
+    try:
+        summary = espn_ufl_summary("401638335", return_parsed=False)
+    except Exception as exc:  # noqa: BLE001 -- upstream flake, not a finding
+        pytest.skip(f"ESPN summary fetch flaked: {exc}")
+    drives = (summary.get("drives") or {}).get("previous") or []
+    n_plays = sum(len(d.get("plays") or []) for d in drives if isinstance(d, dict))
+    assert n_plays == 0, (
+        "ESPN now publishes UFL play-by-play (backfill detected) -- recapture "
+        "the fixtures and re-observe the calibration gates (FEASIBILITY.md)."
+    )
+
+    # (b) the per-play probabilities oracle is still unsupported (any
+    # error/raise outcome counts as "still unsupported"; only real data fails).
+    try:
+        raw = espn_ufl_game_probabilities("401638335", return_parsed=False)
+    except Exception:  # noqa: BLE001 -- raising also means "still unsupported"
+        return
+    items = raw.get("items") if isinstance(raw, dict) else None
+    assert not items, (
+        "espn_ufl_game_probabilities now returns data -- adopt it as the real "
+        "WP oracle for gate (b) (FEASIBILITY.md Finding 2)."
+    )

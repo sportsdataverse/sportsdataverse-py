@@ -30,9 +30,10 @@ ruleset; UFL is the 2024 USFL+XFL merger):
   at the 35-yard line (``yardline_100`` = 65) rather than the NFL's 25
   (``yardline_100`` = 75, 2016+ rule).
 * No PAT kick. After a touchdown the offense attempts a conversion from the
-  2 (worth 1), 5 (worth 2), or 10-yard line (worth 3); published
-  league-average success rates are approximately 80% / 50% / 30%
-  respectively.
+  2 (worth 1), 5 (worth 2), or 10-yard line (worth 3). The 0.80 / 0.50 /
+  0.30 success rates below are SEEDED PLACEHOLDERS (unused in scoring --
+  see the downscope note); refresh from observed league data when
+  conversion modeling lands.
 
 CFL differs structurally (3 downs, 110-yard field, rouge scoring) and is
 handled separately (Phase 6, conditional refit-or-defer) -- its entry here
@@ -63,15 +64,18 @@ class SpringFootballConstants:
         pat_kick: Whether the league kicks a traditional PAT (False for
             ufl/xfl -- they run 1/2/3-pt conversions instead).
         conversion_point_values: ``{points: success_rate}`` for the
-            conversion-distance choices (documented metadata only).
+            conversion-distance choices. Seeded placeholder rates, unused
+            in scoring; refresh when conversion modeling lands.
         ep_point_values: 7-class EP point-value vector consumed by
             ``calculate_expected_points`` to collapse class probabilities
             into a scalar ``ep``. Currently the NFL vector verbatim (see
             downscope note).
         kickoff_spot: Standard kickoff line of scrimmage (yards from own
             goal line). Documented metadata only.
-        model_dir: Import path of the model-bundle package used by
-            ``enrich_nfl_pbp(models_dir=...)`` for this league.
+        model_dir: Import path of the league's model-bundle package.
+            Reserved metadata -- nothing passes it today (the port calls
+            ``enrich_nfl_pbp`` with its default NFL bundle); the cfl entry
+            names a package that does not exist yet.
     """
 
     league: str

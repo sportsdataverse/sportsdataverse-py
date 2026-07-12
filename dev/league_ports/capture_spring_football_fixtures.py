@@ -73,14 +73,23 @@ def capture_summaries() -> None:
 
 
 def probe_probabilities() -> None:
-    """Print the (expected-400) probabilities responses — FEASIBILITY evidence."""
-    from sportsdataverse.football.ufl import espn_ufl_game_probabilities
-    from sportsdataverse.football.xfl import espn_xfl_game_probabilities
+    """Print the (expected-400) oracle responses — FEASIBILITY.md evidence.
+
+    Probes BOTH candidate ESPN win-probability oracles: the per-play Core v2
+    probabilities feed and the pregame Core v2 predictor. As of 2026-07-12
+    both return HTTP 400 ("... not supported for sport: football, league:
+    <ufl|xfl>") — see FEASIBILITY.md Finding 2.
+    """
+    from sportsdataverse.football.ufl import espn_ufl_game_predictor, espn_ufl_game_probabilities
+    from sportsdataverse.football.xfl import espn_xfl_game_predictor, espn_xfl_game_probabilities
 
     prob_fns = {"ufl": espn_ufl_game_probabilities, "xfl": espn_xfl_game_probabilities}
+    pred_fns = {"ufl": espn_ufl_game_predictor, "xfl": espn_xfl_game_predictor}
     for league, event_id, _ in PINNED_SUMMARIES:
         raw = prob_fns[league](event_id, return_parsed=False)
         print(f"[{league} probabilities {event_id}] {json.dumps(raw)[:200]}")
+        raw = pred_fns[league](event_id, return_parsed=False)
+        print(f"[{league} predictor {event_id}] {json.dumps(raw)[:200]}")
 
 
 def build_nfl_parity_fixture() -> None:
