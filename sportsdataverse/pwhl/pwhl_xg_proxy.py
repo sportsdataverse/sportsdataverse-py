@@ -280,6 +280,92 @@ def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
 
 _XG_BASE_FEATURES = ("shot_distance", "shot_angle")
 
+#: Real on-ice PLAY events, in feed order. The pre-shot-context sequence is
+#: restricted to these: PWHL emits a coordless DUPLICATE `goal` row alongside the
+#: scoring `shot` (plus `goalie_change` / shootout rows), so an unfiltered
+#: `shift(1)` would make every goal its own "prior event" -- a target leak that
+#: inflates held-out AUC from 0.707 to 0.755. Do not widen without re-checking that.
+_PLAY_EVENTS = ("faceoff", "shot", "blocked_shot", "hit", "penalty")
+
+#: Pre-shot movement features (T5 Phase 4). Added by :func:`_add_preshot_context`,
+#: which needs the FULL pbp; :func:`_build_xg_features` only reads them.
+_XG_MOVE_FEATURES = (
+    "last_shot",
+    "last_faceoff",
+    "last_hit",
+    "last_blocked",
+    "last_penalty",
+    "time_since_last",
+    "distance_from_last",
+    "last_x",
+    "last_y",
+)
+
+_MOVE_CONTEXT_INPUTS = ("game_id", "sec_from_start", "event", "x_coord", "y_coord")
+_NO_PRIOR_SECONDS = 999.0  # first play of a game: "nothing happened recently"
+_NO_PRIOR_DISTANCE = 200.0  # first play of a game: "far from anything" (rink is 200ft)
+
+#: Even-strength `strength_state` values (home-vs-away skater counts, R4).
+_EV_STRENGTH_STATES = ("5v5", "4v4", "3v3")
+
+
+def _add_preshot_context(pbp: pl.DataFrame) -> pl.DataFrame:
+    """Append pre-shot movement context columns (:data:`_XG_MOVE_FEATURES`) to a pbp.
+
+    Must be handed the **FULL** pbp (not a shots-only frame): the features describe
+    what happened *before* each shot, so they need the surrounding event sequence.
+    Call it before filtering to shots; the columns then ride along on the shot rows
+    into both :func:`_build_xg_features` and :meth:`PwhlCoordXGModel.predict`.
+
+    Idempotent (returns the frame unchanged if the columns are already present), and
+    a no-op on frames that can't support the features:
+
+    - missing any of :data:`_MOVE_CONTEXT_INPUTS`, or
+    - **shots-only frames** (the legacy xG fixture) -- there every shot's "prior
+      event" would be another shot, a degenerate feature set. Callers degrade to the
+      shot-local features instead.
+
+    The sequence is restricted to :data:`_PLAY_EVENTS` -- see that constant for the
+    goal-duplicate target leak this guards against.
+    """
+    if set(_XG_MOVE_FEATURES).issubset(pbp.columns) or not set(_MOVE_CONTEXT_INPUTS).issubset(pbp.columns):
+        return pbp
+    is_play = pl.col("event").is_in(_PLAY_EVENTS)
+    if pbp.filter(is_play & (pl.col("event") != "shot")).height == 0:
+        return pbp
+    f = pbp.with_row_index("_ri")
+    seq = (
+        f.filter(is_play)
+        .sort(["game_id", "sec_from_start"])
+        .with_columns(
+            _pe=pl.col("event").shift(1).over("game_id"),
+            _px=pl.col("x_coord").shift(1).over("game_id"),
+            _py=pl.col("y_coord").shift(1).over("game_id"),
+            _ps=pl.col("sec_from_start").shift(1).over("game_id"),
+        )
+    )
+    pe = pl.col("_pe")
+    ctx = seq.select(
+        "_ri",
+        last_shot=(pe == "shot").fill_null(False).cast(pl.Int64),
+        last_faceoff=(pe == "faceoff").fill_null(False).cast(pl.Int64),
+        last_hit=(pe == "hit").fill_null(False).cast(pl.Int64),
+        last_blocked=(pe == "blocked_shot").fill_null(False).cast(pl.Int64),
+        last_penalty=(pe == "penalty").fill_null(False).cast(pl.Int64),
+        time_since_last=(pl.col("sec_from_start") - pl.col("_ps"))
+        .cast(pl.Float64)
+        .fill_null(_NO_PRIOR_SECONDS)
+        .clip(0.0, _NO_PRIOR_SECONDS),
+        distance_from_last=(
+            ((pl.col("x_coord") - pl.col("_px")) ** 2 + (pl.col("y_coord") - pl.col("_py")) ** 2).sqrt()
+        )
+        .cast(pl.Float64)
+        .fill_null(_NO_PRIOR_DISTANCE),
+        last_x=pl.col("_px").cast(pl.Float64).fill_null(0.0),
+        last_y=pl.col("_py").cast(pl.Float64).fill_null(0.0),
+    )
+    return f.join(ctx, on="_ri", how="left").sort("_ri").drop("_ri")
+
 
 def _build_xg_features(
     shots: pl.DataFrame, want: tuple[str, ...] | None = None
@@ -344,6 +430,11 @@ def _build_xg_features(
             is_tip=(et == "Tip").cast(pl.Int64),
         )
         avail += ["is_wrist", "is_snap", "is_slap", "is_backhand", "is_tip"]
+    if set(_XG_MOVE_FEATURES).issubset(f.columns):
+        # Pre-shot movement (T5 Phase 4) -- already computed by _add_preshot_context
+        # on the FULL pbp (it cannot be derived here: a shots-only frame has no
+        # prior-event context). Read only.
+        avail += list(_XG_MOVE_FEATURES)
     feats = list(want) if want is not None else avail
     mats = [(f[c].cast(pl.Float64).fill_null(0.0).to_numpy() if c in f.columns else np.zeros(f.height)) for c in feats]
     return np.column_stack(mats), tuple(feats), f
@@ -412,13 +503,23 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
     goal indicator as the label -- the same fit-at-call-time recipe as
     :func:`sportsdataverse.nhl.nhl_microstat_constants.fit_shot_xg`, with the
     geometry sourced from the HockeyTech core instead of the NHL api-web one.
-    PWHL pbp has no ``shot_type`` column. When the frame carries the R4
-    strength + clock columns the fit ALSO uses ``rebound`` / ``is_home`` /
-    ``is_pp`` / ``is_sh`` / ``empty_net_for`` (T5 Phase 3, LOSO-validated to lift
-    PP/SH AUC; ``empty_net_for`` = defending team shows >=6 skaters => goalie
-    pulled => shooter faces an empty net); a legacy frame without them degrades to
-    distance/angle only (see :func:`_build_xg_features`; the fitted set is on
-    :attr:`PwhlCoordXGModel.features`). Rows with null coordinates are excluded
+    The feature set grows with what the frame carries (all LOSO-validated; the
+    fitted set is on :attr:`PwhlCoordXGModel.features`, and a frame missing any
+    group simply degrades -- see :func:`_build_xg_features`):
+
+    - **R4 strength + clock columns** -> ``rebound`` / ``is_home`` / ``is_pp`` /
+      ``is_sh`` / ``empty_net_for`` (T5 Phase 3; ``empty_net_for`` = defending team
+      shows >=6 skaters => goalie pulled => shooter faces an empty net).
+    - **``event_type``** -> the shot-type one-hots ``is_wrist`` / ``is_snap`` /
+      ``is_slap`` / ``is_backhand`` / ``is_tip``. PWHL has no ``shot_type`` column,
+      but ``event_type`` on a shot row IS the shot type (T5 Phase 4).
+    - **A full pbp (not a shots-only frame)** -> the pre-shot movement features
+      (:data:`_XG_MOVE_FEATURES`), derived here by :func:`_add_preshot_context`
+      before the shot filter. Pass the FULL pbp to get them; note that
+      :meth:`PwhlCoordXGModel.predict` then also needs frames carrying those
+      columns (:func:`pwhl_team_game_xg_rates` handles this for you).
+
+    Rows with null coordinates are excluded
     from the fit (~100%
     coverage in the captured seasons, so this drops almost nothing). Fewer
     than :data:`_MIN_COORD_SHOTS` qualifying shots -- or a frame with no
@@ -458,6 +559,9 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
         return PwhlCoordXGModel(model=None, fallback_rate=0.0)
     if "goal" not in pbp.columns:
         raise ValueError("fit_pwhl_coord_xg requires a 'goal' column (load_pwhl_pbp shape)")
+    # Pre-shot movement context must be derived BEFORE narrowing to shots (it needs
+    # the surrounding event sequence); the columns then ride along on the shot rows.
+    pbp = _add_preshot_context(pbp)
     shots = pbp.filter(pl.col("event") == "shot") if "event" in pbp.columns else pbp
     if not {"x_coord", "y_coord"}.issubset(pbp.columns):
         # No coordinate columns at all: an honest constant-rate model at the
@@ -526,8 +630,13 @@ def pwhl_team_game_xg_rates(
             as-is regardless of method. Shot rows with null coordinates
             contribute :class:`PwhlCoordXGModel`'s fallback rate (handled
             inside its ``predict``, not here).
-        even_strength_only: Best-effort filter excluding shots with
-            ``power_play == 1`` (see the module docstring's coverage caveat).
+        even_strength_only: Best-effort even-strength filter. When the pbp carries
+            the R4 shift-derived ``strength_state`` / ``strength_state_valid``
+            columns it drops only CONFIDENTLY non-even shots (a valid state outside
+            ``5v5`` / ``4v4`` / ``3v3``); rows whose strength is null or invalid are
+            kept, so a shift-tracking gap never silently deletes a shot. A pre-R4
+            frame falls back to the legacy penalty-window-inferred ``power_play == 1``
+            exclusion (see the module docstring's coverage caveat).
 
     Raises:
         ValueError: If ``xg_method`` is not ``"coords"`` or ``"quality"``.
@@ -568,13 +677,30 @@ def pwhl_team_game_xg_rates(
         return pl.DataFrame(schema=GAME_RATES_SCHEMA)
 
     model = xg_model if xg_model is not None else _fit_xg(pbp, xg_method)
-    shots = pbp.filter(pl.col("event") == "shot")
-    if even_strength_only and "power_play" in shots.columns:
-        # Best-effort even-strength filter (see module docstring): exclude only
-        # confidently-tagged power-play shots. Nulls (the majority, sparse
-        # tagging) are KEPT -- `!= 1` alone would drop them (null comparisons
-        # are null, and filter() excludes null), so null is filled to 0 first.
-        shots = shots.filter(pl.col("power_play").fill_null(0) != 1)
+    # Context BEFORE the shot filter: the movement features need the surrounding
+    # event sequence, which a shots-only frame no longer has.
+    shots = _add_preshot_context(pbp).filter(pl.col("event") == "shot")
+    if even_strength_only and {"strength_state", "strength_state_valid"}.issubset(shots.columns):
+        # R4 shift-derived strength: drop only CONFIDENTLY non-even shots (a valid
+        # state with unequal skater counts). Null / invalid strength keeps the row,
+        # same best-effort philosophy as the legacy power_play path below -- a
+        # shift-tracking gap shouldn't silently delete a shot.
+        non_even = (
+            (pl.col("strength_state_valid") == True) & (pl.col("strength_state").is_in(_EV_STRENGTH_STATES) == False)
+        ).fill_null(False)
+        shots = shots.filter(non_even == False)
+    elif even_strength_only and "power_play" in shots.columns:
+        # Legacy pre-R4 fallback: penalty-window-inferred `power_play` (sparse; see
+        # the module docstring's coverage caveat). Exclude only confidently-tagged
+        # power-play shots. Nulls (the majority) are KEPT -- comparing to null yields
+        # null and filter() drops those rows, so null is filled first.
+        #
+        # Compared AS STRING: load_pwhl_pbp ships `power_play` as Utf8 ("0"/"1"/null),
+        # not an int. The old numeric form (`fill_null(0) != 1`) raised ComputeError
+        # ("cannot compare string with numeric type") on every real pbp frame -- it
+        # only survived tests because the mini fixture hand-builds it as Int32. The
+        # cast handles both.
+        shots = shots.filter(pl.col("power_play").cast(pl.Utf8).fill_null("0") != "1")
     if shots.height == 0:
         return pl.DataFrame(schema=GAME_RATES_SCHEMA)
 

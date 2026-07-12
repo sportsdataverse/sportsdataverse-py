@@ -396,6 +396,165 @@ def _synth_strength_pbp(n: int = 300) -> pl.DataFrame:
     )
 
 
+_MOVE_FEATURES = (
+    "last_shot",
+    "last_faceoff",
+    "last_hit",
+    "last_blocked",
+    "last_penalty",
+    "time_since_last",
+    "distance_from_last",
+    "last_x",
+    "last_y",
+)
+
+
+def _synth_full_pbp(n: int = 300) -> pl.DataFrame:
+    """Full-pbp shape: a real PLAY event before each shot, plus PWHL's coordless
+    DUPLICATE ``goal`` row -- emitted immediately BEFORE the scoring shot, so an
+    unguarded ``shift(1)`` would pick it up as that shot's "prior event" (the leak).
+    """
+    rows: list[dict[str, object]] = []
+    for i in range(n):
+        common: dict[str, object] = {
+            "game_id": str(1000 + i // 30),  # ~10 games
+            "home_team_id": "5",
+            "away_team_id": "6",
+            "skaters_home": 5,
+            "skaters_away": 5 if i % 3 else 4,  # some home power plays
+        }
+        t = float((i % 30) * 40)
+        scored = i % 7 == 0  # ~14%, two classes
+        rows.append(
+            {
+                **common,
+                "event": "faceoff" if i % 2 else "hit",
+                "event_type": "Default",
+                "goal": 0,
+                "x_coord": 20.0,
+                "y_coord": 5.0,
+                "sec_from_start": t - 5.0,
+                "team_id": "5",
+            }
+        )
+        if scored:
+            rows.append(
+                {
+                    **common,
+                    "event": "goal",
+                    "event_type": "Default",
+                    "goal": 1,
+                    "x_coord": None,
+                    "y_coord": None,
+                    "sec_from_start": t,
+                    "team_id": "5",
+                }
+            )
+        rows.append(
+            {
+                **common,
+                "event": "shot",
+                "event_type": ["Wrist", "Snap", "Slap", "Backhand", "Tip", "Default"][i % 6],
+                "goal": 1 if scored else 0,
+                "x_coord": 40.0 + (i % 50),  # varying distance 40..89 ft
+                "y_coord": 0.0,
+                "sec_from_start": t,
+                "team_id": "5" if i % 2 else "6",
+            }
+        )
+    return pl.DataFrame(rows)
+
+
+def test_coord_xg_adds_movement_features_on_full_pbp() -> None:
+    from sportsdataverse.pwhl.pwhl_xg_proxy import fit_pwhl_coord_xg
+
+    m = fit_pwhl_coord_xg(_synth_full_pbp())
+    assert m.model is not None
+    assert m.features == _FULL_FEATURES + _MOVE_FEATURES, f"expected movement features, got {m.features}"
+
+
+def test_preshot_context_excludes_duplicate_goal_rows() -> None:
+    """The leak guard: a scoring shot's "prior event" must be the real prior PLAY,
+    not PWHL's coordless duplicate ``goal`` row (a perfect goal tell -- it inflated
+    held-out AUC 0.707 -> 0.755 before the ``_PLAY_EVENTS`` filter).
+    """
+    from sportsdataverse.pwhl.pwhl_xg_proxy import _add_preshot_context
+
+    ctx = _add_preshot_context(_synth_full_pbp()).filter(pl.col("event") == "shot")
+    assert ctx.filter(pl.col("goal") == 1).height > 0, "synth frame must contain goals to test the leak"
+    # Every shot is preceded by a faceoff or a hit, 5s and 20ft-x away -- including
+    # the scoring ones. If the `goal` dupe leaked in, goal shots would show neither
+    # (and inherit its null coords as last_x=0).
+    assert ((ctx["last_faceoff"] + ctx["last_hit"]) == 1).all()
+    assert (ctx["time_since_last"] == 5.0).all()
+    assert (ctx["last_x"] == 20.0).all()
+    assert (ctx["last_shot"] == 0).all()
+
+
+def test_preshot_context_noop_on_shots_only_frame_and_idempotent() -> None:
+    from sportsdataverse.pwhl.pwhl_xg_proxy import _add_preshot_context
+
+    # A shots-only frame has no prior-event context (every "prior" would be a shot):
+    # no-op, so the caller degrades to the shot-local features.
+    shots = _synth_strength_pbp()
+    assert _add_preshot_context(shots).columns == shots.columns
+    # Idempotent -- fit() and pwhl_team_game_xg_rates() may both call it.
+    once = _add_preshot_context(_synth_full_pbp())
+    assert _add_preshot_context(once).columns == once.columns
+
+
+def _mini_strength_pbp() -> pl.DataFrame:
+    """One game: a 5v5 shot, a valid 5v4 power-play shot, and a null-strength shot."""
+    return pl.DataFrame(
+        {
+            "game_id": [1, 1, 1],
+            "event": ["shot"] * 3,
+            "team_id": [10, 10, 10],
+            "goal": [False, False, False],
+            "x_coord": [85.0, 30.0, 60.0],
+            "y_coord": [0.0, -10.0, 5.0],
+            "strength_state": ["5v5", "5v4", None],
+            "strength_state_valid": [True, True, None],
+        }
+    )
+
+
+def test_even_strength_filter_prefers_shift_derived_strength_state() -> None:
+    """R4 `strength_state` governs when present: drop the CONFIDENTLY non-even shot,
+    keep the null-strength one (a shift-tracking gap must not delete a shot).
+    """
+    model = _distance_only_model()
+    pbp, sched = _mini_strength_pbp(), _mini_sched()
+    ev = pwhl_team_game_xg_rates(pbp, sched, xg_model=model, even_strength_only=True)
+    everything = pwhl_team_game_xg_rates(pbp, sched, xg_model=model, even_strength_only=False)
+    tor_ev = ev.filter(pl.col("team") == "Toronto")["xgf"][0]
+    tor_all = everything.filter(pl.col("team") == "Toronto")["xgf"][0]
+    # Exactly the 5v4 shot is dropped -- so the null-strength shot was KEPT.
+    dropped = model.predict(pl.DataFrame({"x_coord": [30.0], "y_coord": [-10.0]}))[0]
+    assert tor_all - tor_ev == pytest.approx(dropped, abs=1e-9)
+
+
+def test_even_strength_filter_handles_string_power_play_on_prer4_frame() -> None:
+    """Regression: load_pwhl_pbp ships `power_play` as Utf8 ("0"/"1"/null), not int.
+    The old numeric filter (`fill_null(0) != 1`) raised ComputeError on every real
+    frame; it only passed tests because `_mini_pbp` hand-builds it as Int32.
+    """
+    model = _distance_only_model()
+    # Pre-R4 shape (no strength_state) with the feed's real String power_play.
+    pbp = (
+        _mini_strength_pbp()
+        .drop("strength_state", "strength_state_valid")
+        .with_columns(power_play=pl.Series(["0", "1", None], dtype=pl.Utf8))
+    )
+    ev = pwhl_team_game_xg_rates(pbp, _mini_sched(), xg_model=model, even_strength_only=True)
+    everything = pwhl_team_game_xg_rates(pbp, _mini_sched(), xg_model=model, even_strength_only=False)
+    tor_ev = ev.filter(pl.col("team") == "Toronto")["xgf"][0]
+    tor_all = everything.filter(pl.col("team") == "Toronto")["xgf"][0]
+    # Only the "1" shot is dropped -- the null-tagged one is KEPT (sparse tagging).
+    dropped = model.predict(pl.DataFrame({"x_coord": [30.0], "y_coord": [-10.0]}))[0]
+    assert tor_all - tor_ev == pytest.approx(dropped, abs=1e-9)
+
+
 def test_coord_xg_uses_strength_features_when_present() -> None:
     from sportsdataverse.pwhl.pwhl_xg_proxy import fit_pwhl_coord_xg
 
