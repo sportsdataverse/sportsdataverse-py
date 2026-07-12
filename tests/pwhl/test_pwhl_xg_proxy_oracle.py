@@ -1,13 +1,22 @@
 """Internal-oracle gates for the T5.3 PWHL categorical-shot_quality xG proxy.
 
 No external PWHL oracle exists (first-of-its-kind, best-effort): the honest
-internal oracle is a realized-outcome Brier/calibration backtest against a
-naive baseline, on the committed `tests/fixtures/pwhl_prediction/` corpus
-(3 seasons, 2024-2026, as-of-date walk-forward). Floors below are set from
-the observed value at gate-authoring time (rounded to the conservative
-side) -- never lower a floor to pass; debug the model. See
-`tests/fixtures/pwhl_prediction/README.md` for full provenance + the
-documented thin-sample limitation.
+internal oracle is a HELD-OUT realized-outcome backtest. The fixtures are
+built with a strict train/holdout split (see
+``tests/fixtures/pwhl_prediction/README.md`` +
+``dev/pwhl_prediction/build_pwhl_xg_fixture.py``):
+
+- tier weights fit on strictly-prior complete seasons (2024+2025 for the
+  held-out 2026 walk) -- no game sees weights fit on its own or later data;
+- ``margin_sd`` fit on 2025 only, with 2026 kept entirely out of the fit.
+
+**Honest result** (held-out 2026, n=107): Brier 0.2449 vs naive 0.2500 -- a
+delta of only -0.0051, WITHIN sampling noise (SE ~0.0053). The model is
+directionally correct but does NOT robustly beat naive out-of-sample, so per
+the review's honesty rule the gate is held-out CALIBRATION +
+no-worse-than-naive-within-noise, NOT a beats-naive magnitude assertion (that
+needs more PWHL seasons). Floors are set from observed values, conservative;
+never lower a floor to pass -- debug the model.
 """
 
 from __future__ import annotations
@@ -25,30 +34,32 @@ FIXTURES_DIR = Path(__file__).parent.parent / "fixtures" / "pwhl_prediction"
 
 
 @pytest.fixture(scope="module")
-def pooled_shots() -> pl.DataFrame:
-    return pl.read_parquet(FIXTURES_DIR / "shots_2024_2026.parquet")
+def train_shots() -> pl.DataFrame:
+    return pl.read_parquet(FIXTURES_DIR / "shots_train_2024_2025.parquet")
 
 
 @pytest.fixture(scope="module")
 def game_rates() -> pl.DataFrame:
-    return pl.read_parquet(FIXTURES_DIR / "game_rates_2024_2026.parquet")
+    return pl.read_parquet(FIXTURES_DIR / "game_rates_heldout_2026.parquet")
 
 
 @pytest.fixture(scope="module")
 def backtest() -> pl.DataFrame:
-    return pl.read_parquet(FIXTURES_DIR / "backtest_predictions_2024_2026.parquet")
+    return pl.read_parquet(FIXTURES_DIR / "backtest_heldout_2026.parquet")
 
 
 # ---------------------------------------------------------------------------
 # Shot-quality tier weight: directional sanity (the internal oracle for the
 # proxy fit itself -- "Quality" shots must score at a higher empirical goal
 # rate than "Non quality" shots, or the tier labels are meaningless/inverted).
+# Fit on the training pool (2024+2025); this checks the fit MECHANISM, not an
+# out-of-sample prediction, so it is not a leakage surface.
 # ---------------------------------------------------------------------------
-QUALITY_WEIGHT_MARGIN = 0.03  # observed diff ~0.0746 (0.1213 vs 0.0467); floor conservative below
+QUALITY_WEIGHT_MARGIN = 0.03  # observed diff ~0.070 (0.120 vs 0.050); floor conservative below
 
 
-def test_shot_quality_weights_directionally_sane(pooled_shots: pl.DataFrame) -> None:
-    model = fit_shot_quality_xg(pooled_shots)
+def test_shot_quality_weights_directionally_sane(train_shots: pl.DataFrame) -> None:
+    model = fit_shot_quality_xg(train_shots)
     assert "quality" in model.weights and "non_quality" in model.weights
     diff = model.weights["quality"] - model.weights["non_quality"]
     assert diff >= QUALITY_WEIGHT_MARGIN, (
@@ -56,70 +67,78 @@ def test_shot_quality_weights_directionally_sane(pooled_shots: pl.DataFrame) -> 
         f"{model.weights['non_quality']:.4f} by only {diff:.4f} (floor {QUALITY_WEIGHT_MARGIN}) "
         "-- the shot_quality tier collapse or fit may be inverted"
     )
-    # Both weights must be legitimate probabilities.
     for w in model.weights.values():
         assert 0.0 < w < 1.0
 
 
 # ---------------------------------------------------------------------------
-# Game-rates shape sanity.
+# Held-out game-rates shape sanity.
 # ---------------------------------------------------------------------------
 def test_game_rates_shape_and_dtypes(game_rates: pl.DataFrame) -> None:
-    assert game_rates.height > 400, "PWHL game-rates corpus unexpectedly small"
+    assert game_rates.height > 150, "held-out PWHL game-rates corpus unexpectedly small"
     assert game_rates.schema["game_id"] == pl.Utf8
     assert game_rates.schema["team"] == pl.Utf8
     assert game_rates.schema["date"] == pl.Date
     assert game_rates.filter(pl.col("date").is_null()).height == 0, "every regular-season game should resolve a date"
-    # Home/away symmetry: every game_id appears exactly twice (once per side).
     counts = game_rates.group_by("game_id").agg(pl.len().alias("n"))
     assert (counts["n"] == 2).all(), "every game should contribute exactly one home + one away row"
 
 
 # ---------------------------------------------------------------------------
-# Realized-outcome backtest: Brier vs naive baseline + calibration table.
-# This is the honest internal oracle (see module docstring) -- no external
-# PWHL market/power-index exists to compare against.
+# Held-out realized-outcome backtest -- the honest internal oracle.
+# NOT a beats-naive magnitude gate (the -0.0051 edge is within noise): instead
+# (a) no-worse-than-naive within sampling noise, and (b) calibration.
 # ---------------------------------------------------------------------------
 NAIVE_BRIER = 0.25
-MODEL_BRIER_FLOOR = 0.248  # observed 0.2438; must beat naive with margin (floor conservative above observed)
-CALIBRATION_FLOOR = 0.15  # observed max deviation ~0.1177 across 2 buckets (n=199, n=45)
+# No-harm tolerance ~2 SE (SE ~0.0053 on 107 games) so a genuine degradation
+# (anti-predictive model -> Brier well above naive) fails, while noise on a
+# fixture refresh does not spuriously fail. Observed held-out Brier 0.2449.
+BRIER_NO_HARM_TOL = 0.011
+MIN_EVALUATED_GAMES = 90
+# Held-out predictions cluster near 0.5 (exp_margin is heavily shrink-
+# compressed), so calibration_table collapses to a single adequately-sampled
+# base-rate bucket: observed mean_pred 0.5505 vs mean_actual 0.5607, dev
+# ~0.0102. This is effectively a base-rate calibration check; a multi-bucket
+# calibration gate needs more predicted spread (more seasons). Floor
+# conservative above observed.
+CALIBRATION_FLOOR = 0.06
 MIN_CALIBRATION_BUCKET_N = 30
-MIN_EVALUATED_GAMES = 200
 
 
-def test_pwhl_backtest_beats_naive_baseline(backtest: pl.DataFrame) -> None:
+def test_pwhl_heldout_no_worse_than_naive(backtest: pl.DataFrame) -> None:
     assert backtest.height >= MIN_EVALUATED_GAMES, (
-        f"PWHL backtest corpus only {backtest.height} evaluated games (floor {MIN_EVALUATED_GAMES})"
+        f"held-out PWHL backtest only {backtest.height} games (floor {MIN_EVALUATED_GAMES})"
     )
     y = backtest["home_win"].to_numpy()
     p = backtest["home_win_prob"].to_numpy()
     model_brier = brier_score(y, p)
     naive_brier = brier_score(y, np.full(len(y), 0.5))
     assert abs(naive_brier - NAIVE_BRIER) < 0.01, "sanity-check the documented naive baseline"
-    assert model_brier <= MODEL_BRIER_FLOOR, (
-        f"PWHL model Brier {model_brier:.4f} above floor {MODEL_BRIER_FLOOR} -- debug the xG proxy "
-        "or the margin_sd fit before lowering this floor"
+    # Honest claim: the de-leaked model is NOT meaningfully WORSE than naive
+    # out-of-sample (it is very slightly better, within noise). A real
+    # degradation (bug making it anti-predictive) pushes Brier above this bar.
+    assert model_brier <= naive_brier + BRIER_NO_HARM_TOL, (
+        f"held-out PWHL model Brier {model_brier:.4f} exceeds naive {naive_brier:.4f} by more than the "
+        f"no-harm tolerance {BRIER_NO_HARM_TOL} -- the xG proxy or margin_sd fit regressed; debug before "
+        "touching this tolerance"
     )
-    assert model_brier < naive_brier, "PWHL model must beat the p=0.5 naive baseline (even modestly)"
 
 
-def test_pwhl_backtest_calibration(backtest: pl.DataFrame) -> None:
+def test_pwhl_heldout_calibration(backtest: pl.DataFrame) -> None:
     cal = calibration_table(backtest["home_win"].to_numpy(), backtest["home_win_prob"].to_numpy(), n_bins=5)
     cal = cal.filter(pl.col("n") >= MIN_CALIBRATION_BUCKET_N)
-    assert cal.height >= 2, "too few adequately-sampled calibration buckets -- corpus may have shrunk"
+    assert cal.height >= 1, "no adequately-sampled calibration bucket -- corpus may have shrunk"
     dev = (cal["mean_pred"] - cal["mean_actual"]).abs()
     assert dev.max() <= CALIBRATION_FLOOR, (
-        f"PWHL pregame calibration max per-bucket deviation {dev.max():.4f} above floor {CALIBRATION_FLOOR}"
+        f"held-out PWHL calibration max per-bucket deviation {dev.max():.4f} above floor {CALIBRATION_FLOOR}"
     )
 
 
-def test_pwhl_margin_sd_was_fit_not_left_seeded() -> None:
-    # The old seeded value (2.35, a real-world-goal-margin-scale guess) is a
-    # documented ~3x scale mismatch against this proxy's heavily
-    # shrink-compressed exp_margin (std ~0.065) -- confirm the fitted,
-    # much-smaller sigma is in place (see nhl_prediction_constants.py's PWHL
-    # margin_sd comment + tests/fixtures/pwhl_prediction/README.md).
+def test_pwhl_margin_sd_was_fit_out_of_sample() -> None:
+    # The old seeded value (2.35) was a real-world-goal-margin-scale guess; the
+    # fitted, much-smaller sigma (1.21, fit on 2025 with 2026 held out) must be
+    # in place. See nhl_prediction_constants.py's PWHL margin_sd comment.
     const = get_constants("pwhl")
-    assert 0.5 <= const.margin_sd <= 1.2, (
-        f"PWHL margin_sd {const.margin_sd} outside the fitted-scale range -- was it reverted to the old seed?"
+    assert 0.9 <= const.margin_sd <= 1.6, (
+        f"PWHL margin_sd {const.margin_sd} outside the fitted-scale range -- reverted to the old seed?"
     )

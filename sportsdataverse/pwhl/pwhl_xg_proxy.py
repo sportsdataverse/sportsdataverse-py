@@ -44,8 +44,13 @@ pbp adapter exists) that:
   ``load_pwhl_schedules``'s ``game_date`` (a year-less "Wed, May 8" string
   with no reliable chronological parse) -- see :func:`pwhl_team_game_xg_rates`.
 - No external PWHL oracle exists (first-of-its-kind); the gate is a
-  realized-outcome Brier/calibration backtest against a naive baseline --
-  see ``tests/pwhl/test_pwhl_xg_proxy_oracle.py``.
+  HELD-OUT realized-outcome backtest (``margin_sd`` fit on 2025, scored on a
+  held-out 2026, tier weights fit on strictly-prior seasons). The honest
+  result: held-out Brier 0.2449 vs naive 0.2500 -- directionally correct but
+  WITHIN sampling noise, so the gate is calibration + no-worse-than-naive,
+  NOT a beats-naive magnitude claim (needs more seasons). See
+  ``tests/pwhl/test_pwhl_xg_proxy_oracle.py`` +
+  ``tests/fixtures/pwhl_prediction/README.md``.
 
 Example:
     Quick start::
@@ -116,6 +121,32 @@ def _quality_tier_expr() -> pl.Expr:
         .then(pl.lit("non_quality"))
         .otherwise(pl.lit(None, dtype=pl.Utf8))
     )
+
+
+def _game_dates(game_info: pl.DataFrame) -> pl.DataFrame:
+    """``game_id`` (Int64) -> ``date`` from ``game_date_iso``.
+
+    ``load_pwhl_schedules``'s own ``game_date`` is a year-less string
+    (``"Wed, May 8"``) with no reliable chronological parse; ``game_info``'s
+    ``game_date_iso`` is a real ISO timestamp. Shared by every date-dependent
+    caller so the parse lives in one place.
+    """
+    return game_info.select(
+        pl.col("game_id").cast(pl.Int64),
+        pl.col("game_date_iso").str.slice(0, 10).str.strptime(pl.Date, "%Y-%m-%d", strict=False).alias("date"),
+    ).unique(subset=["game_id"])
+
+
+def _pbp_shots_before(pbp: pl.DataFrame, game_info: pl.DataFrame, cutoff: _dt.date) -> pl.DataFrame:
+    """The narrow (fit-ready) pbp rows for games strictly before ``cutoff``.
+
+    Joins ``game_info`` dates onto ``pbp`` and keeps only rows from games
+    dated before the cutoff -- the leakage-safe training set for the tier-weight
+    fit in a predictive (as-of) rating.
+    """
+    cols = ["game_id", "event", "shot_quality", "goal"]
+    dated = pbp.with_columns(pl.col("game_id").cast(pl.Int64)).join(_game_dates(game_info), on="game_id", how="left")
+    return dated.filter(pl.col("date").is_not_null() & (pl.col("date") < cutoff)).select(cols)
 
 
 @dataclass(frozen=True)
@@ -299,11 +330,7 @@ def pwhl_team_game_xg_rates(
         return pl.DataFrame(schema=GAME_RATES_SCHEMA)
 
     if game_info is not None and not game_info.is_empty():
-        dates = game_info.select(
-            pl.col("game_id").cast(pl.Int64),
-            pl.col("game_date_iso").str.slice(0, 10).str.strptime(pl.Date, "%Y-%m-%d", strict=False).alias("date"),
-        ).unique(subset=["game_id"])
-        sched = sched.join(dates, on="game_id", how="left")
+        sched = sched.join(_game_dates(game_info), on="game_id", how="left")
     else:
         sched = sched.with_columns(pl.lit(None, dtype=pl.Date).alias("date"))
 
@@ -375,13 +402,20 @@ def pwhl_ratings_from_proxy(
     with PWHL's fitted constants -- the identical rank-derivation the NHL
     core uses.
 
+    **Leakage boundary:** when ``as_of_date`` is set this is a *predictive*
+    rating, so the tier weights are fit on shots from games strictly BEFORE the
+    cutoff only (never the games being rated). Without a cutoff (a descriptive
+    full-season rating) the weights are fit per-season on that season's full
+    pbp -- there is no future to leak from.
+
     Args:
         seasons: An int or iterable of PWHL season end-years (``>= 2024``).
-        as_of_date: If given, only games strictly before this date are used
-            (the leakage boundary for a predictive backtest).
-        xg_model: A pre-fit :class:`ShotQualityXGModel` (e.g. fit once across
-            multiple seasons for stability); fit per-season-pooled data when
-            ``None``.
+        as_of_date: If given, only games strictly before this date are used --
+            for BOTH the rating games AND the tier-weight fit (the leakage
+            boundary for a predictive backtest).
+        xg_model: A pre-fit :class:`ShotQualityXGModel`; when supplied it is
+            used as-is (the caller owns its leakage boundary). When ``None``,
+            weights are fit internally, leak-safe per the ``as_of_date`` note.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
     Returns:
@@ -422,14 +456,30 @@ def pwhl_ratings_from_proxy(
     from sportsdataverse.pwhl.pwhl_loaders import load_pwhl_game_info, load_pwhl_pbp, load_pwhl_schedules
 
     const = get_constants("pwhl")
-    all_rates = []
+    loaded = []
     for season in _as_season_list(seasons):
         pbp = load_pwhl_pbp(season)
         sched = load_pwhl_schedules(season)
         if pbp.is_empty() or sched.is_empty():
             continue
-        info = load_pwhl_game_info(season)
-        model = xg_model if xg_model is not None else fit_shot_quality_xg(pbp)
+        loaded.append((pbp, sched, load_pwhl_game_info(season)))
+    if not loaded:
+        return _empty_ratings(return_as_pandas)
+
+    # Leakage boundary (MERGE-BLOCKER fix): with an as-of cutoff this is a
+    # PREDICTIVE rating, so the tier weights must not peek at the games being
+    # rated -- fit them on shots from games strictly BEFORE the cutoff only
+    # (pooled across the requested seasons). Without a cutoff (a descriptive
+    # full-season rating) the per-season full-pbp fit is fine, no boundary to
+    # respect. An explicit xg_model always wins.
+    fit_model = xg_model
+    if fit_model is None and as_of_date is not None:
+        pre = [_pbp_shots_before(pbp, info, as_of_date) for pbp, _sched, info in loaded]
+        fit_model = fit_shot_quality_xg(pl.concat(pre, how="vertical_relaxed"))
+
+    all_rates = []
+    for pbp, sched, info in loaded:
+        model = fit_model if fit_model is not None else fit_shot_quality_xg(pbp)
         rates = pwhl_team_game_xg_rates(pbp, sched, game_info=info, xg_model=model)
         if not rates.is_empty():
             all_rates.append(rates)

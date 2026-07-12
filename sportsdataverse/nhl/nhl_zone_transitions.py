@@ -157,6 +157,15 @@ def infer_zone_transitions(
         pl.col("_team").shift(-1).over("_game").alias("_next_event_team"),
         pl.col("_secs").shift(-1).over("_game").alias("_next_event_secs"),
     )
+    # seconds_to_next: elapsed to the next possession event. _secs is
+    # WITHIN-period, so at a period boundary the next event's _secs resets to a
+    # small value and the raw diff goes negative -- that's the tell it crossed a
+    # period (a negative diff <=> period rollover, since inside a period
+    # event-order == increasing elapsed time). Null it there: an entry whose
+    # next possession event is in a later period has no measurable in-period
+    # retention window, so it must not count as controlled below (null <= window
+    # is null -> False), and the output column must not report a bogus negative.
+    _raw_secs_to_next = (pl.col("_next_event_secs") - pl.col("_secs")).cast(pl.Float64)
     poss = poss.with_columns(
         pl.when((pl.col("_prev_zone").is_in(["N", "D"])) & (pl.col("zone_code") == "O"))
         .then(pl.lit("entry"))
@@ -164,7 +173,7 @@ def infer_zone_transitions(
         .then(pl.lit("exit"))
         .otherwise(pl.lit(None, dtype=pl.Utf8))
         .alias("transition_type"),
-        (pl.col("_next_event_secs") - pl.col("_secs")).cast(pl.Float64).alias("seconds_to_next"),
+        pl.when(_raw_secs_to_next >= 0).then(_raw_secs_to_next).otherwise(None).alias("seconds_to_next"),
     )
     transitions = poss.filter(pl.col("transition_type").is_not_null())
     if transitions.height == 0:

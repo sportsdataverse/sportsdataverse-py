@@ -96,16 +96,17 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
         major_penalty_value=0.359,
         # Fit from the 120-game slice via dev/nhl_microstat/fit_zone_entry_value.py
         # (Task 4.2, re-fit after the T5.2 flesh-out of the event-sequence-aware
-        # controlled/dump heuristic -- see nhl_zone_transitions module docstring):
-        # mean xG the entering/exiting team generates within entry_window_s
-        # after a controlled vs dump entry (controlled ~2x dump) / after an
-        # exit. Heuristic controlled/dump labels (see nhl_zone_transitions
-        # 🟡), so these remain approximate values; the re-fit barely moved
-        # (0.108->0.1085 / 0.053->0.0544 / 0.007->0.0070), confirming the label
-        # flesh-out changed WHICH events are called controlled at the margin
-        # without disturbing the aggregate value split.
-        zone_entry_value_controlled=0.1085,
-        zone_entry_value_dump=0.0544,
+        # controlled/dump heuristic + the period-boundary seconds_to_next fix --
+        # see nhl_zone_transitions module docstring): mean xG the entering/exiting
+        # team generates within entry_window_s after a controlled vs dump entry
+        # (controlled ~2x dump) / after an exit. Heuristic controlled/dump labels
+        # (see nhl_zone_transitions 🟡), so these remain approximate values; the
+        # re-fits barely moved (0.108->0.1101 / 0.053->0.0543 / 0.007->0.0070),
+        # confirming the label flesh-out + period-boundary guard changed WHICH
+        # events are called controlled at the margin (887->868 controlled) without
+        # disturbing the aggregate value split.
+        zone_entry_value_controlled=0.1101,
+        zone_entry_value_dump=0.0543,
         zone_exit_value=0.0070,
         # NOT fit -- deliberate equal-weight (unweighted-z) composite: each EDGE
         # component contributes its raw league-wide z-score equally. The EDGE
@@ -147,8 +148,8 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     "pwhl": LeagueConstants(
         pp_goal_value=0.144,
         major_penalty_value=0.359,
-        zone_entry_value_controlled=0.1085,
-        zone_entry_value_dump=0.0544,
+        zone_entry_value_controlled=0.1101,
+        zone_entry_value_dump=0.0543,
         zone_exit_value=0.0070,
         edge_component_weights={
             "top_speed": 1.0,

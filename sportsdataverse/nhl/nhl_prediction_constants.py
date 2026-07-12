@@ -159,24 +159,31 @@ LEAGUE_CONSTANTS: dict[str, LeagueConstants] = {
     # SEEDED placeholders (deferred per design spec Sec 9-7 -- the NHL-contract
     # pbp shape this row's consumers were built for has no PWHL adapter yet).
     #
-    # margin_sd IS fit (T5.3 flesh-out, 2026-07-11), as a byproduct of building
-    # the categorical-shot_quality xG-proxy backtest (see
-    # sportsdataverse.pwhl.pwhl_xg_proxy + dev/pwhl_prediction/): fit by
-    # minimising Brier of Phi(exp_margin/margin_sd) directly on 244 as-of-
-    # evaluated PWHL games (3 seasons, dates[10:] per season) -- the same
-    # method the NHL margin_sd comment above describes. The seeded 2.35 was a
-    # real-world-goal-margin-scale guess; the proxy's exp_margin values are
-    # heavily shrink-compressed (shrink_k=25 against ~10-20 games/team/season)
-    # to a std of ~0.065, so the correctly-scaled sigma is far smaller: fit
-    # value 0.83 (grid search dev/pwhl_prediction/fit_pwhl_margin_sd.py,
-    # step 0.02) drops Brier from the naive-baseline-beating-but-barely 0.2464
-    # (old seed) to 0.2438 vs naive 0.2500. This is a genuine but modest
-    # improvement, not a claim of strong predictive power -- see
-    # tests/pwhl/test_pwhl_xg_proxy_oracle.py for the honest floor + the
-    # documented thin-sample limitation.
+    # margin_sd IS fit (T5.3 flesh-out, 2026-07-11), OUT-OF-SAMPLE, as a
+    # byproduct of the categorical-shot_quality xG-proxy backtest (see
+    # sportsdataverse.pwhl.pwhl_xg_proxy + the held-out fitter/report script
+    # dev/pwhl_prediction/build_pwhl_xg_fixture.py):
+    # grid-search minimising Brier of Phi(exp_margin/margin_sd) on the 2025
+    # season's 78 as-of games ONLY (tier weights for that fit from 2024, a
+    # strictly-prior season), with the held-out 2026 season kept entirely out
+    # of the fit. Same method the NHL margin_sd comment above describes, but on
+    # a held-out split (an earlier cut fit sd in-sample on all 244 games, which
+    # made the beats-naive gate non-falsifiable -- Phi(m/sd)->0.5=naive as sd
+    # grows, so the in-sample minimiser can never lose to naive). The seeded
+    # 2.35 was a real-world-goal-margin-scale guess; the proxy's exp_margin is
+    # heavily shrink-compressed (shrink_k=25 against ~10-20 games/team/season,
+    # std ~0.065), so the correctly-scaled sigma is much smaller: fit value
+    # 1.21. HONEST RESULT: on the held-out 2026 season (n=107) this gives Brier
+    # 0.2449 vs naive 0.2500 -- a delta of only -0.0051, WITHIN sampling noise
+    # (SE ~0.0053 on 107 games). The model is directionally correct (top-half
+    # predicted games win 0.59 vs bottom-half 0.53) but does NOT robustly beat
+    # naive out-of-sample. It ships as a first-of-its-kind scaffold; the gate
+    # (tests/pwhl/test_pwhl_xg_proxy_oracle.py) is held-out CALIBRATION +
+    # no-worse-than-naive-within-noise, NOT a beats-naive magnitude claim --
+    # a powered magnitude gate needs more PWHL seasons.
     "pwhl": LeagueConstants(
         hfa=0.15,
-        margin_sd=0.83,
+        margin_sd=1.21,
         avg_xgf=2.30,
         avg_total_goals=5.20,
         total_scale=1.0,
