@@ -20,6 +20,24 @@ flowchart LR
 | `load_cfb_team_info` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_teams_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
 | `load_cfb_schedule_crosswalk` | [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) | — |
+| `load_cfb_team_box` | [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_box) | — |
+| `load_cfb_player_box` | [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_player_box) | — |
+| `load_cfb_drives` | [espn_cfb_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_drives) | — |
+| `load_cfb_play_participants` | [espn_cfb_play_participants](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_play_participants) | — |
+| `load_cfb_game_rosters` | [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_game_rosters) | — |
+| `load_cfb_linescores` | [espn_cfb_linescores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_linescores) | — |
+| `load_cfb_betting` | [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_betting) | — |
+| `load_cfb_power_index` | [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_power_index) | — |
+| `load_cfb_adv_team` | [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_team) | — |
+| `load_cfb_adv_passing` | [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_passing) | — |
+| `load_cfb_adv_rushing` | [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_rushing) | — |
+| `load_cfb_adv_receiving` | [espn_cfb_adv_receiving](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_receiving) | — |
+| `load_cfb_adv_defensive` | [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_defensive) | — |
+| `load_cfb_adv_defensive_players` | [espn_cfb_adv_defensive_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_defensive_players) | — |
+| `load_cfb_adv_drives` | [espn_cfb_adv_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_drives) | — |
+| `load_cfb_adv_situational` | [espn_cfb_adv_situational](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_situational) | — |
+| `load_cfb_adv_specialists` | [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_specialists) | — |
+| `load_cfb_adv_turnover` | [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_turnover) | — |
 
 ## `load_cfb_pbp`
 
@@ -28,142 +46,134 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 
 | col_name | type |
 |---|---|
-| `home_score` | Float64 |
-| `scoring_play` | Boolean |
-| `priority` | Boolean |
-| `stat_yardage` | Int32 |
-| `away_score` | Float64 |
-| `modified` | String |
-| `id` | Float64 |
+| `id` | Int32 |
+| `sequenceNumber` | String |
 | `text` | String |
-| `period_number` | Int32 |
-| `start_short_down_distance_text` | String |
-| `start_possession_text` | String |
-| `start_down_distance_text` | String |
-| `start_distance` | Int32 |
-| `start_yard_line` | Int32 |
-| `start_team_id` | Int32 |
-| `start_down` | Int32 |
-| `start_yards_to_endzone` | Int32 |
-| `clock_display_value` | String |
-| `type_id` | String |
-| `type_text` | String |
-| `type_abbreviation` | String |
-| `end_short_down_distance_text` | String |
-| `end_possession_text` | String |
-| `end_down_distance_text` | String |
-| `end_distance` | Int32 |
-| `end_yard_line` | Int32 |
-| `end_team_id` | Int32 |
-| `end_down` | Int32 |
-| `end_yards_to_endzone` | Int32 |
-| `scoring_type_display_name` | String |
-| `scoring_type_name` | String |
-| `scoring_type_abbreviation` | String |
-| `drive_id` | String |
-| `drive_display_result` | String |
-| `drive_is_score` | Boolean |
-| `drive_team_short_display_name` | String |
-| `drive_team_display_name` | String |
-| `drive_team_name` | String |
-| `drive_team_abbreviation` | String |
-| `drive_yards` | Int32 |
-| `drive_offensive_plays` | Int32 |
-| `drive_result` | String |
-| `drive_description` | String |
-| `drive_short_display_result` | String |
-| `drive_time_elapsed_display_value` | String |
-| `drive_start_period_number` | Int32 |
-| `drive_start_period_type` | String |
-| `drive_start_yard_line` | Int32 |
-| `drive_start_clock_display_value` | String |
-| `drive_start_text` | String |
-| `drive_end_period_number` | Float64 |
-| `drive_end_period_type` | String |
-| `drive_end_yard_line` | Float64 |
-| `drive_end_clock_display_value` | String |
-| `season` | Int32 |
-| `season_type` | Int32 |
-| `away_team_id` | Int32 |
-| `away_team_name` | String |
-| `away_team_mascot` | String |
-| `away_team_abbrev` | String |
-| `away_team_name_alt` | String |
-| `home_team_id` | Int32 |
-| `home_team_name` | String |
-| `home_team_mascot` | String |
-| `home_team_abbrev` | String |
-| `home_team_name_alt` | String |
-| `home_team_spread` | Float64 |
-| `game_spread` | Float64 |
-| `home_favorite` | Boolean |
-| `game_spread_available` | Boolean |
-| `week` | Int32 |
+| `awayScore` | Int32 |
+| `homeScore` | Int32 |
+| `scoringPlay` | Boolean |
+| `priority` | Boolean |
+| `modified` | String |
+| `statYardage` | Int32 |
+| `type.id` | String |
+| `type.text` | String |
+| `period.number` | Int32 |
+| `clock.displayValue` | String |
+| `start.down` | Int32 |
+| `start.distance` | Int32 |
+| `start.yardLine` | Int32 |
+| `start.yardsToEndzone` | Int32 |
+| `start.downDistanceText` | String |
+| `start.shortDownDistanceText` | String |
+| `start.possessionText` | String |
+| `start.team.id` | Int32 |
+| `end.down` | Int32 |
+| `end.distance` | Int32 |
+| `end.yardLine` | Int32 |
+| `end.yardsToEndzone` | Int32 |
+| `end.downDistanceText` | String |
+| `end.shortDownDistanceText` | String |
+| `end.possessionText` | String |
+| `end.team.id` | Int32 |
+| `drive.id` | String |
+| `drive.displayResult` | String |
+| `drive.isScore` | Boolean |
+| `drive.team.shortDisplayName` | String |
+| `drive.team.displayName` | String |
+| `drive.team.name` | String |
+| `drive.team.abbreviation` | String |
+| `drive.yards` | Int32 |
+| `drive.offensivePlays` | Int32 |
+| `drive.result` | String |
+| `drive.description` | String |
+| `drive.shortDisplayResult` | String |
+| `drive.timeElapsed.displayValue` | String |
+| `drive.start.period.number` | Int32 |
+| `drive.start.period.type` | String |
+| `drive.start.yardLine` | Int32 |
+| `drive.start.clock.displayValue` | String |
+| `drive.start.text` | String |
+| `drive.end.period.number` | Int32 |
+| `drive.end.period.type` | String |
+| `drive.end.yardLine` | Int32 |
+| `drive.end.clock.displayValue` | String |
 | `game_id` | Int32 |
-| `qtr` | Int32 |
-| `time` | String |
-| `clock_minutes` | String |
-| `clock_seconds` | String |
+| `season` | Int32 |
+| `seasonType` | Int32 |
+| `homeTeamId` | Int32 |
+| `awayTeamId` | Int32 |
+| `homeTeamName` | String |
+| `awayTeamName` | String |
+| `homeTeamMascot` | String |
+| `awayTeamMascot` | String |
+| `homeTeamAbbrev` | String |
+| `awayTeamAbbrev` | String |
+| `homeTeamNameAlt` | String |
+| `awayTeamNameAlt` | String |
+| `homeTeamSpread` | Float64 |
+| `gameSpread` | Float64 |
+| `gameSpreadAvailable` | Boolean |
+| `overUnder` | Float64 |
+| `homeFavorite` | Boolean |
+| `clock.minutes` | String |
+| `clock.seconds` | String |
 | `half` | Int32 |
-| `game_half` | Int32 |
-| `lag_qtr` | Float64 |
-| `lead_qtr` | Float64 |
-| `lag_game_half` | String |
-| `lead_game_half` | Int32 |
-| `start_quarter_seconds_remaining` | Int32 |
-| `start_half_seconds_remaining` | Int32 |
-| `start_game_seconds_remaining` | Int32 |
+| `lead_half` | Int32 |
+| `start.TimeSecsRem` | Int32 |
+| `start.adj_TimeSecsRem` | Int32 |
+| `lead_text` | String |
+| `lead_start_team` | String |
+| `lead_start_yardsToEndzone` | Int32 |
+| `lead_start_down` | Int32 |
+| `lead_start_distance` | Int32 |
+| `lead_scoringPlay` | Boolean |
+| `text_dupe` | Boolean |
 | `game_play_number` | Int32 |
-| `start_posteam_id` | Int32 |
-| `start_defteam_id` | Int32 |
-| `end_defteam_id` | Int32 |
-| `end_posteam_id` | Int32 |
-| `start_posteam_name` | String |
-| `start_defteam_name` | String |
-| `end_posteam_name` | String |
-| `end_defteam_name` | String |
-| `start_posteam_type` | Boolean |
-| `end_posteam_type` | Boolean |
-| `home_timeout_called` | Boolean |
-| `away_timeout_called` | Boolean |
-| `end_home_team_timeouts` | Int32 |
-| `end_away_team_timeouts` | Int32 |
-| `start_home_team_timeouts` | Int32 |
-| `start_away_team_timeouts` | Int32 |
-| `end_quarter_seconds_remaining` | Float64 |
-| `end_half_seconds_remaining` | Int32 |
-| `end_game_seconds_remaining` | Int32 |
-| `start_posteam_timeouts` | Int32 |
-| `start_defteam_timeouts` | Int32 |
-| `end_posteam_timeouts` | Int32 |
-| `end_defteam_timeouts` | Int32 |
-| `first_half_kickoff_team_id` | Int32 |
+| `start.pos_team.id` | Int32 |
+| `start.def_pos_team.id` | Int32 |
+| `end.def_team.id` | Int32 |
+| `end.pos_team.id` | Int32 |
+| `end.def_pos_team.id` | Int32 |
+| `start.pos_team.name` | String |
+| `start.def_pos_team.name` | String |
+| `end.pos_team.name` | String |
+| `end.def_pos_team.name` | String |
+| `start.is_home` | Boolean |
+| `end.is_home` | Boolean |
+| `homeTimeoutCalled` | Boolean |
+| `awayTimeoutCalled` | Boolean |
+| `end.homeTeamTimeouts` | Int32 |
+| `end.awayTeamTimeouts` | Int32 |
+| `start.homeTeamTimeouts` | Int32 |
+| `start.awayTeamTimeouts` | Int32 |
+| `end.TimeSecsRem` | Int32 |
+| `end.adj_TimeSecsRem` | Int32 |
+| `start.posTeamTimeouts` | Int32 |
+| `start.defPosTeamTimeouts` | Int32 |
+| `end.posTeamTimeouts` | Int32 |
+| `end.defPosTeamTimeouts` | Int32 |
+| `firstHalfKickoffTeamId` | Int32 |
 | `period` | Int32 |
-| `start_yard` | Int32 |
-| `end_yard` | Int32 |
-| `start_yardline_100` | Float64 |
-| `end_yardline_100` | Int32 |
-| `start_ydstogo` | Int32 |
-| `end_ydstogo` | Int32 |
-| `play_type_original` | String |
-| `play_id` | Float64 |
-| `lag_scoring_play` | Boolean |
+| `start.yard` | Int32 |
+| `end.yard` | Int32 |
+| `playType` | String |
+| `week` | Int32 |
 | `end_of_half` | Boolean |
-| `down_1` | Int32 |
-| `down_2` | Int32 |
-| `down_3` | Int32 |
-| `down_4` | Int32 |
-| `down_1_end` | Int32 |
-| `down_2_end` | Int32 |
-| `down_3_end` | Int32 |
-| `down_4_end` | Int32 |
-| `scoring_play_2` | Boolean |
+| `down_1` | Boolean |
+| `down_2` | Boolean |
+| `down_3` | Boolean |
+| `down_4` | Boolean |
+| `down_1_end` | Boolean |
+| `down_2_end` | Boolean |
+| `down_3_end` | Boolean |
+| `down_4_end` | Boolean |
+| `scoring_play` | Boolean |
 | `td_play` | Boolean |
 | `touchdown` | Boolean |
+| `td_check` | Boolean |
 | `safety` | Boolean |
-| `fumble` | Boolean |
-| `fumble_forced` | Boolean |
-| `fumble_not_forced` | Boolean |
+| `fumble_vec` | Boolean |
+| `forced_fumble` | Boolean |
 | `kickoff_play` | Boolean |
 | `kickoff_tb` | Boolean |
 | `kickoff_onside` | Boolean |
@@ -184,121 +194,69 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `rush` | Boolean |
 | `pass` | Boolean |
 | `sack_vec` | Boolean |
-| `posteam` | Int32 |
-| `defteam` | Int32 |
-| `posteam_type` | Boolean |
-| `lag_ha_score_differential` | Float64 |
-| `ha_score_differential` | Int32 |
-| `net_ha_score_pts` | Float64 |
-| `h_score_differential` | Float64 |
-| `a_score_differential` | Float64 |
-| `lag_home_score` | Float64 |
-| `lag_away_score` | Float64 |
-| `start_home_score` | Float64 |
-| `start_away_score` | Float64 |
-| `end_home_score` | Float64 |
-| `end_away_score` | Float64 |
-| `posteam_score` | Float64 |
-| `defteam_score` | Float64 |
-| `start_posteam_score` | Float64 |
-| `start_defteam_score` | Float64 |
-| `start_posteam_score_differential` | Int32 |
-| `end_posteam_score` | Float64 |
-| `end_defteam_score` | Float64 |
-| `end_posteam_score_differential` | Int32 |
-| `lag_posteam` | Int32 |
-| `lead_posteam` | Float64 |
-| `lead_posteam2` | Float64 |
-| `posteam_score_differential` | Float64 |
-| `lag_posteam_score_differential` | Float64 |
-| `posteam_score_pts` | Float64 |
-| `start_posteam_receives_2h_kickoff` | Boolean |
-| `end_posteam_receives_2h_kickoff` | Boolean |
+| `pos_team` | Int32 |
+| `def_pos_team` | Int32 |
+| `is_home` | Boolean |
+| `HA_score_diff` | Int32 |
+| `lag_homeScore` | Int32 |
+| `lag_awayScore` | Int32 |
+| `start.homeScore` | Int32 |
+| `start.awayScore` | Int32 |
+| `end.homeScore` | Int32 |
+| `end.awayScore` | Int32 |
+| `pos_team_score` | Int32 |
+| `def_pos_team_score` | Int32 |
+| `start.pos_team_score` | Int32 |
+| `start.def_pos_team_score` | Int32 |
+| `start.pos_score_diff` | Int32 |
+| `end.pos_team_score` | Int32 |
+| `end.def_pos_team_score` | Int32 |
+| `end.pos_score_diff` | Int32 |
+| `lag_pos_team` | Int32 |
+| `lead_pos_team` | Int32 |
+| `lead_pos_team2` | Int32 |
+| `pos_score_diff` | Int32 |
+| `lag_pos_score_diff` | Int32 |
+| `pos_score_pts` | Int32 |
+| `pos_score_diff_start` | Int32 |
+| `start.pos_team_receives_2H_kickoff` | Boolean |
+| `end.pos_team_receives_2H_kickoff` | Boolean |
 | `change_of_poss` | Int32 |
-| `td_check` | Boolean |
 | `penalty_flag` | Boolean |
 | `penalty_declined` | Boolean |
 | `penalty_no_play` | Boolean |
 | `penalty_offset` | Boolean |
 | `penalty_1st_conv` | Boolean |
 | `penalty_in_text` | Boolean |
-| `penalty_detail` | String |
-| `penalty_text` | String |
-| `yds_penalty` | Float64 |
 | `sack` | Boolean |
 | `int` | Boolean |
 | `int_td` | Boolean |
-| `complete_pass` | Boolean |
+| `completion` | Boolean |
 | `pass_attempt` | Boolean |
 | `target` | Boolean |
 | `pass_breakup` | Boolean |
-| `pass_touchdown` | Boolean |
-| `rush_touchdown` | Boolean |
+| `pass_td` | Boolean |
+| `rush_td` | Boolean |
 | `turnover_vec` | Boolean |
 | `offense_score_play` | Boolean |
 | `defense_score_play` | Boolean |
 | `downs_turnover` | Boolean |
-| `yds_punted` | Float64 |
-| `yds_punt_gained` | Float64 |
-| `field_goal_attempt` | Boolean |
+| `fg_attempt` | Boolean |
 | `fg_made` | Boolean |
-| `yds_fg` | Boolean |
 | `pos_unit` | String |
 | `def_pos_unit` | String |
 | `lead_play_type` | String |
-| `special_teams` | Boolean |
+| `sp` | Boolean |
 | `play` | Boolean |
 | `scrimmage_play` | Boolean |
-| `change_of_posteam` | Boolean |
-| `posteam_score_differential_end` | Float64 |
-| `drive_result_detailed` | String |
-| `drive_points` | Float64 |
-| `lag_drive_result_detailed` | String |
-| `lag_drive_points` | Float64 |
-| `yds_rushed` | Float64 |
-| `yds_receiving` | Float64 |
-| `yds_int_return` | Float64 |
-| `yds_kickoff` | Boolean |
-| `yds_kickoff_return` | Float64 |
-| `yds_punt_return` | Float64 |
-| `yds_fumble_return` | Boolean |
-| `yds_sacked` | Float64 |
-| `kick_distance` | Float64 |
-| `sack_players` | Boolean |
-| `rush_player_name` | Boolean |
+| `change_of_pos_team` | Boolean |
+| `pos_score_diff_end` | Int32 |
+| `fumble_lost` | Boolean |
+| `fumble_recovered` | Boolean |
 | `receiver_player_name` | String |
 | `passer_player_name` | String |
-| `sack_player_name` | Boolean |
-| `sack_player_name2` | Boolean |
-| `interception_player_name` | String |
-| `pass_breakup_player_name` | Boolean |
-| `fg_kicker_player_name` | String |
-| `fg_return_player_name` | Boolean |
-| `fg_block_player_name` | Boolean |
-| `punter_player_name` | String |
-| `punt_return_player_name` | Boolean |
-| `punt_block_player_name` | Boolean |
-| `punt_block_return_player_name` | Boolean |
-| `kickoff_player_name` | String |
-| `kickoff_return_player_name` | Boolean |
-| `fumble_player_name` | String |
-| `fumble_forced_player_name` | Boolean |
-| `fumble_recovered_player_name` | Boolean |
-| `forced_fumble_player_name` | Boolean |
-| `fumble_recovery_player_name` | String |
-| `fg_returner_player_name` | Boolean |
-| `kickoff_returner_player_name` | String |
-| `punt_returned_player_name` | String |
-| `punt_blocked_returner_player_name` | Boolean |
-| `fg_blocked_player_name` | Boolean |
-| `punt_blocked_player_name` | Boolean |
-| `blocked_player_name` | Boolean |
-| `kicker_player_name` | String |
-| `kick_returner_player_name` | String |
-| `punt_returner_player_name` | String |
-| `rusher_player_name` | String |
 | `new_down` | Int32 |
-| `new_ydstogo` | Int32 |
+| `new_distance` | Int32 |
 | `middle_8` | Boolean |
 | `rz_play` | Boolean |
 | `scoring_opp` | Boolean |
@@ -310,90 +268,146 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `short_rush_attempt` | Boolean |
 | `power_rush_success` | Boolean |
 | `power_rush_attempt` | Boolean |
+| `early_down` | Boolean |
+| `late_down` | Boolean |
+| `early_down_pass` | Boolean |
+| `early_down_rush` | Boolean |
+| `late_down_pass` | Boolean |
+| `late_down_rush` | Boolean |
 | `standard_down` | Boolean |
 | `passing_down` | Boolean |
-| `tfl` | Boolean |
-| `tfl_pass` | Boolean |
-| `tfl_rush` | Boolean |
+| `TFL` | Boolean |
+| `TFL_pass` | Boolean |
+| `TFL_rush` | Boolean |
 | `havoc` | Boolean |
-| `havoc_pass` | Boolean |
-| `havoc_rush` | Boolean |
-| `start_posteam_spread` | Float64 |
-| `start_elapsed_share` | Float64 |
-| `start_spread_time` | Float64 |
-| `end_posteam_spread` | Float64 |
-| `end_elapsed_share` | Float64 |
-| `end_spread_time` | Float64 |
-| `down` | Float64 |
-| `ydstogo` | Float64 |
-| `start_yardline_100_touchback` | Int32 |
-| `ep_start_touchback` | Float64 |
-| `ep_start` | Float64 |
-| `ep_end` | Float64 |
-| `lag_ep_end` | Float64 |
-| `lag_change_of_posteam` | Boolean |
-| `ep_between` | Float64 |
-| `epa` | Float64 |
-| `def_epa` | Float64 |
-| `epa_scrimmage` | Float64 |
-| `epa_rush` | Float64 |
-| `epa_pass` | Float64 |
-| `epa_explosive` | Boolean |
-| `epa_explosive_pass` | Boolean |
-| `epa_explosive_rush` | Boolean |
-| `epa_success` | Boolean |
-| `epa_success_standard_down` | Boolean |
-| `epa_success_passing_down` | Boolean |
-| `epa_success_pass` | Boolean |
-| `epa_success_rush` | Boolean |
-| `epa_success_epa` | Float64 |
-| `epa_success_standard_down_epa` | Float64 |
-| `epa_success_passing_down_epa` | Float64 |
-| `epa_success_pass_epa` | Float64 |
-| `epa_success_rush_epa` | Boolean |
-| `epa_penalty` | Float64 |
-| `epa_special_teams` | Float64 |
-| `epa_fg` | Float64 |
-| `epa_punt` | Float64 |
-| `epa_kickoff` | Float64 |
-| `start_exp_score_diff_touchback` | Float64 |
-| `start_exp_score_diff` | Float64 |
-| `start_exp_score_diff_time_ratio_touchback` | Float64 |
-| `start_exp_score_diff_time_ratio` | Float64 |
-| `end_exp_score_diff` | Float64 |
-| `end_exp_score_diff_time_ratio` | Float64 |
+| `start.pos_team_spread` | Float64 |
+| `start.elapsed_share` | Float64 |
+| `start.spread_time` | Float64 |
+| `end.pos_team_spread` | Float64 |
+| `end.elapsed_share` | Float64 |
+| `end.spread_time` | Float64 |
+| `start.yardsToEndzone.touchback` | Int32 |
+| `EP_start_touchback` | Float64 |
+| `EP_start` | Float64 |
+| `EP_end` | Float64 |
+| `lag_change_of_pos_team` | Boolean |
+| `EPA` | Float64 |
+| `def_EPA` | Float64 |
+| `EPA_scrimmage` | Float64 |
+| `EPA_pass` | Float64 |
+| `EPA_explosive` | Boolean |
+| `EPA_non_explosive` | Float64 |
+| `EPA_explosive_pass` | Boolean |
+| `EPA_explosive_rush` | Boolean |
+| `first_down_created` | Boolean |
+| `EPA_success` | Boolean |
+| `EPA_success_early_down` | Boolean |
+| `EPA_success_early_down_pass` | Boolean |
+| `EPA_success_early_down_rush` | Boolean |
+| `EPA_success_late_down` | Boolean |
+| `EPA_success_late_down_pass` | Boolean |
+| `EPA_success_late_down_rush` | Boolean |
+| `EPA_success_standard_down` | Boolean |
+| `EPA_success_passing_down` | Boolean |
+| `EPA_success_pass` | Boolean |
+| `EPA_success_rush` | Boolean |
+| `EPA_success_rush_EPA` | Boolean |
+| `EPA_middle_8_success` | Boolean |
+| `EPA_middle_8_success_pass` | Boolean |
+| `EPA_middle_8_success_rush` | Boolean |
+| `EPA_sp` | Float64 |
+| `start.ExpScoreDiff_touchback` | Float64 |
+| `start.ExpScoreDiff` | Float64 |
+| `start.ExpScoreDiff_Time_Ratio_touchback` | Float64 |
+| `start.ExpScoreDiff_Time_Ratio` | Float64 |
+| `end.ExpScoreDiff` | Float64 |
+| `end.ExpScoreDiff_Time_Ratio` | Float64 |
 | `wp_before` | Float64 |
 | `wp_touchback` | Float64 |
 | `def_wp_before` | Float64 |
 | `home_wp_before` | Float64 |
 | `away_wp_before` | Float64 |
+| `lead_wp_before` | Float64 |
+| `lead_wp_before2` | Float64 |
 | `wp_after` | Float64 |
 | `def_wp_after` | Float64 |
 | `home_wp_after` | Float64 |
 | `away_wp_after` | Float64 |
-| `lead_wp_before` | Float64 |
-| `lead_wp_before2` | Float64 |
-| `wpa_base` | Float64 |
-| `wpa_base_nxt` | Float64 |
-| `wpa_base_nxt2` | Float64 |
-| `wpa_base_ind` | Boolean |
-| `wpa_base_nxt_ind` | Boolean |
-| `wpa_base_nxt2_ind` | Boolean |
-| `wpa_change` | Float64 |
-| `wpa_change_nxt` | Float64 |
-| `wpa_change_nxt2` | Float64 |
-| `wpa_change_ind` | Boolean |
-| `wpa_change_nxt_ind` | Boolean |
-| `wpa_change_nxt2_ind` | Boolean |
-| `wpa_half_end` | Float64 |
 | `wpa` | Float64 |
-| `drive_start` | Float64 |
+| `drive_start` | Int32 |
+| `drive_stopped` | Boolean |
 | `drive_play_index` | Int32 |
 | `drive_offense_plays` | Int32 |
-| `prog_drive_epa` | Float64 |
-| `prog_drive_wpa` | Float64 |
+| `prog_drive_EPA` | Float64 |
+| `prog_drive_WPA` | Float64 |
 | `drive_offense_yards` | Int32 |
 | `drive_total_yards` | Int32 |
+| `qbr_epa` | Float64 |
+| `weight` | Float64 |
+| `non_fumble_sack` | Boolean |
+| `pass_epa` | Float64 |
+| `pass_weight` | Float64 |
+| `action_play` | Boolean |
+| `athlete_name` | String |
+| `type.abbreviation` | String |
+| `lag_half` | String |
+| `lag_scoringPlay` | Boolean |
+| `lag_HA_score_diff` | Int32 |
+| `net_HA_score_pts` | Int32 |
+| `H_score_diff` | Int32 |
+| `A_score_diff` | Int32 |
+| `yds_rushed` | Int32 |
+| `rusher_player_name` | String |
+| `adj_rush_yardage` | Int32 |
+| `line_yards` | Float64 |
+| `second_level_yards` | Float64 |
+| `open_field_yards` | Int32 |
+| `highlight_yards` | Float64 |
+| `opp_highlight_yards` | Float64 |
+| `lag_EP_end` | Float64 |
+| `EP_between` | Float64 |
+| `EPA_rush` | Float64 |
+| `EPA_success_EPA` | Float64 |
+| `EPA_success_passing_down_EPA` | Float64 |
+| `rush_epa` | Float64 |
+| `rush_weight` | Float64 |
+| `penalty_detail` | String |
+| `penalty_text` | String |
+| `yds_penalty` | Int32 |
+| `EPA_penalty` | Float64 |
+| `pen_epa` | Float64 |
+| `pen_weight` | Float64 |
+| `yds_punt_gained` | Int32 |
+| `yds_punt_return` | Int32 |
+| `punter_player_name` | String |
+| `punt_return_player_name` | String |
+| `EPA_punt` | Float64 |
+| `EPA_success_standard_down_EPA` | Float64 |
+| `yds_receiving` | Int32 |
+| `EPA_success_pass_EPA` | Float64 |
+| `interception_player_name` | String |
+| `scoringType.name` | String |
+| `scoringType.displayName` | String |
+| `scoringType.abbreviation` | String |
+| `yds_kickoff_return` | Int32 |
+| `kickoff_player_name` | String |
+| `kickoff_return_player_name` | String |
+| `down` | Int32 |
+| `distance` | Int32 |
+| `EPA_kickoff` | Float64 |
+| `yds_fg` | Int32 |
+| `EPA_fg` | Float64 |
+| `fumble_player_name` | String |
+| `fumble_recovered_player_name` | String |
+| `yds_sacked` | Int32 |
+| `sack_epa` | Float64 |
+| `sack_weight` | Float64 |
+| `date` | String |
+| `fg_kicker_player_name` | String |
+| `yds_int_return` | Int32 |
+| `yds_punted` | Int32 |
+| `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') |
+| `game_date` | Date |
 
 ```python
 load_cfb_pbp(seasons=2024)
@@ -556,4 +570,750 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 ```python
 load_cfb_schedule_crosswalk(seasons=2024)
+```
+
+## `load_cfb_team_box`
+
+Release: [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_team_box/team_box_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `firstDowns` | String |
+| `thirdDownEff` | String |
+| `fourthDownEff` | String |
+| `totalYards` | String |
+| `netPassingYards` | String |
+| `completionAttempts` | String |
+| `yardsPerPass` | String |
+| `rushingYards` | String |
+| `rushingAttempts` | String |
+| `yardsPerRushAttempt` | String |
+| `totalPenaltiesYards` | String |
+| `turnovers` | String |
+| `fumblesLost` | String |
+| `interceptions` | String |
+| `possessionTime` | String |
+| `team_id` | Int64 |
+| `team_abbreviation` | String |
+| `team_name` | String |
+| `home_away` | String |
+| `game_id` | Int64 |
+| `season` | Int64 |
+
+```python
+load_cfb_team_box(seasons=2024)
+```
+
+## `load_cfb_player_box`
+
+Release: [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_player_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_player_box/player_box_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `completions/passingAttempts` | String |
+| `passingYards` | String |
+| `yardsPerPassAttempt` | String |
+| `passingTouchdowns` | String |
+| `interceptions` | String |
+| `adjQBR` | String |
+| `category` | String |
+| `athlete_id` | Int64 |
+| `athlete_name` | String |
+| `jersey` | Null |
+| `team_id` | Int64 |
+| `rushingAttempts` | String |
+| `rushingYards` | String |
+| `yardsPerRushAttempt` | String |
+| `rushingTouchdowns` | String |
+| `longRushing` | String |
+| `receptions` | String |
+| `receivingYards` | String |
+| `yardsPerReception` | String |
+| `receivingTouchdowns` | String |
+| `longReception` | String |
+| `interceptionYards` | String |
+| `interceptionTouchdowns` | String |
+| `puntReturns` | String |
+| `puntReturnYards` | String |
+| `yardsPerPuntReturn` | String |
+| `longPuntReturn` | String |
+| `puntReturnTouchdowns` | String |
+| `fieldGoalsMade/fieldGoalAttempts` | String |
+| `fieldGoalPct` | String |
+| `longFieldGoalMade` | String |
+| `extraPointsMade/extraPointAttempts` | String |
+| `totalKickingPoints` | String |
+| `punts` | String |
+| `puntYards` | String |
+| `grossAvgPuntYards` | String |
+| `touchbacks` | String |
+| `puntsInside20` | String |
+| `longPunt` | String |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `stat_1` | String |
+| `stat_2` | String |
+| `stat_3` | String |
+| `stat_4` | String |
+| `stat_5` | String |
+
+```python
+load_cfb_player_box(seasons=2024)
+```
+
+## `load_cfb_drives`
+
+Release: [espn_cfb_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_drives) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_drives/drives_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `drive_id` | String |
+| `team_id` | Int64 |
+| `result` | String |
+| `display_result` | String |
+| `short_display_result` | String |
+| `description` | String |
+| `yards` | Int64 |
+| `offensive_plays` | Int64 |
+| `is_score` | Boolean |
+| `start_period` | Int64 |
+| `start_yard_line` | Int64 |
+| `start_clock` | String |
+| `start_text` | String |
+| `end_period` | Int64 |
+| `end_yard_line` | Int64 |
+| `end_clock` | String |
+| `time_elapsed` | String |
+| `n_plays` | Int64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+
+```python
+load_cfb_drives(seasons=2024)
+```
+
+## `load_cfb_play_participants`
+
+Release: [espn_cfb_play_participants](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_play_participants) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_play_participants/play_participants_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `game_id` | Int64 |
+| `play_id` | Int64 |
+| `kicker_player_name` | String |
+| `returner_player_name` | String |
+| `passer_player_name` | String |
+| `receiver_player_name` | String |
+| `rusher_player_name` | String |
+| `penalized_player_name` | String |
+| `scorer_player_name` | String |
+| `pass_defender_player_name` | String |
+| `punter_player_name` | String |
+| `pat_scorer_player_name` | String |
+| `sacked_by_player_name` | String |
+| `kicker_player_id` | String |
+| `returner_player_id` | String |
+| `passer_player_id` | String |
+| `receiver_player_id` | String |
+| `rusher_player_id` | String |
+| `penalized_player_id` | String |
+| `scorer_player_id` | String |
+| `pass_defender_player_id` | String |
+| `punter_player_id` | String |
+| `pat_scorer_player_id` | String |
+| `sacked_by_player_id` | String |
+| `kicker_player_names` | String |
+| `returner_player_names` | String |
+| `passer_player_names` | String |
+| `receiver_player_names` | String |
+| `rusher_player_names` | String |
+| `penalized_player_names` | String |
+| `scorer_player_names` | String |
+| `pass_defender_player_names` | String |
+| `punter_player_names` | String |
+| `pat_scorer_player_names` | String |
+| `sacked_by_player_names` | String |
+| `kicker_player_ids` | String |
+| `returner_player_ids` | String |
+| `passer_player_ids` | String |
+| `receiver_player_ids` | String |
+| `rusher_player_ids` | String |
+| `penalized_player_ids` | String |
+| `scorer_player_ids` | String |
+| `pass_defender_player_ids` | String |
+| `punter_player_ids` | String |
+| `pat_scorer_player_ids` | String |
+| `sacked_by_player_ids` | String |
+| `season` | Int64 |
+| `week` | Int64 |
+| `recoverer_player_name` | String |
+| `recoverer_player_id` | String |
+| `recoverer_player_names` | String |
+| `recoverer_player_ids` | String |
+| `tackler_player_name` | String |
+| `assisted_by_player_name` | String |
+| `forced_by_player_name` | String |
+| `tackler_player_id` | String |
+| `assisted_by_player_id` | String |
+| `forced_by_player_id` | String |
+| `tackler_player_names` | String |
+| `assisted_by_player_names` | String |
+| `forced_by_player_names` | String |
+| `tackler_player_ids` | String |
+| `assisted_by_player_ids` | String |
+| `forced_by_player_ids` | String |
+| `pat_passer_player_name` | String |
+| `pat_passer_player_id` | String |
+| `pat_passer_player_names` | String |
+| `pat_passer_player_ids` | String |
+
+```python
+load_cfb_play_participants(seasons=2024)
+```
+
+## `load_cfb_game_rosters`
+
+Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_game_rosters/game_rosters_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `athlete_id` | Int64 |
+| `athlete_uid` | String |
+| `athlete_guid` | String |
+| `athlete_type` | String |
+| `first_name` | String |
+| `last_name` | String |
+| `full_name` | String |
+| `athlete_display_name` | String |
+| `short_name` | String |
+| `weight` | Float64 |
+| `display_weight` | String |
+| `height` | Float64 |
+| `display_height` | String |
+| `age` | Float64 |
+| `date_of_birth` | String |
+| `slug` | String |
+| `jersey` | String |
+| `linked` | Boolean |
+| `active` | Boolean |
+| `alternate_ids_sdr` | String |
+| `birth_place_city` | String |
+| `birth_place_state` | String |
+| `experience_years` | Float64 |
+| `experience_display_value` | String |
+| `experience_abbreviation` | String |
+| `status_id` | String |
+| `status_name` | String |
+| `status_type` | String |
+| `status_abbreviation` | String |
+| `birth_place_country` | String |
+| `birth_country_alternate_id` | String |
+| `birth_country_abbreviation` | String |
+| `flag_href` | String |
+| `flag_alt` | String |
+| `flag_rel` | String |
+| `starter` | Boolean |
+| `valid` | Boolean |
+| `did_not_play` | Boolean |
+| `athlete_href` | String |
+| `position_href` | String |
+| `statistics_href` | String |
+| `team_id` | Int64 |
+| `order` | Int64 |
+| `home_away` | String |
+| `winner` | Boolean |
+| `team_guid` | String |
+| `team_uid` | String |
+| `team_slug` | String |
+| `team_location` | String |
+| `team_name` | String |
+| `team_nickname` | String |
+| `team_abbreviation` | String |
+| `team_display_name` | String |
+| `team_short_display_name` | String |
+| `team_color` | String |
+| `team_alternate_color` | String |
+| `is_active` | Boolean |
+| `is_all_star` | Boolean |
+| `team_alternate_ids_sdr` | String |
+| `logo_href` | String |
+| `logo_dark_href` | String |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+| `draft_display_text` | String |
+| `draft_round` | Float64 |
+| `draft_year` | Float64 |
+| `draft_selection` | Float64 |
+| `draft_team_href` | String |
+| `middle_name` | String |
+| `headshot_href` | String |
+| `headshot_alt` | String |
+
+```python
+load_cfb_game_rosters(seasons=2024)
+```
+
+## `load_cfb_linescores`
+
+Release: [espn_cfb_linescores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_linescores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_linescores/linescores_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `team_id` | Int64 |
+| `period` | Int64 |
+| `value` | String |
+| `game_id` | Int64 |
+| `season` | Int64 |
+
+```python
+load_cfb_linescores(seasons=2024)
+```
+
+## `load_cfb_betting`
+
+Release: [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_betting) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_betting/betting_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+| `game_spread` | Float64 |
+| `over_under` | Float64 |
+| `home_favorite` | Boolean |
+| `home_team_spread` | Float64 |
+| `game_spread_available` | Boolean |
+| `odds_source` | String |
+
+```python
+load_cfb_betting(seasons=2024)
+```
+
+## `load_cfb_power_index`
+
+Release: [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_power_index) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_power_index/power_index_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `$ref` | String |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_power_index(seasons=2024)
+```
+
+## `load_cfb_adv_team`
+
+Release: [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_team) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_team/adv_team_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `rushing_highlight_yards_per_opp` | Float64 |
+| `total_pen_yards` | Int64 |
+| `EPA_penalty` | Float64 |
+| `penalty_first_downs_created` | Int64 |
+| `penalty_first_downs_created_rate` | Float64 |
+| `penalties` | Int64 |
+| `penalty_yards` | Int64 |
+| `special_teams_plays` | Int64 |
+| `EPA_sp` | Float64 |
+| `EPA_special_teams` | Float64 |
+| `field_goals` | Int64 |
+| `EPA_fg` | Float64 |
+| `punt_plays` | Int64 |
+| `EPA_punt` | Float64 |
+| `kickoff_plays` | Int64 |
+| `EPA_kickoff` | Float64 |
+| `rushes` | Int64 |
+| `rush_yards` | Float64 |
+| `yards_per_rush` | Float64 |
+| `rushing_power_rate` | Float64 |
+| `rushing_first_downs_created` | Int64 |
+| `rushing_first_downs_created_rate` | Float64 |
+| `EPA_rushing_overall` | Float64 |
+| `EPA_rushing_per_play` | Float64 |
+| `EPA_explosive_rushing` | Int64 |
+| `EPA_explosive_rushing_rate` | Float64 |
+| `EPA_non_explosive_rushing` | Float64 |
+| `EPA_non_explosive_rushing_per_play` | Float64 |
+| `passes` | Int64 |
+| `pass_yards` | Float64 |
+| `yards_per_pass` | Float64 |
+| `passing_first_downs_created` | Int64 |
+| `passing_first_downs_created_rate` | Float64 |
+| `EPA_passing_overall` | Float64 |
+| `EPA_passing_per_play` | Float64 |
+| `EPA_explosive_passing` | Int64 |
+| `EPA_explosive_passing_rate` | Float64 |
+| `EPA_non_explosive_passing` | Float64 |
+| `EPA_non_explosive_passing_per_play` | Float64 |
+| `scrimmage_plays` | Int64 |
+| `EPA_overall_off` | Float64 |
+| `EPA_overall_offense` | Float64 |
+| `EPA_per_play` | Float64 |
+| `EPA_non_explosive` | Float64 |
+| `EPA_non_explosive_per_play` | Float64 |
+| `EPA_explosive` | Int64 |
+| `EPA_explosive_rate` | Float64 |
+| `passes_rate` | Float64 |
+| `off_yards` | Int64 |
+| `total_off_yards` | Int64 |
+| `yards_per_play` | Float64 |
+| `EPA_plays` | Int64 |
+| `total_yards` | Int64 |
+| `EPA_overall_total` | Float64 |
+| `rushes_rate` | Float64 |
+| `first_downs_created` | Int64 |
+| `first_downs_created_rate` | Float64 |
+| `EPA_rushing_power` | Float64 |
+| `EPA_rushing_power_per_play` | Float64 |
+| `rushing_power_success` | Int64 |
+| `rushing_power_success_rate` | Float64 |
+| `rushing_power` | Int64 |
+| `rushing_stuff` | Int64 |
+| `rushing_stuff_rate` | Float64 |
+| `rushing_stopped` | Int64 |
+| `rushing_stopped_rate` | Float64 |
+| `rushing_opportunity` | Int64 |
+| `rushing_opportunity_rate` | Float64 |
+| `rushing_highlight` | Int64 |
+| `rushing_highlight_rate` | Float64 |
+| `rushing_highlight_yards` | Float64 |
+| `line_yards` | Float64 |
+| `line_yards_per_carry` | Float64 |
+| `second_level_yards` | Float64 |
+| `open_field_yards` | Float64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_team(seasons=2024)
+```
+
+## `load_cfb_adv_passing`
+
+Release: [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_passing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_passing/adv_passing_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `passer_player_name` | String |
+| `Comp` | Int64 |
+| `Att` | Int64 |
+| `Yds` | Float64 |
+| `Pass_TD` | Int64 |
+| `Int` | Int64 |
+| `YPA` | Float64 |
+| `EPA` | Float64 |
+| `EPA_per_Play` | Float64 |
+| `WPA` | Float64 |
+| `SR` | Float64 |
+| `Sck` | Int64 |
+| `qbr_epa` | Float64 |
+| `sack_epa` | Float64 |
+| `pass_epa` | Float64 |
+| `rush_epa` | Null |
+| `pen_epa` | Null |
+| `spread` | Float64 |
+| `era0` | Int64 |
+| `era1` | Int64 |
+| `era2` | Int64 |
+| `era3` | Int64 |
+| `exp_qbr` | Float64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_passing(seasons=2024)
+```
+
+## `load_cfb_adv_rushing`
+
+Release: [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_rushing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_rushing/adv_rushing_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `rusher_player_name` | String |
+| `Car` | Int64 |
+| `Yds` | Float64 |
+| `Rush_TD` | Int64 |
+| `YPC` | Float64 |
+| `EPA` | Float64 |
+| `EPA_per_Play` | Float64 |
+| `WPA` | Float64 |
+| `SR` | Float64 |
+| `Fum` | Int64 |
+| `Fum_Lost` | Int64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_rushing(seasons=2024)
+```
+
+## `load_cfb_adv_receiving`
+
+Release: [espn_cfb_adv_receiving](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_receiving) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_receiving/adv_receiving_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `receiver_player_name` | String |
+| `Rec` | Int64 |
+| `Tar` | Int64 |
+| `Yds` | Float64 |
+| `Rec_TD` | Int64 |
+| `YPT` | Float64 |
+| `EPA` | Float64 |
+| `EPA_per_Play` | Float64 |
+| `WPA` | Float64 |
+| `SR` | Float64 |
+| `Fum` | Int64 |
+| `Fum_Lost` | Int64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_receiving(seasons=2024)
+```
+
+## `load_cfb_adv_defensive`
+
+Release: [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_defensive) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_defensive/adv_defensive_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `def_pos_team` | Int64 |
+| `scrimmage_plays` | Int64 |
+| `TFL` | Int64 |
+| `TFL_pass` | Int64 |
+| `TFL_rush` | Int64 |
+| `havoc_total` | Int64 |
+| `havoc_total_rate` | Float64 |
+| `fumbles` | Int64 |
+| `def_int` | Int64 |
+| `drive_stopped_rate` | Float64 |
+| `num_pass_plays` | Int64 |
+| `havoc_total_pass` | Int64 |
+| `havoc_total_pass_rate` | Float64 |
+| `sacks` | Int64 |
+| `sacks_rate` | Float64 |
+| `pass_breakups` | Int64 |
+| `havoc_total_rush` | Int64 |
+| `havoc_total_rush_rate` | Float64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_defensive(seasons=2024)
+```
+
+## `load_cfb_adv_defensive_players`
+
+Release: [espn_cfb_adv_defensive_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_defensive_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_defensive_players/adv_defensive_players_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `def_pos_team` | Int64 |
+| `player_name` | String |
+| `fumble_recoveries` | Int64 |
+| `fumble_recoveries_yards` | Int64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_defensive_players(seasons=2024)
+```
+
+## `load_cfb_adv_drives`
+
+Release: [espn_cfb_adv_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_drives) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_drives/adv_drives_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `drive_total_available_yards` | Float64 |
+| `drive_total_gained_yards` | Int64 |
+| `avg_field_position` | Float64 |
+| `plays_per_drive` | Float64 |
+| `yards_per_drive` | Float64 |
+| `drives` | Int64 |
+| `drive_total_gained_yards_rate` | Float64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_drives(seasons=2024)
+```
+
+## `load_cfb_adv_situational`
+
+Release: [espn_cfb_adv_situational](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_situational) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_situational/adv_situational_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `EPA_success` | Int64 |
+| `EPA_success_rate` | Float64 |
+| `EPA_success_pass` | Int64 |
+| `EPA_success_pass_rate` | Float64 |
+| `EPA_success_rush` | Int64 |
+| `EPA_success_rush_rate` | Float64 |
+| `EPA_success_rz` | Int64 |
+| `EPA_success_rate_rz` | Float64 |
+| `EPA_success_third` | Int64 |
+| `EPA_success_rate_third` | Float64 |
+| `EPA_success_early_down` | Int64 |
+| `EPA_success_early_down_rate` | Float64 |
+| `early_downs` | Int64 |
+| `early_down_pass_rate` | Float64 |
+| `early_down_rush_rate` | Float64 |
+| `EPA_early_down` | Float64 |
+| `EPA_early_down_per_play` | Float64 |
+| `early_down_first_down` | Int64 |
+| `early_down_first_down_rate` | Float64 |
+| `early_down_pass` | Int64 |
+| `EPA_early_down_pass` | Float64 |
+| `EPA_early_down_pass_per_play` | Float64 |
+| `EPA_success_early_down_pass` | Int64 |
+| `EPA_success_early_down_pass_rate` | Float64 |
+| `early_down_rush` | Int64 |
+| `EPA_early_down_rush` | Float64 |
+| `EPA_early_down_rush_per_play` | Float64 |
+| `EPA_success_early_down_rush` | Int64 |
+| `EPA_success_early_down_rush_rate` | Float64 |
+| `middle_8` | Int64 |
+| `middle_8_pass_rate` | Float64 |
+| `middle_8_rush_rate` | Float64 |
+| `EPA_middle_8` | Float64 |
+| `EPA_middle_8_per_play` | Float64 |
+| `EPA_middle_8_success` | Int64 |
+| `EPA_middle_8_success_rate` | Float64 |
+| `middle_8_pass` | Int64 |
+| `EPA_middle_8_pass` | Float64 |
+| `EPA_middle_8_pass_per_play` | Float64 |
+| `EPA_middle_8_success_pass` | Int64 |
+| `EPA_middle_8_success_pass_rate` | Float64 |
+| `middle_8_rush` | Int64 |
+| `EPA_middle_8_rush` | Float64 |
+| `EPA_middle_8_rush_per_play` | Float64 |
+| `EPA_middle_8_success_rush` | Int64 |
+| `EPA_middle_8_success_rush_rate` | Float64 |
+| `EPA_success_late_down` | Int64 |
+| `EPA_success_late_down_pass` | Int64 |
+| `EPA_success_late_down_rush` | Int64 |
+| `late_downs` | Int64 |
+| `late_down_pass` | Int64 |
+| `late_down_rush` | Int64 |
+| `EPA_late_down` | Float64 |
+| `EPA_late_down_per_play` | Float64 |
+| `EPA_success_late_down_rate` | Float64 |
+| `EPA_success_late_down_pass_rate` | Float64 |
+| `EPA_success_late_down_rush_rate` | Float64 |
+| `late_down_pass_rate` | Float64 |
+| `late_down_rush_rate` | Float64 |
+| `EPA_success_standard_down` | Int64 |
+| `EPA_success_standard_down_rate` | Float64 |
+| `EPA_standard_down` | Float64 |
+| `EPA_standard_down_per_play` | Float64 |
+| `standard_downs` | Int64 |
+| `EPA_success_passing_down` | Int64 |
+| `EPA_success_passing_down_rate` | Float64 |
+| `EPA_passing_down` | Float64 |
+| `EPA_passing_down_per_play` | Float64 |
+| `passing_downs` | Int64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_situational(seasons=2024)
+```
+
+## `load_cfb_adv_specialists`
+
+Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_specialists) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_specialists/adv_specialists_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `player_name` | String |
+| `punts` | Int64 |
+| `punts_yards` | Int64 |
+| `kick_returns` | Int64 |
+| `kick_returns_yards` | Int64 |
+| `punt_returns` | Int64 |
+| `punt_returns_yards` | Int64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+| `field_goals` | Int64 |
+| `field_goals_yards` | Int64 |
+
+```python
+load_cfb_adv_specialists(seasons=2024)
+```
+
+## `load_cfb_adv_turnover`
+
+Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_turnover) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_turnover/adv_turnover_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pos_team` | Int64 |
+| `turnovers` | Int64 |
+| `st_turnovers_lost` | Int64 |
+| `Int` | Int64 |
+| `fumbles_lost` | Int64 |
+| `pass_breakups` | Int64 |
+| `total_fumbles` | Int64 |
+| `fumbles_recovered` | Int64 |
+| `team_id` | Int64 |
+| `turnovers_pbp` | Int64 |
+| `Int_pbp` | Int64 |
+| `fumbles_lost_pbp` | Int64 |
+| `espn_sourced` | Boolean |
+| `expected_turnovers` | Float64 |
+| `expected_turnover_margin` | Float64 |
+| `turnover_margin` | Int64 |
+| `turnover_luck` | Float64 |
+| `takeaways` | Int64 |
+| `st_turnovers_gained` | Int64 |
+| `fumble_recoveries_gained` | Int64 |
+| `game_id` | Int64 |
+| `season` | Int64 |
+| `week` | Int64 |
+
+```python
+load_cfb_adv_turnover(seasons=2024)
 ```
