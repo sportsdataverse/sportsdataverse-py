@@ -6,6 +6,7 @@
   - [Schema / dtype notes](#schema--dtype-notes)
   - [Train / holdout split (leakage boundary)](#train--holdout-split-leakage-boundary)
   - [Regenerate-together invariant](#regenerate-together-invariant)
+  - [Spring football (UFL / XFL) + NFL-parity fixtures](#spring-football-ufl--xfl--nfl-parity-fixtures)
   - [College baseball / softball fixtures (T7.3, model 5)](#college-baseball--softball-fixtures-t73-model-5)
     - [Feasibility finding: full base-out reconstruction, not the reduced fallback](#feasibility-finding-full-base-out-reconstruction-not-the-reduced-fallback)
     - [Known limitation: single-game sample size](#known-limitation-single-game-sample-size)
@@ -69,6 +70,34 @@ the SAME split. **Never regenerate one without the others** — a stale mix woul
 let the holdout silently overlap the training matches (leakage). If the Cricsheet
 corpus is refreshed, re-run the fit script once and commit all four artifacts
 plus the refreshed `FORMAT_TABLE` constants together.
+
+## Spring football (UFL / XFL) + NFL-parity fixtures
+
+Oracle/contract fixtures for the T7.3 spring-football EP/WP port
+(`sportsdataverse/football/spring_football_ep_wp.py`). Captured
+**2026-07-12** via
+`https://site.api.espn.com/apis/site/v2/sports/football/<league>/summary?event=<id>`
+— full per-fixture provenance, live-verification dates, and the two
+capture findings the tests pin (UFL has NO ESPN play-by-play; the
+`espn_{ufl,xfl}_game_probabilities` oracle returns HTTP 400 for both
+leagues) live in [`FEASIBILITY.md`](FEASIBILITY.md).
+
+| file | league | event | date | plays |
+|---|---|---|---|---|
+| `xfl_summary.json` | xfl | 401517780 | 2023-04-01 | 159 |
+| `xfl_summary_2.json` | xfl | 401517747 | 2023-03-12 | 140 |
+| `xfl_summary_3.json` | xfl | 401517746 | 2023-03-12 | 152 |
+| `ufl_summary.json` | ufl | 401638335 | 2024-06-01 | 0 (real no-pbp capture) |
+| `nfl_parity_2023_game.parquet` | nfl | `2023_01_ARI_WAS` | 2023-09-10 | 168 (gate-(a) input frame) |
+
+All five are regenerated together by ONE run of
+`dev/league_ports/capture_spring_football_fixtures.py` (`SDV_PY_LIVE_TESTS=1`;
+the NFL slice additionally needs the local nfl-data checkout at
+`$SDV_VALIDATION_NFL_DATA_ROOT`). The gate floors in
+`tests/football/test_spring_football_parity.py` (Brier ceiling 0.11, row
+floors 442/445) were observed on THIS committed corpus — regenerating the
+fixtures means re-observing and re-documenting those numbers, never
+loosening them.
 
 ## College baseball / softball fixtures (T7.3, model 5)
 
