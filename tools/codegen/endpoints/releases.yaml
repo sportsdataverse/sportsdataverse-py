@@ -5,10 +5,10 @@ bases:
 loaders:
 - fn: load_cfb_pbp
   league: cfb
-  base: raw_data
-  url: cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet
-  tag: cfbfastR-data
-  min_season: 2003
+  base: sdv_releases
+  url: espn_cfb_pbp/play_by_play_{season}.parquet
+  tag: espn_cfb_pbp
+  min_season: 2004
   example_args:
     seasons: 2024
 - fn: load_cfb_rosters

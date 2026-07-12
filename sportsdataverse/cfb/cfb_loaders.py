@@ -24,12 +24,12 @@ __all__ = [
 
 
 def load_cfb_pbp(seasons, return_as_pandas: bool = False):
-    """Load cfbfastR-data (sportsdataverse-data release).
+    """Load espn_cfb_pbp (sportsdataverse-data release).
 
-    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_pbp
 
     Args:
-        seasons: an int or iterable of seasons (>= 2003).
+        seasons: an int or iterable of seasons (>= 2004).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -412,10 +412,10 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2003:
-            raise SeasonNotFoundError("season cannot be less than 2003")
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
         df = _read_release_parquet(
-            f"https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/pbp/parquet/play_by_play_{season}.parquet"
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_{season}.parquet"
         )
         if df is None:
             missing.append(season)
