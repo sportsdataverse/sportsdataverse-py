@@ -51,3 +51,4 @@ htmlcov/
 # paths). Project-shared config (.claude/settings.json, skills, commands) is
 # intentionally NOT ignored so it can be committed for the team.
 .claude/settings.local.json
+/.omc
