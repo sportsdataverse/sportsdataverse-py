@@ -2347,28 +2347,25 @@ adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
 
 ### `as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'` {#as_of_ratings_split}
 
-Return only games strictly before `cutoff_date` (the leakage boundary).
-
-Predictive backtests must rate a game using only games that finished before
-it — this split enforces that as-of-date rule so no future information leaks
-into a game's own prediction.
+Filter a results frame to games strictly before a cutoff date (leakage boundary).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `results` | `DataFrame` |  | A frame with a `date` column of dtype `pl.Date`. |
-| `cutoff_date` | `date` |  | The date of the game being predicted; games on or after it are dropped. |
+| `results` | `DataFrame` |  | A `polars.DataFrame` with a `date` column. |
+| `cutoff_date` | `date` |  | Games on or after this date are excluded. |
 
 **Returns**
 
-The subset of `results` with `date < cutoff_date`.
+A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 
 **Example**
 
 ```python
-from sportsdataverse.mbb.mbb_prediction_constants import as_of_ratings_split
-prior = as_of_ratings_split(results, some_game_date)
+import datetime as dt
+from sportsdataverse._common.metrics import as_of_ratings_split
+as_of_ratings_split(results, dt.date(2023, 9, 8))
 ```
 
 ### `as_of_season_split(df: 'pl.DataFrame', target_season: 'int') -> 'pl.DataFrame'` {#as_of_season_split}
@@ -2497,25 +2494,25 @@ box_aware_compare("Tuitele, Peanut", "Tuitele, Peanut")
 
 ### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
 
-Mean squared error between binary outcomes and predicted probabilities.
+Mean squared error between predicted probabilities and binary outcomes.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
 
 **Returns**
 
-The Brier score (lower is better; 0.0 is perfect).
+The Brier score (0.0 is a perfect forecast).
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.mbb.mbb_prediction_constants import brier_score
-brier_score(np.array([1, 0]), np.array([1.0, 0.0]))
+from sportsdataverse._common.metrics import brier_score
+brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
 ### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
@@ -3971,28 +3968,26 @@ A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/directi
 
 ### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
 
-Bin predicted probabilities and compare mean-predicted vs mean-actual.
+Bucket predicted probabilities into bins and compare to actual outcome rates.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
 | `n_bins` | `int` | `10` | Number of equal-width probability bins. |
 
 **Returns**
 
-A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin, sorted ascending).
+A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.mbb.mbb_prediction_constants import calibration_table
-y = np.random.default_rng(0).integers(0, 2, 200)
-p = np.random.default_rng(1).random(200)
-calibration_table(y, p, n_bins=10)
+from sportsdataverse._common.metrics import calibration_table
+calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 ```
 
 ### `categorize_bad_lineups(lineup_events: 'list[LineupEvent]') -> 'dict[int, tuple[int, int]]'` {#categorize_bad_lineups}
@@ -6156,25 +6151,25 @@ report = lineup_to_team_report(
 
 ### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
 
-Binary cross-entropy (log loss) between outcomes and probabilities.
+Binary cross-entropy loss between predicted probabilities and outcomes.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `y_true` | `ndarray` |  | Array of realized binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | Array of predicted probabilities in `[0, 1]`. |
-| `eps` | `float` | `1e-15` | Clipping bound to keep the log finite at 0/1. |
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
+| `eps` | `float` | `1e-15` | Clipping bound to avoid `log(0)`. |
 
 **Returns**
 
-The mean log loss (lower is better).
+The mean log loss.
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.mbb.mbb_prediction_constants import log_loss_score
+from sportsdataverse._common.metrics import log_loss_score
 log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
@@ -6208,8 +6203,8 @@ Mean absolute error between two arrays.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `a` | `ndarray` |  | First array. |
-| `b` | `ndarray` |  | Second array (same length as `a`). |
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
 
 **Returns**
 
@@ -6219,7 +6214,7 @@ The mean absolute error.
 
 ```python
 import numpy as np
-from sportsdataverse.mbb.mbb_prediction_constants import mae
+from sportsdataverse._common.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
@@ -7271,19 +7266,19 @@ Spearman rank correlation between two arrays.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `a` | `ndarray` |  | First array. |
-| `b` | `ndarray` |  | Second array (same length as `a`). |
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
 
 **Returns**
 
-The Spearman rank-correlation coefficient in `[-1, 1]`.
+The Spearman rank correlation coefficient.
 
 **Example**
 
 ```python
 import numpy as np
-from sportsdataverse.mbb.mbb_prediction_constants import spearman_corr
-spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([10.0, 20.0, 30.0]))
+from sportsdataverse._common.metrics import spearman_corr
+spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 
 ### `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#start_time_from_period}
