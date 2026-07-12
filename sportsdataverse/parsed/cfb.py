@@ -378,12 +378,30 @@ from sportsdataverse.cfb import helper_cfb_athlete_items as helper_cfb_athlete_i
 from sportsdataverse.cfb import helper_cfb_game_items as helper_cfb_game_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_roster_items as helper_cfb_roster_items  # noqa: F401
 from sportsdataverse.cfb import helper_cfb_team_items as helper_cfb_team_items  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_defensive as load_cfb_adv_defensive  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_defensive_players as load_cfb_adv_defensive_players  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_drives as load_cfb_adv_drives  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_passing as load_cfb_adv_passing  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_receiving as load_cfb_adv_receiving  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_rushing as load_cfb_adv_rushing  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_situational as load_cfb_adv_situational  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_specialists as load_cfb_adv_specialists  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_team as load_cfb_adv_team  # noqa: F401
+from sportsdataverse.cfb import load_cfb_adv_turnover as load_cfb_adv_turnover  # noqa: F401
+from sportsdataverse.cfb import load_cfb_betting as load_cfb_betting  # noqa: F401
 from sportsdataverse.cfb import load_cfb_betting_lines as load_cfb_betting_lines  # noqa: F401
+from sportsdataverse.cfb import load_cfb_drives as load_cfb_drives  # noqa: F401
+from sportsdataverse.cfb import load_cfb_game_rosters as load_cfb_game_rosters  # noqa: F401
+from sportsdataverse.cfb import load_cfb_linescores as load_cfb_linescores  # noqa: F401
 from sportsdataverse.cfb import load_cfb_pbp as load_cfb_pbp  # noqa: F401
+from sportsdataverse.cfb import load_cfb_play_participants as load_cfb_play_participants  # noqa: F401
+from sportsdataverse.cfb import load_cfb_player_box as load_cfb_player_box  # noqa: F401
+from sportsdataverse.cfb import load_cfb_power_index as load_cfb_power_index  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters_crosswalk as load_cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_box as load_cfb_team_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_draft_outcomes as load_draft_outcomes  # noqa: F401
@@ -582,12 +600,30 @@ __all__ = [
     "helper_cfb_game_items",
     "helper_cfb_roster_items",
     "helper_cfb_team_items",
+    "load_cfb_adv_defensive",
+    "load_cfb_adv_defensive_players",
+    "load_cfb_adv_drives",
+    "load_cfb_adv_passing",
+    "load_cfb_adv_receiving",
+    "load_cfb_adv_rushing",
+    "load_cfb_adv_situational",
+    "load_cfb_adv_specialists",
+    "load_cfb_adv_team",
+    "load_cfb_adv_turnover",
+    "load_cfb_betting",
     "load_cfb_betting_lines",
+    "load_cfb_drives",
+    "load_cfb_game_rosters",
+    "load_cfb_linescores",
     "load_cfb_pbp",
+    "load_cfb_play_participants",
+    "load_cfb_player_box",
+    "load_cfb_power_index",
     "load_cfb_rosters",
     "load_cfb_rosters_crosswalk",
     "load_cfb_schedule",
     "load_cfb_schedule_crosswalk",
+    "load_cfb_team_box",
     "load_cfb_team_info",
     "load_cfb_teams_crosswalk",
     "load_draft_outcomes",
