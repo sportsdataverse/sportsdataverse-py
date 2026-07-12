@@ -162,6 +162,9 @@ by-reference shims over the NHL core with a women's-league constants row
   correctly-shaped frame. No PWHL constant is fitted/guessed — the seeded
   women's-league row (wider `margin_sd`, stronger `shrink_k`) is a
   documented placeholder awaiting the fit below.
+  **Superseded (T5.3/T5.3b)** for `margin_sd` + the shot-quality-proxy /
+  coordinate-xG prediction gate — see `tests/fixtures/pwhl_prediction/README.md`;
+  only the NHL-contract (model ①) gate below remains deferred.
 - **Capture contract to close the gate (when PWHL xG lands):**
   1. Add a numeric `xg` column + the four even-strength state columns to the
      `pwhl_pbp` release (or a sibling `pwhl_pbp_full`), matching the NHL
