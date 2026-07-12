@@ -13,7 +13,10 @@ from typing import Optional, Tuple
 
 import numpy as np
 import polars as pl
-from scipy.stats import rankdata
+from sportsdataverse._common.metrics import (
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 RECEIVER_POSITIONS: Tuple[str, ...] = ("WR", "TE", "RB", "FB")
 # Separation-OE ridge penalty. A sweep over lambda {0.1, 1, 10} x min_targets
@@ -185,17 +188,6 @@ def expected_separation_ridge(
     pen[0, 0] = 0.0  # do not penalize intercept
     beta = np.linalg.solve(feature_matrix.T @ weighted + pen, weighted.T @ y)
     return feature_matrix @ beta, beta
-
-
-def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
-    """Spearman rank correlation of two same-length vectors."""
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
-def mae(a: np.ndarray, b: np.ndarray) -> float:
-    """Mean absolute error between two same-length vectors."""
-    return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
 
 
 def next_season_stability(

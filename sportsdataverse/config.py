@@ -25,10 +25,14 @@ NHL_TEAM_BOX_URL = SDVRELEASES + "nhl_team_boxscores/team_box_{season}.parquet"
 NHL_TEAM_SCHEDULE_URL = SDVRELEASES + "nhl_schedules/nhl_schedule_{season}.parquet"
 NHL_TEAM_LOGO_URL = f"{SGITHUB}fastRhockey-data/main/nhl/nhl_teams_colors_logos.csv"
 
-PHF_BASE_URL = SGITHUB + "fastRhockey-data/main/phf/pbp/parquet/play_by_play_{season}.parquet"
-PHF_PLAYER_BOX_URL = SGITHUB + "fastRhockey-data/main/phf/player_box/parquet/player_box_{season}.parquet"
-PHF_TEAM_BOX_URL = SGITHUB + "fastRhockey-data/main/phf/team_box/parquet/team_box_{season}.parquet"
-PHF_TEAM_SCHEDULE_URL = SGITHUB + "fastRhockey-data/main/phf/schedules/parquet/phf_schedule_{season}.parquet"
+# PHF (Premier Hockey Federation) is a frozen dataset -- the league ceased
+# operations in June 2023. Assets were migrated from the fastRhockey-data git
+# tree into dedicated release tags (2026-07-11): seasons 2016-2023, except pbp
+# which covers 2016 + 2020-2023 (2017-2019 pbp was never published upstream).
+PHF_BASE_URL = SDVRELEASES + "phf_pbp/play_by_play_{season}.parquet"
+PHF_PLAYER_BOX_URL = SDVRELEASES + "phf_player_boxscores/player_box_{season}.parquet"
+PHF_TEAM_BOX_URL = SDVRELEASES + "phf_team_boxscores/team_box_{season}.parquet"
+PHF_TEAM_SCHEDULE_URL = SDVRELEASES + "phf_schedules/phf_schedule_{season}.parquet"
 
 MBB_BASE_URL = SDVRELEASES + "espn_mens_college_basketball_pbp/play_by_play_{season}.parquet"
 MBB_TEAM_BOX_URL = SDVRELEASES + "espn_mens_college_basketball_team_boxscores/team_box_{season}.parquet"

@@ -32,8 +32,10 @@ def playtype_corpus() -> "dict[str, pl.DataFrame]":
     Returns a dict of the nine frames captured live from ``stats.nba.com``:
     ``synergy_off_team``/``synergy_def_team``/``synergy_off_player``,
     ``matchups``, ``leaguedash_base``/``leaguedash_adv``, ``gamelog``,
-    ``rapm`` (shipped-RAPM snapshot over a 25-game sample), and
-    ``team_off_rating`` (independent ORTG ground truth for the rank-sanity gate).
+    ``rapm`` (shipped stint-RAPM snapshot over the FULL 1230-game 2023-24
+    season -- see the fixtures README's "Model (2) construct-gap finding"),
+    and ``team_off_rating`` (independent ORTG ground truth for the
+    rank-sanity gate).
     """
     return {
         "synergy_off_team": pl.read_parquet(_PLAYTYPE_FIX / "synergy_off_team_2024.parquet"),

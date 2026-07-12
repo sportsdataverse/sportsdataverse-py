@@ -19,6 +19,11 @@ import numpy as np
 import polars as pl
 from scipy.optimize import minimize
 from scipy.stats import rankdata
+from sportsdataverse._common.metrics import (
+    brier_score as brier_score,
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 
 @dataclass(frozen=True)
@@ -99,17 +104,6 @@ def get_constants(division: str = "fbs") -> ProjectionConstants:
     return DIVISION_CONSTANTS[key]
 
 
-def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
-    """Spearman rank correlation between two arrays."""
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
-def mae(a: np.ndarray, b: np.ndarray) -> float:
-    """Mean absolute error between two arrays."""
-    return float(np.mean(np.abs(np.asarray(a, float) - np.asarray(b, float))))
-
-
 def rmse(a: np.ndarray, b: np.ndarray) -> float:
     """Root-mean-squared error between two arrays."""
     return float(np.sqrt(np.mean((np.asarray(a, float) - np.asarray(b, float)) ** 2)))
@@ -133,11 +127,6 @@ def roc_auc(y_true: np.ndarray, score: np.ndarray) -> float:
     order = rankdata(s)
     auc = (order[y == 1].sum() - n_pos * (n_pos + 1) / 2.0) / (n_pos * n_neg)
     return float(auc)
-
-
-def brier_score(y_true: np.ndarray, p_pred: np.ndarray) -> float:
-    """Mean squared error between predicted probabilities and binary outcomes."""
-    return float(np.mean((np.asarray(p_pred, float) - np.asarray(y_true, float)) ** 2))
 
 
 def as_of_season_split(df: pl.DataFrame, cutoff_season: int, *, season_col: str = "season") -> pl.DataFrame:

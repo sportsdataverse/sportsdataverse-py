@@ -17,13 +17,18 @@ Methodology references (cited, not copied):
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Callable, Optional
 
 import numpy as np
 import polars as pl
-from scipy.stats import rankdata
 
 from sportsdataverse.mlb.mlb_statcast_extra import mlb_statcast_search
+from sportsdataverse._common.metrics import (
+    brier_score as brier_score,
+    calibration_table as calibration_table,
+    mae as mae,
+    spearman_corr as spearman_corr,
+)
 
 
 @dataclass(frozen=True)
@@ -168,102 +173,6 @@ def as_of_seasons_split(player_seasons: pl.DataFrame, target_season: int) -> pl.
             as_of_seasons_split(ps, target_season=2023)
     """
     return player_seasons.filter(pl.col("season") < target_season)
-
-
-def spearman_corr(a: "np.ndarray[Any, Any]", b: "np.ndarray[Any, Any]") -> float:
-    """Spearman rank correlation between two arrays.
-
-    Args:
-        a: First array of values.
-        b: Second array of values (same length as ``a``).
-
-    Returns:
-        The Spearman rank correlation coefficient.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.mlb.mlb_hitting_constants import spearman_corr
-
-            spearman_corr(np.array([1.0, 2.0, 3.0]), np.array([10.0, 20.0, 30.0]))
-    """
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
-def mae(a: "np.ndarray[Any, Any]", b: "np.ndarray[Any, Any]") -> float:
-    """Mean absolute error between two arrays.
-
-    Args:
-        a: First array of values.
-        b: Second array of values (same length as ``a``).
-
-    Returns:
-        The mean absolute difference ``mean(abs(a - b))``.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.mlb.mlb_hitting_constants import mae
-
-            mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
-    """
-    return float(np.mean(np.abs(np.asarray(a, dtype=float) - np.asarray(b, dtype=float))))
-
-
-def brier_score(y_true: "np.ndarray[Any, Any]", p_pred: "np.ndarray[Any, Any]") -> float:
-    """Brier score (mean squared error of a probability forecast).
-
-    Args:
-        y_true: Binary outcome array (0/1).
-        p_pred: Predicted probability array (same length as ``y_true``).
-
-    Returns:
-        The Brier score ``mean((p_pred - y_true) ** 2)``.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.mlb.mlb_hitting_constants import brier_score
-
-            brier_score(np.array([1, 0]), np.array([0.75, 0.25]))
-    """
-    return float(np.mean((np.asarray(p_pred, dtype=float) - np.asarray(y_true, dtype=float)) ** 2))
-
-
-def calibration_table(y_true: "np.ndarray[Any, Any]", p_pred: "np.ndarray[Any, Any]", n_bins: int = 10) -> pl.DataFrame:
-    """Bin predicted probabilities and compare mean predicted vs. mean actual.
-
-    Args:
-        y_true: Binary outcome array (0/1).
-        p_pred: Predicted probability array (same length as ``y_true``).
-        n_bins: Number of equal-width probability bins.
-
-    Returns:
-        A polars DataFrame with columns ``bin_mid``, ``mean_pred``,
-        ``mean_actual``, ``n`` -- one row per non-empty bin.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.mlb.mlb_hitting_constants import calibration_table
-
-            rng = np.random.default_rng(0)
-            calibration_table(rng.integers(0, 2, 200), rng.random(200), n_bins=10)
-    """
-    df = pl.DataFrame({"y": np.asarray(y_true, dtype=float), "p": np.asarray(p_pred, dtype=float)})
-    df = df.with_columns((pl.col("p").clip(0.0, 0.9999) * n_bins).floor().cast(pl.Int64).alias("bin"))
-    return (
-        df.group_by("bin")
-        .agg(pl.col("p").mean().alias("mean_pred"), pl.col("y").mean().alias("mean_actual"), pl.len().alias("n"))
-        .sort("bin")
-        .with_columns(((pl.col("bin") + 0.5) / n_bins).alias("bin_mid"))
-        .select("bin_mid", "mean_pred", "mean_actual", "n")
-    )
 
 
 def pull_statcast_season(

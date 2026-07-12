@@ -28,10 +28,12 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import polars as pl
 import scipy.sparse as sp
 from scipy.sparse.linalg import cg
-from scipy.stats import rankdata
+from sportsdataverse._common.metrics import (
+    calibration_table as calibration_table,
+    spearman_corr as spearman_corr,
+)
 
 __all__ = [
     "ImpactConfig",
@@ -244,58 +246,6 @@ def team_fullname_to_abbr(name: str) -> str | None:
             team_fullname_to_abbr("Buffalo Sabres")  # "BUF"
     """
     return NHL_TEAM_FULLNAME_TO_ABBR.get(name)
-
-
-def spearman_corr(a: np.ndarray, b: np.ndarray) -> float:
-    """Spearman rank correlation between two 1-D arrays (no scipy.stats.spearmanr dep).
-
-    Args:
-        a: first sample.
-        b: second sample, same length as ``a``.
-
-    Returns:
-        The Pearson correlation of the rank-transformed samples.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nhl.nhl_player_impact_constants import spearman_corr
-            spearman_corr(np.array([1, 2, 3]), np.array([3, 6, 9]))  # 1.0
-    """
-    ra, rb = rankdata(a), rankdata(b)
-    return float(np.corrcoef(ra, rb)[0, 1])
-
-
-def calibration_table(y_true: np.ndarray, p_pred: np.ndarray, n_bins: int = 10) -> pl.DataFrame:
-    """Bucket predicted probabilities into ``n_bins`` and compare to the realized rate.
-
-    Args:
-        y_true: binary outcomes (0/1), e.g. ``event_type == "GOAL"``.
-        p_pred: predicted probabilities, e.g. per-shot ``xg``.
-        n_bins: number of equal-width probability bins.
-
-    Returns:
-        polars.DataFrame: ``bin_mid:Float64, mean_pred:Float64, mean_actual:Float64,
-        n:Int64`` -- reliability tracks the diagonal (``mean_actual`` monotone in
-        ``bin_mid``) when the model is well-calibrated.
-
-    Example:
-        Quick start::
-
-            import numpy as np
-            from sportsdataverse.nhl.nhl_player_impact_constants import calibration_table
-            tbl = calibration_table(np.array([0, 1, 1, 0]), np.array([0.1, 0.8, 0.6, 0.2]))
-    """
-    df = pl.DataFrame({"y": np.asarray(y_true, float), "p": np.asarray(p_pred, float)})
-    df = df.with_columns((pl.col("p").clip(0.0, 0.9999) * n_bins).floor().cast(pl.Int64).alias("bin"))
-    return (
-        df.group_by("bin")
-        .agg(pl.col("p").mean().alias("mean_pred"), pl.col("y").mean().alias("mean_actual"), pl.len().alias("n"))
-        .sort("bin")
-        .with_columns(((pl.col("bin") + 0.5) / n_bins).alias("bin_mid"))
-        .select("bin_mid", "mean_pred", "mean_actual", "n")
-    )
 
 
 def weighted_ridge(X: Any, y: np.ndarray, w: np.ndarray, lam: float) -> np.ndarray:
