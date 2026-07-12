@@ -373,6 +373,7 @@ jobs:
                     tags: ["validation-cron"]
                   }') || { echo "::warning::${ds} — could not build ingest payload"; continue; }
             code=$(curl -sS -o resp_ingest.txt -w '%{http_code}' -X POST "$url" \
+              --connect-timeout 10 --max-time 30 \
               -H "Authorization: Bearer ${PLATFORM_INGEST_TOKEN}" \
               -H "Content-Type: application/json" \
               --data "$payload" || echo 000)
