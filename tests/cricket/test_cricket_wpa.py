@@ -91,6 +91,9 @@ def test_wpa_empty() -> None:
 # --- Task 3.3 gate: reconciliation + E[runs] calibration ----------------------
 def _scored_wpa() -> pl.DataFrame:
     h = pl.read_parquet(WPA_HOLDOUT)
+    # Guard against a silently-shrunk fixture passing the gate vacuously.
+    assert h.height >= 10000, f"WPA holdout shrank to {h.height} states"
+    assert h["event_id"].n_unique() >= 180, "WPA holdout lost matches"
     return cricket_win_probability(h)
 
 
@@ -112,9 +115,12 @@ def test_wpa_bowling_is_negation() -> None:
 
 
 def test_wpa_sum_to_outcome() -> None:
-    # Per match, build the innings-1 batting team's win-prob trajectory (p_ref),
-    # seed the pre-match 0.5 prior, anchor the true match outcome; the telescoped
-    # WPA reconciles winner -> +0.5, loser -> -0.5.
+    # Contract/arithmetic check of the WPA reconciliation FRAMING: seeding the
+    # pre-match 0.5 prior and anchoring the true outcome telescopes to winner
+    # +0.5 / loser -0.5. This validates the reconciliation seed+anchor
+    # convention (not the surface itself -- the model's genuine convergence is
+    # covered by test_wpa_telescoping_identity + test_wpa_model_converges_to_outcome
+    # on the real win_prob trajectory).
     s = _scored_wpa().with_columns(
         p_ref=pl.when(pl.col("innings_number") == 1).then(pl.col("win_prob")).otherwise(1.0 - pl.col("win_prob"))
     )

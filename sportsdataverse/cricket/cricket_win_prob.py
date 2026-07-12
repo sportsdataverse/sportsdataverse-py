@@ -248,7 +248,12 @@ def cricket_win_probability(state: pl.DataFrame, *, return_as_pandas: bool = Fal
     df = state.with_columns(
         overs_left=((pl.col("balls_total") - pl.col("balls_bowled")) // 6).cast(pl.Int64),
         wickets_left=(pl.lit(10) - pl.col("wickets")).cast(pl.Int64),
-    ).join(surf, on=["fmt", "overs_left", "wickets_left"], how="left")
+    )
+    for k in ("fmt", "overs_left", "wickets_left"):  # join-key dtype agreement before the surface join
+        assert df.schema[k] == surf.schema[k], (
+            f"surface join-key dtype mismatch on {k}: {df.schema[k]} != {surf.schema[k]}"
+        )
+    df = df.join(surf, on=["fmt", "overs_left", "wickets_left"], how="left")
     df = df.with_columns(resources_left=pl.col("resource").fill_null(0.0).cast(pl.Float64)).drop("resource")
     df = df.with_columns(proj_final=(pl.col("runs") + pl.col("resources_left") * par_expr).cast(pl.Float64))
     is_chase = (pl.col("innings_number") == 2) & pl.col("target").is_not_null()

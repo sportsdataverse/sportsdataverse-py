@@ -47,6 +47,9 @@ def test_surface_bounds() -> None:
 # --- Step 2: holdout calibration gate -----------------------------------------
 def _scored() -> tuple[pl.DataFrame, pl.DataFrame]:
     holdout = pl.read_parquet(HOLDOUT)
+    # Guard against a silently-shrunk fixture passing the gate vacuously.
+    assert holdout.height >= 50000, f"calibration holdout shrank to {holdout.height} states"
+    assert holdout["event_id"].n_unique() >= 800, "calibration holdout lost matches"
     scored = cricket_win_probability(holdout)
     return holdout, scored
 

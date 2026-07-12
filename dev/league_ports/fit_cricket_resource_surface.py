@@ -34,6 +34,14 @@ leakage). The held-out states + match-outcome label are written to
 the holdout Brier + per-decile calibration so the Phase-2 gate floor is set from
 the observed value.
 
+**Regenerate together, always.** A single run of this script writes all four
+coupled artifacts from the SAME train/holdout split — the two committed model
+artifacts (``cricket_resource_surface.parquet``, ``cricket_winprob_calibration.parquet``)
+and the two committed holdout fixtures (``cricket_holdout.parquet``,
+``cricket_wpa_holdout.parquet``). Never regenerate one without the others: the
+holdout is the complement of the training matches, so a stale mix would let the
+holdout silently overlap training (leakage).
+
 Run::
 
     uv run python dev/league_ports/fit_cricket_resource_surface.py
