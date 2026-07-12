@@ -14,6 +14,10 @@ from sportsdataverse._codegen_runtime import (
 )
 
 __all__ = [
+    "load_phf_pbp",
+    "load_phf_player_boxscores",
+    "load_phf_schedules",
+    "load_phf_team_boxscores",
     "load_pwhl_game_info",
     "load_pwhl_game_rosters",
     "load_pwhl_goalie_boxscores",
@@ -30,6 +34,369 @@ __all__ = [
     "load_pwhl_team_boxscores",
     "load_pwhl_three_stars",
 ]
+
+
+def load_phf_pbp(seasons, return_as_pandas: bool = False):
+    """Load phf_pbp (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_pbp
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2016).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                  |type   |
+        |:-------------------------|:------|
+        |play_type                 |String |
+        |team                      |String |
+        |time                      |String |
+        |play_description          |String |
+        |period_id                 |Int32  |
+        |game_id                   |Int32  |
+        |game_date                 |String |
+        |home_team                 |String |
+        |home_location             |String |
+        |home_nickname             |String |
+        |home_abbreviation         |String |
+        |home_score_total          |Int32  |
+        |away_team                 |String |
+        |away_location             |String |
+        |away_nickname             |String |
+        |away_abbreviation         |String |
+        |away_score_total          |Int32  |
+        |away_goalie               |String |
+        |away_goalie_jersey        |String |
+        |goalie_change             |String |
+        |penalty                   |Int32  |
+        |on_ice_situation          |String |
+        |score                     |String |
+        |minute_start              |Int32  |
+        |second_start              |Int32  |
+        |clock                     |String |
+        |leader                    |String |
+        |away_goals                |String |
+        |home_goals                |String |
+        |sec_from_start            |Int32  |
+        |power_play_seconds        |Int32  |
+        |time_elapsed              |String |
+        |time_remaining            |String |
+        |player_name_1             |String |
+        |player_jersey_1           |String |
+        |home_skaters              |Int32  |
+        |away_skaters              |Int32  |
+        |home_goalie               |String |
+        |home_goalie_jersey        |String |
+        |player_name_2             |String |
+        |player_jersey_2           |String |
+        |shot_result               |String |
+        |goalie_involved           |String |
+        |penalty_type              |String |
+        |penalty_level             |String |
+        |penalty_length            |String |
+        |start_power_play          |Int32  |
+        |end_power_play            |Int32  |
+        |player_name_3             |String |
+        |player_jersey_3           |String |
+        |scoring_team_abbrev       |String |
+        |scoring_team_on_ice       |String |
+        |offensive_player_name_1   |String |
+        |offensive_player_name_2   |String |
+        |offensive_player_name_3   |String |
+        |offensive_player_name_4   |String |
+        |offensive_player_name_5   |String |
+        |defending_team_abbrev     |String |
+        |offensive_player_jersey_1 |String |
+        |offensive_player_jersey_2 |String |
+        |offensive_player_jersey_3 |String |
+        |offensive_player_jersey_4 |String |
+        |offensive_player_jersey_5 |String |
+        |defending_team_on_ice     |String |
+        |defensive_player_name_1   |String |
+        |defensive_player_name_2   |String |
+        |defensive_player_name_3   |String |
+        |defensive_player_name_4   |String |
+        |defensive_player_name_5   |String |
+        |defensive_player_jersey_1 |String |
+        |defensive_player_jersey_2 |String |
+        |defensive_player_jersey_3 |String |
+        |defensive_player_jersey_4 |String |
+        |defensive_player_jersey_5 |String |
+        |defensive_player_name_6   |String |
+        |defensive_player_jersey_6 |String |
+        |offensive_player_name_6   |String |
+        |offensive_player_jersey_6 |String |
+        |season                    |Int32  |
+
+    Example:
+        Quick start::
+
+            load_phf_pbp(seasons=2023)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_pbp/play_by_play_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_phf_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_phf_player_boxscores(seasons, return_as_pandas: bool = False):
+    """Load phf_player_boxscores (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_player_boxscores
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2016).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name          |type    |
+        |:-----------------|:-------|
+        |player_jersey     |Int32   |
+        |player_name       |String  |
+        |position          |String  |
+        |goals             |Int32   |
+        |assists           |Int32   |
+        |points            |Int32   |
+        |penalty_minutes   |Int32   |
+        |shots_on_goal     |Int32   |
+        |blocks            |Int32   |
+        |giveaways         |Int32   |
+        |takeaways         |Int32   |
+        |faceoffs_won_lost |String  |
+        |faceoffs_win_pct  |Float64 |
+        |powerplay_goals   |Int32   |
+        |shorthanded_goals |Int32   |
+        |shots             |Int32   |
+        |shots_blocked     |Int32   |
+        |faceoffs_won      |Int32   |
+        |faceoffs_lost     |Int32   |
+        |team              |String  |
+        |skaters_href      |String  |
+        |player_id         |String  |
+        |game_id           |Int32   |
+        |minutes_played    |String  |
+        |shots_against     |Int32   |
+        |goals_against     |Int32   |
+        |saves             |Int32   |
+        |save_percent      |Float64 |
+        |goalies_href      |String  |
+        |season            |Int32   |
+
+    Example:
+        Quick start::
+
+            load_phf_player_boxscores(seasons=2023)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_player_boxscores/player_box_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_phf_player_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_phf_schedules(seasons, return_as_pandas: bool = False):
+    """Load phf_schedules (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_schedules
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2016).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                  |type                                      |
+        |:-------------------------|:-----------------------------------------|
+        |type                      |String                                    |
+        |id                        |String                                    |
+        |league_id                 |Int32                                     |
+        |season_id                 |Int32                                     |
+        |tournament_id             |Boolean                                   |
+        |game_id                   |Int32                                     |
+        |number                    |Int32                                     |
+        |datetime                  |Datetime(time_unit='us', time_zone='UTC') |
+        |datetime_tz               |Datetime(time_unit='us', time_zone='UTC') |
+        |time_zone                 |String                                    |
+        |time_zone_abbr            |String                                    |
+        |updated_at                |Datetime(time_unit='us', time_zone='UTC') |
+        |created_at                |Datetime(time_unit='us', time_zone='UTC') |
+        |home_team_id              |Int32                                     |
+        |home_team                 |String                                    |
+        |home_team_short           |String                                    |
+        |home_team_logo_url_full   |String                                    |
+        |home_team_logo_url_small  |String                                    |
+        |home_team_logo_url_medium |String                                    |
+        |home_team_logo_url_large  |String                                    |
+        |home_team_logo_url_50     |String                                    |
+        |home_team_logo_url_100    |String                                    |
+        |home_team_logo_url_200    |String                                    |
+        |away_team_id              |Int32                                     |
+        |away_team                 |String                                    |
+        |away_team_short           |String                                    |
+        |away_team_logo_url_full   |String                                    |
+        |away_team_logo_url_small  |String                                    |
+        |away_team_logo_url_medium |String                                    |
+        |away_team_logo_url_large  |String                                    |
+        |away_team_logo_url_50     |String                                    |
+        |away_team_logo_url_100    |String                                    |
+        |away_team_logo_url_200    |String                                    |
+        |home_division_id          |Int32                                     |
+        |home_division             |String                                    |
+        |away_division_id          |Int32                                     |
+        |away_division             |String                                    |
+        |home_score                |Int32                                     |
+        |away_score                |Int32                                     |
+        |home_shots                |Int32                                     |
+        |away_shots                |Int32                                     |
+        |home_penalty_minutes      |Int32                                     |
+        |away_penalty_minutes      |Int32                                     |
+        |home_roster_count         |Int32                                     |
+        |away_roster_count         |Int32                                     |
+        |facility_id               |Int32                                     |
+        |facility                  |String                                    |
+        |facility_address          |String                                    |
+        |rink_id                   |Boolean                                   |
+        |rink                      |Boolean                                   |
+        |game_type                 |String                                    |
+        |notes                     |String                                    |
+        |status                    |String                                    |
+        |overtime                  |Boolean                                   |
+        |shootout                  |Boolean                                   |
+        |allow_players             |Boolean                                   |
+        |tickets_url               |String                                    |
+        |watch_live_url            |String                                    |
+        |external_url              |Boolean                                   |
+        |has_play_by_play          |Boolean                                   |
+        |highlight_color           |Boolean                                   |
+        |attendance                |Int32                                     |
+        |date_group                |Date                                      |
+        |winner                    |String                                    |
+        |season                    |Int32                                     |
+        |PBP                       |Boolean                                   |
+        |team_box                  |Boolean                                   |
+        |player_box                |Boolean                                   |
+
+    Example:
+        Quick start::
+
+            load_phf_schedules(seasons=2023)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_schedules/phf_schedule_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_phf_schedules: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_phf_team_boxscores(seasons, return_as_pandas: bool = False):
+    """Load phf_team_boxscores (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_team_boxscores
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2016).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name                 |type    |
+        |:------------------------|:-------|
+        |team                     |String  |
+        |game_id                  |Int32   |
+        |winner                   |Boolean |
+        |total_scoring            |Int32   |
+        |successful_power_play    |Float64 |
+        |power_play_opportunities |Float64 |
+        |power_play_percent       |Float64 |
+        |penalty_minutes          |Float64 |
+        |faceoff_percent          |Float64 |
+        |blocked_opponent_shots   |Float64 |
+        |takeaways                |Float64 |
+        |giveaways                |Float64 |
+        |period_1_shots           |Int32   |
+        |period_2_shots           |Int32   |
+        |period_3_shots           |Int32   |
+        |overtime_shots           |Int32   |
+        |shootout_made_shots      |Int32   |
+        |shootout_missed_shots    |Int32   |
+        |total_shots              |Int32   |
+        |period_1_scoring         |Int32   |
+        |period_2_scoring         |Int32   |
+        |period_3_scoring         |Int32   |
+        |overtime_scoring         |Int32   |
+        |shootout_made_scoring    |Float64 |
+        |shootout_missed_scoring  |Float64 |
+        |season                   |Int32   |
+
+    Example:
+        Quick start::
+
+            load_phf_team_boxscores(seasons=2023)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2016:
+            raise SeasonNotFoundError("season cannot be less than 2016")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_team_boxscores/team_box_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_phf_team_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
 def load_pwhl_game_info(seasons, return_as_pandas: bool = False):
@@ -90,7 +457,9 @@ def load_pwhl_game_info(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_game_info: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -142,7 +511,9 @@ def load_pwhl_game_rosters(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_game_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -201,7 +572,9 @@ def load_pwhl_goalie_boxscores(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_goalie_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -245,7 +618,9 @@ def load_pwhl_officials(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_officials: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -378,7 +753,9 @@ def load_pwhl_pbp(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -436,7 +813,9 @@ def load_pwhl_penalty_summary(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_penalty_summary: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -500,7 +879,9 @@ def load_pwhl_player_boxscores(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_player_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -550,7 +931,9 @@ def load_pwhl_rosters(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_rosters: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -617,7 +1000,9 @@ def load_pwhl_schedules(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_schedules: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -682,7 +1067,9 @@ def load_pwhl_scoring_summary(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_scoring_summary: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -730,7 +1117,9 @@ def load_pwhl_shootout(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_shootout: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -775,7 +1164,9 @@ def load_pwhl_shots_by_period(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_shots_by_period: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -835,7 +1226,9 @@ def load_pwhl_skater_boxscores(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_skater_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -896,7 +1289,9 @@ def load_pwhl_team_boxscores(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_team_boxscores: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
 
 
@@ -954,5 +1349,7 @@ def load_pwhl_three_stars(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_three_stars: no data for season(s) {missing} (skipped)".format(missing=missing))
-    out = pl.concat(frames, how="vertical_relaxed") if frames else pl.DataFrame()
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
