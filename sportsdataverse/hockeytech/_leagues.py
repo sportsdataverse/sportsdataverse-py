@@ -11,7 +11,28 @@ import os
 from dataclasses import dataclass
 from typing import Dict, Literal, Optional
 
-LeagueCode = Literal["pwhl", "ahl", "ohl", "whl", "qmjhl"]
+LeagueCode = Literal[
+    "pwhl",
+    "ahl",
+    "ohl",
+    "whl",
+    "qmjhl",
+    "echl",
+    "sphl",
+    "chl",
+    "ushl",
+    "bchl",
+    "ajhl",
+    "sjhl",
+    "ojhl",
+    "cchl",
+    "gojhl",
+    "mhl",
+    "nojhl",
+    "vijhl",
+    "kijhl",
+    "mjhl",
+]
 
 
 @dataclass(frozen=True)
@@ -30,11 +51,39 @@ _LSCLUSTER = "https://lscluster.hockeytech.com/feed/index.php"
 _LEAGUESTAT = "https://cluster.leaguestat.com/feed/index.php"
 
 LEAGUES: Dict[str, LeagueConfig] = {
+    # Verified live 2026-07-12 (all 20 respond on lscluster.hockeytech.com; seasons +
+    # scorebar schemas are byte-identical across every league). league_id for the
+    # single-league clients is 1 (standings-verified live); pbp_style for the leagues
+    # added in this pass defaults to "hockeytech_b" (small ~600x300 canvas — the
+    # junior/lower-pro majority; ECHL's small canvas was observed directly). Determine
+    # a league's true canvas with one gameCenterPlayByPlay coordinate-range probe and
+    # flip to "hockeytech_a" if it ships the ~850x400 canvas.
+    # -- flagship / already-shipped (league_id + pbp_style curated) --
     "pwhl": LeagueConfig("PWHL", "pwhl", "446521baf8c38984", 1, 0, _LSCLUSTER, "hockeytech_a", 600),
     "ahl": LeagueConfig("AHL", "ahl", "ccb91f29d6744675", 4, 3, _LSCLUSTER, "hockeytech_a", 300),
     "ohl": LeagueConfig("OHL", "ohl", "f1aa699db3d81487", 1, 1, _LSCLUSTER, "hockeytech_b", 300),
     "whl": LeagueConfig("WHL", "whl", "f1aa699db3d81487", 7, 0, _LSCLUSTER, "hockeytech_b", 300),
     "qmjhl": LeagueConfig("QMJHL", "lhjmq", "f322673b6bcae299", 6, 0, _LEAGUESTAT, "hockeytech_b", 300),
+    # -- professional / major (added 2026-07-12) --
+    "echl": LeagueConfig("ECHL", "echl", "2c2b89ea7345cae8", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "sphl": LeagueConfig("SPHL", "sphl", "8fa10d218c49ec96", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "chl": LeagueConfig("CHL", "chl", "ef96ea7d71574f2a", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    # -- junior (added 2026-07-12) --
+    # ushl: gameCenterPlayByPlay ships goals/penalties/goalie-changes only, no coordinates.
+    "ushl": LeagueConfig("USHL", "ushl", "e828f89b243dc43f", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "bchl": LeagueConfig("BCHL", "bchl", "f3ed30007ad2124e", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "ajhl": LeagueConfig("AJHL", "ajhl", "cbe60a1d91c44ade", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "sjhl": LeagueConfig("SJHL", "sjhl", "2fb5c2e84bf3e4a8", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "ojhl": LeagueConfig("OJHL", "ojhl", "cce66dd6bebf4790", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "cchl": LeagueConfig("CCHL", "cchl", "b370f3e6c805baf3", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "gojhl": LeagueConfig("GOJHL", "gojhl", "34b10d4d34d7b59a", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "mhl": LeagueConfig("MHL", "mhl", "4a948e7faf5ee58d", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "nojhl": LeagueConfig("NOJHL", "nojhl", "c1375ff55168bd71", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "vijhl": LeagueConfig("VIJHL", "vijhl", "4f1a61df18906b61", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    "kijhl": LeagueConfig("KIJHL", "kijhl", "2589e0f644b1bb71", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
+    # mjhl: seasons/scorebar/standings work; its public key has NO gamecenter access,
+    # so <lg>_pbp / <lg>_game_summary come back empty for MJHL (graceful, not an error).
+    "mjhl": LeagueConfig("MJHL", "mjhl", "f894c324fe5fd8f0", 1, 0, _LSCLUSTER, "hockeytech_b", 300),
 }
 
 # gameCenterPlayByPlay uses a distinct key on the statviewfeed PBP view for PWHL

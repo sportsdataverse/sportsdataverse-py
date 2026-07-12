@@ -19,7 +19,28 @@ import pytest
 
 from tests.conftest import load_fixture
 
-LEAGUES = ["ahl", "ohl", "whl", "qmjhl"]
+LEAGUES = [
+    "ahl",
+    "ohl",
+    "whl",
+    "qmjhl",
+    # promoted 2026-07-12 — same shared parser, driven by the pwhl_* fixtures
+    "echl",
+    "sphl",
+    "chl",
+    "ushl",
+    "bchl",
+    "ajhl",
+    "sjhl",
+    "ojhl",
+    "cchl",
+    "gojhl",
+    "mhl",
+    "nojhl",
+    "vijhl",
+    "kijhl",
+    "mjhl",
+]
 
 # HockeyTech ``view`` -> captured fixture stem. ``resolve_season_id`` fans out to
 # the ``seasons`` view, so every season-aware wrapper needs that mapping too.
