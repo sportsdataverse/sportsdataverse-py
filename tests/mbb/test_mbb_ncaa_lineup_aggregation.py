@@ -252,3 +252,55 @@ def test_adj_ppp_fallback_equals_raw_ppp_when_no_baselines():
 def test_adj_ppp_zero_poss_guarded():
     f = agg._adj_fields(pts=0.0, poss=0.0, dst="off", opponent_baselines=None, avg_eff=100.0)
     assert f["off_adj_ppp"]["value"] == 0.0
+
+
+def _full_stats(pts: int, poss: int) -> LineupEventStats:
+    # ponytail: every ShotClockStats.total/orb/early set equal so all 3 prefixes
+    # (""/"scramble_"/"trans_") read nonzero data -- exercises the play-type
+    # pts/poss merge, not just the base "" family.
+    def sc(v: int) -> ShotClockStats:
+        return ShotClockStats(total=v, orb=v, early=v)
+
+    fg_full = FieldGoalStats(attempts=sc(10), made=sc(5), ast=sc(3))
+    return LineupEventStats(
+        fg=fg_full,
+        fg_rim=fg_full,
+        fg_mid=fg_full,
+        fg_2p=fg_full,
+        fg_3p=fg_full,
+        ft=fg_full,
+        orb=sc(4),
+        drb=sc(6),
+        to=sc(2),
+        stl=sc(1),
+        blk=sc(1),
+        assist=sc(3),
+        ast_rim=AssistInfo(counts=sc(1)),
+        ast_mid=AssistInfo(counts=sc(1)),
+        ast_3p=AssistInfo(counts=sc(1)),
+        foul=sc(1),
+        pts=pts,
+        num_possessions=poss,
+    )
+
+
+def _enriched_lineup_event() -> LineupEvent:
+    players = [PlayerCodeId(code=c, id=c) for c in ["JaSmith", "AaWiggins", "ErAyala", "AnCowan", "DaMorsell"]]
+    ev = _minimal_lineup_event(players)
+    ev.team_stats = _full_stats(pts=20, poss=15)
+    ev.opponent_stats = _full_stats(pts=18, poss=16)
+    return ev
+
+
+def test_bucket_has_structural_keys_and_wrapped_fields():
+    ev = _enriched_lineup_event()
+    b = agg.lineup_stats_bucket(ev, doc_count=7)
+    assert b["key"] == agg._bucket_key(ev)
+    assert b["players_array"]["hits"]["hits"][0]["_source"]["players"]
+    assert b["doc_count"] == 7
+    assert isinstance(b["off_ppp"], dict) and "value" in b["off_ppp"]
+    assert isinstance(b["def_ppp"], dict) and "value" in b["def_ppp"]
+    assert isinstance(b["total_off_fga"], dict)
+    # Step 3's ordering requirement: play-type pts/poss must be folded into the
+    # per-prefix totals BEFORE minting rates, else off_scramble_ppp reads 0.
+    assert b["off_scramble_ppp"]["value"] != 0.0

@@ -496,6 +496,7 @@ files = [
     "sportsdataverse/mbb/mbb_ncaa_shot_parser.py",
     "sportsdataverse/mbb/mbb_ncaa_pbp_glue.py",
     "sportsdataverse/mbb/mbb_ncaa_strength.py",
+    "sportsdataverse/mbb/mbb_ncaa_lineup_aggregation.py",
     "sportsdataverse/wbb/wbb_lineup_stats.py",
     "sportsdataverse/wbb/wbb_ratings.py",
     "sportsdataverse/wbb/wbb_luck.py",

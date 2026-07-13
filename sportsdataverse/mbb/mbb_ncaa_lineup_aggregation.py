@@ -14,9 +14,11 @@ from .mbb_ncaa_models import LineupEvent, LineupEventStats, ShotClockStats
 
 LineupStatSet = dict[str, Any]
 
-# ponytail: __all__ omitted -- lineup_stats_bucket/lineup_stats_buckets (the
-# public entry points) land in a later task; this task ships only the
-# underscore-prefixed accessors + the LineupStatSet alias.
+__all__ = ["LineupStatSet", "lineup_stats_bucket"]
+
+# ponytail: lineup_stats_buckets (the list-form public entry point) lands in
+# a later task (group-by producer); this task ships the single-lineup
+# assembler `lineup_stats_bucket`.
 
 
 def _leaf(stat: Optional[ShotClockStats], suffix: str) -> float:
@@ -289,3 +291,99 @@ def _adj_fields(
         f"{dst}_adj_ppp": {"value": ppp},
         f"{dst}_adj_opp": {"value": avg_eff},
     }
+
+
+_T1_SUFFIXES = {"": ".total", "scramble_": ".orb", "trans_": ".early"}  # ts:31-78 shot-bucket suffix map.
+
+
+def lineup_stats_bucket(
+    ev: LineupEvent,
+    *,
+    avg_eff: float = 100.0,
+    opponent_baselines: Optional[dict[str, float]] = None,
+    doc_count: int = 1,
+) -> LineupStatSet:
+    """Assemble one lineup's full 254-field ``{value}`` bucket.
+
+    ``lineup_stats_bucket`` is the Python entry point for stage 2 of the port (see the
+    module docstring) -- the faithful composition of this module's factories in the order
+    ``commonLineupAggregations.ts`` (572-line ES aggregation) issues them: ``sum`` (
+    :func:`_sum_fields`) -> merge the play-type ``pts``/``poss`` bucket_script (
+    :func:`_play_type_pts_poss`) -> mint every other rate bucket_script (
+    :func:`_all_rate_fields`) -> the SOS-adjusted-efficiency bucket_script (
+    :func:`_adj_fields`).
+
+    Args:
+        ev: One already-summed lineup event (``team_stats``/``opponent_stats`` populated by
+            stage 1, :func:`~sportsdataverse.mbb.mbb_ncaa_lineup_enrich.enrich_lineup`).
+        avg_eff: League-average efficiency passed through to :func:`_adj_fields`.
+        opponent_baselines: SOS baseline lookup passed through to :func:`_adj_fields`; only
+            ``None`` (no baselines) is implemented.
+        doc_count: The ES ``doc_count`` for this bucket (number of raw events folded in).
+
+    Returns:
+        The full bucket: every ``total_*``/rate/adj field wrapped in ``{"value": <float>}``,
+        plus the structural keys ``key``, ``players_array``, ``doc_count`` (bare, unwrapped).
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_aggregation import lineup_stats_bucket
+
+            bucket = lineup_stats_bucket(enriched_event, doc_count=7)
+            bucket["off_ppp"]["value"]
+
+    See Also:
+        * `cbb-on-off-analyzer <https://github.com/Alex-At-Home/cbb-on-off-analyzer>`_ --
+          ``src/utils/es-queries/commonLineupAggregations.ts``, this function's TS source.
+    """
+    off_totals_by_prefix = {
+        prefix: _sum_fields(ev.team_stats, dst="off", prefix=prefix, suffix=suffix)
+        for prefix, suffix in _T1_SUFFIXES.items()
+    }
+    def_totals_by_prefix = {
+        prefix: _sum_fields(ev.opponent_stats, dst="def", prefix=prefix, suffix=suffix)
+        for prefix, suffix in _T1_SUFFIXES.items()
+    }
+
+    # Fold the play-type pts/poss bucket_script in BEFORE minting rates -- _all_rate_fields
+    # reads total_{dst}_{scramble_,trans_}{pts,poss} out of these same dicts.
+    play_type = _play_type_pts_poss(off_totals_by_prefix, def_totals_by_prefix)
+    for dst, totals_by_prefix in (("off", off_totals_by_prefix), ("def", def_totals_by_prefix)):
+        for prefix in _PLAY_TYPE_PREFIXES:
+            for stem in ("pts", "poss"):
+                key = f"total_{dst}_{prefix}{stem}"
+                totals_by_prefix[prefix][key] = play_type[key]
+
+    off_rates = _all_rate_fields(off_totals_by_prefix, "off", def_totals_by_prefix)
+    def_rates = _all_rate_fields(def_totals_by_prefix, "def", off_totals_by_prefix)
+
+    off_adj = _adj_fields(
+        pts=off_totals_by_prefix[""]["total_off_pts"],
+        poss=off_totals_by_prefix[""]["total_off_poss"],
+        dst="off",
+        opponent_baselines=opponent_baselines,
+        avg_eff=avg_eff,
+    )
+    def_adj = _adj_fields(
+        pts=def_totals_by_prefix[""]["total_def_pts"],
+        poss=def_totals_by_prefix[""]["total_def_poss"],
+        dst="def",
+        opponent_baselines=opponent_baselines,
+        avg_eff=avg_eff,
+    )
+
+    bucket: LineupStatSet = {
+        "key": _bucket_key(ev),
+        "players_array": _players_array(ev),
+        "doc_count": doc_count,
+    }
+    for totals_by_prefix in (off_totals_by_prefix, def_totals_by_prefix):
+        for totals in totals_by_prefix.values():
+            for stem, value in totals.items():
+                bucket[stem] = {"value": value}
+    bucket.update(off_rates)
+    bucket.update(def_rates)
+    bucket.update(off_adj)
+    bucket.update(def_adj)
+    return bucket
