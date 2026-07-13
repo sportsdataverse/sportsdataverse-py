@@ -92,3 +92,35 @@ def test_sum_fields_scramble_prefix_reads_orb():
     s = _stats_with_rim(att_total=8, made_total=5, att_orb=3)
     out = agg._sum_fields(s, dst="off", prefix="scramble_", suffix=".orb")
     assert out["total_off_scramble_2prim_attempts"] == 3.0  # .orb leaf
+
+
+def test_rate_guarded_formula_and_ppp_factor():
+    totals = {
+        "total_off_2prim_made": 5.0,
+        "total_off_2prim_attempts": 8.0,
+        "total_off_pts": 12.0,
+        "total_off_poss": 20.0,
+        "total_off_2prim_attempts_zero": 0.0,
+    }
+    fields = agg._rate_fields(totals, dst="off", prefix="", oppo_totals={})
+    assert fields["off_2prim"]["value"] == 5.0 / 8.0  # cross-check ES off_2prim
+    assert fields["off_ppp"]["value"] == 100.0 * 12.0 / 20.0
+
+
+def test_rate_zero_guard_returns_zero_not_nan():
+    totals = {"total_off_3p_made": 0.0, "total_off_3p_attempts": 0.0}
+    fields = agg._rate_fields(totals, dst="off", prefix="", oppo_totals={})
+    assert fields["off_3p"]["value"] == 0.0  # (num>0)?...:0 guard
+
+
+def test_efg_weights_threes_by_1_5():
+    totals = {"total_off_fga": 10.0, "total_off_2p_made": 3.0, "total_off_3p_made": 2.0}
+    fields = agg._rate_fields(totals, dst="off", prefix="", oppo_totals={})
+    assert fields["off_efg"]["value"] == (1.0 * 3.0 + 1.5 * 2.0) / 10.0
+
+
+def test_orb_rate_uses_cross_side_drb():
+    totals = {"total_off_orb": 6.0}
+    oppo = {"total_def_drb": 14.0}
+    fields = agg._rate_fields(totals, dst="off", prefix="", oppo_totals=oppo)
+    assert fields["off_orb"]["value"] == 6.0 / (6.0 + 14.0)
