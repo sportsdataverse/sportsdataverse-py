@@ -7455,7 +7455,7 @@ given lineup always occupies the same columns.
 
 **Returns**
 
-`pl.DataFrame` (or `pd.DataFrame`) with one row per possession — 28 columns per `POSSESSIONS_SCHEMA` (full) or 17 per `POSSESSIONS_SIMPLE_SCHEMA` (simple). Empty input yields an empty frame carrying the documented schema.
+`pl.DataFrame` (or `pd.DataFrame`) with one row per possession — 28 columns per `POSSESSION_SEG_SCHEMA` (full) or 17 per `POSSESSIONS_SIMPLE_SCHEMA` (simple). Empty input yields an empty frame carrying the documented schema.
 
 **Example**
 
