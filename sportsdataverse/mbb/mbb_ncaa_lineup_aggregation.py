@@ -169,3 +169,19 @@ def _rate_fields(
         for st in _ASSIST_DIST_TYPES:
             _rate(out, totals, dst, f"ast_{st}", f"ast_{st}", "assist")
     return out
+
+
+_PREFIXES = ("", "scramble_", "trans_")
+
+
+def _all_rate_fields(
+    totals_by_prefix: dict[str, dict[str, float]],
+    dst: str,
+    oppo_totals_by_prefix: dict[str, dict[str, float]],
+) -> dict[str, dict[str, float]]:
+    # ponytail: prefix loop over base/scramble_/trans_ families, commonLineupAggregations.ts:181-282.
+    # orb + assist-dist gating already lives in `_rate_fields` (prefix == "" only); no special-casing here.
+    out: dict[str, dict[str, float]] = {}
+    for prefix in _PREFIXES:
+        out.update(_rate_fields(totals_by_prefix[prefix], dst, prefix, oppo_totals_by_prefix[prefix]))
+    return out

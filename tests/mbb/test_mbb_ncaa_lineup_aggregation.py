@@ -192,3 +192,25 @@ def test_base_prefix_emits_all_rate_names():
     fields = agg._rate_fields(totals, dst="off", prefix="", oppo_totals=_full_synthetic_totals("def", ""))
     missing = BASE_OFF_RATE_NAMES - set(fields)
     assert not missing, f"missing rate fields: {missing}"
+
+
+def test_scramble_and_trans_rates_emitted():
+    tp = {
+        "": _full_synthetic_totals("off", ""),
+        "scramble_": {
+            "total_off_scramble_2prim_made": 2.0,
+            "total_off_scramble_2prim_attempts": 4.0,
+            "total_off_scramble_pts": 6.0,
+            "total_off_scramble_poss": 10.0,
+        },
+        "trans_": {"total_off_trans_3p_made": 1.0, "total_off_trans_3p_attempts": 3.0},
+    }
+    fields = agg._all_rate_fields(
+        tp,
+        dst="off",
+        oppo_totals_by_prefix={"": _full_synthetic_totals("def", ""), "scramble_": {}, "trans_": {}},
+    )
+    assert fields["off_scramble_2prim"]["value"] == 2.0 / 4.0
+    assert fields["off_scramble_ppp"]["value"] == 100.0 * 6.0 / 10.0
+    assert fields["off_trans_3p"]["value"] == 1.0 / 3.0
+    assert "off_scramble_orb" not in fields  # orb is prefix "" only
