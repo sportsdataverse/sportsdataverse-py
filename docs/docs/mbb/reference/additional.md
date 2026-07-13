@@ -6249,6 +6249,72 @@ still-negative possession count is clamped to 0.
 
 New lineup copies with clamped `num_possessions`.
 
+### `lineup_stats_bucket(ev: 'LineupEvent', *, avg_eff: 'float' = 100.0, opponent_baselines: 'Optional[dict[str, float]]' = None, doc_count: 'int' = 1) -> 'LineupStatSet'` {#lineup_stats_bucket}
+
+Assemble one lineup's full 254-field `{value}` bucket.
+
+`lineup_stats_bucket` is the Python entry point for stage 2 of the port (see the
+module docstring) -- the faithful composition of this module's factories in the order
+`commonLineupAggregations.ts` (572-line ES aggregation) issues them: `sum` (
+sum_fields`) -> merge the play-type `pts`/`poss` bucket_script (
+play_type_pts_poss`) -> mint every other rate bucket_script (
+all_rate_fields`) -> the SOS-adjusted-efficiency bucket_script (
+adj_fields`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ev` | `LineupEvent` |  | One already-summed lineup event (`team_stats`/`opponent_stats` populated by stage 1, `~sportsdataverse.mbb.mbb_ncaa_lineup_enrich.enrich_lineup`). |
+| `avg_eff` | `float` | `100.0` | League-average efficiency passed through to adj_fields`. |
+| `opponent_baselines` | `Optional[dict[str, float]]` | `None` | SOS baseline lookup passed through to adj_fields`; only `None` (no baselines) is implemented. |
+| `doc_count` | `int` | `1` | The ES `doc_count` for this bucket (number of raw events folded in). |
+
+**Returns**
+
+The full bucket: every `total_*`/rate/adj field wrapped in `{"value": <float>}`, plus the structural keys `key`, `players_array`, `doc_count` (bare, unwrapped).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_aggregation import lineup_stats_bucket
+
+bucket = lineup_stats_bucket(enriched_event, doc_count=7)
+bucket["off_ppp"]["value"]
+```
+
+### `lineup_stats_buckets(evs: 'list[LineupEvent]', *, avg_eff: 'float' = 100.0, opponent_baselines: 'Optional[dict[str, float]]' = None) -> 'list[LineupStatSet]'` {#lineup_stats_buckets}
+
+Group events by lineup, fold each group's stats, and mint one bucket per lineup.
+
+Python entry point for the ES `terms` aggregation over `key` (grouping by
+bucket_key`) that feeds each lineup's docs into
+`commonLineupAggregations.ts`'s `sum` aggs -- see
+`cbb-on-off-analyzer/src/utils/es-queries/commonLineupAggregations.ts`. This
+is the list-form producer the `LineupStatSet` consumers (`mbb_lineup_stats`)
+read from; `lineup_stats_bucket` handles a single already-folded event.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `evs` | `list[LineupEvent]` |  | Raw per-possession-chunk lineup events (`team_stats`/`opponent_stats` populated by stage 1, `~sportsdataverse.mbb.mbb_ncaa_lineup_enrich .enrich_lineup`), one lineup's floor time possibly split across many events. |
+| `avg_eff` | `float` | `100.0` | League-average efficiency passed through to each bucket. |
+| `opponent_baselines` | `Optional[dict[str, float]]` | `None` | SOS baseline lookup passed through to each bucket; only `None` (no baselines) is implemented (see adj_fields`). |
+
+**Returns**
+
+One `LineupStatSet` per distinct lineup (bucket_key`), in first-seen order, with `doc_count` set to that lineup's event count.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_aggregation import lineup_stats_buckets
+
+buckets = lineup_stats_buckets(enriched_events)
+buckets[0]["off_poss"]["value"]
+```
+
 ### `lineup_to_team_report(lineup_report: 'LineupStatSet', inc_replacement: 'bool' = False, regress_diffs: 'float' = 0.0, rep_on_off_diag_mode: 'int' = 0) -> 'LineupStatSet'` {#lineup_to_team_report}
 
 Build per-player on/off splits out of a team's lineups.

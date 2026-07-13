@@ -13,6 +13,7 @@ from sportsdataverse.mbb.mbb_ncaa_data_quality import *
 from sportsdataverse.mbb.mbb_ncaa_events import *
 from sportsdataverse.mbb.mbb_ncaa_fetch import *
 from sportsdataverse.mbb.mbb_ncaa_html import *
+from sportsdataverse.mbb.mbb_ncaa_lineup_aggregation import *
 from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import *
 from sportsdataverse.mbb.mbb_ncaa_models import *
 from sportsdataverse.mbb.mbb_ncaa_names import *
