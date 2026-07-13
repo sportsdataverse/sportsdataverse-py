@@ -216,7 +216,17 @@ def _rel_chr(x: object) -> str | None:
     if x is None:
         return None
     if isinstance(x, list):
-        return str(x[0]) if x else None
+        x = x[0] if x else None
+        if x is None:
+            return None
+    # R's as.character(<double>) formats to 15 significant digits, not to the
+    # shortest exact round-trip Python's str() gives. That matters wherever the
+    # producers round-trip a payload float back through as.numeric(): the R
+    # releases carry the 15-digit value (3.4000000000000057 -> "3.40000000000001"
+    # -> a DIFFERENT double), so an exact Python str() would be more precise than
+    # the oracle -- i.e. off. Reproduce R's precision loss.
+    if isinstance(x, float):
+        return f"{x:.15g}"
     return str(x)
 
 

@@ -391,10 +391,14 @@ def helper_wbb_schedule(
             arr[:] = v  # type: ignore[call-overload]
             return np.array2string(arr, max_line_width=75, threshold=1000, edgeitems=3)
 
-        # to_list() (not map_elements) so List(Struct) entries surface as
-        # dicts -- the repr must keep the field names.
+        # to_pandas() (not to_list()/map_elements) so List(Struct) entries
+        # surface as dicts -- the repr must keep the field names -- AND any
+        # list nested INSIDE a struct field surfaces as a numpy object array,
+        # which is how the scraper's writer rendered it ("devices":
+        # array([...], dtype=object)). to_list() would render those inner
+        # lists as plain Python lists and miss the released string.
         df = df.with_columns(
-            [pl.Series(c, [_np_repr(v) for v in df.get_column(c).to_list()], dtype=pl.Utf8) for c in list_cols]
+            [pl.Series(c, [_np_repr(v) for v in df.get_column(c).to_pandas()], dtype=pl.Utf8) for c in list_cols]
         )
     # R: ymd_hm(substr(date, 1, nchar - 1)) parsed UTC -> America/New_York;
     # game_date is the New York date of the kickoff instant.
