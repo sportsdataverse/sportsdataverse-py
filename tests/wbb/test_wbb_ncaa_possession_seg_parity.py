@@ -36,7 +36,7 @@ def pbp() -> pl.DataFrame:
 
 
 def test_full_parity(pbp: pl.DataFrame) -> None:
-    got = ncaa_mbb_possessions(pbp)
+    got = ncaa_mbb_possessions(pbp, fix_cross_game_leak=False)
     exp = load_expected("possessions", POSSESSION_SEG_SCHEMA, LEAGUE)
     assert_frame_parity(got, exp, POSSESSION_SEG_SCHEMA)
 
@@ -47,8 +47,14 @@ def test_simple_parity(pbp: pl.DataFrame) -> None:
     assert_frame_parity(got, exp, POSSESSIONS_SIMPLE_SCHEMA)
 
 
-def test_start_event_type_leaks_across_games(pbp: pl.DataFrame) -> None:
-    """Faithful ungrouped lag: exactly one null start_event_type frame-wide."""
-    got = ncaa_mbb_possessions(pbp)
-    first_per_game = got.group_by("game_id", maintain_order=True).first()
-    assert first_per_game["start_event_type"].null_count() == 1
+def test_faithful_mode_leaks_across_games_fixed_mode_does_not(pbp: pl.DataFrame) -> None:
+    """BUG-4: faithful ungrouped lag leaks (one null frame-wide); the fix nulls per game."""
+    n_games = pbp["game_id"].n_unique()
+    assert n_games > 1, "leak is only observable in a multi-game frame"
+
+    faithful = ncaa_mbb_possessions(pbp, fix_cross_game_leak=False)
+    assert faithful.group_by("game_id", maintain_order=True).first()["start_event_type"].null_count() == 1
+
+    fixed = ncaa_mbb_possessions(pbp)
+    assert fixed.group_by("game_id", maintain_order=True).first()["start_event_type"].null_count() == n_games
+    assert fixed.drop("start_event_type").equals(faithful.drop("start_event_type"))
