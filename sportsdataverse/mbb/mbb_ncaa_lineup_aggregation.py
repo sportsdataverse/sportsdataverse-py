@@ -45,6 +45,9 @@ _SHOT_SRC = {  # emitted-stem -> (fg-attr) ; each expands to _attempts/_made/_as
     "2p": "fg_2p",
     "3p": "fg_3p",
 }
+# ponytail: fga/fgm/ftm/fta/to/assist are minted for every prefix ("" / scramble_ /
+# trans_) -- plan.md T2. orb/drb/blk/stl/foul are ".total only" (base-prefix-only in
+# practice: the fixture has no total_{off,def}_{scramble,trans}_{orb,drb,blk,stl,foul}).
 _MISC_SRC = {  # emitted-stem -> attr-path-on-stats
     "fga": ("fg", "attempts"),
     "fgm": ("fg", "made"),
@@ -52,13 +55,15 @@ _MISC_SRC = {  # emitted-stem -> attr-path-on-stats
     "fta": ("ft", "attempts"),
     "to": ("to",),
     "assist": ("assist",),
+}
+_MISC_SRC_BASE_ONLY = {  # emitted-stem -> attr-path-on-stats, prefix "" only
     "orb": ("orb",),
     "drb": ("drb",),
     "blk": ("blk",),
     "stl": ("stl",),
     "foul": ("foul",),
 }
-_ASSIST_SRC = {"ast_rim": "ast_rim", "ast_mid": "ast_mid", "ast_3p": "ast_3p"}
+_ASSIST_SRC = {"ast_rim": "ast_rim", "ast_mid": "ast_mid", "ast_3p": "ast_3p"}  # prefix "" only
 
 
 def _sum_fields(s: LineupEventStats, dst: str, prefix: str, suffix: str) -> dict[str, float]:
@@ -73,16 +78,23 @@ def _sum_fields(s: LineupEventStats, dst: str, prefix: str, suffix: str) -> dict
         put(f"{stem}_attempts", _leaf(fg.attempts, suffix))
         put(f"{stem}_made", _leaf(fg.made, suffix))
         put(f"{stem}_ast", _leaf(fg.ast, suffix))
-    # misc scalars-by-clock
+    # misc scalars-by-clock (all prefixes)
     for stem, path in _MISC_SRC.items():
         node: Any = s
         for a in path:
             node = getattr(node, a)
         put(stem, _leaf(node, suffix))
-    # assist counts
-    for stem, ai_attr in _ASSIST_SRC.items():
-        ai = getattr(s, ai_attr)
-        put(stem, _leaf(ai.counts if ai is not None else None, suffix))
+    # misc scalars-by-clock (base prefix only -- ponytail: see _MISC_SRC_BASE_ONLY note)
+    if prefix == "":
+        for stem, path in _MISC_SRC_BASE_ONLY.items():
+            node = s
+            for a in path:
+                node = getattr(node, a)
+            put(stem, _leaf(node, suffix))
+        # assist counts (base prefix only)
+        for stem, ai_attr in _ASSIST_SRC.items():
+            ai = getattr(s, ai_attr)
+            put(stem, _leaf(ai.counts if ai is not None else None, suffix))
     # pts/poss are scalar totals (prefix "" here; scramble_/trans_ handled in Task 6)
     if prefix == "":
         put("pts", float(s.pts))
@@ -293,6 +305,36 @@ def _adj_fields(
     }
 
 
+def _def_3p_opp_field(
+    def_3p_rate: float, opponent_baselines: Optional[dict[str, float]]
+) -> dict[str, dict[str, float]]:
+    """``def_3p_opp`` -- externally opponent-adjusted 3P%, commonLineupAggregations.ts:461-474.
+
+    DEF-side only (the fixture's off bucket has no ``off_3p_opp`` counterpart). TS sources
+    this from an external ``vs_3p`` opponent-baseline lookup this port has no data source
+    for yet -- same divergence class as :func:`_adj_fields`.
+
+    ponytail: no-baseline fallback -- with ``opponent_baselines is None`` we can't compute
+    the real opponent-weighted 3P%, so fall back to the lineup's own raw ``def_3p`` rate
+    (already computed by :func:`_rate_fields`) rather than fabricating a value. Task 8 only
+    pins the field NAME onto the 254-key parity set, not this VALUE against the
+    baseline-minted fixture number.
+
+    Args:
+        def_3p_rate: The already-computed ``def_3p`` raw rate value (fallback source).
+        opponent_baselines: SOS baseline lookup; only ``None`` is implemented.
+
+    Returns:
+        ``{"def_3p_opp": {"value": ...}}``.
+
+    Raises:
+        NotImplementedError: If ``opponent_baselines`` is not ``None``.
+    """
+    if opponent_baselines is not None:
+        raise NotImplementedError("_def_3p_opp_field: opponent_baselines vs_3p branch not yet ported")
+    return {"def_3p_opp": {"value": def_3p_rate}}
+
+
 _T1_SUFFIXES = {"": ".total", "scramble_": ".orb", "trans_": ".early"}  # ts:31-78 shot-bucket suffix map.
 
 
@@ -386,4 +428,11 @@ def lineup_stats_bucket(
     bucket.update(def_rates)
     bucket.update(off_adj)
     bucket.update(def_adj)
+    # ponytail: off_poss/def_poss are a bare re-exposure of the base-prefix total (not a
+    # ratio) -- ts sums the same leaf into a top-level agg name alongside the bucket_script
+    # rates. duration_mins is a straight passthrough of the LineupEvent field.
+    bucket["off_poss"] = {"value": off_totals_by_prefix[""]["total_off_poss"]}
+    bucket["def_poss"] = {"value": def_totals_by_prefix[""]["total_def_poss"]}
+    bucket["duration_mins"] = {"value": ev.duration_mins}
+    bucket.update(_def_3p_opp_field(def_rates["def_3p"]["value"], opponent_baselines))
     return bucket

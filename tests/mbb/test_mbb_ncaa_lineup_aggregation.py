@@ -1,3 +1,5 @@
+import json
+import pathlib
 from datetime import datetime
 
 from sportsdataverse.mbb.mbb_ncaa_models import (
@@ -16,6 +18,8 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     Year,
 )
 from sportsdataverse.mbb import mbb_ncaa_lineup_aggregation as agg
+
+FIX = pathlib.Path(__file__).parent.parent / "fixtures" / "hoop_explorer" / "lineup_utils_inputs.json"
 
 # T3 base-prefix (prefix="") off_* rate names -- commonAverageAggs.ts:291-397.
 BASE_OFF_RATE_NAMES = {
@@ -304,3 +308,16 @@ def test_bucket_has_structural_keys_and_wrapped_fields():
     # Step 3's ordering requirement: play-type pts/poss must be folded into the
     # per-prefix totals BEFORE minting rates, else off_scramble_ppp reads 0.
     assert b["off_scramble_ppp"]["value"] != 0.0
+
+
+def _fixture_field_names() -> set[str]:
+    d = json.loads(FIX.read_text(encoding="utf-8"))
+    b = d["sampleLineupStatsResponse"]["responses"][0]["aggregations"]["lineups"]["buckets"][0]
+    return set(b) - {"doc_count", "key", "players_array"}  # 254 agg fields
+
+
+def test_bucket_matches_254_fixture_field_set():
+    ev = _enriched_lineup_event()
+    produced = set(agg.lineup_stats_bucket(ev)) - {"doc_count", "key", "players_array"}
+    expected = _fixture_field_names()
+    assert produced == expected, f"missing={expected - produced}  extra={produced - expected}"
