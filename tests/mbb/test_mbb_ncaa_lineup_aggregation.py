@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sportsdataverse.mbb.mbb_ncaa_models import (
+    AssistInfo,
     FieldGoalStats,
     LineupEvent,
     LineupEventStats,
@@ -15,6 +16,66 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     Year,
 )
 from sportsdataverse.mbb import mbb_ncaa_lineup_aggregation as agg
+
+# T3 base-prefix (prefix="") off_* rate names -- commonAverageAggs.ts:291-397.
+BASE_OFF_RATE_NAMES = {
+    "off_2p",
+    "off_2p_ast",
+    "off_3p",
+    "off_3p_ast",
+    "off_2prim",
+    "off_2prim_ast",
+    "off_2pmid",
+    "off_2pmid_ast",
+    "off_ft",
+    "off_ftr",
+    "off_2primr",
+    "off_2pmidr",
+    "off_3pr",
+    "off_assist",
+    "off_ppp",
+    "off_to",
+    "off_efg",
+    "off_orb",
+    "off_ast_rim",
+    "off_ast_mid",
+    "off_ast_3p",
+}
+
+
+def _full_synthetic_totals(dst: str, prefix: str) -> dict[str, float]:
+    """Every ``total_{dst}_{prefix}*`` stem set to ``1.0``.
+
+    Derived by running :func:`agg._sum_fields` over a fully populated
+    synthetic :class:`LineupEventStats` (every leaf ``.total`` == 1) rather
+    than hand-enumerating stems, so this helper can't drift from the
+    module's actual ``_sum_fields`` output shape.
+    """
+    one = ShotClockStats(total=1)
+    fg_full = FieldGoalStats(
+        attempts=ShotClockStats(total=1), made=ShotClockStats(total=1), ast=ShotClockStats(total=1)
+    )
+    s = LineupEventStats(
+        fg=fg_full,
+        fg_rim=fg_full,
+        fg_mid=fg_full,
+        fg_2p=fg_full,
+        fg_3p=fg_full,
+        ft=fg_full,
+        orb=one,
+        drb=one,
+        to=ShotClockStats(total=1),
+        stl=one,
+        blk=one,
+        assist=one,
+        ast_rim=AssistInfo(counts=one),
+        ast_mid=AssistInfo(counts=one),
+        ast_3p=AssistInfo(counts=one),
+        foul=one,
+        pts=1,
+        num_possessions=1,
+    )
+    return agg._sum_fields(s, dst=dst, prefix=prefix, suffix=".total")
 
 
 def _minimal_lineup_event(players: list[PlayerCodeId]) -> LineupEvent:
@@ -124,3 +185,10 @@ def test_orb_rate_uses_cross_side_drb():
     oppo = {"total_def_drb": 14.0}
     fields = agg._rate_fields(totals, dst="off", prefix="", oppo_totals=oppo)
     assert fields["off_orb"]["value"] == 6.0 / (6.0 + 14.0)
+
+
+def test_base_prefix_emits_all_rate_names():
+    totals = _full_synthetic_totals("off", "")
+    fields = agg._rate_fields(totals, dst="off", prefix="", oppo_totals=_full_synthetic_totals("def", ""))
+    missing = BASE_OFF_RATE_NAMES - set(fields)
+    assert not missing, f"missing rate fields: {missing}"
