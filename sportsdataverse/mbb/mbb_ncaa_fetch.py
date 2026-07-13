@@ -89,6 +89,7 @@ fixture oracle (Phases 5a-5e) is the validated parse path. See
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import time
@@ -221,9 +222,13 @@ def _from_env() -> NcaaFetchConfig:
         cfg.impersonate = v
     if (v := os.environ.get("SDV_PY_NCAA_ROTATION_BACKOFF")) is not None:
         try:
-            cfg.rotation_backoff = float(v)
+            parsed = float(v)
         except ValueError:
-            pass
+            parsed = None
+        # Reject non-finite values (inf/nan): they would reach time.sleep() on
+        # the retry path and raise OverflowError/ValueError.
+        if parsed is not None and math.isfinite(parsed):
+            cfg.rotation_backoff = parsed
     return cfg
 
 

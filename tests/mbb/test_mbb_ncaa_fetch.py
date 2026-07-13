@@ -172,6 +172,11 @@ def test_rotation_backoff_env_override(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SDV_PY_NCAA_ROTATION_BACKOFF", "abc")
     assert _from_env().rotation_backoff == 1.0
 
+    # Non-finite values would reach time.sleep() and raise -- keep the default.
+    for bad in ("inf", "-inf", "nan"):
+        monkeypatch.setenv("SDV_PY_NCAA_ROTATION_BACKOFF", bad)
+        assert _from_env().rotation_backoff == 1.0
+
 
 # --- redaction ---------------------------------------------------------------
 
