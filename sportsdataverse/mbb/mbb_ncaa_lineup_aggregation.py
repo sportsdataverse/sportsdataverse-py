@@ -12,10 +12,9 @@ from dataclasses import replace
 from functools import reduce
 from typing import Any, Optional
 
+from .mbb_lineup_stats import LineupStatSet
 from .mbb_ncaa_lineup_enrich import sum_event_stats
 from .mbb_ncaa_models import LineupEvent, LineupEventStats, ShotClockStats
-
-LineupStatSet = dict[str, Any]
 
 __all__ = ["LineupStatSet", "lineup_stats_bucket", "lineup_stats_buckets"]
 
@@ -34,7 +33,10 @@ def _bucket_key(ev: LineupEvent) -> str:
 
 
 def _players_array(ev: LineupEvent) -> dict:
-    return {"hits": {"hits": [{"_source": {"players": [{"code": p.code, "id": p.id} for p in ev.players]}}]}}
+    # ponytail: unwrap PlayerId -> its raw `.name` string -- consumers (mbb_lineup_stats
+    # ._get_player_set, mbb_rapm players_baseline lookups) key on a plain string, and a
+    # PlayerId object would never equal that key (plus isn't JSON-serializable).
+    return {"hits": {"hits": [{"_source": {"players": [{"code": p.code, "id": p.id.name} for p in ev.players]}}]}}
 
 
 # (name, attribute-path-tuple)  — ponytail: commonShotAggs/commonMiscAggs, .ts:31-78
@@ -121,7 +123,15 @@ def _rate(
     num = totals.get(f"total_{dst}_{top}", 0.0)
     den = totals.get(f"total_{dst}_{bottom}", 0.0)
     # ponytail: guard den==0 too (num>0 alone can still divide by zero when the
-    # denominator field is absent/zero, e.g. a partial totals dict in tests).
+    # denominator field is absent/zero, e.g. a partial totals dict in tests). For the
+    # shot%/shot-rate/assist-rate families `top` is always a subset of `bottom` (e.g.
+    # made <= attempts), so den==0 implies num==0 there and this guard is output-identical
+    # to the TS `(num>0)?...:0` ternary. That subset property does NOT hold for `ftr`
+    # (fta/fga -- a stint can log FTs with zero FGA), `ppp` (pts/poss), and `to` (to/poss),
+    # whose denominators are independently sourced: on those, a degenerate den==0/num>0
+    # input makes TS emit `Infinity` while this guard deliberately emits 0.0 instead. That
+    # is an intentional safety divergence, not a bug -- Infinity isn't JSON-serializable and
+    # would destabilize downstream models, so 0.0 is the correct safe value here.
     out[f"{dst}_{name}"] = {"value": factor * num / den if num > 0 and den > 0 else 0.0}
 
 

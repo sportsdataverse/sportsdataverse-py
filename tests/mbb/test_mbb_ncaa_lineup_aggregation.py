@@ -10,6 +10,7 @@ from sportsdataverse.mbb.mbb_ncaa_models import (
     LineupId,
     LocationType,
     PlayerCodeId,
+    PlayerId,
     Score,
     ScoreInfo,
     ShotClockStats,
@@ -119,16 +120,23 @@ def test_leaf_selects_suffix_and_coalesces_none():
 
 
 def test_bucket_key_is_sorted_codes_joined():
-    players = [PlayerCodeId(code=c, id=c) for c in ["JaSmith", "AaWiggins", "ErAyala", "AnCowan", "DaMorsell"]]
+    players = [
+        PlayerCodeId(code=c, id=PlayerId(name=c)) for c in ["JaSmith", "AaWiggins", "ErAyala", "AnCowan", "DaMorsell"]
+    ]
     ev = _minimal_lineup_event(players)
     assert agg._bucket_key(ev) == "AaWiggins_AnCowan_DaMorsell_ErAyala_JaSmith"
 
 
 def test_players_array_is_top_hits_shaped():
-    players = [PlayerCodeId(code="AaWiggins", id="Wiggins, Aaron")]
+    players = [PlayerCodeId(code="AaWiggins", id=PlayerId(name="Wiggins, Aaron"))]
     ev = _minimal_lineup_event(players)
     pa = agg._players_array(ev)
-    assert pa["hits"]["hits"][0]["_source"]["players"] == [{"code": "AaWiggins", "id": "Wiggins, Aaron"}]
+    # `id` must be unwrapped to the raw string (not a PlayerId object) -- consumers
+    # (mbb_lineup_stats._get_player_set, mbb_rapm players_baseline lookups) key on
+    # a plain string, and a PlayerId object would never equal that key.
+    out_player = pa["hits"]["hits"][0]["_source"]["players"][0]
+    assert out_player == {"code": "AaWiggins", "id": "Wiggins, Aaron"}
+    assert isinstance(out_player["id"], str)
 
 
 def _stats_with_rim(att_total, made_total, att_orb=0):
@@ -289,7 +297,9 @@ def _full_stats(pts: int, poss: int) -> LineupEventStats:
 
 
 def _enriched_lineup_event(off_pts: int = 20, off_poss: int = 15) -> LineupEvent:
-    players = [PlayerCodeId(code=c, id=c) for c in ["JaSmith", "AaWiggins", "ErAyala", "AnCowan", "DaMorsell"]]
+    players = [
+        PlayerCodeId(code=c, id=PlayerId(name=c)) for c in ["JaSmith", "AaWiggins", "ErAyala", "AnCowan", "DaMorsell"]
+    ]
     ev = _minimal_lineup_event(players)
     ev.team_stats = _full_stats(pts=off_pts, poss=off_poss)
     ev.opponent_stats = _full_stats(pts=18, poss=16)
@@ -305,6 +315,12 @@ def test_bucket_has_structural_keys_and_wrapped_fields():
     assert isinstance(b["off_ppp"], dict) and "value" in b["off_ppp"]
     assert isinstance(b["def_ppp"], dict) and "value" in b["def_ppp"]
     assert isinstance(b["total_off_fga"], dict)
+    # Regression for the PlayerId-leak bug: player "id" must be a plain string (not a
+    # PlayerId dataclass instance), both for JSON-serializability and so downstream
+    # dict-keyed lookups (mbb_lineup_stats._get_player_set, mbb_rapm players_baseline)
+    # actually hit.
+    assert isinstance(b["players_array"]["hits"]["hits"][0]["_source"]["players"][0]["id"], str)
+    json.dumps(b)
     # Step 3's ordering requirement: play-type pts/poss must be folded into the
     # per-prefix totals BEFORE minting rates, else off_scramble_ppp reads 0.
     assert b["off_scramble_ppp"]["value"] != 0.0
