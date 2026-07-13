@@ -7434,7 +7434,7 @@ df_pd = ncaa_mbb_player_stats(pbp, multi_games=True, simple=True, return_as_pand
 season.filter(pl.col("mins") > 50).sort("pts", descending=True).head()
 ```
 
-### `ncaa_mbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_possessions}
+### `ncaa_mbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_possessions}
 
 Aggregate bigballR-contract play-by-play into one row per possession.
 
@@ -7451,6 +7451,7 @@ given lineup always occupies the same columns.
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games; rows must be in scrape order. |
 | `simple` | `bool` | `False` | When True, return only the 17-column possession/points frame (`all_functions.R:3687-3694`) with lineups in on-court order. When False (default), return the full 28-column frame with per-possession context columns and alpha-sorted lineups. |
+| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession has a null start event instead of inheriting the PREVIOUS game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`) and its cross-game leak. Parity tests pass False. Ignored when `simple=True` (that variant emits no `start_event_type`). |
 | `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
 
 **Returns**

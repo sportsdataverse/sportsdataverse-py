@@ -57,8 +57,10 @@ def oracle() -> pl.DataFrame:
 
 
 def _parse(game_id: str) -> pl.DataFrame:
+    """Parse in FAITHFUL mode — the shipped default fixes bigballR's missing
+    technical/flagrant possession rules (BUG-3), which the R oracle lacks."""
     html = (HTML_DIR / f"pbp_{game_id}.html").read_text(encoding="utf-8")
-    return parse_ncaa_bb_game_pbp(html, game_id, period_model=WBB_PERIOD_MODEL)
+    return parse_ncaa_bb_game_pbp(html, game_id, period_model=WBB_PERIOD_MODEL, fix_technicals=False)
 
 
 @pytest.mark.parametrize("game_id", GAMES["wbb"])

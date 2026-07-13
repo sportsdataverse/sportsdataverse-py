@@ -11,6 +11,12 @@ Fixture games (see ``tests/fixtures/ncaa/bigballr/README.md``):
 * 6479639 — close regulation game
 * 6479592 — 1 OT
 * 1613299 — 2019-era markup (older event vocabulary, same V2 comma grammar)
+
+Parity runs in FAITHFUL mode (``fix_technicals=False``): the shipped default
+fixes bigballR's missing technical/flagrant possession rules (BUG-3), which
+moves ``poss_num`` / ``poss_team`` on 1613299 (a coach technical) and 6479639
+(a flagrant). The fixed-mode behavior is pinned by
+``tests/mbb/test_mbb_ncaa_technical_possessions.py``.
 """
 
 from __future__ import annotations
@@ -37,7 +43,7 @@ def _fixture_html(game_id: str) -> str:
 
 @pytest.mark.parametrize("game_id", GAMES["mbb"])
 def test_mbb_pbp_parity(game_id: str, oracle: pl.DataFrame) -> None:
-    got = parse_ncaa_bb_game_pbp(_fixture_html(game_id), game_id)
+    got = parse_ncaa_bb_game_pbp(_fixture_html(game_id), game_id, fix_technicals=False)
     exp = oracle.filter(pl.col("game_id") == game_id)
 
     assert got.columns == list(PBP_SCHEMA)

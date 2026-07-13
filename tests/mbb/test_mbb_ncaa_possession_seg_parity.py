@@ -4,8 +4,11 @@ Input is the oracle play_by_play renamed to the sdv-py contract — the exact
 rows R's ``get_possessions`` (``all_functions.R:3686-3745``) consumed — so
 this isolates the segmenter transform from scrape logic. The transform is
 called ONCE over the concatenated multi-game frame, matching how the oracle
-was generated: the ungrouped ``startEventType`` lag (``all_functions.R:3698``)
-leaks across game boundaries by design and the parity assertions cover it.
+was generated — and in FAITHFUL mode (``fix_cross_game_leak=False``), because
+R's ungrouped ``startEventType`` lag (``all_functions.R:3698``) leaks across
+game boundaries. The shipped default fixes that leak (BUG-4); parity is
+asserted against the faithful mode, and the fixed-vs-faithful delta is pinned
+by ``test_faithful_mode_leaks_across_games_fixed_mode_does_not``.
 
 Row order is deterministic (dplyr emits groups sorted by the group keys; the
 keys are unique per row), so rows are compared in order without re-sorting.
@@ -56,7 +59,7 @@ def pbp() -> pl.DataFrame:
 
 
 def test_full_parity(pbp: pl.DataFrame) -> None:
-    got = ncaa_mbb_possessions(pbp)
+    got = ncaa_mbb_possessions(pbp, fix_cross_game_leak=False)
     exp = load_expected("possessions", POSSESSION_SEG_SCHEMA, LEAGUE)
     assert_frame_parity(got, exp, POSSESSION_SEG_SCHEMA)
 
@@ -67,13 +70,26 @@ def test_simple_parity(pbp: pl.DataFrame) -> None:
     assert_frame_parity(got, exp, POSSESSIONS_SIMPLE_SCHEMA)
 
 
-def test_start_event_type_leaks_across_games(pbp: pl.DataFrame) -> None:
-    """The ungrouped lag (all_functions.R:3698) is ported faithfully."""
-    got = ncaa_mbb_possessions(pbp)
-    first_per_game = got.group_by("game_id", maintain_order=True).first()
-    # Exactly one game (the first in pbp order) starts with a null; the other
-    # games' first possessions inherit the previous game's last event type.
-    assert first_per_game["start_event_type"].null_count() == 1
+def test_faithful_mode_leaks_across_games_fixed_mode_does_not(pbp: pl.DataFrame) -> None:
+    """BUG-4: the ungrouped lag (all_functions.R:3698) leaks; the fix windows it.
+
+    Faithful mode (``fix_cross_game_leak=False``) reproduces R: only the very
+    first row of the whole frame gets a null ``start_event_type``, so every
+    OTHER game's possession #1 inherits the previous game's last event type.
+    The default (fixed) mode nulls each game's first possession instead.
+    """
+    n_games = pbp["game_id"].n_unique()
+    assert n_games > 1, "leak is only observable in a multi-game frame"
+
+    faithful = ncaa_mbb_possessions(pbp, fix_cross_game_leak=False)
+    first_faithful = faithful.group_by("game_id", maintain_order=True).first()
+    assert first_faithful["start_event_type"].null_count() == 1
+
+    fixed = ncaa_mbb_possessions(pbp)
+    first_fixed = fixed.group_by("game_id", maintain_order=True).first()
+    assert first_fixed["start_event_type"].null_count() == n_games
+    # Nothing else moves: only start_event_type differs between the modes.
+    assert fixed.drop("start_event_type").equals(faithful.drop("start_event_type"))
 
 
 def test_return_as_pandas(pbp: pl.DataFrame) -> None:

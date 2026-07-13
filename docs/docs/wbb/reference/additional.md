@@ -6608,14 +6608,14 @@ stats = ncaa_wbb_player_stats(pbp)
 print(stats.shape)
 ```
 
-### `ncaa_wbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_wbb_possessions}
+### `ncaa_wbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_wbb_possessions}
 
 Aggregate WBB play-by-play into one row per possession (wbigballR `get_possessions`).
 
 Pure delegation to
 `sportsdataverse.mbb.mbb_ncaa_possession_seg.ncaa_mbb_possessions`
-— see it for the algorithm, the 28/17-column contracts, and the faithful
-ungrouped-lag quirk.
+— see it for the algorithm, the 28/17-column contracts, and the fixed-vs-
+faithful flag convention.
 
 **Parameters**
 
@@ -6623,6 +6623,7 @@ ungrouped-lag quirk.
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
 | `simple` | `bool` | `False` | Return only the 17-column possession/points frame. |
+| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession does not inherit the previous game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`). Parity tests pass False. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -6635,6 +6636,10 @@ One row per possession.
 from sportsdataverse.wbb.wbb_ncaa_possession_seg import ncaa_wbb_possessions
 poss = ncaa_wbb_possessions(pbp)
 print(poss.shape)
+
+# Faithful (R-buggy) start-event lag
+
+poss = ncaa_wbb_possessions(pbp, fix_cross_game_leak=False)
 ```
 
 ### `ncaa_wbb_shot_locations(game_ids: 'Sequence[object]', *, fetcher: 'Optional[Any]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_wbb_shot_locations}

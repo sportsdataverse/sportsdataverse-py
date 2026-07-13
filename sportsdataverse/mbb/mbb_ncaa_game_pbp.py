@@ -15,6 +15,29 @@ The core is generalized over a ``period_model`` knob —
 Deliberate R-faithful quirks are marked with ``ponytail:`` comments citing the
 R line they reproduce; the 11 fork-skew fixes from the divergence spec are
 adopted (the bigballR side already carries all that apply here).
+
+**Technical / flagrant fouls (``fix_technicals``, default True).** The R chain
+has no technical or flagrant rules, so a made technical free throw flips
+``poss_team`` — a possession change that never happened
+(``dev/bigballr_port/possession_engine_reconciliation.md`` BUG-3). The fix
+ports the semantics of hoop-explorer's ``bad_fouls`` /
+``offsetting_tech_or_flagrant`` (``mbb_ncaa_possessions.calculate_stats``):
+free throws sharing a clock reading with a technical / flagrant foul are inert
+— no switch, no corrective flip, no and-1 — which also nets offsetting double
+technicals to zero. Pass ``fix_technicals=False`` for faithful R output (the
+parity tests do).
+
+**This rule is UN-ADJUDICATED.** Two committed fixtures do exercise it (1613299
+carries a coach technical, 6479639 a flagrant — 2 and 1 phantom possessions
+respectively), but their R oracle encodes the BUGGY chain, so no oracle can
+score the fixed output: there is no ground truth for the correct behavior. The
+rule is a code-read port of hoop-explorer's, pinned by constructed sequences in
+``tests/mbb/test_mbb_ncaa_technical_possessions.py``. Re-validate it against a
+refereed capture when one exists.
+
+Dropping a phantom possession also drops a possession BOUNDARY, so the lineup
+walk-forward can re-home a substitution and ``sub_deviate`` can move — expected
+downstream of the fix, not a second change.
 """
 
 from __future__ import annotations
@@ -169,6 +192,113 @@ _V2_EVENT_MAP: "tuple[tuple[tuple[str, ...], str], ...]" = (
     (("coachchallenge outofbounds",), "Challenge (Out of Bounds)"),
     (("coachchallenge goal",), "Challenge (Interference)"),
 )
+
+#: Technical / flagrant foul detector, run over the RAW ``event_description``.
+#: bigballR's event vocabulary has no technical or flagrant type — the V2 map
+#: folds ``"foul technical ..."`` / ``"foul personal flagrant ..."`` into the
+#: generic ``"Commits Foul"`` (:3204) and V1 spells them out in the description
+#: — so the raw text is the only signal either format preserves.
+_BAD_FOUL_RE = re.compile(r"(?i)technical|flagrant")
+
+
+def _is_bad_foul(row: "dict[str, Any]") -> bool:
+    """True when the event is a technical / flagrant foul (BUG-3 detector)."""
+    desc = row.get("event_description")
+    return desc is not None and _BAD_FOUL_RE.search(desc) is not None
+
+
+def _is_bad_ft(row: "dict[str, Any]", bad_secs: "set[int]") -> bool:
+    """True for a free throw awarded by a technical / flagrant foul.
+
+    A bad-foul FT is one sharing a clock reading with a technical / flagrant
+    foul — the same "concurrent clump" grouping hoop-explorer uses
+    (``mbb_ncaa_possessions.calculate_stats``). Such an FT neither ends nor
+    transfers possession, so the chain must treat it as inert.
+    """
+    return row["event_type"] == "Free Throw" and row["game_seconds"] in bad_secs
+
+
+def _stamp_possessions(
+    rows: "list[dict[str, Any]]",
+    home_team: Optional[str],
+    away_team: Optional[str],
+    *,
+    fix_technicals: bool = True,
+) -> None:
+    """Stamp ``poss_num`` / ``poss_team`` onto arranged pbp rows, in place.
+
+    bigballR's sequential possession chain (``all_functions.R:380-436``),
+    reset per period: a defensive rebound, a turnover, a made FG (unless it's
+    an and-1) or a made FT with nothing following it arms a switch, which
+    takes effect at the next distinct clock reading; an event by the wrong
+    team corrects the chain immediately.
+
+    Args:
+        rows: Arranged event rows (post assist-merge), each carrying
+            ``period``, ``game_seconds``, ``event_team``, ``event_type``,
+            ``event_result`` and ``event_description``. Mutated in place.
+        home_team: Home team name, as it appears in ``event_team``.
+        away_team: Away team name, as it appears in ``event_team``.
+        fix_technicals: See :func:`parse_ncaa_bb_game_pbp`. True (default)
+            makes technical / flagrant free throws inert; False reproduces
+            bigballR, which has no technical / flagrant rules at all.
+    """
+    poss_num = 0
+    max_period = rows[-1]["period"] if rows else 0
+    for i in range(1, max_period + 1):
+        prs = [r for r in rows if r["period"] == i]
+        if not prs:
+            # ponytail: R's 1:max loop would error on an empty period table;
+            # real pages carry rows in every period.
+            continue
+        # BUG-3 fix: clock readings carrying a technical/flagrant foul. Every
+        # Free Throw at one of these readings is a bad-foul FT and is INERT for
+        # the chain (see _BAD_FOUL_RE + the `fix_technicals` docs).
+        bad_secs: "set[int]" = {r["game_seconds"] for r in prs if _is_bad_foul(r)} if fix_technicals else set()
+        first_non_sub = next((r for r in prs if r["event_type"] not in _SUB_TYPES), None)
+        poss_team = first_non_sub["event_team"] if first_non_sub is not None else None
+        other_team = away_team if poss_team == home_team else home_team
+        poss_switch = False
+        poss_num += 1
+        for j, r in enumerate(prs):
+            team = r["event_team"]
+            typ = r["event_type"]
+            result = r["event_result"]
+            seconds = r["game_seconds"]
+            bad_ft = _is_bad_ft(r, bad_secs)
+            swap = poss_switch and seconds != prs[max(j - 1, 0)]["game_seconds"]
+            if swap:
+                poss_num += 1
+                poss_team, other_team = other_team, poss_team
+                poss_switch = False
+            # R precedence: (shot & wrong team) | (turnover & wrong team) (:410).
+            # A bad-foul FT is shot by whoever was fouled, not by whoever has
+            # the ball, so it must NOT trigger the corrective re-sync flip.
+            if not bad_ft and ((result is not None and team != poss_team) or (typ == "Turnover" and poss_team != team)):
+                poss_num += 1 - (1 if swap else 0)
+                poss_team, other_team = other_team, poss_team
+                poss_switch = False
+            and_one = any(
+                x["event_type"] == "Free Throw" and not _is_bad_ft(x, bad_secs)
+                for x in prs
+                if x["game_seconds"] == seconds
+            )
+            nxt = prs[j + 1] if j + 1 < len(prs) else None
+            next_reb = nxt is not None and (
+                nxt["event_type"] == "Defensive Rebound"
+                or (nxt["event_type"] == "Free Throw" and not _is_bad_ft(nxt, bad_secs))
+            )
+            if (
+                typ in ("Defensive Rebound", "Turnover")
+                or (typ in _FG_TYPES and result == "made" and not and_one)
+                # A made bad-foul FT does not end the possession (the ball goes
+                # back to whoever had it) — hoop-explorer's `bad_fouls` term.
+                or (typ == "Free Throw" and result == "made" and not next_reb and not bad_ft)
+            ):
+                poss_switch = True
+            r["poss_num"] = poss_num
+            r["poss_team"] = poss_team
+
 
 _Row = "dict[str, Any]"
 
@@ -520,6 +650,7 @@ def parse_ncaa_bb_game_pbp(
     game_id: str,
     *,
     period_model: "tuple[int, int, int]" = _MBB_PERIOD_MODEL,
+    fix_technicals: bool = True,
 ) -> pl.DataFrame:
     """Parse one stats.ncaa.org play-by-play page (bigballR ``scrape_game``).
 
@@ -536,6 +667,15 @@ def parse_ncaa_bb_game_pbp(
         period_model: ``(n_regulation_periods, regulation_period_seconds,
             overtime_period_seconds)``. MBB ``(2, 1200, 300)`` (the bigballR
             hardcoded model), WBB quarters ``(4, 600, 300)``.
+        fix_technicals: When True (default, and the CORRECT behavior), free
+            throws awarded by a technical or flagrant foul are inert in the
+            possession chain: they neither end nor transfer possession, and
+            they cannot pose as an and-1. When False, reproduce bigballR's
+            faithful behavior (``all_functions.R:380-436`` has no technical /
+            flagrant rules at all, so a made technical FT sets
+            ``poss_switch`` and flips ``poss_team``, inventing a possession
+            change that never happened). Parity tests pass False. Same
+            spirit as ``mbb_ncaa_lineups.fix_tip_in``.
 
     Returns:
         A 35-column polars frame, one row per event in bigballR's arranged
@@ -713,47 +853,7 @@ def parse_ncaa_bb_game_pbp(
         r["shot_value"] = _SHOT_VALUES.get(r["event_type"])
 
     # -- possession counting (R :380-436) --------------------------------------
-    poss_num = 0
-    max_period = rows[-1]["period"]
-    for i in range(1, max_period + 1):
-        prs = [r for r in rows if r["period"] == i]
-        if not prs:
-            # ponytail: R's 1:max loop would error on an empty period table;
-            # real pages carry rows in every period.
-            continue
-        first_non_sub = next((r for r in prs if r["event_type"] not in _SUB_TYPES), None)
-        poss_team = first_non_sub["event_team"] if first_non_sub is not None else None
-        other_team = away_team if poss_team == home_team else home_team
-        poss_switch = False
-        poss_num += 1
-        for j, r in enumerate(prs):
-            team = r["event_team"]
-            typ = r["event_type"]
-            result = r["event_result"]
-            seconds = r["game_seconds"]
-            swap = poss_switch and seconds != prs[max(j - 1, 0)]["game_seconds"]
-            if swap:
-                poss_num += 1
-                poss_team, other_team = other_team, poss_team
-                poss_switch = False
-            # R precedence: (shot & wrong team) | (turnover & wrong team) (:410)
-            if (result is not None and team != poss_team) or (typ == "Turnover" and poss_team != team):
-                poss_num += 1 - (1 if swap else 0)
-                poss_team, other_team = other_team, poss_team
-                poss_switch = False
-            and_one = any(x["event_type"] == "Free Throw" for x in prs if x["game_seconds"] == seconds)
-            next_reb = j + 1 < len(prs) and prs[j + 1]["event_type"] in (
-                "Defensive Rebound",
-                "Free Throw",
-            )
-            if (
-                typ in ("Defensive Rebound", "Turnover")
-                or (typ in _FG_TYPES and result == "made" and not and_one)
-                or (typ == "Free Throw" and result == "made" and not next_reb)
-            ):
-                poss_switch = True
-            r["poss_num"] = poss_num
-            r["poss_team"] = poss_team
+    _stamp_possessions(rows, home_team, away_team, fix_technicals=fix_technicals)
 
     # -- possession validity + Poss_Length + isTransition (R :438-462) ---------
     last_type: "dict[int, Optional[str]]" = {}

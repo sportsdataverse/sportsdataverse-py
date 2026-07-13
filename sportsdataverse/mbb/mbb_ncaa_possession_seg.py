@@ -14,6 +14,20 @@ detection from raw pbp). ``ncaa_mbb_possessions`` here does NOT detect
 possessions — it only segments/groups by the possession keys bigballR
 stamped upstream. Do not merge the two.
 
+Fixed R bugs (flags default to the CORRECT behavior; the parity tests pass the
+faithful value — same convention as ``mbb_ncaa_lineups.fix_tip_in``):
+
+* ``fix_cross_game_leak`` — R's ``End = dplyr::lag(Event_Type)``
+  (``all_functions.R:3698``) runs UNGROUPED, so in a multi-game frame every
+  game's possession #1 inherits the PREVIOUS game's last event as its
+  ``start_event_type`` (``dev/bigballr_port/possession_engine_reconciliation.md``
+  BUG-4). The fix windows the lag with ``.over("game_id")``.
+
+The technical/flagrant possession rule (BUG-3) is NOT here — it lives in the
+chain that stamps ``poss_num`` / ``poss_team``
+(``mbb_ncaa_game_pbp.parse_ncaa_bb_game_pbp``, ``fix_technicals=``); this
+module only groups by the keys that chain already stamped.
+
 Deliberate deviations from the R output (documented, semantics preserved):
 
 * R's full variant round-trips every row through ``apply()`` (chr coercion),
@@ -184,6 +198,7 @@ def ncaa_mbb_possessions(
     pbp: pl.DataFrame,
     *,
     simple: bool = ...,
+    fix_cross_game_leak: bool = ...,
     return_as_pandas: Literal[False] = ...,
 ) -> pl.DataFrame: ...
 
@@ -193,6 +208,7 @@ def ncaa_mbb_possessions(
     pbp: pl.DataFrame,
     *,
     simple: bool = ...,
+    fix_cross_game_leak: bool = ...,
     return_as_pandas: Literal[True],
 ) -> pd.DataFrame: ...
 
@@ -202,12 +218,14 @@ def ncaa_mbb_possessions(
     pbp: pl.DataFrame,
     *,
     simple: bool = False,
+    fix_cross_game_leak: bool = True,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_possessions(
     pbp: pl.DataFrame,
     *,
     simple: bool = False,
+    fix_cross_game_leak: bool = True,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Aggregate bigballR-contract play-by-play into one row per possession.
@@ -227,6 +245,13 @@ def ncaa_mbb_possessions(
             (``all_functions.R:3687-3694``) with lineups in on-court order.
             When False (default), return the full 28-column frame with
             per-possession context columns and alpha-sorted lineups.
+        fix_cross_game_leak: When True (default, and the CORRECT behavior),
+            window the ``start_event_type`` lag with ``.over("game_id")`` so a
+            game's first possession has a null start event instead of
+            inheriting the PREVIOUS game's last event. When False, reproduce
+            R's ungrouped ``dplyr::lag`` (``all_functions.R:3698``) and its
+            cross-game leak. Parity tests pass False. Ignored when
+            ``simple=True`` (that variant emits no ``start_event_type``).
         return_as_pandas: Return a ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -264,12 +289,15 @@ def ncaa_mbb_possessions(
         schema: pl.Schema = POSSESSIONS_SIMPLE_SCHEMA
     else:
         keys = list(_KEYS_FULL)
-        # Faithful to R: `End = dplyr::lag(Event_Type)` at all_functions.R:3698
-        # runs UNGROUPED over the whole frame, so `start_event_type` of a
-        # game's first possession leaks the previous game's last event type in
-        # multi-game frames (null only on the very first row). Do NOT add
-        # .over("game_id") — oracle parity depends on the leak.
-        df = pbp.with_columns(pl.col("event_type").shift(1).alias("_end"))
+        # BUG-4: R's `End = dplyr::lag(Event_Type)` (all_functions.R:3698) runs
+        # UNGROUPED over the whole frame, so in a multi-game frame each game's
+        # first possession leaks the PREVIOUS game's last event type (null only
+        # on the very first row). fix_cross_game_leak=False reproduces that —
+        # oracle parity depends on the leak.
+        end = pl.col("event_type").shift(1)
+        if fix_cross_game_leak:
+            end = end.over("game_id")
+        df = pbp.with_columns(end.alias("_end"))
         is_shot = pl.col("event_type").is_in(SHOT_TYPES)
         aggs = [
             pl.col("home_score").first(),
