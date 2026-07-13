@@ -1,0 +1,499 @@
+"ID","Half_Status","Time","Game_Seconds","Team","Player","Shot_Result","x","y","Shot_Dist"
+"6470186",1,"19:45",15,"Jackson St.","Kobe Butler","missed",69.56,15.5,21.4127555443012
+"6470186",1,"19:15",45,"Illinois","Jake Davis","missed",4.7,1.5,23.5064352890863
+"6470186",1,"19:06",54,"Illinois","Jake Davis","missed",27.26,14,24.6056924308177
+"6470186",1,"18:57",63,"Illinois","Tomislav Ivisic","made",9.4,25.5,4.18001196170537
+"6470186",1,"18:29",91,"Jackson St.","Kobe Butler","missed",75.2,23.5,13.6327730121205
+"6470186",1,"18:22",98,"Illinois","David Mirkovic","made",26.32,14.5,23.5413444815711
+"6470186",1,"18:03",117,"Jackson St.","Daeshun Ruffin","missed",64.86,15,25.8984960953334
+"6470186",1,"17:39",141,"Illinois","Kylan Boswell","missed",10.34,28,5.90830771033466
+"6470186",1,"17:35",145,"Illinois","David Mirkovic","made",6.58,25,1.33
+"6470186",1,"17:24",156,"Jackson St.","Devin Ree","made",66.74,9.5,26.920068722052
+"6470186",1,"17:04",176,"Illinois","David Mirkovic","made",30.08,31,25.5446452314375
+"6470186",1,"16:51",189,"Jackson St.","Dorian McMillian","missed",73.32,14.5,18.6637322098234
+"6470186",1,"16:38",202,"Illinois","David Mirkovic","missed",29.14,22.5,24.0204517026637
+"6470186",1,"15:52",248,"Illinois","Jake Davis","made",16.92,3.5,24.4630108531227
+"6470186",1,"15:44",256,"Jackson St.","Daeshun Ruffin","missed",63.92,26,24.8501287723022
+"6470186",1,"15:19",281,"Illinois","Kylan Boswell","made",8.46,34,9.55531789110127
+"6470186",1,"15:04",296,"Jackson St.","Dorian McMillian","missed",81.78,24.5,6.98791098970214
+"6470186",1,"14:51",309,"Illinois","Ben Humrichous","made",6.58,48,23.038422255007
+"6470186",1,"14:32",328,"Jackson St.","Jalen Tatum","missed",80.84,33.5,11.6111196703849
+"6470186",1,"14:09",351,"Illinois","Tomislav Ivisic","made",31.02,27,25.8474931086169
+"6470186",1,"13:53",367,"Jackson St.","Mike Williams","missed",84.6,48.5,23.8636229437192
+"6470186",1,"13:21",399,"Jackson St.","Mike Williams","made",78.96,27,9.99220195952825
+"6470186",1,"13:07",413,"Illinois","Zvonimir Ivisic","missed",1.88,1.5,23.7404064834619
+"6470186",1,"12:27",453,"Jackson St.","Mike Williams","missed",78.02,47,24.4771914238542
+"6470186",1,"12:03",477,"Jackson St.","Delyle Williams","missed",71.44,40.5,23.2354492102047
+"6470186",1,"11:39",501,"Illinois","Ben Humrichous","made",24.44,11,23.7540754398061
+"6470186",1,"11:28",512,"Jackson St.","Tamarion Hoover","missed",68.62,4,29.0898074933472
+"6470186",1,"11:19",521,"Illinois","Tomislav Ivisic","made",28.2,14.5,25.2379179014435
+"6470186",1,"11:02",538,"Jackson St.","Deyan Kolev","made",78.96,47,24.0799522424776
+"6470186",1,"10:38",562,"Jackson St.","Kedrick Simmons","missed",78.02,47,24.4771914238542
+"6470186",1,"10:30",570,"Illinois","Tomislav Ivisic","made",10.34,49,24.5338154391036
+"6470186",1,"09:55",605,"Jackson St.","Daeshun Ruffin","made",78.96,21,10.5756370966481
+"6470186",1,"09:46",614,"Illinois","Jake Davis","made",6.58,24,1.66400120192264
+"6470186",1,"09:27",633,"Jackson St.","Jayme Mitchell Jr.","missed",66.74,24,22.0327052356264
+"6470186",1,"09:10",650,"Illinois","Tomislav Ivisic","missed",30.08,24.5,24.8350337225461
+"6470186",1,"09:00",660,"Illinois","Ben Humrichous","missed",27.26,40.5,26.920068722052
+"6470186",1,"08:43",677,"Jackson St.","Kedrick Simmons","missed",88.36,2,23.0033062840975
+"6470186",1,"08:20",700,"Illinois","David Mirkovic","made",8.46,21,5.12875228491297
+"6470186",1,"07:53",727,"Illinois","Jake Davis","made",9.4,49.5,24.8489939434175
+"6470186",1,"07:33",747,"Jackson St.","Daeshun Ruffin","missed",63.92,27.5,24.9555384634353
+"6470186",1,"07:20",760,"Illinois","Kylan Boswell","made",19.74,4.5,25.1039857393204
+"6470186",1,"06:58",782,"Jackson St.","Jalen Tatum","missed",75.2,34,16.2666068987973
+"6470186",1,"06:39",801,"Illinois","Kylan Boswell","missed",24.44,10,24.3568491394105
+"6470186",1,"06:20",820,"Illinois","Ben Humrichous","missed",31.02,29,26.0785908361629
+"6470186",1,"06:15",825,"Jackson St.","Mike Williams","missed",78.02,48,25.3797734426452
+"6470186",1,"06:05",835,"Illinois","Jason Jakstys","made",7.52,25.5,2.32441390462198
+"6470186",1,"05:54",846,"Jackson St.","Daeshun Ruffin","missed",71.44,18,18.6717995918979
+"6470186",1,"05:10",890,"Jackson St.","Dorian McMillian","missed",85.54,11.5,13.8763864172197
+"6470186",1,"04:57",903,"Illinois","Kylan Boswell","missed",11.28,28,6.73505011117215
+"6470186",1,"04:40",920,"Jackson St.","Devin Ree","made",80.84,25,7.91
+"6470186",1,"04:15",945,"Illinois","Tomislav Ivisic","made",9.4,23.5,4.4127655727446
+"6470186",1,"04:01",959,"Jackson St.","Dorian McMillian","missed",75.2,23.5,13.6327730121205
+"6470186",1,"03:48",972,"Illinois","Tomislav Ivisic","missed",22.56,43.5,25.3354711817246
+"6470186",1,"03:43",977,"Illinois","Zvonimir Ivisic","made",6.58,23,2.40185345098322
+"6470186",1,"03:29",991,"Jackson St.","Devin Ree","made",67.68,6,28.3715508916943
+"6470186",1,"03:08",1012,"Jackson St.","Dorian McMillian","missed",85.54,48.5,23.7182229519836
+"6470186",1,"02:48",1032,"Jackson St.","Mike Williams","made",87.42,24,1.66400120192264
+"6470186",1,"02:36",1044,"Illinois","David Mirkovic","missed",6.58,27,2.40185345098322
+"6470186",1,"02:32",1048,"Illinois","David Mirkovic","made",8.46,26.5,3.54317654090224
+"6470186",1,"02:25",1055,"Jackson St.","Daeshun Ruffin","made",70.5,23,18.3592619677372
+"6470186",1,"02:09",1071,"Illinois","Tomislav Ivisic","made",3.76,11.5,13.5819770284005
+"6470186",1,"01:41",1099,"Jackson St.","Jayme Mitchell Jr.","made",91.18,1,24.1227050721929
+"6470186",1,"01:16",1124,"Jackson St.","Mike Williams","missed",86.48,42,17.1508862744757
+"6470186",1,"00:42",1158,"Illinois","Keaton Wagler","missed",11.28,17.5,9.62345572027013
+"6470186",1,"00:39",1161,"Illinois","Keaton Wagler","missed",6.58,26.5,2.00471943174101
+"6470186",1,"00:32",1168,"Illinois","Keaton Wagler","made",8.46,27,3.78207614941846
+"6470186",1,"00:00",1200,"Illinois","Keaton Wagler","missed",22.56,27,17.4251571011569
+"6470186",2,"19:48",1212,"Jackson St.","Devin Ree","made",31.96,25,26.71
+"6470186",2,"19:23",1237,"Illinois","Keaton Wagler","made",66.74,14.5,24.38626867727
+"6470186",2,"19:08",1252,"Jackson St.","Dorian McMillian","missed",17.86,29.5,13.3888797141508
+"6470186",2,"18:40",1280,"Illinois","Jake Davis","made",91.18,48,23.1280111553069
+"6470186",2,"18:25",1295,"Jackson St.","Daeshun Ruffin","missed",13.16,48.5,24.7955258060804
+"6470186",2,"18:13",1307,"Jackson St.","Devin Ree","missed",3.76,1.5,23.5471887918707
+"6470186",2,"17:46",1334,"Jackson St.","Jayme Mitchell Jr.","missed",15.04,39,17.0834452028857
+"6470186",2,"17:30",1350,"Illinois","Kylan Boswell","missed",78.96,47,24.0799522424776
+"6470186",2,"17:21",1359,"Illinois","David Mirkovic","made",85.54,24.5,3.24870743527329
+"6470186",2,"16:27",1413,"Illinois","Zvonimir Ivisic","made",85.54,27,3.78207614941846
+"6470186",2,"16:12",1428,"Jackson St.","Dorian McMillian","missed",15.04,39,17.0834452028857
+"6470186",2,"16:02",1438,"Illinois","Jake Davis","missed",72.38,44,25.0794118750819
+"6470186",2,"15:50",1450,"Illinois","Keaton Wagler","made",63.92,22,25.0105757630647
+"6470186",2,"15:21",1479,"Jackson St.","Daeshun Ruffin","made",4.7,23.5,1.59765453086705
+"6470186",2,"15:09",1491,"Illinois","David Mirkovic","missed",64.86,19.5,24.5149362634293
+"6470186",2,"14:26",1534,"Illinois","Ben Humrichous","made",85.54,24.5,3.24870743527329
+"6470186",2,"14:16",1544,"Jackson St.","Mike Williams","made",4.7,15,10.0151135789865
+"6470186",2,"13:56",1564,"Illinois","Tomislav Ivisic","made",84.6,22,5.12079095453036
+"6470186",2,"13:46",1574,"Jackson St.","Mike Williams","missed",30.08,34.5,26.5853136148513
+"6470186",2,"13:40",1580,"Illinois","Jake Davis","missed",89.3,48,23.0065751471183
+"6470186",2,"13:34",1586,"Illinois","Tomislav Ivisic","made",88.36,25,0.390000000000001
+"6470186",2,"13:13",1607,"Jackson St.","Deyan Kolev","missed",9.4,48.5,23.8636229437192
+"6470186",2,"12:52",1628,"Jackson St.","Mike Williams","missed",6.58,24,1.66400120192264
+"6470186",2,"12:27",1653,"Illinois","Jake Davis","missed",90.24,2,23.0482125120366
+"6470186",2,"12:11",1669,"Illinois","Ben Humrichous","missed",90.24,48.5,23.5471887918707
+"6470186",2,"11:50",1690,"Illinois","Jason Jakstys","missed",84.6,25,4.14999999999999
+"6470186",2,"11:28",1712,"Jackson St.","Devin Ree","made",18.8,28.5,13.9947311514012
+"6470186",2,"11:15",1725,"Illinois","Ben Humrichous","made",77.08,47,24.9035921103764
+"6470186",2,"10:39",1761,"Illinois","Ben Humrichous","made",71.44,42,24.2618239215439
+"6470186",2,"10:27",1773,"Jackson St.","Devin Ree","missed",24.44,10.5,24.0521537497165
+"6470186",2,"10:14",1786,"Jackson St.","Devin Ree","made",5.64,25,0.39
+"6470186",2,"10:00",1800,"Illinois","Ben Humrichous","made",76.14,47,25.357683253799
+"6470186",2,"09:36",1824,"Jackson St.","Devin Ree","made",22.56,43,24.9727071019543
+"6470186",2,"09:12",1848,"Illinois","Keaton Wagler","missed",84.6,33,9.01235263402403
+"6470186",2,"09:09",1851,"Illinois","David Mirkovic","made",88.36,25,0.390000000000001
+"6470186",2,"09:01",1859,"Jackson St.","Daeshun Ruffin","made",3.76,21.5,3.80395846454716
+"6470186",2,"08:44",1876,"Illinois","Kylan Boswell","made",86.48,27.5,3.37681802885497
+"6470186",2,"08:19",1901,"Illinois","Jake Davis","missed",83.66,25,5.09
+"6470186",2,"08:13",1907,"Illinois","Kylan Boswell","missed",78.96,3.5,23.624015323395
+"6470186",2,"08:05",1915,"Illinois","Blake Fagbemi","missed",88.36,25,0.390000000000001
+"6470186",2,"08:03",1917,"Jackson St.","Daeshun Ruffin","made",6.58,25.5,1.4208800090085
+"6470186",2,"07:55",1925,"Illinois","Tomislav Ivisic","missed",63.92,25,24.83
+"6470186",2,"07:48",1932,"Jackson St.","Kedrick Simmons","missed",7.52,27.5,3.37681802885498
+"6470186",2,"07:38",1942,"Illinois","Ben Humrichous","missed",84.6,24.5,4.18001196170536
+"6470186",2,"07:33",1947,"Jackson St.","Dorian McMillian","missed",30.08,34.5,26.5853136148513
+"6470186",2,"07:12",1968,"Illinois","Blake Fagbemi","made",86.48,27.5,3.37681802885497
+"6470186",2,"06:52",1988,"Jackson St.","Devin Ree","missed",30.08,30.5,25.4318481436171
+"6470186",2,"06:43",1997,"Jackson St.","Jayme Mitchell Jr.","missed",23.5,43,25.6332303855757
+"6470186",2,"06:31",2009,"Illinois","Kylan Boswell","made",62.98,21.5,26.0065933947528
+"6470186",2,"06:15",2025,"Jackson St.","Dorian McMillian","missed",23.5,33.5,20.1323744252882
+"6470186",2,"05:54",2046,"Jackson St.","Mike Williams","made",8.46,26,3.36215704570741
+"6470186",2,"05:34",2066,"Illinois","Ben Humrichous","missed",89.3,49,24.0063012561286
+"6470186",2,"05:30",2070,"Illinois","Tomislav Ivisic","made",88.36,23,2.03767023828685
+"6470186",2,"04:55",2105,"Jackson St.","Mike Williams","missed",21.62,23.5,16.4385796223396
+"6470186",2,"04:40",2120,"Jackson St.","Jayme Mitchell Jr.","made",10.34,49,24.5338154391036
+"6470186",2,"03:54",2166,"Jackson St.","Devin Ree","missed",10.34,1,24.5338154391036
+"6470186",2,"03:45",2175,"Illinois","Keaton Wagler","made",89.3,26.5,1.59765453086704
+"6470186",2,"03:33",2187,"Jackson St.","Mike Williams","missed",13.16,33.5,11.6111196703849
+"6470186",2,"03:15",2205,"Illinois","Zvonimir Ivisic","missed",72.38,5.5,25.4603004695546
+"6470186",2,"02:47",2233,"Jackson St.","Jayme Mitchell Jr.","missed",8.46,25.5,3.2487074352733
+"6470186",2,"02:41",2239,"Illinois","Blake Fagbemi","missed",88.36,24.5,0.634113554499508
+"6470186",2,"02:34",2246,"Jackson St.","Mike Williams","missed",20.68,6,24.4762108995653
+"6470186",2,"02:00",2280,"Illinois","AJ Redd","missed",87.42,27.5,2.83176623328975
+"6470186",2,"01:53",2287,"Illinois","Jake Davis","made",88.36,23.5,1.54987096237074
+"6470186",2,"01:38",2302,"Jackson St.","Daeshun Ruffin","missed",10.34,23,5.46882985655981
+"6470186",2,"01:29",2311,"Illinois","AJ Redd","made",86.48,24,2.48050398104901
+"6470186",2,"01:13",2327,"Jackson St.","Jayme Mitchell Jr.","missed",15.04,3,24.0799522424776
+"6470186",2,"00:52",2348,"Illinois","Zvonimir Ivisic","missed",90.24,2,23.0482125120366
+"6479639",1,"19:41",19,"Texas Tech","JT Toppin","made",84.6,22,5.12079095453036
+"6479639",1,"19:26",34,"Illinois","Kylan Boswell","missed",8.46,31,6.80471160299979
+"6479639",1,"19:13",47,"Texas Tech","JT Toppin","missed",82.72,24.5,6.05069417505132
+"6479639",1,"19:00",60,"Illinois","Kylan Boswell","missed",9.4,24,4.2687820276983
+"6479639",1,"18:43",77,"Texas Tech","LeJuan Watts","made",62.98,26.5,25.8136184987692
+"6479639",1,"18:13",107,"Texas Tech","LeJuan Watts","made",79.9,24,8.90631798219669
+"6479639",1,"18:05",115,"Illinois","Zvonimir Ivisic","missed",24.44,10.5,24.0521537497165
+"6479639",1,"17:52",128,"Texas Tech","JT Toppin","missed",89.3,1.5,23.5064352890863
+"6479639",1,"17:44",136,"Texas Tech","Donovan Atwell","missed",65.8,13,25.8979246272747
+"6479639",1,"17:30",150,"Illinois","Kylan Boswell","made",31.02,24,25.7893951072917
+"6479639",1,"17:08",172,"Texas Tech","Christian Anderson","missed",66.74,39,26.0852467881751
+"6479639",1,"16:43",197,"Illinois","Kylan Boswell","made",28.2,31.5,23.8527252111787
+"6479639",1,"16:03",237,"Illinois","David Mirkovic","made",27.26,15,24.1751959661137
+"6479639",1,"15:44",256,"Texas Tech","JT Toppin","missed",83.66,21.5,6.17722429574967
+"6479639",1,"15:17",283,"Texas Tech","Tyeree Bryan","made",82.72,48.5,24.261304581576
+"6479639",1,"15:03",297,"Illinois","Ben Humrichous","missed",21.62,44,25.0794118750819
+"6479639",1,"14:49",311,"Illinois","Keaton Wagler","made",6.58,22.5,2.83176623328975
+"6479639",1,"14:20",340,"Illinois","Ben Humrichous","made",3.76,2.5,22.5492815850084
+"6479639",1,"13:59",361,"Texas Tech","JT Toppin","made",85.54,20.5,5.52757632240388
+"6479639",1,"13:49",371,"Illinois","Kylan Boswell","missed",9.4,21,5.76389625166866
+"6479639",1,"13:33",387,"Texas Tech","JT Toppin","made",86.48,27.5,3.37681802885497
+"6479639",1,"13:16",404,"Illinois","Keaton Wagler","missed",26.32,12.5,24.4988754843972
+"6479639",1,"12:52",428,"Texas Tech","JT Toppin","missed",84.6,25.5,4.18001196170536
+"6479639",1,"12:29",451,"Texas Tech","Christian Anderson","made",79.9,18,11.2837272210914
+"6479639",1,"12:05",475,"Illinois","Andrej Stojakovic","made",7.52,21.5,4.17167831933384
+"6479639",1,"11:49",491,"Texas Tech","Christian Anderson","made",74.26,15.5,17.3265720787466
+"6479639",1,"11:29",511,"Texas Tech","Jaylen Petty","missed",85.54,24,3.36215704570741
+"6479639",1,"11:18",522,"Illinois","Andrej Stojakovic","made",12.22,30,8.57793098596625
+"6479639",1,"11:04",536,"Texas Tech","LeJuan Watts","missed",85.54,15.5,10.0276667276092
+"6479639",1,"10:41",559,"Texas Tech","Christian Anderson","missed",86.48,22,3.76203402430122
+"6479639",1,"10:01",599,"Texas Tech","JT Toppin","made",86.48,24.5,2.32441390462198
+"6479639",1,"09:54",606,"Illinois","David Mirkovic","missed",28.2,34,24.6516226646442
+"6479639",1,"09:46",614,"Illinois","Zvonimir Ivisic","made",25.38,40,25.1041211756158
+"6479639",1,"09:30",630,"Texas Tech","JT Toppin","made",64.86,21,24.2225535400378
+"6479639",1,"09:04",656,"Illinois","Andrej Stojakovic","made",15.04,25,9.79
+"6479639",1,"08:47",673,"Texas Tech","JT Toppin","missed",84.6,21.5,5.42885807513881
+"6479639",1,"08:39",681,"Illinois","Zvonimir Ivisic","made",6.58,29,4.21531730715494
+"6479639",1,"08:12",708,"Texas Tech","Tyeree Bryan","missed",88.36,36.5,11.5066111431646
+"6479639",1,"08:09",711,"Texas Tech","JT Toppin","missed",84.6,26.5,4.41276557274459
+"6479639",1,"07:56",724,"Texas Tech","Jaylen Petty","made",86.48,25.5,2.32441390462198
+"6479639",1,"07:32",748,"Illinois","David Mirkovic","missed",10.34,20.5,6.79397527225409
+"6479639",1,"06:55",785,"Texas Tech","Christian Anderson","made",85.54,25.5,3.24870743527329
+"6479639",1,"06:35",805,"Illinois","David Mirkovic","made",7.52,24.5,2.32441390462198
+"6479639",1,"05:41",859,"Illinois","David Mirkovic","missed",9.4,27,4.60678846920498
+"6479639",1,"05:35",865,"Illinois","David Mirkovic","made",5.64,25,0.39
+"6479639",1,"05:23",877,"Texas Tech","Tyeree Bryan","missed",67.68,11,25.2971322485376
+"6479639",1,"05:16",884,"Illinois","Kylan Boswell","missed",29.14,31.5,24.7584753165456
+"6479639",1,"05:08",892,"Texas Tech","Nolan Groves","missed",89.3,49.5,24.5061726917934
+"6479639",1,"04:50",910,"Illinois","Ben Humrichous","missed",29.14,33.5,25.35709171021
+"6479639",1,"04:41",919,"Texas Tech","Christian Anderson","missed",63.92,30,25.3284207956201
+"6479639",1,"04:09",951,"Texas Tech","Jaylen Petty","missed",63.92,27.5,24.9555384634353
+"6479639",1,"04:01",959,"Texas Tech","Jaylen Petty","missed",75.2,33,15.7353900491853
+"6479639",1,"03:40",980,"Illinois","Zvonimir Ivisic","missed",18.8,46.5,25.413628233686
+"6479639",1,"03:27",993,"Texas Tech","Jaylen Petty","made",63.92,31.5,25.6666885281292
+"6479639",1,"03:14",1006,"Illinois","Andrej Stojakovic","made",8.46,23.5,3.54317654090224
+"6479639",1,"02:24",1056,"Illinois","Zvonimir Ivisic","made",30.08,22.5,24.9555384634353
+"6479639",1,"02:05",1075,"Texas Tech","Nolan Groves","missed",66.74,15,24.1751959661137
+"6479639",1,"01:37",1103,"Texas Tech","Marial Akuentok","made",86.48,26.5,2.72082708013574
+"6479639",1,"01:22",1118,"Illinois","David Mirkovic","missed",31.02,19.5,26.3503870939309
+"6479639",1,"00:39",1161,"Illinois","Kylan Boswell","made",29.14,32,24.8944190532738
+"6479639",1,"00:12",1188,"Texas Tech","Christian Anderson","missed",75.2,27,13.6968061970665
+"6479639",1,"00:00",1200,"Illinois","Andrej Stojakovic","made",8.46,24,3.36215704570741
+"6479639",2,"19:47",1213,"Texas Tech","JT Toppin","made",7.52,25.5,2.32441390462198
+"6479639",2,"19:23",1237,"Illinois","David Mirkovic","made",86.48,24.5,2.32441390462198
+"6479639",2,"19:06",1254,"Texas Tech","JT Toppin","made",7.52,24,2.48050398104901
+"6479639",2,"18:54",1266,"Illinois","David Mirkovic","missed",65.8,35.5,25.2379179014435
+"6479639",2,"18:23",1297,"Texas Tech","LeJuan Watts","made",5.64,22.5,2.53023714303621
+"6479639",2,"17:59",1321,"Illinois","Keaton Wagler","made",84.6,26.5,4.41276557274459
+"6479639",2,"17:40",1340,"Texas Tech","JT Toppin","made",10.34,30.5,7.49387082888409
+"6479639",2,"17:08",1372,"Illinois","Keaton Wagler","made",77.08,22.5,11.9347769145468
+"6479639",2,"16:55",1385,"Texas Tech","LeJuan Watts","made",29.14,34.5,25.709572147354
+"6479639",2,"16:36",1404,"Illinois","David Mirkovic","made",86.48,27.5,3.37681802885497
+"6479639",2,"16:13",1427,"Illinois","Ben Humrichous","missed",75.2,21.5,13.9947311514012
+"6479639",2,"16:09",1431,"Illinois","David Mirkovic","missed",88.36,25,0.390000000000001
+"6479639",2,"15:45",1455,"Texas Tech","Christian Anderson","made",15.98,20,11.8377742840451
+"6479639",2,"15:19",1481,"Texas Tech","JT Toppin","made",8.46,24.5,3.2487074352733
+"6479639",2,"14:53",1507,"Illinois","David Mirkovic","missed",86.48,30,5.49116563217683
+"6479639",2,"14:39",1521,"Texas Tech","JT Toppin","made",6.58,23.5,2.00471943174101
+"6479639",2,"14:27",1533,"Illinois","Keaton Wagler","missed",64.86,27.5,24.0204517026637
+"6479639",2,"14:02",1558,"Texas Tech","JT Toppin","made",13.16,30,9.35778285706609
+"6479639",2,"13:43",1577,"Illinois","Kylan Boswell","missed",65.8,16,24.6516226646442
+"6479639",2,"13:26",1594,"Texas Tech","JT Toppin","made",7.52,21,4.5992281961216
+"6479639",2,"13:08",1612,"Illinois","Andrej Stojakovic","missed",81.78,15,12.1893765222016
+"6479639",2,"12:49",1631,"Texas Tech","LeJuan Watts","made",7.52,21.5,4.17167831933384
+"6479639",2,"12:40",1640,"Illinois","Andrej Stojakovic","missed",78.02,46.5,24.0287931448918
+"6479639",2,"11:58",1682,"Texas Tech","Christian Anderson","missed",28.2,15.5,24.8385285393479
+"6479639",2,"11:10",1730,"Texas Tech","JT Toppin","made",14.1,28,9.34465087630351
+"6479639",2,"11:01",1739,"Illinois","David Mirkovic","missed",68.62,13,23.4353771038573
+"6479639",2,"10:42",1758,"Texas Tech","Nolan Groves","missed",12.22,1,24.9916165943702
+"6479639",2,"10:26",1774,"Illinois","Andrej Stojakovic","made",86.48,23.5,2.72082708013574
+"6479639",2,"10:15",1785,"Texas Tech","Donovan Atwell","made",31.02,32,26.703799355148
+"6479639",2,"09:36",1824,"Illinois","Andrej Stojakovic","made",82.72,26,6.11235633778006
+"6479639",2,"09:25",1835,"Texas Tech","JT Toppin","made",10.34,23.5,5.30642063918796
+"6479639",2,"09:05",1855,"Illinois","Andrej Stojakovic","missed",86.48,25,2.27
+"6479639",2,"08:51",1869,"Texas Tech","JT Toppin","missed",6.58,23.5,2.00471943174101
+"6479639",2,"08:44",1876,"Texas Tech","LeJuan Watts","made",5.64,25,0.39
+"6479639",2,"08:23",1897,"Illinois","Keaton Wagler","missed",86.48,27.5,3.37681802885497
+"6479639",2,"08:19",1901,"Illinois","Zvonimir Ivisic","made",86.48,23.5,2.72082708013574
+"6479639",2,"07:54",1926,"Illinois","Andrej Stojakovic","made",85.54,26.5,3.54317654090224
+"6479639",2,"07:38",1942,"Texas Tech","Christian Anderson","missed",25.38,39.5,24.8086053618498
+"6479639",2,"07:06",1974,"Illinois","Keaton Wagler","missed",78.96,26.5,9.90424656397447
+"6479639",2,"06:31",2009,"Illinois","Andrej Stojakovic","missed",85.54,23.5,3.54317654090224
+"6479639",2,"06:22",2018,"Illinois","Andrej Stojakovic","made",86.48,19.5,5.95003361335043
+"6479639",2,"06:04",2036,"Texas Tech","Christian Anderson","missed",25.38,40,25.1041211756158
+"6479639",2,"05:38",2062,"Illinois","Ben Humrichous","missed",68.62,9,25.7141381344971
+"6479639",2,"05:22",2078,"Texas Tech","JT Toppin","missed",8.46,34.5,10.0276667276092
+"6479639",2,"05:10",2090,"Illinois","Kylan Boswell","made",84.6,27.5,4.8448426187029
+"6479639",2,"04:44",2116,"Texas Tech","JT Toppin","made",6.58,31,6.14564073144534
+"6479639",2,"04:24",2136,"Illinois","Andrej Stojakovic","made",73.32,32.5,17.1561913022675
+"6479639",2,"04:05",2155,"Texas Tech","Donovan Atwell","missed",16.92,3,24.9035921103764
+"6479639",2,"03:37",2183,"Illinois","Keaton Wagler","missed",86.48,34.5,9.76744081118488
+"6479639",2,"03:23",2197,"Texas Tech","Tyeree Bryan","missed",17.86,4.5,24.0678644669609
+"6479639",2,"02:50",2230,"Texas Tech","Donovan Atwell","missed",4.7,49,24.0063012561286
+"6479639",2,"02:35",2245,"Texas Tech","JT Toppin","made",5.64,28,3.02524379182902
+"6479639",2,"02:18",2262,"Illinois","Andrej Stojakovic","made",86.48,27.5,3.37681802885497
+"6479639",2,"02:01",2279,"Texas Tech","JT Toppin","made",9.4,25.5,4.18001196170537
+"6479639",2,"01:35",2305,"Illinois","Andrej Stojakovic","missed",84.6,34,9.91072651221897
+"6479639",2,"01:03",2337,"Illinois","Keaton Wagler","missed",62.98,27,25.8474931086169
+"6479639",2,"00:49",2351,"Texas Tech","LeJuan Watts","missed",7.52,27,3.02537600968871
+"6479639",2,"00:45",2355,"Texas Tech","LeJuan Watts","made",5.64,25,0.39
+"6479639",2,"00:26",2374,"Illinois","Kylan Boswell","made",87.42,26,1.66400120192264
+"6479639",2,"00:17",2383,"Texas Tech","LeJuan Watts","made",7.52,28.5,4.17167831933384
+"6479639",2,"00:09",2391,"Texas Tech","Christian Anderson","missed",30.08,30,25.3284207956201
+"6479592",3,"04:37",2423,"Illinois","Keaton Wagler","missed",64.86,39.5,27.9460569669497
+"6479592",3,"04:16",2444,"Wisconsin","Nick Boyd","made",6.58,28,3.28160021940516
+"6479592",3,"03:52",2468,"Illinois","Tomislav Ivisic","missed",85.54,20.5,5.52757632240388
+"6479592",3,"03:24",2496,"Wisconsin","John Blackwell","made",28.2,14.5,25.2379179014435
+"6479592",3,"03:05",2515,"Illinois","Ben Humrichous","missed",70.5,9,24.2706097986845
+"6479592",3,"02:36",2544,"Wisconsin","Nick Boyd","made",8.46,23,3.78207614941846
+"6479592",3,"02:16",2564,"Illinois","Zvonimir Ivisic","made",87.42,25.5,1.4208800090085
+"6479592",3,"02:02",2578,"Wisconsin","Nick Boyd","missed",6.58,21,4.21531730715494
+"6479592",3,"01:42",2598,"Illinois","David Mirkovic","missed",86.48,20,5.49116563217683
+"6479592",3,"01:30",2610,"Illinois","Keaton Wagler","made",63.92,17,26.0869488442018
+"6479592",3,"00:47",2653,"Illinois","Jake Davis","missed",66.74,36.5,24.8332458611435
+"6479592",3,"00:17",2683,"Wisconsin","John Blackwell","missed",15.98,31,12.29361216242
+"6479592",3,"00:06",2694,"Illinois","Ben Humrichous","made",85.54,49,24.2137171867518
+"6479592",3,"00:00",2700,"Illinois","Keaton Wagler","missed",64.86,17,25.1938901323317
+"6479592",1,"19:40",20,"Wisconsin","Nolan Winter","made",86.48,22,3.76203402430122
+"6479592",1,"19:14",46,"Illinois","Keaton Wagler","made",5.64,26.5,1.54987096237074
+"6479592",1,"18:50",70,"Wisconsin","Andrew Rohde","missed",75.2,5,24.1578662137201
+"6479592",1,"18:23",97,"Wisconsin","Andrew Rohde","made",88.36,21,4.01896752910495
+"6479592",1,"18:16",104,"Illinois","David Mirkovic","missed",22.56,6.5,25.3354711817246
+"6479592",1,"18:09",111,"Wisconsin","John Blackwell","missed",84.6,25,4.14999999999999
+"6479592",1,"17:55",125,"Wisconsin","Nick Boyd","missed",74.26,46.5,25.9270148686655
+"6479592",1,"17:42",138,"Illinois","David Mirkovic","made",30.08,26.5,24.8752668327397
+"6479592",1,"17:18",162,"Wisconsin","Nick Boyd","missed",77.08,34,14.737330151693
+"6479592",1,"17:01",179,"Illinois","Keaton Wagler","missed",6.58,26.5,2.00471943174101
+"6479592",1,"16:48",192,"Wisconsin","Aleksas Bieliauskas","made",66.74,15.5,23.9726948839716
+"6479592",1,"16:26",214,"Illinois","Tomislav Ivisic","missed",9.4,31.5,7.71184154401528
+"6479592",1,"16:02",238,"Wisconsin","John Blackwell","made",72.38,42,23.6003580481314
+"6479592",1,"15:35",265,"Illinois","Tomislav Ivisic","made",6.58,25,1.33
+"6479592",1,"15:21",279,"Wisconsin","Braeden Carrington","made",62.04,23,26.7847736596746
+"6479592",1,"14:52",308,"Illinois","Tomislav Ivisic","made",15.98,2.5,24.9275530287271
+"6479592",1,"14:37",323,"Wisconsin","John Blackwell","made",87.42,25.5,1.4208800090085
+"6479592",1,"14:08",352,"Wisconsin","Braeden Carrington","made",77.08,47.5,25.3463784395325
+"6479592",1,"12:57",423,"Illinois","Keaton Wagler","made",13.16,10,16.9578329983521
+"6479592",1,"12:31",449,"Wisconsin","John Blackwell","missed",64.86,21,24.2225535400378
+"6479592",1,"12:12",468,"Illinois","Jake Davis","made",24.44,42,25.6370064555127
+"6479592",1,"11:51",489,"Wisconsin","Andrew Rohde","made",76.14,25,12.61
+"6479592",1,"11:36",504,"Illinois","Tomislav Ivisic","made",6.58,28,3.28160021940516
+"6479592",1,"11:12",528,"Wisconsin","John Blackwell","missed",79.9,26,8.90631798219669
+"6479592",1,"11:00",540,"Illinois","Keaton Wagler","missed",31.02,23,25.8474931086169
+"6479592",1,"10:55",545,"Illinois","Tomislav Ivisic","made",8.46,26.5,3.54317654090224
+"6479592",1,"10:40",560,"Wisconsin","Nolan Winter","missed",63.92,19.5,25.4318481436171
+"6479592",1,"10:24",576,"Illinois","Tomislav Ivisic","made",9.4,26,4.2687820276983
+"6479592",1,"10:06",594,"Wisconsin","Aleksas Bieliauskas","missed",90.24,48.5,23.5471887918707
+"6479592",1,"10:00",600,"Wisconsin","Nick Boyd","made",67.68,12,24.7577240472544
+"6479592",1,"09:39",621,"Illinois","Jake Davis","missed",23.5,8.5,24.6030993982466
+"6479592",1,"09:13",647,"Illinois","Keaton Wagler","made",27.26,36.5,24.8332458611435
+"6479592",1,"08:57",663,"Wisconsin","Braeden Carrington","missed",86.48,30,5.49116563217683
+"6479592",1,"08:46",674,"Illinois","Jake Davis","missed",5.64,49,24.0031685408406
+"6479592",1,"08:32",688,"Wisconsin","Nick Boyd","missed",86.48,33,8.31582226842301
+"6479592",1,"08:27",693,"Wisconsin","Nolan Winter","missed",88.36,25,0.390000000000001
+"6479592",1,"08:25",695,"Illinois","Jake Davis","made",25.38,39,24.5197247129734
+"6479592",1,"08:09",711,"Wisconsin","Nick Boyd","made",87.42,20,5.17386702573617
+"6479592",1,"07:52",728,"Illinois","Keaton Wagler","missed",9.4,30,6.49788427105316
+"6479592",1,"07:43",737,"Wisconsin","John Blackwell","missed",85.54,32.5,8.15806962461096
+"6479592",1,"07:26",754,"Illinois","David Mirkovic","missed",28.2,35.5,25.2379179014435
+"6479592",1,"07:13",767,"Wisconsin","Austin Rapp","missed",72.38,6.5,24.7027710996155
+"6479592",1,"07:06",774,"Wisconsin","John Blackwell","missed",63.92,33.5,26.2445975393032
+"6479592",1,"06:48",792,"Illinois","Tomislav Ivisic","made",3.76,1.5,23.5471887918707
+"6479592",1,"06:15",825,"Wisconsin","Nolan Winter","missed",71.44,6.5,25.3354711817246
+"6479592",1,"05:50",850,"Wisconsin","Austin Rapp","made",84.6,27,4.60678846920498
+"6479592",1,"05:29",871,"Illinois","Keaton Wagler","missed",14.1,22.5,9.19633079004882
+"6479592",1,"05:17",883,"Illinois","Ben Humrichous","made",6.58,24,1.66400120192264
+"6479592",1,"04:55",905,"Wisconsin","Austin Rapp","missed",63.92,23.5,24.8752668327397
+"6479592",1,"04:29",931,"Illinois","Ben Humrichous","made",31.96,26.5,26.7520858999817
+"6479592",1,"04:12",948,"Wisconsin","Nolan Winter","missed",67.68,40,25.8639691462853
+"6479592",1,"03:55",965,"Illinois","Keaton Wagler","made",7.52,24,2.48050398104901
+"6479592",1,"03:40",980,"Wisconsin","John Blackwell","missed",87.42,26.5,2.00471943174101
+"6479592",1,"03:13",1007,"Illinois","Tomislav Ivisic","missed",29.14,30,24.4076238089659
+"6479592",1,"02:47",1033,"Wisconsin","Andrew Rohde","missed",92.12,2,23.2455780741198
+"6479592",1,"02:31",1049,"Wisconsin","Nick Boyd","missed",86.48,27,3.02537600968871
+"6479592",1,"02:05",1075,"Illinois","Keaton Wagler","missed",26.32,10,25.8639691462853
+"6479592",1,"02:00",1080,"Illinois","Ben Humrichous","made",8.46,25,3.21
+"6479592",1,"01:53",1087,"Wisconsin","John Blackwell","made",77.08,48,25.7912562702944
+"6479592",1,"01:30",1110,"Illinois","Zvonimir Ivisic","missed",19.74,44.5,24.2942400580878
+"6479592",1,"01:23",1117,"Wisconsin","Nick Boyd","missed",68.62,38,23.9628232894206
+"6479592",1,"01:06",1134,"Illinois","Keaton Wagler","made",6.58,23,2.40185345098322
+"6479592",1,"00:54",1146,"Wisconsin","Austin Rapp","made",67.68,39,25.2971322485376
+"6479592",1,"00:42",1158,"Illinois","Tomislav Ivisic","made",4.7,1,24.0063012561286
+"6479592",1,"00:14",1186,"Wisconsin","John Blackwell","missed",66.74,36.5,24.8332458611435
+"6479592",1,"00:09",1191,"Wisconsin","Austin Rapp","missed",88.36,25,0.390000000000001
+"6479592",1,"00:04",1196,"Wisconsin","John Blackwell","made",88.36,24,1.07335921293852
+"6479592",1,"00:00",1200,"Illinois","Keaton Wagler","missed",48.88,14,44.9952986433027
+"6479592",2,"19:47",1213,"Wisconsin","Aleksas Bieliauskas","made",21.62,43.5,24.7027710996155
+"6479592",2,"19:47",1213,"Illinois","Keaton Wagler","missed",85.54,21,5.12875228491296
+"6479592",2,"19:47",1213,"Wisconsin","John Blackwell","made",26.32,13.5,24.0040600732459
+"6479592",2,"18:17",1303,"Wisconsin","John Blackwell","made",24.44,41,24.9851175702657
+"6479592",2,"18:01",1319,"Illinois","David Mirkovic","made",66.74,16,23.7789844190201
+"6479592",2,"17:43",1337,"Wisconsin","Nick Boyd","missed",5.64,23,2.03767023828685
+"6479592",2,"17:40",1340,"Wisconsin","Nolan Winter","made",5.64,25,0.39
+"6479592",2,"16:56",1384,"Wisconsin","Austin Rapp","missed",15.04,48,24.9968818055373
+"6479592",2,"16:43",1397,"Illinois","Keaton Wagler","made",86.48,22,3.76203402430122
+"6479592",2,"16:24",1416,"Wisconsin","John Blackwell","missed",8.46,22,4.39364313525803
+"6479592",2,"16:19",1421,"Illinois","Jake Davis","made",86.48,22.5,3.37681802885497
+"6479592",2,"15:50",1450,"Wisconsin","John Blackwell","missed",30.08,26,24.8501287723022
+"6479592",2,"15:23",1477,"Illinois","David Mirkovic","made",68.62,10,25.1041211756158
+"6479592",2,"15:03",1497,"Wisconsin","Andrew Rohde","missed",12.22,22.5,7.40478899091662
+"6479592",2,"14:51",1509,"Illinois","David Mirkovic","missed",65.8,11.5,26.6261619464766
+"6479592",2,"14:34",1526,"Wisconsin","Andrew Rohde","missed",6.58,29,4.21531730715494
+"6479592",2,"14:14",1546,"Illinois","Ben Humrichous","missed",68.62,7.5,26.6733368741146
+"6479592",2,"14:04",1556,"Wisconsin","Braeden Carrington","missed",25.38,9.5,25.4060406202934
+"6479592",2,"13:35",1585,"Illinois","Tomislav Ivisic","made",87.42,26.5,2.00471943174101
+"6479592",2,"13:19",1601,"Wisconsin","Aleksas Bieliauskas","missed",26.32,37,24.2475751364956
+"6479592",2,"13:01",1619,"Illinois","Keaton Wagler","made",64.86,17,25.1938901323317
+"6479592",2,"12:48",1632,"Wisconsin","Nolan Winter","missed",15.98,27,10.9148018763512
+"6479592",2,"12:38",1642,"Wisconsin","Braeden Carrington","missed",6.58,27.5,2.83176623328975
+"6479592",2,"12:18",1662,"Illinois","Zvonimir Ivisic","missed",85.54,21.5,4.74911570716064
+"6479592",2,"11:59",1681,"Illinois","Keaton Wagler","missed",88.36,18,7.01085586786663
+"6479592",2,"11:41",1699,"Wisconsin","John Blackwell","missed",29.14,15,25.8984960953334
+"6479592",2,"11:21",1719,"Illinois","Zvonimir Ivisic","made",86.48,24.5,2.32441390462198
+"6479592",2,"11:06",1734,"Wisconsin","Nick Boyd","missed",15.04,30,10.9929113523216
+"6479592",2,"10:33",1767,"Wisconsin","Austin Rapp","made",7.52,27.5,3.37681802885498
+"6479592",2,"10:03",1797,"Wisconsin","Nick Boyd","made",13.16,24.5,7.92578702716645
+"6479592",2,"09:12",1848,"Wisconsin","Austin Rapp","missed",14.1,23.5,8.97621858022631
+"6479592",2,"08:58",1862,"Illinois","Keaton Wagler","made",62.04,28,26.8779482103824
+"6479592",2,"08:34",1886,"Wisconsin","Nick Boyd","made",25.38,12,23.9628232894206
+"6479592",2,"08:10",1910,"Illinois","Keaton Wagler","made",85.54,19.5,6.36821010959908
+"6479592",2,"07:56",1924,"Wisconsin","Nick Boyd","made",27.26,15,24.1751959661137
+"6479592",2,"07:37",1943,"Wisconsin","Nick Boyd","made",6.58,23.5,2.00471943174101
+"6479592",2,"06:49",1991,"Wisconsin","Austin Rapp","made",30.08,29,25.1501272362587
+"6479592",2,"06:26",2014,"Illinois","Zvonimir Ivisic","missed",90.24,49,24.0462076011998
+"6479592",2,"06:03",2037,"Wisconsin","Nick Boyd","missed",12.22,21.5,7.79941664485236
+"6479592",2,"05:37",2063,"Illinois","Tomislav Ivisic","missed",60.16,18.5,29.3195856041657
+"6479592",2,"05:23",2077,"Wisconsin","John Blackwell","missed",6.58,23,2.40185345098322
+"6479592",2,"05:06",2094,"Wisconsin","John Blackwell","made",8.46,22,4.39364313525803
+"6479592",2,"04:47",2113,"Illinois","Keaton Wagler","made",86.48,28,3.76203402430121
+"6479592",2,"04:24",2136,"Wisconsin","John Blackwell","made",7.52,26.5,2.72082708013574
+"6479592",2,"04:01",2159,"Illinois","Keaton Wagler","missed",82.72,35.5,12.1082988070166
+"6479592",2,"03:38",2182,"Wisconsin","Jack Janicki","missed",13.16,2,24.3221730114725
+"6479592",2,"03:33",2187,"Wisconsin","Nolan Winter","missed",5.64,25,0.39
+"6479592",2,"03:13",2207,"Illinois","Tomislav Ivisic","missed",90.24,1,24.0462076011998
+"6479592",2,"02:56",2224,"Wisconsin","Nick Boyd","made",6.58,27,2.40185345098322
+"6479592",2,"02:19",2261,"Wisconsin","Austin Rapp","made",29.14,24,23.9109200994023
+"6479592",2,"01:53",2287,"Illinois","Keaton Wagler","made",63.92,30,25.3284207956201
+"6479592",2,"01:40",2300,"Wisconsin","Nick Boyd","made",7.52,25.5,2.32441390462198
+"6479592",2,"00:55",2345,"Wisconsin","Austin Rapp","made",30.08,17.5,25.937981802754
+"6479592",2,"00:03",2397,"Wisconsin","John Blackwell","missed",31.96,27,26.7847736596746
+"1613299",1,"19:31",29,"Illinois","Giorgi Bezhanishvili","made",9.4,35,10.8269340073725
+"1613299",1,"19:13",47,"Maryland","Darryl Morsell","missed",83.66,20.5,6.79397527225409
+"1613299",1,"19:06",54,"Maryland","Jalen Smith","made",88.36,24.5,0.634113554499508
+"1613299",1,"18:52",68,"Illinois","Trent Frazier","made",18.8,32,15.2513114190223
+"1613299",1,"18:20",100,"Maryland","Eric Ayala","missed",70.5,8.5,24.6030993982466
+"1613299",1,"18:06",114,"Illinois","Giorgi Bezhanishvili","missed",11.28,42.5,18.5097514840151
+"1613299",1,"17:54",126,"Maryland","Jalen Smith","made",87.42,25.5,1.4208800090085
+"1613299",1,"17:33",147,"Illinois","Aaron Jordan","missed",8.46,46.5,21.7383095018909
+"1613299",1,"17:17",163,"Maryland","Jalen Smith","made",70.5,10.5,23.309064760303
+"1613299",1,"17:04",176,"Illinois","Ayo Dosunmu","missed",24.44,24.5,19.1965127041346
+"1613299",1,"16:43",197,"Maryland","Bruno Fernando","made",82.72,30,7.83331985814444
+"1613299",1,"16:09",231,"Illinois","Trent Frazier","missed",16.92,27,11.840139357288
+"1613299",1,"15:51",249,"Maryland","Darryl Morsell","missed",85.54,28,4.39364313525802
+"1613299",1,"15:45",255,"Illinois","Tevian Jones","missed",21.62,45.5,26.2340789813555
+"1613299",1,"15:24",276,"Maryland","Anthony Cowan","missed",85.54,22,4.39364313525803
+"1613299",1,"15:07",293,"Illinois","Giorgi Bezhanishvili","made",12.22,28,7.5882079570871
+"1613299",1,"14:37",323,"Maryland","Bruno Fernando","made",84.6,23.5,4.41276557274459
+"1613299",1,"14:17",343,"Illinois","Tevian Jones","made",8.46,32,7.70091552998733
+"1613299",1,"13:53",367,"Maryland","Anthony Cowan","made",81.78,3.5,22.6015685296397
+"1613299",1,"13:38",382,"Illinois","Tevian Jones","missed",9.4,35,10.8269340073725
+"1613299",1,"13:35",385,"Illinois","Giorgi Bezhanishvili","missed",9.4,26.5,4.4127655727446
+"1613299",1,"13:26",394,"Illinois","Tevian Jones","missed",13.16,47,23.3787959484658
+"1613299",1,"13:11",409,"Maryland","Aaron Wiggins","missed",68.62,9.5,25.4060406202934
+"1613299",1,"11:29",511,"Illinois","Adonis De La Rosa","missed",9.4,15.5,10.366894424079
+"1613299",1,"11:21",519,"Maryland","Serrel Smith Jr.","made",82.72,26,6.11235633778006
+"1613299",1,"11:13",527,"Illinois","Ayo Dosunmu","made",10.34,28,5.90830771033466
+"1613299",1,"10:47",553,"Maryland","Bruno Fernando","made",83.66,25.5,5.11449899794692
+"1613299",1,"10:13",587,"Illinois","Aaron Jordan","missed",24.44,20,19.8306858176917
+"1613299",1,"09:33",627,"Illinois","Andres Feliz","missed",13.16,31,9.92814685628693
+"1613299",1,"09:14",646,"Maryland","Aaron Wiggins","missed",72.38,45.5,26.2340789813555
+"1613299",1,"09:06",654,"Illinois","Ayo Dosunmu","made",8.46,28,4.39364313525803
+"1613299",1,"08:32",688,"Illinois","Andres Feliz","made",11.28,21.5,6.97215174820514
+"1613299",1,"08:14",706,"Maryland","Eric Ayala","missed",85.54,27.5,4.06867300234363
+"1613299",1,"08:00",720,"Illinois","Trent Frazier","missed",18.8,44.5,23.7455785358032
+"1613299",1,"07:25",755,"Illinois","Andres Feliz","missed",11.28,34.5,11.2521509054936
+"1613299",1,"07:08",772,"Illinois","Alan Griffin","made",25.38,8.5,26.0281943284585
+"1613299",1,"06:35",805,"Illinois","Alan Griffin","missed",28.2,38.5,26.6261619464766
+"1613299",1,"06:14",826,"Maryland","Darryl Morsell","made",81.78,22,7.5882079570871
+"1613299",1,"05:55",845,"Illinois","Giorgi Bezhanishvili","missed",8.46,26,3.36215704570741
+"1613299",1,"05:35",865,"Maryland","Aaron Wiggins","made",89.3,47.5,22.5067212183383
+"1613299",1,"04:58",902,"Illinois","Andres Feliz","made",7.52,16,9.2818586500765
+"1613299",1,"04:30",930,"Maryland","Serrel Smith Jr.","missed",79.9,45,21.8705852688034
+"1613299",1,"04:09",951,"Illinois","Giorgi Bezhanishvili","missed",8.46,37.5,12.9055840627226
+"1613299",1,"03:44",976,"Illinois","Kipper Nichols","missed",11.28,1,24.745926937579
+"1613299",1,"03:12",1008,"Illinois","Ayo Dosunmu","made",8.46,24.5,3.2487074352733
+"1613299",1,"02:42",1038,"Maryland","Bruno Fernando","missed",85.54,46,21.2439191299534
+"1613299",1,"02:35",1045,"Illinois","Andres Feliz","missed",8.46,23.5,3.54317654090224
+"1613299",1,"01:59",1081,"Illinois","Ayo Dosunmu","missed",13.16,18.5,10.2380711073913
+"1613299",1,"01:52",1088,"Maryland","Anthony Cowan","missed",84.6,23.5,4.41276557274459
+"1613299",1,"01:45",1095,"Illinois","Ayo Dosunmu","made",23.5,42,24.9411808060485
+"1613299",1,"01:24",1116,"Maryland","Bruno Fernando","missed",83.66,28,5.90830771033466
+"1613299",1,"01:17",1123,"Illinois","Ayo Dosunmu","made",7.52,27.5,3.37681802885498
+"1613299",1,"00:43",1157,"Maryland","Anthony Cowan","missed",62.04,15,28.5205908073448
+"1613299",1,"00:01",1199,"Illinois","Giorgi Bezhanishvili","missed",15.04,24.5,9.80275981548054
+"1613299",1,"00:00",1200,"Illinois","Tevian Jones","missed",31.02,18.5,26.5771123337356
+"1613299",2,"19:24",1236,"Maryland","Darryl Morsell","made",10.34,27,5.46882985655981
+"1613299",2,"19:05",1255,"Illinois","Aaron Jordan","missed",79.9,24,8.90631798219669
+"1613299",2,"18:43",1277,"Maryland","Bruno Fernando","made",9.4,24.5,4.18001196170537
+"1613299",2,"18:23",1297,"Illinois","Trent Frazier","made",61.1,23,27.7222383656154
+"1613299",2,"17:58",1322,"Illinois","Tevian Jones","made",63.92,18.5,25.6666885281292
+"1613299",2,"17:38",1342,"Maryland","Bruno Fernando","made",6.58,23.5,2.00471943174101
+"1613299",2,"17:25",1355,"Illinois","Tevian Jones","made",89.3,46.5,21.5070337331767
+"1613299",2,"16:56",1384,"Illinois","Trent Frazier","made",64.86,37,26.73447399894
+"1613299",2,"16:11",1429,"Maryland","Anthony Cowan","missed",6.58,22,3.28160021940516
+"1613299",2,"15:36",1464,"Maryland","Jalen Smith","made",26.32,36.5,24.0040600732459
+"1613299",2,"15:25",1475,"Illinois","Aaron Jordan","missed",70.5,42.5,25.2846297184673
+"1613299",2,"15:18",1482,"Illinois","Tevian Jones","missed",70.5,8,24.9411808060485
+"1613299",2,"15:05",1495,"Maryland","Anthony Cowan","missed",10.34,23.5,5.30642063918796
+"1613299",2,"15:01",1499,"Maryland","Jalen Smith","missed",8.46,24,3.36215704570741
+"1613299",2,"14:32",1528,"Maryland","Aaron Wiggins","made",8.46,47,22.2329507713214
+"1613299",2,"14:15",1545,"Illinois","Tevian Jones","missed",68.62,38,23.9628232894206
+"1613299",2,"14:03",1557,"Illinois","Ayo Dosunmu","missed",71.44,8.5,23.9141401685279
+"1613299",2,"14:00",1560,"Illinois","Aaron Jordan","made",87.42,22.5,2.83176623328975
+"1613299",2,"13:30",1590,"Maryland","Aaron Wiggins","missed",6.58,46.5,21.5410979293071
+"1613299",2,"13:22",1598,"Illinois","Tevian Jones","made",76.14,45,23.6434367214244
+"1613299",2,"12:53",1627,"Maryland","Anthony Cowan","made",30.08,9.5,29.2707857769483
+"1613299",2,"12:22",1658,"Maryland","Anthony Cowan","made",9.4,27.5,4.8448426187029
+"1613299",2,"11:53",1687,"Illinois","Tevian Jones","made",87.42,22.5,2.83176623328975
+"1613299",2,"11:41",1699,"Maryland","Darryl Morsell","missed",9.4,28.5,5.42885807513882
+"1613299",2,"10:51",1749,"Illinois","Andres Feliz","made",81.78,26.5,7.12957923022109
+"1613299",2,"10:00",1800,"Illinois","Trent Frazier","missed",64.86,38.5,27.4405193099548
+"1613299",2,"09:22",1838,"Illinois","Giorgi Bezhanishvili","missed",83.66,21,6.47364657669848
+"1613299",2,"08:41",1879,"Illinois","Trent Frazier","missed",85.54,29.5,5.52757632240388
+"1613299",2,"08:06",1914,"Illinois","Aaron Jordan","missed",62.04,29,27.0078525618013
+"1613299",2,"07:48",1932,"Illinois","Aaron Jordan","missed",88.36,2.5,22.5033797461626
+"1613299",2,"07:44",1936,"Maryland","Darryl Morsell","missed",18.8,4,24.9920487355479
+"1613299",2,"07:31",1949,"Illinois","Andres Feliz","made",84.6,23.5,4.41276557274459
+"1613299",2,"06:57",1983,"Maryland","Aaron Wiggins","missed",8.46,26.5,3.54317654090224
+"1613299",2,"06:53",1987,"Maryland","Bruno Fernando","made",8.46,25.5,3.2487074352733
+"1613299",2,"06:32",2008,"Illinois","Andres Feliz","made",83.66,24,5.18730180344271
+"1613299",2,"06:15",2025,"Maryland","Aaron Wiggins","missed",9.4,1.5,23.8636229437192
+"1613299",2,"05:52",2048,"Illinois","Ayo Dosunmu","missed",80.84,18.5,10.2380711073913
+"1613299",2,"05:35",2065,"Maryland","Bruno Fernando","missed",7.52,24,2.48050398104901
+"1613299",2,"05:28",2072,"Illinois","Andres Feliz","missed",84.6,17.5,8.57161011712502
+"1613299",2,"04:57",2103,"Illinois","Tevian Jones","made",66.74,11,26.0852467881751
+"1613299",2,"03:22",2198,"Illinois","Giorgi Bezhanishvili","made",82.72,26.5,6.21376697342281
+"1613299",2,"02:30",2250,"Maryland","Serrel Smith Jr.","missed",15.04,3.5,23.624015323395
+"1613299",2,"01:58",2282,"Illinois","Ayo Dosunmu","missed",62.98,23.5,25.8136184987692
+"1613299",2,"01:29",2311,"Maryland","Jalen Smith","missed",27.26,41,27.2110290139862
+"1613299",2,"01:21",2319,"Illinois","Ayo Dosunmu","made",84.6,26,4.26878202769829
+"1613299",2,"01:02",2338,"Maryland","Aaron Wiggins","made",10.34,26.5,5.30642063918796
+"1613299",2,"00:53",2347,"Maryland","Eric Ayala","missed",22.56,10.5,22.5806576520703
+"1613299",2,"00:42",2358,"Maryland","Anthony Cowan","missed",31.96,17,27.882325943149
+"1613299",2,"00:24",2376,"Maryland","Anthony Cowan","made",7.52,24.5,2.32441390462198
