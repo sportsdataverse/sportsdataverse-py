@@ -13,6 +13,7 @@ Public surface
 - :func:`wnba_enhanced_pbp`   — normalised play-by-play frame
 - :func:`wnba_on_court`       — 10-player rotation-keyed frame (home+away ×5)
 - :func:`wnba_possessions`    — possession-level stint matrix (off+def ×5)
+- :func:`wnba_play_context`   — possessions + the CTG play-context surface
 - :func:`wnba_rapm_from_games` — per-player RAPM over a list of games
 """
 
@@ -23,7 +24,9 @@ from typing import Sequence, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.nba import nba_play_context_constants as C
 from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_play_context import add_play_context
 from sportsdataverse.nba.nba_lineups import (
     boxscore_home_away,
     parse_rotation_resultsets,
@@ -256,6 +259,79 @@ def wnba_possessions(
     )
     poss = attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
     return poss.to_pandas() if return_as_pandas else poss
+
+
+def wnba_play_context(
+    game_id: str,
+    *,
+    transition_seconds: float = C.DEFAULT_TRANSITION_SECONDS,
+    transition_variant: str = C.DEFAULT_TRANSITION_VARIANT,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Return a WNBA game's possessions with the full CTG play-context surface.
+
+    WNBA sibling of
+    :func:`~sportsdataverse.nba.nba_play_context.nba_play_context` — the
+    Cleaning the Glass recreation (possession start-type taxonomy + the
+    halfcourt / transition / putback contexts + CTG's garbage-time and heave
+    filters). One network call (``playbyplayv3`` on ``stats.wnba.com``); every
+    transformation is done by the league-agnostic
+    :func:`~sportsdataverse.nba.nba_play_context.add_play_context` core, so
+    there is **no WNBA-specific classification logic** to drift.
+
+    Two caveats worth stating plainly:
+
+    * **CTG is NBA-only.** There is no published WNBA play-context table to
+      calibrate against, so ``transition_seconds`` inherits the NBA's fitted
+      6.0 s default. The WNBA fixtures land inside the NBA's transition-frequency
+      gate at that value (``tests/wnba/test_wnba_play_context_shim.py``), which
+      is a sanity check on the shared engine — not evidence that 6.0 s is the
+      *right* WNBA cutoff. Re-fit it if a WNBA oracle ever appears.
+    * Shot-zone boundaries are league-agnostic (feet from the rim), and the
+      corner-three test uses the same legacy coordinates, which the WNBA feed
+      also ships.
+
+    Args:
+        game_id: WNBA game identifier (e.g. ``"1022400001"``).
+        transition_seconds: Transition initial-play cutoff, in seconds.
+        transition_variant: See
+            :func:`~sportsdataverse.nba.nba_play_context.add_transition`.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        The possession frame (``POSSESSIONS_SCHEMA``) plus
+        :data:`~sportsdataverse.nba.nba_play_context.PLAY_CONTEXT_POSSESSIONS_SCHEMA`.
+        Empty or malformed payloads return a zero-row frame — never raises.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.wnba.wnba_engine import wnba_play_context
+            poss = wnba_play_context("1022400001")
+            print(poss["possession_start_type_ctg"].value_counts())
+
+        Transition rate (CTG's default filtered view)::
+
+            import polars as pl
+            clean = poss.filter(
+                (pl.col("is_garbage_time") == False)  # noqa: E712
+                & (pl.col("is_heave_possession") == False)  # noqa: E712
+            )
+            print(clean["is_transition"].mean())
+
+        See Also:
+            * `wehoop`_ — WNBA/WBB data in R
+            * `nba_play_context`_ — NBA sibling function
+
+        .. _wehoop: https://wehoop.sportsdataverse.org
+        .. _nba_play_context: sportsdataverse.nba.nba_play_context.nba_play_context
+    """
+    out = add_play_context(
+        _enhanced(game_id),
+        transition_seconds=transition_seconds,
+        transition_variant=transition_variant,
+    )
+    return out.to_pandas() if return_as_pandas else out
 
 
 def _fetch_possessions(game_id: str) -> pl.DataFrame:
