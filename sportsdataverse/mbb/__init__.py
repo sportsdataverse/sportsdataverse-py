@@ -3,8 +3,13 @@ from __future__ import annotations
 from sportsdataverse.mbb.mbb_espn_ext import *
 from sportsdataverse.mbb.mbb_bracketology import *
 from sportsdataverse.mbb.mbb_fox_ext import *
+from sportsdataverse.mbb.mbb_game_officials import *
 from sportsdataverse.mbb.mbb_game_predict import *
 from sportsdataverse.mbb.mbb_game_rosters import *
+from sportsdataverse.mbb.mbb_play_by_play import *
+from sportsdataverse.mbb.mbb_player_box import *
+from sportsdataverse.mbb.mbb_season_producers import *
+from sportsdataverse.mbb.mbb_team_box import *
 from sportsdataverse.mbb.mbb_lineup_stats import *
 from sportsdataverse.mbb.mbb_loaders import *
 from sportsdataverse.mbb.mbb_luck import *

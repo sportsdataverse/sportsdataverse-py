@@ -228,6 +228,7 @@ from sportsdataverse.mbb import box_aware_compare as box_aware_compare  # noqa: 
 from sportsdataverse.mbb import brier_score as brier_score  # noqa: F401
 from sportsdataverse.mbb import build_3p_shot_info as build_3p_shot_info  # noqa: F401
 from sportsdataverse.mbb import build_adjusted_3p as build_adjusted_3p  # noqa: F401
+from sportsdataverse.mbb import build_athlete_identity_lookup as build_athlete_identity_lookup  # noqa: F401
 from sportsdataverse.mbb import build_available_team_list as build_available_team_list  # noqa: F401
 from sportsdataverse.mbb import build_base_event as build_base_event  # noqa: F401
 from sportsdataverse.mbb import build_d_rtg as build_d_rtg  # noqa: F401
@@ -235,6 +236,7 @@ from sportsdataverse.mbb import build_efficiency_margins as build_efficiency_mar
 from sportsdataverse.mbb import build_exp_3p as build_exp_3p  # noqa: F401
 from sportsdataverse.mbb import build_lineup_cli_array as build_lineup_cli_array  # noqa: F401
 from sportsdataverse.mbb import build_lineup_id as build_lineup_id  # noqa: F401
+from sportsdataverse.mbb import build_mbb_player_identity_lookup as build_mbb_player_identity_lookup  # noqa: F401
 from sportsdataverse.mbb import build_mbb_season_wp as build_mbb_season_wp  # noqa: F401
 from sportsdataverse.mbb import build_net_points as build_net_points  # noqa: F401
 from sportsdataverse.mbb import build_new_player_list as build_new_player_list  # noqa: F401
@@ -331,11 +333,21 @@ from sportsdataverse.mbb import handle_common_sub_bug as handle_common_sub_bug  
 from sportsdataverse.mbb import helper_mbb_athlete_items as helper_mbb_athlete_items  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_game_data as helper_mbb_game_data  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_game_items as helper_mbb_game_items  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_game_rosters as helper_mbb_game_rosters  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_officials as helper_mbb_officials  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_pbp as helper_mbb_pbp  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_pbp_features as helper_mbb_pbp_features  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_pickcenter as helper_mbb_pickcenter  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_play_by_play as helper_mbb_play_by_play  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_player_box as helper_mbb_player_box  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_player_season_stats as helper_mbb_player_season_stats  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_roster_items as helper_mbb_roster_items  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_rosters as helper_mbb_rosters  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_schedule as helper_mbb_schedule  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_standings as helper_mbb_standings  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_team_box as helper_mbb_team_box  # noqa: F401
 from sportsdataverse.mbb import helper_mbb_team_items as helper_mbb_team_items  # noqa: F401
+from sportsdataverse.mbb import helper_mbb_team_season_stats as helper_mbb_team_season_stats  # noqa: F401
 from sportsdataverse.mbb import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.mbb import incorporate_height as incorporate_height  # noqa: F401
 from sportsdataverse.mbb import inject_luck as inject_luck  # noqa: F401
@@ -583,6 +595,7 @@ __all__ = [
     "brier_score",
     "build_3p_shot_info",
     "build_adjusted_3p",
+    "build_athlete_identity_lookup",
     "build_available_team_list",
     "build_base_event",
     "build_d_rtg",
@@ -590,6 +603,7 @@ __all__ = [
     "build_exp_3p",
     "build_lineup_cli_array",
     "build_lineup_id",
+    "build_mbb_player_identity_lookup",
     "build_mbb_season_wp",
     "build_net_points",
     "build_new_player_list",
@@ -809,11 +823,21 @@ __all__ = [
     "helper_mbb_athlete_items",
     "helper_mbb_game_data",
     "helper_mbb_game_items",
+    "helper_mbb_game_rosters",
+    "helper_mbb_officials",
     "helper_mbb_pbp",
     "helper_mbb_pbp_features",
     "helper_mbb_pickcenter",
+    "helper_mbb_play_by_play",
+    "helper_mbb_player_box",
+    "helper_mbb_player_season_stats",
     "helper_mbb_roster_items",
+    "helper_mbb_rosters",
+    "helper_mbb_schedule",
+    "helper_mbb_standings",
+    "helper_mbb_team_box",
     "helper_mbb_team_items",
+    "helper_mbb_team_season_stats",
     "in_game_features",
     "incorporate_height",
     "inject_luck",

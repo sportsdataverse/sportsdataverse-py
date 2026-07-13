@@ -206,3 +206,42 @@ def helper_mbb_athlete_items(teams_rosters, **kwargs):
     )
     game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
     return game_athletes
+
+
+def helper_mbb_game_rosters(payload: dict, *, season: int, game_id: int | str) -> pl.DataFrame:
+    """Parse one game's rosters sidecar into the released game-rosters frame.
+
+    Faithful polars port of the script-local parsers in
+    ``hoopR-mbb-data/R/espn_mbb_09_game_rosters_creation.R`` -- CONFIG-only
+    (numbering/tag/name) diffs vs the WBB parser, so this delegates to the
+    shared implementation (NOT the live ``espn_mbb_game_rosters`` pipeline
+    above; this one consumes the stored ``mbb/game_rosters/json/{game_id}.json``
+    sidecar). The R-released ``espn_mens_college_basketball_game_rosters``
+    parquet is the parity oracle.
+
+    Args:
+        payload: One game's ``mbb/game_rosters/json/{game_id}.json`` as a dict.
+        season: Season year the sidecar belongs to.
+        game_id: ESPN game id the sidecar belongs to (released dtype String).
+
+    Returns:
+        pl.DataFrame: One row per rostered athlete; empty (zero-column) frame
+        for degenerate payloads -- season builders skip empty frames.
+
+    Example:
+        Quick start::
+
+            import json
+            from sportsdataverse.mbb import helper_mbb_game_rosters
+            payload = json.load(open("401746082.json", encoding="utf-8"))
+            df = helper_mbb_game_rosters(payload, season=2025, game_id=401746082)
+            print(df.shape)
+
+    See Also:
+        * `hoopR`_ -- the R producer this ports; retained as the parity oracle.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    from sportsdataverse.wbb.wbb_game_rosters import helper_wbb_game_rosters
+
+    return helper_wbb_game_rosters(payload, season=season, game_id=game_id)
