@@ -14,9 +14,11 @@ already match WBB, NOT WNBA/NBA:
   is.data.frame(valid_stats[["athletes"]][[2]])``) -- byte-for-byte the WBB
   gate, not WNBA/NBA's laxer one -- so ``require_both_teams=True``.
 
-WBB's ``_FINAL_ORDER`` tuple is imported verbatim (no plus_minus insert). The
-R-released ``espn_mens_college_basketball_player_boxscores`` parquet is the
-parity oracle.
+MBB's column order is WBB's shared ``_FINAL_ORDER`` with one column moved:
+``active`` is LAST in the R-released ``espn_mens_college_basketball_player_boxscores``
+parquet (idx 54/55), where WBB keeps it mid-list -- the single confirmed
+MBB/WBB order divergence, captured in ``_MBB_FINAL_ORDER`` below (still no
+plus_minus insert). That parquet is the parity oracle.
 """
 
 from __future__ import annotations
@@ -27,6 +29,14 @@ from sportsdataverse.wbb.wbb_player_box import _FINAL_ORDER as _FINAL_ORDER
 from sportsdataverse.wbb.wbb_player_box import _basketball_player_box
 
 __all__ = ["helper_mbb_player_box"]
+
+# The real MBB release orders ``active`` LAST (confirmed against the 2025
+# ``espn_mens_college_basketball_player_boxscores`` parquet, idx 54 of 55),
+# whereas WBB keeps it mid-list after ``did_not_play``/``reason``. Same column
+# set as WBB's shared ``_FINAL_ORDER`` -- only ``active``'s position differs --
+# so derive the MBB order from it rather than changing the shared template
+# (which is correct for WBB). Pinned by tests/mbb/test_mbb_player_box_order.py.
+_MBB_FINAL_ORDER: tuple[str, ...] = tuple(c for c in _FINAL_ORDER if c != "active") + ("active",)
 
 
 def helper_mbb_player_box(final: dict) -> pl.DataFrame:
@@ -69,4 +79,4 @@ def helper_mbb_player_box(final: dict) -> pl.DataFrame:
     # MBB's R gate carries WBB's valid_athletes (both-teams) probe, so a game
     # whose second team ships no athletes is skipped entirely, not partially
     # published.
-    return _basketball_player_box(final, final_order=_FINAL_ORDER, require_both_teams=True)
+    return _basketball_player_box(final, final_order=_MBB_FINAL_ORDER, require_both_teams=True)
