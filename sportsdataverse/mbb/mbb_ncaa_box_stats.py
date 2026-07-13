@@ -458,7 +458,9 @@ def ncaa_mbb_box_scores(
     """
     if isinstance(game_ids, (str, int)):
         game_ids = [game_ids]
-    ids = [str(g) for g in game_ids if g is not None]
+    # g == g drops float("nan") ids (they would stringify to "nan" and hit the
+    # fetch path); matches the ncaa_mbb_game_pbp / _shots driver guard.
+    ids = [str(g) for g in game_ids if g is not None and g == g]
 
     if fetcher is None:
         with NcaaFetcher.with_browser() as browser_fetcher:
