@@ -214,3 +214,41 @@ def test_scramble_and_trans_rates_emitted():
     assert fields["off_scramble_ppp"]["value"] == 100.0 * 6.0 / 10.0
     assert fields["off_trans_3p"]["value"] == 1.0 / 3.0
     assert "off_scramble_orb" not in fields  # orb is prefix "" only
+
+
+def test_play_type_pts_poss_formula():
+    # TS :342-380 -- pts = 3*made3p + 2*made2p + ftm; poss = fgm + (1-rebound_pct)*fgMiss
+    # + 0.475*fta + to, rebound_pct from the BASE (prefix "") cross-side orb/drb.
+    off_totals = {
+        "": {"total_off_orb": 4.0},
+        "scramble_": {
+            "total_off_scramble_3p_made": 2.0,
+            "total_off_scramble_2p_made": 1.0,
+            "total_off_scramble_ftm": 3.0,
+            "total_off_scramble_fga": 10.0,
+            "total_off_scramble_fgm": 4.0,
+            "total_off_scramble_fta": 4.0,
+            "total_off_scramble_to": 2.0,
+        },
+        "trans_": {},
+    }
+    def_totals = {"": {"total_def_drb": 6.0}, "scramble_": {}, "trans_": {}}
+    out = agg._play_type_pts_poss(off_totals, def_totals)
+    assert out["total_off_scramble_pts"] == 3.0 * 2.0 + 2.0 * 1.0 + 3.0  # 11.0
+    rebound_pct = 4.0 / (4.0 + 6.0)
+    fg_missed = 10.0 - 4.0
+    expected_poss = 4.0 + (1.0 - rebound_pct) * fg_missed + 0.475 * 4.0 + 2.0
+    assert out["total_off_scramble_poss"] == expected_poss
+    assert out["total_off_trans_pts"] == 0.0
+    assert out["total_def_scramble_pts"] == 0.0  # def-side totals empty here
+
+
+def test_adj_ppp_fallback_equals_raw_ppp_when_no_baselines():
+    f = agg._adj_fields(pts=30.0, poss=25.0, dst="off", opponent_baselines=None, avg_eff=100.0)
+    assert f["off_adj_ppp"]["value"] == 100.0 * 30.0 / 25.0  # faithful fallback
+    assert f["off_adj_opp"]["value"] == 100.0  # avg_eff
+
+
+def test_adj_ppp_zero_poss_guarded():
+    f = agg._adj_fields(pts=0.0, poss=0.0, dst="off", opponent_baselines=None, avg_eff=100.0)
+    assert f["off_adj_ppp"]["value"] == 0.0

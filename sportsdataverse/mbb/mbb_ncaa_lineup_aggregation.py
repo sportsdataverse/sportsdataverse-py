@@ -185,3 +185,107 @@ def _all_rate_fields(
     for prefix in _PREFIXES:
         out.update(_rate_fields(totals_by_prefix[prefix], dst, prefix, oppo_totals_by_prefix[prefix]))
     return out
+
+
+_PLAY_TYPE_PREFIXES = ("scramble_", "trans_")  # ponytail: `_.drop(typePrefixes)` == everything but "".
+
+
+def _play_type_pts_poss(
+    off_totals_by_prefix: dict[str, dict[str, float]],
+    def_totals_by_prefix: dict[str, dict[str, float]],
+) -> dict[str, float]:
+    """``total_{dst}_{scramble_,trans_}pts`` / ``poss`` -- commonLineupAggregations.ts:342-380.
+
+    The base (prefix "") pts/poss totals are plain scalar sums already emitted by
+    ``_sum_fields`` (see its ``if prefix == ""`` branch); TS only bucket-scripts pts/poss
+    for the *other* typePrefixes (``_.drop(typePrefixes)`` == ``scramble_``/``trans_``),
+    hence this function's narrower scope.
+
+    Takes both sides' per-prefix totals (not one dst at a time, unlike ``_rate_fields``)
+    because the ``poss`` script's rebound_pct term cross-references the *opposite* dst's
+    BASE (prefix "") ``drb`` total (``total_${oppoDstPrefix}_drb``, ts:368) -- same
+    cross-side convention as this module's ``_orb`` helper.
+
+    Args:
+        off_totals_by_prefix: ``{"": {...}, "scramble_": {...}, "trans_": {...}}`` totals
+            for ``dst="off"`` (as returned by ``_sum_fields`` per prefix).
+        def_totals_by_prefix: same shape for ``dst="def"``.
+
+    Returns:
+        Flat ``total_{off,def}_{scramble_,trans_}{pts,poss}`` dict (8 keys).
+    """
+    out: dict[str, float] = {}
+    sides = {"off": (off_totals_by_prefix, def_totals_by_prefix), "def": (def_totals_by_prefix, off_totals_by_prefix)}
+    for dst, (totals_by_prefix, oppo_totals_by_prefix) in sides.items():
+        oppo_dst = "def" if dst == "off" else "off"
+        # ponytail: var_orb/var_drb are always the BASE (prefix "") totals, ts:367-368 --
+        # not re-derived per scramble_/trans_ typePrefix.
+        var_orb = totals_by_prefix[""].get(f"total_{dst}_orb", 0.0)
+        var_drb = oppo_totals_by_prefix[""].get(f"total_{oppo_dst}_drb", 0.0)
+        rebound_pct = var_orb / (var_orb + var_drb) if var_orb > 0 else 0.0
+        for prefix in _PLAY_TYPE_PREFIXES:
+            t = totals_by_prefix.get(prefix, {})
+            made3p = t.get(f"total_{dst}_{prefix}3p_made", 0.0)
+            made2p = t.get(f"total_{dst}_{prefix}2p_made", 0.0)
+            ftm = t.get(f"total_{dst}_{prefix}ftm", 0.0)
+            out[f"total_{dst}_{prefix}pts"] = 3.0 * made3p + 2.0 * made2p + ftm
+
+            fga = t.get(f"total_{dst}_{prefix}fga", 0.0)
+            fgm = t.get(f"total_{dst}_{prefix}fgm", 0.0)
+            fta = t.get(f"total_{dst}_{prefix}fta", 0.0)
+            to = t.get(f"total_{dst}_{prefix}to", 0.0)
+            fg_missed = fga - fgm  # ts:371 `def fgM = params.fga - params.fgm;`
+            out[f"total_{dst}_{prefix}poss"] = fgm + (1.0 - rebound_pct) * fg_missed + 0.475 * fta + to
+    return out
+
+
+def _adj_fields(
+    pts: float,
+    poss: float,
+    dst: str,
+    opponent_baselines: Optional[dict[str, float]],
+    avg_eff: float = 100.0,
+) -> dict[str, dict[str, float]]:
+    """``{dst}_adj_ppp`` / ``{dst}_adj_opp`` -- commonLineupAggregations.ts:443-502.
+
+    ``opponent_baselines is None`` is the only branch this port implements: TS's
+    ``properAdjEffCalc`` (hardcoded ``true``, ts:169) weighted_avg/SOS branch needs a
+    per-opponent baseline lookup (``calculateAdjEff``'s ES ``weighted_avg`` over
+    opponent efficiency) this port has no data source for yet.
+
+    ponytail: the returned value is a *faithful degenerate case* of TS's own
+    bucket_script fallback (ts:503-522: ``(var_adj_opp > 0) ? var_ppp*avgEff/var_adj_opp
+    : avgEff``), not an invented formula -- with no SOS data, ``adj_opp := avg_eff``
+    (can't compute the real weighted-avg), so
+    ``adj_ppp = var_ppp*avgEff/avgEff == var_ppp`` (raw ppp). Confirmed against the
+    analyzer's own adj_ppp *read*-site coalesce (not the query builder):
+    ``cbb-on-off-analyzer/src/utils/stats/LineupUtils.ts:1161``
+    ``const off_adj_ppp = lineup.off_adj_ppp?.value || avgEff;`` -- the consumer already
+    falls back to ``avgEff`` whenever the stored value is falsy/zero, so returning raw
+    ppp here (or ``0.0`` under the zero-poss guard) composes correctly with that
+    read-site; it does not contradict it.
+
+    Args:
+        pts: Total points for this dst/prefix bucket.
+        poss: Total possessions for this dst/prefix bucket.
+        dst: ``"off"`` or ``"def"``.
+        opponent_baselines: SOS baseline lookup; only ``None`` (no baselines) is
+            implemented.
+        avg_eff: League-average efficiency (points per 100 possessions) used as the
+            fallback constant. Defaults to ``100.0``.
+
+    Returns:
+        ``{f"{dst}_adj_ppp": {"value": ...}, f"{dst}_adj_opp": {"value": ...}}``.
+
+    Raises:
+        NotImplementedError: If ``opponent_baselines`` is not ``None`` -- the real
+            SOS-adjusted branch isn't ported yet; raising avoids silently returning the
+            degenerate fallback to a caller that expects real adjustment.
+    """
+    if opponent_baselines is not None:
+        raise NotImplementedError("_adj_fields: opponent_baselines SOS branch (TS properAdjEffCalc) not yet ported")
+    ppp = 100.0 * pts / poss if poss > 0 else 0.0
+    return {
+        f"{dst}_adj_ppp": {"value": ppp},
+        f"{dst}_adj_opp": {"value": avg_eff},
+    }
