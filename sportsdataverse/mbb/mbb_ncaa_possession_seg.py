@@ -197,6 +197,13 @@ def ncaa_mbb_possessions(
 ) -> pd.DataFrame: ...
 
 
+@overload
+def ncaa_mbb_possessions(
+    pbp: pl.DataFrame,
+    *,
+    simple: bool = False,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_possessions(
     pbp: pl.DataFrame,
     *,

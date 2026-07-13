@@ -10,7 +10,7 @@ providing the canonical ``ncaa_wbb_*`` name.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Any, Iterable, Optional, Union
 
 from sportsdataverse.mbb.mbb_ncaa_box_stats import ncaa_mbb_box_scores
 
@@ -24,7 +24,7 @@ __all__ = [
 
 
 def ncaa_wbb_box_scores(
-    game_ids: Sequence[object],
+    game_ids: Union[str, int, Iterable[Union[str, int]]],
     *,
     multi_games: bool = False,
     fetcher: Optional[Any] = None,

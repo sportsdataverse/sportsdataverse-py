@@ -517,6 +517,15 @@ def ncaa_mbb_player_stats(
 ) -> pd.DataFrame: ...
 
 
+@overload
+def ncaa_mbb_player_stats(
+    pbp: pl.DataFrame,
+    *,
+    multi_games: bool = False,
+    simple: bool = False,
+    fix_tip_in: bool = True,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_player_stats(
     pbp: pl.DataFrame,
     *,
@@ -710,6 +719,14 @@ def ncaa_mbb_team_stats(
 ) -> pd.DataFrame: ...
 
 
+@overload
+def ncaa_mbb_team_stats(
+    pbp: pl.DataFrame,
+    *,
+    include_transition: bool = False,
+    fix_tip_in: bool = True,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_team_stats(
     pbp: pl.DataFrame,
     *,

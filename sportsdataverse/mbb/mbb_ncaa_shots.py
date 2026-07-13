@@ -384,6 +384,13 @@ def ncaa_mbb_join_pbp_shots(
 ) -> Any: ...
 
 
+@overload
+def ncaa_mbb_join_pbp_shots(
+    pbp: pl.DataFrame,
+    shots: pl.DataFrame,
+    *,
+    return_as_pandas: bool = False,
+) -> "Union[pl.DataFrame, Any]": ...
 def ncaa_mbb_join_pbp_shots(
     pbp: pl.DataFrame,
     shots: pl.DataFrame,

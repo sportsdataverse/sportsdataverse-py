@@ -514,6 +514,14 @@ def ncaa_mbb_lineups(
 ) -> pd.DataFrame: ...
 
 
+@overload
+def ncaa_mbb_lineups(
+    pbp: pl.DataFrame,
+    *,
+    include_transition: bool = False,
+    fix_tip_in: bool = True,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_lineups(
     pbp: pl.DataFrame,
     *,
@@ -682,6 +690,14 @@ def ncaa_mbb_player_lineups(
 ) -> pd.DataFrame: ...
 
 
+@overload
+def ncaa_mbb_player_lineups(
+    lineups: pl.DataFrame,
+    *,
+    included: Union[str, Sequence[str], None] = None,
+    excluded: Union[str, Sequence[str], None] = None,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_player_lineups(
     lineups: pl.DataFrame,
     *,
@@ -826,6 +842,17 @@ def ncaa_mbb_player_combos(
 ) -> pd.DataFrame: ...
 
 
+@overload
+def ncaa_mbb_player_combos(
+    lineups: pl.DataFrame,
+    *,
+    n: int = 2,
+    min_mins: float = 0,
+    included: Union[str, Sequence[str], None] = None,
+    excluded: Union[str, Sequence[str], None] = None,
+    include_transition: bool = False,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_player_combos(
     lineups: pl.DataFrame,
     *,
@@ -951,6 +978,15 @@ def ncaa_mbb_on_off(
 ) -> pd.DataFrame: ...
 
 
+@overload
+def ncaa_mbb_on_off(
+    players: Union[str, Sequence[str]],
+    lineups: pl.DataFrame,
+    *,
+    included: Union[str, Sequence[str], None] = None,
+    excluded: Union[str, Sequence[str], None] = None,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]: ...
 def ncaa_mbb_on_off(
     players: Union[str, Sequence[str]],
     lineups: pl.DataFrame,

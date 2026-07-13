@@ -391,6 +391,14 @@ def ncaa_mbb_box_scores(
 ) -> "pd.DataFrame": ...
 
 
+@overload
+def ncaa_mbb_box_scores(
+    game_ids: Union[str, int, Iterable[Union[str, int]]],
+    *,
+    multi_games: bool = False,
+    fetcher: Optional[_SupportsFetchIndividualStats] = None,
+    return_as_pandas: bool = False,
+) -> "Union[pl.DataFrame, pd.DataFrame]": ...
 def ncaa_mbb_box_scores(
     game_ids: Union[str, int, Iterable[Union[str, int]]],
     *,
