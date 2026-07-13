@@ -8,6 +8,7 @@
   - [Dependencies](#dependencies)
   - [Release utilities — `sportsdataverse.release` (sportsdataversedata R-package port)](#release-utilities--sportsdataverserelease-sportsdataversedata-r-package-port)
   - [PWHL — coordinate-based xG (T5.3b): xg_method default flips quality → coords](#pwhl--coordinate-based-xg-t53b-xg_method-default-flips-quality-%E2%86%92-coords)
+  - [PWHL — per-strength xG calibration + geometry hardening (T5 follow-up)](#pwhl--per-strength-xg-calibration--geometry-hardening-t5-follow-up)
   - [CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)](#cfb--advanced-efficiency-spine-opponent-adjusted-efficiencyexplosivenesshavoc-%E2%86%92-field-position-%E2%86%92-adjusted-tempo)
   - [NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)](#nfl--ngs-over-expected-tracking-spine-yac-oe-%E2%86%92-ryoe-%E2%86%92-separation-oe-%E2%86%92-manzone-rates)
   - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
@@ -293,6 +294,21 @@
   2025-only). Held-out 2026 (n=107): coords Brier 0.2444 vs quality 0.2449
   vs naive 0.2500 (within noise; gates stay no-worse-than-naive +
   calibration).
+
+### PWHL — per-strength xG calibration + geometry hardening (T5 follow-up)
+
+- feat(pwhl): `fit_pwhl_coord_xg` gains `calibrate_strength=True` (default) — when
+  the frame carries strength columns it fits a per-EV/PP/SH Platt recalibrator
+  (`PwhlCoordXGModel.strength_calibrators`) that shrinks residual within-bucket
+  per-strength calibration error at ~zero AUC cost (held-out LOSO SH 10-bin ECE
+  0.0130 → 0.0091, AUC 0.6962 both). **Default xG output shifts slightly for
+  strength-bearing frames**; identity (unchanged) on 2-feature or thin frames, or
+  with `calibrate_strength=False`. Buckets are shooter-relative (`is_pp`/`is_sh`).
+- fix(pwhl,hockeytech): harden the shot-xG geometry against the dual-frame
+  coordinate footgun — `fit_pwhl_coord_xg`/`predict` now raise on a RAW-scale
+  (0–600) enrich frame instead of silently scoring it with `goal_x=89`, and
+  `hockeytech._analytics.add_shot_distance_angle` asserts `goal_x` is in a
+  plausible rink range (default is the documented NHL-size-rink constant).
 
 ### CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)
 
