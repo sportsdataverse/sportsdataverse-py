@@ -258,8 +258,16 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
 _SCORING_CHANCE_FT = 25.0  # distance threshold from net (feet)
 _SHOT_EVENTS = ["shot", "blocked_shot", "goal"]
 
+#: Offensive goal-line x-coordinate (feet) on an NHL-size (200x85 ft) rink. The PWHL
+#: plays on NHL-size rinks, so 89.0 is correct for it too -- but it is asserted, not
+#: assumed: a caller who passes a mis-scaled ``goal_x`` (e.g. a RAW-feed value) would
+#: otherwise silently compute garbage distances. See the guard in
+#: :func:`add_shot_distance_angle`.
+_NHL_SIZE_RINK_GOAL_X = 89.0
+_MAX_PLAUSIBLE_GOAL_X = 110.0  # rink half-length is 100 ft; a goal_x past this is a scale error
 
-def add_shot_distance_angle(pbp: pl.DataFrame, goal_x: float = 89.0) -> pl.DataFrame:
+
+def add_shot_distance_angle(pbp: pl.DataFrame, goal_x: float = _NHL_SIZE_RINK_GOAL_X) -> pl.DataFrame:
     """Add ``shot_distance``/``shot_angle`` (feet/degrees) for shot-type events.
 
     Assumes coordinates are already in a standard rink frame (offensive net at
@@ -271,14 +279,27 @@ def add_shot_distance_angle(pbp: pl.DataFrame, goal_x: float = 89.0) -> pl.DataF
         Play-by-play frame with at least ``event``, ``x_coord``, ``y_coord``
         columns. Coordinates must already be in feet in the standard rink frame.
     goal_x:
-        X-coordinate of the offensive net in feet. Default is 89.0 (NHL).
+        X-coordinate of the offensive net in feet. Default is
+        :data:`_NHL_SIZE_RINK_GOAL_X` (89.0) -- correct for the PWHL, which plays
+        on an NHL-size rink. Asserted to lie within a plausible rink range so a
+        mis-scaled value can't silently produce garbage geometry.
 
     Returns
     -------
     pl.DataFrame
         Input frame with ``shot_distance`` (Float64) and ``shot_angle``
         (Float64, degrees) columns appended.
+
+    Raises
+    ------
+    ValueError
+        If ``goal_x`` is outside ``(0, _MAX_PLAUSIBLE_GOAL_X]`` feet -- a scale error.
     """
+    if not 0.0 < goal_x <= _MAX_PLAUSIBLE_GOAL_X:
+        raise ValueError(
+            f"goal_x={goal_x} ft is outside the plausible rink range (0, {_MAX_PLAUSIBLE_GOAL_X}]; "
+            "coordinates must be in standard rink-feet (offensive net near +89 ft), not RAW feed scale."
+        )
     if pbp.height == 0:
         return pbp.with_columns(
             shot_distance=pl.lit(None, dtype=pl.Float64),

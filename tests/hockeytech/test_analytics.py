@@ -23,6 +23,30 @@ def test_shot_distance_angle_non_shot_rows_null():
     assert out["shot_distance"][0] is None
 
 
+def test_add_shot_distance_angle_default_is_nhl_size_constant():
+    """R7-(2): the default goal_x is the documented NHL-size-rink constant, not a magic literal."""
+    from sportsdataverse.hockeytech import _analytics
+
+    assert _analytics._NHL_SIZE_RINK_GOAL_X == 89.0
+    df = pl.DataFrame({"event": ["shot"], "x_coord": [25.0], "y_coord": [0.0]})
+    # default (constant) and explicit 89.0 must agree
+    d_default = _analytics.add_shot_distance_angle(df)["shot_distance"][0]
+    d_explicit = _analytics.add_shot_distance_angle(df, goal_x=89.0)["shot_distance"][0]
+    assert d_default == d_explicit
+
+
+def test_add_shot_distance_angle_rejects_scale_error_goal_x():
+    """R7-(2): a mis-scaled goal_x (e.g. RAW feed value) fails loud, not silent garbage."""
+    import pytest
+
+    from sportsdataverse.hockeytech._analytics import add_shot_distance_angle
+
+    df = pl.DataFrame({"event": ["shot"], "x_coord": [25.0], "y_coord": [0.0]})
+    for bad in (0.0, -1.0, 300.0, 600.0):
+        with pytest.raises(ValueError, match="goal_x"):
+            add_shot_distance_angle(df, goal_x=bad)
+
+
 def test_shot_distance_angle_empty_frame():
     from sportsdataverse.hockeytech._analytics import add_shot_distance_angle
 

@@ -580,3 +580,26 @@ def test_coord_xg_falls_back_to_two_features_without_strength_cols() -> None:
     )
     m = fit_pwhl_coord_xg(legacy)
     assert m.features == ("shot_distance", "shot_angle"), f"legacy frame must stay 2-feature, got {m.features}"
+
+
+def test_shot_geometry_rejects_raw_scale_coords() -> None:
+    """R7-(1): a RAW-scale (0-600) enrich frame must fail loud, never be scored with goal_x=89.
+
+    The dual-frame footgun: pwhl_pbp() enrich-path x_coord is RAW feed scale, where only
+    shot_distance/shot_angle are trustworthy. Deriving geometry from those coords with the
+    default goal_x=89 is silent garbage -- _shot_geometry range-checks x_coord instead.
+    """
+    from sportsdataverse.pwhl.pwhl_xg_proxy import _assert_rink_feet, _shot_geometry
+
+    raw = pl.DataFrame({"event": ["shot", "shot"], "x_coord": [120.0, 540.0], "y_coord": [150.0, 160.0]})
+    with pytest.raises(ValueError, match="RAW HockeyTech feed scale"):
+        _shot_geometry(raw)
+    with pytest.raises(ValueError, match="RAW HockeyTech feed scale"):
+        _assert_rink_feet(raw)
+
+    # rink-feet coords (|x| <= ~100) pass, and a frame already carrying the geometry cols
+    # is reused verbatim (no range check, no recompute).
+    feet = pl.DataFrame({"event": ["shot"], "x_coord": [80.0], "y_coord": [5.0]})
+    assert "shot_distance" in _shot_geometry(feet).columns
+    precomputed = feet.with_columns(shot_distance=pl.lit(9.0), shot_angle=pl.lit(0.0))
+    assert _shot_geometry(precomputed)["shot_distance"][0] == 9.0  # reused, not recomputed

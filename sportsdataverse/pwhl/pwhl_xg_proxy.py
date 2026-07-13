@@ -258,6 +258,34 @@ def fit_shot_quality_xg(pbp: pl.DataFrame) -> ShotQualityXGModel:
     return ShotQualityXGModel(weights=weights, fallback_rate=overall_rate)
 
 
+#: Rink half-length (feet). A standard rink-feet frame has ``x_coord`` in ~[-100, 100];
+#: the RAW HockeyTech feed scale is 0-600. Anything past this + a margin is the RAW
+#: scale, which must never be scored with the default ``goal_x=89`` (silent garbage).
+_RINK_HALF_LEN_FT = 100.0
+_RAW_SCALE_MARGIN_FT = 15.0  # behind-the-net shots reach ~100+; 600-scale can't hide under this
+
+
+def _assert_rink_feet(frame: pl.DataFrame) -> None:
+    """Raise if ``x_coord`` looks like the RAW feed scale (0-600) not rink-feet.
+
+    The dual-frame footgun: ``load_pwhl_pbp`` (release parquet) carries feet-scale
+    ``x_coord``, but a ``pwhl_pbp()`` enrich-path frame carries RAW feed-scale
+    ``x_coord`` (0-600) where only ``shot_distance``/``shot_angle`` are trustworthy.
+    Computing geometry from RAW coords with ``goal_x=89`` produces silent nonsense, so
+    this fails loud instead. (No-op when ``x_coord`` is absent or all-null.)
+    """
+    if "x_coord" not in frame.columns:
+        return
+    xmax = frame.select(pl.col("x_coord").cast(pl.Float64, strict=False).abs().max()).item()
+    if xmax is not None and xmax > _RINK_HALF_LEN_FT + _RAW_SCALE_MARGIN_FT:
+        raise ValueError(
+            f"x_coord max |{xmax:.0f}| ft exceeds the rink-feet range (~+-100 ft): this frame looks "
+            "like RAW HockeyTech feed scale (0-600), not standard rink-feet. Score a load_pwhl_pbp() "
+            "frame (feet-scale x_coord), or precompute shot_distance/shot_angle via "
+            "add_shot_distance_angle() -- scoring RAW coords with goal_x=89 is a silent bug."
+        )
+
+
 def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
     """``shot_distance``/``shot_angle`` for a shot frame -- always HockeyTech's geometry.
 
@@ -269,11 +297,16 @@ def _shot_geometry(frame: pl.DataFrame) -> pl.DataFrame:
     standard rink-feet frame -- see the HockeyTech design spec,
     ``docs/superpowers/specs/2026-06-09-hockeytech-multi-league-scraper-analytics-design.md``).
     No geometry is computed in this module.
+
+    When geometry must be derived (the frame lacks ``shot_distance``/``shot_angle``),
+    ``x_coord`` is range-checked first (:func:`_assert_rink_feet`) so a RAW-scale
+    enrich frame can never be silently scored with the NHL ``goal_x=89``.
     """
     if {"shot_distance", "shot_angle"}.issubset(frame.columns):
         return frame
     from sportsdataverse.hockeytech._analytics import add_shot_distance_angle
 
+    _assert_rink_feet(frame)
     f = frame if "event" in frame.columns else frame.with_columns(pl.lit("shot").alias("event"))
     return add_shot_distance_angle(f)
 
