@@ -82,6 +82,22 @@ def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
         raise
 
 
+def _read_release_csv(url: str) -> Optional[pl.DataFrame]:
+    """Read a release CSV; return ``None`` on 404 / missing asset.
+
+    The CSV counterpart of :func:`_read_release_parquet`, for release tags whose
+    producer publishes an asset in csv/rds but not parquet. Same narrow
+    missing-asset classification, same re-raise-everything-else contract.
+    """
+    try:
+        return pl.read_csv(url)
+    except Exception as e:  # noqa: BLE001 -- classify fetch/parse failures
+        msg = str(e).lower()
+        if any(tok in msg for tok in ("404", "not found", "no such")):
+            return None
+        raise
+
+
 def format_nhl_season(season: Any) -> Optional[str]:
     """Normalize an NHL season to the 8-digit ``"20242025"`` form the api-web host wants.
 

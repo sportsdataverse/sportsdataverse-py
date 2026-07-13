@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _read_release_parquet, cli_warn
+from sportsdataverse._codegen_runtime import _read_release_csv, _read_release_parquet, cli_warn
 from sportsdataverse.pwhl.pwhl_loaders import (
     load_pwhl_goalie_boxscores,
     load_pwhl_player_boxscores,
@@ -89,15 +89,21 @@ def load_pwhl_games(return_as_pandas: bool = False):
             load_pwhl_games()
     """
     primary = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_schedules/pwhl_games_in_data_repo.parquet"
+    # The pwhl_schedules release publishes this manifest as csv + rds only -- unlike
+    # nhl_schedules, which also ships parquet. Read the csv when the parquet is absent
+    # rather than degrading to an empty frame.
+    primary_csv = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_schedules/pwhl_games_in_data_repo.csv"
     fallback = (
         "https://raw.githubusercontent.com/sportsdataverse/fastRhockey-data/main/pwhl/pwhl_games_in_data_repo.parquet"
     )
 
     df = _read_release_parquet(primary)
     if df is None:
+        df = _read_release_csv(primary_csv)
+    if df is None:
         df = _read_release_parquet(fallback)
     if df is None:
-        cli_warn("load_pwhl_games: manifest parquet not found at primary or fallback URL")
+        cli_warn("load_pwhl_games: manifest not found at primary (parquet/csv) or fallback URL")
         df = pl.DataFrame()
 
     return df.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else df
