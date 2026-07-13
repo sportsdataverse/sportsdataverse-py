@@ -70,6 +70,7 @@ from sportsdataverse.nba.nba_play_context import (  # noqa: F401
     lineup_play_context,
     nba_play_context,
     player_play_context,
+    starters_on_court_counts,
     team_play_context,
 )
 from sportsdataverse.nba.nba_possessions import (  # noqa: F401

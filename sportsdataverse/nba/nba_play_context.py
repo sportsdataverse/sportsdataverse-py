@@ -56,6 +56,7 @@ __all__ = [
     "lineup_play_context",
     "nba_play_context",
     "player_play_context",
+    "starters_on_court_counts",
     "team_play_context",
 ]
 
@@ -1018,6 +1019,78 @@ def _context_rates(counts: pl.DataFrame, league_non_transition_ppp: float) -> pl
         )
         .drop("_trans_steal", "_trans_reb", "halfcourt_points")
     )
+
+
+def starters_on_court_counts(
+    possessions: pl.DataFrame,
+    starters: dict[int, list[int]],
+) -> dict[int, int]:
+    """Count, per possession, how many **starters** are on the floor across BOTH teams.
+
+    This supplies the second half of CTG's garbage-time rule — "there have to be
+    **two or fewer starters on the floor combined between the two teams**" — which
+    :func:`flag_garbage_time` cannot evaluate on its own (the possession frame does
+    not carry who is on the floor).
+
+    Feed the result straight back in::
+
+        poss = attach_possession_lineups(build_possessions(enh), oncourt, enh, home_team_id=home)
+        counts = starters_on_court_counts(poss, _starters_from_boxscore_v3(box))
+        ctx = add_play_context(enh, starters_on_court=counts)   # now CTG-exact
+
+    The possession numbering is stable for a given enhanced-PBP frame, so counts
+    derived from a lineup-attached frame key correctly into a frame rebuilt from the
+    same PBP.
+
+    Args:
+        possessions: Possession frame with the ten on-court columns
+            ``off_player_1..5`` **and** ``def_player_1..5`` (from
+            :func:`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`).
+        starters: ``{team_id: [player_id, ...]}`` — e.g. from
+            :func:`~sportsdataverse.nba.nba_lineups._starters_from_boxscore_v3`.
+            Player ids are matched across both teams' starting fives, so the
+            offense/defense split of the lineup columns does not matter.
+
+    Returns:
+        ``{possession_number: starters_on_floor}``, each value in ``0..10``.
+
+        An **empty** *starters* map yields all-zero counts, which would make CTG's
+        ``<= 2`` clause vacuously true and flag every margin-qualifying possession.
+        The counts are reported honestly rather than guessed — do not pass an empty
+        map and then read the result as CTG-exact.
+
+    Raises:
+        ValueError: when the ``off_player_*`` / ``def_player_*`` columns are absent.
+
+    Example:
+        Quick start::
+
+            counts = starters_on_court_counts(poss, _starters_from_boxscore_v3(box))
+            print(max(counts.values()))  # 10 at the opening tip
+    """
+    def_cols = [f"def_player_{i}" for i in range(1, 6)]
+    missing = [c for c in _OFF_PLAYER_COLS + def_cols if c not in possessions.columns]
+    if missing:
+        raise ValueError(
+            f"missing on-court columns {missing}: pass a frame through "
+            "nba_possessions.attach_possession_lineups() first"
+        )
+    if possessions.is_empty():
+        return {}
+
+    # One flat set of starter ids: a player is a starter or they are not, and the
+    # offense/defense column split says nothing about which team they start for.
+    starter_ids = {int(pid) for ids in starters.values() for pid in ids}
+
+    counted = possessions.select(
+        "possession_number",
+        pl.concat_list(_OFF_PLAYER_COLS + def_cols)
+        .list.set_intersection(pl.lit(sorted(starter_ids), dtype=pl.List(pl.Int64)))
+        .list.len()
+        .cast(pl.Int64)
+        .alias("n_starters"),
+    )
+    return dict(zip(counted["possession_number"].to_list(), counted["n_starters"].to_list()))
 
 
 def _require_lineups(df: pl.DataFrame) -> None:
