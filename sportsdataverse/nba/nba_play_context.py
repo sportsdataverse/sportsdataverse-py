@@ -42,6 +42,8 @@ from sportsdataverse.nba import nba_play_context_constants as C
 from sportsdataverse.nba.nba_possessions import build_possessions
 
 __all__ = [
+    "LINEUP_PLAY_CONTEXT_SCHEMA",
+    "PLAYER_PLAY_CONTEXT_SCHEMA",
     "PLAY_CONTEXT_POSSESSIONS_SCHEMA",
     "PLAY_CONTEXT_SHOTS_SCHEMA",
     "add_ctg_shot_zones",
@@ -51,7 +53,9 @@ __all__ = [
     "build_play_context_shots",
     "flag_garbage_time",
     "flag_heave_possessions",
+    "lineup_play_context",
     "nba_play_context",
+    "player_play_context",
     "team_play_context",
 ]
 
@@ -67,6 +71,61 @@ PLAY_CONTEXT_POSSESSIONS_SCHEMA: dict[str, pl.DataType] = {
     "is_garbage_time": pl.Boolean,
     "garbage_time_basis": pl.Utf8,
 }
+
+#: The Play-Context metric columns every rollup emits (team / lineup / player-on-off).
+#: Kept in one place so the three tables cannot drift apart.
+_CONTEXT_METRIC_SCHEMA: dict[str, pl.DataType] = {
+    "poss": pl.Int64,
+    "points": pl.Int64,
+    "pts_per_100": pl.Float64,
+    "transition_poss": pl.Int64,
+    "transition_points": pl.Int64,
+    "transition_freq": pl.Float64,
+    "transition_pts_per_100": pl.Float64,
+    "non_transition_pts_per_100": pl.Float64,
+    "transition_pts_added_per_100": pl.Float64,
+    "halfcourt_poss": pl.Int64,
+    "halfcourt_pts_per_100": pl.Float64,
+    "freq_off_steal": pl.Float64,
+    "freq_off_live_rebound": pl.Float64,
+}
+
+#: Schema of :func:`lineup_play_context` — one row per 5-man offensive lineup.
+LINEUP_PLAY_CONTEXT_SCHEMA: dict[str, pl.DataType] = {
+    "offense_team_id": pl.Int64,
+    "lineup_id": pl.Utf8,
+    **{f"off_player_{i}": pl.Int64 for i in range(1, 6)},
+    **_CONTEXT_METRIC_SCHEMA,
+}
+
+#: Schema of :func:`player_play_context` — the offensive half of CTG's On/Off page.
+#: ``on_*`` = the team's offense with the player on the floor, ``off_*`` = without
+#: them, ``diff_*`` = on minus off (the number CTG actually shows).
+PLAYER_PLAY_CONTEXT_SCHEMA: dict[str, pl.DataType] = {
+    "player_id": pl.Int64,
+    "offense_team_id": pl.Int64,
+    "on_poss": pl.Int64,
+    "off_poss": pl.Int64,
+    "on_points": pl.Int64,
+    "off_points": pl.Int64,
+    "on_pts_per_100": pl.Float64,
+    "off_pts_per_100": pl.Float64,
+    "diff_pts_per_100": pl.Float64,
+    "on_transition_freq": pl.Float64,
+    "off_transition_freq": pl.Float64,
+    "diff_transition_freq": pl.Float64,
+    "on_transition_pts_per_100": pl.Float64,
+    "off_transition_pts_per_100": pl.Float64,
+    "diff_transition_pts_per_100": pl.Float64,
+    "on_halfcourt_pts_per_100": pl.Float64,
+    "off_halfcourt_pts_per_100": pl.Float64,
+    "diff_halfcourt_pts_per_100": pl.Float64,
+    "on_transition_pts_added_per_100": pl.Float64,
+    "off_transition_pts_added_per_100": pl.Float64,
+}
+
+#: The offensive lineup columns :func:`attach_possession_lineups` appends.
+_OFF_PLAYER_COLS: list[str] = [f"off_player_{i}" for i in range(1, 6)]
 
 #: Schema of the per-shot frame from :func:`build_play_context_shots`.
 PLAY_CONTEXT_SHOTS_SCHEMA: dict[str, pl.DataType] = {
@@ -874,52 +933,70 @@ def team_play_context(
     """
     df = possessions
     if df.is_empty():
-        out = pl.DataFrame(
-            schema={
-                "offense_team_id": pl.Int64,
-                "poss": pl.Int64,
-                "points": pl.Int64,
-                "pts_per_100": pl.Float64,
-                "transition_poss": pl.Int64,
-                "transition_points": pl.Int64,
-                "transition_freq": pl.Float64,
-                "transition_pts_per_100": pl.Float64,
-                "non_transition_pts_per_100": pl.Float64,
-                "transition_pts_added_per_100": pl.Float64,
-                "halfcourt_poss": pl.Int64,
-                "halfcourt_pts_per_100": pl.Float64,
-                "freq_off_steal": pl.Float64,
-                "freq_off_live_rebound": pl.Float64,
-            }
-        )
+        out = pl.DataFrame(schema={"offense_team_id": pl.Int64, **_CONTEXT_METRIC_SCHEMA})
         return out.to_pandas() if return_as_pandas else out
 
-    if apply_ctg_filters:
-        df = df.filter(
-            (pl.col("count_as_possession") == True)  # noqa: E712
-            & (pl.col("is_garbage_time") == False)  # noqa: E712
-            & (pl.col("is_heave_possession") == False)  # noqa: E712
-        )
+    df = _ctg_filtered(df) if apply_ctg_filters else df
+    league_non_transition_ppp = _league_non_transition_ppp(df, league_non_transition_ppp)
+    out = _context_rates(_context_counts(df, ["offense_team_id"]), league_non_transition_ppp).sort("offense_team_id")
+    return out.to_pandas() if return_as_pandas else out
 
-    is_trans = pl.col("is_transition") == True  # noqa: E712
 
-    if league_non_transition_ppp is None:
-        nt = df.filter(~is_trans)
-        league_non_transition_ppp = 100.0 * nt["points"].sum() / nt.height if nt.height else 0.0
+# ---------------------------------------------------------------------------
+# Shared aggregation core — team / lineup / player all roll up the same way
+# ---------------------------------------------------------------------------
 
-    agg = df.group_by("offense_team_id").agg(
-        pl.len().alias("poss"),
-        pl.col("points").sum().alias("points"),
-        is_trans.sum().alias("transition_poss"),
-        pl.col("points").filter(is_trans).sum().alias("transition_points"),
-        (~is_trans).sum().alias("halfcourt_poss"),
-        pl.col("points").filter(~is_trans).sum().alias("halfcourt_points"),
-        (pl.col("transition_source") == "steal").sum().alias("_trans_steal"),
-        (pl.col("transition_source") == "live_rebound").sum().alias("_trans_reb"),
+
+def _ctg_filtered(df: pl.DataFrame) -> pl.DataFrame:
+    """CTG's default view: drop garbage time, heaves, and non-counting possessions."""
+    return df.filter(
+        (pl.col("count_as_possession") == True)  # noqa: E712
+        & (pl.col("is_garbage_time") == False)  # noqa: E712
+        & (pl.col("is_heave_possession") == False)  # noqa: E712
     )
 
-    out = (
-        agg.with_columns(
+
+def _league_non_transition_ppp(df: pl.DataFrame, supplied: Optional[float]) -> float:
+    """The Pts+/Poss baseline: league-average PPP on non-transition-start possessions.
+
+    Computed from the frame when not supplied — only meaningful on a season-wide
+    frame (on a single game the "league" is just the two teams in it). Every
+    rollup in one call shares ONE baseline, so on/off diffs stay comparable.
+    """
+    if supplied is not None:
+        return supplied
+    nt = df.filter(pl.col("is_transition") == False)  # noqa: E712
+    return 100.0 * nt["points"].sum() / nt.height if nt.height else 0.0
+
+
+def _context_counts(df: pl.DataFrame, by: list[str]) -> pl.DataFrame:
+    """Raw (additive) play-context counts grouped by *by*.
+
+    Counts only — no rates. Keeping the additive layer separate is what lets
+    :func:`player_play_context` derive the OFF side by simple subtraction
+    (team total - on-court), which is exactly what makes the on/off partition
+    identity exact rather than approximate.
+    """
+    is_trans = pl.col("is_transition") == True  # noqa: E712
+    # Every count is cast to Int64 explicitly: pl.len() and Boolean.sum() are UInt32,
+    # which (a) disagrees with the declared zero-row schema and (b) would wrap on the
+    # subtraction that derives the OFF side in player_play_context.
+    return df.group_by(by).agg(
+        pl.len().cast(pl.Int64).alias("poss"),
+        pl.col("points").sum().cast(pl.Int64).alias("points"),
+        is_trans.sum().cast(pl.Int64).alias("transition_poss"),
+        pl.col("points").filter(is_trans).sum().cast(pl.Int64).alias("transition_points"),
+        (~is_trans).sum().cast(pl.Int64).alias("halfcourt_poss"),
+        pl.col("points").filter(~is_trans).sum().cast(pl.Int64).alias("halfcourt_points"),
+        (pl.col("transition_source") == "steal").sum().cast(pl.Int64).alias("_trans_steal"),
+        (pl.col("transition_source") == "live_rebound").sum().cast(pl.Int64).alias("_trans_reb"),
+    )
+
+
+def _context_rates(counts: pl.DataFrame, league_non_transition_ppp: float) -> pl.DataFrame:
+    """Turn :func:`_context_counts` output into the CTG metric columns."""
+    return (
+        counts.with_columns(
             (100.0 * pl.col("points") / pl.col("poss")).alias("pts_per_100"),
             (pl.col("transition_poss") / pl.col("poss")).alias("transition_freq"),
             pl.when(pl.col("transition_poss") > 0)
@@ -940,8 +1017,201 @@ def team_play_context(
             pl.col("non_transition_pts_per_100").alias("halfcourt_pts_per_100"),
         )
         .drop("_trans_steal", "_trans_reb", "halfcourt_points")
-        .sort("offense_team_id")
     )
+
+
+def _require_lineups(df: pl.DataFrame) -> None:
+    """Fail loudly when the 5v5 lineup columns are absent.
+
+    Without ``off_player_1..5`` a lineup/player rollup would silently degenerate
+    (an empty group key, or every possession attributed to one bucket), which is
+    worse than an error — so this raises rather than returning a plausible-looking
+    wrong answer.
+    """
+    missing = [c for c in _OFF_PLAYER_COLS if c not in df.columns]
+    if missing:
+        raise ValueError(
+            f"missing lineup columns {missing}: pass a frame through "
+            "nba_possessions.attach_possession_lineups() before a lineup/player rollup"
+        )
+
+
+def lineup_play_context(
+    possessions: pl.DataFrame,
+    *,
+    min_poss: int = 0,
+    league_non_transition_ppp: Optional[float] = None,
+    apply_ctg_filters: bool = True,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Roll possessions up into a per-5-man-lineup Play-Context table.
+
+    The lineup analogue of :func:`team_play_context`: same metric columns, grouped
+    by the five players on the floor **for the offense**. Lineups are identified by
+    ``lineup_id`` — the five player ids sorted ascending and hyphen-joined — so the
+    same five players always land in the same bucket regardless of slot order.
+
+    Requires the ``off_player_1..5`` columns from
+    :func:`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`
+    (which passes the play-context columns through, so the two compose in either
+    order).
+
+    Args:
+        possessions: Frame from :func:`add_play_context` **with lineups attached**.
+        min_poss: Drop lineups below this possession count (CTG's tables carry a
+            minimum; 0 keeps everything, which is what the partition identity needs).
+        league_non_transition_ppp: Pts+/Poss baseline; see :func:`team_play_context`.
+        apply_ctg_filters: Drop garbage-time / heave / non-counting possessions first.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per (team, lineup) with :data:`LINEUP_PLAY_CONTEXT_SCHEMA`.
+        Empty input returns a zero-row frame with that schema.
+
+    Raises:
+        ValueError: when the ``off_player_*`` columns are missing.
+
+    Example:
+        Quick start::
+
+            poss = attach_possession_lineups(add_play_context(enh), oncourt, enh, home_team_id=home)
+            lu = lineup_play_context(poss, min_poss=25)
+            print(lu.sort("pts_per_100", descending=True).head())
+    """
+    _require_lineups(possessions)
+    if possessions.is_empty():
+        out = pl.DataFrame(schema=LINEUP_PLAY_CONTEXT_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    df = _ctg_filtered(possessions) if apply_ctg_filters else possessions
+    league_non_transition_ppp = _league_non_transition_ppp(df, league_non_transition_ppp)
+
+    # Sort the five ids NUMERICALLY, then cast the list's inner dtype to Utf8 to join.
+    # (Casting to Utf8 before sorting would order them lexicographically -- "10" < "9" --
+    # which still yields a stable key but scrambles the off_player_* ids parsed back out.)
+    df = df.with_columns(
+        pl.concat_list(_OFF_PLAYER_COLS).list.sort().cast(pl.List(pl.Utf8)).list.join("-").alias("lineup_id")
+    )
+    counts = _context_counts(df, ["offense_team_id", "lineup_id"])
+    out = _context_rates(counts, league_non_transition_ppp)
+
+    # re-attach the five ids (sorted, so they line up with lineup_id)
+    ids = out["lineup_id"].str.split("-")
+    out = out.with_columns([ids.list.get(i).cast(pl.Int64).alias(f"off_player_{i + 1}") for i in range(5)])
+    if min_poss > 0:
+        out = out.filter(pl.col("poss") >= min_poss)
+    out = out.select(list(LINEUP_PLAY_CONTEXT_SCHEMA)).sort(["offense_team_id", "poss"], descending=[False, True])
+    return out.to_pandas() if return_as_pandas else out
+
+
+def player_play_context(
+    possessions: pl.DataFrame,
+    *,
+    league_non_transition_ppp: Optional[float] = None,
+    apply_ctg_filters: bool = True,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half).
+
+    For each player: their team's offensive play-context **with them on the floor**
+    (``on_*``), **without them** (``off_*``), and the on-minus-off difference
+    (``diff_*``) — which is the number CTG actually displays.
+
+    The OFF side is derived by **subtraction** (team total minus on-court), not by a
+    second scan. That is deliberate: it makes the partition exact by construction —
+    ``on_poss + off_poss == team_poss`` and the same for points — so a leak (a
+    double-counted possession, a dropped lineup slot) is impossible to hide. The
+    test suite asserts that identity directly.
+
+    Like CTG's on/off, this is a **raw** split: no luck adjustment, no opponent
+    adjustment, no minutes threshold. It is a descriptive difference, not a causal
+    estimate — for that, use the RAPM surface
+    (:func:`~sportsdataverse.nba.nba_rapm.nba_rapm`).
+
+    Requires ``off_player_1..5`` from
+    :func:`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`.
+
+    Args:
+        possessions: Frame from :func:`add_play_context` **with lineups attached**.
+        league_non_transition_ppp: Pts+/Poss baseline; see :func:`team_play_context`.
+            One baseline is shared across the on and off sides so the diffs are
+            comparable.
+        apply_ctg_filters: Drop garbage-time / heave / non-counting possessions first.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per (player, team) with :data:`PLAYER_PLAY_CONTEXT_SCHEMA`.
+        Empty input returns a zero-row frame with that schema.
+
+    Raises:
+        ValueError: when the ``off_player_*`` columns are missing.
+
+    Example:
+        Quick start::
+
+            poss = attach_possession_lineups(add_play_context(enh), oncourt, enh, home_team_id=home)
+            onoff = player_play_context(poss)
+            print(onoff.sort("diff_pts_per_100", descending=True).head())
+
+        Who makes their team run?::
+
+            print(onoff.sort("diff_transition_freq", descending=True).head())
+    """
+    _require_lineups(possessions)
+    if possessions.is_empty():
+        out = pl.DataFrame(schema=PLAYER_PLAY_CONTEXT_SCHEMA)
+        return out.to_pandas() if return_as_pandas else out
+
+    df = _ctg_filtered(possessions) if apply_ctg_filters else possessions
+    league_ppp = _league_non_transition_ppp(df, league_non_transition_ppp)
+
+    keep = ["game_id", "possession_number", "offense_team_id", "points", "is_transition", "transition_source"]
+    long = (
+        df.select(keep + _OFF_PLAYER_COLS)
+        .unpivot(index=keep, on=_OFF_PLAYER_COLS, variable_name="_slot", value_name="player_id")
+        .drop_nulls("player_id")
+        # a player occupying two slots of the same possession would double-count
+        .unique(subset=["game_id", "possession_number", "player_id"])
+    )
+
+    on_counts = _context_counts(long, ["offense_team_id", "player_id"])
+    team_counts = _context_counts(df, ["offense_team_id"])
+
+    count_cols = [
+        "poss",
+        "points",
+        "transition_poss",
+        "transition_points",
+        "halfcourt_poss",
+        "halfcourt_points",
+        "_trans_steal",
+        "_trans_reb",
+    ]
+    off_counts = on_counts.join(team_counts, on="offense_team_id", how="inner", suffix="_team").select(
+        "offense_team_id",
+        "player_id",
+        *[(pl.col(f"{c}_team") - pl.col(c)).alias(c) for c in count_cols],
+    )
+
+    on_rates = _context_rates(on_counts, league_ppp)
+    off_rates = _context_rates(off_counts, league_ppp)
+
+    metric_cols = [c for c in _CONTEXT_METRIC_SCHEMA if c not in ("halfcourt_points",)]
+    out = on_rates.join(
+        off_rates.rename({c: f"off_{c}" for c in metric_cols}),
+        on=["offense_team_id", "player_id"],
+        how="inner",
+    ).rename({c: f"on_{c}" for c in metric_cols})
+
+    out = out.with_columns(
+        (pl.col("on_pts_per_100") - pl.col("off_pts_per_100")).alias("diff_pts_per_100"),
+        (pl.col("on_transition_freq") - pl.col("off_transition_freq")).alias("diff_transition_freq"),
+        (pl.col("on_transition_pts_per_100") - pl.col("off_transition_pts_per_100")).alias(
+            "diff_transition_pts_per_100"
+        ),
+        (pl.col("on_halfcourt_pts_per_100") - pl.col("off_halfcourt_pts_per_100")).alias("diff_halfcourt_pts_per_100"),
+    )
+    out = out.select(list(PLAYER_PLAY_CONTEXT_SCHEMA)).sort(["offense_team_id", "on_poss"], descending=[False, True])
     return out.to_pandas() if return_as_pandas else out
 
 
