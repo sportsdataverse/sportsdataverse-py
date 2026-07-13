@@ -193,6 +193,7 @@ from sportsdataverse.nba import helper_nba_pickcenter as helper_nba_pickcenter  
 from sportsdataverse.nba import helper_nba_roster_items as helper_nba_roster_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_items as helper_nba_team_items  # noqa: F401
 from sportsdataverse.nba import in_game_features as in_game_features  # noqa: F401
+from sportsdataverse.nba import lineup_play_context as lineup_play_context  # noqa: F401
 from sportsdataverse.nba import load_darko_dpm as load_darko_dpm  # noqa: F401
 from sportsdataverse.nba import load_dunks_threes_stats as load_dunks_threes_stats  # noqa: F401
 from sportsdataverse.nba import load_epm as load_epm  # noqa: F401
@@ -256,6 +257,7 @@ from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
+from sportsdataverse.nba import player_play_context as player_play_context  # noqa: F401
 from sportsdataverse.nba import player_rates as player_rates  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_quarter_boxscores as players_on_court_from_quarter_boxscores  # noqa: F401
@@ -273,6 +275,7 @@ from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.nba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.nba import shot_selection_quality as shot_selection_quality  # noqa: F401
 from sportsdataverse.nba import shrink_clutch as shrink_clutch  # noqa: F401
+from sportsdataverse.nba import starters_on_court_counts as starters_on_court_counts  # noqa: F401
 from sportsdataverse.nba import team_pace_projection as team_pace_projection  # noqa: F401
 from sportsdataverse.nba import team_play_context as team_play_context  # noqa: F401
 from sportsdataverse.nba import train_spm as train_spm  # noqa: F401
@@ -454,6 +457,7 @@ __all__ = [
     "helper_nba_roster_items",
     "helper_nba_team_items",
     "in_game_features",
+    "lineup_play_context",
     "load_darko_dpm",
     "load_dunks_threes_stats",
     "load_epm",
@@ -518,6 +522,7 @@ __all__ = [
     "normalize_player_name",
     "normalize_team_roster_columns",
     "parse_nba_stats_result_sets",
+    "player_play_context",
     "player_rates",
     "players_on_court_from_pbp",
     "players_on_court_from_quarter_boxscores",
@@ -535,6 +540,7 @@ __all__ = [
     "shooter_talent",
     "shot_selection_quality",
     "shrink_clutch",
+    "starters_on_court_counts",
     "team_pace_projection",
     "team_play_context",
     "train_spm",

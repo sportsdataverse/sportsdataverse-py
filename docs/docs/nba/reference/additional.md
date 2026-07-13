@@ -1879,6 +1879,42 @@ pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
 feats = in_game_features(pbp, 0.62)
 ```
 
+### `lineup_play_context(possessions: 'pl.DataFrame', *, min_poss: 'int' = 0, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#lineup_play_context}
+
+Roll possessions up into a per-5-man-lineup Play-Context table.
+
+The lineup analogue of `team_play_context`: same metric columns, grouped
+by the five players on the floor **for the offense**. Lineups are identified by
+`lineup_id` — the five player ids sorted ascending and hyphen-joined — so the
+same five players always land in the same bucket regardless of slot order.
+
+Requires the `off_player_1..5` columns from
+`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`
+(which passes the play-context columns through, so the two compose in either
+order).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `add_play_context` **with lineups attached**. |
+| `min_poss` | `int` | `0` | Drop lineups below this possession count (CTG's tables carry a minimum; 0 keeps everything, which is what the partition identity needs). |
+| `league_non_transition_ppp` | `Optional[float]` | `None` | Pts+/Poss baseline; see `team_play_context`. |
+| `apply_ctg_filters` | `bool` | `True` | Drop garbage-time / heave / non-counting possessions first. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (team, lineup) with `LINEUP_PLAY_CONTEXT_SCHEMA`. Empty input returns a zero-row frame with that schema.
+
+**Example**
+
+```python
+poss = attach_possession_lineups(add_play_context(enh), oncourt, enh, home_team_id=home)
+lu = lineup_play_context(poss, min_poss=25)
+print(lu.sort("pts_per_100", descending=True).head())
+```
+
 ### `luck_adjusted_response(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0) -> 'pl.DataFrame'` {#luck_adjusted_response}
 
 Attach a per-possession `la_points` expected-points response.
@@ -3365,6 +3401,53 @@ assert normalize_player_name("Nikola Jokić") == normalize_player_name("Nikola J
 assert normalize_player_name("Gary Trent Jr.") == normalize_player_name("Gary Trent")
 ```
 
+### `player_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#player_play_context}
+
+Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half).
+
+For each player: their team's offensive play-context **with them on the floor**
+(`on_*`), **without them** (`off_*`), and the on-minus-off difference
+(`diff_*`) — which is the number CTG actually displays.
+
+The OFF side is derived by **subtraction** (team total minus on-court), not by a
+second scan. That is deliberate: it makes the partition exact by construction —
+`on_poss + off_poss == team_poss` and the same for points — so a leak (a
+double-counted possession, a dropped lineup slot) is impossible to hide. The
+test suite asserts that identity directly.
+
+Like CTG's on/off, this is a **raw** split: no luck adjustment, no opponent
+adjustment, no minutes threshold. It is a descriptive difference, not a causal
+estimate — for that, use the RAPM surface
+(`~sportsdataverse.nba.nba_rapm.nba_rapm`).
+
+Requires `off_player_1..5` from
+`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `add_play_context` **with lineups attached**. |
+| `league_non_transition_ppp` | `Optional[float]` | `None` | Pts+/Poss baseline; see `team_play_context`. One baseline is shared across the on and off sides so the diffs are comparable. |
+| `apply_ctg_filters` | `bool` | `True` | Drop garbage-time / heave / non-counting possessions first. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (player, team) with `PLAYER_PLAY_CONTEXT_SCHEMA`. Empty input returns a zero-row frame with that schema.
+
+**Example**
+
+```python
+poss = attach_possession_lineups(add_play_context(enh), oncourt, enh, home_team_id=home)
+onoff = player_play_context(poss)
+print(onoff.sort("diff_pts_per_100", descending=True).head())
+
+# Who makes their team run?
+
+print(onoff.sort("diff_transition_freq", descending=True).head())
+```
+
 ### `player_rates(box_logs: 'pl.DataFrame') -> 'pl.DataFrame'` {#player_rates}
 
 Per-player per-minute rate stats from box logs.
@@ -3921,6 +4004,33 @@ factor `k_i = τ² / (τ² + σ²_i)` and `clutch_skill_shrunk = k_i · delta_i`
 ```python
 from sportsdataverse.nba.nba_clutch import clutch_delta, shrink_clutch
 skill = shrink_clutch(clutch_delta(clutch_frame, baseline_frame))
+```
+
+### `starters_on_court_counts(possessions: 'pl.DataFrame', starters: 'dict[int, list[int]]') -> 'dict[int, int]'` {#starters_on_court_counts}
+
+Count, per possession, how many **starters** are on the floor across BOTH teams.
+
+This supplies the second half of CTG's garbage-time rule — "there have to be
+**two or fewer starters on the floor combined between the two teams**" — which
+`flag_garbage_time` cannot evaluate on its own (the possession frame does
+not carry who is on the floor).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession frame with the ten on-court columns `off_player_1..5` **and** `def_player_1..5` (from `~sportsdataverse.nba.nba_possessions.attach_possession_lineups`). |
+| `starters` | `dict[int, list[int]]` |  | `{team_id: [player_id, ...]}` — e.g. from `~sportsdataverse.nba.nba_lineups._starters_from_boxscore_v3`. Player ids are matched across both teams' starting fives, so the offense/defense split of the lineup columns does not matter. |
+
+**Returns**
+
+`{possession_number: starters_on_floor}`, each value in `0..10`. An **empty** *starters* map yields all-zero counts, which would make CTG's `<= 2` clause vacuously true and flag every margin-qualifying possession. The counts are reported honestly rather than guessed — do not pass an empty map and then read the result as CTG-exact.
+
+**Example**
+
+```python
+counts = starters_on_court_counts(poss, _starters_from_boxscore_v3(box))
+print(max(counts.values()))  # 10 at the opening tip
 ```
 
 ### `team_pace_projection(home_team_id: 'str', away_team_id: 'str', ratings: 'pl.DataFrame', *, league_id: 'str' = '00') -> 'float'` {#team_pace_projection}
