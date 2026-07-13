@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sportsdataverse.mbb.mbb_ncaa_models import (
+    FieldGoalStats,
     LineupEvent,
     LineupEventStats,
     LineupId,
@@ -63,3 +64,31 @@ def test_players_array_is_top_hits_shaped():
     ev = _minimal_lineup_event(players)
     pa = agg._players_array(ev)
     assert pa["hits"]["hits"][0]["_source"]["players"] == [{"code": "AaWiggins", "id": "Wiggins, Aaron"}]
+
+
+def _stats_with_rim(att_total, made_total, att_orb=0):
+    s = LineupEventStats()
+    s.fg_rim = FieldGoalStats(
+        attempts=ShotClockStats(total=att_total, orb=att_orb),
+        made=ShotClockStats(total=made_total),
+    )
+    s.fg = FieldGoalStats(attempts=ShotClockStats(total=att_total))
+    s.pts = 12
+    s.num_possessions = 20
+    return s
+
+
+def test_sum_fields_base_prefix_reads_total():
+    s = _stats_with_rim(att_total=8, made_total=5)
+    out = agg._sum_fields(s, dst="off", prefix="", suffix=".total")
+    assert out["total_off_2prim_attempts"] == 8.0
+    assert out["total_off_2prim_made"] == 5.0
+    assert out["total_off_fga"] == 8.0
+    assert out["total_off_pts"] == 12.0  # scalar, prefix "" only
+    assert out["total_off_poss"] == 20.0
+
+
+def test_sum_fields_scramble_prefix_reads_orb():
+    s = _stats_with_rim(att_total=8, made_total=5, att_orb=3)
+    out = agg._sum_fields(s, dst="off", prefix="scramble_", suffix=".orb")
+    assert out["total_off_scramble_2prim_attempts"] == 3.0  # .orb leaf
