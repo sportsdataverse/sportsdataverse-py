@@ -38,6 +38,7 @@ from sportsdataverse.nba.nba_lineups import (
 from sportsdataverse.nba.nba_play_context import (
     LINEUP_PLAY_CONTEXT_SCHEMA,
     PLAYER_PLAY_CONTEXT_SCHEMA,
+    _context_rates,
     add_play_context,
     lineup_play_context,
     player_play_context,
@@ -205,3 +206,29 @@ def test_team_count_dtypes_match_the_empty_schema(frames) -> None:
     for col in ("poss", "points", "transition_poss", "transition_points", "halfcourt_poss"):
         assert populated.schema[col] == pl.Int64, f"{col} is {populated.schema[col]}, want Int64"
         assert populated.schema[col] == empty.schema[col], f"{col}: populated/empty schema disagree"
+
+
+def test_zero_poss_rates_are_null_not_nan() -> None:
+    """A zero-possession group (the subtraction-derived OFF side of a player who never
+    sits: off_poss = team_poss - on_poss = 0) must yield NULL rates, not inf/NaN.
+
+    NaN would poison the on-minus-off diff and any downstream aggregation. Guards the
+    poss-denominator branch in ``_context_rates``.
+    """
+    zero = pl.DataFrame(
+        {
+            "offense_team_id": [1],
+            "poss": [0],
+            "points": [0],
+            "transition_poss": [0],
+            "transition_points": [0],
+            "halfcourt_poss": [0],
+            "halfcourt_points": [0],
+            "_trans_steal": [0],
+            "_trans_reb": [0],
+        }
+    )
+    rates = _context_rates(zero, league_non_transition_ppp=1.0)
+    for col in ("pts_per_100", "transition_freq", "freq_off_steal", "freq_off_live_rebound"):
+        val = rates[col][0]
+        assert val is None, f"{col} = {val!r}, want None (not inf/NaN)"

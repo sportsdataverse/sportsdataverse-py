@@ -1030,8 +1030,18 @@ def _context_rates(counts: pl.DataFrame, league_non_transition_ppp: float) -> pl
     """Turn :func:`_context_counts` output into the CTG metric columns."""
     return (
         counts.with_columns(
-            (100.0 * pl.col("points") / pl.col("poss")).alias("pts_per_100"),
-            (pl.col("transition_poss") / pl.col("poss")).alias("transition_freq"),
+            # poss can be 0 on the subtraction-derived OFF side (a player who never
+            # sits: off_poss = team_poss - on_poss = 0). Guard every poss-denominator
+            # rate to a null rather than emit inf/NaN into the output (and into the
+            # on-minus-off diff). Matches the transition/halfcourt guards below.
+            pl.when(pl.col("poss") > 0)
+            .then(100.0 * pl.col("points") / pl.col("poss"))
+            .otherwise(None)
+            .alias("pts_per_100"),
+            pl.when(pl.col("poss") > 0)
+            .then(pl.col("transition_poss") / pl.col("poss"))
+            .otherwise(None)
+            .alias("transition_freq"),
             pl.when(pl.col("transition_poss") > 0)
             .then(100.0 * pl.col("transition_points") / pl.col("transition_poss"))
             .otherwise(None)
@@ -1040,8 +1050,14 @@ def _context_rates(counts: pl.DataFrame, league_non_transition_ppp: float) -> pl
             .then(100.0 * pl.col("halfcourt_points") / pl.col("halfcourt_poss"))
             .otherwise(None)
             .alias("non_transition_pts_per_100"),
-            (pl.col("_trans_steal") / pl.col("poss")).alias("freq_off_steal"),
-            (pl.col("_trans_reb") / pl.col("poss")).alias("freq_off_live_rebound"),
+            pl.when(pl.col("poss") > 0)
+            .then(pl.col("_trans_steal") / pl.col("poss"))
+            .otherwise(None)
+            .alias("freq_off_steal"),
+            pl.when(pl.col("poss") > 0)
+            .then(pl.col("_trans_reb") / pl.col("poss"))
+            .otherwise(None)
+            .alias("freq_off_live_rebound"),
         )
         .with_columns(
             ((pl.col("transition_pts_per_100") - league_non_transition_ppp) * pl.col("transition_freq")).alias(

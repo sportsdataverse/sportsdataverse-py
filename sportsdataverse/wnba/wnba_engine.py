@@ -301,7 +301,14 @@ def wnba_play_context(
     Returns:
         The possession frame (``POSSESSIONS_SCHEMA``) plus
         :data:`~sportsdataverse.nba.nba_play_context.PLAY_CONTEXT_POSSESSIONS_SCHEMA`.
-        Empty or malformed payloads return a zero-row frame — never raises.
+        Empty or malformed payloads return a zero-row frame — never raises on payload
+        content.
+
+    Raises:
+        ValueError: when *transition_variant* is not one of
+            :data:`~sportsdataverse.nba.nba_play_context_constants.TRANSITION_VARIANTS`
+            (propagated from
+            :func:`~sportsdataverse.nba.nba_play_context.add_transition`).
 
     Example:
         Quick start::

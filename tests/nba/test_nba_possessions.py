@@ -924,19 +924,22 @@ def test_start_type_ft_sandwich_technical_asymmetry():
     ``exclude_technical``; not exercised by the committed fixtures.
     """
     made = {"event_type": "made_shot", "seconds_remaining": 100.0}
+    timeout = {"event_type": "timeout", "seconds_remaining": 90.0}
     tech_ft = {"event_type": "free_throw", "sub_type": "Free Throw Technical", "seconds_remaining": 90.0}
 
-    # PREVIOUS-possession boundary timeout, then this possession opens on a
-    # same-clock technical FT → sandwich → suppressed → falls through to OffMadeShot.
-    prev_rows = [made, {"event_type": "timeout", "seconds_remaining": 90.0}]
+    # PREVIOUS-possession boundary timeout, then this possession opens on a same-clock
+    # technical FT → sandwich → timeout suppressed. Production invariant:
+    # prev_end_row IS the previous group's last row (build_possessions:758), so here it
+    # is the timeout itself. pbpstats' previous_possession_ending_event skips only
+    # Substitutions (not Timeouts), so a suppressed boundary timeout falls through to
+    # OffDeadball — NOT the made shot before it. Under the pre-fix code the technical FT
+    # was wrongly treated as "not a sandwich", so the timeout counted → OffTimeout; this
+    # assertion discriminates the fix.
+    prev_rows = [made, timeout]
     cur_rows = [tech_ft, {"event_type": "made_shot", "seconds_remaining": 80.0}]
-    assert _possession_start_type(made, prev_rows, cur_rows) == "OffMadeShot"
+    assert _possession_start_type(timeout, prev_rows, cur_rows) == "OffDeadball"
 
     # CURRENT-possession timeout before a same-clock technical FT → carve-out
-    # retained → still OffTimeout.
-    cur_rows_to = [
-        {"event_type": "timeout", "seconds_remaining": 90.0},
-        tech_ft,
-        {"event_type": "made_shot", "seconds_remaining": 80.0},
-    ]
+    # retained (possession_has_timeout keeps `and not is_technical_ft`) → OffTimeout.
+    cur_rows_to = [timeout, tech_ft, {"event_type": "made_shot", "seconds_remaining": 80.0}]
     assert _possession_start_type(made, [made], cur_rows_to) == "OffTimeout"
