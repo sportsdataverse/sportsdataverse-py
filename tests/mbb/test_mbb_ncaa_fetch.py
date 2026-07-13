@@ -107,7 +107,7 @@ def test_other_host_url_rejected(tmp_path: Path) -> None:
 
 def test_ban_marker_response_rotates_proxy(tmp_path: Path) -> None:
     transport = FakeTransport([(200, "Access Denied - captcha"), (200, "<html>ok</html>")])
-    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
     fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1", "http://u:p@2.2.2.2:2"])
 
     text = fetcher.fetch_html("contests/1/play_by_play")
@@ -122,10 +122,55 @@ def test_ban_marker_response_rotates_proxy(tmp_path: Path) -> None:
 
 def test_all_proxies_exhausted_raises(tmp_path: Path) -> None:
     transport = FakeTransport([(403, "forbidden"), (403, "forbidden"), (403, "forbidden")])
-    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, max_retries=0)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, max_retries=0, rotation_backoff=0.0)
     fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"])
     with pytest.raises(RuntimeError, match="rotating proxies"):
         fetcher.fetch_html("contests/1/play_by_play")
+
+
+# --- rotation backoff ---------------------------------------------------------
+
+
+def test_rotation_backoff_sleeps_between_retries_not_before_first(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Backoff paces the retry path only -- no sleep before the first attempt."""
+    transport = FakeTransport(
+        [(200, "Access Denied - captcha"), (200, "Access Denied - captcha"), (200, "<html>ok</html>")]
+    )
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.5)
+    fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1", "http://u:p@2.2.2.2:2", "http://u:p@3.3.3.3:3"])
+
+    sleeps: "list[float]" = []
+    monkeypatch.setattr("sportsdataverse.mbb.mbb_ncaa_fetch.time.sleep", sleeps.append)
+
+    text = fetcher.fetch_html("contests/1/play_by_play")
+
+    assert text == "<html>ok</html>"
+    assert sleeps == [0.5, 0.5]
+
+
+def test_rotation_backoff_no_sleep_on_clean_first_hit(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    transport = FakeTransport([(200, "<html>ok</html>")])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=1.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"])
+
+    sleeps: "list[float]" = []
+    monkeypatch.setattr("sportsdataverse.mbb.mbb_ncaa_fetch.time.sleep", sleeps.append)
+
+    fetcher.fetch_html("contests/1/play_by_play")
+
+    assert sleeps == []
+
+
+def test_rotation_backoff_env_override(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _from_env
+
+    monkeypatch.setenv("SDV_PY_NCAA_ROTATION_BACKOFF", "2.5")
+    assert _from_env().rotation_backoff == 2.5
+
+    monkeypatch.setenv("SDV_PY_NCAA_ROTATION_BACKOFF", "abc")
+    assert _from_env().rotation_backoff == 1.0
 
 
 # --- redaction ---------------------------------------------------------------
