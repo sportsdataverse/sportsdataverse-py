@@ -91,6 +91,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -158,6 +159,9 @@ class NcaaFetchConfig:
     timeout: int = 45
     impersonate: str = "chrome"
     max_retries: int = 2
+    # Seconds to sleep between proxy-rotation attempts (retry path only);
+    # paces a ban wave instead of bursting the pool.
+    rotation_backoff: float = 1.0
     # Injection point for tests / alternate transports. ``None`` -> the real
     # curl_cffi-backed transport built lazily by NcaaFetcher.
     transport: Optional[FetchTransport] = None
@@ -176,6 +180,7 @@ class NcaaFetchConfig:
             f"proxybonanza_pkg={self.proxybonanza_pkg!r}, "
             f"timeout={self.timeout}, impersonate={self.impersonate!r}, "
             f"max_retries={self.max_retries}, "
+            f"rotation_backoff={self.rotation_backoff}, "
             f"transport={'<custom>' if self.transport else None})"
         )
 
@@ -214,6 +219,11 @@ def _from_env() -> NcaaFetchConfig:
             pass
     if (v := os.environ.get("SDV_PY_NCAA_IMPERSONATE")) is not None:
         cfg.impersonate = v
+    if (v := os.environ.get("SDV_PY_NCAA_ROTATION_BACKOFF")) is not None:
+        try:
+            cfg.rotation_backoff = float(v)
+        except ValueError:
+            pass
     return cfg
 
 
@@ -674,7 +684,9 @@ class NcaaFetcher:
         pool = self._pool or [""]
         attempts = len(pool) + self.config.max_retries
         last_err = "no proxies in pool"
-        for _ in range(attempts):
+        for i in range(attempts):
+            if i and self.config.rotation_backoff > 0:
+                time.sleep(self.config.rotation_backoff)
             proxy = pool[self._proxy_idx % len(pool)]
             proxies = {"http": proxy, "https": proxy} if proxy else {}
             try:

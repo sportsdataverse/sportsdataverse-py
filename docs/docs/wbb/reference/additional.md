@@ -1064,7 +1064,7 @@ The set of players on the floor, as an opaque id string
 
 Game location (`Game.LocationType`, `Game.scala:36-38`).
 
-### `NcaaFetchConfig(cache_dir: 'Optional[Path]' = None, proxy_url: 'Optional[str]' = None, proxybonanza_key: 'Optional[str]' = None, proxybonanza_pkg: 'Optional[str]' = None, timeout: 'int' = 45, impersonate: 'str' = 'chrome', max_retries: 'int' = 2, transport: 'Optional[FetchTransport]' = None) -> None` {#NcaaFetchConfig}
+### `NcaaFetchConfig(cache_dir: 'Optional[Path]' = None, proxy_url: 'Optional[str]' = None, proxybonanza_key: 'Optional[str]' = None, proxybonanza_pkg: 'Optional[str]' = None, timeout: 'int' = 45, impersonate: 'str' = 'chrome', max_retries: 'int' = 2, rotation_backoff: 'float' = 1.0, transport: 'Optional[FetchTransport]' = None) -> None` {#NcaaFetchConfig}
 
 Runtime configuration for the stats.ncaa.org fetch layer.
 
@@ -1083,6 +1083,7 @@ via `proxybonanza_key` + `proxybonanza_pkg` (resolved lazily by
 | `timeout` | `int` | `45` |  |
 | `impersonate` | `str` | `'chrome'` |  |
 | `max_retries` | `int` | `2` |  |
+| `rotation_backoff` | `float` | `1.0` |  |
 | `transport` | `Optional[FetchTransport]` | `None` |  |
 
 **Example**
