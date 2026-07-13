@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle](#nba--wnba--ctg-play-context-t36-possessionshotlineupplayer-tables--start-type-oracle)
   - [Fixes](#fixes)
   - [Dependencies](#dependencies)
   - [Release utilities — `sportsdataverse.release` (sportsdataversedata R-package port)](#release-utilities--sportsdataverserelease-sportsdataversedata-r-package-port)
@@ -173,6 +174,32 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle
+
+- **`nba_play_context` / `wnba_play_context`** — Cleaning the Glass recreation on
+  the shipped possession engine. Per-possession context (`possession_start_type`
+  coarse family + `possession_start_type_detail` zone-split + the five
+  `possession_start_type_ctg` buckets, `is_transition` / `transition_source`,
+  `seconds_to_first_play`, `is_garbage_time` / `garbage_time_basis`,
+  `is_heave_possession`) and per-shot context (`ctg_shot_zone`, `is_putback`,
+  `is_second_chance_shot`, `shot_context`). `wnba_play_context` is a real shim
+  (`wnba_engine`), byte-identical to the NBA core on WNBA fixtures.
+- **`lineup_play_context` / `player_play_context`** — on/off possessions + points
+  per 5-man unit and per player, sharing one aggregation core; the OFF side is
+  derived by subtraction so the on/off split is exact by construction.
+- **`starters_on_court_counts`** — implements CTG's garbage-time "<=2 starters on
+  floor" clause; when starter data is joined `garbage_time_basis` upgrades from
+  `margin_only` to `margin+starters` (containment-verified against margin-only).
+- **Faithful pbpstats possession start-type** — boundary-only timeout detection
+  (a port of `possession_has_timeout` / `previous_possession_has_timeout`, incl.
+  the asymmetric FT-sandwich technical carve-out), exact CTG shot-zone boundaries
+  from the legacy coordinates (the v3 `shot_distance` column is `Int64`, rounded
+  to whole feet), and a `team_id == 0` team-rebound discriminator (the v3 feed
+  stuffs the team id into `person_id`). Validated like-for-like against
+  pbpstats-live: **99.50% coarse `possession_start_type` agreement (592/595)**
+  across the committed fixtures (`test_nba_play_context_oracle.py`, gated on
+  `SDV_PBPSTATS_ROOT`).
 
 ### Fixes
 

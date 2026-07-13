@@ -18,6 +18,7 @@ from sportsdataverse.mbb.mbb_ncaa_data_quality import *
 from sportsdataverse.mbb.mbb_ncaa_events import *
 from sportsdataverse.mbb.mbb_ncaa_fetch import *
 from sportsdataverse.mbb.mbb_ncaa_html import *
+from sportsdataverse.mbb.mbb_ncaa_lineup_aggregation import *
 from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import *
 from sportsdataverse.mbb.mbb_ncaa_models import *
 from sportsdataverse.mbb.mbb_ncaa_names import *
@@ -33,6 +34,15 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import *
 from sportsdataverse.mbb.mbb_ncaa_stints import *
 from sportsdataverse.mbb.mbb_ncaa_strength import *
 from sportsdataverse.mbb.mbb_ncaa_team_parsers import *
+from sportsdataverse.mbb.mbb_ncaa_box_stats import *
+from sportsdataverse.mbb.mbb_ncaa_game_pbp import *
+from sportsdataverse.mbb.mbb_ncaa_lineups import *
+from sportsdataverse.mbb.mbb_ncaa_possession_seg import *
+from sportsdataverse.mbb.mbb_ncaa_schedule import *
+from sportsdataverse.mbb.mbb_ncaa_scoreboard import *
+from sportsdataverse.mbb.mbb_ncaa_shots import *
+from sportsdataverse.mbb.mbb_ncaa_stats_agg import *
+from sportsdataverse.mbb.mbb_ncaa_team_ids import *
 from sportsdataverse.mbb.mbb_archetypes import *
 from sportsdataverse.mbb.mbb_box_bpm import *
 from sportsdataverse.mbb.mbb_pbp import *

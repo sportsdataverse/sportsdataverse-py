@@ -378,6 +378,22 @@ from sportsdataverse.wbb import mae as mae  # noqa: F401
 from sportsdataverse.wbb import matching_player as matching_player  # noqa: F401
 from sportsdataverse.wbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.wbb import most_recent_wbb_season as most_recent_wbb_season  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_box_scores as ncaa_wbb_box_scores  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_date_games as ncaa_wbb_date_games  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_game_pbp as ncaa_wbb_game_pbp  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_join_pbp_shots as ncaa_wbb_join_pbp_shots  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_lineups as ncaa_wbb_lineups  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_on_off as ncaa_wbb_on_off  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_play_by_play as ncaa_wbb_play_by_play  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_player_combos as ncaa_wbb_player_combos  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_player_lineups as ncaa_wbb_player_lineups  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_player_stats as ncaa_wbb_player_stats  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_possessions as ncaa_wbb_possessions  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_shot_locations as ncaa_wbb_shot_locations  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_team_ids as ncaa_wbb_team_ids  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_team_roster as ncaa_wbb_team_roster  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_team_schedule as ncaa_wbb_team_schedule  # noqa: F401
+from sportsdataverse.wbb import ncaa_wbb_team_stats as ncaa_wbb_team_stats  # noqa: F401
 from sportsdataverse.wbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.wbb import order_lineup as order_lineup  # noqa: F401
 from sportsdataverse.wbb import parse_any_play as parse_any_play  # noqa: F401
@@ -445,6 +461,7 @@ from sportsdataverse.wbb import regress_shot_quality as regress_shot_quality  # 
 from sportsdataverse.wbb import remove_diacritics as remove_diacritics  # noqa: F401
 from sportsdataverse.wbb import reorder_and_reverse as reorder_and_reverse  # noqa: F401
 from sportsdataverse.wbb import reset_config as reset_config  # noqa: F401
+from sportsdataverse.wbb import resolve_ncaa_team_id as resolve_ncaa_team_id  # noqa: F401
 from sportsdataverse.wbb import ridge_cv_lambda as ridge_cv_lambda  # noqa: F401
 from sportsdataverse.wbb import ridge_fit as ridge_fit  # noqa: F401
 from sportsdataverse.wbb import right_kind_of_shot as right_kind_of_shot  # noqa: F401
@@ -845,6 +862,22 @@ __all__ = [
     "matching_player",
     "misspellings",
     "most_recent_wbb_season",
+    "ncaa_wbb_box_scores",
+    "ncaa_wbb_date_games",
+    "ncaa_wbb_game_pbp",
+    "ncaa_wbb_join_pbp_shots",
+    "ncaa_wbb_lineups",
+    "ncaa_wbb_on_off",
+    "ncaa_wbb_play_by_play",
+    "ncaa_wbb_player_combos",
+    "ncaa_wbb_player_lineups",
+    "ncaa_wbb_player_stats",
+    "ncaa_wbb_possessions",
+    "ncaa_wbb_shot_locations",
+    "ncaa_wbb_team_ids",
+    "ncaa_wbb_team_roster",
+    "ncaa_wbb_team_schedule",
+    "ncaa_wbb_team_stats",
     "normalize_team_roster_columns",
     "order_lineup",
     "parse_any_play",
@@ -912,6 +945,7 @@ __all__ = [
     "remove_diacritics",
     "reorder_and_reverse",
     "reset_config",
+    "resolve_ncaa_team_id",
     "ridge_cv_lambda",
     "ridge_fit",
     "right_kind_of_shot",

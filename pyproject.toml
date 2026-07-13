@@ -217,7 +217,7 @@ exclude = ["tests*", "docs*", "examples*", "archive*"]
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
 # package ships inline type information.
-sportsdataverse = ["cfb/models/*", "cricket/models/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nhl/models/*", "py.typed"]
+sportsdataverse = ["cfb/models/*", "cricket/models/*", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nhl/models/*", "wbb/data/*", "py.typed"]
 
 
 [tool.isort]
@@ -496,6 +496,7 @@ files = [
     "sportsdataverse/mbb/mbb_ncaa_shot_parser.py",
     "sportsdataverse/mbb/mbb_ncaa_pbp_glue.py",
     "sportsdataverse/mbb/mbb_ncaa_strength.py",
+    "sportsdataverse/mbb/mbb_ncaa_lineup_aggregation.py",
     "sportsdataverse/wbb/wbb_lineup_stats.py",
     "sportsdataverse/wbb/wbb_ratings.py",
     "sportsdataverse/wbb/wbb_luck.py",
@@ -518,6 +519,24 @@ files = [
     "sportsdataverse/wbb/wbb_ncaa_pbp_glue.py",
     "sportsdataverse/wbb/wbb_ncaa_fetch.py",
     "sportsdataverse/wbb/wbb_ncaa_strength.py",
+    "sportsdataverse/mbb/mbb_ncaa_box_stats.py",
+    "sportsdataverse/mbb/mbb_ncaa_game_pbp.py",
+    "sportsdataverse/mbb/mbb_ncaa_lineups.py",
+    "sportsdataverse/mbb/mbb_ncaa_possession_seg.py",
+    "sportsdataverse/mbb/mbb_ncaa_schedule.py",
+    "sportsdataverse/mbb/mbb_ncaa_scoreboard.py",
+    "sportsdataverse/mbb/mbb_ncaa_shots.py",
+    "sportsdataverse/mbb/mbb_ncaa_stats_agg.py",
+    "sportsdataverse/mbb/mbb_ncaa_team_ids.py",
+    "sportsdataverse/wbb/wbb_ncaa_box_stats.py",
+    "sportsdataverse/wbb/wbb_ncaa_game_pbp.py",
+    "sportsdataverse/wbb/wbb_ncaa_lineups.py",
+    "sportsdataverse/wbb/wbb_ncaa_possession_seg.py",
+    "sportsdataverse/wbb/wbb_ncaa_schedule.py",
+    "sportsdataverse/wbb/wbb_ncaa_scoreboard.py",
+    "sportsdataverse/wbb/wbb_ncaa_shots.py",
+    "sportsdataverse/wbb/wbb_ncaa_stats_agg.py",
+    "sportsdataverse/wbb/wbb_ncaa_team_ids.py",
     "tools/validation/findings.py",
     "tools/validation/oracles.py",
     "tools/validation/registry.py",

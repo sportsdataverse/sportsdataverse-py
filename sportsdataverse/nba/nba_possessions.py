@@ -320,10 +320,28 @@ def _possession_start_type(
     """Coarse pbpstats ``possession_start_type`` (``possession.py:206-242``; no shot-type buckets).
 
     ``OffDeadball``: period start / team rebound / dead-ball turnover /
-    unresolved. ``OffTimeout``: a timeout event in the previous OR current
-    possession's rows. ``OffMadeShot`` / ``OffMissedShot``: prior boundary was
-    a made shot-or-FT / a player defensive rebound. ``OffLiveBallTurnover``:
-    prior boundary was a steal.
+    unresolved. ``OffTimeout``: a timeout at the possession boundary (see below).
+    ``OffMadeShot`` / ``OffMissedShot``: prior boundary was a made shot-or-FT /
+    a player defensive rebound. ``OffLiveBallTurnover``: prior boundary was a steal.
+
+    **Timeout rule (pbpstats ``possession_has_timeout`` /
+    ``previous_possession_has_timeout``, ``possession.py:146-191``).** A timeout
+    does NOT unconditionally make the next possession ``OffTimeout``; only a
+    timeout *at the boundary* does. Faithfully:
+
+    * **Previous possession** — counts only when the timeout's clock equals THIS
+      possession's start time (i.e. it was called as the ball changed hands), and
+      the timeout is not sandwiched before a same-clock non-technical free throw.
+    * **Current possession** — a timeout not at the possession's end time counts
+      (again excluding the FT sandwich); a timeout AT the end time counts only if a
+      real turnover follows at the same clock (call timeout, then turn it over).
+
+    The earlier "any timeout row anywhere in either possession" shortcut
+    over-fired: a timeout called mid-possession, far from either boundary, wrongly
+    relabelled the next possession ``OffTimeout`` and erased its real start type.
+    Measured against the pbpstats-live oracle on the three committed fixtures, that
+    accounted for the largest single mismatch family (~20 possessions/game); see
+    ``tests/nba/test_nba_play_context_oracle.py``.
 
     Real-fixture verification note: the v3 feed's ``"STEAL"`` text does NOT
     live on the ``Turnover``-type row's own ``description`` (verified against
@@ -338,18 +356,88 @@ def _possession_start_type(
     ``prev_end_row``'s own description.
     """
 
-    def _has_timeout(rows: Optional[list[dict]]) -> bool:
-        return any((r.get("event_type") or "") == "timeout" for r in rows or [])
+    def _clock(row: dict) -> float:
+        return float(row.get("seconds_remaining") or 0.0)
+
+    def _is_ft_sandwich(nxt: Optional[dict], timeout_clock: float, *, exclude_technical: bool) -> bool:
+        """pbpstats: skip a timeout that sits before/between the FTs of one trip.
+
+        pbpstats applies this exclusion ASYMMETRICALLY (``possession.py``):
+
+        * ``possession_has_timeout`` (154-159) checks
+          ``and not next_event.is_technical_ft`` -- a timeout before a same-clock
+          *technical* FT is NOT a sandwich, so it still counts as a real timeout.
+        * ``previous_possession_has_timeout`` (185-189) omits that clause -- a
+          same-clock FT of ANY kind (technical included) IS a sandwich and
+          suppresses the timeout.
+
+        ``exclude_technical`` selects between the two: ``True`` for the
+        current-possession call (technical FT is not a sandwich), ``False`` for
+        the previous-possession call (any same-clock FT is a sandwich).
+        """
+        if nxt is None or (nxt.get("event_type") or "") != "free_throw":
+            return False
+        if exclude_technical and is_technical_ft_row(nxt):
+            return False
+        return _clock(nxt) == timeout_clock
+
+    def _previous_possession_has_timeout(rows: Optional[list[dict]], start_time: float) -> bool:
+        rows = rows or []
+        for i, r in enumerate(rows):
+            if (r.get("event_type") or "") != "timeout" or _clock(r) != start_time:
+                continue
+            # the event after a boundary timeout is the first row of THIS possession
+            nxt = rows[i + 1] if i + 1 < len(rows) else (cur_rows[0] if cur_rows else None)
+            # previous-possession sandwich test: any same-clock FT suppresses (no
+            # technical carve-out -- pbpstats possession.py:185-189).
+            if not _is_ft_sandwich(nxt, _clock(r), exclude_technical=False):
+                return True
+        return False
+
+    def _possession_has_timeout(rows: list[dict], end_time: float) -> bool:
+        for i, r in enumerate(rows):
+            if (r.get("event_type") or "") != "timeout":
+                continue
+            clock = _clock(r)
+            if clock != end_time:
+                nxt = rows[i + 1] if i + 1 < len(rows) else None
+                # current-possession sandwich test keeps pbpstats' technical carve-out.
+                if not _is_ft_sandwich(nxt, clock, exclude_technical=True):
+                    return True
+            else:
+                # timeout at the end of the possession: only a same-clock turnover
+                # after it means the timeout actually started the next possession.
+                # pbpstats also requires ``not is_no_turnover`` here (possession.py:169-173),
+                # but that guards a stats_nba "No Turnover" placeholder event; the v3/cdn
+                # feed types turnovers by actionType and emits no such row, so the plain
+                # event_type test is exact for this feed.
+                for later in rows[i + 1 :]:
+                    if (later.get("event_type") or "") == "turnover" and _clock(later) == clock:
+                        return True
+        return False
 
     if prev_end_row is None:
         return "OffDeadball"
-    if _has_timeout(prev_rows) or _has_timeout(cur_rows):
-        return "OffTimeout"
+    if cur_rows:
+        start_time = _clock(cur_rows[0])
+        end_time = _clock(cur_rows[-1])
+        if _possession_has_timeout(cur_rows, end_time) or _previous_possession_has_timeout(prev_rows, start_time):
+            return "OffTimeout"
     et = prev_end_row.get("event_type") or ""
     if et in ("made_shot", "free_throw"):
         return "OffMadeShot"
     if et == "rebound":
-        return "OffMissedShot" if (prev_end_row.get("person_id") or 0) else "OffDeadball"
+        # pbpstats calls a TEAM rebound a dead-ball start (``player1_id == 0``,
+        # possession.py:225-227). On the v3 feed a team rebound does NOT set
+        # ``person_id`` to 0 -- it stuffs the TEAM id into ``person_id`` and sets
+        # ``team_id`` to 0 (e.g. action 109 of 0022100001: "Nets Rebound",
+        # person_id=1610612751, team_id=0). So ``person_id != 0`` is NOT a
+        # player test: it is true for every team rebound too, which mislabelled
+        # them ``OffMissedShot``. ``team_id`` is the reliable discriminator --
+        # verified across all three committed fixtures: every ``team_id == 0``
+        # rebound carries a team id in ``person_id`` (20/19/19) and every
+        # ``team_id != 0`` rebound carries a real player id (98/67/75).
+        return "OffMissedShot" if int(prev_end_row.get("team_id") or 0) != 0 else "OffDeadball"
     if et == "turnover":
         has_steal = any("steal" in (r.get("description") or "").casefold() for r in cur_rows or [])
         return "OffLiveBallTurnover" if has_steal else "OffDeadball"

@@ -62,8 +62,10 @@ from sportsdataverse.nba.nba_oracle_data import (  # noqa: F401
 )
 from sportsdataverse.nba.nba_v3_v2_adapter import nba_v3_to_v2_pbp  # noqa: F401
 from sportsdataverse.nba.nba_play_context import (  # noqa: F401
+    LINEUP_PLAY_CONTEXT_SCHEMA,
     PLAY_CONTEXT_POSSESSIONS_SCHEMA,
     PLAY_CONTEXT_SHOTS_SCHEMA,
+    PLAYER_PLAY_CONTEXT_SCHEMA,
     add_ctg_shot_zones,
     add_play_context,
     add_start_type_detail,
@@ -71,7 +73,10 @@ from sportsdataverse.nba.nba_play_context import (  # noqa: F401
     build_play_context_shots,
     flag_garbage_time,
     flag_heave_possessions,
+    lineup_play_context,
     nba_play_context,
+    player_play_context,
+    starters_on_court_counts,
     team_play_context,
 )
 from sportsdataverse.nba.nba_possessions import (  # noqa: F401

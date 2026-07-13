@@ -76,12 +76,16 @@ def test_ctg_shot_zones_partition_every_field_goal(frames):
 
 def test_ctg_zones_differ_from_official_nba_zones(frames):
     """CTG splits the midrange at the FT-line distance, not the paint boundary."""
+    from sportsdataverse.nba.nba_play_context import _shot_distance_ft
     from sportsdataverse.nba.nba_shot_zones import add_shot_zones
 
     pbp = add_ctg_shot_zones(add_shot_zones(frames["0022200001"]))
     fg = pbp.filter(pl.col("is_field_goal") == 1)
-    # A 2pt shot 5-7 ft out is `in_the_paint_non_ra` officially but `short_mid` in CTG.
-    both = fg.filter((pl.col("shot_value") == 2) & (pl.col("shot_distance").is_between(4, 7)))
+    # A 2pt shot 4-7 ft out is `in_the_paint_non_ra` officially but `short_mid` in CTG.
+    # Select on the EXACT coordinate distance the classifier uses, not the rounded
+    # v3 ``shot_distance`` column — a shot the feed rounds to 4 ft can truly be 3.6 ft
+    # (correctly ``at_rim``), so the rounded column straddles the 4-foot rim boundary.
+    both = fg.filter((pl.col("shot_value") == 2) & _shot_distance_ft().is_between(4, 7))
     if both.height:
         assert set(both["ctg_shot_zone"].unique()) == {"short_mid"}
 

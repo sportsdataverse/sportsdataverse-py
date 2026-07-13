@@ -1039,6 +1039,61 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
+### `wnba_play_context(game_id: 'str', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_play_context}
+
+Return a WNBA game's possessions with the full CTG play-context surface.
+
+WNBA sibling of
+`~sportsdataverse.nba.nba_play_context.nba_play_context` — the
+Cleaning the Glass recreation (possession start-type taxonomy + the
+halfcourt / transition / putback contexts + CTG's garbage-time and heave
+filters). One network call (`playbyplayv3` on `stats.wnba.com`); every
+transformation is done by the league-agnostic
+`~sportsdataverse.nba.nba_play_context.add_play_context` core, so
+there is **no WNBA-specific classification logic** to drift.
+
+Two caveats worth stating plainly:
+
+* **CTG is NBA-only.** There is no published WNBA play-context table to
+  calibrate against, so `transition_seconds` inherits the NBA's fitted
+  6.0 s default. The WNBA fixtures land inside the NBA's transition-frequency
+  gate at that value (`tests/wnba/test_wnba_play_context_shim.py`), which
+  is a sanity check on the shared engine — not evidence that 6.0 s is the
+  *right* WNBA cutoff. Re-fit it if a WNBA oracle ever appears.
+* Shot-zone boundaries are league-agnostic (feet from the rim), and the
+  corner-three test uses the same legacy coordinates, which the WNBA feed
+  also ships.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str` |  | WNBA game identifier (e.g. `"1022400001"`). |
+| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff, in seconds. |
+| `transition_variant` | `str` | `'hoop_math'` | See `~sportsdataverse.nba.nba_play_context.add_transition`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+The possession frame (`POSSESSIONS_SCHEMA`) plus `~sportsdataverse.nba.nba_play_context.PLAY_CONTEXT_POSSESSIONS_SCHEMA`. Empty or malformed payloads return a zero-row frame — never raises on payload content.
+
+**Example**
+
+```python
+from sportsdataverse.wnba.wnba_engine import wnba_play_context
+poss = wnba_play_context("1022400001")
+print(poss["possession_start_type_ctg"].value_counts())
+
+# Transition rate (CTG's default filtered view)
+
+import polars as pl
+clean = poss.filter(
+    (pl.col("is_garbage_time") == False)  # noqa: E712
+    & (pl.col("is_heave_possession") == False)  # noqa: E712
+)
+print(clean["is_transition"].mean())
+```
+
 ### `wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_player_props}
 
 WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.

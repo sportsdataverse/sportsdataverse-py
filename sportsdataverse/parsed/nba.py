@@ -187,6 +187,7 @@ from sportsdataverse.nba import flatten_json_iterative as flatten_json_iterative
 from sportsdataverse.nba import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nba import get_shrinkage_k as get_shrinkage_k  # noqa: F401
 from sportsdataverse.nba import helper_nba_athlete_items as helper_nba_athlete_items  # noqa: F401
+from sportsdataverse.nba import helper_nba_draft as helper_nba_draft  # noqa: F401
 from sportsdataverse.nba import helper_nba_game_data as helper_nba_game_data  # noqa: F401
 from sportsdataverse.nba import helper_nba_game_items as helper_nba_game_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_game_rosters as helper_nba_game_rosters  # noqa: F401
@@ -194,14 +195,18 @@ from sportsdataverse.nba import helper_nba_officials as helper_nba_officials  # 
 from sportsdataverse.nba import helper_nba_pbp as helper_nba_pbp  # noqa: F401
 from sportsdataverse.nba import helper_nba_pbp_features as helper_nba_pbp_features  # noqa: F401
 from sportsdataverse.nba import helper_nba_pickcenter as helper_nba_pickcenter  # noqa: F401
+from sportsdataverse.nba import helper_nba_play_by_play as helper_nba_play_by_play  # noqa: F401
+from sportsdataverse.nba import helper_nba_player_box as helper_nba_player_box  # noqa: F401
 from sportsdataverse.nba import helper_nba_player_season_stats as helper_nba_player_season_stats  # noqa: F401
 from sportsdataverse.nba import helper_nba_roster_items as helper_nba_roster_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_rosters as helper_nba_rosters  # noqa: F401
 from sportsdataverse.nba import helper_nba_schedule as helper_nba_schedule  # noqa: F401
 from sportsdataverse.nba import helper_nba_standings as helper_nba_standings  # noqa: F401
+from sportsdataverse.nba import helper_nba_team_box as helper_nba_team_box  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_items as helper_nba_team_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_season_stats as helper_nba_team_season_stats  # noqa: F401
 from sportsdataverse.nba import in_game_features as in_game_features  # noqa: F401
+from sportsdataverse.nba import lineup_play_context as lineup_play_context  # noqa: F401
 from sportsdataverse.nba import load_darko_dpm as load_darko_dpm  # noqa: F401
 from sportsdataverse.nba import load_dunks_threes_stats as load_dunks_threes_stats  # noqa: F401
 from sportsdataverse.nba import load_epm as load_epm  # noqa: F401
@@ -265,6 +270,7 @@ from sportsdataverse.nba import nba_war as nba_war  # noqa: F401
 from sportsdataverse.nba import normalize_player_name as normalize_player_name  # noqa: F401
 from sportsdataverse.nba import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nba import parse_nba_stats_result_sets as parse_nba_stats_result_sets  # noqa: F401
+from sportsdataverse.nba import player_play_context as player_play_context  # noqa: F401
 from sportsdataverse.nba import player_rates as player_rates  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_pbp as players_on_court_from_pbp  # noqa: F401
 from sportsdataverse.nba import players_on_court_from_quarter_boxscores as players_on_court_from_quarter_boxscores  # noqa: F401
@@ -282,6 +288,7 @@ from sportsdataverse.nba import scoreboard_event_parsing as scoreboard_event_par
 from sportsdataverse.nba import shooter_talent as shooter_talent  # noqa: F401
 from sportsdataverse.nba import shot_selection_quality as shot_selection_quality  # noqa: F401
 from sportsdataverse.nba import shrink_clutch as shrink_clutch  # noqa: F401
+from sportsdataverse.nba import starters_on_court_counts as starters_on_court_counts  # noqa: F401
 from sportsdataverse.nba import team_pace_projection as team_pace_projection  # noqa: F401
 from sportsdataverse.nba import team_play_context as team_play_context  # noqa: F401
 from sportsdataverse.nba import train_spm as train_spm  # noqa: F401
@@ -457,6 +464,7 @@ __all__ = [
     "get_constants",
     "get_shrinkage_k",
     "helper_nba_athlete_items",
+    "helper_nba_draft",
     "helper_nba_game_data",
     "helper_nba_game_items",
     "helper_nba_game_rosters",
@@ -464,14 +472,18 @@ __all__ = [
     "helper_nba_pbp",
     "helper_nba_pbp_features",
     "helper_nba_pickcenter",
+    "helper_nba_play_by_play",
+    "helper_nba_player_box",
     "helper_nba_player_season_stats",
     "helper_nba_roster_items",
     "helper_nba_rosters",
     "helper_nba_schedule",
     "helper_nba_standings",
+    "helper_nba_team_box",
     "helper_nba_team_items",
     "helper_nba_team_season_stats",
     "in_game_features",
+    "lineup_play_context",
     "load_darko_dpm",
     "load_dunks_threes_stats",
     "load_epm",
@@ -536,6 +548,7 @@ __all__ = [
     "normalize_player_name",
     "normalize_team_roster_columns",
     "parse_nba_stats_result_sets",
+    "player_play_context",
     "player_rates",
     "players_on_court_from_pbp",
     "players_on_court_from_quarter_boxscores",
@@ -553,6 +566,7 @@ __all__ = [
     "shooter_talent",
     "shot_selection_quality",
     "shrink_clutch",
+    "starters_on_court_counts",
     "team_pace_projection",
     "team_play_context",
     "train_spm",
