@@ -386,18 +386,15 @@ _DRAFT_COLUMNS: tuple[str, ...] = (
 
 
 def _safe_chr(x: Any) -> str | None:
-    """R ``safe_chr``: NULL/empty -> NA; else as.character of the first element."""
-    if x is None:
-        return None
-    if isinstance(x, list):
-        if not x:
-            return None
-        x = x[0]
-    if isinstance(x, bool):
-        return "TRUE" if x else "FALSE"
-    if isinstance(x, float) and x.is_integer():
-        return str(int(x))  # R as.character(2.0) == "2"
-    return str(x)
+    """R ``safe_chr``: NULL/empty -> NA; else as.character of the first element.
+
+    Delegates to the one shared emulation (``_rel_chr``) rather than keeping a
+    second copy: the two had drifted apart, each missing the other's fix (this
+    one mishandled non-integer floats, that one mishandled bools).
+    """
+    from sportsdataverse.wbb.wbb_game_rosters import _rel_chr
+
+    return _rel_chr(x)
 
 
 def _first_non_blank(*vals: str | None) -> str | None:

@@ -83,11 +83,15 @@ _FLOAT64_COLS: tuple[str, ...] = (
 # id as a true integer, so the Python producer emits Int64 and keeps it exact.
 _INT64_COLS: tuple[str, ...] = ("id",)
 
+# Appended (as all-null Float64) only when a payload ships no coordinates at
+# all. Order matters: it is the order the R creation script's season-level
+# fallback appends them in (espn_wnba_01_pbp_creation.R:100-106), and these
+# land at the end of the frame.
 _COORD_COLS: tuple[str, ...] = (
-    "coordinate_x_raw",
-    "coordinate_y_raw",
     "coordinate_x",
     "coordinate_y",
+    "coordinate_x_raw",
+    "coordinate_y_raw",
 )
 
 __all__ = ["helper_wbb_play_by_play"]

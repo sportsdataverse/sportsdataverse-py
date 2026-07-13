@@ -175,14 +175,24 @@ def helper_wbb_player_box(final: dict) -> pl.DataFrame:
     return _basketball_player_box(final, final_order=_FINAL_ORDER)
 
 
-def _basketball_player_box(final: dict, *, final_order: tuple[str, ...]) -> pl.DataFrame:
+def _basketball_player_box(
+    final: dict, *, final_order: tuple[str, ...], require_both_teams: bool = True
+) -> pl.DataFrame:
     """League-parameterized core shared by the WBB/WNBA release producers.
 
-    The wehoop WBB and WNBA player-box helpers are semantically identical
-    except for the canonical final select: WNBA includes ``plus_minus``
-    (between ``fouls`` and ``points``; kept String -- R never casts it), WBB
-    has no +/-. The stat pivot is payload-driven, so the league's
-    ``final_order`` tuple is the only divergence a caller supplies.
+    The wehoop WBB and WNBA player-box helpers differ in two places:
+
+    * the canonical final select -- WNBA includes ``plus_minus`` (between
+      ``fouls`` and ``points``; kept String -- R never casts it), WBB has no
+      +/-. The stat pivot is payload-driven, so the caller's ``final_order``
+      tuple carries that difference.
+    * the degenerate-payload gate. WBB adds a ``valid_athletes`` probe
+      (``espn_wbb_data.R:3512``) requiring BOTH teams' athletes to be real
+      frames; WNBA's gate (``espn_wnba_data.R:2583``) does not. So a WNBA game
+      whose second team ships no athletes (forfeit / truncated payload) is
+      still published by R -- it just contributes no rows -- while the same
+      payload is skipped entirely for WBB. ``require_both_teams=False``
+      reproduces the laxer WNBA gate.
     """
     header = final.get("header") or {}
     competitions = header.get("competitions") or []
@@ -196,16 +206,19 @@ def _basketball_player_box(final: dict, *, final_order: tuple[str, ...]) -> pl.D
     if len(team_blocks) < 2 or len(competitors) < 2:
         return pl.DataFrame()
 
-    # R validity probes (lines 3509-3533): both teams' athletes are real
-    # frames, the first athlete's stats vector is non-trivial, and its 7th
-    # entry (rebounds) parses numeric. Failure -> producer skips the game.
+    # R validity probes: the first athlete's stats vector is non-trivial and
+    # its 7th entry (rebounds) parses numeric. Failure -> producer skips the
+    # game. WBB additionally requires BOTH teams' athletes to be real frames
+    # (the valid_athletes probe); WNBA does not -- see the docstring.
     try:
         stats_block_0 = (team_blocks[0].get("statistics") or [])[0]
-        stats_block_1 = (team_blocks[1].get("statistics") or [])[0]
         athletes_0 = stats_block_0.get("athletes") or []
-        athletes_1 = stats_block_1.get("athletes") or []
-        if not athletes_0 or not athletes_1:
+        if not athletes_0:
             return pl.DataFrame()
+        if require_both_teams:
+            stats_block_1 = (team_blocks[1].get("statistics") or [])[0]
+            if not (stats_block_1.get("athletes") or []):
+                return pl.DataFrame()
         first_stats = athletes_0[0].get("stats") or []
         if len(first_stats) <= 1:
             return pl.DataFrame()

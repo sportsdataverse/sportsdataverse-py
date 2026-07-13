@@ -236,13 +236,19 @@ def _r_as_character(x: float) -> str:
 
 
 def _rel_chr(x: object) -> str | None:
-    """R ``safe_chr``: NULL/empty -> NA; else first element as character."""
+    """R ``safe_chr``: NULL/empty -> NA; else first element as character.
+
+    The single emulation of R's ``as.character()`` for these producers -- the
+    draft port shares it, so a payload shape can't split the two copies apart.
+    """
     if x is None:
         return None
     if isinstance(x, list):
         x = x[0] if x else None
         if x is None:
             return None
+    if isinstance(x, bool):
+        return "TRUE" if x else "FALSE"  # R: as.character(TRUE) == "TRUE"
     if isinstance(x, float):
         return _r_as_character(x)
     return str(x)
@@ -357,7 +363,10 @@ def helper_wbb_game_rosters(payload: dict, *, season: int, game_id: int | str) -
             rows.append(
                 {
                     "season": int(season),
-                    "game_id": str(game_id),
+                    # Int-first: str() on a float-origin id yields
+                    # "401736112.0", which silently misses every join to the
+                    # Int32-keyed datasets.
+                    "game_id": _rel_chr(_rel_int(game_id)),
                     "team_id": _rel_int(team.get("id") if team else team_block.get("id")),
                     "team_slug": _rel_chr((team or team_block).get("slug")),
                     "team_abbreviation": _rel_chr((team or team_block).get("abbreviation")),

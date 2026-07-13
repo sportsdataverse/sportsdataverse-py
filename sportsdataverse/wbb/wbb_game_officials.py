@@ -354,7 +354,9 @@ def helper_wbb_officials(payload: dict, *, season: int, game_id: int | str) -> p
         rows.append(
             {
                 "season": int(season),
-                "game_id": str(game_id),
+                # Int-first: str() on a float-origin id yields "401736112.0",
+                # which silently misses every join to the Int32-keyed datasets.
+                "game_id": _rel_chr(_rel_int(game_id)),
                 "official_id": _rel_int(o.get("id")),
                 "official_uid": _rel_chr(o.get("uid")),
                 "official_full_name": _rel_chr(

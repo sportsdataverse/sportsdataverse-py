@@ -45,3 +45,15 @@ def test_rel_chr_null_and_list_semantics():
     assert _rel_chr(["a", "b"]) == "a"  # R safe_chr takes the first element
     assert _rel_chr([100000.0]) == "1e+05"  # ...and still applies R's float form
     assert _rel_chr(7) == "7"  # ints are untouched (no float formatting)
+    assert _rel_chr(True) == "TRUE"  # R: as.character(TRUE), not Python's "True"
+    assert _rel_chr(False) == "FALSE"
+
+
+def test_draft_safe_chr_is_the_same_emulation():
+    # The draft port used to carry its own copy that mishandled non-integer
+    # floats. It must now BE the shared one, not merely resemble it.
+    from sportsdataverse.wnba.wnba_draft import _safe_chr
+
+    assert _safe_chr(True) == "TRUE"  # the draft's pick_traded column
+    assert _safe_chr(2.0) == "2"  # R: as.character(2) == "2", not "2.0"
+    assert _safe_chr(3.4000000000000057) == "3.40000000000001"  # the fix it was missing
