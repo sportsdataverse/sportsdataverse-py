@@ -41,6 +41,7 @@ from sportsdataverse.pwhl.pwhl_xg_proxy import (
     fit_shot_quality_xg,
     pwhl_team_game_xg_rates,
 )
+from tests.conftest import skip_if_no_live
 
 FIXTURES_DIR = Path(__file__).parent.parent / "fixtures" / "pwhl_prediction"
 
@@ -603,3 +604,144 @@ def test_shot_geometry_rejects_raw_scale_coords() -> None:
     assert "shot_distance" in _shot_geometry(feet).columns
     precomputed = feet.with_columns(shot_distance=pl.lit(9.0), shot_angle=pl.lit(0.0))
     assert _shot_geometry(precomputed)["shot_distance"][0] == 9.0  # reused, not recomputed
+
+
+# ---------------------------------------------------------------------------
+# Per-strength Platt recalibration (T5 follow-up). Mechanism proven offline on a
+# seeded synthetic frame where each strength bucket has a DIFFERENT true distance
+# slope -- something the pooled model's single distance coefficient + is_pp/is_sh
+# intercepts cannot fit, leaving residual per-bucket bias for Platt to correct. The
+# real-data ECE/ordering improvement is gated live below.
+# ---------------------------------------------------------------------------
+def _synthetic_strength_pbp(n_per_bucket: int = 400, sh_n: int | None = None) -> pl.DataFrame:
+    rng = np.random.default_rng(0)
+    rows = []
+    # (skaters_home, skaters_away, intercept, slope) per bucket -- distinct slopes.
+    specs = {
+        "EV": (5, 5, 0.0, 0.10, n_per_bucket),
+        "PP": (5, 4, 0.6, 0.03, n_per_bucket),
+        "SH": (4, 5, -0.6, 0.22, sh_n if sh_n is not None else n_per_bucket),
+    }
+    for _b, (skh, ska, inter, slope, nb) in specs.items():
+        xc = rng.uniform(55.0, 89.0, nb)
+        dist = 89.0 - xc
+        p = 1.0 / (1.0 + np.exp(-(inter - slope * dist)))
+        goal = (rng.random(nb) < p).astype(int)
+        for xi, gi in zip(xc, goal):
+            rows.append(
+                {
+                    "event": "shot",
+                    "goal": int(gi),
+                    "x_coord": float(xi),
+                    "y_coord": 0.0,
+                    "team_id": "1",
+                    "home_team_id": "1",
+                    "skaters_home": skh,
+                    "skaters_away": ska,
+                }
+            )
+    return pl.DataFrame(rows)
+
+
+def _bucket_of(pbp: pl.DataFrame) -> np.ndarray:
+    return np.where(
+        pbp["skaters_home"].to_numpy() > pbp["skaters_away"].to_numpy(),
+        "PP",
+        np.where(pbp["skaters_home"].to_numpy() < pbp["skaters_away"].to_numpy(), "SH", "EV"),
+    )
+
+
+def test_strength_calibration_fits_and_reduces_per_bucket_bias() -> None:
+    pbp = _synthetic_strength_pbp()
+    cal_model = fit_pwhl_coord_xg(pbp, calibrate_strength=True)
+    raw_model = fit_pwhl_coord_xg(pbp, calibrate_strength=False)
+
+    # (1) calibrators are fit per well-sampled bucket; the off switch yields none.
+    assert cal_model.strength_calibrators is not None
+    assert set(cal_model.strength_calibrators) == {"EV", "PP", "SH"}
+    assert raw_model.strength_calibrators is None
+
+    # (2) calibration reduces the aggregate per-bucket calibration error (sum over
+    # EV/PP/SH of |mean_pred - mean_goal|). Platt per bucket is the MLE recal, so this
+    # is a principled, deterministic improvement.
+    buckets = _bucket_of(pbp)
+    y = pbp["goal"].to_numpy()
+    p_cal = cal_model.predict(pbp).to_numpy()
+    p_raw = raw_model.predict(pbp).to_numpy()
+    err_cal = sum(abs(p_cal[buckets == b].mean() - y[buckets == b].mean()) for b in ("EV", "PP", "SH"))
+    err_raw = sum(abs(p_raw[buckets == b].mean() - y[buckets == b].mean()) for b in ("EV", "PP", "SH"))
+    assert err_cal < err_raw, f"calibration did not reduce per-bucket bias: {err_cal:.4f} vs {err_raw:.4f}"
+
+    # (3) AUC preserved (Platt is monotone in the base logit within a bucket).
+    assert roc_auc_score(y, p_cal) >= roc_auc_score(y, p_raw) - 0.005
+
+
+def test_strength_calibration_skips_thin_bucket() -> None:
+    # SH bucket below _MIN_CALIB_SHOTS earns no calibrator; the well-sampled ones do.
+    pbp = _synthetic_strength_pbp(n_per_bucket=400, sh_n=50)
+    model = fit_pwhl_coord_xg(pbp, calibrate_strength=True)
+    assert model.strength_calibrators is not None
+    assert "SH" not in model.strength_calibrators
+    assert {"EV", "PP"}.issubset(model.strength_calibrators)
+
+
+def _bucket_ece(y: np.ndarray, p: np.ndarray, nbins: int = 10) -> float:
+    edges = np.linspace(0, 1, nbins + 1)
+    e = 0.0
+    for i in range(nbins):
+        m = (p >= edges[i]) & (p < edges[i + 1])
+        if m.sum():
+            e += abs(p[m].mean() - y[m].mean()) * m.sum()
+    return e / len(y)
+
+
+@skip_if_no_live
+def test_strength_calibration_improves_real_pwhl_per_strength_ece() -> None:
+    """Live gate: per-strength Platt cuts HELD-OUT (LOSO) SH calibration error on real
+    PWHL pbp, at no AUC cost -- the productionization proof for the T5 follow-up.
+
+    Measured per-bucket **10-bin ECE** (not mean bias: the ``is_pp``/``is_sh`` dummies
+    already zero each shooter-relative bucket's *mean*, so the win is in the within-bucket
+    tails, which ECE captures and a mean check misses), on the model's own SHOOTER-relative
+    partition (``strength_state`` is home-relative and mislabels away-team special teams).
+    NOT asserting a PP>EV>SH ordering: shooter-relative SH includes empty-net shots (high
+    conversion), so SH is legitimately the highest-rate bucket. Observed 2026-07-13:
+    SH_ECE 0.0130->0.0091, PP_ECE 0.0047->0.0036, AUC 0.6962 both."""
+    from sklearn.metrics import roc_auc_score
+
+    from sportsdataverse.pwhl import load_pwhl_pbp
+    from sportsdataverse.pwhl.pwhl_xg_proxy import (
+        _add_preshot_context,
+        _build_xg_features,
+        _strength_bucket_from_onehots,
+    )
+
+    seasons = [2024, 2025, 2026]
+    pbp = pl.concat(
+        [load_pwhl_pbp([s]).with_columns(pl.lit(s).alias("season")) for s in seasons], how="diagonal_relaxed"
+    ).with_columns(pl.col("game_id").cast(pl.Utf8))
+    pbp = _add_preshot_context(pbp)
+
+    def _loso(calibrate: bool) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        ys, ps, bs = [], [], []
+        for s in seasons:
+            tr = pbp.filter(pl.col("season") != s)
+            te = pbp.filter(pl.col("season") == s).filter(
+                (pl.col("event") == "shot") & pl.col("x_coord").is_not_null() & pl.col("y_coord").is_not_null()
+            )
+            m = fit_pwhl_coord_xg(tr, calibrate_strength=calibrate)
+            xb, names, _ = _build_xg_features(te, want=m.features)
+            ys.append(te["goal"].cast(pl.Int64).to_numpy())
+            ps.append(m.predict(te).to_numpy())
+            bs.append(_strength_bucket_from_onehots(xb, names))
+        return np.concatenate(ys), np.concatenate(ps), np.concatenate(bs)
+
+    y_r, p_r, b_r = _loso(calibrate=False)
+    y_c, p_c, b_c = _loso(calibrate=True)  # same folds/order -> same y, b
+
+    # SH (the structural weak spot) held-out ECE must strictly improve; overall AUC held.
+    sh_r = _bucket_ece(y_r[b_r == "SH"], p_r[b_r == "SH"])
+    sh_c = _bucket_ece(y_c[b_c == "SH"], p_c[b_c == "SH"])
+    assert sh_c < sh_r, f"held-out SH ECE not improved by calibration: {sh_c:.4f} vs {sh_r:.4f}"
+    assert _bucket_ece(y_c, p_c) <= _bucket_ece(y_r, p_r) + 1e-4, "overall held-out ECE regressed"
+    assert roc_auc_score(y_c, p_c) >= roc_auc_score(y_r, p_r) - 0.002, "calibration cost AUC"

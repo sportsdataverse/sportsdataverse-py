@@ -482,6 +482,93 @@ def _build_xg_features(
     return np.column_stack(mats), tuple(feats), f
 
 
+# ---------------------------------------------------------------------------
+# Per-strength Platt recalibration (T5 follow-up). The pooled logistic's `is_pp`/`is_sh`
+# dummies already zero each SHOOTER-relative strength bucket's *mean*, but leave residual
+# WITHIN-bucket miscalibration (the tails). A 1-logistic-per-bucket Platt on the base
+# logit shrinks it at ~zero AUC cost -- held-out LOSO on the model's own shooter-relative
+# EV/PP/SH partition: SH 10-bin ECE 0.0130->0.0091, PP 0.0047->0.0036, AUC 0.6962 both.
+# It beat isotonic (overfits the thin 2-season curve) and a shallow GBM (hurt SH
+# discrimination) in the model-idea sweep (dev/t5_xg_reevaluation/xg_model_ideas.py).
+# NB the buckets are SHOOTER-relative (sk_for vs sk_opp), not the home-relative
+# `strength_state` string -- so shooter-relative SH includes empty-net shots.
+# ---------------------------------------------------------------------------
+_STRENGTH_BUCKETS = ("EV", "PP", "SH")
+#: A bucket needs at least this many training shots (with both outcome classes present)
+#: to earn a Platt calibrator; thinner buckets stay identity (never a degenerate 2-param
+#: fit on a handful of special-teams goals).
+_MIN_CALIB_SHOTS = 200
+
+
+def _strength_bucket_from_onehots(x: Any, feats: tuple[str, ...]) -> Any:
+    """Map each row to its ``EV``/``PP``/``SH`` bucket via the fitted is_pp/is_sh columns.
+
+    Returns a numpy string array, or ``None`` when the model carries no strength
+    one-hots (a 2-feature distance/angle model -- no per-strength calibration possible).
+    """
+    import numpy as np
+
+    if "is_pp" not in feats or "is_sh" not in feats:
+        return None
+    ipp = x[:, feats.index("is_pp")]
+    ish = x[:, feats.index("is_sh")]
+    return np.where(ipp == 1, "PP", np.where(ish == 1, "SH", "EV"))
+
+
+def _logit(p: Any) -> Any:
+    import numpy as np
+
+    p = np.clip(p, 1e-6, 1 - 1e-6)
+    return np.log(p / (1.0 - p))
+
+
+def _fit_strength_calibrators(
+    x: Any, y: Any, feats: tuple[str, ...], base_model: Any
+) -> dict[str, tuple[float, float]]:
+    """Fit a per-EV/PP/SH Platt recalibrator (``(slope, intercept)`` on the base logit).
+
+    Returns ``{bucket: (slope, intercept)}`` for each bucket with
+    ``>= _MIN_CALIB_SHOTS`` training shots and both outcome classes present. Empty dict
+    when the model has no strength one-hots or every bucket is too thin -- i.e. identity.
+    """
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+
+    buckets = _strength_bucket_from_onehots(x, feats)
+    if buckets is None:
+        return {}
+    z = _logit(base_model.predict_proba(x)[:, 1]).reshape(-1, 1)
+    cal: dict[str, tuple[float, float]] = {}
+    for b in _STRENGTH_BUCKETS:
+        m = buckets == b
+        if int(m.sum()) >= _MIN_CALIB_SHOTS and len(np.unique(y[m])) > 1:
+            lr = LogisticRegression(max_iter=1000).fit(z[m], y[m])
+            cal[b] = (float(lr.coef_[0][0]), float(lr.intercept_[0]))
+    return cal
+
+
+def _apply_strength_calibration(
+    proba: Any, x: Any, feats: tuple[str, ...], calibrators: dict[str, tuple[float, float]]
+) -> Any:
+    """Apply per-strength Platt recalibration to ``proba`` in place-safe fashion.
+
+    Rows in a bucket without a calibrator (or in a non-strength model) are returned
+    unchanged, so this is exactly identity wherever calibration can't or shouldn't apply.
+    """
+    import numpy as np
+
+    buckets = _strength_bucket_from_onehots(x, feats)
+    if buckets is None:
+        return proba
+    z = _logit(proba)
+    out = np.asarray(proba, dtype=float).copy()
+    for b, (a, c) in calibrators.items():
+        m = buckets == b
+        if m.any():
+            out[m] = 1.0 / (1.0 + np.exp(-(a * z[m] + c)))
+    return out
+
+
 @dataclass(frozen=True)
 class PwhlCoordXGModel:
     """A fitted (or fallback constant-rate) PWHL coordinate xG model.
@@ -496,11 +583,18 @@ class PwhlCoordXGModel:
             ``shot_angle`` plus, when the source pbp carried the R4 strength +
             clock columns, ``rebound`` / ``is_home`` / ``is_pp`` / ``is_sh``
             (T5 Phase 3). :meth:`predict` rebuilds exactly these.
+        strength_calibrators: Optional per-strength Platt recalibrators
+            ``{"EV"|"PP"|"SH": (slope, intercept)}`` fit on the base logit (T5
+            follow-up). ``None`` (or a 2-feature model without ``is_pp``/``is_sh``)
+            means no recalibration -- :meth:`predict` is then the raw logistic. When
+            present, each row's bucket prediction is Platt-adjusted; buckets without a
+            calibrator pass through unchanged.
     """
 
     model: LogisticRegression | None
     fallback_rate: float
     features: tuple[str, ...] = _XG_BASE_FEATURES
+    strength_calibrators: dict[str, tuple[float, float]] | None = None
 
     def predict(self, shots: pl.DataFrame) -> pl.Series:
         """Predict shot xG for each row of ``shots``.
@@ -527,12 +621,14 @@ class PwhlCoordXGModel:
             return pl.Series("xg", [self.fallback_rate] * shots.height, dtype=pl.Float64)
         x, _, f = _build_xg_features(shots, want=self.features)
         proba = self.model.predict_proba(x)[:, 1]
+        if self.strength_calibrators:
+            proba = _apply_strength_calibration(proba, x, self.features, self.strength_calibrators)
         null_geo = f["shot_distance"].is_null().to_numpy()
         out = np.where(null_geo, self.fallback_rate, proba)
         return pl.Series("xg", out, dtype=pl.Float64)
 
 
-def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
+def fit_pwhl_coord_xg(pbp: pl.DataFrame, *, calibrate_strength: bool = True) -> PwhlCoordXGModel:
     """Fit a real distance/angle logistic xG on PWHL shot coordinates on demand.
 
     Filters to ``load_pwhl_pbp``'s ``event == "shot"`` rows (the complete
@@ -573,6 +669,12 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
         pbp: A frame shaped like ``load_pwhl_pbp`` output (needs ``event``,
             ``goal``, ``x_coord``, ``y_coord``), or an ``enrich_pbp`` output
             already carrying ``shot_distance``/``shot_angle``.
+        calibrate_strength: When ``True`` (default) and the frame carries strength
+            columns, also fit a per-EV/PP/SH Platt recalibrator (T5 follow-up) that
+            shrinks residual within-bucket per-strength calibration error (held-out SH
+            10-bin ECE 0.0130->0.0091) at ~zero AUC cost. Buckets are shooter-relative
+            (``is_pp``/``is_sh``). A no-op on 2-feature or thin frames (no strength
+            one-hots / too few per-bucket shots). Pass ``False`` for the raw logistic.
 
     Returns:
         A fitted :class:`PwhlCoordXGModel`.
@@ -622,7 +724,12 @@ def fit_pwhl_coord_xg(pbp: pl.DataFrame) -> PwhlCoordXGModel:
 
     clf = LogisticRegression(max_iter=1000)
     clf.fit(x, y)
-    return PwhlCoordXGModel(model=clf, fallback_rate=float(y.mean()), features=feats)
+    # Per-strength Platt recalibration (T5 follow-up): shrinks residual within-bucket
+    # per-strength calibration error at ~zero AUC cost. Only earns calibrators when the
+    # frame carried strength cols (is_pp/is_sh in `feats`) AND each bucket is well-sampled
+    # -- else identity (empty dict -> None), so a 2-feature / thin frame is unchanged.
+    cal = _fit_strength_calibrators(x, y, feats, clf) if calibrate_strength else {}
+    return PwhlCoordXGModel(model=clf, fallback_rate=float(y.mean()), features=feats, strength_calibrators=cal or None)
 
 
 def _fit_xg(pbp: pl.DataFrame, xg_method: str) -> Union[ShotQualityXGModel, PwhlCoordXGModel]:
