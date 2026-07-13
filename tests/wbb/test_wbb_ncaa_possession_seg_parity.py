@@ -17,7 +17,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.mbb.mbb_ncaa_possession_seg import (
-    POSSESSIONS_SCHEMA,
+    POSSESSION_SEG_SCHEMA,
     POSSESSIONS_SIMPLE_SCHEMA,
     ncaa_mbb_possessions,
 )
@@ -37,8 +37,8 @@ def pbp() -> pl.DataFrame:
 
 def test_full_parity(pbp: pl.DataFrame) -> None:
     got = ncaa_mbb_possessions(pbp)
-    exp = load_expected("possessions", POSSESSIONS_SCHEMA, LEAGUE)
-    assert_frame_parity(got, exp, POSSESSIONS_SCHEMA)
+    exp = load_expected("possessions", POSSESSION_SEG_SCHEMA, LEAGUE)
+    assert_frame_parity(got, exp, POSSESSION_SEG_SCHEMA)
 
 
 def test_simple_parity(pbp: pl.DataFrame) -> None:

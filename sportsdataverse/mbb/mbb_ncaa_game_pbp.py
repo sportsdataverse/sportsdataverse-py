@@ -114,7 +114,9 @@ _SHOT_VALUES: "dict[str, int]" = {
 }
 
 # Name normalization (all_functions.R:228-232 V2 / :262-276 V1).
-_NON_ALNUM_SPACE_RE = re.compile(r"[^0-9A-Za-z ]")
+# R: gsub("[^[:alnum:] ]", "", x) under a UTF-8 locale keeps unicode letters;
+# \w (unicode) minus underscore is the Python equivalent (same as mbb_ncaa_box_stats).
+_NON_ALNUM_SPACE_RE = re.compile(r"[^\w ]|_")
 _WS_RE = re.compile(r"\s+")
 _SUFFIX_RE = re.compile(r"(\.JR\.|\.SR\.|\.J\.R\.|\.JR\.|JR\.|SR\.|\.SR|\.JR|\.SR|\.III|\.II|\.IV)$")
 # invalid-substitution detection (all_functions.R:479-481).

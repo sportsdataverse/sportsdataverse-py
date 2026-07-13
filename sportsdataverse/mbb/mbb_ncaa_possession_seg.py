@@ -33,7 +33,7 @@ import polars as pl
 
 __all__ = [
     "POSSESSIONS_RENAME",
-    "POSSESSIONS_SCHEMA",
+    "POSSESSION_SEG_SCHEMA",
     "POSSESSIONS_SIMPLE_SCHEMA",
     "SHOT_TYPES",
     "ncaa_mbb_possessions",
@@ -114,7 +114,7 @@ _KEYS_SIMPLE: tuple[str, ...] = (
 )
 
 #: Output contract, full variant (28 columns).
-POSSESSIONS_SCHEMA: pl.Schema = pl.Schema(
+POSSESSION_SEG_SCHEMA: pl.Schema = pl.Schema(
     {
         "game_id": pl.Utf8,
         "game_date": pl.Utf8,
@@ -231,7 +231,7 @@ def ncaa_mbb_possessions(
 
     Returns:
         ``pl.DataFrame`` (or ``pd.DataFrame``) with one row per possession —
-        28 columns per ``POSSESSIONS_SCHEMA`` (full) or 17 per
+        28 columns per ``POSSESSION_SEG_SCHEMA`` (full) or 17 per
         ``POSSESSIONS_SIMPLE_SCHEMA`` (simple). Empty input yields an empty
         frame carrying the documented schema.
 
@@ -287,7 +287,7 @@ def ncaa_mbb_possessions(
             pl.col("poss_length").last().alias("last_event_time"),
             pl.col("event_type").last().alias("last_event_type"),
         ]
-        schema = POSSESSIONS_SCHEMA
+        schema = POSSESSION_SEG_SCHEMA
 
     out = (
         df.group_by(keys)

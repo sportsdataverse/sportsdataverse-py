@@ -21,7 +21,7 @@ import pytest
 
 from sportsdataverse.mbb.mbb_ncaa_possession_seg import (
     POSSESSIONS_RENAME,
-    POSSESSIONS_SCHEMA,
+    POSSESSION_SEG_SCHEMA,
     POSSESSIONS_SIMPLE_SCHEMA,
     ncaa_mbb_possessions,
 )
@@ -57,8 +57,8 @@ def pbp() -> pl.DataFrame:
 
 def test_full_parity(pbp: pl.DataFrame) -> None:
     got = ncaa_mbb_possessions(pbp)
-    exp = load_expected("possessions", POSSESSIONS_SCHEMA, LEAGUE)
-    assert_frame_parity(got, exp, POSSESSIONS_SCHEMA)
+    exp = load_expected("possessions", POSSESSION_SEG_SCHEMA, LEAGUE)
+    assert_frame_parity(got, exp, POSSESSION_SEG_SCHEMA)
 
 
 def test_simple_parity(pbp: pl.DataFrame) -> None:
@@ -84,5 +84,5 @@ def test_return_as_pandas(pbp: pl.DataFrame) -> None:
 
 def test_empty_input_carries_schema(pbp: pl.DataFrame) -> None:
     empty = pbp.head(0)
-    assert ncaa_mbb_possessions(empty).schema == POSSESSIONS_SCHEMA
+    assert ncaa_mbb_possessions(empty).schema == POSSESSION_SEG_SCHEMA
     assert ncaa_mbb_possessions(empty, simple=True).schema == POSSESSIONS_SIMPLE_SCHEMA

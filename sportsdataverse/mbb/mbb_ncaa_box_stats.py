@@ -331,7 +331,13 @@ def _aggregate_multi_games(df: pl.DataFrame) -> pl.DataFrame:
     rates from the sums, and zeroes NaN (Inf survives, like R).
     """
     keys = ["player", "clean_name", "team"]
-    counters = [c for c, dtype in df.schema.items() if dtype == pl.Float64 and c not in _PCT_COLS]
+    counters = [
+        c
+        for c, dtype in df.schema.items()
+        # c != "g": a page shipping a G column would otherwise collide with the
+        # pl.len().alias("g") games counter below (polars DuplicateError)
+        if dtype == pl.Float64 and c not in _PCT_COLS and c != "g"
+    ]
     out = (
         df.group_by(keys, maintain_order=True)
         .agg(
