@@ -257,3 +257,58 @@ def most_recent_wnba_season():
     """
     today = datetime.date(datetime.now())
     return today.year if today.month >= 5 else today.year - 1
+
+
+def helper_wnba_schedule(
+    sched: pl.DataFrame,
+    *,
+    pbp_game_ids: list[int],
+    team_box_game_ids: list[int],
+    player_box_game_ids: list[int],
+) -> pl.DataFrame:
+    """Reshape the raw WNBA season schedule into the released schedule frame.
+
+    Faithful polars port of the schedule blocks in the wehoop-wnba-data
+    creation scripts (``espn_wnba_01_pbp_creation.R`` adds casts +
+    ``game_date_time``/``game_date`` + the ``PBP`` flag; ``02`` stamps
+    ``team_box``; ``03`` stamps ``player_box`` and uploads) -- byte-identical
+    to the WBB blocks after league normalization, so this delegates to the
+    shared implementation. College-only columns (conference ids, ranks,
+    tournament/groups) are simply absent from WNBA raw schedules; every cast
+    in the shared helper is presence-guarded. Column order and dtypes mirror
+    the released ``wnba_schedule_{season}.parquet``.
+
+    Args:
+        sched: The raw ``wehoop-wnba-raw`` season schedule frame
+            (``wnba/schedules/parquet/wnba_schedule_{season}.parquet``).
+        pbp_game_ids: Game ids present in the compiled play_by_play dataset.
+        team_box_game_ids: Game ids present in the compiled team_box dataset.
+        player_box_game_ids: Game ids present in the compiled player_box dataset.
+
+    Returns:
+        pl.DataFrame: One row per game, deduped, sorted by ``date`` descending.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.wnba import helper_wnba_schedule
+            raw = pl.read_parquet("wnba_schedule_2025.parquet")
+            df = helper_wnba_schedule(
+                raw, pbp_game_ids=[], team_box_game_ids=[], player_box_game_ids=[]
+            )
+            print(df.shape)
+
+    See Also:
+        * `wehoop`_ -- the R producer this ports; retained as the parity oracle.
+
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    from sportsdataverse.wbb.wbb_schedule import helper_wbb_schedule
+
+    return helper_wbb_schedule(
+        sched,
+        pbp_game_ids=pbp_game_ids,
+        team_box_game_ids=team_box_game_ids,
+        player_box_game_ids=player_box_game_ids,
+    )

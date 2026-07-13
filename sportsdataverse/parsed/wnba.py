@@ -128,6 +128,7 @@ from sportsdataverse.wnba import espn_wnba_tournaments as _raw_espn_wnba_tournam
 from sportsdataverse.wnba import espn_wnba_transactions as _raw_espn_wnba_transactions
 from sportsdataverse.wnba import espn_wnba_venue as _raw_espn_wnba_venue
 from sportsdataverse.wnba import espn_wnba_venues as _raw_espn_wnba_venues
+from sportsdataverse.wnba import build_athlete_identity_lookup as build_athlete_identity_lookup  # noqa: F401
 from sportsdataverse.wnba import download as download  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_calendar as espn_wnba_calendar  # noqa: F401
 from sportsdataverse.wnba import espn_wnba_draft as espn_wnba_draft  # noqa: F401
@@ -142,13 +143,24 @@ from sportsdataverse.wnba import espn_wnba_team_stats as espn_wnba_team_stats  #
 from sportsdataverse.wnba import espn_wnba_teams as espn_wnba_teams  # noqa: F401
 from sportsdataverse.wnba import flatten_json_iterative as flatten_json_iterative  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_athlete_items as helper_wnba_athlete_items  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_draft as helper_wnba_draft  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_game_data as helper_wnba_game_data  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_game_items as helper_wnba_game_items  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_game_rosters as helper_wnba_game_rosters  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_officials as helper_wnba_officials  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_pbp as helper_wnba_pbp  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_pbp_features as helper_wnba_pbp_features  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_pickcenter as helper_wnba_pickcenter  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_play_by_play as helper_wnba_play_by_play  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_player_box as helper_wnba_player_box  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_player_season_stats as helper_wnba_player_season_stats  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_roster_items as helper_wnba_roster_items  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_rosters as helper_wnba_rosters  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_schedule as helper_wnba_schedule  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_standings as helper_wnba_standings  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_team_box as helper_wnba_team_box  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_team_items as helper_wnba_team_items  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_team_season_stats as helper_wnba_team_season_stats  # noqa: F401
 from sportsdataverse.wnba import load_wnba_draft as load_wnba_draft  # noqa: F401
 from sportsdataverse.wnba import load_wnba_game_rosters as load_wnba_game_rosters  # noqa: F401
 from sportsdataverse.wnba import load_wnba_officials as load_wnba_officials  # noqa: F401
@@ -215,6 +227,7 @@ from sportsdataverse.wnba import wnba_win_prob_from_margin as wnba_win_prob_from
 from sportsdataverse.wnba import zone_value_map as zone_value_map  # noqa: F401
 
 __all__ = [
+    "build_athlete_identity_lookup",
     "download",
     "espn_wnba_award",
     "espn_wnba_awards",
@@ -334,13 +347,24 @@ __all__ = [
     "espn_wnba_venues",
     "flatten_json_iterative",
     "helper_wnba_athlete_items",
+    "helper_wnba_draft",
     "helper_wnba_game_data",
     "helper_wnba_game_items",
+    "helper_wnba_game_rosters",
+    "helper_wnba_officials",
     "helper_wnba_pbp",
     "helper_wnba_pbp_features",
     "helper_wnba_pickcenter",
+    "helper_wnba_play_by_play",
+    "helper_wnba_player_box",
+    "helper_wnba_player_season_stats",
     "helper_wnba_roster_items",
+    "helper_wnba_rosters",
+    "helper_wnba_schedule",
+    "helper_wnba_standings",
+    "helper_wnba_team_box",
     "helper_wnba_team_items",
+    "helper_wnba_team_season_stats",
     "load_wnba_draft",
     "load_wnba_game_rosters",
     "load_wnba_officials",

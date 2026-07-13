@@ -172,6 +172,18 @@ def helper_wbb_player_box(final: dict) -> pl.DataFrame:
 
     .. _wehoop: https://wehoop.sportsdataverse.org
     """
+    return _basketball_player_box(final, final_order=_FINAL_ORDER)
+
+
+def _basketball_player_box(final: dict, *, final_order: tuple[str, ...]) -> pl.DataFrame:
+    """League-parameterized core shared by the WBB/WNBA release producers.
+
+    The wehoop WBB and WNBA player-box helpers are semantically identical
+    except for the canonical final select: WNBA includes ``plus_minus``
+    (between ``fouls`` and ``points``; kept String -- R never casts it), WBB
+    has no +/-. The stat pivot is payload-driven, so the league's
+    ``final_order`` tuple is the only divergence a caller supplies.
+    """
     header = final.get("header") or {}
     competitions = header.get("competitions") or []
     if not competitions:
@@ -304,7 +316,7 @@ def helper_wbb_player_box(final: dict) -> pl.DataFrame:
         return pl.DataFrame()
 
     present = {k for r in rows for k in r}
-    cols = [c for c in _FINAL_ORDER if c in present]
+    cols = [c for c in final_order if c in present]
     df = pl.DataFrame({c: [r.get(c) for r in rows] for c in cols}, strict=False)
     df = df.with_columns(
         [pl.col(c).cast(pl.Int32, strict=False) for c in (*_INT32_META, *_INT32_STATS) if c in df.columns]
