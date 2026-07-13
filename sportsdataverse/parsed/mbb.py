@@ -354,6 +354,8 @@ from sportsdataverse.mbb import kmeans_fit as kmeans_fit  # noqa: F401
 from sportsdataverse.mbb import lineup_as_raw_clumps as lineup_as_raw_clumps  # noqa: F401
 from sportsdataverse.mbb import lineup_balancer as lineup_balancer  # noqa: F401
 from sportsdataverse.mbb import lineup_fixer as lineup_fixer  # noqa: F401
+from sportsdataverse.mbb import lineup_stats_bucket as lineup_stats_bucket  # noqa: F401
+from sportsdataverse.mbb import lineup_stats_buckets as lineup_stats_buckets  # noqa: F401
 from sportsdataverse.mbb import lineup_to_team_report as lineup_to_team_report  # noqa: F401
 from sportsdataverse.mbb import load_artifact as load_artifact  # noqa: F401
 from sportsdataverse.mbb import load_mbb_game_rosters as load_mbb_game_rosters  # noqa: F401
@@ -856,6 +858,8 @@ __all__ = [
     "lineup_as_raw_clumps",
     "lineup_balancer",
     "lineup_fixer",
+    "lineup_stats_bucket",
+    "lineup_stats_buckets",
     "lineup_to_team_report",
     "load_artifact",
     "load_mbb_game_rosters",
