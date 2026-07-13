@@ -191,7 +191,6 @@ def add_ctg_shot_zones(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         return enhanced_pbp.with_columns(pl.lit(None, dtype=pl.Utf8).alias("ctg_shot_zone"))
 
     x = pl.col("x_legacy").abs()
-    dist = pl.col("shot_distance")
     is_fg = pl.col("is_field_goal") == 1
     is_three = pl.col("shot_value") == 3
 
@@ -202,14 +201,47 @@ def add_ctg_shot_zones(enhanced_pbp: pl.DataFrame) -> pl.DataFrame:
         .then(pl.lit("corner_3"))
         .when(is_three)
         .then(pl.lit("arc_3"))
-        .when(dist < C.RIM_DISTANCE_FT)
+        .when(_shot_distance_ft() < C.RIM_DISTANCE_FT)
         .then(pl.lit("at_rim"))
-        .when(dist < C.SHORT_MID_DISTANCE_FT)
+        .when(_shot_distance_ft() < C.SHORT_MID_DISTANCE_FT)
         .then(pl.lit("short_mid"))
         .otherwise(pl.lit("long_mid"))
         .alias("ctg_shot_zone")
     )
     return enhanced_pbp.with_columns(zone)
+
+
+def _shot_distance_ft() -> pl.Expr:
+    """Exact shot distance in feet, from the legacy coordinates.
+
+    **Do not use the v3 ``shot_distance`` column for zone boundaries.** It is
+    ``Int64`` — the feed rounds distance to whole feet — so a shot released 3.6 ft
+    from the rim is reported as ``4`` and falls on the wrong side of CTG's 4-foot
+    ``at_rim`` boundary. The legacy coordinates are exact (tenths of a foot, rim at
+    the origin), so ``sqrt(x^2 + y^2) / 10`` recovers the true distance.
+
+    Measured against the pbpstats-live oracle (which reads the decimal distance off
+    the CDN feed), the rounded column mis-binned every 3.5-3.9 ft shot as
+    ``short_mid`` — 8 of the 22 residual start-type mismatches on the three
+    committed fixtures, all in the single most important zone.
+
+    Falls back to the rounded column only when a coordinate is null.
+    """
+    coord = ((pl.col("x_legacy").cast(pl.Float64) ** 2 + pl.col("y_legacy").cast(pl.Float64) ** 2).sqrt()) / 10.0
+    return (
+        pl.when(pl.col("x_legacy").is_null() | pl.col("y_legacy").is_null())
+        .then(pl.col("shot_distance").cast(pl.Float64))
+        .otherwise(coord)
+    )
+
+
+def _row_distance_ft(row: dict) -> Optional[float]:
+    """Row-wise twin of :func:`_shot_distance_ft` (exact distance from coordinates)."""
+    x, y = row.get("x_legacy"), row.get("y_legacy")
+    if x is None or y is None:
+        d = row.get("shot_distance")
+        return float(d) if d is not None else None
+    return ((float(x) ** 2 + float(y) ** 2) ** 0.5) / 10.0
 
 
 def _zone_of_row(row: dict) -> Optional[str]:
@@ -222,7 +254,7 @@ def _zone_of_row(row: dict) -> Optional[str]:
         if x >= C.CORNER_THREE_ABS_X and y <= C.CORNER_THREE_MAX_Y:
             return "corner_3"
         return "arc_3"
-    dist = row.get("shot_distance")
+    dist = _row_distance_ft(row)
     if dist is None:
         return None
     if dist < C.RIM_DISTANCE_FT:
