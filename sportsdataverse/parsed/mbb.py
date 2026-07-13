@@ -394,6 +394,22 @@ from sportsdataverse.mbb import misspellings as misspellings  # noqa: F401
 from sportsdataverse.mbb import most_recent_mbb_season as most_recent_mbb_season  # noqa: F401
 from sportsdataverse.mbb import name_in_v0_box_format as name_in_v0_box_format  # noqa: F401
 from sportsdataverse.mbb import name_is_initials as name_is_initials  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_box_scores as ncaa_mbb_box_scores  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_date_games as ncaa_mbb_date_games  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_game_pbp as ncaa_mbb_game_pbp  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_join_pbp_shots as ncaa_mbb_join_pbp_shots  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_lineups as ncaa_mbb_lineups  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_on_off as ncaa_mbb_on_off  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_play_by_play as ncaa_mbb_play_by_play  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_player_combos as ncaa_mbb_player_combos  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_player_lineups as ncaa_mbb_player_lineups  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_player_stats as ncaa_mbb_player_stats  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_possessions as ncaa_mbb_possessions  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_shot_locations as ncaa_mbb_shot_locations  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_team_ids as ncaa_mbb_team_ids  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_team_roster as ncaa_mbb_team_roster  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_team_schedule as ncaa_mbb_team_schedule  # noqa: F401
+from sportsdataverse.mbb import ncaa_mbb_team_stats as ncaa_mbb_team_stats  # noqa: F401
 from sportsdataverse.mbb import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.mbb import order_lineup as order_lineup  # noqa: F401
 from sportsdataverse.mbb import parse_any_play as parse_any_play  # noqa: F401
@@ -421,6 +437,12 @@ from sportsdataverse.mbb import parse_html as parse_html  # noqa: F401
 from sportsdataverse.mbb import parse_jumpball_won as parse_jumpball_won  # noqa: F401
 from sportsdataverse.mbb import parse_jumpball_won_or_lost as parse_jumpball_won_or_lost  # noqa: F401
 from sportsdataverse.mbb import parse_live_offensive_rebound as parse_live_offensive_rebound  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_box as parse_ncaa_bb_box  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_game_pbp as parse_ncaa_bb_game_pbp  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_scoreboard as parse_ncaa_bb_scoreboard  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_shots as parse_ncaa_bb_shots  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_team_roster as parse_ncaa_bb_team_roster  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_team_schedule as parse_ncaa_bb_team_schedule  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_deadball_rebound as parse_offensive_deadball_rebound  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_event as parse_offensive_event  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_foul as parse_offensive_foul  # noqa: F401
@@ -460,11 +482,13 @@ from sportsdataverse.mbb import predict_total as predict_total  # noqa: F401
 from sportsdataverse.mbb import project_bracket as project_bracket  # noqa: F401
 from sportsdataverse.mbb import rank_corr as rank_corr  # noqa: F401
 from sportsdataverse.mbb import raw_game_efficiency as raw_game_efficiency  # noqa: F401
+from sportsdataverse.mbb import refresh_ncaa_team_ids as refresh_ncaa_team_ids  # noqa: F401
 from sportsdataverse.mbb import regress_shot_quality as regress_shot_quality  # noqa: F401
 from sportsdataverse.mbb import remove_diacritics as remove_diacritics  # noqa: F401
 from sportsdataverse.mbb import remove_html_encoding as remove_html_encoding  # noqa: F401
 from sportsdataverse.mbb import reorder_and_reverse as reorder_and_reverse  # noqa: F401
 from sportsdataverse.mbb import reset_config as reset_config  # noqa: F401
+from sportsdataverse.mbb import resolve_ncaa_team_id as resolve_ncaa_team_id  # noqa: F401
 from sportsdataverse.mbb import ridge_cv_lambda as ridge_cv_lambda  # noqa: F401
 from sportsdataverse.mbb import ridge_fit as ridge_fit  # noqa: F401
 from sportsdataverse.mbb import right_kind_of_shot as right_kind_of_shot  # noqa: F401
@@ -872,6 +896,22 @@ __all__ = [
     "most_recent_mbb_season",
     "name_in_v0_box_format",
     "name_is_initials",
+    "ncaa_mbb_box_scores",
+    "ncaa_mbb_date_games",
+    "ncaa_mbb_game_pbp",
+    "ncaa_mbb_join_pbp_shots",
+    "ncaa_mbb_lineups",
+    "ncaa_mbb_on_off",
+    "ncaa_mbb_play_by_play",
+    "ncaa_mbb_player_combos",
+    "ncaa_mbb_player_lineups",
+    "ncaa_mbb_player_stats",
+    "ncaa_mbb_possessions",
+    "ncaa_mbb_shot_locations",
+    "ncaa_mbb_team_ids",
+    "ncaa_mbb_team_roster",
+    "ncaa_mbb_team_schedule",
+    "ncaa_mbb_team_stats",
     "normalize_team_roster_columns",
     "order_lineup",
     "parse_any_play",
@@ -899,6 +939,12 @@ __all__ = [
     "parse_jumpball_won",
     "parse_jumpball_won_or_lost",
     "parse_live_offensive_rebound",
+    "parse_ncaa_bb_box",
+    "parse_ncaa_bb_game_pbp",
+    "parse_ncaa_bb_scoreboard",
+    "parse_ncaa_bb_shots",
+    "parse_ncaa_bb_team_roster",
+    "parse_ncaa_bb_team_schedule",
     "parse_offensive_deadball_rebound",
     "parse_offensive_event",
     "parse_offensive_foul",
@@ -938,11 +984,13 @@ __all__ = [
     "project_bracket",
     "rank_corr",
     "raw_game_efficiency",
+    "refresh_ncaa_team_ids",
     "regress_shot_quality",
     "remove_diacritics",
     "remove_html_encoding",
     "reorder_and_reverse",
     "reset_config",
+    "resolve_ncaa_team_id",
     "ridge_cv_lambda",
     "ridge_fit",
     "right_kind_of_shot",
