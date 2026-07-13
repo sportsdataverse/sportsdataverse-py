@@ -385,17 +385,36 @@ def helper_wbb_schedule(
             if v is None:
                 return None
             # Explicit 1-D object array (nested equal-length lists would
-            # otherwise build 2-D) + pinned print options so a numpy upgrade
-            # or a caller's set_printoptions can't change the released strings.
+            # otherwise build 2-D). array2string's kwargs govern only the OUTER
+            # array -- an ndarray nested inside a struct field is rendered by
+            # its own repr(), which reads the process-global print options --
+            # so pin them for the whole call, not just the outer one. These are
+            # numpy's defaults, so this is a no-op on today's output; it stops a
+            # numpy upgrade or a caller's set_printoptions from silently
+            # rewriting the released strings.
             arr = np.empty(len(v), dtype=object)  # type: ignore[arg-type]
             arr[:] = v  # type: ignore[call-overload]
-            return np.array2string(arr, max_line_width=75, threshold=1000, edgeitems=3)
+            with np.printoptions(linewidth=75, threshold=1000, edgeitems=3):
+                return np.array2string(arr, max_line_width=75, threshold=1000, edgeitems=3)
 
-        # to_list() (not map_elements) so List(Struct) entries surface as
-        # dicts -- the repr must keep the field names.
-        df = df.with_columns(
-            [pl.Series(c, [_np_repr(v) for v in df.get_column(c).to_list()], dtype=pl.Utf8) for c in list_cols]
-        )
+        def _entries(col: str) -> list:
+            # List(Struct) MUST go through to_pandas(): it surfaces each entry
+            # as a dict (keeping the field names) AND renders a list nested
+            # inside a struct field as a numpy object array -- which is how the
+            # scraper's writer wrote it ("devices": array([...], dtype=object)).
+            # to_list() would emit plain Python lists there and miss the
+            # released string.
+            #
+            # Everything else stays on to_list(), because to_pandas() UPCASTS a
+            # numeric list with nulls ([1, None, 3] -> [1.0 nan 3.0]) and would
+            # silently rewrite the repr of any numeric list column.
+            dtype = df.schema[col]
+            inner = getattr(dtype, "inner", None)
+            if isinstance(inner, pl.Struct):
+                return list(df.get_column(col).to_pandas())
+            return df.get_column(col).to_list()
+
+        df = df.with_columns([pl.Series(c, [_np_repr(v) for v in _entries(c)], dtype=pl.Utf8) for c in list_cols])
     # R: ymd_hm(substr(date, 1, nchar - 1)) parsed UTC -> America/New_York;
     # game_date is the New York date of the kickoff instant.
     df = df.with_columns(

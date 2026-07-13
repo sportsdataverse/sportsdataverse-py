@@ -211,12 +211,46 @@ def helper_wbb_athlete_items(teams_rosters, **kwargs):
 # --- release producer (wehoop-wbb-data parity) --------------------------------
 
 
+def _r_as_character(x: float) -> str:
+    """R's ``as.character(<double>)``.
+
+    Two things Python's ``str()`` gets "too right":
+
+    1. R formats to 15 significant digits, not to the shortest exact
+       round-trip. The producers round-trip payload floats back through
+       ``as.numeric(as.character(v))``, so the releases carry the 15-digit
+       value (3.4000000000000057 -> "3.40000000000001" -> a DIFFERENT double).
+       Reproducing that precision loss is what parity means here.
+    2. R (scipen=0) then picks whichever of fixed / scientific is SHORTER, so
+       ``as.character(1e5)`` is "1e+05", not "100000". ``%.15g`` alone only
+       goes scientific at exp < -4 or >= 15, so it would miss that window.
+    """
+    fixed = f"{x:.15g}"
+    if "e" in fixed or "n" in fixed:  # already scientific, or inf/nan
+        return fixed
+    mantissa, exponent = f"{x:.14e}".split("e")
+    mantissa = mantissa.rstrip("0").rstrip(".")
+    e = int(exponent)
+    sci = f"{mantissa}e{'+' if e >= 0 else '-'}{abs(e):02d}"
+    return sci if len(sci) < len(fixed) else fixed
+
+
 def _rel_chr(x: object) -> str | None:
-    """R ``safe_chr``: NULL/empty -> NA; else first element as character."""
+    """R ``safe_chr``: NULL/empty -> NA; else first element as character.
+
+    The single emulation of R's ``as.character()`` for these producers -- the
+    draft port shares it, so a payload shape can't split the two copies apart.
+    """
     if x is None:
         return None
     if isinstance(x, list):
-        return str(x[0]) if x else None
+        x = x[0] if x else None
+        if x is None:
+            return None
+    if isinstance(x, bool):
+        return "TRUE" if x else "FALSE"  # R: as.character(TRUE) == "TRUE"
+    if isinstance(x, float):
+        return _r_as_character(x)
     return str(x)
 
 
@@ -329,7 +363,10 @@ def helper_wbb_game_rosters(payload: dict, *, season: int, game_id: int | str) -
             rows.append(
                 {
                     "season": int(season),
-                    "game_id": str(game_id),
+                    # Int-first: str() on a float-origin id yields
+                    # "401736112.0", which silently misses every join to the
+                    # Int32-keyed datasets.
+                    "game_id": _rel_chr(_rel_int(game_id)),
                     "team_id": _rel_int(team.get("id") if team else team_block.get("id")),
                     "team_slug": _rel_chr((team or team_block).get("slug")),
                     "team_abbreviation": _rel_chr((team or team_block).get("abbreviation")),

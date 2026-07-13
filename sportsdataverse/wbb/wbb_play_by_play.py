@@ -83,11 +83,15 @@ _FLOAT64_COLS: tuple[str, ...] = (
 # id as a true integer, so the Python producer emits Int64 and keeps it exact.
 _INT64_COLS: tuple[str, ...] = ("id",)
 
+# Appended (as all-null Float64) only when a payload ships no coordinates at
+# all. Order matters: it is the order the R creation script's season-level
+# fallback appends them in (espn_wnba_01_pbp_creation.R:100-106), and these
+# land at the end of the frame.
 _COORD_COLS: tuple[str, ...] = (
-    "coordinate_x_raw",
-    "coordinate_y_raw",
     "coordinate_x",
     "coordinate_y",
+    "coordinate_x_raw",
+    "coordinate_y_raw",
 )
 
 __all__ = ["helper_wbb_play_by_play"]
@@ -169,6 +173,24 @@ def helper_wbb_play_by_play(final: dict) -> pl.DataFrame:
 
     .. _wehoop: https://wehoop.sportsdataverse.org
     """
+    return _basketball_play_by_play(final, int32_cols=_INT32_COLS, float64_cols=_FLOAT64_COLS)
+
+
+def _basketball_play_by_play(
+    final: dict,
+    *,
+    int32_cols: tuple[str, ...],
+    float64_cols: tuple[str, ...],
+) -> pl.DataFrame:
+    """League-parameterized core shared by the WBB/WNBA release producers.
+
+    The wehoop WBB and WNBA pbp helpers are semantically identical except for
+    the released dtype contract: WNBA's sub-second game clocks keep
+    ``clock_seconds`` and the six ``*_seconds_remaining`` columns Float64,
+    where WBB releases them Int32 (and WNBA names a third participant athlete
+    column, which this core already emits for both). Callers pass their
+    league's cast tuples; everything else is shared verbatim.
+    """
     header = final.get("header") or {}
     competitions = header.get("competitions") or []
     if not competitions:
@@ -191,6 +213,12 @@ def helper_wbb_play_by_play(final: dict) -> pl.DataFrame:
             p = {k: v for k, v in p.items() if k != "participants"}
             for i, part in enumerate(parts[:3]):
                 p[f"participants.{i}.athlete.id"] = ((part or {}).get("athlete") or {}).get("id")
+        # R round-trips game_json through jsonlite::toJSON (default digits = 4)
+        # before plucking plays, so every double is rounded to 4 decimal
+        # places. Visible on WNBA's fractional clocks, where the stored
+        # payload carries float32-widened values (57.900001525878906 -> 57.9);
+        # a no-op for WBB's integer clocks and one-decimal coordinates.
+        p = {k: (round(v, 4) if isinstance(v, float) else v) for k, v in p.items()}
         plays.append(p)
 
     # First-seen key order across all plays (R: fromJSON record-union order).
@@ -265,7 +293,7 @@ def helper_wbb_play_by_play(final: dict) -> pl.DataFrame:
 
     # Released dtype contract (except `id` -- see _INT64_COLS).
     return df.with_columns(
-        [pl.col(c).cast(pl.Int32, strict=False) for c in _INT32_COLS if c in df.columns]
+        [pl.col(c).cast(pl.Int32, strict=False) for c in int32_cols if c in df.columns]
         + [pl.col(c).cast(pl.Int64, strict=False) for c in _INT64_COLS if c in df.columns]
-        + [pl.col(c).cast(pl.Float64, strict=False) for c in _FLOAT64_COLS if c in df.columns]
+        + [pl.col(c).cast(pl.Float64, strict=False) for c in float64_cols if c in df.columns]
     )

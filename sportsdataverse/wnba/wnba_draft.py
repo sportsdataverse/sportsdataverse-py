@@ -326,3 +326,215 @@ def _stringify(v: Any) -> str | None:
     if isinstance(v, str):
         return v
     return str(v)
+
+
+# --- wehoop-wnba-data release producer --------------------------------------
+# Port of the script-local ``parse_one_pick`` in
+# ``wehoop-wnba-data/R/espn_wnba_08_draft_creation.R``. Distinct lineage from
+# the live ``espn_wnba_draft`` wrapper above: this consumes the stored
+# ``wnba/draft/json/{year}.json`` payload and matches the released
+# ``espn_wnba_draft`` parquet (the parity oracle).
+
+_DRAFT_INT32_COLS: tuple[str, ...] = (
+    "season",
+    "round",
+    "pick",
+    "overall_pick",
+    "athlete_id",
+    "college_id",
+    "team_id",
+)
+
+# parse_one_pick's tibble column order (35 columns).
+_DRAFT_COLUMNS: tuple[str, ...] = (
+    "season",
+    "round",
+    "round_display_name",
+    "pick",
+    "overall_pick",
+    "pick_traded",
+    "pick_notes",
+    "athlete_id",
+    "athlete_uid",
+    "athlete_guid",
+    "athlete_first_name",
+    "athlete_last_name",
+    "athlete_full_name",
+    "athlete_display_name",
+    "athlete_short_name",
+    "athlete_height",
+    "athlete_weight",
+    "athlete_position_abbreviation",
+    "athlete_position_name",
+    "athlete_headshot_href",
+    "college_id",
+    "college_name",
+    "college_short_name",
+    "college_abbreviation",
+    "team_id",
+    "team_uid",
+    "team_slug",
+    "team_location",
+    "team_name",
+    "team_abbreviation",
+    "team_display_name",
+    "team_short_display_name",
+    "team_color",
+    "team_alternate_color",
+    "team_logo",
+)
+
+
+def _safe_chr(x: Any) -> str | None:
+    """R ``safe_chr``: NULL/empty -> NA; else as.character of the first element.
+
+    Delegates to the one shared emulation (``_rel_chr``) rather than keeping a
+    second copy: the two had drifted apart, each missing the other's fix (this
+    one mishandled non-integer floats, that one mishandled bools).
+    """
+    from sportsdataverse.wbb.wbb_game_rosters import _rel_chr
+
+    return _rel_chr(x)
+
+
+def _first_non_blank(*vals: str | None) -> str | None:
+    """R ``%|%`` chain: skip NULL/NA/empty-string values, else NA."""
+    for v in vals:
+        if v is not None and v != "":
+            return v
+    return None
+
+
+def _safe_int(s: str | None) -> int | None:
+    """R ``suppressWarnings(as.integer(<chr>))``: truncating parse, NA on failure."""
+    if s is None:
+        return None
+    try:
+        return int(s)
+    except ValueError:
+        try:
+            return int(float(s))
+        except ValueError:
+            return None
+
+
+def _parse_one_pick(season: int, round_meta: dict[str, str | None], pk: dict[str, Any]) -> dict[str, Any]:
+    """One pick's 35-column row in the R ``parse_one_pick`` order."""
+    athlete: dict[str, Any] = pk.get("athlete") or {}
+    team: dict[str, Any] = pk.get("team") or {}
+    college: dict[str, Any] = athlete.get("college") or pk.get("college") or {}
+    position: dict[str, Any] = athlete.get("position") or {}
+    logos = team.get("logos") or []
+    # R: team[["logo"]] %||% purrr::pluck(team, "logos", 1, "href") -- NULL-coalesce.
+    logo = team.get("logo")
+    if logo is None and logos:
+        logo = (logos[0] or {}).get("href")
+    return {
+        "season": season,
+        "round": _safe_int(_first_non_blank(_safe_chr(pk.get("round")), round_meta["round_number"])),
+        "round_display_name": round_meta["round_display_name"],
+        "pick": _safe_int(_safe_chr(pk.get("pick"))),
+        "overall_pick": _safe_int(_first_non_blank(_safe_chr(pk.get("overall")), _safe_chr(pk.get("overallPick")))),
+        "pick_traded": _safe_chr(pk.get("traded")),
+        "pick_notes": _first_non_blank(_safe_chr(pk.get("notes")), _safe_chr(pk.get("note"))),
+        "athlete_id": _safe_int(_safe_chr(athlete.get("id"))),
+        "athlete_uid": _safe_chr(athlete.get("uid")),
+        "athlete_guid": _safe_chr(athlete.get("guid")),
+        "athlete_first_name": _safe_chr(athlete.get("firstName")),
+        "athlete_last_name": _safe_chr(athlete.get("lastName")),
+        "athlete_full_name": _first_non_blank(
+            _safe_chr(athlete.get("fullName")), _safe_chr(athlete.get("displayName"))
+        ),
+        "athlete_display_name": _safe_chr(athlete.get("displayName")),
+        "athlete_short_name": _safe_chr(athlete.get("shortName")),
+        "athlete_height": _first_non_blank(_safe_chr(athlete.get("displayHeight")), _safe_chr(athlete.get("height"))),
+        "athlete_weight": _first_non_blank(_safe_chr(athlete.get("displayWeight")), _safe_chr(athlete.get("weight"))),
+        "athlete_position_abbreviation": _safe_chr(position.get("abbreviation")),
+        "athlete_position_name": _safe_chr(position.get("displayName")),
+        "athlete_headshot_href": _safe_chr((athlete.get("headshot") or {}).get("href")),
+        "college_id": _safe_int(_safe_chr(college.get("id"))),
+        "college_name": _first_non_blank(_safe_chr(college.get("name")), _safe_chr(college.get("displayName"))),
+        "college_short_name": _safe_chr(college.get("shortName")),
+        "college_abbreviation": _safe_chr(college.get("abbreviation")),
+        "team_id": _safe_int(_first_non_blank(_safe_chr(team.get("id")), _safe_chr(pk.get("teamId")))),
+        "team_uid": _safe_chr(team.get("uid")),
+        "team_slug": _safe_chr(team.get("slug")),
+        "team_location": _safe_chr(team.get("location")),
+        "team_name": _safe_chr(team.get("name")),
+        "team_abbreviation": _safe_chr(team.get("abbreviation")),
+        "team_display_name": _safe_chr(team.get("displayName")),
+        "team_short_display_name": _safe_chr(team.get("shortDisplayName")),
+        "team_color": _safe_chr(team.get("color")),
+        "team_alternate_color": _safe_chr(team.get("alternateColor")),
+        "team_logo": _safe_chr(logo),
+    }
+
+
+def helper_wnba_draft(payload: dict, *, season: int) -> pl.DataFrame:
+    """Parse one season's stored draft JSON into the released draft frame.
+
+    Faithful polars port of the script-local ``parse_one_pick`` /
+    ``build_season_draft`` parsers in
+    ``wehoop-wnba-data/R/espn_wnba_08_draft_creation.R``. Handles both payload
+    shapes: ``rounds[]`` of round objects each carrying ``picks[]``, and the
+    modern flat top-level ``picks[]`` (where ``rounds`` is an integer count --
+    the R ``is.list()`` guard skips it and ``round`` comes from each pick).
+    Column set, order, and dtypes match the R-released ``espn_wnba_draft``
+    parquet: Int32 ids/ordinals, String everything else, ``pick_traded`` as
+    ``"TRUE"``/``"FALSE"`` (R ``as.character`` on a logical).
+
+    Args:
+        payload: The season's ``wnba/draft/json/{year}.json`` as a dict.
+        season: Draft year the payload belongs to.
+
+    Returns:
+        pl.DataFrame: One row per pick, deduped and sorted by
+        ``overall_pick``, ``round``, ``pick``. Empty (zero-column) frame when
+        no picks parse -- season builders skip empty frames.
+
+    Example:
+        Quick start::
+
+            import json
+            from sportsdataverse.wnba import helper_wnba_draft
+            payload = json.load(open("2026.json", encoding="utf-8"))
+            df = helper_wnba_draft(payload, season=2026)
+            print(df.shape)
+
+        Pipeline next step (one line)::
+
+            df.select("overall_pick", "athlete_display_name", "team_id").head()
+
+    See Also:
+        * `wehoop`_ -- the R producer this ports; retained as the parity oracle.
+
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    pieces: list[dict[str, Any]] = []
+    rounds = payload.get("rounds")
+    # ESPN's modern payloads set `rounds` to an integer count; only iterate an
+    # actual array of round objects (R is.list guard).
+    if isinstance(rounds, list):
+        for r in rounds:
+            if not isinstance(r, dict):
+                continue
+            rmeta: dict[str, str | None] = {
+                "round_number": _first_non_blank(_safe_chr(r.get("number")), _safe_chr(r.get("round"))),
+                "round_display_name": _first_non_blank(_safe_chr(r.get("displayName")), _safe_chr(r.get("name"))),
+            }
+            for p in r.get("picks") or []:
+                pieces.append(_parse_one_pick(season, rmeta, p))
+    flat_meta: dict[str, str | None] = {"round_number": None, "round_display_name": None}
+    for p in payload.get("picks") or []:
+        pieces.append(_parse_one_pick(season, flat_meta, p))
+    if not pieces:
+        return pl.DataFrame()
+    df = pl.DataFrame(
+        {c: [row[c] for row in pieces] for c in _DRAFT_COLUMNS},
+        schema={c: (pl.Int32 if c in _DRAFT_INT32_COLS else pl.Utf8) for c in _DRAFT_COLUMNS},
+        strict=False,
+    )
+    # R: distinct() then arrange(across(any_of(c("overall_pick", "round", "pick")))).
+    return df.unique(maintain_order=True, keep="first").sort(
+        ["overall_pick", "round", "pick"], nulls_last=True, maintain_order=True
+    )

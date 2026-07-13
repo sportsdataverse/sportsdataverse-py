@@ -513,6 +513,20 @@ print(season, cal.height)
 
 ## Other
 
+### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
+
+R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rosters` | `dict[int \| str, dict]` |  | Mapping of team_id -> that team's raw roster payload (`wbb/team_rosters/json/{season}/{team_id}.json`). NOTE: R walks `raw$athletes` directly here (no position-bucket unwrap, unlike the rosters dataset itself). |
+
+**Returns**
+
+athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
+
 ### `espn_wnba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wnba_teams}
 
 espn_wnba_teams - look up WNBA teams

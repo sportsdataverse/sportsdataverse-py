@@ -114,3 +114,42 @@ def espn_wnba_game_officials(
         return_as_pandas=return_as_pandas,
         **kwargs,
     )
+
+
+def helper_wnba_officials(payload: dict, *, season: int, game_id: int | str) -> pl.DataFrame:
+    """Parse one game's officials sidecar into the released officials frame.
+
+    Faithful polars port of the script-local parsers in
+    ``wehoop-wnba-data/R/espn_wnba_10_officials_creation.R`` -- byte-identical
+    to the WBB parser after league normalization, so this delegates to the
+    shared implementation (it consumes the stored
+    ``wnba/officials/json/{game_id}.json`` sidecar, not the live endpoint
+    wrapped above). The R-released ``espn_wnba_officials`` parquet is the
+    parity oracle.
+
+    Args:
+        payload: One game's ``wnba/officials/json/{game_id}.json`` as a dict.
+        season: Season year the sidecar belongs to.
+        game_id: ESPN game id the sidecar belongs to (released dtype String).
+
+    Returns:
+        pl.DataFrame: One row per official; empty (zero-column) frame for
+        degenerate payloads -- season builders skip empty frames.
+
+    Example:
+        Quick start::
+
+            import json
+            from sportsdataverse.wnba import helper_wnba_officials
+            payload = json.load(open("401736126.json", encoding="utf-8"))
+            df = helper_wnba_officials(payload, season=2025, game_id=401736126)
+            print(df.shape)
+
+    See Also:
+        * `wehoop`_ -- the R producer this ports; retained as the parity oracle.
+
+    .. _wehoop: https://wehoop.sportsdataverse.org
+    """
+    from sportsdataverse.wbb.wbb_game_officials import helper_wbb_officials
+
+    return helper_wbb_officials(payload, season=season, game_id=game_id)
