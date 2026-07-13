@@ -24,6 +24,7 @@ from sportsdataverse.nba.nba_possessions import (
     POSSESSION_SHOOTING_SCHEMA,
     POSSESSIONS_SCHEMA,
     _is_last_ft,
+    _possession_start_type,
     attach_possession_lineups,
     build_possession_shooting,
     build_possessions,
@@ -905,3 +906,37 @@ def test_new_possession_columns(game_id):
     not_counted = poss.filter(pl.col("count_as_possession") == False)  # noqa: E712
     for r in not_counted.to_dicts():
         assert r["start_seconds_remaining"] <= 2.0, r
+
+
+def test_start_type_ft_sandwich_technical_asymmetry():
+    """pbpstats applies the FT-sandwich technical carve-out asymmetrically.
+
+    A boundary timeout followed by a same-clock *technical* FT:
+
+    * as the PREVIOUS possession's boundary → suppressed (any same-clock FT is a
+      sandwich; pbpstats ``previous_possession_has_timeout``, possession.py:185-189
+      has no technical clause) → the start type falls through, NOT ``OffTimeout``.
+    * inside the CURRENT possession → still counts (pbpstats
+      ``possession_has_timeout``, possession.py:154-159, keeps
+      ``and not is_technical_ft``) → ``OffTimeout``.
+
+    Regression guard for the parity fix that split ``_is_ft_sandwich`` by
+    ``exclude_technical``; not exercised by the committed fixtures.
+    """
+    made = {"event_type": "made_shot", "seconds_remaining": 100.0}
+    tech_ft = {"event_type": "free_throw", "sub_type": "Free Throw Technical", "seconds_remaining": 90.0}
+
+    # PREVIOUS-possession boundary timeout, then this possession opens on a
+    # same-clock technical FT → sandwich → suppressed → falls through to OffMadeShot.
+    prev_rows = [made, {"event_type": "timeout", "seconds_remaining": 90.0}]
+    cur_rows = [tech_ft, {"event_type": "made_shot", "seconds_remaining": 80.0}]
+    assert _possession_start_type(made, prev_rows, cur_rows) == "OffMadeShot"
+
+    # CURRENT-possession timeout before a same-clock technical FT → carve-out
+    # retained → still OffTimeout.
+    cur_rows_to = [
+        {"event_type": "timeout", "seconds_remaining": 90.0},
+        tech_ft,
+        {"event_type": "made_shot", "seconds_remaining": 80.0},
+    ]
+    assert _possession_start_type(made, [made], cur_rows_to) == "OffTimeout"

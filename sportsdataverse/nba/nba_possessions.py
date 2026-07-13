@@ -359,16 +359,25 @@ def _possession_start_type(
     def _clock(row: dict) -> float:
         return float(row.get("seconds_remaining") or 0.0)
 
-    def _is_ft_sandwich(nxt: Optional[dict], timeout_clock: float) -> bool:
+    def _is_ft_sandwich(nxt: Optional[dict], timeout_clock: float, *, exclude_technical: bool) -> bool:
         """pbpstats: skip a timeout that sits before/between the FTs of one trip.
 
-        A *technical* FT does NOT trigger the exclusion (pbpstats checks
-        ``not next_event.is_technical_ft``), so a timeout before a technical FT
-        still counts as a real timeout.
+        pbpstats applies this exclusion ASYMMETRICALLY (``possession.py``):
+
+        * ``possession_has_timeout`` (154-159) checks
+          ``and not next_event.is_technical_ft`` -- a timeout before a same-clock
+          *technical* FT is NOT a sandwich, so it still counts as a real timeout.
+        * ``previous_possession_has_timeout`` (185-189) omits that clause -- a
+          same-clock FT of ANY kind (technical included) IS a sandwich and
+          suppresses the timeout.
+
+        ``exclude_technical`` selects between the two: ``True`` for the
+        current-possession call (technical FT is not a sandwich), ``False`` for
+        the previous-possession call (any same-clock FT is a sandwich).
         """
         if nxt is None or (nxt.get("event_type") or "") != "free_throw":
             return False
-        if is_technical_ft_row(nxt):
+        if exclude_technical and is_technical_ft_row(nxt):
             return False
         return _clock(nxt) == timeout_clock
 
@@ -379,7 +388,9 @@ def _possession_start_type(
                 continue
             # the event after a boundary timeout is the first row of THIS possession
             nxt = rows[i + 1] if i + 1 < len(rows) else (cur_rows[0] if cur_rows else None)
-            if not _is_ft_sandwich(nxt, _clock(r)):
+            # previous-possession sandwich test: any same-clock FT suppresses (no
+            # technical carve-out -- pbpstats possession.py:185-189).
+            if not _is_ft_sandwich(nxt, _clock(r), exclude_technical=False):
                 return True
         return False
 
@@ -390,11 +401,16 @@ def _possession_start_type(
             clock = _clock(r)
             if clock != end_time:
                 nxt = rows[i + 1] if i + 1 < len(rows) else None
-                if not _is_ft_sandwich(nxt, clock):
+                # current-possession sandwich test keeps pbpstats' technical carve-out.
+                if not _is_ft_sandwich(nxt, clock, exclude_technical=True):
                     return True
             else:
                 # timeout at the end of the possession: only a same-clock turnover
-                # after it means the timeout actually started the next possession
+                # after it means the timeout actually started the next possession.
+                # pbpstats also requires ``not is_no_turnover`` here (possession.py:169-173),
+                # but that guards a stats_nba "No Turnover" placeholder event; the v3/cdn
+                # feed types turnovers by actionType and emits no such row, so the plain
+                # event_type test is exact for this feed.
                 for later in rows[i + 1 :]:
                     if (later.get("event_type") or "") == "turnover" and _clock(later) == clock:
                         return True

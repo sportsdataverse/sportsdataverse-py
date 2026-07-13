@@ -23,15 +23,23 @@ Gate (floors from OBSERVED values — never lowered to make a test pass):
 
 The three residuals are pinned EXACTLY in :data:`EXPECTED_RESIDUALS` (an equality,
 not a floor): any NEW disagreement fails the gate. Each is a pbpstats-live
-possession-boundary artifact around a timeout/FT sequence — the same S2 family the
-possession oracle (``test_nba_possession_oracle.py``) already classifies — NOT an
-sdv start-type bug. sdv follows pbpstats' OWN documented ``possession_start_type``
-rule (``possession.py:206-242``); the disagreement is downstream of pbpstats-live's
-possession *segmentation* differing from sdv's, which shifts the coarse start type
-of the possession on the far side of the divergent boundary. In every residual sdv
-is on the side pbpstats' documented rule prescribes (e.g. end_action 494 / 578:
-sdv ``OffMadeShot`` because the possession does not start at the timeout's clock,
-while pbpstats-live reaches ``OffTimeout`` only via its shifted boundary).
+possession-*segmentation* artifact — the same S2 family the possession oracle
+(``test_nba_possession_oracle.py``) already classifies — NOT an sdv start-type bug.
+sdv follows pbpstats' OWN documented ``possession_start_type`` rule
+(``possession.py:206-242``); the disagreement is downstream of pbpstats-live
+drawing a possession boundary where sdv does not, which changes the previous-
+possession-ending event and hence the coarse start type. In every residual sdv is
+on the side pbpstats' documented rule prescribes. Two sub-mechanisms:
+
+* **end_action 494 / 578** (sdv ``OffMadeShot`` vs oracle ``OffTimeout``): sdv's
+  possession does not start at the timeout's clock, so its documented boundary-
+  timeout rule yields no timeout; pbpstats-live reaches ``OffTimeout`` only via a
+  shifted boundary around the timeout/FT sequence.
+* **end_action 70** (sdv ``OffMissedShot`` vs oracle ``OffDeadball``): pbpstats-live
+  ends the previous possession at a personal foul (a dead-ball event, event 64), so
+  its previous-possession-ending event is a ``Foul`` → ``OffDeadball``; sdv's prior
+  boundary is the defensive rebound → ``OffMissedShot``. A foul-boundary segmentation
+  difference, not the timeout family.
 
 Gated on ``SDV_PBPSTATS_ROOT`` (a local https://github.com/dblackrun/pbpstats
 checkout; pbpstats is NOT a project dependency). Unset → every test skips cleanly;
