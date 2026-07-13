@@ -453,12 +453,14 @@ def test_nba_possessions_offline(monkeypatch: pytest.MonkeyPatch) -> None:
     import sportsdataverse.nba.nba_possessions as P
 
     g = "0022200001"
-    monkeypatch.setattr(P, "_fetch_pbp", lambda gid, lg: json.loads((FXROOT / g / "playbyplayv3.json").read_text()))
     monkeypatch.setattr(
-        P, "_fetch_rotation", lambda gid, lg: json.loads((FXROOT / g / "gamerotation.json").read_text())
+        P, "_fetch_pbp", lambda gid, lg, **kw: json.loads((FXROOT / g / "playbyplayv3.json").read_text())
     )
     monkeypatch.setattr(
-        P, "_fetch_box", lambda gid, lg: json.loads((FXROOT / g / "boxscoretraditionalv3.json").read_text())
+        P, "_fetch_rotation", lambda gid, lg, **kw: json.loads((FXROOT / g / "gamerotation.json").read_text())
+    )
+    monkeypatch.setattr(
+        P, "_fetch_box", lambda gid, lg, **kw: json.loads((FXROOT / g / "boxscoretraditionalv3.json").read_text())
     )
 
     df = P.nba_possessions(g)
@@ -547,8 +549,10 @@ def _install_fixture_fetchers(
     quarter_box_raises: bool = False,
 ) -> dict[str, int]:
     root = FXROOT / game_id
-    monkeypatch.setattr(npm, "_fetch_pbp", lambda g, lg: json.loads((root / "playbyplayv3.json").read_text()))
-    monkeypatch.setattr(npm, "_fetch_box", lambda g, lg: json.loads((root / "boxscoretraditionalv3.json").read_text()))
+    monkeypatch.setattr(npm, "_fetch_pbp", lambda g, lg, **kw: json.loads((root / "playbyplayv3.json").read_text()))
+    monkeypatch.setattr(
+        npm, "_fetch_box", lambda g, lg, **kw: json.loads((root / "boxscoretraditionalv3.json").read_text())
+    )
 
     def _box_periods(g: str, n: int, **kwargs: object) -> dict[int, dict]:
         # Stubbed so "auto"'s quarter_box step (interposed between rotation and
@@ -561,7 +565,7 @@ def _install_fixture_fetchers(
     monkeypatch.setattr(npm, "_fetch_box_periods", _box_periods)
     calls: dict[str, int] = {"rotation": 0}
 
-    def _rot(g: str, lg: str) -> dict:
+    def _rot(g: str, lg: str, **kw: object) -> dict:
         calls["rotation"] += 1
         if rotation_raises:
             raise RuntimeError("gamerotation throttled")

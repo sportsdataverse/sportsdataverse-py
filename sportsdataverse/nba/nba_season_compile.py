@@ -11,7 +11,7 @@ import logging
 import os
 import time
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Callable, List, Optional, Union
 
 import pandas as pd
 import polars as pl
@@ -68,7 +68,13 @@ def _game_ids_for_season(season: int, season_type: str) -> List[str]:
     return _season_game_index(season, season_type)["game_id"].to_list()
 
 
-def _fetch_possessions(game_id: str, league_id: str, *, lineup_source: str = "auto") -> pl.DataFrame:
+def _fetch_possessions(
+    game_id: str,
+    league_id: str,
+    *,
+    lineup_source: str = "auto",
+    proxy_url: Optional[str] = None,
+) -> pl.DataFrame:
     """Fetch one game's possession+lineup frame (monkeypatchable).
 
     Args:
@@ -78,13 +84,15 @@ def _fetch_possessions(game_id: str, league_id: str, *, lineup_source: str = "au
             (default; tries rotation then falls back to pbp), ``"rotation"``
             (gamerotation endpoint only), or ``"pbp"`` (pbp-derived, no
             gamerotation fetch).
+        proxy_url: Optional proxy URL forwarded to every underlying
+            ``stats.nba.com`` call for this game.
 
     Returns:
         Possession stint matrix as a polars DataFrame.
     """
     from .nba_possessions import nba_possessions
 
-    return nba_possessions(game_id, league_id, lineup_source=lineup_source)
+    return nba_possessions(game_id, league_id, lineup_source=lineup_source, proxy_url=proxy_url)
 
 
 def compile_nba_season(
@@ -95,6 +103,7 @@ def compile_nba_season(
     cache_dir: Optional[str] = None,
     delay_s: float = 0.6,
     lineup_source: str = "auto",
+    proxy_provider: Optional[Callable[[], Optional[str]]] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Compile a full season's possession stint matrix (cached + resumable + throttled).
@@ -118,6 +127,18 @@ def compile_nba_season(
             (gamerotation endpoint only), or ``"pbp"`` (pbp-derived, no
             gamerotation fetch — useful when the gamerotation endpoint is
             throttled or unavailable).
+        proxy_provider: Optional zero-arg callable returning a proxy URL (or
+            ``None``). **Called once per game**, so a rotating pool spreads a
+            season's fetches across many exit IPs rather than hammering
+            ``stats.nba.com`` from one address. ``stats.nba.com`` *hangs*
+            rather than errors on datacenter/cloud IPs, so an unattended host
+            (CI, a droplet) MUST supply one — a proxied request is judged on
+            the proxy's exit IP, which is what makes such a host viable at all.
+            Any ``() -> str | None`` works; a round-robin pool's ``.next``
+            matches the signature directly::
+
+                compile_nba_season(2023, proxy_provider=round_robin.next)
+
         return_as_pandas: Return pandas instead of polars.
 
     Returns:
@@ -174,7 +195,14 @@ def compile_nba_season(
 
         # --- live fetch (throttle only on successful fetches, not failures) ---
         try:
-            poss = _fetch_possessions(gid, _LEAGUE_ID, lineup_source=lineup_source)
+            # Called PER GAME so a pool (e.g. RoundRobin.next) rotates the exit IP
+            # across the season instead of hammering stats.nba.com from one address.
+            poss = _fetch_possessions(
+                gid,
+                _LEAGUE_ID,
+                lineup_source=lineup_source,
+                proxy_url=proxy_provider() if proxy_provider is not None else None,
+            )
         except Exception as exc:
             _LOG.warning("skip game %s (%d/%d): fetch failed: %s", gid, i, total, exc)
             continue

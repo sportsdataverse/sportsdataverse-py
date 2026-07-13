@@ -1066,51 +1066,54 @@ def attach_possession_lineups(
 # ---------------------------------------------------------------------------
 
 
-def _fetch_pbp(game_id: str, league_id: str = "00") -> dict:
+def _fetch_pbp(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
     """Fetch raw play-by-play v3 payload from stats.nba.com.
 
     Args:
         game_id: Ten-character NBA game identifier.
         league_id: League identifier (accepted for API symmetry; not forwarded
             to ``nba_stats_playbyplayv3`` which does not expose it).
+        proxy_url: Optional proxy URL forwarded to the underlying transport.
 
     Returns:
         Raw ``dict`` from ``nba_stats_playbyplayv3``.
     """
     from sportsdataverse.nba.nba_stats import nba_stats_playbyplayv3
 
-    return nba_stats_playbyplayv3(game_id=game_id, return_parsed=False)
+    return nba_stats_playbyplayv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url)
 
 
-def _fetch_rotation(game_id: str, league_id: str = "00") -> dict:
+def _fetch_rotation(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
     """Fetch raw gamerotation payload from stats.nba.com.
 
     Args:
         game_id: Ten-character NBA game identifier.
         league_id: League identifier (default ``"00"`` for NBA).
+        proxy_url: Optional proxy URL forwarded to the underlying transport.
 
     Returns:
         Raw ``dict`` from ``nba_stats_gamerotation``.
     """
     from sportsdataverse.nba.nba_stats import nba_stats_gamerotation
 
-    return nba_stats_gamerotation(game_id=game_id, league_id=league_id, return_parsed=False)
+    return nba_stats_gamerotation(game_id=game_id, league_id=league_id, return_parsed=False, proxy_url=proxy_url)
 
 
-def _fetch_box(game_id: str, league_id: str = "00") -> dict:
+def _fetch_box(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
     """Fetch raw boxscore traditional v3 payload from stats.nba.com.
 
     Args:
         game_id: Ten-character NBA game identifier.
         league_id: League identifier (accepted for API symmetry; not forwarded
             to ``nba_stats_boxscoretraditionalv3`` which does not expose it).
+        proxy_url: Optional proxy URL forwarded to the underlying transport.
 
     Returns:
         Raw ``dict`` from ``nba_stats_boxscoretraditionalv3``.
     """
     from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3
 
-    return nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False)
+    return nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url)
 
 
 def _fetch_box_periods(
@@ -1178,6 +1181,7 @@ def nba_possessions(
     *,
     lineup_source: str = "auto",
     period_boxscores: Optional[Dict[int, dict]] = None,
+    proxy_url: Optional[str] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Fetch and build the possession-level lineup stint matrix for a single game.
@@ -1233,6 +1237,12 @@ def nba_possessions(
             quarter_box step). When ``None`` (default) and quarter_box is
             reached, :func:`_fetch_box_periods` fetches it. Ignored for
             ``"rotation"``/``"pbp"``.
+        proxy_url: Optional proxy URL forwarded to every network call this
+            function makes (pbp, rotation, box, and the per-period boxes).
+            ``stats.nba.com`` hangs rather than errors on datacenter/cloud
+            IPs, so an unattended host (CI, a droplet) MUST supply a proxy;
+            see :func:`~sportsdataverse.nba.nba_season_compile.compile_nba_season`'s
+            ``proxy_provider`` to rotate one per game across a season.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of :class:`polars.DataFrame`.
 
@@ -1293,8 +1303,8 @@ def nba_possessions(
     if lineup_source not in ("auto", "rotation", "pbp", "quarter_box"):
         raise ValueError(f"lineup_source must be 'auto'|'rotation'|'pbp'|'quarter_box', got {lineup_source!r}")
 
-    raw_pbp = _fetch_pbp(game_id, league_id)
-    raw_box = _fetch_box(game_id, league_id)
+    raw_pbp = _fetch_pbp(game_id, league_id, proxy_url=proxy_url)
+    raw_box = _fetch_box(game_id, league_id, proxy_url=proxy_url)
     enh = enhanced_pbp_from_payload(raw_pbp, league_id=league_id)
     home, away = boxscore_home_away(raw_box)
 
@@ -1302,7 +1312,7 @@ def nba_possessions(
         return players_on_court_from_pbp(enh, raw_box, home_team_id=home, away_team_id=away), "pbp"
 
     def _from_rotation() -> "tuple[pl.DataFrame, str]":
-        raw_rot = _fetch_rotation(game_id, league_id)
+        raw_rot = _fetch_rotation(game_id, league_id, proxy_url=proxy_url)
         rot = parse_rotation_resultsets(raw_rot)
         oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
         if oc.is_empty():
@@ -1322,7 +1332,7 @@ def nba_possessions(
         pb = period_boxscores
         if pb is None:
             n_periods = int(enh["period"].max() or 0) if not enh.is_empty() else 0
-            pb = _fetch_box_periods(game_id, n_periods, league_id=league_id)
+            pb = _fetch_box_periods(game_id, n_periods, league_id=league_id, proxy_url=proxy_url)
         oc = players_on_court_from_quarter_boxscores(enh, pb, raw_box, home_team_id=home, away_team_id=away)
         if oc.is_empty():
             raise ValueError("quarter_box produced empty on-court frame")
