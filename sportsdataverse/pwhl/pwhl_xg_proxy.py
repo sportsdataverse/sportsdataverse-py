@@ -336,7 +336,12 @@ def _add_preshot_context(pbp: pl.DataFrame) -> pl.DataFrame:
     f = pbp.with_row_index("_ri")
     seq = (
         f.filter(is_play)
-        .sort(["game_id", "sec_from_start"])
+        # `_ri` (feed order) is the final tie-break: polars' sort is NOT stable by
+        # default, and the feed's clock is 1s-granular, so events tied in the same
+        # second would otherwise flip which row counts as "prior" between runs --
+        # non-deterministic movement features. Feed order is the right tie-break:
+        # within a second it IS the chronological order.
+        .sort(["game_id", "sec_from_start", "_ri"])
         .with_columns(
             _pe=pl.col("event").shift(1).over("game_id"),
             _px=pl.col("x_coord").shift(1).over("game_id"),
@@ -393,7 +398,11 @@ def _build_xg_features(
     avail = list(_XG_BASE_FEATURES)
     if {"game_id", "sec_from_start"}.issubset(f.columns):
         f = (
-            f.sort(["game_id", "sec_from_start"])
+            # `_ri` (feed order) is the final sort key for the same reason as in
+            # `_add_preshot_context`: polars' sort is unstable and the clock is
+            # 1s-granular, so without it the "prior shot" of a rebound flips
+            # between runs on tied timestamps.
+            f.sort(["game_id", "sec_from_start", "_ri"])
             .with_columns(
                 rebound=(pl.col("sec_from_start") - pl.col("sec_from_start").shift(1).over("game_id"))
                 .is_between(0, 3)
