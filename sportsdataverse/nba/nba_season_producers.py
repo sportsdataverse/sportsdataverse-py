@@ -216,12 +216,17 @@ def helper_nba_player_season_stats(
 
     .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    categories = (
-        payload.get("categories")
-        or payload.get("statCategories")
-        or (payload.get("splits") or {}).get("categories")
-        or []
-    )
+    # R uses %||% (NULL-coalesce), which only falls through on absent keys, not on
+    # an empty-but-present list. Gate on ``is None`` (not truthiness) so a payload
+    # shipping ``categories: []`` alongside a populated ``statCategories`` resolves
+    # to the empty ``categories`` exactly as R does.
+    categories = payload.get("categories")
+    if categories is None:
+        categories = payload.get("statCategories")
+    if categories is None:
+        categories = (payload.get("splits") or {}).get("categories")
+    if categories is None:
+        categories = []
     if not categories:
         return pl.DataFrame()
 
