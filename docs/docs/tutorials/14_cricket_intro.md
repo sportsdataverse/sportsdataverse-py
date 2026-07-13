@@ -75,7 +75,7 @@ IPL = "8048"
 print("polars", pl.__version__)
 ```
 
-    polars 1.40.1
+    polars 1.42.0
 
 
 The ESPN cricket feed is live and occasionally rate-limited, so a small `safe()`
@@ -573,11 +573,11 @@ else:
     │ ---                             ┆ ---                  ┆ ---          │
     │ str                             ┆ str                  ┆ str          │
     ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ Phillips rides the Archer ligh… ┆ 2026-06-17T19:41:29Z ┆ Story        │
-    │ Glenn Phillips repels England … ┆ 2026-06-17T19:41:47Z ┆ Recap        │
-    │ Gill and Kishan hundreds carry… ┆ 2026-06-17T18:05:42Z ┆ Recap        │
-    │ Shafali's all-round show helps… ┆ 2026-06-17T17:54:49Z ┆ Recap        │
-    │ Shreyanka Patil stretchered of… ┆ 2026-06-17T17:54:27Z ┆ HeadlineNews │
+    │ Afghan women's refugee team co… ┆ 2026-07-13T17:16:22Z ┆ HeadlineNews │
+    │ Why India's Lord's Test win is… ┆ 2026-07-13T17:11:58Z ┆ HeadlineNews │
+    │ 'We just weren't good enough' … ┆ 2026-07-13T16:36:27Z ┆ HeadlineNews │
+    │ Kohli, Rohit and Bumrah arrive… ┆ 2026-07-13T15:36:18Z ┆ Preview      │
+    │ West Indies and New Zealand em… ┆ 2026-07-13T15:33:58Z ┆ Preview      │
     └─────────────────────────────────┴──────────────────────┴──────────────┘
 
 
@@ -594,8 +594,6 @@ else:
 ```
 
     ✅ IPL injuries
-
-
     injuries feed unavailable or empty right now
 
 

@@ -133,7 +133,7 @@ print("ODDS_API_KEY set:", HAS_KEY,
       "— odds cells will" + ("" if HAS_KEY else " NOT") + " run live")
 ```
 
-    ODDS_API_KEY set: False — odds cells will NOT run live
+    ODDS_API_KEY set: True — odds cells will run live
 
 
 ## 🧭 2 · The naming-convention superpower
@@ -167,12 +167,8 @@ pl.DataFrame(rows)  # same columns, same shape — one contract, four leagues
 ```
 
     ✅ espn_nba_teams
-
-
     ✅ espn_wnba_teams
     ✅ espn_nhl_teams
-
-
     ✅ espn_mlb_teams
 
 
@@ -209,6 +205,8 @@ print("NFL scoreboard rows:", None if board is None else board.height,
 ```
 
     ✅ espn_nfl_scoreboard
+
+
     ✅ espn_nba_standings
     NFL scoreboard rows: 16 | NBA standings rows: 30
 
@@ -284,7 +282,7 @@ pl.DataFrame(rows)
     │ ---    ┆ ---              ┆ ---               ┆ ---    │
     │ str    ┆ str              ┆ str               ┆ i64    │
     ╞════════╪══════════════════╪═══════════════════╪════════╡
-    │ AHL    ┆ ahl_schedule()   ┆ ahl_standings()   ┆ 2026   │
+    │ AHL    ┆ ahl_schedule()   ┆ ahl_standings()   ┆ 2027   │
     │ OHL    ┆ ohl_schedule()   ┆ ohl_standings()   ┆ 2027   │
     │ WHL    ┆ whl_schedule()   ┆ whl_standings()   ┆ 2026   │
     │ QMJHL  ┆ qmjhl_schedule() ┆ qmjhl_standings() ┆ 2027   │
@@ -311,7 +309,7 @@ for lg, fns in hits.items():
 ```
 
      cfb: espn_cfb_scoreboard, scoreboard_event_parsing, yahoo_cfb_scoreboard
-     mbb: espn_mbb_scoreboard, scoreboard_event_parsing
+     mbb: espn_mbb_scoreboard, parse_ncaa_bb_scoreboard, scoreboard_event_parsing
      mlb: espn_mlb_scoreboard
      nba: espn_nba_scoreboard, scoreboard_event_parsing
      nfl: espn_nfl_scoreboard, scoreboard_event_parsing
@@ -358,13 +356,13 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
     │ ---    ┆ ---         │
     │ str    ┆ i64         │
     ╞════════╪═════════════╡
-    │ nhl    ┆ 337         │
-    │ mlb    ┆ 270         │
-    │ nfl    ┆ 237         │
-    │ cfb    ┆ 169         │
-    │ wnba   ┆ 162         │
+    │ mbb    ┆ 527         │
+    │ wbb    ┆ 502         │
+    │ nhl    ┆ 383         │
+    │ cfb    ┆ 363         │
+    │ mlb    ┆ 325         │
     │ …      ┆ …           │
-    │ pwhl   ┆ 44          │
+    │ pwhl   ┆ 67          │
     │ ahl    ┆ 14          │
     │ ohl    ┆ 14          │
     │ qmjhl  ┆ 14          │
@@ -383,7 +381,7 @@ print("athlete ->", None if ath is None else f"{ath['displayName']} (id={ath['id
 ```
 
     team  -> Los Angeles Lakers (id=13)
-    athlete -> LeBron James (id=1966)
+    athlete -> None
 
 
 ## 🍳 3 · Twenty cross-sport recipes
@@ -444,33 +442,17 @@ sb = safe("espn_mlb_scoreboard", lambda: sdv.espn_mlb_scoreboard())
 
 
 
-    shape: (5, 50)
+    shape: (1, 50)
     ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
     │ game_id   ┆ uid       ┆ date      ┆ name      ┆ … ┆ away_logo ┆ away_scor ┆ away_winn ┆ away_ran │
     │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ e         ┆ er        ┆ k        │
     │ str       ┆ str       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ bool      ┆ str      │
+    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ str       ┆ str      │
     ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 401815776 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Miami     ┆ … ┆ https://a ┆ 2         ┆ false     ┆ null     │
-    │           ┆ e:4018157 ┆ 6T22:40Z  ┆ Marlins   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 76        ┆           ┆ at Philad ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ elphia …  ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815775 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Kansas    ┆ … ┆ https://a ┆ 4         ┆ false     ┆ null     │
-    │           ┆ e:4018157 ┆ 6T22:45Z  ┆ City      ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 75        ┆           ┆ Royals at ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Washingt… ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815779 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Toronto   ┆ … ┆ https://a ┆ 6         ┆ true      ┆ null     │
-    │           ┆ e:4018157 ┆ 6T22:45Z  ┆ Blue Jays ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 79        ┆           ┆ at Boston ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Re…       ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815774 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ Chicago   ┆ … ┆ https://a ┆ 2         ┆ false     ┆ null     │
-    │           ┆ e:4018157 ┆ 6T23:05Z  ┆ White Sox ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 74        ┆           ┆ at New    ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ York …    ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401815777 ┆ s:1~l:10~ ┆ 2026-06-1 ┆ New York  ┆ … ┆ https://a ┆ 3         ┆ false     ┆ null     │
-    │           ┆ e:4018157 ┆ 6T23:10Z  ┆ Mets at   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 77        ┆           ┆ Cincinnat ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ i Re…     ┆   ┆ mlo…      ┆           ┆           ┆          │
+    │ 401817370 ┆ s:1~l:10~ ┆ 2026-07-1 ┆ American  ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
+    │           ┆ e:4018173 ┆ 5T00:00Z  ┆ All-Stars ┆   ┆ .espncdn. ┆           ┆           ┆          │
+    │           ┆ 70        ┆           ┆ at        ┆   ┆ com/i/tea ┆           ┆           ┆          │
+    │           ┆           ┆           ┆ National… ┆   ┆ mlo…      ┆           ┆           ┆          │
     └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
 
 
@@ -548,6 +530,8 @@ pl.DataFrame(rows)
 ```
 
     ✅ espn_nba_standings
+
+
     ✅ espn_nhl_standings
     ✅ espn_mlb_standings
 
@@ -581,8 +565,6 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
 ```
 
     nfl  Patriots       -> New England Patriots (id=17)
-
-
     mlb  Yankees        -> New York Yankees (id=10)
 
 
@@ -637,28 +619,28 @@ if lal is not None:
 
     shape: (5, 68)
     ┌─────────┬────────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
-    │ id      ┆ uid        ┆ guid      ┆ first_nam ┆ … ┆ birth_pla ┆ hand_type ┆ hand_abbr ┆ hand_disp │
-    │ ---     ┆ ---        ┆ ---       ┆ e         ┆   ┆ ce_state  ┆ ---       ┆ eviation  ┆ lay_value │
+    │ id      ┆ uid        ┆ guid      ┆ first_nam ┆ … ┆ citizensh ┆ hand_type ┆ hand_abbr ┆ hand_disp │
+    │ ---     ┆ ---        ┆ ---       ┆ e         ┆   ┆ ip        ┆ ---       ┆ eviation  ┆ lay_value │
     │ str     ┆ str        ┆ str       ┆ ---       ┆   ┆ ---       ┆ str       ┆ ---       ┆ ---       │
     │         ┆            ┆           ┆ str       ┆   ┆ str       ┆           ┆ str       ┆ str       │
     ╞═════════╪════════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 4278129 ┆ s:40~l:46~ ┆ 9af41ea8- ┆ Deandre   ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:4278129  ┆ a24c-025f ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -a63f-826 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ 3fb…      ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 5113969 ┆ s:40~l:46~ ┆ a24923a3- ┆ Cameron   ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
+    │         ┆ a:5113969  ┆ f2e0-334d ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ -942f-3d3 ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ 689…      ┆           ┆   ┆           ┆           ┆           ┆           │
     │ 3945274 ┆ s:40~l:46~ ┆ 583794eb- ┆ Luka      ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
     │         ┆ a:3945274  ┆ 0f38-9bbd ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ -3e25-9dd ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ 33b…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 4066648 ┆ s:40~l:46~ ┆ 40c1bcf6- ┆ Rui       ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:4066648  ┆ 675b-f217 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -f97c-1d6 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ 280…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 4397077 ┆ s:40~l:46~ ┆ 4cd92ac1- ┆ Jaxson    ┆ … ┆ OK        ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:4397077  ┆ 73ce-653d ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -c3b1-9c6 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ 8e9…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 4683774 ┆ s:40~l:46~ ┆ 456f71fd- ┆ Bronny    ┆ … ┆ OH        ┆ null      ┆ null      ┆ null      │
+    │ 4397014 ┆ s:40~l:46~ ┆ dbe4d07d- ┆ Quentin   ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
+    │         ┆ a:4397014  ┆ 9166-07d7 ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ -19f0-52c ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ c77…      ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 4868423 ┆ s:40~l:46~ ┆ d4c656b3- ┆ Jaden     ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
+    │         ┆ a:4868423  ┆ e2b5-33c4 ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ -b4e7-7ac ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆            ┆ a3e…      ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 4683774 ┆ s:40~l:46~ ┆ 456f71fd- ┆ Bronny    ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
     │         ┆ a:4683774  ┆ 2ce5-3f50 ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ -8d0d-f30 ┆           ┆   ┆           ┆           ┆           ┆           │
     │         ┆            ┆ c01…      ┆           ┆   ┆           ┆           ┆           ┆           │
@@ -700,7 +682,7 @@ print("raw    ->", type(raw).__name__, "(top-level keys:", None if not isinstanc
 
     ✅ nhl_standings (parsed)
     ✅ nhl_standings (raw dict)
-    parsed -> DataFrame (32, 84)
+    parsed -> DataFrame (32, 85)
     raw    -> dict (top-level keys: ['wildCardIndicator', 'standingsDateTimeUtc', 'standings'] )
 
 
@@ -825,8 +807,8 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
     │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
     │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 96.6         ┆ null         ┆ null         ┆ null      │
-    │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
+    │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 96.2         ┆ null         ┆ null         ┆ null      │
+    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
     └────────────┴───────────────┴────────────┴──────────────┴──────────────┴──────────────┴───────────┘
 
 
@@ -909,8 +891,6 @@ print("standings rows:", None if pwhl_st is None else getattr(pwhl_st, "height",
 ```
 
     ⏭️  pwhl_standings: unavailable right now (ValueError)
-
-
     ✅ load_pwhl_schedules([2024])
     standings rows: None | schedule rows: 85
 
@@ -943,8 +923,6 @@ pl.DataFrame(rows)
 
 
     ✅ ahl_schedule
-
-
     ✅ ohl season
 
 
@@ -972,7 +950,7 @@ pl.DataFrame(rows)
     │ ---    ┆ ---    ┆ ---   │
     │ str    ┆ i64    ┆ i64   │
     ╞════════╪════════╪═══════╡
-    │ AHL    ┆ 2026   ┆ 10000 │
+    │ AHL    ┆ 2027   ┆ 10000 │
     │ OHL    ┆ 2027   ┆ 10000 │
     │ WHL    ┆ 2026   ┆ 10000 │
     │ QMJHL  ┆ 2027   ┆ 10000 │
@@ -996,10 +974,29 @@ else:
 out
 ```
 
+    ✅ odds.toa_sports
 
 
 
-    "set ODDS_API_KEY to run: odds.toa_sports()  (free, doesn't touch quota)"
+
+
+    shape: (10, 3)
+    ┌─────────────────────────────────┬───────────────────┬───────────────────────────┐
+    │ key                             ┆ group             ┆ title                     │
+    │ ---                             ┆ ---               ┆ ---                       │
+    │ str                             ┆ str               ┆ str                       │
+    ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╡
+    │ americanfootball_cfl            ┆ American Football ┆ CFL                       │
+    │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     │
+    │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner │
+    │ americanfootball_nfl            ┆ American Football ┆ NFL                       │
+    │ americanfootball_nfl_preseason  ┆ American Football ┆ NFL Preseason             │
+    │ americanfootball_nfl_super_bow… ┆ American Football ┆ NFL Super Bowl Winner     │
+    │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       │
+    │ baseball_mlb                    ┆ Baseball          ┆ MLB                       │
+    │ baseball_mlb_world_series_winn… ┆ Baseball          ┆ MLB World Series Winner   │
+    │ baseball_npb                    ┆ Baseball          ┆ NPB                       │
+    └─────────────────────────────────┴───────────────────┴───────────────────────────┘
 
 
 
@@ -1021,10 +1018,39 @@ else:
 out
 ```
 
+    ✅ odds.toa_sports_odds (NFL h2h)
 
 
 
-    "set ODDS_API_KEY to run: odds.toa_sports_odds(sport='americanfootball_nfl')"
+
+
+    shape: (10, 6)
+    ┌───────────┬─────────────┬───────────────┬────────────┬──────────────────────┬───────────────┐
+    │ home_team ┆ away_team   ┆ bookmaker_key ┆ market_key ┆ outcome_name         ┆ outcome_price │
+    │ ---       ┆ ---         ┆ ---           ┆ ---        ┆ ---                  ┆ ---           │
+    │ str       ┆ str         ┆ str           ┆ str        ┆ str                  ┆ i64           │
+    ╞═══════════╪═════════════╪═══════════════╪════════════╪══════════════════════╪═══════════════╡
+    │ Seattle   ┆ New England ┆ draftkings    ┆ h2h        ┆ New England Patriots ┆ 160           │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ draftkings    ┆ h2h        ┆ Seattle Seahawks     ┆ -192          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ betus         ┆ h2h        ┆ New England Patriots ┆ 167           │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ betus         ┆ h2h        ┆ Seattle Seahawks     ┆ -195          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ fanduel       ┆ h2h        ┆ New England Patriots ┆ 166           │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ fanduel       ┆ h2h        ┆ Seattle Seahawks     ┆ -198          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ fanatics      ┆ h2h        ┆ New England Patriots ┆ 165           │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ fanatics      ┆ h2h        ┆ Seattle Seahawks     ┆ -200          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ lowvig        ┆ h2h        ┆ New England Patriots ┆ 170           │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    │ Seattle   ┆ New England ┆ lowvig        ┆ h2h        ┆ Seattle Seahawks     ┆ -195          │
+    │ Seahawks  ┆ Patriots    ┆               ┆            ┆                      ┆               │
+    └───────────┴─────────────┴───────────────┴────────────┴──────────────────────┴───────────────┘
 
 
 
@@ -1043,7 +1069,7 @@ print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
 
-    Total wrappers across the counted leagues: 4063
+    Total wrappers across the counted leagues: 5349
 
 
 
@@ -1055,13 +1081,13 @@ df
     │ ---    ┆ ---         │
     │ str    ┆ i64         │
     ╞════════╪═════════════╡
-    │ nhl    ┆ 337         │
-    │ mlb    ┆ 270         │
-    │ nfl    ┆ 237         │
-    │ cfb    ┆ 169         │
-    │ wnba   ┆ 162         │
+    │ mbb    ┆ 527         │
+    │ wbb    ┆ 502         │
+    │ nhl    ┆ 383         │
+    │ cfb    ┆ 363         │
+    │ mlb    ┆ 325         │
     │ …      ┆ …           │
-    │ pwhl   ┆ 44          │
+    │ pwhl   ┆ 67          │
     │ ahl    ┆ 14          │
     │ ohl    ┆ 14          │
     │ qmjhl  ┆ 14          │

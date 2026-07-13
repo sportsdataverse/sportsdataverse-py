@@ -156,13 +156,14 @@ cols = ["team", "games_played", "wins", "losses", "ot_losses", "points", "goals_
     │ ---              ┆ ---          ┆ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---       ┆ ---           │
     │ str              ┆ str          ┆ str  ┆ str    ┆ str       ┆ i64    ┆ str       ┆ str           │
     ╞══════════════════╪══════════════╪══════╪════════╪═══════════╪════════╪═══════════╪═══════════════╡
-    │ Val-d'Or         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
-    │ Niagara IceDogs  ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
-    │ North Bay        ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
-    │ Battalion        ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
-    │ Brampton         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
-    │ Steelheads       ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
-    │ Sudbury Wolves   ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Brantford        ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Bulldogs         ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Peterborough     ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Petes            ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Ottawa 67's      ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Oshawa Generals  ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Kingston         ┆ 0            ┆ 0    ┆ 0      ┆ 0         ┆ 0      ┆ 0         ┆ 0             │
+    │ Frontenacs       ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
     └──────────────────┴──────────────┴──────┴────────┴───────────┴────────┴───────────┴───────────────┘
 
 
@@ -269,8 +270,6 @@ pl.DataFrame(rows)
 
 
     ✅ ahl schedule
-
-
     ✅ ohl season
 
 
@@ -281,8 +280,6 @@ pl.DataFrame(rows)
 
 
     ✅ whl schedule
-
-
     ✅ qmjhl season
 
 
@@ -298,7 +295,7 @@ pl.DataFrame(rows)
     │ ---    ┆ ---    ┆ ---   │
     │ str    ┆ i64    ┆ i64   │
     ╞════════╪════════╪═══════╡
-    │ AHL    ┆ 2026   ┆ 10000 │
+    │ AHL    ┆ 2027   ┆ 10000 │
     │ OHL    ┆ 2027   ┆ 10000 │
     │ WHL    ┆ 2026   ┆ 10000 │
     │ QMJHL  ┆ 2027   ┆ 10000 │
@@ -362,17 +359,18 @@ out
 
 
 
-    shape: (4, 5)
-    ┌─────────────────────────────┬────────┬───────────┬───────────────┬───────────┐
-    │ team                        ┆ points ┆ goals_for ┆ goals_against ┆ goal_diff │
-    │ ---                         ┆ ---    ┆ ---       ┆ ---           ┆ ---       │
-    │ str                         ┆ i64    ┆ str       ┆ str           ┆ i64       │
-    ╞═════════════════════════════╪════════╪═══════════╪═══════════════╪═══════════╡
-    │ Pacific Division All-Stars  ┆ 6      ┆ 10        ┆ 8             ┆ 2         │
-    │ Atlantic Division All-Stars ┆ 3      ┆ 7         ┆ 4             ┆ 3         │
-    │ Central Division All-Stars  ┆ 3      ┆ 8         ┆ 7             ┆ 1         │
-    │ North Division All-Stars    ┆ 2      ┆ 4         ┆ 10            ┆ -6        │
-    └─────────────────────────────┴────────┴───────────┴───────────────┴───────────┘
+    shape: (5, 5)
+    ┌────────────────────────────────┬────────┬───────────┬───────────────┬───────────┐
+    │ team                           ┆ points ┆ goals_for ┆ goals_against ┆ goal_diff │
+    │ ---                            ┆ ---    ┆ ---       ┆ ---           ┆ ---       │
+    │ str                            ┆ i64    ┆ str       ┆ str           ┆ i64       │
+    ╞════════════════════════════════╪════════╪═══════════╪═══════════════╪═══════════╡
+    │ Hartford Wolf Pack             ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Springfield Thunderbirds       ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Charlotte Checkers             ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Hershey Bears                  ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    │ Wilkes-Barre/Scranton Penguins ┆ 0      ┆ 0         ┆ 0             ┆ 0         │
+    └────────────────────────────────┴────────┴───────────┴───────────────┴───────────┘
 
 
 
@@ -400,27 +398,10 @@ out
     ✅ WHL leaders
 
 
-    ✅ WHL stats for Carson Carels
 
 
 
-
-
-    shape: (5, 7)
-    ┌───────────────────────────┬───────────────┬──────────────┬───────┬─────────┬────────┬────────────┐
-    │ season_name               ┆ team_name     ┆ games_played ┆ goals ┆ assists ┆ points ┆ stat_type  │
-    │ ---                       ┆ ---           ┆ ---          ┆ ---   ┆ ---     ┆ ---    ┆ ---        │
-    │ str                       ┆ str           ┆ str          ┆ str   ┆ str     ┆ str    ┆ str        │
-    ╞═══════════════════════════╪═══════════════╪══════════════╪═══════╪═════════╪════════╪════════════╡
-    │ 2025 - 26 Regular Season  ┆ Prince George ┆ 58           ┆ 20    ┆ 53      ┆ 73     ┆ regular    │
-    │                           ┆ Cougars       ┆              ┆       ┆         ┆        ┆            │
-    │ 2024 - 25 Regular Season  ┆ Prince George ┆ 60           ┆ 6     ┆ 29      ┆ 35     ┆ regular    │
-    │                           ┆ Cougars       ┆              ┆       ┆         ┆        ┆            │
-    │ 2023 - 24 Regular Season  ┆ Prince George ┆ 7            ┆ 0     ┆ 3       ┆ 3      ┆ regular    │
-    │                           ┆ Cougars       ┆              ┆       ┆         ┆        ┆            │
-    │ Total                     ┆ null          ┆ 125          ┆ 26    ┆ 85      ┆ 111    ┆ regular    │
-    │ WHL Prospects Game 2026   ┆ West          ┆ 1            ┆ 0     ┆ 4       ┆ 4      ┆ exhibition │
-    └───────────────────────────┴───────────────┴──────────────┴───────┴─────────┴────────┴────────────┘
+    'leaders unavailable to source a player_id'
 
 
 
@@ -661,11 +642,11 @@ out
 
 
        season_id               season_name  season_yr game_type_label
-    0         92  2026 Calder Cup Playoffs       2026        playoffs
-    1         91   2026 All-Star Challenge       2026         regular
-    2         90    2025-26 Regular Season       2026         regular
-    3         88  2025 Calder Cup Playoffs       2025        playoffs
-    4         87   2025 All-Star Challenge       2025         regular
+    0         94    2026-27 Regular Season       2027         regular
+    1         92  2026 Calder Cup Playoffs       2026        playoffs
+    2         91   2026 All-Star Challenge       2026         regular
+    3         90    2025-26 Regular Season       2026         regular
+    4         88  2025 Calder Cup Playoffs       2025        playoffs
 
 
 

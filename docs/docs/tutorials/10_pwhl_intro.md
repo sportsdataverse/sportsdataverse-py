@@ -232,7 +232,7 @@ pbp.shape
 
 
 
-    (10456, 95)
+    (14186, 104)
 
 
 
@@ -247,17 +247,22 @@ pbp.shape
 
 
 
-    shape: (4, 2)
-    ┌─────────┬────────┐
-    │ event   ┆ events │
-    │ ---     ┆ ---    │
-    │ str     ┆ u32    │
-    ╞═════════╪════════╡
-    │ shot    ┆ 4922   │
-    │ faceoff ┆ 4631   │
-    │ penalty ┆ 518    │
-    │ goal    ┆ 385    │
-    └─────────┴────────┘
+    shape: (9, 2)
+    ┌───────────────┬────────┐
+    │ event         ┆ events │
+    │ ---           ┆ ---    │
+    │ str           ┆ u32    │
+    ╞═══════════════╪════════╡
+    │ shot          ┆ 4922   │
+    │ faceoff       ┆ 4631   │
+    │ hit           ┆ 2123   │
+    │ blocked_shot  ┆ 1243   │
+    │ penalty       ┆ 518    │
+    │ goal          ┆ 385    │
+    │ goalie_change ┆ 354    │
+    │ shootout      ┆ 7      │
+    │ penaltyshot   ┆ 3      │
+    └───────────────┴────────┘
 
 
 
@@ -289,10 +294,10 @@ No loader is needed for a quick standings table: the schedule's `winner` column 
     ╞═══════════╪══════╡
     │ Toronto   ┆ 17   │
     │ Montreal  ┆ 13   │
-    │ Boston    ┆ 12   │
     │ Minnesota ┆ 12   │
-    │ New York  ┆ 9    │
+    │ Boston    ┆ 12   │
     │ Ottawa    ┆ 9    │
+    │ New York  ┆ 9    │
     └───────────┴──────┘
 
 
@@ -319,22 +324,22 @@ Aggregate the skater boxscore across every game to build a points leaderboard �
 
 
     shape: (10, 5)
-    ┌──────────────┬───────────┬───────┬─────────┬────────┐
-    │ first_name   ┆ last_name ┆ goals ┆ assists ┆ points │
-    │ ---          ┆ ---       ┆ ---   ┆ ---     ┆ ---    │
-    │ str          ┆ str       ┆ i32   ┆ i32     ┆ i32    │
-    ╞══════════════╪═══════════╪═══════╪═════════╪════════╡
-    │ Natalie      ┆ Spooner   ┆ 21    ┆ 8       ┆ 29     │
-    │ Marie-Philip ┆ Poulin    ┆ 11    ┆ 14      ┆ 25     │
-    │ Sarah        ┆ Nurse     ┆ 11    ┆ 13      ┆ 24     │
-    │ Alex         ┆ Carpenter ┆ 8     ┆ 15      ┆ 23     │
-    │ Taylor       ┆ Heise     ┆ 9     ┆ 12      ┆ 21     │
-    │ Ella         ┆ Shelton   ┆ 7     ┆ 14      ┆ 21     │
-    │ Emma         ┆ Maltais   ┆ 5     ┆ 16      ┆ 21     │
-    │ Erin         ┆ Ambrose   ┆ 4     ┆ 16      ┆ 20     │
-    │ Brianne      ┆ Jenner    ┆ 9     ┆ 11      ┆ 20     │
-    │ Grace        ┆ Zumwinkle ┆ 12    ┆ 8       ┆ 20     │
-    └──────────────┴───────────┴───────┴─────────┴────────┘
+    ┌──────────────┬─────────────────┬───────┬─────────┬────────┐
+    │ first_name   ┆ last_name       ┆ goals ┆ assists ┆ points │
+    │ ---          ┆ ---             ┆ ---   ┆ ---     ┆ ---    │
+    │ str          ┆ str             ┆ i32   ┆ i32     ┆ i32    │
+    ╞══════════════╪═════════════════╪═══════╪═════════╪════════╡
+    │ Natalie      ┆ Spooner         ┆ 21    ┆ 8       ┆ 29     │
+    │ Marie-Philip ┆ Poulin          ┆ 11    ┆ 14      ┆ 25     │
+    │ Sarah        ┆ Nurse           ┆ 11    ┆ 13      ┆ 24     │
+    │ Alex         ┆ Carpenter       ┆ 8     ┆ 15      ┆ 23     │
+    │ Taylor       ┆ Heise           ┆ 9     ┆ 12      ┆ 21     │
+    │ Ella         ┆ Shelton         ┆ 7     ┆ 14      ┆ 21     │
+    │ Emma         ┆ Maltais         ┆ 5     ┆ 16      ┆ 21     │
+    │ Brianne      ┆ Jenner          ┆ 9     ┆ 11      ┆ 20     │
+    │ Erin         ┆ Ambrose         ┆ 4     ┆ 16      ┆ 20     │
+    │ Kendall      ┆ Coyne Schofield ┆ 7     ┆ 13      ┆ 20     │
+    └──────────────┴─────────────────┴───────┴─────────┴────────┘
 
 
 
@@ -586,9 +591,9 @@ Not every contribution shows up on the scoresheet. Sum hits and blocked shots fr
     │ Blayre     ┆ Turnbull   ┆ C        ┆ 62   ┆ 14     ┆ 76               │
     │ Allie      ┆ Munroe     ┆ LD       ┆ 44   ┆ 25     ┆ 69               │
     │ Jessica    ┆ DiGirolamo ┆ LD       ┆ 36   ┆ 31     ┆ 67               │
-    │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
     │ Emma       ┆ Greco      ┆ LD       ┆ 32   ┆ 29     ┆ 61               │
     │ Lee        ┆ Stecklein  ┆ LD       ┆ 36   ┆ 25     ┆ 61               │
+    │ Emma       ┆ Maltais    ┆ LW       ┆ 53   ┆ 8      ┆ 61               │
     │ Kelly      ┆ Pannek     ┆ C        ┆ 28   ┆ 30     ┆ 58               │
     └────────────┴────────────┴──────────┴──────┴────────┴──────────────────┘
 
@@ -660,11 +665,11 @@ top_infractions
     │ Abby           ┆ Roque         ┆ 31  ┆ 10        │
     │ Jesse          ┆ Compher       ┆ 25  ┆ 7         │
     │ Megan          ┆ Keller        ┆ 22  ┆ 11        │
-    │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
     │ Allie          ┆ Munroe        ┆ 20  ┆ 10        │
-    │ Renata         ┆ Fast          ┆ 18  ┆ 9         │
-    │ Sarah          ┆ Nurse         ┆ 18  ┆ 9         │
-    │ Emma           ┆ Maltais       ┆ 18  ┆ 9         │
+    │ Gabbie         ┆ Hughes        ┆ 20  ┆ 10        │
+    │ Lee            ┆ Stecklein     ┆ 18  ┆ 9         │
+    │ Sarah          ┆ Bujold        ┆ 18  ┆ 9         │
+    │ Jade           ┆ Downie-Landry ┆ 18  ┆ 9         │
     └────────────────┴───────────────┴─────┴───────────┘
 
 
@@ -730,10 +735,10 @@ goals_by_period
     │ Sarah             ┆ Nurse            ┆ 11    │
     │ Laura             ┆ Stacey           ┆ 10    │
     │ Daryl             ┆ Watts            ┆ 10    │
-    │ Taylor            ┆ Heise            ┆ 9     │
-    │ Brianne           ┆ Jenner           ┆ 9     │
-    │ Gabbie            ┆ Hughes           ┆ 9     │
     │ Michela           ┆ Cava             ┆ 9     │
+    │ Taylor            ┆ Heise            ┆ 9     │
+    │ Gabbie            ┆ Hughes           ┆ 9     │
+    │ Brianne           ┆ Jenner           ┆ 9     │
     └───────────────────┴──────────────────┴───────┘
 
 
@@ -759,22 +764,22 @@ three_stars = pwhl.load_pwhl_three_stars(seasons=[2024])
 
 
     shape: (10, 3)
-    ┌──────────────┬───────────────┬─────────────┐
-    │ first_name   ┆ last_name     ┆ first_stars │
-    │ ---          ┆ ---           ┆ ---         │
-    │ str          ┆ str           ┆ u32         │
-    ╞══════════════╪═══════════════╪═════════════╡
-    │ Natalie      ┆ Spooner       ┆ 7           │
-    │ Nicole       ┆ Hensley       ┆ 4           │
-    │ Kristen      ┆ Campbell      ┆ 4           │
-    │ Alex         ┆ Carpenter     ┆ 3           │
-    │ Gabbie       ┆ Hughes        ┆ 3           │
-    │ Sarah        ┆ Nurse         ┆ 3           │
-    │ Hilary       ┆ Knight        ┆ 3           │
-    │ Marie-Philip ┆ Poulin        ┆ 3           │
-    │ Susanna      ┆ Tapani        ┆ 3           │
-    │ Jade         ┆ Downie-Landry ┆ 2           │
-    └──────────────┴───────────────┴─────────────┘
+    ┌──────────────┬───────────┬─────────────┐
+    │ first_name   ┆ last_name ┆ first_stars │
+    │ ---          ┆ ---       ┆ ---         │
+    │ str          ┆ str       ┆ u32         │
+    ╞══════════════╪═══════════╪═════════════╡
+    │ Natalie      ┆ Spooner   ┆ 7           │
+    │ Kristen      ┆ Campbell  ┆ 4           │
+    │ Nicole       ┆ Hensley   ┆ 4           │
+    │ Susanna      ┆ Tapani    ┆ 3           │
+    │ Gabbie       ┆ Hughes    ┆ 3           │
+    │ Alex         ┆ Carpenter ┆ 3           │
+    │ Sarah        ┆ Nurse     ┆ 3           │
+    │ Hilary       ┆ Knight    ┆ 3           │
+    │ Marie-Philip ┆ Poulin    ┆ 3           │
+    │ Maddie       ┆ Rooney    ┆ 2           │
+    └──────────────┴───────────┴─────────────┘
 
 
 
@@ -1065,11 +1070,11 @@ out
     │ ---       ┆ ---       ┆ ---           ┆ ---             │
     │ str       ┆ i64       ┆ i64           ┆ f64             │
     ╞═══════════╪═══════════╪═══════════════╪═════════════════╡
-    │ 115       ┆ 18        ┆ 5             ┆ 84.155844       │
-    │ 76        ┆ 20        ┆ 5             ┆ 78.26087        │
-    │ 89        ┆ 17        ┆ 7             ┆ 72.943981       │
-    │ 100       ┆ 19        ┆ 10            ┆ 66.86217        │
-    │ 20        ┆ 20        ┆ 17            ┆ 64.228368       │
+    │ 115       ┆ 16        ┆ 2             ┆ 74.805195       │
+    │ 76        ┆ 17        ┆ 4             ┆ 66.521739       │
+    │ 89        ┆ 15        ┆ 6             ┆ 64.362336       │
+    │ 100       ┆ 17        ┆ 8             ┆ 59.824047       │
+    │ 20        ┆ 16        ┆ 14            ┆ 51.382694       │
     └───────────┴───────────┴───────────────┴─────────────────┘
 
 

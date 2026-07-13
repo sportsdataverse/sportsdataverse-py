@@ -57,7 +57,7 @@ HAS_KEY = bool(os.environ.get("ODDS_API_KEY"))
 print("ODDS_API_KEY set:", HAS_KEY, "— live cells will" + ("" if HAS_KEY else " NOT") + " run")
 ```
 
-    ODDS_API_KEY set: False — live cells will NOT run
+    ODDS_API_KEY set: True — live cells will run
 
 
 ## 🗂️ What's on the board?
@@ -79,7 +79,24 @@ out
 
 
 
-    'set ODDS_API_KEY to run: odds.toa_sports(all_sports=True)'
+    shape: (12, 4)
+    ┌─────────────────────────────────┬───────────────────┬───────────────────────────┬────────┐
+    │ key                             ┆ group             ┆ title                     ┆ active │
+    │ ---                             ┆ ---               ┆ ---                       ┆ ---    │
+    │ str                             ┆ str               ┆ str                       ┆ bool   │
+    ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╪════════╡
+    │ americanfootball_cfl            ┆ American Football ┆ CFL                       ┆ true   │
+    │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     ┆ true   │
+    │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner ┆ true   │
+    │ americanfootball_nfl            ┆ American Football ┆ NFL                       ┆ true   │
+    │ americanfootball_nfl_preseason  ┆ American Football ┆ NFL Preseason             ┆ true   │
+    │ …                               ┆ …                 ┆ …                         ┆ …      │
+    │ aussierules_afl                 ┆ Aussie Rules      ┆ AFL                       ┆ true   │
+    │ baseball_kbo                    ┆ Baseball          ┆ KBO                       ┆ false  │
+    │ baseball_milb                   ┆ Baseball          ┆ MiLB                      ┆ false  │
+    │ baseball_mlb                    ┆ Baseball          ┆ MLB                       ┆ true   │
+    │ baseball_mlb_preseason          ┆ Baseball          ┆ MLB Preseason             ┆ false  │
+    └─────────────────────────────────┴───────────────────┴───────────────────────────┴────────┘
 
 
 
@@ -109,7 +126,34 @@ out
 
 
 
-    "set ODDS_API_KEY to run: odds.toa_sports_odds(sport='americanfootball_nfl', regions='us')"
+    shape: (10, 7)
+    ┌──────────────┬──────────────┬─────────────┬────────────┬─────────────┬─────────────┬─────────────┐
+    │ home_team    ┆ away_team    ┆ bookmaker_k ┆ market_key ┆ outcome_nam ┆ outcome_poi ┆ outcome_pri │
+    │ ---          ┆ ---          ┆ ey          ┆ ---        ┆ e           ┆ nt          ┆ ce          │
+    │ str          ┆ str          ┆ ---         ┆ str        ┆ ---         ┆ ---         ┆ ---         │
+    │              ┆              ┆ str         ┆            ┆ str         ┆ f64         ┆ i64         │
+    ╞══════════════╪══════════════╪═════════════╪════════════╪═════════════╪═════════════╪═════════════╡
+    │ Seattle      ┆ New England  ┆ draftkings  ┆ h2h        ┆ New England ┆ null        ┆ 160         │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ draftkings  ┆ h2h        ┆ Seattle     ┆ null        ┆ -192        │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ draftkings  ┆ spreads    ┆ New England ┆ 3.5         ┆ -110        │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ draftkings  ┆ spreads    ┆ Seattle     ┆ -3.5        ┆ -110        │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ betus       ┆ h2h        ┆ New England ┆ null        ┆ 167         │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ betus       ┆ h2h        ┆ Seattle     ┆ null        ┆ -195        │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ betus       ┆ spreads    ┆ New England ┆ 3.5         ┆ -110        │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ betus       ┆ spreads    ┆ Seattle     ┆ -3.5        ┆ -110        │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ fanduel     ┆ h2h        ┆ New England ┆ null        ┆ 166         │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Patriots    ┆             ┆             │
+    │ Seattle      ┆ New England  ┆ fanduel     ┆ h2h        ┆ Seattle     ┆ null        ┆ -198        │
+    │ Seahawks     ┆ Patriots     ┆             ┆            ┆ Seahawks    ┆             ┆             │
+    └──────────────┴──────────────┴─────────────┴────────────┴─────────────┴─────────────┴─────────────┘
 
 
 
@@ -142,7 +186,23 @@ out
 
 
 
-    'needs ODDS_API_KEY'
+    shape: (10, 5)
+    ┌──────────────────────┬───────────────────┬───────────────────┬────────────┬────────────────┐
+    │ home_team            ┆ away_team         ┆ outcome_name      ┆ best_price ┆ best_book      │
+    │ ---                  ┆ ---               ┆ ---               ┆ ---        ┆ ---            │
+    │ str                  ┆ str               ┆ str               ┆ i64        ┆ str            │
+    ╞══════════════════════╪═══════════════════╪═══════════════════╪════════════╪════════════════╡
+    │ Los Angeles Chargers ┆ Arizona Cardinals ┆ Arizona Cardinals ┆ 480        ┆ mybookieag     │
+    │ San Francisco 49ers  ┆ Arizona Cardinals ┆ Arizona Cardinals ┆ 425        ┆ draftkings     │
+    │ San Francisco 49ers  ┆ Miami Dolphins    ┆ Miami Dolphins    ┆ 400        ┆ draftkings     │
+    │ Arizona Cardinals    ┆ Seattle Seahawks  ┆ Arizona Cardinals ┆ 390        ┆ williamhill_us │
+    │ Detroit Lions        ┆ New York Jets     ┆ New York Jets     ┆ 375        ┆ williamhill_us │
+    │ Los Angeles Chargers ┆ Las Vegas Raiders ┆ Las Vegas Raiders ┆ 330        ┆ draftkings     │
+    │ Los Angeles Rams     ┆ New York Giants   ┆ New York Giants   ┆ 330        ┆ williamhill_us │
+    │ Baltimore Ravens     ┆ Tennessee Titans  ┆ Tennessee Titans  ┆ 330        ┆ williamhill_us │
+    │ New England Patriots ┆ Las Vegas Raiders ┆ Las Vegas Raiders ┆ 330        ┆ williamhill_us │
+    │ Jacksonville Jaguars ┆ Cleveland Browns  ┆ Cleveland Browns  ┆ 325        ┆ betmgm         │
+    └──────────────────────┴───────────────────┴───────────────────┴────────────┴────────────────┘
 
 
 
@@ -169,7 +229,33 @@ out
 
 
 
-    'needs ODDS_API_KEY'
+    shape: (10, 6)
+    ┌─────────────┬───────────────────┬────────────┬───────────────────┬───────────────┬───────────────┐
+    │ home_team   ┆ away_team         ┆ market_key ┆ outcome_name      ┆ outcome_point ┆ outcome_price │
+    │ ---         ┆ ---               ┆ ---        ┆ ---               ┆ ---           ┆ ---           │
+    │ str         ┆ str               ┆ str        ┆ str               ┆ f64           ┆ i64           │
+    ╞═════════════╪═══════════════════╪════════════╪═══════════════════╪═══════════════╪═══════════════╡
+    │ Seattle     ┆ New England       ┆ spreads    ┆ New England       ┆ 3.5           ┆ -110          │
+    │ Seahawks    ┆ Patriots          ┆            ┆ Patriots          ┆               ┆               │
+    │ Seattle     ┆ New England       ┆ spreads    ┆ Seattle Seahawks  ┆ -3.5          ┆ -110          │
+    │ Seahawks    ┆ Patriots          ┆            ┆                   ┆               ┆               │
+    │ Seattle     ┆ New England       ┆ totals     ┆ Over              ┆ 44.5          ┆ -110          │
+    │ Seahawks    ┆ Patriots          ┆            ┆                   ┆               ┆               │
+    │ Seattle     ┆ New England       ┆ totals     ┆ Under             ┆ 44.5          ┆ -110          │
+    │ Seahawks    ┆ Patriots          ┆            ┆                   ┆               ┆               │
+    │ Los Angeles ┆ San Francisco     ┆ spreads    ┆ Los Angeles Rams  ┆ -3.0          ┆ -120          │
+    │ Rams        ┆ 49ers             ┆            ┆                   ┆               ┆               │
+    │ Los Angeles ┆ San Francisco     ┆ spreads    ┆ San Francisco     ┆ 3.0           ┆ 100           │
+    │ Rams        ┆ 49ers             ┆            ┆ 49ers             ┆               ┆               │
+    │ Los Angeles ┆ San Francisco     ┆ totals     ┆ Over              ┆ 48.5          ┆ -110          │
+    │ Rams        ┆ 49ers             ┆            ┆                   ┆               ┆               │
+    │ Los Angeles ┆ San Francisco     ┆ totals     ┆ Under             ┆ 48.5          ┆ -110          │
+    │ Rams        ┆ 49ers             ┆            ┆                   ┆               ┆               │
+    │ Pittsburgh  ┆ Atlanta Falcons   ┆ spreads    ┆ Atlanta Falcons   ┆ 3.0           ┆ 100           │
+    │ Steelers    ┆                   ┆            ┆                   ┆               ┆               │
+    │ Pittsburgh  ┆ Atlanta Falcons   ┆ spreads    ┆ Pittsburgh        ┆ -3.0          ┆ -120          │
+    │ Steelers    ┆                   ┆            ┆ Steelers          ┆               ┆               │
+    └─────────────┴───────────────────┴────────────┴───────────────────┴───────────────┴───────────────┘
 
 
 
@@ -191,7 +277,18 @@ out
 
 
 
-    'needs ODDS_API_KEY'
+    shape: (5, 4)
+    ┌─────────────────────┬──────────────────────┬──────────────────────┬───────────────┐
+    │ home_team           ┆ away_team            ┆ outcome_name         ┆ outcome_price │
+    │ ---                 ┆ ---                  ┆ ---                  ┆ ---           │
+    │ str                 ┆ str                  ┆ str                  ┆ i64           │
+    ╞═════════════════════╪══════════════════════╪══════════════════════╪═══════════════╡
+    │ Seattle Seahawks    ┆ New England Patriots ┆ New England Patriots ┆ 160           │
+    │ Seattle Seahawks    ┆ New England Patriots ┆ Seattle Seahawks     ┆ -192          │
+    │ Los Angeles Rams    ┆ San Francisco 49ers  ┆ Los Angeles Rams     ┆ -170          │
+    │ Los Angeles Rams    ┆ San Francisco 49ers  ┆ San Francisco 49ers  ┆ 142           │
+    │ Pittsburgh Steelers ┆ Atlanta Falcons      ┆ Atlanta Falcons      ┆ 142           │
+    └─────────────────────┴──────────────────────┴──────────────────────┴───────────────┘
 
 
 
@@ -226,7 +323,23 @@ out
 
 
 
-    'needs ODDS_API_KEY'
+    shape: (10, 5)
+    ┌─────────────────────┬──────────────────────┬────────────────┬──────────────┬──────────┐
+    │ home_team           ┆ away_team            ┆ bookmaker_key  ┆ market_total ┆ hold_pct │
+    │ ---                 ┆ ---                  ┆ ---            ┆ ---          ┆ ---      │
+    │ str                 ┆ str                  ┆ str            ┆ f64          ┆ f64      │
+    ╞═════════════════════╪══════════════════════╪════════════════╪══════════════╪══════════╡
+    │ Seattle Seahawks    ┆ New England Patriots ┆ lowvig         ┆ 1.031387     ┆ 3.14     │
+    │ Seattle Seahawks    ┆ New England Patriots ┆ betonlineag    ┆ 1.031387     ┆ 3.14     │
+    │ Arizona Cardinals   ┆ Seattle Seahawks     ┆ williamhill_us ┆ 1.031668     ┆ 3.17     │
+    │ Los Angeles Rams    ┆ San Francisco 49ers  ┆ betonlineag    ┆ 1.031962     ┆ 3.2      │
+    │ Los Angeles Rams    ┆ San Francisco 49ers  ┆ lowvig         ┆ 1.031962     ┆ 3.2      │
+    │ Las Vegas Raiders   ┆ Miami Dolphins       ┆ betonlineag    ┆ 1.031962     ┆ 3.2      │
+    │ Las Vegas Raiders   ┆ Miami Dolphins       ┆ lowvig         ┆ 1.031962     ┆ 3.2      │
+    │ Pittsburgh Steelers ┆ Atlanta Falcons      ┆ betonlineag    ┆ 1.032051     ┆ 3.21     │
+    │ Pittsburgh Steelers ┆ Atlanta Falcons      ┆ lowvig         ┆ 1.032051     ┆ 3.21     │
+    │ Indianapolis Colts  ┆ Baltimore Ravens     ┆ lowvig         ┆ 1.032531     ┆ 3.25     │
+    └─────────────────────┴──────────────────────┴────────────────┴──────────────┴──────────┘
 
 
 
@@ -253,7 +366,18 @@ out
 
 
 
-    'needs ODDS_API_KEY'
+    shape: (5, 5)
+    ┌──────────────────────┬───────────────────┬──────────────────────┬───────────────┬───────────────┐
+    │ home_team            ┆ away_team         ┆ outcome_name         ┆ outcome_price ┆ bookmaker_key │
+    │ ---                  ┆ ---               ┆ ---                  ┆ ---           ┆ ---           │
+    │ str                  ┆ str               ┆ str                  ┆ i64           ┆ str           │
+    ╞══════════════════════╪═══════════════════╪══════════════════════╪═══════════════╪═══════════════╡
+    │ Los Angeles Chargers ┆ Arizona Cardinals ┆ Los Angeles Chargers ┆ -800          ┆ mybookieag    │
+    │ Los Angeles Chargers ┆ Arizona Cardinals ┆ Los Angeles Chargers ┆ -650          ┆ betmgm        │
+    │ Los Angeles Chargers ┆ Arizona Cardinals ┆ Los Angeles Chargers ┆ -650          ┆ bovada        │
+    │ Los Angeles Chargers ┆ Arizona Cardinals ┆ Los Angeles Chargers ┆ -630          ┆ fanatics      │
+    │ Los Angeles Chargers ┆ Arizona Cardinals ┆ Los Angeles Chargers ┆ -600          ┆ draftkings    │
+    └──────────────────────┴───────────────────┴──────────────────────┴───────────────┴───────────────┘
 
 
 
@@ -287,7 +411,23 @@ out
 
 
 
-    'needs ODDS_API_KEY'
+    shape: (10, 4)
+    ┌────────────────────┬───────────────────────┬─────────────────┬─────────┐
+    │ home_team          ┆ away_team             ┆ consensus_total ┆ n_books │
+    │ ---                ┆ ---                   ┆ ---             ┆ ---     │
+    │ str                ┆ str                   ┆ f64             ┆ u32     │
+    ╞════════════════════╪═══════════════════════╪═════════════════╪═════════╡
+    │ Los Angeles Rams   ┆ Buffalo Bills         ┆ 54.0            ┆ 2       │
+    │ Buffalo Bills      ┆ Detroit Lions         ┆ 52.5            ┆ 7       │
+    │ Dallas Cowboys     ┆ Tampa Bay Buccaneers  ┆ 52.5            ┆ 3       │
+    │ Cincinnati Bengals ┆ Tampa Bay Buccaneers  ┆ 51.5            ┆ 11      │
+    │ Dallas Cowboys     ┆ Washington Commanders ┆ 51.5            ┆ 3       │
+    │ Cincinnati Bengals ┆ Jacksonville Jaguars  ┆ 51.5            ┆ 3       │
+    │ Dallas Cowboys     ┆ Baltimore Ravens      ┆ 51.0            ┆ 6       │
+    │ Buffalo Bills      ┆ New England Patriots  ┆ 50.0            ┆ 2       │
+    │ Miami Dolphins     ┆ Cincinnati Bengals    ┆ 49.5            ┆ 3       │
+    │ Buffalo Bills      ┆ Los Angeles Chargers  ┆ 49.25           ┆ 2       │
+    └────────────────────┴───────────────────────┴─────────────────┴─────────┘
 
 
 
@@ -322,7 +462,7 @@ out
 
 
 
-    'set ODDS_API_KEY to run the commence-time filter recipe'
+    'nothing kicks off in the next 24h'
 
 
 
@@ -351,7 +491,10 @@ out
 
 
 
-    'set ODDS_API_KEY to run the player-props recipe'
+    shape: (0, 0)
+    ┌┐
+    ╞╡
+    └┘
 
 
 
@@ -383,7 +526,23 @@ out
 
 
 
-    'set ODDS_API_KEY to run the event-markets recipe'
+    shape: (10, 2)
+    ┌────────────────┬───────────┐
+    │ bookmaker_key  ┆ n_markets │
+    │ ---            ┆ ---       │
+    │ str            ┆ u32       │
+    ╞════════════════╪═══════════╡
+    │ betrivers      ┆ 5         │
+    │ betmgm         ┆ 5         │
+    │ fanatics       ┆ 5         │
+    │ draftkings     ┆ 4         │
+    │ williamhill_us ┆ 4         │
+    │ fanduel        ┆ 3         │
+    │ bovada         ┆ 3         │
+    │ betus          ┆ 3         │
+    │ betonlineag    ┆ 3         │
+    │ mybookieag     ┆ 3         │
+    └────────────────┴───────────┘
 
 
 
@@ -410,7 +569,13 @@ out
 
 
 
-    "set ODDS_API_KEY to run: odds.toa_sports_scores(sport='americanfootball_nfl', days_from=3)"
+    shape: (0, 5)
+    ┌───────────┬───────────┬───────────┬────────┬─────────────┐
+    │ completed ┆ home_team ┆ away_team ┆ scores ┆ last_update │
+    │ ---       ┆ ---       ┆ ---       ┆ ---    ┆ ---         │
+    │ bool      ┆ str       ┆ str       ┆ str    ┆ str         │
+    ╞═══════════╪═══════════╪═══════════╪════════╪═════════════╡
+    └───────────┴───────────┴───────────┴────────┴─────────────┘
 
 
 
@@ -437,7 +602,17 @@ out
 
 
 
-    'set ODDS_API_KEY to tour leagues with odds.toa_sports_events(sport=...)'
+    shape: (4, 2)
+    ┌──────────────────────┬─────────────────┐
+    │ sport                ┆ upcoming_events │
+    │ ---                  ┆ ---             │
+    │ str                  ┆ i64             │
+    ╞══════════════════════╪═════════════════╡
+    │ americanfootball_nfl ┆ 75              │
+    │ baseball_mlb         ┆ 1               │
+    │ basketball_nba       ┆ 0               │
+    │ icehockey_nhl        ┆ 0               │
+    └──────────────────────┴─────────────────┘
 
 
 
@@ -461,7 +636,23 @@ out
 
 
 
-    "set ODDS_API_KEY to run: odds.toa_sports_participants(sport='americanfootball_nfl')"
+    shape: (10, 2)
+    ┌────────────────────┬────────────────────────────────┐
+    │ full_name          ┆ id                             │
+    │ ---                ┆ ---                            │
+    │ str                ┆ str                            │
+    ╞════════════════════╪════════════════════════════════╡
+    │ Arizona Cardinals  ┆ par_01hqmkr1xsfxmrj5pdq0f23asx │
+    │ Atlanta Falcons    ┆ par_01hqmkr1xtexkbhkq7ct921rne │
+    │ Baltimore Ravens   ┆ par_01hqmkr1xvev9rf557fy09k2cx │
+    │ Buffalo Bills      ┆ par_01hqmkr1xwe6prjwr3j4gpqwx8 │
+    │ Carolina Panthers  ┆ par_01hqmkr1xxf2ebbqzb95qzxxxm │
+    │ Chicago Bears      ┆ par_01hqmkr1xye20ahvp8fr2bvt74 │
+    │ Cincinnati Bengals ┆ par_01hqmkr1xze7xbceshy9tka512 │
+    │ Cleveland Browns   ┆ par_01hqmkr1y0ez5bem3gdncd8a0d │
+    │ Dallas Cowboys     ┆ par_01hqmkr1y1esas88pmaxe87by4 │
+    │ Denver Broncos     ┆ par_01hqmkr1y2e15tjsz9afcsj7da │
+    └────────────────────┴────────────────────────────────┘
 
 
 
@@ -480,7 +671,14 @@ odds.toa_usage() if HAS_KEY else "set ODDS_API_KEY to track quota with odds.toa_
 
 
 
-    'set ODDS_API_KEY to track quota with odds.toa_usage()'
+    shape: (1, 3)
+    ┌────────────────────┬───────────────┬───────────┐
+    │ requests_remaining ┆ requests_used ┆ last_cost │
+    │ ---                ┆ ---           ┆ ---       │
+    │ i64                ┆ i64           ┆ i64       │
+    ╞════════════════════╪═══════════════╪═══════════╡
+    │ 19978              ┆ 22            ┆ 1         │
+    └────────────────────┴───────────────┴───────────┘
 
 
 

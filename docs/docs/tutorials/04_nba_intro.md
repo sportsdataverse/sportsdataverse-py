@@ -226,28 +226,28 @@ cols = ['full_name', 'jersey', 'position_abbreviation', 'height', 'weight', 'age
  if roster is not None and roster.height else 'roster unavailable')
 ```
 
-    ✅ roster 2 — 16 rows
+    ✅ roster 2 — 17 rows
 
 
 
 
 
     shape: (10, 6)
-    ┌───────────────────┬────────┬───────────────────────┬────────┬────────┬─────┐
-    │ full_name         ┆ jersey ┆ position_abbreviation ┆ height ┆ weight ┆ age │
-    │ ---               ┆ ---    ┆ ---                   ┆ ---    ┆ ---    ┆ --- │
-    │ str               ┆ str    ┆ str                   ┆ f64    ┆ f64    ┆ i64 │
-    ╞═══════════════════╪════════╪═══════════════════════╪════════╪════════╪═════╡
-    │ Dalano Banton     ┆ 45     ┆ F                     ┆ 80.0   ┆ 203.0  ┆ 26  │
-    │ Jaylen Brown      ┆ 7      ┆ G                     ┆ 78.0   ┆ 223.0  ┆ 29  │
-    │ Luka Garza        ┆ 52     ┆ C                     ┆ 82.0   ┆ 243.0  ┆ 27  │
-    │ Hugo Gonzalez     ┆ 28     ┆ G                     ┆ 78.0   ┆ 200.0  ┆ 20  │
-    │ …                 ┆ …      ┆ …                     ┆ …      ┆ …      ┆ …   │
-    │ Payton Pritchard  ┆ 11     ┆ G                     ┆ 73.0   ┆ 195.0  ┆ 28  │
-    │ Neemias Queta     ┆ 88     ┆ C                     ┆ 84.0   ┆ 248.0  ┆ 26  │
-    │ Baylor Scheierman ┆ 55     ┆ G                     ┆ 78.0   ┆ 205.0  ┆ 25  │
-    │ Max Shulga        ┆ 44     ┆ G                     ┆ 76.0   ┆ 210.0  ┆ 23  │
-    └───────────────────┴────────┴───────────────────────┴────────┴────────┴─────┘
+    ┌──────────────────┬────────┬───────────────────────┬────────┬────────┬─────┐
+    │ full_name        ┆ jersey ┆ position_abbreviation ┆ height ┆ weight ┆ age │
+    │ ---              ┆ ---    ┆ ---                   ┆ ---    ┆ ---    ┆ --- │
+    │ str              ┆ str    ┆ str                   ┆ f64    ┆ f64    ┆ i64 │
+    ╞══════════════════╪════════╪═══════════════════════╪════════╪════════╪═════╡
+    │ Chris Cenac Jr.  ┆ 12     ┆ F                     ┆ 83.0   ┆ 240.0  ┆ 19  │
+    │ Mike Conley      ┆ null   ┆ G                     ┆ 73.0   ┆ 175.0  ┆ 38  │
+    │ Luka Garza       ┆ 52     ┆ C                     ┆ 82.0   ┆ 243.0  ┆ 27  │
+    │ Paul George      ┆ 8      ┆ F                     ┆ 80.0   ┆ 220.0  ┆ 36  │
+    │ …                ┆ …      ┆ …                     ┆ …      ┆ …      ┆ …   │
+    │ Sam Hauser       ┆ 30     ┆ F                     ┆ 79.0   ┆ 217.0  ┆ 28  │
+    │ Dillon Mitchell  ┆ null   ┆ F                     ┆ 80.0   ┆ 210.0  ┆ 22  │
+    │ Payton Pritchard ┆ 11     ┆ G                     ┆ 73.0   ┆ 195.0  ┆ 28  │
+    │ Neemias Queta    ┆ 88     ┆ C                     ┆ 84.0   ┆ 248.0  ┆ 27  │
+    └──────────────────┴────────┴───────────────────────┴────────┴────────┴─────┘
 
 
 
@@ -371,8 +371,8 @@ out
     │ Anthony Edwards         ┆ MIN               ┆ 71  ┆ 27.8 ┆ 5.1  ┆ 3.6  │
     │ …                       ┆ …                 ┆ …   ┆ …    ┆ …    ┆ …    │
     │ Giannis Antetokounmpo   ┆ MIL               ┆ 36  ┆ 27.6 ┆ 9.8  ┆ 5.4  │
-    │ Donovan Mitchell        ┆ CLE               ┆ 88  ┆ 27.5 ┆ 4.6  ┆ 5.1  │
     │ Nikola Jokic            ┆ DEN               ┆ 71  ┆ 27.5 ┆ 12.9 ┆ 10.6 │
+    │ Donovan Mitchell        ┆ CLE               ┆ 88  ┆ 27.5 ┆ 4.6  ┆ 5.1  │
     │ Lauri Markkanen         ┆ UTAH              ┆ 42  ┆ 26.7 ┆ 6.9  ┆ 2.1  │
     └─────────────────────────┴───────────────────┴─────┴──────┴──────┴──────┘
 
@@ -418,8 +418,8 @@ out
     ╞═══════════════════╪═════╪═════════╪═════════╪══════╡
     │ OKC               ┆ 97  ┆ 118.5   ┆ 108.0   ┆ 10.5 │
     │ STARS             ┆ 3   ┆ 41.3    ┆ 32.7    ┆ 8.6  │
-    │ NY                ┆ 102 ┆ 116.4   ┆ 108.4   ┆ 8.0  │
     │ SA                ┆ 106 ┆ 118.2   ┆ 110.2   ┆ 8.0  │
+    │ NY                ┆ 102 ┆ 116.4   ┆ 108.4   ┆ 8.0  │
     │ …                 ┆ …   ┆ …       ┆ …       ┆ …    │
     │ HOU               ┆ 88  ┆ 114.1   ┆ 109.4   ┆ 4.7  │
     │ DEN               ┆ 88  ┆ 121.1   ┆ 116.6   ┆ 4.5  │
@@ -521,8 +521,8 @@ out
     │ Victor Wembanyama    ┆ SA                ┆ 54             │
     │ Jalen Johnson        ┆ ATL               ┆ 51             │
     │ …                    ┆ …                 ┆ …              │
-    │ Donovan Clingan      ┆ POR               ┆ 37             │
     │ Alperen Sengun       ┆ HOU               ┆ 37             │
+    │ Donovan Clingan      ┆ POR               ┆ 37             │
     │ Rudy Gobert          ┆ MIN               ┆ 37             │
     │ Bam Adebayo          ┆ MIA               ┆ 35             │
     └──────────────────────┴───────────────────┴────────────────┘
@@ -617,7 +617,7 @@ else:
 out
 ```
 
-    ✅ shots release — 298411 rows
+    ✅ shots release — 298155 rows
 
 
 
@@ -725,15 +725,15 @@ out
     │ ---                   ┆ ---            │
     │ str                   ┆ i64            │
     ╞═══════════════════════╪════════════════╡
-    │ Memphis Grizzlies     ┆ 13             │
-    │ Brooklyn Nets         ┆ 10             │
-    │ Chicago Bulls         ┆ 10             │
-    │ Indiana Pacers        ┆ 9              │
+    │ Memphis Grizzlies     ┆ 10             │
+    │ Dallas Mavericks      ┆ 8              │
+    │ Utah Jazz             ┆ 8              │
+    │ Chicago Bulls         ┆ 7              │
     │ …                     ┆ …              │
-    │ Washington Wizards    ┆ 8              │
-    │ New Orleans Pelicans  ┆ 6              │
-    │ Golden State Warriors ┆ 4              │
-    │ Miami Heat            ┆ 4              │
+    │ Brooklyn Nets         ┆ 6              │
+    │ Miami Heat            ┆ 6              │
+    │ Milwaukee Bucks       ┆ 5              │
+    │ Oklahoma City Thunder ┆ 5              │
     └───────────────────────┴────────────────┘
 
 
@@ -878,7 +878,7 @@ cols = ['athlete_display_name', 'team_abbreviation', 'starter', 'jersey', 'posit
     │ Spencer Dinwiddie    ┆ LAL               ┆ true    ┆ 26     │
     │ …                    ┆ …                 ┆ …       ┆ …      │
     │ Cam Reddish          ┆ LAL               ┆ false   ┆ 5      │
-    │ Jaxson Hayes         ┆ LAL               ┆ false   ┆ 11     │
+    │ Jaxson Hayes         ┆ LAL               ┆ false   ┆ null   │
     │ Max Christie         ┆ LAL               ┆ false   ┆ 00     │
     │ Harry Giles III      ┆ LAL               ┆ false   ┆ 20     │
     └──────────────────────┴───────────────────┴─────────┴────────┘
@@ -930,6 +930,52 @@ cols = ['id', 'date', 'home_display_name', 'away_display_name', 'home_score', 'a
 
 With the schedule release in hand, a combined-points leaderboard is a quick
 polars pipeline — cast the scores, sum them, sort descending.
+
+## stats.nba.com surface (`nba_stats_*`)
+
+Beyond the ESPN wrappers, `sportsdataverse.nba` also ships **112 wrappers** for the official `stats.nba.com` API — the same source powering [nba_api](https://github.com/swar/nba_api). The module is `nba_stats` and every function is named `nba_stats_<slug>`. These are the **capture-confirmed live, non-deprecated** endpoints; deprecated and never-populated endpoints are excluded (see `ENDPOINT_HEALTH.md` in `sdv-internal-refs` for the full active/dying/barren/dead matrix).
+
+**League routing** is a single `league_id` parameter: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. One stem, one host, league chosen per call.
+
+**curl_cffi required for live calls:** `stats.nba.com` uses TLS/JA3 fingerprinting that silently blocks plain `requests`. Install the optional transport: `pip install "sportsdataverse[all]"` (or `pip install curl_cffi`). The wrappers run fully offline when fed a fixture — live calls simply need the extra installed.
+
+Wrappers return a tidy **polars DataFrame** by default (parsed via the generic `parse_nba_stats_result_sets` parser — which also flattens the shot-location endpoints' grouped 2-level headers into composite columns and unrolls the `scoreboardv3` game feed). Pass `return_parsed=False` for the raw `Dict` or `return_as_pandas=True` for pandas. Multi-result-set endpoints (e.g. `playercareerstats`) return `dict[str, DataFrame]`.
+
+
+```python
+from sportsdataverse.nba import nba_stats
+
+# NBA player dashboard (polars DataFrame by default)
+# Live calls require: pip install "sportsdataverse[all]"  (curl_cffi transport)
+df = safe('nba_stats_leaguedashplayerstats (NBA)',
+          lambda: nba_stats.nba_stats_leaguedashplayerstats(league_id="00"))
+
+# Same endpoint, other leagues via league_id on the SAME stem:
+gleague = safe('nba_stats_leaguedashplayerstats (G-League)',
+               lambda: nba_stats.nba_stats_leaguedashplayerstats(league_id="20"))
+summer  = safe('nba_stats_leaguedashplayerstats (Summer League)',
+               lambda: nba_stats.nba_stats_leaguedashplayerstats(league_id="15"))
+
+# Multi result-set endpoint -> dict[str, polars.DataFrame]
+career = safe('nba_stats_playercareerstats (LeBron)',
+              lambda: nba_stats.nba_stats_playercareerstats(player_id="2544"))
+
+print('career result sets:', list(career.keys()) if isinstance(career, dict) else career)
+df
+```
+
+    ⏭️  nba_stats_leaguedashplayerstats (NBA): unavailable right now (Timeout)
+
+
+    ⏭️  nba_stats_leaguedashplayerstats (G-League): unavailable right now (Timeout)
+
+
+    ⏭️  nba_stats_leaguedashplayerstats (Summer League): unavailable right now (Timeout)
+
+
+    ⏭️  nba_stats_playercareerstats (LeBron): unavailable right now (Timeout)
+    career result sets: None
+
 
 
 ```python
