@@ -8,17 +8,16 @@ See dev/bigballr_port/lineup_aggregation_design.md.
 
 from __future__ import annotations
 
+from dataclasses import replace
+from functools import reduce
 from typing import Any, Optional
 
+from .mbb_ncaa_lineup_enrich import sum_event_stats
 from .mbb_ncaa_models import LineupEvent, LineupEventStats, ShotClockStats
 
 LineupStatSet = dict[str, Any]
 
-__all__ = ["LineupStatSet", "lineup_stats_bucket"]
-
-# ponytail: lineup_stats_buckets (the list-form public entry point) lands in
-# a later task (group-by producer); this task ships the single-lineup
-# assembler `lineup_stats_bucket`.
+__all__ = ["LineupStatSet", "lineup_stats_bucket", "lineup_stats_buckets"]
 
 
 def _leaf(stat: Optional[ShotClockStats], suffix: str) -> float:
@@ -436,3 +435,60 @@ def lineup_stats_bucket(
     bucket["duration_mins"] = {"value": ev.duration_mins}
     bucket.update(_def_3p_opp_field(def_rates["def_3p"]["value"], opponent_baselines))
     return bucket
+
+
+def lineup_stats_buckets(
+    evs: list[LineupEvent],
+    *,
+    avg_eff: float = 100.0,
+    opponent_baselines: Optional[dict[str, float]] = None,
+) -> list[LineupStatSet]:
+    """Group events by lineup, fold each group's stats, and mint one bucket per lineup.
+
+    Python entry point for the ES ``terms`` aggregation over ``key`` (grouping by
+    :func:`_bucket_key`) that feeds each lineup's docs into
+    ``commonLineupAggregations.ts``'s ``sum`` aggs -- see
+    ``cbb-on-off-analyzer/src/utils/es-queries/commonLineupAggregations.ts``. This
+    is the list-form producer the ``LineupStatSet`` consumers (``mbb_lineup_stats``)
+    read from; :func:`lineup_stats_bucket` handles a single already-folded event.
+
+    Args:
+        evs: Raw per-possession-chunk lineup events (``team_stats``/``opponent_stats``
+            populated by stage 1, :func:`~sportsdataverse.mbb.mbb_ncaa_lineup_enrich
+            .enrich_lineup`), one lineup's floor time possibly split across many events.
+        avg_eff: League-average efficiency passed through to each bucket.
+        opponent_baselines: SOS baseline lookup passed through to each bucket; only
+            ``None`` (no baselines) is implemented (see :func:`_adj_fields`).
+
+    Returns:
+        One :data:`LineupStatSet` per distinct lineup (:func:`_bucket_key`), in
+        first-seen order, with ``doc_count`` set to that lineup's event count.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.mbb.mbb_ncaa_lineup_aggregation import lineup_stats_buckets
+
+            buckets = lineup_stats_buckets(enriched_events)
+            buckets[0]["off_poss"]["value"]
+
+    See Also:
+        * `cbb-on-off-analyzer <https://github.com/Alex-At-Home/cbb-on-off-analyzer>`_ --
+          ``src/utils/es-queries/commonLineupAggregations.ts``, the ``terms``-agg-per-lineup
+          concept this function ports.
+    """
+    groups: dict[str, list[LineupEvent]] = {}
+    for ev in evs:
+        groups.setdefault(_bucket_key(ev), []).append(ev)
+
+    buckets = []
+    for group in groups.values():
+        folded = replace(
+            group[0],
+            team_stats=reduce(sum_event_stats, (e.team_stats for e in group)),
+            opponent_stats=reduce(sum_event_stats, (e.opponent_stats for e in group)),
+        )
+        buckets.append(
+            lineup_stats_bucket(folded, avg_eff=avg_eff, opponent_baselines=opponent_baselines, doc_count=len(group))
+        )
+    return buckets

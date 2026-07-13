@@ -288,10 +288,10 @@ def _full_stats(pts: int, poss: int) -> LineupEventStats:
     )
 
 
-def _enriched_lineup_event() -> LineupEvent:
+def _enriched_lineup_event(off_pts: int = 20, off_poss: int = 15) -> LineupEvent:
     players = [PlayerCodeId(code=c, id=c) for c in ["JaSmith", "AaWiggins", "ErAyala", "AnCowan", "DaMorsell"]]
     ev = _minimal_lineup_event(players)
-    ev.team_stats = _full_stats(pts=20, poss=15)
+    ev.team_stats = _full_stats(pts=off_pts, poss=off_poss)
     ev.opponent_stats = _full_stats(pts=18, poss=16)
     return ev
 
@@ -321,3 +321,13 @@ def test_bucket_matches_254_fixture_field_set():
     produced = set(agg.lineup_stats_bucket(ev)) - {"doc_count", "key", "players_array"}
     expected = _fixture_field_names()
     assert produced == expected, f"missing={expected - produced}  extra={produced - expected}"
+
+
+def test_two_events_same_lineup_fold_into_one_bucket():
+    e1 = _enriched_lineup_event(off_pts=10, off_poss=8)
+    e2 = _enriched_lineup_event(off_pts=6, off_poss=5)  # same players
+    buckets = agg.lineup_stats_buckets([e1, e2])
+    assert len(buckets) == 1
+    assert buckets[0]["doc_count"] == 2
+    assert buckets[0]["total_off_pts"]["value"] == 16.0
+    assert buckets[0]["total_off_poss"]["value"] == 13.0
