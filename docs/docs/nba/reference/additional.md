@@ -847,6 +847,158 @@ Oracle 6: walk-forward ("predict tomorrow") retrodiction over a season timeline.
 | `n_checkpoints` | `int` |  | Number of checkpoint dates that produced a non-degenerate (train, test) split. |
 | `n_test_games` | `int` |  | Total distinct game_ids evaluated across all checkpoints. |
 
+### `add_ctg_shot_zones(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#add_ctg_shot_zones}
+
+Append CTG's shot-location zone (`ctg_shot_zone`) to an enhanced PBP frame.
+
+CTG's zones differ from the official NBA zones emitted by
+`~sportsdataverse.nba.nba_shot_zones.add_shot_zones`: CTG splits the
+midrange at the free-throw-line distance rather than at the paint boundary.
+
+* `at_rim` — shot distance < 4 ft ("Shots within 4 feet of the basket").
+* `short_mid` — 4 ft <= distance < 14 ft ("outside of 4 feet, but inside of
+  ~14 feet (the free throw line distance)").
+* `long_mid` — >= 14 ft, inside the arc.
+* `corner_3` — a three "below the break" (`|x_legacy| >= 220` and
+  `y_legacy <= 87.5`).
+* `arc_3` — any other three (CTG's "non-corner three").
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Frame from `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. |
+
+**Returns**
+
+The input frame with a `ctg_shot_zone` Utf8 column appended (null on non-field-goal rows). Empty input returns a zero-row frame carrying the column — never raises.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_play_context import add_ctg_shot_zones
+pbp = add_ctg_shot_zones(enhanced_pbp_from_payload(payload))
+print(pbp.filter(pl.col("ctg_shot_zone").is_not_null())["ctg_shot_zone"].value_counts())
+```
+
+### `add_play_context(enhanced_pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', starters_on_court: 'Optional[dict[int, int]]' = None) -> 'pl.DataFrame'` {#add_play_context}
+
+Build possessions and enrich them with the full CTG play-context surface.
+
+One call: `~sportsdataverse.nba.nba_possessions.build_possessions` ->
+`add_start_type_detail` -> `add_transition` ->
+`flag_heave_possessions` -> `flag_garbage_time`.
+
+The CTG filter columns are **flags, not filters** — nothing is dropped. Apply
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Frame from `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`. |
+| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 10.0). |
+| `transition_variant` | `str` | `'hoop_math'` | See `add_transition`. |
+| `starters_on_court` | `Optional[dict[int, int]]` | `None` | Optional starters-on-floor counts; see `flag_garbage_time`. |
+
+**Returns**
+
+The possession frame (`POSSESSIONS_SCHEMA`) plus every column in `PLAY_CONTEXT_POSSESSIONS_SCHEMA`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_play_context import add_play_context
+poss = add_play_context(enhanced_pbp_from_payload(payload))
+print(poss["possession_start_type_ctg"].value_counts())
+```
+
+### `add_start_type_detail(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#add_start_type_detail}
+
+Append the full pbpstats start-type taxonomy to a possession frame.
+
+Upgrades the engine's coarse 5-value `possession_start_type` into:
+
+* `possession_start_type_detail` — the zone-split pbpstats vocabulary:
+  `Off{AtRim|ShortMidRange|LongMidRange|Corner3|Arc3}{Make|Miss|Block}`,
+  `OffFTMake` / `OffFTMiss`, `OffLiveBallTurnover`, `OffTimeout`,
+  `OffDeadball`.
+* `possession_start_type_ctg` — the coarse bucket CTG reports on:
+  `off_made` / `off_live_rebound` / `off_steal` / `off_deadball` /
+  `off_timeout` (see `~nba_play_context_constants.CTG_START_BUCKETS`).
+
+Precedence (pbpstats): period start > timeout > previous boundary event. A
+**team rebound** (`person_id == 0`) is a dead-ball start even though a
+rebound row exists; a **timeout** beats a made basket (an after-timeout
+possession is `OffTimeout`, not `OffMadeShot`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `~sportsdataverse.nba.nba_possessions.build_possessions`. |
+| `enhanced_pbp` | `DataFrame` |  | The enhanced PBP frame those possessions were built from. |
+
+**Returns**
+
+`possessions` with the two columns appended. Empty input returns a zero-row frame carrying them — never raises.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_possessions import build_possessions
+from sportsdataverse.nba.nba_play_context import add_start_type_detail
+poss = add_start_type_detail(build_possessions(pbp), pbp)
+print(poss["possession_start_type_ctg"].value_counts())
+```
+
+### `add_transition(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, transition_seconds: 'float' = 6.0, variant: 'str' = 'hoop_math') -> 'pl.DataFrame'` {#add_transition}
+
+Flag possessions that started in transition, and time their initial play.
+
+CTG defines transition as beginning at the possession start and ending "once
+the defense is set", **without publishing a seconds threshold**. We therefore
+time the possession's *initial play* — its first shot attempt, trip to the
+line, or turnover (CTG's own definition of a "play") — and call the
+possession transition when that play lands within `transition_seconds`.
+
+Variants (`~nba_play_context_constants.TRANSITION_VARIANTS`):
+
+* `hoop_math` (default) — any non-timeout start type qualifies.
+* `haslametrics` — steal starts only (conservative).
+* `bigballr` — the previous possession must have ended live
+  (`off_made` / `off_live_rebound` / `off_steal`); a dead-ball start can
+  never be transition.
+
+The first possession of a period is never transition. After a timeout the
+defense is set by construction, so `off_timeout` never qualifies under any
+variant.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame carrying `possession_start_type_ctg` (i.e. the output of `add_start_type_detail`). |
+| `enhanced_pbp` | `DataFrame` |  | The enhanced PBP frame the possessions were built from. |
+| `transition_seconds` | `float` | `6.0` | Initial-play cutoff. Default 10.0 (hoop-math). Calibrate against Synergy transition frequency (league mean ~15-16%). |
+| `variant` | `str` | `'hoop_math'` | One of `~nba_play_context_constants.TRANSITION_VARIANTS`. |
+
+**Returns**
+
+`possessions` with `seconds_to_first_play` (Float64, null when the possession had no play), `is_transition` (Boolean), `transition_source` (Utf8: `steal` / `live_rebound` / `made` / `deadball`; null when not transition) and `possession_context` (Utf8: `transition` / `halfcourt` / `misc`) appended.
+
+**Example**
+
+```python
+poss = add_transition(add_start_type_detail(poss, pbp), pbp)
+print(poss["is_transition"].mean())          # transition frequency
+
+# Tune the knob against the Synergy oracle
+
+poss8 = add_transition(poss, pbp, transition_seconds=8.0)
+```
+
 ### `adjust_efficiency(game_eff: 'pl.DataFrame', *, league_id: 'str' = '00', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_efficiency}
 
 Iterative opponent-adjusted rating -> AdjOffRtg / AdjDefRtg / AdjNet per team-season.
@@ -959,6 +1111,44 @@ game's own team pace), then summed — the result is fully deterministic.
 **Returns**
 
 One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
+
+### `build_play_context_shots(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, putback_seconds: 'float' = 2.0) -> 'pl.DataFrame'` {#build_play_context_shots}
+
+Build the per-shot frame carrying CTG's play context.
+
+CTG assigns context **per play**, not per possession: one possession can
+contain a transition miss, a halfcourt reset and a putback. This frame is the
+play-level view — one row per field-goal attempt.
+
+* `is_putback` — pbpstats `field_goal.py:112-144`: an **unassisted 2-point**
+  attempt whose preceding event is a **real offensive rebound by the same
+  player**, within `putback_seconds`. A three is never a putback.
+* `is_second_chance_shot` — the shot follows an offensive rebound earlier in
+  the same possession.
+* `shot_context` — `transition` / `putback` / `halfcourt`. **Transition
+  wins over putback**, reproducing CTG exactly: "if a team comes down in
+  transition and misses a shot but gets a putback, that putback is classified
+  as part of the overall transition event."
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `add_transition` (needs `is_transition`). |
+| `enhanced_pbp` | `DataFrame` |  | The enhanced PBP frame the possessions were built from. |
+| `putback_seconds` | `float` | `2.0` | Rebound-to-shot window. Default 2.0 (pbpstats). |
+
+**Returns**
+
+Polars DataFrame with schema `PLAY_CONTEXT_SHOTS_SCHEMA` — one row per field-goal attempt. Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+shots = build_play_context_shots(poss, pbp)
+print(shots.group_by("shot_context").len())
+print(shots.filter(pl.col("is_putback") == True).height)
+```
 
 ### `build_possession_shooting(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#build_possession_shooting}
 
@@ -1362,6 +1552,79 @@ panel = pl.DataFrame({"player_id": [1, 1], "season": [2020, 2021], "rating": [10
 ages = pl.DataFrame({"player_id": [1, 1], "season": [2020, 2021], "age": [24.0, 25.0]})
 curve = fit_aging_curve(panel, ages, smooth=1)
 print(curve.delta(24))  # ~1.0
+```
+
+### `flag_garbage_time(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, starters_on_court: 'Optional[dict[int, int]]' = None) -> 'pl.DataFrame'` {#flag_garbage_time}
+
+Flag CTG garbage time (excluded from CTG stats by default).
+
+CTG (exact): "the game has to be in the **4th quarter**, the score
+differential has to be **>= 25 for minutes 12-9, >= 20 for minutes 9-6, and
+>= 10 for the remainder of the quarter**. Additionally, there have to be **two
+or fewer starters on the floor combined between the two teams**. Importantly,
+the game can never go back to being non-garbage time, or this clock resets."
+
+The margin x minutes bands are reproduced exactly, evaluated on the score at
+each possession's start. The reset semantics fall out of that per-possession
+evaluation: if the trailing team claws back inside the band's threshold, the
+condition stops holding and those possessions are NOT garbage time (CTG's own
+"comeback is not counted as garbage time" example); if the lead re-expands,
+the flag turns back on.
+
+**The starters clause is applied only when `starters_on_court` is supplied**
+— it needs lineup + box `START_POSITION` data this frame does not carry.
+Without it the flag is the **margin-only superset** of CTG's definition (it can
+flag a blowout stretch in which the starters are still on the floor), and
+`garbage_time_basis` records which rule was actually used. This is a
+deliberate, documented divergence — do not read a `margin_only` flag as
+CTG-exact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame with `period`, `start_seconds_remaining` and `start_order_index`. |
+| `enhanced_pbp` | `DataFrame` |  | The enhanced PBP frame (supplies the running score). |
+| `starters_on_court` | `Optional[dict[int, int]]` | `None` | Optional map `possession_number -> number of starters on the floor across BOTH teams`. When given, a possession is garbage time only if that count is <= `~nba_play_context_constants.GARBAGE_TIME_MAX_STARTERS`. |
+
+**Returns**
+
+`possessions` with Boolean `is_garbage_time` and Utf8 `garbage_time_basis` (`"margin_and_starters"` or `"margin_only"`) appended.
+
+**Example**
+
+```python
+poss = flag_garbage_time(poss, pbp)
+print(poss.filter(pl.col("is_garbage_time") == True).height)
+
+# CTG-exact, with the starters clause
+
+poss = flag_garbage_time(poss, pbp, starters_on_court=starters_by_possession)
+```
+
+### `flag_heave_possessions(possessions: 'pl.DataFrame') -> 'pl.DataFrame'` {#flag_heave_possessions}
+
+Flag CTG's "projected heave possessions" (excluded from CTG stats by default).
+
+CTG (exact): "possessions that start with **4 or fewer seconds on the game
+clock at the end of one of the first three quarters**." Q4/OT are exempt — a
+late Q4 possession is a real possession.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Any frame with `period` and `start_seconds_remaining`. |
+
+**Returns**
+
+`possessions` with a Boolean `is_heave_possession` column appended.
+
+**Example**
+
+```python
+poss = flag_heave_possessions(poss)
+clean = poss.filter(pl.col("is_heave_possession") == False)
 ```
 
 ### `fox_nba_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nba_boxscore}
@@ -2292,6 +2555,45 @@ Parsed JSON contents.
 from sportsdataverse.nba import nba_pbp_disk
 pbp = nba_pbp_disk(game_id=401585183, path_to_json="./cache")
 print(list(pbp.keys()))
+```
+
+### `nba_play_context(game_id: 'str', league_id: 'str' = '00', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nba_play_context}
+
+Fetch one game and return its possessions with the full CTG play-context surface.
+
+Single live call to `nba_stats_playbyplayv3`, then
+`add_play_context`. Works for NBA (`league_id="00"`), WNBA and the
+G-League — `stats.wnba.com` ships the same play-by-play shapes, and every
+threshold here is league-agnostic.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `str` |  | Ten-character game identifier (e.g. `"0022200001"`). |
+| `league_id` | `str` | `'00'` | League identifier (`"00"` NBA, `"10"` WNBA, `"20"` G-League). |
+| `transition_seconds` | `float` | `6.0` | Transition initial-play cutoff (default 10.0). |
+| `transition_variant` | `str` | `'hoop_math'` | See `add_transition`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Possession frame with the play-context columns. Empty/malformed payloads return a zero-row frame — never raises.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_play_context import nba_play_context
+poss = nba_play_context("0022200001")
+print(poss["possession_start_type_ctg"].value_counts())
+
+# Transition rate for the game
+
+import polars as pl
+clean = poss.filter(
+    (pl.col("is_garbage_time") == False) & (pl.col("is_heave_possession") == False)
+)
+print(clean["is_transition"].mean())
 ```
 
 ### `nba_player_ages(season: 'str', *, league_id: 'str' = '00', fetch: 'Optional[Callable[..., pl.DataFrame]]' = None) -> 'pl.DataFrame'` {#nba_player_ages}
@@ -3643,6 +3945,46 @@ Expected possessions for the game.
 ```python
 from sportsdataverse.nba.nba_player_props import team_pace_projection
 poss = team_pace_projection("1", "2", ratings)
+```
+
+### `team_play_context(possessions: 'pl.DataFrame', *, league_non_transition_ppp: 'Optional[float]' = None, apply_ctg_filters: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#team_play_context}
+
+Roll possessions up into CTG's team Play-Context table.
+
+Reproduces the offensive half of CTG's `/stats/league/context` page.
+
+Columns: `poss`, `points`, `pts_per_100`, `transition_poss`,
+`transition_points`, `transition_freq`, `transition_pts_per_100`
+(CTG's "Eff"), `non_transition_pts_per_100`, `transition_pts_added_per_100`
+(CTG's "Pts+/Poss"), plus `halfcourt_*` twins and per-source transition
+frequencies (`freq_off_steal` / `freq_off_live_rebound`).
+
+**Pts+/Poss** is the subtle one. CTG: "CTG takes a team's points per
+possession that starts with transition, and subtracts out **what an average
+team does** in a possession that did not start with transition. ... We take the
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `add_play_context`. |
+| `league_non_transition_ppp` | `Optional[float]` | `None` | League-average points per 100 possessions on non-transition-start possessions. Computed from the frame when omitted. |
+| `apply_ctg_filters` | `bool` | `True` | Drop garbage-time, heave and non-counting possessions first (CTG's default view). Set `False` for the unfiltered totals. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per `offense_team_id`. Empty input returns a zero-row frame.
+
+**Example**
+
+```python
+ctx = team_play_context(add_play_context(pbp))
+print(ctx.select("offense_team_id", "transition_freq", "transition_pts_added_per_100"))
+
+# Season-comparable Pts+/Poss
+
+ctx = team_play_context(season_poss, league_non_transition_ppp=104.8)
 ```
 
 ### `train_spm(box_features: 'pl.DataFrame', rapm_target: 'pl.DataFrame', *, feature_names: 'Optional[List[str]]' = None, alpha: 'float' = 100.0) -> 'SpmCoefficients'` {#train_spm}
