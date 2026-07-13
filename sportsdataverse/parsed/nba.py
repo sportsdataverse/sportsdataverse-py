@@ -161,6 +161,8 @@ from sportsdataverse.nba import adjust_efficiency as adjust_efficiency  # noqa: 
 from sportsdataverse.nba import adjust_pace as adjust_pace  # noqa: F401
 from sportsdataverse.nba import as_of_ratings_split as as_of_ratings_split  # noqa: F401
 from sportsdataverse.nba import box_features as box_features  # noqa: F401
+from sportsdataverse.nba import build_athlete_identity_lookup as build_athlete_identity_lookup  # noqa: F401
+from sportsdataverse.nba import build_nba_player_identity_lookup as build_nba_player_identity_lookup  # noqa: F401
 from sportsdataverse.nba import build_play_context_shots as build_play_context_shots  # noqa: F401
 from sportsdataverse.nba import build_possession_shooting as build_possession_shooting  # noqa: F401
 from sportsdataverse.nba import calibrate_pts_per_win as calibrate_pts_per_win  # noqa: F401
@@ -185,13 +187,24 @@ from sportsdataverse.nba import flatten_json_iterative as flatten_json_iterative
 from sportsdataverse.nba import get_constants as get_constants  # noqa: F401
 from sportsdataverse.nba import get_shrinkage_k as get_shrinkage_k  # noqa: F401
 from sportsdataverse.nba import helper_nba_athlete_items as helper_nba_athlete_items  # noqa: F401
+from sportsdataverse.nba import helper_nba_draft as helper_nba_draft  # noqa: F401
 from sportsdataverse.nba import helper_nba_game_data as helper_nba_game_data  # noqa: F401
 from sportsdataverse.nba import helper_nba_game_items as helper_nba_game_items  # noqa: F401
+from sportsdataverse.nba import helper_nba_game_rosters as helper_nba_game_rosters  # noqa: F401
+from sportsdataverse.nba import helper_nba_officials as helper_nba_officials  # noqa: F401
 from sportsdataverse.nba import helper_nba_pbp as helper_nba_pbp  # noqa: F401
 from sportsdataverse.nba import helper_nba_pbp_features as helper_nba_pbp_features  # noqa: F401
 from sportsdataverse.nba import helper_nba_pickcenter as helper_nba_pickcenter  # noqa: F401
+from sportsdataverse.nba import helper_nba_play_by_play as helper_nba_play_by_play  # noqa: F401
+from sportsdataverse.nba import helper_nba_player_box as helper_nba_player_box  # noqa: F401
+from sportsdataverse.nba import helper_nba_player_season_stats as helper_nba_player_season_stats  # noqa: F401
 from sportsdataverse.nba import helper_nba_roster_items as helper_nba_roster_items  # noqa: F401
+from sportsdataverse.nba import helper_nba_rosters as helper_nba_rosters  # noqa: F401
+from sportsdataverse.nba import helper_nba_schedule as helper_nba_schedule  # noqa: F401
+from sportsdataverse.nba import helper_nba_standings as helper_nba_standings  # noqa: F401
+from sportsdataverse.nba import helper_nba_team_box as helper_nba_team_box  # noqa: F401
 from sportsdataverse.nba import helper_nba_team_items as helper_nba_team_items  # noqa: F401
+from sportsdataverse.nba import helper_nba_team_season_stats as helper_nba_team_season_stats  # noqa: F401
 from sportsdataverse.nba import in_game_features as in_game_features  # noqa: F401
 from sportsdataverse.nba import lineup_play_context as lineup_play_context  # noqa: F401
 from sportsdataverse.nba import load_darko_dpm as load_darko_dpm  # noqa: F401
@@ -308,6 +321,8 @@ __all__ = [
     "adjust_pace",
     "as_of_ratings_split",
     "box_features",
+    "build_athlete_identity_lookup",
+    "build_nba_player_identity_lookup",
     "build_play_context_shots",
     "build_possession_shooting",
     "calibrate_pts_per_win",
@@ -449,13 +464,24 @@ __all__ = [
     "get_constants",
     "get_shrinkage_k",
     "helper_nba_athlete_items",
+    "helper_nba_draft",
     "helper_nba_game_data",
     "helper_nba_game_items",
+    "helper_nba_game_rosters",
+    "helper_nba_officials",
     "helper_nba_pbp",
     "helper_nba_pbp_features",
     "helper_nba_pickcenter",
+    "helper_nba_play_by_play",
+    "helper_nba_player_box",
+    "helper_nba_player_season_stats",
     "helper_nba_roster_items",
+    "helper_nba_rosters",
+    "helper_nba_schedule",
+    "helper_nba_standings",
+    "helper_nba_team_box",
     "helper_nba_team_items",
+    "helper_nba_team_season_stats",
     "in_game_features",
     "lineup_play_context",
     "load_darko_dpm",

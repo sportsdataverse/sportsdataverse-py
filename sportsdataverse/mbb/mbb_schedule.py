@@ -285,3 +285,56 @@ def most_recent_mbb_season():
         return datetime.datetime.now().year + 1
     else:
         return datetime.datetime.now().year
+
+
+def helper_mbb_schedule(
+    sched: pl.DataFrame,
+    *,
+    pbp_game_ids: list[int],
+    team_box_game_ids: list[int],
+    player_box_game_ids: list[int],
+) -> pl.DataFrame:
+    """Reshape the raw MBB season schedule into the released schedule frame.
+
+    Faithful polars port of the schedule blocks in the hoopR-mbb-data
+    creation scripts (``espn_mbb_01_pbp_creation.R`` adds casts +
+    ``game_date_time``/``game_date`` + the ``PBP`` flag; ``02`` stamps
+    ``team_box``; ``03`` stamps ``player_box`` and uploads) -- byte-identical
+    to the WBB blocks after league normalization, so this delegates to the
+    shared implementation. Column order and dtypes mirror the released
+    ``mbb_schedule_{season}.parquet``.
+
+    Args:
+        sched: The raw ``hoopR-mbb-raw`` season schedule frame
+            (``mbb/schedules/parquet/mbb_schedule_{season}.parquet``).
+        pbp_game_ids: Game ids present in the compiled play_by_play dataset.
+        team_box_game_ids: Game ids present in the compiled team_box dataset.
+        player_box_game_ids: Game ids present in the compiled player_box dataset.
+
+    Returns:
+        pl.DataFrame: One row per game, deduped, sorted by ``date`` descending.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.mbb import helper_mbb_schedule
+            raw = pl.read_parquet("mbb_schedule_2025.parquet")
+            df = helper_mbb_schedule(
+                raw, pbp_game_ids=[], team_box_game_ids=[], player_box_game_ids=[]
+            )
+            print(df.shape)
+
+    See Also:
+        * `hoopR`_ -- the R producer this ports; retained as the parity oracle.
+
+    .. _hoopR: https://hoopR.sportsdataverse.org
+    """
+    from sportsdataverse.wbb.wbb_schedule import helper_wbb_schedule
+
+    return helper_wbb_schedule(
+        sched,
+        pbp_game_ids=pbp_game_ids,
+        team_box_game_ids=team_box_game_ids,
+        player_box_game_ids=player_box_game_ids,
+    )

@@ -1112,6 +1112,38 @@ game's own team pace), then summed — the result is fully deterministic.
 
 One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
 
+### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
+
+R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rosters` | `dict[int \| str, dict]` |  | Mapping of team_id -> that team's raw roster payload (`wbb/team_rosters/json/{season}/{team_id}.json`). NOTE: R walks `raw$athletes` directly here (no position-bucket unwrap, unlike the rosters dataset itself). |
+
+**Returns**
+
+athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
+
+### `build_nba_player_identity_lookup(player_box: 'pl.DataFrame') -> 'dict[str, dict[str, Any]]'` {#build_nba_player_identity_lookup}
+
+R `build_identity_lookup(season)`: athlete_id -> identity from the
+
+season's already-compiled `player_box` -- the authoritative "who played
+in season Y" source (ESPN's team-roster endpoint is current-only and
+cannot answer that for historical seasons).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_box` | `DataFrame` |  | The season's compiled player_box frame (e.g. `nba/player_box/parquet/player_box_{season}.parquet`, or whatever the season builder just wrote for this pass). Must carry `athlete_id`; other identity columns are best-effort. |
+
+**Returns**
+
+athlete_id (str) -> identity fields for `helper_nba_player_season_stats`. When an athlete appears in multiple rows (multiple games), the LAST row (by frame order) wins -- mirroring R's `!duplicated(athlete_id, fromLast = TRUE)`, which keeps an athlete's most recent team within the season.
+
 ### `build_play_context_shots(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, putback_seconds: 'float' = 2.0) -> 'pl.DataFrame'` {#build_play_context_shots}
 
 Build the per-shot frame carrying CTG's play context.

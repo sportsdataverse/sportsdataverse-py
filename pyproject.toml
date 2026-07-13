@@ -616,4 +616,11 @@ files = [
     "sportsdataverse/hockey/college_hockey_ratings.py",
     "sportsdataverse/hockey/mch/mch_ratings.py",
     "sportsdataverse/hockey/wch/wch_ratings.py",
+    "sportsdataverse/nba/nba_game_officials.py",
+    "sportsdataverse/nba/nba_season_producers.py",
+    "sportsdataverse/mbb/mbb_play_by_play.py",
+    "sportsdataverse/mbb/mbb_player_box.py",
+    "sportsdataverse/mbb/mbb_team_box.py",
+    "sportsdataverse/mbb/mbb_game_officials.py",
+    "sportsdataverse/mbb/mbb_season_producers.py",
 ]
