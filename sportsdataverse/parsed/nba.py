@@ -217,6 +217,7 @@ from sportsdataverse.nba import load_nba_game_rosters as load_nba_game_rosters  
 from sportsdataverse.nba import load_nba_officials as load_nba_officials  # noqa: F401
 from sportsdataverse.nba import load_nba_pbp as load_nba_pbp  # noqa: F401
 from sportsdataverse.nba import load_nba_player_boxscore as load_nba_player_boxscore  # noqa: F401
+from sportsdataverse.nba import load_nba_player_impact as load_nba_player_impact  # noqa: F401
 from sportsdataverse.nba import load_nba_player_season_stats as load_nba_player_season_stats  # noqa: F401
 from sportsdataverse.nba import load_nba_rosters as load_nba_rosters  # noqa: F401
 from sportsdataverse.nba import load_nba_schedule as load_nba_schedule  # noqa: F401
@@ -494,6 +495,7 @@ __all__ = [
     "load_nba_officials",
     "load_nba_pbp",
     "load_nba_player_boxscore",
+    "load_nba_player_impact",
     "load_nba_player_season_stats",
     "load_nba_rosters",
     "load_nba_schedule",

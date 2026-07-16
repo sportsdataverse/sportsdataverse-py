@@ -3161,6 +3161,51 @@ load_nba_player_boxscore:
   type: String
 - name: opponent_team_score
   type: Int32
+load_nba_player_impact:
+- name: player_id
+  type: Int64
+- name: o_rapm
+  type: Float64
+- name: d_rapm
+  type: Float64
+- name: rapm
+  type: Float64
+- name: off_poss
+  type: Int64
+- name: def_poss
+  type: Int64
+- name: o_adj_rapm
+  type: Float64
+- name: d_adj_rapm
+  type: Float64
+- name: adj_rapm
+  type: Float64
+- name: ospm
+  type: Float64
+- name: dspm
+  type: Float64
+- name: spm
+  type: Float64
+- name: min
+  type: Float64
+- name: gp
+  type: Int64
+- name: obpm
+  type: Float64
+- name: dbpm
+  type: Float64
+- name: bpm
+  type: Float64
+- name: war
+  type: Float64
+- name: darko_filtered_skill
+  type: Float64
+- name: darko_projected_rating
+  type: Float64
+- name: darko_projected_sd
+  type: Float64
+- name: season
+  type: Int64
 load_nba_player_season_stats:
 - name: season
   type: Int32

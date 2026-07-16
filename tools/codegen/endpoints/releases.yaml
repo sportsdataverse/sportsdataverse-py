@@ -613,6 +613,14 @@ loaders:
   min_season: 2025
   example_args:
     seasons: 2025
+- fn: load_nba_player_impact
+  league: nba
+  base: sdv_releases
+  url: nba_player_impact/nba_player_impact_{season}.parquet
+  tag: nba_player_impact
+  min_season: 1996
+  example_args:
+    seasons: 2024
 - fn: load_nhl_game_info
   league: nhl
   base: sdv_releases

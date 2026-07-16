@@ -27,6 +27,7 @@ flowchart LR
 | `load_nba_draft` | [espn_nba_draft](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_draft) | — |
 | `load_nba_rosters` | [espn_nba_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_nba_rosters) | — |
 | `load_nba_stats_schedules` | [nba_stats_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_schedules) | — |
+| `load_nba_player_impact` | [nba_player_impact](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_player_impact) | — |
 
 ## `load_nba_pbp`
 
@@ -643,4 +644,38 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 
 ```python
 load_nba_stats_schedules(seasons=2025)
+```
+
+## `load_nba_player_impact`
+
+Release: [nba_player_impact](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_player_impact) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_player_impact/nba_player_impact_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `player_id` | Int64 |
+| `o_rapm` | Float64 |
+| `d_rapm` | Float64 |
+| `rapm` | Float64 |
+| `off_poss` | Int64 |
+| `def_poss` | Int64 |
+| `o_adj_rapm` | Float64 |
+| `d_adj_rapm` | Float64 |
+| `adj_rapm` | Float64 |
+| `ospm` | Float64 |
+| `dspm` | Float64 |
+| `spm` | Float64 |
+| `min` | Float64 |
+| `gp` | Int64 |
+| `obpm` | Float64 |
+| `dbpm` | Float64 |
+| `bpm` | Float64 |
+| `war` | Float64 |
+| `darko_filtered_skill` | Float64 |
+| `darko_projected_rating` | Float64 |
+| `darko_projected_sd` | Float64 |
+| `season` | Int64 |
+
+```python
+load_nba_player_impact(seasons=2024)
 ```

@@ -27,6 +27,7 @@ __all__ = [
     "load_nba_draft",
     "load_nba_rosters",
     "load_nba_stats_schedules",
+    "load_nba_player_impact",
 ]
 
 
@@ -1005,6 +1006,68 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_nba_stats_schedules: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_nba_player_impact(seasons, return_as_pandas: bool = False):
+    """Load nba_player_impact (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_player_impact
+
+    Args:
+        seasons: an int or iterable of seasons (>= 1996).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name               |type    |
+        |:----------------------|:-------|
+        |player_id              |Int64   |
+        |o_rapm                 |Float64 |
+        |d_rapm                 |Float64 |
+        |rapm                   |Float64 |
+        |off_poss               |Int64   |
+        |def_poss               |Int64   |
+        |o_adj_rapm             |Float64 |
+        |d_adj_rapm             |Float64 |
+        |adj_rapm               |Float64 |
+        |ospm                   |Float64 |
+        |dspm                   |Float64 |
+        |spm                    |Float64 |
+        |min                    |Float64 |
+        |gp                     |Int64   |
+        |obpm                   |Float64 |
+        |dbpm                   |Float64 |
+        |bpm                    |Float64 |
+        |war                    |Float64 |
+        |darko_filtered_skill   |Float64 |
+        |darko_projected_rating |Float64 |
+        |darko_projected_sd     |Float64 |
+        |season                 |Int64   |
+
+    Example:
+        Quick start::
+
+            load_nba_player_impact(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 1996:
+            raise SeasonNotFoundError("season cannot be less than 1996")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_player_impact/nba_player_impact_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_nba_player_impact: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
