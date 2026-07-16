@@ -204,6 +204,23 @@
 
 ### Fixes
 
+- fix(cfb): `cfb_ratings()` now works against the **released `espn_cfb_pbp`
+  asset** it documents itself as loading. The function advertises that it pulls
+  play-by-play via `load_cfb_pbp`, but that path had never been exercised — the
+  module was built and gated entirely against a 14-column fixture carrying
+  cfbfastR-canonical names, while the published asset is ESPN-shaped. Every real
+  call (`cfb_ratings(2023)`) raised `KeyError` on `pos_team_id` /
+  `def_pos_team_id` / `home` / `neutral_site`, then on `play_type` / `drive_id`.
+  The orchestrator now normalizes the released field names (`start.pos_team.id`,
+  `start.def_pos_team.id`, `homeTeamId`, `type.text`, `drive.id`, plus
+  `neutral_site` off the schedule join), aliasing **only** when the canonical
+  name is absent so callers passing an already-canonical frame are unchanged.
+  The HFA term is now guarded on `pos_team`/`home` dtype agreement — it derives
+  from `pos_team == home`, which across mismatched namespaces silently marked
+  every play a road play rather than failing. Verified on the real 2023 asset
+  (153,625 plays → 227 teams); the oracle gates hold on released data (`adj_net`
+  vs FPI 0.926, vs SP+ 0.936; `adj_off` vs SP+ off 0.846; `adj_def` vs SP+ def
+  0.793).
 - fix(codegen): all codegen/capture writers now emit LF explicitly
   (`newline="\n"`), matching `generate.py`'s convention. On Windows the
   text-mode default translated `\n` to CRLF, so every codegen-test run (which
