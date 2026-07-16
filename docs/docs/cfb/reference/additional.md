@@ -1351,69 +1351,6 @@ ratings = cfb_ratings(2023)
 preds = cfb_predict_games(schedule_2023, ratings)
 ```
 
-### `cfb_ratings(seasons: 'int | list[int]', *, as_of_date: 'datetime.date | None' = None, config: 'RatingsConfig | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_ratings}
-
-One row per team: the full CFB ratings spine (off/def/ST EPA + FEI).
-
-Public orchestrator over `efficiency_ratings`,
-`special_teams_ratings`, and `fei_ratings`. Loads play-by-play
-+ schedule via `sportsdataverse.cfb.cfb_loaders.load_cfb_pbp` /
-`sportsdataverse.cfb.cfb_loaders.load_cfb_schedule`, joins the
-schedule's per-game date onto the plays, optionally applies the
-as-of-date leakage boundary
-(`sportsdataverse.cfb.cfb_prediction_constants.as_of_ratings_split`),
-then fits all three component ratings on the (optionally filtered) plays
-and reshapes them into one wide per-team table with dense ranks and a
-net-rating z-score.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A single season (e.g. `2023`) or a list of seasons to pool into one combined fit. |
-| `as_of_date` | `date \| None` | `None` | When given, the leakage boundary -- only plays from games with `date < as_of_date` are used to fit the ratings (mirrors what was knowable heading into that date). `None` (default) uses the full season(s), unfiltered. |
-| `config` | `RatingsConfig \| None` | `None` | Ratings tuning knobs forwarded to all three component functions. Defaults to `RatingsConfig` when omitted. |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
-
-**Returns**
-
-A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -- the single passed season for the common single-season call; `null` for a pooled multi-season call, since no single season applies to every row), `team_id` (Utf8), `adj_off_epa`, `adj_def_epa` (Float64, from `efficiency_ratings`), `adj_st_epa` (Float64, from `special_teams_ratings`), `adj_net` (Float64 -- offense minus defense only; special teams is a separate column, not folded in), `fei_off`, `fei_def`, `fei_net` (Float64, from `fei_ratings`), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model uses), `off_rank` (Int64, dense rank on `adj_off_epa` descending), `def_rank` (Int64, dense rank on `adj_def_epa` **ascending** -- fewer EPA allowed ranks better), `net_rank` (Int64, dense rank on `adj_net` descending), `net_z` (Float64, z-score of `adj_net`). Zero-row (correctly-typed) when the requested season(s) have no published pbp/schedule asset, or when `as_of_date` filters out every play.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | Season the ratings cover (null for a pooled multi-season fit). |
-| `team_id` | character | Team ESPN id (character join key). |
-| `adj_off_epa` | double | Opponent-adjusted offensive EPA per play (higher is better); ridge fit. |
-| `adj_def_epa` | double | Opponent-adjusted defensive EPA allowed per play (lower is better); ridge fit. |
-| `adj_st_epa` | double | Special-teams rating - z-composite of per-unit field-goal/punt/kick-return EPA. |
-| `adj_net` | double | Opponent-adjusted net efficiency (adj_off_epa minus adj_def_epa; special teams not folded in). |
-| `fei_off` | double | Opponent-adjusted offensive drive efficiency (Fremeau-FEI style). |
-| `fei_def` | double | Opponent-adjusted defensive drive efficiency (Fremeau-FEI style). |
-| `fei_net` | double | Opponent-adjusted net drive efficiency (fei_off minus fei_def). |
-| `games` | integer | Number of games the team played in the fitted window. |
-| `off_pace` | double | Offensive scrimmage plays per game (the tempo input to the totals model). |
-| `off_rank` | integer | Dense rank on adj_off_epa descending (best offense = 1). |
-| `def_rank` | integer | Dense rank on adj_def_epa ascending (fewer EPA allowed ranks better). |
-| `net_rank` | integer | Dense rank on adj_net descending (best net rating = 1). |
-| `net_z` | double | Z-score of adj_net across the FBS teams. |
-
-**Example**
-
-```python
-from sportsdataverse.cfb.cfb_ratings import cfb_ratings
-ratings = cfb_ratings(2023)
-ratings.sort("net_rank").head()
-
-# As-of-date leakage boundary
-
-import datetime as dt
-week3 = cfb_ratings(2023, as_of_date=dt.date(2023, 9, 18))
-
-# Pandas round-trip
-
-ratings_pd = cfb_ratings(2023, return_as_pandas=True)
-```
-
 ### `cfb_recruiting_projection(target_season: 'int', *, division: 'str' = 'fbs', history_seasons: 'list[int] | None' = None, alpha: 'float' = 1.0, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#cfb_recruiting_projection}
 
 Project team wins / scoring margin for a season from preseason roster features.
