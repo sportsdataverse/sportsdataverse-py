@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — `load_cfb_ratings` dataset loader](#cfb--load_cfb_ratings-dataset-loader)
   - [NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle](#nba--wnba--ctg-play-context-t36-possessionshotlineupplayer-tables--start-type-oracle)
   - [Fixes](#fixes)
   - [Dependencies](#dependencies)
@@ -175,6 +176,20 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — `load_cfb_ratings` dataset loader
+
+- **`load_cfb_ratings(seasons)`** — loads the published `cfb_ratings` release
+  (one row per team per season, 2004–): opponent-adjusted offensive / defensive /
+  special-teams EPA, FEI, `games`, `off_pace`, dense `off_rank` / `def_rank` /
+  `net_rank`, and `net_z`. The tag is produced by `cfbfastR-cfb-data`'s
+  `cfb_model_publish ratings` builder running sdv-py's own
+  :func:`sportsdataverse.cfb.cfb_ratings` over the released `espn_cfb_pbp`
+  play-by-play, so the loader's returns-schema is the compute function's output
+  schema — a contract test pins the two together (both column order and dtype)
+  so a producer change can't silently leave the published returns-table lying.
+  Like every release loader it is 404-safe: seasons with no published asset are
+  skipped with a warning rather than raising.
 
 ### NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle
 

@@ -1758,6 +1758,37 @@ load_cfb_power_index:
   type: Int64
 - name: week
   type: Int64
+load_cfb_ratings:
+- name: season
+  type: Int64
+- name: team_id
+  type: String
+- name: adj_off_epa
+  type: Float64
+- name: adj_def_epa
+  type: Float64
+- name: adj_st_epa
+  type: Float64
+- name: adj_net
+  type: Float64
+- name: fei_off
+  type: Float64
+- name: fei_def
+  type: Float64
+- name: fei_net
+  type: Float64
+- name: games
+  type: Int64
+- name: off_pace
+  type: Float64
+- name: off_rank
+  type: Int64
+- name: def_rank
+  type: Int64
+- name: net_rank
+  type: Int64
+- name: net_z
+  type: Float64
 load_cfb_rosters:
 - name: athlete_id
   type: String

@@ -15,6 +15,7 @@ flowchart LR
 | Dataset | Release tag | Pipeline |
 |---|---|---|
 | `load_cfb_pbp` | [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_pbp) | — |
+| `load_cfb_ratings` | [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings) | — |
 | `load_cfb_rosters` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_schedule` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_team_info` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
@@ -411,6 +412,33 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 
 ```python
 load_cfb_pbp(seasons=2024)
+```
+
+## `load_cfb_ratings`
+
+Release: [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_ratings/cfb_ratings_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int64 |
+| `team_id` | String |
+| `adj_off_epa` | Float64 |
+| `adj_def_epa` | Float64 |
+| `adj_st_epa` | Float64 |
+| `adj_net` | Float64 |
+| `fei_off` | Float64 |
+| `fei_def` | Float64 |
+| `fei_net` | Float64 |
+| `games` | Int64 |
+| `off_pace` | Float64 |
+| `off_rank` | Int64 |
+| `def_rank` | Int64 |
+| `net_rank` | Int64 |
+| `net_z` | Float64 |
+
+```python
+load_cfb_ratings(seasons=2024)
 ```
 
 ## `load_cfb_rosters`

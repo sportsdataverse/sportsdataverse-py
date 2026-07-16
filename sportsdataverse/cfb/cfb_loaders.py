@@ -15,6 +15,7 @@ from sportsdataverse._codegen_runtime import (
 
 __all__ = [
     "load_cfb_pbp",
+    "load_cfb_ratings",
     "load_cfb_rosters",
     "load_cfb_schedule",
     "load_cfb_team_info",
@@ -437,6 +438,61 @@ def load_cfb_pbp(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_cfb_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_cfb_ratings(seasons, return_as_pandas: bool = False):
+    """Load cfb_ratings (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2004).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name    |type    |
+        |:-----------|:-------|
+        |season      |Int64   |
+        |team_id     |String  |
+        |adj_off_epa |Float64 |
+        |adj_def_epa |Float64 |
+        |adj_st_epa  |Float64 |
+        |adj_net     |Float64 |
+        |fei_off     |Float64 |
+        |fei_def     |Float64 |
+        |fei_net     |Float64 |
+        |games       |Int64   |
+        |off_pace    |Float64 |
+        |off_rank    |Int64   |
+        |def_rank    |Int64   |
+        |net_rank    |Int64   |
+        |net_z       |Float64 |
+
+    Example:
+        Quick start::
+
+            load_cfb_ratings(seasons=2024)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2004:
+            raise SeasonNotFoundError("season cannot be less than 2004")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_ratings/cfb_ratings_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_cfb_ratings: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()

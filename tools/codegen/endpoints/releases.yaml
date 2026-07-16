@@ -11,6 +11,14 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+- fn: load_cfb_ratings
+  league: cfb
+  base: sdv_releases
+  url: cfb_ratings/cfb_ratings_{season}.parquet
+  tag: cfb_ratings
+  min_season: 2004
+  example_args:
+    seasons: 2024
 - fn: load_cfb_rosters
   league: cfb
   base: raw_data
