@@ -89,6 +89,7 @@ fixture oracle (Phases 5a-5e) is the validated parse path. See
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import time
@@ -96,6 +97,8 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Callable, Optional
 from urllib.parse import urlsplit
+
+logger = logging.getLogger(__name__)
 
 NCAA_HOST = "stats.ncaa.org"
 NCAA_HOST_URL = f"https://{NCAA_HOST}"
@@ -468,10 +471,22 @@ class _PlaywrightTransport:
         self._browser: Any = None
         self._page: Any = None
         self._challenge_solved = False
+        # The proxy this browser was LAUNCHED with. Playwright binds the proxy at
+        # launch, so honoring a rotation means relaunching -- see _ensure_page.
+        self._current_proxy: Optional[str] = None
 
     def _ensure_page(self, proxies: "dict[str, str]") -> None:
+        proxy = proxies.get("http") or proxies.get("https") or None
         if self._page is not None:
-            return
+            if proxy == self._current_proxy:
+                return
+            # The caller rotated the proxy. A live browser is pinned to its
+            # LAUNCH proxy, so reusing it would silently keep egressing from the
+            # old IP -- which is how one IP absorbed a whole backfill and got
+            # permanently banned while _proxy_idx "rotated" to no effect.
+            # Relaunch on the new IP (costs a fresh bm-verify solve).
+            logger.info("browser proxy rotated -> %s (relaunching)", _redact_proxy_url(proxy))
+            self.close()
         try:
             from playwright.sync_api import sync_playwright
         except ImportError as exc:  # pragma: no cover - exercised only without playwright
@@ -500,6 +515,7 @@ class _PlaywrightTransport:
             user_agent=self.user_agent, locale="en-US", viewport={"width": 1366, "height": 900}
         )
         self._page = ctx.new_page()
+        self._current_proxy = proxy
         atexit.register(self.close)
 
     def __call__(self, url: str, proxies: "dict[str, str]", headers: "dict[str, str]") -> "tuple[int, str]":
@@ -525,6 +541,7 @@ class _PlaywrightTransport:
                 pass
         self._browser = self._pw = self._page = None
         self._challenge_solved = False
+        self._current_proxy = None
 
     def __enter__(self) -> "_PlaywrightTransport":
         return self
