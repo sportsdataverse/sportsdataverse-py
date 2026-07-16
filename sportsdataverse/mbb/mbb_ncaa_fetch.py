@@ -121,6 +121,20 @@ _BAN_MARKERS = (
     "rate limit",
 )
 
+# An unsolved bm-verify has TWO observed shapes, because Akamai answers a
+# navigation differently from an in-page fetch:
+#   * navigation  -> the full ~2.3 KB interstitial carrying the sensor markers
+#                    (this is what curl_cffi sees, with no cookie at all).
+#   * in-page XHR -> a THIN stub when ``_abck`` is missing/invalid. Observed
+#                    live as a 15-byte body: just ``NCAA Statistics``.
+# The stub carries no markers and no ban text, so marker-matching alone misses
+# it -- which is how unsolved challenges were mistaken for successful fetches.
+# Any stats.ncaa.org page worth having is >= 10 KB (game pages run 100 KB+), so
+# a sub-1 KB body is never content.
+_CHALLENGE_MARKERS = ("bm-verify", "_abck")
+_CHALLENGE_MAX_BYTES = 20000
+_MIN_CONTENT_BYTES = 1000
+
 PoolTransport = Callable[[str, "dict[str, str]"], "tuple[int, str]"]
 FetchTransport = Callable[[str, "dict[str, str]", "dict[str, str]"], "tuple[int, str]"]
 
@@ -375,6 +389,42 @@ def _ban_check(text: str) -> str:
     return "clean"
 
 
+def _is_challenge(text: str) -> bool:
+    """Is *text* an UNSOLVED ``bm-verify`` response -- neither content nor a ban?
+
+    The third response class, and the one that used to slip through: an unsolved
+    challenge is HTTP 200 and carries no ban marker, so :func:`_ban_check` calls
+    it ``"clean"`` and the fetch layer returned it as a successful fetch. Callers
+    then rejected it as too-small/table-less while the fetcher, believing it had
+    succeeded, never re-solved and never rotated -- so a single failed solve
+    turned into an unbounded run of useless requests.
+
+    Both observed shapes are caught:
+
+    * the ~2.3 KB navigation interstitial (matched by sensor marker + size), and
+    * the THIN in-page-fetch stub returned when ``_abck`` is invalid -- observed
+      live as 15 bytes of ``NCAA Statistics``, which carries no marker at all and
+      is only detectable by size.
+    """
+    if not text or len(text) > _CHALLENGE_MAX_BYTES:
+        return False
+    low = text.lower()
+    return any(marker in low for marker in _CHALLENGE_MARKERS)
+
+
+def _browser_response_unsolved(text: str) -> bool:
+    """Did an in-page browser fetch come back UNSOLVED?
+
+    Only the browser transport may use this. It knows two things the generic
+    fetch layer does not: the response came from an in-page ``fetch()`` against
+    stats.ncaa.org, and every page worth having there is >= 10 KB. That licenses
+    the size test which catches the marker-less thin stub (15 bytes observed).
+    :func:`_is_challenge` deliberately does NOT apply a size floor -- it judges
+    responses from every transport, where a small body may be legitimate.
+    """
+    return _is_challenge(text) or not text or len(text) < _MIN_CONTENT_BYTES
+
+
 def _normalize_path(path_or_url: str) -> str:
     """Strip a ``https://stats.ncaa.org/...`` URL down to its bare path+query.
 
@@ -475,10 +525,18 @@ class _PlaywrightTransport:
         challenge_wait_ms: int = 8000,
         nav_timeout_ms: int = 30000,
         user_agent: Optional[str] = None,
+        solve_attempts: int = 2,
     ) -> None:
         self.headless_new = headless_new
         self.challenge_wait_ms = challenge_wait_ms
         self.nav_timeout_ms = nav_timeout_ms
+        # How many times to (re-)run the bm-verify sensor before giving up and
+        # letting the fetch layer rotate. The solve is PROVEN by the in-page
+        # fetch, never assumed -- see __call__. Kept LOW on purpose: each
+        # attempt costs a navigation + challenge_wait_ms, and when an IP simply
+        # is not passing the sensor, rotating to a fresh proxy (fresh browser,
+        # fresh sensor run) recovers far faster than re-waiting on the same one.
+        self.solve_attempts = max(1, solve_attempts)
         self.user_agent = user_agent or (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
             "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
@@ -536,18 +594,51 @@ class _PlaywrightTransport:
         self._current_proxy = proxy
         atexit.register(self.close)
 
+    def _solve_challenge(self, url: str) -> None:
+        """Run a real navigation so the bm-verify sensor executes and mints ``_abck``.
+
+        Gives the sensor up to :attr:`solve_attempts` cycles to clear the
+        interstitial. Note this only observes the NAVIGATION; whether the token
+        is actually usable is proven by the in-page fetch in :meth:`__call__`.
+        """
+        page = self._page
+        page.goto(url, wait_until="domcontentloaded", timeout=self.nav_timeout_ms)
+        for _ in range(self.solve_attempts):
+            page.wait_for_timeout(self.challenge_wait_ms)
+            if "bm-verify" not in page.content():
+                break  # interstitial cleared
+
     def __call__(self, url: str, proxies: "dict[str, str]", headers: "dict[str, str]") -> "tuple[int, str]":
         self._ensure_page(proxies)
-        page = self._page
-        if not self._challenge_solved:
-            # A real navigation runs the bm-verify sensor and mints _abck.
-            page.goto(url, wait_until="domcontentloaded", timeout=self.nav_timeout_ms)
-            page.wait_for_timeout(self.challenge_wait_ms)
-            if "bm-verify" in page.content():
-                page.wait_for_timeout(self.challenge_wait_ms)  # one more sensor cycle
-            self._challenge_solved = True
-        result = page.evaluate(_RAW_FETCH_JS, url)
-        return int(result["status"]), str(result["text"])
+        status, text = 0, ""
+        for attempt in range(1, self.solve_attempts + 1):
+            if not self._challenge_solved:
+                self._solve_challenge(url)
+                self._challenge_solved = True
+            result = self._page.evaluate(_RAW_FETCH_JS, url)
+            status, text = int(result["status"]), str(result["text"])
+            if not _browser_response_unsolved(text):
+                return status, text
+            # The solve did NOT take -- either it never passed, or Akamai
+            # re-challenged once _abck aged out. The old code set
+            # _challenge_solved=True after a BLIND wait and never checked, so a
+            # failed solve latched "solved" and every later fetch returned an
+            # unsolved response forever (1485 of them in one live run). The
+            # fetch itself is the only honest proof; force a real re-solve.
+            logger.info(
+                "bm-verify not passed (%d-byte response) -- re-solving, attempt %d/%d",
+                len(text),
+                attempt,
+                self.solve_attempts,
+            )
+            self._challenge_solved = False
+        # Still unsolved after every attempt. Raise so the fetch layer's
+        # rotate-on-transport-error path moves us to a fresh proxy -- which
+        # relaunches the browser and runs a genuinely fresh sensor. Returning
+        # the stub instead is what let the fetcher mistake it for a success.
+        raise RuntimeError(
+            f"bm-verify not passed after {self.solve_attempts} attempts ({len(text)}-byte response): {url}"
+        )
 
     def close(self) -> None:
         """Stop the browser + Playwright. Idempotent."""
@@ -574,6 +665,7 @@ def playwright_transport(
     challenge_wait_ms: int = 8000,
     nav_timeout_ms: int = 30000,
     user_agent: Optional[str] = None,
+    solve_attempts: int = 2,
 ) -> "_PlaywrightTransport":
     """Build the **suggested** stats.ncaa.org game-detail scraping transport.
 
@@ -611,6 +703,7 @@ def playwright_transport(
         challenge_wait_ms=challenge_wait_ms,
         nav_timeout_ms=nav_timeout_ms,
         user_agent=user_agent,
+        solve_attempts=solve_attempts,
     )
 
 
@@ -740,6 +833,17 @@ class NcaaFetcher:
             except Exception as exc:  # noqa: BLE001 - rotate on any transport failure
                 last_err = str(exc)
                 self._rotate("transport error")
+                continue
+            if status == 200 and _is_challenge(text):
+                # Third response class: a 200 with no ban marker that is still an
+                # unsolved bm-verify shell. The browser transport already tried a
+                # re-solve, so this IP is not currently clearing the sensor. NOT a
+                # ban -- the IP may be perfectly healthy -- so rotate to a fresh
+                # proxy (which relaunches the browser = a fresh solve) but do NOT
+                # retire it. Returning this shell is what made the fetcher believe
+                # it had succeeded and hammer one IP into a permanent ban.
+                last_err = "bm-verify challenge not cleared"
+                self._rotate("challenge not cleared")
                 continue
             if status == 200 and _ban_check(text) == "clean":
                 self._since_rotate += 1

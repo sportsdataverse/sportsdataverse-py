@@ -50,7 +50,11 @@ def _cfg(
 
 
 _POOL = ["http://u:p@10.0.0.1:1", "http://u:p@10.0.0.2:1", "http://u:p@10.0.0.3:1"]
-_CLEAN = "<html><body><table>" + "<tr><td>x</td></tr>" * 40 + "</table></body></html>"
+# Stand-in for a real game page. Must exceed _MIN_CONTENT_BYTES (1KB) -- real
+# stats.ncaa.org pages run 100KB+, and the browser transport uses size to spot
+# the marker-less thin stub, so a 700-byte "clean" fixture would be unrealistic
+# AND would read as unsolved.
+_CLEAN = "<html><body><table>" + "<tr><td>xxxxxxxxxx</td></tr>" * 100 + "</table></body></html>"
 _BAN = "<html><body>Access Denied</body></html>"
 
 
@@ -121,6 +125,185 @@ def test_rotate_every_env_override(monkeypatch: pytest.MonkeyPatch) -> None:
     assert _from_env().rotate_every == 25
     monkeypatch.setenv("SDV_PY_NCAA_ROTATE_EVERY", "abc")
     assert _from_env().rotate_every == 200  # invalid -> default
+
+
+# --- the bm-verify challenge shell is a THIRD response class ---------------
+
+# Shape 1 -- the NAVIGATION interstitial (what curl_cffi sees, ~2.3KB + markers).
+_CHALLENGE = (
+    '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0">'
+    '<script>window._abck="x";bm-verify</script></head><body></body></html>'
+)
+# Shape 2 -- the THIN in-page-fetch stub Akamai returns when _abck is invalid.
+# Captured live from stats.ncaa.org: exactly this, 15 bytes, no markers at all.
+_STUB = "NCAA Statistics"
+
+
+def test_unsolved_challenge_is_not_a_ban_and_not_content() -> None:
+    """The classification hole behind the outage: an unsolved challenge is 200
+    with NO ban marker, so _ban_check calls it 'clean' and the fetch layer
+    returned it as a successful fetch."""
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _ban_check, _is_challenge
+
+    assert _ban_check(_CHALLENGE) == "clean"  # ban-check genuinely cannot see it
+    assert _is_challenge(_CHALLENGE) is True  # ...which is why this exists
+    assert _is_challenge(_CLEAN) is False  # real content is not a challenge
+    assert _is_challenge(_BAN) is False  # a ban is not a challenge
+    # Size guard: a huge page mentioning _abck is content, not a shell.
+    assert _is_challenge("<html>" + "x" * 30000 + "_abck</html>") is False
+
+
+def test_thin_xhr_stub_is_detected_as_unsolved() -> None:
+    """The shape that actually broke us. Akamai answers an in-page fetch that
+    carries an invalid _abck with a 15-byte body -- no 'bm-verify', no '_abck',
+    no ban text. Nothing marker-based can see it, so the BROWSER check catches
+    it by size (no real stats.ncaa.org page is under 1KB).
+
+    The size rule lives ONLY in the browser check: _is_challenge judges
+    responses from every transport, where a small body may be legitimate --
+    putting a size floor there broke 18 unrelated tests."""
+    from sportsdataverse.mbb.mbb_ncaa_fetch import (
+        _ban_check,
+        _browser_response_unsolved,
+        _is_challenge,
+    )
+
+    assert len(_STUB) == 15
+    assert _ban_check(_STUB) == "clean"  # invisible to ban-check
+    assert "bm-verify" not in _STUB.lower() and "_abck" not in _STUB.lower()
+    assert _is_challenge(_STUB) is False  # marker-based: genuinely cannot see it
+    assert _browser_response_unsolved(_STUB) is True  # size-based: caught here
+    assert _browser_response_unsolved("") is True
+    # Both shapes converge for the browser; real content passes both.
+    assert _browser_response_unsolved(_CHALLENGE) is True
+    assert _browser_response_unsolved(_CLEAN) is False
+
+
+def test_challenge_rotates_the_proxy_and_never_returns_the_shell(tmp_path: Path) -> None:
+    """A challenge must rotate to a fresh IP (fresh browser = fresh solve) and
+    must NOT be handed back to the caller as if it were a page."""
+    transport = FakeTransport([(200, _CHALLENGE), (200, _CLEAN)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    got = fetcher.fetch_html("contests/1/play_by_play")
+
+    assert got == _CLEAN  # never the shell
+    assert _proxies_used(transport) == [_POOL[0], _POOL[1]]  # rotated on the challenge
+
+
+def test_challenge_does_not_retire_the_proxy(tmp_path: Path) -> None:
+    """A challenge is NOT a ban -- the IP may be fine. Retiring on a challenge
+    would throw away healthy IPs (they are a scarce, subnet-shared resource)."""
+    transport = FakeTransport([(200, _CHALLENGE), (200, _CLEAN)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    fetcher.fetch_html("contests/1/play_by_play")
+
+    assert fetcher._dead == set()  # vs a 403, which DOES retire the proxy
+
+
+def test_challenge_does_not_count_toward_rotate_every(tmp_path: Path) -> None:
+    """Only real fetches age a proxy's budget; shells must not."""
+    transport = FakeTransport([(200, _CHALLENGE), (200, _CLEAN), (200, _CLEAN)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotate_every=2, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    fetcher.fetch_html("contests/1/play_by_play")  # challenge -> rotate to p1, then clean on p1
+    assert fetcher._since_rotate == 1  # the shell did NOT increment the budget
+    fetcher.fetch_html("contests/2/play_by_play")
+    assert fetcher._since_rotate == 0  # 2 real fetches on p1 -> rotated
+
+
+# --- the solve must be PROVEN by the fetch, never assumed ------------------
+
+
+class _FakePage:
+    """Stands in for a Playwright page: scripted fetch bodies, records solves."""
+
+    def __init__(self, bodies: "list[str]") -> None:
+        self.bodies = list(bodies)
+        self.gotos = 0
+
+    def goto(self, url: str, **kw: object) -> None:
+        self.gotos += 1
+
+    def wait_for_timeout(self, ms: int) -> None:
+        pass
+
+    def content(self) -> str:
+        return "<html>ok</html>"  # interstitial looks cleared
+
+    def evaluate(self, js: str, url: str) -> dict:
+        return {"status": 200, "text": self.bodies.pop(0)}
+
+
+def _transport_with(page: _FakePage) -> object:
+    t = playwright_transport(challenge_wait_ms=0, solve_attempts=2)
+    t._page = page
+    t._current_proxy = _POOL[0]
+    t._challenge_solved = False
+    return t
+
+
+def test_failed_solve_is_retried_not_latched() -> None:
+    """The latch bug: _challenge_solved was set True after a BLIND wait, so a
+    solve that never actually passed was treated as success -- and every later
+    fetch returned an unsolved response forever (1485 in one live run).
+    The fetch itself must be the proof."""
+    page = _FakePage([_STUB, _CLEAN])  # two failed solves, then it takes
+    t = _transport_with(page)
+
+    status, text = t("https://stats.ncaa.org/contests/1/play_by_play", {"http": _POOL[0]}, {})
+
+    assert text == _CLEAN  # never returned a stub as if it were a page
+    assert page.gotos == 2  # re-solved on the unsolved response
+
+
+def test_solve_gives_up_after_solve_attempts_so_the_fetcher_can_rotate() -> None:
+    """Bounded: after solve_attempts the transport RAISES, which the fetch
+    layer's rotate-on-transport-error path turns into a fresh proxy (= fresh
+    browser + a genuinely fresh sensor run). It must never hand the stub back
+    as if it were a page -- that is what made the fetcher think it succeeded."""
+    page = _FakePage([_STUB, _STUB])
+    t = _transport_with(page)
+
+    with pytest.raises(RuntimeError, match="bm-verify not passed after 2 attempts"):
+        t("https://stats.ncaa.org/contests/1/play_by_play", {"http": _POOL[0]}, {})
+
+    assert page.gotos == 2  # exactly solve_attempts sensor runs, then stop
+
+
+def test_unsolvable_proxy_is_rotated_away_from_not_returned(tmp_path: Path) -> None:
+    """End-to-end at the fetch layer: a transport that cannot solve raises, the
+    fetcher rotates to the next proxy, and the caller gets real content."""
+    calls: "list[str]" = []
+
+    def transport(url: str, proxies: dict, headers: dict) -> "tuple[int, str]":
+        px = proxies.get("http")
+        calls.append(px)
+        if px == _POOL[0]:
+            raise RuntimeError("bm-verify not passed after 3 attempts (15-byte response)")
+        return (200, _CLEAN)
+
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    assert fetcher.fetch_html("contests/1/play_by_play") == _CLEAN
+    assert calls == [_POOL[0], _POOL[1]]  # rotated off the unsolvable proxy
+    assert fetcher._dead == set()  # unsolved != banned -- the IP is not retired
+
+
+def test_solved_session_does_not_re_solve_on_every_fetch() -> None:
+    """Once genuinely solved, the token is reused -- no needless navigation."""
+    page = _FakePage([_CLEAN, _CLEAN])
+    t = _transport_with(page)
+
+    t("https://stats.ncaa.org/contests/1/play_by_play", {"http": _POOL[0]}, {})
+    t("https://stats.ncaa.org/contests/2/play_by_play", {"http": _POOL[0]}, {})
+
+    assert page.gotos == 1  # solved once, reused
 
 
 # --- the browser transport must honor a rotation (it is pinned at launch) ---
