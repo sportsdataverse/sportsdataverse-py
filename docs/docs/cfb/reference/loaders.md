@@ -39,6 +39,12 @@ flowchart LR
 | `load_cfb_adv_situational` | [espn_cfb_adv_situational](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_situational) | — |
 | `load_cfb_adv_specialists` | [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_specialists) | — |
 | `load_cfb_adv_turnover` | [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_turnover) | — |
+| `load_cfb_model_pbp` | [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_model_pbp) | — |
+| `load_cfb_passing` | [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_passing) | — |
+| `load_cfb_percentiles` | [espn_cfb_percentiles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_percentiles) | — |
+| `load_cfb_receiving` | [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_receiving) | — |
+| `load_cfb_rushing` | [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_rushing) | — |
+| `load_cfb_team_summaries` | [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_summaries) | — |
 
 ## `load_cfb_pbp`
 
@@ -1344,4 +1350,632 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 
 ```python
 load_cfb_adv_turnover(seasons=2024)
+```
+
+## `load_cfb_model_pbp`
+
+Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_model_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_pbp/model_pbp_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `game_id` | Int64 |
+| `id` | String |
+| `sequenceNumber` | String |
+| `game_play_number` | Int64 |
+| `drive.id` | String |
+| `season` | Int64 |
+| `week` | Int64 |
+| `period` | Int64 |
+| `pos_team` | Int64 |
+| `def_pos_team` | Int64 |
+| `start.pos_team.name` | String |
+| `homeTeamId` | Int64 |
+| `awayTeamId` | Int64 |
+| `homeTeamName` | String |
+| `awayTeamName` | String |
+| `type.text` | String |
+| `text` | String |
+| `start.down` | Int64 |
+| `start.distance` | Int64 |
+| `start.yardsToEndzone` | Int64 |
+| `pos_score_diff_start` | Int64 |
+| `start.TimeSecsRem` | Int64 |
+| `start.is_home` | Boolean |
+| `passing_down` | Boolean |
+| `pass` | Boolean |
+| `rush` | Boolean |
+| `completion` | Boolean |
+| `scoring_play` | Boolean |
+| `statYardage` | Int64 |
+| `passer_player_name` | String |
+| `ep_before` | Float64 |
+| `ep_after` | Float64 |
+| `epa` | Float64 |
+| `wp_before` | Float64 |
+| `wp_after` | Float64 |
+| `wpa` | Float64 |
+| `completion_prob` | Float64 |
+| `cpoe` | Float64 |
+| `model_pbp_version` | String |
+| `cp_model_version` | String |
+| `ep_model_version` | String |
+| `wp_model_version` | String |
+| `scored_date` | String |
+
+```python
+load_cfb_model_pbp(seasons=2024)
+```
+
+## `load_cfb_passing`
+
+Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_passing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_passing/cfb_passing_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `team_id` | String |
+| `pos_team` | String |
+| `division` | String |
+| `conference` | String |
+| `season` | Int32 |
+| `player_id` | Float64 |
+| `passer_player_name` | String |
+| `plays` | Int32 |
+| `games` | Int32 |
+| `team_games` | Int32 |
+| `playsgame` | Float64 |
+| `TEPA` | Float64 |
+| `EPAplay` | Float64 |
+| `EPAgame` | Float64 |
+| `yards` | Float64 |
+| `yardsplay` | Float64 |
+| `yardsgame` | Float64 |
+| `success` | Float64 |
+| `comp` | Float64 |
+| `att` | Float64 |
+| `comppct` | Float64 |
+| `passing_td` | Float64 |
+| `sacked` | Float64 |
+| `sack_yds` | Float64 |
+| `pass_int` | Float64 |
+| `detmer` | Float64 |
+| `detmergame` | Float64 |
+| `dropbacks` | Float64 |
+| `sack_adj_yards` | Float64 |
+| `yardsdropback` | Float64 |
+| `TEPA_rank` | Float64 |
+| `EPAgame_rank` | Float64 |
+| `EPAplay_rank` | Float64 |
+| `success_rank` | Float64 |
+| `comppct_rank` | Float64 |
+| `yards_rank` | Float64 |
+| `yardsplay_rank` | Float64 |
+| `yardsgame_rank` | Float64 |
+| `sack_adj_yards_rank` | Float64 |
+| `yardsdropback_rank` | Float64 |
+| `detmer_rank` | Float64 |
+| `detmergame_rank` | Float64 |
+| `fbs_class` | String |
+
+```python
+load_cfb_passing(seasons=2024)
+```
+
+## `load_cfb_percentiles`
+
+Release: [espn_cfb_percentiles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_percentiles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_percentiles/cfb_percentiles_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `pctile` | Float64 |
+| `GEI` | Float64 |
+| `EPAplay` | Float64 |
+| `pass_success` | Float64 |
+| `rush_success` | Float64 |
+| `early_down_success` | Float64 |
+| `early_down_EPA` | Float64 |
+| `late_down_success` | Float64 |
+| `success` | Float64 |
+| `yardsplay` | Float64 |
+| `dropbacks` | Float64 |
+| `rushes` | Float64 |
+| `EPAdropback` | Float64 |
+| `EPArush` | Float64 |
+| `yardsdropback` | Float64 |
+| `pass_explosive` | Float64 |
+| `rush_explosive` | Float64 |
+| `explosive` | Float64 |
+| `third_down_success` | Float64 |
+| `red_zone_success` | Float64 |
+| `play_stuffed` | Float64 |
+| `nonExplosiveEpaPerPlay` | Float64 |
+| `havoc` | Float64 |
+| `yardsrush` | Float64 |
+| `lineyards` | Float64 |
+| `opportunity_run` | Float64 |
+| `third_down_distance` | Float64 |
+
+```python
+load_cfb_percentiles(seasons=2024)
+```
+
+## `load_cfb_receiving`
+
+Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_receiving) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_receiving/cfb_receiving_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `team_id` | String |
+| `pos_team` | String |
+| `division` | String |
+| `conference` | String |
+| `season` | Int32 |
+| `player_id` | Float64 |
+| `receiver_player_name` | String |
+| `plays` | Int32 |
+| `games` | Int32 |
+| `team_games` | Int32 |
+| `playsgame` | Float64 |
+| `TEPA` | Float64 |
+| `EPAplay` | Float64 |
+| `EPAgame` | Float64 |
+| `yards` | Float64 |
+| `yardsplay` | Float64 |
+| `yardsgame` | Float64 |
+| `success` | Float64 |
+| `comp` | Int32 |
+| `targets` | Int32 |
+| `catchpct` | Float64 |
+| `passing_td` | Float64 |
+| `fumbles` | Float64 |
+| `TEPA_rank` | Float64 |
+| `EPAgame_rank` | Float64 |
+| `EPAplay_rank` | Float64 |
+| `success_rank` | Float64 |
+| `catchpct_rank` | Float64 |
+| `yards_rank` | Float64 |
+| `yardsplay_rank` | Float64 |
+| `yardsgame_rank` | Float64 |
+| `fbs_class` | String |
+
+```python
+load_cfb_receiving(seasons=2024)
+```
+
+## `load_cfb_rushing`
+
+Release: [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_rushing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_rushing/cfb_rushing_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `team_id` | String |
+| `pos_team` | String |
+| `division` | String |
+| `conference` | String |
+| `season` | Int32 |
+| `player_id` | Float64 |
+| `rusher_player_name` | String |
+| `plays` | Int32 |
+| `games` | Int32 |
+| `team_games` | Int32 |
+| `playsgame` | Float64 |
+| `TEPA` | Float64 |
+| `EPAplay` | Float64 |
+| `EPAgame` | Float64 |
+| `yards` | Float64 |
+| `yardsplay` | Float64 |
+| `yardsgame` | Float64 |
+| `success` | Float64 |
+| `rushing_td` | Float64 |
+| `fumbles` | Float64 |
+| `TEPA_rank` | Float64 |
+| `EPAgame_rank` | Float64 |
+| `EPAplay_rank` | Float64 |
+| `success_rank` | Float64 |
+| `yards_rank` | Float64 |
+| `yardsplay_rank` | Float64 |
+| `yardsgame_rank` | Float64 |
+| `fbs_class` | String |
+
+```python
+load_cfb_rushing(seasons=2024)
+```
+
+## `load_cfb_team_summaries`
+
+Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_summaries) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_team_summaries/cfb_team_summaries_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `team_id` | String |
+| `pos_team` | String |
+| `division` | String |
+| `conference` | String |
+| `season` | Int32 |
+| `plays_off` | Int32 |
+| `playsgame_off` | Float64 |
+| `passrate_off` | Float64 |
+| `rushrate_off` | Float64 |
+| `havoc_off` | Float64 |
+| `explosive_off` | Float64 |
+| `TEPA_off` | Float64 |
+| `EPAplay_off` | Float64 |
+| `EPAdrive_off` | Float64 |
+| `EPAgame_off` | Float64 |
+| `yards_off` | Float64 |
+| `yardsplay_off` | Float64 |
+| `yardsgame_off` | Float64 |
+| `play_stuffed_off` | Float64 |
+| `drives_off` | Int32 |
+| `drivesgame_off` | Float64 |
+| `yardsdrive_off` | Float64 |
+| `playsdrive_off` | Float64 |
+| `success_off` | Float64 |
+| `red_zone_success_off` | Float64 |
+| `third_down_success_off` | Float64 |
+| `third_down_distance_off` | Float64 |
+| `late_down_success_off` | Float64 |
+| `early_down_EPA_off` | Float64 |
+| `start_position_off` | Float64 |
+| `nonExplosiveEpaPerPlay_off` | Float64 |
+| `line_yards_off` | Float64 |
+| `opportunity_rate_off` | Float64 |
+| `playsgame_off_rank` | Float64 |
+| `TEPA_off_rank` | Float64 |
+| `EPAgame_off_rank` | Float64 |
+| `EPAplay_off_rank` | Float64 |
+| `EPAdrive_off_rank` | Float64 |
+| `early_down_EPA_off_rank` | Float64 |
+| `success_off_rank` | Float64 |
+| `yards_off_rank` | Float64 |
+| `yardsplay_off_rank` | Float64 |
+| `yardsgame_off_rank` | Float64 |
+| `drivesgame_off_rank` | Float64 |
+| `yardsdrive_off_rank` | Float64 |
+| `playsdrive_off_rank` | Float64 |
+| `play_stuffed_off_rank` | Float64 |
+| `red_zone_success_off_rank` | Float64 |
+| `third_down_success_off_rank` | Float64 |
+| `late_down_success_off_rank` | Float64 |
+| `third_down_distance_off_rank` | Float64 |
+| `start_position_off_rank` | Float64 |
+| `havoc_off_rank` | Float64 |
+| `explosive_off_rank` | Float64 |
+| `passrate_off_rank` | Float64 |
+| `rushrate_off_rank` | Float64 |
+| `nonExplosiveEpaPerPlay_off_rank` | Float64 |
+| `line_yards_off_rank` | Float64 |
+| `opportunity_rate_off_rank` | Float64 |
+| `plays_def` | Int32 |
+| `playsgame_def` | Float64 |
+| `passrate_def` | Float64 |
+| `rushrate_def` | Float64 |
+| `havoc_def` | Float64 |
+| `explosive_def` | Float64 |
+| `TEPA_def` | Float64 |
+| `EPAplay_def` | Float64 |
+| `EPAdrive_def` | Float64 |
+| `EPAgame_def` | Float64 |
+| `yards_def` | Float64 |
+| `yardsplay_def` | Float64 |
+| `yardsgame_def` | Float64 |
+| `play_stuffed_def` | Float64 |
+| `drives_def` | Int32 |
+| `drivesgame_def` | Float64 |
+| `yardsdrive_def` | Float64 |
+| `playsdrive_def` | Float64 |
+| `success_def` | Float64 |
+| `red_zone_success_def` | Float64 |
+| `third_down_success_def` | Float64 |
+| `third_down_distance_def` | Float64 |
+| `late_down_success_def` | Float64 |
+| `early_down_EPA_def` | Float64 |
+| `start_position_def` | Float64 |
+| `nonExplosiveEpaPerPlay_def` | Float64 |
+| `line_yards_def` | Float64 |
+| `opportunity_rate_def` | Float64 |
+| `playsgame_def_rank` | Float64 |
+| `TEPA_def_rank` | Float64 |
+| `EPAgame_def_rank` | Float64 |
+| `EPAplay_def_rank` | Float64 |
+| `EPAdrive_def_rank` | Float64 |
+| `early_down_EPA_def_rank` | Float64 |
+| `success_def_rank` | Float64 |
+| `yards_def_rank` | Float64 |
+| `yardsplay_def_rank` | Float64 |
+| `yardsgame_def_rank` | Float64 |
+| `drivesgame_def_rank` | Float64 |
+| `yardsdrive_def_rank` | Float64 |
+| `playsdrive_def_rank` | Float64 |
+| `play_stuffed_def_rank` | Float64 |
+| `red_zone_success_def_rank` | Float64 |
+| `third_down_success_def_rank` | Float64 |
+| `late_down_success_def_rank` | Float64 |
+| `third_down_distance_def_rank` | Float64 |
+| `start_position_def_rank` | Float64 |
+| `havoc_def_rank` | Float64 |
+| `explosive_def_rank` | Float64 |
+| `passrate_def_rank` | Float64 |
+| `rushrate_def_rank` | Float64 |
+| `nonExplosiveEpaPerPlay_def_rank` | Float64 |
+| `line_yards_def_rank` | Float64 |
+| `opportunity_rate_def_rank` | Float64 |
+| `TEPA_margin` | Float64 |
+| `EPAplay_margin` | Float64 |
+| `EPAdrive_margin` | Float64 |
+| `EPAgame_margin` | Float64 |
+| `success_margin` | Float64 |
+| `yardsplay_margin` | Float64 |
+| `TEPA_margin_rank` | Float64 |
+| `EPAgame_margin_rank` | Float64 |
+| `EPAdrive_margin_rank` | Float64 |
+| `EPAplay_margin_rank` | Float64 |
+| `success_margin_rank` | Float64 |
+| `yardsplay_margin_rank` | Float64 |
+| `start_position_margin` | Float64 |
+| `start_position_margin_rank` | Float64 |
+| `total_available_yards_off` | Float64 |
+| `total_gained_yards_off` | Int32 |
+| `available_yards_pct_off` | Float64 |
+| `available_yards_pct_off_rank` | Float64 |
+| `total_available_yards_def` | Float64 |
+| `total_gained_yards_def` | Int32 |
+| `available_yards_pct_def` | Float64 |
+| `available_yards_pct_def_rank` | Float64 |
+| `total_available_yards_margin` | Float64 |
+| `total_gained_yards_margin` | Int32 |
+| `available_yards_pct_margin` | Float64 |
+| `total_available_yards_margin_rank` | Float64 |
+| `total_gained_yards_margin_rank` | Float64 |
+| `available_yards_pct_margin_rank` | Float64 |
+| `plays_off_pass` | Int32 |
+| `playsgame_off_pass` | Float64 |
+| `passrate_off_pass` | Float64 |
+| `rushrate_off_pass` | Float64 |
+| `havoc_off_pass` | Float64 |
+| `explosive_off_pass` | Float64 |
+| `TEPA_off_pass` | Float64 |
+| `EPAplay_off_pass` | Float64 |
+| `EPAdrive_off_pass` | Float64 |
+| `EPAgame_off_pass` | Float64 |
+| `yards_off_pass` | Float64 |
+| `yardsplay_off_pass` | Float64 |
+| `yardsgame_off_pass` | Float64 |
+| `play_stuffed_off_pass` | Float64 |
+| `drives_off_pass` | Int32 |
+| `drivesgame_off_pass` | Float64 |
+| `yardsdrive_off_pass` | Float64 |
+| `playsdrive_off_pass` | Float64 |
+| `success_off_pass` | Float64 |
+| `red_zone_success_off_pass` | Float64 |
+| `third_down_success_off_pass` | Float64 |
+| `third_down_distance_off_pass` | Float64 |
+| `late_down_success_off_pass` | Float64 |
+| `early_down_EPA_off_pass` | Float64 |
+| `nonExplosiveEpaPerPlay_off_pass` | Float64 |
+| `line_yards_off_pass` | Float64 |
+| `opportunity_rate_off_pass` | Float64 |
+| `playsgame_off_pass_rank` | Float64 |
+| `TEPA_off_pass_rank` | Float64 |
+| `EPAgame_off_pass_rank` | Float64 |
+| `EPAplay_off_pass_rank` | Float64 |
+| `EPAdrive_off_pass_rank` | Float64 |
+| `early_down_EPA_off_pass_rank` | Float64 |
+| `success_off_pass_rank` | Float64 |
+| `yards_off_pass_rank` | Float64 |
+| `yardsplay_off_pass_rank` | Float64 |
+| `yardsgame_off_pass_rank` | Float64 |
+| `drivesgame_off_pass_rank` | Float64 |
+| `yardsdrive_off_pass_rank` | Float64 |
+| `playsdrive_off_pass_rank` | Float64 |
+| `play_stuffed_off_pass_rank` | Float64 |
+| `red_zone_success_off_pass_rank` | Float64 |
+| `third_down_success_off_pass_rank` | Float64 |
+| `late_down_success_off_pass_rank` | Float64 |
+| `third_down_distance_off_pass_rank` | Float64 |
+| `havoc_off_pass_rank` | Float64 |
+| `explosive_off_pass_rank` | Float64 |
+| `passrate_off_pass_rank` | Float64 |
+| `rushrate_off_pass_rank` | Float64 |
+| `nonExplosiveEpaPerPlay_off_pass_rank` | Float64 |
+| `line_yards_off_pass_rank` | Float64 |
+| `opportunity_rate_off_pass_rank` | Float64 |
+| `plays_def_pass` | Int32 |
+| `playsgame_def_pass` | Float64 |
+| `passrate_def_pass` | Float64 |
+| `rushrate_def_pass` | Float64 |
+| `havoc_def_pass` | Float64 |
+| `explosive_def_pass` | Float64 |
+| `TEPA_def_pass` | Float64 |
+| `EPAplay_def_pass` | Float64 |
+| `EPAdrive_def_pass` | Float64 |
+| `EPAgame_def_pass` | Float64 |
+| `yards_def_pass` | Float64 |
+| `yardsplay_def_pass` | Float64 |
+| `yardsgame_def_pass` | Float64 |
+| `play_stuffed_def_pass` | Float64 |
+| `drives_def_pass` | Int32 |
+| `drivesgame_def_pass` | Float64 |
+| `yardsdrive_def_pass` | Float64 |
+| `playsdrive_def_pass` | Float64 |
+| `success_def_pass` | Float64 |
+| `red_zone_success_def_pass` | Float64 |
+| `third_down_success_def_pass` | Float64 |
+| `third_down_distance_def_pass` | Float64 |
+| `late_down_success_def_pass` | Float64 |
+| `early_down_EPA_def_pass` | Float64 |
+| `nonExplosiveEpaPerPlay_def_pass` | Float64 |
+| `line_yards_def_pass` | Float64 |
+| `opportunity_rate_def_pass` | Float64 |
+| `playsgame_def_pass_rank` | Float64 |
+| `TEPA_def_pass_rank` | Float64 |
+| `EPAgame_def_pass_rank` | Float64 |
+| `EPAplay_def_pass_rank` | Float64 |
+| `EPAdrive_def_pass_rank` | Float64 |
+| `early_down_EPA_def_pass_rank` | Float64 |
+| `success_def_pass_rank` | Float64 |
+| `yards_def_pass_rank` | Float64 |
+| `yardsplay_def_pass_rank` | Float64 |
+| `yardsgame_def_pass_rank` | Float64 |
+| `drivesgame_def_pass_rank` | Float64 |
+| `yardsdrive_def_pass_rank` | Float64 |
+| `playsdrive_def_pass_rank` | Float64 |
+| `play_stuffed_def_pass_rank` | Float64 |
+| `red_zone_success_def_pass_rank` | Float64 |
+| `third_down_success_def_pass_rank` | Float64 |
+| `late_down_success_def_pass_rank` | Float64 |
+| `third_down_distance_def_pass_rank` | Float64 |
+| `havoc_def_pass_rank` | Float64 |
+| `explosive_def_pass_rank` | Float64 |
+| `passrate_def_pass_rank` | Float64 |
+| `rushrate_def_pass_rank` | Float64 |
+| `nonExplosiveEpaPerPlay_def_pass_rank` | Float64 |
+| `line_yards_def_pass_rank` | Float64 |
+| `opportunity_rate_def_pass_rank` | Float64 |
+| `TEPA_margin_pass` | Float64 |
+| `EPAplay_margin_pass` | Float64 |
+| `EPAdrive_margin_pass` | Float64 |
+| `EPAgame_margin_pass` | Float64 |
+| `success_margin_pass` | Float64 |
+| `yardsplay_margin_pass` | Float64 |
+| `TEPA_margin_pass_rank` | Float64 |
+| `EPAgame_margin_pass_rank` | Float64 |
+| `EPAdrive_margin_pass_rank` | Float64 |
+| `EPAplay_margin_pass_rank` | Float64 |
+| `success_margin_pass_rank` | Float64 |
+| `yardsplay_margin_pass_rank` | Float64 |
+| `plays_off_rush` | Int32 |
+| `playsgame_off_rush` | Float64 |
+| `passrate_off_rush` | Float64 |
+| `rushrate_off_rush` | Float64 |
+| `havoc_off_rush` | Float64 |
+| `explosive_off_rush` | Float64 |
+| `TEPA_off_rush` | Float64 |
+| `EPAplay_off_rush` | Float64 |
+| `EPAdrive_off_rush` | Float64 |
+| `EPAgame_off_rush` | Float64 |
+| `yards_off_rush` | Float64 |
+| `yardsplay_off_rush` | Float64 |
+| `yardsgame_off_rush` | Float64 |
+| `play_stuffed_off_rush` | Float64 |
+| `drives_off_rush` | Int32 |
+| `drivesgame_off_rush` | Float64 |
+| `yardsdrive_off_rush` | Float64 |
+| `playsdrive_off_rush` | Float64 |
+| `success_off_rush` | Float64 |
+| `red_zone_success_off_rush` | Float64 |
+| `third_down_success_off_rush` | Float64 |
+| `third_down_distance_off_rush` | Float64 |
+| `late_down_success_off_rush` | Float64 |
+| `early_down_EPA_off_rush` | Float64 |
+| `nonExplosiveEpaPerPlay_off_rush` | Float64 |
+| `line_yards_off_rush` | Float64 |
+| `opportunity_rate_off_rush` | Float64 |
+| `playsgame_off_rush_rank` | Float64 |
+| `TEPA_off_rush_rank` | Float64 |
+| `EPAgame_off_rush_rank` | Float64 |
+| `EPAplay_off_rush_rank` | Float64 |
+| `EPAdrive_off_rush_rank` | Float64 |
+| `early_down_EPA_off_rush_rank` | Float64 |
+| `success_off_rush_rank` | Float64 |
+| `yards_off_rush_rank` | Float64 |
+| `yardsplay_off_rush_rank` | Float64 |
+| `yardsgame_off_rush_rank` | Float64 |
+| `drivesgame_off_rush_rank` | Float64 |
+| `yardsdrive_off_rush_rank` | Float64 |
+| `playsdrive_off_rush_rank` | Float64 |
+| `play_stuffed_off_rush_rank` | Float64 |
+| `red_zone_success_off_rush_rank` | Float64 |
+| `third_down_success_off_rush_rank` | Float64 |
+| `late_down_success_off_rush_rank` | Float64 |
+| `third_down_distance_off_rush_rank` | Float64 |
+| `havoc_off_rush_rank` | Float64 |
+| `explosive_off_rush_rank` | Float64 |
+| `passrate_off_rush_rank` | Float64 |
+| `rushrate_off_rush_rank` | Float64 |
+| `nonExplosiveEpaPerPlay_off_rush_rank` | Float64 |
+| `line_yards_off_rush_rank` | Float64 |
+| `opportunity_rate_off_rush_rank` | Float64 |
+| `plays_def_rush` | Int32 |
+| `playsgame_def_rush` | Float64 |
+| `passrate_def_rush` | Float64 |
+| `rushrate_def_rush` | Float64 |
+| `havoc_def_rush` | Float64 |
+| `explosive_def_rush` | Float64 |
+| `TEPA_def_rush` | Float64 |
+| `EPAplay_def_rush` | Float64 |
+| `EPAdrive_def_rush` | Float64 |
+| `EPAgame_def_rush` | Float64 |
+| `yards_def_rush` | Float64 |
+| `yardsplay_def_rush` | Float64 |
+| `yardsgame_def_rush` | Float64 |
+| `play_stuffed_def_rush` | Float64 |
+| `drives_def_rush` | Int32 |
+| `drivesgame_def_rush` | Float64 |
+| `yardsdrive_def_rush` | Float64 |
+| `playsdrive_def_rush` | Float64 |
+| `success_def_rush` | Float64 |
+| `red_zone_success_def_rush` | Float64 |
+| `third_down_success_def_rush` | Float64 |
+| `third_down_distance_def_rush` | Float64 |
+| `late_down_success_def_rush` | Float64 |
+| `early_down_EPA_def_rush` | Float64 |
+| `nonExplosiveEpaPerPlay_def_rush` | Float64 |
+| `line_yards_def_rush` | Float64 |
+| `opportunity_rate_def_rush` | Float64 |
+| `playsgame_def_rush_rank` | Float64 |
+| `TEPA_def_rush_rank` | Float64 |
+| `EPAgame_def_rush_rank` | Float64 |
+| `EPAplay_def_rush_rank` | Float64 |
+| `EPAdrive_def_rush_rank` | Float64 |
+| `early_down_EPA_def_rush_rank` | Float64 |
+| `success_def_rush_rank` | Float64 |
+| `yards_def_rush_rank` | Float64 |
+| `yardsplay_def_rush_rank` | Float64 |
+| `yardsgame_def_rush_rank` | Float64 |
+| `drivesgame_def_rush_rank` | Float64 |
+| `yardsdrive_def_rush_rank` | Float64 |
+| `playsdrive_def_rush_rank` | Float64 |
+| `play_stuffed_def_rush_rank` | Float64 |
+| `red_zone_success_def_rush_rank` | Float64 |
+| `third_down_success_def_rush_rank` | Float64 |
+| `late_down_success_def_rush_rank` | Float64 |
+| `third_down_distance_def_rush_rank` | Float64 |
+| `havoc_def_rush_rank` | Float64 |
+| `explosive_def_rush_rank` | Float64 |
+| `passrate_def_rush_rank` | Float64 |
+| `rushrate_def_rush_rank` | Float64 |
+| `nonExplosiveEpaPerPlay_def_rush_rank` | Float64 |
+| `line_yards_def_rush_rank` | Float64 |
+| `opportunity_rate_def_rush_rank` | Float64 |
+| `TEPA_margin_rush` | Float64 |
+| `EPAplay_margin_rush` | Float64 |
+| `EPAdrive_margin_rush` | Float64 |
+| `EPAgame_margin_rush` | Float64 |
+| `success_margin_rush` | Float64 |
+| `yardsplay_margin_rush` | Float64 |
+| `TEPA_margin_rush_rank` | Float64 |
+| `EPAgame_margin_rush_rank` | Float64 |
+| `EPAdrive_margin_rush_rank` | Float64 |
+| `EPAplay_margin_rush_rank` | Float64 |
+| `success_margin_rush_rank` | Float64 |
+| `yardsplay_margin_rush_rank` | Float64 |
+| `fbs_class` | String |
+| `valid_games` | Float64 |
+| `adj_off_epa` | Float64 |
+| `adj_def_epa` | Float64 |
+| `def_strength_faced` | Float64 |
+| `off_strength_faced` | Float64 |
+| `net_adj_epa` | Float64 |
+| `adj_off_epa_rank` | Float64 |
+| `adj_def_epa_rank` | Float64 |
+| `net_adj_epa_rank` | Float64 |
+
+```python
+load_cfb_team_summaries(seasons=2024)
 ```
