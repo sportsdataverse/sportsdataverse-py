@@ -393,17 +393,23 @@ from sportsdataverse.cfb import load_cfb_betting_lines as load_cfb_betting_lines
 from sportsdataverse.cfb import load_cfb_drives as load_cfb_drives  # noqa: F401
 from sportsdataverse.cfb import load_cfb_game_rosters as load_cfb_game_rosters  # noqa: F401
 from sportsdataverse.cfb import load_cfb_linescores as load_cfb_linescores  # noqa: F401
+from sportsdataverse.cfb import load_cfb_model_pbp as load_cfb_model_pbp  # noqa: F401
+from sportsdataverse.cfb import load_cfb_passing as load_cfb_passing  # noqa: F401
 from sportsdataverse.cfb import load_cfb_pbp as load_cfb_pbp  # noqa: F401
+from sportsdataverse.cfb import load_cfb_percentiles as load_cfb_percentiles  # noqa: F401
 from sportsdataverse.cfb import load_cfb_play_participants as load_cfb_play_participants  # noqa: F401
 from sportsdataverse.cfb import load_cfb_player_box as load_cfb_player_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_power_index as load_cfb_power_index  # noqa: F401
 from sportsdataverse.cfb import load_cfb_ratings as load_cfb_ratings  # noqa: F401
+from sportsdataverse.cfb import load_cfb_receiving as load_cfb_receiving  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters_crosswalk as load_cfb_rosters_crosswalk  # noqa: F401
+from sportsdataverse.cfb import load_cfb_rushing as load_cfb_rushing  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule as load_cfb_schedule  # noqa: F401
 from sportsdataverse.cfb import load_cfb_schedule_crosswalk as load_cfb_schedule_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_box as load_cfb_team_box  # noqa: F401
 from sportsdataverse.cfb import load_cfb_team_info as load_cfb_team_info  # noqa: F401
+from sportsdataverse.cfb import load_cfb_team_summaries as load_cfb_team_summaries  # noqa: F401
 from sportsdataverse.cfb import load_cfb_teams_crosswalk as load_cfb_teams_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_draft_outcomes as load_draft_outcomes  # noqa: F401
 from sportsdataverse.cfb import load_fp_curve as load_fp_curve  # noqa: F401
@@ -616,17 +622,23 @@ __all__ = [
     "load_cfb_drives",
     "load_cfb_game_rosters",
     "load_cfb_linescores",
+    "load_cfb_model_pbp",
+    "load_cfb_passing",
     "load_cfb_pbp",
+    "load_cfb_percentiles",
     "load_cfb_play_participants",
     "load_cfb_player_box",
     "load_cfb_power_index",
     "load_cfb_ratings",
+    "load_cfb_receiving",
     "load_cfb_rosters",
     "load_cfb_rosters_crosswalk",
+    "load_cfb_rushing",
     "load_cfb_schedule",
     "load_cfb_schedule_crosswalk",
     "load_cfb_team_box",
     "load_cfb_team_info",
+    "load_cfb_team_summaries",
     "load_cfb_teams_crosswalk",
     "load_draft_outcomes",
     "load_fp_curve",

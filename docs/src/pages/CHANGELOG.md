@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [CFB — loaders for 6 published-but-unreachable dataset releases](#cfb--loaders-for-6-published-but-unreachable-dataset-releases)
   - [CFB — `load_cfb_ratings` dataset loader](#cfb--load_cfb_ratings-dataset-loader)
   - [NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle](#nba--wnba--ctg-play-context-t36-possessionshotlineupplayer-tables--start-type-oracle)
   - [Fixes](#fixes)
@@ -176,6 +177,33 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### CFB — loaders for 6 published-but-unreachable dataset releases
+
+`cfbfastR-cfb-data` publishes 18 dataset tags to `sportsdataverse-data`; sdv-py
+had loaders for 9. These six were built, backfilled, and published for years
+with no way to read them from Python:
+
+| loader | tag | seasons | cols |
+|---|---|---|---|
+| `load_cfb_passing` | `espn_cfb_passing` | 2014– | 43 |
+| `load_cfb_rushing` | `espn_cfb_rushing` | 2014– | 28 |
+| `load_cfb_receiving` | `espn_cfb_receiving` | 2014– | 32 |
+| `load_cfb_percentiles` | `espn_cfb_percentiles` | 2014– | 27 |
+| `load_cfb_team_summaries` | `espn_cfb_team_summaries` | 2014– | 383 |
+| `load_cfb_model_pbp` | `espn_cfb_model_pbp` | 2004– | 43 |
+
+The first five are the season-level "Binion Box Score" tables (opponent-adjusted
+team summaries + passing/rushing/receiving leaderboards + per-metric
+percentiles); `load_cfb_model_pbp` is the EP/WP/QBR-enriched play-by-play built
+by that repo's model pipeline. Every returns-schema is introspected from the
+real published parquet rather than derived, and a live-gated contract test
+asserts the declared schema against the published asset so a producer-side
+rename or dtype flip can't leave the docs table lying.
+
+`espn_cfb_injuries` is intentionally **not** loadable: its release exists but
+ships zero assets (`write_dataset` skips 0-row frames and ESPN's CFB injuries
+feed yields nothing), so a loader would 404 on every season.
 
 ### CFB — `load_cfb_ratings` dataset loader
 
