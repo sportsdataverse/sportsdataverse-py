@@ -7959,7 +7959,7 @@ from sportsdataverse.mbb.mbb_player_value_constants import player_per100_feature
 feats = player_per100_features(season_stats)
 ```
 
-### `playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 30000, user_agent: 'Optional[str]' = None) -> "'_PlaywrightTransport'"` {#playwright_transport}
+### `playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 30000, user_agent: 'Optional[str]' = None, solve_attempts: 'int' = 2) -> "'_PlaywrightTransport'"` {#playwright_transport}
 
 Build the **suggested** stats.ncaa.org game-detail scraping transport.
 
@@ -7977,6 +7977,7 @@ Playwright is a **lazy optional import** (not a hard dependency); a clear
 | `challenge_wait_ms` | `int` | `8000` | Milliseconds to let the bm-verify sensor run after the first navigation. |
 | `nav_timeout_ms` | `int` | `30000` | Per-navigation timeout. |
 | `user_agent` | `Optional[str]` | `None` | Override the Chrome UA string. |
+| `solve_attempts` | `int` | `2` |  |
 
 **Returns**
 
