@@ -81,6 +81,22 @@ _RATINGS_OUTPUT_SCHEMA: dict[str, pl.PolarsDataType] = {
     "net_z": pl.Float64,
 }
 
+# `load_cfb_pbp` serves the published `espn_cfb_pbp` asset, which ships ESPN's
+# dotted field names rather than the cfbfastR-canonical ones `_prepare`
+# requires. `home` maps to `homeTeamId` because the released `pos_team` is
+# itself a team *id* (Int64), not a name -- `_prepare`'s HFA test compares the
+# two directly, so they must share a namespace.
+_RELEASED_PBP_ALIASES: dict[str, str] = {
+    "pos_team_id": "start.pos_team.id",
+    "def_pos_team_id": "start.def_pos_team.id",
+    "home": "homeTeamId",
+    # `type.text` is the reclassified play type (`orig_play_type` freezes the
+    # pre-reclassification original); it is also what `cfb_pbp` itself reads
+    # first, ahead of `play_type`.
+    "play_type": "type.text",
+    "drive_id": "drive.id",
+}
+
 # Case-insensitive keyword match over the cfbfastR `play_type` vocabulary for
 # kickoffs/punts/field goals (returns, blocks, touchbacks, etc. all contain one
 # of these words) -- deliberately loose since `play_type` free text varies.
@@ -93,6 +109,22 @@ _ST_UNIT_PATTERNS: tuple[tuple[str, str], ...] = (
     ("punt", "(?i)punt"),
     ("kick_return", "(?i)kickoff"),  # pos_team on a kickoff is the receiving/return team
 )
+
+
+def _alias_released_pbp(plays: pl.DataFrame) -> pl.DataFrame:
+    """Map the released `espn_cfb_pbp` field names onto the canonical ones.
+
+    Aliases only when the canonical name is absent, so a caller passing an
+    already-canonical frame (e.g. `CFBPlayProcess` output) is untouched.
+    """
+    aliases = {
+        canon: src
+        for canon, src in _RELEASED_PBP_ALIASES.items()
+        if canon not in plays.columns and src in plays.columns
+    }
+    if not aliases:
+        return plays
+    return plays.with_columns([pl.col(src).alias(canon) for canon, src in aliases.items()])
 
 
 def efficiency_ratings(plays: pl.DataFrame, *, config: RatingsConfig | None = None) -> pl.DataFrame:
@@ -469,13 +501,28 @@ def cfb_ratings(
     schedule = schedule.with_columns(pl.col("game_id").cast(pl.Utf8))
     assert plays.schema["game_id"] == schedule.schema["game_id"]
 
+    plays = _alias_released_pbp(plays)
+    if "home" in plays.columns and plays.schema["pos_team"] != plays.schema["home"]:
+        # `_prepare` derives HFA from `pos_team == home`; mismatched namespaces
+        # (a name on one side, an id on the other) never compare equal and would
+        # silently mark every play a road play rather than fail.
+        raise KeyError(
+            f"cfb_ratings: `pos_team` ({plays.schema['pos_team']}) and `home` "
+            f"({plays.schema['home']}) must share a namespace for the HFA term."
+        )
+
     if "date" in schedule.columns:
         date_expr = pl.col("date").cast(pl.Date)
     else:
         # Real `load_cfb_schedule` ships `start_date` (an ISO datetime
         # string), not a bare `date` column -- take the calendar-day prefix.
         date_expr = pl.col("start_date").cast(pl.Utf8).str.slice(0, 10).str.to_date()
-    schedule_dates = schedule.select("game_id", date_expr.alias("date"))
+    sched_cols: list[pl.Expr] = [pl.col("game_id"), date_expr.alias("date")]
+    if "neutral_site" not in plays.columns and "neutral_site" in schedule.columns:
+        # `neutral_site` is a game attribute -- the released pbp omits it, so it
+        # rides the schedule join that already runs for `date`.
+        sched_cols.append(pl.col("neutral_site"))
+    schedule_dates = schedule.select(sched_cols)
 
     dated_plays = plays.join(schedule_dates, on="game_id", how="left")
     if as_of_date is not None:

@@ -14,6 +14,7 @@ import sys
 import pandas as pd
 import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 
 # See the NOTE in cfb_ratings.py: `sportsdataverse/cfb/__init__.py` re-exports
 # the `cfb_ratings` *function*, shadowing the submodule of the same name in
@@ -549,3 +550,68 @@ def test_cfb_ratings_empty_seasons_returns_documented_schema(monkeypatch: pytest
     out = cfb_ratings(_SEASON)
     assert out.height == 0
     assert out.schema == _RATINGS_SCHEMA
+
+
+def _released_shaped_plays() -> pl.DataFrame:
+    """`_mini_season_plays` re-expressed in the released `espn_cfb_pbp` names.
+
+    That asset -- what `load_cfb_pbp` actually serves -- ships ESPN's dotted
+    field names and omits `neutral_site` (a game attribute, carried on the
+    schedule). Renaming the canonical fixture is deliberate: it keeps the two
+    frames the same DATA, so the ratings must come out identical.
+    """
+    return (
+        _mini_season_plays()
+        .drop("neutral_site")
+        .rename(
+            {
+                "pos_team_id": "start.pos_team.id",
+                "def_pos_team_id": "start.def_pos_team.id",
+                "home": "homeTeamId",
+                "play_type": "type.text",
+                "drive_id": "drive.id",
+            }
+        )
+    )
+
+
+def test_cfb_ratings_accepts_released_pbp_schema(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The released ESPN-shaped frame must rate identically to the canonical one.
+
+    Regression for the released feed raising `KeyError` on
+    ['pos_team_id', 'def_pos_team_id', 'home', 'neutral_site'] (then
+    `play_type` / `drive_id`) -- `cfb_ratings` advertises that it loads via
+    `load_cfb_pbp`, but was only ever exercised against canonical fixtures.
+    """
+    _patch_loaders(monkeypatch)
+    canonical = cfb_ratings(_SEASON)
+
+    monkeypatch.setattr(
+        _cfb_ratings_mod, "load_cfb_pbp", lambda seasons, return_as_pandas=False: _released_shaped_plays()
+    )
+    monkeypatch.setattr(
+        _cfb_ratings_mod,
+        "load_cfb_schedule",
+        lambda seasons, return_as_pandas=False: _mini_season_schedule().with_columns(neutral_site=pl.lit(False)),
+    )
+    released = cfb_ratings(_SEASON)
+
+    assert released.schema == _RATINGS_SCHEMA
+    # Sort both: the ridge fit runs through a `group_by`, whose row order
+    # polars does not guarantee -- comparing unsorted is flaky, not strict.
+    assert_frame_equal(released.sort("team_id"), canonical.sort("team_id"))
+
+
+def test_cfb_ratings_rejects_mismatched_hfa_namespace(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`pos_team` and `home` in different namespaces must raise, not silently
+    mark every play a road game (HFA is derived from `pos_team == home`)."""
+    plays = _released_shaped_plays().with_columns(pl.col("homeTeamId").cast(pl.Categorical))
+    monkeypatch.setattr(_cfb_ratings_mod, "load_cfb_pbp", lambda seasons, return_as_pandas=False: plays)
+    monkeypatch.setattr(
+        _cfb_ratings_mod,
+        "load_cfb_schedule",
+        lambda seasons, return_as_pandas=False: _mini_season_schedule().with_columns(neutral_site=pl.lit(False)),
+    )
+
+    with pytest.raises(KeyError, match="must share a namespace"):
+        cfb_ratings(_SEASON)
