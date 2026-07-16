@@ -49,6 +49,125 @@ def _cfg(
     return NcaaFetchConfig(cache_dir=tmp_path, proxy_url=proxy_url, transport=transport)
 
 
+_POOL = ["http://u:p@10.0.0.1:1", "http://u:p@10.0.0.2:1", "http://u:p@10.0.0.3:1"]
+_CLEAN = "<html><body><table>" + "<tr><td>x</td></tr>" * 40 + "</table></body></html>"
+_BAN = "<html><body>Access Denied</body></html>"
+
+
+def _proxies_used(transport: FakeTransport) -> "list[str]":
+    return [c[1].get("http") for c in transport.calls]
+
+
+# --- proxy rotation: IPs are a consumable budget (bans are permanent) ------
+
+
+def test_rotate_every_retires_a_proxy_while_it_is_still_healthy(tmp_path: Path) -> None:
+    """PROACTIVE rotation -- the whole point. Waiting for a ban is too late:
+    stats.ncaa.org's per-IP bans never lift, so a healthy IP must be retired on
+    a fetch budget, not on failure. One IP absorbing a backfill is what burned
+    31.14.9.13 permanently."""
+    transport = FakeTransport([(200, _CLEAN)] * 6)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotate_every=2, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    for i in range(6):
+        fetcher.fetch_html(f"contests/{i}/play_by_play")
+
+    # 2 fetches per proxy, cycling the pool -- never 6 on one IP.
+    assert _proxies_used(transport) == [_POOL[0], _POOL[0], _POOL[1], _POOL[1], _POOL[2], _POOL[2]]
+
+
+def test_rotate_every_zero_disables_proactive_rotation(tmp_path: Path) -> None:
+    transport = FakeTransport([(200, _CLEAN)] * 3)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotate_every=0, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    for i in range(3):
+        fetcher.fetch_html(f"contests/{i}/play_by_play")
+
+    assert _proxies_used(transport) == [_POOL[0]] * 3  # legacy behavior, opt-out
+
+
+def test_banned_proxy_is_retired_and_never_reused(tmp_path: Path) -> None:
+    """A burned IP must never be handed out again -- rotation that cycles back
+    into a known-dead proxy just re-earns the 403."""
+    # p0 bans; the retry lands clean on p1. Then 2 more fetches must avoid p0.
+    transport = FakeTransport([(403, _BAN), (200, _CLEAN), (200, _CLEAN), (200, _CLEAN)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotate_every=0, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    for i in range(3):
+        fetcher.fetch_html(f"contests/{i}/play_by_play")
+
+    used = _proxies_used(transport)
+    assert used[0] == _POOL[0]  # tried once
+    assert _POOL[0] not in used[1:]  # then retired for good
+    assert _POOL[0] in fetcher._dead
+
+
+def test_all_proxies_banned_raises_a_clear_error(tmp_path: Path) -> None:
+    transport = FakeTransport([(403, _BAN)] * 8)
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
+
+    with pytest.raises(RuntimeError, match="every proxy in the pool is banned"):
+        fetcher.fetch_html("contests/1/play_by_play")
+
+
+def test_rotate_every_env_override(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.mbb.mbb_ncaa_fetch import _from_env
+
+    monkeypatch.setenv("SDV_PY_NCAA_ROTATE_EVERY", "25")
+    assert _from_env().rotate_every == 25
+    monkeypatch.setenv("SDV_PY_NCAA_ROTATE_EVERY", "abc")
+    assert _from_env().rotate_every == 200  # invalid -> default
+
+
+# --- the browser transport must honor a rotation (it is pinned at launch) ---
+
+
+class _StopBeforeLaunch(Exception):
+    pass
+
+
+def test_browser_transport_relaunches_when_the_proxy_rotates(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Playwright binds the proxy at LAUNCH. _ensure_page used to early-return
+    whenever a page existed, so the browser kept egressing from its first IP
+    forever while the fetcher 'rotated' -- the bug that burned one IP and
+    stalled the backfill at 38%."""
+    t = playwright_transport()
+    t._page = object()  # pretend a live browser on proxy A
+    t._current_proxy = _POOL[0]
+
+    def _boom() -> None:
+        raise _StopBeforeLaunch  # stand in for the (real) relaunch
+
+    monkeypatch.setattr(t, "close", _boom)
+
+    # Same proxy -> reuse, no relaunch.
+    t._ensure_page({"http": _POOL[0], "https": _POOL[0]})
+
+    # Different proxy -> MUST close/relaunch rather than silently reuse proxy A.
+    with pytest.raises(_StopBeforeLaunch):
+        t._ensure_page({"http": _POOL[1], "https": _POOL[1]})
+
+
+# --- the wbb shim must inherit all of the above, by reference ---------------
+
+
+def test_wbb_fetch_shim_is_the_same_implementation() -> None:
+    """wbb_ncaa_fetch re-exports the mbb core BY REFERENCE, so every fix here
+    reaches WBB with no duplication. Pin it: a copy-paste fork would silently
+    strand WBB on the old, IP-burning behavior."""
+    from sportsdataverse.mbb import mbb_ncaa_fetch as m
+    from sportsdataverse.wbb import wbb_ncaa_fetch as w
+
+    assert w.NcaaFetcher is m.NcaaFetcher
+    assert w.playwright_transport is m.playwright_transport
+    assert w.NcaaFetchConfig is m.NcaaFetchConfig
+    assert w.get_config() is m.get_config()  # one process-wide config singleton
+
+
 # --- binding directive 1: no direct-fetch mode -----------------------------
 
 
