@@ -47,3 +47,17 @@ def test_shared_parser_runs_through_softball_entrypoint() -> None:
     assert df.columns == list(PBP_SCHEMA.keys())
     assert df.height > 50
     assert df.filter(pl.col("play_type") == "unknown").height == 0
+
+
+def test_real_wsb_game_parses_and_reconciles() -> None:
+    # A REAL softball capture (contest 6548848, Elon @ Saint Joseph's 2025-04-12),
+    # discovered live via the scoreboard route. Softball differs from baseball --
+    # last-name-only players, ';' clause separator, 'stole home' runs -- all handled
+    # by the shared parser (verified end-to-end).
+    df = parse_college_softball_ncaa_pbp(
+        (FIX / "wsb_pbp_6548848.html").read_text(encoding="utf-8"), contest_id="6548848"
+    )
+    assert df.filter(pl.col("play_type") == "unknown").height == 0
+    final = (df.get_column("score_away").max() or 0) + (df.get_column("score_home").max() or 0)
+    assert df.get_column("runs_scored").sum() == final  # every run counted once
+    assert (df.get_column("scoring_runners").list.len() == df.get_column("runs_scored")).all()

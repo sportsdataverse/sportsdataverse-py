@@ -4,6 +4,7 @@
 
 - [college_baseball_ncaa fixtures](#college_baseball_ncaa-fixtures)
   - [Box-score tabs (contest 6357953 — Kansas @ A&M-Corpus Christi, 2025-02-14)](#box-score-tabs-contest-6357953--kansas--am-corpus-christi-2025-02-14)
+  - [Real softball (WSB) capture (contest 6548848 — Elon @ Saint Joseph's, 2025-04-12)](#real-softball-wsb-capture-contest-6548848--elon--saint-josephs-2025-04-12)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -40,3 +41,17 @@ stats.ncaa.org tabs of one game, for the box parsers in
 
 The `Umpires` tab (`/umpires`) is a known gap — the fetch fails to resolve and
 the `/officials` path carries no umpire data; deferred as a TODO.
+
+## Real softball (WSB) capture (contest 6548848 — Elon @ Saint Joseph's, 2025-04-12)
+
+A genuine softball game, discovered live via the scoreboard route
+(`season_divisions/18763/scoreboards`) and used by the softball tests instead of a
+baseball stand-in. Softball pbp differs from baseball (last-name-only players, `;`
+clause separator, `stole home` runs) — the shared parser handles both.
+
+| file | tab |
+|---|---|
+| `wsb_pbp_6548848.html` | Play By Play |
+| `wsb_team_stats_6548848.html` | Team Stats |
+| `wsb_individual_stats_6548848.html` | Individual Stats |
+| `wsb_box_score_6548848.html` | Box Score |

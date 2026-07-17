@@ -38,11 +38,16 @@ if TYPE_CHECKING:
 __all__ = ["PBP_SCHEMA", "parse_college_baseball_ncaa_pbp"]
 
 # NCAA "Last, F" / "Last, First" incl. hyphens and apostrophes ("S-Johnson, C").
-_NAME = r"[A-Z][A-Za-z'.\-]+,\s*[A-Z][A-Za-z'.\-]*\.?"
+# NCAA batter/runner name. Baseball writes "Last, First" (Brooks, M.); softball
+# writes last-name only (Hasapis). The ", First" part is therefore OPTIONAL so one
+# parser handles both -- verified e2e against a real WSB game (contest 6548848).
+_NAME = r"[A-Z][A-Za-z'.\-]+(?:,\s*[A-Z][A-Za-z'.\-]*\.?)?"
 
 # Clause separator inside a description (literal "3a", always followed by a
 # capital-led clause). Python re -> lookahead is fine here (not a polars expr).
-_SEP_RE = re.compile(r"3a\s+(?=[A-Z])")
+# Clause separator inside a description. Baseball uses the literal token "3a";
+# softball uses "; " (semicolon) -- accept either (verified e2e on WSB 6548848).
+_SEP_RE = re.compile(r"(?:3a|;)\s+(?=[A-Z])")
 # Count + pitch sequence, e.g. "(3-2 FBFBBF)" or "(0-0)".
 _COUNT_RE = re.compile(r"\((\d+)-(\d+)(?:\s+([A-Z]+))?\)")
 _RBI_RE = re.compile(r",\s*(\d+)?\s*RBI\b")
@@ -103,7 +108,7 @@ def _classify(rest: str) -> "tuple[str, dict]":
         return "foulout", {"is_out": True, "hit_trajectory": "foul"}
     if "reached on a fielder's choice" in low or "fielder's choice" in low:
         return "fielders_choice", x
-    if "reached on an error" in low or low.startswith("reached on error"):
+    if re.search(r"reached on (?:an? )?(?:throwing |fielding )?error", low):
         return "reached_on_error", x
     if "stole " in low:
         return "stolen_base", x
@@ -115,6 +120,8 @@ def _classify(rest: str) -> "tuple[str, dict]":
         return "runner_advance", x
     if _OUT_RE.search(low):
         return "out", {"is_out": True}
+    if re.search(r"\bfor\s+[A-Z/]", rest):  # softball courtesy-runner / sub notation ("... for Name")
+        return "substitution", x
     return "unknown", x
 
 
@@ -205,10 +212,19 @@ def _decompose(desc: str) -> "dict":
         if ac:
             out["runners_advanced"].append(f"{ac.group(1)}->{ac.group(2)}")
             continue
+        sh = re.match(rf"^({_NAME})\s+stole home", c)  # a steal of home is a run
+        if sh:
+            out["runs_scored"] += 1
+            out["scoring_runners"].append(sh.group(1))
+            continue
         if _OUT_RE.search(c.lower()):
             out["outs_on_play"] += 1
     # on a home run the batter also scores, but NCAA text only lists the runners.
     if out["play_type"] == "home_run" and out["batter"]:
+        out["runs_scored"] += 1
+        out["scoring_runners"].append(out["batter"])
+    # a standalone "<batter> stole home" primary is also a run.
+    if out["play_type"] == "stolen_base" and out["batter"] and "stole home" in primary.lower():
         out["runs_scored"] += 1
         out["scoring_runners"].append(out["batter"])
     out["is_scoring_play"] = out["runs_scored"] > 0
