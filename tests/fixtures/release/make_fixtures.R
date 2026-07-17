@@ -82,6 +82,34 @@ saveRDS(
   version = 2
 )
 
+# ---- 1c. rds byte-golden oracle WITH a league S3 class ----------------------
+# What the real producer chain emits: hoopR:::make_hoopR_data() stamps the
+# class + hoopR_* attrs FIRST, then sportsdataverse_save() appends its own
+# pair -- hence the attribute order (class, hoopR_timestamp, hoopR_type,
+# sportsdataverse_type, sportsdataverse_timestamp) seen on every published
+# release asset. The class is load-bearing: hoopR/wehoop register S3 methods
+# on it (print.hoopR_data), so a python-written rds must reproduce it exactly.
+classed_df <- test_df
+classed_df$season <- as.integer(classed_df$season)
+classed_df$week <- as.integer(classed_df$week)
+class(classed_df) <- c("hoopR_data", "tbl_df", "tbl", "data.table", "data.frame")
+attr(classed_df, "hoopR_timestamp") <- structure(
+  as.numeric(as.POSIXct("2026-07-12 14:00:00", tz = "UTC")),
+  class = c("POSIXct", "POSIXt")
+)
+attr(classed_df, "hoopR_type") <- "ESPN NBA parity from hoopR data repository"
+attr(classed_df, "sportsdataverse_type") <- "Parity fixture frame"
+attr(classed_df, "sportsdataverse_timestamp") <- structure(
+  as.numeric(as.POSIXct("2026-07-12 14:00:00", tz = "UTC")),
+  class = c("POSIXct", "POSIXt")
+)
+saveRDS(
+  classed_df,
+  file.path(out_dir, "rds_golden_classed.rds"),
+  compress = FALSE,
+  version = 2
+)
+
 # ---- 2. timestamp + package_function sidecar files --------------------------
 ts_files <- create_timestamp_file()
 pf_files <- create_package_function("test-tag", "sportsdataverse::load_parity_frame()")

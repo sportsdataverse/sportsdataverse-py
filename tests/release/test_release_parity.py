@@ -184,6 +184,59 @@ def test_rds_byte_golden(tmp_path):
     assert got[14:] == expected[14:]
 
 
+def test_rds_class_byte_golden(tmp_path):
+    """The Python writer reproduces R's saveRDS bytes for a LEAGUE-CLASSED frame.
+
+    ``rds_golden_classed.rds`` is what the real producer chain emits:
+    ``hoopR:::make_hoopR_data()`` stamps the class + ``hoopR_*`` attrs, then
+    ``sportsdataverse_save()`` appends its own pair -- the attribute order on
+    every published release asset.
+
+    The class is load-bearing, not cosmetic: hoopR/wehoop register S3 methods
+    on it (``print.hoopR_data``), so an rds written without it prints
+    differently for every downstream user.
+    """
+    coerced = r_parity_frame().with_columns(
+        pl.col("season").str.strip_chars().cast(pl.Float64).cast(pl.Int32),
+        pl.col("week").cast(pl.Int32),
+        # test_df's game_id carries R's L suffix -- integer, not double
+        pl.col("game_id").cast(pl.Int32),
+    )
+    ts = datetime(2026, 7, 12, 14, 0, 0, tzinfo=timezone.utc)
+    out = tmp_path / "py_classed_check.rds"
+    write_rds(
+        coerced,
+        out,
+        cls=["hoopR_data", "tbl_df", "tbl", "data.table", "data.frame"],
+        attributes={
+            "hoopR_timestamp": ts,
+            "hoopR_type": "ESPN NBA parity from hoopR data repository",
+            "sportsdataverse_type": "Parity fixture frame",
+            "sportsdataverse_timestamp": ts,
+        },
+        compress=False,
+    )
+    expected = (FIXTURE_DIR / "rds_golden_classed.rds").read_bytes()
+    assert out.read_bytes()[14:] == expected[14:]
+
+
+def test_rds_default_class_is_unchanged(tmp_path):
+    """Omitting ``cls`` must still emit a bare data.frame -- the pre-existing
+    byte-golden depends on it, so the new arg cannot shift the default."""
+    out = tmp_path / "default.rds"
+    write_rds(pl.DataFrame({"a": [1]}), out, compress=False)
+    assert b"data.frame" in out.read_bytes()
+    assert b"hoopR_data" not in out.read_bytes()
+
+
+@pytest.mark.parametrize("bad", [[], ["hoopR_data"], ["data.frame", "tbl_df"]])
+def test_rds_rejects_class_without_trailing_data_frame(tmp_path, bad):
+    """R only dispatches data.frame methods when data.frame closes the chain;
+    an rds that loses it stops behaving like a data.frame on read."""
+    with pytest.raises(ValueError):
+        write_rds(pl.DataFrame({"a": [1]}), tmp_path / "x.rds", cls=bad)
+
+
 def test_rds_rejects_nested_columns(tmp_path):
     nested = pl.DataFrame({"plays": [[1, 2], [3]]})
     with pytest.raises(ValueError, match="nested"):
