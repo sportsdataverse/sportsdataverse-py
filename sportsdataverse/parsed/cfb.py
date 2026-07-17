@@ -402,6 +402,7 @@ from sportsdataverse.cfb import load_cfb_player_box as load_cfb_player_box  # no
 from sportsdataverse.cfb import load_cfb_power_index as load_cfb_power_index  # noqa: F401
 from sportsdataverse.cfb import load_cfb_ratings as load_cfb_ratings  # noqa: F401
 from sportsdataverse.cfb import load_cfb_receiving as load_cfb_receiving  # noqa: F401
+from sportsdataverse.cfb import load_cfb_recruiting_proj as load_cfb_recruiting_proj  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters as load_cfb_rosters  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rosters_crosswalk as load_cfb_rosters_crosswalk  # noqa: F401
 from sportsdataverse.cfb import load_cfb_rushing as load_cfb_rushing  # noqa: F401
@@ -631,6 +632,7 @@ __all__ = [
     "load_cfb_power_index",
     "load_cfb_ratings",
     "load_cfb_receiving",
+    "load_cfb_recruiting_proj",
     "load_cfb_rosters",
     "load_cfb_rosters_crosswalk",
     "load_cfb_rushing",

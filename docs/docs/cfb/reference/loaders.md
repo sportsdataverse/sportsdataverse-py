@@ -16,6 +16,7 @@ flowchart LR
 |---|---|---|
 | `load_cfb_pbp` | [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_pbp) | — |
 | `load_cfb_ratings` | [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings) | — |
+| `load_cfb_recruiting_proj` | [cfb_recruiting_proj](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruiting_proj) | — |
 | `load_cfb_rosters` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_schedule` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
 | `load_cfb_team_info` | [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) | — |
@@ -445,6 +446,23 @@ Release: [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 
 ```python
 load_cfb_ratings(seasons=2024)
+```
+
+## `load_cfb_recruiting_proj`
+
+Release: [cfb_recruiting_proj](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruiting_proj) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_recruiting_proj/cfb_recruiting_proj_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int64 |
+| `team_id` | String |
+| `pred_wins` | Float64 |
+| `pred_margin` | Float64 |
+| `pred_net_epa` | Float64 |
+
+```python
+load_cfb_recruiting_proj(seasons=2024)
 ```
 
 ## `load_cfb_rosters`

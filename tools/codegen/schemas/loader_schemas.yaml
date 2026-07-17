@@ -2083,6 +2083,17 @@ load_cfb_receiving:
   type: Float64
 - name: fbs_class
   type: String
+load_cfb_recruiting_proj:
+- name: season
+  type: Int64
+- name: team_id
+  type: String
+- name: pred_wins
+  type: Float64
+- name: pred_margin
+  type: Float64
+- name: pred_net_epa
+  type: Float64
 load_cfb_rosters:
 - name: athlete_id
   type: String
