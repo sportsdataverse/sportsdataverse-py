@@ -260,3 +260,41 @@ def test_mbb_team_ratings_empty_seasons(monkeypatch):
     out = mod.mbb_team_ratings([2024])
     assert out.columns == _RATINGS_COLUMNS
     assert out.height == 0
+
+
+def test_mbb_team_ratings_missing_season_columnless_frames(monkeypatch):
+    """A season with no released boxscore asset comes back COLUMN-LESS from the
+    loader (it warns "no data for season(s) [...] (skipped)" and returns a frame
+    with no columns at all -- e.g. WBB 2003). This crashed raw_game_efficiency
+    with ColumnNotFoundError instead of honoring the documented
+    empty-in/empty-out contract."""
+    import importlib
+
+    mod = importlib.import_module("sportsdataverse.mbb.mbb_team_ratings")
+
+    sched = pl.DataFrame(
+        {
+            "game_id": ["G1"],
+            "season": [2002],
+            "date": [datetime.date(2002, 1, 1)],
+            "home_team_id": ["A"],
+            "away_team_id": ["B"],
+            "neutral_site": [False],
+        }
+    )
+    monkeypatch.setattr(mod, "load_mbb_schedule", lambda seasons: sched)
+    monkeypatch.setattr(mod, "load_mbb_team_boxscore", lambda seasons: pl.DataFrame())
+
+    out = mod.mbb_team_ratings([2002])
+    assert out.columns == _RATINGS_COLUMNS
+    assert out.height == 0
+
+
+def test_raw_game_efficiency_columnless_inputs_return_typed_empty():
+    import importlib
+
+    mod = importlib.import_module("sportsdataverse.mbb.mbb_team_ratings")
+
+    out = raw_game_efficiency(pl.DataFrame(), pl.DataFrame())
+    assert out.height == 0
+    assert dict(out.schema) == dict(mod._EFF_SCHEMA)

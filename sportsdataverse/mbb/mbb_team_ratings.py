@@ -30,6 +30,31 @@ if TYPE_CHECKING:
     import pandas as pd
 
 
+_EFF_SCHEMA: dict[str, pl.DataType] = {
+    "game_id": pl.Utf8,
+    "season": pl.Int64,
+    "date": pl.Date,
+    "team_id": pl.Utf8,
+    "opp_team_id": pl.Utf8,
+    "is_home": pl.Boolean,
+    "neutral_site": pl.Boolean,
+    "poss": pl.Float64,
+    "off_eff": pl.Float64,
+    "def_eff": pl.Float64,
+}
+
+_BOX_REQUIRED = (
+    "game_id",
+    "team_id",
+    "field_goals_attempted",
+    "offensive_rebounds",
+    "turnovers",
+    "free_throws_attempted",
+    "team_score",
+)
+_SCHED_REQUIRED = ("game_id", "season", "date", "home_team_id", "away_team_id", "neutral_site")
+
+
 def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.DataFrame:
     """Per-team, per-game possessions + raw offensive/defensive efficiency.
 
@@ -62,6 +87,17 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
             from sportsdataverse.mbb.mbb_team_ratings import raw_game_efficiency
             eff = raw_game_efficiency(load_mbb_schedule([2024]), load_mbb_team_boxscore([2024]))
     """
+    # A season with no released boxscore asset comes back from the loader as a
+    # COLUMN-LESS empty frame (e.g. WBB 2003) -- selecting game_id off it
+    # raises ColumnNotFoundError instead of honoring the documented
+    # empty-in/empty-out contract. Guard on emptiness AND required columns.
+    if (
+        schedule.height == 0
+        or team_box.height == 0
+        or any(c not in team_box.columns for c in _BOX_REQUIRED)
+        or any(c not in schedule.columns for c in _SCHED_REQUIRED)
+    ):
+        return pl.DataFrame(schema=_EFF_SCHEMA)
     box = team_box.select(
         pl.col("game_id").cast(pl.Utf8),
         pl.col("team_id").cast(pl.Utf8),
