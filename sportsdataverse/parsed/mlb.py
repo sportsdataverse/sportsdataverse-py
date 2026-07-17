@@ -287,11 +287,17 @@ from sportsdataverse.mlb import espn_mlb_teams as espn_mlb_teams  # noqa: F401
 from sportsdataverse.mlb import event_run_value as event_run_value  # noqa: F401
 from sportsdataverse.mlb import fit_zone_model as fit_zone_model  # noqa: F401
 from sportsdataverse.mlb import leverage_index as leverage_index  # noqa: F401
-from sportsdataverse.mlb import load_mlb_pbp as load_mlb_pbp  # noqa: F401
-from sportsdataverse.mlb import load_mlb_player_boxscore as load_mlb_player_boxscore  # noqa: F401
-from sportsdataverse.mlb import load_mlb_rosters as load_mlb_rosters  # noqa: F401
-from sportsdataverse.mlb import load_mlb_schedule as load_mlb_schedule  # noqa: F401
-from sportsdataverse.mlb import load_mlb_team_boxscore as load_mlb_team_boxscore  # noqa: F401
+from sportsdataverse.mlb import load_mlb_batter_projection as load_mlb_batter_projection  # noqa: F401
+from sportsdataverse.mlb import load_mlb_catcher_framing as load_mlb_catcher_framing  # noqa: F401
+from sportsdataverse.mlb import load_mlb_command_plus as load_mlb_command_plus  # noqa: F401
+from sportsdataverse.mlb import load_mlb_expected_hr as load_mlb_expected_hr  # noqa: F401
+from sportsdataverse.mlb import load_mlb_expected_stats as load_mlb_expected_stats  # noqa: F401
+from sportsdataverse.mlb import load_mlb_oaa as load_mlb_oaa  # noqa: F401
+from sportsdataverse.mlb import load_mlb_re24_matrix as load_mlb_re24_matrix  # noqa: F401
+from sportsdataverse.mlb import load_mlb_stuff_plus as load_mlb_stuff_plus  # noqa: F401
+from sportsdataverse.mlb import load_mlb_we_table as load_mlb_we_table  # noqa: F401
+from sportsdataverse.mlb import load_mlb_wpa as load_mlb_wpa  # noqa: F401
+from sportsdataverse.mlb import load_mlb_xera as load_mlb_xera  # noqa: F401
 from sportsdataverse.mlb import mae as mae  # noqa: F401
 from sportsdataverse.mlb import mlb_attendance as mlb_attendance  # noqa: F401
 from sportsdataverse.mlb import mlb_baserunning_value as mlb_baserunning_value  # noqa: F401
@@ -506,11 +512,17 @@ __all__ = [
     "fox_mlb_team_roster",
     "fox_mlb_team_stats",
     "leverage_index",
-    "load_mlb_pbp",
-    "load_mlb_player_boxscore",
-    "load_mlb_rosters",
-    "load_mlb_schedule",
-    "load_mlb_team_boxscore",
+    "load_mlb_batter_projection",
+    "load_mlb_catcher_framing",
+    "load_mlb_command_plus",
+    "load_mlb_expected_hr",
+    "load_mlb_expected_stats",
+    "load_mlb_oaa",
+    "load_mlb_re24_matrix",
+    "load_mlb_stuff_plus",
+    "load_mlb_we_table",
+    "load_mlb_wpa",
+    "load_mlb_xera",
     "mae",
     "mlb_all_star_ballot",
     "mlb_all_star_final_vote",
