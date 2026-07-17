@@ -157,9 +157,7 @@ def nba_rookie_projection(
         # avail.season is the debut END year; map it back to draft_year
         # (start year) = season - 1 so the join below lines up with
         # draft_board's start-year draft_year convention.
-        avail_map = (
-            avail.with_columns((pl.col("season") - 1).alias("draft_year")) if not avail.is_empty() else None
-        )
+        avail_map = avail.with_columns((pl.col("season") - 1).alias("draft_year")) if not avail.is_empty() else None
 
     out = draft_board.with_columns(
         (pl.col("proj_career_value") * rookie_fraction * (rel_rookie / rel_peak)).alias("_base_rookie"),
