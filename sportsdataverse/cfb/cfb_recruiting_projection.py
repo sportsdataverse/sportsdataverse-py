@@ -40,17 +40,29 @@ _PROJECTION_SCHEMA: dict[str, pl.PolarsDataType] = {
 
 
 def _crosswalk_names_to_espn(seasons: list[int]) -> pl.DataFrame:
-    """``norm_key`` (school+mascot, normalized) -> ESPN team id (Utf8)."""
-    xw = load_cfb_teams_crosswalk(max(seasons))
-    assert isinstance(xw, pl.DataFrame)
-    return (
-        xw.select(
-            pl.col("norm_key").cast(pl.Utf8),
-            pl.col("espn_team_id").cast(pl.Int64).cast(pl.Utf8).alias("espn_id"),
-        )
-        .drop_nulls()
-        .unique(subset=["norm_key"])
-    )
+    """``norm_key`` (school+mascot, normalized) -> ESPN team id (Utf8).
+
+    The crosswalk asset trails the calendar (capped at 2025 while a 2026
+    projection is already meaningful after early signing), and a missing
+    season comes back from the loader as a column-less empty frame -- so walk
+    back season by season to the newest crosswalk that exists (team name ->
+    ESPN id identity barely changes year to year) instead of crashing on the
+    select. All-missing degrades to a typed empty per the empty-in/empty-out
+    convention.
+    """
+    for season in range(max(seasons), 2013, -1):  # crosswalk asset floor is 2014
+        xw = load_cfb_teams_crosswalk(season)
+        assert isinstance(xw, pl.DataFrame)
+        if xw.height > 0 and "norm_key" in xw.columns:
+            return (
+                xw.select(
+                    pl.col("norm_key").cast(pl.Utf8),
+                    pl.col("espn_team_id").cast(pl.Int64).cast(pl.Utf8).alias("espn_id"),
+                )
+                .drop_nulls()
+                .unique(subset=["norm_key"])
+            )
+    return pl.DataFrame(schema={"norm_key": pl.Utf8, "espn_id": pl.Utf8})
 
 
 def _load_talent(seasons: list[int], division: str) -> pl.DataFrame:

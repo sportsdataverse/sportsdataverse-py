@@ -114,3 +114,31 @@ def test_projection_empty_history_returns_schema(monkeypatch) -> None:
     assert out.height == 0
     for col in ("season", "team_id", "pred_wins", "pred_margin"):
         assert col in out.columns
+
+
+def test_crosswalk_falls_back_to_newest_available_season(monkeypatch):
+    """The crosswalk asset trails the calendar (capped at 2025 while a 2026
+    projection is meaningful after early signing); a missing season comes back
+    COLUMN-LESS from the loader and used to crash the select. Walk back to the
+    newest crosswalk that exists instead."""
+    calls: list[int] = []
+
+    def fake_xw(season):
+        calls.append(season)
+        if season >= 2026:
+            return pl.DataFrame()  # the loader's missing-season shape
+        return pl.DataFrame({"norm_key": ["georgia bulldogs"], "espn_team_id": [61]})
+
+    monkeypatch.setattr(_mod, "load_cfb_teams_crosswalk", fake_xw)
+
+    xw = _mod._crosswalk_names_to_espn([2026])
+    assert calls == [2026, 2025]
+    assert xw["espn_id"].to_list() == ["61"]
+
+
+def test_crosswalk_all_seasons_missing_returns_typed_empty(monkeypatch):
+    monkeypatch.setattr(_mod, "load_cfb_teams_crosswalk", lambda season: pl.DataFrame())
+
+    xw = _mod._crosswalk_names_to_espn([2026])
+    assert xw.height == 0
+    assert xw.columns == ["norm_key", "espn_id"]
