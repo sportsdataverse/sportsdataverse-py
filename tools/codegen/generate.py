@@ -986,7 +986,7 @@ def render_loader_module(league: str, loaders, bases: dict) -> str:
 # loaders are generated; season-less loaders + module helpers that the loader template
 # can't express are preserved hand-written in {league}_loaders_extra.py residuals
 # (cfb: load_cfb_betting_lines + get_cfb_teams; nhl: nhl_teams).
-_GENERATED_LOADER_LEAGUES = {"cfb", "mbb", "nba", "nhl", "pwhl", "wbb", "wnba"}
+_GENERATED_LOADER_LEAGUES = {"cfb", "mbb", "mlb", "nba", "nhl", "pwhl", "wbb", "wnba"}
 
 
 def _render_loaders_all() -> dict[str, str]:

@@ -309,6 +309,94 @@ loaders:
   min_season: 2006
   example_args:
     seasons: 2025
+- fn: load_mlb_re24_matrix
+  league: mlb
+  base: sdv_releases
+  url: mlb_game_state/mlb_re24_matrix_{season}.parquet
+  tag: mlb_game_state
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_we_table
+  league: mlb
+  base: sdv_releases
+  url: mlb_game_state/mlb_we_table_{season}.parquet
+  tag: mlb_game_state
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_wpa
+  league: mlb
+  base: sdv_releases
+  url: mlb_game_state/mlb_wpa_{season}.parquet
+  tag: mlb_game_state
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_expected_stats
+  league: mlb
+  base: sdv_releases
+  url: mlb_hitting_models/mlb_expected_stats_{season}.parquet
+  tag: mlb_hitting_models
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_expected_hr
+  league: mlb
+  base: sdv_releases
+  url: mlb_hitting_models/mlb_expected_hr_{season}.parquet
+  tag: mlb_hitting_models
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_batter_projection
+  league: mlb
+  base: sdv_releases
+  url: mlb_hitting_models/mlb_batter_projection_{season}.parquet
+  tag: mlb_hitting_models
+  min_season: 2016
+  example_args:
+    seasons: 2024
+- fn: load_mlb_oaa
+  league: mlb
+  base: sdv_releases
+  url: mlb_fielding_models/mlb_oaa_{season}.parquet
+  tag: mlb_fielding_models
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_catcher_framing
+  league: mlb
+  base: sdv_releases
+  url: mlb_fielding_models/mlb_catcher_framing_{season}.parquet
+  tag: mlb_fielding_models
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_xera
+  league: mlb
+  base: sdv_releases
+  url: mlb_pitching_models/mlb_xera_{season}.parquet
+  tag: mlb_pitching_models
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_stuff_plus
+  league: mlb
+  base: sdv_releases
+  url: mlb_pitching_models/mlb_stuff_plus_{season}.parquet
+  tag: mlb_pitching_models
+  min_season: 2015
+  example_args:
+    seasons: 2024
+- fn: load_mlb_command_plus
+  league: mlb
+  base: sdv_releases
+  url: mlb_pitching_models/mlb_command_plus_{season}.parquet
+  tag: mlb_pitching_models
+  min_season: 2015
+  example_args:
+    seasons: 2024
 - fn: load_nba_pbp
   league: nba
   base: sdv_releases

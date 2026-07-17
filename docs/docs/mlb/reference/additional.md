@@ -299,67 +299,6 @@ reg.group_by("status_type_description").len().sort("len", descending=True)
 espn_mlb_schedule(dates=20240328, return_as_pandas=True).head()
 ```
 
-## Dataset loaders
-
-### `load_mlb_pbp(seasons: 'List[int]', return_as_pandas: 'bool' = False)` {#load_mlb_pbp}
-
-load_mlb_pbp - planned: load pre-built season-level MLB play-by-play.
-
-TODO: Implement once an MLB-data release pipeline is in place.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-### `load_mlb_player_boxscore(seasons: 'List[int]', return_as_pandas: 'bool' = False)` {#load_mlb_player_boxscore}
-
-load_mlb_player_boxscore - planned: load pre-built season-level MLB player boxscores.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-### `load_mlb_rosters(seasons: 'List[int]', return_as_pandas: 'bool' = False)` {#load_mlb_rosters}
-
-load_mlb_rosters - planned: load pre-built season-level MLB rosters.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-### `load_mlb_schedule(seasons: 'List[int]', return_as_pandas: 'bool' = False)` {#load_mlb_schedule}
-
-load_mlb_schedule - planned: load pre-built season-level MLB schedule.
-
-TODO: Implement once an MLB-data release pipeline is in place.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-### `load_mlb_team_boxscore(seasons: 'List[int]', return_as_pandas: 'bool' = False)` {#load_mlb_team_boxscore}
-
-load_mlb_team_boxscore - planned: load pre-built season-level MLB team boxscores.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
 ## Utilities & helpers
 
 ### `most_recent_mlb_season() -> 'int'` {#most_recent_mlb_season}
@@ -3317,35 +3256,4 @@ from sportsdataverse.mlb.mlb_pitch_fatigue import tto_penalty_table
 feats = add_sequence_features(pitch_features(raw_pitches))
 out = tto_penalty_table(feats)
 print(out.sort("times_through_order"))
-```
-
-### `x_era(pitches: 'pl.DataFrame', season: 'int', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#x_era}
-
-Parametric xERA from Statcast expected wOBA allowed.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pitches` | `DataFrame` |  | Raw (or feature-substrate) pitch frame carrying `pitcher` and `estimated_woba_using_speedangle`. |
-| `season` | `int` |  | Season year (selects the league baseline via `sportsdataverse.mlb.mlb_pitching_constants.get_baselines`). |
-| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
-
-**Returns**
-
-`pitcher`, `season`, `x_woba`, `x_era`. Empty input returns a zero-row frame with this schema.
-
-| col_name | type | description |
-|---|---|---|
-| `pitcher` | integer | MLB Advanced Media (MLBAM) id for the pitcher. |
-| `season` | integer | MLB season (4-digit start year). |
-| `x_woba` | double | Mean estimated_woba_using_speedangle allowed on batted balls. |
-| `x_era` | double | Parametric xERA converted from x_woba via the season's league baselines. |
-
-**Example**
-
-```python
-from sportsdataverse.mlb.mlb_pitch_era import x_era
-out = x_era(raw_pitches, 2024)
-print(out.sort("x_era").head())
 ```

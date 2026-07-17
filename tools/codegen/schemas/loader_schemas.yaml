@@ -4098,6 +4098,131 @@ load_nba_officials:
   type: Int32
 - name: official_order
   type: Int32
+load_mlb_re24_matrix:
+- name: base_state
+  type: String
+- name: outs
+  type: Int64
+- name: re
+  type: Float64
+- name: n
+  type: UInt32
+- name: season
+  type: Int64
+load_mlb_we_table:
+- name: inning_capped
+  type: Int64
+- name: half
+  type: String
+- name: base_state
+  type: String
+- name: outs_start
+  type: Int64
+- name: score_diff_bucket
+  type: Int64
+- name: home_win_exp
+  type: Float64
+- name: n
+  type: UInt32
+- name: season
+  type: Int64
+load_mlb_wpa:
+- name: game_id
+  type: String
+- name: at_bat_index
+  type: Int64
+- name: wpa
+  type: Float64
+- name: season
+  type: Int64
+load_mlb_expected_stats:
+- name: batter
+  type: Int64
+- name: season
+  type: Int64
+- name: pa
+  type: Int64
+- name: ab
+  type: Int64
+- name: xwoba
+  type: Float64
+- name: xba
+  type: Float64
+- name: xslg
+  type: Float64
+load_mlb_expected_hr:
+- name: batter
+  type: Int64
+- name: season
+  type: Int64
+- name: hr
+  type: Int64
+- name: xhr_neutral
+  type: Float64
+- name: xhr_park_adj
+  type: Float64
+- name: hr_above_expected
+  type: Float64
+load_mlb_batter_projection:
+- name: batter
+  type: Int64
+- name: age
+  type: Int64
+- name: proj_xwoba
+  type: Float64
+- name: proj_pa
+  type: Float64
+load_mlb_oaa:
+- name: fielder_id
+  type: String
+- name: position
+  type: Int64
+- name: opportunities
+  type: UInt32
+- name: oaa
+  type: Float64
+- name: season
+  type: Int64
+load_mlb_catcher_framing:
+- name: catcher_id
+  type: String
+- name: takes
+  type: UInt32
+- name: framing_runs
+  type: Float64
+- name: strikes_gained
+  type: Float64
+- name: season
+  type: Int64
+load_mlb_xera:
+- name: pitcher
+  type: Int64
+- name: season
+  type: Int64
+- name: x_woba
+  type: Float64
+- name: x_era
+  type: Float64
+load_mlb_stuff_plus:
+- name: pitcher
+  type: Int64
+- name: pitch_type
+  type: String
+- name: stuff_rv_hat
+  type: Float64
+- name: stuff_plus
+  type: Float64
+- name: season
+  type: Int64
+load_mlb_command_plus:
+- name: pitcher
+  type: Int64
+- name: location_rv_hat
+  type: Float64
+- name: command_plus
+  type: Float64
+- name: season
+  type: Int64
 load_nba_pbp:
 - name: id
   type: Float64
