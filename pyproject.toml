@@ -140,6 +140,9 @@ all = [
     "scikit-learn>=1.0.0",
     "xgboost>=2.0.0",
     "playwright>=1.40",
+    # NCAA (stats.ncaa.org) browser transport -- anti-detect fork of Playwright
+    # that clears Akamai bm-verify; vanilla Playwright is flagged. See mbb_ncaa_fetch.
+    "patchright>=1.50",
 ]
 
 

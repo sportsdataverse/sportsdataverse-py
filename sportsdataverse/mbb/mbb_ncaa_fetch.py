@@ -66,18 +66,21 @@ game-detail pages, so there are two transports:
   clears the challenge, then serves the raw server HTML the Phase 5a-5e parsers
   consume. It runs fully headless (no window) on any host with a real GPU.
 
-**Why new-headless is the load-bearing detail.** Playwright's *default*
-``headless=True`` uses the old ``headless_shell`` binary, whose SwiftShader
-software-GPU WebGL renderer (``"Google SwiftShader"``) is a textbook Akamai
-headless tell -> edge-denied. ``--headless=new`` renders through the real
-GPU/ANGLE path, so that tell disappears and bm-verify passes. It is **not** the
-automation fingerprint -- vanilla Playwright (``navigator.webdriver`` + CDP
-leak intact) passes both headful and new-headless -- so anti-detect forks
-(patchright/nodriver) are unnecessary. Ceiling: a GPU-less headless CI box
-falls back to SwiftShader and is re-detected; run on a GPU instance / ``xvfb``
-+ real GPU, or a managed browser, there.
+**Three load-bearing details, all required together (re-established live 2026-07-16
+after Akamai tightened -- the earlier "anti-detect is unnecessary" note was
+FALSIFIED).** (1) **new-headless** (``--headless=new``) renders through the real
+GPU/ANGLE path; the default ``headless=True``/old ``headless_shell`` uses the
+SwiftShader software-GPU renderer (``"Google SwiftShader"``), a textbook Akamai
+tell. (2) **patchright, not vanilla Playwright** -- vanilla Playwright leaks
+``navigator.webdriver=true`` + the ``Runtime.enable`` CDP tell and gets
+*challenged*; patchright patches both. (3) **a real Chrome ``user_agent``** --
+new-headless otherwise reports ``HeadlessChrome`` in ``navigator.userAgent``, the
+single tell that broke every prior attempt. With all three + a **residential** IP
+(datacenter gets an instant edge 403 regardless of browser), bm-verify clears
+(proven: 10-game canary, real 100 KB+ pages, ~11 s/page warm). Ceiling: a GPU-less
+headless CI box falls back to SwiftShader and is re-detected; run on a real-GPU host.
 
-**Playwright stays an OPTIONAL import** (lazy, like ``curl_cffi``): importing
+**patchright stays an OPTIONAL import** (lazy, like ``curl_cffi``): importing
 this module never requires it; only :func:`playwright_transport` does, with a
 clear ``ImportError`` + install hint on first use. Game-id **discovery**
 (scoreboards / ``teams/{id}/game_by_game`` are JS-rendered, no server-side ids)
@@ -492,25 +495,25 @@ _RAW_FETCH_JS = (
 
 
 class _PlaywrightTransport:
-    """Stateful `FetchTransport` that drives a real Chromium (Playwright) to
-    clear the Akamai ``bm-verify`` challenge, then returns raw server HTML.
+    """Stateful `FetchTransport` that drives an anti-detect Chromium (patchright)
+    to clear the Akamai ``bm-verify`` challenge, then returns raw server HTML.
 
     **This is the suggested method for scraping stats.ncaa.org game-detail
     pages** (play-by-play / individual-stats / box-score), which sit behind an
     Akamai BotManager JS proof-of-work that ``curl_cffi`` cannot clear. Built
     via :func:`playwright_transport` and wired through
     :attr:`NcaaFetchConfig.transport` (or the :meth:`NcaaFetcher.with_browser`
-    convenience). Proven live 2026-07-07 -- see ``dev/phase5f-live-proof.md``.
+    convenience). Re-proven live 2026-07-16 (10-game canary PASS).
 
-    **Why new-headless (the load-bearing detail):** Chrome's *new* headless
-    (``--headless=new``) renders through the real GPU/ANGLE path, so its WebGL
-    renderer string is a normal GPU -- not the ``"Google SwiftShader"`` of
-    Playwright's default old-``headless_shell``, which Akamai flags. So this
-    runs fully headless (no visible window) on any host with a real GPU. It is
-    NOT the automation fingerprint: vanilla Playwright (``navigator.webdriver``
-    + CDP leak intact) passes, so no anti-detect fork is needed. Caveat: a
-    GPU-less headless CI box falls back to SwiftShader and is re-detected --
-    there, run on a GPU instance / ``xvfb`` + real GPU, or a managed browser.
+    **Three tells must ALL be neutralized** (see the module docstring): (1)
+    **new-headless** (``--headless=new``) → real GPU/ANGLE, not the
+    ``"Google SwiftShader"`` of old ``headless_shell``; (2) **patchright** patches
+    ``navigator.webdriver`` + the ``Runtime.enable`` CDP leak that get *vanilla*
+    Playwright challenged; (3) a **real Chrome ``user_agent``** (new-headless
+    leaks ``HeadlessChrome`` otherwise). Plus a **residential** proxy -- a
+    datacenter IP gets an instant edge 403 no matter how clean the browser is.
+    Caveat: a GPU-less headless CI box falls back to SwiftShader and is
+    re-detected -- run on a real-GPU host.
 
     Reuses ONE browser across the whole session: the first fetch navigates to
     mint the ``_abck`` cookie, every fetch (including the first) reads raw
@@ -523,9 +526,9 @@ class _PlaywrightTransport:
         *,
         headless_new: bool = True,
         challenge_wait_ms: int = 8000,
-        nav_timeout_ms: int = 30000,
+        nav_timeout_ms: int = 45000,
         user_agent: Optional[str] = None,
-        solve_attempts: int = 2,
+        solve_attempts: int = 3,
     ) -> None:
         self.headless_new = headless_new
         self.challenge_wait_ms = challenge_wait_ms
@@ -537,9 +540,13 @@ class _PlaywrightTransport:
         # is not passing the sensor, rotating to a fresh proxy (fresh browser,
         # fresh sensor run) recovers far faster than re-waiting on the same one.
         self.solve_attempts = max(1, solve_attempts)
+        # A REAL Chrome UA is load-bearing: new-headless otherwise reports
+        # "HeadlessChrome" in navigator.userAgent, and that single tell is what made
+        # every pre-2026-07-16 solve attempt fail. Overriding it (any real Chrome UA)
+        # is half the fix; anti-detect patchright (webdriver=false) is the other half.
         self.user_agent = user_agent or (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+            "(KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
         )
         # Any (not object): these hold optional-import Playwright handles; the
         # module never imports playwright at type-check time.
@@ -564,33 +571,46 @@ class _PlaywrightTransport:
             logger.info("browser proxy rotated -> %s (relaunching)", _redact_proxy_url(proxy))
             self.close()
         try:
-            from playwright.sync_api import sync_playwright
-        except ImportError as exc:  # pragma: no cover - exercised only without playwright
+            from patchright.sync_api import sync_playwright
+        except ImportError as exc:  # pragma: no cover - exercised only without patchright
             raise ImportError(
-                "The NCAA browser transport requires Playwright (game-detail pages "
-                "sit behind an Akamai bm-verify JS challenge). Install with: "
-                "pip install playwright && playwright install chromium. "
-                "Playwright is intentionally NOT a hard sportsdataverse dependency."
+                "The NCAA browser transport requires patchright -- an anti-detect "
+                "Playwright fork. Game-detail pages sit behind Akamai bm-verify, and "
+                "vanilla Playwright's navigator.webdriver=true is flagged (only "
+                "patchright, which patches that + the Runtime.enable CDP leak, clears "
+                "it). Install with: pip install patchright && patchright install "
+                "chromium. patchright is intentionally NOT a hard sportsdataverse "
+                "dependency."
             ) from exc
         import atexit
+        import tempfile
 
         self._pw = sync_playwright().start()
-        launch_kwargs: "dict[str, object]" = (
+        # launch_persistent_context (not launch + new_context) is the more stealthy
+        # path patchright recommends. new-headless renders through the real GPU/ANGLE
+        # (not the SwiftShader tell). The user_agent override is load-bearing (see
+        # __init__). Proven live 2026-07-16: this exact shape clears bm-verify where
+        # vanilla Playwright and a leaky-UA browser both failed.
+        launch_kwargs: "dict[str, object]" = {
+            "user_data_dir": tempfile.mkdtemp(prefix="ncaa_pw_"),
+            "user_agent": self.user_agent,
+            "no_viewport": True,
+        }
+        launch_kwargs.update(
             {"headless": False, "args": ["--headless=new"]} if self.headless_new else {"headless": True}
         )
         proxy = proxies.get("http") or proxies.get("https")
-        if proxy:  # honor a configured (residential) proxy; datacenter IPs defeat bm-verify
+        if proxy:  # honor a configured RESIDENTIAL proxy; datacenter IPs get an edge 403
             parts = urlsplit(proxy)
             launch_kwargs["proxy"] = {
                 "server": f"{parts.scheme}://{parts.hostname}:{parts.port}",
                 **({"username": parts.username} if parts.username else {}),
                 **({"password": parts.password} if parts.password else {}),
             }
-        self._browser = self._pw.chromium.launch(**launch_kwargs)
-        ctx = self._browser.new_context(
-            user_agent=self.user_agent, locale="en-US", viewport={"width": 1366, "height": 900}
-        )
-        self._page = ctx.new_page()
+        # launch_persistent_context returns a BrowserContext (closeable) -- kept in
+        # self._browser so close() works unchanged.
+        self._browser = self._pw.chromium.launch_persistent_context(**launch_kwargs)
+        self._page = self._browser.pages[0] if self._browser.pages else self._browser.new_page()
         self._current_proxy = proxy
         atexit.register(self.close)
 
@@ -663,9 +683,9 @@ def playwright_transport(
     *,
     headless_new: bool = True,
     challenge_wait_ms: int = 8000,
-    nav_timeout_ms: int = 30000,
+    nav_timeout_ms: int = 45000,
     user_agent: Optional[str] = None,
-    solve_attempts: int = 2,
+    solve_attempts: int = 3,
 ) -> "_PlaywrightTransport":
     """Build the **suggested** stats.ncaa.org game-detail scraping transport.
 
