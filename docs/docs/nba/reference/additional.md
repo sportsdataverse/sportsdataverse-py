@@ -2140,7 +2140,7 @@ reports it as a separate column too).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season (start year, e.g. `2019`) or list of seasons. |
+| `seasons` | `int \| list[int]` |  | A season (end year, e.g. `2020`) or list of seasons. |
 | `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
 | `gleague_bridge` | `bool` | `False` | When `True` (and `league != "gleague"`), also pulls each season's G-League (`league_id="20"`) bulk GP as a development-outcome bridge feature before scoring. Best-effort: gracefully absent (never raises) when the G-League bulk call returns no rows for a season; the returned schema is unaffected either way since the bridge column isn't part of the bundled artifact's scored features. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
