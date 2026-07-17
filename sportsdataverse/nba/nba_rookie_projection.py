@@ -140,11 +140,26 @@ def nba_rookie_projection(
     rel_soph = _rel(curve, _ROOKIE_AGE + 1)
     rel_peak = 1.0
 
-    seasons = [int(y) for y in draft_board["draft_year"].unique().to_list()]
-    avail = nba_availability(seasons, league=league)
-    # avail is keyed by (player_id, season); rookie-season availability uses
-    # the player's draft_year as the season key (their debut season).
-    avail_map = avail.rename({"season": "draft_year"}) if not avail.is_empty() else None
+    draft_years = [int(y) for y in draft_board["draft_year"].unique().to_list()]
+    if league == "wnba":
+        # WNBA seasons are single-year and were NOT flipped by the NBA
+        # season-end-year migration -- nba_availability(league="wnba") still
+        # takes/returns the season as-is, so draft_year is the season key
+        # directly (unshifted), same as before.
+        avail = nba_availability(draft_years, league=league)
+        avail_map = avail.rename({"season": "draft_year"}) if not avail.is_empty() else None
+    else:
+        # nba_availability now takes/returns the season END year (nba +
+        # gleague); a draft_year (start year, e.g. 2019) debuts the
+        # following season, whose end year is draft_year + 1 (2020).
+        debut_end_years = [y + 1 for y in draft_years]
+        avail = nba_availability(debut_end_years, league=league)
+        # avail.season is the debut END year; map it back to draft_year
+        # (start year) = season - 1 so the join below lines up with
+        # draft_board's start-year draft_year convention.
+        avail_map = (
+            avail.with_columns((pl.col("season") - 1).alias("draft_year")) if not avail.is_empty() else None
+        )
 
     out = draft_board.with_columns(
         (pl.col("proj_career_value") * rookie_fraction * (rel_rookie / rel_peak)).alias("_base_rookie"),
