@@ -529,10 +529,16 @@ class _PlaywrightTransport:
         nav_timeout_ms: int = 45000,
         user_agent: Optional[str] = None,
         solve_attempts: int = 3,
+        relaunch_backoff: float = 2.0,
     ) -> None:
         self.headless_new = headless_new
         self.challenge_wait_ms = challenge_wait_ms
         self.nav_timeout_ms = nav_timeout_ms
+        # Seconds to let a rotated-off context fully tear down before relaunching a
+        # new one. A proxy rotation relaunches only the browser CONTEXT (not the
+        # Playwright driver); rapid back-to-back relaunches with no settle crashed
+        # patchright's driver (EPIPE) during a whole-season backfill. See _ensure_page.
+        self.relaunch_backoff = max(0.0, relaunch_backoff)
         # How many times to (re-)run the bm-verify sensor before giving up and
         # letting the fetch layer rotate. The solve is PROVEN by the in-page
         # fetch, never assumed -- see __call__. Kept LOW on purpose: each
@@ -566,29 +572,34 @@ class _PlaywrightTransport:
         if self._page is not None:
             if proxy == self._current_proxy:
                 return
-            # The caller rotated the proxy. A live browser is pinned to its
-            # LAUNCH proxy, so reusing it would silently keep egressing from the
-            # old IP -- which is how one IP absorbed a whole backfill and got
-            # permanently banned while _proxy_idx "rotated" to no effect.
-            # Relaunch on the new IP (costs a fresh bm-verify solve).
-            logger.info("browser proxy rotated -> %s (relaunching)", _redact_proxy_url(proxy))
-            self.close()
-        try:
-            from patchright.sync_api import sync_playwright
-        except ImportError as exc:  # pragma: no cover - exercised only without patchright
-            raise ImportError(
-                "The NCAA browser transport requires patchright -- an anti-detect "
-                "Playwright fork. Game-detail pages sit behind Akamai bm-verify, and "
-                "vanilla Playwright's navigator.webdriver=true is flagged (only "
-                "patchright, which patches that + the Runtime.enable CDP leak, clears "
-                "it). Install with: pip install patchright && patchright install "
-                "chromium. patchright is intentionally NOT a hard sportsdataverse "
-                "dependency."
-            ) from exc
-        import atexit
+            # The caller rotated the proxy. A live context is pinned to its LAUNCH
+            # proxy, so reusing it would keep egressing from the old IP. Close only
+            # the CONTEXT (keeping the Playwright driver alive), let it settle, then
+            # relaunch on the new IP -- stop/starting the whole driver per rotation
+            # crashed patchright (EPIPE) under a backfill's many rotations.
+            logger.info("browser proxy rotated -> %s (relaunching context)", _redact_proxy_url(proxy))
+            self._close_context()
+            if self.relaunch_backoff:
+                time.sleep(self.relaunch_backoff)
+        if self._pw is None:  # start the Playwright DRIVER once; reuse across rotations
+            try:
+                from patchright.sync_api import sync_playwright
+            except ImportError as exc:  # pragma: no cover - exercised only without patchright
+                raise ImportError(
+                    "The NCAA browser transport requires patchright -- an anti-detect "
+                    "Playwright fork. Game-detail pages sit behind Akamai bm-verify, and "
+                    "vanilla Playwright's navigator.webdriver=true is flagged (only "
+                    "patchright, which patches that + the Runtime.enable CDP leak, clears "
+                    "it). Install with: pip install patchright && patchright install "
+                    "chromium. patchright is intentionally NOT a hard sportsdataverse "
+                    "dependency."
+                ) from exc
+            import atexit
+
+            self._pw = sync_playwright().start()
+            atexit.register(self.close)
         import tempfile
 
-        self._pw = sync_playwright().start()
         # launch_persistent_context (not launch + new_context) is the more stealthy
         # path patchright recommends. new-headless renders through the real GPU/ANGLE
         # (not the SwiftShader tell). The user_agent override is load-bearing (see
@@ -619,7 +630,26 @@ class _PlaywrightTransport:
         self._browser = self._pw.chromium.launch_persistent_context(**launch_kwargs)
         self._page = self._browser.pages[0] if self._browser.pages else self._browser.new_page()
         self._current_proxy = proxy
-        atexit.register(self.close)
+
+    def _close_context(self) -> None:
+        """Close ONLY the browser context + its profile dir, keeping the Playwright
+        DRIVER (``self._pw``) alive so a proxy rotation relaunches just the context.
+        Repeatedly stop/starting the driver process is what crashed patchright
+        (EPIPE) mid-backfill."""
+        try:
+            if self._browser is not None:
+                self._browser.close()
+        except Exception:  # noqa: BLE001 - best-effort teardown
+            pass
+        if self._temp_dir is not None:
+            try:
+                self._temp_dir.cleanup()
+            except Exception:  # noqa: BLE001 - best-effort; a lingering file lock may defer it
+                pass
+            self._temp_dir = None
+        self._browser = self._page = None
+        self._challenge_solved = False
+        self._current_proxy = None
 
     def _solve_challenge(self, url: str) -> None:
         """Run a real navigation so the bm-verify sensor executes and mints ``_abck``.
@@ -668,22 +698,15 @@ class _PlaywrightTransport:
         )
 
     def close(self) -> None:
-        """Stop the browser + Playwright and remove the profile dir. Idempotent."""
-        for obj, meth in ((self._browser, "close"), (self._pw, "stop")):
-            try:
-                if obj is not None:
-                    getattr(obj, meth)()
-            except Exception:  # noqa: BLE001 - best-effort teardown
-                pass
-        if self._temp_dir is not None:
-            try:
-                self._temp_dir.cleanup()  # remove the browser profile dir
-            except Exception:  # noqa: BLE001 - best-effort; a lingering file lock may defer it
-                pass
-            self._temp_dir = None
-        self._browser = self._pw = self._page = None
-        self._challenge_solved = False
-        self._current_proxy = None
+        """Full teardown: close the context, stop the Playwright driver, remove the
+        profile dir. Idempotent."""
+        self._close_context()  # context + temp dir + solved/proxy state
+        try:
+            if self._pw is not None:
+                self._pw.stop()
+        except Exception:  # noqa: BLE001 - best-effort teardown
+            pass
+        self._pw = None
 
     def __enter__(self) -> "_PlaywrightTransport":
         return self
@@ -699,6 +722,7 @@ def playwright_transport(
     nav_timeout_ms: int = 45000,
     user_agent: Optional[str] = None,
     solve_attempts: int = 3,
+    relaunch_backoff: float = 2.0,
 ) -> "_PlaywrightTransport":
     """Build the **suggested** stats.ncaa.org game-detail scraping transport.
 
@@ -737,6 +761,7 @@ def playwright_transport(
         nav_timeout_ms=nav_timeout_ms,
         user_agent=user_agent,
         solve_attempts=solve_attempts,
+        relaunch_backoff=relaunch_backoff,
     )
 
 

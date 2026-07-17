@@ -313,26 +313,48 @@ class _StopBeforeLaunch(Exception):
     pass
 
 
-def test_browser_transport_relaunches_when_the_proxy_rotates(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Playwright binds the proxy at LAUNCH. _ensure_page used to early-return
-    whenever a page existed, so the browser kept egressing from its first IP
-    forever while the fetcher 'rotated' -- the bug that burned one IP and
-    stalled the backfill at 38%."""
+def test_browser_transport_relaunches_context_when_the_proxy_rotates(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Playwright binds the proxy at LAUNCH. A rotation must relaunch the CONTEXT
+    (not silently reuse proxy A -- the bug that burned one IP and stalled the
+    backfill at 38%). It closes only the context, NOT the driver: stop/starting the
+    driver per rotation crashed patchright (EPIPE)."""
     t = playwright_transport()
-    t._page = object()  # pretend a live browser on proxy A
+    t._page = object()  # pretend a live context on proxy A
     t._current_proxy = _POOL[0]
 
     def _boom() -> None:
-        raise _StopBeforeLaunch  # stand in for the (real) relaunch
+        raise _StopBeforeLaunch  # stand in for the (real) context relaunch
 
-    monkeypatch.setattr(t, "close", _boom)
+    monkeypatch.setattr(t, "_close_context", _boom)
 
     # Same proxy -> reuse, no relaunch.
     t._ensure_page({"http": _POOL[0], "https": _POOL[0]})
 
-    # Different proxy -> MUST close/relaunch rather than silently reuse proxy A.
+    # Different proxy -> MUST close the CONTEXT + relaunch, not reuse proxy A.
     with pytest.raises(_StopBeforeLaunch):
         t._ensure_page({"http": _POOL[1], "https": _POOL[1]})
+
+
+def test_rotation_uses_close_context_never_full_close(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The EPIPE fix: a rotation relaunches only the CONTEXT (``_close_context``);
+    it must NEVER call ``close()`` (which stops the Playwright driver). Stop/starting
+    the driver per rotation is what crashed patchright during a backfill."""
+    t = playwright_transport(relaunch_backoff=0.0)
+    t._page = object()
+    t._current_proxy = _POOL[0]
+    calls: "list[str]" = []
+    monkeypatch.setattr(t, "close", lambda: calls.append("close"))
+
+    def _ctx() -> None:
+        calls.append("_close_context")
+        raise _StopBeforeLaunch  # stop before the real (browser-launching) relaunch
+
+    monkeypatch.setattr(t, "_close_context", _ctx)
+    with pytest.raises(_StopBeforeLaunch):
+        t._ensure_page({"http": _POOL[1], "https": _POOL[1]})
+    assert calls == ["_close_context"]  # context closed; full close()/driver-stop NOT called
 
 
 # --- the wbb shim must inherit all of the above, by reference ---------------
