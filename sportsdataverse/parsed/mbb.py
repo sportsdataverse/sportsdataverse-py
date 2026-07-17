@@ -376,6 +376,8 @@ from sportsdataverse.mbb import load_mbb_officials as load_mbb_officials  # noqa
 from sportsdataverse.mbb import load_mbb_pbp as load_mbb_pbp  # noqa: F401
 from sportsdataverse.mbb import load_mbb_player_boxscore as load_mbb_player_boxscore  # noqa: F401
 from sportsdataverse.mbb import load_mbb_player_season_stats as load_mbb_player_season_stats  # noqa: F401
+from sportsdataverse.mbb import load_mbb_player_value as load_mbb_player_value  # noqa: F401
+from sportsdataverse.mbb import load_mbb_ratings as load_mbb_ratings  # noqa: F401
 from sportsdataverse.mbb import load_mbb_rosters as load_mbb_rosters  # noqa: F401
 from sportsdataverse.mbb import load_mbb_schedule as load_mbb_schedule  # noqa: F401
 from sportsdataverse.mbb import load_mbb_shots as load_mbb_shots  # noqa: F401
@@ -893,6 +895,8 @@ __all__ = [
     "load_mbb_pbp",
     "load_mbb_player_boxscore",
     "load_mbb_player_season_stats",
+    "load_mbb_player_value",
+    "load_mbb_ratings",
     "load_mbb_rosters",
     "load_mbb_schedule",
     "load_mbb_shots",

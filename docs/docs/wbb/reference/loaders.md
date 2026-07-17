@@ -18,6 +18,8 @@ flowchart LR
 | `load_wbb_player_boxscore` | [espn_womens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_boxscores) | — |
 | `load_wbb_schedule` | [espn_womens_college_basketball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_schedules) | — |
 | `load_wbb_team_boxscore` | [espn_womens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores) | — |
+| `load_wbb_ratings` | [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_ratings) | — |
+| `load_wbb_player_value` | [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_player_value) | — |
 | `load_wbb_game_rosters` | [espn_womens_college_basketball_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_game_rosters) | — |
 | `load_wbb_officials` | [espn_womens_college_basketball_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_officials) | — |
 | `load_wbb_player_season_stats` | [espn_womens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_player_season_stats) | — |
@@ -311,6 +313,49 @@ Release: [espn_womens_college_basketball_team_boxscores](https://github.com/spor
 
 ```python
 load_wbb_team_boxscore(seasons=2024)
+```
+
+## `load_wbb_ratings`
+
+Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_ratings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_ratings/wbb_ratings_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int64 |
+| `team_id` | String |
+| `adj_o` | Float64 |
+| `adj_d` | Float64 |
+| `adj_em` | Float64 |
+| `adj_tempo` | Float64 |
+| `raw_o` | Float64 |
+| `raw_d` | Float64 |
+| `games` | Int64 |
+| `rank` | Int64 |
+| `adj_em_z` | Float64 |
+
+```python
+load_wbb_ratings(seasons=2025)
+```
+
+## `load_wbb_player_value`
+
+Release: [wbb_player_value](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_player_value) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_player_value/wbb_player_value_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `player_id` | String |
+| `player` | String |
+| `season` | Int64 |
+| `team_id` | String |
+| `min` | Float64 |
+| `box_obpm` | Float64 |
+| `box_dbpm` | Float64 |
+| `box_bpm` | Float64 |
+
+```python
+load_wbb_player_value(seasons=2025)
 ```
 
 ## `load_wbb_game_rosters`

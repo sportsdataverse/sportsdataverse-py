@@ -367,6 +367,8 @@ from sportsdataverse.wbb import load_wbb_officials as load_wbb_officials  # noqa
 from sportsdataverse.wbb import load_wbb_pbp as load_wbb_pbp  # noqa: F401
 from sportsdataverse.wbb import load_wbb_player_boxscore as load_wbb_player_boxscore  # noqa: F401
 from sportsdataverse.wbb import load_wbb_player_season_stats as load_wbb_player_season_stats  # noqa: F401
+from sportsdataverse.wbb import load_wbb_player_value as load_wbb_player_value  # noqa: F401
+from sportsdataverse.wbb import load_wbb_ratings as load_wbb_ratings  # noqa: F401
 from sportsdataverse.wbb import load_wbb_rosters as load_wbb_rosters  # noqa: F401
 from sportsdataverse.wbb import load_wbb_schedule as load_wbb_schedule  # noqa: F401
 from sportsdataverse.wbb import load_wbb_shots as load_wbb_shots  # noqa: F401
@@ -852,6 +854,8 @@ __all__ = [
     "load_wbb_pbp",
     "load_wbb_player_boxscore",
     "load_wbb_player_season_stats",
+    "load_wbb_player_value",
+    "load_wbb_ratings",
     "load_wbb_rosters",
     "load_wbb_schedule",
     "load_wbb_shots",

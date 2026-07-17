@@ -18,6 +18,8 @@ __all__ = [
     "load_wbb_player_boxscore",
     "load_wbb_schedule",
     "load_wbb_team_boxscore",
+    "load_wbb_ratings",
+    "load_wbb_player_value",
     "load_wbb_game_rosters",
     "load_wbb_officials",
     "load_wbb_player_season_stats",
@@ -421,6 +423,105 @@ def load_wbb_team_boxscore(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_wbb_team_boxscore: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wbb_ratings(seasons, return_as_pandas: bool = False):
+    """Load wbb_ratings (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_ratings
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2008).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name  |type    |
+        |:---------|:-------|
+        |season    |Int64   |
+        |team_id   |String  |
+        |adj_o     |Float64 |
+        |adj_d     |Float64 |
+        |adj_em    |Float64 |
+        |adj_tempo |Float64 |
+        |raw_o     |Float64 |
+        |raw_d     |Float64 |
+        |games     |Int64   |
+        |rank      |Int64   |
+        |adj_em_z  |Float64 |
+
+    Example:
+        Quick start::
+
+            load_wbb_ratings(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2008:
+            raise SeasonNotFoundError("season cannot be less than 2008")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_ratings/wbb_ratings_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wbb_ratings: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_wbb_player_value(seasons, return_as_pandas: bool = False):
+    """Load wbb_player_value (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_player_value
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2014).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name  |type    |
+        |:---------|:-------|
+        |player_id |String  |
+        |player    |String  |
+        |season    |Int64   |
+        |team_id   |String  |
+        |min       |Float64 |
+        |box_obpm  |Float64 |
+        |box_dbpm  |Float64 |
+        |box_bpm   |Float64 |
+
+    Example:
+        Quick start::
+
+            load_wbb_player_value(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2014:
+            raise SeasonNotFoundError("season cannot be less than 2014")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_player_value/wbb_player_value_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_wbb_player_value: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
