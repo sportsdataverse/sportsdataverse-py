@@ -197,6 +197,7 @@ from sportsdataverse.nba import helper_nba_pbp_features as helper_nba_pbp_featur
 from sportsdataverse.nba import helper_nba_pickcenter as helper_nba_pickcenter  # noqa: F401
 from sportsdataverse.nba import helper_nba_play_by_play as helper_nba_play_by_play  # noqa: F401
 from sportsdataverse.nba import helper_nba_player_box as helper_nba_player_box  # noqa: F401
+from sportsdataverse.nba import helper_nba_player_core as helper_nba_player_core  # noqa: F401
 from sportsdataverse.nba import helper_nba_player_season_stats as helper_nba_player_season_stats  # noqa: F401
 from sportsdataverse.nba import helper_nba_roster_items as helper_nba_roster_items  # noqa: F401
 from sportsdataverse.nba import helper_nba_rosters as helper_nba_rosters  # noqa: F401
@@ -475,6 +476,7 @@ __all__ = [
     "helper_nba_pickcenter",
     "helper_nba_play_by_play",
     "helper_nba_player_box",
+    "helper_nba_player_core",
     "helper_nba_player_season_stats",
     "helper_nba_roster_items",
     "helper_nba_rosters",

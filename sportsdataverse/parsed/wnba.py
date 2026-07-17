@@ -153,6 +153,7 @@ from sportsdataverse.wnba import helper_wnba_pbp_features as helper_wnba_pbp_fea
 from sportsdataverse.wnba import helper_wnba_pickcenter as helper_wnba_pickcenter  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_play_by_play as helper_wnba_play_by_play  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_player_box as helper_wnba_player_box  # noqa: F401
+from sportsdataverse.wnba import helper_wnba_player_core as helper_wnba_player_core  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_player_season_stats as helper_wnba_player_season_stats  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_roster_items as helper_wnba_roster_items  # noqa: F401
 from sportsdataverse.wnba import helper_wnba_rosters as helper_wnba_rosters  # noqa: F401
@@ -358,6 +359,7 @@ __all__ = [
     "helper_wnba_pickcenter",
     "helper_wnba_play_by_play",
     "helper_wnba_player_box",
+    "helper_wnba_player_core",
     "helper_wnba_player_season_stats",
     "helper_wnba_roster_items",
     "helper_wnba_rosters",

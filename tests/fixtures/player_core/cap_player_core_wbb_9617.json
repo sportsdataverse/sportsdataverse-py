@@ -1,0 +1,33 @@
+{
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/athletes/9617?lang=en&region=us",
+"id": "9617",
+"uid": "s:40~l:54~a:9617",
+"guid": "eecb6134-c9de-b11c-913d-be2c913d7c81",
+"type": "basketball",
+"alternateIds": {
+"sdr": "2246611"
+},
+"firstName": "Lisa",
+"lastName": "Bue",
+"fullName": "Lisa Bue",
+"displayName": "Lisa Bue",
+"shortName": "L. Bue",
+"birthPlace": {},
+"slug": "lisa-bue",
+"position": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/womens-college-basketball/positions/0?lang=en&region=us",
+"id": "0",
+"name": "Not Available",
+"displayName": "Not Available",
+"abbreviation": "NA",
+"leaf": false
+},
+"linked": true,
+"active": false,
+"status": {
+"id": "2",
+"name": "Inactive",
+"type": "inactive",
+"abbreviation": "Inactive"
+}
+}

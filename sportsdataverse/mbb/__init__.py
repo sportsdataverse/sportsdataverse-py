@@ -4,6 +4,7 @@ from sportsdataverse.mbb.mbb_espn_ext import *
 from sportsdataverse.mbb.mbb_bracketology import *
 from sportsdataverse.mbb.mbb_fox_ext import *
 from sportsdataverse.mbb.mbb_game_officials import *
+from sportsdataverse.mbb.mbb_player_core import *
 from sportsdataverse.mbb.mbb_game_predict import *
 from sportsdataverse.mbb.mbb_game_rosters import *
 from sportsdataverse.mbb.mbb_play_by_play import *

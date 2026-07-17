@@ -1,0 +1,287 @@
+{
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/1966?lang=en&region=us",
+"id": "1966",
+"uid": "s:40~l:46~a:1966",
+"guid": "1f6592b3-ff53-d321-8dc5-6038d48c1786",
+"type": "basketball",
+"alternateIds": {
+"sdr": "2126588"
+},
+"firstName": "LeBron",
+"lastName": "James",
+"fullName": "LeBron James",
+"displayName": "LeBron James",
+"shortName": "L. James",
+"weight": 250.0,
+"displayWeight": "250 lbs",
+"height": 81.0,
+"displayHeight": "6' 9\"",
+"age": 41,
+"dateOfBirth": "1984-12-30T08:00Z",
+"debutYear": 2003,
+"links": [
+{
+"language": "en-US",
+"rel": [
+"playercard",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/_/id/1966/lebron-james",
+"text": "Player Card",
+"shortText": "Player Card",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"stats",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/stats/_/id/1966/lebron-james",
+"text": "Stats",
+"shortText": "Stats",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"stats",
+"sportscenter",
+"app",
+"athlete"
+],
+"href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:1966&section=stats",
+"text": "Stats",
+"shortText": "Stats",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"splits",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/splits/_/id/1966/lebron-james",
+"text": "Splits",
+"shortText": "Splits",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"gamelog",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/gamelog/_/id/1966/lebron-james",
+"text": "Game Log",
+"shortText": "Game Log",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"gamelog",
+"sportscenter",
+"app",
+"athlete"
+],
+"href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:1966&section=gamelog",
+"text": "Game Log",
+"shortText": "Game Log",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"news",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/news/_/id/1966/lebron-james",
+"text": "News",
+"shortText": "News",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"news",
+"sportscenter",
+"app",
+"athlete"
+],
+"href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:1966&section=news",
+"text": "News",
+"shortText": "News",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"bio",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/bio/_/id/1966/lebron-james",
+"text": "Bio",
+"shortText": "Bio",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"bio",
+"sportscenter",
+"app",
+"athlete"
+],
+"href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:1966&section=bio",
+"text": "Bio",
+"shortText": "Bio",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"overview",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/_/id/1966/lebron-james",
+"text": "Overview",
+"shortText": "Overview",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"overview",
+"sportscenter",
+"app",
+"athlete"
+],
+"href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:1966",
+"text": "Overview",
+"shortText": "Overview",
+"isExternal": false,
+"isPremium": false
+},
+{
+"language": "en-US",
+"rel": [
+"advancedstats",
+"desktop",
+"athlete"
+],
+"href": "https://www.espn.com/nba/player/advancedstats/_/id/1966/lebron-james",
+"text": "Advanced Stats",
+"shortText": "Advanced Stats",
+"isExternal": false,
+"isPremium": false
+}
+],
+"birthPlace": {
+"city": "Akron",
+"state": "OH",
+"country": "USA"
+},
+"slug": "lebron-james",
+"headshot": {
+"href": "https://a.espncdn.com/i/headshots/nba/players/full/1966.png",
+"alt": "LeBron James"
+},
+"jersey": "23",
+"position": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us",
+"id": "7",
+"name": "Forward",
+"displayName": "Forward",
+"abbreviation": "F",
+"leaf": false
+},
+"linked": true,
+"team": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2026/teams/13?lang=en&region=us"
+},
+"statistics": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/1966/statistics?lang=en&region=us"
+},
+"contracts": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/1966/contracts?lang=en&region=us"
+},
+"experience": {
+"years": 23
+},
+"active": false,
+"contract": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/1966/contracts/2026?lang=en&region=us",
+"birdStatus": 0,
+"baseYearCompensation": {
+"active": false
+},
+"poisonPillProvision": {
+"active": false
+},
+"incomingTradeValue": 52627153,
+"outgoingTradeValue": 52627153,
+"minimumSalaryException": false,
+"optionType": 0,
+"salary": 52627153,
+"salaryRemaining": 0,
+"yearsRemaining": 1,
+"season": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2026?lang=en&region=us"
+},
+"team": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2026/teams/13?lang=en&region=us"
+},
+"tradeKicker": {
+"active": false,
+"percentage": 0.0,
+"value": 0,
+"tradeValue": 0
+},
+"tradeRestriction": true,
+"unsignedForeignPick": false,
+"active": true
+},
+"draft": {
+"displayText": "Year: 2003 Round: 1 Pick: 1",
+"round": 1,
+"year": 2003,
+"selection": 1,
+"team": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2003/teams/5?lang=en&region=us"
+},
+"pick": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2003/draft/rounds/1/picks/1?lang=en&region=us"
+}
+},
+"status": {
+"id": "9",
+"name": "Free Agent",
+"type": "free-agent",
+"abbreviation": "FA"
+},
+"statisticslog": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/1966/statisticslog?lang=en&region=us"
+},
+"seasons": {
+"$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/1966/seasons?lang=en&region=us"
+}
+}
