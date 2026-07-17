@@ -49,10 +49,10 @@ def test_compile_dedups_gameids_and_tags_season(tmp_path, monkeypatch):
         return _poss(gid)
 
     monkeypatch.setattr(C, "_fetch_possessions", fake_fetch)
-    out = C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)
+    out = C.compile_nba_season(2024, cache_dir=str(tmp_path), delay_s=0.0)
     assert sorted(calls) == ["001", "002"]  # deduped
     assert set(out["game_id"].unique().to_list()) == {"001", "002"}
-    assert out["season"].unique().to_list() == [2023]
+    assert out["season"].unique().to_list() == [2024]
 
 
 def test_compile_resume_skips_cached(tmp_path, monkeypatch):
