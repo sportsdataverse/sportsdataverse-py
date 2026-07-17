@@ -38,7 +38,9 @@ def test_compile_dedups_gameids_and_tags_season(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st: _idx(["001", "002"], [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25)]),
+        lambda s, st, *, proxy_url=None: _idx(
+            ["001", "002"], [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25)]
+        ),
     )
     calls = []
 
@@ -57,7 +59,9 @@ def test_compile_resume_skips_cached(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st: _idx(["001", "002"], [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25)]),
+        lambda s, st, *, proxy_url=None: _idx(
+            ["001", "002"], [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25)]
+        ),
     )
     monkeypatch.setattr(C, "_fetch_possessions", lambda gid, lid, *, lineup_source="auto", proxy_url=None: _poss(gid))
     C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)  # warm cache
@@ -75,7 +79,7 @@ def test_compile_best_effort_skips_failing_game(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st: _idx(
+        lambda s, st, *, proxy_url=None: _idx(
             ["ok1", "bad", "ok2"],
             [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25), datetime.date(2023, 10, 26)],
         ),
@@ -92,15 +96,15 @@ def test_compile_best_effort_skips_failing_game(tmp_path, monkeypatch):
 
 
 def test_compile_never_raises_on_no_games(tmp_path, monkeypatch):
-    monkeypatch.setattr(C, "_season_game_index", lambda s, st: _idx([], []))
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st, *, proxy_url=None: _idx([], []))
     out = C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)
     assert out.is_empty() and "season" in out.columns
 
 
 # ---------------------------------------------------------------------------
-# proxy_provider: stats.nba.com HANGS (not errors) on datacenter IPs, so an
-# unattended host must proxy. The provider is called PER GAME so a pool rotates
-# the exit IP across a season instead of burning one address.
+# proxy_provider: stats.nba.com rejects/hangs on datacenter IPs, so an unattended
+# host must proxy. The provider is called once for discovery then PER GAME (N+1),
+# so a pool rotates the exit IP across a season instead of burning one address.
 # ---------------------------------------------------------------------------
 
 
@@ -108,12 +112,14 @@ def test_compile_rotates_proxy_once_per_game(tmp_path, monkeypatch):
     monkeypatch.setattr(
         C,
         "_season_game_index",
-        lambda s, st: _idx(
+        lambda s, st, *, proxy_url=None: _idx(
             ["001", "002", "003"],
             [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25), datetime.date(2023, 10, 26)],
         ),
     )
-    pool = iter(["http://p1:1", "http://p2:2", "http://p3:3"])
+    # p0 is consumed by game discovery (test_compile_proxies_game_discovery) --
+    # a season costs N+1 provider calls, not N.
+    pool = iter(["http://p0:0", "http://p1:1", "http://p2:2", "http://p3:3"])
     seen: list[str | None] = []
 
     def fetch(gid, lid, *, lineup_source="auto", proxy_url=None):
@@ -128,7 +134,9 @@ def test_compile_rotates_proxy_once_per_game(tmp_path, monkeypatch):
 
 def test_compile_without_proxy_provider_passes_none(tmp_path, monkeypatch):
     """Default (no provider) must stay a plain unproxied fetch -- back-compat."""
-    monkeypatch.setattr(C, "_season_game_index", lambda s, st: _idx(["001"], [datetime.date(2023, 10, 24)]))
+    monkeypatch.setattr(
+        C, "_season_game_index", lambda s, st, *, proxy_url=None: _idx(["001"], [datetime.date(2023, 10, 24)])
+    )
     seen: list[str | None] = []
 
     def fetch(gid, lid, *, lineup_source="auto", proxy_url=None):
@@ -138,6 +146,26 @@ def test_compile_without_proxy_provider_passes_none(tmp_path, monkeypatch):
     monkeypatch.setattr(C, "_fetch_possessions", fetch)
     C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)
     assert seen == [None]
+
+
+def test_compile_proxies_game_discovery(tmp_path, monkeypatch):
+    """Discovery is a stats.nba.com call too -- it MUST be proxied.
+
+    Unproxied, the leaguegamelog discovery call returns {} on a datacenter host,
+    which _season_game_index turns into an empty index (empty-in/empty-out). The
+    season then compiles to zero rows and exits 0 -- a silent no-op backfill that
+    looks like success. The per-game fetch being proxied is not enough.
+    """
+    seen: list[str | None] = []
+
+    def idx(s, st, *, proxy_url=None):
+        seen.append(proxy_url)
+        return _idx(["001"], [datetime.date(2023, 10, 24)])
+
+    monkeypatch.setattr(C, "_season_game_index", idx)
+    monkeypatch.setattr(C, "_fetch_possessions", lambda gid, lid, *, lineup_source="auto", proxy_url=None: _poss(gid))
+    C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0, proxy_provider=lambda: "http://p1:1")
+    assert seen == ["http://p1:1"]
 
 
 def test_nba_possessions_threads_proxy_to_every_fetcher(monkeypatch):
@@ -183,7 +211,7 @@ def _fixture_poss() -> pl.DataFrame:
 def test_compile_attaches_game_date(monkeypatch, tmp_path):
     from sportsdataverse.nba import nba_season_compile as mod
 
-    monkeypatch.setattr(mod, "_season_game_index", lambda s, st: _fake_index())
+    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: _fake_index())
     monkeypatch.setattr(
         mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None: _fixture_poss()
     )
@@ -199,7 +227,7 @@ def test_compile_game_date_covers_cached_parquet(monkeypatch, tmp_path):
 
     cache = tmp_path / mod._game_cache_key("0022300001")
     _fixture_poss().write_parquet(cache)  # simulates a cache written before this change
-    monkeypatch.setattr(mod, "_season_game_index", lambda s, st: _fake_index())
+    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: _fake_index())
     monkeypatch.setattr(
         mod,
         "_fetch_possessions",
@@ -218,7 +246,7 @@ def test_compile_missing_game_date_raises(monkeypatch, tmp_path):
         {"game_id": ["0022300001"], "game_date": [None]},
         schema={"game_id": pl.Utf8, "game_date": pl.Date},
     )
-    monkeypatch.setattr(mod, "_season_game_index", lambda s, st: bad_index)
+    monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: bad_index)
     monkeypatch.setattr(
         mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None: _fixture_poss()
     )
@@ -236,6 +264,6 @@ from tests.conftest import skip_if_no_nba_stats_live  # noqa: E402
 def test_compile_live_small_slice(tmp_path, monkeypatch):
     # only the first 3 real regular-season game ids, real fetch, real cache
     real_index = C._season_game_index(2023, "Regular Season").head(3)
-    monkeypatch.setattr(C, "_season_game_index", lambda s, st: real_index)
+    monkeypatch.setattr(C, "_season_game_index", lambda s, st, *, proxy_url=None: real_index)
     out = C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=1.0)
     assert not out.is_empty() and "off_player_1" in out.columns
