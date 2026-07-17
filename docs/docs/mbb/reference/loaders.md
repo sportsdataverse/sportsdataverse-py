@@ -18,6 +18,8 @@ flowchart LR
 | `load_mbb_player_boxscore` | [espn_mens_college_basketball_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_boxscores) | — |
 | `load_mbb_schedule` | [espn_mens_college_basketball_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_schedules) | — |
 | `load_mbb_team_boxscore` | [espn_mens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_team_boxscores) | — |
+| `load_mbb_ratings` | [mbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_ratings) | — |
+| `load_mbb_player_value` | [mbb_player_value](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_player_value) | — |
 | `load_mbb_shots` | [espn_mens_college_basketball_shots](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_shots) | — |
 | `load_mbb_standings` | [espn_mens_college_basketball_standings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_standings) | — |
 | `load_mbb_player_season_stats` | [espn_mens_college_basketball_player_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_mens_college_basketball_player_season_stats) | — |
@@ -313,6 +315,49 @@ Release: [espn_mens_college_basketball_team_boxscores](https://github.com/sports
 
 ```python
 load_mbb_team_boxscore(seasons=2024)
+```
+
+## `load_mbb_ratings`
+
+Release: [mbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_ratings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_ratings/mbb_ratings_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `season` | Int64 |
+| `team_id` | String |
+| `adj_o` | Float64 |
+| `adj_d` | Float64 |
+| `adj_em` | Float64 |
+| `adj_tempo` | Float64 |
+| `raw_o` | Float64 |
+| `raw_d` | Float64 |
+| `games` | Int64 |
+| `rank` | Int64 |
+| `adj_em_z` | Float64 |
+
+```python
+load_mbb_ratings(seasons=2025)
+```
+
+## `load_mbb_player_value`
+
+Release: [mbb_player_value](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/mbb_player_value) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/mbb_player_value/mbb_player_value_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `player_id` | String |
+| `player` | String |
+| `season` | Int64 |
+| `team_id` | String |
+| `min` | Float64 |
+| `box_obpm` | Float64 |
+| `box_dbpm` | Float64 |
+| `box_bpm` | Float64 |
+
+```python
+load_mbb_player_value(seasons=2025)
 ```
 
 ## `load_mbb_shots`

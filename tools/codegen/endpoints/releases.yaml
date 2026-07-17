@@ -293,6 +293,22 @@ loaders:
   min_season: 2002
   example_args:
     seasons: 2024
+- fn: load_mbb_ratings
+  league: mbb
+  base: sdv_releases
+  url: mbb_ratings/mbb_ratings_{season}.parquet
+  tag: mbb_ratings
+  min_season: 2006
+  example_args:
+    seasons: 2025
+- fn: load_mbb_player_value
+  league: mbb
+  base: sdv_releases
+  url: mbb_player_value/mbb_player_value_{season}.parquet
+  tag: mbb_player_value
+  min_season: 2006
+  example_args:
+    seasons: 2025
 - fn: load_nba_pbp
   league: nba
   base: sdv_releases
@@ -389,6 +405,22 @@ loaders:
   min_season: 2002
   example_args:
     seasons: 2024
+- fn: load_wbb_ratings
+  league: wbb
+  base: sdv_releases
+  url: wbb_ratings/wbb_ratings_{season}.parquet
+  tag: wbb_ratings
+  min_season: 2008
+  example_args:
+    seasons: 2025
+- fn: load_wbb_player_value
+  league: wbb
+  base: sdv_releases
+  url: wbb_player_value/wbb_player_value_{season}.parquet
+  tag: wbb_player_value
+  min_season: 2014
+  example_args:
+    seasons: 2025
 - fn: load_wnba_pbp
   league: wnba
   base: sdv_releases

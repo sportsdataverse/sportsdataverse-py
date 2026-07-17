@@ -3894,6 +3894,46 @@ load_mbb_team_boxscore:
   type: String
 - name: opponent_team_score
   type: Int32
+load_mbb_ratings:
+- name: season
+  type: Int64
+- name: team_id
+  type: String
+- name: adj_o
+  type: Float64
+- name: adj_d
+  type: Float64
+- name: adj_em
+  type: Float64
+- name: adj_tempo
+  type: Float64
+- name: raw_o
+  type: Float64
+- name: raw_d
+  type: Float64
+- name: games
+  type: Int64
+- name: rank
+  type: Int64
+- name: adj_em_z
+  type: Float64
+load_mbb_player_value:
+- name: player_id
+  type: String
+- name: player
+  type: String
+- name: season
+  type: Int64
+- name: team_id
+  type: String
+- name: min
+  type: Float64
+- name: box_obpm
+  type: Float64
+- name: box_dbpm
+  type: Float64
+- name: box_bpm
+  type: Float64
 load_mbb_team_season_stats:
 - name: season
   type: Int32
@@ -8171,6 +8211,46 @@ load_wbb_team_boxscore:
   type: String
 - name: opponent_team_score
   type: Int32
+load_wbb_ratings:
+- name: season
+  type: Int64
+- name: team_id
+  type: String
+- name: adj_o
+  type: Float64
+- name: adj_d
+  type: Float64
+- name: adj_em
+  type: Float64
+- name: adj_tempo
+  type: Float64
+- name: raw_o
+  type: Float64
+- name: raw_d
+  type: Float64
+- name: games
+  type: Int64
+- name: rank
+  type: Int64
+- name: adj_em_z
+  type: Float64
+load_wbb_player_value:
+- name: player_id
+  type: String
+- name: player
+  type: String
+- name: season
+  type: Int64
+- name: team_id
+  type: String
+- name: min
+  type: Float64
+- name: box_obpm
+  type: Float64
+- name: box_dbpm
+  type: Float64
+- name: box_bpm
+  type: Float64
 load_wbb_team_season_stats:
 - name: season
   type: Int32
