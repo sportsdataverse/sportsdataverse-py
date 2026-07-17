@@ -310,6 +310,7 @@ files = [
     "sportsdataverse/cfb/cfb_advanced_constants.py",
     "sportsdataverse/cfb/cfb_advanced_stats.py",
     "sportsdataverse/cfb/cfb_field_position.py",
+    "sportsdataverse/cfb/cfb_ncaa_pbp.py",
     "sportsdataverse/cfb/cfb_opponent_adjust.py",
     "sportsdataverse/cfb/cfb_crosswalk.py",
     "sportsdataverse/cfb/cfb_fox_ext.py",
