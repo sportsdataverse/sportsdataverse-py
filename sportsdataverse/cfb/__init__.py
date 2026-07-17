@@ -7,6 +7,7 @@ from sportsdataverse.cfb.cfb_loaders import *
 from sportsdataverse.cfb.cfb_loaders_extra import *
 from sportsdataverse.cfb.cfb_pbp import *
 from sportsdataverse.cfb.cfb_ncaa_pbp import *
+from sportsdataverse.cfb.cfb_ncaa_box import *
 from sportsdataverse.cfb.cfb_adjusted_epa import *
 from sportsdataverse.cfb.cfb_advanced_stats import *
 from sportsdataverse.cfb.cfb_field_position import *
