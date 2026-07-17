@@ -6990,6 +6990,49 @@ load_pwhl_pbp:
   type: String
 - name: sec_from_start
   type: Int32
+load_pwhl_xg_pbp:
+- name: game_id
+  type: Int32
+- name: game_season
+  type: Int32
+- name: game_date
+  type: String
+- name: team_id
+  type: Int32
+- name: player_id
+  type: Int32
+- name: goalie_id
+  type: Int32
+- name: period_of_game
+  type: String
+- name: sec_from_start
+  type: Int32
+- name: clock
+  type: String
+- name: x_coord
+  type: Float64
+- name: y_coord
+  type: Float64
+- name: shot_distance
+  type: Float64
+- name: shot_angle
+  type: Float64
+- name: event_type
+  type: String
+- name: shot_quality
+  type: String
+- name: power_play
+  type: Int32
+- name: short_handed
+  type: String
+- name: empty_net
+  type: String
+- name: penalty_shot
+  type: String
+- name: goal
+  type: Boolean
+- name: xg
+  type: Float64
 load_pwhl_penalty_summary:
 - name: game_id
   type: Int32

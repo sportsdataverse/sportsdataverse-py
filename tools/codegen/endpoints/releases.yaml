@@ -913,6 +913,14 @@ loaders:
   min_season: 2024
   example_args:
     seasons: 2024
+- fn: load_pwhl_xg_pbp
+  league: pwhl
+  base: sdv_releases
+  url: pwhl_xg_pbp/pwhl_xg_pbp_{season}.parquet
+  tag: pwhl_xg_pbp
+  min_season: 2024
+  example_args:
+    seasons: 2025
 - fn: load_pwhl_penalty_summary
   league: pwhl
   base: sdv_releases

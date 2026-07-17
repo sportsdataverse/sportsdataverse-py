@@ -24,6 +24,7 @@ flowchart LR
 | `load_pwhl_goalie_boxscores` | [pwhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_goalie_boxscores) | — |
 | `load_pwhl_officials` | [pwhl_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_officials) | — |
 | `load_pwhl_pbp` | [pwhl_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_pbp) | — |
+| `load_pwhl_xg_pbp` | [pwhl_xg_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_xg_pbp) | — |
 | `load_pwhl_penalty_summary` | [pwhl_penalty_summary](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_penalty_summary) | — |
 | `load_pwhl_player_boxscores` | [pwhl_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_player_boxscores) | — |
 | `load_pwhl_rosters` | [pwhl_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_rosters) | — |
@@ -530,6 +531,39 @@ Release: [pwhl_pbp](https://github.com/sportsdataverse/sportsdataverse-data/rele
 
 ```python
 load_pwhl_pbp(seasons=2024)
+```
+
+## `load_pwhl_xg_pbp`
+
+Release: [pwhl_xg_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_xg_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_xg_pbp/pwhl_xg_pbp_{season}.parquet`
+### Returns
+
+| col_name | type |
+|---|---|
+| `game_id` | Int32 |
+| `game_season` | Int32 |
+| `game_date` | String |
+| `team_id` | Int32 |
+| `player_id` | Int32 |
+| `goalie_id` | Int32 |
+| `period_of_game` | String |
+| `sec_from_start` | Int32 |
+| `clock` | String |
+| `x_coord` | Float64 |
+| `y_coord` | Float64 |
+| `shot_distance` | Float64 |
+| `shot_angle` | Float64 |
+| `event_type` | String |
+| `shot_quality` | String |
+| `power_play` | Int32 |
+| `short_handed` | String |
+| `empty_net` | String |
+| `penalty_shot` | String |
+| `goal` | Boolean |
+| `xg` | Float64 |
+
+```python
+load_pwhl_xg_pbp(seasons=2025)
 ```
 
 ## `load_pwhl_penalty_summary`

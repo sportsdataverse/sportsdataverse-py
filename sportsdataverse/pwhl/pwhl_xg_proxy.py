@@ -1099,3 +1099,103 @@ def pwhl_ratings_from_proxy(
 def _empty_ratings(return_as_pandas: bool) -> Union[pl.DataFrame, pd.DataFrame]:
     out = pl.DataFrame(schema=_RATINGS_SCHEMA)
     return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+#: Published `pwhl_xg_pbp` dataset schema: one row per on-net shot, curated
+#: identity/geometry/context columns + the model xG. Dtypes are locked here
+#: (explicit casts at the boundary) so both input shapes -- `load_pwhl_pbp`
+#: output and the pwhl-data committed parquet, whose id dtypes differ --
+#: land on one published schema.
+_SHOT_XG_SCHEMA: dict[str, pl.DataType] = {
+    "game_id": pl.Int32,
+    "game_season": pl.Int32,
+    "game_date": pl.Utf8,
+    "team_id": pl.Int32,
+    "player_id": pl.Int32,
+    "goalie_id": pl.Int32,
+    "period_of_game": pl.Utf8,
+    "sec_from_start": pl.Int32,
+    "clock": pl.Utf8,
+    "x_coord": pl.Float64,
+    "y_coord": pl.Float64,
+    "shot_distance": pl.Float64,
+    "shot_angle": pl.Float64,
+    "event_type": pl.Utf8,
+    "shot_quality": pl.Utf8,
+    "power_play": pl.Int32,
+    "short_handed": pl.Utf8,
+    "empty_net": pl.Utf8,
+    "penalty_shot": pl.Utf8,
+    "goal": pl.Boolean,
+    "xg": pl.Float64,
+}
+
+
+def pwhl_shot_xg(
+    pbp: pl.DataFrame,
+    *,
+    model: PwhlCoordXGModel | None = None,
+    calibrate_strength: bool = True,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Score every on-net PWHL shot with coordinate xG (the `pwhl_xg_pbp` shape).
+
+    The shot-level counterpart to :func:`pwhl_team_game_xg_rates`: runs the
+    same pre-shot context derivation (:func:`_add_preshot_context`) over the
+    FULL pbp so rebound/movement features exist, filters to
+    ``event == "shot"`` rows (the complete on-net shot log; ``goal`` is the
+    outcome flag), scores them with :meth:`PwhlCoordXGModel.predict`, and
+    returns the curated :data:`_SHOT_XG_SCHEMA` frame -- identity, geometry
+    (``shot_distance``/``shot_angle`` derived via the shared HockeyTech
+    analytics core inside the model), strength context, outcome, and ``xg``.
+    This is the frame the `pwhl_xg_pbp` dataset release publishes per season.
+
+    Args:
+        pbp: A frame shaped like ``load_pwhl_pbp`` output (needs ``event``,
+            ``goal``, ``x_coord``, ``y_coord``; extra columns are fine and
+            improve the feature set). Pass the FULL pbp, not a shots-only
+            frame, so the pre-shot movement features can be derived.
+        model: A fitted :class:`PwhlCoordXGModel` to score with. Default
+            ``None`` fits one from ``pbp`` via :func:`fit_pwhl_coord_xg` --
+            pass a model fit on pooled seasons when scoring one season at a
+            time so every season is scored by the same model.
+        calibrate_strength: Forwarded to :func:`fit_pwhl_coord_xg` when
+            ``model`` is ``None``.
+        return_as_pandas: If True, return a pandas DataFrame; otherwise polars.
+
+    Returns:
+        One row per on-net shot with the :data:`_SHOT_XG_SCHEMA` columns, in
+        pbp order. Zero-row (typed) when ``pbp`` is empty or has no shot rows.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.pwhl.pwhl_loaders import load_pwhl_pbp
+            from sportsdataverse.pwhl.pwhl_xg_proxy import pwhl_shot_xg
+
+            shots = pwhl_shot_xg(load_pwhl_pbp(2025))
+            shots.select("shot_distance", "xg", "goal").describe()
+
+    See Also:
+        * :func:`fit_pwhl_coord_xg` -- the model this scores with.
+        * :func:`pwhl_team_game_xg_rates` -- the per-(game, team) aggregate.
+    """
+    if pbp.height == 0:
+        out = pl.DataFrame(schema=_SHOT_XG_SCHEMA)
+        return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+    if model is None:
+        model = fit_pwhl_coord_xg(pbp, calibrate_strength=calibrate_strength)
+
+    enriched = _add_preshot_context(pbp)
+    shots = enriched.filter(pl.col("event") == "shot")
+    if shots.height == 0:
+        out = pl.DataFrame(schema=_SHOT_XG_SCHEMA)
+        return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+    xg = model.predict(shots)
+    # predict() derives shot_distance/shot_angle internally when absent; the
+    # published frame must carry them too, so derive on the output path as well.
+    shots = _shot_geometry(shots)
+    out = shots.with_columns(xg).select([pl.col(c).cast(t) for c, t in _SHOT_XG_SCHEMA.items()])
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out

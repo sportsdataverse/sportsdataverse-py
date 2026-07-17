@@ -24,6 +24,7 @@ __all__ = [
     "load_pwhl_goalie_boxscores",
     "load_pwhl_officials",
     "load_pwhl_pbp",
+    "load_pwhl_xg_pbp",
     "load_pwhl_penalty_summary",
     "load_pwhl_player_boxscores",
     "load_pwhl_rosters",
@@ -808,6 +809,67 @@ def load_pwhl_pbp(seasons, return_as_pandas: bool = False):
         frames.append(df)
     if missing:
         cli_warn("load_pwhl_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
+    # diagonal: per-season release schemas can drift (columns added/dropped
+    # over the years) -- union columns, null-fill gaps.
+    out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+    return out.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else out
+
+
+def load_pwhl_xg_pbp(seasons, return_as_pandas: bool = False):
+    """Load pwhl_xg_pbp (sportsdataverse-data release).
+
+    Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_xg_pbp
+
+    Args:
+        seasons: an int or iterable of seasons (>= 2024).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        A polars (or pandas) DataFrame; seasons with no published asset are
+        skipped with a warning rather than raising (404-safe).
+
+        |col_name       |type    |
+        |:--------------|:-------|
+        |game_id        |Int32   |
+        |game_season    |Int32   |
+        |game_date      |String  |
+        |team_id        |Int32   |
+        |player_id      |Int32   |
+        |goalie_id      |Int32   |
+        |period_of_game |String  |
+        |sec_from_start |Int32   |
+        |clock          |String  |
+        |x_coord        |Float64 |
+        |y_coord        |Float64 |
+        |shot_distance  |Float64 |
+        |shot_angle     |Float64 |
+        |event_type     |String  |
+        |shot_quality   |String  |
+        |power_play     |Int32   |
+        |short_handed   |String  |
+        |empty_net      |String  |
+        |penalty_shot   |String  |
+        |goal           |Boolean |
+        |xg             |Float64 |
+
+    Example:
+        Quick start::
+
+            load_pwhl_xg_pbp(seasons=2025)
+    """
+    frames, missing = [], []
+    for season in _as_season_list(seasons):
+        if int(season) < 2024:
+            raise SeasonNotFoundError("season cannot be less than 2024")
+        df = _read_release_parquet(
+            f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_xg_pbp/pwhl_xg_pbp_{season}.parquet"
+        )
+        if df is None:
+            missing.append(season)
+            continue
+        frames.append(df)
+    if missing:
+        cli_warn("load_pwhl_xg_pbp: no data for season(s) {missing} (skipped)".format(missing=missing))
     # diagonal: per-season release schemas can drift (columns added/dropped
     # over the years) -- union columns, null-fill gaps.
     out = pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
