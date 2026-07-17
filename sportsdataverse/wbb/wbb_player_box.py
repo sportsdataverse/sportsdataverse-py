@@ -199,8 +199,12 @@ def _basketball_player_box(
     if not competitions:
         return pl.DataFrame()
     comp = competitions[0]
-    if comp.get("boxscoreAvailable") != True:  # noqa: E712 -- R: boxScoreAvailable == TRUE
-        return pl.DataFrame()
+    # ESPN's header `boxscoreAvailable` flag is unreliable for archival games
+    # (pre-2014 WBB payloads carry real player lines while the flag says
+    # false), so availability is derived from the payload itself -- the
+    # athlete/stat validity probes below are the real gate. Deliberate
+    # divergence from the R helper's original flag gate (fixed the same way
+    # in wehoop).
     team_blocks = (final.get("boxscore") or {}).get("players") or []
     competitors = comp.get("competitors") or []
     if len(team_blocks) < 2 or len(competitors) < 2:
