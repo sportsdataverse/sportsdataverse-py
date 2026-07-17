@@ -33,7 +33,7 @@ def _game_cache_key(game_id: str) -> str:
     return f"{game_id}__v{PIPELINE_VERSION}.parquet"
 
 
-def _season_game_index(season: int, season_type: str) -> pl.DataFrame:
+def _season_game_index(season: int, season_type: str, *, proxy_url: Optional[str] = None) -> pl.DataFrame:
     """``(game_id, game_date)`` index for a season from leaguegamelog (monkeypatchable).
 
     One row per game id (the team-level log has two rows per game; first kept).
@@ -43,6 +43,10 @@ def _season_game_index(season: int, season_type: str) -> pl.DataFrame:
     Args:
         season: Season start year (e.g. 2023 for 2023-24).
         season_type: NBA season type string (e.g. ``"Regular Season"``).
+        proxy_url: Optional proxy URL forwarded to the underlying transport.
+            Discovery is a stats.nba.com call like any other — on a datacenter
+            host an unproxied call returns no rows, which silently compiles the
+            season to zero games.
 
     Returns:
         Polars DataFrame with ``game_id: Utf8`` and ``game_date: Date``.
@@ -54,6 +58,7 @@ def _season_game_index(season: int, season_type: str) -> pl.DataFrame:
         season=year_to_season(season),
         season_type_all_star=season_type,
         league_id=_LEAGUE_ID,
+        proxy_url=proxy_url,
     )
     if log.is_empty() or "game_id" not in log.columns or "game_date" not in log.columns:
         return pl.DataFrame(schema={"game_id": pl.Utf8, "game_date": pl.Date})
@@ -63,9 +68,9 @@ def _season_game_index(season: int, season_type: str) -> pl.DataFrame:
     ).unique(subset=["game_id"], keep="first", maintain_order=True)
 
 
-def _game_ids_for_season(season: int, season_type: str) -> List[str]:
+def _game_ids_for_season(season: int, season_type: str, *, proxy_url: Optional[str] = None) -> List[str]:
     """Return the (deduped) game ids for a season (delegates to :func:`_season_game_index`)."""
-    return _season_game_index(season, season_type)["game_id"].to_list()
+    return _season_game_index(season, season_type, proxy_url=proxy_url)["game_id"].to_list()
 
 
 def _fetch_possessions(
@@ -128,12 +133,15 @@ def compile_nba_season(
             gamerotation fetch — useful when the gamerotation endpoint is
             throttled or unavailable).
         proxy_provider: Optional zero-arg callable returning a proxy URL (or
-            ``None``). **Called once per game**, so a rotating pool spreads a
-            season's fetches across many exit IPs rather than hammering
-            ``stats.nba.com`` from one address. ``stats.nba.com`` *hangs*
-            rather than errors on datacenter/cloud IPs, so an unattended host
+            ``None``). **Called once for game discovery, then once per game**
+            (``N + 1`` calls for an ``N``-game season), so a rotating pool
+            spreads a season's fetches across many exit IPs rather than
+            hammering ``stats.nba.com`` from one address. ``stats.nba.com``
+            rejects or hangs on datacenter/cloud IPs, so an unattended host
             (CI, a droplet) MUST supply one — a proxied request is judged on
             the proxy's exit IP, which is what makes such a host viable at all.
+            Note discovery is proxied too: an unproxied index call returns no
+            rows there, compiling the season to zero games without an error.
             Any ``() -> str | None`` works; a round-robin pool's ``.next``
             matches the signature directly::
 
@@ -175,7 +183,13 @@ def compile_nba_season(
     cdir = Path(cache_dir) if cache_dir else _default_cache_dir()
     cdir.mkdir(parents=True, exist_ok=True)
 
-    index = _season_game_index(season, season_type)
+    # Discovery is proxied too: unproxied it returns no rows on a datacenter host,
+    # which compiles the whole season to zero games and still exits clean.
+    index = _season_game_index(
+        season,
+        season_type,
+        proxy_url=proxy_provider() if proxy_provider is not None else None,
+    )
     # dedupe preserving order
     game_ids = list(dict.fromkeys(index["game_id"].to_list()))
 
