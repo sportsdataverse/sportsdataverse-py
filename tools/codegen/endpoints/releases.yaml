@@ -19,6 +19,14 @@ loaders:
   min_season: 2004
   example_args:
     seasons: 2024
+- fn: load_cfb_recruiting_proj
+  league: cfb
+  base: sdv_releases
+  url: cfb_recruiting_proj/cfb_recruiting_proj_{season}.parquet
+  tag: cfb_recruiting_proj
+  min_season: 2016
+  example_args:
+    seasons: 2024
 - fn: load_cfb_rosters
   league: cfb
   base: raw_data
