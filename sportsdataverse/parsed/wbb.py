@@ -332,6 +332,7 @@ from sportsdataverse.wbb import helper_wbb_pbp_features as helper_wbb_pbp_featur
 from sportsdataverse.wbb import helper_wbb_pickcenter as helper_wbb_pickcenter  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_play_by_play as helper_wbb_play_by_play  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_player_box as helper_wbb_player_box  # noqa: F401
+from sportsdataverse.wbb import helper_wbb_player_core as helper_wbb_player_core  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_player_season_stats as helper_wbb_player_season_stats  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_roster_items as helper_wbb_roster_items  # noqa: F401
 from sportsdataverse.wbb import helper_wbb_rosters as helper_wbb_rosters  # noqa: F401
@@ -816,6 +817,7 @@ __all__ = [
     "helper_wbb_pickcenter",
     "helper_wbb_play_by_play",
     "helper_wbb_player_box",
+    "helper_wbb_player_core",
     "helper_wbb_player_season_stats",
     "helper_wbb_roster_items",
     "helper_wbb_rosters",

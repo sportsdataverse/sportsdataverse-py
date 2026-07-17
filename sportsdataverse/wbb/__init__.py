@@ -3,6 +3,7 @@ from __future__ import annotations
 from sportsdataverse.wbb.wbb_bracketology import *
 from sportsdataverse.wbb.wbb_espn_ext import *
 from sportsdataverse.wbb.wbb_game_officials import *
+from sportsdataverse.wbb.wbb_player_core import *
 from sportsdataverse.wbb.wbb_game_predict import *
 from sportsdataverse.wbb.wbb_game_rosters import *
 from sportsdataverse.wbb.wbb_lineup_stats import *
