@@ -23,7 +23,7 @@ import struct
 from datetime import datetime, timezone
 from functools import partial
 from pathlib import Path
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Union
 
 import numpy as np
@@ -284,6 +284,7 @@ def write_rds(
     path: str | Path,
     *,
     attributes: Mapping[str, _AttrValue] | None = None,
+    cls: Sequence[str] | None = None,
     compress: bool = True,
 ) -> None:
     """Write ``df`` as an R data.frame in RDS (version 2) format.
@@ -295,10 +296,17 @@ def write_rds(
         attributes: Extra attributes to attach to the data.frame — ``str``
             values become length-1 character vectors, ``datetime`` values
             become ``POSIXct`` scalars (matching R ``attr(df, ...) <-``).
+        cls: The frame's S3 ``class`` vector. Defaults to ``["data.frame"]``.
+            Pass the league's own chain to match what the R producers stamp,
+            e.g. ``["hoopR_data", "tbl_df", "tbl", "data.table", "data.frame"]``
+            (``hoopR:::make_hoopR_data``) — the class is load-bearing, not
+            cosmetic: hoopR/wehoop register S3 methods on it (``print.hoopR_data``),
+            so a released rds without it prints differently for every user.
         compress: Gzip the stream like ``saveRDS(compress = TRUE)``.
 
     Raises:
-        ValueError: On column dtypes with no R atomic-vector equivalent.
+        ValueError: On column dtypes with no R atomic-vector equivalent, or a
+            ``cls`` that does not end in ``"data.frame"``.
 
     Example:
         Quick start::
@@ -306,7 +314,29 @@ def write_rds(
             import polars as pl
             from sportsdataverse._rds import write_rds
             write_rds(pl.DataFrame({"season": [2024]}), "frame.rds")
+
+        Stamp a league class + attributes the way the R producers do::
+
+            from datetime import datetime, timezone
+            write_rds(
+                df,
+                "player_core_2015.rds",
+                cls=["hoopR_data", "tbl_df", "tbl", "data.table", "data.frame"],
+                attributes={
+                    "hoopR_type": "ESPN NBA player_core from hoopR data repository",
+                    "hoopR_timestamp": datetime.now(timezone.utc),
+                },
+            )
     """
+    if cls is not None:
+        cls = list(cls)
+        if not cls:
+            raise ValueError("cls must be a non-empty class vector")
+        # R only dispatches data.frame methods when data.frame is in the chain,
+        # and it must be last -- an rds whose class omits it stops behaving like
+        # a data.frame on read, which is far worse than a wrong print method.
+        if cls[-1] != "data.frame":
+            raise ValueError(f"cls must end with 'data.frame'; got {cls!r}")
     writer = _RdsWriter()
     writer.header()
 
@@ -323,7 +353,7 @@ def write_rds(
             # compact internal form: c(NA_integer_, -nrow)
             lambda: writer.intsxp_raw(struct.pack(">ii", _NA_INT, -df.height), length=2),
         ),
-        writer.class_attr(["data.frame"]),
+        writer.class_attr(cls if cls is not None else ["data.frame"]),
     ]
     for attr_name, attr_value in (attributes or {}).items():
         if isinstance(attr_value, datetime):
