@@ -653,11 +653,11 @@ def test_playwright_transport_shape() -> None:
 
 
 def test_playwright_transport_missing_dep_raises() -> None:
-    """Playwright is not a hard dep; first use without it raises a clear hint."""
-    if importlib.util.find_spec("playwright") is not None:
-        pytest.skip("playwright installed -- ImportError path not exercised")
+    """patchright is not a hard dep; first use without it raises a clear hint."""
+    if importlib.util.find_spec("patchright") is not None:
+        pytest.skip("patchright installed -- ImportError path not exercised")
     t = playwright_transport()
-    with pytest.raises(ImportError, match="[Pp]laywright"):
+    with pytest.raises(ImportError, match="[Pp]atchright"):
         t("https://stats.ncaa.org/contests/1/play_by_play", {}, {})
 
 
