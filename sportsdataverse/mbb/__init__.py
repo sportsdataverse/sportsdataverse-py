@@ -36,6 +36,7 @@ from sportsdataverse.mbb.mbb_ncaa_stints import *
 from sportsdataverse.mbb.mbb_ncaa_strength import *
 from sportsdataverse.mbb.mbb_ncaa_team_parsers import *
 from sportsdataverse.mbb.mbb_ncaa_box_stats import *
+from sportsdataverse.mbb.mbb_ncaa_box_tabs import *
 from sportsdataverse.mbb.mbb_ncaa_game_pbp import *
 from sportsdataverse.mbb.mbb_ncaa_lineups import *
 from sportsdataverse.mbb.mbb_ncaa_possession_seg import *

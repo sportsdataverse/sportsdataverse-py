@@ -424,6 +424,9 @@ from sportsdataverse.wbb import parse_html as parse_html  # noqa: F401
 from sportsdataverse.wbb import parse_jumpball_won as parse_jumpball_won  # noqa: F401
 from sportsdataverse.wbb import parse_jumpball_won_or_lost as parse_jumpball_won_or_lost  # noqa: F401
 from sportsdataverse.wbb import parse_live_offensive_rebound as parse_live_offensive_rebound  # noqa: F401
+from sportsdataverse.wbb import parse_ncaa_wbb_linescore as parse_ncaa_wbb_linescore  # noqa: F401
+from sportsdataverse.wbb import parse_ncaa_wbb_officials as parse_ncaa_wbb_officials  # noqa: F401
+from sportsdataverse.wbb import parse_ncaa_wbb_team_stats as parse_ncaa_wbb_team_stats  # noqa: F401
 from sportsdataverse.wbb import parse_offensive_deadball_rebound as parse_offensive_deadball_rebound  # noqa: F401
 from sportsdataverse.wbb import parse_offensive_event as parse_offensive_event  # noqa: F401
 from sportsdataverse.wbb import parse_offensive_foul as parse_offensive_foul  # noqa: F401
@@ -911,6 +914,9 @@ __all__ = [
     "parse_jumpball_won",
     "parse_jumpball_won_or_lost",
     "parse_live_offensive_rebound",
+    "parse_ncaa_wbb_linescore",
+    "parse_ncaa_wbb_officials",
+    "parse_ncaa_wbb_team_stats",
     "parse_offensive_deadball_rebound",
     "parse_offensive_event",
     "parse_offensive_foul",

@@ -456,10 +456,13 @@ from sportsdataverse.mbb import parse_jumpball_won_or_lost as parse_jumpball_won
 from sportsdataverse.mbb import parse_live_offensive_rebound as parse_live_offensive_rebound  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_box as parse_ncaa_bb_box  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_game_pbp as parse_ncaa_bb_game_pbp  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_linescore as parse_ncaa_bb_linescore  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_officials as parse_ncaa_bb_officials  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_scoreboard as parse_ncaa_bb_scoreboard  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_shots as parse_ncaa_bb_shots  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_team_roster as parse_ncaa_bb_team_roster  # noqa: F401
 from sportsdataverse.mbb import parse_ncaa_bb_team_schedule as parse_ncaa_bb_team_schedule  # noqa: F401
+from sportsdataverse.mbb import parse_ncaa_bb_team_stats as parse_ncaa_bb_team_stats  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_deadball_rebound as parse_offensive_deadball_rebound  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_event as parse_offensive_event  # noqa: F401
 from sportsdataverse.mbb import parse_offensive_foul as parse_offensive_foul  # noqa: F401
@@ -975,10 +978,13 @@ __all__ = [
     "parse_live_offensive_rebound",
     "parse_ncaa_bb_box",
     "parse_ncaa_bb_game_pbp",
+    "parse_ncaa_bb_linescore",
+    "parse_ncaa_bb_officials",
     "parse_ncaa_bb_scoreboard",
     "parse_ncaa_bb_shots",
     "parse_ncaa_bb_team_roster",
     "parse_ncaa_bb_team_schedule",
+    "parse_ncaa_bb_team_stats",
     "parse_offensive_deadball_rebound",
     "parse_offensive_event",
     "parse_offensive_foul",
