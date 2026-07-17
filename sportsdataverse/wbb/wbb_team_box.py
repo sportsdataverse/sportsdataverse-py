@@ -200,8 +200,12 @@ def helper_wbb_team_box(final: dict) -> pl.DataFrame:
     if not competitions:
         return pl.DataFrame()
     comp = competitions[0]
-    if comp.get("boxscoreAvailable") != True:  # noqa: E712 -- R: box_score_available == TRUE
-        return pl.DataFrame()
+    # ESPN's header `boxscoreAvailable` flag is unreliable for archival games
+    # (pre-2014 WBB payloads carry full team statistics while the flag says
+    # false), so availability is derived from the payload itself -- the
+    # teams/statistics checks below are the real gate. This deliberately
+    # diverges from the R helper's original flag gate (fixed the same way in
+    # wehoop); matching it would drop ~97% of extractable 2006-2013 boxscores.
     teams = (final.get("boxscore") or {}).get("teams") or []
     competitors = comp.get("competitors") or []
     if len(teams) < 2 or len(competitors) < 2 or not teams[0].get("statistics"):
