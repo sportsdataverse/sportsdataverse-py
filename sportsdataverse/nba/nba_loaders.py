@@ -926,7 +926,12 @@ def load_nba_stats_schedules(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_stats_schedules
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 2025), the season START
+            year in span form (e.g. 2025 -> the ``schedule_2025-26``
+            asset / "2025-26" season). This asset is produced by the R
+            pipeline and its season numbering is unaffected by the
+            end-year convention migration applied elsewhere in the Python
+            NBA API (see :func:`compile_nba_season`, :func:`nba_availability`).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1018,12 +1023,15 @@ def load_nba_player_impact(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_player_impact
 
     Args:
-        seasons: an int or iterable of seasons (>= 1996).
+        seasons: an int or iterable of seasons (>= 1996), the season ENDING
+            year (e.g. 2024 = the 2023-24 season), matching the `season`
+            column in the returned frame.
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
         A polars (or pandas) DataFrame; seasons with no published asset are
-        skipped with a warning rather than raising (404-safe).
+        skipped with a warning rather than raising (404-safe). The `season`
+        column is the season ENDING year (2024 = 2023-24).
 
         |col_name               |type    |
         |:----------------------|:-------|
