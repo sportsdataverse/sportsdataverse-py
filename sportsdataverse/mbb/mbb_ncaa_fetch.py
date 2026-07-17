@@ -553,6 +553,9 @@ class _PlaywrightTransport:
         self._pw: Any = None
         self._browser: Any = None
         self._page: Any = None
+        # Browser profile dir, tied to this transport's lifetime -- removed in
+        # close() so a per-launch temp dir does not leak across proxy rotations.
+        self._temp_dir: Any = None
         self._challenge_solved = False
         # The proxy this browser was LAUNCHED with. Playwright binds the proxy at
         # launch, so honoring a rotation means relaunching -- see _ensure_page.
@@ -591,8 +594,12 @@ class _PlaywrightTransport:
         # (not the SwiftShader tell). The user_agent override is load-bearing (see
         # __init__). Proven live 2026-07-16: this exact shape clears bm-verify where
         # vanilla Playwright and a leaky-UA browser both failed.
+        # Retain the profile dir on the instance so close() can remove it; a bare
+        # mkdtemp leaked one dir per launch, and the browser relaunches on every
+        # proxy rotation. TemporaryDirectory also GC-finalizes as a backstop.
+        self._temp_dir = tempfile.TemporaryDirectory(prefix="ncaa_pw_")
         launch_kwargs: "dict[str, object]" = {
-            "user_data_dir": tempfile.mkdtemp(prefix="ncaa_pw_"),
+            "user_data_dir": self._temp_dir.name,
             "user_agent": self.user_agent,
             "no_viewport": True,
         }
@@ -661,13 +668,19 @@ class _PlaywrightTransport:
         )
 
     def close(self) -> None:
-        """Stop the browser + Playwright. Idempotent."""
+        """Stop the browser + Playwright and remove the profile dir. Idempotent."""
         for obj, meth in ((self._browser, "close"), (self._pw, "stop")):
             try:
                 if obj is not None:
                     getattr(obj, meth)()
             except Exception:  # noqa: BLE001 - best-effort teardown
                 pass
+        if self._temp_dir is not None:
+            try:
+                self._temp_dir.cleanup()  # remove the browser profile dir
+            except Exception:  # noqa: BLE001 - best-effort; a lingering file lock may defer it
+                pass
+            self._temp_dir = None
         self._browser = self._pw = self._page = None
         self._challenge_solved = False
         self._current_proxy = None
