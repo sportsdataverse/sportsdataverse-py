@@ -491,9 +491,12 @@ sched = load_nba_schedule(seasons=[most_recent_nba_season()])
 
 ### `year_to_season(year)` {#year_to_season}
 
-Convert a season-end year (e.g. 2024) to the NBA's hyphenated label
+Convert a season START year (e.g. 2023) to the NBA's hyphenated label
 
 (e.g. `"2023-24"`).
+
+Callers working in the end-year convention pass `end_year - 1` (e.g.
+`year_to_season(most_recent_nba_season() - 1)`).
 
 Handles century rollover (1999 -> `"1999-00"`) and zero-pads the
 second half of the label.
@@ -1331,13 +1334,13 @@ frame is tagged with a `season` column.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` |  | Season start year (e.g. 2023 for 2023-24). |
+| `season` | `int` |  | Season END year (e.g. 2024 for 2023-24). |
 | `season_type` | `str` | `'Regular Season'` | `"Regular Season"` (default) or `"Playoffs"`. |
 | `resume` | `bool` | `True` | Reuse per-game cached parquet when present. |
 | `cache_dir` | `Optional[str]` | `None` | Cache root; defaults to `SDV_PY_NBA_CACHE_DIR` or `~/.sdv_py_nba_cache/possessions`. |
 | `delay_s` | `float` | `0.6` | Seconds to sleep after each live fetch (rate-limit throttle). |
 | `lineup_source` | `str` | `'auto'` | Which on-court lineup producer to use — `"auto"` (default; tries rotation then falls back to pbp), `"rotation"` (gamerotation endpoint only), or `"pbp"` (pbp-derived, no gamerotation fetch — useful when the gamerotation endpoint is throttled or unavailable). |
-| `proxy_provider` | `Optional[Callable[[], Optional[str]]]` | `None` | Optional zero-arg callable returning a proxy URL (or `None`). **Called once for game discovery, then once per game** (`N + 1` calls for an `N`-game season), so a rotating pool spreads a season's fetches across many exit IPs rather than hammering `stats.nba.com` from one address. `stats.nba.com` rejects or hangs on datacenter/cloud IPs, so an unattended host (CI, a droplet) MUST supply one — a proxied request is judged on the proxy's exit IP, which is what makes such a host viable at all. Note discovery is proxied too: an unproxied index call returns no rows there, compiling the season to zero games without an error. Any `() -> str \| None` works; a round-robin pool's `.next` matches the signature directly:: compile_nba_season(2023, proxy_provider=round_robin.next) |
+| `proxy_provider` | `Optional[Callable[[], Optional[str]]]` | `None` | Optional zero-arg callable returning a proxy URL (or `None`). **Called once for game discovery, then once per game** (`N + 1` calls for an `N`-game season), so a rotating pool spreads a season's fetches across many exit IPs rather than hammering `stats.nba.com` from one address. `stats.nba.com` rejects or hangs on datacenter/cloud IPs, so an unattended host (CI, a droplet) MUST supply one — a proxied request is judged on the proxy's exit IP, which is what makes such a host viable at all. Note discovery is proxied too: an unproxied index call returns no rows there, compiling the season to zero games without an error. Any `() -> str \| None` works; a round-robin pool's `.next` matches the signature directly:: compile_nba_season(2024, proxy_provider=round_robin.next) |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**
@@ -1349,19 +1352,19 @@ The season possession frame (+ `season` and `game_date` cols). Empty typed frame
 ```python
 from sportsdataverse.nba.nba_season_compile import compile_nba_season
 
-poss = compile_nba_season(2023)
+poss = compile_nba_season(2024)
 print(poss.shape)          # (n_possessions, n_cols)
-print(poss["season"][0])   # 2023
+print(poss["season"][0])   # 2024
 
 # Resume a partially completed run and return as pandas
 
-poss_pd = compile_nba_season(2023, resume=True, return_as_pandas=True)
+poss_pd = compile_nba_season(2024, resume=True, return_as_pandas=True)
 print(type(poss_pd))       # <class 'pandas.core.frame.DataFrame'>
 
 # Compile Playoffs with a custom cache directory
 
 poss = compile_nba_season(
-    2023,
+    2024,
     season_type="Playoffs",
     cache_dir="/tmp/nba_cache",
 )
@@ -2137,7 +2140,7 @@ reports it as a separate column too).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `int \| list[int]` |  | A season (start year, e.g. `2019`) or list of seasons. |
+| `seasons` | `int \| list[int]` |  | A season (end year, e.g. `2020`) or list of seasons. |
 | `league` | `str` | `'nba'` | `"nba"`, `"wnba"`, or `"gleague"`. |
 | `gleague_bridge` | `bool` | `False` | When `True` (and `league != "gleague"`), also pulls each season's G-League (`league_id="20"`) bulk GP as a development-outcome bridge feature before scoring. Best-effort: gracefully absent (never raises) when the G-League bulk call returns no rows for a season; the returned schema is unaffected either way since the bridge column isn't part of the bundled artifact's scored features. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |

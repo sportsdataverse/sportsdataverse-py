@@ -178,6 +178,17 @@
 
 ## Unreleased
 
+### BREAKING CHANGES
+
+- **NBA season convention is now END-year across the Python API.**
+  `compile_nba_season(2024)` and `nba_availability` now use the season ENDING
+  year (2024 = 2023-24), matching `most_recent_nba_season()` and every
+  ESPN-sourced `load_nba_*` dataset. Previously the stats.nba.com compile path
+  used the start year — external callers passing a start year must add 1.
+  Unchanged: `year_to_season` (still a low-level start-year helper — call it as
+  `year_to_season(end_year - 1)`), and `nba_box_logs` (takes the `"2023-24"`
+  string, not an integer).
+
 ### CFB — loaders for 6 published-but-unreachable dataset releases
 
 `cfbfastR-cfb-data` publishes 18 dataset tags to `sportsdataverse-data`; sdv-py

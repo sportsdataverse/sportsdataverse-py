@@ -166,6 +166,28 @@ def test_availability_features_median_ref_uses_passed_scalar() -> None:
     assert feats_frame["prior_gp_pct"][0] != 0.33
 
 
+def test_nba_availability_tags_end_year(monkeypatch: pytest.MonkeyPatch) -> None:
+    """``seasons`` is END-year (2024 == the 2023-24 season); output ``season`` matches it.
+
+    The stub only returns rows for the stats.nba.com season string
+    ``"2023-24"`` -- the correct derivation for end-year input 2024 (empty
+    frame for every other requested string). Under the old start-year
+    semantics the loop would have requested/tagged that data as ``2023``,
+    and the final ``season_list`` filter (``[2024]``) would drop it entirely
+    -- producing an EMPTY output. Under the end-year flip the same fetched
+    data is tagged ``2024`` and survives the filter.
+    """
+    mod = importlib.import_module("sportsdataverse.nba.nba_availability")
+    synthetic = pl.DataFrame({"player_id": [1, 2], "age": [24, 30], "gp": [70, 60]})
+
+    def _fake(season: str, league_id: str | None = None) -> pl.DataFrame:
+        return synthetic if season == "2023-24" else pl.DataFrame()
+
+    monkeypatch.setattr(mod, "nba_stats_leaguedashplayerstats", _fake)
+    out = mod.nba_availability(2024)
+    assert out["season"].unique().to_list() == [2024]
+
+
 def test_availability_runtime_dedups_duplicate_player_id(monkeypatch: pytest.MonkeyPatch) -> None:
     """A duplicated player_id in the bulk season frame is collapsed, not summed."""
     mod = importlib.import_module("sportsdataverse.nba.nba_availability")

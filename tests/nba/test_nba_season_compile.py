@@ -49,10 +49,31 @@ def test_compile_dedups_gameids_and_tags_season(tmp_path, monkeypatch):
         return _poss(gid)
 
     monkeypatch.setattr(C, "_fetch_possessions", fake_fetch)
-    out = C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)
+    out = C.compile_nba_season(2024, cache_dir=str(tmp_path), delay_s=0.0)
     assert sorted(calls) == ["001", "002"]  # deduped
     assert set(out["game_id"].unique().to_list()) == {"001", "002"}
-    assert out["season"].unique().to_list() == [2023]
+    assert out["season"].unique().to_list() == [2024]
+
+
+def test_season_game_index_converts_end_year_to_stats_nba_season_string(monkeypatch):
+    """``_season_game_index`` takes the season END year but stats.nba.com's
+    ``leaguegamelog`` wants the START-year hyphenated label -- the ``- 1``
+    inside ``_season_game_index`` is what bridges the two conventions. This
+    exercises that conversion directly (unlike the other tests here, which
+    monkeypatch ``_season_game_index`` wholesale and so never touch it).
+    """
+    from sportsdataverse.nba import nba_stats
+
+    seen: dict = {}
+
+    def fake_leaguegamelog(**kwargs):
+        seen.update(kwargs)
+        return pl.DataFrame()
+
+    monkeypatch.setattr(nba_stats, "nba_stats_leaguegamelog", fake_leaguegamelog)
+    out = C._season_game_index(2024, "Regular Season")
+    assert seen["season"] == "2023-24"
+    assert out.is_empty()
 
 
 def test_compile_resume_skips_cached(tmp_path, monkeypatch):

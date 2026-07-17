@@ -41,7 +41,7 @@ def _season_game_index(season: int, season_type: str, *, proxy_url: Optional[str
     and ISO-datetime string forms.
 
     Args:
-        season: Season start year (e.g. 2023 for 2023-24).
+        season: Season END year (e.g. 2024 for 2023-24).
         season_type: NBA season type string (e.g. ``"Regular Season"``).
         proxy_url: Optional proxy URL forwarded to the underlying transport.
             Discovery is a stats.nba.com call like any other — on a datacenter
@@ -55,7 +55,7 @@ def _season_game_index(season: int, season_type: str, *, proxy_url: Optional[str
     from .nba_stats import nba_stats_leaguegamelog
 
     log = nba_stats_leaguegamelog(
-        season=year_to_season(season),
+        season=year_to_season(season - 1),
         season_type_all_star=season_type,
         league_id=_LEAGUE_ID,
         proxy_url=proxy_url,
@@ -121,7 +121,7 @@ def compile_nba_season(
     frame is tagged with a ``season`` column.
 
     Args:
-        season: Season start year (e.g. 2023 for 2023-24).
+        season: Season END year (e.g. 2024 for 2023-24).
         season_type: ``"Regular Season"`` (default) or ``"Playoffs"``.
         resume: Reuse per-game cached parquet when present.
         cache_dir: Cache root; defaults to ``SDV_PY_NBA_CACHE_DIR`` or
@@ -145,7 +145,7 @@ def compile_nba_season(
             Any ``() -> str | None`` works; a round-robin pool's ``.next``
             matches the signature directly::
 
-                compile_nba_season(2023, proxy_provider=round_robin.next)
+                compile_nba_season(2024, proxy_provider=round_robin.next)
 
         return_as_pandas: Return pandas instead of polars.
 
@@ -163,19 +163,19 @@ def compile_nba_season(
 
             from sportsdataverse.nba.nba_season_compile import compile_nba_season
 
-            poss = compile_nba_season(2023)
+            poss = compile_nba_season(2024)
             print(poss.shape)          # (n_possessions, n_cols)
-            print(poss["season"][0])   # 2023
+            print(poss["season"][0])   # 2024
 
         Resume a partially completed run and return as pandas::
 
-            poss_pd = compile_nba_season(2023, resume=True, return_as_pandas=True)
+            poss_pd = compile_nba_season(2024, resume=True, return_as_pandas=True)
             print(type(poss_pd))       # <class 'pandas.core.frame.DataFrame'>
 
         Compile Playoffs with a custom cache directory::
 
             poss = compile_nba_season(
-                2023,
+                2024,
                 season_type="Playoffs",
                 cache_dir="/tmp/nba_cache",
             )

@@ -269,8 +269,11 @@ def most_recent_nba_season():
 
 
 def year_to_season(year):
-    """Convert a season-end year (e.g. 2024) to the NBA's hyphenated label
+    """Convert a season START year (e.g. 2023) to the NBA's hyphenated label
     (e.g. ``"2023-24"``).
+
+    Callers working in the end-year convention pass ``end_year - 1`` (e.g.
+    ``year_to_season(most_recent_nba_season() - 1)``).
 
     Handles century rollover (1999 -> ``"1999-00"``) and zero-pads the
     second half of the label.

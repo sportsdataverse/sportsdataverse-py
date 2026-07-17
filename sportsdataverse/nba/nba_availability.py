@@ -160,7 +160,7 @@ def nba_availability(
     reports it as a separate column too).
 
     Args:
-        seasons: A season (start year, e.g. ``2019``) or list of seasons.
+        seasons: A season (end year, e.g. ``2020``) or list of seasons.
         league: ``"nba"``, ``"wnba"``, or ``"gleague"``.
         gleague_bridge: When ``True`` (and ``league != "gleague"``), also
             pulls each season's G-League (``league_id="20"``) bulk GP as a
@@ -193,14 +193,19 @@ def nba_availability(
     earliest = min(season_list) - _LOOKBACK_SEASONS
     latest = max(season_list)
     frames = []
-    for start_year in range(earliest, latest + 1):
-        season_str = f"{start_year}-{str(start_year + 1)[-2:]}"
+    for end_year in range(earliest, latest + 1):
+        # Public `seasons` is now the END year; derive the START year to
+        # build the stats.nba.com "YYYY-YY" season string.
+        start_year = end_year - 1
+        season_str = f"{start_year}-{str(end_year)[-2:]}"
         if league == "wnba":
-            # WNBA plays a single-year season label (no cross-year split);
-            # wnba_stats mirrors the nba_stats parameter shape on its own host.
+            # WNBA plays a single-year season label (no cross-year split, so
+            # there's no start/end distinction to derive) -- unaffected by
+            # the NBA end-year migration; wnba_stats mirrors the nba_stats
+            # parameter shape on its own host.
             from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashplayerstats  # noqa: PLC0415
 
-            bulk = wnba_stats_leaguedashplayerstats(season=str(start_year))
+            bulk = wnba_stats_leaguedashplayerstats(season=str(end_year))
         elif league == "gleague":
             bulk = nba_stats_leaguedashplayerstats(season=season_str, league_id="20")
         else:
@@ -216,7 +221,7 @@ def nba_availability(
         frames.append(
             bulk.select(
                 pl.col("player_id").cast(pl.Int64).cast(pl.Utf8),
-                pl.lit(start_year).cast(pl.Int64).alias("season"),
+                pl.lit(end_year).cast(pl.Int64).alias("season"),
                 pl.col("age").cast(pl.Float64),
                 pl.col("gp").cast(pl.Int64),
             ).unique(subset=["player_id"], keep="first")
@@ -228,8 +233,9 @@ def nba_availability(
 
     if gleague_bridge and league != "gleague":
         bridge_frames = []
-        for start_year in range(earliest, latest + 1):
-            season_str = f"{start_year}-{str(start_year + 1)[-2:]}"
+        for end_year in range(earliest, latest + 1):
+            start_year = end_year - 1
+            season_str = f"{start_year}-{str(end_year)[-2:]}"
             try:
                 gbulk = nba_stats_leaguedashplayerstats(season=season_str, league_id="20")
             except Exception:  # pragma: no cover - defensive, matches "never raises"
@@ -239,7 +245,7 @@ def nba_availability(
             bridge_frames.append(
                 gbulk.select(
                     pl.col("player_id").cast(pl.Int64).cast(pl.Utf8),
-                    pl.lit(start_year).cast(pl.Int64).alias("season"),
+                    pl.lit(end_year).cast(pl.Int64).alias("season"),
                     pl.col("gp").cast(pl.Int64).alias("gleague_gp"),
                 )
             )
