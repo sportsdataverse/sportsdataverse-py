@@ -44,7 +44,7 @@ def test_compile_dedups_gameids_and_tags_season(tmp_path, monkeypatch):
     )
     calls = []
 
-    def fake_fetch(gid, league_id, *, lineup_source: str = "auto", proxy_url=None):
+    def fake_fetch(gid, league_id, *, lineup_source: str = "auto", proxy_url=None, **_kwargs):
         calls.append(gid)
         return _poss(gid)
 
@@ -84,13 +84,15 @@ def test_compile_resume_skips_cached(tmp_path, monkeypatch):
             ["001", "002"], [datetime.date(2023, 10, 24), datetime.date(2023, 10, 25)]
         ),
     )
-    monkeypatch.setattr(C, "_fetch_possessions", lambda gid, lid, *, lineup_source="auto", proxy_url=None: _poss(gid))
+    monkeypatch.setattr(
+        C, "_fetch_possessions", lambda gid, lid, *, lineup_source="auto", proxy_url=None, **_kwargs: _poss(gid)
+    )
     C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)  # warm cache
     calls = []
     monkeypatch.setattr(
         C,
         "_fetch_possessions",
-        lambda gid, lid, *, lineup_source="auto", proxy_url=None: (calls.append(gid), _poss(gid))[1],
+        lambda gid, lid, *, lineup_source="auto", proxy_url=None, **_kwargs: (calls.append(gid), _poss(gid))[1],
     )
     C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)  # all cached
     assert calls == []  # nothing re-fetched
@@ -106,7 +108,7 @@ def test_compile_best_effort_skips_failing_game(tmp_path, monkeypatch):
         ),
     )
 
-    def fetch(gid, lid, *, lineup_source: str = "auto", proxy_url=None):
+    def fetch(gid, lid, *, lineup_source: str = "auto", proxy_url=None, **_kwargs):
         if gid == "bad":
             raise RuntimeError("api boom")
         return _poss(gid)
@@ -143,7 +145,7 @@ def test_compile_rotates_proxy_once_per_game(tmp_path, monkeypatch):
     pool = iter(["http://p0:0", "http://p1:1", "http://p2:2", "http://p3:3"])
     seen: list[str | None] = []
 
-    def fetch(gid, lid, *, lineup_source="auto", proxy_url=None):
+    def fetch(gid, lid, *, lineup_source="auto", proxy_url=None, **_kwargs):
         seen.append(proxy_url)  # the URL must actually REACH the fetcher
         return _poss(gid)
 
@@ -160,7 +162,7 @@ def test_compile_without_proxy_provider_passes_none(tmp_path, monkeypatch):
     )
     seen: list[str | None] = []
 
-    def fetch(gid, lid, *, lineup_source="auto", proxy_url=None):
+    def fetch(gid, lid, *, lineup_source="auto", proxy_url=None, **_kwargs):
         seen.append(proxy_url)
         return _poss(gid)
 
@@ -184,7 +186,9 @@ def test_compile_proxies_game_discovery(tmp_path, monkeypatch):
         return _idx(["001"], [datetime.date(2023, 10, 24)])
 
     monkeypatch.setattr(C, "_season_game_index", idx)
-    monkeypatch.setattr(C, "_fetch_possessions", lambda gid, lid, *, lineup_source="auto", proxy_url=None: _poss(gid))
+    monkeypatch.setattr(
+        C, "_fetch_possessions", lambda gid, lid, *, lineup_source="auto", proxy_url=None, **_kwargs: _poss(gid)
+    )
     C.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0, proxy_provider=lambda: "http://p1:1")
     assert seen == ["http://p1:1"]
 
@@ -195,11 +199,11 @@ def test_nba_possessions_threads_proxy_to_every_fetcher(monkeypatch):
 
     got: dict[str, str | None] = {}
 
-    def _pbp(game_id, league_id="00", *, proxy_url=None):
+    def _pbp(game_id, league_id="00", *, proxy_url=None, **_kwargs):
         got["pbp"] = proxy_url
         return json.loads(pathlib.Path("tests/fixtures/nba_engine/0022300001/playbyplayv3.json").read_text())
 
-    def _box(game_id, league_id="00", *, proxy_url=None):
+    def _box(game_id, league_id="00", *, proxy_url=None, **_kwargs):
         got["box"] = proxy_url
         return json.loads(pathlib.Path("tests/fixtures/nba_engine/0022300001/boxscoretraditionalv3.json").read_text())
 
@@ -234,7 +238,7 @@ def test_compile_attaches_game_date(monkeypatch, tmp_path):
 
     monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: _fake_index())
     monkeypatch.setattr(
-        mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None: _fixture_poss()
+        mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None, **_kwargs: _fixture_poss()
     )
     out = mod.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)
     assert out.schema["game_date"] == pl.Date
@@ -269,7 +273,7 @@ def test_compile_missing_game_date_raises(monkeypatch, tmp_path):
     )
     monkeypatch.setattr(mod, "_season_game_index", lambda s, st, *, proxy_url=None: bad_index)
     monkeypatch.setattr(
-        mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None: _fixture_poss()
+        mod, "_fetch_possessions", lambda gid, lid, lineup_source="auto", proxy_url=None, **_kwargs: _fixture_poss()
     )
     with pytest.raises(ValueError, match="game_date"):
         mod.compile_nba_season(2023, cache_dir=str(tmp_path), delay_s=0.0)

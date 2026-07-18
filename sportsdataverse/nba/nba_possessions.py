@@ -16,7 +16,7 @@ import logging
 import os
 import re
 from pathlib import Path
-from typing import Callable, Dict, Optional, Union
+from typing import Callable, Dict, Mapping, Optional, Union
 
 import pandas as pd
 import polars as pl
@@ -1068,13 +1068,56 @@ def attach_possession_lineups(
 # Raw payload store (read-through against a hoopR-nba-stats-raw checkout)
 # ---------------------------------------------------------------------------
 
+#: A store root spec: one root for every endpoint, or a per-endpoint mapping
+#: (``"*"`` is the default key). ``None`` -> env vars; ``""`` -> disabled.
+RawStoreDir = Optional[Union[str, Path, Mapping[str, Union[str, Path]]]]
 
-def _raw_store_path(endpoint: str, game_id: str, suffix: str = "") -> Optional[Path]:
+
+def _resolve_store_root(endpoint: str, root: RawStoreDir) -> Optional[str]:
+    """Resolve one endpoint's store root: mapping entry > scalar arg > per-endpoint env > generic env.
+
+    The per-endpoint env var is ``SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`` (slug
+    upper-cased, e.g. ``SDV_PY_NBA_RAW_JSON_DIR_PLAYBYPLAYV3``); it beats the
+    generic ``SDV_PY_NBA_RAW_JSON_DIR`` so payload families can live in
+    independent trees. An empty-string value at any level disables the store
+    for that endpoint.
+    """
+    resolved: Optional[Union[str, Path]]
+    if isinstance(root, Mapping):
+        resolved = root.get(endpoint, root.get("*"))
+        if resolved is None:
+            resolved = _env_store_root(endpoint)
+    elif root is not None:
+        resolved = root
+    else:
+        resolved = _env_store_root(endpoint)
+    if resolved is None or not str(resolved):
+        return None
+    return str(resolved)
+
+
+def _env_store_root(endpoint: str) -> Optional[str]:
+    """Per-endpoint env root (``SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}``), else the generic one."""
+    per_endpoint = os.environ.get(f"SDV_PY_NBA_RAW_JSON_DIR_{endpoint.upper()}")
+    if per_endpoint is not None:
+        return per_endpoint
+    return os.environ.get("SDV_PY_NBA_RAW_JSON_DIR")
+
+
+def _raw_store_path(
+    endpoint: str,
+    game_id: str,
+    suffix: str = "",
+    *,
+    root: RawStoreDir = None,
+) -> Optional[Path]:
     """Resolve the raw-store path for one payload, or ``None`` when disabled.
 
-    Enabled by setting ``SDV_PY_NBA_RAW_JSON_DIR`` to the JSON root of a raw
-    store (canonically a ``hoopR-nba-stats-raw`` checkout's ``nba_stats/json``
-    directory). Layout: ``{root}/{endpoint}/{season}/{game_id}{suffix}.json``,
+    The store root comes from *root* when given, else the
+    ``SDV_PY_NBA_RAW_JSON_DIR`` env var (explicit arg > env > disabled —
+    the same precedence as ``compile_nba_season``'s ``cache_dir``). The root
+    is canonically a ``hoopR-nba-stats-raw`` checkout's ``nba_stats/json``
+    directory. Layout: ``{root}/{endpoint}/{season}/{game_id}{suffix}.json``,
     where ``season`` is the start year decoded from digits 4-5 of the game id
     (``0029600001`` -> ``1996``, ``0022300001`` -> ``2023``; NBA game ids
     before 1946 don't exist, so ``>= 46`` selects the 1900s).
@@ -1084,13 +1127,20 @@ def _raw_store_path(endpoint: str, game_id: str, suffix: str = "") -> Optional[P
         game_id: Ten-character NBA game identifier.
         suffix: Optional filename suffix (e.g. ``"_p3"`` for per-period
             payloads) inserted before ``.json``.
+        root: Explicit store root spec (:data:`RawStoreDir`): a single path
+            for every endpoint, or a per-endpoint mapping with an optional
+            ``"*"`` default key. ``None`` falls back to the env vars
+            (per-endpoint ``SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}``, then the
+            generic ``SDV_PY_NBA_RAW_JSON_DIR``); an empty string at any
+            level force-disables the store for that endpoint.
 
     Returns:
         Absolute :class:`~pathlib.Path`, or ``None`` when the store is off.
     """
-    root = os.environ.get("SDV_PY_NBA_RAW_JSON_DIR")
-    if not root:
+    resolved = _resolve_store_root(endpoint, root)
+    if resolved is None:
         return None
+    root = resolved
     yy = game_id[3:5]
     if yy.isdigit():
         season = str(1900 + int(yy)) if int(yy) >= 46 else str(2000 + int(yy))
@@ -1099,7 +1149,15 @@ def _raw_store_path(endpoint: str, game_id: str, suffix: str = "") -> Optional[P
     return Path(root) / endpoint / season / f"{game_id}{suffix}.json"
 
 
-def _through_raw_store(endpoint: str, game_id: str, fetch: Callable[[], dict], *, suffix: str = "") -> dict:
+def _through_raw_store(
+    endpoint: str,
+    game_id: str,
+    fetch: Callable[[], dict],
+    *,
+    suffix: str = "",
+    store_dir: RawStoreDir = None,
+    readonly: Optional[bool] = None,
+) -> dict:
     """Read-through raw store: a local JSON wins, the network fills misses.
 
     With ``SDV_PY_NBA_RAW_JSON_DIR`` unset this is exactly ``fetch()``. On a
@@ -1109,23 +1167,28 @@ def _through_raw_store(endpoint: str, game_id: str, fetch: Callable[[], dict], *
     A present-but-unreadable file falls back to ``fetch()`` and is rewritten;
     a persist failure logs a warning and never fails the pipeline.
 
-    Setting ``SDV_PY_NBA_RAW_JSON_READONLY=1`` additionally disables the
-    persist half: reads still hit the store, but misses fetch without
-    writing. This is the mode for compile/build consumers (e.g. the
-    hoopR-nba-stats-data possession warm) so that only the raw repo's own
-    scrape sweep ever fills the store — separation of concerns between the
-    -raw (scrape + push) and -data (compile + release) repos.
+    Read-only mode disables the persist half: reads still hit the store, but
+    misses fetch without writing. This is the mode for compile/build
+    consumers (e.g. the hoopR-nba-stats-data possession warm) so that only
+    the raw repo's own scrape sweep ever fills the store — separation of
+    concerns between the -raw (scrape + push) and -data (compile + release)
+    repos. Enabled per call via *readonly* or ambiently via
+    ``SDV_PY_NBA_RAW_JSON_READONLY=1`` (explicit arg > env).
 
     Args:
         endpoint: stats.nba.com endpoint slug (store subdirectory).
         game_id: Ten-character NBA game identifier.
         fetch: Zero-arg callable performing the live fetch.
         suffix: Optional filename suffix forwarded to :func:`_raw_store_path`.
+        store_dir: Explicit store root spec — single path or per-endpoint
+            mapping (``None`` -> env vars; ``""`` -> disabled), forwarded
+            to :func:`_raw_store_path`.
+        readonly: Explicit read-only flag; ``None`` defers to the env var.
 
     Returns:
         Raw payload ``dict`` (from disk on hit, from ``fetch()`` on miss).
     """
-    path = _raw_store_path(endpoint, game_id, suffix)
+    path = _raw_store_path(endpoint, game_id, suffix, root=store_dir)
     if path is None:
         return fetch()
     if path.exists():
@@ -1134,7 +1197,8 @@ def _through_raw_store(endpoint: str, game_id: str, fetch: Callable[[], dict], *
         except (OSError, ValueError):
             logger.warning("raw store: unreadable %s -- refetching", path)
     payload = fetch()
-    if os.environ.get("SDV_PY_NBA_RAW_JSON_READONLY"):
+    ro = bool(os.environ.get("SDV_PY_NBA_RAW_JSON_READONLY")) if readonly is None else readonly
+    if ro:
         return payload
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -1151,7 +1215,14 @@ def _through_raw_store(endpoint: str, game_id: str, fetch: Callable[[], dict], *
 # ---------------------------------------------------------------------------
 
 
-def _fetch_pbp(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
+def _fetch_pbp(
+    game_id: str,
+    league_id: str = "00",
+    *,
+    proxy_url: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+    raw_store_readonly: Optional[bool] = None,
+) -> dict:
     """Fetch raw play-by-play v3 payload from stats.nba.com.
 
     Args:
@@ -1159,10 +1230,13 @@ def _fetch_pbp(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] 
         league_id: League identifier (accepted for API symmetry; not forwarded
             to ``nba_stats_playbyplayv3`` which does not expose it).
         proxy_url: Optional proxy URL forwarded to the underlying transport.
+        raw_store_dir: Explicit raw-store root, or a per-endpoint mapping
+            (``None`` -> env vars; see :func:`_resolve_store_root`).
+        raw_store_readonly: Explicit read-only flag (``None`` -> env var).
 
     Returns:
         Raw ``dict`` from ``nba_stats_playbyplayv3`` (or the raw store when
-        ``SDV_PY_NBA_RAW_JSON_DIR`` is set and holds this game).
+        enabled and holding this game).
     """
     from sportsdataverse.nba.nba_stats import nba_stats_playbyplayv3
 
@@ -1170,20 +1244,32 @@ def _fetch_pbp(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] 
         "playbyplayv3",
         game_id,
         lambda: nba_stats_playbyplayv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url),
+        store_dir=raw_store_dir,
+        readonly=raw_store_readonly,
     )
 
 
-def _fetch_rotation(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
+def _fetch_rotation(
+    game_id: str,
+    league_id: str = "00",
+    *,
+    proxy_url: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+    raw_store_readonly: Optional[bool] = None,
+) -> dict:
     """Fetch raw gamerotation payload from stats.nba.com.
 
     Args:
         game_id: Ten-character NBA game identifier.
         league_id: League identifier (default ``"00"`` for NBA).
         proxy_url: Optional proxy URL forwarded to the underlying transport.
+        raw_store_dir: Explicit raw-store root, or a per-endpoint mapping
+            (``None`` -> env vars; see :func:`_resolve_store_root`).
+        raw_store_readonly: Explicit read-only flag (``None`` -> env var).
 
     Returns:
         Raw ``dict`` from ``nba_stats_gamerotation`` (or the raw store when
-        ``SDV_PY_NBA_RAW_JSON_DIR`` is set and holds this game).
+        enabled and holding this game).
     """
     from sportsdataverse.nba.nba_stats import nba_stats_gamerotation
 
@@ -1191,10 +1277,19 @@ def _fetch_rotation(game_id: str, league_id: str = "00", *, proxy_url: Optional[
         "gamerotation",
         game_id,
         lambda: nba_stats_gamerotation(game_id=game_id, league_id=league_id, return_parsed=False, proxy_url=proxy_url),
+        store_dir=raw_store_dir,
+        readonly=raw_store_readonly,
     )
 
 
-def _fetch_box(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
+def _fetch_box(
+    game_id: str,
+    league_id: str = "00",
+    *,
+    proxy_url: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+    raw_store_readonly: Optional[bool] = None,
+) -> dict:
     """Fetch raw boxscore traditional v3 payload from stats.nba.com.
 
     Args:
@@ -1202,10 +1297,13 @@ def _fetch_box(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] 
         league_id: League identifier (accepted for API symmetry; not forwarded
             to ``nba_stats_boxscoretraditionalv3`` which does not expose it).
         proxy_url: Optional proxy URL forwarded to the underlying transport.
+        raw_store_dir: Explicit raw-store root, or a per-endpoint mapping
+            (``None`` -> env vars; see :func:`_resolve_store_root`).
+        raw_store_readonly: Explicit read-only flag (``None`` -> env var).
 
     Returns:
         Raw ``dict`` from ``nba_stats_boxscoretraditionalv3`` (or the raw
-        store when ``SDV_PY_NBA_RAW_JSON_DIR`` is set and holds this game).
+        store when enabled and holding this game).
     """
     from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3
 
@@ -1213,6 +1311,8 @@ def _fetch_box(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] 
         "boxscoretraditionalv3",
         game_id,
         lambda: nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url),
+        store_dir=raw_store_dir,
+        readonly=raw_store_readonly,
     )
 
 
@@ -1222,6 +1322,8 @@ def _fetch_box_periods(
     *,
     league_id: str = "00",
     proxy_url: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+    raw_store_readonly: Optional[bool] = None,
 ) -> Dict[int, dict]:
     """Fetch per-period range-boxscores (one ``boxscoretraditionalv3`` call per period).
 
@@ -1243,6 +1345,9 @@ def _fetch_box_periods(
             forwarded to ``nba_stats_boxscoretraditionalv3``, which has no
             ``league_id`` parameter).
         proxy_url: Optional proxy URL forwarded to the underlying transport.
+        raw_store_dir: Explicit raw-store root, or a per-endpoint mapping
+            (``None`` -> env vars; see :func:`_resolve_store_root`).
+        raw_store_readonly: Explicit read-only flag (``None`` -> env var).
 
     Returns:
         ``{period: raw_boxscoretraditionalv3_range_payload}`` — one entry for
@@ -1273,6 +1378,8 @@ def _fetch_box_periods(
             game_id,
             _fetch_period,
             suffix=f"_p{period}",
+            store_dir=raw_store_dir,
+            readonly=raw_store_readonly,
         )
     return out
 
@@ -1294,6 +1401,8 @@ def nba_possessions(
     lineup_source: str = "auto",
     period_boxscores: Optional[Dict[int, dict]] = None,
     proxy_url: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+    raw_store_readonly: Optional[bool] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Fetch and build the possession-level lineup stint matrix for a single game.
@@ -1355,6 +1464,19 @@ def nba_possessions(
             IPs, so an unattended host (CI, a droplet) MUST supply a proxy;
             see :func:`~sportsdataverse.nba.nba_season_compile.compile_nba_season`'s
             ``proxy_provider`` to rotate one per game across a season.
+        raw_store_dir: Explicit raw JSON store root for the payloads this
+            function fetches — a single path for every endpoint, or a
+            per-endpoint mapping (keys ``playbyplayv3`` /
+            ``boxscoretraditionalv3`` / ``gamerotation`` /
+            ``boxscoretraditionalv3_period``, ``"*"`` as default) so payload
+            families can live in independent trees. ``None`` (default) falls
+            back to the env vars (``SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}``,
+            then ``SDV_PY_NBA_RAW_JSON_DIR``); ``""`` force-disables.
+            Mapping entry > scalar arg > per-endpoint env > generic env —
+            same spirit as ``compile_nba_season``'s ``cache_dir``.
+        raw_store_readonly: If ``True``, store hits are read but misses are
+            never persisted (pure-consumer mode). ``None`` (default) defers
+            to ``SDV_PY_NBA_RAW_JSON_READONLY``.
         return_as_pandas: If ``True``, return a :class:`pandas.DataFrame`
             instead of :class:`polars.DataFrame`.
 
@@ -1415,8 +1537,12 @@ def nba_possessions(
     if lineup_source not in ("auto", "rotation", "pbp", "quarter_box"):
         raise ValueError(f"lineup_source must be 'auto'|'rotation'|'pbp'|'quarter_box', got {lineup_source!r}")
 
-    raw_pbp = _fetch_pbp(game_id, league_id, proxy_url=proxy_url)
-    raw_box = _fetch_box(game_id, league_id, proxy_url=proxy_url)
+    raw_pbp = _fetch_pbp(
+        game_id, league_id, proxy_url=proxy_url, raw_store_dir=raw_store_dir, raw_store_readonly=raw_store_readonly
+    )
+    raw_box = _fetch_box(
+        game_id, league_id, proxy_url=proxy_url, raw_store_dir=raw_store_dir, raw_store_readonly=raw_store_readonly
+    )
     enh = enhanced_pbp_from_payload(raw_pbp, league_id=league_id)
     home, away = boxscore_home_away(raw_box)
 
@@ -1424,7 +1550,9 @@ def nba_possessions(
         return players_on_court_from_pbp(enh, raw_box, home_team_id=home, away_team_id=away), "pbp"
 
     def _from_rotation() -> "tuple[pl.DataFrame, str]":
-        raw_rot = _fetch_rotation(game_id, league_id, proxy_url=proxy_url)
+        raw_rot = _fetch_rotation(
+            game_id, league_id, proxy_url=proxy_url, raw_store_dir=raw_store_dir, raw_store_readonly=raw_store_readonly
+        )
         rot = parse_rotation_resultsets(raw_rot)
         oc = players_on_court_from_rotation(enh, rot, home_team_id=home, away_team_id=away)
         if oc.is_empty():
@@ -1444,7 +1572,14 @@ def nba_possessions(
         pb = period_boxscores
         if pb is None:
             n_periods = int(enh["period"].max() or 0) if not enh.is_empty() else 0
-            pb = _fetch_box_periods(game_id, n_periods, league_id=league_id, proxy_url=proxy_url)
+            pb = _fetch_box_periods(
+                game_id,
+                n_periods,
+                league_id=league_id,
+                proxy_url=proxy_url,
+                raw_store_dir=raw_store_dir,
+                raw_store_readonly=raw_store_readonly,
+            )
         oc = players_on_court_from_quarter_boxscores(enh, pb, raw_box, home_team_id=home, away_team_id=away)
         if oc.is_empty():
             raise ValueError("quarter_box produced empty on-court frame")

@@ -11,7 +11,10 @@ import logging
 import os
 import time
 from pathlib import Path
-from typing import Callable, List, Optional, Union
+from typing import TYPE_CHECKING, Callable, List, Optional, Union
+
+if TYPE_CHECKING:
+    from .nba_possessions import RawStoreDir
 
 import pandas as pd
 import polars as pl
@@ -79,6 +82,8 @@ def _fetch_possessions(
     *,
     lineup_source: str = "auto",
     proxy_url: Optional[str] = None,
+    raw_store_dir: RawStoreDir = None,
+    raw_store_readonly: Optional[bool] = None,
 ) -> pl.DataFrame:
     """Fetch one game's possession+lineup frame (monkeypatchable).
 
@@ -91,13 +96,24 @@ def _fetch_possessions(
             gamerotation fetch).
         proxy_url: Optional proxy URL forwarded to every underlying
             ``stats.nba.com`` call for this game.
+        raw_store_dir: Explicit raw JSON store root or per-endpoint mapping
+            (``None`` -> env vars), forwarded to
+            :func:`~sportsdataverse.nba.nba_possessions.nba_possessions`.
+        raw_store_readonly: Explicit store read-only flag (``None`` -> env var).
 
     Returns:
         Possession stint matrix as a polars DataFrame.
     """
     from .nba_possessions import nba_possessions
 
-    return nba_possessions(game_id, league_id, lineup_source=lineup_source, proxy_url=proxy_url)
+    return nba_possessions(
+        game_id,
+        league_id,
+        lineup_source=lineup_source,
+        proxy_url=proxy_url,
+        raw_store_dir=raw_store_dir,
+        raw_store_readonly=raw_store_readonly,
+    )
 
 
 def compile_nba_season(
@@ -109,6 +125,8 @@ def compile_nba_season(
     delay_s: float = 0.6,
     lineup_source: str = "auto",
     proxy_provider: Optional[Callable[[], Optional[str]]] = None,
+    raw_store_dir: RawStoreDir = None,
+    raw_store_readonly: Optional[bool] = None,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Compile a full season's possession stint matrix (cached + resumable + throttled).
@@ -147,6 +165,16 @@ def compile_nba_season(
 
                 compile_nba_season(2024, proxy_provider=round_robin.next)
 
+        raw_store_dir: Explicit raw JSON store root forwarded to every
+            per-game fetch — a single path, or a per-endpoint mapping
+            (``"*"`` default key) so payload families can live in
+            independent trees. ``None`` -> env vars (per-endpoint
+            ``SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}``, then the generic
+            ``SDV_PY_NBA_RAW_JSON_DIR``); ``""`` force-disables. Same
+            spirit as ``cache_dir``'s arg-over-env precedence.
+        raw_store_readonly: If ``True``, per-game fetches read the store but
+            never persist misses (pure-consumer mode); ``None`` defers to
+            ``SDV_PY_NBA_RAW_JSON_READONLY``.
         return_as_pandas: Return pandas instead of polars.
 
     Returns:
@@ -216,6 +244,8 @@ def compile_nba_season(
                 _LEAGUE_ID,
                 lineup_source=lineup_source,
                 proxy_url=proxy_provider() if proxy_provider is not None else None,
+                raw_store_dir=raw_store_dir,
+                raw_store_readonly=raw_store_readonly,
             )
         except Exception as exc:
             _LOG.warning("skip game %s (%d/%d): fetch failed: %s", gid, i, total, exc)
