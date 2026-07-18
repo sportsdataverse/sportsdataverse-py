@@ -1118,9 +1118,11 @@ def _raw_store_path(
     the same precedence as ``compile_nba_season``'s ``cache_dir``). The root
     is canonically a ``hoopR-nba-stats-raw`` checkout's ``nba_stats/json``
     directory. Layout: ``{root}/{endpoint}/{season}/{game_id}{suffix}.json``,
-    where ``season`` is the start year decoded from digits 4-5 of the game id
-    (``0029600001`` -> ``1996``, ``0022300001`` -> ``2023``; NBA game ids
-    before 1946 don't exist, so ``>= 46`` selects the 1900s).
+    where ``season`` is the season END year — the NBA stats pipeline's
+    end-year convention, matching ``compile_nba_season`` (digits 4-5 of the
+    game id are the start year, so ``0029600001`` -> ``1997`` for 1996-97
+    and ``0022300001`` -> ``2024`` for 2023-24; NBA game ids before 1946
+    don't exist, so ``>= 46`` selects the 1900s).
 
     Args:
         endpoint: stats.nba.com endpoint slug (e.g. ``"playbyplayv3"``).
@@ -1143,7 +1145,12 @@ def _raw_store_path(
     root = resolved
     yy = game_id[3:5]
     if yy.isdigit():
-        season = str(1900 + int(yy)) if int(yy) >= 46 else str(2000 + int(yy))
+        year = 1900 + int(yy) if int(yy) >= 46 else 2000 + int(yy)
+        # End-year season convention. Cross-year leagues (NBA "00",
+        # G-League "20") label a season by its END year, so shift +1.
+        # WNBA (league prefix "10") seasons are single calendar years:
+        # 1022600071 -> 2026, no shift.
+        season = str(year if game_id.startswith("10") else year + 1)
     else:
         season = "unknown"
     return Path(root) / endpoint / season / f"{game_id}{suffix}.json"
