@@ -1319,7 +1319,7 @@ from sportsdataverse.nba.nba_clutch import clutch_delta
 d = clutch_delta(clutch_frame, baseline_frame)
 ```
 
-### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
+### `compile_nba_season(season: 'int', season_type: 'str' = 'Regular Season', *, resume: 'bool' = True, cache_dir: 'Optional[str]' = None, delay_s: 'float' = 0.6, lineup_source: 'str' = 'auto', proxy_provider: 'Optional[Callable[[], Optional[str]]]' = None, raw_store_dir: 'RawStoreDir' = None, raw_store_readonly: 'Optional[bool]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#compile_nba_season}
 
 Compile a full season's possession stint matrix (cached + resumable + throttled).
 
@@ -1341,6 +1341,8 @@ frame is tagged with a `season` column.
 | `delay_s` | `float` | `0.6` | Seconds to sleep after each live fetch (rate-limit throttle). |
 | `lineup_source` | `str` | `'auto'` | Which on-court lineup producer to use — `"auto"` (default; tries rotation then falls back to pbp), `"rotation"` (gamerotation endpoint only), or `"pbp"` (pbp-derived, no gamerotation fetch — useful when the gamerotation endpoint is throttled or unavailable). |
 | `proxy_provider` | `Optional[Callable[[], Optional[str]]]` | `None` | Optional zero-arg callable returning a proxy URL (or `None`). **Called once for game discovery, then once per game** (`N + 1` calls for an `N`-game season), so a rotating pool spreads a season's fetches across many exit IPs rather than hammering `stats.nba.com` from one address. `stats.nba.com` rejects or hangs on datacenter/cloud IPs, so an unattended host (CI, a droplet) MUST supply one — a proxied request is judged on the proxy's exit IP, which is what makes such a host viable at all. Note discovery is proxied too: an unproxied index call returns no rows there, compiling the season to zero games without an error. Any `() -> str \| None` works; a round-robin pool's `.next` matches the signature directly:: compile_nba_season(2024, proxy_provider=round_robin.next) |
+| `raw_store_dir` | `RawStoreDir` | `None` | Explicit raw JSON store root forwarded to every per-game fetch — a single path, or a per-endpoint mapping (`"*"` default key) so payload families can live in independent trees. `None` -> env vars (per-endpoint `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`, then the generic `SDV_PY_NBA_RAW_JSON_DIR`); `""` force-disables. Same spirit as `cache_dir`'s arg-over-env precedence. |
+| `raw_store_readonly` | `Optional[bool]` | `None` | If `True`, per-game fetches read the store but never persist misses (pure-consumer mode); `None` defers to `SDV_PY_NBA_RAW_JSON_READONLY`. |
 | `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**
