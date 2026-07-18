@@ -11,9 +11,12 @@ games (0022100001, 0022200001, 0022300001).
 
 from __future__ import annotations
 
+import json
 import logging
+import os
 import re
-from typing import Dict, Optional, Union
+from pathlib import Path
+from typing import Callable, Dict, Optional, Union
 
 import pandas as pd
 import polars as pl
@@ -1062,6 +1065,88 @@ def attach_possession_lineups(
 
 
 # ---------------------------------------------------------------------------
+# Raw payload store (read-through against a hoopR-nba-stats-raw checkout)
+# ---------------------------------------------------------------------------
+
+
+def _raw_store_path(endpoint: str, game_id: str, suffix: str = "") -> Optional[Path]:
+    """Resolve the raw-store path for one payload, or ``None`` when disabled.
+
+    Enabled by setting ``SDV_PY_NBA_RAW_JSON_DIR`` to the JSON root of a raw
+    store (canonically a ``hoopR-nba-stats-raw`` checkout's ``nba_stats/json``
+    directory). Layout: ``{root}/{endpoint}/{season}/{game_id}{suffix}.json``,
+    where ``season`` is the start year decoded from digits 4-5 of the game id
+    (``0029600001`` -> ``1996``, ``0022300001`` -> ``2023``; NBA game ids
+    before 1946 don't exist, so ``>= 46`` selects the 1900s).
+
+    Args:
+        endpoint: stats.nba.com endpoint slug (e.g. ``"playbyplayv3"``).
+        game_id: Ten-character NBA game identifier.
+        suffix: Optional filename suffix (e.g. ``"_p3"`` for per-period
+            payloads) inserted before ``.json``.
+
+    Returns:
+        Absolute :class:`~pathlib.Path`, or ``None`` when the store is off.
+    """
+    root = os.environ.get("SDV_PY_NBA_RAW_JSON_DIR")
+    if not root:
+        return None
+    yy = game_id[3:5]
+    if yy.isdigit():
+        season = str(1900 + int(yy)) if int(yy) >= 46 else str(2000 + int(yy))
+    else:
+        season = "unknown"
+    return Path(root) / endpoint / season / f"{game_id}{suffix}.json"
+
+
+def _through_raw_store(endpoint: str, game_id: str, fetch: Callable[[], dict], *, suffix: str = "") -> dict:
+    """Read-through raw store: a local JSON wins, the network fills misses.
+
+    With ``SDV_PY_NBA_RAW_JSON_DIR`` unset this is exactly ``fetch()``. On a
+    hit the committed per-game JSON is returned without touching the network
+    (offline rebuilds). On a miss the payload is fetched and persisted
+    atomically (tmp + rename) so an interrupted run can't leave a torn file.
+    A present-but-unreadable file falls back to ``fetch()`` and is rewritten;
+    a persist failure logs a warning and never fails the pipeline.
+
+    Setting ``SDV_PY_NBA_RAW_JSON_READONLY=1`` additionally disables the
+    persist half: reads still hit the store, but misses fetch without
+    writing. This is the mode for compile/build consumers (e.g. the
+    hoopR-nba-stats-data possession warm) so that only the raw repo's own
+    scrape sweep ever fills the store — separation of concerns between the
+    -raw (scrape + push) and -data (compile + release) repos.
+
+    Args:
+        endpoint: stats.nba.com endpoint slug (store subdirectory).
+        game_id: Ten-character NBA game identifier.
+        fetch: Zero-arg callable performing the live fetch.
+        suffix: Optional filename suffix forwarded to :func:`_raw_store_path`.
+
+    Returns:
+        Raw payload ``dict`` (from disk on hit, from ``fetch()`` on miss).
+    """
+    path = _raw_store_path(endpoint, game_id, suffix)
+    if path is None:
+        return fetch()
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            logger.warning("raw store: unreadable %s -- refetching", path)
+    payload = fetch()
+    if os.environ.get("SDV_PY_NBA_RAW_JSON_READONLY"):
+        return payload
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.parent / (path.name + ".tmp")
+        tmp.write_text(json.dumps(payload), encoding="utf-8")
+        os.replace(tmp, path)
+    except OSError:
+        logger.warning("raw store: persist failed for %s", path, exc_info=True)
+    return payload
+
+
+# ---------------------------------------------------------------------------
 # Task 4: Network fetchers (module-level so tests can monkeypatch them)
 # ---------------------------------------------------------------------------
 
@@ -1076,11 +1161,16 @@ def _fetch_pbp(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] 
         proxy_url: Optional proxy URL forwarded to the underlying transport.
 
     Returns:
-        Raw ``dict`` from ``nba_stats_playbyplayv3``.
+        Raw ``dict`` from ``nba_stats_playbyplayv3`` (or the raw store when
+        ``SDV_PY_NBA_RAW_JSON_DIR`` is set and holds this game).
     """
     from sportsdataverse.nba.nba_stats import nba_stats_playbyplayv3
 
-    return nba_stats_playbyplayv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url)
+    return _through_raw_store(
+        "playbyplayv3",
+        game_id,
+        lambda: nba_stats_playbyplayv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url),
+    )
 
 
 def _fetch_rotation(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
@@ -1092,11 +1182,16 @@ def _fetch_rotation(game_id: str, league_id: str = "00", *, proxy_url: Optional[
         proxy_url: Optional proxy URL forwarded to the underlying transport.
 
     Returns:
-        Raw ``dict`` from ``nba_stats_gamerotation``.
+        Raw ``dict`` from ``nba_stats_gamerotation`` (or the raw store when
+        ``SDV_PY_NBA_RAW_JSON_DIR`` is set and holds this game).
     """
     from sportsdataverse.nba.nba_stats import nba_stats_gamerotation
 
-    return nba_stats_gamerotation(game_id=game_id, league_id=league_id, return_parsed=False, proxy_url=proxy_url)
+    return _through_raw_store(
+        "gamerotation",
+        game_id,
+        lambda: nba_stats_gamerotation(game_id=game_id, league_id=league_id, return_parsed=False, proxy_url=proxy_url),
+    )
 
 
 def _fetch_box(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] = None) -> dict:
@@ -1109,11 +1204,16 @@ def _fetch_box(game_id: str, league_id: str = "00", *, proxy_url: Optional[str] 
         proxy_url: Optional proxy URL forwarded to the underlying transport.
 
     Returns:
-        Raw ``dict`` from ``nba_stats_boxscoretraditionalv3``.
+        Raw ``dict`` from ``nba_stats_boxscoretraditionalv3`` (or the raw
+        store when ``SDV_PY_NBA_RAW_JSON_DIR`` is set and holds this game).
     """
     from sportsdataverse.nba.nba_stats import nba_stats_boxscoretraditionalv3
 
-    return nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url)
+    return _through_raw_store(
+        "boxscoretraditionalv3",
+        game_id,
+        lambda: nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False, proxy_url=proxy_url),
+    )
 
 
 def _fetch_box_periods(
@@ -1154,13 +1254,25 @@ def _fetch_box_periods(
     out: Dict[int, dict] = {}
     for period in range(1, n_periods + 1):
         start_range, end_range = _period_start_range(period)
-        out[period] = nba_stats_boxscoretraditionalv3(
-            game_id=game_id,
-            start_range=start_range,
-            end_range=end_range,
-            range_type=_QUARTER_BOX_RANGE_TYPE,
-            return_parsed=False,
-            proxy_url=proxy_url,
+
+        # Bind the window as defaults: the callable runs inside
+        # _through_raw_store on this iteration, and late-binding closures
+        # over loop variables would fetch every period at the LAST window.
+        def _fetch_period(sr: str = start_range, er: str = end_range) -> dict:
+            return nba_stats_boxscoretraditionalv3(
+                game_id=game_id,
+                start_range=sr,
+                end_range=er,
+                range_type=_QUARTER_BOX_RANGE_TYPE,
+                return_parsed=False,
+                proxy_url=proxy_url,
+            )
+
+        out[period] = _through_raw_store(
+            "boxscoretraditionalv3_period",
+            game_id,
+            _fetch_period,
+            suffix=f"_p{period}",
         )
     return out
 
