@@ -19,6 +19,7 @@ Public surface
 
 from __future__ import annotations
 
+import os
 from typing import Sequence, Union
 
 import pandas as pd
@@ -38,30 +39,73 @@ from sportsdataverse.nba.nba_rapm import nba_rapm
 _WNBA_LEAGUE_ID = "10"
 
 # ---------------------------------------------------------------------------
+# Raw JSON store (read-through, WNBA env namespace)
+# ---------------------------------------------------------------------------
+# Reuses the league-agnostic store in nba_possessions (its season decode is
+# already WNBA-aware — game ids prefixed "10" are single calendar years) but
+# with WNBA env vars, so a WNBA compile can read a wehoop-wnba-stats-raw
+# checkout offline via SDV_PY_WNBA_RAW_JSON_DIR as a pure consumer
+# (SDV_PY_WNBA_RAW_JSON_READONLY=1) — the -raw sweep stays the only writer.
+# Resolving the WNBA env here (not via the store's own NBA-named fallback)
+# keeps the namespaces separate: unset -> store off, never an NBA-env bleed.
+
+
+def _wnba_store_dir() -> str:
+    """WNBA raw-store root, or ``""`` (store disabled) when the env var is unset."""
+    return os.environ.get("SDV_PY_WNBA_RAW_JSON_DIR") or ""
+
+
+def _wnba_readonly() -> bool:
+    """Whether the WNBA store is read-only (consumer mode); default write-on-miss."""
+    return bool(os.environ.get("SDV_PY_WNBA_RAW_JSON_READONLY"))
+
+
+# ---------------------------------------------------------------------------
 # Module-level fetch helpers — monkeypatched in offline tests
 # ---------------------------------------------------------------------------
 
 
 def _fetch_pbp(game_id: str) -> dict:
+    from sportsdataverse.nba.nba_possessions import _through_raw_store
     from sportsdataverse.wnba.wnba_stats import wnba_stats_playbyplayv3
 
-    return wnba_stats_playbyplayv3(game_id=game_id, return_parsed=False)
+    return _through_raw_store(
+        "playbyplayv3",
+        game_id,
+        lambda: wnba_stats_playbyplayv3(game_id=game_id, return_parsed=False),
+        store_dir=_wnba_store_dir(),
+        readonly=_wnba_readonly(),
+    )
 
 
 def _fetch_rotation(game_id: str) -> dict:
+    from sportsdataverse.nba.nba_possessions import _through_raw_store
     from sportsdataverse.wnba.wnba_stats import wnba_stats_gamerotation
 
-    return wnba_stats_gamerotation(
-        game_id=game_id,
-        league_id=_WNBA_LEAGUE_ID,
-        return_parsed=False,
+    return _through_raw_store(
+        "gamerotation",
+        game_id,
+        lambda: wnba_stats_gamerotation(
+            game_id=game_id,
+            league_id=_WNBA_LEAGUE_ID,
+            return_parsed=False,
+        ),
+        store_dir=_wnba_store_dir(),
+        readonly=_wnba_readonly(),
     )
 
 
 def _fetch_box(game_id: str) -> dict:
+    from sportsdataverse.nba.nba_possessions import _through_raw_store
     from sportsdataverse.wnba.wnba_stats import wnba_stats_boxscoretraditionalv3
 
-    return wnba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False)
+    return _through_raw_store(
+        "boxscoretraditionalv3",
+        game_id,
+        lambda: wnba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False),
+        store_dir=_wnba_store_dir(),
+        readonly=_wnba_readonly(),
+    )
 
 
 # ---------------------------------------------------------------------------
