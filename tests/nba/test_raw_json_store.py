@@ -26,6 +26,24 @@ def _fetch_boom() -> dict:
     raise AssertionError("network fetch should not have been called")
 
 
+def test_empty_payload_not_persisted(monkeypatch, tmp_path):
+    # A bare {} (transient failure / dataless endpoint) must NOT be cached —
+    # caching it would poison the game with a permanent hit that never
+    # refetches. It stays retryable: returned to the caller, absent on disk.
+    monkeypatch.setenv("SDV_PY_NBA_RAW_JSON_DIR", str(tmp_path))
+    calls = {"n": 0}
+
+    def _fetch_empty() -> dict:
+        calls["n"] += 1
+        return {}
+
+    assert _through_raw_store("gamerotation", "0029600001", _fetch_empty) == {}
+    assert not (tmp_path / "gamerotation").exists()
+    # Still a miss on the next call -> refetched, not served from a cached {}.
+    assert _through_raw_store("gamerotation", "0029600001", _fetch_empty) == {}
+    assert calls["n"] == 2
+
+
 def test_disabled_is_passthrough(monkeypatch, tmp_path):
     monkeypatch.delenv("SDV_PY_NBA_RAW_JSON_DIR", raising=False)
     assert _raw_store_path("playbyplayv3", "0022300001") is None

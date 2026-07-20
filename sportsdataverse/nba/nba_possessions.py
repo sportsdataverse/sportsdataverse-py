@@ -1207,6 +1207,16 @@ def _through_raw_store(
     ro = bool(os.environ.get("SDV_PY_NBA_RAW_JSON_READONLY")) if readonly is None else readonly
     if ro:
         return payload
+    # Never persist an empty/dataless payload. A stats.nba.com fetch that
+    # returns a bare ``{}`` (a transient failure, an empty envelope, or a
+    # genuinely-dataless endpoint like gamerotation for very old games) is
+    # indistinguishable from a real capture once on disk, and a present file
+    # counts as a cache HIT that never refetches — so caching ``{}`` poisons
+    # the game permanently. Leaving it unwritten keeps it retryable. A valid
+    # payload for these endpoints always carries ``resultSets``/``resource``,
+    # so it is never falsy.
+    if not payload:
+        return payload
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.parent / (path.name + ".tmp")
