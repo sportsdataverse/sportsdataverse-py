@@ -28,3 +28,16 @@ def test_nba_player_positions_parses_playerindex() -> None:
     assert df.columns == ["player_id", "position_num"]
     assert df["player_id"].to_list() == [1, 2, 3]
     assert df["position_num"].to_list() == [1.5, 4.25, 3.0]  # G=1.5, F-C=(3.5+5)/2=4.25
+
+
+def test_nba_player_positions_dedups_traded_player() -> None:
+    # A mid-season-traded player is listed once per team in the playerindex.
+    # The output must stay one row per player_id (its documented grain), else
+    # the duplicate fans out through the position join in nba_bpm/nba_spm.
+    def fake(**kw: object) -> pl.DataFrame:
+        return pl.DataFrame({"person_id": [10, 20, 10], "position": ["PG", "C", "PG"]})
+
+    df = nba_player_positions("2015-16", fetch=fake)
+    assert df.height == df["player_id"].n_unique() == 2
+    assert df["player_id"].to_list() == [10, 20]  # order preserved, first kept
+    assert df["position_num"].to_list() == [1.0, 5.0]

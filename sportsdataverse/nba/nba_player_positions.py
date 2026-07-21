@@ -71,7 +71,16 @@ def nba_player_positions(
     get = fetch if fetch is not None else nba_stats_playerindex
     raw: pl.DataFrame = get(season=season, league_id=league_id)
     id_col = "person_id" if "person_id" in raw.columns else "player_id"
-    return raw.select(
-        pl.col(id_col).cast(pl.Int64).alias("player_id"),
-        pl.col("position").map_elements(_position_to_num, return_dtype=pl.Float64).alias("position_num"),
+    return (
+        raw.select(
+            pl.col(id_col).cast(pl.Int64).alias("player_id"),
+            pl.col("position").map_elements(_position_to_num, return_dtype=pl.Float64).alias("position_num"),
+        )
+        # One row per player_id (the documented grain). The playerindex lists a
+        # mid-season-traded player once per team, so without this a traded
+        # player's duplicate player_id fans out through the position join in
+        # nba_bpm/nba_spm. Listed position is a player attribute (identical
+        # across a player's team rows), so keeping the first is deterministic
+        # and lossless.
+        .unique(subset=["player_id"], keep="first", maintain_order=True)
     )
