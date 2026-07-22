@@ -8,6 +8,8 @@ is injectable (``transport=``) so wrappers/tests stay offline-friendly.
 from __future__ import annotations
 
 import json
+import os
+import time
 from typing import Any, Callable, Optional
 
 __all__ = ["_get", "stats_headers"]
@@ -72,13 +74,18 @@ def _curl_transport(
             "plain requests). Install with: pip install curl_cffi"
         ) from exc
     proxies = {"http": proxy_url, "https": proxy_url} if proxy_url else None
+    # Tunable per-request timeout. stats.nba.com is slow for some historical
+    # endpoints (a real gamerotation payload for a 2011-12 game can take ~27s,
+    # right at the old hardcoded 30s cliff), so bump SDV_PY_NBA_STATS_TIMEOUT
+    # when back-filling old seasons.
+    timeout = float(os.environ.get("SDV_PY_NBA_STATS_TIMEOUT", "30"))
     r = creq.get(
         url,
         params=params,
         headers=headers,
         proxies=proxies,
         impersonate="chrome",
-        timeout=30,
+        timeout=timeout,
     )
     return r.status_code, r.text
 
@@ -149,10 +156,34 @@ def _get(
         url = f"https://{host}/stats/{path}"
 
     _transport = transport or _curl_transport
-    status, text = _transport(url, clean, headers or stats_headers(host), proxy_url)
-    if status != 200 or not text.strip():
+    _headers = headers or stats_headers(host)
+
+    # Optional retry-with-backoff for the throttle/slowness failure modes.
+    # stats.nba.com intermittently hangs (curl timeout) or returns a blank /
+    # bare ``{}`` body under load for historical endpoints even though the data
+    # exists — a retry recovers it. Defaults to 0 retries so behavior is
+    # byte-identical unless SDV_PY_NBA_STATS_RETRIES is set (back-fill sweeps
+    # set it; the tight-timeout single-shot path is unchanged for everyone else).
+    retries = int(os.environ.get("SDV_PY_NBA_STATS_RETRIES", "0"))
+    backoff = float(os.environ.get("SDV_PY_NBA_STATS_BACKOFF", "1.5"))
+    for attempt in range(retries + 1):
+        try:
+            status, text = _transport(url, clean, _headers, proxy_url)
+        except Exception:
+            if attempt < retries:
+                time.sleep(backoff * (attempt + 1))
+                continue
+            raise  # exhausted: preserve the "timeout propagates" contract
+        if status == 200 and text.strip():
+            try:
+                payload = json.loads(text)
+            except json.JSONDecodeError:
+                payload = {}
+            if payload:  # a valid, non-empty envelope
+                return payload
+        # non-200 / blank / undecodable / bare {} — a transient throttle; retry
+        if attempt < retries:
+            time.sleep(backoff * (attempt + 1))
+            continue
         return {}
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        return {}
+    return {}  # unreachable; keeps type-checkers happy
