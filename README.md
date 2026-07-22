@@ -38,20 +38,31 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 
 | League | Module | Surfaces covered |
 |---|---|---|
-| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + Fox Sports (Bifrost) |
-| WNBA | `sportsdataverse.wnba` | ESPN |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) + Fox Sports (Bifrost) |
-| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only |
-| CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) + Fox Sports (Bifrost) + Yahoo Sports |
+| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + **stats.nba.com** (`nba_stats_*`, 112 wrappers; G-League `league_id="20"` / Summer League `"15"`) + Fox Sports (Bifrost) |
+| WNBA | `sportsdataverse.wnba` | ESPN + **stats.wnba.com** (`wnba_stats_*`, 95 wrappers) |
+| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) + **stats.ncaa.org** (`ncaa_mbb_*` bigballR-parity family + `mbb_ncaa_*` pbp/lineup/stint engine) + Fox Sports (Bifrost) |
+| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only + **stats.ncaa.org** (`ncaa_wbb_*` family) |
+| CFB | `sportsdataverse.cfb` | ESPN + NCAA + **stats.ncaa.org** (`cfb_ncaa_pbp` + box/drives/officials parsers) + football-only (QBR) + Fox Sports (Bifrost) + Yahoo Sports |
 | NFL | `sportsdataverse.nfl` | ESPN + **NFL.com API** (`api.nfl.com` "Shield") + **nflverse loaders** (nflreadpy parity) + football-only (QBR) |
 | MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast (43-endpoint `mlb_statcast_*` surface) + Fox Sports (Bifrost) |
 | NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site + Fox Sports (Bifrost) |
+| PWHL | `sportsdataverse.pwhl` | HockeyTech/LeagueStat (schedule / pbp / shifts / strength-state / xG) |
+| Minor & junior hockey | `sportsdataverse.hockey.<lg>` | HockeyTech — 20 registry-driven league families (`ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, `bchl`, …), 13 callables each |
+| College hockey (M/W) | `sportsdataverse.hockey.mch` / `.wch` | ESPN |
+| College baseball & softball | `sportsdataverse.baseball` | ESPN + **stats.ncaa.org** pbp parsers + run-expectancy helpers |
+| Soccer | `sportsdataverse.soccer` | ESPN (league-parameterized wrappers — MLS, NWSL, EPL, …) |
+| Cricket | `sportsdataverse.cricket` | ESPN (league-parameterized) + bundled win-probability models |
+| UFL / XFL / CFL | `sportsdataverse.football` | ESPN |
+| Odds | `sportsdataverse.odds` | Odds & betting-lines wrappers and loaders |
 
-Each league exports 150–340 public functions (ESPN wrappers + that league's
-native-API wrappers + dataset loaders + parsers); ~1,600 in total. **Fox Sports**
-adds `fox_<league>_*` Bifrost wrappers (pbp / boxscore / odds / roster / stats /
-standings / leaders) for nba, mbb, cfb, mlb, nhl; **Yahoo Sports** adds
-`yahoo_cfb_*` season-stats / scoreboard wrappers for college football.
+The big-league modules export roughly 240–680 public functions each (ESPN
+wrappers + that league's native-API wrappers + dataset loaders + parsers) —
+about 4,400 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
+Bifrost wrappers (pbp / boxscore / odds / roster / stats / standings / leaders)
+for nba, mbb, cfb, mlb, nhl; **Yahoo Sports** adds `yahoo_cfb_*` season-stats /
+scoreboard wrappers for college football. `sportsdataverse.release` ports the
+`sportsdataversedata` R release utilities (GitHub-release asset publish /
+download helpers, including a pure-Python RDS writer).
 
 ## Polars / pandas parser layer
 
@@ -183,9 +194,17 @@ under [`examples/notebooks/`](examples/notebooks):
 | `02_cfb_intro.ipynb` | College football PBP, schedule, teams, `espn_cfb_play_participants` |
 | `03_nfl_intro.ipynb` | NFL — nflreadpy parity surface, caching layer, current-season helpers |
 | `04_nba_intro.ipynb` | NBA — PBP, schedule, teams, game rosters, shot distribution |
-| `05_wbb_wnba_intro.ipynb` | Women's basketball — NCAA + WNBA parallels, multi-table stats |
+| `05_wbb_intro.ipynb` | Women's college basketball — PBP, schedule, multi-table player stats |
 | `06_mbb_intro.ipynb` | Men's college basketball — PBP, schedule, conference standings |
 | `07_nhl_intro.ipynb` | NHL — PBP, schedule, teams, shot-event filter |
+| `08_wnba_intro.ipynb` | WNBA — PBP, schedule, rosters, player stats |
+| `09_mlb_intro.ipynb` | MLB — Stats API + Statcast search / leaderboards / gamefeed |
+| `10_pwhl_intro.ipynb` | PWHL — HockeyTech schedule, PBP, shifts, xG |
+| `11_junior_hockey_intro.ipynb` | HockeyTech minor/junior leagues — one family shape across 20 leagues |
+| `12_odds_intro.ipynb` | Odds & betting lines |
+| `13_soccer_intro.ipynb` | ESPN soccer — league-parameterized wrappers |
+| `14_cricket_intro.ipynb` | ESPN cricket + win-probability models |
+| `15_other_espn_leagues_intro.ipynb` | UFL/XFL/CFL, college hockey, college baseball/softball ESPN families |
 
 ## Companion packages
 

@@ -28,9 +28,11 @@
 
 `sportsdataverse-py` is the Python sister to the SportsDataverse R packages
 (`wehoop`, `hoopR`, `cfbfastR`, etc.). It provides tidy access to play-by-play,
-box score, schedule, roster, and other sports data across the NBA, WNBA,
-NFL, MLB, NHL, MBB (men's college basketball), WBB (women's college
-basketball), CFB (college football), and odds endpoints.
+box score, schedule, roster, and other sports data across the NBA (+ G-League),
+WNBA, NFL, MLB, NHL, MBB (men's college basketball), WBB (women's college
+basketball), CFB (college football), PWHL + 20 HockeyTech minor/junior hockey
+leagues, college hockey (M/W), college baseball + softball, soccer, cricket,
+UFL/XFL/CFL, and odds endpoints.
 
 When there is any conflict between this file and repository contributor
 docs, follow `CONTRIBUTING.md`, `CLAUDE.md`, and the current test suite
@@ -166,6 +168,27 @@ handles the `{resultSets:[{name,headers,rowSet}]}` envelope for both families
 (polars default, pandas via `return_as_pandas=True`, zero-row frame on
 empty/malformed). Generated via `tools/codegen/gen_nba_stats.py` → `FLAT_APIS`.
 See `CLAUDE.md` → "NBA / WNBA — stats.nba.com".
+
+**HockeyTech (`pwhl_*` + `sportsdataverse.hockey.<lg>`, 0.0.72+):** one shared
+core (`sportsdataverse/hockeytech/`) + a `LEAGUES` registry mints 13 public
+callables per league via `build_family(league)` — 20 leagues wired (`pwhl`
+flagship top-level; `ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, …). Adding a
+league is a registry entry + a 4-line module — never new parser code. Errors
+are HTTP 200 with an error-in-body sentinel; check bodies, not status. See
+`CLAUDE.md` → "Hockey — HockeyTech multi-league".
+
+**stats.ncaa.org families (0.0.72+):** `ncaa_mbb_*` / `ncaa_wbb_*` (bigballR /
+wbigballR port, R-oracle parity-tested), the `mbb_ncaa_*` / `wbb_ncaa_*`
+NCAA computational engine (pbp → lineups → stints → possessions), `cfb_ncaa_pbp` +
+`cfb_ncaa_box` for football, and `sportsdataverse.baseball` college baseball /
+softball pbp parsers. Reuse the shared NCAA fetch layer (rate rotation +
+bm-verify solve) — don't hand-roll stats.ncaa.org requests.
+
+**NBA raw JSON store (0.0.72+):** per-game stats.nba.com fetches route through
+a read-through store (`SDV_PY_NBA_RAW_JSON_DIR`, per-endpoint
+`SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`, `SDV_PY_NBA_RAW_JSON_READONLY`); season
+dirs use the league-aware END-year convention, and an empty `{}` payload is
+never persisted. WNBA engine fetchers share the store.
 
 ## NFL — nflreadpy Parity
 

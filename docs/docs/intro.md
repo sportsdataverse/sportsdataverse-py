@@ -77,15 +77,22 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 
 | League | Module | Surfaces covered |
 |---|---|---|
-| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) — 118 wrappers |
-| WNBA | `sportsdataverse.wnba` | ESPN — 124 wrappers |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) — 121 wrappers |
-| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only — 126 wrappers |
-| CFB | `sportsdataverse.cfb` | ESPN + NCAA + football-only (QBR) — 123 wrappers |
-| NFL | `sportsdataverse.nfl` | ESPN + football-only (QBR) — 119 wrappers |
-| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast — **175 wrappers** |
-| NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site — **132 wrappers** |
-| **Total** | | **~1,030 wrappers** |
+| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + stats.nba.com (`nba_stats_*`; G-League / Summer League via `league_id`) + Fox Sports |
+| WNBA | `sportsdataverse.wnba` | ESPN + stats.wnba.com (`wnba_stats_*`) |
+| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) + stats.ncaa.org (`ncaa_mbb_*` + pbp/lineup/stint engine) + Fox Sports |
+| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only + stats.ncaa.org (`ncaa_wbb_*`) |
+| CFB | `sportsdataverse.cfb` | ESPN + NCAA + stats.ncaa.org (`cfb_ncaa_pbp` + box parsers) + football-only (QBR) + Fox Sports + Yahoo Sports |
+| NFL | `sportsdataverse.nfl` | ESPN + NFL.com API + nflverse loaders (nflreadpy parity) + football-only (QBR) |
+| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast (`mlb_statcast_*`) + Fox Sports |
+| NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site + Fox Sports |
+| PWHL | `sportsdataverse.pwhl` | HockeyTech/LeagueStat (schedule / pbp / shifts / xG) |
+| Minor & junior hockey | `sportsdataverse.hockey.<lg>` | HockeyTech — 20 league families (`ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, …) |
+| College hockey (M/W) | `sportsdataverse.hockey.mch` / `.wch` | ESPN |
+| College baseball & softball | `sportsdataverse.baseball` | ESPN + stats.ncaa.org pbp parsers |
+| Soccer | `sportsdataverse.soccer` | ESPN (league-parameterized — MLS, NWSL, EPL, …) |
+| Cricket | `sportsdataverse.cricket` | ESPN + bundled win-probability models |
+| UFL / XFL / CFL | `sportsdataverse.football` | ESPN |
+| Odds | `sportsdataverse.odds` | Odds & betting lines |
 
 ## Polars / pandas parser layer
 

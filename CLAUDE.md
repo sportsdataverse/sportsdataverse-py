@@ -25,6 +25,9 @@
     - [MLB — Statcast (Baseball Savant) comprehensive surface (0.0.64+)](#mlb--statcast-baseball-savant-comprehensive-surface-0064)
     - [NBA / WNBA — stats.nba.com / stats.wnba.com stats API (0.0.72+)](#nba--wnba--statsnbacom--statswnbacom-stats-api-0072)
     - [Hockey — HockeyTech multi-league (PWHL + 19 minor/junior) (0.0.72+)](#hockey--hockeytech-multi-league-pwhl--19-minorjunior-0072)
+    - [MBB / WBB / CFB / college baseball — stats.ncaa.org families (0.0.72+)](#mbb--wbb--cfb--college-baseball--statsncaaorg-families-0072)
+    - [NBA / WNBA — read-through raw JSON store (0.0.72+)](#nba--wnba--read-through-raw-json-store-0072)
+    - [Release utilities — `sportsdataverse.release` (0.0.72+)](#release-utilities--sportsdataverserelease-0072)
     - [HTTP / retry layer](#http--retry-layer)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
@@ -45,7 +48,9 @@
 `sportsdataverse-py` is the Python sister to the SportsDataverse R packages
 (`wehoop`, `hoopR`, `cfbfastR`, `cfbfastR-py`, etc.) and provides tidy access
 to play-by-play, box score, schedule, roster, and other sports data across
-multiple leagues (NBA, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, plus odds).
+multiple leagues (NBA + G-League, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, PWHL +
+20 HockeyTech minor/junior leagues, college hockey M/W, college baseball +
+softball, soccer, cricket, UFL/XFL/CFL, plus odds).
 
 When this guide differs from current repository docs, treat
 `CONTRIBUTING.md` and the current test suite under `tests/` as authoritative.
@@ -175,6 +180,15 @@ sportsdataverse/
     wnba_team_roster.py       # thin shim over wbb helper, league="wnba"
     wnba_player_stats.py      # same shape as wbb_player_stats
   odds/       # Odds & betting lines
+  pwhl/       # PWHL (HockeyTech flagship — richer surface, top-level)
+  hockeytech/ # HockeyTech core (_client/_leagues/_family/_parsers/_analytics)
+  hockey/     # 20 HockeyTech league families + college hockey (mch/wch, ESPN)
+  baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
+  soccer/     # ESPN soccer (league-parameterized wrappers)
+  cricket/    # ESPN cricket + bundled win-probability models
+  football/   # UFL / XFL / CFL ESPN families
+  nbagl/      # NBA G-League engine helpers
+  release.py  # sportsdataversedata R-package port (release assets + RDS writer)
   dl_utils.py # download() retry + janitor + (under|kebab|camel)ize helpers
   errors.py   # NoESPNDataError, SeasonNotFoundError
   config.py   # Per-sport URL constants pointing at sportsdataverse-data releases
@@ -711,6 +725,48 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
 - Full API reference + the live/dead + schema accounting: `sdv-internal-refs/
   hockeytech/` (`README.md`, `SCHEMAS.md`, `ACCOUNTING.md`, `hockeytech.openapi.yaml`
   mirrored to `sdv-swagger/`).
+
+### MBB / WBB / CFB / college baseball — stats.ncaa.org families (0.0.72+)
+
+- **`ncaa_mbb_*` / `ncaa_wbb_*`** (16 public functions per league) are the
+  bigballR/wbigballR port — R-oracle golden-master parity against real
+  stats.ncaa.org fixtures (schedules, rosters, box scores, pbp, lineups,
+  on/off). The `mbb_ncaa_*` / `wbb_ncaa_*` module family underneath is the
+  ported NCAA computational engine (fetch → pbp parse → lineups → stints →
+  possessions → strength), including stint validation + self-healing.
+- **CFB**: `cfb_ncaa_pbp` (graduated parser) + `cfb_ncaa_box` cover
+  stats.ncaa.org football pbp, box, drives, and officials.
+- **College baseball / softball**: `sportsdataverse.baseball`
+  (`college_baseball/`, `college_softball/`) parses stats.ncaa.org pbp and
+  ships run-expectancy helpers.
+- stats.ncaa.org transport gotchas (rate rotation, bm-verify solve proof,
+  Playwright fallback) live in the shared NCAA fetch layer — reuse it; don't
+  hand-roll requests against stats.ncaa.org.
+
+### NBA / WNBA — read-through raw JSON store (0.0.72+)
+
+Per-game stats.nba.com fetches in the possessions / season-compile path route
+through `_through_raw_store` (`nba/nba_possessions.py`): with the store unset
+it is exactly `fetch()`; with a store root set, payloads persist as JSON and
+re-reads hit disk before the network. WNBA engine fetchers route through the
+same store.
+
+- **Env/args**: generic root `SDV_PY_NBA_RAW_JSON_DIR`; per-endpoint
+  `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}` (upper-cased slug, beats the generic);
+  `SDV_PY_NBA_RAW_JSON_READONLY=1` for read-only. Explicit
+  `raw_store_dir` / `raw_store_readonly` args beat env; `""` force-disables.
+- **Season dirs use the league-aware END-year convention** (0.0.72 BREAKING:
+  `compile_nba_season(2024)` = 2023-24; external callers passing a start year
+  must add 1).
+- The store **never persists an empty `{}` payload**, and
+  `nba_player_positions` dedups to one row per `player_id`.
+
+### Release utilities — `sportsdataverse.release` (0.0.72+)
+
+Port of the `sportsdataversedata` R package: GitHub-release asset
+publish/download helpers plus a pure-Python **byte-parity RDS writer**
+(`_rds.py`). csv.gz outputs are opt-in only. Use these instead of ad-hoc
+`gh release upload` scripting in Python producers.
 
 ### HTTP / retry layer
 

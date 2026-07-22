@@ -75,7 +75,7 @@ mid-season change (trade, expansion, etc.).
 
 ## 3. `list_functions` / `function_count` — searchable function index
 
-The package exposes ~1,340 callables across 8 leagues. `dir()`
+The package exposes ~4,400 callables across 30+ league/module families. `dir()`
 produces a flat list that's hard to scan; `list_functions` is the
 searchable index.
 

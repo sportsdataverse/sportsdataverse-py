@@ -2,7 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Unreleased](#unreleased)
+- [0.0.72 Release: July 22, 2026](#0072-release-july-22-2026)
+  - [BREAKING CHANGES](#breaking-changes)
   - [CFB — loaders for 6 published-but-unreachable dataset releases](#cfb--loaders-for-6-published-but-unreachable-dataset-releases)
   - [CFB — `load_cfb_ratings` dataset loader](#cfb--load_cfb_ratings-dataset-loader)
   - [NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle](#nba--wnba--ctg-play-context-t36-possessionshotlineupplayer-tables--start-type-oracle)
@@ -30,6 +31,23 @@
   - [NBA — possession event-detail columns, per-shooter shooting frame, `game_date`](#nba--possession-event-detail-columns-per-shooter-shooting-frame-game_date)
   - [NBA — faithful possession boundaries (pbpstats parity)](#nba--faithful-possession-boundaries-pbpstats-parity)
   - [NBA — quarter-box on-court lineup seeding + `lineup_source="quarter_box"`](#nba--quarter-box-on-court-lineup-seeding--lineup_sourcequarter_box)
+  - [CFB — 0.36-live pbp reconciliation + game-ending WP-perspective fix](#cfb--036-live-pbp-reconciliation--game-ending-wp-perspective-fix)
+  - [CFB — advanced box score: player-name cleanup + `cp` aggregation](#cfb--advanced-box-score-player-name-cleanup--cp-aggregation)
+  - [NFL / CFB — season standings + simulation engines (nflseedR / cfbseedR ports)](#nfl--cfb--season-standings--simulation-engines-nflseedr--cfbseedr-ports)
+  - [MBB / WBB — bigballR + wbigballR port: `ncaa_mbb_*` / `ncaa_wbb_*` stats.ncaa.org family](#mbb--wbb--bigballr--wbigballr-port-ncaa_mbb_--ncaa_wbb_-statsncaaorg-family)
+  - [MBB / WBB — college computational-core port (lineup stats → ratings/luck → RAPM → positions → NCAA stint pipeline)](#mbb--wbb--college-computational-core-port-lineup-stats-%E2%86%92-ratingsluck-%E2%86%92-rapm-%E2%86%92-positions-%E2%86%92-ncaa-stint-pipeline)
+  - [MBB / WBB / NBA — NCAA LineupStatSet producer + hoopR release-parity producers](#mbb--wbb--nba--ncaa-lineupstatset-producer--hoopr-release-parity-producers)
+  - [CFB / MBB / WBB / Baseball — stats.ncaa.org parser expansion (football pbp graduation, box tabs, college baseball + softball pbp)](#cfb--mbb--wbb--baseball--statsncaaorg-parser-expansion-football-pbp-graduation-box-tabs-college-baseball--softball-pbp)
+  - [NBA / MBB / WBB — dataset loaders for the published model releases](#nba--mbb--wbb--dataset-loaders-for-the-published-model-releases)
+  - [NBA / WNBA — read-through raw JSON store for stats.nba.com per-game payloads](#nba--wnba--read-through-raw-json-store-for-statsnbacom-per-game-payloads)
+  - [NBA / WNBA / G-League — tracking-value spine (T3.2): six over-expected models on the `playerdashpt*` surface](#nba--wnba--g-league--tracking-value-spine-t32-six-over-expected-models-on-the-playerdashpt-surface)
+  - [NBA — model-zoo v1: validation harness + SPM / BPM 2.0 / Bayesian adj-RAPM](#nba--model-zoo-v1-validation-harness--spm--bpm-20--bayesian-adj-rapm)
+  - [NBA — Kalman + aging-curve player projection + forecast validator](#nba--kalman--aging-curve-player-projection--forecast-validator)
+  - [NHL / PWHL — microstat & EDGE value spine (T5.2) + first-of-its-kind PWHL prediction (T5.3)](#nhl--pwhl--microstat--edge-value-spine-t52--first-of-its-kind-pwhl-prediction-t53)
+  - [PWHL — shift-derived `strength_state` + shot-level coordinate xG (+ two loaders)](#pwhl--shift-derived-strength_state--shot-level-coordinate-xg--two-loaders)
+  - [MLB — model spines: game state (T6.4), pitching evaluation (T6.1), fielding/catching/baserunning (T6.3)](#mlb--model-spines-game-state-t64-pitching-evaluation-t61-fieldingcatchingbaserunning-t63)
+  - [Recruiting / NFL — PFF Premium Stats stem + On3 RDB retarget + 247Sports expansion](#recruiting--nfl--pff-premium-stats-stem--on3-rdb-retarget--247sports-expansion)
+  - [Validation harness — `constant_column` check, R-lint UTF-8 fix, cron run-tracker ingest](#validation-harness--constant_column-check-r-lint-utf-8-fix-cron-run-tracker-ingest)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
   - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
@@ -176,7 +194,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Unreleased
+## 0.0.72 Release: July 22, 2026
 
 ### BREAKING CHANGES
 
@@ -188,6 +206,18 @@
   Unchanged: `year_to_season` (still a low-level start-year helper — call it as
   `year_to_season(end_year - 1)`), and `nba_box_logs` (takes the `"2023-24"`
   string, not an integer).
+
+
+- **`id` in Python-produced WBB play-by-play frames is Int64 (was Float64
+  in R-produced releases).** R/jsonlite has no int64, so the released pbp
+  `id` loses precision above 2^53 — adjacent ~4e17 play ids round to the
+  same double and collide (verified: multiple plays per game share an id in
+  the released assets; fixture game 401804834 yields 447/447 unique ids
+  where Float64 collided). The stored payload carries a true integer, so
+  `helper_wbb_play_by_play` now emits exact Int64 — a deliberate dtype
+  divergence from the R releases, pinned by the wehoop-wbb-data parity
+  suite's `dtype_upgrades` gate (values still compared equal under the
+  oracle's lossy Float64 view).
 
 ### CFB — loaders for 6 published-but-unreachable dataset releases
 
@@ -315,6 +345,66 @@ feed yields nothing), so a loader would 404 on every season.
   `.status_code`), and non-2xx responses are no longer cached. 403 is retried
   by default because ESPN's Core v2 API returns it under load — `download()`
   is the ESPN/nflverse gateway and does not serve the auth'd endpoints.
+
+- fix(mbb): the NCAA fetch layer **proves the bm-verify solve instead of
+  assuming it**. `_solve_challenge` latched `_challenge_solved = True`
+  without checking whether the Akamai sensor actually passed, so a failed
+  solve poisoned the session — every in-page fetch thereafter returned an
+  unsolved 15-byte `NCAA Statistics` stub (invisible to both the ban check
+  and marker matching; 1,485 of them in one live run) while the layer kept
+  hammering, which is what earned the IP a ban. The fetch is now the proof:
+  an unsolved response forces a real re-solve and retry (`solve_attempts`,
+  default 2 — deliberately low, rotating to a fresh proxy recovers faster),
+  and exhaustion raises so the existing rotate-on-transport-error path
+  moves to a fresh proxy. The stub response is captured live and pinned as
+  a test fixture. (#266)
+- fix(wbb): stop trusting ESPN's `header.competitions.boxscoreAvailable`
+  flag — it is false for most pre-2014 WBB games even when
+  `boxscore.teams[].statistics` is fully populated, and the box helpers'
+  faithful port of the R gate bug-matched that wrong oracle (the root cause
+  of the WBB 2006–2013 dataset coverage hole: `team_box_2009..2013` held
+  10–280 rows against ~5,400-game seasons). Availability is now derived
+  from the payload itself; genuinely boxless games still return
+  typed-empty. Deliberate divergence from the original R behavior (R fixed
+  the same way in wehoop#64), tested on the real 2012 title-game payload.
+  (#275)
+- fix(mbb): `raw_game_efficiency` honors the empty-in/empty-out contract
+  for missing-season boxscores — a season with no released asset comes back
+  from the loader as a column-less empty frame, which crashed the select
+  with `ColumnNotFoundError` instead of returning the documented typed
+  `_EFF_SCHEMA` empty. One boundary guard covers all callers
+  (`mbb_team_ratings` and the `wbb_team_ratings` wrapper inherit it). (#280)
+- fix(cfb): future-season recruiting projections walk back to the newest
+  available teams crosswalk — the crosswalk asset trails the calendar
+  (capped at 2025 while a 2026 projection is already meaningful after early
+  signing), and the missing season's column-less empty frame crashed
+  `_crosswalk_names_to_espn`, killing the `cfb_recruiting_proj` 2016:2026
+  backfill on season 2026. Team-name → ESPN-id identity barely changes year
+  to year, so the walk-back is safe; all-missing degrades to a typed empty.
+  (#282)
+- fix(nba): `compile_nba_season` threads `proxy_url` through game discovery
+  (`_season_game_index` / `_game_ids_for_season`), not just the per-game
+  fetches — on a datacenter host the unproxied `nba_stats_leaguegamelog`
+  call returned `{}`, the empty-in/empty-out contract turned it into an
+  empty index, and the whole season compiled to zero games, best-effort,
+  exit 0 — indistinguishable from success. Verified live from the failing
+  environment (0 rows unproxied → 1,230 rows proxied for 2023).
+  `proxy_provider` is now called N+1 times for an N-game season (documented).
+  (#283)
+- fix(nba): `box_features` canonicalizes the real `leaguegamelog` parser's
+  `fg3_m` column to `fg3m` at the boundary (applied only when `fg3_m` is
+  present and `fg3m` absent) — the snake-caser emits `FG3M` → `fg3_m`, so
+  the first real-data run of the SPM/BPM box-feature surface crashed with
+  `ColumnNotFoundError` while every synthetic-fixture test passed. The
+  regression test feeds the real column name and fails without the fix.
+  (#158)
+- chore(phf): PHF dataset URLs cut over from `raw.githubusercontent.com`
+  tree paths to dedicated `sportsdataverse-data` release tags mirroring the
+  `pwhl_*` convention (`phf_pbp` / `phf_player_boxscores` /
+  `phf_team_boxscores` / `phf_schedules`, 29 assets uploaded per-file). PHF
+  is a frozen dataset (league ceased operations June 2023; coverage
+  2016–2023, with 2017–2019 pbp a permanent upstream gap). (#218)
+- `calculate_nfl_standings` is deprecated in favor of `nfl_season_standings` (the nflseedR-parity engine); the old name emits a `DeprecationWarning` shim.
 
 ### Dependencies
 
@@ -662,8 +752,8 @@ feed yields nothing), so a loader would 404 on every season.
 
 - feat(nba): model-zoo v2 WP3 — Oracle 5 external concurrent validity
   (`external_validity`, five published-metric loaders in `nba_oracle_data.py`:
-  Ryan Davis RAPM, Dunks & Threes EPM, LEBRON season/daily, DARKO DPM,
-  Dunks & Threes ewins) and Oracle 6 walk-forward retrodiction
+  Ryan Davis RAPM, Dunks & Threes EPM, LEBRON season/daily, daily
+  plus-minus (DPM), Dunks & Threes ewins) and Oracle 6 walk-forward retrodiction
   (`walk_forward`, time-ordered "predict tomorrow" with carry-forward and
   random-fold baselines) in `nba_model_validation.py`.
 
@@ -752,6 +842,456 @@ Two new codegen-generated flat-API stems wrap the official stats API surface:
   to 0.8817 gamerotation-agreement; with `raw_box` threaded through, quarter_box
   now matches `players_on_court_from_pbp` exactly on all 3 fixture games
   (0.9689 / 0.9686 / 0.9662).
+
+### CFB — 0.36-live pbp reconciliation + game-ending WP-perspective fix
+
+Two bodies of CFB play-by-play parity work, each parity-test-first on real
+captured fixtures (`tests/cfb/test_cfb_036_reconciliation.py`, with measured
+before/after EPA/WP deltas). The reconciliation ports the valuable CFB pbp
+fixes from the pandas `0.36-live` branch into the polars `main` pipeline:
+kneel-down flag + scrimmage exclusion; `cleaned_text` +
+`yds_rushed`/`yds_receiving` direction-word parsing; box-score volume sort;
+kickoff fair-catch → touchback (era-gated ≥2018); errored-punt end-yardline
+flip; `end_state_missing` fill (`end.team.id` + `end.yardsToEndzone`
+backfill); overtime play-sort by `sequenceNumber`; and the
+penalty-assessed-on-kickoff EP/WP touchback — a refined `penalty_flag` guard
+excludes Timeouts and completes the end-state touchback `0.36-live` left
+partial (resets `down_*_end` + `pos_score_diff_end`) so EPA neutralizes to
+0.0 on the affected 2024 fixture plays. Interception return yardage is now
+excluded from offensive / drive / `total_yards` at the aggregation sites
+(the shared `statYardage` column is untouched, preserving the
+penalty-residual chain), and `statYardage==0` completions are reconstructed
+from the yardline delta. Separately, a game ending on a possession-flipping
+play whose type is absent from `end_change_vec` — notably a safety —
+reported `home_wp_after = 1.0` for the **losing** team; the game-ending WP
+perspective is now correct.
+
+### CFB — advanced box score: player-name cleanup + `cp` aggregation
+
+- feat(cfb): the advanced box score's player-name cleaning regex strips more
+  invalid cases, and the passing box score now aggregates `cp` (the
+  xCompletion model results) alongside the existing passing columns.
+  Verified against the live `test_cfb_adv_box_score` suite so existing box
+  scores don't break with the new field.
+
+### NFL / CFB — season standings + simulation engines (nflseedR / cfbseedR ports)
+
+- feat(nfl): `nfl_season_standings` — a port of the nflseedR v2 standings
+  engine with the real NFL division/conference/draft tiebreaker cascades and
+  the `tiebreaker_depth` ladder (`RANDOM` < `PRE-SOV` < `SOS` < `POINTS`).
+  Named `nfl_season_standings` because `sportsdataverse.nfl.nfl_standings`
+  is already taken by the api.nfl.com codegen wrapper. Parity vs real
+  nflseedR 2.0.2 output for 2023: **exact** on
+  `div_rank`/`conf_rank`/`draft_rank`/`exit`/games/true_wins/losses/ties/pf/pa/pd,
+  <1e-9 on wins/win_pct/div_pct/conf_pct/sov/sos (golden fixtures under
+  `tests/fixtures/seedr/` with R-provenance README).
+- feat(nfl): `nfl_simulations` / `nfl_compute_results` — week-by-week season
+  simulation with a pluggable `compute_results` generator (default = the
+  nflseedR ELO generator: init N(1500,150), +20 home, ×1.2 postseason,
+  margin `rnorm(estimate, sd=13)` rounded away from zero, K=20 log-MOV),
+  playoff rounds with reseeding + `byes_per_conf`, and the 5-frame summary
+  dict (`standings` / `games` / `overall` / `team_wins` / `game_summary`).
+- feat(cfb): `cfb_standings` + `cfb_playoff_seeds` + `cfb_simulations` /
+  `cfb_compute_results` + `cfb_games_from_schedule` — the CFB adaptation
+  (sibling of the NFL port), cross-validated against the new cfbseedR R
+  package on a designed toy fixture (all 13 output columns × 9 teams agree
+  ≤1e-6). Binding semantic ruling: the conference-rank tiebreaker cascade
+  AND the reported `sov`/`sos` are conference-REG-scoped (independents 0.0)
+  — a deliberate divergence from nflseedR's overall games-weighted
+  convention, caught and locked in by the Python↔R toy-fixture diff.
+  `CONF_CHAMP` games count toward the overall record and decide the
+  champion but not the conference record/rank. `cfb_playoff_seeds`
+  implements CFP 12-team straight seeding (2025 rule): 12 best-ranked teams
+  with the 5 highest-ranked conference champions guaranteed, optional
+  committee `rankings=` frame.
+
+### MBB / WBB — bigballR + wbigballR port: `ncaa_mbb_*` / `ncaa_wbb_*` stats.ncaa.org family
+
+Ports **bigballR** (MBB) and **wbigballR** (WBB) — the community
+stats.ncaa.org R scrapers — as a first-class 33-function
+`ncaa_mbb_*` / `ncaa_wbb_*` surface: one shared polars core in `mbb/` +
+thin WBB binding shims, built on the existing proxy-bound `NcaaFetcher`
+transport (browser path for bm-verify game pages; no new transport code).
+Surface: `ncaa_{mbb,wbb}_game_pbp` / `_play_by_play` (row-level pbp with
+both-teams on-floor lineups, possession numbering, transition +
+garbage-time flags), `_box_scores`, `_team_schedule`, `_team_roster`,
+`_date_games`, `_shot_locations`, `_join_pbp_shots`, `_lineups`,
+`_player_lineups`, `_player_combos`, `_on_off`, `_player_stats`,
+`_team_stats`, `_possessions`, `_team_ids` (+ `resolve_ncaa_team_id`,
+`refresh_ncaa_team_ids`), with bundled season-scoped team-id crosswalks
+(2009-10→2025-26 M / →2024-25 W).
+
+Parity is golden-master against the R sources on real fixtures: 27 raw HTML
+captures (8 games chosen to stress edges — blowout/garbage-time, close,
+1 OT, 2 OT, 2019-era markup) + 32 R-oracle CSVs produced by running
+bigballR/wbigballR from source, with SHA/version provenance READMEs. MBB
+play-by-play parity is cell-for-cell exact on all 35 columns including row
+order; every transform (lineups, player/team stats, possessions, combos,
+on/off, box, schedule, roster, scoreboard, shots, pbp↔shots join) is strict
+against its oracle on both leagues. R numeric fidelity is ported exactly:
+R ≥4.0 `round()` (ties-to-even with back-converted-double candidates),
+long-double `sum()` via `math.fsum`, NA-poisoning `max()`/`sum()`
+semantics, dplyr C-locale group ordering. One deliberate fix over the R
+sources (documented in-module + in tests): modern WBB pbp ships one table
+per quarter, and wbigballR — an older fork of bigballR — applies MBB halves
+math and misreads regulation WBB as 2-OT; the shared core takes a
+`period_model` knob (WBB binds `(4, 600, 300)`), with time-derived columns
+validated by invariants + a 100% chart↔pbp join match.
+
+### MBB / WBB — college computational-core port (lineup stats → ratings/luck → RAPM → positions → NCAA stint pipeline)
+
+A nine-phase port of an open-source college-basketball RAPM computational
+core (TypeScript on/off analyzer + Scala NCAA pipeline upstream) into
+`sportsdataverse/mbb/` with `wbb_*` shims throughout,
+jest-/upstream-oracle-validated:
+
+| Phase | Modules | What |
+|---|---|---|
+| 0–1 | `mbb_lineup_stats` | `LineupUtils.ts` port — weighted-sum accumulators, `complete_weighted_avg` (transition/scramble possession recompute, regressed diffs), `calculate_aggregated_lineup_stats`, `lineup_to_team_report` + `get_stats_diff` per-player on/off partition (replacement on/off ported bug-for-bug, documented) |
+| 2 | `mbb_ratings`, `mbb_luck` | Dean-Oliver individual ratings (`build_o_rtg` 93-key / `build_d_rtg` 47-key diagnostics matching the jest oracle exactly, `build_productivity` "Adj Rtg+" RAPM prior) + the complete 950-LOC luck engine (Bayesian 3P% shrink with 10-bit bit-packed shot-info deserializer, eFG→PPP→AdjEff propagation, both directions) |
+| 3 | `mbb_rapm` | Ridge RAPM over lineup design matrices — priors/player context (weak/strong/adaptive-correlation modes), `sqrt(poss/total)` design matrix + unbias row, `(XᵀX+λI)⁻¹Xᵀ` solve with standard errors, adaptive-λ picker scaled by `avgEigenVal` |
+| 4 | `mbb_positions` | Box-score → position classifier (17-feature linear discriminant → softmax over PG..C, normal-CDF height reweighting, small-sample shot-quality shrinkage), `build_position` decision tree (PG/s-PG/CG/WG/WF/S-PF/PF/C), `order_lineup` greedy slot assignment |
+| 5a–5d | `mbb_ncaa_{models,events,possessions,data_quality,names,stints,lineup_enrich,stint_validation}` | The cbb-explorer NCAA stats.ncaa.org pipeline: 20-dataclass model layer with the possession-count formula, 40 pbp event extractors, the substitution-tracking stint state machine (incl. the hand-curated 144-key duplicate-name / misspelling data-quality tables), the 1,772-LOC `enrich_lineup` counting-stat tree (18-category event dispatch, scramble 6.5s ORB-follow + transition tagging, assist source/target pairing), and stint validation + self-healing (`validate_lineup` three sanity checks, `clump_bad_lineups`, the fixer pipeline) |
+| 5e | `mbb_ncaa_html`, `mbb_ncaa_{roster,boxscore,pbp}_parser` | JSoup→bs4 semantics helpers (`:eq(N)`, `:matches`, text-collapse) + the roster/boxscore/pbp HTML parsers, making the NCAA pipeline end-to-end runnable from saved HTML; oracle'd against 5 vendored upstream fixtures + the upstream inline test suites |
+| 5f | `mbb_ncaa_fetch`, strength engine | Cache-first, proxy-bound stats.ncaa.org fetch layer (original sdv-py code — deliberately no direct-fetch mode, the host is IP-ban-happy; fetch-once caching, `NcaaFetchConfig` singleton with `SDV_PY_NCAA_*` / `SDV_PY_PROXYBONANZA_*` env, secret-redacting `__repr__`, `curl_cffi` chrome impersonation) + the Phase-4-deferred strength-adjusted stats engine |
+
+### MBB / WBB / NBA — NCAA LineupStatSet producer + hoopR release-parity producers
+
+- feat(mbb,wbb): `lineup_stats_bucket` / `lineup_stats_buckets`
+  (`mbb_ncaa_lineup_aggregation`) — a field-for-field port of
+  the upstream `commonLineupAggregations.ts` (the Elasticsearch lineup
+  aggregation), the missing **stage-2** layer that mints the 254-field
+  `LineupStatSet` bucket from the ported raw-count tree. This connects the
+  finished college model tier to real NCAA data: the ported models
+  (`mbb_rapm`, `mbb_lineup_stats`, `mbb_luck`, `mbb_ratings`) consume an
+  ES-aggregation bucket that until now came only from vendored jest
+  fixtures — now a real HTML game runs parse → enrich →
+  `lineup_stats_buckets` → models. Two field families that need external
+  opponent D1 baselines emit a documented fallback rather than a faked
+  reproduction.
+- feat(nba,mbb): release-parity producers for the **hoopR NBA + MBB Python
+  cutover** — `helper_{nba,mbb}_*` functions reproducing the hoopR R
+  creation scripts against the released parquet oracles so
+  `hoopR-nba-data` / `hoopR-mbb-data` can compile their datasets in Python
+  (the sister-league counterpart of the merged WNBA producers). NBA is the
+  WNBA variant (zero new parameters); MBB is the WBB variant with one code
+  delta; two genuinely new helpers — **officials** (projected from
+  `game_rosters.gameInfo.officials[]`) and **player_season_stats** (flat
+  career payload, Totals/teamSlug preference) — are shared by NBA + MBB.
+  Every dataset was validated full-frame equal against R's on-disk released
+  parquet oracle (NBA across the full 2025 season; MBB per-game on three
+  fixtures + full-season for the delegates). One deliberate, flagged data
+  fix: pbp `id` is emitted **Int64**, not R's Float64 — MBB's 18-digit
+  concat overflows R's double (~906k colliding released ids in 2025, 41%);
+  parity is asserted through the oracle's lossy Float64 view (#245
+  precedent).
+
+### CFB / MBB / WBB / Baseball — stats.ncaa.org parser expansion (football pbp graduation, box tabs, college baseball + softball pbp)
+
+The stats.ncaa.org parser surface now spans four sports, mirroring the MBB
+NCAA split everywhere: the library owns the parser, discovery/capture stay
+producer concerns.
+
+- feat(cfb): `parse_cfb_ncaa_pbp` (`cfb/cfb_ncaa_pbp.py`) — the
+  college-football play-by-play parser graduated from the
+  `ncaa-mfb-football-raw` producer, so `cfb/` now holds both providers
+  (ESPN + stats.ncaa.org) like `mbb/` does. One row per play,
+  cfbfastR-style, from the `div.drives` markup: drive context, situation
+  (`down`/`distance`/`yard_line`/`end_yard_line`), `play_type`
+  classification (**0 unknowns** across all fixtures), players (`passer`,
+  `rusher`, `receiver`, `kicker`, `punter`, `returner`,
+  `tackler_1`/`tackler_2` with suffix-safe "Last,First" handling), signed
+  `yards_gained`, kick/return/punt/FG detail, turnover + penalty flags, and
+  a frame-wide derived `qb_scramble` (a rush by a player who also passes in
+  the game — NCAA text doesn't label scrambles). 21 offline tests on 3 real
+  captured games.
+- feat(cfb): `cfb_ncaa_box.py` — parsers for the non-pbp football
+  game-detail tabs: `parse_cfb_ncaa_drives` (one row per drive with
+  start/end `how`/`clock`/`yard_line`), `parse_cfb_ncaa_team_stats` (team
+  box with a genuine per-quarter breakdown), `parse_cfb_ncaa_player_stats`
+  (dict of one frame per category), `parse_cfb_ncaa_officials`, and
+  `parse_cfb_ncaa_linescore` (+ `game_date`/`venue`/`attendance`).
+  Validated on a real 2024 capture (California @ Auburn): 26 drives in
+  clean sequence, linescore quarters sum to finals, officials never a nav
+  tab. NCAA's per-quarter team values don't necessarily sum to the total —
+  extracted faithfully, not "corrected".
+- feat(mbb): `mbb_ncaa_box_tabs.py` — `parse_ncaa_bb_officials`,
+  `parse_ncaa_bb_team_stats` (one row per stat/period; the period regex
+  handles WBB quarters and MBB halves), and `parse_ncaa_bb_linescore`,
+  closing the three basketball contest tabs the bigballR-port parsers
+  didn't cover — the contest page is now fully mapped. WBB re-exports them
+  (`parse_ncaa_wbb_*`).
+- feat(baseball): `parse_college_baseball_ncaa_pbp` +
+  `parse_college_softball_ncaa_pbp` (a by-reference twin — softball uses
+  the identical page layout + grammar) — a structured NCAA baseball pbp
+  decomposition: inning context and scores, the batter clause (`play_type`
+  ~20 values, `hit_trajectory`, `fielded_position`, hit/out/strikeout/
+  sacrifice/double-play flags, `rbi`, `count_balls`/`count_strikes`,
+  `pitch_sequence`, error detail) and the runner clauses (`runs_scored`,
+  `scoring_runners`, `runners_advanced`, `outs_on_play`). On 3 real D1
+  games: 0 unknown play types across 322 plays and `runs_scored`
+  reconciles exactly to the final score in every game.
+
+All of these return tidy polars frames (pandas via `return_as_pandas=True`)
+with empty input → the documented zero-row schema, and are fully typed in
+the mypy ratchet.
+
+### NBA / MBB / WBB — dataset loaders for the published model releases
+
+- feat(nba): `load_nba_player_impact(seasons)` — consumer loader for the
+  `nba_player_impact` release produced by `hoopR-nba-stats-data`'s
+  `nba_model_publish` (the RAPM / adj-RAPM / SPM / BPM / WAR /
+  Kalman-projection per-player-season impact table). Codegen-generated from `releases.yaml` +
+  `loader_schemas.yaml`; 404-safe with a **1996** floor (the stats.nba.com
+  lineup/pbp era, erring low so unpublished seasons skip rather than
+  raise); documented 22-column schema pinned by an offline round-trip test.
+- feat(mbb,wbb): `load_mbb_ratings` / `load_mbb_player_value` /
+  `load_wbb_ratings` / `load_wbb_player_value` over the four published
+  model dataset tags. Floors were probed per tag rather than inherited from
+  the 2002 boxscore loaders: MBB 2006 (2003–05 are genuine archival
+  thinness), WBB ratings 2008 (unlocked by the `boxscoreAvailable`-flag fix
+  below — better than the originally-published 2014), WBB player value 2014
+  (`wbb_box_bpm`'s ≥10-games hygiene floor is unreachable on partial
+  archival coverage). Declared returns-schemas are pinned to the producer
+  modules' schema constants by contract tests.
+
+### NBA / WNBA — read-through raw JSON store for stats.nba.com per-game payloads
+
+- feat(nba): the possession engine's module-level fetchers (`_fetch_pbp` /
+  `_fetch_box` / `_fetch_rotation` / `_fetch_box_periods`) now route through
+  an env-gated **read-through raw store**: payloads live in a raw-repo
+  checkout (canonically `hoopR-nba-stats-raw`'s `nba_stats/json`), laid out
+  `{endpoint}/{season}/{game_id}.json`. **Hit** → served from disk, no
+  network (offline rebuilds; a `PIPELINE_VERSION` bump no longer refetches
+  the corpus). **Miss** → live fetch, then atomic persist (tmp+rename) with
+  corrupt-file refetch; persist failures never fail the pipeline.
+  Read-only mode disables the persist half so compile/build consumers stay
+  pure readers — only the raw repo's own sweep fills the store.
+  Configuration is explicit-first, env-fallback: `raw_store_dir=` /
+  `raw_store_readonly=` on `nba_possessions`, `compile_nba_season`, and the
+  fetchers; `raw_store_dir` accepts a single root or a per-endpoint mapping,
+  and per-endpoint `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}` env vars override
+  the generic `SDV_PY_NBA_RAW_JSON_DIR`. With nothing set, every existing
+  caller is byte-identical to before.
+- feat(wnba): the WNBA engine's fetchers route through the same
+  league-agnostic store (the season decode is WNBA-aware — `10`-prefixed
+  game ids are single calendar years, no end-year shift) under a separate
+  env namespace (`SDV_PY_WNBA_RAW_JSON_DIR` +
+  `SDV_PY_WNBA_RAW_JSON_READONLY`) so a WNBA compile can read a
+  `wehoop-wnba-stats-raw` checkout offline; a test asserts no bleed from
+  the NBA env var.
+- fix(nba): the store never persists an empty `{}` payload — a present file
+  is a cache hit that never refetches, so a cached `{}` (a transient scrape
+  failure) poisoned the game permanently, silently degrading possession /
+  lineup building to pbp-inferred lineups (the backfill had left 2,732 empty
+  rotation files, including 311 of 431 in 2023 alone). Falsy payloads stay
+  retryable misses; the shared helper covers WNBA too.
+- fix(nba): `nba_player_positions` dedups to one row per `player_id` —
+  the stats.nba.com `playerindex` lists a mid-season-traded player once per
+  team, violating the documented grain and fanning out through the
+  `positions` join in `nba_bpm`/`nba_spm` (the model-publish builder
+  correctly halted on the duplicate). Listed position is a player
+  attribute, so `keep="first"` is deterministic and lossless.
+
+### NBA / WNBA / G-League — tracking-value spine (T3.2): six over-expected models on the `playerdashpt*` surface
+
+- feat(nba): six player-tracking "over-expected" value models over the
+  second-spectrum `playerdashpt*` surface, sharing one `_over_expected`
+  centering engine — rebounding over-expected (chance-adjusted), passer
+  value (assists over expected), drive value, catch-&-shoot vs pull-up shot
+  value, touch value (points per touch over expected), and rim protection
+  (points saved). WNBA (`league_id="10"`) ships as by-reference shims with
+  a G-League degradation path.
+- Oracle gates on real 2023-24 fixtures: each over-expected metric is a
+  minutes/possession-weighted centering that sums to ~0 by construction
+  (verified Σ≈2.8e-14, tol 1e-6), plus a rank-sanity gate against an
+  externally rate-sourced elite allowlist (top-K exact-cover membership;
+  qualified populations ~300–450 per model). Review-driven hardening added
+  minimum qualified-N asserts on all six rank gates (so a truncated
+  re-capture can't pass vacuously) and a position-bucket join match-rate
+  floor (`matched/height >= 0.9`) that catches the
+  dtype-agrees-but-id-spaces-disjoint bug which would silently collapse the
+  by-position baseline into one league-wide bucket. Real-data capture
+  corrected two wrong column names from the design doc (documented in the
+  fixtures README).
+
+### NBA — model-zoo v1: validation harness + SPM / BPM 2.0 / Bayesian adj-RAPM
+
+The first generation of the NBA player-value model zoo: a validation harness
+wiring four external oracles plus a meta-oracle and a season compiler; a
+trained SPM (box-score features regressed onto a RAPM target) with the
+`RatingsModel` harness extension; a faithful BPM 2.0 port (box-score player
+value) validated in a three-way head-to-head; and adj-RAPM-with-prior
+(Bayesian RAPM) with the calibration oracle activated. The v2 tier-1
+estimators (RAPM variants, external concurrent validity, the through-date
+ratings panel + WAR) build on this base.
+
+### NBA — Kalman + aging-curve player projection + forecast validator
+
+- feat(nba): `nba_darko` — a per-player **Kalman filter** over a
+  multi-season rating panel with an empirical **aging curve**
+  (`AgingCurve` / `fit_aging_curve`, delta method) that forecasts each
+  player's next-season rating with a posterior SD. Noise parameters are MLE
+  fit (`q`/`obs_base` via `scipy.optimize` with a moment-based `q`-floor);
+  observation noise scales ∝ 1/possessions. Input is a pre-built
+  `{player_id, season, rating, weight}` panel (assemble it from
+  adj-RAPM/SPM per season) so the projection layer is decoupled from the
+  estimators. `nba_player_ages.py` supplies bulk per-season `AGE` via
+  `leaguedashplayerbiostats`.
+- feat(nba): `darko_forecast_accuracy` + `ForecastResult` — the projection
+  is evaluated by forecast accuracy (predict season N+1 from history ≤ N),
+  not the possession harness. The meta-oracle has teeth: on a skill panel
+  the projection beats carry-forward (RMSE 0.82 < 0.94, corr 0.98), and on
+  a pure-noise panel it does **not** manufacture skill — building that
+  noise test exposed and fixed a real MLE pathology.
+
+### NHL / PWHL — microstat & EDGE value spine (T5.2) + first-of-its-kind PWHL prediction (T5.3)
+
+- feat(nhl): five microstat value models over the api-web pbp + EDGE
+  tracking surface, with PWHL by-reference shims — context-adjusted faceoff
+  win value (zone × strength, fit from post-faceoff xG), penalty
+  drawn/taken net value (man-advantage goals per minor), expected
+  primary/secondary assists (relative-danger xG credit), zone-entry/exit
+  value (pbp-derived controlled/dump inference), and an EDGE skating
+  z-composite value (NHL-only; PWHL zero-row) from `nhl_edge` skater
+  detail. All oracle gates pass on the real 2024 corpus (faceoff
+  context-cell calibration 0.021 ≤ 0.03; penalty net conservation ~4e-16;
+  ΣxA≈ΣA unbiasedness 0.006 ≤ 0.05; split-half stabilities 0.21–0.28 vs
+  ≥0.15 floors; EDGE component rank-corr 0.52–0.76 vs ≥0.5), with the
+  rare-event stability gates using an independent games-played denominator
+  to avoid the conditioning-on-the-sum trap. No gate lowered.
+- feat(nhl): the T5.2 deferrals fleshed out — the zone-entry
+  controlled/dump heuristic is now event-sequence-aware (the entering team
+  must win the next possession event within the window, cross-period
+  sign-flip guarded) with a directional gate (controlled entries precede a
+  same-team shot 0.98 vs 0.77 for dumps); EDGE skating gains
+  `method="percentile"` plus a joint face-validity gate; xAssists ordering
+  was re-measured, confirmed genuinely underpowered (real numbers
+  documented + reproducible via a committed check script), and replaced
+  with a powered population-level gate (secondary-assist goals carry higher
+  mean relative danger).
+- feat(pwhl): `pwhl_xg_proxy` — the T5.3 PWHL prediction, a
+  first-of-its-kind model on real PWHL data (3 live seasons, 2024–2026): a
+  2-tier empirical xG proxy from PWHL's categorical `shot_quality` feeding
+  the existing league-agnostic opponent-adjustment + market core. De-leaked
+  after review: tier weights fit on strictly pre-cutoff pbp (per-as-of in
+  the backtest) and `margin_sd` fit on train (2024+2025) and evaluated on
+  held-out 2026 only. Honest held-out result (n=107): Brier 0.2449 vs naive
+  0.2500 — within ~1 SD of noise, so the beats-naive magnitude assertion is
+  deliberately dropped in favor of the held-out calibration gate.
+
+### PWHL — shift-derived `strength_state` + shot-level coordinate xG (+ two loaders)
+
+- feat(pwhl): `add_strength_state(pbp, goalie_ids)`
+  (`hockeytech/_analytics.py`) — derives `skaters_home`/`skaters_away`,
+  home-vs-away `strength_state` (`5v5`/`5v4`/`6v5`), and a
+  `strength_state_valid` sanitize flag from the on-ice ids, unlocking real
+  offline strength context on every PWHL shot for EV/PP/SH strength-split
+  xG. Empty-net is intentionally **not** derived here — HockeyTech goalie
+  shift-tracking is unreliable (~40% false positives); use the
+  authoritative goal-level `empty_net` field.
+- fix(hockeytech): `build_on_ice` end intervals are now half-open
+  (`> end_s`), fixing a line-change double-count that produced impossible
+  ~10-v-10 on-ice states — a shared-core fix that also corrects Corsi/TOI
+  for AHL/OHL/WHL/QMJHL.
+- feat(pwhl): `pwhl_shot_xg()` — public shot-level counterpart to
+  `pwhl_team_game_xg_rates`: same pre-shot context derivation over the full
+  pbp, `PwhlCoordXGModel` scoring, returned as a curated 21-column
+  `_SHOT_XG_SCHEMA` frame (identity, rink-feet geometry, strength context,
+  outcome, `xg`), with dtypes cast at the boundary so `load_pwhl_pbp`
+  output and the pwhl-data committed parquet land on one published schema.
+  Takes `model=` so a producer can fit once on pooled seasons and score
+  every season consistently. Real-data smoke: pooled 2024–2026 fit scoring
+  2025 → 5,671 shots, xG sum 464.8 vs 499 goals.
+- feat(pwhl): `load_pwhl_shifts()` + `load_pwhl_xg_pbp()` — codegen loaders
+  for the `pwhl_shifts` and `pwhl_xg_pbp` release tags (the latter's
+  declared returns-schema pinned to `_SHOT_XG_SCHEMA` by a contract test).
+
+### MLB — model spines: game state (T6.4), pitching evaluation (T6.1), fielding/catching/baserunning (T6.3)
+
+- feat(mlb): **game-state spine** — the MLB substrate + the RE24 /
+  `run_value` denominator the sibling spines import:
+  `mlb_run_expectancy_matrix` + `run_value(...)` (exported at
+  `sportsdataverse.mlb`), a win-expectancy table + WPA + Tango leverage
+  index (pre-play-aligned), an umpire strike-zone logistic with per-umpire
+  bias (Statcast bridge), team projection (pythagenpat + as-of-date Elo),
+  and prop projection (team-runs log5 + strikeouts Poisson). Ships its own
+  `statsapi.mlb.com` collector. Gates: RE24 per-state |diff| vs Tango 0.048
+  ≤ 0.05, WE corr vs statsapi 0.974 ≥ 0.95, exact WPA-sum telescoping,
+  umpire calibration gap 0.075 ≤ 0.08, pythagenpat MAE 0.029, props
+  as-of-date MAE 2.64 runs. As-of leakage enforced (Elo updates only after
+  a team's own game; prop backtest uses strictly-prior `cum_sum().shift(1)`).
+- feat(mlb): **pitching-evaluation spine** — compute-on-demand pitcher
+  models over Baseball Savant Statcast: `mlb_stuff_plus` (xgboost run-value
+  model on pitch physics, plus-scale), `mlb_command_plus`
+  (Location+/Command+ with a bundled command model; fixed a
+  train/score-inconsistency in the categorical encoding), `mlb_pitch_era`
+  (parametric xERA + SIERA-like estimator, oracle vs the Savant xERA
+  leaderboard), `mlb_pitch_features`
+  (physics/location/sequence/TTO/workload substrate), `mlb_pitch_sequencing`
+  (tunnel geometry + sequence run value), `mlb_pitch_fatigue`
+  (times-through-order / fatigue penalty), `mlb_pitch_classify`
+  (per-pitcher GMM reclassification with an agreement gate), and
+  `mlb_pitch_injury` (leakage-safe injury-risk index). All oracle gates
+  green on real Savant pitch + leaderboard captures; model artifacts
+  bundled.
+- feat(mlb): **fielding / catching / baserunning spine** — `mlb_run_values`
+  (RE288 count table + event/count-strike run values with an as-of-date
+  split), `mlb_catcher_framing` (framing runs from a called-strike
+  probability grid), `mlb_catcher_defense` (blocking runs + throwing /
+  caught-stealing value via a pop-time model), `mlb_fielding_oaa`
+  (outs-above-average from a catch-probability surface over BIP trajectory
+  features), `mlb_baserunning` (extra-bases-above-expected + advancement
+  opportunities), and `mlb_stolen_base` (SB success surface + value; SB/CS
+  attempts derived from `des` text to fill a documented Savant capture
+  gap). All gates green against the committed real-capture Savant corpus;
+  rate-metric oracle joins assert dtype agreement + match-rate floors.
+
+### Recruiting / NFL — PFF Premium Stats stem + On3 RDB retarget + 247Sports expansion
+
+- feat(nfl,cfb): **PFF Premium Stats 2.0** stem (`premium.pff.com/api/v1`,
+  cookie-auth) — a new `pff_core` stem (46 wrappers: 32 facet reports,
+  player reports, meta) + `make_pff_league_module` shims for
+  nfl / ncaa (cfb) / aaf / ufl. Cookie-supply auth path with
+  `SDV_PY_PFF_LIVE`-gated live tests; `pff_login` ships as an experimental
+  stub; the transport is injectable so offline tests run against real
+  logged-in captures.
+- feat(cfb): **On3 RDB retarget** — the 4-endpoint `_next/data` scrape
+  becomes an 82-endpoint RDB stem; deprecated `_next/data` shims keep the 4
+  released names working.
+- feat(cfb): **247Sports expansion** — the guest-usable `positions` RDB
+  route (residential-gated live tests) plus a new auth-free
+  `sports247_site_pages` stem (curl_cffi chrome; string-numeric casts at
+  the boundary; nested entities surfaced as integer FKs).
+
+### Validation harness — `constant_column` check, R-lint UTF-8 fix, cron run-tracker ingest
+
+- feat(validation): new **`constant_column`** check — flags all-null /
+  all-NaN and zero-variance (single-valued, incl. all-zero) columns as WARN
+  `needs_judgment`, minus a per-dataset `expected_constant_columns`
+  allowlist; the class of dead-column bug the existing checks can't catch
+  (`extraction` is null-based, `sweep` is release-over-release,
+  `numeric_parity` needs an oracle). All 7 previously-unmonitored CFB
+  modeling-suite datasets (`cfb_passing`, `cfb_rushing`, `cfb_receiving`,
+  `cfb_percentiles`, `cfb_team_summaries`, `cfb_rosters_crosswalk`,
+  `cfb_rb_eval`) are now registered with committed schema snapshots, join
+  keys, and allowlists — and the check immediately surfaced real standing
+  producer findings (e.g. all-zero `sacked` / `pass_int` / `sack_yds` in
+  `cfb_passing`).
+- fix(validation): the R leakage lint decoded Rscript output as cp1252 on
+  Windows and `UnicodeDecodeError`'d on UTF-8 R sources — **silently
+  dropping those files instead of linting them**; now
+  `encoding="utf-8", errors="replace"`. The workflow's hardcoded
+  `LINT_TARGETS` had also drifted from the registry (the CFB R lint never
+  ran); a new contract test asserts the workflow's `DATASETS` /
+  `LINT_TARGETS` match `registry.py` so future drift fails CI.
+- ci(validation): the weekly validation cron now ingests one platform run
+  per validated dataset into the sportsdataverse.org run tracker — one gate
+  per harness check (pass iff zero ERROR findings; WARN-only findings
+  surface in `metrics`), with links back to the Actions run. A dataset
+  whose release download was unavailable is not ingested (an empty findings
+  file would masquerade as a perfect run), and ingest failures never fail
+  the cron.
 
 ## 0.0.71 Release: June 24, 2026
 
