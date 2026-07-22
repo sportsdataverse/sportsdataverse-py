@@ -19,12 +19,15 @@ values outside int32 range are written as doubles (R has no 64-bit integer).
 from __future__ import annotations
 
 import gzip
+import os
 import struct
+import tempfile
+from contextlib import nullcontext
 from datetime import datetime, timezone
 from functools import partial
 from pathlib import Path
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from typing import Union
+from typing import Protocol, Union
 
 import numpy as np
 import polars as pl
@@ -61,20 +64,72 @@ _AttrValue = Union[str, datetime]
 _ColumnWriter = Callable[[], None]
 
 
-class _RdsWriter:
-    """Accumulates the XDR byte stream for one serialized R object."""
+class _ByteSink(Protocol):
+    """Any write-only binary sink: ``GzipFile``, ``BufferedWriter``, ``BytesIO``.
 
-    def __init__(self) -> None:
+    Structural rather than ``IO[bytes]`` because ``gzip.GzipFile`` does not
+    satisfy the full ``IO`` protocol -- the writer only ever calls ``write``.
+    """
+
+    def write(self, data: bytes, /) -> int: ...
+
+
+class _RdsWriter:
+    """Serializes one R object as an XDR byte stream.
+
+    With a ``sink`` the stream is written straight through and nothing is
+    retained; without one it accumulates in memory and :meth:`payload` returns it.
+
+    Streaming is not an optimization here, it is what makes season-sized frames
+    writable at all. Buffering costs roughly 10x the frame: every value becomes
+    its own small ``bytes`` object (each carrying ~33 bytes of object overhead),
+    and ``payload()`` then joins them into a second, contiguous copy of the whole
+    stream. Serializing NHL's 1.1M x 94 play-by-play frame that way needed ~6.8GB
+    on top of the frame itself and was OOM-killed mid-write.
+    """
+
+    # Bytes to gather before handing the sink a single write. Serialization emits
+    # a few bytes at a time, so writing each one straight through means millions
+    # of compressor calls; batching them cuts that by ~5 orders of magnitude while
+    # keeping memory bounded by this constant rather than by the frame.
+    _SINK_BUFFER_BYTES = 4 * 1024 * 1024
+
+    def __init__(self, sink: _ByteSink | None = None) -> None:
+        self._sink = sink
         self._chunks: list[bytes] = []
+        self._pending: list[bytes] = []
+        self._pending_len = 0
         # R's serializer refs repeated symbols instead of re-serializing them
         # (serialize.c HashAdd/OutRefIndex); 1-based, first-appearance order
         self._sym_refs: dict[str, int] = {}
 
     def payload(self) -> bytes:
+        """The buffered stream. Only valid on a writer constructed without a sink.
+
+        Raises:
+            RuntimeError: If a sink was given -- the bytes went to it, so returning
+                the (empty) buffer would look like a successfully serialized object.
+        """
+        if self._sink is not None:
+            raise RuntimeError("payload() is unavailable on a streaming writer")
         return b"".join(self._chunks)
 
+    def flush(self) -> None:
+        """Hand any buffered bytes to the sink. Must be called before closing it."""
+        if self._sink is None or not self._pending:
+            return
+        self._sink.write(b"".join(self._pending))
+        self._pending.clear()
+        self._pending_len = 0
+
     def _raw(self, data: bytes) -> None:
-        self._chunks.append(data)
+        if self._sink is None:
+            self._chunks.append(data)
+            return
+        self._pending.append(data)
+        self._pending_len += len(data)
+        if self._pending_len >= self._SINK_BUFFER_BYTES:
+            self.flush()
 
     def _int(self, value: int) -> None:
         self._raw(struct.pack(">i", value))
@@ -337,40 +392,62 @@ def write_rds(
         # a data.frame on read, which is far worse than a wrong print method.
         if cls[-1] != "data.frame":
             raise ValueError(f"cls must end with 'data.frame'; got {cls!r}")
-    writer = _RdsWriter()
-    writer.header()
-
-    column_writers = [_column_writer(writer, df[name]) for name in df.columns]
-
-    # Attribute order is mutation-history-dependent in R; this matches a
-    # data.frame that went through `$<-` column assignment (as in
-    # sportsdataverse_save's season/week coercion): names, row.names, class.
-    # Readers accept any order; the byte-golden fixture pins this one.
-    frame_attributes: list[tuple[str, _ColumnWriter]] = [
-        ("names", lambda: writer.strsxp(list(df.columns), length=df.width)),
-        (
-            "row.names",
-            # compact internal form: c(NA_integer_, -nrow)
-            lambda: writer.intsxp_raw(struct.pack(">ii", _NA_INT, -df.height), length=2),
-        ),
-        writer.class_attr(cls if cls is not None else ["data.frame"]),
-    ]
-    for attr_name, attr_value in (attributes or {}).items():
-        if isinstance(attr_value, datetime):
-            frame_attributes.append((attr_name, partial(writer.posixct_scalar, attr_value)))
-        else:
-            frame_attributes.append((attr_name, partial(writer.scalar_string, attr_value)))
-
-    writer._flags(_VECSXP, is_object=True, has_attr=True)
-    writer._int(df.width)
-    for write_column in column_writers:
-        write_column()
-    writer.attr_pairlist(frame_attributes)
-
-    payload = writer.payload()
     out_path = Path(path)
-    if compress:
-        with gzip.open(out_path, "wb") as f:
-            f.write(payload)
-    else:
-        out_path.write_bytes(payload)
+
+    # Serialize straight into the file rather than buffering the stream and
+    # writing it at the end: a season-sized frame costs ~10x its own size to
+    # buffer (see _RdsWriter) and gets OOM-killed. Peak memory is now flat in the
+    # size of the output.
+    #
+    # Streaming does introduce a failure mode the buffered version could not
+    # have: a mid-write error leaves a truncated file where previously no file
+    # was created at all. A truncated .rds is worse than a missing one -- it
+    # reads as a corrupt object and can be published as if it were complete --
+    # so write to a temp sibling and rename on success, which is atomic within a
+    # filesystem and never exposes a partial file at `path`. The temp name is unique
+    # per writer: two processes writing the same `path` (two compiles sharing an
+    # out_dir) would otherwise interleave their bytes into one fixed temp file.
+    fd, tmp_name = tempfile.mkstemp(dir=out_path.parent, prefix=f".{out_path.name}.", suffix=".partial")
+    tmp_path = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "wb") as raw:
+            # gzip stamps the output filename into its header, so name it for the
+            # final path -- opening the temp path directly would embed the temp name
+            # and make the bytes differ from a plain gzip.open(path). Built only when
+            # compressing: GzipFile writes its header at construction.
+            sink_ctx = gzip.GzipFile(filename=out_path.name, mode="wb", fileobj=raw) if compress else nullcontext(raw)
+            with sink_ctx as f:
+                writer = _RdsWriter(sink=f)
+                writer.header()
+
+                column_writers = [_column_writer(writer, df[name]) for name in df.columns]
+
+                # Attribute order is mutation-history-dependent in R; this matches a
+                # data.frame that went through `$<-` column assignment (as in
+                # sportsdataverse_save's season/week coercion): names, row.names, class.
+                # Readers accept any order; the byte-golden fixture pins this one.
+                frame_attributes: list[tuple[str, _ColumnWriter]] = [
+                    ("names", lambda: writer.strsxp(list(df.columns), length=df.width)),
+                    (
+                        "row.names",
+                        # compact internal form: c(NA_integer_, -nrow)
+                        lambda: writer.intsxp_raw(struct.pack(">ii", _NA_INT, -df.height), length=2),
+                    ),
+                    writer.class_attr(cls if cls is not None else ["data.frame"]),
+                ]
+                for attr_name, attr_value in (attributes or {}).items():
+                    if isinstance(attr_value, datetime):
+                        frame_attributes.append((attr_name, partial(writer.posixct_scalar, attr_value)))
+                    else:
+                        frame_attributes.append((attr_name, partial(writer.scalar_string, attr_value)))
+
+                writer._flags(_VECSXP, is_object=True, has_attr=True)
+                writer._int(df.width)
+                for write_column in column_writers:
+                    write_column()
+                writer.attr_pairlist(frame_attributes)
+                writer.flush()  # the tail of the stream is still buffered
+    except BaseException:
+        tmp_path.unlink(missing_ok=True)
+        raise
+    tmp_path.replace(out_path)
