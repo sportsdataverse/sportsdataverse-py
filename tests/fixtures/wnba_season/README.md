@@ -14,3 +14,8 @@
   stats.wnba.com game-id namespace). Gates the
   `games_from_leaguegamelog` pivot offline; the full season path is
   live-gated in `tests/nba/test_nba_season_glue.py`.
+- `nba_schedule_2025_sample.parquet` — 3 real rows (3 completed 2025-26
+  regular-season games) captured 2026-07-22 from the published
+  `nba_stats_schedules` release (league-schedule shape: one row per game,
+  `home_team_*`/`away_team_*` columns, `game_status` 3 = final). Gates
+  the `games_from_nba_schedule` pivot offline.

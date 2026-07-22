@@ -61,6 +61,85 @@ def test_team_ratings_mechanics_on_real_sample() -> None:
         fit_team_ratings(games.with_columns(pl.lit(False).alias("completed")))
 
 
+def test_nba_schedule_pivot_on_real_sample() -> None:
+    from sportsdataverse.nba.nba_possession_sim import games_from_nba_schedule
+
+    schedule = pl.read_parquet("tests/fixtures/wnba_season/nba_schedule_2025_sample.parquet")
+    games = games_from_nba_schedule(schedule)
+    assert games.height == 3
+    assert games["game_id"].str.starts_with("002").all()  # preseason filtered
+    for row in games.iter_rows(named=True):
+        assert row["completed"] is True
+        assert row["home_team_id"] != row["away_team_id"]
+        assert row["home_pts"] > 0 and row["away_pts"] > 0
+        assert isinstance(row["game_date"], dt.date)
+    with pytest.raises(ValueError, match="missing columns"):
+        games_from_nba_schedule(schedule.drop("game_status"))
+
+
+def test_recency_weighting_is_inert_on_a_single_date() -> None:
+    """The committed sample's games share one date, so any half-life must
+    reproduce the unweighted ratings exactly — the weights cancel."""
+    from sportsdataverse.nba.nba_possession_sim import fit_team_ratings
+
+    games = games_from_leaguegamelog(pl.read_parquet(SAMPLE))
+    plain = fit_team_ratings(games, shrinkage=2.0)
+    weighted = fit_team_ratings(games, shrinkage=2.0, half_life_days=3.0)
+    for team, factor in plain["off"].items():
+        assert weighted["off"][team] == pytest.approx(factor)
+    assert weighted["home_edge"] == pytest.approx(plain["home_edge"])
+    assert weighted["team_mean"] == pytest.approx(plain["team_mean"])
+
+
+@skip_if_no_live
+def test_nba_ratings_smoke_and_pbp_gap() -> None:
+    from sportsdataverse.nba.nba_loaders import load_nba_stats_schedules
+    from sportsdataverse.nba.nba_possession_sim import (
+        fit_team_ratings,
+        games_from_nba_schedule,
+        season_data,
+    )
+
+    games = games_from_nba_schedule(load_nba_stats_schedules([2025]))
+    completed = games.filter(pl.col("completed") == True)  # noqa: E712
+    assert completed.height >= 1_200  # full 2025-26 regular season
+    ratings = fit_team_ratings(completed)
+    assert len(ratings["off"]) == 30
+    assert 0.95 < ratings["home_edge"] < 1.10  # observed 1.0151
+    assert 100.0 < ratings["team_mean"] < 130.0  # observed 115.6
+    # the pbp half fails loudly until load_nba_stats_pbp is published
+    with pytest.raises(ValueError, match="load_nba_stats_pbp"):
+        season_data("nba", [2025])
+
+
+@skip_if_no_live
+def test_season_matchup_surface_with_availability() -> None:
+    from sportsdataverse.nba.nba_possession_sim import season_matchup
+    from sportsdataverse.nba.nba_possession_sim.season import _load_stats_schedule
+
+    log = _load_stats_schedule("wnba", [2026])
+    ids = {
+        needle: int(log.filter(pl.col("TEAM_NAME").str.contains(needle))["TEAM_ID"].unique()[0])
+        for needle in ("Sparks", "Mercury")
+    }
+    through = dt.date(2026, 7, 1)
+    game = season_matchup("wnba", [2026], ids["Sparks"], ids["Mercury"], through=through, half_life_days=21.0)
+    assert game["targets"]["home"] > 60 and game["targets"]["away"] > 60
+    assert game["attribution"].ft_pct  # shooter FT fitted from season logs
+    star = game["attribution"].away.player_ids[0]
+    masked = season_matchup(
+        "wnba",
+        [2026],
+        ids["Sparks"],
+        ids["Mercury"],
+        through=through,
+        half_life_days=21.0,
+        away_unavailable=[star],
+    )
+    assert star not in masked["attribution"].all_player_ids()
+    assert masked["attribution"].ft_pct == game["attribution"].ft_pct  # masks keep the fitted rates
+
+
 @skip_if_no_live
 def test_season_data_respects_the_cutoff() -> None:
     from sportsdataverse.nba.nba_possession_sim import season_data

@@ -74,6 +74,7 @@ from sportsdataverse.nba.nba_possession_sim.props import (
 from sportsdataverse.nba.nba_possession_sim.season import (
     fit_team_ratings,
     games_from_leaguegamelog,
+    games_from_nba_schedule,
     matchup_factors,
     matchup_targets,
     season_data,
@@ -166,6 +167,7 @@ __all__ = [
     "ensemble_market_summary",
     "player_points_long",
     "games_from_leaguegamelog",
+    "games_from_nba_schedule",
     "season_data",
     "season_shelf",
     "walk_forward_backtest",

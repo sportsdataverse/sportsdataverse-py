@@ -48,8 +48,14 @@ def _load_stats_pbp(league: str, seasons: List[int]) -> pl.DataFrame:
         from sportsdataverse.wnba.wnba_loaders import load_wnba_stats_pbp
 
         return load_wnba_stats_pbp(seasons)
-    from sportsdataverse.nba.nba_loaders import load_nba_stats_pbp
-
+    try:
+        from sportsdataverse.nba.nba_loaders import load_nba_stats_pbp
+    except ImportError as exc:
+        raise ValueError(
+            "the NBA v3-schema season pbp loader (load_nba_stats_pbp) is not published in "
+            "sdv-py yet — the pbp half of the season glue supports WNBA today; the "
+            "schedule/ratings half works for NBA via games_from_nba_schedule + fit_team_ratings"
+        ) from exc
     return load_nba_stats_pbp(seasons)
 
 
@@ -117,6 +123,61 @@ def games_from_leaguegamelog(log: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def games_from_nba_schedule(schedule: pl.DataFrame) -> pl.DataFrame:
+    """Normalize the NBA ``*_stats_schedules`` release into one-row games.
+
+    The NBA release ships the league-schedule shape (one row per game,
+    ``home_team_*``/``away_team_*`` columns, ``game_status`` 3 = final)
+    rather than the WNBA leaguegamelog shape; preseason ids (``001…``)
+    are dropped so ratings see regular-season play only.
+
+    Args:
+        schedule: A ``load_nba_stats_schedules`` frame.
+
+    Returns:
+        The :func:`games_from_leaguegamelog` schema: ``game_id``,
+        ``game_date``, ``home_team_id``, ``away_team_id``, ``home_pts``,
+        ``away_pts``, ``completed``.
+
+    Raises:
+        ValueError: When required columns are absent.
+
+    Example:
+        NBA team ratings without the (not-yet-published) pbp half::
+
+            from sportsdataverse.nba.nba_loaders import load_nba_stats_schedules
+            games = games_from_nba_schedule(load_nba_stats_schedules([2025]))
+            ratings = fit_team_ratings(games)
+    """
+    required = [
+        "game_id",
+        "game_date",
+        "home_team_id",
+        "away_team_id",
+        "home_team_score",
+        "away_team_score",
+        "game_status",
+    ]
+    missing = sorted(set(required) - set(schedule.columns))
+    if missing:
+        raise ValueError(f"nba schedule frame is missing columns: {missing}")
+    return (
+        schedule.filter(pl.col("game_id").cast(pl.Utf8).str.starts_with("002"))
+        .select(
+            pl.col("game_id").cast(pl.Utf8),
+            pl.col("game_date").cast(pl.Date),
+            pl.col("home_team_id").cast(pl.Int64),
+            pl.col("away_team_id").cast(pl.Int64),
+            pl.col("home_team_score").cast(pl.Int64, strict=False).alias("home_pts"),
+            pl.col("away_team_score").cast(pl.Int64, strict=False).alias("away_pts"),
+            ((pl.col("game_status").cast(pl.Int64, strict=False) == 3) & pl.col("home_team_score").is_not_null()).alias(
+                "completed"
+            ),
+        )
+        .sort("game_date", "game_id")
+    )
+
+
 def season_data(
     league: str,
     seasons: List[int],
@@ -151,7 +212,8 @@ def season_data(
     """
     if league not in _LEAGUES:
         raise ValueError(f"league must be one of {_LEAGUES}")
-    games = games_from_leaguegamelog(_load_stats_schedule(league, seasons))
+    raw_schedule = _load_stats_schedule(league, seasons)
+    games = games_from_nba_schedule(raw_schedule) if league == "nba" else games_from_leaguegamelog(raw_schedule)
     if through is not None:
         games = games.filter(pl.col("game_date") <= through)
     completed = games.filter(pl.col("completed") == True)  # noqa: E712
@@ -174,6 +236,7 @@ def _calibrate_pace_to_total(
     n_pilot: int = 400,
     seed: int = 11,
     passes: int = 2,
+    expanded: bool = False,
 ) -> Shelf:
     """Scale the pace node so simulated totals match a realized anchor.
 
@@ -183,11 +246,13 @@ def _calibrate_pace_to_total(
     board's original hand calibration: two pilot passes scale the global
     burn AND every per-key pace rate by the simulated/realized total
     ratio, preserving the fitted per-state pace SHAPE while pinning the
-    level to real finals.
+    level to real finals. ``expanded`` pilots the expanded walk — use it
+    when the consumer is the boxscore/prop path (it scores a few points
+    higher than the collapsed walk).
     """
     for _ in range(passes):
-        pilot = simulate_ensemble(shelf, n_sim=n_pilot, seed=seed, rules=rules)
-        scale = float(pilot["mean_total"]) / target_total
+        home, away = _pilot_scores(shelf, rules, n_pilot, seed, expanded=expanded)
+        scale = float((home + away).mean()) / target_total
         shelf.mean_possession_seconds *= scale
         if shelf.pace_rates is not None:
             shelf.pace_rates = {key: value * scale for key, value in shelf.pace_rates.items()}
@@ -201,6 +266,7 @@ def season_shelf(
     through: Optional[dt.date] = None,
     learned_keyer: bool = False,
     calibrate_total: bool = True,
+    half_life_days: Optional[float] = None,
 ) -> Shelf:
     """The fully fitted node tree from full season-to-date data.
 
@@ -231,7 +297,8 @@ def season_shelf(
     shelf = models_to_shelf(data["events"], keyer=keyer, actions=data["pbp"])
     if calibrate_total:
         finals = data["schedule"].filter(pl.col("completed") == True)  # noqa: E712
-        target = float((finals["home_pts"] + finals["away_pts"]).mean())
+        anchor = through or finals["game_date"].max()
+        target = _weighted_mean_total(finals, anchor, half_life_days)
         shelf = _calibrate_pace_to_total(shelf, target, _rules_for(league))
     return shelf
 
@@ -247,6 +314,7 @@ def walk_forward_backtest(
     min_train_games: int = 20,
     learned_keyer: bool = False,
     team_factors: bool = True,
+    half_life_days: Optional[float] = None,
 ) -> Dict[str, Any]:
     """Walk-forward distributional calibration of the season-fitted tree.
 
@@ -310,9 +378,12 @@ def walk_forward_backtest(
         keyer = fit_learned_gamestate_keyer(events) if learned_keyer else None
         shelf = models_to_shelf(events, keyer=keyer, actions=train_pbp)
         # leakage-safe level anchor: the TRAIN games' realized mean total
-        train_target = float((train_games["home_pts"] + train_games["away_pts"]).mean())
+        # (recency-weighted from the eval date when a half-life is given)
+        train_target = _weighted_mean_total(train_games, eval_date, half_life_days)
         shelf = _calibrate_pace_to_total(shelf, train_target, rules)
-        ratings = fit_team_ratings(train_games) if team_factors else None
+        ratings = (
+            fit_team_ratings(train_games, as_of=eval_date, half_life_days=half_life_days) if team_factors else None
+        )
         n_refits += 1
         max_train_dates.append(train_games["game_date"].max())
         slate = window.filter(pl.col("game_date") == eval_date)
@@ -375,21 +446,85 @@ def walk_forward_backtest(
 _SCORING_OUTCOMES = ("rim_make", "mid_make", "three_make", "ft_trip_1", "ft_trip_2", "ft_trip_3")
 
 
-def fit_team_ratings(games: pl.DataFrame, *, shrinkage: float = 6.0) -> Dict[str, Any]:
+def _weight_expr(anchor: dt.date, half_life_days: Optional[float]) -> pl.Expr:
+    """Exponential recency weight over ``game_date`` (1.0 when unweighted)."""
+    if half_life_days is None:
+        return pl.lit(1.0)
+    age_days = (pl.lit(anchor) - pl.col("game_date")).dt.total_days().clip(lower_bound=0)
+    return (pl.lit(0.5) ** (age_days / float(half_life_days))).cast(pl.Float64)
+
+
+def _weighted_mean_total(finals: pl.DataFrame, anchor: dt.date, half_life_days: Optional[float]) -> float:
+    """Recency-weighted mean of realized game totals."""
+    weighted = finals.with_columns(_weight_expr(anchor, half_life_days).alias("w"))
+    return float(
+        weighted.select(((pl.col("home_pts") + pl.col("away_pts")) * pl.col("w")).sum() / pl.col("w").sum()).item()
+    )
+
+
+def _pilot_scores(
+    shelf: Shelf,
+    rules: SportRules,
+    n_pilot: int,
+    seed: int,
+    *,
+    expanded: bool = False,
+    home_factors: Any = None,
+    away_factors: Any = None,
+) -> Any:
+    """Pilot (home, away) score vectors on the collapsed OR expanded walk.
+
+    Calibration must pilot the same walk the consumer runs: the expanded
+    tree scores a few points higher than the collapsed one (and-1 chains),
+    so boxscore/prop boards calibrate expanded while team-level ensembles
+    calibrate collapsed.
+    """
+    if not expanded:
+        ens = simulate_ensemble(
+            shelf, n_sim=n_pilot, seed=seed, rules=rules, home_factors=home_factors, away_factors=away_factors
+        )
+        return ens["score_home"].astype(float), ens["score_away"].astype(float)
+    from sportsdataverse.nba.nba_possession_sim.engine import simulate_game_pbp
+
+    rng = np.random.default_rng(seed)
+    home: np.ndarray = np.empty(n_pilot, dtype=float)
+    away: np.ndarray = np.empty(n_pilot, dtype=float)
+    for index in range(n_pilot):
+        final, _ = simulate_game_pbp(
+            shelf, rng, rules=rules, expanded=True, home_factors=home_factors, away_factors=away_factors
+        )
+        home[index] = final.score_home
+        away[index] = final.score_away
+    return home, away
+
+
+def fit_team_ratings(
+    games: pl.DataFrame,
+    *,
+    shrinkage: float = 6.0,
+    as_of: Optional[dt.date] = None,
+    half_life_days: Optional[float] = None,
+) -> Dict[str, Any]:
     """Offense/defense strength + home edge from realized finals.
 
     Ratings are per-game points for/against, empirical-Bayes shrunk toward
-    the league mean with ``n / (n + shrinkage)`` games and expressed as
-    multiplicative factors (1.0 = league average).
+    the league mean with ``n / (n + shrinkage)`` effective games and
+    expressed as multiplicative factors (1.0 = league average). With
+    ``half_life_days``, games are exponentially recency-weighted from
+    ``as_of`` (default: the latest final) — the effective game count is
+    the weight sum, so shrinkage tightens as history decays.
 
     Args:
         games: :func:`games_from_leaguegamelog` output (completed rows).
         shrinkage: Pseudo-game weight of the league mean.
+        as_of: Recency anchor date (with ``half_life_days``).
+        half_life_days: Exponential half-life; None = unweighted.
 
     Returns:
         ``{"off": {team_id: factor}, "def": {team_id: factor},
         "team_mean": league per-team points mean, "home_edge":
-        mean(home points) / mean(away points)}``.
+        mean(home points) / mean(away points)}`` (all recency-weighted
+        when a half-life is given).
 
     Raises:
         ValueError: When no completed games exist.
@@ -406,31 +541,43 @@ def fit_team_ratings(games: pl.DataFrame, *, shrinkage: float = 6.0) -> Dict[str
     finals = games.filter(pl.col("completed") == True)  # noqa: E712
     if finals.height == 0:
         raise ValueError("no completed games to rate teams from")
-    long = pl.concat(
-        [
-            finals.select(
-                pl.col("home_team_id").alias("team_id"),
-                pl.col("home_pts").alias("pf"),
-                pl.col("away_pts").alias("pa"),
-            ),
-            finals.select(
-                pl.col("away_team_id").alias("team_id"),
-                pl.col("away_pts").alias("pf"),
-                pl.col("home_pts").alias("pa"),
-            ),
-        ]
+    anchor = as_of or finals["game_date"].max()
+    finals = finals.with_columns(_weight_expr(anchor, half_life_days).alias("w"))
+    home_side = finals.select(
+        pl.col("home_team_id").alias("team_id"),
+        pl.col("home_pts").alias("pf"),
+        pl.col("away_pts").alias("pa"),
+        pl.col("w"),
     )
-    team_mean = float(long["pf"].mean())
+    away_side = finals.select(
+        pl.col("away_team_id").alias("team_id"),
+        pl.col("away_pts").alias("pf"),
+        pl.col("home_pts").alias("pa"),
+        pl.col("w"),
+    )
+    long = pl.concat([home_side, away_side])
+    team_mean = float(long.select((pl.col("pf") * pl.col("w")).sum() / pl.col("w").sum()).item())
     per_team = long.group_by("team_id").agg(
-        pl.len().alias("n"), pl.col("pf").mean().alias("pf"), pl.col("pa").mean().alias("pa")
+        pl.col("w").sum().alias("n_eff"),
+        ((pl.col("pf") * pl.col("w")).sum() / pl.col("w").sum()).alias("pf"),
+        ((pl.col("pa") * pl.col("w")).sum() / pl.col("w").sum()).alias("pa"),
     )
     off: Dict[int, float] = {}
     defense: Dict[int, float] = {}
     for row in per_team.iter_rows(named=True):
-        n = int(row["n"])
-        off[int(row["team_id"])] = ((n * float(row["pf"]) + shrinkage * team_mean) / (n + shrinkage)) / team_mean
-        defense[int(row["team_id"])] = ((n * float(row["pa"]) + shrinkage * team_mean) / (n + shrinkage)) / team_mean
-    home_edge = float(finals["home_pts"].mean() / finals["away_pts"].mean())
+        n_eff = float(row["n_eff"])
+        off[int(row["team_id"])] = (
+            (n_eff * float(row["pf"]) + shrinkage * team_mean) / (n_eff + shrinkage)
+        ) / team_mean
+        defense[int(row["team_id"])] = (
+            (n_eff * float(row["pa"]) + shrinkage * team_mean) / (n_eff + shrinkage)
+        ) / team_mean
+    home_edge = float(
+        finals.select(
+            ((pl.col("home_pts") * pl.col("w")).sum() / pl.col("w").sum())
+            / ((pl.col("away_pts") * pl.col("w")).sum() / pl.col("w").sum())
+        ).item()
+    )
     return {"off": off, "def": defense, "team_mean": team_mean, "home_edge": home_edge}
 
 
@@ -469,6 +616,7 @@ def matchup_factors(
     n_pilot: int = 400,
     seed: int = 13,
     passes: int = 2,
+    expanded: bool = False,
 ) -> Any:
     """Pilot-calibrated per-side scoring factors hitting the matchup targets.
 
@@ -503,16 +651,17 @@ def matchup_factors(
     home_mult = {outcome: 1.0 for outcome in _SCORING_OUTCOMES}
     away_mult = {outcome: 1.0 for outcome in _SCORING_OUTCOMES}
     for _ in range(passes):
-        pilot = simulate_ensemble(
+        home, away = _pilot_scores(
             shelf,
-            n_sim=n_pilot,
-            seed=seed,
-            rules=rules,
+            rules,
+            n_pilot,
+            seed,
+            expanded=expanded,
             home_factors=FactorAdjustment(factors=dict(home_mult)),
             away_factors=FactorAdjustment(factors=dict(away_mult)),
         )
-        home_scale = home_target / float(pilot["score_home"].mean())
-        away_scale = away_target / float(pilot["score_away"].mean())
+        home_scale = home_target / float(home.mean())
+        away_scale = away_target / float(away.mean())
         home_mult = {outcome: value * home_scale for outcome, value in home_mult.items()}
         away_mult = {outcome: value * away_scale for outcome, value in away_mult.items()}
     return FactorAdjustment(factors=home_mult), FactorAdjustment(factors=away_mult)
@@ -526,6 +675,10 @@ def season_matchup(
     *,
     through: Optional[dt.date] = None,
     learned_keyer: bool = False,
+    half_life_days: Optional[float] = None,
+    expanded_pilot: bool = True,
+    home_unavailable: Any = (),
+    away_unavailable: Any = (),
 ) -> Dict[str, Any]:
     """The one-call pregame surface: fitted tree + matchup team factors.
 
@@ -536,36 +689,63 @@ def season_matchup(
         away_team_id: Away team.
         through: Optional inclusive as-of cutoff.
         learned_keyer: Compose the shelf with a learned keyer.
+        half_life_days: Recency half-life for the pace anchor and the team
+            ratings (None = unweighted season-to-date).
+        expanded_pilot: Calibrate pace and matchup factors on the EXPANDED
+            walk — the boxscore/prop path this surface feeds (the expanded
+            tree scores a few points above the collapsed one).
+        home_unavailable: Player ids masked out of the home attribution
+            (injury/rest scenarios).
+        away_unavailable: Away masks.
 
     Returns:
         ``{"shelf", "home_factors", "away_factors", "ratings", "targets",
-        "data"}`` — feed shelf + factors straight to ``simulate_ensemble``
-        / ``simulate_player_boxscores``.
+        "attribution", "data"}`` — feed shelf + factors + attribution
+        straight to ``simulate_player_boxscores`` (or drop the attribution
+        for team-level ``simulate_ensemble``).
 
     Example:
         Quick start::
 
             from sportsdataverse.nba.nba_possession_sim.season import season_matchup
-            game = season_matchup("wnba", [2026], home_id, away_id)
-            ens = simulate_ensemble(game["shelf"], n_sim=5000, seed=7,
-                                    rules=WNBA_RULES,
-                                    home_factors=game["home_factors"],
-                                    away_factors=game["away_factors"])
+            game = season_matchup("wnba", [2026], home_id, away_id,
+                                  away_unavailable=[star_id])
+            box = simulate_player_boxscores(
+                game["shelf"], game["attribution"], n_sim=5000, seed=7,
+                rules=WNBA_RULES, home_factors=game["home_factors"],
+                away_factors=game["away_factors"])
     """
     data = season_data(league, seasons, through=through)
     keyer = fit_learned_gamestate_keyer(data["events"]) if learned_keyer else None
     shelf = models_to_shelf(data["events"], keyer=keyer, actions=data["pbp"])
     finals = data["schedule"].filter(pl.col("completed") == True)  # noqa: E712
     rules = _rules_for(league)
-    shelf = _calibrate_pace_to_total(shelf, float((finals["home_pts"] + finals["away_pts"]).mean()), rules)
-    ratings = fit_team_ratings(finals)
+    anchor = through or finals["game_date"].max()
+    target = _weighted_mean_total(finals, anchor, half_life_days)
+    shelf = _calibrate_pace_to_total(shelf, target, rules, expanded=expanded_pilot)
+    ratings = fit_team_ratings(finals, as_of=anchor, half_life_days=half_life_days)
     targets = matchup_targets(ratings, home_team_id, away_team_id)
-    home_factors, away_factors = matchup_factors(shelf, rules, targets["home"], targets["away"])
+    home_factors, away_factors = matchup_factors(
+        shelf, rules, targets["home"], targets["away"], expanded=expanded_pilot
+    )
+    from sportsdataverse.nba.nba_possession_sim.attribution import PlayerAttribution
+
+    attribution = PlayerAttribution.from_logs(
+        data["logs"],
+        home_team_id=home_team_id,
+        away_team_id=away_team_id,
+        with_ft_pct="ftm" in data["logs"].columns,
+    )
+    if home_unavailable or away_unavailable:
+        attribution = attribution.without(
+            home_unavailable=tuple(home_unavailable), away_unavailable=tuple(away_unavailable)
+        )
     return {
         "shelf": shelf,
         "home_factors": home_factors,
         "away_factors": away_factors,
         "ratings": ratings,
         "targets": targets,
+        "attribution": attribution,
         "data": data,
     }

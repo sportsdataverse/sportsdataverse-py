@@ -320,6 +320,8 @@ def simulate_game_pbp(
     start: Optional[GameState] = None,
     factors: Optional[FactorAdjustment] = None,
     expanded: bool = False,
+    home_factors: Optional[FactorAdjustment] = None,
+    away_factors: Optional[FactorAdjustment] = None,
 ) -> "tuple[GameState, List[Dict[str, Any]]]":
     """Simulate one game AND emit its full play-by-play log.
 
@@ -346,5 +348,15 @@ def simulate_game_pbp(
     if start is None:
         start = GameState(clock_seconds=rules.period_seconds, offense_is_home=bool(rng.random() < 0.5))
     pbp: List[Dict[str, Any]] = []
-    final = _finish_game(shelf, start, rng, factors, rules=rules, pbp_sink=pbp, expanded=expanded)
+    final = _finish_game(
+        shelf,
+        start,
+        rng,
+        factors,
+        rules=rules,
+        pbp_sink=pbp,
+        expanded=expanded,
+        home_factors=home_factors,
+        away_factors=away_factors,
+    )
     return final, pbp
